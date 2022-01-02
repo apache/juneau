@@ -151,7 +151,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected Strict(Builder builder) {
+		public Strict(Builder builder) {
 			super(builder.strict().validateEnd());
 		}
 	}
@@ -176,7 +176,6 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		protected Builder() {
 			super();
 			consumes("application/json,text/json");
-			type(JsonParser.class);
 			validateEnd = env("JsonParser.validateEnd", false);
 		}
 
@@ -207,7 +206,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 
 		@Override /* Context.Builder */
 		public JsonParser build() {
-			return build(JsonParser.class, CACHE);
+			return cache(CACHE).build(JsonParser.class);
 		}
 
 		@Override /* Context.Builder */
@@ -288,6 +287,12 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -306,7 +311,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -760,7 +765,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected JsonParser(Builder builder) {
+	public JsonParser(Builder builder) {
 		super(builder);
 		validateEnd = builder.validateEnd;
 	}

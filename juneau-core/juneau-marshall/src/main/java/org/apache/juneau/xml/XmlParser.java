@@ -93,7 +93,6 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		protected Builder() {
 			super();
 			consumes("text/xml,application/xml");
-			type(XmlParser.class);
 			preserveRootElement = env("XmlParser.preserveRootElement", false);
 			validating = env("XmlParser.validating", false);
 			eventAllocator = null;
@@ -136,7 +135,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 
 		@Override /* Context.Builder */
 		public XmlParser build() {
-			return build(XmlParser.class, CACHE);
+			return cache(CACHE).build(XmlParser.class);
 		}
 
 		@Override /* Context.Builder */
@@ -303,6 +302,12 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -321,7 +326,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -785,7 +790,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	 * @param builder
 	 * 	The property store containing all the settings for this object.
 	 */
-	protected XmlParser(Builder builder) {
+	public XmlParser(Builder builder) {
 		super(builder);
 		validating = builder.validating;
 		preserveRootElement = builder.preserveRootElement;

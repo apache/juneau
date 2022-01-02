@@ -78,7 +78,6 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 		protected Builder() {
 			super();
 			produces("text/openapi");
-			type(OpenApiSerializer.class);
 			format = HttpPartFormat.NO_FORMAT;
 			collectionFormat = HttpPartCollectionFormat.NO_COLLECTION_FORMAT;
 		}
@@ -112,7 +111,7 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 
 		@Override /* Context.Builder */
 		public OpenApiSerializer build() {
-			return build(OpenApiSerializer.class, CACHE);
+			return cache(CACHE).build(OpenApiSerializer.class);
 		}
 
 		@Override /* Context.Builder */
@@ -271,6 +270,12 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -289,7 +294,7 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -925,7 +930,7 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 	 * @param builder
 	 * 	The builder for this object.
 	 */
-	protected OpenApiSerializer(Builder builder) {
+	public OpenApiSerializer(Builder builder) {
 		super(builder.encoding(false));
 		format = builder.format;
 		collectionFormat = builder.collectionFormat;

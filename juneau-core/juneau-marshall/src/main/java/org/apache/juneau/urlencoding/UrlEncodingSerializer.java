@@ -171,7 +171,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected Expanded(Builder builder) {
+		public Expanded(Builder builder) {
 			super(builder.expandedParams());
 		}
 	}
@@ -186,7 +186,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected Readable(Builder builder) {
+		public Readable(Builder builder) {
 			super(builder.useWhitespace());
 		}
 	}
@@ -201,7 +201,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected PlainText(Builder builder) {
+		public PlainText(Builder builder) {
 			super(builder.paramFormatPlain());
 		}
 	}
@@ -226,7 +226,6 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		protected Builder() {
 			super();
 			produces("application/x-www-form-urlencoded");
-			type(UrlEncodingSerializer.class);
 			expandedParams = env("UrlEncoding.expandedParams", false);
 		}
 
@@ -257,7 +256,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 
 		@Override /* Context.Builder */
 		public UrlEncodingSerializer build() {
-			return build(UrlEncodingSerializer.class, CACHE);
+			return cache(CACHE).build(UrlEncodingSerializer.class);
 		}
 
 		@Override /* Context.Builder */
@@ -356,6 +355,12 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -374,7 +379,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -1009,7 +1014,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected UrlEncodingSerializer(Builder builder) {
+	public UrlEncodingSerializer(Builder builder) {
 		super(builder.encoding());
 		expandedParams = builder.expandedParams;
 	}

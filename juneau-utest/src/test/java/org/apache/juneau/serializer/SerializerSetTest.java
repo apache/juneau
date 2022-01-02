@@ -51,19 +51,19 @@ public class SerializerSetTest {
 
 
 	public static class SA1 extends JsonSerializer {
-		protected SA1(JsonSerializer.Builder builder) {
+		public SA1(JsonSerializer.Builder builder) {
 			super(builder.accept("text/foo+*,text/foo_a+*"));
 		}
 	}
 
 	public static class SA2 extends JsonSerializer {
-		protected SA2(JsonSerializer.Builder builder) {
+		public SA2(JsonSerializer.Builder builder) {
 			super(builder.accept("text/foo+bar+*,text/foo+bar_a+*"));
 		}
 	}
 
 	public static class SA3 extends JsonSerializer {
-		protected SA3(JsonSerializer.Builder builder) {
+		public SA3(JsonSerializer.Builder builder) {
 			super(builder.accept("text/baz+*,text/baz_a+*"));
 		}
 	}
@@ -90,31 +90,31 @@ public class SerializerSetTest {
 	}
 
 	public static class SB1 extends JsonSerializer {
-		protected SB1(JsonSerializer.Builder builder) {
+		public SB1(JsonSerializer.Builder builder) {
 			super(builder.accept("text/1"));
 		}
 	}
 
 	public static class SB2 extends JsonSerializer {
-		protected SB2(JsonSerializer.Builder builder) {
+		public SB2(JsonSerializer.Builder builder) {
 			super(builder.accept("text/2,text/2a"));
 		}
 	}
 
 	public static class SB3 extends JsonSerializer {
-		protected SB3(JsonSerializer.Builder builder) {
+		public SB3(JsonSerializer.Builder builder) {
 			super(builder.accept("text/3"));
 		}
 	}
 
 	public static class SB4 extends JsonSerializer {
-		protected SB4(JsonSerializer.Builder builder) {
+		public SB4(JsonSerializer.Builder builder) {
 			super(builder.accept("text/4,text/4a"));
 		}
 	}
 
 	public static class SB5 extends JsonSerializer {
-		protected SB5(JsonSerializer.Builder builder) {
+		public SB5(JsonSerializer.Builder builder) {
 			super(builder.accept("text/5"));
 		}
 	}
@@ -135,19 +135,19 @@ public class SerializerSetTest {
 	}
 
 	public static class SC1 extends JsonSerializer {
-		protected SC1(JsonSerializer.Builder builder) {
+		public SC1(JsonSerializer.Builder builder) {
 			super(builder.accept("text/*"));
 		}
 	}
 
 	public static class SC2 extends JsonSerializer {
-		protected SC2(JsonSerializer.Builder builder) {
+		public SC2(JsonSerializer.Builder builder) {
 			super(builder.accept("*/json"));
 		}
 	}
 
 	public static class SC3 extends JsonSerializer {
-		protected SC3(JsonSerializer.Builder builder) {
+		public SC3(JsonSerializer.Builder builder) {
 			super(builder.accept("*/*"));
 		}
 	}

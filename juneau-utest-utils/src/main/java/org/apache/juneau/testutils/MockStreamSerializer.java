@@ -24,36 +24,17 @@ import org.apache.juneau.serializer.*;
  */
 public class MockStreamSerializer extends OutputStreamSerializer {
 
-	private final MockStreamSerializerFunction function;
-
-	protected MockStreamSerializer(Builder builder) {
-		super(builder);
-		function = builder.function;
-	}
+	//-------------------------------------------------------------------------------------------------------------------
+	// Static
+	//-------------------------------------------------------------------------------------------------------------------
 
 	public static Builder create() {
 		return new Builder();
 	}
 
-	@Override /* Context */
-	public OutputStreamSerializerSession.Builder createSession() {
-		return new OutputStreamSerializerSession.Builder(this) {
-			@Override
-			public OutputStreamSerializerSession build() {
-				return new OutputStreamSerializerSession(this) {
-					@Override /* SerializerSession */
-					protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-						out.getOutputStream().write(function.apply(this, o));
-					}
-				};
-			}
-		};
-	}
-
-	@Override /* Context */
-	public OutputStreamSerializerSession getSession() {
-		return createSession().build();
-	}
+	//-------------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-------------------------------------------------------------------------------------------------------------------
 
 	public static class Builder extends OutputStreamSerializer.Builder {
 		MockStreamSerializerFunction function = (s,o) -> StringUtils.stringify(o).getBytes();
@@ -83,17 +64,23 @@ public class MockStreamSerializer extends OutputStreamSerializer {
 
 		@Override
 		public Builder copy() {
-			throw new NoSuchMethodError("Not implemented.");
-		}
-
-		@Override
-		public MockStreamSerializer build() {
-			return build(MockStreamSerializer.class, null);
+			return this;
 		}
 	}
 
-	@Override
-	public Builder copy() {
-		throw new NoSuchMethodError("Not implemented.");
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
+
+	private final MockStreamSerializerFunction function;
+
+	public MockStreamSerializer(Builder builder) {
+		super(builder);
+		function = builder.function;
+	}
+
+	@Override /* SerializerSession */
+	protected void doSerialize(SerializerSession session, SerializerPipe out, Object o) throws IOException, SerializeException {
+		out.getOutputStream().write(function.apply((OutputStreamSerializerSession)session, o));
 	}
 }

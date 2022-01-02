@@ -62,7 +62,7 @@ public class XmlDocSerializer extends XmlSerializer {
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected Ns(XmlSerializer.Builder builder) {
+		public Ns(XmlSerializer.Builder builder) {
 			super(builder.enableNamespaces());
 		}
 	}
@@ -76,7 +76,7 @@ public class XmlDocSerializer extends XmlSerializer {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected XmlDocSerializer(XmlSerializer.Builder builder) {
+	public XmlDocSerializer(XmlSerializer.Builder builder) {
 		super(builder);
 	}
 

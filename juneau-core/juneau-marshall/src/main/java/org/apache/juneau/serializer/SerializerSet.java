@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.ThrowableUtils.*;
 import static java.util.Arrays.*;
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -28,6 +29,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Represents a group of {@link Serializer Serializers} that can be looked up by media type.
@@ -171,7 +173,10 @@ public final class SerializerSet {
 		private Object copyBuilder(Object o) {
 			if (o instanceof Serializer.Builder) {
 				Serializer.Builder x = (Serializer.Builder)o;
-				x = x.copy();
+				Serializer.Builder x2 = x.copy();
+				if (ne(x.getClass(), x2.getClass()))
+					throw runtimeException("Copy method not implemented on class " + x.getClass().getName());
+				x = x2;
 				if (bcBuilder != null)
 					x.beanContext(bcBuilder);
 				return x;
@@ -295,6 +300,13 @@ public final class SerializerSet {
 
 		private Object createBuilder(Object o) {
 			if (o instanceof Class) {
+
+				// Check for no-arg constructor.
+				ConstructorInfo ci = ClassInfo.of((Class<?>)o).getPublicConstructor();
+				if (ci != null)
+					return ci.invoke();
+
+				// Check for builder create method.
 				@SuppressWarnings("unchecked")
 				Serializer.Builder b = Serializer.createSerializerBuilder((Class<? extends Serializer>)o);
 				if (bcBuilder != null)

@@ -51,7 +51,7 @@ public class NTripleParser extends RdfParser {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected NTripleParser(RdfParser.Builder builder) {
+	public NTripleParser(RdfParser.Builder builder) {
 		super(builder.ntriple().consumes("text/n-triple"));
 	}
 }

@@ -45,7 +45,20 @@ import org.apache.juneau.utils.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public abstract class ReaderParser extends Parser {
+public class ReaderParser extends Parser {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Static
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Builder
@@ -55,7 +68,7 @@ public abstract class ReaderParser extends Parser {
 	 * Builder class.
 	 */
 	@FluentSetters
-	public abstract static class Builder extends Parser.Builder {
+	public static class Builder extends Parser.Builder {
 
 		Charset fileCharset, streamCharset;
 
@@ -91,10 +104,14 @@ public abstract class ReaderParser extends Parser {
 		}
 
 		@Override /* Context.Builder */
-		public abstract Builder copy();
+		public Builder copy() {
+			return new Builder(this);
+		}
 
 		@Override /* Context.Builder */
-		public abstract ReaderParser build();
+		public ReaderParser build() {
+			return build(ReaderParser.class);
+		}
 
 		@Override /* Context.Builder */
 		public HashKey hashKey() {
@@ -218,7 +235,7 @@ public abstract class ReaderParser extends Parser {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -666,6 +683,16 @@ public abstract class ReaderParser extends Parser {
 	@Override /* Parser */
 	public final boolean isReaderParser() {
 		return true;
+	}
+
+	@Override /* Context */
+	public ReaderParserSession.Builder createSession() {
+		return ReaderParserSession.create(this);
+	}
+
+	@Override /* Context */
+	public ReaderParserSession getSession() {
+		return createSession().build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

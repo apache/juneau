@@ -97,7 +97,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected Readable(Builder builder) {
+		public Readable(Builder builder) {
 			super(builder.useWhitespace());
 		}
 	}
@@ -110,7 +110,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected Simple(Builder builder) {
+		public Simple(Builder builder) {
 			super(builder.quoteChar('\''));
 		}
 	}
@@ -123,7 +123,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected SimpleReadable(Builder builder) {
+		public SimpleReadable(Builder builder) {
 			super(builder.quoteChar('\'').useWhitespace());
 		}
 	}
@@ -149,7 +149,6 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 			super();
 			produces("text/html");
 			accept("text/html+schema");
-			type(HtmlSchemaSerializer.class);
 			generatorBuilder = JsonSchemaGenerator.create().beanContext(beanContext());
 		}
 
@@ -180,7 +179,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 
 		@Override /* Context.Builder */
 		public HtmlSchemaSerializer build() {
-			return build(HtmlSchemaSerializer.class, CACHE);
+			return cache(CACHE).build(HtmlSchemaSerializer.class);
 		}
 
 		@Override /* Context.Builder */
@@ -354,6 +353,12 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -372,7 +377,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -1093,7 +1098,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 	 *
 	 * @param builder The builder for this serializer.
 	 */
-	protected HtmlSchemaSerializer(Builder builder) {
+	public HtmlSchemaSerializer(Builder builder) {
 		super(builder.detectRecursions().ignoreRecursions());
 
 		generator = builder.generatorBuilder.build();

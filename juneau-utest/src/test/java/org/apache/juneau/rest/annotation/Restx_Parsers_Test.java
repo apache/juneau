@@ -30,25 +30,25 @@ public class Restx_Parsers_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class PA extends MockReaderParser {
-		protected PA(MockReaderParser.Builder b) {
+		public PA(MockReaderParser.Builder b) {
 			super(b.consumes("text/a").function((session,in,type)->"text/a - " + in));
 		}
 	}
 
 	public static class PB extends MockReaderParser {
-		protected PB(MockReaderParser.Builder b) {
+		public PB(MockReaderParser.Builder b) {
 			super(b.consumes("text/b").function((session,in,type)->"text/b - " + in));
 		}
 	}
 
 	public static class PC extends MockReaderParser {
-		protected PC(MockReaderParser.Builder b) {
+		public PC(MockReaderParser.Builder b) {
 			super(b.consumes("text/c").function((session,in,type)->"text/c - " + in));
 		}
 	}
 
 	public static class PD extends MockReaderParser {
-		protected PD(MockReaderParser.Builder b) {
+		public PD(MockReaderParser.Builder b) {
 			super(b.consumes("text/d").function((session,in,type)->"text/d - " + in));
 		}
 	}
@@ -143,11 +143,11 @@ public class Restx_Parsers_Test {
 	// Test parser inheritance.
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class P1 extends MockReaderParser{ protected P1(MockReaderParser.Builder b) {super(b.consumes("text/p1"));} }
-	public static class P2 extends MockReaderParser{ protected P2(MockReaderParser.Builder b) {super(b.consumes("text/p2"));} }
-	public static class P3 extends MockReaderParser{ protected P3(MockReaderParser.Builder b) {super(b.consumes("text/p3"));} }
-	public static class P4 extends MockReaderParser{ protected P4(MockReaderParser.Builder b) {super(b.consumes("text/p4"));} }
-	public static class P5 extends MockReaderParser{ protected P5(MockReaderParser.Builder b) {super(b.consumes("text/p5"));} }
+	public static class P1 extends MockReaderParser{ public P1(MockReaderParser.Builder b) {super(b.consumes("text/p1"));} }
+	public static class P2 extends MockReaderParser{ public P2(MockReaderParser.Builder b) {super(b.consumes("text/p2"));} }
+	public static class P3 extends MockReaderParser{ public P3(MockReaderParser.Builder b) {super(b.consumes("text/p3"));} }
+	public static class P4 extends MockReaderParser{ public P4(MockReaderParser.Builder b) {super(b.consumes("text/p4"));} }
+	public static class P5 extends MockReaderParser{ public P5(MockReaderParser.Builder b) {super(b.consumes("text/p5"));} }
 
 	@Rest(parsers={P1.class,P2.class})
 	public static class B {}

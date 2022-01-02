@@ -52,7 +52,7 @@ public class RdfXmlParser extends RdfParser {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected RdfXmlParser(RdfParser.Builder builder) {
+	public RdfXmlParser(RdfParser.Builder builder) {
 		super(builder.xml().consumes("text/xml+rdf"));
 	}
 }

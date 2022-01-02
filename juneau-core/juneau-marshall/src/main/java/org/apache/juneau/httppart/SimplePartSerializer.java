@@ -12,7 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
+import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.utils.*;
 
 /**
  * An implementation of {@link HttpPartSerializer} that simply serializes everything using {@link Object#toString()}.
@@ -56,6 +59,8 @@ public class SimplePartSerializer extends BaseHttpPartSerializer {
 	 */
 	public static class Builder extends BaseHttpPartSerializer.Builder {
 
+		private static final Cache<HashKey,SimplePartSerializer> CACHE = Cache.of(HashKey.class, SimplePartSerializer.class).build();
+
 		/**
 		 * Constructor.
 		 */
@@ -74,12 +79,18 @@ public class SimplePartSerializer extends BaseHttpPartSerializer {
 
 		@Override
 		public SimplePartSerializer build() {
-			return new SimplePartSerializer(this);
+			return cache(CACHE).build(SimplePartSerializer.class);
 		}
 
 		@Override
 		public Builder copy() {
 			return new Builder(this);
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
 		}
 	}
 
@@ -92,7 +103,7 @@ public class SimplePartSerializer extends BaseHttpPartSerializer {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected SimplePartSerializer(Builder builder) {
+	public SimplePartSerializer(Builder builder) {
 		super(builder);
 	}
 

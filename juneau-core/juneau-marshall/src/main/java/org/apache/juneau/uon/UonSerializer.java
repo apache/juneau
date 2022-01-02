@@ -173,7 +173,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected Readable(Builder builder) {
+		public Readable(Builder builder) {
 			super(builder.useWhitespace());
 		}
 	}
@@ -188,7 +188,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected Encoding(Builder builder) {
+		public Encoding(Builder builder) {
 			super(builder.encoding());
 		}
 	}
@@ -236,7 +236,6 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		protected Builder() {
 			super();
 			produces("text/uon");
-			type(UonSerializer.class);
 			addBeanTypesUon = env("UonSerializer.addBeanTypesUon", false);
 			encoding = env("UonSerializer.encoding", false);
 			paramFormat = env("UonSerializer.paramFormat", ParamFormat.UON);
@@ -276,7 +275,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 
 		@Override /* Context.Builder */
 		public UonSerializer build() {
-			return build(UonSerializer.class, CACHE);
+			return cache(CACHE).build(UonSerializer.class);
 		}
 
 		@Override /* Context.Builder */
@@ -493,6 +492,12 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -511,7 +516,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -1119,7 +1124,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 * @param builder
 	 * 	The builder for this object.
 	 */
-	protected UonSerializer(Builder builder) {
+	public UonSerializer(Builder builder) {
 		super(builder);
 
 		encoding = builder.encoding;

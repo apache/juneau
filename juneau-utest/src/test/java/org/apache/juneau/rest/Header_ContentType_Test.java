@@ -211,7 +211,7 @@ public class Header_ContentType_Test {
 	// Helpers
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class P1 extends MockReaderParser { protected P1(MockReaderParser.Builder b) {super(b.consumes("text/p1").function((session,in,type)->"p1"));}}
-	public static class P2 extends MockReaderParser { protected P2(MockReaderParser.Builder b) {super(b.consumes("text/p2").function((session,in,type)->"p2"));}}
-	public static class P3 extends MockReaderParser { protected P3(MockReaderParser.Builder b) {super(b.consumes("text/p3").function((session,in,type)->"p3"));}}
+	public static class P1 extends MockReaderParser { public P1(MockReaderParser.Builder b) {super(b.consumes("text/p1").function((session,in,type)->"p1"));}}
+	public static class P2 extends MockReaderParser { public P2(MockReaderParser.Builder b) {super(b.consumes("text/p2").function((session,in,type)->"p2"));}}
+	public static class P3 extends MockReaderParser { public P3(MockReaderParser.Builder b) {super(b.consumes("text/p3").function((session,in,type)->"p3"));}}
 }

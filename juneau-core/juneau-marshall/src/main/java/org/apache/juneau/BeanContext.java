@@ -247,7 +247,6 @@ public class BeanContext extends Context {
 		 */
 		protected Builder() {
 			super();
-			type(BeanContext.class);
 			beanClassVisibility = env("BeanContext.beanClassVisibility", PUBLIC);
 			beanConstructorVisibility = env("BeanContext.beanConstructorVisibility", PUBLIC);
 			beanMethodVisibility = env("BeanContext.beanMethodVisibility", PUBLIC);
@@ -362,7 +361,7 @@ public class BeanContext extends Context {
 
 		@Override /* Context.Builder */
 		public BeanContext build() {
-			return build(BeanContext.class, CACHE);
+			return cache(CACHE).build(BeanContext.class);
 		}
 
 		@Override /* Context.Builder */
@@ -3478,7 +3477,7 @@ public class BeanContext extends Context {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -3555,7 +3554,7 @@ public class BeanContext extends Context {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected BeanContext(Builder builder) {
+	public BeanContext(Builder builder) {
 		super(builder);
 
 		hashKey = builder.hashKey();

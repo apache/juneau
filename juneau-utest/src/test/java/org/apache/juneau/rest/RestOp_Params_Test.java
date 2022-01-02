@@ -274,13 +274,13 @@ public class RestOp_Params_Test {
 	}
 
 	public static class B1a extends PlainTextSerializer {
-		protected B1a(PlainTextSerializer.Builder b) {
+		public B1a(PlainTextSerializer.Builder b) {
 			super(b.accept("*/*"));
 		}
 	}
 
 	public static class B1b extends PlainTextParser {
-		protected B1b(PlainTextParser.Builder b) {
+		public B1b(PlainTextParser.Builder b) {
 			super(b.consumes("*/*"));
 		}
 	}

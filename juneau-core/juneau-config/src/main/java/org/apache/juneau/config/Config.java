@@ -257,13 +257,8 @@ public final class Config extends Context implements ConfigEventListener {
 
 		@Override /* Context.Builder */
 		public Config build() {
-			try {
-				return new Config(this);
-			} catch (IOException e) {
-				throw runtimeException(e);
-			}
+			return build(Config.class);
 		}
-
 
 		//-----------------------------------------------------------------------------------------------------------------
 		// Properties
@@ -523,7 +518,7 @@ public final class Config extends Context implements ConfigEventListener {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -562,7 +557,7 @@ public final class Config extends Context implements ConfigEventListener {
 	 * @param builder The builder for this object.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	protected Config(Builder builder) throws IOException {
+	public Config(Builder builder) throws IOException {
 		super(builder);
 
 		name = builder.name;

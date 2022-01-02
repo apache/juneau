@@ -2191,7 +2191,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}

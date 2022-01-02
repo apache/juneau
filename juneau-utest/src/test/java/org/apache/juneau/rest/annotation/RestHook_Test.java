@@ -83,7 +83,7 @@ public class RestHook_Test {
 	}
 
 	public static class A1 extends MockReaderParser {
-		protected A1(MockReaderParser.Builder b) {
+		public A1(MockReaderParser.Builder b) {
 			super(b.consumes("text/a1,text/a2,text/a3").function((session,in,type)->in(session)));
 		}
 
@@ -155,7 +155,7 @@ public class RestHook_Test {
 	}
 
 	public static class B1 extends MockWriterSerializer {
-		protected B1(MockWriterSerializer.Builder b) {
+		public B1(MockWriterSerializer.Builder b) {
 			super(b.produces("test/s1").accept("text/s1,text/s2,text/s3").function((s,o) -> out(s)).headers(s->headers(s)));
 		}
 		public static String out(SerializerSession s) {

@@ -75,7 +75,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected SpacedHex(Builder builder) {
+		public SpacedHex(Builder builder) {
 			super(
 				builder.binaryFormat(BinaryFormat.SPACED_HEX)
 			);
@@ -90,7 +90,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected Base64(Builder builder) {
+		public Base64(Builder builder) {
 			super(
 				builder.binaryFormat(BinaryFormat.BASE64)
 			);
@@ -115,7 +115,6 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		protected Builder() {
 			super();
 			consumes("octal/msgpack");
-			type(MsgPackParser.class);
 		}
 
 		/**
@@ -143,7 +142,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 
 		@Override /* Context.Builder */
 		public MsgPackParser build() {
-			return build(MsgPackParser.class, CACHE);
+			return cache(CACHE).build(MsgPackParser.class);
 		}
 
 		@Override /* Context.Builder */
@@ -181,6 +180,12 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -199,7 +204,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -645,7 +650,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected MsgPackParser(Builder builder) {
+	public MsgPackParser(Builder builder) {
 		super(builder);
 	}
 

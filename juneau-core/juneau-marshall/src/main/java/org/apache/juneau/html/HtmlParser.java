@@ -82,7 +82,6 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 		protected Builder() {
 			super();
 			consumes("text/html,text/html+stripped");
-			type(HtmlParser.class);
 		}
 
 		/**
@@ -110,7 +109,7 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 
 		@Override /* Context.Builder */
 		public HtmlParser build() {
-			return build(HtmlParser.class, CACHE);
+			return cache(CACHE).build(HtmlParser.class);
 		}
 
 		@Override /* Context.Builder */
@@ -149,6 +148,12 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -167,7 +172,7 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -661,7 +666,7 @@ public class HtmlParser extends XmlParser implements HtmlMetaProvider {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected HtmlParser(Builder builder) {
+	public HtmlParser(Builder builder) {
 		super(builder);
 	}
 

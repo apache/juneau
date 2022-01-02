@@ -30,25 +30,25 @@ public class Restx_Serializers_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class SA extends MockWriterSerializer {
-		protected SA(MockWriterSerializer.Builder b) {
+		public SA(MockWriterSerializer.Builder b) {
 			super(b.produces("text/a").function((s,o)->"text/a - "+o));
 		}
 	}
 
 	public static class SB extends MockWriterSerializer {
-		protected SB(MockWriterSerializer.Builder b) {
+		public SB(MockWriterSerializer.Builder b) {
 			super(b.produces("text/b").function((s,o)->"text/b - "+o));
 		}
 	}
 
 	public static class SC extends MockWriterSerializer {
-		protected SC(MockWriterSerializer.Builder b) {
+		public SC(MockWriterSerializer.Builder b) {
 			super(b.produces("text/a").function((s,o)->"text/c - "+o));
 		}
 	}
 
 	public static class SD extends MockWriterSerializer {
-		protected SD(MockWriterSerializer.Builder b) {
+		public SD(MockWriterSerializer.Builder b) {
 			super(b.produces("text/d").accept("text/a,text/d").function((s,o)->"text/d - "+o));
 		}
 	}
@@ -131,16 +131,16 @@ public class Restx_Serializers_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class DummySerializer extends MockWriterSerializer {
-		protected DummySerializer(MockWriterSerializer.Builder b, String produces) {
+		public DummySerializer(MockWriterSerializer.Builder b, String produces) {
 			super(b.produces(produces));
 		}
 	}
 
-	public static class S1 extends DummySerializer{ protected S1(MockWriterSerializer.Builder b) {super(b, "text/s1");} }
-	public static class S2 extends DummySerializer{ protected S2(MockWriterSerializer.Builder b) {super(b, "text/s2");} }
-	public static class S3 extends DummySerializer{ protected S3(MockWriterSerializer.Builder b) {super(b, "text/s3");} }
-	public static class S4 extends DummySerializer{ protected S4(MockWriterSerializer.Builder b) {super(b, "text/s4");} }
-	public static class S5 extends DummySerializer{ protected S5(MockWriterSerializer.Builder b) {super(b, "text/s5");} }
+	public static class S1 extends DummySerializer{ public S1(MockWriterSerializer.Builder b) {super(b, "text/s1");} }
+	public static class S2 extends DummySerializer{ public S2(MockWriterSerializer.Builder b) {super(b, "text/s2");} }
+	public static class S3 extends DummySerializer{ public S3(MockWriterSerializer.Builder b) {super(b, "text/s3");} }
+	public static class S4 extends DummySerializer{ public S4(MockWriterSerializer.Builder b) {super(b, "text/s4");} }
+	public static class S5 extends DummySerializer{ public S5(MockWriterSerializer.Builder b) {super(b, "text/s5");} }
 
 	@Rest(serializers={S1.class,S2.class})
 	public static class B {}

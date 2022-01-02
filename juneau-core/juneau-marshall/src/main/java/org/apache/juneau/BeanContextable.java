@@ -97,9 +97,6 @@ public abstract class BeanContextable extends Context {
 		public abstract Builder copy();
 
 		@Override /* Context.Builder */
-		public abstract BeanContextable build();
-
-		@Override /* Context.Builder */
 		public HashKey hashKey() {
 			return HashKey.of(
 				super.hashKey(),
@@ -2996,7 +2993,7 @@ public abstract class BeanContextable extends Context {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}

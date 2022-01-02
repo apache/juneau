@@ -89,7 +89,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected Readable(Builder builder) {
+		public Readable(Builder builder) {
 			super(builder.useWhitespace());
 		}
 	}
@@ -102,7 +102,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected Simple(Builder builder) {
+		public Simple(Builder builder) {
 			super(builder.simpleMode().quoteChar('\''));
 		}
 	}
@@ -115,7 +115,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected SimpleReadable(Builder builder) {
+		public SimpleReadable(Builder builder) {
 			super(builder.simpleMode().quoteChar('\'').useWhitespace());
 		}
 	}
@@ -141,7 +141,6 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 			super();
 			produces("application/json");
 			accept("application/json+schema,text/json+schema");
-			type(JsonSchemaSerializer.class);
 			generatorBuilder = JsonSchemaGenerator.create().beanContext(beanContext());
 		}
 
@@ -172,7 +171,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 
 		@Override /* Context.Builder */
 		public JsonSchemaSerializer build() {
-			return build(JsonSchemaSerializer.class, CACHE);
+			return cache(CACHE).build(JsonSchemaSerializer.class);
 		}
 
 		@Override /* Context.Builder */
@@ -346,6 +345,12 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -364,7 +369,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -1004,7 +1009,7 @@ public class JsonSchemaSerializer extends JsonSerializer implements JsonSchemaMe
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected JsonSchemaSerializer(Builder builder) {
+	public JsonSchemaSerializer(Builder builder) {
 		super(builder.detectRecursions().ignoreRecursions());
 
 		generator = builder.generatorBuilder.build();

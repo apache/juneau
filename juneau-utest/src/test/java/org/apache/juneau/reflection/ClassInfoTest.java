@@ -548,7 +548,7 @@ public class ClassInfoTest {
 	static class DCx {}
 	static class DC1 {
 		public static DCx create() {return null;}
-		protected DC1(DCx x) {}
+		public DC1(DCx x) {}
 	}
 	static class DC2 {
 		protected static DCx create() {return null;}
@@ -566,11 +566,11 @@ public class ClassInfoTest {
 
 	@Test
 	public void getBuilderCreateMethod() throws Exception {
-		check("DC1.create()", dc1.getBuilderCreateMethod());
-		check(null, dc2.getBuilderCreateMethod());
-		check(null, dc3.getBuilderCreateMethod());
-		check(null, dc4.getBuilderCreateMethod());
-		check(null, dc5.getBuilderCreateMethod());
+		check("DC1.create()", dc1.getBuilderCreateMethod().orElse(null));
+		check(null, dc2.getBuilderCreateMethod().orElse(null));
+		check(null, dc3.getBuilderCreateMethod().orElse(null));
+		check(null, dc4.getBuilderCreateMethod().orElse(null));
+		check(null, dc5.getBuilderCreateMethod().orElse(null));
 	}
 
 	static class DDx {}
@@ -593,11 +593,11 @@ public class ClassInfoTest {
 
 	@Test
 	public void getBuilderBuildMethod() throws Exception {
-		check("DD1.build()", dd1.getBuilderBuildMethod());
-		check(null, dd2.getBuilderBuildMethod());
-		check(null, dd3.getBuilderBuildMethod());
-		check(null, dd4.getBuilderBuildMethod());
-		check(null, dd5.getBuilderBuildMethod());
+		check("DD1.build()", dd1.getBuilderBuildMethod().orElse(null));
+		check(null, dd2.getBuilderBuildMethod().orElse(null));
+		check(null, dd3.getBuilderBuildMethod().orElse(null));
+		check(null, dd4.getBuilderBuildMethod().orElse(null));
+		check(null, dd5.getBuilderBuildMethod().orElse(null));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

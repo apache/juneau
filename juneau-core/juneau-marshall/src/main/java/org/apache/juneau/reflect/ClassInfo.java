@@ -718,26 +718,35 @@ public final class ClassInfo {
 	 *
 	 * @return The <c>public static Builder create()</c> method on this class, or <jk>null</jk> if it doesn't exist.
 	 */
-	public MethodInfo getBuilderCreateMethod() {
-		for (MethodInfo m : getPublicMethods()) {
-			if (m.isAll(PUBLIC, STATIC) && m.hasName("create") && (!m.hasReturnType(void.class)) && (!m.hasReturnType(c))) {
-				if (getConstructor(Visibility.PROTECTED, m.getReturnType().inner()) != null)
-					return m;
-			}
-		}
-		return null;
+	public Optional<MethodInfo> getBuilderCreateMethod() {
+		return getPublicConstructors()
+			.stream()
+			.filter(x -> x.hasNumParams(1))
+			.map(x -> x.getParam(0).getParameterType())
+			.filter(x -> ne(x.inner(), c))  // Ignore copy-constructor.
+			.map(x -> getStaticCreator(x))
+			.filter(x -> x.isPresent())
+			.findFirst()
+			.orElse(Optional.empty());
+	}
+
+	private Optional<MethodInfo> getStaticCreator(ClassInfo ci) {
+		return getPublicMethods()
+			.stream()
+			.filter(x -> x.isAll(PUBLIC, STATIC) && x.hasName("create") && x.hasReturnType(ci))
+			.findFirst();
 	}
 
 	/**
 	 * Returns the <c>T build()</c> method on this class.
 	 *
-	 * @return The <c>T build()</c> method on this class, or <jk>null</jk> if it doesn't exist.
+	 * @return The <c>T build()</c> method on this class, or {@link Optional#empty()} if it doesn't exist.
 	 */
-	public MethodInfo getBuilderBuildMethod() {
-		for (MethodInfo m : getDeclaredMethods())
-			if (m.isAll(NOT_STATIC) && m.hasName("build") && (!m.hasParams()) && (!m.hasReturnType(void.class)))
-				return m;
-		return null;
+	public Optional<MethodInfo> getBuilderBuildMethod() {
+		return getDeclaredMethods()
+			.stream()
+			.filter(x -> x.isAll(NOT_STATIC) && x.hasName("build") && (!x.hasParams()) && (!x.hasReturnType(void.class)))
+			.findFirst();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

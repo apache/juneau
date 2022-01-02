@@ -34,7 +34,21 @@ import org.apache.juneau.internal.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public abstract class InputStreamParserSession extends ParserSession {
+public class InputStreamParserSession extends ParserSession {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Static
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(InputStreamParser ctx) {
+		return new Builder(ctx);
+	}
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Builder
@@ -44,7 +58,7 @@ public abstract class InputStreamParserSession extends ParserSession {
 	 * Builder class.
 	 */
 	@FluentSetters
-	public abstract static class Builder extends ParserSession.Builder {
+	public static class Builder extends ParserSession.Builder {
 
 		InputStreamParser ctx;
 
@@ -59,7 +73,9 @@ public abstract class InputStreamParserSession extends ParserSession {
 		}
 
 		@Override
-		public abstract InputStreamParserSession build();
+		public InputStreamParserSession build() {
+			return new InputStreamParserSession(this);
+		}
 
 		// <FluentSetters>
 

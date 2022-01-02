@@ -176,7 +176,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected Sq(Builder builder) {
+		public Sq(Builder builder) {
 			super(builder.quoteChar('\''));
 		}
 	}
@@ -189,7 +189,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected SqReadable(Builder builder) {
+		public SqReadable(Builder builder) {
 			super(builder.quoteChar('\'').useWhitespace());
 		}
 	}
@@ -202,7 +202,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected Ns(Builder builder) {
+		public Ns(Builder builder) {
 			super(builder.enableNamespaces());
 		}
 	}
@@ -215,7 +215,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected NsSq(Builder builder) {
+		public NsSq(Builder builder) {
 			super(builder.enableNamespaces().quoteChar('\''));
 		}
 	}
@@ -228,7 +228,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected NsSqReadable(Builder builder) {
+		public NsSqReadable(Builder builder) {
 			super(builder.enableNamespaces().quoteChar('\'').useWhitespace());
 		}
 	}
@@ -260,7 +260,6 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		protected Builder() {
 			super();
 			produces("text/xml");
-			type(XmlSerializer.class);
 			addBeanTypesXml = env("XmlSerializer.addBeanTypes", false);
 			addNamespaceUrisToRoot = env("XmlSerializer.addNamespaceUrisToRoot", false);
 			disableAutoDetectNamespaces = env("XmlSerializer.disableAutoDetectNamespaces", false);
@@ -307,7 +306,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 
 		@Override /* Context.Builder */
 		public XmlSerializer build() {
-			return build(XmlSerializer.class, CACHE);
+			return cache(CACHE).build(XmlSerializer.class);
 		}
 
 		@Override /* Context.Builder */
@@ -543,6 +542,12 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -561,7 +566,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -1169,7 +1174,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	 * @param builder
 	 * 	The builder for this object.
 	 */
-	protected XmlSerializer(Builder builder) {
+	public XmlSerializer(Builder builder) {
 		super(builder);
 		autoDetectNamespaces = ! builder.disableAutoDetectNamespaces;
 		enableNamespaces = builder.enableNamespaces;

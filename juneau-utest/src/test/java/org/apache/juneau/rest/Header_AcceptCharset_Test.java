@@ -66,13 +66,13 @@ public class Header_AcceptCharset_Test {
 		}
 
 		public static class TestParser extends MockReaderParser {
-			protected TestParser(MockReaderParser.Builder builder) {
+			public TestParser(MockReaderParser.Builder builder) {
 				super(builder.consumes("text/plain").function((session,in,type) -> session.getStreamCharset().toString()));
 			}
 		}
 
 		public static class TestSerializer extends MockWriterSerializer {
-			protected TestSerializer(MockWriterSerializer.Builder builder) {
+			public TestSerializer(MockWriterSerializer.Builder builder) {
 				super(builder.produces("text/plain").function((session,o) -> (o.toString() + "/" + session.getStreamCharset())));
 			}
 		}

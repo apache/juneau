@@ -108,7 +108,7 @@ public class SqlStore extends ConfigStore {
 
 		@Override
 		public SqlStore build() {
-			return new SqlStore(this);
+			return build(SqlStore.class);
 		}
 	}
 

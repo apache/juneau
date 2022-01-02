@@ -16,7 +16,6 @@ import java.io.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -24,39 +23,17 @@ import org.apache.juneau.parser.*;
  */
 public class MockStreamParser extends InputStreamParser {
 
-	private final MockStreamParserFunction function;
-
-	protected MockStreamParser(Builder builder) {
-		super(builder);
-		this.function = builder.function;
-	}
+	//-------------------------------------------------------------------------------------------------------------------
+	// Static
+	//-------------------------------------------------------------------------------------------------------------------
 
 	public static Builder create() {
 		return new Builder();
 	}
 
-	@Override /* Context */
-	public InputStreamParserSession.Builder createSession() {
-		return new InputStreamParserSession.Builder(MsgPackParser.DEFAULT) {
-			@Override
-			public InputStreamParserSession build() {
-				return new InputStreamParserSession(this) {
-					@SuppressWarnings("unchecked")
-					@Override
-					protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-						if (function != null)
-							return (T)function.apply(this, IOUtils.readBytes(pipe.getInputStream()), type);
-						return null;
-					}
-				};
-			}
-		};
-	}
-
-	@Override /* Context */
-	public InputStreamParserSession getSession() {
-		return createSession().build();
-	}
+	//-------------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-------------------------------------------------------------------------------------------------------------------
 
 	public static class Builder extends InputStreamParser.Builder {
 		MockStreamParserFunction function;
@@ -74,17 +51,26 @@ public class MockStreamParser extends InputStreamParser {
 
 		@Override
 		public Builder copy() {
-			throw new NoSuchMethodError("Not implemented.");
-		}
-
-		@Override
-		public MockStreamParser build() {
-			return build(MockStreamParser.class, null);
+			return this;
 		}
 	}
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
+
+	private final MockStreamParserFunction function;
+
+	public MockStreamParser(Builder builder) {
+		super(builder);
+		this.function = builder.function;
+	}
+
 	@Override
-	public Builder copy() {
-		throw new NoSuchMethodError("Not implemented.");
+	@SuppressWarnings("unchecked")
+	public <T> T doParse(ParserSession session, ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+		if (function != null)
+			return (T)function.apply((InputStreamParserSession)session, IOUtils.readBytes(pipe.getInputStream()), type);
+		return null;
 	}
 }

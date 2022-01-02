@@ -51,7 +51,7 @@ public class N3Serializer extends RdfSerializer {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected N3Serializer(RdfSerializer.Builder builder) {
+	public N3Serializer(RdfSerializer.Builder builder) {
 		super(builder.n3());
 	}
 }

@@ -84,7 +84,6 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 			super();
 			produces("text/html");
 			accept("text/html+stripped");
-			type(HtmlStrippedDocSerializer.class);
 		}
 
 		/**
@@ -112,7 +111,7 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 
 		@Override /* Context.Builder */
 		public HtmlStrippedDocSerializer build() {
-			return build(HtmlStrippedDocSerializer.class, CACHE);
+			return cache(CACHE).build(HtmlStrippedDocSerializer.class);
 		}
 
 		@Override /* Context.Builder */
@@ -151,6 +150,12 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -169,7 +174,7 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -888,7 +893,7 @@ public class HtmlStrippedDocSerializer extends HtmlSerializer {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected HtmlStrippedDocSerializer(Builder builder) {
+	public HtmlStrippedDocSerializer(Builder builder) {
 		super(builder);
 	}
 

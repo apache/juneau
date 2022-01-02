@@ -36,7 +36,7 @@ public class MockWriterSerializer extends WriterSerializer implements HttpPartSe
 	public static final X X = new X(create());
 
 	public static class X extends MockWriterSerializer {
-		protected X(Builder builder) {
+		public X(Builder builder) {
 			super(builder
 				.function((s,o) -> out(o))
 				.partFunction((s,t,o) -> out(o))
@@ -54,72 +54,22 @@ public class MockWriterSerializer extends WriterSerializer implements HttpPartSe
 		}
 	}
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-----------------------------------------------------------------------------------------------------------------
-
-	private final MockWriterSerializerFunction function;
-	private final MockWriterSerializerPartFunction partFunction;
-	private final Function<WriterSerializerSession,Map<String,String>> headers;
-
-
-	protected MockWriterSerializer(Builder builder) {
-		super(builder);
-		this.function = builder.function;
-		this.partFunction = builder.partFunction;
-		this.headers = builder.headers;
-	}
+	//-------------------------------------------------------------------------------------------------------------------
+	// Static
+	//-------------------------------------------------------------------------------------------------------------------
 
 	public static Builder create() {
 		return new Builder();
 	}
 
-	@Override /* Context */
-	public WriterSerializerSession.Builder createSession() {
-		return new WriterSerializerSession.Builder(this) {
-			@Override
-			public WriterSerializerSession build() {
-				return new WriterSerializerSession(this) {
-					@Override /* SerializerSession */
-					protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
-						out.getWriter().write(function.apply(this,o));
-					}
-					@Override /* SerializerSession */
-					public Map<String,String> getResponseHeaders() {
-						return headers.apply(this);
-					}
-				};
-			}
-		};
-	}
-
-	@Override /* Context */
-	public WriterSerializerSession getSession() {
-		return createSession().build();
-	}
-
-	@Override
-	public HttpPartSerializerSession getPartSession() {
-		return new HttpPartSerializerSession() {
-			@Override
-			public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
-				return partFunction.apply(type, schema, value);
-			}
-		};
-	}
+	//-------------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-------------------------------------------------------------------------------------------------------------------
 
 	public static class Builder extends WriterSerializer.Builder {
 		MockWriterSerializerFunction function = (s,o) -> StringUtils.stringify(o);
 		MockWriterSerializerPartFunction partFunction = (t,s,o) -> StringUtils.stringify(o);
 		Function<WriterSerializerSession,Map<String,String>> headers = (s) -> Collections.emptyMap();
-
-		public Builder() {
-			super();
-		}
-
-		public Builder(Builder copyFrom) {
-			super(copyFrom);
-		}
 
 		public Builder function(MockWriterSerializerFunction value) {
 			function = value;
@@ -150,17 +100,38 @@ public class MockWriterSerializer extends WriterSerializer implements HttpPartSe
 
 		@Override
 		public Builder copy() {
-			return new Builder(this);
-		}
-
-		@Override
-		public MockWriterSerializer build() {
-			return build(MockWriterSerializer.class, null);
+			return this;
 		}
 	}
 
+	private final MockWriterSerializerFunction function;
+	private final MockWriterSerializerPartFunction partFunction;
+	private final Function<WriterSerializerSession,Map<String,String>> headers;
+
+	public MockWriterSerializer(Builder builder) {
+		super(builder);
+		this.function = builder.function;
+		this.partFunction = builder.partFunction;
+		this.headers = builder.headers;
+	}
+
+	@Override /* SerializerSession */
+	protected void doSerialize(SerializerSession session, SerializerPipe out, Object o) throws IOException, SerializeException {
+		out.getWriter().write(function.apply((WriterSerializerSession)session,o));
+	}
+
+	@Override /* SerializerSession */
+	public Map<String,String> getResponseHeaders(SerializerSession session) {
+		return headers.apply((WriterSerializerSession)session);
+	}
+
 	@Override
-	public Builder copy() {
-		throw new NoSuchMethodError("Not implemented.");
+	public HttpPartSerializerSession getPartSession() {
+		return new HttpPartSerializerSession() {
+			@Override
+			public String serialize(HttpPartType type, HttpPartSchema schema, Object value) throws SerializeException, SchemaValidationException {
+				return partFunction.apply(type, schema, value);
+			}
+		};
 	}
 }

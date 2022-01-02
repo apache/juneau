@@ -81,7 +81,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected Decoding(Builder builder) {
+		public Decoding(Builder builder) {
 			super(builder.decoding());
 		}
 	}
@@ -106,7 +106,6 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		protected Builder() {
 			super();
 			consumes("text/uon");
-			type(UonParser.class);
 			decoding = env("UonParser.decoding", false);
 			validateEnd = env("UonParser.validateEnd", false);
 		}
@@ -140,7 +139,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 
 		@Override /* Context.Builder */
 		public UonParser build() {
-			return build(UonParser.class, CACHE);
+			return cache(CACHE).build(UonParser.class);
 		}
 
 		@Override /* Context.Builder */
@@ -260,6 +259,12 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -278,7 +283,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -732,7 +737,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected UonParser(Builder builder) {
+	public UonParser(Builder builder) {
 		super(builder);
 		decoding = builder.decoding;
 		validateEnd = builder.validateEnd;

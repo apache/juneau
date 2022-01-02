@@ -71,7 +71,11 @@ public class RestClient_Test {
 	// Override client and builder.
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class A2 extends RestClient.Builder {}
+	public static class A2 extends RestClient.Builder {
+		public A2() {
+			super();
+		}
+	}
 
 	@Test
 	public void a02_basic_useNoArgConstructor() {

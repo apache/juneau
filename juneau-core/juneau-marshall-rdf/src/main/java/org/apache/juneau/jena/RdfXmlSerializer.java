@@ -51,7 +51,7 @@ public class RdfXmlSerializer extends RdfSerializer {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected RdfXmlSerializer(RdfSerializer.Builder builder) {
+	public RdfXmlSerializer(RdfSerializer.Builder builder) {
 		super(builder.xml());
 	}
 }

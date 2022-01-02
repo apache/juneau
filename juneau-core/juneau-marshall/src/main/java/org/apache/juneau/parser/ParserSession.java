@@ -44,7 +44,21 @@ import org.apache.juneau.utils.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public abstract class ParserSession extends BeanSession {
+public class ParserSession extends BeanSession {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Static
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(Parser ctx) {
+		return new Builder(ctx);
+	}
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Builder
@@ -54,7 +68,7 @@ public abstract class ParserSession extends BeanSession {
 	 * Builder class.
 	 */
 	@FluentSetters
-	public abstract static class Builder extends BeanSession.Builder {
+	public static class Builder extends BeanSession.Builder {
 
 		Parser ctx;
 		Method javaMethod;
@@ -73,7 +87,9 @@ public abstract class ParserSession extends BeanSession {
 		}
 
 		@Override
-		public abstract ParserSession build();
+		public ParserSession build() {
+			return new ParserSession(this);
+		}
 
 		/**
 		 * The java method that called this serializer, usually the method in a REST servlet.
@@ -249,7 +265,10 @@ public abstract class ParserSession extends BeanSession {
 	 * Workhorse method.
 	 *
 	 * <p>
-	 * Subclasses are expected to implement this method.
+	 * Subclasses are expected to implement this method or {@link Parser#doParse(ParserSession,ParserPipe,ClassMeta)}.
+	 *
+	 * <p>
+	 * The default implementation of this method simply calls {@link Parser#doParse(ParserSession,ParserPipe,ClassMeta)}.
 	 *
 	 * @param pipe Where to get the input from.
 	 * @param type
@@ -263,14 +282,18 @@ public abstract class ParserSession extends BeanSession {
 	 * @throws ParseException Malformed input encountered.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	protected abstract <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException;
+	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+		return ctx.doParse(this, pipe, type);
+	}
 
 	/**
 	 * Returns <jk>true</jk> if this parser subclasses from {@link ReaderParser}.
 	 *
 	 * @return <jk>true</jk> if this parser subclasses from {@link ReaderParser}.
 	 */
-	public abstract boolean isReaderParser();
+	public boolean isReaderParser() {
+		return false;
+	}
 
 
 	//-----------------------------------------------------------------------------------------------------------------

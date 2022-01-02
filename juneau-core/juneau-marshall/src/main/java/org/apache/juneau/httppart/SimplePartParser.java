@@ -12,6 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart;
 
+import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
+
 /**
  * An implementation of {@link HttpPartParser} that takes in the strings and tries to convert them to POJOs using constructors and static create methods.
  *
@@ -75,6 +79,8 @@ public class SimplePartParser extends BaseHttpPartParser {
 	 */
 	public static class Builder extends BaseHttpPartParser.Builder {
 
+		private static final Cache<HashKey,SimplePartParser> CACHE = Cache.of(HashKey.class, SimplePartParser.class).build();
+
 		/**
 		 * Constructor.
 		 */
@@ -93,12 +99,18 @@ public class SimplePartParser extends BaseHttpPartParser {
 
 		@Override
 		public SimplePartParser build() {
-			return new SimplePartParser(this);
+			return cache(CACHE).build(SimplePartParser.class);
 		}
 
 		@Override
 		public Builder copy() {
 			return new Builder(this);
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
 		}
 	}
 
@@ -111,7 +123,7 @@ public class SimplePartParser extends BaseHttpPartParser {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected SimplePartParser(Builder builder) {
+	public SimplePartParser(Builder builder) {
 		super(builder);
 	}
 

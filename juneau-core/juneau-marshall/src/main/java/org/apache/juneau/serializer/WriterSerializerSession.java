@@ -48,7 +48,21 @@ import org.apache.juneau.svl.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public abstract class WriterSerializerSession extends SerializerSession {
+public class WriterSerializerSession extends SerializerSession {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Static
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(WriterSerializer ctx) {
+		return new Builder(ctx);
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Builder
@@ -58,7 +72,7 @@ public abstract class WriterSerializerSession extends SerializerSession {
 	 * Builder class.
 	 */
 	@FluentSetters
-	public static abstract class Builder extends SerializerSession.Builder {
+	public static class Builder extends SerializerSession.Builder {
 
 		WriterSerializer ctx;
 		boolean useWhitespace;
@@ -78,7 +92,9 @@ public abstract class WriterSerializerSession extends SerializerSession {
 		}
 
 		@Override
-		public abstract WriterSerializerSession build();
+		public WriterSerializerSession build() {
+			return new WriterSerializerSession(this);
+		}
 
 		/**
 		 * File charset.

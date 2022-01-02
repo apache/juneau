@@ -43,7 +43,21 @@ import org.apache.juneau.svl.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public abstract class OutputStreamSerializerSession extends SerializerSession {
+public class OutputStreamSerializerSession extends SerializerSession {
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(OutputStreamSerializer ctx) {
+		return new Builder(ctx);
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Builder
@@ -53,7 +67,7 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 	 * Builder class.
 	 */
 	@FluentSetters
-	public static abstract class Builder extends SerializerSession.Builder {
+	public static class Builder extends SerializerSession.Builder {
 
 		OutputStreamSerializer ctx;
 
@@ -68,7 +82,9 @@ public abstract class OutputStreamSerializerSession extends SerializerSession {
 		}
 
 		@Override
-		public abstract OutputStreamSerializerSession build();
+		public OutputStreamSerializerSession build() {
+			return new OutputStreamSerializerSession(this);
+		}
 
 		// <FluentSetters>
 

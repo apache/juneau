@@ -2422,15 +2422,15 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jc'>{@link org.apache.juneau.BeanContext.Builder}
-			<ul>
-				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanClassVisibility(Visibility) beanClassVisibility(Visibility)} - Allows non-public POJOs to be treated as beans.
-				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanConstructorVisibility(Visibility) beanConstructorVisibility(Visibility)} - Allows non-public constructors to be used on beans.
-				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanFieldVisibility(Visibility) beanFieldVisibility(Visibility)} - Allows non-public fields to be used as bean properties.
-				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanMethodVisibility(Visibility) beanMethodVisibility(Visibility)} - Allows non-public methods to be used as bean getters and setters.
-				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beansRequireDefaultConstructor() beansRequireDefaultConstructor()} - Don't treat a POJO as a bean if it doesn't have a default no-arg constructor.
-				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beansRequireSerializable() beansRequireSerializable()} - Don't treat a POJO as a bean if it doesn't implement <c>Serializable</c>.
-				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beansRequireSettersForGetters() beansRequireSettersForGetters()} - Ignore getter methods if they don't have setter methods.
-				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableBeansRequireSomeProperties() disableBeansRequireSomeProperties()} - Don't treat a POJO as a bean if it doesn't have at least one property defined.
+			<ul class='javatreec'>
+				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanClassVisibility(Visibility) beanClassVisibility(Visibility)}
+				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanConstructorVisibility(Visibility) beanConstructorVisibility(Visibility)}
+				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanFieldVisibility(Visibility) beanFieldVisibility(Visibility)}
+				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanMethodVisibility(Visibility) beanMethodVisibility(Visibility)}
+				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beansRequireDefaultConstructor() beansRequireDefaultConstructor()}
+				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beansRequireSerializable() beansRequireSerializable()}
+				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beansRequireSettersForGetters() beansRequireSettersForGetters()}
+				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableBeansRequireSomeProperties() disableBeansRequireSomeProperties()}
 			</ul>
 		</li>
 	</ul>
@@ -2439,11 +2439,11 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jc'>{@link org.apache.juneau.BeanContext.Builder}
-			<ul>
-				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanProperties(Class,String) beanProperties(Class,String)} - Specifies properties to include and property order during marshalling.
-				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesExcludes(Class,String) beanPropertiesExcludes(Class,String)} - Specifies properties to exclude during marshalling.
-				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(Class,String) beanPropertiesReadOnly(Class,String) } - Specifies read-only properties (ignored during parsing).
-				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(Class,String) beanPropertiesWriteOnly(Class,String)} - Specifies write-only properties (ignored during reading).
+			<ul class='javatreec'>
+				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanProperties(Class,String) beanProperties(Class,String)}
+				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesExcludes(Class,String) beanPropertiesExcludes(Class,String)}
+				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(Class,String) beanPropertiesReadOnly(Class,String) }
+				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(Class,String) beanPropertiesWriteOnly(Class,String)}
 			</ul>
 		</li>
 	</ul>
@@ -3336,9 +3336,9 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jc'>{@link org.apache.juneau.BeanContext.Builder}
-			<ul>
-				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#applyAnnotations(Class...) applyAnnotations(Class...)} - Apply annotations from class and all parent classes.
-				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#applyAnnotations(Method...) applyAnnotations(Method...)} - Apply annotations from method and parent methods.
+			<ul class='javatreec'>
+				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#applyAnnotations(Class...) applyAnnotations(Class...)}
+				<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#applyAnnotations(Method...) applyAnnotations(Method...)}
 			</ul>
 		</li>
 	</ul>
@@ -5636,9 +5636,9 @@
 		.getBody().assertValue().asString().contains(<js>"OK"</js>)
 		.getBody().as(MyBean.<jk>class</jk>);
 	</p>
-	<p>
-		<i>Note:  The REST API is described later in the documentation.</i>
-	</p>
+	<ul>
+		<li class='note'>The REST API is described later in the documentation.</i>
+	</ul>
 	<p>
 		The assertions API is designed to be used in both code (as it's done in the REST APIs) or for standalone
 		use in unit tests.
@@ -14137,10 +14137,10 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jac'>{@link org.apache.juneau.config.store.ConfigStore}
-			<ul>
-				<li class='jm'>{@link org.apache.juneau.config.store.ConfigStore#read(String) read(String)} - Read a config file.
-				<li class='jm'>{@link org.apache.juneau.config.store.ConfigStore#write(String,String,String) write(String,String,String)} - Write a config file.
-				<li class='jm'>{@link org.apache.juneau.config.store.ConfigStore#update(String,String) update(String,String)} - Update the contents of a config file.
+			<ul class='javatreec'>
+				<li class='jm'>{@link org.apache.juneau.config.store.ConfigStore#read(String) read(String)}
+				<li class='jm'>{@link org.apache.juneau.config.store.ConfigStore#write(String,String,String) write(String,String,String)}
+				<li class='jm'>{@link org.apache.juneau.config.store.ConfigStore#update(String,String) update(String,String)}
 			</ul>
 		</li>
 	</ul>
@@ -14186,7 +14186,11 @@
 		The store is defined on the <c>Config</c> object via the following setting:
 	</p>
 	<ul class='javatree'>
-		<li class='jm'>{@link org.apache.juneau.config.Config.Builder#store(ConfigStore)}
+		<li class='jc'>{@link org.apache.juneau.config.Config.Builder}
+			<ul class='javatreec'>
+				<li class='jm'>{@link org.apache.juneau.config.Config.Builder#store(ConfigStore) store(ConfigStore)}
+			</ul>
+		</li>
 	</ul>
 	
 	<h5 class='figure'>Example:</h5>
@@ -14417,9 +14421,9 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jac'>{@link org.apache.juneau.config.store.ConfigStore}
-			<ul>
-				<li class='jm'>{@link org.apache.juneau.config.store.ConfigStore#register(String,ConfigStoreListener) register(String,ConfigStoreListener)} - Register a listener on the specified config name.
-				<li class='jm'>{@link org.apache.juneau.config.store.ConfigStore#unregister(String,ConfigStoreListener) unregister(String,ConfigStoreListener)} - Unregister a listener on the specified config name.
+			<ul class='javatreec'>
+				<li class='jm'>{@link org.apache.juneau.config.store.ConfigStore#register(String,ConfigStoreListener) register(String,ConfigStoreListener)}
+				<li class='jm'>{@link org.apache.juneau.config.store.ConfigStore#unregister(String,ConfigStoreListener) unregister(String,ConfigStoreListener)}
 			</ul>
 		</li>
 	</ul>
@@ -14429,8 +14433,8 @@
 	</p>		
 	<ul class='javatree'>
 		<li class='jic'>{@link org.apache.juneau.config.store.ConfigStoreListener}
-			<ul>
-				<li class='jm'>{@link org.apache.juneau.config.store.ConfigStoreListener#onChange(String)} - Called when file changes.  New contents are passed in.
+			<ul class='javatreec'>
+				<li class='jm'>{@link org.apache.juneau.config.store.ConfigStoreListener#onChange(String) onChange(String)}
 			</ul>
 		</li>
 	</ul>
@@ -14451,7 +14455,11 @@
 		The following settings can be used to create read-only <c>Config</c> objects:
 	</p>
 	<ul class='javatree'>
-		<li class='jm'>{@link org.apache.juneau.config.Config.Builder#readOnly()}
+		<li class='jc'>{@link org.apache.juneau.config.Config.Builder}
+			<ul class='javatreec'>
+				<li class='jm'>{@link org.apache.juneau.config.Config.Builder#readOnly() readOnly()}
+			</ul>
+		</li>
 	</ul>
 	
 	<h5 class='figure'>Example:</h5>
@@ -15276,9 +15284,9 @@
 		which can be manipulated during servlet initialization.
 		(As a general rule, all annotations throughout Juneau have programmatic equivalents.)
 	</p>
-	<p>
-		<i>Note:</i>  {@link org.apache.juneau.rest.BasicRestServletJena} is the equivalent class that includes support for RDF languages.
-	</p>
+	<ul>
+		<li class='note'>{@link org.apache.juneau.rest.BasicRestServletJena} is the equivalent class that includes support for RDF languages.
+	</ul>
 	<p>
 		The {@link org.apache.juneau.rest.BasicRestObject} class is identical to the {@link org.apache.juneau.rest.BasicRestServlet} class except that
 		it does not extend from <c>HttpServlet</c>.
@@ -15709,12 +15717,12 @@
 					<ul class='javatreec'>
 						<li class='jc'>{@link org.apache.juneau.BeanContext}
 						<li class='jc'>{@link org.apache.juneau.config.Config}
-						<li class='jic'>{@link org.apache.juneau.rest.DebugEnablement}
+						<li class='jic'>{@link org.apache.juneau.rest.debug.DebugEnablement}
 						<li class='jc'>{@link org.apache.juneau.encoders.EncoderSet}
 						<li class='jic'>{@link org.apache.juneau.cp.FileFinder}
 						<li class='jc'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator}
 						<li class='jc'>{@link java.util.Logger}
-						<li class='jc'>{@link org.apache.juneau.mstat.MethodExecStore}
+						<li class='jc'>{@link org.apache.juneau.stats.MethodExecStore}
 						<li class='jc'>{@link org.apache.juneau.parser.ParserSet}
 						<li class='jc'>{@link org.apache.juneau.rest.RestChildren}
 						<li class='jc'>{@link org.apache.juneau.rest.RestContext}
@@ -15723,7 +15731,7 @@
 						<li class='jc'>{@link org.apache.juneau.rest.RestOpContext}
 						<li class='jc'>{@link org.apache.juneau.rest.RestOperations}
 						<li class='jc'>{@link org.apache.juneau.serializer.SerializerSet}
-						<li class='jic'>{@link org.apache.juneau.rest.StaticFiles}
+						<li class='jic'>{@link org.apache.juneau.rest.staticfile.StaticFiles}
 						<li class='jc'>{@link org.apache.juneau.rest.stats.ThrownStore}
 					</ul>
 				</li>
@@ -17429,9 +17437,17 @@
 	<p>
 		Guards are associated with resource classes and methods via the following:
 	</p>
-	<ul class='javatreec'>
-		<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#guards() Rest(guards)} 
-		<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#guards() RestOp(guards)} 
+	<ul class='javatree'>
+		<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest} 
+			<ul class='javatreec'>
+				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#guards() guards} 
+			</ul>
+		</li>
+		<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp} 
+			<ul class='javatreec'>
+				<li class='jma'>{@link org.apache.juneau.rest.annotation.RestOp#guards() guards} 
+			</ul>
+		</li>
 	</ul>
 	<h5 class='figure'>Example:</h5>
 	<p class='bcode w800'>
@@ -17491,9 +17507,17 @@
 		A simplified format is available for matching based on the user role on the request using the following:
 	</p>
 	
-	<ul class='javatreec'>
-		<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#roleGuard() Rest(roleGuard)} 
-		<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#roleGuard() RestOp(roleGuard)} 
+	<ul class='javatree'>
+		<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest} 
+			<ul class='javatreec'>
+				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#roleGuard() roleGuard} 
+			</ul>
+		</li>
+		<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp} 
+			<ul class='javatreec'>
+				<li class='jma'>{@link org.apache.juneau.rest.annotation.RestOp#roleGuard() roleGuard} 
+			</ul>
+		</li>
 	</ul>
 	<h5 class='figure'>Example:</h5>
 	<p class='bcode w800'>
@@ -17519,9 +17543,17 @@
 	<p>
 		Converters are associated with resource classes and methods via the following:
 	</p>
-	<ul class='javatreec'>
-		<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#converters() Rest(converters)} 
-		<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#converters() RestOp(converters)} 
+	<ul class='javatree'>
+		<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest} 
+			<ul class='javatreec'>
+				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#converters() converters} 
+			</ul>
+		</li>
+		<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp} 
+			<ul class='javatreec'>
+				<li class='jma'>{@link org.apache.juneau.rest.annotation.RestOp#converters() converters} 
+			</ul>
+		</li>
 	</ul>
 	<h5 class='figure'>Example:</h5>
 	<p class='bcode w800'>
@@ -17589,7 +17621,10 @@
 		This annotation is used to provide request-localized (based on <c>Accept-Language</c>) messages for the following method:
 	</p>
 	<ul class='javatree'>
-		<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMessage(String, Object...)}
+		<li class='jc'>{@link org.apache.juneau.rest.RestRequest}
+			<ul class='javatreec'>
+				<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getMessage(String,Object...) getMessage(String,Object)}
+			</ul>
 	</ul>
 	
 	<p>
@@ -18116,7 +18151,7 @@
 	<ul class='javatree'>
 		<li class='jc'>{@link org.apache.juneau.rest.RestContext.Builder}
 			<ul class='javatreec'>
-				<li class='jmp'>{@link org.apache.juneau.rest.RestContext.Builder#createVarResolver(BeanSession,Supplier) createVarResolver(BeanSession,Supplier)}
+				<li class='jmp'>{@link org.apache.juneau.rest.RestContext.Builder#createVarResolver(BeanStore,Class) createVarResolver(BeanStore,Class)}
 				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#varResolver() varResolver()}
 				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#varResolver(Consumer) varResolver(Consumer)}
 			</ul>
@@ -18153,12 +18188,12 @@
 	<ul class='javatree'>
 		<li class='jc'>{@link org.apache.juneau.rest.RestContext}
 			<ul class='javatreec'>
-				<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver()}
+				<li class='jm'>{@link org.apache.juneau.rest.RestContext#getVarResolver() getVarResolver()}
 			</ul>
 		</li>
 		<li class='jc'>{@link org.apache.juneau.rest.RestRequest}
 			<ul class='javatreec'>
-				<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getVarResolverSession()}
+				<li class='jm'>{@link org.apache.juneau.rest.RestRequest#getVarResolverSession() getVarResolverSession()}
 			</ul>
 		</li>
 	</ul>
@@ -19199,7 +19234,11 @@
 		<br>They are registered in the following location:
 	</p>
 	<ul class='javatree'>
-		<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#widgets() HtmlDocConfig(widgets)}
+		<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig}
+			<ul class='javatreec'>
+				<li class='jma'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#widgets() widgets}
+			</ul>
+		</li>
 	</ul>
 	<h5 class='figure'>Example:</h5>
 	<p class='bcode w800'>
@@ -26724,10 +26763,11 @@
 		The <c>juneau-examples-rest</c> project includes various examples of REST resources written
 		using Juneau.
 	</p>
-	<p>
-		Note:  These examples can be deployed as buildable Eclipse projects using Jetty or Spring Boot using instructions
-		in the following sections:
-	</p>
+	<ul>
+		<li class='note'>
+			These examples can be deployed as buildable Eclipse projects using Jetty or Spring Boot using instructions
+			in the following sections:
+	</ul>
 	<ul class='spaced-list'>
 		<li>{@doc juneau-examples-rest-jetty}
 		<li>{@doc juneau-examples-rest-springboot}

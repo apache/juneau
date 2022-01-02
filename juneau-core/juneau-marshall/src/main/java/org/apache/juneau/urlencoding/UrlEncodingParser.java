@@ -92,7 +92,6 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 			super();
 			decoding();
 			consumes("application/x-www-form-urlencoded");
-			type(UrlEncodingParser.class);
 			expandedParams = env("UrlEncoding.expandedParams", false);
 		}
 
@@ -123,7 +122,7 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 
 		@Override /* Context.Builder */
 		public UrlEncodingParser build() {
-			return build(UrlEncodingParser.class, CACHE);
+			return cache(CACHE).build(UrlEncodingParser.class);
 		}
 
 		@Override /* Context.Builder */
@@ -219,6 +218,12 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -237,7 +242,7 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -715,7 +720,7 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected UrlEncodingParser(Builder builder) {
+	public UrlEncodingParser(Builder builder) {
 		super(builder);
 		expandedParams = builder.expandedParams;
 	}

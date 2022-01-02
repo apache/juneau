@@ -14,6 +14,7 @@ package org.apache.juneau.serializer;
 
 import static java.util.Optional.*;
 import static org.apache.juneau.collections.OMap.*;
+
 import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -24,6 +25,7 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.soap.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -43,8 +45,15 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <p>
- * Subclasses should extend directly from {@link OutputStreamSerializer} or {@link WriterSerializer} depending on
+ * Subclasses should (but are not required to) extend directly from {@link OutputStreamSerializer} or {@link WriterSerializer} depending on
  * whether it's a stream or character based serializer.
+ *
+ * <p>
+ * Subclasses must implement parsing via one of the following methods:
+ * <ul class='javatree'>
+ * 	<li class='jmp'>{@link #doSerialize(SerializerSession, SerializerPipe, Object)}
+ * 	<li class='jmp'>{@link SerializerSession#doSerialize(SerializerPipe, Object)}
+ * </ul>
  *
  * <ul class='spaced-list'>
  * 	<li class='note'>This class is thread safe and reusable.
@@ -55,11 +64,20 @@ import org.apache.juneau.utils.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public abstract class Serializer extends BeanTraverseContext {
+public class Serializer extends BeanTraverseContext {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Static
 	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
 
 	/**
 	 * Represents no Serializer.
@@ -92,7 +110,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * Builder class.
 	 */
 	@FluentSetters
-	public abstract static class Builder extends BeanTraverseContext.Builder {
+	public static class Builder extends BeanTraverseContext.Builder {
 
 		boolean addBeanTypes, addRootType, keepNullProperties, sortCollections, sortMaps, trimEmptyCollections,
 			trimEmptyMaps, trimStrings;
@@ -170,10 +188,14 @@ public abstract class Serializer extends BeanTraverseContext {
 		}
 
 		@Override /* Context.Builder */
-		public abstract Builder copy();
+		public Builder copy() {
+			return new Builder(this);
+		}
 
 		@Override /* Context.Builder */
-		public abstract Serializer build();
+		public Serializer build() {
+			return build(Serializer.class);
+		}
 
 		@Override /* Context.Builder */
 		public HashKey hashKey() {
@@ -866,7 +888,7 @@ public abstract class Serializer extends BeanTraverseContext {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -1316,17 +1338,19 @@ public abstract class Serializer extends BeanTraverseContext {
 	}
 
 	@Override /* Context */
-	public abstract Builder copy();
+	public Builder copy() {
+		return new Builder(this);
+	}
 
 	@Override /* Context */
-	public abstract SerializerSession.Builder createSession();
+	public SerializerSession.Builder createSession() {
+		return SerializerSession.create(this);
+	}
 
 	@Override /* Context */
-	public abstract SerializerSession getSession();
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Abstract methods
-	//-----------------------------------------------------------------------------------------------------------------
+	public SerializerSession getSession() {
+		return createSession().build();
+	}
 
 	/**
 	 * Returns <jk>true</jk> if this serializer subclasses from {@link WriterSerializer}.
@@ -1334,7 +1358,7 @@ public abstract class Serializer extends BeanTraverseContext {
 	 * @return <jk>true</jk> if this serializer subclasses from {@link WriterSerializer}.
 	 */
 	public boolean isWriterSerializer() {
-		return true;
+		return false;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1403,6 +1427,38 @@ public abstract class Serializer extends BeanTraverseContext {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Serializes a POJO to the specified pipe.
+	 *
+	 * @param session The current session.
+	 * @param pipe Where to send the output from the serializer.
+	 * @param o The object to serialize.
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws SerializeException Problem occurred trying to serialize object.
+	 */
+	protected void doSerialize(SerializerSession session, SerializerPipe pipe, Object o) throws IOException, SerializeException {
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * Optional method that specifies HTTP request headers for this serializer.
+	 *
+	 * <p>
+	 * For example, {@link SoapXmlSerializer} needs to set a <c>SOAPAction</c> header.
+	 *
+	 * <p>
+	 * This method is typically meaningless if the serializer is being used stand-alone (i.e. outside of a REST server
+	 * or client).
+	 *
+	 * @param session The current session.
+	 * @return
+	 * 	The HTTP headers to set on HTTP requests.
+	 * 	Never <jk>null</jk>.
+	 */
+	public Map<String,String> getResponseHeaders(SerializerSession session) {
+		return Collections.emptyMap();
+	}
 
 	/**
 	 * Returns the media types handled based on the value of the <c>accept</c> parameter passed into the constructor.

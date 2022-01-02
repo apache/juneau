@@ -30,7 +30,6 @@ import org.apache.juneau.utils.*;
 
 /**
  * Subclass of {@link Serializer} for character-based serializers.
- * {@review}
  *
  * <ul class='spaced-list'>
  * 	<li class='note'>This class is thread safe and reusable.
@@ -41,7 +40,20 @@ import org.apache.juneau.utils.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public abstract class WriterSerializer extends Serializer {
+public class WriterSerializer extends Serializer {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Static
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Builder
@@ -51,7 +63,7 @@ public abstract class WriterSerializer extends Serializer {
 	 * Builder class.
 	 */
 	@FluentSetters
-	public abstract static class Builder extends Serializer.Builder {
+	public static class Builder extends Serializer.Builder {
 
 		boolean useWhitespace;
 		Charset fileCharset, streamCharset;
@@ -102,10 +114,14 @@ public abstract class WriterSerializer extends Serializer {
 		}
 
 		@Override /* Context.Builder */
-		public abstract Builder copy();
+		public Builder copy() {
+			return new Builder(this);
+		}
 
 		@Override /* Context.Builder */
-		public abstract WriterSerializer build();
+		public WriterSerializer build() {
+			return build(WriterSerializer.class);
+		}
 
 		@Override /* Context.Builder */
 		public HashKey hashKey() {
@@ -429,7 +445,7 @@ public abstract class WriterSerializer extends Serializer {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -990,13 +1006,19 @@ public abstract class WriterSerializer extends Serializer {
 	}
 
 	@Override /* Context */
-	public abstract Builder copy();
+	public Builder copy() {
+		return new Builder(this);
+	}
 
 	@Override /* Context */
-	public abstract WriterSerializerSession.Builder createSession();
+	public WriterSerializerSession.Builder createSession() {
+		return WriterSerializerSession.create(this);
+	}
 
 	@Override /* Context */
-	public abstract WriterSerializerSession getSession();
+	public WriterSerializerSession getSession() {
+		return createSession().build();
+	}
 
 	@Override /* Serializer */
 	public final boolean isWriterSerializer() {

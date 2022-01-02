@@ -29,12 +29,6 @@ import org.apache.juneau.utils.*;
  *
  * <h5 class='topic'>Description</h5>
  *
- * This class is typically the parent class of all byte-based parsers.
- * It has 1 abstract method to implement...
- * <ul>
- * 	<li><c>parse(InputStream, ClassMeta, Parser)</c>
- * </ul>
- *
  * <ul class='spaced-list'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
@@ -44,7 +38,20 @@ import org.apache.juneau.utils.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public abstract class InputStreamParser extends Parser {
+public class InputStreamParser extends Parser {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Static
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Builder
@@ -54,7 +61,7 @@ public abstract class InputStreamParser extends Parser {
 	 * Builder class.
 	 */
 	@FluentSetters
-	public abstract static class Builder extends Parser.Builder {
+	public static class Builder extends Parser.Builder {
 
 		BinaryFormat binaryFormat;
 
@@ -87,10 +94,14 @@ public abstract class InputStreamParser extends Parser {
 		}
 
 		@Override /* Context.Builder */
-		public abstract Builder copy();
+		public Builder copy() {
+			return new Builder(this);
+		}
 
 		@Override /* Context.Builder */
-		public abstract InputStreamParser build();
+		public InputStreamParser build() {
+			return build(InputStreamParser.class);
+		}
 
 		@Override /* Context.Builder */
 		public HashKey hashKey() {
@@ -180,7 +191,7 @@ public abstract class InputStreamParser extends Parser {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -627,6 +638,16 @@ public abstract class InputStreamParser extends Parser {
 	@Override /* Parser */
 	public final boolean isReaderParser() {
 		return false;
+	}
+
+	@Override /* Context */
+	public InputStreamParserSession.Builder createSession() {
+		return InputStreamParserSession.create(this);
+	}
+
+	@Override /* Context */
+	public InputStreamParserSession getSession() {
+		return createSession().build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

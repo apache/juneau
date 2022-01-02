@@ -422,7 +422,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		protected Builder() {
 			super();
 			connectionManager(new MockHttpClientConnectionManager());
-			type(MockRestClient.class);
 		}
 
 		@Override /* Context.Builder */
@@ -586,12 +585,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 
 		@Override /* Context.Builder */
 		public MockRestClient build() {
-			return (MockRestClient)super.build();
-		}
-
-		@Override /* Context.Builder */
-		public <T extends RestClient> T build(Class<T> c) {
-			return super.build(c);
+			return build(MockRestClient.class);
 		}
 
 		// <FluentSetters>
@@ -627,7 +621,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -1917,7 +1911,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 * @param builder
 	 * 	The builder for this object.
 	 */
-	protected MockRestClient(Builder builder) {
+	public MockRestClient(Builder builder) {
 		super(preInit(builder));
 		restContext = builder.restContext;
 		contextPath = ofNullable(builder.contextPath).orElse("");

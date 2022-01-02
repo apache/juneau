@@ -85,7 +85,6 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 			super();
 			produces("text/xml");
 			accept("text/xml+soap");
-			type(SoapXmlSerializer.class);
 			soapAction = "http://www.w3.org/2003/05/soap-envelope";
 		}
 
@@ -116,7 +115,7 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 
 		@Override /* Context.Builder */
 		public SoapXmlSerializer build() {
-			return build(SoapXmlSerializer.class, CACHE);
+			return cache(CACHE).build(SoapXmlSerializer.class);
 		}
 
 		@Override /* Context.Builder */
@@ -172,6 +171,12 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -190,7 +195,7 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -854,7 +859,7 @@ public class SoapXmlSerializer extends XmlSerializer implements SoapXmlMetaProvi
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected SoapXmlSerializer(Builder builder) {
+	public SoapXmlSerializer(Builder builder) {
 		super(builder);
 		soapAction = builder.soapAction;
 	}

@@ -10,48 +10,32 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.jena;
+package org.apache.juneau.examples.parser;
+
+import java.awt.image.*;
+import java.io.*;
+
+import javax.imageio.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.parser.*;
 
 /**
- * Subclass of {@link RdfParser} for parsing RDF in Abbreviated-XML notation.
- *
- * <ul class='spaced-list'>
- * 	<li class='note'>This class is thread safe and reusable.
- * </ul>
- *
- * <ul class='seealso'>
- * 	<li class='link'>{@doc jmr.RdfDetails}
- * 	<li class='extlink'>{@source}
- * </ul>
+ * Example parser that converts byte streams to {@link BufferedImage} objects.
  */
-public class RdfXmlAbbrevSerializer extends RdfSerializer {
+@SuppressWarnings("javadoc")
+public class ImageParser extends InputStreamParser {
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Static
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/** Default RDF/XML serializer, all default settings.*/
-	public static final RdfXmlAbbrevSerializer DEFAULT = new RdfXmlAbbrevSerializer(create());
-
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @return A new builder.
-	 */
-	public static RdfSerializer.Builder create() {
-		return RdfSerializer.create().xmlabbrev();
+	public ImageParser() {
+		super(create().consumes("image/png,image/jpg"));
 	}
 
-	//-------------------------------------------------------------------------------------------------------------------
-	// Instance
-	//-------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Constructor.
-	 *
-	 * @param builder The builder for this object.
-	 */
-	public RdfXmlAbbrevSerializer(RdfSerializer.Builder builder) {
-		super(builder.xmlabbrev());
+	@Override /* Parser */
+	@SuppressWarnings("unchecked")
+	public <T> T doParse(ParserSession session, ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
+		try (InputStream is = pipe.getInputStream()) {
+			BufferedImage image = ImageIO.read(is);
+			return (T)image;
+		}
 	}
 }

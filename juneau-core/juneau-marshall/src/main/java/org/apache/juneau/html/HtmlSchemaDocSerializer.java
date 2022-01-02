@@ -89,7 +89,6 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 			super();
 			produces("text/html");
 			accept("text/html+schema");
-			type(HtmlSchemaDocSerializer.class);
 			generatorBuilder = JsonSchemaGenerator.create().beanContext(beanContext());
 		}
 
@@ -120,7 +119,7 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 
 		@Override /* Context.Builder */
 		public HtmlSchemaDocSerializer build() {
-			return (HtmlSchemaDocSerializer)super.build();
+			return build(HtmlSchemaDocSerializer.class);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -304,7 +303,7 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -1117,7 +1116,7 @@ public final class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 	 * @param builder
 	 * 	The builder for this object.
 	 */
-	protected HtmlSchemaDocSerializer(HtmlDocSerializer.Builder builder) {
+	public HtmlSchemaDocSerializer(HtmlDocSerializer.Builder builder) {
 		super(builder.detectRecursions().ignoreRecursions());
 
 		generator = JsonSchemaGenerator.create().beanContext(getBeanContext()).build();

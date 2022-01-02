@@ -51,7 +51,7 @@ public class N3Parser extends RdfParser {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected N3Parser(RdfParser.Builder builder) {
+	public N3Parser(RdfParser.Builder builder) {
 		super(builder.n3().consumes("text/n3"));
 	}
 }

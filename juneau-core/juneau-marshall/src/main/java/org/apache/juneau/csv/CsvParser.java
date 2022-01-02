@@ -72,7 +72,6 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 		protected Builder() {
 			super();
 			consumes("text/csv");
-			type(CsvParser.class);
 		}
 
 		/**
@@ -100,7 +99,7 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 
 		@Override /* Context.Builder */
 		public CsvParser build() {
-			return build(CsvParser.class, CACHE);
+			return cache(CACHE).build(CsvParser.class);
 		}
 
 		@Override /* Context.Builder */
@@ -139,6 +138,12 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -157,7 +162,7 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -609,7 +614,7 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected CsvParser(Builder builder) {
+	public CsvParser(Builder builder) {
 		super(builder);
 	}
 

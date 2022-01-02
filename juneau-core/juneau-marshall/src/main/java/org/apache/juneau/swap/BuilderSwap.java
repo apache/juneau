@@ -152,7 +152,7 @@ public class BuilderSwap<T,B> {
 		ConstructorInfo objectConstructor;
 		ConstructorInfo builderConstructor;
 
-		createObjectMethod = bci.getBuilderBuildMethod();
+		createObjectMethod = bci.getBuilderBuildMethod().orElse(null);
 		if (createObjectMethod != null)
 			objectClass = createObjectMethod.getReturnType().inner();
 
@@ -166,7 +166,7 @@ public class BuilderSwap<T,B> {
 			return null;
 
 		builderConstructor = bci.getNoArgConstructor(cVis);
-		createBuilderMethod = pci.getBuilderCreateMethod();
+		createBuilderMethod = pci.getBuilderCreateMethod().orElse(null);
 		if (builderConstructor == null && createBuilderMethod == null)
 			return null;
 
@@ -196,7 +196,7 @@ public class BuilderSwap<T,B> {
 
 		ClassInfo pci = ClassInfo.of(objectClass);
 
-		builderCreateMethod = pci.getBuilderCreateMethod();
+		builderCreateMethod = pci.getBuilderCreateMethod().orElse(null);
 
 		if (builderClass == null && builderCreateMethod != null)
 			builderClass = builderCreateMethod.getReturnType().inner();
@@ -221,7 +221,7 @@ public class BuilderSwap<T,B> {
 		if (builderConstructor == null && builderCreateMethod == null)
 			return null;
 
-		objectCreateMethod = bci.getBuilderBuildMethod();
+		objectCreateMethod = bci.getBuilderBuildMethod().orElse(null);
 		if (objectConstructor == null)
 			objectConstructor = pci.getConstructor(cVis, builderClass);
 

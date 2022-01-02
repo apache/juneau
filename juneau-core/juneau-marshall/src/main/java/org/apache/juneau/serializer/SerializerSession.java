@@ -59,7 +59,21 @@ import org.apache.juneau.swap.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public abstract class SerializerSession extends BeanTraverseSession {
+public class SerializerSession extends BeanTraverseSession {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Static
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(Serializer ctx) {
+		return new Builder(ctx);
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Builder
@@ -69,7 +83,7 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 * Builder class.
 	 */
 	@FluentSetters
-	public static abstract class Builder extends BeanTraverseSession.Builder {
+	public static class Builder extends BeanTraverseSession.Builder {
 
 		Serializer ctx;
 		Method javaMethod;
@@ -90,7 +104,9 @@ public abstract class SerializerSession extends BeanTraverseSession {
 		}
 
 		@Override
-		public abstract SerializerSession build();
+		public SerializerSession build() {
+			return new SerializerSession(this);
+		}
 
 		/**
 		 * The java method that called this serializer, usually the method in a REST servlet.
@@ -326,17 +342,22 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Serializes a POJO to the specified output stream or writer.
+	 * Serializes a POJO to the specified pipe.
 	 *
 	 * <p>
 	 * This method should NOT close the context object.
+	 *
+	 * <p>
+	 * The default implementation of this method simply calls {@link Serializer#doSerialize(SerializerSession,SerializerPipe,Object)}.
 	 *
 	 * @param pipe Where to send the output from the serializer.
 	 * @param o The object to serialize.
 	 * @throws IOException Thrown by underlying stream.
 	 * @throws SerializeException Problem occurred trying to serialize object.
 	 */
-	protected abstract void doSerialize(SerializerPipe pipe, Object o) throws IOException, SerializeException;
+	protected void doSerialize(SerializerPipe pipe, Object o) throws IOException, SerializeException {
+		ctx.doSerialize(this, pipe, o);
+	}
 
 	/**
 	 * Shortcut method for serializing objects directly to either a <c>String</c> or <code><jk>byte</jk>[]</code>
@@ -349,7 +370,9 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 * 	<br>Stream-based serializers will return a <code><jk>byte</jk>[]</code>.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	public abstract Object serialize(Object o) throws SerializeException;
+	public Object serialize(Object o) throws SerializeException {
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * Shortcut method for serializing an object to a String.
@@ -361,14 +384,18 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 * 	<br>Stream-based serializers will return a <code><jk>byte</jk>[]</code> converted to a string based on the {@link OutputStreamSerializer.Builder#binaryFormat(BinaryFormat)} setting.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	public abstract String serializeToString(Object o) throws SerializeException;
+	public String serializeToString(Object o) throws SerializeException {
+		throw new UnsupportedOperationException();
+	}
 
 	/**
 	 * Returns <jk>true</jk> if this serializer subclasses from {@link WriterSerializer}.
 	 *
 	 * @return <jk>true</jk> if this serializer subclasses from {@link WriterSerializer}.
 	 */
-	public abstract boolean isWriterSerializer();
+	public boolean isWriterSerializer() {
+		return false;
+	}
 
 	/**
 	 * Wraps the specified input object into a {@link ParserPipe} object so that it can be easily converted into
@@ -391,7 +418,9 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 * @return
 	 * 	A new {@link ParserPipe} wrapper around the specified input object.
 	 */
-	protected abstract SerializerPipe createPipe(Object output);
+	protected SerializerPipe createPipe(Object output) {
+		return new SerializerPipe(output);
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
@@ -824,12 +853,15 @@ public abstract class SerializerSession extends BeanTraverseSession {
 	 * This method is typically meaningless if the serializer is being used stand-alone (i.e. outside of a REST server
 	 * or client).
 	 *
+	 * <p>
+	 * The default implementation of this method simply calls {@link Serializer#getResponseHeaders(SerializerSession)}.
+	 *
 	 * @return
 	 * 	The HTTP headers to set on HTTP requests.
 	 * 	Never <jk>null</jk>.
 	 */
 	public Map<String,String> getResponseHeaders() {
-		return Collections.emptyMap();
+		return ctx.getResponseHeaders(this);
 	}
 
 	/**

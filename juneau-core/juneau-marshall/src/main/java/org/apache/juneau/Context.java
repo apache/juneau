@@ -12,11 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.Visibility.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
-import static org.apache.juneau.reflect.ReflectionFilters.*;
 import static java.util.Arrays.*;
 import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
@@ -97,9 +95,7 @@ public abstract class Context implements MetaProvider {
 		try {
 			MethodInfo mi = BUILDER_CREATE_METHODS.get(type);
 			if (mi == null) {
-				mi = ClassInfo.of(type).getBuilderCreateMethod();
-				if (mi == null)
-					throw runtimeException("Could not find builder create method on class {0}", type);
+				mi = ClassInfo.of(type).getBuilderCreateMethod().orElseThrow(()->runtimeException("Could not find builder create method on class {0}", type));
 				BUILDER_CREATE_METHODS.put(type, mi);
 			}
 			Builder b = (Builder)mi.invoke(null);
@@ -120,10 +116,13 @@ public abstract class Context implements MetaProvider {
 	@FluentSetters
 	public static abstract class Builder {
 
+		private static final Map<Class<?>,ConstructorInfo> CONTEXT_CONSTRUCTORS = new ConcurrentHashMap<>();
+
 		boolean debug;
-		Class<?> type;
+		Class<? extends Context> type;
 		Context impl;
 		List<Annotation> annotations;
+		Cache<HashKey,? extends Context> cache;
 
 		private final List<Object> builders = new ArrayList<>();
 		private final AnnotationWorkList applied = new AnnotationWorkList();
@@ -132,10 +131,16 @@ public abstract class Context implements MetaProvider {
 		 * Constructor.
 		 * Default settings.
 		 */
+		@SuppressWarnings("unchecked")
 		protected Builder() {
 			debug = env("Context.debug", false);
 			annotations = null;
 			registerBuilders(this);
+
+			// By default, the type being created should be the class declaring the builder.
+			Class<?> dc = getClass().getDeclaringClass();
+			if (Context.class.isAssignableFrom(dc))
+				type((Class<? extends Context>)dc);
 		}
 
 		/**
@@ -162,6 +167,30 @@ public abstract class Context implements MetaProvider {
 			registerBuilders(this);
 		}
 
+		private Context innerBuild() {
+			if (type == null)
+				throw runtimeException("Type not specified for context builder {0}", getClass().getName());
+			if (impl != null && type.isInstance(impl))
+				return type.cast(impl);
+			if (cache != null)
+				return cache.get(hashKey(), ()->getContextConstructor().invoke(this));
+			return getContextConstructor().invoke(this);
+		}
+
+		private ConstructorInfo getContextConstructor() {
+			ConstructorInfo cci = CONTEXT_CONSTRUCTORS.get(type);
+			if (cci == null) {
+				cci = ClassInfo.of(type)
+					.getPublicConstructors()
+					.stream()
+					.filter(x -> x.hasNumParams(1) && x.getParam(0).getParameterType().isParentOf(this.getClass()))
+					.findFirst()
+					.orElseThrow(()->runtimeException("Public constructor not found: {0}({1})", className(type), className(this)));
+				CONTEXT_CONSTRUCTORS.put(type, cci);
+			}
+			return cci;
+		}
+
 		/**
 		 * Copy creator.
 		 *
@@ -174,7 +203,9 @@ public abstract class Context implements MetaProvider {
 		 *
 		 * @return The built object.
 		 */
-		public abstract Context build();
+		public Context build() {
+			return innerBuild();
+		}
 
 		/**
 		 * Returns the hashkey of this builder.
@@ -191,37 +222,29 @@ public abstract class Context implements MetaProvider {
 		}
 
 		/**
-		 * Builds the context from this builder.
+		 * Specifies a cache to use for hashkey-based caching.
 		 *
-		 * <p>
-		 * Looks for a public/protected constructor that takes in this builder bean.
-		 * If <c>cache</c> is specified, then the created bean will be cached using {@link #hashKey()} as the key.
-		 *
-		 * @param c The context class being created.
-		 * @param cache Optional cache to use for caching and retrieving existing instances.
-		 * @return A new context object.
+		 * @param value The cache.
+		 * @return This object.
 		 */
-		protected <T extends Context> T build(Class<T> c, Cache<HashKey,T> cache) {
-			if (impl != null && c.isInstance(impl))
-				return c.cast(impl);
-			if (cache != null)
-				return cache.get(hashKey(), ()->getContextConstructor().invoke(this));
-			return getContextConstructor().invoke(this);
+		@FluentSetter
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			this.cache = value;
+			return this;
 		}
 
-		private ConstructorInfo getContextConstructor() {
-			ConstructorInfo cci = CONTEXT_CONSTRUCTORS.get(type);
-			if (cci == null) {
-				ClassInfo ci = ClassInfo.of(type);
-				cci = ci.getConstructor(isVisible(PROTECTED).and(hasParentArgs(this))).map(x -> x.accessible()).orElse(null);
-				if (cci == null)
-					throw runtimeException("Constructor not found for class {0}", type);
-				CONTEXT_CONSTRUCTORS.put(type, cci);
-			}
-			return cci;
+		/**
+		 * Convenience method for calling {@link #build()} while avoiding a cast.
+		 *
+		 * @param c The type to cast the built object to.
+		 * @return The built context bean.
+		 */
+		@SuppressWarnings("unchecked")
+		public final <T extends Context> T build(Class<T> c) {
+			if (type == null || ! c.isAssignableFrom(type))
+				type = c;
+			return (T)innerBuild();
 		}
-
-		private static final Map<Class<?>,ConstructorInfo> CONTEXT_CONSTRUCTORS = new ConcurrentHashMap<>();
 
 		/**
 		 * Apply a consumer to this builder.
@@ -240,11 +263,17 @@ public abstract class Context implements MetaProvider {
 		/**
 		 * Associates a context class with this builder.
 		 *
+		 * <p>
+		 * This is the type of object that this builder creates when the {@link #build()} method is called.
+		 *
+		 * <p>
+		 * By default, it's the outer class of where the builder class is defined.
+		 *
 		 * @param value The context class that this builder should create.
 		 * @return This object.
 		 */
 		@FluentSetter
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			this.type = value;
 			return this;
 		}

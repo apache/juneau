@@ -51,7 +51,7 @@ public class NTripleSerializer extends RdfSerializer {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected NTripleSerializer(RdfSerializer.Builder builder) {
+	public NTripleSerializer(RdfSerializer.Builder builder) {
 		super(builder.ntriple());
 	}
 }

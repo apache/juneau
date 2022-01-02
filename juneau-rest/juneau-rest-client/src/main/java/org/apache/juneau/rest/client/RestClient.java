@@ -1095,7 +1095,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		protected Builder() {
 			super();
-			type(RestClient.class);
 		}
 
 		@Override /* Context.Builder */
@@ -1105,18 +1104,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 		@Override /* Context.Builder */
 		public RestClient build() {
-			return build(RestClient.class, null);
-		}
-
-		/**
-		 * Creates client of the specified class.
-		 *
-		 * @param c The subtype to create.
-		 * @return A new client.
-		 */
-		public <T extends RestClient> T build(Class<T> c) {
-			type(c);
-			return build(c, null);
+			return build(RestClient.class);
 		}
 
 		//------------------------------------------------------------------------------------------------------------------
@@ -5740,7 +5728,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -6779,7 +6767,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 *
 	 * @param builder The builder for this client.
 	 */
-	protected RestClient(Builder builder) {
+	public RestClient(Builder builder) {
 		super(builder);
 
 		beanStore = builder.beanStore

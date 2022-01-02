@@ -139,7 +139,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected Readable(Builder builder) {
+		public Readable(Builder builder) {
 			super(builder.useWhitespace());
 		}
 	}
@@ -155,7 +155,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected ReadableSafe(Builder builder) {
+		public ReadableSafe(Builder builder) {
 			super(builder.simpleMode().quoteChar('\'').useWhitespace().detectRecursions());
 		}
 	}
@@ -181,7 +181,6 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 			super();
 			produces("application/json");
 			accept("application/json,text/json");
-			type(JsonSerializer.class);
 			addBeanTypesJson = env("JsonSerializer.addBeanTypes", false);
 			escapeSolidus = env("JsonSerializer.escapeSolidus", false);
 			simpleMode = env("JsonSerializer.simpleMode", false);
@@ -218,7 +217,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 
 		@Override /* Context.Builder */
 		public JsonSerializer build() {
-			return build(JsonSerializer.class, CACHE);
+			return cache(CACHE).build(JsonSerializer.class);
 		}
 
 		@Override /* Context.Builder */
@@ -438,6 +437,12 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -456,7 +461,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -1057,7 +1062,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected JsonSerializer(Builder builder) {
+	public JsonSerializer(Builder builder) {
 		super(builder);
 		addBeanTypesJson = builder.addBeanTypesJson;
 		simpleMode = builder.simpleMode;

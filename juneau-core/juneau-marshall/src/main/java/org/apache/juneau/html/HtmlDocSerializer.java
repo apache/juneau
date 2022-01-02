@@ -124,7 +124,6 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 			super();
 			produces("text/html");
 			accept("text/html");
-			type(HtmlDocSerializer.class);
 			asideFloat = AsideFloat.RIGHT;
 			noResultsMessage = "<p>no results</p>";
 			template = BasicHtmlDocTemplate.class;
@@ -183,7 +182,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 
 		@Override /* Context.Builder */
 		public HtmlDocSerializer build() {
-			return build(HtmlDocSerializer.class, CACHE);
+			return cache(CACHE).build(HtmlDocSerializer.class);
 		}
 
 		@Override /* Context.Builder */
@@ -834,6 +833,12 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -852,7 +857,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -1636,7 +1641,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected HtmlDocSerializer(Builder builder) {
+	public HtmlDocSerializer(Builder builder) {
 		super(builder);
 		style = ofNullable(builder.style).map(x -> toArray(x)).orElse(new String[0]);
 		stylesheet = ofNullable(builder.stylesheet).map(x -> toArray(x)).orElse(new String[0]);

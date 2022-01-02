@@ -87,7 +87,6 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 		protected Builder() {
 			super();
 			produces("text/plain");
-			type(PlainTextSerializer.class);
 		}
 
 		/**
@@ -115,7 +114,7 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 
 		@Override /* Context.Builder */
 		public PlainTextSerializer build() {
-			return build(PlainTextSerializer.class, CACHE);
+			return cache(CACHE).build(PlainTextSerializer.class);
 		}
 
 		@Override /* Context.Builder */
@@ -154,6 +153,12 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -172,7 +177,7 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -769,7 +774,7 @@ public class PlainTextSerializer extends WriterSerializer implements PlainTextMe
 	 * @param builder
 	 * 	The builder for this object.
 	 */
-	protected PlainTextSerializer(Builder builder) {
+	public PlainTextSerializer(Builder builder) {
 		super(builder);
 	}
 

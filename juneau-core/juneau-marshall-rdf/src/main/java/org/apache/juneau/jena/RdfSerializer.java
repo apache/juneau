@@ -100,7 +100,6 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 */
 		protected Builder() {
 			super();
-			type(RdfSerializer.class);
 			addBeanTypesRdf = env("Rdf.addBeanTypesRdf", false);
 			addLiteralTypes = env("Rdf.addLiteralTypes", false);
 			addRootProperty = env("Rdf.addRootProperty", false);
@@ -164,7 +163,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 
 		@Override /* Context.Builder */
 		public RdfSerializer build() {
-			return build(RdfSerializer.class, CACHE);
+			return cache(CACHE).build(RdfSerializer.class);
 		}
 
 		@Override /* Context.Builder */
@@ -1231,6 +1230,12 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -1249,7 +1254,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -1866,7 +1871,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	 * @param builder
 	 * 	The builder for this object.
 	 */
-	protected RdfSerializer(Builder builder) {
+	public RdfSerializer(Builder builder) {
 		super(builder.produces(getProduces(builder)).accept(getAccept(builder)));
 		addLiteralTypes = builder.addLiteralTypes;
 		addRootProperty = builder.addRootProperty;

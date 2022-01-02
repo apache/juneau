@@ -59,7 +59,7 @@ public class SimpleJsonParser extends JsonParser {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected SimpleJsonParser(JsonParser.Builder builder) {
+	public SimpleJsonParser(JsonParser.Builder builder) {
 		super(builder);
 	}
 

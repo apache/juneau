@@ -18,7 +18,6 @@ import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -26,64 +25,21 @@ import org.apache.juneau.parser.*;
  */
 public class MockReaderParser extends ReaderParser implements HttpPartParser {
 
-	private final MockReaderParserFunction function;
-	private final MockReaderParserPartFunction partFunction;
-
-	protected MockReaderParser(Builder builder) {
-		super(builder);
-		this.function = builder.function;
-		this.partFunction = builder.partFunction;
-	}
+	//-------------------------------------------------------------------------------------------------------------------
+	// Static
+	//-------------------------------------------------------------------------------------------------------------------
 
 	public static Builder create() {
 		return new Builder();
 	}
 
-	@Override /* Context */
-	public ReaderParserSession.Builder createSession() {
-		return new ReaderParserSession.Builder(JsonParser.DEFAULT) {
-			@Override
-			public ReaderParserSession build() {
-				return new ReaderParserSession(this) {
-					@Override
-					@SuppressWarnings("unchecked")
-					protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
-						if (function != null)
-							return (T)function.apply(this, pipe.asString(), type);
-						return null;
-					}
-				};
-			}
-		};
-	}
-
-	@Override /* Context */
-	public ReaderParserSession getSession() {
-		return createSession().build();
-	}
-
-	@Override
-	public HttpPartParserSession getPartSession() {
-		return new HttpPartParserSession() {
-			@Override
-			@SuppressWarnings("unchecked")
-			public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
-				return (T)partFunction.apply(partType, schema, in, toType);
-			}
-		};
-	}
+	//-------------------------------------------------------------------------------------------------------------------
+	// Builder
+	//-------------------------------------------------------------------------------------------------------------------
 
 	public static class Builder extends ReaderParser.Builder {
 		MockReaderParserFunction function;
 		MockReaderParserPartFunction partFunction;
-
-		public Builder() {
-			super();
-		}
-
-		public Builder(Builder copyFrom) {
-			super(copyFrom);
-		}
 
 		public Builder function(MockReaderParserFunction value) {
 			function = value;
@@ -103,18 +59,40 @@ public class MockReaderParser extends ReaderParser implements HttpPartParser {
 
 		@Override
 		public Builder copy() {
-			return new Builder(this);
-		}
-
-		@Override
-		public MockReaderParser build() {
-			return build(MockReaderParser.class, null);
+			return this;
 		}
 	}
 
+	//-------------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-------------------------------------------------------------------------------------------------------------------
+
+	private final MockReaderParserFunction function;
+	private final MockReaderParserPartFunction partFunction;
+
+	public MockReaderParser(Builder builder) {
+		super(builder);
+		this.function = builder.function;
+		this.partFunction = builder.partFunction;
+	}
+
 	@Override
-	public Builder copy() {
-		throw new NoSuchMethodError("Not implemented.");
+	@SuppressWarnings("unchecked")
+	public <T> T doParse(ParserSession session, ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+		if (function != null)
+			return (T)function.apply((ReaderParserSession)session, pipe.asString(), type);
+		return null;
+	}
+
+	@Override
+	public HttpPartParserSession getPartSession() {
+		return new HttpPartParserSession() {
+			@Override
+			@SuppressWarnings("unchecked")
+			public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
+				return (T)partFunction.apply(partType, schema, in, toType);
+			}
+		};
 	}
 
 	@Override

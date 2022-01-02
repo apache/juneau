@@ -2561,7 +2561,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 			@Override
 			public DummyPartSerializer build() {
-				return new DummyPartSerializer(this);
+				return build(DummyPartSerializer.class);
 			}
 		}
 

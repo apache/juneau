@@ -81,7 +81,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected SpacedHex(Builder builder) {
+		public SpacedHex(Builder builder) {
 			super(builder.binaryFormat(BinaryFormat.SPACED_HEX));
 		}
 	}
@@ -94,7 +94,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected Base64(Builder builder) {
+		public Base64(Builder builder) {
 			super(builder.binaryFormat(BinaryFormat.BASE64));
 		}
 	}
@@ -119,7 +119,6 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		protected Builder() {
 			super();
 			produces("octal/msgpack");
-			type(MsgPackSerializer.class);
 			addBeanTypesMsgPack = env("MsgPackSerializer.addBeanTypesMsgPack", false);
 		}
 
@@ -148,7 +147,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 
 		@Override /* Context.Builder */
 		public MsgPackSerializer build() {
-			return build(MsgPackSerializer.class, CACHE);
+			return cache(CACHE).build(MsgPackSerializer.class);
 		}
 
 		@Override /* Context.Builder */
@@ -220,6 +219,12 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -238,7 +243,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -789,7 +794,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected MsgPackSerializer(Builder builder) {
+	public MsgPackSerializer(Builder builder) {
 		super(builder);
 		this.addBeanTypesMsgPack = builder.addBeanTypesMsgPack;
 	}

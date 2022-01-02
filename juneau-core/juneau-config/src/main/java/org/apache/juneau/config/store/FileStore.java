@@ -84,7 +84,6 @@ public class FileStore extends ConfigStore {
 		 */
 		protected Builder() {
 			super();
-			type(FileStore.class);
 			directory = env("ConfigFileStore.directory", ".");
 			charset = env("ConfigFileStore.charset", Charset.defaultCharset());
 			enableWatcher = env("ConfigFileStore.enableWatcher", false);
@@ -131,7 +130,7 @@ public class FileStore extends ConfigStore {
 
 		@Override /* Context.Builder */
 		public FileStore build() {
-			return build(FileStore.class, null);
+			return build(FileStore.class);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -342,7 +341,7 @@ public class FileStore extends ConfigStore {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -375,7 +374,7 @@ public class FileStore extends ConfigStore {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected FileStore(Builder builder) {
+	public FileStore(Builder builder) {
 		super(builder);
 		directory = builder.directory;
 		extensions = builder.extensions;

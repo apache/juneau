@@ -235,7 +235,7 @@ public class BuilderComboTest extends ComboRoundTripTest {
 		public int a;
 		boolean createdByBuilder;
 
-		protected A(ABuilder x) {
+		public A(ABuilder x) {
 			if (x != null)
 				this.a = x.a;
 		}
@@ -379,7 +379,7 @@ public class BuilderComboTest extends ComboRoundTripTest {
 		public int fooBar;
 		boolean createdByBuilder;
 
-		protected H(HBuilder x) {
+		public H(HBuilder x) {
 			if (x != null)
 				this.fooBar = x.fooBar;
 		}

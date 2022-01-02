@@ -71,7 +71,7 @@ public class SimpleJsonSerializer extends JsonSerializer {
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected Readable(JsonSerializer.Builder builder) {
+		public Readable(JsonSerializer.Builder builder) {
 			super(builder.simpleMode().quoteChar('\'').useWhitespace());
 		}
 	}
@@ -85,7 +85,7 @@ public class SimpleJsonSerializer extends JsonSerializer {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected SimpleJsonSerializer(JsonSerializer.Builder builder) {
+	public SimpleJsonSerializer(JsonSerializer.Builder builder) {
 		super(builder.simpleMode().quoteChar('\''));
 	}
 

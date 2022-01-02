@@ -178,7 +178,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected Sq(Builder builder) {
+		public Sq(Builder builder) {
 			super(builder.quoteChar('\''));
 		}
 	}
@@ -191,7 +191,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 *
 		 * @param builder The builder for this object.
 		 */
-		protected SqReadable(Builder builder) {
+		public SqReadable(Builder builder) {
 			super(builder.quoteChar('\'').useWhitespace());
 		}
 	}
@@ -218,7 +218,6 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		protected Builder() {
 			super();
 			produces("text/html");
-			type(HtmlSerializer.class);
 			addBeanTypesHtml = env("HtmlSerializer.addBeanTypesHtml", false);
 			addKeyValueTableHeaders = env("HtmlSerializer.addKeyValueTableHeaders", false);
 			disableDetectLabelParameters = env("HtmlSerializer.disableDetectLabelParameters", false);
@@ -264,7 +263,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 
 		@Override /* Context.Builder */
 		public HtmlSerializer build() {
-			return build(HtmlSerializer.class, CACHE);
+			return cache(CACHE).build(HtmlSerializer.class);
 		}
 
 		@Override /* Context.Builder */
@@ -744,6 +743,12 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -762,7 +767,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -1434,7 +1439,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected HtmlSerializer(Builder builder) {
+	public HtmlSerializer(Builder builder) {
 		super(builder);
 		detectLabelParameters = ! builder.disableDetectLabelParameters;
 		detectLinksInStrings = ! builder.disableDetectLinksInStrings;

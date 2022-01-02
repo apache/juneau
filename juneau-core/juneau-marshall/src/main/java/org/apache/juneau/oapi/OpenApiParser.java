@@ -78,7 +78,6 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		protected Builder() {
 			super();
 			consumes("text/openapi");
-			type(OpenApiParser.class);
 			format = HttpPartFormat.NO_FORMAT;
 			collectionFormat = HttpPartCollectionFormat.NO_COLLECTION_FORMAT;
 		}
@@ -112,7 +111,7 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 
 		@Override /* Context.Builder */
 		public OpenApiParser build() {
-			return build(OpenApiParser.class, CACHE);
+			return cache(CACHE).build(OpenApiParser.class);
 		}
 
 		@Override /* Context.Builder */
@@ -260,6 +259,12 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -278,7 +283,7 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -757,7 +762,7 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected OpenApiParser(Builder builder) {
+	public OpenApiParser(Builder builder) {
 		super(builder);
 		format = builder.format;
 		collectionFormat = builder.collectionFormat;

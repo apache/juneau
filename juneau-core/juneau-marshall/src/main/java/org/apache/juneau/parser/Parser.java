@@ -131,7 +131,20 @@ import org.apache.juneau.xml.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public abstract class Parser extends BeanContextable {
+public class Parser extends BeanContextable {
+
+	//-------------------------------------------------------------------------------------------------------------------
+	// Static
+	//-------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @return A new builder.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Static
@@ -168,7 +181,7 @@ public abstract class Parser extends BeanContextable {
 	 * Builder class.
 	 */
 	@FluentSetters
-	public abstract static class Builder extends BeanContextable.Builder {
+	public static class Builder extends BeanContextable.Builder {
 
 		boolean autoCloseStreams, strict, trimStrings, unbuffered;
 		String consumes;
@@ -222,10 +235,14 @@ public abstract class Parser extends BeanContextable {
 		}
 
 		@Override /* Context.Builder */
-		public abstract Builder copy();
+		public Builder copy() {
+			return new Builder(this);
+		}
 
 		@Override /* Context.Builder */
-		public abstract Parser build();
+		public Parser build() {
+			return build(Parser.class);
+		}
 
 		@Override /* Context.Builder */
 		public HashKey hashKey() {
@@ -613,7 +630,7 @@ public abstract class Parser extends BeanContextable {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -1010,8 +1027,9 @@ public abstract class Parser extends BeanContextable {
 	}
 
 	@Override /* Context */
-	public abstract Builder copy();
-
+	public Builder copy() {
+		return new Builder(this);
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Abstract methods
@@ -1220,10 +1238,37 @@ public abstract class Parser extends BeanContextable {
 	}
 
 	@Override /* Context */
-	public abstract ParserSession.Builder createSession();
+	public ParserSession.Builder createSession() {
+		return ParserSession.create(this);
+	}
 
 	@Override /* Context */
-	public abstract ParserSession getSession();
+	public ParserSession getSession() {
+		return createSession().build();
+	}
+
+	/**
+	 * Workhorse method.
+	 *
+	 * <p>
+	 * Subclasses are expected to either implement this method or {@link ParserSession#doParse(ParserPipe, ClassMeta)}.
+	 *
+	 * @param session The current session.
+	 * @param pipe Where to get the input from.
+	 * @param type
+	 * 	The class type of the object to create.
+	 * 	If <jk>null</jk> or <code>Object.<jk>class</jk></code>, object type is based on what's being parsed.
+	 * 	For example, when parsing JSON text, it may return a <c>String</c>, <c>Number</c>,
+	 * 	<c>OMap</c>, etc...
+	 * @param <T> The class type of the object to create.
+	 * @return The parsed object.
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws ParseException Malformed input encountered.
+	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
+	 */
+	public <T> T doParse(ParserSession session, ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
+		throw new UnsupportedOperationException();
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Optional methods

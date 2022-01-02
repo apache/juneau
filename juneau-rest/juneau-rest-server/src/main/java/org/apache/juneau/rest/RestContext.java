@@ -288,7 +288,6 @@ public class RestContext extends Context {
 		 * @param servletConfig The servlet config if available.
 		 */
 		protected Builder(Class<?> resourceClass, RestContext parentContext, ServletConfig servletConfig) {
-			type(RestContext.class);
 
 			this.resourceClass = resourceClass;
 			this.inner = servletConfig;
@@ -5867,7 +5866,7 @@ public class RestContext extends Context {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -6000,7 +5999,7 @@ public class RestContext extends Context {
 	 * @param builder The builder containing the settings for this bean.
 	 * @throws Exception If any initialization problems were encountered.
 	 */
-	protected RestContext(Builder builder) throws Exception {
+	public RestContext(Builder builder) throws Exception {
 		super(builder);
 
 		startTime = Instant.now();

@@ -13,6 +13,7 @@
 package org.apache.juneau.parser;
 
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static java.util.Arrays.*;
 import static java.util.Collections.*;
@@ -28,6 +29,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.reflect.*;
 
 /**
  * Represents a group of {@link Parser Parsers} that can be looked up by media type.
@@ -172,7 +174,10 @@ public final class ParserSet {
 		private Object copyBuilder(Object o) {
 			if (o instanceof Parser.Builder) {
 				Parser.Builder x = (Parser.Builder)o;
-				x = x.copy();
+				Parser.Builder x2 = x.copy();
+				if (ne(x.getClass(), x2.getClass()))
+					throw runtimeException("Copy method not implemented on class " + x.getClass().getName());
+				x = x2;
 				if (bcBuilder != null)
 					x.beanContext(bcBuilder);
 				return x;
@@ -299,6 +304,13 @@ public final class ParserSet {
 
 		private Object createBuilder(Object o) {
 			if (o instanceof Class) {
+
+				// Check for no-arg constructor.
+				ConstructorInfo ci = ClassInfo.of((Class<?>)o).getPublicConstructor();
+				if (ci != null)
+					return ci.invoke();
+
+				// Check for builder.
 				@SuppressWarnings("unchecked")
 				Parser.Builder b = Parser.createParserBuilder((Class<? extends Parser>)o);
 				if (bcBuilder != null)

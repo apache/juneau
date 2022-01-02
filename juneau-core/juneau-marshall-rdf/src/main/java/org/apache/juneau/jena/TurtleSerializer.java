@@ -51,7 +51,7 @@ public class TurtleSerializer extends RdfSerializer {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected TurtleSerializer(RdfSerializer.Builder builder) {
+	public TurtleSerializer(RdfSerializer.Builder builder) {
 		super(builder.turtle());
 	}
 }

@@ -47,7 +47,7 @@ public class Nls_Test {
 		}
 	}
 	public static class A1 extends MockWriterSerializer {
-		protected A1(MockWriterSerializer.Builder builder) {
+		public A1(MockWriterSerializer.Builder builder) {
 			super(builder.accept("*/*").function((s,o)->out(s)));
 		}
 

@@ -100,7 +100,6 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 */
 		protected Builder() {
 			super();
-			type(RdfParser.class);
 			trimWhitespace = env("Rdf.trimWhitespace", false);
 			looseCollections = env("Rdf.looseCollections", false);
 			language = env("Rdf.language", "RDF/XML-ABBREV");
@@ -149,7 +148,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 
 		@Override /* Context.Builder */
 		public RdfParser build() {
-			return build(RdfParser.class, CACHE);
+			return cache(CACHE).build(RdfParser.class);
 		}
 
 		@Override /* Context.Builder */
@@ -1003,6 +1002,12 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -1021,7 +1026,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -1484,7 +1489,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected RdfParser(Builder builder) {
+	public RdfParser(Builder builder) {
 		super((Builder) builder.consumes(getConsumes(builder)));
 
 		trimWhitespace = builder.trimWhitespace;

@@ -72,7 +72,6 @@ public final class CsvSerializer extends WriterSerializer implements CsvMetaProv
 		protected Builder() {
 			super();
 			produces("text/csv");
-			type(CsvSerializer.class);
 		}
 
 		/**
@@ -100,7 +99,7 @@ public final class CsvSerializer extends WriterSerializer implements CsvMetaProv
 
 		@Override /* Context.Builder */
 		public CsvSerializer build() {
-			return build(CsvSerializer.class, CACHE);
+			return cache(CACHE).build(CsvSerializer.class);
 		}
 
 		@Override /* Context.Builder */
@@ -145,6 +144,12 @@ public final class CsvSerializer extends WriterSerializer implements CsvMetaProv
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug(boolean value) {
 			super.debug(value);
 			return this;
@@ -157,7 +162,7 @@ public final class CsvSerializer extends WriterSerializer implements CsvMetaProv
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -753,7 +758,7 @@ public final class CsvSerializer extends WriterSerializer implements CsvMetaProv
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected CsvSerializer(Builder builder) {
+	public CsvSerializer(Builder builder) {
 		super(builder);
 	}
 

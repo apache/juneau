@@ -90,7 +90,6 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 			BeanContext.Builder bc = beanContext();
 			jsonSerializerBuilder = JsonSerializer.create().beanContext(bc);
 			jsonParserBuilder = JsonParser.create().beanContext(bc);
-			type(JsonSchemaGenerator.class);
 			registerBuilders(jsonSerializerBuilder, jsonParserBuilder);
 			addDescriptionsTo = null;
 			addExamplesTo = null;
@@ -148,7 +147,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 
 		@Override /* Context.Builder */
 		public JsonSchemaGenerator build() {
-			return build(JsonSchemaGenerator.class, CACHE);
+			return cache(CACHE).build(JsonSchemaGenerator.class);
 		}
 
 		@Override /* Context.Builder */
@@ -426,6 +425,12 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -444,7 +449,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -863,7 +868,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected JsonSchemaGenerator(Builder builder) {
+	public JsonSchemaGenerator(Builder builder) {
 		super(builder.detectRecursions().ignoreRecursions());
 
 		useBeanDefs = builder.useBeanDefs;

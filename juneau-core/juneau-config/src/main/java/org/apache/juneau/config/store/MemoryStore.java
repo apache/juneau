@@ -70,7 +70,6 @@ public class MemoryStore extends ConfigStore {
 		 */
 		protected Builder() {
 			super();
-			type(MemoryStore.class);
 		}
 
 		/**
@@ -99,7 +98,7 @@ public class MemoryStore extends ConfigStore {
 
 		@Override /* Context.Builder */
 		public MemoryStore build() {
-			return build(MemoryStore.class, null);
+			return build(MemoryStore.class);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -151,7 +150,7 @@ public class MemoryStore extends ConfigStore {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -175,7 +174,7 @@ public class MemoryStore extends ConfigStore {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected MemoryStore(Builder builder) {
+	public MemoryStore(Builder builder) {
 		super(builder);
 	}
 

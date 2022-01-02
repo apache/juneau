@@ -73,7 +73,6 @@ public class ClasspathStore extends ConfigStore {
 		 */
 		protected Builder() {
 			super();
-			type(ClasspathStore.class);
 		}
 
 		/**
@@ -102,7 +101,7 @@ public class ClasspathStore extends ConfigStore {
 
 		@Override /* Context.Builder */
 		public ClasspathStore build() {
-			return build(ClasspathStore.class, null);
+			return build(ClasspathStore.class);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -154,7 +153,7 @@ public class ClasspathStore extends ConfigStore {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<?> value) {
+		public Builder type(Class<? extends Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -178,7 +177,7 @@ public class ClasspathStore extends ConfigStore {
 	 *
 	 * @param builder The builder for this object.
 	 */
-	protected ClasspathStore(Builder builder) {
+	public ClasspathStore(Builder builder) {
 		super(builder);
 	}
 
