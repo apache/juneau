@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Built-in Parameters', flags:'todo'}
+{title:'Built-in Parameters', updated:'9.0.0'}
 
 <div class='topic'>
 	<p>
@@ -28,14 +28,14 @@
 			<td class='code'>&amp;plainText=true</td>
 			<td>
 				Response will always be <l>Content-Type: text/plain</l> and the returned text will be human-readable
-				({@del oaj.serializer.WriterSerializer#WSERIALIZER_useWhitespace WSERIALIZER_useWhitespace} enabled).
+				({@link oaj.serializer.WriterSerializer.Builder#useWhitespace()} enabled).
 				<br>Useful for debugging.
 			</td>
 		</tr>
 		<tr>
 			<td class='code'>&amp;debug=true</td>
 			<td>
-				Request body content will be dumped to log file.
+				Enable debug mode for request.
 			</td>
 		</tr>
 		<tr>
