@@ -22,6 +22,8 @@ import java.lang.reflect.*;
 import java.lang.reflect.Method;
 import java.util.*;
 
+import javax.servlet.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
@@ -545,7 +547,7 @@ public class BasicSwaggerProviderSession {
 //			System.err.println(swaggerJson);
 			return jp.parse(swaggerJson, Swagger.class);
 		} catch (Exception e) {
-			throw new RestServletException(e, "Error detected in swagger.");
+			throw new ServletException("Error detected in swagger.", e);
 		}
 	}
 	//=================================================================================================================

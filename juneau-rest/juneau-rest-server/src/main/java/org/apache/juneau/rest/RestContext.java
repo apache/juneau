@@ -387,12 +387,12 @@ public class RestContext extends Context {
 
 				List<ClassInfo> missing = beanStore.getMissingParamTypes(params);
 				if (! missing.isEmpty())
-					throw new RestServletException("Could not call @RestHook(INIT) method {0}.{1}.  Could not find prerequisites: {2}.", m.getDeclaringClass().getSimpleName(), m.getSignature(), missing.stream().map(x->x.getSimpleName()).collect(Collectors.joining(",")));
+					throw servletException("Could not call @RestHook(INIT) method {0}.{1}.  Could not find prerequisites: {2}.", m.getDeclaringClass().getSimpleName(), m.getSignature(), missing.stream().map(x->x.getSimpleName()).collect(Collectors.joining(",")));
 
 				try {
 					m.invoke(r, beanStore.getParams(params));
 				} catch (Exception e) {
-					throw new RestServletException(e, "Exception thrown from @RestHook(INIT) method {0}.{1}.", m.getDeclaringClass().getSimpleName(), m.getSignature());
+					throw servletException(e, "Exception thrown from @RestHook(INIT) method {0}.{1}.", m.getDeclaringClass().getSimpleName(), m.getSignature());
 				}
 			}
 		}
@@ -4141,9 +4141,9 @@ public class RestContext extends Context {
 		 *
 		 * @param restContext The rest context.
 		 * @return The REST operations list.
-		 * @throws RestServletException If a problem occurred instantiating one of the child rest contexts.
+		 * @throws ServletException If a problem occurred instantiating one of the child rest contexts.
 		 */
-		public final RestOperations.Builder restOperations(RestContext restContext) throws RestServletException {
+		public final RestOperations.Builder restOperations(RestContext restContext) throws ServletException {
 			if (restOperations == null)
 				restOperations = createRestOperations(beanStore(), resource(), restContext);
 			return restOperations;
@@ -4161,9 +4161,9 @@ public class RestContext extends Context {
 		 * @param resource
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new REST operations list.
-		 * @throws RestServletException If a problem occurred instantiating one of the child rest contexts.
+		 * @throws ServletException If a problem occurred instantiating one of the child rest contexts.
 		 */
-		protected RestOperations.Builder createRestOperations(BeanStore beanStore, Supplier<?> resource, RestContext restContext) throws RestServletException {
+		protected RestOperations.Builder createRestOperations(BeanStore beanStore, Supplier<?> resource, RestContext restContext) throws ServletException {
 
 			// Default value.
 			Value<RestOperations.Builder> v = Value.of(
@@ -4187,7 +4187,7 @@ public class RestContext extends Context {
 				if (al.size() > 0) {
 					try {
 						if (mi.isNotPublic())
-							throw new RestServletException("@RestOp method {0}.{1} must be defined as public.", rci.inner().getName(), mi.getSimpleName());
+							throw servletException("@RestOp method {0}.{1} must be defined as public.", rci.inner().getName(), mi.getSimpleName());
 
 						RestOpContext roc = RestOpContext
 							.create(mi.inner(), restContext)
@@ -4216,7 +4216,7 @@ public class RestContext extends Context {
 							v.get().add(roc);
 						}
 					} catch (Throwable e) {
-						throw new RestServletException(e, "Problem occurred trying to initialize methods on class {0}", rci.inner().getName());
+						throw servletException(e, "Problem occurred trying to initialize methods on class {0}", rci.inner().getName());
 					}
 				}
 			}
@@ -7304,6 +7304,14 @@ public class RestContext extends Context {
 			return ((InvocationTargetException)t).getTargetException();
 		}
 		return t;
+	}
+
+	static ServletException servletException(String msg, Object...args) {
+		return new ServletException(format(msg, args));
+	}
+
+	static ServletException servletException(Throwable t, String msg, Object...args) {
+		return new ServletException(format(msg, args), t);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
