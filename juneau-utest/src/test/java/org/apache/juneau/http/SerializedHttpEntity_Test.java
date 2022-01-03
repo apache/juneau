@@ -25,10 +25,10 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.testutils.pojos.*;
 
 import static org.apache.juneau.assertions.Assertions.*;

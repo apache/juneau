@@ -14,12 +14,12 @@ package org.apache.juneau.rest.annotation;
 
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.servlet.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -50,7 +50,7 @@ public class Rest_Debug_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(callLogger=CaptureLogger.class)
-	public static class A1_RestOp implements BasicUniversalRest {
+	public static class A1_RestOp implements BasicUniversalConfig {
 		@RestOp
 		public boolean aa(RestRequest req) {
 			return req.isDebug();
@@ -190,7 +190,7 @@ public class Rest_Debug_Test {
 	}
 
 	@Rest(callLogger=CaptureLogger.class)
-	public static class A1_RestGet implements BasicUniversalRest {
+	public static class A1_RestGet implements BasicUniversalConfig {
 		@RestGet
 		public boolean a(RestRequest req) {
 			return req.isDebug();
@@ -303,7 +303,7 @@ public class Rest_Debug_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(callLogger=CaptureLogger.class, debug="true")
-	public static class A2 implements BasicUniversalRest {
+	public static class A2 implements BasicUniversalConfig {
 		@RestOp
 		public boolean a(RestRequest req) {
 			return req.isDebug();
@@ -382,7 +382,7 @@ public class Rest_Debug_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(callLogger=CaptureLogger.class,debug="false")
-	public static class A3 implements BasicUniversalRest {
+	public static class A3 implements BasicUniversalConfig {
 		@RestOp
 		public boolean a(RestRequest req) {
 			return req.isDebug();
@@ -461,7 +461,7 @@ public class Rest_Debug_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(callLogger=CaptureLogger.class,debug="conditional")
-	public static class A4 implements BasicUniversalRest {
+	public static class A4 implements BasicUniversalConfig {
 		@RestOp
 		public boolean a(RestRequest req) {
 			return req.isDebug();
@@ -547,7 +547,7 @@ public class Rest_Debug_Test {
 			+ "C1.d1=conditional,C1.d2=conditional,C1.d3=CONDITIONAL,C1.d4=CONDITIONAL,C1.d5=CONDITIONAL,C1.d6=CONDITIONAL,"
 			+ "C1.e1=foo,C1.e2,C1.e3=foo,C1.e4=foo,C1.e5=foo,C1.e6=foo,"
 	)
-	public static class C1 implements BasicUniversalRest {
+	public static class C1 implements BasicUniversalConfig {
 
 		@RestOp
 		public boolean a1(RestRequest req) {
@@ -881,7 +881,7 @@ public class Rest_Debug_Test {
 			+ "C2.d1=conditional,C2.d2=conditional,C2.d3=CONDITIONAL,C2.d4=CONDITIONAL,C2.d5=CONDITIONAL,C2.d6=CONDITIONAL,"
 			+ "C2.e1=foo,C2.e2=,C2.e3=foo,C2.e4=foo,C2.e5=foo,C2.e6=foo,"
 	)
-	public static class C2 implements BasicUniversalRest {
+	public static class C2 implements BasicUniversalConfig {
 
 		@RestOp
 		public boolean a1(RestRequest req) {

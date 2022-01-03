@@ -13,13 +13,12 @@
 package org.apache.juneau.rest.config;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.serializer.annotation.*;
 
 /**
- * Basic configuration for a REST resource that supports JSON and HTML transport.
+ * Basic configuration for a REST resource that supports JSON transport.
  *
  * <p>
  * 	Default settings defined:
@@ -30,13 +29,11 @@ import org.apache.juneau.serializer.annotation.*;
  * 			<li><c>{@link Rest#serializers() serializers}=</c>
  * 				<ul class='javatreec'>
  * 					<li class='jc'>{@link JsonSerializer}
- * 					<li class='jc'>{@link HtmlDocSerializer}
  * 				</ul>
  * 			</li>
  * 			<li><c>{@link Rest#parsers() parsers}=</c>
  * 				<ul class='javatreec'>
  * 					<li class='jc'>{@link JsonParser}
- * 					<li class='jc'>{@link HtmlParser}
  * 				</ul>
  * 			</li>
  * 			<li><c>{@link Rest#defaultAccept() defaultAccept}=<js>"text/json"</c></li>
@@ -84,14 +81,14 @@ import org.apache.juneau.serializer.annotation.*;
 
 	// Default serializers for all Java methods in the class.
 	serializers={
-		HtmlDocSerializer.class,
-		JsonSerializer.class
+		JsonSerializer.class,
+		SimpleJsonSerializer.class
 	},
 
 	// Default parsers for all Java methods in the class.
 	parsers={
-		HtmlParser.class,
-		JsonParser.class
+		JsonParser.class,
+		SimpleJsonParser.class
 	},
 
 	defaultAccept="text/json",
@@ -107,4 +104,4 @@ import org.apache.juneau.serializer.annotation.*;
 	// Enable automatic resolution of URI objects to root-relative values.
 	uriResolution="ROOT_RELATIVE"
 )
-public interface BasicJsonHtmlRest {}
+public interface BasicJsonConfig {}

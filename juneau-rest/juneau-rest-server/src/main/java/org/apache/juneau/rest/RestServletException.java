@@ -19,6 +19,7 @@ import java.text.*;
 import javax.servlet.*;
 
 import org.apache.juneau.internal.*;
+import org.apache.juneau.rest.servlet.*;
 
 /**
  * General exception thrown from {@link RestServlet} during construction or initialization.

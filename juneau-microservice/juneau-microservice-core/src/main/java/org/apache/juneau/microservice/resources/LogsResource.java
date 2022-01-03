@@ -29,7 +29,9 @@ import org.apache.juneau.http.annotation.Schema;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
+import org.apache.juneau.rest.config.BasicUniversalConfig;
 import org.apache.juneau.rest.converter.*;
+import org.apache.juneau.rest.servlet.BasicRestServlet;
 import org.apache.juneau.http.response.*;
 
 /**
@@ -50,7 +52,7 @@ import org.apache.juneau.http.response.*;
 )
 @HtmlConfig(uriAnchorText="PROPERTY_NAME")
 @SuppressWarnings("javadoc")
-public class LogsResource extends BasicRestServlet {
+public class LogsResource extends BasicRestServlet implements BasicUniversalConfig {
 	private static final long serialVersionUID = 1L;
 
 	//-------------------------------------------------------------------------------------------------------------------

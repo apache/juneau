@@ -25,6 +25,7 @@ import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
+import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.stats.*;
 import org.apache.juneau.soap.*;
 import org.apache.juneau.uon.*;
@@ -153,7 +154,7 @@ import org.apache.juneau.xml.*;
  * @serial exclude
  */
 @Rest
-public abstract class BasicSpringRestServlet extends SpringRestServlet implements BasicUniversalRest, BasicRestOperations {
+public abstract class BasicSpringRestServlet extends SpringRestServlet implements BasicRestOperations, BasicJsonConfig {
 	private static final long serialVersionUID = 1L;
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -18,7 +18,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.serializer.annotation.*;
 
 /**
- * Basic configuration for a REST resource that supports JSON transport.
+ * Basic configuration for a REST resource that supports simplified JSON transport.
  *
  * <p>
  * 	Default settings defined:
@@ -28,12 +28,12 @@ import org.apache.juneau.serializer.annotation.*;
  * 		<ul>
  * 			<li><c>{@link Rest#serializers() serializers}=</c>
  * 				<ul class='javatreec'>
- * 					<li class='jc'>{@link JsonSerializer}
+ * 					<li class='jc'>{@link SimpleJsonSerializer}
  * 				</ul>
  * 			</li>
  * 			<li><c>{@link Rest#parsers() parsers}=</c>
  * 				<ul class='javatreec'>
- * 					<li class='jc'>{@link JsonParser}
+ * 					<li class='jc'>{@link SimpleJsonParser}
  * 				</ul>
  * 			</li>
  * 			<li><c>{@link Rest#defaultAccept() defaultAccept}=<js>"text/json"</c></li>
@@ -58,12 +58,12 @@ import org.apache.juneau.serializer.annotation.*;
  * <p class='bcode w800'>
  * 	<jc>// Used on a top-level resource.</jc>
  * 	<ja>@Rest</ja>
- * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet <jk>implements</jk> BasicJsonRest { ... }
+ * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet <jk>implements</jk> BasicSimpleJsonRest { ... }
  * </p>
  * <p class='bcode w800'>
  * 	<jc>// Used on a child resource.</jc>
  * 	<ja>@Rest</ja>
- * 	<jk>public class</jk> MyResource <jk>extends</jk> RestObject <jk>implements</jk> BasicJsonRest { ... }
+ * 	<jk>public class</jk> MyResource <jk>extends</jk> RestObject <jk>implements</jk> BasicSimpleJsonRest { ... }
  * </p>
  *
  * <p>
@@ -81,25 +81,25 @@ import org.apache.juneau.serializer.annotation.*;
 
 	// Default serializers for all Java methods in the class.
 	serializers={
-		JsonSerializer.class,
+		SimpleJsonSerializer.class,
 	},
 
 	// Default parsers for all Java methods in the class.
 	parsers={
-		JsonParser.class,
+		SimpleJsonParser.class,
 	},
 
-	defaultAccept="text/json",
-
 	// Optional external configuration file.
-	config="$S{juneau.configFile,SYSTEM_DEFAULT}"
-)
-@BeanConfig(
-	// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.
-	ignoreUnknownBeanProperties="true"
+	config="$S{juneau.configFile,SYSTEM_DEFAULT}",
+
+	defaultAccept="text/json+simple"
 )
 @SerializerConfig(
 	// Enable automatic resolution of URI objects to root-relative values.
 	uriResolution="ROOT_RELATIVE"
 )
-public interface BasicJsonRest {}
+@BeanConfig(
+	// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.
+	ignoreUnknownBeanProperties="true"
+)
+public interface BasicSimpleJsonConfig {}

@@ -20,6 +20,7 @@ import java.lang.annotation.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.servlet.*;
 
 /**
  * Identifies Java methods on a resource/servlet class that get invoked during particular lifecycle events of

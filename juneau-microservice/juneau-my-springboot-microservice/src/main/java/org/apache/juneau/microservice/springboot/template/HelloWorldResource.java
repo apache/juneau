@@ -17,8 +17,9 @@ import java.util.*;
 import javax.inject.*;
 
 import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.BasicUniversalConfig;
+import org.apache.juneau.rest.servlet.BasicRestObject;
 
 /**
  * Sample REST resource that prints out a simple "Hello world!" message.
@@ -41,7 +42,7 @@ import org.apache.juneau.rest.annotation.*;
 		"</div>"
 	}
 )
-public class HelloWorldResource extends BasicRestObject {
+public class HelloWorldResource extends BasicRestObject implements BasicUniversalConfig {
 
 	private final String message;
 

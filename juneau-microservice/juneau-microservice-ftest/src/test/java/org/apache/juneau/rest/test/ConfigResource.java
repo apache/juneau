@@ -17,6 +17,8 @@ import static org.apache.juneau.http.HttpMethod.*;
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.BasicUniversalConfig;
+import org.apache.juneau.rest.servlet.BasicRestServlet;
 
 /**
  * JUnit automated testcase resource.
@@ -25,7 +27,7 @@ import org.apache.juneau.rest.annotation.*;
 	path="/testConfig"
 )
 @SuppressWarnings({"serial"})
-public class ConfigResource extends BasicRestServlet {
+public class ConfigResource extends BasicRestServlet implements BasicUniversalConfig {
 
 	@RestOp(method=GET, path="/")
 	public Object test1(RestRequest req) {

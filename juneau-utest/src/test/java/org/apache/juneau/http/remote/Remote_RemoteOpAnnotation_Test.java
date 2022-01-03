@@ -167,7 +167,7 @@ public class Remote_RemoteOpAnnotation_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
-	public static class C implements BasicSimpleJsonRest {
+	public static class C implements BasicSimpleJsonConfig {
 		@RestOp(path="/*")
 		public String post(@Body String body) {
 			return body;
@@ -212,7 +212,7 @@ public class Remote_RemoteOpAnnotation_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
-	public static class D implements BasicOpenApiRest {
+	public static class D implements BasicOpenApiConfig {
 		@RestPost(path="/*") @Response
 		public String x1(@Body String body) {
 			return body;

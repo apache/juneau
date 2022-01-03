@@ -19,9 +19,9 @@ import static org.apache.juneau.http.HttpParts.*;
 
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.servlet.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

@@ -22,8 +22,9 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.jena.annotation.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.*;
+import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.annotation.*;
 
@@ -72,7 +73,7 @@ import org.apache.juneau.serializer.annotation.*;
 	addRootProperty="true"
 )
 @Marshalled(onClass=Feed.class,example="$F{AtomFeedResource_example.json}")
-public class AtomFeedResource extends BasicRestServletJena {
+public class AtomFeedResource extends BasicRestServlet implements BasicUniversalJenaConfig {
 	private static final long serialVersionUID = 1L;
 
 	private Feed feed;     // The root resource object

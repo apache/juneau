@@ -10,13 +10,14 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau.rest.servlet;
 
 import java.util.*;
 
 import javax.servlet.http.*;
 
 import org.apache.juneau.dto.swagger.Swagger;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.stats.*;
@@ -28,7 +29,7 @@ import org.apache.juneau.http.response.*;
  * Identical to {@link BasicRestServlet} but doesn't extend from {@link HttpServlet}.
  *
  * <p>
- * 	Implements basic configuration settings from {@link BasicUniversalRest} and
+ * 	Implements basic configuration settings from {@link BasicUniversalConfig} and
  * 	basic endpoint methods from {@link BasicRestOperations}.
  *
  * <p>
@@ -41,7 +42,7 @@ import org.apache.juneau.http.response.*;
  * </ul>
  */
 @Rest
-public abstract class BasicRestObject extends RestObject implements BasicUniversalRest, BasicRestOperations {
+public abstract class BasicRestObject extends RestObject implements BasicRestOperations, BasicJsonConfig {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// BasicRestConfig methods

@@ -10,33 +10,39 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau.rest.servlet;
 
-import org.apache.juneau.jena.*;
+import javax.servlet.http.*;
+
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.beans.*;
+import org.apache.juneau.rest.config.*;
 
 /**
- * Resource group with additional RDF support.
+ * Identical to {@link BasicRestServletGroup} but doesn't extend from {@link HttpServlet}.
+ *
+ * <p>
+ * 	Implements basic configuration settings from {@link BasicUniversalConfig} and
+ * 	basic endpoint methods from {@link BasicRestOperations}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server-rdf}
+ * 	<li class='link'>{@doc jrs.BasicRestServletGroup}
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-@SuppressWarnings("serial")
-@Rest(
-	serializers={
-		RdfXmlSerializer.class,
-		RdfXmlAbbrevSerializer.class,
-		TurtleSerializer.class,
-		NTripleSerializer.class,
-		N3Serializer.class
-	},
-	parsers={
-		RdfXmlParser.class,
-		TurtleParser.class,
-		NTripleParser.class,
-		N3Parser.class
+@Rest
+public abstract class BasicRestObjectGroup extends BasicRestObject {
+
+	/**
+	 * [GET /] - Get child resources.
+	 *
+	 * @param req The HTTP request.
+	 * @return The bean containing links to the child resources.
+	 */
+	@RestGet(path="/", summary="Navigation page")
+	public ChildResourceDescriptions getChildren(RestRequest req) {
+		return new ChildResourceDescriptions(req);
 	}
-)
-public abstract class BasicRestServletJenaGroup extends BasicRestServletGroup {}
+}
+

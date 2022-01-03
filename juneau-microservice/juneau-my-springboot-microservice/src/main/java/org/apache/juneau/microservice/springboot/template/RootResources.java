@@ -15,6 +15,7 @@ package org.apache.juneau.microservice.springboot.template;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.microservice.resources.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.BasicUniversalConfig;
 import org.apache.juneau.rest.springboot.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.annotation.*;
@@ -69,6 +70,6 @@ import org.apache.juneau.serializer.annotation.*;
 	// You can apply any of the Serializer/Parser/BeanContext settings this way.
 	quoteChar="'"
 )
-public class RootResources extends BasicSpringRestServletGroup {
+public class RootResources extends BasicSpringRestServletGroup implements BasicUniversalConfig {
 	private static final long serialVersionUID = 1L;
 }

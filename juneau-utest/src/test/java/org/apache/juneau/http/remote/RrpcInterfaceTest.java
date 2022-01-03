@@ -28,10 +28,11 @@ import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.serializer.annotation.*;
 import org.apache.juneau.testutils.pojos.*;
@@ -231,7 +232,7 @@ public class RrpcInterfaceTest {
 
 	@Rest(callLogger=BasicDisabledRestLogger.class)
 	@SerializerConfig(addRootType="true",addBeanTypes="true")
-	public static class InterfaceProxyResource extends BasicRestServletJena {
+	public static class InterfaceProxyResource extends BasicRestServlet implements BasicUniversalJenaConfig {
 		private static final long serialVersionUID = 1L;
 
 		//-----------------------------------------------------------------------------------------------------------------

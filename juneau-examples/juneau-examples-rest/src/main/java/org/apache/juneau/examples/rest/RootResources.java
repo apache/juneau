@@ -15,8 +15,9 @@ package org.apache.juneau.examples.rest;
 import org.apache.juneau.examples.rest.dto.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.microservice.resources.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.*;
+import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.annotation.*;
 
@@ -72,7 +73,7 @@ import org.apache.juneau.serializer.annotation.*;
 	// You can apply any of the Serializer/Parser/BeanContext settings this way.
 	quoteChar="'"
 )
-public class RootResources extends BasicRestServletJenaGroup {
+public class RootResources extends BasicRestServletGroup implements BasicUniversalJenaConfig {
 	// IMPORTANT!  If you don't need RDF support, change the parent class to ResourceGroup.
 	// It allows you to remove the Jena prerequisite.
 

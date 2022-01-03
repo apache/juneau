@@ -15,8 +15,9 @@ package org.apache.juneau.rest.test;
 import static org.apache.juneau.http.HttpMethod.*;
 
 import org.apache.juneau.http.annotation.Body;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.BasicUniversalJenaConfig;
+import org.apache.juneau.rest.servlet.BasicRestServlet;
 import org.apache.juneau.testutils.pojos.*;
 
 /**
@@ -25,7 +26,7 @@ import org.apache.juneau.testutils.pojos.*;
 @Rest(
 	path="/testLargePojos"
 )
-public class LargePojosResource extends BasicRestServletJena {
+public class LargePojosResource extends BasicRestServlet implements BasicUniversalJenaConfig {
 	private static final long serialVersionUID = 1L;
 
 	//====================================================================================================

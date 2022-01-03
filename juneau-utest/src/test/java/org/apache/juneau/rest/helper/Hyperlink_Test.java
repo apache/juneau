@@ -16,11 +16,12 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.servlet.*;
 import org.junit.*;
 
 @SuppressWarnings("serial")
@@ -28,7 +29,7 @@ import org.junit.*;
 public class Hyperlink_Test {
 
 	@Rest
-	public static class A extends BasicRestServlet {
+	public static class A extends BasicRestServlet implements BasicUniversalConfig {
 		@RestGet
 		public Hyperlink a() {
 			return new Hyperlink("foo", "bar");

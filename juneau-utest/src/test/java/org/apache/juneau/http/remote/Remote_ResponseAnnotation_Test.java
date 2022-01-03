@@ -97,7 +97,7 @@ public class Remote_ResponseAnnotation_Test {
 	}
 
 	@Rest
-	public static class A3 implements BasicJsonRest {
+	public static class A3 implements BasicJsonConfig {
 		@RestOp
 		public ABean get() {
 			return bean;

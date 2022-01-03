@@ -13,8 +13,9 @@
 package org.apache.juneau.examples.rest.dto;
 
 import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.*;
+import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.annotation.*;
 
@@ -62,6 +63,6 @@ import org.apache.juneau.serializer.annotation.*;
 	// You can apply any of the Serializer/Parser/BeanContext settings this way.
 	quoteChar="'"
 )
-public class DtoExamples extends BasicRestServletJenaGroup {
+public class DtoExamples extends BasicRestServletGroup implements BasicUniversalJenaConfig {
 	private static final long serialVersionUID = 1L;
 }

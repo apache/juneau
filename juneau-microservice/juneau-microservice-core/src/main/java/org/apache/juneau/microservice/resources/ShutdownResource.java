@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.resources;
 
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.BasicUniversalConfig;
+import org.apache.juneau.rest.servlet.BasicRestServlet;
 
 /**
  * Provides the capability to shut down this REST microservice through a REST call.
@@ -29,7 +30,7 @@ import org.apache.juneau.rest.annotation.*;
 	path="/shutdown",
 	title="Shut down this resource"
 )
-public class ShutdownResource extends BasicRestServlet {
+public class ShutdownResource extends BasicRestServlet implements BasicUniversalConfig {
 
 	private static final long serialVersionUID = 1L;
 

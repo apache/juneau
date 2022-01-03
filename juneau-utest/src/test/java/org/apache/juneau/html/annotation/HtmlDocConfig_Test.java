@@ -2,10 +2,11 @@ package org.apache.juneau.html.annotation;
 
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.servlet.*;
 import org.junit.*;
 
 //***************************************************************************************************************************
@@ -31,7 +32,7 @@ public class HtmlDocConfig_Test {
 
 	@Rest
 	@HtmlDocConfig(aside={"a01a","a01b","INHERIT"})
-	public static class A1 extends BasicRestServlet {
+	public static class A1 extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet
 		public Object a01() {
 			return "OK";
@@ -113,7 +114,7 @@ public class HtmlDocConfig_Test {
 
 	@Rest
 	@HtmlDocConfig(footer={"a01a","a01b"})
-	public static class B1 extends BasicRestServlet {
+	public static class B1 extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet
 		public Object a01() {
 			return "OK";
@@ -195,7 +196,7 @@ public class HtmlDocConfig_Test {
 
 	@Rest
 	@HtmlDocConfig(header={"a01a","a01b"})
-	public static class C1 extends BasicRestServlet {
+	public static class C1 extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet
 		public Object a01() {
 			return "OK";
@@ -277,7 +278,7 @@ public class HtmlDocConfig_Test {
 
 	@Rest
 	@HtmlDocConfig(navlinks={"a01a","a01b"})
-	public static class D1 extends BasicRestServlet {
+	public static class D1 extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet
 		public Object a01() {
 			return "OK";
@@ -431,7 +432,7 @@ public class HtmlDocConfig_Test {
 
 	@Rest
 	@HtmlDocConfig(navlinks={"NONE"},nav={"a01a","a01b"})
-	public static class E1 extends BasicRestServlet {
+	public static class E1 extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet
 		public Object a01() {
 			return "OK";
@@ -513,7 +514,7 @@ public class HtmlDocConfig_Test {
 
 	@Rest
 	@HtmlDocConfig(script={"a01a","a01b"})
-	public static class F1 extends BasicRestServlet {
+	public static class F1 extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet
 		public Object a01() {
 			return "OK";
@@ -595,7 +596,7 @@ public class HtmlDocConfig_Test {
 
 	@Rest
 	@HtmlDocConfig(style={"a01a","a01b"},stylesheet="a01s",nowrap="false")
-	public static class G1 extends BasicRestServlet {
+	public static class G1 extends BasicRestServlet implements BasicJsonHtmlConfig {
 		@RestGet
 		public Object a01() {
 			return "OK";

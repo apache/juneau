@@ -19,6 +19,7 @@ import org.apache.juneau.microservice.jetty.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
+import org.apache.juneau.rest.servlet.BasicRestServlet;
 
 /**
  * Microservice debug utilities.

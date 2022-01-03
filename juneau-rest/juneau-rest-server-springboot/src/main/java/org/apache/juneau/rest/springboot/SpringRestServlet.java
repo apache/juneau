@@ -17,7 +17,7 @@ import java.util.*;
 import javax.inject.*;
 
 import org.apache.juneau.cp.*;
-import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.servlet.*;
 import org.springframework.context.*;
 
 /**

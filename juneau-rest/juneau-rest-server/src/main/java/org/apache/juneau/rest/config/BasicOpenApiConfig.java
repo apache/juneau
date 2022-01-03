@@ -13,12 +13,12 @@
 package org.apache.juneau.rest.config;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.oapi.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.serializer.annotation.*;
 
 /**
- * Basic configuration for a REST resource that supports simplified JSON transport.
+ * Basic configuration for a REST resource that supports OpenAPI transport.
  *
  * <p>
  * 	Default settings defined:
@@ -28,15 +28,15 @@ import org.apache.juneau.serializer.annotation.*;
  * 		<ul>
  * 			<li><c>{@link Rest#serializers() serializers}=</c>
  * 				<ul class='javatreec'>
- * 					<li class='jc'>{@link SimpleJsonSerializer}
+ * 					<li class='jc'>{@link OpenApiSerializer}
  * 				</ul>
  * 			</li>
  * 			<li><c>{@link Rest#parsers() parsers}=</c>
  * 				<ul class='javatreec'>
- * 					<li class='jc'>{@link SimpleJsonParser}
+ * 					<li class='jc'>{@link OpenApiParser}
  * 				</ul>
  * 			</li>
- * 			<li><c>{@link Rest#defaultAccept() defaultAccept}=<js>"text/json"</c></li>
+ * 			<li><c>{@link Rest#defaultAccept() defaultAccept}=<js>"text/openapi"</c></li>
  * 			<li><c>{@link Rest#config() config}=<js>"$S{juneau.configFile,SYSTEM_DEFAULT}</js>"</c></li>
  *		</ul>
  *	</li>
@@ -53,17 +53,17 @@ import org.apache.juneau.serializer.annotation.*;
  * </ul>
  *
  * <p>
- * 	This annotation can be applied to REST resource classes to define common JSON default configurations:
+ * 	This annotation can be applied to REST resource classes to define common OpenAPI default configurations:
  * </p>
  * <p class='bcode w800'>
  * 	<jc>// Used on a top-level resource.</jc>
  * 	<ja>@Rest</ja>
- * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet <jk>implements</jk> BasicSimpleJsonRest { ... }
+ * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet <jk>implements</jk> BasicOpenApiRest { ... }
  * </p>
  * <p class='bcode w800'>
  * 	<jc>// Used on a child resource.</jc>
  * 	<ja>@Rest</ja>
- * 	<jk>public class</jk> MyResource <jk>extends</jk> RestObject <jk>implements</jk> BasicSimpleJsonRest { ... }
+ * 	<jk>public class</jk> MyResource <jk>extends</jk> RestObject <jk>implements</jk> BasicOpenApiRest { ... }
  * </p>
  *
  * <p>
@@ -81,25 +81,25 @@ import org.apache.juneau.serializer.annotation.*;
 
 	// Default serializers for all Java methods in the class.
 	serializers={
-		SimpleJsonSerializer.class,
+		OpenApiSerializer.class,
 	},
 
 	// Default parsers for all Java methods in the class.
 	parsers={
-		SimpleJsonParser.class,
+		OpenApiParser.class,
 	},
 
-	// Optional external configuration file.
-	config="$S{juneau.configFile,SYSTEM_DEFAULT}",
+	defaultAccept="text/openapi",
 
-	defaultAccept="text/json+simple"
-)
-@SerializerConfig(
-	// Enable automatic resolution of URI objects to root-relative values.
-	uriResolution="ROOT_RELATIVE"
+	// Optional external configuration file.
+	config="$S{juneau.configFile,SYSTEM_DEFAULT}"
 )
 @BeanConfig(
 	// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.
 	ignoreUnknownBeanProperties="true"
 )
-public interface BasicSimpleJsonRest {}
+@SerializerConfig(
+	// Enable automatic resolution of URI objects to root-relative values.
+	uriResolution="ROOT_RELATIVE"
+)
+public interface BasicOpenApiConfig {}

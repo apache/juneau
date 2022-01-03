@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau.rest.servlet;
 
 import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
@@ -31,6 +31,7 @@ import javax.servlet.http.*;
 
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converter.*;
 import org.apache.juneau.rest.guard.*;
@@ -295,7 +296,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * Method that gets called during servlet initialization.
 	 *
 	 * <p>
-	 * This method is called from within the {@link Servlet#init(ServletConfig)} method after the {@link RestContext.Builder}
+	 * This method is called from within the {@link Servlet#init(ServletConfig)} method after the {@link org.apache.juneau.rest.RestContext.Builder}
 	 * object has been created and initialized with the annotations defined on the class, but before the
 	 * {@link RestContext} object has been created.
 	 *

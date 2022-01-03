@@ -160,7 +160,7 @@ public class Remote_BodyAnnotation_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
-	public static class B implements BasicOpenApiRest {
+	public static class B implements BasicOpenApiConfig {
 		@RestPost
 		public Object x1(@Body int b, @Header("Content-Type") String ct) {
 			assertEquals("text/openapi",ct);

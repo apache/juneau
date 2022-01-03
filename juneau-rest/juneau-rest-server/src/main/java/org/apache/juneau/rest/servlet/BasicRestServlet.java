@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau.rest.servlet;
 
 import java.util.*;
 
@@ -21,6 +21,7 @@ import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.plaintext.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.stats.*;
@@ -33,7 +34,7 @@ import org.apache.juneau.xml.*;
  * Subclass of {@link RestServlet} with default settings and standard methods defined.
  *
  * <p>
- * 	Implements basic configuration settings from {@link BasicUniversalRest} and
+ * 	Implements basic configuration settings from {@link BasicUniversalConfig} and
  * 	basic endpoint methods from {@link BasicRestOperations}.
  *
  * <p>
@@ -137,7 +138,7 @@ import org.apache.juneau.xml.*;
  * @serial exclude
  */
 @Rest
-public abstract class BasicRestServlet extends RestServlet implements BasicUniversalRest, BasicRestOperations {
+public abstract class BasicRestServlet extends RestServlet implements BasicRestOperations, BasicJsonConfig {
 	private static final long serialVersionUID = 1L;
 
 	//-----------------------------------------------------------------------------------------------------------------

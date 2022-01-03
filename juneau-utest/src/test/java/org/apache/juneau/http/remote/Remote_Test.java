@@ -20,12 +20,12 @@ import static org.apache.juneau.http.HttpHeaders.*;
 
 import java.util.concurrent.*;
 
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.remote.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.marshall.*;
@@ -236,7 +236,7 @@ public class Remote_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest(path="/C1")
-	public static class C implements BasicSimpleJsonRest {
+	public static class C implements BasicSimpleJsonConfig {
 		@RestOp
 		public String x1() {
 			return "foo";
@@ -279,7 +279,7 @@ public class Remote_Test {
 	}
 
 	@Rest(path="/C3")
-	public static class C3a implements BasicSimpleJsonRest {
+	public static class C3a implements BasicSimpleJsonConfig {
 		@RestOp
 		public String x1() {
 			return "bar";
@@ -316,7 +316,7 @@ public class Remote_Test {
 	}
 
 	@Rest(path="/C4")
-	public static class C4a implements BasicSimpleJsonRest {
+	public static class C4a implements BasicSimpleJsonConfig {
 		@RestOp
 		public String x1() throws C4c {
 			throw new C4c("foo");
@@ -384,7 +384,7 @@ public class Remote_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
-	public static class D1 implements BasicSimpleJsonRest {
+	public static class D1 implements BasicSimpleJsonConfig {
 		@RestGet
 		public void r202(org.apache.juneau.rest.RestResponse res) {
 			res.setStatus(202);
@@ -425,7 +425,7 @@ public class Remote_Test {
 	}
 
 	@Rest
-	public static class D2 implements BasicSimpleJsonRest {
+	public static class D2 implements BasicSimpleJsonConfig {
 		@RestGet
 		public Integer x1() {
 			return null;
@@ -456,7 +456,7 @@ public class Remote_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest
-	public static class E implements BasicSimpleJsonRest {
+	public static class E implements BasicSimpleJsonConfig {
 		@RestOp(method=HttpMethod.RRPC)
 		public E1 proxy() {
 			return new E1() {
@@ -502,7 +502,7 @@ public class Remote_Test {
 	}
 
 	@Rest
-	public static class E5 implements BasicSimpleJsonRest {
+	public static class E5 implements BasicSimpleJsonConfig {
 		@RestOp(method=HttpMethod.RRPC)
 		public E5b proxy() {
 			return new E5b() {
@@ -532,7 +532,7 @@ public class Remote_Test {
 	}
 
 	@Rest
-	public static class E6 implements BasicSimpleJsonRest {
+	public static class E6 implements BasicSimpleJsonConfig {
 		@RestOp(method=HttpMethod.RRPC)
 		public E5b proxy() {
 			return new E5b() {

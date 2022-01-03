@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.jetty.template;
 
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.servlet.BasicRestServlet;
 
 /**
  * Sample REST resource that prints out a simple "Hello world!" message.

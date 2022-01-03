@@ -21,9 +21,9 @@ import java.util.logging.*;
 import org.apache.http.entity.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.servlet.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

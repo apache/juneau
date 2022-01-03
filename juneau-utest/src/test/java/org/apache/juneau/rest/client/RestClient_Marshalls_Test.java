@@ -20,9 +20,10 @@ import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.servlet.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -50,7 +51,7 @@ public class RestClient_Marshalls_Test {
 	public static Bean bean = Bean.create();
 
 	@Rest
-	public static class A extends BasicRestObject {
+	public static class A extends BasicRestObject implements BasicUniversalConfig {
 		@RestPost
 		public Bean a01(@Body Bean b, @Header("Accept") String accept, @Header("Content-Type") String ct, @Header("X-Accept") String xaccept, @Header("X-Content-Type") String xct) {
 			assertEquals("Accept doesn't match",nn(xaccept),nn(accept));

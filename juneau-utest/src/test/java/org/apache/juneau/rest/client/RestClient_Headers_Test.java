@@ -29,10 +29,11 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.oapi.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.testutils.*;
 import org.apache.juneau.uon.*;
@@ -65,7 +66,7 @@ public class RestClient_Headers_Test {
 	private static ABean bean = ABean.get();
 
 	@Rest(callLogger=CaptureLogger.class)
-	public static class A extends BasicRestObject {
+	public static class A extends BasicRestObject implements BasicUniversalConfig {
 		@RestGet
 		public String[] headers(org.apache.juneau.rest.RestRequest req) {
 			return req.getHeaders().getAll(req.getHeader("Check").orElse(null)).stream().map(x -> x.getValue()).toArray(String[]::new);

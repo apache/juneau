@@ -21,6 +21,8 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.*;
+import org.apache.juneau.rest.servlet.*;
 
 import java.awt.image.*;
 import java.net.*;
@@ -45,7 +47,7 @@ import java.net.*;
 	navlinks="options: ?method=OPTIONS"
 )
 @SuppressWarnings({ "javadoc" })
-public class PhotosResource extends BasicRestServlet {
+public class PhotosResource extends BasicRestServlet implements BasicUniversalConfig {
 
 	private static final long serialVersionUID = 1L;
 

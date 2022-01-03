@@ -10,35 +10,47 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest;
+package org.apache.juneau.rest.servlet;
 
-import javax.servlet.http.HttpServlet;
-
-import org.apache.juneau.jena.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.beans.*;
+import org.apache.juneau.rest.config.*;
 
 /**
- * Identical to {@link BasicRestServletJena} but doesn't extend from {@link HttpServlet}
+ * Specialized subclass of {@link BasicRestServlet} for showing "group" pages.
+ *
+ * <p>
+ * 	Implements basic configuration settings from {@link BasicUniversalConfig} and
+ * 	basic endpoint methods from {@link BasicRestOperations}.
+ *
+ * <p>
+ * Group pages consist of simple lists of child resource URLs and their labels.
+ * They're meant to be used as jumping-off points for child resources.
+ *
+ * <p>
+ * Child resources are specified using the {@link Rest#children() @Rest(children)} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server-rdf}
+ * 	<li class='link'>{@doc jrs.BasicRestServletGroup}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
-@SuppressWarnings("serial")
-@Rest(
-	serializers={
-		RdfXmlSerializer.class,
-		RdfXmlAbbrevSerializer.class,
-		TurtleSerializer.class,
-		NTripleSerializer.class,
-		N3Serializer.class
-	},
-	parsers={
-		RdfXmlParser.class,
-		TurtleParser.class,
-		NTripleParser.class,
-		N3Parser.class
+@Rest
+public abstract class BasicRestServletGroup extends BasicRestServlet {
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * [GET /] - Get child resources.
+	 *
+	 * @param req The HTTP request.
+	 * @return The bean containing links to the child resources.
+	 */
+	@RestGet(path="/", summary="Navigation page")
+	public ChildResourceDescriptions getChildren(RestRequest req) {
+		return new ChildResourceDescriptions(req);
 	}
-)
-public abstract class BasicRestJena extends BasicRestServlet {}
+}
+

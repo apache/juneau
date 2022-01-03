@@ -19,8 +19,8 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.plaintext.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.serializer.annotation.*;
 import org.apache.juneau.soap.*;
 import org.apache.juneau.uon.*;
@@ -195,4 +195,4 @@ import org.apache.juneau.xml.*;
 	// By default, table cell contents should not wrap.
 	nowrap="true"
 )
-public interface BasicUniversalRest {}
+public interface BasicUniversalConfig {}

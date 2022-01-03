@@ -70,6 +70,7 @@ import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.rest.processor.*;
 import org.apache.juneau.rest.rrpc.*;
+import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.staticfile.*;
 import org.apache.juneau.rest.stats.*;
 import org.apache.juneau.rest.swagger.*;
@@ -7238,7 +7239,7 @@ public class RestContext extends Context {
 	/**
 	 * Called during servlet destruction to invoke all {@link HookEvent#DESTROY} methods.
 	 */
-	protected void destroy() {
+	public void destroy() {
 		for (MethodInvoker x : destroyMethods) {
 			try {
 				x.invoke(beanStore, getResource());

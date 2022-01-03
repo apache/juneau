@@ -49,7 +49,7 @@ public class Remote_CommonInterfaces_Test {
 	}
 
 	@Rest
-	public static class A1 implements A, BasicSimpleJsonRest {
+	public static class A1 implements A, BasicSimpleJsonConfig {
 		@Override
 		@RestOp
 		public String putX1(String b) {
@@ -81,7 +81,7 @@ public class Remote_CommonInterfaces_Test {
 
 	@Remote
 	@Rest
-	public static interface B extends BasicSimpleJsonRest {
+	public static interface B extends BasicSimpleJsonConfig {
 		String putX1(@Body String b);
 		String getX2(@Query("foo") String b);
 		String getX3(@Header("foo") String b);
@@ -116,7 +116,7 @@ public class Remote_CommonInterfaces_Test {
 
 	@Remote
 	@Rest
-	public static interface C extends BasicSimpleJsonRest {
+	public static interface C extends BasicSimpleJsonConfig {
 		Ok ok();
 		Accepted accepted();
 		AlreadyReported alreadyReported();
@@ -198,7 +198,7 @@ public class Remote_CommonInterfaces_Test {
 
 	@Remote
 	@Rest
-	public static interface D extends BasicSimpleJsonRest {
+	public static interface D extends BasicSimpleJsonConfig {
 		BasicResource httpResource() throws IOException ;
 	}
 
@@ -225,7 +225,7 @@ public class Remote_CommonInterfaces_Test {
 
 	@Remote
 	@Rest
-	public static interface E extends BasicSimpleJsonRest {
+	public static interface E extends BasicSimpleJsonConfig {
 		void badRequest() throws BadRequest;
 		void conflict() throws Conflict;
 		void expectationFailed() throws ExpectationFailed;
@@ -613,7 +613,7 @@ public class Remote_CommonInterfaces_Test {
 
 	@Remote
 	@Rest
-	public static interface F extends BasicSimpleJsonRest {
+	public static interface F extends BasicSimpleJsonConfig {
 		BadRequest badRequest();
 		Conflict conflict();
 		ExpectationFailed expectationFailed();
@@ -828,7 +828,7 @@ public class Remote_CommonInterfaces_Test {
 
 	@Remote
 	@Rest
-	public static interface G extends BasicSimpleJsonRest {
+	public static interface G extends BasicSimpleJsonConfig {
 		Reader reader();
 		InputStream inputStream();
 	}
@@ -857,7 +857,7 @@ public class Remote_CommonInterfaces_Test {
 
 	@Remote
 	@Rest
-	public static interface IH extends BasicSimpleJsonRest {
+	public static interface IH extends BasicSimpleJsonConfig {
 		SeeOtherRoot seeOtherRoot();
 	}
 

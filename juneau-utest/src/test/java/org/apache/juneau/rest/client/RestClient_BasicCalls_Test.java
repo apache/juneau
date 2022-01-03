@@ -31,9 +31,10 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.testutils.*;
 import org.junit.*;
 import org.apache.juneau.http.header.ContentType;
@@ -57,7 +58,7 @@ public class RestClient_BasicCalls_Test {
 	private static ABean bean = ABean.get();
 
 	@Rest
-	public static class A extends BasicRestObject {
+	public static class A extends BasicRestObject implements BasicUniversalConfig {
 		@RestOp(path="/bean")
 		public ABean getBean() {
 			return bean;

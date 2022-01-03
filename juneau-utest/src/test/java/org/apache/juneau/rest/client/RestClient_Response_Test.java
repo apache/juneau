@@ -29,9 +29,9 @@ import org.apache.http.message.*;
 import org.apache.http.params.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.utils.*;
 import org.junit.*;
 

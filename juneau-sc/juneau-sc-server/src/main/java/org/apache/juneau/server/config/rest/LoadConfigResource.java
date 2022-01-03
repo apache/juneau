@@ -14,8 +14,8 @@ package org.apache.juneau.server.config.rest;
 
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.json.JsonSerializer;
-import org.apache.juneau.rest.RestServlet;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.server.config.repository.GetConfiguration;
 
 @Rest(path="/configs/*")

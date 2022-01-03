@@ -98,7 +98,7 @@ public final class SerializerSet {
 	 */
 	@SuppressWarnings("javadoc")
 	public static abstract class Inherit extends Serializer {
-		protected Inherit(Serializer.Builder builder) {
+		public Inherit(Serializer.Builder builder) {
 			super(builder);
 		}
 	}
@@ -110,7 +110,7 @@ public final class SerializerSet {
 	 */
 	@SuppressWarnings("javadoc")
 	public static abstract class NoInherit extends Serializer {
-		protected NoInherit(Serializer.Builder builder) {
+		public NoInherit(Serializer.Builder builder) {
 			super(builder);
 		}
 	}

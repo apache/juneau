@@ -31,7 +31,9 @@ import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.http.annotation.Schema;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.BasicUniversalJenaConfig;
 import org.apache.juneau.rest.logging.*;
+import org.apache.juneau.rest.servlet.BasicRestServlet;
 import org.apache.juneau.serializer.annotation.*;
 import org.apache.juneau.testutils.pojos.*;
 
@@ -44,7 +46,7 @@ import org.apache.juneau.testutils.pojos.*;
 )
 @SerializerConfig(addRootType="true",addBeanTypes="true")
 @SuppressWarnings({"serial"})
-public class ThirdPartyProxyResource extends BasicRestServletJena {
+public class ThirdPartyProxyResource extends BasicRestServlet implements BasicUniversalJenaConfig {
 
 	public static FileWriter logFile;
 	static {
