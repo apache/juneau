@@ -13,13 +13,13 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'REST Server Overview', created:'9.0.0'} 
+{title:'REST Server Overview', created:'9.0.0', flags:'todo'} 
 
 <h5 class='topic'>@Rest-Annotated Resources</h5>
 <div class='topic'>
 	<p>
 		A REST resource is simply a Java class annotated with {@link oajr.annotation.Rest}.
-		The most common case is a class that extends {@link oajr.RestServlet}, which itself is simply an 
+		The most common case is a class that extends {@link oajr.servlet.BasicRestServlet}, which itself is simply an 
 		extension of {@link javax.servlet.http.HttpServlet} which allows it to be deployed as a servlet.  
 	</p>
 	<p class='bcode w800'>
@@ -42,7 +42,7 @@
 		|		}
 		|	)
 		|	<ja>@BeanConfig</ja>(sortProperties=<js>"true"</js>)
-		|	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet {
+		|	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniveralConfig {
 		|	
 		|		<ja>@RestGet</ja>(path=<js>"/*"</js>, summary=<js>"Responds with \"Hello world!\""</js>)
 		|		<jk>public</jk> String sayHello() {
@@ -108,7 +108,7 @@
 <h5 class='topic'>REST Group Pages</h5>
 <div class='topic'>
 	<p>
-		The {@link oajr.BasicRestServletGroup} class provides a default "router" page for 
+		The {@link oajr.servlet.BasicRestServletGroup} class provides a default "router" page for 
 		child resources when a parent resource is nothing more than a grouping of child resources.
 	</p>		
 	<p>
@@ -131,7 +131,7 @@
 		|			ShutdownResource.<jk>class</jk>
 		|		}
 		|	)
-		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup {
+		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup <jk>implements</jk> BasicUniversalConfig {
 		|		<jc>// NO CODE!!!</jc>
 		|	}
 	</p>
@@ -220,7 +220,7 @@
 <h5 class='topic'>Deploying as a Servlet</h5>
 <div class='topic'>
 	<p>
-		The {@link oajr.RestServlet} class is the entry point for your REST resources.
+		The {@link oajr.servlet.RestServlet} class is the entry point for your REST resources.
 		It extends directly from <l>HttpServlet</l> and is deployed like any other servlet (such as a standard <c>web.xml</c> file).
 	</p>
 	<p>
@@ -231,7 +231,7 @@
 	</p>
 	<p>
 		Most developers are not going to be using the <l>RestServlet</l> class itself, and instead will
-		extend from one of the preconfigured default servlets such as {@link oajr.BasicRestServlet} and {@link oajr.BasicRestServletGroup} 
+		extend from one of the preconfigured default servlets such as {@link oajr.servlet.BasicRestServlet} and {@link oajr.servlet.BasicRestServletGroup} 
 		which provides universal language support, basic instrumentation, and auto-generated Swagger UI.
 	</p>
 </div>
@@ -253,7 +253,7 @@
 	<p>
 		Most developers are not going to be using the <l>RestServlet</l> class itself, and instead will
 		extend from one of the preconfigured default servlets such as {@link oajr.springboot.BasicSpringRestServlet} and {@link oajr.springboot.BasicSpringRestServletGroup}
-		that have the same capabilites as the {@link oajr.BasicRestServlet} and {@link oajr.BasicRestServletGroup} counterparts.
+		that have the same capabilites as the {@link oajr.servlet.BasicRestServlet} and {@link oajr.servlet.BasicRestServletGroup} counterparts.
 	</p>
 	<h5 class='figure'>Example configuration file:</h5>
 	<p class='bcode w800'>
@@ -294,7 +294,7 @@
 		|			HelloWorldResource.<jk>class</jk>
 		|		}
 		|	)
-		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicSpringRestServletGroup {
+		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicSpringRestServletGroup <jk>implements</jk> BasicUniversalConfig {
 		|		<jc>// No code!</jc>
 		|	}
 	</p>

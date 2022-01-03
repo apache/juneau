@@ -383,11 +383,11 @@
 			Revamped and simplified servlet and REST-call lifecycle handling through new
 			{@link oajr.annotation.RestHook @RestHook} annotation.
 			<ul>
-				<li>The {@link oajr.RestServlet#init(ServletConfig)} method is now final and can
+				<li>The {@del oajr.RestServlet#init(ServletConfig)} method is now final and can
 					no longer be extended.
 					<br>Instead, use {@link oajr.annotation.HookEvent#INIT} or 
 					{@link oajr.annotation.HookEvent#POST_INIT} for initialization.
-				<li>The following methods on {@link oajr.RestServlet} have been removed:
+				<li>The following methods on {@del oajr.RestServlet} have been removed:
 					<ul>
 						<li><c>init(RestConfig)</c> 
 							- Use {@link oajr.annotation.HookEvent#INIT} instead.

@@ -340,7 +340,7 @@
 			<ul>
 				<li>Don't set <c>Content-Encoding: identity</c> when no encoding is used.  Some clients don't interpret it correctly.
 			</ul>
-		<li>New methods in {@link oajr.RestServlet}:
+		<li>New methods in {@del oajr.RestServlet}:
 			<ul>
 				<li>{@del RestServlet#getChildClasses()}  - Programmatic equivalent to {@del @RestResource(children)} annotation.
 				<li>{@del RestServlet#shouldLog(HttpServletRequest,HttpServletResponse,RestException)} 
@@ -353,7 +353,7 @@
 				<li>{@del RestServlet#getConfigMgr()}
 			</ul>
 		<li>Removed {@del oaj.jso.JsoParser}
-			from {@link oajr.BasicRestServlet} and {@del RestServletJenaDefault}.  
+			from {@del oajr.BasicRestServlet} and {@del RestServletJenaDefault}.  
 			These may represent a security risk if not handled correctly, so removed
 			them as a precaution.
 		<li>Removed <c>RestServletProperties.REST_htDocsFolder</c>.  Replaced with {@del @RestResource(staticFiles)}}.

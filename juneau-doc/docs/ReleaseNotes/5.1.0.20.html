@@ -54,7 +54,7 @@
 	<ul class='spaced-list'>
 		<li>You can now parse into non-static inner classes of a servlet for parameters/attributes/content.
 			Useful if you like to define your marshaller beans inside your servlet.
-		<li>Changes to {@link oajr.RestServlet}:
+		<li>Changes to {@del oajr.RestServlet}:
 			<ul>
 				<li>New methods for accessing external INI config files:<br>  
 					{@del RestServlet#getConfig()}<br>
@@ -69,7 +69,7 @@
 				<li>New {@del RestServlet#handleNotFound(int,RestRequest,RestResponse)} method for customized handling
 					of when a resource or method was not found.  
 			</ul>
-		<li>{@link oajr.BasicRestServlet}  now automatically processes <js>"/favicon.ico"</js> requests by 
+		<li>{@del oajr.BasicRestServlet}  now automatically processes <js>"/favicon.ico"</js> requests by 
 			overriding the new {@del RestServlet#handleNotFound(int,RestRequest,RestResponse)} method.
 		<li>New {@link oajr.RestRequest} methods: 
 			<ul>

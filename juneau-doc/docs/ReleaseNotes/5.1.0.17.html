@@ -90,19 +90,19 @@
 				<li><c>$E{var}</c> - Environment variables.
 			</ul>
 		<li>Added methods {@del RestServlet#getDescription(RestRequest)} and {@del RestServlet#getLabel(RestRequest)}.
-		<li>{@link oajr.BasicRestServlet} and {@del RestServletJenaDefault} now provide default HTML titles
+		<li>{@del oajr.BasicRestServlet} and {@del RestServletJenaDefault} now provide default HTML titles
 			and descriptions:
 			<p class='bcode w800'>
 		<ja>@Property</ja>(name=<jsf>HTMLDOC_title</jsf>, value=<js>"$R{resourceTitle}"</js>),
 		<ja>@Property</ja>(name=<jsf>HTMLDOC_description</jsf>, value=<js>"$R{resourceDescription}"</js>)
 			</p>
-		<li>Options pages on {@link oajr.BasicRestServlet} and {@del RestServletJenaDefault} now provide default descriptions and back links:
+		<li>Options pages on {@del oajr.BasicRestServlet} and {@del RestServletJenaDefault} now provide default descriptions and back links:
 			and descriptions:
 			<p class='bcode w800'>
 		<ja>@Property</ja>(name=<jsf>HTMLDOC_navlinks</jsf>, value=<js>"{back:'$R{servletURI}"</js>),
 		<ja>@Property</ja>(name=<jsf>HTMLDOC_description</jsf>, value=<js>"Resource options"</js>)
 			</p>
-		<li>New {@link oajr.BasicRestServletGroup} class.
+		<li>New {@del oajr.BasicRestServletGroup} class.
 		<li>Removed <c>RestServletProperties.REST_trimTrailingUriSlashes</c> and <c>RestServletProperties.REST_pathInfoBlankForNull</c>. 
 		<li>New annotations for providing labels and descriptions.  Useful if you don't plan on having to support other languages, so you don't 
 			want to provide labels in resource bundles.

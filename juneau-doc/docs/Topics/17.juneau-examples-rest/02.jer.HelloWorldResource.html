@@ -48,10 +48,10 @@
 		|	}
 	</p>
 	<p>
-		Notice that in this case we're not extending from {@link oajr.RestServlet}.  
+		Notice that in this case we're not extending from {@link oajr.servlet.RestServlet}.  
 		We are however implementing {@del oajr.BasicRestConfig} which is a no-op
 		interface that defines a default <ja>@Rest</ja> annotation with all the serializers, parsers, 
-		and configuration defined on the {@link oajr.BasicRestServlet} class.
+		and configuration defined on the {@link oajr.servlet.BasicRestServlet} class.
 	</p>
 	<p>
 		The only difference between implementing <l>BasicRestConfig</l> and extending from <l>BasicRestServlet</l>

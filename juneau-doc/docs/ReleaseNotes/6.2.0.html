@@ -115,7 +115,7 @@
 	<h5 class='topic w800'>org.apache.juneau.rest</h5>
 	<ul class='spaced-list'>
 		<li>{@del @RestResource} annotation can now be applied to 
-			any class!  You're no longer restricted to subclassing your resources from {@link oajr.RestServlet}.
+			any class!  You're no longer restricted to subclassing your resources from {@del oajr.RestServlet}.
 			<br>This is a major enhancement in the API.  Anything you could do by subclassing from <c>RestServlet</c>
 			should have an equivalent for non-<c>RestServlet</c> classes.
 			<br>The only restriction is that the top-level resource must subclass from <c>RestServlet</c>.
@@ -127,7 +127,7 @@
 				<li>{@link oajr.RestContext} - A read-only configuration that's the result of a snapshot of the config.
 			</ul>
 			<br><br>
-			The {@link oajr.RestServlet} class now has the following initialization method that allows you to override
+			The {@del oajr.RestServlet} class now has the following initialization method that allows you to override
 			the config settings define via annotations:
 			<ul>
 				<li>{@del RestServlet#init(RestConfig)} - A modifiable configuration of a resource.

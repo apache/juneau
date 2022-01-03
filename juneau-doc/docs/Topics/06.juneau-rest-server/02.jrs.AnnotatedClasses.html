@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'@Rest-Annotated Classes', updated:'8.1.2,9.0.0'}
+{title:'@Rest-Annotated Classes', updated:'8.1.2,9.0.0', flags:'todo'}
 
 <div class='topic'>
 	<p>
@@ -101,28 +101,25 @@
 			{@link javax.servlet.http.HttpServlet javax.servlet.http.HttpServlet} 
 			<ul>
 				<li class='jac'>
-					{@link oajr.RestServlet org.apache.juneau.rest.RestServlet}
+					{@link oajr.servlet.RestServlet org.apache.juneau.rest.RestServlet}
 					<br>Contains all the main logic.
 					<ul>
-						<li class='jac'>{@link oajr.BasicRestServlet org.apache.juneau.rest.BasicRestServlet}
+						<li class='jac'>{@link oajr.servlet.BasicRestServlet org.apache.juneau.rest.BasicRestServlet}
 							<br>Provides a default set of serializers, parsers, options page, stylesheet, and other common settings.
 							<ul>
-								<li class='jac'>{@link oajr.BasicRestServletGroup org.apache.juneau.rest.BasicRestServletGroup}
+								<li class='jac'>{@link oajr.servlet.BasicRestServletGroup org.apache.juneau.rest.BasicRestServletGroup}
 									<br>A default implementation for "router" pages.
 								</li>
 							</ul>
-						</li>
-						<li class='jac'>{@link oajr.BasicRestServletJena org.apache.juneau.rest.BasicRestServletJena}
-							<br>Same as {@link oajr.BasicRestServlet} but adds RDF marshalling support.
 						</li>
 						<li class='jac'>{@link oajr.springboot.SpringRestServlet org.apache.juneau.rest.springboot.SpringRestServlet}
 							<br>Top-level servlet to use in Spring Boot.
 							<ul>
 								<li class='jac'>{@link oajr.springboot.BasicSpringRestServlet org.apache.juneau.rest.springboot.BasicSpringRestServlet}
-									<br>Same as {@link oajr.BasicRestServlet} except for Spring Boot.
+									<br>Same as {@link oajr.servlet.BasicRestServlet} except for Spring Boot.
 									<ul>
 										<li class='jac'>{@link oajr.springboot.BasicSpringRestServletGroup org.apache.juneau.rest.springboot.BasicSpringRestServletGroup}
-											<br>Same as {@link oajr.BasicRestServletGroup} except for Spring Boot.
+											<br>Same as {@link oajr.servlet.BasicRestServletGroup} except for Spring Boot.
 										</li>
 									</ul>
 								</li>
@@ -141,11 +138,11 @@
 		of the default implementations that don't extend from {@link javax.servlet.http.HttpServlet}:
 	</p>
 	<ul class='javatree'>
-		<li class='jic'>{@link oajr.BasicRestOperations org.apache.juneau.BasicRestOperations}
+		<li class='jic'>{@link oajr.servlet.BasicRestOperations org.apache.juneau.BasicRestOperations}
 			<ul>
-				<li class='jac'>{@link oajr.BasicRestObject org.apache.juneau.BasicRestObject}
+				<li class='jac'>{@link oajr.servlet.BasicRestObject org.apache.juneau.BasicRestObject}
 					<ul>
-						<li class='jac'>{@link oajr.BasicRestObjectGroup org.apache.juneau.BasicRestObjectGroup}
+						<li class='jac'>{@link oajr.servlet.BasicRestObjectGroup org.apache.juneau.BasicRestObjectGroup}
 					</ul>
 				</li>
 			</ul>
@@ -161,11 +158,11 @@
 		The following interfaces are also provided for defining REST endpoint classes:
 	
 	<ul class='javatree'>
-		<li class='jic'>{@link oajr.config.BasicUniversalRest} - Support for all languages.
-		<li class='jic'>{@link oajr.config.BasicJsonRest} - Support for JSON.
-		<li class='jic'>{@link oajr.config.BasicJsonHtmlRest} - Support for JSON and HTML.
-		<li class='jic'>{@link oajr.config.BasicSimpleJsonRest} - Support for simplified JSON.
-		<li class='jic'>{@link oajr.config.BasicOpenApiRest} - Support for OpenAPI. 
+		<li class='jic'>{@link oajr.config.BasicUniversalConfig} - Support for all languages.
+		<li class='jic'>{@link oajr.config.BasicJsonConfig} - Support for JSON.
+		<li class='jic'>{@link oajr.config.BasicJsonHtmlConfig} - Support for JSON and HTML.
+		<li class='jic'>{@link oajr.config.BasicSimpleJsonConfig} - Support for simplified JSON.
+		<li class='jic'>{@link oajr.config.BasicOpenApiConfig} - Support for OpenAPI. 
 	</ul>
 	<p>
 		The interfaces have no methods to implement.  They simply aggregate common class-level
@@ -210,17 +207,17 @@
 		Children can be nested arbitrary deep to create complex REST interfaces with a single top-level REST servlet.
 	</p>
 	<p>
-		Child REST objects typically extend from {@link oajr.BasicRestObject} to inherit basic functionality 
+		Child REST objects typically extend from {@link oajr.servlet.BasicRestObject} to inherit basic functionality 
 		defined on that class, but as shown above it's not a requirement.
 		Child REST objects can also be preconfigured with basic functionality by implementing one of the 
 		following interfaces as well:
 	</p>
 	<ul class='javatreec'>
-		<li class='jic'>{@link oajr.config.BasicUniversalRest}
-		<li class='jic'>{@link oajr.config.BasicJsonRest}
-		<li class='jic'>{@link oajr.config.BasicJsonHtmlRest}
-		<li class='jic'>{@link oajr.config.BasicSimpleJsonRest}
-		<li class='jic'>{@link oajr.config.BasicOpenApiRest}
+		<li class='jic'>{@link oajr.config.BasicUniversalConfig}
+		<li class='jic'>{@link oajr.config.BasicJsonConfig}
+		<li class='jic'>{@link oajr.config.BasicJsonHtmlConfig}
+		<li class='jic'>{@link oajr.config.BasicSimpleJsonConfig}
+		<li class='jic'>{@link oajr.config.BasicOpenApiConfig}
 	</ul>
 	
 	<h5 class='topic'>Path Variables</h5>

@@ -13,11 +13,11 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'BasicRestServlet/BasicRestObject', updated:'8.1.0,9.0.0'} 
+{title:'BasicRestServlet/BasicRestObject', updated:'8.1.0,9.0.0', flags:'todo'} 
 
 <div class='topic'>
 	<p>
-		The {@link oajr.BasicRestServlet} class is a subclass of {@link oajr.RestServlet}
+		The {@link oajr.servlet.BasicRestServlet} class is a subclass of {@link oajr.servlet.RestServlet}
 		preconfigured with the following:
 	</p>
 	<ul class='spaced-list'>
@@ -251,10 +251,10 @@
 		(As a general rule, all annotations throughout Juneau have programmatic equivalents.)
 	</p>
 	<ul>
-		<li class='note'>{@link oajr.BasicRestServletJena} is the equivalent class that includes support for RDF languages.
+		<li class='note'>{@del oajr.BasicRestServletJena} is the equivalent class that includes support for RDF languages.
 	</ul>
 	<p>
-		The {@link oajr.BasicRestObject} class is identical to the {@link oajr.BasicRestServlet} class except that
+		The {@link oajr.servlet.BasicRestObject} class is identical to the {@link oajr.servlet.BasicRestServlet} class except that
 		it does not extend from <c>HttpServlet</c>.
 		It defines the exact same set of serializers, parsers, etc., but it cannot be deployed as a top-level
 		servlet.  It can however be used for child resources registered via the {@link oajr.annotation.Rest#children() @Rest(children)} 
@@ -266,7 +266,7 @@
 		from this class will prevent that behavior.
 	</p>
 	<p>
-		The code for this class is virtually identical to {@link oajr.BasicRestServlet} but lacks a parent class:
+		The code for this class is virtually identical to {@link oajr.servlet.BasicRestServlet} but lacks a parent class:
 	</p>
 	
 	<h5 class='figure'>BasicRestServlet.java</h5>

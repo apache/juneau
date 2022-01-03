@@ -13,11 +13,11 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'BasicRestServletGroup/BasicRestObjectGroup', updated:'8.1.0,9.0.0'}
+{title:'BasicRestServletGroup/BasicRestObjectGroup', updated:'8.1.0,9.0.0', flags:'todo'}
 
 <div class='topic'>
 	<p>
-		The {@link oajr.BasicRestServletGroup} class provides a default "router" page for 
+		The {@link oajr.servlet.BasicRestServletGroup} class provides a default "router" page for 
 		child resources when a parent resource is nothing more than a grouping of child resources.
 	</p>		
 	<p>
@@ -53,8 +53,8 @@
 	</p>
 	<img class='bordered w800' src='doc-files/jrs.RouterPages.1.png'/>
 	<p> 
-		The {@link oajr.BasicRestServletGroup} class is nothing more than a subclass of 
-		{@link oajr.BasicRestServlet} with a <l>getChildren()</l> method mapped to the servlet 
+		The {@link oajr.servlet.BasicRestServletGroup} class is nothing more than a subclass of 
+		{@link oajr.servlet.BasicRestServlet} with a <l>getChildren()</l> method mapped to the servlet 
 		root path.
 		The method returns a POJO with is just a linked-list of beans with name/description properties.
 	</p>	
@@ -70,7 +70,7 @@
 		|	}		
 	</p>
 	<ul>
-		<li class='note'>{@link oajr.BasicRestServletJenaGroup} is the equivalent class that includes support for RDF languages.
-		<li class='note'>{@link oajr.BasicRestObjectGroup} is the equivalent class that doesn't extend from <c>Servlet</c>.
+		<li class='note'>{@del oajr.BasicRestServletJenaGroup} is the equivalent class that includes support for RDF languages.
+		<li class='note'>{@link oajr.servlet.BasicRestObjectGroup} is the equivalent class that doesn't extend from <c>Servlet</c>.
 	</ul>
 </div>

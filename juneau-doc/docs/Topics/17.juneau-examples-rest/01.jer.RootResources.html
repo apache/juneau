@@ -25,21 +25,16 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jac'>
-			{@link oajr.RestServlet} - Contains all the REST servlet logic.
+			{@link oajr.servlet.RestServlet} - Contains all the REST servlet logic.
 			<ul>
 				<li class='jac'>
-					{@link oajr.BasicRestServlet} - Defines default serializers and parsers, and OPTIONs page logic.
+					{@link oajr.servlet.BasicRestServlet} - Defines default serializers and parsers, and OPTIONs page logic.
 					<ul>
 						<li class='jac'>
-							{@link oajr.BasicRestServletGroup} - Specialized subclass for grouping other resources.
+							{@link oajr.servlet.BasicRestServletGroup} - Specialized subclass for grouping other resources.
 							<ul>
-								<li class='jac'>
-									{@link oaj.rest.BasicRestServletJenaGroup} - Group resource with added RDF support.
-									<ul>
-										<li class='jc'>
-											<c>RootResources</c>
-									</ul>
-								</li>
+								<li class='jc'>
+									<c>RootResources</c>
 							</ul>
 						</li>
 					</ul>
@@ -130,7 +125,7 @@
 	<p>
 		Child resources must be annotated with the {@link oajr.annotation.Rest#path() @Rest(path)} annotation to 
 		identify the subpath of the child.
-		Children CAN extend from {@link oajr.BasicRestServlet} but it is not a requirement.
+		Children CAN extend from {@link oajr.servlet.BasicRestServlet} but it is not a requirement.
 	</p>
 	<p>
 		Note that these router pages can be arbitrarily nested deep.  

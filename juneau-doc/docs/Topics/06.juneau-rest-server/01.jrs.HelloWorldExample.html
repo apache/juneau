@@ -13,12 +13,12 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Hello World Example', updated:'9.0.0'}
+{title:'Hello World Example', updated:'9.0.0', flags:'todo'}
 
 <div class='topic'>
 	<p>
 		A REST resource is simply a Java class annotated with {@link oajr.annotation.Rest}.
-		The most common case is a class that extends {@link oajr.RestServlet}, which itself is simply an 
+		The most common case is a class that extends {@link oajr.servlet.BasicRestServlet}, which itself is simply an 
 		extension of {@link javax.servlet.http.HttpServlet} which allows it to be deployed as a servlet.  
 	</p>
 	<p>
@@ -64,7 +64,7 @@
 		|			<js>"&lt;/div&gt;"</js>
 		|		}
 		|	)
-		|	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet {
+		|	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
 		|	
 		|		<ja>@RestGet</ja>(path=<js>"/*"</js>, summary=<js>"Responds with \"Hello world!\""</js>)
 		|		<jk>public</jk> String sayHello() {
@@ -86,9 +86,9 @@
 		However, we could have returned any POJO consisting of beans, maps, collections, etc...
 	</p>
 	<p>
-		The {@link oajr.BasicRestServlet} class that we're using here is a subclass of 
-		{@link oajr.RestServlet} that provides default support for a variety of content types.  
+		The {@link oajr.servlet.BasicRestServlet} class that we're using here is a subclass of 
+		{@link oajr.servlet.RestServlet} that provides default support for a variety of content types.  
 		Implementers can choose to use this class, or create their own subclass of 
-		{@link oajr.RestServlet} with their own specialized serializers and parsers.
+		{@link oajr.servlet.RestServlet} with their own specialized serializers and parsers.
 	</p>
 </div>
