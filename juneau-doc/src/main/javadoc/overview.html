@@ -165,7 +165,7 @@
 		<li><p><a class='doclink' href='#Overview.o.Dto'>DTO Library Overview</a><span class='update'>created: <b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#Overview.o.Config'>Config API Overview</a><span class='update'>created: <b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#Overview.o.Rest'>REST Overview</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#Overview.o.RestServer'>REST Server Overview</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#Overview.o.RestServer'>REST Server Overview</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></p>
 		<li><p><a class='doclink' href='#Overview.o.RestClient'>REST Client Overview</a><span class='update'>created: <b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#Overview.o.GeneralDesign'>General Design</a><span class='update'>created: <b>9.0.0</b></span></p>
 	</ol>
@@ -345,11 +345,11 @@
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#juneau-rest-server'>juneau-rest-server</a><span class='update'>updated: <b>9.0.0</b></span></p>
 	<ol>
-		<li><p><a class='doclink' href='#juneau-rest-server.jrs.HelloWorldExample'>Hello World Example</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#juneau-rest-server.jrs.AnnotatedClasses'>@Rest-Annotated Classes</a><span class='update'>updated: 8.1.2,<b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.jrs.HelloWorldExample'>Hello World Example</a><span class='update'>updated: <b>9.0.0</b>, <b><red>todo</red></b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.jrs.AnnotatedClasses'>@Rest-Annotated Classes</a><span class='update'>updated: 8.1.2,<b>9.0.0</b>, <b><red>todo</red></b></span></p>
 		<ol>
-			<li><p><a class='doclink' href='#juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServlet'>BasicRestServlet/BasicRestObject</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServletGroup'>BasicRestServletGroup/BasicRestObjectGroup</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServlet'>BasicRestServlet/BasicRestObject</a><span class='update'>updated: 8.1.0,<b>9.0.0</b>, <b><red>todo</red></b></span></p>
+			<li><p><a class='doclink' href='#juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServletGroup'>BasicRestServletGroup/BasicRestObjectGroup</a><span class='update'>updated: 8.1.0,<b>9.0.0</b>, <b><red>todo</red></b></span></p>
 			<li><p><a class='doclink' href='#juneau-rest-server.jrs.AnnotatedClasses.jrs.LifecycleHooks'>Lifecycle Hooks</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		</ol>
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.RestOpAnnotatedMethods'>@RestOp-Annotated Methods</a><span class='update'>updated: <b>9.0.0</b></span></p>
@@ -405,7 +405,7 @@
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.HttpStatusCodes'>HTTP Status Codes</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.OverloadingHttpMethods'>Overloading HTTP Methods</a></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.BuiltInParameters'>Built-in Parameters</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#juneau-rest-server.jrs.UsingWithOsgi'>Using with OSGi</a><span class='update'><b><red>todo</red></b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.jrs.UsingWithOsgi'>Using with OSGi</a></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.Injection'>Using with Spring and Injection frameworks</a><span class='update'><b><red>todo</red></b></span></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.OtherNotes'>Other Notes</a><span class='update'><b><red>todo</red></b></span></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.RestContext'>RestContext</a><span class='update'><b><red>todo</red></b></span></p>
@@ -1625,13 +1625,13 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#Overview.o.RestServer' id='Overview.o.RestServer'>1.5 - REST Server Overview</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#Overview.o.RestServer' id='Overview.o.RestServer'>1.5 - REST Server Overview</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></h3>
 <div class='topic'><!-- START: 1.5 - Overview.o.RestServer -->
 <h5 class='topic'>@Rest-Annotated Resources</h5>
 <div class='topic'>
 	<p>
 		A REST resource is simply a Java class annotated with {@link org.apache.juneau.rest.annotation.Rest}.
-		The most common case is a class that extends {@link org.apache.juneau.rest.RestServlet}, which itself is simply an 
+		The most common case is a class that extends {@link org.apache.juneau.rest.servlet.BasicRestServlet}, which itself is simply an 
 		extension of {@link javax.servlet.http.HttpServlet} which allows it to be deployed as a servlet.  
 	</p>
 	<p class='bcode w800'>
@@ -1654,7 +1654,7 @@
 		}
 	)
 	<ja>@BeanConfig</ja>(sortProperties=<js>"true"</js>)
-	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet {
+	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniveralConfig {
 	
 		<ja>@RestGet</ja>(path=<js>"/*"</js>, summary=<js>"Responds with \"Hello world!\""</js>)
 		<jk>public</jk> String sayHello() {
@@ -1720,7 +1720,7 @@
 <h5 class='topic'>REST Group Pages</h5>
 <div class='topic'>
 	<p>
-		The {@link org.apache.juneau.rest.BasicRestServletGroup} class provides a default "router" page for 
+		The {@link org.apache.juneau.rest.servlet.BasicRestServletGroup} class provides a default "router" page for 
 		child resources when a parent resource is nothing more than a grouping of child resources.
 	</p>		
 	<p>
@@ -1743,7 +1743,7 @@
 			ShutdownResource.<jk>class</jk>
 		}
 	)
-	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup {
+	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup <jk>implements</jk> BasicUniversalConfig {
 		<jc>// NO CODE!!!</jc>
 	}
 	</p>
@@ -1832,7 +1832,7 @@
 <h5 class='topic'>Deploying as a Servlet</h5>
 <div class='topic'>
 	<p>
-		The {@link org.apache.juneau.rest.RestServlet} class is the entry point for your REST resources.
+		The {@link org.apache.juneau.rest.servlet.RestServlet} class is the entry point for your REST resources.
 		It extends directly from <l>HttpServlet</l> and is deployed like any other servlet (such as a standard <c>web.xml</c> file).
 	</p>
 	<p>
@@ -1843,7 +1843,7 @@
 	</p>
 	<p>
 		Most developers are not going to be using the <l>RestServlet</l> class itself, and instead will
-		extend from one of the preconfigured default servlets such as {@link org.apache.juneau.rest.BasicRestServlet} and {@link org.apache.juneau.rest.BasicRestServletGroup} 
+		extend from one of the preconfigured default servlets such as {@link org.apache.juneau.rest.servlet.BasicRestServlet} and {@link org.apache.juneau.rest.servlet.BasicRestServletGroup} 
 		which provides universal language support, basic instrumentation, and auto-generated Swagger UI.
 	</p>
 </div>
@@ -1865,7 +1865,7 @@
 	<p>
 		Most developers are not going to be using the <l>RestServlet</l> class itself, and instead will
 		extend from one of the preconfigured default servlets such as {@link org.apache.juneau.rest.springboot.BasicSpringRestServlet} and {@link org.apache.juneau.rest.springboot.BasicSpringRestServletGroup}
-		that have the same capabilites as the {@link org.apache.juneau.rest.BasicRestServlet} and {@link org.apache.juneau.rest.BasicRestServletGroup} counterparts.
+		that have the same capabilites as the {@link org.apache.juneau.rest.servlet.BasicRestServlet} and {@link org.apache.juneau.rest.servlet.BasicRestServletGroup} counterparts.
 	</p>
 	<h5 class='figure'>Example configuration file:</h5>
 	<p class='bcode w800'>
@@ -1906,7 +1906,7 @@
 			HelloWorldResource.<jk>class</jk>
 		}
 	)
-	<jk>public class</jk> RootResources <jk>extends</jk> BasicSpringRestServletGroup {
+	<jk>public class</jk> RootResources <jk>extends</jk> BasicSpringRestServletGroup <jk>implements</jk> BasicUniversalConfig {
 		<jc>// No code!</jc>
 	}
 	</p>
@@ -12758,7 +12758,7 @@
 	}
 	</p>
 	<p>
-		The {@link org.apache.juneau.rest.BasicRestServlet} class (describe later) shows how this swap is used in the REST interface to 
+		The {@link org.apache.juneau.rest.servlet.BasicRestServlet} class (describe later) shows how this swap is used in the REST interface to 
 		generate the Swagger UI shown above:
 	</p>
 	<p class='bcode w800'>
@@ -14599,7 +14599,7 @@
 	</p>
 	<p> 
 		The API builds upon the existing JEE Servlet API.  
-		The root class, {@link org.apache.juneau.rest.RestServlet} is nothing but a specialized 
+		The root class, {@link org.apache.juneau.rest.servlet.RestServlet} is nothing but a specialized 
 		{@link javax.servlet.http.HttpServlet}, and the {@link org.apache.juneau.rest.RestRequest} and 
 		{@link org.apache.juneau.rest.RestResponse} classes are nothing more than specialized 
 		{@link javax.servlet.http.HttpServletRequest} and {@link javax.servlet.http.HttpServletResponse} objects.  
@@ -14682,12 +14682,12 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.HelloWorldExample' id='juneau-rest-server.jrs.HelloWorldExample'>6.1 - Hello World Example</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.HelloWorldExample' id='juneau-rest-server.jrs.HelloWorldExample'>6.1 - Hello World Example</a><span class='update'>updated: <b>9.0.0</b>, <b><red>todo</red></b></span></h3>
 <div class='topic'><!-- START: 6.1 - juneau-rest-server.jrs.HelloWorldExample -->
 <div class='topic'>
 	<p>
 		A REST resource is simply a Java class annotated with {@link org.apache.juneau.rest.annotation.Rest}.
-		The most common case is a class that extends {@link org.apache.juneau.rest.RestServlet}, which itself is simply an 
+		The most common case is a class that extends {@link org.apache.juneau.rest.servlet.BasicRestServlet}, which itself is simply an 
 		extension of {@link javax.servlet.http.HttpServlet} which allows it to be deployed as a servlet.  
 	</p>
 	<p>
@@ -14733,7 +14733,7 @@
 			<js>"&lt;/div&gt;"</js>
 		}
 	)
-	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet {
+	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
 	
 		<ja>@RestGet</ja>(path=<js>"/*"</js>, summary=<js>"Responds with \"Hello world!\""</js>)
 		<jk>public</jk> String sayHello() {
@@ -14755,17 +14755,17 @@
 		However, we could have returned any POJO consisting of beans, maps, collections, etc...
 	</p>
 	<p>
-		The {@link org.apache.juneau.rest.BasicRestServlet} class that we're using here is a subclass of 
-		{@link org.apache.juneau.rest.RestServlet} that provides default support for a variety of content types.  
+		The {@link org.apache.juneau.rest.servlet.BasicRestServlet} class that we're using here is a subclass of 
+		{@link org.apache.juneau.rest.servlet.RestServlet} that provides default support for a variety of content types.  
 		Implementers can choose to use this class, or create their own subclass of 
-		{@link org.apache.juneau.rest.RestServlet} with their own specialized serializers and parsers.
+		{@link org.apache.juneau.rest.servlet.RestServlet} with their own specialized serializers and parsers.
 	</p>
 </div>
 </div><!-- END: 6.1 - juneau-rest-server.jrs.HelloWorldExample -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.AnnotatedClasses' id='juneau-rest-server.jrs.AnnotatedClasses'>6.2 - @Rest-Annotated Classes</a><span class='update'>updated: 8.1.2,<b>9.0.0</b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.AnnotatedClasses' id='juneau-rest-server.jrs.AnnotatedClasses'>6.2 - @Rest-Annotated Classes</a><span class='update'>updated: 8.1.2,<b>9.0.0</b>, <b><red>todo</red></b></span></h3>
 <div class='topic'><!-- START: 6.2 - juneau-rest-server.jrs.AnnotatedClasses -->
 <div class='topic'>
 	<p>
@@ -14853,28 +14853,25 @@
 			{@link javax.servlet.http.HttpServlet javax.servlet.http.HttpServlet} 
 			<ul>
 				<li class='jac'>
-					{@link org.apache.juneau.rest.RestServlet org.apache.juneau.rest.RestServlet}
+					{@link org.apache.juneau.rest.servlet.RestServlet org.apache.juneau.rest.RestServlet}
 					<br>Contains all the main logic.
 					<ul>
-						<li class='jac'>{@link org.apache.juneau.rest.BasicRestServlet org.apache.juneau.rest.BasicRestServlet}
+						<li class='jac'>{@link org.apache.juneau.rest.servlet.BasicRestServlet org.apache.juneau.rest.BasicRestServlet}
 							<br>Provides a default set of serializers, parsers, options page, stylesheet, and other common settings.
 							<ul>
-								<li class='jac'>{@link org.apache.juneau.rest.BasicRestServletGroup org.apache.juneau.rest.BasicRestServletGroup}
+								<li class='jac'>{@link org.apache.juneau.rest.servlet.BasicRestServletGroup org.apache.juneau.rest.BasicRestServletGroup}
 									<br>A default implementation for "router" pages.
 								</li>
 							</ul>
-						</li>
-						<li class='jac'>{@link org.apache.juneau.rest.BasicRestServletJena org.apache.juneau.rest.BasicRestServletJena}
-							<br>Same as {@link org.apache.juneau.rest.BasicRestServlet} but adds RDF marshalling support.
 						</li>
 						<li class='jac'>{@link org.apache.juneau.rest.springboot.SpringRestServlet org.apache.juneau.rest.springboot.SpringRestServlet}
 							<br>Top-level servlet to use in Spring Boot.
 							<ul>
 								<li class='jac'>{@link org.apache.juneau.rest.springboot.BasicSpringRestServlet org.apache.juneau.rest.springboot.BasicSpringRestServlet}
-									<br>Same as {@link org.apache.juneau.rest.BasicRestServlet} except for Spring Boot.
+									<br>Same as {@link org.apache.juneau.rest.servlet.BasicRestServlet} except for Spring Boot.
 									<ul>
 										<li class='jac'>{@link org.apache.juneau.rest.springboot.BasicSpringRestServletGroup org.apache.juneau.rest.springboot.BasicSpringRestServletGroup}
-											<br>Same as {@link org.apache.juneau.rest.BasicRestServletGroup} except for Spring Boot.
+											<br>Same as {@link org.apache.juneau.rest.servlet.BasicRestServletGroup} except for Spring Boot.
 										</li>
 									</ul>
 								</li>
@@ -14893,11 +14890,11 @@
 		of the default implementations that don't extend from {@link javax.servlet.http.HttpServlet}:
 	</p>
 	<ul class='javatree'>
-		<li class='jic'>{@link org.apache.juneau.rest.BasicRestOperations org.apache.juneau.BasicRestOperations}
+		<li class='jic'>{@link org.apache.juneau.rest.servlet.BasicRestOperations org.apache.juneau.BasicRestOperations}
 			<ul>
-				<li class='jac'>{@link org.apache.juneau.rest.BasicRestObject org.apache.juneau.BasicRestObject}
+				<li class='jac'>{@link org.apache.juneau.rest.servlet.BasicRestObject org.apache.juneau.BasicRestObject}
 					<ul>
-						<li class='jac'>{@link org.apache.juneau.rest.BasicRestObjectGroup org.apache.juneau.BasicRestObjectGroup}
+						<li class='jac'>{@link org.apache.juneau.rest.servlet.BasicRestObjectGroup org.apache.juneau.BasicRestObjectGroup}
 					</ul>
 				</li>
 			</ul>
@@ -14962,7 +14959,7 @@
 		Children can be nested arbitrary deep to create complex REST interfaces with a single top-level REST servlet.
 	</p>
 	<p>
-		Child REST objects typically extend from {@link org.apache.juneau.rest.BasicRestObject} to inherit basic functionality 
+		Child REST objects typically extend from {@link org.apache.juneau.rest.servlet.BasicRestObject} to inherit basic functionality 
 		defined on that class, but as shown above it's not a requirement.
 		Child REST objects can also be preconfigured with basic functionality by implementing one of the 
 		following interfaces as well:
@@ -15048,11 +15045,11 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServlet' id='juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServlet'>6.2.1 - BasicRestServlet/BasicRestObject</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServlet' id='juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServlet'>6.2.1 - BasicRestServlet/BasicRestObject</a><span class='update'>updated: 8.1.0,<b>9.0.0</b>, <b><red>todo</red></b></span></h4>
 <div class='topic'><!-- START: 6.2.1 - juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServlet -->
 <div class='topic'>
 	<p>
-		The {@link org.apache.juneau.rest.BasicRestServlet} class is a subclass of {@link org.apache.juneau.rest.RestServlet}
+		The {@link org.apache.juneau.rest.servlet.BasicRestServlet} class is a subclass of {@link org.apache.juneau.rest.servlet.RestServlet}
 		preconfigured with the following:
 	</p>
 	<ul class='spaced-list'>
@@ -15286,10 +15283,10 @@
 		(As a general rule, all annotations throughout Juneau have programmatic equivalents.)
 	</p>
 	<ul>
-		<li class='note'>{@link org.apache.juneau.rest.BasicRestServletJena} is the equivalent class that includes support for RDF languages.
+		<li class='note'>{@del org.apache.juneau.rest.BasicRestServletJena} is the equivalent class that includes support for RDF languages.
 	</ul>
 	<p>
-		The {@link org.apache.juneau.rest.BasicRestObject} class is identical to the {@link org.apache.juneau.rest.BasicRestServlet} class except that
+		The {@link org.apache.juneau.rest.servlet.BasicRestObject} class is identical to the {@link org.apache.juneau.rest.servlet.BasicRestServlet} class except that
 		it does not extend from <c>HttpServlet</c>.
 		It defines the exact same set of serializers, parsers, etc., but it cannot be deployed as a top-level
 		servlet.  It can however be used for child resources registered via the {@link org.apache.juneau.rest.annotation.Rest#children() @Rest(children)} 
@@ -15301,7 +15298,7 @@
 		from this class will prevent that behavior.
 	</p>
 	<p>
-		The code for this class is virtually identical to {@link org.apache.juneau.rest.BasicRestServlet} but lacks a parent class:
+		The code for this class is virtually identical to {@link org.apache.juneau.rest.servlet.BasicRestServlet} but lacks a parent class:
 	</p>
 	
 	<h5 class='figure'>BasicRestServlet.java</h5>
@@ -15339,11 +15336,11 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServletGroup' id='juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServletGroup'>6.2.2 - BasicRestServletGroup/BasicRestObjectGroup</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServletGroup' id='juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServletGroup'>6.2.2 - BasicRestServletGroup/BasicRestObjectGroup</a><span class='update'>updated: 8.1.0,<b>9.0.0</b>, <b><red>todo</red></b></span></h4>
 <div class='topic'><!-- START: 6.2.2 - juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServletGroup -->
 <div class='topic'>
 	<p>
-		The {@link org.apache.juneau.rest.BasicRestServletGroup} class provides a default "router" page for 
+		The {@link org.apache.juneau.rest.servlet.BasicRestServletGroup} class provides a default "router" page for 
 		child resources when a parent resource is nothing more than a grouping of child resources.
 	</p>		
 	<p>
@@ -15379,8 +15376,8 @@
 	</p>
 	<img class='bordered w800' src='doc-files/jrs.RouterPages.1.png'/>
 	<p> 
-		The {@link org.apache.juneau.rest.BasicRestServletGroup} class is nothing more than a subclass of 
-		{@link org.apache.juneau.rest.BasicRestServlet} with a <l>getChildren()</l> method mapped to the servlet 
+		The {@link org.apache.juneau.rest.servlet.BasicRestServletGroup} class is nothing more than a subclass of 
+		{@link org.apache.juneau.rest.servlet.BasicRestServlet} with a <l>getChildren()</l> method mapped to the servlet 
 		root path.
 		The method returns a POJO with is just a linked-list of beans with name/description properties.
 	</p>	
@@ -15396,8 +15393,8 @@
 	}		
 	</p>
 	<ul>
-		<li class='note'>{@link org.apache.juneau.rest.BasicRestServletJenaGroup} is the equivalent class that includes support for RDF languages.
-		<li class='note'>{@link org.apache.juneau.rest.BasicRestObjectGroup} is the equivalent class that doesn't extend from <c>Servlet</c>.
+		<li class='note'>{@del org.apache.juneau.rest.BasicRestServletJenaGroup} is the equivalent class that includes support for RDF languages.
+		<li class='note'>{@link org.apache.juneau.rest.servlet.BasicRestObjectGroup} is the equivalent class that doesn't extend from <c>Servlet</c>.
 	</ul>
 </div>
 </div><!-- END: 6.2.2 - juneau-rest-server.jrs.AnnotatedClasses.jrs.BasicRestServletGroup -->
@@ -17186,10 +17183,10 @@
 	<ul class='javatree'>
 		<li>Classes:
 			<ul class='javatreec'>
-				<li class='jc'>{@link org.apache.juneau.rest.BasicRestServlet}
-				<li class='jc'>{@link org.apache.juneau.rest.BasicRestServletGroup}
-				<li class='jc'>{@link org.apache.juneau.rest.BasicRestObject}
-				<li class='jc'>{@link org.apache.juneau.rest.BasicRestObjectGroup}
+				<li class='jc'>{@link org.apache.juneau.rest.servlet.BasicRestServlet}
+				<li class='jc'>{@link org.apache.juneau.rest.servlet.BasicRestServletGroup}
+				<li class='jc'>{@link org.apache.juneau.rest.servlet.BasicRestObject}
+				<li class='jc'>{@link org.apache.juneau.rest.servlet.BasicRestObjectGroup}
 			</ul>
 		</li>
 		<li>Interfaces:
@@ -17289,7 +17286,7 @@
 	</ul>
 	
 	<ul class='seealso'>
-		<li class='jc'>{@link org.apache.juneau.rest.examples.PhotoResource} - An example of a REST resource that uses a custom serializer and parser.
+		<li class='jc'>{@link org.apache.juneau.examples.rest.PhotosResource} - An example of a REST resource that uses a custom serializer and parser.
 	</ul>
 </div>
 </div><!-- END: 6.5 - juneau-rest-server.jrs.Marshalling -->
@@ -17780,7 +17777,7 @@
 	</p>
 	<p>
 		The annotation itself can contain string variables.  
-		For example, the Microservice API {@link org.apache.juneau.rest.BasicRestServlet} class defines the 
+		For example, the Microservice API {@link org.apache.juneau.rest.servlet.BasicRestServlet} class defines the 
 		location of the config file as a system property <l>"juneau.configFile"</l>:
 	</p>
 	<p class='bcode w800'>
@@ -18211,7 +18208,7 @@
 <div class='topic'><!-- START: 6.13 - juneau-rest-server.jrs.StaticFiles -->
 <div class='topic'>
 	<p>
-		The {@link org.apache.juneau.rest.BasicRestServlet} and {@link org.apache.juneau.rest.BasicRestObject} classes come with built-in support
+		The {@link org.apache.juneau.rest.servlet.BasicRestServlet} and {@link org.apache.juneau.rest.servlet.BasicRestObject} classes come with built-in support
 		for serving up static files through the following REST operation:
 	</p>
 	<p class='bcode w800'>
@@ -18348,7 +18345,7 @@
 <div class='topic'><!-- START: 6.15.1 - juneau-rest-server.jrs.Swagger.jrs.BasicRestServletSwagger -->
 <div class='topic'>
 	<p>
-		Any subclass of {@link org.apache.juneau.rest.BasicRestServlet} and {@link org.apache.juneau.rest.BasicRestObject} gets an auto-generated Swagger UI when performing an <c>OPTIONS</c>
+		Any subclass of {@link org.apache.juneau.rest.servlet.BasicRestServlet} and {@link org.apache.juneau.rest.servlet.BasicRestObject} gets an auto-generated Swagger UI when performing an <c>OPTIONS</c>
 		request with <c>Accept:text/html</c> due to the following method:
 	</p>
 	<p class='bcode w800'>
@@ -18383,7 +18380,7 @@
 	</p>
 	<p>
 		The underlying mechanics are simple.  
-		The {@link org.apache.juneau.rest.BasicRestServlet#getSwagger(RestRequest)} method returns a {@link org.apache.juneau.dto.swagger.Swagger} bean
+		The {@link org.apache.juneau.rest.servlet.BasicRestServlet#getSwagger(RestRequest)} method returns a {@link org.apache.juneau.dto.swagger.Swagger} bean
 		consisting of information gathered from annotations and other sources.
 		Then that bean is swapped for a {@link org.apache.juneau.dto.swagger.ui.SwaggerUI} bean when rendered as HTML.
 	</p>
@@ -19021,7 +19018,7 @@
 		and <ja>@RestHook</ja> annotated methods on the class.
 	</p>
 	<p>
-		If you extend from {@link org.apache.juneau.rest.BasicRestServlet} or {@link org.apache.juneau.rest.BasicRestObject}, then
+		If you extend from {@link org.apache.juneau.rest.servlet.BasicRestServlet} or {@link org.apache.juneau.rest.servlet.BasicRestObject}, then
 		the statics are made available through the REST interface via the following method:
 	</p>
 	<p class='bcode w800'>
@@ -19734,7 +19731,7 @@
 	<img class='bordered w800' src='doc-files/jrs.Stylesheets.3.png'>
 	<p>
 		The stylesheet URL is controlled by the {@link org.apache.juneau.html.annotation.HtmlDocConfig#stylesheet() @HtmlDocConfig(stylesheet)} annotation.
-		The {@link org.apache.juneau.rest.BasicRestServlet} class defines the stylesheet served up as a static file:
+		The {@link org.apache.juneau.rest.servlet.BasicRestServlet} class defines the stylesheet served up as a static file:
 	<p class='bcode w800'>
 	<ja>@Rest</ja>(
 		staticFiles={<js>"styles:styles"</js>}
@@ -20212,7 +20209,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.UsingWithOsgi' id='juneau-rest-server.jrs.UsingWithOsgi'>6.22 - Using with OSGi</a><span class='update'><b><red>todo</red></b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.UsingWithOsgi' id='juneau-rest-server.jrs.UsingWithOsgi'>6.22 - Using with OSGi</a></h3>
 <div class='topic'><!-- START: 6.22 - juneau-rest-server.jrs.UsingWithOsgi -->
 <div class='topic'>
 	<p>
@@ -21034,7 +21031,7 @@
 	</p>
 	<p>
 		It should be noted that although some of the functionality of the Juneau Server API is provided through the JAX-RS 
-		integration components, it is not nearly as flexible as using the {@link org.apache.juneau.rest.RestServlet} class directly.
+		integration components, it is not nearly as flexible as using the {@link org.apache.juneau.rest.servlet.RestServlet} class directly.
 	</p>
 	<p>
 		What you can do with the Juneau JAX-RS provider classes:
@@ -21083,7 +21080,7 @@
 			apply to those serializers and parsers.
 		<li class='jc'>
 			{@link org.apache.juneau.rest.jaxrs.BasicProvider} - A default provider that provides the same level
-			of media type support as the {@link org.apache.juneau.rest.BasicRestServlet} class.
+			of media type support as the {@link org.apache.juneau.rest.servlet.BasicRestServlet} class.
 	</ul>
 	<p>
 		For the most part, when using these components, you'll either use the existing <l>BasicProvider</l>, 
@@ -21132,13 +21129,13 @@
 		The Juneau integration component for Spring Boot consists of the following classes:
 	</p>
 	<ul class='javatree'>
-		<li class='ja'>{@link org.apache.juneau.rest.springboot.annotation.JuneauRestRoot}
+		<li class='ja'>{@del org.apache.juneau.rest.springboot.annotation.JuneauRestRoot}
 		<li class='jc'>{@del org.apache.juneau.rest.springboot.JuneauRestInitializer}
 		<li class='jc'>{@del org.apache.juneau.rest.springboot.SpringRestResourceResolver}
 	</ul>
 	<p>
 		A typical Spring Boot application can use the {@del org.apache.juneau.rest.springboot.JuneauRestInitializer} to find
-		and register Juneau REST servlets via the {@link org.apache.juneau.rest.springboot.annotation.JuneauRestRoot} annotation.
+		and register Juneau REST servlets via the {@del org.apache.juneau.rest.springboot.annotation.JuneauRestRoot} annotation.
 	</p>
 	<h5 class='figure'>Example:</h5>
 	<p class='bcode w800'>
@@ -21222,7 +21219,7 @@
 	</p>
 	<p>
 		The root resource class must extend from <c>HttpServlet</c> so that it can be registered as a normal
-		servlet using the Spring Boot architecture.  The {@link org.apache.juneau.rest.BasicRestServletGroup} class is our router class
+		servlet using the Spring Boot architecture.  The {@link org.apache.juneau.rest.servlet.BasicRestServletGroup} class is our router class
 		that extends from <c>HttpServlet</c>:
 	</p>
 	<p class='bcode w800'>
@@ -25287,7 +25284,7 @@
 		<li>
 			The <l>children</l> annotation make up the list of child resources.
 			<br>These child resources can be anything that extends from <l>Servlet</l>, although usually
-			they will be subclasses of {@link org.apache.juneau.rest.BasicRestServlet} or other resource groups.
+			they will be subclasses of {@link org.apache.juneau.rest.servlet.BasicRestServlet} or other resource groups.
 	</ul>
 	<p>
 		If you click the <l>helloWorld</l> link in your application, you'll get a simple hello world message:
@@ -25421,7 +25418,7 @@
 	<p>
 		The most common usage for the configuration file is to reference values using the {@link org.apache.juneau.config.vars.ConfigVar $C} variable in annotations.
 		For example, the {@del org.apache.juneau.rest.BasicRestConfig} interface that defines the annotations that control the look-and-feel of
-		classes that extend from {@link org.apache.juneau.rest.BasicRestServlet} use several <c>$C</c> variables to externalize values:
+		classes that extend from {@link org.apache.juneau.rest.servlet.BasicRestServlet} use several <c>$C</c> variables to externalize values:
 	</p>
 	<p class='bcode w800'>
 	<ja>@Rest</ja>(
@@ -25757,7 +25754,7 @@
 		<cv>&lt;/a&gt;</cv>
 	</p>
 	<p>
-		The {@del org.apache.juneau.rest.BasicRestConfig} interface (which defines the default settings for {@link org.apache.juneau.rest.BasicRestServlet} 
+		The {@del org.apache.juneau.rest.BasicRestConfig} interface (which defines the default settings for {@link org.apache.juneau.rest.servlet.BasicRestServlet} 
 		pulls in this information using {@link org.apache.juneau.config.vars.ConfigVar $C} and {@link org.apache.juneau.rest.vars.UrlVar $U} variables:
 	</p>
 	<p class='bcode w800'>
@@ -26334,7 +26331,7 @@
 			<br>This class creates and starts our microservice.
 			<br>Note that we're using the existing Spring Boot application logic for the microservice and we're retrieving
 			our root resource as a spring bean.
-			<br>Only the top-level resource needs to be annotated with {@link org.apache.juneau.rest.springboot.annotation.JuneauRestRoot @JuneauRestRoot}
+			<br>Only the top-level resource needs to be annotated with {@del org.apache.juneau.rest.springboot.annotation.JuneauRestRoot @JuneauRestRoot}
 			<br><br>
 			<p class='bcode w800'>
 		<ja>@SpringBootApplication</ja>
@@ -26671,21 +26668,16 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jac'>
-			{@link org.apache.juneau.rest.RestServlet} - Contains all the REST servlet logic.
+			{@link org.apache.juneau.rest.servlet.RestServlet} - Contains all the REST servlet logic.
 			<ul>
 				<li class='jac'>
-					{@link org.apache.juneau.rest.BasicRestServlet} - Defines default serializers and parsers, and OPTIONs page logic.
+					{@link org.apache.juneau.rest.servlet.BasicRestServlet} - Defines default serializers and parsers, and OPTIONs page logic.
 					<ul>
 						<li class='jac'>
-							{@link org.apache.juneau.rest.BasicRestServletGroup} - Specialized subclass for grouping other resources.
+							{@link org.apache.juneau.rest.servlet.BasicRestServletGroup} - Specialized subclass for grouping other resources.
 							<ul>
-								<li class='jac'>
-									{@link org.apache.juneau.rest.BasicRestServletJenaGroup} - Group resource with added RDF support.
-									<ul>
-										<li class='jc'>
-											<c>RootResources</c>
-									</ul>
-								</li>
+								<li class='jc'>
+									<c>RootResources</c>
 							</ul>
 						</li>
 					</ul>
@@ -26776,7 +26768,7 @@
 	<p>
 		Child resources must be annotated with the {@link org.apache.juneau.rest.annotation.Rest#path() @Rest(path)} annotation to 
 		identify the subpath of the child.
-		Children CAN extend from {@link org.apache.juneau.rest.BasicRestServlet} but it is not a requirement.
+		Children CAN extend from {@link org.apache.juneau.rest.servlet.BasicRestServlet} but it is not a requirement.
 	</p>
 	<p>
 		Note that these router pages can be arbitrarily nested deep.  
@@ -26840,10 +26832,10 @@
 	}
 	</p>
 	<p>
-		Notice that in this case we're not extending from {@link org.apache.juneau.rest.RestServlet}.  
+		Notice that in this case we're not extending from {@link org.apache.juneau.rest.servlet.RestServlet}.  
 		We are however implementing {@del org.apache.juneau.rest.BasicRestConfig} which is a no-op
 		interface that defines a default <ja>@Rest</ja> annotation with all the serializers, parsers, 
-		and configuration defined on the {@link org.apache.juneau.rest.BasicRestServlet} class.
+		and configuration defined on the {@link org.apache.juneau.rest.servlet.BasicRestServlet} class.
 	</p>
 	<p>
 		The only difference between implementing <l>BasicRestConfig</l> and extending from <l>BasicRestServlet</l>
@@ -27721,7 +27713,7 @@
 			<br>This class creates and starts our microservice.
 			<br>Note that we're using the existing Spring Boot application logic for the microservice and we're retrieving
 			our root resource as a spring bean.
-			<br>Only the top-level resource needs to be annotated with {@link org.apache.juneau.rest.springboot.annotation.JuneauRestRoot @JuneauRestRoot}
+			<br>Only the top-level resource needs to be annotated with {@del org.apache.juneau.rest.springboot.annotation.JuneauRestRoot @JuneauRestRoot}
 			<br><br>
 			<p class='bcode w800'>
 		<ja>@SpringBootApplication</ja>
@@ -29150,9 +29142,9 @@
 	</p>
 	<ul class='spaced-list'>
 		<li>
-			New {@del org.apache.juneau.rest.annotation.RestMethod @RestMethod} annotation on {@link org.apache.juneau.rest.RestServlet} methods.<br>
+			New {@del org.apache.juneau.rest.annotation.RestMethod @RestMethod} annotation on {@del org.apache.juneau.rest.RestServlet} methods.<br>
 			Allows the usage of URL pattern matching and automatic conversion of URL variables to arguments passed to method handlers.<br>
-			See {@link org.apache.juneau.rest.RestServlet} for more information.
+			See {@del org.apache.juneau.rest.RestServlet} for more information.
 		</li>
 		<li>
 			Enhancements to {@del BeanContext#convertToType(Object,Class)} to be able to convert <c>Strings</c> to classes with 
@@ -29459,7 +29451,7 @@
 			Allows parsing form posts directly to POJOs.
 		</li>
 		<li>
-			Support for <c>Accept</c> and <c>Content-Type</c> <js>"application/x-www-form-urlencoded"</js> added by default on {@link org.apache.juneau.rest.BasicRestServlet}.
+			Support for <c>Accept</c> and <c>Content-Type</c> <js>"application/x-www-form-urlencoded"</js> added by default on {@del org.apache.juneau.rest.BasicRestServlet}.
 		</li>
 		<li>
 			New {@del RestServlet#renderError(HttpServletRequest,HttpServletResponse,RestException)} method to allow customized handling of response errors.
@@ -29542,7 +29534,7 @@
 	<h5 class='topic w800'>REST server API changes</h5>
 	<ul class='spaced-list'>
 		<li>
-			Improvements to {@link org.apache.juneau.rest.RestServlet} to automatically handle relative URIs in POJOs.
+			Improvements to {@del org.apache.juneau.rest.RestServlet} to automatically handle relative URIs in POJOs.
 			<ul>
 				<li><c>SerializerContext.SERIALIZER_uriContext</c> property set by default to web app context root.</li>
 				<li><c>SerializerContext.SERIALIZER_uriAuthority</c> property set by default to the request scheme+hostname+port.</li>
@@ -29761,7 +29753,7 @@
 	</p>
 	<ul class='spaced-list'>
 		<li>
-			New methods on {@link org.apache.juneau.rest.RestServlet}:
+			New methods on {@del org.apache.juneau.rest.RestServlet}:
 			<ul>
 				<li>{@del RestServlet#onPreCall(RestRequest)}</li>
 				<li>{@del RestServlet#onPostCall(RestRequest,RestResponse)}</li>
@@ -29828,7 +29820,7 @@
 			It's redundant with the introduction of inheritable annotations.
 		</li>
 		<li>
-			New methods on {@link org.apache.juneau.rest.RestServlet}:
+			New methods on {@del org.apache.juneau.rest.RestServlet}:
 			<ul>
 				<li><c>RestServlet.createConfigFactory()</c></li>
 				<li><c>RestServlet.createSerializers()</c></li>
@@ -30055,7 +30047,7 @@
 			Fixed some HTML formatting issues in {@link org.apache.juneau.html.HtmlSerializer}.
 		</li>
 		<li>
-	  			{@link org.apache.juneau.rest.BasicRestServlet} now includes {@link org.apache.juneau.plaintext.PlainTextSerializer} and {@link org.apache.juneau.plaintext.PlainTextParser} for plain-text support.
+	  			{@del org.apache.juneau.rest.BasicRestServlet} now includes {@link org.apache.juneau.plaintext.PlainTextSerializer} and {@link org.apache.juneau.plaintext.PlainTextParser} for plain-text support.
 	  		</li>
 	  		<li>
 			Child resources now render on default <c>OPTIONS</c> pages through new method {@del ResourceOptions#getChildren()}.
@@ -30282,7 +30274,7 @@
 			While the old behavior was as-designed, the new behavior is more in-line with expected behavior.
 		</li>
 		<li>
-			Added support for HTTP header <js>"X-Response-Headers"</js> to {@link org.apache.juneau.rest.RestServlet}. <br>
+			Added support for HTTP header <js>"X-Response-Headers"</js> to {@del org.apache.juneau.rest.RestServlet}. <br>
 			Allows you to specify one or more headers that should be returned on the response from the servlet.<br>
 			For example, to get a page to automatically refresh every 1 second, you can append the following to a URL:  <c>?x-response-headers={Refresh=1}</c>
 		</li>
@@ -30343,7 +30335,7 @@
 			</ul>
 		</li>
 		<li>
-			New methods on {@link org.apache.juneau.rest.RestServlet} that allow easier customization by subclasses:
+			New methods on {@del org.apache.juneau.rest.RestServlet} that allow easier customization by subclasses:
 			<ul>
 				<li>{@del RestServlet#createConfigFactory()}</li>
 				<li>{@del RestServlet#createConverters()}</li>
@@ -30793,7 +30785,7 @@
 		<li>Removed properties parameters from {@del RestServlet#onPreCall(RestRequest)} and {@del RestServlet#onPostCall(RestRequest,RestResponse)} methods
 			since the properties are already accessible through <c>RestRequest.getProperties()</c>.
 		<li>Added {@link org.apache.juneau.uon.UonSerializer} and {@link org.apache.juneau.uon.UonParser} to serializer and parser lists on 
-			{@link org.apache.juneau.rest.BasicRestServlet} and {@del RestServletJenaDefault}.
+			{@del org.apache.juneau.rest.BasicRestServlet} and {@del RestServletJenaDefault}.
 	</ul>
 	
 	<h5 class='topic w800'>Client</h5>		
@@ -30887,7 +30879,7 @@
 		<li><c>&amp;noTrace=true</c> now prevents any errors from being logged in log file.
 		<li>Workaround for Jetty issue where <c>ServletContext.getContextPath()</c> always ends with <js>"null"</js>.
 		<li><c>RestServletProperties.REST_allowMethodParam</c> is now <jk>true</jk> by default on all subclasses 
-			of {@link org.apache.juneau.rest.BasicRestServlet} and {@del RestServletJenaDefault}.
+			of {@del org.apache.juneau.rest.BasicRestServlet} and {@del RestServletJenaDefault}.
 	</ul>
 			
 	<h5 class='topic w800'>Client</h5>		
@@ -31005,7 +30997,7 @@
 	
 	<h5 class='topic w800'>Server</h5>		
 	<ul class='spaced-list'>
-		<li>Added a default OPTIONS page to {@link org.apache.juneau.rest.BasicRestServlet} and {@del RestServletJenaDefault}.
+		<li>Added a default OPTIONS page to {@del org.apache.juneau.rest.BasicRestServlet} and {@del RestServletJenaDefault}.
 		<li><c>RestServletProperties.REST_allowMethodParam</c> has been enhanced to allow you to
 			explicitly specify which HTTP methods can be used in the <c>&amp;method</c> parameter.
 		<li>New methods added to {@link org.apache.juneau.rest.RestRequest}:
@@ -31206,19 +31198,19 @@
 				<li><c>$E{var}</c> - Environment variables.
 			</ul>
 		<li>Added methods {@del RestServlet#getDescription(RestRequest)} and {@del RestServlet#getLabel(RestRequest)}.
-		<li>{@link org.apache.juneau.rest.BasicRestServlet} and {@del RestServletJenaDefault} now provide default HTML titles
+		<li>{@del org.apache.juneau.rest.BasicRestServlet} and {@del RestServletJenaDefault} now provide default HTML titles
 			and descriptions:
 			<p class='bcode w800'>
 		<ja>@Property</ja>(name=<jsf>HTMLDOC_title</jsf>, value=<js>"$R{resourceTitle}"</js>),
 		<ja>@Property</ja>(name=<jsf>HTMLDOC_description</jsf>, value=<js>"$R{resourceDescription}"</js>)
 			</p>
-		<li>Options pages on {@link org.apache.juneau.rest.BasicRestServlet} and {@del RestServletJenaDefault} now provide default descriptions and back links:
+		<li>Options pages on {@del org.apache.juneau.rest.BasicRestServlet} and {@del RestServletJenaDefault} now provide default descriptions and back links:
 			and descriptions:
 			<p class='bcode w800'>
 		<ja>@Property</ja>(name=<jsf>HTMLDOC_navlinks</jsf>, value=<js>"{back:'$R{servletURI}"</js>),
 		<ja>@Property</ja>(name=<jsf>HTMLDOC_description</jsf>, value=<js>"Resource options"</js>)
 			</p>
-		<li>New {@link org.apache.juneau.rest.BasicRestServletGroup} class.
+		<li>New {@del org.apache.juneau.rest.BasicRestServletGroup} class.
 		<li>Removed <c>RestServletProperties.REST_trimTrailingUriSlashes</c> and <c>RestServletProperties.REST_pathInfoBlankForNull</c>. 
 		<li>New annotations for providing labels and descriptions.  Useful if you don't plan on having to support other languages, so you don't 
 			want to provide labels in resource bundles.
@@ -31261,7 +31253,7 @@
 		<li>New {@del RestMethod#input()} and {@del RestMethod#responses()}
 			annotations.
 			These replace the various <c>description</c> annotations added 2 days ago with a simpler design.
-		<li>New methods on {@link org.apache.juneau.rest.RestServlet}:
+		<li>New methods on {@del org.apache.juneau.rest.RestServlet}:
 			<ul>
 				<li>{@del RestServlet#getMethodDescription(String,RestRequest)} so that subclasses
 					can override the method description in the OPTIONS page.
@@ -31358,7 +31350,7 @@
 	<ul class='spaced-list'>
 		<li>You can now parse into non-static inner classes of a servlet for parameters/attributes/content.
 			Useful if you like to define your marshaller beans inside your servlet.
-		<li>Changes to {@link org.apache.juneau.rest.RestServlet}:
+		<li>Changes to {@del org.apache.juneau.rest.RestServlet}:
 			<ul>
 				<li>New methods for accessing external INI config files:<br>  
 					{@del RestServlet#getConfig()}<br>
@@ -31373,7 +31365,7 @@
 				<li>New {@del RestServlet#handleNotFound(int,RestRequest,RestResponse)} method for customized handling
 					of when a resource or method was not found.  
 			</ul>
-		<li>{@link org.apache.juneau.rest.BasicRestServlet}  now automatically processes <js>"/favicon.ico"</js> requests by 
+		<li>{@del org.apache.juneau.rest.BasicRestServlet}  now automatically processes <js>"/favicon.ico"</js> requests by 
 			overriding the new {@del RestServlet#handleNotFound(int,RestRequest,RestResponse)} method.
 		<li>New {@link org.apache.juneau.rest.RestRequest} methods: 
 			<ul>
@@ -31743,7 +31735,7 @@
 			<ul>
 				<li>Don't set <c>Content-Encoding: identity</c> when no encoding is used.  Some clients don't interpret it correctly.
 			</ul>
-		<li>New methods in {@link org.apache.juneau.rest.RestServlet}:
+		<li>New methods in {@del org.apache.juneau.rest.RestServlet}:
 			<ul>
 				<li>{@del RestServlet#getChildClasses()}  - Programmatic equivalent to {@del @RestResource(children)} annotation.
 				<li>{@del RestServlet#shouldLog(HttpServletRequest,HttpServletResponse,RestException)} 
@@ -31756,7 +31748,7 @@
 				<li>{@del RestServlet#getConfigMgr()}
 			</ul>
 		<li>Removed {@del org.apache.juneau.jso.JsoParser}
-			from {@link org.apache.juneau.rest.BasicRestServlet} and {@del RestServletJenaDefault}.  
+			from {@del org.apache.juneau.rest.BasicRestServlet} and {@del RestServletJenaDefault}.  
 			These may represent a security risk if not handled correctly, so removed
 			them as a precaution.
 		<li>Removed <c>RestServletProperties.REST_htDocsFolder</c>.  Replaced with {@del @RestResource(staticFiles)}}.
@@ -32034,7 +32026,7 @@
 				</li>					
 			</ul>
 		<li>New {@del RestServletContext#paramFormat} context property.
-		<li>New/updated methods on {@link org.apache.juneau.rest.RestServlet}:
+		<li>New/updated methods on {@del org.apache.juneau.rest.RestServlet}:
 			<ul>
 				<li>{@del RestServlet#createProperties()}
 				<li>{@del RestServlet#createBeanContext(ObjectMap,Class[],Class[])}
@@ -32434,7 +32426,7 @@
 	<h5 class='topic w800'>org.apache.juneau.rest</h5>
 	<ul class='spaced-list'>
 		<li>{@del @RestResource} annotation can now be applied to 
-			any class!  You're no longer restricted to subclassing your resources from {@link org.apache.juneau.rest.RestServlet}.
+			any class!  You're no longer restricted to subclassing your resources from {@del org.apache.juneau.rest.RestServlet}.
 			<br>This is a major enhancement in the API.  Anything you could do by subclassing from <c>RestServlet</c>
 			should have an equivalent for non-<c>RestServlet</c> classes.
 			<br>The only restriction is that the top-level resource must subclass from <c>RestServlet</c>.
@@ -32446,7 +32438,7 @@
 				<li>{@link org.apache.juneau.rest.RestContext} - A read-only configuration that's the result of a snapshot of the config.
 			</ul>
 			<br><br>
-			The {@link org.apache.juneau.rest.RestServlet} class now has the following initialization method that allows you to override
+			The {@del org.apache.juneau.rest.RestServlet} class now has the following initialization method that allows you to override
 			the config settings define via annotations:
 			<ul>
 				<li>{@del RestServlet#init(RestConfig)} - A modifiable configuration of a resource.
@@ -33208,7 +33200,7 @@
 				<li><c>description()</c>
 				<li><c>branding()</c>
 			</ul>
-			Instead, the {@link org.apache.juneau.rest.BasicRestServlet} class defines the following default header
+			Instead, the {@del org.apache.juneau.rest.BasicRestServlet} class defines the following default header
 			that can be easily overridden: 
 			<p class='bcode w800'>
 		htmldoc=<ja>@HtmlDoc</ja>(
@@ -33626,11 +33618,11 @@
 			Revamped and simplified servlet and REST-call lifecycle handling through new
 			{@link org.apache.juneau.rest.annotation.RestHook @RestHook} annotation.
 			<ul>
-				<li>The {@link org.apache.juneau.rest.RestServlet#init(ServletConfig)} method is now final and can
+				<li>The {@del org.apache.juneau.rest.RestServlet#init(ServletConfig)} method is now final and can
 					no longer be extended.
 					<br>Instead, use {@link org.apache.juneau.rest.annotation.HookEvent#INIT} or 
 					{@link org.apache.juneau.rest.annotation.HookEvent#POST_INIT} for initialization.
-				<li>The following methods on {@link org.apache.juneau.rest.RestServlet} have been removed:
+				<li>The following methods on {@del org.apache.juneau.rest.RestServlet} have been removed:
 					<ul>
 						<li><c>init(RestConfig)</c> 
 							- Use {@link org.apache.juneau.rest.annotation.HookEvent#INIT} instead.
@@ -34134,9 +34126,9 @@
 	<h5 class='topic w800'>juneau-rest-server</h5>
 	<ul class='spaced-list'>
 		<li>
-			<c>RestServletDefault</c> renamed to {@link org.apache.juneau.rest.BasicRestServlet}.
+			<c>RestServletDefault</c> renamed to {@del org.apache.juneau.rest.BasicRestServlet}.
 		<li>
-			<c>RestServletGroupDefault</c> renamed to {@link org.apache.juneau.rest.BasicRestServletGroup}.
+			<c>RestServletGroupDefault</c> renamed to {@del org.apache.juneau.rest.BasicRestServletGroup}.
 		<li>
 			The <js>"$R{...}"</js> variable has been split into the following:
 			<ul>
@@ -34329,7 +34321,7 @@
 			<br>The {@del org.apache.juneau.rest.reshandlers.DefaultHandler} class now calls <c>finish()</c>
 			instead of <c>close()</c> on the stream.
 		<li>
-			Added the following annotations to the {@link org.apache.juneau.rest.BasicRestServlet} class
+			Added the following annotations to the {@del org.apache.juneau.rest.BasicRestServlet} class
 			(which were previously defined on the {@del Resource} class):
 			<p class='bcode w800'>
 		<ja>@RestResource</ja>(
@@ -34372,7 +34364,7 @@
 	<ul class='spaced-list'>
 		<li>
 			<c>Resource</c> and <c>ResourceGroup</c> classes removed.
-			<br>{@link org.apache.juneau.rest.BasicRestServlet} and {@link org.apache.juneau.rest.BasicRestServletGroup} can be used instead.
+			<br>{@del org.apache.juneau.rest.BasicRestServlet} and {@del org.apache.juneau.rest.BasicRestServletGroup} can be used instead.
 		<li>
 			<c>ResourceJena</c> and <c>ResourceJenaGroup</c> classes renamed to
 			{@del BasicRestServletJena} and {@del BasicRestServletJenaGroup}.
@@ -35146,10 +35138,10 @@
 	<h5 class='topic w800'>juneau-rest-server</h5>
 	<ul class='spaced-list'>
 		<li>
-			New methods on {@link org.apache.juneau.rest.RestServlet}:
+			New methods on {@del org.apache.juneau.rest.RestServlet}:
 			<ul class='javatree'>
 				<li class='jm'>{@del org.apache.juneau.rest.RestServlet#setRestResourceResolver(RestResourceResolver) setRestResourceResolver(RestResourceResolver)}
-				<li class='jm'>{@link org.apache.juneau.rest.RestServlet#getPath() getPath()}
+				<li class='jm'>{@del org.apache.juneau.rest.RestServlet#getPath() getPath()}
 			</ul>
 		<li>
 			The registered resource resolver is now used to instantiate objects of classes defined via {@del @RestResource}.
@@ -35441,13 +35433,13 @@
 			</ul>
 		<li>
 			Added the following classes that provide the same support as the servlet classes but doesn't extend from <c>HttpServlet</c>.
-			<br>This fixes an issue where instances of {@link org.apache.juneau.rest.BasicRestServlet} are registered as top-level servlets even though
+			<br>This fixes an issue where instances of {@del org.apache.juneau.rest.BasicRestServlet} are registered as top-level servlets even though
 			you don't want them to be.  
 			<ul class='javatree'>
-				<li class='jac'>{@del org.apache.juneau.rest.BasicRest} - Non-servlet equivalent to {@link org.apache.juneau.rest.BasicRestServlet}
-				<li class='jac'>{@del org.apache.juneau.rest.BasicRestGroup} - Non-servlet equivalent to {@link org.apache.juneau.rest.BasicRestServletGroup}
-				<li class='jac'>{@link org.apache.juneau.rest.BasicRestJena} - Non-servlet equivalent to {@link org.apache.juneau.rest.BasicRestServletJena}
-				<li class='jac'>{@link org.apache.juneau.rest.BasicRestJenaGroup} - Non-servlet equivalent to {@link org.apache.juneau.rest.BasicRestServletJenaGroup}
+				<li class='jac'>{@del org.apache.juneau.rest.BasicRest} - Non-servlet equivalent to {@del org.apache.juneau.rest.BasicRestServlet}
+				<li class='jac'>{@del org.apache.juneau.rest.BasicRestGroup} - Non-servlet equivalent to {@del org.apache.juneau.rest.BasicRestServletGroup}
+				<li class='jac'>{@del org.apache.juneau.rest.BasicRestJena} - Non-servlet equivalent to {@del org.apache.juneau.rest.BasicRestServletJena}
+				<li class='jac'>{@del org.apache.juneau.rest.BasicRestJenaGroup} - Non-servlet equivalent to {@del org.apache.juneau.rest.BasicRestServletJenaGroup}
 			</ul>
 		<li>
 			HTML widgets now have access to the <c>RestResponse</c> object if they need access to the output bean.
@@ -35605,7 +35597,7 @@
 			The fix involves resolving the original bean class for resolving parameterized type while leaving
 			method invocation on the proxy method so as not to bypass Spring features.
 		<li>
-			New methods on {@del org.apache.juneau.rest.BasicRest} to provide feature-parity with {@link org.apache.juneau.rest.RestServlet}:
+			New methods on {@del org.apache.juneau.rest.BasicRest} to provide feature-parity with {@del org.apache.juneau.rest.RestServlet}:
 			<ul class='javatree'>
 				<li class='jc'>{@del org.apache.juneau.rest.BasicRest}
 					<ul class='javatreec'>
@@ -36066,7 +36058,7 @@
 			</ul>
 			<br>The methods added for {@del org.apache.juneau.rest.RestInfoProvider} are:
 			<ul>
-				<li class='jac'>{@link org.apache.juneau.rest.RestServlet}
+				<li class='jac'>{@del org.apache.juneau.rest.RestServlet}
 				<ul>
 					<li class='jm'>{@del getSwagger(RestRequest)}
 					<li class='jm'>{@del getSiteName(RestRequest)}
@@ -36087,7 +36079,7 @@
 			</ul>
 			<br>The methods added for {@del org.apache.juneau.rest.RestCallLogger} are:
 			<ul>
-				<li class='jac'>{@link org.apache.juneau.rest.RestServlet}
+				<li class='jac'>{@del org.apache.juneau.rest.RestServlet}
 				<ul>
 					<li class='jm'>{@del org.apache.juneau.rest.RestServlet#log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse) log(RestCallLoggerConfig,HttpServletRequest,HttpServletResponse)}
 				</ul>
@@ -36098,7 +36090,7 @@
 			</ul>
 			<br>The methods added for {@del org.apache.juneau.utils.ClasspathResourceFinder} are:
 			<ul>
-				<li class='jac'>{@link org.apache.juneau.rest.RestServlet}
+				<li class='jac'>{@del org.apache.juneau.rest.RestServlet}
 				<ul>
 					<li class='jm'>{@del org.apache.juneau.rest.RestServlet#findResource(Class,String,Locale) findResource(Class,String,Locale)}
 				</ul>
@@ -36109,7 +36101,7 @@
 			</ul>
 			<br>The methods added for {@del org.apache.juneau.rest.RestResourceResolver} are:
 			<ul>
-				<li class='jac'>{@link org.apache.juneau.rest.RestServlet}
+				<li class='jac'>{@del org.apache.juneau.rest.RestServlet}
 				<ul>
 					<li class='jm'>{@del org.apache.juneau.rest.RestServlet#resolve(Object,Class,RestContext.Builder,Object...) resolve(Object,Class&lt;T&gt;,RestContext.Builder,Object...)}
 				</ul>
@@ -36119,18 +36111,18 @@
 				</ul>
 			</ul>
 		<li>
-			Added the following convenience hook methods on the {@link org.apache.juneau.rest.RestServlet} and {@del org.apache.juneau.rest.BasicRest} classes:
+			Added the following convenience hook methods on the {@del org.apache.juneau.rest.RestServlet} and {@del org.apache.juneau.rest.BasicRest} classes:
 			<ul>
-				<li class='jac'>{@link org.apache.juneau.rest.RestServlet}
+				<li class='jac'>{@del org.apache.juneau.rest.RestServlet}
 				<ul>
-					<li class='jm'>{@link org.apache.juneau.rest.RestServlet#onInit(RestContext.Builder) onInit(RestContext.Builder)}
-					<li class='jm'>{@link org.apache.juneau.rest.RestServlet#onPostInit(RestContext) onPostInit(RestContext)}
-					<li class='jm'>{@link org.apache.juneau.rest.RestServlet#onPostInitChildFirst(RestContext) onPostInitChildFirst(RestContext)}
-					<li class='jm'>{@link org.apache.juneau.rest.RestServlet#onDestroy(RestContext) onDestroy(RestContext)}
-					<li class='jm'>{@link org.apache.juneau.rest.RestServlet#onStartCall(HttpServletRequest,HttpServletResponse) onStartCall(HttpServletRequest,HttpServletResponse)}
-					<li class='jm'>{@link org.apache.juneau.rest.RestServlet#onPreCall(RestRequest,RestResponse) onPreCall(RestRequest,RestResponse)}
-					<li class='jm'>{@link org.apache.juneau.rest.RestServlet#onPostCall(RestRequest,RestResponse) onPostCall(RestRequest,RestResponse)}
-					<li class='jm'>{@link org.apache.juneau.rest.RestServlet#onEndCall(HttpServletRequest,HttpServletResponse) onEndCall(HttpServletRequest,HttpServletResponse)}
+					<li class='jm'>{@del org.apache.juneau.rest.RestServlet#onInit(RestContext.Builder) onInit(RestContext.Builder)}
+					<li class='jm'>{@del org.apache.juneau.rest.RestServlet#onPostInit(RestContext) onPostInit(RestContext)}
+					<li class='jm'>{@del org.apache.juneau.rest.RestServlet#onPostInitChildFirst(RestContext) onPostInitChildFirst(RestContext)}
+					<li class='jm'>{@del org.apache.juneau.rest.RestServlet#onDestroy(RestContext) onDestroy(RestContext)}
+					<li class='jm'>{@del org.apache.juneau.rest.RestServlet#onStartCall(HttpServletRequest,HttpServletResponse) onStartCall(HttpServletRequest,HttpServletResponse)}
+					<li class='jm'>{@del org.apache.juneau.rest.RestServlet#onPreCall(RestRequest,RestResponse) onPreCall(RestRequest,RestResponse)}
+					<li class='jm'>{@del org.apache.juneau.rest.RestServlet#onPostCall(RestRequest,RestResponse) onPostCall(RestRequest,RestResponse)}
+					<li class='jm'>{@del org.apache.juneau.rest.RestServlet#onEndCall(HttpServletRequest,HttpServletResponse) onEndCall(HttpServletRequest,HttpServletResponse)}
 				</ul>
 				<li class='jac'>{@del org.apache.juneau.rest.BasicRest}
 				<ul>
