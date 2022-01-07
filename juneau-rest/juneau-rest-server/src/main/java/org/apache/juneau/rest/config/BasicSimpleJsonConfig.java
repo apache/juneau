@@ -24,30 +24,30 @@ import org.apache.juneau.serializer.annotation.*;
  * 	Default settings defined:
  * </p>
  * <ul class='spaced-list'>
- * 	<li>{@link Rest @Rest}:
+ * 	<li class='ja'>{@link Rest}:
  * 		<ul>
- * 			<li><c>{@link Rest#serializers() serializers}=</c>
- * 				<ul class='javatreec'>
+ * 			<li class='jma'>{@link Rest#serializers() serializers}:
+ * 				<ul class='javatree'>
  * 					<li class='jc'>{@link SimpleJsonSerializer}
  * 				</ul>
  * 			</li>
- * 			<li><c>{@link Rest#parsers() parsers}=</c>
- * 				<ul class='javatreec'>
+ * 			<li class='jma'>{@link Rest#parsers() parsers}:
+ * 				<ul class='javatree'>
  * 					<li class='jc'>{@link SimpleJsonParser}
  * 				</ul>
  * 			</li>
- * 			<li><c>{@link Rest#defaultAccept() defaultAccept}=<js>"text/json"</c></li>
- * 			<li><c>{@link Rest#config() config}=<js>"$S{juneau.configFile,SYSTEM_DEFAULT}</js>"</c></li>
+ * 			<li class='jma'>{@link Rest#defaultAccept() defaultAccept}:  <js>"text/json"</js>
+ * 			<li class='jma'>{@link Rest#config() config}:  <js>"$S{juneau.configFile,SYSTEM_DEFAULT}"</js>
  *		</ul>
  *	</li>
- * 	<li>{@link BeanConfig @BeanConfig}:
+ * 	<li class='ja'>{@link BeanConfig}:
  * 		<ul>
- * 			<li><c>{@link BeanConfig#ignoreUnknownBeanProperties() ignoreUnknownBeanProperties}=<js>"true"</js></c></li>
+ * 			<li class='jma'>{@link BeanConfig#ignoreUnknownBeanProperties() ignoreUnknownBeanProperties}:  <js>"true"</js>
  * 		</ul>
  * 	</li>
- * 	<li>{@link SerializerConfig @SerializerConfig}:
+ * 	<li class='ja'>{@link SerializerConfig}:
  * 		<ul>
- * 			<li><c>{@link SerializerConfig#uriResolution() uriResolution}=<js>"ROOT_RELATIVE"</js></c></li>
+ * 			<li class='jma'>{@link SerializerConfig#uriResolution() uriResolution}:  <js>"ROOT_RELATIVE"</js>
  * 		</ul>
  * 	</li>
  * </ul>
@@ -58,12 +58,12 @@ import org.apache.juneau.serializer.annotation.*;
  * <p class='bcode w800'>
  * 	<jc>// Used on a top-level resource.</jc>
  * 	<ja>@Rest</ja>
- * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet <jk>implements</jk> BasicSimpleJsonRest { ... }
+ * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet <jk>implements</jk> BasicSimpleJsonConfig { ... }
  * </p>
  * <p class='bcode w800'>
  * 	<jc>// Used on a child resource.</jc>
  * 	<ja>@Rest</ja>
- * 	<jk>public class</jk> MyResource <jk>extends</jk> RestObject <jk>implements</jk> BasicSimpleJsonRest { ... }
+ * 	<jk>public class</jk> MyResource <jk>extends</jk> RestObject <jk>implements</jk> BasicSimpleJsonConfig { ... }
  * </p>
  *
  * <p>

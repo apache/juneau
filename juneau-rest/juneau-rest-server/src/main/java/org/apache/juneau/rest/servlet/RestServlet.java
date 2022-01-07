@@ -52,27 +52,15 @@ import org.apache.juneau.http.response.*;
  * 	These get constructed into a {@link RestContext} object that holds all the configuration
  * 	information about your resource in a read-only object.
  * </p>
- * <p>
- * 	Most developers are not going to be using the <l>RestServlet</l> class itself, and instead will
- * 	extend from one of the preconfigured default servlets such as {@link BasicRestServlet}.
- * 	The <l>RestServlet</l> class by itself is not configured with any serializers and parsers, and therefore
- * 	not very useful on it's own.
- * 	However, the class does provide a couple of convenience methods to be aware of:
- * </p>
- * <ul class='javatree'>
- * 	<li class='jac'><c>{@link RestServlet} <jk>extends</jk> HttpServlet</c>
- * 	<ul>
- * 		<li class='jm'>{@link RestServlet#init(ServletConfig) init(ServletConfig)} - Can override to provide custom initialization.
- * 		<li class='jm'>{@link RestServlet#service(HttpServletRequest,HttpServletResponse) service(HttpServletRequest,HttpServletResponse)} - Can override to provide custom request handling.
- * 		<li class='jm'>{@link RestServlet#destroy() destroy()} - Can override to provide custom cleanup.
- * 		<li class='jm'>{@link RestServlet#getContext() getContext()} - Returns all aspects of the configuration of your resource pulled from all annotations on the class/parent-classes and methods.
- * 		<li class='jm'>{@link RestServlet#log(Level,String,Object...) log(Level,String,Object...)} - Convenience logging method.
- * 		<li class='jm'>{@link RestServlet#log(Level,Throwable,String,Object...) log(Level,Throwable,String,Object...)} - Convenience logging method.
- * 	</ul>
+ *
+ * <ul>
+ * 	<li class='note'>
+ * 		Users will typically extend from {@link BasicRestServlet} or {@link BasicRestServletGroup}
+ * 		instead of this class directly.
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.Overview}
+ * 	<li class='link'>{@doc jrs.AnnotatedClasses}
  * 	<li class='extlink'>{@source}
  * </ul>
  *
@@ -307,15 +295,21 @@ public abstract class RestServlet extends HttpServlet {
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<ja>@Rest</ja>(...)
-	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> ResourceJena {
+	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServlet {
 	 *
 	 * 		<jc>// Our database.</jc>
 	 * 		<jk>private</jk> Map&lt;Integer,Pet&gt; <jf>petDB</jf>;
 	 *
 	 * 		<ja>@Override</ja>
-	 * 		<jk>public void</jk> onInit(RestContext.Builder builder) <jk>throws</jk> Exception {
+	 * 		<jk>public void</jk> onInit(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 	 * 			<jc>// Load our database from a local JSON file.</jc>
-	 * 			<jf>petDB</jf> = JsonParser.<jsf>DEFAULT</jsf>.parse(getClass().getResourceAsStream(<js>"PetStore.json"</js>), LinkedHashMap.<jk>class</jk>, Integer.<jk>class</jk>, Pet.<jk>class</jk>);
+	 * 			<jf>petDB</jf> = JsonParser.<jsf>DEFAULT</jsf>
+	 * 				.parse(
+	 * 					getClass().getResourceAsStream(<js>"PetStore.json"</js>),
+	 * 					LinkedHashMap.<jk>class</jk>,
+	 * 					Integer.<jk>class</jk>,
+	 * 					Pet.<jk>class</jk>
+	 * 				);
 	 * 		}
 	 * 	}
 	 * </p>
@@ -401,13 +395,13 @@ public abstract class RestServlet extends HttpServlet {
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bcode w800'>
 	 * 	<ja>@Rest</ja>(...)
-	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> ResourceJena {
+	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServlet {
 	 *
 	 * 		<jc>// Our database.</jc>
 	 * 		<jk>private</jk> Map&lt;Integer,Pet&gt; <jf>petDB</jf>;
 	 *
 	 * 		<ja>@Override</ja>
-	 * 		<jk>public void</jk> onDestroy(RestContext context) {
+	 * 		<jk>public void</jk> onDestroy(RestContext <jv>context</jv>) {
 	 * 			<jf>petDB</jf> = <jk>null</jk>;
 	 * 		}
 	 * 	}
@@ -445,8 +439,8 @@ public abstract class RestServlet extends HttpServlet {
 	 *
 	 * 		<jc>// Add a request attribute to all incoming requests.</jc>
 	 * 		<ja>@Override</ja>
-	 * 		<jk>public void</jk> onStartCall(HttpServletRequest req, HttpServletResponse res) {
-	 * 			req.setAttribute(<js>"foobar"</js>, <jk>new</jk> FooBar());
+	 * 		<jk>public void</jk> onStartCall(HttpServletRequest <jv>req</jv>, HttpServletResponse <jv>res</jv>) {
+	 * 			<jv>req</jv>.setAttribute(<js>"foobar"</js>, <jk>new</jk> FooBar());
 	 * 		}
 	 * 	}
 	 * </p>

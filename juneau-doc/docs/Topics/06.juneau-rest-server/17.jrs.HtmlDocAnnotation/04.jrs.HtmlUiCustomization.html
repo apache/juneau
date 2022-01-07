@@ -70,7 +70,7 @@
 		|		footer=<js>"$C{REST/footer}"</js>
 		|	)
 		|	
-		|	<jk>public interface</jk> BasicRestConfig {}
+		|	<jk>public interface</jk> BasicUniversalConfig {}
 	</p>
 	<p class='bcode w800'>			
 		|	<ja>@Rest</ja>(...)
@@ -81,11 +81,11 @@
 		|			<js>"options: servlet:/?method=OPTIONS"</js>
 		|		}
 		|	)
-		|	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet <jk>implements</jk> BasicRestConfig {...}
+		|	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet <jk>implements</jk> BasicRestOperations, BasicJsonConfig {...}
 	</p>
 	<p class='bcode w800'>			
 		|	<ja>@Rest</ja>
-		|	<jk>public abstract class</jk> BasicRestServletGroup <jk>extends</jk> BasicRestServlet {...}
+		|	<jk>public abstract class</jk> BasicRestServletGroup <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicGroupOperations {...}
 	</p>
 	<p class='bcode w800'>			
 		|	<ja>@Rest</ja>(...)
@@ -111,7 +111,7 @@
 		|			<js>"&lt;/div&gt;"</js>
 		|		}
 		|	)
-		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup {...}
+		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup <jk>implements</jk> BasicUniversalConfig {...}
 	</p>
 	
 	<p>

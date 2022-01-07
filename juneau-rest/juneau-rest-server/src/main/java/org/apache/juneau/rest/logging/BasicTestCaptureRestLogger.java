@@ -46,7 +46,7 @@ import org.apache.juneau.assertions.*;
  * 		}
  *
  * 		<ja>@Rest</ja>(callLogger=CaptureLogger.<jk>class</jk>)
- * 		<jk>public static class</jk> TestRest <jk>implements</jk> BasicUniversalRest {
+ * 		<jk>public static class</jk> TestRest <jk>implements</jk> BasicRestServlet {
  * 			<ja>@RestGet</ja>
  * 			<jk>public boolean</jk> bad() <jk>throws</jk> InternalServerError {
  * 				<jk>throw new</jk> InternalServerError(<js>"foo"</js>);

@@ -474,7 +474,7 @@ public @interface RestGet {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 	 *
 	 * 		<ja>@RestGet</ja>(
 	 * 			path=<js>"/foo"</js>,
@@ -530,7 +530,7 @@ public @interface RestGet {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 	 *
 	 * 		<ja>@RestGet</ja>(
 	 * 			path=<js>"/foo"</js>,

@@ -245,6 +245,7 @@ li.jm::marker  { font-weight:bolder; font-size:small; color:#008000; content:'\0
 li.jf::marker  { font-weight:bolder; font-size:small; color:#008000; content:'\00a0\00a0\25cf\00a0\00a0'; }
 li.jp::marker  { font-weight:bolder; font-size:small; color:#e09c01; content:'\00a0\00a0\229e\00a0\00a0'; }
 li.jmp::marker  { font-weight:bolder; font-size:small; color:#eed304; content:'\00a0\00a0\25c6\00a0\00a0'; }
+li.jma::marker  { font-weight:bolder; font-size:small; color:#00ced1; content:'\00a0\00a0\25cf\00a0\00a0'; }
 
 li.note::marker  { font-weight:bolder; font-size:large; color:#F5A400; content:'\00a0\00a0\270E\00a0\00a0'; }
 li.warn::marker  { font-weight:bolder; font-size:x-large; color:#e09c01; content:'\00a0\00a0\26A0\00a0\00a0'; }

@@ -2037,7 +2037,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 		rolesDeclared=<js>"ROLE_ADMIN,ROLE_READ_WRITE,ROLE_READ_ONLY,ROLE_SPECIAL"</js>,
 		 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
 		 * 	)
-		 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
+		 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 		 * 		...
 		 * 	}
 		 * </p>
@@ -2070,7 +2070,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 		path=<js>"/foo"</js>,
 		 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
 		 * 	)
-		 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
+		 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 		 * 		...
 		 * 	}
 		 * </p>

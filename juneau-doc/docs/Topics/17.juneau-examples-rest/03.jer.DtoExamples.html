@@ -74,7 +74,7 @@
 		|	) 
 		|	<ja>@SerializerConfig</ja>(quoteChar=<js>"'"</js>)
 		|	<ja>@RdfConfig</ja>(rdfxml_tab=<js>"5"</js>, addRootProperty=<js>"true"</js>)
-		|	<jk>public class</jk> AtomFeedResource <jk>extends</jk> BasicRestServletJena { 
+		|	<jk>public class</jk> AtomFeedResource <jk>extends</jk> BasicRestServlet { 
 		|	
 		|		<jk>private</jk> Feed <jf>feed</jf>; <jc>// The root resource object</jc> 
 		|		
@@ -187,7 +187,7 @@
 		|			}
 		|		)
 		|	) 
-		|	<jk>public class</jk> JsonSchemaResource <jk>extends</jk> BasicRestServletJena { 
+		|	<jk>public class</jk> JsonSchemaResource <jk>extends</jk> BasicRestServlet { 
 		|		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L; 
 		|		
 		|		<jk>private</jk> JsonSchema schema; <jc>// The schema document</jc> 

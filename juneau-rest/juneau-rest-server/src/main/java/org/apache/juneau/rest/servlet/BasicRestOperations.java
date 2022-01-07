@@ -33,22 +33,32 @@ import org.apache.juneau.rest.stats.*;
  * <p>
  * 	Defines 5 special use REST operation endpoints:
  * </p>
- * <ul class='javatree'>
- * 	<li><c><jk>public</jk> {@link Swagger} {@link #getSwagger(RestRequest) getSwagger}(@link RestRequest} <jv>req</jv>);</c>
- * 	<li><c><jk>public</jk> {@link HttpResource} {@link #getHtdoc(String,Locale) getHtdoc}(<ja>@Path</ja> String <jv>path</jv>, Locale <jv>locale</jv>);</c>
- * 	<li><c><jk>public</jk> {@link HttpResource} {@link #getFavIcon() getFavIcon}();</c>
- * 	<li><c><jk>public</jk> {@link RestContextStats} {@link #getStats(RestRequest) getStats}({@link RestRequest} <jv>req</jv>);</c>
- * 	<li><c><jk>public void</jk> {@link #error() error}();</c>
- * </ul>
+ *
+ * <p class='bcode w800'>
+ * 	<ja>@RestGet</ja>(path=<js>"/api/*"</js></js>)
+ * 	<jk>public</jk> {@link Swagger} {@link #getSwagger(RestRequest) getSwagger}({@link RestRequest} <jv>req</jv>);
+ *
+ * 	<ja>@RestGet</ja>(path=<js>"/htdocs/*"</js>)
+ * 	<jk>public</jk> {@link HttpResource} {@link #getHtdoc(String,Locale) getHtdoc}(<ja>@Path</ja> String <jv>path</jv>, Locale <jv>locale</jv>);
+ *
+ * 	<ja>@RestGet</ja>(path=<js>"favicon.ico"</js>)
+ * 	<jk>public</jk> {@link HttpResource} {@link #getFavIcon() getFavIcon}();
+ *
+ * 	<ja>@RestGet</ja>(path=<js>"/stats"</js>)
+ * 	<jk>public</jk> {@link RestContextStats} {@link #getStats(RestRequest) getStats}({@link RestRequest} <jv>req</jv>);
+ *
+ * 	<ja>@RestOp</ja>(method=<jsf>ANY</jsf>, path=<js>"/error"</js>)
+ * 	<jk>public void</jk> {@link #error() error}();
+ * </p>
  *
  * <p>
  * 	Implementations provided by the following classes:
  * </p>
  * <ul class='javatreec'>
- * 	<li class='jc'>{@link BasicRestServlet}
- * 	<li class='jc'>{@link BasicRestServletGroup}
- * 	<li class='jc'>{@link BasicRestObject}
- * 	<li class='jc'>{@link BasicRestObjectGroup}
+ * 	<li class='jac'>{@link BasicRestServlet}
+ * 	<li class='jac'>{@link BasicRestServletGroup}
+ * 	<li class='jac'>{@link BasicRestObject}
+ * 	<li class='jac'>{@link BasicRestObjectGroup}
  * </ul>
  *
  * <ul class='seealso'>

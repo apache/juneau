@@ -21,34 +21,32 @@ import org.apache.juneau.rest.config.*;
  * Specialized subclass of {@link BasicRestServlet} for showing "group" pages.
  *
  * <p>
- * 	Implements basic configuration settings from {@link BasicUniversalConfig} and
- * 	basic endpoint methods from {@link BasicRestOperations}.
+ * Meant as a base class for top-level REST resources in servlet containers.
  *
  * <p>
- * Group pages consist of simple lists of child resource URLs and their labels.
- * They're meant to be used as jumping-off points for child resources.
+ * Provides basic JSON support by implementing the {@link BasicJsonConfig} interface.
+ * Other language types can be added via the {@link Rest#serializers() @Rest(serializers)}/{@link Rest#parsers() @Rest(parsers)} annotations
+ * or by adding one of the predefined interfaces in {@link org.apache.juneau.rest.config}.
  *
  * <p>
- * Child resources are specified using the {@link Rest#children() @Rest(children)} annotation.
+ * Implements the basic REST endpoints defined in {@link BasicRestOperations} and {@link BasicGroupOperations}.
+ *
+ * <p>
+ * Children are attached to this resource using the {@link Rest#children() @Rest(children)} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.BasicRestServletGroup}
+ * 	<li class='link'>{@doc jrs.AnnotatedClasses}
  * 	<li class='extlink'>{@source}
  * </ul>
  *
  * @serial exclude
  */
 @Rest
-public abstract class BasicRestServletGroup extends BasicRestServlet {
+public abstract class BasicRestServletGroup extends BasicRestServlet implements BasicGroupOperations {
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * [GET /] - Get child resources.
-	 *
-	 * @param req The HTTP request.
-	 * @return The bean containing links to the child resources.
-	 */
-	@RestGet(path="/", summary="Navigation page")
+
+	@Override /* BasicGroupOperations */
 	public ChildResourceDescriptions getChildren(RestRequest req) {
 		return new ChildResourceDescriptions(req);
 	}

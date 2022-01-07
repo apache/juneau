@@ -32,10 +32,10 @@
 		|		path=<js>"/petstore"</js>,
 		|		title=<js>"Petstore application"</js>,
 		|		...
-		|		swagger=@Swagger(<js>"$F{PetStoreResource.json}"</js>),
+		|		swagger=<ja>@Swagger</ja>(<js>"$F{PetStoreResource.json}"</js>),
 		|		...
 		|	)
-		|	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServletJena {...}
+		|	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServlet {...}
 	</p>
 	<p>
 		In this particular case, the Swagger is pulled in from a localized Swagger JSON file located in the 
@@ -91,7 +91,7 @@
 		|		),
 		|		...
 		|	)
-		|	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServletJena {...}
+		|	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServlet {...}
 	</p>
 	<p>
 		However, a more typical (and less error-prone) scenario is to define all of your Swagger as annotations:
@@ -121,7 +121,7 @@
 		|		),
 		|		...
 		|	)
-		|	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServletJena {...}
+		|	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServlet {...}
 	</p>
 	<p>
 		All annotations support {@doc jrs.SvlVariables SVL variables}, so you could for example
@@ -153,7 +153,7 @@
 		|		),
 		|		...
 		|	)
-		|	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServletJena {...}
+		|	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServlet {...}
 	</p>
 	<p>
 		A third option is to define your Swagger information in your {@link oajr.annotation.Rest#messages @Rest(messages)} resource

@@ -14,6 +14,7 @@ package org.apache.juneau.rest.config;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
+import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.serializer.annotation.*;
@@ -25,32 +26,44 @@ import org.apache.juneau.serializer.annotation.*;
  * 	Default settings defined:
  * </p>
  * <ul class='spaced-list'>
- * 	<li>{@link Rest @Rest}:
+ * 	<li class='ja'>{@link Rest}:
  * 		<ul>
- * 			<li><c>{@link Rest#serializers() serializers}=</c>
- * 				<ul class='javatreec'>
+ * 			<li class='jma'>{@link Rest#serializers() serializers}:
+ * 				<ul class='javatree'>
  * 					<li class='jc'>{@link JsonSerializer}
+ * 					<li class='jc'>{@link SimpleJsonSerializer}
  * 					<li class='jc'>{@link HtmlDocSerializer}
  * 				</ul>
  * 			</li>
- * 			<li><c>{@link Rest#parsers() parsers}=</c>
- * 				<ul class='javatreec'>
+ * 			<li class='jma'>{@link Rest#parsers() parsers}:
+ * 				<ul class='javatree'>
  * 					<li class='jc'>{@link JsonParser}
+ * 					<li class='jc'>{@link SimpleJsonParser}
  * 					<li class='jc'>{@link HtmlParser}
  * 				</ul>
  * 			</li>
- * 			<li><c>{@link Rest#defaultAccept() defaultAccept}=<js>"text/json"</c></li>
- * 			<li><c>{@link Rest#config() config}=<js>"$S{juneau.configFile,SYSTEM_DEFAULT}</js>"</c></li>
+ * 			<li class='jma'>{@link Rest#defaultAccept() defaultAccept}:  <js>"text/json"</js>
+ * 			<li class='jma'>{@link Rest#config() config}:  <js>"$S{juneau.configFile,SYSTEM_DEFAULT}"</js>
  *		</ul>
  *	</li>
- * 	<li>{@link BeanConfig @BeanConfig}:
+ * 	<li class='ja'>{@link BeanConfig}:
  * 		<ul>
- * 			<li><c>{@link BeanConfig#ignoreUnknownBeanProperties() ignoreUnknownBeanProperties}=<js>"true"</js></c></li>
+ * 			<li class='jma'>{@link BeanConfig#ignoreUnknownBeanProperties() ignoreUnknownBeanProperties}:  <js>"true"</js>
  * 		</ul>
  * 	</li>
- * 	<li>{@link SerializerConfig @SerializerConfig}:
+ * 	<li class='ja'>{@link SerializerConfig}:
  * 		<ul>
- * 			<li><c>{@link SerializerConfig#uriResolution() uriResolution}=<js>"ROOT_RELATIVE"</js></c></li>
+ * 			<li class='jma'>{@link SerializerConfig#uriResolution() uriResolution}:  <js>"ROOT_RELATIVE"</js>
+ * 		</ul>
+ * 	</li>
+ * 	<li class='ja'>{@link HtmlDocConfig}:
+ * 		<ul>
+ * 			<li class='jma'>{@link HtmlDocConfig#header() header}:  <js>"&lt;h1>$RS{title}&lt;/h1>&lt;h2>$RS{operationSummary,description}&lt;/h2>$C{REST/header}"</js>
+ * 			<li class='jma'>{@link HtmlDocConfig#navlinks() navlinks}:  <js>"up: request:/.."</js>
+ * 			<li class='jma'>{@link HtmlDocConfig#stylesheet() stylesheet}:  <js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>
+ * 			<li class='jma'>{@link HtmlDocConfig#head() head}:  <js>"$C{REST/head}"</js>
+ * 			<li class='jma'>{@link HtmlDocConfig#footer() footer}:  <js>"$C{REST/footer}"</js>
+ * 			<li class='jma'>{@link HtmlDocConfig#nowrap() nowrap}:  <js>"true"</js>
  * 		</ul>
  * 	</li>
  * </ul>
@@ -61,12 +74,12 @@ import org.apache.juneau.serializer.annotation.*;
  * <p class='bcode w800'>
  * 	<jc>// Used on a top-level resource.</jc>
  * 	<ja>@Rest</ja>
- * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet <jk>implements</jk> BasicJsonRest { ... }
+ * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet <jk>implements</jk> BasicJsonHtmlConfig { ... }
  * </p>
  * <p class='bcode w800'>
  * 	<jc>// Used on a child resource.</jc>
  * 	<ja>@Rest</ja>
- * 	<jk>public class</jk> MyResource <jk>extends</jk> RestObject <jk>implements</jk> BasicJsonRest { ... }
+ * 	<jk>public class</jk> MyResource <jk>extends</jk> RestObject <jk>implements</jk> BasicJsonHtmlConfig { ... }
  * </p>
  *
  * <p>
@@ -108,5 +121,35 @@ import org.apache.juneau.serializer.annotation.*;
 @SerializerConfig(
 	// Enable automatic resolution of URI objects to root-relative values.
 	uriResolution="ROOT_RELATIVE"
+)
+@HtmlDocConfig(
+
+	// Default page header contents.
+	header={
+		"<h1>$RS{title}</h1>",  // Use @Rest(title)
+		"<h2>$RS{operationSummary,description}</h2>", // Use either @RestOp(summary) or @Rest(description)
+		"$C{REST/header}"  // Extra header HTML defined in external config file.
+	},
+
+	// Basic page navigation links.
+	navlinks={
+		"up: request:/.."
+	},
+
+	// Default stylesheet to use for the page.
+	// Can be overridden from external config file.
+	// Default is DevOps look-and-feel (aka Depression look-and-feel).
+	stylesheet="$C{REST/theme,servlet:/htdocs/themes/devops.css}",
+
+	// Default contents to add to the <head> section of the HTML page.
+	// Use it to add a favicon link to the page.
+	head="$C{REST/head}",
+
+	// No default page footer contents.
+	// Can be overridden from external config file.
+	footer="$C{REST/footer}",
+
+	// By default, table cell contents should not wrap.
+	nowrap="true"
 )
 public interface BasicJsonHtmlConfig {}

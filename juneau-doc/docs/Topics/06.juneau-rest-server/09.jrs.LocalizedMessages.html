@@ -70,7 +70,7 @@
 		|	<jc>// Contents of org/apache/foo/MyResource.java</jc>
 		|
 		|	<ja>@Rest</ja>(messages=<js>"nls/MyMessages"</js>)
-		|	<jk>public class</jk> MyResource {...}
+		|	<jk>public class</jk> MyResource {
 		|
 		|		<ja>@RestGet</ja>(<js>"/hello/{you}"</js>)
 		|		<jk>public</jk> Object helloYou(RestRequest <jv>req</jv>, Messages <jv>messages</jv>, <ja>@Path</ja>(<js>"name"</js>) String <jv>you</jv>) {

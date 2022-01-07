@@ -29,15 +29,18 @@ import org.apache.juneau.http.response.*;
  * Identical to {@link BasicRestServlet} but doesn't extend from {@link HttpServlet}.
  *
  * <p>
- * 	Implements basic configuration settings from {@link BasicUniversalConfig} and
- * 	basic endpoint methods from {@link BasicRestOperations}.
+ * Meant as a base class for child REST resources in servlet containers and Spring Boot environments.
  *
  * <p>
- * This is particularly useful in Spring Boot environments that auto-detect servlets to deploy in servlet containers,
- * but you want this resource to be deployed as a child instead.
+ * Provides basic JSON support by implementing the {@link BasicJsonConfig} interface.
+ * Other language types can be added via the {@link Rest#serializers() @Rest(serializers)}/{@link Rest#parsers() @Rest(parsers)} annotations
+ * or by adding one of the predefined interfaces in {@link org.apache.juneau.rest.config}.
+ *
+ * <p>
+ * Implements the basic REST endpoints defined in {@link BasicRestOperations}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.BasicRestServlet}
+ * 	<li class='link'>{@doc jrs.AnnotatedClasses}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

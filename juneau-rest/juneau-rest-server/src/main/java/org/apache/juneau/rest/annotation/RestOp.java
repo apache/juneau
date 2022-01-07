@@ -696,7 +696,7 @@ public @interface RestOp {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 	 *
 	 * 		<ja>@RestOp</ja>(
 	 * 			method=<jsf>GET</jsf>,
@@ -753,7 +753,7 @@ public @interface RestOp {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode w800'>
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 	 *
 	 * 		<ja>@RestOp</ja>(
 	 * 			method=<jsf>GET</jsf>,

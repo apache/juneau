@@ -23,24 +23,28 @@ import org.apache.juneau.rest.config.*;
  * Identical to {@link BasicRestServletGroup} but doesn't extend from {@link HttpServlet}.
  *
  * <p>
- * 	Implements basic configuration settings from {@link BasicUniversalConfig} and
- * 	basic endpoint methods from {@link BasicRestOperations}.
+ * Meant as a base class for child REST resources in servlet containers or Spring Boot environments.
+ *
+ * <p>
+ * Provides basic JSON support by implementing the {@link BasicJsonConfig} interface.
+ * Other language types can be added via the {@link Rest#serializers() @Rest(serializers)}/{@link Rest#parsers() @Rest(parsers)} annotations
+ * or by adding one of the predefined interfaces in {@link org.apache.juneau.rest.config}.
+ *
+ * <p>
+ * Implements the basic REST endpoints defined in {@link BasicRestOperations} and {@link BasicGroupOperations}.
+ *
+ * <p>
+ * Children are attached to this resource using the {@link Rest#children() @Rest(children)} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.BasicRestServletGroup}
+ * 	<li class='link'>{@doc jrs.AnnotatedClasses}
  * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Rest
-public abstract class BasicRestObjectGroup extends BasicRestObject {
+public abstract class BasicRestObjectGroup extends BasicRestObject implements BasicGroupOperations {
 
-	/**
-	 * [GET /] - Get child resources.
-	 *
-	 * @param req The HTTP request.
-	 * @return The bean containing links to the child resources.
-	 */
-	@RestGet(path="/", summary="Navigation page")
+	@Override /* BasicGroupOperations */
 	public ChildResourceDescriptions getChildren(RestRequest req) {
 		return new ChildResourceDescriptions(req);
 	}

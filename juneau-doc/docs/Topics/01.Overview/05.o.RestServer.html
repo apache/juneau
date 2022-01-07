@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'REST Server Overview', created:'9.0.0', flags:'todo'} 
+{title:'REST Server Overview'} 
 
 <h5 class='topic'>@Rest-Annotated Resources</h5>
 <div class='topic'>
@@ -220,7 +220,7 @@
 <h5 class='topic'>Deploying as a Servlet</h5>
 <div class='topic'>
 	<p>
-		The {@link oajr.servlet.RestServlet} class is the entry point for your REST resources.
+		The {@link oajr.servlet.BasicRestServlet} class is the entry point for your REST resources.
 		It extends directly from <l>HttpServlet</l> and is deployed like any other servlet (such as a standard <c>web.xml</c> file).
 	</p>
 	<p>
@@ -239,7 +239,7 @@
 <h5 class='topic'>Deploying in Spring Boot</h5>
 <div class='topic'>
 	<p>
-		The {@link oajr.springboot.SpringRestServlet} class is typically entry point for your REST resources
+		The {@link oajr.springboot.BasicSpringRestServlet} class is typically entry point for your REST resources
 		when working within a Spring Boot environment.
 	</p>
 	<p>

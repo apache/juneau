@@ -110,10 +110,10 @@
 		|		<jk>private final</jk> String <jf>path</jf>;
 		|		<jk>private final</jk> File <jf>javaHome</jf>;
 		|	
-		|		<jk>public</jk> MyResource(RestContext.Builder builder) {
-		|			Config c = builder.getConfig();
-		|			<jf>path</jf> = c.get(<js>"MyProperties/path"</js>).orElse(<js>"mypath"</js>);
-		|			<jf>javaHome</jf> = c.get(<js>"MyProperties/javaHome"</js>).to(File.<jk>class</jk>);
+		|		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) {
+		|			Config <jv>config</jv> = <jv>builder</jv>.getConfig();
+		|			<jf>path</jf> = <jv>config</jv>.get(<js>"MyProperties/path"</js>).orElse(<js>"mypath"</js>);
+		|			<jf>javaHome</jf> = <jv>config</jv>.get(<js>"MyProperties/javaHome"</js>).to(File.<jk>class</jk>);
 		|		}
 	</p>
 	<p>

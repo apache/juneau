@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Stylesheets', updated:'8.1.0,9.0.0'}
+{title:'Stylesheets', updated:'8.1.0,9.0.0', flags:'todo'}
 
 <div class='topic'>
 	<p>
@@ -43,7 +43,7 @@
 	<img class='bordered w800' src='doc-files/jrs.Stylesheets.3.png'>
 	<p>
 		The stylesheet URL is controlled by the {@link oaj.html.annotation.HtmlDocConfig#stylesheet() @HtmlDocConfig(stylesheet)} annotation.
-		The {@link oajr.servlet.BasicRestServlet} class defines the stylesheet served up as a static file:
+		The {@link oajr.config.BasicUniversalConfig} interface defines the stylesheet served up as a static file:
 	<p class='bcode w800'>
 		|	<ja>@Rest</ja>(
 		|		staticFiles={<js>"styles:styles"</js>}
@@ -51,7 +51,7 @@
 		|	<ja>@HtmlDocConfig</ja>(
 		|		stylesheet=<js>"$C{REST/stylesheet,servlet:/styles/devops.css}"</js>
 		|	)
-		|	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet {...}
+		|	<jk>public abstract class</jk> BasicRestServlet {...}
 	</p>		
 	<p>
 		The <js>"$C{REST/stylesheet,servlet:/styles/devops.css}"</js> variable says to use the URI defined
@@ -94,7 +94,7 @@
 		|			<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
 		|		}
 		|	)
-		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletJenaGroup {...}
+		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup {...}
 	</p>
 	<p>
 		The <l>StyleMenuItem</l> is a widget that extends from {@link oajr.widget.MenuItemWidget}, a

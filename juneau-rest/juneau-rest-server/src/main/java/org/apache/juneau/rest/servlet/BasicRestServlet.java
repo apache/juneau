@@ -15,123 +15,30 @@ package org.apache.juneau.rest.servlet;
 import java.util.*;
 
 import org.apache.juneau.dto.swagger.Swagger;
-import org.apache.juneau.html.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.stats.*;
-import org.apache.juneau.soap.*;
-import org.apache.juneau.uon.*;
-import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.xml.*;
 
 /**
  * Subclass of {@link RestServlet} with default settings and standard methods defined.
  *
  * <p>
- * 	Implements basic configuration settings from {@link BasicUniversalConfig} and
- * 	basic endpoint methods from {@link BasicRestOperations}.
+ * Meant as a base class for top-level REST resources in servlet containers.
  *
  * <p>
- * Supports the following request <c>Accept</c> header values with the resulting response <c>Content-Type</c>:
- * <table class='styled'>
- * 	<tr>
- * 		<th>Accept</th>
- * 		<th>Content-Type</th>
- * 		<th>Serializer</th>
- * 	</tr>
- * 	<tr>
- * 		<td class='code'>application/json<br>text/json</td>
- * 		<td class='code'>application/json</td>
- * 		<td>{@link JsonSerializer}</td>
- * 	</tr>
- * 	<tr>
- * 		<td class='code'>application/json+simple<br>text/json+simple</td>
- * 		<td class='code'>application/json</td>
- * 		<td>{@link org.apache.juneau.json.SimpleJsonSerializer}</td>
- * 	</tr>
- * 	<tr>
- * 		<td class='code'>application/json+schema<br>text/json+schema</td>
- * 		<td class='code'>application/json</td>
- * 		<td>{@link JsonSchemaSerializer}</td>
- * 	</tr>
- * 	<tr>
- * 		<td class='code'>text/xml</td>
- * 		<td class='code'>text/xml</td>
- * 		<td>{@link XmlDocSerializer}</td>
- * 	</tr>
- * 	<tr>
- * 		<td class='code'>text/html</td>
- * 		<td class='code'>text/html</td>
- * 		<td>{@link HtmlDocSerializer}</td>
- * 	</tr>
- * 	<tr>
- * 		<td class='code'>text/html+stripped</td>
- * 		<td class='code'>text/html</td>
- * 		<td>{@link HtmlStrippedDocSerializer}</td>
- * 	</tr>
- * 	<tr>
- * 		<td class='code'>text/uon</td>
- * 		<td class='code'>text/uon</td>
- * 		<td>{@link UonSerializer}</td>
- * 	</tr>
- * 	<tr>
- * 		<td class='code'>application/x-www-form-urlencoded</td>
- * 		<td class='code'>application/x-www-form-urlencoded</td>
- * 		<td>{@link UrlEncodingSerializer}</td>
- * 	</tr>
- * 	<tr>
- * 		<td class='code'>text/xml+soap</td>
- * 		<td class='code'>text/xml</td>
- * 		<td>{@link SoapXmlSerializer}</td>
- * 	</tr>
- * 	<tr>
- * 		<td class='code'>text/plain</td>
- * 		<td class='code'>text/plain</td>
- * 		<td>{@link PlainTextSerializer}</td>
- * 	</tr>
- * </table>
+ * Provides basic JSON support by implementing the {@link BasicJsonConfig} interface.
+ * Other language types can be added via the {@link Rest#serializers() @Rest(serializers)}/{@link Rest#parsers() @Rest(parsers)} annotations
+ * or by adding one of the predefined interfaces in {@link org.apache.juneau.rest.config}.
+ *
  * <p>
- * Supports the following request <c>Content-Type</c> header values:
- * </p>
- * <table class='styled'>
- * 	<tr>
- * 		<th>Content-Type</th>
- * 		<th>Parser</th>
- * 	</tr>
- * 	<tr>
- * 		<td class='code'>application/json<br>text/json</td>
- * 		<td>{@link JsonParser}</td>
- * 	</tr>
- * 	<tr>
- * 		<td class='code'>text/xml<br>application/xml</td>
- * 		<td>{@link XmlParser}</td>
- * 	</tr>
- * 	<tr>
- * 		<td class='code'>text/html<br>text/html+stripped</td>
- * 		<td>{@link HtmlParser}</td>
- * 	</tr>
- * 	<tr>
- * 		<td class='code'>text/uon</td>
- * 		<td>{@link UonParser}</td>
- * 	</tr>
- * 	<tr>
- * 		<td class='code'>application/x-www-form-urlencoded</td>
- * 		<td>{@link UrlEncodingParser}</td>
- * 	</tr>
- * 	<tr>
- * 		<td class='code'>text/plain</td>
- * 		<td>{@link PlainTextParser}</td>
- * 	</tr>
- * </table>
+ * Implements the basic REST endpoints defined in {@link BasicRestOperations}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.BasicRestServlet}
+ * 	<li class='link'>{@doc jrs.AnnotatedClasses}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

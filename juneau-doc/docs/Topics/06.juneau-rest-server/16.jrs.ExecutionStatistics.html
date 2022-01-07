@@ -30,17 +30,6 @@
 		summary=<js>"Timing statistics"</js>,
 		description=<js>"Timing statistics for method invocations on this resource."</js>
 	)
-	<ja>@HtmlDocConfig</ja>(
-		<jc>// Should override config annotations defined on class.</jc>
-		rank=10,
-		<jc>// Override the nav links for the swagger page.</jc>
-		navlinks={
-			<js>"back: servlet:/"</js>,
-			<js>"json: servlet:/stats?Accept=text/json&plainText=true"</js>
-		},
-		<jc>// Never show aside contents of page inherited from class.</jc>
-		aside=<js>"NONE"</js>
-	)
 	<ja>@Override</ja> <jc>/* BasicRestOperations */</jc>
 	<jk>public</jk> RestContextStats getStats(RestRequest <jv>req</jv>) {
 		<jk>return</jk> <jv>req</jv>.getContext().getStats();

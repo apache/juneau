@@ -13,31 +13,31 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'juneau-rest-server-rdf'}
+{title:'Path Variables', updated:'9.0.0'}
 
 <div class='topic'>
-	<h5 class='figure'>Maven Dependency</h5>
-	<p class='bcode w500'>
-		|	<xt>&lt;dependency&gt;</xt>
-		|		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
-		|		<xt>&lt;artifactId&gt;</xt>juneau-rest-server-jaxrs<xt>&lt;/artifactId&gt;</xt>
-		|		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
-		|	<xt>&lt;/dependency&gt;</xt>
-	</p>	
-	
-	<h5 class='figure'>Java Library</h5>
-	<p class='bcode w500'>
-		|	juneau-rest-server-jaxrs-{@property juneauVersion}.jar 
-	</p>	
-	
-	<h5 class='figure'>OSGi Module</h5>
-	<p class='bcode w500'>
-		|	org.apache.juneau.rest.server_{@property juneauVersion}.jar 
-	</p>	
-	
 	<p>
-		The <c>juneau-rest-server-jaxrs</c> library provides an implementation of a <c>MessageBodyReader</c>
-		and <c>MessageBodyWriter</c> to allow any of the Juneau serializers and parsers to be used in a 
-		JAX/RS environment. 
+		The path can contain variables that get resolved to {@link oaj.http.annotation.Path @Path} parameters
+		or access through the {@link oajr.RestRequest#getPathParams()} method.
 	</p>
-</div>
+	<h5 class='figure'>Example:</h5>
+	<p class='bcode'>
+		|	<ja>@Rest</ja>(
+		|		path=<js>"/myResource/{foo}/{bar}"</js>
+		|	)
+		|	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
+		|
+		|		<ja>@RestPost</ja>(<js>"/{baz}"</js>)
+		|		<jk>public void</jk> String doX(<ja>@Path</ja> String <jv>foo</jv>, <ja>@Path</ja> <jk>int</jk> <jv>bar</jv>) {
+		|			...
+		|		}
+		|	}
+	</p>
+	<p>
+		Variables can be used on either top-level or child resources and can be defined on multiple levels.
+		Path variables resolved in parent resource paths are also available to the child resources.
+	</p>
+	<div class='info'>
+		All variables in the path must be specified or else the target will not resolve and a <c>404</c> will result.
+	</div>
+</div>	

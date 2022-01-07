@@ -41,39 +41,39 @@
 		|		<jk>private</jk> BundleContext <jf>context</jf>;
 		|	
 		|		<ja>@Override</ja> <jc>/* BundleActivator */</jc>
-		|		<jk>public void</jk> start(BundleContext context) <jk>throws</jk> Exception {
-		|			<jk>this</jk>.<jf>context</jf> = context;
-		|			<jf>httpServiceTracker</jf> = <jk>new</jk> ServiceTracker(context, HttpService.<jk>class</jk>.getName(), <jk>this</jk>);
+		|		<jk>public void</jk> start(BundleContext <jv>context</jv>) <jk>throws</jk> Exception {
+		|			<jk>this</jk>.<jf>context</jf> = <jv>context</jv>;
+		|			<jf>httpServiceTracker</jf> = <jk>new</jk> ServiceTracker(<jv>context</jv>, HttpService.<jk>class</jk>.getName(), <jk>this</jk>);
 		|			<jf>httpServiceTracker</jf>.open();
 		|		}
 		|	
 		|		<ja>@Override</ja> <jc>/* BundleActivator */</jc>
-		|		<jk>public void</jk> stop(BundleContext context) <jk>throws</jk> Exception {
+		|		<jk>public void</jk> stop(BundleContext <jv>context</jv>) <jk>throws</jk> Exception {
 		|			<jf>httpServiceTracker</jf>.close();
 		|		}
 		|	
 		|		<ja>@Override</ja> <jc>/* ServiceTrackerCustomizer */</jc>
-		|		<jk>public</jk> Object addingService(ServiceReference reference) {
-		|			Object service = <jf>context</jf>.getService(reference);
+		|		<jk>public</jk> Object addingService(ServiceReference <jv>reference</jv>) {
+		|			Object <jv>service</jv> = <jf>context</jf>.getService(<jv>reference</jv>);
 		|	
 		|			<jk>if</jk> (service <jk>instanceof</jk> HttpService) {
-		|				HttpService s = (HttpService)service;
+		|				HttpService <jv>s</jv> = (HttpService)<jv>service</jv>;
 		|				<jk>try</jk> {
-		|					s.registerServlet(<js>"/sample"</js>, <jk>new</jk> MyRestServlet(), <jk>null</jk>, <jk>null</jk>);
-		|				} <jk>catch</jk> (Exception e) {
-		|					<jk>throw new</jk> RuntimeException(e);
+		|					<jv>s</jv>.registerServlet(<js>"/sample"</js>, <jk>new</jk> MyRestServlet(), <jk>null</jk>, <jk>null</jk>);
+		|				} <jk>catch</jk> (Exception <jv>e</jv>) {
+		|					<jk>throw new</jk> RuntimeException(<jv>e</jv>);
 		|				}
 		|			}
 		|	
-		|			<jk>return</jk> service;
+		|			<jk>return</jk> <jv>service</jv>;
 		|		}
 		|	
 		|		<ja>@Override</ja> <jc>/* ServiceTrackerCustomizer */</jc>
-		|		<jk>public void</jk> modifiedService(ServiceReference reference, Object service) {
+		|		<jk>public void</jk> modifiedService(ServiceReference <jv>reference</jv>, Object <jv>service</jv>) {
 		|		}
 		|	
 		|		<ja>@Override</ja> <jc>/* ServiceTrackerCustomizer */</jc>
-		|		<jk>public void</jk> removedService(ServiceReference reference, Object service) {
+		|		<jk>public void</jk> removedService(ServiceReference <jv>reference</jv>, Object <jv>service</jv>) {
 		|		}
 		|	}
 	</p>

@@ -57,7 +57,7 @@
 		|	<ja>@RestPost</ja>(<js>"/"</js>)
 		|	<jk>public</jk> Object doPost(
 		|		<ja>@FormData</ja>(<js>"aString"</js>) String <jv>aString</jv>, 
-		|		<ja>@FormData</ja>(<js>"aNumber"</js>) <jk>int</jk> <jv>aNumber</jv>,ß
+		|		<ja>@FormData</ja>(<js>"aNumber"</js>) <jk>int</jk> <jv>aNumber</jv>,
 		|		<ja>@FormData</ja>(<js>"aDate"</js>) Calendar <jv>aDate</jv>) {
 		|		...
 		|	}
@@ -73,6 +73,24 @@
 		<br>Your input bean will end up being null since there won't be any content left after the servlet 
 		has parsed the body of the request.
 		<br>This applies to WHENEVER you use <l>@Body</l> or {@link oajr.RestRequest#getBody()}
+	</div>
+	<div class='warn'>
+		If you want to be able to consume url-encoded form post bodies as POJOs in Spring Boot, you'll need to 
+		add the following Spring Bean to your configuration to prevent Spring Boot from automatically 
+		consuming the body itself:
+		<p class='bcode w800'>
+			|	<ja>@SpringBootApplication</ja>
+			|	<ja>@Controller</ja>
+			|	<jk>public class</jk> SpringBootAppConfig {
+			|			
+			|		<ja>@Bean</ja>
+			|		<jk>public</jk> FilterRegistrationBean&lt;HiddenHttpMethodFilter> registration(HiddenHttpMethodFilter <jv>filter</jv>) {
+			|			FilterRegistrationBean&lt;HiddenHttpMethodFilter> <jv>reg</jv> = <jk>new</jk> FilterRegistrationBean&gt;>(<jv>filter</jv>);
+			|			<jv>reg</jv>.setEnabled(<jk>false</jk>);
+			|			<jk>return</jk> <jv>reg</jv>;
+			|		}
+			|	}
+		</p>	
 	</div>
 	
 	<h5 class='topic'>Multi-part Form Posts</h5>
@@ -110,7 +128,7 @@
 		|			<ja>@Override</ja> <jc>/* RestMatcher */</jc>
 		|			<jk>public boolean</jk> matches(RestRequest <jv>req</jv>) {
 		|				String <jv>contentType</jv> = <jv>req</jv>.getContentType();
-		|				<jk>return</jk> <jv>contentType</jv> != <jk>null</jk> &amp;&amp; contentType.startsWith(<js>"multipart/form-data"</js>); 
+		|				<jk>return</jk> <jv>contentType</jv> != <jk>null</jk> &amp;&amp; <jv>contentType</jv>.startsWith(<js>"multipart/form-data"</js>); 
 		|			}
 		|		}
 	</p>

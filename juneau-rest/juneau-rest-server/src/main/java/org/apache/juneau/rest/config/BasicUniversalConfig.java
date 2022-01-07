@@ -34,10 +34,10 @@ import org.apache.juneau.xml.*;
  * 	Default settings defined:
  * </p>
  * <ul class='spaced-list'>
- * 	<li>{@link Rest @Rest}:
+ * 	<li class='ja'>{@link Rest}:
  * 		<ul>
- * 			<li><c>{@link Rest#serializers() serializers}=</c>
- * 				<ul class='javatreec'>
+ * 			<li class='jma'>{@link Rest#serializers() serializers}:
+ * 				<ul class='javatree'>
  * 					<li class='jc'>{@link HtmlDocSerializer}
  * 					<li class='jc'>{@link HtmlStrippedDocSerializer}
  * 					<li class='jc'>{@link HtmlSchemaDocSerializer}
@@ -53,8 +53,8 @@ import org.apache.juneau.xml.*;
  * 					<li class='jc'>{@link PlainTextSerializer}
  * 				</ul>
  * 			</li>
- * 			<li><c>{@link Rest#parsers() parsers}=</c>
- * 				<ul class='javatreec'>
+ * 			<li class='jma'>{@link Rest#parsers() parsers}:
+ * 				<ul class='javatree'>
  * 					<li class='jc'>{@link JsonParser}
  * 					<li class='jc'>{@link SimpleJsonParser}
  * 					<li class='jc'>{@link XmlParser}
@@ -66,27 +66,27 @@ import org.apache.juneau.xml.*;
  * 					<li class='jc'>{@link PlainTextParser}
  * 				</ul>
  * 			</li>
- * 			<li><c>{@link Rest#config() config}=<js>"$S{juneau.configFile,SYSTEM_DEFAULT}</js>"</c></li>
+ * 			<li class='jma'>{@link Rest#config() config}:  <js>"$S{juneau.configFile,SYSTEM_DEFAULT}"</js>
  *		</ul>
  *	</li>
- * 	<li>{@link BeanConfig @BeanConfig}:
+ * 	<li class='ja'>{@link BeanConfig}:
  * 		<ul>
- * 			<li><c>{@link BeanConfig#ignoreUnknownBeanProperties() ignoreUnknownBeanProperties}=<js>"true"</js></c></li>
+ * 			<li class='jma'>{@link BeanConfig#ignoreUnknownBeanProperties() ignoreUnknownBeanProperties}:  <js>"true"</js>
  * 		</ul>
  * 	</li>
- * 	<li>{@link SerializerConfig @SerializerConfig}:
+ * 	<li class='ja'>{@link SerializerConfig}:
  * 		<ul>
- * 			<li><c>{@link SerializerConfig#uriResolution() uriResolution}=<js>"ROOT_RELATIVE"</js></c></li>
+ * 			<li class='jma'>{@link SerializerConfig#uriResolution() uriResolution}:  <js>"ROOT_RELATIVE"</js>
  * 		</ul>
  * 	</li>
- * 	<li>{@link HtmlDocConfig @HtmlDocConfig}:
+ * 	<li class='ja'>{@link HtmlDocConfig}:
  * 		<ul>
- * 			<li><c>{@link HtmlDocConfig#header() header}=<js>"&lt;h1>$RS{title}&lt;/h1>&lt;h2>$RS{operationSummary,description}&lt;/h2>$C{REST/header}"</js></c></li>
- * 			<li><c>{@link HtmlDocConfig#navlinks() navlinks}=<js>"up: request:/.."</js></c></li>
- * 			<li><c>{@link HtmlDocConfig#stylesheet() stylesheet}=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js></c></li>
- * 			<li><c>{@link HtmlDocConfig#head() head}=<js>"$C{REST/head}"</js></c></li>
- * 			<li><c>{@link HtmlDocConfig#footer() footer}=<js>"$C{REST/footer}"</js></c></li>
- * 			<li><c>{@link HtmlDocConfig#nowrap() nowrap}=<js>"true"</js></c></li>
+ * 			<li class='jma'>{@link HtmlDocConfig#header() header}:  <js>"&lt;h1>$RS{title}&lt;/h1>&lt;h2>$RS{operationSummary,description}&lt;/h2>$C{REST/header}"</js>
+ * 			<li class='jma'>{@link HtmlDocConfig#navlinks() navlinks}:  <js>"up: request:/.."</js>
+ * 			<li class='jma'>{@link HtmlDocConfig#stylesheet() stylesheet}:  <js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>
+ * 			<li class='jma'>{@link HtmlDocConfig#head() head}:  <js>"$C{REST/head}"</js>
+ * 			<li class='jma'>{@link HtmlDocConfig#footer() footer}:  <js>"$C{REST/footer}"</js>
+ * 			<li class='jma'>{@link HtmlDocConfig#nowrap() nowrap}:  <js>"true"</js>
  * 		</ul>
  * 	</li>
  * </ul>
@@ -97,12 +97,12 @@ import org.apache.juneau.xml.*;
  * <p class='bcode w800'>
  * 	<jc>// Used on a top-level resource.</jc>
  * 	<ja>@Rest</ja>
- * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet <jk>implements</jk> BasicUniversalRest { ... }
+ * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet <jk>implements</jk> BasicUniversalConfig { ... }
  * </p>
  * <p class='bcode w800'>
  * 	<jc>// Used on a child resource.</jc>
  * 	<ja>@Rest</ja>
- * 	<jk>public class</jk> MyResource <jk>extends</jk> RestObject <jk>implements</jk> BasicUniversalRest { ... }
+ * 	<jk>public class</jk> MyResource <jk>extends</jk> RestObject <jk>implements</jk> BasicUniversalConfig { ... }
  * </p>
  *
  * <p>

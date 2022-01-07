@@ -10,42 +10,48 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.springboot;
+package org.apache.juneau.rest.servlet;
 
-import java.util.*;
-
-import javax.inject.*;
-
-import org.apache.juneau.cp.*;
-import org.apache.juneau.rest.servlet.*;
-import org.springframework.context.*;
+import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.beans.*;
 
 /**
- * Subclass of a {@link RestServlet} that hooks into Spring Boot for using Spring Beans.
+ * Basic REST group operation methods.
  *
- * <ul>
- * 	<li class='note'>
- * 		Users will typically extend from {@link BasicSpringRestServlet} or {@link BasicSpringRestServletGroup}
- * 		instead of this class directly.
+ * <p>
+ * 	Defines 1 special use REST operation endpoint:
+ * </p>
+ *
+ * <p class='bcode w800'>
+ * 	<ja>@RestGet</ja>(path=<js>"/*"</js></js>)
+ * 	<jk>public</jk> {@link ChildResourceDescriptions} {@link #getChildren(RestRequest) getChildren}({@link RestRequest} <jv>req</jv>);
+ * </p>
+ *
+ * <p>
+ * 	Implementations provided by the following classes:
+ * </p>
+ * <ul class='javatreec'>
+ * 	<li class='jac'>{@link BasicRestServletGroup}
+ * 	<li class='jac'>{@link BasicRestObjectGroup}
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-server-springboot}
  * 	<li class='link'>{@doc jrs.AnnotatedClasses}
  * 	<li class='extlink'>{@source}
  * </ul>
- *
- * @serial exclude
  */
-public abstract class SpringRestServlet extends RestServlet {
+public interface BasicGroupOperations {
 
-	private static final long serialVersionUID = 1L;
-
-	@Inject
-	private Optional<ApplicationContext> appContext;
-
-	@Override /* RestServlet */
-	public BeanStore createBeanStore(Optional<BeanStore> parent) {
-		return new SpringBeanStore(appContext, parent, this);
-	}
+	/**
+	 * [GET /] - Get child resources.
+	 *
+	 * <p>
+	 * Returns a bean that lists and allows navigation to child resources.
+	 *
+	 * @param req The HTTP request.
+	 * @return The bean containing links to the child resources.
+	 */
+	@RestGet(path="/", summary="Navigation page")
+	public ChildResourceDescriptions getChildren(RestRequest req);
 }

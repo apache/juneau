@@ -342,7 +342,7 @@ public @interface HtmlDocConfig {
 	 * 			<js>"doc: doc"</js>
 	 * 		}
 	 * 	)
-	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> BasicRestServletJena {
+	 * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> BasicRestServlet {
 	 * </p>
 	 *
 	 * <ul class='notes'>
