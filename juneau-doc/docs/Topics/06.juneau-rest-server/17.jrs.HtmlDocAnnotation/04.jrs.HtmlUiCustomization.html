@@ -35,17 +35,15 @@
 	</p>
 	<p class='bcode w800'>
 		|	<ja>@Rest</ja>(
-		|		...
-		
 		|		<jc>// Optional external configuration file.</jc>
 		|		config=<js>"$S{juneau.configFile}"</js>,
-		|	
-		|		<jc>// These are static files that are served up by the servlet under the specified sub-paths.
-		|		// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"
-		|		// By default, we define static files through the external configuration file.</jc>
-		|		staticFiles=<js>"$C{REST/staticFiles}"</js>
 		|	)
 		|	<ja>@HtmlDocConfig</ja>(
+		|	
+		|		<jc>// Default stylesheet to use for the page.
+		|		// Can be overridden from external config file.
+		|		// Default is DevOps look-and-feel (aka Depression look-and-feel).</jc>
+		|		stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>,
 		|	
 		|		<jc>// Default page header contents.</jc>
 		|		header={
@@ -54,38 +52,23 @@
 		|			<js>"$C{REST/header}"</js>  <jc>// Extra header HTML defined in external config file.</jc>
 		|		},
 		|	
-		|		<jc>// Default stylesheet to use for the page.
-		|		// Can be overridden from external config file.
-		|		// Default is DevOps look-and-feel (aka Depression look-and-feel).</jc>
-		|		stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>,
-		|	
 		|		<jc>// Default contents to add to the &lt;head&gt; section of the HTML page.
 		|		// Use it to add a favicon link to the page.</jc>
 		|		head={
 		|			<js>"&lt;link rel='icon' href='$U{$C{REST/favicon}}'/&gt;"</js>
 		|		},
 		|	
+		|		<jc>// Basic page navigation links.</jc>
+		|		navlinks={
+		|			<js>"up: request:/.."</js>
+		|		},
+		|		
 		|		<jc>// No default page footer contents.
 		|		// Can be overridden from external config file.</jc>
 		|		footer=<js>"$C{REST/footer}"</js>
 		|	)
 		|	
 		|	<jk>public interface</jk> BasicUniversalConfig {}
-	</p>
-	<p class='bcode w800'>			
-		|	<ja>@Rest</ja>(...)
-		|	<ja>@HtmlDocConfig</ja>(
-		|		<jc>// Basic page navigation links.</jc>
-		|		navlinks={
-		|			<js>"up: request:/.."</js>,
-		|			<js>"options: servlet:/?method=OPTIONS"</js>
-		|		}
-		|	)
-		|	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet <jk>implements</jk> BasicRestOperations, BasicJsonConfig {...}
-	</p>
-	<p class='bcode w800'>			
-		|	<ja>@Rest</ja>
-		|	<jk>public abstract class</jk> BasicRestServletGroup <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicGroupOperations {...}
 	</p>
 	<p class='bcode w800'>			
 		|	<ja>@Rest</ja>(...)
@@ -109,9 +92,10 @@
 		|			<js>"	&lt;p&gt;All content on pages in the UI are serialized POJOs.  In this case, it's a serialized array of beans with 2 properties, 'name' and 'description'.&lt;/p&gt;"</js>,
 		|			<js>"	&lt;p&gt;Other features (such as this aside) are added through annotations.&lt;/p&gt;"</js>,
 		|			<js>"&lt;/div&gt;"</js>
-		|		}
+		|		},
+		|		asideFloat=<js>"RIGHT"</js>
 		|	)
-		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup <jk>implements</jk> BasicUniversalConfig {...}
+		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup <jk>implements</jk> BasicUniversalJenaConfig {...}
 	</p>
 	
 	<p>

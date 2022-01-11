@@ -18,7 +18,30 @@
 <div class='topic'>
 	<p>
 		The {@link oaj.html.annotation.HtmlDocConfig @HtmlDocConfig} annotation is used to customize the HTML 
-		view of your serialized POJOs.
+		view of POJOs serialized by {@link oaj.html.HtmlDocSerializer}.
+	</p>
+	<ul class='javatree'>
+		<li class='ja'>{@link oaj.html.annotation.HtmlDocConfig}
+			<ul class='javatreec'>
+				<li class='jma'>{@link oaj.html.annotation.HtmlDocConfig#aside() aside}
+				<li class='jma'>{@link oaj.html.annotation.HtmlDocConfig#asideFloat() asideFloat}
+				<li class='jma'>{@link oaj.html.annotation.HtmlDocConfig#footer() footer}
+				<li class='jma'>{@link oaj.html.annotation.HtmlDocConfig#head() head}
+				<li class='jma'>{@link oaj.html.annotation.HtmlDocConfig#header() header}
+				<li class='jma'>{@link oaj.html.annotation.HtmlDocConfig#nav() nav}
+				<li class='jma'>{@link oaj.html.annotation.HtmlDocConfig#navlinks() navlinks}
+				<li class='jma'>{@link oaj.html.annotation.HtmlDocConfig#noResultsMessage() noResultsMessage}
+				<li class='jma'>{@link oaj.html.annotation.HtmlDocConfig#nowrap() nowrap}
+				<li class='jma'>{@link oaj.html.annotation.HtmlDocConfig#rank() rank}
+				<li class='jma'>{@link oaj.html.annotation.HtmlDocConfig#script() script}
+				<li class='jma'>{@link oaj.html.annotation.HtmlDocConfig#style() style}
+				<li class='jma'>{@link oaj.html.annotation.HtmlDocConfig#stylesheet() stylesheet}
+				<li class='jma'>{@link oaj.html.annotation.HtmlDocConfig#template() template}
+				<li class='jma'>{@link oaj.html.annotation.HtmlDocConfig#widgets() widgets}			
+			</ul>
+		</li>
+	</ul>
+	<p>
 		It's used in the following locations:
 	</p>
 	<ul>
@@ -66,10 +89,10 @@
 	</p>
 	<p>
 		The outline above is controlled by the {@link oaj.html.HtmlDocTemplate} interface
-		which can be overridden via the {@del oajr.annotation.HtmlDoc#template @HtmlDoc(template)} annotation.
+		which can be overridden via the {@link oaj.html.annotation.HtmlDocConfig#template() @HtmlDocConfig(template)} annotation.
 	</p>
 	<p>
-		The <l>HelloWorldResource</l> class was an example of the <l>@HtmlDoc</l> annotation in use:
+		The <c>HelloWorldResource</c> class was an example of the <c>@HtmlDocConfig</c> annotation in use:
 	</p>
 	<p class='bcode w800'>
 		|	<jd>/** 

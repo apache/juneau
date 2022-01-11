@@ -402,7 +402,7 @@
 			<li><p><a class='doclink' href='#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlWidgets'>Widgets</a><span class='update'>updated: <b>9.0.0</b></span></p>
 			<li><p><a class='doclink' href='#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlPredefinedWidgets'>Predefined Widgets</a><span class='update'>updated: <b>9.0.0</b></span></p>
 			<li><p><a class='doclink' href='#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlUiCustomization'>UI Customization</a><span class='update'>updated: <b>9.0.0</b></span></p>
-			<li><p><a class='doclink' href='#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlStylesheets'>Stylesheets</a><span class='update'>updated: 8.1.0,<b>9.0.0</b>, <b><red>todo</red></b></span></p>
+			<li><p><a class='doclink' href='#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlStylesheets'>Stylesheets</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></p>
 		</ol>
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.LoggingAndDebugging'>Logging / Debugging</a><span class='update'>created: <b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.HttpStatusCodes'>HTTP Status Codes</a><span class='update'>updated: <b>9.0.0</b></span></p>
@@ -1965,7 +1965,7 @@
 		<jc>// Our REST resource to test.</jc>
 		<jc>// Simply echos the response.</jc>
 		<ja>@Rest</ja>
-		<jk>public static class</jk> EchoRest <jk>implements</jk> BasicJsonRest {
+		<jk>public static class</jk> EchoRest <jk>implements</jk> BasicRestServlet {
 
 			<ja>@RestPut</ja>
 			<jk>public</jk> MyBean echo(<ja>@Body</ja> MyBean <jv>bean</jv>) {
@@ -18893,7 +18893,30 @@
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.html.annotation.HtmlDocConfig @HtmlDocConfig} annotation is used to customize the HTML 
-		view of your serialized POJOs.
+		view of POJOs serialized by {@link org.apache.juneau.html.HtmlDocSerializer}.
+	</p>
+	<ul class='javatree'>
+		<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlDocConfig}
+			<ul class='javatreec'>
+				<li class='jma'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#aside() aside}
+				<li class='jma'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#asideFloat() asideFloat}
+				<li class='jma'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#footer() footer}
+				<li class='jma'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#head() head}
+				<li class='jma'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#header() header}
+				<li class='jma'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#nav() nav}
+				<li class='jma'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#navlinks() navlinks}
+				<li class='jma'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#noResultsMessage() noResultsMessage}
+				<li class='jma'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#nowrap() nowrap}
+				<li class='jma'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#rank() rank}
+				<li class='jma'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#script() script}
+				<li class='jma'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#style() style}
+				<li class='jma'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#stylesheet() stylesheet}
+				<li class='jma'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#template() template}
+				<li class='jma'>{@link org.apache.juneau.html.annotation.HtmlDocConfig#widgets() widgets}			
+			</ul>
+		</li>
+	</ul>
+	<p>
 		It's used in the following locations:
 	</p>
 	<ul>
@@ -18941,10 +18964,10 @@
 	</p>
 	<p>
 		The outline above is controlled by the {@link org.apache.juneau.html.HtmlDocTemplate} interface
-		which can be overridden via the {@del org.apache.juneau.rest.annotation.HtmlDoc#template @HtmlDoc(template)} annotation.
+		which can be overridden via the {@link org.apache.juneau.html.annotation.HtmlDocConfig#template() @HtmlDocConfig(template)} annotation.
 	</p>
 	<p>
-		The <l>HelloWorldResource</l> class was an example of the <l>@HtmlDoc</l> annotation in use:
+		The <c>HelloWorldResource</c> class was an example of the <c>@HtmlDocConfig</c> annotation in use:
 	</p>
 	<p class='bcode w800'>
 	<jd>/** 
@@ -19168,7 +19191,7 @@
 		nothing keeps you from using it in an arbitrary location in the page).
 	</p>
 	<p>
-		The script specifies a <js>"menuClick(element)"</js> function that toggles the visibility of the next sibling of the element.
+		The script specifies a <c>menuClick(element)</c> function that toggles the visibility of the next sibling of the element.
 	</p>
 	<p>
 		Subclasses implement the following two methods:
@@ -19191,7 +19214,7 @@
 	};
 
 	<ja>@Override</ja>
-	<jk>public</jk> Div getLabel() {
+	<jk>public</jk> Div getContent() {
 		<jk>return</jk> Html5Builder.<jsm>div</jsm>(<js>"Surprise!"</js>).style(<js>"color:red"</js>);
 	};
 	</p>
@@ -19398,16 +19421,15 @@
 	</p>
 	<p class='bcode w800'>
 	<ja>@Rest</ja>(
-		...
 		<jc>// Optional external configuration file.</jc>
 		config=<js>"$S{juneau.configFile}"</js>,
-	
-		<jc>// These are static files that are served up by the servlet under the specified sub-paths.
-		// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"
-		// By default, we define static files through the external configuration file.</jc>
-		staticFiles=<js>"$C{REST/staticFiles}"</js>
 	)
 	<ja>@HtmlDocConfig</ja>(
+	
+		<jc>// Default stylesheet to use for the page.
+		// Can be overridden from external config file.
+		// Default is DevOps look-and-feel (aka Depression look-and-feel).</jc>
+		stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>,
 	
 		<jc>// Default page header contents.</jc>
 		header={
@@ -19416,38 +19438,23 @@
 			<js>"$C{REST/header}"</js>  <jc>// Extra header HTML defined in external config file.</jc>
 		},
 	
-		<jc>// Default stylesheet to use for the page.
-		// Can be overridden from external config file.
-		// Default is DevOps look-and-feel (aka Depression look-and-feel).</jc>
-		stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>,
-	
 		<jc>// Default contents to add to the &lt;head&gt; section of the HTML page.
 		// Use it to add a favicon link to the page.</jc>
 		head={
 			<js>"&lt;link rel='icon' href='$U{$C{REST/favicon}}'/&gt;"</js>
 		},
 	
+		<jc>// Basic page navigation links.</jc>
+		navlinks={
+			<js>"up: request:/.."</js>
+		},
+		
 		<jc>// No default page footer contents.
 		// Can be overridden from external config file.</jc>
 		footer=<js>"$C{REST/footer}"</js>
 	)
 	
 	<jk>public interface</jk> BasicUniversalConfig {}
-	</p>
-	<p class='bcode w800'>			
-	<ja>@Rest</ja>(...)
-	<ja>@HtmlDocConfig</ja>(
-		<jc>// Basic page navigation links.</jc>
-		navlinks={
-			<js>"up: request:/.."</js>,
-			<js>"options: servlet:/?method=OPTIONS"</js>
-		}
-	)
-	<jk>public abstract class</jk> BasicRestServlet <jk>extends</jk> RestServlet <jk>implements</jk> BasicRestOperations, BasicJsonConfig {...}
-	</p>
-	<p class='bcode w800'>			
-	<ja>@Rest</ja>
-	<jk>public abstract class</jk> BasicRestServletGroup <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicGroupOperations {...}
 	</p>
 	<p class='bcode w800'>			
 	<ja>@Rest</ja>(...)
@@ -19471,9 +19478,10 @@
 			<js>"	&lt;p&gt;All content on pages in the UI are serialized POJOs.  In this case, it's a serialized array of beans with 2 properties, 'name' and 'description'.&lt;/p&gt;"</js>,
 			<js>"	&lt;p&gt;Other features (such as this aside) are added through annotations.&lt;/p&gt;"</js>,
 			<js>"&lt;/div&gt;"</js>
-		}
+		},
+		asideFloat=<js>"RIGHT"</js>
 	)
-	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup <jk>implements</jk> BasicUniversalConfig {...}
+	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup <jk>implements</jk> BasicUniversalJenaConfig {...}
 	</p>
 	
 	<p>
@@ -19519,7 +19527,7 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlStylesheets' id='juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlStylesheets'>6.17.5 - Stylesheets</a><span class='update'>updated: 8.1.0,<b>9.0.0</b>, <b><red>todo</red></b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlStylesheets' id='juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlStylesheets'>6.17.5 - Stylesheets</a><span class='update'>updated: 8.1.0,<b>9.0.0</b></span></h4>
 <div class='topic'><!-- START: 6.17.5 - juneau-rest-server.jrs.HtmlDocAnnotation.jrs.HtmlStylesheets -->
 <div class='topic'>
 	<p>
@@ -19551,31 +19559,25 @@
 		The stylesheet URL is controlled by the {@link org.apache.juneau.html.annotation.HtmlDocConfig#stylesheet() @HtmlDocConfig(stylesheet)} annotation.
 		The {@link org.apache.juneau.rest.config.BasicUniversalConfig} interface defines the stylesheet served up as a static file:
 	<p class='bcode w800'>
-	<ja>@Rest</ja>(
-		staticFiles={<js>"styles:styles"</js>}
-	)
 	<ja>@HtmlDocConfig</ja>(
-		stylesheet=<js>"$C{REST/stylesheet,servlet:/styles/devops.css}"</js>
+		stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>
 	)
-	<jk>public abstract class</jk> BasicRestServlet {...}
+	<jk>public interface</jk> BasicUniversalConfig {...}
 	</p>		
 	<p>
-		The <js>"$C{REST/stylesheet,servlet:/styles/devops.css}"</js> variable says to use the URI defined
+		The <js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js> variable says to use the URI defined
 		in your servlet's config file, if there is one, and to default to serving up the file
-		<c>org/apache/juneau/rest/styles/devops.css</c>.
+		<c>htdocs/themes/devops.css</c> which is in the resource folder of the <c>juneau-rest-server</c> module.
 	</p>
 	<p>
 		To provide your own stylesheet, simply override the stylesheet attribute and point to a different
 		file:	
 	</p>
 	<p class='bcode w800'>
-	<ja>@Rest</ja>(
-		staticFiles={<js>"my-styles:my-styles"</js>}
-	)
 	<ja>@HtmlDocConfig</ja>(
-		stylesheet=<js>"servlet:/my-styles/my-style.css}"</js>
+		stylesheet=<js>"servlet:/htdocs/themes/my-style.css}"</js>
 	)
-	<jk>public class</jk> MyResourceBaseClass <jk>extends</jk> BasicRestServlet {...}
+	<jk>public class</jk> MyResourceBaseClass <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {...}
 	</p>
 	<p>
 		You can try out different stylesheets by passing in a <c>stylesheet</c> attribute in the request
@@ -19600,10 +19602,10 @@
 			<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
 		}
 	)
-	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup {...}
+	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup <jk>implements</jk> BasicUniversalConfig {...}
 	</p>
 	<p>
-		The <l>StyleMenuItem</l> is a widget that extends from {@link org.apache.juneau.rest.widget.MenuItemWidget}, a
+		The <c>StyleMenuItem</c> is a widget that extends from {@link org.apache.juneau.rest.widget.MenuItemWidget}, a
 		specialized widget for creating pop-up menus.
 		In the case of <l>StyleMenuItem</l>, it's simply returning a list of links wrapped in a div tag:
 	</p>
@@ -23786,7 +23788,7 @@
 		<jc>// Our REST resource to test.</jc>
 		<jc>// Simply echos the response.</jc>
 		<ja>@Rest</ja>
-		<jk>public static class</jk> EchoRest <jk>implements</jk> BasicJsonRest {
+		<jk>public static class</jk> EchoRest <jk>implements</jk> BasicRestServlet {
 
 			<ja>@RestPut</ja>
 			<jk>public</jk> MyBean echo(<ja>@Body</ja> MyBean <jv>bean</jv>) {

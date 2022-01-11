@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Stylesheets', updated:'8.1.0,9.0.0', flags:'todo'}
+{title:'Stylesheets', updated:'8.1.0,9.0.0'}
 
 <div class='topic'>
 	<p>
@@ -45,31 +45,25 @@
 		The stylesheet URL is controlled by the {@link oaj.html.annotation.HtmlDocConfig#stylesheet() @HtmlDocConfig(stylesheet)} annotation.
 		The {@link oajr.config.BasicUniversalConfig} interface defines the stylesheet served up as a static file:
 	<p class='bcode w800'>
-		|	<ja>@Rest</ja>(
-		|		staticFiles={<js>"styles:styles"</js>}
-		|	)
 		|	<ja>@HtmlDocConfig</ja>(
-		|		stylesheet=<js>"$C{REST/stylesheet,servlet:/styles/devops.css}"</js>
+		|		stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>
 		|	)
-		|	<jk>public abstract class</jk> BasicRestServlet {...}
+		|	<jk>public interface</jk> BasicUniversalConfig {...}
 	</p>		
 	<p>
-		The <js>"$C{REST/stylesheet,servlet:/styles/devops.css}"</js> variable says to use the URI defined
+		The <js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js> variable says to use the URI defined
 		in your servlet's config file, if there is one, and to default to serving up the file
-		<c>org/apache/juneau/rest/styles/devops.css</c>.
+		<c>htdocs/themes/devops.css</c> which is in the resource folder of the <c>juneau-rest-server</c> module.
 	</p>
 	<p>
 		To provide your own stylesheet, simply override the stylesheet attribute and point to a different
 		file:	
 	</p>
 	<p class='bcode w800'>
-		|	<ja>@Rest</ja>(
-		|		staticFiles={<js>"my-styles:my-styles"</js>}
-		|	)
 		|	<ja>@HtmlDocConfig</ja>(
-		|		stylesheet=<js>"servlet:/my-styles/my-style.css}"</js>
+		|		stylesheet=<js>"servlet:/htdocs/themes/my-style.css"</js>
 		|	)
-		|	<jk>public class</jk> MyResourceBaseClass <jk>extends</jk> BasicRestServlet {...}
+		|	<jk>public class</jk> MyResourceBaseClass <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {...}
 	</p>
 	<p>
 		You can try out different stylesheets by passing in a <c>stylesheet</c> attribute in the request
@@ -94,10 +88,10 @@
 		|			<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
 		|		}
 		|	)
-		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup {...}
+		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup <jk>implements</jk> BasicUniversalConfig {...}
 	</p>
 	<p>
-		The <l>StyleMenuItem</l> is a widget that extends from {@link oajr.widget.MenuItemWidget}, a
+		The <c>StyleMenuItem</c> is a widget that extends from {@link oajr.widget.MenuItemWidget}, a
 		specialized widget for creating pop-up menus.
 		In the case of <l>StyleMenuItem</l>, it's simply returning a list of links wrapped in a div tag:
 	</p>

@@ -46,7 +46,7 @@
 		nothing keeps you from using it in an arbitrary location in the page).
 	</p>
 	<p>
-		The script specifies a <js>"menuClick(element)"</js> function that toggles the visibility of the next sibling of the element.
+		The script specifies a <c>menuClick(element)</c> function that toggles the visibility of the next sibling of the element.
 	</p>
 	<p>
 		Subclasses implement the following two methods:
@@ -69,7 +69,7 @@
 		|	};
 		|
 		|	<ja>@Override</ja>
-		|	<jk>public</jk> Div getLabel() {
+		|	<jk>public</jk> Div getContent() {
 		|		<jk>return</jk> Html5Builder.<jsm>div</jsm>(<js>"Surprise!"</js>).style(<js>"color:red"</js>);
 		|	};
 	</p>
