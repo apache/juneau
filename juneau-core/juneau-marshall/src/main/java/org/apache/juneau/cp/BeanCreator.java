@@ -13,8 +13,6 @@
 package org.apache.juneau.cp;
 
 import static java.util.stream.Collectors.*;
-import static org.apache.juneau.reflect.ReflectFlags.*;
-
 import java.util.*;
 import java.util.function.*;
 
@@ -327,7 +325,8 @@ public class BeanCreator<T> {
 	}
 
 	private boolean isStaticCreateMethod(MethodInfo m, Class<?> type) {
-		return m.isAll(STATIC, NOT_DEPRECATED)
+		return m.isStatic()
+			&& m.isNotDeprecated()
 			&& m.hasReturnType(type)
 			&& m.hasNoAnnotation(BeanIgnore.class)
 			&& m.hasName("create");

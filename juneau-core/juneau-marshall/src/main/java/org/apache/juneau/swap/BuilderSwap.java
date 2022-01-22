@@ -13,7 +13,6 @@
 package org.apache.juneau.swap;
 
 import java.lang.reflect.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.reflect.*;
@@ -196,7 +195,7 @@ public class BuilderSwap<T,B> {
 
 		ClassInfo pci = ClassInfo.of(objectClass);
 
-		builderCreateMethod = pci.getBuilderCreateMethod().orElse(null);
+		builderCreateMethod = getBuilderCreateMethod(pci);
 
 		if (builderClass == null && builderCreateMethod != null)
 			builderClass = builderCreateMethod.getReturnType().inner();
@@ -229,5 +228,21 @@ public class BuilderSwap<T,B> {
 			return null;
 
 		return new BuilderSwap(objectClass, builderClass, objectConstructor == null ? null : objectConstructor.inner(), builderConstructor == null ? null : builderConstructor.inner(), builderCreateMethod, objectCreateMethod);
+	}
+
+	private static MethodInfo getBuilderCreateMethod(ClassInfo c) {
+		return c.getPublicMethod(
+			x -> x.isStatic()
+			&& x.hasName("create")
+			&& ! x.hasReturnType(c)
+			&& hasConstructorThatTakesType(c, x.getReturnType())
+		);
+	}
+
+	private static boolean hasConstructorThatTakesType(ClassInfo c, ClassInfo argType) {
+		return c.getPublicConstructor(
+			x -> x.hasNumParams(1)
+			&& x.hasParamTypes(argType)
+		) != null;
 	}
 }

@@ -582,13 +582,6 @@ public class ClassInfoTest {
 		check("E5()", e5.getConstructor(Visibility.PUBLIC));
 	}
 
-	@Test
-	public void getDeclaredConstructor() {
-		check("E1()", e1.getDeclaredConstructor());
-		check("E1(int)", e1.getDeclaredConstructor(int.class));
-		check(null, e1.getDeclaredConstructor(Object.class));
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Fields
 	//-----------------------------------------------------------------------------------------------------------------

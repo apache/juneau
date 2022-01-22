@@ -18,14 +18,12 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.reflect.ReflectionFilters.*;
-import static java.util.Arrays.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
-import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -74,7 +72,7 @@ public final class ClassInfo {
 	private ClassInfo[] interfaces, declaredInterfaces, parents, allParents;
 	private MethodInfo[] publicMethods, declaredMethods, allMethods, allMethodsParentFirst;
 	private MethodInfo repeatedAnnotationMethod;
-	private ConstructorInfo[] publicConstructors, protectedConstructors, declaredConstructors;
+	private ConstructorInfo[] publicConstructors, declaredConstructors;
 	private FieldInfo[] publicFields, declaredFields, allFields, allFieldsParentFirst;
 	private int dim = -1;
 	private ClassInfo componentType;
@@ -538,22 +536,6 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Returns the method with the specified method name and fuzzy argument types.
-	 *
-	 * @param name The method name (e.g. <js>"toString"</js>).
-	 * @param args The exact argument types.
-	 * @return
-	 *  The method with the specified method name and argument types, or <jk>null</jk> if not found.
-	 */
-	public MethodInfo getMethodFuzzy(String name, Object...args) {
-		Class<?>[] ac = ClassUtils.getClasses(args);
-		for (MethodInfo mi : _getAllMethods())
-			if (mi.hasName(name) && mi.argsOnlyOfType(ac))
-				return mi;
-		return null;
-	}
-
-	/**
 	 * Returns all declared methods on this class and all parent classes.
 	 *
 	 *
@@ -671,30 +653,16 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Returns all the public constructors defined on this class.
+	 * Returns the public constructor that matches the specified predicate.
 	 *
-	 * @return All public constructors defined on this class.
+	 * @param predicate The predicate.
+	 * @return The public constructor that matches the specified predicate.
 	 */
-	public Stream<ConstructorInfo> publicConstructors() {
-		return stream(_getPublicConstructors());
-	}
-
-	/**
-	 * Returns all the public constructors defined on this class.
-	 *
-	 * @return All public constructors defined on this class.
-	 */
-	public List<ConstructorInfo> getProtectedConstructors() {
-		return new UnmodifiableArray<>(_getProtectedConstructors());
-	}
-
-	/**
-	 * Returns all the public constructors defined on this class.
-	 *
-	 * @return All public constructors defined on this class.
-	 */
-	public Stream<ConstructorInfo> protectedConstructors() {
-		return stream(_getProtectedConstructors());
+	public ConstructorInfo getPublicConstructor(Predicate<ConstructorInfo> predicate) {
+		for (ConstructorInfo ci : _getPublicConstructors())
+			if (predicate.test(ci))
+				return ci;
+		return null;
 	}
 
 	/**
@@ -717,33 +685,19 @@ public final class ClassInfo {
 	 * @param test The test that the public constructor must pass.
 	 * @return The first matching public constructor.
 	 */
-	public Optional<ConstructorInfo> getPublicConstructor(Predicate<ExecutableInfo> test) {
-		return Arrays.stream(_getPublicConstructors()).filter(test).findFirst();
-	}
-
-	/**
-	 * Returns the public constructor that passes the specified predicate test.
-	 *
-	 * <p>
-	 * The {@link ReflectionFilters} class has predefined predicates that can be used for testing.
-	 *
-	 * @param test The test that the public constructor must pass.
-	 * @return The first matching public constructor.
-	 */
 	public Optional<ConstructorInfo> getConstructor(Predicate<ExecutableInfo> test) {
 		return Arrays.stream(_getDeclaredConstructors()).filter(test).findFirst();
 	}
 
 	/**
-	 * Returns the declared constructor with the specified argument types.
+	 * Returns the declared constructor that matches the specified predicate.
 	 *
-	 * @param args The exact argument types.
-	 * @return
-	 *  The declared constructor with the specified argument types, or <jk>null</jk> if not found.
+	 * @param predicate The predicate to match.
+	 * @return The declared constructor that matches the specified predicate.
 	 */
-	public ConstructorInfo getDeclaredConstructor(Class<?>...args) {
+	public ConstructorInfo getDeclaredConstructor(Predicate<ConstructorInfo> predicate) {
 		for (ConstructorInfo ci : _getDeclaredConstructors())
-			if (ci.hasParamTypes(args))
+			if (predicate.test(ci))
 				return ci;
 		return null;
 	}
@@ -831,18 +785,6 @@ public final class ClassInfo {
 		return publicConstructors;
 	}
 
-	private ConstructorInfo[] _getProtectedConstructors() {
-		if (protectedConstructors == null) {
-			Constructor<?>[] cc = c == null ? new Constructor[0] : c.getDeclaredConstructors();
-			List<ConstructorInfo> l = new ArrayList<>(cc.length);
-			for (Constructor<?> ccc : cc)
-				if (Modifier.isProtected(ccc.getModifiers()))
-					l.add(ConstructorInfo.of(this, ccc));
-			l.sort(null);
-			protectedConstructors = l.toArray(new ConstructorInfo[l.size()]);
-		}
-		return protectedConstructors;
-	}
 	private ConstructorInfo[] _getDeclaredConstructors() {
 		if (declaredConstructors == null) {
 			Constructor<?>[] cc = c == null ? new Constructor[0] : c.getDeclaredConstructors();

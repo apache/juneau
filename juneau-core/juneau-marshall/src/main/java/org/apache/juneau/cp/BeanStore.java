@@ -158,21 +158,21 @@ public class BeanStore {
 			ClassInfo c = ClassInfo.ofc(type);
 
 			MethodInfo m = c.getDeclaredMethod(
-				x -> x.isPublic() 
-				&& x.hasNoParams() 
-				&& x.isStatic() 
+				x -> x.isPublic()
+				&& x.hasNoParams()
+				&& x.isStatic()
 				&& x.hasName("getInstance")
 			);
 			if (m != null)
 				return m.invoke(null);
 
-			Optional<ConstructorInfo> ci = c.publicConstructors().filter(x -> x.canAccept(this)).findFirst();
-			if (ci.isPresent())
-				return ci.get().invoke(this);
+			ConstructorInfo ci = c.getPublicConstructor(x -> x.canAccept(this));
+			if (ci != null)
+				return ci.invoke(this);
 
-			ci = c.protectedConstructors().filter(x -> x.canAccept(this)).findFirst();
-			if (ci.isPresent())
-				return ci.get().accessible().invoke(this);
+			ci = c.getDeclaredConstructor(x -> x.isProtected() && x.canAccept(this));
+			if (ci != null)
+				return ci.accessible().invoke(this);
 
 			throw runtimeException("Could not find a way to instantiate class {0}", type);
 		}
