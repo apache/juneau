@@ -48,12 +48,13 @@ public class RestChildren {
 	}
 
 	/**
-	 * Creates a new builder for this object.
+	 * Static creator.
 	 *
+	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -70,30 +71,17 @@ public class RestChildren {
 
 		/**
 		 * Constructor.
-		 */
-		protected Builder() {
-			super(RestChildren.class);
-			list = AList.create();
-		}
-
-		/**
-		 * Copy constructor.
 		 *
-		 * @param copyFrom The builder being copied.
+		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(Builder copyFrom) {
-			super(copyFrom);
-			list = AList.of(copyFrom.list);
+		protected Builder(BeanStore beanStore) {
+			super(RestChildren.class, beanStore);
+			list = AList.create();
 		}
 
 		@Override /* BeanBuilder */
 		protected RestChildren buildDefault() {
 			return new RestChildren(this);
-		}
-
-		@Override /* BeanBuilder */
-		public Builder copy() {
-			return new Builder(this);
 		}
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -114,20 +102,8 @@ public class RestChildren {
 		// <FluentSetters>
 
 		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder outer(Object value) {
-			super.outer(value);
 			return this;
 		}
 

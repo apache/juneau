@@ -88,7 +88,7 @@ import org.apache.juneau.serializer.*;
 public class ThrowableAssertion<T extends Throwable> extends FluentThrowableAssertion<T,ThrowableAssertion<T>> {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -102,6 +102,10 @@ public class ThrowableAssertion<T extends Throwable> extends FluentThrowableAsse
 	public static <V extends Throwable> ThrowableAssertion<V> create(V value) {
 		return new ThrowableAssertion<>(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

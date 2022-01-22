@@ -64,6 +64,9 @@ import org.apache.juneau.serializer.*;
  * <h5 class='topic'>Transform Methods</h5>
  * 	<ul>
  * 		<li class='jm'>{@link FluentArrayAssertion#asStrings()}
+ * 		<li class='jm'>{@link FluentArrayAssertion#asStrings(Function)}
+ * 		<li class='jm'>{@link FluentArrayAssertion#asCdl()}
+ * 		<li class='jm'>{@link FluentArrayAssertion#asCdl(Function)}
  * 		<li class='jm'>{@link FluentArrayAssertion#asBeanList()}
  * 		<li class='jm'>{@link FluentArrayAssertion#item(int)}
  * 		<li class='jm'>{@link FluentArrayAssertion#sorted()}
@@ -97,6 +100,10 @@ import org.apache.juneau.serializer.*;
 @FluentSetters(returns="FluentArrayAssertion<E,R>")
 public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final Messages MESSAGES = Messages.of(FluentArrayAssertion.class, "Messages");
 	private static final String
 		MSG_arrayWasNotEmpty = MESSAGES.getString("arrayWasNotEmpty"),
@@ -109,7 +116,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 		MSG_arrayContainedNonMatchingValueAt = MESSAGES.getString("arrayContainedNonMatchingValueAt");
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -169,6 +176,37 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 */
 	public FluentStringListAssertion<R> asStrings() {
 		return new FluentStringListAssertion<>(this, valueIsNull() ? null : stream(value()).map(x -> stringify(x)).collect(Collectors.toList()), returns());
+	}
+
+	/**
+	 * Runs the stringify function against all values in this list and returns it as a fluent string list assertion.
+	 *
+	 * @param function The function to apply to all values in this list.
+	 * @return A new fluent string list assertion.  Never <jk>null</jk>.
+	 */
+	public FluentStringListAssertion<R> asStrings(Function<E,String> function) {
+		List<String> l = valueIsNull() ? null : stream(value()).map(x -> function.apply(x)).collect(Collectors.toList());
+		return new FluentStringListAssertion<>(this, l, returns());
+	}
+
+	/**
+	 * Converts the entries in this list to a simple comma-delimited list and returns the value as a fluent string assertion.
+	 *
+	 * @return A fluent string assertion.  Never <jk>null</jk>.
+	 */
+	public FluentStringAssertion<R> asCdl() {
+		return new FluentStringAssertion<>(this, valueIsNull() ? null : StringUtils.join(value(), ','), returns());
+	}
+
+	/**
+	 * Converts the entries to strings using the specified stringify function, combines them into a simple comma-delimited list, and returns the value as a fluent string assertion.
+	 *
+	 * @param function The function to apply to all values in this list.
+	 * @return A fluent string assertion.  Never <jk>null</jk>.
+	 */
+	public FluentStringAssertion<R> asCdl(Function<E,String> function) {
+		List<String> l = valueIsNull() ? null : stream(value()).map(x -> function.apply(x)).collect(Collectors.toList());
+		return new FluentStringAssertion<>(this, join(l, ','), returns());
 	}
 
 	/**
@@ -260,7 +298,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * Asserts that at least one value in the array passes the specified test.
 	 *
 	 * @param test The predicate test.
-	 * @return The object to return after the test.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R any(Predicate<E> test) throws AssertionError {
@@ -275,7 +313,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * Asserts that all values in the array passes the specified test.
 	 *
 	 * @param test The predicate test.
-	 * @return The object to return after the test.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R all(Predicate<E> test) throws AssertionError {
@@ -289,7 +327,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	/**
 	 * Asserts that the collection exists and is empty.
 	 *
-	 * @return The object to return after the test.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isEmpty() throws AssertionError {
@@ -301,7 +339,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	/**
 	 * Asserts that the collection exists and is not empty.
 	 *
-	 * @return The object to return after the test.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isNotEmpty() throws AssertionError {
@@ -314,7 +352,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * Asserts that the collection exists and is the specified size.
 	 *
 	 * @param size The expected size.
-	 * @return The object to return after the test.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isSize(int size) throws AssertionError {
@@ -327,7 +365,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * Asserts that the array contains the expected value.
 	 *
 	 * @param entry The value to check for.
-	 * @return The object to return after the test.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R contains(E entry) throws AssertionError {
@@ -341,7 +379,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * Asserts that the array does not contain the expected value.
 	 *
 	 * @param entry The value to check for.
-	 * @return The object to return after the test.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R doesNotContain(E entry) throws AssertionError {

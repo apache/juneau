@@ -64,6 +64,9 @@ import org.apache.juneau.serializer.*;
  * <h5 class='topic'>Transform Methods</h5>
  * 	<ul>
  * 		<li class='jm'>{@link FluentArrayAssertion#asStrings()}
+ * 		<li class='jm'>{@link FluentArrayAssertion#asStrings(Function)}
+ * 		<li class='jm'>{@link FluentArrayAssertion#asCdl()}
+ * 		<li class='jm'>{@link FluentArrayAssertion#asCdl(Function)}
  * 		<li class='jm'>{@link FluentArrayAssertion#asBeanList()}
  * 		<li class='jm'>{@link FluentArrayAssertion#item(int)}
  * 		<li class='jm'>{@link FluentArrayAssertion#sorted()}
@@ -97,7 +100,7 @@ import org.apache.juneau.serializer.*;
 public class ArrayAssertion<E> extends FluentArrayAssertion<E,ArrayAssertion<E>> {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -111,6 +114,10 @@ public class ArrayAssertion<E> extends FluentArrayAssertion<E,ArrayAssertion<E>>
 	public static <E> ArrayAssertion<E> create(E[] value) {
 		return new ArrayAssertion<>(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

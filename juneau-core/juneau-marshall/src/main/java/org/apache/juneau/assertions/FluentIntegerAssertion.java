@@ -89,7 +89,7 @@ import org.apache.juneau.serializer.*;
 public class FluentIntegerAssertion<R> extends FluentComparableAssertion<Integer,R> {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**

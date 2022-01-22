@@ -80,7 +80,7 @@ import org.apache.juneau.serializer.*;
 public class ObjectAssertion<T> extends FluentObjectAssertion<T,ObjectAssertion<T>> {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -94,6 +94,10 @@ public class ObjectAssertion<T> extends FluentObjectAssertion<T,ObjectAssertion<
 	public static <T> ObjectAssertion<T> create(T value) {
 		return new ObjectAssertion<>(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

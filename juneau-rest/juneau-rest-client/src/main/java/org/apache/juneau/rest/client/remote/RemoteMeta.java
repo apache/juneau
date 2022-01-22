@@ -80,8 +80,11 @@ public class RemoteMeta {
 			headersBuilder.append(stringHeader(versionHeader, clientVersion));
 
 		AMap<Method,RemoteOperationMeta> operations = AMap.create();
-		for (MethodInfo m : ci.getPublicMethods())
-			operations.put(m.inner(), new RemoteOperationMeta(path, m.inner(), "GET"));
+		String path2 = path;
+		ci.getPublicMethods(
+			x -> true, 
+			x -> operations.put(x.inner(), new RemoteOperationMeta(path2, x.inner(), "GET"))
+		);
 
 		this.operations = operations.unmodifiable();
 		this.headers = headersBuilder.build();

@@ -15,19 +15,98 @@ package org.apache.juneau.cp;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
 
-import java.lang.annotation.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.reflect.*;
 
 /**
- * Utility class for creating beans.
+ * Utility class for creating beans through constructors, creator methods, and builders.
+ *
+ * <p>
+ * Uses a {@link BeanStore} to find available ways to construct beans via injection of beans from the store.
+ *
+ * <p>
+ * This class is instantiated through the following method:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link BeanStore}
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link BeanStore#createBean(Class)}
+ * 		</ul>
+ * 	</li>
+ * </ul>
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// Construct and throw a RuntimeException using a bean store.</jc>
+ * 	<jk>throw</jk> BeanStore
+ * 		.<jsm>create</jsm>()
+ * 		.build()
+ * 		.addBean(Throwable.<jk>class</jk>, <jv>cause</jv>)
+ * 		.addBean(String.<jk>class</jk>, <jv>msg</jv>)
+ * 		.addBean(Object[].<jk>class</jk>, <jv>args</jv>)
+ * 		.createBean(RuntimeException.<jk>class</jk>)
+ * 		.run();
+ * </p>
+ *
+ * <p>
+ * Looks for the following methods for creating a bean:
+ * <ol class='spaced-list'>
+ * 	<li>Looks for a singleton no-arg method of the form:
+ * 		<p class='bcode w800'>
+ * 	<jk>public static</jk> MyClass <jsm>getInstance</jsm>();
+ * 		</p>
+ * 		<ul>
+ * 			<li>Deprecated and {@link BeanIgnore @BeanIgnore-annotated} methods are ignored.
+ * 			<li>Enabled by {@linnk #findSingleton()}.
+ *		</ul>
+ * 	<li>Looks for a static creator method of the form:
+ * 		<p class='bcode w800'>
+ * 	<jk>public static</jk> MyClass <jsm>create</jsm>(<ja>&lt;args&gt;</ja>);
+ * 		</p>
+ * 		<ul>
+ * 			<li>All arguments except {@link Optional} and {@link List} parameters must have beans available in the store.
+ * 			<li>If multiple methods are found, the one with the most matching parameters is used.
+ * 			<li>Deprecated and {@link BeanIgnore @BeanIgnore-annotated} methods are ignored.
+ * 		</ul>
+ * 	<li>Looks for a public constructor of the form:
+ * 		<p class='bcode w800'>
+ * 	<jk>public</jk> MyClass(<ja>&lt;args&gt;</ja>);
+ * 		</p>
+ * 		<ul>
+ * 			<li>All arguments except {@link Optional} and {@link List} parameters must have beans available in the store.
+ * 			<li>If multiple methods are found, the one with the most matching parameters is used.
+ * 			<li>Deprecated and {@link BeanIgnore @BeanIgnore-annotated} methods are ignored.
+ *		</ul>
+ * 	<li>Looks for a protected constructor of the form:
+ * 		<p class='bcode w800'>
+ * 	<jk>protected</jk> MyClass(<ja>&lt;args&gt;</ja>);
+ * 		</p>
+ * 		<ul>
+ * 			<li>All arguments except {@link Optional} and {@link List} parameters must have beans available in the store.
+ * 			<li>If multiple methods are found, the one with the most matching parameters is used.
+ * 			<li>Deprecated and {@link BeanIgnore @BeanIgnore-annotated} methods are ignored.
+ *		</ul>
+ * 	<li>Looks for a static no-arg create method that returns a builder object that can be passed in to a protected constructor.
+ * 		<p class='bcode w800'>
+ * 	<jk>public static</jk> MyClass.Builder <jsm>create</jsm>();
+ *
+ * 	<jk>protected</jk> MyClass(MyClass.Builder <jv>builder</jv>);
+ * 		</p>
+ * 		<ul>
+ * 			<li>Deprecated and {@link BeanIgnore @BeanIgnore-annotated} methods are ignored.
+ *		</ul>
+ * </ol>
+ *
+ * <ul class='spaced-list'>
+ * 	<li class='note'>The {@link #builder(Class,Object)} method can be used to set an existing initialized builder object to pass to a constructor.
+ * 	<li class='note'>An existing initialized builder can be set using the {@link #builder(Class,Object)} method.
+ * </ul>
  *
  * <ul class='seealso'>
+ * 	<li class='jc'>{@link BeanStore}
  * 	<li class='extlink'>{@source}
  * </ul>
  *
@@ -35,53 +114,20 @@ import org.apache.juneau.reflect.*;
  */
 public class BeanCreator<T> {
 
+	private final BeanStore store;
 	private ClassInfo type;
-	private BeanStore store = BeanStore.INSTANCE;
-	private Object outer;
 	private Object builder;
-	private boolean findSingleton;
 	private T impl;
-
-	/**
-	 * Static creator.
-	 *
-	 * @param type The bean type being created.
-	 * @return A new creator object.
-	 */
-	public static <T> BeanCreator<T> of(Class<T> type) {
-		return new BeanCreator<>(type);
-	}
 
 	/**
 	 * Constructor.
 	 *
 	 * @param type The bean type being created.
+	 * @param store The bean store creating this creator.
 	 */
-	protected BeanCreator(Class<T> type) {
+	protected BeanCreator(Class<T> type, BeanStore store) {
 		this.type = ClassInfo.ofc(type);
-	}
-
-	/**
-	 * Copy constructor.
-	 *
-	 * @param copyFrom The creator being copied.
-	 */
-	protected BeanCreator(BeanCreator<T> copyFrom) {
-		type = copyFrom.type;
-		store = copyFrom.store;
-		outer = copyFrom.outer;
-		builder = copyFrom.builder;
-		findSingleton = copyFrom.findSingleton;
-		impl = copyFrom.impl;
-	}
-
-	/**
-	 * Creates a copy of this bean creator.
-	 *
-	 * @return A copy of this bean creator.
-	 */
-	public BeanCreator<T> copy() {
-		return new BeanCreator<>(this);
+		this.store = BeanStore.of(store, store.outer.orElse(null));
 	}
 
 	/**
@@ -108,47 +154,26 @@ public class BeanCreator<T> {
 		impl = (T)value;
 		return this;
 	}
-	/**
-	 * Specifies a bean store for looking up matching parameters on constructors and static creator methods.
-	 *
-	 * @param value The value for this setting.
-	 * @return This object.
-	 */
-	public BeanCreator<T> store(BeanStore value) {
-		if (value != null)
-			store = value;
-		return this;
-	}
-
-	/**
-	 * Specifies the outer "this" parameter to an inner class constructor.
-	 *
-	 * @param value The value for this setting.
-	 * @return This object.
-	 */
-	public BeanCreator<T> outer(Object value) {
-		outer = value;
-		return this;
-	}
 
 	/**
 	 * Specifies a builder object for the bean type.
 	 *
+	 * <ul class='notes'>
+	 * 	<li class='note'>When specified, we don't look for a static creator method.
+	 * </ul>
+	 *
+	 * @param type The class type of the builder.
 	 * @param value The value for this setting.
 	 * @return This object.
 	 */
-	public BeanCreator<T> builder(Object value) {
+	@SuppressWarnings("unchecked")
+	public <B> BeanCreator<T> builder(Class<B> type, B value) {
 		builder = value;
-		return this;
-	}
-
-	/**
-	 * Specifies to look for the existence of a <c>getInstance()</c> method that returns a singleton.
-	 *
-	 * @return This object.
-	 */
-	public BeanCreator<T> findSingleton() {
-		findSingleton = true;
+		Class<?> t = value.getClass();
+		do {
+			store.add((Class<T>)t, (T)value);
+			t = t.getSuperclass();
+		} while(t != null && ! t.equals(type));
 		return this;
 	}
 
@@ -167,11 +192,34 @@ public class BeanCreator<T> {
 
 		String found = null;
 
+		// Look for getInstance(Builder).
+		if (builder != null) {
+			MethodInfo m = type.getPublicMethod(
+				x -> x.isStatic()
+				&& x.isNotDeprecated()
+				&& x.getParamCount() == 1
+				&& x.getParam(0).canAccept(builder)
+				&& x.hasReturnType(type)
+				&& x.hasNoAnnotation(BeanIgnore.class)
+				&& x.hasName("getInstance")
+			);
+			if (m != null)
+				return m.invoke(null, builder);
+		}
+
 		// Look for getInstance().
-		if (builder == null || findSingleton)
-			for (MethodInfo m : type.getPublicMethods())
-				if (isSingletonMethod(m))
-					return m.invoke(null);
+		if (builder == null) {
+			MethodInfo m = type.getPublicMethod(
+				x -> x.isStatic()
+				&& x.isNotDeprecated()
+				&& x.getParamCount() == 0
+				&& x.hasReturnType(type)
+				&& x.hasNoAnnotation(BeanIgnore.class)
+				&& x.hasName("getInstance")
+			);
+			if (m != null)
+				return m.invoke(null);
+		}
 
 		if (builder == null) {
 			// Look for static creator methods.
@@ -183,7 +231,7 @@ public class BeanCreator<T> {
 			for (MethodInfo m : type.getPublicMethods()) {
 				if (isStaticCreateMethod(m)) {
 					found = "STATIC_CREATOR";
-					if (hasAllParams(m.getParams())) {
+					if (store.hasAllParams(m)) {
 						if (m.getParamCount() > matchedCreatorParams) {
 							matchedCreatorParams = m.getParamCount();
 							matchedCreator = m;
@@ -193,7 +241,7 @@ public class BeanCreator<T> {
 			}
 
 			if (matchedCreator != null)
-				return matchedCreator.invoke(null, getParams(matchedCreator.getParams()));
+				return matchedCreator.invoke(null, store.getParams(matchedCreator));
 		}
 
 		if (type.isInterface())
@@ -209,7 +257,7 @@ public class BeanCreator<T> {
 		for (ConstructorInfo cc : type.getPublicConstructors()) {
 			if (found == null)
 				found = "PUBLIC_CONSTRUCTOR";
-			if (hasAllParams(cc.getParams())) {
+			if (store.hasAllParams(cc)) {
 				if (cc.getParamCount() > matchedConstructorParams) {
 					matchedConstructorParams = cc.getParamCount();
 					matchedConstructor = cc;
@@ -223,7 +271,7 @@ public class BeanCreator<T> {
 				if (cc.isProtected()) {
 					if (found == null)
 						found = "PROTECTED_CONSTRUCTOR";
-					if (hasAllParams(cc.getParams())) {
+					if (store.hasAllParams(cc)) {
 						if (cc.getParamCount() > matchedConstructorParams) {
 							matchedConstructorParams = cc.getParamCount();
 							matchedConstructor = cc.accessible();
@@ -235,18 +283,17 @@ public class BeanCreator<T> {
 
 		// Execute.
 		if (matchedConstructor != null)
-			return matchedConstructor.invoke(getParams(matchedConstructor.getParams()));
+			return matchedConstructor.invoke(store.getParams(matchedConstructor));
 
 		if (builder == null) {
 			// Look for static-builder/protected-constructor pair.
 			for (ConstructorInfo cc2 : type.getDeclaredConstructors()) {
 				if (cc2.getParamCount() == 1 && cc2.isVisible(Visibility.PROTECTED)) {
 					Class<?> pt = cc2.getParam(0).getParameterType().inner();
-					for (MethodInfo m : type.getPublicMethods()) {
-						if (isStaticCreateMethod(m, pt)) {
-							Object builder = m.invoke(null);
-							return cc2.accessible().invoke(builder);
-						}
+					MethodInfo m = type.getPublicMethod(x -> isStaticCreateMethod(x, pt));
+					if (m != null) {
+						Object builder = m.invoke(null);
+						return cc2.accessible().invoke(builder);
 					}
 				}
 			}
@@ -256,11 +303,12 @@ public class BeanCreator<T> {
 		if (found == null) {
 			msg = "No public/protected constructors found";
 		} else if (found.equals("STATIC_CREATOR")) {
-			msg = "Static creator found but could not find prerequisites: " + type.getPublicMethods().stream().filter(x -> isStaticCreateMethod(x)).map(x -> getMissingParams(x.getParams())).sorted().collect(joining(" or "));
+
+			msg = "Static creator found but could not find prerequisites: " + type.getPublicMethods().stream().filter(x -> isStaticCreateMethod(x)).map(x -> store.getMissingParams(x)).sorted().collect(joining(" or "));
 		} else if (found.equals("PUBLIC_CONSTRUCTOR")) {
-			msg = "Public constructor found but could not find prerequisites: " + type.getPublicConstructors().stream().map(x -> getMissingParams(x.getParams())).sorted().collect(joining(" or "));
+			msg = "Public constructor found but could not find prerequisites: " + type.getPublicConstructors().stream().map(x -> store.getMissingParams(x)).sorted().collect(joining(" or "));
 		} else {
-			msg = "Protected constructor found but could not find prerequisites: " + type.getDeclaredConstructors().stream().filter(x -> x.isProtected()).map(x -> getMissingParams(x.getParams())).sorted().collect(joining(" or "));
+			msg = "Protected constructor found but could not find prerequisites: " + type.getDeclaredConstructors().stream().filter(x -> x.isProtected()).map(x -> store.getMissingParams(x)).sorted().collect(joining(" or "));
 		}
 		throw new ExecutableException("Could not instantiate class {0}: {1}.", type.getName(), msg);
 	}
@@ -274,26 +322,6 @@ public class BeanCreator<T> {
 		return ()->run();
 	}
 
-	private boolean hasAllParams(List<ParamInfo> params) {
-		loop: for (int i = 0; i < params.size(); i++) {
-			ParamInfo pi = params.get(i);
-			ClassInfo pt = pi.getParameterType();
-			ClassInfo ptu = pt.unwrap(Optional.class);
-			if (i == 0 && ptu.isInstance(outer))
-				continue loop;
-			if (pt.is(Optional.class))
-				continue loop;
-			if (ptu.isInstance(builder))
-					continue loop;
-			String beanName = findBeanName(pi);
-			if (beanName == null)
-				beanName = ptu.inner().getName();
-			if (! store.hasBean(beanName))
-				return false;
-		}
-		return true;
-	}
-
 	private boolean isStaticCreateMethod(MethodInfo m) {
 		return isStaticCreateMethod(m, type.inner());
 	}
@@ -301,68 +329,7 @@ public class BeanCreator<T> {
 	private boolean isStaticCreateMethod(MethodInfo m, Class<?> type) {
 		return m.isAll(STATIC, NOT_DEPRECATED)
 			&& m.hasReturnType(type)
-			&& (!m.hasAnnotation(BeanIgnore.class))
-			&& m.getSimpleName().equals("create");
-	}
-
-	private boolean isSingletonMethod(MethodInfo m) {
-		return m.isAll(STATIC, NOT_DEPRECATED)
-			&& m.getParamCount() == 0
-			&& m.hasReturnType(type)
-			&& (!m.hasAnnotation(BeanIgnore.class))
-			&& m.getSimpleName().equals("getInstance");
-	}
-
-	private Object[] getParams(List<ParamInfo> params) {
-		Object[] o = new Object[params.size()];
-		for (int i = 0; i < params.size(); i++) {
-			ParamInfo pi = params.get(i);
-			ClassInfo pt = pi.getParameterType();
-			ClassInfo ptu = pt.unwrap(Optional.class);
-			if (i == 0 && ptu.isInstance(outer))
-				o[i] = outer;
-			else {
-				if (pt.isInstance(builder))
-					o[i] = builder;
-				else {
-					String beanName = findBeanName(pi);
-					if (pt.is(Optional.class)) {
-						o[i] = store.getBean(beanName, ptu.inner());
-					} else {
-						o[i] = store.getBean(beanName, ptu.inner()).get();
-					}
-				}
-			}
-		}
-		return o;
-	}
-
-	private String getMissingParams(List<ParamInfo> params) {
-		List<String> l = AList.create();
-		loop: for (int i = 0; i < params.size(); i++) {
-			ParamInfo pi = params.get(i);
-			ClassInfo pt = pi.getParameterType();
-			ClassInfo ptu = pt.unwrap(Optional.class);
-			if (i == 0 && ptu.isInstance(outer))
-				continue loop;
-			if (pt.is(Optional.class))
-				continue loop;
-			String beanName = findBeanName(pi);
-			if (beanName != null) {
-				if (! store.hasBean(beanName))
-					l.add(beanName);
-			} else {
-				if (! store.hasBean(pt.inner()))
-					l.add(pt.inner().getSimpleName());
-			}
-		}
-		return l.stream().sorted().collect(joining(","));
-	}
-
-	private String findBeanName(ParamInfo pi) {
-		Optional<Annotation> namedAnnotation = pi.getAnnotations(Annotation.class).stream().filter(x->x.annotationType().getSimpleName().equals("Named")).findFirst();
-		if (namedAnnotation.isPresent())
-			return AnnotationInfo.of((ClassInfo)null, namedAnnotation.get()).getValue(String.class, "value").orElse(null);
-		return null;
+			&& m.hasNoAnnotation(BeanIgnore.class)
+			&& m.hasName("create");
 	}
 }

@@ -91,8 +91,8 @@ public class Assertions_Test {
 
 	@Test
 	public void a10_assertStream() throws Exception {
-		assertStream(inputStream("foo")).asString().is("foo");
-		assertStream((InputStream)null).asString().isNull();
+		assertBytes(inputStream("foo")).asString().is("foo");
+		assertBytes((InputStream)null).asString().isNull();
 	}
 
 	@Test

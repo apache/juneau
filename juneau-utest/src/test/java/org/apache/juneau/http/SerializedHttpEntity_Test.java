@@ -91,7 +91,7 @@ public class SerializedHttpEntity_Test {
 
 	@Test
 	public void a08_getContent() throws Exception {
-		assertStream(serializedEntity("foo",null).build().getContent()).asString().is("foo");
+		assertBytes(serializedEntity("foo",null).build().getContent()).asString().is("foo");
 	}
 
 	@Test

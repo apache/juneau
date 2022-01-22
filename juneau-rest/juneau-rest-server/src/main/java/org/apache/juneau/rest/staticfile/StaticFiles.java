@@ -43,12 +43,13 @@ public interface StaticFiles extends FileFinder {
 	public abstract class Null implements StaticFiles {}
 
 	/**
-	 * Creates a new builder for this object.
+	 * Static creator.
 	 *
+	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -67,33 +68,19 @@ public interface StaticFiles extends FileFinder {
 
 		/**
 		 * Constructor.
-		 */
-		protected Builder() {
-			super(BasicStaticFiles.class);
-			headers = AList.create();
-			fileFinder = FileFinder.create();
-			mimeTypes = new ExtendedMimetypesFileTypeMap();
-		}
-
-		/**
-		 * Copy constructor.
 		 *
-		 * @param copyFrom The builder being copied.
+		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(Builder copyFrom) {
-			super(copyFrom);
-			headers = AList.of(copyFrom.headers);
-			mimeTypes = copyFrom.mimeTypes;
+		protected Builder(BeanStore beanStore) {
+			super(BasicStaticFiles.class, beanStore);
+			headers = AList.create();
+			fileFinder = FileFinder.create(beanStore);
+			mimeTypes = new ExtendedMimetypesFileTypeMap();
 		}
 
 		@Override /* BeanBuilder */
 		protected StaticFiles buildDefault() {
 			return new BasicStaticFiles(this);
-		}
-
-		@Override /* BeanBuilder */
-		public Builder copy() {
-			return new Builder(this);
 		}
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -220,20 +207,8 @@ public interface StaticFiles extends FileFinder {
 		// <FluentSetters>
 
 		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder outer(Object value) {
-			super.outer(value);
 			return this;
 		}
 

@@ -47,12 +47,13 @@ public class RestOperations {
 	}
 
 	/**
-	 * Creates a new builder.
+	 * Static creator.
 	 *
-	 * @return A new builder.
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -70,32 +71,18 @@ public class RestOperations {
 
 		/**
 		 * Constructor.
+		 *
+		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder() {
-			super(RestOperations.class);
+		protected Builder(BeanStore beanStore) {
+			super(RestOperations.class, beanStore);
 			map = new TreeMap<>();
 			set = ASet.of();
-		}
-
-		/**
-		 * Copy constructor.
-		 *
-		 * @param copyFrom The builder being copied.
-		 */
-		protected Builder(Builder copyFrom) {
-			super(copyFrom);
-			map = new TreeMap<>(copyFrom.map);
-			set = ASet.of(copyFrom.set);
 		}
 
 		@Override /* BeanBuilder */
 		protected RestOperations buildDefault() {
 			return new RestOperations(this);
-		}
-
-		@Override /* BeanBuilder */
-		public Builder copy() {
-			return new Builder(this);
 		}
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -131,20 +118,8 @@ public class RestOperations {
 		// <FluentSetters>
 
 		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder outer(Object value) {
-			super.outer(value);
 			return this;
 		}
 

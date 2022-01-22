@@ -85,7 +85,7 @@ import org.apache.juneau.serializer.*;
 public class BeanAssertion<T> extends FluentBeanAssertion<T,BeanAssertion<T>> {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -99,6 +99,10 @@ public class BeanAssertion<T> extends FluentBeanAssertion<T,BeanAssertion<T>> {
 	public static <T> BeanAssertion<T> create(T value) {
 		return new BeanAssertion<>(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

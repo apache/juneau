@@ -38,21 +38,11 @@ public class RestOpArgList {
 	/**
 	 * Static creator.
 	 *
-	 * @return An empty list.
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
 	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	/**
-	 * Static creator.
-	 *
-	 * @param values The initial contents of the list.
-	 * @return A list initialized with the specified values.
-	 */
-	@SafeVarargs
-	public static Builder of(Class<? extends RestOpArg>...values) {
-		return new Builder().add(values);
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -69,30 +59,17 @@ public class RestOpArgList {
 
 		/**
 		 * Constructor.
-		 */
-		protected Builder() {
-			super(RestOpArgList.class);
-			entries = AList.create();
-		}
-
-		/**
-		 * Copy constructor.
 		 *
-		 * @param copyFrom The builder being copied.
+		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(Builder copyFrom) {
-			super(copyFrom);
-			entries = AList.of(copyFrom.entries);
+		protected Builder(BeanStore beanStore) {
+			super(RestOpArgList.class, beanStore);
+			entries = AList.create();
 		}
 
 		@Override /* BeanBuilder */
 		protected RestOpArgList buildDefault() {
 			return new RestOpArgList(this);
-		}
-
-		@Override /* BeanBuilder */
-		public Builder copy() {
-			return new Builder(this);
 		}
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -114,20 +91,8 @@ public class RestOpArgList {
 		// <FluentSetters>
 
 		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder outer(Object value) {
-			super.outer(value);
 			return this;
 		}
 

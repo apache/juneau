@@ -35,67 +35,67 @@ public class BasicHttpResource_Test {
 		HttpResource x = stringResource((String)null).build();
 
 		assertNull(x.getContentType());
-		assertStream(x.getContent()).isNotNull().asString().isEmpty();
+		assertBytes(x.getContent()).isNotNull().asString().isEmpty();
 		assertNull(x.getContentEncoding());
 		assertInteger(x.getHeaders().size()).is(0);
 
 		x = stringResource("foo").build();
-		assertStream(x.getContent()).asString().is("foo");
+		assertBytes(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
 		x = readerResource(reader("foo")).build();
-		assertStream(x.getContent()).asString().is("foo");
+		assertBytes(x.getContent()).asString().is("foo");
 		assertFalse(x.isRepeatable());
 		assertTrue(x.isStreaming());
 
 		x = byteArrayResource("foo".getBytes()).build();
-		assertStream(x.getContent()).asString().is("foo");
+		assertBytes(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
 		x = streamResource(inputStream("foo")).build();
-		assertStream(x.getContent()).asString().is("foo");
+		assertBytes(x.getContent()).asString().is("foo");
 		assertFalse(x.isRepeatable());
 		assertTrue(x.isStreaming());
 
 		x = streamResource(null).build();
-		assertStream(x.getContent()).isNotNull().asString().isEmpty();
+		assertBytes(x.getContent()).isNotNull().asString().isEmpty();
 		assertFalse(x.isRepeatable());
 		assertTrue(x.isStreaming());
 
 		x = fileResource(f).build();
-		assertStream(x.getContent()).asString().isEmpty();
+		assertBytes(x.getContent()).asString().isEmpty();
 		assertTrue(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
 		x = stringResource("foo").cached().build();
-		assertStream(x.getContent()).asString().is("foo");
-		assertStream(x.getContent()).asString().is("foo");
+		assertBytes(x.getContent()).asString().is("foo");
+		assertBytes(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 
 		x = readerResource(reader("foo")).cached().build();
-		assertStream(x.getContent()).asString().is("foo");
-		assertStream(x.getContent()).asString().is("foo");
+		assertBytes(x.getContent()).asString().is("foo");
+		assertBytes(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 
 		x = byteArrayResource("foo".getBytes()).cached().build();
-		assertStream(x.getContent()).asString().is("foo");
-		assertStream(x.getContent()).asString().is("foo");
+		assertBytes(x.getContent()).asString().is("foo");
+		assertBytes(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 
 		x = streamResource(inputStream("foo")).cached().build();
-		assertStream(x.getContent()).asString().is("foo");
-		assertStream(x.getContent()).asString().is("foo");
+		assertBytes(x.getContent()).asString().is("foo");
+		assertBytes(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 
 		x = stringResource((String)null).cached().build();
-		assertStream(x.getContent()).exists().asString().isEmpty();
+		assertBytes(x.getContent()).exists().asString().isEmpty();
 		assertTrue(x.isRepeatable());
 		x.writeTo(new ByteArrayOutputStream());
 
 		x = fileResource(f).cached().build();
-		assertStream(x.getContent()).asString().isEmpty();
+		assertBytes(x.getContent()).asString().isEmpty();
 		assertTrue(x.isRepeatable());
 		x.writeTo(new ByteArrayOutputStream());
 

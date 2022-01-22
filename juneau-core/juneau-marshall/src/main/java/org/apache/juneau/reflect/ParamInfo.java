@@ -274,6 +274,16 @@ public final class ParamInfo {
 		return null;
 	}
 
+	/**
+	 * Returns <jk>true</jk> if this parameter can accept the specified value.
+	 *
+	 * @param value The value to check.
+	 * @return <jk>true</jk> if this parameter can accept the specified value.
+	 */
+	public boolean canAccept(Object value) {
+		return getParameterType().isInstance(value);
+	}
+
 	@Override
 	public String toString() {
 		return (eInfo.getSimpleName()) + "[" + index + "]";

@@ -91,6 +91,10 @@ import org.apache.juneau.serializer.*;
 @FluentSetters(returns="FluentMapAssertion<K,V,R>")
 public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>  {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final Messages MESSAGES = Messages.of(FluentMapAssertion.class, "Messages");
 	private static final String
 		MSG_mapWasNotEmpty = MESSAGES.getString("mapWasNotEmpty"),
@@ -100,7 +104,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 		MSG_mapDidNotHaveTheExpectedSize = MESSAGES.getString("mapDidNotHaveTheExpectedSize");
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -212,7 +216,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	/**
 	 * Asserts that the map exists and is empty.
 	 *
-	 * @return The object to return after the test.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isEmpty() throws AssertionError {
@@ -224,7 +228,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	/**
 	 * Asserts that the map exists and is not empty.
 	 *
-	 * @return The object to return after the test.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isNotEmpty() throws AssertionError {
@@ -237,7 +241,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 * Asserts that the map contains the expected key.
 	 *
 	 * @param name The key name to check for.
-	 * @return The object to return after the test.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R containsKey(String name) throws AssertionError {
@@ -250,7 +254,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 * Asserts that the map contains the expected key.
 	 *
 	 * @param name The key name to check for.
-	 * @return The object to return after the test.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R doesNotContainKey(String name) throws AssertionError {
@@ -263,7 +267,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 * Asserts that the map exists and is the specified size.
 	 *
 	 * @param size The expected size.
-	 * @return The object to return after the test.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isSize(int size) throws AssertionError {

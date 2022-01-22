@@ -28,11 +28,11 @@ import java.util.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  *
- * @param <T> Array element type.
+ * @param <E> Array element type.
  */
-public class UnmodifiableArray<T> implements List<T> {
+public class UnmodifiableArray<E> implements List<E> {
 
-	final T[] array;
+	final E[] array;
 	final int length;
 	private final boolean reversed;
 
@@ -41,7 +41,7 @@ public class UnmodifiableArray<T> implements List<T> {
 	 *
 	 * @param array The array being wrapped.
 	 */
-	public UnmodifiableArray(T[] array) {
+	public UnmodifiableArray(E[] array) {
 		this(array, false);
 	}
 
@@ -52,8 +52,8 @@ public class UnmodifiableArray<T> implements List<T> {
 	 * @param reversed <jk>true</jk> if elements of array should be addressed in reverse.
 	 */
 	@SuppressWarnings("unchecked")
-	public UnmodifiableArray(T[] array, boolean reversed) {
-		this.array = array == null ? (T[])new Object[0] : array;
+	public UnmodifiableArray(E[] array, boolean reversed) {
+		this.array = array == null ? (E[])new Object[0] : array;
 		this.length = this.array.length;
 		this.reversed = reversed;
 	}
@@ -74,9 +74,9 @@ public class UnmodifiableArray<T> implements List<T> {
 	}
 
 	@Override
-	public Iterator<T> iterator() {
+	public Iterator<E> iterator() {
 		if (reversed) {
-			return new Iterator<T>() {
+			return new Iterator<E>() {
 				int i = length-1;
 
 				@Override
@@ -85,12 +85,12 @@ public class UnmodifiableArray<T> implements List<T> {
 				}
 
 				@Override
-				public T next() {
+				public E next() {
 					return array[i--];
 				}
 			};
 		}
-		return new Iterator<T>() {
+		return new Iterator<E>() {
 			int i = 0;
 
 			@Override
@@ -99,7 +99,7 @@ public class UnmodifiableArray<T> implements List<T> {
 			}
 
 			@Override
-			public T next() {
+			public E next() {
 				return array[i++];
 			}
 		};
@@ -124,7 +124,7 @@ public class UnmodifiableArray<T> implements List<T> {
 	}
 
 	@Override
-	public boolean add(T e) {
+	public boolean add(E e) {
 		throw unsupportedOperationException("Object is read-only.");
 	}
 
@@ -142,12 +142,12 @@ public class UnmodifiableArray<T> implements List<T> {
 	}
 
 	@Override
-	public boolean addAll(Collection<? extends T> c) {
+	public boolean addAll(Collection<? extends E> c) {
 		throw unsupportedOperationException("Object is read-only.");
 	}
 
 	@Override
-	public boolean addAll(int index, Collection<? extends T> c) {
+	public boolean addAll(int index, Collection<? extends E> c) {
 		throw unsupportedOperationException("Object is read-only.");
 	}
 
@@ -167,22 +167,22 @@ public class UnmodifiableArray<T> implements List<T> {
 	}
 
 	@Override
-	public T get(int index) {
+	public E get(int index) {
 		return reversed ? array[length-index-1] : array[index];
 	}
 
 	@Override
-	public T set(int index, T element) {
+	public E set(int index, E element) {
 		throw unsupportedOperationException("Object is read-only.");
 	}
 
 	@Override
-	public void add(int index, T element) {
+	public void add(int index, E element) {
 		throw unsupportedOperationException("Object is read-only.");
 	}
 
 	@Override
-	public T remove(int index) {
+	public E remove(int index) {
 		throw unsupportedOperationException("Object is read-only.");
 	}
 
@@ -190,7 +190,7 @@ public class UnmodifiableArray<T> implements List<T> {
 	public int indexOf(Object o) {
 		for (int i = 0; i < length; i++) {
 			int j = reversed ? length-i-1 : i;
-			T t = array[j];
+			E t = array[j];
 			if ((o == t) || (o != null && o.equals(t)))
 				return j;
 		}
@@ -201,7 +201,7 @@ public class UnmodifiableArray<T> implements List<T> {
 	public int lastIndexOf(Object o) {
 		for (int i = length-1; i >= 0; i--) {
 			int j = reversed ? length-i-1 : i;
-			T t = array[j];
+			E t = array[j];
 			if ((o == t) || (o != null && o.equals(t)))
 				return j;
 		}
@@ -209,22 +209,38 @@ public class UnmodifiableArray<T> implements List<T> {
 	}
 
 	@Override
-	public ListIterator<T> listIterator() {
+	public ListIterator<E> listIterator() {
 		throw unsupportedOperationException("Object is read-only.");
 	}
 
 	@Override
-	public ListIterator<T> listIterator(int index) {
+	public ListIterator<E> listIterator(int index) {
 		throw unsupportedOperationException("Object is read-only.");
 	}
 
 	@Override
-	public List<T> subList(int fromIndex, int toIndex) {
+	public List<E> subList(int fromIndex, int toIndex) {
 		if (reversed) {
-			List<T> l = Arrays.asList(array);
+			List<E> l = Arrays.asList(array);
 			Collections.reverse(l);
 			return l.subList(fromIndex, toIndex);
 		}
 		return Arrays.asList(array).subList(fromIndex, toIndex);
+	}
+
+	@Override
+	public String toString() {
+		if (array.length == 0)
+			return "[]";
+
+		StringBuilder sb = new StringBuilder();
+		sb.append('[');
+		for (int i = 0; i < array.length; i++) {
+			if (i != 0)
+				sb.append(',').append(' ');
+			sb.append(array[i] == this ? "(this Collection)" : array[i]);
+		}
+		sb.append(']');
+		return sb.toString();
 	}
 }

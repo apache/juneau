@@ -13,8 +13,9 @@
 package org.apache.juneau.rest.springboot;
 
 import java.util.*;
+import java.util.stream.*;
 
-import org.apache.juneau.cp.BeanStore;
+import org.apache.juneau.cp.*;
 import org.springframework.context.*;
 
 /**
@@ -42,9 +43,9 @@ public class SpringBeanStore extends BeanStore {
 	}
 
 	@Override
-	public <T> Optional<T> getBean(String name, Class<T> c) {
+	public <T> Optional<T> getBean(Class<T> c, String name) {
 		try {
-			Optional<T> o = super.getBean(name, c);
+			Optional<T> o = super.getBean(c, name);
 			if (o.isPresent())
 				return o;
 			if (appContext.isPresent()) {
@@ -56,5 +57,19 @@ public class SpringBeanStore extends BeanStore {
 			e.printStackTrace();
 		}
 		return Optional.empty();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> Stream<BeanStoreEntry<T>> stream(Class<T> c)  {
+		try {
+			Stream<BeanStoreEntry<T>> o = super.stream(c);
+			if (appContext.isPresent())
+				o = Stream.concat(o, appContext.get().getBeansOfType(c).entrySet().stream().map(x -> BeanStoreEntry.create(c, ()->x.getValue(), x.getKey())));
+			return o;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return Collections.emptyList().stream().map(x -> (BeanStoreEntry<T>)x);
 	}
 }

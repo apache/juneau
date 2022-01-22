@@ -154,7 +154,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		@Override /* BeanContext.Builder */
 		public RestOpContext build() {
 			try {
-				return BeanCreator.of(RestOpContext.class).type(getType().orElse(getDefaultImplClass())).store(beanStore).builder(this).run();
+				return beanStore.createBean(RestOpContext.class).type(getType().orElse(getDefaultImplClass())).builder(RestOpContext.Builder.class, this).run();
 			} catch (Exception e) {
 				throw toHttpException(e, InternalServerError.class);
 			}
@@ -904,20 +904,13 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			// Default value.
 			Value<RestConverterList.Builder> v = Value.of(
 				RestConverterList
-					.create()
-					.beanStore(beanStore)
+					.create(beanStore)
 			);
 
 			// Specify the implementation class if its set as a default.
 			defaultClasses()
 				.get(RestConverterList.class)
 				.ifPresent(x -> v.get().type(x));
-
-			// Replace with builder from bean store.
-			beanStore
-				.getBean(RestConverterList.Builder.class)
-				.map(x -> x.copy())
-				.ifPresent(x->v.set(x));
 
 			// Replace with bean from bean store.
 			beanStore
@@ -926,14 +919,14 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 			// Replace with builder from:  public [static] RestConverterList.Builder createConverters(<args>)
 			beanStore
-				.beanCreateMethodFinder(RestConverterList.Builder.class)
+				.createMethodFinder(RestConverterList.Builder.class)
 				.addBean(RestConverterList.Builder.class, v.get())
 				.find("createConverters")
 				.run(x -> v.set(x));
 
 			// Replace with bean from:  public [static] RestConverterList createConverters(<args>)
 			beanStore
-				.beanCreateMethodFinder(RestConverterList.class)
+				.createMethodFinder(RestConverterList.class)
 				.addBean(RestConverterList.Builder.class, v.get())
 				.find("createConverters")
 				.run(x -> v.get().impl(x));
@@ -1013,20 +1006,13 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			// Default value.
 			Value<RestGuardList.Builder> v = Value.of(
 				RestGuardList
-					.create()
-					.beanStore(beanStore)
+					.create(beanStore)
 			);
 
 			// Specify the implementation class if its set as a default.
 			defaultClasses()
 				.get(RestGuardList.class)
 				.ifPresent(x -> v.get().type(x));
-
-			// Replace with builder from bean store.
-			beanStore
-				.getBean(RestGuardList.Builder.class)
-				.map(x -> x.copy())
-				.ifPresent(x->v.set(x));
 
 			// Replace with bean from bean store.
 			beanStore
@@ -1035,14 +1021,14 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 			// Replace with builder from:  public [static] RestGuardList.Builder createGuards(<args>)
 			beanStore
-				.beanCreateMethodFinder(RestGuardList.Builder.class)
+				.createMethodFinder(RestGuardList.Builder.class)
 				.addBean(RestGuardList.Builder.class, v.get())
 				.find("createGuards")
 				.run(x -> v.set(x));
 
 			// Replace with bean from:  public [static] RestGuardList createGuards(<args>)
 			beanStore
-				.beanCreateMethodFinder(RestGuardList.class)
+				.createMethodFinder(RestGuardList.class)
 				.addBean(RestGuardList.Builder.class, v.get())
 				.find("createGuards")
 				.run(x -> v.get().impl(x));
@@ -1163,20 +1149,13 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			// Default value.
 			Value<RestMatcherList.Builder> v = Value.of(
 				RestMatcherList
-					.create()
-					.beanStore(beanStore)
+					.create(beanStore)
 			);
 
 			// Specify the implementation class if its set as a default.
 			defaultClasses()
 				.get(RestMatcherList.class)
 				.ifPresent(x -> v.get().type(x));
-
-			// Replace with builder from bean store.
-			beanStore
-				.getBean(RestMatcherList.Builder.class)
-				.map(x -> x.copy())
-				.ifPresent(x->v.set(x));
 
 			// Replace with bean from bean store.
 			beanStore
@@ -1185,14 +1164,14 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 			// Replace with builder from:  public [static] RestMatcherList.Builder createMatchers(<args>)
 			beanStore
-				.beanCreateMethodFinder(RestMatcherList.Builder.class)
+				.createMethodFinder(RestMatcherList.Builder.class)
 				.addBean(RestMatcherList.Builder.class, v.get())
 				.find("createMatchers")
 				.run(x -> v.set(x));
 
 			// Replace with bean from:  public [static] RestMatcherList createMatchers(<args>)
 			beanStore
-				.beanCreateMethodFinder(RestMatcherList.class)
+				.createMethodFinder(RestMatcherList.class)
 				.addBean(RestMatcherList.Builder.class, v.get())
 				.find("createMatchers")
 				.run(x -> v.get().impl(x));
@@ -2266,7 +2245,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			if (builder.debug == null)
 				debug = context.getDebugEnablement();
 			else
-				debug = DebugEnablement.create().enable(builder.debug, "*").build();
+				debug = DebugEnablement.create(context.getRootBeanStore()).enable(builder.debug, "*").build();
 
 			mi = MethodInfo.of(method).accessible();
 			Object r = context.getResource();

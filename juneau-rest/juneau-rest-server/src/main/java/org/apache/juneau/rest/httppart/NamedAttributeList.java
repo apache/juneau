@@ -67,7 +67,7 @@ public class NamedAttributeList {
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(NamedAttributeList.class);
+			super(NamedAttributeList.class, BeanStore.INSTANCE);
 			entries = new LinkedHashMap<>();
 		}
 
@@ -86,7 +86,11 @@ public class NamedAttributeList {
 			return new NamedAttributeList(this);
 		}
 
-		@Override /* BeanBuilder */
+		/**
+		 * Creates a copy of this builder.
+		 *
+		 * @return A new copy of this builder.
+		 */
 		public Builder copy() {
 			return new Builder(this);
 		}
@@ -110,20 +114,8 @@ public class NamedAttributeList {
 		// <FluentSetters>
 
 		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder outer(Object value) {
-			super.outer(value);
 			return this;
 		}
 

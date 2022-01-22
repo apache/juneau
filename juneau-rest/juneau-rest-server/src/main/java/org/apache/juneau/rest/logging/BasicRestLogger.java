@@ -23,6 +23,7 @@ import java.util.logging.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.stats.*;
@@ -87,7 +88,7 @@ import org.apache.juneau.rest.util.*;
  */
 public class BasicRestLogger implements RestLogger {
 
-	private static final RestLoggerRule DEFAULT_RULE = RestLoggerRule.create().build();
+	private static final RestLoggerRule DEFAULT_RULE = RestLoggerRule.create(BeanStore.INSTANCE).build();
 
 	private final Logger logger;
 	private final ThrownStore thrownStore;

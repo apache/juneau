@@ -13,6 +13,7 @@
 package org.apache.juneau.swap;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static java.util.Optional.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -72,12 +73,11 @@ public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 				Class<?> pt = cc.getRawParamType(0);
 				if (! pt.equals(c.getDeclaringClass())) {
 					// Find the unswap method if there is one.
-					Method unswapMethod = null;
-					for (MethodInfo m : ci.getPublicMethods()) {
-						if (m.getReturnType().is(pt) && m.isPublic())
-						unswapMethod = m.inner();
-					}
-
+					Method unswapMethod = ofNullable(
+						ci.getPublicMethod(
+							x -> x.hasReturnType(pt)
+						)
+					).map(x -> x.inner()).orElse(null);
 					l.add(new SurrogateSwap(pt, cc.inner(), unswapMethod));
 				}
 			}

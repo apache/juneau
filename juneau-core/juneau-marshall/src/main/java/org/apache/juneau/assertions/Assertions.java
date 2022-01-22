@@ -18,6 +18,7 @@ import static org.apache.juneau.internal.IOUtils.*;
 import java.io.*;
 import java.time.*;
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
@@ -315,6 +316,34 @@ public class Assertions {
 	}
 
 	/**
+	 * Performs an assertion on the contents of an input stream.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 * 	<jc>// Asserts that the stream contains the string "foo".</jc>
+	 * 	<jsm>assertBytes</jsm>(<jv>myStream</jv>)
+	 * 		.asHex().is(<js>"666F6F"</js>);
+	 * </p>
+	 *
+	 * <p>
+	 * See {@doc jm.FluentAssertions Fluent Assertions} for general assertion usage and {@link ByteArrayAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is automatically closed.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
+	 * @throws IOException If thrown while reading contents from stream.
+	 */
+	public static final ByteArrayAssertion assertBytes(InputStream value) throws IOException {
+		return assertBytes(value == null ? null : readBytes(value));
+	}
+
+	/**
 	 * Performs an assertion on a char array.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -558,6 +587,33 @@ public class Assertions {
 	}
 
 	/**
+	 * Performs an assertion on a stream of POJOs.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bcode w800'>
+	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 *
+	 * 	<jc>// Assert that the first entry in a list is "{foo:'bar'}" when serialized to simplified JSON.</jc>
+	 * 	<jsm>assertList</jsm>(<jv>myStream</jv>)
+	 * 		.item(0)
+	 * 			.asJson().is(<js>"{foo:'bar'}"</js>);
+	 * </p>
+	 *
+	 * <p>
+	 * See {@doc jm.FluentAssertions Fluent Assertions} for general assertion usage and {@link ListAssertion} for supported operations on this type.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return
+	 * 	A new assertion object.
+	 * 	<br>Never <jk>null</jk>.
+	 */
+	public static final <E> ListAssertion<E> assertList(Stream<E> value) {
+		return ListAssertion.create(value);
+	}
+
+	/**
 	 * Performs an assertion on a Long.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -748,34 +804,6 @@ public class Assertions {
 	 */
 	public static final PrimitiveArrayAssertion<Short,short[]> assertShortArray(short[] value) {
 		return PrimitiveArrayAssertion.create(value);
-	}
-
-	/**
-	 * Performs an assertion on the contents of an input stream.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
-	 *
-	 * 	<jc>// Asserts that the stream contains the string "foo".</jc>
-	 * 	<jsm>assertStream</jsm>(<jv>myStream</jv>)
-	 * 		.asHex().is(<js>"666F6F"</js>);
-	 * </p>
-	 *
-	 * <p>
-	 * See {@doc jm.FluentAssertions Fluent Assertions} for general assertion usage and {@link ByteArrayAssertion} for supported operations on this type.
-	 *
-	 * @param value
-	 * 	The object being tested.
-	 * 	<br>Can be <jk>null</jk>.
-	 * 	<br>Stream is automatically closed.
-	 * @return
-	 * 	A new assertion object.
-	 * 	<br>Never <jk>null</jk>.
-	 * @throws IOException If thrown while reading contents from stream.
-	 */
-	public static final ByteArrayAssertion assertStream(InputStream value) throws IOException {
-		return assertBytes(value == null ? null : readBytes(value));
 	}
 
 	/**

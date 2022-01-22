@@ -116,12 +116,22 @@ public final class SerializerSet {
 	}
 
 	/**
-	 * Instantiates a new clean-slate {@link Builder} object.
+	 * Static creator.
 	 *
-	 * @return A new {@link Builder} object.
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
+	 */
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
+	}
+
+	/**
+	 * Static creator.
+	 *
+	 * @return A new builder for this object.
 	 */
 	public static Builder create() {
-		return new Builder();
+		return new Builder(BeanStore.INSTANCE);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -139,9 +149,11 @@ public final class SerializerSet {
 
 		/**
 		 * Create an empty serializer group builder.
+		 *
+		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder() {
-			super(SerializerSet.class);
+		protected Builder(BeanStore beanStore) {
+			super(SerializerSet.class, beanStore);
 			this.entries = AList.create();
 		}
 
@@ -189,7 +201,11 @@ public final class SerializerSet {
 			return new SerializerSet(this);
 		}
 
-		@Override /* BeanBuilder */
+		/**
+		 * Makes a copy of this builder.
+		 *
+		 * @return A new copy of this builder.
+		 */
 		public Builder copy() {
 			return new Builder(this);
 		}
@@ -432,20 +448,8 @@ public final class SerializerSet {
 		// <FluentSetters>
 
 		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder outer(Object value) {
-			super.outer(value);
 			return this;
 		}
 

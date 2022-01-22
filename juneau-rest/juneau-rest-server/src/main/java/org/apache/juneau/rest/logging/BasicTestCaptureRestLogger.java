@@ -19,6 +19,7 @@ import java.util.concurrent.atomic.*;
 import java.util.logging.*;
 
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.cp.*;
 
 /**
  *
@@ -93,15 +94,16 @@ public class BasicTestCaptureRestLogger extends BasicRestLogger {
 	}
 
 	private static RestLogger.Builder builder() {
-		return RestLogger.create()
+		BeanStore bs = BeanStore.INSTANCE;
+		return RestLogger.create(bs)
 			.normalRules(  // Rules when debugging is not enabled.
-				RestLoggerRule.create()  // Log 500+ errors with status-line and header information.
+				RestLoggerRule.create(bs)  // Log 500+ errors with status-line and header information.
 					.statusFilter(x -> x >= 500)
 					.level(SEVERE)
 					.requestDetail(HEADER)
 					.responseDetail(HEADER)
 					.build(),
-				RestLoggerRule.create()  // Log 400-500 errors with just status-line information.
+				RestLoggerRule.create(bs)  // Log 400-500 errors with just status-line information.
 					.statusFilter(x -> x >= 400)
 					.level(WARNING)
 					.requestDetail(STATUS_LINE)
@@ -109,7 +111,7 @@ public class BasicTestCaptureRestLogger extends BasicRestLogger {
 					.build()
 			)
 			.debugRules(  // Rules when debugging is enabled.
-				RestLoggerRule.create()  // Log everything with full details.
+				RestLoggerRule.create(bs)  // Log everything with full details.
 					.level(SEVERE)
 					.requestDetail(ENTITY)
 					.responseDetail(ENTITY)

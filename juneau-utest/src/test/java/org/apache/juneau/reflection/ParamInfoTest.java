@@ -88,10 +88,10 @@ public class ParamInfoTest {
 	static ParamInfo
 		b_b_a = b.getPublicConstructor(int.class, String.class).getParam(0),
 		b_b_b = b.getPublicConstructor(int.class, String.class).getParam(1),
-		b_a1_a = b.getMethod("a1", int.class, String.class).getParam(0),
-		b_a1_b = b.getMethod("a1", int.class, String.class).getParam(1),
-		b_a2_a = b.getMethod("a2", int.class, String.class).getParam(0),
-		b_a2_b = b.getMethod("a2", int.class, String.class).getParam(1);
+		b_a1_a = b.getMethod(x -> x.hasName("a1")).getParam(0),
+		b_a1_b = b.getMethod(x -> x.hasName("a1")).getParam(1),
+		b_a2_a = b.getMethod(x -> x.hasName("a2")).getParam(0),
+		b_a2_b = b.getMethod(x -> x.hasName("a2")).getParam(1);
 
 
 	@Test
@@ -173,10 +173,10 @@ public class ParamInfoTest {
 		cc = ClassInfo.of(CC.class);
 	static ParamInfo
 		cc_cc = cc.getPublicConstructor(C1.class).getParam(0),
-		cb_a1 = cb.getMethod("a1", C1.class).getParam(0),
-		cb_a2 = cb.getMethod("a2", C1.class).getParam(0),
-		cc_a1 = cc.getMethod("a1", C1.class).getParam(0),
-		cc_a2 = cc.getMethod("a2", C1.class).getParam(0);
+		cb_a1 = cb.getMethod(x -> x.hasName("a1")).getParam(0),
+		cb_a2 = cb.getMethod(x -> x.hasName("a2")).getParam(0),
+		cc_a1 = cc.getMethod(x -> x.hasName("a1")).getParam(0),
+		cc_a2 = cc.getMethod(x -> x.hasName("a2")).getParam(0);
 
 	@Test
 	public void getDeclaredAnnotations() throws Exception {
@@ -320,8 +320,8 @@ public class ParamInfoTest {
 		db = ClassInfo.of(DB.class),
 		dc = ClassInfo.of(DC.class);
 	static ParamInfo
-		db_a1 = db.getMethod("a1", D1.class).getParam(0),
-		dc_a1 = dc.getMethod("a1", D1.class).getParam(0);
+		db_a1 = db.getMethod(x -> x.hasName("a1")).getParam(0),
+		dc_a1 = dc.getMethod(x -> x.hasName("a1")).getParam(0);
 
 	@Test
 	public void getAnnotationsParentFirst_inherited() throws Exception {
@@ -355,8 +355,8 @@ public class ParamInfoTest {
 
 	static ClassInfo e = ClassInfo.of(E.class);
 	static ParamInfo
-		e_a1_a = e.getMethod("a1", int.class, int.class).getParam(0),
-		e_a1_b = e.getMethod("a1", int.class, int.class).getParam(1);
+		e_a1_a = e.getMethod(x -> x.hasName("a1")).getParam(0),
+		e_a1_b = e.getMethod(x -> x.hasName("a1")).getParam(1);
 
 	@Test
 	public void hasName() {

@@ -38,12 +38,13 @@ public class RestLoggerRule {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Creates a new builder for this object.
+	 * Static creator.
 	 *
+	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -68,38 +69,16 @@ public class RestLoggerRule {
 
 		/**
 		 * Constructor.
-		 */
-		protected Builder() {
-			super(RestLoggerRule.class);
-		}
-
-		/**
-		 * Copy constructor.
 		 *
-		 * @param copyFrom The builder being copied.
+		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(Builder copyFrom) {
-			super(copyFrom);
-			statusFilter = copyFrom.statusFilter;
-			requestFilter = copyFrom.requestFilter;
-			responseFilter = copyFrom.responseFilter;
-			exceptionFilter = copyFrom.exceptionFilter;
-			enabled = copyFrom.enabled;
-			enabledTest = copyFrom.enabledTest;
-			level = copyFrom.level;
-			requestDetail = copyFrom.requestDetail;
-			responseDetail = copyFrom.responseDetail;
-			logStackTrace = copyFrom.logStackTrace;
+		protected Builder(BeanStore beanStore) {
+			super(RestLoggerRule.class, beanStore);
 		}
 
 		@Override /* BeanBuilder */
 		protected RestLoggerRule buildDefault() {
 			return new RestLoggerRule(this);
-		}
-
-		@Override /* BeanBuilder */
-		public Builder copy() {
-			return new Builder(this);
 		}
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -334,20 +313,8 @@ public class RestLoggerRule {
 		// <FluentSetters>
 
 		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder outer(Object value) {
-			super.outer(value);
 			return this;
 		}
 

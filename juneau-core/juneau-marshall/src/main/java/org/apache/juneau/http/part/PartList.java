@@ -23,7 +23,6 @@ import java.util.stream.*;
 import org.apache.http.*;
 import org.apache.http.util.*;
 import org.apache.juneau.*;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.http.HttpParts;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
@@ -283,7 +282,11 @@ public class PartList {
 			return entries.isEmpty() && defaultEntries == null ? EMPTY : new PartList(this);
 		}
 
-		@Override /* BeanBuilder */
+		/**
+		 * Makes a copy of this builder.
+		 *
+		 * @return A new copy of this builder.
+		 */
 		public Builder copy() {
 			return new Builder(this);
 		}
@@ -1147,20 +1150,8 @@ public class PartList {
 		// <FluentSetters>
 
 		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder outer(Object value) {
-			super.outer(value);
 			return this;
 		}
 

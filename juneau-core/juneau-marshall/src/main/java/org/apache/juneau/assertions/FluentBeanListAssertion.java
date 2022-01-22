@@ -60,6 +60,10 @@ import org.apache.juneau.serializer.*;
  * 	<ul>
  * 		<li class='jm'>{@link FluentBeanListAssertion#extract(String...)}
  * 		<li class='jm'>{@link FluentBeanListAssertion#property(String)}
+ * 		<li class='jm'>{@link FluentListAssertion#asStrings()}
+ * 		<li class='jm'>{@link FluentListAssertion#asStrings(Function)}
+ * 		<li class='jm'>{@link FluentListAssertion#asCdl()}
+ * 		<li class='jm'>{@link FluentListAssertion#asCdl(Function)}
  * 		<li class='jm'>{@link FluentListAssertion#item(int)}
  * 		<li class='jm'>{@link FluentListAssertion#sorted()}
  * 		<li class='jm'>{@link FluentListAssertion#sorted(Comparator)}
@@ -95,7 +99,7 @@ import org.apache.juneau.serializer.*;
 public class FluentBeanListAssertion<E,R> extends FluentListAssertion<E,R> {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**

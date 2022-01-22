@@ -90,7 +90,7 @@ import org.apache.juneau.serializer.*;
 public class FluentLongAssertion<R> extends FluentComparableAssertion<Long,R> {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**

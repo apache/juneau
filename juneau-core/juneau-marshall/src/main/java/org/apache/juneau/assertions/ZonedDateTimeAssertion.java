@@ -91,7 +91,7 @@ import org.apache.juneau.serializer.*;
 public class ZonedDateTimeAssertion extends FluentZonedDateTimeAssertion<ZonedDateTimeAssertion> {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -105,6 +105,10 @@ public class ZonedDateTimeAssertion extends FluentZonedDateTimeAssertion<ZonedDa
 	public static ZonedDateTimeAssertion create(ZonedDateTime value) {
 		return new ZonedDateTimeAssertion(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

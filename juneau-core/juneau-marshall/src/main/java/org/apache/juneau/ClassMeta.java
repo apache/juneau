@@ -16,7 +16,7 @@ import static org.apache.juneau.ClassMeta.ClassCategory.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
-import static org.apache.juneau.reflect.ReflectFlags.*;
+import static java.util.Optional.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -435,24 +435,26 @@ public final class ClassMeta<T> implements Type {
 			// valueOf() is used by enums.
 			// parse() is used by the java logging Level class.
 			// forName() is used by Class and Charset
-			for (String methodName : new String[]{"fromString","fromValue","valueOf","parse","parseString","forName","forString"}) {
-				if (fromStringMethod == null) {
-					for (MethodInfo m : ci.getPublicMethods()) {
-						if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasName(methodName) && m.hasReturnType(c) && m.hasParamTypes(String.class)) {
-							fromStringMethod = m.inner();
-							break;
-						}
-					}
-				}
-			}
+			String[] fromStringMethodNames = {"fromString","fromValue","valueOf","parse","parseString","forName","forString"};
+			fromStringMethod = ofNullable(
+				ci.getPublicMethod(
+					x -> x.isStatic()
+					&& x.isNotDeprecated()
+					&& x.hasReturnType(c) 
+					&& x.hasParamTypes(String.class) 
+					&& ArrayUtils.contains(x.getName(), fromStringMethodNames))
+				).map(x -> x.inner())
+				.orElse(null);
 
 			// Find example() method if present.
-			for (MethodInfo m : ci.getPublicMethods()) {
-				if (m.isAll(PUBLIC, NOT_DEPRECATED, STATIC) && m.hasName("example") && m.hasFuzzyParamTypes(BeanSession.class)) {
-					exampleMethod = m.inner();
-					break;
-				}
-			}
+			exampleMethod = ofNullable(
+				ci.getPublicMethod(
+					x -> x.isStatic()
+					&& x.isNotDeprecated()
+					&& x.hasName("example") 
+					&& x.hasFuzzyParamTypes(BeanSession.class))
+				).map(x -> x.inner())
+				.orElse(null);
 
 			for (FieldInfo f : ci.getAllFieldsParentFirst()) {
 				if (bc.hasAnnotation(ParentProperty.class, f)) {
@@ -522,9 +524,10 @@ public final class ClassMeta<T> implements Type {
 
 			primitiveDefault = ci.getPrimitiveDefault();
 
-			for (MethodInfo m : ci.getPublicMethods())
-				if (m.isAll(PUBLIC, NOT_DEPRECATED))
-					publicMethods.put(m.getSignature(), m.inner());
+			ci.getPublicMethods(
+				x -> x.isNotDeprecated(), 
+				x -> publicMethods.put(x.getSignature(), x.inner())
+			);
 
 			BeanFilter beanFilter = findBeanFilter(bc);
 			MarshalledFilter marshalledFilter = findMarshalledFilter(bc);

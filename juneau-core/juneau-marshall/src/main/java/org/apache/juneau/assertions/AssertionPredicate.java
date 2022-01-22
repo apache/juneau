@@ -56,6 +56,10 @@ import org.apache.juneau.cp.*;
  */
 public class AssertionPredicate<T> implements Predicate<T> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Argument placeholder for tested value.
 	 */
@@ -66,14 +70,14 @@ public class AssertionPredicate<T> implements Predicate<T> {
 		MSG_valueDidNotPassTest = MESSAGES.getString("valueDidNotPassTest"),
 		MSG_valueDidNotPassTestWithValue = MESSAGES.getString("valueDidNotPassTestWithValue");
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private final Predicate<T> inner;
 	private final String message;
 	private final Object[] args;
 	final ThreadLocal<String> failedMessage = new ThreadLocal<>();
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

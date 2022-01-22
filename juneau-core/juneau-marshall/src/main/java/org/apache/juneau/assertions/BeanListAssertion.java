@@ -65,6 +65,10 @@ import org.apache.juneau.serializer.*;
  * 	<ul>
  * 		<li class='jm'>{@link FluentBeanListAssertion#extract(String...)}
  * 		<li class='jm'>{@link FluentBeanListAssertion#property(String)}
+ * 		<li class='jm'>{@link FluentListAssertion#asStrings()}
+ * 		<li class='jm'>{@link FluentListAssertion#asStrings(Function)}
+ * 		<li class='jm'>{@link FluentListAssertion#asCdl()}
+ * 		<li class='jm'>{@link FluentListAssertion#asCdl(Function)}
  * 		<li class='jm'>{@link FluentListAssertion#item(int)}
  * 		<li class='jm'>{@link FluentListAssertion#sorted()}
  * 		<li class='jm'>{@link FluentListAssertion#sorted(Comparator)}
@@ -99,7 +103,7 @@ import org.apache.juneau.serializer.*;
 public class BeanListAssertion<E> extends FluentBeanListAssertion<E,BeanListAssertion<E>> {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -113,6 +117,10 @@ public class BeanListAssertion<E> extends FluentBeanListAssertion<E,BeanListAsse
 	public static <E> BeanListAssertion<E> create(List<E> value) {
 		return new BeanListAssertion<>(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

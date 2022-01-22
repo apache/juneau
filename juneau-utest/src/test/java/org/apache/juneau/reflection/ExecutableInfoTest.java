@@ -74,13 +74,13 @@ public class ExecutableInfoTest {
 	@Test
 	public void isConstructor() {
 		assertTrue(a.getPublicConstructor().isConstructor());
-		assertFalse(a.getPublicMethod("foo").isConstructor());
+		assertFalse(a.getPublicMethod(x -> x.hasName("foo")).isConstructor());
 	}
 
 	@Test
 	public void getDeclaringClass() {
 		check("A", a.getPublicConstructor().getDeclaringClass());
-		check("A", a.getPublicMethod("foo").getDeclaringClass());
+		check("A", a.getPublicMethod(x -> x.hasName("foo")).getDeclaringClass());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -97,8 +97,8 @@ public class ExecutableInfoTest {
 	static ExecutableInfo
 		b_c1=b.getPublicConstructor(),
 		b_c2=b.getPublicConstructor(String.class),
-		b_m1=b.getPublicMethod("m"),
-		b_m2=b.getPublicMethod("m", String.class)
+		b_m1=b.getPublicMethod(x -> x.hasName("m") && x.hasNoParams()),
+		b_m2=b.getPublicMethod(x -> x.hasName("m") && x.hasParamTypes(String.class))
 	;
 
 	@Test
@@ -157,7 +157,7 @@ public class ExecutableInfoTest {
 	public void getParam_nocache() {
 		ClassInfo b = ClassInfo.of(B.class);
 		check("B[0]", b.getPublicConstructor(String.class).getParam(0));
-		check("m[0]", b.getPublicMethod("m", String.class).getParam(0));
+		check("m[0]", b.getPublicMethod(x -> x.hasName("m") && x.hasParamTypes(String.class)).getParam(0));
 	}
 
 	@Test
@@ -273,9 +273,9 @@ public class ExecutableInfoTest {
 		c_c3=c.getPublicConstructor(int.class)
 	;
 	static MethodInfo
-		c_m1=c.getPublicMethod("m"),
-		c_m2=c.getPublicMethod("m", String.class),
-		c_m3=c.getPublicMethod("m", int.class)
+		c_m1=c.getPublicMethod(x -> x.hasName("m") && x.hasNoParams()),
+		c_m2=c.getPublicMethod(x -> x.hasName("m") && x.hasParamTypes(String.class)),
+		c_m3=c.getPublicMethod(x -> x.hasName("m") && x.hasParamTypes(int.class))
 	;
 
 	@Test
@@ -330,7 +330,7 @@ public class ExecutableInfoTest {
 	static ClassInfo d = ClassInfo.of(D.class);
 	static ExecutableInfo
 		d_c=d.getPublicConstructor(),
-		d_m=d.getPublicMethod("m")
+		d_m=d.getPublicMethod(x -> x.hasName("m"))
 	;
 
 	@Test
@@ -370,17 +370,17 @@ public class ExecutableInfoTest {
 	}
 	static ClassInfo e = ClassInfo.of(E.class);
 	static ExecutableInfo
-		e_deprecated = e.getPublicMethod("deprecated"),
-		e_notDeprecated = e.getPublicMethod("notDeprecated"),
-		e_hasParams = e.getPublicMethod("hasParams", int.class),
-		e_hasStringParam = e.getPublicMethod("hasStringParam", String.class),
-		e_hasNoParams = e.getPublicMethod("hasNoParams"),
-		e_isPublic = e.getPublicMethod("isPublic"),
-		e_isNotPublic = e.getMethod("isNotPublic"),
-		e_isStatic = e.getPublicMethod("isStatic"),
-		e_isNotStatic = e.getPublicMethod("isNotStatic"),
-		e_isAbstract = e.getPublicMethod("isAbstract"),
-		e_isNotAbstract = e.getPublicMethod("isNotAbstract")
+		e_deprecated = e.getPublicMethod(x -> x.hasName("deprecated")),
+		e_notDeprecated = e.getPublicMethod(x -> x.hasName("notDeprecated")),
+		e_hasParams = e.getPublicMethod(x -> x.hasName("hasParams")),
+		e_hasStringParam = e.getPublicMethod(x -> x.hasName("hasStringParam")),
+		e_hasNoParams = e.getPublicMethod(x -> x.hasName("hasNoParams")),
+		e_isPublic = e.getPublicMethod(x -> x.hasName("isPublic")),
+		e_isNotPublic = e.getMethod(x -> x.hasName("isNotPublic")),
+		e_isStatic = e.getPublicMethod(x -> x.hasName("isStatic")),
+		e_isNotStatic = e.getPublicMethod(x -> x.hasName("isNotStatic")),
+		e_isAbstract = e.getPublicMethod(x -> x.hasName("isAbstract")),
+		e_isNotAbstract = e.getPublicMethod(x -> x.hasName("isNotAbstract"))
 	;
 
 	@Test
@@ -532,10 +532,10 @@ public class ExecutableInfoTest {
 	}
 	static ClassInfo f = ClassInfo.of(F.class);
 	static ExecutableInfo
-		f_isPublic = f.getPublicMethod("isPublic"),
-		f_isProtected = f.getMethod("isProtected"),
-		f_isPrivate = f.getMethod("isPrivate"),
-		f_isDefault = f.getMethod("isDefault");
+		f_isPublic = f.getPublicMethod(x -> x.hasName("isPublic")),
+		f_isProtected = f.getMethod(x -> x.hasName("isProtected")),
+		f_isPrivate = f.getMethod(x -> x.hasName("isPrivate")),
+		f_isDefault = f.getMethod(x -> x.hasName("isDefault"));
 
 	@Test
 	public void setAccessible() {
@@ -584,9 +584,9 @@ public class ExecutableInfoTest {
 
 	@Test
 	public void getFullName_method() {
-		assertEquals("org.apache.juneau.reflection.ExecutableInfoTest$X.foo()", x.getPublicMethod("foo").getFullName());
-		assertEquals("org.apache.juneau.reflection.ExecutableInfoTest$X.foo(java.lang.String)", x.getPublicMethod("foo", String.class).getFullName());
-		assertEquals("org.apache.juneau.reflection.ExecutableInfoTest$X.foo(java.util.Map<java.lang.String,java.lang.Object>)", x.getPublicMethod("foo", Map.class).getFullName());
+		assertEquals("org.apache.juneau.reflection.ExecutableInfoTest$X.foo()", x.getPublicMethod(x -> x.hasName("foo") && x.hasNoParams()).getFullName());
+		assertEquals("org.apache.juneau.reflection.ExecutableInfoTest$X.foo(java.lang.String)", x.getPublicMethod(x -> x.hasName("foo") && x.hasParamTypes(String.class)).getFullName());
+		assertEquals("org.apache.juneau.reflection.ExecutableInfoTest$X.foo(java.util.Map<java.lang.String,java.lang.Object>)", x.getPublicMethod(x -> x.hasName("foo") && x.hasParamTypes(Map.class)).getFullName());
 	}
 
 	@Test
@@ -598,9 +598,9 @@ public class ExecutableInfoTest {
 
 	@Test
 	public void getShortName_method() {
-		assertEquals("foo()", x.getPublicMethod("foo").getShortName());
-		assertEquals("foo(String)", x.getPublicMethod("foo", String.class).getShortName());
-		assertEquals("foo(Map)", x.getPublicMethod("foo", Map.class).getShortName());
+		assertEquals("foo()", x.getPublicMethod(x -> x.hasName("foo") && x.hasNoParams()).getShortName());
+		assertEquals("foo(String)", x.getPublicMethod(x -> x.hasName("foo") && x.hasParamTypes(String.class)).getShortName());
+		assertEquals("foo(Map)", x.getPublicMethod(x -> x.hasName("foo") && x.hasParamTypes(Map.class)).getShortName());
 	}
 
 	@Test
@@ -612,9 +612,9 @@ public class ExecutableInfoTest {
 
 	@Test
 	public void getSimpleName_method() {
-		assertEquals("foo", x.getPublicMethod("foo").getSimpleName());
-		assertEquals("foo", x.getPublicMethod("foo", String.class).getSimpleName());
-		assertEquals("foo", x.getPublicMethod("foo", Map.class).getSimpleName());
+		assertEquals("foo", x.getPublicMethod(x -> x.hasName("foo") && x.hasNoParams()).getSimpleName());
+		assertEquals("foo", x.getPublicMethod(x -> x.hasName("foo") && x.hasParamTypes(String.class)).getSimpleName());
+		assertEquals("foo", x.getPublicMethod(x -> x.hasName("foo") && x.hasParamTypes(Map.class)).getSimpleName());
 	}
 
 	@Test

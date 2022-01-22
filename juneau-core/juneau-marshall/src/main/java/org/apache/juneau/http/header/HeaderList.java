@@ -260,7 +260,7 @@ public class HeaderList {
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(HeaderList.class);
+			super(HeaderList.class, BeanStore.INSTANCE);
 			entries = new ArrayList<>();
 		}
 
@@ -270,7 +270,7 @@ public class HeaderList {
 		 * @param copyFrom The bean to copy.
 		 */
 		protected Builder(HeaderList copyFrom) {
-			super(copyFrom.getClass());
+			super(copyFrom.getClass(), BeanStore.INSTANCE);
 			entries = new ArrayList<>(copyFrom.entries.length);
 			for (int i = 0; i < copyFrom.entries.length; i++)
 				entries.add(copyFrom.entries[i]);
@@ -295,7 +295,11 @@ public class HeaderList {
 			return entries.isEmpty() && defaultEntries == null ? EMPTY : new HeaderList(this);
 		}
 
-		@Override /* BeanBuilder */
+		/**
+		 * Makes a copy of this builder.
+		 *
+		 * @return A new copy of this builder.
+		 */
 		public Builder copy() {
 			return new Builder(this);
 		}
@@ -1165,20 +1169,8 @@ public class HeaderList {
 		// <FluentSetters>
 
 		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder outer(Object value) {
-			super.outer(value);
 			return this;
 		}
 

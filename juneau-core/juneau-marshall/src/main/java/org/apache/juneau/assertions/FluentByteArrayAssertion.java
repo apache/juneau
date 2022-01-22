@@ -93,7 +93,7 @@ import org.apache.juneau.serializer.*;
 public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<Byte,byte[],R> {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**

@@ -94,6 +94,10 @@ import org.apache.juneau.serializer.*;
 @FluentSetters(returns="FluentPrimitiveArrayAssertion<E,T,R>")
 public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<T,R> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final Map<Class<?>,Function<Object,String>> STRINGIFIERS = new HashMap<>();
 	static {
 		STRINGIFIERS.put(boolean.class, (x) -> Arrays.toString((boolean[])x));
@@ -119,7 +123,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 		MSG_arrayContainedNonMatchingValueAt = MESSAGES.getString("arrayContainedNonMatchingValueAt");
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -245,7 +249,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	 * Asserts that at least one value in the array passes the specified test.
 	 *
 	 * @param test The predicate test.
-	 * @return The object to return after the test.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R any(Predicate<E> test) throws AssertionError {
@@ -260,7 +264,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	 * Asserts that all values in the array pass the specified test.
 	 *
 	 * @param test The predicate test.
-	 * @return The object to return after the test.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R all(Predicate<E> test) throws AssertionError {
@@ -274,7 +278,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	/**
 	 * Asserts that the collection exists and is empty.
 	 *
-	 * @return The object to return after the test.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isEmpty() throws AssertionError {
@@ -286,7 +290,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	/**
 	 * Asserts that the collection exists and is not empty.
 	 *
-	 * @return The object to return after the test.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isNotEmpty() throws AssertionError {
@@ -299,7 +303,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	 * Asserts that the collection exists and is the specified size.
 	 *
 	 * @param size The expected size.
-	 * @return The object to return after the test.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isSize(int size) throws AssertionError {
@@ -312,7 +316,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	 * Asserts that the array contains the expected entry.
 	 *
 	 * @param entry The value to check for.
-	 * @return The object to return after the test.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R contains(E entry) throws AssertionError {
@@ -326,7 +330,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	 * Asserts that the array does not contain the expected value.
 	 *
 	 * @param entry The value to check for.
-	 * @return The object to return after the test.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R doesNotContain(E entry) throws AssertionError {

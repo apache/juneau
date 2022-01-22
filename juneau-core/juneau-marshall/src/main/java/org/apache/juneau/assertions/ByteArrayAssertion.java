@@ -95,7 +95,7 @@ import org.apache.juneau.serializer.*;
 public class ByteArrayAssertion extends FluentByteArrayAssertion<ByteArrayAssertion> {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -109,6 +109,10 @@ public class ByteArrayAssertion extends FluentByteArrayAssertion<ByteArrayAssert
 	public static ByteArrayAssertion create(byte[] value) {
 		return new ByteArrayAssertion(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

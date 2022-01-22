@@ -44,6 +44,7 @@ import org.apache.juneau.serializer.*;
  * 		<li class='jm'>{@link FluentStringAssertion#doesNotContain(String...)}
  * 		<li class='jm'>{@link FluentStringAssertion#isEmpty()}
  * 		<li class='jm'>{@link FluentStringAssertion#isNotEmpty()}
+ * 		<li class='jm'>{@link FluentStringAssertion#isString(Object)}
  * 		<li class='jm'>{@link FluentStringAssertion#matches(String)}
  * 		<li class='jm'>{@link FluentStringAssertion#regex(String)}
  * 		<li class='jm'>{@link FluentStringAssertion#regex(String,int)}
@@ -107,7 +108,7 @@ import org.apache.juneau.serializer.*;
 public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -121,6 +122,10 @@ public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 	public static StringAssertion create(Object value) {
 		return new StringAssertion(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

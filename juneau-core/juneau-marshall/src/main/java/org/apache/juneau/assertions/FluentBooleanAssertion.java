@@ -82,13 +82,17 @@ import org.apache.juneau.serializer.*;
 @FluentSetters(returns="FluentBooleanAssertion<R>")
 public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean,R> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final Messages MESSAGES = Messages.of(FluentBooleanAssertion.class, "Messages");
 	private static final String
 		MSG_valueWasFalse = MESSAGES.getString("valueWasFalse"),
 		MSG_valueWasTrue = MESSAGES.getString("valueWasTrue");
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -134,7 +138,7 @@ public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean
 	/**
 	 * Asserts that the value is true.
 	 *
-	 * @return This object.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isTrue() throws AssertionError {
@@ -146,7 +150,7 @@ public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean
 	/**
 	 * Asserts that the value is false.
 	 *
-	 * @return This object.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isFalse() throws AssertionError {

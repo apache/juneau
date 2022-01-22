@@ -50,11 +50,12 @@ public class BasicStaticFiles implements StaticFiles {
 
 	/**
 	 * Creates a new builder for this object.
-	 *
+	 * 
+	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static StaticFiles.Builder create() {
-		return new StaticFiles.Builder();
+	public static StaticFiles.Builder create(BeanStore beanStore) {
+		return new StaticFiles.Builder(beanStore);
 	}
 
 	/**

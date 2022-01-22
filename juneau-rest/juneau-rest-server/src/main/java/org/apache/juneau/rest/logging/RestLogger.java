@@ -135,12 +135,13 @@ public interface RestLogger {
 	public static final String SP_level = "juneau.restLogger.level";
 
 	/**
-	 * Creates a new builder for this object.
+	 * Static creator.
 	 *
+	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -163,33 +164,17 @@ public interface RestLogger {
 
 		/**
 		 * Constructor.
+		 *
+		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder() {
-			super(BasicRestLogger.class);
+		protected Builder(BeanStore beanStore) {
+			super(BasicRestLogger.class, beanStore);
 			logger = Logger.getLogger(env(SP_logger, "global"));
 			enabled = env(SP_enabled, ALWAYS);
 			enabledTest = x -> false;
 			requestDetail = env(SP_requestDetail, STATUS_LINE);
 			responseDetail = env(SP_responseDetail, STATUS_LINE);
 			level = env(SP_level).map(Level::parse).orElse(OFF);
-		}
-
-		/**
-		 * Copy constuctor.
-		 *
-		 * @param copyFrom The builder to copy.
-		 */
-		protected Builder(Builder copyFrom) {
-			super(copyFrom);
-			logger = copyFrom.logger;
-			thrownStore = copyFrom.thrownStore;
-			normalRules = AList.<RestLoggerRule>create().append(copyFrom.normalRules);
-			debugRules = AList.<RestLoggerRule>create().append(copyFrom.debugRules);
-			enabled = copyFrom.enabled;
-			enabledTest = copyFrom.enabledTest;
-			requestDetail = copyFrom.requestDetail;
-			responseDetail = copyFrom.responseDetail;
-			level = copyFrom.level;
 		}
 
 		@Override /* BeanBuilder */
@@ -199,12 +184,7 @@ public interface RestLogger {
 
 		@Override /* BeanBuilder */
 		protected BeanCreator<? extends RestLogger> creator() {
-			return super.creator().findSingleton();
-		}
-
-		@Override /* BeanBuilder */
-		public Builder copy() {
-			return new Builder(this);
+			return super.creator();
 		}
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -491,20 +471,8 @@ public interface RestLogger {
 		// <FluentSetters>
 
 		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder outer(Object value) {
-			super.outer(value);
 			return this;
 		}
 

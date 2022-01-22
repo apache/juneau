@@ -10,26 +10,48 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.logging;
+package org.apache.juneau.internal;
 
-import org.apache.juneau.rest.*;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- * Default implementation of a {@link RestLogger} that never logs REST calls.
- *
- * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
- * 	<li class='extlink'>{@source}
- * </ul>
+ * An extension of {@link ReentrantReadWriteLock} with convenience methods for creating
+ * auto-closeable locks.
  */
-public class BasicDisabledRestLogger extends BasicRestLogger {
+public class SimpleNoOpLock extends ReentrantReadWriteLock {
+	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Constructor.
-	 *
-	 * @param context The context of the resource object.
 	 */
-	public BasicDisabledRestLogger(RestContext context) {
-		super(RestLogger.create(context.getBeanStore()).disabled());
+	public SimpleNoOpLock() {
+		super();
+	}
+
+	/**
+	 * Constructor
+	 *
+	 * @param fair <jk>true</jk> if this lock should use a fair ordering policy.
+	 */
+	public SimpleNoOpLock(boolean fair) {
+		super(fair);
+	}
+
+	/**
+	 * Construct a write lock.
+	 *
+	 * @return A new closeable write lock.
+	 */
+	public SimpleLock write(){
+		return new SimpleLock(writeLock());
+	}
+
+	/**
+	 * Construct a read lock.
+	 *
+	 * @return A new closeable read lock.
+	 */
+	public SimpleLock read(){
+		return new SimpleLock(readLock());
 	}
 }

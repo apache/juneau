@@ -46,12 +46,13 @@ public interface DebugEnablement {
 	public abstract class Null implements DebugEnablement {};
 
 	/**
-	 * Creator.
+	 * Static creator.
 	 *
+	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -66,27 +67,18 @@ public interface DebugEnablement {
 		ReflectionMap.Builder<Enablement> mapBuilder;
 		Enablement defaultEnablement = NEVER;
 		Predicate<HttpServletRequest> conditionalPredicate;
-		BeanCreator<DebugEnablement> creator = BeanCreator.of(DebugEnablement.class).type(BasicDebugEnablement.class).builder(this);
+		BeanCreator<DebugEnablement> creator;
 
 		/**
 		 * Constructor.
+		 *
+		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder() {
+		protected Builder(BeanStore beanStore) {
 			mapBuilder = ReflectionMap.create(Enablement.class);
 			defaultEnablement = NEVER;
 			conditionalPredicate = x -> "true".equalsIgnoreCase(x.getHeader("Debug"));
-		}
-
-		/**
-		 * Copy constructor.
-		 *
-		 * @param copyFrom The builder being copied.
-		 */
-		protected Builder(Builder copyFrom) {
-			mapBuilder = copyFrom.mapBuilder.copy();
-			creator = copyFrom.creator.copy();
-			defaultEnablement = copyFrom.defaultEnablement;
-			conditionalPredicate = copyFrom.conditionalPredicate;
+			creator = beanStore.createBean(DebugEnablement.class).type(BasicDebugEnablement.class).builder(Builder.class, this);
 		}
 
 		/**
@@ -104,17 +96,6 @@ public interface DebugEnablement {
 			} catch (Exception e) {
 				throw toHttpException(e, InternalServerError.class);
 			}
-		}
-
-		/**
-		 * Specifies the bean store to use for instantiating the {@link DebugEnablement} object.
-		 *
-		 * @param value The new value for this setting.
-		 * @return  This object.
-		 */
-		public Builder beanStore(BeanStore value) {
-			creator.store(value);
-			return this;
 		}
 
 		/**
@@ -226,15 +207,6 @@ public interface DebugEnablement {
 		public Builder conditionalPredicate(Predicate<HttpServletRequest> value) {
 			conditionalPredicate = value;
 			return this;
-		}
-
-		/**
-		 * Creates a copy of this builder.
-		 *
-		 * @return A copy of this builder.
-		 */
-		public Builder copy() {
-			return new Builder(this);
 		}
 	}
 

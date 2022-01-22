@@ -88,6 +88,10 @@ import org.apache.juneau.serializer.*;
 @FluentSetters(returns="FluentThrowableAssertion<T,R>")
 public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjectAssertion<T,R> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final Messages MESSAGES = Messages.of(FluentThrowableAssertion.class, "Messages");
 	private static final String
 		MSG_exceptionWasNotExpectedType = MESSAGES.getString("exceptionWasNotExpectedType"),
@@ -95,7 +99,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 		MSG_causedByExceptionNotExpectedType = MESSAGES.getString("causedByExceptionNotExpectedType");
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -317,7 +321,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 * </p>
 	 *
 	 * @param parent The type.
-	 * @return This object.
+	 * @return The fluent return object.
 	 */
 	@Override
 	public R isType(Class<?> parent) {
@@ -338,7 +342,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 * </p>
 	 *
 	 * @param type The type.
-	 * @return This object.
+	 * @return The fluent return object.
 	 */
 	@Override
 	public R isExactType(Class<?> type) {
@@ -357,7 +361,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; {<jv>foo</jv>.getBar();}).exists();
 	 * </p>
 	 *
-	 * @return This object.
+	 * @return The fluent return object.
 	 */
 	@Override
 	public R exists() {

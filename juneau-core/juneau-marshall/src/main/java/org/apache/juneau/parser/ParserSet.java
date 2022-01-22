@@ -117,12 +117,22 @@ public final class ParserSet {
 	}
 
 	/**
-	 * Instantiates a new clean-slate {@link Builder} object.
+	 * Static creator.
 	 *
-	 * @return A new {@link Builder} object.
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
+	 */
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
+	}
+
+	/**
+	 * Static creator.
+	 *
+	 * @return A new builder for this object.
 	 */
 	public static Builder create() {
-		return new Builder();
+		return new Builder(BeanStore.INSTANCE);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -140,9 +150,11 @@ public final class ParserSet {
 
 		/**
 		 * Create an empty parser group builder.
+		 *
+		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder() {
-			super(ParserSet.class);
+		protected Builder(BeanStore beanStore) {
+			super(ParserSet.class, beanStore);
 			this.entries = AList.create();
 		}
 
@@ -152,7 +164,7 @@ public final class ParserSet {
 		 * @param copyFrom The parser group that we're copying settings and parsers from.
 		 */
 		protected Builder(ParserSet copyFrom) {
-			super(copyFrom.getClass());
+			super(copyFrom.getClass(), BeanStore.INSTANCE);
 			this.entries = AList.create().append(asList(copyFrom.entries));
 		}
 
@@ -190,7 +202,11 @@ public final class ParserSet {
 			return new ParserSet(this);
 		}
 
-		@Override /* BeanBuilder */
+		/**
+		 * Makes a copy of this builder.
+		 *
+		 * @return A new copy of this builder.
+		 */
 		public Builder copy() {
 			return new Builder(this);
 		}
@@ -436,20 +452,8 @@ public final class ParserSet {
 		// <FluentSetters>
 
 		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder outer(Object value) {
-			super.outer(value);
 			return this;
 		}
 

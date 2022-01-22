@@ -93,7 +93,7 @@ import org.apache.juneau.serializer.*;
 public class FluentVersionAssertion<R> extends FluentComparableAssertion<Version,R> {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**

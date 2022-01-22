@@ -54,19 +54,24 @@ import org.apache.juneau.internal.*;
 @FluentSetters
 public class Assertion {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final Messages MESSAGES = Messages.of(Assertion.class, "Messages");
+
 	static final String
 		MSG_parameterCannotBeNull = MESSAGES.getString("parameterCannotBeNull"),
 		MSG_causedBy = MESSAGES.getString("causedBy");
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private String msg;
 	private Object[] msgArgs;
 	private PrintStream out = System.err;
 	private Class<? extends RuntimeException> throwable;
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor used when this assertion is being created from within another assertion.
@@ -228,7 +233,7 @@ public class Assertion {
 					.addBean(Throwable.class, cause)
 					.addBean(String.class, msg)
 					.addBean(Object[].class,new Object[0])
-					.creator(throwable)
+					.createBean(throwable)
 					.run();
 			} catch (ExecutableException e) {
 				// If we couldn't create requested exception, just throw a RuntimeException.

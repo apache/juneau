@@ -19,6 +19,7 @@ import static org.apache.juneau.rest.logging.RestLoggingDetail.*;
 
 import javax.servlet.http.*;
 
+import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.*;
 
 /**
@@ -60,9 +61,10 @@ public class BasicTestRestLogger extends BasicRestLogger {
 	}
 
 	private static RestLogger.Builder builder() {
-		return RestLogger.create()
+		BeanStore bs = BeanStore.INSTANCE;
+		return RestLogger.create(bs)
 			.normalRules(  // Rules when debugging is not enabled.
-				RestLoggerRule.create()  // Log 500+ errors with status-line and header information.
+				RestLoggerRule.create(bs)  // Log 500+ errors with status-line and header information.
 					.statusFilter(x -> x >= 400)
 					.level(SEVERE)
 					.requestDetail(HEADER)
@@ -71,7 +73,7 @@ public class BasicTestRestLogger extends BasicRestLogger {
 					.enabledTest(x -> ! isNoTrace(x))  // Only log if it's not a no-trace request.
 					.logStackTrace()
 					.build(),
-				RestLoggerRule.create()  // Log 400-500 errors with just status-line information.
+				RestLoggerRule.create(bs)  // Log 400-500 errors with just status-line information.
 					.statusFilter(x -> x >= 400)
 					.level(WARNING)
 					.requestDetail(STATUS_LINE)
@@ -82,7 +84,7 @@ public class BasicTestRestLogger extends BasicRestLogger {
 					.build()
 			)
 			.debugRules(  // Rules when debugging is enabled.
-				RestLoggerRule.create()  // Log everything with full details.
+				RestLoggerRule.create(bs)  // Log everything with full details.
 					.level(SEVERE)
 					.requestDetail(ENTITY)
 					.responseDetail(ENTITY)

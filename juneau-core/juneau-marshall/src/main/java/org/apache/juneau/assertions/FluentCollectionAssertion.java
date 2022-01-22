@@ -89,6 +89,10 @@ import org.apache.juneau.serializer.*;
 @FluentSetters(returns="FluentCollectionAssertion<E,R>")
 public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collection<E>,R> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final Messages MESSAGES = Messages.of(FluentCollectionAssertion.class, "Messages");
 	private static final String
 		MSG_collectionWasNotEmpty = MESSAGES.getString("collectionWasNotEmpty"),
@@ -99,7 +103,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 		MSG_collectionDidNotHaveExpectedSize = MESSAGES.getString("collectionDidNotHaveExpectedSize");
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -177,7 +181,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	/**
 	 * Asserts that the collection exists and is empty.
 	 *
-	 * @return The object to return after the test.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isEmpty() throws AssertionError {
@@ -189,7 +193,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	/**
 	 * Asserts that the collection exists and is not empty.
 	 *
-	 * @return The object to return after the test.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isNotEmpty() throws AssertionError {
@@ -202,7 +206,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 * Asserts that the collection contains the expected value.
 	 *
 	 * @param entry The value to check for.
-	 * @return The object to return after the test.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R contains(E entry) throws AssertionError {
@@ -216,7 +220,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 * Asserts that the collection contains the expected value.
 	 *
 	 * @param entry The value to check for.
-	 * @return The object to return after the test.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R doesNotContain(E entry) throws AssertionError {
@@ -230,7 +234,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 * Asserts that at least one value in the collection passes the specified test.
 	 *
 	 * @param test The predicate test.
-	 * @return The object to return after the test.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R any(Predicate<E> test) throws AssertionError {
@@ -246,7 +250,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 * Asserts that all values in the collection pass the specified test.
 	 *
 	 * @param test The predicate test.
-	 * @return The object to return after the test.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R all(Predicate<E> test) throws AssertionError {
@@ -262,7 +266,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 * Asserts that the collection exists and is the specified size.
 	 *
 	 * @param size The expected size.
-	 * @return The object to return after the test.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R isSize(int size) throws AssertionError {

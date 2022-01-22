@@ -92,7 +92,7 @@ import org.apache.juneau.serializer.*;
 public class PrimitiveArrayAssertion<E,T> extends FluentPrimitiveArrayAssertion<E,T,PrimitiveArrayAssertion<E,T>> {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -106,6 +106,10 @@ public class PrimitiveArrayAssertion<E,T> extends FluentPrimitiveArrayAssertion<
 	public static <E,T> PrimitiveArrayAssertion<E,T> create(T value) {
 		return new PrimitiveArrayAssertion<>(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
 
@@ -160,9 +161,15 @@ public class Mutaters {
 
 		if (ic == String.class) {
 			Class<?> oc2 = oci.hasPrimitiveWrapper() ? oci.getPrimitiveWrapper() : oc;
-			ClassInfo oc2i = ClassInfo.of(oc2);
+			ClassInfo oc2i = ClassInfo.ofc(oc2);
 
-			final MethodInfo createMethod = oc2i.getStaticCreateMethod(ic, "forName");
+			final MethodInfo createMethod = oc2i.getPublicMethod(
+				x -> x.isStatic()
+				&& x.isNotDeprecated()
+				&& x.hasReturnType(oc2)
+				&& x.hasParamTypes(ic)
+				&& (x.hasName("forName") || isStaticCreateMethodName(x, ic))
+			);
 
 			if (oc2.isEnum() && createMethod == null) {
 				return new Mutater<String,Object>() {
@@ -186,7 +193,14 @@ public class Mutaters {
 				};
 			}
 		} else {
-			MethodInfo createMethod = oci.getStaticCreateMethod(ic);
+			MethodInfo createMethod = oci.getPublicMethod(
+				x -> x.isStatic()
+				&& x.isNotDeprecated()
+				&& x.hasReturnType(oc)
+				&& x.hasParamTypes(ic)
+				&& isStaticCreateMethodName(x, ic)
+			);
+
 			if (createMethod != null) {
 				Method cm = createMethod.inner();
 				return new Mutater() {
@@ -234,6 +248,14 @@ public class Mutaters {
 		}
 
 		return NULL;
+	}
+
+	private static boolean isStaticCreateMethodName(MethodInfo mi, Class<?> ic) {
+		String n = mi.getSimpleName(), cn = ic.getSimpleName();
+		return isOneOf(n, "create","from","fromValue","parse","valueOf")
+			|| (n.startsWith("from") && n.substring(4).equals(cn))
+			|| (n.startsWith("for") && n.substring(3).equals(cn))
+			|| (n.startsWith("parse") && n.substring(5).equals(cn));
 	}
 
 	/**

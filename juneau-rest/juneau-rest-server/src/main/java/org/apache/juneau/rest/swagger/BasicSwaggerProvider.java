@@ -36,6 +36,7 @@ public class BasicSwaggerProvider implements SwaggerProvider {
 	private final JsonSchemaGenerator js;
 	private final Messages messages;
 	private final FileFinder fileFinder;
+	private final BeanStore beanStore;
 
 	/**
 	 * Constructor.
@@ -43,9 +44,9 @@ public class BasicSwaggerProvider implements SwaggerProvider {
 	 * @param builder The builder containing the settings for this Swagger provider.
 	 */
 	public BasicSwaggerProvider(SwaggerProvider.Builder builder) {
-		BeanStore bs = builder.beanStore;
-		this.vr = builder.varResolver().orElse(bs.getBean(VarResolver.class).orElse(VarResolver.DEFAULT));
-		this.js = builder.jsonSchemaGenerator().orElse(bs.getBean(JsonSchemaGenerator.class).orElse(JsonSchemaGenerator.DEFAULT));
+		this.beanStore = builder.beanStore;
+		this.vr = builder.varResolver().orElse(beanStore.getBean(VarResolver.class).orElse(VarResolver.DEFAULT));
+		this.js = builder.jsonSchemaGenerator().orElse(beanStore.getBean(JsonSchemaGenerator.class).orElse(JsonSchemaGenerator.DEFAULT));
 		this.messages = builder.messages().orElse(null);
 		this.fileFinder = builder.fileFinder().orElse(null);
 	}
@@ -65,7 +66,7 @@ public class BasicSwaggerProvider implements SwaggerProvider {
 	public Swagger getSwagger(RestContext context, Locale locale) throws Exception {
 
 		Class<?> c = context.getResourceClass();
-		FileFinder ff = fileFinder != null ? fileFinder : FileFinder.create().cp(c,null,false).build();
+		FileFinder ff = fileFinder != null ? fileFinder : FileFinder.create(beanStore).cp(c,null,false).build();
 		Messages mb = messages != null ? messages.forLocale(locale) : Messages.create(c).build().forLocale(locale);
 		VarResolverSession vrs = vr.createSession().bean(Messages.class, mb);
 		BasicSwaggerProviderSession session = new BasicSwaggerProviderSession(context, locale, ff, messages, vrs, js.getSession());

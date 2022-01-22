@@ -91,7 +91,7 @@ import org.apache.juneau.serializer.*;
 public class MapAssertion<K,V> extends FluentMapAssertion<K,V,MapAssertion<K,V>> {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -105,6 +105,10 @@ public class MapAssertion<K,V> extends FluentMapAssertion<K,V,MapAssertion<K,V>>
 	public static <K,V> MapAssertion<K,V> create(Map<K,V> value) {
 		return new MapAssertion<>(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

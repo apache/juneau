@@ -13,8 +13,6 @@
 package org.apache.juneau.cp;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.reflect.ReflectFlags.*;
-
 import java.util.*;
 import java.util.function.*;
 
@@ -23,11 +21,55 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.reflect.*;
 
 /**
- * Used for finding methods on an object that take in arbitrary parameters and returns bean instances.
+ * Utility class for creating beans through creator methods.
  *
- * See {@link BeanStore#createMethodFinder(Class, Object)} for usage.
+ * <p>
+ * Used for finding and invoking methods on an object that take in arbitrary parameters and returns bean instances.
+ *
+ * <p>
+ * This class is instantiated through the following methods:
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link BeanStore}
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link BeanStore#createMethodFinder(Class)}
+ * 			<li class='jm'>{@link BeanStore#createMethodFinder(Class,Class)}
+ * 			<li class='jm'>{@link BeanStore#createMethodFinder(Class,Object)}
+ * 		</ul>
+ * 	</li>
+ * </ul>
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// The bean we want to create.</jc>
+ * 	<jk>public class</jk> A {}
+ *
+ * 	<jc>// The bean that has a creator method for the bean above.</jc>
+ * 	<jk>public class</jk> B {
+ *
+ * 		<jc>// Creator method.</jc>
+ * 		<jc>// Bean store must have a C bean and optionally a D bean.</jc>
+ * 		<jk>public</jk> A createA(C <mv>c</mv>, Optional&lt;D&gt; <mv>d</mv>) {
+ * 			<jk>return new</jk> A(<mv>c</mv>, <mv>d</mv>.orElse(<jk>null</jk>));
+ * 		}
+ * 	}
+ *
+ * 	<jc>// Instantiate the bean with the creator method.</jc>
+ * 	B <mv>b</mv> = <jk>new</jk> B();
+ *
+ *  <jc>// Create a bean store with some mapped beans.</jc>
+ * 	BeanStore <mv>beanStore</mv> = BeanStore.<jsm>create</jsm>().addBean(C.<jk>class</jk>, <jk>new</jk> C());
+ *
+ * 	<jc>// Instantiate the bean using the creator method.</jc>
+ * 	A <mv>a</mv> = <mv>beanStore</mv>
+ * 		.createMethodFinder(A.<jk>class</jk>, <mv>b</mv>)  <jc>// Looking for creator for A on b object.</jc>
+ * 		.find(<js>"createA"</js>)                         <jc>// Look for method called "createA".</jc>
+ * 		.thenFind(<js>"createA2"</js>)                    <jc>// Then look for method called "createA2".</jc>
+ * 		.withDefault(()-&gt;<jk>new</jk> A())                        <jc>// Optionally supply a default value if method not found.</jc>
+ * 		.run();                                  <jc>// Execute.</jc>
+ * </p>
  *
  * <ul class='seealso'>
+ * 	<li class='jc'>{@link BeanStore}
  * 	<li class='extlink'>{@source}
  * </ul>
  *
@@ -46,16 +88,16 @@ public class BeanCreateMethodFinder<T> {
 	private Supplier<T> def = ()->null;
 
 	BeanCreateMethodFinder(Class<T> beanType, Object resource, BeanStore beanStore) {
-		this.beanType = beanType;
-		this.resource = resource;
+		this.beanType = assertArgNotNull("beanType", beanType);
+		this.resource = assertArgNotNull("resource", resource);
 		this.resourceClass = resource.getClass();
 		this.beanStore = BeanStore.of(beanStore, resource);
 	}
 
 	BeanCreateMethodFinder(Class<T> beanType, Class<?> resourceClass, BeanStore beanStore) {
-		this.beanType = beanType;
+		this.beanType = assertArgNotNull("beanType", beanType);
 		this.resource = null;
-		this.resourceClass = resourceClass;
+		this.resourceClass = assertArgNotNull("resourceClass", resourceClass);
 		this.beanStore = BeanStore.of(beanStore);
 	}
 
@@ -98,16 +140,17 @@ public class BeanCreateMethodFinder<T> {
 	 */
 	public BeanCreateMethodFinder<T> find(String methodName, Class<?>...requiredParams) {
 		if (method == null) {
-			ClassInfo ci = ClassInfo.of(resourceClass);
-			for (MethodInfo m : ci.getPublicMethods()) {
-				if (m.isAll(NOT_DEPRECATED) && m.hasReturnType(beanType) && m.getSimpleName().equals(methodName) && (!m.hasAnnotation(BeanIgnore.class))) {
-					List<ClassInfo> missing = beanStore.getMissingParamTypes(m.getParams());
-					if (missing.isEmpty() && m.hasAllArgs(requiredParams) && (m.isNotStatic() || resource != null)) {
-						this.method = m;
-						this.args = beanStore.getParams(m.getParams());
-					}
-				}
-			}
+			method = ClassInfo.ofc(resourceClass).getPublicMethod(
+				x -> x.isNotDeprecated()
+				&& x.hasReturnType(beanType)
+				&& x.hasName(methodName)
+				&& x.hasNoAnnotation(BeanIgnore.class)
+				&& x.hasAllArgs(requiredParams)
+				&& beanStore.hasAllParams(x)
+				&& (x.isStatic() || resource != null)
+			);
+			if (method != null)
+				args = beanStore.getParams(method);
 		}
 		return this;
 	}
@@ -152,7 +195,7 @@ public class BeanCreateMethodFinder<T> {
 	 * @throws ExecutableException If method invocation threw an exception.
 	 */
 	@SuppressWarnings("unchecked")
-	public T run() throws ExecutableException  {
+	public T run() throws ExecutableException {
 		if (method != null)
 			return (T)method.invoke(resource, args);
 		return def.get();
@@ -170,5 +213,4 @@ public class BeanCreateMethodFinder<T> {
 		Optional.ofNullable(t).ifPresent(consumer);
 		return t;
 	}
-
 }

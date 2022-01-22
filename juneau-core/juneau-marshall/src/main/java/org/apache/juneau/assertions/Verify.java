@@ -40,17 +40,14 @@ import org.apache.juneau.internal.*;
  */
 public class Verify {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final Messages MESSAGES = Messages.of(Verify.class, "Messages");
 	static final String
 		MSG_unexpectedType = MESSAGES.getString("unexpectedType"),
 		MSG_unexpectedValue = MESSAGES.getString("unexpectedValue");
-
-	private final Object o;
-	private Supplier<String> msg;
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Create a new verifier object.
@@ -61,6 +58,13 @@ public class Verify {
 	public static Verify verify(Object o) {
 		return new Verify(o);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final Object o;
+	private Supplier<String> msg;
 
 	/**
 	 * Create a new verifier object.

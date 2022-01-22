@@ -90,7 +90,7 @@ import org.apache.juneau.serializer.*;
 public class CollectionAssertion<E> extends FluentCollectionAssertion<E,CollectionAssertion<E>> {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -104,6 +104,10 @@ public class CollectionAssertion<E> extends FluentCollectionAssertion<E,Collecti
 	public static <E> CollectionAssertion<E> create(Collection<E> value) {
 		return new CollectionAssertion<>(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

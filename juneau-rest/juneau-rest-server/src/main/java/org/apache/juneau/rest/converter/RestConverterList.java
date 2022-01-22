@@ -34,10 +34,11 @@ public class RestConverterList {
 	/**
 	 * Static creator.
 	 *
-	 * @return An empty list.
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -54,30 +55,17 @@ public class RestConverterList {
 
 		/**
 		 * Create an empty builder.
-		 */
-		protected Builder() {
-			super(RestConverterList.class);
-			this.entries = AList.create();
-		}
-
-		/**
-		 * Copy constructor.
 		 *
-		 * @param copyFrom The builder being copied.
+		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(Builder copyFrom) {
-			super(copyFrom);
-			entries = AList.of(copyFrom.entries);
+		protected Builder(BeanStore beanStore) {
+			super(RestConverterList.class, beanStore);
+			this.entries = AList.create();
 		}
 
 		@Override /* BeanBuilder */
 		protected RestConverterList buildDefault() {
 			return new RestConverterList(this);
-		}
-
-		@Override /* BeanBuilder */
-		public Builder copy() {
-			return new Builder(this);
 		}
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -93,7 +81,7 @@ public class RestConverterList {
 		@SuppressWarnings("unchecked")
 		public Builder append(Class<? extends RestConverter>...values) {
 			for (Class<? extends RestConverter> v : values)
-				entries.append(BeanCreator.of(RestConverter.class).type(v));
+				entries.append(beanStore().createBean(RestConverter.class).type(v));
 			return this;
 		}
 
@@ -105,27 +93,15 @@ public class RestConverterList {
 		 */
 		public Builder append(RestConverter...values) {
 			for (RestConverter v : values)
-				entries.append(BeanCreator.of(RestConverter.class).impl(v));
+				entries.append(beanStore().createBean(RestConverter.class).impl(v));
 			return this;
 		}
 
 		// <FluentSetters>
 
 		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder outer(Object value) {
-			super.outer(value);
 			return this;
 		}
 
@@ -150,13 +126,11 @@ public class RestConverterList {
 	 * @param builder The builder containing the contents for this list.
 	 */
 	protected RestConverterList(Builder builder) {
-		BeanStore bs = builder.beanStore().orElse(BeanStore.INSTANCE);
-		builder.entries.stream().forEach(x -> x.store(bs));
 		entries =
 			builder
 				.entries
 				.stream()
-				.map(x -> x.store(bs).run())
+				.map(x -> x.run())
 				.toArray(RestConverter[]::new);
 	}
 

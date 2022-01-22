@@ -117,7 +117,7 @@ import org.apache.juneau.serializer.*;
 public class AnyAssertion<T> extends FluentAnyAssertion<T,AnyAssertion<T>> {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -131,6 +131,10 @@ public class AnyAssertion<T> extends FluentAnyAssertion<T,AnyAssertion<T>> {
 	public static <T> AnyAssertion<T> create(T value) {
 		return new AnyAssertion<>(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

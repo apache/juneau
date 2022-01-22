@@ -95,7 +95,21 @@ public abstract class Context implements MetaProvider {
 		try {
 			MethodInfo mi = BUILDER_CREATE_METHODS.get(type);
 			if (mi == null) {
-				mi = ClassInfo.of(type).getBuilderCreateMethod().orElseThrow(()->runtimeException("Could not find builder create method on class {0}", type));
+				ClassInfo c = ClassInfo.ofc(type);
+				for (ConstructorInfo ci : c.getPublicConstructors()) {
+					if (ci.matches(x -> x.hasNumParams(1) && ! x.getParam(0).getParameterType().is(type))) {
+						mi = c.getPublicMethod(
+							x -> x.isStatic()
+							&& x.isNotDeprecated()
+							&& x.hasName("create")
+							&& x.hasReturnType(ci.getParam(0).getParameterType())
+						);
+						if (mi != null)
+							break;
+					}
+				}
+				if (mi == null)
+					throw runtimeException("Could not find builder create method on class {0}", type);
 				BUILDER_CREATE_METHODS.put(type, mi);
 			}
 			Builder b = (Builder)mi.invoke(null);
@@ -833,7 +847,7 @@ public abstract class Context implements MetaProvider {
 			try {
 				ClassInfo ci = ClassInfo.of(a.getClass());
 
-				MethodInfo mi = ci.getMethod("onClass");
+				MethodInfo mi = ci.getPublicMethod(x -> x.hasName("onClass"));
 				if (mi != null) {
 					if (! mi.getReturnType().is(Class[].class))
 						throw new ConfigException("Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an onClass() method that returns a Class array.", a.getClass().getSimpleName());
@@ -841,7 +855,7 @@ public abstract class Context implements MetaProvider {
 						rmb.append(c.getName(), a);
 				}
 
-				mi = ci.getMethod("on");
+				mi = ci.getPublicMethod(x -> x.hasName("on"));
 				if (mi != null) {
 					if (! mi.getReturnType().is(String[].class))
 						throw new ConfigException("Invalid annotation @{0} used in BEAN_annotations property.  Annotation must define an on() method that returns a String array.", a.getClass().getSimpleName());

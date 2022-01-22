@@ -78,8 +78,8 @@ import org.apache.juneau.internal.*;
  * Subclasses must provide a public constructor that takes in any of the following arguments:
  * <ul>
  * 	<li>{@link Builder} - The builder object.
- * 	<li>Any beans present in the registered {@link Builder#beanStore(BeanStore) bean store}.
- * 	<li>Any {@link Optional} beans optionally present in the registered {@link Builder#beanStore(BeanStore) bean store}.
+ * 	<li>Any beans present in the bean store passed into the constructor.
+ * 	<li>Any {@link Optional} beans optionally present in bean store passed into the constructor.
  * </ul>
  *
  * <ul class='seealso'>
@@ -96,12 +96,22 @@ public interface FileFinder {
 	public abstract class Null implements FileFinder {}
 
 	/**
-	 * Instantiate a new builder.
+	 * Static creator.
 	 *
-	 * @return A new builder.
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
+	 */
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
+	}
+
+	/**
+	 * Static creator.
+	 *
+	 * @return A new builder for this object.
 	 */
 	public static Builder create() {
-		return new Builder();
+		return new Builder(BeanStore.INSTANCE);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -120,36 +130,20 @@ public interface FileFinder {
 
 		/**
 		 * Constructor.
+		 *
+		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder() {
-			super(BasicFileFinder.class);
+		protected Builder(BeanStore beanStore) {
+			super(BasicFileFinder.class, beanStore);
 			roots = new LinkedHashSet<>();
 			cachingLimit = -1;
 			include = AList.of(Pattern.compile(".*"));
 			exclude = AList.create();
 		}
 
-		/**
-		 * Copy constructor.
-		 *
-		 * @param copyFrom The builder being copied.
-		 */
-		protected Builder(Builder copyFrom) {
-			super(copyFrom);
-			roots = new LinkedHashSet<>(copyFrom.roots);
-			cachingLimit = copyFrom.cachingLimit;
-			include = AList.of(copyFrom.include);
-			exclude = AList.of(copyFrom.exclude);
-		}
-
 		@Override /* BeanBuilder */
 		protected FileFinder buildDefault() {
 			return new BasicFileFinder(this);
-		}
-
-		@Override /* BeanBuilder */
-		public Builder copy() {
-			return new Builder(this);
 		}
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -241,20 +235,8 @@ public interface FileFinder {
 		// <FluentSetters>
 
 		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder outer(Object value) {
-			super.outer(value);
 			return this;
 		}
 

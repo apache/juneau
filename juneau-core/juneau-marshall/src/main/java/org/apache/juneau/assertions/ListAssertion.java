@@ -15,6 +15,7 @@ package org.apache.juneau.assertions;
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
@@ -61,6 +62,10 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='topic'>Transform Methods</h5>
  * 	<ul>
+ * 		<li class='jm'>{@link FluentListAssertion#asStrings()}
+ * 		<li class='jm'>{@link FluentListAssertion#asStrings(Function)}
+ * 		<li class='jm'>{@link FluentListAssertion#asCdl()}
+ * 		<li class='jm'>{@link FluentListAssertion#asCdl(Function)}
  * 		<li class='jm'>{@link FluentListAssertion#item(int)}
  * 		<li class='jm'>{@link FluentListAssertion#sorted()}
  * 		<li class='jm'>{@link FluentListAssertion#sorted(Comparator)}
@@ -95,7 +100,7 @@ import org.apache.juneau.serializer.*;
 public class ListAssertion<E> extends FluentListAssertion<E,ListAssertion<E>> {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -109,6 +114,22 @@ public class ListAssertion<E> extends FluentListAssertion<E,ListAssertion<E>> {
 	public static <E> ListAssertion<E> create(List<E> value) {
 		return new ListAssertion<>(value);
 	}
+
+	/**
+	 * Static creator.
+	 *
+	 * @param value
+	 * 	The object being tested.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new assertion object.
+	 */
+	public static <E> ListAssertion<E> create(Stream<E> value) {
+		return new ListAssertion<>(value == null ? null : value.collect(Collectors.toList()));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

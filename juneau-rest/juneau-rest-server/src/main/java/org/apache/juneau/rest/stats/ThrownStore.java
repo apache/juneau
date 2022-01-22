@@ -49,10 +49,20 @@ public class ThrownStore {
 	/**
 	 * Static creator.
 	 *
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
+	 */
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
+	}
+
+	/**
+	 * Static creator.
+	 *
 	 * @return A new builder for this object.
 	 */
 	public static Builder create() {
-		return new Builder();
+		return new Builder(BeanStore.INSTANCE);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -71,31 +81,16 @@ public class ThrownStore {
 
 		/**
 		 * Constructor.
-		 */
-		protected Builder() {
-			super(ThrownStore.class);
-		}
-
-		/**
-		 * Copy constructor.
 		 *
-		 * @param copyFrom The builder to copy.
+		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(Builder copyFrom) {
-			super(copyFrom);
-			parent = copyFrom.parent;
-			statsImplClass = copyFrom.statsImplClass;
-			ignoreClasses = copyFrom.ignoreClasses == null ? null : ASet.of(copyFrom.ignoreClasses);
+		protected Builder(BeanStore beanStore) {
+			super(ThrownStore.class, beanStore);
 		}
 
 		@Override /* BeanBuilder */
 		protected ThrownStore buildDefault() {
 			return new ThrownStore(this);
-		}
-
-		@Override /* BeanBuilder */
-		public Builder copy() {
-			return new Builder(this);
 		}
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -145,20 +140,8 @@ public class ThrownStore {
 		// <FluentSetters>
 
 		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder outer(Object value) {
-			super.outer(value);
 			return this;
 		}
 
@@ -185,7 +168,7 @@ public class ThrownStore {
 	 * Constructor.
 	 */
 	public ThrownStore() {
-		this(create());
+		this(create(BeanStore.INSTANCE));
 	}
 
 	/**
@@ -195,7 +178,7 @@ public class ThrownStore {
 	 */
 	public ThrownStore(Builder builder) {
 		this.parent = ofNullable(builder.parent);
-		this.beanStore = builder.beanStore().orElseGet(()->BeanStore.create().build());
+		this.beanStore = builder.beanStore();
 
 		this.statsImplClass = firstNonNull(builder.statsImplClass, parent.isPresent() ? parent.get().statsImplClass : null, null);
 
@@ -340,8 +323,7 @@ public class ThrownStore {
 		ThrownStats stc = db.get(hash);
 		if (stc == null) {
 			stc = ThrownStats
-				.create()
-				.beanStore(beanStore)
+				.create(beanStore)
 				.type(statsImplClass)
 				.throwable(t)
 				.hash(hash)

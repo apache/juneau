@@ -249,8 +249,19 @@ public abstract class ExecutableInfo {
 			// Note that due to a bug involving Enum constructors, getGenericParameterTypes() may
 			// always return an empty array.  This appears to be fixed in Java 8 b75.
 			Type[] ptt = _getRawGenericParamTypes();
-			if (ptt.length != ptc.length)
-				ptt = ptc;
+			if (ptt.length != ptc.length) {
+				// Bug in javac: generic type array excludes enclosing instance parameter
+				// for inner classes with at least one generic constructor parameter.
+				if (ptt.length + 1 == ptc.length) {
+					Type[] ptt2 = new Type[ptc.length];
+					ptt2[0] = ptc[0];
+					for (int i = 0; i < ptt.length; i++)
+						ptt2[i+1] = ptt[i];
+					ptt = ptt2;
+				} else {
+					ptt = ptc;
+				}
+			}
 			ClassInfo[] l = new ClassInfo[ptc.length];
 			for (int i = 0; i < ptc.length; i++)
 				l[i] = ClassInfo.of(ptc[i], ptt[i]);

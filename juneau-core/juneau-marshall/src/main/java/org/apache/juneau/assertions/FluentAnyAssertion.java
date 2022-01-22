@@ -125,12 +125,16 @@ import org.apache.juneau.serializer.*;
 @FluentSetters(returns="FluentAnyAssertion<T,R>")
 public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final Messages MESSAGES = Messages.of(FluentAnyAssertion.class, "Messages");
 	private static final String
 		MSG_objectWasNotType = MESSAGES.getString("objectWasNotType");
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**

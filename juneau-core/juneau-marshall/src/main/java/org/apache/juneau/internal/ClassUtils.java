@@ -13,10 +13,10 @@
 package org.apache.juneau.internal;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
-
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.reflect.*;
 
@@ -112,7 +112,8 @@ public final class ClassUtils {
 			try {
 				ClassInfo c3 = ClassInfo.of((Class<?>)c2);
 
-				MethodInfo mi = fuzzyArgs ? c3.getStaticCreatorFuzzy(args) : c3.getStaticCreator(args);
+				MethodInfo mi = fuzzyArgs ? getStaticCreatorFuzzy(c3, args) : getStaticCreator(c3, args);
+
 				if (mi != null)
 					return fuzzyArgs ? (T)mi.invokeFuzzy(null, args) : mi.invoke(null, args);
 
@@ -134,7 +135,7 @@ public final class ClassUtils {
 
 				// Finally use fuzzy matching.
 				if (fuzzyArgs) {
-					mi = c3.getStaticCreatorFuzzy(args);
+					mi = getStaticCreatorFuzzy(c3, args);
 					if (mi != null)
 						return mi.invoke(null, getMatchingArgs(mi.getParamTypes(), args));
 
@@ -152,6 +153,32 @@ public final class ClassUtils {
 		} else {
 			throw runtimeException("Object of type {0} found but was expecting {1}.", className(c2), className(c));
 		}
+	}
+
+
+	private static MethodInfo getStaticCreatorFuzzy(ClassInfo c, Object...args) {
+		int bestCount = -1;
+		MethodInfo bestMatch = null;
+		for (MethodInfo m : c.getPublicMethods()) {
+			if (m.matches(x -> x.isStatic() && x.isNotDeprecated() && x.hasReturnType(c) && x.hasName("create","getInstance"))) {
+				int mn = m.canAcceptFuzzy(args);
+				if (mn > bestCount) {
+					bestCount = mn;
+					bestMatch = m;
+				}
+			}
+		}
+		return bestMatch;
+	}
+
+	private static MethodInfo getStaticCreator(ClassInfo c, Object...args) {
+		return c.getPublicMethod(
+			x -> x.isStatic()
+			&& x.isNotDeprecated()
+			&& x.hasReturnType(c)
+			&& x.hasName("create","getInstance")
+			&& x.canAccept(args)
+		);
 	}
 
 	/**
@@ -273,12 +300,30 @@ public final class ClassUtils {
 	}
 
 	/**
-	 * Returns the class name for the specified object.
+	 * Returns the fully-qualified class name for the specified object.
 	 *
 	 * @param value The object to get the class name for.
 	 * @return The name of the class or <jk>null</jk> if the value was null.
 	 */
 	public static String className(Object value) {
 		return value == null ? null : value instanceof Class<?> ? ((Class<?>)value).getName() : value.getClass().getName();
+	}
+
+	/**
+	 * Returns the simple class name for the specified object.
+	 *
+	 * @param value The object to get the class name for.
+	 * @return The name of the class or <jk>null</jk> if the value was null.
+	 */
+	public static String simpleClassName(Object value) {
+		if (value == null)
+			return null;
+		if (value instanceof ClassInfo)
+			return ((ClassInfo)value).getSimpleName();
+		if (value instanceof ClassMeta)
+			return ((ClassMeta<?>)value).getSimpleName();
+		if (value instanceof Class)
+			return ((Class<?>)value).getSimpleName();
+		return value.getClass().getSimpleName();
 	}
 }

@@ -28,7 +28,7 @@ public class Rest_Debug_Test {
 	public static final CaptureLogger LOGGER = new CaptureLogger();
 
 	public static class CaptureLogger extends BasicTestCaptureRestLogger {
-		public static CaptureLogger getInstance() {
+		public static CaptureLogger getInstance(RestLogger.Builder x) {
 			return LOGGER;
 		}
 	}

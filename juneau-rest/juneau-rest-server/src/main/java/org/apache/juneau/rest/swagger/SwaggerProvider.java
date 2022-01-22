@@ -49,12 +49,13 @@ public interface SwaggerProvider {
 	public abstract class Null implements SwaggerProvider {};
 
 	/**
-	 * Creator.
+	 * Static creator.
 	 *
+	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -66,32 +67,24 @@ public interface SwaggerProvider {
 	 */
 	public class Builder {
 
-		BeanStore beanStore;
+		final BeanStore beanStore;
 		Class<?> resourceClass;
 		Supplier<VarResolver> varResolver;
 		Supplier<JsonSchemaGenerator> jsonSchemaGenerator;
 		Supplier<Messages> messages;
 		Supplier<FileFinder> fileFinder;
-		BeanCreator<SwaggerProvider> creator = BeanCreator.of(SwaggerProvider.class).type(BasicSwaggerProvider.class).builder(this);
+		BeanCreator<SwaggerProvider> creator;
 
 		/**
 		 * Constructor.
-		 */
-		protected Builder() {}
-
-		/**
-		 * Copy constructor.
 		 *
-		 * @param copyFrom The builder being copied.
+		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(Builder copyFrom) {
-			resourceClass = copyFrom.resourceClass;
-			varResolver = copyFrom.varResolver;
-			jsonSchemaGenerator = copyFrom.jsonSchemaGenerator;
-			messages = copyFrom.messages;
-			fileFinder = copyFrom.fileFinder;
-			creator = copyFrom.creator.copy();
+		protected Builder(BeanStore beanStore) {
+			this.beanStore = beanStore;
+			this.creator = beanStore.createBean(SwaggerProvider.class).type(BasicSwaggerProvider.class).builder(Builder.class, this);
 		}
+
 		/**
 		 * Creates a new {@link SwaggerProvider} object from this builder.
 		 *
@@ -152,18 +145,6 @@ public interface SwaggerProvider {
 		 */
 		protected Class<? extends SwaggerProvider> getDefaultType() {
 			return BasicSwaggerProvider.class;
-		}
-
-		/**
-		 * Specifies the bean store to use for instantiating the {@link SwaggerProvider} object.
-		 *
-		 * @param value The new value for this setting.
-		 * @return  This object.
-		 */
-		public Builder beanStore(BeanStore value) {
-			creator.store(value);
-			beanStore = value;
-			return this;
 		}
 
 		/**
@@ -230,15 +211,6 @@ public interface SwaggerProvider {
 		public Builder impl(SwaggerProvider value) {
 			creator.impl(value);
 			return this;
-		}
-
-		/**
-		 * Creates a copy of this builder.
-		 *
-		 * @return A copy of this builder.
-		 */
-		public Builder copy() {
-			return new Builder(this);
 		}
 	}
 

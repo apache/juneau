@@ -174,25 +174,11 @@ public class Messages extends ResourceBundle {
 		 * @param forClass The base class.
 		 */
 		protected Builder(Class<?> forClass) {
-			super(Messages.class);
+			super(Messages.class, BeanStore.INSTANCE);
 			this.forClass = forClass;
 			this.name = forClass.getSimpleName();
 			locations = new ArrayList<>();
 			locale = Locale.getDefault();
-		}
-
-		/**
-		 * Copy constructor.
-		 *
-		 * @param copyFrom The builder being copied.
-		 */
-		protected Builder(Builder copyFrom) {
-			super(copyFrom);
-			forClass = copyFrom.forClass;
-			locale = copyFrom.locale;
-			name = copyFrom.name;
-			parent = copyFrom.parent;
-			locations = new ArrayList<>(copyFrom.locations);
 		}
 
 		@Override /* BeanBuilder */
@@ -229,11 +215,6 @@ public class Messages extends ResourceBundle {
 			public String name;
 			public String[] baseNames;
 			public String locale;
-		}
-
-		@Override /* BeanBuilder */
-		public Builder copy() {
-			return new Builder(this);
 		}
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -323,20 +304,8 @@ public class Messages extends ResourceBundle {
 		// <FluentSetters>
 
 		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder outer(Object value) {
-			super.outer(value);
 			return this;
 		}
 

@@ -112,7 +112,7 @@ public class RestClient_Response_Body_Test {
 	public void a03_asInputStream() throws Exception {
 		RestResponse r1 = client().build().get("/bean").run();
 		InputStream is = r1.getBody().asInputStream();
-		assertStream(is).asString().is("{f:1}");
+		assertBytes(is).asString().is("{f:1}");
 		assertThrown(()->r1.getBody().asInputStream()).message().contains("Response has already been consumed.");
 
 		// Non-repeatable entity.
@@ -126,7 +126,7 @@ public class RestClient_Response_Body_Test {
 		RestResponse r3 = x.get("/bean").run();
 		r3.getBody().asInputStream();
 		is = r3.getBody().asInputStream();
-		assertStream(is).asString().is("{f:2}");
+		assertBytes(is).asString().is("{f:2}");
 		is = x.get("/bean").run().getBody().asInputStream();
 		((EofSensorInputStream)is).abortConnection();
 
@@ -292,7 +292,7 @@ public class RestClient_Response_Body_Test {
 			.getBody().getContentEncoding().assertValue().is("identity");
 
 		InputStream x4 = testClient().entity(inputStreamEntity("foo")).get().run().getBody().asInputStream();
-		assertStream(x4).asString().is("foo");
+		assertBytes(x4).asString().is("foo");
 
 		ByteArrayOutputStream x5 = new ByteArrayOutputStream();
 		testClient().entity(inputStreamEntity("foo")).get().run().getBody().writeTo(x5);

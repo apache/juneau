@@ -95,12 +95,22 @@ public final class EncoderSet {
 	public static abstract class NoInherit extends Encoder {}
 
 	/**
-	 * Instantiates a new clean-slate {@link EncoderSet.Builder} object.
+	 * Static creator.
 	 *
-	 * @return A new {@link EncoderSet.Builder} object.
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
+	 */
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
+	}
+
+	/**
+	 * Static creator.
+	 *
+	 * @return A new builder for this object.
 	 */
 	public static Builder create() {
-		return new Builder();
+		return new Builder(BeanStore.INSTANCE);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -117,9 +127,11 @@ public final class EncoderSet {
 
 		/**
 		 * Constructor.
+		 *
+		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder() {
-			super(EncoderSet.class);
+		protected Builder(BeanStore beanStore) {
+			super(EncoderSet.class, beanStore);
 			entries = AList.create();
 		}
 
@@ -138,7 +150,11 @@ public final class EncoderSet {
 			return new EncoderSet(this);
 		}
 
-		@Override /* BeanBuilder */
+		/**
+		 * Makes a copy of this builder.
+		 *
+		 * @return A new copy of this builder.
+		 */
 		public Builder copy() {
 			return new Builder(this);
 		}
@@ -254,20 +270,8 @@ public final class EncoderSet {
 		// <FluentSetters>
 
 		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder outer(Object value) {
-			super.outer(value);
 			return this;
 		}
 
@@ -314,7 +318,7 @@ public final class EncoderSet {
 	 * @param builder The builder for this object.
 	 */
 	protected EncoderSet(Builder builder) {
-		entries = builder.entries.stream().map(x -> instantiate(builder.beanStore().orElse(BeanStore.INSTANCE), x)).toArray(Encoder[]::new);
+		entries = builder.entries.stream().map(x -> instantiate(builder.beanStore(), x)).toArray(Encoder[]::new);
 
 		List<String> lc = AList.create();
 		List<Encoder> l = AList.create();
@@ -333,7 +337,7 @@ public final class EncoderSet {
 		if (o instanceof Encoder)
 			return (Encoder)o;
 		try {
-			return bs.creator(Encoder.class).type((Class<?>)o).run();
+			return bs.createBean(Encoder.class).type((Class<?>)o).run();
 		} catch (ExecutableException e) {
 			throw runtimeException(e);
 		}

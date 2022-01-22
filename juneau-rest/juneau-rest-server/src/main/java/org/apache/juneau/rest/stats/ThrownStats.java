@@ -39,10 +39,11 @@ public class ThrownStats implements Cloneable {
 	/**
 	 * Static creator.
 	 *
+	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -55,12 +56,23 @@ public class ThrownStats implements Cloneable {
 	@FluentSetters
 	public static class Builder {
 
+		final BeanStore beanStore;
 		Throwable throwable;
 		long hash;
 		List<String> stackTrace;
 		ThrownStats causedBy;
 
-		BeanCreator<ThrownStats> creator = BeanCreator.of(ThrownStats.class).builder(this);
+		BeanCreator<ThrownStats> creator;
+
+		/**
+		 * Constructor.
+		 *
+		 * @param beanStore The bean store to use for creating beans.
+		 */
+		protected Builder(BeanStore beanStore) {
+			this.beanStore = beanStore;
+			this.creator = beanStore.createBean(ThrownStats.class).builder(Builder.class, this);
+		}
 
 		/**
 		 * Create a new {@link ThrownStats} using this builder.
@@ -69,21 +81,6 @@ public class ThrownStats implements Cloneable {
 		 */
 		public ThrownStats build() {
 			return creator.run();
-		}
-
-		/**
-		 * Specifies the bean store to use for instantiating the {@link ThrownStats} object.
-		 *
-		 * <p>
-		 * Can be used to instantiate {@link ThrownStats} implementations with injected constructor argument beans.
-		 *
-		 * @param value The new value for this setting.
-		 * @return This object.
-		 */
-		@FluentSetter
-		public Builder beanStore(BeanStore value) {
-			creator.store(value);
-			return this;
 		}
 
 		/**

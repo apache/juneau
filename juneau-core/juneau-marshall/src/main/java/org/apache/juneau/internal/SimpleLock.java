@@ -19,6 +19,11 @@ import java.util.concurrent.locks.Lock;
  */
 public class SimpleLock implements AutoCloseable {
 
+	/**
+	 * A simple no-op lock.
+	 */
+	public static final SimpleLock NO_OP = new SimpleLock(null);
+
 	private final Lock lock;
 
 	/**
@@ -28,11 +33,11 @@ public class SimpleLock implements AutoCloseable {
 	 */
 	public SimpleLock(Lock lock) {
 		this.lock = lock;
-		this.lock.lock();
+		if (lock != null) lock.lock();
 	}
 
 	@Override
 	public void close() {
-		this.lock.unlock();
+		if (lock != null) lock.unlock();
 	}
 }

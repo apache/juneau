@@ -40,10 +40,11 @@ public class ResponseProcessorList {
 	/**
 	 * Static creator.
 	 *
-	 * @return An empty list.
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -60,30 +61,17 @@ public class ResponseProcessorList {
 
 		/**
 		 * Constructor.
-		 */
-		protected Builder() {
-			super(ResponseProcessorList.class);
-			this.entries = AList.create();
-		}
-
-		/**
-		 * Copy constructor.
 		 *
-		 * @param copyFrom The builder to copy.
+		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(Builder copyFrom) {
-			super(copyFrom);
-			this.entries = AList.create().append(copyFrom.entries);
+		protected Builder(BeanStore beanStore) {
+			super(ResponseProcessorList.class, beanStore);
+			this.entries = AList.create();
 		}
 
 		@Override /* BeanBuilder */
 		protected ResponseProcessorList buildDefault() {
 			return new ResponseProcessorList(this);
-		}
-
-		@Override /* BeanBuilder */
-		public Builder copy() {
-			return new Builder(this);
 		}
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -116,20 +104,8 @@ public class ResponseProcessorList {
 		// <FluentSetters>
 
 		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder outer(Object value) {
-			super.outer(value);
 			return this;
 		}
 
@@ -154,7 +130,7 @@ public class ResponseProcessorList {
 	 * @param builder The builder containing the contents for this list.
 	 */
 	protected ResponseProcessorList(Builder builder) {
-		BeanStore bs = builder.beanStore().orElse(BeanStore.INSTANCE);
+		BeanStore bs = builder.beanStore();
 		entries =
 			builder
 				.entries
@@ -167,7 +143,7 @@ public class ResponseProcessorList {
 		if (o instanceof ResponseProcessor)
 			return (ResponseProcessor)o;
 		try {
-			return bs.creator(ResponseProcessor.class).type((Class<?>)o).run();
+			return bs.createBean(ResponseProcessor.class).type((Class<?>)o).run();
 		} catch (ExecutableException e) {
 			throw new ConfigException(e, "Could not instantiate class {0}", o);
 		}

@@ -59,6 +59,10 @@ import org.apache.juneau.serializer.*;
  * 		<li class='jm'>{@link FluentStringListAssertion#join(String)}
  * 		<li class='jm'>{@link FluentStringListAssertion#join(String,String,String)}
  * 		<li class='jm'>{@link FluentStringListAssertion#trim()}
+ * 		<li class='jm'>{@link FluentListAssertion#asStrings()}
+ * 		<li class='jm'>{@link FluentListAssertion#asStrings(Function)}
+ * 		<li class='jm'>{@link FluentListAssertion#asCdl()}
+ * 		<li class='jm'>{@link FluentListAssertion#asCdl(Function)}
  * 		<li class='jm'>{@link FluentListAssertion#item(int)}
  * 		<li class='jm'>{@link FluentListAssertion#sorted()}
  * 		<li class='jm'>{@link FluentListAssertion#sorted(Comparator)}
@@ -91,7 +95,7 @@ import org.apache.juneau.serializer.*;
 public class StringListAssertion extends FluentStringListAssertion<StringListAssertion> {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -105,6 +109,10 @@ public class StringListAssertion extends FluentStringListAssertion<StringListAss
 	public static StringListAssertion create(List<String> value) {
 		return new StringListAssertion(value);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

@@ -57,8 +57,10 @@ public class RrpcInterfaceMeta {
 				path = trimSlashes(r.path());
 
 		AMap<Method,RrpcInterfaceMethodMeta> methods = AMap.create();
-		for (MethodInfo m : ci.getPublicMethods())
-			methods.put(m.inner(), new RrpcInterfaceMethodMeta(uri, m.inner()));
+		ci.getPublicMethods(
+			x -> true, 
+			x -> methods.put(x.inner(), new RrpcInterfaceMethodMeta(uri, x.inner()))
+		);
 
 		AMap<String,RrpcInterfaceMethodMeta> methodsByPath = AMap.create();
 		for (RrpcInterfaceMethodMeta rmm : methods.values())

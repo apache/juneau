@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
@@ -127,6 +128,32 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns <jk>true</jk> if this constructor passes the specified predicate.
+	 *
+	 * @param predicate The predicate.
+	 * @return <jk>true</jk> if this constructor passes the specified predicate.
+	 */
+	public boolean matches(Predicate<ConstructorInfo> predicate) {
+		return predicate.test(this);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this constructor can accept the specified arguments in the specified order.
+	 *
+	 * @param args The arguments to check.
+	 * @return <jk>true</jk> if this constructor can accept the specified arguments in the specified order.
+	 */
+	public boolean canAccept(Object...args) {
+		Class<?>[] pt = c.getParameterTypes();
+		if (pt.length != args.length)
+			return false;
+		for (int i = 0; i < pt.length; i++)
+			if (! pt[i].isInstance(args[i]))
+				return false;
+		return true;
+	}
 
 	/**
 	 * Shortcut for calling the new-instance method on the underlying constructor.

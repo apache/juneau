@@ -34,10 +34,11 @@ public class RestGuardList {
 	/**
 	 * Static creator.
 	 *
-	 * @return An empty list.
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -54,30 +55,17 @@ public class RestGuardList {
 
 		/**
 		 * Constructor.
-		 */
-		protected Builder() {
-			super(RestGuardList.class);
-			entries = AList.create();
-		}
-
-		/**
-		 * Copy constructor.
 		 *
-		 * @param copyFrom The builder being copied.
+		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(Builder copyFrom) {
-			super(copyFrom);
-			entries = AList.of(copyFrom.entries);
+		protected Builder(BeanStore beanStore) {
+			super(RestGuardList.class, beanStore);
+			entries = AList.create();
 		}
 
 		@Override /* BeanBuilder */
 		protected RestGuardList buildDefault() {
 			return new RestGuardList(this);
-		}
-
-		@Override /* BeanBuilder */
-		public Builder copy() {
-			return new Builder(this);
 		}
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -93,7 +81,7 @@ public class RestGuardList {
 		@SuppressWarnings("unchecked")
 		public Builder append(Class<? extends RestGuard>...values) {
 			for (Class<? extends RestGuard> v : values)
-				entries.append(BeanCreator.of(RestGuard.class).type(v));
+				entries.append(beanStore().createBean(RestGuard.class).type(v));
 			return this;
 		}
 
@@ -105,27 +93,15 @@ public class RestGuardList {
 		 */
 		public Builder append(RestGuard...values) {
 			for (RestGuard v : values)
-				entries.append(BeanCreator.of(RestGuard.class).impl(v));
+				entries.append(beanStore().createBean(RestGuard.class).impl(v));
 			return this;
 		}
 
 		// <FluentSetters>
 
 		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder outer(Object value) {
-			super.outer(value);
 			return this;
 		}
 
@@ -150,12 +126,11 @@ public class RestGuardList {
 	 * @param builder The builder containing the contents for this list.
 	 */
 	protected RestGuardList(Builder builder) {
-		BeanStore bs = builder.beanStore().orElse(BeanStore.INSTANCE);
 		entries =
 			builder
 				.entries
 				.stream()
-				.map(x -> x.store(bs).run())
+				.map(x -> x.run())
 				.toArray(RestGuard[]::new);
 	}
 

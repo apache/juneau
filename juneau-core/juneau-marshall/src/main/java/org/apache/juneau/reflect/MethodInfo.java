@@ -105,6 +105,52 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Returns <jk>true</jk> if this method passes the specified predicate.
+	 *
+	 * @param predicate The predicate.
+	 * @return <jk>true</jk> if this method passes the specified predicate.
+	 */
+	public boolean matches(Predicate<MethodInfo> predicate) {
+		return predicate.test(this);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this constructor can accept the specified arguments in the specified order.
+	 *
+	 * @param args The arguments to check.
+	 * @return <jk>true</jk> if this constructor can accept the specified arguments in the specified order.
+	 */
+	public boolean canAccept(Object...args) {
+		Class<?>[] pt = m.getParameterTypes();
+		if (pt.length != args.length)
+			return false;
+		for (int i = 0; i < pt.length; i++)
+			if (! pt[i].isInstance(args[i]))
+				return false;
+		return true;
+	}
+
+	/**
+	 * Returns the number of matching arguments for this method.
+	 *
+	 * @param args The arguments to check.
+	 * @return the number of matching arguments for this method.
+	 */
+	public int canAcceptFuzzy(Object...args) {
+		int matches = 0;
+		outer: for (ClassInfo pi : getParamTypes()) {
+			for (Object a : args) {
+				if (pi.canAcceptArg(a)) {
+					matches++;
+					continue outer;
+				}
+			}
+			return -1;
+		}
+		return matches;
+	}
+
+	/**
 	 * Finds all declared methods with the same name and arguments on all superclasses and interfaces.
 	 *
 	 * @return
@@ -191,7 +237,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	public final <T extends Annotation> T getLastAnnotation(Class<T> a, MetaProvider mp) {
 		if (a == null)
 			return null;
-		for (Method m2 : getMatching()) {
+		for (Method m2 : _getMatching()) {
 			T t = last(mp.getAnnotations(a, m2));
 			if (t != null)
 				return t;
@@ -207,6 +253,16 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 */
 	public final boolean hasAnnotation(Class<? extends Annotation> a) {
 		return getLastAnnotation(a) != null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified annotation is not present on this method.
+	 *
+	 * @param a The annotation to check for.
+	 * @return <jk>true</jk> if the specified annotation is not present on this method.
+	 */
+	public final boolean hasNoAnnotation(Class<? extends Annotation> a) {
+		return getLastAnnotation(a) == null;
 	}
 
 	/**

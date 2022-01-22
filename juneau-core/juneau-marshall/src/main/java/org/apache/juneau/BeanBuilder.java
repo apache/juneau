@@ -34,16 +34,26 @@ public class BeanBuilder<T> {
 
 	private Class<? extends T> type, defaultType;
 	private T impl;
-	private Object outer;
-	private BeanStore beanStore = BeanStore.INSTANCE;
+	private final BeanStore beanStore;
 
 	/**
 	 * Constructor.
 	 *
+	 * @param beanStore The bean store to use for creating beans.
 	 * @param defaultType The default bean type that this builder creates.
 	 */
-	protected BeanBuilder(Class<? extends T> defaultType) {
+	protected BeanBuilder(Class<? extends T> defaultType, BeanStore beanStore) {
 		this.defaultType = type = defaultType;
+		this.beanStore = beanStore;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param defaultType The type of bean being created.
+	 */
+	protected BeanBuilder(Class<? extends T> defaultType) {
+		this(defaultType, BeanStore.INSTANCE);
 	}
 
 	/**
@@ -54,17 +64,7 @@ public class BeanBuilder<T> {
 	protected BeanBuilder(BeanBuilder<T> copyFrom) {
 		type = copyFrom.type;
 		impl = copyFrom.impl;
-		outer = copyFrom.outer;
 		beanStore = copyFrom.beanStore;
-	}
-
-	/**
-	 * Creates a copy of this builder.
-	 *
-	 * @return A copy of this builder.
-	 */
-	public BeanBuilder<T> copy() {
-		return new BeanBuilder<>(this);
 	}
 
 	/**
@@ -90,9 +90,8 @@ public class BeanBuilder<T> {
 	 */
 	protected BeanCreator<? extends T> creator() {
 		return beanStore
-			.creator(type().orElseThrow(()->runtimeException("Type not specified.")))
-			.outer(outer)
-			.builder(this);
+			.createBean(type().orElseThrow(()->runtimeException("Type not specified.")))
+			.builder(BeanBuilder.class, this);
 	}
 
 	/**
@@ -102,9 +101,8 @@ public class BeanBuilder<T> {
 	 */
 	protected T buildDefault() {
 		return beanStore
-			.creator(type().orElseThrow(()->runtimeException("Type not specified.")))
-			.outer(outer)
-			.builder(this)
+			.createBean(type().orElseThrow(()->runtimeException("Type not specified.")))
+			.builder(BeanBuilder.class, this)
 			.run();
 	}
 
@@ -159,52 +157,12 @@ public class BeanBuilder<T> {
 	}
 
 	/**
-	 * Specifies the outer bean context.
+	 * Returns the bean store passed in through the constructor.
 	 *
-	 * <p>
-	 * This should be the instance of the outer object such as the servlet object when constructing inner classes
-	 * of the servlet class.
-	 *
-	 * @param value The setting value.
-	 * @return  This object.
+	 * @return The bean store passed in through the constructor.
 	 */
-	@FluentSetter
-	public BeanBuilder<T> outer(Object value) {
-		outer = value;
-		return this;
-	}
-
-	/**
-	 * Returns the outer bean context specified via {@link #outer(Object)}.
-	 *
-	 * @return The outer bean context specified via {@link #outer(Object)}.
-	 */
-	public Optional<Object> outer() {
-		return ofNullable(outer);
-	}
-
-	/**
-	 * The bean store to use for instantiating the bean.
-	 *
-	 * <p>
-	 * The bean store can be used to inject beans into parameters of the constructor of the bean.
-	 *
-	 * @param value The setting value.
-	 * @return  This object.
-	 */
-	@FluentSetter
-	public BeanBuilder<T> beanStore(BeanStore value) {
-		beanStore = value;
-		return this;
-	}
-
-	/**
-	 * Returns the bean store specified via {@link #outer(Object)}.
-	 *
-	 * @return The bean store specified via {@link #outer(Object)}.
-	 */
-	public Optional<BeanStore> beanStore() {
-		return ofNullable(beanStore);
+	public BeanStore beanStore() {
+		return beanStore;
 	}
 
 	// <FluentSetters>

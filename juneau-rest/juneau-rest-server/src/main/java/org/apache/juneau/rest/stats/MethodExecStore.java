@@ -40,12 +40,22 @@ public class MethodExecStore {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Creates a new builder for this object.
+	 * Static creator.
+	 *
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
+	 */
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
+	}
+
+	/**
+	 * Static creator.
 	 *
 	 * @return A new builder for this object.
 	 */
 	public static Builder create() {
-		return new Builder();
+		return new Builder(BeanStore.INSTANCE);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -63,30 +73,16 @@ public class MethodExecStore {
 
 		/**
 		 * Constructor.
-		 */
-		protected Builder() {
-			super(MethodExecStore.class);
-		}
-
-		/**
-		 * Copy constructor.
 		 *
-		 * @param copyFrom The builder to copy.
+		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(Builder copyFrom) {
-			super(copyFrom);
-			thrownStore = copyFrom.thrownStore;
-			statsImplClass = copyFrom.statsImplClass;
+		protected Builder(BeanStore beanStore) {
+			super(MethodExecStore.class, beanStore);
 		}
 
 		@Override /* BeanBuilder */
 		protected MethodExecStore buildDefault() {
 			return new MethodExecStore(this);
-		}
-
-		@Override /* BeanBuilder */
-		public Builder copy() {
-			return new Builder(this);
 		}
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -136,20 +132,8 @@ public class MethodExecStore {
 		// <FluentSetters>
 
 		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder outer(Object value) {
-			super.outer(value);
 			return this;
 		}
 
@@ -177,7 +161,7 @@ public class MethodExecStore {
 	 * @param builder The store to use for storing thrown exception statistics.
 	 */
 	protected MethodExecStore(Builder builder) {
-		this.beanStore = builder.beanStore().orElseGet(()->BeanStore.create().build());
+		this.beanStore = builder.beanStore();
 		this.thrownStore = ofNullable(builder.thrownStore).orElse(beanStore.getBean(ThrownStore.class).orElseGet(ThrownStore::new));
 		this.statsImplClass = builder.statsImplClass;
 	}
@@ -195,11 +179,10 @@ public class MethodExecStore {
 		MethodExecStats stats = db.get(m);
 		if (stats == null) {
 			stats = MethodExecStats
-				.create()
-				.beanStore(beanStore)
+				.create(beanStore)
 				.type(statsImplClass)
 				.method(m)
-				.thrownStore(ThrownStore.create().parent(thrownStore).build())
+				.thrownStore(ThrownStore.create(beanStore).parent(thrownStore).build())
 				.build();
 			db.putIfAbsent(m, stats);
 			stats = db.get(m);

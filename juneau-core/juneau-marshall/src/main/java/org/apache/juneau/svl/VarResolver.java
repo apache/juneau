@@ -116,9 +116,8 @@ public class VarResolver {
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(VarResolver.class);
+			super(VarResolver.class, BeanStore.create().build());
 			vars = VarList.create();
-			beanStore(BeanStore.create().build());
 		}
 
 		/**
@@ -127,29 +126,13 @@ public class VarResolver {
 		 * @param copyFrom The bean to copy from.
 		 */
 		protected Builder(VarResolver copyFrom) {
-			super(copyFrom.getClass());
+			super(copyFrom.getClass(), copyFrom.beanStore);
 			vars = VarList.of(copyFrom.vars);
-			beanStore(copyFrom.beanStore.copy().build());
-		}
-
-		/**
-		 * Copy constructor.
-		 *
-		 * @param copyFrom The builder to copy from.
-		 */
-		protected Builder(Builder copyFrom) {
-			super(copyFrom);
-			vars = copyFrom.vars.copy();
 		}
 
 		@Override /* BeanBuilder */
 		protected VarResolver buildDefault() {
 			return new VarResolver(this);
-		}
-
-		@Override /* BeanBuilder */
-		public Builder copy() {
-			return new Builder(this);
 		}
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -235,27 +218,15 @@ public class VarResolver {
 		 * @return This object .
 		 */
 		public <T> Builder bean(Class<T> c, T value) {
-			beanStore().get().addBean(c, value);
+			beanStore().addBean(c, value);
 			return this;
 		}
 
 		// <FluentSetters>
 
 		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder outer(Object value) {
-			super.outer(value);
 			return this;
 		}
 
@@ -282,19 +253,19 @@ public class VarResolver {
 	 * @param builder The builder for this object.
 	 */
 	protected VarResolver(Builder builder) {
-		this.vars = builder.vars.stream().map(x -> toVar(builder.beanStore().get(),x)).toArray(Var[]::new);
+		this.vars = builder.vars.stream().map(x -> toVar(builder.beanStore(),x)).toArray(Var[]::new);
 
 		Map<String,Var> m = new ConcurrentSkipListMap<>();
 		for (Var v : vars)
 			m.put(v.getName(), v);
 
 		this.varMap = AMap.unmodifiable(m);
-		this.beanStore = BeanStore.of(builder.beanStore().get());
+		this.beanStore = BeanStore.of(builder.beanStore());
 	}
 
 	private static Var toVar(BeanStore bs, Object o) {
 		if (o instanceof Class)
-			return bs.creator(Var.class).type((Class<?>)o).run();
+			return bs.createBean(Var.class).type((Class<?>)o).run();
 		return (Var)o;
 	}
 

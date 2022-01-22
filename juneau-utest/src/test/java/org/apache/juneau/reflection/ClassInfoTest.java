@@ -189,10 +189,10 @@ public class ClassInfoTest {
 
 	@Test
 	public void resolvedParams() {
-		MethodInfo mi = ClassInfo.of(A6.class).getPublicMethod("m1", Optional.class);
+		MethodInfo mi = ClassInfo.of(A6.class).getPublicMethod(x -> x.hasName("m1"));
 		check("A1", mi.getParamType(0).unwrap(Optional.class));
 		check("A1", mi.getReturnType().unwrap(Optional.class));
-		mi = ClassInfo.of(A6.class).getPublicMethod("m2", Value.class);
+		mi = ClassInfo.of(A6.class).getPublicMethod(x -> x.hasName("m2"));
 		check("A1", mi.getParamType(0).unwrap(Value.class));
 		check("A1", mi.getReturnType().unwrap(Value.class));
 	}
@@ -398,152 +398,9 @@ public class ClassInfoTest {
 		check("", pTypeGenericArgInfo.getDeclaredMethods());
 	}
 
-	static class C2 {
-		public void a1() {}
-		public void a2(int x){}
-		void b1() {}
-		void b2(int x){}
-	}
-	static ClassInfo c2 = ClassInfo.of(C2.class);
-
-	@Test
-	public void getPublicMethod_noArgs() {
-		check("C2.a1()", c2.getPublicMethod("a1"));
-		check(null, c2.getPublicMethod("a2"));
-		check(null, c2.getPublicMethod("b1"));
-		check(null, c2.getPublicMethod("b2"));
-	}
-
-	@Test
-	public void getPublicMethod_withArgs() {
-		check(null, c2.getPublicMethod("a1", int.class));
-		check("C2.a2(int)", c2.getPublicMethod("a2", int.class));
-		check(null, c2.getPublicMethod("b1", int.class));
-		check(null, c2.getPublicMethod("b2", int.class));
-	}
-
-	@Test
-	public void getMethod_noArgs() {
-		check("C2.a1()", c2.getMethod("a1"));
-		check(null, c2.getMethod("a2"));
-		check("C2.b1()", c2.getMethod("b1"));
-		check(null, c2.getMethod("b2"));
-	}
-
-	@Test
-	public void getMethod_withArgs() {
-		check(null, c2.getMethod("a1", int.class));
-		check("C2.a2(int)", c2.getMethod("a2", int.class));
-		check(null, c2.getMethod("b1", int.class));
-		check("C2.b2(int)", c2.getMethod("b2", int.class));
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Special methods
 	//-----------------------------------------------------------------------------------------------------------------
-
-	static class DA1 {
-		public static DA1 create(String s) {return null;}
-	}
-	static class DA2 {
-		public static DA2 create(Object o) {return null;}
-	}
-	static class DA3 {
-		@Deprecated
-		public static DA3 create(String s) {return null;}
-	}
-	static class DA4 {
-		public static DA1 create(String s) {return null;}
-	}
-	static class DA5 {
-		public static DA5 create(String s1, String s2) {return null;}
-	}
-	static class DA6 {
-		public DA6 create(String s1) {return null;}
-	}
-	static class DA7 {
-		static DA7 create(String s1) {return null;}
-	}
-	static class DA8 {
-		public static DA8 create2(String s1) {return null;}
-	}
-	static ClassInfo da1=of(DA1.class), da2=of(DA2.class), da3=of(DA3.class), da4=of(DA4.class), da5=of(DA5.class), da6=of(DA6.class), da7=of(DA7.class), da8=of(DA8.class);
-
-	@Test
-	public void getFromStringMethod() throws Exception {
-		check("DA1.create(String)", da1.getStaticCreateMethod(String.class));
-		check(null, da2.getStaticCreateMethod(String.class));
-		check(null, da3.getStaticCreateMethod(String.class));
-		check(null, da4.getStaticCreateMethod(String.class));
-		check(null, da5.getStaticCreateMethod(String.class));
-		check(null, da6.getStaticCreateMethod(String.class));
-		check(null, da7.getStaticCreateMethod(String.class));
-		check(null, da8.getStaticCreateMethod(String.class));
-	}
-
-	@Test
-	public void getFromStringMethod_onType() throws Exception {
-		check(null, aTypeInfo.getStaticCreateMethod(String.class));
-		check(null, pTypeGenericArgInfo.getStaticCreateMethod(String.class));
-	}
-
-	static class DBx {}
-	static class DB1 {
-		public static DB1 create(DBx x) {return null;}
-	}
-	static class DB2 {
-		public static DB2 fromDBx(DBx x) {return null;}
-	}
-	static class DB3 {
-		public static DB3 from(DBx x) {return null;}
-	}
-	static class DB4 {
-		public static DBx fromDBx(DBx x) {return null;}
-	}
-	static class DB5 {
-		public DB5 fromDBx(DBx x) {return null;}
-	}
-	static class DB6 {
-		protected static DB6 fromDBx(DBx x) {return null;}
-	}
-	static class DB7 {
-		protected static DB7 from(DBx x) {return null;}
-	}
-	static class DB8 {
-		@Deprecated
-		public static DB8 create(DBx x) {return null;}
-	}
-	static class DB9 {
-		public static DB9 create(DB1 x) {return null;}
-	}
-	static class DB10 {
-		public static DB10 foo(DBx x) {return null;}
-	}
-	static class DB11 {
-		public static DB11 fromFoo(DBx x) {return null;}
-	}
-	static ClassInfo db1=of(DB1.class), db2=of(DB2.class), db3=of(DB3.class), db4=of(DB4.class), db5=of(DB5.class), db6=of(DB6.class), db7=of(DB7.class), db8=of(DB8.class), db9=of(DB9.class), db10=of(DB10.class), db11=of(DB11.class);
-
-	@Test
-	public void getStaticCreateMethod() throws Exception {
-		check("DB1.create(DBx)", db1.getStaticCreateMethod(DBx.class));
-		check("DB2.fromDBx(DBx)", db2.getStaticCreateMethod(DBx.class));
-		check("DB3.from(DBx)", db3.getStaticCreateMethod(DBx.class));
-		check(null, db4.getStaticCreateMethod(DBx.class));
-		check(null, db5.getStaticCreateMethod(DBx.class));
-		check(null, db6.getStaticCreateMethod(DBx.class));
-		check(null, db7.getStaticCreateMethod(DBx.class));
-		check(null, db8.getStaticCreateMethod(DBx.class));
-		check(null, db9.getStaticCreateMethod(DBx.class));
-		check(null, db10.getStaticCreateMethod(DBx.class));
-		check(null, db11.getStaticCreateMethod(DBx.class));
-	}
-
-	@Test
-	public void getStaticCreateMethod_onType() throws Exception {
-		check(null, aTypeInfo.getStaticCreateMethod(DBx.class));
-		check(null, pTypeGenericArgInfo.getStaticCreateMethod(DBx.class));
-	}
 
 	static class DCx {}
 	static class DC1 {
@@ -2193,48 +2050,6 @@ public class ClassInfoTest {
 		check("MM", mn.getParameterType(1, HashMap.class));
 	}
 
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// ClassInfo.getStaticCreator(Object...)
-	// ClassInfo.getStaticCreatorFuzzy(Object...)
-	//-----------------------------------------------------------------------------------------------------------------
-
-	public static class N1 {}
-	public static ClassInfo n1 = ClassInfo.of(N1.class);
-
-	@Test
-	public void n01_noCreators() {
-		assertNull(n1.getStaticCreator());
-		assertNull(n1.getStaticCreatorFuzzy());
-	}
-
-	public static class N2 {
-		public static N2 create() {return null;}
-	}
-	public static ClassInfo n2 = ClassInfo.of(N2.class);
-
-	@Test
-	public void n02_noArgCreator() {
-		assertNotNull(n2.getStaticCreator());
-		assertNotNull(n2.getStaticCreatorFuzzy());
-	}
-
-	public static class N3 {
-		public static N3 create(String foo, int bar) {return null;}
-	}
-	public static ClassInfo n3 = ClassInfo.of(N3.class);
-
-	@Test
-	public void n03_withArgCreators() {
-		assertNull(n3.getStaticCreator());
-		assertNull(n3.getStaticCreatorFuzzy());
-		assertNotNull(n3.getStaticCreator("foo", 123));
-		assertNotNull(n3.getStaticCreatorFuzzy("foo", 123));
-		assertNotNull(n3.getStaticCreator(123, "foo"));
-		assertNotNull(n3.getStaticCreatorFuzzy(123, "foo"));
-		assertNull(n3.getStaticCreator("foo", 123, new File(".")));
-		assertNotNull(n3.getStaticCreatorFuzzy("foo", 123, new File(".")));
-	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// ClassInfo.isParentOfFuzzyPrimitives(Class)

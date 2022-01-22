@@ -42,10 +42,11 @@ public class MethodExecStats {
 	/**
 	 * Static creator.
 	 *
+	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
-	public static Builder create() {
-		return new Builder();
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -63,30 +64,16 @@ public class MethodExecStats {
 
 		/**
 		 * Constructor.
-		 */
-		protected Builder() {
-			super(MethodExecStats.class);
-		}
-
-		/**
-		 * Copy constructor.
 		 *
-		 * @param copyFrom The builder being copied.
+		 * @param beanStore The bean store to use for creating beans.
 		 */
-		protected Builder(Builder copyFrom) {
-			super(copyFrom);
-			method = copyFrom.method;
-			thrownStore = copyFrom.thrownStore;
+		protected Builder(BeanStore beanStore) {
+			super(MethodExecStats.class, beanStore);
 		}
 
 		@Override /* BeanBuilder */
 		protected MethodExecStats buildDefault() {
 			return new MethodExecStats(this);
-		}
-
-		@Override /* BeanBuilder */
-		public Builder copy() {
-			return new Builder(this);
 		}
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -120,20 +107,8 @@ public class MethodExecStats {
 		// <FluentSetters>
 
 		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder beanStore(BeanStore value) {
-			super.beanStore(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
 		public Builder impl(Object value) {
 			super.impl(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.BeanBuilder */
-		public Builder outer(Object value) {
-			super.outer(value);
 			return this;
 		}
 

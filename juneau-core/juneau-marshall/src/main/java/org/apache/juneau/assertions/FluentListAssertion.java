@@ -13,6 +13,8 @@
 package org.apache.juneau.assertions;
 
 import static java.util.Arrays.*;
+import static java.util.stream.Collectors.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -59,6 +61,10 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='topic'>Transform Methods</h5>
  * 	<ul>
+ * 		<li class='jm'>{@link FluentListAssertion#asStrings()}
+ * 		<li class='jm'>{@link FluentListAssertion#asStrings(Function)}
+ * 		<li class='jm'>{@link FluentListAssertion#asCdl()}
+ * 		<li class='jm'>{@link FluentListAssertion#asCdl(Function)}
  * 		<li class='jm'>{@link FluentListAssertion#item(int)}
  * 		<li class='jm'>{@link FluentListAssertion#sorted()}
  * 		<li class='jm'>{@link FluentListAssertion#sorted(Comparator)}
@@ -93,12 +99,16 @@ import org.apache.juneau.serializer.*;
 @FluentSetters(returns="FluentListAssertion<E,R>")
 public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final Messages MESSAGES = Messages.of(FluentListAssertion.class, "Messages");
 	private static final String
 		MSG_listDidNotContainExpectedValueAt = MESSAGES.getString("listDidNotContainExpectedValueAt");
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Constructors
+	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -233,6 +243,37 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 		return new FluentListAssertion<>(this, valueIsNull() ? null : value().subList(start, end), returns());
 	}
 
+	/**
+	 * Runs the stringify function against all values in this list and returns it as a fluent string list assertion.
+	 *
+	 * @param function The function to apply to all values in this list.
+	 * @return A new fluent string list assertion.  Never <jk>null</jk>.
+	 */
+	public FluentStringListAssertion<R> asStrings(Function<E,String> function) {
+		List<String> l = valueIsNull() ? null : value().stream().map(x -> function.apply(x)).collect(toList());
+		return new FluentStringListAssertion<>(this, l, returns());
+	}
+
+	/**
+	 * Converts the entries in this list to a simple comma-delimited list and returns the value as a fluent string assertion.
+	 *
+	 * @return A fluent string assertion.  Never <jk>null</jk>.
+	 */
+	public FluentStringAssertion<R> asCdl() {
+		return new FluentStringAssertion<>(this, valueIsNull() ? null : StringUtils.join(value(), ','), returns());
+	}
+
+	/**
+	 * Converts the entries to strings using the specified stringify function, combines them into a simple comma-delimited list, and returns the value as a fluent string assertion.
+	 *
+	 * @param function The function to apply to all values in this list.
+	 * @return A fluent string assertion.  Never <jk>null</jk>.
+	 */
+	public FluentStringAssertion<R> asCdl(Function<E,String> function) {
+		List<String> l = valueIsNull() ? null : value().stream().map(x -> function.apply(x)).collect(toList());
+		return new FluentStringAssertion<>(this, join(l, ','), returns());
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -241,7 +282,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	 * Asserts that the contents of this list contain the specified values.
 	 *
 	 * @param entries The expected entries in this list.
-	 * @return This object.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	@SuppressWarnings("unchecked")
@@ -256,7 +297,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	 * @param tests
 	 * 	The tests to run.
 	 * <jk>null</jk> predicates are ignored.
-	 * @return This object.
+	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
 	@SafeVarargs

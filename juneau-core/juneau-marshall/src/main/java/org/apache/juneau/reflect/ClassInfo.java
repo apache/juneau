@@ -18,12 +18,14 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.reflect.ReflectionFilters.*;
+import static java.util.Arrays.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -72,7 +74,7 @@ public final class ClassInfo {
 	private ClassInfo[] interfaces, declaredInterfaces, parents, allParents;
 	private MethodInfo[] publicMethods, declaredMethods, allMethods, allMethodsParentFirst;
 	private MethodInfo repeatedAnnotationMethod;
-	private ConstructorInfo[] publicConstructors, declaredConstructors;
+	private ConstructorInfo[] publicConstructors, protectedConstructors, declaredConstructors;
 	private FieldInfo[] publicFields, declaredFields, allFields, allFieldsParentFirst;
 	private int dim = -1;
 	private ClassInfo componentType;
@@ -433,68 +435,6 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Returns the public method with the specified method name and argument types.
-	 *
-	 * @param name The method name (e.g. <js>"toString"</js>).
-	 * @param args The exact argument types.
-	 * @return
-	 *  The public method with the specified method name and argument types, or <jk>null</jk> if not found.
-	 */
-	public MethodInfo getPublicMethod(String name, Class<?>...args) {
-		for (MethodInfo mi : _getPublicMethods())
-			if (mi.hasName(name) && mi.hasParamTypes(args))
-				return mi;
-		return null;
-	}
-
-	/**
-	 * Returns the public method with the specified method name and fuzzy argument types.
-	 *
-	 * @param name The method name (e.g. <js>"toString"</js>).
-	 * @param args The fuzzy argument types.
-	 * @return
-	 *  The public method with the specified method name and argument types, or <jk>null</jk> if not found.
-	 */
-	public MethodInfo getPublicMethodFuzzy(String name, Object...args) {
-		Class<?>[] ac = ClassUtils.getClasses(args);
-		for (MethodInfo mi : _getPublicMethods())
-			if (mi.hasName(name) && mi.argsOnlyOfType(ac))
-				return mi;
-		return null;
-	}
-
-	/**
-	 * Returns the method with the specified method name and argument types.
-	 *
-	 * @param name The method name (e.g. <js>"toString"</js>).
-	 * @param args The exact argument types.
-	 * @return
-	 *  The method with the specified method name and argument types, or <jk>null</jk> if not found.
-	 */
-	public MethodInfo getMethod(String name, Class<?>...args) {
-		for (MethodInfo mi : _getAllMethods())
-			if (mi.hasName(name) && mi.hasParamTypes(args))
-				return mi;
-		return null;
-	}
-
-	/**
-	 * Returns the method with the specified method name and fuzzy argument types.
-	 *
-	 * @param name The method name (e.g. <js>"toString"</js>).
-	 * @param args The exact argument types.
-	 * @return
-	 *  The method with the specified method name and argument types, or <jk>null</jk> if not found.
-	 */
-	public MethodInfo getMethodFuzzy(String name, Object...args) {
-		Class<?>[] ac = ClassUtils.getClasses(args);
-		for (MethodInfo mi : _getAllMethods())
-			if (mi.hasName(name) && mi.argsOnlyOfType(ac))
-				return mi;
-		return null;
-	}
-
-	/**
 	 * Returns all methods declared on this class.
 	 *
 	 * @return
@@ -514,6 +454,103 @@ public final class ClassInfo {
 	 */
 	public List<MethodInfo> getAllMethods() {
 		return new UnmodifiableArray<>(_getAllMethods());
+	}
+
+	/**
+	 * Returns the public method that matches the specified predicate.
+	 *
+	 * @param predicate The predicate.
+	 * @return The first matching method, or <jk>null</jk> if no methods matched.
+	 */
+	public final MethodInfo getPublicMethod(Predicate<MethodInfo> predicate) {
+		for (MethodInfo mi : _getPublicMethods())
+			if (predicate.test(mi))
+				return mi;
+		return null;
+	}
+
+	/**
+	 * Returns the declared method that matches the specified predicate.
+	 *
+	 * @param predicate The predicate.
+	 * @return The first matching method, or <jk>null</jk> if no methods matched.
+	 */
+	public MethodInfo getDeclaredMethod(Predicate<MethodInfo> predicate) {
+		for (MethodInfo mi : _getDeclaredMethods())
+			if (predicate.test(mi))
+				return mi;
+		return null;
+	}
+
+	/**
+	 * Returns the method that matches the specified predicate.
+	 *
+	 * @param predicate The predicate.
+	 * @return The first matching method, or <jk>null</jk> if no methods matched.
+	 */
+	public MethodInfo getMethod(Predicate<MethodInfo> predicate) {
+		for (MethodInfo mi : _getAllMethods())
+			if (predicate.test(mi))
+				return mi;
+		return null;
+	}
+
+	/**
+	 * Returns the public method that matches the specified predicate.
+	 *
+	 * @param predicate The predicate.
+	 * @param consumer The consumer of the matching predicate.
+	 * @return This object.
+	 */
+	public final ClassInfo getPublicMethods(Predicate<MethodInfo> predicate, Consumer<MethodInfo> consumer) {
+		for (MethodInfo mi : _getPublicMethods())
+			if (predicate.test(mi))
+				consumer.accept(mi);
+		return this;
+	}
+
+	/**
+	 * Returns the declared method that matches the specified predicate.
+	 *
+	 * @param predicate The predicate.
+	 * @param consumer The consumer of the matching predicate.
+	 * @return This object.
+	 */
+	public final ClassInfo getDeclaredMethods(Predicate<MethodInfo> predicate, Consumer<MethodInfo> consumer) {
+		for (MethodInfo mi : _getDeclaredMethods())
+			if (predicate.test(mi))
+				consumer.accept(mi);
+		return this;
+	}
+
+	/**
+	 * Returns the method that matches the specified predicate.
+	 *
+	 * @param predicate The predicate.
+	 * @param consumer The consumer of the matching predicate.
+	 * @return This object.
+	 */
+	public final ClassInfo getMethods(Predicate<MethodInfo> predicate, Consumer<MethodInfo> consumer) {
+		for (MethodInfo mi : _getAllMethods())
+			if (predicate.test(mi))
+				consumer.accept(mi);
+		return this;
+	}
+
+	/**
+	 * Returns the method with the specified method name and fuzzy argument types.
+	 *
+	 * @param name The method name (e.g. <js>"toString"</js>).
+	 * @param args The exact argument types.
+	 * @return
+	 *  The method with the specified method name and argument types, or <jk>null</jk> if not found.
+	 */
+	public MethodInfo getMethodFuzzy(String name, Object...args) {
+		Class<?>[] ac = ClassUtils.getClasses(args);
+		for (MethodInfo mi : _getAllMethods())
+			if (mi.hasName(name) && mi.argsOnlyOfType(ac))
+				return mi;
+		return null;
 	}
 
 	/**
@@ -575,143 +612,14 @@ public final class ClassInfo {
 	}
 
 	private List<MethodInfo> _appendDeclaredMethods(List<MethodInfo> l) {
-		l.addAll(getDeclaredMethods());
+		for (MethodInfo mi : _getDeclaredMethods())
+			l.add(mi);
 		return l;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Special methods
 	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Find the public static creator method on this class.
-	 *
-	 * <p>
-	 * Looks for the following method names:
-	 * <ul>
-	 * 	<li><c>create</c>
-	 * 	<li><c>from</c>
-	 * 	<li><c>fromValue</c>
-	 * 	<li><c>parse</c>
-	 * 	<li><c>valueOf</c>
-	 * 	<li><c>fromX</c>
-	 * 	<li><c>forX</c>
-	 * 	<li><c>parseX</c>
-	 * </ul>
-	 *
-	 * @param ic The argument type.
-	 * @param additionalNames Additional method names to check for.
-	 * @return The static method, or <jk>null</jk> if it couldn't be found.
-	 */
-	public MethodInfo getStaticCreateMethod(Class<?> ic, String...additionalNames) {
-		if (c != null) {
-			for (MethodInfo m : getPublicMethods()) {
-				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasReturnType(c) && m.hasParamTypes(ic)) {
-					String n = m.getSimpleName(), cn = ic.getSimpleName();
-					if (
-						isOneOf(n, "create","from","fromValue","parse","valueOf")
-						|| isOneOf(n, additionalNames)
-						|| (n.startsWith("from") && n.substring(4).equals(cn))
-						|| (n.startsWith("for") && n.substring(3).equals(cn))
-						|| (n.startsWith("parse") && n.substring(5).equals(cn))
-						) {
-						return m;
-					}
-				}
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Find the public static creator method on this class.
-	 *
-	 * <p>
-	 * Must have the following signature where T is the exact outer class.
-	 * <p class='bcode w800'>
-	 * 	public static T create(...);
-	 * </p>
-	 *
-	 * <p>
-	 * Must be able to take in all arguments specified in any order.
-	 *
-	 * @param args The arguments to pass to the create method.
-	 * @return The static method, or <jk>null</jk> if it couldn't be found.
-	 */
-	public MethodInfo getStaticCreator(Object...args) {
-		if (c != null) {
-			Class<?>[] argTypes = ClassUtils.getClasses(args);
-			for (MethodInfo m : getPublicMethods()) {
-				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasReturnType(c) && (m.getSimpleName().equals("create") || m.getSimpleName().equals("getInstance")) && m.hasMatchingParamTypes(argTypes))
-					return m;
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Find the public static creator method on this class.
-	 *
-	 * <p>
-	 * Must have the following signature where T is the exact outer class.
-	 * <p class='bcode w800'>
-	 * 	public static T create(...);
-	 * </p>
-	 *
-	 * <p>
-	 * Returned method can take in arguments in any order if they match.  The method is guaranteed to not require additional
-	 * arguments not specified.
-	 *
-	 * @param args The arguments to pass to the create method.
-	 * @return The static method, or <jk>null</jk> if it couldn't be found.
-	 */
-	public MethodInfo getStaticCreatorFuzzy(Object...args) {
-		int bestCount = -1;
-		MethodInfo bestMatch = null;
-		if (c != null) {
-			Class<?>[] argTypes = ClassUtils.getClasses(args);
-			for (MethodInfo m : getPublicMethods()) {
-				String sn = m.getSimpleName();
-				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && m.hasReturnType(c) && (sn.equals("create") || sn.equals("getInstance"))) {
-					int mn = m.fuzzyArgsMatch(argTypes);
-					if (mn > bestCount) {
-						bestCount = mn;
-						bestMatch = m;
-					}
-				}
-			}
-		}
-		return bestMatch;
-	}
-
-	/**
-	 * Find the public static method with the specified name and args.
-	 *
-	 * @param name The method name.
-	 * @param rt The method return type.
-	 * @param args The method arguments
-	 * @return The method, or <jk>null</jk> if it couldn't be found.
-	 */
-	public MethodInfo getStaticPublicMethod(String name, Class<?> rt, Class<?>...args) {
-		if (c != null)
-			for (MethodInfo m : getPublicMethods())
-				if (m.isAll(STATIC, PUBLIC, NOT_DEPRECATED) && name.equals(m.getSimpleName()) && m.hasReturnType(rt) && m.hasParamTypes(args))
-					return m;
-		return null;
-	}
-
-	/**
-	 * Find the public static method with the specified name and args.
-	 *
-	 * @param name The method name.
-	 * @param rt The method return type.
-	 * @param args The method arguments
-	 * @return The method, or <jk>null</jk> if it couldn't be found.
-	 */
-	public Method getStaticPublicMethodInner(String name, Class<?> rt, Class<?>...args) {
-		MethodInfo mi = getStaticPublicMethod(name, rt, args);
-		return mi == null ? null : mi.inner();
-	}
 
 	/**
 	 * Returns the <c>public static Builder create()</c> method on this class.
@@ -760,6 +668,33 @@ public final class ClassInfo {
 	 */
 	public List<ConstructorInfo> getPublicConstructors() {
 		return new UnmodifiableArray<>(_getPublicConstructors());
+	}
+
+	/**
+	 * Returns all the public constructors defined on this class.
+	 *
+	 * @return All public constructors defined on this class.
+	 */
+	public Stream<ConstructorInfo> publicConstructors() {
+		return stream(_getPublicConstructors());
+	}
+
+	/**
+	 * Returns all the public constructors defined on this class.
+	 *
+	 * @return All public constructors defined on this class.
+	 */
+	public List<ConstructorInfo> getProtectedConstructors() {
+		return new UnmodifiableArray<>(_getProtectedConstructors());
+	}
+
+	/**
+	 * Returns all the public constructors defined on this class.
+	 *
+	 * @return All public constructors defined on this class.
+	 */
+	public Stream<ConstructorInfo> protectedConstructors() {
+		return stream(_getProtectedConstructors());
 	}
 
 	/**
@@ -896,6 +831,18 @@ public final class ClassInfo {
 		return publicConstructors;
 	}
 
+	private ConstructorInfo[] _getProtectedConstructors() {
+		if (protectedConstructors == null) {
+			Constructor<?>[] cc = c == null ? new Constructor[0] : c.getDeclaredConstructors();
+			List<ConstructorInfo> l = new ArrayList<>(cc.length);
+			for (Constructor<?> ccc : cc)
+				if (Modifier.isProtected(ccc.getModifiers()))
+					l.add(ConstructorInfo.of(this, ccc));
+			l.sort(null);
+			protectedConstructors = l.toArray(new ConstructorInfo[l.size()]);
+		}
+		return protectedConstructors;
+	}
 	private ConstructorInfo[] _getDeclaredConstructors() {
 		if (declaredConstructors == null) {
 			Constructor<?>[] cc = c == null ? new Constructor[0] : c.getDeclaredConstructors();
@@ -2145,6 +2092,24 @@ public final class ClassInfo {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if this type can be used as a parameter for the specified object.
+	 *
+	 * @param child The argument to check.
+	 * @return <jk>true</jk> if this type can be used as a parameter for the specified object.
+	 */
+	public boolean canAcceptArg(Object child) {
+		if (c == null || child == null)
+			return false;
+		if (c.isInstance(child))
+			return true;
+		if (this.isPrimitive() || child.getClass().isPrimitive()) {
+			return this.getWrapperIfPrimitive().isAssignableFrom(of(child).getWrapperIfPrimitive());
+		}
+		return false;
+	}
+
+
+	/**
 	 * Same as {@link #isParentOfFuzzyPrimitives(Class)} but takes in a {@link ClassInfo}.
 	 *
 	 * @param child The child class.
@@ -2248,6 +2213,16 @@ public final class ClassInfo {
 	 */
 	public boolean is(Class<?> c) {
 		return this.c != null && this.c.equals(c);
+	}
+
+	/**
+	 * Performs a predicate check on this class.
+	 *
+	 * @param test The test to perform.
+	 * @return <jk>true</jk> if the predicate test passes.
+	 */
+	public boolean is(Predicate<Class<?>> test) {
+		return test.test(c);
 	}
 
 	/**
@@ -2371,7 +2346,7 @@ public final class ClassInfo {
 	public boolean isRepeatedAnnotation() {
 		if (isRepeatedAnnotation == null) {
 			boolean b = false;
-			MethodInfo mi = getMethod("value");
+			MethodInfo mi = getPublicMethod(x -> x.hasName("value"));
 			if (mi != null) {
 				ClassInfo rt = mi.getReturnType();
 				if (rt.isArray()) {
@@ -2400,7 +2375,7 @@ public final class ClassInfo {
 	public MethodInfo getRepeatedAnnotationMethod() {
 		if (isRepeatedAnnotation()) {
 			if (repeatedAnnotationMethod == null)
-				repeatedAnnotationMethod = getMethod("value");
+				repeatedAnnotationMethod = getPublicMethod(x -> x.hasName("value"));
 			return repeatedAnnotationMethod;
 		}
 		return null;
