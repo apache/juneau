@@ -262,7 +262,9 @@ public class ObjectUtils {
 			Map<String,MethodInfo> methods2 = new LinkedHashMap<>();
 			do {
 				String cname = ci.getShortName();
-				ci.getDeclaredMethods().stream().filter(x -> x.getName().equals("properties")).findFirst().ifPresent(x -> methods2.put(cname, x.accessible()));
+				MethodInfo mi = ci.getDeclaredMethod(x -> x.hasName("properties"));
+				if (mi != null)
+					methods2.put(cname, mi.accessible());
 				ci = ci.getParent();
 			} while (ci != null);
 			methods = methods2;

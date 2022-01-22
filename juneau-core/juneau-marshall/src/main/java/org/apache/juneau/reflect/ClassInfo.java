@@ -317,36 +317,26 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Returns a list including this class and all parent classes.
-	 *
-	 * <p>
-	 * Does not include interfaces.
-	 *
-	 * @return An unmodifiable list including this class and all parent classes.
-	 * 	<br>Results are in parent-to-child order.
-	 */
-	public List<ClassInfo> getParentsParentFirst() {
-		return new UnmodifiableArray<>(_getParents(), true);
-	}
-
-	/**
 	 * Returns a list including this class and all parent classes and interfaces.
 	 *
 	 * @return An unmodifiable list including this class and all parent classes.
 	 * 	<br>Results are ordered child-to-parent order with classes listed before interfaces.
 	 */
-	public List<ClassInfo> getAllParentsChildFirst() {
+	public List<ClassInfo> getAllParents() {
 		return new UnmodifiableArray<>(_getAllParents());
 	}
 
 	/**
-	 * Returns a list including this class and all parent classes and interfaces.
+	 * Returns the parent class or interface that matches the specified predicate.
 	 *
-	 * @return An unmodifiable list including this class and all parent classes.
-	 * 	<br>Results are ordered parent-to-child order with interfaces listed before classes.
+	 * @param predicate The predicate to test for.
+	 * @return The parent class or interface that matches the specified predicate.
 	 */
-	public List<ClassInfo> getAllParentsParentFirst() {
-		return new UnmodifiableArray<>(_getAllParents(), true);
+	public ClassInfo getAllParent(Predicate<ClassInfo> predicate) {
+		for (ClassInfo ci : _getAllParents())
+			if (predicate.test(ci))
+				return ci;
+		return null;
 	}
 
 	ClassInfo[] _getInterfaces() {
@@ -436,7 +426,7 @@ public final class ClassInfo {
 	 * 	All declared methods on this class and all parent classes.
 	 * 	<br>Results are ordered child-to-parent, and then alphabetically per class.
 	 */
-	public List<MethodInfo> getAllMethods() {
+	public List<MethodInfo> getMethods() {
 		return new UnmodifiableArray<>(_getAllMethods());
 	}
 
@@ -729,6 +719,20 @@ public final class ClassInfo {
 	}
 
 	/**
+	 * Consumes all declared fields on this class that match the specified predicate.
+	 *
+	 * @param predicate The predicate to test against.
+	 * @param consumer The consumer.
+	 * @return This object.
+	 */
+	public ClassInfo getDeclaredFields(Predicate<FieldInfo> predicate, Consumer<FieldInfo> consumer) {
+		for (FieldInfo fi : _getDeclaredFields())
+			if (predicate.test(fi))
+				consumer.accept(fi);
+		return this;
+	}
+
+	/**
 	 * Returns all declared fields on this class and all parent classes.
 	 *
 	 * @return
@@ -772,6 +776,19 @@ public final class ClassInfo {
 	public FieldInfo getDeclaredField(String name) {
 		for (FieldInfo f : _getDeclaredFields())
 			if (f.getName().equals(name))
+				return f;
+		return null;
+	}
+
+	/**
+	 * Returns the declared field that passes the specified predicate.
+	 *
+	 * @param predicate The predicate to test against.
+	 * @return The declared field, or <jk>null</jk> if not found.
+	 */
+	public FieldInfo getDeclaredField(Predicate<FieldInfo> predicate) {
+		for (FieldInfo f : _getDeclaredFields())
+			if (predicate.test(f))
 				return f;
 		return null;
 	}

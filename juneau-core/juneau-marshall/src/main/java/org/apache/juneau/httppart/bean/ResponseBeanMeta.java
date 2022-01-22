@@ -155,25 +155,23 @@ public class ResponseBeanMeta {
 			Class<?> c = ClassUtils.toClass(t);
 			this.cm = BeanContext.DEFAULT.getClassMeta(c);
 			ClassInfo ci = cm.getInfo();
-			for (MethodInfo m : ci.getAllMethods()) {
-				if (m.isPublic()) {
-					assertNoInvalidAnnotations(m, Query.class, FormData.class);
-					if (m.hasAnnotation(Header.class)) {
-						assertNoArgs(m, Header.class);
+			for (MethodInfo m : ci.getPublicMethods()) {
+				assertNoInvalidAnnotations(m, Query.class, FormData.class);
+				if (m.hasAnnotation(Header.class)) {
+					assertNoArgs(m, Header.class);
+					assertReturnNotVoid(m, Header.class);
+					HttpPartSchema s = HttpPartSchema.create(m.getLastAnnotation(Header.class), m.getPropertyName());
+					headerMethods.put(s.getName(), ResponseBeanPropertyMeta.create(RESPONSE_HEADER, s, m));
+				} else if (m.hasAnnotation(StatusCode.class)) {
+					assertNoArgs(m, Header.class);
+					assertReturnType(m, Header.class, int.class, Integer.class);
+					statusMethod = ResponseBeanPropertyMeta.create(RESPONSE_STATUS, m);
+				} else if (m.hasAnnotation(Body.class)) {
+					if (m.getParamCount() == 0)
 						assertReturnNotVoid(m, Header.class);
-						HttpPartSchema s = HttpPartSchema.create(m.getLastAnnotation(Header.class), m.getPropertyName());
-						headerMethods.put(s.getName(), ResponseBeanPropertyMeta.create(RESPONSE_HEADER, s, m));
-					} else if (m.hasAnnotation(StatusCode.class)) {
-						assertNoArgs(m, Header.class);
-						assertReturnType(m, Header.class, int.class, Integer.class);
-						statusMethod = ResponseBeanPropertyMeta.create(RESPONSE_STATUS, m);
-					} else if (m.hasAnnotation(Body.class)) {
-						if (m.getParamCount() == 0)
-							assertReturnNotVoid(m, Header.class);
-						else
-							assertArgType(m, Header.class, OutputStream.class, Writer.class);
-						bodyMethod = ResponseBeanPropertyMeta.create(RESPONSE_BODY, m);
-					}
+					else
+						assertArgType(m, Header.class, OutputStream.class, Writer.class);
+					bodyMethod = ResponseBeanPropertyMeta.create(RESPONSE_BODY, m);
 				}
 			}
 			return this;

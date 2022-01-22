@@ -256,30 +256,16 @@ public class ClassInfoTest {
 	}
 
 	@Test
-	public void getParentsParentFirst() {
-		check("BC1,BC2,BC3", bc3.getParentsParentFirst());
-		check("", object.getParentsParentFirst());
-		check("BI1", bi1.getParentsParentFirst());
-	}
-
-	@Test
 	public void getAllParents() {
-		check("BC3,BC2,BC1,BI3,BI1,BI2", bc3.getAllParentsChildFirst());
-		check("", object.getAllParentsChildFirst());
-		check("BI1", bi1.getAllParentsChildFirst());
+		check("BC3,BC2,BC1,BI3,BI1,BI2", bc3.getAllParents());
+		check("", object.getAllParents());
+		check("BI1", bi1.getAllParents());
 	}
 
 	@Test
 	public void getAllParents_twice() {
-		check("BC3,BC2,BC1,BI3,BI1,BI2", bc3.getAllParentsChildFirst());
-		check("BC3,BC2,BC1,BI3,BI1,BI2", bc3.getAllParentsChildFirst());
-	}
-
-	@Test
-	public void getAllParentsParentFirst() {
-		check("BI2,BI1,BI3,BC1,BC2,BC3", bc3.getAllParentsParentFirst());
-		check("", object.getAllParentsParentFirst());
-		check("BI1", bi1.getAllParentsParentFirst());
+		check("BC3,BC2,BC1,BI3,BI1,BI2", bc3.getAllParents());
+		check("BC3,BC2,BC1,BI3,BI1,BI2", bc3.getAllParents());
 	}
 
 	@Test
@@ -359,24 +345,13 @@ public class ClassInfoTest {
 
 	@Test
 	public void getAllMethods() throws Exception {
-		check("CC3.c3a(),CC3.c3b(),CC3.i2b(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CI1.i1a(),CI1.i1b(),CI2.i2a(),CI2.i2b()", cc3.getAllMethods());
+		check("CC3.c3a(),CC3.c3b(),CC3.i2b(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CI1.i1a(),CI1.i1b(),CI2.i2a(),CI2.i2b()", cc3.getMethods());
 	}
 
 	@Test
 	public void getAllMethods_twice() throws Exception {
-		check("CC3.c3a(),CC3.c3b(),CC3.i2b(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CI1.i1a(),CI1.i1b(),CI2.i2a(),CI2.i2b()", cc3.getAllMethods());
-		check("CC3.c3a(),CC3.c3b(),CC3.i2b(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CI1.i1a(),CI1.i1b(),CI2.i2a(),CI2.i2b()", cc3.getAllMethods());
-	}
-
-	@Test
-	public void getAllMethodsParentFirst() throws Exception {
-		check("CI2.i2a(),CI2.i2b(),CI1.i1a(),CI1.i1b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC3.c3a(),CC3.c3b(),CC3.i2b()", cc3.getAllMethodsParentFirst());
-	}
-
-	@Test
-	public void getAllMethodsParentFirst_twice() throws Exception {
-		check("CI2.i2a(),CI2.i2b(),CI1.i1a(),CI1.i1b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC3.c3a(),CC3.c3b(),CC3.i2b()", cc3.getAllMethodsParentFirst());
-		check("CI2.i2a(),CI2.i2b(),CI1.i1a(),CI1.i1b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC3.c3a(),CC3.c3b(),CC3.i2b()", cc3.getAllMethodsParentFirst());
+		check("CC3.c3a(),CC3.c3b(),CC3.i2b(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CI1.i1a(),CI1.i1b(),CI2.i2a(),CI2.i2b()", cc3.getMethods());
+		check("CC3.c3a(),CC3.c3b(),CC3.i2b(),CC2.c2a(),CC2.c2b(),CC2.i1b(),CC2.i2a(),CC2.i2b(),CC1.c1a(),CC1.c1b(),CC1.i1a(),CI1.i1a(),CI1.i1b(),CI2.i2a(),CI2.i2b()", cc3.getMethods());
 	}
 
 	@Test

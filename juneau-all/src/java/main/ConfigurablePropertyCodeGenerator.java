@@ -111,7 +111,9 @@ public class ConfigurablePropertyCodeGenerator {
 			String indent = c.getDeclaringClass() != null ? "\t\t" : "\t";
 			Set<String> sigsAdded = new HashSet<String>();
 
-			for (ClassInfo pc : ClassInfo.of(c).getParentsParentFirst()) {
+			List<ClassInfo> l = ClassInfo.of(c).getParents();
+			for (int i = l.size()-1; i>=0; i--) {
+				ClassInfo pc = l.get(i);
 				Class<?> pcc = pc.inner();
 				if (pcc != c) {
 					Set<Method> ms = configMethods.get(pcc);

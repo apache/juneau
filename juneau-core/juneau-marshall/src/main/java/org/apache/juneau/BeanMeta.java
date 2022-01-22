@@ -16,7 +16,6 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
-import static org.apache.juneau.reflect.ReflectFlags.*;
 import static org.apache.juneau.BeanMeta.MethodType.*;
 
 import java.beans.*;
@@ -771,38 +770,32 @@ public class BeanMeta<T> {
 
 	static final Collection<Field> findBeanFields(BeanContext ctx, Class<?> c, Class<?> stopClass, Visibility v) {
 		List<Field> l = new LinkedList<>();
+		boolean noIgnoreTransients = ! ctx.isIgnoreTransientFields();
 		for (ClassInfo c2 : findClasses(c, stopClass)) {
-			for (FieldInfo f : c2.getDeclaredFields()) {
-				if (f.is(STATIC))
-					continue;
-				if (f.is(TRANSIENT) && ctx.isIgnoreTransientFields())
-					continue;
-				if (ctx.hasAnnotation(BeanIgnore.class, f))
-					continue;
-
-				List<Beanp> lp = ctx.getAnnotations(Beanp.class, f);
-
-				if (! (v.isVisible(f.inner()) || lp.size() > 0))
-					continue;
-
-				l.add(f.inner());
-			}
+			c2.getDeclaredFields(
+				x -> x.isNotStatic()
+				&& (x.isNotTransient() || noIgnoreTransients)
+				&& (x.hasNoAnnotation(Transient.class) || noIgnoreTransients)
+				&& x.hasNoAnnotation(BeanIgnore.class, ctx)
+				&& (v.isVisible(x.inner()) || ctx.getAnnotations(Beanp.class, x).size() > 0),
+				x -> l.add(x.inner())
+			);
 		}
 		return l;
 	}
 
-	static final Field findInnerBeanField(BeanContext bc, Class<?> c, Class<?> stopClass, String name) {
+	static final Field findInnerBeanField(BeanContext ctx, Class<?> c, Class<?> stopClass, String name) {
+		boolean noIgnoreTransients = ! ctx.isIgnoreTransientFields();
 		for (ClassInfo c2 : findClasses(c, stopClass)) {
-			for (FieldInfo f : c2.getDeclaredFields()) {
-				if (f.is(STATIC))
-					continue;
-				if ((f.is(TRANSIENT) || f.hasAnnotation(Transient.class)) && bc.isIgnoreTransientFields())
-					continue;
-				if (f.hasAnnotation(BeanIgnore.class, bc))
-					continue;
-				if (f.hasName(name))
-					return f.inner();
-			}
+			FieldInfo f = c2.getDeclaredField(
+				x -> x.isNotStatic()
+				&& (x.isNotTransient() || noIgnoreTransients)
+				&& (x.hasNoAnnotation(Transient.class) || noIgnoreTransients)
+				&& x.hasNoAnnotation(BeanIgnore.class, ctx)
+				&& x.hasName(name)
+			);
+			if (f != null)
+				return f.inner();
 		}
 		return null;
 	}

@@ -392,7 +392,9 @@ public class BasicSwaggerProviderSession {
 							om.appendIf(true, true, true, "schema", schema);
 						}
 					}
-					for (MethodInfo ecmi : eci.getAllMethodsParentFirst()) {
+					List<MethodInfo> methods = eci.getMethods();
+					for (int i = methods.size()-1; i>=0; i--) {
+						MethodInfo ecmi = methods.get(i);
 						Header a = ecmi.getLastAnnotation(Header.class);
 						if (a == null)
 							a = ecmi.getReturnType().unwrap(Value.class,Optional.class).getLastAnnotation(Header.class);
@@ -425,7 +427,9 @@ public class BasicSwaggerProviderSession {
 					}
 				}
 				if (mi.getReturnType().hasAnnotation(Response.class)) {
-					for (MethodInfo ecmi : mi.getReturnType().getAllMethodsParentFirst()) {
+					List<MethodInfo> methods = mi.getReturnType().getMethods();
+					for (int i = methods.size()-1; i>=0; i--) {
+						MethodInfo ecmi = methods.get(i);
 						if (ecmi.hasAnnotation(Header.class)) {
 							Header a = ecmi.getLastAnnotation(Header.class);
 							String ha = a.name();

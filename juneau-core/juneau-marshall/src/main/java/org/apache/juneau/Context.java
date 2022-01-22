@@ -194,12 +194,12 @@ public abstract class Context implements MetaProvider {
 		private ConstructorInfo getContextConstructor() {
 			ConstructorInfo cci = CONTEXT_CONSTRUCTORS.get(type);
 			if (cci == null) {
-				cci = ClassInfo.of(type)
-					.getPublicConstructors()
-					.stream()
-					.filter(x -> x.hasNumParams(1) && x.getParam(0).getParameterType().isParentOf(this.getClass()))
-					.findFirst()
-					.orElseThrow(()->runtimeException("Public constructor not found: {0}({1})", className(type), className(this)));
+				cci = ClassInfo.ofc(type).getPublicConstructor(
+					x -> x.hasNumParams(1)
+					&& x.getParam(0).canAccept(this)
+				);
+				if (cci == null)
+					throw runtimeException("Public constructor not found: {0}({1})", className(type), className(this));
 				CONTEXT_CONSTRUCTORS.put(type, cci);
 			}
 			return cci;

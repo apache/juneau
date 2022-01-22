@@ -98,18 +98,18 @@ public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {
 			return null;
 
 		// Find swap() method if present.
-		for (MethodInfo m : ci.getAllMethods()) {
+		for (MethodInfo m : ci.getMethods()) {
 			if (isSwapMethod(bc, m)) {
 
 				ClassInfo rt = m.getReturnType();
 
-				for (MethodInfo m2 : ci.getAllMethods())
-					if (isUnswapMethod(bc, m2, ci, rt))
-						return new AutoListSwap(bc, ci, m, m2, null);
+				MethodInfo mi = ci.getMethod(x -> isUnswapMethod(bc, x, ci, rt));
+				if (mi != null)
+					return new AutoListSwap(bc, ci, m, mi, null);
 
-				for (ConstructorInfo cs : ci.getDeclaredConstructors())
-					if (isUnswapConstructor(bc, cs, rt))
-						return new AutoListSwap(bc, ci, m, null, cs);
+				ConstructorInfo cs = ci.getDeclaredConstructor(x -> isUnswapConstructor(bc, x, rt));
+				if (cs != null)
+					return new AutoListSwap(bc, ci, m, null, cs);
 
 				return new AutoListSwap(bc, ci, m, null, null);
 			}

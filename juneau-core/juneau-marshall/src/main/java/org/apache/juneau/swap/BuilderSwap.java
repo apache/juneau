@@ -201,14 +201,14 @@ public class BuilderSwap<T,B> {
 			builderClass = builderCreateMethod.getReturnType().inner();
 
 		if (builderClass == null) {
-			for (ConstructorInfo cc : pci.getPublicConstructors()) {
-				if (cc.isVisible(cVis) && cc.hasNumParams(1)) {
-					ClassInfo pt = cc.getParamType(0);
-					if (pt.isChildOf(Builder.class)) {
-						objectConstructor = cc;
-						builderClass = pt.inner();
-					}
-				}
+			ConstructorInfo cc = pci.getPublicConstructor(
+				x -> x.isVisible(cVis)
+				&& x.hasNumParams(1)
+				&& x.getParamType(0).isChildOf(Builder.class)
+			);
+			if (cc != null) {
+				objectConstructor = cc;
+				builderClass = cc.getParamType(0).inner();
 			}
 		}
 

@@ -14,8 +14,6 @@ package org.apache.juneau.reflect;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
-import static org.apache.juneau.reflect.ReflectFlags.*;
-
 import java.util.concurrent.*;
 
 import java.lang.reflect.*;
@@ -153,11 +151,9 @@ public class Mutaters {
 
 		ClassInfo ici = ClassInfo.of(ic), oci = ClassInfo.of(oc);
 
-		for (ClassInfo pic : ici.getAllParentsChildFirst()) {
-			Mutater t = m.get(pic.inner());
-			if (t != null)
-				return t;
-		}
+		ClassInfo pic = ici.getAllParent(x -> m.get(x.inner()) != null);
+		if (pic != null)
+			return m.get(pic.inner());
 
 		if (ic == String.class) {
 			Class<?> oc2 = oci.hasPrimitiveWrapper() ? oci.getPrimitiveWrapper() : oc;
@@ -299,13 +295,11 @@ public class Mutaters {
 
 	private static MethodInfo findToXMethod(ClassInfo ic, ClassInfo oc) {
 		String tn = oc.getReadableName();
-		for (MethodInfo m : ic.getAllMethods()) {
-			if (m.isAll(PUBLIC, NOT_STATIC, HAS_NO_PARAMS, NOT_DEPRECATED)
-				&& m.getSimpleName().startsWith("to")
-				&& m.getSimpleName().substring(2).equalsIgnoreCase(tn))
-				return m;
-		}
-		return null;
+		return ic.getPublicMethod(
+			x -> x.isNotStatic()
+			&& x.hasNoParams()
+			&& x.getSimpleName().startsWith("to")
+			&& x.getSimpleName().substring(2).equalsIgnoreCase(tn)
+		);
 	}
-
 }
