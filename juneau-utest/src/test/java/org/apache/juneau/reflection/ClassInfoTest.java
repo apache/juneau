@@ -236,23 +236,23 @@ public class ClassInfoTest {
 
 	@Test
 	public void getInterfaces() {
-		check("", bi4.getInterfacesChildFirst());
-		check("BI1,BI2", bc1.getInterfacesChildFirst());
-		check("BI3,BI1,BI2", bc2.getInterfacesChildFirst());
-		check("BI3,BI1,BI2", bc3.getInterfacesChildFirst());
+		check("", bi4.getInterfaces());
+		check("BI1,BI2", bc1.getInterfaces());
+		check("BI3,BI1,BI2", bc2.getInterfaces());
+		check("BI3,BI1,BI2", bc3.getInterfaces());
 	}
 
 	@Test
 	public void getInterfaces_tiwce() {
-		check("BI3,BI1,BI2", bc2.getInterfacesChildFirst());
-		check("BI3,BI1,BI2", bc2.getInterfacesChildFirst());
+		check("BI3,BI1,BI2", bc2.getInterfaces());
+		check("BI3,BI1,BI2", bc2.getInterfaces());
 	}
 
 	@Test
 	public void getParents() {
-		check("BC3,BC2,BC1", bc3.getParentsChildFirst());
-		check("", object.getParentsChildFirst());
-		check("BI1", bi1.getParentsChildFirst());
+		check("BC3,BC2,BC1", bc3.getParents());
+		check("", object.getParents());
+		check("BI1", bi1.getParents());
 	}
 
 	@Test

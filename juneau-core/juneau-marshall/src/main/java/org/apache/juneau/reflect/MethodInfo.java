@@ -411,23 +411,27 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	AnnotationList appendAnnotationList(AnnotationList al) {
 		ClassInfo c = this.declaringClass;
 		appendDeclaredAnnotations(al, c.getPackage());
-		for (ClassInfo ci : c.getInterfacesParentFirst()) {
-			appendDeclaredAnnotations(al, ci);
-			appendDeclaredMethodAnnotations(al, ci);
+		ClassInfo[] interfaces = c._getInterfaces();
+		for (int i = interfaces.length-1; i >= 0; i--) {
+			appendDeclaredAnnotations(al, interfaces[i]);
+			appendDeclaredMethodAnnotations(al, interfaces[i]);
 		}
-		for (ClassInfo ci : c.getParentsParentFirst()) {
-			appendDeclaredAnnotations(al, ci);
-			appendDeclaredMethodAnnotations(al, ci);
+		ClassInfo[] parents = c._getParents();
+		for (int i = parents.length-1; i >= 0; i--) {
+			appendDeclaredAnnotations(al, parents[i]);
+			appendDeclaredMethodAnnotations(al, parents[i]);
 		}
 		return al;
 	}
 
 	AnnotationList appendAnnotationListMethodOnly(AnnotationList al) {
 		ClassInfo c = this.declaringClass;
-		for (ClassInfo ci : c.getInterfacesParentFirst())
-			appendDeclaredMethodAnnotations(al, ci);
-		for (ClassInfo ci : c.getParentsParentFirst())
-			appendDeclaredMethodAnnotations(al, ci);
+		ClassInfo[] interfaces = c._getInterfaces();
+		for (int i = interfaces.length-1; i >= 0; i--)
+			appendDeclaredMethodAnnotations(al, interfaces[i]);
+		ClassInfo[] parents = c._getParents();
+		for (int i = parents.length-1; i >= 0; i--)
+			appendDeclaredMethodAnnotations(al, parents[i]);
 		return al;
 	}
 

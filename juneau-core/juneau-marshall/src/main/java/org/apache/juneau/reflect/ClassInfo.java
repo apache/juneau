@@ -275,7 +275,7 @@ public final class ClassInfo {
 	 * 	The parent class, or <jk>null</jk> if the class has no parent.
 	 */
 	public ClassInfo getParent() {
-		return c == null ? null : of(c.getSuperclass());
+		return c == null ? null : ofc(c.getSuperclass());
 	}
 
 	/**
@@ -299,19 +299,8 @@ public final class ClassInfo {
 	 * 	An unmodifiable list of interfaces defined on this class and superclasses.
 	 * 	<br>Results are in child-to-parent order.
 	 */
-	public List<ClassInfo> getInterfacesChildFirst() {
+	public List<ClassInfo> getInterfaces() {
 		return new UnmodifiableArray<>(_getInterfaces());
-	}
-
-	/**
-	 * Returns a list of interfaces defined on this class and superclasses.
-	 *
-	 * @return
-	 * 	An unmodifiable list of interfaces defined on this class and superclasses.
-	 * 	<br>Results are in parent-to-child order.
-	 */
-	public List<ClassInfo> getInterfacesParentFirst() {
-		return new UnmodifiableArray<>(_getInterfaces(), true);
 	}
 
 	/**
@@ -323,7 +312,7 @@ public final class ClassInfo {
 	 * @return An unmodifiable list including this class and all parent classes.
 	 * 	<br>Results are in child-to-parent order.
 	 */
-	public List<ClassInfo> getParentsChildFirst() {
+	public List<ClassInfo> getParents() {
 		return new UnmodifiableArray<>(_getParents());
 	}
 
@@ -360,13 +349,13 @@ public final class ClassInfo {
 		return new UnmodifiableArray<>(_getAllParents(), true);
 	}
 
-	private ClassInfo[] _getInterfaces() {
+	ClassInfo[] _getInterfaces() {
 		if (interfaces == null) {
 			Set<ClassInfo> s = new LinkedHashSet<>();
-			for (ClassInfo ci : getParentsChildFirst())
-				for (ClassInfo ci2 : ci.getDeclaredInterfaces()) {
+			for (ClassInfo ci : _getParents())
+				for (ClassInfo ci2 : ci._getDeclaredInterfaces()) {
 					s.add(ci2);
-					for (ClassInfo ci3 : ci2.getInterfacesChildFirst())
+					for (ClassInfo ci3 : ci2._getInterfaces())
 						s.add(ci3);
 				}
 			interfaces = s.toArray(new ClassInfo[s.size()]);
@@ -385,7 +374,7 @@ public final class ClassInfo {
 		return declaredInterfaces;
 	}
 
-	private ClassInfo[] _getParents() {
+	ClassInfo[] _getParents() {
 		if (parents == null) {
 			List<ClassInfo> l = new ArrayList<>();
 			Class<?> pc = c;
@@ -573,7 +562,7 @@ public final class ClassInfo {
 	private MethodInfo[] _getAllMethods() {
 		if (allMethods == null) {
 			List<MethodInfo> l = new ArrayList<>();
-			for (ClassInfo c : getAllParentsChildFirst())
+			for (ClassInfo c : _getAllParents())
 				c._appendDeclaredMethods(l);
 			allMethods = l.toArray(new MethodInfo[l.size()]);
 		}
@@ -583,8 +572,9 @@ public final class ClassInfo {
 	private MethodInfo[] _getAllMethodsParentFirst() {
 		if (allMethodsParentFirst == null) {
 			List<MethodInfo> l = new ArrayList<>();
-			for (ClassInfo c : getAllParentsParentFirst())
-				c._appendDeclaredMethods(l);
+			ClassInfo[] parents = _getAllParents();
+			for (int i = parents.length-1; i >=0; i--)
+				parents[i]._appendDeclaredMethods(l);
 			allMethodsParentFirst = l.toArray(new MethodInfo[l.size()]);
 		}
 		return allMethodsParentFirst;
@@ -865,8 +855,9 @@ public final class ClassInfo {
 	private FieldInfo[] _getAllFieldsParentFirst() {
 		if (allFieldsParentFirst == null) {
 			List<FieldInfo> l = new ArrayList<>();
-			for (ClassInfo c : getAllParentsParentFirst())
-				c._appendDeclaredFields(l);
+			ClassInfo[] parents = _getAllParents();
+			for (int i = parents.length-1; i >=0; i--)
+				parents[i]._appendDeclaredFields(l);
 			allFieldsParentFirst = l.toArray(new FieldInfo[l.size()]);
 		}
 		return allFieldsParentFirst;
@@ -937,22 +928,6 @@ public final class ClassInfo {
 	public <T extends Annotation> T getDeclaredAnnotation(Class<T> a) {
 		return a == null ? null : c.getDeclaredAnnotation(a);
 	}
-
-	/**
-	 * Returns the specified annotation only if it's been declared on this class.
-	 *
-	 * <p>
-	 * More efficient than calling {@link Class#getAnnotation(Class)} since it doesn't recursively look for the class
-	 * up the parent chain.
-	 *
-	 * @param <T> The annotation class type.
-	 * @param a The annotation class.
-	 * @param mp The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
-	 * @return The annotation, or <jk>null</jk> if not found.
-	 */
-//	public <T extends Annotation> T getDeclaredAnnotation(Class<T> a, MetaProvider mp) {
-//		return mp.getDeclaredAnnotation(a, c);
-//	}
 
 	/**
 	 * Returns the specified annotation only if it's been declared on the package of this class.
@@ -1121,11 +1096,13 @@ public final class ClassInfo {
 	 */
 	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, MetaProvider mp) {
 		addIfNotNull(l, getPackageAnnotation(a));
-		for (ClassInfo ci : getInterfacesParentFirst())
-			for (T t : mp.getDeclaredAnnotations(a, ci.inner()))
+		ClassInfo[] interfaces = _getInterfaces();
+		for (int i = interfaces.length-1; i >= 0; i--)
+			for (T t : mp.getDeclaredAnnotations(a, interfaces[i].inner()))
 				l.add(t);
-		for (ClassInfo ci : getParentsParentFirst())
-			for (T t : mp.getDeclaredAnnotations(a, ci.inner()))
+		ClassInfo[] parents = _getParents();
+		for (int i = parents.length-1; i >= 0; i--)
+			for (T t : mp.getDeclaredAnnotations(a, parents[i].inner()))
 				l.add(t);
 		return l;
 	}
@@ -1149,10 +1126,12 @@ public final class ClassInfo {
 	 */
 	public <T extends Annotation> List<AnnotationInfo<T>> appendAnnotationInfos(List<AnnotationInfo<T>> l, Class<T> a) {
 		addIfNotNull(l, getPackageAnnotationInfo(a));
-		for (ClassInfo ci : getInterfacesParentFirst())
-			addIfNotNull(l, ci.getDeclaredAnnotationInfo(a));
-		for (ClassInfo ci : getParentsParentFirst())
-			addIfNotNull(l, ci.getDeclaredAnnotationInfo(a));
+		ClassInfo[] interfaces = _getInterfaces();
+		for (int i = interfaces.length-1; i >= 0; i--)
+			addIfNotNull(l, interfaces[i].getDeclaredAnnotationInfo(a));
+		ClassInfo[] parents = _getParents();
+		for (int i = parents.length-1; i >= 0; i--)
+			addIfNotNull(l, parents[i].getDeclaredAnnotationInfo(a));
 		return l;
 	}
 
@@ -1170,7 +1149,7 @@ public final class ClassInfo {
 			if (x != null)
 				return x;
 		}
-		for (ClassInfo ci : getInterfacesChildFirst()) {
+		for (ClassInfo ci : _getInterfaces()) {
 			for (Class<? extends Annotation> ca : annotations) {
 				Annotation x = ci.getLastAnnotation(ca, mp);
 				if (x != null)
@@ -1188,14 +1167,16 @@ public final class ClassInfo {
 			for (Annotation a : p.getDeclaredAnnotations())
 				for (Annotation a2 : splitRepeated(a))
 					m.add(AnnotationInfo.of(p, a2));
-		for (ClassInfo ci : getInterfacesParentFirst())
-			for (Annotation a : ci.c.getDeclaredAnnotations())
+		ClassInfo[] interfaces = _getInterfaces();
+		for (int i = interfaces.length-1; i >= 0; i--)
+			for (Annotation a : interfaces[i].c.getDeclaredAnnotations())
 				for (Annotation a2 : splitRepeated(a))
-					m.add(AnnotationInfo.of(ci, a2));
-		for (ClassInfo ci : getParentsParentFirst())
-			for (Annotation a : ci.c.getDeclaredAnnotations())
+					m.add(AnnotationInfo.of(interfaces[i], a2));
+		ClassInfo[] parents = _getParents();
+		for (int i = parents.length-1; i >= 0; i--)
+			for (Annotation a : parents[i].c.getDeclaredAnnotations())
 				for (Annotation a2 : splitRepeated(a))
-					m.add(AnnotationInfo.of(ci, a2));
+					m.add(AnnotationInfo.of(parents[i], a2));
 		return m;
 	}
 
@@ -1232,7 +1213,7 @@ public final class ClassInfo {
 				return t;
 		}
 
-		for (ClassInfo c2 : getInterfacesChildFirst()) {
+		for (ClassInfo c2 : _getInterfaces()) {
 			t = c2.getLastAnnotation(a, mp);
 			if (t != null)
 				return t;
