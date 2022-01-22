@@ -6907,11 +6907,11 @@ public class RestContext extends Context {
 		ClassInfo eci = ClassInfo.ofc(defaultThrowable);
 
 		try {
-			ConstructorInfo cci = eci.getPublicConstructor(Throwable.class, String.class, Object[].class);
+			ConstructorInfo cci = eci.getPublicConstructor(x -> x.hasParamTypes(Throwable.class, String.class, Object[].class));
 			if (cci != null)
 	 			return toHttpException((Throwable)cci.invoke(t), InternalServerError.class);
 
-			cci = eci.getPublicConstructor(Throwable.class);
+			cci = eci.getPublicConstructor(x -> x.hasParamTypes(Throwable.class));
 			if (cci != null)
 				return toHttpException((Throwable)cci.invoke(t), InternalServerError.class);
 

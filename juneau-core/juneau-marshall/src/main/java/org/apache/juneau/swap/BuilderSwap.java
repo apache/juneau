@@ -151,7 +151,7 @@ public class BuilderSwap<T,B> {
 		ConstructorInfo objectConstructor;
 		ConstructorInfo builderConstructor;
 
-		createObjectMethod = bci.getBuilderBuildMethod().orElse(null);
+		createObjectMethod = getBuilderBuildMethod(bci);
 		if (createObjectMethod != null)
 			objectClass = createObjectMethod.getReturnType().inner();
 
@@ -160,12 +160,12 @@ public class BuilderSwap<T,B> {
 
 		ClassInfo pci = ClassInfo.of(objectClass);
 
-		objectConstructor = pci.getConstructor(cVis, builderClass);
+		objectConstructor = pci.getConstructor(x -> x.isVisible(cVis) && x.hasParamTypes(builderClass));
 		if (objectConstructor == null)
 			return null;
 
 		builderConstructor = bci.getNoArgConstructor(cVis);
-		createBuilderMethod = pci.getBuilderCreateMethod().orElse(null);
+		createBuilderMethod = getBuilderCreateMethod(pci);
 		if (builderConstructor == null && createBuilderMethod == null)
 			return null;
 
@@ -220,9 +220,10 @@ public class BuilderSwap<T,B> {
 		if (builderConstructor == null && builderCreateMethod == null)
 			return null;
 
-		objectCreateMethod = bci.getBuilderBuildMethod().orElse(null);
+		objectCreateMethod = getBuilderBuildMethod(bci);
+		Class<?> builderClass2 = builderClass;
 		if (objectConstructor == null)
-			objectConstructor = pci.getConstructor(cVis, builderClass);
+			objectConstructor = pci.getConstructor(x -> x.isVisible(cVis) && x.hasParamTypes(builderClass2));
 
 		if (objectConstructor == null && objectCreateMethod == null)
 			return null;
@@ -244,5 +245,14 @@ public class BuilderSwap<T,B> {
 			x -> x.hasNumParams(1)
 			&& x.hasParamTypes(argType)
 		) != null;
+	}
+
+	private static MethodInfo getBuilderBuildMethod(ClassInfo c) {
+		return c.getDeclaredMethod(
+			x -> x.isNotStatic()
+			&& x.hasNoParams()
+			&& (!x.hasReturnType(void.class))
+			&& x.hasName("build")
+		);
 	}
 }

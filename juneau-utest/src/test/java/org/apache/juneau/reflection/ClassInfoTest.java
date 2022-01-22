@@ -399,65 +399,6 @@ public class ClassInfoTest {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Special methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	static class DCx {}
-	static class DC1 {
-		public static DCx create() {return null;}
-		public DC1(DCx x) {}
-	}
-	static class DC2 {
-		protected static DCx create() {return null;}
-	}
-	static class DC3 {
-		public DCx create() {return null;}
-	}
-	static class DC4 {
-		public static void create() {}
-	}
-	static class DC5 {
-		public static DCx createFoo() {return null;}
-	}
-	static ClassInfo dc1=of(DC1.class), dc2=of(DC2.class), dc3=of(DC3.class), dc4=of(DC4.class), dc5=of(DC5.class);
-
-	@Test
-	public void getBuilderCreateMethod() throws Exception {
-		check("DC1.create()", dc1.getBuilderCreateMethod().orElse(null));
-		check(null, dc2.getBuilderCreateMethod().orElse(null));
-		check(null, dc3.getBuilderCreateMethod().orElse(null));
-		check(null, dc4.getBuilderCreateMethod().orElse(null));
-		check(null, dc5.getBuilderCreateMethod().orElse(null));
-	}
-
-	static class DDx {}
-	static class DD1 {
-		public DDx build() {return null;}
-	}
-	static class DD2 {
-		public void build() {}
-	}
-	static class DD3 {
-		public static DDx build() {return null;}
-	}
-	static class DD4 {
-		public DDx build2() {return null;}
-	}
-	static class DD5 {
-		public DDx build(String x) {return null;}
-	}
-	static ClassInfo dd1=of(DD1.class), dd2=of(DD2.class), dd3=of(DD3.class), dd4=of(DD4.class), dd5=of(DD5.class);
-
-	@Test
-	public void getBuilderBuildMethod() throws Exception {
-		check("DD1.build()", dd1.getBuilderBuildMethod().orElse(null));
-		check(null, dd2.getBuilderBuildMethod().orElse(null));
-		check(null, dd3.getBuilderBuildMethod().orElse(null));
-		check(null, dd4.getBuilderBuildMethod().orElse(null));
-		check(null, dd5.getBuilderBuildMethod().orElse(null));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
 	// Constructors
 	//-----------------------------------------------------------------------------------------------------------------
 
@@ -529,13 +470,12 @@ public class ClassInfoTest {
 
 	@Test
 	public void getPublicConstructor_classArgs() {
-		check("E1(String)", e1.getPublicConstructor(String.class));
-		check("E1(Writer)", e1.getAvailablePublicConstructor(StringWriter.class));
+		check("E1(String)", e1.getPublicConstructor(x -> x.hasParamTypes(String.class)));
 	}
 
 	@Test
 	public void getPublicConstructor_objectArgs() {
-		check("E1(String)", e1.getPublicConstructor("foo"));
+		check("E1(String)", e1.getPublicConstructor(x -> x.canAccept("foo")));
 	}
 
 	@Test
@@ -569,17 +509,17 @@ public class ClassInfoTest {
 
 	@Test
 	public void getPublicNoArgConstructor() {
-		check("E1()", e1.getPublicConstructor());
+		check("E1()", e1.getPublicConstructor(x -> x.hasNoParams()));
 	}
 
 	@Test
 	public void getConstructor() {
-		check("E1(int)", e1.getConstructor(Visibility.PROTECTED, int.class));
-		check("E1(int)", e1.getConstructor(Visibility.PRIVATE, int.class));
-		check(null, e1.getConstructor(Visibility.PUBLIC, int.class));
-		check("E3()", e3.getConstructor(Visibility.PUBLIC));
-		check(null, e4.getConstructor(Visibility.PUBLIC));
-		check("E5()", e5.getConstructor(Visibility.PUBLIC));
+		check("E1(int)", e1.getConstructor(x -> x.isVisible(Visibility.PROTECTED) && x.hasParamTypes(int.class)));
+		check("E1(int)", e1.getConstructor(x -> x.isVisible(Visibility.PRIVATE) && x.hasParamTypes(int.class)));
+		check(null, e1.getConstructor(x -> x.isVisible(Visibility.PUBLIC) && x.hasParamTypes(int.class)));
+		check("E3()", e3.getConstructor(x -> x.isVisible(Visibility.PUBLIC)));
+		check("E4(ClassInfoTest)", e4.getConstructor(x -> x.isVisible(Visibility.PUBLIC)));
+		check("E5()", e5.getConstructor(x -> x.isVisible(Visibility.PUBLIC)));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

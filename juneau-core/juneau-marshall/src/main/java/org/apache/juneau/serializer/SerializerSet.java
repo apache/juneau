@@ -318,7 +318,7 @@ public final class SerializerSet {
 			if (o instanceof Class) {
 
 				// Check for no-arg constructor.
-				ConstructorInfo ci = ClassInfo.of((Class<?>)o).getPublicConstructor();
+				ConstructorInfo ci = ClassInfo.of((Class<?>)o).getPublicConstructor(x -> x.hasNoParams());
 				if (ci != null)
 					return ci.invoke();
 

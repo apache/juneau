@@ -13,12 +13,9 @@
 package org.apache.juneau.reflect;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.reflect.ReflectFlags.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
-import static org.apache.juneau.reflect.ReflectionFilters.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -600,46 +597,6 @@ public final class ClassInfo {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Special methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Returns the <c>public static Builder create()</c> method on this class.
-	 *
-	 * @return The <c>public static Builder create()</c> method on this class, or <jk>null</jk> if it doesn't exist.
-	 */
-	public Optional<MethodInfo> getBuilderCreateMethod() {
-		return getPublicConstructors()
-			.stream()
-			.filter(x -> x.hasNumParams(1))
-			.map(x -> x.getParam(0).getParameterType())
-			.filter(x -> ne(x.inner(), c))  // Ignore copy-constructor.
-			.map(x -> getStaticCreator(x))
-			.filter(x -> x.isPresent())
-			.findFirst()
-			.orElse(Optional.empty());
-	}
-
-	private Optional<MethodInfo> getStaticCreator(ClassInfo ci) {
-		return getPublicMethods()
-			.stream()
-			.filter(x -> x.isAll(PUBLIC, STATIC) && x.hasName("create") && x.hasReturnType(ci))
-			.findFirst();
-	}
-
-	/**
-	 * Returns the <c>T build()</c> method on this class.
-	 *
-	 * @return The <c>T build()</c> method on this class, or {@link Optional#empty()} if it doesn't exist.
-	 */
-	public Optional<MethodInfo> getBuilderBuildMethod() {
-		return getDeclaredMethods()
-			.stream()
-			.filter(x -> x.isAll(NOT_STATIC) && x.hasName("build") && (!x.hasParams()) && (!x.hasReturnType(void.class)))
-			.findFirst();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
 	// Constructors
 	//-----------------------------------------------------------------------------------------------------------------
 
@@ -666,17 +623,6 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Returns the public constructor with the specified argument types.
-	 *
-	 * @param args The exact argument types.
-	 * @return
-	 *  The public constructor with the specified argument types, or <jk>null</jk> if not found.
-	 */
-	public ConstructorInfo getPublicConstructor(Class<?>...args) {
-		return Arrays.stream(_getPublicConstructors()).filter(hasArgs(args)).findFirst().orElse(null);
-	}
-
-	/**
 	 * Returns the public constructor that passes the specified predicate test.
 	 *
 	 * <p>
@@ -685,8 +631,11 @@ public final class ClassInfo {
 	 * @param test The test that the public constructor must pass.
 	 * @return The first matching public constructor.
 	 */
-	public Optional<ConstructorInfo> getConstructor(Predicate<ExecutableInfo> test) {
-		return Arrays.stream(_getDeclaredConstructors()).filter(test).findFirst();
+	public ConstructorInfo getConstructor(Predicate<ExecutableInfo> test) {
+		for (ConstructorInfo ci : _getDeclaredConstructors())
+			if (test.test(ci))
+				return ci;
+		return null;
 	}
 
 	/**
@@ -703,38 +652,12 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Same as {@link #getPublicConstructor(Class...)} but allows for inexact arg type matching.
-	 *
-	 * <p>
-	 * For example, the method <c>foo(CharSequence)</c> will be matched by <code>getAvailablePublicConstructor(String.<jk>class</jk>)</code>
-	 *
-	 * @param args The exact argument types.
-	 * @return
-	 *  The public constructor with the specified argument types, or <jk>null</jk> if not found.
-	 */
-	public ConstructorInfo getAvailablePublicConstructor(Class<?>...args) {
-		return _getConstructor(Visibility.PUBLIC, false, args);
-	}
-
-	/**
 	 * Returns all the constructors defined on this class.
 	 *
 	 * @return All constructors defined on this class.
 	 */
 	public List<ConstructorInfo> getDeclaredConstructors() {
 		return new UnmodifiableArray<>(_getDeclaredConstructors());
-	}
-
-	/**
-	 * Finds the public constructor that can take in the specified arguments.
-	 *
-	 * @param args The arguments we want to pass into the constructor.
-	 * @return
-	 * 	The constructor, or <jk>null</jk> if a public constructor could not be found that takes in the specified
-	 * 	arguments.
-	 */
-	public ConstructorInfo getPublicConstructor(Object...args) {
-		return getPublicConstructor(ClassUtils.getClasses(args));
 	}
 
 	/**
@@ -747,30 +670,6 @@ public final class ClassInfo {
 	 */
 	public ConstructorInfo getPublicConstructorFuzzy(Object...args) {
 		return _getConstructor(Visibility.PUBLIC, true, ClassUtils.getClasses(args));
-	}
-
-	/**
-	 * Finds the public constructor that can take in the specified arguments using fuzzy-arg matching.
-	 *
-	 * @param args The arguments we want to pass into the constructor.
-	 * @return
-	 * 	The constructor, never <jk>null</jk>.
-	 */
-	public Optional<ConstructorInfo> getOptionalPublicConstructorFuzzy(Object...args) {
-		return Optional.ofNullable(_getConstructor(Visibility.PUBLIC, true, ClassUtils.getClasses(args)));
-	}
-
-	/**
-	 * Finds a constructor with the specified parameters without throwing an exception.
-	 *
-	 * @param vis The minimum visibility.
-	 * @param argTypes
-	 * 	The argument types in the constructor.
-	 * 	Can be subtypes of the actual constructor argument types.
-	 * @return The matching constructor, or <jk>null</jk> if constructor could not be found.
-	 */
-	public ConstructorInfo getConstructor(Visibility vis, Class<?>...argTypes) {
-		return _getConstructor(vis, false, argTypes);
 	}
 
 	private ConstructorInfo[] _getPublicConstructors() {

@@ -121,14 +121,16 @@ public final class ClassUtils {
 					return null;
 
 				// First look for an exact match.
-				ConstructorInfo con = c3.getPublicConstructor(args);
+				Object[] args2 = args;
+				ConstructorInfo con = c3.getPublicConstructor(x -> x.canAccept(args2));
 				if (con != null)
 					return con.<T>invoke(args);
 
 				// Next look for an exact match including the outer.
 				if (outer != null) {
 					args = AList.of(outer).append(args).toArray();
-					con = c3.getPublicConstructor(args);
+					Object[] args3 = args;
+					con = c3.getPublicConstructor(x -> x.canAccept(args3));
 					if (con != null)
 						return con.<T>invoke(args);
 				}

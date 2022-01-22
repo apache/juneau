@@ -91,13 +91,13 @@ public class HeaderBeanMeta<T> {
 
 		ClassInfo ci = ClassInfo.of(type);
 
-		ConstructorInfo cci = ci.getPublicConstructor(String.class);
+		ConstructorInfo cci = ci.getPublicConstructor(x -> x.hasParamTypes(String.class));
 		if (cci == null)
-			cci = ci.getPublicConstructor(Object.class);
+			cci = ci.getPublicConstructor(x -> x.hasParamTypes(Object.class));
 		if (cci == null)
-			cci = ci.getPublicConstructor(String.class, String.class);
+			cci = ci.getPublicConstructor(x -> x.hasParamTypes(String.class, String.class));
 		if (cci == null)
-			cci = ci.getPublicConstructor(String.class, Object.class);
+			cci = ci.getPublicConstructor(x -> x.hasParamTypes(String.class, Object.class));
 		constructor = cci == null ? null : cci.inner();
 
 		this.schema = HttpPartSchema.create(org.apache.juneau.http.annotation.Header.class, type);

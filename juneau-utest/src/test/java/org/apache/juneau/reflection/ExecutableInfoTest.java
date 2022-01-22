@@ -73,13 +73,13 @@ public class ExecutableInfoTest {
 
 	@Test
 	public void isConstructor() {
-		assertTrue(a.getPublicConstructor().isConstructor());
+		assertTrue(a.getPublicConstructor(x -> x.hasNoParams()).isConstructor());
 		assertFalse(a.getPublicMethod(x -> x.hasName("foo")).isConstructor());
 	}
 
 	@Test
 	public void getDeclaringClass() {
-		check("A", a.getPublicConstructor().getDeclaringClass());
+		check("A", a.getPublicConstructor(x -> x.hasNoParams()).getDeclaringClass());
 		check("A", a.getPublicMethod(x -> x.hasName("foo")).getDeclaringClass());
 	}
 
@@ -95,8 +95,8 @@ public class ExecutableInfoTest {
 	}
 	static ClassInfo b = ClassInfo.of(B.class);
 	static ExecutableInfo
-		b_c1=b.getPublicConstructor(),
-		b_c2=b.getPublicConstructor(String.class),
+		b_c1=b.getPublicConstructor(x -> x.hasNoParams()),
+		b_c2=b.getPublicConstructor(x -> x.hasParamTypes(String.class)),
 		b_m1=b.getPublicMethod(x -> x.hasName("m") && x.hasNoParams()),
 		b_m2=b.getPublicMethod(x -> x.hasName("m") && x.hasParamTypes(String.class))
 	;
@@ -156,7 +156,7 @@ public class ExecutableInfoTest {
 	@Test
 	public void getParam_nocache() {
 		ClassInfo b = ClassInfo.of(B.class);
-		check("B[0]", b.getPublicConstructor(String.class).getParam(0));
+		check("B[0]", b.getPublicConstructor(x -> x.hasParamTypes(String.class)).getParam(0));
 		check("m[0]", b.getPublicMethod(x -> x.hasName("m") && x.hasParamTypes(String.class)).getParam(0));
 	}
 
@@ -170,9 +170,9 @@ public class ExecutableInfoTest {
 	@Test
 	public void getParam_indexOutOfBounds_noCache() {
 		ClassInfo b = ClassInfo.of(B.class);
-		assertThrown(()->b.getPublicConstructor().getParam(0)).message().is("Invalid index '0'.  No parameters.");
-		assertThrown(()->b.getPublicConstructor(String.class).getParam(-1)).message().is("Invalid index '-1'.  Parameter count: 1");
-		assertThrown(()->b.getPublicConstructor(String.class).getParam(1)).message().is("Invalid index '1'.  Parameter count: 1");
+		assertThrown(()->b.getPublicConstructor(x -> x.hasNoParams()).getParam(0)).message().is("Invalid index '0'.  No parameters.");
+		assertThrown(()->b.getPublicConstructor(x -> x.hasParamTypes(String.class)).getParam(-1)).message().is("Invalid index '-1'.  Parameter count: 1");
+		assertThrown(()->b.getPublicConstructor(x -> x.hasParamTypes(String.class)).getParam(1)).message().is("Invalid index '1'.  Parameter count: 1");
 	}
 
 	@Test
@@ -268,9 +268,9 @@ public class ExecutableInfoTest {
 	}
 	static ClassInfo c = ClassInfo.of(C.class);
 	static ConstructorInfo
-		c_c1=c.getPublicConstructor(),
-		c_c2=c.getPublicConstructor(String.class),
-		c_c3=c.getPublicConstructor(int.class)
+		c_c1=c.getPublicConstructor(x -> x.hasNoParams()),
+		c_c2=c.getPublicConstructor(x -> x.hasParamTypes(String.class)),
+		c_c3=c.getPublicConstructor(x -> x.hasParamTypes(int.class))
 	;
 	static MethodInfo
 		c_m1=c.getPublicMethod(x -> x.hasName("m") && x.hasNoParams()),
@@ -329,7 +329,7 @@ public class ExecutableInfoTest {
 	}
 	static ClassInfo d = ClassInfo.of(D.class);
 	static ExecutableInfo
-		d_c=d.getPublicConstructor(),
+		d_c=d.getPublicConstructor(x -> x.hasNoParams()),
 		d_m=d.getPublicMethod(x -> x.hasName("m"))
 	;
 
@@ -591,9 +591,9 @@ public class ExecutableInfoTest {
 
 	@Test
 	public void getFullName_constructor() {
-		assertEquals("org.apache.juneau.reflection.ExecutableInfoTest$X()", x.getPublicConstructor().getFullName());
-		assertEquals("org.apache.juneau.reflection.ExecutableInfoTest$X(java.lang.String)", x.getPublicConstructor(String.class).getFullName());
-		assertEquals("org.apache.juneau.reflection.ExecutableInfoTest$X(java.util.Map<java.lang.String,java.lang.Object>)", x.getPublicConstructor(Map.class).getFullName());
+		assertEquals("org.apache.juneau.reflection.ExecutableInfoTest$X()", x.getPublicConstructor(x -> x.hasNoParams()).getFullName());
+		assertEquals("org.apache.juneau.reflection.ExecutableInfoTest$X(java.lang.String)", x.getPublicConstructor(x -> x.hasParamTypes(String.class)).getFullName());
+		assertEquals("org.apache.juneau.reflection.ExecutableInfoTest$X(java.util.Map<java.lang.String,java.lang.Object>)", x.getPublicConstructor(x -> x.hasParamTypes(Map.class)).getFullName());
 	}
 
 	@Test
@@ -605,9 +605,9 @@ public class ExecutableInfoTest {
 
 	@Test
 	public void getShortName_constructor() {
-		assertEquals("X()", x.getPublicConstructor().getShortName());
-		assertEquals("X(String)", x.getPublicConstructor(String.class).getShortName());
-		assertEquals("X(Map)", x.getPublicConstructor(Map.class).getShortName());
+		assertEquals("X()", x.getPublicConstructor(x -> x.hasNoParams()).getShortName());
+		assertEquals("X(String)", x.getPublicConstructor(x -> x.hasParamTypes(String.class)).getShortName());
+		assertEquals("X(Map)", x.getPublicConstructor(x -> x.hasParamTypes(Map.class)).getShortName());
 	}
 
 	@Test
@@ -619,8 +619,8 @@ public class ExecutableInfoTest {
 
 	@Test
 	public void getSimpleName_constructor() {
-		assertEquals("X", x.getPublicConstructor().getSimpleName());
-		assertEquals("X", x.getPublicConstructor(String.class).getSimpleName());
-		assertEquals("X", x.getPublicConstructor(Map.class).getSimpleName());
+		assertEquals("X", x.getPublicConstructor(x -> x.hasNoParams()).getSimpleName());
+		assertEquals("X", x.getPublicConstructor(x -> x.hasParamTypes(String.class)).getSimpleName());
+		assertEquals("X", x.getPublicConstructor(x -> x.hasParamTypes(Map.class)).getSimpleName());
 	}
 }

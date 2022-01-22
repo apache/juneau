@@ -216,7 +216,7 @@ public class Mutaters {
 			}
 		}
 
-		ConstructorInfo c = oci.getPublicConstructor(ic);
+		ConstructorInfo c = oci.getPublicConstructor(x -> x.hasParamTypes(ic));
 		if (c != null && c.isNotDeprecated()) {
 			boolean isMemberClass = oci.isNonStaticMemberClass();
 			return new Mutater() {

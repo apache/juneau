@@ -460,9 +460,9 @@ public class HttpParts {
 
 	private static final Function<ClassMeta<?>,ConstructorInfo> CONSTRUCTOR_FUNCTION = x -> {
 		ClassInfo ci = x.getInfo();
-		ConstructorInfo cc = ci.getConstructor(Visibility.PUBLIC, String.class);
+		ConstructorInfo cc = ci.getPublicConstructor(y -> y.hasParamTypes(String.class));
 		if (cc == null)
-			cc = ci.getConstructor(Visibility.PUBLIC, String.class, String.class);
+			cc = ci.getPublicConstructor(y -> y.hasParamTypes(String.class, String.class));
 		return cc;
 	};
 

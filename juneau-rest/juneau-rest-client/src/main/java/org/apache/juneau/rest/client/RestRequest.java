@@ -2565,16 +2565,16 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					if (t.getName().equals(className)) {
 						ConstructorInfo c = null;
 						ClassInfo ci = ClassInfo.of(t);
-						c = ci.getPublicConstructor(HttpResponse.class);
+						c = ci.getPublicConstructor(x -> x.hasParamTypes(HttpResponse.class));
 						if (c != null)
 							throw c.<Throwable>invoke(response);
-						c = ci.getPublicConstructor(String.class);
+						c = ci.getPublicConstructor(x -> x.hasParamTypes(String.class));
 						if (c != null)
 							throw c.<Throwable>invoke(message != null ? message : response.getBody().asString());
-						c = ci.getPublicConstructor(String.class,Throwable.class);
+						c = ci.getPublicConstructor(x -> x.hasParamTypes(String.class,Throwable.class));
 						if (c != null)
 							throw c.<Throwable>invoke(message != null ? message : response.getBody().asString(), null);
-						c = ci.getPublicConstructor();
+						c = ci.getPublicConstructor(x -> x.hasNoParams());
 						if (c != null)
 							throw c.<Throwable>invoke();
 					}

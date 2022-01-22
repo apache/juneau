@@ -109,10 +109,10 @@ public class ConstructorInfoTest {
 	}
 	static ClassInfo b = ClassInfo.of(B.class);
 	static ConstructorInfo
-		b_c1 = b.getPublicConstructor(),
-		b_c2 = b.getPublicConstructor(String.class),
+		b_c1 = b.getPublicConstructor(x -> x.hasNoParams()),
+		b_c2 = b.getPublicConstructor(x -> x.hasParamTypes(String.class)),
 		b_c3 = b.getDeclaredConstructor(x -> x.hasParamTypes(int.class)),
-		b_c4 = b.getPublicConstructor(String.class, String.class);
+		b_c4 = b.getPublicConstructor(x -> x.hasParamTypes(String.class, String.class));
 
 
 	@Test

@@ -86,8 +86,8 @@ public class ParamInfoTest {
 
 	static ClassInfo b = ClassInfo.of(B.class);
 	static ParamInfo
-		b_b_a = b.getPublicConstructor(int.class, String.class).getParam(0),
-		b_b_b = b.getPublicConstructor(int.class, String.class).getParam(1),
+		b_b_a = b.getPublicConstructor(x -> x.hasParamTypes(int.class, String.class)).getParam(0),
+		b_b_b = b.getPublicConstructor(x -> x.hasParamTypes(int.class, String.class)).getParam(1),
 		b_a1_a = b.getMethod(x -> x.hasName("a1")).getParam(0),
 		b_a1_b = b.getMethod(x -> x.hasName("a1")).getParam(1),
 		b_a2_a = b.getMethod(x -> x.hasName("a2")).getParam(0),
@@ -172,7 +172,7 @@ public class ParamInfoTest {
 		cb = ClassInfo.of(CB.class),
 		cc = ClassInfo.of(CC.class);
 	static ParamInfo
-		cc_cc = cc.getPublicConstructor(C1.class).getParam(0),
+		cc_cc = cc.getPublicConstructor(x -> x.hasParamTypes(C1.class)).getParam(0),
 		cb_a1 = cb.getMethod(x -> x.hasName("a1")).getParam(0),
 		cb_a2 = cb.getMethod(x -> x.hasName("a2")).getParam(0),
 		cc_a1 = cc.getMethod(x -> x.hasName("a1")).getParam(0),

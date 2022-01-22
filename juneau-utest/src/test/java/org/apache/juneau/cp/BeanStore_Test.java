@@ -270,8 +270,8 @@ public class BeanStore_Test {
 		BeanStore b2c = BeanStore.create().outer(outer).parent(b1p).threadSafe().build();
 
 		ClassInfo ci = ClassInfo.of(B1.class);
-		ConstructorInfo c1 = ci.getPublicConstructor(A1.class, Optional.class, BeanStore.class);
-		ConstructorInfo c2 = ci.getPublicConstructor(A1.class, Optional.class);
+		ConstructorInfo c1 = ci.getPublicConstructor(x -> x.hasParamTypes(A1.class, Optional.class, BeanStore.class));
+		ConstructorInfo c2 = ci.getPublicConstructor(x -> x.hasParamTypes(A1.class, Optional.class));
 		MethodInfo m1 = ci.getPublicMethod(x-> x.hasName("m1"));
 		MethodInfo m2 = ci.getPublicMethod(x-> x.hasName("m2"));
 		MethodInfo m3 = ci.getPublicMethod(x-> x.hasName("m3"));
@@ -405,8 +405,8 @@ public class BeanStore_Test {
 		BeanStore b2c = BeanStore.create().outer(this).parent(b1p).threadSafe().build();
 
 		ClassInfo ci = ClassInfo.of(B2.class);
-		ConstructorInfo c1 = ci.getPublicConstructor(BeanStore_Test.class, A1.class, Optional.class, BeanStore.class);
-		ConstructorInfo c2 = ci.getPublicConstructor(BeanStore_Test.class, A1.class, Optional.class);
+		ConstructorInfo c1 = ci.getPublicConstructor(x -> x.hasParamTypes(BeanStore_Test.class, A1.class, Optional.class, BeanStore.class));
+		ConstructorInfo c2 = ci.getPublicConstructor(x -> x.hasParamTypes(BeanStore_Test.class, A1.class, Optional.class));
 
 		for (BeanStore b : array(b1p, b1c, b2p, b2c)) {
 			assertString(b.getMissingParams(c1)).is(A1n);

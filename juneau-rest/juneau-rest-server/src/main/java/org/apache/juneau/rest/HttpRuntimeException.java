@@ -106,11 +106,11 @@ public final class HttpRuntimeException extends BasicRuntimeException {
 		ClassInfo eci = ClassInfo.ofc(ec);
 
 		try {
-			ConstructorInfo cci = eci.getPublicConstructor(Throwable.class, String.class, Object[].class);
+			ConstructorInfo cci = eci.getPublicConstructor(x -> x.hasParamTypes(Throwable.class, String.class, Object[].class));
 			if (cci != null)
 	 			return toHttpException((Throwable)cci.invoke(t, msg, args), InternalServerError.class);
 
-			cci = eci.getPublicConstructor(Throwable.class);
+			cci = eci.getPublicConstructor(x -> x.hasParamTypes(Throwable.class));
 			if (cci != null)
 				return toHttpException((Throwable)cci.invoke(t), InternalServerError.class);
 

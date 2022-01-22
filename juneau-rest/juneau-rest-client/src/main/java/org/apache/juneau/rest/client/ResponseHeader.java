@@ -227,10 +227,10 @@ public class ResponseHeader implements Header {
 	public <T extends BasicHeader> T asHeader(Class<T> c) {
 		try {
 			ClassInfo ci = ClassInfo.of(c);
-			ConstructorInfo cc = ci.getConstructor(Visibility.PUBLIC, String.class);
+			ConstructorInfo cc = ci.getPublicConstructor(x -> x.hasParamTypes(String.class));
 			if (cc != null)
 				return cc.invoke(getValue());
-			cc = ci.getConstructor(Visibility.PUBLIC, String.class, String.class);
+			cc = ci.getPublicConstructor(x -> x.hasParamTypes(String.class, String.class));
 			if (cc != null)
 				return cc.invoke(getName(), getValue());
 		} catch (Throwable e) {

@@ -675,7 +675,7 @@ public class ResponseBody implements HttpEntity {
 			if (type.is(HttpResource.class))
 				type = (ClassMeta<T>)getClassMeta(BasicResource.class);
 
-			ConstructorInfo ci = type.getInfo().getPublicConstructor(HttpResponse.class);
+			ConstructorInfo ci = type.getInfo().getPublicConstructor(x -> x.hasParamTypes(HttpResponse.class));
 			if (ci != null) {
 				try {
 					return (T)ci.invoke(response);
@@ -710,7 +710,7 @@ public class ResponseBody implements HttpEntity {
 
 					// Some HTTP responses have no body, so try to create these beans if they've got no-arg constructors.
 					if (t == null && ! type.is(String.class)) {
-						ConstructorInfo c = type.getInfo().getPublicConstructor();
+						ConstructorInfo c = type.getInfo().getPublicConstructor(x -> x.hasNoParams());
 						if (c != null) {
 							try {
 								return c.<T>invoke();
