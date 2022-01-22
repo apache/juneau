@@ -660,18 +660,6 @@ public final class ClassInfo {
 		return new UnmodifiableArray<>(_getDeclaredConstructors());
 	}
 
-	/**
-	 * Finds the public constructor that can take in the specified arguments using fuzzy-arg matching.
-	 *
-	 * @param args The arguments we want to pass into the constructor.
-	 * @return
-	 * 	The constructor, or <jk>null</jk> if a public constructor could not be found that takes in the specified
-	 * 	arguments.
-	 */
-	public ConstructorInfo getPublicConstructorFuzzy(Object...args) {
-		return _getConstructor(Visibility.PUBLIC, true, ClassUtils.getClasses(args));
-	}
-
 	private ConstructorInfo[] _getPublicConstructors() {
 		if (publicConstructors == null) {
 			Constructor<?>[] cc = c == null ? new Constructor[0] : c.getConstructors();
@@ -694,34 +682,6 @@ public final class ClassInfo {
 			declaredConstructors = l.toArray(new ConstructorInfo[l.size()]);
 		}
 		return declaredConstructors;
-	}
-
-	private ConstructorInfo _getConstructor(Visibility vis, boolean fuzzyArgs, Class<?>...argTypes) {
-		if (fuzzyArgs) {
-			int bestCount = -1;
-			ConstructorInfo bestMatch = null;
-			for (ConstructorInfo n : _getDeclaredConstructors()) {
-				if (vis.isVisible(n.inner())) {
-					int m = n.fuzzyArgsMatch(argTypes);
-					if (m > bestCount) {
-						bestCount = m;
-						bestMatch = n;
-					}
-				}
-			}
-			return bestMatch;
-		}
-
-		boolean isMemberClass = isNonStaticMemberClass();
-		for (ConstructorInfo n : _getDeclaredConstructors()) {
-			List<ClassInfo> paramTypes = n.getParamTypes();
-			if (isMemberClass)
-				paramTypes = paramTypes.subList(1, paramTypes.size());
-			if (n.hasMatchingParamTypes(argTypes) && vis.isVisible(n.inner()))
-				return n;
-		}
-
-		return null;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

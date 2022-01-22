@@ -141,7 +141,7 @@ public final class ClassUtils {
 					if (mi != null)
 						return mi.invoke(null, getMatchingArgs(mi.getParamTypes(), args));
 
-					con = c3.getPublicConstructorFuzzy(args);
+					con = getPublicConstructorFuzzy(c3, args);
 					if (con != null)
 						return con.<T>invokeFuzzy(args);
 				}
@@ -157,6 +157,18 @@ public final class ClassUtils {
 		}
 	}
 
+	private static ConstructorInfo getPublicConstructorFuzzy(ClassInfo c, Object...args) {
+		int bestCount = -1;
+		ConstructorInfo bestMatch = null;
+		for (ConstructorInfo n : c.getPublicConstructors()) {
+			int m = n.fuzzyArgsMatch(args);
+			if (m > bestCount) {
+				bestCount = m;
+				bestMatch = n;
+			}
+		}
+		return bestMatch;
+	}
 
 	private static MethodInfo getStaticCreatorFuzzy(ClassInfo c, Object...args) {
 		int bestCount = -1;

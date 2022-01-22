@@ -479,12 +479,6 @@ public class ClassInfoTest {
 	}
 
 	@Test
-	public void getPublicConstructorFuzzy() {
-		check("E1(String)", e1.getPublicConstructorFuzzy("foo", new HashMap<>()));
-		check("E1()", e1.getPublicConstructorFuzzy(new HashMap<>()));
-	}
-
-	@Test
 	public void getNoArgConstructor() {
 		check("E2()", e2.getNoArgConstructor(Visibility.PRIVATE));
 		check("E2()", e2.getNoArgConstructor(Visibility.PROTECTED));

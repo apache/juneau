@@ -623,6 +623,29 @@ public abstract class ExecutableInfo {
 		return matches;
 	}
 
+	/**
+	 * Returns how well this method matches the specified arg types.
+	 *
+	 * <p>
+	 * The number returned is the number of method arguments that match the passed in arg types.
+	 * <br>Returns <c>-1</c> if the method cannot take in one or more of the specified arguments.
+	 *
+	 * @param argTypes The arg types to check against.
+	 * @return How many parameters match or <c>-1</c> if method cannot handle one or more of the arguments.
+	 */
+	public int fuzzyArgsMatch(Object... argTypes) {
+		int matches = 0;
+		outer: for (ClassInfo pi : getParamTypes()) {
+			for (Object a : argTypes) {
+				if (pi.canAcceptArg(a)) {
+					matches++;
+					continue outer;
+				}
+			}
+			return -1;
+		}
+		return matches;
+	}
 
 	/**
 	 * Returns <jk>true</jk> if this method has at most only this arguments in any order.
