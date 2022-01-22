@@ -222,7 +222,7 @@ public final class DateUtils {
 		if (isEmpty(pattern))
 			return DateTimeFormatter.ISO_INSTANT;
 		try {
-			FieldInfo fi = ClassInfo.of(DateTimeFormatter.class).getStaticPublicField(pattern);
+			FieldInfo fi = ClassInfo.of(DateTimeFormatter.class).getPublicField(x -> x.isStatic() && x.hasName(pattern));
 			if (fi != null)
 				return (DateTimeFormatter)fi.inner().get(null);
 			return DateTimeFormatter.ofPattern(pattern);

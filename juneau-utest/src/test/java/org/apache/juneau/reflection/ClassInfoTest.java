@@ -582,16 +582,16 @@ public class ClassInfoTest {
 
 	@Test
 	public void getPublicField() {
-		check("F3.a1", f3.getPublicField("a1"));
-		check(null, f3.getPublicField("a2"));
-		check(null, f3.getPublicField("a3"));
+		check("F3.a1", f3.getPublicField(x -> x.hasName("a1")));
+		check(null, f3.getPublicField(x -> x.hasName("a2")));
+		check(null, f3.getPublicField(x -> x.hasName("a3")));
 	}
 
 	@Test
 	public void getDeclaredField() {
-		check("F3.a1", f3.getDeclaredField("a1"));
-		check("F3.a2", f3.getDeclaredField("a2"));
-		check(null, f3.getDeclaredField("a3"));
+		check("F3.a1", f3.getDeclaredField(x -> x.hasName("a1")));
+		check("F3.a2", f3.getDeclaredField(x -> x.hasName("a2")));
+		check(null, f3.getDeclaredField(x -> x.hasName("a3")));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

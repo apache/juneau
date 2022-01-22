@@ -755,27 +755,14 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Returns the public field with the specified name.
+	 * Returns the public field that passes the specified predicate.
 	 *
-	 * @param name The field name.
+	 * @param predicate The predicate to test against.
 	 * @return The public field, or <jk>null</jk> if not found.
 	 */
-	public FieldInfo getPublicField(String name) {
+	public FieldInfo getPublicField(Predicate<FieldInfo> predicate) {
 		for (FieldInfo f : _getPublicFields())
-			if (f.getName().equals(name))
-				return f;
-		return null;
-	}
-
-	/**
-	 * Returns the declared field with the specified name.
-	 *
-	 * @param name The field name.
-	 * @return The declared field, or <jk>null</jk> if not found.
-	 */
-	public FieldInfo getDeclaredField(String name) {
-		for (FieldInfo f : _getDeclaredFields())
-			if (f.getName().equals(name))
+			if (predicate.test(f))
 				return f;
 		return null;
 	}
@@ -790,32 +777,6 @@ public final class ClassInfo {
 		for (FieldInfo f : _getDeclaredFields())
 			if (predicate.test(f))
 				return f;
-		return null;
-	}
-
-	/**
-	 * Returns the static public field with the specified name.
-	 *
-	 * @param name The field name.
-	 * @return The public field, or <jk>null</jk> if not found.
-	 */
-	public FieldInfo getStaticPublicField(String name) {
-		for (FieldInfo f : _getPublicFields())
-			if (f.isStatic() && f.getName().equals(name))
-				return f;
-		return null;
-	}
-
-	/**
-	 * Returns the static public field with the specified name.
-	 *
-	 * @param name The field name.
-	 * @return The public field, or <jk>null</jk> if not found.
-	 */
-	public Field getStaticPublicFieldInner(String name) {
-		for (FieldInfo f : _getPublicFields())
-			if (f.isStatic() && f.getName().equals(name))
-				return f.inner();
 		return null;
 	}
 

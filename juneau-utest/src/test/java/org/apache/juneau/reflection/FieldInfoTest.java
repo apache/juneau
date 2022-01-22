@@ -162,14 +162,14 @@ public class FieldInfoTest {
 	}
 	static ClassInfo c = ClassInfo.of(C.class);
 	static FieldInfo
-		c_deprecated = c.getPublicField("deprecated"),
-		c_notDeprecated = c.getPublicField("notDeprecated"),
-		c_isPublic = c.getPublicField("isPublic"),
-		c_isNotPublic = c.getDeclaredField("isNotPublic"),
-		c_isStatic = c.getPublicField("isStatic"),
-		c_isNotStatic = c.getPublicField("isNotStatic"),
-		c_isTransient = c.getPublicField("isTransient"),
-		c_isNotTransient = c.getPublicField("isNotTransient")
+		c_deprecated = c.getPublicField(x -> x.hasName("deprecated")),
+		c_notDeprecated = c.getPublicField(x -> x.hasName("notDeprecated")),
+		c_isPublic = c.getPublicField(x -> x.hasName("isPublic")),
+		c_isNotPublic = c.getDeclaredField(x -> x.hasName("isNotPublic")),
+		c_isStatic = c.getPublicField(x -> x.hasName("isStatic")),
+		c_isNotStatic = c.getPublicField(x -> x.hasName("isNotStatic")),
+		c_isTransient = c.getPublicField(x -> x.hasName("isTransient")),
+		c_isNotTransient = c.getPublicField(x -> x.hasName("isNotTransient"))
 	;
 
 	@Test
@@ -296,10 +296,10 @@ public class FieldInfoTest {
 	}
 	static ClassInfo d = ClassInfo.of(D.class);
 	static FieldInfo
-		d_isPublic = d.getPublicField("isPublic"),
-		d_isProtected = d.getDeclaredField("isProtected"),
-		d_isPrivate = d.getDeclaredField("isPrivate"),
-		d_isDefault = d.getDeclaredField("isDefault");
+		d_isPublic = d.getPublicField(x -> x.hasName("isPublic")),
+		d_isProtected = d.getDeclaredField(x -> x.hasName("isProtected")),
+		d_isPrivate = d.getDeclaredField(x -> x.hasName("isPrivate")),
+		d_isDefault = d.getDeclaredField(x -> x.hasName("isDefault"));
 
 	@Test
 	public void setAccessible() {
@@ -343,8 +343,8 @@ public class FieldInfoTest {
 
 	static ClassInfo e = ClassInfo.of(E.class);
 	static FieldInfo
-		e_a1 = e.getPublicField("a1"),
-		e_a2 = e.getDeclaredField("a2");
+		e_a1 = e.getPublicField(x -> x.hasName("a1")),
+		e_a2 = e.getDeclaredField(x -> x.hasName("a2"));
 
 	@Test
 	public void getType() {
