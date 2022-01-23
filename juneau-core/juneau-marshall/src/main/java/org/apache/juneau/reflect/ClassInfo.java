@@ -853,10 +853,8 @@ public final class ClassInfo {
 	 * signature on the parent classes or interfaces.
 	 * <br>The search is performed in child-to-parent order.
 	 *
-	 * @param a
-	 * 	The annotation to search for.
-	 * @return
-	 * 	The annotation if found, or <jk>null</jk> if not.
+	 * @param a The annotation to search for.
+	 * @return The annotation if found, or <jk>null</jk> if not.
 	 */
 	public <T extends Annotation> T getLastAnnotation(Class<T> a) {
 		return getLastAnnotation(a, MetaProvider.DEFAULT);
@@ -866,15 +864,12 @@ public final class ClassInfo {
 	 * Finds the annotation of the specified type defined on this class or parent class/interface.
 	 *
 	 * <p>
-	 * If the annotation cannot be found on the immediate class, searches methods with the same
-	 * signature on the parent classes or interfaces.
-	 * <br>The search is performed in child-to-parent order.
+	 * If the annotation cannot be found on the immediate class, searches methods with the same signature on the parent classes or interfaces. <br>
+	 * The search is performed in child-to-parent order.
 	 *
-	 * @param a
-	 * 	The annotation to search for.
+	 * @param a The annotation to search for.
 	 * @param mp The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
-	 * @return
-	 * 	The annotation if found, or <jk>null</jk> if not.
+	 * @return The annotation if found, or <jk>null</jk> if not.
 	 */
 	public <T extends Annotation> T getLastAnnotation(Class<T> a, MetaProvider mp) {
 		return findAnnotation(a, mp);
@@ -883,10 +878,8 @@ public final class ClassInfo {
 	/**
 	 * Returns <jk>true</jk> if this class has the specified annotation.
 	 *
-	 * @param a
-	 * 	The annotation to search for.
-	 * @return
-	 * 	The <jk>true</jk> if annotation if found.
+	 * @param a The annotation to search for.
+	 * @return The <jk>true</jk> if annotation if found.
 	 */
 	public boolean hasAnnotation(Class<? extends Annotation> a) {
 		return getLastAnnotation(a) != null;
@@ -896,8 +889,7 @@ public final class ClassInfo {
 	 * Returns the specified annotation only if it's been declared on this class.
 	 *
 	 * <p>
-	 * More efficient than calling {@link Class#getAnnotation(Class)} since it doesn't recursively look for the class
-	 * up the parent chain.
+	 * More efficient than calling {@link Class#getAnnotation(Class)} since it doesn't recursively look for the class up the parent chain.
 	 *
 	 * @param <T> The annotation class type.
 	 * @param a The annotation class.
@@ -985,20 +977,6 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Same as getAnnotations(Class) except returns the annotations with the accompanying class.
-	 *
-	 * <p>
-	 * Results are ordered parent-to-child.
-	 *
-	 * @param <T> The annotation class type.
-	 * @param a The annotation class type.
-	 * @return The found matches, or an empty list if annotation was not found.
-	 */
-	public <T extends Annotation> List<AnnotationInfo<T>> getAnnotationInfos(Class<T> a) {
-		return appendAnnotationInfos(new ArrayList<>(), a);
-	}
-
-	/**
 	 * Constructs an {@link AnnotationList} of all annotations found on this class.
 	 *
 	 * <p>
@@ -1045,7 +1023,9 @@ public final class ClassInfo {
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
 	public AnnotationList getAnnotationList(Predicate<AnnotationInfo<?>> filter) {
-		return appendAnnotationList(new AnnotationList(filter));
+		AnnotationList l = new AnnotationList(filter);
+		getAnnotationInfos(x -> l.add(x));
+		return l;
 	}
 
 	/**
@@ -1070,31 +1050,7 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
-	 * list.
-	 *
-	 * <p>
-	 * Annotations are appended in the following orders:
-	 * <ol>
-	 * 	<li>On the package of this class.
-	 * 	<li>On interfaces ordered child-to-parent.
-	 * 	<li>On parent classes ordered child-to-parent.
-	 * 	<li>On this class.
-	 * </ol>
-	 *
-	 * @param l The list of annotations.
-	 * @param a The annotation to search for.
-	 * @param mp The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
-	 * @return The same list.
-	 */
-	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, MetaProvider mp) {
-		getAnnotations(a, mp, x -> l.add(x));
-		return l;
-	}
-
-	/**
-	 * Finds and consumes the specified annotation on the specified class and superclasses/interfaces to the specified
-	 * consumer.
+	 * Finds and consumes the specified annotation on the specified class and superclasses/interfaces to the specified consumer.
 	 *
 	 * <p>
 	 * Annotations are appended in the following orders:
@@ -1143,34 +1099,6 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
-	 * list.
-	 *
-	 * <p>
-	 * Annotations are appended in the following orders:
-	 * <ol>
-	 * 	<li>On the package of this class.
-	 * 	<li>On interfaces ordered child-to-parent.
-	 * 	<li>On parent classes ordered child-to-parent.
-	 * 	<li>On this class.
-	 * </ol>
-	 *
-	 * @param l The list of annotations.
-	 * @param a The annotation to search for.
-	 * @return The same list.
-	 */
-	public <T extends Annotation> List<AnnotationInfo<T>> appendAnnotationInfos(List<AnnotationInfo<T>> l, Class<T> a) {
-		addIfNotNull(l, getPackageAnnotationInfo(a));
-		ClassInfo[] interfaces = _getInterfaces();
-		for (int i = interfaces.length-1; i >= 0; i--)
-			addIfNotNull(l, interfaces[i].getDeclaredAnnotationInfo(a));
-		ClassInfo[] parents = _getParents();
-		for (int i = parents.length-1; i >= 0; i--)
-			addIfNotNull(l, parents[i].getDeclaredAnnotationInfo(a));
-		return l;
-	}
-
-	/**
 	 * Searches up the parent hierarchy of this class for the first annotation in the list it finds.
 	 *
 	 * @param mp Metadata provider.
@@ -1195,24 +1123,22 @@ public final class ClassInfo {
 		return ci == null ? null : ci.getAnyLastAnnotation(mp, annotations);
 	}
 
-
-	AnnotationList appendAnnotationList(AnnotationList m) {
+	void getAnnotationInfos(Consumer<AnnotationInfo<?>> consumer) {
 		Package p = c.getPackage();
 		if (p != null)
 			for (Annotation a : p.getDeclaredAnnotations())
 				for (Annotation a2 : splitRepeated(a))
-					m.add(AnnotationInfo.of(p, a2));
+					consumer.accept(AnnotationInfo.of(p, a2));
 		ClassInfo[] interfaces = _getInterfaces();
 		for (int i = interfaces.length-1; i >= 0; i--)
 			for (Annotation a : interfaces[i].c.getDeclaredAnnotations())
 				for (Annotation a2 : splitRepeated(a))
-					m.add(AnnotationInfo.of(interfaces[i], a2));
+					consumer.accept(AnnotationInfo.of(interfaces[i], a2));
 		ClassInfo[] parents = _getParents();
 		for (int i = parents.length-1; i >= 0; i--)
 			for (Annotation a : parents[i].c.getDeclaredAnnotations())
 				for (Annotation a2 : splitRepeated(a))
-					m.add(AnnotationInfo.of(parents[i], a2));
-		return m;
+					consumer.accept(AnnotationInfo.of(parents[i], a2));
 	}
 
 	/**
@@ -1925,7 +1851,6 @@ public final class ClassInfo {
 		return false;
 	}
 
-
 	/**
 	 * Same as {@link #isParentOfFuzzyPrimitives(Class)} but takes in a {@link ClassInfo}.
 	 *
@@ -2169,8 +2094,8 @@ public final class ClassInfo {
 				if (rt.isArray()) {
 					ClassInfo rct = rt.getComponentType();
 					if (rct.hasAnnotation(Repeatable.class)) {
-						Repeatable r = rct.getLastAnnotation(Repeatable.class) ;
-							b = r.value().equals(c);
+						Repeatable r = rct.getLastAnnotation(Repeatable.class);
+						b = r.value().equals(c);
 					}
 				}
 			}
@@ -2337,12 +2262,6 @@ public final class ClassInfo {
 				typeMap.put(typeParameters[i], actualTypeArguments[i]);
 			}
 		}
-	}
-
-	private static <T> List<T> addIfNotNull(List<T> l, T o) {
-		if (o != null)
-			l.add(o);
-		return l;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

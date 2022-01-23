@@ -1111,23 +1111,23 @@ public final class BeanPropertyMeta {
 		BeanContext bc = beanContext;
 		if (a == null)
 			return l;
-		getBeanMeta().getClassMeta().getInfo().appendAnnotations(l, a, bc);
+		getBeanMeta().getClassMeta().getInfo().getAnnotations(a, bc, x -> l.add(x));
 
 		if (field != null) {
 			l.addAll(bc.getAnnotations(a, field));
-			ClassInfo.of(field.getType()).appendAnnotations(l, a, bc);
+			ClassInfo.of(field.getType()).getAnnotations(a, bc, x -> l.add(x));
 		}
 		if (getter != null) {
 			l.addAll(bc.getAnnotations(a, getter));
-			ClassInfo.of(getter.getReturnType()).appendAnnotations(l, a, bc);
+			ClassInfo.of(getter.getReturnType()).getAnnotations(a, bc, x -> l.add(x));
 		}
 		if (setter != null) {
 			l.addAll(bc.getAnnotations(a, setter));
-			ClassInfo.of(setter.getReturnType()).appendAnnotations(l, a, bc);
+			ClassInfo.of(setter.getReturnType()).getAnnotations(a, bc, x -> l.add(x));
 		}
 		if (extraKeys != null) {
 			l.addAll(bc.getAnnotations(a, extraKeys));
-			ClassInfo.of(extraKeys.getReturnType()).appendAnnotations(l, a, bc);
+			ClassInfo.of(extraKeys.getReturnType()).getAnnotations(a, bc, x -> l.add(x));
 		}
 
 		return l;

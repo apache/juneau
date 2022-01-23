@@ -684,11 +684,6 @@ public class ClassInfoTest {
 	}
 
 	@Test
-	public void getAnnotationInfosParentFirst() {
-		check("@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)", g3.getAnnotationInfos(A.class));
-	}
-
-	@Test
 	public void getPackageAnnotation() {
 		check("@PA(10)", g3.getPackageAnnotation(PA.class));
 	}

@@ -14,92 +14,17 @@ package org.apache.juneau.reflection;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
 
 import org.apache.juneau.annotation.*;
 import java.lang.annotation.*;
-import java.util.function.*;
 
 import org.apache.juneau.reflect.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
 public class AnnotationInfoTest {
-
-	private static void check(String expected, Object o) {
-		assertEquals(expected, TO_STRING.apply(o));
-	}
-
-	private static final Function<Object,String> TO_STRING = new Function<Object,String>() {
-		@Override
-		public String apply(Object t) {
-			if (t instanceof A)
-				return "@A(" + ((A)t).value() + ")";
-			if (t instanceof ClassInfo)
-				return ((ClassInfo)t).getSimpleName();
-			return t.toString();
-		}
-	};
-
-	private static ClassInfo of(Class<?> c) {
-		try {
-			return ClassInfo.of(c);
-		} catch (SecurityException e) {
-			fail(e.getLocalizedMessage());
-		}
-		return null;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instantiation.
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Documented
-	@Target(TYPE)
-	@Retention(RUNTIME)
-	@Inherited
-	public static @interface A {
-		int value();
-	}
-
-	@A(1)
-	static class B {}
-	static ClassInfo b = of(B.class);
-
-	@Test
-	public void b01_getClassOn() {
-		check("B", b.getAnnotationInfos(A.class).get(0).getClassOn());
-	}
-
-	@Test
-	public void b02_getAnnotation() {
-		check("@A(1)", b.getAnnotationInfos(A.class).get(0).getAnnotation());
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Get value.
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Target(TYPE)
-	@Retention(RUNTIME)
-	public static @interface C {
-		String foo() default "x";
-	}
-
-	@C(foo="bar")
-	public static class C1 {}
-
-	@Test
-	public void c01_getValue() {
-		ClassInfo c1 = ClassInfo.of(C1.class);
-		AnnotationInfo<?> ai = c1.getAnnotationInfos(C.class).get(0);
-		assertString(ai.getValue(String.class, "foo")).is("bar");
-		assertOptional(ai.getValue(Integer.class, "foo")).isNull();
-		assertOptional(ai.getValue(String.class, "bar")).isNull();
-	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Is in group.
