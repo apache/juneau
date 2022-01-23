@@ -28,7 +28,7 @@ import org.apache.juneau.reflect.*;
 class Utils {
 
 	static void assertNoArgs(MethodInfo m, Class<?> a) throws InvalidAnnotationException {
-		if (m.getParamCount() != 0)
+		if (m.hasParams())
 			throw new InvalidAnnotationException("Method with @{0} annotation cannot have arguments.  Method=''{1}''", a.getSimpleName(), m);
 	}
 

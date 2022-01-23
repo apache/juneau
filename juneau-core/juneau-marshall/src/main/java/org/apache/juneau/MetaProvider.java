@@ -15,6 +15,7 @@ package org.apache.juneau;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
 
 import static java.util.Collections.*;
 
@@ -41,11 +42,19 @@ public interface MetaProvider {
 		}
 
 		@Override /* MetaProvider */
-		public <A extends Annotation> List<A> getDeclaredAnnotations(Class<A> a, Class<?> c) {
-			if (a == null || c == null)
-				return emptyList();
-			A[] aa = c.getDeclaredAnnotationsByType(a);
-			return Arrays.asList(aa);
+		public <A extends Annotation> void getDeclaredAnnotations(Class<A> a, Class<?> c, Consumer<A> consumer) {
+			if (a != null && c != null)
+				for (A aa : c.getDeclaredAnnotationsByType(a))
+					consumer.accept(aa);
+		}
+
+		@Override /* MetaProvider */
+		public <A extends Annotation> A getDeclaredAnnotation(Class<A> a, Class<?> c, Predicate<A> predicate) {
+			if (a != null && c != null)
+				for (A aa : c.getDeclaredAnnotationsByType(a))
+					if (predicate.test(aa))
+						return aa;
+			return null;
 		}
 
 		@Override /* MetaProvider */
@@ -86,12 +95,21 @@ public interface MetaProvider {
 	/**
 	 * Finds the specified declared annotations on the specified class.
 	 *
-	 * @param <A> The annotation type to find.
 	 * @param a The annotation type to find.
 	 * @param c The class to search on.
-	 * @return The annotations in an unmodifiable list, or an empty list if not found.
+	 * @param consumer The consumer of the annotations.
 	 */
-	<A extends Annotation> List<A> getDeclaredAnnotations(Class<A> a, Class<?> c);
+	<A extends Annotation> void getDeclaredAnnotations(Class<A> a, Class<?> c, Consumer<A> consumer);
+
+	/**
+	 * Finds the specified declared annotations on the specified class that match the specified predicate.
+	 *
+	 * @param a The annotation type to find.
+	 * @param c The class to search on.
+	 * @param predicate The predicate to match the annotation against.
+	 * @return The matched annotation, or <jk>null</jk> if no annotations matched.
+	 */
+	<A extends Annotation> A getDeclaredAnnotation(Class<A> a, Class<?> c, Predicate<A> predicate);
 
 	/**
 	 * Finds the specified annotations on the specified method.

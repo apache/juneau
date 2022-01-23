@@ -84,8 +84,7 @@ public class PathArg implements RestOpArg {
 	}
 
 	private String getName(ParamInfo pi, UrlPathMatcher pathMatcher) {
-		ClassInfo pt = pi.getParameterType();
-		String p = findName(pi.getAnnotations(Path.class), pt.getAnnotations(Path.class)).orElse(null);
+		String p = findName(pi).orElse(null);
 		if (p != null)
 			return p;
 		if (pathMatcher != null) {

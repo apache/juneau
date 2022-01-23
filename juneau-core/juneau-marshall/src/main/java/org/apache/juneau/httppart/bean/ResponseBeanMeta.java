@@ -55,8 +55,8 @@ public class ResponseBeanMeta {
 			return null;
 		Builder b = new Builder(annotations);
 		b.apply(ci.innerType());
-		ci.getAnnotations(Response.class).forEach(x -> b.apply(x));
-		ci.getAnnotations(StatusCode.class).forEach(x -> b.apply(x));
+		ci.getAnnotations(Response.class, x -> b.apply(x));
+		ci.getAnnotations(StatusCode.class, x -> b.apply(x));
 		return b.build();
 	}
 
@@ -167,7 +167,7 @@ public class ResponseBeanMeta {
 					assertReturnType(m, Header.class, int.class, Integer.class);
 					statusMethod = ResponseBeanPropertyMeta.create(RESPONSE_STATUS, m);
 				} else if (m.hasAnnotation(Body.class)) {
-					if (m.getParamCount() == 0)
+					if (m.hasNoParams())
 						assertReturnNotVoid(m, Header.class);
 					else
 						assertArgType(m, Header.class, OutputStream.class, Writer.class);

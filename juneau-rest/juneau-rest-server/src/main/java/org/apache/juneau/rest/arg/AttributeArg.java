@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.arg;
 
-import static org.apache.juneau.internal.StringUtils.*;
-
+import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -65,14 +65,16 @@ public class AttributeArg implements RestOpArg {
 	}
 
 	private String getName(ParamInfo paramInfo) {
-		String n = null;
+		Value<String> n = Value.empty();
 		for (Attr h : paramInfo.getAnnotations(Attr.class))
-			n = firstNonEmpty(h.name(), h.value(), n);
-		for (Attr h : paramInfo.getParameterType().getAnnotations(Attr.class))
-			n = firstNonEmpty(h.name(), h.value(), n);
-		if (n == null)
+			n.setIf(h.name(), StringUtils::isNotEmpty).setIf(h.value(), StringUtils::isNotEmpty);
+		paramInfo.getParameterType().getAnnotations(Attr.class, x -> {
+			n.setIf(x.name(), StringUtils::isNotEmpty);
+			n.setIf(x.value(), StringUtils::isNotEmpty);
+		});
+		if (n.isEmpty())
 			throw new ArgException(paramInfo, "@Attr used without name or value");
-		return n;
+		return n.get();
 	}
 
 	@Override /* RestOpArg */

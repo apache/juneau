@@ -14,15 +14,14 @@ package org.apache.juneau.http.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.internal.StringUtils.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
-import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -87,16 +86,15 @@ public class FormDataAnnotation {
 	 * <p>
 	 * The last matching name found is returned.
 	 *
-	 * @param lists The lists to search.
-	 * @return The last matching name, or {@link Optional#empty()} if not found.
+	 * @param pi The parameter.
+	 * @return The last matching name, or {@link Value#empty()} if not found.
 	 */
-	@SafeVarargs
-	public static Optional<String> findName(List<FormData>...lists) {
-		String n = null;
-		for (List<FormData> l : lists)
-			for (FormData h : l)
-				n = firstNonEmpty(h.name(), h.value(), n);
-		return Optional.ofNullable(n);
+	public static Value<String> findName(ParamInfo pi) {
+		Value<String> n = Value.empty();
+		Predicate<String> t = StringUtils::isNotEmpty;
+		pi.getAnnotations(FormData.class, x -> n.setIf(x.value(), t).setIf(x.name(), t));
+		pi.getParameterType().getAnnotations(FormData.class, x -> n.setIf(x.value(), t).setIf(x.name(), t));
+		return n;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

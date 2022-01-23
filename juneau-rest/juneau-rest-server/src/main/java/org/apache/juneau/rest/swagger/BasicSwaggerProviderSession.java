@@ -320,52 +320,52 @@ public class BasicSwaggerProviderSession {
 				if (mpi.hasAnnotation(Body.class) || pt.hasAnnotation(Body.class)) {
 					OMap param = paramMap.getMap(BODY + ".body", true).a("in", BODY);
 					OMap schema = getSchema(param.getMap("schema"), type, bs);
-					pt.getAnnotations(Schema.class).forEach(x -> merge(schema, x));
-					mpi.getAnnotations(Schema.class).forEach(x -> merge(schema, x));
-					pt.getAnnotations(Body.class).forEach(x -> merge(schema, x.schema()));
-					mpi.getAnnotations(Body.class).forEach(x -> merge(schema, x.schema()));
+					pt.getAnnotations(Schema.class, x -> merge(schema, x));
+					mpi.getAnnotations(Schema.class, x -> merge(schema, x));
+					pt.getAnnotations(Body.class, x -> merge(schema, x.schema()));
+					mpi.getAnnotations(Body.class, x -> merge(schema, x.schema()));
 					pushupSchemaFields(BODY, param, schema);
 					param.appendIf(true, true, true, "schema", schema);
 					param.putIfAbsent("required", true);
 					addBodyExamples(sm, param, false, type, locale);
 
 				} else if (mpi.hasAnnotation(Query.class) || pt.hasAnnotation(Query.class)) {
-					String name = QueryAnnotation.findName(mpi.getAnnotations(Query.class), pt.getAnnotations(Query.class)).orElse(null);
+					String name = QueryAnnotation.findName(mpi).orElse(null);
 					OMap param = paramMap.getMap(QUERY + "." + name, true).a("name", name).a("in", QUERY);
-					pt.getAnnotations(Schema.class).forEach(x -> merge(param, x));
-					pt.getAnnotations(Query.class).forEach(x -> merge(param, x.schema()));
-					mpi.getAnnotations(Schema.class).forEach(x -> merge(param, x));
-					mpi.getAnnotations(Query.class).forEach(x -> merge(param, x.schema()));
+					pt.getAnnotations(Schema.class, x -> merge(param, x));
+					pt.getAnnotations(Query.class, x -> merge(param, x.schema()));
+					mpi.getAnnotations(Schema.class, x -> merge(param, x));
+					mpi.getAnnotations(Query.class, x -> merge(param, x.schema()));
 					pushupSchemaFields(QUERY, param, getSchema(param.getMap("schema"), type, bs));
 					addParamExample(sm, param, QUERY, type);
 
 				} else if (mpi.hasAnnotation(FormData.class) || pt.hasAnnotation(FormData.class)) {
-					String name = FormDataAnnotation.findName(mpi.getAnnotations(FormData.class), pt.getAnnotations(FormData.class)).orElse(null);
+					String name = FormDataAnnotation.findName(mpi).orElse(null);
 					OMap param = paramMap.getMap(FORM_DATA + "." + name, true).a("name", name).a("in", FORM_DATA);
-					pt.getAnnotations(Schema.class).forEach(x -> merge(param, x));
-					pt.getAnnotations(FormData.class).forEach(x -> merge(param, x.schema()));
-					mpi.getAnnotations(Schema.class).forEach(x -> merge(param, x));
-					mpi.getAnnotations(FormData.class).forEach(x -> merge(param, x.schema()));
+					pt.getAnnotations(Schema.class, x -> merge(param, x));
+					pt.getAnnotations(FormData.class, x -> merge(param, x.schema()));
+					mpi.getAnnotations(Schema.class, x -> merge(param, x));
+					mpi.getAnnotations(FormData.class, x -> merge(param, x.schema()));
 					pushupSchemaFields(FORM_DATA, param, getSchema(param.getMap("schema"), type, bs));
 					addParamExample(sm, param, FORM_DATA, type);
 
 				} else if (mpi.hasAnnotation(Header.class) || pt.hasAnnotation(Header.class)) {
-					String name = HeaderAnnotation.findName(mpi.getAnnotations(Header.class), pt.getAnnotations(Header.class)).orElse(null);
+					String name = HeaderAnnotation.findName(mpi).orElse(null);
 					OMap param = paramMap.getMap(HEADER + "." + name, true).a("name", name).a("in", HEADER);
-					pt.getAnnotations(Schema.class).forEach(x -> merge(param, x));
-					pt.getAnnotations(Header.class).forEach(x -> merge(param, x.schema()));
-					mpi.getAnnotations(Schema.class).forEach(x -> merge(param, x));
-					mpi.getAnnotations(Header.class).forEach(x -> merge(param, x.schema()));
+					pt.getAnnotations(Schema.class, x -> merge(param, x));
+					pt.getAnnotations(Header.class, x -> merge(param, x.schema()));
+					mpi.getAnnotations(Schema.class, x -> merge(param, x));
+					mpi.getAnnotations(Header.class, x -> merge(param, x.schema()));
 					pushupSchemaFields(HEADER, param, getSchema(param.getMap("schema"), type, bs));
 					addParamExample(sm, param, HEADER, type);
 
 				} else if (mpi.hasAnnotation(Path.class) || pt.hasAnnotation(Path.class)) {
-					String name = PathAnnotation.findName(mpi.getAnnotations(Path.class), pt.getAnnotations(Path.class)).orElse(null);
+					String name = PathAnnotation.findName(mpi).orElse(null);
 					OMap param = paramMap.getMap(PATH + "." + name, true).a("name", name).a("in", PATH);
-					pt.getAnnotations(Schema.class).forEach(x -> merge(param, x));
-					pt.getAnnotations(Path.class).forEach(x -> merge(param, x.schema()));
-					mpi.getAnnotations(Schema.class).forEach(x -> merge(param, x));
-					mpi.getAnnotations(Path.class).forEach(x -> merge(param, x.schema()));
+					pt.getAnnotations(Schema.class, x -> merge(param, x));
+					pt.getAnnotations(Path.class, x -> merge(param, x.schema()));
+					mpi.getAnnotations(Schema.class, x -> merge(param, x));
+					mpi.getAnnotations(Path.class, x -> merge(param, x.schema()));
 					pushupSchemaFields(PATH, param, getSchema(param.getMap("schema"), type, bs));
 					addParamExample(sm, param, PATH, type);
 					param.putIfAbsent("required", true);
@@ -387,7 +387,7 @@ public class BasicSwaggerProviderSession {
 							OMap om = responses.getMap(String.valueOf(code), true);
 							merge(om, a);
 							OMap schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
-							eci.getAnnotations(Schema.class).forEach(x -> merge(schema, x));
+							eci.getAnnotations(Schema.class, x -> merge(schema, x));
 							pushupSchemaFields(RESPONSE, om, schema);
 							om.appendIf(true, true, true, "schema", schema);
 						}
@@ -402,8 +402,8 @@ public class BasicSwaggerProviderSession {
 							String ha = a.name();
 							for (Integer code : codes) {
 								OMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(ha, true);
-								ecmi.getAnnotations(Schema.class).forEach(x -> merge(header, x));
-								ecmi.getReturnType().unwrap(Value.class,Optional.class).getAnnotations(Schema.class).forEach(x -> merge(header, x));
+								ecmi.getAnnotations(Schema.class, x -> merge(header, x));
+								ecmi.getReturnType().unwrap(Value.class,Optional.class).getAnnotations(Schema.class, x -> merge(header, x));
 								pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header.getMap("schema"), ecmi.getReturnType().unwrap(Value.class,Optional.class).innerType(), bs));
 							}
 						}
@@ -420,7 +420,7 @@ public class BasicSwaggerProviderSession {
 						OMap om = responses.getMap(String.valueOf(code), true);
 						merge(om, a);
 						OMap schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
-						mi.getAnnotations(Schema.class).forEach(x -> merge(schema, x));
+						mi.getAnnotations(Schema.class, x -> merge(schema, x));
 						pushupSchemaFields(RESPONSE, om, schema);
 						om.appendIf(true, true, true, "schema", schema);
 						addBodyExamples(sm, om, true, m.getGenericReturnType(), locale);
@@ -436,8 +436,8 @@ public class BasicSwaggerProviderSession {
 							if (! isMulti(a)) {
 								for (Integer code : codes) {
 									OMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(ha, true);
-									ecmi.getAnnotations(Schema.class).forEach(x -> merge(header, x));
-									ecmi.getReturnType().unwrap(Value.class,Optional.class).getAnnotations(Schema.class).forEach(x -> merge(header, x));
+									ecmi.getAnnotations(Schema.class, x -> merge(header, x));
+									ecmi.getReturnType().unwrap(Value.class,Optional.class).getAnnotations(Schema.class, x -> merge(header, x));
 									merge(header, a.schema());
 									pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header, ecmi.getReturnType().innerType(), bs));
 								}
@@ -449,7 +449,7 @@ public class BasicSwaggerProviderSession {
 				OMap om = responses.getMap("200", true);
 				ClassInfo pt2 = ClassInfo.of(m.getGenericReturnType());
 				OMap schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
-				pt2.getAnnotations(Schema.class).forEach(x -> merge(schema, x));
+				pt2.getAnnotations(Schema.class, x -> merge(schema, x));
 				pushupSchemaFields(RESPONSE, om, schema);
 				om.appendIf(true, true, true, "schema", schema);
 				addBodyExamples(sm, om, true, m.getGenericReturnType(), locale);
@@ -464,14 +464,14 @@ public class BasicSwaggerProviderSession {
 					List<Header> la = AList.of(mpi.getAnnotations(Header.class)).a(pt.getAnnotations(Header.class));
 					List<StatusCode> la2 = AList.of(mpi.getAnnotations(StatusCode.class)).a(pt.getAnnotations(StatusCode.class));
 					Set<Integer> codes = getCodes(la2, 200);
-					String name = HeaderAnnotation.findName(la).orElse(null);
+					String name = HeaderAnnotation.findName(mpi).orElse(null);
 					Type type = Value.unwrap(mpi.getParameterType().innerType());
 					for (Header a : la) {
 						if (! isMulti(a)) {
 							for (Integer code : codes) {
 								OMap header = responses.getMap(String.valueOf(code), true).getMap("headers", true).getMap(name, true);
-								mpi.getAnnotations(Schema.class).forEach(x -> merge(header, x));
-								mpi.getParameterType().getAnnotations(Schema.class).forEach(x -> merge(header, x));
+								mpi.getAnnotations(Schema.class, x -> merge(header, x));
+								mpi.getParameterType().getAnnotations(Schema.class, x -> merge(header, x));
 								merge(header, a.schema());
 								pushupSchemaFields(RESPONSE_HEADER, header, getSchema(header, type, bs));
 							}
@@ -488,8 +488,8 @@ public class BasicSwaggerProviderSession {
 							OMap om = responses.getMap(String.valueOf(code), true);
 							merge(om, a);
 							OMap schema = getSchema(om.getMap("schema"), type, bs);
-							pt.getAnnotations(Schema.class).forEach(x -> merge(schema, x));
-							mpi.getAnnotations(Schema.class).forEach(x -> merge(schema, x));
+							pt.getAnnotations(Schema.class, x -> merge(schema, x));
+							mpi.getAnnotations(Schema.class, x -> merge(schema, x));
 							la.forEach(x -> merge(schema, x.schema()));
 							pushupSchemaFields(RESPONSE, om, schema);
 							om.appendIf(true, true, true, "schema", schema);

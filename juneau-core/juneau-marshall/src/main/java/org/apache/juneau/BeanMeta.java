@@ -234,7 +234,7 @@ public class BeanMeta<T> {
 						for (Beanc bc : ctx.getAnnotations(Beanc.class, x))
 							if (! bc.properties().isEmpty())
 								constructorArgs = split(bc.properties());
-						if (constructorArgs.length != x.getParamCount()) {
+						if (! x.hasNumParams(constructorArgs.length)) {
 							if (constructorArgs.length != 0)
 								throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
 							constructorArgs = new String[x.getParamCount()];
@@ -261,7 +261,7 @@ public class BeanMeta<T> {
 							for (Beanc bc : ctx.getAnnotations(Beanc.class, x))
 								if (! bc.properties().isEmpty())
 									constructorArgs = split(bc.properties());
-							if (constructorArgs.length != x.getParamCount()) {
+							if (! x.hasNumParams(constructorArgs.length)) {
 								if (constructorArgs.length != 0)
 									throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
 								constructorArgs = new String[x.getParamCount()];

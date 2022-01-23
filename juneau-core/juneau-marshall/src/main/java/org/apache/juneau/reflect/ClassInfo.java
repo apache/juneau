@@ -950,7 +950,20 @@ public final class ClassInfo {
 	 * 	A list of all matching annotations found or an empty list if none found.
 	 */
 	public <T extends Annotation> List<T> getAnnotations(Class<T> a) {
-		return appendAnnotations(new ArrayList<>(), a);
+		List<T> l = new ArrayList<>();
+		getAnnotations(a, x -> l.add(x));
+		return l;
+	}
+
+	/**
+	 * Returns the first matching annotation of the specified type defined on the specified class or parent classes/interfaces in parent-to-child order.
+	 *
+	 * @param a The annotation to search for.
+	 * @param predicate The predicate to test against.
+	 * @return This object.
+	 */
+	public <T extends Annotation> T getAnnotation(Class<T> a, Predicate<T> predicate) {
+		return getAnnotation(predicate, a, MetaProvider.DEFAULT);
 	}
 
 	/**
@@ -1035,7 +1048,7 @@ public final class ClassInfo {
 
 	/**
 	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
-	 * list.
+	 * consumer.
 	 *
 	 * <p>
 	 * Annotations are appended in the following orders:
@@ -1046,12 +1059,12 @@ public final class ClassInfo {
 	 * 	<li>On this class.
 	 * </ol>
 	 *
-	 * @param l The list of annotations.
+	 * @param consumer The consumer of the annotations.
 	 * @param a The annotation to search for.
 	 * @return The same list.
 	 */
-	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a) {
-		return appendAnnotations(l, a, MetaProvider.DEFAULT);
+	public <T extends Annotation> ClassInfo getAnnotations(Class<T> a, Consumer<T> consumer) {
+		return getAnnotations(a, MetaProvider.DEFAULT, consumer);
 	}
 
 	/**
@@ -1073,16 +1086,58 @@ public final class ClassInfo {
 	 * @return The same list.
 	 */
 	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, MetaProvider mp) {
-		addIfNotNull(l, getPackageAnnotation(a));
+		getAnnotations(a, mp, x -> l.add(x));
+		return l;
+	}
+
+	/**
+	 * Finds and consumes the specified annotation on the specified class and superclasses/interfaces to the specified
+	 * consumer.
+	 *
+	 * <p>
+	 * Annotations are appended in the following orders:
+	 * <ol>
+	 * 	<li>On the package of this class.
+	 * 	<li>On interfaces ordered child-to-parent.
+	 * 	<li>On parent classes ordered child-to-parent.
+	 * 	<li>On this class.
+	 * </ol>
+	 *
+	 * @param consumer The consumer of the annotations.
+	 * @param a The annotation to search for.
+	 * @param mp The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
+	 * @return This object.
+	 */
+	public <T extends Annotation> ClassInfo getAnnotations(Class<T> a, MetaProvider mp, Consumer<T> consumer) {
+		T t2 = getPackageAnnotation(a);
+		if (t2 != null)
+			consumer.accept(t2);
 		ClassInfo[] interfaces = _getInterfaces();
 		for (int i = interfaces.length-1; i >= 0; i--)
-			for (T t : mp.getDeclaredAnnotations(a, interfaces[i].inner()))
-				l.add(t);
+			mp.getDeclaredAnnotations(a, interfaces[i].inner(), consumer);
 		ClassInfo[] parents = _getParents();
 		for (int i = parents.length-1; i >= 0; i--)
-			for (T t : mp.getDeclaredAnnotations(a, parents[i].inner()))
-				l.add(t);
-		return l;
+			mp.getDeclaredAnnotations(a, parents[i].inner(), consumer);
+		return this;
+	}
+
+	private <T extends Annotation> T getAnnotation(Predicate<T> p, Class<T> a, MetaProvider mp) {
+		T t2 = getPackageAnnotation(a);
+		if (t2 != null && p.test(t2))
+			return t2;
+		ClassInfo[] interfaces = _getInterfaces();
+		for (int i = interfaces.length-1; i >= 0; i--) {
+			T o = mp.getDeclaredAnnotation(a, interfaces[i].inner(), p);
+			if (o != null)
+				return o;
+		}
+		ClassInfo[] parents = _getParents();
+		for (int i = parents.length-1; i >= 0; i--) {
+			T o = mp.getDeclaredAnnotation(a, parents[i].inner(), p);
+			if (o != null)
+				return o;
+		}
+		return null;
 	}
 
 	/**
@@ -1180,10 +1235,10 @@ public final class ClassInfo {
 		if (a == null)
 			return null;
 
-		for (T t : mp.getDeclaredAnnotations(a, c))
+		T t = mp.getDeclaredAnnotation(a, c, x -> true);
+		if (t != null)
 			return t;
 
-		T t;
 		ClassInfo sci = getParent();
 		if (sci != null) {
 			t = sci.getLastAnnotation(a, mp);

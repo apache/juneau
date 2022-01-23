@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.reflect.*;
 
@@ -49,16 +50,14 @@ public class RrpcInterfaceMeta {
 	 */
 	public RrpcInterfaceMeta(Class<?> c, String uri) {
 		this.c = c;
-		String path = "";
+		Value<String> path = Value.of("");
 		ClassInfo ci = ClassInfo.of(c);
 
-		for (Remote r : ci.getAnnotations(Remote.class))
-			if (! r.path().isEmpty())
-				path = trimSlashes(r.path());
+		ci.getAnnotations(Remote.class, x -> { if (! x.path().isEmpty()) path.set(trimSlashes(x.path()));});
 
 		AMap<Method,RrpcInterfaceMethodMeta> methods = AMap.create();
 		ci.getPublicMethods(
-			x -> true, 
+			x -> true,
 			x -> methods.put(x.inner(), new RrpcInterfaceMethodMeta(uri, x.inner()))
 		);
 
@@ -68,7 +67,7 @@ public class RrpcInterfaceMeta {
 
 		this.methods = methods.unmodifiable();
 		this.methodsByPath = methodsByPath.unmodifiable();
-		this.path = path;
+		this.path = path.get();
 	}
 
 	/**

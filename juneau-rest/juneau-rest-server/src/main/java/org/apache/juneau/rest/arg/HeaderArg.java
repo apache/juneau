@@ -120,9 +120,7 @@ public class HeaderArg implements RestOpArg {
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
 	protected HeaderArg(ParamInfo pi, AnnotationWorkList annotations) {
-		ClassInfo pt = pi.getParameterType();
-
-		this.name = findName(pi.getAnnotations(Header.class), pt.getAnnotations(Header.class)).orElseThrow(() -> new ArgException(pi, "@Header used without name or value"));
+		this.name = findName(pi).orElseThrow(() -> new ArgException(pi, "@Header used without name or value"));
 		this.type = pi.getParameterType();
 		this.schema = HttpPartSchema.create(Header.class, pi);
 		this.partParser = ofNullable(schema.getParser()).map(x -> HttpPartParser.creator().type(x).apply(annotations).create()).orElse(null);

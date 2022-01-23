@@ -1785,6 +1785,8 @@ public final class StringUtils {
 	public static String trimSlashes(String s) {
 		if (s == null)
 			return null;
+		if (s.length() == 0)
+			return s;
 		while (endsWith(s, '/'))
 			s = s.substring(0, s.length()-1);
 		while (s.length() > 0 && s.charAt(0) == '/')

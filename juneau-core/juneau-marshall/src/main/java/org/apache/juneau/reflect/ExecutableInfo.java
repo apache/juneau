@@ -38,7 +38,7 @@ public abstract class ExecutableInfo {
 
 	private ParamInfo[] params;
 	private ClassInfo[] paramTypes, exceptionInfos;
-	private Class<?>[] rawParamTypes, rawExceptionTypes;
+	private Class<?>[] rawParamTypes;
 	private Type[] rawGenericParamTypes;
 	private Parameter[] rawParameters;
 
@@ -345,30 +345,15 @@ public abstract class ExecutableInfo {
 		return new UnmodifiableArray<>(_getExceptionTypes());
 	}
 
-	/**
-	 * Returns the raw exception types on this executable.
-	 *
-	 * @return The raw exception types on this executable.
-	 */
-	public final Class<?>[] getRawExceptionTypes() {
-		return _getRawExceptionTypes().clone();
-	}
-
 	private ClassInfo[] _getExceptionTypes() {
 		if (exceptionInfos == null) {
-			Class<?>[] exceptionTypes = _getRawExceptionTypes();
+			Class<?>[] exceptionTypes = e.getExceptionTypes();
 			ClassInfo[] l = new ClassInfo[exceptionTypes.length];
 			for (int i = 0; i < exceptionTypes.length; i++)
 				l[i] = ClassInfo.of(exceptionTypes[i]);
 			exceptionInfos = l;
 		}
 		return exceptionInfos;
-	}
-
-	private Class<?>[] _getRawExceptionTypes() {
-		if (rawExceptionTypes == null)
-			rawExceptionTypes = e.getExceptionTypes();
-		return rawExceptionTypes;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

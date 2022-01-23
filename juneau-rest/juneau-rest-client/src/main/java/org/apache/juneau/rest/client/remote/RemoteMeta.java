@@ -51,14 +51,15 @@ public class RemoteMeta {
 		String path = "";
 
 		ClassInfo ci = ClassInfo.of(c);
-		for (Remote r : ci.getAnnotations(Remote.class))
+		List<Remote> remotes = ci.getAnnotations(Remote.class);
+		for (Remote r : remotes)
 			if (! r.path().isEmpty())
 				path = trimSlashes(r.path());
 
 		String versionHeader = "Client-Version", clientVersion = null;
 		HeaderList.Builder headersBuilder = HeaderList.create().resolving();
 
-		for (Remote r : ci.getAnnotations(Remote.class)) {
+		for (Remote r : remotes) {
 			if (! r.path().isEmpty())
 				path = trimSlashes(resolve(r.path()));
 			for (String h : r.headers())
@@ -82,7 +83,7 @@ public class RemoteMeta {
 		AMap<Method,RemoteOperationMeta> operations = AMap.create();
 		String path2 = path;
 		ci.getPublicMethods(
-			x -> true, 
+			x -> true,
 			x -> operations.put(x.inner(), new RemoteOperationMeta(path2, x.inner(), "GET"))
 		);
 

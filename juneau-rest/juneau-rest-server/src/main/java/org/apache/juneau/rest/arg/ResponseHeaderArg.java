@@ -68,9 +68,7 @@ public class ResponseHeaderArg implements RestOpArg {
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
 	protected ResponseHeaderArg(ParamInfo pi, AnnotationWorkList annotations) {
-		ClassInfo pt = pi.getParameterType();
-
-		this.name = findName(pi.getAnnotations(Header.class), pt.getAnnotations(Header.class)).orElseThrow(() -> new ArgException(pi, "@Header used without name or value"));
+		this.name = findName(pi).orElseThrow(() -> new ArgException(pi, "@Header used without name or value"));
 		this.type = pi.getParameterType().innerType();
 		HttpPartSchema schema = HttpPartSchema.create(Header.class, pi);
 		this.meta = new ResponsePartMeta(HttpPartType.HEADER, schema, ofNullable(schema.getSerializer()).map(x -> HttpPartSerializer.creator().type(x).apply(annotations).create()).orElse(null));

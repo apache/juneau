@@ -345,12 +345,6 @@ public class ExecutableInfoTest {
 		check("IOException", d_c.getExceptionTypes());
 	}
 
-	@Test
-	public void getRawExceptionTypes() {
-		check("IOException", d_c.getRawExceptionTypes());
-		check("IOException", d_m.getRawExceptionTypes());
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Characteristics
 	//-----------------------------------------------------------------------------------------------------------------

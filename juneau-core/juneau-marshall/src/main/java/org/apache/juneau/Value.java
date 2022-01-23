@@ -152,6 +152,22 @@ public class Value<T> {
 	}
 
 	/**
+	 * Sets the value if the specified predicate test passes.
+	 *
+	 * @param t The new value.
+	 * @param p The predicate to test the value against.
+	 * @return This object.
+	 */
+	public Value<T> setIf(T t, Predicate<T> p) {
+		if (p.test(t)) {
+			this.t = t;
+			if (listener != null)
+				listener.onSet(t);
+		}
+		return this;
+	}
+
+	/**
 	 * Returns the value.
 	 *
 	 * @return The value, or <jk>null</jk> if it is not set.
@@ -207,5 +223,36 @@ public class Value<T> {
 	 */
 	public boolean isEmpty() {
 		return t == null;
+	}
+
+	/**
+	 * Return the value if present, otherwise invoke {@code other} and return
+	 * the result of that invocation.
+	 *
+	 * @param other a {@code Supplier} whose result is returned if no value
+	 * is present
+	 * @return the value if present otherwise the result of {@code other.get()}
+	 * @throws NullPointerException if value is not present and {@code other} is
+	 * null
+	 */
+	public T orElseGet(Supplier<? extends T> other) {
+		return t != null ? t : other.get();
+	}
+
+	/**
+	 * Return the contained value, if present, otherwise throw an exception
+	 * to be created by the provided supplier.
+	 *
+	 * @param exceptionSupplier The supplier which will return the exception to
+	 * be thrown
+	 * @return the present value
+	 * @throws X if there is no value present
+	 * @throws NullPointerException if no value is present and
+	 * {@code exceptionSupplier} is null
+	 */
+	public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
+		if (t != null)
+			return t;
+		throw exceptionSupplier.get();
 	}
 }

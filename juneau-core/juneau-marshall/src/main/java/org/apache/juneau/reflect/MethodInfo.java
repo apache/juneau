@@ -304,15 +304,32 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @param a The annotation.
 	 * @return The same list.
 	 */
-	@SuppressWarnings("unchecked")
 	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a) {
-		declaringClass.appendAnnotations(l, a);
-		for (Method m2 : getMatchingParentFirst())
-			for (Annotation a2 :  m2.getDeclaredAnnotations())
-				if (a.isInstance(a2))
-					l.add((T)a2);
-		getReturnType().unwrap(Value.class,Optional.class).appendAnnotations(l, a);
+		getAnnotations(a, x -> l.add(x));
 		return l;
+	}
+
+	/**
+	 * Consumes all annotations of the specified type defined on the specified method.
+	 *
+	 * <p>
+	 * Searches all methods with the same signature on the parent classes or interfaces
+	 * and the return type on the method.
+	 * <br>Results are parent-to-child ordered.
+	 *
+	 * @param a The annotation to search for.
+	 * @param consumer The consumer of the annotation.
+	 * @return This object.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends Annotation> MethodInfo getAnnotations(Class<T> a, Consumer<T> consumer) {
+		declaringClass.getAnnotations(a, consumer);
+		for (Method m2 : getMatchingParentFirst())
+			for (Annotation a2 : m2.getDeclaredAnnotations())
+				if (a.isInstance(a2))
+					consumer.accept((T)a2);
+		getReturnType().unwrap(Value.class,Optional.class).getAnnotations(a, consumer);
+		return this;
 	}
 
 	/**

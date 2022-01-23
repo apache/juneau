@@ -79,9 +79,7 @@ public class FormDataArg implements RestOpArg {
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
 	protected FormDataArg(ParamInfo pi, AnnotationWorkList annotations) {
-		ClassInfo pt = pi.getParameterType();
-
-		this.name = findName(pi.getAnnotations(FormData.class), pt.getAnnotations(FormData.class)).orElseThrow(()->new ArgException(pi, "@FormData used without name or value"));
+		this.name = findName(pi).orElseThrow(()->new ArgException(pi, "@FormData used without name or value"));
 		this.type = pi.getParameterType();
 		this.schema = HttpPartSchema.create(FormData.class, pi);
 		this.partParser = ofNullable(schema.getParser()).map(x -> HttpPartParser.creator().type(x).apply(annotations).create()).orElse(null);

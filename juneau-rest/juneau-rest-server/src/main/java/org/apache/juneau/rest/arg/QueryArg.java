@@ -78,9 +78,7 @@ public class QueryArg implements RestOpArg {
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
 	protected QueryArg(ParamInfo pi, AnnotationWorkList annotations) {
-		ClassInfo pt = pi.getParameterType();
-
-		this.name = QueryAnnotation.findName(pi.getAnnotations(Query.class), pt.getAnnotations(Query.class)).orElseThrow(() -> new ArgException(pi, "@Query used without name or value"));
+		this.name = QueryAnnotation.findName(pi).orElseThrow(() -> new ArgException(pi, "@Query used without name or value"));
 		this.type = pi.getParameterType();
 		this.schema = HttpPartSchema.create(Query.class, pi);
 		this.partParser = ofNullable(schema.getParser()).map(x -> HttpPartParser.creator().type(x).apply(annotations).create()).orElse(null);

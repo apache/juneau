@@ -267,6 +267,19 @@ public class BeanStore {
 			this.type = value;
 			return this;
 		}
+
+		/**
+		 * Overrides the bean store type if the predicate test passes.
+		 *
+		 * @param value The bean store type.
+		 * @param predicate The predicate to test against.
+		 * @return This object.
+		 */
+		public Builder typeIf(Class<? extends BeanStore> value, Predicate<Class<? extends BeanStore>> predicate) {
+			if (predicate.test(value))
+				this.type = value;
+			return this;
+		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -674,15 +687,10 @@ public class BeanStore {
 	// Helper methods
 	//-----------------------------------------------------------------------------------------------------------------
 	private String findBeanName(ParamInfo pi) {
-		Optional<Annotation> namedAnnotation = pi.getAnnotations(Annotation.class).stream().filter(x->isNamedAnnotation(x.annotationType())).findFirst();
-		if (namedAnnotation.isPresent())
-			return AnnotationInfo.of((ClassInfo)null, namedAnnotation.get()).getValue(String.class, "value").orElse(null);
+		Annotation n = pi.getAnnotation(Annotation.class, x -> x.annotationType().getSimpleName().equals("Named"));
+		if (n != null)
+			return AnnotationInfo.of((ClassInfo)null, n).getValue(String.class, "value").orElse(null);
 		return null;
-	}
-
-	private boolean isNamedAnnotation(Class<?> c) {
-		String s = c.getSimpleName();
-		return s.equals("Named");
 	}
 
 	private void assertCanWrite() {

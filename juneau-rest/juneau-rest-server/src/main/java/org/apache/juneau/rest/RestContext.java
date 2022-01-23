@@ -172,11 +172,7 @@ public class RestContext extends Context {
 	public static Builder create(Class<?> resourceClass, RestContext parentContext, ServletConfig servletConfig) throws ServletException {
 
 		Value<Class<? extends Builder>> v = Value.of(Builder.class);
-		ClassInfo.of(resourceClass)
-			.getAnnotations(Rest.class)
-			.stream()
-			.filter(x -> x.builder() != Builder.Null.class)
-			.forEach(x -> v.set(x.builder()));
+		ClassInfo.ofc(resourceClass).getAnnotations(Rest.class, x -> v.setIf(x.builder(), x2 -> x2 != Builder.Null.class));
 
 		if (v.get() == Builder.class)
 			return new Builder(resourceClass, parentContext, servletConfig);
@@ -588,13 +584,7 @@ public class RestContext extends Context {
 			);
 
 			// Apply @Rest(beanStore).
-			ClassInfo.of(resourceClass)
-				.getAnnotations(Rest.class)
-				.stream()
-				.map(x -> x.beanStore())
-				.filter(x -> x != BeanStore.Null.class)
-				.reduce((x1,x2)->x2)
-				.ifPresent(x -> v.get().type(x));
+			ClassInfo.of(resourceClass).getAnnotations(Rest.class, x -> v.get().typeIf(x.beanStore(), y -> y != BeanStore.Null.class));
 
 			// Replace with builder from:  public [static] BeanStore.Builder createBeanStore(<args>)
 			v.get().build()
@@ -874,15 +864,13 @@ public class RestContext extends Context {
 
 			// Find our config file.  It's the last non-empty @RestResource(config).
 			VarResolver vr = beanStore.getBean(VarResolver.class).orElseThrow(()->runtimeException("VarResolver not found."));
-			String cf = ClassInfo
-				.of(resourceClass)
-				.getAnnotations(Rest.class)
-				.stream()
-				.map(x -> x.config())
-				.filter(x -> ! x.isEmpty())
-				.reduce((x1,x2)->x2)
-				.map(x -> vr.resolve(x))
-				.orElse("");
+			Value<String> cfv = Value.empty();
+			Consumer<Rest> consumer = x -> {
+				if (! x.config().isEmpty())
+					cfv.set(vr.resolve(x.config()));
+			};
+			ClassInfo.of(resourceClass).getAnnotations(Rest.class, consumer);
+			String cf = cfv.orElse("");
 
 			// If not specified or value is set to SYSTEM_DEFAULT, use system default config.
 			if (v.isEmpty() && "SYSTEM_DEFAULT".equals(cf))

@@ -929,7 +929,7 @@ public abstract class Context implements MetaProvider {
 	private static final boolean DISABLE_ANNOTATION_CACHING = ! Boolean.getBoolean("juneau.disableAnnotationCaching");
 
 	private TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,List<Annotation>> classAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
-	private TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,List<Annotation>> declaredClassAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
+	private TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,Annotation[]> declaredClassAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
 	private TwoKeyConcurrentCache<Method,Class<? extends Annotation>,List<Annotation>> methodAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
 	private TwoKeyConcurrentCache<Field,Class<? extends Annotation>,List<Annotation>> fieldAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
 	private TwoKeyConcurrentCache<Constructor<?>,Class<? extends Annotation>,List<Annotation>> constructorAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
@@ -958,28 +958,35 @@ public abstract class Context implements MetaProvider {
 		return (List<A>)aa;
 	}
 
-	/**
-	 * Finds the specified declared annotations on the specified class.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param c The class to search on.
-	 * @return The annotations in an unmodifiable list, or an empty list if not found.
-	 */
-	@SuppressWarnings("unchecked")
 	@Override /* MetaProvider */
-	public <A extends Annotation> List<A> getDeclaredAnnotations(Class<A> a, Class<?> c) {
-		if (a == null || c == null)
-			return emptyList();
-		List<Annotation> aa = declaredClassAnnotationCache.get(c, a);
+	public <A extends Annotation> void getDeclaredAnnotations(Class<A> a, Class<?> c, Consumer<A> consumer) {
+		if (a != null && c != null)
+			for (A aa : declaredAnnotations(a, c))
+				consumer.accept(aa);
+	}
+
+	@Override /* MetaProvider */
+	public <A extends Annotation> A getDeclaredAnnotation(Class<A> a, Class<?> c, Predicate<A> predicate) {
+		if (a != null && c != null)
+			for (A aa : declaredAnnotations(a, c))
+				if (predicate.test(aa))
+					return aa;
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	private <A extends Annotation> A[] declaredAnnotations(Class<A> a, Class<?> c) {
+		A[] aa = (A[])declaredClassAnnotationCache.get(c, a);
 		if (aa == null) {
 			A[] x = c.getDeclaredAnnotationsByType(a);
 			AList<Annotation> l = new AList<>(Arrays.asList(x));
 			annotationMap.appendAll(c, a, l);
-			aa = l.unmodifiable();
+			aa = (A[]) Array.newInstance(a, l.size());
+			for (int i = 0; i < l.size(); i++)
+				Array.set(aa, i, l.get(i));
 			declaredClassAnnotationCache.put(c, a, aa);
 		}
-		return (List<A>)aa;
+		return aa;
 	}
 
 	/**

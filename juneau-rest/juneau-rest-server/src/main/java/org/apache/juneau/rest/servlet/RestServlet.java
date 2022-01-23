@@ -36,6 +36,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converter.*;
 import org.apache.juneau.rest.guard.*;
 import org.apache.juneau.rest.matcher.*;
+import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
 
@@ -128,13 +129,9 @@ public abstract class RestServlet extends HttpServlet {
 		if (context != null)
 			return context.getFullPath();
 		ClassInfo ci = ClassInfo.of(getClass());
-		String path = "";
-		for (Rest rr : ci.getAnnotations(Rest.class))
-			if (! rr.path().isEmpty())
-				path = trimSlashes(rr.path());
-		if (! path.isEmpty())
-			return path;
-		return "";
+		Value<String> path = Value.empty();
+		ci.getAnnotations(Rest.class, x -> path.setIf(trimSlashes(x.path()), StringUtils::isNotEmpty));
+		return path.orElse("");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
