@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.soap;
 
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.soap.annotation.*;
 
@@ -28,8 +26,6 @@ import org.apache.juneau.soap.annotation.*;
  */
 public class SoapXmlClassMeta extends ExtendedClassMeta {
 
-	private final List<SoapXml> soapXmls;
-
 	/**
 	 * Constructor.
 	 *
@@ -38,15 +34,5 @@ public class SoapXmlClassMeta extends ExtendedClassMeta {
 	 */
 	public SoapXmlClassMeta(ClassMeta<?> cm, SoapXmlMetaProvider mp) {
 		super(cm);
-		this.soapXmls = cm.getAnnotations(SoapXml.class);
-	}
-
-	/**
-	 * Returns the {@link SoapXml @SoapXml} annotations defined on the class.
-	 *
-	 * @return An unmodifiable list of annotations ordered parent-to-child, or an empty list if not found.
-	 */
-	protected List<SoapXml> getAnnotations() {
-		return soapXmls;
 	}
 }

@@ -979,7 +979,9 @@ public final class ClassInfo {
 	 * 	A list of all matching annotations found or an empty list if none found.
 	 */
 	public <T extends Annotation> List<T> getAnnotations(Class<T> a, MetaProvider mp) {
-		return appendAnnotations(new ArrayList<>(), a, mp);
+		List<T> l = new ArrayList<>();
+		getAnnotations(a, mp, x -> l.add(x));
+		return l;
 	}
 
 	/**

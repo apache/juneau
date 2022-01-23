@@ -518,15 +518,11 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			} else if (sType.isBean()) {
 				BeanMap m = toBeanMap(o);
 				if (aType.hasAnnotation(HtmlLink.class)) {
-					String uriProperty = "", nameProperty = "";
-					for (HtmlLink a : aType.getAnnotations(HtmlLink.class)) {
-						if (! a.uriProperty().isEmpty())
-							uriProperty = a.uriProperty();
-						if (! a.nameProperty().isEmpty())
-							nameProperty = a.nameProperty();
-					}
-					Object urlProp = m.get(uriProperty);
-					Object nameProp = m.get(nameProperty);
+					Value<String> uriProperty = Value.empty(), nameProperty = Value.empty();
+					aType.getAnnotations(HtmlLink.class, x -> uriProperty.setIf(x.uriProperty(), StringUtils::isNotEmpty));
+					aType.getAnnotations(HtmlLink.class, x -> nameProperty.setIf(x.nameProperty(), StringUtils::isNotEmpty));
+					Object urlProp = m.get(uriProperty.orElse(""));
+					Object nameProp = m.get(nameProperty.orElse(""));
 
 					out.oTag("a").attrUri("href", urlProp).append('>').text(nameProp).eTag("a");
 					cr = CR_MIXED;

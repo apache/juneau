@@ -24,6 +24,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -419,43 +420,31 @@ public class HttpParts {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private static final Function<ClassMeta<?>,String> HEADER_NAME_FUNCTION = x -> {
-		for (org.apache.juneau.http.annotation.Header a : x.getAnnotations(org.apache.juneau.http.annotation.Header.class)) {
-			if (! a.value().isEmpty())
-				return a.value();
-			if (! a.name().isEmpty())
-				return a.name();
-		}
-		return null;
+		Value<String> n = Value.empty();
+		Predicate<String> t = StringUtils::isNotEmpty;
+		x.getAnnotations(org.apache.juneau.http.annotation.Header.class, y -> n.setIf(y.value(), t).setIf(y.name(), t));
+		return n.orElse(null);
 	};
 
 	private static final Function<ClassMeta<?>,String> QUERY_NAME_FUNCTION = x -> {
-		for (org.apache.juneau.http.annotation.Query a : x.getAnnotations(org.apache.juneau.http.annotation.Query.class)) {
-			if (! a.value().isEmpty())
-				return a.value();
-			if (! a.name().isEmpty())
-				return a.name();
-		}
-		return null;
+		Value<String> n = Value.empty();
+		Predicate<String> t = StringUtils::isNotEmpty;
+		x.getAnnotations(org.apache.juneau.http.annotation.Query.class, y -> n.setIf(y.value(), t).setIf(y.name(), t));
+		return n.orElse(null);
 	};
 
 	private static final Function<ClassMeta<?>,String> FORMDATA_NAME_FUNCTION = x -> {
-		for (org.apache.juneau.http.annotation.FormData a : x.getAnnotations(org.apache.juneau.http.annotation.FormData.class)) {
-			if (! a.value().isEmpty())
-				return a.value();
-			if (! a.name().isEmpty())
-				return a.name();
-		}
-		return null;
+		Value<String> n = Value.empty();
+		Predicate<String> t = StringUtils::isNotEmpty;
+		x.getAnnotations(org.apache.juneau.http.annotation.FormData.class, y -> n.setIf(y.value(), t).setIf(y.name(), t));
+		return n.orElse(null);
 	};
 
 	private static final Function<ClassMeta<?>,String> PATH_NAME_FUNCTION = x -> {
-		for (org.apache.juneau.http.annotation.Path a : x.getAnnotations(org.apache.juneau.http.annotation.Path.class)) {
-			if (! a.value().isEmpty())
-				return a.value();
-			if (! a.name().isEmpty())
-				return a.name();
-		}
-		return null;
+		Value<String> n = Value.empty();
+		Predicate<String> t = StringUtils::isNotEmpty;
+		x.getAnnotations(org.apache.juneau.http.annotation.Path.class, y -> n.setIf(y.value(), t).setIf(y.name(), t));
+		return n.orElse(null);
 	};
 
 	private static final Function<ClassMeta<?>,ConstructorInfo> CONSTRUCTOR_FUNCTION = x -> {

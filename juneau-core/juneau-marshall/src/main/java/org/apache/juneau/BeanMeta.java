@@ -26,6 +26,7 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -180,19 +181,15 @@ public class BeanMeta<T> {
 				if (beanFilter != null && beanFilter.getBeanDictionary() != null)
 					bdClasses.a(beanFilter.getBeanDictionary());
 
-				boolean hasTypeName = false;
-				for (Bean b : classMeta.getAnnotations(Bean.class))
-					if (! b.typeName().isEmpty())
-						hasTypeName = true;
-				if (hasTypeName)
+				Value<String> typeName = Value.empty();
+				classMeta.getAnnotations(Bean.class, x -> typeName.setIf(x.typeName(), StringUtils::isNotEmpty));
+				if (typeName.isPresent())
 					bdClasses.add(classMeta.innerClass);
 				this.beanRegistry = new BeanRegistry(ctx, null, bdClasses.toArray(new Class<?>[bdClasses.size()]));
 
-				for (Bean b : classMeta.getAnnotations(Bean.class))
-					if (! b.typePropertyName().isEmpty())
-						typePropertyName = b.typePropertyName();
-				if (typePropertyName == null)
-					typePropertyName = ctx.getBeanTypePropertyName();
+				Value<String> typePropertyName = Value.empty();
+				classMeta.getAnnotations(Bean.class, x -> typePropertyName.setIf(x.typePropertyName(), StringUtils::isNotEmpty));
+				this.typePropertyName = typePropertyName.orElseGet(()->ctx.getBeanTypePropertyName());
 
 				fluentSetters = (ctx.isFindFluentSetters() || (beanFilter != null && beanFilter.isFluentSetters()));
 

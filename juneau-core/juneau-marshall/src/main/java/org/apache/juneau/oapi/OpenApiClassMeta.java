@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.oapi;
 
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.oapi.annotation.*;
 
@@ -28,8 +26,6 @@ import org.apache.juneau.oapi.annotation.*;
  */
 public class OpenApiClassMeta extends ExtendedClassMeta {
 
-	private final List<OpenApi> openApis;
-
 	/**
 	 * Constructor.
 	 *
@@ -38,15 +34,5 @@ public class OpenApiClassMeta extends ExtendedClassMeta {
 	 */
 	public OpenApiClassMeta(ClassMeta<?> cm, OpenApiMetaProvider mp) {
 		super(cm);
-		this.openApis = cm.getAnnotations(OpenApi.class);
-	}
-
-	/**
-	 * Returns the {@link OpenApi @OpenApi} annotations defined on the class.
-	 *
-	 * @return An unmodifiable list of annotations ordered parent-to-child, or an empty list if not found.
-	 */
-	protected List<OpenApi> getAnnotations() {
-		return openApis;
 	}
 }

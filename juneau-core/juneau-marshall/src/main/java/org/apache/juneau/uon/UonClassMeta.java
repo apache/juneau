@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.uon.annotation.*;
 
@@ -28,8 +26,6 @@ import org.apache.juneau.uon.annotation.*;
  */
 public class UonClassMeta extends ExtendedClassMeta {
 
-	private final List<Uon> uons;
-
 	/**
 	 * Constructor.
 	 *
@@ -38,15 +34,5 @@ public class UonClassMeta extends ExtendedClassMeta {
 	 */
 	public UonClassMeta(ClassMeta<?> cm, UonMetaProvider mp) {
 		super(cm);
-		this.uons = cm.getAnnotations(Uon.class);
-	}
-
-	/**
-	 * Returns the {@link Uon @Uon} annotations defined on the class.
-	 *
-	 * @return An unmodifiable list of annotations ordered parent-to-child, or an empty list if not found.
-	 */
-	protected List<Uon> getAnnotations() {
-		return uons;
 	}
 }

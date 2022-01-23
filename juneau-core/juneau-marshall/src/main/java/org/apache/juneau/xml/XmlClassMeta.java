@@ -29,7 +29,6 @@ import org.apache.juneau.xml.annotation.*;
 public class XmlClassMeta extends ExtendedClassMeta {
 
 	private final Namespace namespace;
-	private final List<Xml> xmls;
 	private final XmlFormat format;
 	private final String childName;
 
@@ -41,8 +40,13 @@ public class XmlClassMeta extends ExtendedClassMeta {
 	 */
 	public XmlClassMeta(ClassMeta<?> cm, XmlMetaProvider mp) {
 		super(cm);
-		this.namespace = findNamespace(cm, mp);
-		this.xmls = cm.getAnnotations(Xml.class);
+		List<Xml> xmls = new ArrayList<>();
+		List<XmlSchema> schemas = new ArrayList<>();
+		if (cm != null) {
+			cm.getAnnotations(Xml.class, x -> xmls.add(x));
+			cm.getAnnotations(XmlSchema.class, x -> schemas.add(x));
+		}
+		this.namespace = XmlUtils.findNamespace(xmls, schemas);
 
 		String _childName = null;
 		XmlFormat _format = XmlFormat.DEFAULT;
@@ -54,15 +58,6 @@ public class XmlClassMeta extends ExtendedClassMeta {
 		}
 		this.format = _format;
 		this.childName = _childName;
-	}
-
-	/**
-	 * Returns the {@link Xml @Xml} annotations defined on the class.
-	 *
-	 * @return An unmodifiable list of annotations ordered parent-to-child, or an empty list if not found.
-	 */
-	protected List<Xml> getAnnotations() {
-		return xmls;
 	}
 
 	/**
@@ -101,13 +96,5 @@ public class XmlClassMeta extends ExtendedClassMeta {
 	 */
 	public Namespace getNamespace() {
 		return namespace;
-	}
-
-	private static Namespace findNamespace(ClassMeta<?> cm, MetaProvider mp) {
-		if (cm == null)
-			return null;
-		List<Xml> xmls = cm.getAnnotations(Xml.class);
-		List<XmlSchema> schemas = cm.getAnnotations(XmlSchema.class);
-		return XmlUtils.findNamespace(xmls, schemas);
 	}
 }

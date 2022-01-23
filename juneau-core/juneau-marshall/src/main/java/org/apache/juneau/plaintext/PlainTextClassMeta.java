@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.plaintext;
 
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.plaintext.annotation.*;
 
@@ -28,8 +26,6 @@ import org.apache.juneau.plaintext.annotation.*;
  */
 public class PlainTextClassMeta extends ExtendedClassMeta {
 
-	private final List<PlainText> plainTexts;
-
 	/**
 	 * Constructor.
 	 *
@@ -38,15 +34,5 @@ public class PlainTextClassMeta extends ExtendedClassMeta {
 	 */
 	public PlainTextClassMeta(ClassMeta<?> cm, PlainTextMetaProvider mp) {
 		super(cm);
-		this.plainTexts = cm.getAnnotations(PlainText.class);
-	}
-
-	/**
-	 * Returns the {@link PlainText @PlainText} annotations defined on the class.
-	 *
-	 * @return An unmodifiable list of annotations ordered parent-to-child, or an empty list if not found.
-	 */
-	protected List<PlainText> getAnnotations() {
-		return plainTexts;
 	}
 }

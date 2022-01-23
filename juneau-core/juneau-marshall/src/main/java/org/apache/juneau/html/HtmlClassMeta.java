@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
-import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.html.annotation.*;
@@ -30,7 +30,6 @@ import org.apache.juneau.html.annotation.*;
  */
 public class HtmlClassMeta extends ExtendedClassMeta {
 
-	private final List<Html> htmls;
 	private final boolean noTables, noTableHeaders;
 	private final HtmlFormat format;
 	private final HtmlRender<?> render;
@@ -43,32 +42,29 @@ public class HtmlClassMeta extends ExtendedClassMeta {
 	 */
 	public HtmlClassMeta(ClassMeta<?> cm, HtmlMetaProvider mp) {
 		super(cm);
-		this.htmls = cm.getAnnotations(Html.class);
 
-		boolean _noTables = false, _noTableHeaders = false;
-		HtmlRender<?> _render = null;
-		HtmlFormat _format = HtmlFormat.HTML;
+		Value<Boolean> noTables = Value.empty(), noTableHeaders = Value.empty();
+		Value<HtmlFormat> format = Value.empty();
+		Value<HtmlRender<?>> render = Value.empty();
 
-		for (Html a : this.htmls) {
-			_format = a.format();
-			_noTables = a.noTables();
-			_noTableHeaders = a.noTableHeaders();
-			_render = castOrCreate(HtmlRender.class, a.render());
-		}
+		Consumer<Html> c = x -> {
+			noTables.setIf(x.noTables(), y -> y != false);
+			noTableHeaders.setIf(x.noTableHeaders(), y -> y != false);
+			format.setIf(x.format(), y -> y != HtmlFormat.HTML);
+			if (x.render() != HtmlRender.class) {
+				try {
+					render.set(x.render().newInstance());
+				} catch (Exception e) {
+					throw runtimeException(e);
+				}
+			}
+		};
+		cm.getAnnotations(Html.class, c);
 
-		this.noTables = _noTables;
-		this.noTableHeaders = _noTableHeaders;
-		this.render = _render;
-		this.format = _format;
-	}
-
-	/**
-	 * Returns the {@link Html @Html} annotations defined on the class.
-	 *
-	 * @return An unmodifiable list of annotations ordered parent-to-child, or an empty list if not found.
-	 */
-	protected List<Html> getAnnotations() {
-		return htmls;
+		this.noTables = noTables.orElse(false);
+		this.noTableHeaders = noTableHeaders.orElse(false);
+		this.render = render.orElse(null);
+		this.format = format.orElse(HtmlFormat.HTML);
 	}
 
 	/**

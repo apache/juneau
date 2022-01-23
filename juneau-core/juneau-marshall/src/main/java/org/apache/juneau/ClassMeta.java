@@ -117,7 +117,7 @@ public final class ClassMeta<T> implements Type {
 	private final Map<Class<?>,Mutater<?,T>> fromMutaters = new ConcurrentHashMap<>();
 	private final Map<Class<?>,Mutater<T,?>> toMutaters = new ConcurrentHashMap<>();
 	private final Mutater<String,T> stringMutater;
-	private final Map<Class<?>,List<?>> annotationListMap = new ConcurrentHashMap<>();
+	private final Map<Class<?>,Annotation[]> annotationArrayMap = new ConcurrentHashMap<>();
 	private final Map<Class<?>,Optional<?>> annotationLastMap = new ConcurrentHashMap<>();
 	private final Map<String,Optional<?>> properties = new ConcurrentHashMap<>();
 
@@ -2100,23 +2100,31 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Returns all annotations of the specified type defined on the specified class or parent classes/interfaces in parent-to-child order.
+	 * Consumes all annotations of the specified type defined on the specified class or parent classes/interfaces in parent-to-child order.
 	 *
 	 * @param a
 	 * 	The annotation to search for.
-	 * @return
-	 * 	A list of all matching annotations found or an empty list if none found.
+	 * @param consumer The consumer of the annotations.
+	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
-	public <A extends Annotation> List<A> getAnnotations(Class<A> a) {
-		List<A> l = (List<A>)annotationListMap.get(a);
-		if (l == null) {
-			if (beanContext == null)
-				return info.getAnnotations(a, BeanContext.DEFAULT);
-			l = Collections.unmodifiableList(info.getAnnotations(a, beanContext));
-			annotationListMap.put(a, l);
+	public <A extends Annotation> ClassMeta<T> getAnnotations(Class<A> a, Consumer<A> consumer) {
+		A[] array = (A[])annotationArrayMap.get(a);
+		if (array == null) {
+			if (beanContext == null) {
+				info.getAnnotations(a, BeanContext.DEFAULT, consumer);
+				return this;
+			}
+			List<A> l = new ArrayList<>();
+			info.getAnnotations(a, beanContext, x -> l.add(x));
+			array = (A[])Array.newInstance(a, l.size());
+			for (int i = 0; i < l.size(); i++)
+				Array.set(array, i, l.get(i));
+			annotationArrayMap.put(a, array);
 		}
-		return l;
+		for (A aa : array)
+			consumer.accept(aa);
+		return this;
 	}
 
 	/**

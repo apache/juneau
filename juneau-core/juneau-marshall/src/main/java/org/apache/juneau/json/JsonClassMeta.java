@@ -12,9 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import java.util.*;
-
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.annotation.*;
 
 /**
@@ -28,7 +27,6 @@ import org.apache.juneau.json.annotation.*;
  */
 public class JsonClassMeta extends ExtendedClassMeta {
 
-	private final List<Json> jsons;
 	private final String wrapperAttr;
 
 	/**
@@ -39,22 +37,10 @@ public class JsonClassMeta extends ExtendedClassMeta {
 	 */
 	public JsonClassMeta(ClassMeta<?> cm, JsonMetaProvider mp) {
 		super(cm);
-		this.jsons = cm.getAnnotations(Json.class);
 
-		String _wrapperAttr = null;
-		for (Json a : this.jsons)
-			if (! a.wrapperAttr().isEmpty())
-				_wrapperAttr = a.wrapperAttr();
-		this.wrapperAttr = _wrapperAttr;
-	}
-
-	/**
-	 * Returns the {@link Json @Json} annotations defined on the class.
-	 *
-	 * @return An unmodifiable list of annotations ordered parent-to-child, or an empty list if not found.
-	 */
-	protected List<Json> getAnnotations() {
-		return jsons;
+		Value<String> wrapperAttr = Value.empty();
+		cm.getAnnotations(Json.class, x -> wrapperAttr.setIf(x.wrapperAttr(), StringUtils::isNotEmpty));
+		this.wrapperAttr = wrapperAttr.orElse(null);
 	}
 
 	/**

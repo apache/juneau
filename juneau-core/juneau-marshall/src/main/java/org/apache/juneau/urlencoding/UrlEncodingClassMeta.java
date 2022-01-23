@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.urlencoding.annotation.*;
 
@@ -27,7 +25,6 @@ import org.apache.juneau.urlencoding.annotation.*;
  */
 public class UrlEncodingClassMeta extends ExtendedClassMeta {
 
-	private final List<UrlEncoding> urlEncodings;
 	private final boolean expandedParams;
 
 	/**
@@ -38,23 +35,10 @@ public class UrlEncodingClassMeta extends ExtendedClassMeta {
 	 */
 	public UrlEncodingClassMeta(ClassMeta<?> cm, UrlEncodingMetaProvider mp) {
 		super(cm);
-		this.urlEncodings = cm.getAnnotations(UrlEncoding.class);
 
-		boolean _expandedParams = false;
-		for (UrlEncoding a : urlEncodings)
-			if (a.expandedParams())
-				_expandedParams = true;
-
-		this.expandedParams = _expandedParams;
-	}
-
-	/**
-	 * Returns the {@link UrlEncoding} annotations defined on the class.
-	 *
-	 * @return An unmodifiable list of annotations ordered parent-to-child, or an empty list if not found.
-	 */
-	protected List<UrlEncoding> getAnnotations() {
-		return urlEncodings;
+		Value<Boolean> expandedParams = Value.empty();
+		cm.getAnnotations(UrlEncoding.class, x -> expandedParams.setIf(x.expandedParams(), y -> y == true));
+		this.expandedParams = expandedParams.orElse(false);
 	}
 
 	/**
