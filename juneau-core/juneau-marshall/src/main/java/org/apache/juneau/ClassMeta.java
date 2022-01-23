@@ -622,20 +622,21 @@ public final class ClassMeta<T> implements Type {
 				invocationHandler = new BeanProxyInvocationHandler<T>(beanMeta);
 
 			if (bc != null) {
-				for (Bean b : bc.getAnnotations(Bean.class, c)) {
-					if (b.dictionary().length != 0)
-						beanRegistry = new BeanRegistry(bc, null, b.dictionary());
-
+				bc.getAnnotations(Bean.class, c, x -> {
+					if (x.dictionary().length != 0)
+						beanRegistry = new BeanRegistry(bc, null, x.dictionary());
 					// This could be a non-bean POJO with a type name.
-					if (dictionaryName == null && ! b.typeName().isEmpty())
-						dictionaryName = b.typeName();
-				}
+					if (dictionaryName == null && ! x.typeName().isEmpty())
+						dictionaryName = x.typeName();
+				});
 			}
 
-			if (example == null && bc != null)
-				for (Example e : bc.getAnnotations(Example.class, c))
-					if (! e.value().isEmpty())
-						example = e.value();
+			if (example == null && bc != null) {
+				bc.getAnnotations(Example.class, c, x -> {
+					if (! x.value().isEmpty())
+						example = x.value();
+				});
+			}
 
 			if (example == null) {
 				switch(cc) {
@@ -715,8 +716,7 @@ public final class ClassMeta<T> implements Type {
 		private void findSwaps(List<ObjectSwap> l, BeanContext bc) {
 
 			if (bc != null)
-				for (Swap swap : bc.getAnnotations(Swap.class, innerClass))
-					l.add(createSwap(swap));
+				bc.getAnnotations(Swap.class, innerClass, x-> l.add(createSwap(x)));
 
 			ObjectSwap defaultSwap = DefaultSwaps.find(ci);
 			if (defaultSwap == null)

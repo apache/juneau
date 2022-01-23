@@ -34,11 +34,19 @@ public interface MetaProvider {
 	public static MetaProvider DEFAULT = new MetaProvider() {
 
 		@Override /* MetaProvider */
-		public <A extends Annotation> List<A> getAnnotations(Class<A> a, Class<?> c) {
-			if (a == null || c == null)
-				return emptyList();
-			A[] aa = c.getAnnotationsByType(a);
-			return Arrays.asList(aa);
+		public <A extends Annotation> void getAnnotations(Class<A> a, Class<?> c, Consumer<A> consumer) {
+			if (a != null && c != null)
+				for (A aa : c.getAnnotationsByType(a))
+					consumer.accept(aa);
+		}
+
+		@Override /* MetaProvider */
+		public <A extends Annotation> A getAnnotation(Class<A> a, Class<?> c, Predicate<A> predicate) {
+			if (a != null && c != null)
+				for (A aa : c.getAnnotationsByType(a))
+					if (predicate.test(aa))
+						return aa;
+			return null;
 		}
 
 		@Override /* MetaProvider */
@@ -85,12 +93,21 @@ public interface MetaProvider {
 	/**
 	 * Finds the specified annotations on the specified class.
 	 *
-	 * @param <A> The annotation type to find.
 	 * @param a The annotation type to find.
 	 * @param c The class to search on.
+	 * @param consumer The consumer of the annotations.
+	 */
+	<A extends Annotation> void getAnnotations(Class<A> a, Class<?> c, Consumer<A> consumer);
+
+	/**
+	 * Finds the first annotation on the specified class matching the specified predicate.
+	 *
+	 * @param a The annotation type to find.
+	 * @param c The class to search on.
+	 * @param predicate The predicate to test against.
 	 * @return The annotations in an unmodifiable list, or an empty list if not found.
 	 */
-	<A extends Annotation> List<A> getAnnotations(Class<A> a, Class<?> c);
+	<A extends Annotation> A getAnnotation(Class<A> a, Class<?> c, Predicate<A> predicate);
 
 	/**
 	 * Finds the specified declared annotations on the specified class.

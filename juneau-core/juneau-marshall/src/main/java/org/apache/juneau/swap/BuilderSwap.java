@@ -184,23 +184,21 @@ public class BuilderSwap<T,B> {
 	 */
 	@SuppressWarnings("rawtypes")
 	public static BuilderSwap<?,?> findSwapFromObjectClass(BeanContext bc, Class<?> objectClass, Visibility cVis, Visibility mVis) {
-		Class<?> builderClass = null;
+		Value<Class<?>> builderClass = Value.empty();
 		MethodInfo objectCreateMethod, builderCreateMethod;
 		ConstructorInfo objectConstructor = null;
 		ConstructorInfo builderConstructor;
 
-		for (org.apache.juneau.annotation.Builder b : bc.getAnnotations(org.apache.juneau.annotation.Builder.class, objectClass))
-			if (b.value() != Null.class)
-				builderClass = b.value();
+		bc.getAnnotations(org.apache.juneau.annotation.Builder.class, objectClass, x -> builderClass.setIf(x.value(), y -> y != Null.class));
 
 		ClassInfo pci = ClassInfo.of(objectClass);
 
 		builderCreateMethod = getBuilderCreateMethod(pci);
 
-		if (builderClass == null && builderCreateMethod != null)
-			builderClass = builderCreateMethod.getReturnType().inner();
+		if (builderClass.isEmpty() && builderCreateMethod != null)
+			builderClass.set(builderCreateMethod.getReturnType().inner());
 
-		if (builderClass == null) {
+		if (builderClass.isEmpty()) {
 			ConstructorInfo cc = pci.getPublicConstructor(
 				x -> x.isVisible(cVis)
 				&& x.hasNumParams(1)
@@ -208,27 +206,27 @@ public class BuilderSwap<T,B> {
 			);
 			if (cc != null) {
 				objectConstructor = cc;
-				builderClass = cc.getParamType(0).inner();
+				builderClass.set(cc.getParamType(0).inner());
 			}
 		}
 
-		if (builderClass == null)
+		if (builderClass.isEmpty())
 			return null;
 
-		ClassInfo bci = ClassInfo.of(builderClass);
+		ClassInfo bci = ClassInfo.of(builderClass.get());
 		builderConstructor = bci.getNoArgConstructor(cVis);
 		if (builderConstructor == null && builderCreateMethod == null)
 			return null;
 
 		objectCreateMethod = getBuilderBuildMethod(bci);
-		Class<?> builderClass2 = builderClass;
+		Class<?> builderClass2 = builderClass.get();
 		if (objectConstructor == null)
 			objectConstructor = pci.getConstructor(x -> x.isVisible(cVis) && x.hasParamTypes(builderClass2));
 
 		if (objectConstructor == null && objectCreateMethod == null)
 			return null;
 
-		return new BuilderSwap(objectClass, builderClass, objectConstructor == null ? null : objectConstructor.inner(), builderConstructor == null ? null : builderConstructor.inner(), builderCreateMethod, objectCreateMethod);
+		return new BuilderSwap(objectClass, builderClass.get(), objectConstructor == null ? null : objectConstructor.inner(), builderConstructor == null ? null : builderConstructor.inner(), builderCreateMethod, objectCreateMethod);
 	}
 
 	private static MethodInfo getBuilderCreateMethod(ClassInfo c) {

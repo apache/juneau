@@ -84,21 +84,21 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 
 		XmlBeanMetaBuilder(BeanMeta<?> beanMeta, XmlMetaProvider mp) {
 			Class<?> c = beanMeta.getClassMeta().getInnerClass();
-			XmlFormat defaultFormat = null;
+			Value<XmlFormat> defaultFormat = Value.empty();
 
-			for (Xml xml : mp.getAnnotations(Xml.class, c)) {
-				XmlFormat xf = xml.format();
+			mp.getAnnotations(Xml.class, c, x -> {
+				XmlFormat xf = x.format();
 				if (xf == ATTRS)
-					defaultFormat = XmlFormat.ATTR;
+					defaultFormat.set(XmlFormat.ATTR);
 				else if (xf.isOneOf(ELEMENTS, DEFAULT))
-					defaultFormat = ELEMENT;
+					defaultFormat.set(ELEMENT);
 				else if (xf == VOID) {
 					contentFormat = VOID;
-					defaultFormat = VOID;
+					defaultFormat.set(VOID);
 				}
 				else
-					throw new BeanRuntimeException(c, "Invalid format specified in @Xml annotation on bean: {0}.  Must be one of the following: DEFAULT,ATTRS,ELEMENTS,VOID", xml.format());
-			}
+					throw new BeanRuntimeException(c, "Invalid format specified in @Xml annotation on bean: {0}.  Must be one of the following: DEFAULT,ATTRS,ELEMENTS,VOID", x.format());
+			});
 
 			for (BeanPropertyMeta p : beanMeta.getPropertyMetas()) {
 				XmlFormat xf = mp.getXmlBeanPropertyMeta(p).getXmlFormat();
@@ -110,7 +110,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 				} else if (xf == COLLAPSED) {
 					collapsedProperties.put(p.getName(), p);
 				} else if (xf == DEFAULT) {
-					if (defaultFormat == ATTR)
+					if (defaultFormat.get() == ATTR)
 						attrs.put(p.getName(), p);
 					else
 						elements.put(p.getName(), p);
