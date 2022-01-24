@@ -930,9 +930,9 @@ public abstract class Context implements MetaProvider {
 
 	private TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,Annotation[]> classAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
 	private TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,Annotation[]> declaredClassAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
-	private TwoKeyConcurrentCache<Method,Class<? extends Annotation>,List<Annotation>> methodAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
-	private TwoKeyConcurrentCache<Field,Class<? extends Annotation>,List<Annotation>> fieldAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
-	private TwoKeyConcurrentCache<Constructor<?>,Class<? extends Annotation>,List<Annotation>> constructorAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
+	private TwoKeyConcurrentCache<Method,Class<? extends Annotation>,Annotation[]> methodAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
+	private TwoKeyConcurrentCache<Field,Class<? extends Annotation>,Annotation[]> fieldAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
+	private TwoKeyConcurrentCache<Constructor<?>,Class<? extends Annotation>,Annotation[]> constructorAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
 
 	@Override /* MetaProvider */
 	public <A extends Annotation> void getAnnotations(Class<A> a, Class<?> c, Consumer<A> consumer) {
@@ -996,40 +996,97 @@ public abstract class Context implements MetaProvider {
 		return aa;
 	}
 
-	/**
-	 * Finds the specified annotations on the specified method.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param m The method to search on.
-	 * @return The annotations in an unmodifiable list, or an empty list if not found.
-	 */
-	@SuppressWarnings("unchecked")
 	@Override /* MetaProvider */
-	public <A extends Annotation> List<A> getAnnotations(Class<A> a, Method m) {
-		if (a == null || m == null)
-			return emptyList();
-		List<Annotation> aa = methodAnnotationCache.get(m, a);
+	public <A extends Annotation> void getAnnotations(Class<A> a, Method m, Consumer<A> consumer) {
+		if (a != null && m != null)
+			for (A aa : annotations(a, m))
+				consumer.accept(aa);
+	}
+
+	@Override /* MetaProvider */
+	public <A extends Annotation> A getAnnotation(Class<A> a, Method m, Predicate<A> predicate) {
+		if (a != null && m != null)
+			for (A aa : annotations(a, m))
+				if (predicate.test(aa))
+					return aa;
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	private <A extends Annotation> A[] annotations(Class<A> a, Method m) {
+		A[] aa = (A[])methodAnnotationCache.get(m, a);
 		if (aa == null) {
 			A[] x = m.getAnnotationsByType(a);
 			AList<Annotation> l = new AList<>(Arrays.asList(x));
 			annotationMap.appendAll(m, a, l);
-			aa = l.unmodifiable();
+			aa = (A[]) Array.newInstance(a, l.size());
+			for (int i = 0; i < l.size(); i++)
+				Array.set(aa, i, l.get(i));
 			methodAnnotationCache.put(m, a, aa);
 		}
-		return (List<A>)aa;
+		return aa;
 	}
 
-	/**
-	 * Finds the specified annotations on the specified method.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param m The method to search on.
-	 * @return The annotations in an unmodifiable list, or an empty list if not found.
-	 */
-	public <A extends Annotation> List<A> getAnnotations(Class<A> a, MethodInfo m) {
-		return getAnnotations(a, m == null ? null : m.inner());
+	@Override /* MetaProvider */
+	public <A extends Annotation> void getAnnotations(Class<A> a, Field f, Consumer<A> consumer) {
+		if (a != null && f != null)
+			for (A aa : annotations(a, f))
+				consumer.accept(aa);
+	}
+
+	@Override /* MetaProvider */
+	public <A extends Annotation> A getAnnotation(Class<A> a, Field f, Predicate<A> predicate) {
+		if (a != null && f != null)
+			for (A aa : annotations(a, f))
+				if (predicate.test(aa))
+					return aa;
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	private <A extends Annotation> A[] annotations(Class<A> a, Field f) {
+		A[] aa = (A[])fieldAnnotationCache.get(f, a);
+		if (aa == null) {
+			A[] x = f.getAnnotationsByType(a);
+			AList<Annotation> l = new AList<>(Arrays.asList(x));
+			annotationMap.appendAll(f, a, l);
+			aa = (A[]) Array.newInstance(a, l.size());
+			for (int i = 0; i < l.size(); i++)
+				Array.set(aa, i, l.get(i));
+			fieldAnnotationCache.put(f, a, aa);
+		}
+		return aa;
+	}
+
+	@Override /* MetaProvider */
+	public <A extends Annotation> void getAnnotations(Class<A> a, Constructor<?> c, Consumer<A> consumer) {
+		if (a != null && c != null)
+			for (A aa : annotations(a, c))
+				consumer.accept(aa);
+	}
+
+	@Override /* MetaProvider */
+	public <A extends Annotation> A getAnnotation(Class<A> a, Constructor<?> c, Predicate<A> predicate) {
+		if (a != null && c != null)
+			for (A aa : annotations(a, c))
+				if (predicate.test(aa))
+					return aa;
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	private <A extends Annotation> A[] annotations(Class<A> a, Constructor<?> c) {
+		A[] aa = (A[])constructorAnnotationCache.get(c, a);
+		if (aa == null) {
+			A[] x = c.getAnnotationsByType(a);
+			AList<Annotation> l = new AList<>(Arrays.asList(x));
+			annotationMap.appendAll(c, a, l);
+			aa = (A[]) Array.newInstance(a, l.size());
+			for (int i = 0; i < l.size(); i++)
+				Array.set(aa, i, l.get(i));
+			constructorAnnotationCache.put(c, a, aa);
+		}
+		return aa;
 	}
 
 	/**
@@ -1041,91 +1098,19 @@ public abstract class Context implements MetaProvider {
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
 	public <A extends Annotation> A getLastAnnotation(Class<A> a, Method m) {
-		return last(getAnnotations(a, m));
+		return last(annotations(a, m));
 	}
 
 	/**
-	 * Finds the last specified annotations on the specified method.
+	 * Finds the last specified annotations on the specified field.
 	 *
 	 * @param <A> The annotation type to find.
 	 * @param a The annotation type to find.
-	 * @param m The method to search on.
+	 * @param f The field to search on.
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
-	public <A extends Annotation> A getLastAnnotation(Class<A> a, MethodInfo m) {
-		return last(getAnnotations(a, m));
-	}
-
-	/**
-	 * Finds the specified annotations on the specified field.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param f The field to search on.
-	 * @return The annotations in an unmodifiable list, or an empty list if not found.
-	 */
-	@SuppressWarnings("unchecked")
-	@Override /* MetaProvider */
-	public <A extends Annotation> List<A> getAnnotations(Class<A> a, Field f) {
-		if (a == null || f == null)
-			return emptyList();
-		List<Annotation> aa = fieldAnnotationCache.get(f, a);
-		if (aa == null) {
-			A[] x = f.getAnnotationsByType(a);
-			AList<Annotation> l = new AList<>(Arrays.asList(x));
-			annotationMap.appendAll(f, a, l);
-			aa = l.unmodifiable();
-			fieldAnnotationCache.put(f, a, aa);
-		}
-		return (List<A>)aa;
-	}
-
-	/**
-	 * Finds the specified annotations on the specified field.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param f The field to search on.
-	 * @return The annotations in an unmodifiable list, or an empty list if not found.
-	 */
-	public <A extends Annotation> List<A> getAnnotations(Class<A> a, FieldInfo f) {
-		return getAnnotations(a, f == null ? null: f.inner());
-	}
-
-	/**
-	 * Finds the specified annotations on the specified constructor.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param c The constructor to search on.
-	 * @return The annotations in an unmodifiable list, or an empty list if not found.
-	 */
-	@SuppressWarnings("unchecked")
-	@Override /* MetaProvider */
-	public <A extends Annotation> List<A> getAnnotations(Class<A> a, Constructor<?> c) {
-		if (a == null || c == null)
-			return emptyList();
-		List<Annotation> aa = constructorAnnotationCache.get(c, a);
-		if (aa == null) {
-			A[] x = c.getAnnotationsByType(a);
-			AList<Annotation> l = new AList<>(Arrays.asList(x));
-			annotationMap.appendAll(c, a, l);
-			aa = l.unmodifiable();
-			constructorAnnotationCache.put(c, a, l);
-		}
-		return (List<A>)aa;
-	}
-
-	/**
-	 * Finds the specified annotations on the specified constructor.
-	 *
-	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param c The constructor to search on.
-	 * @return The annotations in an unmodifiable list, or an empty list if not found.
-	 */
-	public <A extends Annotation> List<A> getAnnotations(Class<A> a, ConstructorInfo c) {
-		return getAnnotations(a, c == null ? null : c.inner());
+	public <A extends Annotation> A getLastAnnotation(Class<A> a, Field f) {
+		return last(annotations(a, f));
 	}
 
 	/**
@@ -1158,7 +1143,7 @@ public abstract class Context implements MetaProvider {
 	 * @return <jk>true</jk> if the annotation exists on the specified method.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> a, Method m) {
-		return getAnnotations(a, m).size() > 0;
+		return annotations(a, m).length > 0;
 	}
 
 	/**
@@ -1169,7 +1154,7 @@ public abstract class Context implements MetaProvider {
 	 * @return <jk>true</jk> if the annotation exists on the specified method.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> a, MethodInfo m) {
-		return getAnnotations(a, m == null ? null : m.inner()).size() > 0;
+		return annotations(a, m == null ? null : m.inner()).length > 0;
 	}
 
 	/**
@@ -1180,7 +1165,7 @@ public abstract class Context implements MetaProvider {
 	 * @return <jk>true</jk> if the annotation exists on the specified field.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> a, FieldInfo f) {
-		return getAnnotations(a, f == null ? null : f.inner()).size() > 0;
+		return annotations(a, f == null ? null : f.inner()).length > 0;
 	}
 
 	/**
@@ -1191,7 +1176,7 @@ public abstract class Context implements MetaProvider {
 	 * @return <jk>true</jk> if the annotation exists on the specified constructor.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> a, ConstructorInfo c) {
-		return getAnnotations(a, c == null ? null : c.inner()).size() > 0;
+		return annotations(a, c == null ? null : c.inner()).length > 0;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

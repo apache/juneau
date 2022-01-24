@@ -23,6 +23,7 @@ import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
@@ -228,9 +229,11 @@ public class BeanMeta<T> {
 							throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 						constructor = x;
 						constructorArgs = new String[0];
-						for (Beanc bc : ctx.getAnnotations(Beanc.class, x))
-							if (! bc.properties().isEmpty())
-								constructorArgs = split(bc.properties());
+						Consumer<Beanc> consumer = y -> {
+							if (! y.properties().isEmpty())
+								constructorArgs = split(y.properties());
+						};
+						ctx.getAnnotations(Beanc.class, x.inner(), consumer);
 						if (! x.hasNumParams(constructorArgs.length)) {
 							if (constructorArgs.length != 0)
 								throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
@@ -255,9 +258,11 @@ public class BeanMeta<T> {
 								throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 							constructor = x;
 							constructorArgs = new String[0];
-							for (Beanc bc : ctx.getAnnotations(Beanc.class, x))
-								if (! bc.properties().isEmpty())
-									constructorArgs = split(bc.properties());
+							Consumer<Beanc> consumer = y -> {
+								if (! y.properties().isEmpty())
+									constructorArgs = split(y.properties());
+							};
+							ctx.getAnnotations(Beanc.class, x.inner(), consumer);
 							if (! x.hasNumParams(constructorArgs.length)) {
 								if (constructorArgs.length != 0)
 									throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
@@ -539,8 +544,10 @@ public class BeanMeta<T> {
 		 * Returns null if the field isn't a valid property.
 		 */
 		private String findPropertyName(Field f) {
-			List<Beanp> lp = ctx.getAnnotations(Beanp.class, f);
-			List<Name> ln = ctx.getAnnotations(Name.class, f);
+			List<Beanp> lp = new ArrayList<>();
+			List<Name> ln = new ArrayList<>();
+			ctx.getAnnotations(Beanp.class, f, x -> lp.add(x));
+			ctx.getAnnotations(Name.class, f, x -> ln.add(x));
 			String name = bpName(lp, ln);
 			if (isNotEmpty(name))
 				return name;
@@ -667,15 +674,17 @@ public class BeanMeta<T> {
 				if (m.getParamCount() > 2)
 					continue;
 
-				BeanIgnore bi = ctx.getLastAnnotation(BeanIgnore.class, m);
+				BeanIgnore bi = ctx.getLastAnnotation(BeanIgnore.class, m.inner());
 				if (bi != null)
 					continue;
-				Transient t = ctx.getLastAnnotation(Transient.class, m);
+				Transient t = ctx.getLastAnnotation(Transient.class, m.inner());
 				if (t != null && t.value())
 					continue;
 
-				List<Beanp> lp = ctx.getAnnotations(Beanp.class, m);
-				List<Name> ln = ctx.getAnnotations(Name.class, m);
+				List<Beanp> lp = new ArrayList<>();
+				List<Name> ln = new ArrayList<>();
+				ctx.getAnnotations(Beanp.class, m.inner(), x -> lp.add(x));
+				ctx.getAnnotations(Name.class, m.inner(), x -> ln.add(x));
 				if (! (m.isVisible(v) || lp.size() > 0 || ln.size() > 0))
 					continue;
 
@@ -774,7 +783,7 @@ public class BeanMeta<T> {
 				&& (x.isNotTransient() || noIgnoreTransients)
 				&& (x.hasNoAnnotation(Transient.class) || noIgnoreTransients)
 				&& x.hasNoAnnotation(BeanIgnore.class, ctx)
-				&& (v.isVisible(x.inner()) || ctx.getAnnotations(Beanp.class, x).size() > 0),
+				&& (v.isVisible(x.inner()) || ctx.hasAnnotation(Beanp.class, x)),
 				x -> l.add(x.inner())
 			);
 		}

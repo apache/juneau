@@ -159,4 +159,17 @@ public final class CollectionUtils {
 			return null;
 		return l.get(l.size()-1);
 	}
+
+	/**
+	 * Returns the last entry in an array.
+	 *
+	 * @param <T> The element type.
+	 * @param l The array.
+	 * @return The last element, or <jk>null</jk> if the array is <jk>null</jk> or empty.
+	 */
+	public static <T> T last(T[] l) {
+		if (l == null || l.length == 0)
+			return null;
+		return l[l.length-1];
+	}
 }

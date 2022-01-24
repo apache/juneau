@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.function.*;
@@ -111,7 +109,9 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	 * 	The first annotation found, or <jk>null</jk> if it doesn't exist.
 	 */
 	public final <T extends Annotation> T getAnnotation(Class<T> a, MetaProvider mp) {
-		return last(mp.getAnnotations(a, c));
+		Value<T> t = Value.empty();
+		mp.getAnnotations(a, c, x -> t.set(x));
+		return t.orElse(null);
 	}
 
 	/**

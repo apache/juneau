@@ -180,7 +180,8 @@ public final class BeanPropertyMeta {
 			canWrite |= (field != null || setter != null);
 
 			if (innerField != null) {
-				List<Beanp> lp = bc.getAnnotations(Beanp.class, innerField);
+				List<Beanp> lp = new ArrayList<>();
+				bc.getAnnotations(Beanp.class, innerField, x -> lp.add(x));
 				if (field != null || lp.size() > 0) {
 					// Only use field type if it's a bean property or has @Beanp annotation.
 					// Otherwise, we want to infer the type from the getter or setter.
@@ -196,13 +197,13 @@ public final class BeanPropertyMeta {
 					if (! p.wo().isEmpty())
 						writeOnly = Boolean.valueOf(p.wo());
 				}
-				for (Swap s : bc.getAnnotations(Swap.class, innerField))
-					swap = getPropertySwap(s);
-				isUri |= last(bc.getAnnotations(Uri.class, innerField)) != null;
+				bc.getAnnotations(Swap.class, innerField, x -> swap = getPropertySwap(x));
+				isUri |= bc.getAnnotation(Uri.class, innerField, x->true) != null;
 			}
 
 			if (getter != null) {
-				List<Beanp> lp = bc.getAnnotations(Beanp.class, getter);
+				List<Beanp> lp = new ArrayList<>();
+				bc.getAnnotations(Beanp.class, getter, x -> lp.add(x));
 				if (rawTypeMeta == null)
 					rawTypeMeta = bc.resolveClassMeta(last(lp), getter.getGenericReturnType(), typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || bc.hasAnnotation(Uri.class, getter));
@@ -215,12 +216,12 @@ public final class BeanPropertyMeta {
 					if (! p.wo().isEmpty())
 						writeOnly = Boolean.valueOf(p.wo());
 				}
-				for (Swap s : bc.getAnnotations(Swap.class, getter))
-					swap = getPropertySwap(s);
+				bc.getAnnotations(Swap.class, getter, x -> swap = getPropertySwap(x));
 			}
 
 			if (setter != null) {
-				List<Beanp> lp = bc.getAnnotations(Beanp.class, setter);
+				List<Beanp> lp = new ArrayList<>();
+				bc.getAnnotations(Beanp.class, setter, x -> lp.add(x));
 				if (rawTypeMeta == null)
 					rawTypeMeta = bc.resolveClassMeta(last(lp), setter.getGenericParameterTypes()[0], typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || bc.hasAnnotation(Uri.class, setter));
@@ -235,8 +236,7 @@ public final class BeanPropertyMeta {
 					if (! p.wo().isEmpty())
 						writeOnly = Boolean.valueOf(p.wo());
 				}
-				for (Swap s : bc.getAnnotations(Swap.class, setter))
-					swap = getPropertySwap(s);
+				bc.getAnnotations(Swap.class, setter, x -> swap = getPropertySwap(x));
 			}
 
 			if (rawTypeMeta == null)
@@ -322,7 +322,7 @@ public final class BeanPropertyMeta {
 			return null;
 		}
 
-		private ObjectSwap getPropertySwap(Swap s) throws Exception {
+		private ObjectSwap getPropertySwap(Swap s) throws RuntimeException {
 			Class<?> c = s.value();
 			if (c == Null.class)
 				c = s.impl();
@@ -1112,21 +1112,20 @@ public final class BeanPropertyMeta {
 		if (a == null)
 			return l;
 		getBeanMeta().getClassMeta().getInfo().getAnnotations(a, bc, x -> l.add(x));
-
 		if (field != null) {
-			l.addAll(bc.getAnnotations(a, field));
+			bc.getAnnotations(a, field, x -> l.add(x));
 			ClassInfo.of(field.getType()).getAnnotations(a, bc, x -> l.add(x));
 		}
 		if (getter != null) {
-			l.addAll(bc.getAnnotations(a, getter));
+			bc.getAnnotations(a, getter, x -> l.add(x));
 			ClassInfo.of(getter.getReturnType()).getAnnotations(a, bc, x -> l.add(x));
 		}
 		if (setter != null) {
-			l.addAll(bc.getAnnotations(a, setter));
+			bc.getAnnotations(a, setter, x -> l.add(x));
 			ClassInfo.of(setter.getReturnType()).getAnnotations(a, bc, x -> l.add(x));
 		}
 		if (extraKeys != null) {
-			l.addAll(bc.getAnnotations(a, extraKeys));
+			bc.getAnnotations(a, extraKeys, x -> l.add(x));
 			ClassInfo.of(extraKeys.getReturnType()).getAnnotations(a, bc, x -> l.add(x));
 		}
 
@@ -1145,9 +1144,9 @@ public final class BeanPropertyMeta {
 		BeanContext bc = beanContext;
 		if (a == null)
 			return l;
-		l.addAll(bc.getAnnotations(a, field));
-		l.addAll(bc.getAnnotations(a, getter));
-		l.addAll(bc.getAnnotations(a, setter));
+		bc.getAnnotations(a, field, x -> l.add(x));
+		bc.getAnnotations(a, getter, x -> l.add(x));
+		bc.getAnnotations(a, setter, x -> l.add(x));
 		return l;
 	}
 
