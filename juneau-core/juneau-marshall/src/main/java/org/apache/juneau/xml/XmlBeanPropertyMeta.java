@@ -101,7 +101,7 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		return childName;
 	}
 
-	private void findXmlInfo(Xml xml, MetaProvider mp) {
+	private void findXmlInfo(Xml xml, AnnotationProvider mp) {
 		if (xml == null)
 			return;
 		BeanPropertyMeta bpm = getBeanPropertyMeta();

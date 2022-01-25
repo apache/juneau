@@ -215,7 +215,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * 	The annotation if found, or <jk>null</jk> if not.
 	 */
 	public final <T extends Annotation> T getLastAnnotation(Class<T> a) {
-		return getLastAnnotation(a, MetaProvider.DEFAULT);
+		return getLastAnnotation(AnnotationProvider.DEFAULT, a);
 	}
 
 	/**
@@ -225,19 +225,16 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * Searches all methods with the same signature on the parent classes or interfaces
 	 * and the return type on the method.
 	 *
-	 * @param a
-	 * 	The annotation to search for.
-	 * @param mp
-	 * 	The meta provider for looking up annotations on classes/methods/fields.
-	 * @return
-	 * 	The first annotation found, or <jk>null</jk> if it doesn't exist.
+	 * @param ap The annotation provider.
+	 * @param a The annotation to search for.
+	 * @return The first annotation found, or <jk>null</jk> if it doesn't exist.
 	 */
-	public final <T extends Annotation> T getLastAnnotation(Class<T> a, MetaProvider mp) {
+	public final <T extends Annotation> T getLastAnnotation(AnnotationProvider ap, Class<T> a) {
 		if (a == null)
 			return null;
 		Value<T> t = Value.empty();
 		for (Method m2 : _getMatching()) {
-			mp.getAnnotations(a, m2, x -> t.set(x));
+			ap.getAnnotations(a, m2, x -> true, x -> t.set(x));
 			if (t.isPresent())
 				return t.get();
 		}
@@ -251,7 +248,21 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @return <jk>true</jk> if the specified annotation is present on this method.
 	 */
 	public final boolean hasAnnotation(Class<? extends Annotation> a) {
-		return getLastAnnotation(a) != null;
+		return hasAnnotation(AnnotationProvider.DEFAULT, a);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified annotation is present on this method.
+	 *
+	 * @param ap The annotation provider.
+	 * @param a The annotation to check for.
+	 * @return <jk>true</jk> if the specified annotation is present on this method.
+	 */
+	public final boolean hasAnnotation(AnnotationProvider ap, Class<? extends Annotation> a) {
+		for (Method m2 : _getMatching()) 
+			if (ap.getAnnotation(a, m2, x -> true) != null)
+				return true;
+		return false;
 	}
 
 	/**

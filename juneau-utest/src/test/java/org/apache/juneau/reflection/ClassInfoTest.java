@@ -483,12 +483,12 @@ public class ClassInfoTest {
 
 	@Test
 	public void getConstructor() {
-		check("E1(int)", e1.getConstructor(x -> x.isVisible(Visibility.PROTECTED) && x.hasParamTypes(int.class)));
-		check("E1(int)", e1.getConstructor(x -> x.isVisible(Visibility.PRIVATE) && x.hasParamTypes(int.class)));
-		check(null, e1.getConstructor(x -> x.isVisible(Visibility.PUBLIC) && x.hasParamTypes(int.class)));
-		check("E3()", e3.getConstructor(x -> x.isVisible(Visibility.PUBLIC)));
-		check("E4(ClassInfoTest)", e4.getConstructor(x -> x.isVisible(Visibility.PUBLIC)));
-		check("E5()", e5.getConstructor(x -> x.isVisible(Visibility.PUBLIC)));
+		check("E1(int)", e1.getDeclaredConstructor(x -> x.isVisible(Visibility.PROTECTED) && x.hasParamTypes(int.class)));
+		check("E1(int)", e1.getDeclaredConstructor(x -> x.isVisible(Visibility.PRIVATE) && x.hasParamTypes(int.class)));
+		check(null, e1.getDeclaredConstructor(x -> x.isVisible(Visibility.PUBLIC) && x.hasParamTypes(int.class)));
+		check("E3()", e3.getDeclaredConstructor(x -> x.isVisible(Visibility.PUBLIC)));
+		check("E4(ClassInfoTest)", e4.getDeclaredConstructor(x -> x.isVisible(Visibility.PUBLIC)));
+		check("E5()", e5.getDeclaredConstructor(x -> x.isVisible(Visibility.PUBLIC)));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -544,34 +544,14 @@ public class ClassInfoTest {
 	}
 
 	@Test
-	public void getAllFields() {
-		check("F2.f1a,F2.f2b,F2.f2c,F2.f2d,F1.f1a,F1.f1b", f2.getAllFields());
-	}
-
-	@Test
-	public void getAllFields_twice() {
-		check("F2.f1a,F2.f2b,F2.f2c,F2.f2d,F1.f1a,F1.f1b", f2.getAllFields());
-		check("F2.f1a,F2.f2b,F2.f2c,F2.f2d,F1.f1a,F1.f1b", f2.getAllFields());
-	}
-
-	@Test
-	public void getAllFields_onType() {
-		check("A1.this$0", aTypeInfo.getAllFields());
-		check("", pTypeInfo.getAllFields());
-		check("", pTypeDimensionalInfo.getAllFields());
-		check("AbstractMap.keySet,AbstractMap.values", pTypeGenericInfo.getAllFields());
-		check("", pTypeGenericArgInfo.getAllFields());
-	}
-
-	@Test
 	public void getAllFieldsParentFirst() {
-		check("F1.f1a,F1.f1b,F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getAllFieldsParentFirst());
+		check("F1.f1a,F1.f1b,F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getAllFields());
 	}
 
 	@Test
 	public void getAllFieldsParentFirst_twice() {
-		check("F1.f1a,F1.f1b,F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getAllFieldsParentFirst());
-		check("F1.f1a,F1.f1b,F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getAllFieldsParentFirst());
+		check("F1.f1a,F1.f1b,F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getAllFields());
+		check("F1.f1a,F1.f1b,F2.f1a,F2.f2b,F2.f2c,F2.f2d", f2.getAllFields());
 	}
 
 	static class F3 {
@@ -672,18 +652,6 @@ public class ClassInfoTest {
 	}
 
 	@Test
-	public void getDeclaredAnnotationInfo() {
-		check("@A(7)", g3.getDeclaredAnnotationInfo(A.class));
-		check(null, g3.getDeclaredAnnotationInfo(B.class));
-	}
-
-	@Test
-	public void getDeclaredAnnotationInfo_twice() {
-		check("@A(7)", g3.getDeclaredAnnotationInfo(A.class));
-		check("@A(7)", g3.getDeclaredAnnotationInfo(A.class));
-	}
-
-	@Test
 	public void getPackageAnnotation() {
 		check("@PA(10)", g3.getPackageAnnotation(PA.class));
 	}
@@ -695,11 +663,6 @@ public class ClassInfoTest {
 		check(null, pTypeDimensionalInfo.getPackageAnnotation(PA.class));
 		check(null, pTypeGenericInfo.getPackageAnnotation(PA.class));
 		check(null, pTypeGenericArgInfo.getPackageAnnotation(PA.class));
-	}
-
-	@Test
-	public void getPackageAnnotationInfo() {
-		check("@PA(10)", g3.getPackageAnnotationInfo(PA.class));
 	}
 
 	@Test

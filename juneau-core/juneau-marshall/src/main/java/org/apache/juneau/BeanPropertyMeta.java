@@ -181,7 +181,7 @@ public final class BeanPropertyMeta {
 
 			if (innerField != null) {
 				List<Beanp> lp = new ArrayList<>();
-				bc.getAnnotations(Beanp.class, innerField, x -> lp.add(x));
+				bc.getAnnotations(Beanp.class, innerField, x -> true, x -> lp.add(x));
 				if (field != null || lp.size() > 0) {
 					// Only use field type if it's a bean property or has @Beanp annotation.
 					// Otherwise, we want to infer the type from the getter or setter.
@@ -197,13 +197,13 @@ public final class BeanPropertyMeta {
 					if (! p.wo().isEmpty())
 						writeOnly = Boolean.valueOf(p.wo());
 				}
-				bc.getAnnotations(Swap.class, innerField, x -> swap = getPropertySwap(x));
+				bc.getAnnotations(Swap.class, innerField, x -> true, x -> swap = getPropertySwap(x));
 				isUri |= bc.getAnnotation(Uri.class, innerField, x->true) != null;
 			}
 
 			if (getter != null) {
 				List<Beanp> lp = new ArrayList<>();
-				bc.getAnnotations(Beanp.class, getter, x -> lp.add(x));
+				bc.getAnnotations(Beanp.class, getter, x -> true, x -> lp.add(x));
 				if (rawTypeMeta == null)
 					rawTypeMeta = bc.resolveClassMeta(last(lp), getter.getGenericReturnType(), typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || bc.hasAnnotation(Uri.class, getter));
@@ -216,12 +216,12 @@ public final class BeanPropertyMeta {
 					if (! p.wo().isEmpty())
 						writeOnly = Boolean.valueOf(p.wo());
 				}
-				bc.getAnnotations(Swap.class, getter, x -> swap = getPropertySwap(x));
+				bc.getAnnotations(Swap.class, getter, x -> true, x -> swap = getPropertySwap(x));
 			}
 
 			if (setter != null) {
 				List<Beanp> lp = new ArrayList<>();
-				bc.getAnnotations(Beanp.class, setter, x -> lp.add(x));
+				bc.getAnnotations(Beanp.class, setter, x -> true, x -> lp.add(x));
 				if (rawTypeMeta == null)
 					rawTypeMeta = bc.resolveClassMeta(last(lp), setter.getGenericParameterTypes()[0], typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || bc.hasAnnotation(Uri.class, setter));
@@ -236,7 +236,7 @@ public final class BeanPropertyMeta {
 					if (! p.wo().isEmpty())
 						writeOnly = Boolean.valueOf(p.wo());
 				}
-				bc.getAnnotations(Swap.class, setter, x -> swap = getPropertySwap(x));
+				bc.getAnnotations(Swap.class, setter, x -> true, x -> swap = getPropertySwap(x));
 			}
 
 			if (rawTypeMeta == null)
@@ -1111,22 +1111,22 @@ public final class BeanPropertyMeta {
 		BeanContext bc = beanContext;
 		if (a == null)
 			return l;
-		getBeanMeta().getClassMeta().getInfo().getAnnotations(a, bc, x -> l.add(x));
+		getBeanMeta().getClassMeta().getInfo().getAnnotations(bc, a, x -> true, x -> l.add(x));
 		if (field != null) {
-			bc.getAnnotations(a, field, x -> l.add(x));
-			ClassInfo.of(field.getType()).getAnnotations(a, bc, x -> l.add(x));
+			bc.getAnnotations(a, field, x -> true, x -> l.add(x));
+			ClassInfo.of(field.getType()).getAnnotations(bc, a, x -> true, x -> l.add(x));
 		}
 		if (getter != null) {
-			bc.getAnnotations(a, getter, x -> l.add(x));
-			ClassInfo.of(getter.getReturnType()).getAnnotations(a, bc, x -> l.add(x));
+			bc.getAnnotations(a, getter, x -> true, x -> l.add(x));
+			ClassInfo.of(getter.getReturnType()).getAnnotations(bc, a, x -> true, x -> l.add(x));
 		}
 		if (setter != null) {
-			bc.getAnnotations(a, setter, x -> l.add(x));
-			ClassInfo.of(setter.getReturnType()).getAnnotations(a, bc, x -> l.add(x));
+			bc.getAnnotations(a, setter, x -> true, x -> l.add(x));
+			ClassInfo.of(setter.getReturnType()).getAnnotations(bc, a, x -> true, x -> l.add(x));
 		}
 		if (extraKeys != null) {
-			bc.getAnnotations(a, extraKeys, x -> l.add(x));
-			ClassInfo.of(extraKeys.getReturnType()).getAnnotations(a, bc, x -> l.add(x));
+			bc.getAnnotations(a, extraKeys, x -> true, x -> l.add(x));
+			ClassInfo.of(extraKeys.getReturnType()).getAnnotations(bc, a, x -> true, x -> l.add(x));
 		}
 
 		return l;
@@ -1144,9 +1144,9 @@ public final class BeanPropertyMeta {
 		BeanContext bc = beanContext;
 		if (a == null)
 			return l;
-		bc.getAnnotations(a, field, x -> l.add(x));
-		bc.getAnnotations(a, getter, x -> l.add(x));
-		bc.getAnnotations(a, setter, x -> l.add(x));
+		bc.getAnnotations(a, field, x -> true, x -> l.add(x));
+		bc.getAnnotations(a, getter, x -> true, x -> l.add(x));
+		bc.getAnnotations(a, setter, x -> true, x -> l.add(x));
 		return l;
 	}
 

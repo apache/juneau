@@ -20,11 +20,8 @@ import static org.apache.juneau.BeanMeta.MethodType.*;
 
 import java.beans.*;
 import java.io.*;
-import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.function.*;
-
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
@@ -204,9 +201,8 @@ public class BeanMeta<T> {
 
 				Map<String,BeanPropertyMeta.Builder> normalProps = new LinkedHashMap<>();
 
-				Annotation ba = ci.getAnyLastAnnotation(ctx, Bean.class, BeanIgnore.class);
-				boolean hasBean = ba != null && ba.annotationType() == Bean.class;
-				boolean hasBeanIgnore = ba != null && ba.annotationType() == BeanIgnore.class;
+				boolean hasBean = ci.hasAnnotation(ctx, Bean.class);
+				boolean hasBeanIgnore = ci.hasAnnotation(ctx, BeanIgnore.class);
 
 				/// See if this class matches one the patterns in the exclude-class list.
 				if (ctx.isNotABean(c))
@@ -224,16 +220,12 @@ public class BeanMeta<T> {
 
 				// Look for @Beanc constructor on public constructors.
 				for (ConstructorInfo x : ci.getPublicConstructors()) {
-					if (ctx.hasAnnotation(Beanc.class, x)) {
+					if (x.hasAnnotation(ctx, Beanc.class)) {
 						if (constructor != null)
 							throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 						constructor = x;
 						constructorArgs = new String[0];
-						Consumer<Beanc> consumer = y -> {
-							if (! y.properties().isEmpty())
-								constructorArgs = split(y.properties());
-						};
-						ctx.getAnnotations(Beanc.class, x.inner(), consumer);
+						ctx.getAnnotations(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = split(z.properties()));
 						if (! x.hasNumParams(constructorArgs.length)) {
 							if (constructorArgs.length != 0)
 								throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
@@ -253,16 +245,12 @@ public class BeanMeta<T> {
 				// Look for @Beanc on all other constructors.
 				if (constructor == null) {
 					for (ConstructorInfo x : ci.getDeclaredConstructors()) {
-						if (ctx.hasAnnotation(Beanc.class, x)) {
+						if (x.hasAnnotation(ctx, Beanc.class)) {
 							if (constructor != null)
 								throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 							constructor = x;
 							constructorArgs = new String[0];
-							Consumer<Beanc> consumer = y -> {
-								if (! y.properties().isEmpty())
-									constructorArgs = split(y.properties());
-							};
-							ctx.getAnnotations(Beanc.class, x.inner(), consumer);
+							ctx.getAnnotations(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = split(z.properties()));
 							if (! x.hasNumParams(constructorArgs.length)) {
 								if (constructorArgs.length != 0)
 									throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
@@ -546,8 +534,8 @@ public class BeanMeta<T> {
 		private String findPropertyName(Field f) {
 			List<Beanp> lp = new ArrayList<>();
 			List<Name> ln = new ArrayList<>();
-			ctx.getAnnotations(Beanp.class, f, x -> lp.add(x));
-			ctx.getAnnotations(Name.class, f, x -> ln.add(x));
+			ctx.getAnnotations(Beanp.class, f, x -> true, x -> lp.add(x));
+			ctx.getAnnotations(Name.class, f, x -> true, x -> ln.add(x));
 			String name = bpName(lp, ln);
 			if (isNotEmpty(name))
 				return name;
@@ -674,17 +662,16 @@ public class BeanMeta<T> {
 				if (m.getParamCount() > 2)
 					continue;
 
-				BeanIgnore bi = ctx.getLastAnnotation(BeanIgnore.class, m.inner());
-				if (bi != null)
+				if (m.hasAnnotation(ctx, BeanIgnore.class))
 					continue;
-				Transient t = ctx.getLastAnnotation(Transient.class, m.inner());
+				Transient t = m.getLastAnnotation(ctx, Transient.class);
 				if (t != null && t.value())
 					continue;
 
 				List<Beanp> lp = new ArrayList<>();
 				List<Name> ln = new ArrayList<>();
-				ctx.getAnnotations(Beanp.class, m.inner(), x -> lp.add(x));
-				ctx.getAnnotations(Name.class, m.inner(), x -> ln.add(x));
+				ctx.getAnnotations(Beanp.class, m.inner(), x -> true, x -> lp.add(x));
+				ctx.getAnnotations(Name.class, m.inner(), x -> true, x -> ln.add(x));
 				if (! (m.isVisible(v) || lp.size() > 0 || ln.size() > 0))
 					continue;
 
@@ -782,8 +769,8 @@ public class BeanMeta<T> {
 				x -> x.isNotStatic()
 				&& (x.isNotTransient() || noIgnoreTransients)
 				&& (x.hasNoAnnotation(Transient.class) || noIgnoreTransients)
-				&& x.hasNoAnnotation(BeanIgnore.class, ctx)
-				&& (v.isVisible(x.inner()) || ctx.hasAnnotation(Beanp.class, x)),
+				&& x.hasNoAnnotation(ctx, BeanIgnore.class)
+				&& (v.isVisible(x.inner()) || x.hasAnnotation(ctx, Beanp.class)),
 				x -> l.add(x.inner())
 			);
 		}
@@ -797,7 +784,7 @@ public class BeanMeta<T> {
 				x -> x.isNotStatic()
 				&& (x.isNotTransient() || noIgnoreTransients)
 				&& (x.hasNoAnnotation(Transient.class) || noIgnoreTransients)
-				&& x.hasNoAnnotation(BeanIgnore.class, ctx)
+				&& x.hasNoAnnotation(ctx, BeanIgnore.class)
 				&& x.hasName(name)
 			);
 			if (f != null)

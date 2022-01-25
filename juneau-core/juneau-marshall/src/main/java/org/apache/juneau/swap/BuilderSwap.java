@@ -160,7 +160,7 @@ public class BuilderSwap<T,B> {
 
 		ClassInfo pci = ClassInfo.of(objectClass);
 
-		objectConstructor = pci.getConstructor(x -> x.isVisible(cVis) && x.hasParamTypes(builderClass));
+		objectConstructor = pci.getDeclaredConstructor(x -> x.isVisible(cVis) && x.hasParamTypes(builderClass));
 		if (objectConstructor == null)
 			return null;
 
@@ -189,7 +189,7 @@ public class BuilderSwap<T,B> {
 		ConstructorInfo objectConstructor = null;
 		ConstructorInfo builderConstructor;
 
-		bc.getAnnotations(org.apache.juneau.annotation.Builder.class, objectClass, x -> builderClass.setIf(x.value(), y -> y != Null.class));
+		bc.getAnnotations(org.apache.juneau.annotation.Builder.class, objectClass, x -> x.value() != Null.class, x -> builderClass.set(x.value()));
 
 		ClassInfo pci = ClassInfo.of(objectClass);
 
@@ -221,7 +221,7 @@ public class BuilderSwap<T,B> {
 		objectCreateMethod = getBuilderBuildMethod(bci);
 		Class<?> builderClass2 = builderClass.get();
 		if (objectConstructor == null)
-			objectConstructor = pci.getConstructor(x -> x.isVisible(cVis) && x.hasParamTypes(builderClass2));
+			objectConstructor = pci.getDeclaredConstructor(x -> x.isVisible(cVis) && x.hasParamTypes(builderClass2));
 
 		if (objectConstructor == null && objectCreateMethod == null)
 			return null;

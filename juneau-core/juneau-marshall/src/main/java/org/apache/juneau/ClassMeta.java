@@ -417,7 +417,7 @@ public final class ClassMeta<T> implements Type {
 					cc = DATE;
 				else if (c.isArray())
 					cc = ARRAY;
-				else if (ci.isChildOfAny(URL.class, URI.class) || bc.hasAnnotation(Uri.class, c))
+				else if (ci.isChildOfAny(URL.class, URI.class) || ci.hasAnnotation(bc, Uri.class))
 					cc = URI;
 				else if (ci.isChildOf(Reader.class))
 					cc = READER;
@@ -456,41 +456,35 @@ public final class ClassMeta<T> implements Type {
 				).map(x -> x.inner())
 				.orElse(null);
 
-			for (FieldInfo f : ci.getAllFieldsParentFirst()) {
-				if (bc.hasAnnotation(ParentProperty.class, f)) {
-					if (f.isStatic())
-						throw new ClassMetaRuntimeException(c, "@ParentProperty used on invalid field ''{0}''.  Must be static.", f);
-					f.setAccessible();
-					parentPropertyMethod = new Setter.FieldSetter(f.inner());
-				}
-				if (bc.hasAnnotation(NameProperty.class, f)) {
-					if (f.isStatic())
-						throw new ClassMetaRuntimeException(c, "@NameProperty used on invalid field ''{0}''.  Must be static.", f);
-					f.setAccessible();
-					namePropertyMethod = new Setter.FieldSetter(f.inner());
-				}
-			}
+			ci.getAllFields(x -> x.hasAnnotation(bc, ParentProperty.class), x -> {
+				if (x.isStatic())
+					throw new ClassMetaRuntimeException(c, "@ParentProperty used on invalid field ''{0}''.  Must be static.", x);
+				parentPropertyMethod = new Setter.FieldSetter(x.accessible().inner());
+			});
 
-			for (FieldInfo f : ci.getDeclaredFields()) {
-				if (bc.hasAnnotation(Example.class, f)) {
-					if (! (f.isStatic() && ci.isParentOf(f.getType().inner())))
-						throw new ClassMetaRuntimeException(c, "@Example used on invalid field ''{0}''.  Must be static and an instance of the type.", f);
-					f.setAccessible();
-					exampleField = f.inner();
-				}
-			}
+			ci.getAllFields(x -> x.hasAnnotation(bc, NameProperty.class), x -> {
+				if (x.isStatic())
+					throw new ClassMetaRuntimeException(c, "@NameProperty used on invalid field ''{0}''.  Must be static.", x);
+				namePropertyMethod = new Setter.FieldSetter(x.accessible().inner());
+			});
+
+			ci.getDeclaredFields(x -> x.hasAnnotation(bc, Example.class), x -> {
+				if (! (x.isStatic() && ci.isParentOf(x.getType().inner())))
+					throw new ClassMetaRuntimeException(c, "@Example used on invalid field ''{0}''.  Must be static and an instance of the type.", x);
+				exampleField = x.accessible().inner();
+			});
 
 			// Find @NameProperty and @ParentProperty methods if present.
 			List<MethodInfo> methods = ci.getMethods();
 			for (int i = methods.size()-1; i >=0; i--) {
 				MethodInfo m = methods.get(i);
-				if (bc.hasAnnotation(ParentProperty.class, m)) {
+				if (m.hasAnnotation(bc, ParentProperty.class)) {
 					if (m.isStatic() || ! m.hasNumParams(1))
 						throw new ClassMetaRuntimeException(c, "@ParentProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);
 					m.setAccessible();
 					parentPropertyMethod = new Setter.MethodSetter(m.inner());
 				}
-				if (bc.hasAnnotation(NameProperty.class, m)) {
+				if (m.hasAnnotation(bc, NameProperty.class)) {
 					if (m.isStatic() || ! m.hasNumParams(1))
 						throw new ClassMetaRuntimeException(c, "@NameProperty used on invalid method ''{0}''.  Must not be static and have one argument.", m);
 					m.setAccessible();
@@ -499,7 +493,7 @@ public final class ClassMeta<T> implements Type {
 			}
 
 			for (MethodInfo m : ci.getDeclaredMethods()) {
-				if (bc.hasAnnotation(Example.class, m)) {
+				if (m.hasAnnotation(bc, Example.class)) {
 					if (! (m.isStatic() && m.hasFuzzyParamTypes(BeanSession.class) && ci.isParentOf(m.getReturnType().inner())))
 						throw new ClassMetaRuntimeException(c, "@Example used on invalid method ''{0}''.  Must be static and return an instance of the declaring class.", m.toString());
 					m.setAccessible();
@@ -622,7 +616,7 @@ public final class ClassMeta<T> implements Type {
 				invocationHandler = new BeanProxyInvocationHandler<T>(beanMeta);
 
 			if (bc != null) {
-				bc.getAnnotations(Bean.class, c, x -> {
+				bc.getAnnotations(Bean.class, c, x -> true, x -> {
 					if (x.dictionary().length != 0)
 						beanRegistry = new BeanRegistry(bc, null, x.dictionary());
 					// This could be a non-bean POJO with a type name.
@@ -632,10 +626,7 @@ public final class ClassMeta<T> implements Type {
 			}
 
 			if (example == null && bc != null) {
-				bc.getAnnotations(Example.class, c, x -> {
-					if (! x.value().isEmpty())
-						example = x.value();
-				});
+				bc.getAnnotations(Example.class, c, x -> ! x.value().isEmpty(), x -> example = x.value());
 			}
 
 			if (example == null) {
@@ -693,7 +684,7 @@ public final class ClassMeta<T> implements Type {
 
 		private BeanFilter findBeanFilter(BeanContext bc) {
 			try {
-				List<Bean> ba = info.getAnnotations(Bean.class, bc);
+				List<Bean> ba = info.getAnnotations(bc, Bean.class);
 				if (! ba.isEmpty())
 					return BeanFilter.create(innerClass).applyAnnotations(ba).build();
 			} catch (Exception e) {
@@ -704,7 +695,7 @@ public final class ClassMeta<T> implements Type {
 
 		private MarshalledFilter findMarshalledFilter(BeanContext bc) {
 			try {
-				List<Marshalled> ba = info.getAnnotations(Marshalled.class, bc);
+				List<Marshalled> ba = info.getAnnotations(bc, Marshalled.class);
 				if (! ba.isEmpty())
 					return MarshalledFilter.create(innerClass).applyAnnotations(ba).build();
 			} catch (Exception e) {
@@ -716,7 +707,7 @@ public final class ClassMeta<T> implements Type {
 		private void findSwaps(List<ObjectSwap> l, BeanContext bc) {
 
 			if (bc != null)
-				bc.getAnnotations(Swap.class, innerClass, x-> l.add(createSwap(x)));
+				bc.getAnnotations(Swap.class, innerClass, x -> true, x -> l.add(createSwap(x)));
 
 			ObjectSwap defaultSwap = DefaultSwaps.find(ci);
 			if (defaultSwap == null)
@@ -2092,8 +2083,8 @@ public final class ClassMeta<T> implements Type {
 		Optional<A> o = (Optional<A>)annotationLastMap.get(a);
 		if (o == null) {
 			if (beanContext == null)
-				return info.getLastAnnotation(a, BeanContext.DEFAULT);
-			o = Optional.ofNullable(info.getLastAnnotation(a, beanContext));
+				return info.getLastAnnotation(BeanContext.DEFAULT, a);
+			o = Optional.ofNullable(info.getLastAnnotation(beanContext, a));
 			annotationLastMap.put(a, o);
 		}
 		return o.orElse(null);
@@ -2112,11 +2103,11 @@ public final class ClassMeta<T> implements Type {
 		A[] array = (A[])annotationArrayMap.get(a);
 		if (array == null) {
 			if (beanContext == null) {
-				info.getAnnotations(a, BeanContext.DEFAULT, consumer);
+				info.getAnnotations(BeanContext.DEFAULT, a, x-> true, consumer);
 				return this;
 			}
 			List<A> l = new ArrayList<>();
-			info.getAnnotations(a, beanContext, x -> l.add(x));
+			info.getAnnotations(beanContext, a, x-> true, x -> l.add(x));
 			array = (A[])Array.newInstance(a, l.size());
 			for (int i = 0; i < l.size(); i++)
 				Array.set(array, i, l.get(i));

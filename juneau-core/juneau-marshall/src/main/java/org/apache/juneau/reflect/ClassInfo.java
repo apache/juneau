@@ -70,7 +70,7 @@ public final class ClassInfo {
 	private MethodInfo[] publicMethods, declaredMethods, allMethods, allMethodsParentFirst;
 	private MethodInfo repeatedAnnotationMethod;
 	private ConstructorInfo[] publicConstructors, declaredConstructors;
-	private FieldInfo[] publicFields, declaredFields, allFields, allFieldsParentFirst;
+	private FieldInfo[] publicFields, declaredFields, allFields;
 	private int dim = -1;
 	private ClassInfo componentType;
 
@@ -409,25 +409,17 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Returns all methods declared on this class.
+	 * Returns the public method that matches the specified predicate.
 	 *
-	 * @return
-	 * 	All methods declared on this class.
-	 * 	<br>Results are ordered alphabetically.
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
 	 */
-	public List<MethodInfo> getDeclaredMethods() {
-		return new UnmodifiableArray<>(_getDeclaredMethods());
-	}
-
-	/**
-	 * Returns all declared methods on this class and all parent classes.
-	 *
-	 * @return
-	 * 	All declared methods on this class and all parent classes.
-	 * 	<br>Results are ordered child-to-parent, and then alphabetically per class.
-	 */
-	public List<MethodInfo> getMethods() {
-		return new UnmodifiableArray<>(_getAllMethods());
+	public final ClassInfo getPublicMethods(Predicate<MethodInfo> predicate, Consumer<MethodInfo> consumer) {
+		for (MethodInfo mi : _getPublicMethods())
+			if (predicate.test(mi))
+				consumer.accept(mi);
+		return this;
 	}
 
 	/**
@@ -444,6 +436,31 @@ public final class ClassInfo {
 	}
 
 	/**
+	 * Returns all methods declared on this class.
+	 *
+	 * @return
+	 * 	All methods declared on this class.
+	 * 	<br>Results are ordered alphabetically.
+	 */
+	public List<MethodInfo> getDeclaredMethods() {
+		return new UnmodifiableArray<>(_getDeclaredMethods());
+	}
+
+	/**
+	 * Returns the declared method that matches the specified predicate.
+	 *
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
+	 */
+	public final ClassInfo getDeclaredMethods(Predicate<MethodInfo> predicate, Consumer<MethodInfo> consumer) {
+		for (MethodInfo mi : _getDeclaredMethods())
+			if (predicate.test(mi))
+				consumer.accept(mi);
+		return this;
+	}
+
+	/**
 	 * Returns the declared method that matches the specified predicate.
 	 *
 	 * @param predicate The predicate.
@@ -454,6 +471,31 @@ public final class ClassInfo {
 			if (predicate.test(mi))
 				return mi;
 		return null;
+	}
+
+	/**
+	 * Returns all declared methods on this class and all parent classes.
+	 *
+	 * @return
+	 * 	All declared methods on this class and all parent classes.
+	 * 	<br>Results are ordered child-to-parent, and then alphabetically per class.
+	 */
+	public List<MethodInfo> getMethods() {
+		return new UnmodifiableArray<>(_getAllMethods());
+	}
+
+	/**
+	 * Returns the method that matches the specified predicate.
+	 *
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
+	 */
+	public final ClassInfo getMethods(Predicate<MethodInfo> predicate, Consumer<MethodInfo> consumer) {
+		for (MethodInfo mi : _getAllMethods())
+			if (predicate.test(mi))
+				consumer.accept(mi);
+		return this;
 	}
 
 	/**
@@ -470,48 +512,6 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Returns the public method that matches the specified predicate.
-	 *
-	 * @param predicate The predicate.
-	 * @param consumer The consumer of the matching predicate.
-	 * @return This object.
-	 */
-	public final ClassInfo getPublicMethods(Predicate<MethodInfo> predicate, Consumer<MethodInfo> consumer) {
-		for (MethodInfo mi : _getPublicMethods())
-			if (predicate.test(mi))
-				consumer.accept(mi);
-		return this;
-	}
-
-	/**
-	 * Returns the declared method that matches the specified predicate.
-	 *
-	 * @param predicate The predicate.
-	 * @param consumer The consumer of the matching predicate.
-	 * @return This object.
-	 */
-	public final ClassInfo getDeclaredMethods(Predicate<MethodInfo> predicate, Consumer<MethodInfo> consumer) {
-		for (MethodInfo mi : _getDeclaredMethods())
-			if (predicate.test(mi))
-				consumer.accept(mi);
-		return this;
-	}
-
-	/**
-	 * Returns the method that matches the specified predicate.
-	 *
-	 * @param predicate The predicate.
-	 * @param consumer The consumer of the matching predicate.
-	 * @return This object.
-	 */
-	public final ClassInfo getMethods(Predicate<MethodInfo> predicate, Consumer<MethodInfo> consumer) {
-		for (MethodInfo mi : _getAllMethods())
-			if (predicate.test(mi))
-				consumer.accept(mi);
-		return this;
-	}
-
-	/**
 	 * Returns all declared methods on this class and all parent classes.
 	 *
 	 *
@@ -521,6 +521,20 @@ public final class ClassInfo {
 	 */
 	public List<MethodInfo> getAllMethodsParentFirst() {
 		return new UnmodifiableArray<>(_getAllMethodsParentFirst());
+	}
+
+	/**
+	 * Returns the method that matches the specified predicate from all declared methods on this class and all parent classes.
+	 *
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
+	 */
+	public final ClassInfo getAllMethodsParentFirst(Predicate<MethodInfo> predicate, Consumer<MethodInfo> consumer) {
+		for (MethodInfo mi : _getAllMethodsParentFirst())
+			if (predicate.test(mi))
+				consumer.accept(mi);
+		return this;
 	}
 
 	private MethodInfo[] _getPublicMethods() {
@@ -590,6 +604,20 @@ public final class ClassInfo {
 	}
 
 	/**
+	 * Consumes the public constructors defined on this class that match the specified predicate.
+	 *
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
+	 */
+	public final ClassInfo getPublicConstructors(Predicate<ConstructorInfo> predicate, Consumer<ConstructorInfo> consumer) {
+		for (ConstructorInfo mi : _getPublicConstructors())
+			if (predicate.test(mi))
+				consumer.accept(mi);
+		return this;
+	}
+
+	/**
 	 * Returns the public constructor that matches the specified predicate.
 	 *
 	 * @param predicate The predicate.
@@ -603,19 +631,26 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Returns the public constructor that passes the specified predicate test.
+	 * Returns all the constructors defined on this class.
 	 *
-	 * <p>
-	 * The {@link ReflectionFilters} class has predefined predicates that can be used for testing.
-	 *
-	 * @param test The test that the public constructor must pass.
-	 * @return The first matching public constructor.
+	 * @return All constructors defined on this class.
 	 */
-	public ConstructorInfo getConstructor(Predicate<ExecutableInfo> test) {
-		for (ConstructorInfo ci : _getDeclaredConstructors())
-			if (test.test(ci))
-				return ci;
-		return null;
+	public List<ConstructorInfo> getDeclaredConstructors() {
+		return new UnmodifiableArray<>(_getDeclaredConstructors());
+	}
+
+	/**
+	 * Consumes the declared constructors defined on this class that match the specified predicate.
+	 *
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
+	 */
+	public final ClassInfo getDeclaredConstructors(Predicate<ConstructorInfo> predicate, Consumer<ConstructorInfo> consumer) {
+		for (ConstructorInfo mi : _getDeclaredConstructors())
+			if (predicate.test(mi))
+				consumer.accept(mi);
+		return this;
 	}
 
 	/**
@@ -629,15 +664,6 @@ public final class ClassInfo {
 			if (predicate.test(ci))
 				return ci;
 		return null;
-	}
-
-	/**
-	 * Returns all the constructors defined on this class.
-	 *
-	 * @return All constructors defined on this class.
-	 */
-	public List<ConstructorInfo> getDeclaredConstructors() {
-		return new UnmodifiableArray<>(_getDeclaredConstructors());
 	}
 
 	private ConstructorInfo[] _getPublicConstructors() {
@@ -708,6 +734,33 @@ public final class ClassInfo {
 	}
 
 	/**
+	 * Returns the public field that matches the specified predicate.
+	 *
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
+	 */
+	public final ClassInfo getPublicFields(Predicate<FieldInfo> predicate, Consumer<FieldInfo> consumer) {
+		for (FieldInfo mi : _getPublicFields())
+			if (predicate.test(mi))
+				consumer.accept(mi);
+		return this;
+	}
+
+	/**
+	 * Returns the public field that passes the specified predicate.
+	 *
+	 * @param predicate The predicate.
+	 * @return The public field, or <jk>null</jk> if not found.
+	 */
+	public FieldInfo getPublicField(Predicate<FieldInfo> predicate) {
+		for (FieldInfo f : _getPublicFields())
+			if (predicate.test(f))
+				return f;
+		return null;
+	}
+
+	/**
 	 * Returns all declared fields on this class.
 	 *
 	 * @return
@@ -721,7 +774,7 @@ public final class ClassInfo {
 	/**
 	 * Consumes all declared fields on this class that match the specified predicate.
 	 *
-	 * @param predicate The predicate to test against.
+	 * @param predicate The predicate.
 	 * @param consumer The consumer.
 	 * @return This object.
 	 */
@@ -733,44 +786,9 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Returns all declared fields on this class and all parent classes.
-	 *
-	 * @return
-	 * 	All declared fields on this class.
-	 * 	<br>Results are ordered child-to-parent, and then alphabetical per class.
-	 */
-	public List<FieldInfo> getAllFields() {
-		return new UnmodifiableArray<>(_getAllFields());
-	}
-
-	/**
-	 * Returns all declared fields on this class and all parent classes.
-	 *
-	 * @return
-	 * 	All declared fields on this class.
-	 * 	<br>Results are ordered parent-to-child, and then alphabetical per class.
-	 */
-	public List<FieldInfo> getAllFieldsParentFirst() {
-		return new UnmodifiableArray<>(_getAllFieldsParentFirst());
-	}
-
-	/**
-	 * Returns the public field that passes the specified predicate.
-	 *
-	 * @param predicate The predicate to test against.
-	 * @return The public field, or <jk>null</jk> if not found.
-	 */
-	public FieldInfo getPublicField(Predicate<FieldInfo> predicate) {
-		for (FieldInfo f : _getPublicFields())
-			if (predicate.test(f))
-				return f;
-		return null;
-	}
-
-	/**
 	 * Returns the declared field that passes the specified predicate.
 	 *
-	 * @param predicate The predicate to test against.
+	 * @param predicate The predicate.
 	 * @return The declared field, or <jk>null</jk> if not found.
 	 */
 	public FieldInfo getDeclaredField(Predicate<FieldInfo> predicate) {
@@ -780,26 +798,45 @@ public final class ClassInfo {
 		return null;
 	}
 
-	private List<FieldInfo> _appendDeclaredFields(List<FieldInfo> l) {
-		for (FieldInfo f : _getDeclaredFields())
-			l.add(f);
-		return l;
+	/**
+	 * Returns all fields on this class and all parent classes.
+	 *
+	 * <p>
+	 * 	Results are ordered parent-to-child, and then alphabetical per class.
+	 *
+	 * @return All declared fields on this class.
+	 */
+	public List<FieldInfo> getAllFields() {
+		return new UnmodifiableArray<>(_getAllFields());
 	}
 
-	private Map<String,FieldInfo> _appendDeclaredPublicFields(Map<String,FieldInfo> m) {
-		for (FieldInfo f : _getDeclaredFields()) {
-			String fn = f.getName();
-			if (f.isPublic() && ! (m.containsKey(fn) || "$jacocoData".equals(fn)))
-					m.put(f.getName(), f);
-		}
-		return m;
+	/**
+	 * Consumes all fields on this class and all parent classes that matches the specified predicate.
+	 *
+	 * <p>
+	 * 	Results are ordered parent-to-child, and then alphabetical per class.
+	 *
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
+	 */
+	public ClassInfo getAllFields(Predicate<FieldInfo> predicate, Consumer<FieldInfo> consumer) {
+		for (FieldInfo fi : _getAllFields())
+			if (predicate.test(fi))
+				consumer.accept(fi);
+		return this;
 	}
 
 	private FieldInfo[] _getPublicFields() {
 		if (publicFields == null) {
 			Map<String,FieldInfo> m = new LinkedHashMap<>();
-			for (ClassInfo c : _getParents())
-				c._appendDeclaredPublicFields(m);
+			for (ClassInfo c : _getParents()) {
+				for (FieldInfo f : c._getDeclaredFields()) {
+					String fn = f.getName();
+					if (f.isPublic() && ! (m.containsKey(fn) || "$jacocoData".equals(fn)))
+						m.put(f.getName(), f);
+				}
+			}
 			List<FieldInfo> l = new ArrayList<>(m.values());
 			l.sort(null);
 			publicFields = l.toArray(new FieldInfo[l.size()]);
@@ -823,27 +860,86 @@ public final class ClassInfo {
 	private FieldInfo[] _getAllFields() {
 		if (allFields == null) {
 			List<FieldInfo> l = new ArrayList<>();
-			for (ClassInfo c : _getAllParents())
-				c._appendDeclaredFields(l);
+			ClassInfo[] parents = _getAllParents();
+			for (int i = parents.length-1; i >=0; i--)
+				for (FieldInfo f : parents[i]._getDeclaredFields())
+					l.add(f);
 			allFields = l.toArray(new FieldInfo[l.size()]);
 		}
 		return allFields;
 	}
 
-	private FieldInfo[] _getAllFieldsParentFirst() {
-		if (allFieldsParentFirst == null) {
-			List<FieldInfo> l = new ArrayList<>();
-			ClassInfo[] parents = _getAllParents();
-			for (int i = parents.length-1; i >=0; i--)
-				parents[i]._appendDeclaredFields(l);
-			allFieldsParentFirst = l.toArray(new FieldInfo[l.size()]);
-		}
-		return allFieldsParentFirst;
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Annotations
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns all annotations of the specified type defined on the specified class or parent classes/interfaces in parent-to-child order.
+	 *
+	 * @param a
+	 * 	The annotation to search for.
+	 * @return
+	 * 	A list of all matching annotations found or an empty list if none found.
+	 */
+	public <T extends Annotation> List<T> getAnnotations(Class<T> a) {
+		List<T> l = new ArrayList<>();
+		getAnnotations(a, x -> l.add(x));
+		return l;
+	}
+
+	/**
+	 * Finds and consumes the specified annotation on the specified class and superclasses/interfaces to the specified consumer.
+	 *
+	 * <p>
+	 * Annotations are appended in the following orders:
+	 * <ol>
+	 * 	<li>On the package of this class.
+	 * 	<li>On interfaces ordered child-to-parent.
+	 * 	<li>On parent classes ordered child-to-parent.
+	 * 	<li>On this class.
+	 * </ol>
+	 *
+	 * @param ap The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
+	 * @param a The annotation to search for.
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
+	 */
+	public <T extends Annotation> ClassInfo getAnnotations(AnnotationProvider ap, Class<T> a, Predicate<T> predicate, Consumer<T> consumer) {
+		if (predicate == null) predicate = x->true;
+		if (ap == null) ap = AnnotationProvider.DEFAULT;
+		T t2 = getPackageAnnotation(a);
+		if (t2 != null && predicate.test(t2))
+			consumer.accept(t2);
+		ClassInfo[] interfaces = _getInterfaces();
+		for (int i = interfaces.length-1; i >= 0; i--)
+			ap.getDeclaredAnnotations(a, interfaces[i].inner(), predicate, consumer);
+		ClassInfo[] parents = _getParents();
+		for (int i = parents.length-1; i >= 0; i--)
+			ap.getDeclaredAnnotations(a, parents[i].inner(), predicate, consumer);
+		return this;
+	}
+
+	/**
+	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
+	 * consumer.
+	 *
+	 * <p>
+	 * Annotations are appended in the following orders:
+	 * <ol>
+	 * 	<li>On the package of this class.
+	 * 	<li>On interfaces ordered child-to-parent.
+	 * 	<li>On parent classes ordered child-to-parent.
+	 * 	<li>On this class.
+	 * </ol>
+	 *
+	 * @param consumer The consumer of the annotations.
+	 * @param a The annotation to search for.
+	 * @return The same list.
+	 */
+	public <T extends Annotation> ClassInfo getAnnotations(Class<T> a, Consumer<T> consumer) {
+		return getAnnotations(AnnotationProvider.DEFAULT, a, x-> true, consumer);
+	}
 
 	/**
 	 * Finds the annotation of the specified type defined on this class or parent class/interface.
@@ -857,7 +953,7 @@ public final class ClassInfo {
 	 * @return The annotation if found, or <jk>null</jk> if not.
 	 */
 	public <T extends Annotation> T getLastAnnotation(Class<T> a) {
-		return getLastAnnotation(a, MetaProvider.DEFAULT);
+		return getLastAnnotation(AnnotationProvider.DEFAULT, a);
 	}
 
 	/**
@@ -866,13 +962,13 @@ public final class ClassInfo {
 	 * <p>
 	 * If the annotation cannot be found on the immediate class, searches methods with the same signature on the parent classes or interfaces. <br>
 	 * The search is performed in child-to-parent order.
-	 *
+	 * @param ap The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
 	 * @param a The annotation to search for.
-	 * @param mp The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
+	 *
 	 * @return The annotation if found, or <jk>null</jk> if not.
 	 */
-	public <T extends Annotation> T getLastAnnotation(Class<T> a, MetaProvider mp) {
-		return findAnnotation(a, mp);
+	public <T extends Annotation> T getLastAnnotation(AnnotationProvider ap, Class<T> a) {
+		return findAnnotation(ap, a);
 	}
 
 	/**
@@ -882,7 +978,18 @@ public final class ClassInfo {
 	 * @return The <jk>true</jk> if annotation if found.
 	 */
 	public boolean hasAnnotation(Class<? extends Annotation> a) {
-		return getLastAnnotation(a) != null;
+		return hasAnnotation(AnnotationProvider.DEFAULT, a);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class has the specified annotation.
+	 *
+	 * @param ap The annotation provider.
+	 * @param a The annotation to search for.
+	 * @return The <jk>true</jk> if annotation if found.
+	 */
+	public boolean hasAnnotation(AnnotationProvider ap, Class<? extends Annotation> a) {
+		return ap.getAnnotation(a, c, x -> true) != null;
 	}
 
 	/**
@@ -912,50 +1019,14 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Same as {@link #getDeclaredAnnotation(Class)} but returns the annotation wrapped in a {@link AnnotationInfo}.
-	 *
-	 * @param a The annotation to search for.
-	 * @return The annotation if found, or <jk>null</jk> if not.
-	 */
-	public <T extends Annotation> AnnotationInfo<T> getDeclaredAnnotationInfo(Class<T> a) {
-		T ca = getDeclaredAnnotation(a);
-		return ca == null ? null : AnnotationInfo.of(this, ca);
-	}
-
-	/**
-	 * Same as {@link #getPackageAnnotation(Class)} but returns the annotation wrapped in a {@link AnnotationInfo}.
-	 *
-	 * @param a The annotation to search for.
-	 * @return The annotation if found, or <jk>null</jk> if not.
-	 */
-	public <T extends Annotation> AnnotationInfo<T> getPackageAnnotationInfo(Class<T> a) {
-		T ca = getPackageAnnotation(a);
-		return ca == null ? null : AnnotationInfo.of(getPackage(), ca);
-	}
-
-	/**
-	 * Returns all annotations of the specified type defined on the specified class or parent classes/interfaces in parent-to-child order.
-	 *
-	 * @param a
-	 * 	The annotation to search for.
-	 * @return
-	 * 	A list of all matching annotations found or an empty list if none found.
-	 */
-	public <T extends Annotation> List<T> getAnnotations(Class<T> a) {
-		List<T> l = new ArrayList<>();
-		getAnnotations(a, x -> l.add(x));
-		return l;
-	}
-
-	/**
 	 * Returns the first matching annotation of the specified type defined on the specified class or parent classes/interfaces in parent-to-child order.
 	 *
 	 * @param a The annotation to search for.
-	 * @param predicate The predicate to test against.
+	 * @param predicate The predicate.
 	 * @return This object.
 	 */
 	public <T extends Annotation> T getAnnotation(Class<T> a, Predicate<T> predicate) {
-		return getAnnotation(predicate, a, MetaProvider.DEFAULT);
+		return getAnnotation(predicate, a, AnnotationProvider.DEFAULT);
 	}
 
 	/**
@@ -963,16 +1034,16 @@ public final class ClassInfo {
 	 *
 	 * <p>
 	 * Returns the list in reverse (parent-to-child) order.
-	 *
+	 * @param ap The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
 	 * @param a
 	 * 	The annotation to search for.
-	 * @param mp The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
+	 *
 	 * @return
 	 * 	A list of all matching annotations found or an empty list if none found.
 	 */
-	public <T extends Annotation> List<T> getAnnotations(Class<T> a, MetaProvider mp) {
+	public <T extends Annotation> List<T> getAnnotations(AnnotationProvider ap, Class<T> a) {
 		List<T> l = new ArrayList<>();
-		getAnnotations(a, mp, x -> l.add(x));
+		getAnnotations(ap, a, x-> true, x -> l.add(x));
 		return l;
 	}
 
@@ -1029,57 +1100,44 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
-	 * consumer.
+	 * If the annotation is an array of other annotations, returns the inner annotations.
 	 *
-	 * <p>
-	 * Annotations are appended in the following orders:
-	 * <ol>
-	 * 	<li>On the package of this class.
-	 * 	<li>On interfaces ordered child-to-parent.
-	 * 	<li>On parent classes ordered child-to-parent.
-	 * 	<li>On this class.
-	 * </ol>
-	 *
-	 * @param consumer The consumer of the annotations.
-	 * @param a The annotation to search for.
-	 * @return The same list.
+	 * @param a The annotation to split if repeated.
+	 * @return The nested annotations, or a singleton array of the same annotation if it's not repeated.
 	 */
-	public <T extends Annotation> ClassInfo getAnnotations(Class<T> a, Consumer<T> consumer) {
-		return getAnnotations(a, MetaProvider.DEFAULT, consumer);
+	private static Annotation[] splitRepeated(Annotation a) {
+		try {
+			ClassInfo ci = ClassInfo.ofc(a.annotationType());
+			MethodInfo mi = ci.getRepeatedAnnotationMethod();
+			if (mi != null)
+				return mi.invoke(a);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new Annotation[]{a};
 	}
 
-	/**
-	 * Finds and consumes the specified annotation on the specified class and superclasses/interfaces to the specified consumer.
-	 *
-	 * <p>
-	 * Annotations are appended in the following orders:
-	 * <ol>
-	 * 	<li>On the package of this class.
-	 * 	<li>On interfaces ordered child-to-parent.
-	 * 	<li>On parent classes ordered child-to-parent.
-	 * 	<li>On this class.
-	 * </ol>
-	 *
-	 * @param consumer The consumer of the annotations.
-	 * @param a The annotation to search for.
-	 * @param mp The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
-	 * @return This object.
-	 */
-	public <T extends Annotation> ClassInfo getAnnotations(Class<T> a, MetaProvider mp, Consumer<T> consumer) {
-		T t2 = getPackageAnnotation(a);
-		if (t2 != null)
-			consumer.accept(t2);
-		ClassInfo[] interfaces = _getInterfaces();
-		for (int i = interfaces.length-1; i >= 0; i--)
-			mp.getDeclaredAnnotations(a, interfaces[i].inner(), consumer);
-		ClassInfo[] parents = _getParents();
-		for (int i = parents.length-1; i >= 0; i--)
-			mp.getDeclaredAnnotations(a, parents[i].inner(), consumer);
-		return this;
+	<T extends Annotation> T findAnnotation(AnnotationProvider ap, Class<T> a) {
+		if (a == null)
+			return null;
+		T t = ap.getDeclaredAnnotation(a, c, x -> true);
+		if (t != null)
+			return t;
+		ClassInfo sci = getParent();
+		if (sci != null) {
+			t = sci.getLastAnnotation(ap, a);
+			if (t != null)
+				return t;
+		}
+		for (ClassInfo c2 : _getInterfaces()) {
+			t = c2.getLastAnnotation(ap, a);
+			if (t != null)
+				return t;
+		}
+		return null;
 	}
 
-	private <T extends Annotation> T getAnnotation(Predicate<T> p, Class<T> a, MetaProvider mp) {
+	private <T extends Annotation> T getAnnotation(Predicate<T> p, Class<T> a, AnnotationProvider mp) {
 		T t2 = getPackageAnnotation(a);
 		if (t2 != null && p.test(t2))
 			return t2;
@@ -1098,32 +1156,7 @@ public final class ClassInfo {
 		return null;
 	}
 
-	/**
-	 * Searches up the parent hierarchy of this class for the first annotation in the list it finds.
-	 *
-	 * @param mp Metadata provider.
-	 * @param annotations The annotations to search for.
-	 * @return The first annotation found, or <jk>null</jk> if not found.
-	 */
-	@SafeVarargs
-	public final Annotation getAnyLastAnnotation(MetaProvider mp, Class<? extends Annotation>...annotations) {
-		for (Class<? extends Annotation> ca : annotations) {
-			Annotation x = getLastAnnotation(ca, mp);
-			if (x != null)
-				return x;
-		}
-		for (ClassInfo ci : _getInterfaces()) {
-			for (Class<? extends Annotation> ca : annotations) {
-				Annotation x = ci.getLastAnnotation(ca, mp);
-				if (x != null)
-					return x;
-			}
-		}
-		ClassInfo ci = getParent();
-		return ci == null ? null : ci.getAnyLastAnnotation(mp, annotations);
-	}
-
-	void getAnnotationInfos(Consumer<AnnotationInfo<?>> consumer) {
+	private void getAnnotationInfos(Consumer<AnnotationInfo<?>> consumer) {
 		Package p = c.getPackage();
 		if (p != null)
 			for (Annotation a : p.getDeclaredAnnotations())
@@ -1139,48 +1172,6 @@ public final class ClassInfo {
 			for (Annotation a : parents[i].c.getDeclaredAnnotations())
 				for (Annotation a2 : splitRepeated(a))
 					consumer.accept(AnnotationInfo.of(parents[i], a2));
-	}
-
-	/**
-	 * If the annotation is an array of other annotations, returns the inner annotations.
-	 *
-	 * @param a The annotation to split if repeated.
-	 * @return The nested annotations, or a singleton array of the same annotation if it's not repeated.
-	 */
-	private static Annotation[] splitRepeated(Annotation a) {
-		try {
-			ClassInfo ci = ClassInfo.ofc(a.annotationType());
-			MethodInfo mi = ci.getRepeatedAnnotationMethod();
-			if (mi != null)
-				return mi.invoke(a);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return new Annotation[]{a};
-	}
-
-	<T extends Annotation> T findAnnotation(Class<T> a, MetaProvider mp) {
-		if (a == null)
-			return null;
-
-		T t = mp.getDeclaredAnnotation(a, c, x -> true);
-		if (t != null)
-			return t;
-
-		ClassInfo sci = getParent();
-		if (sci != null) {
-			t = sci.getLastAnnotation(a, mp);
-			if (t != null)
-				return t;
-		}
-
-		for (ClassInfo c2 : _getInterfaces()) {
-			t = c2.getLastAnnotation(a, mp);
-			if (t != null)
-				return t;
-		}
-
-		return null;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

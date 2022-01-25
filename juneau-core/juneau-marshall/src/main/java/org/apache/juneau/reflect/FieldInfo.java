@@ -102,19 +102,19 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
 	public <T extends Annotation> T getAnnotation(Class<T> a) {
-		return getAnnotation(a, MetaProvider.DEFAULT);
+		return getAnnotation(AnnotationProvider.DEFAULT, a);
 	}
 
 	/**
 	 * Returns the specified annotation on this field.
 	 *
+	 * @param ap The annotation provider.
 	 * @param a The annotation to look for.
-	 * @param mp The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
-	public <T extends Annotation> T getAnnotation(Class<T> a, MetaProvider mp) {
+	public <T extends Annotation> T getAnnotation(AnnotationProvider ap, Class<T> a) {
 		Value<T> t = Value.empty();
-		mp.getAnnotations(a, f, x -> t.set(x));
+		ap.getAnnotations(a, f, x -> true, x -> t.set(x));
 		return t.orElse(null);
 	}
 
@@ -141,23 +141,23 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	/**
 	 * Returns <jk>true</jk> if the specified annotation is present.
 	 *
+	 * @param ap The annotation provider.
 	 * @param a The annotation to check for.
-	 * @param mp The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
 	 * @return <jk>true</jk> if the specified annotation is present.
 	 */
-	public boolean hasAnnotation(Class<? extends Annotation> a, MetaProvider mp) {
-		return mp.getAnnotation(a, f, x -> true) != null;
+	public boolean hasAnnotation(AnnotationProvider ap, Class<? extends Annotation> a) {
+		return ap.getAnnotation(a, f, x -> true) != null;
 	}
 
 	/**
 	 * Returns <jk>true</jk> if the specified annotation is not present.
 	 *
+	 * @param ap The annotation provider.
 	 * @param a The annotation to check for.
-	 * @param mp The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
 	 * @return <jk>true</jk> if the specified annotation is not present.
 	 */
-	public boolean hasNoAnnotation(Class<? extends Annotation> a, MetaProvider mp) {
-		return ! hasAnnotation(a, mp);
+	public boolean hasNoAnnotation(AnnotationProvider ap, Class<? extends Annotation> a) {
+		return ! hasAnnotation(ap, a);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

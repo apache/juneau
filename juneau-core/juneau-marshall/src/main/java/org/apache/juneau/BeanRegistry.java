@@ -20,7 +20,6 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -95,9 +94,9 @@ public class BeanRegistry {
 					}
 				} else {
 					Value<String> typeName = Value.empty();
-					ci.getAnnotations(Bean.class, beanContext, x -> typeName.setIf(x.typeName(), StringUtils::isNotEmpty));
+					ci.getAnnotations(beanContext, Bean.class, x -> isNotEmpty(x.typeName()), x -> typeName.set(x.typeName()));
 					addToMap(
-						typeName.orElseThrow(() -> new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean(typeName) annotation defined.", className(c))), 
+						typeName.orElseThrow(() -> new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Bean(typeName) annotation defined.", className(c))),
 						beanContext.getClassMeta(c)
 					);
 				}

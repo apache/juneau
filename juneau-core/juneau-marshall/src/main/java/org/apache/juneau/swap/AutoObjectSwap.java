@@ -122,7 +122,7 @@ public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 
 	private static boolean shouldIgnore(BeanContext bc, ClassInfo ci) {
 		return
-			bc.hasAnnotation(BeanIgnore.class, ci)
+			ci.hasAnnotation(bc, BeanIgnore.class)
 			|| ci.isNonStaticMemberClass();
 	}
 
@@ -133,7 +133,7 @@ public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 			&& mi.isVisible(bc.getBeanMethodVisibility())
 			&& mi.hasName(SWAP_METHOD_NAMES)
 			&& mi.hasFuzzyParamTypes(BeanSession.class)
-			&& ! bc.hasAnnotation(BeanIgnore.class, mi);
+			&& ! mi.hasAnnotation(bc, BeanIgnore.class);
 	}
 
 	private static boolean isUnswapMethod(BeanContext bc, MethodInfo mi, ClassInfo ci, ClassInfo rt) {
@@ -144,7 +144,7 @@ public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 			&& mi.hasName(UNSWAP_METHOD_NAMES)
 			&& mi.hasFuzzyParamTypes(BeanSession.class, rt.inner())
 			&& mi.hasReturnTypeParent(ci)
-			&& ! bc.hasAnnotation(BeanIgnore.class, mi);
+			&& ! mi.hasAnnotation(bc, BeanIgnore.class);
 	}
 
 	private static boolean isUnswapConstructor(BeanContext bc, ConstructorInfo cs, ClassInfo rt) {
@@ -152,7 +152,7 @@ public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 			cs.isNotDeprecated()
 			&& cs.isVisible(bc.getBeanConstructorVisibility())
 			&& cs.hasMatchingParamTypes(rt)
-			&& ! bc.hasAnnotation(BeanIgnore.class, cs);
+			&& ! cs.hasAnnotation(bc, BeanIgnore.class);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

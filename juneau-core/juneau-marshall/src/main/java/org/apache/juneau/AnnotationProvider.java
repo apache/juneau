@@ -17,24 +17,25 @@ import java.lang.reflect.*;
 import java.util.function.*;
 
 /**
- * Parent interface for all class/method language-specific metadata providers.
+ * Interface that provides the ability to look up annotations on classes/methods/constructors/fields.
  *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public interface MetaProvider {
+public interface AnnotationProvider {
 
 	/**
 	 * Default metadata provider.
 	 */
-	public static MetaProvider DEFAULT = new MetaProvider() {
+	public static AnnotationProvider DEFAULT = new AnnotationProvider() {
 
 		@Override /* MetaProvider */
-		public <A extends Annotation> void getAnnotations(Class<A> a, Class<?> c, Consumer<A> consumer) {
+		public <A extends Annotation> void getAnnotations(Class<A> a, Class<?> c, Predicate<A> predicate, Consumer<A> consumer) {
 			if (a != null && c != null)
 				for (A aa : c.getAnnotationsByType(a))
-					consumer.accept(aa);
+					if (predicate.test(aa))
+						consumer.accept(aa);
 		}
 
 		@Override /* MetaProvider */
@@ -47,10 +48,11 @@ public interface MetaProvider {
 		}
 
 		@Override /* MetaProvider */
-		public <A extends Annotation> void getDeclaredAnnotations(Class<A> a, Class<?> c, Consumer<A> consumer) {
+		public <A extends Annotation> void getDeclaredAnnotations(Class<A> a, Class<?> c, Predicate<A> predicate, Consumer<A> consumer) {
 			if (a != null && c != null)
 				for (A aa : c.getDeclaredAnnotationsByType(a))
-					consumer.accept(aa);
+					if (predicate.test(aa))
+						consumer.accept(aa);
 		}
 
 		@Override /* MetaProvider */
@@ -63,10 +65,11 @@ public interface MetaProvider {
 		}
 
 		@Override /* MetaProvider */
-		public <A extends Annotation> void getAnnotations(Class<A> a, Method m, Consumer<A> consumer) {
+		public <A extends Annotation> void getAnnotations(Class<A> a, Method m, Predicate<A> predicate, Consumer<A> consumer) {
 			if (a != null && m != null)
 				for (A aa : m.getAnnotationsByType(a))
-					consumer.accept(aa);
+					if (predicate.test(aa))
+						consumer.accept(aa);
 		}
 
 		@Override /* MetaProvider */
@@ -79,10 +82,11 @@ public interface MetaProvider {
 		}
 
 		@Override /* MetaProvider */
-		public <A extends Annotation> void getAnnotations(Class<A> a, Field f, Consumer<A> consumer) {
+		public <A extends Annotation> void getAnnotations(Class<A> a, Field f, Predicate<A> predicate, Consumer<A> consumer) {
 			if (a != null && f != null)
 				for (A aa : f.getAnnotationsByType(a))
-					consumer.accept(aa);
+					if (predicate.test(aa))
+						consumer.accept(aa);
 		}
 
 		@Override /* MetaProvider */
@@ -95,10 +99,11 @@ public interface MetaProvider {
 		}
 
 		@Override /* MetaProvider */
-		public <A extends Annotation> void getAnnotations(Class<A> a, Constructor<?> c, Consumer<A> consumer) {
+		public <A extends Annotation> void getAnnotations(Class<A> a, Constructor<?> c, Predicate<A> predicate, Consumer<A> consumer) {
 			if (a != null && c != null)
 				for (A aa : c.getAnnotationsByType(a))
-					consumer.accept(aa);
+					if (predicate.test(aa))
+						consumer.accept(aa);
 		}
 
 		@Override /* MetaProvider */
@@ -116,16 +121,17 @@ public interface MetaProvider {
 	 *
 	 * @param a The annotation type to find.
 	 * @param c The class to search on.
-	 * @param consumer The consumer of the annotations.
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
 	 */
-	<A extends Annotation> void getAnnotations(Class<A> a, Class<?> c, Consumer<A> consumer);
+	<A extends Annotation> void getAnnotations(Class<A> a, Class<?> c, Predicate<A> predicate, Consumer<A> consumer);
 
 	/**
 	 * Finds the first annotation on the specified class matching the specified predicate.
 	 *
 	 * @param a The annotation type to find.
 	 * @param c The class to search on.
-	 * @param predicate The predicate to test against.
+	 * @param predicate The predicate.
 	 * @return The annotations in an unmodifiable list, or an empty list if not found.
 	 */
 	<A extends Annotation> A getAnnotation(Class<A> a, Class<?> c, Predicate<A> predicate);
@@ -135,16 +141,17 @@ public interface MetaProvider {
 	 *
 	 * @param a The annotation type to find.
 	 * @param c The class to search on.
-	 * @param consumer The consumer of the annotations.
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
 	 */
-	<A extends Annotation> void getDeclaredAnnotations(Class<A> a, Class<?> c, Consumer<A> consumer);
+	<A extends Annotation> void getDeclaredAnnotations(Class<A> a, Class<?> c, Predicate<A> predicate, Consumer<A> consumer);
 
 	/**
 	 * Finds the specified declared annotations on the specified class that match the specified predicate.
 	 *
 	 * @param a The annotation type to find.
 	 * @param c The class to search on.
-	 * @param predicate The predicate to match the annotation against.
+	 * @param predicate The predicate.
 	 * @return The matched annotation, or <jk>null</jk> if no annotations matched.
 	 */
 	<A extends Annotation> A getDeclaredAnnotation(Class<A> a, Class<?> c, Predicate<A> predicate);
@@ -155,9 +162,10 @@ public interface MetaProvider {
 	 * @param <A> The annotation type to find.
 	 * @param a The annotation type to find.
 	 * @param m The method to search on.
-	 * @param consumer The consumer of the annotations.
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
 	 */
-	<A extends Annotation> void getAnnotations(Class<A> a, Method m, Consumer<A> consumer);
+	<A extends Annotation> void getAnnotations(Class<A> a, Method m, Predicate<A> predicate, Consumer<A> consumer);
 
 	/**
 	 * Finds the specified annotations on the specified method.
@@ -165,7 +173,7 @@ public interface MetaProvider {
 	 * @param <A> The annotation type to find.
 	 * @param a The annotation type to find.
 	 * @param m The method to search on.
-	 * @param predicate The predicate to match the annotation against.
+	 * @param predicate The predicate.
 	 * @return The matched annotation, or <jk>null</jk> if no annotations matched.
 	 */
 	<A extends Annotation> A getAnnotation(Class<A> a, Method m, Predicate<A> predicate);
@@ -176,9 +184,10 @@ public interface MetaProvider {
 	 * @param <A> The annotation type to find.
 	 * @param a The annotation type to find.
 	 * @param f The field to search on.
-	 * @param consumer The consumer of the annotations.
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
 	 */
-	<A extends Annotation> void getAnnotations(Class<A> a, Field f, Consumer<A> consumer);
+	<A extends Annotation> void getAnnotations(Class<A> a, Field f, Predicate<A> predicate, Consumer<A> consumer);
 
 	/**
 	 * Finds the specified annotations on the specified field.
@@ -186,7 +195,7 @@ public interface MetaProvider {
 	 * @param <A> The annotation type to find.
 	 * @param a The annotation type to find.
 	 * @param f The field to search on.
-	 * @param predicate The predicate to match the annotation against.
+	 * @param predicate The predicate.
 	 * @return The matched annotation, or <jk>null</jk> if no annotations matched.
 	 */
 	<A extends Annotation> A getAnnotation(Class<A> a, Field f, Predicate<A> predicate);
@@ -197,9 +206,10 @@ public interface MetaProvider {
 	 * @param <A> The annotation type to find.
 	 * @param a The annotation type to find.
 	 * @param c The constructor to search on.
-	 * @param consumer The consumer of the annotations.
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
 	 */
-	<A extends Annotation> void getAnnotations(Class<A> a, Constructor<?> c, Consumer<A> consumer);
+	<A extends Annotation> void getAnnotations(Class<A> a, Constructor<?> c, Predicate<A> predicate, Consumer<A> consumer);
 
 	/**
 	 * Finds the specified annotations on the specified constructor.

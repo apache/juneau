@@ -69,7 +69,7 @@ public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 		List<SurrogateSwap<?,?>> l = new LinkedList<>();
 		ClassInfo ci = ClassInfo.of(c);
 		for (ConstructorInfo cc : ci.getPublicConstructors()) {
-			if (! bc.hasAnnotation(BeanIgnore.class, cc) && cc.hasNumParams(1) && cc.isPublic()) {
+			if (! cc.hasAnnotation(bc, BeanIgnore.class) && cc.hasNumParams(1) && cc.isPublic()) {
 				Class<?> pt = cc.getRawParamType(0);
 				if (! pt.equals(c.getDeclaringClass())) {
 					// Find the unswap method if there is one.

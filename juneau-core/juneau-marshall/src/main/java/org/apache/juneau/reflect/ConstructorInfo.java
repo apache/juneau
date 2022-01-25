@@ -89,28 +89,23 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	/**
 	 * Finds the annotation of the specified type defined on this constructor.
 	 *
-	 * @param a
-	 * 	The annotation to search for.
-	 * @return
-	 * 	The annotation if found, or <jk>null</jk> if not.
+	 * @param a The annotation to search for.
+	 * @return The annotation if found, or <jk>null</jk> if not.
 	 */
 	public final <T extends Annotation> T getAnnotation(Class<T> a) {
-		return getAnnotation(a, MetaProvider.DEFAULT);
+		return getAnnotation(AnnotationProvider.DEFAULT, a);
 	}
 
 	/**
 	 * Finds the annotation of the specified type defined on this constructor.
 	 *
-	 * @param a
-	 * 	The annotation to search for.
-	 * @param mp
-	 * 	The meta provider for looking up annotations on classes/methods/fields.
-	 * @return
-	 * 	The first annotation found, or <jk>null</jk> if it doesn't exist.
+	 * @param ap The annotation provider.
+	 * @param a The annotation to search for.
+	 * @return The first annotation found, or <jk>null</jk> if it doesn't exist.
 	 */
-	public final <T extends Annotation> T getAnnotation(Class<T> a, MetaProvider mp) {
+	public final <T extends Annotation> T getAnnotation(AnnotationProvider ap, Class<T> a) {
 		Value<T> t = Value.empty();
-		mp.getAnnotations(a, c, x -> t.set(x));
+		ap.getAnnotations(a, c, x-> true, x -> t.set(x));
 		return t.orElse(null);
 	}
 
@@ -121,9 +116,19 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	 * @return <jk>true</jk> if the specified annotation is present on this constructor.
 	 */
 	public final boolean hasAnnotation(Class<? extends Annotation> a) {
-		return getAnnotation(a) != null;
+		return hasAnnotation(AnnotationProvider.DEFAULT, a);
 	}
 
+	/**
+	 * Returns <jk>true</jk> if the specified annotation is present on this constructor.
+	 *
+	 * @param ap The annotation provider.
+	 * @param a The annotation to check for.
+	 * @return <jk>true</jk> if the specified annotation is present on this constructor.
+	 */
+	public final boolean hasAnnotation(AnnotationProvider ap, Class<? extends Annotation> a) {
+		return ap.getAnnotation(a, c, x -> true) != null;
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods

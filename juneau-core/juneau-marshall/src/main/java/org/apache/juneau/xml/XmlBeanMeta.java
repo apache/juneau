@@ -86,7 +86,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 			Class<?> c = beanMeta.getClassMeta().getInnerClass();
 			Value<XmlFormat> defaultFormat = Value.empty();
 
-			mp.getAnnotations(Xml.class, c, x -> {
+			mp.getAnnotations(Xml.class, c, x-> true, x -> {
 				XmlFormat xf = x.format();
 				if (xf == ATTRS)
 					defaultFormat.set(XmlFormat.ATTR);

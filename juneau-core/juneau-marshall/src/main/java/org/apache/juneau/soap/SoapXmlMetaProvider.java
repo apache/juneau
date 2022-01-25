@@ -22,7 +22,7 @@ import org.apache.juneau.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public interface SoapXmlMetaProvider extends MetaProvider {
+public interface SoapXmlMetaProvider extends AnnotationProvider {
 
 	/**
 	 * Returns the language-specific metadata on the specified class.

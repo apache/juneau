@@ -22,7 +22,7 @@ import org.apache.juneau.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public interface UonMetaProvider extends MetaProvider {
+public interface UonMetaProvider extends AnnotationProvider {
 
 	/**
 	 * Returns the language-specific metadata on the specified class.

@@ -366,17 +366,16 @@ public class RestContext extends Context {
 		private void runInitHooks(BeanStore beanStore, Supplier<?> resource) throws ServletException {
 
 			Object r = resource.get();
-			ClassInfo rci = ClassInfo.ofProxy(r);
 
 			Map<String,MethodInfo> map = new LinkedHashMap<>();
-			for (MethodInfo m : rci.getAllMethodsParentFirst()) {
-				if (m.hasAnnotation(RestHook.class) && m.getLastAnnotation(RestHook.class).value() == HookEvent.INIT) {
-					m.setAccessible();
-					String sig = m.getSignature();
+			ClassInfo.ofProxy(r).getAllMethodsParentFirst(
+				y -> y.hasAnnotation(RestHook.class) && y.getLastAnnotation(RestHook.class).value() == HookEvent.INIT,
+				y -> {
+					String sig = y.getSignature();
 					if (! map.containsKey(sig))
-						map.put(sig, m);
+						map.put(sig, y.accessible());
 				}
-			}
+			);
 
 			for (MethodInfo m : map.values()) {
 				if (! beanStore.hasAllParams(m))
@@ -5756,10 +5755,14 @@ public class RestContext extends Context {
 			Map<String,Method> x = AMap.create();
 			Object r = resource.get();
 
-			for (MethodInfo m : ClassInfo.ofProxy(r).getAllMethodsParentFirst())
-				for (RestHook h : m.getAnnotations(RestHook.class))
-					if (h.value() == event)
-						x.put(m.getSignature(), m.accessible().inner());
+			ClassInfo.ofProxy(r).getAllMethodsParentFirst(
+				y -> y.hasAnnotation(RestHook.class),
+				y -> {
+					for (RestHook h : y.getAnnotations(RestHook.class))
+						if (h.value() == event)
+							x.put(y.getSignature(), y.accessible().inner());
+				}
+			);
 
 			MethodList x2 = MethodList.of(x.values());
 			return x2;
