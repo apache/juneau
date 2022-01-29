@@ -155,7 +155,7 @@ public class BeanStore {
 			if (type == null || type == BeanStore.class)
 				return new BeanStore(this);
 
-			ClassInfo c = ClassInfo.ofc(type);
+			ClassInfo c = ClassInfo.of(type);
 
 			MethodInfo m = c.getDeclaredMethod(
 				x -> x.isPublic()

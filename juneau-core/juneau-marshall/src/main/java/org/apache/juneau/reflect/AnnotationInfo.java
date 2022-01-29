@@ -58,7 +58,7 @@ public class AnnotationInfo<T extends Annotation> {
 	}
 
 	private static int getRank(Object a) {
-		ClassInfo ci = ClassInfo.ofc(a);
+		ClassInfo ci = ClassInfo.of(a);
 		MethodInfo mi = ci.getPublicMethod(x -> x.hasName("rank") && x.hasNoParams() && x.hasReturnType(int.class));
 		if (mi != null) {
 			try {

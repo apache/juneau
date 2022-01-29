@@ -157,7 +157,7 @@ public class Mutaters {
 
 		if (ic == String.class) {
 			Class<?> oc2 = oci.hasPrimitiveWrapper() ? oci.getPrimitiveWrapper() : oc;
-			ClassInfo oc2i = ClassInfo.ofc(oc2);
+			ClassInfo oc2i = ClassInfo.of(oc2);
 
 			final MethodInfo createMethod = oc2i.getPublicMethod(
 				x -> x.isStatic()

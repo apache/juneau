@@ -95,7 +95,7 @@ public abstract class Context implements AnnotationProvider {
 		try {
 			MethodInfo mi = BUILDER_CREATE_METHODS.get(type);
 			if (mi == null) {
-				ClassInfo c = ClassInfo.ofc(type);
+				ClassInfo c = ClassInfo.of(type);
 				for (ConstructorInfo ci : c.getPublicConstructors()) {
 					if (ci.matches(x -> x.hasNumParams(1) && ! x.getParam(0).getParameterType().is(type))) {
 						mi = c.getPublicMethod(
@@ -194,7 +194,7 @@ public abstract class Context implements AnnotationProvider {
 		private ConstructorInfo getContextConstructor() {
 			ConstructorInfo cci = CONTEXT_CONSTRUCTORS.get(type);
 			if (cci == null) {
-				cci = ClassInfo.ofc(type).getPublicConstructor(
+				cci = ClassInfo.of(type).getPublicConstructor(
 					x -> x.hasNumParams(1)
 					&& x.getParam(0).canAccept(this)
 				);

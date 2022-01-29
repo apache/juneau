@@ -87,7 +87,7 @@ public final class HttpRuntimeException extends BasicRuntimeException {
 		if (t instanceof ParseException)
 			throw new BadRequest(t);
 
-		ClassInfo ci = ClassInfo.ofc(t);
+		ClassInfo ci = ClassInfo.of(t);
 
 		// If it's any RuntimeException annotated with @Response, it can be rethrown.
 		if (ci.isRuntimeException()) {
@@ -103,7 +103,7 @@ public final class HttpRuntimeException extends BasicRuntimeException {
 
 		if (ec == null)
 			ec = InternalServerError.class;
-		ClassInfo eci = ClassInfo.ofc(ec);
+		ClassInfo eci = ClassInfo.of(ec);
 
 		try {
 			ConstructorInfo cci = eci.getPublicConstructor(x -> x.hasParamTypes(Throwable.class, String.class, Object[].class));

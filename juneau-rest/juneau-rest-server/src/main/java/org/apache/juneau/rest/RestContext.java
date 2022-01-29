@@ -172,7 +172,7 @@ public class RestContext extends Context {
 	public static Builder create(Class<?> resourceClass, RestContext parentContext, ServletConfig servletConfig) throws ServletException {
 
 		Value<Class<? extends Builder>> v = Value.of(Builder.class);
-		ClassInfo.ofc(resourceClass).getAnnotations(Rest.class, x -> x.builder() != Builder.Null.class, x -> v.set(x.builder()));
+		ClassInfo.of(resourceClass).getAnnotations(Rest.class, x -> x.builder() != Builder.Null.class, x -> v.set(x.builder()));
 
 		if (v.get() == Builder.class)
 			return new Builder(resourceClass, parentContext, servletConfig);
@@ -4185,7 +4185,7 @@ public class RestContext extends Context {
 
 				RestContext cc = cb.init(so).build();
 
-				MethodInfo mi = ClassInfo.ofc(o).getPublicMethod(
+				MethodInfo mi = ClassInfo.of(o).getPublicMethod(
 					x -> x.hasName("setContext")
 					&& x.hasParamTypes(RestContext.class)
 				);
@@ -6856,21 +6856,21 @@ public class RestContext extends Context {
 	 */
 	public Throwable convertThrowable(Throwable t, Class<?> defaultThrowable) {
 
-		ClassInfo ci = ClassInfo.ofc(t);
+		ClassInfo ci = ClassInfo.of(t);
 
 		if (ci.is(InvocationTargetException.class)) {
 			t = ((InvocationTargetException)t).getTargetException();
-			ci = ClassInfo.ofc(t);
+			ci = ClassInfo.of(t);
 		}
 
 		if (ci.is(HttpRuntimeException.class)) {
 			t = ((HttpRuntimeException)t).getInner();
-			ci = ClassInfo.ofc(t);
+			ci = ClassInfo.of(t);
 		}
 
 		if (ci.is(ExecutableException.class)) {
 			t = ((ExecutableException)t).getTargetException();
-			ci = ClassInfo.ofc(t);
+			ci = ClassInfo.of(t);
 		}
 
 		if (ci.hasAnnotation(Response.class))
@@ -6890,7 +6890,7 @@ public class RestContext extends Context {
 		if (defaultThrowable == null)
 			return new InternalServerError(t);
 
-		ClassInfo eci = ClassInfo.ofc(defaultThrowable);
+		ClassInfo eci = ClassInfo.of(defaultThrowable);
 
 		try {
 			ConstructorInfo cci = eci.getPublicConstructor(x -> x.hasParamTypes(Throwable.class, String.class, Object[].class));
@@ -6952,7 +6952,7 @@ public class RestContext extends Context {
 
 		int code = 500;
 
-		ClassInfo ci = ClassInfo.ofc(e);
+		ClassInfo ci = ClassInfo.of(e);
 		StatusCode r = ci.getLastAnnotation(StatusCode.class);
 		if (r != null)
 			if (r.value().length > 0)
@@ -7069,7 +7069,7 @@ public class RestContext extends Context {
 		if (initialized.get())
 			return this;
 		Object resource = getResource();
-		MethodInfo mi = ClassInfo.ofc(getResource()).getPublicMethod(
+		MethodInfo mi = ClassInfo.of(getResource()).getPublicMethod(
 			x -> x.hasName("setContext")
 			&& x.hasParamTypes(RestContext.class)
 		);

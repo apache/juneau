@@ -334,7 +334,7 @@ public class TemporalSwap extends StringSwap<Temporal> {
 	private static Method findParseMethod(Class<? extends Temporal> c) throws ExecutableException {
 		Method m = FROM_METHODS.get(c);
 		if (m == null) {
-			MethodInfo mi = ClassInfo.ofc(c).getPublicMethod(
+			MethodInfo mi = ClassInfo.of(c).getPublicMethod(
 				x -> x.isStatic()
 				&& x.isNotDeprecated()
 				&& x.hasName("from")

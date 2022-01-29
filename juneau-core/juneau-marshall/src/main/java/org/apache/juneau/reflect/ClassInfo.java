@@ -59,38 +59,14 @@ import org.apache.juneau.internal.*;
  */
 public final class ClassInfo {
 
-	/** Reusable ClassInfo for Object class. */
-	public static final ClassInfo OBJECT = ClassInfo.of(Object.class);
-
-	private final Type t;
-	final Class<?> c;
-	private final boolean isParameterizedType;
-	private Boolean isRepeatedAnnotation;
-	private ClassInfo[] interfaces, declaredInterfaces, parents, allParents;
-	private MethodInfo[] publicMethods, declaredMethods, allMethods, allMethodsParentFirst;
-	private MethodInfo repeatedAnnotationMethod;
-	private ConstructorInfo[] publicConstructors, declaredConstructors;
-	private FieldInfo[] publicFields, declaredFields, allFields;
-	private int dim = -1;
-	private ClassInfo componentType;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private static final Map<Class<?>,ClassInfo> CACHE = new ConcurrentHashMap<>();
 
-	//-----------------------------------------------------------------------------------------------------------------
-	// Instantiation
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Constructor.
-	 *
-	 * @param c The class type.
-	 * @param t The generic type (if parameterized type).
-	 */
-	protected ClassInfo(Class<?> c, Type t) {
-		this.t = t;
-		this.c = c;
-		this.isParameterizedType = t == null ? false : (t instanceof ParameterizedType);
-	}
+	/** Reusable ClassInfo for Object class. */
+	public static final ClassInfo OBJECT = ClassInfo.of(Object.class);
 
 	/**
 	 * Returns a class info wrapper around the specified class type.
@@ -101,6 +77,8 @@ public final class ClassInfo {
 	public static ClassInfo of(Type t) {
 		if (t == null)
 			return null;
+		if (t instanceof Class)
+			return of((Class<?>)t);
 		return new ClassInfo(ClassUtils.toClass(t), t);
 	}
 
@@ -113,21 +91,9 @@ public final class ClassInfo {
 	public static ClassInfo of(Class<?> c) {
 		if (c == null)
 			return null;
-		return new ClassInfo(c, c);
-	}
-
-	/**
-	 * Same as {@link #of(Class)}} but caches the result for faster future lookup.
-	 *
-	 * @param c The class type.
-	 * @return The constructed class info, or <jk>null</jk> if the type was <jk>null</jk>.
-	 */
-	public static ClassInfo ofc(Class<?> c) {
-		if (c == null)
-			return null;
 		ClassInfo ci = CACHE.get(c);
 		if (ci == null) {
-			ci = ClassInfo.of(c);
+			ci = new ClassInfo(c, c);
 			CACHE.put(c, ci);
 		}
 		return ci;
@@ -151,9 +117,7 @@ public final class ClassInfo {
 	 * @return The constructed class info, or <jk>null</jk> if the object was <jk>null</jk>.
 	 */
 	public static ClassInfo of(Object o) {
-		if (o == null)
-			return null;
-		return new ClassInfo(o.getClass(), o.getClass());
+		return of(o == null ? null : o.getClass());
 	}
 
 	/**
@@ -167,24 +131,6 @@ public final class ClassInfo {
 			return null;
 		Class<?> c = getProxyFor(o);
 		return c == null ? ClassInfo.of(o) : ClassInfo.of(c);
-	}
-
-	/**
-	 * Same as {@link #of(Object)}} but caches the result for faster future lookup.
-	 *
-	 * @param o The class instance.
-	 * @return The constructed class info, or <jk>null</jk> if the type was <jk>null</jk>.
-	 */
-	public static ClassInfo ofc(Object o) {
-		if (o == null)
-			return null;
-		Class<?> c = o.getClass();
-		ClassInfo ci = CACHE.get(c);
-		if (ci == null) {
-			ci = ClassInfo.of(o);
-			CACHE.put(c, ci);
-		}
-		return ci;
 	}
 
 	/**
@@ -206,6 +152,35 @@ public final class ClassInfo {
 			}
 		}
 		return null;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final Type t;
+	final Class<?> c;
+	private final boolean isParameterizedType;
+	private Boolean isRepeatedAnnotation;
+	private ClassInfo[] interfaces, declaredInterfaces, parents, allParents;
+	private MethodInfo[] publicMethods, declaredMethods, allMethods, allMethodsParentFirst;
+	private MethodInfo repeatedAnnotationMethod;
+	private ConstructorInfo[] publicConstructors, declaredConstructors;
+	private FieldInfo[] publicFields, declaredFields, allFields;
+	private int dim = -1;
+	private ClassInfo componentType;
+
+
+	/**
+	 * Constructor.
+	 *
+	 * @param c The class type.
+	 * @param t The generic type (if parameterized type).
+	 */
+	protected ClassInfo(Class<?> c, Type t) {
+		this.t = t;
+		this.c = c;
+		this.isParameterizedType = t == null ? false : (t instanceof ParameterizedType);
 	}
 
 	/**
@@ -275,7 +250,7 @@ public final class ClassInfo {
 	 * 	The parent class, or <jk>null</jk> if the class has no parent.
 	 */
 	public ClassInfo getParent() {
-		return c == null ? null : ofc(c.getSuperclass());
+		return c == null ? null : of(c.getSuperclass());
 	}
 
 	/**
@@ -1101,7 +1076,7 @@ public final class ClassInfo {
 	 */
 	private static Annotation[] splitRepeated(Annotation a) {
 		try {
-			ClassInfo ci = ClassInfo.ofc(a.annotationType());
+			ClassInfo ci = ClassInfo.of(a.annotationType());
 			MethodInfo mi = ci.getRepeatedAnnotationMethod();
 			if (mi != null)
 				return mi.invoke(a);

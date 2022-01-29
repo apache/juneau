@@ -140,7 +140,7 @@ public class BeanCreateMethodFinder<T> {
 	 */
 	public BeanCreateMethodFinder<T> find(String methodName, Class<?>...requiredParams) {
 		if (method == null) {
-			method = ClassInfo.ofc(resourceClass).getPublicMethod(
+			method = ClassInfo.of(resourceClass).getPublicMethod(
 				x -> x.isNotDeprecated()
 				&& x.hasReturnType(beanType)
 				&& x.hasName(methodName)

@@ -124,7 +124,7 @@ public class BeanCreator<T> {
 	 * @param store The bean store creating this creator.
 	 */
 	protected BeanCreator(Class<T> type, BeanStore store) {
-		this.type = ClassInfo.ofc(type);
+		this.type = ClassInfo.of(type);
 		this.store = BeanStore.of(store, store.outer.orElse(null));
 	}
 
@@ -137,7 +137,7 @@ public class BeanCreator<T> {
 	public BeanCreator<T> type(Class<?> value) {
 		if (value != null && ! type.inner().isAssignableFrom(value))
 			throw new ExecutableException("Could not instantiate class of type {0} because it was not a subtype of the class: {1}.", type, value);
-		type = ClassInfo.ofc(value);
+		type = ClassInfo.of(value);
 		return this;
 	}
 
