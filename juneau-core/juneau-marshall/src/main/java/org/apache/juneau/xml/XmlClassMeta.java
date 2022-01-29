@@ -43,8 +43,8 @@ public class XmlClassMeta extends ExtendedClassMeta {
 		List<Xml> xmls = new ArrayList<>();
 		List<XmlSchema> schemas = new ArrayList<>();
 		if (cm != null) {
-			cm.getAnnotations(Xml.class, x -> xmls.add(x));
-			cm.getAnnotations(XmlSchema.class, x -> schemas.add(x));
+			cm.getAnnotations(Xml.class, x -> true, x -> xmls.add(x));
+			cm.getAnnotations(XmlSchema.class, x -> true, x -> schemas.add(x));
 		}
 		this.namespace = XmlUtils.findNamespace(xmls, schemas);
 

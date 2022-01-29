@@ -224,15 +224,6 @@ public class MethodInfoTest {
 	}
 
 	@Test
-	public void appendAnnotationsParentFirst() {
-		check("@A(C1),@A(C2),@A(C3),@A(a1)", c_a1.appendAnnotations(new ArrayList<>(), A.class));
-		check("@A(C1),@A(C2),@A(C3),@A(a2a),@A(a2b)", c_a2.appendAnnotations(new ArrayList<>(), A.class));
-		check("@A(C1),@A(C2),@A(C3),@A(a3)", c_a3.appendAnnotations(new ArrayList<>(), A.class));
-		check("@A(C1),@A(C2),@A(C3),@A(a4)", c_a4.appendAnnotations(new ArrayList<>(), A.class));
-		check("@A(C1),@A(C2),@A(C3)", c_a5.appendAnnotations(new ArrayList<>(), A.class));
-	}
-
-	@Test
 	public void getAnnotation() {
 		check("@A(a1)", c_a1.getLastAnnotation(A.class));
 		check("@A(a2b)", c_a2.getLastAnnotation(A.class));

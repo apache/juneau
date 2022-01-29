@@ -152,22 +152,6 @@ public class Value<T> {
 	}
 
 	/**
-	 * Sets the value if the specified predicate test passes.
-	 *
-	 * @param t The new value.
-	 * @param p The predicate to test the value against.
-	 * @return This object.
-	 */
-	public Value<T> setIf(T t, Predicate<T> p) {
-		if (p.test(t)) {
-			this.t = t;
-			if (listener != null)
-				listener.onSet(t);
-		}
-		return this;
-	}
-
-	/**
 	 * Returns the value.
 	 *
 	 * @return The value, or <jk>null</jk> if it is not set.

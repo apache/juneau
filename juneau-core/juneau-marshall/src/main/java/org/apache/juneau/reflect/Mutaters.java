@@ -151,7 +151,7 @@ public class Mutaters {
 
 		ClassInfo ici = ClassInfo.of(ic), oci = ClassInfo.of(oc);
 
-		ClassInfo pic = ici.getAllParent(x -> m.get(x.inner()) != null);
+		ClassInfo pic = ici.getAnyParent(x -> m.get(x.inner()) != null);
 		if (pic != null)
 			return m.get(pic.inner());
 

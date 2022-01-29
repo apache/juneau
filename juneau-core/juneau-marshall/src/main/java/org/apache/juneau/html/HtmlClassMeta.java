@@ -48,9 +48,12 @@ public class HtmlClassMeta extends ExtendedClassMeta {
 		Value<HtmlRender<?>> render = Value.empty();
 
 		Consumer<Html> c = x -> {
-			noTables.setIf(x.noTables(), y -> y != false);
-			noTableHeaders.setIf(x.noTableHeaders(), y -> y != false);
-			format.setIf(x.format(), y -> y != HtmlFormat.HTML);
+			if (x.noTables())
+				noTables.set(true);
+			if (x.noTableHeaders())
+				noTableHeaders.set(true);
+			if (x.format() != HtmlFormat.HTML)
+				format.set(x.format());
 			if (x.render() != HtmlRender.class) {
 				try {
 					render.set(x.render().newInstance());
@@ -59,7 +62,7 @@ public class HtmlClassMeta extends ExtendedClassMeta {
 				}
 			}
 		};
-		cm.getAnnotations(Html.class, c);
+		cm.getAnnotations(Html.class, x -> true, c);
 
 		this.noTables = noTables.orElse(false);
 		this.noTableHeaders = noTableHeaders.orElse(false);

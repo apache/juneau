@@ -55,8 +55,8 @@ public class ResponseBeanMeta {
 			return null;
 		Builder b = new Builder(annotations);
 		b.apply(ci.innerType());
-		ci.getAnnotations(Response.class, x -> b.apply(x));
-		ci.getAnnotations(StatusCode.class, x -> b.apply(x));
+		ci.getAnnotations(Response.class, x -> true, x -> b.apply(x));
+		ci.getAnnotations(StatusCode.class, x -> true, x -> b.apply(x));
 		return b.build();
 	}
 

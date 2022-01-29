@@ -135,13 +135,26 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns <jk>true</jk> if this constructor passes the specified predicate.
+	 * Returns <jk>true</jk> if this object passes the specified predicate test.
 	 *
 	 * @param predicate The predicate.
-	 * @return <jk>true</jk> if this constructor passes the specified predicate.
+	 * @return <jk>true</jk> if this object passes the specified predicate test.
 	 */
 	public boolean matches(Predicate<ConstructorInfo> predicate) {
 		return predicate.test(this);
+	}
+
+	/**
+	 * Consumes this object if the specified predicate test passes.
+	 *
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
+	 */
+	public ConstructorInfo accept(Predicate<ConstructorInfo> predicate, Consumer<ConstructorInfo> consumer) {
+		if (matches(predicate))
+			consumer.accept(this);
+		return this;
 	}
 
 	/**

@@ -267,19 +267,6 @@ public class BeanStore {
 			this.type = value;
 			return this;
 		}
-
-		/**
-		 * Overrides the bean store type if the predicate test passes.
-		 *
-		 * @param value The bean store type.
-		 * @param predicate The predicate to test against.
-		 * @return This object.
-		 */
-		public Builder typeIf(Class<? extends BeanStore> value, Predicate<Class<? extends BeanStore>> predicate) {
-			if (predicate.test(value))
-				this.type = value;
-			return this;
-		}
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

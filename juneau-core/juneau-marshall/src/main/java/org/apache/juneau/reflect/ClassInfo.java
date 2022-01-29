@@ -284,6 +284,9 @@ public final class ClassInfo {
 	 * <p>
 	 * Does not include interfaces declared on parent classes.
 	 *
+	 * <p>
+	 * Results are in the same order as Class.getInterfaces().
+	 *
 	 * @return
 	 * 	An unmodifiable list of interfaces declared on this class.
 	 * 	<br>Results are in the same order as {@link Class#getInterfaces()}.
@@ -294,6 +297,9 @@ public final class ClassInfo {
 
 	/**
 	 * Returns a list of interfaces defined on this class and superclasses.
+	 *
+	 * <p>
+	 * Results are in child-to-parent order.
 	 *
 	 * @return
 	 * 	An unmodifiable list of interfaces defined on this class and superclasses.
@@ -309,6 +315,9 @@ public final class ClassInfo {
 	 * <p>
 	 * Does not include interfaces.
 	 *
+	 * <p>
+	 * Results are in child-to-parent order.
+	 *
 	 * @return An unmodifiable list including this class and all parent classes.
 	 * 	<br>Results are in child-to-parent order.
 	 */
@@ -318,6 +327,9 @@ public final class ClassInfo {
 
 	/**
 	 * Returns a list including this class and all parent classes and interfaces.
+	 *
+	 * <p>
+	 * Results are classes-before-interfaces, then child-to-parent order.
 	 *
 	 * @return An unmodifiable list including this class and all parent classes.
 	 * 	<br>Results are ordered child-to-parent order with classes listed before interfaces.
@@ -329,16 +341,20 @@ public final class ClassInfo {
 	/**
 	 * Returns the parent class or interface that matches the specified predicate.
 	 *
+	 * <p>
+	 * Results are classes-before-interfaces, then child-to-parent order.
+	 *
 	 * @param predicate The predicate to test for.
 	 * @return The parent class or interface that matches the specified predicate.
 	 */
-	public ClassInfo getAllParent(Predicate<ClassInfo> predicate) {
+	public ClassInfo getAnyParent(Predicate<ClassInfo> predicate) {
 		for (ClassInfo ci : _getAllParents())
 			if (predicate.test(ci))
 				return ci;
 		return null;
 	}
 
+	/** Results are in child-to-parent order. */
 	ClassInfo[] _getInterfaces() {
 		if (interfaces == null) {
 			Set<ClassInfo> s = new LinkedHashSet<>();
@@ -353,6 +369,7 @@ public final class ClassInfo {
 		return interfaces;
 	}
 
+	/** Results are in the same order as Class.getInterfaces(). */
 	private ClassInfo[] _getDeclaredInterfaces() {
 		if (declaredInterfaces == null) {
 			Class<?>[] ii = c == null ? new Class[0] : c.getInterfaces();
@@ -364,6 +381,7 @@ public final class ClassInfo {
 		return declaredInterfaces;
 	}
 
+	/** Results are in child-to-parent order. */
 	ClassInfo[] _getParents() {
 		if (parents == null) {
 			List<ClassInfo> l = new ArrayList<>();
@@ -377,6 +395,7 @@ public final class ClassInfo {
 		return parents;
 	}
 
+	/** Results are classes-before-interfaces, then child-to-parent order. */
 	private ClassInfo[] _getAllParents() {
 		if (allParents == null) {
 			ClassInfo[] a1 = _getParents(), a2 = _getInterfaces();
@@ -882,9 +901,37 @@ public final class ClassInfo {
 	 * 	A list of all matching annotations found or an empty list if none found.
 	 */
 	public <T extends Annotation> List<T> getAnnotations(Class<T> a) {
+		return getAnnotations(AnnotationProvider.DEFAULT, a);
+	}
+
+	/**
+	 * Returns all annotations of the specified type defined on this or parent classes/interfaces.
+	 *
+	 * <p>
+	 * Returns the list in reverse (parent-to-child) order.
+	 * @param ap The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
+	 * @param a
+	 * 	The annotation to search for.
+	 *
+	 * @return
+	 * 	A list of all matching annotations found or an empty list if none found.
+	 */
+	public <T extends Annotation> List<T> getAnnotations(AnnotationProvider ap, Class<T> a) {
 		List<T> l = new ArrayList<>();
-		getAnnotations(a, x -> l.add(x));
+		getAnnotations(ap, a, x-> true, x -> l.add(x));
 		return l;
+	}
+
+	/**
+	 * Consumes all matching annotations of the specified type defined on this or parent classes/interfaces.
+	 *
+	 * @param a The annotation to look for.
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
+	 */
+	public <T extends Annotation> ClassInfo getAnnotations(Class<T> a, Predicate<T> predicate, Consumer<T> consumer) {
+		return getAnnotations(AnnotationProvider.DEFAULT, a, predicate, consumer);
 	}
 
 	/**
@@ -918,27 +965,6 @@ public final class ClassInfo {
 		for (int i = parents.length-1; i >= 0; i--)
 			ap.getDeclaredAnnotations(a, parents[i].inner(), predicate, consumer);
 		return this;
-	}
-
-	/**
-	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
-	 * consumer.
-	 *
-	 * <p>
-	 * Annotations are appended in the following orders:
-	 * <ol>
-	 * 	<li>On the package of this class.
-	 * 	<li>On interfaces ordered child-to-parent.
-	 * 	<li>On parent classes ordered child-to-parent.
-	 * 	<li>On this class.
-	 * </ol>
-	 *
-	 * @param consumer The consumer of the annotations.
-	 * @param a The annotation to search for.
-	 * @return The same list.
-	 */
-	public <T extends Annotation> ClassInfo getAnnotations(Class<T> a, Consumer<T> consumer) {
-		return getAnnotations(AnnotationProvider.DEFAULT, a, x-> true, consumer);
 	}
 
 	/**
@@ -993,20 +1019,6 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Returns the specified annotation only if it's been declared on this class.
-	 *
-	 * <p>
-	 * More efficient than calling {@link Class#getAnnotation(Class)} since it doesn't recursively look for the class up the parent chain.
-	 *
-	 * @param <T> The annotation class type.
-	 * @param a The annotation class.
-	 * @return The annotation, or <jk>null</jk> if not found.
-	 */
-	public <T extends Annotation> T getDeclaredAnnotation(Class<T> a) {
-		return a == null ? null : c.getDeclaredAnnotation(a);
-	}
-
-	/**
 	 * Returns the specified annotation only if it's been declared on the package of this class.
 	 *
 	 * @param <T> The annotation class type.
@@ -1026,25 +1038,7 @@ public final class ClassInfo {
 	 * @return This object.
 	 */
 	public <T extends Annotation> T getAnnotation(Class<T> a, Predicate<T> predicate) {
-		return getAnnotation(predicate, a, AnnotationProvider.DEFAULT);
-	}
-
-	/**
-	 * Returns all annotations of the specified type defined on the specified class or parent classes/interfaces.
-	 *
-	 * <p>
-	 * Returns the list in reverse (parent-to-child) order.
-	 * @param ap The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
-	 * @param a
-	 * 	The annotation to search for.
-	 *
-	 * @return
-	 * 	A list of all matching annotations found or an empty list if none found.
-	 */
-	public <T extends Annotation> List<T> getAnnotations(AnnotationProvider ap, Class<T> a) {
-		List<T> l = new ArrayList<>();
-		getAnnotations(ap, a, x-> true, x -> l.add(x));
-		return l;
+		return getAnnotation(AnnotationProvider.DEFAULT, a, predicate);
 	}
 
 	/**
@@ -1062,7 +1056,7 @@ public final class ClassInfo {
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
 	public AnnotationList getAnnotationList() {
-		return getAnnotationList(null);
+		return getAnnotationList(x -> true);
 	}
 
 	/**
@@ -1095,7 +1089,7 @@ public final class ClassInfo {
 	 */
 	public AnnotationList getAnnotationList(Predicate<AnnotationInfo<?>> filter) {
 		AnnotationList l = new AnnotationList(filter);
-		getAnnotationInfos(x -> l.add(x));
+		getAnnotationInfos(filter, x -> l.add(x));
 		return l;
 	}
 
@@ -1137,41 +1131,41 @@ public final class ClassInfo {
 		return null;
 	}
 
-	private <T extends Annotation> T getAnnotation(Predicate<T> p, Class<T> a, AnnotationProvider mp) {
+	private <T extends Annotation> T getAnnotation(AnnotationProvider ap, Class<T> a, Predicate<T> p) {
 		T t2 = getPackageAnnotation(a);
 		if (t2 != null && p.test(t2))
 			return t2;
 		ClassInfo[] interfaces = _getInterfaces();
 		for (int i = interfaces.length-1; i >= 0; i--) {
-			T o = mp.getDeclaredAnnotation(a, interfaces[i].inner(), p);
+			T o = ap.getDeclaredAnnotation(a, interfaces[i].inner(), p);
 			if (o != null)
 				return o;
 		}
 		ClassInfo[] parents = _getParents();
 		for (int i = parents.length-1; i >= 0; i--) {
-			T o = mp.getDeclaredAnnotation(a, parents[i].inner(), p);
+			T o = ap.getDeclaredAnnotation(a, parents[i].inner(), p);
 			if (o != null)
 				return o;
 		}
 		return null;
 	}
 
-	private void getAnnotationInfos(Consumer<AnnotationInfo<?>> consumer) {
+	private void getAnnotationInfos(Predicate<AnnotationInfo<?>> predicate, Consumer<AnnotationInfo<?>> consumer) {
 		Package p = c.getPackage();
 		if (p != null)
 			for (Annotation a : p.getDeclaredAnnotations())
 				for (Annotation a2 : splitRepeated(a))
-					consumer.accept(AnnotationInfo.of(p, a2));
+					AnnotationInfo.of(p, a2).accept(predicate, consumer);
 		ClassInfo[] interfaces = _getInterfaces();
 		for (int i = interfaces.length-1; i >= 0; i--)
 			for (Annotation a : interfaces[i].c.getDeclaredAnnotations())
 				for (Annotation a2 : splitRepeated(a))
-					consumer.accept(AnnotationInfo.of(interfaces[i], a2));
+					AnnotationInfo.of(interfaces[i], a2).accept(predicate, consumer);
 		ClassInfo[] parents = _getParents();
 		for (int i = parents.length-1; i >= 0; i--)
 			for (Annotation a : parents[i].c.getDeclaredAnnotations())
 				for (Annotation a2 : splitRepeated(a))
-					consumer.accept(AnnotationInfo.of(parents[i], a2));
+					AnnotationInfo.of(parents[i], a2).accept(predicate, consumer);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -2256,8 +2250,31 @@ public final class ClassInfo {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Other
+	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns <jk>true</jk> if this object passes the specified predicate test.
+	 *
+	 * @param predicate The predicate.
+	 * @return <jk>true</jk> if this object passes the specified predicate test.
+	 */
+	public boolean matches(Predicate<ClassInfo> predicate) {
+		return predicate.test(this);
+	}
+
+	/**
+	 * Consumes this object if the specified predicate test passes.
+	 *
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
+	 */
+	public ClassInfo accept(Predicate<ClassInfo> predicate, Consumer<ClassInfo> consumer) {
+		if (matches(predicate))
+			consumer.accept(this);
+		return this;
+	}
 
 	@Override
 	public String toString() {

@@ -186,11 +186,13 @@ public final class ParamInfo {
 	 * @return A list of all matching annotations found or an empty list if none found.
 	 */
 	public <T extends Annotation> List<T> getAnnotations(Class<T> a) {
-		return appendAnnotations(new ArrayList<>(), a, true);
+		List<T> l = new ArrayList<>();
+		getAnnotations(AnnotationProvider.DEFAULT, a, true, x -> true, x -> l.add(x));
+		return l;
 	}
 
 	/**
-	 * Consumes all annotations of the specified type defined on this method parameter.
+	 * Consumes all matching annotations of the specified type defined on this parameter.
 	 *
 	 * <p>
 	 * Searches all methods with the same signature on the parent classes or interfaces
@@ -199,11 +201,12 @@ public final class ParamInfo {
 	 * Results are in parent-to-child order.
 	 *
 	 * @param a The annotation to search for.
+	 * @param predicate The predicate.
 	 * @param consumer The consumer for the annotations.
 	 * @return This object.
 	 */
-	public <T extends Annotation> ParamInfo getAnnotations(Class<T> a, Consumer<T> consumer) {
-		return getAnnotations(a, true, consumer);
+	public <T extends Annotation> ParamInfo getAnnotations(Class<T> a, Predicate<T> predicate, Consumer<T> consumer) {
+		return getAnnotations(AnnotationProvider.DEFAULT, a, true, predicate, consumer);
 	}
 
 	/**
@@ -223,42 +226,42 @@ public final class ParamInfo {
 		return getAnnotation(a, true, predicate);
 	}
 
-	private <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, boolean parentFirst) {
-		getAnnotations(a, parentFirst, x -> l.add(x));
-		return l;
-	}
+//	private <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, boolean parentFirst) {
+//		getAnnotations(AnnotationProvider.DEFAULT, a, parentFirst, x -> true, x -> l.add(x));
+//		return l;
+//	}
 
 	@SuppressWarnings("unchecked")
-	private <T extends Annotation> ParamInfo getAnnotations(Class<T> a, boolean parentFirst, Consumer<T> consumer) {
+	private <T extends Annotation> ParamInfo getAnnotations(AnnotationProvider ap, Class<T> a, boolean parentFirst, Predicate<T> predicate, Consumer<T> consumer) {
 		if (eInfo.isConstructor) {
 			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class,Optional.class);
 			Annotation[] annotations = eInfo.getParameterAnnotations(index);
 			if (parentFirst) {
-				ci.getAnnotations(a, consumer);
+				ci.getAnnotations(ap, a, predicate, consumer);
 				for (Annotation a2 : annotations)
-					if (a.isInstance(a2))
+					if (a.isInstance(a2) && predicate.test((T)a2))
 						consumer.accept((T)a2);
 			} else {
 				for (Annotation a2 : annotations)
-					if (a.isInstance(a2))
+					if (a.isInstance(a2) && predicate.test((T)a2))
 						consumer.accept((T)a2);
-				ci.getAnnotations(a, consumer);
+				ci.getAnnotations(ap, a, predicate, consumer);
 			}
 		} else {
 			MethodInfo mi = (MethodInfo)eInfo;
 			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class,Optional.class);
 			if (parentFirst) {
-				ci.getAnnotations(a, consumer);
+				ci.getAnnotations(ap, a, predicate, consumer);
 				for (Method m2 : mi.getMatchingParentFirst())
 					for (Annotation a2 :  m2.getParameterAnnotations()[index])
-						if (a.isInstance(a2))
+						if (a.isInstance(a2) && predicate.test((T)a2))
 							consumer.accept((T)a2);
 			} else {
 				for (Method m2 : mi.getMatching())
 					for (Annotation a2 :  m2.getParameterAnnotations()[index])
-						if (a.isInstance(a2))
+						if (a.isInstance(a2) && predicate.test((T)a2))
 							consumer.accept((T)a2);
-				ci.getAnnotations(a, consumer);
+				ci.getAnnotations(ap, a, predicate, consumer);
 			}
 		}
 		return this;
@@ -317,6 +320,29 @@ public final class ParamInfo {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns <jk>true</jk> if this object passes the specified predicate test.
+	 *
+	 * @param predicate The predicate.
+	 * @return <jk>true</jk> if this object passes the specified predicate test.
+	 */
+	public boolean matches(Predicate<ParamInfo> predicate) {
+		return predicate.test(this);
+	}
+
+	/**
+	 * Consumes this object if the specified predicate test passes.
+	 *
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
+	 */
+	public ParamInfo accept(Predicate<ParamInfo> predicate, Consumer<ParamInfo> consumer) {
+		if (matches(predicate))
+			consumer.accept(this);
+		return this;
+	}
 
 	/**
 	 * Returns <jk>true</jk> if the parameter type is an exact match for the specified class.

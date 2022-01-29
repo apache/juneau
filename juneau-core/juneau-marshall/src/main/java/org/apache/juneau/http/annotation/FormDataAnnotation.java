@@ -12,16 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.annotation;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
-import java.util.function.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -91,9 +90,8 @@ public class FormDataAnnotation {
 	 */
 	public static Value<String> findName(ParamInfo pi) {
 		Value<String> n = Value.empty();
-		Predicate<String> t = StringUtils::isNotEmpty;
-		pi.getAnnotations(FormData.class, x -> n.setIf(x.value(), t).setIf(x.name(), t));
-		pi.getParameterType().getAnnotations(FormData.class, x -> n.setIf(x.value(), t).setIf(x.name(), t));
+		pi.getAnnotations(FormData.class, x -> isNotEmpty(x.value()), x -> n.set(x.value()));
+		pi.getAnnotations(FormData.class, x -> isNotEmpty(x.name()), x -> n.set(x.name()));
 		return n;
 	}
 

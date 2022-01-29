@@ -15,6 +15,7 @@ package org.apache.juneau.reflect;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -243,6 +244,29 @@ public class AnnotationInfo<T extends Annotation> {
 	public boolean isInGroup(Class<? extends Annotation> group) {
 		AnnotationGroup x = a.annotationType().getAnnotation(AnnotationGroup.class);
 		return (x != null && x.value().equals(group));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this object passes the specified predicate test.
+	 *
+	 * @param predicate The predicate.
+	 * @return <jk>true</jk> if this object passes the specified predicate test.
+	 */
+	public boolean matches(Predicate<AnnotationInfo<?>> predicate) {
+		return predicate.test(this);
+	}
+
+	/**
+	 * Consumes this object if the specified predicate test passes.
+	 *
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
+	 */
+	public AnnotationInfo<?> accept(Predicate<AnnotationInfo<?>> predicate, Consumer<AnnotationInfo<?>> consumer) {
+		if (matches(predicate))
+			consumer.accept(this);
+		return this;
 	}
 
 	@Override

@@ -56,20 +56,6 @@ public class Rest_Messages_Test {
 		a1.get("/c?name=key3").run().assertBody().is("{!key3}");
 	}
 
-	@Rest
-	public static class A2 extends A1 {}
-
-	@Test
-	public void a02_subclassed() throws Exception {
-		MockRestClient a2 = MockRestClient.build(A2.class);
-		a2.get("/a").run().assertBody().is("{'A1.key2':'A1.value2a','A2.key3':'A2.value3b',key1:'value1a',key2:'value2b',key3:'A2.value3b'}");
-		a2.get("/b").run().assertBody().is("{'A1.key2':'A1.value2a','A2.key3':'A2.value3b',key1:'value1a',key2:'value2b',key3:'A2.value3b'}");
-		a2.get("/c?name=key1").run().assertBody().is("value1a");
-		a2.get("/c?name=key2").run().assertBody().is("value2b");
-		a2.get("/c?name=key3").run().assertBody().is("A2.value3b");
-		a2.get("/c?name=key4").run().assertBody().is("{!key4}");
-	}
-
 	//------------------------------------------------------------------------------------------------------------------
 	// Overridden on subclass.
 	//------------------------------------------------------------------------------------------------------------------

@@ -1073,7 +1073,6 @@ public class RestAnnotation {
 		@Override
 		public void apply(AnnotationInfo<Rest> ai, RestContext.Builder b) {
 			Rest a = ai.getAnnotation();
-			ClassInfo c = ai.getClassOn();
 
 			classes(a.serializers()).ifPresent(x -> b.serializers().add(x));
 			classes(a.parsers()).ifPresent(x -> b.parsers().add(x));
@@ -1095,7 +1094,7 @@ public class RestAnnotation {
 			string(a.uriAuthority()).ifPresent(x -> b.uriAuthority(x));
 			string(a.uriRelativity()).map(UriRelativity::valueOf).ifPresent(x -> b.uriRelativity(x));
 			string(a.uriResolution()).map(UriResolution::valueOf).ifPresent(x -> b.uriResolution(x));
-			b.messages().location(c.inner(), string(a.messages()).orElse(null));
+			b.messages().location(string(a.messages()).orElse(null));
 			type(a.fileFinder()).ifPresent(x -> b.fileFinder().type(x));
 			type(a.staticFiles()).ifPresent(x -> b.staticFiles().type(x));
 			string(a.path()).ifPresent(x -> b.path(x));

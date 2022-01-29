@@ -301,6 +301,17 @@ public class Messages extends ResourceBundle {
 			return this;
 		}
 
+		/**
+		 * Specifies a location of where to look for messages.
+		 *
+		 * @param bundlePath The bundle path.
+		 * @return This object.
+		 */
+		public Builder location(String bundlePath) {
+			this.locations.add(0, Tuple2.of(forClass, bundlePath));
+			return this;
+		}
+
 		// <FluentSetters>
 
 		@Override /* GENERATED - org.apache.juneau.BeanBuilder */

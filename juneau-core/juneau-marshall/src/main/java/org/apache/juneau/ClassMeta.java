@@ -2091,19 +2091,19 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Consumes all annotations of the specified type defined on the specified class or parent classes/interfaces in parent-to-child order.
+	 * Consumes all matching annotations of the specified type defined on the specified class or parent classes/interfaces in parent-to-child order.
 	 *
-	 * @param a
-	 * 	The annotation to search for.
+	 * @param a The annotation to search for.
+	 * @param predicate The predicate.
 	 * @param consumer The consumer of the annotations.
 	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
-	public <A extends Annotation> ClassMeta<T> getAnnotations(Class<A> a, Consumer<A> consumer) {
+	public <A extends Annotation> ClassMeta<T> getAnnotations(Class<A> a, Predicate<A> predicate, Consumer<A> consumer) {
 		A[] array = (A[])annotationArrayMap.get(a);
 		if (array == null) {
 			if (beanContext == null) {
-				info.getAnnotations(BeanContext.DEFAULT, a, x-> true, consumer);
+				info.getAnnotations(BeanContext.DEFAULT, a, predicate, consumer);
 				return this;
 			}
 			List<A> l = new ArrayList<>();
@@ -2114,7 +2114,8 @@ public final class ClassMeta<T> implements Type {
 			annotationArrayMap.put(a, array);
 		}
 		for (A aa : array)
-			consumer.accept(aa);
+			if (predicate.test(aa))
+				consumer.accept(aa);
 		return this;
 	}
 

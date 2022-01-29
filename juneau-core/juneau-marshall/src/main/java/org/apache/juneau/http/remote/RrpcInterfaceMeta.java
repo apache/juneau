@@ -53,7 +53,7 @@ public class RrpcInterfaceMeta {
 		Value<String> path = Value.of("");
 		ClassInfo ci = ClassInfo.of(c);
 
-		ci.getAnnotations(Remote.class, x -> { if (! x.path().isEmpty()) path.set(trimSlashes(x.path()));});
+		ci.getAnnotations(Remote.class, x -> isNotEmpty(x.path()), x -> path.set(trimSlashes(x.path())));
 
 		AMap<Method,RrpcInterfaceMethodMeta> methods = AMap.create();
 		ci.getPublicMethods(

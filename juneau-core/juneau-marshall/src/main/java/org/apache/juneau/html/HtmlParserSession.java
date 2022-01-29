@@ -476,8 +476,8 @@ public final class HtmlParserSession extends XmlParserSession {
 		String name = getElementText(r);
 		if (beanType.hasAnnotation(HtmlLink.class)) {
 			Value<String> uriProperty = Value.empty(), nameProperty = Value.empty();
-			beanType.getAnnotations(HtmlLink.class, x -> uriProperty.setIf(x.uriProperty(), StringUtils::isNotEmpty));
-			beanType.getAnnotations(HtmlLink.class, x -> nameProperty.setIf(x.nameProperty(), StringUtils::isNotEmpty));
+			beanType.getAnnotations(HtmlLink.class, x -> isNotEmpty(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));
+			beanType.getAnnotations(HtmlLink.class, x -> isNotEmpty(x.nameProperty()), x -> nameProperty.set(x.nameProperty()));
 			BeanMap<T> m = newBeanMap(beanType.getInnerClass());
 			m.put(uriProperty.orElse(""), href);
 			m.put(nameProperty.orElse(""), name);

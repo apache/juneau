@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 
@@ -394,6 +395,29 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns <jk>true</jk> if this object passes the specified predicate test.
+	 *
+	 * @param predicate The predicate.
+	 * @return <jk>true</jk> if this object passes the specified predicate test.
+	 */
+	public boolean matches(Predicate<FieldInfo> predicate) {
+		return predicate.test(this);
+	}
+
+	/**
+	 * Consumes this object if the specified predicate test passes.
+	 *
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
+	 */
+	public FieldInfo accept(Predicate<FieldInfo> predicate, Consumer<FieldInfo> consumer) {
+		if (matches(predicate))
+			consumer.accept(this);
+		return this;
+	}
 
 	/**
 	 * Returns the type of this field.

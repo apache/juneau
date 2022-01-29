@@ -103,16 +103,6 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns <jk>true</jk> if this method passes the specified predicate.
-	 *
-	 * @param predicate The predicate.
-	 * @return <jk>true</jk> if this method passes the specified predicate.
-	 */
-	public boolean matches(Predicate<MethodInfo> predicate) {
-		return predicate.test(this);
-	}
-
-	/**
 	 * Returns <jk>true</jk> if this constructor can accept the specified arguments in the specified order.
 	 *
 	 * @param args The arguments to check.
@@ -259,7 +249,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @return <jk>true</jk> if the specified annotation is present on this method.
 	 */
 	public final boolean hasAnnotation(AnnotationProvider ap, Class<? extends Annotation> a) {
-		for (Method m2 : _getMatching()) 
+		for (Method m2 : _getMatching())
 			if (ap.getAnnotation(a, m2, x -> true) != null)
 				return true;
 		return false;
@@ -297,30 +287,33 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * and the return type on the method.
 	 * <br>Results are parent-to-child ordered.
 	 *
-	 * @param a
-	 * 	The annotation to search for.
-	 * @return
-	 * 	A list of all matching annotations found or an empty list if none found.
+	 * @param a The annotation to search for.
+	 * @return A list of all matching annotations found or an empty list if none found.
 	 */
 	public <T extends Annotation> List<T> getAnnotations(Class<T> a) {
-		return appendAnnotations(new ArrayList<>(), a);
+		return getAnnotations(AnnotationProvider.DEFAULT, a);
 	}
 
 	/**
-	 * Finds and appends the specified annotation on the specified class and superclasses/interfaces to the specified
-	 * list.
+	 * Returns all annotations of the specified type defined on the specified method.
 	 *
-	 * @param l The list of annotations.
-	 * @param a The annotation.
-	 * @return The same list.
+	 * <p>
+	 * Searches all methods with the same signature on the parent classes or interfaces
+	 * and the return type on the method.
+	 * <br>Results are parent-to-child ordered.
+	 *
+	 * @param ap The annotation provider.
+	 * @param a The annotation to search for.
+	 * @return	A list of all matching annotations found or an empty list if none found.
 	 */
-	public <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a) {
-		getAnnotations(a, x -> l.add(x));
+	public <T extends Annotation> List<T> getAnnotations(AnnotationProvider ap, Class<T> a) {
+		List<T> l = new ArrayList<>();
+		getAnnotations(ap, a, x -> true, x -> l.add(x));
 		return l;
 	}
 
 	/**
-	 * Consumes all annotations of the specified type defined on the specified method.
+	 * Consumes all matching annotations of the specified type defined on this method.
 	 *
 	 * <p>
 	 * Searches all methods with the same signature on the parent classes or interfaces
@@ -328,17 +321,36 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * <br>Results are parent-to-child ordered.
 	 *
 	 * @param a The annotation to search for.
+	 * @param predicate The predicate.
 	 * @param consumer The consumer of the annotation.
 	 * @return This object.
 	 */
+	public <T extends Annotation> MethodInfo getAnnotations(Class<T> a, Predicate<T> predicate, Consumer<T> consumer) {
+		return getAnnotations(AnnotationProvider.DEFAULT, a, predicate, consumer);
+	}
+
+	/**
+	 * Consumes all annotations of the specified type defined on this method.
+	 *
+	 * <p>
+	 * Searches all methods with the same signature on the parent classes or interfaces
+	 * and the return type on the method.
+	 * <br>Results are parent-to-child ordered.
+	 *
+	 * @param ap The annotation provider.
+	 * @param a The annotation.
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
+	 */
 	@SuppressWarnings("unchecked")
-	public <T extends Annotation> MethodInfo getAnnotations(Class<T> a, Consumer<T> consumer) {
-		declaringClass.getAnnotations(a, consumer);
+	public <T extends Annotation> MethodInfo getAnnotations(AnnotationProvider ap, Class<T> a, Predicate<T> predicate, Consumer<T> consumer) {
+		declaringClass.getAnnotations(ap, a, predicate, consumer);
 		for (Method m2 : getMatchingParentFirst())
 			for (Annotation a2 : m2.getDeclaredAnnotations())
-				if (a.isInstance(a2))
+				if (a.isInstance(a2) && predicate.test((T)a2))
 					consumer.accept((T)a2);
-		getReturnType().unwrap(Value.class,Optional.class).getAnnotations(a, consumer);
+		getReturnType().unwrap(Value.class,Optional.class).getAnnotations(ap, a, predicate, consumer);
 		return this;
 	}
 
@@ -539,6 +551,29 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns <jk>true</jk> if this object passes the specified predicate test.
+	 *
+	 * @param predicate The predicate.
+	 * @return <jk>true</jk> if this object passes the specified predicate test.
+	 */
+	public boolean matches(Predicate<MethodInfo> predicate) {
+		return predicate.test(this);
+	}
+
+	/**
+	 * Consumes this object if the specified predicate test passes.
+	 *
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
+	 */
+	public MethodInfo accept(Predicate<MethodInfo> predicate, Consumer<MethodInfo> consumer) {
+		if (matches(predicate))
+			consumer.accept(this);
+		return this;
+	}
 
 	/**
 	 * Shortcut for calling the invoke method on the underlying method.

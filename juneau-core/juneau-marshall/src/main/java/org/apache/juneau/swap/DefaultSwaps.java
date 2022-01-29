@@ -65,7 +65,7 @@ public class DefaultSwaps {
 	 * @return The matched swap, or <jk>null</jk> if it couldn't be found.
 	 */
 	public static ObjectSwap<?,?> find(ClassInfo ci) {
-		ClassInfo ci2 = ci.getAllParent(x -> SWAPS.get(x.inner()) != null);
+		ClassInfo ci2 = ci.getAnyParent(x -> SWAPS.get(x.inner()) != null);
 		return ci2 == null ? null : SWAPS.get(ci2.inner());
 	}
 }

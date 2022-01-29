@@ -630,28 +630,6 @@ public class ClassInfoTest {
 	}
 
 	@Test
-	public void getDeclaredAnnotation() {
-		check("@A(7)", g3.getDeclaredAnnotation(A.class));
-		check(null, g3.getDeclaredAnnotation(B.class));
-	}
-
-	@Test
-	public void getDeclaredAnnotation_null() {
-		check(null, g3.getDeclaredAnnotation(null));
-	}
-
-	@Test
-	public void getDeclaredAnnotation_twice() {
-		check("@A(7)", g3.getDeclaredAnnotation(A.class));
-		check("@A(7)", g3.getDeclaredAnnotation(A.class));
-	}
-
-	@Test
-	public void getDeclaredAnnotation_onType() {
-		check(null, aTypeInfo.getDeclaredAnnotation(A.class));
-	}
-
-	@Test
 	public void getPackageAnnotation() {
 		check("@PA(10)", g3.getPackageAnnotation(PA.class));
 	}
