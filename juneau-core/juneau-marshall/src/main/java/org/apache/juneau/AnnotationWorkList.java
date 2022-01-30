@@ -16,6 +16,7 @@ import java.lang.annotation.*;
 import java.util.*;
 
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.svl.*;
 
 /**
  * A list of {@link AnnotationWork} objects.
@@ -29,6 +30,60 @@ import org.apache.juneau.reflect.*;
 public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	private static final long serialVersionUID = 1L;
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Static creator.
+	 *
+	 * @param annotations The annotations to create work from.
+	 * @param vrs The variable resolver.
+	 * @return A new list.
+	 */
+	public static AnnotationWorkList of(VarResolverSession vrs, AnnotationList annotations) {
+		return create(vrs).add(annotations);
+	}
+
+	/**
+	 * Static creator.
+	 *
+	 * @param annotations The annotations to create work from.
+	 * @return A new list.
+	 */
+	public static AnnotationWorkList of(AnnotationList annotations) {
+		return create().add(annotations);
+	}
+
+	/**
+	 * Static creator.
+	 *
+	 * @return A new list.
+	 */
+	public static AnnotationWorkList create() {
+		return new AnnotationWorkList(VarResolver.DEFAULT.createSession());
+	}
+
+	/**
+	 * Static creator.
+	 *
+	 * @param vrs The variable resolver.
+	 * @return A new list.
+	 */
+	public static AnnotationWorkList create(VarResolverSession vrs) {
+		return new AnnotationWorkList(vrs);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final VarResolverSession vrs;
+
+	private AnnotationWorkList(VarResolverSession vrs) {
+		this.vrs = vrs;
+	}
+
 	/**
 	 * Adds an entry to this list.
 	 *
@@ -38,6 +93,18 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	 */
 	public AnnotationWorkList add(AnnotationInfo<?> ai, AnnotationApplier<Annotation,Object> aa) {
 		add(new AnnotationWork(ai, aa));
+		return this;
+	}
+
+	/**
+	 * Adds entries for the specified annotations to this work list.
+	 *
+	 * @param annotations The annotations to create work from.
+	 * @return This object.
+	 */
+	public AnnotationWorkList add(AnnotationList annotations) {
+		for (AnnotationInfo<?> ai : annotations.sort())
+			ai.getApplies(vrs, x -> add(ai, x));
 		return this;
 	}
 }

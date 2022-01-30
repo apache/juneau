@@ -35,13 +35,13 @@ public class CsvConfig_Test {
 
 	@Test
 	public void defaultsSerializer() throws Exception {
-		AnnotationWorkList al = b.getAnnotationList().getWork(null);
+		AnnotationWorkList al = AnnotationWorkList.of(b.getAnnotationList());
 		CsvSerializer.create().apply(al).build();
 	}
 
 	@Test
 	public void defaultsParser() throws Exception {
-		AnnotationWorkList al = b.getAnnotationList().getWork(null);
+		AnnotationWorkList al = AnnotationWorkList.of(b.getAnnotationList());
 		CsvParser.create().apply(al).build();
 	}
 
@@ -54,13 +54,13 @@ public class CsvConfig_Test {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		AnnotationWorkList al = b.getAnnotationList().getWork(null);
+		AnnotationWorkList al = AnnotationWorkList.of(b.getAnnotationList());
 		CsvSerializer.create().apply(al).build();
 	}
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		AnnotationWorkList al = b.getAnnotationList().getWork(null);
+		AnnotationWorkList al = AnnotationWorkList.of(b.getAnnotationList());
 		CsvParser.create().apply(al).build();
 	}
 }

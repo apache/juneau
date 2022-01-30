@@ -81,7 +81,7 @@ public class SerializerConfigAnnotationTest {
 
 	@Test
 	public void basicWriterSerializer() throws Exception {
-		AnnotationWorkList al = a.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		JsonSerializerSession x = JsonSerializer.create().apply(al).build().getSession();
 		check("true", ((SerializerSession)x).isAddBeanTypes());
 		check("true", x.isAddRootType());
@@ -106,7 +106,7 @@ public class SerializerConfigAnnotationTest {
 
 	@Test
 	public void basicOutputStreamSerializer() throws Exception {
-		AnnotationWorkList al = a.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("true", ((SerializerSession)x).isAddBeanTypes());
 		check("true", x.isAddRootType());
@@ -137,7 +137,7 @@ public class SerializerConfigAnnotationTest {
 
 	@Test
 	public void noValuesWriterSerializer() throws Exception {
-		AnnotationWorkList al = b.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		JsonSerializerSession x = JsonSerializer.create().apply(al).build().getSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
 		check("false", x.isAddRootType());
@@ -158,7 +158,7 @@ public class SerializerConfigAnnotationTest {
 
 	@Test
 	public void noValuesOutputStreamSerializer() throws Exception {
-		AnnotationWorkList al = b.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
 		check("false", x.isAddRootType());
@@ -184,7 +184,7 @@ public class SerializerConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationWriterSerializer() throws Exception {
-		AnnotationWorkList al = c.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		JsonSerializerSession x = JsonSerializer.create().apply(al).build().getSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
 		check("false", x.isAddRootType());
@@ -205,7 +205,7 @@ public class SerializerConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationOutputStreamSerializer() throws Exception {
-		AnnotationWorkList al = c.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		MsgPackSerializerSession x = MsgPackSerializer.create().apply(al).build().getSession();
 		check("false", ((SerializerSession)x).isAddBeanTypes());
 		check("false", x.isAddRootType());

@@ -173,14 +173,15 @@ public class AnnotationInfo<T extends Annotation> {
 	private Constructor<? extends AnnotationApplier<?,?>>[] applyConstructors;
 
 	/**
-	 * If this annotation has a {@link ContextApply} annotation, returns an instance of the specified {@link AnnotationApplier} class.
+	 * If this annotation has a {@link ContextApply} annotation, consumes an instance of the specified {@link AnnotationApplier} class.
 	 *
 	 * @param vrs Variable resolver passed to the {@link AnnotationApplier} object.
-	 * @return A new {@link AnnotationApplier} object.  Never <jk>null</jk>.
+	 * @param consumer The consumer.
+	 * @return This object.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	@SuppressWarnings("unchecked")
-	public AnnotationApplier<Annotation,Object>[] getApplies(VarResolverSession vrs) throws ExecutableException {
+	public AnnotationInfo<?> getApplies(VarResolverSession vrs, Consumer<AnnotationApplier<Annotation,Object>> consumer) throws ExecutableException {
 		try {
 			if (applyConstructors == null) {
 				ContextApply cpa = a.annotationType().getAnnotation(ContextApply.class);
@@ -192,13 +193,12 @@ public class AnnotationInfo<T extends Annotation> {
 						applyConstructors[i] = (Constructor<? extends AnnotationApplier<?,?>>) cpa.value()[i].getConstructor(VarResolverSession.class);
 				}
 			}
-			AnnotationApplier<Annotation,Object>[] aa = new AnnotationApplier[applyConstructors.length];
-			for (int i = 0; i < aa.length; i++)
-				aa[i] = (AnnotationApplier<Annotation,Object>) applyConstructors[i].newInstance(vrs);
-			return aa;
+			for (int i = 0; i < applyConstructors.length; i++)
+				consumer.accept((AnnotationApplier<Annotation,Object>) applyConstructors[i].newInstance(vrs));
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
 			throw new ExecutableException(e);
 		}
+		return this;
 	}
 
 	/**

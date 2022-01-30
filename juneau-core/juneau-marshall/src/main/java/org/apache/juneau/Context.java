@@ -15,9 +15,7 @@ package org.apache.juneau;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
-import static java.util.Arrays.*;
 import static java.util.Optional.*;
-import static java.util.stream.Collectors.*;
 import static org.apache.juneau.collections.OMap.*;
 
 import java.lang.annotation.Annotation;
@@ -139,7 +137,7 @@ public abstract class Context implements AnnotationProvider {
 		Cache<HashKey,? extends Context> cache;
 
 		private final List<Object> builders = new ArrayList<>();
-		private final AnnotationWorkList applied = new AnnotationWorkList();
+		private final AnnotationWorkList applied = AnnotationWorkList.create();
 
 		/**
 		 * Constructor.
@@ -447,16 +445,9 @@ public abstract class Context implements AnnotationProvider {
 		 */
 		@FluentSetter
 		public Builder applyAnnotations(Class<?>...fromClasses) {
-			VarResolverSession vrs = VarResolver.DEFAULT.createSession();
-			AnnotationWorkList work = new AnnotationWorkList();
-			for (Class<?> c : fromClasses) {
-				ClassInfo ci = ClassInfo.of(c);
-				AnnotationList al = new AnnotationList();
-				ci.getAnnotationInfos(ContextApplyFilter.INSTANCE, x -> al.add(x));
-				for (AnnotationInfo<?> ai : al.sort())
-					for (AnnotationApplier<Annotation,Object> aa : ai.getApplies(vrs))
-						work.add(ai, aa);
-			}
+			AnnotationWorkList work = AnnotationWorkList.create();
+			for (Class<?> c : fromClasses)
+				work.add(ClassInfo.of(c).getAnnotationList(ContextApplyFilter.INSTANCE));
 			return apply(work);
 		}
 
@@ -518,12 +509,9 @@ public abstract class Context implements AnnotationProvider {
 		 */
 		@FluentSetter
 		public Builder applyAnnotations(Method...fromMethods) {
-			VarResolverSession vrs = VarResolver.DEFAULT.createSession();
-			AnnotationWorkList work = stream(fromMethods)
-				.map(MethodInfo::of)
-				.map(x -> x.getAnnotationList(ContextApplyFilter.INSTANCE).getWork(vrs))
-				.flatMap(Collection::stream)
-				.collect(toCollection(AnnotationWorkList::new));
+			AnnotationWorkList work = AnnotationWorkList.create();
+			for (Method m : fromMethods)
+				work.add(MethodInfo.of(m).getAnnotationList(ContextApplyFilter.INSTANCE));
 			return apply(work);
 		}
 

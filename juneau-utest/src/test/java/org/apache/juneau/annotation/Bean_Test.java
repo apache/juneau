@@ -71,7 +71,7 @@ public class Bean_Test {
 
 	@Test
 	public void testBeanAnnotationOverridesPrivate_usingConfig() throws Exception {
-		AnnotationWorkList al = a2ci.getAnnotationList().getWork(null);
+		AnnotationWorkList al = AnnotationWorkList.of(a2ci.getAnnotationList());
 		JsonSerializer js = SimpleJsonSerializer.create().apply(al).build();
 		JsonParser jp = JsonParser.create().apply(al).build();
 
@@ -157,7 +157,7 @@ public class Bean_Test {
 
 	@Test
 	public void testBeanxAnnotationOverridesPrivate_usingConfig() throws Exception {
-		AnnotationWorkList al = b2ci.getAnnotationList().getWork(null);
+		AnnotationWorkList al = AnnotationWorkList.of(b2ci.getAnnotationList());
 		JsonSerializer js = SimpleJsonSerializer.create().apply(al).build();
 		JsonParser jp = JsonParser.create().apply(al).build();
 
@@ -227,7 +227,7 @@ public class Bean_Test {
 
 	@Test
 	public void d03_beanPropertiesExcludePropertiesCombined_beanConfigOverride() throws Exception {
-		AnnotationWorkList al = dConfig.getAnnotationList().getWork(vr);
+		AnnotationWorkList al = AnnotationWorkList.of(vr, dConfig.getAnnotationList());
 		JsonSerializer js = SimpleJsonSerializer.create().apply(al).build();
 		JsonParser jp = JsonParser.create().apply(al).build();
 
@@ -240,7 +240,7 @@ public class Bean_Test {
 
 	@Test
 	public void d04_beanPXpCombined_beanConfigOverride() throws Exception {
-		AnnotationWorkList al = dConfig.getAnnotationList().getWork(vr);
+		AnnotationWorkList al = AnnotationWorkList.of(vr, dConfig.getAnnotationList());
 		JsonSerializer js = SimpleJsonSerializer.create().apply(al).build();
 		JsonParser jp = JsonParser.create().apply(al).build();
 
@@ -344,7 +344,7 @@ public class Bean_Test {
 
 	@Test
 	public void e03_beanPropertiesExcludePropertiesCombined_multipleBeanAnnotations_beanConfigOverride() throws Exception {
-		AnnotationWorkList al = eConfig.getAnnotationList().getWork(vr);
+		AnnotationWorkList al = AnnotationWorkList.of(vr, eConfig.getAnnotationList());
 		JsonSerializer js = SimpleJsonSerializer.create().apply(al).build();
 		JsonParser jp = JsonParser.create().apply(al).build();
 
@@ -357,7 +357,7 @@ public class Bean_Test {
 
 	@Test
 	public void e04_beanPXpCombined_multipleBeanAnnotations_beanConfigOverride() throws Exception {
-		AnnotationWorkList al = eConfig.getAnnotationList().getWork(vr);
+		AnnotationWorkList al = AnnotationWorkList.of(vr, eConfig.getAnnotationList());
 		JsonSerializer js = SimpleJsonSerializer.create().apply(al).build();
 		JsonParser jp = JsonParser.create().apply(al).build();
 

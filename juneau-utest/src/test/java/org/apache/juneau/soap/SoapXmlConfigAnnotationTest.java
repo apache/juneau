@@ -54,7 +54,7 @@ public class SoapXmlConfigAnnotationTest {
 
 	@Test
 	public void basic() throws Exception {
-		AnnotationWorkList al = a.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		SoapXmlSerializerSession x = SoapXmlSerializer.create().apply(al).build().getSession();
 		check("foo", x.getSoapAction());
 	}
@@ -69,7 +69,7 @@ public class SoapXmlConfigAnnotationTest {
 
 	@Test
 	public void noValues() throws Exception {
-		AnnotationWorkList al = b.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		SoapXmlSerializerSession x = SoapXmlSerializer.create().apply(al).build().getSession();
 		check("http://www.w3.org/2003/05/soap-envelope", x.getSoapAction());
 	}
@@ -83,7 +83,7 @@ public class SoapXmlConfigAnnotationTest {
 
 	@Test
 	public void noAnnotation() throws Exception {
-		AnnotationWorkList al = c.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		SoapXmlSerializerSession x = SoapXmlSerializer.create().apply(al).build().getSession();
 		check("http://www.w3.org/2003/05/soap-envelope", x.getSoapAction());
 	}

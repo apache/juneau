@@ -61,7 +61,7 @@ public class HtmlConfigAnnotation_Test {
 
 	@Test
 	public void basicSerializer() throws Exception {
-		AnnotationWorkList al = a.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		HtmlSerializerSession x = HtmlSerializer.create().apply(al).build().getSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isAddKeyValueTableHeaders());
@@ -73,7 +73,7 @@ public class HtmlConfigAnnotation_Test {
 
 	@Test
 	public void basicParser() throws Exception {
-		AnnotationWorkList al = a.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		HtmlParser.create().apply(al).build().createSession();
 	}
 
@@ -87,7 +87,7 @@ public class HtmlConfigAnnotation_Test {
 
 	@Test
 	public void defaultsSerializer() throws Exception {
-		AnnotationWorkList al = b.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		HtmlSerializerSession x = HtmlSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddKeyValueTableHeaders());
@@ -99,7 +99,7 @@ public class HtmlConfigAnnotation_Test {
 
 	@Test
 	public void defaultsParser() throws Exception {
-		AnnotationWorkList al = b.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		HtmlParser.create().apply(al).build().createSession();
 	}
 
@@ -112,7 +112,7 @@ public class HtmlConfigAnnotation_Test {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		AnnotationWorkList al = c.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		HtmlSerializerSession x = HtmlSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isAddKeyValueTableHeaders());
@@ -124,7 +124,7 @@ public class HtmlConfigAnnotation_Test {
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		AnnotationWorkList al = c.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		HtmlParser.create().apply(al).build().createSession();
 	}
 }

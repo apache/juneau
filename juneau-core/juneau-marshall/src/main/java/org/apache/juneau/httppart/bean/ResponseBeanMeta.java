@@ -40,7 +40,7 @@ public class ResponseBeanMeta {
 	/**
 	 * Represents a non-existent meta object.
 	 */
-	public static ResponseBeanMeta NULL = new ResponseBeanMeta(new Builder(new AnnotationWorkList()));
+	public static ResponseBeanMeta NULL = new ResponseBeanMeta(new Builder(AnnotationWorkList.create()));
 
 	/**
 	 * Create metadata from specified class.

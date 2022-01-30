@@ -12,14 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
 import java.lang.annotation.*;
 import java.util.*;
 import java.util.function.*;
-
-import org.apache.juneau.*;
-import org.apache.juneau.svl.*;
 
 /**
  * An ordered list of annotations and the classes/methods/packages they were found on.
@@ -32,33 +27,6 @@ import org.apache.juneau.svl.*;
  */
 public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 	private static final long serialVersionUID = 1L;
-
-	private final Predicate<AnnotationInfo<?>> filter;
-
-	/**
-	 * Constructor with optional filter.
-	 *
-	 * @param filter The filter to use to filter entries added to this list.
-	 */
-	public AnnotationList(Predicate<AnnotationInfo<?>> filter) {
-		this.filter = filter;
-	}
-
-	/**
-	 * Constructor.
-	 */
-	public AnnotationList() {
-		this.filter = null;
-	}
-
-	@Override /* List */
-	public boolean add(AnnotationInfo<?> ai) {
-		if (filter == null || filter.test(ai)) {
-			super.add(ai);
-			return true;
-		}
-		return false;
-	}
 
 	private static final Comparator<AnnotationInfo<?>> RANK_COMPARATOR = new Comparator<AnnotationInfo<?>>() {
 		@Override
@@ -122,23 +90,5 @@ public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 			if (predicate.test(ai))
 				consumer.accept(ai);
 		return this;
-	}
-
-	/**
-	 * Takes the annotations in this list and produces a list of {@link AnnotationWork} objects to be applied to context builders.
-	 *
-	 * @param vrs The variable resolver session that gets passed in to the constructor of the {@link AnnotationApplier} objects that get created.
-	 * @return A list of {@link AnnotationWork} objects.
-	 */
-	public AnnotationWorkList getWork(VarResolverSession vrs) {
-		try {
-			AnnotationWorkList l = new AnnotationWorkList();
-			for (AnnotationInfo<?> ai : sort())
-				for (AnnotationApplier<Annotation,Object> aa : ai.getApplies(vrs))
-					l.add(ai, aa);
-			return l;
-		} catch (ExecutableException e) {
-			throw runtimeException(e.getCause());
-		}
 	}
 }

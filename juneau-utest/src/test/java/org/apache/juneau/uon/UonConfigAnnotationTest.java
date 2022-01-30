@@ -58,7 +58,7 @@ public class UonConfigAnnotationTest {
 
 	@Test
 	public void basicSerializer() throws Exception {
-		AnnotationWorkList al = a.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		UonSerializerSession x = UonSerializer.create().apply(al).build().getSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isEncoding());
@@ -67,7 +67,7 @@ public class UonConfigAnnotationTest {
 
 	@Test
 	public void basicParser() throws Exception {
-		AnnotationWorkList al = a.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		UonParserSession x = UonParser.create().apply(al).build().getSession();
 		check("true", x.isDecoding());
 		check("true", x.isValidateEnd());
@@ -83,7 +83,7 @@ public class UonConfigAnnotationTest {
 
 	@Test
 	public void noValuesSerializer() throws Exception {
-		AnnotationWorkList al = b.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		UonSerializerSession x = UonSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isEncoding());
@@ -92,7 +92,7 @@ public class UonConfigAnnotationTest {
 
 	@Test
 	public void noValuesParser() throws Exception {
-		AnnotationWorkList al = b.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		UonParserSession x = UonParser.create().apply(al).build().getSession();
 		check("false", x.isDecoding());
 		check("false", x.isValidateEnd());
@@ -107,7 +107,7 @@ public class UonConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		AnnotationWorkList al = c.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		UonSerializerSession x = UonSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isEncoding());
@@ -116,7 +116,7 @@ public class UonConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		AnnotationWorkList al = c.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		UonParserSession x = UonParser.create().apply(al).build().getSession();
 		check("false", x.isDecoding());
 		check("false", x.isValidateEnd());

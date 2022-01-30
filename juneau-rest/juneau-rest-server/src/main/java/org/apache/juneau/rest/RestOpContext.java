@@ -184,22 +184,22 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 				VarResolver vr = context.getVarResolver();
 				VarResolverSession vrs = vr.createSession();
-				AnnotationWorkList al = mi.getAnnotationList(ContextApplyFilter.INSTANCE).getWork(vrs);
+				AnnotationWorkList work = AnnotationWorkList.of(vrs, mi.getAnnotationList(ContextApplyFilter.INSTANCE));
 
-				apply(al);
+				apply(work);
 
-				if (context.builder.beanContext().canApply(al))
-					beanContext().apply(al);
-				if (context.builder.serializers().canApply(al))
-					serializers().apply(al);
-				if (context.builder.parsers().canApply(al))
-					parsers().apply(al);
-				if (context.builder.partSerializer().canApply(al))
-					partSerializer().apply(al);
-				if (context.builder.partParser().canApply(al))
-					partParser().apply(al);
-				if (context.builder.jsonSchemaGenerator().canApply(al))
-					jsonSchemaGenerator().apply(al);
+				if (context.builder.beanContext().canApply(work))
+					beanContext().apply(work);
+				if (context.builder.serializers().canApply(work))
+					serializers().apply(work);
+				if (context.builder.parsers().canApply(work))
+					parsers().apply(work);
+				if (context.builder.partSerializer().canApply(work))
+					partSerializer().apply(work);
+				if (context.builder.partParser().canApply(work))
+					partParser().apply(work);
+				if (context.builder.jsonSchemaGenerator().canApply(work))
+					jsonSchemaGenerator().apply(work);
 
 				processParameterAnnotations();
 
@@ -2368,7 +2368,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		Class<?> c = o.getClass();
 		ResponseBeanMeta rbm = responseBeanMetas.get(c);
 		if (rbm == null) {
-			rbm = ResponseBeanMeta.create(c, new AnnotationWorkList());
+			rbm = ResponseBeanMeta.create(c, AnnotationWorkList.create());
 			if (rbm == null)
 				rbm = ResponseBeanMeta.NULL;
 			responseBeanMetas.put(c, rbm);

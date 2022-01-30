@@ -1113,7 +1113,7 @@ public final class ClassInfo {
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
 	public AnnotationList getAnnotationList(Predicate<AnnotationInfo<?>> filter) {
-		AnnotationList l = new AnnotationList(filter);
+		AnnotationList l = new AnnotationList();
 		getAnnotationInfos(filter, x -> l.add(x));
 		return l;
 	}

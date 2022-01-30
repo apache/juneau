@@ -351,12 +351,13 @@ public class RestContext extends Context {
 			ClassInfo rci = ClassInfo.of(resourceClass);
 
 			VarResolverSession vrs = varResolver().build().createSession();
-			AnnotationWorkList al = rci.getAnnotationList(ContextApplyFilter.INSTANCE).getWork(vrs);
-			apply(al);
-			beanContext().apply(al);
-			partSerializer().apply(al);
-			partParser().apply(al);
-			jsonSchemaGenerator().apply(al);
+			AnnotationWorkList work = AnnotationWorkList.of(vrs, rci.getAnnotationList(ContextApplyFilter.INSTANCE));
+
+			apply(work);
+			beanContext().apply(work);
+			partSerializer().apply(work);
+			partParser().apply(work);
+			jsonSchemaGenerator().apply(work);
 
 			runInitHooks(bs, resource());
 

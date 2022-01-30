@@ -57,7 +57,7 @@ public class JsonConfigAnnotationTest {
 
 	@Test
 	public void basicSerializer() throws Exception {
-		AnnotationWorkList al = a.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		JsonSerializerSession x = JsonSerializer.create().apply(al).build().getSession();
 		check("true", x.isAddBeanTypes());
 		check("true", x.isEscapeSolidus());
@@ -66,7 +66,7 @@ public class JsonConfigAnnotationTest {
 
 	@Test
 	public void basicParser() throws Exception {
-		AnnotationWorkList al = a.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, a.getAnnotationList());
 		JsonParserSession x = JsonParser.create().apply(al).build().getSession();
 		check("true", x.isValidateEnd());
 	}
@@ -81,7 +81,7 @@ public class JsonConfigAnnotationTest {
 
 	@Test
 	public void noValuesSerializer() throws Exception {
-		AnnotationWorkList al = b.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		JsonSerializerSession x = JsonSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isEscapeSolidus());
@@ -90,7 +90,7 @@ public class JsonConfigAnnotationTest {
 
 	@Test
 	public void noValuesParser() throws Exception {
-		AnnotationWorkList al = b.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, b.getAnnotationList());
 		JsonParserSession x = JsonParser.create().apply(al).build().getSession();
 		check("false", x.isValidateEnd());
 	}
@@ -104,7 +104,7 @@ public class JsonConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationSerializer() throws Exception {
-		AnnotationWorkList al = c.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		JsonSerializerSession x = JsonSerializer.create().apply(al).build().getSession();
 		check("false", x.isAddBeanTypes());
 		check("false", x.isEscapeSolidus());
@@ -113,7 +113,7 @@ public class JsonConfigAnnotationTest {
 
 	@Test
 	public void noAnnotationParser() throws Exception {
-		AnnotationWorkList al = c.getAnnotationList().getWork(sr);
+		AnnotationWorkList al = AnnotationWorkList.of(sr, c.getAnnotationList());
 		JsonParserSession x = JsonParser.create().apply(al).build().getSession();
 		check("false", x.isValidateEnd());
 	}
