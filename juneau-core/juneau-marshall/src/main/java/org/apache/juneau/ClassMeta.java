@@ -2083,8 +2083,8 @@ public final class ClassMeta<T> implements Type {
 		Optional<A> o = (Optional<A>)annotationLastMap.get(a);
 		if (o == null) {
 			if (beanContext == null)
-				return info.getLastAnnotation(BeanContext.DEFAULT, a);
-			o = Optional.ofNullable(info.getLastAnnotation(beanContext, a));
+				return info.getAnnotation(BeanContext.DEFAULT, a);
+			o = Optional.ofNullable(info.getAnnotation(beanContext, a));
 			annotationLastMap.put(a, o);
 		}
 		return o.orElse(null);

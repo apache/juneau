@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.reflection;
+package org.apache.juneau.reflect;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
@@ -19,6 +19,7 @@ import static org.apache.juneau.reflect.ClassInfo.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.Context.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -30,8 +31,7 @@ import java.util.stream.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.*;
-import org.apache.juneau.reflect.*;
-import org.apache.juneau.reflection.MethodInfoTest.*;
+import org.apache.juneau.reflect.MethodInfoTest.*;
 import org.apache.juneau.svl.*;
 import org.junit.*;
 
@@ -592,29 +592,29 @@ public class ClassInfoTest {
 
 	@Test
 	public void getAnnotation() {
-		check("@A(7)", g3.getLastAnnotation(A.class));
-		check(null, g3.getLastAnnotation(B.class));
-		check(null, g3.getLastAnnotation(null));
+		check("@A(7)", g3.getAnnotation(A.class));
+		check(null, g3.getAnnotation(B.class));
+		check(null, g3.getAnnotation(null));
 	}
 
 	@Test
 	public void getAnnotation_twice() {
-		check("@A(7)", g3.getLastAnnotation(A.class));
-		check("@A(7)", g3.getLastAnnotation(A.class));
+		check("@A(7)", g3.getAnnotation(A.class));
+		check("@A(7)", g3.getAnnotation(A.class));
 	}
 
 	@Test
 	public void getAnnotation_onParent() {
-		check("@A(7)", g4.getLastAnnotation(A.class));
-		check(null, g4.getLastAnnotation(B.class));
-		check(null, g4.getLastAnnotation(null));
+		check("@A(7)", g4.getAnnotation(A.class));
+		check(null, g4.getAnnotation(B.class));
+		check(null, g4.getAnnotation(null));
 	}
 
 	@Test
 	public void getAnnotation_onInterface() {
-		check("@A(3)", g5.getLastAnnotation(A.class));
-		check(null, g5.getLastAnnotation(B.class));
-		check(null, g5.getLastAnnotation(null));
+		check("@A(3)", g5.getAnnotation(A.class));
+		check(null, g5.getAnnotation(B.class));
+		check(null, g5.getAnnotation(null));
 	}
 
 	@Test
@@ -664,9 +664,9 @@ public class ClassInfoTest {
 
 	@Test
 	public void getConfigAnnotationsMapParentFirst() {
-		check("@AConfig(2),@AConfig(1),@AConfig(3),@AConfig(5),@AConfig(6),@AConfig(7)", gb3.getAnnotationList(ContextApplyFilter.INSTANCE));
-		check("@AConfig(2),@AConfig(1),@AConfig(3),@AConfig(5),@AConfig(6),@AConfig(7)", gb4.getAnnotationList(ContextApplyFilter.INSTANCE));
-		check("@AConfig(3)", gb5.getAnnotationList(ContextApplyFilter.INSTANCE));
+		check("@AConfig(2),@AConfig(1),@AConfig(3),@AConfig(5),@AConfig(6),@AConfig(7)", gb3.getAnnotationList(CONTEXT_APPLY_FILTER));
+		check("@AConfig(2),@AConfig(1),@AConfig(3),@AConfig(5),@AConfig(6),@AConfig(7)", gb4.getAnnotationList(CONTEXT_APPLY_FILTER));
+		check("@AConfig(3)", gb5.getAnnotationList(CONTEXT_APPLY_FILTER));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1248,7 +1248,7 @@ public class ClassInfoTest {
 
 	@Test
 	public void getWrapperIfPrimitive_onType() {
-		assertEquals("class org.apache.juneau.reflection.ClassInfoTest$A1", aTypeInfo.getWrapperIfPrimitive().toString());
+		assertEquals("class org.apache.juneau.reflect.ClassInfoTest$A1", aTypeInfo.getWrapperIfPrimitive().toString());
 		assertEquals("interface java.util.Map", pTypeInfo.getWrapperIfPrimitive().toString());
 		assertEquals("interface java.util.Map", pTypeDimensionalInfo.getWrapperIfPrimitive().toString());
 		assertEquals("class java.util.AbstractMap", pTypeGenericInfo.getWrapperIfPrimitive().toString());
@@ -1291,30 +1291,30 @@ public class ClassInfoTest {
 
 	@Test
 	public void getFullName_simple() {
-		assertEquals("org.apache.juneau.reflection.AClass", aClass.getFullName());
+		assertEquals("org.apache.juneau.reflect.AClass", aClass.getFullName());
 	}
 
 	@Test
 	public void getFullName_simpleTwice() {
-		assertEquals("org.apache.juneau.reflection.AClass", aClass.getFullName());
-		assertEquals("org.apache.juneau.reflection.AClass", aClass.getFullName());
+		assertEquals("org.apache.juneau.reflect.AClass", aClass.getFullName());
+		assertEquals("org.apache.juneau.reflect.AClass", aClass.getFullName());
 	}
 
 	@Test
 	public void getFullName_simpleArray() {
-		assertEquals("org.apache.juneau.reflection.AClass[][]", of(AClass[][].class).getFullName());
+		assertEquals("org.apache.juneau.reflect.AClass[][]", of(AClass[][].class).getFullName());
 	}
 
 	@Test
 	public void getFullName_inner() {
-		assertEquals("org.apache.juneau.reflection.ClassInfoTest$J1", j1.getFullName());
-		assertEquals("org.apache.juneau.reflection.ClassInfoTest$J2", j2.getFullName());
+		assertEquals("org.apache.juneau.reflect.ClassInfoTest$J1", j1.getFullName());
+		assertEquals("org.apache.juneau.reflect.ClassInfoTest$J2", j2.getFullName());
 	}
 
 	@Test
 	public void getFullName_innerArray() {
-		assertEquals("org.apache.juneau.reflection.ClassInfoTest$J1[][]", j1_3d.getFullName());
-		assertEquals("org.apache.juneau.reflection.ClassInfoTest$J2[][]", j2_3d.getFullName());
+		assertEquals("org.apache.juneau.reflect.ClassInfoTest$J1[][]", j1_3d.getFullName());
+		assertEquals("org.apache.juneau.reflect.ClassInfoTest$J2[][]", j2_3d.getFullName());
 	}
 
 	@Test
@@ -1329,7 +1329,7 @@ public class ClassInfoTest {
 
 	@Test
 	public void getFullName_simpleType() {
-		assertEquals("org.apache.juneau.reflection.ClassInfoTest$A1", aTypeInfo.getFullName());
+		assertEquals("org.apache.juneau.reflect.ClassInfoTest$A1", aTypeInfo.getFullName());
 	}
 
 	@Test
@@ -1356,7 +1356,7 @@ public class ClassInfoTest {
 	public void getFullName_localClass() {
 		@SuppressWarnings("serial")
 		class LocalClass implements Serializable {};
-		assertEquals("org.apache.juneau.reflection.ClassInfoTest$1LocalClass", of(LocalClass.class).getFullName());
+		assertEquals("org.apache.juneau.reflect.ClassInfoTest$1LocalClass", of(LocalClass.class).getFullName());
 	}
 
 	@Test
@@ -1502,7 +1502,7 @@ public class ClassInfoTest {
 
 	@Test
 	public void getName() {
-		assertEquals("org.apache.juneau.reflection.AClass", aClass.getName());
+		assertEquals("org.apache.juneau.reflect.AClass", aClass.getName());
 		assertEquals("java.util.AbstractMap", pTypeGenericInfo.getName());
 		assertEquals("V", pTypeGenericArgInfo.getName());
 	}
@@ -1691,12 +1691,12 @@ public class ClassInfoTest {
 
 	@Test
 	public void getPackage() {
-		check("org.apache.juneau.reflection", ka.getPackage().getName());
+		check("org.apache.juneau.reflect", ka.getPackage().getName());
 	}
 
 	@Test
 	public void getPackage_type() {
-		check("org.apache.juneau.reflection", aTypeInfo.getPackage());
+		check("org.apache.juneau.reflect", aTypeInfo.getPackage());
 		check("java.util", pTypeInfo.getPackage());
 		check("java.util", pTypeDimensionalInfo.getPackage());
 		check("java.util", pTypeGenericInfo.getPackage());
@@ -1912,9 +1912,9 @@ public class ClassInfoTest {
 
 	@Test
 	public void xToString() {
-		assertEquals("class org.apache.juneau.reflection.AClass", aClass.toString());
-		assertEquals("interface org.apache.juneau.reflection.AInterface", aInterface.toString());
-		assertEquals("class org.apache.juneau.reflection.ClassInfoTest$A1", aType.toString());
+		assertEquals("class org.apache.juneau.reflect.AClass", aClass.toString());
+		assertEquals("interface org.apache.juneau.reflect.AInterface", aInterface.toString());
+		assertEquals("class org.apache.juneau.reflect.ClassInfoTest$A1", aType.toString());
 		assertEquals("java.util.Map<java.lang.String, java.util.List<java.lang.String>>", pType.toString());
 		assertEquals("java.util.Map<java.lang.String, java.lang.String[][]>", pTypeDimensional.toString());
 		assertEquals("java.util.AbstractMap<K, V>", pTypeGeneric.toString());

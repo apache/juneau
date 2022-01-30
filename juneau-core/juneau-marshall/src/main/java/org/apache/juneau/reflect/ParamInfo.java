@@ -93,29 +93,36 @@ public final class ParamInfo {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the parameter annotations declared on this parameter.
+	 * Consumers the matching parameter annotations declared on this parameter.
 	 *
-	 * @return The parameter annotations declared on this parameter, or an empty array if none found.
+	 * @param type The annotation type.
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
 	 */
-	public Annotation[] getDeclaredAnnotations() {
-		return eInfo.getParameterAnnotations(index);
+	@SuppressWarnings("unchecked")
+	public <A extends Annotation> ParamInfo getDeclaredAnnotations(Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
+		for (Annotation a : eInfo.getParameterAnnotations(index))
+			if (type.isInstance(a) && predicate.test((A)a))
+				consumer.accept((A)a);
+		return this;
 	}
 
 	/**
 	 * Returns the specified parameter annotation declared on this parameter.
 	 *
-	 * @param a
-	 * 	The annotation to search for.
-	 * @param <T>
+	 * @param type
+	 * 	The annotation to look for.
+	 * @param <A>
 	 * 	The annotation type.
 	 * @return The specified parameter annotation declared on this parameter, or <jk>null</jk> if not found.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends Annotation> T getDeclaredAnnotation(Class<T> a) {
-		if (a != null)
+	public <A extends Annotation> A getDeclaredAnnotation(Class<A> type) {
+		if (type != null)
 			for (Annotation aa : eInfo.getParameterAnnotations(index))
-				if (a.isInstance(aa))
-					return (T)aa;
+				if (type.isInstance(aa))
+					return (A)aa;
 		return null;
 	}
 
@@ -130,31 +137,31 @@ public final class ParamInfo {
 	 * <p>
 	 * If still not found, searches for the annotation on the return type of the method.
 	 *
-	 * @param a
-	 * 	The annotation to search for.
+	 * @param type
+	 * 	The annotation to look for.
 	 * @return
 	 * 	The annotation if found, or <jk>null</jk> if not.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends Annotation> T getLastAnnotation(Class<T> a) {
-		Optional<Annotation> o = annotationMap().get(a);
+	public <A extends Annotation> A getAnnotation(Class<A> type) {
+		Optional<Annotation> o = annotationMap().get(type);
 		if (o == null) {
-			o = Optional.ofNullable(findAnnotation(a));
-			annotationMap().put(a, o);
+			o = Optional.ofNullable(findAnnotation(type));
+			annotationMap().put(type, o);
 		}
-		return o.isPresent() ? (T)o.get() : null;
+		return o.isPresent() ? (A)o.get() : null;
 	}
 
 	/**
 	 * Returns <jk>true</jk> if this parameter has the specified annotation.
 	 *
-	 * @param a
-	 * 	The annotation to search for.
+	 * @param type
+	 * 	The annotation to look for.
 	 * @return
 	 * 	The <jk>true</jk> if annotation if found.
 	 */
-	public boolean hasAnnotation(Class<? extends Annotation> a) {
-		return getLastAnnotation(a) != null;
+	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
+		return getAnnotation(type) != null;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -163,32 +170,14 @@ public final class ParamInfo {
 			for (Annotation a2 : eInfo.getParameterAnnotations(index))
 				if (a.isInstance(a2))
 					return (T)a2;
-			return eInfo.getParamType(index).unwrap(Value.class,Optional.class).getLastAnnotation(a);
+			return eInfo.getParamType(index).unwrap(Value.class,Optional.class).getAnnotation(a);
 		}
 		MethodInfo mi = (MethodInfo)eInfo;
 		for (Method m2 : mi.getMatching())
 			for (Annotation a2 :  m2.getParameterAnnotations()[index])
 				if (a.isInstance(a2))
 					return (T)a2;
-		return eInfo.getParamType(index).unwrap(Value.class,Optional.class).getLastAnnotation(a);
-	}
-
-	/**
-	 * Returns all annotations of the specified type defined on this method parameter.
-	 *
-	 * <p>
-	 * Searches all methods with the same signature on the parent classes or interfaces
-	 * and the return type on the method.
-	 * <p>
-	 * Results are in parent-to-child order.
-	 *
-	 * @param a The annotation to search for.
-	 * @return A list of all matching annotations found or an empty list if none found.
-	 */
-	public <T extends Annotation> List<T> getAnnotations(Class<T> a) {
-		List<T> l = new ArrayList<>();
-		getAnnotations(AnnotationProvider.DEFAULT, a, true, x -> true, x -> l.add(x));
-		return l;
+		return eInfo.getParamType(index).unwrap(Value.class,Optional.class).getAnnotation(a);
 	}
 
 	/**
@@ -200,13 +189,13 @@ public final class ParamInfo {
 	 * <p>
 	 * Results are in parent-to-child order.
 	 *
-	 * @param a The annotation to search for.
+	 * @param type The annotation to look for.
 	 * @param predicate The predicate.
-	 * @param consumer The consumer for the annotations.
+	 * @param consumer The consumer.
 	 * @return This object.
 	 */
-	public <T extends Annotation> ParamInfo getAnnotations(Class<T> a, Predicate<T> predicate, Consumer<T> consumer) {
-		return getAnnotations(AnnotationProvider.DEFAULT, a, true, predicate, consumer);
+	public <A extends Annotation> ParamInfo getAnnotations(Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
+		return getAnnotations(AnnotationProvider.DEFAULT, type, true, predicate, consumer);
 	}
 
 	/**
@@ -218,33 +207,28 @@ public final class ParamInfo {
 	 * <p>
 	 * Results are in parent-to-child order.
 	 *
-	 * @param a The annotation to search for.
-	 * @param predicate The consumer for the annotations.
+	 * @param type The annotation to look for.
+	 * @param predicate The predicate.
 	 * @return A list of all matching annotations found or an empty list if none found.
 	 */
-	public <T extends Annotation> T getAnnotation(Class<T> a, Predicate<T> predicate) {
-		return getAnnotation(a, true, predicate);
+	public <A extends Annotation> A getAnnotation(Class<A> type, Predicate<A> predicate) {
+		return getAnnotation(type, true, predicate);
 	}
 
-//	private <T extends Annotation> List<T> appendAnnotations(List<T> l, Class<T> a, boolean parentFirst) {
-//		getAnnotations(AnnotationProvider.DEFAULT, a, parentFirst, x -> true, x -> l.add(x));
-//		return l;
-//	}
-
 	@SuppressWarnings("unchecked")
-	private <T extends Annotation> ParamInfo getAnnotations(AnnotationProvider ap, Class<T> a, boolean parentFirst, Predicate<T> predicate, Consumer<T> consumer) {
+	private <A extends Annotation> ParamInfo getAnnotations(AnnotationProvider ap, Class<A> a, boolean parentFirst, Predicate<A> predicate, Consumer<A> consumer) {
 		if (eInfo.isConstructor) {
 			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class,Optional.class);
 			Annotation[] annotations = eInfo.getParameterAnnotations(index);
 			if (parentFirst) {
 				ci.getAnnotations(ap, a, predicate, consumer);
 				for (Annotation a2 : annotations)
-					if (a.isInstance(a2) && predicate.test((T)a2))
-						consumer.accept((T)a2);
+					if (a.isInstance(a2) && predicate.test((A)a2))
+						consumer.accept((A)a2);
 			} else {
 				for (Annotation a2 : annotations)
-					if (a.isInstance(a2) && predicate.test((T)a2))
-						consumer.accept((T)a2);
+					if (a.isInstance(a2) && predicate.test((A)a2))
+						consumer.accept((A)a2);
 				ci.getAnnotations(ap, a, predicate, consumer);
 			}
 		} else {
@@ -254,13 +238,13 @@ public final class ParamInfo {
 				ci.getAnnotations(ap, a, predicate, consumer);
 				for (Method m2 : mi.getMatchingParentFirst())
 					for (Annotation a2 :  m2.getParameterAnnotations()[index])
-						if (a.isInstance(a2) && predicate.test((T)a2))
-							consumer.accept((T)a2);
+						if (a.isInstance(a2) && predicate.test((A)a2))
+							consumer.accept((A)a2);
 			} else {
 				for (Method m2 : mi.getMatching())
 					for (Annotation a2 :  m2.getParameterAnnotations()[index])
-						if (a.isInstance(a2) && predicate.test((T)a2))
-							consumer.accept((T)a2);
+						if (a.isInstance(a2) && predicate.test((A)a2))
+							consumer.accept((A)a2);
 				ci.getAnnotations(ap, a, predicate, consumer);
 			}
 		}
@@ -268,22 +252,22 @@ public final class ParamInfo {
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T extends Annotation> T getAnnotation(Class<T> a, boolean parentFirst, Predicate<T> predicate) {
+	private <A extends Annotation> A getAnnotation(Class<A> a, boolean parentFirst, Predicate<A> predicate) {
 		if (eInfo.isConstructor) {
 			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class,Optional.class);
 			Annotation[] annotations = eInfo.getParameterAnnotations(index);
 			if (parentFirst) {
-				T o = ci.getAnnotation(a, predicate);
+				A o = ci.getAnnotation(a, predicate);
 				if (o != null)
 					return o;
 				for (Annotation a2 : annotations)
-					if (a.isInstance(a2) && predicate.test((T)a2))
-						return (T)a2;
+					if (a.isInstance(a2) && predicate.test((A)a2))
+						return (A)a2;
 			} else {
 				for (Annotation a2 : annotations)
-					if (a.isInstance(a2) && predicate.test((T)a2))
-						return (T)a2;
-				T o = ci.getAnnotation(a, predicate);
+					if (a.isInstance(a2) && predicate.test((A)a2))
+						return (A)a2;
+				A o = ci.getAnnotation(a, predicate);
 				if (o != null)
 					return o;
 			}
@@ -291,19 +275,19 @@ public final class ParamInfo {
 			MethodInfo mi = (MethodInfo)eInfo;
 			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class,Optional.class);
 			if (parentFirst) {
-				T o = ci.getAnnotation(a, predicate);
+				A o = ci.getAnnotation(a, predicate);
 				if (o != null)
 					return o;
 				for (Method m2 : mi.getMatchingParentFirst())
 					for (Annotation a2 :  m2.getParameterAnnotations()[index])
-						if (a.isInstance(a2) && predicate.test((T)a2))
-							return (T)a2;
+						if (a.isInstance(a2) && predicate.test((A)a2))
+							return (A)a2;
 			} else {
 				for (Method m2 : mi.getMatching())
 					for (Annotation a2 :  m2.getParameterAnnotations()[index])
-						if (a.isInstance(a2) && predicate.test((T)a2))
-							return (T)a2;
-				T o = ci.getAnnotation(a, predicate);
+						if (a.isInstance(a2) && predicate.test((A)a2))
+							return (A)a2;
+				A o = ci.getAnnotation(a, predicate);
 				if (o != null)
 					return o;
 			}
@@ -312,8 +296,11 @@ public final class ParamInfo {
 	}
 
 	private synchronized Map<Class<?>,Optional<Annotation>> annotationMap() {
-		if (annotationMap == null)
-			annotationMap = new ConcurrentHashMap<>();
+		if (annotationMap == null) {
+			synchronized(this) {
+				annotationMap = new ConcurrentHashMap<>();
+			}
+		}
 		return annotationMap;
 	}
 

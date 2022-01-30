@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.reflection;
+package org.apache.juneau.reflect;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
@@ -23,8 +23,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.reflect.*;
 import org.junit.*;
 
 /**
@@ -180,15 +180,21 @@ public class ParamInfoTest {
 
 	@Test
 	public void getDeclaredAnnotations() throws Exception {
-		check("@CA(5)", cb_a1.getDeclaredAnnotations());
-		check("@CA(5)", cb_a2.getDeclaredAnnotations());
-		check("", cc_a1.getDeclaredAnnotations());
-		check("@CA(6)", cc_a2.getDeclaredAnnotations());
+		check("@CA(5)", declaredAnnotations(cb_a1, CA.class));
+		check("@CA(5)", declaredAnnotations(cb_a2, CA.class));
+		check("", declaredAnnotations(cc_a1, CA.class));
+		check("@CA(6)", declaredAnnotations(cc_a2, CA.class));
 	}
 
 	@Test
 	public void getDeclaredAnnotations_constructor() throws Exception {
-		check("@CA(9)", cc_cc.getDeclaredAnnotations());
+		check("@CA(9)", declaredAnnotations(cc_cc, CA.class));
+	}
+
+	private static <T extends Annotation> List<T> declaredAnnotations(ParamInfo pi, Class<T> type) {
+		List<T> l = new ArrayList<>();
+		pi.getDeclaredAnnotations(type, x -> true, x -> l.add(x));
+		return l;
 	}
 
 	@Test
@@ -226,60 +232,60 @@ public class ParamInfoTest {
 
 	@Test
 	public void getAnnotationsParentFirst() throws Exception {
-		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5)", cb_a1.getAnnotations(CA.class));
-		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5)", cb_a2.getAnnotations(CA.class));
-		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5)", cc_a1.getAnnotations(CA.class));
-		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5),@CA(6)", cc_a2.getAnnotations(CA.class));
+		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5)", annotations(cb_a1, CA.class));
+		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5)", annotations(cb_a2, CA.class));
+		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5)", annotations(cc_a1, CA.class));
+		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(5),@CA(6)", annotations(cc_a2, CA.class));
 	}
 
 	@Test
 	public void getAnnotationsParentFirst_notFound() throws Exception {
-		check("", cb_a1.getAnnotations(DA.class));
+		check("", annotations(cb_a1, DA.class));
 	}
 
 	@Test
 	public void getAnnotationsParentFirst_constructor() throws Exception {
-		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(9)", cc_cc.getAnnotations(CA.class));
+		check("@CA(4),@CA(3),@CA(2),@CA(1),@CA(9)", annotations(cc_cc, CA.class));
 	}
 
 	@Test
 	public void getAnnotationsParentFirst_notFound_constructor() throws Exception {
-		check("", cc_cc.getAnnotations(DA.class));
+		check("", annotations(cc_cc, DA.class));
 	}
 
 	@Test
 	public void getAnnotation() throws Exception {
-		check("@CA(5)", cb_a1.getLastAnnotation(CA.class));
-		check("@CA(5)", cb_a2.getLastAnnotation(CA.class));
-		check("@CA(5)", cc_a1.getLastAnnotation(CA.class));
-		check("@CA(6)", cc_a2.getLastAnnotation(CA.class));
+		check("@CA(5)", cb_a1.getAnnotation(CA.class));
+		check("@CA(5)", cb_a2.getAnnotation(CA.class));
+		check("@CA(5)", cc_a1.getAnnotation(CA.class));
+		check("@CA(6)", cc_a2.getAnnotation(CA.class));
 	}
 
 	@Test
 	public void getAnnotation_notFound() throws Exception {
-		check(null, cb_a1.getLastAnnotation(DA.class));
+		check(null, cb_a1.getAnnotation(DA.class));
 	}
 
 	@Test
 	public void getAnnotation_constructor() throws Exception {
-		check("@CA(9)", cc_cc.getLastAnnotation(CA.class));
+		check("@CA(9)", cc_cc.getAnnotation(CA.class));
 	}
 
 	@Test
 	public void getAnnotation_notFound_constructor() throws Exception {
-		check(null, cc_cc.getLastAnnotation(DA.class));
+		check(null, cc_cc.getAnnotation(DA.class));
 	}
 
 	@Test
 	public void getAnnotation_twice() throws Exception {
-		check("@CA(5)", cb_a1.getLastAnnotation(CA.class));
-		check("@CA(5)", cb_a1.getLastAnnotation(CA.class));
+		check("@CA(5)", cb_a1.getAnnotation(CA.class));
+		check("@CA(5)", cb_a1.getAnnotation(CA.class));
 	}
 
 	@Test
 	public void getAnnotation_twice_constructor() throws Exception {
-		check("@CA(9)", cc_cc.getLastAnnotation(CA.class));
-		check("@CA(9)", cc_cc.getLastAnnotation(CA.class));
+		check("@CA(9)", cc_cc.getAnnotation(CA.class));
+		check("@CA(9)", cc_cc.getAnnotation(CA.class));
 	}
 
 	@Test
@@ -325,24 +331,24 @@ public class ParamInfoTest {
 
 	@Test
 	public void getAnnotationsParentFirst_inherited() throws Exception {
-		check("@DA(4),@DA(3),@DA(2),@DA(1),@DA(0)", db_a1.getAnnotations(DA.class));
-		check("@DA(4),@DA(3),@DA(2),@DA(1),@DA(0),@DA(5)", dc_a1.getAnnotations(DA.class));
+		check("@DA(4),@DA(3),@DA(2),@DA(1),@DA(0)", annotations(db_a1, DA.class));
+		check("@DA(4),@DA(3),@DA(2),@DA(1),@DA(0),@DA(5)", annotations(dc_a1, DA.class));
 	}
 
 	@Test
 	public void getAnnotationsParentFirst_inherited_notFound() throws Exception {
-		check("", db_a1.getAnnotations(CA.class));
+		check("", annotations(db_a1, CA.class));
 	}
 
 	@Test
 	public void getAnnotation_inherited() throws Exception {
-		check("@DA(0)", db_a1.getLastAnnotation(DA.class));
-		check("@DA(5)", dc_a1.getLastAnnotation(DA.class));
+		check("@DA(0)", db_a1.getAnnotation(DA.class));
+		check("@DA(5)", dc_a1.getAnnotation(DA.class));
 	}
 
 	@Test
 	public void getAnnotation_inherited_notFound() throws Exception {
-		check(null, db_a1.getLastAnnotation(CA.class));
+		check(null, db_a1.getAnnotation(CA.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -373,5 +379,15 @@ public class ParamInfoTest {
 	@Test
 	public void toString2() {
 		assertEquals("a1[1]", e_a1_b.toString());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helpers
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private static <T extends Annotation> List<T> annotations(ParamInfo pi, Class<T> a) {
+		List<T> l = AList.create();
+		pi.getAnnotations(a, x -> true, x -> l.add(x));
+		return l;
 	}
 }

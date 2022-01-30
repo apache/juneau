@@ -12,11 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.annotation;
 
-import static org.apache.juneau.internal.StringUtils.*;
-
 import java.lang.annotation.*;
-import java.util.*;
-
 import org.apache.juneau.annotation.*;
 
 /**
@@ -42,24 +38,6 @@ public class HasQueryAnnotation {
 	 */
 	public static Builder create() {
 		return new Builder();
-	}
-
-	/**
-	 * Finds the name from the specified lists of annotations.
-	 *
-	 * <p>
-	 * The last matching name found is returned.
-	 *
-	 * @param lists The lists to search.
-	 * @return The last matching name, or {@link Optional#empty()} if not found.
-	 */
-	@SafeVarargs
-	public static Optional<String> findName(List<HasQuery>...lists) {
-		String n = null;
-		for (List<HasQuery> l : lists)
-			for (HasQuery h : l)
-				n = firstNonEmpty(h.name(), h.value(), n);
-		return Optional.ofNullable(n);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

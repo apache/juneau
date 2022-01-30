@@ -184,7 +184,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 				VarResolver vr = context.getVarResolver();
 				VarResolverSession vrs = vr.createSession();
-				AnnotationWorkList work = AnnotationWorkList.of(vrs, mi.getAnnotationList(ContextApplyFilter.INSTANCE));
+				AnnotationWorkList work = AnnotationWorkList.of(vrs, mi.getAnnotationList(CONTEXT_APPLY_FILTER));
 
 				apply(work);
 
@@ -1222,8 +1222,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 					httpMethod = "post";
 				else if (mi.hasAnnotation(RestDelete.class))
 					httpMethod = "delete";
-				else if (mi.hasAnnotation(RestOp.class))
-					httpMethod = mi.getAnnotations(RestOp.class).stream().map(y -> y.method()).filter(y -> ! y.isEmpty()).findFirst().orElse(null);
+				else if (mi.hasAnnotation(RestOp.class)) {
+					Value<String> _httpMethod = Value.empty();
+					mi.getAnnotations(RestOp.class, x -> isNotEmpty(x.method()), x -> _httpMethod.set(x.method()));
+					httpMethod = _httpMethod.orElse(null);
+				}
 
 				p = HttpUtils.detectHttpPath(restMethod, httpMethod);
 

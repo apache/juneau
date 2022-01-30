@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.reflection;
+package org.apache.juneau.reflect;
 
 import static org.apache.juneau.reflect.ConstructorInfo.*;
 import static org.junit.Assert.*;
@@ -22,7 +22,6 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.reflect.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

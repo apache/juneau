@@ -49,7 +49,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @param p The package where the annotation was found.
 	 * @param a The annotation found.
 	 */
-	protected AnnotationInfo(ClassInfo c, MethodInfo m, Package p, T a) {
+	AnnotationInfo(ClassInfo c, MethodInfo m, Package p, T a) {
 		this.c = c;
 		this.m = m;
 		this.p = p;
@@ -73,34 +73,34 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Convenience constructor when annotation is found on a class.
 	 *
-	 * @param c The class where the annotation was found.
-	 * @param a The annotation found.
+	 * @param onClass The class where the annotation was found.
+	 * @param value The annotation found.
 	 * @return A new {@link AnnotationInfo} object.
 	 */
-	public static <T extends Annotation> AnnotationInfo<T> of(ClassInfo c, T a) {
-		return new AnnotationInfo<>(c, null, null, a);
+	public static <A extends Annotation> AnnotationInfo<A> of(ClassInfo onClass, A value) {
+		return new AnnotationInfo<>(onClass, null, null, value);
 	}
 
 	/**
 	 * Convenience constructor when annotation is found on a method.
 	 *
-	 * @param m The method where the annotation was found.
-	 * @param a The annotation found.
+	 * @param onMethod The method where the annotation was found.
+	 * @param value The annotation found.
 	 * @return A new {@link AnnotationInfo} object.
 	 */
-	public static <T extends Annotation> AnnotationInfo<T> of(MethodInfo m, T a) {
-		return new AnnotationInfo<>(null, m, null, a);
+	public static <A extends Annotation> AnnotationInfo<A> of(MethodInfo onMethod, A value) {
+		return new AnnotationInfo<>(null, onMethod, null, value);
 	}
 
 	/**
 	 * Convenience constructor when annotation is found on a package.
 	 *
-	 * @param p The package where the annotation was found.
-	 * @param a The annotation found.
+	 * @param onPackage The package where the annotation was found.
+	 * @param value The annotation found.
 	 * @return A new {@link AnnotationInfo} object.
 	 */
-	public static <T extends Annotation> AnnotationInfo<T> of(Package p, T a) {
-		return new AnnotationInfo<>(null, null, p, a);
+	public static <A extends Annotation> AnnotationInfo<A> of(Package onPackage, A value) {
+		return new AnnotationInfo<>(null, null, onPackage, value);
 	}
 
 	/**
@@ -181,7 +181,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	@SuppressWarnings("unchecked")
-	public AnnotationInfo<?> getApplies(VarResolverSession vrs, Consumer<AnnotationApplier<Annotation,Object>> consumer) throws ExecutableException {
+	public AnnotationInfo<T> getApplies(VarResolverSession vrs, Consumer<AnnotationApplier<Annotation,Object>> consumer) throws ExecutableException {
 		try {
 			if (applyConstructors == null) {
 				ContextApply cpa = a.annotationType().getAnnotation(ContextApply.class);
@@ -217,22 +217,22 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns <jk>true</jk> if this annotation is the specified type.
 	 *
-	 * @param a The type to test against.
+	 * @param type The type to test against.
 	 * @return <jk>true</jk> if this annotation is the specified type.
 	 */
-	public boolean isType(Class<? extends Annotation> a) {
+	public <A extends Annotation> boolean isType(Class<A> type) {
 		Class<? extends Annotation> at = this.a.annotationType();
-		return at == a;
+		return at == type;
 	}
 
 	/**
 	 * Returns <jk>true</jk> if this annotation has the specified annotation defined on it.
 	 *
-	 * @param a The annotation to test for.
+	 * @param type The annotation to test for.
 	 * @return <jk>true</jk> if this annotation has the specified annotation defined on it.
 	 */
-	public boolean hasAnnotation(Class<? extends Annotation> a) {
-		return this.a.annotationType().getAnnotation(a) != null;
+	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
+		return this.a.annotationType().getAnnotation(type) != null;
 	}
 
 	/**
@@ -241,7 +241,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @param group The group annotation.
 	 * @return <jk>true</jk> if this annotation is in the specified {@link AnnotationGroup group}.
 	 */
-	public boolean isInGroup(Class<? extends Annotation> group) {
+	public <A extends Annotation> boolean isInGroup(Class<A> group) {
 		AnnotationGroup x = a.annotationType().getAnnotation(AnnotationGroup.class);
 		return (x != null && x.value().equals(group));
 	}
@@ -269,7 +269,7 @@ public class AnnotationInfo<T extends Annotation> {
 		return this;
 	}
 
-	@Override
+	@Override /* Object */
 	public String toString() {
 		return SimpleJson.DEFAULT_READABLE.toString(toOMap());
 	}

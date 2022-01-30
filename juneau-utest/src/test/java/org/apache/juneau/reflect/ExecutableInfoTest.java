@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.reflection;
+package org.apache.juneau.reflect;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
@@ -28,7 +28,6 @@ import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.reflect.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -309,9 +308,9 @@ public class ExecutableInfoTest {
 		check(null, c_c1.getAnnotation(CA.class));
 		check(null, c_c2.getAnnotation(CA.class));
 		check("@CA()", c_c3.getAnnotation(CA.class));
-		check(null, c_m1.getLastAnnotation(CA.class));
-		check(null, c_m2.getLastAnnotation(CA.class));
-		check("@CA()", c_m3.getLastAnnotation(CA.class));
+		check(null, c_m1.getAnnotation(CA.class));
+		check(null, c_m2.getAnnotation(CA.class));
+		check("@CA()", c_m3.getAnnotation(CA.class));
 	}
 
 	@Test
@@ -578,16 +577,16 @@ public class ExecutableInfoTest {
 
 	@Test
 	public void getFullName_method() {
-		assertEquals("org.apache.juneau.reflection.ExecutableInfoTest$X.foo()", x.getPublicMethod(x -> x.hasName("foo") && x.hasNoParams()).getFullName());
-		assertEquals("org.apache.juneau.reflection.ExecutableInfoTest$X.foo(java.lang.String)", x.getPublicMethod(x -> x.hasName("foo") && x.hasParamTypes(String.class)).getFullName());
-		assertEquals("org.apache.juneau.reflection.ExecutableInfoTest$X.foo(java.util.Map<java.lang.String,java.lang.Object>)", x.getPublicMethod(x -> x.hasName("foo") && x.hasParamTypes(Map.class)).getFullName());
+		assertEquals("org.apache.juneau.reflect.ExecutableInfoTest$X.foo()", x.getPublicMethod(x -> x.hasName("foo") && x.hasNoParams()).getFullName());
+		assertEquals("org.apache.juneau.reflect.ExecutableInfoTest$X.foo(java.lang.String)", x.getPublicMethod(x -> x.hasName("foo") && x.hasParamTypes(String.class)).getFullName());
+		assertEquals("org.apache.juneau.reflect.ExecutableInfoTest$X.foo(java.util.Map<java.lang.String,java.lang.Object>)", x.getPublicMethod(x -> x.hasName("foo") && x.hasParamTypes(Map.class)).getFullName());
 	}
 
 	@Test
 	public void getFullName_constructor() {
-		assertEquals("org.apache.juneau.reflection.ExecutableInfoTest$X()", x.getPublicConstructor(x -> x.hasNoParams()).getFullName());
-		assertEquals("org.apache.juneau.reflection.ExecutableInfoTest$X(java.lang.String)", x.getPublicConstructor(x -> x.hasParamTypes(String.class)).getFullName());
-		assertEquals("org.apache.juneau.reflection.ExecutableInfoTest$X(java.util.Map<java.lang.String,java.lang.Object>)", x.getPublicConstructor(x -> x.hasParamTypes(Map.class)).getFullName());
+		assertEquals("org.apache.juneau.reflect.ExecutableInfoTest$X()", x.getPublicConstructor(x -> x.hasNoParams()).getFullName());
+		assertEquals("org.apache.juneau.reflect.ExecutableInfoTest$X(java.lang.String)", x.getPublicConstructor(x -> x.hasParamTypes(String.class)).getFullName());
+		assertEquals("org.apache.juneau.reflect.ExecutableInfoTest$X(java.util.Map<java.lang.String,java.lang.Object>)", x.getPublicConstructor(x -> x.hasParamTypes(Map.class)).getFullName());
 	}
 
 	@Test

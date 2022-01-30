@@ -663,7 +663,7 @@ public class BeanMeta<T> {
 
 				if (m.hasAnnotation(ctx, BeanIgnore.class))
 					continue;
-				Transient t = m.getLastAnnotation(ctx, Transient.class);
+				Transient t = m.getAnnotation(ctx, Transient.class);
 				if (t != null && t.value())
 					continue;
 

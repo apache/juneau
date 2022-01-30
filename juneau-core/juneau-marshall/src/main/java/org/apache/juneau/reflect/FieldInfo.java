@@ -102,66 +102,66 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	/**
 	 * Returns the specified annotation on this field.
 	 *
-	 * @param a The annotation to look for.
+	 * @param type The annotation to look for.
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
-	public <T extends Annotation> T getAnnotation(Class<T> a) {
-		return getAnnotation(AnnotationProvider.DEFAULT, a);
+	public <A extends Annotation> A getAnnotation(Class<A> type) {
+		return getAnnotation(AnnotationProvider.DEFAULT, type);
 	}
 
 	/**
 	 * Returns the specified annotation on this field.
 	 *
-	 * @param ap The annotation provider.
-	 * @param a The annotation to look for.
+	 * @param annotationProvider The annotation provider.
+	 * @param type The annotation to look for.
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
-	public <T extends Annotation> T getAnnotation(AnnotationProvider ap, Class<T> a) {
-		Value<T> t = Value.empty();
-		ap.getAnnotations(a, f, x -> true, x -> t.set(x));
+	public <A extends Annotation> A getAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
+		Value<A> t = Value.empty();
+		annotationProvider.getAnnotations(type, f, x -> true, x -> t.set(x));
 		return t.orElse(null);
 	}
 
 	/**
 	 * Returns <jk>true</jk> if the specified annotation is present.
 	 *
-	 * @param a The annotation to check for.
+	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is present.
 	 */
-	public boolean hasAnnotation(Class<? extends Annotation> a) {
-		return f.isAnnotationPresent(a);
+	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
+		return f.isAnnotationPresent(type);
 	}
 
 	/**
 	 * Returns <jk>true</jk> if the specified annotation is not present on this field.
 	 *
-	 * @param a The annotation to check for.
+	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is not present on this field.
 	 */
-	public final boolean hasNoAnnotation(Class<? extends Annotation> a) {
-		return ! hasAnnotation(a);
+	public final <A extends Annotation> boolean hasNoAnnotation(Class<A> type) {
+		return ! hasAnnotation(type);
 	}
 
 	/**
 	 * Returns <jk>true</jk> if the specified annotation is present.
 	 *
-	 * @param ap The annotation provider.
-	 * @param a The annotation to check for.
+	 * @param annotationProvider The annotation provider.
+	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is present.
 	 */
-	public boolean hasAnnotation(AnnotationProvider ap, Class<? extends Annotation> a) {
-		return ap.getAnnotation(a, f, x -> true) != null;
+	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
+		return annotationProvider.getAnnotation(type, f, x -> true) != null;
 	}
 
 	/**
 	 * Returns <jk>true</jk> if the specified annotation is not present.
 	 *
-	 * @param ap The annotation provider.
-	 * @param a The annotation to check for.
+	 * @param annotationProvider The annotation provider.
+	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is not present.
 	 */
-	public boolean hasNoAnnotation(AnnotationProvider ap, Class<? extends Annotation> a) {
-		return ! hasAnnotation(ap, a);
+	public <A extends Annotation> boolean hasNoAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
+		return ! hasAnnotation(annotationProvider, type);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

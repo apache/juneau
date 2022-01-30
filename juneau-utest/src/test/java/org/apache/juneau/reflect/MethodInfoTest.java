@@ -10,13 +10,14 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.reflection;
+package org.apache.juneau.reflect;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.Context.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -26,7 +27,6 @@ import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 import org.junit.*;
 
@@ -207,38 +207,44 @@ public class MethodInfoTest {
 
 	@Test
 	public void getAnnotationsParentFirst() {
-		check("@A(C1),@A(C2),@A(C3),@A(a1)", c_a1.getAnnotations(A.class));
-		check("@A(C1),@A(C2),@A(C3),@A(a2a),@A(a2b)", c_a2.getAnnotations(A.class));
-		check("@A(C1),@A(C2),@A(C3),@A(a3)", c_a3.getAnnotations(A.class));
-		check("@A(C1),@A(C2),@A(C3),@A(a4)", c_a4.getAnnotations(A.class));
-		check("@A(C1),@A(C2),@A(C3)", c_a5.getAnnotations(A.class));
+		check("@A(C1),@A(C2),@A(C3),@A(a1)", annotations(c_a1, A.class));
+		check("@A(C1),@A(C2),@A(C3),@A(a2a),@A(a2b)", annotations(c_a2, A.class));
+		check("@A(C1),@A(C2),@A(C3),@A(a3)", annotations(c_a3, A.class));
+		check("@A(C1),@A(C2),@A(C3),@A(a4)", annotations(c_a4, A.class));
+		check("@A(C1),@A(C2),@A(C3)", annotations(c_a5, A.class));
 	}
 
 	@Test
 	public void getAnnotationsParentFirst_notExistent() {
-		check("", c_a1.getAnnotations(AX.class));
-		check("", c_a2.getAnnotations(AX.class));
-		check("", c_a3.getAnnotations(AX.class));
-		check("", c_a4.getAnnotations(AX.class));
-		check("", c_a5.getAnnotations(AX.class));
+		check("", annotations(c_a1, AX.class));
+		check("", annotations(c_a2, AX.class));
+		check("", annotations(c_a3, AX.class));
+		check("", annotations(c_a4, AX.class));
+		check("", annotations(c_a5, AX.class));
+	}
+
+	private static List<A> annotations(MethodInfo mi, Class<? extends Annotation> a) {
+		List<A> l = new ArrayList<>();
+		mi.getAnnotations(a, x -> true, x -> l.add((A)x));
+		return l;
 	}
 
 	@Test
 	public void getAnnotation() {
-		check("@A(a1)", c_a1.getLastAnnotation(A.class));
-		check("@A(a2b)", c_a2.getLastAnnotation(A.class));
-		check("@A(a3)", c_a3.getLastAnnotation(A.class));
-		check("@A(a4)", c_a4.getLastAnnotation(A.class));
-		check(null, c_a5.getLastAnnotation(A.class));
+		check("@A(a1)", c_a1.getAnnotation(A.class));
+		check("@A(a2b)", c_a2.getAnnotation(A.class));
+		check("@A(a3)", c_a3.getAnnotation(A.class));
+		check("@A(a4)", c_a4.getAnnotation(A.class));
+		check(null, c_a5.getAnnotation(A.class));
 	}
 
 	@Test
 	public void getAnnotationAny() {
-		check("@A(a1)", c_a1.getAnyLastAnnotation(AX.class, A.class));
-		check("@A(a2b)", c_a2.getAnyLastAnnotation(AX.class, A.class));
-		check("@A(a3)", c_a3.getAnyLastAnnotation(AX.class, A.class));
-		check("@A(a4)", c_a4.getAnyLastAnnotation(AX.class, A.class));
-		check(null, c_a5.getAnyLastAnnotation(AX.class, A.class));
+		check("@A(a1)", c_a1.getAnyAnnotation(AX.class, A.class));
+		check("@A(a2b)", c_a2.getAnyAnnotation(AX.class, A.class));
+		check("@A(a3)", c_a3.getAnyAnnotation(AX.class, A.class));
+		check("@A(a4)", c_a4.getAnyAnnotation(AX.class, A.class));
+		check(null, c_a5.getAnyAnnotation(AX.class, A.class));
 	}
 
 	@Test
@@ -286,11 +292,11 @@ public class MethodInfoTest {
 
 	@Test
 	public void getConfigAnnotationsMapParentFirst() {
-		check("@AConfig(C1),@AConfig(a1),@AConfig(C2),@AConfig(C3)", cb_a1.getAnnotationList(ContextApplyFilter.INSTANCE));
-		check("@AConfig(C1),@AConfig(a2a),@AConfig(C2),@AConfig(a2b),@AConfig(C3)", cb_a2.getAnnotationList(ContextApplyFilter.INSTANCE));
-		check("@AConfig(C1),@AConfig(a3),@AConfig(C2),@AConfig(C3)", cb_a3.getAnnotationList(ContextApplyFilter.INSTANCE));
-		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a4)", cb_a4.getAnnotationList(ContextApplyFilter.INSTANCE));
-		check("@AConfig(C1),@AConfig(C2),@AConfig(C3)", cb_a5.getAnnotationList(ContextApplyFilter.INSTANCE));
+		check("@AConfig(C1),@AConfig(a1),@AConfig(C2),@AConfig(C3)", cb_a1.getAnnotationList(CONTEXT_APPLY_FILTER));
+		check("@AConfig(C1),@AConfig(a2a),@AConfig(C2),@AConfig(a2b),@AConfig(C3)", cb_a2.getAnnotationList(CONTEXT_APPLY_FILTER));
+		check("@AConfig(C1),@AConfig(a3),@AConfig(C2),@AConfig(C3)", cb_a3.getAnnotationList(CONTEXT_APPLY_FILTER));
+		check("@AConfig(C1),@AConfig(C2),@AConfig(C3),@AConfig(a4)", cb_a4.getAnnotationList(CONTEXT_APPLY_FILTER));
+		check("@AConfig(C1),@AConfig(C2),@AConfig(C3)", cb_a5.getAnnotationList(CONTEXT_APPLY_FILTER));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

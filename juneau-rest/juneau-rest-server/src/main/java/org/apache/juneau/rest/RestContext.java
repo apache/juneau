@@ -352,7 +352,7 @@ public class RestContext extends Context {
 			ClassInfo rci = ClassInfo.of(resourceClass);
 
 			VarResolverSession vrs = varResolver().build().createSession();
-			AnnotationWorkList work = AnnotationWorkList.of(vrs, rci.getAnnotationList(ContextApplyFilter.INSTANCE));
+			AnnotationWorkList work = AnnotationWorkList.of(vrs, rci.getAnnotationList(CONTEXT_APPLY_FILTER));
 
 			apply(work);
 			beanContext().apply(work);
@@ -371,7 +371,7 @@ public class RestContext extends Context {
 
 			Map<String,MethodInfo> map = new LinkedHashMap<>();
 			ClassInfo.ofProxy(r).getAllMethodsParentFirst(
-				y -> y.hasAnnotation(RestHook.class) && y.getLastAnnotation(RestHook.class).value() == HookEvent.INIT,
+				y -> y.hasAnnotation(RestHook.class) && y.getAnnotation(RestHook.class).value() == HookEvent.INIT,
 				y -> {
 					String sig = y.getSignature();
 					if (! map.containsKey(sig))
@@ -5752,11 +5752,7 @@ public class RestContext extends Context {
 
 			ClassInfo.ofProxy(r).getAllMethodsParentFirst(
 				y -> y.hasAnnotation(RestHook.class),
-				y -> {
-					for (RestHook h : y.getAnnotations(RestHook.class))
-						if (h.value() == event)
-							x.put(y.getSignature(), y.accessible().inner());
-				}
+				y -> y.getAnnotations(RestHook.class, z -> z.value() == event, z -> x.put(y.getSignature(), y.accessible().inner()))
 			);
 
 			MethodList x2 = MethodList.of(x.values());
@@ -6952,7 +6948,7 @@ public class RestContext extends Context {
 		int code = 500;
 
 		ClassInfo ci = ClassInfo.of(e);
-		StatusCode r = ci.getLastAnnotation(StatusCode.class);
+		StatusCode r = ci.getAnnotation(StatusCode.class);
 		if (r != null)
 			if (r.value().length > 0)
 				code = r.value()[0];

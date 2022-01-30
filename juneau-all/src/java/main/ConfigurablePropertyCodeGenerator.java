@@ -102,7 +102,7 @@ public class ConfigurablePropertyCodeGenerator {
 			ClassInfo ci = ClassInfo.of(c);
 			String cName = ci.getSimpleName();
 			Set<String> ignore = ASet.of();
-			FluentSetters fs = ci.getLastAnnotation(FluentSetters.class);
+			FluentSetters fs = ci.getAnnotation(FluentSetters.class);
 			if (! fs.returns().isEmpty())
 				cName = fs.returns();
 			for (String i : fs.ignore())

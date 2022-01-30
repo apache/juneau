@@ -80,6 +80,11 @@ public abstract class Context implements AnnotationProvider {
 	private static final Map<Class<?>,MethodInfo> BUILDER_CREATE_METHODS = new ConcurrentHashMap<>();
 
 	/**
+	 * Predicate for annotations that themselves are annotated with {@link ContextApply}.
+	 */
+	public static final Predicate<AnnotationInfo<?>> CONTEXT_APPLY_FILTER = x -> x.hasAnnotation(ContextApply.class);
+
+	/**
 	 * Instantiates a builder of the specified context class.
 	 *
 	 * <p>
@@ -447,7 +452,7 @@ public abstract class Context implements AnnotationProvider {
 		public Builder applyAnnotations(Class<?>...fromClasses) {
 			AnnotationWorkList work = AnnotationWorkList.create();
 			for (Class<?> c : fromClasses)
-				work.add(ClassInfo.of(c).getAnnotationList(ContextApplyFilter.INSTANCE));
+				work.add(ClassInfo.of(c).getAnnotationList(CONTEXT_APPLY_FILTER));
 			return apply(work);
 		}
 
@@ -511,7 +516,7 @@ public abstract class Context implements AnnotationProvider {
 		public Builder applyAnnotations(Method...fromMethods) {
 			AnnotationWorkList work = AnnotationWorkList.create();
 			for (Method m : fromMethods)
-				work.add(MethodInfo.of(m).getAnnotationList(ContextApplyFilter.INSTANCE));
+				work.add(MethodInfo.of(m).getAnnotationList(CONTEXT_APPLY_FILTER));
 			return apply(work);
 		}
 

@@ -19,7 +19,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -205,13 +204,11 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * signature on the parent classes or interfaces.
 	 * <br>The search is performed in child-to-parent order.
 	 *
-	 * @param a
-	 * 	The annotation to search for.
-	 * @return
-	 * 	The annotation if found, or <jk>null</jk> if not.
+	 * @param type The annotation to look for.
+	 * @return The annotation if found, or <jk>null</jk> if not.
 	 */
-	public final <T extends Annotation> T getLastAnnotation(Class<T> a) {
-		return getLastAnnotation(AnnotationProvider.DEFAULT, a);
+	public final <A extends Annotation> A getAnnotation(Class<A> type) {
+		return getAnnotation(AnnotationProvider.DEFAULT, type);
 	}
 
 	/**
@@ -221,16 +218,16 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * Searches all methods with the same signature on the parent classes or interfaces
 	 * and the return type on the method.
 	 *
-	 * @param ap The annotation provider.
-	 * @param a The annotation to search for.
+	 * @param annotationProvider The annotation provider.
+	 * @param type The annotation to look for.
 	 * @return The first annotation found, or <jk>null</jk> if it doesn't exist.
 	 */
-	public final <T extends Annotation> T getLastAnnotation(AnnotationProvider ap, Class<T> a) {
-		if (a == null)
+	public final <A extends Annotation> A getAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
+		if (type == null)
 			return null;
-		Value<T> t = Value.empty();
+		Value<A> t = Value.empty();
 		for (Method m2 : _getMatching()) {
-			ap.getAnnotations(a, m2, x -> true, x -> t.set(x));
+			annotationProvider.getAnnotations(type, m2, x -> true, x -> t.set(x));
 			if (t.isPresent())
 				return t.get();
 		}
@@ -240,23 +237,23 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	/**
 	 * Returns <jk>true</jk> if the specified annotation is present on this method.
 	 *
-	 * @param a The annotation to check for.
+	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is present on this method.
 	 */
-	public final boolean hasAnnotation(Class<? extends Annotation> a) {
-		return hasAnnotation(AnnotationProvider.DEFAULT, a);
+	public final <A extends Annotation> boolean hasAnnotation(Class<A> type) {
+		return hasAnnotation(AnnotationProvider.DEFAULT, type);
 	}
 
 	/**
 	 * Returns <jk>true</jk> if the specified annotation is present on this method.
 	 *
-	 * @param ap The annotation provider.
-	 * @param a The annotation to check for.
+	 * @param annotationProvider The annotation provider.
+	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is present on this method.
 	 */
-	public final boolean hasAnnotation(AnnotationProvider ap, Class<? extends Annotation> a) {
+	public final <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
 		for (Method m2 : _getMatching())
-			if (ap.getAnnotation(a, m2, x -> true) != null)
+			if (annotationProvider.getAnnotation(type, m2, x -> true) != null)
 				return true;
 		return false;
 	}
@@ -264,58 +261,25 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	/**
 	 * Returns <jk>true</jk> if the specified annotation is not present on this method.
 	 *
-	 * @param a The annotation to check for.
+	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is not present on this method.
 	 */
-	public final boolean hasNoAnnotation(Class<? extends Annotation> a) {
-		return getLastAnnotation(a) == null;
+	public final <A extends Annotation> boolean hasNoAnnotation(Class<A> type) {
+		return getAnnotation(type) == null;
 	}
 
 	/**
 	 * Returns <jk>true</jk> if at least one of the specified annotation is present on this method.
 	 *
-	 * @param a The annotation to check for.
+	 * @param types The annotation to look for.
 	 * @return <jk>true</jk> if at least one of the specified annotation is present on this method.
 	 */
 	@SafeVarargs
-	public final boolean hasAnyAnnotations(Class<? extends Annotation>...a) {
-		for (Class<? extends Annotation> aa : a)
+	public final boolean hasAnyAnnotations(Class<? extends Annotation>...types) {
+		for (Class<? extends Annotation> aa : types)
 			if (hasAnnotation(aa))
 				return true;
 		return false;
-	}
-
-	/**
-	 * Returns all annotations of the specified type defined on the specified method.
-	 *
-	 * <p>
-	 * Searches all methods with the same signature on the parent classes or interfaces
-	 * and the return type on the method.
-	 * <br>Results are parent-to-child ordered.
-	 *
-	 * @param a The annotation to search for.
-	 * @return A list of all matching annotations found or an empty list if none found.
-	 */
-	public <T extends Annotation> List<T> getAnnotations(Class<T> a) {
-		return getAnnotations(AnnotationProvider.DEFAULT, a);
-	}
-
-	/**
-	 * Returns all annotations of the specified type defined on the specified method.
-	 *
-	 * <p>
-	 * Searches all methods with the same signature on the parent classes or interfaces
-	 * and the return type on the method.
-	 * <br>Results are parent-to-child ordered.
-	 *
-	 * @param ap The annotation provider.
-	 * @param a The annotation to search for.
-	 * @return	A list of all matching annotations found or an empty list if none found.
-	 */
-	public <T extends Annotation> List<T> getAnnotations(AnnotationProvider ap, Class<T> a) {
-		List<T> l = new ArrayList<>();
-		getAnnotations(ap, a, x -> true, x -> l.add(x));
-		return l;
 	}
 
 	/**
@@ -326,13 +290,13 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * and the return type on the method.
 	 * <br>Results are parent-to-child ordered.
 	 *
-	 * @param a The annotation to search for.
+	 * @param type The annotation to look for.
 	 * @param predicate The predicate.
-	 * @param consumer The consumer of the annotation.
+	 * @param consumer The consumer.
 	 * @return This object.
 	 */
-	public <T extends Annotation> MethodInfo getAnnotations(Class<T> a, Predicate<T> predicate, Consumer<T> consumer) {
-		return getAnnotations(AnnotationProvider.DEFAULT, a, predicate, consumer);
+	public <A extends Annotation> MethodInfo getAnnotations(Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
+		return getAnnotations(AnnotationProvider.DEFAULT, type, predicate, consumer);
 	}
 
 	/**
@@ -343,33 +307,33 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * and the return type on the method.
 	 * <br>Results are parent-to-child ordered.
 	 *
-	 * @param ap The annotation provider.
-	 * @param a The annotation.
+	 * @param annotationProvider The annotation provider.
+	 * @param type The annotation type.
 	 * @param predicate The predicate.
 	 * @param consumer The consumer.
 	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T extends Annotation> MethodInfo getAnnotations(AnnotationProvider ap, Class<T> a, Predicate<T> predicate, Consumer<T> consumer) {
-		declaringClass.getAnnotations(ap, a, predicate, consumer);
+	public <A extends Annotation> MethodInfo getAnnotations(AnnotationProvider annotationProvider, Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
+		declaringClass.getAnnotations(annotationProvider, type, predicate, consumer);
 		for (Method m2 : getMatchingParentFirst())
 			for (Annotation a2 : m2.getDeclaredAnnotations())
-				if (a.isInstance(a2) && predicate.test((T)a2))
-					consumer.accept((T)a2);
-		getReturnType().unwrap(Value.class,Optional.class).getAnnotations(ap, a, predicate, consumer);
+				if (type.isInstance(a2) && predicate.test((A)a2))
+					consumer.accept((A)a2);
+		getReturnType().unwrap(Value.class,Optional.class).getAnnotations(annotationProvider, type, predicate, consumer);
 		return this;
 	}
 
 	/**
 	 * Returns the first annotation in the specified list on this method.
 	 *
-	 * @param c The annotations that cannot be present on the method.
-	 * @return <jk>true</jk> if this method does not have any of the specified annotations.
+	 * @param types The annotations to look for.
+	 * @return The first matching annotation.
 	 */
 	@SafeVarargs
-	public final Annotation getAnyLastAnnotation(Class<? extends Annotation>...c) {
-		for (Class<? extends Annotation> cc : c) {
-			Annotation a = getLastAnnotation(cc);
+	public final Annotation getAnyAnnotation(Class<? extends Annotation>...types) {
+		for (Class<? extends Annotation> cc : types) {
+			Annotation a = getAnnotation(cc);
 			if (a != null)
 				return a;
 		}
@@ -408,42 +372,25 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * 	<li>On this method and matching methods ordered parent-to-child.
 	 * </ol>
 	 *
-	 * @param filter
-	 * 	Optional filter to apply to limit which annotations are added to the list.
-	 * 	<br>Can be <jk>null</jk> for no filtering.
+	 * @param predicate The predicate.
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationList getAnnotationList(Predicate<AnnotationInfo<?>> filter) {
+	public AnnotationList getAnnotationList(Predicate<AnnotationInfo<?>> predicate) {
 		AnnotationList al = new AnnotationList();
-		getAnnotationInfos(filter, x -> al.add(x));
+		getAnnotationInfos(predicate, x -> al.add(x));
 		return al;
 	}
 
 	/**
 	 * Same as {@link #getAnnotationList(Predicate)} except only returns annotations defined on methods.
 	 *
-	 * @param filter
-	 * 	Optional filter to apply to limit which annotations are added to the list.
-	 * 	<br>Can be <jk>null</jk> for no filtering.
+	 * @param predicate The predicate.
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationList getAnnotationListMethodOnly(Predicate<AnnotationInfo<?>> filter) {
+	public AnnotationList getAnnotationListMethodOnly(Predicate<AnnotationInfo<?>> predicate) {
 		AnnotationList al = new AnnotationList();
-		getAnnotationInfosMethodOnly(filter, x -> al.add(x));
+		getAnnotationInfosMethodOnly(predicate, x -> al.add(x));
 		return al;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this method or parent methods have any annotations annotated with {@link ContextApply}.
-	 *
-	 * @return <jk>true</jk> if this method or parent methods have any annotations annotated with {@link ContextApply}.
-	 */
-	public boolean hasApplyAnnotations() {
-		for (Method m2 : getMatching())
-			for (Annotation a2 :  m2.getAnnotations())
-				if (a2.annotationType().getAnnotation(ContextApply.class) != null)
-					return true;
-		return false;
 	}
 
 	/**

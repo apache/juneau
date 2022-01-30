@@ -10,6 +10,46 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.reflection;
+package org.apache.juneau.reflect;
 
-public class AClass {}
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
+import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.assertions.Assertions.*;
+
+import org.apache.juneau.annotation.*;
+import java.lang.annotation.*;
+
+import org.junit.*;
+
+@FixMethodOrder(NAME_ASCENDING)
+public class AnnotationInfoTest {
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Is in group.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Target(TYPE)
+	@Retention(RUNTIME)
+	@AnnotationGroup(D1.class)
+	public static @interface D1 {}
+
+	@Target(TYPE)
+	@Retention(RUNTIME)
+	@AnnotationGroup(D1.class)
+	public static @interface D2 {}
+
+	@Target(TYPE)
+	@Retention(RUNTIME)
+	public static @interface D3 {}
+
+	@D1 @D2 @D3
+	public static class D {}
+
+	@Test
+	public void d01_isInGroup() {
+		ClassInfo d = ClassInfo.of(D.class);
+		AnnotationList l = d.getAnnotationList(x -> x.isInGroup(D1.class));
+		assertList(l).isSize(2);
+	}
+}

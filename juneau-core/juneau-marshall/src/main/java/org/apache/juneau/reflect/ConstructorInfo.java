@@ -92,45 +92,45 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	/**
 	 * Finds the annotation of the specified type defined on this constructor.
 	 *
-	 * @param a The annotation to search for.
+	 * @param type The annotation to look for.
 	 * @return The annotation if found, or <jk>null</jk> if not.
 	 */
-	public final <T extends Annotation> T getAnnotation(Class<T> a) {
-		return getAnnotation(AnnotationProvider.DEFAULT, a);
+	public final <A extends Annotation> A getAnnotation(Class<A> type) {
+		return getAnnotation(AnnotationProvider.DEFAULT, type);
 	}
 
 	/**
 	 * Finds the annotation of the specified type defined on this constructor.
 	 *
-	 * @param ap The annotation provider.
-	 * @param a The annotation to search for.
+	 * @param annotationProvider The annotation provider.
+	 * @param type The annotation to look for.
 	 * @return The first annotation found, or <jk>null</jk> if it doesn't exist.
 	 */
-	public final <T extends Annotation> T getAnnotation(AnnotationProvider ap, Class<T> a) {
-		Value<T> t = Value.empty();
-		ap.getAnnotations(a, c, x-> true, x -> t.set(x));
+	public final <A extends Annotation> A getAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
+		Value<A> t = Value.empty();
+		annotationProvider.getAnnotations(type, c, x -> true, x -> t.set(x));
 		return t.orElse(null);
 	}
 
 	/**
 	 * Returns <jk>true</jk> if the specified annotation is present on this constructor.
 	 *
-	 * @param a The annotation to check for.
+	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is present on this constructor.
 	 */
-	public final boolean hasAnnotation(Class<? extends Annotation> a) {
-		return hasAnnotation(AnnotationProvider.DEFAULT, a);
+	public final <A extends Annotation> boolean hasAnnotation(Class<A> type) {
+		return hasAnnotation(AnnotationProvider.DEFAULT, type);
 	}
 
 	/**
 	 * Returns <jk>true</jk> if the specified annotation is present on this constructor.
 	 *
-	 * @param ap The annotation provider.
-	 * @param a The annotation to check for.
+	 * @param annotationProvider The annotation provider.
+	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is present on this constructor.
 	 */
-	public final boolean hasAnnotation(AnnotationProvider ap, Class<? extends Annotation> a) {
-		return ap.getAnnotation(a, c, x -> true) != null;
+	public final <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
+		return annotationProvider.getAnnotation(type, c, x -> true) != null;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -394,9 +394,9 @@ public class BasicSwaggerProviderSession {
 					List<MethodInfo> methods = eci.getMethods();
 					for (int i = methods.size()-1; i>=0; i--) {
 						MethodInfo ecmi = methods.get(i);
-						Header a = ecmi.getLastAnnotation(Header.class);
+						Header a = ecmi.getAnnotation(Header.class);
 						if (a == null)
-							a = ecmi.getReturnType().unwrap(Value.class,Optional.class).getLastAnnotation(Header.class);
+							a = ecmi.getReturnType().unwrap(Value.class,Optional.class).getAnnotation(Header.class);
 						if (a != null && ! isMulti(a)) {
 							String ha = a.name();
 							for (Integer code : codes) {
@@ -411,8 +411,10 @@ public class BasicSwaggerProviderSession {
 			}
 
 			if (mi.hasAnnotation(Response.class) || mi.getReturnType().unwrap(Value.class,Optional.class).hasAnnotation(Response.class)) {
-				List<Response> la = mi.getAnnotations(context, Response.class);
-				List<StatusCode> la2 = mi.getAnnotations(context, StatusCode.class);
+				List<Response> la = new ArrayList<>();
+				mi.getAnnotations(context, Response.class, x -> true, x -> la.add(x));
+				List<StatusCode> la2 = new ArrayList<>();
+				mi.getAnnotations(context, StatusCode.class, x -> true, x -> la2.add(x));
 				Set<Integer> codes = getCodes(la2, 200);
 				for (Response a : la) {
 					for (Integer code : codes) {
@@ -430,7 +432,7 @@ public class BasicSwaggerProviderSession {
 					for (int i = methods.size()-1; i>=0; i--) {
 						MethodInfo ecmi = methods.get(i);
 						if (ecmi.hasAnnotation(Header.class)) {
-							Header a = ecmi.getLastAnnotation(Header.class);
+							Header a = ecmi.getAnnotation(Header.class);
 							String ha = a.name();
 							if (! isMulti(a)) {
 								for (Integer code : codes) {
@@ -460,8 +462,12 @@ public class BasicSwaggerProviderSession {
 				ClassInfo pt = mpi.getParameterType();
 
 				if (pt.is(Value.class) && (mpi.hasAnnotation(Header.class) || pt.hasAnnotation(Header.class))) {
-					List<Header> la = AList.of(mpi.getAnnotations(Header.class)).a(pt.getAnnotations(Header.class));
-					List<StatusCode> la2 = AList.of(mpi.getAnnotations(StatusCode.class)).a(pt.getAnnotations(StatusCode.class));
+					List<Header> la = new ArrayList<>();
+					mpi.getAnnotations(Header.class, x -> true, x -> la.add(x));
+					pt.getAnnotations(Header.class, x -> true, x -> la.add(x));
+					List<StatusCode> la2 = new ArrayList<>();
+					mpi.getAnnotations(StatusCode.class, x -> true, x -> la2.add(x));
+					pt.getAnnotations(StatusCode.class, x -> true, x -> la2.add(x));
 					Set<Integer> codes = getCodes(la2, 200);
 					String name = HeaderAnnotation.findName(mpi).orElse(null);
 					Type type = Value.unwrap(mpi.getParameterType().innerType());
@@ -477,8 +483,12 @@ public class BasicSwaggerProviderSession {
 					}
 
 				} else if (mpi.hasAnnotation(Response.class) || pt.hasAnnotation(Response.class)) {
-					List<Response> la = AList.of(mpi.getAnnotations(Response.class)).a(pt.getAnnotations(Response.class));
-					List<StatusCode> la2 = AList.of(mpi.getAnnotations(StatusCode.class)).a(pt.getAnnotations(StatusCode.class));
+					List<Response> la = new ArrayList<>();
+					mpi.getAnnotations(Response.class, x -> true, x -> la.add(x));
+					pt.getAnnotations(Response.class, x -> true, x -> la.add(x));
+					List<StatusCode> la2 = new ArrayList<>();
+					mpi.getAnnotations(StatusCode.class, x -> true, x -> la2.add(x));
+					pt.getAnnotations(StatusCode.class, x -> true, x -> la2.add(x));
 					Set<Integer> codes = getCodes(la2, 200);
 					Type type = Value.unwrap(mpi.getParameterType().innerType());
 					for (Response a : la) {

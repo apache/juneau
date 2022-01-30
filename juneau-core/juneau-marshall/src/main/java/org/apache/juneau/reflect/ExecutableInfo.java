@@ -41,6 +41,7 @@ public abstract class ExecutableInfo {
 	private volatile Class<?>[] rawParamTypes;
 	private volatile Type[] rawGenericParamTypes;
 	private volatile Parameter[] rawParameters;
+	private volatile Annotation[][] parameterAnnotations;
 
 	/**
 	 * Constructor.
@@ -313,24 +314,18 @@ public abstract class ExecutableInfo {
 	// Annotations
 	//-----------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * Returns the parameter annotations on this executable.
-	 *
-	 * @return The parameter annotations on this executable.
-	 */
-	public final Annotation[][] getParameterAnnotations() {
-		return e.getParameterAnnotations();
+	final Annotation[][] getParameterAnnotations() {
+		if (parameterAnnotations == null) {
+			synchronized(this) {
+				parameterAnnotations = e.getParameterAnnotations();
+			}
+		}
+		return parameterAnnotations;
 	}
 
-	/**
-	 * Returns the parameter annotations on the parameter at the specified index.
-	 *
-	 * @param index The parameter index.
-	 * @return The parameter annotations on the parameter at the specified index.
-	 */
-	public final Annotation[] getParameterAnnotations(int index) {
+	final Annotation[] getParameterAnnotations(int index) {
 		checkIndex(index);
-		Annotation[][] x = e.getParameterAnnotations();
+		Annotation[][] x = getParameterAnnotations();
 		int c = e.getParameterCount();
 		if (c != x.length) {
 			// Seems to be a JVM bug where getParameterAnnotations() don't take mandated parameters into account.

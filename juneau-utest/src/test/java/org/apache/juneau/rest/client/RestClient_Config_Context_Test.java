@@ -14,6 +14,8 @@ package org.apache.juneau.rest.client;
 
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.Context.*;
+
 import java.io.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -111,7 +113,7 @@ public class RestClient_Config_Context_Test {
 		client().applyAnnotations(A6b.class).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().asType(A6a.class);
 		client().applyAnnotations(A6c.class).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().asType(A6a.class);
 		client().applyAnnotations(A6d.class.getMethod("foo")).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().asType(A6a.class);
-		AnnotationWorkList al = AnnotationWorkList.of(ClassInfo.of(A6c.class).getAnnotationList(ContextApplyFilter.INSTANCE));
+		AnnotationWorkList al = AnnotationWorkList.of(ClassInfo.of(A6c.class).getAnnotationList(CONTEXT_APPLY_FILTER));
 		client().apply(al).build().post("/echoBody",A6a.get()).run().cacheBody().assertBody().is("{bar:2,baz:3,foo:1}").getBody().asType(A6a.class);
 	}
 

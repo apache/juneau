@@ -350,7 +350,7 @@ public final class ClassInfo {
 	 * <p>
 	 * Results are classes-before-interfaces, then child-to-parent order.
 	 *
-	 * @param predicate The predicate to test for.
+	 * @param predicate The predicate.
 	 * @return The parent class or interface that matches the specified predicate.
 	 */
 	public ClassInfo getAnyParent(Predicate<ClassInfo> predicate) {
@@ -689,7 +689,7 @@ public final class ClassInfo {
 	/**
 	 * Returns the declared constructor that matches the specified predicate.
 	 *
-	 * @param predicate The predicate to match.
+	 * @param predicate The predicate.
 	 * @return The declared constructor that matches the specified predicate.
 	 */
 	public ConstructorInfo getDeclaredConstructor(Predicate<ConstructorInfo> predicate) {
@@ -919,13 +919,11 @@ public final class ClassInfo {
 	/**
 	 * Returns all annotations of the specified type defined on the specified class or parent classes/interfaces in parent-to-child order.
 	 *
-	 * @param a
-	 * 	The annotation to search for.
-	 * @return
-	 * 	A list of all matching annotations found or an empty list if none found.
+	 * @param type The annotation type to look for.
+	 * @return The matching annotations.
 	 */
-	public <T extends Annotation> List<T> getAnnotations(Class<T> a) {
-		return getAnnotations(AnnotationProvider.DEFAULT, a);
+	public <A extends Annotation> List<A> getAnnotations(Class<A> type) {
+		return getAnnotations(AnnotationProvider.DEFAULT, type);
 	}
 
 	/**
@@ -933,29 +931,27 @@ public final class ClassInfo {
 	 *
 	 * <p>
 	 * Returns the list in reverse (parent-to-child) order.
-	 * @param ap The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
-	 * @param a
-	 * 	The annotation to search for.
 	 *
-	 * @return
-	 * 	A list of all matching annotations found or an empty list if none found.
+	 * @param annotationProvider The annotation provider.
+	 * @param type The annotation type to look for.
+	 * @return The matching annotations.
 	 */
-	public <T extends Annotation> List<T> getAnnotations(AnnotationProvider ap, Class<T> a) {
-		List<T> l = new ArrayList<>();
-		getAnnotations(ap, a, x-> true, x -> l.add(x));
+	public <A extends Annotation> List<A> getAnnotations(AnnotationProvider annotationProvider, Class<A> type) {
+		List<A> l = new ArrayList<>();
+		getAnnotations(annotationProvider, type, x-> true, x -> l.add(x));
 		return l;
 	}
 
 	/**
 	 * Consumes all matching annotations of the specified type defined on this or parent classes/interfaces.
 	 *
-	 * @param a The annotation to look for.
+	 * @param type The annotation to look for.
 	 * @param predicate The predicate.
 	 * @param consumer The consumer.
 	 * @return This object.
 	 */
-	public <T extends Annotation> ClassInfo getAnnotations(Class<T> a, Predicate<T> predicate, Consumer<T> consumer) {
-		return getAnnotations(AnnotationProvider.DEFAULT, a, predicate, consumer);
+	public <A extends Annotation> ClassInfo getAnnotations(Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
+		return getAnnotations(AnnotationProvider.DEFAULT, type, predicate, consumer);
 	}
 
 	/**
@@ -970,24 +966,24 @@ public final class ClassInfo {
 	 * 	<li>On this class.
 	 * </ol>
 	 *
-	 * @param ap The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
-	 * @param a The annotation to search for.
+	 * @param annotationProvider The annotation provider.
+	 * @param type The annotation to look for.
 	 * @param predicate The predicate.
 	 * @param consumer The consumer.
 	 * @return This object.
 	 */
-	public <T extends Annotation> ClassInfo getAnnotations(AnnotationProvider ap, Class<T> a, Predicate<T> predicate, Consumer<T> consumer) {
+	public <A extends Annotation> ClassInfo getAnnotations(AnnotationProvider annotationProvider, Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
 		if (predicate == null) predicate = x->true;
-		if (ap == null) ap = AnnotationProvider.DEFAULT;
-		T t2 = getPackageAnnotation(a);
+		if (annotationProvider == null) annotationProvider = AnnotationProvider.DEFAULT;
+		A t2 = getPackageAnnotation(type);
 		if (t2 != null && predicate.test(t2))
 			consumer.accept(t2);
 		ClassInfo[] interfaces = _getInterfaces();
 		for (int i = interfaces.length-1; i >= 0; i--)
-			ap.getDeclaredAnnotations(a, interfaces[i].inner(), predicate, consumer);
+			annotationProvider.getDeclaredAnnotations(type, interfaces[i].inner(), predicate, consumer);
 		ClassInfo[] parents = _getParents();
 		for (int i = parents.length-1; i >= 0; i--)
-			ap.getDeclaredAnnotations(a, parents[i].inner(), predicate, consumer);
+			annotationProvider.getDeclaredAnnotations(type, parents[i].inner(), predicate, consumer);
 		return this;
 	}
 
@@ -999,11 +995,11 @@ public final class ClassInfo {
 	 * signature on the parent classes or interfaces.
 	 * <br>The search is performed in child-to-parent order.
 	 *
-	 * @param a The annotation to search for.
+	 * @param type The annotation to look for.
 	 * @return The annotation if found, or <jk>null</jk> if not.
 	 */
-	public <T extends Annotation> T getLastAnnotation(Class<T> a) {
-		return getLastAnnotation(AnnotationProvider.DEFAULT, a);
+	public <A extends Annotation> A getAnnotation(Class<A> type) {
+		return getAnnotation(AnnotationProvider.DEFAULT, type);
 	}
 
 	/**
@@ -1012,57 +1008,57 @@ public final class ClassInfo {
 	 * <p>
 	 * If the annotation cannot be found on the immediate class, searches methods with the same signature on the parent classes or interfaces. <br>
 	 * The search is performed in child-to-parent order.
-	 * @param ap The meta provider for looking up annotations on reflection objects (classes, methods, fields, constructors).
-	 * @param a The annotation to search for.
+	 * @param annotationProvider The annotation provider.
+	 * @param type The annotation to look for.
 	 *
 	 * @return The annotation if found, or <jk>null</jk> if not.
 	 */
-	public <T extends Annotation> T getLastAnnotation(AnnotationProvider ap, Class<T> a) {
-		return findAnnotation(ap, a);
+	public <A extends Annotation> A getAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
+		return findAnnotation(annotationProvider, type);
 	}
 
 	/**
 	 * Returns <jk>true</jk> if this class has the specified annotation.
 	 *
-	 * @param a The annotation to search for.
+	 * @param type The annotation to look for.
 	 * @return The <jk>true</jk> if annotation if found.
 	 */
-	public boolean hasAnnotation(Class<? extends Annotation> a) {
-		return hasAnnotation(AnnotationProvider.DEFAULT, a);
+	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
+		return hasAnnotation(AnnotationProvider.DEFAULT, type);
 	}
 
 	/**
 	 * Returns <jk>true</jk> if this class has the specified annotation.
 	 *
-	 * @param ap The annotation provider.
-	 * @param a The annotation to search for.
+	 * @param annotationProvider The annotation provider.
+	 * @param type The annotation to look for.
 	 * @return The <jk>true</jk> if annotation if found.
 	 */
-	public boolean hasAnnotation(AnnotationProvider ap, Class<? extends Annotation> a) {
-		return ap.getAnnotation(a, c, x -> true) != null;
+	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
+		return annotationProvider.getAnnotation(type, c, x -> true) != null;
 	}
 
 	/**
 	 * Returns the specified annotation only if it's been declared on the package of this class.
 	 *
-	 * @param <T> The annotation class type.
-	 * @param a The annotation class.
+	 * @param <A> The annotation class type.
+	 * @param type The annotation class.
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
-	public <T extends Annotation> T getPackageAnnotation(Class<T> a) {
+	public <A extends Annotation> A getPackageAnnotation(Class<A> type) {
 		Package p = c == null ? null : c.getPackage();
-		return (p == null ? null : p.getAnnotation(a));
+		return (p == null ? null : p.getAnnotation(type));
 	}
 
 	/**
 	 * Returns the first matching annotation of the specified type defined on the specified class or parent classes/interfaces in parent-to-child order.
 	 *
-	 * @param a The annotation to search for.
+	 * @param type The annotation to look for.
 	 * @param predicate The predicate.
 	 * @return This object.
 	 */
-	public <T extends Annotation> T getAnnotation(Class<T> a, Predicate<T> predicate) {
-		return getAnnotation(AnnotationProvider.DEFAULT, a, predicate);
+	public <A extends Annotation> A getAnnotation(Class<A> type, Predicate<A> predicate) {
+		return getAnnotation(AnnotationProvider.DEFAULT, type, predicate);
 	}
 
 	/**
@@ -1104,7 +1100,7 @@ public final class ClassInfo {
 		return l;
 	}
 
-	/**
+	/*
 	 * If the annotation is an array of other annotations, returns the inner annotations.
 	 *
 	 * @param a The annotation to split if repeated.
@@ -1122,39 +1118,39 @@ public final class ClassInfo {
 		return new Annotation[]{a};
 	}
 
-	private <T extends Annotation> T findAnnotation(AnnotationProvider ap, Class<T> a) {
+	private <A extends Annotation> A findAnnotation(AnnotationProvider ap, Class<A> a) {
 		if (a == null)
 			return null;
-		T t = ap.getDeclaredAnnotation(a, c, x -> true);
+		A t = ap.getDeclaredAnnotation(a, c, x -> true);
 		if (t != null)
 			return t;
 		ClassInfo sci = getParent();
 		if (sci != null) {
-			t = sci.getLastAnnotation(ap, a);
+			t = sci.getAnnotation(ap, a);
 			if (t != null)
 				return t;
 		}
 		for (ClassInfo c2 : _getInterfaces()) {
-			t = c2.getLastAnnotation(ap, a);
+			t = c2.getAnnotation(ap, a);
 			if (t != null)
 				return t;
 		}
 		return null;
 	}
 
-	private <T extends Annotation> T getAnnotation(AnnotationProvider ap, Class<T> a, Predicate<T> p) {
-		T t2 = getPackageAnnotation(a);
+	private <A extends Annotation> A getAnnotation(AnnotationProvider ap, Class<A> a, Predicate<A> p) {
+		A t2 = getPackageAnnotation(a);
 		if (t2 != null && p.test(t2))
 			return t2;
 		ClassInfo[] interfaces = _getInterfaces();
 		for (int i = interfaces.length-1; i >= 0; i--) {
-			T o = ap.getDeclaredAnnotation(a, interfaces[i].inner(), p);
+			A o = ap.getDeclaredAnnotation(a, interfaces[i].inner(), p);
 			if (o != null)
 				return o;
 		}
 		ClassInfo[] parents = _getParents();
 		for (int i = parents.length-1; i >= 0; i--) {
-			T o = ap.getDeclaredAnnotation(a, parents[i].inner(), p);
+			A o = ap.getDeclaredAnnotation(a, parents[i].inner(), p);
 			if (o != null)
 				return o;
 		}
@@ -2108,7 +2104,7 @@ public final class ClassInfo {
 					if (rt.isArray()) {
 						ClassInfo rct = rt.getComponentType();
 						if (rct.hasAnnotation(Repeatable.class)) {
-							Repeatable r = rct.getLastAnnotation(Repeatable.class);
+							Repeatable r = rct.getAnnotation(Repeatable.class);
 							b = r.value().equals(c);
 						}
 					}

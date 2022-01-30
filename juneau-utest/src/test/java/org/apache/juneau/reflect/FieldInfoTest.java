@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.reflection;
+package org.apache.juneau.reflect;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
@@ -24,7 +24,6 @@ import java.lang.reflect.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.reflect.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -360,6 +359,6 @@ public class FieldInfoTest {
 
 	@Test
 	public void toString2() {
-		assertEquals("org.apache.juneau.reflection.FieldInfoTest$E.a1", e_a1.toString());
+		assertEquals("org.apache.juneau.reflect.FieldInfoTest$E.a1", e_a1.toString());
 	}
 }

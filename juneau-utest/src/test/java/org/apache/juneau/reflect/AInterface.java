@@ -12,27 +12,4 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
-import java.lang.annotation.*;
-import java.util.function.*;
-
-import org.apache.juneau.annotation.*;
-
-/**
- * Filter used to accept only annotations that themselves have the {@link ContextApply} annotation.
- *
- * <ul class='seealso'>
- * 	<li class='extlink'>{@source}
- * </ul>
- */
-public class ContextApplyFilter implements Predicate<AnnotationInfo<?>> {
-
-	/**
-	 * Reusable instance.
-	 */
-	public static final ContextApplyFilter INSTANCE = new ContextApplyFilter();
-
-	@Override
-	public boolean test(AnnotationInfo<? extends Annotation> t) {
-		return t.hasAnnotation(ContextApply.class);
-	}
-}
+public interface AInterface {}

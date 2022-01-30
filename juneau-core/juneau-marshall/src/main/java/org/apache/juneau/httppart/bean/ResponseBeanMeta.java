@@ -72,8 +72,8 @@ public class ResponseBeanMeta {
 			return null;
 		Builder b = new Builder(annotations);
 		b.apply(m.getReturnType().unwrap(Value.class, Optional.class).innerType());
-		m.getAnnotations(Response.class).forEach(x -> b.apply(x));
-		m.getAnnotations(StatusCode.class).forEach(x -> b.apply(x));
+		m.getAnnotations(Response.class, x -> true, x -> b.apply(x));
+		m.getAnnotations(StatusCode.class, x -> true, x -> b.apply(x));
 		return b.build();
 	}
 
@@ -89,8 +89,8 @@ public class ResponseBeanMeta {
 			return null;
 		Builder b = new Builder(annotations);
 		b.apply(mpi.getParameterType().unwrap(Value.class, Optional.class).innerType());
-		mpi.getAnnotations(Response.class).forEach(x -> b.apply(x));
-		mpi.getAnnotations(StatusCode.class).forEach(x -> b.apply(x));
+		mpi.getAnnotations(Response.class, x-> true, x -> b.apply(x));
+		mpi.getAnnotations(StatusCode.class, x -> true, x -> b.apply(x));
 		return b.build();
 	}
 
@@ -160,7 +160,7 @@ public class ResponseBeanMeta {
 				if (m.hasAnnotation(Header.class)) {
 					assertNoArgs(m, Header.class);
 					assertReturnNotVoid(m, Header.class);
-					HttpPartSchema s = HttpPartSchema.create(m.getLastAnnotation(Header.class), m.getPropertyName());
+					HttpPartSchema s = HttpPartSchema.create(m.getAnnotation(Header.class), m.getPropertyName());
 					headerMethods.put(s.getName(), ResponseBeanPropertyMeta.create(RESPONSE_HEADER, s, m));
 				} else if (m.hasAnnotation(StatusCode.class)) {
 					assertNoArgs(m, Header.class);
