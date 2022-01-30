@@ -18,6 +18,7 @@ import static org.apache.juneau.http.HttpParts.*;
 
 import java.lang.annotation.*;
 import java.nio.charset.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -49,6 +50,11 @@ public class RestOpAnnotation {
 
 	/** Default value */
 	public static final RestOp DEFAULT = create().build();
+
+	/**
+	 * Predicate that can be used with the {@link ClassInfo#getAnnotationList(Predicate)} and {@link MethodInfo#getAnnotationList(Predicate)}
+	 */
+	public static final Predicate<AnnotationInfo<?>> REST_OP_GROUP = x -> x.isInGroup(RestOp.class);
 
 	/**
 	 * Instantiates a new builder for this class.

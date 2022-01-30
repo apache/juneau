@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.rest.httppart.RestPartType.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -218,14 +219,16 @@ public class BasicSwaggerProviderSession {
 
 			Method m = sm.getJavaMethod();
 			MethodInfo mi = MethodInfo.of(m);
-			AnnotationList al = mi.getAnnotationGroupList(RestOp.class);
+			AnnotationList al = mi.getAnnotationList(REST_OP_GROUP);
 			String mn = m.getName();
 
 			// Get the operation from the existing swagger so far.
 			OMap op = getOperation(omSwagger, sm.getPathPattern(), sm.getHttpMethod().toLowerCase());
 
 			// Add @RestOp(swagger)
-			OpSwagger ms = al.getValues(OpSwagger.class, "swagger").stream().filter(x -> ! OpSwaggerAnnotation.empty(x)).findFirst().orElse(OpSwaggerAnnotation.create().build());
+			Value<OpSwagger> _ms = Value.empty();
+			al.getValues(OpSwagger.class, "swagger", OpSwaggerAnnotation::notEmpty, x -> _ms.set(x));
+			OpSwagger ms = _ms.orElseGet(()->OpSwaggerAnnotation.create().build());
 
 			op.append(parseMap(ms.value(), "@OpSwagger(value) on class {0} method {1}", c, m));
 			op.appendSkipEmpty("operationId",
@@ -235,20 +238,26 @@ public class BasicSwaggerProviderSession {
 					mn
 				)
 			);
+
+			Value<String> _summary = Value.empty();
+			al.getValues(String.class, "summary", StringUtils::isNotEmpty, x -> _summary.set(x));
 			op.appendSkipEmpty("summary",
 				firstNonEmpty(
 					resolve(ms.summary()),
 					resolve(mb.findFirstString(mn + ".summary")),
 					op.getString("summary"),
-					resolve(al.getValues(String.class, "summary").stream().filter(x -> !x.isEmpty()).findFirst().orElse(null))
+					resolve(_summary.orElse(null))
 				)
 			);
+
+			Value<String[]> _description = Value.empty();
+			al.getValues(String[].class, "description",x -> x.length > 0, x -> _description.set(x));
 			op.appendSkipEmpty("description",
 				firstNonEmpty(
 					resolve(ms.description()),
 					resolve(mb.findFirstString(mn + ".description")),
 					op.getString("description"),
-					resolve(al.getValues(String[].class, "description").stream().filter(x -> x.length > 0).findFirst().orElse(new String[0]))
+					resolve(_description.orElse(new String[0]))
 				)
 			);
 			op.appendSkipEmpty("deprecated",

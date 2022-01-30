@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client.remote;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.http.remote.RemoteUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -85,12 +86,15 @@ public class RemoteOperationMeta {
 
 			MethodInfo mi = MethodInfo.of(m);
 
-			AnnotationList al = mi.getAnnotationGroupList(RemoteOp.class);
+			AnnotationList al = mi.getAnnotationList(REMOTE_OP_GROUP);
 			if (al.isEmpty())
-				al = mi.getReturnType().unwrap(Value.class,Optional.class).getAnnotationGroupList(RemoteOp.class);
+				al = mi.getReturnType().unwrap(Value.class,Optional.class).getAnnotationList(REMOTE_OP_GROUP);
 
-			httpMethod = al.getValues(String.class, "method").stream().filter(x -> isNotEmpty(x)).findFirst().orElse("").trim();
-			path = al.getValues(String.class, "path").stream().filter(x -> isNotEmpty(x)).findFirst().orElse("").trim();
+			Value<String> _httpMethod = Value.empty(), _path = Value.empty();
+			al.getValues(String.class, "method", StringUtils::isNotEmpty, x -> _httpMethod.set(x.trim()));
+			al.getValues(String.class, "path", StringUtils::isNotEmpty, x-> _path.set(x.trim()));
+			httpMethod = _httpMethod.orElse("").trim();
+			path = _path.orElse("").trim();
 
 			Value<String> value = Value.empty();
 			al.forEach(RemoteOp.class, x -> isNotEmpty(x.inner().value().trim()), x -> value.set(x.inner().value().trim()));
@@ -105,7 +109,7 @@ public class RemoteOperationMeta {
 					path = v.substring(i).trim();
 				}
 			} else {
-				al.forEach(x -> ! x.isType(RemoteOp.class) && isNotEmpty(x.getValue(String.class, "value").orElse("").trim()),x -> value.set(x.getValue(String.class, "value").get().trim()));
+				al.forEach(x -> ! x.isType(RemoteOp.class) && isNotEmpty(x.getValue(String.class, "value", StringUtils::isNotEmpty).orElse("").trim()),x -> value.set(x.getValue(String.class, "value", StringUtils::isNotEmpty).get().trim()));
 				if (value.isPresent())
 					path = value.get();
 			}

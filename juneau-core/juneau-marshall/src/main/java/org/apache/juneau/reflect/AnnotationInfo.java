@@ -275,18 +275,45 @@ public class AnnotationInfo<T extends Annotation> {
 	}
 
 	/**
+	 * Consumes a value on this annotation.
+	 *
+	 * @param type The annotation field type.
+	 * @param name The annotation field name.
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
+	 */
+	@SuppressWarnings("unchecked")
+	public <V> AnnotationInfo<?> getValue(Class<V> type, String name, Predicate<V> predicate, Consumer<V> consumer) {
+		for (Method m : a.annotationType().getMethods())
+			if (m.getName().equals(name) && m.getReturnType().equals(type)) {
+				try {
+					V v = (V)m.invoke(a);
+					if (predicate.test(v))
+						consumer.accept(v);
+				} catch (Exception e) {
+					e.printStackTrace(); // Shouldn't happen.
+				}
+			}
+		return this;
+	}
+
+	/**
 	 * Returns a value on this annotation.
 	 *
 	 * @param type The annotation field type.
 	 * @param name The annotation field name.
-	 * @return The value on this annotation if the field exists and is the specified type.
+	 * @param predicate The predicate.
+	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
-	public <V> Optional<V> getValue(Class<V> type, String name) {
+	public <V> Optional<V> getValue(Class<V> type, String name, Predicate<V> predicate) {
 		for (Method m : a.annotationType().getMethods())
 			if (m.getName().equals(name) && m.getReturnType().equals(type)) {
 				try {
-					return Optional.ofNullable((V)m.invoke(a));
+					V v = (V)m.invoke(a);
+					if (predicate.test(v))
+						return Optional.of(v);
 				} catch (Exception e) {
 					e.printStackTrace(); // Shouldn't happen.
 				}

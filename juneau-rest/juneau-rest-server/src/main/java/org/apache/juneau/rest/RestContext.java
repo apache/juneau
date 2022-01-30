@@ -27,6 +27,7 @@ import static java.util.Arrays.*;
 import static java.util.Collections.*;
 import static java.util.Optional.*;
 import static java.util.logging.Level.*;
+import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -3518,16 +3519,13 @@ public class RestContext extends Context {
 			v.get().defaultEnable(debugDefault);
 
 			// Gather @RestOp(debug) settings.
-			ClassInfo.ofProxy(resource.get()).getPublicMethods(
-				x -> true,
-				x -> x
-					.getAnnotationGroupList(RestOp.class)
-					.getValues(String.class, "debug")
-					.stream()
-					.filter(y->!y.isEmpty())
-					.findFirst()
-					.ifPresent(x2 -> v.get().enable(Enablement.fromString(x2), x.getFullName()))
-			);
+			Consumer<MethodInfo> consumer = x -> {
+				Value<String> debug = Value.empty();
+				x.getAnnotationList(REST_OP_GROUP).getValues(String.class, "debug", StringUtils::isNotEmpty, y -> debug.set(y));
+				if (debug.isPresent())
+					v.get().enable(Enablement.fromString(debug.get()), x.getFullName());
+			};
+			ClassInfo.ofProxy(resource.get()).getPublicMethods(x -> true, consumer);
 
 			// Replace with bean from bean store.
 			rootBeanStore
@@ -4048,7 +4046,7 @@ public class RestContext extends Context {
 			ClassInfo rci = ClassInfo.of(resource.get());
 
 			for (MethodInfo mi : rci.getPublicMethods()) {
-				AnnotationList al = mi.getAnnotationGroupList(RestOp.class);
+				AnnotationList al = mi.getAnnotationList(REST_OP_GROUP);
 
 				// Also include methods on @Rest-annotated interfaces.
 				if (al.size() == 0) {

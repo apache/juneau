@@ -50,16 +50,14 @@ public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 	 *
 	 * @param type The annotation value type.
 	 * @param name The annotation value name.
-	 * @return A list of all values found.
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
 	 */
-	public <T> List<T> getValues(Class<T> type, String name) {
-		List<T> l = new ArrayList<>();
-		for (AnnotationInfo<?> ai : this) {
-			Optional<T> o = ai.getValue(type, name);
-			if (o.isPresent())
-				l.add(o.get());
-		}
-		return l;
+	public <T> AnnotationList getValues(Class<T> type, String name, Predicate<T> predicate, Consumer<T> consumer) {
+		for (AnnotationInfo<?> ai : this)
+			ai.getValue(type, name, predicate, consumer);
+		return this;
 	}
 
 	/**

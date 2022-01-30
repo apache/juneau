@@ -50,7 +50,7 @@ public class AnnotationInfoTest {
 	@Test
 	public void d01_isInGroup() {
 		ClassInfo d = ClassInfo.of(D.class);
-		AnnotationList l = d.getAnnotationGroupList(D1.class);
+		AnnotationList l = d.getAnnotationList(x -> x.isInGroup(D1.class));
 		assertList(l).isSize(2);
 	}
 }

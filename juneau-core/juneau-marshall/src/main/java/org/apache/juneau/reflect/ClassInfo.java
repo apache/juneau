@@ -23,7 +23,6 @@ import java.util.concurrent.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 
@@ -1085,18 +1084,7 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Constructs an {@link AnnotationList} of all annotations found on this class that belong to the specified
-	 * annotation group.
-	 *
-	 * @param group The annotation group.  See {@link AnnotationGroup}.
-	 * @return A new {@link AnnotationList} object on every call.
-	 */
-	public AnnotationList getAnnotationGroupList(Class<? extends Annotation> group) {
-		return getAnnotationList(x -> x.isInGroup(group));
-	}
-
-	/**
-	 * Constructs an {@link AnnotationList} of all annotations found on this class.
+	 * Constructs an {@link AnnotationList} of all matching annotations found on this class.
 	 *
 	 * <p>
 	 * Annotations are appended in the following orders:
@@ -1107,14 +1095,12 @@ public final class ClassInfo {
 	 * 	<li>On this class.
 	 * </ol>
 	 *
-	 * @param filter
-	 * 	Optional filter to apply to limit which annotations are added to the list.
-	 * 	<br>Can be <jk>null</jk> for no filtering.
+	 * @param predicate The predicate.
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationList getAnnotationList(Predicate<AnnotationInfo<?>> filter) {
+	public AnnotationList getAnnotationList(Predicate<AnnotationInfo<?>> predicate) {
 		AnnotationList l = new AnnotationList();
-		getAnnotationInfos(filter, x -> l.add(x));
+		getAnnotationInfos(predicate, x -> l.add(x));
 		return l;
 	}
 
@@ -1136,7 +1122,7 @@ public final class ClassInfo {
 		return new Annotation[]{a};
 	}
 
-	<T extends Annotation> T findAnnotation(AnnotationProvider ap, Class<T> a) {
+	private <T extends Annotation> T findAnnotation(AnnotationProvider ap, Class<T> a) {
 		if (a == null)
 			return null;
 		T t = ap.getDeclaredAnnotation(a, c, x -> true);

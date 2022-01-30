@@ -676,7 +676,7 @@ public class BeanStore {
 	private String findBeanName(ParamInfo pi) {
 		Annotation n = pi.getAnnotation(Annotation.class, x -> x.annotationType().getSimpleName().equals("Named"));
 		if (n != null)
-			return AnnotationInfo.of((ClassInfo)null, n).getValue(String.class, "value").orElse(null);
+			return AnnotationInfo.of((ClassInfo)null, n).getValue(String.class, "value", StringUtils::isNotEmpty).orElse(null);
 		return null;
 	}
 

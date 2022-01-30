@@ -55,6 +55,16 @@ public class OpSwaggerAnnotation {
 		return a == null || DEFAULT.equals(a);
 	}
 
+	/**
+	 * Returns <jk>false</jk> if the specified annotation contains all default values.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>false</jk> if the specified annotation contains all default values.
+	 */
+	public static boolean notEmpty(OpSwagger a) {
+		return ! empty(a);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Builder
 	//-----------------------------------------------------------------------------------------------------------------

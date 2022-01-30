@@ -10,52 +10,19 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.matcher;
+package org.apache.juneau.http.remote;
 
-import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
+import java.util.function.*;
 
-import javax.servlet.http.*;
-
-import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
 /**
- * Specialized matcher for matching client versions.
- *
- * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.ClientVersioning}
- * 	<li class='extlink'>{@source}
- * </ul>
+ * Utilities.
  */
-public class ClientVersionMatcher extends RestMatcher {
-
-	private final String clientVersionHeader;
-	private final VersionRange range;
+public class RemoteUtils {
 
 	/**
-	 * Constructor.
-	 *
-	 * @param clientVersionHeader
-	 * 	The HTTP request header name containing the client version.
-	 * 	If <jk>null</jk> or an empty string, uses <js>"Client-Version"</js>
-	 * @param mi The version string that the client version must match.
+	 * Predicate that can be used with the {@link ClassInfo#getAnnotationList(Predicate)} and {@link MethodInfo#getAnnotationList(Predicate)}
 	 */
-	public ClientVersionMatcher(String clientVersionHeader, MethodInfo mi) {
-		this.clientVersionHeader = isEmpty(clientVersionHeader) ? "Client-Version" : clientVersionHeader;
-		Value<String> clientVersion = Value.empty();
-		mi.getAnnotationList(REST_OP_GROUP).getValues(String.class, "clientVersion", StringUtils::isNotEmpty, x -> clientVersion.set(x));
-		range = new VersionRange(clientVersion.orElse(null));
-	}
-
-	@Override /* RestMatcher */
-	public boolean matches(HttpServletRequest req) {
-		return range.matches(req.getHeader(clientVersionHeader));
-	}
-
-	@Override /* RestMatcher */
-	public boolean required() {
-		return true;
-	}
+	public static final Predicate<AnnotationInfo<?>> REMOTE_OP_GROUP = x -> x.isInGroup(RemoteOp.class);
 }

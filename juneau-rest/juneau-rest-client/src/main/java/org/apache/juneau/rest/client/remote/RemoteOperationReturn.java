@@ -12,12 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client.remote;
 
+import static org.apache.juneau.http.remote.RemoteUtils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.remote.RemoteOp;
 import org.apache.juneau.http.remote.RemoteReturn;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.bean.*;
@@ -42,9 +43,9 @@ public final class RemoteOperationReturn {
 	RemoteOperationReturn(MethodInfo m) {
 		ClassInfo rt = m.getReturnType();
 
-		AnnotationList al = m.getAnnotationGroupList(RemoteOp.class);
+		AnnotationList al = m.getAnnotationList(REMOTE_OP_GROUP);
 		if (al.isEmpty())
-			al = m.getReturnType().unwrap(Value.class,Optional.class).getAnnotationGroupList(RemoteOp.class);
+			al = m.getReturnType().unwrap(Value.class,Optional.class).getAnnotationList(REMOTE_OP_GROUP);
 
 		RemoteReturn rv = null;
 
@@ -56,12 +57,13 @@ public final class RemoteOperationReturn {
 			rt = ClassInfo.of(((ParameterizedType)rt.innerType()).getActualTypeArguments()[0]);
 		}
 
-		if (rt.is(void.class) || rt.is(Void.class))
+		if (rt.is(void.class) || rt.is(Void.class)) {
 			rv = RemoteReturn.NONE;
-		else if (! al.isEmpty())
-			rv = al.getValues(RemoteReturn.class,"returns").stream().findFirst().orElse(RemoteReturn.BODY);
-		else
-			rv = RemoteReturn.BODY;
+		} else {
+			Value<RemoteReturn> v = Value.of(RemoteReturn.BODY);
+			al.getValues(RemoteReturn.class, "returns", x -> true, x -> v.set(x));
+			rv = v.get();
+		}
 
 		if (rt.hasAnnotation(Response.class) && rt.isInterface()) {
 			this.meta = ResponseBeanMeta.create(m, AnnotationWorkList.create());
