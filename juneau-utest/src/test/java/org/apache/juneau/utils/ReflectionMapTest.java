@@ -28,10 +28,10 @@ public class ReflectionMapTest {
 	}
 
 	private void checkEntries(ReflectionMap<?> m, boolean hasClass, boolean hasMethods, boolean hasFields, boolean hasConstructors) {
-		assertEquals(m.noClassEntries, ! hasClass);
-		assertEquals(m.noMethodEntries, ! hasMethods);
-		assertEquals(m.noFieldEntries, ! hasFields);
-		assertEquals(m.noConstructorEntries, ! hasConstructors);
+		assertEquals(m.classEntries.length == 0, ! hasClass);
+		assertEquals(m.methodEntries.length == 0, ! hasMethods);
+		assertEquals(m.fieldEntries.length == 0, ! hasFields);
+		assertEquals(m.constructorEntries.length == 0, ! hasConstructors);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

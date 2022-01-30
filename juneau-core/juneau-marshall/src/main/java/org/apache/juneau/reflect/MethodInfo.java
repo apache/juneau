@@ -32,24 +32,9 @@ import org.apache.juneau.internal.*;
 @FluentSetters
 public final class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo> {
 
-	private ClassInfo returnType;
-	private final Method m;
-	private Method[] matching;
-
 	//-----------------------------------------------------------------------------------------------------------------
-	// Instantiation
+	// Static
 	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Constructor.
-	 *
-	 * @param declaringClass The class that declares this method.
-	 * @param m The method being wrapped.
-	 */
-	protected MethodInfo(ClassInfo declaringClass, Method m) {
-		super(declaringClass, m);
-		this.m = m;
-	}
 
 	/**
 	 * Convenience method for instantiating a {@link MethodInfo};
@@ -61,7 +46,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	public static MethodInfo of(ClassInfo declaringClass, Method m) {
 		if (m == null)
 			return null;
-		return new MethodInfo(declaringClass, m);
+		return declaringClass.getMethodInfo(m);
 	}
 
 	/**
@@ -74,7 +59,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	public static MethodInfo of(Class<?> declaringClass, Method m) {
 		if (m == null)
 			return null;
-		return new MethodInfo(ClassInfo.of(declaringClass), m);
+		return ClassInfo.of(declaringClass).getMethodInfo(m);
 	}
 
 	/**
@@ -86,7 +71,26 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	public static MethodInfo of(Method m) {
 		if (m == null)
 			return null;
-		return new MethodInfo(ClassInfo.of(m.getDeclaringClass()), m);
+		return ClassInfo.of(m.getDeclaringClass()).getMethodInfo(m);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final Method m;
+	private volatile ClassInfo returnType;
+	private volatile Method[] matching;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param declaringClass The class that declares this method.
+	 * @param m The method being wrapped.
+	 */
+	protected MethodInfo(ClassInfo declaringClass, Method m) {
+		super(declaringClass, m);
+		this.m = m;
 	}
 
 	/**
@@ -181,8 +185,10 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 
 	private Method[] _getMatching() {
 		if (matching == null) {
-			List<Method> l = findMatching(new ArrayList<>(), m, m.getDeclaringClass());
-			matching = l.toArray(new Method[l.size()]);
+			synchronized(this) {
+				List<Method> l = findMatching(new ArrayList<>(), m, m.getDeclaringClass());
+				matching = l.toArray(new Method[l.size()]);
+			}
 		}
 		return matching;
 	}
@@ -503,8 +509,11 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @return The generic return type of this method.
 	 */
 	public ClassInfo getReturnType() {
-		if (returnType == null)
-			returnType = ClassInfo.of(m.getReturnType(), m.getGenericReturnType());
+		if (returnType == null) {
+			synchronized(this) {
+				returnType = ClassInfo.of(m.getReturnType(), m.getGenericReturnType());
+			}
+		}
 		return returnType;
 	}
 

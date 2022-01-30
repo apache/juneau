@@ -14,6 +14,7 @@ package org.apache.juneau.internal;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.*;
 
 /**
  * A hashmap that allows for two-part keys.
@@ -31,20 +32,23 @@ public class TwoKeyConcurrentCache<K1,K2,V> extends ConcurrentHashMap<TwoKeyConc
 	private static final long serialVersionUID = 1L;
 
 	private final boolean disabled;
+	private final BiFunction<K1,K2,V> supplier;
 
 	/**
 	 * Constructor.
 	 */
 	public TwoKeyConcurrentCache() {
-		this.disabled = false;
+		this(false, null);
 	}
 
 	/**
 	 * Constructor.
 	 * @param disabled If <jk>true</jk>, get/put operations are no-ops.
+	 * @param supplier The supplier for this cache.
 	 */
-	public TwoKeyConcurrentCache(boolean disabled) {
+	public TwoKeyConcurrentCache(boolean disabled, BiFunction<K1,K2,V> supplier) {
 		this.disabled = disabled;
+		this.supplier = supplier;
 	}
 
 	/**
@@ -71,9 +75,14 @@ public class TwoKeyConcurrentCache<K1,K2,V> extends ConcurrentHashMap<TwoKeyConc
 	 */
 	public V get(K1 key1, K2 key2) {
 		if (disabled)
-			return null;
+			return (supplier == null ? null : supplier.apply(key1, key2));
 		Key<K1,K2> key = new Key<>(key1, key2);
-		return super.get(key);
+		V v = super.get(key);
+		if (v == null && supplier != null) {
+			v = supplier.apply(key1, key2);
+			super.put(key, v);
+		}
+		return v;
 	}
 
 	static class Key<K1,K2> {

@@ -820,6 +820,11 @@ public abstract class Context implements AnnotationProvider {
 	final boolean debug;
 
 	private final ReflectionMap<Annotation> annotationMap;
+	private final TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,Annotation[]> classAnnotationCache;
+	private final TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,Annotation[]> declaredClassAnnotationCache;
+	private final TwoKeyConcurrentCache<Method,Class<? extends Annotation>,Annotation[]> methodAnnotationCache;
+	private final TwoKeyConcurrentCache<Field,Class<? extends Annotation>,Annotation[]> fieldAnnotationCache;
+	private final TwoKeyConcurrentCache<Constructor<?>,Class<? extends Annotation>,Annotation[]> constructorAnnotationCache;
 
 	/**
 	 * Copy constructor.
@@ -830,6 +835,11 @@ public abstract class Context implements AnnotationProvider {
 		annotationMap = copyFrom.annotationMap;
 		annotations = copyFrom.annotations;
 		debug = copyFrom.debug;
+		classAnnotationCache = copyFrom.classAnnotationCache;
+		declaredClassAnnotationCache = copyFrom.declaredClassAnnotationCache;
+		methodAnnotationCache = copyFrom.methodAnnotationCache;
+		fieldAnnotationCache = copyFrom.fieldAnnotationCache;
+		constructorAnnotationCache = copyFrom.constructorAnnotationCache;
 	}
 
 	/**
@@ -868,6 +878,12 @@ public abstract class Context implements AnnotationProvider {
 			}
 		}
 		this.annotationMap = rmb.build();
+		boolean disabled = Boolean.getBoolean("juneau.disableAnnotationCaching");
+		classAnnotationCache = new TwoKeyConcurrentCache<>(disabled, (k1,k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
+		declaredClassAnnotationCache = new TwoKeyConcurrentCache<>(disabled, (k1,k2) -> annotationMap.appendAll(k1, k2, k1.getDeclaredAnnotationsByType(k2)));
+		methodAnnotationCache = new TwoKeyConcurrentCache<>(disabled, (k1,k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
+		fieldAnnotationCache = new TwoKeyConcurrentCache<>(disabled, (k1,k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
+		constructorAnnotationCache = new TwoKeyConcurrentCache<>(disabled, (k1,k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
 	}
 
 	/**
@@ -925,14 +941,6 @@ public abstract class Context implements AnnotationProvider {
 	//-----------------------------------------------------------------------------------------------------------------
 	// MetaProvider methods
 	//-----------------------------------------------------------------------------------------------------------------
-
-	private static final boolean DISABLE_ANNOTATION_CACHING = ! Boolean.getBoolean("juneau.disableAnnotationCaching");
-
-	private TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,Annotation[]> classAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
-	private TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,Annotation[]> declaredClassAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
-	private TwoKeyConcurrentCache<Method,Class<? extends Annotation>,Annotation[]> methodAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
-	private TwoKeyConcurrentCache<Field,Class<? extends Annotation>,Annotation[]> fieldAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
-	private TwoKeyConcurrentCache<Constructor<?>,Class<? extends Annotation>,Annotation[]> constructorAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING);
 
 	@Override /* MetaProvider */
 	public <A extends Annotation> void getAnnotations(Class<A> a, Class<?> c, Predicate<A> predicate, Consumer<A> consumer) {
@@ -1065,77 +1073,27 @@ public abstract class Context implements AnnotationProvider {
 
 	@SuppressWarnings("unchecked")
 	private <A extends Annotation> A[] annotations(Class<A> a, Class<?> c) {
-		A[] aa = (A[])classAnnotationCache.get(c, a);
-		if (aa == null) {
-			A[] x = c.getAnnotationsByType(a);
-			AList<Annotation> l = new AList<>(Arrays.asList(x));
-			annotationMap.appendAll(c, a, l);
-			aa = (A[]) Array.newInstance(a, l.size());
-			for (int i = 0; i < l.size(); i++)
-				Array.set(aa, i, l.get(i));
-			classAnnotationCache.put(c, a, aa);
-		}
-		return aa;
+		return (A[])classAnnotationCache.get(c, a);
 	}
 
 	@SuppressWarnings("unchecked")
 	private <A extends Annotation> A[] declaredAnnotations(Class<A> a, Class<?> c) {
-		A[] aa = (A[])declaredClassAnnotationCache.get(c, a);
-		if (aa == null) {
-			A[] x = c.getDeclaredAnnotationsByType(a);
-			AList<Annotation> l = new AList<>(Arrays.asList(x));
-			annotationMap.appendAll(c, a, l);
-			aa = (A[]) Array.newInstance(a, l.size());
-			for (int i = 0; i < l.size(); i++)
-				Array.set(aa, i, l.get(i));
-			declaredClassAnnotationCache.put(c, a, aa);
-		}
-		return aa;
+		return (A[])declaredClassAnnotationCache.get(c, a);
 	}
 
 	@SuppressWarnings("unchecked")
 	private <A extends Annotation> A[] annotations(Class<A> a, Method m) {
-		A[] aa = (A[])methodAnnotationCache.get(m, a);
-		if (aa == null) {
-			A[] x = m.getAnnotationsByType(a);
-			AList<Annotation> l = new AList<>(Arrays.asList(x));
-			annotationMap.appendAll(m, a, l);
-			aa = (A[]) Array.newInstance(a, l.size());
-			for (int i = 0; i < l.size(); i++)
-				Array.set(aa, i, l.get(i));
-			methodAnnotationCache.put(m, a, aa);
-		}
-		return aa;
+		return (A[])methodAnnotationCache.get(m, a);
 	}
 
 	@SuppressWarnings("unchecked")
 	private <A extends Annotation> A[] annotations(Class<A> a, Field f) {
-		A[] aa = (A[])fieldAnnotationCache.get(f, a);
-		if (aa == null) {
-			A[] x = f.getAnnotationsByType(a);
-			AList<Annotation> l = new AList<>(Arrays.asList(x));
-			annotationMap.appendAll(f, a, l);
-			aa = (A[]) Array.newInstance(a, l.size());
-			for (int i = 0; i < l.size(); i++)
-				Array.set(aa, i, l.get(i));
-			fieldAnnotationCache.put(f, a, aa);
-		}
-		return aa;
+		return (A[])fieldAnnotationCache.get(f, a);
 	}
 
 	@SuppressWarnings("unchecked")
 	private <A extends Annotation> A[] annotations(Class<A> a, Constructor<?> c) {
-		A[] aa = (A[])constructorAnnotationCache.get(c, a);
-		if (aa == null) {
-			A[] x = c.getAnnotationsByType(a);
-			AList<Annotation> l = new AList<>(Arrays.asList(x));
-			annotationMap.appendAll(c, a, l);
-			aa = (A[]) Array.newInstance(a, l.size());
-			for (int i = 0; i < l.size(); i++)
-				Array.set(aa, i, l.get(i));
-			constructorAnnotationCache.put(c, a, aa);
-		}
-		return aa;
+		return (A[])constructorAnnotationCache.get(c, a);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -29,11 +29,40 @@ import org.apache.juneau.internal.*;
 @FluentSetters
 public final class ConstructorInfo extends ExecutableInfo implements Comparable<ConstructorInfo> {
 
-	private final Constructor<?> c;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Convenience method for instantiating a {@link ConstructorInfo};
+	 *
+	 * @param declaringClass The class that declares this method.
+	 * @param c The constructor being wrapped.
+	 * @return A new {@link ConstructorInfo} object, or <jk>null</jk> if the method was null;
+	 */
+	public static ConstructorInfo of(ClassInfo declaringClass, Constructor<?> c) {
+		if (c == null)
+			return null;
+		return ClassInfo.of(declaringClass).getConstructorInfo(c);
+	}
+
+	/**
+	 * Convenience method for instantiating a {@link ConstructorInfo};
+	 *
+	 * @param c The constructor being wrapped.
+	 * @return A new {@link ConstructorInfo} object, or <jk>null</jk> if the method was null;
+	 */
+	public static ConstructorInfo of(Constructor<?> c) {
+		if (c == null)
+			return null;
+		return ClassInfo.of(c.getDeclaringClass()).getConstructorInfo(c);
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Instantiation
+	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
+
+	private final Constructor<?> c;
 
 	/**
 	 * Constructor.
@@ -47,31 +76,6 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	}
 
 	/**
-	 * Convenience method for instantiating a {@link ConstructorInfo};
-	 *
-	 * @param declaringClass The class that declares this method.
-	 * @param c The constructor being wrapped.
-	 * @return A new {@link ConstructorInfo} object, or <jk>null</jk> if the method was null;
-	 */
-	public static ConstructorInfo of(ClassInfo declaringClass, Constructor<?> c) {
-		if (c == null)
-			return null;
-		return new ConstructorInfo(declaringClass, c);
-	}
-
-	/**
-	 * Convenience method for instantiating a {@link ConstructorInfo};
-	 *
-	 * @param c The constructor being wrapped.
-	 * @return A new {@link ConstructorInfo} object, or <jk>null</jk> if the method was null;
-	 */
-	public static ConstructorInfo of(Constructor<?> c) {
-		if (c == null)
-			return null;
-		return new ConstructorInfo(ClassInfo.of(c.getDeclaringClass()), c);
-	}
-
-	/**
 	 * Returns the wrapped method.
 	 *
 	 * @return The wrapped method.
@@ -80,7 +84,6 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	public <T> Constructor<T> inner() {
 		return (Constructor<T>)c;
 	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Annotations

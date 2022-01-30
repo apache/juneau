@@ -29,23 +29,9 @@ import org.apache.juneau.*;
  */
 public final class FieldInfo implements Comparable<FieldInfo> {
 
-	private final Field f;
-	private ClassInfo declaringClass, type;
-
 	//-----------------------------------------------------------------------------------------------------------------
-	// Instantiation
+	// Static
 	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Constructor.
-	 *
-	 * @param declaringClass The class that declares this method.
-	 * @param f The field being wrapped.
-	 */
-	protected FieldInfo(ClassInfo declaringClass, Field f) {
-		this.declaringClass = declaringClass;
-		this.f = f;
-	}
 
 	/**
 	 * Convenience method for instantiating a {@link FieldInfo};
@@ -57,7 +43,7 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	public static FieldInfo of(ClassInfo declaringClass, Field f) {
 		if (f == null)
 			return null;
-		return new FieldInfo(declaringClass, f);
+		return ClassInfo.of(declaringClass).getFieldInfo(f);
 	}
 
 	/**
@@ -69,7 +55,26 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	public static FieldInfo of(Field f) {
 		if (f == null)
 			return null;
-		return new FieldInfo(ClassInfo.of(f.getDeclaringClass()), f);
+		return ClassInfo.of(f.getDeclaringClass()).getFieldInfo(f);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final Field f;
+	private final ClassInfo declaringClass;
+	private volatile ClassInfo type;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param declaringClass The class that declares this method.
+	 * @param f The field being wrapped.
+	 */
+	protected FieldInfo(ClassInfo declaringClass, Field f) {
+		this.declaringClass = declaringClass;
+		this.f = f;
 	}
 
 	/**
@@ -87,8 +92,6 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	 * @return Metadata about the declaring class.
 	 */
 	public ClassInfo getDeclaringClass() {
-		if (declaringClass == null)
-			declaringClass = ClassInfo.of(f.getDeclaringClass());
 		return declaringClass;
 	}
 
@@ -425,8 +428,11 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	 * @return The type of this field.
 	 */
 	public ClassInfo getType() {
-		if (type == null)
-			type = ClassInfo.of(f.getType());
+		if (type == null) {
+			synchronized(this) {
+				type = ClassInfo.of(f.getType());
+			}
+		}
 		return type;
 	}
 

@@ -20,8 +20,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.collections.*;
-
 /**
  * Allows arbitrary objects to be mapped to classes and methods base on class/method name keys.
  *
@@ -250,11 +248,10 @@ public class ReflectionMap<V> {
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private final List<ClassEntry<V>> classEntries;
-	private final List<MethodEntry<V>> methodEntries;
-	private final List<FieldEntry<V>> fieldEntries;
-	private final List<ConstructorEntry<V>> constructorEntries;
-	final boolean noClassEntries, noMethodEntries, noFieldEntries, noConstructorEntries;
+	final ClassEntry<V>[] classEntries;
+	final MethodEntry<V>[] methodEntries;
+	final FieldEntry<V>[] fieldEntries;
+	final ConstructorEntry<V>[] constructorEntries;
 
 	/**
 	 * Constructor.
@@ -262,14 +259,10 @@ public class ReflectionMap<V> {
 	 * @param b Initializer object.
 	 */
 	protected ReflectionMap(Builder<V> b) {
-		this.classEntries = Collections.unmodifiableList(new ArrayList<>(b.classEntries));
-		this.methodEntries = Collections.unmodifiableList(new ArrayList<>(b.methodEntries));
-		this.fieldEntries = Collections.unmodifiableList(new ArrayList<>(b.fieldEntries));
-		this.constructorEntries = Collections.unmodifiableList(new ArrayList<>(b.constructorEntries));
-		this.noClassEntries = classEntries.isEmpty();
-		this.noMethodEntries = methodEntries.isEmpty();
-		this.noFieldEntries = fieldEntries.isEmpty();
-		this.noConstructorEntries = constructorEntries.isEmpty();
+		this.classEntries = b.classEntries.toArray(new ClassEntry[b.classEntries.size()]);
+		this.methodEntries = b.methodEntries.toArray(new MethodEntry[b.methodEntries.size()]);
+		this.fieldEntries = b.fieldEntries.toArray(new FieldEntry[b.fieldEntries.size()]);
+		this.constructorEntries = b.constructorEntries.toArray(new ConstructorEntry[b.constructorEntries.size()]);
 	}
 
 	static List<String> splitNames(String key) {
@@ -303,11 +296,10 @@ public class ReflectionMap<V> {
 	 * @return The matching object.  Never <jk>null</jk>.
 	 */
 	public Optional<V> find(Class<?> c, Class<? extends V> ofType) {
-		if (! noClassEntries)
-			for (ClassEntry<V> e : classEntries)
-				if (e.matches(c))
-					if (ofType == null || ofType.isInstance(e.value))
-						return Optional.ofNullable(e.value);
+		for (ClassEntry<V> e : classEntries)
+			if (e.matches(c))
+				if (ofType == null || ofType.isInstance(e.value))
+					return Optional.ofNullable(e.value);
 		return Optional.empty();
 	}
 
@@ -329,7 +321,12 @@ public class ReflectionMap<V> {
 	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
 	 */
 	public List<V> findAll(Class<?> c, Class<? extends V> ofType) {
-		return appendAll(c, ofType, null);
+		List<V> list = null;
+		for (ClassEntry<V> e : classEntries)
+			if (e.matches(c) && e.value != null)
+				if (ofType == null || ofType.isInstance(e.value))
+					list = lazyAdd(list, e.value);
+		return lazyList(list);
 	}
 
 	/**
@@ -339,7 +336,11 @@ public class ReflectionMap<V> {
 	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
 	 */
 	public List<V> findAll(Class<?> c) {
-		return appendAll(c, null, null);
+		List<V> list = null;
+		for (ClassEntry<V> e : classEntries)
+			if (e.matches(c) && e.value != null)
+				list = lazyAdd(list, e.value);
+		return lazyList(list);
 	}
 
 	/**
@@ -347,18 +348,23 @@ public class ReflectionMap<V> {
 	 *
 	 * @param c The class to test for.
 	 * @param ofType Only return objects of the specified type.
-	 * @param l The list to append values to.  Can be <jk>null</jk>.
+	 * @param array The array to append values to.
 	 * @return The same list passed in or a new modifiable list if <jk>null</jk>.
 	 */
-	public List<V> appendAll(Class<?> c, Class<? extends V> ofType, List<V> l) {
-		if (l == null)
-			l = AList.create();
-		if (! noClassEntries)
-			for (ClassEntry<V> e : classEntries)
-				if (e.matches(c) && e.value != null)
-					if (ofType == null || ofType.isInstance(e.value))
-						l.add(e.value);
-		return l;
+	public V[] appendAll(Class<?> c, Class<? extends V> ofType, V[] array) {
+		List<V> list = null;
+		for (ClassEntry<V> e : classEntries)
+			if (e.matches(c) && e.value != null)
+				if (ofType == null || ofType.isInstance(e.value))
+					list = lazyAdd(array, list, e.value);
+		return lazyArray(array, list);
+	}
+
+	private static <V> List<V> lazyAdd(List<V> list, V v) {
+		if (list == null)
+			list = new ArrayList<>();
+		list.add(v);
+		return list;
 	}
 
 	/**
@@ -369,11 +375,10 @@ public class ReflectionMap<V> {
 	 * @return The matching object.  Never <jk>null</jk>.
 	 */
 	public Optional<V> find(Method m, Class<? extends V> ofType) {
-		if (! noMethodEntries)
-			for (MethodEntry<V> e : methodEntries)
-				if (e.matches(m))
-					if (ofType == null || ofType.isInstance(e.value))
-						return Optional.ofNullable(e.value);
+		for (MethodEntry<V> e : methodEntries)
+			if (e.matches(m))
+				if (ofType == null || ofType.isInstance(e.value))
+					return Optional.ofNullable(e.value);
 		return Optional.empty();
 	}
 
@@ -395,7 +400,12 @@ public class ReflectionMap<V> {
 	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
 	 */
 	public List<V> findAll(Method m, Class<? extends V> ofType) {
-		return appendAll(m, ofType, null);
+		List<V> list = null;
+		for (MethodEntry<V> e : methodEntries)
+			if (e.matches(m) && e.value != null)
+				if (ofType == null || ofType.isInstance(e.value))
+					list = lazyAdd(list, e.value);
+		return lazyList(list);
 	}
 
 	/**
@@ -405,7 +415,11 @@ public class ReflectionMap<V> {
 	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
 	 */
 	public List<V> findAll(Method m) {
-		return appendAll(m, null, null);
+		List<V> list = null;
+		for (MethodEntry<V> e : methodEntries)
+			if (e.matches(m) && e.value != null)
+				list = lazyAdd(list, e.value);
+		return lazyList(list);
 	}
 
 	/**
@@ -413,18 +427,16 @@ public class ReflectionMap<V> {
 	 *
 	 * @param m The method to test for.
 	 * @param ofType Only return objects of the specified type.
-	 * @param l The list to append values to.  Can be <jk>null</jk>.
+	 * @param array The array to append values to.
 	 * @return The same list passed in or a new modifiable list if <jk>null</jk>.
 	 */
-	public List<V> appendAll(Method m, Class<? extends V> ofType, List<V> l) {
-		if (l == null)
-			l = AList.create();
-		if (! noMethodEntries)
-			for (MethodEntry<V> e : methodEntries)
-				if (e.matches(m) && e.value != null)
-					if (ofType == null || ofType.isInstance(e.value))
-						l.add(e.value);
-		return l;
+	public V[] appendAll(Method m, Class<? extends V> ofType, V[] array) {
+		List<V> list = null;
+		for (MethodEntry<V> e : methodEntries)
+			if (e.matches(m) && e.value != null)
+				if (ofType == null || ofType.isInstance(e.value))
+					list = lazyAdd(array, list, e.value);
+		return lazyArray(array, list);
 	}
 
 	/**
@@ -435,11 +447,10 @@ public class ReflectionMap<V> {
 	 * @return The matching object.  Never <jk>null</jk>.
 	 */
 	public Optional<V> find(Field f, Class<? extends V> ofType) {
-		if (! noFieldEntries)
-			for (FieldEntry<V> e : fieldEntries)
-				if (e.matches(f))
-					if (ofType == null || ofType.isInstance(e.value))
-						return Optional.ofNullable(e.value);
+		for (FieldEntry<V> e : fieldEntries)
+			if (e.matches(f))
+				if (ofType == null || ofType.isInstance(e.value))
+					return Optional.ofNullable(e.value);
 		return Optional.empty();
 	}
 
@@ -461,7 +472,12 @@ public class ReflectionMap<V> {
 	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
 	 */
 	public List<V> findAll(Field f, Class<? extends V> ofType) {
-		return appendAll(f, ofType, null);
+		List<V> list = null;
+		for (FieldEntry<V> e : fieldEntries)
+			if (e.matches(f) && e.value != null)
+				if (ofType == null || ofType.isInstance(e.value))
+					list = lazyAdd(list, e.value);
+		return lazyList(list);
 	}
 
 	/**
@@ -471,7 +487,11 @@ public class ReflectionMap<V> {
 	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
 	 */
 	public List<V> findAll(Field f) {
-		return appendAll(f, null, null);
+		List<V> list = null;
+		for (FieldEntry<V> e : fieldEntries)
+			if (e.matches(f) && e.value != null)
+				list = lazyAdd(list, e.value);
+		return lazyList(list);
 	}
 
 	/**
@@ -479,18 +499,16 @@ public class ReflectionMap<V> {
 	 *
 	 * @param f The field to test for.
 	 * @param ofType Only return objects of the specified type.
-	 * @param l The list to append values to.  Can be <jk>null</jk>.
+	 * @param array The array to append values to.
 	 * @return The same list passed in or a new modifiable list if <jk>null</jk>.
 	 */
-	public List<V> appendAll(Field f, Class<? extends V> ofType, List<V> l) {
-		if (l == null)
-			l = AList.create();
-		if (! noFieldEntries)
-			for (FieldEntry<V> e : fieldEntries)
-				if (e.matches(f) && e.value != null)
-					if (ofType == null || ofType.isInstance(e.value))
-						l.add(e.value);
-		return l == null ? new ArrayList<>(0) : l;
+	public V[] appendAll(Field f, Class<? extends V> ofType, V[] array) {
+		List<V> list = null;
+		for (FieldEntry<V> e : fieldEntries)
+			if (e.matches(f) && e.value != null)
+				if (ofType == null || ofType.isInstance(e.value))
+					list = lazyAdd(array, list, e.value);
+		return lazyArray(array, list);
 	}
 
 	/**
@@ -501,11 +519,10 @@ public class ReflectionMap<V> {
 	 * @return The matching object.  Never <jk>null</jk>.
 	 */
 	public Optional<V> find(Constructor<?> c, Class<? extends V> ofType) {
-		if (! noConstructorEntries)
-			for (ConstructorEntry<V> e : constructorEntries)
-				if (e.matches(c))
-					if (ofType == null || ofType.isInstance(e.value))
-						return Optional.ofNullable(e.value);
+		for (ConstructorEntry<V> e : constructorEntries)
+			if (e.matches(c))
+				if (ofType == null || ofType.isInstance(e.value))
+					return Optional.ofNullable(e.value);
 		return Optional.empty();
 	}
 
@@ -527,7 +544,12 @@ public class ReflectionMap<V> {
 	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
 	 */
 	public List<V> findAll(Constructor<?> c, Class<? extends V> ofType) {
-		return appendAll(c, ofType, null);
+		List<V> list = null;
+		for (ConstructorEntry<V> e : constructorEntries)
+			if (e.matches(c) && e.value != null)
+				if (ofType == null || ofType.isInstance(e.value))
+					list = lazyAdd(list, e.value);
+		return lazyList(list);
 	}
 
 	/**
@@ -537,7 +559,11 @@ public class ReflectionMap<V> {
 	 * @return A modifiable list of matching values.  Never <jk>null</jk>.
 	 */
 	public List<V> findAll(Constructor<?> c) {
-		return appendAll(c, null, null);
+		List<V> list = null;
+		for (ConstructorEntry<V> e : constructorEntries)
+			if (e.matches(c) && e.value != null)
+				list = lazyAdd(list, e.value);
+		return lazyList(list);
 	}
 
 	/**
@@ -545,18 +571,16 @@ public class ReflectionMap<V> {
 	 *
 	 * @param c The constructor to test for.
 	 * @param ofType Only return objects of the specified type.
-	 * @param l The list to append values to.  Can be <jk>null</jk>.
+	 * @param array The array to append values to.
 	 * @return The same list passed in or a new modifiable list if <jk>null</jk>.
 	 */
-	public List<V> appendAll(Constructor<?> c, Class<? extends V> ofType, List<V> l) {
-		if (l == null)
-			l = AList.create();
-		if (! noConstructorEntries)
-			for (ConstructorEntry<V> e : constructorEntries)
-				if (e.matches(c) && e.value != null)
-					if (ofType == null || ofType.isInstance(e.value))
-						l.add(e.value);
-		return l;
+	public V[] appendAll(Constructor<?> c, Class<? extends V> ofType, V[] array) {
+		List<V> list = null;
+		for (ConstructorEntry<V> e : constructorEntries)
+			if (e.matches(c) && e.value != null)
+				if (ofType == null || ofType.isInstance(e.value))
+					list = lazyAdd(array, list, e.value);
+		return lazyArray(array, list);
 	}
 
 	static class ClassEntry<V> {
@@ -768,5 +792,29 @@ public class ReflectionMap<V> {
 			.a("fieldEntries", fieldEntries)
 			.a("constructorEntries", constructorEntries)
 			.asString();
+	}
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// Utility methods
+	//-----------------------------------------------------------------------------------------------------------------
+	
+	private static <V> List<V> lazyList(List<V> list) {
+		return list == null ? Collections.emptyList() : list;
+	}
+
+	private static <V> List<V> lazyAdd(V[] array, List<V> list, V v) {
+		if (list == null)
+			list = new ArrayList<>(Arrays.asList(array));
+		list.add(v);
+		return list;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <V> V[] lazyArray(V[] array, List<V> list) {
+		if (list == null)
+			return array;
+		array = (V[])Array.newInstance(array.getClass().getComponentType(), list.size());
+		list.toArray(array);
+		return array;
 	}
 }

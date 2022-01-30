@@ -36,11 +36,11 @@ public abstract class ExecutableInfo {
 	final Executable e;
 	final boolean isConstructor;
 
-	private ParamInfo[] params;
-	private ClassInfo[] paramTypes, exceptionInfos;
-	private Class<?>[] rawParamTypes;
-	private Type[] rawGenericParamTypes;
-	private Parameter[] rawParameters;
+	private volatile ParamInfo[] params;
+	private volatile ClassInfo[] paramTypes, exceptionInfos;
+	private volatile Class<?>[] rawParamTypes;
+	private volatile Type[] rawGenericParamTypes;
+	private volatile Parameter[] rawParameters;
 
 	/**
 	 * Constructor.
@@ -234,57 +234,70 @@ public abstract class ExecutableInfo {
 
 	private ParamInfo[] _getParams() {
 		if (params == null) {
-			Parameter[] rp = _getRawParameters();
-			ParamInfo[] l = new ParamInfo[rp.length];
-			for (int i = 0; i < rp.length; i++)
-				l[i] = new ParamInfo(this, rp[i], i);
-			params = l;
+			synchronized(this) {
+				Parameter[] rp = _getRawParameters();
+				ParamInfo[] l = new ParamInfo[rp.length];
+				for (int i = 0; i < rp.length; i++)
+					l[i] = new ParamInfo(this, rp[i], i);
+				params = l;
+			}
 		}
 		return params;
 	}
 
 	ClassInfo[] _getParamTypes() {
 		if (paramTypes == null) {
-			Class<?>[] ptc = _getRawParamTypes();
-			// Note that due to a bug involving Enum constructors, getGenericParameterTypes() may
-			// always return an empty array.  This appears to be fixed in Java 8 b75.
-			Type[] ptt = _getRawGenericParamTypes();
-			if (ptt.length != ptc.length) {
-				// Bug in javac: generic type array excludes enclosing instance parameter
-				// for inner classes with at least one generic constructor parameter.
-				if (ptt.length + 1 == ptc.length) {
-					Type[] ptt2 = new Type[ptc.length];
-					ptt2[0] = ptc[0];
-					for (int i = 0; i < ptt.length; i++)
-						ptt2[i+1] = ptt[i];
-					ptt = ptt2;
-				} else {
-					ptt = ptc;
+			synchronized(this) {
+				Class<?>[] ptc = _getRawParamTypes();
+				// Note that due to a bug involving Enum constructors, getGenericParameterTypes() may
+				// always return an empty array.  This appears to be fixed in Java 8 b75.
+				Type[] ptt = _getRawGenericParamTypes();
+				if (ptt.length != ptc.length) {
+					// Bug in javac: generic type array excludes enclosing instance parameter
+					// for inner classes with at least one generic constructor parameter.
+					if (ptt.length + 1 == ptc.length) {
+						Type[] ptt2 = new Type[ptc.length];
+						ptt2[0] = ptc[0];
+						for (int i = 0; i < ptt.length; i++)
+							ptt2[i+1] = ptt[i];
+						ptt = ptt2;
+					} else {
+						ptt = ptc;
+					}
 				}
+				ClassInfo[] l = new ClassInfo[ptc.length];
+				for (int i = 0; i < ptc.length; i++)
+					l[i] = ClassInfo.of(ptc[i], ptt[i]);
+				paramTypes = l;
 			}
-			ClassInfo[] l = new ClassInfo[ptc.length];
-			for (int i = 0; i < ptc.length; i++)
-				l[i] = ClassInfo.of(ptc[i], ptt[i]);
-			paramTypes = l;
 		}
 		return paramTypes;
 	}
 
 	Class<?>[] _getRawParamTypes() {
-		if (rawParamTypes == null)
-			rawParamTypes = e.getParameterTypes();
+		if (rawParamTypes == null) {
+			synchronized(this) {
+				rawParamTypes = e.getParameterTypes();
+			}
+		}
 		return rawParamTypes;
 	}
 
 	private Type[] _getRawGenericParamTypes() {
-		if (rawGenericParamTypes == null)
-			rawGenericParamTypes = e.getGenericParameterTypes();
+		if (rawGenericParamTypes == null) {
+			synchronized(this) {
+				rawGenericParamTypes = e.getGenericParameterTypes();
+			}
+		}
 		return rawGenericParamTypes;
 	}
 
 	private Parameter[] _getRawParameters() {
-		if (rawParameters == null)
-			rawParameters = e.getParameters();
+		if (rawParameters == null) {
+			synchronized(this) {
+				rawParameters = e.getParameters();
+			}
+		}
 		return rawParameters;
 	}
 
@@ -347,11 +360,13 @@ public abstract class ExecutableInfo {
 
 	private ClassInfo[] _getExceptionTypes() {
 		if (exceptionInfos == null) {
-			Class<?>[] exceptionTypes = e.getExceptionTypes();
-			ClassInfo[] l = new ClassInfo[exceptionTypes.length];
-			for (int i = 0; i < exceptionTypes.length; i++)
-				l[i] = ClassInfo.of(exceptionTypes[i]);
-			exceptionInfos = l;
+			synchronized(this) {
+				Class<?>[] exceptionTypes = e.getExceptionTypes();
+				ClassInfo[] l = new ClassInfo[exceptionTypes.length];
+				for (int i = 0; i < exceptionTypes.length; i++)
+					l[i] = ClassInfo.of(exceptionTypes[i]);
+				exceptionInfos = l;
+			}
 		}
 		return exceptionInfos;
 	}

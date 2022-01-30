@@ -107,6 +107,8 @@ public final class ClassInfo {
 	 * @return The constructed class info, or <jk>null</jk> if the type was <jk>null</jk>.
 	 */
 	public static ClassInfo of(Class<?> c, Type t) {
+		if (c == t)
+			return of(c);
 		return new ClassInfo(c, t);
 	}
 
@@ -161,15 +163,18 @@ public final class ClassInfo {
 	private final Type t;
 	final Class<?> c;
 	private final boolean isParameterizedType;
-	private Boolean isRepeatedAnnotation;
-	private ClassInfo[] interfaces, declaredInterfaces, parents, allParents;
-	private MethodInfo[] publicMethods, declaredMethods, allMethods, allMethodsParentFirst;
-	private MethodInfo repeatedAnnotationMethod;
-	private ConstructorInfo[] publicConstructors, declaredConstructors;
-	private FieldInfo[] publicFields, declaredFields, allFields;
+	private volatile Boolean isRepeatedAnnotation;
+	private volatile ClassInfo[] interfaces, declaredInterfaces, parents, allParents;
+	private volatile MethodInfo[] publicMethods, declaredMethods, allMethods, allMethodsParentFirst;
+	private volatile MethodInfo repeatedAnnotationMethod;
+	private volatile ConstructorInfo[] publicConstructors, declaredConstructors;
+	private volatile FieldInfo[] publicFields, declaredFields, allFields;
 	private int dim = -1;
 	private ClassInfo componentType;
 
+	private final ConcurrentHashMap<Method,MethodInfo> methods = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<Field,FieldInfo> fields = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<Constructor<?>,ConstructorInfo> constructors = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
@@ -237,6 +242,33 @@ public final class ClassInfo {
 				return ClassInfo.of(c).getParameterType(0, parameterizedType);
 		}
 		return null;
+	}
+
+	MethodInfo getMethodInfo(Method x) {
+		MethodInfo i = methods.get(x);
+		if (i == null) {
+			i = new MethodInfo(this, x);
+			methods.put(x, i);
+		}
+		return i;
+	}
+
+	FieldInfo getFieldInfo(Field x) {
+		FieldInfo i = fields.get(x);
+		if (i == null) {
+			i = new FieldInfo(this, x);
+			fields.put(x, i);
+		}
+		return i;
+	}
+
+	ConstructorInfo getConstructorInfo(Constructor<?> x) {
+		ConstructorInfo i = constructors.get(x);
+		if (i == null) {
+			i = new ConstructorInfo(this, x);
+			constructors.put(x, i);
+		}
+		return i;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -330,7 +362,7 @@ public final class ClassInfo {
 	}
 
 	/** Results are in child-to-parent order. */
-	ClassInfo[] _getInterfaces() {
+	synchronized ClassInfo[] _getInterfaces() {
 		if (interfaces == null) {
 			Set<ClassInfo> s = new LinkedHashSet<>();
 			for (ClassInfo ci : _getParents())
@@ -345,7 +377,7 @@ public final class ClassInfo {
 	}
 
 	/** Results are in the same order as Class.getInterfaces(). */
-	private ClassInfo[] _getDeclaredInterfaces() {
+	private synchronized ClassInfo[] _getDeclaredInterfaces() {
 		if (declaredInterfaces == null) {
 			Class<?>[] ii = c == null ? new Class[0] : c.getInterfaces();
 			ClassInfo[] l = new ClassInfo[ii.length];
@@ -357,7 +389,7 @@ public final class ClassInfo {
 	}
 
 	/** Results are in child-to-parent order. */
-	ClassInfo[] _getParents() {
+	synchronized ClassInfo[] _getParents() {
 		if (parents == null) {
 			List<ClassInfo> l = new ArrayList<>();
 			Class<?> pc = c;
@@ -371,7 +403,7 @@ public final class ClassInfo {
 	}
 
 	/** Results are classes-before-interfaces, then child-to-parent order. */
-	private ClassInfo[] _getAllParents() {
+	private synchronized ClassInfo[] _getAllParents() {
 		if (allParents == null) {
 			ClassInfo[] a1 = _getParents(), a2 = _getInterfaces();
 			ClassInfo[] l = new ClassInfo[a1.length + a2.length];
@@ -531,54 +563,62 @@ public final class ClassInfo {
 		return this;
 	}
 
-	private MethodInfo[] _getPublicMethods() {
+	private synchronized MethodInfo[] _getPublicMethods() {
 		if (publicMethods == null) {
-			Method[] mm = c == null ? new Method[0] : c.getMethods();
-			List<MethodInfo> l = new ArrayList<>(mm.length);
-			for (Method m : mm)
-				if (m.getDeclaringClass() != Object.class)
-					l.add(MethodInfo.of(this, m));
-			l.sort(null);
-			publicMethods = l.toArray(new MethodInfo[l.size()]);
+			synchronized(this) {
+				Method[] mm = c == null ? new Method[0] : c.getMethods();
+				List<MethodInfo> l = new ArrayList<>(mm.length);
+				for (Method m : mm)
+					if (m.getDeclaringClass() != Object.class)
+						l.add(getMethodInfo(m));
+				l.sort(null);
+				publicMethods = l.toArray(new MethodInfo[l.size()]);
+			}
 		}
 		return publicMethods;
 	}
 
-	private MethodInfo[] _getDeclaredMethods() {
+	private synchronized MethodInfo[] _getDeclaredMethods() {
 		if (declaredMethods == null) {
-			Method[] mm = c == null ? new Method[0] : c.getDeclaredMethods();
-			List<MethodInfo> l = new ArrayList<>(mm.length);
-			for (Method m : mm)
-				if (! "$jacocoInit".equals(m.getName())) // Jacoco adds its own simulated methods.
-					l.add(MethodInfo.of(this, m));
-			l.sort(null);
-			declaredMethods = l.toArray(new MethodInfo[l.size()]);
+			synchronized(this) {
+				Method[] mm = c == null ? new Method[0] : c.getDeclaredMethods();
+				List<MethodInfo> l = new ArrayList<>(mm.length);
+				for (Method m : mm)
+					if (! "$jacocoInit".equals(m.getName())) // Jacoco adds its own simulated methods.
+						l.add(getMethodInfo(m));
+				l.sort(null);
+				declaredMethods = l.toArray(new MethodInfo[l.size()]);
+			}
 		}
 		return declaredMethods;
 	}
 
-	private MethodInfo[] _getAllMethods() {
+	private synchronized MethodInfo[] _getAllMethods() {
 		if (allMethods == null) {
-			List<MethodInfo> l = new ArrayList<>();
-			for (ClassInfo c : _getAllParents())
-				c._appendDeclaredMethods(l);
-			allMethods = l.toArray(new MethodInfo[l.size()]);
+			synchronized(this) {
+				List<MethodInfo> l = new ArrayList<>();
+				for (ClassInfo c : _getAllParents())
+					c._appendDeclaredMethods(l);
+				allMethods = l.toArray(new MethodInfo[l.size()]);
+			}
 		}
 		return allMethods;
 	}
 
-	private MethodInfo[] _getAllMethodsParentFirst() {
+	private synchronized MethodInfo[] _getAllMethodsParentFirst() {
 		if (allMethodsParentFirst == null) {
-			List<MethodInfo> l = new ArrayList<>();
-			ClassInfo[] parents = _getAllParents();
-			for (int i = parents.length-1; i >=0; i--)
-				parents[i]._appendDeclaredMethods(l);
-			allMethodsParentFirst = l.toArray(new MethodInfo[l.size()]);
+			synchronized(this) {
+				List<MethodInfo> l = new ArrayList<>();
+				ClassInfo[] parents = _getAllParents();
+				for (int i = parents.length-1; i >=0; i--)
+					parents[i]._appendDeclaredMethods(l);
+				allMethodsParentFirst = l.toArray(new MethodInfo[l.size()]);
+			}
 		}
 		return allMethodsParentFirst;
 	}
 
-	private List<MethodInfo> _appendDeclaredMethods(List<MethodInfo> l) {
+	private synchronized List<MethodInfo> _appendDeclaredMethods(List<MethodInfo> l) {
 		for (MethodInfo mi : _getDeclaredMethods())
 			l.add(mi);
 		return l;
@@ -660,26 +700,30 @@ public final class ClassInfo {
 		return null;
 	}
 
-	private ConstructorInfo[] _getPublicConstructors() {
+	private synchronized ConstructorInfo[] _getPublicConstructors() {
 		if (publicConstructors == null) {
-			Constructor<?>[] cc = c == null ? new Constructor[0] : c.getConstructors();
-			List<ConstructorInfo> l = new ArrayList<>(cc.length);
-			for (Constructor<?> ccc : cc)
-				l.add(ConstructorInfo.of(this, ccc));
-			l.sort(null);
-			publicConstructors = l.toArray(new ConstructorInfo[l.size()]);
+			synchronized(this) {
+				Constructor<?>[] cc = c == null ? new Constructor[0] : c.getConstructors();
+				List<ConstructorInfo> l = new ArrayList<>(cc.length);
+				for (Constructor<?> ccc : cc)
+					l.add(getConstructorInfo(ccc));
+				l.sort(null);
+				publicConstructors = l.toArray(new ConstructorInfo[l.size()]);
+			}
 		}
 		return publicConstructors;
 	}
 
-	private ConstructorInfo[] _getDeclaredConstructors() {
+	private synchronized ConstructorInfo[] _getDeclaredConstructors() {
 		if (declaredConstructors == null) {
-			Constructor<?>[] cc = c == null ? new Constructor[0] : c.getDeclaredConstructors();
-			List<ConstructorInfo> l = new ArrayList<>(cc.length);
-			for (Constructor<?> ccc : cc)
-				l.add(ConstructorInfo.of(this, ccc));
-			l.sort(null);
-			declaredConstructors = l.toArray(new ConstructorInfo[l.size()]);
+			synchronized(this) {
+				Constructor<?>[] cc = c == null ? new Constructor[0] : c.getDeclaredConstructors();
+				List<ConstructorInfo> l = new ArrayList<>(cc.length);
+				for (Constructor<?> ccc : cc)
+					l.add(getConstructorInfo(ccc));
+				l.sort(null);
+				declaredConstructors = l.toArray(new ConstructorInfo[l.size()]);
+			}
 		}
 		return declaredConstructors;
 	}
@@ -823,42 +867,48 @@ public final class ClassInfo {
 
 	private FieldInfo[] _getPublicFields() {
 		if (publicFields == null) {
-			Map<String,FieldInfo> m = new LinkedHashMap<>();
-			for (ClassInfo c : _getParents()) {
-				for (FieldInfo f : c._getDeclaredFields()) {
-					String fn = f.getName();
-					if (f.isPublic() && ! (m.containsKey(fn) || "$jacocoData".equals(fn)))
-						m.put(f.getName(), f);
+			synchronized(this) {
+				Map<String,FieldInfo> m = new LinkedHashMap<>();
+				for (ClassInfo c : _getParents()) {
+					for (FieldInfo f : c._getDeclaredFields()) {
+						String fn = f.getName();
+						if (f.isPublic() && ! (m.containsKey(fn) || "$jacocoData".equals(fn)))
+							m.put(f.getName(), f);
+					}
 				}
+				List<FieldInfo> l = new ArrayList<>(m.values());
+				l.sort(null);
+				publicFields = l.toArray(new FieldInfo[l.size()]);
 			}
-			List<FieldInfo> l = new ArrayList<>(m.values());
-			l.sort(null);
-			publicFields = l.toArray(new FieldInfo[l.size()]);
 		}
 		return publicFields;
 	}
 
-	private FieldInfo[] _getDeclaredFields() {
+	private synchronized FieldInfo[] _getDeclaredFields() {
 		if (declaredFields == null) {
-			Field[] ff = c == null ? new Field[0] : c.getDeclaredFields();
-			List<FieldInfo> l = new ArrayList<>(ff.length);
-			for (Field f : ff)
-				if (! "$jacocoData".equals(f.getName()))
-					l.add(FieldInfo.of(this, f));
-			l.sort(null);
-			declaredFields = l.toArray(new FieldInfo[l.size()]);
+			synchronized(this) {
+				Field[] ff = c == null ? new Field[0] : c.getDeclaredFields();
+				List<FieldInfo> l = new ArrayList<>(ff.length);
+				for (Field f : ff)
+					if (! "$jacocoData".equals(f.getName()))
+						l.add(getFieldInfo(f));
+				l.sort(null);
+				declaredFields = l.toArray(new FieldInfo[l.size()]);
+			}
 		}
 		return declaredFields;
 	}
 
-	private FieldInfo[] _getAllFields() {
+	private synchronized FieldInfo[] _getAllFields() {
 		if (allFields == null) {
-			List<FieldInfo> l = new ArrayList<>();
-			ClassInfo[] parents = _getAllParents();
-			for (int i = parents.length-1; i >=0; i--)
-				for (FieldInfo f : parents[i]._getDeclaredFields())
-					l.add(f);
-			allFields = l.toArray(new FieldInfo[l.size()]);
+			synchronized(this) {
+				List<FieldInfo> l = new ArrayList<>();
+				ClassInfo[] parents = _getAllParents();
+				for (int i = parents.length-1; i >=0; i--)
+					for (FieldInfo f : parents[i]._getDeclaredFields())
+						l.add(f);
+				allFields = l.toArray(new FieldInfo[l.size()]);
+			}
 		}
 		return allFields;
 	}
@@ -2047,19 +2097,21 @@ public final class ClassInfo {
 	 */
 	public boolean isRepeatedAnnotation() {
 		if (isRepeatedAnnotation == null) {
-			boolean b = false;
-			MethodInfo mi = getPublicMethod(x -> x.hasName("value"));
-			if (mi != null) {
-				ClassInfo rt = mi.getReturnType();
-				if (rt.isArray()) {
-					ClassInfo rct = rt.getComponentType();
-					if (rct.hasAnnotation(Repeatable.class)) {
-						Repeatable r = rct.getLastAnnotation(Repeatable.class);
-						b = r.value().equals(c);
+			synchronized(this) {
+				boolean b = false;
+				repeatedAnnotationMethod = getPublicMethod(x -> x.hasName("value"));
+				if (repeatedAnnotationMethod != null) {
+					ClassInfo rt = repeatedAnnotationMethod.getReturnType();
+					if (rt.isArray()) {
+						ClassInfo rct = rt.getComponentType();
+						if (rct.hasAnnotation(Repeatable.class)) {
+							Repeatable r = rct.getLastAnnotation(Repeatable.class);
+							b = r.value().equals(c);
+						}
 					}
 				}
+				isRepeatedAnnotation = b;
 			}
-			isRepeatedAnnotation = b;
 		}
 		return isRepeatedAnnotation;
 	}
@@ -2076,8 +2128,11 @@ public final class ClassInfo {
 	 */
 	public MethodInfo getRepeatedAnnotationMethod() {
 		if (isRepeatedAnnotation()) {
-			if (repeatedAnnotationMethod == null)
-				repeatedAnnotationMethod = getPublicMethod(x -> x.hasName("value"));
+			if (repeatedAnnotationMethod == null) {
+				synchronized(this) {
+					repeatedAnnotationMethod = getPublicMethod(x -> x.hasName("value"));
+				}
+			}
 			return repeatedAnnotationMethod;
 		}
 		return null;

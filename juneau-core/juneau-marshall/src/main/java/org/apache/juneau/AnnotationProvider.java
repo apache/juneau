@@ -16,6 +16,8 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.function.*;
 
+import org.apache.juneau.internal.*;
+
 /**
  * Interface that provides the ability to look up annotations on classes/methods/constructors/fields.
  *
@@ -26,14 +28,26 @@ import java.util.function.*;
 public interface AnnotationProvider {
 
 	/**
+	 * Disable annotation caching.
+	 */
+	static final boolean DISABLE_ANNOTATION_CACHING = Boolean.getBoolean("juneau.disableAnnotationCaching");
+
+	/**
 	 * Default metadata provider.
 	 */
-	public static AnnotationProvider DEFAULT = new AnnotationProvider() {
+	@SuppressWarnings("unchecked")
+	public static final AnnotationProvider DEFAULT = new AnnotationProvider() {
+
+		private final TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,Annotation[]> classAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING, (k1,k2) -> k1.getAnnotationsByType(k2));
+		private final TwoKeyConcurrentCache<Class<?>,Class<? extends Annotation>,Annotation[]> declaredClassAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING, (k1,k2) -> k1.getDeclaredAnnotationsByType(k2));
+		private final TwoKeyConcurrentCache<Method,Class<? extends Annotation>,Annotation[]> methodAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING, (k1,k2) -> k1.getAnnotationsByType(k2));
+		private final TwoKeyConcurrentCache<Field,Class<? extends Annotation>,Annotation[]> fieldAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING, (k1,k2) -> k1.getAnnotationsByType(k2));
+		private final TwoKeyConcurrentCache<Constructor<?>,Class<? extends Annotation>,Annotation[]> constructorAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING, (k1,k2) -> k1.getAnnotationsByType(k2));
 
 		@Override /* MetaProvider */
 		public <A extends Annotation> void getAnnotations(Class<A> a, Class<?> c, Predicate<A> predicate, Consumer<A> consumer) {
 			if (a != null && c != null)
-				for (A aa : c.getAnnotationsByType(a))
+				for (A aa : (A[])classAnnotationCache.get(c,a))
 					if (predicate.test(aa))
 						consumer.accept(aa);
 		}
@@ -41,7 +55,7 @@ public interface AnnotationProvider {
 		@Override /* MetaProvider */
 		public <A extends Annotation> A getAnnotation(Class<A> a, Class<?> c, Predicate<A> predicate) {
 			if (a != null && c != null)
-				for (A aa : c.getAnnotationsByType(a))
+				for (A aa : (A[])classAnnotationCache.get(c,a))
 					if (predicate.test(aa))
 						return aa;
 			return null;
@@ -50,7 +64,7 @@ public interface AnnotationProvider {
 		@Override /* MetaProvider */
 		public <A extends Annotation> void getDeclaredAnnotations(Class<A> a, Class<?> c, Predicate<A> predicate, Consumer<A> consumer) {
 			if (a != null && c != null)
-				for (A aa : c.getDeclaredAnnotationsByType(a))
+				for (A aa : (A[])declaredClassAnnotationCache.get(c,a))
 					if (predicate.test(aa))
 						consumer.accept(aa);
 		}
@@ -58,7 +72,7 @@ public interface AnnotationProvider {
 		@Override /* MetaProvider */
 		public <A extends Annotation> A getDeclaredAnnotation(Class<A> a, Class<?> c, Predicate<A> predicate) {
 			if (a != null && c != null)
-				for (A aa : c.getDeclaredAnnotationsByType(a))
+				for (A aa : (A[])declaredClassAnnotationCache.get(c,a))
 					if (predicate.test(aa))
 						return aa;
 			return null;
@@ -67,7 +81,7 @@ public interface AnnotationProvider {
 		@Override /* MetaProvider */
 		public <A extends Annotation> void getAnnotations(Class<A> a, Method m, Predicate<A> predicate, Consumer<A> consumer) {
 			if (a != null && m != null)
-				for (A aa : m.getAnnotationsByType(a))
+				for (A aa : (A[])methodAnnotationCache.get(m,a))
 					if (predicate.test(aa))
 						consumer.accept(aa);
 		}
@@ -75,7 +89,7 @@ public interface AnnotationProvider {
 		@Override /* MetaProvider */
 		public <A extends Annotation> A getAnnotation(Class<A> a, Method m, Predicate<A> predicate) {
 			if (a != null && m != null)
-				for (A aa : m.getAnnotationsByType(a))
+				for (A aa : (A[])methodAnnotationCache.get(m,a))
 					if (predicate.test(aa))
 						return aa;
 			return null;
@@ -84,7 +98,7 @@ public interface AnnotationProvider {
 		@Override /* MetaProvider */
 		public <A extends Annotation> void getAnnotations(Class<A> a, Field f, Predicate<A> predicate, Consumer<A> consumer) {
 			if (a != null && f != null)
-				for (A aa : f.getAnnotationsByType(a))
+				for (A aa : (A[])fieldAnnotationCache.get(f,a))
 					if (predicate.test(aa))
 						consumer.accept(aa);
 		}
@@ -92,7 +106,7 @@ public interface AnnotationProvider {
 		@Override /* MetaProvider */
 		public <A extends Annotation> A getAnnotation(Class<A> a, Field f, Predicate<A> predicate) {
 			if (a != null && f != null)
-				for (A aa : f.getAnnotationsByType(a))
+				for (A aa : (A[])fieldAnnotationCache.get(f,a))
 					if (predicate.test(aa))
 						return aa;
 			return null;
@@ -101,7 +115,7 @@ public interface AnnotationProvider {
 		@Override /* MetaProvider */
 		public <A extends Annotation> void getAnnotations(Class<A> a, Constructor<?> c, Predicate<A> predicate, Consumer<A> consumer) {
 			if (a != null && c != null)
-				for (A aa : c.getAnnotationsByType(a))
+				for (A aa : (A[])constructorAnnotationCache.get(c,a))
 					if (predicate.test(aa))
 						consumer.accept(aa);
 		}
@@ -109,7 +123,7 @@ public interface AnnotationProvider {
 		@Override /* MetaProvider */
 		public <A extends Annotation> A getAnnotation(Class<A> a, Constructor<?> c, Predicate<A> predicate) {
 			if (a != null && c != null)
-				for (A aa : c.getAnnotationsByType(a))
+				for (A aa : (A[])constructorAnnotationCache.get(c,a))
 					if (predicate.test(aa))
 						return aa;
 			return null;
