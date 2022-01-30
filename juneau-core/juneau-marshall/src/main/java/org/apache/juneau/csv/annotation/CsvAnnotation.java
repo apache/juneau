@@ -180,7 +180,7 @@ public class CsvAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<Csv> ai, Context.Builder b) {
-			Csv a = ai.getAnnotation();
+			Csv a = ai.inner();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;

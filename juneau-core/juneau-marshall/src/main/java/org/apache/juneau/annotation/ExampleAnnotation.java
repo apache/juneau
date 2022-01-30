@@ -199,7 +199,7 @@ public class ExampleAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<Example> ai, BeanContext.Builder b) {
-			Example a = ai.getAnnotation();
+			Example a = ai.inner();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;

@@ -44,7 +44,7 @@ public class HtmlDocConfigAnnotation {
 		@SuppressWarnings("unchecked")
 		@Override
 		public void apply(AnnotationInfo<HtmlDocConfig> ai, HtmlDocSerializer.Builder b) {
-			HtmlDocConfig a = ai.getAnnotation();
+			HtmlDocConfig a = ai.inner();
 
 			strings(a.aside()).ifPresent(x -> b.aside(x));
 			strings(a.footer()).ifPresent(x -> b.footer(x));

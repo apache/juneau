@@ -618,7 +618,7 @@ public class RestPutAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<RestPut> ai, RestOpContext.Builder b) {
-			RestPut a = ai.getAnnotation();
+			RestPut a = ai.inner();
 
 			b.httpMethod("put");
 

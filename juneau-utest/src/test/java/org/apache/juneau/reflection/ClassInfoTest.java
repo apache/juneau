@@ -114,7 +114,7 @@ public class ClassInfoTest {
 			if (t instanceof AConfig)
 				return "@AConfig(" + ((AConfig)t).value() + ")";
 			if (t instanceof AnnotationInfo)
-				return apply(((AnnotationInfo<?>)t).getAnnotation());
+				return apply(((AnnotationInfo<?>)t).inner());
 			if (t instanceof AnnotationList) {
 				AnnotationList al = (AnnotationList)t;
 				return al.toString();

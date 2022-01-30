@@ -179,7 +179,7 @@ public class SoapXmlAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<SoapXml> ai, Context.Builder b) {
-			SoapXml a = ai.getAnnotation();
+			SoapXml a = ai.inner();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;

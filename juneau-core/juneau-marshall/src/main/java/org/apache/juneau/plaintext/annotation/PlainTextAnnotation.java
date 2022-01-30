@@ -179,7 +179,7 @@ public class PlainTextAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<PlainText> ai, Context.Builder b) {
-			PlainText a = ai.getAnnotation();
+			PlainText a = ai.inner();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;

@@ -473,7 +473,7 @@ public class RestDeleteAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<RestDelete> ai, RestOpContext.Builder b) {
-			RestDelete a = ai.getAnnotation();
+			RestDelete a = ai.inner();
 
 			b.httpMethod("delete");
 

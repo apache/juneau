@@ -43,7 +43,7 @@ public class MsgPackConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<MsgPackConfig> ai, MsgPackSerializer.Builder b) {
-			MsgPackConfig a = ai.getAnnotation();
+			MsgPackConfig a = ai.inner();
 
 			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypesMsgPack(x));
 		}

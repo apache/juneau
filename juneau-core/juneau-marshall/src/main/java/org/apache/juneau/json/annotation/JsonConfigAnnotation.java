@@ -43,7 +43,7 @@ public class JsonConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<JsonConfig> ai, JsonSerializer.Builder b) {
-			JsonConfig a = ai.getAnnotation();
+			JsonConfig a = ai.inner();
 
 			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypesJson(x));
 			bool(a.escapeSolidus()).ifPresent(x -> b.escapeSolidus(x));
@@ -67,7 +67,7 @@ public class JsonConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<JsonConfig> ai, JsonParser.Builder b) {
-			JsonConfig a = ai.getAnnotation();
+			JsonConfig a = ai.inner();
 
 			bool(a.validateEnd()).ifPresent(x -> b.validateEnd(x));
 		}

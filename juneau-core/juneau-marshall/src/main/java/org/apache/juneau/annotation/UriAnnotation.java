@@ -177,7 +177,7 @@ public class UriAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<Uri> ai, BeanContext.Builder b) {
-			Uri a = ai.getAnnotation();
+			Uri a = ai.inner();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;

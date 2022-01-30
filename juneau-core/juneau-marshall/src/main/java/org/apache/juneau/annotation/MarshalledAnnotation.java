@@ -206,7 +206,7 @@ public class MarshalledAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<Marshalled> ai, BeanContext.Builder b) {
-			Marshalled a = ai.getAnnotation();
+			Marshalled a = ai.inner();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;

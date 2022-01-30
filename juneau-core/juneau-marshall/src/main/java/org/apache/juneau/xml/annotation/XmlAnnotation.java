@@ -257,7 +257,7 @@ public class XmlAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<Xml> ai, Context.Builder b) {
-			Xml a = ai.getAnnotation();
+			Xml a = ai.inner();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;

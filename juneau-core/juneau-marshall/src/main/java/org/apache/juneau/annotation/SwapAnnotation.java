@@ -259,7 +259,7 @@ public class SwapAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<Swap> ai, BeanContext.Builder b) {
-			Swap a = ai.getAnnotation();
+			Swap a = ai.inner();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;

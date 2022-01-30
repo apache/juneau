@@ -286,7 +286,7 @@ public class PathAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<Path> ai, BeanContext.Builder b) {
-			Path a = ai.getAnnotation();
+			Path a = ai.inner();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;

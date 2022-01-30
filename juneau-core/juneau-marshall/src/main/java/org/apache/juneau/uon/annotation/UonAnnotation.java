@@ -179,7 +179,7 @@ public class UonAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<Uon> ai, Context.Builder b) {
-			Uon a = ai.getAnnotation();
+			Uon a = ai.inner();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;

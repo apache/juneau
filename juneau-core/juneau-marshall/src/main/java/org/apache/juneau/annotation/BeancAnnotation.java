@@ -170,7 +170,7 @@ public class BeancAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<Beanc> ai, BeanContext.Builder b) {
-			Beanc a = ai.getAnnotation();
+			Beanc a = ai.inner();
 
 			if (isEmpty(a.on()))
 				return;

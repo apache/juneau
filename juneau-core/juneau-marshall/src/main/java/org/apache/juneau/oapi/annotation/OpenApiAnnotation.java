@@ -179,7 +179,7 @@ public class OpenApiAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<OpenApi> ai, Context.Builder b) {
-			OpenApi a = ai.getAnnotation();
+			OpenApi a = ai.inner();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;

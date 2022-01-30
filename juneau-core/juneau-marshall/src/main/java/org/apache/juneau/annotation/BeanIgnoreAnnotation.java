@@ -184,7 +184,7 @@ public class BeanIgnoreAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<BeanIgnore> ai, BeanContext.Builder b) {
-			BeanIgnore a = ai.getAnnotation();
+			BeanIgnore a = ai.inner();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;

@@ -189,7 +189,7 @@ public class BodyAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<Body> ai, BeanContext.Builder b) {
-			Body a = ai.getAnnotation();
+			Body a = ai.inner();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;

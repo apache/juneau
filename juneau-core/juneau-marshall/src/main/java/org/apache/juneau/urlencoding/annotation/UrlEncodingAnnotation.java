@@ -203,7 +203,7 @@ public class UrlEncodingAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<UrlEncoding> ai, Context.Builder b) {
-			UrlEncoding a = ai.getAnnotation();
+			UrlEncoding a = ai.inner();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;

@@ -1072,7 +1072,7 @@ public class RestAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<Rest> ai, RestContext.Builder b) {
-			Rest a = ai.getAnnotation();
+			Rest a = ai.inner();
 
 			classes(a.serializers()).ifPresent(x -> b.serializers().add(x));
 			classes(a.parsers()).ifPresent(x -> b.parsers().add(x));
@@ -1131,7 +1131,7 @@ public class RestAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<Rest> ai, RestOpContext.Builder b) {
-			Rest a = ai.getAnnotation();
+			Rest a = ai.inner();
 
 			stream(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
 			stream(a.consumes()).map(MediaType::of).forEach(x -> b.consumes(x));

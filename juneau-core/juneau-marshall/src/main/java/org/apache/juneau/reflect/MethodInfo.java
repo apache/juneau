@@ -392,7 +392,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
 	public AnnotationList getAnnotationList() {
-		return getAnnotationList(null);
+		return getAnnotationList(x -> true);
 	}
 
 	/**
@@ -425,7 +425,9 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
 	public AnnotationList getAnnotationList(Predicate<AnnotationInfo<?>> filter) {
-		return appendAnnotationList(new AnnotationList(filter));
+		AnnotationList al = new AnnotationList();
+		getAnnotationInfos(filter, x -> al.add(x));
+		return al;
 	}
 
 	/**
@@ -437,7 +439,9 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
 	public AnnotationList getAnnotationListMethodOnly(Predicate<AnnotationInfo<?>> filter) {
-		return appendAnnotationListMethodOnly(new AnnotationList(filter));
+		AnnotationList al = new AnnotationList();
+		getAnnotationInfosMethodOnly(filter, x -> al.add(x));
+		return al;
 	}
 
 	/**
@@ -453,50 +457,56 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 		return false;
 	}
 
-	AnnotationList appendAnnotationList(AnnotationList al) {
+	/**
+	 * Consumes the annotations that match the specified predicate on this method.
+	 *
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
+	 */
+	public MethodInfo getAnnotationInfos(Predicate<AnnotationInfo<?>> predicate, Consumer<AnnotationInfo<?>> consumer) {
 		ClassInfo c = this.declaringClass;
-		appendDeclaredAnnotations(al, c.getPackage());
+		getDeclaredAnnotationInfos(c.getPackage(), predicate, consumer);
 		ClassInfo[] interfaces = c._getInterfaces();
 		for (int i = interfaces.length-1; i >= 0; i--) {
-			appendDeclaredAnnotations(al, interfaces[i]);
-			appendDeclaredMethodAnnotations(al, interfaces[i]);
+			getDeclaredAnnotationInfos(interfaces[i], predicate, consumer);
+			getDeclaredMethodAnnotationInfos(interfaces[i], predicate, consumer);
 		}
 		ClassInfo[] parents = c._getParents();
 		for (int i = parents.length-1; i >= 0; i--) {
-			appendDeclaredAnnotations(al, parents[i]);
-			appendDeclaredMethodAnnotations(al, parents[i]);
+			getDeclaredAnnotationInfos(parents[i], predicate, consumer);
+			getDeclaredMethodAnnotationInfos(parents[i], predicate, consumer);
 		}
-		return al;
+		return this;
 	}
 
-	AnnotationList appendAnnotationListMethodOnly(AnnotationList al) {
+	private void getAnnotationInfosMethodOnly(Predicate<AnnotationInfo<?>> predicate, Consumer<AnnotationInfo<?>> consumer) {
 		ClassInfo c = this.declaringClass;
 		ClassInfo[] interfaces = c._getInterfaces();
 		for (int i = interfaces.length-1; i >= 0; i--)
-			appendDeclaredMethodAnnotations(al, interfaces[i]);
+			getDeclaredMethodAnnotationInfos(interfaces[i], predicate, consumer);
 		ClassInfo[] parents = c._getParents();
 		for (int i = parents.length-1; i >= 0; i--)
-			appendDeclaredMethodAnnotations(al, parents[i]);
-		return al;
+			getDeclaredMethodAnnotationInfos(parents[i], predicate, consumer);
 	}
 
-	void appendDeclaredAnnotations(AnnotationList al, Package p) {
+	private void getDeclaredAnnotationInfos(Package p, Predicate<AnnotationInfo<?>> predicate, Consumer<AnnotationInfo<?>> consumer) {
 		if (p != null)
 			for (Annotation a : p.getDeclaredAnnotations())
-				al.add(AnnotationInfo.of(p, a));
+				AnnotationInfo.of(p, a).accept(predicate, consumer);
 	}
 
-	void appendDeclaredAnnotations(AnnotationList al, ClassInfo ci) {
+	private void getDeclaredAnnotationInfos(ClassInfo ci, Predicate<AnnotationInfo<?>> predicate, Consumer<AnnotationInfo<?>> consumer) {
 		if (ci != null)
 			for (Annotation a : ci.c.getDeclaredAnnotations())
-				al.add(AnnotationInfo.of(ci, a));
+				AnnotationInfo.of(ci, a).accept(predicate, consumer);
 	}
 
-	void appendDeclaredMethodAnnotations(AnnotationList al, ClassInfo ci) {
+	private void getDeclaredMethodAnnotationInfos(ClassInfo ci, Predicate<AnnotationInfo<?>> predicate, Consumer<AnnotationInfo<?>> consumer) {
 		Method m = findMatchingOnClass(ci);
 		if (m != null)
 			for (Annotation a : m.getDeclaredAnnotations())
-				al.add(AnnotationInfo.of(MethodInfo.of(m), a));
+				AnnotationInfo.of(MethodInfo.of(m), a).accept(predicate, consumer);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -46,7 +46,7 @@ public class BeanConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<BeanConfig> ai, BeanContext.Builder b) {
-			BeanConfig a = ai.getAnnotation();
+			BeanConfig a = ai.inner();
 
 			string(a.beanClassVisibility()).map(Visibility::valueOf).ifPresent(x -> b.beanClassVisibility(x));
 			string(a.beanConstructorVisibility()).map(Visibility::valueOf).ifPresent(x -> b.beanConstructorVisibility(x));

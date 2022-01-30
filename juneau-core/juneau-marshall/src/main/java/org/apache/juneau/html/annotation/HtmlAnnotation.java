@@ -299,7 +299,7 @@ public class HtmlAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<Html> ai, Context.Builder b) {
-			Html a = ai.getAnnotation();
+			Html a = ai.inner();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;

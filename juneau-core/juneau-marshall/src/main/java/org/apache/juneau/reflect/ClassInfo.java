@@ -1175,7 +1175,23 @@ public final class ClassInfo {
 		return null;
 	}
 
-	private void getAnnotationInfos(Predicate<AnnotationInfo<?>> predicate, Consumer<AnnotationInfo<?>> consumer) {
+	/**
+	 * Consumes the annotations on this class/parents/package that match the specified predicate.
+	 *
+	 * <p>
+	 * Annotations are consumed in the following order:
+	 * <ol>
+	 * 	<li>On the package of this class.
+	 * 	<li>On interfaces ordered parent-to-child.
+	 * 	<li>On parent classes ordered parent-to-child.
+	 * 	<li>On this class.
+	 * </ol>
+	 *
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
+	 */
+	public ClassInfo getAnnotationInfos(Predicate<AnnotationInfo<?>> predicate, Consumer<AnnotationInfo<?>> consumer) {
 		Package p = c.getPackage();
 		if (p != null)
 			for (Annotation a : p.getDeclaredAnnotations())
@@ -1191,6 +1207,7 @@ public final class ClassInfo {
 			for (Annotation a : parents[i].c.getDeclaredAnnotations())
 				for (Annotation a2 : splitRepeated(a))
 					AnnotationInfo.of(parents[i], a2).accept(predicate, consumer);
+		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

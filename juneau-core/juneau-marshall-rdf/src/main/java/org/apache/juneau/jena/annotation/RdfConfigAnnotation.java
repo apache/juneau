@@ -46,7 +46,7 @@ public class RdfConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<RdfConfig> ai, RdfSerializer.Builder b) {
-			RdfConfig a = ai.getAnnotation();
+			RdfConfig a = ai.inner();
 
 			string(a.language()).ifPresent(x -> b.language(x));
 			string(a.juneauNs()).map(Namespace::of).ifPresent(x -> b.juneauNs(x));
@@ -100,7 +100,7 @@ public class RdfConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<RdfConfig> ai, RdfParser.Builder b) {
-			RdfConfig a = ai.getAnnotation();
+			RdfConfig a = ai.inner();
 
 			string(a.language()).ifPresent(x -> b.language(x));
 			string(a.juneauNs()).map(Namespace::of).ifPresent(x -> b.juneauNs(x));

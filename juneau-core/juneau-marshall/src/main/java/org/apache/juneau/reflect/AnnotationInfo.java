@@ -135,7 +135,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 *
 	 * @return The annotation found.
 	 */
-	public T getAnnotation() {
+	public T inner() {
 		return a;
 	}
 

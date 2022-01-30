@@ -287,7 +287,7 @@ public class HeaderAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<Header> ai, BeanContext.Builder b) {
-			Header a = ai.getAnnotation();
+			Header a = ai.inner();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;

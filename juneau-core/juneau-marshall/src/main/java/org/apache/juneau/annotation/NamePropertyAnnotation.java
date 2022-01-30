@@ -154,7 +154,7 @@ public class NamePropertyAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<NameProperty> ai, BeanContext.Builder b) {
-			NameProperty a = ai.getAnnotation();
+			NameProperty a = ai.inner();
 
 			if (isEmpty(a.on()))
 				return;

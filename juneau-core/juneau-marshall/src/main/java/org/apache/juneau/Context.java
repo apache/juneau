@@ -448,11 +448,15 @@ public abstract class Context implements AnnotationProvider {
 		@FluentSetter
 		public Builder applyAnnotations(Class<?>...fromClasses) {
 			VarResolverSession vrs = VarResolver.DEFAULT.createSession();
-			AnnotationWorkList work = stream(fromClasses)
-				.map(ClassInfo::of)
-				.map(x -> x.getAnnotationList(ContextApplyFilter.INSTANCE).getWork(vrs))
-				.flatMap(Collection::stream)
-				.collect(toCollection(AnnotationWorkList::new));
+			AnnotationWorkList work = new AnnotationWorkList();
+			for (Class<?> c : fromClasses) {
+				ClassInfo ci = ClassInfo.of(c);
+				AnnotationList al = new AnnotationList();
+				ci.getAnnotationInfos(ContextApplyFilter.INSTANCE, x -> al.add(x));
+				for (AnnotationInfo<?> ai : al.sort())
+					for (AnnotationApplier<Annotation,Object> aa : ai.getApplies(vrs))
+						work.add(ai, aa);
+			}
 			return apply(work);
 		}
 

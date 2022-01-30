@@ -43,7 +43,7 @@ public class SoapXmlConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<SoapXmlConfig> ai, SoapXmlSerializer.Builder b) {
-			SoapXmlConfig a = ai.getAnnotation();
+			SoapXmlConfig a = ai.inner();
 
 			string(a.soapAction()).ifPresent(x -> b.soapAction(x));
 		}

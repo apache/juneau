@@ -267,7 +267,7 @@ public class ResponseAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<Response> ai, BeanContext.Builder b) {
-			Response a = ai.getAnnotation();
+			Response a = ai.inner();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;

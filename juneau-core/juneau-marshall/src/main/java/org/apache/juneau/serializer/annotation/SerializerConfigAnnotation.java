@@ -43,7 +43,7 @@ public class SerializerConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<SerializerConfig> ai, Serializer.Builder b) {
-			SerializerConfig a = ai.getAnnotation();
+			SerializerConfig a = ai.inner();
 
 			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypes(x));
 			bool(a.addRootType()).ifPresent(x -> b.addRootType(x));
@@ -80,7 +80,7 @@ public class SerializerConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<SerializerConfig> ai, OutputStreamSerializer.Builder b) {
-			SerializerConfig a = ai.getAnnotation();
+			SerializerConfig a = ai.inner();
 
 			string(a.binaryFormat()).map(BinaryFormat::valueOf).ifPresent(x -> b.binaryFormat(x));
 		}
@@ -102,7 +102,7 @@ public class SerializerConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<SerializerConfig> ai, WriterSerializer.Builder b) {
-			SerializerConfig a = ai.getAnnotation();
+			SerializerConfig a = ai.inner();
 
 			charset(a.fileCharset()).ifPresent(x -> b.fileCharset(x));
 			integer(a.maxIndent(), "maxIndent").ifPresent(x -> b.maxIndent(x));

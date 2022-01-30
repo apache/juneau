@@ -43,7 +43,7 @@ public class HtmlConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<HtmlConfig> ai, HtmlSerializer.Builder b) {
-			HtmlConfig a = ai.getAnnotation();
+			HtmlConfig a = ai.inner();
 
 			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypesHtml(x));
 			bool(a.addKeyValueTableHeaders()).ifPresent(x -> b.addKeyValueTableHeaders(x));

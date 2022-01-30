@@ -201,7 +201,7 @@ public class JsonAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<Json> ai, Context.Builder b) {
-			Json a = ai.getAnnotation();
+			Json a = ai.inner();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;

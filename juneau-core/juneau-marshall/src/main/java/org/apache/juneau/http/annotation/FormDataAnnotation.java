@@ -286,7 +286,7 @@ public class FormDataAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<FormData> ai, BeanContext.Builder b) {
-			FormData a = ai.getAnnotation();
+			FormData a = ai.inner();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;

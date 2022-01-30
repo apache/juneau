@@ -43,7 +43,7 @@ public class ParserConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<ParserConfig> ai, Parser.Builder b) {
-			ParserConfig a = ai.getAnnotation();
+			ParserConfig a = ai.inner();
 
 			bool(a.autoCloseStreams()).ifPresent(x -> b.autoCloseStreams(x));
 			integer(a.debugOutputLines(), "debugOutputLines").ifPresent(x -> b.debugOutputLines(x));
@@ -70,7 +70,7 @@ public class ParserConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<ParserConfig> ai, InputStreamParser.Builder b) {
-			ParserConfig a = ai.getAnnotation();
+			ParserConfig a = ai.inner();
 
 			string(a.binaryFormat()).map(BinaryFormat::valueOf).ifPresent(x -> b.binaryFormat(x));
 		}
@@ -92,7 +92,7 @@ public class ParserConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<ParserConfig> ai, ReaderParser.Builder b) {
-			ParserConfig a = ai.getAnnotation();
+			ParserConfig a = ai.inner();
 
 			charset(a.fileCharset()).ifPresent(x -> b.fileCharset(x));
 			charset(a.streamCharset()).ifPresent(x -> b.streamCharset(x));

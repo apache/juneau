@@ -636,7 +636,7 @@ public class RestOpAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<RestOp> ai, RestOpContext.Builder b) {
-			RestOp a = ai.getAnnotation();
+			RestOp a = ai.inner();
 
 			classes(a.serializers()).ifPresent(x -> b.serializers().set(x));
 			classes(a.parsers()).ifPresent(x -> b.parsers().set(x));

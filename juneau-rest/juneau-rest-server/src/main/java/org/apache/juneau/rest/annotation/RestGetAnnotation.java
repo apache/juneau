@@ -531,7 +531,7 @@ public class RestGetAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<RestGet> ai, RestOpContext.Builder b) {
-			RestGet a = ai.getAnnotation();
+			RestGet a = ai.inner();
 
 			b.httpMethod("get");
 

@@ -44,6 +44,13 @@ public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 		this.filter = filter;
 	}
 
+	/**
+	 * Constructor.
+	 */
+	public AnnotationList() {
+		this.filter = null;
+	}
+
 	@Override /* List */
 	public boolean add(AnnotationInfo<?> ai) {
 		if (filter == null || filter.test(ai)) {
@@ -88,15 +95,33 @@ public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 	}
 
 	/**
-	 * Filters this list using the specified test.
+	 * Consumes all annotations in this list that match the specified type and predicate.
 	 *
-	 * @param predicate The test to use to filter this list.
-	 * @return A new list containing only the filtered elements.
+	 * @param a The annotation type.
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
 	 */
-	public AnnotationList filter(Predicate<AnnotationInfo<?>> predicate) {
-		AnnotationList al = new AnnotationList(predicate);
-		forEach(x -> al.add(x));
-		return al;
+	@SuppressWarnings("unchecked")
+	public <A extends Annotation> AnnotationList forEach(Class<A> a, Predicate<AnnotationInfo<A>> predicate, Consumer<AnnotationInfo<A>> consumer) {
+		for (AnnotationInfo<?> ai : this)
+			if (ai.isType(a) && predicate.test((AnnotationInfo<A>)ai))
+				consumer.accept((AnnotationInfo<A>)ai);
+		return this;
+	}
+
+	/**
+	 * Consumes all annotations in this list that match the specified predicate.
+	 *
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
+	 */
+	public <A extends Annotation> AnnotationList forEach(Predicate<AnnotationInfo<?>> predicate, Consumer<AnnotationInfo<?>> consumer) {
+		for (AnnotationInfo<?> ai : this)
+			if (predicate.test(ai))
+				consumer.accept(ai);
+		return this;
 	}
 
 	/**

@@ -84,7 +84,7 @@ public class MethodInfoTest {
 			if (t instanceof List)
 				return ((List<?>)t).stream().map(this).collect(Collectors.joining(","));
 			if (t instanceof AnnotationInfo)
-				return apply(((AnnotationInfo)t).getAnnotation());
+				return apply(((AnnotationInfo)t).inner());
 			if (t instanceof A)
 				return "@A(" + ((A)t).value() + ")";
 			if (t instanceof PA)

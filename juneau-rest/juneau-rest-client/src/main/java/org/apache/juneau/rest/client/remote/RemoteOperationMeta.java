@@ -92,19 +92,22 @@ public class RemoteOperationMeta {
 			httpMethod = al.getValues(String.class, "method").stream().filter(x -> isNotEmpty(x)).findFirst().orElse("").trim();
 			path = al.getValues(String.class, "path").stream().filter(x -> isNotEmpty(x)).findFirst().orElse("").trim();
 
-			String value1 = al.filter(x->x.isType(RemoteOp.class)).getValues(String.class, "value").stream().filter(x -> isNotEmpty(x)).findFirst().orElse("").trim();
-			String value2 = al.filter(x->!x.isType(RemoteOp.class)).getValues(String.class, "value").stream().filter(x -> isNotEmpty(x)).findFirst().orElse("").trim();
+			Value<String> value = Value.empty();
+			al.forEach(RemoteOp.class, x -> isNotEmpty(x.inner().value().trim()), x -> value.set(x.inner().value().trim()));
 
-			if (isNotEmpty(value1)) {
-				int i = value1.indexOf(' ');
+			if (value.isPresent()) {
+				String v = value.get();
+				int i = v.indexOf(' ');
 				if (i == -1) {
-					httpMethod = value1;
+					httpMethod = v;
 				} else {
-					httpMethod = value1.substring(0, i).trim();
-					path = value1.substring(i).trim();
+					httpMethod = v.substring(0, i).trim();
+					path = v.substring(i).trim();
 				}
-			} else if (isNotEmpty(value2)) {
-				path = value2;
+			} else {
+				al.forEach(x -> ! x.isType(RemoteOp.class) && isNotEmpty(x.getValue(String.class, "value").orElse("").trim()),x -> value.set(x.getValue(String.class, "value").get().trim()));
+				if (value.isPresent())
+					path = value.get();
 			}
 
 			if (path.isEmpty()) {

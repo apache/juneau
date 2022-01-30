@@ -154,7 +154,7 @@ public class ParentPropertyAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<ParentProperty> ai, BeanContext.Builder b) {
-			ParentProperty a = ai.getAnnotation();
+			ParentProperty a = ai.inner();
 
 			if (isEmpty(a.on()))
 				return;

@@ -43,7 +43,7 @@ public class JsonSchemaConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<JsonSchemaConfig> ai, JsonSchemaGenerator.Builder b) {
-			JsonSchemaConfig a = ai.getAnnotation();
+			JsonSchemaConfig a = ai.inner();
 
 			string(a.addDescriptionsTo()).map(TypeCategory::parseArray).ifPresent(x -> b.addDescriptionsTo(x));
 			string(a.addExamplesTo()).map(TypeCategory::parseArray).ifPresent(x -> b.addExamplesTo(x));

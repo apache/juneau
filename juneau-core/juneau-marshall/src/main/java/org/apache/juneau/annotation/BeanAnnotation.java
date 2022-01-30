@@ -523,7 +523,7 @@ public class BeanAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<Bean> ai, BeanContext.Builder b) {
-			Bean a = ai.getAnnotation();
+			Bean a = ai.inner();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;

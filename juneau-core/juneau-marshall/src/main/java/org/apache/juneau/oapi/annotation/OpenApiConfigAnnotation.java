@@ -44,7 +44,7 @@ public class OpenApiConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<OpenApiConfig> ai, OpenApiSerializer.Builder b) {
-			OpenApiConfig a = ai.getAnnotation();
+			OpenApiConfig a = ai.inner();
 
 			string(a.format()).map(HttpPartFormat::valueOf).ifPresent(x -> b.format(x));
 			string(a.collectionFormat()).map(HttpPartCollectionFormat::valueOf).ifPresent(x -> b.collectionFormat(x));
@@ -67,7 +67,7 @@ public class OpenApiConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<OpenApiConfig> ai, OpenApiParser.Builder b) {
-			OpenApiConfig a = ai.getAnnotation();
+			OpenApiConfig a = ai.inner();
 
 			string(a.format()).map(HttpPartFormat::valueOf).ifPresent(x -> b.format(x));
 			string(a.collectionFormat()).map(HttpPartCollectionFormat::valueOf).ifPresent(x -> b.collectionFormat(x));

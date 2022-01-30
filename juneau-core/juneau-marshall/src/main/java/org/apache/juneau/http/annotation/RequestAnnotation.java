@@ -191,7 +191,7 @@ public class RequestAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<Request> ai, BeanContext.Builder b) {
-			Request a = ai.getAnnotation();
+			Request a = ai.inner();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;

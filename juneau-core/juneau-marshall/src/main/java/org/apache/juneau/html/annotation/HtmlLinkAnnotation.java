@@ -206,7 +206,7 @@ public class HtmlLinkAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<HtmlLink> ai, Context.Builder b) {
-			HtmlLink a = ai.getAnnotation();
+			HtmlLink a = ai.inner();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;

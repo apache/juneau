@@ -179,7 +179,7 @@ public class StatusCodeAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<StatusCode> ai, BeanContext.Builder b) {
-			StatusCode a = ai.getAnnotation();
+			StatusCode a = ai.inner();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;

@@ -43,7 +43,7 @@ public class XmlConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<XmlConfig> ai, XmlSerializer.Builder b) {
-			XmlConfig a = ai.getAnnotation();
+			XmlConfig a = ai.inner();
 
 			bool(a.addBeanTypes()).ifPresent(x -> b.addBeanTypesXml(x));
 			bool(a.addNamespaceUrisToRoot()).ifPresent(x -> b.addNamespaceUrisToRoot(x));
@@ -70,7 +70,7 @@ public class XmlConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<XmlConfig> ai, XmlParser.Builder b) {
-			XmlConfig a = ai.getAnnotation();
+			XmlConfig a = ai.inner();
 
 			type(a.eventAllocator()).ifPresent(x -> b.eventAllocator(x));
 			bool(a.preserveRootElement()).ifPresent(x -> b.preserveRootElement(x));

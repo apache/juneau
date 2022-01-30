@@ -179,7 +179,7 @@ public class MsgPackAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<MsgPack> ai, Context.Builder b) {
-			MsgPack a = ai.getAnnotation();
+			MsgPack a = ai.inner();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;

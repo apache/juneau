@@ -286,7 +286,7 @@ public class QueryAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<Query> ai, BeanContext.Builder b) {
-			Query a = ai.getAnnotation();
+			Query a = ai.inner();
 
 			if (isEmpty(a.on()) && isEmpty(a.onClass()))
 				return;

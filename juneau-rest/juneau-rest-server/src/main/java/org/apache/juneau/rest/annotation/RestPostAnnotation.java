@@ -618,7 +618,7 @@ public class RestPostAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<RestPost> ai, RestOpContext.Builder b) {
-			RestPost a = ai.getAnnotation();
+			RestPost a = ai.inner();
 
 			b.httpMethod("post");
 

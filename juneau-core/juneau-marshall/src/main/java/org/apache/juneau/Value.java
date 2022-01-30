@@ -239,4 +239,9 @@ public class Value<T> {
 			return t;
 		throw exceptionSupplier.get();
 	}
+
+	@Override /* Object */
+	public String toString() {
+		return "Value("+t+")";
+	}
 }
