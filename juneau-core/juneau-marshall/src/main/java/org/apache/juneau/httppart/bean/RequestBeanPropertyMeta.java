@@ -54,8 +54,8 @@ public class RequestBeanPropertyMeta {
 		this.partType = b.partType;
 		this.schema = b.schema;
 		this.getter = b.getter;
-		this.serializer = ofNullable(schema.getSerializer() == null ? serializer : BeanStore.INSTANCE.createBean(HttpPartSerializer.class).type(schema.getSerializer()).run());
-		this.parser = schema.getParser() == null ? parser : BeanStore.INSTANCE.createBean(HttpPartParser.class).type(schema.getParser()).run();
+		this.serializer = ofNullable(schema.getSerializer() == null ? serializer : BeanCreator.of(HttpPartSerializer.class).type(schema.getSerializer()).run());
+		this.parser = schema.getParser() == null ? parser : BeanCreator.of(HttpPartParser.class).type(schema.getParser()).run();
 	}
 
 	static class Builder {

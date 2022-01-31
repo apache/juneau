@@ -12,9 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import org.apache.juneau.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.html.annotation.*;
 
 /**
@@ -59,7 +58,7 @@ public final class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		this.format = b.format;
 		this.noTables = b.noTables;
 		this.noTableHeaders = b.noTableHeaders;
-		this.render = castOrCreate(HtmlRender.class, b.render);
+		this.render = b.render.orElse(null);
 		this.link = b.link;
 		this.anchorText = b.anchorText;
 	}
@@ -77,7 +76,7 @@ public final class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	static final class Builder {
 		boolean noTables, noTableHeaders;
 		HtmlFormat format = HtmlFormat.HTML;
-		Class<? extends HtmlRender> render = HtmlRender.class;
+		BeanCreator<HtmlRender> render = BeanCreator.of(HtmlRender.class);
 		String link, anchorText;
 
 		void findHtmlInfo(Html html) {
@@ -89,7 +88,7 @@ public final class HtmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 			if (html.noTableHeaders())
 				noTableHeaders = html.noTableHeaders();
 			if (html.render() != HtmlRender.class)
-				render = html.render();
+				render.type(html.render());
 			if (! html.link().isEmpty())
 				link = html.link();
 			if (! html.anchorText().isEmpty())

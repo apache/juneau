@@ -15,11 +15,11 @@ package org.apache.juneau;
 import java.beans.*;
 import java.util.*;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.swap.*;
 
 /**
@@ -71,9 +71,10 @@ public final class BeanFilter {
 			writeOnlyProperties = ASet.of();
 		Class<?> implClass, interfaceClass, stopClass;
 		boolean sortProperties, fluentSetters;
-		Object propertyNamer;
+		BeanCreator<PropertyNamer> propertyNamer = BeanCreator.of(PropertyNamer.class);
 		List<Class<?>> dictionary;
-		Object interceptor;
+		@SuppressWarnings("rawtypes")
+		BeanCreator<BeanInterceptor> interceptor = BeanCreator.of(BeanInterceptor.class);
 
 		/**
 		 * Constructor.
@@ -434,7 +435,7 @@ public final class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder propertyNamer(Class<? extends PropertyNamer> value) {
-			this.propertyNamer = value;
+			this.propertyNamer.type(value);
 			return this;
 		}
 
@@ -711,7 +712,7 @@ public final class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder interceptor(Class<?> value) {
-			this.interceptor = value;
+			this.interceptor.type(value);
 			return this;
 		}
 
@@ -755,15 +756,12 @@ public final class BeanFilter {
 		this.stopClass = builder.stopClass;
 		this.sortProperties = builder.sortProperties;
 		this.fluentSetters = builder.fluentSetters;
-		this.propertyNamer = castOrCreate(PropertyNamer.class, builder.propertyNamer);
+		this.propertyNamer = builder.propertyNamer.orElse(null);
 		this.beanDictionary =
 			builder.dictionary == null
 			? null
 			: builder.dictionary.toArray(new Class<?>[builder.dictionary.size()]);
-		this.interceptor =
-			builder.interceptor == null
-			? BeanInterceptor.DEFAULT
-			: castOrCreate(BeanInterceptor.class, builder.interceptor);
+		this.interceptor = builder.interceptor.orElse(BeanInterceptor.DEFAULT);
 	}
 
 	/**

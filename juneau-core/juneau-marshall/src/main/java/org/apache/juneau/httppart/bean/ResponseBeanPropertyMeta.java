@@ -12,15 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart.bean;
 
-import static org.apache.juneau.internal.ClassUtils.*;
-
 import java.lang.reflect.*;
 import java.util.*;
-import static java.util.Optional.*;
-
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.reflect.*;
+import org.apache.juneau.cp.*;
 
 /**
  * Represents the metadata gathered from a getter method of a class annotated with {@link Response}.
@@ -54,8 +51,8 @@ public class ResponseBeanPropertyMeta {
 		this.partType = b.partType;
 		this.schema = b.schema;
 		this.getter = b.getter;
-		this.serializer = serializer.isPresent() ? serializer : ofNullable(castOrCreate(HttpPartSerializer.class, schema.getSerializer(), true));
-		this.parser = parser.isPresent() ? parser : ofNullable(castOrCreate(HttpPartParser.class, schema.getParser(), true));
+		this.serializer = serializer.isPresent() ? serializer : BeanCreator.of(HttpPartSerializer.class).type(schema.getSerializer()).execute();
+		this.parser = parser.isPresent() ? parser : BeanCreator.of(HttpPartParser.class).type(schema.getParser()).execute();
 	}
 
 	static class Builder {

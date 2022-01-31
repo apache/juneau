@@ -26,6 +26,7 @@ import java.util.function.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -253,7 +254,7 @@ public class ParserSession extends BeanSession {
 		javaMethod = builder.javaMethod;
 		outer = builder.outer;
 		schema = builder.schema;
-		listener = ClassUtils.castOrCreate(ParserListener.class, ctx.getListener());
+		listener = BeanCreator.of(ParserListener.class).type(ctx.getListener()).orElse(null);
 		sbStack = new Stack<>();
 	}
 

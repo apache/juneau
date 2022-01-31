@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -2737,8 +2736,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private static HttpPartSerializer createPartSerializer(Class<? extends HttpPartSerializer> c, HttpPartSerializer _default) {
-		HttpPartSerializer hps = castOrCreate(HttpPartSerializer.class, c, true);
-		return hps == null ? _default : hps;
+		return BeanCreator.of(HttpPartSerializer.class).type(c).orElse(_default);
 	}
 
 	private UrlPathMatch matchPattern(RestSession call) {

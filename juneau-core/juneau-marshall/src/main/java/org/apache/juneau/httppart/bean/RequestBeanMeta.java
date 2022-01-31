@@ -71,8 +71,8 @@ public class RequestBeanMeta {
 
 	RequestBeanMeta(Builder b) {
 		this.cm = b.cm;
-		this.serializer = BeanStore.INSTANCE.createBean(HttpPartSerializer.class).type(b.serializer).run();
-		this.parser = BeanStore.INSTANCE.createBean(HttpPartParser.class).type(b.parser).run();
+		this.serializer = b.serializer.orElse(null);
+		this.parser = b.parser.orElse(null);
 		Map<String,RequestBeanPropertyMeta> properties = new LinkedHashMap<>();
 		for (Map.Entry<String,RequestBeanPropertyMeta.Builder> e : b.properties.entrySet())
 			properties.put(e.getKey(), e.getValue().build(serializer, parser));
@@ -82,8 +82,8 @@ public class RequestBeanMeta {
 	static class Builder {
 		ClassMeta<?> cm;
 		AnnotationWorkList annotations;
-		Class<? extends HttpPartSerializer> serializer;
-		Class<? extends HttpPartParser> parser;
+		BeanCreator<HttpPartSerializer> serializer = BeanCreator.of(HttpPartSerializer.class);
+		BeanCreator<HttpPartParser> parser = BeanCreator.of(HttpPartParser.class);
 		Map<String,RequestBeanPropertyMeta.Builder> properties = new LinkedHashMap<>();
 
 		Builder(AnnotationWorkList annotations) {
@@ -127,9 +127,9 @@ public class RequestBeanMeta {
 		Builder apply(Request a) {
 			if (a != null) {
 				if (a.serializer() != HttpPartSerializer.Null.class)
-					serializer = a.serializer();
+					serializer.type(a.serializer());
 				if (a.parser() != HttpPartParser.Null.class)
-					parser = a.parser();
+					parser.type(a.parser());
 			}
 			return this;
 		}

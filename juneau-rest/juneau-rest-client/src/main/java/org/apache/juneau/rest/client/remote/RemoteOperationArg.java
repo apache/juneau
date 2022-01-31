@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.client.remote;
 
-import static java.util.Optional.*;
-
 import java.util.*;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
@@ -42,7 +40,7 @@ public final class RemoteOperationArg {
 	RemoteOperationArg(int index, HttpPartType partType, HttpPartSchema schema) {
 		this.index = index;
 		this.partType = partType;
-		this.serializer = ofNullable(BeanStore.INSTANCE.createBean(schema.getSerializer()).run());
+		this.serializer = BeanCreator.of(HttpPartSerializer.class).type(schema.getSerializer()).execute();
 		this.schema = schema;
 	}
 

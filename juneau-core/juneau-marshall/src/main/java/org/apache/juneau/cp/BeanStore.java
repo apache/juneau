@@ -601,9 +601,8 @@ public class BeanStore {
 	 * @return A comma-delimited list of types that are missing from this factory.
 	 */
 	public boolean hasAllParams(ExecutableInfo executable) {
-		List<ParamInfo> params = executable.getParams();
-		loop: for (int i = 0; i < params.size(); i++) {
-			ParamInfo pi = params.get(i);
+		loop: for (int i = 0; i < executable.getParamCount(); i++) {
+			ParamInfo pi = executable.getParam(i);
 			ClassInfo pt = pi.getParameterType();
 			if (i == 0 && outer.isPresent() && pt.isInstance(outer.get()))
 				continue loop;
@@ -627,10 +626,9 @@ public class BeanStore {
 	 * @return The corresponding beans in this factory for the specified param types.
 	 */
 	public Object[] getParams(ExecutableInfo executable) {
-		List<ParamInfo> params = executable.getParams();
-		Object[] o = new Object[params.size()];
-		for (int i = 0; i < params.size(); i++) {
-			ParamInfo pi = params.get(i);
+		Object[] o = new Object[executable.getParamCount()];
+		for (int i = 0; i < executable.getParamCount(); i++) {
+			ParamInfo pi = executable.getParam(i);
 			ClassInfo pt = pi.getParameterType();
 			if (i == 0 && outer.isPresent() && pt.isInstance(outer.get())) {
 				o[i] = outer.get();

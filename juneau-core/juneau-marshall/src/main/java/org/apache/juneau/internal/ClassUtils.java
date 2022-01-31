@@ -12,12 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import java.lang.reflect.*;
-import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -40,159 +37,6 @@ public final class ClassUtils {
 		for (int i = 0; i < args.length; i++)
 			pt[i] = args[i] == null ? null : args[i].getClass();
 		return pt;
-	}
-
-	/**
-	 * Creates an instance of the specified class.
-	 *
-	 * @param c
-	 * 	The class to cast to.
-	 * @param c2
-	 * 	The class to instantiate.
-	 * 	Can also be an instance of the class.
-	 * @return
-	 * 	The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
-	 * @throws
-	 * 	RuntimeException if constructor could not be found or called.
-	 */
-	public static <T> T castOrCreate(Class<T> c, Object c2) {
-		return castOrCreateFromOuter(null, c, c2, false);
-	}
-
-	/**
-	 * Creates an instance of the specified class.
-	 *
-	 * @param c
-	 * 	The class to cast to.
-	 * @param c2
-	 * 	The class to instantiate.
-	 * 	Can also be an instance of the class.
-	 * @param fuzzyArgs
-	 * 	Use fuzzy constructor arg matching.
-	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
-	 * 	<br>No-arg constructors are also used if no other constructors are found.
-	 * @param args
-	 * 	The arguments to pass to the constructor.
-	 * @return
-	 * 	The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
-	 * @throws
-	 * 	RuntimeException if constructor could not be found or called.
-	 */
-	public static <T> T castOrCreate(Class<T> c, Object c2, boolean fuzzyArgs, Object...args) {
-		return castOrCreateFromOuter(null, c, c2, fuzzyArgs, args);
-	}
-
-	/**
-	 * Creates an instance of the specified class from within the context of another object.
-	 *
-	 * @param outer
-	 * 	The outer object.
-	 * 	Can be <jk>null</jk>.
-	 * @param c
-	 * 	The class to cast to.
-	 * @param c2
-	 * 	The class to instantiate.
-	 * 	Can also be an instance of the class.
-	 * @param fuzzyArgs
-	 * 	Use fuzzy constructor arg matching.
-	 * 	<br>When <jk>true</jk>, constructor args can be in any order and extra args are ignored.
-	 * 	<br>No-arg constructors are also used if no other constructors are found.
-	 * @param args
-	 * 	The arguments to pass to the constructor.
-	 * @return
-	 * 	The new class instance, or <jk>null</jk> if the class was <jk>null</jk> or is abstract or an interface.
-	 * @throws
-	 * 	RuntimeException if constructor could not be found or called.
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T castOrCreateFromOuter(Object outer, Class<T> c, Object c2, boolean fuzzyArgs, Object...args) {
-		if (c2 == null)
-			return null;
-		if (c2 instanceof Class) {
-			try {
-				ClassInfo c3 = ClassInfo.of((Class<?>)c2);
-
-				MethodInfo mi = fuzzyArgs ? getStaticCreatorFuzzy(c3, args) : getStaticCreator(c3, args);
-
-				if (mi != null)
-					return fuzzyArgs ? (T)mi.invokeFuzzy(null, args) : mi.invoke(null, args);
-
-				if (c3.isInterface() || c3.isAbstract())
-					return null;
-
-				// First look for an exact match.
-				Object[] args2 = args;
-				ConstructorInfo con = c3.getPublicConstructor(x -> x.canAccept(args2));
-				if (con != null)
-					return con.<T>invoke(args);
-
-				// Next look for an exact match including the outer.
-				if (outer != null) {
-					args = AList.of(outer).append(args).toArray();
-					Object[] args3 = args;
-					con = c3.getPublicConstructor(x -> x.canAccept(args3));
-					if (con != null)
-						return con.<T>invoke(args);
-				}
-
-				// Finally use fuzzy matching.
-				if (fuzzyArgs) {
-					mi = getStaticCreatorFuzzy(c3, args);
-					if (mi != null)
-						return mi.invoke(null, getMatchingArgs(mi.getParamTypes(), args));
-
-					con = getPublicConstructorFuzzy(c3, args);
-					if (con != null)
-						return con.<T>invokeFuzzy(args);
-				}
-
-				throw runtimeException("Could not instantiate class {0}/{1}.  Constructor not found.", className(c), c2);
-			} catch (Exception e) {
-				throw runtimeException(e, "Could not instantiate class {0}", className(c));
-			}
-		} else if (ClassInfo.of(c).isParentOf(c2.getClass())) {
-			return (T)c2;
-		} else {
-			throw runtimeException("Object of type {0} found but was expecting {1}.", className(c2), className(c));
-		}
-	}
-
-	private static ConstructorInfo getPublicConstructorFuzzy(ClassInfo c, Object...args) {
-		int bestCount = -1;
-		ConstructorInfo bestMatch = null;
-		for (ConstructorInfo n : c.getPublicConstructors()) {
-			int m = n.fuzzyArgsMatch(args);
-			if (m > bestCount) {
-				bestCount = m;
-				bestMatch = n;
-			}
-		}
-		return bestMatch;
-	}
-
-	private static MethodInfo getStaticCreatorFuzzy(ClassInfo c, Object...args) {
-		int bestCount = -1;
-		MethodInfo bestMatch = null;
-		for (MethodInfo m : c.getPublicMethods()) {
-			if (m.matches(x -> x.isStatic() && x.isNotDeprecated() && x.hasReturnType(c) && x.hasName("create","getInstance"))) {
-				int mn = m.canAcceptFuzzy(args);
-				if (mn > bestCount) {
-					bestCount = mn;
-					bestMatch = m;
-				}
-			}
-		}
-		return bestMatch;
-	}
-
-	private static MethodInfo getStaticCreator(ClassInfo c, Object...args) {
-		return c.getPublicMethod(
-			x -> x.isStatic()
-			&& x.isNotDeprecated()
-			&& x.hasReturnType(c)
-			&& x.hasName("create","getInstance")
-			&& x.canAccept(args)
-		);
 	}
 
 	/**
@@ -222,20 +66,6 @@ public final class ClassUtils {
 			ClassInfo pt = ClassInfo.of(paramTypes[i]).getWrapperInfoIfPrimitive();
 			for (int j = 0; j < args.length; j++) {
 				if (args[j] != null && pt.isParentOf(args[j].getClass())) {
-					params[i] = args[j];
-					break;
-				}
-			}
-		}
-		return params;
-	}
-
-	private static Object[] getMatchingArgs(List<ClassInfo> paramTypes, Object... args) {
-		Object[] params = new Object[paramTypes.size()];
-		for (int i = 0; i < paramTypes.size(); i++) {
-			ClassInfo pt = paramTypes.get(i).getWrapperInfoIfPrimitive();
-			for (int j = 0; j < args.length; j++) {
-				if (pt.isParentOf(args[j].getClass())) {
 					params[i] = args[j];
 					break;
 				}

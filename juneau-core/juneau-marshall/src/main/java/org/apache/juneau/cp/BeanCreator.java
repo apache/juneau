@@ -13,6 +13,9 @@
 package org.apache.juneau.cp;
 
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.Visibility.*;
+import static java.util.Optional.*;
+
 import java.util.*;
 import java.util.function.*;
 
@@ -111,11 +114,30 @@ import org.apache.juneau.reflect.*;
  * @param <T> The bean type being created.
  */
 public class BeanCreator<T> {
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Shortcut for calling <c>BeanStore.INSTANCE.createBean(beanType)</c>.
+	 * 
+	 * @param beanType The bean type to create.
+	 * @return A new creator.
+	 */
+	public static <T> BeanCreator<T> of(Class<T> beanType) {
+		return BeanStore.INSTANCE.createBean(beanType);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private final BeanStore store;
 	private ClassInfo type;
 	private Object builder;
 	private T impl;
+	private boolean silent;
 
 	/**
 	 * Constructor.
@@ -142,14 +164,46 @@ public class BeanCreator<T> {
 	}
 
 	/**
+	 * Allows you to specify a subclass of the specified bean type to create.
+	 *
+	 * @param value The value for this setting.
+	 * @return This object.
+	 */
+	public BeanCreator<T> type(ClassInfo value) {
+		return type(value == null ? null : value.inner());
+	}
+
+	/**
 	 * Allows you to specify a specific instance for the build method to return.
 	 *
 	 * @param value The value for this setting.
 	 * @return This object.
 	 */
-	@SuppressWarnings("unchecked")
-	public BeanCreator<T> impl(Object value) {
-		impl = (T)value;
+	public BeanCreator<T> impl(T value) {
+		impl = value;
+		return this;
+	}
+
+	/**
+	 * Adds an argument to this creator.
+	 *
+	 * @param beanType The parameter type.
+	 * @param bean The parameter value.
+	 * @return This object.
+	 */
+	public <T2> BeanCreator<T> arg(Class<T2> beanType, T2 bean) {
+		store.add(beanType, bean);
+		return this;
+	}
+
+	/**
+	 * Suppresses throwing of {@link ExecutableException ExecutableExceptions} from the {@link #run()} method when
+	 * a form of creation cannot be found.
+	 *
+	 * @return This object.
+	 */
+	public BeanCreator<T> silent() {
+		silent = true;
 		return this;
 	}
 
@@ -176,9 +230,29 @@ public class BeanCreator<T> {
 	}
 
 	/**
+	 * Same as {@link #run()} but returns the alternate value if a method of creation could not be found.
+	 *
+	 * @param other The other bean to use.
+	 * @return Either the created or other bean.
+	 */
+	public T orElse(T other) {
+		return execute().orElse(other);
+	}
+
+	/**
+	 * Same as {@link #run()} but returns the value wrapped in an {@link Optional}.
+	 *
+	 * @return A new bean wrapped in an {@link Optional}.
+	 */
+	public Optional<T> execute() {
+		return ofNullable(silent().run());
+	}
+
+	/**
 	 * Creates the bean.
 	 *
 	 * @return A new bean.
+	 * @throws ExecutableException if bean could not be created and {@link #silent()} was not enabled.
 	 */
 	public T run() {
 
@@ -188,7 +262,7 @@ public class BeanCreator<T> {
 		if (type == null)
 			return null;
 
-		String found = null;
+		Value<String> found = Value.empty();
 
 		// Look for getInstance(Builder).
 		if (builder != null) {
@@ -222,91 +296,79 @@ public class BeanCreator<T> {
 		if (builder == null) {
 			// Look for static creator methods.
 
-			MethodInfo matchedCreator = null;
-			int matchedCreatorParams = -1;
+			Match<MethodInfo> match = new Match<>();
 
 			// Look for static creator method.
-			for (MethodInfo m : type.getPublicMethods()) {
-				if (isStaticCreateMethod(m)) {
-					found = "STATIC_CREATOR";
-					if (store.hasAllParams(m)) {
-						if (m.getParamCount() > matchedCreatorParams) {
-							matchedCreatorParams = m.getParamCount();
-							matchedCreator = m;
-						}
-					}
-				}
-			}
+			type.getPublicMethods(x -> isStaticCreateMethod(x), x -> {
+				found.set("STATIC_CREATOR");
+				if (hasAllParams(x))
+					match.add(x);
+			});
 
-			if (matchedCreator != null)
-				return matchedCreator.invoke(null, store.getParams(matchedCreator));
+			if (match.isPresent())
+				return match.get().invoke(null, getParams(match.get()));
 		}
 
-		if (type.isInterface())
+		if (type.isInterface()) {
+			if (silent)
+				return null;
 			throw new ExecutableException("Could not instantiate class {0}: {1}.", type.getName(), "Class is an interface");
+		}
 
-		if (type.isAbstract())
+		if (type.isAbstract()) {
+			if (silent)
+				return null;
 			throw new ExecutableException("Could not instantiate class {0}: {1}.", type.getName(), "Class is abstract");
-
-		ConstructorInfo matchedConstructor = null;
-		int matchedConstructorParams = -1;
+		}
 
 		// Look for public constructor.
-		for (ConstructorInfo cc : type.getPublicConstructors()) {
-			if (found == null)
-				found = "PUBLIC_CONSTRUCTOR";
-			if (store.hasAllParams(cc)) {
-				if (cc.getParamCount() > matchedConstructorParams) {
-					matchedConstructorParams = cc.getParamCount();
-					matchedConstructor = cc;
-				}
-			}
-		}
+		Match<ConstructorInfo> constructorMatch = new Match<>();
+		type.getPublicConstructors(x -> true, x -> {
+			found.setIfEmpty("PUBLIC_CONSTRUCTOR");
+			if (hasAllParams(x))
+				constructorMatch.add(x);
+		});
 
 		// Look for protected constructor.
-		if (matchedConstructor == null) {
-			for (ConstructorInfo cc : type.getDeclaredConstructors()) {
-				if (cc.isProtected()) {
-					if (found == null)
-						found = "PROTECTED_CONSTRUCTOR";
-					if (store.hasAllParams(cc)) {
-						if (cc.getParamCount() > matchedConstructorParams) {
-							matchedConstructorParams = cc.getParamCount();
-							matchedConstructor = cc.accessible();
-						}
-					}
-				}
-			}
+		if (! constructorMatch.isPresent()) {
+			type.getDeclaredConstructors(x -> x.isProtected(), x -> {
+				found.setIfEmpty("PROTECTED_CONSTRUCTOR");
+				if (hasAllParams(x))
+					constructorMatch.add(x);
+			});
 		}
 
 		// Execute.
-		if (matchedConstructor != null)
-			return matchedConstructor.invoke(store.getParams(matchedConstructor));
+		if (constructorMatch.isPresent())
+			return constructorMatch.get().invoke(getParams(constructorMatch.get()));
 
 		if (builder == null) {
 			// Look for static-builder/protected-constructor pair.
-			for (ConstructorInfo cc2 : type.getDeclaredConstructors()) {
-				if (cc2.hasNumParams(1) && cc2.isVisible(Visibility.PROTECTED)) {
-					Class<?> pt = cc2.getParam(0).getParameterType().inner();
-					MethodInfo m = type.getPublicMethod(x -> isStaticCreateMethod(x, pt));
-					if (m != null) {
-						Object builder = m.invoke(null);
-						return cc2.accessible().invoke(builder);
-					}
+			Value<T> value = Value.empty();
+			type.getDeclaredConstructors(x -> x.hasNumParams(1) && x.isVisible(PROTECTED), x -> {
+				Class<?> pt = x.getParam(0).getParameterType().inner();
+				MethodInfo m = type.getPublicMethod(y -> isStaticCreateMethod(y, pt));
+				if (m != null) {
+					Object builder = m.invoke(null);
+					value.set(x.accessible().invoke(builder));
 				}
-			}
+			});
+			if (value.isPresent())
+				return value.get();
 		}
 
-		String msg = null;
-		if (found == null) {
-			msg = "No public/protected constructors found";
-		} else if (found.equals("STATIC_CREATOR")) {
+		if (silent)
+			return null;
 
-			msg = "Static creator found but could not find prerequisites: " + type.getPublicMethods().stream().filter(x -> isStaticCreateMethod(x)).map(x -> store.getMissingParams(x)).sorted().collect(joining(" or "));
-		} else if (found.equals("PUBLIC_CONSTRUCTOR")) {
-			msg = "Public constructor found but could not find prerequisites: " + type.getPublicConstructors().stream().map(x -> store.getMissingParams(x)).sorted().collect(joining(" or "));
+		String msg = null;
+		if (found.isEmpty()) {
+			msg = "No public/protected constructors found";
+		} else if (found.get().equals("STATIC_CREATOR")) {
+			msg = "Static creator found but could not find prerequisites: " + type.getPublicMethods().stream().filter(x -> isStaticCreateMethod(x)).map(x -> getMissingParams(x)).sorted().collect(joining(" or "));
+		} else if (found.get().equals("PUBLIC_CONSTRUCTOR")) {
+			msg = "Public constructor found but could not find prerequisites: " + type.getPublicConstructors().stream().map(x -> getMissingParams(x)).sorted().collect(joining(" or "));
 		} else {
-			msg = "Protected constructor found but could not find prerequisites: " + type.getDeclaredConstructors().stream().filter(x -> x.isProtected()).map(x -> store.getMissingParams(x)).sorted().collect(joining(" or "));
+			msg = "Protected constructor found but could not find prerequisites: " + type.getDeclaredConstructors().stream().filter(x -> x.isProtected()).map(x -> getMissingParams(x)).sorted().collect(joining(" or "));
 		}
 		throw new ExecutableException("Could not instantiate class {0}: {1}.", type.getName(), msg);
 	}
@@ -330,5 +392,42 @@ public class BeanCreator<T> {
 			&& m.hasReturnType(type)
 			&& m.hasNoAnnotation(BeanIgnore.class)
 			&& m.hasName("create");
+	}
+	
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helpers
+	//-----------------------------------------------------------------------------------------------------------------
+
+	static class Match<T extends ExecutableInfo> {
+		T executable = null;
+		int numMatches = -1;
+
+		@SuppressWarnings("unchecked")
+		void add(T ei) {
+			if (ei.getParamCount() > numMatches) {
+				numMatches = ei.getParamCount();
+				executable = (T)ei.accessible();
+			}
+		}
+
+		boolean isPresent() {
+			return executable != null;
+		}
+
+		T get() {
+			return executable;
+		}
+	}
+
+	private boolean hasAllParams(ExecutableInfo ei) {
+		return store.hasAllParams(ei);
+	}
+
+	private Object[] getParams(ExecutableInfo ei) {
+		return store.getParams(ei);
+	}
+
+	private String getMissingParams(ExecutableInfo ei) {
+		return store.getMissingParams(ei);
 	}
 }

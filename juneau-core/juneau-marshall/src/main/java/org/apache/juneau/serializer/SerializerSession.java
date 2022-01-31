@@ -13,7 +13,6 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.collections.OMap.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -25,6 +24,7 @@ import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
@@ -291,7 +291,7 @@ public class SerializerSession extends BeanTraverseSession {
 		javaMethod = builder.javaMethod;
 		UriContext uriContext = builder.uriContext;
 		uriResolver = UriResolver.of(ctx.getUriResolution(), ctx.getUriRelativity(), uriContext);
-		listener = castOrCreate(SerializerListener.class, ctx.getListener());
+		listener = BeanCreator.of(SerializerListener.class).type(ctx.getListener()).orElse(null);
 		vrs = builder.resolver;
 		schema = builder.schema;
 	}

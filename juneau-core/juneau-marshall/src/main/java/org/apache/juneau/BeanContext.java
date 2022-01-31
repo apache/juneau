@@ -14,7 +14,6 @@ package org.apache.juneau;
 
 import static org.apache.juneau.Visibility.*;
 import static org.apache.juneau.collections.OMap.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -31,6 +30,7 @@ import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
@@ -3608,7 +3608,7 @@ public class BeanContext extends Context {
 			} else {
 				ClassInfo ci = ClassInfo.of((Class<?>)o);
 				if (ci.isChildOf(ObjectSwap.class))
-					_swaps.add(castOrCreate(ObjectSwap.class, ci.inner()));
+					_swaps.add(BeanCreator.of(ObjectSwap.class).type(ci).run());
 				else if (ci.isChildOf(Surrogate.class))
 					_swaps.addAll(SurrogateSwap.findObjectSwaps(ci.inner(), this));
 				else

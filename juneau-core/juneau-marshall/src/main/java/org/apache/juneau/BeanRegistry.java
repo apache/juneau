@@ -20,6 +20,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -71,7 +72,7 @@ public class BeanRegistry {
 				ClassInfo ci = ClassInfo.of(c);
 				if (ci.isChildOf(Collection.class)) {
 					@SuppressWarnings("rawtypes")
-					Collection cc = castOrCreate(Collection.class, c);
+					Collection cc = BeanCreator.of(Collection.class).type(c).run();
 					for (Object o : cc) {
 						if (o instanceof Class)
 							addClass((Class<?>)o);
@@ -79,7 +80,7 @@ public class BeanRegistry {
 							throw new BeanRuntimeException("Collection class ''{0}'' passed to BeanRegistry does not contain Class objects.", className(c));
 					}
 				} else if (ci.isChildOf(Map.class)) {
-					Map<?,?> m = castOrCreate(Map.class, c);
+					Map<?,?> m = BeanCreator.of(Map.class).type(c).run();
 					for (Map.Entry<?,?> e : m.entrySet()) {
 						String typeName = stringify(e.getKey());
 						Object v = e.getValue();

@@ -13,7 +13,6 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.ClassMeta.ClassCategory.*;
-import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static java.util.Optional.*;
@@ -32,6 +31,7 @@ import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
@@ -729,7 +729,7 @@ public final class ClassMeta<T> implements Type {
 			ClassInfo ci = ClassInfo.of(c);
 
 			if (ci.isChildOf(ObjectSwap.class)) {
-				ObjectSwap ps = castOrCreate(ObjectSwap.class, c);
+				ObjectSwap ps = BeanCreator.of(ObjectSwap.class).type(c).run();
 				if (s.mediaTypes().length > 0)
 					ps.forMediaTypes(MediaType.ofAll(s.mediaTypes()));
 				if (! s.template().isEmpty())

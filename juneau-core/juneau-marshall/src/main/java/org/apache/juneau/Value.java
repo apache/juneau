@@ -152,6 +152,18 @@ public class Value<T> {
 	}
 
 	/**
+	 * Sets the value if it's not already set.
+	 *
+	 * @param t The new value.
+	 * @return This object.
+	 */
+	public Value<T> setIfEmpty(T t) {
+		if (isEmpty())
+			set(t);
+		return this;
+	}
+
+	/**
 	 * Returns the value.
 	 *
 	 * @return The value, or <jk>null</jk> if it is not set.

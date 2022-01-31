@@ -27,6 +27,7 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
@@ -318,7 +319,7 @@ public final class BeanPropertyMeta {
 
 		private ObjectSwap getPropertySwap(Beanp p) throws Exception {
 			if (! p.format().isEmpty())
-				return castOrCreate(ObjectSwap.class, StringFormatSwap.class, false, p.format());
+				return BeanCreator.of(ObjectSwap.class).type(StringFormatSwap.class).arg(String.class, p.format()).run();
 			return null;
 		}
 
@@ -330,7 +331,7 @@ public final class BeanPropertyMeta {
 				return null;
 			ClassInfo ci = ClassInfo.of(c);
 			if (ci.isChildOf(ObjectSwap.class)) {
-				ObjectSwap ps = castOrCreate(ObjectSwap.class, c);
+				ObjectSwap ps = BeanCreator.of(ObjectSwap.class).type(c).run();
 				if (ps.forMediaTypes() != null)
 					throw runtimeException("TODO - Media types on swaps not yet supported on bean properties.");
 				if (ps.withTemplate() != null)
@@ -746,7 +747,7 @@ public final class BeanPropertyMeta {
 						}
 					} else {
 						if (propMap == null) {
-							propMap = castOrCreate(Map.class, propertyClass);
+							propMap = BeanCreator.of(Map.class).type(propertyClass).run();
 						} else {
 							propMap.clear();
 						}
@@ -802,7 +803,7 @@ public final class BeanPropertyMeta {
 						propList.clear();
 					} else {
 						if (propList == null) {
-							propList = castOrCreate(Collection.class, propertyClass);
+							propList = BeanCreator.of(Collection.class).type(propertyClass).run();
 							invokeSetter(bean, pName, propList);
 						} else {
 							propList.clear();
