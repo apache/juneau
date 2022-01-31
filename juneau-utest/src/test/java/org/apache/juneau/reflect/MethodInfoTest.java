@@ -163,7 +163,9 @@ public class MethodInfoTest {
 	@Test
 	public void findMatchingMethods() throws Exception {
 		MethodInfo mi = MethodInfo.of(B3.class.getMethod("foo", int.class));
-		check("B3.foo(int),B2.foo(int),B1.foo(int)", mi.getMatching());
+		List<Method> l = new ArrayList<>();
+		mi.getMatching(x -> true, x -> l.add(x));
+		check("B3.foo(int),B2.foo(int),B1.foo(int)", l);
 	}
 
 

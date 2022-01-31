@@ -173,11 +173,14 @@ public final class ParamInfo {
 			return eInfo.getParamType(index).unwrap(Value.class,Optional.class).getAnnotation(a);
 		}
 		MethodInfo mi = (MethodInfo)eInfo;
-		for (Method m2 : mi.getMatching())
-			for (Annotation a2 :  m2.getParameterAnnotations()[index])
+		Value<T> v = Value.empty();
+		mi.getMatchingParentFirst(x -> true, x -> {
+			for (Annotation a2 :  x.getParameterAnnotations()[index])
 				if (a.isInstance(a2))
-					return (T)a2;
-		return eInfo.getParamType(index).unwrap(Value.class,Optional.class).getAnnotation(a);
+					v.set((T)a2);
+
+		});
+		return v.orElseGet(() -> eInfo.getParamType(index).unwrap(Value.class,Optional.class).getAnnotation(a));
 	}
 
 	/**
@@ -195,7 +198,7 @@ public final class ParamInfo {
 	 * @return This object.
 	 */
 	public <A extends Annotation> ParamInfo getAnnotations(Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
-		return getAnnotations(AnnotationProvider.DEFAULT, type, true, predicate, consumer);
+		return getAnnotations(AnnotationProvider.DEFAULT, type, predicate, consumer);
 	}
 
 	/**
@@ -211,88 +214,54 @@ public final class ParamInfo {
 	 * @param predicate The predicate.
 	 * @return A list of all matching annotations found or an empty list if none found.
 	 */
+	@SuppressWarnings("unchecked")
 	public <A extends Annotation> A getAnnotation(Class<A> type, Predicate<A> predicate) {
-		return getAnnotation(type, true, predicate);
-	}
-
-	@SuppressWarnings("unchecked")
-	private <A extends Annotation> ParamInfo getAnnotations(AnnotationProvider ap, Class<A> a, boolean parentFirst, Predicate<A> predicate, Consumer<A> consumer) {
 		if (eInfo.isConstructor) {
 			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class,Optional.class);
-			Annotation[] annotations = eInfo.getParameterAnnotations(index);
-			if (parentFirst) {
-				ci.getAnnotations(ap, a, predicate, consumer);
-				for (Annotation a2 : annotations)
-					if (a.isInstance(a2) && predicate.test((A)a2))
-						consumer.accept((A)a2);
-			} else {
-				for (Annotation a2 : annotations)
-					if (a.isInstance(a2) && predicate.test((A)a2))
-						consumer.accept((A)a2);
-				ci.getAnnotations(ap, a, predicate, consumer);
-			}
+			A o = ci.getAnnotation(type, predicate);
+			if (o != null)
+				return o;
+			for (Annotation a2 : eInfo.getParameterAnnotations(index))
+				if (type.isInstance(a2) && predicate.test((A)a2))
+					return (A)a2;
 		} else {
 			MethodInfo mi = (MethodInfo)eInfo;
 			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class,Optional.class);
-			if (parentFirst) {
-				ci.getAnnotations(ap, a, predicate, consumer);
-				for (Method m2 : mi.getMatchingParentFirst())
-					for (Annotation a2 :  m2.getParameterAnnotations()[index])
-						if (a.isInstance(a2) && predicate.test((A)a2))
-							consumer.accept((A)a2);
-			} else {
-				for (Method m2 : mi.getMatching())
-					for (Annotation a2 :  m2.getParameterAnnotations()[index])
-						if (a.isInstance(a2) && predicate.test((A)a2))
-							consumer.accept((A)a2);
-				ci.getAnnotations(ap, a, predicate, consumer);
-			}
-		}
-		return this;
-	}
-
-	@SuppressWarnings("unchecked")
-	private <A extends Annotation> A getAnnotation(Class<A> a, boolean parentFirst, Predicate<A> predicate) {
-		if (eInfo.isConstructor) {
-			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class,Optional.class);
-			Annotation[] annotations = eInfo.getParameterAnnotations(index);
-			if (parentFirst) {
-				A o = ci.getAnnotation(a, predicate);
-				if (o != null)
-					return o;
-				for (Annotation a2 : annotations)
-					if (a.isInstance(a2) && predicate.test((A)a2))
-						return (A)a2;
-			} else {
-				for (Annotation a2 : annotations)
-					if (a.isInstance(a2) && predicate.test((A)a2))
-						return (A)a2;
-				A o = ci.getAnnotation(a, predicate);
-				if (o != null)
-					return o;
-			}
-		} else {
-			MethodInfo mi = (MethodInfo)eInfo;
-			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class,Optional.class);
-			if (parentFirst) {
-				A o = ci.getAnnotation(a, predicate);
-				if (o != null)
-					return o;
-				for (Method m2 : mi.getMatchingParentFirst())
-					for (Annotation a2 :  m2.getParameterAnnotations()[index])
-						if (a.isInstance(a2) && predicate.test((A)a2))
-							return (A)a2;
-			} else {
-				for (Method m2 : mi.getMatching())
-					for (Annotation a2 :  m2.getParameterAnnotations()[index])
-						if (a.isInstance(a2) && predicate.test((A)a2))
-							return (A)a2;
-				A o = ci.getAnnotation(a, predicate);
-				if (o != null)
-					return o;
-			}
+			A o = ci.getAnnotation(type, predicate);
+			if (o != null)
+				return o;
+			Value<A> v = Value.empty();
+			mi.getMatchingParentFirst(x -> true, x -> {
+				for (Annotation a2 :  x.getParameterAnnotations()[index])
+					if (type.isInstance(a2) && predicate.test((A)a2))
+						v.set((A)a2);
+			});
+			return v.orElse(null);
 		}
 		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	private <A extends Annotation> ParamInfo getAnnotations(AnnotationProvider ap, Class<A> a, Predicate<A> predicate, Consumer<A> consumer) {
+		if (eInfo.isConstructor) {
+			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class,Optional.class);
+			Annotation[] annotations = eInfo.getParameterAnnotations(index);
+			ci.getAnnotations(ap, a, predicate, consumer);
+			for (Annotation a2 : annotations)
+				if (a.isInstance(a2) && predicate.test((A)a2))
+					consumer.accept((A)a2);
+		} else {
+			MethodInfo mi = (MethodInfo)eInfo;
+			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class,Optional.class);
+			ci.getAnnotations(ap, a, predicate, consumer);
+			mi.getMatchingParentFirst(x -> true, x -> {
+				for (Annotation a2 :  x.getParameterAnnotations()[index])
+					if (a.isInstance(a2) && predicate.test((A)a2))
+						consumer.accept((A)a2);
+
+			});
+		}
+		return this;
 	}
 
 	private synchronized Map<Class<?>,Optional<Annotation>> annotationMap() {

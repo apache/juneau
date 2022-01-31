@@ -142,25 +142,38 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	}
 
 	/**
-	 * Finds all declared methods with the same name and arguments on all superclasses and interfaces.
+	 * Consumes all matching declared methods with the same name and arguments on all superclasses and interfaces.
 	 *
-	 * @return
-	 * 	All matching methods including this method itself.
-	 * 	<br>Methods are ordered from child-to-parent order.
+	 * <p>
+	 * Methods are accessed from child-to-parent order.
+	 *
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
 	 */
-	public List<Method> getMatching() {
-		return new UnmodifiableArray<>(_getMatching());
+	public MethodInfo getMatching(Predicate<Method> predicate, Consumer<Method> consumer) {
+		for (Method m : _getMatching())
+			if (predicate.test(m))
+				consumer.accept(m);
+		return this;
 	}
 
 	/**
-	 * Convenience method for retrieving values in {@link #getMatching()} in parent-to-child order.
+	 * Consumes all matching declared methods with the same name and arguments on all superclasses and interfaces.
 	 *
-	 * @return
-	 * 	All matching methods including this method itself.
-	 * 	<br>Methods are ordered from parent-to-child order.
+	 * <p>
+	 * Methods are accessed from parent-to-child order.
+	 *
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
 	 */
-	public List<Method> getMatchingParentFirst() {
-		return new UnmodifiableArray<>(_getMatching(), true);
+	public MethodInfo getMatchingParentFirst(Predicate<Method> predicate, Consumer<Method> consumer) {
+		Method[] m = _getMatching();
+		for (int i = m.length-1; i >= 0; i--)
+			if (predicate.test(m[i]))
+				consumer.accept(m[i]);
+		return this;
 	}
 
 	private static List<Method> findMatching(List<Method> l, Method m, Class<?> c) {
@@ -316,8 +329,9 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> MethodInfo getAnnotations(AnnotationProvider annotationProvider, Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
 		declaringClass.getAnnotations(annotationProvider, type, predicate, consumer);
-		for (Method m2 : getMatchingParentFirst())
-			for (Annotation a2 : m2.getDeclaredAnnotations())
+		Method[] m = _getMatching();
+		for (int i = m.length-1; i >= 0; i--)
+			for (Annotation a2 : m[i].getDeclaredAnnotations())
 				if (type.isInstance(a2) && predicate.test((A)a2))
 					consumer.accept((A)a2);
 		getReturnType().unwrap(Value.class,Optional.class).getAnnotations(annotationProvider, type, predicate, consumer);
