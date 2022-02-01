@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.ClassMeta.ClassCategory.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.ConsumerUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static java.util.Optional.*;
 
@@ -2093,29 +2094,28 @@ public final class ClassMeta<T> implements Type {
 	/**
 	 * Consumes all matching annotations of the specified type defined on the specified class or parent classes/interfaces in parent-to-child order.
 	 *
-	 * @param a The annotation to search for.
+	 * @param type The annotation to search for.
 	 * @param predicate The predicate.
 	 * @param consumer The consumer of the annotations.
 	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
-	public <A extends Annotation> ClassMeta<T> getAnnotations(Class<A> a, Predicate<A> predicate, Consumer<A> consumer) {
-		A[] array = (A[])annotationArrayMap.get(a);
+	public <A extends Annotation> ClassMeta<T> getAnnotations(Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
+		A[] array = (A[])annotationArrayMap.get(type);
 		if (array == null) {
 			if (beanContext == null) {
-				info.getAnnotations(BeanContext.DEFAULT, a, predicate, consumer);
+				info.getAnnotations(BeanContext.DEFAULT, type, predicate, consumer);
 				return this;
 			}
 			List<A> l = new ArrayList<>();
-			info.getAnnotations(beanContext, a, x-> true, x -> l.add(x));
-			array = (A[])Array.newInstance(a, l.size());
+			info.getAnnotations(beanContext, type, x-> true, x -> l.add(x));
+			array = (A[])Array.newInstance(type, l.size());
 			for (int i = 0; i < l.size(); i++)
 				Array.set(array, i, l.get(i));
-			annotationArrayMap.put(a, array);
+			annotationArrayMap.put(type, array);
 		}
-		for (A aa : array)
-			if (predicate.test(aa))
-				consumer.accept(aa);
+		for (A a : array)
+			consume(predicate, consumer, a);
 		return this;
 	}
 

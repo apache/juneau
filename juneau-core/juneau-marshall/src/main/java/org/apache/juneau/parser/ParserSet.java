@@ -444,9 +444,8 @@ public final class ParserSet {
 			return entries;
 		}
 
-		@SuppressWarnings("unchecked")
 		private <T extends Parser.Builder> Stream<T> builders(Class<T> type) {
-			return entries.stream().filter(x -> type.isInstance(x)).map(x -> (T)x);
+			return entries.stream().filter(x -> type.isInstance(x)).map(x -> type.cast(x));
 		}
 
 		// <FluentSetters>

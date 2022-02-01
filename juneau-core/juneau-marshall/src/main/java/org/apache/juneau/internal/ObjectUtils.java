@@ -37,10 +37,9 @@ public class ObjectUtils {
 	 * @param c The class to cast to.
 	 * @return The cast object, or <jk>null</jk> if the object wasn't an instance of the specified class.
 	 */
-	@SuppressWarnings("unchecked")
 	public static <T> T castOrNull(Object o, Class<T> c) {
 		if (c.isInstance(o))
-			return (T)o;
+			return c.cast(o);
 		return null;
 	}
 
@@ -227,9 +226,8 @@ public class ObjectUtils {
 	 * @param o The object to cast to.
 	 * @return The cast object, or <jk>null</jk> if the object wasn't the specified type.
 	 */
-	@SuppressWarnings("unchecked")
 	public static <T> T cast(Class<T> c, Object o) {
-		return o != null && c.isInstance(o) ? (T)o : null;
+		return o != null && c.isInstance(o) ? c.cast(o) : null;
 	}
 
 	/**

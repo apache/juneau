@@ -16,6 +16,8 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.internal.ConsumerUtils.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -355,7 +357,7 @@ public final class ClassInfo {
 	 */
 	public ClassInfo getAnyParent(Predicate<ClassInfo> predicate) {
 		for (ClassInfo ci : _getAllParents())
-			if (predicate.test(ci))
+			if (passes(predicate, ci))
 				return ci;
 		return null;
 	}
@@ -442,8 +444,7 @@ public final class ClassInfo {
 	 */
 	public final ClassInfo getPublicMethods(Predicate<MethodInfo> predicate, Consumer<MethodInfo> consumer) {
 		for (MethodInfo mi : _getPublicMethods())
-			if (predicate.test(mi))
-				consumer.accept(mi);
+			consume(predicate, consumer, mi);
 		return this;
 	}
 
@@ -455,7 +456,7 @@ public final class ClassInfo {
 	 */
 	public final MethodInfo getPublicMethod(Predicate<MethodInfo> predicate) {
 		for (MethodInfo mi : _getPublicMethods())
-			if (predicate.test(mi))
+			if (passes(predicate, mi))
 				return mi;
 		return null;
 	}
@@ -480,8 +481,7 @@ public final class ClassInfo {
 	 */
 	public final ClassInfo getDeclaredMethods(Predicate<MethodInfo> predicate, Consumer<MethodInfo> consumer) {
 		for (MethodInfo mi : _getDeclaredMethods())
-			if (predicate.test(mi))
-				consumer.accept(mi);
+			consume(predicate, consumer, mi);
 		return this;
 	}
 
@@ -493,7 +493,7 @@ public final class ClassInfo {
 	 */
 	public MethodInfo getDeclaredMethod(Predicate<MethodInfo> predicate) {
 		for (MethodInfo mi : _getDeclaredMethods())
-			if (predicate.test(mi))
+			if (passes(predicate, mi))
 				return mi;
 		return null;
 	}
@@ -518,8 +518,7 @@ public final class ClassInfo {
 	 */
 	public final ClassInfo getMethods(Predicate<MethodInfo> predicate, Consumer<MethodInfo> consumer) {
 		for (MethodInfo mi : _getAllMethods())
-			if (predicate.test(mi))
-				consumer.accept(mi);
+			consume(predicate, consumer, mi);
 		return this;
 	}
 
@@ -531,7 +530,7 @@ public final class ClassInfo {
 	 */
 	public MethodInfo getMethod(Predicate<MethodInfo> predicate) {
 		for (MethodInfo mi : _getAllMethods())
-			if (predicate.test(mi))
+			if (passes(predicate, mi))
 				return mi;
 		return null;
 	}
@@ -557,8 +556,7 @@ public final class ClassInfo {
 	 */
 	public final ClassInfo getAllMethodsParentFirst(Predicate<MethodInfo> predicate, Consumer<MethodInfo> consumer) {
 		for (MethodInfo mi : _getAllMethodsParentFirst())
-			if (predicate.test(mi))
-				consumer.accept(mi);
+			consume(predicate, consumer, mi);
 		return this;
 	}
 
@@ -645,8 +643,7 @@ public final class ClassInfo {
 	 */
 	public final ClassInfo getPublicConstructors(Predicate<ConstructorInfo> predicate, Consumer<ConstructorInfo> consumer) {
 		for (ConstructorInfo mi : _getPublicConstructors())
-			if (predicate.test(mi))
-				consumer.accept(mi);
+			consume(predicate, consumer, mi);
 		return this;
 	}
 
@@ -658,7 +655,7 @@ public final class ClassInfo {
 	 */
 	public ConstructorInfo getPublicConstructor(Predicate<ConstructorInfo> predicate) {
 		for (ConstructorInfo ci : _getPublicConstructors())
-			if (predicate.test(ci))
+			if (passes(predicate, ci))
 				return ci;
 		return null;
 	}
@@ -681,8 +678,7 @@ public final class ClassInfo {
 	 */
 	public final ClassInfo getDeclaredConstructors(Predicate<ConstructorInfo> predicate, Consumer<ConstructorInfo> consumer) {
 		for (ConstructorInfo mi : _getDeclaredConstructors())
-			if (predicate.test(mi))
-				consumer.accept(mi);
+			consume(predicate, consumer, mi);
 		return this;
 	}
 
@@ -694,7 +690,7 @@ public final class ClassInfo {
 	 */
 	public ConstructorInfo getDeclaredConstructor(Predicate<ConstructorInfo> predicate) {
 		for (ConstructorInfo ci : _getDeclaredConstructors())
-			if (predicate.test(ci))
+			if (passes(predicate, ci))
 				return ci;
 		return null;
 	}
@@ -779,8 +775,7 @@ public final class ClassInfo {
 	 */
 	public final ClassInfo getPublicFields(Predicate<FieldInfo> predicate, Consumer<FieldInfo> consumer) {
 		for (FieldInfo mi : _getPublicFields())
-			if (predicate.test(mi))
-				consumer.accept(mi);
+			consume(predicate, consumer, mi);
 		return this;
 	}
 
@@ -792,7 +787,7 @@ public final class ClassInfo {
 	 */
 	public FieldInfo getPublicField(Predicate<FieldInfo> predicate) {
 		for (FieldInfo f : _getPublicFields())
-			if (predicate.test(f))
+			if (passes(predicate, f))
 				return f;
 		return null;
 	}
@@ -817,8 +812,7 @@ public final class ClassInfo {
 	 */
 	public ClassInfo getDeclaredFields(Predicate<FieldInfo> predicate, Consumer<FieldInfo> consumer) {
 		for (FieldInfo fi : _getDeclaredFields())
-			if (predicate.test(fi))
-				consumer.accept(fi);
+			consume(predicate, consumer, fi);
 		return this;
 	}
 
@@ -830,7 +824,7 @@ public final class ClassInfo {
 	 */
 	public FieldInfo getDeclaredField(Predicate<FieldInfo> predicate) {
 		for (FieldInfo f : _getDeclaredFields())
-			if (predicate.test(f))
+			if (passes(predicate, f))
 				return f;
 		return null;
 	}
@@ -859,8 +853,7 @@ public final class ClassInfo {
 	 */
 	public ClassInfo getAllFields(Predicate<FieldInfo> predicate, Consumer<FieldInfo> consumer) {
 		for (FieldInfo fi : _getAllFields())
-			if (predicate.test(fi))
-				consumer.accept(fi);
+			consume(predicate, consumer, fi);
 		return this;
 	}
 
@@ -976,8 +969,8 @@ public final class ClassInfo {
 		if (predicate == null) predicate = x->true;
 		if (annotationProvider == null) annotationProvider = AnnotationProvider.DEFAULT;
 		A t2 = getPackageAnnotation(type);
-		if (t2 != null && predicate.test(t2))
-			consumer.accept(t2);
+		if (t2 != null)
+			consume(predicate, consumer, t2);
 		ClassInfo[] interfaces = _getInterfaces();
 		for (int i = interfaces.length-1; i >= 0; i--)
 			annotationProvider.getDeclaredAnnotations(type, interfaces[i].inner(), predicate, consumer);
@@ -2289,7 +2282,7 @@ public final class ClassInfo {
 	 * @return <jk>true</jk> if this object passes the specified predicate test.
 	 */
 	public boolean matches(Predicate<ClassInfo> predicate) {
-		return predicate.test(this);
+		return passes(predicate, this);
 	}
 
 	/**

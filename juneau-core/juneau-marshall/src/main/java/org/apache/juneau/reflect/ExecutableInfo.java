@@ -13,11 +13,13 @@
 package org.apache.juneau.reflect;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.ConsumerUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
@@ -42,6 +44,7 @@ public abstract class ExecutableInfo {
 	private volatile Type[] rawGenericParamTypes;
 	private volatile Parameter[] rawParameters;
 	private volatile Annotation[][] parameterAnnotations;
+	private volatile Annotation[] declaredAnnotations;
 
 	/**
 	 * Constructor.
@@ -314,7 +317,23 @@ public abstract class ExecutableInfo {
 	// Annotations
 	//-----------------------------------------------------------------------------------------------------------------
 
-	final Annotation[][] getParameterAnnotations() {
+	/**
+	 * Consumes the matching parameter annotations of the specified type at the specified parameter index.
+	 *
+	 * @param index The parameter index.
+	 * @param type The annotation type.
+	 * @param predicate The predicate.
+	 * @param consumer The consumer.
+	 * @return This object.
+	 */
+	public <A extends Annotation> ExecutableInfo getParameterAnnotations(int index, Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
+		for (Annotation a : getParameterAnnotations(index))
+			if (type.isInstance(a))
+				consume(predicate, consumer, type.cast(a));
+		return this;
+	}
+
+	final Annotation[][] _getParameterAnnotations() {
 		if (parameterAnnotations == null) {
 			synchronized(this) {
 				parameterAnnotations = e.getParameterAnnotations();
@@ -325,7 +344,7 @@ public abstract class ExecutableInfo {
 
 	final Annotation[] getParameterAnnotations(int index) {
 		checkIndex(index);
-		Annotation[][] x = getParameterAnnotations();
+		Annotation[][] x = _getParameterAnnotations();
 		int c = e.getParameterCount();
 		if (c != x.length) {
 			// Seems to be a JVM bug where getParameterAnnotations() don't take mandated parameters into account.
@@ -338,6 +357,15 @@ public abstract class ExecutableInfo {
 			x = x2;
 		}
 		return x[index];
+	}
+
+	final Annotation[] getDeclaredAnnotations() {
+		if (declaredAnnotations == null) {
+			synchronized(this) {
+				declaredAnnotations = e.getDeclaredAnnotations();
+			}
+		}
+		return declaredAnnotations;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

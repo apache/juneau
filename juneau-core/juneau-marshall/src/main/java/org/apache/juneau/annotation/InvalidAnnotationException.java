@@ -43,14 +43,14 @@ public class InvalidAnnotationException extends BasicRuntimeException {
 	/**
 	 * Throws an {@link InvalidAnnotationException} if the specified method contains any of the specified annotations.
 	 *
-	 * @param m The method to check.
-	 * @param a The annotations to check for.
+	 * @param onMethod The method to check.
+	 * @param types The annotations to check for.
 	 * @throws InvalidAnnotationException Annotation was used in an invalid location.
 	 */
 	@SafeVarargs
-	public static void assertNoInvalidAnnotations(MethodInfo m, Class<? extends Annotation>...a) throws InvalidAnnotationException {
-		Annotation aa = m.getAnyAnnotation(a);
-		if (aa != null)
-			throw new InvalidAnnotationException("@{0} annotation cannot be used in a @{1} bean.  Method=''{2}''", aa.getClass().getSimpleName(), m.getDeclaringClass().getSimpleName(), m);
+	public static void assertNoInvalidAnnotations(MethodInfo onMethod, Class<? extends Annotation>...types) throws InvalidAnnotationException {
+		Annotation a = onMethod.getAnyAnnotation(types);
+		if (a != null)
+			throw new InvalidAnnotationException("@{0} annotation cannot be used in a @{1} bean.  Method=''{2}''", a.getClass().getSimpleName(), onMethod.getDeclaringClass().getSimpleName(), onMethod);
 	}
 }

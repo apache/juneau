@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.ConsumerUtils.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.function.*;
@@ -45,87 +47,82 @@ public interface AnnotationProvider {
 		private final TwoKeyConcurrentCache<Constructor<?>,Class<? extends Annotation>,Annotation[]> constructorAnnotationCache = new TwoKeyConcurrentCache<>(DISABLE_ANNOTATION_CACHING, (k1,k2) -> k1.getAnnotationsByType(k2));
 
 		@Override /* MetaProvider */
-		public <A extends Annotation> void getAnnotations(Class<A> a, Class<?> c, Predicate<A> predicate, Consumer<A> consumer) {
-			if (a != null && c != null)
-				for (A aa : (A[])classAnnotationCache.get(c,a))
-					if (predicate.test(aa))
-						consumer.accept(aa);
+		public <A extends Annotation> void getAnnotations(Class<A> type, Class<?> onClass, Predicate<A> predicate, Consumer<A> consumer) {
+			if (type != null && onClass != null)
+				for (A a : (A[])classAnnotationCache.get(onClass,type))
+					consume(predicate, consumer, a);
 		}
 
 		@Override /* MetaProvider */
-		public <A extends Annotation> A getAnnotation(Class<A> a, Class<?> c, Predicate<A> predicate) {
-			if (a != null && c != null)
-				for (A aa : (A[])classAnnotationCache.get(c,a))
-					if (predicate.test(aa))
-						return aa;
+		public <A extends Annotation> A getAnnotation(Class<A> type, Class<?> onClass, Predicate<A> predicate) {
+			if (type != null && onClass != null)
+				for (A a : (A[])classAnnotationCache.get(onClass,type))
+					if (passes(predicate, a))
+						return a;
 			return null;
 		}
 
 		@Override /* MetaProvider */
-		public <A extends Annotation> void getDeclaredAnnotations(Class<A> a, Class<?> c, Predicate<A> predicate, Consumer<A> consumer) {
-			if (a != null && c != null)
-				for (A aa : (A[])declaredClassAnnotationCache.get(c,a))
-					if (predicate.test(aa))
-						consumer.accept(aa);
+		public <A extends Annotation> void getDeclaredAnnotations(Class<A> type, Class<?> onClass, Predicate<A> predicate, Consumer<A> consumer) {
+			if (type != null && onClass != null)
+				for (A a : (A[])declaredClassAnnotationCache.get(onClass,type))
+					consume(predicate, consumer, a);
 		}
 
 		@Override /* MetaProvider */
-		public <A extends Annotation> A getDeclaredAnnotation(Class<A> a, Class<?> c, Predicate<A> predicate) {
-			if (a != null && c != null)
-				for (A aa : (A[])declaredClassAnnotationCache.get(c,a))
-					if (predicate.test(aa))
-						return aa;
+		public <A extends Annotation> A getDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> predicate) {
+			if (type != null && onClass != null)
+				for (A a : (A[])declaredClassAnnotationCache.get(onClass,type))
+					if (passes(predicate, a))
+						return a;
 			return null;
 		}
 
 		@Override /* MetaProvider */
-		public <A extends Annotation> void getAnnotations(Class<A> a, Method m, Predicate<A> predicate, Consumer<A> consumer) {
-			if (a != null && m != null)
-				for (A aa : (A[])methodAnnotationCache.get(m,a))
-					if (predicate.test(aa))
-						consumer.accept(aa);
+		public <A extends Annotation> void getAnnotations(Class<A> type, Method onMethod, Predicate<A> predicate, Consumer<A> consumer) {
+			if (type != null && onMethod != null)
+				for (A a : (A[])methodAnnotationCache.get(onMethod,type))
+					consume(predicate, consumer, a);
 		}
 
 		@Override /* MetaProvider */
-		public <A extends Annotation> A getAnnotation(Class<A> a, Method m, Predicate<A> predicate) {
-			if (a != null && m != null)
-				for (A aa : (A[])methodAnnotationCache.get(m,a))
-					if (predicate.test(aa))
-						return aa;
+		public <A extends Annotation> A getAnnotation(Class<A> type, Method onMethod, Predicate<A> predicate) {
+			if (type != null && onMethod != null)
+				for (A a : (A[])methodAnnotationCache.get(onMethod,type))
+					if (passes(predicate, a))
+						return a;
 			return null;
 		}
 
 		@Override /* MetaProvider */
-		public <A extends Annotation> void getAnnotations(Class<A> a, Field f, Predicate<A> predicate, Consumer<A> consumer) {
-			if (a != null && f != null)
-				for (A aa : (A[])fieldAnnotationCache.get(f,a))
-					if (predicate.test(aa))
-						consumer.accept(aa);
+		public <A extends Annotation> void getAnnotations(Class<A> type, Field onField, Predicate<A> predicate, Consumer<A> consumer) {
+			if (type != null && onField != null)
+				for (A a : (A[])fieldAnnotationCache.get(onField,type))
+					consume(predicate, consumer, a);
 		}
 
 		@Override /* MetaProvider */
-		public <A extends Annotation> A getAnnotation(Class<A> a, Field f, Predicate<A> predicate) {
-			if (a != null && f != null)
-				for (A aa : (A[])fieldAnnotationCache.get(f,a))
-					if (predicate.test(aa))
-						return aa;
+		public <A extends Annotation> A getAnnotation(Class<A> type, Field onField, Predicate<A> predicate) {
+			if (type != null && onField != null)
+				for (A a : (A[])fieldAnnotationCache.get(onField,type))
+					if (passes(predicate, a))
+						return a;
 			return null;
 		}
 
 		@Override /* MetaProvider */
-		public <A extends Annotation> void getAnnotations(Class<A> a, Constructor<?> c, Predicate<A> predicate, Consumer<A> consumer) {
-			if (a != null && c != null)
-				for (A aa : (A[])constructorAnnotationCache.get(c,a))
-					if (predicate.test(aa))
-						consumer.accept(aa);
+		public <A extends Annotation> void getAnnotations(Class<A> type, Constructor<?> onConstructor, Predicate<A> predicate, Consumer<A> consumer) {
+			if (type != null && onConstructor != null)
+				for (A a : (A[])constructorAnnotationCache.get(onConstructor,type))
+					consume(predicate, consumer, a);
 		}
 
 		@Override /* MetaProvider */
-		public <A extends Annotation> A getAnnotation(Class<A> a, Constructor<?> c, Predicate<A> predicate) {
-			if (a != null && c != null)
-				for (A aa : (A[])constructorAnnotationCache.get(c,a))
-					if (predicate.test(aa))
-						return aa;
+		public <A extends Annotation> A getAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> predicate) {
+			if (type != null && onConstructor != null)
+				for (A a : (A[])constructorAnnotationCache.get(onConstructor,type))
+					if (passes(predicate, a))
+						return a;
 			return null;
 		}
 	};
@@ -133,106 +130,106 @@ public interface AnnotationProvider {
 	/**
 	 * Finds the specified annotations on the specified class.
 	 *
-	 * @param a The annotation type to find.
-	 * @param c The class to search on.
+	 * @param type The annotation type to find.
+	 * @param onClass The class to search on.
 	 * @param predicate The predicate.
 	 * @param consumer The consumer.
 	 */
-	<A extends Annotation> void getAnnotations(Class<A> a, Class<?> c, Predicate<A> predicate, Consumer<A> consumer);
+	<A extends Annotation> void getAnnotations(Class<A> type, Class<?> onClass, Predicate<A> predicate, Consumer<A> consumer);
 
 	/**
 	 * Finds the first annotation on the specified class matching the specified predicate.
 	 *
-	 * @param a The annotation type to find.
-	 * @param c The class to search on.
+	 * @param type The annotation type to find.
+	 * @param onClass The class to search on.
 	 * @param predicate The predicate.
 	 * @return The annotations in an unmodifiable list, or an empty list if not found.
 	 */
-	<A extends Annotation> A getAnnotation(Class<A> a, Class<?> c, Predicate<A> predicate);
+	<A extends Annotation> A getAnnotation(Class<A> type, Class<?> onClass, Predicate<A> predicate);
 
 	/**
 	 * Finds the specified declared annotations on the specified class.
 	 *
-	 * @param a The annotation type to find.
-	 * @param c The class to search on.
+	 * @param type The annotation type to find.
+	 * @param onClass The class to search on.
 	 * @param predicate The predicate.
 	 * @param consumer The consumer.
 	 */
-	<A extends Annotation> void getDeclaredAnnotations(Class<A> a, Class<?> c, Predicate<A> predicate, Consumer<A> consumer);
+	<A extends Annotation> void getDeclaredAnnotations(Class<A> type, Class<?> onClass, Predicate<A> predicate, Consumer<A> consumer);
 
 	/**
 	 * Finds the specified declared annotations on the specified class that match the specified predicate.
 	 *
-	 * @param a The annotation type to find.
-	 * @param c The class to search on.
+	 * @param type The annotation type to find.
+	 * @param onClass The class to search on.
 	 * @param predicate The predicate.
 	 * @return The matched annotation, or <jk>null</jk> if no annotations matched.
 	 */
-	<A extends Annotation> A getDeclaredAnnotation(Class<A> a, Class<?> c, Predicate<A> predicate);
+	<A extends Annotation> A getDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> predicate);
 
 	/**
 	 * Finds the specified annotations on the specified method.
 	 *
 	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param m The method to search on.
+	 * @param type The annotation type to find.
+	 * @param onMethod The method to search on.
 	 * @param predicate The predicate.
 	 * @param consumer The consumer.
 	 */
-	<A extends Annotation> void getAnnotations(Class<A> a, Method m, Predicate<A> predicate, Consumer<A> consumer);
+	<A extends Annotation> void getAnnotations(Class<A> type, Method onMethod, Predicate<A> predicate, Consumer<A> consumer);
 
 	/**
 	 * Finds the specified annotations on the specified method.
 	 *
 	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param m The method to search on.
+	 * @param type The annotation type to find.
+	 * @param onMethod The method to search on.
 	 * @param predicate The predicate.
 	 * @return The matched annotation, or <jk>null</jk> if no annotations matched.
 	 */
-	<A extends Annotation> A getAnnotation(Class<A> a, Method m, Predicate<A> predicate);
+	<A extends Annotation> A getAnnotation(Class<A> type, Method onMethod, Predicate<A> predicate);
 
 	/**
 	 * Finds the specified annotations on the specified field.
 	 *
 	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param f The field to search on.
+	 * @param type The annotation type to find.
+	 * @param onField The field to search on.
 	 * @param predicate The predicate.
 	 * @param consumer The consumer.
 	 */
-	<A extends Annotation> void getAnnotations(Class<A> a, Field f, Predicate<A> predicate, Consumer<A> consumer);
+	<A extends Annotation> void getAnnotations(Class<A> type, Field onField, Predicate<A> predicate, Consumer<A> consumer);
 
 	/**
 	 * Finds the specified annotations on the specified field.
 	 *
 	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param f The field to search on.
+	 * @param type The annotation type to find.
+	 * @param onField The field to search on.
 	 * @param predicate The predicate.
 	 * @return The matched annotation, or <jk>null</jk> if no annotations matched.
 	 */
-	<A extends Annotation> A getAnnotation(Class<A> a, Field f, Predicate<A> predicate);
+	<A extends Annotation> A getAnnotation(Class<A> type, Field onField, Predicate<A> predicate);
 
 	/**
 	 * Finds the specified annotations on the specified constructor.
 	 *
 	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param c The constructor to search on.
+	 * @param type The annotation type to find.
+	 * @param onConstructor The constructor to search on.
 	 * @param predicate The predicate.
 	 * @param consumer The consumer.
 	 */
-	<A extends Annotation> void getAnnotations(Class<A> a, Constructor<?> c, Predicate<A> predicate, Consumer<A> consumer);
+	<A extends Annotation> void getAnnotations(Class<A> type, Constructor<?> onConstructor, Predicate<A> predicate, Consumer<A> consumer);
 
 	/**
 	 * Finds the specified annotations on the specified constructor.
 	 *
 	 * @param <A> The annotation type to find.
-	 * @param a The annotation type to find.
-	 * @param c The constructor to search on.
+	 * @param type The annotation type to find.
+	 * @param onConstructor The constructor to search on.
 	 * @param predicate The predicate to match the annotation against.
 	 * @return The matched annotation, or <jk>null</jk> if no annotations matched.
 	 */
-	<A extends Annotation> A getAnnotation(Class<A> a, Constructor<?> c, Predicate<A> predicate);
+	<A extends Annotation> A getAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> predicate);
 }

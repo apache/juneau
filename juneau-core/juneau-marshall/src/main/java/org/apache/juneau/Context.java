@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ConsumerUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static java.util.Optional.*;
 import static org.apache.juneau.collections.OMap.*;
@@ -270,10 +271,9 @@ public abstract class Context implements AnnotationProvider {
 		 * @param consumer The consumer.
 		 * @return This object.
 		 */
-		@SuppressWarnings("unchecked")
 		public <T extends Builder> Builder apply(Class<T> subtype, Consumer<T> consumer) {
 			if (subtype.isInstance(this))
-				consumer.accept((T)this);
+				consumer.accept(subtype.cast(this));
 			return this;
 		}
 
@@ -940,157 +940,152 @@ public abstract class Context implements AnnotationProvider {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> void getAnnotations(Class<A> a, Class<?> c, Predicate<A> predicate, Consumer<A> consumer) {
-		if (a != null && c != null)
-			for (A aa : annotations(a, c))
-				if (predicate.test(aa))
-					consumer.accept(aa);
+	public <A extends Annotation> void getAnnotations(Class<A> type, Class<?> onClass, Predicate<A> predicate, Consumer<A> consumer) {
+		if (type != null && onClass != null)
+			for (A a : annotations(type, onClass))
+				consume(predicate, consumer, a);
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> A getAnnotation(Class<A> a, Class<?> c, Predicate<A> predicate) {
-		if (a != null && c != null)
-			for (A aa : annotations(a, c))
-				if (predicate.test(aa))
-					return aa;
+	public <A extends Annotation> A getAnnotation(Class<A> type, Class<?> onClass, Predicate<A> predicate) {
+		if (type != null && onClass != null)
+			for (A a : annotations(type, onClass))
+				if (passes(predicate, a))
+					return a;
 		return null;
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> void getDeclaredAnnotations(Class<A> a, Class<?> c, Predicate<A> predicate, Consumer<A> consumer) {
-		if (a != null && c != null)
-			for (A aa : declaredAnnotations(a, c))
-				if (predicate.test(aa))
-					consumer.accept(aa);
+	public <A extends Annotation> void getDeclaredAnnotations(Class<A> type, Class<?> onClass, Predicate<A> predicate, Consumer<A> consumer) {
+		if (type != null && onClass != null)
+			for (A a : declaredAnnotations(type, onClass))
+				consume(predicate, consumer, a);
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> A getDeclaredAnnotation(Class<A> a, Class<?> c, Predicate<A> predicate) {
-		if (a != null && c != null)
-			for (A aa : declaredAnnotations(a, c))
-				if (predicate.test(aa))
-					return aa;
+	public <A extends Annotation> A getDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> predicate) {
+		if (type != null && onClass != null)
+			for (A a : declaredAnnotations(type, onClass))
+				if (passes(predicate, a))
+					return a;
 		return null;
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> void getAnnotations(Class<A> a, Method m, Predicate<A> predicate, Consumer<A> consumer) {
-		if (a != null && m != null)
-			for (A aa : annotations(a, m))
-				if (predicate.test(aa))
-					consumer.accept(aa);
+	public <A extends Annotation> void getAnnotations(Class<A> type, Method onMethod, Predicate<A> predicate, Consumer<A> consumer) {
+		if (type != null && onMethod != null)
+			for (A a : annotations(type, onMethod))
+				consume(predicate, consumer, a);
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> A getAnnotation(Class<A> a, Method m, Predicate<A> predicate) {
-		if (a != null && m != null)
-			for (A aa : annotations(a, m))
-				if (predicate.test(aa))
-					return aa;
+	public <A extends Annotation> A getAnnotation(Class<A> type, Method onMethod, Predicate<A> predicate) {
+		if (type != null && onMethod != null)
+			for (A a : annotations(type, onMethod))
+				if (passes(predicate, a))
+					return a;
 		return null;
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> void getAnnotations(Class<A> a, Field f, Predicate<A> predicate, Consumer<A> consumer) {
-		if (a != null && f != null)
-			for (A aa : annotations(a, f))
-				if (predicate.test(aa))
-					consumer.accept(aa);
+	public <A extends Annotation> void getAnnotations(Class<A> type, Field onField, Predicate<A> predicate, Consumer<A> consumer) {
+		if (type != null && onField != null)
+			for (A a : annotations(type, onField))
+				consume(predicate, consumer, a);
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> A getAnnotation(Class<A> a, Field f, Predicate<A> predicate) {
-		if (a != null && f != null)
-			for (A aa : annotations(a, f))
-				if (predicate.test(aa))
-					return aa;
+	public <A extends Annotation> A getAnnotation(Class<A> type, Field onField, Predicate<A> predicate) {
+		if (type != null && onField != null)
+			for (A a : annotations(type, onField))
+				if (passes(predicate, a))
+					return a;
 		return null;
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> void getAnnotations(Class<A> a, Constructor<?> c, Predicate<A> predicate, Consumer<A> consumer) {
-		if (a != null && c != null)
-			for (A aa : annotations(a, c))
-				if (predicate.test(aa))
-					consumer.accept(aa);
+	public <A extends Annotation> void getAnnotations(Class<A> type, Constructor<?> onConstructor, Predicate<A> predicate, Consumer<A> consumer) {
+		if (type != null && onConstructor != null)
+			for (A a : annotations(type, onConstructor))
+				consume(predicate, consumer, a);
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> A getAnnotation(Class<A> a, Constructor<?> c, Predicate<A> predicate) {
-		if (a != null && c != null)
-			for (A aa : annotations(a, c))
-				if (predicate.test(aa))
-					return aa;
+	public <A extends Annotation> A getAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> predicate) {
+		if (type != null && onConstructor != null)
+			for (A a : annotations(type, onConstructor))
+				if (passes(predicate, a))
+					return a;
 		return null;
 	}
 
 	/**
 	 * Returns <jk>true</jk> if <c>getAnnotation(a,c)</c> returns a non-null value.
 	 *
-	 * @param a The annotation being checked for.
-	 * @param c The class being checked on.
+	 * @param type The annotation being checked for.
+	 * @param onClass The class being checked on.
 	 * @return <jk>true</jk> if the annotation exists on the specified class.
 	 */
-	public <A extends Annotation> boolean hasAnnotation(Class<A> a, Class<?> c) {
-		return annotations(a, c).length > 0;
+	public <A extends Annotation> boolean hasAnnotation(Class<A> type, Class<?> onClass) {
+		return annotations(type, onClass).length > 0;
 	}
 
 	/**
 	 * Returns <jk>true</jk> if <c>getAnnotation(a,m)</c> returns a non-null value.
 	 *
-	 * @param a The annotation being checked for.
-	 * @param m The method being checked on.
+	 * @param type The annotation being checked for.
+	 * @param onMethod The method being checked on.
 	 * @return <jk>true</jk> if the annotation exists on the specified method.
 	 */
-	public <A extends Annotation> boolean hasAnnotation(Class<A> a, Method m) {
-		return annotations(a, m).length > 0;
+	public <A extends Annotation> boolean hasAnnotation(Class<A> type, Method onMethod) {
+		return annotations(type, onMethod).length > 0;
 	}
 
 	/**
 	 * Returns <jk>true</jk> if <c>getAnnotation(a,f)</c> returns a non-null value.
 	 *
-	 * @param a The annotation being checked for.
-	 * @param f The field being checked on.
+	 * @param type The annotation being checked for.
+	 * @param onField The field being checked on.
 	 * @return <jk>true</jk> if the annotation exists on the specified field.
 	 */
-	public <A extends Annotation> boolean hasAnnotation(Class<A> a, Field f) {
-		return annotations(a, f).length > 0;
+	public <A extends Annotation> boolean hasAnnotation(Class<A> type, Field onField) {
+		return annotations(type, onField).length > 0;
 	}
 
 	/**
 	 * Returns <jk>true</jk> if <c>getAnnotation(a,c)</c> returns a non-null value.
 	 *
-	 * @param a The annotation being checked for.
-	 * @param c The constructor being checked on.
+	 * @param type The annotation being checked for.
+	 * @param onConstructor The constructor being checked on.
 	 * @return <jk>true</jk> if the annotation exists on the specified field.
 	 */
-	public <A extends Annotation> boolean hasAnnotation(Class<A> a, Constructor<?> c) {
-		return annotations(a, c).length > 0;
+	public <A extends Annotation> boolean hasAnnotation(Class<A> type, Constructor<?> onConstructor) {
+		return annotations(type, onConstructor).length > 0;
 	}
 
 	@SuppressWarnings("unchecked")
-	private <A extends Annotation> A[] annotations(Class<A> a, Class<?> c) {
-		return (A[])classAnnotationCache.get(c, a);
+	private <A extends Annotation> A[] annotations(Class<A> type, Class<?> onClass) {
+		return (A[])classAnnotationCache.get(onClass, type);
 	}
 
 	@SuppressWarnings("unchecked")
-	private <A extends Annotation> A[] declaredAnnotations(Class<A> a, Class<?> c) {
-		return (A[])declaredClassAnnotationCache.get(c, a);
+	private <A extends Annotation> A[] declaredAnnotations(Class<A> type, Class<?> onClass) {
+		return (A[])declaredClassAnnotationCache.get(onClass, type);
 	}
 
 	@SuppressWarnings("unchecked")
-	private <A extends Annotation> A[] annotations(Class<A> a, Method m) {
-		return (A[])methodAnnotationCache.get(m, a);
+	private <A extends Annotation> A[] annotations(Class<A> type, Method onMethod) {
+		return (A[])methodAnnotationCache.get(onMethod, type);
 	}
 
 	@SuppressWarnings("unchecked")
-	private <A extends Annotation> A[] annotations(Class<A> a, Field f) {
-		return (A[])fieldAnnotationCache.get(f, a);
+	private <A extends Annotation> A[] annotations(Class<A> type, Field onField) {
+		return (A[])fieldAnnotationCache.get(onField, type);
 	}
 
 	@SuppressWarnings("unchecked")
-	private <A extends Annotation> A[] annotations(Class<A> a, Constructor<?> c) {
-		return (A[])constructorAnnotationCache.get(c, a);
+	private <A extends Annotation> A[] annotations(Class<A> type, Constructor<?> onConstructor) {
+		return (A[])constructorAnnotationCache.get(onConstructor, type);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

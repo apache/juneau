@@ -407,10 +407,9 @@ public class RestContext extends Context {
 		 * @param type The expected type of the resource bean.
 		 * @return The bean cast to that instance, or {@link Optional#empty()} if it's not the specified type.
 		 */
-		@SuppressWarnings("unchecked")
 		public final <T> Optional<T> resourceAs(Class<T> type) {
 			Object r = resource().get();
-			return Optional.ofNullable(type.isInstance(r) ? (T)r : null);
+			return Optional.ofNullable(type.isInstance(r) ? type.cast(r) : null);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -4050,8 +4049,8 @@ public class RestContext extends Context {
 
 				// Also include methods on @Rest-annotated interfaces.
 				if (al.size() == 0) {
-					Predicate<Method> isRestAnnotatedInterface = x -> x.getDeclaringClass().isInterface() && x.getDeclaringClass().getAnnotation(Rest.class) != null;
-					mi.getMatching(isRestAnnotatedInterface, x -> al.add(AnnotationInfo.of(MethodInfo.of(x), RestOpAnnotation.DEFAULT)));
+					Predicate<MethodInfo> isRestAnnotatedInterface = x -> x.getDeclaringClass().isInterface() && x.getDeclaringClass().getAnnotation(Rest.class) != null;
+					mi.getMatching(isRestAnnotatedInterface, x -> al.add(AnnotationInfo.of(x, RestOpAnnotation.DEFAULT)));
 				}
 
 				if (al.size() > 0) {

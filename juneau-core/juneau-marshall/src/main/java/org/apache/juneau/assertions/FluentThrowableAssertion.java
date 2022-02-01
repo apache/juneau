@@ -275,11 +275,10 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 * @param type The expected exception type.
 	 * @return An assertion against the caused-by.  Never <jk>null</jk>.
 	 */
-	@SuppressWarnings("unchecked")
 	public <E extends Throwable> FluentThrowableAssertion<E,R> causedBy(Class<E> type) {
 		Throwable t = map(Throwable::getCause).orElse(null);
 		if (t == null || type.isInstance(t))
-			return new FluentThrowableAssertion<>(this, (E)t, returns());
+			return new FluentThrowableAssertion<>(this, type.cast(t), returns());
 		throw error(MSG_causedByExceptionNotExpectedType, type, t.getClass());
 	}
 
@@ -295,12 +294,11 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 * @param throwableClass The class type to search for in the caused-by chain.
 	 * @return An assertion against the caused-by throwable.  Never <jk>null</jk>.
 	 */
-	@SuppressWarnings("unchecked")
 	public <E extends Throwable> FluentThrowableAssertion<E,R> find(Class<E> throwableClass) {
 		Throwable t = orElse(null);
 		while (t != null) {
 			if (throwableClass.isInstance(t))
-				return new FluentThrowableAssertion<>(this, (E)t, returns());
+				return new FluentThrowableAssertion<>(this, throwableClass.cast(t), returns());
 			t = t.getCause();
 		}
 		return new FluentThrowableAssertion<>(this, (E)null, returns());

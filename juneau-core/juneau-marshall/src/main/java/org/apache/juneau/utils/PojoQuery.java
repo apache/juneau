@@ -510,7 +510,7 @@ public final class PojoQuery {
 		/**
 		 * Construct a number matcher for the given search pattern.
 		 *
-		 * @param searchPattern A date search paattern.  See class usage for a description.
+		 * @param searchPattern A date search pattern.  See class usage for a description.
 		 */
 		public NumberMatcher(String searchPattern) {
 			numberPatterns = new NumberPattern[1];

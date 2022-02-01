@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
+import static org.apache.juneau.internal.ConsumerUtils.*;
+
 import java.beans.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -79,7 +81,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 
 	private final Method m;
 	private volatile ClassInfo returnType;
-	private volatile Method[] matching;
+	private volatile MethodInfo[] matching;
 
 	/**
 	 * Constructor.
@@ -151,10 +153,9 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @param consumer The consumer.
 	 * @return This object.
 	 */
-	public MethodInfo getMatching(Predicate<Method> predicate, Consumer<Method> consumer) {
-		for (Method m : _getMatching())
-			if (predicate.test(m))
-				consumer.accept(m);
+	public MethodInfo getMatching(Predicate<MethodInfo> predicate, Consumer<MethodInfo> consumer) {
+		for (MethodInfo m : _getMatching())
+			consume(predicate, consumer, m);
 		return this;
 	}
 
@@ -168,18 +169,17 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @param consumer The consumer.
 	 * @return This object.
 	 */
-	public MethodInfo getMatchingParentFirst(Predicate<Method> predicate, Consumer<Method> consumer) {
-		Method[] m = _getMatching();
+	public MethodInfo getMatchingParentFirst(Predicate<MethodInfo> predicate, Consumer<MethodInfo> consumer) {
+		MethodInfo[] m = _getMatching();
 		for (int i = m.length-1; i >= 0; i--)
-			if (predicate.test(m[i]))
-				consumer.accept(m[i]);
+			consume(predicate, consumer, m[i]);
 		return this;
 	}
 
-	private static List<Method> findMatching(List<Method> l, Method m, Class<?> c) {
+	private static List<MethodInfo> findMatching(List<MethodInfo> l, Method m, Class<?> c) {
 		for (Method m2 : c.getDeclaredMethods())
 			if (m.getName().equals(m2.getName()) && Arrays.equals(m.getParameterTypes(), m2.getParameterTypes()))
-				l.add(m2);
+				l.add(MethodInfo.of(m2));
 		Class<?> pc = c.getSuperclass();
 		if (pc != null)
 			findMatching(l, m, pc);
@@ -188,18 +188,18 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 		return l;
 	}
 
-	private Method findMatchingOnClass(ClassInfo c) {
+	private MethodInfo findMatchingOnClass(ClassInfo c) {
 		for (Method m2 : c.inner().getDeclaredMethods())
 			if (m.getName().equals(m2.getName()) && Arrays.equals(m.getParameterTypes(), m2.getParameterTypes()))
-				return m2;
+				return MethodInfo.of(m2);
 		return null;
 	}
 
-	private Method[] _getMatching() {
+	private MethodInfo[] _getMatching() {
 		if (matching == null) {
 			synchronized(this) {
-				List<Method> l = findMatching(new ArrayList<>(), m, m.getDeclaringClass());
-				matching = l.toArray(new Method[l.size()]);
+				List<MethodInfo> l = findMatching(new ArrayList<>(), m, m.getDeclaringClass());
+				matching = l.toArray(new MethodInfo[l.size()]);
 			}
 		}
 		return matching;
@@ -239,8 +239,8 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 		if (type == null)
 			return null;
 		Value<A> t = Value.empty();
-		for (Method m2 : _getMatching()) {
-			annotationProvider.getAnnotations(type, m2, x -> true, x -> t.set(x));
+		for (MethodInfo m2 : _getMatching()) {
+			annotationProvider.getAnnotations(type, m2.inner(), x -> true, x -> t.set(x));
 			if (t.isPresent())
 				return t.get();
 		}
@@ -265,8 +265,8 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @return <jk>true</jk> if the specified annotation is present on this method.
 	 */
 	public final <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
-		for (Method m2 : _getMatching())
-			if (annotationProvider.getAnnotation(type, m2, x -> true) != null)
+		for (MethodInfo m2 : _getMatching())
+			if (annotationProvider.getAnnotation(type, m2.inner(), x -> true) != null)
 				return true;
 		return false;
 	}
@@ -289,8 +289,8 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 */
 	@SafeVarargs
 	public final boolean hasAnyAnnotations(Class<? extends Annotation>...types) {
-		for (Class<? extends Annotation> aa : types)
-			if (hasAnnotation(aa))
+		for (Class<? extends Annotation> a : types)
+			if (hasAnnotation(a))
 				return true;
 		return false;
 	}
@@ -326,14 +326,12 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @param consumer The consumer.
 	 * @return This object.
 	 */
-	@SuppressWarnings("unchecked")
 	public <A extends Annotation> MethodInfo getAnnotations(AnnotationProvider annotationProvider, Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
 		declaringClass.getAnnotations(annotationProvider, type, predicate, consumer);
-		Method[] m = _getMatching();
+		MethodInfo[] m = _getMatching();
 		for (int i = m.length-1; i >= 0; i--)
 			for (Annotation a2 : m[i].getDeclaredAnnotations())
-				if (type.isInstance(a2) && predicate.test((A)a2))
-					consumer.accept((A)a2);
+				consume(type, predicate, consumer, a2);
 		getReturnType().unwrap(Value.class,Optional.class).getAnnotations(annotationProvider, type, predicate, consumer);
 		return this;
 	}
@@ -453,10 +451,10 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	}
 
 	private void getDeclaredMethodAnnotationInfos(ClassInfo ci, Predicate<AnnotationInfo<?>> predicate, Consumer<AnnotationInfo<?>> consumer) {
-		Method m = findMatchingOnClass(ci);
+		MethodInfo m = findMatchingOnClass(ci);
 		if (m != null)
 			for (Annotation a : m.getDeclaredAnnotations())
-				AnnotationInfo.of(MethodInfo.of(m), a).accept(predicate, consumer);
+				AnnotationInfo.of(m, a).accept(predicate, consumer);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -528,7 +526,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @return <jk>true</jk> if this object passes the specified predicate test.
 	 */
 	public boolean matches(Predicate<MethodInfo> predicate) {
-		return predicate.test(this);
+		return passes(predicate, this);
 	}
 
 	/**

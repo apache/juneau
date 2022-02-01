@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
+import static org.apache.juneau.internal.ConsumerUtils.*;
+
 import java.lang.annotation.*;
 import java.util.*;
 import java.util.function.*;
@@ -71,8 +73,8 @@ public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> AnnotationList forEach(Class<A> a, Predicate<AnnotationInfo<A>> predicate, Consumer<AnnotationInfo<A>> consumer) {
 		for (AnnotationInfo<?> ai : this)
-			if (ai.isType(a) && predicate.test((AnnotationInfo<A>)ai))
-				consumer.accept((AnnotationInfo<A>)ai);
+			if (ai.isType(a))
+				consume(predicate, consumer, (AnnotationInfo<A>)ai);
 		return this;
 	}
 
@@ -85,8 +87,7 @@ public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 	 */
 	public <A extends Annotation> AnnotationList forEach(Predicate<AnnotationInfo<?>> predicate, Consumer<AnnotationInfo<?>> consumer) {
 		for (AnnotationInfo<?> ai : this)
-			if (predicate.test(ai))
-				consumer.accept(ai);
+			consume(predicate, consumer, ai);
 		return this;
 	}
 }

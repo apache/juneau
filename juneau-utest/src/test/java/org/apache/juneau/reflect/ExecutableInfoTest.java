@@ -279,12 +279,12 @@ public class ExecutableInfoTest {
 
 	@Test
 	public void getParameterAnnotations() {
-		check("", c_c1.getParameterAnnotations());
-		check("@CA()", c_c2.getParameterAnnotations());
-		check("", c_c3.getParameterAnnotations());
-		check("", c_m1.getParameterAnnotations());
-		check("@CA()", c_m2.getParameterAnnotations());
-		check("", c_m3.getParameterAnnotations());
+		check("", c_c1._getParameterAnnotations());
+		check("@CA()", c_c2._getParameterAnnotations());
+		check("", c_c3._getParameterAnnotations());
+		check("", c_m1._getParameterAnnotations());
+		check("@CA()", c_m2._getParameterAnnotations());
+		check("", c_m3._getParameterAnnotations());
 	}
 
 	@Test

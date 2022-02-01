@@ -440,9 +440,8 @@ public final class SerializerSet {
 			return entries;
 		}
 
-		@SuppressWarnings("unchecked")
 		private <T extends Serializer.Builder> Stream<T> builders(Class<T> type) {
-			return entries.stream().filter(x -> type.isInstance(x)).map(x -> (T)x);
+			return entries.stream().filter(x -> type.isInstance(x)).map(x -> type.cast(x));
 		}
 
 		// <FluentSetters>

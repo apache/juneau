@@ -206,7 +206,6 @@ public class ListBuilder<E> {
 	 * @param values The values to add.
 	 * @return This object.
 	 */
-	@SuppressWarnings("unchecked")
 	public ListBuilder<E> addAny(Object...values) {
 		if (elementType == null)
 			throw runtimeException("Unknown element type.  Cannot use this method.");
@@ -224,7 +223,7 @@ public class ListBuilder<E> {
 							for (Object o2 : new OList(o.toString()))
 								addAny(o2);
 						} else if (elementType.isInstance(o)) {
-							add((E)o);
+							add(elementType.cast(o));
 						} else {
 							add(toType(o, elementType, elementTypeArgs));
 						}

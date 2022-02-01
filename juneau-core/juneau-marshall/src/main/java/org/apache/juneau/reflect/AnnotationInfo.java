@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
+import static org.apache.juneau.internal.ConsumerUtils.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -253,7 +255,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 * @return <jk>true</jk> if this object passes the specified predicate test.
 	 */
 	public boolean matches(Predicate<AnnotationInfo<?>> predicate) {
-		return predicate.test(this);
+		return passes(predicate, this);
 	}
 
 	/**
@@ -288,9 +290,7 @@ public class AnnotationInfo<T extends Annotation> {
 		for (Method m : a.annotationType().getMethods())
 			if (m.getName().equals(name) && m.getReturnType().equals(type)) {
 				try {
-					V v = (V)m.invoke(a);
-					if (predicate.test(v))
-						consumer.accept(v);
+					consume(predicate, consumer, (V)m.invoke(a));
 				} catch (Exception e) {
 					e.printStackTrace(); // Shouldn't happen.
 				}
@@ -312,7 +312,7 @@ public class AnnotationInfo<T extends Annotation> {
 			if (m.getName().equals(name) && m.getReturnType().equals(type)) {
 				try {
 					V v = (V)m.invoke(a);
-					if (predicate.test(v))
+					if (passes(predicate, v))
 						return Optional.of(v);
 				} catch (Exception e) {
 					e.printStackTrace(); // Shouldn't happen.

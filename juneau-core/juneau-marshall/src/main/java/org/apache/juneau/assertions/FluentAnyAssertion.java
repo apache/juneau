@@ -499,11 +499,10 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	// Utility methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings("unchecked")
 	private <T2> T2 cast(Class<T2> c) throws AssertionError {
 		Object o = orElse(null);
 		if (o == null || c.isInstance(o))
-			return (T2)o;
+			return c.cast(o);
 		throw new BasicAssertionError(MSG_objectWasNotType, ClassInfo.of(c).getFullName(), o.getClass());
 	}
 }

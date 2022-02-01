@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
+import static org.apache.juneau.internal.ConsumerUtils.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.function.*;
@@ -144,7 +146,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	 * @return <jk>true</jk> if this object passes the specified predicate test.
 	 */
 	public boolean matches(Predicate<ConstructorInfo> predicate) {
-		return predicate.test(this);
+		return passes(predicate, this);
 	}
 
 	/**

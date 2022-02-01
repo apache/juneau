@@ -161,12 +161,11 @@ public class ThrowableUtils {
 	 * @param t The throwable to search.
 	 * @return The exception, or <jk>null</jk> if not found.
 	 */
-	@SuppressWarnings("unchecked")
 	public static <T extends Throwable> T getCause(Class<T> c, Throwable t) {
 		while (t != null) {
 			t = t.getCause();
 			if (c.isInstance(t))
-				return (T)t;
+				return c.cast(t);
 		}
 		return null;
 	}

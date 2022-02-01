@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
+import static org.apache.juneau.internal.ConsumerUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.lang.annotation.*;
@@ -406,7 +407,7 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	 * @return <jk>true</jk> if this object passes the specified predicate test.
 	 */
 	public boolean matches(Predicate<FieldInfo> predicate) {
-		return predicate.test(this);
+		return passes(predicate, this);
 	}
 
 	/**

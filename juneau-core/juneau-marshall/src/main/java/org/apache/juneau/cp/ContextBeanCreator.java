@@ -104,9 +104,8 @@ public class ContextBeanCreator<T> {
 	 * @param c The builder class type.
 	 * @return An optional containing the builder if it exists.
 	 */
-	@SuppressWarnings("unchecked")
 	public <T2 extends Context.Builder> Optional<T2> builder(Class<T2> c) {
-		return ofNullable(c.isInstance(builder) ? (T2)builder : null);
+		return ofNullable(c.isInstance(builder) ? c.cast(builder) : null);
 	}
 
 	/**
@@ -120,10 +119,9 @@ public class ContextBeanCreator<T> {
 	 * @param operation The operation to apply.
 	 * @return This object.
 	 */
-	@SuppressWarnings("unchecked")
 	public <T2 extends Context.Builder> ContextBeanCreator<T> builder(Class<T2> c, Consumer<T2> operation) {
 		if (c.isInstance(builder))
-			operation.accept((T2)builder);
+			operation.accept(c.cast(builder));
 		return this;
 	}
 
