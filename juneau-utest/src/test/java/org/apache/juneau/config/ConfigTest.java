@@ -428,7 +428,7 @@ public class ConfigTest {
 		assertObject(c.get("a1").as(byte[].class)).asJson().is("[102,111,111]");
 		assertObject(c.get("a2").as(byte[].class)).asJson().is("[102,111,111]");
 		assertObject(c.get("a3").as(byte[].class)).asJson().is("[]");
-		assertNull(null, c.get("a4").to(byte[].class));
+		assertFalse(c.get("a4").as(byte[].class).isPresent());
 	}
 
 	//====================================================================================================
@@ -447,6 +447,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public <T> T getObject(String key, Type type, Type...args) throws ParseException {
 	//====================================================================================================
+	@SuppressWarnings("unchecked")
 	@Test
 	public void getObject1() throws Exception {
 		Config c = init(
@@ -458,24 +459,24 @@ public class ConfigTest {
 			"\t}"
 			);
 
-		Map<String,Integer> a1 = c.get("a1").to(Map.class, String.class, Integer.class);
+		Map<String,Integer> a1 = (Map<String,Integer>) c.get("a1").as(Map.class, String.class, Integer.class).get();
 		assertObject(a1).asJson().is("{foo:123}");
 		assertObject(a1.keySet().iterator().next()).isType(String.class);
 		assertObject(a1.values().iterator().next()).isType(Integer.class);
 
-		List<Map<String,Integer>> a2a = c.get("a2").to(List.class, Map.class, String.class, Integer.class);
+		List<Map<String,Integer>> a2a = (List<Map<String,Integer>>) c.get("a2").as(List.class, Map.class, String.class, Integer.class).get();
 		assertObject(a2a).asJson().is("[{foo:123}]");
 		assertObject(a2a.get(0).keySet().iterator().next()).isType(String.class);
 		assertObject(a2a.get(0).values().iterator().next()).isType(Integer.class);
 
-		List<ABean> a2b = c.get("a2").to(List.class, ABean.class);
+		List<ABean> a2b = (List<ABean>) c.get("a2").as(List.class, ABean.class).get();
 		assertObject(a2b).asJson().is("[{foo:'123'}]");
 		assertObject(a2b.get(0)).isType(ABean.class);
 
-		Map<String,Integer> a3 = c.get("a3").to(Map.class, String.class, Integer.class);
+		Map<String,Integer> a3 = (Map<String,Integer>) c.get("a3").as(Map.class, String.class, Integer.class).orElse(null);
 		assertNull(a3);
 
-		Map<String,Integer> a4a = c.get("a4").to(Map.class, String.class, Integer.class);
+		Map<String,Integer> a4a = (Map<String,Integer>) c.get("a4").as(Map.class, String.class, Integer.class).get();
 		assertObject(a4a).asJson().is("{foo:123}");
 		assertObject(a4a.keySet().iterator().next()).isType(String.class);
 		assertObject(a4a.values().iterator().next()).isType(Integer.class);
@@ -488,6 +489,7 @@ public class ConfigTest {
 	//====================================================================================================
 	//	public <T> T getObject(String key, Parser parser, Type type, Type...args) throws ParseException {
 	//====================================================================================================
+	@SuppressWarnings("unchecked")
 	@Test
 	public void getObject2() throws Exception {
 		Config c = init(
@@ -499,24 +501,24 @@ public class ConfigTest {
 			"\t)"
 			);
 
-		Map<String,Integer> a1 = c.get("a1").to(UonParser.DEFAULT, Map.class, String.class, Integer.class);
+		Map<String,Integer> a1 = (Map<String,Integer>) c.get("a1").as(UonParser.DEFAULT, Map.class, String.class, Integer.class).get();
 		assertObject(a1).asJson().is("{foo:123}");
 		assertObject(a1.keySet().iterator().next()).isType(String.class);
 		assertObject(a1.values().iterator().next()).isType(Integer.class);
 
-		List<Map<String,Integer>> a2a = c.get("a2").to(UonParser.DEFAULT, List.class, Map.class, String.class, Integer.class);
+		List<Map<String,Integer>> a2a = (List<Map<String,Integer>>) c.get("a2").as(UonParser.DEFAULT, List.class, Map.class, String.class, Integer.class).get();
 		assertObject(a2a).asJson().is("[{foo:123}]");
 		assertObject(a2a.get(0).keySet().iterator().next()).isType(String.class);
 		assertObject(a2a.get(0).values().iterator().next()).isType(Integer.class);
 
-		List<ABean> a2b = c.get("a2").to(UonParser.DEFAULT, List.class, ABean.class);
+		List<ABean> a2b = (List<ABean>) c.get("a2").as(UonParser.DEFAULT, List.class, ABean.class).get();
 		assertObject(a2b).asJson().is("[{foo:'123'}]");
 		assertObject(a2b.get(0)).isType(ABean.class);
 
-		Map<String,Integer> a3 = c.get("a3").to(UonParser.DEFAULT, Map.class, String.class, Integer.class);
+		Map<String,Integer> a3 = (Map<String,Integer>) c.get("a3").as(UonParser.DEFAULT, Map.class, String.class, Integer.class).orElse(null);
 		assertNull(a3);
 
-		Map<String,Integer> a4a = c.get("a4").to(UonParser.DEFAULT, Map.class, String.class, Integer.class);
+		Map<String,Integer> a4a = (Map<String,Integer>) c.get("a4").as(UonParser.DEFAULT, Map.class, String.class, Integer.class).get();
 		assertObject(a4a).asJson().is("{foo:123}");
 		assertObject(a4a.keySet().iterator().next()).isType(String.class);
 		assertObject(a4a.values().iterator().next()).isType(Integer.class);
@@ -838,24 +840,24 @@ public class ConfigTest {
 		ABean a = null;
 		BBean b = null;
 
-		a = c.getSection("").toBean(ABean.class);
+		a = c.getSection("").asBean(ABean.class).get();
 		assertObject(a).asJson().is("{foo:'qux'}");
-		a = c.getSection("").toBean(ABean.class);
+		a = c.getSection("").asBean(ABean.class).get();
 		assertObject(a).asJson().is("{foo:'qux'}");
-		a = c.getSection(null).toBean(ABean.class);
+		a = c.getSection(null).asBean(ABean.class).get();
 		assertObject(a).asJson().is("{foo:'qux'}");
-		a = c.getSection("S").toBean(ABean.class);
+		a = c.getSection("S").asBean(ABean.class).get();
 		assertObject(a).asJson().is("{foo:'baz'}");
 
-		b = c.getSection("").toBean(BBean.class);
+		b = c.getSection("").asBean(BBean.class).get();
 		assertObject(b).asJson().is("{foo:'qux'}");
-		b = c.getSection("").toBean(BBean.class);
+		b = c.getSection("").asBean(BBean.class).get();
 		assertObject(b).asJson().is("{foo:'qux'}");
-		b = c.getSection("S").toBean(BBean.class);
+		b = c.getSection("S").asBean(BBean.class).get();
 		assertObject(b).asJson().is("{foo:'baz'}");
 
-		assertThrown(()->c.getSection("T").toBean(ABean.class)).message().is("Unknown property 'bar' encountered in configuration section 'T'.");
-		assertThrown(()->c.getSection("T").toBean(BBean.class)).message().is("Unknown property 'bar' encountered in configuration section 'T'.");
+		assertThrown(()->c.getSection("T").asBean(ABean.class).get()).message().is("Unknown property 'bar' encountered in configuration section 'T'.");
+		assertThrown(()->c.getSection("T").asBean(BBean.class).get()).message().is("Unknown property 'bar' encountered in configuration section 'T'.");
 	}
 
 	//====================================================================================================
@@ -868,13 +870,13 @@ public class ConfigTest {
 		ABean a = null;
 		BBean b = null;
 
-		a = c.getSection("T").toBean(ABean.class, true);
+		a = c.getSection("T").asBean(ABean.class, true).get();
 		assertObject(a).asJson().is("{foo:'qux'}");
-		b = c.getSection("T").toBean(BBean.class, true);
+		b = c.getSection("T").asBean(BBean.class, true).get();
 		assertObject(b).asJson().is("{foo:'qux'}");
 
-		assertThrown(()->c.getSection("T").toBean(ABean.class, false)).message().is("Unknown property 'bar' encountered in configuration section 'T'.");
-		assertThrown(()->c.getSection("T").toBean(BBean.class, false)).message().is("Unknown property 'bar' encountered in configuration section 'T'.");
+		assertThrown(()->c.getSection("T").asBean(ABean.class, false).get()).message().is("Unknown property 'bar' encountered in configuration section 'T'.");
+		assertThrown(()->c.getSection("T").asBean(BBean.class, false).get()).message().is("Unknown property 'bar' encountered in configuration section 'T'.");
 	}
 
 	//====================================================================================================
@@ -884,12 +886,12 @@ public class ConfigTest {
 	public void getSectionAsMap() throws Exception {
 		Config c = init("a=1", "[S]", "b=2", "[T]");
 
-		assertObject(c.getSection("").toMap()).asJson().is("{a:'1'}");
-		assertObject(c.getSection("").toMap()).asJson().is("{a:'1'}");
-		assertObject(c.getSection(null).toMap()).asJson().is("{a:'1'}");
-		assertObject(c.getSection("S").toMap()).asJson().is("{b:'2'}");
-		assertObject(c.getSection("T").toMap()).asJson().is("{}");
-		assertNull(c.getSection("U").toMap());
+		assertObject(c.getSection("").asMap().get()).asJson().is("{a:'1'}");
+		assertObject(c.getSection("").asMap().get()).asJson().is("{a:'1'}");
+		assertObject(c.getSection(null).asMap().get()).asJson().is("{a:'1'}");
+		assertObject(c.getSection("S").asMap().get()).asJson().is("{b:'2'}");
+		assertObject(c.getSection("T").asMap().get()).asJson().is("{}");
+		assertFalse(c.getSection("U").asMap().isPresent());
 	}
 
 	//====================================================================================================
@@ -900,22 +902,22 @@ public class ConfigTest {
 		Config c = init("foo=qux", "[S]", "foo=baz", "[T]", "foo=qux", "bar=qux");
 		AInterface a = null;
 
-		a = c.getSection("").toInterface(AInterface.class);
+		a = c.getSection("").asInterface(AInterface.class).get();
 		assertEquals("qux", a.getFoo());
 
-		a = c.getSection("").toInterface(AInterface.class);
+		a = c.getSection("").asInterface(AInterface.class).get();
 		assertEquals("qux", a.getFoo());
 
-		a = c.getSection(null).toInterface(AInterface.class);
+		a = c.getSection(null).asInterface(AInterface.class).get();
 		assertEquals("qux", a.getFoo());
 
-		a = c.getSection("S").toInterface(AInterface.class);
+		a = c.getSection("S").asInterface(AInterface.class).get();
 		assertEquals("baz", a.getFoo());
 
-		a = c.getSection("T").toInterface(AInterface.class);
+		a = c.getSection("T").asInterface(AInterface.class).get();
 		assertEquals("qux", a.getFoo());
 
-		assertThrown(()->c.getSection("T").toInterface(ABean.class)).message().is("Class 'org.apache.juneau.config.ConfigTest$ABean' passed to toInterface() is not an interface.");
+		assertThrown(()->c.getSection("T").asInterface(ABean.class).get()).message().is("Class 'org.apache.juneau.config.ConfigTest$ABean' passed to toInterface() is not an interface.");
 	}
 
 	public static interface AInterface {
@@ -1026,17 +1028,17 @@ public class ConfigTest {
 			"[section1]", "key1 = 2", "key2 = false", "key3 = [4,5,6]", "key4 = http://bar"
 		);
 
-		assertInteger(cf.get("key1").toInteger()).is(1);
-		assertBoolean(cf.get("key2").toBoolean()).isTrue();
-		assertInteger(cf.get("key3").to(int[].class)[2]).is(3);
+		assertInteger(cf.get("key1").asInteger().get()).is(1);
+		assertBoolean(cf.get("key2").asBoolean().get()).isTrue();
+		assertInteger(cf.get("key3").as(int[].class).get()[2]).is(3);
 		assertInteger(cf.get("xkey3").as(int[].class).orElse(new int[]{4,5,6})[2]).is(6);
 		assertInteger(cf.get("X/key3").as(int[].class).orElse(new int[]{4,5,6})[2]).is(6);
-		assertEquals(new URL("http://foo").toString(), cf.get("key4").to(URL.class).toString());
+		assertEquals(new URL("http://foo").toString(), cf.get("key4").as(URL.class).get().toString());
 
-		assertInteger(cf.get("section1/key1").toInteger()).is(2);
-		assertBoolean(cf.get("section1/key2").toBoolean()).isFalse();
-		assertInteger(cf.get("section1/key3").to(int[].class)[2]).is(6);
-		assertEquals(new URL("http://bar").toString(), cf.get("section1/key4").to(URL.class).toString());
+		assertInteger(cf.get("section1/key1").asInteger().get()).is(2);
+		assertBoolean(cf.get("section1/key2").asBoolean().get()).isFalse();
+		assertInteger(cf.get("section1/key3").as(int[].class).get()[2]).is(6);
+		assertEquals(new URL("http://bar").toString(), cf.get("section1/key4").as(URL.class).get().toString());
 
 		cf = init(
 			"# Default section",
@@ -1054,15 +1056,15 @@ public class ConfigTest {
 
 		cf.commit();
 
-		assertInteger(cf.get("key1").toInteger()).is(1);
-		assertBoolean(cf.get("key2").toBoolean()).isTrue();
-		assertInteger(cf.get("key3").to(int[].class)[2]).is(3);
-		assertEquals(new URL("http://foo").toString(), cf.get("key4").to(URL.class).toString());
+		assertInteger(cf.get("key1").asInteger().get()).is(1);
+		assertBoolean(cf.get("key2").asBoolean().get()).isTrue();
+		assertInteger(cf.get("key3").as(int[].class).get()[2]).is(3);
+		assertEquals(new URL("http://foo").toString(), cf.get("key4").as(URL.class).get().toString());
 
-		assertInteger(cf.get("section1/key1").toInteger()).is(2);
-		assertBoolean(cf.get("section1/key2").toBoolean()).isFalse();
-		assertInteger(cf.get("section1/key3").to(int[].class)[2]).is(6);
-		assertEquals(new URL("http://bar").toString(), cf.get("section1/key4").to(URL.class).toString());
+		assertInteger(cf.get("section1/key1").asInteger().get()).is(2);
+		assertBoolean(cf.get("section1/key2").asBoolean().get()).isFalse();
+		assertInteger(cf.get("section1/key3").as(int[].class).get()[2]).is(6);
+		assertEquals(new URL("http://bar").toString(), cf.get("section1/key4").as(URL.class).get().toString());
 	}
 
 	//====================================================================================================
@@ -1073,11 +1075,11 @@ public class ConfigTest {
 		Config cf = init(
 			"key1 = MINUTES"
 		);
-		assertEquals(TimeUnit.MINUTES, cf.get("key1").to(TimeUnit.class));
+		assertEquals(TimeUnit.MINUTES, cf.get("key1").as(TimeUnit.class).get());
 
 		cf.commit();
 
-		assertEquals(TimeUnit.MINUTES, cf.get("key1").to(TimeUnit.class));
+		assertEquals(TimeUnit.MINUTES, cf.get("key1").as(TimeUnit.class).get());
 	}
 
 	//====================================================================================================
@@ -1194,7 +1196,7 @@ public class ConfigTest {
 
 		cf.set("foo", "bar".getBytes("UTF-8"));
 		assertEquals("626172", cf.get("foo").getValue());
-		assertObject(cf.get("foo").toBytes()).asJson().is("[98,97,114]");
+		assertObject(cf.get("foo").asBytes().get()).asJson().is("[98,97,114]");
 	}
 
 	//====================================================================================================
@@ -1206,7 +1208,7 @@ public class ConfigTest {
 
 		cf.set("foo", "bar".getBytes("UTF-8"));
 		assertEquals("62 61 72", cf.get("foo").getValue());
-		assertObject(cf.get("foo").toBytes()).asJson().is("[98,97,114]");
+		assertObject(cf.get("foo").asBytes().get()).asJson().is("[98,97,114]");
 	}
 
 	//====================================================================================================
@@ -1238,10 +1240,10 @@ public class ConfigTest {
 			"f3 = 1 M",
 			"f4 = 1 K"
 		);
-		assertInteger(cf.get("s1/f1").toInteger()).is(1048576);
-		assertInteger(cf.get("s1/f2").toInteger()).is(1024);
-		assertInteger(cf.get("s1/f3").toInteger()).is(1048576);
-		assertInteger(cf.get("s1/f4").toInteger()).is(1024);
+		assertInteger(cf.get("s1/f1").asInteger().get()).is(1048576);
+		assertInteger(cf.get("s1/f2").asInteger().get()).is(1024);
+		assertInteger(cf.get("s1/f3").asInteger().get()).is(1048576);
+		assertInteger(cf.get("s1/f4").asInteger().get()).is(1024);
 	}
 
 	//====================================================================================================
@@ -1362,20 +1364,20 @@ public class ConfigTest {
 	@Test
 	public void testGetObjectArray() throws Exception {
 		Config cf = init("[A]", "a1=[1,2,3]");
-		assertObject(cf.get("A/a1").to(Integer[].class)).asJson().is("[1,2,3]");
+		assertObject(cf.get("A/a1").as(Integer[].class).get()).asJson().is("[1,2,3]");
 		assertObject(cf.get("A/a2").as(Integer[].class).orElse(new Integer[]{4,5,6})).asJson().is("[4,5,6]");
 		assertObject(cf.get("B/a1").as(Integer[].class).orElse(new Integer[]{7,8,9})).asJson().is("[7,8,9]");
-		assertNull(cf.get("B/a1").to(Integer[].class));
+		assertFalse(cf.get("B/a1").as(Integer[].class).isPresent());
 
 		cf = init("[A]", "a1 = [1 ,\n\t2 ,\n\t3] ");
-		assertObject(cf.get("A/a1").to(Integer[].class)).asJson().is("[1,2,3]");
+		assertObject(cf.get("A/a1").as(Integer[].class).get()).asJson().is("[1,2,3]");
 
 		// We cannot cast primitive arrays to Object[], so the following throws exceptions.
-		assertObject(cf.get("A/a1").to(int[].class)).asJson().is("[1,2,3]");
-		assertEquals("int", cf.get("A/a1").to(int[].class).getClass().getComponentType().getSimpleName());
-		assertNull(cf.get("B/a1").to(int[].class));
+		assertObject(cf.get("A/a1").as(int[].class).get()).asJson().is("[1,2,3]");
+		assertEquals("int", cf.get("A/a1").as(int[].class).get().getClass().getComponentType().getSimpleName());
+		assertFalse(cf.get("B/a1").as(int[].class).isPresent());
 		assertEquals("int", cf.get("B/a1").as(int[].class).orElse(new int[0]).getClass().getComponentType().getSimpleName());
-		assertNull(cf.get("A/a2").to(int[].class));
+		assertFalse(cf.get("A/a2").as(int[].class).isPresent());
 		assertEquals("int", cf.get("A/a2").as(int[].class).orElse(new int[0]).getClass().getComponentType().getSimpleName());
 
 		assertObject(cf.get("A/a1").as(int[].class).orElse(new int[]{4})).asJson().is("[1,2,3]");
@@ -1400,13 +1402,13 @@ public class ConfigTest {
 	@Test
 	public void testGetStringArray() throws Exception {
 		Config cf = init("[A]", "a1=1,2,3");
-		assertObject(cf.get("A/a1").toStringArray()).asJson().is("['1','2','3']");
+		assertObject(cf.get("A/a1").asStringArray().get()).asJson().is("['1','2','3']");
 		assertObject(cf.get("A/a2").asStringArray().orElse(new String[]{"4","5","6"})).asJson().is("['4','5','6']");
 		assertObject(cf.get("B/a1").asStringArray().orElse(new String[]{"7","8","9"})).asJson().is("['7','8','9']");
-		assertObject(cf.get("B/a1").toStringArray()).isNull();
+		assertObject(cf.get("B/a1").asStringArray().orElse(null)).isNull();
 
 		cf = init("[A]", "a1 = 1 ,\n\t2 ,\n\t3 ");
-		assertObject(cf.get("A/a1").toStringArray()).asJson().is("['1','2','3']");
+		assertObject(cf.get("A/a1").asStringArray().get()).asJson().is("['1','2','3']");
 
 		System.setProperty("X", "4,5,6");
 		cf = init(null, "x1=$C{A/a1}", "x2=$S{X}", "x3=$S{Y}", "x4=$S{Y,$S{X}}", "[A]", "a1=1,2,3");
@@ -1424,15 +1426,15 @@ public class ConfigTest {
 	public void testGetSectionMap() throws Exception {
 		Config cf = init("[A]", "a1=1", "", "[D]", "d1=$C{A/a1}","d2=$S{X}");
 
-		assertObject(cf.getSection("A").toMap()).asJson().is("{a1:'1'}");
-		assertNull(cf.getSection("B").toMap());
-		assertObject(cf.getSection("C").toMap()).asJson().is("null");
+		assertObject(cf.getSection("A").asMap().get()).asJson().is("{a1:'1'}");
+		assertFalse(cf.getSection("B").asMap().isPresent());
+		assertObject(cf.getSection("C").asMap().orElse(null)).asJson().is("null");
 
-		OMap m = cf.getSection("A").toMap();
+		OMap m = cf.getSection("A").asMap().get();
 		assertObject(m).asJson().is("{a1:'1'}");
 
 		System.setProperty("X", "x");
-		m = cf.getSection("D").toMap();
+		m = cf.getSection("D").asMap().get();
 		assertObject(m).asJson().is("{d1:'1',d2:'x'}");
 		System.clearProperty("X");
 	}

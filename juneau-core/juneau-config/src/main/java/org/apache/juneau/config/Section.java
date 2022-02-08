@@ -57,17 +57,6 @@ public class Section {
 	}
 
 	/**
-	 * Shortcut for calling <code>toBean(sectionName, c, <jk>false</jk>)</code>.
-	 *
-	 * @param c The bean class to create.
-	 * @return A new bean instance, or <jk>null</jk> if this section does not exist.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public <T> T toBean(Class<T> c) throws ParseException {
-		return toBean(c, false);
-	}
-
-	/**
 	 * Shortcut for calling <code>asBean(sectionName, c, <jk>false</jk>)</code>.
 	 *
 	 * @param c The bean class to create.
@@ -75,65 +64,7 @@ public class Section {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public <T> Optional<T> asBean(Class<T> c) throws ParseException {
-		return ofNullable(toBean(c));
-	}
-
-	/**
-	 * Converts this config file section to the specified bean instance.
-	 *
-	 * <p>
-	 * Key/value pairs in the config file section get copied as bean property values to the specified bean class.
-	 *
-	 * <h5 class='figure'>Example config file</h5>
-	 * <p class='bini'>
-	 * 	<cs>[MyAddress]</cs>
-	 * 	<ck>name</ck> = <cv>John Smith</cv>
-	 * 	<ck>street</ck> = <cv>123 Main Street</cv>
-	 * 	<ck>city</ck> = <cv>Anywhere</cv>
-	 * 	<ck>state</ck> = <cv>NY</cv>
-	 * 	<ck>zip</ck> = <cv>12345</cv>
-	 * </p>
-	 *
-	 * <h5 class='figure'>Example bean</h5>
-	 * <p class='bjava'>
-	 * 	<jk>public class</jk> Address {
-	 * 		<jk>public</jk> String <jf>name</jf>, <jf>street</jf>, <jf>city</jf>;
-	 * 		<jk>public</jk> StateEnum <jf>state</jf>;
-	 * 		<jk>public int</jk> <jf>zip</jf>;
-	 * 	}
-	 * </p>
-	 *
-	 * <h5 class='figure'>Example usage</h5>
-	 * <p class='bjava'>
-	 * 	Config <jv>config</jv> = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
-	 * 	Address <jv>address</jv> = <jv>config</jv>.getSection(<js>"MySection"</js>).toBean(Address.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param c The bean class to create.
-	 * @param ignoreUnknownProperties
-	 * 	If <jk>false</jk>, throws a {@link ParseException} if the section contains an entry that isn't a bean property
-	 * 	name.
-	 * @return A new bean instance, or <jk>null</jk> if this section doesn't exist.
-	 * @throws ParseException Unknown property was encountered in section.
-	 */
-	public <T> T toBean(Class<T> c, boolean ignoreUnknownProperties) throws ParseException {
-		assertArgNotNull("c", c);
-		if (! isPresent()) return null;
-
-		Set<String> keys = configMap.getKeys(name);
-
-		BeanMap<T> bm = config.beanSession.newBeanMap(c);
-		for (String k : keys) {
-			BeanPropertyMeta bpm = bm.getPropertyMeta(k);
-			if (bpm == null) {
-				if (! ignoreUnknownProperties)
-					throw new ParseException("Unknown property ''{0}'' encountered in configuration section ''{1}''.", k, name);
-			} else {
-				bm.put(k, config.get(name + '/' + k).as(bpm.getClassMeta().getInnerClass()).orElse(null));
-			}
-		}
-
-		return bm.getBean();
+		return asBean(c, false);
 	}
 
 	/**
@@ -175,23 +106,23 @@ public class Section {
 	 * @throws ParseException Unknown property was encountered in section.
 	 */
 	public <T> Optional<T> asBean(Class<T> c, boolean ignoreUnknownProperties) throws ParseException {
-		return ofNullable(toBean(c, ignoreUnknownProperties));
-	}
-
-	/**
-	 * Returns this section as a map.
-	 *
-	 * @return A new {@link OMap}, or <jk>null</jk> if this section doesn't exist.
-	 */
-	public OMap toMap() {
-		if (! isPresent()) return null;
+		assertArgNotNull("c", c);
+		if (! isPresent()) return empty();
 
 		Set<String> keys = configMap.getKeys(name);
 
-		OMap om = new OMap();
-		for (String k : keys)
-			om.put(k, config.get(name + '/' + k).as(Object.class).orElse(null));
-		return om;
+		BeanMap<T> bm = config.beanSession.newBeanMap(c);
+		for (String k : keys) {
+			BeanPropertyMeta bpm = bm.getPropertyMeta(k);
+			if (bpm == null) {
+				if (! ignoreUnknownProperties)
+					throw new ParseException("Unknown property ''{0}'' encountered in configuration section ''{1}''.", k, name);
+			} else {
+				bm.put(k, config.get(name + '/' + k).as(bpm.getClassMeta().getInnerClass()).orElse(null));
+			}
+		}
+
+		return of(bm.getBean());
 	}
 
 	/**
@@ -200,92 +131,14 @@ public class Section {
 	 * @return A new {@link OMap}, or {@link Optional#empty()} if this section doesn't exist.
 	 */
 	public Optional<OMap> asMap() {
-		return ofNullable(toMap());
-	}
+		if (! isPresent()) return empty();
 
-	/**
-	 * Wraps this section inside a Java interface so that values in the section can be read and
-	 * write using getters and setters.
-	 *
-	 * <h5 class='figure'>Example config file</h5>
-	 * <p class='bini'>
-	 * 	<cs>[MySection]</cs>
-	 * 	<ck>string</ck> = <cv>foo</cv>
-	 * 	<ck>int</ck> = <cv>123</cv>
-	 * 	<ck>enum</ck> = <cv>ONE</cv>
-	 * 	<ck>bean</ck> = <cv>{foo:'bar',baz:123}</cv>
-	 * 	<ck>int3dArray</ck> = <cv>[[[123,null],null],null]</cv>
-	 * 	<ck>bean1d3dListMap</ck> = <cv>{key:[[[[{foo:'bar',baz:123}]]]]}</cv>
-	 * </p>
-	 *
-	 * <h5 class='figure'>Example interface</h5>
-	 * <p class='bjava'>
-	 * 	<jk>public interface</jk> MyConfigInterface {
-	 *
-	 * 		String getString();
-	 * 		<jk>void</jk> setString(String <jv>value</jv>);
-	 *
-	 * 		<jk>int</jk> getInt();
-	 * 		<jk>void</jk> setInt(<jk>int</jk> <jv>value</jv>);
-	 *
-	 * 		MyEnum getEnum();
-	 * 		<jk>void</jk> setEnum(MyEnum <jv>value</jv>);
-	 *
-	 * 		MyBean getBean();
-	 * 		<jk>void</jk> setBean(MyBean <jv>value</jv>);
-	 *
-	 * 		<jk>int</jk>[][][] getInt3dArray();
-	 * 		<jk>void</jk> setInt3dArray(<jk>int</jk>[][][] <jv>value</jv>);
-	 *
-	 * 		Map&lt;String,List&lt;MyBean[][][]&gt;&gt; getBean1d3dListMap();
-	 * 		<jk>void</jk> setBean1d3dListMap(Map&lt;String,List&lt;MyBean[][][]&gt;&gt; <jv>value</jv>);
-	 * 	}
-	 * </p>
-	 *
-	 * <h5 class='figure'>Example usage</h5>
-	 * <p class='bjava'>
-	 * 	Config <jv>config</jv> = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
-	 *
-	 * 	MyConfigInterface <jv>ci</jv> = <jv>config</jv>.get(<js>"MySection"</js>).toInterface(MyConfigInterface.<jk>class</jk>);
-	 *
-	 * 	<jk>int</jk> <jv>myInt</jv> = <jv>ci</jv>.getInt();
-	 *
-	 * 	<jv>ci</jv>.setBean(<jk>new</jk> MyBean());
-	 *
-	 * 	<jv>ci</jv>.save();
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>Calls to setters when the configuration is read-only will cause {@link UnsupportedOperationException} to be thrown.
-	 * </ul>
-	 *
-	 * @param c The proxy interface class.
-	 * @return The proxy interface.
-	 */
-	@SuppressWarnings("unchecked")
-	public <T> T toInterface(final Class<T> c) {
-		assertArgNotNull("c", c);
+		Set<String> keys = configMap.getKeys(name);
 
-		if (! c.isInterface())
-			throw illegalArgumentException("Class ''{0}'' passed to toInterface() is not an interface.", c.getName());
-
-		InvocationHandler h = new InvocationHandler() {
-
-			@Override
-			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-				BeanInfo bi = Introspector.getBeanInfo(c, null);
-				for (PropertyDescriptor pd : bi.getPropertyDescriptors()) {
-					Method rm = pd.getReadMethod(), wm = pd.getWriteMethod();
-					if (method.equals(rm))
-						return config.get(name + '/' + pd.getName()).to(rm.getGenericReturnType());
-					if (method.equals(wm))
-						return config.set(name + '/' + pd.getName(), args[0]);
-				}
-				throw unsupportedOperationException("Unsupported interface method.  method=''{0}''", method);
-			}
-		};
-
-		return (T)Proxy.newProxyInstance(c.getClassLoader(), new Class[] { c }, h);
+		OMap om = new OMap();
+		for (String k : keys)
+			om.put(k, config.get(name + '/' + k).as(Object.class).orElse(null));
+		return of(om);
 	}
 
 	/**
@@ -347,8 +200,30 @@ public class Section {
 	 * @param c The proxy interface class.
 	 * @return The proxy interface.
 	 */
+	@SuppressWarnings("unchecked")
 	public <T> Optional<T> asInterface(final Class<T> c) {
-		return ofNullable(toInterface(c));
+		assertArgNotNull("c", c);
+
+		if (! c.isInterface())
+			throw illegalArgumentException("Class ''{0}'' passed to toInterface() is not an interface.", c.getName());
+
+		InvocationHandler h = new InvocationHandler() {
+
+			@Override
+			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+				BeanInfo bi = Introspector.getBeanInfo(c, null);
+				for (PropertyDescriptor pd : bi.getPropertyDescriptors()) {
+					Method rm = pd.getReadMethod(), wm = pd.getWriteMethod();
+					if (method.equals(rm))
+						return config.get(name + '/' + pd.getName()).as(rm.getGenericReturnType()).orElse(null);
+					if (method.equals(wm))
+						return config.set(name + '/' + pd.getName(), args[0]);
+				}
+				throw unsupportedOperationException("Unsupported interface method.  method=''{0}''", method);
+			}
+		};
+
+		return ofNullable((T)Proxy.newProxyInstance(c.getClassLoader(), new Class[] { c }, h));
 	}
 
 	/**
