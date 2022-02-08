@@ -27,12 +27,12 @@ import org.apache.http.Header;
 import org.apache.http.entity.*;
 import org.apache.http.message.*;
 import org.apache.http.params.*;
+import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
-import org.apache.juneau.utils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -78,7 +78,7 @@ public class RestClient_Response_Test {
 
 	@Test
 	public void a02_getStatusLine_Mutable() throws RestCallException {
-		Mutable<StatusLine> m = Mutable.create();
+		Value<StatusLine> m = Value.empty();
 		client().build().get("/bean").run().getStatusLine(m);
 		assertEquals(200,m.get().getStatusCode());
 	}
@@ -90,7 +90,7 @@ public class RestClient_Response_Test {
 
 	@Test
 	public void a04_getStatusCode_Mutable() throws RestCallException {
-		Mutable<Integer> m = Mutable.create();
+		Value<Integer> m = Value.empty();
 		client().build().get("/bean").run().getStatusCode(m);
 		assertEquals(200,m.get().intValue());
 	}
@@ -102,7 +102,7 @@ public class RestClient_Response_Test {
 
 	@Test
 	public void a06_getReasonPhrase_Mutable() throws RestCallException {
-		Mutable<String> m = Mutable.create();
+		Value<String> m = Value.empty();
 		client().build().get("/bean").run().getReasonPhrase(m);
 		assertNull(m.get());
 	}

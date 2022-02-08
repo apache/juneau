@@ -20,8 +20,8 @@ import static org.junit.runners.MethodSorters.*;
 import java.util.function.*;
 
 import org.apache.http.*;
+import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.utils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -73,7 +73,7 @@ public class BasicHeader_Test {
 
 	@Test
 	public void a08_getElements() {
-		Mutable<Integer> m = Mutable.of(1);
+		Value<Integer> m = Value.of(1);
 		Header h1 = header("X1","1");
 		Header h2 = header("X2",()->m);
 		Header h3 = header("X3",null);
@@ -89,11 +89,11 @@ public class BasicHeader_Test {
 
 		x = h2.getElements();
 		assertEquals(1, x.length);
-		assertEquals("1", x[0].getName());
+		assertEquals("Value(1)", x[0].getName());
 		m.set(2);
 		x = h2.getElements();
 		assertEquals(1, x.length);
-		assertEquals("2", x[0].getName());
+		assertEquals("Value(2)", x[0].getName());
 
 		x = h3.getElements();
 		assertEquals(0, x.length);

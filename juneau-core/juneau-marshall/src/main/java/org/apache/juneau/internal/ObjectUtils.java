@@ -17,9 +17,9 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.reflect.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Various generic object utility methods.
@@ -161,7 +161,7 @@ public class ObjectUtils {
 	}
 
 	/**
-	 * If the specified object is a {@link Supplier} or {@link Mutable}, returns the inner value, otherwise the same value.
+	 * If the specified object is a {@link Supplier} or {@link Value}, returns the inner value, otherwise the same value.
 	 *
 	 * @param o The object to unwrap.
 	 * @return The unwrapped object.
@@ -169,8 +169,8 @@ public class ObjectUtils {
 	public static Object unwrap(Object o) {
 		while (o instanceof Supplier)
 			o = ((Supplier<?>)o).get();
-		while (o instanceof Mutable)
-			o = ((Mutable<?>)o).get();
+		while (o instanceof Value)
+			o = ((Value<?>)o).get();
 		return o;
 	}
 

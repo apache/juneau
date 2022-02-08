@@ -30,7 +30,6 @@ import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.client.assertion.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Represents a single header on an HTTP response.
@@ -334,11 +333,11 @@ public class ResponseHeader implements Header {
 	/**
 	 * Same as {@link #asString()} but sets the value in a mutable for fluent calls.
 	 *
-	 * @param m The mutable to set the header value in.
+	 * @param value The mutable to set the header value in.
 	 * @return This object.
 	 */
-	public RestResponse asString(Mutable<String> m) {
-		m.set(orElse(null));
+	public RestResponse asString(Value<String> value) {
+		value.set(orElse(null));
 		return response;
 	}
 
@@ -364,7 +363,7 @@ public class ResponseHeader implements Header {
 	 * <p>
 	 * See {@doc jm.ComplexDataTypes Complex Data Types} for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
 	 *
-	 * @param m The mutable to set the parsed header value in.
+	 * @param value The mutable to set the parsed header value in.
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @param args The type parameters.
@@ -372,8 +371,8 @@ public class ResponseHeader implements Header {
 	 * @throws RestCallException If value could not be parsed.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> RestResponse asType(Mutable<T> m, Type type, Type...args) throws RestCallException {
-		m.set((T)asType(type, args).orElse(null));
+	public <T> RestResponse asType(Value<T> value, Type type, Type...args) throws RestCallException {
+		value.set((T)asType(type, args).orElse(null));
 		return response;
 	}
 
@@ -392,14 +391,14 @@ public class ResponseHeader implements Header {
 	/**
 	 * Same as {@link #asType(Class)} but sets the value in a mutable for fluent calls.
 	 *
-	 * @param m The mutable to set the parsed header value in.
+	 * @param value The mutable to set the parsed header value in.
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @return This object.
 	 * @throws RestCallException If value could not be parsed.
 	 */
-	public <T> RestResponse asType(Mutable<T> m, Class<T> type) throws RestCallException {
-		m.set(asType(type).orElse(null));
+	public <T> RestResponse asType(Value<T> value, Class<T> type) throws RestCallException {
+		value.set(asType(type).orElse(null));
 		return response;
 	}
 
@@ -422,14 +421,14 @@ public class ResponseHeader implements Header {
 	/**
 	 * Same as {@link #asType(ClassMeta)} but sets the value in a mutable for fluent calls.
 	 *
-	 * @param m The mutable to set the parsed header value in.
+	 * @param value The mutable to set the parsed header value in.
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @return This object.
 	 * @throws RestCallException If value could not be parsed.
 	 */
-	public <T> RestResponse asType(Mutable<T> m, ClassMeta<T> type) throws RestCallException {
-		m.set(asType(type).orElse(null));
+	public <T> RestResponse asType(Value<T> value, ClassMeta<T> type) throws RestCallException {
+		value.set(asType(type).orElse(null));
 		return response;
 	}
 

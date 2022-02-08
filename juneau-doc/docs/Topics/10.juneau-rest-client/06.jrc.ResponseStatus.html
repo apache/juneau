@@ -43,8 +43,8 @@
 	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
 		|	<jc>// Interested in multiple values.</jc>
-		|	Mutable&lt;Integer&gt; <jv>statusCode</jv> = Mutable.<jsm>create</jsm>();
-		|	Mutable&lt;String&gt; <jv>reasonPhrase</jv> = Mutable.<jsm>create</jsm>();
+		|	Value&lt;Integer&gt; <jv>statusCode</jv> = Value.<jsm>empty</jsm>();
+		|	Value&lt;String&gt; <jv>reasonPhrase</jv> = Value.<jsm>empty</jsm>();
 		|	
 		|	<jv>client</jv>.get(<jsf>URI</jsf>).complete().getStatusCode(<jv>statusCode</jv>).getReasonPhrase(<jv>reasonPhrase</jv>);
 		|	System.<jsf>err</jsf>.println(<js>"statusCode="</js>+<jv>statusCode</jv>.get()+<js>", reasonPhrase="</js>+<jv>reasonPhrase</jv>.get());

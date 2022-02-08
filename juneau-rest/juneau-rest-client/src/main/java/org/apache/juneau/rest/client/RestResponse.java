@@ -32,7 +32,6 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Represents a response from a remote REST resource.
@@ -109,11 +108,11 @@ public class RestResponse implements HttpResponse {
 	/**
 	 * Same as {@link #getStatusLine()} but sets the value in a mutable for fluent calls.
 	 *
-	 * @param m The mutable to set the status line in.
+	 * @param value The mutable to set the status line in.
 	 * @return This object.
 	 */
-	public RestResponse getStatusLine(Mutable<StatusLine> m) {
-		m.set(getStatusLine());
+	public RestResponse getStatusLine(Value<StatusLine> value) {
+		value.set(getStatusLine());
 		return this;
 	}
 
@@ -131,11 +130,11 @@ public class RestResponse implements HttpResponse {
 	/**
 	 * Same as {@link #getStatusCode()} but sets the value in a mutable for fluent calls.
 	 *
-	 * @param m The mutable to set the status code in.
+	 * @param value The mutable to set the status code in.
 	 * @return This object.
 	 */
-	public RestResponse getStatusCode(Mutable<Integer> m) {
-		m.set(getStatusCode());
+	public RestResponse getStatusCode(Value<Integer> value) {
+		value.set(getStatusCode());
 		return this;
 	}
 
@@ -153,11 +152,11 @@ public class RestResponse implements HttpResponse {
 	/**
 	 * Same as {@link #getReasonPhrase()} but sets the value in a mutable for fluent calls.
 	 *
-	 * @param m The mutable to set the status line reason phrase in.
+	 * @param value The mutable to set the status line reason phrase in.
 	 * @return This object.
 	 */
-	public RestResponse getReasonPhrase(Mutable<String> m) {
-		m.set(getReasonPhrase());
+	public RestResponse getReasonPhrase(Value<String> value) {
+		value.set(getReasonPhrase());
 		return this;
 	}
 

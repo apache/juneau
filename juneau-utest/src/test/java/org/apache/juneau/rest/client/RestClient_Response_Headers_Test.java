@@ -30,7 +30,6 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
-import org.apache.juneau.utils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -88,7 +87,7 @@ public class RestClient_Response_Headers_Test {
 		String s = checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asString().orElse(null);
 		assertEquals("bar", s);
 
-		Mutable<String> m = Mutable.create();
+		Value<String> m = Value.empty();
 		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asString(m);
 		assertEquals("bar", m.get());
 
@@ -109,14 +108,14 @@ public class RestClient_Response_Headers_Test {
 		Integer i = checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Foo").asType(Integer.class).orElse(null);
 		assertEquals(123, i.intValue());
 
-		Mutable<Integer> m1 = Mutable.create();
+		Value<Integer> m1 = Value.empty();
 		checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Foo").asType(m1,Integer.class);
 		assertEquals(123, m1.get().intValue());
 
 		List<Integer> l = (List<Integer>) checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").asType(LinkedList.class,Integer.class).get();
 		assertObject(l).asJson().is("[1,2]");
 
-		Mutable<Integer> m2 = Mutable.create();
+		Value<Integer> m2 = Value.empty();
 		checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").asType(m2,LinkedList.class,Integer.class);
 
 		ClassMeta<LinkedList<Integer>> cm1 = BeanContext.DEFAULT.getClassMeta(LinkedList.class, Integer.class);
@@ -125,7 +124,7 @@ public class RestClient_Response_Headers_Test {
 		l = checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").asType(cm1).get();
 		assertObject(l).asJson().is("[1,2]");
 
-		Mutable<LinkedList<Integer>> m3 = Mutable.create();
+		Value<LinkedList<Integer>> m3 = Value.empty();
 		checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").asType(m3,cm1);
 		assertObject(m3.get()).asJson().is("[1,2]");
 
