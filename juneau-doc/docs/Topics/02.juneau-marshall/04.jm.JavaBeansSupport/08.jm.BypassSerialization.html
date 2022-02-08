@@ -21,7 +21,7 @@
 		simply serializing their contents directly to the output stream or writer.
 		This allows you to embed fully customized serializer output.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> MyBean {
 		|		<jc>// A bean property that produces raw JSON.</jc>
 		|		<jk>public</jk> Reader <jf>f1</jf> = <jk>new</jk> StringReader(<js>"{'foo':'bar'}"</js>);	
@@ -40,7 +40,7 @@
 		In the following example, we're customizing the JSON output for a particular bean type, but leaving
 		all other renditions as-is:
 	</p>			
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Swap</ja>(MyBeanSwapSometimes.<jk>class</jk>)
 		|	<jk>public class</jk> MyBean {...}
 		|	
@@ -48,8 +48,8 @@
 		|	<jc>// all other media types.</jc>
 		|	<jk>public class</jk> MyBeanSwapSometimes <jk>extends</jk> ObjectSwap&lt;MyBean,Object&gt; {
 		|		<jk>public</jk> Object swap(BeanSession <jv>session</jv>, MyPojo <jv>object</jv>) <jk>throws</jk> Exception {
-		|			MediaType <jv>mt</jv> = <jv>session</jv>.getMediaType();
-		|			<jk>if</jk> (<jv>mt</jv>.hasSubType(<js>"json"</js>))
+		|			MediaType <jv>mediaType</jv> = <jv>session</jv>.getMediaType();
+		|			<jk>if</jk> (<jv>mediaType</jv>.hasSubType(<js>"json"</js>))
 		|				<jk>return new</jk> StringReader(<js>"{myPojo:'foobar'}"</js>);  <jc>// Custom JSON output</jc>
 		|			<jk>return</jk> <jv>object</jv>;  <jc>// Otherwise serialize it as a normal bean</jc>
 		|		}

@@ -26,7 +26,7 @@
 		The following shows a simple example of invoking a PUT method on a simple REST interface and asserting
 		the correct status code and response body: 
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> MockTest {
 		|
 		|		<jc>// A simple bean with one field.</jc>
@@ -69,7 +69,7 @@
 	<p>
 		Breaking apart the fluent method call above will help you understand how this works.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Test</ja>
 		|	<jk>public void</jk> testEcho() <jk>throws</jk> Exception {
 		|
@@ -105,7 +105,7 @@
 		The latter is particularly useful for testing REST APIs written as Spring beans.
 	</p>
 	
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@RunWith</ja>(SpringRunner.<jk>class</jk>)
 		|	<ja>@ContextConfiguration</ja>(classes = {MyApp.<jk>class</jk>})
 		|	<ja>@SpringBootTest</ja>
@@ -120,7 +120,7 @@
 		|		<jk>public void</jk> setup() {
 		|			<jc>// Instantiate our mock client.</jc>
 		|			<jf>client</jf> = MockRestClient
-		|				.<jsm>create</jsm>(echoRest)
+		|				.<jsm>create</jsm>(<jf>echoRest</jf>)
 		|				.simpleJson()
 		|				.build();
 		|		}
@@ -151,7 +151,7 @@
 		this can be used to directly set roles on the request object to perform security testing.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(roleGuard=<js>"ADMIN"</js>)
 		|	<jk>public</jk> class A {
 		|		<ja>@RestGet</ja>
@@ -174,7 +174,7 @@
 		The {@del oajr.mock2.MockRestClient} class has a debug mode that will cause your HTTP requests and responses to
 		be sent to the console:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	MockRestClient <jv>client</jv> = MockRestClient
 		|		.<jsm>create</jsm>(MyRest.<jk>class</jk>)
 		|		.debug()
@@ -187,7 +187,7 @@
 		interfaces against {@link oajr.annotation.Rest @Rest}-annotated resources.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Our remote resource to test.</jc>
 		|	<ja>@Remote</ja>
 		|	<jk>public interface</jk> MyRemoteInterface {

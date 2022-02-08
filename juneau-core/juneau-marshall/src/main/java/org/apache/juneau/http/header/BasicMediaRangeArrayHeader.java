@@ -23,7 +23,7 @@ import java.util.function.*;
  *
  * <p>
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Accept: application/json;q=0.9,text/xml;q=0.1
  * </p>
  *

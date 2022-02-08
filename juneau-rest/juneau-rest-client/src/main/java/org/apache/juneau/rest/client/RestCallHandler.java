@@ -37,7 +37,7 @@ import org.apache.http.protocol.*;
  * The {@link BasicRestCallHandler} shows an example of a simple pass-through handler.  Note that you must handle
  * the case where {@link HttpHost} is null.
  *
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jk>public class</jk> BasicRestCallHandler <jk>implements</jk> RestCallHandler {
  *
  * 		<jk>private final</jk> RestClient <jf>client</jf>;

@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * <p>
  * The syntax expected to be found in the referenced <c>value</c> complies with the syntax described in
  * RFC2616, Section 14.1, as described below:
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Accept         = "Accept" ":"
  * 	                  #( media-range [ accept-params ] )
  *

@@ -95,17 +95,17 @@ public class RestClient_Response_Body_Test {
 
 	@Test
 	public void a01_basic() throws Exception {
-		client().build().post("/echo",bean).run().assertBody().asType(ABean.class).asJson().is("{f:1}");
+		client().build().post("/echo",bean).run().assertBody().as(ABean.class).asJson().is("{f:1}");
 		client().build().post("/echo",bean).run().assertBody().asBytes().asString().is("{f:1}");
 	}
 
 	@Test
 	public void a02_overrideParser() throws Exception {
 		RestClient x = client().build();
-		ABean b = x.post("/echo",bean).run().getBody().parser(JsonParser.DEFAULT).asType(ABean.class);
+		ABean b = x.post("/echo",bean).run().getBody().parser(JsonParser.DEFAULT).as(ABean.class);
 		assertObject(b).asJson().is("{f:1}");
-		assertThrown(()->x.post("/echo",bean).run().getBody().parser(XmlParser.DEFAULT).asType(ABean.class)).messages().any(contains("ParseError at [row,col]:[1,1]"));
-		assertThrown(()->x.post("/echo",bean).run().getBody().parser(XmlParser.DEFAULT).assertValue().asType(ABean.class)).messages().any(contains("ParseError at [row,col]:[1,1]"));
+		assertThrown(()->x.post("/echo",bean).run().getBody().parser(XmlParser.DEFAULT).as(ABean.class)).messages().any(contains("ParseError at [row,col]:[1,1]"));
+		assertThrown(()->x.post("/echo",bean).run().getBody().parser(XmlParser.DEFAULT).assertValue().as(ABean.class)).messages().any(contains("ParseError at [row,col]:[1,1]"));
 	}
 
 	@Test
@@ -211,22 +211,22 @@ public class RestClient_Response_Body_Test {
 
 	@Test
 	public void a07_asType() throws Exception {
-		List<Integer> x1 = testClient().entity(stringEntity("[1,2]")).get().run().getBody().asType(List.class,Integer.class);
+		List<Integer> x1 = testClient().entity(stringEntity("[1,2]")).get().run().getBody().as(List.class,Integer.class);
 		assertObject(x1).asJson().is("[1,2]");
 
-		ABean x3 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().asType(ABean.class);
+		ABean x3 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().as(ABean.class);
 		assertObject(x3).asJson().is("{f:1}");
 
-		HttpEntity x5 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().asType(ResponseBody.class);
+		HttpEntity x5 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().as(ResponseBody.class);
 		assertTrue(x5 instanceof ResponseBody);
 
-		HttpEntity x6 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().asType(HttpEntity.class);
+		HttpEntity x6 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().as(HttpEntity.class);
 		assertTrue(x6 instanceof ResponseBody);
 
-		plainTestClient().entity(stringEntity("foo")).get().run().assertBody().asType(A7a.class).is(x->x.x.equals("foo"));
-		plainTestClient().entity(stringEntity("foo")).get().run().assertBody().asType(A7b.class).is(x->x.x.equals("foo"));
-		assertThrown(()->plainTestClient().entity(stringEntity("foo")).headers(header("Content-Type","foo")).get().run().getBody().asType(A7c.class)).exists().messages().any(contains("Unsupported media-type"));
-		assertThrown(()->testClient().entity(stringEntity("")).get().run().getBody().asType(A7c.class)).messages().contains("foo");
+		plainTestClient().entity(stringEntity("foo")).get().run().assertBody().as(A7a.class).is(x->x.x.equals("foo"));
+		plainTestClient().entity(stringEntity("foo")).get().run().assertBody().as(A7b.class).is(x->x.x.equals("foo"));
+		assertThrown(()->plainTestClient().entity(stringEntity("foo")).headers(header("Content-Type","foo")).get().run().getBody().as(A7c.class)).exists().messages().any(contains("Unsupported media-type"));
+		assertThrown(()->testClient().entity(stringEntity("")).get().run().getBody().as(A7c.class)).messages().contains("foo");
 
 		Future<ABean> x8 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().asFuture(ABean.class);
 		assertObject(x8.get()).asJson().is("{f:1}");

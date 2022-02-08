@@ -24,7 +24,7 @@ import org.apache.juneau.http.annotation.*;
  * Informs the client of proxies through which the response was sent.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Via: 1.0 fred, 1.1 example.com (Apache/1.1)
  * </p>
  *
@@ -33,7 +33,7 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Via: 1.0 fred, 1.1 example.com (Apache/1.1)
  * </p>
  *
@@ -46,7 +46,7 @@ import org.apache.juneau.http.annotation.*;
  * It is analogous to the "Received" field of RFC 822 and is intended to be used for tracking message forwards,
  * avoiding request loops, and identifying the protocol capabilities of all senders along the request/response chain.
  *
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Via =  "Via" ":" 1#( received-protocol received-by [ comment ] )
  * 	received-protocol = [ protocol-name "/" ] protocol-version
  * 	protocol-name     = token
@@ -84,7 +84,7 @@ import org.apache.juneau.http.annotation.*;
  * which uses HTTP/1.1 to forward the request to a public proxy at nowhere.com, which completes the request by
  * forwarding it to the origin server at www.ics.uci.edu.
  * The request received by www.ics.uci.edu would then have the following Via header field:
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Via: 1.0 fred, 1.1 nowhere.com (Apache/1.1)
  * </p>
  *
@@ -99,13 +99,13 @@ import org.apache.juneau.http.annotation.*;
  * For organizations that have strong privacy requirements for hiding internal structures, a proxy MAY combine an
  * ordered subsequence of Via header field entries with identical received-protocol values into a single such entry.
  * For example...
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Via: 1.0 ricky, 1.1 ethel, 1.1 fred, 1.0 lucy
  * </p>
  *
  * <p>
  * ...could be collapsed to...
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Via: 1.0 ricky, 1.1 mertz, 1.0 lucy
  * </p>
  *

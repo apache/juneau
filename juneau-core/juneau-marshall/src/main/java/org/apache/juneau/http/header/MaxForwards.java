@@ -23,7 +23,7 @@ import org.apache.juneau.http.annotation.*;
  * Limit the number of times the message can be forwarded through proxies or gateways.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Max-Forwards: 10
  * </p>
  *
@@ -34,7 +34,7 @@ import org.apache.juneau.http.annotation.*;
  * This can be useful when the client is attempting to trace a request chain which appears to be failing or looping in
  * mid-chain.
  *
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Max-Forwards   = "Max-Forwards" ":" 1*DIGIT
  * </p>
  *

@@ -70,7 +70,7 @@ public class UrlPath {
 	 * <p>
 	 * For example, given the path <js>"/foo/bar.txt"</js>, this returns <js>"bar.txt"</js>.
 	 *
-	 * @return The filename portion of the path, or <jk>null<jk> if the path doesn't match a file name.
+	 * @return The filename portion of the path, or <jk>null</jk> if the path doesn't match a file name.
 	 */
 	public Optional<String> getFileName() {
 		if (parts.length == 0)

@@ -21,16 +21,16 @@ import org.apache.juneau.jena.*;
  * 	The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.
  *
  * <h5 class='figure'>Examples:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
- * 	RdfXml rdfXml = <jk>new</jk> RdfXml();
- * 	MyPojo myPojo = rdfXml.read(string, MyPojo.<jk>class</jk>);
- * 	String string = rdfXml.write(myPojo);
+ * 	RdfXml <jv>rdfXml</jv> = <jk>new</jk> RdfXml();
+ * 	MyPojo <jv>myPojo</jv> = <jv>rdfXml</jv>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = <jv>rdfXml</jv>.write(<jv>myPojo</jv>);
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  *	<jc>// Using DEFAULT instance.</jc>
- * 	MyPojo myPojo = RdfXml.<jsf>DEFAULT</jsf>.read(string, MyPojo.<jk>class</jk>);
- * 	String string = RdfXml.<jsf>DEFAULT</jsf>.write(myPojo);
+ * 	MyPojo <jv>myPojo</jv> = RdfXml.<jsf>DEFAULT</jsf>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = RdfXml.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
  * </p>
  *
  * <ul class='seealso'>

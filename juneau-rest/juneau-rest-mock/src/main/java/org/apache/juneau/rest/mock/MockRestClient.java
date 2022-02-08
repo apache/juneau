@@ -88,7 +88,7 @@ import org.apache.juneau.utils.*;
  * The following shows a simple example of invoking a PUT method on a simple REST interface and asserting the correct status code and response body:
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jk>public class</jk> MockTest {
  *
  * 		<jc>// A simple bean with one field.</jc>
@@ -136,7 +136,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * 	Breaking apart the fluent method call above will help you understand how this works.
  *
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@Test</ja>
  * 	<jk>public void</jk> testEcho() <jk>throws</jk> Exception {
  *
@@ -147,7 +147,7 @@ import org.apache.juneau.utils.*;
  * 			.build();
  *
  * 		<jc>// Create a request.</jc>
- * 		RestRequest <jv>req</jv> = <jv>client</jv>.put(<js>"/echo"</js>, <jv>myBean</jv>);
+ * 		RestRequest <jv>req</jv> = <jv>client</jv>.put(<js>"/echo"</js>, <jv>bean</jv>);
  *
  * 		<jc>// Execute it (by calling RestCallHandler.service(...) and then returning the response object).</jc>
  * 		RestResponse <jv>res</jv> = <jv>req</jv>.run();
@@ -157,7 +157,7 @@ import org.apache.juneau.utils.*;
  * 		<jv>res</jv>.assertBody().is(<js>"'foo'"</js>);
  *
  * 		<jc>// Convert the body of the response to a bean.</jc>
- * 		<jv>myBean</jv> = <jv>res</jv>.getBody().as(MyBean.<jk>class</jk>);
+ * 		<jv>bean</jv> = <jv>res</jv>.getBody().as(MyBean.<jk>class</jk>);
  * 	}
  * </p>
  *
@@ -171,7 +171,7 @@ import org.apache.juneau.utils.*;
  * 	this can be used to directly set roles on the request object to perform security testing.
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@Rest</ja>(roleGuard=<js>"ADMIN"</js>)
  * 	<jk>public class</jk> A {
  * 		<ja>@RestGet</ja>
@@ -194,7 +194,7 @@ import org.apache.juneau.utils.*;
  * 	Debug mode is provided that will cause your HTTP requests and responses to be sent to the console:
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	MockRestClient <jv>client</jv> = MockRestClient
  * 		.<jsm>create</jsm>(MyRest.<jk>class</jk>)
  * 		.debug()
@@ -206,7 +206,7 @@ import org.apache.juneau.utils.*;
  * 	The class can also be used for testing of {@link Remote @Remote}-annotated interfaces against {@link Rest @Rest}-annotated resources.
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Our remote resource to test.</jc>
  * 	<ja>@Remote</ja>
  * 	<jk>public interface</jk> MyRemoteInterface {
@@ -286,7 +286,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 *
 	 * <p>
 	 * Equivalent to calling:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	MockRestClient.<jsm>create</jsm>(<jv>impl</jv>).build();
 	 * </p>
 	 *
@@ -307,7 +307,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 *
 	 * <p>
 	 * Equivalent to calling:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	MockRestClient.<jsm>create</jsm>(<jv>impl</jv>).ignoreErrors().noTrace().build();
 	 * </p>
 	 *
@@ -325,7 +325,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 *
 	 * <p>
 	 * Equivalent to calling:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	MockRestClient.<jsm>create</jsm>(<jv>impl</jv>).json().build();
 	 * </p>
 	 *
@@ -346,7 +346,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 *
 	 * <p>
 	 * Equivalent to calling:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	MockRestClient.<jsm>create</jsm>(<jv>impl</jv>).json().ignoreErrors().build();
 	 * </p>
 	 *
@@ -364,7 +364,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 *
 	 * <p>
 	 * Equivalent to calling:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	MockRestClient.<jsm>create</jsm>(<jv>impl</jv>).json().build();
 	 * </p>
 	 *
@@ -385,7 +385,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	 *
 	 * <p>
 	 * Equivalent to calling:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	MockRestClient.<jsm>create</jsm>(<jv>impl</jv>).json().ignoreErrors().build();
 	 * </p>
 	 *
@@ -510,7 +510,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		 * Allows you to add resolved parent path variables when performing tests on child resource classes.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A parent class with a path variable.</jc>
 		 * 	<ja>@Rest</ja>(
 		 * 		path=<js>"/parent/{foo}"</js>,
@@ -526,11 +526,11 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		 *
 		 * 		<jk>@RestGet</jk>
 		 * 		<jk>public</jk> String get(<ja>@Path</ja>(<js>"foo"</js>) String <jv>foo</jv>) {
-		 * 			<jk>return</jk> <jv>foo<jv>;
+		 * 			<jk>return</jk> <jv>foo</jv>;
 		 * 		}
 		 * 	}
 		 * </p>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Test the method that uses the parent path variable.</jc>
 		 * 	MockRestClient
 		 * 		.<jsm>create</jsm>(Child.<jk>class</jk>)

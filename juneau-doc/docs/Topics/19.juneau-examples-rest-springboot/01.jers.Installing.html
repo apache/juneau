@@ -45,7 +45,7 @@
 			our root resource as a spring bean.
 			<br>Only the top-level resource needs to be annotated with {@del oaj.rest.springboot.annotation.JuneauRestRoot @JuneauRestRoot}
 			<br><br>
-			<p class='bcode w800'>
+			<p class='bjava'>
 		<ja>@SpringBootApplication</ja>
 		<ja>@Controller</ja>
 		<jk>public class</jk> App {
@@ -66,7 +66,7 @@
 			<l>RootResources.java</l> - The top-level REST resource. 
 			<br>This class routes HTTP requests to child resources:
 			<br><br>
-			<p class='bcode w800'>
+			<p class='bjava'>
 		<ja>@Rest</ja>(
 			path=<js>"/*"</js>,
 			title=<js>"Root resources"</js>,
@@ -118,7 +118,7 @@
 			<br>Note that the Jetty configuration is not present.
 			<br>Also it's located in the classpath so that our microservice can be built as a single executable jar. 
 			<br><br>
-			<p class='bcode w800'>
+			<p class='bini'>
 		<cc>#=======================================================================================================================
 		# Basic configuration file for REST microservices
 		# Subprojects can use this as a starting point.

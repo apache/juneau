@@ -35,7 +35,7 @@ import org.apache.juneau.svl.*;
  * <p>
  * The following code shows the general design pattern.
  *
- * <p class 'bcode w800'>
+ * <p class 'bjava'>
  * 	<jc>// The annotation applied to classes and methods.</jc>
  * 	<ja>@Target</ja>({METHOD,TYPE})
  * 	<ja>@Retention</ja>(<jsf>RUNTIME</jsf>)

@@ -29,7 +29,7 @@
 		</li>
 	</ul>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@RestGet</ja>(...)
 		|	<ja>@HtmlDocConfig</ja>(
 		|		widgets={
@@ -72,13 +72,13 @@
 		It shows an example of a widget that renders an image located in the <c>htdocs</c> static files
 		directory in your classpath (see {@link oajr.annotation.Rest#staticFiles() @Rest(staticFiles)}):
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> MyWidget <jk>extends</jk> Widget {
 		|
 		|		<ja>@Override</ja> <jc>/* Widget */</jc>
 		|		<jk>public</jk> String getHtml(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
-		|			UriResolver <jv>r</jv> = <jv>req</jv>.getUriResolver(); <jc>// API used for resolving URIs.</jc>
-		|			<jk>return</jk> <js>"&lt;img class='myimage' onclick='myalert(this)' src='"</js>+<jv>r</jv>.resolve(<js>"servlet:/htdocs/myimage.png"</js>)+<js>"'&gt;"</js>;
+		|			UriResolver <jv>resolver</jv> = <jv>req</jv>.getUriResolver(); <jc>// API used for resolving URIs.</jc>
+		|			<jk>return</jk> <js>"&lt;img class='myimage' onclick='myalert(this)' src='"</js>+<jv>resolver</jv>.resolve(<js>"servlet:/htdocs/myimage.png"</js>)+<js>"'&gt;"</js>;
 		|		}
 		|
 		|		<ja>@Override</ja> <jc>/* Widget */</jc>

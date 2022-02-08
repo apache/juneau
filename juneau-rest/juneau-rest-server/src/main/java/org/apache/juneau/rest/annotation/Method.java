@@ -25,7 +25,7 @@ import java.lang.annotation.*;
  * Typically used for HTTP method handlers of type <js>"*"</js> (i.e. handle all requests).
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestOp</ja>(method=<js>"*"</js>)
  * 	<jk>public void</jk> doAnything(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>, <ja>@Method</ja> String <jv>method</jv>) {
  * 		...
@@ -34,7 +34,7 @@ import java.lang.annotation.*;
  *
  * <p>
  * This is functionally equivalent to the following code...
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestOp</ja>(method=<js>"*"</js>)
  * 	<jk>public void</jk> doAnything(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) {
  * 		String <jv>method</jv> = <jv>req</jv>.getMethod();

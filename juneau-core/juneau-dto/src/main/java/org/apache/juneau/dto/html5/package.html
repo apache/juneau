@@ -224,12 +224,12 @@
 		<p>
 			Use the {@link org.apache.juneau.html.HtmlParser} to convert HTML5 documents back into their original POJOs:
 		</p>
-		<p class='bcode w800'>
+		<p class='bjava'>
 	<jc>// Get an HTML parser to convert our generated HTML5 documents back into POJOs.</jc>
-	HtmlParser p = HtmlParser.<jsf>DEFAULT</jsf>;
+	HtmlParser <jv>parser</jv> = HtmlParser.<jsf>DEFAULT</jsf>;
 	
 	<jc>// Convert an HTML table back into a Table object.</jc>
-	Table table = p.parse(tableHtml, Table.<jk>class</jk>);
+	Table <jv>table</jv> = <jv>parser</jv>.parse(<jv>tableHtml</jv>, Table.<jk>class</jk>);
 		</p>
 		<p>
 			HTML5 objects can also be constructed from the other media types using the appropriate parsers.
@@ -257,7 +257,7 @@
 			In this case, we are defining a template for a reusable HTML form with two simple fields.  
 			This gets serialized as an HTML form. 
 		</p>
-		<p class='bcode w800'>
+		<p class='bjava'>
 	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
 	
 	<jd>/**
@@ -270,15 +270,15 @@
 		<jk>private boolean</jk> <jf>value2</jf>;
 		
 		<jc>// Some constructor that initializes our fields. </jc>
-		<jk>public</jk> FormTemplate(String action, <jk>int</jk> value1, <jk>boolean</jk> value2) {
-			<jk>this</jk>.<jf>action</jf> = action;
-			<jk>this</jk>.<jf>value1</jf> = value1;
-			<jk>this</jk>.<jf>value2</jf> = value2;
+		<jk>public</jk> FormTemplate(String <jv>action</jv>, <jk>int</jk> <jv>value1</jv>, <jk>boolean</jk> <jv>value2</jv>) {
+			<jk>this</jk>.<jf>action</jf> = <jv>action</jv>;
+			<jk>this</jk>.<jf>value1</jf> = <jv>value1</jv>;
+			<jk>this</jk>.<jf>value2</jf> = <jv>value2</jv>;
 		}
 		
 		<jc>// Special swap method that converts this template to a serializable bean,
 		// in this case an HTML5 Form bean. </jc>
-		<jk>public</jk> Form swap(BeanSession session) {
+		<jk>public</jk> Form swap(BeanSession <jv>session</jv>) {
 			<jk>return</jk> <jsm>form</jsm>(<jf>action</jf>,
 				<jsm>input</jsm>(<js>"text"</js>).name(<js>"v1"</js>).value(<jf>value1</jf>),
 				<jsm>input</jsm>(<js>"text"</js>).name(<js>"v2"</js>).value(<jf>value2</jf>)
@@ -289,7 +289,7 @@
 		<p>
 			When serialized using the HTML or XML serializer, it produces the following:
 		</p>	
-		<p class='bcode w800'><xt>
+		<p class='bxml'><xt>
 	&lt;form <xa>action</xa>='myaction'&gt;
 		&lt;input <xa>type</xa>=<xs>'text'</xs> <xa>name</xa>=<xs>'v1'</xs> <xa>value</xa>=<xs>'123'</xs>/&gt;
 		&lt;input <xa>type</xa>=<xs>'text'</xs> <xa>name</xa>=<xs>'v2'</xs> <xa>value</xa>=<xs>'true'</xs>/&gt;
@@ -299,7 +299,7 @@
 			Support for parsing back into the template class can be accomplished by adding an unswap method or 
 			constructor.
 		</p>
-		<p class='bcode w800'>
+		<p class='bjava'>
 	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
 	
 	<jd>/**
@@ -314,21 +314,21 @@
 		<jk>private boolean</jk> <jf>value2</jf>;
 		
 		<jc>// Our 'unswap' constructor</jc>
-		<jk>public</jk> FormTemplate(Form f) {
-			<jk>this</jk>.<jf>action</jf> = f.getAttr(<js>"action"</js>);
-			<jk>this</jk>.<jf>value1</jf> = f.getChild(Input.<jk>class</jk>, 0)
+		<jk>public</jk> FormTemplate(Form <jv>form</jv>) {
+			<jk>this</jk>.<jf>action</jf> = <jv>form</jv>.getAttr(<js>"action"</js>);
+			<jk>this</jk>.<jf>value1</jf> = <jv>form</jv>.getChild(Input.<jk>class</jk>, 0)
 				.getAttr(<jk>int</jk>.<jk>class</jk>, <js>"value"</js>);
-			<jk>this</jk>.<jf>value2</jf> = f.getChild(Input.<jk>class</jk>, 1)
+			<jk>this</jk>.<jf>value2</jf> = <jv>form</jv>.getChild(Input.<jk>class</jk>, 1)
 				.getAttr(<jk>boolean</jk>.<jk>class</jk>, <js>"value"</js>);
 		}
 		
-		<jk>public</jk> FormTemplate(String action, <jk>int</jk> value1, <jk>boolean</jk> value2) {
-			<jk>this</jk>.<jf>action</jf> = action;
-			<jk>this</jk>.<jf>value1</jf> = value1;
-			<jk>this</jk>.<jf>value2</jf> = value2;
+		<jk>public</jk> FormTemplate(String <jv>action</jv>, <jk>int</jk> <jv>value1</jv>, <jk>boolean</jk> <jv>value2</jv>) {
+			<jk>this</jk>.<jf>action</jf> = <jv>action</jv>;
+			<jk>this</jk>.<jf>value1</jf> = <jv>value1</jv>;
+			<jk>this</jk>.<jf>value2</jf> = <jv>value2</jv>;
 		}
 		
-		<jk>public</jk> Form swap(BeanSession session) {
+		<jk>public</jk> Form swap(BeanSession <jv>session</jv>) {
 			<jk>return</jk> <jsm>form</jsm>(<jf>action</jf>,
 				<jsm>input</jsm>(<js>"text"</js>).name(<js>"v1"</js>).value(<jf>value1</jf>),
 				<jsm>input</jsm>(<js>"text"</js>).name(<js>"v2"</js>).value(<jf>value2</jf>)

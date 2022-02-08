@@ -18,11 +18,11 @@ package org.apache.juneau.dto.jsonschema;
  * <p>
  * An instance of this object is equivalent to calling...
  *
- * <p class='bcode w800'>
- * 	JsonSchemaProperty p = <jk>new</jk> JsonSchemaProperty(name)
+ * <p class='bjava'>
+ * 	JsonSchemaProperty <jv>property</jv> = <jk>new</jk> JsonSchemaProperty(<jv>name</jv>)
  * 		.setType(JsonType.<jsf>ARRAY</jsf>)
  * 		.setItems(
- * 			<jk>new</jk> JsonSchema().setType(elementType)
+ * 			<jk>new</jk> JsonSchema().setType(<jv>elementType</jv>)
  * 		);
  * </p>
  *

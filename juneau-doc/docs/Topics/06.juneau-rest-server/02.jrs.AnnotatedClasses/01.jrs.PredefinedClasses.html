@@ -20,7 +20,7 @@
 		The following example represents the bare-minimum needed
 		for deploying a top-level REST endpoint with basic JSON marshalling support:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(
 		|		path=<js>"/mypath"</js>,
 		|		serializers=JsonSerializer.<jk>class</jk>,
@@ -120,7 +120,7 @@
 		The <c>Basic*</c> classes implement the {@link oajr.servlet.BasicRestOperations} interface
 		which defines common endpoints for swagger documentation, statistics, and serving static files:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public interface</jk> BasicRestOperations {
 		|
 		|		<ja>@RestGet</ja>(path=<js>"/api/*"</js>)
@@ -158,7 +158,7 @@
 		For example, if you want to provide a resource that supports all languages in Juneau, 
 		simply add the {@link oajr.config.BasicUniversalConfig} interface like so:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(...)
 		|	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
 		|		...
@@ -167,7 +167,7 @@
 	<p>
 		The <c>*Group</c> classes implement the {@link oajr.servlet.BasicGroupOperations} interface which provides an additional REST endpoint for listing and navigating child resources:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public interface</jk> BasicGroupOperations {
 		|
 		|		<ja>@RestGet</ja>(path=<js>"/"</js>)

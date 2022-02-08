@@ -51,7 +51,7 @@ public @interface OpSwagger {
 	 * Defines the swagger field <c>/paths/{path}/{method}/deprecated</c>.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>(
 	 * 		swagger=<ja>@OpSwagger</ja>(
 	 * 			deprecated=<jk>true</jk>
@@ -95,7 +95,7 @@ public @interface OpSwagger {
 	 * Defines the swagger field <c>/paths/{path}/{method}/externalDocs</c>.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>(
 	 * 		swagger=<ja>@OpSwagger</ja>(
 	 * 			externalDocs=<ja>@ExternalDocs</ja>(url=<js>"http://juneau.apache.org"</js>)
@@ -138,7 +138,7 @@ public @interface OpSwagger {
 	 * column on the Swagger page.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestPost</ja>(
 	 * 		path=<js>"/{a}"</js>,
 	 * 		description=<js>"This is my method."</js>,
@@ -191,7 +191,7 @@ public @interface OpSwagger {
 	 * column on the Swagger page.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>(
 	 * 		path=<js>"/"</js>,
 	 * 		swagger=<ja>@OpSwagger</ja>(
@@ -258,7 +258,7 @@ public @interface OpSwagger {
 	 * <br>Tags can be used for logical grouping of operations by resources or any other qualifier.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>(
 	 * 		swagger=<ja>@OpSwagger</ja>(
 	 * 			tags=<js>"foo,bar"</js>
@@ -283,7 +283,7 @@ public @interface OpSwagger {
 	 * Used for free-form Swagger documentation of a REST Java method.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>(
 	 * 		swagger=<ja>@OpSwagger</ja>(
 	 * 			<js>"tags:['pet'],"</js>,
@@ -316,7 +316,7 @@ public @interface OpSwagger {
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of a resource method:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Normal</jc>
 	 * 	<ja>@RestPost</ja>(
 	 * 		path=<js>"/pet"</js>,
@@ -331,7 +331,7 @@ public @interface OpSwagger {
 	 * 		)
 	 * )
 	 * </p>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Free-form</jc>
 	 * 	<ja>@RestPost</ja>(
 	 * 		path=<js>"/pet"</js>,
@@ -346,14 +346,14 @@ public @interface OpSwagger {
 	 * 		})
 	 * )
 	 * </p>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Free-form with variables</jc>
 	 * 	<ja>@RestPost</ja>(
 	 * 		path=<js>"/pet"</js>,
 	 * 		swagger=<ja>@OpSwagger</ja>(<js>"$L{addPetSwagger}"</js>)
 	 * )
 	 * </p>
-	 * <p class='bcode w800'>
+	 * <p class='bini'>
 	 * 	<mc>// Contents of MyResource.properties</mc>
 	 * 	<mk>addPetSwagger</mk> = <mv>{ summary: "Add pet", description: "Adds a new pet to the store", tags: ["pet"], externalDocs:{ description: "Home page", url: "http://juneau.apache.org" } }</mv>
 	 * </p>
@@ -371,10 +371,10 @@ public @interface OpSwagger {
 	 * 	<li>
 	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
-	 * 		<p class='bcode w800'>
+	 * 		<p class='bjava'>
 	 * 	<ja>@OpSwagger</ja>(<js>"{summary: 'Add pet'}"</js>)
 	 * 		</p>
-	 * 		<p class='bcode w800'>
+	 * 		<p class='bjava'>
 	 * 	<ja>@OpSwagger</ja>(<js>"summary: 'Add pet'"</js>)
 	 * 		</p>
 	 * 	<li>

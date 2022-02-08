@@ -36,17 +36,17 @@ import java.lang.annotation.*;
 </ul>
 
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bjava'>
 	<ja>@RestPost</ja>
 	<jk>public void</jk> doPost(<ja>@HasFormData</ja>(<js>"p1"</js>) <jk>boolean</jk> <jv>p1</jv>) {...}
 </p>
 <p>
 	This is functionally equivalent to the following code:
 </p>
-<p class='bcode w800'>
+<p class='bjava'>
 	<ja>@RestPost</ja>
 	<jk>public void</jk> doPost(RestRequest <jv>req</jv>) {
-		<jk>boolean</jk> <jv>p1</jv> = <jv>req</jv>.hasFormData(<js>"p1"</js>);
+		<jk>boolean</jk> <jv>p1</jv> = <jv>req</jv>.getFormParam(<js>"p1"</js>).isPresent();
 		...
 	}
 </p>
@@ -127,11 +127,11 @@ public @interface HasFormData {
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the existence of a form post entry:
-	 * <p class='bcode w800'>
-	 * 	<jk>public</jk> Order placeOrder(<ja>@HasFormData</ja>(name=<js>"petId"</js>) <jk>boolean</jk> hasPetId) {...}
+	 * <p class='bjava'>
+	 * 	<jk>public</jk> Order placeOrder(<ja>@HasFormData</ja>(name=<js>"petId"</js>) <jk>boolean</jk> <jv>hasPetId</jv>) {...}
 	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<jk>public</jk> Order placeOrder(<ja>@HasFormData</ja>(<js>"petId"</js>) <jk>boolean</jk> hasPetId) {...}
+	 * <p class='bjava'>
+	 * 	<jk>public</jk> Order placeOrder(<ja>@HasFormData</ja>(<js>"petId"</js>) <jk>boolean</jk> <jv>hasPetId</jv>) {...}
 	 * </p>
 	 */
 	String value() default "";

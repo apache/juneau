@@ -62,7 +62,7 @@
 	<p>
 		For example, to render a link that brings up a simple dialog in a div tag:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Override</ja>
 		|	<jk>public</jk> String getLabel() {
 		|		<jk>return</jk> <js>"my-menu-item"</js>;
@@ -87,7 +87,7 @@
 	<p>
 		An example of this widget can be found in the <c>PetStoreResource</c> in the examples that provides a drop-down menu item for rendering all other supported content types in plain text:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@RestGet</ja>(path=<js>"/"</js>)
 		|	<ja>@HtmlDocConfig</ja>(
 		|		widgets={
@@ -124,7 +124,7 @@
 	<p>
 		An example of this widget can be found in the <c>PetStoreResource</c> in the examples that provides
 		search/view/sort capabilities against the collection of POJOs:
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@RestGet</ja>(
 		|		path=<js>"/"</js>,
 		|		converters=Queryable.<jk>class</jk>
@@ -170,7 +170,7 @@
 		An example of this widget can be found in the <c>PetStoreResource</c> in the examples that provides
 		a drop-down menu item for rendering all other supported content types in plain text:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@RestGet</ja>(path=<js>"/"</js>)
 		|	<ja>@HtmlDocConfig</ja>(
 		|		widgets={
@@ -199,7 +199,7 @@
 		It produces a simple Apache Juneau icon floating on the right.
 		Typically it's used in the footer of the page, as shown below in the <c>AddressBookResource</c> from the examples:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(path=<js>"/addressBook"</js>)
 		|	<ja>@HtmlDocConfig</ja>(
 		|		widgets={
@@ -220,7 +220,7 @@
 	<p>
 		The following examples shows how tooltips can be added to a menu item widget.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> MyFormMenuItem <jk>extends</jk> MenuItemWidget {
 		|	
 		|		<ja>@Override</ja>

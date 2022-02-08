@@ -147,7 +147,7 @@ public final class BeanFilter {
 		 * Specifies the dictionary type name for this bean.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Define our filter.</jc>
 		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
 		 * 		<jk>public</jk> MyFilter() {
@@ -156,13 +156,13 @@ public final class BeanFilter {
 		 * 	}
 		 *
 		 * 	<jc>// Register it with a serializer or parser.</jc>
-		 * 	WriterSerializer s = JsonSerializer
+		 * 	WriterSerializer <jv>serializer<jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.beanFilters(MyFilter.<jk>class</jk>)
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces:  "{_type:'mybean', ...}"</jc>
-		 * 	String json = s.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <ul class='seealso'>
@@ -197,7 +197,7 @@ public final class BeanFilter {
 		 * When specified, only the list of properties defined on the interface class will be used during serialization.
 		 * <br>Additional properties on subclasses will be ignored.
 		 *
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Parent class</jc>
 		 * 	<jk>public abstract class</jk> A {
 		 * 		<jk>public</jk> String <jf>f0</jf> = <js>"f0"</js>;
@@ -216,15 +216,15 @@ public final class BeanFilter {
 		 * 	}
 		 *
 		 * 	<jc>// Register it with a serializer.</jc>
-		 * 	WriterSerializer s = JsonSerializer
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.beanFilters(AFilter.<jk>class</jk>)
 		 * 		.build();
 		 *
 		 * 	<jc>// Use it.</jc>
-		 * 	A1 a1 = <jk>new</jk> A1();
-		 * 	String r = s.serialize(a1);
-		 * 	<jsm>assertEquals</jsm>(<js>"{f0:'f0'}"</js>, r);  <jc>// Note f1 is not serialized</jc>
+		 * 	A1 <jv>a1</jv> = <jk>new</jk> A1();
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>a1</jv>);
+		 * 	<jsm>assertEquals</jsm>(<js>"{f0:'f0'}"</js>, <jv>json</jv>);  <jc>// Note f1 is not serialized</jc>
 		 * </p>
 		 *
 		 * <p>
@@ -258,7 +258,7 @@ public final class BeanFilter {
 		 * but not <c>p1</c> or <c>p2</c>.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jk>public class</jk> C1 {
 		 * 		<jk>public int</jk> getP1();
 		 * 	}
@@ -279,13 +279,13 @@ public final class BeanFilter {
 		 * 	}
 		 *
 		 * 	<jc>// Register it with a serializer.</jc>
-		 * 	WriterSerializer s = JsonSerializer
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.beanFilters(C3Filter.<jk>class</jk>)
 		 * 		.build();
 		 *
 		 * 	<jc>// Serializes property 'p3', but NOT 'p1' or 'p2'.</jc>
-		 * 	String json = s.serialize(<jk>new</jk> C3());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> C3());
 		 * </p>
 		 *
 		 * <ul class='seealso'>
@@ -308,7 +308,7 @@ public final class BeanFilter {
 		 * <br>Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Define our filter.</jc>
 		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
 		 * 		<jk>public</jk> MyFilter() {
@@ -317,13 +317,13 @@ public final class BeanFilter {
 		 * 	}
 		 *
 		 * 	<jc>// Register it with a serializer.</jc>
-		 * 	WriterSerializer s = JsonSerializer
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.beanFilters(MyFilter.<jk>class</jk>)
 		 * 		.build();
 		 *
 		 * 	<jc>// Properties will be sorted alphabetically.</jc>
-		 * 	String json = s.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <ul class='seealso'>
@@ -375,7 +375,7 @@ public final class BeanFilter {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Define our filter.</jc>
 		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
 		 * 		<jk>public</jk> MyFilter() {
@@ -403,7 +403,7 @@ public final class BeanFilter {
 		 * The class to use for calculating bean property names.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Define our filter.</jc>
 		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
 		 * 		<jk>public</jk> MyFilter() {
@@ -414,13 +414,13 @@ public final class BeanFilter {
 		 * 	}
 		 *
 		 * 	<jc>// Register it with a serializer or parser.</jc>
-		 * 	WriterSerializer s = JsonSerializer
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.beanFilters(MyFilter.<jk>class</jk>)
 		 * 		.build();
 		 *
 		 * 	<jc>// Properties names will be Dashed-Lower-Case.</jc>
-		 * 	String json = s.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <ul class='seealso'>
@@ -446,22 +446,22 @@ public final class BeanFilter {
 		 * Specifies the set and order of names of properties associated with the bean class.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Define our filter.</jc>
 		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
 		 * 		<jk>public</jk> MyFilter() {
-		 * 			bpi(<js>"foo,bar,baz"</js>);
+		 * 			properties(<js>"foo,bar,baz"</js>);
 		 * 		}
 		 * 	}
 		 *
 		 * 	<jc>// Register it with a serializer.</jc>
-		 * 	WriterSerializer s = JsonSerializer
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.beanFilters(MyFilter.<jk>class</jk>)
 		 * 		.build();
 		 *
 		 * 	<jc>// Only serializes the properties 'foo', 'bar', and 'baz'.</jc>
-		 * 	String json = s.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <ul class='seealso'>
@@ -491,22 +491,22 @@ public final class BeanFilter {
 		 * Specifies properties to exclude from the bean class.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Define our filter.</jc>
 		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
 		 * 		<jk>public</jk> MyFilter() {
-		 * 			bpx(<js>"foo,bar"</js>);
+		 * 			excludeProperties(<js>"foo,bar"</js>);
 		 * 		}
 		 * 	}
 		 *
 		 * 	<jc>// Register it with a serializer.</jc>
-		 * 	WriterSerializer s = JsonSerializer
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.beanFilters(MyFilter.<jk>class</jk>)
 		 * 		.build();
 		 *
 		 * 	<jc>// Serializes all properties except for 'foo' and 'bar'.</jc>
-		 * 	String json = s.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <ul class='seealso'>
@@ -537,22 +537,22 @@ public final class BeanFilter {
 		 * Serializers will serialize such properties as usual, but parsers will silently ignore them.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Define our filter.</jc>
 		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
 		 * 		<jk>public</jk> MyFilter() {
-		 * 			bpro(<js>"foo,bar"</js>);
+		 * 			readOnlyProperties(<js>"foo,bar"</js>);
 		 * 		}
 		 * 	}
 		 *
 		 * 	<jc>// Register it with a parser.</jc>
-		 *  ReaderParser p = JsonParser
+		 *  ReaderParser <jv>parser</jv> = JsonParser
 		 * 		.<jsm>create</jsm>()
 		 * 		.beanFilters(MyFilter.<jk>class</jk>)
 		 * 		.build();
 		 *
 		 * 	<jc>// Parsers all properties except for 'foo' and 'bar'.</jc>
-		 * 	MyBean b = p.parse(<js>"..."</js>, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<js>"..."</js>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
 		 * <ul class='seealso'>
@@ -584,22 +584,22 @@ public final class BeanFilter {
 		 * Parsers will parse such properties as usual, but serializers will silently ignore them.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Define our filter.</jc>
 		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
 		 * 		<jk>public</jk> MyFilter() {
-		 * 			bpwo(<js>"foo,bar"</js>);
+		 * 			writeOnlyProperties(<js>"foo,bar"</js>);
 		 * 		}
 		 * 	}
 		 *
 		 * 	<jc>// Register it with a serializer.</jc>
-		 *  WriterSerializer s = JsonSerializer
+		 *  WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.beanFilters(MyFilter.<jk>class</jk>)
 		 * 		.build();
 		 *
 		 * 	<jc>// Serializes all properties except for 'foo' and 'bar'.</jc>
-		 * 	String json = s.serialize(<jk>new</jk> MyBean());
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
 		 * <ul class='seealso'>
@@ -630,7 +630,7 @@ public final class BeanFilter {
 		 * Adds to the list of classes that make up the bean dictionary for this bean.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Define our filter.</jc>
 		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
 		 * 		<jk>public</jk> MyFilter() {
@@ -640,13 +640,13 @@ public final class BeanFilter {
 		 * 	}
 		 *
 		 * 	<jc>// Register it with a parser.</jc>
-		 * 	ReaderParser p = JsonParser
+		 * 	ReaderParser <jv>parser</jv> = JsonParser
 		 * 		.<jsm>create</jsm>()
 		 * 		.beanFilters(MyFilter.<jk>class</jk>)
 		 * 		.build();
 		 *
 		 * 	<jc>// Instantiate our bean.</jc>
-		 * 	MyBean myBean = p.parse(json);
+		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<jv>json</jv>);
 		 * </p>
 		 *
 		 * <ul class='seealso'>
@@ -685,7 +685,7 @@ public final class BeanFilter {
 		 * The interceptor to use for intercepting and altering getter and setter calls.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Define our filter.</jc>
 		 * 	<jk>public class</jk> MyFilter <jk>extends</jk> Builder&lt;MyBean&gt; {
 		 * 		<jk>public</jk> MyFilter() {
@@ -695,7 +695,7 @@ public final class BeanFilter {
 		 * 	}
 		 *
 		 * 	<jc>// Register it with a serializer or parser.</jc>
-		 * 	WriterSerializer s = JsonSerializer
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.beanFilters(MyFilter.<jk>class</jk>)
 		 * 		.build();

@@ -17,8 +17,8 @@ package org.apache.juneau.internal;
  *
  * <p>
  * General usage:
- * <p class='bcode w800'>
- * 	int hashCode = new HashCode().add("foobar").add(myobject).add(123).get();
+ * <p class='bjava'>
+ * 	<jk>int</jk> <jv>hashCode</jv> = HashCode.<jsm>create</jsm>().add(<js>"foobar"</js>).add(<jv>myobject</jv>).add(123).get();
  * </p>
  *
  * <ul class='seealso'>

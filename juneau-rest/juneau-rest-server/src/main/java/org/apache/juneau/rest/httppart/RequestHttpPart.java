@@ -179,8 +179,8 @@ public abstract class RequestHttpPart {
 	 * If the specified type is an HTTP part type (extends from {@link org.apache.http.Header}/{@link NameValuePair}), then looks for
 	 * one of the following constructors:
 	 * <ul class='javatree'>
-	 * 	<li class='jm><c><jk>public</jv> T(String <jv>value</jv>);</c>
-	 * 	<li class='jm><c><jk>public</jv> T(String <jv>name</jv>, String <jv>value</jv>);</c>
+	 * 	<li class='jm><c><jk>public</jk> T(String <jv>value</jv>);</c>
+	 * 	<li class='jm><c><jk>public</jk> T(String <jv>name</jv>, String <jv>value</jv>);</c>
 	 * </ul>
 	 *
 	 * <p>
@@ -202,8 +202,8 @@ public abstract class RequestHttpPart {
 	 * If the specified type is an HTTP part type (extends from {@link org.apache.http.Header}/{@link NameValuePair}), then looks for
 	 * one of the following constructors:
 	 * <ul class='javatree'>
-	 * 	<li class='jm><c><jk>public</jv> T(String <jv>value</jv>);</c>
-	 * 	<li class='jm><c><jk>public</jv> T(String <jv>name</jv>, String <jv>value</jv>);</c>
+	 * 	<li class='jm><c><jk>public</jk> T(String <jv>value</jv>);</c>
+	 * 	<li class='jm><c><jk>public</jk> T(String <jv>name</jv>, String <jv>value</jv>);</c>
 	 * </ul>
 	 *
 	 * <p>
@@ -237,9 +237,9 @@ public abstract class RequestHttpPart {
 	 * Matches the specified pattern against this part value.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	Matcher <jv>matcher</jv> = <jv>request</jv>
-	 * 		.getRequestHeader(<js>"Content-Type"</js>)
+	 * 		.getHeader(<js>"Content-Type"</js>)
 	 * 		.asMatcher(Pattern.<jsm>compile</jsm>(<js>"application/(.*)"</js>));
 	 *
 	 * <jk>if</jk> (<jv>matcher</jv>.matches()) {
@@ -259,9 +259,9 @@ public abstract class RequestHttpPart {
 	 * Matches the specified pattern against this part value.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	Matcher <jv>matcher</jv> = <jv>request</jv>
-	 * 		.getRequestHeader(<js>"Content-Type"</js>)
+	 * 		.getHeader(<js>"Content-Type"</js>)
 	 * 		.asMatcher(<js>"application/(.*)"</js>);
 	 *
 	 * 	<jk>if</jk> (<jv>matcher</jv>.matches()) {
@@ -281,9 +281,9 @@ public abstract class RequestHttpPart {
 	 * Matches the specified pattern against this part value.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	Matcher <jv>matcher</jv> = <jv>request</jv>
-	 * 		.getRequestHeader(<js>"Content-Type"</js>)
+	 * 		.getHeader(<js>"Content-Type"</js>)
 	 * 		.asMatcher(<js>"application/(.*)"</js>, <jsf>CASE_INSENSITIVE</jsf>);
 	 *
 	 * 	<jk>if</jk> (<jv>matcher</jv>.matches()) {

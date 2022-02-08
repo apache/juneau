@@ -46,7 +46,7 @@ import org.apache.juneau.utils.*;
  *
  * <p>
  * The following shows a sample object defined in Javascript:
- * <p class='bcode w800'>
+ * <p class='bjson'>
  * 	{
  * 		id: 1,
  * 		name: <js>'John Smith'</js>,
@@ -71,7 +71,7 @@ import org.apache.juneau.utils.*;
  *
  * <p>
  * Using the "strict" syntax defined in this document, the equivalent UON notation would be as follows:
- * <p class='bcode w800'>
+ * <p class='buon'>
  * 	(
  * 		<ua>id</ua>=<un>1</un>,
  * 		<ua>name</ua>=<us>'John+Smith'</us>,
@@ -95,17 +95,17 @@ import org.apache.juneau.utils.*;
  * </p>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Serialize a Map</jc>
- * 	Map m = OMap.<jsm>ofJson</jsm>(<js>"{a:'b',c:1,d:false,e:['f',1,false],g:{h:'i'}}"</js>);
+ * 	Map <jv>map</jv> = OMap.<jsm>ofJson</jsm>(<js>"{a:'b',c:1,d:false,e:['f',1,false],g:{h:'i'}}"</js>);
  *
  * 	<jc>// Serialize to value equivalent to JSON.</jc>
  * 	<jc>// Produces "(a=b,c=1,d=false,e=@(f,1,false),g=(h=i))"</jc>
- * 	String s = UonSerializer.<jsf>DEFAULT</jsf>.serialize(s);
+ * 	String <jv>uon</jv> = UonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>map</jv>);
  *
  * 	<jc>// Serialize a bean</jc>
  * 	<jk>public class</jk> Person {
- * 		<jk>public</jk> Person(String s);
+ * 		<jk>public</jk> Person(String <jv>name</jv>);
  * 		<jk>public</jk> String getName();
  * 		<jk>public int</jk> getAge();
  * 		<jk>public</jk> Address getAddress();
@@ -119,11 +119,11 @@ import org.apache.juneau.utils.*;
  * 		<jk>public int</jk> getZip();
  * 	}
  *
- * 	Person p = <jk>new</jk> Person(<js>"John Doe"</js>, 23, <js>"123 Main St"</js>, <js>"Anywhere"</js>,
+ * 	Person <jv>person</jv> = <jk>new</jk> Person(<js>"John Doe"</js>, 23, <js>"123 Main St"</js>, <js>"Anywhere"</js>,
  * 		<js>"NY"</js>, 12345, <jk>false</jk>);
  *
  * 	<jc>// Produces "(name='John Doe',age=23,address=(street='123 Main St',city=Anywhere,state=NY,zip=12345),deceased=false)"</jc>
- * 	String s = UonSerializer.<jsf>DEFAULT</jsf>.serialize(s);
+ * 	String <jv>uon</jv> = UonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>person</jv>);
  * </p>
  *
  * <ul class='spaced-list'>
@@ -335,25 +335,25 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * URL-encoding of non-valid URI characters.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a non-encoding UON serializer.</jc>
 		 * 	UonSerializer <jv>serializer1</jv> = UonSerializer.
 		 * 		.<jsm>create</jsm>()
 		 * 		.build();
 		 *
 		 * 	<jc>// Create an encoding UON serializer.</jc>
-		 * 	UonSerializer <jv>serializer1</jv> = UonSerializer.
+		 * 	UonSerializer <jv>serializer2</jv> = UonSerializer.
 		 * 		.<jsm>create</jsm>()
 		 * 		.encoding()
 		 * 		.build();
 		 *
-		 * 	OMap <jv>myMap</jv> = OMap.<jsm>of</jsm>(<js>"foo"</js>, <js>"foo bar"</js>);
+		 * 	OMap <jv>map</jv> = OMap.<jsm>of</jsm>(<js>"foo"</js>, <js>"foo bar"</js>);
 		 *
 		 * 	<jc>// Produces: "(foo=foo bar)"</jc>
-		 * 	String <jv>uon1</jv> = <jv>serializer1</jv>.serialize(<jv>myMap</jv>)
+		 * 	String <jv>uon1</jv> = <jv>serializer1</jv>.serialize(<jv>map</jv>)
 		 *
 		 * 	<jc>// Produces: "(foo=foo%20bar)"</jc>
-		 * 	String <jv>uon2</jv> = <jv>serializer2</jv>.serialize(<jv>myMap</jv>)
+		 * 	String <jv>uon2</jv> = <jv>serializer2</jv>.serialize(<jv>map</jv>)
 		 * </p>
 		 *
 		 * @return This object.
@@ -388,7 +388,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a normal UON serializer.</jc>
 		 * 	UonSerializer <jv>serializer1</jv> = UonSerializer
 		 * 		.<jsm>create</jsm>()
@@ -400,16 +400,16 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * 		.paramFormat(<jsf>PLAIN_TEXT</jsf>)
 		 * 		.build();
 		 *
-		 * 	OMap <jv>myMap</jv> = OMap.<jsm>of</jsm>(
+		 * 	OMap <jv>map</jv> = OMap.<jsm>of</jsm>(
 		 * 		<js>"foo"</js>, <js>"bar"</js>,
 		 * 		<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>}
 		 * 	);
 		 *
 		 * 	<jc>// Produces: "(foo=bar,baz=@(qux,'true','123'))"</jc>
-		 * 	String <jv>uon1</jv> = <jv>serializer1</jv>.serialize(<jv>myMap</jv>)
+		 * 	String <jv>uon1</jv> = <jv>serializer1</jv>.serialize(<jv>map</jv>)
 		 *
 		 * 	<jc>// Produces: "foo=bar,baz=qux,true,123"</jc>
-		 * 	String <jv>uon2</jv> = <jv>serializer2</jv>.serialize(<jv>myMap</jv>)
+		 * 	String <jv>uon2</jv> = <jv>serializer2</jv>.serialize(<jv>map</jv>)
 		 * </p>
 		 *
 		 * @param value
@@ -430,20 +430,20 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * Specifies plain-text for the format to use for URL GET parameter keys and values.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a plain-text UON serializer.</jc>
 		 * 	UonSerializer <jv>serializer</jv> = UonSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.paramFormatPlain()
 		 * 		.build();
 		 *
-		 * 	OMap <jv>myMap</jv> = OMap.<jsm>of</jsm>(
+		 * 	OMap <jv>map</jv> = OMap.<jsm>of</jsm>(
 		 * 		<js>"foo"</js>, <js>"bar"</js>,
 		 * 		<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>}
 		 * 	);
 		 *
 		 * 	<jc>// Produces: "foo=bar,baz=qux,true,123"</jc>
-		 * 	String <jv>uon</jv> = <jv>serializer</jv>.serialize(<jv>myMap</jv>)
+		 * 	String <jv>uon</jv> = <jv>serializer</jv>.serialize(<jv>map</jv>)
 		 * </p>
 		 *
 		 * @return This object.

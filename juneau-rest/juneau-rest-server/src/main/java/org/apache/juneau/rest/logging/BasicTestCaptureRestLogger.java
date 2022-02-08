@@ -34,7 +34,7 @@ import org.apache.juneau.cp.*;
  * The following example shows how the capture logger can be associated with a REST class so that logged messages can
  * be examined.
  *
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jk>public class</jk> MyTests {
  *
  * 		<jk>private static final</jk> CaptureLogger <jsf>LOGGER</jsf> = <jk>new</jk> CaptureLogger();

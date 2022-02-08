@@ -28,7 +28,7 @@ import org.apache.juneau.rest.servlet.*;
  *
  * <p>
  * For example, if you want to add an initialization method to your resource:
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@Rest</ja>(...)
  * 	<jk>public class</jk> MyResource  {
  *
@@ -36,7 +36,7 @@ import org.apache.juneau.rest.servlet.*;
  * 		<jk>private</jk> Map&lt;Integer,Object&gt; <jf>myDatabase</jf>;
  *
  * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
- * 		<jk>public void</jk> initMyDatabase(RestContext.Builder builder) <jk>throws</jk> Exception {
+ * 		<jk>public void</jk> initMyDatabase(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
  * 			<jf>myDatabase</jf> = <jk>new</jk> LinkedHashMap&lt;&gt;();
  * 		}
  * 	}
@@ -44,14 +44,14 @@ import org.apache.juneau.rest.servlet.*;
  *
  * <p>
  * Or if you want to intercept REST calls:
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@Rest</ja>(...)
  * 	<jk>public class</jk> MyResource {
  *
  * 		<jc>// Add a request attribute to all incoming requests.</jc>
  * 		<ja>@RestHook</ja>(<jsf>PRE_CALL</jsf>)
- * 		<jk>public void</jk> onPreCall(RestRequest req) {
- * 			req.setAttribute(<js>"foo"</js>, <js>"bar"</js>);
+ * 		<jk>public void</jk> onPreCall(RestRequest <jv>req</jv>) {
+ * 			<jv>req</jv>.setAttribute(<js>"foo"</js>, <js>"bar"</js>);
  * 		}
  * 	}
  * </p>

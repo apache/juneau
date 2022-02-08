@@ -38,7 +38,7 @@
 	<p>
 		For example, given the following JSON:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjson'>
 		|	{
 		|		id: <jk>1</jk>, 
 		|		name: <js>'John Smith'</js>, 
@@ -62,19 +62,19 @@
 	<p>
 		We can parse this into a generic <c>OMap</c>:
 	</p>
-	<p class='bcode w800'>	
+	<p class='bjava'>	
 		|	<jc>// Parse JSON into a generic POJO model.</jc>
-		|	OMap <jv>omap</jv> = JsonParser.<jsf>DEFAULT</jsf>.parse(<jv>json</jv>, OMap.<jk>class</jk>);
+		|	OMap <jv>map</jv> = JsonParser.<jsf>DEFAULT</jsf>.parse(<jv>json</jv>, OMap.<jk>class</jk>);
 		|
 		|	<jc>// Convert it back to JSON.</jc>
-		|	String <jv>json</jv> = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.serialize(<jv>omap</jv>);
+		|	String <jv>json</jv> = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.serialize(<jv>map</jv>);
 	</p>
 	<p>
 		What we end up with is the exact same output.
 		Even the numbers and booleans are preserved because they are parsed into <c>Number</c> and 
 		<c>Boolean</c> objects when parsing into generic models.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjson'>
 		|	{
 		|		id: <jk>1</jk>, 
 		|		name: <js>'John Smith'</js>, 
@@ -99,23 +99,23 @@
 		Once parsed into a generic model, various convenience methods are provided on the <c>OMap</c>
 			and <c>OList</c> classes to retrieve values:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Parse JSON into a generic POJO model.</jc>
-		|	OMap <jv>omap</jv> = JsonParser.<jsf>DEFAULT</jsf>.parse(<jv>json</jv>, OMap.<jk>class</jk>);
+		|	OMap <jv>map</jv> = JsonParser.<jsf>DEFAULT</jsf>.parse(<jv>json</jv>, OMap.<jk>class</jk>);
 		|
 		|	<jc>// Get some simple values.</jc>
-		|	String <jv>name</jv> = <jv>omap</jv>.getString(<js>"name"</js>);
-		|	<jk>int</jk> <jv>id</jv> = <jv>omap</jv>.getInt(<js>"id"</js>);
+		|	String <jv>name</jv> = <jv>map</jv>.getString(<js>"name"</js>);
+		|	<jk>int</jk> <jv>id</jv> = <jv>map</jv>.getInt(<js>"id"</js>);
 		|
 		|	<jc>// Get a value convertable from a String.</jc>
-		|	URI <jv>uri</jv> = <jv>omap</jv>.get(URI.<jk>class</jk>, <js>"uri"</js>);
+		|	URI <jv>uri</jv> = <jv>map</jv>.get(URI.<jk>class</jk>, <js>"uri"</js>);
 		|
 		|	<jc>// Get a value using a swap.</jc>
 		|	TemporalCalendarSwap <jv>swap</jv> = <jk>new</jk> TemporalCalendarSwap.IsoInstant();
-		|	Calendar <jv>birthDate</jv> = <jv>omap</jv>.get(<jv>swap</jv>, <js>"birthDate"</js>);
+		|	Calendar <jv>birthDate</jv> = <jv>map</jv>.get(<jv>swap</jv>, <js>"birthDate"</js>);
 		|
 		|	<jc>// Get the addresses.</jc>
-		|	OList <jv>addresses</jv> = <jv>omap</jv>.getList(<js>"addresses"</js>);
+		|	OList <jv>addresses</jv> = <jv>map</jv>.getList(<js>"addresses"</js>);
 		|
 		|	<jc>// Get the first address and convert it to a bean.</jc>
 		|	Address <jv>address</jv> = <jv>addresses</jv>.get(Address.<jk>class</jk>, 0);

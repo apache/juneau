@@ -39,13 +39,13 @@ import org.apache.juneau.rest.util.*;
  * 	The {@link RequestBody} object is the API for accessing the body of an HTTP request.
  * 	It can be accessed by passing it as a parameter on your REST Java method:
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestPost</ja>(...)
  * 	<jk>public</jk> Object myMethod(RequestBody <jv>body</jv>) {...}
  * </p>
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestPost</ja>(...)
  * 	<jk>public void</jk> doPost(RequestBody <jv>body</jv>) {
  * 		<jc>// Convert body to a linked list of Person objects.</jc>
@@ -245,21 +245,21 @@ public class RequestBody {
 	 * Refer to {@doc jm.PojoCategories} for a complete definition of supported POJOs.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Parse into an integer.</jc>
-	 * 	<jk>int</jk> body = req.getBody().as(<jk>int</jk>.<jk>class</jk>);
+	 * 	<jk>int</jk> <jv>body1</jv> = <jv>req</jv>.getBody().as(<jk>int</jk>.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into an int array.</jc>
-	 * 	<jk>int</jk>[] body = req.getBody().as(<jk>int</jk>[].<jk>class</jk>);
+	 * 	<jk>int</jk>[] <jv>body2</jv> = <jv>req</jv>.getBody().as(<jk>int</jk>[].<jk>class</jk>);
 
 	 * 	<jc>// Parse into a bean.</jc>
-	 * 	MyBean body = req.getBody().as(MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>body3</jv> = <jv>req</jv>.getBody().as(MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
-	 * 	List body = req.getBody().as(LinkedList.<jk>class</jk>);
+	 * 	List <jv>body4</jv> = <jv>req</jv>.getBody().as(LinkedList.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
-	 * 	Map body = req.getBody().as(TreeMap.<jk>class</jk>);
+	 * 	Map <jv>body5</jv> = <jv>req</jv>.getBody().as(TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -285,18 +285,18 @@ public class RequestBody {
 	 * This is similar to {@link #as(Class)} but allows for complex collections of POJOs to be created.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
-	 * 	List&lt;String&gt; body = req.getBody().as(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;String&gt; <jv>body1</jv> = <jv>req</jv>.getBody().as(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
-	 * 	List&lt;List&lt;String&gt;&gt; body = req.getBody().as(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;List&lt;String&gt;&gt; <jv>body2</jv> = <jv>req</jv>.getBody().as(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
-	 * 	Map&lt;String,String&gt; body = req.getBody().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	Map&lt;String,String&gt; <jv>body3</jv> = <jv>req</jv>.getBody().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
-	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; body = req.getBody().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>body4</jv> = <jv>req</jv>.getBody().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -361,7 +361,7 @@ public class RequestBody {
 	 * Returns the HTTP body content as a simple hexadecimal character string.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bcode'>
 	 * 	0123456789ABCDEF
 	 * </p>
 	 *
@@ -377,7 +377,7 @@ public class RequestBody {
 	 * Returns the HTTP body content as a simple space-delimited hexadecimal character string.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bcode'>
 	 * 	01 23 45 67 89 AB CD EF
 	 * </p>
 	 *

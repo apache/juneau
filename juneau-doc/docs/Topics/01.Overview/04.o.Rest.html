@@ -26,7 +26,7 @@
 	<p>
 		A typical pattern is to define a REST API on the server side:
 	</p>
-	<p class='bcode w800'>	
+	<p class='bjava'>	
 		|	<ja>@Rest</ja>(path=<js>"/petstore"</js>)
 		|	<jk>public class</jk> PetStore {
 		|		
@@ -44,7 +44,7 @@
 	<p>
 		Then define a Java interface that can be provided to consumers of your API to access your REST API:
 	</p>
-	<p class='bcode w800'>	
+	<p class='bjava'>	
 		|	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
 		|	<jk>public interface</jk> PetStoreService {
 		|		
@@ -63,7 +63,7 @@
 	</p>
 	<p>
 		Finally, the {@link oajrc.RestClient} class is used to construct a remote proxy to our REST service:
-	<p class='bcode w800'>	
+	<p class='bjava'>	
 		|	<jc>// Use a RestClient with default Simple JSON support and BASIC auth.</jc>
 		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().basicAuth(...).build();
 		|	
@@ -77,7 +77,7 @@
 	<p>
 		The call above translates to the following REST call:
 	</p>
-	<p class='bcode w800'>
+	<p class='bcode'>
 		|	POST http://localhost:10000/petstore/pets?debug=true HTTP/1.1
 		|	Accept: application/json
 		|	Content-Type: application/json

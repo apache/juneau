@@ -35,7 +35,7 @@
 		that allow you to easily construct DTO instances in a minimal amount of code. 
 	</p>
 	<h5 class='figure'>Examples:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
 		|
 		|	<jc>// An HTML table</jc>	
@@ -53,7 +53,7 @@
 		|		
 		|	String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>mytable</jv>);
 	</p>
-	<p class='bcode w800'><xt>
+	<p class='bxml'><xt>
 		|	&lt;table&gt;
 		|		&lt;tr&gt;
 		|			&lt;th&gt;<xv>c1</xv>&lt;/th&gt;
@@ -78,7 +78,7 @@
 		{@link oaj.dto.atom.AtomBuilder} class.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>import static</jk> org.apache.juneau.dto.atom.AtomBuilder.*;
 		|	
 		|	Feed <jv>feed</jv> = 
@@ -133,7 +133,7 @@
 		languages such as XML or HTML using the other serializers.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>static import</jk> org.apache.juneau.dto.swagger.SwaggerBuilder.*;
 		|
 		|	Swagger <jv>swagger</jv> = <jsm>swagger</jsm>()

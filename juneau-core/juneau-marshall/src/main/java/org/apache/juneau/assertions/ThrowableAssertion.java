@@ -23,7 +23,7 @@ import org.apache.juneau.serializer.*;
  * {@review}
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Validates the throwable message or one of the parent messages contain 'Foobar'.</jc>
  * 	<jsm>assertThrowable</jsm>(<jv>throwable</jv>).contains(<js>"Foobar"</js>);
  * </p>

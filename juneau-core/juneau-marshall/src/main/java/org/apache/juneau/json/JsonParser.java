@@ -229,7 +229,7 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		 * the stream consists of only comments or whitespace.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a parser that validates that there's no garbage at the end of the input.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser.
 		 * 		.<jsm>create</jsm>()

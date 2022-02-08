@@ -29,11 +29,11 @@ import org.apache.juneau.urlencoding.*;
  * {@link UrlEncodingSerializer class}.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
- * 	NameValuePairs params = <jk>new</jk> NameValuePairs()
- * 		.append(<jk>new</jk> SerializedNameValuePair(<js>"myPojo"</js>, pojo, UrlEncodingSerializer.<jsf>DEFAULT_SIMPLE</jsf>))
+ * <p class='bjava'>
+ * 	NameValuePairs <jv>params</jv> = <jk>new</jk> NameValuePairs()
+ * 		.append(<jk>new</jk> SerializedNameValuePair(<js>"myPojo"</js>, <jv>pojo</jv>, UrlEncodingSerializer.<jsf>DEFAULT_SIMPLE</jsf>))
  * 		.append(<jk>new</jk> BasicNameValuePair(<js>"someOtherParam"</js>, <js>"foobar"</js>));
- * 	request.setEntity(<jk>new</jk> UrlEncodedFormEntity(params));
+ * 	<jv>request</jv>.setEntity(<jk>new</jk> UrlEncodedFormEntity(<jv>params</jv>));
  * </p>
  *
  * <ul class='seealso'>

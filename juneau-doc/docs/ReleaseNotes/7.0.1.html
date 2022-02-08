@@ -29,7 +29,7 @@
 	<ul class='spaced-list'>
 		<li>New static <c>create()</c> methods for builders on serializers and parsers.
 			<br>This simplifies the syntax of creation of serializers and parsers by scratch.
-			<p class='bcode w800'>
+			<p class='bcode'>
 		<jc>// Old way</jc>
 		JsonSerializer s1 = <jk>new</jk> JsonSerializer.Builder().ws().build();
 		
@@ -74,7 +74,7 @@
 		<li>
 			New pluggable console commands.
 			<br>When you start up the microservice, you'll now see the following:
-			<p class='bcode w800'>
+			<p class='bcode'>
 		Running class 'RestMicroservice' using config file 'examples.cfg'.
 		Server started on port 10000
 	
@@ -106,7 +106,7 @@
 			</p>
 			<p>
 			Commands are pluggable and extensible through the config file. 
-		<p class='bcode w800'>
+		<p class='bcode'>
 		<cc>#=======================================================================================================================
 		# Console settings
 		#=======================================================================================================================</cc>

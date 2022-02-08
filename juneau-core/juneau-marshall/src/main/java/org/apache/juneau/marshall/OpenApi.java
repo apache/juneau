@@ -21,16 +21,16 @@ import org.apache.juneau.oapi.*;
  * 	The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.
  *
  * <h5 class='figure'>Examples:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
- * 	OpenApi oapi = <jk>new</jk> OpenApi();
- * 	MyPojo myPojo = oapi.read(string, MyPojo.<jk>class</jk>);
- * 	String string = oapi.write(myPojo);
+ * 	OpenApi <jv>oapi</jv> = <jk>new</jk> OpenApi();
+ * 	MyPojo <jv>myPojo</jv> = <jv>oapi</jv>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = <jv>oapi</jv>.write(<jv>myPojo</jv>);
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  *	<jc>// Using DEFAULT instance.</jc>
- * 	MyPojo myPojo = OpenApi.<jsf>DEFAULT</jsf>.read(string, MyPojo.<jk>class</jk>);
- * 	String string = OpenApi.<jsf>DEFAULT</jsf>.write(myPojo);
+ * 	MyPojo <jv>myPojo</jv> = OpenApi.<jsf>DEFAULT</jsf>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = OpenApi.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
  * </p>
  *
  * <ul class='seealso'>

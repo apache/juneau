@@ -96,7 +96,7 @@ import org.apache.juneau.utils.*;
  * 	It can be accessed by passing it as a parameter on your REST Java method:
  * </p>
  *
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestPost</ja>(...)
  * 	<jk>public</jk> Object myMethod(RestRequest <jv>req</jv>) {...}
  * </p>
@@ -314,7 +314,7 @@ public final class RestRequest {
 	 * Returns an assertion on the request line returned by {@link #getRequestLine()}.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the request body contains "foo".</jc>
 	 * 	<jv>request</jv>
 	 * 		.assertRequestLine().protocol().minor().is(1);
@@ -330,10 +330,10 @@ public final class RestRequest {
 	 * Returns a fluent assertion for the request body.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the request body contains "foo".</jc>
 	 * 	<jv>request</jv>
-	 * 		.assertBody().is(<js>"foo"</js>);
+	 * 		.assertBody().asString().is(<js>"foo"</js>);
 	 * </p>
 	 *
 	 * @return A new fluent assertion on the body, never <jk>null</jk>.
@@ -346,10 +346,10 @@ public final class RestRequest {
 	 * Returns a fluent assertion for the specified header.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the content type is JSON.</jc>
 	 * 	<jv>request</jv>
-	 * 		.assertHeader(<js>"Content-Type"</js>).is(<js>"application/json"</js>);
+	 * 		.assertHeader(<js>"Content-Type"</js>).asString().is(<js>"application/json"</js>);
 	 * </p>
 	 *
 	 * @param name The header name.
@@ -363,7 +363,7 @@ public final class RestRequest {
 	 * Returns a fluent assertion for the specified query parameter.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the content type is JSON.</jc>
 	 * 	<jv>request</jv>
 	 * 		.assertQueryParam(<js>"foo"</js>).asString().contains(<js>"bar"</js>);
@@ -381,7 +381,7 @@ public final class RestRequest {
 	 * Returns a fluent assertion for the specified form parameter.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the content type is JSON.</jc>
 	 * 	<jv>request</jv>
 	 * 		.assertFormParam(<js>"foo"</js>).asString().contains(<js>"bar"</js>);
@@ -405,7 +405,7 @@ public final class RestRequest {
 	 * Returns a {@link RequestHeaders} object that encapsulates access to HTTP headers on the request.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestPost</ja>(...)
 	 * 	<jk>public</jk> Object myMethod(RestRequest <jv>req</jv>) {
 	 *
@@ -454,7 +454,7 @@ public final class RestRequest {
 	 * <br>If there is no matching header in the message, an empty request header object is returned.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Gets a header and throws a BadRequest if it doesn't exist.</jc>
 	 * 	<jv>request</jv>
 	 * 		.getHeader(<js>"Foo"</js>)
@@ -483,7 +483,7 @@ public final class RestRequest {
 	 * Provides the ability to perform fluent-style assertions on the response character encoding.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates that the response content charset is UTF-8.</jc>
 	 * 	<jv>request</jv>
 	 * 		.assertCharset().is(<js>"utf-8"</js>);
@@ -638,7 +638,7 @@ public final class RestRequest {
 	 * Returns a {@link RequestAttributes} object that encapsulates access to attributes on the request.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestPost</ja>(...)
 	 * 	<jk>public</jk> Object myMethod(RestRequest <jv>req</jv>) {
 	 *
@@ -707,7 +707,7 @@ public final class RestRequest {
 	 * Similar to {@link HttpServletRequest#getParameterMap()} but only looks for query parameters in the URL and not form posts.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>(...)
 	 * 	<jk>public void</jk> doGet(RestRequest <jv>req</jv>) {
 	 *
@@ -715,7 +715,7 @@ public final class RestRequest {
 	 * 		RequestQueryParams <jv>query</jv> = <jv>req</jv>.getQuery();
 	 *
 	 * 		<jc>// Get query parameters converted to various types.</jc>
-	 * 		<jk>int</jk> <jv>p1/<jv> = <jv>query</jv>.getInteger(<js>"p1"</js>).orElse(<jk>null</jk>);
+	 * 		<jk>int</jk> <jv>p1/</jv> = <jv>query</jv>.getInteger(<js>"p1"</js>).orElse(<jk>null</jk>);
 	 * 		String <jv>p2</jv> = <jv>query</jv>.getString(<js>"p2"</js>).orElse(<jk>null</jk>);
 	 * 		UUID <jv>p3</jv> = <jv>query</jv>.get(<js>"p3"</js>).as(UUID.<jk>class</jk>).orElse(<jk>null</jk>);
 	 * 	}
@@ -787,17 +787,17 @@ public final class RestRequest {
 	 * Similar to {@link HttpServletRequest#getParameterMap()}, but only looks for form data in the HTTP body.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestPost</ja>(...)
 	 * 	<jk>public void</jk> doPost(RestRequest <jv>req</jv>) {
 	 *
 	 * 		<jc>// Get access to parsed form data parameters.</jc>
-	 * 		RequestFormData <jv>formData</jv> = <jv>req</jv>.getFormData();
+	 * 		RequestFormParams <jv>formParams</jv> = <jv>req</jv>.getFormParams();
 	 *
 	 * 		<jc>// Get form data parameters converted to various types.</jc>
-	 * 		<jk>int</jk> <jv>p1</jv> = <jv>formData</jv>.get(<js>"p1"</js>, 0, <jk>int</jk>.<jk>class</jk>);
-	 * 		String <jv>p2</jv> = <jv>formData</jv>.get(<js>"p2"</js>, String.<jk>class</jk>);
-	 * 		UUID <jv>p3</jv> = <jv>formData</jv>.get(<js>"p3"</js>, UUID.<jk>class</jk>);
+	 * 		<jk>int</jk> <jv>p1</jv> = <jv>formParams</jv>.get(<js>"p1"</js>).asInteger().orElse(0);
+	 * 		String <jv>p2</jv> = <jv>formParams</jv>.get(<js>"p2"</js>).asString().orElse(<jk>null</jk>);
+	 * 		UUID <jv>p3</jv> = <jv>formParams</jv>.get(<js>"p3"</js>).as(UUID.<jk>class</jk>).orElse(<jk>null</jk>);
 	 * 	}
 	 * </p>
 	 *
@@ -878,7 +878,7 @@ public final class RestRequest {
 	 * Returns a {@link RequestPathParams} object that encapsulates access to URL path parameters.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>(<js>"/{foo}/{bar}/{baz}/*"</js>)
 	 * 	<jk>public void</jk> doGet(RestRequest <jv>req</jv>) {
 	 *
@@ -888,7 +888,7 @@ public final class RestRequest {
 	 * 		<jc>// Example URL:  /123/qux/true/quux</jc>
 	 *
 	 * 		<jk>int</jk> <jv>foo</jv> = <jv>pathParams</jv>.get(<js>"foo"</js>).asInteger().orElse(-1);  <jc>// =123</jc>
-	 * 		String <jv>bar</jv> = <jv>pathParams</jv>.get(<js>"bar"</js>).orElse(null);  <jc>// =qux</jc>
+	 * 		String <jv>bar</jv> = <jv>pathParams</jv>.get(<js>"bar"</js>).orElse(<jk>null</jk>);  <jc>// =qux</jc>
 	 * 		<jk>boolean</jk> <jv>baz</jv> = <jv>pathParams</jv>.get(<js>"baz"</js>).asBoolean().orElse(<jk>false</jk>);  <jc>// =true</jc>
 	 * 		String <jv>remainder</jv> = <jv>pathParams</jv>.getRemainder().orElse(<jk>null</jk>);  <jc>// =quux</jc>
 	 * 	}
@@ -951,7 +951,7 @@ public final class RestRequest {
 	 * Returns a {@link RequestBody} object that encapsulates access to the HTTP request body.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestPost</ja>(...)
 	 * 	<jk>public void</jk> doPost(RestRequest <jv>req</jv>) {
 	 *
@@ -1202,7 +1202,7 @@ public final class RestRequest {
 	 * A shortcut for calling <c>getInfoProvider().getSwagger(request);</c>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>
 	 * 	<jk>public</jk> List&lt;Tag&gt; swaggerTags(RestRequest <jv>req</jv>) {
 	 * 		<jk>return</jk> <jv>req</jv>.getSwagger().getTags();
@@ -1288,7 +1288,7 @@ public final class RestRequest {
 	 * Returns the resource bundle for the request locale.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>
 	 * 	<jk>public</jk> String hello(RestRequest <jv>req</jv>, <ja>@Query</ja>(<js>"user"</js>) String <jv>user</jv>) {
 	 *
@@ -1439,7 +1439,7 @@ public final class RestRequest {
 	 * Used to resolve SVL variables in text.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>
 	 * 	<jk>public</jk> String hello(RestRequest <jv>req</jv>) {
 	 *
@@ -1510,7 +1510,7 @@ public final class RestRequest {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>(...)
 	 * 	<jk>public void</jk> doGet(RestRequest <jv>req</jv>) {
 	 *
@@ -1518,10 +1518,10 @@ public final class RestRequest {
 	 * 		Config <jv>config</jv> = <jv>req</jv>.getConfig();
 	 *
 	 * 		<jc>// Get simple values from config file.</jc>
-	 * 		<jk>int</jk> <jv>timeout</jv> = <jv>config</jv>.getInt(<js>"MyResource/timeout"</js>, 10000);
+	 * 		<jk>int</jk> <jv>timeout</jv> = <jv>config</jv>.get(<js>"MyResource/timeout"</js>).asInteger().orElse(=10000);
 	 *
 	 * 		<jc>// Get complex values from config file.</jc>
-	 * 		MyBean <jv>bean</jv> = <jv>config</jv>.getObject(<js>"MyResource/myBean"</js>, MyBean.<jk>class</jk>);
+	 * 		MyBean <jv>bean</jv> = <jv>config</jv>.get(<js>"MyResource/myBean"</js>).as(MyBean.<jk>class</jk>).orElse(<jk>null</jk>);
 	 * 	}
 	 * </p>
 	 *
@@ -1548,7 +1548,7 @@ public final class RestRequest {
 	 * Creates a proxy interface to retrieve HTTP parts of this request as a proxy bean.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestPost</ja>(<js>"/mypath/{p1}/{p2}/*"</js>)
 	 * 	<jk>public void</jk> myMethod(<ja>@Request</ja> MyRequest <jv>requestBean</jv>) {...}
 	 *

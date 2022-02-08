@@ -26,7 +26,7 @@
 			Revamped the serializer, parser classes to use builders for creation.
 			Serializers and parsers are now unmodifiable objects once they are created.
 			This is a breaking code change that will require adoption.
-			<p class='bcode w800'>
+			<p class='bcode'>
 		<jc>/* Creating a new serializer or parser */ </jc>
 		
 		<jc>// Old way</jc>
@@ -166,7 +166,7 @@
 				<li>{@del @RestResource(pageLinks)} 
 				<li>{@del @RestMethod(pageLinks)} 
 			</ul>				
-			<p class='bcode w800'>
+			<p class='bcode'>
 		<jc>// Old method</jc>
 		<ja>@RestResource</ja>(
 			properties={
@@ -187,7 +187,7 @@
 				Typically you're going to simply want to use the <c>title</c> and <c>description</c> annotations
 				which apply to both the page title/text and the swagger doc:		
 			</p>
-			<p class='bcode w800'>
+			<p class='bcode'>
 		<ja>@RestResource</ja>(
 			title=<js>"System properties resource"</js>,
 			description=<js>"REST interface for performing CRUD operations on system properties."</js>,
@@ -199,7 +199,7 @@
 			and is now immutable.  It also includes a new {@del StreamResourceBuilder} class.
 		<li>Simplified remoteable proxies using the <c><ja>@RestMethod</ja>(name=<js>"PROXY"</js>)</c> annotation on REST methods.
 			Used to expose interface proxies without the need for {@del RemoteableServlet}.
-		<p class='bcode w800'>
+		<p class='bcode'>
 		<jc>// Server side</jc>
 		<ja>@RestMethod</ja>(name=<js>"PROXY"</js>, path=<js>"/myproxy/*"</js>)
 		<jk>public</jk> IAddressBook getProxy() {

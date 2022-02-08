@@ -34,7 +34,7 @@
 	<p>
 		Read is self-explanatory:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public</jk> String read(String <jv>name</jv>) {
 		|		<jc>// Return the contents of the specified configuration.</jc>
 		|	}
@@ -42,7 +42,7 @@
 	<p>
 		Write is slightly trickier:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public</jk> String write(String <jv>name</jv>, String <jv>oldContents</jv>, String <jv>newContents</jv>) {
 		|			
 		|		<jc>// If the old contents match the current stored contents, the new contents will get stored, 
@@ -57,7 +57,7 @@
 	<p>
 		The update method is called whenever the stored file gets modified externally:
 	</p>		
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public</jk> String update(String <jv>name</jv>, String <jv>newContents</jv>) {
 		|		<jc>// Do something with the updated contents.</jc>
 		|	}
@@ -81,7 +81,7 @@
 	</ul>
 	
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a config with in-memory storage.</jc>
 		|	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).store(ConfigMemoryStore.<jsf>DEFAULT</jsf>).build();
 	</p>

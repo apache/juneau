@@ -23,7 +23,7 @@ import org.apache.juneau.http.annotation.*;
  * Where in a full body message this partial message belongs.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Content-Range: bytes 21010-47021/47022
  * </p>
  *
@@ -32,7 +32,7 @@ import org.apache.juneau.http.annotation.*;
  * The Content-Range entity-header is sent with a partial entity-body to specify where in the full entity-body the
  * partial body should be applied.
  * Range units are defined in section 3.12.
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Content-Range = "Content-Range" ":" content-range-spec
  * 	content-range-spec      = byte-content-range-spec
  * 	byte-content-range-spec = bytes-unit SP
@@ -66,7 +66,7 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * Examples of byte-content-range-spec values, assuming that the entity contains a total of 1234 bytes:
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	The first 500 bytes:
  * 	 bytes 0-499/1234
  * 	The second 500 bytes:
@@ -82,7 +82,7 @@ import org.apache.juneau.http.annotation.*;
  * or to a request for a set of ranges that overlap without any holes), this content is transmitted with a Content-Range
  * header, and a Content-Length header showing the number of bytes actually transferred.
  * For example:
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	HTTP/1.1 206 Partial content
  * 	Date: Wed, 15 Nov 1995 06:25:24 GMT
  * 	Last-Modified: Wed, 15 Nov 1995 04:58:08 GMT

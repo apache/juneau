@@ -89,11 +89,11 @@ public class RestLoggerRule {
 		 * Apply a status-based predicate check for this rule to match against.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a logger rule that only matches if the status code is greater than or equal to 500.</jc>
 		 * 	RestLogger
 		 * 		.<jsm>createRule</jsm>()
-		 * 		.statusFilter(<jv>x</jv> -&gt; <jv>x</jv> &gt;= 500)
+		 * 		.statusFilter(<jv>x</jv> -> <jv>x</jv> &gt;= 500)
 		 * 		.build();
 		 * </p>
 		 *
@@ -110,11 +110,11 @@ public class RestLoggerRule {
 		 * Apply a throwable-based predicate check for this rule to match against.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a logger rule that only matches if a NotFound exception was thrown.</jc>
 		 * 	RestLogger
 		 * 		.<jsm>createRule</jsm>()
-		 * 		.exceptionFilter(<jv>x</jv> -&gt; <jv>x</jv> <jk>instanceof</jk> NotFound)
+		 * 		.exceptionFilter(<jv>x</jv> -> <jv>x</jv> <jk>instanceof</jk> NotFound)
 		 * 		.build();
 		 * </p>
 		 *
@@ -135,11 +135,11 @@ public class RestLoggerRule {
 		 * Apply a request-based predicate check for this rule to match against.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a logger rule that only matches if the servlet path contains "foobar".</jc>
 		 * 	RestLogger
 		 * 		.<jsm>createRule</jsm>()
-		 * 		.requestFilter(<jv>x</jv> -&gt; <jv>x</jv>.getServletPath().contains(<js>"foobar"</js>))
+		 * 		.requestFilter(<jv>x</jv> -> <jv>x</jv>.getServletPath().contains(<js>"foobar"</js>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -156,11 +156,11 @@ public class RestLoggerRule {
 		 * Apply a response-based predicate check for this rule to match against.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a logger rule that only matches if the servlet path contains "foobar".</jc>
 		 * 	RestLogger
 		 * 		.<jsm>createRule</jsm>()
-		 * 		.responseFilter(<jv>x</jv> -&gt; <jv>x</jv>.getStatus() &gt;= 500)
+		 * 		.responseFilter(<jv>x</jv> -> <jv>x</jv>.getStatus() &gt;= 500)
 		 * 		.build();
 		 * </p>
 		 *
@@ -185,16 +185,16 @@ public class RestLoggerRule {
 		 * <ul>
 		 * 	<li>{@link Enablement#ALWAYS ALWAYS} - Logging is enabled.
 		 * 	<li>{@link Enablement#NEVER NEVER} - Logging is disabled.
-		 * 	<li>{@link Enablement#CONDITIONAL CONDITIONALLY} - Logging is enabled if it passes the {@link #enabledTest(Predicate)} test.
+		 * 	<li>{@link Enablement#CONDITIONAL CONDITIONALLY} - Logging is enabled if it passes the {@link #enabledPredicate(Predicate)} test.
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a logger rule where logging is only enabled if the query string contains "foobar".</jc>
 		 * 	RestLogger
 		 * 		.<jsm>createRule</jsm>()
 		 * 		.enabled(<jsf>CONDITIONALLY</jsf>)
-		 * 		.enabledTest(<jv>x</jv> -> <jv>x</jv>.getQueryString().contains(<js>"foobar"</js>))
+		 * 		.enabledPredicate(<jv>x</jv> -> <jv>x</jv>.getQueryString().contains(<js>"foobar"</js>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -215,20 +215,20 @@ public class RestLoggerRule {
 		 * This setting has no effect if the enablement value is not {@link Enablement#CONDITIONAL CONDITIONALLY}.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a logger rule where logging is only enabled if the query string contains "foobar".</jc>
 		 * 	RestLogger
 		 * 		.<jsm>createRule</jsm>()
 		 * 		.enabled(<jsf>CONDITIONALLY</jsf>)
-		 * 		.enabledTest(<jv>x</jv> -> <jv>x</jv>.getQueryString().contains(<js>"foobar"</js>))
+		 * 		.enabledPredicate(<jv>x</jv> -> <jv>x</jv>.getQueryString().contains(<js>"foobar"</js>))
 		 * 		.build();
 		 * </p>
 		 *
 		 * @param value
-		 * 	The enablement predicate test, or <jk>null</jk> to inherit from the call logger whose default value is <c><jv>x</jv> -&gt; <jk>false</jk></c>.
+		 * 	The enablement predicate test, or <jk>null</jk> to inherit from the call logger whose default value is <c><jv>x</jv> -> <jk>false</jk></c>.
 		 * @return This object.
 		 */
-		public Builder enabledTest(Predicate<HttpServletRequest> value) {
+		public Builder enabledPredicate(Predicate<HttpServletRequest> value) {
 			this.enabledTest = value;
 			return this;
 		}

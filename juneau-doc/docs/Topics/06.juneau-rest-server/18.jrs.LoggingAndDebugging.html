@@ -51,7 +51,7 @@
 		<li><js>"conditional"</js> - Debug is enabled only for requests that have a <c class='snippet'>Debug: true</c> header.
 	</ul>
 	<h5 class='figure'>Example</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Enable debugging on all op calls on this resource</jc>
 		|	<ja>@Rest</ja>(debug=<js>"true"</js>)
 		|	<jk>public class</jk> MyResource {...}
@@ -59,7 +59,7 @@
 	<p>
 		These annotations support SVL variables, so it's possible to define them as a system property for example.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Enable via system property 'MyResource.debug'</jc>
 		|	<ja>@Rest</ja>(debug=<js>"$S{MyResource.debug}"</js>)
 		|	<jk>public class</jk> MyResource {...}
@@ -69,7 +69,7 @@
 		to enable debugging.  It takes a comma-delimited list of key-value pairs, the keys
 		being class or method names, and the values being one of <c>true|false|conditional</c>.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Turn on debug per-request on the class and always on the doX() method</jc>
 		|	<ja>@Rest</ja>(debugOn=<js>"MyResource=conditional,MyResource.doX=true"</js>)
 		|	<jk>public class</jk> MyResource {...}
@@ -78,7 +78,7 @@
 		The primary advantage of {@link oajr.annotation.Rest#debugOn() @Rest(debugOn)} is that
 		you can control debugging externally such as through a system property or environment variable:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Turn on debug per-request on the class and always on the doX() method</jc>
 		|	<ja>@Rest</ja>(debugOn=<js>"$E{DEBUG}"</js>)
 		|	<jk>public class</jk> MyResource {...}
@@ -179,7 +179,7 @@
 		The call logger uses logging rules to map requests to logging detail levels.
 		By default, these are the logging rules:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	RestLogger
 		|		.<jsm>create</jsm>()
 		|		.beanStore(<jv>beanStore</jv>)  <jc>// Allow injected beans in constructor</jc>
@@ -208,7 +208,7 @@
 	<p>
 		Thrown exceptions get logged with a stack trace hash and a counter like below:
 	</p>
-	<p class='bcode w800'>
+	<p class='bcode'>
 		|	WARNING: [500,9b85cc96.13] HTTP POST /foo?foo=bar
 	</p>
 	<p>

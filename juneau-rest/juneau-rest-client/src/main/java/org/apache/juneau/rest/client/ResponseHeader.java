@@ -437,7 +437,7 @@ public class ResponseHeader implements Header {
 	 * Matches the specified pattern against this header value.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Parse header using a regular expression.</jc>
 	 * 	Matcher <jv>matcher</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
@@ -461,7 +461,7 @@ public class ResponseHeader implements Header {
 	 * Matches the specified pattern against this header value.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Parse header using a regular expression.</jc>
 	 * 	Matcher <jv>matcher</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
@@ -485,7 +485,7 @@ public class ResponseHeader implements Header {
 	 * Matches the specified pattern against this header value.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Parse header using a regular expression.</jc>
 	 * 	Matcher <jv>matcher</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
@@ -514,7 +514,7 @@ public class ResponseHeader implements Header {
 	 * Provides the ability to perform fluent-style assertions on this response header.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the content type header is provided.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
@@ -525,13 +525,13 @@ public class ResponseHeader implements Header {
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).equals(<js>"application/json"</js>);
+	 * 		.getHeader(<js>"Content-Type"</js>).assertValue().equals(<js>"application/json"</js>);
 	 *
 	 * 	<jc>// Validates the content type is JSON using test predicate.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).assertValue().passes(<jv>x</jv> -&gt; <jv>x</jv>.equals(<js>"application/json"</js>));
+	 * 		.getHeader(<js>"Content-Type"</js>).assertValue().passes(<jv>x</jv> -> <jv>x</jv>.equals(<js>"application/json"</js>));
 	 *
 	 * 	<jc>// Validates the content type is JSON by just checking for substring.</jc>
 	 * 	<jv>client</jv>
@@ -554,7 +554,7 @@ public class ResponseHeader implements Header {
 	 *
 	 * <p>
 	 * The assertion test returns the original response object allowing you to chain multiple requests like so:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the header and converts it to a bean.</jc>
 	 * 	MediaType <jv>mediaType</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)

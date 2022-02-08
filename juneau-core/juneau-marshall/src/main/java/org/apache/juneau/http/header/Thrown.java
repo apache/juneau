@@ -29,7 +29,7 @@ import org.apache.juneau.http.annotation.*;
  * Contains exception information including name and optionally a message.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Thrown: org.apache.juneau.http.response.NotFound;Resource was not found
  * </p>
  *
@@ -39,13 +39,13 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * This header supports comma-delimited values for multiple thrown values.
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Thrown: org.apache.juneau.http.response.NotFound;Resource was not found,java.lang.RuntimeException;foo
  * </p>
  *
  * <p>
  * Note that this is equivalent to specifying multiple header values.
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Thrown: org.apache.juneau.http.response.NotFound;Resource was not found
  * 	Thrown: java.lang.RuntimeException;foo
  * </p>

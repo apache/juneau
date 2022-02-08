@@ -123,7 +123,7 @@ public class InputStreamParser extends Parser {
 		 * when converting the string into a byte array.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a parser that parses from BASE64.</jc>
 		 * 	InputStreamParser <jv>parser</jv> = MsgPackParser
 		 * 		.<jsm>create</jsm>()
@@ -132,7 +132,7 @@ public class InputStreamParser extends Parser {
 		 *
 		 * 	String <jv>input</jv> = <js>"base64-encoded-string"</js>;
 		 *
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv> .parse(<jv>input</jv> , MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<jv>input</jv> , MyBean.<jk>class</jk>);
 		 * </p>
 		 *
 		 * @param value

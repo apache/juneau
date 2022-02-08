@@ -24,7 +24,7 @@ import org.apache.juneau.http.annotation.*;
  * Valid methods for a specified resource. To be used for a 405 Method not allowed.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Allow: GET, HEAD
  * </p>
  *
@@ -34,13 +34,13 @@ import org.apache.juneau.http.annotation.*;
  * The purpose of this field is strictly to inform the recipient of valid methods associated with the resource.
  * An Allow header field MUST be present in a 405 (Method Not Allowed) response.
  *
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Allow   = "Allow" ":" #Method
  * </p>
  *
  * <p>
  * Example of use:
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Allow: GET, HEAD, PUT
  * </p>
  *

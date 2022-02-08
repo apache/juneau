@@ -23,7 +23,7 @@ import org.apache.juneau.serializer.*;
  * {@review}
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Validates the response length isn't too long.</jc>
  * 	<jsm>assertLong</jsm>(<jv>responseLength</jv>).isLessThan(100000);
  * </p>

@@ -32,7 +32,7 @@
 		It can make sense to be able to render {@code Iterators} as arrays, but in general it's not possible to 
 		reconstruct an {@code Iterator} during parsing. 
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> IteratorSwap <jk>extends</jk> ObjectSwap&lt;Iterator,List&gt; {
 		|		<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
 		|		<jk>public</jk> List swap(Iterator <jv>iterator</jv>) {
@@ -48,7 +48,7 @@
 		Note that trying to parse the original object will cause a {@link oaj.parser.ParseException} 
 		to be thrown.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a JSON serializer that can serialize Iterators.</jc>
 		|	WriterSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().simple().swaps(IteratorSwap.<jk>class</jk>).build();
 		|	

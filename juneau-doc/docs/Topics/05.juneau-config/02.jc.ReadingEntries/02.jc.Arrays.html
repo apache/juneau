@@ -18,34 +18,34 @@
 <div class='topic'>
 	<p>
 		The <c>toStringArray()</c> method allows you to retrieve comma-delimited lists of values:
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<ck>key1</ck> = <cv>foo, bar, baz</cv>
 	</p>
-	<p class='bcode w800'>
-		|	String[] <jv>key1</jv> = <jv>config</jv>.get(<js>"key1"</js>).toStringArray();
+	<p class='bjava'>
+		|	String[] <jv>key1</jv> = <jv>config</jv>.get(<js>"key1"</js>).asStringArray().orElse(<jk>null</jk>);
 	</p>
 	<p>
 		String arrays can also be represented in JSON when the registered parser is a JSON parser:
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<ck>key1</ck> = <cv>['foo','bar','baz']</cv>
 	</p>
-	<p class='bcode w800'>
-		|	String[] <jv>key1</jv> = <jv>config</jv>.get(<js>"key1"</js>).toStringArray();
+	<p class='bjava'>
+		|	String[] <jv>key1</jv> = <jv>config</jv>.get(<js>"key1"</js>).asStringArray().orElse(<jk>null</jk>);
 	</p>
 	<p>
 		Primitive arrays can also be retrieved using the <c>as()</c> and <c>to()</c> methods:
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<ck>key1</ck> = <cv>[1,2,3]</cv>
 	</p>
-	<p class='bcode w800'>
-		|	<jk>int</jk>[] <jv>key1</jv> = <jv>config</jv>.get(<js>"key1"</js>).to(<jk>int</jk>[].<jk>class</jk>);
+	<p class='bjava'>
+		|	<jk>int</jk>[] <jv>key1</jv> = <jv>config</jv>.get(<js>"key1"</js>).as(<jk>int</jk>[].<jk>class</jk>).orElse(<jk>null</jk>);
 	</p>
 	<p>
 		Arrays of POJOs can also be retrieved using the methods as well:
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<ck>addresses</ck> = 
 		|		<cv>[
 		|			{
@@ -62,7 +62,7 @@
 		|			}
 		|		]</cv>
 	</p>
-	<p class='bcode w800'>
-		|	Address[] <jv>addresses</jv> = <jv>config</jv>.get(<js>"addresses"</js>).to(Address[].<jk>class</jk>);
+	<p class='bjava'>
+		|	Address[] <jv>addresses</jv> = <jv>config</jv>.get(<js>"addresses"</js>).as(Address[].<jk>class</jk>).orElse(<jk>null</jk>);
 	</p>
 </div>

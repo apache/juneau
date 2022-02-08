@@ -20,7 +20,7 @@ import java.util.function.*;
  * <p>
  * Same as {@link BiFunction}.
  *
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	Tuple2Function&lt;A,B,R&gt; <jv>x</jv> = (<jv>a</jv>,<jv>b</jv>) -> <jsm>doSomething</jsm>(<jv>a</jv>,<jv>b</jv>);
  *
  * 	R <jv>result</jv> = <jv>x</jv>.apply(<jv>xa</jv>,<jv>xb</jv>);

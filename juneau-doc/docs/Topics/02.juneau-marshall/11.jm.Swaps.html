@@ -33,7 +33,7 @@
 		In the following example, we introduce a <c>ObjectSwap</c> that will swap in a bean of a particular type
 		with a map containing customized key-value pairs:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Sample swap for converting a bean to a specialized map of key-value pairs.</jc>
 		|	<jk>public class</jk> MyBeanSwap <jk>extends</jk> ObjectSwap&lt;MyBean,OMap&gt; {
 		|		
@@ -45,9 +45,9 @@
 		|		
 		|		<jc>// Converts the generic map back into a bean.</jc>
 		|		<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
-		|		<jk>public</jk> MyBean unswap(BeanSession <jv>session</jv>, OMap <jv>omap</jv>, ClassMeta&lt;?&gt; <jv>hint</jv>) <jk>throws</jk> Exception {
+		|		<jk>public</jk> MyBean unswap(BeanSession <jv>session</jv>, OMap <jv>map</jv>, ClassMeta&lt;?&gt; <jv>hint</jv>) <jk>throws</jk> Exception {
 		|			MyBean <jv>bean</jv> = <jk>new</jk> MyBean();
-		|			<jv>bean</jv>.setBar(<jv>omap</jv>.getString(<js>"foo"</js>));
+		|			<jv>bean</jv>.setBar(<jv>map</jv>.getString(<js>"foo"</js>));
 		|			<jk>return</jk> <jv>bean</jv>;
 		|		}
 		|	}
@@ -55,7 +55,7 @@
 	<p>
 		The swap can then be associated with serializers and parsers like so:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a new JSON serializer with our swap.</jc>
 		|	WriterSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().simple().swaps(MyBeanSwap.<jk>class</jk>).build();
 		|	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
@@ -68,7 +68,7 @@
 		Another example of a <c>ObjectSwap</c> is one that converts <c><jk>byte</jk>[]</c> arrays to
 		BASE64-encoded strings:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> ByteArrayBase64Swap <jk>extends</jk> StringSwap&lt;<jk>byte</jk>[]&gt; {
 		|	
 		|		<ja>@Override</ja> <jc>/* StringSwap */</jc>
@@ -96,7 +96,7 @@
 	<p>
 		The following example shows the BASE64 swap in use:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a JSON serializer and register the BASE64 encoding swap with it.</jc>
 		|	WriterSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().simple().swaps(ByteArrayBase64Swap.<jk>class</jk>).build();
 		|	ReaderParser <jv>parser</jv> = JsonParser.<jsm>create</jsm>().swaps(ByteArrayBase64Swap.<jk>class</jk>).build();
@@ -113,12 +113,12 @@
 		The {@link oaj.BeanContextable.Builder#swap(Class,Class,ThrowingFunction)} and {@link oaj.BeanContextable.Builder#swap(Class,Class,ThrowingFunction,ThrowingFunction)}
 		methods are another way to define swaps by using functions.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Use a function to convert beans to strings.</jc>
 		|	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		|		.<jsm>create</jsm>()
 		|		.simple()
-		|		.swap(MyBean.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -&gt; <jsm>myBeanStringifier</jsm>(<jv>x</jv>))
+		|		.swap(MyBean.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -> <jsm>myBeanStringifier</jsm>(<jv>x</jv>))
 		|		.build();
 	</p>
 </div>

@@ -27,7 +27,7 @@ import org.apache.juneau.internal.*;
  * Describes a single API operation on a path.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	Operation <jv>operation</jv> = <jsm>operation</jsm>()
  * 		.tags(<js>"pet"</js>)
@@ -66,7 +66,7 @@ import org.apache.juneau.internal.*;
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	<jv>json</jv> = <jv>operation</jv>.toString();
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjson'>
  * 	<jc>// Output</jc>
  * 	{
  * 		<js>"tags"</js>: [
@@ -522,7 +522,7 @@ public class Operation extends SwaggerElement {
 	 * Additional external documentation for this operation as raw JSON.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	externalDocs(<js>"{description:'description',url:'url'}"</js>);
 	 * </p>
 	 *
@@ -969,7 +969,7 @@ public class Operation extends SwaggerElement {
 	 * The list of possible responses as they are returned from executing this operation as raw JSON.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	responses(<js>"{'404':{description:'description',...}}"</js>);
 	 * </p>
 	 *
@@ -1176,7 +1176,7 @@ public class Operation extends SwaggerElement {
 	 * <br>To remove a top-level <c>security</c> declaration, an empty array can be used.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	security(<js>"[{key:['val1','val2']}]"</js>);
 	 * </p>
 	 *

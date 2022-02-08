@@ -27,7 +27,7 @@
 		<li>Uses single-quotes for quoting.
 	</ul>
 	<h5 class='figure'>Examples:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Some free-form JSON.</jc>
 		|	OMap <jv>omap</jv> = OMap.<jsm>of</jsm>(
 		|		<js>"foo"</js>, <js>"x1"</js>,
@@ -38,7 +38,7 @@
 		|		<js>""</js>, <js>"x6"</js>
 		|	);
 	</p>
-	<p class='bcode w800'>
+	<p class='bjson'>
 		|	<joc>// Serialized to standard JSON</joc>
 		|	{
 		|		<jok>"foo"</jok>: <jov>"x1"</jov>,
@@ -49,7 +49,7 @@
 		|		<jok>""</jok>: <jov>"x6"</jov>
 		|	}
 	</p>	 		
-	<p class='bcode w800'>
+	<p class='bjson'>
 		|	<joc>// Serialized to simplified JSON</joc>
 		|	{
 		|		<jok>foo</jok>: <jov>'x1'</jov>,
@@ -64,7 +64,7 @@
 		The advantage to simplified JSON is you can represent it in a Java String in minimal form with minimal escaping.
 		This is particularly useful in cases such as unit testing where you can easily validate POJOs by simplifying them to Simplified JSON and do a simple string comparison.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	WriterSerializer <jv>serializer</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>;
 		|	<jsm>assertEquals</jsm>(<js>"{foo:'bar',baz:123}"</js>, <jv>serializer</jv>.toString(<jv>myPojo</jv>));
 	</p>			

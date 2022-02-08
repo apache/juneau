@@ -31,12 +31,12 @@ import org.apache.juneau.svl.*;
  * respectively.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Create a variable resolver that resolves system properties and $SW vars.</jc>
- * 	VarResolver r = VarResolver.<jsm>create</jsm>().vars(PatternExtractVar.<jk>class</jk>, SystemPropertiesVar.<jk>class</jk>).build();
+ * 	VarResolver <jv>varResolver</jv> = VarResolver.<jsm>create</jsm>().vars(PatternExtractVar.<jk>class</jk>, SystemPropertiesVar.<jk>class</jk>).build();
  *
  * 	<jc>// Use it!</jc>
- * 	System.<jsf>out</jsf>.println(r.resolve(<js>"Update = $PE{$P{java.version},_([0-9]+),1}!"</js>));
+ * 	System.<jsf>out</jsf>.println(<jv>varResolver</jv>.resolve(<js>"Update = $PE{$P{java.version},_([0-9]+),1}!"</js>));
  * </p>
  *
  * <p>

@@ -531,23 +531,23 @@ public class ParserSession extends BeanSession {
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
+	 * <p class='bjava'>
+	 * 	ReaderParser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
 	 *
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
-	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List <jv>list1</jv> = <jv>parser</jv>.parse(<jv>json</jv>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of beans.</jc>
-	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	List <jv>list2</jv> = <jv>parser</jv>.parse(<jv>json</jv>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
-	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List <jv>list3</jv> = <jv>parser</jv>.parse(<jv>json</jv>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
-	 * 	Map m = p.parse(json, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	Map <jv>map1</jv> = <jv>parser</jv>.parse(<jv>json</jv>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
-	 * 	Map m = p.parse(json, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	Map <jv>map2</jv> = <jv>parser</jv>.parse(<jv>json</jv>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <p>
@@ -657,23 +657,23 @@ public class ParserSession extends BeanSession {
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
+	 * <p class='bjava'>
+	 * 	ReaderParser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
 	 *
 	 * 	<jc>// Parse into a string.</jc>
-	 * 	String s = p.parse(json, String.<jk>class</jk>);
+	 * 	String <jv>string</jv> = <jv>parser</jv>.parse(<jv>json</jv>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a bean.</jc>
-	 * 	MyBean b = p.parse(json, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a bean array.</jc>
-	 * 	MyBean[] ba = p.parse(json, MyBean[].<jk>class</jk>);
+	 * 	MyBean[] <jv>beanArray</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean[].<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
-	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>);
+	 * 	List <jv>list</jv> = <jv>parser</jv>.parse(<jv>json</jv>, LinkedList.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
-	 * 	Map m = p.parse(json, TreeMap.<jk>class</jk>);
+	 * 	Map <jv>map</jv> = <jv>parser</jv>.parse(<jv>json</jv>, TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param <T> The class type of the object being created.
@@ -698,23 +698,23 @@ public class ParserSession extends BeanSession {
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
+	 * <p class='bjava'>
+	 * 	ReaderParser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
 	 *
 	 * 	<jc>// Parse into a string.</jc>
-	 * 	String s = p.parse(json, String.<jk>class</jk>);
+	 * 	String <jv>string</jv> = <jv>parser</jv>.parse(<jv>json</jv>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a bean.</jc>
-	 * 	MyBean b = p.parse(json, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a bean array.</jc>
-	 * 	MyBean[] ba = p.parse(json, MyBean[].<jk>class</jk>);
+	 * 	MyBean[] <jv>beanArray</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean[].<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
-	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>);
+	 * 	List <jv>list</jv> = <jv>parser</jv>.parse(<jv>json</jv>, LinkedList.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
-	 * 	Map m = p.parse(json, TreeMap.<jk>class</jk>);
+	 * 	Map <jv>map</jv> = <jv>parser</jv>.parse(<jv>json</jv>, TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param <T> The class type of the object being created.

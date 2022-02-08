@@ -33,24 +33,24 @@ import org.apache.juneau.svl.*;
  * {@review}
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	HeaderList <jv>headers</jv> = HeaderList
  * 		.<jsm>create</jsm>()
- * 		.append(Accept.<jsm>of</jsm>("text/xml"))
+ * 		.append(Accept.<jsm>of</jsm>(<js>"text/xml"</js>))
  * 		.append(<js>"Content-Type"</js>, ()-><jsm>getDynamicContentTypeFromSomewhere</jsm>())
  * 		.build();
  * </p>
  *
  * <p>
  * Convenience creators are provided for creating lists with minimal code:
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	HeaderList <jv>headers</jv> = HeaderList.<jsm>of</jsm>(Accept.<jsf>TEXT_XML</jsf>, ContentType.<jsf>TEXT_XML</jsf>);
  * </p>
  *
  * <p>
  * Header lists are immutable, but can be appended to using the {@link #copy()} method:
- * <p class='bcode w800'>
- * 	headers = headers
+ * <p class='bjava'>
+ * 	<jv>headers</jv> = <jv>headers</jv>
  * 		.copy()
  * 		.append(AcceptEncoding.<jsm>of</jsm>(<js>"identity"</js>))
  * 		.build();
@@ -58,10 +58,10 @@ import org.apache.juneau.svl.*;
  *
  * <p>
  * Static methods are provided on {@link HttpHeaders} to further simplify creation of header lists.
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jk>import static</jk> org.apache.juneau.http.HttpHeaders.*;
  *
- * 	HeaderList <jv>headers</jv> = <jsm>headerList</jsm>(<jsm>accept</jsm>(<js>"text/xml"</js>), <jsm>contentType</jsm>(<js>"text/xml"<js>));
+ * 	HeaderList <jv>headers</jv> = <jsm>headerList</jsm>(<jsm>accept</jsm>(<js>"text/xml"</js>), <jsm>contentType</jsm>(<js>"text/xml"</js>));
  * </p>
  *
  * <p>
@@ -70,7 +70,7 @@ import org.apache.juneau.svl.*;
  * headers.
  * <br>The following example notes the distinction:
  *
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jv>headers</jv> = HeaderList
  * 		.<jsm>create</jsm>()
  * 		.set(Accept.<jsf>TEXT_PLAIN</jsf>)
@@ -105,7 +105,7 @@ import org.apache.juneau.svl.*;
  * beans.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	ContentType <jv>contentType</jv> = <jv>headers</jv>.get(ContentType.<jk>class</jk>);
  * </p>
  *
@@ -118,7 +118,7 @@ import org.apache.juneau.svl.*;
  * are resolved at runtime.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Create a header list with dynamically-resolving values pulled from a system property.</jc>
  *
  * 	System.<jsm>setProperty</jsm>(<js>"foo"</js>, <js>"bar"</js>);
@@ -138,7 +138,7 @@ import org.apache.juneau.svl.*;
  * annotations throughout the framework.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// A predefined list of headers.</jc>
  * 	<jk>public class</jk> MyHeaderList <jk>extends</jk> HeaderList {
  * 		<jk>public</jk> MyHeaderList() {
@@ -220,7 +220,7 @@ public class HeaderList {
 	 * Creates a new {@link HeaderList} initialized with the specified name/value pairs.
 	 *
 	 * <h5 class='figure'>Example</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	HeaderList <jv>headers</jv> = HeaderList.<jsm>ofPairs</jsm>(<js>"Accept"</js>, <js>"text/xml"</js>, <js>"Content-Type"</js>, <js>"text/xml"</js>);
 	 * </p>
 	 *
@@ -1335,7 +1335,7 @@ public class HeaderList {
 	 * </ul>
 	 *
 	 * <h5 class='figure'>Example</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	BasicIntegerHeader <jv>age</jv> = headerList.get(<js>"Age"</js>, BasicIntegerHeader.<jk>class</jk>);
 	 * </p>
 	 *
@@ -1385,7 +1385,7 @@ public class HeaderList {
 	 * 	{@link org.apache.juneau.http.annotation.Header#value()} annotations.
 	 *
 	 * <h5 class='figure'>Example</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	Age <jv>age</jv> = headerList.get(Age.<jk>class</jk>);
 	 * </p>
 	 *

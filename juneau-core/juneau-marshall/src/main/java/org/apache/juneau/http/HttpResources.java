@@ -38,7 +38,7 @@ public class HttpResources {
 	 * <p>
 	 * Assumes no content type.
 	 *
-	 * @param content The entity content.  Can be <jk>null<jk>.
+	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @return A new {@link ByteArrayResource} builder.
 	 */
 	public static final HttpResourceBuilder<ByteArrayResource> byteArrayResource(byte[] content) {
@@ -48,7 +48,7 @@ public class HttpResources {
 	/**
 	 * Creates a new {@link ByteArrayResource} builder.
 	 *
-	 * @param content The entity content.  Can be <jk>null<jk>.
+	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link ByteArrayResource} builder.
 	 */
@@ -62,7 +62,7 @@ public class HttpResources {
 	 * <p>
 	 * Assumes no content type.
 	 *
-	 * @param content The entity content supplier.  Can be <jk>null<jk>.
+	 * @param content The entity content supplier.  Can be <jk>null</jk>.
 	 * @return A new {@link ByteArrayResource} builder.
 	 */
 	public static final HttpResourceBuilder<ByteArrayResource> byteArrayResource(Supplier<byte[]> content) {
@@ -72,7 +72,7 @@ public class HttpResources {
 	/**
 	 * Creates a new {@link ByteArrayResource} builder.
 	 *
-	 * @param content The entity content supplier.  Can be <jk>null<jk>.
+	 * @param content The entity content supplier.  Can be <jk>null</jk>.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link ByteArrayResource} builder.
 	 */
@@ -86,7 +86,7 @@ public class HttpResources {
 	 * <p>
 	 * Assumes no content type.
 	 *
-	 * @param content The entity content.  Can be <jk>null<jk>.
+	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @return A new {@link FileResource} builder.
 	 */
 	public static final HttpResourceBuilder<FileResource> fileResource(File content) {
@@ -96,7 +96,7 @@ public class HttpResources {
 	/**
 	 * Creates a new {@link FileResource} builder.
 	 *
-	 * @param content The entity content.  Can be <jk>null<jk>.
+	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link FileResource} builder.
 	 */
@@ -125,77 +125,13 @@ public class HttpResources {
 		return ReaderResource.create().content(content).contentType(contentType);
 	}
 
-//	/**
-//	 * Creates a new {@link SerializedResource} object.
-//	 *
-//	 * @param content
-//	 * 	The Java POJO representing the content.
-//	 * 	<br>Can be <jk>null<jk>.
-//	 * @param serializer
-//	 * 	The serializer to use to serialize the POJO.
-//	 * 	<br>If <jk>null</jk>, POJO will be converted to a string using {@link Object#toString()}.
-//	 * @return A new {@link SerializedResource} object.
-//	 */
-//	public static final SerializedResourceBuilder<SerializedResource> serializedResource(Object content, Serializer serializer) {
-//		return SerializedResource.create().content(content).serializer(serializer);
-//	}
-//
-//	/**
-//	 * Creates a new {@link SerializedResource} object.
-//	 *
-//	 * @param content
-//	 * 	The supplier of a Java POJO representing the content.
-//	 * 	<br>Can be <jk>null<jk>.
-//	 * @param serializer
-//	 * 	The serializer to use to serialize the POJO.
-//	 * 	<br>If <jk>null</jk>, POJO will be converted to a string using {@link Object#toString()}.
-//	 * @return A new {@link SerializedResource} object.
-//	 */
-//	public static final SerializedResourceBuilder<SerializedResource> serializedResource(Supplier<?> content, Serializer serializer) {
-//		return SerializedResource.create().contentSupplier(content).serializer(serializer);
-//	}
-//
-//	/**
-//	 * Creates a new {@link SerializedResource} object.
-//	 *
-//	 * @param content
-//	 * 	The Java POJO representing the content.
-//	 * 	<br>Can be <jk>null<jk>.
-//	 * @param serializer
-//	 * 	The serializer to use to serialize the POJO.
-//	 * 	<br>If <jk>null</jk>, POJO will be converted to a string using {@link Object#toString()}.
-//	 * @param schema
-//	 * 	Optional HTTP-part schema for providing instructionst to the serializer on the format of the entity.
-//	 * @return A new {@link SerializedResource} object.
-//	 */
-//	public static final SerializedResourceBuilder<SerializedResource> serializedResource(Object content, Serializer serializer, HttpPartSchema 	schema) {
-//		return SerializedResource.create().content(content).serializer(serializer).schema(schema);
-//	}
-//
-//	/**
-//	 * Creates a new {@link SerializedResource} object.
-//	 *
-//	 * @param content
-//	 * 	The supplier of a Java POJO representing the content.
-//	 * 	<br>Can be <jk>null<jk>.
-//	 * @param serializer
-//	 * 	The serializer to use to serialize the POJO.
-//	 * 	<br>If <jk>null</jk>, POJO will be converted to a string using {@link Object#toString()}.
-//	 * @param schema
-//	 * 	Optional HTTP-part schema for providing instructionst to the serializer on the format of the entity.
-//	 * @return A new {@link SerializedResource} object.
-//	 */
-//	public static final SerializedResourceBuilder<SerializedResource> serializedResource(Supplier<?> content, Serializer serializer, HttpPartSchema schema) {
-//		return SerializedResource.create().contentSupplier(content).serializer(serializer).schema(schema);
-//	}
-
 	/**
 	 * Creates a new {@link InputStreamResource} builder.
 	 *
 	 * <p>
 	 * Assumes no content type.
 	 *
-	 * @param content The entity content.  Can be <jk>null<jk>.
+	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @return A new {@link InputStreamResource} builder.
 	 */
 	public static final HttpResourceBuilder<InputStreamResource> streamResource(InputStream content) {
@@ -205,7 +141,7 @@ public class HttpResources {
 	/**
 	 * Creates a new {@link InputStreamResource} builder.
 	 *
-	 * @param content The entity content.  Can be <jk>null<jk>.
+	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @param length The content length, or <c>-1</c> if not known.
 	 * @return A new {@link InputStreamResource} builder.

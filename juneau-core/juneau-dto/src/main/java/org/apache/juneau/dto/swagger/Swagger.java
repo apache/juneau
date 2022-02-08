@@ -501,7 +501,7 @@ public class Swagger extends SwaggerElement {
 	 * Additional external documentation as raw JSON.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	externalDocs(<js>"{description:'description',url:'url'}"</js>);
 	 * </p>
 	 *
@@ -645,7 +645,7 @@ public class Swagger extends SwaggerElement {
 	 * Provides metadata about the API as raw JSON.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	info(<js>"{title:'title',description:'description',...}"</js>);
 	 * </p>
 	 *

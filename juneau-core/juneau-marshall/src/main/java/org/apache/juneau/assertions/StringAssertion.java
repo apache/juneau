@@ -26,7 +26,7 @@ import org.apache.juneau.serializer.*;
  * {@review}
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
  * 	<jsm>assertString</jsm>(<jv>httpBody</jv>).is(<js>"OK"</js>);
  * </p>

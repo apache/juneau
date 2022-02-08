@@ -26,7 +26,7 @@
 		The following example shows JSON for a typical bean:
 	</p>
 	<h5 class='figure'>Sample Beans</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> Person {
 		|		
 		|		<jc>// Bean properties</jc>
@@ -49,7 +49,7 @@
 		|	}	
 	</p>
 	<h5 class='figure'>Sample Code</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	Person <jv>person</jv> = <jk>new</jk> Person()
 		|		.name(<js>"John Smith"</js>)
 		|		.birthDate(<js>"1946-08-12T00:00:00Z"</js>)
@@ -63,7 +63,7 @@
 		|		);
 	</p>
 	<h5 class='figure'>Normal JSON</h5>
-	<p class='bcode w800'>
+	<p class='bjson'>
 		|	{
 		|		<js>"name"</js>: <js>"John Smith"</js>, 
 		|		<js>"birthDate"</js>: <js>"1946-08-12T00:00:00Z"</js>, 
@@ -79,7 +79,7 @@
 		|	} 
 	</p>
 	<h5 class='figure'>Simplified JSON</h5>
-	<p class='bcode w800'>
+	<p class='bjson'>
 		|	{
 		|		name: <js>'John Smith'</js>, 
 		|		birthDate: <js>'1946-08-12T00:00:00Z'</js>, 

@@ -75,7 +75,7 @@ public @interface Beanp {
 	 * {@link BeanSession#convertToType(Object, Class)} but there is no guarantee that this will succeed.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Beanp</ja>(format=<js>"$%.2f"</js>)
 	 * 	<jk>public float</jk> <jf>price</jf>;
 	 * </p>
@@ -84,7 +84,7 @@ public @interface Beanp {
 	 * This annotation can also be used on private fields of a property like so:
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
 	 *
 	 * 		<ja>@Beanp</ja>(format=<js>"$%.2f"</js>)
@@ -120,13 +120,13 @@ public @interface Beanp {
 	 *
 	 * <p>
 	 * The following examples show how to define dynamic bean properties.
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Option #1 - A simple public Map field.
 	 * 	// The field name can be anything.</jc>
 	 * 	<jk>public class</jk> BeanWithDynaField {
 	 *
 	 * 		<ja>@Beanp</ja>(name=<js>"*"</js>)
-	 * 		<jk>public</jk> Map&lt;String,Object&gt; extraStuff = <jk>new</jk> LinkedHashMap&lt;String,Object&gt;();
+	 * 		<jk>public</jk> Map&lt;String,Object&gt; <jf>extraStuff</jf> = <jk>new</jk> LinkedHashMap&lt;String,Object&gt;();
 	 * 	}
 	 *
 	 * 	<jc>// Option #2 - Getters and setters.
@@ -141,7 +141,7 @@ public @interface Beanp {
 	 * 		}
 	 *
 	 * 		<ja>@Beanp</ja>(name=<js>"*"</js>)
-	 * 		<jk>public void</jk> setAnExtraField(String name, Object value) {
+	 * 		<jk>public void</jk> setAnExtraField(String <jv>name</jv>, Object <jv>value</jv>) {
 	 * 			...
 	 * 		}
 	 * 	}
@@ -161,12 +161,12 @@ public @interface Beanp {
 	 * 	<jk>public class</jk> BeanWithDynaExtraKeys {
 	 *
 	 * 		<ja>@Beanp</ja>(name=<js>"*"</js>)
-	 * 		<jk>public</jk> Object get(String name) {
+	 * 		<jk>public</jk> Object get(String <jv>name</jv>) {
 	 * 			...
 	 * 		}
 	 *
 	 * 		<ja>@Beanp</ja>(name=<js>"*"</js>)
-	 * 		<jk>public void</jk> set(String name, Object value) {
+	 * 		<jk>public void</jk> set(String <jv>name</jv>, Object <jv>value</jv>) {
 	 * 			...
 	 * 		}
 	 *
@@ -180,7 +180,7 @@ public @interface Beanp {
 	 *<p>
 	 * Similar rules apply for value types and swaps.
 	 * The property values optionally can be any serializable type or use swaps.
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// A serializable type other than Object.</jc>
 	 * 	<jk>public class</jk> BeanWithDynaFieldWithListValues {
 	 *
@@ -280,7 +280,7 @@ public @interface Beanp {
 	 * contents of the bean property object when the generic parameter types are interfaces or abstract classes.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
 	 *
 	 * 		<jc>// Identify concrete map type with String keys and Integer values.</jc>
@@ -293,7 +293,7 @@ public @interface Beanp {
 	 * This annotation can also be used on private fields of a property like so:
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
 	 *
 	 * 		<ja>@Beanp</ja>(type=HashMap.<jk>class</jk>, params={String.<jk>class</jk>,Integer.<jk>class</jk>})
@@ -320,28 +320,28 @@ public @interface Beanp {
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyClass {
 	 *
 	 * 		<jc>// Only render 'f1' when serializing this bean property.</jc>
 	 * 		<ja>@Beanp</ja>(properties=<js>"f1"</js>)
-	 * 		<jk>public</jk> MyChildClass x1 = <jk>new</jk> MyChildClass();
+	 * 		<jk>public</jk> MyChildClass <jf>x1</jf> = <jk>new</jk> MyChildClass();
 	 * 	}
 	 *
 	 * 	<jk>public class</jk> MyChildClass {
-	 * 		<jk>public int</jk> f1 = 1;
-	 * 		<jk>public int</jk> f2 = 2;
+	 * 		<jk>public int</jk> <jf>f1</jf> = 1;
+	 * 		<jk>public int</jk> <jf>f2</jf> = 2;
 	 * 	}
 	 *
 	 * 	<jc>// Renders "{x1:{f1:1}}"</jc>
-	 * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jk>new</jk> MyClass());
+	 * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jk>new</jk> MyClass());
 	 * </p>
 	 *
 	 * <p>
 	 * This annotation can also be used on private fields of a property like so:
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
 	 *
 	 * 		<ja>@Beanp</ja>(properties=<js>"f1"</js>)
@@ -362,7 +362,7 @@ public @interface Beanp {
 	 * Serializers will serialize such properties as usual, but parsers will silently ignore them.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<ja>@Beanp</ja>(ro=<js>"true"</js>)
 	 * 		<jk>public float</jk> <jf>price</jf>;
@@ -390,7 +390,7 @@ public @interface Beanp {
 	 * This property must denote a concrete bean class with a no-arg constructor.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
 	 *
 	 * 		<jc>// Identify concrete map type.</jc>
@@ -403,7 +403,7 @@ public @interface Beanp {
 	 * This annotation can also be used on private fields of a property like so:
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
 	 *
 	 * 		<ja>@Beanp</ja>(type=HashMap.<jk>class</jk>)
@@ -423,7 +423,7 @@ public @interface Beanp {
 	 * <p>
 	 * The following annotations are equivalent:
 	 *
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Beanp</ja>(name=<js>"foo"</js>)
 	 *
 	 * 	<ja>@Beanp</ja>(<js>"foo"</js>)
@@ -438,7 +438,7 @@ public @interface Beanp {
 	 * Parsers will parse such properties as usual, but serializers will silently ignore them.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<ja>@Beanp</ja>(wo=<js>"true"</js>)
 	 * 		<jk>public float</jk> <jf>price</jf>;

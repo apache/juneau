@@ -22,13 +22,13 @@
 		These classes allow serializers and parsers to be grouped and retrieved by W3C-compliant HTTP <c>Accept</c> 
 		and <c>Content-Type</c> values...
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Construct a new serializer group with configuration parameters that get applied 
 		|	// to all serializers.</jc>
 		|	SerializerSet <jv>serializers</jv> = SerializerSet.<jsm>create</jsm>()
 		|		.add(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>)
-		|		.forEach(<jv>x</jv> -&gt; <jv>x</jv>.swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>))
-		|		.forEachWS(<jv>x</jv> -&gt; <jv>x</jv>.ws())   <jc>// or .useWhitespace(true)</jc>
+		|		.forEach(<jv>x</jv> -> <jv>x</jv>.swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>))
+		|		.forEachWS(<jv>x</jv> -> <jv>x</jv>.ws())   <jc>// or .useWhitespace(true)</jc>
 		|		.build();
 		|
 		|	<jc>// Find the appropriate serializer by Accept type and serialize our POJO to the 
@@ -40,7 +40,7 @@
 		|	<jc>// Construct a new parser group with configuration parameters that get applied to all parsers.</jc>
 		|	ParserSet <jv>parsers</jv> = ParserSet.<jsm>create</jsm>()
 		|		.add(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>)
-		|		.forEach(<jv>x</jv> -&gt; <jv>x</jv>.swaps(CalendarSwap.IsoLocalDateTime.<jk>class</jk>))
+		|		.forEach(<jv>x</jv> -> <jv>x</jv>.swaps(CalendarSwap.IsoLocalDateTime.<jk>class</jk>))
 		|		.build();
 		|
 		|	Person <jv>myPerson</jv> = <jv>parsers</jv>

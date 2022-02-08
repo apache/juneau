@@ -37,7 +37,7 @@ import org.apache.juneau.collections.*;
  * <p>
  * For example, the {@link HelpCommand} is used to provide help on other commands.
  *
- * <p class='bcode w800'>
+ * <p class='bconsole'>
  * 	Running class 'JettyMicroservice' using config file 'examples.cfg'.
  * 	Server started on port 10000
  *
@@ -72,24 +72,24 @@ import org.apache.juneau.collections.*;
  * The arguments are available as an {@link Args} object which allows for easy accessed to parsed command lines.
  * Some simple examples of valid command lines:
  *
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// mycommand</jc>
- * 	args.get("0");  <jc>// "mycommand"</jc>
+ * 	<jv>args</jv>.get(<js>"0"</js>);  <jc>// "mycommand"</jc>
  *
  * 	<jc>// mycommand arg1 arg2</jc>
- * 	args.get("0");  <jc>// "mycommand"</jc>
- * 	args.get("1");  <jc>// "arg1"</jc>
- * 	args.get("2");  <jc>// "arg2"</jc>
+ * 	<jv>args</jv>.get(<js>"0"</js>);  <jc>// "mycommand"</jc>
+ * 	<jv>args</jv>.get(<js>"1"</js>);  <jc>// "arg1"</jc>
+ * 	<jv>args</jv>.get(<js>"2"</js>);  <jc>// "arg2"</jc>
  *
  * 	<jc>// mycommand -optArg1 foo bar -optArg2 baz qux</jc>
- * 	args.get("0");  <jc>// "mycommand"</jc>
- * 	args.get("optArg1", String[].class);  <jc>// ["foo","bar"]</jc>
- * 	args.get("optArg2", String[].class);  <jc>// ["baz","qux"]</jc>
+ * 	<jv>args</jv>.get(<js>"0"</js>);  <jc>// "mycommand"</jc>
+ * 	<jv>args</jv>.get(<js>"optArg1"</js>, String[].<jk>class</jk>);  <jc>// ["foo","bar"]</jc>
+ * 	<jv>args</jv>.get(<js>"optArg2"</js>, String[].<jk>class</jk>);  <jc>// ["baz","qux"]</jc>
  *
  * 	<jc>// mycommand -optArg1 "foo bar" -optArg2 'baz qux'</jc>
- * 	args.get("0");  <jc>// "mycommand"</jc>
- * 	args.get("optArg1", String[].class);  <jc>// ["foo bar"]</jc>
- * 	args.get("optArg2", String[].class);  <jc>// ["baz qux"]</jc>
+ * 	<jv>args</jv>.get(<js>"0"</js>);  <jc>// "mycommand"</jc>
+ * 	<jv>args</jv>.get(<js>"optArg1"</js>, String[].<jk>class</jk>);  <jc>// ["foo bar"]</jc>
+ * 	<jv>args</jv>.get(<js>"optArg2"</js>, String[].<jk>class</jk>);  <jc>// ["baz qux"]</jc>
  * </p>
  *
  * <ul class='seealso'>

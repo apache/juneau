@@ -43,13 +43,13 @@ import org.apache.juneau.utils.*;
  * 	The {@link RequestFormParams} object is the API for accessing the HTTP request body as form data.
  * 	It can be accessed by passing it as a parameter on your REST Java method:
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestPost</ja>(...)
  * 	<jk>public</jk> Object myMethod(RequestFormParams <jv>formData</jv>) {...}
  * </p>
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestPost</ja>(...)
  * 	<jk>public</jk> Object myMethod(RequestFormParams <jv>formData</jv>) {
  *

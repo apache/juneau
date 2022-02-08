@@ -24,7 +24,7 @@ import org.apache.juneau.serializer.*;
  * {@review}
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
  *
  * 	String[] <jv>array</jv> = {<js>"foo"</js>};

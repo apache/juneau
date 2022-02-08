@@ -29,7 +29,7 @@
 	</ul>
 	
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(
 		|		<jc>// Config file is located at ./config_dir/myconfig.cfg</jc>
 		|		config=<js>"config_dir/myconfig.cfg"</js>,
@@ -42,7 +42,7 @@
 	</p>
 	
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc>#--------------------------</cc>
 		|	<cc># Examples </cc>
 		|	<cc>#--------------------------</cc>
@@ -55,11 +55,11 @@
 	<p>
 		These properties are then accessible through the {@link oaj.config.Config} class.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@RestGet</ja>(<js>"/"</js>)
 		|	<jk>public</jk> String sample(Config <jv>config</jv>) {
 		|		String <jv>path</jv> = <jv>config</jv>.get(<js>"MyProperties/path"</js>).get();
-		|		File <jv>javaHome</jv> = <jv>config</jv>.get(<js>"MyProperties/javaHome"</js>).to(File.<jk>class</jk>);
+		|		File <jv>javaHome</jv> = <jv>config</jv>.get(<js>"MyProperties/javaHome"</js>).as(File.<jk>class</jk>).orElse(<jv>null</jv>);
 		|		String <jv>customMessage</jv> = <jv>config</jv>.get(<js>"MyProperties/customMessage"</js>).orElse(<js>"Hello"</js>);
 		|		...
 		|	}
@@ -69,7 +69,7 @@
 		For example, the Microservice API {@link oajr.servlet.BasicRestServlet} class defines the 
 		location of the config file as a system property <l>"juneau.configFile"</l>:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(
 		|		<jc>// Config file location is defined as a system property</jc>
 		|		config=<js>"$S{juneau.configFile}"</js>,
@@ -81,7 +81,7 @@
 		Spring Boot applications typically define an <c>application.properties</c> file.  You can reuse it
 		as a config file like so:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(
 		|		config=<js>"application.properties"</js>,
 		|		...
@@ -100,7 +100,7 @@
 	<p>
 		A common usage is to use this method to initialize fields in your servlet.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(
 		|		<jc>// Config file is located at ./config_dir/myconfig.cfg</jc>
 		|		config=<js>"config_dir/myconfig.cfg"</js>,
@@ -113,13 +113,13 @@
 		|		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) {
 		|			Config <jv>config</jv> = <jv>builder</jv>.getConfig();
 		|			<jf>path</jf> = <jv>config</jv>.get(<js>"MyProperties/path"</js>).orElse(<js>"mypath"</js>);
-		|			<jf>javaHome</jf> = <jv>config</jv>.get(<js>"MyProperties/javaHome"</js>).to(File.<jk>class</jk>);
+		|			<jf>javaHome</jf> = <jv>config</jv>.get(<js>"MyProperties/javaHome"</js>).as(File.<jk>class</jk>).orElse(<jv>null</jv>);
 		|		}
 	</p>
 	<p>
 		Another common usage is to refer to config properties through <ck>$C</ck> variables in your annotations:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>
 		|	<jc>// Get stylesheet from myconfig.cfg, but default to devops.css if it's not specified</jc>
 		|	<ja>@HtmlDoc</ja>(
@@ -131,14 +131,14 @@
 		It's even possible to reference request-level variables in your config file if you use 
 		{@link oajr.RestRequest#getConfig()} to access the config file:
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc>#-------------------------------------</cc>
 		|	<cc># Contents of config_dir/myconfig.cfg </cc>
 		|	<cc>#-------------------------------------</cc>
 		|	<cs>[HelloWorldResource]</cs>
 		|	<ck>message</ck> = <cv>Hello $RQ{person}!</cv>
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jd>/** 
 		|	 * Sample REST resource that prints out a simple "Hello world!" message.
 		|	 */</jd>
@@ -154,27 +154,27 @@
 		|		 */</jd>
 		|		<ja>@RestGet</ja>(<js>"/"</js>)
 		|		<jk>public</jk> String sayHello(Config <jv>config</jv>) {
-		|			<jk>return</jk> <jv>config</jv>.getString(<js>"HelloWorldResource/message"</js>);
+		|			<jk>return</jk> <jv>config</jv>.get(<js>"HelloWorldResource/message"</js>).get();
 		|		}
 		|	}
 	</p>
 	<p>
 		You can even add resource bundles into the mix:
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc>#-------------------------------------</cc>
 		|	<cc># Contents of config_dir/myconfig.cfg </cc>
 		|	<cc>#-------------------------------------</cc>
 		|	<cs>[HelloWorldResource]</cs>
 		|	<ck>message</ck> = <cv>$L{localizedMessage,$RQ{person}}</cv>
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc>#-------------------------------------------</cc>
 		|	<cc># Contents of HelloWorldResource.properties </cc>
 		|	<cc>#-------------------------------------------</cc>
 		|	<ck>localizedMessage</ck> = <cv>Hello {0}!</cv>
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jd>/** 
 		|	 * Sample REST resource that prints out a simple "Hello world!" message.
 		|	 */</jd>
@@ -191,7 +191,7 @@
 		|		 */</jd>
 		|		<ja>@RestGet</ja>(<js>"/"</js>)
 		|		<jk>public</jk> String sayHello(Config <jv>config</jv>) {
-		|			<jk>return</jk> <jv>config</jv>.getString(<js>"HelloWorldResource/message"</js>);
+		|			<jk>return</jk> <jv>config</jv>.get(<js>"HelloWorldResource/message"</js>).get();
 		|		}
 		|	}
 	</p>

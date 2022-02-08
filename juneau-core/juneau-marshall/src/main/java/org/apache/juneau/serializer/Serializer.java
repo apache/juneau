@@ -253,12 +253,9 @@ public class Serializer extends BeanTraverseContext {
 		 * 	<p>
 		 * 	For example, if this serializer produces <js>"application/json"</js> but should handle media types of
 		 * 	<js>"application/json"</js> and <js>"text/json"</js>, then the arguments should be:
-		 * 	<p class='bcode w800'>
-		 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"application/json,text/json"</js>);
-		 * 	</p>
-		 * 	<br>...or...
-		 * 	<p class='bcode w800'>
-		 * 	<jk>super</jk>(ps, <js>"application/json"</js>, <js>"*&#8203;/json"</js>);
+		 * 	<p class='bjava'>
+		 * 		<jv>builder</jv>.produces(<js>"application/json"</js>);
+		 * 		<jv>builder</jv>.accept(<js>"application/json,text/json"</js>);
 		 * 	</p>
 		 * <p>
 		 * The accept value can also contain q-values.
@@ -301,7 +298,7 @@ public class Serializer extends BeanTraverseContext {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that adds _type to nodes.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
@@ -316,7 +313,7 @@ public class Serializer extends BeanTraverseContext {
 		 * 	OMap <jv>myMap</jv> = OMap.of(<js>"foo"</js>, <jk>new</jk> MyBean());
 		 *
 		 * 	<jc>// Will contain:  {"foo":{"_type":"mybean","foo":"bar"}}</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myMapp</jv>);
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myMap</jv>);
 		 * </p>
 		 *
 		 * @return This object.
@@ -360,7 +357,7 @@ public class Serializer extends BeanTraverseContext {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that adds _type to root node.</jc>
 		 * 	WriterSerializer <jv>serializer</jv>= JsonSerializer
 		 * 		.<jsm>create</jsm>()
@@ -407,7 +404,7 @@ public class Serializer extends BeanTraverseContext {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that serializes null properties.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
@@ -449,7 +446,7 @@ public class Serializer extends BeanTraverseContext {
 		 * Class used to listen for errors and warnings that occur during serialization.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Define our serializer listener.</jc>
 		 * 	<jc>// Simply captures all errors.</jc>
 		 * 	<jk>public class</jk> MySerializerListener <jk>extends</jk> SerializerListener {
@@ -504,7 +501,7 @@ public class Serializer extends BeanTraverseContext {
 		 * Note that this introduces a performance penalty since it requires copying the existing collection.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that sorts arrays and collections before serialization.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
@@ -512,7 +509,7 @@ public class Serializer extends BeanTraverseContext {
 		 * 		.build();
 		 *
 		 * 	<jc>// An unsorted array</jc>
-		 * 	String[] <jv>myArray</jv> = {<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>}
+		 * 	String[] <jv>myArray</jv> = {<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>};
 		 *
 		 * 	<jc>// Produces ["bar","baz","foo"]</jc>
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myArray</jv>);
@@ -547,7 +544,7 @@ public class Serializer extends BeanTraverseContext {
 		 * Note that this introduces a performance penalty.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that sorts maps before serialization.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
@@ -596,7 +593,7 @@ public class Serializer extends BeanTraverseContext {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that skips empty arrays and collections.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
@@ -645,7 +642,7 @@ public class Serializer extends BeanTraverseContext {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that skips empty maps.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
@@ -687,7 +684,7 @@ public class Serializer extends BeanTraverseContext {
 		 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that trims strings before serialization.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
@@ -727,7 +724,7 @@ public class Serializer extends BeanTraverseContext {
 		 * Bean used for resolution of URIs to absolute or root-relative form.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Our URI contextual information.</jc>
 		 * 	String <jv>authority</jv> = <js>"http://localhost:10000"</js>;
 		 * 	String <jv>contextRoot</jv> = <js>"/myContext"</js>;

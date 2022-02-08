@@ -29,7 +29,7 @@ import org.eclipse.jetty.util.log.AbstractLogger;
  * <p>
  * Can be used by setting the following system property in the microservice config file.
  *
- * <p class='bcode w800'>
+ * <p class='bini'>
  * 	<cs>[SystemProperties]</cs>
  *
  * 	<cc># Configure Jetty to log using java-util logging</cc>

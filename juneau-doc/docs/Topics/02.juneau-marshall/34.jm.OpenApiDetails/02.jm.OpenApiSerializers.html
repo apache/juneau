@@ -57,7 +57,7 @@
 		of HTTP parts.  
 		The following example is a preview showing an HTTP body defined as pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>):
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@RestPost</ja>(<js>"/2dLongArray"</js>)	
 		|	<jk>public void</jk> post2dLongArray(
 		|		<ja>@Body</ja>(
@@ -112,7 +112,7 @@
 	<p>
 		Under-the-covers, this gets converted to the following schema object:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	HttpPartSchema <jv>schema</jv> = HttpPartSchema.<jsm>create</jsm>()
 		|		.items(
 		|			HttpPartSchema.<jsm>create</jsm>()
@@ -138,7 +138,7 @@
 	<p>
 		Various convenience methods exist for shortening this code.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	HttpPartSchema <jv>schema</jv> = HttpPartSchema.<jsm>tArrayPipes</jsm>(
 		|		<jsm>tArrayCsv</jsm>(
 		|			<jsm>tInt64</jsm>().minimum(0).maximum(100).minLength(1).maxLength(10)
@@ -148,7 +148,7 @@
 	<p>
 		The following code shows how the schema above can be used to create our pipe+csv list of numbers:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Our POJO being serialized.</jc>
 		|	Long[][] <jv>input</jv> = ....
 		|	
@@ -352,7 +352,7 @@
 	<p>
 		For arrays, an example of "Any POJO transformable to arrays of the default types" is:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Sample POJO class convertable to a Long[][].</jc>
 		|	<jk>public class</jk> MyPojo {
 		|		
@@ -363,7 +363,7 @@
 	<p>
 		In the example above, our POJO class can be used to create our pipe-delimited list of comma-delimited numbers: 
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Our POJO being serialized.</jc>
 		|	MyPojo <jv>input</jv> = ....
 		|	
@@ -384,7 +384,7 @@
 	<p>
 		The following shows an example of a bean with several properties of various types.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> MyBean {
 		|		<jk>private static byte</jk>[] <jsf>FOOB</jsf> = <js>"foo"</js>.getBytes();
 		|
@@ -405,7 +405,7 @@
 	<p>
 		We define the following schema:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>import static</jk> org.apache.juneau.httppart.HttpPartSchema.*;
 		|	
 		|	HttpPartSchema <jv>schema</jv> = tObject()
@@ -426,14 +426,14 @@
 	<p>
 		Then we serialize our bean:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	HttpPartSerializer <jv>serializer</jv> = OpenApiSerializer.<jsf>DEFAULT</jsf>;
 		|	String <jv>httpPart</jv> = <jv>serializer</jv>.serialize(<jv>schema</jv>, <jk>new</jk> MyBean());
 	</p>
 	<p>
 		The results of this serialization is shown below:
 	</p>
-	<p class='bcode w800'>
+	<p class='buon'>
 		|	(
 		|		f1=foo,
 		|		f2=Zm9v,
@@ -452,7 +452,7 @@
 	<p>
 		The following is an example of a bean with various array property types:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> MyBean {
 		|		<jk>private static byte</jk>[] <jsf>FOOB</jsf> = <js>"foo"</js>.getBytes();
 		|	
@@ -473,7 +473,7 @@
 	<p>
 		For this bean, we define the following schema:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>import static</jk> org.apache.juneau.httppart.HttpPartSchema.*;
 		|
 		|	HttpPartSchema <jv>schema</jv> = <jsm>tObject</jsm>()
@@ -494,7 +494,7 @@
 	<p>
 		Serializing this bean produces the following output:
 	</p>
-	<p class='bcode w800'>
+	<p class='buon'>
 		|	(
 		|		f1=@('a,b',null),
 		|		f2=@(Zm9v,null),

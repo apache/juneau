@@ -32,7 +32,7 @@
 		parsed POJO.
 	</p>
 	<h5 class='figure'>Examples:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// If you're calling parse on the same input multiple times, use a session instead of the parser directly.</jc>
 		|	ReaderParserSession <jv>session</jv> = JsonParser.<jsm>create</jsm>().unbuffered().build().createSession();
 		|	Object <jv>pojo</jv>;
@@ -40,7 +40,7 @@
 		|
 		|	<jv>reader</jv> = <jk>new</jk> StringReader(<js>"{foo:'bar'}{baz:'qux'}"</js>);
 		|	<jv>pojo</jv> = <jv>session</jv>.parse(<jv>reader</jv>, OMap.<jk>class</jk>);  <jc>// {foo:'bar'}</jc>
-		|	<jv>pojo</jv> = p.parse(<jv>reader</jv>, OMap.<jk>class</jk>);  <jc>// {baz:'qux'}</jc>
+		|	<jv>pojo</jv> = <jv>session</jv>.parse(<jv>reader</jv>, OMap.<jk>class</jk>);  <jc>// {baz:'qux'}</jc>
 		|
 		|	<jv>reader</jv> = <jk>new</jk> StringReader(<js>"[123][456]"</js>);
 		|	<jv>pojo</jv> = <jv>session</jv>.parse(<jv>reader</jv>, <jk>int</jk>[].<jk>class</jk>);  <jc>// [123]</jc>

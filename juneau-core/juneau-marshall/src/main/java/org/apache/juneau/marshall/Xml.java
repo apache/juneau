@@ -21,16 +21,16 @@ import org.apache.juneau.xml.*;
  * 	The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.
  *
  * <h5 class='figure'>Examples:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
- * 	Xml xml = <jk>new</jk> Xml();
- * 	MyPojo myPojo = xml.read(string, MyPojo.<jk>class</jk>);
- * 	String string = xml.write(myPojo);
+ * 	Xml <jv>xml</jv> = <jk>new</jk> Xml();
+ * 	MyPojo <jv>myPojo</jv> = <jv>xml</jv>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = <jv>xml</jv>.write(<jv>myPojo</jv>);
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  *	<jc>// Using DEFAULT instance.</jc>
- * 	MyPojo myPojo = Xml.<jsf>DEFAULT</jsf>.read(string, MyPojo.<jk>class</jk>);
- * 	String string = Xml.<jsf>DEFAULT</jsf>.write(myPojo);
+ * 	MyPojo <jv>myPojo</jv> = Xml.<jsf>DEFAULT</jsf>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = Xml.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
  * </p>
  *
  * <ul class='seealso'>

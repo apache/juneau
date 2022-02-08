@@ -21,7 +21,7 @@
 		{@link oaj.BeanContext.Builder} class that allows you to easily construct new instances from scratch or build upon existing instances.
 		For example, the following code shows how to configure a JSON serializer:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		|		.<jsm>create</jsm>()          <jc>// Create a JsonSerializer.Builder</jc>
 		|		.simpleMode()      <jc>// Simple mode</jc>
@@ -57,7 +57,7 @@
 	<p>
 		These can be used directly, as follows:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Serialize a POJO to LAX JSON.</jc>
 		|	String <jv>json</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>myPojo</jv>);
 	</p>
@@ -65,7 +65,7 @@
 		For performance reasons, serializers and parsers are immutable.
 		However, they can be 'copied' and modified using the <c>copy()</c> method.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Clone and customize an existing serializer.</jc>
 		|	WriterSerializer <jv>serializer</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>
 		|		.copy()          <jc>// Create a new builder with copied settings.</jc>

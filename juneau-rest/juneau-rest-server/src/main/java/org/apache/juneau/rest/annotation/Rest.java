@@ -87,7 +87,7 @@ public @interface Rest {
 	 * URL parameter.
 	 * <br>
 	 * For example:
-	 * <p class='bcode w800'>
+	 * <p class='burlenc'>
 	 *  ?body=(name='John%20Smith',age=45)
 	 * </p>
 	 *
@@ -111,7 +111,7 @@ public @interface Rest {
 	 * parameters.
 	 * <br>
 	 * For example:
-	 * <p class='bcode w800'>
+	 * <p class='burlenc'>
 	 *  ?Accept=text/json&amp;Content-Type=text/json
 	 * </p>
 	 *
@@ -165,7 +165,7 @@ public @interface Rest {
 	 * GET request.
 	 * <br>
 	 * For example:
-	 * <p class='bcode w800'>
+	 * <p class='burlenc'>
 	 *  ?method=OPTIONS
 	 * </p>
 	 *
@@ -465,7 +465,7 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Turn on debug per-request on the class and always on the doX() method</jc>.
 	 * 	<ja>@Rest</ja>(
 	 * 		debugOn=<js>"MyResource=conditional,MyResource.doX=true"</js>
@@ -483,7 +483,7 @@ public @interface Rest {
 	 * variable:
 	 *
 	 * <h5 class='figure'>Example:</h5
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		debugOn=<js>"$E{DEBUG_ON_SETTINGS}"</js>
 	 * 	)
@@ -578,7 +578,7 @@ public @interface Rest {
 	 * 	</ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@Rest</ja>(defaultRequestAttributes={<js>"Foo=bar"</js>, <js>"Baz: $C{REST/myAttributeValue}"</js>})
 	 * 	<jk>public class</jk> MyResource {
@@ -676,7 +676,7 @@ public @interface Rest {
 	 * The {@link org.apache.juneau.encoders.EncoderSet.NoInherit} class can be used to prevent inheriting from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Define a REST resource that handles GZIP compression.</jc>
 	 * 	<ja>@Rest</ja>(
 	 * 		encoders={
@@ -693,7 +693,7 @@ public @interface Rest {
 	 *
 	 * <p>
 	 * The programmatic equivalent to this annotation is:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	RestContext.Builder <jv>builder</jv> = RestContext.<jsm>create</jsm>(<jv>resource</jv>);
 	 * 	<jv>builder</jv>.getEncoders().add(<jv>classes</jv>);
 	 * </p>
@@ -779,13 +779,13 @@ public @interface Rest {
 	 * <ul>
 	 * 	<li>A simple string - Represents the {@link org.apache.juneau.cp.Messages.Builder#name(String) name} of the resource bundle.
 	 * 		<br><br><i>Example:</i>
-	 * 		<p class='bcode w800'>
+	 * 		<p class='bjava'>
 	 * 	<jc>// Bundle name is Messages.properties.</jc>
 	 * 	<ja>@Rest</ja>(messages=<js>"Messages"</js>)
 	 * 		</p>
 	 * 	<li>Simplified JSON - Represents parameters for the {@link org.apache.juneau.cp.Messages.Builder} class.
 	 * 		<br><br><i>Example:</i>
-	 * 		<p class='bcode w800'>
+	 * 		<p class='bjava'>
 	 * 	<jc>// Bundles can be found in two packages.</jc>
 	 * 	<ja>@Rest</ja>(messages=<js>"{name:'Messages',baseNames:['{package}.{name}','{package}.i18n.{name}']"</js>)
 	 * 		</p>
@@ -841,7 +841,7 @@ public @interface Rest {
 	 * The {@link org.apache.juneau.parser.ParserSet.NoInherit} class can be used to prevent inheriting from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Define a REST resource that can consume JSON and XML.</jc>
 	 * 	<ja>@Rest</ja>(
 	 * 		parsers={
@@ -859,7 +859,7 @@ public @interface Rest {
 	 *
 	 * <p>
 	 * The programmatic equivalent to this annotation is:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	RestContext.Builder <jv>builder</jv> = RestContext.<jsm>create</jsm>(<jv>resource</jv>);
 	 * 	<jv>builder</jv>.getParsers().add(<jv>classes</jv>);
 	 * </p>
@@ -912,7 +912,7 @@ public @interface Rest {
 	 * The typical usage is to define a path to a child resource relative to the parent resource.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		children={ChildResource.<jk>class</jk>}
 	 * 	)
@@ -942,48 +942,13 @@ public @interface Rest {
 	 * Note that in this scenario, the <c>path</c> attribute is not defined on the top-level resource.
 	 * Specifying the path on the top-level resource has no effect, but can be used for readability purposes.
 	 *
-	 * <h5 class='topic'>On top-level resources deployed as Spring beans</h5>
-	 * <p>
-	 * The path can also be used on top-level resources deployed as Spring beans when used with the <c>JuneauRestInitializer</c>
-	 * Spring Boot initializer class:
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	<ja>@SpringBootApplication</ja>
-	 * 	<ja>@Controller</ja>
-	 * 	<jk>public class</jk> App {
-	 *
-	 *		<jc>// Our entry-point method.</jc>
-	 * 		<jk>public static void</jk> main(String[] <jv>args</jv>) {
-	 * 			<jk>new</jk> SpringApplicationBuilder(App.<jk>class</jk>)
-	 * 				.initializers(<jk>new</jk> JuneauRestInitializer(App.<jk>class</jk>))
-	 * 				.run(<jv>args</jv>);
-	 * 		}
-	 *
-	 * 		<jc>// Our top-level servlet.</jc>
-	 * 		<ja>@Bean</ja>
-	 * 		<ja>@JuneauRestRoot</ja>
-	 * 		<jk>public</jk> MyResource getMyResource() {
-	 * 			<jk>return new</jk> MyResource();
-	 * 		}
-	 * 	}
-	 *
-	 * 	<ja>@Rest</ja>(
-	 * 		path=<js>"/myResource"</js>
-	 * 	)
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {...}
-	 * </p>
-	 *
-	 * <p>
-	 * In this case, the servlet will get registered using the path defined on the resource class.
-	 *
 	 * <h5 class='topic'>Path variables</h5>
 	 * <p>
 	 * The path can contain variables that get resolved to {@link org.apache.juneau.http.annotation.Path @Path} parameters
 	 * or access through the {@link RestRequest#getPathParams()} method.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		path=<js>"/myResource/{foo}/{bar}"</js>
 	 * 	)
@@ -1128,7 +1093,7 @@ public @interface Rest {
 	 * This is a shortcut for specifying {@link RestOp#roleGuard()} on all the REST operations on a class.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		path=<js>"/foo"</js>,
 	 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
@@ -1183,7 +1148,7 @@ public @interface Rest {
 	 * This is a shortcut for specifying {@link RestOp#rolesDeclared()} on all the REST operations on a class.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		rolesDeclared=<js>"ROLE_ADMIN,ROLE_READ_WRITE,ROLE_READ_ONLY,ROLE_SPECIAL"</js>,
 	 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
@@ -1217,7 +1182,7 @@ public @interface Rest {
 	 * The {@link org.apache.juneau.serializer.SerializerSet.NoInherit} class can be used to prevent inheriting from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Define a REST resource that can produce JSON and XML.</jc>
 	 * 	<ja>@Rest</ja>(
 	 * 		serializers={
@@ -1235,7 +1200,7 @@ public @interface Rest {
 	 *
 	 * <p>
 	 * The programmatic equivalent to this annotation is:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	RestContext.Builder <jv>builder</jv> = RestContext.<jsm>create</jsm>(<jv>resource</jv>);
 	 * 	<jv>builder</jv>.getSerializers().add(<jv>classes</jv>);
 	 * </p>
@@ -1263,7 +1228,7 @@ public @interface Rest {
 	 * <p>
 	 * One possible use is if you want to add the same title to the top of all pages by defining a header on a
 	 * common parent class like so:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 *  <ja>@HtmlDocConfig</ja>(
 	 * 		header={
 	 * 			<js>"&lt;h1&gt;$RS{siteName}&lt;/h1&gt;"</js>,
@@ -1313,7 +1278,7 @@ public @interface Rest {
 	 * Used to populate the auto-generated OPTIONS swagger documentation.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		path=<js>"/addressBook"</js>,
 	 *

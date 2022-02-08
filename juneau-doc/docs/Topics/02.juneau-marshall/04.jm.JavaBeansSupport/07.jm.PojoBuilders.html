@@ -25,13 +25,13 @@
 	<p>
 		A typical builder usage is shown below:
 	</p>
-	<p class='bcode w800'>
-		|	MyBean <jv>b</jv> = MyBean.<jsm>create</jsm>().foo(<js>"foo"</js>).bar(123).build();
+	<p class='bjava'>
+		|	MyBean <jv>bean</jv> = MyBean.<jsm>create</jsm>().foo(<js>"foo"</js>).bar(123).build();
 	</p>								
 	<p>
 		The typical code for such a builder using a static inner class is shown below:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> MyBean {
 		|	
 		|		<jc>// Read-only properties.</jc>
@@ -52,7 +52,7 @@
 		|		<jc>// Builder class.</jc>
 		|		<jk>public static class</jk> Builder {
 		|			String <jf>foo</jf>;
-		|			int</jk> <jf>bar</jf>;
+		|			<jk>int</jk> <jf>bar</jf>;
 		|			
 		|			<jc>// Method that creates the bean.</jc>
 		|			<jk>public</jk> MyBean build() {
@@ -92,17 +92,17 @@
 	</p>
 	<ul class='spaced-list'>
 		<li>A static <c>create()</c> method on the POJO class that returns a builder instance.
-			<p class='bcode w800 nomargin'>
+			<p class='bjava nomargin'>
 				|	<jk>public static</jk> Builder <jsm>create</jsm>() {...}
 			</p>
 		<li>A public constructor on the POJO class that takes in a single parameter that implements the {@link oaj.swap.Builder} interface.
 			<br>The builder class must have a public no-arg constructor.
-			<p class='bcode w800 nomargin'>
+			<p class='bjava nomargin'>
 				|	<jk>public</jk> MyBean(Builder <jv>builder</jv>) {...}
 			</p>
 		<li>A {@link oaj.annotation.Builder @Builder} annotation on the POJO class to explicitly identify it.
 			<br>The builder class must have a public no-arg constructor.
-			<p class='bcode w800 nomargin'>
+			<p class='bjava nomargin'>
 				|	<ja>@Builder</ja>(Builder.<jk>class</jk>)
 				|	<jk>public class</jk> MyBean {...}
 			</p>
@@ -112,11 +112,11 @@
 	</p>
 	<ul class='spaced-list'>
 		<li>The existence of a <c>build()</c> method on the builder class.
-			<p class='bcode w800 nomargin'>
+			<p class='bjava nomargin'>
 				|	<jk>public</jk> MyBean build() {...}
 			</p>
 		<li>The existence of a public constructor on the POJO class that takes in the builder instance.
-			<p class='bcode w800 nomargin'>
+			<p class='bjava nomargin'>
 				|	<jk>public</jk> MyBean(Builder <jv>builder</jv>) {...}
 			</p>
 	</ul>

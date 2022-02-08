@@ -18,16 +18,16 @@ import org.apache.juneau.cp.*;
  * Represents a simple child REST resource / path mapping.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Parent resource.</jc>
  * 	<jk>public class</jk> MyResource {
- * 		<jk>public</jk> MyResource(RestContext.Builder builder) <jk>throws</jk> Exception {
+ * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
  *
  * 			<jc>// Register a child resource.</jc>
- * 			builder.children(<jk>new</jk> RestChild(<js>"/child"</js>, <jk>new</jk> MyChildResource());
+ * 			<jv>builder</jv>.children(<jk>new</jk> RestChild(<js>"/child"</js>, <jk>new</jk> MyChildResource());
  *
  * 			<jc>// The above is equivalent to...</jc>
- * 			builder.child(<js>"/child"</js>, <jk>new</jk> MyChildResource());
+ * 			<jv>builder</jv>.child(<js>"/child"</js>, <jk>new</jk> MyChildResource());
  * 		}
  * 	}
  * </p>

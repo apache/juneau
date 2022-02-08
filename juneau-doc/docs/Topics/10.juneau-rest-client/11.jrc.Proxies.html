@@ -57,7 +57,7 @@
 	</ul>
 	
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>	
+	<p class='bjava'>	
 		|	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
 		|	<jk>public interface</jk> PetStore {
 		|		
@@ -70,7 +70,7 @@
 		|	}
 	</p>
 	
-	<p class='bcode w800'>	
+	<p class='bjava'>	
 		|	<jc>// Use a RestClient with default Simple JSON support.</jc>
 		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
 		|	
@@ -86,7 +86,7 @@
 		The call above translates to the following REST call:
 	</p>
 	
-	<p class='bcode w800'>
+	<p class='bcode'>
 		|	POST http://localhost:10000/petstore/pets?debug=true HTTP/1.1
 		|	Accept: application/json
 		|	Content-Type: application/json
@@ -104,7 +104,7 @@
 	</p>
 	
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>	
+	<p class='bjava'>	
 		|	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
 		|	<jk>public interface</jk> PetStore {
 		|		

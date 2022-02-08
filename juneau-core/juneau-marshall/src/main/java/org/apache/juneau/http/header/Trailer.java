@@ -24,7 +24,7 @@ import org.apache.juneau.http.annotation.*;
  * encoded with chunked transfer coding.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Trailer: Max-Forwards
  * </p>
  *
@@ -33,7 +33,7 @@ import org.apache.juneau.http.annotation.*;
  * The Trailer general field value indicates that the given set of header fields is present in the trailer of a message
  * encoded with chunked transfer-coding.
  *
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Trailer  = "Trailer" ":" 1#field-name
  * </p>
  *

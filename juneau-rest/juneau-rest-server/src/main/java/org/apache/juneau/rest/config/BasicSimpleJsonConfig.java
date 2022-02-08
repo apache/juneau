@@ -55,12 +55,12 @@ import org.apache.juneau.serializer.annotation.*;
  * <p>
  * 	This annotation can be applied to REST resource classes to define common JSON default configurations:
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Used on a top-level resource.</jc>
  * 	<ja>@Rest</ja>
  * 	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet <jk>implements</jk> BasicSimpleJsonConfig { ... }
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Used on a child resource.</jc>
  * 	<ja>@Rest</ja>
  * 	<jk>public class</jk> MyResource <jk>extends</jk> RestObject <jk>implements</jk> BasicSimpleJsonConfig { ... }

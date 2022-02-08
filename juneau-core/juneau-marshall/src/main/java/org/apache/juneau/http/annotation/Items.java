@@ -30,7 +30,7 @@ import org.apache.juneau.oapi.*;
  * <br>Also used to define OpenAPI schema information for POJOs serialized through {@link OpenApiSerializer} and parsed through {@link OpenApiParser}.
  *
  * <h5 class='section'>Examples:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Items have a specific set of enumerated string values</jc>
  * 	<ja>@Query</ja>(
  * 		name=<js>"status"</js>,
@@ -43,7 +43,7 @@ import org.apache.juneau.oapi.*;
  *		)
  * 	)
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// An array of arrays, the internal array being of type integer, numbers must be between 0 and 63 (inclusive)</jc>
  * 	<ja>@Query</ja>(
  * 		name=<js>"status"</js>,

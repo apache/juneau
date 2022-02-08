@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Installing in Eclipse', created:'8.0.0', deprecated:'8.1.2'}
+{title:'Installing in Eclipse', created:'8.0.0', deprecated:'8.1.2', flags:'todo'}
 
 <div class='topic'>
 	<p>
@@ -42,7 +42,7 @@
 			<l>App.java</l> - The entry point. 
 			<br>This class creates and starts our microservice:
 			<br><br>
-			<p class='bcode w800'>
+			<p class='bjava'>
 		<jk>public class</jk> App {
 		
 			<jk>public static void</jk> main(String[] args) <jk>throws</jk> Exception {
@@ -61,7 +61,7 @@
 			<l>RootResources.java</l> - The top-level REST resource. 
 			<br>This class routes HTTP requests to child resources:
 			<br><br>
-			<p class='bcode w800'>
+			<p class='bjava'>
 		<ja>@Rest</ja>(
 			path=<js>"/*"</js>,
 			title=<js>"Root resources"</js>,
@@ -111,7 +111,7 @@
 			<br>Contains various useful settings.
 			<br>Can be used for your own resource configurations.
 			<br><br>
-			<p class='bcode w800'>
+			<p class='bini'>
 		<cc>#=======================================================================================================================
 		# Basic configuration file for REST microservices
 		# Subprojects can use this as a starting point.
@@ -222,7 +222,7 @@
 			<l>jetty.xml</l> - The Jetty configuration file. 
 			<br>A bare-bones config file that can be extended to use any Jetty features.
 			<br><br>
-			<p class='bcode w800'>
+			<p class='bxml'>
 		<xt>&lt;Configure</xt> <xa>id</xa>=<xs>"ExampleServer"</xs> <xa>class</xa>=<xs>"org.eclipse.jetty.server.Server"</xs>&gt;</xt>
 		
 			<xt>&lt;Set</xt> <xa>name</xa>=<xs>"connectors"</xs><xt>&gt;</xt>
@@ -240,11 +240,11 @@
 		
 			<xt>&lt;New</xt> <xa>id</xa>=<xs>"context"</xs> <xa>class</xa>=<xs>"org.eclipse.jetty.servlet.ServletContextHandler"</xs><xt>&gt;</xt>
 				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"contextPath"</xs><xt>&gt;/&lt;/Set&gt;</xt>
-				<xc>&lt;!-- Optionally specify your servlets here --&gt;
+				<xc>&lt;!-- Optionally specify your servlets here -->
 				&lt;!--Call name="addServlet"&gt;
 					&lt;Arg&gt;org.apache.juneau.microservice.sample.RootResources&lt;/Arg&gt;
 					&lt;Arg&gt;/*&lt;/Arg&gt;
-				&lt;/Call--&gt;</xc>
+				&lt;/Call--></xc>
 				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"sessionHandler"</xs><xt>&gt;</xt>
 					<xt>&lt;New</xt> <xa>class</xa>=<xs>"org.eclipse.jetty.server.session.SessionHandler"</xs><xt>/&gt;</xt>
 				<xt>&lt;/Set&gt;</xt>
@@ -276,12 +276,12 @@
 				<xt>&lt;/New&gt;</xt>
 			<xt>&lt;/Set&gt;</xt>
 		
-		    <xt>&lt;Get</xt> <xa>name</xa>=<xs>"ThreadPool"</xs><xt>&gt;</xt>
-		        <xt>&lt;Set</xt> <xa>name</xa>=<xs>"minThreads"</xs> <xa>type</xa>=<xs>"int"</xs><xt>&gt;</xt>10<xt>&lt;/Set&gt;</xt>
-		        <xt>&lt;Set</xt> <xa>name</xa>=<xs>"maxThreads"</xs> <xa>type</xa>=<xs>"int"</xs><xt>&gt;</xt>100<xt>&lt;/Set&gt;</xt>
-		        <xt>&lt;Set</xt> <xa>name</xa>=<xs>"idleTimeout"</xs> <xa>type</xa>=<xs>"int"</xs><xt>&gt;</xt>60000<xt>&lt;/Set&gt;</xt>
-		        <xt>&lt;Set</xt> <xa>name</xa>=<xs>"detailedDump"</xs><xt>&gt;</xt>true<xt>&lt;/Set&gt;</xt>
-		    <xt>&lt;/Get&gt;</xt>
+			<xt>&lt;Get</xt> <xa>name</xa>=<xs>"ThreadPool"</xs><xt>&gt;</xt>
+				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"minThreads"</xs> <xa>type</xa>=<xs>"int"</xs><xt>&gt;</xt>10<xt>&lt;/Set&gt;</xt>
+				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"maxThreads"</xs> <xa>type</xa>=<xs>"int"</xs><xt>&gt;</xt>100<xt>&lt;/Set&gt;</xt>
+				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"idleTimeout"</xs> <xa>type</xa>=<xs>"int"</xs><xt>&gt;</xt>60000<xt>&lt;/Set&gt;</xt>
+				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"detailedDump"</xs><xt>&gt;</xt>true<xt>&lt;/Set&gt;</xt>
+			<xt>&lt;/Get&gt;</xt>
 		<xt>&lt;/Configure&gt;</xt>
 			</p>
 	</ul>

@@ -21,7 +21,7 @@
 		{@link oajr.annotation.Rest#children() @Rest(children)} annotation.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jd>/** Parent Resource */</jd>
 		|	<ja>@Rest</ja>(
 		|		path=<js>"/parent"</js>,
@@ -29,7 +29,7 @@
 		|	)
 		|	<jk>public</jk> MyRootResources <jk>extends</jk> BasicRestServletGroup {...}
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jd>/** Child Resource */</jd>
  		|	<ja>@Rest</ja>(
 		|		path=<js>"/child"</js>  <jc>// Path relative to parent resource.</jc>

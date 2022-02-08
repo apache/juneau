@@ -28,7 +28,7 @@ import org.apache.juneau.serializer.*;
  * {@review}
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Validates the response expiration is after the current date.</jc>
  * 	<jv>client</jv>
  * 		.get(<jsf>URL</jsf>)

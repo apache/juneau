@@ -38,13 +38,13 @@ import org.apache.juneau.http.*;
  * 	The {@link RequestPathParams} object is the API for accessing the matched variables
  * 	and remainder on the URL path.
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestPost</ja>(...)
  * 	<jk>public</jk> Object myMethod(RequestPathParams <jv>path</jv>) {...}
  * </p>
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestPost</ja>(..., path=<js>"/{foo}/{bar}/{baz}/*"</js>)
  * 	<jk>public void</jk> doGet(RequestPathParams <jv>path</jv>) {
  * 		<jc>// Example URL:  /123/qux/true/quux</jc>
@@ -509,7 +509,7 @@ public class RequestPathParams {
 	 * </table>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// REST method</jc>
 	 * 	<ja>@RestGet</ja>(<js>"/foo/{bar}/*"</js>)
 	 * 	<jk>public</jk> String doGetById(RequestPathParams <jv>path</jv>, <jk>int</jk> <jv>bar</jv>) {

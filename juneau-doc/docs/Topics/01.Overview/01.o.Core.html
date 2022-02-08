@@ -45,7 +45,7 @@
 	<p>
 		The default serializers can often be used to serialize POJOs in a single line of code:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// A simple bean</jc>
 		|	<jk>public class</jk> Person {
 		|		<jk>public</jk> String <jf>name</jf> = <js>"John Smith"</js>;
@@ -60,7 +60,7 @@
 		Parsing back into POJOs is equally simple for any of the supported languages 
 		Language fragments are also supported.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Parse a JSON object as a bean.</jc>
 		|	String <jv>json</jv> = <js>"{\"name\":\"John Smith\","\age\":21}"</js>;
 		|	Person <jv>person</jv> = <jv>parser</jv>.parse(<jv>json</jv>, Person.<jk>class</jk>);
@@ -68,7 +68,7 @@
 	<p>
 		Marshalls are pairings of serializers and parsers in a single class for even simpler code:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Serialize</jc>
 		|	String <jv>json</jv> = Json.<jsf>DEFAULT</jsf>.write(<jv>person</jv>);
 		|	
@@ -97,7 +97,7 @@
 		Serializers and parsers are builder-based using fluent methods allowing you to quickly create, clone, and modify them
 		in single lines of code.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a serializer from scratch programmatically using a builder.</jc>
 		|	JsonSerializer <jv>serializer</jv> = JsonSerializer
 		|		.<jsm>create</jsm>()
@@ -125,7 +125,7 @@
 		{@doc jm.Swaps Object swaps} allow you to replace non-serializable objects with serializable equivalents.
 		The {@link oaj.swaps} package contains a variety of predefined swaps.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a serializer from scratch programmatically using a builder.</jc>
 		|	JsonSerializer <jv>serializer</jv> = JsonSerializer
 		|		.<jsm>create</jsm>()
@@ -152,7 +152,7 @@
 	<p>
 		Beans and POJO classes, methods, fields, and constructors can also be annotated with a variety of annotations to customize how they are marshalled:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Sort bean properties by name.</jc>
 		|	<jc>// Exclude city/state from marshalling.</jc>
 		|	<ja>@Bean</ja>(sort=<jk>true</jk>, excludeProperties=<js>"city,state"</js>)
@@ -177,7 +177,7 @@
 	<p>
 		Serializers and parsers can also be configured using annotations.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@BeanConfig</ja>(sortProperties=<js>"true"</js>)
 		|	<ja>@SerializerConfig</ja>(quoteChar=<js>"'"</js>)
 		|	<ja>@RdfConfig</ja>(rdfxml_tab=<js>"5"</js>, addRootProperty=<js>"true"</js>)
@@ -195,7 +195,7 @@
 	<p>
 		Configuration variables also support embedded variables for resolving settings at runtime.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Sort properties depending on value of system property "sortProperties".</jc>
 		|	<ja>@BeanConfig</ja>(sortProperties=<js>"$S{sortProperties,false}"</js>)
 	</p>
@@ -207,7 +207,7 @@
 	<p>
 		Bean annotations can also be programmatically attached to POJOs using config annototations like so:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Bean</ja>(onClass=Address.<jk>class</jk>, sort=<jk>true</jk>, excludeProperties=<js>"city,state"</js>)
 		|	<jk>public class</jk> MyAnnotatedClass {...}
 	</p>
@@ -229,7 +229,7 @@
 		<li>Uses single-quotes for quoting.
 	</ul>
 	<h5 class='figure'>Examples:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Some free-form JSON.</jc>
 		|	Map <jv>map</jv> = OMap.<jsm>of</jsm>(
 		|		<js>"foo"</js>, <js>"x1"</js>,
@@ -240,7 +240,7 @@
 		|		<js>""</js>, <js>"x6"</js>
 		|	);
 	</p>
-	<p class='bcode w800'>
+	<p class='bjson'>
 		|	<joc>// Serialized to standard JSON</joc>
 		|	{
 		|		<jok>"foo"</jok>: <jov>"x1"</jov>,
@@ -251,7 +251,7 @@
 		|		<jok>""</jok>: <jov>"x6"</jov>
 		|	}
 	</p>	 		
-	<p class='bcode w800'>
+	<p class='bjson'>
 	<joc>// Serialized to simplified JSON</joc>
 		|	{
 		|		<jok>foo</jok>: <jov>'x1'</jov>,
@@ -267,7 +267,7 @@
 		The advantage to simplified JSON is you can represent it in a Java String in minimal form with minimal escaping.
 		This is particularly useful in cases such as unit testing where you can easily validate POJOs by simplifying them to Simplified JSON and do a simple string comparison.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	WriterSerializer <jv>serializer</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>;
 		|	<jsm>assertEquals</jsm>(<js>"{foo:'bar',baz:123}"</js>, <jv>serializer</jv>.toString(<jv>myPojo</jv>));
 	</p>			
@@ -284,7 +284,7 @@
 		headers, URL parts) without violating RFC2396.
 		This allows POJOs to be converted directly into these HTTP constructs which is not possible in other languages such as JSON.
 	</p>
-	<p class='bcode w800'>
+	<p class='buon'>
 		|	(
 		|		id=1, 
 		|		name=<js>'John+Smith'</js>, 
@@ -315,7 +315,7 @@
 		The Marshalling API also supports schema-based OpenAPI serialization.
 		It allows HTTP parts to be marshalled to-and-from POJOs based on OpenAPI schema definitions.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>import static</jk> org.apache.juneau.httpart.HttpPartSchema.*;
 		|	
 		|	<jc>// Schema - Pipe-delimited list of comma-delimited longs.</jc>
@@ -335,7 +335,7 @@
 		Schema-based serialization and parsing is used heavily in both the server and client REST APIs with built-in schema
 		validations support in various HTTP part annotations.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// REST server method with HTTP parts using schema validation.</jc>
 		|	<ja>@RestGet</ja>
 		|	<jk>public void</jk> doGet(
@@ -356,7 +356,7 @@
 		<c>JSONObject</c> and <c>JSONArray</c> that you find in other JSON marshalling APIs, but
 		can be used to generate DOMs in any of the supported languages.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create JSON strings from scratch using fluent-style code.</jc>
 		|	String <jv>jsonObject</jv> = OMap.<jsm>create</jsm>().append(<js>"foo"</js>,<js>"bar"</js>).toString(); 
 		|	String <jv>jsonArray</jv> = OList.<jsm>of</jsm>(<js>"foo"</js>, 123, <jk>null</jk>, <jv>jsonObject</jv>).toString(); 
@@ -383,13 +383,13 @@
 		<code>SerializerSet</code> and <code>ParserSet</code> classes allow serializers and parsers 
 		to be retrieved by W3C-compliant HTTP <code>Accept</code> and <code>Content-Type</code> values:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Construct a new serializer group with configuration parameters that get applied to all serializers.</jc>
 		|	SerializerSet <jv>serializerSet</jv> = SerializerSet
 		|		.<jsm>create</jsm>()
 		|		.add(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>);
 		|		.forEach(<jv>x</jv> -> <jv>x</jv>.swaps(CalendarSwap.ISO8601DT.<jk>class</jk>))
-		|		.forEachWS(<jv>x</jv> -&gt; <jv>x</jv>.useWhitespace())
+		|		.forEachWS(<jv>x</jv> -> <jv>x</jv>.useWhitespace())
 		|		.build();
 		|
 		|	<jc>// Find the appropriate serializer by Accept type and serialize our POJO to the specified writer.</jc>
@@ -402,7 +402,7 @@
 		|	ParserSet <jv>parserSet</jv> = ParserSet
 		|		.<jsm>create</jsm>()
 		|		.add(JsonParser.<jk>class</jk>, UrlEncodingParser.<jk>class</jk>);
-		|		.forEach(<jv>x</jv> -&gt; <jv>x</jv>.swaps(CalendarSwap.ISO8601DT.<jk>class</jk>))
+		|		.forEach(<jv>x</jv> -> <jv>x</jv>.swaps(CalendarSwap.ISO8601DT.<jk>class</jk>))
 		|		.build();
 		|
 		|	Person <jv>person</jv> = <jv>parserSet</jv>
@@ -425,7 +425,7 @@
 		Variables can be recursively nested within the varKey (e.g. <js>"$FOO{$BAR{xxx},$BAZ{xxx}}"</js>).
 		Variables can also return values that themselves contain more variables.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Use the default variable resolver to resolve a string that 
 		|	// contains $S (system property) variables</jc>
 		|	String <jv>myProperty</jv> = VarResolver.<jsf>DEFAULT</jsf>.resolve(<js>"The Java home directory is $S{java.home}"</js>);
@@ -446,7 +446,7 @@
 		The {@link oaj.assertions} package in Juneau is a powerful API for performing fluent style assertions.
 	</p>
 	<h5 class='figure'>Examples:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
 		|	<jk>import static</jk> org.apache.juneau.assertions.AssertionPredicates.*;
 		|	
@@ -486,7 +486,7 @@
 	</p>
 
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
 		|	MyBean <jv>bean</jv> = RestClient.<jsm>create</jsm>()
 		|		.simpleJson()

@@ -27,7 +27,7 @@
 		Tags are also defined in the <ja>@Swagger</ja> annotation
 	</p>
 	<h5 class='figure'>PetStoreResource.json</h5>
-	<p class='bcode w800'>
+	<p class='bjson'>
 		|	<jok>"tags"</jok>: [
 		|		{
 		|			<jok>"name"</jok>: <jov>"pet"</jov>,
@@ -55,7 +55,7 @@
 		The annotation-only approach is shown here:
 	</p>
 	<h5 class='figure'>org.apache.juneau.examples.rest.petstore.PetStoreResource</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	swagger=<ja>@Swagger</ja>(
 		|		...
 		|		tags={
@@ -87,7 +87,7 @@
 	</p>
 	
 	<h5 class='figure'>GET /user operation</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@RestGet</ja>(
 		|		path=<js>"/user"</js>,
 		|		summary=<js>"Petstore users"</js>,

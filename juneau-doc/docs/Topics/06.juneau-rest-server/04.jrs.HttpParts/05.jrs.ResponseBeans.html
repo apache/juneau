@@ -38,7 +38,7 @@
 	<p>
 		The following example shows the <ja>@Response</ja> annotation used to define an exception for an invalid login attempt:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Our annotated normal response.</jc>
 		|	<ja>@Response</ja>
 		|	<ja>@StatusCode</ja>(200)
@@ -57,7 +57,7 @@
 		|		}
 		|	}
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Our annotated exception.</jc>
 		|	<ja>@Response</ja>
 		|	<ja>@StatusCode</ja>(401)
@@ -75,7 +75,7 @@
 		|		}
 		|	}
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Our REST method that throws an annotated exception.</jc>
 		|	<ja>@RestGet</ja>(<js>"/user/login"</js>)
 		|	<jk>public</jk> ValidLogin login(
@@ -92,7 +92,7 @@
 	<p>
 		Custom exceptions can also extend from one of the predefined HTTP exceptions such as the {@link oaj.http.response.Unauthorized} exception:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Our annotated exception.</jc>
 		|	<ja>@Response</ja>
 		|	<ja>@Schema</ja>(
@@ -106,7 +106,7 @@
 		|
 		|	<jc>// Parent predefined exception class.</jc>
 		|	<ja>@Response</ja>
-		|	<ja>@StatusCode(401)</ja>
+		|	<ja>@StatusCode</ja>(401)
 		|	<ja>@Schema</ja>(
 		|		description=<js>"Unauthorized"</js>
 		|	)

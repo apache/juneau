@@ -62,7 +62,7 @@ public class ResponseStatusLine implements StatusLine {
 	 * Provides the ability to perform fluent-style assertions on this response status line.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the content type header is provided.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)

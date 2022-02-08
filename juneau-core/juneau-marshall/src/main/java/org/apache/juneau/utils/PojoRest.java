@@ -54,9 +54,9 @@ import org.apache.juneau.parser.*;
  * So <js>"/xxx/yyy/zzz"</js> and <js>"xxx/yyy/zzz"</js> are considered identical.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Construct an unstructured POJO model</jc>
- * 	OMap m = OMap.<jsm>ofJson</jsm>(<js>""</js>
+ * 	OMap <jv>map</jv> = OMap.<jsm>ofJson</jsm>(<js>""</js>
  * 		+ <js>"{"</js>
  * 		+ <js>"	name:'John Smith', "</js>
  * 		+ <js>"	address:{ "</js>
@@ -77,41 +77,41 @@ import org.apache.juneau.parser.*;
  * 	);
  *
  * 	<jc>// Wrap Map inside a PojoRest object</jc>
- * 	PojoRest johnSmith = <jk>new</jk> PojoRest(m);
+ * 	PojoRest <jv>johnSmith</jv> = <jk>new</jk> PojoRest(<jv>map</jv>);
  *
  * 	<jc>// Get a simple value at the top level</jc>
  * 	<jc>// "John Smith"</jc>
- * 	String name = johnSmith.getString(<js>"name"</js>);
+ * 	String <jv>name</jv> = <jv>johnSmith</jv>.getString(<js>"name"</js>);
  *
  * 	<jc>// Change a simple value at the top level</jc>
- * 	johnSmith.put(<js>"name"</js>, <js>"The late John Smith"</js>);
+ * 	<jv>johnSmith</jv>.put(<js>"name"</js>, <js>"The late John Smith"</js>);
  *
  * 	<jc>// Get a simple value at a deep level</jc>
  * 	<jc>// "21 2nd Street"</jc>
- * 	String streetAddress = johnSmith.getString(<js>"address/streetAddress"</js>);
+ * 	String <jv>streetAddress</jv> = <jv>johnSmith</jv>.getString(<js>"address/streetAddress"</js>);
  *
  * 	<jc>// Set a simple value at a deep level</jc>
- * 	johnSmith.put(<js>"address/streetAddress"</js>, <js>"101 Cemetery Way"</js>);
+ * 	<jv>johnSmith</jv>.put(<js>"address/streetAddress"</js>, <js>"101 Cemetery Way"</js>);
  *
  * 	<jc>// Get entries in a list</jc>
  * 	<jc>// "212 555-1111"</jc>
- * 	String firstPhoneNumber = johnSmith.getString(<js>"phoneNumbers/0"</js>);
+ * 	String <jv>firstPhoneNumber</jv> = <jv>johnSmith</jv>.getString(<js>"phoneNumbers/0"</js>);
  *
  * 	<jc>// Add entries to a list</jc>
- * 	johnSmith.post(<js>"phoneNumbers"</js>, <js>"212 555-3333"</js>);
+ * 	<jv>johnSmith</jv>.post(<js>"phoneNumbers"</js>, <js>"212 555-3333"</js>);
  *
  * 	<jc>// Delete entries from a model</jc>
- * 	johnSmith.delete(<js>"fico score"</js>);
+ * 	<jv>johnSmith</jv>.delete(<js>"fico score"</js>);
  *
  * 	<jc>// Add entirely new structures to the tree</jc>
- * 	OMap medicalInfo = OMap.<jsm>ofJson</jsm>(<js>""</js>
+ * 	OMap <jv>medicalInfo</jv> = OMap.<jsm>ofJson</jsm>(<js>""</js>
  * 		+ <js>"{"</js>
  * 		+ <js>"	currentStatus: 'deceased',"</js>
  * 		+ <js>"	health: 'non-existent',"</js>
  * 		+ <js>"	creditWorthiness: 'not good'"</js>
  * 		+ <js>"}"</js>
  * 	);
- * 	johnSmith.put(<js>"additionalInfo/medicalInfo"</js>, medicalInfo);
+ * 	<jv>johnSmith</jv>.put(<js>"additionalInfo/medicalInfo"</js>, <jv>medicalInfo</jv>);
  * </p>
  *
  * <p>
@@ -120,9 +120,9 @@ import org.apache.juneau.parser.*;
  * <br>The syntax is {@code @attr=val}, where attr is the attribute name on the child map, and val is the matching value.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Get map/bean with name attribute value of 'foo' from a list of items</jc>
- * 	Map m = pojoRest.getMap(<js>"/items/@name=foo"</js>);
+ * 	Map <jv>map</jv> = <jv>pojoRest</jv>.getMap(<js>"/items/@name=foo"</js>);
  * </p>
  *
  * <ul class='seealso'>
@@ -225,23 +225,23 @@ public final class PojoRest {
 	 * Will convert object to the specified type per {@link BeanSession#convertToType(Object, Class)}.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	PojoRest r = <jk>new</jk> PojoRest(object);
+	 * <p class='bjava'>
+	 * 	PojoRest <jv>pojoRest</jv> = <jk>new</jk> PojoRest(<jv>object</jv>);
 	 *
 	 * 	<jc>// Value converted to a string.</jc>
-	 * 	String s = r.get(<js>"path/to/string"</js>, String.<jk>class</jk>);
+	 * 	String <jv>string</jv> = <jv>pojoRest</jv>.get(<js>"path/to/string"</js>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a bean.</jc>
-	 * 	MyBean b = r.get(<js>"path/to/bean"</js>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>bean</jv> = <jv>pojoRest</jv>.get(<js>"path/to/bean"</js>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a bean array.</jc>
-	 * 	MyBean[] ba = r.get(<js>"path/to/beanarray"</js>, MyBean[].<jk>class</jk>);
+	 * 	MyBean[] <jv>beanArray</jv> = <jv>pojoRest</jv>.get(<js>"path/to/beanarray"</js>, MyBean[].<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a linked-list of objects.</jc>
-	 * 	List l = r.get(<js>"path/to/list"</js>, LinkedList.<jk>class</jk>);
+	 * 	List <jv>list</jv> = <jv>pojoRest</jv>.get(<js>"path/to/list"</js>, LinkedList.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a map of object keys/values.</jc>
-	 * 	Map m2 = r.get(<js>"path/to/map"</js>, TreeMap.<jk>class</jk>);
+	 * 	Map <jv>map</jv> = <jv>pojoRest</jv>.get(<js>"path/to/map"</js>, TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param url
@@ -266,23 +266,23 @@ public final class PojoRest {
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	PojoMap r = <jk>new</jk> PojoMap(object);
+	 * <p class='bjava'>
+	 * 	PojoRest <jv>pojoRest</jv> = <jk>new</jk> PojoRest(<jv>object</jv>);
 	 *
 	 * 	<jc>// Value converted to a linked-list of strings.</jc>
-	 * 	List&lt;String&gt; l1 = r.get(<js>"path/to/list1"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;String&gt; <jv>list1</jv> = <jv>pojoRest</jv>.get(<js>"path/to/list1"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a linked-list of beans.</jc>
-	 * 	List&lt;MyBean&gt; l2 = r.get(<js>"path/to/list2"</js>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	List&lt;MyBean&gt; <jv>list2</jv> = <jv>pojoRest</jv>.get(<js>"path/to/list2"</js>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a linked-list of linked-lists of strings.</jc>
-	 * 	List&lt;List&lt;String&gt;&gt; l3 = r.get(<js>"path/to/list3"</js>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;List&lt;String&gt;&gt; <jv>list3</jv> = <jv>pojoRest</jv>.get(<js>"path/to/list3"</js>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a map of string keys/values.</jc>
-	 * 	Map&lt;String,String&gt; m1 = r.get(<js>"path/to/map1"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	Map&lt;String,String&gt; <jv>map1</jv> = <jv>pojoRest</jv>.get(<js>"path/to/map1"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a map containing string keys and values of lists containing beans.</jc>
-	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; m2 = r.get(<js>"path/to/map2"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>map2</jv> = <jv>pojoRest</jv>.get(<js>"path/to/map2"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <p>

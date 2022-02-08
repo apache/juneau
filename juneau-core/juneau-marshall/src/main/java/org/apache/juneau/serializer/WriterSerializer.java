@@ -150,7 +150,7 @@ public class WriterSerializer extends Serializer {
 		 * Used when passing in files to {@link Serializer#serialize(Object, Object)}.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that writes UTF-8 files.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
@@ -183,7 +183,7 @@ public class WriterSerializer extends Serializer {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that indents a maximum of 20 tabs.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
@@ -214,7 +214,7 @@ public class WriterSerializer extends Serializer {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that uses single quotes.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
@@ -273,7 +273,7 @@ public class WriterSerializer extends Serializer {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that uses single quotes.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
@@ -306,7 +306,7 @@ public class WriterSerializer extends Serializer {
 		 * Used when passing in output streams and byte arrays to {@link WriterSerializer#serialize(Object, Object)}.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that writes UTF-8 files.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
@@ -335,7 +335,7 @@ public class WriterSerializer extends Serializer {
 		 * When enabled, whitespace is added to the output to improve readability.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer with whitespace enabled.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
@@ -377,7 +377,7 @@ public class WriterSerializer extends Serializer {
 		 * When enabled, whitespace is added to the output to improve readability.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer with whitespace enabled.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()

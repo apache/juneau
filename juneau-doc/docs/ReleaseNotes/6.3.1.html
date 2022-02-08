@@ -67,7 +67,7 @@
 			<ul>
 				<li>{@del oajr.annotation.HtmlDoc#navlinks() navlinks()} - Now an array of strings instead of a JSON object.  Simplified syntax.
 					<br>For example:
-					<p class='bcode w800'>
+					<p class='bcode'>
 		<jc>// Old syntax</jc>
 		htmldoc=<ja>@HtmlDoc</ja>(
 			links=<js>"{"</js>
@@ -125,8 +125,8 @@
 				<li>
 					Renamed widgets:
 					<ul>
-						<li><c>PoweredByApacheWidget</c> -&gt; <c>PoweredByApache</c>  
-						<li><c>PoweredByJuneauWidget</c> -&gt; <c>PoweredByJuneau</c>  
+						<li><c>PoweredByApacheWidget</c> -> <c>PoweredByApache</c>  
+						<li><c>PoweredByJuneauWidget</c> -> <c>PoweredByJuneau</c>  
 					</ul>
 				<li>
 					New {@link oajr.widget.MenuItemWidget} can be used as a starting point for creatint pull-down menu items.
@@ -183,7 +183,7 @@
 			</ul>
 			Instead, the {@del oajr.BasicRestServlet} class defines the following default header
 			that can be easily overridden: 
-			<p class='bcode w800'>
+			<p class='bcode'>
 		htmldoc=<ja>@HtmlDoc</ja>(
 			header={
 				<js>"&lt;h1&gt;$R{resourceTitle}&lt;/h1&gt;"</js>,
@@ -198,7 +198,7 @@
 			files in the classpath.
 			<br>The <c>DockerRegistryResource</c> examples shows how it can be used to pull in a localized
 			file from the classpath to populate the aside section of a page.
-			<p class='bcode w800'>
+			<p class='bcode'>
 		htmldoc=<ja>@HtmlDoc</ja>(
 			<jc>// Pull in aside contents from file.</jc>
 			aside=<js>"$F{resources/DockerRegistryResourceAside.html}"</js>

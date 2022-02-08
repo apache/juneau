@@ -24,21 +24,21 @@ import org.apache.juneau.swap.*;
  * This class can be used to get and set property values on a bean, or to get metadata on a property.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Construct a new bean</jc>
- * 	Person p = <jk>new</jk> Person();
+ * 	Person <jv>person</jv> = <jk>new</jk> Person();
  *
  * 	<jc>// Wrap it in a bean map</jc>
- * 	BeanMap&lt;Person&gt; b = BeanContext.<jsf>DEFAULT</jsf>.forBean(p);
+ * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.toBeanMap(<jv>person</jv>);
  *
  * 	<jc>// Get a reference to the birthDate property</jc>
- * 	BeanMapEntry birthDate = b.getProperty(<js>"birthDate"</js>);
+ * 	BeanMapEntry <jv>birthDate</jv> = <jv>beanMap</jv>.getProperty(<js>"birthDate"</js>);
  *
  * 	<jc>// Set the property value</jc>
- * 	birthDate.setValue(<jk>new</jk> Date(1, 2, 3, 4, 5, 6));
+ * 	<jv>birthDate</jv>.setValue(<jk>new</jk> Date(1, 2, 3, 4, 5, 6));
  *
  * 	<jc>// Or if the DateSwap.DEFAULT_ISO8601DT is registered with the bean context, set a transformed value</jc>
- * 	birthDate.setValue(<js>"'1901-03-03T04:05:06-5000'"</js>);
+ * 	<jv>birthDate</jv>.setValue(<js>"'1901-03-03T04:05:06-5000'"</js>);
  * </p>
  *
  * <ul class='seealso'>

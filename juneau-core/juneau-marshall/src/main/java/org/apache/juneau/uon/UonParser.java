@@ -163,7 +163,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		 * before being passed to this parser.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a decoding UON parser.</jc>
 		 * 	ReaderParser <jv>parser</jv> = UonParser.
 		 * 		.<jsm>create</jsm>()
@@ -201,7 +201,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		 * the stream consists of only comments or whitespace.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a parser using strict mode.</jc>
 		 * 	ReaderParser <jv>parser</jv> = UonParser.
 		 * 		.<jsm>create</jsm>()
@@ -210,7 +210,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 		 *
 		 * 	<jc>// Should fail because input has multiple POJOs.</jc>
 		 * 	String <jv>in</jv> = <js>"(foo=bar)(baz=qux)"</js>;
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(in, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<jv>in</jv>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
 		 * @return This object.

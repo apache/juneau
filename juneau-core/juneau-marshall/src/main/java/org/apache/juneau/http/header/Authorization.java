@@ -23,7 +23,7 @@ import org.apache.juneau.http.annotation.*;
  * Authentication credentials for HTTP authentication.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
  * </p>
  *
@@ -36,7 +36,7 @@ import org.apache.juneau.http.annotation.*;
  * The Authorization field value consists of credentials containing the authentication information of the user agent for
  * the realm of the resource being requested.
  *
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Authorization  = "Authorization" ":" credentials
  * </p>
  *

@@ -24,7 +24,7 @@ import org.apache.juneau.serializer.*;
  * {@review}
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Validates the specified list is not empty.</jc>
  * 	<jsm>assertCollection</jsm>(<jv>myList</jv>).isNotEmpty();
  * </p>

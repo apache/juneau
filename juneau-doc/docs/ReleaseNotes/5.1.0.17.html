@@ -92,13 +92,13 @@
 		<li>Added methods {@del RestServlet#getDescription(RestRequest)} and {@del RestServlet#getLabel(RestRequest)}.
 		<li>{@del oajr.BasicRestServlet} and {@del RestServletJenaDefault} now provide default HTML titles
 			and descriptions:
-			<p class='bcode w800'>
+			<p class='bcode'>
 		<ja>@Property</ja>(name=<jsf>HTMLDOC_title</jsf>, value=<js>"$R{resourceTitle}"</js>),
 		<ja>@Property</ja>(name=<jsf>HTMLDOC_description</jsf>, value=<js>"$R{resourceDescription}"</js>)
 			</p>
 		<li>Options pages on {@del oajr.BasicRestServlet} and {@del RestServletJenaDefault} now provide default descriptions and back links:
 			and descriptions:
-			<p class='bcode w800'>
+			<p class='bcode'>
 		<ja>@Property</ja>(name=<jsf>HTMLDOC_navlinks</jsf>, value=<js>"{back:'$R{servletURI}"</js>),
 		<ja>@Property</ja>(name=<jsf>HTMLDOC_description</jsf>, value=<js>"Resource options"</js>)
 			</p>

@@ -26,7 +26,7 @@ import org.apache.juneau.json.*;
  *
  * <p>
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Content-Type: application/json;charset=utf-8
  * </p>
  *
@@ -286,9 +286,9 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	/**
 	 * Returns a parameterized value of the header.
 	 *
-	 * <p class='bcode w800'>
-	 * 	ContentType ct = ContentType.<jsm>of</jsm>(<js>"application/json;charset=foo"</js>);
-	 * 	assertEquals(<js>"foo"</js>, ct.getParameter(<js>"charset"</js>);
+	 * <p class='bjava'>
+	 * 	ContentType <jv>contentType</jv> = ContentType.<jsm>of</jsm>(<js>"application/json;charset=foo"</js>);
+	 * 	<jsm>assertEquals</jsm>(<js>"foo"</js>, <jv>contentType</jv>.getParameter(<js>"charset"</js>);
 	 * </p>
 	 *
 	 * @param name The header name.

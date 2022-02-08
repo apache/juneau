@@ -73,22 +73,22 @@ import org.apache.juneau.xml.*;
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Use one of the default serializers to serialize a POJO</jc>
- * 	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(someObject);
+ * 	String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>someObject</jv>);
  *
  * 	<jc>// Create a custom serializer that doesn't use whitespace and newlines</jc>
- * 	HtmlSerializer serializer = <jk>new</jk> HtmlSerializerBuider().ws().build();
+ * 	HtmlSerializer <jv>serializer</jv> = HtmlSerializer.<jsm>create</jsm>().ws().build();
  *
  * 	<jc>// Same as above, except uses cloning</jc>
- * 	HtmlSerializer serializer = HtmlSerializer.<jsf>DEFAULT</jsf>.copy().ws().build();
+ * 	HtmlSerializer <jv>serializer</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.copy().ws().build();
  *
  * 	<jc>// Serialize POJOs to HTML</jc>
  *
  * 	<jc>// Produces: </jc>
  * 	<jc>// &lt;ul&gt;&lt;li&gt;1&lt;li&gt;2&lt;li&gt;3&lt;/ul&gt;</jc>
- * 	List l = OList.<jsm>of</jsm>(1, 2, 3);
- * 	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(l);
+ * 	List <jv>list</jv> = OList.<jsm>of</jsm>(1, 2, 3);
+ * 	String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>list</jv>);
  *
  * 	<jc>// Produces: </jc>
  * 	<jc>//    &lt;table&gt; </jc>
@@ -97,12 +97,12 @@ import org.apache.juneau.xml.*;
  * 	<jc>//       &lt;tr&gt;&lt;td&gt;Billy&lt;/td&gt;&lt;td&gt;TheKid&lt;/td&gt;&lt;/tr&gt; </jc>
  * 	<jc>//       &lt;tr&gt;&lt;td&gt;Barney&lt;/td&gt;&lt;td&gt;Miller&lt;/td&gt;&lt;/tr&gt; </jc>
  * 	<jc>//    &lt;/table&gt; </jc>
- * 	l = OList.<jsm>of</jsm>(
+ * 	<jv>html</jv> = OList.<jsm>of</jsm>(
  * 		OMap.<jsm>ofJson</jsm>(<js>"{firstName:'Bob',lastName:'Costas'}"</js>),
  * 		OMap.<jsm>ofJson</jsm>(<js>"{firstName:'Billy',lastName:'TheKid'}"</js>),
  * 		OMap.<jsm>ofJson</jsm>(<js>"{firstName:'Barney',lastName:'Miller'}"</js>)
  * 	);
- * 	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(l);
+ * 	String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>list</jv>);
  *
  * 	<jc>// Produces: </jc>
  * 	<jc>//    &lt;table&gt; </jc>
@@ -110,8 +110,8 @@ import org.apache.juneau.xml.*;
  * 	<jc>//       &lt;tr&gt;&lt;td&gt;foo&lt;/td&gt;&lt;td&gt;bar&lt;/td&gt;&lt;/tr&gt; </jc>
  * 	<jc>//       &lt;tr&gt;&lt;td&gt;baz&lt;/td&gt;&lt;td&gt;123&lt;/td&gt;&lt;/tr&gt; </jc>
  * 	<jc>//    &lt;/table&gt; </jc>
- * 	Map m = OMap.<jsm>ofJson</jsm>(<js>"{foo:'bar',baz:123}"</js>);
- * 	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(m);
+ * 	Map <jv>map</jv> = OMap.<jsm>ofJson</jsm>(<js>"{foo:'bar',baz:123}"</js>);
+ * 	String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>map</jv>);
  *
  * 	<jc>// HTML elements can be nested arbitrarily deep</jc>
  * 	<jc>// Produces: </jc>
@@ -127,10 +127,10 @@ import org.apache.juneau.xml.*;
  * 	<jc>//			&lt;/table&gt; </jc>
  * 	<jc>//		&lt;/td&gt;&lt;/tr&gt; </jc>
  * 	<jc>//	&lt;/table&gt; </jc>
- * 	Map m = OMap.<jsm>ofJson</jsm>(<js>"{foo:'bar',baz:123}"</js>);
- * 	m.put(<js>"someNumbers"</js>, OList.<jsm>of</jsm>(1, 2, 3));
- * 	m.put(<js>"someSubMap"</js>, OMap.<jsm>ofJson</jsm>(<js>"{a:'b'}"</js>));
- * 	String html = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(m);
+ * 	Map <jv>map</jv> = OMap.<jsm>ofJson</jsm>(<js>"{foo:'bar',baz:123}"</js>);
+ * 	<jv>map</jv>.put(<js>"someNumbers"</js>, OList.<jsm>of</jsm>(1, 2, 3));
+ * 	<jv>map</jv>.put(<js>"someSubMap"</js>, OMap.<jsm>ofJson</jsm>(<js>"{a:'b'}"</js>));
+ * 	String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>map</jv>);
  * </p>
  *
  * <ul class='spaced-list'>
@@ -320,7 +320,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * When enabled, <bc>key</bc> and <bc>value</bc> column headers are added to tables.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjson'>
 		 * 	<jc>// Our bean class.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String <jf>f1</jf> = <js>"foo"</js>;
@@ -392,7 +392,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * and make it into a hyperlink based on the rules specified by {@link Builder#uriAnchorText(AnchorText)}.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjson'>
 		 * 	<jc>// Our bean class with a property containing what looks like a URL.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String <jf>f1</jf> = <js>"http://www.apache.org"</js>;
@@ -485,7 +485,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * The parameter name can be changed via the {@link #labelParameter(String)} property.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjson'>
 		 * 	<jc>// Our bean class with a property containing what looks like a URL.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"http://www.apache.org?label=Apache%20Foundation"</js>);
@@ -567,7 +567,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 		<li class='jf'>{@link AnchorText#TO_STRING TO_STRING} (default) - Set to whatever is returned by {@link #toString()} on the object.
 		 * 			<br>
 		 * 			<h5 class='section'>Example:</h5>
-		 * 			<p class='bcode w800'>
+		 * 			<p class='bjson'>
 		 * 	<jc>// Our bean class with a URI property.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"http://www.apache.org?foo=bar#myAnchor"</js>);
@@ -582,7 +582,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 		<li class='jf'>{@link AnchorText#PROPERTY_NAME PROPERTY_NAME} - Set to the bean property name.
 		 * 			<br>
 		 * 			<h5 class='section'>Example:</h5>
-		 * 			<p class='bcode w800'>
+		 * 			<p class='bjson'>
 		 * 	<jc>// Our bean class with a URI property.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"http://www.apache.org?foo=bar#myAnchor"</js>);
@@ -597,7 +597,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 		<li class='jf'>{@link AnchorText#URI URI} - Set to the URI value.
 		 * 			<br>
 		 * 			<h5 class='section'>Example:</h5>
-		 * 			<p class='bcode w800'>
+		 * 			<p class='bjson'>
 		 * 	<jc>// Our bean class with a URI property.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"http://www.apache.org?foo=bar#myAnchor"</js>);
@@ -612,7 +612,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 		<li class='jf'>{@link AnchorText#LAST_TOKEN LAST_TOKEN} - Set to the last token of the URI value.
 		 * 			<br>
 		 * 			<h5 class='section'>Example:</h5>
-		 * 			<p class='bcode w800'>
+		 * 			<p class='bjson'>
 		 * 	<jc>// Our bean class with a URI property.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"http://www.apache.org/foo/bar?baz=qux#myAnchor"</js>);
@@ -627,7 +627,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 		<li class='jf'>{@link AnchorText#URI_ANCHOR URI_ANCHOR} - Set to the anchor of the URL.
 		 * 			<br>
 		 * 			<h5 class='section'>Example:</h5>
-		 * 			<p class='bcode w800'>
+		 * 			<p class='bjson'>
 		 * 	<jc>// Our bean class with a URI property.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"http://www.apache.org/foo/bar?baz=qux#myAnchor"</js>);
@@ -642,7 +642,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 		<li class='jf'>{@link AnchorText#CONTEXT_RELATIVE CONTEXT_RELATIVE} - Same as {@link AnchorText#TO_STRING TO_STRING} but assumes it's a context-relative path.
 		 * 			<br>
 		 * 			<h5 class='section'>Example:</h5>
-		 * 			<p class='bcode w800'>
+		 * 			<p class='bjson'>
 		 * 	<jc>// Our bean class with a URI property.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"bar/baz"</js>);
@@ -663,7 +663,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 		<li class='jf'>{@link AnchorText#SERVLET_RELATIVE SERVLET_RELATIVE} - Same as {@link AnchorText#TO_STRING TO_STRING} but assumes it's a servlet-relative path.
 		 * 			<br>
 		 * 			<h5 class='section'>Example:</h5>
-		 * 			<p class='bcode w800'>
+		 * 			<p class='bjson'>
 		 * 	<jc>// Our bean class with a URI property.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"bar/baz"</js>);
@@ -684,7 +684,7 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 		 * 		<li class='jf'>{@link AnchorText#PATH_RELATIVE PATH_RELATIVE} - Same as {@link AnchorText#TO_STRING TO_STRING} but assumes it's a path-relative path.
 		 * 			<br>
 		 * 			<h5 class='section'>Example:</h5>
-		 * 			<p class='bcode w800'>
+		 * 			<p class='bjson'>
 		 * 	<jc>// Our bean class with a URI property.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> URI <jf>f1</jf> = URI.<jsm>create</jsm>(<js>"bar/baz"</js>);

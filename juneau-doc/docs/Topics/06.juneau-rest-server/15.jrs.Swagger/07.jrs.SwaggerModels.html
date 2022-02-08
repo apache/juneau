@@ -23,7 +23,7 @@
 	<p>
 		This setting is disabled by default, but can be set on the {@link oajr.RestContext.Builder} object:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@HookEvent</ja>(<jsf>INIT</jsf>)
 		|	<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) {
 		|		<jv>builder</jv>.jsonSchemaGenerator().useBeanDefs();
@@ -39,7 +39,7 @@
 	<p>
 		In the generated Swagger JSON, embedded schema information for beans will be replaced with references such as the one shown below for the <c>Order</c> bean:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjson'>
 		|	{
 		|		<jok>"swagger"</jok>: <jov>"2.0"</jov>,
 		|		<jok>"paths"</jok>: {

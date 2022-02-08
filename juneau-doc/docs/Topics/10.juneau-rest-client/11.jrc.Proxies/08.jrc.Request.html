@@ -30,7 +30,7 @@
 	
 	
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
 		|	<jk>public interface</jk> PetStore {
 		|
@@ -38,7 +38,7 @@
 		|		String postPet(CreatePetRequest <jv>bean</jv>);
 		|	}
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Request</ja> 
 		|	<jk>public class</jk> CreatePetRequest {
 		|	
@@ -64,7 +64,7 @@
 		|	}
 		|	}
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		PetStore <jv>store</jv> = <jv>client</jv>.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
 		
 		CreatePetRequest <jv>requestBean</jv> = <jk>new</jk> CreatePetRequest(<js>"Fluffy"</js>, 9.99);
@@ -95,7 +95,7 @@
 		Annotations on methods are inherited from parent classes and interfaces. 
 		For example, the request bean above could have defined annotations in an interface to keep them clear from the implementation:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Request</ja> 
 		|	<jk>public interface</jk> CreatePetRequest {
 		|	
@@ -109,7 +109,7 @@
 		|	UUID getUUID();
 		|	}
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> CreatePetRequestImpl <jk>implements</jk> CreatePetRequest {
 		|	
 		|		<jk>public</jk> CreatePetRequestImpl(String <jv>name</jv>, <jk>float</jk> <jv>price</jv>) {...}

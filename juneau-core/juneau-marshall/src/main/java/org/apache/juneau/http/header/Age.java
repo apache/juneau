@@ -23,7 +23,7 @@ import org.apache.juneau.http.annotation.*;
  * The age the object has been in a proxy cache in seconds.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Age: 12
  * </p>
  *
@@ -34,7 +34,7 @@ import org.apache.juneau.http.annotation.*;
  * A cached response is "fresh" if its age does not exceed its freshness lifetime.
  * Age values are calculated as specified in section 13.2.3.
  *
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Age = "Age" ":" age-value
  * 	age-value = delta-seconds
  * </p>

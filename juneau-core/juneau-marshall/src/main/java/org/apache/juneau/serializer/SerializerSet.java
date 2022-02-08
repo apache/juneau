@@ -59,12 +59,12 @@ import org.apache.juneau.reflect.*;
  * will result in the order <c>S3, S4, S1, S2</c>.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Construct a new serializer group</jc>
  * 	SerializerSet <jv>serializers</jv> = SerializerSet.<jsm>create</jsm>();
  * 		.add(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>) <jc>// Add some serializers to it</jc>
- * 		.forEach(<jv>x</jv> -&gt; <jv>x</jv>.swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>))
- * 		.forEachWS(<jv>x</jv> -&gt; <jv>x</jv>.ws())
+ * 		.forEach(<jv>x</jv> -> <jv>x</jv>.swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>))
+ * 		.forEachWS(<jv>x</jv> -> <jv>x</jv>.ws())
  * 		.build();
  *
  * 	<jc>// Find the appropriate serializer by Accept type</jc>
@@ -73,7 +73,7 @@ import org.apache.juneau.reflect.*;
  *
  * 	<jc>// Serialize a bean to JSON text </jc>
  * 	AddressBook <jv>addressBook</jv> = <jk>new</jk> AddressBook();  <jc>// Bean to serialize.</jc>
- * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(addressBook);
+ * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>addressBook</jv>);
  * </p>
  *
  * <ul class='spaced-list'>
@@ -248,7 +248,7 @@ public final class SerializerSet {
 		 * The {@link NoInherit} class can be used to clear out the existing list of serializers before adding the new entries.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	SerializerSet.Builder <jv>builder</jv> = SerializerSet.<jsm>create</jsm>();  <jc>// Create an empty builder.</jc>
 		 *
 		 * 	<jv>builder</jv>.add(FooSerializer.<jk>class</jk>);  <jc>// Now contains:  [FooSerializer]</jc>
@@ -285,7 +285,7 @@ public final class SerializerSet {
 		 * The {@link Inherit} class can be used to insert existing entries in this group into the position specified.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	SerializerSet.Builder <jv>builder</jv> = SerializerSet.<jsm>create</jsm>();  <jc>// Create an empty builder.</jc>
 		 *
 		 * 	<jv>builder</jv>.set(FooSerializer.<jk>class</jk>);  <jc>// Now contains:  [FooSerializer]</jc>
@@ -537,7 +537,7 @@ public final class SerializerSet {
 	 *
 	 * <p>
 	 * The <c>accept</c> value complies with the syntax described in RFC2616, Section 14.1, as described below:
-	 * <p class='bcode w800'>
+	 * <p class='bcode'>
 	 * 	Accept         = "Accept" ":"
 	 * 	                  #( media-range [ accept-params ] )
 	 *

@@ -42,17 +42,17 @@ import org.apache.juneau.oapi.*;
  * request header.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestGet</ja>
  * 	<jk>public void</jk> doGet(<ja>@Header</ja>(<js>"ETag"</js>) UUID <jv>etag</jv>) {...}
  * </p>
  *
  * <p>
  * This is functionally equivalent to the following code...
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestGet</ja>
  * 	<jk>public void</jk> doGet(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) {
- * 		UUID <jv>etag</jv> = <jv>req</jv>.getHeader(UUID.<jk>class</jk>, <js>"ETag"</js>);
+ * 		UUID <jv>etag</jv> = <jv>req</jv>.getHeader(<js>"ETag"</js>).as(UUID.<jk>class</jk>).orElse(<jk>null</jk>);
  * 		...
  * 	}
  * </p>
@@ -105,12 +105,12 @@ public @interface Header {
 	 * 		then it's the equivalent to <js>"*"</js> which will cause the value to be serialized as name/value pairs.
 	 *
 	 * 		<h5 class='figure'>Examples:</h5>
-	 * 		<p class='bcode w800'>
+	 * 		<p class='bjava'>
 	 * 	<jc>// When used on a REST method</jc>
 	 * 	<ja>@RestPost</ja>(<js>"/addPet"</js>)
 	 * 	<jk>public void</jk> addPet(<ja>@Header</ja> OMap <jv>allHeaderParameters</jv>) {...}
 	 * 		</p>
-	 * 		<p class='bcode w800'>
+	 * 		<p class='bjava'>
 	 * 	<jc>// When used on a remote method parameter</jc>
 	 * 	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
 	 * 	<jk>public interface</jk> MyProxy {
@@ -120,7 +120,7 @@ public @interface Header {
 	 * 		String myProxyMethod1(<ja>@Header</ja> Map&lt;String,Object&gt; <jv>allHeaderParameters</jv>);
 	 * 	}
 	 * 		</p>
-	 * 		<p class='bcode w800'>
+	 * 		<p class='bjava'>
 	 * 	<jc>// When used on a request bean method</jc>
 	 * 	<jk>public interface</jk> MyRequest {
 	 *
@@ -134,7 +134,7 @@ public @interface Header {
 	 * 		If used on a request bean method, uses the bean property name.
 	 *
 	 * 		<h5 class='figure'>Example:</h5>
-	 * 		<p class='bcode w800'>
+	 * 		<p class='bjava'>
 	 * 	<jk>public interface</jk> MyRequest {
 	 *
 	 * 		<jc>// Equivalent to @Header("Foo")</jc>
@@ -216,10 +216,10 @@ public @interface Header {
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining a header entry:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public</jk> Order placeOrder(<ja>@Header</ja>(name=<js>"api_key"</js>) String <jv>apiKey</jv>) {...}
 	 * </p>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public</jk> Order placeOrder(<ja>@Header</ja>(<js>"api_key"</js>) String <jv>apiKey</jv>) {...}
 	 * </p>
 	 */

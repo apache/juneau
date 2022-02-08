@@ -28,7 +28,7 @@
 		request of the form <l>"aString=foo&amp;aNumber=123&amp;aDate=2001-07-04T15:30:45Z"</l> and 
 		loading it into a simple bean.
 	</p>
-	<p class='bcode w800'>				
+	<p class='bjava'>				
 		|	<jc>// A simple bean.</jc>
 		|	<jk>public static class</jk> FormInputBean {
 		|		<jk>public</jk> String <jf>aString</jf>;
@@ -37,22 +37,22 @@
 		|		<jk>public</jk> Calendar <jf>aDate</jf>;
 		|	}
 	</p>
-	<p class='bcode w800'>				
+	<p class='bjava'>				
 		|	<ja>@Rest</ja>(...)
 		|	<jk>public class</jk> MyRestResource <jk>extends</jk> BasicRestServlet {
 		|	
 		|		<jc>// Our form input endpoint.</jc>
 		|		<ja>@RestPost</ja>(<js>"/"</js>)
-		|		<jk>public</jk> Object doPost(<ja>@Body</ja> FormInputBean input) {
+		|		<jk>public</jk> Object doPost(<ja>@Body</ja> FormInputBean <jv>input</jv>) {
 		|			<jc>// Just mirror back the request</jc>
-		|			<jk>return</jk> input;
+		|			<jk>return</jk> <jv>input</jv>;
 		|		}
 		|	}		
 	</p>	
 	<p>
 		The next example shows handling it as individual parts:	
 	</p>	
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Our form input endpoint.</jc>
 		|	<ja>@RestPost</ja>(<js>"/"</js>)
 		|	<jk>public</jk> Object doPost(
@@ -78,7 +78,7 @@
 		If you want to be able to consume url-encoded form post bodies as POJOs in Spring Boot, you'll need to 
 		add the following Spring Bean to your configuration to prevent Spring Boot from automatically 
 		consuming the body itself:
-		<p class='bcode w800'>
+		<p class='bjava'>
 			|	<ja>@SpringBootApplication</ja>
 			|	<ja>@Controller</ja>
 			|	<jk>public class</jk> SpringBootAppConfig {
@@ -102,7 +102,7 @@
 		The following is an example that uses the File Upload library to allow files to be uploaded as multipart form posts.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(
 		|		path=<js>"/tempDir"</js>
 		|	)
@@ -115,8 +115,8 @@
 		|			<jk>while</jk> (<jv>iter</jv>.hasNext()) {
 		|				FileItemStream <jv>item</jv> = <jv>iter</jv>.next();
 		|				<jk>if</jk> (<jv>item</jv>.getFieldName().equals(<js>"contents"</js>)) { 
-		|					File <jv>f</jv> = <jk>new</jk> File(getRootDir(), <jv>item</jv>.getName());
-		|					IOPipe.<jsm>create</jsm>(<jv>item</jv>.openStream(), <jk>new</jk> FileOutputStream(<jv>f</jv>)).closeOut().run();
+		|					File <jv>file</jv> = <jk>new</jk> File(getRootDir(), <jv>item</jv>.getName());
+		|					IOPipe.<jsm>create</jsm>(<jv>item</jv>.openStream(), <jk>new</jk> FileOutputStream(<jv>file</jv>)).closeOut().run();
 		|				}
 		|			}
 		|			<jk>return new</jk> Redirect(); <jc>// Redirect to the servlet root.</jc>
@@ -136,7 +136,7 @@
 		The following shows using the <l>HttpServletRequest.getParts()</l> method to retrieve multi-part form posts when using Jetty.
 		This example is pulled from the PetStore application.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@RestPost</ja>
 		|	<jk>public</jk> SeeOtherRoot uploadFile(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
 		|

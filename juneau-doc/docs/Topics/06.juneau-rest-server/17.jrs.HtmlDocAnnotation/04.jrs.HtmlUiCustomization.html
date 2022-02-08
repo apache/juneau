@@ -25,7 +25,7 @@
 	<p>
 		The sample root page below includes some default branding for Juneau and Apache:
 	</p>
-	<p class='bcode w800'>
+	<p class='bcode'>
 		|	http://localhost:10000/helloWorld
 	</p>
 	<img class='bordered w800' src='doc-files/jrs.UiCustomization.1.png'>
@@ -33,7 +33,7 @@
 		The Juneau REST framework does not provide specific branding support (i.e. there is no concept of a brand icon).
 		Instead, it just uses the existing open-ended API for defining branding via annotations on your REST classes.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(
 		|		<jc>// Optional external configuration file.</jc>
 		|		config=<js>"$S{juneau.configFile}"</js>,
@@ -70,7 +70,7 @@
 		|	
 		|	<jk>public interface</jk> BasicUniversalConfig {}
 	</p>
-	<p class='bcode w800'>			
+	<p class='bjava'>			
 		|	<ja>@Rest</ja>(...)
 		|	<ja>@HtmlDocConfig</ja>(
 		|		widgets={
@@ -102,7 +102,7 @@
 		The default annotation values use {@link oaj.config.vars.ConfigVar $C} variables to pull in values from an optional
 		external configuration file such as the one shown below:
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc>#=======================================================================================================================
 		|	# REST settings
 		|	#=======================================================================================================================</cc>

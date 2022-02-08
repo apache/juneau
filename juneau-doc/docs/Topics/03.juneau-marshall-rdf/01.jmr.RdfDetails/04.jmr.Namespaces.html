@@ -34,7 +34,7 @@
 		of this class.
 		We do this by adding the following annotation to our class:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rdf</ja>(prefix=<js>"per"</js>)
 		|	<jk>public class</jk> Person {
 	</p>
@@ -42,7 +42,7 @@
 		In general, the best approach is to define the namespace URIs at the package level using a 
 		<c>package-info.java</c> class, like so:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// RDF namespaces used in this package</jc>
 		|	<ja>@RdfSchema</ja>(
 		|		prefix=<js>"ab"</js>,
@@ -63,7 +63,7 @@
 	<p>
 		Now when we rerun the sample code, we'll get the following:
 	</p>
-	<p class='bcode w800'>
+	<p class='bxml'>
 		|	<xt>&lt;rdf:RDF</xt>
 		|		<xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
 		|		<xa>xmlns:j</xa>=<xs>"http://www.apache.org/juneau/"</xs>
@@ -81,7 +81,7 @@
 		In high-performance environments, you may want to consider disabling auto-detection and providing an 
 		explicit list of namespaces to the serializer to avoid this scanning step using {@link oaj.xml.XmlSerializer.Builder#disableAutoDetectNamespaces()}.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a new serializer, but manually specify the namespaces.</jc>
 		|	RdfSerializer <jv>serializer</jv> = RdfSerializer.<jsm>create</jsm>()
 		|		.xmlabbrev()

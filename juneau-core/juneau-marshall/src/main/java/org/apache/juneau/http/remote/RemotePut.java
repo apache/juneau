@@ -54,7 +54,7 @@ public @interface RemotePut {
 	 * If you do not specify a path, then the path is inferred from the Java method name.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bjava'>
 	 * 	<ja>@RemotePut</ja>
 	 * 	<jk>public void</jk> putPet(...);
 	 * </p>
@@ -110,7 +110,7 @@ public @interface RemotePut {
 	 *
 	 * <p>
 	 * The following examples are considered equivalent.
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Normal form</jc>
 	 * 	<ja>@RemotePut</ja>(path=<js>"/{propertyName}"</js>)
 	 *

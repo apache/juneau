@@ -22,7 +22,7 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <p>
  * The parameter value is resolved using:
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jv>opSession</jv>
  * 		.{@link RestOpSession#getBeanStore() getBeanStore}()
  * 		.{@link BeanStore#getBean(Class) getBean}(<jv>type</jv>);

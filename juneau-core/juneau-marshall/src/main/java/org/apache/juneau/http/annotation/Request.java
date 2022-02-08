@@ -40,7 +40,7 @@ import org.apache.juneau.oapi.*;
  * Annotation that can be applied to a parameter of a <ja>@RestOp</ja>-annotated method to identify it as an interface for retrieving HTTP parts through a bean interface.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestGet</ja>(<js>"/mypath/{p1}/{p2}/*"</js>)
  * 	<jk>public void</jk> myMethod(<ja>@Request</ja> MyRequest <jv>requestBean</jv>) {...}
  *
@@ -73,7 +73,7 @@ import org.apache.juneau.oapi.*;
  * 		<ja>@Header</ja>(<js>"*"</js>)
  * 		Map&lt;String,Object&gt; getHeaders();
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Same as above but annotation defined on interface.</jc>
  * 	<ja>@RestGet</ja>(path=<js>"/mypath/{p1}/{p2}/*"</js>)
  * 	<jk>public void</jk> myMethod(MyRequest <jv>requestBean</jv>) {...}
@@ -93,7 +93,7 @@ import org.apache.juneau.oapi.*;
  * Annotation applied to Java method arguments of interface proxies to denote a bean with remote resource annotations.
 
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
  * 	<jk>public interface</jk> MyProxy {
  *

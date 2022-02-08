@@ -216,18 +216,18 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * a String containing an ISO8601 date-time string value.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Construct a bean with a 'birthDate' Date field</jc>
-	 * 	Person p = <jk>new</jk> Person();
+	 * 	Person <jv>person</jv> = <jk>new</jk> Person();
 	 *
 	 * 	<jc>// Create a bean context and add the ISO8601 date-time swap</jc>
-	 * 	BeanContext beanContext = <jk>new</jk> BeanContext().swaps(DateSwap.ISO8601DT.<jk>class</jk>);
+	 * 	BeanContext <jv>beanContext</jv> = BeanContext.<jsm>create</jsm>().swaps(DateSwap.ISO8601DT.<jk>class</jk>).build();
 	 *
 	 * 	<jc>// Wrap our bean in a bean map</jc>
-	 * 	BeanMap&lt;Person&gt; b = beanContext.forBean(p);
+	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = <jv>beanContext</jv>.toBeanMap(<jv>person</jv>);
 	 *
 	 * 	<jc>// Set the field</jc>
-	 * 	myBeanMap.put(<js>"birthDate"</js>, <js>"'1901-03-03T04:05:06-5000'"</js>);
+	 * 	<jv>beanMap</jv>.put(<js>"birthDate"</js>, <js>"'1901-03-03T04:05:06-5000'"</js>);
 	 * </p>
 	 *
 	 * @param property The name of the property to set.
@@ -300,19 +300,19 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * ISO8601 date-time string value.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Construct a bean with a 'birthDate' Date field</jc>
-	 * 	Person p = <jk>new</jk> Person();
-	 * 	p.setBirthDate(<jk>new</jk> Date(1, 2, 3, 4, 5, 6));
+	 * 	Person <jv>person</jv> = <jk>new</jk> Person();
+	 * 	<jv>person</jv>.setBirthDate(<jk>new</jk> Date(1, 2, 3, 4, 5, 6));
 	 *
 	 * 	<jc>// Create a bean context and add the ISO8601 date-time swap</jc>
-	 * 	BeanContext beanContext = <jk>new</jk> BeanContext().swaps(DateSwap.ISO8601DT.<jk>class</jk>);
+	 * 	BeanContext <jv>beanContext</jv> = BeanContext.<jsm>create</jsm>().swaps(DateSwap.ISO8601DT.<jk>class</jk>).build();
 	 *
 	 * 	<jc>// Wrap our bean in a bean map</jc>
-	 * 	BeanMap&lt;Person&gt; b = beanContext.forBean(p);
+	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = <jv>beanContext</jv>.toBeanMap(<jv>person</jv>);
 	 *
 	 * 	<jc>// Get the field as a string (i.e. "'1901-03-03T04:05:06-5000'")</jc>
-	 * 	String s = myBeanMap.get(<js>"birthDate"</js>);
+	 * 	String <jv>birthDate</jv> = <jv>beanMap</jv>.get(<js>"birthDate"</js>);
 	 * </p>
 	 *
 	 * @param property The name of the property to get.
@@ -376,8 +376,8 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * Convenience method for setting multiple property values by passing in JSON text.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	aPersonBean.load(<js>"{name:'John Smith',age:21}"</js>)
+	 * <p class='bjava'>
+	 * 	<jv>beanMap</jv>.load(<js>"{name:'John Smith',age:21}"</js>)
 	 * </p>
 	 *
 	 * @param input The text that will get parsed into a map and then added to this map.

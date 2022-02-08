@@ -216,7 +216,7 @@ public class RequestHeader extends RequestHttpPart implements Header {
 	 * Provides the ability to perform fluent-style assertions on this parameter.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jv>request</jv>
 	 * 		.getHeader(<js>"foo"</js>)
 	 * 		.assertString().contains(<js>"bar"</js>);
@@ -224,7 +224,7 @@ public class RequestHeader extends RequestHttpPart implements Header {
 	 *
 	 * <p>
 	 * The assertion test returns the original object allowing you to chain multiple requests like so:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	String <jv>foo</jv> = <jv>request</jv>
 	 * 		.getHeader(<js>"foo"</js>)
 	 * 		.assertString().contains(<js>"bar"</js>)
@@ -241,7 +241,7 @@ public class RequestHeader extends RequestHttpPart implements Header {
 	 * Provides the ability to perform fluent-style assertions on an integer parameter.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jv>request</jv>
 	 * 		.getHeader(<js>"age"</js>)
 	 * 		.assertInteger().isGreaterThan(1);
@@ -257,7 +257,7 @@ public class RequestHeader extends RequestHttpPart implements Header {
 	 * Provides the ability to perform fluent-style assertions on a long parameter.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jv>request</jv>
 	 * 		.getHeader(<js>"length"</js>)
 	 * 		.assertLong().isLessThan(100000);
@@ -273,7 +273,7 @@ public class RequestHeader extends RequestHttpPart implements Header {
 	 * Provides the ability to perform fluent-style assertions on a date parameter.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jv>request</jv>
 	 * 		.getHeader(<js>"time"</js>)
 	 * 		.assertDate().isAfterNow();
@@ -289,7 +289,7 @@ public class RequestHeader extends RequestHttpPart implements Header {
 	 * Provides the ability to perform fluent-style assertions on comma-separated string parameters.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jv>request</jv>
 	 * 		.getHeader(<js>"allow"</js>)
 	 * 		.assertCsvArray().contains(<js>"GET"</js>);

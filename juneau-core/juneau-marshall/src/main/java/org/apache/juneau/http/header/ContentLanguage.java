@@ -24,7 +24,7 @@ import org.apache.juneau.http.annotation.*;
  * The natural language or languages of the intended audience for the enclosed content.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Content-Language: da
  * </p>
  *
@@ -33,7 +33,7 @@ import org.apache.juneau.http.annotation.*;
  * The Content-Language entity-header field describes the natural language(s) of the intended audience for the
  * enclosed entity.
  * Note that this might not be equivalent to all the languages used within the entity-body.
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Content-Language  = "Content-Language" ":" 1#language-tag
  * </p>
  *
@@ -42,7 +42,7 @@ import org.apache.juneau.http.annotation.*;
  * The primary purpose of Content-Language is to allow a user to identify and differentiate entities according to the
  * user's own preferred language.
  * Thus, if the body content is intended only for a Danish-literate audience, the appropriate field is...
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Content-Language: da
  * </p>
  *
@@ -55,7 +55,7 @@ import org.apache.juneau.http.annotation.*;
  * Multiple languages MAY be listed for content that is intended for multiple audiences.
  * For example, a rendition of the "Treaty of Waitangi," presented simultaneously in the original Maori and English
  * versions, would call for...
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Content-Language: mi, en
  * </p>
  *

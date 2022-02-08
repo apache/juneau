@@ -22,7 +22,7 @@
 		setting the output using the {@link oajr.RestResponse#setOutput(Object)} method.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@RestGet</ja>
 		|	<jk>public</jk> String doGet() {
 		|		<jk>return</jk> <js>"Hello World!"</js>;
@@ -133,7 +133,7 @@
 			{@link oajr.RestResponse#getNegotiatedWriter()} and writing the output yourself.
 	</ul>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Equivalent method 1</jc>
 		|	<ja>@RestGet</ja>(<js>"/example1/{personId}"</js>)
 		|	<jk>public</jk> Person doGet1(<ja>@Path</ja>(<js>"personId"</js>) UUID <jv>personId</jv>) {
@@ -143,7 +143,7 @@
 		|
 		|	<jc>// Equivalent method 2</jc>
 		|	<ja>@RestGet</ja>(<js>"/example2/{personId}"</js>)
-		|	<jk>public void</jk> doGet2(RestResponse <jv>res</jv>, <ja>@Path</ja>(<js>"personId"</js>) UUID personId) {
+		|	<jk>public void</jk> doGet2(RestResponse <jv>res</jv>, <ja>@Path</ja>(<js>"personId"</js>) UUID <jv>personId</jv>) {
 		|		Person <jv>person</jv> = <jsm>getPersonById</jsm>(<jv>personId</jv>);
 		|		<jv>res</jv>.setOutput(<jv>person</jv>);
 		|	}

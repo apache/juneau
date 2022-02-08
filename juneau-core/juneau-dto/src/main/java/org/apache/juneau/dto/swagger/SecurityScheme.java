@@ -32,7 +32,7 @@ import org.apache.juneau.internal.*;
  * common flows (implicit, password, application and access code).
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjson'>
  * 	<jc>// Basic authentication sample</jc>
  * 	{
  * 		<js>"type"</js>: <js>"basic"</js>

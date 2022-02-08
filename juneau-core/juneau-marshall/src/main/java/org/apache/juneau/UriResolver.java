@@ -139,9 +139,9 @@ public class UriResolver {
 	 *
 	 * <p>
 	 * For example, to relativize a URI to its servlet-relative form:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// relativeUri == "path/foo"</jc>
-	 * 	String relativeUri = resolver.relativize(<js>"servlet:/"</js>, <js>"/context/servlet/path/foo"</js>);
+	 * 	String <jv>relativeUri</jv> = <jv>resolver</jv>.relativize(<js>"servlet:/"</js>, <js>"/context/servlet/path/foo"</js>);
 	 * </p>
 	 *
 	 * @param relativeTo The URI to relativize against.

@@ -24,7 +24,7 @@ import org.apache.juneau.serializer.*;
  * {@review}
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Validates the specified list contains 3 beans with the specified values for the 'foo' property.</jc>
  * 	<jsm>assertBeanList</jsm>(<jv>myBeanList</jv>)
  * 		.property(<js>"foo"</js>)

@@ -24,7 +24,7 @@ import org.apache.juneau.serializer.*;
  * {@review}
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Validates the byte array contains the string "foo".</jc>
  * 	<jsm>assertBytes</jsm>(<jv>myByteArray</jv>).asHex().is(<js>"666F6F"</js>);
  * </p>

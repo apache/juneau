@@ -24,7 +24,7 @@ import org.apache.juneau.http.annotation.*;
  * Allows a 304 Not Modified to be returned if content is unchanged.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	If-None-Match: "737060cd8c284d8af7ad3082f209582d"
  * </p>
  *
@@ -41,7 +41,7 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * As a special case, the value "*" matches any current entity of the resource.
  *
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	If-None-Match = "If-None-Match" ":" ( "*" | 1#entity-tag )
  * </p>
  *
@@ -78,7 +78,7 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * Examples:
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	If-None-Match: "xyzzy"
  * 	If-None-Match: W/"xyzzy"
  * 	If-None-Match: "xyzzy", "r2d2xxxx", "c3piozzzz"

@@ -274,10 +274,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.beanContext(<jv>x</jv> -&gt; <jv>x</jv>.ignoreUnknownBeanProperties())
+		 * 		.beanContext(<jv>x</jv> -> <jv>x</jv>.ignoreUnknownBeanProperties())
 		 * 		.build();
 		 * </p>
 		 *
@@ -350,10 +350,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.encoders(<jv>x</jv> -&gt; <jv>x</jv>.add(MyEncoder.<jk>class</jk>))
+		 * 		.encoders(<jv>x</jv> -> <jv>x</jv>.add(MyEncoder.<jk>class</jk>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -426,10 +426,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.serializers(<jv>x</jv> -&gt; <jv>x</jv>.add(MySerializer.<jk>class</jk>))
+		 * 		.serializers(<jv>x</jv> -> <jv>x</jv>.add(MySerializer.<jk>class</jk>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -502,10 +502,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.parsers(<jv>x</jv> -&gt; <jv>x</jv>.add(MyParser.<jk>class</jk>))
+		 * 		.parsers(<jv>x</jv> -> <jv>x</jv>.add(MyParser.<jk>class</jk>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -578,10 +578,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.partSerializer(<jv>x</jv> -&gt; <jv>x</jv>.builder(OpenApiSerializer.Builder.<jk>class</jk>, <jv>y</jv> -&gt; <jv>y</jv>.sortProperties()))
+		 * 		.partSerializer(<jv>x</jv> -> <jv>x</jv>.builder(OpenApiSerializer.Builder.<jk>class</jk>, <jv>y</jv> -> <jv>y</jv>.sortProperties()))
 		 * 		.build();
 		 * </p>
 		 *
@@ -654,10 +654,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.partParser(<jv>x</jv> -&gt; <jv>x</jv>.builder(OpenApiParser.Builder.<jk>class</jk>, <jv>y</jv> -&gt; <jv>y</jv>.ignoreUnknownBeanProperties()))
+		 * 		.partParser(<jv>x</jv> -> <jv>x</jv>.builder(OpenApiParser.Builder.<jk>class</jk>, <jv>y</jv> -> <jv>y</jv>.ignoreUnknownBeanProperties()))
 		 * 		.build();
 		 * </p>
 		 *
@@ -730,10 +730,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.jsonSchemaGenerator(<jv>x</jv> -&gt; <jv>x</jv>.allowNestedExamples()))
+		 * 		.jsonSchemaGenerator(<jv>x</jv> -> <jv>x</jv>.allowNestedExamples()))
 		 * 		.build();
 		 * </p>
 		 *
@@ -806,10 +806,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.converters(<jv>x</jv> -&gt; <jv>x</jv>.add(MyConverter.<jk>class</jk>)))
+		 * 		.converters(<jv>x</jv> -> <jv>x</jv>.add(MyConverter.<jk>class</jk>)))
 		 * 		.build();
 		 * </p>
 		 *
@@ -839,11 +839,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	(e.g. first the results will be traversed, then the resulting node will be searched/sorted).
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Our converter.</jc>
 		 * 	<jk>public class</jk> MyConverter <jk>implements</jk> RestConverter {
 		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> Object convert(RestRequest <jv>req</jv>, Object <jv>o</jv>) {
+		 * 		<jk>public</jk> Object convert(RestRequest <jv>req</jv>, Object <jv>object</jv>) {
 		 * 			<jc>// Do something with object and return another object.</jc>
 		 * 			<jc>// Or just return the same object for a no-op.</jc>
 		 * 		}
@@ -955,10 +955,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.guards(<jv>x</jv> -&gt; <jv>x</jv>.add(MyGuard.<jk>class</jk>)))
+		 * 		.guards(<jv>x</jv> -> <jv>x</jv>.add(MyGuard.<jk>class</jk>)))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1072,10 +1072,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.matchers(<jv>x</jv> -&gt; <jv>x</jv>.add(MyMatcher.<jk>class</jk>)))
+		 * 		.matchers(<jv>x</jv> -> <jv>x</jv>.add(MyMatcher.<jk>class</jk>)))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1276,10 +1276,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.defaultRequestHeaders(<jv>x</jv> -&gt; <jv>x</jv>.remove(<js>"Foo"</js>)))
+		 * 		.defaultRequestHeaders(<jv>x</jv> -> <jv>x</jv>.remove(<js>"Foo"</js>)))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1347,10 +1347,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.defaultResponseHeaders(<jv>x</jv> -&gt; <jv>x</jv>.remove(<js>"Foo"</js>)))
+		 * 		.defaultResponseHeaders(<jv>x</jv> -> <jv>x</jv>.remove(<js>"Foo"</js>)))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1418,10 +1418,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.defaultRequestAttributes(<jv>x</jv> -&gt; <jv>x</jv>.add(BasicNamedAttribute.<jsm>of</jsm>(<js>"Foo"</js>, ()-&gt;<jsm>getFoo</jsm>()))
+		 * 		.defaultRequestAttributes(<jv>x</jv> -> <jv>x</jv>.add(BasicNamedAttribute.<jsm>of</jsm>(<js>"Foo"</js>, ()-><jsm>getFoo</jsm>()))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1489,10 +1489,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.defaultRequestQueryData(<jv>x</jv> -&gt; <jv>x</jv>.add(BasicPart.<jsm>of</jsm>(<js>"foo"</js>, ()-&gt;<jsm>getFoo</jsm>()))
+		 * 		.defaultRequestQueryData(<jv>x</jv> -> <jv>x</jv>.add(BasicPart.<jsm>of</jsm>(<js>"foo"</js>, ()-><jsm>getFoo</jsm>()))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1562,10 +1562,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.defaultRequestFormData(<jv>x</jv> -&gt; <jv>x</jv>.add(BasicPart.<jsm>of</jsm>(<js>"foo"</js>, ()-&gt;<jsm>getFoo</jsm>()))
+		 * 		.defaultRequestFormData(<jv>x</jv> -> <jv>x</jv>.add(BasicPart.<jsm>of</jsm>(<js>"foo"</js>, ()-><jsm>getFoo</jsm>()))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1703,7 +1703,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * <p>
 		 * In the following example, the Java methods are mapped to the same HTTP method and URL <js>"/foobar"</js>.
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Call this method if Client-Version is at least 2.0.
 		 * 	// Note that this also matches 2.0.1.</jc>
 		 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
@@ -1721,7 +1721,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * <p>
 		 * It's common to combine the client version with transforms that will convert new POJOs into older POJOs for
 		 * backwards compatibility.
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Call this method if Client-Version is at least 2.0.</jc>
 		 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
 		 * 	<jk>public</jk> NewPojo newMethod()  {...}
@@ -1884,7 +1884,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * in out-of-memory errors which could affect system stability.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 		 * 	<ja>@Rest</ja>(maxInput=<js>"$C{REST/maxInput,10M}"</js>)
 		 * 	<jk>public class</jk> MyResource {
@@ -2013,7 +2013,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * Used in conjunction with {@link RestOpContext.Builder#roleGuard(String)} is used with patterns.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<ja>@Rest</ja>(
 		 * 		rolesDeclared=<js>"ROLE_ADMIN,ROLE_READ_WRITE,ROLE_READ_ONLY,ROLE_SPECIAL"</js>,
 		 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
@@ -2046,7 +2046,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * An expression defining if a user with the specified roles are allowed to access methods on this class.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<ja>@Rest</ja>(
 		 * 		path=<js>"/foo"</js>,
 		 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>

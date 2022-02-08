@@ -26,8 +26,8 @@ import org.apache.juneau.*;
  * concatenation for performance reasons.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
- * 	writer.append(<js>"foo"</js>).nl().i(5).append(<js>"bar"</js>);
+ * <p class='bjava'>
+ * 	<jv>writer</jv>.append(<js>"foo"</js>).nl().i(5).append(<js>"bar"</js>);
  * </p>
  *
  * <ul class='seealso'>

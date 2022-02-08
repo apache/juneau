@@ -24,7 +24,7 @@
 		The {@link oaj.annotation.Beanp#name() @Beanp(name)} annotation
 		is used to override the name of the bean property.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> MyBean {
 		|		<ja>@Beanp</ja>(name=<js>"Bar"</js>)
 		|		<jk>public</jk> String getFoo() {...}
@@ -33,7 +33,7 @@
 	<p>
 		The {@link oaj.annotation.Name @Name} annotation is a shortcut for specifying a bean property name:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> MyBean {
 		|		<ja>@Name</ja>(<js>"Bar"</js>)
 		|		<jk>public</jk> String getFoo() {...}
@@ -44,7 +44,7 @@
 		(e.g. the visibility is set to the default of PUBLIC, but the field is PROTECTED), this annotation 
 		can be used to force the field to be identified as a property.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> MyBean {
 		|		<ja>@Beanp</ja>
 		|		<jk>protected</jk> String getFoo() {...}
@@ -61,7 +61,7 @@
 	<p>
 		The following shows various ways of using dynamic bean properties.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Option #1 - A simple public Map field.</jc>
 		|	<jc>// The field name can be anything.</jc>
 		|	<jk>public class</jk> BeanWithDynaField {
@@ -101,7 +101,7 @@
 		Similar rules apply for value types and swaps.
 		The property values optionally can be any serializable type or use swaps.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// A serializable type other than Object.</jc>
 		|	<jk>public class</jk> BeanWithDynaFieldWithListValues {
 		|
@@ -133,7 +133,7 @@
 	<p>
 		The following annotations are equivalent:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Beanp</ja>(name=<js>"foo"</js>)
 		|
 		|	<ja>@Beanp</ja>(<js>"foo"</js>)
@@ -149,7 +149,7 @@
 	<p>
 		This property must denote a concrete class with a no-arg constructor.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> MyBean {
 		|
 		|		<jc>// Identify concrete type as a HashMap.</jc>
@@ -163,7 +163,7 @@
 		It's used to identify the class types of the contents of the bean property object when
 		the general parameter types are interfaces or abstract classes.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> MyBean {
 		|
 		|		<jc>// This is a HashMap&lt;String,Integer&gt;.</jc>
@@ -182,7 +182,7 @@
 		<li>Bean/Map arrays - Same, but applied to each element in the array.
 		<li>Bean/Map collections - Same, but applied to each element in the collection.
 	</ul>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> MyClass {
 		|
 		|		<jc>// Only render 'f1' when serializing this bean property.</jc>
@@ -202,7 +202,7 @@
 		The {@link oaj.annotation.Beanp#format() @Beanp(format)} 
 		annotation specifies a String format for converting a bean property value to a formatted string.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Serialize a float as a string with 2 decimal places.</jc>
 		|	<ja>@Beanp</ja>(format=<js>"$%.2f"</js>)
 		|	<jk>public float</jk> <jf>price</jf>;

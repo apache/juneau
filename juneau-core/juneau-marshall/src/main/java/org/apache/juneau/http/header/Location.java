@@ -24,7 +24,7 @@ import org.apache.juneau.http.annotation.*;
  * Used in redirection, or when a new resource has been created.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Location: http://www.w3.org/pub/WWW/People.html
  * </p>
  *
@@ -36,13 +36,13 @@ import org.apache.juneau.http.annotation.*;
  * For 3xx responses, the location SHOULD indicate the server's preferred URI for automatic redirection to the resource.
  * The field value consists of a single absolute URI.
  *
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Location       = "Location" ":" absoluteURI
  * </p>
  *
  * <p>
  * An example is:
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Location: http://www.w3.org/pub/WWW/People.html
  * </p>
  *

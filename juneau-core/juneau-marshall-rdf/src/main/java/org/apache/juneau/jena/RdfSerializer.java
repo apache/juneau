@@ -994,7 +994,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * annotated with {@link Rdf#beanUri @Rdf(beanUri=true)}.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	WriterSerializer <jv>serializer</jv> = RdfSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.xmlabbrev()
@@ -1007,21 +1007,21 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * 		.looseCollections()
 		 * 		.build();
 		 *
-		 * 	List&lt;MyBean&gt; <jv>myList</jv> = createListOfMyBeans();
+		 * 	List&lt;MyBean&gt; <jv>list</jv> = <jsm>createListOfMyBeans</jsm>();
 		 *
 		 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
-		 * 	String <jv>rdfXml</jv> = <jv>serializer</jv>.serialize(<jv>myList</jv>);
+		 * 	String <jv>rdfXml</jv> = <jv>serializer</jv>.serialize(<jv>list</jv>);
 		 *
 		 * 	<jc>// Parse back into a Java collection</jc>
-		 * 	<jv>myList</jv> = <jv>parser</jv>.parse(<jv>rdfXml</jv>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+		 * 	<jv>list</jv> = <jv>parser</jv>.parse(<jv>rdfXml</jv>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 		 *
-		 * 	MyBean[] <jv>myBeans</jv> = createArrayOfMyBeans();
+		 * 	MyBean[] <jv>beans</jv> = <jsm>createArrayOfMyBeans</jsm>();
 		 *
 		 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
-		 * 	<jv>rdfXml</jv> = <jv>serializer</jv>.serialize(<jv>myBeans</jv>);
+		 * 	<jv>rdfXml</jv> = <jv>serializer</jv>.serialize(<jv>beans</jv>);
 		 *
 		 * 	<jc>// Parse back into a bean array</jc>
-		 * 	<jv>myBeans</jv> = <jv>parser</jv>.parse(<jv>rdfXml</jv>, MyBean[].<jk>class</jk>);
+		 * 	<jv>beans</jv> = <jv>parser</jv>.parse(<jv>rdfXml</jv>, MyBean[].<jk>class</jk>);
 		 * </p>
 		 *
 		 * @return This object.
@@ -1048,7 +1048,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * annotated with {@link Rdf#beanUri @Rdf(beanUri=true)}.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	WriterSerializer <jv>serializer</jv> = RdfSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.xmlabbrev()
@@ -1061,21 +1061,21 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * 		.looseCollections()
 		 * 		.build();
 		 *
-		 * 	List&lt;MyBean&gt; <jv>myList</jv> = createListOfMyBeans();
+		 * 	List&lt;MyBean&gt; <jv>list</jv> = <jsm>createListOfMyBeans</jsm>();
 		 *
 		 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
-		 * 	String <jv>rdfXml</jv> = <jv>serializer</jv>.serialize(<jv>myList</jv>);
+		 * 	String <jv>rdfXml</jv> = <jv>serializer</jv>.serialize(<jv>list</jv>);
 		 *
 		 * 	<jc>// Parse back into a Java collection</jc>
-		 * 	<jv>myList</jv> = <jv>parser</jv>.parse(<jv>rdfXml</jv>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+		 * 	<jv>list</jv> = <jv>parser</jv>.parse(<jv>rdfXml</jv>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 		 *
-		 * 	MyBean[] <jv>myBeans</jv> = createArrayOfMyBeans();
+		 * 	MyBean[] <jv>beans</jv> = <jsm>createArrayOfMyBeans</jsm>();
 		 *
 		 * 	<jc>// Serialize to RDF/XML as loose resources</jc>
-		 * 	<jv>rdfXml</jv> = <jv>serializer</jv>.serialize(<jv>myBeans</jv>);
+		 * 	<jv>rdfXml</jv> = <jv>serializer</jv>.serialize(<jv>beans</jv>);
 		 *
 		 * 	<jc>// Parse back into a bean array</jc>
-		 * 	<jv>myBeans</jv> = <jv>parser</jv>.parse(<jv>rdfXml</jv>, MyBean[].<jk>class</jk>);
+		 * 	<jv>beans</jv> = <jv>parser</jv>.parse(<jv>rdfXml</jv>, MyBean[].<jk>class</jk>);
 		 * </p>
 		 *
 		 * @param value

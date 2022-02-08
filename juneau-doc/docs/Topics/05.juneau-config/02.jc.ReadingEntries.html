@@ -89,7 +89,7 @@
 	<p>
 		The most common case for configuration values are primitives.
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc># A string</cc>
 		|	<ck>key1</ck> = <cv>foo</cv>
 		|
@@ -109,14 +109,14 @@
 	<p>
 		On integers and longs, <js>"K"</js>, <js>"M"</js>, and <js>"G"</js> can be used to identify kilo, mega, and giga.
 	</p>	
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<ck>key1</ck> = <cv>100K</cv>  <cc># Same as 1024000</cc>
 		|	<ck>key2</ck> = <cv>100M</cv>  <cc># Same as 104857600</cc>
 	</p>
 	<p>
 		Numbers can also use hexadecimal and octal notation:
 	</p>	
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<ck>hex1</ck> = <cv>0x12FE</cv>
 		|	<ck>hex2</ck> = <cv>0X12FE</cv>
 		|	<ck>octal1</ck> = <cv>01234</cv>
@@ -124,14 +124,14 @@
 	<p>
 		Strings with newlines are treated as multi-line values that get broken into separate lines:
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<ck>key1</ck> = <cv>This is a particularly long sentence that we want to split</cv>
 		|		<cv>onto separate lines</cv>.
 	</p>
 	<p>
 		Typically, multi-line values are started on the next line for clarity like so:
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<ck>key1</ck> = 
 		|		<cv>This is a particularly long sentence that we want to split</cv>
 		|		<cv>onto separate lines</cv>.

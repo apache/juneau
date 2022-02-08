@@ -19,11 +19,11 @@
 	<p>
 		The Microservice API provides support for simple console commands.
 	</p>
-	<p class='bcode w800'>
-		|	<jk>public static void</jk> main(String[] args) {
+	<p class='bjava'>
+		|	<jk>public static void</jk> main(String[] <jv>args</jv>) {
 		|		Microservice
 		|			.<jsm>create</jsm>() 
-		|			.args(args)
+		|			.args(<jv>args</jv>)
 		|			.build()
 		|			.start()
 		|			.startConsole()    <jc>// Start console.</jc>
@@ -34,7 +34,7 @@
 	<p>
 		When started, the console renders the following output:
 	</p>
-	<p class='bcode w800 console'>
+	<p class='bconsole'>
 		|	Running class 'Microservice' using config file 'my-microservice.cfg'.
 		|	
 		|	List of available commands:
@@ -60,7 +60,7 @@
 	<p>
 		By default, the supported commands are pulled from the configuration file:
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc>#=======================================================================================================================
 		|	# Console settings
 		|	#=======================================================================================================================</cc>

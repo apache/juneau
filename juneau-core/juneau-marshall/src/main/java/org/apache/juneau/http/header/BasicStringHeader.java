@@ -26,7 +26,7 @@ import org.apache.juneau.assertions.*;
  *
  * <p>
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Host: www.myhost.com:8080
  * </p>
  *
@@ -143,12 +143,12 @@ public class BasicStringHeader extends BasicHeader {
 	 * Provides the ability to perform fluent-style assertions on this header.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the content type header is provided.</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.getStringHeader(<js>"Content-Type"</js>).assertThat().exists();
+	 * 		.getHeader(<js>"Content-Type"</js>).assertString().exists();
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.

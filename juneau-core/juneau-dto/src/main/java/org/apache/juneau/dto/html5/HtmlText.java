@@ -24,8 +24,8 @@ import org.apache.juneau.xml.annotation.*;
  * For example:
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
- * 	HtmlText t = <jk>new</jk> HtmlText(<js>"&lt;span&gt;&amp;#2753;&lt;/span&gt;"</js>);
+ * <p class='bjava'>
+ * 	HtmlText <jv>htmlText</jv> = <jk>new</jk> HtmlText(<js>"&lt;span&gt;&amp;#2753;&lt;/span&gt;"</js>);
  * </p>
  *
  * <ul class='seealso'>

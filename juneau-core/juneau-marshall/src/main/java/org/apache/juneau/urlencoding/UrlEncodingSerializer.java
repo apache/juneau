@@ -44,7 +44,7 @@ import org.apache.juneau.utils.*;
  *
  * <p>
  * The following shows a sample object defined in Javascript:
- * <p class='bcode w800'>
+ * <p class='bjson'>
  * 	{
  * 		id: 1,
  * 		name: <js>'John Smith'</js>,
@@ -69,7 +69,7 @@ import org.apache.juneau.utils.*;
  *
  * <p>
  * Using the "strict" syntax defined in this document, the equivalent URL-encoded notation would be as follows:
- * <p class='bcode w800'>
+ * <p class='burlenc'>
  * 	<ua>id</ua>=<un>1</un>
  * 	&amp;<ua>name</ua>=<us>'John+Smith'</us>,
  * 	&amp;<ua>uri</ua>=<us>http://sample/addressBook/person/1</us>,
@@ -91,17 +91,17 @@ import org.apache.juneau.utils.*;
  * </p>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Serialize a Map</jc>
- * 	Map m = OMap.<jsm>ofJson</jsm>(<js>"{a:'b',c:1,d:false,e:['f',1,false],g:{h:'i'}}"</js>);
+ * 	Map <jv>map</jv> = OMap.<jsm>ofJson</jsm>(<js>"{a:'b',c:1,d:false,e:['f',1,false],g:{h:'i'}}"</js>);
  *
  * 	<jc>// Serialize to value equivalent to JSON.</jc>
  * 	<jc>// Produces "a=b&amp;c=1&amp;d=false&amp;e=@(f,1,false)&amp;g=(h=i)"</jc>
- * 	String s = UrlEncodingSerializer.<jsf>DEFAULT</jsf>.serialize(s);
+ * 	String <jv>uenc</jv> = UrlEncodingSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>map</jv>);
  *
  * 	<jc>// Serialize a bean</jc>
  * 	<jk>public class</jk> Person {
- * 		<jk>public</jk> Person(String s);
+ * 		<jk>public</jk> Person(String <jv>name</jv>);
  * 		<jk>public</jk> String getName();
  * 		<jk>public int</jk> getAge();
  * 		<jk>public</jk> Address getAddress();
@@ -115,10 +115,10 @@ import org.apache.juneau.utils.*;
  * 		<jk>public int</jk> getZip();
  * 	}
  *
- * 	Person p = <jk>new</jk> Person(<js>"John Doe"</js>, 23, <js>"123 Main St"</js>, <js>"Anywhere"</js>, <js>"NY"</js>, 12345, <jk>false</jk>);
+ * 	Person <jv>person</jv> = <jk>new</jk> Person(<js>"John Doe"</js>, 23, <js>"123 Main St"</js>, <js>"Anywhere"</js>, <js>"NY"</js>, 12345, <jk>false</jk>);
  *
  * 	<jc>// Produces "name=John+Doe&amp;age=23&amp;address=(street='123+Main+St',city=Anywhere,state=NY,zip=12345)&amp;deceased=false"</jc>
- * 	String s = UrlEncodingSerializer.<jsf>DEFAULT</jsf>.serialize(s);
+ * 	String <jv>uenc</jv> = UrlEncodingSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>person</jv>);
  * </p>
  *
  * <ul class='spaced-list'>
@@ -289,7 +289,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A sample bean.</jc>
 		 * 	<jk>public class</jk> A {
 		 * 		<jk>public</jk> String[] <jf>f1</jf> = {<js>"a"</js>,<js>"b"</js>};
@@ -306,7 +306,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		 * 	String <jv>out1</jv> = <jv>serializer1</jv>.serialize(<jk>new</jk> A());
 		 *
 		 * 	<jc>// Produces "f1=a&amp;f1=b&amp;f2=c&amp;f2=d"</jc>
-		 * 	String <jv>out2</jv> = <jv>serializer2</jv>.serialize(<jk>new</jk> A()); <jc>
+		 * 	String <jv>out2</jv> = <jv>serializer2</jv>.serialize(<jk>new</jk> A());
 		 * </p>
 		 *
 		 * @return This object.

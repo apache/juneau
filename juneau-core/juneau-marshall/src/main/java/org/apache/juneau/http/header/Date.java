@@ -24,7 +24,7 @@ import org.apache.juneau.http.annotation.*;
  * The date and time that the message was sent (in "HTTP-date" format as defined by RFC 7231).
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Date: Tue, 15 Nov 1994 08:12:31 GMT
  * </p>
  *
@@ -33,13 +33,13 @@ import org.apache.juneau.http.annotation.*;
  * The Date general-header field represents the date and time at which the message was originated, having the same
  * semantics as orig-date in RFC 822.
  * The field value is an HTTP-date, as described in section 3.3.1; it MUST be sent in RFC 1123 [8]-date format.
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Date  = "Date" ":" HTTP-date
  * </p>
  *
  * <p>
  * An example is...
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Date: Tue, 15 Nov 1994 08:12:31 GMT
  * </p>
  *

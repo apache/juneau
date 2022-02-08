@@ -24,7 +24,7 @@ import org.apache.juneau.internal.*;
  * The MIME type of this content.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Content-Type: text/html; charset=utf-8
  * </p>
  *
@@ -32,14 +32,14 @@ import org.apache.juneau.internal.*;
  *
  * The Content-Type entity-header field indicates the media type of the entity-body sent to the recipient or, in the
  * case of the HEAD method, the media type that would have been sent had the request been a GET.
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Content-Type   = "Content-Type" ":" media-type
  * </p>
  *
  * <p>
  * Media types are defined in section 3.7.
  * An example of the field is...
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Content-Type: text/html; charset=ISO-8859-4
  * </p>
  *

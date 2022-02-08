@@ -25,7 +25,7 @@ import org.apache.juneau.serializer.*;
  * {@review}
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Validates the specified date is after the current date.</jc>
  * 	<jsm>assertZonedDateTime</jsm>(<jv>myZdt</jv>).isAfterNow();
  * </p>

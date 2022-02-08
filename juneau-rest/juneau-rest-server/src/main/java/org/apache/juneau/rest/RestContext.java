@@ -95,20 +95,18 @@ import org.apache.juneau.svl.vars.*;
  *
  * <p>
  * To interact with this object, simply pass it in as a constructor argument or in an INIT hook.
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Option #1 - Pass in through constructor.</jc>
- * 	<jk>public</jk> MyResource(Builder builder) {
- * 			builder
- * 				.swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>)
- * 				.set(<jsf>PARSER_debug</jsf>);
+ * 	<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) {
+ * 			<jv>builder</jv>
+ * 				.swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>);
  * 	}
  *
  * 	<jc>// Option #2 - Use an INIT hook.</jc>
  * 	<ja>@RestHook</ja>(<jsf>INIT</jsf>)
- * 	<jk>public void</jk> init(Builder builder) <jk>throws</jk> Exception {
- * 			builder
- * 				.swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>)
- * 				.set(<jsf>PARSER_debug</jsf>);
+ * 	<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+ * 			<jv>builder</jv>
+ * 				.swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>);
  * 	}
  * </p>
  *
@@ -442,7 +440,7 @@ public class RestContext extends Context {
 		 * <p>
 		 * A shortcut for the following code:
 		 *
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jv>builder</jv>.defaultClasses().add(<jv>values</jv>);
 		 * </p>
 		 *
@@ -482,7 +480,7 @@ public class RestContext extends Context {
 		 * <p>
 		 * A shortcut for the following code:
 		 *
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jv>builder</jv>.defaultSettings().add(<jv>key</jv>, <jv>value</jv>);
 		 *
 		 * </p>
@@ -529,10 +527,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.beanStore(<jv>x</jv> -&gt; <jv>x</jv>.addSupplier(MyBean.<jk>class</jk>, ()-&gt;<jsm>getMyBean</jsm>()))
+		 * 		.beanStore(<jv>x</jv> -> <jv>x</jv>.addSupplier(MyBean.<jk>class</jk>, ()-><jsm>getMyBean</jsm>()))
 		 * 		.build();
 		 * </p>
 		 *
@@ -648,10 +646,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.varResolver(<jv>x</jv> -&gt; <jv>x</jv>.vars(MyVar.<jk>class</jk>))
+		 * 		.varResolver(<jv>x</jv> -> <jv>x</jv>.vars(MyVar.<jk>class</jk>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -798,8 +796,8 @@ public class RestContext extends Context {
 		 *
 		 * <p>
 		 * The config file can be programmatically overridden by adding the following method to your resource:
-		 * <p class='bcode w800'>
-		 * 	<jk>public</jk> Config createConfig(ServletConfig servletConfig) <jk>throws</jk> ServletException;
+		 * <p class='bjava'>
+		 * 	<jk>public</jk> Config createConfig(ServletConfig <jv>servletConfig</jv>) <jk>throws</jk> ServletException;
 		 * </p>
 		 *
 		 * <p>
@@ -818,10 +816,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.config(<jv>x</jv> -&gt; <jv>x</jv>.set(<js>"Foo/bar"</js>, <js>"baz"</js>).save())
+		 * 		.config(<jv>x</jv> -> <jv>x</jv>.set(<js>"Foo/bar"</js>, <js>"baz"</js>).save())
 		 * 		.build();
 		 * </p>
 		 *
@@ -918,10 +916,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.logger(<jv>x</jv> -&gt; <jv>x</jv>.setFilter(<jv>logFilter</jv>))
+		 * 		.logger(<jv>x</jv> -> <jv>x</jv>.setFilter(<jv>logFilter</jv>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1015,10 +1013,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.logger(<jv>x</jv> -&gt; <jv>x</jv>.statsImplClass(MyStatsImplClass.<jk>class</jk>))
+		 * 		.logger(<jv>x</jv> -> <jv>x</jv>.statsImplClass(MyStatsImplClass.<jk>class</jk>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1115,10 +1113,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bcodbjavae w800'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.encoders(<jv>x</jv> -&gt; <jv>x</jv>.add(MyEncoder.<jk>class</jk>))
+		 * 		.encoders(<jv>x</jv> -> <jv>x</jv>.add(MyEncoder.<jk>class</jk>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1219,10 +1217,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.serializers(<jv>x</jv> -&gt; <jv>x</jv>.add(MySerializer.<jk>class</jk>))
+		 * 		.serializers(<jv>x</jv> -> <jv>x</jv>.add(MySerializer.<jk>class</jk>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1301,10 +1299,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.parsers(<jv>x</jv> -&gt; <jv>x</jv>.add(MyParser.<jk>class</jk>))
+		 * 		.parsers(<jv>x</jv> -> <jv>x</jv>.add(MyParser.<jk>class</jk>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1383,10 +1381,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.methodExecStore(<jv>x</jv> -&gt; <jv>x</jv>.statsImplClass(MyStats.<jk>class</jk>))
+		 * 		.methodExecStore(<jv>x</jv> -> <jv>x</jv>.statsImplClass(MyStats.<jk>class</jk>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1464,10 +1462,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.messages(<jv>x</jv> -&gt; <jv>x</jv>.name(<js>"MyMessages"</js>))
+		 * 		.messages(<jv>x</jv> -> <jv>x</jv>.name(<js>"MyMessages"</js>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1516,12 +1514,12 @@ public class RestContext extends Context {
 		 * absolute path like <js>"com.foo.sample.nls.Messages"</js>
 		 *
 		 * <h5 class='section'>Examples:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='jini w800'>
 		 * 	<cc># Contents of org/apache/foo/nls/MyMessages.properties</cc>
 		 *
 		 * 	<ck>HelloMessage</ck> = <cv>Hello {0}!</cv>
 		 * </p>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Contents of org/apache/foo/MyResource.java</jc>
 		 *
 		 * 	<ja>@Rest</ja>(messages=<js>"nls/MyMessages"</js>)
@@ -1529,18 +1527,18 @@ public class RestContext extends Context {
 		 *
 		 * 		<ja>@RestGet</ja>(<js>"/hello/{you}"</js>)
 		 * 		<jk>public</jk> Object helloYou(RestRequest <jv>req</jv>, Messages <jv>messages</jv>, <ja>@Path</ja>(<js>"name"</js>) String <jv>you</jv>) {
-		 * 			String <jv>s</jv>;
+		 * 			String <jv>string</jv>;
 		 *
 		 * 			<jc>// Get it from the RestRequest object.</jc>
-		 * 			<jv>s</jv> = <jv>req</jv>.getMessage(<js>"HelloMessage"</js>, <jv>you</jv>);
+		 * 			<jv>string</jv> = <jv>req</jv>.getMessage(<js>"HelloMessage"</js>, <jv>you</jv>);
 		 *
 		 * 			<jc>// Or get it from the method parameter.</jc>
-		 * 			<jv>s</jv> = <jv>messages</jv>.getString(<js>"HelloMessage"</js>, <jv>you</jv>);
+		 * 			<jv>string</jv> = <jv>messages</jv>.getString(<js>"HelloMessage"</js>, <jv>you</jv>);
 		 *
 		 * 			<jc>// Or get the message in a locale different from the request.</jc>
-		 * 			<jv>s</jv> = <jv>messages</jv>.forLocale(Locale.<jsf>UK</jsf>).getString(<js>"HelloMessage"</js>, <jv>you</jv>);
+		 * 			<jv>string</jv> = <jv>messages</jv>.forLocale(Locale.<jsf>UK</jsf>).getString(<js>"HelloMessage"</js>, <jv>you</jv>);
 		 *
-		 * 			<jk>return</jk> <jv>s</jv>;
+		 * 			<jk>return</jk> <jv>string</jv>;
 		 * 		}
 		 * 	}
 		 * </p>
@@ -1616,7 +1614,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Our custom response processor for Foo objects. </jc>
 		 * 	<jk>public class</jk> MyResponseProcessor <jk>implements</jk> ResponseProcessor {
 		 *
@@ -1629,7 +1627,7 @@ public class RestContext extends Context {
 		 * 				<jk>if</jk> (<jv>foo</jv> == <jk>null</jk>)
 		 * 					<jk>return</jk> <jsf>NEXT</jsf>;  <jc>// Let the next processor handle it.</jc>
 		 *
-		 * 				<jk>try</jk> (Writer <jv>w</jv> = <jv>res</jv>.getNegotiatedWriter()) {
+		 * 				<jk>try</jk> (Writer <jv>writer</jv> = <jv>res</jv>.getNegotiatedWriter()) {
 		 * 					<jc>//Pipe it to the writer ourselves.</jc>
 		 * 				}
 		 *
@@ -1693,10 +1691,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.responseProcessors(<jv>x</jv> -&gt; <jv>x</jv>.add(MyResponseProcessor.<jk>class</jk>))
+		 * 		.responseProcessors(<jv>x</jv> -> <jv>x</jv>.add(MyResponseProcessor.<jk>class</jk>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1788,7 +1786,7 @@ public class RestContext extends Context {
 		 * Specifies the logger to use for logging of HTTP requests and responses.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Our customized logger.</jc>
 		 * 	<jk>public class</jk> MyLogger <jk>extends</jk> BasicRestLogger {
 		 *
@@ -1803,7 +1801,7 @@ public class RestContext extends Context {
 		 * 	<jk>public class</jk> MyResource {
 		 *
 		 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 *
 		 * 			<jc>// Using method on builder.</jc>
 		 * 			<jv>builder</jv>.callLogger(MyLogger.<jk>class</jk>);
@@ -1811,7 +1809,7 @@ public class RestContext extends Context {
 		 *
 		 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
 		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		 * 		<jk>public void</jk> init(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.callLogger(MyLogger.<jk>class</jk>);
 		 * 		}
 		 * 	}
@@ -1856,10 +1854,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.callLogger(<jv>x</jv> -&gt; <jv>x</jv>.disabled())
+		 * 		.callLogger(<jv>x</jv> -> <jv>x</jv>.disabled())
 		 * 		.build();
 		 * </p>
 		 *
@@ -1987,10 +1985,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.beanContext(<jv>x</jv> -&gt; <jv>x</jv>.interfaces(MyInterface.<jk>class</jk>))
+		 * 		.beanContext(<jv>x</jv> -> <jv>x</jv>.interfaces(MyInterface.<jk>class</jk>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -2088,10 +2086,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.partSerializer(<jv>x</jv> -&gt; <jv>x</jv>.builder(OpenApiSerializer.Builder.<jk>class</jk>, <jv>y</jv> -&gt; <jv>y</jv>.sortProperties()))
+		 * 		.partSerializer(<jv>x</jv> -> <jv>x</jv>.builder(OpenApiSerializer.Builder.<jk>class</jk>, <jv>y</jv> -> <jv>y</jv>.sortProperties()))
 		 * 		.build();
 		 * </p>
 		 *
@@ -2200,10 +2198,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.partParser(<jv>x</jv> -&gt; <jv>x</jv>.builder(OpenApiParser.Builder.<jk>class</jk>, <jv>y</jv> -&gt; <jv>y</jv>.ignoreUnknownBeanProperties()))
+		 * 		.partParser(<jv>x</jv> -> <jv>x</jv>.builder(OpenApiParser.Builder.<jk>class</jk>, <jv>y</jv> -> <jv>y</jv>.ignoreUnknownBeanProperties()))
 		 * 		.build();
 		 * </p>
 		 *
@@ -2312,10 +2310,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.jsonSchemaGenerator(<jv>x</jv> -&gt; <jv>x</jv>.allowNestedExamples()))
+		 * 		.jsonSchemaGenerator(<jv>x</jv> -> <jv>x</jv>.allowNestedExamples()))
 		 * 		.build();
 		 * </p>
 		 *
@@ -2407,10 +2405,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.fileFinder(<jv>x</jv> -&gt; <jv>x</jv>.dir(<js>"/mydir"</js>)))
+		 * 		.fileFinder(<jv>x</jv> -> <jv>x</jv>.dir(<js>"/mydir"</js>)))
 		 * 		.build();
 		 * </p>
 		 *
@@ -2454,7 +2452,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a file finder that looks for files in the /files working subdirectory, but overrides the find()
 		 * 	// method for special handling of special cases.</jc>
 		 * 	<jk>public class</jk> MyFileFinder <jk>extends</jk> BasicFileFinder {
@@ -2524,7 +2522,7 @@ public class RestContext extends Context {
 		 * file finder.
 		 *
 		 * <h5 class='figure'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<ja>@Rest</ja>
 		 * 	<jk>public class</jk> MyRestClass {
 		 *
@@ -2616,10 +2614,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.staticFiles(<jv>x</jv> -&gt; <jv>x</jv>.dir(<js>"/mydir"</js>)))
+		 * 		.staticFiles(<jv>x</jv> -> <jv>x</jv>.dir(<js>"/mydir"</js>)))
 		 * 		.build();
 		 * </p>
 		 *
@@ -2662,7 +2660,7 @@ public class RestContext extends Context {
 		 * 		Uses existing {@link org.apache.juneau.rest.staticfile.StaticFiles.Builder} bean if found in the bean store (e.g. an injected bean).
 		 * 	<li>
 		 * 		Constructs a builder with default settings:
-		 * 		<p class='bcode w800'>
+		 * 		<p class='bjava'>
 		 * 	StaticFiles
 		 * 		.<jsm>create</jsm>(<jv>beanStore</jv>)
 		 * 		.{@link org.apache.juneau.rest.staticfile.StaticFiles.Builder#type(Class) type}({@link BasicStaticFiles}.<jk>class</jk>)
@@ -2676,13 +2674,13 @@ public class RestContext extends Context {
 		 * 		</p>
 		 * 	<li>
 		 * 		Looks for the following method on the resource class:
-		 * 		<p class='bcode w800'>
+		 * 		<p class='bjava'>
 		 * 	<jk>public [static]</jk> StaticFiles.Builder createStaticFiles(<ja>&lt;args&gt;</ja>)
 		 * 		</p>
 		 * 		Args can be any bean found in the bean store (including injected beans) and the <c>StaticFiles.Builder</c> itself.
 		 * 	<li>
 		 * 		Looks for the following method on the resource class:
-		 * 		<p class='bcode w800'>
+		 * 		<p class='bjava'>
 		 * 	<jk>public [static]</jk> StaticFiles createStaticFiles(<ja>&lt;args&gt;</ja>)
 		 * 		</p>
 		 * 		Args can be any bean found in the bean store (including injected beans) and the <c>StaticFiles.Builder</c> itself.
@@ -2702,7 +2700,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a static file finder that looks for files in the /files working subdirectory, but
 		 * 	// overrides the find() and resolve methods for special handling of special cases and adds a
 		 *	// Foo header to all requests.</jc>
@@ -2718,7 +2716,7 @@ public class RestContext extends Context {
 		 * 		}
 		 * 	}
 		 * </p>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<ja>@Rest</ja>(staticFiles=MyStaticFiles.<jk>class</jk>)
 		 * 	<jk>public class</jk> MyResource {...}
 		 * </p>
@@ -2798,10 +2796,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.defaultRequestHeaders(<jv>x</jv> -&gt; <jv>x</jv>.remove(<js>"Foo"</js>)))
+		 * 		.defaultRequestHeaders(<jv>x</jv> -> <jv>x</jv>.remove(<js>"Foo"</js>)))
 		 * 		.build();
 		 * </p>
 		 *
@@ -2828,13 +2826,13 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 		 * 	<ja>@Rest</ja>(defaultRequestHeaders={<js>"Accept: application/json"</js>, <js>"My-Header=$C{REST/myHeaderValue}"</js>})
 		 * 	<jk>public class</jk> MyResource {
 		 *
 		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 *
 		 * 			<jc>// Using method on builder.</jc>
 		 * 			<jv>builder</jv>
@@ -2846,7 +2844,7 @@ public class RestContext extends Context {
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		 * 		<jk>public void</jk> init(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.defaultRequestHeaders(Accept.<jsm>of</jsm>(<js>"application/json"</js>));
 		 * 		}
 		 *
@@ -2964,10 +2962,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.defaultResponseHeaders(<jv>x</jv> -&gt; <jv>x</jv>.remove(<js>"Foo"</js>)))
+		 * 		.defaultResponseHeaders(<jv>x</jv> -> <jv>x</jv>.remove(<js>"Foo"</js>)))
 		 * 		.build();
 		 * </p>
 		 *
@@ -2994,13 +2992,13 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 		 * 	<ja>@Rest</ja>(defaultResponseHeaders={<js>"Content-Type: $C{REST/defaultContentType,text/plain}"</js>,<js>"My-Header: $C{REST/myHeaderValue}"</js>})
 		 * 	<jk>public class</jk> MyResource {
 		 *
 		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 *
 		 * 			<jc>// Using method on builder.</jc>
 		 * 			<jv>builder</jv>
@@ -3012,7 +3010,7 @@ public class RestContext extends Context {
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		 * 		<jk>public void</jk> init(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.defaultResponseHeaders(ContentType.<jsm>of</jsm>(<js>"text/plain"</js>));
 		 * 		}
 		 * 	}
@@ -3096,10 +3094,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.defaultRequestAttributes(<jv>x</jv> -&gt; <jv>x</jv>.add(BasicNamedAttribute.<jsm>of</jsm>(<js>"Foo"</js>, ()-&gt;<jsm>getFoo</jsm>()))
+		 * 		.defaultRequestAttributes(<jv>x</jv> -> <jv>x</jv>.add(BasicNamedAttribute.<jsm>of</jsm>(<js>"Foo"</js>, ()-><jsm>getFoo</jsm>()))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3124,13 +3122,13 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 		 * 	<ja>@Rest</ja>(defaultRequestAttributes={<js>"Foo=bar"</js>, <js>"Baz: $C{REST/myAttributeValue}"</js>})
 		 * 	<jk>public class</jk> MyResource {
 		 *
 		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 *
 		 * 			<jc>// Using method on builder.</jc>
 		 * 			<jv>builder</jv>
@@ -3142,7 +3140,7 @@ public class RestContext extends Context {
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		 * 		<jk>public void</jk> init(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.defaultRequestAttribute(<js>"Foo"</js>, <js>"bar"</js>);
 		 * 		}
 		 *
@@ -3224,10 +3222,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.restOpArgs(<jv>x</jv> -&gt; <jv>x</jv>.add(MyRestOpArg.<jk>class</jk>))
+		 * 		.restOpArgs(<jv>x</jv> -> <jv>x</jv>.add(MyRestOpArg.<jk>class</jk>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3250,7 +3248,7 @@ public class RestContext extends Context {
 		 * <p>
 		 * For example, if you want to pass in instances of <c>MySpecialObject</c> to your Java method, define
 		 * the following resolver:
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Define a parameter resolver for resolving MySpecialObject objects.</jc>
 		 * 	<jk>public class</jk> MyRestOpArg <jk>implements</jk> RestOpArg {
 		 *
@@ -3425,10 +3423,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.debugEnablement(<jv>x</jv> -&gt; <jv>x</jv>.defaultEnable(<jsf>ALWAYS</jsf>))
+		 * 		.debugEnablement(<jv>x</jv> -> <jv>x</jv>.defaultEnable(<jsf>ALWAYS</jsf>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3579,10 +3577,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.startCallMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
+		 * 		.startCallMethods(<jv>x</jv> -> <jv>x</jv>.add(<jv>extraMethod</jv>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3642,10 +3640,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.endCallMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
+		 * 		.endCallMethods(<jv>x</jv> -> <jv>x</jv>.add(<jv>extraMethod</jv>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3705,10 +3703,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.postInitMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
+		 * 		.postInitMethods(<jv>x</jv> -> <jv>x</jv>.add(<jv>extraMethod</jv>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3768,10 +3766,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.postInitChildFirstMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
+		 * 		.postInitChildFirstMethods(<jv>x</jv> -> <jv>x</jv>.add(<jv>extraMethod</jv>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3831,10 +3829,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.destroyMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
+		 * 		.destroyMethods(<jv>x</jv> -> <jv>x</jv>.add(<jv>extraMethod</jv>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3897,10 +3895,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.preCallMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
+		 * 		.preCallMethods(<jv>x</jv> -> <jv>x</jv>.add(<jv>extraMethod</jv>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3963,10 +3961,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.postCallMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
+		 * 		.postCallMethods(<jv>x</jv> -> <jv>x</jv>.add(<jv>extraMethod</jv>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -4229,10 +4227,10 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.swaggerProvider(<jv>x</jv> -&gt; <jv>x</jv>.fileFinder(<jv>aDifferentFileFinder</jv>))
+		 * 		.swaggerProvider(<jv>x</jv> -> <jv>x</jv>.fileFinder(<jv>aDifferentFileFinder</jv>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -4328,7 +4326,7 @@ public class RestContext extends Context {
 		 * parameters.
 		 * <br>
 		 * For example:
-		 * <p class='bcode w800'>
+		 * <p class='burlenc'>
 		 *  ?Accept=text/json&amp;Content-Type=text/json
 		 * </p>
 		 *
@@ -4378,13 +4376,13 @@ public class RestContext extends Context {
 		 * <c>HTTP POST /foo</c> request call which will make the HTTP call look like a <c>PATCH</c> request in any of the REST APIs.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 		 * 	<ja>@Rest</ja>(allowedMethodHeaders=<js>"PATCH"</js>)
 		 * 	<jk>public class</jk> MyResource {
 		 *
 		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 *
 		 * 			<jc>// Using method on builder.</jc>
 		 * 			<jv>builder</jv>.allowedMethodHeaders(<js>"PATCH"</js>);
@@ -4392,7 +4390,7 @@ public class RestContext extends Context {
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		 * 		<jk>public void</jk> init(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.allowedMethodHeaders(<js>"PATCH"</js>);
 		 * 		}
 		 * 	}
@@ -4435,7 +4433,7 @@ public class RestContext extends Context {
 		 * GET request.
 		 * <br>
 		 * For example:
-		 * <p class='bcode w800'>
+		 * <p class='burlenc'>
 		 *  ?method=OPTIONS
 		 * </p>
 		 *
@@ -4449,13 +4447,13 @@ public class RestContext extends Context {
 		 * be taken when allowing non-safe (<c>POST</c>, <c>PUT</c>, <c>DELETE</c>) methods to be invoked through GET requests.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Option #1 - Defined via annotation.</jc>
 		 * 	<ja>@Rest</ja>(allowedMethodParams=<js>"HEAD,OPTIONS,PUT"</js>)
 		 * 	<jk>public class</jk> MyResource {
 		 *
 		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 *
 		 * 			<jc>// Using method on builder.</jc>
 		 * 			<jv>builder</jv>.allowedMethodParams(<js>"HEAD,OPTIONS,PUT"</js>);
@@ -4463,7 +4461,7 @@ public class RestContext extends Context {
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		 * 		<jk>public void</jk> init(Builder builder) <jk>throws</jk> Exception {
+		 * 		<jk>public void</jk> init(RestContext.Builder builder) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.allowedMethodParams(<js>"HEAD,OPTIONS,PUT"</js>);
 		 * 		}
 		 * 	}
@@ -4511,13 +4509,13 @@ public class RestContext extends Context {
 		 * <br>Used in conjunction with {@link RestOp#clientVersion() @RestOp(clientVersion)} annotation.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 		 * 	<ja>@Rest</ja>(clientVersionHeader=<js>"$C{REST/clientVersionHeader,Client-Version}"</js>)
 		 * 	<jk>public class</jk> MyResource {
 		 *
 		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 *
 		 * 			<jc>// Using method on builder.</jc>
 		 * 			<jv>builder</jv>.clientVersionHeader(<js>"Client-Version"</js>);
@@ -4525,13 +4523,13 @@ public class RestContext extends Context {
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		 * 		<jk>public void</jk> init(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.clientVersionHeader(<js>"Client-Version"</js>);
 		 * 		}
 		 * 	}
 		 * </p>
 		 *
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Call this method if Client-Version is at least 2.0.
 		 * 	// Note that this also matches 2.0.1.</jc>
 		 * 	<ja>@RestGet/ja>(path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
@@ -4579,13 +4577,13 @@ public class RestContext extends Context {
 		 * The default character encoding for the request and response if not specified on the request.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 		 * 	<ja>@Rest</ja>(defaultCharset=<js>"$C{REST/defaultCharset,US-ASCII}"</js>)
 		 * 	<jk>public class</jk> MyResource {
 		 *
 		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 *
 		 * 			<jc>// Using method on builder.</jc>
 		 * 			<jv>builder</jv>.defaultCharset(<js>"US-ASCII"</js>);
@@ -4593,7 +4591,7 @@ public class RestContext extends Context {
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		 * 		<jk>public void</jk> init(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.defaultCharset(<js>"US-ASCII"</js>);
 		 * 		}
 		 *
@@ -4632,18 +4630,18 @@ public class RestContext extends Context {
 		 * URL parameter.
 		 * <br>
 		 * For example:
-		 * <p class='bcode w800'>
+		 * <p class='burlenc'>
 		 *  ?body=(name='John%20Smith',age=45)
 		 * </p>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 		 * 	<ja>@Rest</ja>(disableBodyParam=<js>"$C{REST/disableBodyParam,true}"</js>)
 		 * 	<jk>public class</jk> MyResource {
 		 *
 		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 *
 		 * 			<jc>// Using method on builder.</jc>
 		 * 			<jv>builder</jv>.disableBodyParam();
@@ -4651,7 +4649,7 @@ public class RestContext extends Context {
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		 * 		<jk>public void</jk> init(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.disableBodyParam();
 		 * 		}
 		 * 	}
@@ -4694,13 +4692,13 @@ public class RestContext extends Context {
 		 * in out-of-memory errors which could affect system stability.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 		 * 	<ja>@Rest</ja>(maxInput=<js>"$C{REST/maxInput,10M}"</js>)
 		 * 	<jk>public class</jk> MyResource {
 		 *
 		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 *
 		 * 			<jc>// Using method on builder.</jc>
 		 * 			<jv>builder</jv>.maxInput(<js>"10M"</js>);
@@ -4708,7 +4706,7 @@ public class RestContext extends Context {
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		 * 		<jk>public void</jk> init(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.maxInput(<js>"10M"</js>);
 		 * 		}
 		 *
@@ -4800,7 +4798,7 @@ public class RestContext extends Context {
 		 * <p>
 		 * If you do not specify the authority, it is automatically calculated via the following:
 		 *
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	String <jv>scheme</jv> = <jv>request</jv>.getScheme();
 		 * 	<jk>int</jk> <jv>port</jv> = <jv>request</jv>.getServerPort();
 		 * 	StringBuilder <jv>sb</jv> = <jk>new</jk> StringBuilder(<jv>request</jv>.getScheme()).append(<js>"://"</js>).append(<jv>request</jv>.getServerName());
@@ -4810,7 +4808,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 		 * 	<ja>@Rest</ja>(
 		 * 		path=<js>"/servlet"</js>,
@@ -4819,7 +4817,7 @@ public class RestContext extends Context {
 		 * 	<jk>public class</jk> MyResource {
 		 *
 		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 *
 		 * 			<jc>// Using method on builder.</jc>
 		 * 			<jv>builder</jv>.uriAuthority(<js>"http://localhost:10000"</js>);
@@ -4827,7 +4825,7 @@ public class RestContext extends Context {
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		 * 		<jk>public void</jk> init(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.uriAuthority(<js>"http://localhost:10000"</js>);
 		 * 		}
 		 * 	}
@@ -4871,7 +4869,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 		 * 	<ja>@Rest</ja>(
 		 * 		path=<js>"/servlet"</js>,
@@ -4880,7 +4878,7 @@ public class RestContext extends Context {
 		 * 	<jk>public class</jk> MyResource {
 		 *
 		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 *
 		 * 			<jc>// Using method on builder.</jc>
 		 * 			<jv>builder</jv>.uriContext(<js>"/foo"</js>);
@@ -4888,7 +4886,7 @@ public class RestContext extends Context {
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		 * 		<jk>public void</jk> init(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.uriContext(<js>"/foo"</js>);
 		 * 		}
 		 * 	}
@@ -4930,7 +4928,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 		 * 	<ja>@Rest</ja>(
 		 * 		path=<js>"/servlet"</js>,
@@ -4939,7 +4937,7 @@ public class RestContext extends Context {
 		 * 	<jk>public class</jk> MyResource {
 		 *
 		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 *
 		 * 			<jc>// Using method on builder.</jc>
 		 * 			<jv>builder</jv>.uriRelativity(<jsf>PATH_INFO</jsf>);
@@ -4947,7 +4945,7 @@ public class RestContext extends Context {
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		 * 		<jk>public void</jk> init(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.uriRelativity(<jsf>PATH_INFO</jsf>);
 		 * 		}
 		 * 	}
@@ -4989,7 +4987,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 		 * 	<ja>@Rest</ja>(
 		 * 		path=<js>"/servlet"</js>,
@@ -4998,7 +4996,7 @@ public class RestContext extends Context {
 		 * 	<jk>public class</jk> MyResource {
 		 *
 		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 *
 		 * 			<jc>// Using method on builder.</jc>
 		 * 			<jv>builder</jv>.uriResolution(<jsf>ABSOLUTE</jsf>);
@@ -5006,7 +5004,7 @@ public class RestContext extends Context {
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		 * 		<jk>public void</jk> init(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.uriResolution(<jsf>ABSOLUTE</jsf>);
 		 * 		}
 		 * 	}
@@ -5158,7 +5156,7 @@ public class RestContext extends Context {
 		 * </dl>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Our child resource.</jc>
 		 * 	<ja>@Rest</ja>(path=<js>"/child"</js>)
 		 * 	<jk>public class</jk> MyChildResource {...}
@@ -5168,7 +5166,7 @@ public class RestContext extends Context {
 		 * 	<jk>public class</jk> MyResource {
 		 *
 		 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 *
 		 * 			<jc>// Using method on builder.</jc>
 		 * 			<jv>builder</jv>.children(MyChildResource.<jk>class</jk>);
@@ -5179,7 +5177,7 @@ public class RestContext extends Context {
 		 *
 		 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
 		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		 * 		<jk>public void</jk> init(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.children(MyChildResource.<jk>class</jk>);
 		 * 		}
 		 * 	}
@@ -5265,13 +5263,13 @@ public class RestContext extends Context {
 		 * This setting is critical for the routing of HTTP requests from ascendant to child resources.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Option #1 - Defined via annotation.</jc>
 		 * 	<ja>@Rest</ja>(path=<js>"/myResource"</js>)
 		 * 	<jk>public class</jk> MyResource {
 		 *
 		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 *
 		 * 			<jc>// Using method on builder.</jc>
 		 * 			<jv>builder</jv>.path(<js>"/myResource"</js>);
@@ -5279,7 +5277,7 @@ public class RestContext extends Context {
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		 * 		<jk>public void</jk> init(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.path(<js>"/myResource"</js>);
 		 * 		}
 		 * 	}
@@ -5334,10 +5332,10 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Our extended context class</jc>
 		 * 	<jk>public</jk> MyRestChildren <jk>extends</jk> RestChildren {
-		 * 		<jk>public</jk> MyRestChildren(RestChildrenBuilder <jv>builder</jv>, ARequiredSpringBean <jv>bean1</jv>, Optional&lt;AnOptionalSpringBean&gt; <jv>bean2</jv>) {
+		 * 		<jk>public</jk> MyRestChildren(RestChildren.Builder <jv>builder</jv>, ARequiredSpringBean <jv>bean1</jv>, Optional&lt;AnOptionalSpringBean&gt; <jv>bean2</jv>) {
 		 * 			<jk>super</jk>(<jv>builder</jv>);
 		 * 		}
 		 *
@@ -5353,7 +5351,7 @@ public class RestContext extends Context {
 		 * 		}
 		 * 	}
 		 * </p>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Option #1 - Defined via annotation.</jc>
 		 * 	<ja>@Rest</ja>(restChildrenClass=MyRestChildren.<jk>class</jk>)
 		 * 	<jk>public class</jk> MyResource {
@@ -5361,7 +5359,7 @@ public class RestContext extends Context {
 		 *
 		 * 		<jc>// Option #2 - Defined via builder passed in through init method.</jc>
 		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		 * 		<jk>public void</jk> init(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.restChildrenClass(MyRestChildren.<jk>class</jk>);
 		 * 		}
 		 * 	}
@@ -5391,7 +5389,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Our extended context class that adds a request attribute to all requests.</jc>
 		 * 	<jc>// The attribute value is provided by an injected spring bean.</jc>
 		 * 	<jk>public</jk> MyRestOperationContext <jk>extends</jk> RestOpContext {
@@ -5413,7 +5411,7 @@ public class RestContext extends Context {
 		 * 		}
 		 * 	}
 		 * </p>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Option #1 - Defined via annotation.</jc>
 		 * 	<ja>@Rest</ja>(restOpContextClass=MyRestOperationContext.<jk>class</jk>)
 		 * 	<jk>public class</jk> MyResource {
@@ -5421,7 +5419,7 @@ public class RestContext extends Context {
 		 *
 		 * 		<jc>// Option #2 - Defined via builder passed in through init method.</jc>
 		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		 * 		<jk>public void</jk> init(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.methodContextClass(MyRestOperationContext.<jk>class</jk>);
 		 * 		}
 		 *
@@ -5456,10 +5454,10 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Our extended context class</jc>
 		 * 	<jk>public</jk> MyRestOperations <jk>extends</jk> RestOperations {
-		 * 		<jk>public</jk> MyRestOperations(RestOperationsBuilder <jv>builder</jv>, ARequiredSpringBean <jv>bean1</jv>, Optional&lt;AnOptionalSpringBean&gt; <jv>bean2</jv>) {
+		 * 		<jk>public</jk> MyRestOperations(RestOperations.Builder <jv>builder</jv>, ARequiredSpringBean <jv>bean1</jv>, Optional&lt;AnOptionalSpringBean&gt; <jv>bean2</jv>) {
 		 * 			<jk>super</jk>(<jv>builder</jv>);
 		 * 		}
 		 *
@@ -5475,7 +5473,7 @@ public class RestContext extends Context {
 		 * 		}
 		 * 	}
 		 * </p>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Option #1 - Defined via annotation.</jc>
 		 * 	<ja>@Rest</ja>(restMethodsClass=MyRestOperations.<jk>class</jk>)
 		 * 	<jk>public class</jk> MyResource {
@@ -5483,7 +5481,7 @@ public class RestContext extends Context {
 		 *
 		 * 		<jc>// Option #2 - Defined via builder passed in through init method.</jc>
 		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		 * 		<jk>public void</jk> init(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.restMethodsClass(MyRestOperations.<jk>class</jk>);
 		 * 		}
 		 * 	}
@@ -5527,13 +5525,13 @@ public class RestContext extends Context {
 		 * don't want exposed in the Swagger documentation.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 		 * 	<ja>@Rest</ja>(produces={<js>"$C{REST/supportedProduces,application/json}"</js>})
 		 * 	<jk>public class</jk> MyResource {
 		 *
 		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 *
 		 * 			<jc>// Using method on builder.</jc>
 		 * 			<jv>builder</jv>.produces(<jk>false</jk>, <js>"application/json"</js>)
@@ -5541,7 +5539,7 @@ public class RestContext extends Context {
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		 * 		<jk>public void</jk> init(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.produces(<jk>false</jk>, <js>"application/json"</js>);
 		 * 		}
 		 * 	}
@@ -5592,13 +5590,13 @@ public class RestContext extends Context {
 		 * don't want exposed in the Swagger documentation.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
 		 * 	<ja>@Rest</ja>(consumes={<js>"$C{REST/supportedConsumes,application/json}"</js>})
 		 * 	<jk>public class</jk> MyResource {
 		 *
 		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 *
 		 * 			<jc>// Using method on builder.</jc>
 		 * 			<jv>builder</jv>.consumes(<jk>false</jk>, <js>"application/json"</js>)
@@ -5606,7 +5604,7 @@ public class RestContext extends Context {
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		 * 		<jk>public void</jk> init(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.consumes(<jk>false</jk>, <js>"application/json"</js>);
 		 * 		}
 		 * 	}
@@ -6061,7 +6059,7 @@ public class RestContext extends Context {
 	 * They can also return values that themselves contain other variables.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		messages=<js>"nls/Messages"</js>,
 	 * 		properties={
@@ -6078,7 +6076,7 @@ public class RestContext extends Context {
 	 *
 	 * <p>
 	 * A typical usage pattern involves using variables inside the {@link HtmlDocConfig @HtmlDocConfig} annotation:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>(<js>"/{name}/*"</js>)
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		navlinks={

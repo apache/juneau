@@ -26,14 +26,14 @@ import org.apache.juneau.internal.*;
  * downloaded and saved locally.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Content-Disposition: form-data; name="fieldName"; filename="filename.jpg"
  * </p>
  *
  * <h5 class='topic'>RFC2616 Specification</h5>
  *
  * The Expect request-header field is used to indicate that particular server behaviors are required by the client.
- * <p class='bcode w800'>
+ * <p class='bcode'>
  *	content-disposition = "Content-Disposition" ":"
  *  	disposition-type *( ";" disposition-parm )
  * 	disposition-type = "attachment" | disp-extension-token

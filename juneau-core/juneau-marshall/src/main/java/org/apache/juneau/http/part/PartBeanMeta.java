@@ -41,7 +41,7 @@ import org.apache.juneau.reflect.*;
  *
  * <p>
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Our part bean.</jc>
  * 	<ja>@Query</ja>(<js>"foo"</js>)
  * 	<jk>public class</jk> FooPart <jk>extends</jk> BasicStringPart {

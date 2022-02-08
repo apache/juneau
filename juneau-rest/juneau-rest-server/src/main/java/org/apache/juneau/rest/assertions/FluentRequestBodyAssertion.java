@@ -136,10 +136,10 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	 * Provides the ability to perform fluent-style assertions on the bytes of the request body.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the request body equals the text "foo".</jc>
 	 * 	<jv>request</jv>
-	 * 		.assertBody().asBytes().hex().is(<js>"666F6F"</js>);
+	 * 		.assertBody().asBytes().asHex().is(<js>"666F6F"</js>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -161,12 +161,12 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	 * Converts the body to a type using {@link RequestBody#as(Class)} and then returns the value as an object assertion.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the request body bean is the expected value.</jc>
 	 * 	<jv>request</jv>
 	 * 		.assertBody()
 	 * 		.as(MyBean.<jk>class</jk>)
-	 * 			.json().is(<js>"{foo:'bar'}"</js>);
+	 * 			.asJson().is(<js>"{foo:'bar'}"</js>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -192,12 +192,12 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	 * Converts the body to a type using {@link RequestBody#as(Type,Type...)} and then returns the value as an object assertion.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the request body bean is the expected value.</jc>
 	 * 	<jv>request</jv>
 	 * 		.assertBody()
 	 * 		.as(Map.<jk>class</jk>,String.<jk>class</jk>,Integer.<jk>class</jk>)
-	 * 			.json().is(<js>"{foo:123}"</js>);
+	 * 			.asJson().is(<js>"{foo:123}"</js>);
 	 * </p>
 	 *
 	 * <ul class='notes'>

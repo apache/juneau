@@ -24,7 +24,7 @@
 		added for creating instances of schema serializers from the regular serializer instance.
 	</p>
 	<h5 class='figure'>Sample Beans</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> Person {
 		|		
 		|		<jc>// Bean properties</jc>
@@ -49,7 +49,7 @@
 	<p>
 		The code for creating our POJO model and generating JSON-Schema is shown below:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Get the one of the default schema serializers.</jc>
 		|	JsonSchemaSerializer <jv>serializer</jv> = JsonSchemaSerializer.<jsf>DEFAULT_SIMPLE_READABLE</jsf>;
 		|	
@@ -61,7 +61,7 @@
 	</p>
 	
 	<h5 class='figure'>JSON Schema</h5>
-	<p class='bcode w800'>
+	<p class='bjson'>
 		|	{
 		|		<jok>type: <jov>'object'</jov>, 
 		|		<jok>description</jok>: <jov>'org.apache.juneau.sample.Person'</jov>, 

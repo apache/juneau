@@ -18,7 +18,7 @@ package org.apache.juneau.html;
  *
  * <p>
  * The HTML doc serializer produces the following document structure with the typical contents:
- * <p class='bcode w800'>
+ * <p class='bxml'>
  * 	<xt>&lt;html&gt;
  * 		&lt;head&gt;
  * 			&lt;style&gt;

@@ -24,7 +24,7 @@
 		In the section on the REST server API, we describe how to configure serializers and parsers using <ja>@XConfig</ja>
 		annotations like those shown below:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(
 		|		path=<js>"/addressBook"</js>,
 		|		title=<js>"Address Book REST API"</js>
@@ -52,7 +52,7 @@
 	<p>
 		The following example shows how annotations defined on a dummy class can be applied to a serializer:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@SerializerConfig</ja>(quoteChar=<js>"'"</js>)
 		|	<ja>@Bean</ja>(on=<js>"Address"</js>, properties=<js>"street,city,state"</js>)
 		|	<jk>public static class</jk> DummyClass {}
@@ -100,7 +100,7 @@
 	<p>
 		The following example shows a concrete implementation of an interface can be applied to a serializer:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> Address {...}
 		|	
 		|	<ja>Bean</ja> <jv>ba</jv> = <jk>new</jk> BeanAnnotation(<js>"Address"</js>).properties(<js>"street,city,state"</js>);
@@ -117,12 +117,12 @@
 		level annotations 
 	</p>
 	
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Bean</ja>(properties=<js>"street,city"</js>) <jc>// Will be overridden</jc>
 		|	<jk>public class</jk> Address {...}
 		|	
-		|	<ja>Bean</ja> ba = <jk>new</jk> BeanAnnotation(<js>"Address"</js>).properties(<js>"street,city,state"</js>);
-		|	WriterSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().annotations(<jv>ba</jv>).build();
+		|	<ja>Bean</ja> <jv>beanAnnotation</jv> = <jk>new</jk> BeanAnnotation(<js>"Address"</js>).properties(<js>"street,city,state"</js>);
+		|	WriterSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().annotations(<jv>beanAnnotation</jv>).build();
 		|	String <jv>json</jv> = <jv>serializer</jv>.toString(<jv>addressBean</jv>);  <jc>// Will print street,city,state</jc>
 	</p>
 	

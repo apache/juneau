@@ -23,7 +23,7 @@ import org.apache.juneau.http.annotation.*;
  * What partial content range types this server supports via byte serving.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Accept-Ranges: bytes
  * </p>
  *
@@ -31,14 +31,14 @@ import org.apache.juneau.http.annotation.*;
  *
  * The Accept-Ranges response-header field allows the server to indicate its acceptance of range requests for a
  * resource:
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Accept-Ranges     = "Accept-Ranges" ":" acceptable-ranges
  * 	acceptable-ranges = 1#range-unit | "none"
  * </p>
  *
  * <p>
  * Origin servers that accept byte-range requests MAY send...
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Accept-Ranges: bytes
  * </p>
  * <p>
@@ -52,7 +52,7 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * Servers that do not accept any kind of range request for a resource MAY send...
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Accept-Ranges: none
  * </p>
  * <p>

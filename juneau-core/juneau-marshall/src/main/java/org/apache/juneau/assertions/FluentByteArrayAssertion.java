@@ -140,9 +140,9 @@ public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<B
 	 * Converts this byte array to a UTF-8 encoded string and returns it as a new assertion.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified byte array contains the string "foobar".</jc>
-	 * 	<jsm>assertBytes<jsm>(myByteArray).asString().is(<js>"foobar"</js>);
+	 * 	<jsm>assertBytes<jsm>(<jv>myByteArray</jv>).asString().is(<js>"foobar"</js>);
 	 * </p>
 	 *
 	 * @return A new fluent string assertion.
@@ -156,9 +156,9 @@ public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<B
 	 * Converts this byte array to a string and returns it as a new assertion.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified byte array contains the string "foobar" encoded in ASCII.</jc>
-	 * 	<jsm>assertBytes<jsm>(myByteArray).string(<js>"iso8859-1"</js>).is(<js>"foobar"</js>);
+	 * 	<jsm>assertBytes<jsm>(<jv>myByteArray</jv>).asString(<js>"iso8859-1"</js>).is(<js>"foobar"</js>);
 	 * </p>
 	 *
 	 * @param cs The charset to use to decode the string.
@@ -172,9 +172,9 @@ public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<B
 	 * Converts this byte array to a base-64 encoded string and returns it as a new assertion.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified byte array contains the string "foo".</jc>
-	 * 	<jsm>assertBytes<jsm>(myByteArray).base64().is(<js>"Zm9v"</js>);
+	 * 	<jsm>assertBytes<jsm>(<jv>myByteArray</jv>).asBase64().is(<js>"Zm9v"</js>);
 	 * </p>
 	 *
 	 * @return A new fluent string assertion.
@@ -187,9 +187,9 @@ public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<B
 	 * Converts this byte array to hexadecimal and returns it as a new assertion.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified byte array contains the string "foo".</jc>
-	 * 	<jsm>assertBytes<jsm>(myByteArray).asHex().is(<js>"666F6F"</js>);
+	 * 	<jsm>assertBytes<jsm>(<jv>myByteArray</jv>).asHex().is(<js>"666F6F"</js>);
 	 * </p>
 	 *
 	 * @return A new string consisting of hexadecimal characters.
@@ -202,9 +202,9 @@ public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<B
 	 * Converts this byte array to spaced hexadecimal and returns it as a new assertion.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified byte array contains the string "foo".</jc>
-	 * 	<jsm>assertBytes<jsm>(myByteArray).asSpacedHex().is(<js>"66 6F 6F"</js>);
+	 * 	<jsm>assertBytes<jsm>(<jv>myByteArray</jv>).asSpacedHex().is(<js>"66 6F 6F"</js>);
 	 * </p>
 	 *
 	 * @return A new string consisting of hexadecimal characters.

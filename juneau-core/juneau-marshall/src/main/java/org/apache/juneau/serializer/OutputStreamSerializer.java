@@ -120,7 +120,7 @@ public class OutputStreamSerializer extends Serializer {
 		 * when converting the resulting byte array to a string.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that serializes to BASE64.</jc>
 		 * 	OutputStreamSerializer <jv>serializer</jv> = MsgPackSerializer
 		 * 		.<jsm>create</jsm>()

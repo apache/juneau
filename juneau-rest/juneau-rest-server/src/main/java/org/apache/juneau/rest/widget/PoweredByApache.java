@@ -25,7 +25,7 @@ import org.apache.juneau.rest.*;
  * It produces a simple Apache icon floating on the right.
  * Typically it's used in the footer of the page, as shown below in the <c>RootResources</c> from the examples:
  *
- * <p class='bcode'>
+ * <p class='bjava'>
  * 	<ja>@Rest</ja>(
  * 		path=<js>"/"</js>,
  * 		title=<js>"Root resources"</js>,

@@ -35,7 +35,7 @@ import org.apache.juneau.rest.annotation.*;
  * execute the method.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
  *
  * 		<ja>@RestGet</ja>(path=<js>"/foo"</js>, matchers=IsDNT.<jk>class</jk>)

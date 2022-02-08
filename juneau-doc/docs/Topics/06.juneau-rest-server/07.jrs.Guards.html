@@ -39,7 +39,7 @@
 		</li>
 	</ul>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Define a guard that only lets Billy make a request</jc>
 		|	<jk>public</jk> BillyGuard <jk>extends</jk> RestGuard {
 		|
@@ -61,12 +61,12 @@
 	<p>
 		A common use for guards is to only allow admin access to certain Java methods...
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// DELETE method</jc>
 		|	<ja>@RestDelete</ja>(guards={AdminGuard.<jk>class</jk>})
 		|	<jk>public void</jk> doDelete(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> Exception {...}
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> AdminGuard <jk>extends</jk> RestGuard {
 		|
 		|		<ja>@Override</ja> <jc>/* RestGuard */</jc>
@@ -81,12 +81,12 @@
 		{@link oajr.guard.RestGuard#guard(RestRequest,RestResponse)} and processing the response 
 		yourself.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> AdminGuard <jk>extends</jk> RestGuard {
 		|
 		|		<ja>@Override</ja> <jc>/* RestGuard */</jc>
 		|		<jk>public boolean</jk> guard(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) <jk>throws</jk> BasicHttpException {
-		|			<jk>if</jk> (! isOkay(req))
+		|			<jk>if</jk> (! <jsm>isOkay</jsm>(<jv>req</jv>))
 		|				<jk>throw new</jk> Forbidden(<js>"Access denied!!!"</js>);
 		|			<jk>return true</jk>;
 		|		}
@@ -109,7 +109,7 @@
 		</li>
 	</ul>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 	|	<ja>@Rest</ja>(
 	|		path=<js>"/foo"</js>,
 	|		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>

@@ -23,7 +23,7 @@ import org.apache.juneau.http.annotation.*;
  * Request authentication to access the proxy.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Proxy-Authenticate: Basic
  * </p>
  *
@@ -34,7 +34,7 @@ import org.apache.juneau.http.annotation.*;
  * The field value consists of a challenge that indicates the authentication scheme and parameters applicable to the
  * proxy for this Request-URI.
  *
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Proxy-Authenticate  = "Proxy-Authenticate" ":" 1#challenge
  * </p>
  *

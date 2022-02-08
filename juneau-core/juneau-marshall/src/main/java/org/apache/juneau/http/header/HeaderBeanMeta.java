@@ -40,7 +40,7 @@ import org.apache.juneau.reflect.*;
  *
  * <p>
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Our header bean.</jc>
  * 	<ja>@Header</ja>(<js>"Foo"</js>)
  * 	<jk>public class</jk> FooHeader <jk>extends</jk> BasicStringHeader {

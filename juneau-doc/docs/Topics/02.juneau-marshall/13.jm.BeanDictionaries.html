@@ -40,7 +40,7 @@
 		For example, if a bean property is of type <c>Object</c>, then the serializer will add 
 		<js>"_type"</js> attributes so that the class can be determined during parsing.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
 		|	<jk>public class</jk> Foo {
 		|		<jc>// A bean property where the object types cannot be inferred since it's an Object[].</jc>
@@ -58,7 +58,7 @@
 		When serialized as JSON, <js>"_type"</js> attributes would be added when needed to infer the type during 
 		parsing:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjson'>
 		|	{
 		|		x: [
 		|			{_type:<js>'bar'</js>},
@@ -75,7 +75,7 @@
 	<p>
 		When serialized as XML, the bean is rendered as:
 	</p>
-	<p class='bcode w800'>
+	<p class='bxml'>
 		|	<xt>&lt;foo&gt;</xt>
 		|		<xt>&lt;x&gt;</xt>
 		|			<xt>&lt;bar/&gt;</xt>
@@ -112,7 +112,7 @@
 		<li>Any subclass of {@link oaj.BeanDictionaryMap} containing a mapping of type names to classes without type name annotations.
 		<li>Any array or collection of the objects above.
 	</ul>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a parser and tell it which classes to try to resolve.</jc>
 		|	ReaderParser <jv>parser</jv> = JsonParser
 		|		.<jsm>create</jsm>()
@@ -144,7 +144,7 @@
 		When using the annotation, you'll typically want to define it on an interface class so that it can
 		be inherited by all subclasses.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Bean</ja>(typePropertyName=<js>"mytype"</js>, dictionary={MyClass1.<jk>class</jk>,MyClass2.<jk>class</jk>})
 		|	<jk>public interface</jk> MyInterface {...}
 		|

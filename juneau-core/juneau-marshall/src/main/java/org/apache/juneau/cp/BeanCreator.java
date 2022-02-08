@@ -40,7 +40,7 @@ import org.apache.juneau.reflect.*;
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Construct and throw a RuntimeException using a bean store.</jc>
  * 	<jk>throw</jk> BeanStore
  * 		.<jsm>create</jsm>()
@@ -56,15 +56,14 @@ import org.apache.juneau.reflect.*;
  * Looks for the following methods for creating a bean:
  * <ol class='spaced-list'>
  * 	<li>Looks for a singleton no-arg method of the form:
- * 		<p class='bcode w800'>
+ * 		<p class='bjava'>
  * 	<jk>public static</jk> MyClass <jsm>getInstance</jsm>();
  * 		</p>
  * 		<ul>
  * 			<li>Deprecated and {@link BeanIgnore @BeanIgnore-annotated} methods are ignored.
- * 			<li>Enabled by {@linnk #findSingleton()}.
  *		</ul>
  * 	<li>Looks for a static creator method of the form:
- * 		<p class='bcode w800'>
+ * 		<p class='bjava'>
  * 	<jk>public static</jk> MyClass <jsm>create</jsm>(<ja>&lt;args&gt;</ja>);
  * 		</p>
  * 		<ul>
@@ -73,7 +72,7 @@ import org.apache.juneau.reflect.*;
  * 			<li>Deprecated and {@link BeanIgnore @BeanIgnore-annotated} methods are ignored.
  * 		</ul>
  * 	<li>Looks for a public constructor of the form:
- * 		<p class='bcode w800'>
+ * 		<p class='bjava'>
  * 	<jk>public</jk> MyClass(<ja>&lt;args&gt;</ja>);
  * 		</p>
  * 		<ul>
@@ -82,7 +81,7 @@ import org.apache.juneau.reflect.*;
  * 			<li>Deprecated and {@link BeanIgnore @BeanIgnore-annotated} methods are ignored.
  *		</ul>
  * 	<li>Looks for a protected constructor of the form:
- * 		<p class='bcode w800'>
+ * 		<p class='bjava'>
  * 	<jk>protected</jk> MyClass(<ja>&lt;args&gt;</ja>);
  * 		</p>
  * 		<ul>
@@ -91,7 +90,7 @@ import org.apache.juneau.reflect.*;
  * 			<li>Deprecated and {@link BeanIgnore @BeanIgnore-annotated} methods are ignored.
  *		</ul>
  * 	<li>Looks for a static no-arg create method that returns a builder object that can be passed in to a protected constructor.
- * 		<p class='bcode w800'>
+ * 		<p class='bjava'>
  * 	<jk>public static</jk> MyClass.Builder <jsm>create</jsm>();
  *
  * 	<jk>protected</jk> MyClass(MyClass.Builder <jv>builder</jv>);
@@ -114,14 +113,14 @@ import org.apache.juneau.reflect.*;
  * @param <T> The bean type being created.
  */
 public class BeanCreator<T> {
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Shortcut for calling <c>BeanStore.INSTANCE.createBean(beanType)</c>.
-	 * 
+	 *
 	 * @param beanType The bean type to create.
 	 * @return A new creator.
 	 */
@@ -393,7 +392,7 @@ public class BeanCreator<T> {
 			&& m.hasNoAnnotation(BeanIgnore.class)
 			&& m.hasName("create");
 	}
-	
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helpers
 	//-----------------------------------------------------------------------------------------------------------------

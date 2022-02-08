@@ -87,7 +87,7 @@
 			Using these methods, you can construct arbitrarily complex objects consisting of maps and collections.
 			You could do this before, but it required constructing a <c>ClassMeta</c> object.  
 			<br>For example:
-				<p class='bcode w800'>
+				<p class='bcode'>
 		<jc>// Old way:</jc>
 		ClassMeta&lt;?&gt; cm = parser.getMapClassMeta(
 			HashMap.<jk>class</jk>, 
@@ -106,7 +106,7 @@
 			<li>No need for casting anymore if you were using the old <c>parseMap()</c> and <c>parseCollection()</c> methods!
 			<li>Changes allow me to eliminate <c>BeanContext.normalizeClassMeta()</c> method.
 			<li>Convenience methods added for setting parser properties:
-				<p class='bcode w800'>
+				<p class='bcode'>
 		<jc>// Old way:</jc>
 		<jk>new</jk> JsonParser().setProperty(<jsf>PARSER_strict</jsf>, <jk>true</jk>).setProperty(<jsf>BEAN_locale</jsf>, mylocale);
 		
@@ -117,7 +117,7 @@
 		<li>Improvements to Serializer class:
 		<ul>
 			<li>Convenience methods added for setting serializer properties:
-				<p class='bcode w800'>
+				<p class='bcode'>
 		<jc>// Old way:</jc>
 		<jk>new</jk> JsonSerializer().setProperty(<jsf>JSON_simpleMode</jsf>, <jk>true</jk>).setProperty(<jsf>SERIALIZER_quoteChar</jsf>, <js>'"'</js>);
 		

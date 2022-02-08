@@ -23,7 +23,7 @@ import org.apache.juneau.http.annotation.*;
  * The email address of the user making the request.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	From: user@example.com
  * </p>
  *
@@ -33,13 +33,13 @@ import org.apache.juneau.http.annotation.*;
  * the requesting user agent.
  * The address SHOULD be machine-usable, as defined by "mailbox" in RFC 822 [9] as updated by RFC 1123 [8]:
  *
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	From   = "From" ":" mailbox
  * </p>
  *
  * <p>
  * An example is:
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	From: webmaster@w3.org
  * </p>
  *

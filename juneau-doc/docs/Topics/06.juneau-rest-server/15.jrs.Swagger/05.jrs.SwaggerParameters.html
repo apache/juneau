@@ -24,7 +24,7 @@
 		Parameter information can be defined in a couple of ways.  The typical way is through annotations on parameters
 		being passed to your <ja>@RestOp</ja>-annotated method, like so:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@RestGet</ja>
 		|	<jk>public</jk> Collection&lt;Pet&gt; getPets(
 		|			<ja>@Query</ja>(
@@ -72,7 +72,7 @@
 		defined in the {@link oajr.converter.Queryable} class:
 	</p>
 	<h5 class='figure'>PetStoreResource.getPets()</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@RestGet</ja>(
 		|		path=<js>"/pet"</js>,
 		|		summary=<js>"All pets in the store"</js>,
@@ -90,7 +90,7 @@
 		|	}
 	</p>
 	<h5 class='figure'>Queryable</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> Queryable <jk>implements</jk> RestConverter {
 		|	
 		|		<jk>public static final</jk> String <jsf>SWAGGER_PARAMS</jsf>=<js>""</js>
@@ -133,7 +133,7 @@
 	<p>
 		The definition of this method is shown here:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@RestPost</ja>(
 		|		summary=<js>"Add a new pet to the store"</js>,
 		|		swagger=<ja>@OpSwagger</ja>(

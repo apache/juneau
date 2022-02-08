@@ -27,7 +27,7 @@ import org.apache.juneau.internal.*;
  * Contact information for the exposed API.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	Contact <jv>contact</jv> = <jsm>contact</jsm>(<js>"API Support"</js>, <js>"http://www.swagger.io/support"</js>, <js>"support@swagger.io"</js>);
  *
@@ -37,7 +37,7 @@ import org.apache.juneau.internal.*;
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	<jv>json</jv> = <jv>contact</jv>.toString();
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjson'>
  * 	<jc>// Output</jc>
  * 	{
  * 		<js>"name"</js>: <js>"API Support"</js>,

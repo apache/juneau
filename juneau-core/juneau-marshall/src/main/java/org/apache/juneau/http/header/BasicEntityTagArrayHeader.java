@@ -25,7 +25,7 @@ import java.util.function.*;
  *
  * <p>
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	If-Match: "xyzzy"
  * 	If-Match: "xyzzy", "r2d2xxxx", "c3piozzzz"
  * 	If-Match: *

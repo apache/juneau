@@ -40,57 +40,57 @@ import org.apache.juneau.utils.*;
  * when accessing elements in a list.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Construct an empty List</jc>
- * 	OList l = OList.<jsm>of</jsm>();
+ * 	OList <jv>list</jv> = OList.<jsm>of</jsm>();
  *
  * 	<jc>// Construct a list of objects using various methods</jc>
- * 	l = OList.<jsm>of</jsm>().a(<js>"foo"</js>).a(123).a(<jk>true</jk>);
- * 	l = OList.<jsm>of</jsm>().a(<js>"foo"</js>, 123, <jk>true</jk>);  <jc>// Equivalent</jc>
- * 	l = OList.<jsm>of</jsm>(<js>"foo"</js>, 123, <jk>true</jk>);  <jc>// Equivalent</jc>
+ * 	<jv>list</jv> = OList.<jsm>of</jsm>().a(<js>"foo"</js>).a(123).a(<jk>true</jk>);
+ * 	<jv>list</jv> = OList.<jsm>of</jsm>().a(<js>"foo"</js>, 123, <jk>true</jk>);  <jc>// Equivalent</jc>
+ * 	<jv>list</jv> = OList.<jsm>of</jsm>(<js>"foo"</js>, 123, <jk>true</jk>);  <jc>// Equivalent</jc>
  *
  * 	<jc>// Construct a list of integers from JSON</jc>
- * 	l = OList.<jsm>ofJson</jsm>(<js>"[1,2,3]"</js>);
+ * 	<jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"[1,2,3]"</js>);
  *
  * 	<jc>// Construct a list of generic OMap objects from JSON</jc>
- * 	l = OList.<jsm>ofJson</jsm>(<js>"[{foo:'bar'},{baz:'bing'}]"</js>);
+ * 	<jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"[{foo:'bar'},{baz:'bing'}]"</js>);
  *
  * 	<jc>// Construct a list of integers from XML</jc>
- * 	String xml = <js>"&lt;array&gt;&lt;number&gt;1&lt;/number&gt;&lt;number&gt;2&lt;/number&gt;&lt;number&gt;3&lt;/number&gt;&lt;/array&gt;"</js>;
- * 	l = OList.<jsm>of</jsm>(xml, XmlParser.<jsf>DEFAULT</jsf>);
- * 	l = (List)XmlParser.<jsf>DEFAULT</jsf>.parse(xml);  <jc>// Equivalent</jc>
- * 	l = (List)XmlParser.<jsf>DEFAULT</jsf>.parse(Object.<jk>class</jk>, xml);  <jc>// Equivalent</jc>
- * 	l = XmlParser.<jsf>DEFAULT</jsf>.parse(List.<jk>class</jk>, xml);  <jc>// Equivalent</jc>
- * 	l = XmlParser.<jsf>DEFAULT</jsf>.parse(OList.<jk>class</jk>, xml);  <jc>// Equivalent</jc>
+ * 	String <jv>xml</jv> = <js>"&lt;array&gt;&lt;number&gt;1&lt;/number&gt;&lt;number&gt;2&lt;/number&gt;&lt;number&gt;3&lt;/number&gt;&lt;/array&gt;"</js>;
+ * 	<jv>list</jv> = OList.<jsm>of</jsm>(<jv>xml</jv>, XmlParser.<jsf>DEFAULT</jsf>);
+ * 	<jv>list</jv> = (List)XmlParser.<jsf>DEFAULT</jsf>.parse(<jv>xml</jv>);  <jc>// Equivalent</jc>
+ * 	<jv>list</jv> = (List)XmlParser.<jsf>DEFAULT</jsf>.parse(Object.<jk>class</jk>, <jv>xml</jv>);  <jc>// Equivalent</jc>
+ * 	<jv>list</jv> = XmlParser.<jsf>DEFAULT</jsf>.parse(List.<jk>class</jk>, <jv>xml</jv>);  <jc>// Equivalent</jc>
+ * 	<jv>list</jv> = XmlParser.<jsf>DEFAULT</jsf>.parse(OList.<jk>class</jk>, <jv>xml</jv>);  <jc>// Equivalent</jc>
  *
  * 	<jc>// Construct JSON from OList</jc>
- * 	l = OList.<jsm>ofJson</jsm>(<js>"[{foo:'bar'},{baz:'bing'}]"</js>);
- * 	String json = l.toString();  <jc>// Produces "[{foo:'bar'},{baz:'bing'}]"</jc>
- * 	json = l.toString(JsonSerializer.<jsf>DEFAULT</jsf>);  <jc>// Equivalent</jc>
- * 	json = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(l);  <jc>// Equivalent</jc>
+ * 	<jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"[{foo:'bar'},{baz:'bing'}]"</js>);
+ * 	String <jv>json</jv> = <jv>list</jv>.toString();  <jc>// Produces "[{foo:'bar'},{baz:'bing'}]"</jc>
+ * 	<jv>json</jv> = <jv>list</jv>.toString(JsonSerializer.<jsf>DEFAULT</jsf>);  <jc>// Equivalent</jc>
+ * 	<jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>list</jv>);  <jc>// Equivalent</jc>
  *
  * 	<jc>// Get one of the entries in the list as an Integer</jc>
- * 	l = OList.<jsm>ofJson</jsm>(<js>"[1,2,3]"</js>);
- * 	Integer i = l.getInt(1);
- * 	i = l.get(Integer.<jk>class</jk>, 1);  <jc>// Equivalent</jc>
+ * 	<jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"[1,2,3]"</js>);
+ * 	Integer <jv>integer</jv> = <jv>list</jv>.getInt(1);
+ * 	<jv>list</jv> = <jv>list</jv>.get(Integer.<jk>class</jk>, 1);  <jc>// Equivalent</jc>
  *
  * 	<jc>// Get one of the entries in the list as an Float</jc>
- * 	l = OList.<jsm>ofJson</jsm>(<js>"[1,2,3]"</js>);
- * 	Float f = l.getFloat(1); <jc>// Returns 2f </jc>
- * 	f = l.get(Float.<jk>class</jk>, 1);  <jc>// Equivalent</jc>
+ * 	<jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"[1,2,3]"</js>);
+ * 	Float <jv>_float</jv> = <jv>list</jv>.getFloat(1); <jc>// Returns 2f </jc>
+ * 	<jv>_float</jv> = <jv>list</jv>.get(Float.<jk>class</jk>, 1);  <jc>// Equivalent</jc>
  *
  * 	<jc>// Same as above, except converted to a String</jc>
- * 	l = OList.<jsm>ofJson</jsm>(<js>"[1,2,3]"</js>);
- * 	String s = l.getString(1); <jc>// Returns "2" </jc>
- * 	s = l.get(String.<jk>class</jk>, 1);  <jc>// Equivalent</jc>
+ * 	<jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"[1,2,3]"</js>);
+ * 	String <jv>string</jv> = <jv>list</jv>.getString(1); <jc>// Returns "2" </jc>
+ * 	<jv>string</jv> = <jv>list</jv>.get(String.<jk>class</jk>, 1);  <jc>// Equivalent</jc>
  *
  * 	<jc>// Get one of the entries in the list as a bean (converted to a bean if it isn't already one)</jc>
- * 	l = OList.<jsm>ofJson</jsm>(<js>"[{name:'John Smith',age:45}]"</js>);
- * 	Person p = l.get(Person.<jk>class</jk>, 0);
+ * 	<jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"[{name:'John Smith',age:45}]"</js>);
+ * 	Person <jv>person</jv> = <jv>list</jv>.get(Person.<jk>class</jk>, 0);
  *
  * 	<jc>// Iterate over a list of beans using the elements() method</jc>
- * 	OList l = OList.<jsm>ofJson</jsm>(<js>"[{name:'John Smith',age:45}]"</js>);
- * 	<jk>for</jk> (Person p : l.elements(Person.<jk>class</jk>) {
+ * 	<jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"[{name:'John Smith',age:45}]"</js>);
+ * 	<jk>for</jk> (Person <jv>person</jv> : <jv>list</jv>.elements(Person.<jk>class</jk>) {
  * 		<jc>// Do something with p</jc>
  * 	}
  * </p>
@@ -540,23 +540,23 @@ public class OList extends LinkedList<Object> {
 	 * This is the preferred get method for simple types.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	OList l = OList.<jsm>ofJson</jsm>(<js>"..."</js>);
+	 * <p class='bjava'>
+	 * 	OList <jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"..."</js>);
 	 *
 	 * 	<jc>// Value converted to a string.</jc>
-	 * 	String s = l.get(1, String.<jk>class</jk>);
+	 * 	String <jv>string</jv> = <jv>list</jv>.get(1, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a bean.</jc>
-	 * 	MyBean b = l.get(2, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>bean</jv> = <jv>list</jv>.get(2, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a bean array.</jc>
-	 * 	MyBean[] ba = l.get(3, MyBean[].<jk>class</jk>);
+	 * 	MyBean[] <jv>beanArray</jv> = <jv>list</jv>.get(3, MyBean[].<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a linked-list of objects.</jc>
-	 * 	List l1 = l.get(4, LinkedList.<jk>class</jk>);
+	 * 	List <jv>list2</jv> = <jv>list</jv>.get(4, LinkedList.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a map of object keys/values.</jc>
-	 * 	Map m1 = l.get(5, TreeMap.<jk>class</jk>);
+	 * 	Map <jv>map</jv> = <jv>list</jv>.get(5, TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <p>
@@ -578,23 +578,23 @@ public class OList extends LinkedList<Object> {
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	OList l = OList.<jsm>ofJson</jsm>(<js>"..."</js>);
+	 * <p class='bjava'>
+	 * 	OList <jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"..."</js>);
 	 *
 	 * 	<jc>// Value converted to a linked-list of strings.</jc>
-	 * 	List&lt;String&gt; l1 = l.get(1, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;String&gt; <jv>list1</jv> = <jv>list</jv>.get(1, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a linked-list of beans.</jc>
-	 * 	List&lt;MyBean&gt; l2 = l.get(2, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	List&lt;MyBean&gt; <jv>list2</jv> = <jv>list</jv>.get(2, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a linked-list of linked-lists of strings.</jc>
-	 * 	List&lt;List&lt;String&gt;&gt; l3 = l.get(3, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;List&lt;String&gt;&gt; <jv>list3</jv> = <jv>list</jv>.get(3, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a map of string keys/values.</jc>
-	 * 	Map&lt;String,String&gt; m1 = l.get(4, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	Map&lt;String,String&gt; <jv>map1</jv> = <jv>list</jv>.get(4, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a map containing string keys and values of lists containing beans.</jc>
-	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; m2 = l.get(5, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>map2</jv> = <jv>list</jv>.get(5, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <p>
@@ -720,14 +720,14 @@ public class OList extends LinkedList<Object> {
 	 * <p>
 	 * For example, the following code is equivalent:
 	 * </p>
-	 * <p class='bcode w800'>
-	 * 	OList ol = OList.<jsm>ofJson</jsm>(<js>"..."</js>);
+	 * <p class='bjava'>
+	 * 	OList <jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"..."</js>);
 	 *
 	 * 	<jc>// Long way</jc>
-	 * 	<jk>long</jk> l = ol.getMap(<js>"0"</js>).getLong(<js>"baz"</js>);
+	 * 	<jk>long</jk> <jv>long1</jv> = <jv>list</jv>.getMap(<js>"0"</js>).getLong(<js>"baz"</js>);
 	 *
 	 * 	<jc>// Using this method</jc>
-	 * 	<jk>long</jk> l = ol.getAt(<js>"0/baz"</js>, <jk>long</jk>.<jk>class</jk>);
+	 * 	<jk>long</jk> <jv>long2</jv> = <jv>list</jv>.getAt(<js>"0/baz"</js>, <jk>long</jk>.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <p>
@@ -765,14 +765,14 @@ public class OList extends LinkedList<Object> {
 	 * <p>
 	 * For example, the following code is equivalent:
 	 * </p>
-	 * <p class='bcode w800'>
-	 * 	OList ol = OList.<jsm>ofJson</jsm>(<js>"..."</js>);
+	 * <p class='bjava'>
+	 * 	OList <jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"..."</js>);
 	 *
 	 * 	<jc>// Long way</jc>
-	 * 	ol.getMap(<js>"0"</js>).put(<js>"baz"</js>, 123);
+	 * 	<jv>list</jv>.getMap(<js>"0"</js>).put(<js>"baz"</js>, 123);
 	 *
 	 * 	<jc>// Using this method</jc>
-	 * 	ol.putAt(<js>"0/baz"</js>, 123);
+	 * 	<jv>list</jv>.putAt(<js>"0/baz"</js>, 123);
 	 * </p>
 	 *
 	 * <p>
@@ -793,14 +793,14 @@ public class OList extends LinkedList<Object> {
 	 * <p>
 	 * For example, the following code is equivalent:
 	 * </p>
-	 * <p class='bcode w800'>
-	 * 	OList ol = OList.<jsm>ofJson</jsm>(<js>"..."</js>);
+	 * <p class='bjava'>
+	 * 	OList <jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"..."</js>);
 	 *
 	 * 	<jc>// Long way</jc>
-	 * 	ol.getMap(0).getList(<js>"bar"</js>).append(123);
+	 * 	<jv>list</jv>.getMap(0).getList(<js>"bar"</js>).append(123);
 	 *
 	 * 	<jc>// Using this method</jc>
-	 * 	ol.postAt(<js>"0/bar"</js>, 123);
+	 * 	<jv>list</jv>.postAt(<js>"0/bar"</js>, 123);
 	 * </p>
 	 *
 	 * <p>
@@ -822,14 +822,14 @@ public class OList extends LinkedList<Object> {
 	 * <p>
 	 * For example, the following code is equivalent:
 	 * </p>
-	 * <p class='bcode w800'>
-	 * 	OList ol = OList.<jsm>ofJson</jsm>(<js>"..."</js>);
+	 * <p class='bjava'>
+	 * 	OList <jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"..."</js>);
 	 *
 	 * 	<jc>// Long way</jc>
-	 * 	ol.getMap(0).getList(<js>"bar"</js>).delete(0);
+	 * 	<jv>list</jv>.getMap(0).getList(<js>"bar"</js>).delete(0);
 	 *
 	 * 	<jc>// Using this method</jc>
-	 * 	m.deleteAt(<js>"0/bar/0"</js>);
+	 * 	<jv>list</jv>.deleteAt(<js>"0/bar/0"</js>);
 	 * </p>
 	 *
 	 * <p>
@@ -881,23 +881,23 @@ public class OList extends LinkedList<Object> {
 	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for a description of valid conversions.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Iterate over a list of OMaps.</jc>
-	 * 	OList l = OList.<jsm>ofJson</jsm>(<js>"[{foo:'bar'},{baz:123}]"</js>);
-	 * 	for (OMap m : l.elements(OMap.<jk>class</jk>)) {
-	 * 		<jc>// Do something with m.</jc>
+	 * 	OList <jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"[{foo:'bar'},{baz:123}]"</js>);
+	 * 	<jk>for</jk> (OMap <jv>map</jv> : <jv>list</jv>.elements(OMap.<jk>class</jk>)) {
+	 * 		<jc>// Do something with map.</jc>
 	 * 	}
 	 *
 	 * 	<jc>// Iterate over a list of ints.</jc>
-	 * 	OList l = OList.<jsm>ofJson</jsm>(<js>"[1,2,3]"</js>);
-	 * 	for (Integer i : l.elements(Integer.<jk>class</jk>)) {
+	 * 	OList <jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"[1,2,3]"</js>);
+	 * 	<jk>for</jk> (Integer <jv>i</jv> : <jv>list</jv>.elements(Integer.<jk>class</jk>)) {
 	 * 		<jc>// Do something with i.</jc>
 	 * 	}
 	 *
 	 * 	<jc>// Iterate over a list of beans.</jc>
 	 * 	<jc>// Automatically converts to beans.</jc>
-	 * 	OList l = OList.<jsm>ofJson</jsm>(<js>"[{name:'John Smith',age:45}]"</js>);
-	 * 	for (Person p : l.elements(Person.<jk>class</jk>)) {
+	 * 	OList <jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"[{name:'John Smith',age:45}]"</js>);
+	 * 	<jk>for</jk> (Person <jv>p</jv> : <jv>list</jv>.elements(Person.<jk>class</jk>)) {
 	 * 		<jc>// Do something with p.</jc>
 	 * 	}
 	 * </p>

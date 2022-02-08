@@ -51,7 +51,7 @@ public @interface Html {
 	 * The text can contain any bean property values resolved through variables of the form <js>"{property-name}"</js>.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Produces &lt;a href&#61;'...'&gt;drive&lt;/a&gt; when serialized to HTML.</jc>
 	 * 	<ja>@Html</ja>(anchorText=<js>"drive"</js>)
 	 * 	<ja>@URI</ja> <jc>// Treat property as a URL</jc>
@@ -85,7 +85,7 @@ public @interface Html {
 	 * </ul>
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public class</jk> FileSpace {
 	 *
 	 * 		<ja>@Html</ja>(link=<js>"servlet:/drive/{drive}"</js>)

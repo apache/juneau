@@ -113,7 +113,7 @@
 			and is disabled by default.
 		<li>
 			Parse exception messages are now clearer and include code snippets of where a parse exception occurred:
-			<p class='bcode w800' style='color:red'>
+			<p class='bcode' style='color:red'>
 		org.apache.juneau.parser.ParseException: Expected '[' at beginning of JSON array.
 			At line 80, column 20.
 			While parsing into: 
@@ -188,26 +188,26 @@
 		<li>
 			RDF serializer subclasses have been moved into top-level classes:
 			<ul>
-				<li><c>RdfSerializer.Xml</c> -&gt; {@link oaj.jena.RdfXmlSerializer}
-				<li><c>RdfSerializer.XmlAbbrev</c> -&gt; {@link oaj.jena.RdfXmlAbbrevSerializer}
-				<li><c>RdfSerializer.N3</c> -&gt; {@link oaj.jena.N3Serializer}
-				<li><c>RdfSerializer.NTriple</c> -&gt; {@link oaj.jena.NTripleSerializer}
-				<li><c>RdfSerializer.Turtle</c> -&gt; {@link oaj.jena.TurtleSerializer}
-				<li><c>RdfParser.Xml</c> -&gt; {@link oaj.jena.RdfXmlParser}
-				<li><c>RdfParser.N3</c> -&gt; {@link oaj.jena.N3Parser}
-				<li><c>RdfParser.NTriple</c> -&gt; {@link oaj.jena.NTripleParser}
-				<li><c>RdfParser.Turtle</c> -&gt; {@link oaj.jena.TurtleParser}
+				<li><c>RdfSerializer.Xml</c> -> {@link oaj.jena.RdfXmlSerializer}
+				<li><c>RdfSerializer.XmlAbbrev</c> -> {@link oaj.jena.RdfXmlAbbrevSerializer}
+				<li><c>RdfSerializer.N3</c> -> {@link oaj.jena.N3Serializer}
+				<li><c>RdfSerializer.NTriple</c> -> {@link oaj.jena.NTripleSerializer}
+				<li><c>RdfSerializer.Turtle</c> -> {@link oaj.jena.TurtleSerializer}
+				<li><c>RdfParser.Xml</c> -> {@link oaj.jena.RdfXmlParser}
+				<li><c>RdfParser.N3</c> -> {@link oaj.jena.N3Parser}
+				<li><c>RdfParser.NTriple</c> -> {@link oaj.jena.NTripleParser}
+				<li><c>RdfParser.Turtle</c> -> {@link oaj.jena.TurtleParser}
 			</ul>
 		<li>
 			New API for pairing serializers and parsers for simplified syntax:
 			<h5 class='figure'>Examples:</h5>
-			<p class='bcode w800'>
+			<p class='bcode'>
 		<jc>// Using instance.</jc>
 		Json json = <jk>new</jk> Json();
 		MyPojo myPojo = json.read(string, MyPojo.<jk>class</jk>);
 		String string = json.write(myPojo);
 			</p>
-			<p class='bcode w800'>
+			<p class='bcode'>
 		<jc>// Using DEFAULT instance.</jc>
 		MyPojo myPojo = Json.<jsf>DEFAULT</jsf>.read(string, MyPojo.<jk>class</jk>);
 		String string = Json.<jsf>DEFAULT</jsf>.write(myPojo);
@@ -384,7 +384,7 @@
 		<li>
 			The <c>$F</c> variable can now be used as a initialization time variable.
 			<br>For example, the <c>AtomFeedResource</c> example pulls a bean example from a file on the classpath:
-			<p class='bcode w800'>
+			<p class='bcode'>
 		<ja>@RestResource</ja>(
 			path=<js>"/atom"</js>,
 			title=<js>"Sample ATOM feed resource"</js>,
@@ -564,7 +564,7 @@
 			<br><img class='bordered' style='width:170px' src='doc-files/ReleaseNotes.711.1.png'>
 			<br><br>
 			The default configuration is this: 
-			<p class='bcode w800'>
+			<p class='bcode'>
 		<cc>#=======================================================================================================================
 		# REST settings
 		#=======================================================================================================================</cc>
@@ -592,7 +592,7 @@
 			<br><br>
 			The <c>BasicRestConfig</c> interface (which defines the default settings for the <c>BasicRestServlet</c> class)
 			now looks like this...
-			<p class='bcode w800'>
+			<p class='bcode'>
 		<ja>@RestResource</ja>(
 			...
 			htmldoc=<ja>@HtmlDoc</ja>(
@@ -622,7 +622,7 @@
 				<br><br>
 				If you're testing out changes in the theme stylesheets, you may want to set the following system property
 				that prevents caching of those files so that you don't need to restart the microservice each time a change is made:
-				<p class='bcode w800'>
+				<p class='bcode'>
 		<cc>#=======================================================================================================================
 		# System properties
 		#=======================================================================================================================</cc>

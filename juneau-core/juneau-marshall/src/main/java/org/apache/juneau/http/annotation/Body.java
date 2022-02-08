@@ -41,15 +41,15 @@ import org.apache.juneau.json.*;
  * On server-side REST, this annotation can be applied to method parameters or parameter classes to identify them as the body of an HTTP request.
  *
  * <h5 class='section'>Examples:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Used on parameter</jc>
  * 	<ja>@RestPost</ja>(<js>"/pets"</js>)
- * 	<jk>public void</jk> addPet(<ja>@Body</ja> Pet pet) {...}
+ * 	<jk>public void</jk> addPet(<ja>@Body</ja> Pet <jv>pet</jv>) {...}
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Used on class</jc>
  * 	<ja>@RestPost</ja>(<js>"/pets"</js>)
- * 	<jk>public void</jk> addPet(Pet pet) {...}
+ * 	<jk>public void</jk> addPet(Pet <jv>pet</jv>) {...}
  *
  * 	<ja>@Body</ja>
  * 	<jk>public class</jk> Pet {...}
@@ -57,10 +57,10 @@ import org.apache.juneau.json.*;
  *
  * <p>
  * This is functionally equivalent to the following code...
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestPost</ja>(<js>"/pets"</js>)
  * 	<jk>public void</jk> addPet(RestRequest <jv>req</jv>) {
- * 		Pet <jv>pet</jv> = <jv>req</jv>.getBody().asType(Pet.<jk>class</jk>);
+ * 		Pet <jv>pet</jv> = <jv>req</jv>.getBody().as(Pet.<jk>class</jk>);
  * 		...
  * 	}
  * </p>
@@ -69,7 +69,7 @@ import org.apache.juneau.json.*;
  * Also used to populate the auto-generated Swagger documentation.
  *
  * <h5 class='section'>Examples:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestPost</ja>(<js>"/pets"</js>)
  * 	<jk>public void</jk> addPet(Pet <jv>pet</jv>) {...}
  *

@@ -21,16 +21,16 @@ import org.apache.juneau.jena.*;
  * 	The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.
  *
  * <h5 class='figure'>Examples:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
- * 	RdfXmlAbbrev rdfXmlAbbrev = <jk>new</jk> RdfXmlAbbrev();
- * 	MyPojo myPojo = rdfXmlAbbrev.read(string, MyPojo.<jk>class</jk>);
- * 	String string = rdfXmlAbbrev.write(myPojo);
+ * 	RdfXmlAbbrev <jv>rdfXmlAbbrev</jv> = <jk>new</jk> RdfXmlAbbrev();
+ * 	MyPojo <jv>myPojo</jv> = <jv>rdfXmlAbbrev</jv>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = <jv>rdfXmlAbbrev</jv>.write(<jv>myPojo</jv>);
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  *	<jc>// Using DEFAULT instance.</jc>
- * 	MyPojo myPojo = RdfXmlAbbrev.<jsf>DEFAULT</jsf>.read(string, MyPojo.<jk>class</jk>);
- * 	String string = RdfXmlAbbrev.<jsf>DEFAULT</jsf>.write(myPojo);
+ * 	MyPojo <jv>myPojo</jv> = RdfXmlAbbrev.<jsf>DEFAULT</jsf>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = RdfXmlAbbrev.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
  * </p>
  *
  * <ul class='seealso'>

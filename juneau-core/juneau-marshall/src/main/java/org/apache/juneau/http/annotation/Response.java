@@ -60,7 +60,7 @@ public @interface Response {
 	 * <p>
 	 * This is a {@doc jd.Swagger} object whose keys are media types and values are string representations of that value.
 	 *
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// A JSON representation of a PetCreate object.</jc>
 	 * 	<ja>@Response</ja>(
 	 * 		examples={

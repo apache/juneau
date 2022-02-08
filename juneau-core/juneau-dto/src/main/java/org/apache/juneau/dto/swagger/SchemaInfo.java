@@ -35,7 +35,7 @@ import org.apache.juneau.internal.*;
  * Unless stated otherwise, the property definitions follow the JSON Schema specification as referenced here.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	SchemaInfo <jv>info</jv> = <jsm>schemaInfo</jsm>()
  * 		.type(<js>"string"</js>)
@@ -47,7 +47,7 @@ import org.apache.juneau.internal.*;
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	<jv>json</jv> = <jv>info</jv>.toString();
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjson'>
  * 	<jc>// Output</jc>
  * 	{
  * 		<js>"type"</js>: <js>"string"</js>,
@@ -729,7 +729,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * Bean property fluent setter:  <property>externalDocs</property>.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	externalDocs(<js>"{description:'description',url:'url'}"</js>);
 	 * </p>
 	 *
@@ -863,7 +863,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * Bean property fluent setter:  <property>items</property>.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	items(<js>"{type:'type',format:'format',...}"</js>);
 	 * </p>
 	 *
@@ -1984,7 +1984,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * Bean property fluent setter:  <property>xml</property>.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	xml(<js>"{name:'name',namespace:'namespace',...}"</js>);
 	 * </p>
 	 *

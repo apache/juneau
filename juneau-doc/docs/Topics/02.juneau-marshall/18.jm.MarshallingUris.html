@@ -22,7 +22,7 @@
 	<p>
 		The following example shows a bean containing URIs of various forms and how they end up serialized. 
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Our bean with properties containing various kinds of URIs.</jc>
 		|	<jk>public class</jk> TestURIs {
 		|		<jk>public</jk> URI
@@ -43,7 +43,7 @@
 		|			<jf>o</jf> = URI.<jsm>create</jsm>(<js>"request:/o/x"</js>),
 		|			<jf>p</jf> = URI.<jsm>create</jsm>(<js>"request:/p"</js>),
 		|			<jf>q</jf> = URI.<jsm>create</jsm>(<js>"request:/"</js>),
-		|			<jf>r</jf> = URI.<jsm>create</jsm>(<js>"request:/.."</js>);;
+		|			<jf>r</jf> = URI.<jsm>create</jsm>(<js>"request:/.."</js>);
 		|	}	
 		|	
 		|	<jc>// Create a serializer.</jc>
@@ -126,7 +126,7 @@
 		properties and class types so that they also get interpreted as URIs.
 		For example:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Applied to a class whose toString() method returns a URI.</jc>
 		|	<ja>@URI</ja>
 		|	<jk>public class</jk> MyURI {

@@ -28,7 +28,7 @@ import org.apache.juneau.utils.*;
  * When enabled, objects in a POJO tree returned by the REST method can be addressed through additional URL path
  * information.
  *
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Resource method on resource "http://localhost:8080/sample/addressBook"</jc>
  * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, converters=Traversable.<jk>class</jk>)
  * 	<jk>public void</jk> doGet(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) {

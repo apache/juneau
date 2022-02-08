@@ -40,7 +40,7 @@ import org.apache.juneau.annotation.*;
  * On server-side REST, this annotation can be applied to method parameters to identify them as an HTTP response value.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestPost</ja>
  * 	<jk>public void</jk> addPet(<ja>@Body</ja> Pet <jv>pet</jv>, <ja>@StatusCode</ja> Value&lt;Integer&gt; <jv>status</jv>) {
  * 		<jsm>addPet</jsm>(<jv>pet</jv>);
@@ -58,7 +58,7 @@ import org.apache.juneau.annotation.*;
  * On {@link Response @Response}-annotated classes, this method can be used to denote an HTTP status code on a response.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestPost</ja>
  * 	<jk>public</jk> Success addPet(Pet <jv>pet</jv>) {
  * 		<jsm>addPet</jsm>(<jv>pet</jv>);
@@ -66,7 +66,7 @@ import org.apache.juneau.annotation.*;
  * 	}
  * </p>
  *
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@Response</ja>
  * 	<jk>public class</jk> Success {
  *

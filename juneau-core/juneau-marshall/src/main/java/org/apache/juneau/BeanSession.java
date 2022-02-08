@@ -987,9 +987,9 @@ public class BeanSession extends ContextSession {
 	 * If object is already a {@link BeanMap}, simply returns the same object.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Construct a bean map around a bean instance</jc>
-	 * 	BeanMap&lt;Person&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.forBean(<jk>new</jk> Person());
+	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> Person());
 	 * </p>
 	 *
 	 * @param <T> The class of the object being wrapped.
@@ -1009,9 +1009,9 @@ public class BeanSession extends ContextSession {
 	 * Same as {@link #toBeanMap(Object)} but allows you to specify a property namer instance.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Construct a bean map around a bean instance</jc>
-	 * 	BeanMap&lt;Person&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> Person(), PropertyNamerDLC.<jsf>INSTANCE</jsf>);
+	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> Person(), PropertyNamerDLC.<jsf>INSTANCE</jsf>);
 	 * </p>
 	 *
 	 * @param <T> The class of the object being wrapped.
@@ -1053,12 +1053,12 @@ public class BeanSession extends ContextSession {
 	 * If object is not a true bean, throws a {@link BeanRuntimeException} with an explanation of why it's not a bean.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Construct a bean map for new bean using only properties defined in a superclass</jc>
-	 * 	BeanMap&lt;MySubBean&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.forBean(<jk>new</jk> MySubBean(), MySuperBean.<jk>class</jk>);
+	 * 	BeanMap&lt;MySubBean&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> MySubBean(), MySuperBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Construct a bean map for new bean using only properties defined in an interface</jc>
-	 * 	BeanMap&lt;MySubBean&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.forBean(<jk>new</jk> MySubBean(), MySuperInterface.<jk>class</jk>);
+	 * 	BeanMap&lt;MySubBean&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> MySubBean(), MySuperInterface.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param <T> The class of the object being wrapped.
@@ -1093,9 +1093,9 @@ public class BeanSession extends ContextSession {
 	 * bean.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Construct a new bean map wrapped around a new Person object</jc>
-	 * 	BeanMap&lt;Person&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.newBeanMap(Person.<jk>class</jk>);
+	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.newBeanMap(Person.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param <T> The class of the object being wrapped.
@@ -1132,9 +1132,9 @@ public class BeanSession extends ContextSession {
 	 * be instantiated within another class instance.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Construct a new instance of the specified bean class</jc>
-	 * 	Person p = BeanContext.<jsf>DEFAULT</jsf>.newBean(Person.<jk>class</jk>);
+	 * 	Person <jv>person</jv> = BeanContext.<jsf>DEFAULT</jsf>.newBean(Person.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param <T> The class type of the bean being created.

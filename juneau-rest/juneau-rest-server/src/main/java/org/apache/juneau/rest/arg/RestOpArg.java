@@ -22,7 +22,7 @@ import org.apache.juneau.rest.annotation.*;
  * Used to resolve parameter values when invoking {@link RestOp}-annotated methods.
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// A simple parameter resolver that resolves TimeZone parameters.</jc>
  * 	<jk>public class</jk> TimeZoneArg <jk>implements</jk> RestOpArg {
  *

@@ -76,8 +76,8 @@ public class SearchArgs {
 		 *
 		 * <p>
 		 * For example:
-		 * <p class='bcode w800'>
-		 * 	builder.search(<js>"column1=foo*, column2=bar baz"</js>);
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.search(<js>"column1=foo*, column2=bar baz"</js>);
 		 * </p>
 		 *
 		 * <p>
@@ -127,8 +127,8 @@ public class SearchArgs {
 		 *
 		 * <p>
 		 * For example:
-		 * <p class='bcode w800'>
-		 * 	builder.view(<js>"column1, column2"</js>);
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.view(<js>"column1, column2"</js>);
 		 * </p>
 		 *
 		 * <p>
@@ -172,9 +172,9 @@ public class SearchArgs {
 		 *
 		 * <p>
 		 * For example:
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Order by column1 ascending, then column2 descending.</jc>
-		 * 	builder.sort(<js>"column1, column2-"</js>);
+		 * 	<jv>builder</jv>.sort(<js>"column1, column2-"</js>);
 		 * </p>
 		 *
 		 * <p>

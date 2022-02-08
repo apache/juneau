@@ -32,17 +32,17 @@ import org.apache.juneau.svl.*;
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Create an args object from the main(String[]) method.</jc>
- * 	Args args = new Args(argv);
+ * 	Args <jv>args</jv> = <jk>new</jk> Args(<jv>argv</jv>);
  *
- * 	ArgsVar.<jsm>init</jsm>(args);
+ * 	ArgsVar.<jsm>init</jsm>(<jv>args</jv>);
  *
  * 	<jc>// Create a variable resolver that resolves JVM arguments (e.g. "$A{1}")</jc>
- * 	VarResolver r = <jk>new</jk> VarResolver().addVars(ArgsVar.<jk>class</jk>);
+ * 	VarResolver <jv>varResolver</jv> = VarResolver.<jsm>create</jsm>().vars(ArgsVar.<jk>class</jk>).build();
  *
  * 	<jc>// Use it!</jc>
- * 	System.<jsf>out</jsf>.println(r.resolve(<js>"Arg #1 is set to $A{1}"</js>));
+ * 	System.<jsf>out</jsf>.println(<jv>varResolver</jv>.resolve(<js>"Arg #1 is set to $A{1}"</js>));
  * </p>
  *
  * <p>

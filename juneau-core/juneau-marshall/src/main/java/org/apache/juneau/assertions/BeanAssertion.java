@@ -23,11 +23,11 @@ import org.apache.juneau.serializer.*;
  * {@review}
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Validates the specified POJO is the specified type and serializes to the specified value.</jc>
  * 	<jsm>assertBean</jsm>(<jv>myBean</jv>)
- * 	.isType(MyBean.<jk>class</jk>)
- * 	.properties(<js>"foo,bar"</js>).asJson().is(<js>"{foo:1,bar:2}"</js>);
+ * 		.isType(MyBean.<jk>class</jk>)
+ * 		.properties(<js>"foo,bar"</js>).asJson().is(<js>"{foo:1,bar:2}"</js>);
  * </p>
  *
  *

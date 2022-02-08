@@ -177,7 +177,7 @@
 		The most typical scenario is to simply use the <c>value</c> field to define parameter names:
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@RestGet</ja>
 		|	<jk>public void</jk> doGet(
 		|		<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> <jv>p1</jv>, 
@@ -187,7 +187,7 @@
 	<p>
 		This is functionally equivalent to the following code:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@RestGet</ja>
 		|	<jk>public void</jk> doGet(RestRequest <jv>req</jv>) {
 		|		RequestQueryParams <jv>query</jv> = <jv>req</jv>.getQueryParams();
@@ -201,17 +201,17 @@
 		When used, the data type must be a <c>Map</c> or bean.
 	</p>
 	<h5 class='figure'>Examples:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Multiple values passed as a map.</jc>
 		|	<ja>@RestGet</ja>
 		|	<jk>public void</jk> doGet(<ja>@Query</ja>(<js>"*"</js>) Map&lt;String,Object&gt; <jv>map</jv>) {...}
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Same, but name "*" is inferred.</jc>
 		|	<ja>@RestGet</ja>
 		|	<jk>public void</jk> doGet(<ja>@Query</ja> Map&lt;String,Object&gt; <jv>map</jv>) {...}
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Multiple values passed as a bean.</jc>
 		|	<ja>@RestGet</ja>
 		|	<jk>public void</jk> doGet(<ja>@Query</ja> MyQueryBean <jv>bean</jv>) {...}
@@ -220,12 +220,12 @@
 		The {@link oaj.http.annotation.Body @Body} annotation is used to identify POJOs to be used as the body of an HTTP request.
 	</p>
 	<h5 class='figure'>Examples:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Defined on parameter</jc>
 		|	<ja>@RestPost</ja>
 		|	<jk>public void</jk> addPet(<ja>@Body</ja> Pet <jv>pet</jv>) {...}
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Defined on POJO class</jc>
 		|	<ja>@RestPost</ja>
 		|	<jk>public void</jk> addPet(Pet <jv>pet</jv>) {...}
@@ -236,7 +236,7 @@
 	<p>
 		This is functionally equivalent to the following code:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@RestPost</ja>
 		|	<jk>public void</jk> addPet(RestRequest <jv>req</jv>) {
 		|		Pet <jv>pet</jv> = <jv>req</jv>.getBody().as(Pet.<jk>class</jk>);
@@ -296,7 +296,7 @@
 		to define to response codes and headers.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@RestGet</ja>(<js>"/user/login"</js>)
 		|	<jk>public void</jk> login(
 		|		<ja>@FormData</ja>(<js>"username"</js>) String <jv>username</jv>, 
@@ -315,7 +315,7 @@
 	<p>
 		This is functionally equivalent to the following code:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@RestGet</ja>(<js>"/user/login"</js>)
 		|	<jk>public void</jk> doGet(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) {
 		|		RequestFormParams <jv>form</jv> = <jv>req</jv>.getFormParams();
@@ -336,7 +336,7 @@
 	<p>
 		For example, the following shows how a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>) can be converted to a 2-dimensional array of <c>Longs</c>:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@RestGet</ja>(<js>"/testQuery1"</js>)	
 		|	<jk>public void</jk> testQuery1(
 		|		<ja>@Query</ja>(<js>"queryParamName"</js>)
@@ -379,7 +379,7 @@
 		This information is used to populate the auto-generated Swagger documentation and UI.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Query</ja>(<js>"name"</js>)
 		|	<ja>@Schema</ja>(
 		|		description=<js>"Pet name"</js>,
@@ -392,7 +392,7 @@
 		based on the <c>Accept-Language</c> on a request.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Schema</ja>(
 		|		description=<js>"$L{PetNameDescription}"</js>
 		|	)
@@ -404,7 +404,7 @@
 	<p>
 		The following shows the same for a request body:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@RestPost</ja>(<js>"/testBody"</js>)	
 		|	<jk>public void</jk> testBody(
 		|		<ja>@Body</ja>
@@ -431,7 +431,7 @@
 		The list of valid POJO types for parameters depends on type and format of the value or items/entries of the value.
 		For example, instead of <c>Longs</c> in the example above, we could also define a 2-dimensional array of POJOs convertible from <c>Longs</c>:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Body is a 2-dimensional array of POJOs convertible from Longs:</jc>
 		|	<ja>@RestPost</ja>(<js>"/example1"</js>)	
 		|	<jk>public void</jk> testBody(<ja>@Body</ja>(...) MyPojo1[][] <jv>body</jv>) {...}
@@ -440,7 +440,7 @@
 		|		<jk>public</jk> MyPojo1(Long <jv>input</jv>) {...}
 		|	}
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Body is a POJO that takes in a Long array:</jc>
 		|	<ja>@RestPost</ja>(<js>"/example2"</js>)	
 		|	<jk>public void</jk> testBody(<ja>@Body</ja>(...) MyPojo2[] <jv>body</jv>) {...}
@@ -449,7 +449,7 @@
 		|		<jk>public</jk> MyPojo2(Long[] <jv>input</jv>) {...}
 		|	}
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Body is a POJO that takes in the whole 2-dimensional array:</jc>
 		|	<ja>@RestPost</ja>(<js>"/example3"</js>)	
 		|	<jk>public void</jk> testBody(<ja>@Body</ja>(...) MyPojo3 <jv>body</jv>) {...}

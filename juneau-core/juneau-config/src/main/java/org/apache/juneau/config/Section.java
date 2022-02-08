@@ -85,7 +85,7 @@ public class Section {
 	 * Key/value pairs in the config file section get copied as bean property values to the specified bean class.
 	 *
 	 * <h5 class='figure'>Example config file</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bini'>
 	 * 	<cs>[MyAddress]</cs>
 	 * 	<ck>name</ck> = <cv>John Smith</cv>
 	 * 	<ck>street</ck> = <cv>123 Main Street</cv>
@@ -95,18 +95,18 @@ public class Section {
 	 * </p>
 	 *
 	 * <h5 class='figure'>Example bean</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public class</jk> Address {
-	 * 		public String name, street, city;
-	 * 		public StateEnum state;
-	 * 		public int zip;
+	 * 		<jk>public</jk> String <jf>name</jf>, <jf>street</jf>, <jf>city</jf>;
+	 * 		<jk>public</jk> StateEnum <jf>state</jf>;
+	 * 		<jk>public int</jk> <jf>zip</jf>;
 	 * 	}
 	 * </p>
 	 *
 	 * <h5 class='figure'>Example usage</h5>
-	 * <p class='bcode w800'>
-	 * 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
-	 * 	Address myAddress = cf.getSection(<js>"MySection"</js>).toBean(Address.<jk>class</jk>);
+	 * <p class='bjava'>
+	 * 	Config <jv>config</jv> = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
+	 * 	Address <jv>address</jv> = <jv>config</jv>.getSection(<js>"MySection"</js>).toBean(Address.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param c The bean class to create.
@@ -143,7 +143,7 @@ public class Section {
 	 * Key/value pairs in the config file section get copied as bean property values to the specified bean class.
 	 *
 	 * <h5 class='figure'>Example config file</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bini'>
 	 * 	<cs>[MyAddress]</cs>
 	 * 	<ck>name</ck> = <cv>John Smith</cv>
 	 * 	<ck>street</ck> = <cv>123 Main Street</cv>
@@ -153,18 +153,18 @@ public class Section {
 	 * </p>
 	 *
 	 * <h5 class='figure'>Example bean</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public class</jk> Address {
-	 * 		public String name, street, city;
-	 * 		public StateEnum state;
-	 * 		public int zip;
+	 * 		<jk>public</jk> String <jf>name</jf>, <jf>street</jf>, <jf>city</jf>;
+	 * 		<jk>public</jk> StateEnum <jf>state</jf>;
+	 * 		<jk>public int</jk> <jf>zip</jf>;
 	 * 	}
 	 * </p>
 	 *
 	 * <h5 class='figure'>Example usage</h5>
-	 * <p class='bcode w800'>
-	 * 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
-	 * 	Address myAddress = cf.getSection(<js>"MySection"</js>).asBean(Address.<jk>class</jk>).orElse(<jk>null</jk>);
+	 * <p class='bjava'>
+	 * 	Config <jv>config</jv> = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
+	 * 	Address <jv>address</jv> = <jv>config</jv>.getSection(<js>"MySection"</js>).asBean(Address.<jk>class</jk>).orElse(<jk>null</jk>);
 	 * </p>
 	 *
 	 * @param c The bean class to create.
@@ -208,7 +208,7 @@ public class Section {
 	 * write using getters and setters.
 	 *
 	 * <h5 class='figure'>Example config file</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bini'>
 	 * 	<cs>[MySection]</cs>
 	 * 	<ck>string</ck> = <cv>foo</cv>
 	 * 	<ck>int</ck> = <cv>123</cv>
@@ -219,40 +219,40 @@ public class Section {
 	 * </p>
 	 *
 	 * <h5 class='figure'>Example interface</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public interface</jk> MyConfigInterface {
 	 *
 	 * 		String getString();
-	 * 		<jk>void</jk> setString(String x);
+	 * 		<jk>void</jk> setString(String <jv>value</jv>);
 	 *
 	 * 		<jk>int</jk> getInt();
-	 * 		<jk>void</jk> setInt(<jk>int</jk> x);
+	 * 		<jk>void</jk> setInt(<jk>int</jk> <jv>value</jv>);
 	 *
 	 * 		MyEnum getEnum();
-	 * 		<jk>void</jk> setEnum(MyEnum x);
+	 * 		<jk>void</jk> setEnum(MyEnum <jv>value</jv>);
 	 *
 	 * 		MyBean getBean();
-	 * 		<jk>void</jk> setBean(MyBean x);
+	 * 		<jk>void</jk> setBean(MyBean <jv>value</jv>);
 	 *
 	 * 		<jk>int</jk>[][][] getInt3dArray();
-	 * 		<jk>void</jk> setInt3dArray(<jk>int</jk>[][][] x);
+	 * 		<jk>void</jk> setInt3dArray(<jk>int</jk>[][][] <jv>value</jv>);
 	 *
 	 * 		Map&lt;String,List&lt;MyBean[][][]&gt;&gt; getBean1d3dListMap();
-	 * 		<jk>void</jk> setBean1d3dListMap(Map&lt;String,List&lt;MyBean[][][]&gt;&gt; x);
+	 * 		<jk>void</jk> setBean1d3dListMap(Map&lt;String,List&lt;MyBean[][][]&gt;&gt; <jv>value</jv>);
 	 * 	}
 	 * </p>
 	 *
 	 * <h5 class='figure'>Example usage</h5>
-	 * <p class='bcode w800'>
-	 * 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
+	 * <p class='bjava'>
+	 * 	Config <jv>config</jv> = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
 	 *
-	 * 	MyConfigInterface ci = cf.get(<js>"MySection"</js>).toInterface(MyConfigInterface.<jk>class</jk>);
+	 * 	MyConfigInterface <jv>ci</jv> = <jv>config</jv>.get(<js>"MySection"</js>).toInterface(MyConfigInterface.<jk>class</jk>);
 	 *
-	 * 	<jk>int</jk> myInt = ci.getInt();
+	 * 	<jk>int</jk> <jv>myInt</jv> = <jv>ci</jv>.getInt();
 	 *
-	 * 	ci.setBean(<jk>new</jk> MyBean());
+	 * 	<jv>ci</jv>.setBean(<jk>new</jk> MyBean());
 	 *
-	 * 	cf.save();
+	 * 	<jv>ci</jv>.save();
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -293,7 +293,7 @@ public class Section {
 	 * write using getters and setters.
 	 *
 	 * <h5 class='figure'>Example config file</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bini'>
 	 * 	<cs>[MySection]</cs>
 	 * 	<ck>string</ck> = <cv>foo</cv>
 	 * 	<ck>int</ck> = <cv>123</cv>
@@ -304,40 +304,40 @@ public class Section {
 	 * </p>
 	 *
 	 * <h5 class='figure'>Example interface</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public interface</jk> MyConfigInterface {
 	 *
 	 * 		String getString();
-	 * 		<jk>void</jk> setString(String x);
+	 * 		<jk>void</jk> setString(String <jv>value</jv>);
 	 *
 	 * 		<jk>int</jk> getInt();
-	 * 		<jk>void</jk> setInt(<jk>int</jk> x);
+	 * 		<jk>void</jk> setInt(<jk>int</jk> <jv>value</jv>);
 	 *
 	 * 		MyEnum getEnum();
-	 * 		<jk>void</jk> setEnum(MyEnum x);
+	 * 		<jk>void</jk> setEnum(MyEnum <jv>value</jv>);
 	 *
 	 * 		MyBean getBean();
-	 * 		<jk>void</jk> setBean(MyBean x);
+	 * 		<jk>void</jk> setBean(MyBean <jv>value</jv>);
 	 *
 	 * 		<jk>int</jk>[][][] getInt3dArray();
-	 * 		<jk>void</jk> setInt3dArray(<jk>int</jk>[][][] x);
+	 * 		<jk>void</jk> setInt3dArray(<jk>int</jk>[][][] <jv>value</jv>);
 	 *
 	 * 		Map&lt;String,List&lt;MyBean[][][]&gt;&gt; getBean1d3dListMap();
-	 * 		<jk>void</jk> setBean1d3dListMap(Map&lt;String,List&lt;MyBean[][][]&gt;&gt; x);
+	 * 		<jk>void</jk> setBean1d3dListMap(Map&lt;String,List&lt;MyBean[][][]&gt;&gt; <jv>value</jv>);
 	 * 	}
 	 * </p>
 	 *
 	 * <h5 class='figure'>Example usage</h5>
-	 * <p class='bcode w800'>
-	 * 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
+	 * <p class='bjava'>
+	 * 	Config <jv>config</jv> = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
 	 *
-	 * 	MyConfigInterface ci = cf.get(<js>"MySection"</js>).asInterface(MyConfigInterface.<jk>class</jk>).orElse(<jk>null</jk>);
+	 * 	MyConfigInterface <jv>ci</jv> = <jv>config</jv>.get(<js>"MySection"</js>).asInterface(MyConfigInterface.<jk>class</jk>).orElse(<jk>null</jk>);
 	 *
-	 * 	<jk>int</jk> myInt = ci.getInt();
+	 * 	<jk>int</jk> <jv>myInt</jv> = <jv>ci</jv>.getInt();
 	 *
-	 * 	ci.setBean(<jk>new</jk> MyBean());
+	 * 	<jv>ci</jv>.setBean(<jk>new</jk> MyBean());
 	 *
-	 * 	cf.save();
+	 * 	<jv>ci</jv>.save();
 	 * </p>
 	 *
 	 * <ul class='notes'>

@@ -177,7 +177,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		 * is the root element name.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Parser with preserve-root-element.</jc>
 		 * 	ReaderParser <jv>parser1</jv> = XmlParser
 		 * 		.<jsm>create</jsm>()
@@ -192,10 +192,10 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		 * 	String <jv>xml</jv> = <js>"&lt;root&gt;&lt;a&gt;foobar&lt;/a&gt;&lt;/root&gt;"</js>;
 		 *
 		 * 	<jc>// Produces:  "{ root: { a:'foobar' }}"</jc>
-		 * 	OMap <jv>myMap1</jv> = <jv>parser1</jv>.parse(<jv>xml</jv>, OMap.<jk>class</jk>);
+		 * 	OMap <jv>map1</jv> = <jv>parser1</jv>.parse(<jv>xml</jv>, OMap.<jk>class</jk>);
 		 *
 		 * 	<jc>// Produces:  "{ a:'foobar' }"</jc>
-		 * 	OMap <jv>myMap2</jv> = <jv>parser2</jv>.parse(<jv>xml</jv>, OMap.<jk>class)</jk>;
+		 * 	OMap <jv>map2</jv> = <jv>parser2</jv>.parse(<jv>xml</jv>, OMap.<jk>class</jk>);
 		 * </p>
 		 *
 		 * @return This object.

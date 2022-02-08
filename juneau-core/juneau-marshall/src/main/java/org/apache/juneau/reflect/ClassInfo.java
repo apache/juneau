@@ -30,6 +30,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * Lightweight utility class for introspecting information about a class.
+ * {@review}
  *
  * <p>
  * Provides various convenience methods for introspecting fields/methods/annotations
@@ -39,17 +40,17 @@ import org.apache.juneau.internal.*;
  * Objects are designed to be lightweight to create and threadsafe.
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Wrap our class inside a ClassInfo.</jc>
- * 	ClassInfo ci = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
+ * 	ClassInfo <jv>classInfo</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
  *
  * 	<jc>// Get all methods in parent-to-child order, sorted alphabetically per class.</jc>
- * 	<jk>for</jk> (MethodInfo mi : ci.getAllMethodInfos(<jk>true</jk>, <jk>true</jk>)) {
+ * 	<jk>for</jk> (MethodInfo <jv>methodInfo</jv> : <jv>classInfo</jv>.getAllMethodsParentFirst()) {
  * 		<jc>// Do something with it.</jc>
  * 	}
  *
  * 	<jc>// Get all class-level annotations in parent-to-child order.</jc>
- * 	<jk>for</jk> (MyAnnotation a : ci.getAnnotations(MyAnnotation.<jk>class</jk>, <jk>true</jk>)) {
+ * 	<jk>for</jk> (MyAnnotation <jv>annotation</jv> : <jv>classInfo</jv>.getAnnotations(MyAnnotation.<jk>class</jk>)) {
  * 		// Do something with it.
  * 	}
  * </p>
@@ -1811,7 +1812,7 @@ public final class ClassInfo {
 	 * Primitive classes are converted to wrapper classes and compared.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 		ClassInfo.<jsm>of</jsm>(String.<jk>class</jk>).isParentOfFuzzyPrimitives(String.<jk>class</jk>);  <jc>// true</jc>
 	 * 		ClassInfo.<jsm>of</jsm>(CharSequence.<jk>class</jk>).isParentOfFuzzyPrimitives(String.<jk>class</jk>);  <jc>// true</jc>
 	 * 		ClassInfo.<jsm>of</jsm>(String.<jk>class</jk>).isParentOfFuzzyPrimitives(CharSequence.<jk>class</jk>);  <jc>// false</jc>

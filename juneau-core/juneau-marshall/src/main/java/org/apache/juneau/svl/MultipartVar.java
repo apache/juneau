@@ -18,7 +18,7 @@ import static org.apache.juneau.internal.StringUtils.*;
  * Interface for the resolution of vars that consist of a comma-delimited list.
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<js>"$X{foo, bar, baz}"</js>
  * </p>
  *

@@ -30,13 +30,13 @@ import org.apache.juneau.svl.*;
  * 	(i.e. {@link javax.servlet.ServletRequest#getAttribute(String)}).
  * </p>
  *
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestPost</ja>(...)
  * 	<jk>public</jk> Object myMethod(RequestAttributes <jv>attributes</jv>) {...}
  * </p>
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestPost</ja>(...)
  * 	<jk>public</jk> Object myMethod(RequestAttributes <jv>attributes</jv>) {
  *

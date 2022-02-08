@@ -20,7 +20,7 @@
 		There is a separate set of serializers and parsers for marshalling HTTP parts (query, form-data, headers, path variables, and plain-text request bodies).
 		The distinction is that these are designed to marshall directly to-and-from strings based on Open-API schema information.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Schema information about our part.</jc>
 		|	HttpPartSchema <jv>schema</jv> = HttpPartSchema
 		|		.<jsm>tArrayPipes</jsm>()
@@ -46,7 +46,7 @@
 		The {@link oaj.httppart.HttpPartSchemaBuilder} class is provided for shortening the creation of schemas.
 		The equivalent to the schema above can be structured like so:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>import static</jk> org.apache.juneau.httppart.HttpPartSchemaBuilder.*;
 		|	
 		|	<jc>// Schema information about our part.</jc>

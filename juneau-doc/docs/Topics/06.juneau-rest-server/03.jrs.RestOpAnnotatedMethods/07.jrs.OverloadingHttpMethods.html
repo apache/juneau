@@ -23,7 +23,7 @@
 	<p>
 		For example, the URL <l>"/sample/foo?method=BAR"</l> will cause the following method to be invoked...
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@RestOp</ja>(method=<js>"BAR"</js>)
 		|	<jk>public void</jk> doBar(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) {
 		|		<jc>// Handle BAR requests</jc>
@@ -33,7 +33,7 @@
 		To support overloaded methods, the {@link oajr.annotation.Rest#allowedMethodParams() @Rest(allowedMethodParams)} 
 		setting must be enabled on your servlet.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(
 		|		<jc>// Allow &amp;method parameter on BAR requests</jc>
 		|		allowedMethodParams=<js>"BAR"</js>

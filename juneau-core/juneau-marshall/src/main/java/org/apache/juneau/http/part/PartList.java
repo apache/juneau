@@ -33,7 +33,7 @@ import org.apache.juneau.svl.*;
  * {@review}
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	PartList <jv>parts</jv> = PartList
  * 		.<jsm>create</jsm>()
  * 		.append(MyPart.<jsm>of</jsm>("foo"))
@@ -43,14 +43,14 @@ import org.apache.juneau.svl.*;
  *
  * <p>
  * Convenience creators are provided for creating lists with minimal code:
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	PartList <jv>parts</jv> = PartList.<jsm>of</jsm>(BasicIntegerPart.of(<js>"foo"</js>, 1));
  * </p>
  *
  * <p>
  * Part lists are immutable, but can be appended to using the {@link #copy()} method:
- * <p class='bcode w800'>
- * 	parts = parts
+ * <p class='bjava'>
+ * 	<jv>parts</jv> = <jv>parts</jv>
  * 		.copy()
  * 		.append(BasicIntegerPart.<jsm>of</jsm>(<js>"foo"</js>, 1))
  * 		.build();
@@ -58,10 +58,10 @@ import org.apache.juneau.svl.*;
  *
  * <p>
  * Static methods are provided on {@link HttpParts} to further simplify creation of part lists.
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
  *
- * 	PartList <jv>parts</jv> = <jsm>partList</jsm>(<jsm>integerPart</jsm>(<js>"foo"</js>, 1), <jsm>booleanPart</jsm>(<js>"bar"<js>, <jk>false</jk>));
+ * 	PartList <jv>parts</jv> = <jsm>partList</jsm>(<jsm>integerPart</jsm>(<js>"foo"</js>, 1), <jsm>booleanPart</jsm>(<js>"bar"</js>, <jk>false</jk>));
  * </p>
  *
  * <p>
@@ -70,7 +70,7 @@ import org.apache.juneau.svl.*;
  * parts.
  * <br>The following example notes the distinction:
  *
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jv>parts</jv> = PartList
  * 		.<jsm>create</jsm>()
  * 		.set(<js>"Foo"</js>, <js>"bar"</js>)
@@ -105,7 +105,7 @@ import org.apache.juneau.svl.*;
  * beans.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	MyQueryBean <jv>foo</jv> = <jv>parts</jv>.get(MyQueryBean.<jk>class</jk>);
  * </p>
  *
@@ -118,7 +118,7 @@ import org.apache.juneau.svl.*;
  * are resolved at runtime.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Create a part list with dynamically-resolving values pulled from a system property.</jc>
  *
  * 	System.<jsm>setProperty</jsm>(<js>"foo"</js>, <js>"bar"</js>);
@@ -138,11 +138,11 @@ import org.apache.juneau.svl.*;
  * annotations throughout the framework.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// A predefined list of parts.</jc>
  * 	<jk>public class</jk> MyPartList <jk>extends</jk> PartList {
  * 		<jk>public</jk> MyPartList() {
- * 			<jk>super</jk>(BasicIntegerPart.<jsm>of</jsm>(<js>"foo"</js>,1), BasicBooleanPart.<jsm>of</jsm>(<js>"bar"</js>,<jk>false</jk>);
+ * 			<jk>super</jk>(BasicIntegerPart.<jsm>of</jsm>(<js>"foo"</js>,1), BasicBooleanPart.<jsm>of</jsm>(<js>"bar"</js>,<jk>false</jk>));
  * 		}
  * 	}
  *
@@ -207,7 +207,7 @@ public class PartList {
 	 * Creates a new {@link PartList} initialized with the specified name/value pairs.
 	 *
 	 * <h5 class='figure'>Example</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	PartList <jv>parts</jv> = PartList.<jsm>ofPairs</jsm>(<js>"foo"</js>, 1, <js>"bar"</js>, <jk>true</jk>);
 	 * </p>
 	 *
@@ -1316,8 +1316,8 @@ public class PartList {
 	 * </ul>
 	 *
 	 * <h5 class='figure'>Example</h5>
-	 * <p class='bcode w800'>
-	 * 	BasicIntegerPart <jv>age</jv> = partList.get(<js>"age"</js>, BasicIntegerPart.<jk>class</jk>);
+	 * <p class='bjava'>
+	 * 	BasicIntegerPart <jv>age</jv> = <jv>partList</jv>.get(<js>"age"</js>, BasicIntegerPart.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param name The part name.
@@ -1365,8 +1365,8 @@ public class PartList {
 	 * Same as {@link #get(String, Class)} but the part name is pulled from the name or value attribute of the {@link FormData}/{@link Query}/{@link Path} annotation.
 	 *
 	 * <h5 class='figure'>Example</h5>
-	 * <p class='bcode w800'>
-	 * 	Age <jv>age</jv> = partList.get(Age.<jk>class</jk>);
+	 * <p class='bjava'>
+	 * 	Age <jv>age</jv> = <jv>partList</jv>.get(Age.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param type The part implementation class.

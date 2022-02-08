@@ -51,19 +51,19 @@
 		<li class='jc'>{@link oaj.svl.vars.SubstringVar} - <c>$ST{arg,start[,end]}</c>
 	</ul>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Use the default variable resolver to resolve a string that contains 
 		|	// $S (system property) variables.</jc>
-		|	String <jv>myProperty</jv> = VarResolver.<jsf>DEFAULT</jsf>.resolve(<js>"The Java home directory is $S{java.home}"</js>);
+		|	String <jv>property</jv> = VarResolver.<jsf>DEFAULT</jsf>.resolve(<js>"The Java home directory is $S{java.home}"</js>);
 	</p>
 	<p>
 		The following shows how variables can be arbitrarily nested...
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Look up a property in the following order:
 		|	// 1) MYPROPERTY environment variable.
 		|	// 2) 'my.property' system property if environment variable not found.
 		|	// 3) 'not found' string if system property not found.</jc>
-		|	String <jv>myproperty</jv> = VarResolver.<jsf>DEFAULT</jsf>.resolve(<js>"$E{MYPROPERTY,$S{my.property,not found}}"</js>);
+		|	String <jv>property</jv> = VarResolver.<jsf>DEFAULT</jsf>.resolve(<js>"$E{MYPROPERTY,$S{my.property,not found}}"</js>);
 	</p>
 </div>

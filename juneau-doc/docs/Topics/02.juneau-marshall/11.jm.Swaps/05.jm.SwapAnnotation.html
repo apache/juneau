@@ -22,7 +22,7 @@
 		This is often cleaner than using the builder <c>swaps()</c> method since you can keep
 		your swap class near your POJO class. 
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Swap</ja>(MyObjectSwap.<jk>class</jk>)
 		|	<jk>public class</jk> MyPojo {
 		|		...
@@ -40,7 +40,7 @@
 	<p>
 		Multiple swaps can be associated with a class using multiple {@link oaj.annotation.Swap @Swap} annotations:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Swap</ja>(MyJsonSwap.<jk>class</jk>)
 		|	<ja>@Swap</ja>(MyXmlSwap.<jk>class</jk>)
 		|	<ja>@Swap</ja>(MyOtherSwap.<jk>class</jk>)
@@ -50,7 +50,7 @@
 		<c>Readers</c> get serialized directly to the output of a serializer.
 		Therefore it's possible to implement a swap that provides fully-customized output.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> MyJsonSwap <jk>extends</jk> ObjectSwap&lt;MyPojo,Reader&gt; {
 		|
 		|		<jk>public</jk> MediaType[] forMediaTypes() {
@@ -66,7 +66,7 @@
 		The <ja>@Swap</ja> annotation can also be used on getters and setters as well to apply a swap
 		to individual property values:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> MyBean {
 		|		<jk>private</jk> MyPojo <jf>myPojo</jf>;
 		|	
@@ -83,7 +83,7 @@
 	<p>
 		The swap annotation can also be applied to the private field of a bean property, like so:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> MyBean {
 		|
 		|		<ja>@Beanp</ja>(swap=MyPojoSwap.<jk>class</jk>)

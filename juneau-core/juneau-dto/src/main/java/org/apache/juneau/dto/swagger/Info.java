@@ -29,7 +29,7 @@ import org.apache.juneau.internal.*;
  * in the Swagger-UI for convenience.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	Info <jv>info</jv> = <jsm>info</jsm>(<js>"Swagger Sample App"</js>, <js>"1.0.1"</js>)
  * 		.description(<js>"This is a sample server Petstore server."</js>)
@@ -47,7 +47,7 @@ import org.apache.juneau.internal.*;
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	<jv>json</jv> = <jv>info</jv>.toString();
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjson'>
  * 	<jc>// Output</jc>
  * 	{
  * 		<js>"title"</js>: <js>"Swagger Sample App"</js>,
@@ -179,7 +179,7 @@ public class Info extends SwaggerElement {
 	 * The contact information for the exposed API as raw JSON.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	contact(<js>"{name:'name',url:'url',...}"</js>);
 	 * </p>
 	 *
@@ -318,7 +318,7 @@ public class Info extends SwaggerElement {
 	 * The license information for the exposed API as raw JSON.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	license(<js>"{name:'name',url:'url',...}"</js>);
 	 * </p>
 	 *

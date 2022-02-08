@@ -24,7 +24,7 @@ package org.apache.juneau.rest.client;
  * overriding the methods on the client class as well.
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Specialized client that adds a header to every request.</jc>
  * 	<jk>public class</jk> MyRestClient <jk>extends</jk> RestClient {
  * 		<ja>@Override</ja>

@@ -45,7 +45,7 @@
 		and serialized.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(
 		|		serializers={JsonParser.<jk>class</jk>, HtmlSerializer.<jk>class</jk>},
 		|		parsers={JsonParser.<jk>class</jk>, HtmlParser.<jk>class</jk>}
@@ -87,7 +87,7 @@
 	<p>
 		Serializers and parsers can also be defined programmatically using an INIT hook method like shown below:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>
 		|	<jk>public class</jk> MyResource {
 		|
@@ -106,7 +106,7 @@
 		Config annotations allow you to define serializer and parser properties using specialized annotations
 		at either the class or operation levels:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(
 		|		...
 		|	)
@@ -127,7 +127,7 @@
 		Swaps are associated serializers and parsers registered on a REST resource via the {@link oaj.annotation.BeanConfig} annotation
 		on either the class or method level:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Servlet with transforms applied</jc>
 		|	<ja>@Rest</ja>(
 		|		...

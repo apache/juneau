@@ -23,7 +23,7 @@ import org.apache.juneau.http.annotation.*;
  * Request only part of an entity. Bytes are numbered from 0.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Range: bytes=500-999
  * </p>
  *
@@ -39,7 +39,7 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * A byte range operation MAY specify a single range of bytes, or a set of ranges within a single entity.
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	ranges-specifier = byte-ranges-specifier
  * 	byte-ranges-specifier = bytes-unit "=" byte-range-set
  * 	byte-range-set  = 1#( byte-range-spec | suffix-byte-range-spec )
@@ -67,7 +67,7 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * By its choice of last-byte-pos, a client can limit the number of bytes retrieved without knowing the size of the
  * entity.
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	suffix-byte-range-spec = "-" suffix-length
  * 	suffix-length = 1*DIGIT
  * </p>
@@ -90,7 +90,7 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * Examples of byte-ranges-specifier values (assuming an entity-body of length 10000):
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	- The first 500 bytes (byte offsets 0-499, inclusive):  bytes=0-499
  * 	- The second 500 bytes (byte offsets 500-999, inclusive):  bytes=500-999
  * 	- The final 500 bytes (byte offsets 9500-9999, inclusive):  bytes=-500
@@ -106,7 +106,7 @@ import org.apache.juneau.http.annotation.*;
  * entity, instead of the entire entity, using the Range request header, which applies to the entity returned as the
  * result of the request:
  *
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Range = "Range" ":" ranges-specifier
  * </p>
  *

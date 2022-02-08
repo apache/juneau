@@ -27,7 +27,7 @@ import java.lang.annotation.*;
  * Used to populate the auto-generated Swagger documentation and UI for server-side <ja>@Rest</ja>-annotated classes.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@Rest</ja>(
  * 		swagger=<ja>@Swagger</ja>(
  * 			license=<ja>@License</ja>(

@@ -61,12 +61,12 @@ import org.apache.juneau.reflect.*;
  * will result in the order <c>P3, P4, P1, P2</c>.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Construct a new parser group builder</jc>
  * 	ParserSet <jv>parsers</jv> = ParserSet.<jsm>create</jsm>();
  * 		.add(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>); <jc>// Add some parsers to it</jc>
- *		.forEach(<jv>x</jv> -&gt; <jv>x</jv>.swaps(CalendarSwap.IsoLocalDateTime.<jk>class</jk>))
- *		.forEach(<jv>x</jv> -&gt; <jv>x</jv>.beansRequireSerializable())
+ *		.forEach(<jv>x</jv> -> <jv>x</jv>.swaps(CalendarSwap.IsoLocalDateTime.<jk>class</jk>))
+ *		.forEach(<jv>x</jv> -> <jv>x</jv>.beansRequireSerializable())
  * 		.build();
  *
  * 	<jc>// Find the appropriate parser by Content-Type</jc>
@@ -249,7 +249,7 @@ public final class ParserSet {
 		 * The {@link NoInherit} class can be used to clear out the existing list of parsers before adding the new entries.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	ParserSet.Builder <jv>builder</jv> = ParserSet.<jsm>create</jsm>();  <jc>// Create an empty builder.</jc>
 		 *
 		 * 	<jv>builder</jv>.add(FooParser.<jk>class</jk>);  <jc>// Now contains:  [FooParser]</jc>
@@ -289,7 +289,7 @@ public final class ParserSet {
 		 * The {@link Inherit} class can be used to insert existing entries in this group into the position specified.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	ParserSet.Builder <jv>builder</jv> = ParserSet.<jsm>create</jsm>();  <jc>// Create an empty builder.</jc>
 		 *
 		 * 	<jv>builder</jv>.set(FooParser.<jk>class</jk>);  <jc>// Now contains:  [FooParser]</jc>

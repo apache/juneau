@@ -62,7 +62,7 @@ public @interface RdfSchema {
 	 * <h5 class='section'>Example:</h5>
 	 *
 	 * Contents of <c>package-info.java</c>...
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// XML namespaces used within this package.</jc>
 	 * 	<ja>@RdfSchema</ja>(prefix=<js>"ab"</js>,
 	 * 		namespaces={
@@ -78,7 +78,7 @@ public @interface RdfSchema {
 	 *
 	 * <p>
 	 * Class in package using defined namespaces...
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>package</jk> org.apache.juneau.examples.addressbook;
 	 *
 	 * 	<jc>// Bean class, override "ab" namespace on package.</jc>

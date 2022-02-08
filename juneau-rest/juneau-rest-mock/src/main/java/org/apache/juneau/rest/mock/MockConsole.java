@@ -27,7 +27,7 @@ import org.apache.juneau.assertions.*;
  * testing purposes.
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// A simple REST API that echos a posted bean.</jc>
  * 	<ja>@Rest</ja>
  * 	<jk>public class</jk> MyRest <jk>extends</jk> BasicRest {
@@ -112,7 +112,7 @@ public class MockConsole extends PrintStream {
 	 * Allows you to perform fluent-style assertions on the contents of this buffer.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	MockConsole <jv>console</jv> = MockConsole.<jsf>create</jsf>();
 	 *
 	 * 	MockRestClient
@@ -137,7 +137,7 @@ public class MockConsole extends PrintStream {
 	 * Allows you to perform fluent-style assertions on the size of this buffer.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	MockConsole <jv>console</jv> = MockConsole.<jsf>create</jsf>();
 	 *
 	 * 	MockRestClient

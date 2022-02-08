@@ -99,7 +99,7 @@ import org.apache.juneau.utils.*;
  *
  * <h5 class='section'>Example:</h5>
  *
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Construct a context from scratch.</jc>
  * 	BeanContext <jv>beanContext</jv> = BeanContext
  * 		.<jsm>create</jsm>()
@@ -125,7 +125,7 @@ import org.apache.juneau.utils.*;
  *
  * <h5 class='section'>Example:</h5>
  *
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// A sample bean class</jc>
  * 	<jk>public class</jk> Person {
  * 		<jk>public</jk> String getName();
@@ -138,15 +138,15 @@ import org.apache.juneau.utils.*;
  * 	BeanSession <jv>session</jv> = BeanContext.<jsf>DEFAULT</jsf>.createSession();
  *
  * 	<jc>// Wrap an existing bean in a new bean map</jc>
- * 	BeanMap&lt;Person&gt; <jv>m1</jv> = <jv>session</jv>.toBeanMap(<jk>new</jk> Person());
- * 	<jv>m1</jv>.put(<js>"name"</js>, <js>"John Smith"</js>);
- * 	<jv>m1</jv>.put(<js>"age"</js>, 45);
+ * 	BeanMap&lt;Person&gt; <jv>map1</jv> = <jv>session</jv>.toBeanMap(<jk>new</jk> Person());
+ * 	<jv>map1</jv>.put(<js>"name"</js>, <js>"John Smith"</js>);
+ * 	<jv>map1</jv>.put(<js>"age"</js>, 45);
  *
  * 	<jc>// Create a new bean instance wrapped in a new bean map</jc>
- * 	BeanMap&lt;Person&gt; <jv>m2</jv> = <jv>session</jv>.newBeanMap(Person.<jk>class</jk>);
- * 	<jv>m2</jv>.put(<js>"name"</js>, <js>"John Smith"</js>);
- * 	<jv>m2</jv>.put(<js>"age"</js>, 45);
- * 	Person <jv>p</jv> = <jv>m2</jv>.getBean();  <jc>// Get the bean instance that was created.</jc>
+ * 	BeanMap&lt;Person&gt; <jv>map2</jv> = <jv>session</jv>.newBeanMap(Person.<jk>class</jk>);
+ * 	<jv>map2</jv>.put(<js>"name"</js>, <js>"John Smith"</js>);
+ * 	<jv>map2</jv>.put(<js>"age"</js>, 45);
+ * 	Person <jv>person</jv> = <jv>map2</jv>.getBean();  <jc>// Get the bean instance that was created.</jc>
  * </p>
  *
  * <ul class='spaced-list'>
@@ -423,7 +423,7 @@ public class BeanContext extends Context {
 		 * Use this setting to reduce the visibility requirement.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with a protected class and one field.</jc>
 		 * 	<jk>protected class</jk> MyBean {
 		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
@@ -470,7 +470,7 @@ public class BeanContext extends Context {
 		 * constructors are used.  Use this setting if you want to reduce the visibility requirement.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with a protected constructor and one field.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String <jf>foo</jf>;
@@ -519,7 +519,7 @@ public class BeanContext extends Context {
 		 * Use this setting if you want to reduce the visibility requirement.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with a protected field.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>protected</jk> String <jf>foo</jf> = <js>"bar"</js>;
@@ -538,7 +538,7 @@ public class BeanContext extends Context {
 		 * <p>
 		 * Bean fields can be ignored as properties entirely by setting the value to {@link Visibility#NONE}
 		 *
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Disable using fields as properties entirely.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
@@ -573,7 +573,7 @@ public class BeanContext extends Context {
 		 * Bean interceptors can be used to intercept calls to getters and setters and alter their values in transit.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Interceptor that strips out sensitive information.</jc>
 		 * 	<jk>public class</jk> AddressInterceptor <jk>extends</jk> BeanInterceptor&lt;Address&gt; {
 		 *
@@ -632,7 +632,7 @@ public class BeanContext extends Context {
 		 * Disabled by default because it introduces a slight performance penalty during serialization.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a context that creates BeanMaps with normal put() behavior.</jc>
 		 * 	BeanContext <jv>context</jv> = BeanContext
 		 * 		.<jsm>create</jsm>()
@@ -678,7 +678,7 @@ public class BeanContext extends Context {
 		 * Use this setting if you want to reduce the visibility requirement.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with a protected getter.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String getFoo() { <jk>return</jk> <js>"foo"</js>; }
@@ -723,7 +723,7 @@ public class BeanContext extends Context {
 		 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean without a no-arg constructor.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 *
@@ -787,7 +787,7 @@ public class BeanContext extends Context {
 		 * Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean without a Serializable interface.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 *
@@ -845,7 +845,7 @@ public class BeanContext extends Context {
 		 * When enabled, ignore read-only properties (properties with getters but not setters).
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean without a Serializable interface.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 *
@@ -902,7 +902,7 @@ public class BeanContext extends Context {
 		 * The {@link Bean @Bean} annotation can be used on a class to override this setting when <jk>true</jk>.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with no properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 	}
@@ -967,7 +967,7 @@ public class BeanContext extends Context {
 		 * Setting applies to specified class and all subclasses.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String
@@ -988,12 +988,12 @@ public class BeanContext extends Context {
 		 *
 		 * <p>
 		 * This method is functionally equivalent to the following code:
-		 * <p class='bcode w800'>
-		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).properties(<jv>properties</jv>));
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).properties(<jv>properties</jv>).build());
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='jm'>{@link Bean#properties()}/{@link Bean#p()} - On an annotation on the bean class itself.
+		 * 	<li class='jma'>{@link Bean#properties()}/{@link Bean#p()} - On an annotation on the bean class itself.
 		 * </ul>
 		 *
 		 * @param beanClass The bean class.
@@ -1027,7 +1027,7 @@ public class BeanContext extends Context {
 		 * Setting applies to specified class and all subclasses.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String
@@ -1048,12 +1048,12 @@ public class BeanContext extends Context {
 		 *
 		 * <p>
 		 * This method is functionally equivalent to the following code for each entry:
-		 * <p class='bcode w800'>
-		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>key</jv>).properties(<jv>value</jv>.toString()));
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>key</jv>).properties(<jv>value</jv>.toString()).build());
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='jm'>{@link Bean#properties()} / {@link Bean#p()}- On an annotation on the bean class itself.
+		 * 	<li class='jma'>{@link Bean#properties()} / {@link Bean#p()}- On an annotation on the bean class itself.
 		 * </ul>
 		 *
 		 * @param values
@@ -1091,7 +1091,7 @@ public class BeanContext extends Context {
 		 * Setting applies to specified class and all subclasses.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String
@@ -1112,12 +1112,12 @@ public class BeanContext extends Context {
 		 *
 		 * <p>
 		 * This method is functionally equivalent to the following code:
-		 * <p class='bcode w800'>
-		 * 	<jv>builider</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).properties(<jv>properties</jv>));
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).properties(<jv>properties</jv>).build());
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='jm'>{@link Bean#properties()} / {@link Bean#p()} - On an annotation on the bean class itself.
+		 * 	<li class='jma'>{@link Bean#properties()} / {@link Bean#p()} - On an annotation on the bean class itself.
 		 * </ul>
 		 *
 		 * @param beanClassName
@@ -1145,7 +1145,7 @@ public class BeanContext extends Context {
 		 * Setting applies to specified class and all subclasses.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String
@@ -1166,12 +1166,12 @@ public class BeanContext extends Context {
 		 *
 		 * <p>
 		 * This method is functionally equivalent to the following code:
-		 * <p class='bcode w800'>
-		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).excludeProperties(<jv>properties</jv>));
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).excludeProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='jm'>{@link Bean#excludeProperties()} / {@link Bean#xp()}
+		 * 	<li class='jma'>{@link Bean#excludeProperties()} / {@link Bean#xp()}
 		 * </ul>
 		 *
 		 * @param beanClass The bean class.
@@ -1197,7 +1197,7 @@ public class BeanContext extends Context {
 		 * Setting applies to specified class and all subclasses.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String
@@ -1218,12 +1218,12 @@ public class BeanContext extends Context {
 		 *
 		 * <p>
 		 * This method is functionally equivalent to the following code for each entry:
-		 * <p class='bcode w800'>
-		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>key</jv>).excludeProperties(<jv>value</jv>.toString()));
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>key</jv>).excludeProperties(<jv>value</jv>.toString()).build());
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='jm'>{@link Bean#excludeProperties()} / {@link Bean#xp()}
+		 * 	<li class='jma'>{@link Bean#excludeProperties()} / {@link Bean#xp()}
 		 * </ul>
 		 *
 		 * @param values
@@ -1253,7 +1253,7 @@ public class BeanContext extends Context {
 		 * Setting applies to specified class and all subclasses.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String
@@ -1274,12 +1274,12 @@ public class BeanContext extends Context {
 		 *
 		 * <p>
 		 * This method is functionally equivalent to the following code:
-		 * <p class='bcode w800'>
-		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).excludeProperties(<jv>properties</jv>));
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).excludeProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='jm'>{@link Bean#excludeProperties()} / {@link Bean#xp()}
+		 * 	<li class='jma'>{@link Bean#excludeProperties()} / {@link Bean#xp()}
 		 * </ul>
 		 *
 		 * @param beanClassName
@@ -1303,7 +1303,7 @@ public class BeanContext extends Context {
 		 * for both serializers and parsers.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String <jf>foo</jf>, <jf>bar</jf>, <jf>baz</jf>;
@@ -1331,12 +1331,12 @@ public class BeanContext extends Context {
 		 *
 		 * <p>
 		 * This method is functionally equivalent to the following code:
-		 * <p class='bcode w800'>
-		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).readOnlyProperties(<jv>properties</jv>));
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).readOnlyProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='jm'>{@link Bean#readOnlyProperties()} / {@link Bean#ro()}
+		 * 	<li class='jma'>{@link Bean#readOnlyProperties()} / {@link Bean#ro()}
 		 * </ul>
 		 *
 		 * @param beanClass The bean class.
@@ -1358,7 +1358,7 @@ public class BeanContext extends Context {
 		 * for both serializers and parsers.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String <jf>foo</jf>, <jf>bar</jf>, <jf>baz</jf>;
@@ -1386,12 +1386,12 @@ public class BeanContext extends Context {
 		 *
 		 * <p>
 		 * This method is functionally equivalent to the following code for each entry:
-		 * <p class='bcode w800'>
-		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>key</jv>).readOnlyProperties(<jv>value</jv>.toString()));
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>key</jv>).readOnlyProperties(<jv>value</jv>.toString()).build());
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='jm'>{@link Bean#readOnlyProperties()} / {@link Bean#ro()}
+		 * 	<li class='jma'>{@link Bean#readOnlyProperties()} / {@link Bean#ro()}
 		 * </ul>
 		 *
 		 * @param values
@@ -1417,7 +1417,7 @@ public class BeanContext extends Context {
 		 * for both serializers and parsers.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String <jf>foo</jf>, <jf>bar</jf>, <jf>baz</jf>;
@@ -1445,12 +1445,12 @@ public class BeanContext extends Context {
 		 *
 		 * <p>
 		 * This method is functionally equivalent to the following code:
-		 * <p class='bcode w800'>
-		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).readOnlyProperties(<jv>properties</jv>));
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).readOnlyProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='jm'>{@link Bean#readOnlyProperties()} / {@link Bean#ro()}
+		 * 	<li class='jma'>{@link Bean#readOnlyProperties()} / {@link Bean#ro()}
 		 * </ul>
 		 *
 		 * @param beanClassName
@@ -1474,7 +1474,7 @@ public class BeanContext extends Context {
 		 * for both serializers and parsers.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String <jf>foo</jf>, <jf>bar</jf>, <jf>baz</jf>;
@@ -1501,12 +1501,12 @@ public class BeanContext extends Context {
 		 *
 		 * <p>
 		 * This method is functionally equivalent to the following code:
-		 * <p class='bcode w800'>
-		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).writeOnlyProperties(<jv>properties</jv>));
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClass</jv>).writeOnlyProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='jm'>{@link Bean#writeOnlyProperties()} / {@link Bean#wo()}
+		 * 	<li class='jma'>{@link Bean#writeOnlyProperties()} / {@link Bean#wo()}
 		 * </ul>
 		 *
 		 * @param beanClass The bean class.
@@ -1528,7 +1528,7 @@ public class BeanContext extends Context {
 		 * for both serializers and parsers.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String <jf>foo</jf>, <jf>bar</jf>, <jf>baz</jf>;
@@ -1555,12 +1555,12 @@ public class BeanContext extends Context {
 		 *
 		 * <p>
 		 * This method is functionally equivalent to the following code for each entry:
-		 * <p class='bcode w800'>
-		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>key</jv>).writeOnlyProperties(<jv>value</jv>.toString()));
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>key</jv>).writeOnlyProperties(<jv>value</jv>.toString()).build());
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='jm'>{@link Bean#writeOnlyProperties()} / {@link Bean#wo()}
+		 * 	<li class='jma'>{@link Bean#writeOnlyProperties()} / {@link Bean#wo()}
 		 * </ul>
 		 *
 		 * @param values
@@ -1586,7 +1586,7 @@ public class BeanContext extends Context {
 		 * for both serializers and parsers.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String <jf>foo</jf>, <jf>bar</jf>, <jf>baz</jf>;
@@ -1613,12 +1613,12 @@ public class BeanContext extends Context {
 		 *
 		 * <p>
 		 * This method is functionally equivalent to the following code:
-		 * <p class='bcode w800'>
-		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).writeOnlyProperties(<jv>properties</jv>));
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.annotations(BeanAnnotation.<jsm>create</jsm>(<jv>beanClassName</jv>).writeOnlyProperties(<jv>properties</jv>).build());
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='jm'>{@link Bean#writeOnlyProperties()} / {@link Bean#wo()}
+		 * 	<li class='jma'>{@link Bean#writeOnlyProperties()} / {@link Bean#wo()}
 		 * </ul>
 		 *
 		 * @param beanClassName
@@ -1661,7 +1661,7 @@ public class BeanContext extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// POJOs with @Bean(name) annotations.</jc>
 		 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
 		 * 	<jk>public class</jk> Foo {...}
@@ -1687,7 +1687,7 @@ public class BeanContext extends Context {
 		 * <p>
 		 * Another option is to use the {@link Bean#dictionary()} annotation on the POJO class itself:
 		 *
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Instead of by parser, define a bean dictionary on a class through an annotation.</jc>
 		 * 	<jc>// This applies to all properties on this class and all subclasses.</jc>
 		 * 	<ja>@Bean</ja>(dictionary={Foo.<jk>class</jk>,Bar.<jk>class</jk>})
@@ -1699,7 +1699,7 @@ public class BeanContext extends Context {
 		 *
 		 * <p>
 		 * 	A typical usage is to allow for HTML documents to be parsed back into HTML beans:
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Use the predefined HTML5 bean dictionary which is a BeanDictionaryList.</jc>
 		 * 	ReaderParser <jv>parser</jv> = HtmlParser
 		 * 		.<jsm>create</jsm>()
@@ -1764,7 +1764,7 @@ public class BeanContext extends Context {
 		 * a single class as opposed to globally.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// POJOs with @Bean(name) annotations.</jc>
 		 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
 		 * 	<jk>public class</jk> Foo {...}
@@ -1790,7 +1790,7 @@ public class BeanContext extends Context {
 		 * This is functionally equivalent to the {@link Bean#dictionary()} annotation.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li class='ja'>{@link Bean#dictionary()}
+		 * 	<li class='jma'>{@link Bean#dictionary()}
 		 * 	<li class='jm'>{@link #beanDictionary(Class...)}
 		 * </ul>
 		 *
@@ -1814,7 +1814,7 @@ public class BeanContext extends Context {
 		 * Examples are used in cases such as POJO examples in Swagger documents.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
@@ -1824,8 +1824,8 @@ public class BeanContext extends Context {
 		 *
 		 * <p>
 		 * This is a shorthand method for the following code:
-		 * <p class='bcode w800'>
-		 * 		<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>pojoClass</jv>).example(SimpleJson.<jsf>DEFAULT</jsf>.toString(<jv>o</jv>)))
+		 * <p class='bjava'>
+		 * 		<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>pojoClass</jv>).example(SimpleJson.<jsf>DEFAULT</jsf>.toString(<jv>object</jv>)).build())
 		 * </p>
 		 *
 		 * <ul class='notes'>
@@ -1865,7 +1865,7 @@ public class BeanContext extends Context {
 		 * Setting applies to specified class and all subclasses.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that excludes the 'foo' and 'bar' properties on the MyBean class.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
@@ -1875,8 +1875,8 @@ public class BeanContext extends Context {
 		 *
 		 * <p>
 		 * This is a shorthand method for the following code:
-		 * <p class='bcode w800'>
-		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>pojoClass</jv>).example(<jv>json</jv>))
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.annotations(MarshalledAnnotation.<jsm>create</jsm>(<jv>pojoClass</jv>).example(<jv>json</jv>).build())
 		 * </p>
 		 *
 		 * <p>
@@ -1917,7 +1917,7 @@ public class BeanContext extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with a fluent setter.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> MyBean foo(String <jv>value</jv>) {...}
@@ -1969,7 +1969,7 @@ public class BeanContext extends Context {
 		 * Identical to {@link #findFluentSetters()} but enables it on a specific class only.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with a fluent setter.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> MyBean foo(String <jv>value</jv>) {...}
@@ -2010,7 +2010,7 @@ public class BeanContext extends Context {
 		 * Otherwise, a {@code BeanRuntimeException} is thrown.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with a property that throws an exception.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String getFoo() {
@@ -2059,7 +2059,7 @@ public class BeanContext extends Context {
 		 * Otherwise, a {@code BeanRuntimeException} is thrown.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with a property that throws an exception.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public void</jk> setFoo(String <jv>foo</jv>) {
@@ -2108,7 +2108,7 @@ public class BeanContext extends Context {
 		 * Otherwise, it will be silently ignored.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with a property with a getter but not a setter.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public void</jk> getFoo() {
@@ -2160,7 +2160,7 @@ public class BeanContext extends Context {
 		 * When enabled, methods and fields marked as <jk>transient</jk> will not be ignored as bean properties.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with a transient field.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public transient</jk> String <jf>foo</jf> = <js>"foo"</js>;
@@ -2211,7 +2211,7 @@ public class BeanContext extends Context {
 		 * Otherwise, a {@code BeanRuntimeException} is thrown.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with a single property.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String <jf>foo</jf>;
@@ -2258,7 +2258,7 @@ public class BeanContext extends Context {
 		 * Otherwise it will be silently ignored.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with a single property.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String <jf>foo</jf>;
@@ -2306,7 +2306,7 @@ public class BeanContext extends Context {
 		 * parse).
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean interface.</jc>
 		 * 	<jk>public interface</jk> MyBean {
 		 * 		...
@@ -2345,7 +2345,7 @@ public class BeanContext extends Context {
 		 * parse).
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with a single property.</jc>
 		 * 	<jk>public interface</jk> MyBean {
 		 * 		...
@@ -2384,7 +2384,7 @@ public class BeanContext extends Context {
 		 * When specified, only the list of properties defined on the interface class will be used during serialization.
 		 * Additional properties on subclasses will be ignored.
 		 *
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Parent class or interface</jc>
 		 * 	<jk>public abstract class</jk> A {
 		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"foo"</js>;
@@ -2430,7 +2430,7 @@ public class BeanContext extends Context {
 		 * When specified, only the list of properties defined on the interface class will be used during serialization
 		 * of implementation classes.  Additional properties on subclasses will be ignored.
 		 *
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Parent class or interface</jc>
 		 * 	<jk>public abstract class</jk> A {
 		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"foo"</js>;
@@ -2480,14 +2480,14 @@ public class BeanContext extends Context {
 		 * {@link ObjectSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Define a POJO swap that skips serializing beans if we're in the UK.</jc>
 		 * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> StringSwap&lt;MyBean&gt; {
 		 * 		<ja>@Override</ja>
-		 * 		public String swap(BeanSession <jv>session</jv>, MyBean <jv>o</jv>) throws Exception {
+		 * 		<jk>public</jk> String swap(BeanSession <jv>session</jv>, MyBean <jv>bean/jv>) <jk>throws</jk> Exception {
 		 * 			<jk>if</jk> (<jv>session</jv>.getLocale().equals(Locale.<jsf>UK</jsf>))
 		 * 				<jk>return null</jk>;
-		 * 			<jk>return</jk> <jv>o</jv>.toString();
+		 * 			<jk>return</jk> <jv>bean</jv>.toString();
 		 * 		}
 		 * 	}
 		 *
@@ -2497,14 +2497,6 @@ public class BeanContext extends Context {
 		 * 		.locale(Locale.<jsf>UK</jsf>)
 		 * 		.swaps(MyBeanSwap.<jk>class</jk>)
 		 * 		.build();
-		 *
-		 * 	<jc>// Define on session-args instead.</jc>
-		 * 	SerializerSessionArgs <jv>sessionArgs</jv> = <jk>new</jk> SerializerSessionArgs().locale(Locale.<jsf>UK</jsf>);
-		 * 	<jk>try</jk> (WriterSerializerSession <jv>session</jv> = <jv>serializer</jv>.createSession(<jv>sessionArgs</jv>)) {
-		 *
-		 * 		<jc>// Produces "null" if in the UK.</jc>
-		 * 		String <jv>json</jv> = <jv>session</jv>.serialize(<jk>new</jk> MyBean());
-		 * 	}
 		 * </p>
 		 *
 		 * <ul class='seealso'>
@@ -2532,14 +2524,14 @@ public class BeanContext extends Context {
 		 * serializer or parser.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Define a POJO swap that skips serializing beans if the media type is application/json.</jc>
 		 * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> StringSwap&lt;MyBean&gt; {
 		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> String swap(BeanSession <jv>session</jv>, MyBean <jv>o</jv>) throws Exception {
+		 * 		<jk>public</jk> String swap(BeanSession <jv>session</jv>, MyBean <jv>bean</jv>) <jk>throws</jk> Exception {
 		 * 			<jk>if</jk> (<jv>session</jv>.getMediaType().equals(<js>"application/json"</js>))
 		 * 				<jk>return null</jk>;
-		 * 			<jk>return</jk> <jv>o</jv>.toString();
+		 * 			<jk>return</jk> <jv>bean</jv>.toString();
 		 * 		}
 		 * 	}
 		 *
@@ -2548,14 +2540,6 @@ public class BeanContext extends Context {
 		 * 		.<jsm>create</jsm>()
 		 * 		.mediaType(MediaType.<jsf>JSON</jsf>)
 		 * 		.build();
-		 *
-		 * 	<jc>// Define on session-args instead.</jc>
-		 * 	SerializerSessionArgs <jv>sessionArgs</jv> = <jk>new</jk> SerializerSessionArgs().mediaType(MediaType.<jsf>JSON</jsf>);
-		 * 	<jk>try</jk> (WriterSerializerSession <jv>session</jv> = <jv>serializer</jv>.createSession(<jv>sessionArgs</jv>)) {
-		 *
-		 * 		<jc>// Produces "null" since it's JSON.</jc>
-		 * 		String <jv>json</jv> = <jv>session</jv>.serialize(<jk>new</jk> MyBean());
-		 * 	}
 		 * </p>
 		 *
 		 * <ul class='seealso'>
@@ -2587,7 +2571,7 @@ public class BeanContext extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with a single property.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
@@ -2677,7 +2661,7 @@ public class BeanContext extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that ignores beans in the specified packages.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
@@ -2744,7 +2728,7 @@ public class BeanContext extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with a single property.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String <jf>fooBarBaz</jf> = <js>"fooBarBaz"</js>;
@@ -2779,7 +2763,7 @@ public class BeanContext extends Context {
 		 * Same as {@link #propertyNamer(Class)} but allows you to specify a namer for a specific class.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with a single property.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String <jf>fooBarBaz</jf> = <js>"fooBarBaz"</js>;
@@ -2827,7 +2811,7 @@ public class BeanContext extends Context {
 		 * in the Java file.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String <jf>c</jf> = <js>"1"</js>;
@@ -2876,7 +2860,7 @@ public class BeanContext extends Context {
 		 * Same as {@link #sortProperties()} but allows you to specify individual bean classes instead of globally.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A bean with 3 properties.</jc>
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String <jf>c</jf> = <js>"1"</js>;
@@ -2921,7 +2905,7 @@ public class BeanContext extends Context {
 		 * but not <c>p1</c> or <c>p2</c>.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jk>public class</jk> C1 {
 		 * 		<jk>public int</jk> getP1();
 		 * 	}
@@ -2979,20 +2963,20 @@ public class BeanContext extends Context {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Sample swap for converting Dates to ISO8601 strings.</jc>
 		 * 	<jk>public class</jk> MyDateSwap <jk>extends</jk> StringSwap&lt;Date&gt; {
 		 * 		<jc>// ISO8601 formatter.</jc>
 		 * 		<jk>private</jk> DateFormat <jf>format</jf> = <jk>new</jk> SimpleDateFormat(<js>"yyyy-MM-dd'T'HH:mm:ssZ"</js>);
 		 *
 		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> String swap(BeanSession <jv>session</jv>, Date <jv>o</jv>) {
-		 * 			<jk>return</jk> <jf>format</jf>.format(<jv>o</jv>);
+		 * 		<jk>public</jk> String swap(BeanSession <jv>session</jv>, Date <jv>date</jv>) {
+		 * 			<jk>return</jk> <jf>format</jf>.format(<jv>date</jv>);
 		 * 		}
 		 *
 		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> Date unswap(BeanSession <jv>session</jv>, String <jv>o</jv>, ClassMeta <jv>hint</jv>) <jk>throws</jk> Exception {
-		 * 			<jk>return</jk> <jf>format</jf>.parse(<jv>o</jv>);
+		 * 		<jk>public</jk> Date unswap(BeanSession <jv>session</jv>, String <jv>string</jv>, ClassMeta <jv>hint</jv>) <jk>throws</jk> Exception {
+		 * 			<jk>return</jk> <jf>format</jf>.parse(<jv>string</jv>);
 		 * 		}
 		 * 	}
 		 *
@@ -3017,7 +3001,7 @@ public class BeanContext extends Context {
 		 * 		.build();
 		 *
 		 * 	<jc>// Use our parser to parse a bean.</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(json, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
 		 * <ul class='notes'>
@@ -3058,11 +3042,11 @@ public class BeanContext extends Context {
 		 * A shortcut for defining a {@link FunctionalSwap}.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that performs a custom format for DAte objects.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
-		 * 		.swap(Date.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -&gt; <jsm>format</jsm>(<jv>x</jv>))
+		 * 		.swap(Date.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -> <jsm>format</jsm>(<jv>x</jv>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3080,11 +3064,11 @@ public class BeanContext extends Context {
 		 * A shortcut for defining a {@link FunctionalSwap}.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that performs a custom format for DAte objects.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
-		 * 		.swap(Date.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -&gt; <jsm>format</jsm>(<jv>x</jv>), <jv>x</jv> -&gt; <jsm>parse</jsm>(<jv>x</jv>))
+		 * 		.swap(Date.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -> <jsm>format</jsm>(<jv>x</jv>), <jv>x</jv> -> <jsm>parse</jsm>(<jv>x</jv>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3125,14 +3109,14 @@ public class BeanContext extends Context {
 		 * {@link ObjectSwap#unswap(BeanSession, Object, ClassMeta, String)} methods.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Define a POJO swap that skips serializing beans if the time zone is GMT.</jc>
 		 * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> StringSwap&lt;MyBean&gt; {
 		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> String swap(BeanSession <jv>session</jv>, MyBean <jv>o</jv>) throws Exception {
+		 * 		<jk>public</jk> String swap(BeanSession <jv>session</jv>, MyBean <jv>bean</jv>) <jk>throws</jk> Exception {
 		 * 			<jk>if</jk> (<jv>session</jv>.getTimeZone().equals(TimeZone.<jsf>GMT</jsf>))
 		 * 				<jk>return null</jk>;
-		 * 			<jk>return</jk> <jv>o</jv>.toString();
+		 * 			<jk>return</jk> <jv>bean</jv>.toString();
 		 * 		}
 		 * 	}
 		 *
@@ -3141,14 +3125,6 @@ public class BeanContext extends Context {
 		 * 		.<jsm>create</jsm>()
 		 * 		.timeZone(TimeZone.<jsf>GMT</jsf>)
 		 * 		.build();
-		 *
-		 * 	<jc>// Define on session-args instead.</jc>
-		 * 	SerializerSessionArgs <jv>sessionArgs</jv> = <jk>new</jk> SerializerSessionArgs().timeZone(TimeZone.<jsf>GMT</jsf>);
-		 * 	<jk>try</jk> (WriterSerializerSession <jv>session</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.createSession(<jv>sessionArgs</jv>)) {
-		 *
-		 * 		<jc>// Produces "null" since the time zone is GMT.</jc>
-		 * 		String <jv>json</jv> = <jv>session</jv>.serialize(<jk>new</jk> MyBean());
-		 * 	}
 		 * </p>
 		 *
 		 * <ul class='seealso'>
@@ -3177,7 +3153,7 @@ public class BeanContext extends Context {
 		 * It is also used to specify element names in XML.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Use _type='mybean' to identify this bean.</jc>
 		 * 	<jk>public class</jk> MyBean {...}
 		 *
@@ -3219,7 +3195,7 @@ public class BeanContext extends Context {
 		 * parser knows the data type to reconstruct.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// POJOs with @Bean(name) annotations.</jc>
 		 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
 		 * 	<jk>public class</jk> Foo {...}
@@ -3249,7 +3225,7 @@ public class BeanContext extends Context {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 *
 		 * 	<jc>// Parse bean.</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
+		 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
 		 * <ul class='seealso'>
@@ -3275,7 +3251,7 @@ public class BeanContext extends Context {
 		 * Same as {@link #typePropertyName(String)} except targets a specific bean class instead of globally.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// POJOs with @Bean(name) annotations.</jc>
 		 * 	<ja>@Bean</ja>(typeName=<js>"foo"</js>)
 		 * 	<jk>public class</jk> Foo {...}
@@ -3320,7 +3296,7 @@ public class BeanContext extends Context {
 		 * When enabled, enums are always serialized by name, not using {@link Object#toString()}.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer with debug enabled.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
@@ -3334,15 +3310,15 @@ public class BeanContext extends Context {
 		 * 		<jsf>TWO</jsf>(2),
 		 * 		<jsf>THREE</jsf>(3);
 		 *
-		 * 		<jk>private int</jk> <jf>i</jf>;
+		 * 		<jk>private int</jk> <jf>value</jf>;
 		 *
-		 * 		Option(<jk>int</jk> i) {
-		 * 			<jk>this</jk>.<jf>i</jf> = i;
+		 * 		Option(<jk>int</jk> <jv>value</jv>) {
+		 * 			<jk>this</jk>.<jf>value</jf> = <jv>value</jv>;
 		 * 		}
 		 *
 		 * 		<ja>@Override</ja>
 		 * 		<jk>public</jk> String toString() {
-		 * 			<jk>return</jk> String.<jsm>valueOf</jsm>(<jf>i</jf>);
+		 * 			<jk>return</jk> String.<jsm>valueOf</jsm>(<jf>value</jf>);
 		 * 		}
 		 * 	}
 		 * </p>
@@ -3405,7 +3381,7 @@ public class BeanContext extends Context {
 		 * <br>Most {@link Bean @Bean} annotations will be ignored.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that only uses the built-in java bean introspector for finding properties.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
@@ -3660,21 +3636,21 @@ public class BeanContext extends Context {
 	 * Wraps an object inside a {@link BeanMap} object (a modifiable {@link Map}).
 	 *
 	 * <p>
-	 * This is a shortcut for the following code:  <c>createSession().build().toBeanMap(<jv>c</jv>);</c>
+	 * This is a shortcut for the following code:  <c>createSession().build().toBeanMap(<jv>object</jv>);</c>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Construct a bean map around a bean instance</jc>
-	 * 	BeanMap&lt;Person&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.forBean(<jk>new</jk> Person());
+	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.toBeanMap(<jk>new</jk> Person());
 	 * </p>
 	 *
 	 * @param <T> The class of the object being wrapped.
-	 * @param o The object to wrap in a map interface.  Must not be null.
+	 * @param object The object to wrap in a map interface.  Must not be null.
 	 * @return The wrapped object.
 	 * @see BeanSession#toBeanMap(Object)
 	 */
-	public <T> BeanMap<T> toBeanMap(T o) {
-		return defaultSession.toBeanMap(o);
+	public <T> BeanMap<T> toBeanMap(T object) {
+		return defaultSession.toBeanMap(object);
 	}
 
 	/**
@@ -3682,12 +3658,12 @@ public class BeanContext extends Context {
 	 * property values.
 	 *
 	 * <p>
-	 * This is a shortcut for the following code:  <c>createSession().build().newBeanMap(<jv>c</jv>);</c>
+	 * This is a shortcut for the following code:  <c>createSession().build().newBeanMap(<jv>_class</jv>);</c>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Construct a new bean map wrapped around a new Person object</jc>
-	 * 	BeanMap&lt;Person&gt; bm = BeanContext.<jsf>DEFAULT</jsf>.newBeanMap(Person.<jk>class</jk>);
+	 * 	BeanMap&lt;Person&gt; <jv>beanMap</jv> = BeanContext.<jsf>DEFAULT</jsf>.newBeanMap(Person.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param <T> The class of the object being wrapped.

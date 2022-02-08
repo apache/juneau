@@ -28,7 +28,7 @@ import org.apache.juneau.internal.*;
  * Allows referencing an external resource for extended documentation.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	ExternalDocumentation <jv>extDoc</jv> = <jsm>externalDocumentation</jsm>(<js>"https://swagger.io"</js>, <js>"Find more info here"</js>);
  *
@@ -38,7 +38,7 @@ import org.apache.juneau.internal.*;
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	<jv>json</jv> = <jv>extDoc</jv>.toString();
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjson'>
  * 	<jc>// Output</jc>
  * 	{
  * 		<js>"description"</js>: <js>"Find more info here"</js>,

@@ -59,14 +59,14 @@ public enum HookEvent {
 	 * </ul>
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(...)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 	 *
 	 * 		<jc>// Add a request attribute to all incoming requests.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>START_CALL</jsf>)
-	 * 		<jk>public void</jk> onStartCall(HttpServletRequest req) {
-	 * 			req.setAttribute(<js>"foobar"</js>, <jk>new</jk> FooBar());
+	 * 		<jk>public void</jk> onStartCall(HttpServletRequest <jv>req</jv>) {
+	 * 			<jv>req</jv>.setAttribute(<js>"foobar"</js>, <jk>new</jk> FooBar());
 	 * 		}
 	 * 	}
 	 * </p>
@@ -173,14 +173,14 @@ public enum HookEvent {
 	 * </ul>
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(...)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 	 *
 	 * 		<jc>// Log the incoming request.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>PRE_CALL</jsf>)
-	 * 		<jk>public void</jk> onPreCall(Accept accept, Logger logger) {
-	 * 			logger.fine(<js>"Accept {0} header found."</js>, accept);
+	 * 		<jk>public void</jk> onPreCall(Accept <jv>accept</jv>, Logger <jv>logger</jv>) {
+	 * 			<jv>logger</jv>.fine(<js>"Accept {0} header found."</js>, <jv>accept</jv>);
 	 * 		}
 	 * 	}
 	 * </p>
@@ -222,14 +222,14 @@ public enum HookEvent {
 	 * The list of valid parameter types are the same as {@link #PRE_CALL}.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(...)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 	 *
 	 * 		<jc>// Log the result of the request.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>POST_CALL</jsf>)
-	 * 		<jk>public void</jk> onPostCall(RestResponse res, Logger logger) {
-	 * 			logger.fine(<js>Output {0} was set on the response."</js>, res.getOutput());
+	 * 		<jk>public void</jk> onPostCall(RestResponse <jv>res</jv>, Logger <jv>logger</jv>) {
+	 * 			<jv>logger</jv>.fine(<js>Output {0} was set on the response."</js>, <jv>res</jv>.getOutput());
 	 * 		}
 	 * 	}
 	 * </p>
@@ -279,19 +279,19 @@ public enum HookEvent {
 	 * </ul>
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(...)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 	 *
 	 * 		<jc>// Log the time it took to execute the request.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>END_CALL</jsf>)
-	 * 		<jk>public void</jk> onEndCall(HttpServletRequest req, Logger logger) {
-	 * 			Exception e = (Exception)req.getAttribute(<js>"Exception"</js>);
-	 * 			Long execTime = (Long)req.getAttribute(<js>"ExecTime"</js>);
-	 * 			<jk>if</jk> (e != <jk>null</jk>)
-	 * 				logger.warn(e, <js>"Request failed in {0}ms."</js>, execTime);
+	 * 		<jk>public void</jk> onEndCall(HttpServletRequest <jv>req</jv>, Logger <jv>logger</jv>) {
+	 * 			Exception <jv>exception</jv> = (Exception)<jv>req</jv>.getAttribute(<js>"Exception"</js>);
+	 * 			Long <jv>execTime</jv> = (Long)<jv>req</jv>.getAttribute(<js>"ExecTime"</js>);
+	 * 			<jk>if</jk> (<jv>exception</jv> != <jk>null</jk>)
+	 * 				<jv>logger</jv>.warn(<jv>exception</jv>, <js>"Request failed in {0}ms."</js>, <jv>execTime</jv>);
 	 * 			<jk>else</jk>
-	 * 				logger.fine(<js>"Request finished in {0}ms."</js>, execTime);
+	 * 				<jv>logger</jv>.fine(<js>"Request finished in {0}ms."</js>, <jv>execTime</jv>);
 	 * 		}
 	 * 	}
 	 * </p>
@@ -333,7 +333,7 @@ public enum HookEvent {
 	 * of an internal data structure.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(...)
 	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> ResourceJena {
 	 *
@@ -341,7 +341,7 @@ public enum HookEvent {
 	 * 		<jk>private</jk> Map&lt;Integer,Pet&gt; <jf>petDB</jf>;
 	 *
 	 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-	 * 		<jk>public void</jk> onInit(RestContext.Builder builder) <jk>throws</jk> Exception {
+	 * 		<jk>public void</jk> onInit(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 	 * 			<jc>// Load our database from a local JSON file.</jc>
 	 * 			<jf>petDB</jf> = JsonParser.<jsf>DEFAULT</jsf>.parse(getClass().getResourceAsStream(<js>"PetStore.json"</js>), LinkedHashMap.<jk>class</jk>, Integer.<jk>class</jk>, Pet.<jk>class</jk>);
 	 * 		}
@@ -443,7 +443,7 @@ public enum HookEvent {
 	 * be specified.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(...)
 	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> ResourceJena {
 	 *

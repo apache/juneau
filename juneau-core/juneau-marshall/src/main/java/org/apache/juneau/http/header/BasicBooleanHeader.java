@@ -26,7 +26,7 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Foo: true
  * </p>
  *
@@ -175,9 +175,9 @@ public class BasicBooleanHeader extends BasicHeader {
 	 * Provides the ability to perform fluent-style assertions on this header.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the response header Foo is true.</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
 	 * 		.getHeader(<js>"Foo"</js>).asBooleanHeader().assertBoolean().isTrue();

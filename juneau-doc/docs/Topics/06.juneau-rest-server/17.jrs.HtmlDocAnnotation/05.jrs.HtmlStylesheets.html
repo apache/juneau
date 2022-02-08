@@ -19,7 +19,7 @@
 	<p>
 		The sample root page renders in the default "devops" look-and-feel:
 	</p>
-	<p class='bcode w800'>
+	<p class='bcode'>
 		|	http://localhost:10000
 	</p>
 	<img class='bordered w800' src='doc-files/jrs.Stylesheets.0.png'>
@@ -30,21 +30,21 @@
 	<p>
 		For example, the "light" look-and-feel:
 	</p>
-	<p class='bcode w800'>
+	<p class='bcode'>
 		|	http://localhost:10000/?stylesheet=styles%2Flight.css
 	</p>
 	<img class='bordered w800' src='doc-files/jrs.Stylesheets.2.png'>
 	<p>
 		And the "dark" look-and-feel:
 	</p>
-	<p class='bcode w800'>
+	<p class='bcode'>
 		|	http://localhost:10000/?stylesheet=styles%2Fdark.css
 	</p>
 	<img class='bordered w800' src='doc-files/jrs.Stylesheets.3.png'>
 	<p>
 		The stylesheet URL is controlled by the {@link oaj.html.annotation.HtmlDocConfig#stylesheet() @HtmlDocConfig(stylesheet)} annotation.
 		The {@link oajr.config.BasicUniversalConfig} interface defines the stylesheet served up as a static file:
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@HtmlDocConfig</ja>(
 		|		stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>
 		|	)
@@ -59,7 +59,7 @@
 		To provide your own stylesheet, simply override the stylesheet attribute and point to a different
 		file:	
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@HtmlDocConfig</ja>(
 		|		stylesheet=<js>"servlet:/htdocs/themes/my-style.css"</js>
 		|	)
@@ -73,7 +73,7 @@
 	<p>
 		In case you're curious about how the menu item works, it's defined via a widget:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(...)
 		|	<ja>@HtmlDocConfig</ja>(
 		|		widgets={
@@ -95,7 +95,7 @@
 		specialized widget for creating pop-up menus.
 		In the case of <l>StyleMenuItem</l>, it's simply returning a list of links wrapped in a div tag:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
 		|
 		|	<jk>public class</jk> StyleMenuItem <jk>extends</jk> MenuItemWidget {
@@ -103,18 +103,18 @@
 		|		<jk>private static final</jk> String[] <jsf>BUILT_IN_STYLES</jsf> = {<js>"devops"</js>, <js>"light"</js>, <js>"original"</js>, <js>"dark"</js>};
 		|	
 		|		<ja>@Override</ja> <jc>/* Widget */</jc>
-		|		<jk>public</jk> String getLabel(RestRequest req) {
+		|		<jk>public</jk> String getLabel(RestRequest <jv>req</jv>) {
 		|			<jk>return</jk> <js>"styles"</js>;
 		|		}
 		|
 		|		<ja>@Override</ja> <jc>/* MenuItemWidget */</jc>
-		|		<jk>public</jk> Div getContent(RestRequest req) <jk>throws</jk> Exception {
-		|			Div div = <jsm>div</jsm>();
-		|			<jk>for</jk> (String s : <jsf>BUILT_IN_STYLES</jsf>) {
-		|				java.net.URI uri = req.getUri(<jk>true</jk>, <jk>new</jk> AMap&lt;String,String&gt;().append(<js>"stylesheet"</js>, <js>"styles/"</js>+s+<js>".css"</js>));
-		|				div.children(<jsm>a</jsm>(uri, s), <jsm>br</jsm>());
+		|		<jk>public</jk> Div getContent(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
+		|			Div <jv>div</jv> = <jsm>div</jsm>();
+		|			<jk>for</jk> (String <jv>style</jv> : <jsf>BUILT_IN_STYLES</jsf>) {
+		|				java.net.URI <jk>uri</jk> = <jv>req</jv>.getUri(<jk>true</jk>, <jk>new</jk> AMap&lt;String,String&gt;().append(<js>"stylesheet"</js>, <js>"styles/"</js>+s+<js>".css"</js>));
+		|				<jv>div</jv>.children(<jsm>a</jsm>(<jv>uri</jv>, <jv>style</jv>), <jsm>br</jsm>());
 		|			}
-		|			<jk>return</jk> div;
+		|			<jk>return</jk> <jv>div</jv>;
 		|		}
 		|	}
 	</p>

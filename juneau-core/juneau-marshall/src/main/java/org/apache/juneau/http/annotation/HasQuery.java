@@ -43,17 +43,17 @@ import java.lang.annotation.*;
 	{@code RestRequestgetBody()} method for <c>application/x-www-form-urlencoded POST</c> calls.
  </p>
 <h5 class='figure'>Example:</h5>
-<p class='bcode w800'>
+<p class='bjava'>
 	<ja>@RestGet</ja>
 	<jk>public void</jk> doGet(<ja>@HasQuery</ja>(<js>"p1"</js>) <jk>boolean</jk> <jv>p1</jv>) {...}
 </p>
 <p>
 	This is functionally equivalent to the following code:
 </p>
-<p class='bcode w800'>
+<p class='bjava'>
 	<ja>@RestGet</ja>
 	<jk>public void</jk> doGet(RestRequest <jv>req</jv>) {
-		<jk>boolean</jk> <jv>p1</jv> = <jv>req</jv>.hasQuery(<js>"p1"</js>);
+		<jk>boolean</jk> <jv>p1</jv> = <jv>req</jv>.getQueryParam(<js>"p1"</js>).isPresent();
 		...
 	}
 </p>
@@ -122,11 +122,11 @@ public @interface HasQuery {
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the existence of a query entry:
-	 * <p class='bcode w800'>
-	 * 	<jk>public</jk> Order placeOrder(<ja>@HasQuery</ja>(name=<js>"petId"</js>) <jk>boolean</jk> hasPetId) {...}
+	 * <p class='bjava'>
+	 * 	<jk>public</jk> Order placeOrder(<ja>@HasQuery</ja>(name=<js>"petId"</js>) <jk>boolean</jk> <jv>hasPetId</jv>) {...}
 	 * </p>
-	 * <p class='bcode w800'>
-	 * 	<jk>public</jk> Order placeOrder(<ja>@HasQuery</ja>(<js>"petId"</js>) <jk>boolean</jk> hasPetId) {...}
+	 * <p class='bjava'>
+	 * 	<jk>public</jk> Order placeOrder(<ja>@HasQuery</ja>(<js>"petId"</js>) <jk>boolean</jk> <jv>hasPetId</jv>) {...}
 	 * </p>
 	 */
 	String value() default "";

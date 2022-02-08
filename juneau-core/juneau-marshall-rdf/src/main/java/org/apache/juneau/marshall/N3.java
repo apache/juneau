@@ -21,16 +21,16 @@ import org.apache.juneau.jena.*;
  * 	The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.
  *
  * <h5 class='figure'>Examples:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
- * 	N3 n3 = <jk>new</jk> N3();
- * 	MyPojo myPojo = n3.read(string, MyPojo.<jk>class</jk>);
- * 	String string = n3.write(myPojo);
+ * 	N3 <jv>n3</jv> = <jk>new</jk> N3();
+ * 	MyPojo <jv>myPojo</jv> = <jv>n3</jv>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = <jv>n3</jv>.write(<jv>myPojo</jv>);
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  *	<jc>// Using DEFAULT instance.</jc>
- * 	MyPojo myPojo = N3.<jsf>DEFAULT</jsf>.read(string, MyPojo.<jk>class</jk>);
- * 	String string = N3.<jsf>DEFAULT</jsf>.write(myPojo);
+ * 	MyPojo <jv>myPojo</jv> = N3.<jsf>DEFAULT</jsf>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = N3.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
  * </p>
  *
  * <ul class='seealso'>

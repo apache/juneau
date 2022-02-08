@@ -69,7 +69,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	ParameterInfo <jv>info</jv> = <jsm>parameterInfo</jsm>(<js>"query"</js>, <js>"foo"</js>);
  *
@@ -79,7 +79,7 @@ import org.apache.juneau.internal.*;
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	<jv>json</jv> = <jv>info</jv>.toString();
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjson'>
  * 	<jc>// Output</jc>
  * 	{
  * 		<js>"in"</js>: <js>"query"</js>,
@@ -932,7 +932,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * Describes the type of items in the array as raw JSON.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	items(<js>"{type:'type',format:'format',...}"</js>);
 	 * </p>
 	 *
@@ -1609,7 +1609,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * The schema defining the type used for the body parameter as raw JSON.
 	 *
 	 * <h5 class='section'>Example:,/h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	schema(<js>"{type:'type',description:'description',...}"</js>);
 	 * </p>
 	 *

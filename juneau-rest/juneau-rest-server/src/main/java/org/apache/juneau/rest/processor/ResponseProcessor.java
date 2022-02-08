@@ -41,7 +41,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p>
  * The following example shows how to create a response processor to handle special <c>Foo</c> objects outside the
  * normal Juneau architecture.
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@Rest</ja>(
  * 		path=<js>"/example"</js>,
  * 		responseProcessors=FooProcessor.<jk>class</jk>

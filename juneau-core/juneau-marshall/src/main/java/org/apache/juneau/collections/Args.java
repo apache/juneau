@@ -45,58 +45,58 @@ import org.apache.juneau.internal.*;
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  *
  * 	<jc>// Main method with arguments</jc>
- * 	<jk>public static void</jk> <jsm>main</jsm>(String[] args) {
+ * 	<jk>public static void</jk> <jsm>main</jsm>(String[] <jv>_args</jv>) {
  *
  * 		<jc>// Wrap in Args</jc>
- * 		Args a = new Args(args);
+ * 		Args <jv>args</jv> = <jk>new</jk> Args(<jv>_args</jv>);
  *
  * 		<jc>// One main argument</jc>
  * 		<jc>// a1</jc>
- * 		String a1 = a.getArg(0); <jc>// "a1"</jc>
- * 		String a2 = a.getArg(1); <jc>// null</jc>
+ * 		String <jv>a1</jv> = <jv>args</jv>.getArg(0); <jc>// "a1"</jc>
+ * 		String <jv>a2</jv> = <jv>args</jv>.getArg(1); <jc>// null</jc>
  *
  * 		<jc>// Two main arguments</jc>
  * 		<jc>// a1 a2</jc>
- * 		String a1 = a.getArg(0); <jc>// "a1"</jc>
- * 		String a2 = a.getArg(1); <jc>// "a2"</jc>
+ * 		String <jv>a1</jv> = <jv>args</jv>.getArg(0); <jc>// "a1"</jc>
+ * 		String <jv>a2</jv> = <jv>args</jv>.getArg(1); <jc>// "a2"</jc>
  *
  * 		<jc>// One main argument and one optional argument with no value</jc>
  * 		<jc>// a1 -a2</jc>
- * 		String a1 = a.getArg(0);
- * 		<jk>boolean</jk> hasA2 = a.hasArg(<js>"a2"</js>); <jc>// true</jc>
- * 		<jk>boolean</jk> hasA3 = a.hasArg(<js>"a3"</js>); <jc>// false</jc>
+ * 		String <jv>a1</jv> = <jv>args</jv>.getArg(0);
+ * 		<jk>boolean</jk> <jv>hasA2</jv> = <jv>args</jv>.hasArg(<js>"a2"</js>); <jc>// true</jc>
+ * 		<jk>boolean</jk> <jv>hasA3</jv> = <jv>args</jv>.hasArg(<js>"a3"</js>); <jc>// false</jc>
  *
  * 		<jc>// One main argument and one optional argument with one value</jc>
  * 		<jc>// a1 -a2 v2</jc>
- * 		String a1 = a.getArg(0);
- * 		String a2 = a.getArg(<js>"a2"</js>); <jc>// "v2"</jc>
- * 		String a3 = a.getArg(<js>"a3"</js>); <jc>// null</jc>
+ * 		String <jv>a1</jv> = <jv>args</jv>.getArg(0);
+ * 		String <jv>a2</jv> = <jv>args</jv>.getArg(<js>"a2"</js>); <jc>// "v2"</jc>
+ * 		String <jv>a3</jv> = <jv>args</jv>.getArg(<js>"a3"</js>); <jc>// null</jc>
  *
  * 		<jc>// One main argument and one optional argument with two values</jc>
  * 		<jc>// a1 -a2 v2a v2b</jc>
  * 		String a1 = a.getArg(0);
- * 		List&lt;String&gt; a2 = a.getArgs(<js>"a2"</js>); <jc>// Contains ["v2a","v2b"]</jc>
- * 		List&lt;String&gt; a3 = a.getArgs(<js>"a3"</js>); <jc>// Empty list</jc>
+ * 		List&lt;String&gt; <jv>a2</jv> = <jv>args</jv>.getArgs(<js>"a2"</js>); <jc>// Contains ["v2a","v2b"]</jc>
+ * 		List&lt;String&gt; <jv>a3</jv> = <jv>args</jv>.getArgs(<js>"a3"</js>); <jc>// Empty list</jc>
  *
  * 		<jc>// Same as previous, except specify optional argument name multiple times</jc>
  * 		<jc>// a1 -a2 v2a -a2 v2b</jc>
- * 		String a1 = a.getArg(0);
- * 		List&lt;String&gt; a2 = a.getArgs(<js>"a2"</js>); <jc>// Contains ["v2a","v2b"]</jc>
+ * 		String <jv>a1</jv> = <jv>args</jv>.getArg(0);
+ * 		List&lt;String&gt; <jv>a2</jv> = <jv>args</jv>.getArgs(<js>"a2"</js>); <jc>// Contains ["v2a","v2b"]</jc>
  * 	}
  * </p>
  *
  * <p>
  * Main arguments are available through numeric string keys (e.g. <js>"0"</js>, <js>"1"</js>, ...).
  * So you could use the {@link OMap} API to convert main arguments directly to POJOs, such as an <c>Enum</c>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Get 1st main argument as an Enum</jc>
- * 	MyEnum e = a.get(MyEnum.<jk>class</jk>, <js>"0"</js>);
+ * 	MyEnum <jv>_enum</jv> = <jv>args</jv>.get(MyEnum.<jk>class</jk>, <js>"0"</js>);
  *
  * 	<jc>// Get 1st main argument as an integer</jc>
- * 	int i = a.get(<jk>int</jk>.<jk>class</jk>, <js>"0"</js>);
+ * 	<jk>int</jk> <jv>_int</jv> = <jv>args</jv>.get(<jk>int</jk>.<jk>class</jk>, <js>"0"</js>);
  * </p>
  *
  * <p>
@@ -164,24 +164,24 @@ public final class Args extends OMap {
 	 *
 	 * <p>
 	 * Can be used in conjunction with {@link #hasArg(int)} to check for existence of arg.
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Check for no arguments</jc>
-	 * 	<jk>if</jk> (! args.hasArg(0))
-	 * 		printUsageAndExit();
+	 * 	<jk>if</jk> (! <jv>args</jv>.hasArg(0))
+	 * 		<jsm>printUsageAndExit</jsm>();
 	 *
 	 * 	<jc>// Get the first argument</jc>
-	 * 	String firstArg = args.getArg(0);
+	 * 	String <jv>firstArg</jv> = <jv>args</jv>.getArg(0);
 	 * </p>
 	 *
 	 * <p>
 	 * Since main arguments are stored as numeric keys, this method is essentially equivalent to...
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Check for no arguments</jc>
-	 * 	<jk>if</jk> (! args.containsKey(<js>"0"</js>))
-	 * 		printUsageAndExit();
+	 * 	<jk>if</jk> (! <jv>args</jv>.containsKey(<js>"0"</js>))
+	 * 		<jsm>printUsageAndExit</jsm>();
 	 *
 	 * 	<jc>// Get the first argument</jc>
-	 * 	String firstArg = args.getString("0");
+	 * 	String <jv>firstArg</jv> = <jv>args</jv>.getString(<js>"0"</js>);
 	 * </p>
 	 *
 	 * @param i The index position of the main argument (zero-indexed).
@@ -237,10 +237,10 @@ public final class Args extends OMap {
 	 * If the optional arg has multiple values, returns only the first converted value.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Command:  java com.sample.MyClass -verbose true -debug 5</jc>
-	 * 	<jk>boolean</jk> b = args.getArg(<jk>boolean</jk>.<jk>class</jk>, <js>"verbose"</js>);
-	 * 	<jk>int</jk> i = args.getArg(<jk>int</jk>.<jk>class</jk>, <js>"debug"</js>);
+	 * 	<jk>boolean</jk> <jv>bool</jv> = <jv>args</jv>.getArg(<jk>boolean</jk>.<jk>class</jk>, <js>"verbose"</js>);
+	 * 	<jk>int</jk> <jv>_int</jv> = <jv>args</jv>.getArg(<jk>int</jk>.<jk>class</jk>, <js>"debug"</js>);
 	 * </p>
 	 *
 	 * @param c The class type to convert the value to.
@@ -259,10 +259,10 @@ public final class Args extends OMap {
 	 * Returns the optional argument values as a list of strings.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Command:  java com.sample.MyClass -extraArgs foo bar baz</jc>
-	 * 	List&lt;String&gt; l1 = args.getArgs(<js>"extraArgs"</js>); <jc>// ['foo','bar','baz']</jc>
-	 * 	List&lt;String&gt; l2 = args.getArgs(<js>"nonExistentArgs"</js>); <jc>// An empty list</jc>
+	 * 	List&lt;String&gt; <jv>list1</jv> = <jv>args</jv>.getArgs(<js>"extraArgs"</js>); <jc>// ['foo','bar','baz']</jc>
+	 * 	List&lt;String&gt; <jv>list2</jv> = <jv>args</jv>.getArgs(<js>"nonExistentArgs"</js>); <jc>// An empty list</jc>
 	 * </p>
 	 *
 	 * @param name The optional argument name.

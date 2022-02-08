@@ -47,7 +47,7 @@ import org.apache.juneau.oapi.*;
  * <c>RestRequest.getBody()</c> method for <c>application/x-www-form-urlencoded POST</c> calls.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestGet</ja>
  * 	<jk>public void</jk> doGet(
  * 			<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> <jv>p1</jv>,
@@ -58,12 +58,12 @@ import org.apache.juneau.oapi.*;
  *
  * <p>
  * This is functionally equivalent to the following code...
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestGet</ja>
  * 	<jk>public void</jk> doGet(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) {
- * 		<jk>int</jk> <jv>p1</jv> = <jv>req</jv>.getQueryParameter(<jk>int</jk>.<jk>class</jk>, <js>"p1"</js>, 0);
- * 		String <jv>p2</jv> = <jv>req</jv>.getQueryParameter(String.<jk>class</jk>, <js>"p2"</js>);
- * 		UUID <jv>p3</jv> = <jv>req</jv>.getQueryParameter(UUID.<jk>class</jk>, <js>"p3"</js>);
+ * 		<jk>int</jk> <jv>p1</jv> = <jv>req</jv>.getQueryParam(<js>"p1"</js>).asInteger().orElse(0);
+ * 		String <jv>p2</jv> = <jv>req</jv>.getQueryParam(<js>"p2"</js>).asString().orElse(<jk>null</jk>);
+ * 		UUID <jv>p3</jv> = <jv>req</jv>.getQueryParam(<js>"p3"</js>).as(UUID.<jk>class</jk>).orElse(<jk>null</jk>);
  * 		...
  * 	}
  * </p>
@@ -113,12 +113,12 @@ public @interface Query {
 	 * 		then it's the equivalent to <js>"*"</js> which will cause the value to be serialized as name/value pairs.
 	 *
 	 * 		<h5 class='figure'>Examples:</h5>
-	 * 		<p class='bcode w800'>
+	 * 		<p class='bjava'>
 	 * 	<jc>// When used on a REST method</jc>
 	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(<ja>@Query</ja> OMap <jv>allQueryParameters</jv>) {...}
 	 * 		</p>
-	 * 		<p class='bcode w800'>
+	 * 		<p class='bjava'>
 	 * 	<jc>// When used on a remote method parameter</jc>
 	 * 	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
 	 * 	<jk>public interface</jk> MyProxy {
@@ -128,7 +128,7 @@ public @interface Query {
 	 * 		String myProxyMethod1(<ja>@Query</ja> Map&lt;String,Object&gt; <jv>allQueryParameters</jv>);
 	 * 	}
 	 * 		</p>
-	 * 		<p class='bcode w800'>
+	 * 		<p class='bjava'>
 	 * 	<jc>// When used on a request bean method</jc>
 	 * 	<jk>public interface</jk> MyRequest {
 	 *
@@ -142,7 +142,7 @@ public @interface Query {
 	 * 		If used on a request bean method, uses the bean property name.
 	 *
 	 * 		<h5 class='figure'>Example:</h5>
-	 * 		<p class='bcode w800'>
+	 * 		<p class='bjava'>
 	 * 	<jk>public interface</jk> MyRequest {
 	 *
 	 * 		<jc>// Equivalent to @Query("foo")</jc>
@@ -227,10 +227,10 @@ public @interface Query {
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the existence of a query entry:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public</jk> Order placeOrder(<ja>@Query</ja>(name=<js>"petId"</js>) <jk>long</jk> <jv>petId</jv>) {...}
 	 * </p>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public</jk> Order placeOrder(<ja>@Query</ja>(<js>"petId"</js>) <jk>long</jk> <jv>petId</jv>) {...}
 	 * </p>
 	 */

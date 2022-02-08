@@ -24,7 +24,7 @@ import org.apache.juneau.http.annotation.*;
  * Gives the date/time after which the response is considered stale (in "HTTP-date" format as defined by RFC 7231).
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Expires: Thu, 01 Dec 1994 16:00:00 GMT
  * </p>
  *
@@ -43,13 +43,13 @@ import org.apache.juneau.http.annotation.*;
  * <p>
  * The format is an absolute date and time as defined by HTTP-date in section 3.3.1; it MUST be in RFC 1123 date format:
  *
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Expires = "Expires" ":" HTTP-date
  * </p>
  *
  * <p>
  * An example of its use is...
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Expires: Thu, 01 Dec 1994 16:00:00 GMT
  * </p>
  *

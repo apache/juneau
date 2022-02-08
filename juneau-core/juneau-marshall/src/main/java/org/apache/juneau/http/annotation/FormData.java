@@ -41,7 +41,7 @@ import org.apache.juneau.oapi.*;
  * Annotation that can be applied to a parameter of a <ja>@RestOp</ja>-annotated method to identify it as a form-data parameter.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestPost</ja>
  * 	<jk>public void</jk> doPost(
  * 			<ja>@FormData</ja>(<js>"p1"</js>) <jk>int</jk> <jv>p1</jv>,
@@ -52,12 +52,12 @@ import org.apache.juneau.oapi.*;
  *
  * <p>
  * This is functionally equivalent to the following code...
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestPost</ja>
  * 	<jk>public void</jk> doPost(RestRequest <jv>req</jv>) {
- * 		<jk>int</jk> <jv>p1</jv> = <jv>req</jv>.getFormData(<jk>int</jk>.<jk>class</jk>, <js>"p1"</js>, 0);
- * 		String <jv>p2</jv> = <jv>req</jv>.getFormData(String.<jk>class</jk>, <js>"p2"</js>);
- * 		UUID <jv>p3</jv> = <jv>req</jv>.getFormData(UUID.<jk>class</jk>, <js>"p3"</js>);
+ * 		<jk>int</jk> <jv>p1</jv> = <jv>req</jv>.getFormParam(<js>"p1"</js>).as(<jk>int</jk>.<jk>class</jk>).orElse(0);
+ * 		String <jv>p2</jv> = <jv>req</jv>.getFormParam(<js>"p2"</js>).asString().orElse(<jk>null</jk>);
+ * 		UUID <jv>p3</jv> = <jv>req</jv>.getFormParam(<js>"p3"</js>).as(UUID.<jk>class</jk>).orElse(<jk>null</jk>);
  * 		...
  * 	}
  * </p>
@@ -140,12 +140,12 @@ public @interface FormData {
 	 * 		then it's the equivalent to <js>"*"</js> which will cause the value to be serialized as name/value pairs.
 	 *
 	 * 		<h5 class='figure'>Examples:</h5>
-	 * 		<p class='bcode w800'>
+	 * 		<p class='bjava'>
 	 * 	<jc>// When used on a REST method</jc>
 	 * 	<ja>@RestPost</ja>(<js>"/addPet"</js>)
 	 * 	<jk>public void</jk> addPet(<ja>@FormData</ja> OMap <jv>allFormDataParameters</jv>) {...}
 	 * 		</p>
-	 * 		<p class='bcode w800'>
+	 * 		<p class='bjava'>
 	 * 	<jc>// When used on a remote method parameter</jc>
 	 * 	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
 	 * 	<jk>public interface</jk> MyProxy {
@@ -155,7 +155,7 @@ public @interface FormData {
 	 * 		String myProxyMethod1(<ja>@FormData</ja> Map&lt;String,Object&gt; <jv>allFormDataParameters</jv>);
 	 * 	}
 	 * 		</p>
-	 * 		<p class='bcode w800'>
+	 * 		<p class='bjava'>
 	 * 	<jc>// When used on a request bean method</jc>
 	 * 	<jk>public interface</jk> MyRequest {
 	 *
@@ -169,7 +169,7 @@ public @interface FormData {
 	 * 		If used on a request bean method, uses the bean property name.
 	 *
 	 * 		<h5 class='figure'>Example:</h5>
-	 * 		<p class='bcode w800'>
+	 * 		<p class='bjava'>
 	 * 	<jk>public interface</jk> MyRequest {
 	 *
 	 * 		<jc>// Equivalent to @FormData("foo")</jc>
@@ -255,10 +255,10 @@ public @interface FormData {
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining a form post entry:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public</jk> Order placeOrder(<ja>@FormData</ja>(name=<js>"petId"</js>) <jk>long</jk> <jv>petId</jv>) {...}
 	 * </p>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public</jk> Order placeOrder(<ja>@FormData</ja>(<js>"petId"</js>) <jk>long</jk> <jv>petId</jv>) {...}
 	 * </p>
 	 */

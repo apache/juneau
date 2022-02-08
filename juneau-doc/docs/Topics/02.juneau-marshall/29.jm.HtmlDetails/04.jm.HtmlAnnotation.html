@@ -36,10 +36,10 @@
 	</p>
 	
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> FileSpace {
 		|		<jc>// Add a hyperlink to this bean property.</jc>
-		|		<ja>@Html</ja>(link&#61;<js>"servlet:/drive/{drive}"</js>)
+		|		<ja>@Html</ja>(link=<js>"servlet:/drive/{drive}"</js>)
 		|		<jk>public</jk> String getDrive() {...}
 		|	}			
 	</p>
@@ -47,8 +47,8 @@
 		The {@link oaj.html.annotation.Html#anchorText @Html(anchorText)} annotation is used to specify the anchor text of a hyperlink.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
-		|	<jc>// Produces &lt;a href&#61;'...'&gt;CLICK ME!&lt;/a&gt; when serialized to HTML.</jc>
+	<p class='bjava'>
+		|	<jc>// Produces &lt;a href='...'&gt;CLICK ME!&lt;/a&gt; when serialized to HTML.</jc>
 		|	<jk>public class</jk> FileSpace {
 		|		<jc>// Add a hyperlink to this bean property.</jc>
 		|		<ja>@Html</ja>(link=<js>"servlet:/drive/{drive}"</js>, anchorText=<js>"CLICK ME!"</js>)
@@ -61,7 +61,7 @@
 		the beans get serialized as standard XML:
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Parent class of all HTML DTO beans.</jc>
 		|	<ja>@Html</ja>(format=<jsf>XML</jsf>)	
 		|	<jk>public abstract class</jk> HtmlElement {...}

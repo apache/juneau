@@ -34,7 +34,7 @@
 		<li>
 			All parsers now allow for numeric types with <js>'K'</js>/<js>'M'</js>/<js>'G'</js> suffixes to represent
 			kilobytes, megabytes, and gigabytes.
-			<p class='bcode w800'>
+			<p class='bcode'>
 		<jc>// Example</jc>
 		<jk>int</jk> i = JsonParser.<jsf>DEFAULT</jsf>.parse(<js>"123M"</js>);  <jc>// 123MB</jc>
 			</p>
@@ -89,11 +89,11 @@
 						<li><js>"request:/..."</js> - Relative to the request URI.
 					</ul>
 					For example, currently we define HTML page links using variables and servlet-relative URIs...
-					<p class='bcode w800'>
+					<p class='bcode'>
 		pages=<js>"{up:'$R{requestParentURI}', options:'?method=OPTIONS', upload:'upload'}"</js>
 					</p>
 					With these new protocols, we can define them like so:
-					<p class='bcode w800'>
+					<p class='bcode'>
 		links=<js>"{top:'context:/', up:'request:/..' ,options:'servlet:/?method=OPTIONS', upload:'servlet:/upload'}"</js>
 					</p>
 					The old method of using variables and servlet-relative URIs will still be supported, but using 
@@ -116,7 +116,7 @@
 			</ul>
 		<li>New annotation property: {@del @BeanProperty(value)}.
 			<br>The following two annotations are considered equivalent:
-			<p class='bcode w800'>
+			<p class='bcode'>
 		<ja>@BeanProperty</ja>(name=<js>"foo"</js>)
 		
 		<ja>@BeanProperty</ja>(<js>"foo"</js>)
@@ -260,7 +260,7 @@
 				<li>{@del ConfigFile} - The external config file for the resource.
 			</ul>
 			So, for example...
-			<p class='bcode w800'>
+			<p class='bcode'>
 		<jd>/** Old way */</jd> 
 		<ja>@RestMethod</ja>(name=<js>"*"</js>, path=<js>"/example1/{a1}/{a2}/{a3}/*"</js>) 
 		<jk>public</jk> String example1( 

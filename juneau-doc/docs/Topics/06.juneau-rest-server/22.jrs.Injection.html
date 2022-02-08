@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Using with Spring and Injection Frameworks', updated:'9.0.0'}
+{title:'Using with Spring and Injection Frameworks', updated:'9.0.0', flags:'todo'}
 
 <div class='topic'>
 	<p>
@@ -27,7 +27,7 @@
 	<p>
 		The general approach starts with defining a resolver that uses the Spring application context for resolution:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> SpringRestResourceResolver <jk>extends</jk> RestResourceResolverSimple {
 		|
 		|		<jk>private final</jk> ApplicationContext <jf>appContext</jf>;
@@ -51,7 +51,7 @@
 	<p>
 		Next, define the Spring configuration to return our resolver:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Configuration</ja>
 		|	<jk>public abstract class</jk> MySpringConfiguration {
 		|		
@@ -76,7 +76,7 @@
 		Finally, define your <c>Root</c> resource with a constructor that takes in our rest resource resolver and
 		sets it on the config object during initialization.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(
 		|		children={
 		|			...
@@ -100,7 +100,7 @@
 	<p>
 		After that, just define constructors on your child resources to take in Spring beans:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(
 		|		path=<js>"/child"</js>
 		|	)

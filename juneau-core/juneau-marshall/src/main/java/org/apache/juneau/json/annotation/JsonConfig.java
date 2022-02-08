@@ -149,7 +149,7 @@ public @interface JsonConfig {
 	 * 	<li>They start with an ASCII character or <js>'_'</js>.
 	 * 	<li>They contain only ASCII characters or numbers or <js>'_'</js>.
 	 * 	<li>They are not one of the following reserved words:
-	 * 		<p class='bcode w800'>
+	 * 		<p class='bcode'>
 	 * 	arguments, break, case, catch, class, const, continue, debugger, default,
 	 * 	delete, do, else, enum, eval, export, extends, false, finally, for, function,
 	 * 	if, implements, import, in, instanceof, interface, let, new, null, package,

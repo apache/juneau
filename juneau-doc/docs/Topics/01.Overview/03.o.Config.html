@@ -21,7 +21,7 @@
 		The <c>juneau-config</c> library contains a powerful API for creating and using INI-style config files.
 	</p>
 	<h5 class='figure'>Example configuration file:</h5>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc># A set of entries</cc>
 		|	<cs>[Section1]</cs>
 		|
@@ -42,7 +42,7 @@
 		are created through the {@link oaj.config.Config.Builder} class.
 		Builder creator methods are provided on the <c>Config</c> class:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a Config object</jc>
 		|	Config <jv>config</jv> = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
 		|	

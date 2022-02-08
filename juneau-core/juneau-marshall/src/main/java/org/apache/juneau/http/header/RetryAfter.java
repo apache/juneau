@@ -31,7 +31,7 @@ import org.apache.juneau.http.annotation.*;
  * Value could be a specified period of time (in seconds) or a HTTP-date.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Retry-After: 120
  * 	Retry-After: Fri, 07 Nov 2014 23:59:59 GMT
  * </p>
@@ -45,13 +45,13 @@ import org.apache.juneau.http.annotation.*;
  * The value of this field can be either an HTTP-date or an integer number of seconds (in decimal) after the time of the
  * response.
  *
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Retry-After  = "Retry-After" ":" ( HTTP-date | delta-seconds )
  * </p>
  *
  * <p>
  * Two examples of its use are
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Retry-After: Fri, 31 Dec 1999 23:59:59 GMT
  * 	Retry-After: 120
  * </p>

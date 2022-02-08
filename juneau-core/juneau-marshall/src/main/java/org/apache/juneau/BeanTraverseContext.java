@@ -25,13 +25,13 @@ import org.apache.juneau.utils.*;
 
 /**
  * Parent class for all classes that traverse POJOs.
- * {@review}
+ * {@reviewed}
  *
  * <h5 class='topic'>Description</h5>
- *
+ * <p>
  * Base class that serves as the parent class for all serializers and other classes that traverse POJOs.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
@@ -126,7 +126,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that automatically checks for recursions.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
@@ -137,11 +137,11 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> Object <jf>f</jf>;
 		 * 	}
-		 * 	MyBean <jv>myBean</jv> = <jk>new</jk> MyBean();
-		 * 	<jv>serializer</jv>.<jf>f</jf> = <jv>serializer</jv>;
+		 * 	MyBean <jv>bean</jv> = <jk>new</jk> MyBean();
+		 * 	<jv>bean</jv>.<jf>f</jf> = <jv>bean</jv>;
 		 *
 		 * 	<jc>// Throws a SerializeException and not a StackOverflowError</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myBean</jv>);
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>bean</jv>);
 		 * </p>
 		 *
 		 * @return This object.
@@ -170,10 +170,10 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		 * When enabled, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
 		 *
 		 * <p>
-		 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
+		 * For example, if a model contains the links A->B->C->A, then the JSON generated will look like
 		 * 	the following when this setting is <jk>true</jk>...
 		 *
-		 * <p class='bcode w800'>
+		 * <p class='bjson'>
 		 * 	{A:{B:{C:<jk>null</jk>}}}
 		 * </p>
 		 *
@@ -183,7 +183,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer ignores recursions.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
@@ -194,11 +194,11 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> Object <jf>f</jf>;
 		 * 	}
-		 * 	MyBean <jv>myBean</jv> = <jk>new</jk> MyBean();
-		 * 	<jv>myBean</jv>.<jf>f</jf> = <jv>myBean</jv>;
+		 * 	MyBean <jv>bean</jv> = <jk>new</jk> MyBean();
+		 * 	<jv>bean</jv>.<jf>f</jf> = <jv>bean</jv>;
 		 *
 		 * 	<jc>// Produces "{f:null}"</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myBean</jv>);
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>bean</jv>);
 		 * </p>
 		 *
 		 * @return This object.
@@ -230,7 +230,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		 * Useful when constructing document fragments that need to be indented at a certain level when whitespace is enabled.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer with whitespace enabled and an initial depth of 2.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
@@ -266,7 +266,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		 * This prevents stack overflows from occurring when trying to traverse models with recursive references.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that throws an exception if the depth reaches greater than 20.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()

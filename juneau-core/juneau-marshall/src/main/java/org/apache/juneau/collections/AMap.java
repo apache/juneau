@@ -28,21 +28,21 @@ import org.apache.juneau.serializer.*;
  * Provides various convenience methods for creating and populating a map with minimal code.
  *
  * <h5 class='figure'>Examples:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// A map of string key/value pairs.</jc>
- * 	AMap&lt;String,String&gt; m = AMap.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>);
+ * 	AMap&lt;String,String&gt; <jv>map</jv> = AMap.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>);
  *
  * 	<jc>// Append to map.</jc>
- * 	m.a(<js>"baz"</js>, <js>"qux"</js>);
+ * 	<jv>map</jv>.a(<js>"baz"</js>, <js>"qux"</js>);
  *
  * 	<jc>// Create an unmodifiable view of this list.</jc>
- * 	Map&lt;String,String&gt; m2 = m.unmodifiable();
+ * 	Map&lt;String,String&gt; <jv>map2</jv> = <jv>map</jv>.unmodifiable();
  *
  * 	<jc>// Convert to simplified JSON.</jc>
- * 	String json = m.asString();
+ * 	String <jv>json</jv> = <jv>map</jv>.asString();
  *
  * 	<jc>// Convert to XML.</jc>
- * 	String json = m.asString(XmlSerializer.<jsf>DEFAULT</jsm>);
+ * 	String <jv>json</jv> = <jv>msp</jv>.asString(XmlSerializer.<jsf>DEFAULT</jsm>);
  * </p>
  *
  * <ul class='spaced-list'>

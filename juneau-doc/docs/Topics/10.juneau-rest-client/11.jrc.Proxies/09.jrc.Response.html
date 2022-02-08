@@ -29,7 +29,7 @@
 		The <ja>@Response</ja> annotation can be used to define interfaces for retrieving response parts using a bean-like proxy.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>	
+	<p class='bjava'>	
 		|	<ja>@Remote</ja>
 		|	<jk>public interface</jk> PetStore {
 		|		
@@ -37,7 +37,7 @@
 		|		CreatePetResponse postPet(...);
 		|	}
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Response</ja> 
 		|	<jk>public interface</jk> CreatePetResponse {
 		|	
@@ -51,7 +51,7 @@
 		|		<jk>int</jk> getStatus();
 		|	}
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	PetStore <jv>store</jv> = <jv>client</jv>.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
 		|	
 		|	CreatePetResponse <jv>response</jv> = <jv>store</jv>.postPet(...);

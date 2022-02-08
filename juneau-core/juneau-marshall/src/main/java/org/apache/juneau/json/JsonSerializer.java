@@ -83,18 +83,18 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Use one of the default serializers to serialize a POJO</jc>
- * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(someObject);
+ * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>someObject</jv>);
  *
  * 	<jc>// Create a custom serializer for lax syntax using single quote characters</jc>
- * 	JsonSerializer serializer = JsonSerializer.<jsm>create</jsm>().simple().sq().build();
+ * 	JsonSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().simple().sq().build();
  *
  * 	<jc>// Clone an existing serializer and modify it to use single-quotes</jc>
- * 	JsonSerializer serializer = JsonSerializer.<jsf>DEFAULT</jsf>.copy().sq().build();
+ * 	<jv>serializer</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.copy().sq().build();
  *
  * 	<jc>// Serialize a POJO to JSON</jc>
- * 	String json = serializer.serialize(someObject);
+ * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>someObject</jv>);
  * </p>
  *
  * <ul class='spaced-list'>
@@ -276,7 +276,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 * <xt>&lt;\/script&gt;</xt>.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a JSON serializer that escapes solidus characters.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
@@ -320,7 +320,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 * 	<li>They start with an ASCII character or <js>'_'</js>.
 		 * 	<li>They contain only ASCII characters or numbers or <js>'_'</js>.
 		 * 	<li>They are not one of the following reserved words:
-		 * 		<p class='bcode w800'>
+		 * 		<p class='bcode'>
 		 * 	arguments, break, case, catch, class, const, continue, debugger, default,
 		 * 	delete, do, else, enum, eval, export, extends, false, finally, for, function,
 		 * 	if, implements, import, in, instanceof, interface, let, new, null, package,
@@ -330,19 +330,19 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 * </ol>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a JSON serializer in normal mode.</jc>
-		 * 	WriterSerializer <jv>serializer1<jv> = JsonSerializer
+		 * 	WriterSerializer <jv>serializer1</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.build();
 		 *
 		 * 	<jc>// Create a JSON serializer in simple mode.</jc>
-		 * 	WriterSerializer <jv>serializer2<jv> = JsonSerializer
+		 * 	WriterSerializer <jv>serializer2</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.simple()
 		 * 		.build();
 		 *
-		 * 	OMap <jv>myMap<jv> = OMap.<jsm>of</jsm>(
+		 * 	OMap <jv>myMap</jv> = OMap.<jsm>of</jsm>(
 		 * 		<js>"foo"</js>, <js>"x1"</js>,
 		 * 		<js>"_bar"</js>, <js>"x2"</js>,
 		 * 		<js>" baz "</js>, <js>"x3"</js>,
@@ -360,7 +360,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 * 	<jc>// 	"return": "x5"</jc>
 		 * 	<jc>// 	"": "x6"</jc>
 		 * 	<jc>// }</jc>
-		 * 	String <jv>json1<jv> = <jv>serializer1<jv>.serialize(<jv>myMap<jv>);
+		 * 	String <jv>json1</jv> = <jv>serializer1</jv>.serialize(<jv>myMap</jv>);
 		 *
 		 * 	<jc>// Produces:</jc>
 		 * 	<jc>// {</jc>
@@ -371,7 +371,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 * 	<jc>// 	"return": "x5"</jc>
 		 * 	<jc>// 	"": "x6"</jc>
 		 * 	<jc>// }</jc>
-		 * 	String <jv>json2<jv> = <jv>serializer2<jv>.serialize(<jv>myMap<jv>);
+		 * 	String <jv>json2</jv> = <jv>serializer2</jv>.serialize(<jv>myMap</jv>);
 		 * </p>
 		 *
 		 * @return This object.

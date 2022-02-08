@@ -30,7 +30,7 @@
 		The following example shows XML for a typical bean:
 	</p>
 	<h5 class='figure'>Sample Beans</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Bean</ja>(typeName=<js>"person"</js>)
 		|	<jk>public class</jk> Person {
 		|		
@@ -55,7 +55,7 @@
 		|	}	
 	</p>
 	<h5 class='figure'>Sample Code</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	Person <jv>person</jv> = <jk>new</jk> Person()
 		|		.name(<js>"John Smith"</js>)
 		|		.birthDate(<js>"1946-08-12T00:00:00Z"</js>)
@@ -69,7 +69,7 @@
 		|		);
 	</p>
 	<h5 class='figure'>Normal XML:</h5>
-	<p class='bcode w800'>
+	<p class='bxml'>
 		|	<xt>&lt;person&gt;</xt>
 		|		<xt>&lt;name&gt;</xt>John Smith<xt>&lt;/name&gt;</xt>
 		|		<xt>&lt;birthDate&gt;</xt>1946-08-12T04:00:00Z<xt>&lt;/birthDate&gt;</xt>

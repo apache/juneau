@@ -64,7 +64,7 @@ public @interface RestOp {
 	 *
 	 * <p>
 	 * In the following example, the Java methods are mapped to the same HTTP method and URL <js>"/foobar"</js>.
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Call this method if Client-Version is at least 2.0.
 	 * 	// Note that this also matches 2.0.1.</jc>
 	 * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
@@ -82,7 +82,7 @@ public @interface RestOp {
 	 * <p>
 	 * It's common to combine the client version with transforms that will convert new POJOs into older POJOs for
 	 * backwards compatibility.
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Call this method if Client-Version is at least 2.0.</jc>
 	 * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
 	 * 	<jk>public</jk> NewPojo newMethod()  {...}
@@ -236,9 +236,9 @@ public @interface RestOp {
 	 * request.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestOp</ja>(method=<jsf>POST</jsf>, path=<js>"/*"</js>, defaultRequestFormData={<js>"foo=bar"</js>})
-	 * 	<jk>public</jk> String doGet(<ja>@FormData</ja>(<js>"foo"</js>) String foo)  {...}
+	 * 	<jk>public</jk> String doPost(<ja>@FormData</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -263,9 +263,9 @@ public @interface RestOp {
 	 * Affects values returned by {@link RestRequest#getQueryParam(String)} when the parameter is not present on the request.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultRequestQueryData={<js>"foo=bar"</js>})
-	 * 	<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"foo"</js>) String foo)  {...}
+	 * 	<jk>public</jk> String doGet(<ja>@Query</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -294,7 +294,7 @@ public @interface RestOp {
 	 * 	</ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@Rest</ja>(defaultRequestAttributes={<js>"Foo=bar"</js>, <js>"Baz: $C{REST/myAttributeValue}"</js>})
 	 * 	<jk>public class</jk> MyResource {
@@ -326,7 +326,7 @@ public @interface RestOp {
 	 * Specifies default values for request headers if they're not passed in through the request.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
 	 * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultRequestHeaders={<js>"Accept: text/json"</js>})
 	 * 	<jk>public</jk> String doGet()  {...}
@@ -351,7 +351,7 @@ public @interface RestOp {
 	 * Specifies default values for response headers if they're not overwritten during the request.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
 	 * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/*"</js>, defaultResponseHeaders={<js>"Content-Type: text/json"</js>})
 	 * 	<jk>public</jk> String doGet()  {...}
@@ -404,7 +404,7 @@ public @interface RestOp {
 	 * The {@link org.apache.juneau.encoders.EncoderSet.Inherit} class can be used to include values from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Define a REST resource that handles GZIP compression.</jc>
 	 * 	<ja>@Rest</ja>(
 	 * 		encoders={
@@ -428,8 +428,8 @@ public @interface RestOp {
 	 *
 	 * <p>
 	 * The programmatic equivalent to this annotation is:
-	 * <p class='bcode w800'>
-	 * 	RestOpContext.Builder <jv>builder</jv> = RestOpContext.Builder.<jsm>create</jsm>(<jv>method</jv>,<jv>restContext</jv>);
+	 * <p class='bjava'>
+	 * 	RestOpContext.Builder <jv>builder</jv> = RestOpContext.<jsm>create</jsm>(<jv>method</jv>,<jv>restContext</jv>);
 	 * 	<jv>builder</jv>.getEncoders().set(<jv>classes</jv>);
 	 * </p>
 	 *
@@ -475,7 +475,7 @@ public @interface RestOp {
 	 * in out-of-memory errors which could affect system stability.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestOp</ja>(
 	 * 		maxInput=<js>"100M"</js>
 	 * 	)
@@ -570,7 +570,7 @@ public @interface RestOp {
 	 * The {@link org.apache.juneau.parser.ParserSet.Inherit} class can be used to include values from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Define a REST resource that can consume JSON and HTML.</jc>
 	 * 	<ja>@Rest</ja>(
 	 * 		parsers={
@@ -595,8 +595,8 @@ public @interface RestOp {
 	 *
 	 * <p>
 	 * The programmatic equivalent to this annotation is:
-	 * <p class='bcode w800'>
-	 * 	RestOpContext.Builder <jv>builder</jv> = RestOpContext.Builder.<jsm>create</jsm>(<jv>method</jv>,<jv>restContext</jv>);
+	 * <p class='bjava'>
+	 * 	RestOpContext.Builder <jv>builder</jv> = RestOpContext.<jsm>create</jsm>(<jv>method</jv>,<jv>restContext</jv>);
 	 * 	<jv>builder</jv>.getParsers().set(<jv>classes</jv>);
 	 * </p>
 	 *
@@ -618,10 +618,10 @@ public @interface RestOp {
 	 * The path can contain variables that get resolved to {@link org.apache.juneau.http.annotation.Path @Path} parameters.
 	 *
 	 * <h5 class='figure'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
 	 * </p>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/myurl/{0}/{1}/{2}/*"</js>)
 	 * </p>
 	 *
@@ -629,7 +629,7 @@ public @interface RestOp {
 	 * If you do not specify a path name, then the path name is inferred from the Java method name.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Path is assumed to be "/foo".</jc>
 	 * 	<ja>@RestOp</ja>(method=<jsf>GET</jsf>)
 	 * 	<jk>public void</jk> foo() {...}
@@ -640,22 +640,22 @@ public @interface RestOp {
 	 * then the HTTP method name is stripped from the inferred path.
 	 *
 	 * <h5 class='figure'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Method is GET, path is "/foo".</jc>
 	 * 	<ja>@RestOp</ja>
 	 * 	<jk>public void</jk> getFoo() {...}
 	 * </p>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Method is DELETE, path is "/bar".</jc>
 	 * 	<ja>@RestOp</ja>
 	 * 	<jk>public void</jk> deleteBar() {...}
 	 * </p>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Method is GET, path is "/foobar".</jc>
 	 * 	<ja>@RestOp</ja>
 	 * 	<jk>public void</jk> foobar() {...}
 	 * </p>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Method is GET, path is "/".</jc>
 	 * 	<ja>@RestOp</ja>
 	 * 	<jk>public void</jk> get() {...}
@@ -695,7 +695,7 @@ public @interface RestOp {
 	 * An expression defining if a user with the specified roles are allowed to access this method.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 	 *
 	 * 		<ja>@RestOp</ja>(
@@ -752,7 +752,7 @@ public @interface RestOp {
 	 * Used in conjunction with {@link #roleGuard()} is used with patterns.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 	 *
 	 * 		<ja>@RestOp</ja>(
@@ -789,7 +789,7 @@ public @interface RestOp {
 	 * The {@link org.apache.juneau.serializer.SerializerSet.Inherit} class can be used to include values from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Define a REST resource that can produce JSON and HTML.</jc>
 	 * 	<ja>@Rest</ja>(
 	 * 		serializers={
@@ -814,8 +814,8 @@ public @interface RestOp {
 	 *
 	 * <p>
 	 * The programmatic equivalent to this annotation is:
-	 * <p class='bcode w800'>
-	 * 	RestOpContext.Builder <jv>builder</jv> = RestOpContext.Builder.<jsm>create</jsm>(<jv>method</jv>,<jv>restContext</jv>);
+	 * <p class='bjava'>
+	 * 	RestOpContext.Builder <jv>builder</jv> = RestOpContext.<jsm>create</jsm>(<jv>method</jv>,<jv>restContext</jv>);
 	 * 	<jv>builder</jv>.getSerializers().set(<jv>classes</jv>);
 	 * </p>
 	 *
@@ -860,7 +860,7 @@ public @interface RestOp {
 	 * <br>The starting and ending <js>'{'</js>/<js>'}'</js> characters around the entire value are optional.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestOp</ja>(
 	 * 		method=<jsf>PUT</jsf>,
 	 * 		path=<js>"/{propertyName}"</js>,
@@ -907,7 +907,7 @@ public @interface RestOp {
 	 *
 	 * <p>
 	 * The following examples are considered equivalent.
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Normal form</jc>
 	 * 	<ja>@RestOp</ja>(method=<jsf>PUT</jsf>, path=<js>"/{propertyName}"</js>)
 	 *

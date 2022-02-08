@@ -311,7 +311,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		 *
 		 * <p>
 		 * When enabled, schemas on beans will be serialized as the following:
-		 * <p class='bcode w800'>
+		 * <p class='bjson'>
 		 * 	{
 		 * 		type: <js>'object'</js>,
 		 * 		<js>'$ref'</js>: <js>'#/definitions/TypeId'</js>

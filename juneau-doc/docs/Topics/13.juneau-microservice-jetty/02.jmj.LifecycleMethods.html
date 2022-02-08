@@ -53,15 +53,15 @@
 	<p>
 		A typical implementation of an app with lifecycle methods might look like the following:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> App {
 		|	
 		|		<jk>private static final</jk> JettyMicroservice <jsf>MICROSERVICE</jsf>;
 		|	
-		|		<jk>public static void</jk> main(String[] args) {
+		|		<jk>public static void</jk> main(String[] <jv>args</jv>) {
 		|			<jsf>MICROSERVICE</jsf> = JettyMicroservice
 		|				.<jsm>create</jsm>()                     <jc>// Create builder.</jc>
-		|				.args(args)                   <jc>// Pass in args.</jc>
+		|				.args(<jv>args</jv>)                   <jc>// Pass in args.</jc>
 		|				.servlets(RootResource.<jk>class</jk>) <jc>// A Juneau RestServlet class.</jc>
 		|				.build()                      <jc>// Create microservice.</jc>
 		|				.start()                      <jc>// Start microservice.</jc>
@@ -83,13 +83,13 @@
 		Similar to {@link oaj.microservice.Microservice#getInstance()}, the {@link oaj.microservice.jetty.JettyMicroservice#getInstance()}
 		also allows easy access to the microservice:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> App {
 		|	
-		|		<jk>public static void</jk> main(String[] args) {
+		|		<jk>public static void</jk> main(String[] <jv>args</jv>) {
 		|			JettyMicroservice
 		|				.<jsm>create</jsm>()                     <jc>// Create builder.</jc>
-		|				.args(args)                   <jc>// Pass in args.</jc>
+		|				.args(<jv>args</jv>)                   <jc>// Pass in args.</jc>
 		|				.servlets(RootResource.<jk>class</jk>) <jc>// A Juneau RestServlet class.</jc>
 		|				.build()                      <jc>// Create microservice.</jc>
 		|				.start()                      <jc>// Start microservice.</jc>

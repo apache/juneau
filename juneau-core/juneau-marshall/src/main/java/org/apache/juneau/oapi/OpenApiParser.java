@@ -154,23 +154,23 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a plain-text parser.</jc>
-		 * 	OpenApiParser p1 = OpenApiParser
+		 * 	OpenApiParser <jv>parser1</jv> = OpenApiParser
 		 * 		.<jsm>create</jsm>()
 		 * 		.build();
 		 *
 		 * 	<jc>// Create a UON parser.</jc>
-		 * 	OpenApiParser p2 = OpenApiParser
+		 * 	OpenApiParser <jv>parser2</jv> = OpenApiParser
 		 * 		.<jsm>create</jsm>()
 		 * 		.format(<jsf>UON</jsf>)
 		 * 		.build();
 		 *
 		 * 	<jc>// Parse a plain-text string.</jc>
-		 * 	String v1 = p1.parse(<js>"foo bar"</js>);
+		 * 	String <jv>value1</jv> = <jv>parser1</jv>.parse(<js>"foo bar"</js>);
 		 *
 		 * 	<jc>// Parse a UON string.</jc>
-		 * 	String v2 = p2.parse(<js>"'foo bar'"</js>);
+		 * 	String <jv>value2</jv> = <jv>parser1</jv>.parse(<js>"'foo bar'"</js>);
 		 * </p>
 		 *
 		 * @param value The new value for this property.
@@ -203,24 +203,24 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a parser using CSV for collections.</jc>
-		 * 	OpenApiParser p1 = OpenApiParser
+		 * 	OpenApiParser <jv>parser1</jv> = OpenApiParser
 		 * 		.<jsm>create</jsm>()
 		 * 		.collectionFormat(<jsf>CSV</jsf>)
 		 * 		.build();
 		 *
 		 * 	<jc>// Create a serializer using UON for collections.</jc>
-		 * 	OpenApiParser p2 = OpenApiParser
+		 * 	OpenApiParser <jv>parser2</jv> = OpenApiParser
 		 * 		.<jsm>create</jsm>()
 		 * 		.collectionFormat(<jsf>UON</jsf>)
 		 * 		.build();
 		 *
 		 * 	<jc>// Parse CSV.</jc>
-		 * 	OList l1 = p1.parse(<js>"foo=bar,baz=qux\,true\,123"</js>, OList.<jk>class</jk>)
+		 * 	OList <jv>list1</jv> = <jv>parser1</jv>.parse(<js>"foo=bar,baz=qux\,true\,123"</js>, OList.<jk>class</jk>)
 		 *
 		 * 	<jc>// Parse UON.</jc>
-		 * 	OList l2 = p2.parse(<js>"(foo=bar,baz=@(qux,true,123))"</js>, OList.<jk>class</jk>)
+		 * 	OList <jv>list2</jv> = <jv>parser2</jv>.parse(<js>"(foo=bar,baz=@(qux,true,123))"</js>, OList.<jk>class</jk>)
 		 * </p>
 		 *
 		 * @param value The new value for this property.

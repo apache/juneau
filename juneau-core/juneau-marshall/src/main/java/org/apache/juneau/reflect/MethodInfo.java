@@ -25,6 +25,7 @@ import org.apache.juneau.internal.*;
 
 /**
  * Lightweight utility class for introspecting information about a method.
+ * {@review}
  *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
@@ -636,14 +637,14 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * Returns <jk>true</jk> if the parameters on the method only consist of the types specified in the list.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 *
 	 *  <jc>// Example method:</jc>
-	 * 	<jk>public void</jk> foo(String bar, Integer baz);
+	 * 	<jk>public void</jk> foo(String <jv>bar</jv>, Integer <jv>baz</jv>);
 	 *
-	 * 	argsOnlyOfType(fooMethod, String.<jk>class</jk>, Integer.<jk>class</jk>);  <jc>// True.</jc>
-	 * 	argsOnlyOfType(fooMethod, String.<jk>class</jk>, Integer.<jk>class</jk>, Map.<jk>class</jk>);  <jc>// True.</jc>
-	 * 	argsOnlyOfType(fooMethod, String.<jk>class</jk>);  <jc>// False.</jc>
+	 * 	argsOnlyOfType(<jv>fooMethod</jv>, String.<jk>class</jk>, Integer.<jk>class</jk>);  <jc>// True.</jc>
+	 * 	argsOnlyOfType(<jv>fooMethod</jv>, String.<jk>class</jk>, Integer.<jk>class</jk>, Map.<jk>class</jk>);  <jc>// True.</jc>
+	 * 	argsOnlyOfType(<jv>fooMethod</jv>, String.<jk>class</jk>);  <jc>// False.</jc>
 	 * </p>
 	 *
 	 * @param args The valid class types (exact) for the arguments.

@@ -25,23 +25,23 @@ import org.apache.juneau.assertions.*;
  * Simplified logger for intercepting and asserting logging messages.
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Instantiate a mock logger.</jc>
- * 	MockLogger logger = <jk>new</jk> MockLogger();
+ * 	MockLogger <jv>logger</jv> = <jk>new</jk> MockLogger();
  *
  * 	<jc>// Associate it with a MockRestClient.</jc>
  * 	MockRestClient
  * 		.<jsm>create</jsm>(MyRestResource.<jk>class</jk>)
  * 		.simpleJson()
- * 		.logger(logger)
+ * 		.logger(<jv>logger</jv>)
  * 		.logRequests(DetailLevel.<jsf>FULL</jsf>, Level.<jsf>SEVERE</jsf>)
  * 		.build()
- * 		.post(<js>"/bean"</js>, bean)
+ * 		.post(<js>"/bean"</js>, <jv>bean</jv>)
  * 		.complete();
  *
  * 	<jc>// Assert that logging occurred.</jc>
- * 	logger.assertLastLevel(Level.<jsf>SEVERE</jsf>);
- * 	logger.assertLastMessage().is(
+ * 	<jv>logger</jv>.assertLastLevel(Level.<jsf>SEVERE</jsf>);
+ * 	<jv>logger</jv>.assertLastMessage().is(
  * 		<js>"=== HTTP Call (outgoing) ======================================================"</js>,
  * 		<js>"=== REQUEST ==="</js>,
  * 		<js>"POST http://localhost/bean"</js>,

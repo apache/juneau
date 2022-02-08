@@ -414,7 +414,7 @@ public class BeanMeta<T> {
 				// Check for missing properties.
 				for (String fp : fixedBeanProps)
 					if (! normalProps.containsKey(fp))
-						throw new BeanRuntimeException(c, "The property ''{0}'' was defined on the @Bean(bpi=X) annotation of class ''{1}'' but was not found on the class definition.", fp, ci.getSimpleName());
+						throw new BeanRuntimeException(c, "The property ''{0}'' was defined on the @Bean(properties=X) annotation of class ''{1}'' but was not found on the class definition.", fp, ci.getSimpleName());
 
 				// Mark constructor arg properties.
 				for (String fp : constructorArgs) {
@@ -876,24 +876,24 @@ public class BeanMeta<T> {
 	 *
 	 * <p>
 	 * For example, given the following classes...
-	 * <p class='bcode w800'>
-	 * 	public static class BeanA&lt;T&gt; {
-	 * 		public T x;
+	 * <p class='bjava'>
+	 * 	<jk>public static class</jk> BeanA&lt;T&gt; {
+	 * 		<jk>public</jk> T <jf>x</jf>;
 	 * 	}
-	 * 	public static class BeanB extends BeanA&lt;Integer>} {...}
+	 * 	<jk>public static class</jk> BeanB <jk>extends</jk> BeanA&lt;Integer> {...}
 	 * </p>
 	 * <p>
 	 * 	...calling this method on {@code BeanB.class} will load the following data into {@code m} indicating
 	 * 	that the {@code T} parameter on the BeanA class is implemented with an {@code Integer}:
-	 * <p class='bcode w800'>
+	 * <p class='bcode'>
 	 * 	{BeanA.class:[Integer.class]}
 	 * </p>
 	 *
 	 * <p>
 	 * TODO:  This code doesn't currently properly handle the following situation:
-	 * <p class='bcode w800'>
-	 * 	public static class BeanB&lt;T extends Number&gt; extends BeanA&lt;T&gt;;
-	 * 	public static class BeanC extends BeanB&lt;Integer&gt;;
+	 * <p class='bjava'>
+	 * 	<jk>public static class</jk> BeanB&lt;T <jk>extends</jk> Number&gt; <jk>extends</jk> BeanA&lt;>;
+	 * 	<jk>public static class</jk> BeanC <jk>extends</jk> BeanB&lt;Integer>;
 	 * </p>
 	 *
 	 * <p>

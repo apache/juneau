@@ -22,7 +22,7 @@ import org.apache.juneau.annotation.*;
  * Represents an <c>atomEntry</c> construct in the RFC4287 specification.
  *
  * <h5 class='figure'>Schema</h5>
- * <p class='bcode w800'>
+ * <p class='bschema'>
  * 	atomEntry =
  * 		element atom:entry {
  * 			atomCommonAttributes,

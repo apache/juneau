@@ -29,7 +29,7 @@ import org.apache.juneau.serializer.*;
  * {@review}
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
  * 	<jv>client</jv>
  * 		.get(<jsf>URL</jsf>)
@@ -183,8 +183,8 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	/**
 	 * When enabled, text in the message is converted to valid Java strings.
 	 *
-	 * <p class='bcode w800'>
-	 * 	value.replaceAll(<js>"\\\\"</js>, <js>"\\\\\\\\"</js>).replaceAll(<js>"\n"</js>, <js>"\\\\n"</js>).replaceAll(<js>"\t"</js>, <js>"\\\\t"</js>);
+	 * <p class='bjava'>
+	 * 	<jv>value</jv>.replaceAll(<js>"\\\\"</js>, <js>"\\\\\\\\"</js>).replaceAll(<js>"\n"</js>, <js>"\\\\n"</js>).replaceAll(<js>"\t"</js>, <js>"\\\\t"</js>);
 	 * </p>
 	 *
 	 * @return This object.
@@ -306,9 +306,9 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * Similar to {@link #is(String)} except error message states diff position.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
 	 * 		.assertBody().isEqualTo(<js>"OK"</js>);
@@ -347,9 +347,9 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * Asserts that the lines of text equals the specified value.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
 	 * 		.assertBody().isEqualLinesTo(
@@ -378,9 +378,9 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * Asserts that the text equals the specified value after splitting both by newlines and sorting the rows.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the response body of an HTTP call is the text "OK".</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
 	 * 		.assertBody().isEqualSortedLinesTo(

@@ -38,7 +38,7 @@ import org.apache.juneau.svl.*;
  *
  * <p>
  * Example:
- * <p class='bcode w800'>
+ * <p class='bjava'>
  *  <ja>@HtmlDocConfig</ja>(
  * 		aside=<js>"$F{resources/MyAsideMessage.html, Oops not found!}"</js>
  * 	)

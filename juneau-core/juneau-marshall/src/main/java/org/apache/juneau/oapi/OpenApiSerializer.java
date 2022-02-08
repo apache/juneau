@@ -154,25 +154,25 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a plain-text serializer.</jc>
-		 * 	OpenApiSerializer s1 = OpenApiSerializer
+		 * 	OpenApiSerializer <jv>serializer1</jv> = OpenApiSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.build();
 		 *
 		 * 	<jc>// Create a UON serializer.</jc>
-		 * 	OpenApiSerializer s2 = OpenApiSerializer
+		 * 	OpenApiSerializer <jv>serializer2</jv> = OpenApiSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.format(<jsf>UON</jsf>)
 		 * 		.build();
 		 *
-		 * 	String string = <js>"foo bar"</js>;
+		 * 	String <jv>string</jv> = <js>"foo bar"</js>;
 		 *
 		 * 	<jc>// Produces: "foo bar"</jc>
-		 * 	String v1 = s.serialize(string);
+		 * 	String <jv>value1</jv> = <jv>serializer1</jv>.serialize(<jv>string</jv>);
 		 *
 		 * 	<jc>// Produces: "'foo bar'"</jc>
-		 * 	String v2 = s2.serialize(string);
+		 * 	String <jv>value2</jv> = <jv>serializer2</jv>.serialize(<jv>string</jv>);
 		 * </p>
 		 *
 		 * @param value The new value for this property.
@@ -205,21 +205,21 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer using CSV for collections.</jc>
-		 * 	OpenApiSerializer s1 = OpenApiSerializer
+		 * 	OpenApiSerializer <jv>serializer1</jv> = OpenApiSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.collectionFormat(<jsf>CSV</jsf>)
 		 * 		.build();
 		 *
 		 * 	<jc>// Create a serializer using UON for collections.</jc>
-		 * 	OpenApiSerializer s2 = OpenApiSerializer
+		 * 	OpenApiSerializer <jv>serializer2</jv> = OpenApiSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.collectionFormat(<jsf>UON</jsf>)
 		 * 		.build();
 		 *
 		 * 	<jc>// An arbitrary data structure.</jc>
-		 * 	OList l = OList.<jsm>of</jsm>(
+		 * 	OList <jv>list</jv> = OList.<jsm>of</jsm>(
 		 * 		<js>"foo"</js>,
 		 * 		<js>"bar"</js>,
 		 * 		OMap.<jsm>of</jsm>(
@@ -228,10 +228,10 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 		 *	);
 		 *
 		 * 	<jc>// Produces: "foo=bar,baz=qux\,true\,123"</jc>
-		 * 	String v1 = s1.serialize(l)
+		 * 	String <jv>value1</jv> = <jv>serializer1</jv>.serialize(<jv>list</jv>)
 		 *
 		 * 	<jc>// Produces: "(foo=bar,baz=@(qux,'true','123'))"</jc>
-		 * 	String v2 = s2.serialize(l)
+		 * 	String <jv>value2</jv> = <jv>serializer2</jv>.serialize(<jv>list</jv>)
 		 * </p>
 		 *
 		 * @param value The new value for this property.

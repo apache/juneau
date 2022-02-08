@@ -25,25 +25,25 @@ import org.apache.juneau.ExecutableException;
  * <p>
  * For example, given the following bean classes...
  *
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jk>public interface</jk> IA {
  * 		String getX();
- * 		<jk>void</jk> setX(String x);
+ * 		<jk>void</jk> setX(String <jv>x</jv>);
  * 	}
  *
  * 	<jk>public class</jk> A <jk>implements</jk> IA {
  * 		<jk>private</jk> String <jf>x</jf>;
  *
- * 		<jk>public</jk> A(String x) {
- * 			<jk>this</jk>.<jf>x</jf> = x;
+ * 		<jk>public</jk> A(String <jv>x</jv>) {
+ * 			<jk>this</jk>.<jf>x</jf> = <jv>x</jv>;
  * 		}
  *
  * 		<jk>public</jk> String getX() {
  * 			<jk>return</jk> <jf>x</jf>;
  * 		}
  *
- * 		<jk>public void</jk> setX(String x) {
- * 			<jk>this</jk>.<jf>x</jf> = x;
+ * 		<jk>public void</jk> setX(String <jv>x</jv>) {
+ * 			<jk>this</jk>.<jf>x</jf> = <jv>x</jv>;
  * 		}
  * 	}
  * </p>
@@ -51,17 +51,17 @@ import org.apache.juneau.ExecutableException;
  * <p>
  * The getters will be called in order until the first non-null value is returned...
  *
- * <p class='bcode w800'>
- * 	PojoMerge m;
+ * <p class='bjava'>
+ * 	PojoMerge <jv>merge</jv>;
  *
- * 	m = PojoMerge.<jsm>merge</jsm>(IA.<jk>class</jk>, <jk>new</jk> A(<js>"1"</js>), <jk>new</jk> A(<js>"2"</js>));
- * 	<jsm>assertEquals</jsm>(<js>"1"</js>, m.getX());
+ * 	<jv>merge</jv> = PojoMerge.<jsm>merge</jsm>(IA.<jk>class</jk>, <jk>new</jk> A(<js>"1"</js>), <jk>new</jk> A(<js>"2"</js>));
+ * 	<jsm>assertEquals</jsm>(<js>"1"</js>, <jv>merge</jv>.getX());
  *
- * 	m = PojoMerge.<jsm>merge</jsm>(IA.<jk>class</jk>, <jk>new</jk> A(<jk>null</jk>), <jk>new</jk> A(<js>"2"</js>));
- * 	<jsm>assertEquals</jsm>(<js>"2"</js>, m.getX());
+ * 	<jv>merge</jv> = PojoMerge.<jsm>merge</jsm>(IA.<jk>class</jk>, <jk>new</jk> A(<jk>null</jk>), <jk>new</jk> A(<js>"2"</js>));
+ * 	<jsm>assertEquals</jsm>(<js>"2"</js>, <jv>merge</jv>.getX());
  *
- * 	m = PojoMerge.<jsm>merge</jsm>(IA.<jk>class</jk>, <jk>new</jk> A(<jk>null</jk>), <jk>new</jk> A(<jk>null</jk>));
- * 	<jsm>assertEquals</jsm>(<jk>null</jk>, m.getX());
+ * 	<jv>merge</jv> = PojoMerge.<jsm>merge</jsm>(IA.<jk>class</jk>, <jk>new</jk> A(<jk>null</jk>), <jk>new</jk> A(<jk>null</jk>));
+ * 	<jsm>assertEquals</jsm>(<jk>null</jk>, <jv>merge</jv>.getX());
  * </p>
  *
  * <ul class='notes'>

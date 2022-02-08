@@ -54,7 +54,7 @@ public @interface RemoteDelete {
 	 * If you do not specify a path, then the path is inferred from the Java method name.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bjava'>
 	 * 	<jc>// POST /pet</jc>
 	 * 	<ja>@RemoteDelete</ja>
 	 * 	<jk>public void</jk> postPet(...) {...}
@@ -111,7 +111,7 @@ public @interface RemoteDelete {
 	 *
 	 * <p>
 	 * The following examples are considered equivalent.
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Normal form</jc>
 	 * 	<ja>@RemoteDelete</ja>(path=<js>"/{propertyName}"</js>)
 	 *

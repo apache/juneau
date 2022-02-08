@@ -49,12 +49,12 @@ import org.apache.juneau.utils.*;
  * <p>
  * The following example shows the basic usage of this class for retrieving localized messages:
  *
- * <p class='bcode w800'>
+ * <p class='bini'>
  * 	<cc># Contents of MyClass.properties</cc>
  * 	<ck>foo</ck> = <cv>foo {0}</cv>
  * 	<ck>MyClass.bar</ck> = <cv>bar {0}</cv>
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jk>public class</jk> MyClass {
  * 		<jk>private static final</jk> Messages <jsf>MESSAGES</jsf> = Messages.<jsm>of</jsm>(MyClass.<jk>class</jk>);
  *
@@ -78,7 +78,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * 	The following shows how to retrieve messages from a common bundle:
  *
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jk>public class</jk> MyClass {
  * 		<jk>private static final</jk> Messages <jsf>MESSAGES</jsf> = Messages.<jsm>of</jsm>(MyClass.<jk>class</jk>, <js>"Messages"</js>);
  * 	}
@@ -99,7 +99,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * 	Localized messages can be retrieved in the following way:
  *
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Return value from Japan locale bundle.</jc>
  * 	String <jv>foo</jv> = <jsf>MESSAGES</jsf>.forLocale(Locale.<jsf>JAPAN</jsf>).getString(<js>"foo"</js>);
  * </p>

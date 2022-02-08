@@ -161,9 +161,9 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * Converts this object to a string using {@link Object#toString} and returns it as a new assertion.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified object is "foobar" after converting to a string.</jc>
-	 * 	<jsm>assertObject<jsm>(myPojo).asString().is(<js>"foobar"</js>);
+	 * 	<jsm>assertObject<jsm>(<jv>myPojo</jv>).asString().is(<js>"foobar"</js>);
 	 * </p>
 	 *
 	 * @return A new fluent string assertion.
@@ -176,9 +176,9 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * Converts this object to text using the specified serializer and returns it as a new assertion.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
-	 * 	<jsm>assertObject<jsm>(myPojo).asString(XmlSerializer.<jsf>DEFAULT</jsf>).is(<js>"&lt;object>&lt;foo>bar&lt;/foo>&lt;baz>qux&lt;/baz>&lt;/object>"</js>);
+	 * 	<jsm>assertObject<jsm>(<jv>myPojo</jv>).asString(XmlSerializer.<jsf>DEFAULT</jsf>).is(<js>"&lt;object>&lt;foo>bar&lt;/foo>&lt;baz>qux&lt;/baz>&lt;/object>"</js>);
 	 * </p>
 	 *
 	 * @param ws The serializer to use to convert the object to text.
@@ -196,9 +196,9 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * Converts this object to a string using the specified function and returns it as a new assertion.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified object is "foobar" after converting to a string.</jc>
-	 * 	<jsm>assertObject<jsm>(myPojo).asString(<jv>x</jv>-><jv>x</jv>.toString()).is(<js>"foobar"</js>);
+	 * 	<jsm>assertObject<jsm>(<jv>myPojo</jv>).asString(<jv>x</jv>-><jv>x</jv>.toString()).is(<js>"foobar"</js>);
 	 * </p>
 	 *
 	 * @param function The conversion function.
@@ -212,9 +212,9 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * Converts this object to simplified JSON and returns it as a new assertion.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
-	 * 	<jsm>assertObject<jsm>(myPojo).asJson().is(<js>"{foo:'bar',baz:'qux'}"</js>);
+	 * 	<jsm>assertObject<jsm>(<jv>myPojo</jv>).asJson().is(<js>"{foo:'bar',baz:'qux'}"</js>);
 	 * </p>
 	 *
 	 * @return A new fluent string assertion.
@@ -227,9 +227,9 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * Converts this object to sorted simplified JSON and returns it as a new assertion.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
-	 * 	<jsm>assertObject<jsm>(myPojo).asJsonSorted().is(<js>"{baz:'qux',foo:'bar'}"</js>);
+	 * 	<jsm>assertObject<jsm>(<jv>myPojo</jv>).asJsonSorted().is(<js>"{baz:'qux',foo:'bar'}"</js>);
 	 * </p>
 	 *
 	 * @return A new fluent string assertion.
@@ -441,9 +441,9 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * Asserts that the object is an instance of the specified class.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
-	 * 	<jsm>assertObject<jsm>(myPojo).isType(MyBean.<jk>class</jk>);
+	 * 	<jsm>assertObject<jsm>(<jv>myPojo</jv>).isType(MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param parent The value to check against.
@@ -461,9 +461,9 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * Asserts that the object is an instance of the specified class.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
-	 * 	<jsm>assertObject<jsm>(myPojo).isExactType(MyBean.<jk>class</jk>);
+	 * 	<jsm>assertObject<jsm>(<jv>myPojo</jv>).isExactType(MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param type The value to check against.
@@ -494,9 +494,9 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * Converts this object to simplified JSON and runs the {@link FluentStringAssertion#is(String)} on the result.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
-	 * 	<jsm>assertObject<jsm>(myPojo).asJson().is(<js>"{foo:'bar',baz:'qux'}"</js>);
+	 * 	<jsm>assertObject<jsm>(<jv>myPojo</jv>).asJson().is(<js>"{foo:'bar',baz:'qux'}"</js>);
 	 * </p>
 	 *
 	 * @param value The expected string value.

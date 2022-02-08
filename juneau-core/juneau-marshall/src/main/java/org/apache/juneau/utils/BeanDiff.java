@@ -26,21 +26,21 @@ import org.apache.juneau.collections.*;
  *
  * <p>
  *
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Two beans to compare.</jc>
- * 	MyBean bean1, bean2;
+ * 	MyBean <jv>bean1</jv>, <jv>bean2</jv>;
  *
  *	<jc>// Get differences.</jc>
- * 	BeanDiff bf = BeanDiff.<jsm>create</jsm>(bean1, bean2).exclude(<js>"fooProperty"</js>).build();
+ * 	BeanDiff <jv>beanDiff</jv> = BeanDiff.<jsm>create</jsm>(<jv>bean1</jv>, <jv>bean2</jv>).exclude(<js>"fooProperty"</js>).build();
  *
  * 	<jc>// Check for differences.</jc>
- * 	<jk>boolean</jk> b = bf.hasDiffs();
+ * 	<jk>boolean</jk> <jv>hasDiff</jv> = <jv>beanDiff</jv>.hasDiffs();
  *
- * 	OMap v1 = bf.getV1();  <jc>// Get version 1 differences.</jc>
- * 	OMap v2 = bf.getV2();  <jc>// Get version 2 differences.</jc>
+ * 	OMap <jv>v1Diffs</jv> = <jv>beanDiff</jv>.getV1();  <jc>// Get version 1 differences.</jc>
+ * 	OMap <jv>v2Diffs</jv> = <jv>beanDiff</jv>.getV2();  <jc>// Get version 2 differences.</jc>
  *
  * 	<jc>// Display differences.</jc>
- * 	System.<jsf>err</jsf>.println(bf);
+ * 	System.<jsf>err</jsf>.println(<jv>beanDiff</jv>);
  * </p>
  *
  * <ul class='seealso'>

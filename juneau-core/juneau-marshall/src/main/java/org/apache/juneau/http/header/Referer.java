@@ -26,7 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * become standard usage and is considered correct terminology)
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Referer: http://en.wikipedia.org/wiki/Main_Page
  * </p>
  *
@@ -40,13 +40,13 @@ import org.apache.juneau.http.annotation.*;
  * The Referer field MUST NOT be sent if the Request-URI was obtained from a source that does not have its own URI,
  * such as input from the user keyboard.
  *
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Referer        = "Referer" ":" ( absoluteURI | relativeURI )
  * </p>
  *
  * <p>
  * Example:
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Referer: http://www.w3.org/hypertext/DataSources/Overview.html
  * </p>
  *

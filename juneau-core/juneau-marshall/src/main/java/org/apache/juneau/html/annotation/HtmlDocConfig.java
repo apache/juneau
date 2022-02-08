@@ -60,7 +60,7 @@ public @interface HtmlDocConfig {
 	 * the page.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		aside={
 	 * 			<js>"&lt;ul&gt;"</js>,
@@ -107,7 +107,7 @@ public @interface HtmlDocConfig {
 	 * By default, the aside section is floated to the right.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 *  <ja>@HtmlDocConfig</ja>(
 	 * 		aside={
 	 * 			<js>"&lt;ul&gt;"</js>,
@@ -153,7 +153,7 @@ public @interface HtmlDocConfig {
 	 * Allows you to specify the contents of the footer section on the HTML page.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		footer={
 	 * 			<js>"&lt;b&gt;This interface is great!&lt;/b&gt;"</js>
@@ -193,7 +193,7 @@ public @interface HtmlDocConfig {
 	 * Adds the specified HTML content to the head section of the page.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		head={
 	 * 			<js>"&lt;link rel='icon' href='$U{servlet:/htdocs/mypageicon.ico}'&gt;"</js>
@@ -232,7 +232,7 @@ public @interface HtmlDocConfig {
 	 * The header section normally contains the title and description at the top of the page.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		header={
 	 * 			<js>"&lt;h1&gt;My own header&lt;/h1&gt;"</js>
@@ -273,7 +273,7 @@ public @interface HtmlDocConfig {
 	 * The nav section normally contains the page links at the top of the page.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		nav={
 	 * 			<js>"&lt;p class='special-navigation'&gt;This is my special navigation content&lt;/p&gt;"</js>
@@ -334,7 +334,7 @@ public @interface HtmlDocConfig {
 	 * <js>"servlet:/..."</js>.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		navlinks={
 	 * 			<js>"api: servlet:/api"</js>,
@@ -377,7 +377,7 @@ public @interface HtmlDocConfig {
 	 * Allows you to specify the string message used when trying to serialize an empty array or empty list.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		noResultsMessage=<js>"&lt;b&gt;This interface is great!&lt;/b&gt;"</js>
 	 * 	)
@@ -430,7 +430,7 @@ public @interface HtmlDocConfig {
 	 * Adds the specified Javascript code to the HTML page.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		script={
 	 * 			<js>"alert('hello!');"</js>
@@ -470,7 +470,7 @@ public @interface HtmlDocConfig {
 	 * Adds the specified CSS instructions to the HTML page.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		style={
 	 * 			<js>"h3 { color: red; }"</js>,
@@ -543,7 +543,7 @@ public @interface HtmlDocConfig {
 	 * can be overridden with your own custom implementation class.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		template=MySpecialDocTemplate.<jk>class</jk>
 	 * 	)
@@ -582,7 +582,7 @@ public @interface HtmlDocConfig {
 	 * The following examples shows how to associate a widget with a REST method and then have it rendered in the links
 	 * and aside section of the page:
 	 *
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@HtmlDocConfig</ja>(
 	 * 		widgets={
 	 * 			MyWidget.<jk>class</jk>

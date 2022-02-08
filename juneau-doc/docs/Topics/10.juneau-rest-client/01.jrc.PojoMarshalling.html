@@ -36,7 +36,7 @@
 	</ul>
 	
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a basic REST client with Simplified-JSON support.</jc>
 		|	<jc>// Typically easier to use when performing unit tests.</jc>
 		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
@@ -46,7 +46,7 @@
 		Clients can also support multiple languages:
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a REST client with support for multiple languages.</jc>
 		|	RestClient <jv>client1</jv> = RestClient.<jsm>create</jsm>().json().xml().openApi().build();
 		|
@@ -58,7 +58,7 @@
 		When using clients with multiple language support, the request language is selected by setting the <c>Content-Type</c> 
 		request header.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a REST client with support for multiple languages.</jc>
 		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().universal().build();
 		|
@@ -71,7 +71,7 @@
 	<p>
 		Languages can also be specified per-request.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a REST client with no default languages supported.</jc>
 		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().build();
 		|
@@ -87,7 +87,7 @@
 		settings.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a basic REST client with JSON support.</jc>
 		|	<jc>// Use single-quotes and whitespace.</jc>
 		|	RestClient <jv>client1</jv> = RestClient.<jsm>create</jsm>().json().sq().ws().build();

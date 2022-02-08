@@ -24,7 +24,7 @@
 		The following example shows two render classes that customize the appearance of the <c>pctFull</c> and
 		<c>status</c> columns in the code below:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;	
 		|			
 		|	<jc>// Our bean class</jc>
@@ -68,13 +68,13 @@
 		|		}
 		|	}
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Possible values for the getStatus() method</jc>
 		|	<jk>public enum</jk> FileSpaceStatus {
 		|		<jsf>OK</jsf>, <jsf>WARNING</jsf>, <jsf>SEVERE</jsf>;
 		|	}
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Custom render for getPctFull() method</jc>
 		|	<jk>public class</jk> FileSpacePctRender <jk>extends</jk> HtmlRender&lt;Float&gt; {
 		|
@@ -98,7 +98,7 @@
 		|		}
 		|	}
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Custom render for getStatus() method</jc>
 		|	<jk>public class</jk> FileSpaceStatusRender <jk>extends</jk> HtmlRender&lt;FileSpaceStatus&gt; {
 		|

@@ -14,27 +14,28 @@ package org.apache.juneau.swap;
 
 /**
  * Bean interceptor.
+ * {@reviewed}
  *
  * <p>
  * Bean interceptors intercept calls to bean getters and setters to allow them to override values in transit.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Interceptor that strips out sensitive information on Address beans.</jc>
  * 	<jk>public class</jk> AddressInterceptor <jk>extends</jk> BeanInterceptor&lt;Address&gt; {
  *
  * 		<ja>@Override</ja>
- * 		<jk>public</jk> Object readProperty(Address bean, String name, Object value) {
- * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(name))
+ * 		<jk>public</jk> Object readProperty(Address <jv>bean</jv>, String <jv>name</jv>, Object <jv>value</jv>) {
+ * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(<jv>name</jv>))
  * 				<jk>return</jk> <js>"redacted"</js>;
- * 			<jk>return</jk> value;
+ * 			<jk>return</jk> <jv>value</jv>;
  * 		}
  *
  * 		<ja>@Override</ja>
- * 		<jk>public</jk> Object writeProperty(Address bean, String name, Object value) {
- * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(name) &amp;&amp; <js>"redacted"</js>.equals(value))
- * 				<jk>return</jk> TaxInfoUtils.<jsm>lookup</jsm>(bean.getStreet(), bean.getCity(), bean.getState());
- * 			<jk>return</jk> value;
+ * 		<jk>public</jk> Object writeProperty(Address <jv>bean</jv>, String <jv>name</jv>, Object <jv>value</jv>) {
+ * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(<jv>name</jv>) &amp;&amp; <js>"redacted"</js>.equals(<jv>value</jv>))
+ * 				<jk>return</jk> TaxInfoUtils.<jsm>lookup</jsm>(<jv>bean</jv>.getStreet(), <jv>bean</jv>.getCity(), <jv>bean</jv>.getState());
+ * 			<jk>return</jk> <jv>value</jv>;
  * 		}
  * 	}
  * </p>
@@ -47,12 +48,12 @@ package org.apache.juneau.swap;
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Register interceptor on bean class.</jc>
  * 	<ja>@Bean</ja>(interceptor=AddressInterceptor.<jk>class</jk>)
  * 	<jk>public class</jk> Address {
  * 		<jk>public</jk> String getTaxInfo() {...}
- * 		<jk>public void</jk> setTaxInfo(String s) {...}
+ * 		<jk>public void</jk> setTaxInfo(String <jv>value</jv>) {...}
  * 	}
  * </p>
  *
@@ -80,14 +81,14 @@ public class BeanInterceptor<T> {
 	 * Subclasses can override this property to convert property values to some other object just before serialization.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Address filter that strips out sensitive information.</jc>
 	 * 	<jk>public class</jk> AddressInterceptor <jk>extends</jk> BeanInterceptor&lt;Address&gt; {
 	 *
-	 * 		<jk>public</jk> Object readProperty(Address bean, String name, Object value) {
-	 * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(name))
+	 * 		<jk>public</jk> Object readProperty(Address <jv>bean</jv>, String <jv>name</jv>, Object <jv>value</jv>) {
+	 * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(<jv>name</jv>))
 	 * 				<jk>return</jk> <js>"redacted"</js>;
-	 * 			<jk>return</jk> value;
+	 * 			<jk>return</jk> <jv>value</jv>;
 	 * 		}
 	 * 	}
 	 * </p>
@@ -109,14 +110,14 @@ public class BeanInterceptor<T> {
 	 * bean setter.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Address filter that strips out sensitive information.</jc>
 	 * 	<jk>public class</jk> AddressInterceptor <jk>extends</jk> BeanInterceptor&lt;Address&gt; {
 	 *
-	 * 		<jk>public</jk> Object writeProperty(Address bean, String name, Object value) {
-	 * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(name) &amp;&amp; <js>"redacted"</js>.equals(value))
-	 * 				<jk>return</jk> TaxInfoUtils.<jsm>lookup</jsm>(bean.getStreet(), bean.getCity(), bean.getState());
-	 * 			<jk>return</jk> value;
+	 * 		<jk>public</jk> Object writeProperty(Address <jv>bean</jv>, String <jv>name</jv>, Object <jv>value</jv>) {
+	 * 			<jk>if</jk> (<js>"taxInfo"</js>.equals(<jv>name</jv>) &amp;&amp; <js>"redacted"</js>.equals(<jv>value</jv>))
+	 * 				<jk>return</jk> TaxInfoUtils.<jsm>lookup</jsm>(<jv>bean</jv>.getStreet(), <jv>bean</jv>.getCity(), <jv>bean</jv>.getState());
+	 * 			<jk>return</jk> <jv>value</jv>;
 	 * 		}
 	 * 	}
 	 * </p>

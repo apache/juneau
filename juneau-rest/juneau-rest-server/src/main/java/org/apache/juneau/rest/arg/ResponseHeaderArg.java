@@ -32,7 +32,7 @@ import org.apache.juneau.rest.httppart.*;
  *
  * <p>
  * The parameter value must be of type {@link Value} that accepts a value that is then set via:
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jv>opSession</jv>
  * 		.{@link RestOpSession#getResponse() getResponse}()
  * 		.{@link RestResponse#setHeader(String,String) setOutput}(<jv>name</jv>,<jv>value</jv>);

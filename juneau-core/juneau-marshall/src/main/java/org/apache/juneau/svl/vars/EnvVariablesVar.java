@@ -21,12 +21,12 @@ import org.apache.juneau.svl.*;
  * The format for this var is <js>"$E{envVar[,defaultValue]}"</js>.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Create a variable resolver that resolves environment variables (e.g. "$E{PATH}")</jc>
- * 	VarResolver r = VarResolver.<jsm>create</jsm>().vars(EnvVariablesVar.<jk>class</jk>).build();
+ * 	VarResolver <jv>varResolver</jv> = VarResolver.<jsm>create</jsm>().vars(EnvVariablesVar.<jk>class</jk>).build();
  *
  * 	<jc>// Use it!</jc>
- * 	System.<jsf>out</jsf>.println(r.resolve(<js>"Environment variable PATH is set to $E{PATH}"</js>));
+ * 	System.<jsf>out</jsf>.println(<jv>varResolver</jv>.resolve(<js>"Environment variable PATH is set to $E{PATH}"</js>));
  * </p>
  *
  * <p>

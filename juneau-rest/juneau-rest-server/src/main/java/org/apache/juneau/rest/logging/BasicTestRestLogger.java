@@ -70,7 +70,7 @@ public class BasicTestRestLogger extends BasicRestLogger {
 					.requestDetail(HEADER)
 					.responseDetail(HEADER)
 					.enabled(CONDITIONAL)
-					.enabledTest(x -> ! isNoTrace(x))  // Only log if it's not a no-trace request.
+					.enabledPredicate(x -> ! isNoTrace(x))  // Only log if it's not a no-trace request.
 					.logStackTrace()
 					.build(),
 				RestLoggerRule.create(bs)  // Log 400-500 errors with just status-line information.
@@ -79,7 +79,7 @@ public class BasicTestRestLogger extends BasicRestLogger {
 					.requestDetail(STATUS_LINE)
 					.responseDetail(STATUS_LINE)
 					.enabled(CONDITIONAL)
-					.enabledTest(x -> ! isNoTrace(x))  // Only log if it's not a no-trace request.
+					.enabledPredicate(x -> ! isNoTrace(x))  // Only log if it's not a no-trace request.
 					.logStackTrace()
 					.build()
 			)

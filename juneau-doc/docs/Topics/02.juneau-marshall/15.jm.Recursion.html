@@ -32,7 +32,7 @@
 	<p>
 		For example, let's make a POJO model out of the following classes:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> A {
 		|		<jk>public</jk> B <jf>b</jf>;
 		|	}
@@ -48,7 +48,7 @@
 	<p>
 		Now we create a model with a loop and serialize the results.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Clone an existing serializer and set property for detecting recursions.</jc>
 		|	JsonSerializer <jv>serializer</jv> = SimpleJsonSerializer
 		|		.<jsf>DEFAULT_READABLE</jsf>
@@ -68,7 +68,7 @@
 	<p>
 		What we end up with is the following, which does not serialize the contents of the <c>c</c> field:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjson'>
 		|	{
 		|		<jok>b</jok>: {
 		|			<jok>c</jok>: {

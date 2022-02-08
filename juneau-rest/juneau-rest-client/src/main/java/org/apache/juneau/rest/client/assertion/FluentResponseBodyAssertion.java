@@ -56,8 +56,8 @@ import org.apache.juneau.serializer.*;
  * <h5 class='topic'>Transform Methods</h5>
  * 	<ul>
  * 		<li class='jm'>{@link FluentResponseBodyAssertion#asBytes()}
- * 		<li class='jm'>{@link FluentResponseBodyAssertion#asType(Class)}
- * 		<li class='jm'>{@link FluentResponseBodyAssertion#asType(Type,Type...)}
+ * 		<li class='jm'>{@link FluentResponseBodyAssertion#as(Class)}
+ * 		<li class='jm'>{@link FluentResponseBodyAssertion#as(Type,Type...)}
  * 		<li class='jm'>{@link FluentObjectAssertion#asString()}
  * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer)}
  * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function)}
@@ -136,7 +136,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * Provides the ability to perform fluent-style assertions on this response body.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the response body equals the text "OK".</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
@@ -153,7 +153,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().passes(<jv>x</jv> -&gt; <jv>x</jv>.contains(<js>"OK"</js>));
+	 * 		.assertBody().passes(<jv>x</jv> -> <jv>x</jv>.contains(<js>"OK"</js>));
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression.</jc>
 	 * 	<jv>client</jv>
@@ -168,16 +168,16 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * 		.assertBody().matches(<js>".*OK.*"</js>, <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>);
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression in the form of an existing Pattern.</jc>
-	 * 	Pattern <jv>p</jv> = Pattern.<jsm>compile</jsm>(<js>".*OK.*"</js>);
+	 * 	Pattern <jv>pattern</jv> = Pattern.<jsm>compile</jsm>(<js>".*OK.*"</js>);
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().matches(<jv>p</jv>);
+	 * 		.assertBody().matches(<jv>pattern</jv>);
 	 * </p>
 	 *
 	 * <p>
 	 * The assertion test returns the original response object allowing you to chain multiple requests like so:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the response body matches a regular expression.</jc>
 	 * 	MyBean <jv>bean</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
@@ -207,12 +207,12 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * Provides the ability to perform fluent-style assertions on the bytes of the response body.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the response body equals the text "foo".</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBodyBytes().hex().is(<js>"666F6F"</js>);
+	 * 		.assertBody().asBytes().asHex().is(<js>"666F6F"</js>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -232,34 +232,34 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	}
 
 	/**
-	 * Converts the body to a type using {@link ResponseBody#asType(Class)} and then returns the value as an object assertion.
+	 * Converts the body to a type using {@link ResponseBody#as(Class)} and then returns the value as an object assertion.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the response body as a list of strings and validates the length.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<js>"/myBean"</js>)
 	 * 		.run()
-	 * 		.assertBody().asObject(List.<jk>class</jk>, String.<jk>class</jk>).passes(<jv>x</jv> -&gt; <jv>x</jv>.size() > 0);
+	 * 		.assertBody().as(List.<jk>class</jk>, String.<jk>class</jk>).passes(<jv>x</jv> -> <jv>x</jv>.size() > 0);
 	 * </p>
 	 *
 	 * @param type The object type to create.
 	 * @return A new fluent assertion object.
 	 */
-	public <V> FluentAnyAssertion<V,R> asType(Class<V> type) {
+	public <V> FluentAnyAssertion<V,R> as(Class<V> type) {
 		return new FluentAnyAssertion<>(valueAsType(type), returns());
 	}
 
 	/**
-	 * Converts the body to a type using {@link ResponseBody#asType(Type,Type...)} and then returns the value as an object assertion.
+	 * Converts the body to a type using {@link ResponseBody#as(Type,Type...)} and then returns the value as an object assertion.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the response body as a list of strings and validates the length.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<js>"/myBean"</js>)
 	 * 		.run()
-	 * 		.assertBody().asObject(List.<jk>class</jk>, String.<jk>class</jk>).passes(<jv>x</jv> -&gt; <jv>x</jv>.size() > 0);
+	 * 		.assertBody().as(List.<jk>class</jk>, String.<jk>class</jk>).passes(<jv>x</jv> -> <jv>x</jv>.size() > 0);
 	 * </p>
 	 *
 	 * <p>
@@ -269,7 +269,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * @param args Optional type arguments.
 	 * @return A new fluent assertion object.
 	 */
-	public FluentAnyAssertion<Object,R> asType(Type type, Type...args) {
+	public FluentAnyAssertion<Object,R> as(Type type, Type...args) {
 		return new FluentAnyAssertion<>(valueAsType(type, args), returns());
 	}
 
@@ -353,7 +353,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 
 	private <T> T valueAsType(Type type, Type...args) throws AssertionError {
 		try {
-			return value().cache().asType(type, args);
+			return value().cache().as(type, args);
 		} catch (RestCallException e) {
 			throw error(e, "Exception occurred during call.");
 		}

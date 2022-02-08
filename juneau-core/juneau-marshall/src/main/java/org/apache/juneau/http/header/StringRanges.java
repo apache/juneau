@@ -34,7 +34,7 @@ import org.apache.juneau.internal.*;
  * The Accept-Encoding request-header field is similar to Accept, but restricts the content-codings (section 3.5) that
  * are acceptable in the response.
  *
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Accept-Encoding  = "Accept-Encoding" ":"
  * 	                   1#( codings [ ";" "q" "=" qvalue ] )
  * 	codings          = ( content-coding | "*" )
@@ -42,7 +42,7 @@ import org.apache.juneau.internal.*;
  *
  * <p>
  * Examples of its use are:
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Accept-Encoding: compress, gzip
  * 	Accept-Encoding:
  * 	Accept-Encoding: *

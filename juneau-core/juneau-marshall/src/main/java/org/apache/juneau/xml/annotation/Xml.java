@@ -57,7 +57,7 @@ public @interface Xml {
 	 * Applies only to collection and array bean properties.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<ja>@Xml</ja>(childName=<js>"child"</js>}
 	 * 		<jk>public</jk> String[] <jf>children</jf> = {<js>"foo"</js>,<js>"bar"</js>};
@@ -66,7 +66,7 @@ public @interface Xml {
 	 *
 	 * <p>
 	 * Without the <ja>@Xml</ja> annotation, serializing this bean as XML would have produced the following...
-	 * <p class='bcode w800'>
+	 * <p class='bxml'>
 	 * 	<xt>&lt;object&gt;</xt>
 	 * 		<xt>&lt;children&gt;</xt>
 	 * 			<xt>&lt;string&gt;</xt>foo<xt>&lt;/string&gt;</xt>
@@ -77,7 +77,7 @@ public @interface Xml {
 	 *
 	 * <p>
 	 * With the annotations, serializing this bean as XML produces the following...
-	 * <p class='bcode w800'>
+	 * <p class='bxml'>
 	 * 	<xt>&lt;object&gt;</xt>
 	 * 		<xt>&lt;children&gt;</xt>
 	 * 			<xt>&lt;child&gt;</xt>foo<xt>&lt;/child&gt;</xt>
@@ -92,13 +92,13 @@ public @interface Xml {
 	 * The {@link XmlFormat} to use for serializing this object type.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyBean {
 	 *
 	 * 		<jc>// Normally, bean properties would be rendered as child elements of the bean element.</jc>
 	 * 		<jc>// Override so that it's rendered as a "f1='123'" attribute on the bean element instead.</jc>
 	 * 		<ja>@Xml</ja>(format=XmlFormat.<jsf>ATTR</jsf>}
-	 * 		<jk>public int</jk> f1 = 123;
+	 * 		<jk>public int</jk> <jf>f1</jf> = 123;
 	 *
 	 * 		<jc>// Normally, bean URL properties would be rendered as XML attributes on the bean element.</jc>
 	 * 		<jc>// Override so that it's rendered as an &lt;href&gt;http://foo&lt;/href&gt; child element instead.</jc>
@@ -115,7 +115,7 @@ public @interface Xml {
 	 *
 	 * <p>
 	 * Without the <ja>@Xml</ja> annotations, serializing this bean as XML would have produced the following...
-	 * <p class='bcode w800'>
+	 * <p class='bxml'>
 	 * 	<xt>&lt;object</xt> <xa>href</xa>=<js>'http://foo'</js><xt>&gt;</xt>
 	 * 		<xt>&lt;f1&gt;</xt>123<xt>&lt;/f1&gt;</xt>
 	 * 		<xt>&lt;children&gt;</xt>
@@ -127,7 +127,7 @@ public @interface Xml {
 	 *
 	 * <p>
 	 * With the annotations, serializing this bean as XML produces the following...
-	 * <p class='bcode w800'>
+	 * <p class='bxml'>
 	 * 	<xt>&lt;object</xt> <xa>f1</xa>=<js>'123'</js><xt>&gt;</xt>
 	 * 		<xt>&lt;href&gt;</xt>http://foo<xt>&lt;/href&gt;</xt>
 	 * 		<xt>&lt;child&gt;</xt>foo<xt>&lt;/child&gt;</xt>

@@ -51,7 +51,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	String <jv>title</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"$RS{title}"</js>);
  * 	String <jv>titleOrDescription</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"$RS{title,description}"</js>);
  * </p>

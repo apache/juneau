@@ -554,10 +554,10 @@ public @interface SerializerConfig {
 	 * The behavior when recursions are detected depends on the value for {@link org.apache.juneau.BeanTraverseContext.Builder#ignoreRecursions()}.
 	 *
 	 * <p>
-	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
+	 * For example, if a model contains the links A->B->C->A, then the JSON generated will look like
 	 * 	the following when <jsf>BEANTRAVERSE_ignoreRecursions</jsf> is <jk>true</jk>...
 	 *
-	 * <p class='bcode w800'>
+	 * <p class='bjson'>
 	 * 	{A:{B:{C:<jk>null</jk>}}}
 	 * </p>
 	 *

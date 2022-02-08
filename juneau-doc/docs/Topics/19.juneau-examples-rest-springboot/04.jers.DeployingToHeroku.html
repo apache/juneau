@@ -28,7 +28,7 @@
 			<br><br>
 				This class provides basic metadata information to Heroku about our application.
 			<br><br>
-			<p class='bcode w800'>
+			<p class='bjson'>
 				|	{
 				|		<jok>"name"</jok>: <jov>"Start on Heroku: Juneau REST Examples"</jov>,
 				|		<jok>"description"</jok>: <jov>"Deployable REST examples to Heroku."</jov>
@@ -39,7 +39,7 @@
 			<br><br>
 				This class tells Heroku how to deploy our application using the Web dyno.
 			<br><br>
-			<p class='bcode w800'>
+			<p class='bcode'>
 				|	web: java -jar target/juneau-examples-rest-springboot-8.0.0-SNAPSHOT.jar
 			</p>
 		<li>
@@ -84,12 +84,12 @@
 	<p>
 		Next, run the following commands to cd into our Eclipse project and initialize it as a local git repo:
 	</p>
-	<p class='bcode w800'>
+	<p class='bconsole'>
 		|	$ cd juneau-examples-rest-springboot/
 		|	$ git init
 	</p>
 	<h5 class='figure'>Output</h5>
-	<p class='bcode w800 console'>
+	<p class='bconsole'>
 		|	$ cd juneau-examples-rest-springboot/
 		|	$ git init
 		|	Initialized empty Git repository in /.../juneau-examples-rest-springboot/.git/
@@ -98,11 +98,11 @@
 	<p>
 		Next, run the following command to link our project to the Heroku app:
 	</p>
-	<p class='bcode w800'>
+	<p class='bconsole'>
 		|	$ heroku git:remote -a juneau-examples-rest
 	</p>
 	<h5 class='figure'>Output</h5>
-	<p class='bcode w800 console'>
+	<p class='bconsole'>
 		|	$ heroku git:remote -a juneau-examples-rest
 		|	set git remote heroku to https://git.heroku.com/juneau-examples-rest.git
 	</p>
@@ -110,13 +110,13 @@
 	<p>
 		Next, run the following commands to add our files to the git repo and push to the Heroku master branch:
 	</p>
-	<p class='bcode w800'>
+	<p class='bconsole'>
 		|	$ git add .
 		|	$ git commit -am "Initial deploy"
 		|	$ git push heroku master
 	</p>
 	<h5 class='figure'>Output</h5>
-	<p class='bcode w800 console'>
+	<p class='bconsole'>
 		|	$ git add .
 		|	master (root-commit) 7c94cb9] Initial deploy
 		|	 123 files changed, 11986 insertions(+)

@@ -148,10 +148,10 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 		 * <br>If <jk>true</jk>, serializing the same array results in <c>?key=1&amp;key=2&amp;key=3</c>.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public</jk> String[] f1;
-		 * 		<jk>public</jk> List&lt;String&gt; f2;
+		 * 		<jk>public</jk> String[] <jf>f1</jf>;
+		 * 		<jk>public</jk> List&lt;String&gt; <jf>f2</jf>;
 		 * 	}
 		 *
 		 * 	UrlEncodingParser <jv>parser1</jv> = UrlEncodingParser.<jsf>DEFAULT</jsf>;

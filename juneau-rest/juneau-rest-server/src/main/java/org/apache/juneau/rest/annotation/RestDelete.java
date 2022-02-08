@@ -62,7 +62,7 @@ public @interface RestDelete {
 	 *
 	 * <p>
 	 * In the following example, the Java methods are mapped to the same HTTP method and URL <js>"/foobar"</js>.
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Call this method if Client-Version is at least 2.0.
 	 * 	// Note that this also matches 2.0.1.</jc>
 	 * 	<ja>@RestDelete</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
@@ -80,7 +80,7 @@ public @interface RestDelete {
 	 * <p>
 	 * It's common to combine the client version with transforms that will convert new POJOs into older POJOs for
 	 * backwards compatibility.
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Call this method if Client-Version is at least 2.0.</jc>
 	 * 	<ja>@RestDelete</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
 	 * 	<jk>public void</jk> newMethod()  {...}
@@ -88,6 +88,7 @@ public @interface RestDelete {
 	 * 	<jc>// Call this method if Client-Version is at least 1.1, but less than 2.0.</jc>
 	 * 	<ja>@RestDelete</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>})
 	 * 	<jk>public void</jk> oldMethod() {...}
+	 * </p>
 	 *
 	 * <p>
 	 * Note that in the previous example, we're returning the exact same POJO, but using a transform to convert it into
@@ -189,9 +190,9 @@ public @interface RestDelete {
 	 * Affects values returned by {@link RestRequest#getQueryParam(String)} when the parameter is not present on the request.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestDelete</ja>(path=<js>"/*"</js>, defaultRequestQueryData={<js>"foo=bar"</js>})
-	 * 	<jk>public</jk> String doDelete(<ja>@Query</ja>(<js>"foo"</js>) String foo)  {...}
+	 * 	<jk>public</jk> String doDelete(<ja>@Query</ja>(<js>"foo"</js>) String <jv>foo</jv>)  {...}
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -220,7 +221,7 @@ public @interface RestDelete {
 	 * 	</ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Defined via annotation resolving to a config file setting with default value.</jc>
 	 * 	<ja>@Rest</ja>(defaultRequestAttributes={<js>"Foo=bar"</js>, <js>"Baz: $C{REST/myAttributeValue}"</js>})
 	 * 	<jk>public class</jk> MyResource {
@@ -252,7 +253,7 @@ public @interface RestDelete {
 	 * Specifies default values for request headers if they're not passed in through the request.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
 	 * 	<ja>@RestDelete</ja>(path=<js>"/*"</js>, defaultRequestHeaders={<js>"Accept: text/json"</js>})
 	 * 	<jk>public</jk> String doDelete()  {...}
@@ -277,7 +278,7 @@ public @interface RestDelete {
 	 * Specifies default values for response headers if they're not overwritten during the request.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Assume "text/json" Accept value when Accept not specified</jc>
 	 * 	<ja>@RestDelete</ja>(path=<js>"/*"</js>, defaultResponseHeaders={<js>"Content-Type: text/json"</js>})
 	 * 	<jk>public</jk> String doDelete()  {...}
@@ -330,7 +331,7 @@ public @interface RestDelete {
 	 * The {@link org.apache.juneau.encoders.EncoderSet.Inherit} class can be used to include values from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Define a REST resource that handles GZIP compression.</jc>
 	 * 	<ja>@Rest</ja>(
 	 * 		encoders={
@@ -353,7 +354,7 @@ public @interface RestDelete {
 	 *
 	 * <p>
 	 * The programmatic equivalent to this annotation is:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	RestOpContext.Builder <jv>builder</jv> = RestOpContext.Builder.<jsm>create</jsm>(<jv>method</jv>,<jv>restContext</jv>);
 	 * 	<jv>builder</jv>.getEncoders().set(<jv>classes</jv>);
 	 * </p>
@@ -413,10 +414,10 @@ public @interface RestDelete {
 	 * The path can contain variables that get resolved to {@link org.apache.juneau.http.annotation.Path @Path} parameters.
 	 *
 	 * <h5 class='figure'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestDelete</ja>(path=<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
 	 * </p>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestDelete</ja>(path=<js>"/myurl/{0}/{1}/{2}/*"</js>)
 	 * </p>
 	 *
@@ -436,7 +437,7 @@ public @interface RestDelete {
 	 * An expression defining if a user with the specified roles are allowed to access this method.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 	 *
 	 * 		<ja>@RestDelete</ja>(
@@ -492,7 +493,7 @@ public @interface RestDelete {
 	 * Used in conjunction with {@link #roleGuard()} is used with patterns.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 	 *
 	 * 		<ja>@RestDelete</ja>(
@@ -500,7 +501,7 @@ public @interface RestDelete {
 	 * 			rolesDeclared=<js>"ROLE_ADMIN,ROLE_READ_WRITE,ROLE_READ_ONLY,ROLE_SPECIAL"</js>,
 	 * 			roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
 	 * 		)
-	 * 		<jk>public</jk> Object doGet() {
+	 * 		<jk>public</jk> Object doDelete() {
 	 * 		}
 	 * 	}
 	 * </p>
@@ -546,7 +547,7 @@ public @interface RestDelete {
 	 * <br>The starting and ending <js>'{'</js>/<js>'}'</js> characters around the entire value are optional.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestDelete</ja>(
 	 * 		path=<js>"/{propertyName}"</js>,
 	 *
@@ -592,7 +593,7 @@ public @interface RestDelete {
 	 *
 	 * <p>
 	 * The following examples are considered equivalent.
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Normal form</jc>
 	 * 	<ja>@RestDelete</ja>(path=<js>"/{propertyName}"</js>)
 	 *

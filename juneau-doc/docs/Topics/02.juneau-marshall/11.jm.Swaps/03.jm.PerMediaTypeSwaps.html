@@ -30,7 +30,7 @@
 		In the following example, we define 3 swaps against the same object.  
 		One for JSON, one for XML, and one for all other types.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> ObjectSwapTest {
 		|
 		|		<jk>public static class</jk> MyPojo {}
@@ -73,8 +73,8 @@
 		|
 		|			SerializerSet <jv>serializers</jv> = SerializersSet.<jsm>create</jsm>()
 		|				.add(JsonSerializer.<jk>class</jk>, XmlSerializer.<jk>class</jk>, HtmlSerializer.<jk>class</jk>)
-		|				.forEach(<jv>x</jv> -&gt; <jv>x</jv>.swaps(MyJsonSwap.<jk>class</jk>, MyXmlSwap.<jk>class</jk>, MyOtherSwap.<jk>class</jk>))
-		|				.forEachWS(<jv>x</jv> -&gt; <jv>x</jv>.ws())
+		|				.forEach(<jv>x</jv> -> <jv>x</jv>.swaps(MyJsonSwap.<jk>class</jk>, MyXmlSwap.<jk>class</jk>, MyOtherSwap.<jk>class</jk>))
+		|				.forEachWS(<jv>x</jv> -> <jv>x</jv>.ws())
 		|				.build();
 		|
 		|			MyPojo <jv>myPojo</jv> = <jk>new</jk> MyPojo();
@@ -97,7 +97,7 @@
 	<p>
 		In later sections we describe how annotations can be used to shorten this syntax:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Swap</ja>(MyJsonSwap.<jk>class</jk>)
 		|	<ja>@Swap</ja>(MyXmlSwap.<jk>class</jk>)
 		|	<ja>@Swap</ja>(MyOtherSwap.<jk>class</jk>)

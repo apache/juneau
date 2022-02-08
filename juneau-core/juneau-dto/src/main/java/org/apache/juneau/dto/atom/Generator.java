@@ -26,7 +26,7 @@ import org.apache.juneau.xml.annotation.*;
  * Represents an <c>atomGenerator</c> construct in the RFC4287 specification.
  *
  * <h5 class='figure'>Schema</h5>
- * <p class='bcode w800'>
+ * <p class='bschema'>
  * 	atomGenerator = element atom:generator {
  * 		atomCommonAttributes,
  * 		attribute uri { atomUri }?,

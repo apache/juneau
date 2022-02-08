@@ -24,7 +24,7 @@ import org.apache.juneau.http.annotation.*;
  * Currently defined methods are: chunked, compress, deflate, gzip, identity.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Transfer-Encoding: chunked
  * </p>
  *
@@ -34,14 +34,14 @@ import org.apache.juneau.http.annotation.*;
  * message body in order to safely transfer it between the sender and the recipient.
  * This differs from the content-coding in that the transfer-coding is a property of the message, not of the entity.
  *
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Transfer-Encoding       = "Transfer-Encoding" ":" 1#transfer-coding
  * </p>
  *
  * <p>
  * Transfer-codings are defined in section 3.6. An example is:
  *
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Transfer-Encoding: chunked
  * </p>
  *

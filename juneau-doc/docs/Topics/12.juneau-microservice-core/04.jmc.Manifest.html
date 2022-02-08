@@ -50,23 +50,23 @@
 		you to retrieve entries as any data types supported by that class.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
-		|	ManifestFile mf = Microservice.<jsm>getInstance</jsm>().getManifest();
+	<p class='bjava'>
+		|	ManifestFile <jv>manifestFile</jv> = Microservice.<jsm>getInstance</jsm>().getManifest();
 		|	
-		|	String mainClass = mf.getString(<js>"Main-Class"</js>);
-		|	<jk>int</jk> myInt = mf.getInt(<js>"My-Int"</js>, 123);
-		|	<jk>boolean</jk> myBoolean = mf.getBoolean(<js>"My-Boolean"</js>);
+		|	String <jv>mainClass</jv> = <jv>manifestFile</jv>.getString(<js>"Main-Class"</js>);
+		|	<jk>int</jk> <jv>myInt</jv> = <jv>manifestFile</jv>.getInt(<js>"My-Int"</js>, 123);
+		|	<jk>boolean</jk> <jv>myBoolean</jv> = <jv>manifestFile</jv>.getBoolean(<js>"My-Boolean"</js>);
 	</p>
 	<p>
 		The manifest is also used for the {@link oaj.svl.vars.ManifestFileVar $MF} SVL variable.
 	</p>
 	<h5 class='figure'>Examples:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// $MF used in variable resolver.</jc>
-		|	VarResolver vr = Microservice.<jsm>getInstance</jsm>().getVarResolver();
-		|	System.<jsf>out</jsf>.println(vr.resolve(<js>"The main class is $MF{Main-Class}"</js>));
+		|	VarResolver <jv>var</jv> = Microservice.<jsm>getInstance</jsm>().getVarResolver();
+		|	System.<jsf>out</jsf>.println(<jv>vr</jv>.resolve(<js>"The main class is $MF{Main-Class}"</js>));
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// $MF used in annotation.</jc>
 		|	<ja>@Rest</ja>(
 		|		title=<js>"$MF{Application-Title}"</js>,

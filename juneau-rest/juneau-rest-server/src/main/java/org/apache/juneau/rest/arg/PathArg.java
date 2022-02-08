@@ -33,7 +33,7 @@ import org.apache.juneau.rest.util.*;
  *
  * <p>
  * The parameter value is resolved using:
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jv>opSession</jv>
  * 		.{@link RestOpSession#getRequest() getRequest}()
  * 		.{@link RestRequest#getPathParams() getPathParams}()

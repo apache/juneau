@@ -138,25 +138,25 @@ public class Entry {
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
+	 * <p class='bjava'>
+	 * 	Config <jv>config</jv> = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
 	 *
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
-	 * 	List l = cf.get(<js>"MySection/myListOfStrings"</js>).to(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List <jv>list</jv> = <jv>config</jv>.get(<js>"MySection/myListOfStrings"</js>).to(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of beans.</jc>
-	 * 	List l = cf.get(<js>"MySection/myListOfBeans"</js>).to(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	List <jv>list</jv> = <jv>config</jv>.get(<js>"MySection/myListOfBeans"</js>).to(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
-	 * 	List l = cf.get(<js>"MySection/my2dListOfStrings"</js>).to(LinkedList.<jk>class</jk>,
+	 * 	List <jv>list</jv> = <jv>config</jv>.get(<js>"MySection/my2dListOfStrings"</js>).to(LinkedList.<jk>class</jk>,
 	 * 		LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
-	 * 	Map m = cf.get(<js>"MySection/myMap"</js>).to(TreeMap.<jk>class</jk>, String.<jk>class</jk>,
+	 * 	Map <jv>map</jv> = <jv>config</jv>.get(<js>"MySection/myMap"</js>).to(TreeMap.<jk>class</jk>, String.<jk>class</jk>,
 	 * 		String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
-	 * 	Map m = cf.get(<js>"MySection/myMapOfListsOfBeans"</js>).to(TreeMap.<jk>class</jk>, String.<jk>class</jk>,
+	 * 	Map <jv>map</jv> = <jv>config</jv>.get(<js>"MySection/myMapOfListsOfBeans"</js>).to(TreeMap.<jk>class</jk>, String.<jk>class</jk>,
 	 * 		List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
@@ -195,25 +195,25 @@ public class Entry {
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	Config cf = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
+	 * <p class='bjava'>
+	 * 	Config <jv>config</jv> = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
 	 *
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
-	 * 	List l = cf.get(<js>"MySection/myListOfStrings"</js>).to(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List <jv>list</jv> = <jv>config</jv>.get(<js>"MySection/myListOfStrings"</js>).to(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of beans.</jc>
-	 * 	List l = cf.get(<js>"MySection/myListOfBeans"</js>).to(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	List <jv>list</jv> = <jv>config</jv>.get(<js>"MySection/myListOfBeans"</js>).to(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
-	 * 	List l = cf.get(<js>"MySection/my2dListOfStrings"</js>).to(LinkedList.<jk>class</jk>,
+	 * 	List <jv>list</jv> = <jv>config</jv>.get(<js>"MySection/my2dListOfStrings"</js>).to(LinkedList.<jk>class</jk>,
 	 * 		LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
-	 * 	Map m = cf.get(<js>"MySection/myMap"</js>).to(TreeMap.<jk>class</jk>, String.<jk>class</jk>,
+	 * 	Map <jv>map</jv> = <jv>config</jv>.get(<js>"MySection/myMap"</js>).to(TreeMap.<jk>class</jk>, String.<jk>class</jk>,
 	 * 		String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
-	 * 	Map m = cf.get(<js>"MySection/myMapOfListsOfBeans"</js>).to(TreeMap.<jk>class</jk>, String.<jk>class</jk>,
+	 * 	Map <jv>map</jv> = <jv>config</jv>.get(<js>"MySection/myMapOfListsOfBeans"</js>).to(TreeMap.<jk>class</jk>, String.<jk>class</jk>,
 	 * 		List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *

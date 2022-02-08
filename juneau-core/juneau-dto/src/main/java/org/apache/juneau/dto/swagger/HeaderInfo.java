@@ -27,7 +27,7 @@ import org.apache.juneau.internal.*;
  * Describes a single HTTP header.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	HeaderInfo <jv>headerInfo</jv> = <jsm>headerInfo</jsm>(<js>"integer"</js>).description(<js>"The number of allowed requests in the current period"</js>);
  *
@@ -37,7 +37,7 @@ import org.apache.juneau.internal.*;
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	<jv>json</jv> = <jv>headerInfo</jv>.toString();
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjson'>
  * 	<jc>// Output</jc>
  * 	{
  * 		<js>"description"</js>: <js>"The number of allowed requests in the current period"</js>,
@@ -411,11 +411,6 @@ public class HeaderInfo extends SwaggerElement {
 	/**
 	 * Bean property fluent setter:  <property>enum</property>.
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
-	 * 	_enumJson(<js>"['foo','bar']"</js>);
-	 * </p>
-	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Strings can be JSON arrays.
@@ -715,7 +710,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * Describes the type of items in the array as raw JSON.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjson'>
 	 * 	items(<js>"{type:'type',format:'format',...}"</js>);
 	 * </p>
 	 *

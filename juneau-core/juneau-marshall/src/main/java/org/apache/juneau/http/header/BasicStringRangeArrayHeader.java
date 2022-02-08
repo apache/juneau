@@ -23,7 +23,7 @@ import java.util.function.*;
  *
  * <p>
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Accept-Encoding: compress;q=0.5, gzip;q=1.0
  * </p>
  *

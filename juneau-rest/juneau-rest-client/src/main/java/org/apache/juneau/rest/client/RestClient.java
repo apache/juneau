@@ -101,7 +101,7 @@ import org.apache.juneau.xml.*;
  * REST calls and the ability to perform marshalling of POJOs to and from HTTP parts.
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
  * 	MyBean <jv>bean</jv> = RestClient.<jsm>create</jsm>()
  * 		.simpleJson()
@@ -115,7 +115,7 @@ import org.apache.juneau.xml.*;
  *
  * <p class='w900'>
  * Breaking apart the fluent call, we can see the classes being used:
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>().simpleJson();
  * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
  * 	RestRequest <jv>req</jv> = <jv>client</jv>.get(<jsf>URI</jsf>);
@@ -133,7 +133,7 @@ import org.apache.juneau.xml.*;
  * It additionally provides support for creating remote proxy interfaces using REST as the transport medium.
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Define a Remote proxy for interacting with a REST interface.</jc>
  * 	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
  * 	<jk>public interface</jk> PetStore {
@@ -174,7 +174,7 @@ import org.apache.juneau.xml.*;
  * This is done using the {@link Builder#rootUri(Object)} method.
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Create a client where all URIs are relative to localhost.</jc>
  * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().rootUri(<js>"http://localhost:5000"</js>).build();
  *
@@ -221,12 +221,12 @@ import org.apache.juneau.xml.*;
  * <p class='w900'>
  * The following examples show the distinction between the two calls:
  *
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Consuming the response, so use run().</jc>
  * 	String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().asString();
  *
  * 	<jc>// Only interested in response status code, so use complete().</jc>
- *   <jk>int</jk> <jv>status</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).complete().getStatusCode();
+ * 	<jk>int</jk> <jv>status</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).complete().getStatusCode();
  * </p>
  *
  *
@@ -251,7 +251,7 @@ import org.apache.juneau.xml.*;
  * </ul>
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Create a basic REST client with Simplified-JSON support.</jc>
  * 	<jc>// Typically easier to use when performing unit tests.</jc>
  * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
@@ -261,7 +261,7 @@ import org.apache.juneau.xml.*;
  * Clients can also support multiple languages:
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Create a REST client with support for multiple languages.</jc>
  * 	RestClient <jv>client1</jv> = RestClient.<jsm>create</jsm>().json().xml().openApi().build();
  *
@@ -273,7 +273,7 @@ import org.apache.juneau.xml.*;
  * When using clients with multiple language support, you must specify the <c>Content-Type</c> header on requests
  * with bodies to specify which serializer should be selected.
  *
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Create a REST client with support for multiple languages.</jc>
  * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().universal().build();
  *
@@ -287,7 +287,7 @@ import org.apache.juneau.xml.*;
  * <p>
  * Languages can also be specified per-request.
  *
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Create a REST client with no default languages supported.</jc>
  * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().build();
  *
@@ -305,18 +305,10 @@ import org.apache.juneau.xml.*;
  * settings.
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Create a basic REST client with JSON support.</jc>
  * 	<jc>// Use single-quotes and whitespace.</jc>
  * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().sq().ws().build();
- *
- * 	<jc>// Same, but using properties.</jc>
- * 	RestClient <jv>client2</jv> = RestClient
- * 		.<jsm>create</jsm>()
- * 		.json()
- * 		.set(<jsf>WSERIALIZER_quoteChar</jsf>, <js>'\''</js>)
- * 		.set(<jsf>WSERIALIZER_useWhitespace</jsf>)
- * 		.build();
  * </p>
  *
  * <p class='w900'>
@@ -371,9 +363,9 @@ import org.apache.juneau.xml.*;
  * </p>
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Create a client that adds a dynamic Authorization header to every request.</jc>
- * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().header(<js>"Authorization"</js>, ()-&gt;getMyAuthToken()).build();
+ * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().header(<js>"Authorization"</js>, ()->getMyAuthToken()).build();
  * </p>
  *
  * <p>
@@ -381,7 +373,7 @@ import org.apache.juneau.xml.*;
  * and responses.
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Create a client that adds a header "Foo: bar|baz" to every request.</jc>
  * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>()
  * 		.header(<js>"Foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>), <jsf>T_ARRAY_PIPES</jsf>)
@@ -422,7 +414,7 @@ import org.apache.juneau.xml.*;
  * </ul>
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Create a client that adds a ?foo=bar query parameter to every request.</jc>
  * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().query(<js>"foo"</js>, <js>"bar"</js>).build();
  *
@@ -525,7 +517,7 @@ import org.apache.juneau.xml.*;
  * </ul>
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Only interested in status code.</jc>
  * 	<jk>int</jk> <jv>statusCode</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).complete().getStatusCode();
  * </p>
@@ -534,10 +526,10 @@ import org.apache.juneau.xml.*;
  * Equivalent methods with mutable parameters are provided to allow access to status values without breaking fluent call chains.
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Interested in multiple values.</jc>
- * 	Mutable&lt;Integer&gt; <jv>statusCode</jv> = Mutable.<jsm>create</jsm>();
- * 	Mutable&lt;String&gt; <jv>reasonPhrase</jv> = Mutable.<jsm>create</jsm>();
+ * 	Value&lt;Integer&gt; <jv>statusCode</jv> = Value.<jsm>create</jsm>();
+ * 	Value&lt;String&gt; <jv>reasonPhrase</jv> = Value.<jsm>create</jsm>();
  *
  * 	<jv>client</jv>.get(<jsf>URI</jsf>).complete().getStatusCode(<jv>statusCode</jv>).getReasonPhrase(<jv>reasonPhrase</jv>);
  * 	System.<jsf>err</jsf>.println(<js>"statusCode="</js>+<jv>statusCode</jv>.get()+<js>", reasonPhrase="</js>+<jv>reasonPhrase</jv>.get());
@@ -553,7 +545,7 @@ import org.apache.juneau.xml.*;
  * The assertion method is provided for quickly asserting status codes in fluent calls.
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Status assertion using a static value.</jc>
  * 	String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
  * 		.run()
@@ -563,7 +555,7 @@ import org.apache.juneau.xml.*;
  * 	<jc>// Status assertion using a predicate.</jc>
  * 	String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
  * 		.run()
- * 		.assertStatus().code().passes(<jv>x</jv> -&gt; <jv>x</jv>&lt;400)
+ * 		.assertStatus().code().passes(<jv>x</jv> -> <jv>x</jv>&lt;400)
  * 		.getBody().asString();
  * </p>
  *
@@ -590,9 +582,9 @@ import org.apache.juneau.xml.*;
  * This allows it to be used more easily in fluent calls.
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// See if response contains Location header.</jc>
- * 	<jk>boolean</jk> <jv>hasLocationHeader</jv> = client.get(<jsf>URI</jsf>).complete().getLastHeader(<js>"Location"</js>).exists();
+ * 	<jk>boolean</jk> <jv>hasLocationHeader</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).complete().getLastHeader(<js>"Location"</js>).exists();
  * </p>
  *
  * <p class='w900'>
@@ -625,7 +617,7 @@ import org.apache.juneau.xml.*;
  * header parts.
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Parse the header "Foo: bar|baz".</jc>
  * 	List&lt;String&gt; <jv>fooHeader</jv> = <jv>client</jv>
  * 		.get(<jsf>URI</jsf>)
@@ -648,7 +640,7 @@ import org.apache.juneau.xml.*;
  * the assertion has been completed:
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Assert the response content type is any sort of JSON.</jc>
  * 	String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
  * 		.run()
@@ -681,8 +673,8 @@ import org.apache.juneau.xml.*;
  * 		<li class='jm'><c>{@link ResponseBody#asReader(Charset) asReader(Charset)} <jk>returns</jk> Reader</c>
  * 		<li class='jm'><c>{@link ResponseBody#pipeTo(OutputStream) pipeTo(OutputStream)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link ResponseBody#pipeTo(Writer) pipeTo(Writer)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link ResponseBody#asType(Type,Type...) asType(Type,Type...)} <jk>returns</jk> T</c>
- * 		<li class='jm'><c>{@link ResponseBody#asType(Class) asType(Class&lt;T&gt;)} <jk>returns</jk> T</c>
+ * 		<li class='jm'><c>{@link ResponseBody#as(Type,Type...) asType(Type,Type...)} <jk>returns</jk> T</c>
+ * 		<li class='jm'><c>{@link ResponseBody#as(Class) asType(Class&lt;T&gt;)} <jk>returns</jk> T</c>
  * 		<li class='jm'><c>{@link ResponseBody#asFuture(Class) asFuture(Class&lt;T&gt;)} <jk>returns</jk> Future&lt;T&gt;</c>
  * 		<li class='jm'><c>{@link ResponseBody#asFuture(Type,Type...) asFuture(Type,Type...)} <jk>returns</jk> Future&lt;T&gt;</c>
  * 		<li class='jm'><c>{@link ResponseBody#asString() asString()} <jk>returns</jk> String</c>
@@ -698,33 +690,33 @@ import org.apache.juneau.xml.*;
  * <br>
  *
  * <h5 class='figure'>Examples:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Parse into a linked-list of strings.</jc>
- * 	List&lt;String&gt; <jv>l1</jv> = <jv>client</jv>
+ * 	List&lt;String&gt; <jv>list1</jv> = <jv>client</jv>
  * 		.get(<jsf>URI</jsf>)
  * 		.run()
  * 		.getBody().as(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
  *
  * 	<jc>// Parse into a linked-list of beans.</jc>
- * 	List&lt;MyBean&gt; <jv>l2</jv> = <jv>client</jv>
+ * 	List&lt;MyBean&gt; <jv>list2</jv> = <jv>client</jv>
  * 		.get(<jsf>URI</jsf>)
  * 		.run()
  * 		.getBody().as(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
  *
  * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
- * 	List&lt;List&lt;String&gt;&gt; <jv>l3</jv> = <jv>client</jv>
+ * 	List&lt;List&lt;String&gt;&gt; <jv>list3</jv> = <jv>client</jv>
  * 		.get(<jsf>URI</jsf>)
  * 		.run()
  * 		.getBody().as(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
  *
  * 	<jc>// Parse into a map of string keys/values.</jc>
- * 	Map&lt;String,String&gt; <jv>m1</jv> = <jv>client</jv>
+ * 	Map&lt;String,String&gt; <jv>map1</jv> = <jv>client</jv>
  * 		.get(<jsf>URI</jsf>)
  * 		.run()
  * 		.getBody().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
  *
  * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
- * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>m2<jv> = <jv>client</jv>
+ * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>map2</jv> = <jv>client</jv>
  * 		.get(<jsf>URI</jsf>)
  * 		.run()
  * 		.getBody().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
@@ -737,7 +729,7 @@ import org.apache.juneau.xml.*;
  * In these cases, the {@link RestResponse#cacheBody()} and {@link ResponseBody#cache()} methods are provided
  * to cache the response body in memory so that you can perform several operations against it.
  *
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Cache the response body so we can access it twice.</jc>
  * 	InputStream <jv>inputStream</jv> = <jv>client</jv>
  * 		.get(<jsf>URI</jsf>)
@@ -760,7 +752,7 @@ import org.apache.juneau.xml.*;
  * <br>
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Assert that the body contains the string "Success".</jc>
  * 	String <jv>body</jv> = <jv>client</jv>
  * 		.get(<jsf>URI</jsf>)
@@ -774,11 +766,11 @@ import org.apache.juneau.xml.*;
  * POJO.
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Parse bean into POJO and then validate that it was parsed correctly.</jc>
  * 	MyBean <jv>bean</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
  * 		.run()
- * 		.getBody().assertObject(MyBean.<jk>class</jk>).json().is(<js>"{foo:'bar'}"</js>)
+ * 		.getBody().assertObject(MyBean.<jk>class</jk>).asJson().is(<js>"{foo:'bar'}"</js>)
  * 		.getBody().as(MyBean.<jk>class</jk>);
  * </p>
  *
@@ -847,11 +839,11 @@ import org.apache.juneau.xml.*;
  * The following example shows the results of logging all requests that end with <c>/bean</c>.
  *
  * <h5 class='figure'>Examples:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	MyBean <jv>bean</jv> = RestClient
  * 		.<jsm>create</jsm>()
  * 		.simpleJson()
- * 		.logRequests(DetailLevel.<jsf>FULL</jsf>, Level.<jsf>SEVERE</jsf>, (<jv>req</jv>,<jv>res</jv>)-&gt;<jv>req</jv>.getUri().endsWith(<js>"/bean"</js>))
+ * 		.logRequests(DetailLevel.<jsf>FULL</jsf>, Level.<jsf>SEVERE</jsf>, (<jv>req</jv>,<jv>res</jv>)-><jv>req</jv>.getUri().endsWith(<js>"/bean"</js>))
  * 		.logToConsole()
  * 		.build()
  * 		.post(<js>"http://localhost/bean"</js>, <jv>anotherBean</jv>)
@@ -862,7 +854,7 @@ import org.apache.juneau.xml.*;
  * <p>
  * This produces the following console output:
  *
- * <p class='bcode w800 console'>
+ * <p class='bconsole'>
  * 	=== HTTP Call (outgoing) ======================================================
  * 	=== REQUEST ===
  * 	POST http://localhost/bean
@@ -912,7 +904,7 @@ import org.apache.juneau.xml.*;
  * arbitrary remote REST resources.
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Define a Remote proxy for interacting with a REST interface.</jc>
  * 	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
  * 	<jk>public interface</jk> PetStore {
@@ -984,7 +976,7 @@ import org.apache.juneau.xml.*;
  * Additionally, all methods on the <c>HttpClientBuilder</c> class have been extended with fluent setters.
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Create a client with customized HttpClient settings.</jc>
  * 	MyBean <jv>bean</jv> = RestClient
  * 		.<jsm>create</jsm>()
@@ -1005,7 +997,7 @@ import org.apache.juneau.xml.*;
  * The following example that overrides the primary run method shows how this can be done.
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jk>public class</jk> MyRestClient <jk>extends</jk> RestClient {
  *
  * 		<jc>// Must provide this constructor!</jc>
@@ -1142,7 +1134,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	Identical to calling <c>serializer(JsonSerializer.<jk>class</jk>).parser(JsonParser.<jk>class</jk>)</c>.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses JSON marshalling.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().build();
 		 * </p>
@@ -1189,7 +1181,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	Identical to calling <c>serializer(SimpleJsonSerializer.<jk>class</jk>).parser(JsonParser.<jk>class</jk>)</c>.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses Simplified JSON marshalling.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
 		 * </p>
@@ -1232,7 +1224,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	Identical to calling <c>serializer(XmlSerializer.<jk>class</jk>).parser(XmlParser.<jk>class</jk>)</c>.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses XML marshalling.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().xml().build();
 		 * </p>
@@ -1278,7 +1270,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	Identical to calling <c>serializer(HtmlSerializer.<jk>class</jk>).parser(HtmlParser.<jk>class</jk>)</c>.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses HTML marshalling.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().html().build();
 		 * </p>
@@ -1324,7 +1316,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	Identical to calling <c>serializer(HtmlDocSerializer.<jk>class</jk>).parser(HtmlParser.<jk>class</jk>)</c>.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses HTML Doc marshalling.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().htmlDoc().build();
 		 * </p>
@@ -1370,7 +1362,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	Identical to calling <c>serializer(HtmlStrippedDocSerializer.<jk>class</jk>).parser(HtmlParser.<jk>class</jk>)</c>.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses HTML Stripped Doc marshalling.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().htmlStrippedDoc().build();
 		 * </p>
@@ -1417,7 +1409,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	Identical to calling <c>serializer(PlainTextSerializer.<jk>class</jk>).parser(PlainTextParser.<jk>class</jk>)</c>.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses Plain Text marshalling.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().plainText().build();
 		 * </p>
@@ -1463,7 +1455,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	Identical to calling <c>serializer(MsgPackSerializer.<jk>class</jk>).parser(MsgPackParser.<jk>class</jk>)</c>.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses MessagePack marshalling.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().msgPack().build();
 		 * </p>
@@ -1510,7 +1502,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	Identical to calling <c>serializer(UonSerializer.<jk>class</jk>).parser(UonParser.<jk>class</jk>)</c>.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses UON marshalling.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().uon().build();
 		 * </p>
@@ -1555,7 +1547,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	Identical to calling <c>serializer(UrlEncodingSerializer.<jk>class</jk>).parser(UrlEncodingParser.<jk>class</jk>)</c>.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses URL-Encoded marshalling.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().urlEnc().build();
 		 * </p>
@@ -1604,7 +1596,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	Identical to calling <c>serializer(OpenApiSerializer.<jk>class</jk>).parser(OpenApiParser.<jk>class</jk>)</c>.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses OpenAPI marshalling.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().openApi().build();
 		 * </p>
@@ -1641,7 +1633,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	Similar to calling <c>json().simpleJson().html().xml().uon().urlEnc().openApi().msgPack().plainText()</c>.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses universal marshalling.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().universal().build();
 		 * </p>
@@ -1697,10 +1689,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.httpClientBuilder(<jv>x</jv> -&gt; <jv>x</jv>.disableAuthCaching())
+		 * 		.httpClientBuilder(<jv>x</jv> -> <jv>x</jv>.disableAuthCaching())
 		 * 		.build();
 		 * </p>
 		 *
@@ -1720,7 +1712,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * The builder can also be specified using the {@link #httpClientBuilder(HttpClientBuilder)} method.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A Builder that provides it's own customized HttpClientBuilder.</jc>
 		 * 	<jk>public class</jk> MyBuilder <jk>extends</jk> Builder {
 		 * 		<ja>@Override</ja>
@@ -1746,7 +1738,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This can be used to bypass the builder created by {@link #createHttpClientBuilder()} method.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses a customized HttpClientBuilder.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -1783,7 +1775,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * {@link #createHttpClientBuilder()}.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A Builder that provides it's own customized HttpClient.</jc>
 		 * 	<jk>public class</jk> MyBuilder <jk>extends</jk> Builder {
 		 * 		<ja>@Override</ja>
@@ -1812,7 +1804,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This can be used to bypass the client created by {@link #createHttpClient()} method.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses a customized HttpClient.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -1886,7 +1878,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses JSON transport for request bodies.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -1922,7 +1914,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses a predefined JSON serializer request bodies.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -1959,7 +1951,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses JSON and XML transport for request bodies.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -2000,7 +1992,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses predefined JSON and XML serializers for request bodies.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -2072,7 +2064,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses JSON transport for response bodies.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -2108,7 +2100,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses a predefined JSON parser for response bodies.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -2145,7 +2137,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses JSON and XML transport for response bodies.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -2186,7 +2178,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses JSON and XML transport for response bodies.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -2253,7 +2245,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * The default part serializer is {@link OpenApiSerializer} which allows for schema-driven marshalling.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses UON format by default for outgoing HTTP parts.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -2282,7 +2274,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * The default part serializer is {@link OpenApiSerializer} which allows for schema-driven marshalling.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses UON format by default for outgoing HTTP parts.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -2349,7 +2341,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * The default part parser is {@link OpenApiParser} which allows for schema-driven marshalling.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses UON format by default for incoming HTTP parts.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -2378,7 +2370,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * The default part parser is {@link OpenApiParser} which allows for schema-driven marshalling.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses UON format by default for incoming HTTP parts.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -2447,9 +2439,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * On first call, the builder is created via the method {@link #createHeaderData()}.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a client that adds a "Foo: bar" header on every request.</jc>
-		 * 	Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
+		 * 	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
 		 * 	<jv>builder</jv>.headerData().setDefault(<js>"Foo"</js>, <js>"bar"</js>));
 		 * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
 		 * </p>
@@ -2502,10 +2494,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.headerData(<jv>x</jv> -&gt; <jv>x</jv>.setDefault(<js>"Foo"</js>, <js>"bar"</js>))
+		 * 		.headerData(<jv>x</jv> -> <jv>x</jv>.setDefault(<js>"Foo"</js>, <js>"bar"</js>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -2537,7 +2529,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Appends multiple headers to all requests.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jk>import static</jk> org.apache.juneau.http.HttpHeaders.*;
 		 *
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -2570,10 +2562,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Uses default values for specified headers if not otherwise specified on the outgoing requests.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.headersDefault(<jsm>stringHeader</jsm>(<js>"Foo"</js>, ()-&gt;<js>"bar"</js>));
+		 * 		.headersDefault(<jsm>stringHeader</jsm>(<js>"Foo"</js>, ()-><js>"bar"</js>));
 		 * 		.build();
 		 * </p>
 		 *
@@ -2593,7 +2585,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Appends a header to all requests.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
 		 * 		.header(<js>"Foo"</js>, <js>"bar"</js>);
@@ -2618,10 +2610,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Appends a header to all requests using a dynamic value.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.header(<js>"Foo"</js>, ()-&gt;<js>"bar"</js>);
+		 * 		.header(<js>"Foo"</js>, ()-><js>"bar"</js>);
 		 * 		.build();
 		 * </p>
 		 *
@@ -2987,9 +2979,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * On first call, the builder is created via the method {@link #createQueryData()}.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a client that adds a "foo=bar" query parameter on every request.</jc>
-		 * 	Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
+		 * 	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
 		 * 	<jv>builder</jv>.queryData().setDefault(<js>"foo"</js>, <js>"bar"</js>));
 		 * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
 		 * </p>
@@ -3021,10 +3013,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.queryData(<jv>x</jv> -&gt; <jv>x</jv>.setDefault(<js>"foo"</js>, <js>"bar"</js>))
+		 * 		.queryData(<jv>x</jv> -> <jv>x</jv>.setDefault(<js>"foo"</js>, <js>"bar"</js>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3056,7 +3048,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Appends multiple query parameters to the URI of all requests.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
 		 *
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -3089,10 +3081,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Uses default values for specified parameters if not otherwise specified on the outgoing requests.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.queryDataDefault(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-&gt;<js>"bar"</js>));
+		 * 		.queryDataDefault(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-><js>"bar"</js>));
 		 * 		.build();
 		 * </p>
 		 *
@@ -3112,7 +3104,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Appends a query parameter to the URI.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
 		 * 		.queryData(<js>"foo"</js>, <js>"bar"</js>)
@@ -3137,10 +3129,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Appends a query parameter with a dynamic value to the URI.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.queryData(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
+		 * 		.queryData(<js>"foo"</js>, ()-><js>"bar"</js>)
 		 * 		.build();
 		 * </p>
 		 *
@@ -3170,9 +3162,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * On first call, the builder is created via the method {@link #createFormData()}.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a client that adds a "foo=bar" form-data parameter on every request.</jc>
-		 * 	Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
+		 * 	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
 		 * 	<jv>builder</jv>.formData().setDefault(<js>"foo"</js>, <js>"bar"</js>));
 		 * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
 		 * </p>
@@ -3204,10 +3196,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.formData(<jv>x</jv> -&gt; <jv>x</jv>.setDefault(<js>"foo"</js>, <js>"bar"</js>))
+		 * 		.formData(<jv>x</jv> -> <jv>x</jv>.setDefault(<js>"foo"</js>, <js>"bar"</js>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3239,7 +3231,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Appends multiple form-data parameters to the request bodies of all URL-encoded form posts.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
 		 *
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -3272,10 +3264,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Uses default values for specified parameters if not otherwise specified on the outgoing requests.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.defaultFormData(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-&gt;<js>"bar"</js>));
+		 * 		.formDataDefault(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-><js>"bar"</js>));
 		 * 		.build();
 		 * </p>
 		 *
@@ -3295,7 +3287,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Appends a form-data parameter to all request bodies.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
 		 * 		.formData(<js>"foo"</js>, <js>"bar"</js>)
@@ -3320,10 +3312,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Appends a form-data parameter with a dynamic value to all request bodies.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.formData(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
+		 * 		.formData(<js>"foo"</js>, ()-><js>"bar"</js>)
 		 * 		.build();
 		 * </p>
 		 *
@@ -3353,10 +3345,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * On first call, the builder is created via the method {@link #createFormData()}.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses "bar" for the "{foo}" path variable on every request.</jc>
-		 * 	Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
-		 * 	<jv>builder</jv>.formData().setDefault(<js>"foo"</js>, <js>"bar"</js>));
+		 * 	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>();
+		 * 	<jv>builder</jv>.pathData().setDefault(<js>"foo"</js>, <js>"bar"</js>));
 		 * 	RestClient <jv>client</jv> = <jv>builder</jv>.build();
 		 * </p>
 		 *
@@ -3387,10 +3379,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.apply(<jv>x</jv> -&gt; <jv>x</jv>.setDefault(<js>"foo"</js>, <js>"bar"</js>))
+		 * 		.pathData(<jv>x</jv> -> <jv>x</jv>.setDefault(<js>"foo"</js>, <js>"bar"</js>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3422,7 +3414,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Sets multiple path parameters on all requests.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
 		 *
 		 * 	RestClient <jv>client</jv> = RestClient
@@ -3455,10 +3447,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Uses default values for specified parameters if not otherwise specified on the outgoing requests.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.pathDataDefault(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-&gt;<js>"bar"</js>));
+		 * 		.pathDataDefault(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-><js>"bar"</js>));
 		 * 		.build();
 		 * </p>
 		 *
@@ -3478,7 +3470,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Appends a path parameter to all request bodies.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
 		 * 		.pathData(<js>"foo"</js>, <js>"bar"</js>)
@@ -3503,10 +3495,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Sets a path parameter with a dynamic value to all request bodies.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.pathData(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
+		 * 		.pathData(<js>"foo"</js>, ()-><js>"bar"</js>)
 		 * 		.build();
 		 * </p>
 		 *
@@ -3535,7 +3527,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Allows you to provide a custom handler for making HTTP calls.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a client that handles processing of requests using a custom handler.</jc>
 		 * 	<jk>public class</jk> MyRestCallHandler <jk>implements</jk> RestCallHandler {
 		 *
@@ -3581,10 +3573,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.callHandler(<jv>x</jv> -&gt; <jv>x</jv>.impl(<jv>myCallHandler</jv>))
+		 * 		.callHandler(<jv>x</jv> -> <jv>x</jv>.impl(<jv>myCallHandler</jv>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3643,17 +3635,17 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Defines a predicate to test for error codes.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a client that considers any 300+ responses to be errors.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.errorCodes(<jv>x</jv> -&gt; <jv>x</jv>&gt;=300)
+		 * 		.errorCodes(<jv>x</jv> -> <jv>x</jv>&gt;=300)
 		 * 		.build();
 		 * </p>
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * 	<br>The default value is <code>x -&gt; x &gt;= 400</code>.
+		 * 	<br>The default value is <code>x -> x &gt;= 400</code>.
 		 * @return This object.
 		 */
 		@FluentSetter
@@ -3674,12 +3666,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * <p>
 		 * If not specified, uses the following logger:
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	Logger.<jsm>getLogger</jsm>(RestClient.<jk>class</jk>.getName());
 		 * </p>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that logs messages to a special logger.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -3705,7 +3697,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Specifies to log messages to the console.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that logs messages to a special logger.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -3730,13 +3722,13 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * <p>
 		 * <jsf>SIMPLE</jsf> detail produces a log message like the following:
-		 * <p class='bcode w800 console'>
+		 * <p class='bconsole'>
 		 * 	POST http://localhost:10000/testUrl, HTTP/1.1 200 OK
 		 * </p>
 		 *
 		 * <p>
 		 * <jsf>FULL</jsf> detail produces a log message like the following:
-		 * <p class='bcode w800 console'>
+		 * <p class='bconsole'>
 		 * 	=== HTTP Call (outgoing) =======================================================
 		 * 	=== REQUEST ===
 		 * 	POST http://localhost:10000/testUrl
@@ -3792,7 +3784,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * was called or {@link BasicHttpClientConnectionManager} if not..
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A Builder that provides it's own customized HttpClientConnectionManager.</jc>
 		 * 	<jk>public class</jk> MyBuilder <jk>extends</jk> Builder {
 		 * 		<ja>@Override</ja>
@@ -3816,7 +3808,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * instead of a {@link BasicHttpClientConnectionManager}.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses pooled connections.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -3867,7 +3859,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Set up this client to use BASIC auth.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Construct a client that uses BASIC authentication.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -3930,7 +3922,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * and a queue size of 10.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a client with a customized executor service.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -3975,7 +3967,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Don't close this client when the {@link RestClient#close()} method is called.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a client with a customized client and don't close the client  service.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -4001,10 +3993,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * When enabled, HTTP error response codes (e.g. <l>&gt;=400</l>) will not cause a {@link RestCallException} to
 		 * be thrown.
 		 * <p>
-		 * Note that this is equivalent to <c>builder.errorCodes(x -&gt; <jk>false</jk>);</c>
+		 * Note that this is equivalent to <c>builder.errorCodes(x -> <jk>false</jk>);</c>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a client that doesn't throws a RestCallException when a 500 error occurs.</jc>
 		 * 	RestClient
 		 * 		.<jsm>create</jsm>()
@@ -4030,7 +4022,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Adds an interceptor that can be called to hook into specified events in the lifecycle of a single request.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 *   <jc>// Customized interceptor (note you can also extend from BasicRestCallInterceptor as well.</jc>
 		 * 	<jk>public class</jk> MyRestCallInterceptor <jk>implements</jk> RestCallInterceptor {
 		 *
@@ -4095,7 +4087,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Adds an interceptor that gets called immediately after a connection is made.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a client with a customized interceptor.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -4174,7 +4166,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Automatically enabled with {@link org.apache.juneau.Context.Builder#debug()}.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a client that logs a message if </jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -4206,7 +4198,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses Simplified-JSON transport using an existing marshall.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -4237,7 +4229,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses JSON and XML transport using existing marshalls.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -4265,7 +4257,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <br>This root URI is ignored on those methods if you pass in a {@link URL}, {@link URI}, or an absolute URI string.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a client that uses UON format by default for HTTP parts.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -4446,7 +4438,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a JSON client that automatically checks for recursions.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -4464,7 +4456,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *	<jk>try</jk> {
 		 * 		<jc>// Throws a RestCallException with an inner SerializeException and not a StackOverflowError</jc>
 		 * 		<jv>client</jv>
-		 * 			.doPost(<js>"http://localhost:10000/foo"</js>, <jv>a</jv>)
+		 * 			.post(<js>"http://localhost:10000/foo"</js>, <jv>a</jv>)
 		 * 			.run();
 		 *	} <jk>catch</jk> (RestCallException <jv>e</jv>} {
 		 *		<jc>// Handle exception.</jc>
@@ -4490,10 +4482,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * When enabled, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
 		 *
 		 * <p>
-		 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
+		 * For example, if a model contains the links A->B->C->A, then the JSON generated will look like
 		 * 	the following when <jsf>BEANTRAVERSE_ignoreRecursions</jsf> is <jk>true</jk>...
 		 *
-		 * <p class='bcode w800'>
+		 * <p class='bjson'>
 		 * 	{A:{B:{C:<jk>null</jk>}}}
 		 * </p>
 		 *
@@ -4503,7 +4495,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a JSON client that ignores recursions.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -4520,7 +4512,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * 	<jc>// Produces request body "{f:null}"</jc>
 		 * 	<jv>client</jv>
-		 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jv>a</jv>)
+		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jv>a</jv>)
 		 * 		.run();
 		 * </p>
 		 *
@@ -4546,7 +4538,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Useful when constructing document fragments that need to be indented at a certain level when whitespace is enabled.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON serializer with whitespace enabled and an initial depth of 2.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -4562,7 +4554,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * 	<jc>// Produces request body "\t\t{\n\t\t\t'foo':'bar'\n\t\t}\n"</jc>
 		 * 	<jv>client</jv>
-		 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
 		 * 		.run();
 		 * </p>
 		 *
@@ -4594,7 +4586,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This prevents stack overflows from occurring when trying to traverse models with recursive references.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON serializer that throws an exception if the depth reaches greater than 20.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -4642,7 +4634,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a JSON client that adds _type to nodes in the request body.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -4660,7 +4652,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * 	<jc>// Request body will contain:  {"foo":{"_type":"mybean","foo":"bar"}}</jc>
 		 * 	<jv>client</jv>
-		 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jv>map</jv>)
+		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jv>map</jv>)
 		 * 		.run();
 		 * </p>
 		 *
@@ -4698,7 +4690,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a JSON client that adds _type to root node.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -4714,7 +4706,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * 	<jc>// Request body will contain:  {"_type":"mybean","foo":"bar"}</jc>
 		 * 	<jv>client</jv>
-		 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
 		 * 		.run();
 		 * </p>
 		 *
@@ -4741,7 +4733,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON serializer that serializes null properties.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -4756,7 +4748,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * 	<jc>// Request body will contain:  {foo:null}</jc>
 		 * 	<jv>client</jv>
-		 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
 		 * 		.run();
 		 * </p>
 		 *
@@ -4782,7 +4774,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Note that this introduces a performance penalty since it requires copying the existing collection.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON serializer that sorts arrays and collections before serialization.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -4795,7 +4787,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * 	<jc>// Request body will contain:  ["bar","baz","foo"]</jc>
 		 * 	<jv>client</jv>
-		 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jv>array</jv>)
+		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jv>array</jv>)
 		 * 		.run();
 		 * </p>
 		 *
@@ -4821,7 +4813,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Note that this introduces a performance penalty.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON serializer that sorts maps before serialization.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -4834,7 +4826,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * 	<jc>// Request body will contain:  {"bar":2,"baz":3,"foo":1}</jc>
 		 * 	<jv>client</jv>
-		 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jv>map</jv>)
+		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jv>map</jv>)
 		 * 		.run();
 		 * </p>
 		 *
@@ -4866,9 +4858,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer that skips empty arrays and collections.</jc>
-		 * 	WriterSerializer <jv>s</jv> = JsonSerializer
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.trimEmptyCollections()
 		 * 		.build();
@@ -4880,7 +4872,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * 	<jc>// Request body will contain:  {}</jc>
 		 * 	<jv>client</jv>
-		 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
 		 * 		.run();
 		 * </p>
 		 *
@@ -4910,7 +4902,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON serializer that skips empty maps.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -4925,7 +4917,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * 	<jc>// Request body will contain:  {}</jc>
 		 * 	<jv>client</jv>
-		 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
 		 * 		.run();
 		 * </p>
 		 *
@@ -4948,7 +4940,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * When enabled, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON serializer that trims strings before serialization.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -4961,7 +4953,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * 	<jc>// Request body will contain:  {"foo":"bar"}</jc>
 		 * 	<jv>client</jv>
-		 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jv>map</jv>)
+		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jv>map</jv>)
 		 * 		.run();
 		 * </p>
 		 *
@@ -4984,7 +4976,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Bean used for resolution of URIs to absolute or root-relative form.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Our URI contextual information.</jc>
 		 * 	String <jv>authority</jv> = <js>"http://localhost:10000"</js>;
 		 * 	String <jv>contextRoot</jv> = <js>"/myContext"</js>;
@@ -5008,7 +5000,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * 	<jc>// Request body will contain:  "http://localhost:10000/myContext/myServlet/foo/bar"</jc>
 		 * 	<jv>client</jv>
-		 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jv>uri</jv>)
+		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jv>uri</jv>)
 		 * 		.run();
 		 * </p>
 		 *
@@ -5121,7 +5113,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON serializer that indents a maximum of 20 tabs.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -5157,7 +5149,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON serializer that uses single quotes.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -5172,7 +5164,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * 	<jc>// Request body will contain:  {'foo':'bar'}</jc>
 		 * 	<jv>client</jv>
-		 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
 		 * 		.run();
 		 * </p>
 		 *
@@ -5202,7 +5194,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON serializer that uses single quotes.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -5217,7 +5209,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * 	<jc>// Request body will contain:  {'foo':'bar'}</jc>
 		 * 	<jv>client</jv>
-		 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
 		 * 		.run();
 		 * </p>
 		 *
@@ -5240,7 +5232,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * When enabled, whitespace is added to the output to improve readability.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON serializer with whitespace enabled.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -5255,7 +5247,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * 	<jc>// Request body will contain:  {\n\t"foo": "bar"\n\}\n</jc>
 		 * 	<jv>client</jv>
-		 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
 		 * 		.run();
 		 * </p>
 		 *
@@ -5277,7 +5269,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * When enabled, whitespace is added to the output to improve readability.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON serializer with whitespace enabled.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -5292,7 +5284,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * 	<jc>// Request body will contain:  {\n\t"foo": "bar"\n\}\n</jc>
 		 * 	<jv>client</jv>
-		 * 		.doPost(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
+		 * 		.post(<js>"http://localhost:10000/foo"</js>, <jk>new</jk> MyBean())
 		 * 		.run();
 		 * </p>
 		 *
@@ -5324,7 +5316,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * error location to be printed as part of the exception message.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a parser whose exceptions print out 100 lines before and after the parse error location.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -5394,7 +5386,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </table>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON parser using strict mode.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -5433,7 +5425,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * the POJO.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with JSON parser with trim-strings enabled.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -5503,9 +5495,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with UON part serialization and parsing.</jc>
-		 * 	RestClient client  = RestClient
+		 * 	RestClient <jv>client</jv>  = RestClient
 		 * 		.<jsm>create</jsm>()
 		 * 		.oapiFormat(<jsf>UON</jsf>)
 		 * 		.build();
@@ -5558,7 +5550,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with CSV format for http parts.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -5621,7 +5613,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with URL-Encoded serializer that serializes values in plain-text format.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -5664,7 +5656,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Specifies plaintext as the format to use for GET parameter keys and values.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with URL-Encoded serializer that serializes values in plain-text format.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
@@ -7636,7 +7628,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * If the information is not available to resolve to an absolute URI, a {@link RemoteMetadataException} is thrown.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>package</jk> <jk>org.apache.foo</jk>;
 	 *
 	 * 	<ja>@RemoteResource</ja>(path=<js>"http://hostname/resturi/myinterface1"</js>)
@@ -7648,20 +7640,20 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * 	<jk>public interface</jk> MyInterface3 { ... }
 	 *
 	 * 	<jc>// Resolves to "http://localhost/resturi/myinterface1"</jc>
-	 * 	MyInterface1 <jv>i1</jv> = RestClient
+	 * 	MyInterface1 <jv>interface1</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.build()
 	 * 		.getRemote(MyInterface1.<jk>class</jk>);
 	 *
 	 * 	<jc>// Resolves to "http://hostname/resturi/myinterface2"</jc>
-	 * 	MyInterface2 <jv>i2</jv> = RestClient
+	 * 	MyInterface2 <jv>interface2</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.rootUri(<js>"http://hostname/resturi"</js>)
 	 * 		.build()
 	 * 		.getRemote(MyInterface2.<jk>class</jk>);
 	 *
 	 * 	<jc>// Resolves to "http://hostname/resturi/org.apache.foo.MyInterface3"</jc>
-	 * 	MyInterface3 <jv>i3</jv> = RestClient
+	 * 	MyInterface3 <jv>interface3</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
 	 * 		.rootUri(<js>"http://hostname/resturi"</js>)
 	 * 		.build()
@@ -7853,7 +7845,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				if (Throwable.class.isAssignableFrom(rt))
 					rc.ignoreErrors();
 				res = rc.run();
-				Object v = res.getBody().asType(ror.getReturnType());
+				Object v = res.getBody().as(ror.getReturnType());
 				if (v == null && rt.isPrimitive())
 					v = ClassInfo.of(rt).getPrimitiveDefault();
 				ret = v;
@@ -7981,7 +7973,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 						res = rc.run();
 
-						Object v = res.getBody().asType(method.getGenericReturnType());
+						Object v = res.getBody().as(method.getGenericReturnType());
 						if (v == null && method.getReturnType().isPrimitive())
 							v = ClassInfo.of(method.getReturnType()).getPrimitiveDefault();
 						return v;

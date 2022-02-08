@@ -36,15 +36,15 @@ import org.apache.juneau.cp.*;
  * See {@link AssertionPredicates} for a set of predefined predicates for common use cases.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Asserts that a bean passes a custom test.</jc>
  * 	<jc>// AssertionError with specified message is thrown otherwise.</jc>
- * 	Predicate<> <jv>p</jv> = <jk>new</jk> AssertionPredicate&lt;MyBean&gt;(
- * 		<jv>x</jv> -&gt; <jv>x</jv>.getFoo().equals(<js>"bar"</js>),
+ * 	Predicate&lt;MyBean&gt; <jv>predicate</jv> = <jk>new</jk> AssertionPredicate&lt;MyBean&gt;(
+ * 		<jv>x</jv> -> <jv>x</jv>.getFoo().equals(<js>"bar"</js>),
  * 		<js>"Foo did not equal bar.  Bean was=''{0}''"</js>,
  * 		<jsf>VALUE</jsf>
  * 	);
- * 	<jsm>assertObject<jsm>(<jv>myBean</jv>).passes(<jv>p</jv>);
+ * 	<jsm>assertObject<jsm>(<jv>myBean</jv>).passes(<jv>predicate</jv>);
  * </p>
  *
  * <ul class='seealso'>
@@ -159,7 +159,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 	 * Encapsulates multiple predicates into a single AND operation.
 	 *
 	 * <p>
-	 * Similar to <c><jsm>stream</jsm>(<jv>predicates<jv>).reduce(<jv>x</jv>-><jk>true</jk>, Predicate::and)</c> but
+	 * Similar to <c><jsm>stream</jsm>(<jv>predicates</jv>).reduce(<jv>x</jv>-><jk>true</jk>, Predicate::and)</c> but
 	 * provides for {@link #getFailureMessage()} to return a useful message.
 	 *
 	 * @param <T> the type of input being tested.
@@ -206,7 +206,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 	 * Encapsulates multiple predicates into a single OR operation.
 	 *
 	 * <p>
-	 * Similar to <c><jsm>stream</jsm>(<jv>predicates<jv>).reduce(<jv>x</jv>-><jk>true</jk>, Predicate::or)</c> but
+	 * Similar to <c><jsm>stream</jsm>(<jv>predicates</jv>).reduce(<jv>x</jv>-><jk>true</jk>, Predicate::or)</c> but
 	 * provides for {@link #getFailureMessage()} to return a useful message.
 	 *
 	 * @param <T> the type of input being tested.

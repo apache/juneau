@@ -60,13 +60,13 @@
 	</p>
 	
 	<h5 class='figure'>Examples:</h5>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc>#--------------------------------------------------------------------------------
 		|	# Contents of org/apache/foo/nls/MyMessages.properties
 		|	#--------------------------------------------------------------------------------</cc>
 		|	<ck>HelloMessage</ck> = <cv>Hello {0}!</cv>
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Contents of org/apache/foo/MyResource.java</jc>
 		|
 		|	<ja>@Rest</ja>(messages=<js>"nls/MyMessages"</js>)
@@ -74,18 +74,18 @@
 		|
 		|		<ja>@RestGet</ja>(<js>"/hello/{you}"</js>)
 		|		<jk>public</jk> Object helloYou(RestRequest <jv>req</jv>, Messages <jv>messages</jv>, <ja>@Path</ja>(<js>"name"</js>) String <jv>you</jv>) {
-		|			String <jv>s</jv>;
+		|			String <jv>msg</jv>;
 		|
 		|			<jc>// Get it from the RestRequest object.</jc>
-		|			<jv>s</jv> = <jv>req</jv>.getMessage(<js>"HelloMessage"</js>, <jv>you</jv>);
+		|			<jv>msg</jv> = <jv>req</jv>.getMessage(<js>"HelloMessage"</js>, <jv>you</jv>);
 		|
 		|			<jc>// Or get it from the method parameter.</jc>
-		|			<jv>s</jv> = <jv>messages</jv>.getString(<js>"HelloMessage"</js>, <jv>you</jv>);
+		|			<jv>msg</jv> = <jv>messages</jv>.getString(<js>"HelloMessage"</js>, <jv>you</jv>);
 		|
 		|			<jc>// Or get the message in a locale different from the request.</jc>
-		|			<jv>s</jv> = <jv>messages</jv>.forLocale(Locale.<jsf>UK</jsf>).getString(<js>"HelloMessage"</js>, <jv>you</jv>);
+		|			<jv>msg</jv> = <jv>messages</jv>.forLocale(Locale.<jsf>UK</jsf>).getString(<js>"HelloMessage"</js>, <jv>you</jv>);
 		|
-		|			<jk>return</jk> <jv>s</jv>;
+		|			<jk>return</jk> <jv>msg</jv>;
 		|		}
 		|	}
 	</p>
@@ -93,7 +93,7 @@
 		When using shared resource bundles, keys can be prefixed by class names like so and still retrieve by simple
 		key names:
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc>#--------------------------------------------------------------------------------
 		|	# Contents of shared org/apache/foo/nls/MyMessages.properties
 		|	#--------------------------------------------------------------------------------</cc>

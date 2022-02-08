@@ -20,11 +20,11 @@
 		Setter methods that take in a <c>Serializer</c> can be used to provide custom serialization of entries
 		instead of using the predefined serializer.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Set an XML value instead of JSON.</jc>
 		|	<jv>config</jv>.set(<js>"key1"</js>, <jv>myAddress</jv>, XmlSerializer.<jsf>DEFAULT_SQ_READABLE</jsf>);
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<ck>key1</ck> = 
 		|		<cv>&lt;address&gt;	
 		|			&lt;street&gt;123 Main Street&lt;/street&gt;
@@ -36,7 +36,7 @@
 	<p>
 		The value can then be retrieved using the equivalent parser:
 	</p>
-	<p class='bcode w800'>
-		|	Address <jv>myAddress</jv> = <jv>config</jv>.get(<js>"key1"</js>).to(XmlParser.<jsf>DEFAULT</jsf>, Address.<jk>class</jk>);			
+	<p class='bjava'>
+		|	Address <jv>myAddress</jv> = <jv>config</jv>.get(<js>"key1"</js>).as(XmlParser.<jsf>DEFAULT</jsf>, Address.<jk>class</jk>).orElse(<jk>null</jk>);			
 	</p>
 </div>

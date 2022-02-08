@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Age: 300
  * </p>
  *
@@ -167,9 +167,9 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * Provides the ability to perform fluent-style assertions on this header.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the response content is older than 1.</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
 	 * 		.getHeader(<js>"Age"</js>).asIntegerHeader().assertInteger().isGreaterThan(1);

@@ -31,7 +31,7 @@
 	<p>
 		The <c>$IF</c> variable can be used for simple if/else logic:
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc># Value set to 'foo' if myBooleanProperty is true</cc>
 		|	<ck>key1</ck> = 
 		|		<cv>$IF{		
@@ -58,7 +58,7 @@
 	<p>
 		The <c>$SW</c> variable can be used for switch blocks based on pattern matching:
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc># Shell command depends on the OS</cc>
 		|	<ck>shellCommand</ck> = 
 		|		<cv>$SW{		
@@ -71,7 +71,7 @@
 	<p>
 		The <c>$CO</c> variable can be used for coalescing of values (finding the first non-null/empty match):
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc># Debug flag can be enabled by system property or environment variable.</cc>
 		|	<ck>debug</ck> = 
 		|		<cv>$CO{		
@@ -83,7 +83,7 @@
 	<p>
 		The <c>$PM</c> variable can be used for calculating boolean values:
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc># Debug flag can be enabled by system property or environment variable.</cc>
 		|	<ck>isWindows</ck> = 
 		|		<cv>$PM{		

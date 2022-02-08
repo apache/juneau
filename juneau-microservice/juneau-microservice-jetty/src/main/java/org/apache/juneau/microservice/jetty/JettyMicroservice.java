@@ -639,7 +639,7 @@ public class JettyMicroservice extends Microservice {
 	 * <p>
 	 * The default implementation is configured by the following values in the config file
 	 * if a jetty.xml is not specified via a <c>REST/jettyXml</c> setting:
-	 * <p class='bcode w800'>
+	 * <p class='bini'>
 	 * 	<cc>#================================================================================
 	 * 	# Jetty settings
 	 * 	#================================================================================</cc>

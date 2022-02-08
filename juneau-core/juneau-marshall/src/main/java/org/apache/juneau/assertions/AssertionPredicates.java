@@ -38,7 +38,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Asserts that a list contains te specified values.</jc>
  * 	List&lt;Object&gt; <jv>myList</jv> = AList.<jsm>of</jsm>(...);
  * 	<jsm>assertList</jsm>(<jv>myList</jv>)

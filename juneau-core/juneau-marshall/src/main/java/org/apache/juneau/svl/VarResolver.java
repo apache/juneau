@@ -36,7 +36,7 @@ import org.apache.juneau.svl.vars.*;
  * The {@link Var} interface defines how variables are converted to values.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jk>public class</jk> SystemPropertiesVar <jk>extends</jk> SimpleVar {
  *
  * 		<jc>// Must have a no-arg constructor!</jc>
@@ -45,16 +45,16 @@ import org.apache.juneau.svl.vars.*;
  * 		}
  *
  * 		<ja>@Override</ja>
- * 		<jk>public</jk> String resolve(VarResolverSession session, String varVal) {
- * 			<jk>return</jk> System.<jsm>getProperty</jsm>(varVal);
+ * 		<jk>public</jk> String resolve(VarResolverSession <jv>session</jv>, String <jv>value</jv>) {
+ * 			<jk>return</jk> System.<jsm>getProperty</jsm>(<jv>value</jv>);
  * 		}
  * 	}
  *
  * 	<jc>// Create a variable resolver that resolves system properties (e.g. "$S{java.home}")</jc>
- * 	VarResolver r = VarResolver.<jsm>create</jsm>().vars(SystemPropertiesVar.<jk>class</jk>).build();
+ * 	VarResolver <jv>varResolver</jv> = VarResolver.<jsm>create</jsm>().vars(SystemPropertiesVar.<jk>class</jk>).build();
  *
  * 	<jc>// Use it!</jc>
- * 	System.<jsf>out</jsf>.println(r.resolve(<js>"java.home is set to $S{java.home}"</js>));
+ * 	System.<jsf>out</jsf>.println(<jv>varResolver</jv>.resolve(<js>"java.home is set to $S{java.home}"</js>));
  * </p>
  *
  * <ul class='seealso'>

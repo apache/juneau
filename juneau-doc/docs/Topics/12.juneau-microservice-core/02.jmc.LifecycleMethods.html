@@ -35,15 +35,15 @@
 	<p>
 		A typical implementation of an app with lifecycle methods might look like the following:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> App {
 		|	
 		|		<jk>private static final</jk> Microservice <jsf>MICROSERVICE</jsf>;
 		|	
-		|		<jk>public static void</jk> main(String[] args) {
+		|		<jk>public static void</jk> main(String[] <jv>args</jv>) {
 		|			<jsf>MICROSERVICE</jsf> = Microservice
 		|				.<jsm>create</jsm>()          <jc>// Create builder.</jc>
-		|				.args(args)        <jc>// Pass in args.</jc>
+		|				.args(<jv>args</jv>)        <jc>// Pass in args.</jc>
 		|				.build()           <jc>// Create microservice.</jc>
 		|				.start()           <jc>// Start microservice.</jc>
 		|				.startConsole()    <jc>// Start console.</jc>
@@ -64,13 +64,13 @@
 		If your application consists of a single microservice, you can use the {@link oaj.microservice.Microservice#getInstance()} method
 		from anywhere in your code:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> App {
 		|	
-		|		<jk>public static void</jk> main(String[] args) {
+		|		<jk>public static void</jk> main(String[] <jv>args</jv>) {
 		|			Microservice
 		|				.<jsm>create</jsm>()          <jc>// Create builder.</jc>
-		|				.args(args)        <jc>// Pass in args.</jc>
+		|				.args(<jv>args</jv>)        <jc>// Pass in args.</jc>
 		|				.build()           <jc>// Create microservice.</jc>
 		|				.start()           <jc>// Start microservice.</jc>
 		|				.startConsole()    <jc>// Start console.</jc>

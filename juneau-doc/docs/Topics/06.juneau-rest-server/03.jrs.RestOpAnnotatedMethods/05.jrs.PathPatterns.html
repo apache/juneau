@@ -27,7 +27,7 @@
 		Note how the variables are passed in as additional arguments on the method, and how those arguments are 
 		automatically converted to the specified class type...
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Default method</jc>
 		|	<ja>@RestGet</ja>(path=<js>"/*"</js>)
 		|	<jk>public void</jk> doGetDefault() {
@@ -55,7 +55,7 @@
 		By default, path patterns are matched using a best-match heuristic. 
 		When overlaps occur, URLs are matched from most-specific to most-general order:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Try first </jc>
 		|	<ja>@RestGet</ja>(<js>"/foo/bar"</js>)
 		|	<jk>public void</jk> method1() {
@@ -91,7 +91,7 @@
 	<p>
 		The following example shows the distinction.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@RestGet</ja>(<js>"/*"</js>)
 		|	<jk>public void</jk> doGet(<ja>@Path</ja>(<js>"/*"</js>) String <jv>remainder</jv>) {
 		|		<jc>// URL path pattern can have remainder accessible through req.getRemainder().</jc>

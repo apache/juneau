@@ -27,7 +27,7 @@ import org.apache.juneau.svl.*;
  * <br>When multiple keys are used, returns the first non-null/empty value.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// URI path pattern = "/foo/{foo}/bar/{bar}"</jc>
  * 	String <jv>foo</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"$RP{foo}"</js>);
  * 	String <jv>fooOrBar</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"$RP{foo,bar}"</js>);

@@ -29,18 +29,18 @@
 		An example of an object convertible from a String was already shown in an example above.
 		In that case, it was a URL which has a public constructor that takes in a String:
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc># A POJO</cc>
 		|	<ck>key4</ck> = <cv>http://bar</cv>
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Read values from section #1</jc>
-		|	URL <jv>key4</jv> = <jv>config</jv>.get(<js>"Section1/key4"</js>).to(URL.<jk>class</jk>);
+		|	URL <jv>key4</jv> = <jv>config</jv>.get(<js>"Section1/key4"</js>).as(URL.<jk>class</jk>).orElse(<jk>null</jk>);
 	</p>
 	<p>
 		Beans are represented as {@doc jm.SimplifiedJson Simplified JSON} by default:
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<jc>// Contact information</jc>
 		|	<cs>[ContactInfo]</cs>
 		|	<ck>address</ck> = 
@@ -51,7 +51,7 @@
 		|			zip: 12345
 		|		}</cv>
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Example bean</jc>
 		|	<jk>public class</jk> Address {
 		|		<jk>public</jk> String <jf>street</jf>, <jf>city</jf>;
@@ -61,7 +61,7 @@
 		|
 		|	<jc>// Example usage</jc>
 		|	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build();
-		|	Address <jv>myAddress</jv> = <jv>config</jv>.get(<js>"ContactInfo/address"</js>).to(Address.<jk>class</jk>);
+		|	Address <jv>myAddress</jv> = <jv>config</jv>.get(<js>"ContactInfo/address"</js>).as(Address.<jk>class</jk>).orElse(<jk>null</jk>);
 	</p>
 	<p>
 		The default serializer and parser is registered on the Config through the following methods:

@@ -55,7 +55,7 @@ public @interface Marshalled {
 	 * Examples are used in cases such as POJO examples in Swagger documents.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Marshalled</ja>(example=<js>"{foo:'bar'}"</js>)
 	 * 	<jk>public class</jk> MyClass {...}
 	 * </p>
@@ -92,7 +92,7 @@ public @interface Marshalled {
 	 * parse).
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Marshalled</ja>(implClass=MyInterfaceImpl.<jk>class</jk>)
 	 * 	<jk>public class</jk> MyInterface {...}
 	 * <p>
@@ -108,7 +108,7 @@ public @interface Marshalled {
 	 *
 	 * <p>
 	 * The following example shows the equivalent methods for applying the {@link Bean @Bean} annotation to REST methods:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Class with explicit annotation.</jc>
 	 * 	<ja>@Marshalled</ja>(example=<js>"{foo:'bar'}"</js>)
 	 * 	<jk>public class</jk> A {...}

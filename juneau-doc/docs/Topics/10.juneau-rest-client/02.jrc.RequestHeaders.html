@@ -44,7 +44,7 @@
 	</ul>
 	
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a client that adds a "Foo: bar" header to every request.</jc>
 		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().header(<js>"Foo"</js>,<js>"bar"</js>).build();
 		|
@@ -59,7 +59,7 @@
 	</p>
 	
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a client that adds a bunch of headers to every request.</jc>
 		|	RestClient <jv>client</jv> = RestClient
 		|		.<jsm>create</jsm>()
@@ -81,7 +81,7 @@
 	</p>
 	
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a client that adds an Authorization header to every request.</jc>
 		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().authorization(<js>"Foo"</js>).build();
 		|
@@ -98,9 +98,9 @@
 	</p>
 	
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a client that adds a dynamic Authorization header to every request.</jc>
-		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().header(<js>"Authorization"</js>, ()-&gt;getMyAuthToken()).build();
+		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().header(<js>"Authorization"</js>, ()->getMyAuthToken()).build();
 	</p>
 	
 	<p>
@@ -108,7 +108,7 @@
 	</p>
 	
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a client that adds a header "Foo: bar|baz" to every request.</jc>
 		|	RestClient <jv>client</jv> = RestClient
 		|		.<jsm>create</jsm>()

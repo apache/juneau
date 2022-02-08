@@ -28,7 +28,7 @@ import org.apache.juneau.internal.*;
  * Utility class for finding regular or localized files on the classpath and file system.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Constructor a file source that looks for files in the "files" working directory, then in the
  * 	// package "foo.bar", then in the package "foo.bar.files", then in the package "files".</jc>
  * 	FileFinder <jv>finder</jv> = FileFinder
@@ -63,15 +63,15 @@ import org.apache.juneau.internal.*;
  * The {@link Builder#type(Class)} method is provided for instantiating other instances.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jk>public class</jk> MyFileFinder <jk>extends</jk> BasicFileFinder {
  * 		<jk>public</jk> MyFileFinder(Builder <jv>builder</jv>) {
- * 			<jk>super</jk>(builder);
+ * 			<jk>super</jk>(<jv>builder</jv>);
  * 		}
  * 	}
  *
  * 	<jc>// Instantiate subclass.</jc>
- * 	FileFinder <jv>myFinder</jv> = FileFinder.<jsm>create</jsm>().implClass(MyFileFinder.<jk>class</jk>).build();
+ * 	FileFinder <jv>myFinder</jv> = FileFinder.<jsm>create</jsm>().type(MyFileFinder.<jk>class</jk>).build();
  * </p>
  *
  * <p>

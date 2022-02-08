@@ -28,7 +28,7 @@ import org.apache.juneau.annotation.*;
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// A bean dictionary list consisting of classes with @Bean(typeName) annotations.</jc>
  * 	<jk>public class</jk> MyBeanDictionaryList <jk>extends</jk> BeanDictionaryList {
  *
@@ -39,7 +39,7 @@ import org.apache.juneau.annotation.*;
  * 	}
  *
  * 	<jc>// Use it in a parser.</jc>
- * 	ReaderParser p = JsonParser
+ * 	ReaderParser <jv>parser</jv> = JsonParser
  * 		.<jsm>create</jsm>()
  * 		.dictionary(MyBeanDictionaryList.<jk>class</jk>)
  * 		.build();

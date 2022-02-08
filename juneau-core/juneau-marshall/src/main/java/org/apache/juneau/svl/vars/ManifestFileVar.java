@@ -26,17 +26,17 @@ import org.apache.juneau.utils.*;
  * the {@link #init(ManifestFile)} method.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Create a ManifestFile object that contains the manifest of the jar file containing this class.</jc>
- * 	ManifestFile mf = <jk>new</jk> ManifestFile(<jk>this</jk>.getClass());
+ * 	ManifestFile <jv>manifestFile</jv> = <jk>new</jk> ManifestFile(<jk>this</jk>.getClass());
  *
- * 	ManifestFileVar.<jsm>init</jsm>(mf);
+ * 	ManifestFileVar.<jsm>init</jsm>(<jv>manifestFile</jv>);
  *
  * 	<jc>// Create a variable resolver that resolves manifest file entries (e.g. "$MF{Main-Class}")</jc>
- * 	VarResolver r = <jk>new</jk> VarResolver().addVars(ManifestFile.<jk>class</jk>);
+ * 	VarResolver <jv>varResolver</jv> = VarResolver.<jsm>create</jsm>().vars(ManifestFile.<jk>class</jk>).build();
  *
  * 	<jc>// Use it!</jc>
- * 	System.<jsf>out</jsf>.println(r.resolve(<js>"The main class is $MF{Main-Class}"</js>));
+ * 	System.<jsf>out</jsf>.println(<jv>varResolver</jv>.resolve(<js>"The main class is $MF{Main-Class}"</js>));
  * </p>
  *
  * <p>

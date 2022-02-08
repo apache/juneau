@@ -39,7 +39,7 @@
 	<p>
 		To enable, set the <jsf>RDF_addRootProperty</jsf> property to <jk>true</jk> on the serializer:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a new serializer.</jc>
 		|	RdfSerializer <jv>serializer</jv> = RdfSerializer.<jsm>create</jsm>()
 		|		.xmlabbrev()
@@ -50,7 +50,7 @@
 	<p>
 		Now when we rerun the sample code, we'll see the added <c>root</c> attribute on the root resource.
 	</p>
-	<p class='bcode w800'>
+	<p class='bxml'>
 		|	<xt>&lt;rdf:RDF</xt>
 		|		<xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
 		|		<xa>xmlns:j</xa>=<xs>"http://www.apache.org/juneau/"</xs>

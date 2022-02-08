@@ -39,7 +39,7 @@ import org.apache.juneau.reflect.*;
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// The bean we want to create.</jc>
  * 	<jk>public class</jk> A {}
  *
@@ -48,8 +48,8 @@ import org.apache.juneau.reflect.*;
  *
  * 		<jc>// Creator method.</jc>
  * 		<jc>// Bean store must have a C bean and optionally a D bean.</jc>
- * 		<jk>public</jk> A createA(C <mv>c</mv>, Optional&lt;D&gt; <mv>d</mv>) {
- * 			<jk>return new</jk> A(<mv>c</mv>, <mv>d</mv>.orElse(<jk>null</jk>));
+ * 		<jk>public</jk> A createA(C <jv>c</jv>, Optional&lt;D&gt; <jv>d</jv>) {
+ * 			<jk>return new</jk> A(<jv>c</jv>, <jv>d</jv>.orElse(<jk>null</jk>));
  * 		}
  * 	}
  *
@@ -64,7 +64,7 @@ import org.apache.juneau.reflect.*;
  * 		.createMethodFinder(A.<jk>class</jk>, <mv>b</mv>)  <jc>// Looking for creator for A on b object.</jc>
  * 		.find(<js>"createA"</js>)                         <jc>// Look for method called "createA".</jc>
  * 		.thenFind(<js>"createA2"</js>)                    <jc>// Then look for method called "createA2".</jc>
- * 		.withDefault(()-&gt;<jk>new</jk> A())                        <jc>// Optionally supply a default value if method not found.</jc>
+ * 		.withDefault(()-><jk>new</jk> A())                        <jc>// Optionally supply a default value if method not found.</jc>
  * 		.run();                                  <jc>// Execute.</jc>
  * </p>
  *

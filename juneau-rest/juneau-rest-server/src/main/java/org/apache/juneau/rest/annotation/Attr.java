@@ -30,14 +30,14 @@ import org.apache.juneau.oapi.*;
  * retrieved from the request attributes.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestGet</ja>
  * 	<jk>public</jk> Person getPerson(<ja>@Attr</ja>(<js>"ETag"</js>) UUID <jv>etag</jv>) {...}
  * </p>
  *
  * <p>
  * This is functionally equivalent to the following code...
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestPost</ja>
  * 	<jk>public void</jk> postPerson(RestRequest <jv>req</jv>, RestResponse <jv>res</jv>) {
  * 		UUID <jv>etag</jv> = <jv>req</jv>.getAttributes().get(UUID.<jk>class</jk>, <js>"ETag"</js>);
@@ -81,7 +81,7 @@ public @interface Attr {
 	 * 		then it's the equivalent to <js>"*"</js> which will cause the value to be serialized as name/value pairs.
 	 *
 	 * 		<h5 class='figure'>Examples:</h5>
-	 * 		<p class='bcode w800'>
+	 * 		<p class='bjava'>
 	 * 	<ja>@RestPost</ja>(<js>"/addPet"</js>)
 	 * 	<jk>public void</jk> addPet(<ja>@Attr</ja> OMap <jv>allAttributes</jv>) {...}
 	 * 		</p>
@@ -98,10 +98,10 @@ public @interface Attr {
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining a header entry:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public</jk> Order placeOrder(<ja>@Attr</ja>(name=<js>"api_key"</js>) String <jv>apiKey</jv>) {...}
 	 * </p>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public</jk> Order placeOrder(<ja>@Attr</ja>(<js>"api_key"</js>) String <jv>apiKey</jv>) {...}
 	 * </p>
 	 */

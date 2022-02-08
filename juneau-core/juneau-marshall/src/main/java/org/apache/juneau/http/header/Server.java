@@ -23,7 +23,7 @@ import org.apache.juneau.http.annotation.*;
  * A name for the server.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Server: Apache/2.4.1 (Unix)
  * </p>
  *
@@ -35,13 +35,13 @@ import org.apache.juneau.http.annotation.*;
  * sub-products.
  * The product tokens are listed in order of their significance for identifying the application.
  *
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Server         = "Server" ":" 1*( product | comment )
  * </p>
  *
  * <p>
  * Example:
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Server: CERN/3.0 libwww/2.17
  * </p>
  *

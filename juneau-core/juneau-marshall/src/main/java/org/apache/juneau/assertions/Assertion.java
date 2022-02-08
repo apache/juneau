@@ -98,7 +98,7 @@ public class Assertion {
 	 * String can contain <js>"{msg}"</js> to represent the original message.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
 	 *
 	 *	<jc>// Throws an assertion with a custom message instead of the default "Value was null."</jc>
@@ -169,7 +169,7 @@ public class Assertion {
 	 * If the throwable cannot be instantiated, a {@link RuntimeException} is thrown instead.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
 	 *
 	 *	<jc>// Throws a BadRequest instead of an AssertionError if the string is null.</jc>

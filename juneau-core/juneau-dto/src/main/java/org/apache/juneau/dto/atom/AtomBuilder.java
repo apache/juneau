@@ -22,10 +22,10 @@ import org.apache.juneau.*;
  *
  * <p>
  * Typically, you'll want to do a static import on this class and then call the methods like so...
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jk>import static</jk> org.apache.juneau.dto.atom.AtomBuilder.*;
  *
- * 	Feed feed =
+ * 	Feed <jv>feed</jv> =
  * 		<jsm>feed</jsm>(<js>"tag:juneau.sample.com,2013:1"</js>, <js>"Juneau ATOM specification"</js>,
  * 			<js>"2013-05-08T12:29:29Z"</js>)
  * 		.subtitle(<jsm>text</jsm>(<js>"html"</js>)

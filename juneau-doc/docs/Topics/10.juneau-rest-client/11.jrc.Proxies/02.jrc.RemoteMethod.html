@@ -34,7 +34,7 @@
 		The HTTP method and path are mapped to a Java method using the <c>method</c> and <c>path</c> annotations.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>	
+	<p class='bjava'>	
 		|	<ja>@Remote</ja>
 		|	<jk>public interface</jk> PetStore {
 		|		
@@ -55,7 +55,7 @@
 	<p>
 		For example, the <c>getPet</c> method below defaults to <c>GET /pet</c>:
 	</p>
-	<p class='bcode w800'>	
+	<p class='bjava'>	
 		|	<ja>@Remote</ja>
 		|	<jk>public interface</jk> PetStore {
 		|		
@@ -70,10 +70,10 @@
 	<p>
 		Method names matching the following pattern are assumed to be implying the HTTP method name:
 	</p>
-	<p class='bcode w800'>
+	<p class='bcode'>
 		|	(get|put|post|delete|options|head|connect|trace|patch).*
 	</p>
-	<p class='bcode w800'>
+	<p class='bcode'>
 		|	do(?i)(get|put|post|delete|options|head|connect|trace|patch)
 	</p>
 	
@@ -154,7 +154,7 @@
 		annotation with a value of {@link oaj.http.remote.RemoteReturn#STATUS STATUS}:
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>	
+	<p class='bjava'>	
 		|	<ja>@Remote</ja>
 		|	<jk>public interface</jk> PetStore {
 		|		

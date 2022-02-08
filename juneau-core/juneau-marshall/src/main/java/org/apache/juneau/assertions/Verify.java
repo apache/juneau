@@ -26,11 +26,11 @@ import org.apache.juneau.internal.*;
  * error message.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Validates that our POJO is of type MyBean.</jc>
- * 	String errorMessage = <jsm>verify</jsm>(myPojo).isType(MyBean.<jk>class</jk>);
- * 	<jk>if</jk> (errorMessage != <jk>null</jk>)
- * 		<jk>throw new</jk> RuntimeException(errorMessage);
+ * 	String <jv>errorMessage</jv> = <jsm>verify</jsm>(<jv>myPojo</jv>).isType(MyBean.<jk>class</jk>);
+ * 	<jk>if</jk> (<jv>errorMessage</jv> != <jk>null</jk>)
+ * 		<jk>throw new</jk> RuntimeException(<jv>errorMessage</jv>);
  * </p>
  *
  * <ul class='seealso'>

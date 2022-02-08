@@ -136,7 +136,7 @@ public class ReaderParser extends Parser {
 		 * Used when passing in files to {@link Parser#parse(Object, Class)}.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a parser that reads UTF-8 files.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
 		 * 		.<jsm>create</jsm>()
@@ -168,7 +168,7 @@ public class ReaderParser extends Parser {
 		 * Used when passing in input streams and byte arrays to {@link Parser#parse(Object, Class)}.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a parser that reads UTF-8 files.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
 		 * 		.<jsm>create</jsm>()

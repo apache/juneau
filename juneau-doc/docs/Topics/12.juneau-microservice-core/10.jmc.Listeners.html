@@ -41,15 +41,15 @@
 	<p>
 		This listener API can be used for listening for and reacting to configuration changes on the file system.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> MyMicroserviceListener <jk>extends</jk> BasicMicroserviceListener {
 		|	
 		|		<ja>@Override</ja> <jc>/* MicroserviceListener */</jc>
-		|		<jk>public void</jk> onConfigChange(Microservice microservice, ConfigEvents events) {
+		|		<jk>public void</jk> onConfigChange(Microservice <jv>microservice</jv>, ConfigEvents <jv>events</jv>) {
 		|			
 		|			<jc>// Restart the microservice if anything was modified in one of our sections</jc>
-		|			<jk>if</jk> (events.isSectionChanged(<js>"MySection"</js>))
-		|				microservice.stop().start();
+		|			<jk>if</jk> (<jv>events</jv>.isSectionChanged(<js>"MySection"</js>))
+		|				<jv>microservice</jv>.stop().start();
 		|		}
 		|	}
 	</p>
@@ -57,14 +57,14 @@
 		Note that the {@link oaj.microservice.Microservice#onConfigChange(ConfigEvents)} method can also be overridden
 		to react to configuration changes as well:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> MyMicroservice <jk>extends</jk> Microservice {
 		|	
 		|		<ja>@Override</ja> <jc>/* MicroserviceListener */</jc>
-		|		<jk>public void</jk> onConfigChange(ConfigEvents events) {
+		|		<jk>public void</jk> onConfigChange(ConfigEvents <jv>events</jv>) {
 		|			
 		|			<jc>// Restart the microservice if anything was modified in one of our sections</jc>
-		|			<jk>if</jk> (events.isSectionChanged(<js>"MySection"</js>))
+		|			<jk>if</jk> (<jv>events</jv>.isSectionChanged(<js>"MySection"</js>))
 		|				<jk>this</jk>.stop().start();
 		|		}
 		|	}

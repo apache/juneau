@@ -29,7 +29,7 @@ import org.apache.juneau.assertions.*;
  *
  * <p>
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	If-Modified-Since: Sat, 29 Oct 1994 19:43:31 GMT
  * </p>
  *
@@ -167,12 +167,12 @@ public class BasicDateHeader extends BasicHeader {
 	 * Provides the ability to perform fluent-style assertions on this header.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the response body content is not expired.</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.getDateHeader(<js>"Expires"</js>).assertThat().isLessThan(<jk>new</jk> Date());
+	 * 		.getHeader(<js>"Expires"</js>).asDateHeader().assertZonedDateTime().isLessThan(<jk>new</jk> Date());
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.

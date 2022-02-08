@@ -38,7 +38,7 @@ import org.apache.juneau.oapi.*;
  * <br>Also used to define OpenAPI schema information for POJOs serialized through {@link OpenApiSerializer} and parsed through {@link OpenApiParser}.
  *
  * <h5 class='section'>Examples:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// A response object thats a hex-encoded string</jc>
  * 	<ja>@Response</ja>(
  * 		schema=<ja>@Schema</ja>(
@@ -47,7 +47,7 @@ import org.apache.juneau.oapi.*;
  * 		)
  * 	)
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// A request body consisting of an array of arrays, the internal array being of type integer, numbers must be between 0 and 63 (inclusive)</jc>
  * 	<ja>@Body</ja>(
  * 		schema=<ja>@Schema</ja>(
@@ -92,7 +92,7 @@ public @interface Schema {
 	 * <br>Multiple lines are concatenated with newlines.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public</jk> Order placeOrder(
 	 * 		<ja>@Header</ja>(<js>"X-PetId"</js>) <ja>@Schema</ja>(_default=<js>"100"</js>) <jk>long</jk> <jv>petId</jv>,
 	 * 		<ja>@Header</ja>(<js>"X-AdditionalInfo"</js>) <ja>@Schema</ja>(format=<js>"uon"</js>, _default=<js>"(rushOrder=false)"</js>) AdditionalInfo <jv>additionalInfo</jv>,
@@ -128,7 +128,7 @@ public @interface Schema {
 	 * <br>Multiple lines are concatenated with newlines.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Comma-delimited list</jc>
 	 * 	<jk>public</jk> Collection&lt;Pet&gt; findPetsByStatus(
 	 * 		<ja>@Header</ja>(<js>"X-Status"</js>)
@@ -275,14 +275,14 @@ public @interface Schema {
 	 * A brief description of the body. This could contain examples of use.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Used on parameter</jc>
 	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(
 	 * 		<ja>@Body</ja> <ja>@Schema</ja>(description=<js>"Pet object to add to the store"</js>) Pet <jv>input</jv>
 	 * 	) {...}
 	 * </p>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Used on class</jc>
 	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(Pet <jv>input</jv>) {...}
@@ -450,7 +450,7 @@ public @interface Schema {
 	 * Static strings are defined in {@link FormatType}.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Used on parameter</jc>
 	 * 	<ja>@RestPut</ja>
 	 * 	<jk>public void</jk> setAge(
@@ -880,9 +880,9 @@ public @interface Schema {
 	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestPut</ja>
-	 * 	<jk>public void</jk> doPut(<ja>@Body</ja> <js>@Schema</ja>(pattern=<js>"/\\w+\\.\\d+/"</js>) String <jv>input<jv>) {...}
+	 * 	<jk>public void</jk> doPut(<ja>@Body</ja> <ja>@Schema</ja>(pattern=<js>"/\\w+\\.\\d+/"</js>) String <jv>input</jv>) {...}
 	 * </p>
 	 *
 	 * <p>
@@ -939,14 +939,14 @@ public @interface Schema {
 	 * <br>On the server-side, this gets converted to a <c>BadRequest</c> (400).
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Used on parameter</jc>
 	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(
 	 * 		<ja>@Body</ja> <ja>@Schema</ja>(required=<jk>true</jk>) Pet <jv>input</jv>
 	 * 	) {...}
 	 * </p>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Used on class</jc>
 	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(Pet <jv>input</jv>) {...}
@@ -1048,14 +1048,14 @@ public @interface Schema {
 	 * Static strings are defined in {@link ParameterType}.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Used on parameter</jc>
 	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(
 	 * 		<ja>@Body</ja> <ja>@Schema</ja>(type=<js>"object"</js>) Pet <jv>input</jv>
 	 * 	) {...}
 	 * </p>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Used on class</jc>
 	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(Pet <jv>input</jv>) {...}

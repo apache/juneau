@@ -26,7 +26,7 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <p>
  * The parameter value must be of type {@link Value} that accepts a value that is then set via:
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jv>opSession</jv>
  * 		.{@link RestOpSession#getResponse() getResponse}()
  * 		.{@link RestResponse#setOutput(Object) setOutput}(<jv>value</jv>);

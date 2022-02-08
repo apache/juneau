@@ -39,7 +39,7 @@
 	</p>
 	
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// See if response contains Location header.</jc>
 		|	<jk>boolean</jk> <jv>hasLocationHeader</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).complete().getHeader(<js>"Location"</js>).exists();
 	</p>
@@ -80,7 +80,7 @@
 	</p>
 		
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Parse the header "Foo: bar|baz".</jc>
 		|	List&lt;String&gt; <jv>fooHeader</jv> = <jv>client</jv>
 		|		.get(<jsf>URI</jsf>)
@@ -108,7 +108,7 @@
 	</p>
 	
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Assert the response content type is any sort of JSON.</jc>
 		|	String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
 		|		.run()

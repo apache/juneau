@@ -26,7 +26,7 @@ import org.apache.juneau.serializer.*;
  * {@review}
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Validates the response status code is 200 or 404.</jc>
  * 	<jv>client</jv>
  * 		.get(<jsf>URI</jsf>)

@@ -36,7 +36,7 @@
 		<li>
 			Fixed an initialization time race condition that can cause initial parse errors when concurrently parsing into
 			array types like so: 
-			<p class='bcode w800'>
+			<p class='bcode'>
 		JsonParser.<jsf>DEFAULT</jsf>.parse(input, MyBean[].<jk>class</jk>);
 			</p>
 	</ul>
@@ -45,7 +45,7 @@
 	<ul class='spaced-list'>
 		<li> 
 			Fixed bug in {@del BasicRestCallHandler} where if you have the following REST methods...
-			<p class='bcode w800'>
+			<p class='bcode'>
 		<ja>@RestMethod</ja>(name=<js>"GET"</js>, path=<js>"/foo"</js>)
 		<ja>@RestMethod</ja>(name=<js>"*"</js>, path=<js>"/bar"</js>)
 			</p>
@@ -55,7 +55,7 @@
 			request, it sets the URL on the request to <js>"/error"</js> with a 401 status.  When Juneau then processes
 			this request, it cannot find that mapping and changes the status to 404 which messes with HTTP clients.
 			<br>Solution was to add a default no-op error method to the {@del oajr.BasicRestConfig} (and implementers):
-			<p class='bcode w800'>
+			<p class='bcode'>
 		<ja>@RestMethod</ja>(name=<js>"*"</js>, path=<js>"/error"</js>)
 		<jk>public void</jk> error() {}
 			</p>
@@ -65,11 +65,11 @@
 		<li>
 			Renamed the following annotations:
 			<ul>
-				<li><ja>@Rest(attrs)</ja> --&gt; {@del oajr.annotation.Rest#reqAttrs() @Rest(reqAttrs)}
-				<li><ja>@Rest(defaultRequestHeaders)</ja> --&gt; {@del oajr.annotation.Rest#reqHeaders() @Rest(reqHeaders)}
-				<li><ja>@Rest(defaultResponseHeaders)</ja> --&gt; {@del oajr.annotation.Rest#resHeaders() @Rest(resHeaders)}
-				<li><ja>@RestMethod(attrs)</ja> --&gt; {@del oajr.annotation.RestMethod#reqAttrs() @RestMethod(reqAttrs)}
-				<li><ja>@RestMethod(defaultRequestHeaders)</ja> --&gt; {@del oajr.annotation.RestMethod#reqHeaders() @RestMethod(reqHeaders)}
+				<li><ja>@Rest(attrs)</ja> --> {@del oajr.annotation.Rest#reqAttrs() @Rest(reqAttrs)}
+				<li><ja>@Rest(defaultRequestHeaders)</ja> --> {@del oajr.annotation.Rest#reqHeaders() @Rest(reqHeaders)}
+				<li><ja>@Rest(defaultResponseHeaders)</ja> --> {@del oajr.annotation.Rest#resHeaders() @Rest(resHeaders)}
+				<li><ja>@RestMethod(attrs)</ja> --> {@del oajr.annotation.RestMethod#reqAttrs() @RestMethod(reqAttrs)}
+				<li><ja>@RestMethod(defaultRequestHeaders)</ja> --> {@del oajr.annotation.RestMethod#reqHeaders() @RestMethod(reqHeaders)}
 			</ul>
 		<li>
 			New auto-generated REST method execution statistics: {@del RestExecutionStatistics}

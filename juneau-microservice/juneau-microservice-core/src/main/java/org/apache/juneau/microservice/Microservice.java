@@ -52,9 +52,9 @@ import org.apache.juneau.cp.Messages;
  *
  * <p>
  * The general command for creating and starting a microservice from a main method is as follows:
- * <p class='bcode w800'>
- * 	<jk>public static void</jk> main(String[] args) {
- * 		Microservice.<jsm>create</jsm>().args(args).build().start().join();
+ * <p class='bjava'>
+ * 	<jk>public static void</jk> main(String[] <jv>args</jv>) {
+ * 		Microservice.<jsm>create</jsm>().args(<jv>args</jv>).build().start().join();
  *  }
  * </p>
  *
@@ -898,7 +898,7 @@ public class Microservice implements ConfigEventListener {
 	 * 		The <c>Main-Config</c> entry in the microservice jar manifest file.
 	 * 	<li>
 	 * 		The name of the microservice jar with a <js>".cfg"</js> suffix (e.g.
-	 * 		<js>"mymicroservice.jar"</js>-&gt;<js>"mymicroservice.cfg"</js>).
+	 * 		<js>"mymicroservice.jar"</js>-><js>"mymicroservice.cfg"</js>).
 	 * </ol>
 	 *
 	 * <p>
@@ -918,7 +918,7 @@ public class Microservice implements ConfigEventListener {
 	 * This method can be called from the class constructor.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bini'>
 	 * 	<cc>#--------------------------</cc>
 	 * 	<cc># My section</cc>
 	 * 	<cc>#--------------------------</cc>
@@ -964,21 +964,21 @@ public class Microservice implements ConfigEventListener {
 	 * 	<ck>aBean2</ck> = {foo:'$A{0}',baz:$C{MySection/anInt}}
 	 * </p>
 	 *
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Java code for accessing config entries above.</jc>
-	 * 	Config cf = getConfig();
+	 * 	Config <jv>config</jv> = getConfig();
 	 *
-	 * 	<jk>int</jk> anInt = cf.getInt(<js>"MySection/anInt"</js>);
-	 * 	<jk>boolean</jk> aBoolean = cf.getBoolean(<js>"MySection/aBoolean"</js>);
-	 * 	<jk>int</jk>[] anIntArray = cf.getObject(<jk>int</jk>[].<jk>class</jk>, <js>"MySection/anIntArray"</js>);
-	 * 	URL aURL = cf.getObject(URL.<jk>class</jk>, <js>"MySection/aURL"</js>);
-	 * 	MyBean aBean = cf.getObject(MyBean.<jk>class</jk>, <js>"MySection/aBean"</js>);
-	 * 	Locale locale = cf.getObject(Locale.<jk>class</jk>, <js>"MySection/locale"</js>);
-	 * 	String path = cf.getString(<js>"MySection/path"</js>);
-	 * 	String mainClass = cf.getString(<js>"MySection/mainClass"</js>);
-	 * 	<jk>int</jk> sameAsAnInt = cf.getInt(<js>"MySection/sameAsAnInt"</js>);
-	 * 	String myArg = cf.getString(<js>"MySection/myArg"</js>);
-	 * 	String firstArg = cf.getString(<js>"MySection/firstArg"</js>);
+	 * 	<jk>int</jk> <jv>anInt</jv> = <jv>config</jv>.get(<js>"MySection/anInt"</js>).asInteger().orElse(-1);
+	 * 	<jk>boolean</jk> <jv>aBoolean</jv> = <jv>config</jv>.get(<js>"MySection/aBoolean"</js>).asBoolean().orElse(<jk>false</jk>);
+	 * 	<jk>int</jk>[] <jv>anIntArray</jv> = <jv>config</jv>.get(<js>"MySection/anIntArray"</js>).as(<jk>int</jk>[].<jk>class</jk>).orElse(<jk>null</jk>);
+	 * 	URL <jv>aURL</jv> = <jv>config</jv>.get(<js>"MySection/aURL"</js>).as(URL.<jk>class</jk>).orElse(<jk>null</jk>);
+	 * 	MyBean <jv>aBean</jv> = <jv>config</jv>.get(<js>"MySection/aBean"</js>).as(MyBean.<jk>class</jk>).orElse(<jk>null</jk>);
+	 * 	Locale <jv>locale</jv> = <jv>config</jv>.get(<js>"MySection/locale"</js>).as(Locale.<jk>class</jk>).orElse(<jk>null</jk>);
+	 * 	String <jv>path</jv> = <jv>config</jv>.get(<js>"MySection/path"</js>).orElse(<jk>null</jk>);
+	 * 	String <jv>mainClass</jv> = <jv>config</jv>.get(<js>"MySection/mainClass"</js>).orElse(<jk>null</jk>);
+	 * 	<jk>int</jk> <jv>sameAsAnInt</jv> = <jv>config</jv>.get(<js>"MySection/sameAsAnInt"</js>).asInteger().orElse(<jk>null</jk>);
+	 * 	String <jv>myArg</jv> = <jv>config</jv>.getString(<js>"MySection/myArg"</js>);
+	 * 	String <jv>firstArg</jv> = <jv>config</jv>.getString(<js>"MySection/firstArg"</js>);
 	 * </p>
 	 *
 	 * @return The config file for this application, or <jk>null</jk> if no config file is configured.
@@ -997,12 +997,12 @@ public class Microservice implements ConfigEventListener {
 	 * This method can be called from the class constructor.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Get Main-Class from manifest file.</jc>
-	 * 	String mainClass = Microservice.<jsm>getManifest</jsm>().getString(<js>"Main-Class"</js>, <js>"unknown"</js>);
+	 * 	String <jv>mainClass</jv> = Microservice.<jsm>getManifest</jsm>().getString(<js>"Main-Class"</js>, <js>"unknown"</js>);
 	 *
 	 * 	<jc>// Get Rest-Resources from manifest file.</jc>
-	 * 	String[] restResources = Microservice.<jsm>getManifest</jsm>().getStringArray(<js>"Rest-Resources"</js>);
+	 * 	String[] <jv>restResources</jv> = Microservice.<jsm>getManifest</jsm>().getStringArray(<js>"Rest-Resources"</js>);
 	 * </p>
 	 *
 	 * @return The manifest file from the main jar, or <jk>null</jk> if the manifest file could not be retrieved.

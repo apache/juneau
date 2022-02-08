@@ -29,19 +29,19 @@ import org.apache.juneau.internal.*;
  * used to add that information.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	Xml <jv>xml</jv> = <jsm>xml</jsm>()
  * 		.name(<js>"foo"</js>)
  * 		.namespace(<js>"http://foo"</js>)
  *
  * 	<jc>// Serialize using JsonSerializer.</jc>
- * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.toString(<jv>xml</jv>x);
+ * 	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.toString(<jv>xml</jv>);
  *
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  *  <jv>json</jv> = <jv>xml</jv>.toString();
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjson'>
  * 	<jc>// Output</jc>
  * 	{
  * 		<js>"name"</js>: <js>"foo"</js>,

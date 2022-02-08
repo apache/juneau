@@ -27,11 +27,11 @@ import org.apache.juneau.annotation.*;
  *
  * <p>
  * The following is an example of a surrogate class change changes a property name:
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jk>public class</jk> MySurrogate <jk>implements</jk> Surrogate {
  *
  * 		<jc>// Public constructor that wraps the normal object during serialization.</jc>
- * 		<jk>public</jk> MySurrogate(NormalClass o) {...}
+ * 		<jk>public</jk> MySurrogate(NormalClass <jv>object</jv>) {...}
  *
  * 		<jc>// Public no-arg constructor using during parsing.</jc>
  * 		<jc>// Not required if only used during serializing.</jc>
@@ -47,13 +47,13 @@ import org.apache.juneau.annotation.*;
  * <p>
  * Surrogate classes are associated with serializers and parsers using the {@link org.apache.juneau.BeanContext.Builder#swaps(Class...)}
  * method.
- * <p class='bcode w800'>
- * 	JsonSerializer s = JsonSerializer
+ * <p class='bjava'>
+ * 	JsonSerializer <jv>serializer</jv> = JsonSerializer
  * 		.<jsm>create</jsm>()
  * 		.swaps(MySurrogate.<jk>class</jk>)
  * 		.build();
  *
- * 	JsonParser p = JsonParser
+ * 	JsonParser <jv>parser</jv> = JsonParser
  * 		.<jsm>create</jsm>()
  * 		.swaps(MySurrogate.<jk>class</jk>)
  * 		.build();
@@ -61,7 +61,7 @@ import org.apache.juneau.annotation.*;
  *
  * <p>
  * Surrogates can also be associated using the {@link Swap @Swap} annotation.
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@Swap</ja>(MySurrogate.<jk>class</jk>)
  * 	<jk>public class</jk> NormalClass {...}
  * </p>
@@ -69,13 +69,13 @@ import org.apache.juneau.annotation.*;
  * <p>
  * On a side note, a surrogate class is functionally equivalent to the following {@link ObjectSwap}
  * implementation:
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jk>public class</jk> MySurrogate <jk>extends</jk> ObjectSwap&lt;NormalClass,MySurrogate&gt; {
- * 		<jk>public</jk> MySurrogate swap(NormalClass o) <jk>throws</jk> SerializeException {
- * 			<jk>return new</jk> MySurrogate(o);
+ * 		<jk>public</jk> MySurrogate swap(NormalClass <jv>object</jv>) <jk>throws</jk> SerializeException {
+ * 			<jk>return new</jk> MySurrogate(<jv>object</jv>);
  * 		}
- * 		<jk>public</jk> NormalClass unswap(MySurrogate o, ClassMeta&lt;?&gt; hint) <jk>throws</jk> ParseException {
- * 			<jk>return</jk> o.unswap();
+ * 		<jk>public</jk> NormalClass unswap(MySurrogate <jv>surrogate</jv>, ClassMeta&lt;?&gt; <jv>hint</jv>) <jk>throws</jk> ParseException {
+ * 			<jk>return</jk> <jv>surrogate</jv>.unswap();
  * 		}
  * 	}
  * </p>

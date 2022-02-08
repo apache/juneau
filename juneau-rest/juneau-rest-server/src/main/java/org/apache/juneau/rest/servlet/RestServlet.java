@@ -179,8 +179,8 @@ public abstract class RestServlet extends HttpServlet {
 	 * <p>
 	 * Resource classes that don't extend from {@link RestServlet} can add the following method to their class to get
 	 * access to this context object:
-	 * <p class='bcode w800'>
-	 * 	<jk>public void</jk> init(RestServletContext context) <jk>throws</jk> Exception;
+	 * <p class='bjava'>
+	 * 	<jk>public void</jk> init(RestServletContext <jv>context</jv>) <jk>throws</jk> Exception;
 	 * </p>
 	 *
 	 * @return The context information on this servlet.
@@ -290,7 +290,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * of an internal data structure.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(...)
 	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServlet {
 	 *
@@ -390,7 +390,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * This method is called from within the {@link Servlet#destroy()}.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(...)
 	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServlet {
 	 *
@@ -430,7 +430,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * Note that you only have access to the raw request and response objects at this point.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(...)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 	 *

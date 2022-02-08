@@ -20,7 +20,7 @@
 		Config files can contain variables that get resolved dynamically using the previously-described {@link oaj.svl.VarResolver} API.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc>#--------------------------</cc>
 		|	<cc># My section</cc>
 		|	<cc>#--------------------------</cc>
@@ -41,13 +41,13 @@
 		|	<cc># A POJO with embedded variables</cc>
 		|	<ck>aBean</ck> = <cv>{foo:'$S{foo}',baz:$C{MySection/anInt}}</cv>
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	Config <jv>config</jv> = Config.<jsm>create</jsm>().build();
 		|	
-		|	Locale <jv>locale</jv> = <jv>config</jv>.get(<js>"MySection/locale"</js>).to(Locale.<jk>class</jk>); 
-		|	String <jv>path</jv> = <jv>config</jv>.get(<js>"MySection/path"</js>).toString(); 
-		|	<jk>int</jk> <jv>sameAsAnInt</jv> = <jv>config</jv>.get(<js>"MySection/sameAsAnInt"</js>).toInteger(); 
-		|	ABean <jv>bean</jv> = <jv>config</jv>.get(<js>"MySection/aBean"</js>).to(ABean.<jk>class</jk>); 
+		|	Locale <jv>locale</jv> = <jv>config</jv>.get(<js>"MySection/locale"</js>).as(Locale.<jk>class</jk>).orElse(<jk>null</jk>); 
+		|	String <jv>path</jv> = <jv>config</jv>.get(<js>"MySection/path"</js>).asString().orElse(<jk>null</jk>); 
+		|	<jk>int</jk> <jv>sameAsAnInt</jv> = <jv>config</jv>.get(<js>"MySection/sameAsAnInt"</js>).asInteger().orElse(<jk>null</jk>); 
+		|	ABean <jv>bean</jv> = <jv>config</jv>.get(<js>"MySection/aBean"</js>).as(ABean.<jk>class</jk>).orElse(<jk>null</jk>); 
 	</p>
 	<p>
 		By default, <c>Configs</c> use the {@link oaj.svl.VarResolver#DEFAULT} variable resolver

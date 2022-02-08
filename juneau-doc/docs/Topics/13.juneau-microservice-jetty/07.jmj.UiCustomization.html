@@ -24,14 +24,14 @@
 	<p>
 		These files can be used to tailor the look-and-feel of your microservice.
 	</p>
-	<p class='bcode w800'>
+	<p class='bcode'>
 		|	http://localhost:10000/helloWorld
 	</p>
 	<img class='bordered w800' src='doc-files/jrs.UiCustomization.1.png'>
 	<p>
 		The REST configuration section of your microservice configuration file can be used to tailor the header and footer on the pages:
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc>#=======================================================================================================================
 		|	# REST settings
 		|	#=======================================================================================================================</cc>
@@ -61,35 +61,9 @@
 		The {@del oajr.BasicRestConfig} interface (which defines the default settings for {@link oajr.servlet.BasicRestServlet} 
 		pulls in this information using {@link oaj.config.vars.ConfigVar $C} and {@link oajr.vars.UrlVar $U} variables:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(
 		|		...
-		|		<jc>// HTML-page specific settings</jc>
-		|		htmldoc=<ja>@HtmlDoc</ja>(
-		|	
-		|			<jc>// Default page header contents.</jc>
-		|			header={
-		|				<js>"&lt;h1&gt;$RS{title}&lt;/h1&gt;"</js>,  <jc>// Use @Rest(title)</jc>
-		|				<js>"&lt;h2&gt;$RS{operationSummary,description}&lt;/h2&gt;"</js>, <jc>// Use either @RestOp(summary) or @Rest(description)</jc>
-		|				<js>"$C{REST/header}"</js>  <jc>// Extra header HTML defined in external config file.</jc>
-		|			},
-		|	
-		|			<jc>// Default stylesheet to use for the page.
-		|			// Can be overridden from external config file.
-		|			// Default is DevOps look-and-feel (aka Depression look-and-feel).</jc>
-		|			stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>,
-		|	
-		|			<jc>// Default contents to add to the &lt;head&gt; section of the HTML page.
-		|			// Use it to add a favicon link to the page.</jc>
-		|			head={
-		|				<js>"&lt;link rel='icon' href='$U{$C{REST/favicon}}'/&gt;"</js>
-		|			},
-		|	
-		|			<jc>// No default page footer contents.
-		|			// Can be overridden from external config file.</jc>
-		|			footer=<js>"$C{REST/footer}"</js>
-		|		),
-		|	
 		|		<jc>// Optional external configuration file.</jc>
 		|		config=<js>"$S{juneau.configFile}"</js>,
 		|	
@@ -97,6 +71,30 @@
 		|		// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"
 		|		// By default, we define static files through the external configuration file.</jc>
 		|		staticFiles=<js>"$C{REST/staticFiles}"</js>
+		|	)
+		|	<jc>// HTML-page specific settings</jc>
+		|	<ja>@HtmlDocConfig</ja>(
+		|		<jc>// Default page header contents.</jc>
+		|		header={
+		|			<js>"&lt;h1&gt;$RS{title}&lt;/h1&gt;"</js>,  <jc>// Use @Rest(title)</jc>
+		|			<js>"&lt;h2&gt;$RS{operationSummary,description}&lt;/h2&gt;"</js>, <jc>// Use either @RestOp(summary) or @Rest(description)</jc>
+		|			<js>"$C{REST/header}"</js>  <jc>// Extra header HTML defined in external config file.</jc>
+		|		},
+		|	
+		|		<jc>// Default stylesheet to use for the page.
+		|		// Can be overridden from external config file.
+		|		// Default is DevOps look-and-feel (aka Depression look-and-feel).</jc>
+		|		stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>,
+		|	
+		|		<jc>// Default contents to add to the &lt;head&gt; section of the HTML page.
+		|		// Use it to add a favicon link to the page.</jc>
+		|		head={
+		|			<js>"&lt;link rel='icon' href='$U{$C{REST/favicon}}'/&gt;"</js>
+		|		},
+		|	
+		|		<jc>// No default page footer contents.
+		|		// Can be overridden from external config file.</jc>
+		|		footer=<js>"$C{REST/footer}"</js>
 		|	)
 		|	<jk>public interface</jk> BasicRestConfig {}
 	</p>
@@ -112,7 +110,7 @@
 		If you're testing out changes in the theme stylesheets, you may want to set the following system property that prevents caching of those files so 
 		that you don't need to restart the microservice each time a change is made:
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc>#=======================================================================================================================
 		|	# System properties
 		|	#-----------------------------------------------------------------------------------------------------------------------

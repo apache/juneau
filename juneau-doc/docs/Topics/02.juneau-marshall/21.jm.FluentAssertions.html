@@ -21,7 +21,7 @@
 		It is used throughout the REST client and server APIs for performing inline assertions on REST requests and responses.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
 		|	MyBean <jv>bean</jv> = RestClient.<jsm>create</jsm>()
 		|		.simpleJson()
@@ -55,6 +55,7 @@
 				<li class='jm'>{@link oaj.assertions.Assertions#assertBooleanArray(boolean[]) assertBooleanArray(boolean[])}
 				<li class='jm'>{@link oaj.assertions.Assertions#assertByteArray(byte[]) assertByteArray(byte[])}
 				<li class='jm'>{@link oaj.assertions.Assertions#assertBytes(byte[]) assertBytes(byte[])}
+				<li class='jm'>{@link oaj.assertions.Assertions#assertBytes(InputStream) assertBytes(InputStream)}
 				<li class='jm'>{@link oaj.assertions.Assertions#assertCharArray(char[]) assertCharArray(char[])}
 				<li class='jm'>{@link oaj.assertions.Assertions#assertCollection(Collection) assertCollection(Collection)}
 				<li class='jm'>{@link oaj.assertions.Assertions#assertComparable(Comparable) assertComparable(T)}
@@ -71,7 +72,6 @@
 				<li class='jm'>{@link oaj.assertions.Assertions#assertOptional(Optional) assertOptional(Optional)}
 				<li class='jm'>{@link oaj.assertions.Assertions#assertReader(Reader) assertReader(Reader)}
 				<li class='jm'>{@link oaj.assertions.Assertions#assertShortArray(short[]) assertShortArray(short[])}
-				<li class='jm'>{@link oaj.assertions.Assertions#assertStream(InputStream) assertStream(InputStream)}
 				<li class='jm'>{@link oaj.assertions.Assertions#assertString(Object) assertString(Object)}
 				<li class='jm'>{@link oaj.assertions.Assertions#assertStringList(List) assertStringList(List)}
 				<li class='jm'>{@link oaj.assertions.Assertions#assertThrowable(Throwable) assertThrowable(V)}
@@ -82,7 +82,7 @@
 		</li>
 	</ul>
 	<h5 class='figure'>Examples:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
 		|	<jk>import static</jk> org.apache.juneau.assertions.AssertionPredicates.*;
 		|	
@@ -130,7 +130,7 @@
 		the test fails.  Otherwise, the method returns the original assertion object to allow you to chain the command.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Test a string.</jc>
 		|	<jsm>assertString</jsm>(<jv>myString</jv>)
 		|		.isNotNull()  <jc>// Perform test and returns original FluentStringAssertion.</jc>
@@ -141,7 +141,7 @@
 		some other form wrapped in another assertion.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Customize the behavior of an assertion.</jc>
 		|	<jsm>assertString</jsm>(<jv>myString</jv>)
 		|		.length()  <jc>// Converts to a FluentIntegerAssertion.</jc>
@@ -155,7 +155,7 @@
 		Transformed assertions inherit the configurations of the created-by assertions.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Customize the behavior of an assertion.</jc>
 		|	<jsm>assertString</jsm>(<jv>myString</jv>)
 		|		.msg(<js>"My string was null.  Value was {VALUE}."</js>)  <jc>// Custom error message when error occurs.</jc>

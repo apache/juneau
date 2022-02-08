@@ -25,7 +25,7 @@ import org.apache.juneau.http.annotation.*;
  * Typically used in router resources.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jk>new</jk> ResourceDescription(<js>"httpTool"</js>, <js>"HTTP request test client"</js>);
  * </p>
  *

@@ -32,7 +32,7 @@ import org.apache.juneau.utils.*;
  *
  * <p>
  * The name and url properties correspond to the following parts of a hyperlink in an HTML document...
- * <p class='bcode w800'>
+ * <p class='bxml'>
  * 	<xt>&lt;a</xt> <xa>href</xa>=<xs>'href'</xs><xt>&gt;</xt>name<xt>&lt;/a&gt;</xt>
  * </p>
  *

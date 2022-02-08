@@ -23,7 +23,7 @@ import org.apache.juneau.http.annotation.*;
  * Authorization credentials for connecting to a proxy.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Proxy-Authorization: Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==
  * </p>
  *
@@ -34,7 +34,7 @@ import org.apache.juneau.http.annotation.*;
  * The Proxy-Authorization field value consists of credentials containing the authentication information of the user
  * agent for the proxy and/or realm of the resource being requested.
  *
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Proxy-Authorization     = "Proxy-Authorization" ":" credentials
  * </p>
  *

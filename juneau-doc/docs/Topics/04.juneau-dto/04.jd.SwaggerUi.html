@@ -34,7 +34,7 @@
 		The class itself is nothing more than a POJO swap that swaps out {@link oaj.dto.swagger.Swagger} beans
 		with {@link oaj.dto.html5.Div} elements:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> SwaggerUI <jk>extends</jk> ObjectSwap&lt;Swagger,Div&gt; {
 		|	
 		|		<ja>@Override</ja>
@@ -53,7 +53,7 @@
 		The {@link oajr.servlet.BasicRestServlet} class (describe later) shows how this swap is used in the REST interface to 
 		generate the Swagger UI shown above:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(
 		|	
 		|		<jc>// Allow OPTIONS requests to be simulated using ?method=OPTIONS query parameter.</jc>
@@ -89,9 +89,9 @@
 		|			<jc>// Never show aside contents of page inherited from class.</jc>
 		|			aside="<js>NONE"</js>
 		|		)
-		|		<jk>public</jk> Swagger getOptions(RestRequest req) {
+		|		<jk>public</jk> Swagger getOptions(RestRequest <jv>req</jv>) {
 		|			<jc>// Localized Swagger for this resource is available through the RestRequest object.</jc>
-		|			<jk>return</jk> req.getSwagger();
+		|			<jk>return</jk> <jv>req</jv>.getSwagger();
 		|		}
 		|	}
 	</p>

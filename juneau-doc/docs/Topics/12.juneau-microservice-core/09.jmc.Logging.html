@@ -33,7 +33,7 @@
 	<p>
 		If not specified, the logging configuration is pulled in from the configuration file:
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<jc>#=======================================================================================================================
 		|	# Logger settings
 		|	#-----------------------------------------------------------------------------------------------------------------------
@@ -121,10 +121,10 @@
 		</li>
 	</ul>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
-		|	<jk>public static void</jk> main(String[] args) {
+	<p class='bjava'>
+		|	<jk>public static void</jk> main(String[] <jv>args</jv>) {
 		|		
-		|		LogConfig logConfig = LogConfig
+		|		LogConfig <jv>logConfig</jv> = LogConfig
 		|			.<jsm>create</jsm>()
 		|			.append(<jk>true</jk>)
 		|			.consoleLevel(<jsf>FINE</jsf>)
@@ -133,8 +133,8 @@
 		|		
 		|		Microservice
 		|			.<jsm>create</jsm>() 
-		|			.args(args)
-		|			.logConfig(logConfig)
+		|			.args(<jv>args</jv>)
+		|			.logConfig(<jv>logConfig</jv>)
 		|			.build()
 		|			.start()
 		|			.join()

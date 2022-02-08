@@ -18,11 +18,11 @@ import org.apache.juneau.utils.*;
 /**
  * A subclass of {@link ObjectSwap} that allows swap and unswap methods to be defined as functions.
  *
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Example</jc>
  * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> FunctionalSwap<MyBean,String> {
  * 		<jk>public</jk> MyBeanSwap() {
- * 			<jk>super</jk>(MyBean.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -&gt; <jsm>myStringifyier</jsm>(<jv>x</jv>), <jv>x</jv> -&gt; <jsm>myDeStringifier</jsm>(<jv>x</jv>));
+ * 			<jk>super</jk>(MyBean.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -> <jsm>myStringifyier</jsm>(<jv>x</jv>), <jv>x</jv> -> <jsm>myDeStringifier</jsm>(<jv>x</jv>));
  * 		}
  * 	}
  * </p>

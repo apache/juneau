@@ -33,10 +33,10 @@
 	<p>
 		A typical usage pattern is shown below:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// $A used in variable resolver.</jc>
-		|	VarResolver vr = Microservice.<jsm>getInstance</jsm>().getVarResolver();
-		|	System.<jsf>out</jsf>.println(vr.resolve(<js>"Main class is set to $MF{Main-Class, unknown}"</js>));
+		|	VarResolver <jv>varResolver</jv> = Microservice.<jsm>getInstance</jsm>().getVarResolver();
+		|	System.<jsf>out</jsf>.println(<jv>varResolver</jv>.resolve(<js>"Main class is set to $MF{Main-Class, unknown}"</js>));
 	</p>
 	<p>
 		The variable resolver becomes much more powerful when used in REST resource annotations which will be

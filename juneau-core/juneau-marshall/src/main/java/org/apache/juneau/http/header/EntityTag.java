@@ -22,7 +22,7 @@ import static org.apache.juneau.internal.ObjectUtils.*;
  *
  * <p>
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	ETag: "123456789"    – A strong ETag validator
  * 	ETag: W/"123456789"  – A weak ETag validator
  * </p>

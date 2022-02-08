@@ -27,7 +27,7 @@
 		The information is pulled from the {@link oajr.annotation.Rest#swagger() @Rest(swagger)} annotation.
 	</p>
 	<h5 class='figure'>org.apache.juneau.examples.rest.petstore.PetStoreResource</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(
 		|		path=<js>"/petstore"</js>,
 		|		title=<js>"Petstore application"</js>,
@@ -42,7 +42,7 @@
 		<c>org.apache.juneau.examples.rest.petstore</c> package using the {@link oajr.vars.FileVar $F} variable.
 	</p>
 	<h5 class='figure'>PetStoreResource.json</h5>
-	<p class='bcode w800'>
+	<p class='bjson'>
 		|	{
 		|		<jok>"swagger"</jok>: <jov>"2.0"</jov>,
 		|		<jok>"info"</jok>: {
@@ -75,7 +75,7 @@
 		annotation.  
 		You could equivalently embed JSON directly into your annotation like so:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(
 		|		path=<js>"/petstore"</js>,
 		|		title=<js>"Petstore application"</js>,
@@ -96,7 +96,7 @@
 	<p>
 		However, a more typical (and less error-prone) scenario is to define all of your Swagger as annotations:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(
 		|		path=<js>"/petstore"</js>,
 		|		title=<js>"Petstore application"</js>,
@@ -127,7 +127,7 @@
 		All annotations support {@doc jrs.SvlVariables SVL variables}, so you could for example
 		pull localized strings from resource bundles using {@link oajr.vars.LocalizationVar $L} variables.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(
 		|		path=<js>"/petstore"</js>,
 		|		title=<js>"Petstore application"</js>,
@@ -159,7 +159,7 @@
 		A third option is to define your Swagger information in your {@link oajr.annotation.Rest#messages @Rest(messages)} resource
 		bundle using predefined Swagger keywords:
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<mk>PetStoreResource.version</mk> = <mv>1.0.0</mv>
 		|	<mk>PetStoreResource.title</mk> = <mv>Swagger Petstore</mv>
 		|	<mk>PetStoreResource.termsOfService</mk> = <mv>You are on your own.</mv>

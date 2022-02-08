@@ -21,16 +21,16 @@ import org.apache.juneau.msgpack.*;
  * 	The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.
  *
  * <h5 class='figure'>Examples:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
- * 	MsgPack msgPack = <jk>new</jk> MsgPack();
- * 	MyPojo myPojo = msgPack.read(bytes, MyPojo.<jk>class</jk>);
- * 	<jk>byte</jk>[] bytes = msgPack.write(myPojo);
+ * 	MsgPack <jv>msgPack</jv> = <jk>new</jk> MsgPack();
+ * 	MyPojo <jv>myPojo</jv> = <jv>msgPack</jv>.read(<jv>bytes</jv>, MyPojo.<jk>class</jk>);
+ * 	<jk>byte</jk>[] <jv>bytes</jv> = <jv>msgPack</jv>.write(<jv>myPojo</jv>);
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  *	<jc>// Using DEFAULT instance.</jc>
- * 	MyPojo myPojo = MsgPack.<jsf>DEFAULT</jsf>.read(bytes, MyPojo.<jk>class</jk>);
- * 	<jk>byte</jk>[] bytes = MsgPack.<jsf>DEFAULT</jsf>.write(myPojo);
+ * 	MyPojo <jv>myPojo</jv> = MsgPack.<jsf>DEFAULT</jsf>.read(<jv>bytes</jv>, MyPojo.<jk>class</jk>);
+ * 	<jk>byte</jk>[] <jv>bytes</jv> = MsgPack.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
  * </p>
  *
  * <ul class='seealso'>

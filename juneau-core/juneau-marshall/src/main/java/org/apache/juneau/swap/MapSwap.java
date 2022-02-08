@@ -19,24 +19,24 @@ import org.apache.juneau.collections.*;
  * Abstract subclass for object swaps that swap objects for object maps.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// A swap that converts beans into generic maps.</jc>
  * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> MapSwap&lt;<jk>byte</jk>[]&gt; {
  *
  * 		<ja>@Override</ja>
- * 		<jk>public</jk> OMap swap(BeanSession session, MyBean myBean) <jk>throws</jk> Exception {
- * 			<jk>return</jk> OMap.<jsm>of<jsm>(<js>"foo"</js>, myBean.getFoo());
+ * 		<jk>public</jk> OMap swap(BeanSession <jv>session</jv>, MyBean <jv>bean</jv>) <jk>throws</jk> Exception {
+ * 			<jk>return</jk> OMap.<jsm>of<jsm>(<js>"foo"</js>, <jv>bean</jv>.getFoo());
  * 		}
  *
  * 		<ja>@Override</ja>
- * 		<jk>public</jk> MyBean unswap(BeanSession session, OMap m, ClassMeta&lt;?&gt; hint) <jk>throws</jk> Exception {
- * 			<jk>return</jk> new</jk> MyBean(m.get(<js>"foo"</js>));
+ * 		<jk>public</jk> MyBean unswap(BeanSession <jv>session</jv>, OMap <jv>map</jv>, ClassMeta&lt;?&gt; <jv>hint</jv>) <jk>throws</jk> Exception {
+ * 			<jk>return</jk> new</jk> MyBean(<jv>map</jv>.get(<js>"foo"</js>));
  * 		}
  * 	}
  *
  * 	<jc>// Use it to serialize a byte array.</jc>
- * 	WriterSerializer s = JsonSerializer.<jsm>create</jsm>().simple().swaps(MyBeanSwap.<jk>class</jk>).build();
- * 	String json = s.serialize(<jk>new</jk> MyBean(<js>"bar"</js>));  <jc>// Produces "{foo:'bar'}"</jc>
+ * 	WriterSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().simple().swaps(MyBeanSwap.<jk>class</jk>).build();
+ * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean(<js>"bar"</js>));  <jc>// Produces "{foo:'bar'}"</jc>
  * </p>
  *
  * <ul class='seealso'>

@@ -33,10 +33,10 @@
 	<p>
 		The following example shows a potential vector that circumvents the restriction above:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Don't do this!</jc>
-		|	Class c = Class.<jsf>forName</jsf>(someUserInputString);
-		|	JsonParser.<jsf>DEFAULT</jsf>.parse(input, c);  <jc>// Oops!  Security hole!</jc>
+		|	Class <jv>c</jv> = Class.<jsf>forName</jsf>(<jv>someUserInputString</jv>);
+		|	JsonParser.<jsf>DEFAULT</jsf>.parse(<jv>input</jv>, <jv>c</jv>);  <jc>// Oops!  Security hole!</jc>
 	</p>
 	<p>
 		Juneau does support something similar to a <js>"class"</js> attribute that allows you to define the
@@ -55,12 +55,12 @@
 		vulnerabilities.  However, it is possible to circumvent this through your swap implementation as shown
 		below: 	
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Don't do this!</jc>
 		|	<jk>public class</jk> MyInsecureSwap <jk>extends</jk> ObjectSwap&lt;OMap,Object&gt; {
-		|		<jk>public</jk> Object swap(BeanSession session, OMap input) <jk>throws</jk> Exception {
+		|		<jk>public</jk> Object swap(BeanSession <jv>session</jv>, OMap <jv>input</jv>) <jk>throws</jk> Exception {
 		|			<jc>// Security hole!</jc>
-		|			<jk>return</jk> Class.<jsf>forName</jsf>(input.getString(<js>"class"</js>)).newInstance();
+		|			<jk>return</jk> Class.<jsf>forName</jsf>(<jv>input</jv>.getString(<js>"class"</js>)).newInstance();
 		|		}
 		|	}
 	</p>

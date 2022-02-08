@@ -36,7 +36,7 @@ public class HttpEntities {
 	 * <p>
 	 * Assumes no content type.
 	 *
-	 * @param content The entity content.  Can be <jk>null<jk>.
+	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @return A new {@link ByteArrayEntity} builder.
 	 */
 	public static final HttpEntityBuilder<ByteArrayEntity> byteArrayEntity(byte[] content) {
@@ -46,7 +46,7 @@ public class HttpEntities {
 	/**
 	 * Creates a new {@link ByteArrayEntity} builder.
 	 *
-	 * @param content The entity content.  Can be <jk>null<jk>.
+	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link ByteArrayEntity} builder.
 	 */
@@ -60,7 +60,7 @@ public class HttpEntities {
 	 * <p>
 	 * Assumes no content type.
 	 *
-	 * @param content The entity content supplier.  Can be <jk>null<jk>.
+	 * @param content The entity content supplier.  Can be <jk>null</jk>.
 	 * @return A new {@link ByteArrayEntity} builder.
 	 */
 	public static final HttpEntityBuilder<ByteArrayEntity> byteArrayEntity(Supplier<byte[]> content) {
@@ -70,7 +70,7 @@ public class HttpEntities {
 	/**
 	 * Creates a new {@link ByteArrayEntity} builder.
 	 *
-	 * @param content The entity content supplier.  Can be <jk>null<jk>.
+	 * @param content The entity content supplier.  Can be <jk>null</jk>.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link ByteArrayEntity} builder.
 	 */
@@ -84,7 +84,7 @@ public class HttpEntities {
 	 * <p>
 	 * Assumes no content type.
 	 *
-	 * @param content The entity content.  Can be <jk>null<jk>.
+	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @return A new {@link FileEntity} builder.
 	 */
 	public static final HttpEntityBuilder<FileEntity> fileEntity(File content) {
@@ -94,7 +94,7 @@ public class HttpEntities {
 	/**
 	 * Creates a new {@link FileEntity} builder.
 	 *
-	 * @param content The entity content.  Can be <jk>null<jk>.
+	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link FileEntity} builder.
 	 */
@@ -128,7 +128,7 @@ public class HttpEntities {
 	 *
 	 * @param content
 	 * 	The Java POJO representing the content.
-	 * 	<br>Can be <jk>null<jk>.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param serializer
 	 * 	The serializer to use to serialize the POJO.
 	 * 	<br>If <jk>null</jk>, POJO will be converted to a string using {@link Object#toString()}.
@@ -143,7 +143,7 @@ public class HttpEntities {
 	 *
 	 * @param content
 	 * 	The supplier of a Java POJO representing the content.
-	 * 	<br>Can be <jk>null<jk>.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param serializer
 	 * 	The serializer to use to serialize the POJO.
 	 * 	<br>If <jk>null</jk>, POJO will be converted to a string using {@link Object#toString()}.
@@ -158,7 +158,7 @@ public class HttpEntities {
 	 *
 	 * @param content
 	 * 	The Java POJO representing the content.
-	 * 	<br>Can be <jk>null<jk>.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param serializer
 	 * 	The serializer to use to serialize the POJO.
 	 * 	<br>If <jk>null</jk>, POJO will be converted to a string using {@link Object#toString()}.
@@ -175,7 +175,7 @@ public class HttpEntities {
 	 *
 	 * @param content
 	 * 	The supplier of a Java POJO representing the content.
-	 * 	<br>Can be <jk>null<jk>.
+	 * 	<br>Can be <jk>null</jk>.
 	 * @param serializer
 	 * 	The serializer to use to serialize the POJO.
 	 * 	<br>If <jk>null</jk>, POJO will be converted to a string using {@link Object#toString()}.
@@ -193,7 +193,7 @@ public class HttpEntities {
 	 * <p>
 	 * Assumes no content type.
 	 *
-	 * @param content The entity content.  Can be <jk>null<jk>.
+	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @return A new {@link InputStreamEntity} builder.
 	 */
 	public static final HttpEntityBuilder<InputStreamEntity> streamEntity(InputStream content) {
@@ -203,7 +203,7 @@ public class HttpEntities {
 	/**
 	 * Creates a new {@link InputStreamEntity} builder.
 	 *
-	 * @param content The entity content.  Can be <jk>null<jk>.
+	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @param length The content length, or <c>-1</c> if not known.
 	 * @return A new {@link InputStreamEntity} builder.

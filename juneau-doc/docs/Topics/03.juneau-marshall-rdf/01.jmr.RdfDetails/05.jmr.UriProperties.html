@@ -27,7 +27,7 @@
 		identifier for this bean.
 		The second un-annotated property is interpreted as a reference to another resource.
 	</p>
-	<p class='bcode w800'>	
+	<p class='bjava'>	
 		|	<jk>public class</jk> Person {
 		|		
 		|		<jc>// Bean properties</jc>
@@ -50,7 +50,7 @@
 	<p>
 		We alter our code to pass in values for these new properties.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create our bean.</jc>
 		|	Person <jv>person</jv> = <jk>new</jk> Person(1, <js>"John Smith"</js>, <js>"http://sample/addressBook/person/1"</js>, 
 		|		<js>"http://sample/addressBook"</js>);
@@ -58,7 +58,7 @@
 	<p>
 		Now when we run the sample code, we get the following:
 	</p>
-	<p class='bcode w800'>
+	<p class='bxml'>
 		|	<xt>&lt;rdf:RDF</xt>
 		|		<xa>xmlns:rdf</xa>=<xs>"http://www.w3.org/1999/02/22-rdf-syntax-ns#"</xs>
 		|		<xa>xmlns:j</xa>=<xs>"http://www.apache.org/juneau/"</xs>
@@ -80,7 +80,7 @@
 		The following properties would have produced the same output as before.  
 		Note that the <ja>@URI</ja> annotation is only needed on the second property.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> Person {
 		|		
 		|		<jc>// Bean properties</jc>
@@ -102,7 +102,7 @@
 	<p>
 		The following code produces the same output as before, but the URIs on the beans are relative.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a new serializer with readable output.</jc>
 		|	RdfSerializer <jv>serializer</jv> = RdfSerializer.<jsm>create</jsm>()
 		|		.xmlabbrev()

@@ -523,7 +523,7 @@ public final class BeanPropertyMeta {
 	}
 
 	/**
-	 * Returns the override list of properties defined through a {@link Beanp#properties() @Beanp(bpi)} annotation
+	 * Returns the override list of properties defined through a {@link Beanp#properties() @Beanp(properties)} annotation
 	 * on this property.
 	 *
 	 * @return The list of override properties, or <jk>null</jk> if annotation not specified.

@@ -23,7 +23,7 @@
 	<p>
 		The <c>200</c> response is determined by the return type on the method, in this case a collection of <c>Pet</c> objects:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@RestGet</ja>(
 		|		path=<js>"/pet"</js>,
 		|		summary=<js>"All pets in the store"</js>,
@@ -37,7 +37,7 @@
 		Note that additional responses can be specified by throwing exceptions annotated with the {@link oaj.http.annotation.Response @Response} annotation such
 		as this one:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Response</ja>
 		|	<ja>@StatusCode</ja>(406)
 		|	<ja>@Schema</ja>(description=<js>"Not Acceptable"</js>)

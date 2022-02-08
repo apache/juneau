@@ -47,7 +47,7 @@ import org.apache.juneau.serializer.*;
  * 	It can be accessed by passing it as a parameter on your REST Java method:
  * </p>
  *
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestPost</ja>(...)
  * 	<jk>public</jk> Object myMethod(RestResponse <jv>res</jv>) {...}
  * </p>
@@ -201,7 +201,7 @@ public final class RestResponse {
 	 * Calling this method is functionally equivalent to returning the object in the REST Java method.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>(<js>"/example2/{personId}"</js>)
 	 * 	<jk>public void</jk> doGet(RestResponse <jv>res</jv>, <ja>@Path</ja> UUID <jv>personId</jv>) {
 	 * 		Person <jv>person</jv> = getPersonById(<jv>personId</jv>);
@@ -699,7 +699,7 @@ public final class RestResponse {
 	 *
 	 * @return
 	 * 	The metadata about this response.
-	 * 	<jk>Never <jk>null</jk>.
+	 * 	<br>Never <jk>null</jk>.
 	 */
 	public ResponseBeanMeta getResponseBeanMeta() {
 		return responseBeanMeta;

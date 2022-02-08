@@ -23,7 +23,7 @@ import org.apache.juneau.http.annotation.*;
  * Implementation-specific fields that may have various effects anywhere along the request-response chain.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Pragma: no-cache
  * </p>
  *
@@ -34,7 +34,7 @@ import org.apache.juneau.http.annotation.*;
  * All pragma directives specify optional behavior from the viewpoint of the protocol; however, some systems MAY
  * require that behavior be consistent with the directives.
  *
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Pragma            = "Pragma" ":" 1#pragma-directive
  * 	pragma-directive  = "no-cache" | extension-pragma
  * 	extension-pragma  = token [ "=" ( token | quoted-string ) ]

@@ -25,20 +25,20 @@ import org.apache.juneau.svl.*;
  * <p>
  * This variable resolver requires that a {@link Config} bean be available in the resolver session bean factory.
  *
- * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <h5 class='figure'>Example:</h5>
+ * <p class='bjava'>
  * 	<jc>// Create a config object.</jc>
  * 	Config <jv>config</jv> = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
  *
  * 	<jc>// Create a variable resolver that resolves config file entries (e.g. "$C{MySection/myKey}")</jc>
- * 	VarResolver <jv>resolver<jv> = VarResolver
+ * 	VarResolver <jv>resolver</jv> = VarResolver
  * 		.<jsm>create</jsm>()
  * 		.vars(ConfigVar.<jk>class</jk>)
  * 		.bean(Config.<jk>class</jk>, <jv>config</jv>)
  * 		.build();
  *
  * 	<jc>// Use it!</jc>
- * 	System.<jsf>out</jsf>.println(<jv>resolver<jv>.resolve(<js>"Value for myKey in section MySection is $C{MySection/myKey}"</js>));
+ * 	System.<jsf>out</jsf>.println(<jv>resolver</jv>.resolve(<js>"Value for myKey in section MySection is $C{MySection/myKey}"</js>));
  * </p>
  *
  * <p>

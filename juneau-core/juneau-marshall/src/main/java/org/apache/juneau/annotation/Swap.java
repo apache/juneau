@@ -57,13 +57,13 @@ public @interface Swap {
 	 * <p>
 	 * In the following example, the swap is only invoked by the JSON serializer:
 	 *
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Swap</ja>(impl=ToStringSwap.<jk>class</jk>, mediaTypes=<js>"&#42;/json"</js>)
 	 * 	<jk>public class</jk> MyBean { ... }
 	 *
 	 * 	<jk>public class</jk> ToStringSwap <jk>extends</jk> ObjectSwap&lt;Object,String&gt; {
-	 * 			<jk>public</jk> String swap(BeanSession session, Object o) <jk>throws</jk> Exception {
-	 * 				<jk>return</jk> o.toString();
+	 * 			<jk>public</jk> String swap(BeanSession <jv>session</jv>, Object <jv>value</jv>) <jk>throws</jk> Exception {
+	 * 				<jk>return</jk> <jv>value</jv>.toString();
 	 * 			}
 	 * 		}
 	 * </p>
@@ -183,7 +183,7 @@ public @interface Swap {
 	 * <p>
 	 * The following is an example of a templated swap class used to serialize POJOs to HTML using FreeMarker:
 	 *
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Our templated swap class.</jc>
 	 * 	<jk>public class</jk> FreeMarkerSwap <jk>extends</jk> ObjectSwap&lt;Object,Reader&gt; {
 	 *
@@ -191,12 +191,12 @@ public @interface Swap {
 	 * 			<jk>return</jk> MediaType.<jsm>forStrings</jsm>(<js>"&#42;/html"</js>);
 	 * 		}
 	 *
-	 * 		<jk>public</jk> Reader swap(BeanSession session, Object o, String template) <jk>throws</jk> Exception {
-	 * 			<jk>return</jk> getFreeMarkerReader(template, o);  <jc>// Some method that creates raw HTML.</jc>
+	 * 		<jk>public</jk> Reader swap(BeanSession <jv>session</jv>, Object <jv>value</jv>, String <jv>template</jv>) <jk>throws</jk> Exception {
+	 * 			<jk>return</jk> <jsm>getFreeMarkerReader</jsm>(<jv>template</jv>, <jv>value</jv>);  <jc>// Some method that creates raw HTML.</jc>
 	 * 		}
 	 * 	}
 	 * </p>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Swap</ja>(impl=FreeMarkerSwap.<jk>class</jk>, template=<js>"MyPojo.div.ftl"</js>)
 	 * 	<jk>public class</jk> MyPojo {}
 	 * </p>

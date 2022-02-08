@@ -25,7 +25,7 @@ import org.apache.juneau.annotation.*;
  * {@link Bean#typeName() @Bean(typeName)} annotation.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// A bean dictionary map consisting of classes without @Bean(typeName) annotations</jc>
  * 	<jc>// that require type names to be explicitly specified.</jc>
  * 	<jk>public class</jk> MyBeanDictionaryMap <jk>extends</jk> BeanDictionaryMap {
@@ -47,7 +47,7 @@ import org.apache.juneau.annotation.*;
  * 	}
  *
  * 	<jc>// Use it in a parser.</jc>
- * 	ReaderParser p = JsonParser
+ * 	ReaderParser <jv>parser</jv> = JsonParser
  * 		.<jsm>create</jsm>()
  * 		.dictionary(MyBeanDictionaryMap.<jk>class</jk>)
  * 		.build();

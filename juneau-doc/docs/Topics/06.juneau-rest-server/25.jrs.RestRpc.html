@@ -24,7 +24,7 @@
 	<p>
 		The following example shows a remote interface:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@RemoteInterface</ja> <jc>// Annotation is optional</jc>
 		|	<jk>public interface</jk> IAddressBook {
 		|
@@ -87,7 +87,7 @@
 	<p>
 		Here's an example of the above interface being used:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a RestClient using JSON for serialization, and point to the server-side remote interface servlet.</jc>
 		|	RestClient client = RestClient.<jsm>create</jsm>()
 		|		.json()
@@ -109,7 +109,7 @@
 	<p>
 		Under the covers, this method call gets converted to a REST POST.
 	</p>
-	<p class='bcode w800'>
+	<p class='bcode'>
 		|	HTTP POST http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook/createPerson(org.apache.juneau.examples.addressbook.Person)
 		|	Accept: application/json
 		|	Content-Type: application/json
@@ -159,7 +159,7 @@
 		The {@link oajr.remote.RrpcServlet} class is a simple specialized servlet with an abstract 
 		<c>getServiceMap()</c> method to define the server-side POJOs:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(
 		|		path=<js>"/remote"</js>
 		|	)
@@ -189,7 +189,7 @@
 		You simply define a Java method whose return type is an interface, and return the implementation of that 
 		interface:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Our exposed interface.</jc>
 		|	<ja>@RestOp</ja>(method=<jsf>RRPC</jsf>, path=<js>"/addressbookproxy/*"</js>)
 		|	<jk>public</jk> IAddressBook getProxy() {
@@ -201,7 +201,7 @@
 	<p>
 		If you point your browser to the servlet above, you get a list of available interfaces:
 	</p>
-	<p class='bcode w800'>
+	<p class='bcode'>
 		|	http://localhost:10000/remote
 	</p>
 	<img class='bordered w800' src='doc-files/jrs.restRPC.1.png'>
@@ -211,7 +211,7 @@
 		interface, whereas the <c>AddressBook</c> link shows ALL public methods defined on that class.
 	</p>
 	<h5 class='figure'>IAddressBook</h5>
-	<p class='bcode w800'>
+	<p class='bcode'>
 		|	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook
 	</p>
 	<img class='bordered w800' src='doc-files/jrs.restRPC.2.png'>
@@ -220,7 +220,7 @@
 		framework methods listed.
 	</p>
 	<h5 class='figure'>AddressBook</h5>
-	<p class='bcode w800'>
+	<p class='bcode'>
 		|	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.AddressBook
 	</p>
 	<img class='bordered w800' src='doc-files/jrs.restRPC.3.png'>
@@ -230,7 +230,7 @@
 		We'll use the same method call as in the introduction.
 		First, we need to create the serialized form of the arguments:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	Object[] <jv>args</jv> = <jk>new</jk> Object[] {
 		|		<jk>new</jk> CreatePerson(<js>"Test Person"</js>,
 		|			AddressBook.<jsm>toCalendar</jsm>(<js>"Aug 1, 1999"</js>),
@@ -242,7 +242,7 @@
 	<p>
 		That produces the following JSON output:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjson'>
 		|	[
 		|		{
 		|			name: <js>'Test Person'</js>, 
@@ -269,7 +269,7 @@
 		Methods are invoked by POSTing the serialized object array to the URI of the interface method.
 		In this case, we want to POST our JSON to the following URL:
 	</p>
-	<p class='bcode w800'>
+	<p class='bcode'>
 		|	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook/createPerson(org.apache.juneau.examples.addressbook.CreatePerson)
 	</p>
 	<p>
@@ -286,7 +286,7 @@
 	<p>
 		From there, we could use the following code snippet to reconstruct the response object from JSON:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	String response = <js>"<i>output from above</i>"</js>;
 		|	Person p = JsonParser.<jsf>DEFAULT</jsf>.parse(response, Person.<jk>class</jk>);
 	</p>
@@ -294,7 +294,7 @@
 		If we alter our servlet to allow overloaded GET requests, we can invoke methods using nothing more than a 
 		browser...
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(
 		|		path=<js>"/remote"</js>,
 		|		
@@ -306,7 +306,7 @@
 	<p>
 		For example, to invoke the <c>getPeople()</c> method on our bean:
 	</p>
-	<p class='bcode w800'>
+	<p class='bcode'>
 		|	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook/getPeople?method=POST
 	</p>			
 	<img class='bordered w800' src='doc-files/jrs.restRPC.6.png'>
@@ -315,7 +315,7 @@
 		returned POJO (in this case as HTML since that's what's in the <c>Accept</c> header when calling from a 
 		browser):
 	</p>
-	<p class='bcode w800'>
+	<p class='bcode'>
 		|	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook/findPerson(int)?method=POST&amp;body=@(3)
 	</p>			
 	<img class='bordered w800' src='doc-files/jrs.restRPC.7.png'>

@@ -71,7 +71,7 @@ public @interface Beanc {
 	 *
 	 * <p>
 	 * The following example shows this annotation in use:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 *		<jc>// Our read-only bean.</jc>
 	 *		<jk>public class</jk> Person {
 	 *			<jk>private final</jk> String <jf>name</jf>;
@@ -98,7 +98,7 @@ public @interface Beanc {
 	 *		<ja>@Beanc</ja>(on=<js>"Person(String,int)"</js>, properties=<js>"name,age"</js>))
 	 *		<jk>public static class</jk> MyConfig {}
 	 * </p>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 *		<jc>// Parsing into a read-only bean.</jc>
 	 *		String <jv>json</jv> = <js>"{name:'John Smith',age:45}"</js>;
 	 *		Person <jv>person</jv> = JsonParser.<jsf>DEFAULT</jsf>.copy().applyAnnotations(MyConfig.<jk>class</jk>).build().parse(<jv>json</jv>);
@@ -149,16 +149,16 @@ public @interface Beanc {
 	 *
 	 * <p>
 	 * The definition of a read-only bean is a bean with properties with only getters, like shown below:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 *		<jc>// Our read-only bean.</jc>
 	 *		<jk>public class</jk> Person {
 	 *			<jk>private final</jk> String <jf>name</jf>;
 	 *			<jk>private final int</jk> <jf>age</jf>;
 	 *
 	 *			<ja>@Beanc</ja>(properties=<js>"name,age"</js>)
-	 *			<jk>public</jk> Person(String name, <jk>int</jk> age) {
-	 *				<jk>this</jk>.<jf>name</jf> = name;
-	 *				<jk>this</jk>.<jf>age</jf> = age;
+	 *			<jk>public</jk> Person(String <jv>name</jv>, <jk>int</jk> <jv>age</jv>) {
+	 *				<jk>this</jk>.<jf>name</jf> = <jv>name</jv>;
+	 *				<jk>this</jk>.<jf>age</jf> = <jv>age</jv>;
 	 *			}
 	 *
 	 *			<jc>// Read only properties.</jc>
@@ -173,12 +173,12 @@ public @interface Beanc {
 	 *			}
 	 *		}
 	 * </p>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 *		<jc>// Parsing into a read-only bean.</jc>
-	 *		String json = <js>"{name:'John Smith',age:45}"</js>;
-	 *		Person p = JsonParser.<jsf>DEFAULT</jsf>.parse(json);
-	 *		String name = p.getName();  <jc>// "John Smith"</jc>
-	 *		<jk>int</jk> age = p.getAge();   <jc>// 45</jc>
+	 *		String <jv>json</jv> = <js>"{name:'John Smith',age:45}"</js>;
+	 *		Person <jv>person</jv> = JsonParser.<jsf>DEFAULT</jsf>.parse(<jv>json</jv>);
+	 *		String <jv>name</jv> = <jv>person</jv>.getName();  <jc>// "John Smith"</jc>
+	 *		<jk>int</jk> <jv>age</jv> = <jv>person</jv>.getAge();   <jc>// 45</jc>
 	 * </p>
 	 * <p>
 	 * 	Note that the {@link Name @Name} annotation can also be used to identify bean property names on constructor

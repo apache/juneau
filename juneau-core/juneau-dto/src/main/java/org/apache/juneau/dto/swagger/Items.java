@@ -30,7 +30,7 @@ import org.apache.juneau.internal.*;
  * It is used by parameter definitions that are not located in "body".
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	Items <jv>items</jv> = <jsm>items</jsm>(<js>"string"</js>).minLength(2);
  *
@@ -40,7 +40,7 @@ import org.apache.juneau.internal.*;
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	<jv>json</jv> = <jv>items</jv>.toString();
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjson'>
  * 	<jc>// Output</jc>
  * 	{
  * 		<js>"type"</js>: <js>"string"</js>,
@@ -606,7 +606,7 @@ public class Items extends SwaggerElement {
 	 * Describes the type of items in the array in raw JSON.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	items(<js>"{type:'type',format:'format',...}"</js>);
 	 * </p>
 	 *

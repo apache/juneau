@@ -34,7 +34,7 @@ public @interface Swagger {
 	 *
 	 * <p>
 	 * A {@doc jd.Swagger} string with the following fields:
-	 * <p class='bcode w800'>
+	 * <p class='bschema'>
 	 * 	{
 	 * 		name: string,
 	 * 		url: string,
@@ -48,7 +48,7 @@ public @interface Swagger {
 	 * <js>"MyServlet.contact = {name:'John Smith',email:'john.smith@foo.bar'}"</js>).
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@Swagger</ja>(
 	 * 			contact=<js>"{name:'John Smith',email:'john.smith@foo.bar'}"</js>
@@ -71,7 +71,7 @@ public @interface Swagger {
 	 * Defines the swagger field <c>/info/description</c>.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@Swagger</ja>(
 	 * 			description={
@@ -113,7 +113,7 @@ public @interface Swagger {
 	 * <js>"MyServlet.externalDocs = {url:'http://juneau.apache.org'}"</js>).
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@Swagger</ja>(
 	 * 			externalDocs=<ja>@ExternalDocs</ja>(url=<js>"http://juneau.apache.org"</js>)
@@ -131,7 +131,7 @@ public @interface Swagger {
 	 *
 	 * <p>
 	 * A {@doc jd.Swagger} string with the following fields:
-	 * <p class='bcode w800'>
+	 * <p class='bschema'>
 	 * 	{
 	 * 		name: string,
 	 * 		url: string
@@ -144,7 +144,7 @@ public @interface Swagger {
 	 * <js>"MyServlet.license = {name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>).
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@Swagger</ja>(
 	 * 			license=<js>"{name:'Apache 2.0',url:'http://www.apache.org/licenses/LICENSE-2.0.html'}"</js>
@@ -174,7 +174,7 @@ public @interface Swagger {
 	 *
 	 * <p>
 	 * A {@doc jd.Swagger} string with the following fields:
-	 * <p class='bcode w800'>
+	 * <p class='bschema'>
 	 * 	[
 	 * 		{
 	 * 			name: string,
@@ -193,7 +193,7 @@ public @interface Swagger {
 	 * <js>"MyServlet.tags = [{name:'Foo',description:'Foobar'}]"</js>).
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@Swagger</ja>(
 	 * 			tags=<js>"[{name:'Foo',description:'Foobar'}]"</js>
@@ -240,7 +240,7 @@ public @interface Swagger {
 	 * Defines the swagger field <c>/info/title</c>.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@Swagger</ja>(
 	 * 			title=<js>"Petstore application"</js>
@@ -275,7 +275,7 @@ public @interface Swagger {
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining the swagger description of a resource:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Normal</jc>
 	 * 	<ja>@Rest</ja>(
 	 * 		swagger=<ja>@Swagger</ja>(
@@ -311,7 +311,7 @@ public @interface Swagger {
 	 * 		)
 	 * 	)
 	 * </p>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Free-form</jc>
 	 * 	<ja>@Rest</ja>(
 	 * 		swagger=@Swagger({
@@ -344,7 +344,7 @@ public @interface Swagger {
 	 * 		})
 	 * 	)
 	 * </p>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Free-form with variables</jc>
 	 * 	<ja>@Rest</ja>(
 	 * 		swagger=@Swagger(<js>"$F{MyResourceSwagger.json}"</js>)
@@ -364,10 +364,10 @@ public @interface Swagger {
 	 * 	<li>
 	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
-	 * 		<p class='bcode w800'>
+	 * 		<p class='bjava'>
 	 * 	<ja>@Swagger</ja>(<js>"{title:'Petstore application'}"</js>)
 	 * 		</p>
-	 * 		<p class='bcode w800'>
+	 * 		<p class='bjava'>
 	 * 	<ja>@Swagger</ja>(<js>"title:'Petstore application'"</js>)
 	 * 		</p>
 	 * 	<li>

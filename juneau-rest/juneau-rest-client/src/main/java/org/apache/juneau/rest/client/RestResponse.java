@@ -169,7 +169,7 @@ public class RestResponse implements HttpResponse {
 	 * Provides the ability to perform fluent-style assertions on the response {@link StatusLine} object.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	MyBean <jv>bean</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
@@ -187,7 +187,7 @@ public class RestResponse implements HttpResponse {
 	 * Provides the ability to perform fluent-style assertions on the response status code.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	MyBean <jv>bean</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
@@ -246,7 +246,7 @@ public class RestResponse implements HttpResponse {
 	 * Provides the ability to perform fluent-style assertions on the response character encoding.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates that the response content charset is UTF-8.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
@@ -265,7 +265,7 @@ public class RestResponse implements HttpResponse {
 	 * Provides the ability to perform fluent-style assertions on a response header.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the content type header is provided.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
@@ -282,7 +282,7 @@ public class RestResponse implements HttpResponse {
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).passes(<jv>x</jv> -&gt; <jv>x</jv>.equals(<js>"application/json"</js>));
+	 * 		.assertHeader(<js>"Content-Type"</js>).passes(<jv>x</jv> -> <jv>x</jv>.equals(<js>"application/json"</js>));
 	 *
 	 * 	<jc>// Validates the content type is JSON by just checking for substring.</jc>
 	 * 	<jv>client</jv>
@@ -305,7 +305,7 @@ public class RestResponse implements HttpResponse {
 	 *
 	 * <p>
 	 * The assertion test returns the original response object allowing you to chain multiple requests like so:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the header and converts it to a bean.</jc>
 	 * 	MediaType <jv>mediaType</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
@@ -341,7 +341,7 @@ public class RestResponse implements HttpResponse {
 	 * Provides the ability to perform fluent-style assertions on this response body.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the response body equals the text "OK".</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
@@ -358,7 +358,7 @@ public class RestResponse implements HttpResponse {
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().passes(<jv>x</jv> -&gt; <jv>x</jv>.contains(<js>"OK"</js>));
+	 * 		.assertBody().passes(<jv>x</jv> -> <jv>x</jv>.contains(<js>"OK"</js>));
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression.</jc>
 	 * 	<jv>client</jv>
@@ -373,16 +373,16 @@ public class RestResponse implements HttpResponse {
 	 * 		.assertBody().matches(<js>".*OK.*"</js>, <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>);
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression in the form of an existing Pattern.</jc>
-	 * 	Pattern <jv>p</jv> = Pattern.<jsm>compile</jsm>(<js>".*OK.*"</js>);
+	 * 	Pattern <jv>pattern</jv> = Pattern.<jsm>compile</jsm>(<js>".*OK.*"</js>);
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().matches(<jv>p</jv>);
+	 * 		.assertBody().matches(<jv>pattern</jv>);
 	 * </p>
 	 *
 	 * <p>
 	 * The assertion test returns the original response object allowing you to chain multiple requests like so:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the response body matches a regular expression.</jc>
 	 * 	MyBean <jv>bean</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
@@ -411,7 +411,7 @@ public class RestResponse implements HttpResponse {
 	 * Caches the response body so that it can be read as a stream multiple times.
 	 *
 	 * This is equivalent to calling the following:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	getBody().cache();
 	 * </p>
 	 *
@@ -442,7 +442,7 @@ public class RestResponse implements HttpResponse {
 						return getHeader(name).parser(pp).schema(schema).asType(type).orElse(null);
 					if (pt == RESPONSE_STATUS)
 						return getStatusCode();
-					return getBody().schema(schema).asType(type);
+					return getBody().schema(schema).as(type);
 				}
 		});
 	}

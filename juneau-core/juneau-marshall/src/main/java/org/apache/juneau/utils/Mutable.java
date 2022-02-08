@@ -19,10 +19,10 @@ import java.util.*;
  *
  * Typically passed as method parameters to provide by-reference support.
  *
- * <p class='bcode w800'>
- * 	Mutable&lt;String&gt; m = Mutable.<jsm>create</jsm>(String.<jk>class</jk>);
- * 	callSomeMethodThatSetsValue(m);
- * 	String val = m.get();
+ * <p class='bjava'>
+ * 	Mutable&lt;String&gt; <jv>map</jv> = Mutable.<jsm>create</jsm>(String.<jk>class</jk>);
+ * 	<jsm>callSomeMethodThatSetsValue</jsm>(<jv>map</jv>);
+ * 	String <jv>vlaue</jv> = <jv>map</jv>.get();
  * </p>
  *
  * <ul class='notes'>
@@ -39,6 +39,7 @@ import java.util.*;
  *
  * @param <T> The inner object type.
  */
+@Deprecated
 public class Mutable<T> {
 
 	private T value;

@@ -19,7 +19,7 @@
 	<p>
 		Configurations can import values from other configurations using the following syntax: 
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc># Import values from configuration 'ParentConfig'</cc>
 		|	<ci>&lt;ParentConfig&gt;</ci>
 		|
@@ -36,20 +36,20 @@
 		Configuration imports can be nested arbitrarily deep.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc># MyConfig contents</cc>
 		|	<ci>&lt;ParentConfig1&gt;</ci>
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc># ParentConfig1 contents</cc>
 		|	<ci>&lt;ParentConfig2&gt;</ci>
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc># ParentConfig2 contents</cc>
 		|	<cs>[Foo]</cs>
 		|	<ck>bar</ck> = <cv>baz</cv>
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Java code</jc>
 		|	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig"</js>).build();
 		|	String <jv>foo</jv> = <jv>config</jv>.get(<js>"Foo/bar"</js>).get();  <jc>// == "baz"</jc>
@@ -58,26 +58,26 @@
 		Values can be overridden by child configurations.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc># MyConfig contents</cc>
 		|	<ci>&lt;ParentConfig1&gt;</ci>
 		|	
 		|	<cs>[Foo]</cs>
 		|	<ck>bar</ck> = <cv>baz</cv>
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc># ParentConfig1 contents</cc>
 		|	<ci>&lt;ParentConfig2&gt;</ci>
 		|	
 		|	<cs>[Foo]</cs>
 		|	<ck>bar</ck> = <cv>qux</cv>
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc># ParentConfig2 contents</cc>
 		|	<cs>[Foo]</cs>
 		|	<ck>bar</ck> = <cv>quux</cv>
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig"</js>).build();
 		|	String <jv>foo</jv> = <jv>config</jv>.get(<js>"Foo/bar"</js>).get();  <jc>// == "baz"</jc>
 	</p>
@@ -99,15 +99,15 @@
 	<p>
 		Dynamically adding an import will cause change events to be generated for imported values.
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc># MyConfig contents starting empty</cc>
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc># ParentConfig contents</cc>
 		|	<cs>[Foo]</cs>
 		|	<ck>bar</ck> = <cv>baz</cv>
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create our configuration.</jc>
 		|	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig"</js>).build();
 		|	

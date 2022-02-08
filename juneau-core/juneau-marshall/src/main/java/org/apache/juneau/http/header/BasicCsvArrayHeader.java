@@ -26,7 +26,7 @@ import org.apache.juneau.assertions.*;
  *
  * <p>
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Allow: GET, PUT
  * </p>
  *
@@ -198,15 +198,6 @@ public class BasicCsvArrayHeader extends BasicHeader {
 
 	/**
 	 * Provides the ability to perform fluent-style assertions on this header.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	<jc>// Validates the response body content is not expired.</jc>
-	 * 	client
-	 * 		.get(<jsf>URL</jsf>)
-	 * 		.run()
-	 * 		.(<js>"Expires"</js>).assertThat().isLessThan(<jk>new</jk> Date());
-	 * </p>
 	 *
 	 * @return A new fluent assertion object.
 	 * @throws AssertionError If assertion failed.

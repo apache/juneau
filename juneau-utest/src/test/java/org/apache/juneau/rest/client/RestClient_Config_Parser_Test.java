@@ -42,7 +42,7 @@ public class RestClient_Config_Parser_Test {
 
 	@Test
 	public void a02_parser_strict() throws Exception {
-		assertThrown(()->MockRestClient.create(A.class).json().strict().build().post("/echoBody",reader("{f:1}")).run().getBody().asType(A2.class)).messages().any(contains("Unquoted attribute detected."));
+		assertThrown(()->MockRestClient.create(A.class).json().strict().build().post("/echoBody",reader("{f:1}")).run().getBody().as(A2.class)).messages().any(contains("Unquoted attribute detected."));
 	}
 
 	public static class A3 {
@@ -51,7 +51,7 @@ public class RestClient_Config_Parser_Test {
 
 	@Test
 	public void a03_parser_trimStringsOnRead() throws Exception {
-		A3 x = client().trimStringsOnRead().build().post("/echoBody",reader("{f:' 1 '}")).run().getBody().asType(A3.class);
+		A3 x = client().trimStringsOnRead().build().post("/echoBody",reader("{f:' 1 '}")).run().getBody().as(A3.class);
 		assertEquals("1",x.f);
 	}
 

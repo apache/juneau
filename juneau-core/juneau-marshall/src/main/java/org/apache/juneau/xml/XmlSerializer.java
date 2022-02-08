@@ -44,7 +44,7 @@ import org.apache.juneau.utils.*;
  *
  * <p>
  * For example, the following JSON...
- * <p class='bcode w800'>
+ * <p class='bjson'>
  * 	{
  * 		name:<js>'John Smith'</js>,
  * 		address: {
@@ -64,7 +64,7 @@ import org.apache.juneau.utils.*;
  * 	}
  * <p>
  * 	...maps to the following XML using the default serializer...
- * <p class='bcode w800'>
+ * <p class='bxml'>
  * 	<xt>&lt;object&gt;</xt>
  * 		<xt>&lt;name&gt;</xt>John Smith<xt>&lt;/name&gt;</xt>
  * 		<xt>&lt;address&gt;</xt>
@@ -85,7 +85,7 @@ import org.apache.juneau.utils.*;
  *
  * <p>
  * An additional "add-json-properties" mode is also provided to prevent loss of JSON data types...
- * <p class='bcode w800'>
+ * <p class='bxml'>
  * 	<xt>&lt;object&gt;</xt>
  * 		<xt>&lt;name</xt> <xa>_type</xa>=<xs>'string'</xs><xt>&gt;</xt>John Smith<xt>&lt;/name&gt;</xt>
  * 		<xt>&lt;address</xt> <xa>_type</xa>=<xs>'object'</xs><xt>&gt;</xt>

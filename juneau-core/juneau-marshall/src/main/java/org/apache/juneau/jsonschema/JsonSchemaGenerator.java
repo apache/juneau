@@ -324,7 +324,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * Swagger documentation.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Don't generate schema for any prototype packages or the class named 'Swagger'.</jc>
 		 * 	<ja>@JsonSchemaConfig</ja>(
 		 * 		ignoreTypes=<js>"Swagger,*.proto.*"</js>
@@ -349,7 +349,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 *
 		 * <p>
 		 * When enabled, schemas on beans will be serialized as the following:
-		 * <p class='bcode w800'>
+		 * <p class='bjson'>
 		 * 	{
 		 * 		type: <js>'object'</js>,
 		 * 		<js>'$ref'</js>: <js>'#/definitions/TypeId'</js>

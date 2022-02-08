@@ -338,15 +338,15 @@ public abstract class Context implements AnnotationProvider {
 		 * and {@link AnnotationApplier} which represents the code used to apply the values in that annotation to a specific builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A class annotated with a config annotation.</jc>
 		 * 	<ja>@BeanConfig</ja>(sortProperties=<js>"$S{sortProperties,false}"</js>)
 		 * 	<jk>public class</jk> MyClass {...}
 		 *
 		 * 	<jc>// Find all annotations that themselves are annotated with @ContextPropertiesApply.</jc>
-		 * 	List&lt;AnnotationWork&gt; <jv>work</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>)
-		 * 		.getAnnotationList(ConfigAnnotationFilter.<jsf>INSTANCE</jsf>)
-		 * 		.getWork(VarResolver.<jsf>DEFAULT</jsf>.createSession());
+		 * 	AnnotationList <jv>annotations</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>).getAnnotationList(<jsf>CONTEXT_APPLY_FILTER</jsf>);
+		 * 	VarResolverSession <jv>vrs</jv> = VarResolver.<jsf>DEFAULT</jsf>.createSession();
+		 * 	AnnotationWorkList <jv>work</jv> = AnnotationWorkList.of(<jv>vrs</jv>, <jv>annotations</jv>);
 		 *
 		 * 	<jc>// Apply any settings found on the annotations.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
@@ -401,7 +401,7 @@ public abstract class Context implements AnnotationProvider {
 		 * <p>
 		 * Any annotations found that themselves are annotated with {@link ContextApply} will be resolved and
 		 * applied as properties to this builder.  These annotations include:
-		 * <ul class='javatree'>
+		 * <ul class='javatreec'>
 		 * 	<li class ='ja'>{@link BeanConfig}
 		 * 	<li class ='ja'>{@link CsvConfig}
 		 * 	<li class ='ja'>{@link HtmlConfig}
@@ -433,7 +433,7 @@ public abstract class Context implements AnnotationProvider {
 		 * The default var resolver {@link VarResolver#DEFAULT} is used to resolve any variables in annotation field values.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A class annotated with a config annotation.</jc>
 		 * 	<ja>@BeanConfig</ja>(sortProperties=<js>"$S{sortProperties,false}"</js>)
 		 * 	<jk>public class</jk> MyClass {...}
@@ -462,7 +462,7 @@ public abstract class Context implements AnnotationProvider {
 		 * <p>
 		 * Any annotations found that themselves are annotated with {@link ContextApply} will be resolved and
 		 * applied as properties to this builder.  These annotations include:
-		 * <ul class='javatree'>
+		 * <ul class='javatreec'>
 		 * 	<li class ='ja'>{@link BeanConfig}
 		 * 	<li class ='ja'>{@link CsvConfig}
 		 * 	<li class ='ja'>{@link HtmlConfig}
@@ -495,7 +495,7 @@ public abstract class Context implements AnnotationProvider {
 		 * The default var resolver {@link VarResolver#DEFAULT} is used to resolve any variables in annotation field values.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// A method annotated with a config annotation.</jc>
 		 * 	<jk>public class</jk> MyClass {
 		 * 		<ja>@BeanConfig</ja>(sortProperties=<js>"$S{sortProperties,false}"</js>)
@@ -537,7 +537,7 @@ public abstract class Context implements AnnotationProvider {
 		 *
 		 * <p>
 		 * The following example shows the equivalent methods for applying the {@link Bean @Bean} annotation:
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Class with explicit annotation.</jc>
 		 * 	<ja>@Bean</ja>(properties=<js>"street,city,state"</js>)
 		 * 	<jk>public class</jk> A {...}
@@ -555,9 +555,9 @@ public abstract class Context implements AnnotationProvider {
 		 * In general, the underlying framework uses this method when it finds dynamically applied annotations on
 		 * config annotations.  However, concrete implementations of annotations are also provided that can be passed
 		 * directly into builder classes like so:
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a concrete @Bean annotation.</jc>
-		 * 	BeanAnnotation <jv>annotation</jv> = BeanAnnotation.<jsm>create</jsm>(B.<jk>class</jk>).properties(<js>"street,city,state"</js>);
+		 * 	<ja>Bean</ja> <jv>annotation</jv> = BeanAnnotation.<jsm>create</jsm>(B.<jk>class</jk>).properties(<js>"street,city,state"</js>).build();
 		 *
 		 * 	<jc>// Apply it to a serializer.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().annotations(<jv>annotation</jv>).build();
@@ -569,7 +569,7 @@ public abstract class Context implements AnnotationProvider {
 		 * <p>
 		 * The following is the list of annotations builders provided that can be constructed
 		 * and passed into the builder class:
-		 * <ul class='javatree'>
+		 * <ul class='javatreec'>
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanAnnotation}
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeancAnnotation}
 		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanIgnoreAnnotation}
@@ -725,7 +725,7 @@ public abstract class Context implements AnnotationProvider {
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a serializer with debug enabled.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
@@ -736,11 +736,11 @@ public abstract class Context implements AnnotationProvider {
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> Object <jf>f</jf>;
 		 * 	}
-		 * 	MyBean <jv>myBean</jv> = <jk>new</jk> MyBean();
-		 * 	<jv>myBean</jv>.<jf>f</jf> = <jv>myBean</jv>;
+		 * 	MyBean <jv>bean</jv> = <jk>new</jk> MyBean();
+		 * 	<jv>bean</jv>.<jf>f</jf> = <jv>bean</jv>;
 		 *
 		 * 	<jc>// Throws a SerializeException and not a StackOverflowError</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myBean</jv>);
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>bean</jv>);
 		 * </p>
 		 *
 		 * <ul class='seealso'>

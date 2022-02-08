@@ -24,7 +24,7 @@ import org.apache.juneau.internal.*;
  * Control options for the current connection and list of hop-by-hop request fields.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Connection: keep-alive
  * 	Connection: Upgrade
  * </p>
@@ -36,7 +36,7 @@ import org.apache.juneau.internal.*;
  *
  * <p>
  * The Connection header has the following grammar:
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Connection = "Connection" ":" 1#(connection-token)
  * 	connection-token  = token
  * </p>
@@ -55,7 +55,7 @@ import org.apache.juneau.internal.*;
  * HTTP/1.1 defines the "close" connection option for the sender to signal that the connection will be closed after
  * completion of the response.
  * For example...
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Connection: close
  * </p>
  * <p>

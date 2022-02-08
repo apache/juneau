@@ -581,7 +581,7 @@ public @interface BeanConfig {
 	 * When specified, only the list of properties defined on the interface class will be used during serialization
 	 * of implementation classes.  Additional properties on subclasses will be ignored.
 	 *
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Parent class or interface</jc>
 	 * 	<jk>public abstract class</jk> A {
 	 * 		<jk>public</jk> String <jf>foo</jf> = <js>"foo"</js>;

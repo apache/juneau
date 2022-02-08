@@ -68,7 +68,7 @@
 		
 		(Any valid XML can also be parsed into an unstructured model)
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Parse an arbitrary JSON document into an unstructered data model
 		|	// consisting of OMaps, OLists, and java primitive objects.</jc>
 		|	Parser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
@@ -90,7 +90,7 @@
 	<p>
 		The <c>OMap</c> and <c>OList</c> classes have many convenience features:
 	</p>
-	<p class='bcode w800'>	
+	<p class='bjava'>	
 		|	<jc>// Convert the map to a bean.</jc>		
 		|	MyBean <jv>myBean</jv> = <jv>omap</jv>.cast(MyBean.<jk>class</jk>);
 		|			
@@ -114,7 +114,7 @@
 		|	String <jv>xml</jv> = <jv>omap</jv>.serializeTo(XmlSerializer.<jsf>DEFAULT</jsf>);
 		|	
 		|	<jc>// Nested maps.</jc>
-		|	<jv>omap</jv>.inner(<jv>omapInner</jv>);
+		|	<jv>omap</jv>.inner(<jv>anotherMap</jv>);
 	</p>
 	
 	<div class='info'>

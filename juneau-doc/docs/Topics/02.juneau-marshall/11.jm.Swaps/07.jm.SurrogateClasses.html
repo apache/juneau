@@ -23,7 +23,7 @@
 		For example, let's say we want to be able to serialize the following class, but it's not serializable for 
 		some reason (for example, there are no properties exposed):  
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Not serializable because it's not a bean because it has no public properties.</jc>
 		|	<jk>public class</jk> MyNonSerializableClass {
 		|		<jk>protected</jk> String <jf>foo</jf>;
@@ -32,7 +32,7 @@
 	<p>
 		This could be solved with the following <c>ObjectSwap</c>.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// A serializable bean with 1 property.</jc>
 		|	<jk>public class</jk> MySerializableSurrogate {
 		|		<jk>public</jk> String <jf>foo</jf>;
@@ -54,7 +54,7 @@
 		However, the same can be accomplished by using a surrogate class that simply contains a constructor with 
 		the non-serializable class as an argument:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> MySerializableSurrogate {
 		|		<jk>public</jk> String <jf>foo</jf>;
 		|		
@@ -67,7 +67,7 @@
 	<p>
 		The surrogate class is registered in the same way as a <c>ObjectSwap</c>:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a JSON serializer that can serialize our unserializable object.</jc>
 		|	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		|		.<jsm>create</jsm>()

@@ -26,7 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * updated it.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	If-Match: "737060cd8c284d8af7ad3082f209582d"
  * </p>
  *
@@ -41,7 +41,7 @@ import org.apache.juneau.http.annotation.*;
  * It is also used, on updating requests, to prevent inadvertent modification of the wrong version of a resource.
  * As a special case, the value "*" matches any current entity of the resource.
  *
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	If-Match = "If-Match" ":" ( "*" | 1#entity-tag )
  * </p>
  *
@@ -77,7 +77,7 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * Examples:
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	If-Match: "xyzzy"
  * 	If-Match: "xyzzy", "r2d2xxxx", "c3piozzzz"
  * 	If-Match: *

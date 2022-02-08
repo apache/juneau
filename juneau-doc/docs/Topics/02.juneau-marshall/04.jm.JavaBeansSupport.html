@@ -22,7 +22,7 @@
 		annotations that can be used to customize how bean properties are detected.  The following is an example of
 		some of the ways to define bean properties:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> MyBean {
 		|	
 		|		<jc>// Public field property.</jc>
@@ -101,7 +101,7 @@
 		Oracle JVMs do not and return fields/methods in random order.  The {@link oaj.annotation.Bean#properties @Bean(properties|p)} annotation was added to 
 		help with this limitation.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Bean should be marshalled with properties in the specified order.</jc>
 		|	<ja>@Bean</ja>(properties=<js>"foo,bar,baz"</js>)
 		|	<jk>public class</jk> MyBean {
@@ -111,7 +111,7 @@
 	<p>
 		Another option to force ordering of properties is to use {@link oaj.annotation.Bean#sort @Bean(sort)}.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Bean</ja>(sort=<jk>true</jk>)
 		|	<jk>public class</jk> MyBean {
 		|		...

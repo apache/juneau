@@ -24,7 +24,7 @@ import org.apache.juneau.*;
  * Represents an <c>atomPersonConstruct</c> construct in the RFC4287 specification.
  *
  * <h5 class='figure'>Schema</h5>
- * <p class='bcode w800'>
+ * <p class='bschema'>
  * 	atomPersonConstruct =
  * 		atomCommonAttributes,
  * 		(element atom:name { text }

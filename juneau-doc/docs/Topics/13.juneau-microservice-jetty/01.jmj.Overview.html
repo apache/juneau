@@ -49,12 +49,12 @@
 	<p>
 		The most-basic creation of a Jetty microservice from an entry-point method is shown below:
 	</p>	
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> App {
-		|		<jk>public static void</jk> main(String[] args) {
+		|		<jk>public static void</jk> main(String[] <jv>args</jv>) {
 		|			JettyMicroservice
 		|				.<jsm>create</jsm>()                     <jc>// Create builder.</jc>
-		|				.args(args)                   <jc>// Pass in args.</jc>
+		|				.args(<jv>args</jv>)                   <jc>// Pass in args.</jc>
 		|				.servlets(RootResource.<jk>class</jk>) <jc>// A Juneau RestServlet class.</jc>
 		|				.build()                      <jc>// Create microservice.</jc>
 		|				.start()                      <jc>// Start microservice.</jc>

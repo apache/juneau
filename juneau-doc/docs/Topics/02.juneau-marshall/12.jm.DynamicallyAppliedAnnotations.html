@@ -20,7 +20,7 @@
 		In the section {@doc jm.Swaps Swaps}, you were introduced to annotations that can be applied to bean
 		classes, methods, fields, and constructors such as {@link oaj.annotation.Bean @Bean}:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Address class with only street/city/state properties (in that order).</jc>
 		|	<jc>// All other properties are ignored.</jc>
 		|	<ja>@Bean</ja>(properties=<js>"street,city,state"</js>)
@@ -30,7 +30,7 @@
 		An alternate way of applying these annotations is to attach them to unrelated classes and methods and then
 		tell your serializer or parser where to find them.  
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Unannotated class.</jc>
 		|	<jk>public class</jk> Address { ... }
 		|
@@ -53,7 +53,7 @@
 		For example, the following shows the <ja>@Bean</ja> annotation being selectively applied on a single REST method 
 		(described later in {@doc juneau-rest-server}): 
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@RestGet</ja> 
 		|	<ja>@Bean</ja>(onClass=Address.<jk>class</jk>, properties=<js>"street,city,state"</js>)
 		|	<jk>public</jk> List&lt;Address&gt; getAddresses() {}

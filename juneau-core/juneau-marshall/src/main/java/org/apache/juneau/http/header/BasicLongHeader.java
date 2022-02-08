@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Content-Length: 300
  * </p>
  *
@@ -168,12 +168,12 @@ public class BasicLongHeader extends BasicHeader {
 	 * Provides the ability to perform fluent-style assertions on this header.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the response body is not too large.</jc>
-	 * 	client
+	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.getLongHeader(<js>"Length"</js>).assertThat().isLessThan(100000);
+	 * 		.getHeader(<js>"Length"</js>).asLongHeader().assertLong().isLessThan(100000);
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.

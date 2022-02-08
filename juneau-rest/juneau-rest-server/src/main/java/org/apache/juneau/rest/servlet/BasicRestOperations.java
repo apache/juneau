@@ -34,7 +34,7 @@ import org.apache.juneau.rest.stats.*;
  * 	Defines 5 special use REST operation endpoints:
  * </p>
  *
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestGet</ja>(path=<js>"/api/*"</js></js>)
  * 	<jk>public</jk> {@link Swagger} {@link #getSwagger(RestRequest) getSwagger}({@link RestRequest} <jv>req</jv>);
  *

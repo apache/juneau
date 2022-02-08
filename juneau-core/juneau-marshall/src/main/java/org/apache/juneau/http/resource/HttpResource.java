@@ -25,11 +25,11 @@ import org.apache.juneau.http.header.*;
  * <p>
  * For example, you might want to be able to create an entity with a <c>Cache-Control</c> header.
  *
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jk>import static</jk> org.apache.juneau.http.HttpResources.*;
  *
  *	<jc>// Create a resource with dynamic content and a no-cache header.</jc>
- * 	HttpResource <jv>myResource</jv> = <jsm>stringResource</jsm>(()-&gt;<jsm>getMyContent</jsm>(), ContentType.<jsf>TEXT_PLAIN</jsf>)
+ * 	HttpResource <jv>myResource</jv> = <jsm>stringResource</jsm>(()-><jsm>getMyContent</jsm>(), ContentType.<jsf>TEXT_PLAIN</jsf>)
  * 		.header(<js>"Cache-Control"</js>, <js>"no-cache"</js>)
  * 		.build();
  * </p>

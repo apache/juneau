@@ -51,7 +51,7 @@ import org.apache.juneau.internal.*;
  * E4.<jk>class</jk>)</code> will result in the order <c>E3, E4, E1, E2</c>.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Create an encoder group with support for gzip compression.</jc>
  * 	EncoderSet <jv>encoders</jv> = EncoderSet
  * 		.<jsm>create</jsm>()

@@ -105,8 +105,8 @@ import org.apache.juneau.xml.*;
  * objects.
  * When registered with this parser, you can construct {@code Calendar} objects from {@code Strings} using the
  * following syntax...
- * <p class='bcode w800'>
- * 	Calendar c = parser.parse(<js>"'Sun Mar 03 04:05:06 EST 2001'"</js>, GregorianCalendar.<jk>class</jk>);
+ * <p class='bjava'>
+ * 	Calendar <jv>calendar</jv> = <jv>parser</jv>.parse(<js>"'Sun Mar 03 04:05:06 EST 2001'"</js>, GregorianCalendar.<jk>class</jk>);
  * </p>
  *
  * <p>
@@ -291,7 +291,7 @@ public class Parser extends BeanContextable {
 		 * after parsing is complete.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a parser using strict mode.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
 		 * 		.<jsm>create</jsm>()
@@ -301,7 +301,7 @@ public class Parser extends BeanContextable {
 		 * 	Reader <jv>myReader</jv> = <jk>new</jk> FileReader(<js>"/tmp/myfile.json"</js>);
 		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<jv>myReader</jv>, MyBean.<jk>class</jk>);
 		 *
-		 * 	<jsm>assertTrue</jsm>(r.isClosed());
+		 * 	<jsm>assertTrue</jsm>(<jv>myReader</jv>.isClosed());
 		 * </p>
 		 *
 		 * @return This object.
@@ -331,7 +331,7 @@ public class Parser extends BeanContextable {
 		 * error location to be printed as part of the exception message.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a parser whose exceptions print out 100 lines before and after the parse error location.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
 		 * 		.<jsm>create</jsm>()
@@ -342,8 +342,8 @@ public class Parser extends BeanContextable {
 		 * 	Reader <jv>myReader</jv> = <jk>new</jk> FileReader(<js>"/tmp/mybadfile.json"</js>);
 		 * 	<jk>try</jk> {
 		 * 		<jv>parser</jv>.parse(<jv>myReader</jv>, Object.<jk>class</jk>);
-		 * 	} <jk>catch</jk> (ParseException e) {
-		 * 		System.<jsf>err</jsf>.println(e.getMessage());  <jc>// Will display 200 lines of the output.</jc>
+		 * 	} <jk>catch</jk> (ParseException <jv>e</jv>) {
+		 * 		System.<jsf>err</jsf>.println(<jv>e</jv>.getMessage());  <jc>// Will display 200 lines of the output.</jc>
 		 * 	}
 		 * </p>
 		 *
@@ -365,7 +365,7 @@ public class Parser extends BeanContextable {
 		 * Class used to listen for errors and warnings that occur during parsing.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Define our parser listener.</jc>
 		 * 	<jc>// Simply captures all unknown bean property events.</jc>
 		 * 	<jk>public class</jk> MyParserListener <jk>extends</jk> ParserListener {
@@ -445,7 +445,7 @@ public class Parser extends BeanContextable {
 		 * </table>
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a parser using strict mode.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
 		 * 		.<jsm>create</jsm>()
@@ -456,8 +456,8 @@ public class Parser extends BeanContextable {
 		 * 	<jk>try</jk> {
 		 * 		String <jv>json</jv> = <js>"{unquotedAttr:'value'}"</js>;
 		 * 		<jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
-		 * 	} <jk>catch</jk> (ParseException e) {
-		 * 		<jsm>assertTrue</jsm>(e.getMessage().contains(<js>"Unquoted attribute detected."</js>);
+		 * 	} <jk>catch</jk> (ParseException <jv>e</jv>) {
+		 * 		<jsm>assertTrue</jsm>(<jv>e</jv>.getMessage().contains(<js>"Unquoted attribute detected."</js>);
 		 * 	}
 		 * </p>
 		 *
@@ -488,7 +488,7 @@ public class Parser extends BeanContextable {
 		 * the POJO.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a parser with trim-strings enabled.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser
 		 * 		.<jsm>create</jsm>()
@@ -534,7 +534,7 @@ public class Parser extends BeanContextable {
 		 * <br>Buffering would cause the parser to read past the current POJO in the stream.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	<jc>// Create a parser using strict mode.</jc>
 		 * 	ReaderParser <jv>parser</jv> = JsonParser.
 		 * 		.<jsm>create</jsm>()
@@ -1055,23 +1055,23 @@ public class Parser extends BeanContextable {
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
+	 * <p class='bjava'>
+	 * 	ReaderParser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
 	 *
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
-	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List <jv>list1</jv> = <jv>parser</jv>.parse(<jv>json</jv>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of beans.</jc>
-	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	List <jv>list2</jv> = <jv>parser</jv>.parse(<jv>json</jv>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
-	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List <jv>list3</jv> = <jv>parser</jv>.parse(<jv>json</jv>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
-	 * 	Map m = p.parse(json, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	Map <jv>map1</jv> = <jv>parser</jv>.parse(<jv>json</jv>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
-	 * 	Map m = p.parse(json, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	Map <jv>map2</jv> = <jv>parser</jv>.parse(<jv>json</jv>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <p>
@@ -1155,23 +1155,23 @@ public class Parser extends BeanContextable {
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	ReaderParser p = JsonParser.<jsf>DEFAULT</jsf>;
+	 * <p class='bjava'>
+	 * 	ReaderParser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
 	 *
 	 * 	<jc>// Parse into a string.</jc>
-	 * 	String s = p.parse(json, String.<jk>class</jk>);
+	 * 	String <jv>string</jv> = <jv>parser</jv>.parse(<jv>json</jv>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a bean.</jc>
-	 * 	MyBean b = p.parse(json, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a bean array.</jc>
-	 * 	MyBean[] ba = p.parse(json, MyBean[].<jk>class</jk>);
+	 * 	MyBean[] <jv>beanArray</jv> = <jv>parser</jv>.parse(<jv>json</jv>, MyBean[].<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
-	 * 	List l = p.parse(json, LinkedList.<jk>class</jk>);
+	 * 	List <jv>list</jv> = <jv>parser</jv>.parse(<jv>json</jv>, LinkedList.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
-	 * 	Map m = p.parse(json, TreeMap.<jk>class</jk>);
+	 * 	Map <jv>map</jv> = <jv>parser</jv>.parse(<jv>json</jv>, TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param <T> The class type of the object being created.

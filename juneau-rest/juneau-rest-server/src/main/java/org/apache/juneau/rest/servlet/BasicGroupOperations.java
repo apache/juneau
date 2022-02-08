@@ -23,7 +23,7 @@ import org.apache.juneau.rest.beans.*;
  * 	Defines 1 special use REST operation endpoint:
  * </p>
  *
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestGet</ja>(path=<js>"/*"</js></js>)
  * 	<jk>public</jk> {@link ChildResourceDescriptions} {@link #getChildren(RestRequest) getChildren}({@link RestRequest} <jv>req</jv>);
  * </p>

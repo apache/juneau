@@ -23,14 +23,14 @@ import org.apache.juneau.http.annotation.*;
  * Indicates that particular server behaviors are required by the client.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Expect: 100-continue
  * </p>
  *
  * <h5 class='topic'>RFC2616 Specification</h5>
  *
  * The Expect request-header field is used to indicate that particular server behaviors are required by the client.
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Expect       =  "Expect" ":" 1#expectation
  * 	expectation  =  "100-continue" | expectation-extension
  * 	expectation-extension =  token [ "=" ( token | quoted-string )

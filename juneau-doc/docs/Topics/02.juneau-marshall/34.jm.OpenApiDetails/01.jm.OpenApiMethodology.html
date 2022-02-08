@@ -93,12 +93,12 @@
 	<p>
 		For example, the following POJO type can be transformed to and from a byte array.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Sample POJO class convertable to and from a byte[].</jc>
 		|	<jk>public class</jk> MyPojo {
 		|		
 		|		<jc>// Constructor used by parser.</jc>
-		|		<jk>public</jk> MyPojo(<jk>byte</jk>[] <jv>fromBytes</jv>) {...}
+		|		<jk>public</jk> MyPojo(<jk>byte</jk>[] <jv>value</jv>) {...}
 		|	
 		|		<jc>// toX method used by serializer.</jc>
 		|		<jk>public byte</jk>[] toBytes() {...}
@@ -107,7 +107,7 @@
 	<p>
 		This example shows how that POJO can be converted to a BASE64-encoded string.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Construct a POJO.</jc>
 		|	MyPojo <jv>myPojo</jv> = ...;
 		|	
@@ -125,7 +125,7 @@
 	<p>
 		In addition to defining format, the schema also allows for validations of the serialized form.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Construct a POJO.</jc>
 		|	MyPojo <jv>myPojo</jv> = ...;
 		|	

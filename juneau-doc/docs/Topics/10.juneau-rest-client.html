@@ -17,7 +17,7 @@ specific language governing permissions and limitations under the License.
 
 <div class='topic'>
 	<h5 class='figure'>Maven Dependency</h5>
-	<p class='bcode w500'>
+	<p class='bxml w500'>
 		|	<xt>&lt;dependency&gt;</xt>
 		|		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
 		|		<xt>&lt;artifactId&gt;</xt>juneau-rest-client<xt>&lt;/artifactId&gt;</xt>
@@ -41,7 +41,7 @@ specific language governing permissions and limitations under the License.
 	</p>
 	
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
 		|	MyBean <jv>bean</jv> = RestClient.<jsm>create</jsm>()
 		|		.simpleJson()
@@ -57,7 +57,7 @@ specific language governing permissions and limitations under the License.
 		Breaking apart the fluent call, we can see the classes being used:
 	</p>
 	
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>().simpleJson();
 		|	RestClient <jv>client</jv> = <jv>builder</jv>.build();
 		|	RestRequest <jv>req</jv> = <jv>client</jv>.get(<jsf>URI</jsf>);
@@ -76,7 +76,7 @@ specific language governing permissions and limitations under the License.
 	</p>
 	
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Define a Remote proxy for interacting with a REST interface.</jc>
 		|	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
 		|	<jk>public interface</jk> PetStore {
@@ -118,7 +118,7 @@ specific language governing permissions and limitations under the License.
 	</p>
 	
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Create a client where all URIs are relative to localhost.</jc>
 		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().rootUri(<js>"http://localhost:10000"</js>).build();
 		|
@@ -171,7 +171,7 @@ specific language governing permissions and limitations under the License.
 		The following examples show the distinction between the two calls:
 	</p>
 	
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Consuming the response, so use run().</jc>
 		|	String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().asString();
 		|

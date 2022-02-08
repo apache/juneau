@@ -23,7 +23,7 @@ import org.apache.juneau.http.annotation.*;
  * The user agent string of the user agent.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/21.0
  * </p>
  *
@@ -37,13 +37,13 @@ import org.apache.juneau.http.annotation.*;
  * which form a significant part of the user agent.
  * By convention, the product tokens are listed in order of their significance for identifying the application.
  *
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	User-Agent     = "User-Agent" ":" 1*( product | comment )
  * </p>
  *
  * <p>
  * Example:
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	User-Agent: CERN-LineMode/2.15 libwww/2.17b3
  * </p>
  *

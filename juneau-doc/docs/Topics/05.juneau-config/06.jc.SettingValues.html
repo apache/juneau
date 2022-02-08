@@ -33,7 +33,7 @@
 			</ul>
 		</li>
 	</ul>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Construct the sample config file programmatically</jc>
 		|	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build()
 		|		.set(<js>"key1"</js>, 1)
@@ -50,7 +50,7 @@
 		The method {@link oaj.config.Config#set(String,Object,Serializer,String,String,List)} can be used
 		for adding comments and pre-lines to entries, and specifying encoded values.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Set an encoded value with some comments.</jc>
 		|	<jv>config</jv>.set(<js>"key1"</js>, 1, <jk>null</jk>, <js>"*"</js>, <js>"Same-line comment"</js>, 
 		|		Arrays.asList(
@@ -58,7 +58,7 @@
 		|		)
 		|	);
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc># Comment 1</cc>
 		|	
 		|	<cc># Comment 2</cc>
@@ -73,7 +73,7 @@
 	<p>
 		Sections can be added with optional pre-lines using the <c>setSection</c> methods:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Set an encoded value with some comments.</jc>
 		|	<jv>config</jv>.setSection(<js>"NewSection"</js>, 
 		|		Arrays.asList(
@@ -81,7 +81,7 @@
 		|		)
 		|	);
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc># Section comment 1</cc>
 		|	
 		|	<cc># Section comment 2</cc>

@@ -23,14 +23,14 @@
 	<p>
 		Pointing a browser to the resource shows the following:
 	</p>
-	<p class='bcode w800'>
+	<p class='bcode'>
 		|	http://localhost:10000/config
 	</p>			
 	<img class='bordered w800' src='doc-files/jer.ConfigResource.1.png'>
 	<p>
 		An edit page is provided for altering the raw config file:
 	</p>
-	<p class='bcode w800'>
+	<p class='bcode'>
 		|	http://localhost:10000/config/edit
 	</p>			
 	<img class='bordered w800' src='doc-files/jer.ConfigResource.2.png'>
@@ -40,7 +40,7 @@
 	</p>
 	
 	<h5 class='figure'>ConfigResource.java</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jd>/** 
 		|	* Shows contents of the microservice configuration file. 
 		|	*/</jd> 
@@ -158,10 +158,10 @@
 		|		} 
 		|		
 		|		<jk>private</jk> OMap getSection(String <jv>name</jv>) { 
-		|			OMap <jv>m</jv> = getServletConfig().getConfig().getSectionMap(<jv>name</jv>); 
-		|			<jk>if</jk> (<jv>m</jv> == <jk>null</jk>) 
+		|			OMap <jv>map</jv> = getServletConfig().getConfig().getSectionMap(<jv>name</jv>); 
+		|			<jk>if</jk> (<jv>map</jv> == <jk>null</jk>) 
 		|				<jk>throw new</jk> RestException(<jsf>SC_NOT_FOUND</jsf>, <js>"Section not found."</js>); 
-		|			<jk>return</jk> <jv>m</jv>; 
+		|			<jk>return</jk> <jv>map</jv>; 
 		|		} 
 		|	} 		
 	</p>

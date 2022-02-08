@@ -48,9 +48,9 @@ public abstract class MenuItemWidget extends Widget {
 	 * For example, the following shows how the method could be used to make an AJAX call back to the REST
 	 * interface to populate a SELECT element in the contents of the popup dialog:
 	 *
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Override</ja>
-	 * 	<jk>public</jk> String getBeforeShowScript(RestRequest req) {
+	 * 	<jk>public</jk> String getBeforeShowScript(RestRequest <jv>req</jv>) {
 	 * 		<jk>return</jk> <js>""</js>
 	 * 			+ <js>"\n	var xhr = new XMLHttpRequest();"</js>
 	 * 			+ <js>"\n	xhr.open('GET', '/petstore/pet?s=status=AVAILABLE&amp;v=id,name', true);"</js>
@@ -76,9 +76,9 @@ public abstract class MenuItemWidget extends Widget {
 	 * Note that it's often easier (and cleaner) to use the {@link #loadScript(RestRequest,String)} method and read the Javascript from
 	 * your classpath:
 	 *
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Override</ja>
-	 * 	<jk>public</jk> String getBeforeShowScript(RestRequest req) <jk>throws</jk> Exception {
+	 * 	<jk>public</jk> String getBeforeShowScript(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
 	 * 		<jk>return</jk> loadScript(<js>"AddOrderMenuItem_beforeShow.js"</js>);
 	 * 	}
 	 * </p>

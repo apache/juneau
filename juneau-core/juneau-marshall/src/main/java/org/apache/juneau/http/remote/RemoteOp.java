@@ -53,7 +53,7 @@ public @interface RemoteOp {
 	 * If you do not specify a path, then the path is inferred from the Java method name.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bjava'>
 	 * 	<ja>@RemotePost</ja>
 	 * 	<jk>public void</jk> postPet(...);
 	 * </p>
@@ -70,7 +70,7 @@ public @interface RemoteOp {
 	 * If not specified, then the method is inferred from the Java method name.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
+	 * <p class='bjava'>
 	 * 	<ja>@RemotePost</ja>
 	 * 	<jk>public void</jk> postPet(...);
 	 * </p>
@@ -128,7 +128,7 @@ public @interface RemoteOp {
 	 *
 	 * <p>
 	 * The following examples are considered equivalent.
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Normal form</jc>
 	 * 	<ja>@RemoteOp</ja>(method=<jsf>PUT</jsf>, path=<js>"/{propertyName}"</js>)
 	 *

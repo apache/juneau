@@ -26,24 +26,24 @@ import org.apache.juneau.serializer.*;
  * Provides various convenience methods for creating and populating a sorted set with minimal code.
  *
  * <h5 class='figure'>Examples:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// A set of strings.</jc>
- * 	ASortedSet&lt;String&gt; s = ASortedSet.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>);
+ * 	ASortedSet&lt;String&gt; <jv>set</jv> = ASortedSet.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>);
  *
  * 	<jc>// Append to set.</jc>
- * 	s.a(<js>"baz"</js>).a(<js>"qux"</js>);
+ * 	<jv>set</jv>.a(<js>"baz"</js>).a(<js>"qux"</js>);
  *
  * 	<jc>// Create an unmodifiable view of this set.</jc>
- * 	Set&lt;String&gt; s2 = s.unmodifiable();
+ * 	Set&lt;String&gt; <jv>set2</jv> = <jv>set</jv>.unmodifiable();
  *
  * 	<jc>// Convert it to an array.</jc>
- * 	String[] array = s.asArrayOf(String.<jk>class</jk>);
+ * 	String[] <jv>array</jv> = <jv>set</jv>.asArrayOf(String.<jk>class</jk>);
  *
  * 	<jc>// Convert to simplified JSON.</jc>
- * 	String json = s.asString();
+ * 	String <jv>json</jv> = <jv>set</jv>.asString();
  *
  * 	<jc>// Convert to XML.</jc>
- * 	String json = s.asString(XmlSerializer.<jsf>DEFAULT</jsm>);
+ * 	String <jv>json</jv> = <jv>set</jv>.asString(XmlSerializer.<jsf>DEFAULT</jsm>);
  * </p>
  *
  * <ul class='spaced-list'>

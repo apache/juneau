@@ -26,7 +26,7 @@ import org.apache.juneau.internal.*;
  * Describes a single response from an API Operation.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	ResponseInfo <jv>info</jv> = <jsm>responseInfo</jsm>(<js>"A complex object array response"</js>)
  * 		.schema(
@@ -44,7 +44,7 @@ import org.apache.juneau.internal.*;
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	<jv>json</jv> = <jv>info</jv>.toString();
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjson'>
  * 	<jc>// Output</jc>
  * 	{
  * 		<js>"description"</js>: <js>"A complex object array response"</js>,
@@ -274,7 +274,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * Bean property fluent setter:  <property>examples</property>.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	examples(<js>"{'text/json':{foo:'bar'}}"</js>);
 	 * </p>
 	 *
@@ -376,7 +376,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * A list of headers that are sent with the response as raw JSON.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	headers(<js>"{headerName:{description:'description',...}}"</js>);
 	 * </p>
 	 *
@@ -475,7 +475,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * A definition of the response structure as raw JSON.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	schema(<js>"{type:'type',description:'description',...}"</js>);
 	 * </p>
 	 *

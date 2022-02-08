@@ -31,7 +31,7 @@
 	<p>
 		Arrays are simple enough and can be constructed using the first method:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	ReaderParser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
 		|	String <jv>json</jv> = <js>"[1,2,3]"</js>;
 		|	<jk>int</jk>[] <jv>array</jv> = <jv>parser</jv>.parse(<jv>json</jv>, <jk>int</jk>[].<jk>class</jk>);
@@ -41,14 +41,14 @@
 		use the second parse method that allows you to define the parameter types of the collections classes.
 		For example:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	String <jv>json</jv> = <js>"{foo:[{bar:'baz'}]}"</js>;
 		|	TreeMap&lt;String,List&lt;MyBean&gt;&gt; <jv>map</jv> = <jv>parser</jv>.parse(
 		|		<jv>json</jv>,             <jc>// Input being parsed.</jc>
 		|		TreeMap.<jk>class</jk>,    <jc>// Top-level data type.</jc>
 		|		String.<jk>class</jk>,     <jc>// Key type of map.</jc>
 		|		LinkedList.<jk>class</jk>, <jc>// Value type of map.</jc>
-		|		MyBean.<jk>class</jk>      <jc>// Value type of list.v
+		|		MyBean.<jk>class</jk>      <jc>// Value type of list.</jc>
 		|	);
 	</p>
 	<p>

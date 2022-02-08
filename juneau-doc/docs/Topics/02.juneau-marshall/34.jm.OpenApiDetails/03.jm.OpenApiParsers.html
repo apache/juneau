@@ -51,7 +51,7 @@
 	<p>
 		The following is the previous example of a schema that defines the format of a pipe-delimited list of comma-delimited numbers (e.g. <js>"1,2,3|4,5,6|7,8,9"</js>):
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>import static</jk> org.apache.juneau.httppart.HttpPartSchema.*;
 		|
 		|	HttpPartSchema <jv>schema</jv> = <jsm>tArrayPipes</jsm>(
@@ -63,7 +63,7 @@
 	<p>
 		The following code shows how the schema above can be used to parse our input into a POJO:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Our input being parsed.</jc>
 		|	String <jv>input</jv> = <js>"1,2,3|4,5,6|7,8,9"</js>
 		|	
@@ -241,7 +241,7 @@
 	<p>
 		For arrays, an example of "Any POJO transformable from arrays of the default types" is:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Sample POJO class convertable from a Long[][].</jc>
 		|	<jk>public class</jk> MyPojo {
 		|		
@@ -252,7 +252,7 @@
 	<p>
 		In the example above, our POJO class can be constructed from our pipe-delimited list of comma-delimited numbers: 
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Our input being parsed.</jc>
 		|	String <jv>input</jv> = <js>"1,2,3|4,5,6|7,8,9"</js>
 		|	
@@ -273,7 +273,7 @@
 	<p>
 		The following shows an example of a bean with several properties of various types.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> MyBean {
 		|		<jk>public</jk> String <jf>f1</jf>;
 		|		<jk>public byte</jk>[] <jf>f2</jf>;
@@ -292,7 +292,7 @@
 	<p>
 		We define the following schema again:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>import static</jk> org.apache.juneau.httppart.HttpPartSchema.*;
 		|	
 		|	HttpPartSchema <jv>schema</jv> = <jsm>tObject</jsm>()
@@ -313,7 +313,7 @@
 	<p>
 		Then we parse our input into our POJO:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	String <jv>input</jv> = 
 		|		<js>"(f1=foo,f2=Zm9v,f3=666F6F,f4='66 6F 6F',f5=2012-12-21T12:34:56Z,f6=foo,"</js>
 		|		+ <js>"f7=1,f8=2,f9=1.0,f10=1.0,f11=true,fExtra=1)"</js>;
@@ -324,7 +324,7 @@
 	<p>
 		Note that serializing into generic <c>Object</c> properties would have produced similar results:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jk>public class</jk> MyBean {
 		|		<jk>public</jk> Object <jf>f1</jf>;
 		|		<jk>public</jk> Object <jf>f2</jf>;
@@ -343,7 +343,7 @@
 	<p>
 		We can also parse into Maps as well:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	String <jv>input</jv> = 
 		|		<js>"(f1=foo,f2=Zm9v,f3=666F6F,f4='66 6F 6F',f5=2012-12-21T12:34:56Z,f6=foo,"</js>
 		|		+ <js>"f7=1,f8=2,f9=1.0,f10=1.0,f11=true,fExtra=1)"</js>;

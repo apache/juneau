@@ -71,7 +71,7 @@ public @interface Bean {
 	 * Examples are used in cases such as POJO examples in Swagger documents.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Bean</ja>(example=<js>"{foo:'bar'}"</js>)
 	 * 	<jk>public class</jk> MyClass {...}
 	 * </p>
@@ -106,7 +106,7 @@ public @interface Bean {
 	 * Specifies a list of properties that should be excluded from {@link BeanMap#entrySet()}.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Exclude the 'city' and 'state' properties from the Address class.</jc>
 	 * 	<ja>@Bean</ja>(excludeProperties=<js>"city,state"</js>})
 	 * 	<jk>public class</jk> Address {...}
@@ -132,11 +132,11 @@ public @interface Bean {
 	 * When <jk>true</jk>, fluent setters will be detected on beans.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Bean</ja>(findFluentSetters=<jk>true</jk>)
 	 * 	<jk>public class</jk> MyBean {
 	 * 		<jk>public int</jk> getId() {...}
-	 * 		<jk>public</jk> MyBean id(<jk>int</jk> id) {...}
+	 * 		<jk>public</jk> MyBean id(<jk>int</jk> <jv>id</jv>) {...}
 	 * 	}
 	 * </p>
 	 *
@@ -165,7 +165,7 @@ public @interface Bean {
 	 * parse).
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Bean</ja>(implClass=MyInterfaceImpl.<jk>class</jk>)
 	 * 	<jk>public class</jk> MyInterface {...}
 	 * <p>
@@ -191,7 +191,7 @@ public @interface Bean {
 	 * When specified, only the list of properties defined on the interface class will be used during serialization.
 	 * Additional properties on subclasses will be ignored.
 	 *
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Parent class</jc>
 	 * 	<ja>@Bean</ja>(interfaceClass=A.<jk>class</jk>)
 	 * 	<jk>public abstract class</jk> A {
@@ -204,7 +204,7 @@ public @interface Bean {
 	 * 	}
 	 *
 	 * 	<jc>// Produces "{f0:'f0'}"</jc>
-	 * 	String json = SimpleJsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jk>new</jk> A1());
+	 * 	String <jv>json</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jk>new</jk> A1());
 	 * </p>
 	 *
 	 * <p>
@@ -288,7 +288,7 @@ public @interface Bean {
 	 * whereas on Oracle JREs, the order is entirely random.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Address class with only street/city/state properties (in that order).</jc>
 	 * 	<ja>@Bean</ja>(properties=<js>"street,city,state"</js>)
 	 * 	<jk>public class</jk> Address {...}
@@ -314,7 +314,7 @@ public @interface Bean {
 	 * Property namers are used to transform bean property names from standard form to some other form.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Define a class with dashed-lowercase property names.</jc>
 	 * 	<ja>@Bean</ja>(propertyNamer=PropertyNamerDashedLC.<jk>class</jk>)
 	 * 	<jk>public class</jk> MyBean {...}
@@ -334,7 +334,7 @@ public @interface Bean {
 	 * Serializers will serialize such properties as usual, but parsers will silently ignore them.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Exclude the 'city' and 'state' properties from being parsed, but not serialized.</jc>
 	 * 	<ja>@Bean</ja>(readOnlyProperties=<js>"city,state"</js>})
 	 * 	<jk>public class</jk> Address {...}
@@ -366,7 +366,7 @@ public @interface Bean {
 	 * <br>Otherwise, the natural order of the bean properties is used which is dependent on the JVM vendor.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Sort bean properties alphabetically during serialization.</jc>
 	 * 	<ja>@Bean</ja>(sort=<jk>true</jk>)
 	 * 	<jk>public class</jk> MyBean {...}
@@ -388,7 +388,7 @@ public @interface Bean {
 	 * <p>
 	 * For example, in the following class hierarchy, instances of <c>C3</c> will include property <c>p3</c>,
 	 * but not <c>p1</c> or <c>p2</c>.
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jk>public class</jk> C1 {
 	 * 		<jk>public int</jk> getP1();
 	 * 	}
@@ -417,7 +417,7 @@ public @interface Bean {
 	 * It is also used to specify element names in XML.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Use _type='mybean' to identify this bean.</jc>
 	 * 	<ja>@Bean</ja>(typeName=<js>"mybean"</js>)
 	 * 	<jk>public class</jk> MyBean {...}
@@ -439,7 +439,7 @@ public @interface Bean {
 	 * The default value if not specified is <js>"_type"</js> .
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Use 'type' instead of '_type' for bean names.</jc>
 	 * 	<ja>@Bean</ja>(typePropertyName=<js>"type"</js>)
 	 * 	<jk>public class</jk> MyBean {...}
@@ -465,7 +465,7 @@ public @interface Bean {
 	 * Parsers will parse such properties as usual, but serializers will silently ignore them.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Exclude the 'city' and 'state' properties from being serialized, but not parsed.</jc>
 	 * 	<ja>@Bean</ja>(writeOnlyProperties=<js>"city,state"</js>})
 	 * 	<jk>public class</jk> Address {...}

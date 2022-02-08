@@ -31,16 +31,16 @@ import org.apache.juneau.serializer.*;
  * 	The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.
  *
  * <h5 class='figure'>Examples:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
- * 	Marshall json = <jk>new</jk> Json();
- * 	MyPojo myPojo = json.read(string, MyPojo.<jk>class</jk>);
- * 	String string = json.write(myPojo);
+ * 	Marshall <jv>json</jv> = <jk>new</jk> Json();
+ * 	MyPojo <jv>myPojo</jv> = <jv>json</jv>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = <jv>json</jv>.write(<jv>myPojo</jv>);
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  *	<jc>// Using DEFAULT instance.</jc>
- * 	MyPojo myPojo = Json.<jsf>DEFAULT</jsf>.read(string, MyPojo.<jk>class</jk>);
- * 	String string = Json.<jsf>DEFAULT</jsf>.write(myPojo);
+ * 	MyPojo <jv>myPojo</jv> = Json.<jsf>DEFAULT</jsf>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = Json.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
  * </p>
  *
  * <ul class='seealso'>
@@ -169,8 +169,8 @@ public abstract class Marshall {
 	 * Useful for debug messages.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	SimpleJson.<jsf>DEFAULT</jsf>.out(<js>"myPojo={0}"</js>, myPojo);
+	 * <p class='bjava'>
+	 * 	SimpleJson.<jsf>DEFAULT</jsf>.out(<js>"myPojo={0}"</js>, <jv>myPojo</jv>);
 	 * </p>
 	 *
 	 * @param msg The {@link MessageFormat}-styled message.
@@ -192,8 +192,8 @@ public abstract class Marshall {
 	 * Useful for debug messages.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	SimpleJson.<jsf>DEFAULT</jsf>.err(<js>"myPojo={0}"</js>, myPojo);
+	 * <p class='bjava'>
+	 * 	SimpleJson.<jsf>DEFAULT</jsf>.err(<js>"myPojo={0}"</js>, <jv>myPojo</jv>);
 	 * </p>
 	 *
 	 * @param msg The {@link MessageFormat}-styled message.
@@ -215,8 +215,8 @@ public abstract class Marshall {
 	 * Useful for debug messages.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	String msg = SimpleJson.<jsf>DEFAULT</jsf>.format(<js>"myPojo={0}"</js>, myPojo);
+	 * <p class='bjava'>
+	 * 	String <jv>msg</jv> = SimpleJson.<jsf>DEFAULT</jsf>.format(<js>"myPojo={0}"</js>, <jv>myPojo</jv>);
 	 * </p>
 	 *
 	 * @param msg The {@link MessageFormat}-styled message.
@@ -236,23 +236,23 @@ public abstract class Marshall {
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	Marshall m = Json.<jsf>DEFAULT</jsf>;
+	 * <p class='bjava'>
+	 * 	Marshall <jv>marshall</jv> = Json.<jsf>DEFAULT</jsf>;
 	 *
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
-	 * 	List l = m.read(json, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List <jv>list1</jv> = <jv>marshall</jv>.read(<jv>json</jv>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of beans.</jc>
-	 * 	List l = m.read(json, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	List <jv>list2</jv> = <jv>marshall</jv>.read(<jv>json</jv>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
-	 * 	List l = m.read(json, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List <jv>list3</jv> = <jv>marshall</jv>.read(<jv>json</jv>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
-	 * 	Map m = m.read(json, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	Map <jv>map1</jv> = <jv>marshall</jv>.read(<jv>json</jv>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
-	 * 	Map m = m.read(json, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	Map <jv>map2</jv> = <jv>marshall</jv>.read(<jv>json</jv>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <p>
@@ -356,23 +356,23 @@ public abstract class Marshall {
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	Marshall m = Json.<jsf>DEFAULT</jsf>;
+	 * <p class='bjava'>
+	 * 	Marshall <jv>marshall</jv> = Json.<jsf>DEFAULT</jsf>;
 	 *
 	 * 	<jc>// Parse into a string.</jc>
-	 * 	String s = m.read(json, String.<jk>class</jk>);
+	 * 	String <jv>string</jv> = <jv>marshall</jv>.read(<jv>json</jv>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a bean.</jc>
-	 * 	MyBean b = m.read(json, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>bean</jv> = <jv>marshall</jv>.read(<jv>json</jv>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a bean array.</jc>
-	 * 	MyBean[] ba = m.read(json, MyBean[].<jk>class</jk>);
+	 * 	MyBean[] <jv>beanArray</jv> = <jv>marshall</jv>.read(<jv>json</jv>, MyBean[].<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
-	 * 	List l = m.read(json, LinkedList.<jk>class</jk>);
+	 * 	List <jv>list</jv> = <jv>marshall</jv>.read(<jv>json</jv>, LinkedList.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
-	 * 	Map m = m.read(json, TreeMap.<jk>class</jk>);
+	 * 	Map <jv>map</jv> = <jv>marshall</jv>.read(<jv>json</jv>, TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param <T> The class type of the object being created.
@@ -395,23 +395,23 @@ public abstract class Marshall {
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	Marshall m = Json.<jsf>DEFAULT</jsf>;
+	 * <p class='bjava'>
+	 * 	Marshall <jv>marshall</jv> = Json.<jsf>DEFAULT</jsf>;
 	 *
 	 * 	<jc>// Parse into a string.</jc>
-	 * 	String s = m.read(json, String.<jk>class</jk>);
+	 * 	String <jv>string</jv> = <jv>marshall</jv>.read(<jv>json</jv>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a bean.</jc>
-	 * 	MyBean b = m.read(json, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>bean</jv> = <jv>marshall</jv>.read(<jv>json</jv>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a bean array.</jc>
-	 * 	MyBean[] ba = m.read(json, MyBean[].<jk>class</jk>);
+	 * 	MyBean[] <jv>beanArray</jv> = <jv>marshall</jv>.read(<jv>json</jv>, MyBean[].<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
-	 * 	List l = m.read(json, LinkedList.<jk>class</jk>);
+	 * 	List <jv>list</jv> = <jv>marshall</jv>.read(<jv>json</jv>, LinkedList.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
-	 * 	Map m = m.read(json, TreeMap.<jk>class</jk>);
+	 * 	Map <jv>map</jv> = <jv>marshall</jv>.read(<jv>json</jv>, TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param <T> The class type of the object being created.

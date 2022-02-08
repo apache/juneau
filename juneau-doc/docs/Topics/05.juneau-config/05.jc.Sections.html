@@ -41,7 +41,7 @@
 		methods allow you to access a section as simple key/value pairs. 
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<jc>// Example config file</jc>
 		|	<cs>[MyAddress]</cs>
 		|	<ck>street</ck> = <cv>123 Main Street</cv>
@@ -49,16 +49,16 @@
 		|	<ck>state</ck> = <cv>NY</cv>
 		|	<ck>zip</ck> = <cv>12345</cv>
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Example usage</jc>
 		|	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build();
 		|	
-		|	OMap <jv>omap</jv> = <jv>config</jv>.getSection(<js>"MyAddress"</js>).asMap();
+		|	OMap <jv>map</jv> = <jv>config</jv>.getSection(<js>"MyAddress"</js>).asMap();
 		|	
-		|	String <jv>street</jv> = <jv>omap</jv>.getString(<js>"street"</js>);
-		|	String <jv>city</jv> = <jv>omap</jv>.getString(<js>"city"</js>);
-		|	String <jv>state</jv> = <jv>omap</jv>.getString(<js>"state"</js>);
-		|	<jk>int</jk> <jv>zip</jv> = <jv>omap</jv>.getInt(<js>"zip"</js>);
+		|	String <jv>street</jv> = <jv>map</jv>.getString(<js>"street"</js>);
+		|	String <jv>city</jv> = <jv>map</jv>.getString(<js>"city"</js>);
+		|	String <jv>state</jv> = <jv>map</jv>.getString(<js>"state"</js>);
+		|	<jk>int</jk> <jv>zip</jv> = <jv>map</jv>.getInt(<js>"zip"</js>);
 	</p>
 	<p>
 		Maps created this way are snapshot copies of the section at the time of the method call.
@@ -68,7 +68,7 @@
 		{@link oaj.config.Section#asBean(Class) asBean()}, {@link oaj.config.Section#toBean(Class) toBean()}, or {@link oaj.config.Section#writeToBean(Object,boolean) writeToBean()}.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<jc>// Example config file</jc>
 		|	<cs>[MyAddress]</cs>
 		|	<ck>street</ck> = <cv>123 Main Street</cv>
@@ -76,7 +76,7 @@
 		|	<ck>state</ck> = <cv>NY</cv>
 		|	<ck>zip</ck> = <cv>12345</cv>
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Example bean</jc>
 		|	<jk>public class</jk> Address {
 		|		<jk>public</jk> String <jf>street</jf>, <jf>city</jf>;
@@ -86,7 +86,7 @@
 		|
 		|	<jc>// Example usage</jc>
 		|	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build();
-		|	Address <jv>myAddress</jv> = <jv>config</jv>.getSection(<js>"MyAddress"</js>).to(Address.<jk>class</jk>);
+		|	Address <jv>myAddress</jv> = <jv>config</jv>.getSection(<js>"MyAddress"</js>).as(Address.<jk>class</jk>).orElse(<jk>null</jk>);
 	</p>
 	<p>
 		Like maps, beans created this way are snapshot copies of the section at the time of the method call.
@@ -100,7 +100,7 @@
 		call, section interfaces can also be use to set values in the underlying configuration.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<jc>// Example config file</jc>
 		|	<cs>[MySection]</cs>
 		|	<ck>string</ck> = <cv>foo</cv>
@@ -110,7 +110,7 @@
 		|	<ck>int3dArray</ck> = <cv>[[[123,null],null],null]</cv>
 		|	<ck>bean1d3dListMap</ck> = <cv>{key:[[[[{foo:'bar',baz:123}]]]]}</cv>
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Example interface.</jc>
 		|	<jc>// Setters are optional.</jc>
 		|	<jk>public interface</jk> MyConfigInterface {

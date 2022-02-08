@@ -15,8 +15,8 @@
  * 
  * Allows you to embed paragraphs of highlighted code into HTML documents.
  * For example:
- * 	<p class='bcode w800'>
- *		<jk>public static void</jk> myMethod(<jk>int</jk> foo, String bar) <jk>throws</jk> Exception {
+ * 	<p class='bjava'>
+ *		<jk>public static void</jk> myMethod(<jk>int</jk> <jv>foo</jv>, String <jv>bar</jv>) <jk>throws</jk> Exception {
  *			System.<jsm>err</jsm>.println(<js>"Hello world!"</js>);
  *		}
  * 	</p>
@@ -27,7 +27,7 @@
  * 
  * Available classes:
  * 	code - Unbordered code block
- * 	bcode - Bordered code block
+ * 	bcode,bjava,bxml,bini,bjson,buon,burlenc,bconsole - Bordered code block
  * 
  * Available tags:
  *	<jc> - Java comment
@@ -59,7 +59,7 @@
 
 /* Monospaced font size */
 .code,
-.bcode,
+.bcode,.bjava,.bjson,.bxml,.bini,.buon,.burlenc,.bconsole,.bschema,
 jc,jd,jt,jk,js,jf,jsf,jsm,ja,jp,jv 
 xt,xa,xc,xs,
 mc,mk,mv,
@@ -73,6 +73,10 @@ c,dc,bc {
 	-o-tab-size: 3;
 }
 
+.bcode,.bjava,.bjson,.bxml,.bini,.buon,.burlenc,.bconsole,.bschema {
+	width:800px !important;
+}
+
 /* Deleted code */
 dc {
 	text-decoration: line-through;
@@ -84,8 +88,8 @@ bc {
 }
 
 /*--- Bordered code ---*/
-p.bcode,
-div.bcode {
+p.bcode,p.bjava,p.bjson,p.bxml,p.bini,p.buon,p.burlenc,p.bconsole,p.bschema,
+div.bcode,div.bjava,div.bjson,div.bxml,div.bini,div.buon,div.burlenc,div.bconsole,div.bschema {
 	border: 1px solid black;
 	margin: 0px 20px;
 	border-radius: 10px;
@@ -96,15 +100,33 @@ div.bcode {
 }
 
 /*--- Bordered code in a section of a method doc ---*/
-dd p.bcode, dd div.bcode {
+dd p.bcode, dd div.bcode,
+dd p.bjava, dd div.bjava,
+dd p.bjson, dd div.bjson,
+dd p.bxml, dd div.bxml,
+dd p.bini, dd div.bini,
+dd p.buon, dd div.buon,
+dd p.burlenc, dd div.burlenc,
+dd p.bschema, dd div.bschema,
+dd p.bconsole, dd div.bconsole {
 	margin-left:0px;
 	margin-right:20px;
 }
 
 /* Override padding bottom in javadoc comments. */
-.blockList p.bcode, .blocklist div.bcode {
+.blockList p.bcode, .blocklist div.bcode,
+.blockList p.bjava, .blocklist div.bjava,
+.blockList p.bjson, .blocklist div.bjson,
+.blockList p.bxml, .blocklist div.bxml,
+.blockList p.buon, .blocklist div.buon,
+.blockList p.burlenc, .blocklist div.burlenc,
+.blockList p.bconsole, .blocklist div.bconsole,
+.blockList p.bschema, .blocklist div.bschema,
+.blockList p.bini, .blocklist div.bini {
 	padding-bottom: 0px !important;
 }
+
+.bconsole { color:#ffcc00; font-weight:bold; font-family:monospace; font-size:1.1em; background-color:black !important; }
 
 /*--- Unbordered code ---*/
 p.code, div.code {

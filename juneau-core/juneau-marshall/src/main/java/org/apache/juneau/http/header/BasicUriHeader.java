@@ -25,7 +25,7 @@ import java.util.function.*;
  *
  * <p>
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Location: http://www.w3.org/pub/WWW/People.html
  * </p>
  *

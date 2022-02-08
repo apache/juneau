@@ -50,7 +50,7 @@ import org.apache.juneau.xml.*;
  * Configurable properties are typically specified via <ja>@HtmlDocConfig</ja>.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@Rest</ja>(
  * 		messages=<js>"nls/AddressBookResource"</js>,
  * 		title=<js>"$L{title}"</js>,
@@ -222,7 +222,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * By default, the aside section is empty.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.aside(
@@ -289,7 +289,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * By default, the aside section is floated to the right.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.aside(
@@ -323,7 +323,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * By default, the footer section is empty.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.footer(
@@ -364,7 +364,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * Adds the specified HTML content to the head section of the page.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.head(
@@ -406,7 +406,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * The header section normally contains the title and description at the top of the page.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.header(
@@ -448,7 +448,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * The nav section normally contains the page links at the top of the page.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.nav(
@@ -511,7 +511,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * <js>"servlet:/..."</js>.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.navlinks(
@@ -554,10 +554,10 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * Allows you to specify the string message used when trying to serialize an empty array or empty list.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
 		 * 		.<jsm>create</jsm>()
-		 * 		.noResultsMessage("&lt;b&gt;This interface is great!&lt;/b&gt;"</js>)
+		 * 		.noResultsMessage(<js>"&lt;b&gt;This interface is great!&lt;/b&gt;"</js>)
 		 * 		.build();
 		 * </p>
 		 *
@@ -606,7 +606,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 *
 		 * <p>
 		 * A shortcut on <ja>@Rest</ja> is also provided for this setting:
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.script(<js>"alert('hello!');"</js>)
@@ -641,7 +641,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		/**
 		 * Adds the specified CSS instructions to the HTML page.
 		 *
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.style(
@@ -718,10 +718,10 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * can be overridden with your own custom implementation class.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
 		 * 		.<jsm>create</jsm>()
-		 * 		.template9MySpecialDocTemplate.<jk>class</jk>)
+		 * 		.template(MySpecialDocTemplate.<jk>class</jk>)
 		 * 		.build();
 		 * </p>
 		 *
@@ -757,7 +757,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * The following examples shows how to associate a widget with a REST method and then have it rendered in the links
 		 * and aside section of the page:
 		 *
-		 * <p class='bcode w800'>
+		 * <p class='bjava'>
 		 * 	WriterSerializer <jv>serializer</jv> = HtmlDocSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.widgets(

@@ -29,12 +29,12 @@
 			of the file.
 		<li>
 			Specifying the location using a <c>Jetty-Config</c> value in the <c>MANIFEST.MF</c> file.
-			<p class='bcode w800'>
+			<p class='bini'>
 				|	<mk>Jetty-Config:</mk> <mv>files/jetty.xml</mv>
 			</p>
 		<li>
 			Specifying the location using the <js>"Jetty/jettyXml"</js> configuration value.
-			<p class='bcode w800'>
+			<p class='bini'>
 				|	<cc>#=======================================================================================================================
 				|	# Jetty settings
 				|	#=======================================================================================================================</cc>
@@ -54,10 +54,10 @@
 	<ul class='spaced-list'>
 		<li>
 			The {@link oaj.microservice.jetty.JettyMicroservice.Builder#ports(int...)} method.
-			<p class='bcode w800'>
+			<p class='bjava'>
 				|	JettyMicroservice
 				|		.<jsm>create</jsm>() 
-				|		.args(args)  
+				|		.args(<jv>args</jv>)  
 				|		.servlets(RootResource.<jk>class</jk>)
 				|		.port(1000,2000,0,0,0)  <jc>// Try port 1000, then 2000, then 3 random ports.</jc>
 				|		.build()  
@@ -65,7 +65,7 @@
 			</p>
 		<li>
 			The <js>"Jetty/ports"</js> configuration property.
-			<p class='bcode w800'>
+			<p class='bini'>
 				|	<cc>#=======================================================================================================================
 				|	# Jetty settings
 				|	#=======================================================================================================================</cc>
@@ -80,7 +80,7 @@
 		The first available port is then made available through the system property <js>"availablePort"</js> so that it
 		can be referenced in our <c>jetty.xml</c> file.
 	</p>
-	<p class='bcode w800'>
+	<p class='bxml'>
 		|	<xt>&lt;Set</xt> <xa>name</xa>=<xs>"connectors"</xs><xt>&gt;</xt>
 		|		<xt>&lt;Array</xt> <xa>type</xa>=<xs>"org.eclipse.jetty.server.Connector"</xs><xt>&gt;</xt>
 		|			<xt>&lt;Item&gt;</xt>

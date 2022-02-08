@@ -21,7 +21,7 @@
 		The resource resolver gets passed down through the children hierarchy, allowing child resources to be defined as injectable Spring beans.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Configuration</ja>
 		|	<jk>public class</jk> AppConfiguration {
 		|	
@@ -46,7 +46,7 @@
 		servlet using the Spring Boot architecture.  The {@link oajr.servlet.BasicRestServletGroup} class is our router class
 		that extends from <c>HttpServlet</c>:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(
 		|		path=<js>"/root"</js>,
 		|		children={
@@ -63,7 +63,7 @@
 		{@del oajr.BasicRestGroup} and {@del oajr.BasicRest} instead:
 	</p>
 	
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(
 		|		path=<js>"/child"</js>,
 		|		children={
@@ -74,7 +74,7 @@
 		|		<jc>// No code needed.</jc>
 		|	}
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(
 		|		path=<js>"/grandchild"</js>
 		|	)

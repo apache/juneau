@@ -42,7 +42,7 @@ import org.apache.juneau.oapi.*;
  * in a URL path pattern.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestGet</ja>(<js>"/myurl/{foo}/{bar}/{baz}/*"</js>)
  * 	<jk>public void</jk> doGet(
  * 			<ja>@Path</ja>(<js>"foo"</js>) String <jv>foo</jv>,
@@ -104,12 +104,12 @@ public @interface Path {
 	 * 		then it's the equivalent to <js>"*"</js> which will cause the value to be treated as name/value pairs.
 	 *
 	 * 		<h5 class='figure'>Examples:</h5>
-	 * 		<p class='bcode w800'>
+	 * 		<p class='bjava'>
 	 * 	<jc>// When used on a REST method</jc>
 	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(<ja>@Path</ja> OMap <jv>allPathParameters</jv>) {...}
 	 * 		</p>
-	 * 		<p class='bcode w800'>
+	 * 		<p class='bjava'>
 	 * 	<jc>// When used on a remote method parameter</jc>
 	 * 	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
 	 * 	<jk>public interface</jk> MyProxy {
@@ -119,7 +119,7 @@ public @interface Path {
 	 * 		String myProxyMethod1(<ja>@Path</ja> Map&lt;String,Object&gt; <jv>allPathParameters</jv>);
 	 * 	}
 	 * 		</p>
-	 * 		<p class='bcode w800'>
+	 * 		<p class='bjava'>
 	 * 	<jc>// When used on a request bean method</jc>
 	 * 	<jk>public interface</jk> MyRequest {
 	 *
@@ -133,7 +133,7 @@ public @interface Path {
 	 * 		If used on a request bean method, uses the bean property name.
 	 *
 	 * 		<h5 class='figure'>Example:</h5>
-	 * 		<p class='bcode w800'>
+	 * 		<p class='bjava'>
 	 * 	<jk>public interface</jk> MyRequest {
 	 *
 	 * 		<jc>// Equivalent to @Path("foo")</jc>
@@ -221,11 +221,11 @@ public @interface Path {
 	 *
 	 * <p>
 	 * The following are completely equivalent ways of defining a path entry:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>(<js>"/pet/{petId}"</js>)
 	 * 	<jk>public</jk> Pet getPet(<ja>@Path</ja>(name=<js>"petId"</js>) <jk>long</jk> <jv>petId</jv>) { ... }
 	 * </p>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@RestGet</ja>(<js>"/pet/{petId}"</js>)
 	 * 	<jk>public</jk> Pet getPet(<ja>@Path</ja>(<js>"petId"</js>) <jk>long</jk> <jv>petId</jv>) { ... }
 	 * </p>

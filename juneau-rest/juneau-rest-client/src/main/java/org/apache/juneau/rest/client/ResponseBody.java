@@ -474,33 +474,33 @@ public class ResponseBody implements HttpEntity {
 	 * The type can be a simple type (e.g. beans, strings, numbers) or parameterized type (collections/maps).
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
-	 * 	List&lt;String&gt; <jv>l1</jv> = <jv>client</jv>
+	 * 	List&lt;String&gt; <jv>list1</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.getBody().as(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of beans.</jc>
-	 * 	List&lt;MyBean&gt; <jv>l2</jv> = <jv>client</jv>
+	 * 	List&lt;MyBean&gt; <jv>list2</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.getBody().as(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
-	 * 	List&lt;List&lt;String&gt;&gt; <jv>l3</jv> = <jv>client</jv>
+	 * 	List&lt;List&lt;String&gt;&gt; <jv>list3</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.getBody().as(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
-	 * 	Map&lt;String,String&gt; <jv>m1</jv> = <jv>client</jv>
+	 * 	Map&lt;String,String&gt; <jv>map1</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.getBody().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
-	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>m2</jv> = <jv>client</jv>
+	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>map2</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.getBody().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
@@ -517,7 +517,7 @@ public class ResponseBody implements HttpEntity {
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
-	 * 		Use the {@link #asType(Class)} method instead if you don't need a parameterized map/collection.
+	 * 		Use the {@link #as(Class)} method instead if you don't need a parameterized map/collection.
 	 * 	<li>
 	 * 		You can also specify any of the following types:
 	 * 		<ul class='compact'>
@@ -551,18 +551,18 @@ public class ResponseBody implements HttpEntity {
 	 * 	</ul>
 	 * @see BeanSession#getClassMeta(Class) for argument syntax for maps and collections.
 	 */
-	public <T> T asType(Type type, Type...args) throws RestCallException {
-		return asType(getClassMeta(type, args));
+	public <T> T as(Type type, Type...args) throws RestCallException {
+		return as(getClassMeta(type, args));
 	}
 
 	/**
-	 * Same as {@link #asType(Type,Type...)} except optimized for a non-parameterized class.
+	 * Same as {@link #as(Type,Type...)} except optimized for a non-parameterized class.
 	 *
 	 * <p>
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Parse into a string.</jc>
 	 * 	String <jv>string</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().as(String.<jk>class</jk>);
 	 *
@@ -599,43 +599,43 @@ public class ResponseBody implements HttpEntity {
 	 *
 	 * @param <T>
 	 * 	The class type of the object being created.
-	 * 	See {@link #asType(Type,Type...)} for details.
+	 * 	See {@link #as(Type,Type...)} for details.
 	 * @param type The object type to create.
 	 * @return The parsed object.
 	 * @throws RestCallException
 	 * 	If the input contains a syntax error or is malformed, or is not valid for the specified type, or if a connection
 	 * 	error occurred.
 	 */
-	public <T> T asType(Class<T> type) throws RestCallException {
-		return asType(getClassMeta(type));
+	public <T> T as(Class<T> type) throws RestCallException {
+		return as(getClassMeta(type));
 	}
 
 	/**
-	 * Same as {@link #asType(Class)} except allows you to predefine complex data types using the {@link ClassMeta} API.
+	 * Same as {@link #as(Class)} except allows you to predefine complex data types using the {@link ClassMeta} API.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
-	 * 	BeanContext <jv>bc</jv> = BeanContext.<jsf>DEFAULT</jsf>;
+	 * <p class='bjava'>
+	 * 	BeanContext <jv>beanContext</jv> = BeanContext.<jsf>DEFAULT</jsf>;
 	 *
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
-	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm1</jv> = <jv>bc</jv>.getClassMeta(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 * 	List&lt;String> <jv>l1</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().as(<jv>cm1</jv>);
+	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm1</jv> = <jv>beanContext</jv>.getClassMeta(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;String> <jv>list1</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().as(<jv>cm1</jv>);
 	 *
 	 * 	<jc>// Parse into a linked-list of beans.</jc>
-	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm2</jv> = <jv>bc</jv>.getClassMeta(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 * 	List&lt;MyBean&gt; <jv>l2</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().as(<jv>cm2</jv>);
+	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm2</jv> = <jv>beanContext</jv>.getClassMeta(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	List&lt;MyBean&gt; <jv>list2</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().as(<jv>cm2</jv>);
 	 *
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
-	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm3</jv> = <jv>bc</jv>.getClassMeta(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 * 	List&lt;List&lt;String&gt;&gt; <jv>l3</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().as(<jv>cm3</jv>);
+	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm3</jv> = <jv>beanContext</jv>.getClassMeta(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;List&lt;String&gt;&gt; <jv>list3</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().as(<jv>cm3</jv>);
 	 *
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
-	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm4</jv> = <jv>bc</jv>.getClassMeta(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
-	 * 	Map&lt;String,String&gt; <jv>m4</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().as(<jv>cm4</jv>);
+	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm4</jv> = <jv>beanContext</jv>.getClassMeta(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	Map&lt;String,String&gt; <jv>map4</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().as(<jv>cm4</jv>);
 	 *
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
-	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm5</jv> = <jv>bc</jv>.getClassMeta(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>m5</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().as(<jv>cm5</jv>);
+	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm5</jv> = <jv>beanContext</jv>.getClassMeta(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>map5</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().as(<jv>cm5</jv>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -658,7 +658,7 @@ public class ResponseBody implements HttpEntity {
 	 * @see BeanSession#getClassMeta(Class) for argument syntax for maps and collections.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> T asType(ClassMeta<T> type) throws RestCallException {
+	public <T> T as(ClassMeta<T> type) throws RestCallException {
 		try {
 			if (type.is(ResponseBody.class) || type.is(HttpEntity.class))
 				return (T)this;
@@ -744,7 +744,7 @@ public class ResponseBody implements HttpEntity {
 	}
 
 	/**
-	 * Same as {@link #asType(Class)} but allows you to run the call asynchronously.
+	 * Same as {@link #as(Class)} but allows you to run the call asynchronously.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -768,14 +768,14 @@ public class ResponseBody implements HttpEntity {
 			new Callable<T>() {
 				@Override /* Callable */
 				public T call() throws Exception {
-					return asType(type);
+					return as(type);
 				}
 			}
 		);
 	}
 
 	/**
-	 * Same as {@link #asType(ClassMeta)} but allows you to run the call asynchronously.
+	 * Same as {@link #as(ClassMeta)} but allows you to run the call asynchronously.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -788,7 +788,7 @@ public class ResponseBody implements HttpEntity {
 	 *
 	 * @param <T>
 	 * 	The class type of the object being created.
-	 * 	See {@link #asType(Type, Type...)} for details.
+	 * 	See {@link #as(Type, Type...)} for details.
 	 * @param type The object type to create.
 	 * @return The future object.
 	 * @throws RestCallException If the executor service was not defined.
@@ -801,14 +801,14 @@ public class ResponseBody implements HttpEntity {
 			new Callable<T>() {
 				@Override /* Callable */
 				public T call() throws Exception {
-					return asType(type);
+					return as(type);
 				}
 			}
 		);
 	}
 
 	/**
-	 * Same as {@link #asType(Type,Type...)} but allows you to run the call asynchronously.
+	 * Same as {@link #as(Type,Type...)} but allows you to run the call asynchronously.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -821,7 +821,7 @@ public class ResponseBody implements HttpEntity {
 	 *
 	 * @param <T>
 	 * 	The class type of the object being created.
-	 * 	See {@link #asType(Type, Type...)} for details.
+	 * 	See {@link #as(Type, Type...)} for details.
 	 * @param type
 	 * 	The object type to create.
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
@@ -840,7 +840,7 @@ public class ResponseBody implements HttpEntity {
 			new Callable<T>() {
 				@Override /* Callable */
 				public T call() throws Exception {
-					return asType(type, args);
+					return as(type, args);
 				}
 			}
 		);
@@ -922,7 +922,7 @@ public class ResponseBody implements HttpEntity {
 	 * Returns the HTTP body content as a simple hexadecimal character string.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bcode'>
 	 * 	0123456789ABCDEF
 	 * </p>
 	 *
@@ -937,7 +937,7 @@ public class ResponseBody implements HttpEntity {
 	 * Returns the HTTP body content as a simple space-delimited hexadecimal character string.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bcode'>
 	 * 	01 23 45 67 89 AB CD EF
 	 * </p>
 	 *
@@ -963,7 +963,7 @@ public class ResponseBody implements HttpEntity {
 	 * 	</ul>
 	 */
 	public PojoRest asPojoRest(Class<?> innerType) throws RestCallException {
-		return new PojoRest(asType(innerType));
+		return new PojoRest(as(innerType));
 	}
 
 	/**
@@ -987,7 +987,7 @@ public class ResponseBody implements HttpEntity {
 	 * Converts the contents of the response body to a string and then matches the specified pattern against it.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Parse response using a regular expression.</jc>
 	 * 	Matcher <jv>matcher</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
@@ -1020,7 +1020,7 @@ public class ResponseBody implements HttpEntity {
 	 * Converts the contents of the response body to a string and then matches the specified pattern against it.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Parse response using a regular expression.</jc>
 	 * 	Matcher <jv>matcher</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
@@ -1056,7 +1056,7 @@ public class ResponseBody implements HttpEntity {
 	 * Converts the contents of the response body to a string and then matches the specified pattern against it.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Parse response using a regular expression.</jc>
 	 * 	Matcher <jv>matcher</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
@@ -1100,7 +1100,7 @@ public class ResponseBody implements HttpEntity {
 	 * This method is called directly from the {@link RestResponse#assertBody()} method to instantiate a fluent assertions object.
 	 *
 	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the response body equals the text "OK".</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
@@ -1117,7 +1117,7 @@ public class ResponseBody implements HttpEntity {
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getBody().assertValue().passes(<jv>x</jv> -&gt; <jv>x</jv>.contains(<js>"OK"</js>));
+	 * 		.getBody().assertValue().passes(<jv>x</jv> -> <jv>x</jv>.contains(<js>"OK"</js>));
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression.</jc>
 	 * 	<jv>client</jv>
@@ -1132,16 +1132,16 @@ public class ResponseBody implements HttpEntity {
 	 * 		.getBody().assertValue().matches(<js>".*OK.*"</js>,  <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>);
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression in the form of an existing Pattern.</jc>
-	 * 	Pattern <jv>p</jv> = Pattern.<jsm>compile</jsm>(<js>".*OK.*"</js>);
+	 * 	Pattern <jv>pattern</jv> = Pattern.<jsm>compile</jsm>(<js>".*OK.*"</js>);
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getBody().assertValue().matches(<jv>p</jv>);
+	 * 		.getBody().assertValue().matches(<jv>pattern</jv>);
 	 * </p>
 	 *
 	 * <p>
 	 * The assertion test returns the original response object allowing you to chain multiple requests like so:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Validates the response body matches a regular expression.</jc>
 	 * 	MyBean <jv>bean</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)

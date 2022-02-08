@@ -91,7 +91,7 @@ public @interface Remote {
 	 *
 	 * <p>
 	 * The server side then uses an OSGi-version matching pattern to identify which methods to call:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Call this method if Client-Version is at least 2.0.
 	 * 	// Note that this also matches 2.0.1.</jc>
 	 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)

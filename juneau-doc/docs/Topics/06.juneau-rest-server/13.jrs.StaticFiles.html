@@ -20,7 +20,7 @@
 		The {@link oajr.servlet.BasicRestServlet} and {@link oajr.servlet.BasicRestObject} classes come with built-in support
 		for serving up static files through the following REST operation:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@RestGet</ja>(path=<js>"/htdocs/*"</js>)
 		|	<jk>public</jk> HttpResource getHtdoc(<ja>@Path</ja>("/*") String <jv>path</jv>, Locale <jv>locale</jv>) <jk>throws</jk> NotFound {
 		|		<jk>return</jk> getContext().getStaticFiles().resolve(<jv>path</jv>, <jv>locale</jv>).orElseThrow(NotFound::<jk>new</jk>);
@@ -44,7 +44,7 @@
 	<p>
 		By default, the {@link oajr.staticfile.StaticFiles} bean is configured as follows:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	StaticFiles
 		|		.<jsm>create</jsm>()
 		|		.beanStore(<jv>beanStore</jv>)  <jc>// Allow injected beans in constructor.</jc>

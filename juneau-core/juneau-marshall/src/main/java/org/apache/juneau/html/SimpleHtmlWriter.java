@@ -18,8 +18,8 @@ import java.io.*;
  * Utility class for creating custom HTML.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
- * 	String table = <jk>new</jk> SimpleHtmlWriter().sTag(<js>"table"</js>).sTag(<js>"tr"</js>).sTag(<js>"td"</js>)
+ * <p class='bjson'>
+ * 	String <jv>table</jv> = <jk>new</jk> SimpleHtmlWriter().sTag(<js>"table"</js>).sTag(<js>"tr"</js>).sTag(<js>"td"</js>)
  * 	.append(<js>"hello"</js>).eTag(<js>"td"</js>).eTag(<js>"tr"</js>).eTag(<js>"table"</js>).toString();
  * </p>
  *

@@ -41,7 +41,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	String <jv>servletClass</jv> = <jv>restRequest</jv>.getVarResolver().resolve(<js>"$R{servletClass}"</js>);
  * </p>
  *

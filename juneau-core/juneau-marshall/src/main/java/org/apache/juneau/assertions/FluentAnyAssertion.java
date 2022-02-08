@@ -34,11 +34,10 @@ import org.apache.juneau.serializer.*;
  * methods to convert to more-specific assertion types.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
  *
  * 	List&lt;MyBean&gt; <jv>listOfBeans</jv> = ...;
- * 	FluentAnyAssertion<
  * 	<jsm>assertList</jsm>(<jv>listOfBeans</jv>)
  * 		.item(1)  <jc>// Returns an AnyAssertion.</jc>
  * 		.asBean()  <jc>// Transforms to BeanAssertion.</jc>

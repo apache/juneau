@@ -639,9 +639,9 @@ public final class StringUtils {
 	 *
 	 * <p>
 	 * Example:
-	 * <p class='bcode w800'>
-	 * 	String in = <js>"foo=1;bar=2"</js>;
-	 * 	Map m = StringUtils.<jsm>splitMap</jsm>(in, <js>';'</js>, <js>'='</js>, <jk>true</jk>);
+	 * <p class='bjava'>
+	 * 	String <jv>in</jv> = <js>"foo=1;bar=2"</js>;
+	 * 	Map <jv>map</jv> = StringUtils.<jsm>splitMap</jsm>(in, <js>';'</js>, <js>'='</js>, <jk>true</jk>);
 	 * </p>
 	 *
 	 * @param s The string to split.

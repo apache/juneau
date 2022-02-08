@@ -47,11 +47,11 @@ specific language governing permissions and limitations under the License.
 	</p>
 	
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>	
+	<p class='bjava'>	
 		|	<ja>@Remote</ja>(path=<js>"http://localhost:10000/petstore"</js>)
 		|	<jk>public interface</jk> PetStore {...}
 	</p>
-	<p class='bcode w800'>	
+	<p class='bjava'>	
 		|	PetStore <jv>store</jv> = <jv>client</jv>.getRemote(PetStore.<jk>class</jk>);
 	</p>
 	
@@ -60,7 +60,7 @@ specific language governing permissions and limitations under the License.
 	</p>
 	
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>	
+	<p class='bjava'>	
 		|	<jc>// URL is specified via a system property.</jc>
 		|	<ja>@Remote</ja>(path=<js>"$S{PetStoreUrl}"</js>)
 		|	<jk>public interface</jk> PetStore {...}
@@ -71,11 +71,11 @@ specific language governing permissions and limitations under the License.
 	</p>
 	
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>	
+	<p class='bjava'>	
 		|	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
 		|	<jk>public interface</jk> PetStore {...}
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	RestClient <jv>client</jv> = RestClient
 		|		.<jsm>create</jsm>()
 		|		.json()
@@ -90,11 +90,11 @@ specific language governing permissions and limitations under the License.
 	</p>
 	
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>	
+	<p class='bjava'>	
 		|	<ja>@Remote</ja>
 		|	<jk>public interface</jk> PetStore {...}
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	RestClient <jv>client</jv> = RestClient
 		|		.<jsm>create</jsm>()
 		|		.json()
@@ -112,7 +112,7 @@ specific language governing permissions and limitations under the License.
 	</p>
 	
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>	
+	<p class='bjava'>	
 		|	<ja>@Remote</ja>(
 		|		path=<js>"/petstore"</js>,
 		|		headers={
@@ -123,7 +123,7 @@ specific language governing permissions and limitations under the License.
 		|	)
 		|	<jk>public interface</jk> PetStore {...}
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Our dynamic supplier.</jc>
 		|	<jk>public class</jk> MyHeaderSupplier <jk>extends</jk> HeaderSupplier {
 		|	
@@ -145,7 +145,7 @@ specific language governing permissions and limitations under the License.
 		to perform version-specific handling.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>	
+	<p class='bjava'>	
 		|	<ja>@Remote</ja>(
 		|		path=<js>"/petstore"</js>,
 		|		version=<js>"1.2.3"</js>  <jc>// Adds "Client-Version: 1.2.3" header to all requests.</jc>
@@ -156,7 +156,7 @@ specific language governing permissions and limitations under the License.
 	<p>
 		This can be used in conjunction with the server-side client-versioning support.
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Call this method if Client-Version is at least 2.0.
 		|	// Note that this also matches 2.0.1.</jc>
 		|	<ja>@RestGet</ja>(clientVersion=<js>"2.0"</js>)

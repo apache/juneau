@@ -29,24 +29,24 @@ import org.apache.juneau.serializer.*;
  * Provides various convenience methods for creating and populating a list with minimal code.
  *
  * <h5 class='figure'>Examples:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// A list of strings.</jc>
- * 	AList&lt;String&gt; l = AList.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>);
+ * 	AList&lt;String&gt; <jv>list</jv> = AList.<jsm>of</jsm>(<js>"foo"</js>,<js>"bar"</js>);
  *
  * 	<jc>// Append to list.</jc>
- * 	l.append(<js>"baz"</js>, <js>"qux"</js>);
+ * 	<jv>list</jv>.append(<js>"baz"</js>, <js>"qux"</js>);
  *
  * 	<jc>// Create an unmodifiable view of this list.</jc>
- * 	List&lt;String&gt; l2 = l.unmodifiable();
+ * 	List&lt;String&gt; <jv>list2</jv> = <jv>list</jv>.unmodifiable();
  *
  * 	<jc>// Convert it to an array.</jc>
- * 	String[] array = l.asArray();
+ * 	String[] <jv>array</jv> = <jv>list</jv>.asArray();
  *
  * 	<jc>// Convert to simplified JSON.</jc>
- * 	String json = l.asString();
+ * 	String <jv>json</jv> = <jv>list</jv>.asString();
  *
  * 	<jc>// Convert to XML.</jc>
- * 	String json = l.asString(XmlSerializer.<jsf>DEFAULT</jsm>);
+ * 	String <jv>json</jv> = <jv>list</jv>.asString(XmlSerializer.<jsf>DEFAULT</jsm>);
  * </p>
  *
  * <ul class='spaced-list'>

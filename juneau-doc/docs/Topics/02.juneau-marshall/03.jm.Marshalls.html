@@ -39,13 +39,13 @@
 		The following shows the {@link oaj.marshall.Json} marshall in action:
 	</p>
 	<h5 class='figure'>Examples:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Using instance.</jc>
 		|	Json <jv>json</jv> = <jk>new</jk> Json();
 		|	MyPojo <jv>myPojo</jv> = <jv>json</jv>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
 		|	String <jv>string</jv> = <jv>json</jv>.write(<jv>myPojo</jv>);
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jc>// Using DEFAULT instance.</jc>
 		|	MyPojo <jv>myPojo</jv> = Json.<jsf>DEFAULT</jsf>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
 		|	String <jv>string</jv> = Json.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);

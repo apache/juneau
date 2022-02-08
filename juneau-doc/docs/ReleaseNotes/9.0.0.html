@@ -41,7 +41,7 @@
 		<li>
 			Eliminated the various <c><ja>@XConfig</ja>(applyX={...})</c> annotations and replaced them with the ability
 			to apply targeted annotations directly to configuration classes and methods (such as REST classes/methods).
-			<p class='bcode w800'>
+			<p class='bcode'>
 				|	<ja>@Rest</ja>(...)
 				|	<ja>@Bean</ja>(on=<js>"MyBean1,MyBean2"</js>,sort=<jk>true</jk>)
 				|	<ja>@UrlEncoding</ja>(onClass=MyList.<jk>class</jk>,expandedParams=<jk>true</jk>)
@@ -55,7 +55,7 @@
 			</p>
 		<li>
 			New shortened form {@link oaj.http.remote.RemoteOp#value()} for specifying http method name and path.
-			<p class='bcode w800'>
+			<p class='bcode'>
 				|	<jc>// Normal form</jc>
 				|	<ja>@RemoteOp</ja>(method=<jsf>PUT</jsf>, path=<js>"/foo"</js>)
 				|	
@@ -72,7 +72,7 @@
 			Removed the <c><ja>@RestMethod</ja>(name)</c> annotation.  Use <c><ja>@RestMethod</ja>(method)</c> instead.
 		<li>
 			New shortened form {@del oajr.annotation.RestMethod#value()} for specifying http method name and path.
-			<p class='bcode w800'>
+			<p class='bcode'>
 				|	<jc>// Normal form</jc>
 				|	<ja>@RestMethod</ja>(method=<jsf>PUT</jsf>, path=<js>"/{propertyName}"</js>)
 				|	

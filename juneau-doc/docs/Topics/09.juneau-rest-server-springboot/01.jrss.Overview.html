@@ -29,7 +29,7 @@
 		and register Juneau REST servlets via the {@del oajr.springboot.annotation.JuneauRestRoot} annotation.
 	</p>
 	<h5 class='figure'>Example:</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@SpringBootApplication</ja>
 		|	<ja>@Controller</ja>
 		|	<jk>public class</jk> App {
@@ -54,7 +54,7 @@
 	<p>
 		Another option is to use the <ja>@JuneauRestRoot</ja> annotation on your Spring Boot source class like so:  
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@SpringBootApplication</ja>
 		|	<ja>@Controller</ja>
 		|	<ja>@JuneauRestRoot</ja>(servlets=RootResource.<jk>class</jk>)

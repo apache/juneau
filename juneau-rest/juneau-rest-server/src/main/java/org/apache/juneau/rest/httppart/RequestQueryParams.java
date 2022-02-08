@@ -39,13 +39,13 @@ import org.apache.juneau.http.part.*;
  * 	The {@link RequestQueryParams} object is the API for accessing the GET query parameters of an HTTP request.
  * 	It can be accessed by passing it as a parameter on your REST Java method:
  * </p>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestPost</ja>(...)
  * 	<jk>public</jk> Object myMethod(RequestQueryParams <jv>query</jv>) {...}
  * </p>
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<ja>@RestPost</ja>(...)
  * 	<jk>public</jk> Object myMethod(RequestQueryParams <jv>query</jv>) {
  *

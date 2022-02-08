@@ -302,7 +302,7 @@ public class ParserReader extends Reader implements Positionable {
 	 *
 	 * <p>
 	 * For example, to return the marked string, but trim the first and last characters, call the following:
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	getFromMarked(1, -1);
 	 * </p>
 	 *

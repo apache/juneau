@@ -213,9 +213,9 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * Converts this assertion into a {@link FluentBeanListAssertion}.
 	 *
 	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<jc>// Extracts the 'foo' property from an array of beans and validates their values.</jc>.
-	 * 	<jsm>assertObject<jsm>(myArrayOfBeans).asBeanList().property(<js>"foo"</js>).sorted().equals(<js>"value1"</js>,<js>"value2"</js>,<js>"value3"</js>);
+	 * 	<jsm>assertObject<jsm>(<jv>myArrayOfBeans</jv>).asBeanList().property(<js>"foo"</js>).sorted().equals(<js>"value1"</js>,<js>"value2"</js>,<js>"value3"</js>);
 	 * </p>
 	 *
 	 * @return A new fluent string assertion.

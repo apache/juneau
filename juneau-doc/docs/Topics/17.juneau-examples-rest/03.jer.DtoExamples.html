@@ -29,27 +29,27 @@
 	<p>
 		Pointing a browser to the resource shows the following:
 	</p>
-	<p class='bcode w800'>
+	<p class='bcode'>
 		|	http://localhost:10000/atom
 	</p>			
 	<img class='bordered w800' src='doc-files/jer.AtomFeedResource.1.png'>
 	<p>
 		True ATOM feeds require using an <l>Accept:text/xml</l> header:
 	</p>
-	<p class='bcode w800'>
+	<p class='bcode'>
 		|	http://localhost:10000/atom?Accept=text/xml&amp;plainText=true
 	</p>			
 	<img class='bordered w800' src='doc-files/jer.AtomFeedResource.2.png'>
 	<p>
 		Other languages, such as JSON are also supported:
 	</p>
-	<p class='bcode w800'>
+	<p class='bcode'>
 		|	http://localhost:10000/atom?Accept=text/json&amp;plainText=true
 	</p>			
 	<img class='bordered w800' src='doc-files/jer.AtomFeedResource.3.png'>
 	
 	<h5 class='figure'>AtomFeedResource.java</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jd>/** 
 		|	* Sample resource that shows how to generate ATOM feeds. 
 		|	*/</jd> 
@@ -146,20 +146,20 @@
 		The resource consists of a pre-initialized {@link oaj.dto.jsonschema.JsonSchema} object.
 		Pointing a browser to the resource shows the following:
 	</p>
-	<p class='bcode w800'>
+	<p class='bcode'>
 		|	http://localhost:10000/jsonSchema
 	</p>			
 	<img class='bordered w800' src='doc-files/jer.JsonSchemaResource.1.png'>
 	<p>
 		For true JSON-Schema, you need to specify the header <l>Accept: text/json</l>:
 	</p>
-	<p class='bcode w800'>
+	<p class='bcode'>
 		|	http://localhost:10000/jsonSchema?Accept=text/json&amp;plainText=true
 	</p>			
 	<img class='bordered w800' src='doc-files/jer.JsonSchemaResource.2.png'>
 	
 	<h5 class='figure'>JsonSchemaResource.java</h5>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<jd>/** 
 		|	* Sample resource that shows how to serialize JSON-Schema documents. 
 		|	*/</jd> 

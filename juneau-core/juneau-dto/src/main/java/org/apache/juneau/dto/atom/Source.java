@@ -18,7 +18,7 @@ import java.util.*;
  * Represents an <c>atomSource</c> construct in the RFC4287 specification.
  *
  * <h5 class='figure'>Schema</h5>
- * <p class='bcode w800'>
+ * <p class='bschema'>
  * 	atomSource =
  * 		element atom:source {
  * 			atomCommonAttributes,

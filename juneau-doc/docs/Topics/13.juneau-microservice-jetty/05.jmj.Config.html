@@ -27,41 +27,39 @@
 		For example, the {@del oajr.BasicRestConfig} interface that defines the annotations that control the look-and-feel of
 		classes that extend from {@link oajr.servlet.BasicRestServlet} use several <c>$C</c> variables to externalize values:
 	</p>
-	<p class='bcode w800'>
+	<p class='bjava'>
 		|	<ja>@Rest</ja>(
 		|		...
-		|			
-		|		<jc>// HTML-page specific settings</jc>
-		|		htmldoc=<ja>@HtmlDoc</ja>(
-		|	
-		|			<jc>// Default page header contents.</jc>
-		|			header={
-		|				<js>"&lt;h1&gt;$RS{title}&lt;/h1&gt;"</js>,  <jc>// Use @Rest(title)</jc>
-		|				<js>"&lt;h2&gt;$RS{operationSummary,description}&lt;/h2&gt;"</js>, <jc>// Use either @RestOp(summary) or @Rest(description)</jc>
-		|				<js>"$C{REST/header}"</js>  <jc>// Extra header HTML defined in external config file.</jc>
-		|			},
-		|	
-		|			<jc>// Default stylesheet to use for the page.
-		|			// Can be overridden from external config file.
-		|			// Default is DevOps look-and-feel (aka Depression look-and-feel).</jc>
-		|			stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>,
-		|	
-		|			<jc>// Default contents to add to the &lt;head&gt; section of the HTML page.
-		|			// Use it to add a favicon link to the page.</jc>
-		|			head={
-		|				<js>"&lt;link rel='icon' href='$U{$C{REST/favicon}}'/&gt;"</js>
-		|			},
-		|	
-		|			<jc>// No default page footer contents.
-		|			// Can be overridden from external config file.</jc>
-		|			footer=<js>"$C{REST/footer}"</js>,
-		|			...
-		|		),
-		|
 		|		<jc>// These are static files that are served up by the servlet under the specified sub-paths.
 		|		// For example, "/servletPath/htdocs/javadoc.css" resolves to the file "[servlet-package]/htdocs/javadoc.css"
 		|		// By default, we define static files through the external configuration file.</jc>
 		|		staticFiles=<js>"$C{REST/staticFiles}"</js>
+		|	)
+		|	<jc>// HTML-page specific settings</jc>
+		|	<ja>@HtmlDocConfig</ja>(
+		|	
+		|		<jc>// Default page header contents.</jc>
+		|		header={
+		|			<js>"&lt;h1&gt;$RS{title}&lt;/h1&gt;"</js>,  <jc>// Use @Rest(title)</jc>
+		|			<js>"&lt;h2&gt;$RS{operationSummary,description}&lt;/h2&gt;"</js>, <jc>// Use either @RestOp(summary) or @Rest(description)</jc>
+		|			<js>"$C{REST/header}"</js>  <jc>// Extra header HTML defined in external config file.</jc>
+		|		},
+		|	
+		|		<jc>// Default stylesheet to use for the page.
+		|		// Can be overridden from external config file.
+		|		// Default is DevOps look-and-feel (aka Depression look-and-feel).</jc>
+		|		stylesheet=<js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>,
+		|	
+		|		<jc>// Default contents to add to the &lt;head&gt; section of the HTML page.
+		|		// Use it to add a favicon link to the page.</jc>
+		|		head={
+		|			<js>"&lt;link rel='icon' href='$U{$C{REST/favicon}}'/&gt;"</js>
+		|		},
+		|	
+		|		<jc>// No default page footer contents.
+		|		// Can be overridden from external config file.</jc>
+		|		footer=<js>"$C{REST/footer}"</js>,
+		|		...
 		|	)
 		|	<jk>public interface</jk> BasicRestConfig {}
 	</p>
@@ -69,7 +67,7 @@
 		These values in turn are pulled from the external configuration file shown below.
 		Note that the configuration file can also contain <c>$C</c> variables.
 	</p>
-	<p class='bcode w800'>
+	<p class='bini'>
 		|	<cc>#=======================================================================================================================
 		|	# REST settings
 		|	#=======================================================================================================================</cc>
@@ -109,14 +107,14 @@
 		<li class='jm'>{@link oajr.RestContext#getConfig()} 
 			<p>Any {@doc jrs.SvlVariables initialization-time variables} can be used.</p>
 			<h5 class='figure'>Example usage:</h5>
-			<p class='bcode w800'>
+			<p class='bini'>
 				|	<cc>#----------------------------------</cc>
 				|	<cc># Configuration for MyHelloResource </cc>
 				|	<cc>#----------------------------------</cc>
 				|	<cs>[MyHelloResource]</cs>
 				|	<ck>greeting</ck> = <cv>Hello world!</cv> 
 			</p>
-			<p class='bcode w800'>
+			<p class='bjava'>
 				|	<cc>#---------------------------------</cc>
 				|	<cc># Contents of MyHelloResource.java </cc>
 				|	<cc>#---------------------------------</cc>
@@ -127,8 +125,8 @@
 				|		<jc>// Or access config file in servlet init method.</jc>
 				|		<ja>@Override</ja> <jc>/* Servlet */</jc>
 				|		<jk>public void</jk> init() {
-				|			Config c = getContext().getConfig();
-				|			<jk>this</jk>.<jf>greeting</jf> = c.getString(<js>"MyHelloResource/greeting"</js>); 
+				|			Config <jv>config</jv> = getContext().getConfig();
+				|			<jk>this</jk>.<jf>greeting</jf> = <jv>config</jv>.getString(<js>"MyHelloResource/greeting"</js>); 
 				|		}
 				|	}		
 			</p>
@@ -144,7 +142,7 @@
 			<p>Any {@doc jrs.SvlVariables initialization-time or request-time variables} can be used.</p>
 			
 			<h5 class='figure'>Example usage:</h5>
-			<p class='bcode w800'>
+			<p class='bini'>
 				|	<cc>#----------------------------------</cc>
 				|	<cc># Configuration for MyHelloResource</cc>
 				|	<cc>#----------------------------------</cc>
@@ -152,7 +150,7 @@
 				|	<ck>greeting</ck> = <cv>Hello $RP{person}!</cv> <cc>// $RP is RequestPathVar</cc>
 				|	<ck>localizedGreeting</ck> = <cv>$L{HelloMessage,$RP{person}}</cv> <cc>// $L is LocalizationVar with args</cc>
 			</p>
-			<p class='bcode w800'>
+			<p class='bjava'>
 				|	<cc>#---------------------------------</cc>
 				|	<cc># Contents of MyHelloResource.java </cc>
 				|	<cc>#---------------------------------</cc>
@@ -176,7 +174,7 @@
 				|		}
 				|	}		
 			</p>
-			<p class='bcode w800'>
+			<p class='bini'>
 				|	<cc>#---------------------------------------</cc>
 				|	<cc># Contents of nls/Messages_en.properties </cc>
 				|	<cc>#---------------------------------------</cc>

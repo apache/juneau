@@ -25,19 +25,19 @@ import org.apache.juneau.internal.*;
  * Assertion test methods that pass use this method to return to the origin of the call.
  *
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
- * MyPojo myPojo = ...;
- * MyTestedBean myTestedBean = ...;
+ * 	MyPojo <jv>myPojo</jv> = ...;
+ * 	MyTestedBean <jv>myTestedBean</jv> = ...;
  *
- * Assertion assertion = new FluentBeanAssertion<MyPojo,MyTestedBean>(myPojo, myTestedBean);
- * myPojo = assertion.test(x -> x.getMyProperty().equals("foo"));  <jc>// Returns myPojo after test.</jc>
+ * 	Assertion <jv>assertion</jv> = <jk>new</jk> FluentBeanAssertion&lt;MyPojo,MyTestedBean>(<jv>myPojo</jv>, <jv>myTestedBean</jv>);
+ * 	<jv>myPojo</jv> = <jv>assertion</jv>.test(<jv>x</jv> -> <jv>x</jv>.getMyProperty().equals(<js>"foo"</js>));  <jc>// Returns myPojo after test.</jc>
  * </p>
  *
  * For subclasses such as {@link IntegerAssertion}, the return object is simply itself so that multiple tests
  * can be performed using the same assertion.
  * <h5 class='figure'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jk>public class</jk> IntegerAssertion <jk>extends</jk> FluentIntegerAssertion&lt;IntegerAssertion&gt; {
  *  	...
  *  }

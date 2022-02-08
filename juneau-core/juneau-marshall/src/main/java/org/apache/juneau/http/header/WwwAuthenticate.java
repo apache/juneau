@@ -23,7 +23,7 @@ import org.apache.juneau.http.annotation.*;
  * Indicates the authentication scheme that should be used to access the requested entity.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	WWW-Authenticate: Basic
  * </p>
  *
@@ -33,7 +33,7 @@ import org.apache.juneau.http.annotation.*;
  * The field value consists of at least one challenge that indicates the authentication scheme(s) and parameters
  * applicable to the Request-URI.
  *
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	WWW-Authenticate  = "WWW-Authenticate" ":" 1#challenge
  * </p>
  *

@@ -18,7 +18,7 @@ import org.apache.juneau.dto.html5.*;
  * Defines a simple hyperlink class.
  *
  * <h5 class='figure'>Examples:</h5>
- * <p class='bcode w800>
+ * <p class='bjava>
  * 	<ja>@Rest</ja>
  * 	<jk>public class</jk> MyRest <jk>extends</jk> BasicRestServlet {
  *

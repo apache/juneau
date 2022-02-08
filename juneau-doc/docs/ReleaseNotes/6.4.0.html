@@ -207,7 +207,7 @@
 					<br>Replaces the <c>@Pojo</c> and {@del @BeanProperty(swap)} annotations.
 				<li>Support for per-media-type swaps.
 					<br>Programmatic example:
-					<p class='bcode w800'>
+					<p class='bcode'>
 		<ja>@Swap</ja>(MyJsonOnlySwap.<jk>class</jk>)			
 		<jk>public class</jk> MyPojo {}
 	
@@ -222,7 +222,7 @@
 	 		}
 					</p>
 					<br>Annotated example:
-					<p class='bcode w800'>
+					<p class='bcode'>
 		<ja>@Swap</ja>(impl=ToStringSwap.<jk>class</jk>, mediaTypes=<js>"&#42;/json"</js>)
 		<jk>public class</jk> MyBean { ... }
 	
@@ -234,7 +234,7 @@
 					</p>
 				<li>Support for templated swaps which provide additional context information for a swap.
 					<br>The following is an example of a templated swap class used to serialize POJOs to HTML using FreeMarker:
-					<p class='bcode w800'>
+					<p class='bcode'>
 		<jc>// Our abstracted templated swap class.</jc>
 		<jk>public abstract class</jk> FreeMarkerSwap <jk>extends</jk> PojoSwap&lt;Object,Reader&gt; {
 	
@@ -247,13 +247,13 @@
 			}
 		}
 					</p>
-					<p class='bcode w800'>
+					<p class='bcode'>
 			<ja>@Swap</ja>(impl=FreeMarkerSwap.<jk>class</jk>, template=<js>"MyPojo.div.ftl"</js>)
 			<jk>public class</jk> MyPojo {}
 					</p>
 				<li>New {@del oaj.annotation.Swaps @Swaps} annotation for defining multiple swaps
 					against the same POJO when they're differentiated by media types:
-					<p class='bcode w800'>
+					<p class='bcode'>
 		<ja>@Swaps</ja>(
 			{
 				<ja>@Swap</ja>(MyJsonSwap.<jk>class</jk>),
@@ -273,7 +273,7 @@
 			directly to the output stream or writer.
 			<br>When used with conjunction with <c>PojoSwaps</c>, this can be used to provide customized
 			output for specific content types.
-			<p class='bcode w800'>
+			<p class='bcode'>
 		<ja>@Pojo</ja>(swap=MyBeanSwap.<jk>class</jk>)
 		<jk>public class</jk> MyBean {...}
 		
@@ -295,7 +295,7 @@
 		<li>
 			{@link oaj.serializer.SerializerSession} and {@link oaj.parser.ParserSession}
 			objects are now reusable if used within the same thread.
-			<p class='bcode w800'>
+			<p class='bcode'>
 		<jc>// Old way (still works)</jc>
 		JsonSerializer.<jsf>DEFAULT</jsf>.serialize(writer1, pojo1);
 		JsonSerializer.<jsf>DEFAULT</jsf>.serialize(writer2, pojo2);

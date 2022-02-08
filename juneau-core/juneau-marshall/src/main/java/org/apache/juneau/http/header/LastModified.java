@@ -24,7 +24,7 @@ import org.apache.juneau.http.annotation.*;
  * The last modified date for the requested object (in "HTTP-date" format as defined by RFC 7231).
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Last-Modified: Tue, 15 Nov 1994 12:45:26 GMT
  * </p>
  *
@@ -33,13 +33,13 @@ import org.apache.juneau.http.annotation.*;
  * The Last-Modified entity-header field indicates the date and time at which the origin server believes the variant was
  * last modified.
  *
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Last-Modified  = "Last-Modified" ":" HTTP-date
  * </p>
  *
  * <p>
  * An example of its use is...
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Last-Modified: Tue, 15 Nov 1994 12:45:26 GMT
  * </p>
  *

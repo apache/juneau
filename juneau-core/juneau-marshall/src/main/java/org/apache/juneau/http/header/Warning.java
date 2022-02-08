@@ -23,7 +23,7 @@ import org.apache.juneau.http.annotation.*;
  * A general warning about possible problems with the entity body.
  *
  * <h5 class='figure'>Example</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Warning: 199 Miscellaneous warning
  * </p>
  *
@@ -36,7 +36,7 @@ import org.apache.juneau.http.annotation.*;
  *
  * <p>
  * Warning headers are sent with responses using:
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	Warning    = "Warning" ":" 1#warning-value
  * 	warning-value = warn-code SP warn-agent SP warn-text
  * 	                                      [SP warn-date]

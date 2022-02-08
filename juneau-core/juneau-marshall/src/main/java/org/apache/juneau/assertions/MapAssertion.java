@@ -24,9 +24,9 @@ import org.apache.juneau.serializer.*;
  * {@review}
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bjava'>
  * 	<jc>// Validates the specified POJO is the specified type.</jc>
- * 	<jsm>assertMap</jsm>(<jv>mymap</jv>).isNotEmpty();
+ * 	<jsm>assertMap</jsm>(<jv>myMap</jv>).isNotEmpty();
  * </p>
  *
  *

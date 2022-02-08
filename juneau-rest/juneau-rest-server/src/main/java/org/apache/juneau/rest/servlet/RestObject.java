@@ -168,7 +168,7 @@ public abstract class RestObject {
 	 * of an internal data structure.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(...)
 	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> ResourceJena {
 	 *
@@ -176,7 +176,7 @@ public abstract class RestObject {
 	 * 		<jk>private</jk> Map&lt;Integer,Pet&gt; <jf>petDB</jf>;
 	 *
 	 * 		<ja>@Override</ja>
-	 * 		<jk>public void</jk> onInit(RestContext.Builder builder) <jk>throws</jk> Exception {
+	 * 		<jk>public void</jk> onInit(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 	 * 			<jc>// Load our database from a local JSON file.</jc>
 	 * 			<jf>petDB</jf> = JsonParser.<jsf>DEFAULT</jsf>.parse(getClass().getResourceAsStream(<js>"PetStore.json"</js>), LinkedHashMap.<jk>class</jk>, Integer.<jk>class</jk>, Pet.<jk>class</jk>);
 	 * 		}
@@ -262,7 +262,7 @@ public abstract class RestObject {
 	 * This method is called from within the {@link Servlet#destroy()}.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(...)
 	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> ResourceJena {
 	 *
@@ -270,7 +270,7 @@ public abstract class RestObject {
 	 * 		<jk>private</jk> Map&lt;Integer,Pet&gt; <jf>petDB</jf>;
 	 *
 	 * 		<ja>@Override</ja>
-	 * 		<jk>public void</jk> onDestroy(RestContext context) {
+	 * 		<jk>public void</jk> onDestroy(RestContext <jv>context</jv>) {
 	 * 			<jf>petDB</jf> = <jk>null</jk>;
 	 * 		}
 	 * 	}
@@ -302,14 +302,14 @@ public abstract class RestObject {
 	 * Note that you only have access to the raw request and response objects at this point.
 	 *
 	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bcode w800'>
+	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(...)
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
 	 *
 	 * 		<jc>// Add a request attribute to all incoming requests.</jc>
 	 * 		<ja>@Override</ja>
-	 * 		<jk>public void</jk> onStartCall(HttpServletRequest req, HttpServletResponse res) {
-	 * 			req.setAttribute(<js>"foobar"</js>, <jk>new</jk> FooBar());
+	 * 		<jk>public void</jk> onStartCall(HttpServletRequest <jv>req</jv>, HttpServletResponse <jv>res</jv>) {
+	 * 			<jv>req</jv>.setAttribute(<js>"foobar"</js>, <jk>new</jk> FooBar());
 	 * 		}
 	 * 	}
 	 * </p>
