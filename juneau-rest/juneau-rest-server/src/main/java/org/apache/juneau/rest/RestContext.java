@@ -1641,7 +1641,7 @@ public class RestContext extends Context {
 		 * 	<jk>public class</jk> MyResource {
 		 *
 		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 *
 		 * 			<jc>// Using method on builder.</jc>
 		 * 			<jv>builder</jv>.responseProcessors(MyResponseProcessor.<jk>class</jk>);
@@ -1649,7 +1649,7 @@ public class RestContext extends Context {
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		 * 		<jk>public void</jk> init(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.responseProcessors(MyResponseProcessors.<jk>class</jk>);
 		 * 		}
 		 *
@@ -2482,7 +2482,7 @@ public class RestContext extends Context {
 		 * 		}
 		 *
 		 * 		<jc>// Option #3 - Registered via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 *
 		 * 			<jc>// Using method on builder.</jc>
 		 * 			<jv>builder</jv>.fileFinder(MyFileFinder.<jk>class</jk>);
@@ -2493,7 +2493,7 @@ public class RestContext extends Context {
 		 *
 		 * 		<jc>// Option #4 - Registered via builder passed in through init method.</jc>
 		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		 * 		<jk>public void</jk> init(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.fileFinder(MyFileFinder.<jk>class</jk>);
 		 * 		}
 		 *
@@ -3275,7 +3275,7 @@ public class RestContext extends Context {
 		 * 	<jk>public class</jk> MyResource {
 		 *
 		 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 *
 		 * 			<jc>// Using method on builder.</jc>
 		 * 			<jv>builder</jv>.restOpArgs(MyRestParam.<jk>class</jk>);
@@ -3283,7 +3283,7 @@ public class RestContext extends Context {
 		 *
 		 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
 		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
-		 * 		<jk>public void</jk> init(Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.restOpArgs(MyRestParam.<jk>class</jk>);
 		 * 		}
 		 *
@@ -5189,7 +5189,7 @@ public class RestContext extends Context {
 		 * 		by default is {@link BeanStore} which requires the class have one of the following
 		 * 		constructors:
 		 * 		<ul>
-		 * 			<li><code><jk>public</jk> T(Builder)</code>
+		 * 			<li><code><jk>public</jk> T(RestContext.Builder)</code>
 		 * 			<li><code><jk>public</jk> T()</code>
 		 * 		</ul>
 		 * </ul>
@@ -6071,7 +6071,7 @@ public class RestContext extends Context {
 	 * 			<ja>@Property</ja>(name=<js>"v1"</js>,value=<js>"$R{foo,bar}"</js>),  <jc>// Request variable.  value="bar"</jc>
 	 * 		}
 	 * 	)
-	 * 	<jk>public class</jk> MyRestResource <jk>extends</jk> BasicRestServlet {
+	 * 	<jk>public class</jk> MyRestResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
 	 * </p>
 	 *
 	 * <p>

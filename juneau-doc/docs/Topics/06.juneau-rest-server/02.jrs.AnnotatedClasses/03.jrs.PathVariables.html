@@ -25,7 +25,7 @@
 		|	<ja>@Rest</ja>(
 		|		path=<js>"/myResource/{foo}/{bar}"</js>
 		|	)
-		|	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
+		|	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
 		|
 		|		<ja>@RestPost</ja>(<js>"/{baz}"</js>)
 		|		<jk>public void</jk> String doX(<ja>@Path</ja> String <jv>foo</jv>, <ja>@Path</ja> <jk>int</jk> <jv>bar</jv>) {

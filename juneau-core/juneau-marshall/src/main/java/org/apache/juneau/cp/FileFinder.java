@@ -65,7 +65,7 @@ import org.apache.juneau.internal.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jk>public class</jk> MyFileFinder <jk>extends</jk> BasicFileFinder {
- * 		<jk>public</jk> MyFileFinder(Builder <jv>builder</jv>) {
+ * 		<jk>public</jk> MyFileFinder(FileFinder.Builder <jv>builder</jv>) {
  * 			<jk>super</jk>(<jv>builder</jv>);
  * 		}
  * 	}

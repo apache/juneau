@@ -34,7 +34,7 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<jk>public class</jk> RequestEchoResource <jk>extends</jk> BasicRestServlet {
+ * 	<jk>public class</jk> RequestEchoResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
  *
  * 		<jc>// GET request handler</jc>
  * 		<ja>@RestGet</ja>(path=<js>"/*"</js>, converters={Queryable.<jk>class</jk>,Traversable.<jk>class</jk>})

@@ -62,7 +62,7 @@ import org.apache.juneau.xml.*;
  * 			<js>"doc: doc"</js>
  * 		}
  * 	)
- * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> BasicRestServlet {
+ * 	<jk>public class</jk> AddressBookResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
  * </p>
  *
  * <p>

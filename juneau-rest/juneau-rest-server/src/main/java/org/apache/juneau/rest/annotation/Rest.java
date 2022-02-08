@@ -916,7 +916,7 @@ public @interface Rest {
 	 * 	<ja>@Rest</ja>(
 	 * 		children={ChildResource.<jk>class</jk>}
 	 * 	)
-	 * 	<jk>public class</jk> TopLevelResource <jk>extends</jk> BasicRestServlet {...}
+	 * 	<jk>public class</jk> TopLevelResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {...}
 	 *
 	 * 	<ja>@Rest</ja>(
 	 *		path=<js>"/child"</js>,
@@ -952,7 +952,7 @@ public @interface Rest {
 	 * 	<ja>@Rest</ja>(
 	 * 		path=<js>"/myResource/{foo}/{bar}"</js>
 	 * 	)
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
 	 *
 	 *		<ja>@RestGet</ja>(<js>"/{baz}"</js>)
 	 *		<jk>public void</jk> String doX(<ja>@Path</ja> String <jv>foo</jv>, <ja>@Path</ja> <jk>int</jk> <jv>bar</jv>, <ja>@Path</ja> MyPojo <jv>baz</jv>) {
@@ -1098,7 +1098,7 @@ public @interface Rest {
 	 * 		path=<js>"/foo"</js>,
 	 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
 	 * 	)
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
 	 * 		...
 	 * 	}
 	 * </p>
@@ -1153,7 +1153,7 @@ public @interface Rest {
 	 * 		rolesDeclared=<js>"ROLE_ADMIN,ROLE_READ_WRITE,ROLE_READ_ONLY,ROLE_SPECIAL"</js>,
 	 * 		roleGuard=<js>"ROLE_ADMIN || (ROLE_READ_WRITE &amp;&amp; ROLE_SPECIAL)"</js>
 	 * 	)
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
 	 * 		...
 	 * 	}
 	 * </p>

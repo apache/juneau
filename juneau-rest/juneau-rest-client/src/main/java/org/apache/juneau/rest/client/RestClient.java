@@ -596,8 +596,8 @@ import org.apache.juneau.xml.*;
  * 	<ul>
  * 		<li class='jm'><c>{@link ResponseHeader#isPresent() isPresent()} <jk>returns</jk> <jk>boolean</jk></c>
  * 		<li class='jm'><c>{@link ResponseHeader#asString() asString()} <jk>returns</jk> String</c>
- * 		<li class='jm'><c>{@link ResponseHeader#asType(Type,Type...) asType(Type,Type...)} <jk>returns</jk> T</c>
- * 		<li class='jm'><c>{@link ResponseHeader#asType(Class) asType(Class&lt;T&gt;)} <jk>returns</jk> T</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#as(Type,Type...) as(Type,Type...)} <jk>returns</jk> T</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#as(Class) as(Class&lt;T&gt;)} <jk>returns</jk> T</c>
  * 		<li class='jm'><c>{@link ResponseHeader#asMatcher(Pattern) asMatcher(Pattern)} <jk>returns</jk> {@link Matcher}</c>
  * 		<li class='jm'><c>{@link ResponseHeader#asMatcher(String) asMatcher(String)} <jk>returns</jk> {@link Matcher}</c>
  * 		<li class='jm'><c>{@link ResponseHeader#asHeader(Class) asHeader(Class&lt;T <jk>extends</jk> BasicHeader&gt; c)} <jk>returns</jk> {@link BasicHeader}</c>
@@ -673,8 +673,8 @@ import org.apache.juneau.xml.*;
  * 		<li class='jm'><c>{@link ResponseBody#asReader(Charset) asReader(Charset)} <jk>returns</jk> Reader</c>
  * 		<li class='jm'><c>{@link ResponseBody#pipeTo(OutputStream) pipeTo(OutputStream)} <jk>returns</jk> {@link RestResponse}</c>
  * 		<li class='jm'><c>{@link ResponseBody#pipeTo(Writer) pipeTo(Writer)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link ResponseBody#as(Type,Type...) asType(Type,Type...)} <jk>returns</jk> T</c>
- * 		<li class='jm'><c>{@link ResponseBody#as(Class) asType(Class&lt;T&gt;)} <jk>returns</jk> T</c>
+ * 		<li class='jm'><c>{@link ResponseBody#as(Type,Type...) as(Type,Type...)} <jk>returns</jk> T</c>
+ * 		<li class='jm'><c>{@link ResponseBody#as(Class) as(Class&lt;T&gt;)} <jk>returns</jk> T</c>
  * 		<li class='jm'><c>{@link ResponseBody#asFuture(Class) asFuture(Class&lt;T&gt;)} <jk>returns</jk> Future&lt;T&gt;</c>
  * 		<li class='jm'><c>{@link ResponseBody#asFuture(Type,Type...) asFuture(Type,Type...)} <jk>returns</jk> Future&lt;T&gt;</c>
  * 		<li class='jm'><c>{@link ResponseBody#asString() asString()} <jk>returns</jk> String</c>

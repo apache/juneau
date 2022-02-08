@@ -105,44 +105,44 @@ public class RestClient_Response_Headers_Test {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void a04_asType() throws Exception {
-		Integer i = checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Foo").asType(Integer.class).orElse(null);
+		Integer i = checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Foo").as(Integer.class).orElse(null);
 		assertEquals(123, i.intValue());
 
 		Value<Integer> m1 = Value.empty();
-		checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Foo").asType(m1,Integer.class);
+		checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Foo").as(m1,Integer.class);
 		assertEquals(123, m1.get().intValue());
 
-		List<Integer> l = (List<Integer>) checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").asType(LinkedList.class,Integer.class).get();
+		List<Integer> l = (List<Integer>) checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(LinkedList.class,Integer.class).get();
 		assertObject(l).asJson().is("[1,2]");
 
 		Value<Integer> m2 = Value.empty();
-		checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").asType(m2,LinkedList.class,Integer.class);
+		checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(m2,LinkedList.class,Integer.class);
 
 		ClassMeta<LinkedList<Integer>> cm1 = BeanContext.DEFAULT.getClassMeta(LinkedList.class, Integer.class);
 		ClassMeta<Integer> cm2 = BeanContext.DEFAULT.getClassMeta(Integer.class);
 
-		l = checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").asType(cm1).get();
+		l = checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(cm1).get();
 		assertObject(l).asJson().is("[1,2]");
 
 		Value<LinkedList<Integer>> m3 = Value.empty();
-		checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").asType(m3,cm1);
+		checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(m3,cm1);
 		assertObject(m3.get()).asJson().is("[1,2]");
 
-		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","foo").run().getHeader("Foo").asType(m2,cm1)).messages().any(contains("Invalid number"));
+		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","foo").run().getHeader("Foo").as(m2,cm1)).messages().any(contains("Invalid number"));
 
-		Optional<List<Integer>> o1 = checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").asType(LinkedList.class,Integer.class);
+		Optional<List<Integer>> o1 = checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(LinkedList.class,Integer.class);
 		assertObject(o1.get()).asJson().is("[1,2]");
-		o1 = checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Bar").asType(LinkedList.class,Integer.class);
+		o1 = checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Bar").as(LinkedList.class,Integer.class);
 		assertFalse(o1.isPresent());
 
-		Optional<Integer> o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getHeader("Foo").asType(Integer.class);
+		Optional<Integer> o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getHeader("Foo").as(Integer.class);
 		assertEquals(1, o2.get().intValue());
-		o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getHeader("Bar").asType(Integer.class);
+		o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getHeader("Bar").as(Integer.class);
 		assertFalse(o2.isPresent());
 
-		o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getHeader("Foo").asType(cm2);
+		o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getHeader("Foo").as(cm2);
 		assertEquals(1, o2.get().intValue());
-		o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getHeader("Bar").asType(cm2);
+		o2 = checkFooClient().build().get("/echo").header("Foo","1").run().getHeader("Bar").as(cm2);
 		assertFalse(o2.isPresent());
 
 		assertTrue(checkFooClient().build().get("/echo").header("Foo","foo").run().getHeader("Foo").asMatcher("foo").matches());

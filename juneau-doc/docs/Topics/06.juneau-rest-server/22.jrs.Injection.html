@@ -82,7 +82,7 @@
 		|			...
 		|		}
 		|	)
-		|	<jk>public class</jk> Root <jk>extends</jk> BasicRestServletGroup {
+		|	<jk>public class</jk> Root <jk>extends</jk> BasicRestServletGroup <jk>implements</jk> BasicUniversalConfig {
 		|		
 		|		<jk>private final</jk> RestResourceResolver <jf>resolver</jf>;
 		|		
@@ -104,7 +104,7 @@
 		|	<ja>@Rest</ja>(
 		|		path=<js>"/child"</js>
 		|	)
-		|	<jk>public class</jk> MyChildResource <jk>extends</jk> BasicRestServlet {
+		|	<jk>public class</jk> MyChildResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
 		|	
 		|		<jk>private final</jk> Bean1 <jf>bean1</jf>;
 		|		<jk>private final</jk> Bean2 <jf>bean2</jf>;

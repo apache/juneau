@@ -889,7 +889,7 @@ public abstract class Context implements AnnotationProvider {
 	 * <p>
 	 * Builders are used to define new contexts (e.g. serializers, parsers) based on existing configurations.
 	 *
-	 * @return A new ContextBuilder object.
+	 * @return A new Builder object.
 	 */
 	public Builder copy() {
 		throw unsupportedOperationException("Not implemented.");

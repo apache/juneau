@@ -71,8 +71,8 @@ import org.apache.juneau.serializer.*;
  * 		<li class='jm'>{@link FluentResponseHeaderAssertion#asInteger()}
  * 		<li class='jm'>{@link FluentResponseHeaderAssertion#asLong()}
  * 		<li class='jm'>{@link FluentResponseHeaderAssertion#asZonedDateTime()}
- * 		<li class='jm'>{@link FluentResponseHeaderAssertion#asType(Class)}
- * 		<li class='jm'>{@link FluentResponseHeaderAssertion#asType(Type,Type...)}
+ * 		<li class='jm'>{@link FluentResponseHeaderAssertion#as(Class)}
+ * 		<li class='jm'>{@link FluentResponseHeaderAssertion#as(Type,Type...)}
  * 		<li class='jm'>{@link FluentStringAssertion#replaceAll(String,String)}
  * 		<li class='jm'>{@link FluentStringAssertion#replace(String,String)}
  * 		<li class='jm'>{@link FluentStringAssertion#urlDecode()}
@@ -200,18 +200,18 @@ public class FluentResponseHeaderAssertion<R> extends FluentStringAssertion<R> {
 	}
 
 	/**
-	 * Converts the parameter value to a type using {@link ResponseHeader#asType(Class)} and then returns the value as an any-object assertion.
+	 * Converts the parameter value to a type using {@link ResponseHeader#as(Class)} and then returns the value as an any-object assertion.
 	 *
 	 * @param type The object type to create.
 	 * @return A new fluent assertion object.
 	 * @throws RestCallException If value could not be parsed.
 	 */
-	public <V> FluentAnyAssertion<V,R> asType(Class<V> type) throws RestCallException {
-		return new FluentAnyAssertion<>(value.asType(type).orElse(null), returns());
+	public <V> FluentAnyAssertion<V,R> as(Class<V> type) throws RestCallException {
+		return new FluentAnyAssertion<>(value.as(type).orElse(null), returns());
 	}
 
 	/**
-	 * Converts the parameter value to a type using {@link ResponseHeader#asType(Type,Type...)} and then returns the value as an any-object assertion.
+	 * Converts the parameter value to a type using {@link ResponseHeader#as(Type,Type...)} and then returns the value as an any-object assertion.
 	 *
 	 * <p>
 	 * See {@doc jm.ComplexDataTypes Complex Data Types} for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
@@ -221,8 +221,8 @@ public class FluentResponseHeaderAssertion<R> extends FluentStringAssertion<R> {
 	 * @return A new fluent assertion object.
 	 * @throws RestCallException If value could not be parsed.
 	 */
-	public FluentAnyAssertion<Object,R> asType(Type type, Type...args) throws RestCallException {
-		return new FluentAnyAssertion<>(value.asType(type, args).orElse(null), returns());
+	public FluentAnyAssertion<Object,R> as(Type type, Type...args) throws RestCallException {
+		return new FluentAnyAssertion<>(value.as(type, args).orElse(null), returns());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

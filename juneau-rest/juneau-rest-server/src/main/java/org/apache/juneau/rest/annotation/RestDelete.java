@@ -355,7 +355,7 @@ public @interface RestDelete {
 	 * <p>
 	 * The programmatic equivalent to this annotation is:
 	 * <p class='bjava'>
-	 * 	RestOpContext.Builder <jv>builder</jv> = RestOpContext.Builder.<jsm>create</jsm>(<jv>method</jv>,<jv>restContext</jv>);
+	 * 	RestOpContext.Builder <jv>builder</jv> = RestOpContext.<jsm>create</jsm>(<jv>method</jv>,<jv>restContext</jv>);
 	 * 	<jv>builder</jv>.getEncoders().set(<jv>classes</jv>);
 	 * </p>
 	 *
@@ -438,7 +438,7 @@ public @interface RestDelete {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
 	 *
 	 * 		<ja>@RestDelete</ja>(
 	 * 			path=<js>"/foo"</js>,
@@ -494,7 +494,7 @@ public @interface RestDelete {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
 	 *
 	 * 		<ja>@RestDelete</ja>(
 	 * 			path=<js>"/foo"</js>,

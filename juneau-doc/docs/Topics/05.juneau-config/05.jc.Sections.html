@@ -28,17 +28,13 @@
 				<li class='jm'>{@link oaj.config.Section#asInterface(Class) asInterface(Class)}
 				<li class='jm'>{@link oaj.config.Section#asMap() asMap()}
 				<li class='jm'>{@link oaj.config.Section#isPresent() isPresent()}
-				<li class='jm'>{@link oaj.config.Section#toBean(Class) toBean(Class)}
-				<li class='jm'>{@link oaj.config.Section#toBean(Class,boolean) toBean(Class,boolean)}
-				<li class='jm'>{@link oaj.config.Section#toInterface(Class) toInterface(Class)}
-				<li class='jm'>{@link oaj.config.Section#toMap() toMap()}
 				<li class='jm'>{@link oaj.config.Section#writeToBean(Object,boolean) writeToBean(Object,boolean)}
 			</ul>
 		</li>
 	</ul>
 	<p>	
-		The {@link oaj.config.Section#asMap() asMap()} and {@link oaj.config.Section#toMap() toMap()}
-		methods allow you to access a section as simple key/value pairs. 
+		The {@link oaj.config.Section#asMap() asMap()} 
+		method allows you to access a section as simple key/value pairs. 
 	</p>
 	<h5 class='figure'>Example:</h5>
 	<p class='bini'>
@@ -53,7 +49,7 @@
 		|	<jc>// Example usage</jc>
 		|	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build();
 		|	
-		|	OMap <jv>map</jv> = <jv>config</jv>.getSection(<js>"MyAddress"</js>).asMap();
+		|	OMap <jv>map</jv> = <jv>config</jv>.getSection(<js>"MyAddress"</js>).asMap().get();
 		|	
 		|	String <jv>street</jv> = <jv>map</jv>.getString(<js>"street"</js>);
 		|	String <jv>city</jv> = <jv>map</jv>.getString(<js>"city"</js>);
@@ -65,7 +61,7 @@
 	</p>
 	<p>
 		Config files can also be used to directly populate beans using 
-		{@link oaj.config.Section#asBean(Class) asBean()}, {@link oaj.config.Section#toBean(Class) toBean()}, or {@link oaj.config.Section#writeToBean(Object,boolean) writeToBean()}.
+		{@link oaj.config.Section#asBean(Class) asBean()} or {@link oaj.config.Section#writeToBean(Object,boolean) writeToBean()}.
 	</p>
 	<h5 class='figure'>Example:</h5>
 	<p class='bini'>
@@ -136,7 +132,7 @@
 		|	
 		|	<jc>// Example usage.</jc>
 		|	Config <jv>config</jv> = Config.<jsm>create</jsm>(<js>"MyConfig.cfg"</js>).build();
-		|	MyConfigInterface <jv>intf</jv> = <jv>config</jv>.getSection(<js>"MySection"</js>).toInterface(MyConfigInterface.<jk>class</jk>);
+		|	MyConfigInterface <jv>intf</jv> = <jv>config</jv>.getSection(<js>"MySection"</js>).asInterface(MyConfigInterface.<jk>class</jk>).get();
 		|	
 		|	<jc>// Read a value.</jc>
 		|	<jk>int</jk> <jv>myInt</jv> = <jv>intf</jv>.getInt();

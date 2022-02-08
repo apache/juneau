@@ -238,7 +238,7 @@ public class RestResponse implements HttpResponse {
 	 * @throws RestCallException If REST call failed.
 	 */
 	public Optional<ContentType> getContentType() throws RestCallException {
-		return getHeader("Content-Type").asType(ContentType.class);
+		return getHeader("Content-Type").as(ContentType.class);
 	}
 
 	/**
@@ -438,7 +438,7 @@ public class RestResponse implements HttpResponse {
 					String name = pm.getPartName().orElse(null);
 					ClassMeta<?> type = rc.getBeanContext().getClassMeta(method.getGenericReturnType());
 					if (pt == RESPONSE_HEADER)
-						return getHeader(name).parser(pp).schema(schema).asType(type).orElse(null);
+						return getHeader(name).parser(pp).schema(schema).as(type).orElse(null);
 					if (pt == RESPONSE_STATUS)
 						return getStatusCode();
 					return getBody().schema(schema).as(type);

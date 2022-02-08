@@ -91,14 +91,6 @@
 		|	<jc>// Create a basic REST client with JSON support.</jc>
 		|	<jc>// Use single-quotes and whitespace.</jc>
 		|	RestClient <jv>client1</jv> = RestClient.<jsm>create</jsm>().json().sq().ws().build();
-		|
-		|	<jc>// Same, but using properties.</jc>
-		|	RestClient <jv>client2</jv> = RestClient
-		|		.<jsm>create</jsm>()
-		|		.json()
-		|		.set(<jsf>WSERIALIZER_quoteChar</jsf>, <js>'\''</js>)
-		|		.set(<jsf>WSERIALIZER_useWhitespace</jsf>)
-		|		.build();
 	</p>
 	
 	<p>

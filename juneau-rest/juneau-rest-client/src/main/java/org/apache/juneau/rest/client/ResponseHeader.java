@@ -353,12 +353,12 @@ public class ResponseHeader implements Header {
 	 * @return The converted type, or <jk>null</jk> if header is not present.
 	 * @throws RestCallException If value could not be parsed.
 	 */
-	public <T> Optional<T> asType(Type type, Type...args) throws RestCallException {
-		return asType(request.getClassMeta(type, args));
+	public <T> Optional<T> as(Type type, Type...args) throws RestCallException {
+		return as(request.getClassMeta(type, args));
 	}
 
 	/**
-	 * Same as {@link #asType(Type,Type...)} but sets the value in a mutable for fluent calls.
+	 * Same as {@link #as(Type,Type...)} but sets the value in a mutable for fluent calls.
 	 *
 	 * <p>
 	 * See {@doc jm.ComplexDataTypes Complex Data Types} for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
@@ -371,8 +371,8 @@ public class ResponseHeader implements Header {
 	 * @throws RestCallException If value could not be parsed.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> RestResponse asType(Value<T> value, Type type, Type...args) throws RestCallException {
-		value.set((T)asType(type, args).orElse(null));
+	public <T> RestResponse as(Value<T> value, Type type, Type...args) throws RestCallException {
+		value.set((T)as(type, args).orElse(null));
 		return response;
 	}
 
@@ -384,12 +384,12 @@ public class ResponseHeader implements Header {
 	 * @return The converted type, or <jk>null</jk> if header is not present.
 	 * @throws RestCallException If value could not be parsed.
 	 */
-	public <T> Optional<T> asType(Class<T> type) throws RestCallException {
-		return asType(request.getClassMeta(type));
+	public <T> Optional<T> as(Class<T> type) throws RestCallException {
+		return as(request.getClassMeta(type));
 	}
 
 	/**
-	 * Same as {@link #asType(Class)} but sets the value in a mutable for fluent calls.
+	 * Same as {@link #as(Class)} but sets the value in a mutable for fluent calls.
 	 *
 	 * @param value The mutable to set the parsed header value in.
 	 * @param <T> The type to convert to.
@@ -397,8 +397,8 @@ public class ResponseHeader implements Header {
 	 * @return This object.
 	 * @throws RestCallException If value could not be parsed.
 	 */
-	public <T> RestResponse asType(Value<T> value, Class<T> type) throws RestCallException {
-		value.set(asType(type).orElse(null));
+	public <T> RestResponse as(Value<T> value, Class<T> type) throws RestCallException {
+		value.set(as(type).orElse(null));
 		return response;
 	}
 
@@ -410,7 +410,7 @@ public class ResponseHeader implements Header {
 	 * @return The converted type, or <jk>null</jk> if header is not present.
 	 * @throws RestCallException If value could not be parsed.
 	 */
-	public <T> Optional<T> asType(ClassMeta<T> type) throws RestCallException {
+	public <T> Optional<T> as(ClassMeta<T> type) throws RestCallException {
 		try {
 			return ofNullable(parser.parse(HEADER, schema, getValue(), type));
 		} catch (ParseException e) {
@@ -419,7 +419,7 @@ public class ResponseHeader implements Header {
 	}
 
 	/**
-	 * Same as {@link #asType(ClassMeta)} but sets the value in a mutable for fluent calls.
+	 * Same as {@link #as(ClassMeta)} but sets the value in a mutable for fluent calls.
 	 *
 	 * @param value The mutable to set the parsed header value in.
 	 * @param <T> The type to convert to.
@@ -427,8 +427,8 @@ public class ResponseHeader implements Header {
 	 * @return This object.
 	 * @throws RestCallException If value could not be parsed.
 	 */
-	public <T> RestResponse asType(Value<T> value, ClassMeta<T> type) throws RestCallException {
-		value.set(asType(type).orElse(null));
+	public <T> RestResponse as(Value<T> value, ClassMeta<T> type) throws RestCallException {
+		value.set(as(type).orElse(null));
 		return response;
 	}
 

@@ -46,7 +46,7 @@ import org.apache.juneau.http.response.*;
  *
  * <h5 class='topic'>Example usage:</h5>
  * <p class='bjava'>
- * 	<jk>public</jk> MyResource <jk>extends</jk> BasicRestServlet {
+ * 	<jk>public</jk> MyResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
  *
  * 		<jc>// Delete method with guard that only allows Billy to call it.</jc>
  * 		<ja>@RestDelete</ja>(guards=BillyGuard.<jk>class</jk>)

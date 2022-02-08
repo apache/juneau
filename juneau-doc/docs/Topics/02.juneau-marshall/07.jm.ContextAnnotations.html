@@ -34,7 +34,7 @@
 		|	<ja>@RdfConfig</ja>(rdfxml_tab=<js>"5"</js>, addRootProperty=<js>"true"</js>)
 		|	<ja>@BeanConfig</ja>(sortProperties=<js>"true"</js>, examples=<js>"Feed: $F{AddressBook_example.json}"</js>)
 		|	<ja>@Bean</ja>(onClass=Address.<jk>class</jk>, properties=<js>"street,city,state"</js>)
-		|	<jk>public class</jk> AddressBookResource <jk>extends</jk> BasicRestServlet {
+		|	<jk>public class</jk> AddressBookResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
 		|		...
 		|	}
 	</p>

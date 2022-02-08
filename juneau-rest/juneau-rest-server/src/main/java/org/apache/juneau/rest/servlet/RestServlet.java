@@ -292,7 +292,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(...)
-	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServlet {
+	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
 	 *
 	 * 		<jc>// Our database.</jc>
 	 * 		<jk>private</jk> Map&lt;Integer,Pet&gt; <jf>petDB</jf>;
@@ -392,7 +392,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(...)
-	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServlet {
+	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
 	 *
 	 * 		<jc>// Our database.</jc>
 	 * 		<jk>private</jk> Map&lt;Integer,Pet&gt; <jf>petDB</jf>;
@@ -432,7 +432,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(...)
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
 	 *
 	 * 		<jc>// Add a request attribute to all incoming requests.</jc>
 	 * 		<ja>@Override</ja>

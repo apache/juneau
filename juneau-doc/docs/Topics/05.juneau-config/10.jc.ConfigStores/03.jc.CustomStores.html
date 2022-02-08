@@ -33,7 +33,7 @@
 		|		<jk>private final</jk> Timer <jf>watcher</jf>;
 		|		<jk>private final</jk> ConcurrentHashMap&låt;String,String> <jf>cache</jf> = <jk>new</jk> ConcurrentHashMap<>();
 		|	
-		|		<jk>protected</jk> SqlStore(Builder <jv>builder</jv>) {
+		|		<jk>protected</jk> SqlStore(ConfigStore.Builder <jv>builder</jv>) {
 		|			<jk>super</jk>(<jv>builder</jv>);
 		|			<jk>this</jk>.<jf>jdbcUrl</jf> = <jv>builder</jv>.<jf>jdbcUrl</jf>;
 		|			<jk>this</jk>.<jf>tableName</jf> = <jv>builder</jv>.<jf>tableName</jf>;

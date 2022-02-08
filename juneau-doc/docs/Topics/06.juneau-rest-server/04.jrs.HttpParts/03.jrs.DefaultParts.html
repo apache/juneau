@@ -55,7 +55,7 @@
 		|		<jc>// Add a version header attribute to all responses</jc>
 		|		defaultResponseHeaders={<js>"X-Version: 1.0"</js>}
 		|	)
-		|	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
+		|	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
 		|		...
 		|	}			
 	</p>

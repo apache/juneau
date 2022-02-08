@@ -56,7 +56,7 @@
 		|			}
 		|		)
 		|	) 
-		|	<jk>public class</jk> ConfigResource <jk>extends</jk> BasicRestServlet { 
+		|	<jk>public class</jk> ConfigResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig { 
 		|		
 		|		<ja>@RestGet</ja>(path=<js>"/"</js>, description=<js>"Show contents of config file."</js>) 
 		|		<jk>public</jk> OMap getConfig() <jk>throws</jk> Exception {

@@ -61,7 +61,7 @@ public enum HookEvent {
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(...)
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
 	 *
 	 * 		<jc>// Add a request attribute to all incoming requests.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>START_CALL</jsf>)
@@ -175,7 +175,7 @@ public enum HookEvent {
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(...)
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
 	 *
 	 * 		<jc>// Log the incoming request.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>PRE_CALL</jsf>)
@@ -224,7 +224,7 @@ public enum HookEvent {
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(...)
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
 	 *
 	 * 		<jc>// Log the result of the request.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>POST_CALL</jsf>)
@@ -281,7 +281,7 @@ public enum HookEvent {
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(...)
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
+	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
 	 *
 	 * 		<jc>// Log the time it took to execute the request.</jc>
 	 * 		<ja>@RestHook</ja>(<jsf>END_CALL</jsf>)
@@ -335,7 +335,7 @@ public enum HookEvent {
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(...)
-	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> ResourceJena {
+	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalJenaConfig {
 	 *
 	 * 		<jc>// Our database.</jc>
 	 * 		<jk>private</jk> Map&lt;Integer,Pet&gt; <jf>petDB</jf>;
@@ -445,7 +445,7 @@ public enum HookEvent {
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(...)
-	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> ResourceJena {
+	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalJenaConfig {
 	 *
 	 * 		<jc>// Our database.</jc>
 	 * 		<jk>private</jk> Map&lt;Integer,Pet&gt; <jf>petDB</jf>;

@@ -27,7 +27,7 @@
 	<p class='bjava'>
 		|	<jc>// Servlet with automated support for GZIP compression</jc>
 		|	<ja>@Rest</ja>(encoders={GzipEncoder.<jk>class</jk>})
-		|	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet {
+		|	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
 		|		...
 		|	}
 	</p>

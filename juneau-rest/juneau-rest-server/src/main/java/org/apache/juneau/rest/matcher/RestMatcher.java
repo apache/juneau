@@ -36,7 +36,7 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
+ * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
  *
  * 		<ja>@RestGet</ja>(path=<js>"/foo"</js>, matchers=IsDNT.<jk>class</jk>)
  * 		<jk>public</jk> Object doGetWithDNT() {

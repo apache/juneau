@@ -113,7 +113,7 @@
 		|	<ja>@BeanConfig</ja>(sortProperties=<js>"true"</js>)
 		|	<ja>@SerializerConfig</ja>(trimNulls=<js>"true"</js>)
 		|	<ja>@JsonConfig</ja>(escapeSolidus=<js>"true"</js>)
-		|	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
+		|	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
 		|		
 		|		<ja>@RestPost</ja>
 		|		<ja>@BeanConfig</ja>(sortProperties=<js>"false"</js>)
@@ -146,7 +146,7 @@
 		|			MyInterface.<jk>class</jk>
 		|		}
 		|	)
-		|	<jk>public</jk> MyResource <jk>extends</jk> BasicRestServlet {...}
+		|	<jk>public</jk> MyResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {...}
 	</p>
 	<p>
 		Config annotations are defined for all serializers and parsers:

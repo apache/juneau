@@ -27,7 +27,7 @@
 		|		path=<js>"/parent"</js>,
 		|		children={MyChildResource.<jk>class</jk>}
 		|	)
-		|	<jk>public</jk> MyRootResources <jk>extends</jk> BasicRestServletGroup {...}
+		|	<jk>public</jk> MyRootResources <jk>extends</jk> BasicRestServletGroup <jk>implements</jk> BasicUniversalConfig {...}
 	</p>
 	<p class='bjava'>
 		|	<jd>/** Child Resource */</jd>

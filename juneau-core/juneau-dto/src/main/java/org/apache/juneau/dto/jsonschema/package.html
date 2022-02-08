@@ -428,7 +428,7 @@
 			<js>"options: ?method=OPTIONS"</js>
 		}
 	)
-	<jk>public class</jk> JsonSchemaResource <jk>extends</jk> BasicRestServlet {
+	<jk>public class</jk> JsonSchemaResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
 	
 		<jk>private</jk> JsonSchema <jf>schema</jf>;	 <jc>// The schema document</jc>
 		
@@ -473,8 +473,8 @@
 	
 		<jd>/** OPTIONS request handler */</jd>
 	 	<ja>@RestOp</ja>(method=<jsf>OPTIONS</jsf>, path=<js>"/*"</js>)
-		<jk>public</jk> ResourceOptions doOptions(RestRequest <jv>req</jv>) {
-			<jk>return new</jk> ResourceOptions(<jk>this</jk>, <jv>req</jv>);
+		<jk>public</jk> Swagger doOptions(RestRequest <jv>req</jv>) {
+			<jk>return new</jk> Swagger(<jk>this</jk>, <jv>req</jv>);
 		}
 	}
 			</p>

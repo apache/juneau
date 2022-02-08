@@ -53,7 +53,7 @@
 		|			ChildResource.<jk>class</jk>
 		|		}
 		|	)
-		|	<jk>public class</jk> RootResource <jk>extends</jk> BasicRestServletGroup {
+		|	<jk>public class</jk> RootResource <jk>extends</jk> BasicRestServletGroup <jk>implements</jk> BasicUniversalConfig {
 		|		<jc>// No code needed.</jc>
 		|	}
 	</p>
@@ -70,7 +70,7 @@
 		|			GrandChildResource.<jk>class</jk>
 		|		}
 		|	)
-		|	<jk>public class</jk> ChildResource <jk>extends</jk> BasicRestGroup {
+		|	<jk>public class</jk> ChildResource <jk>extends</jk> BasicRestGroup <jk>implements</jk> BasicUniversalConfig {
 		|		<jc>// No code needed.</jc>
 		|	}
 	</p>
@@ -78,7 +78,7 @@
 		|	<ja>@Rest</ja>(
 		|		path=<js>"/grandchild"</js>
 		|	)
-		|	<jk>public class</jk> GrandChildResource <jk>extends</jk> BasicRest {
+		|	<jk>public class</jk> GrandChildResource <jk>extends</jk> BasicRestObject <jk>implements</jk> BasicUniversalConfig {
 		|		<jc>// Injectable bean</jc>
 		|	}
 	</p>
