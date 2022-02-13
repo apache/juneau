@@ -23,7 +23,6 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.junit.*;
 
@@ -193,7 +192,7 @@ public class ParamInfoTest {
 
 	private static <T extends Annotation> List<T> declaredAnnotations(ParamInfo pi, Class<T> type) {
 		List<T> l = new ArrayList<>();
-		pi.getDeclaredAnnotations(type, x -> true, x -> l.add(x));
+		pi.forEachDeclaredAnnotation(type, x -> true, x -> l.add(x));
 		return l;
 	}
 
@@ -387,7 +386,7 @@ public class ParamInfoTest {
 
 	private static <T extends Annotation> List<T> annotations(ParamInfo pi, Class<T> a) {
 		List<T> l = AList.create();
-		pi.getAnnotations(a, x -> true, x -> l.add(x));
+		pi.forEachAnnotation(a, x -> true, x -> l.add(x));
 		return l;
 	}
 }

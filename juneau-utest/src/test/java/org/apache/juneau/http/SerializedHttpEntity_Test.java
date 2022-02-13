@@ -20,8 +20,8 @@ import java.io.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.http.HttpEntities.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;

@@ -21,7 +21,7 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 
 /**
  * A {@link NameValuePair} that consists of a comma-delimited list of string values.

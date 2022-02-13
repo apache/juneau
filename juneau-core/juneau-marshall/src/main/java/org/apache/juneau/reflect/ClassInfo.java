@@ -25,7 +25,6 @@ import java.util.concurrent.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -348,17 +347,17 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Returns the parent class or interface that matches the specified predicate.
+	 * Returns the first matching parent class or interface.
 	 *
 	 * <p>
 	 * Results are classes-before-interfaces, then child-to-parent order.
 	 *
-	 * @param predicate The predicate.
+	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
 	 * @return The parent class or interface that matches the specified predicate.
 	 */
-	public ClassInfo getAnyParent(Predicate<ClassInfo> predicate) {
+	public ClassInfo getAnyParent(Predicate<ClassInfo> filter) {
 		for (ClassInfo ci : _getAllParents())
-			if (passes(predicate, ci))
+			if (passes(filter, ci))
 				return ci;
 		return null;
 	}
@@ -437,64 +436,65 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Returns the public method that matches the specified predicate.
+	 * Performs an action on all matching public methods on this class.
 	 *
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public final ClassInfo getPublicMethods(Predicate<MethodInfo> predicate, Consumer<MethodInfo> consumer) {
+	public final ClassInfo forEachPublicMethod(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
 		for (MethodInfo mi : _getPublicMethods())
-			consume(predicate, consumer, mi);
+			consume(filter, action, mi);
 		return this;
 	}
 
 	/**
-	 * Returns the public method that matches the specified predicate.
+	 * Returns the first matching public method on this class.
 	 *
-	 * @param predicate The predicate.
+	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
 	 * @return The first matching method, or <jk>null</jk> if no methods matched.
 	 */
-	public final MethodInfo getPublicMethod(Predicate<MethodInfo> predicate) {
+	public final MethodInfo getPublicMethod(Predicate<MethodInfo> filter) {
 		for (MethodInfo mi : _getPublicMethods())
-			if (passes(predicate, mi))
+			if (passes(filter, mi))
 				return mi;
 		return null;
 	}
 
 	/**
 	 * Returns all methods declared on this class.
-	 *
+	 * 
 	 * @return
 	 * 	All methods declared on this class.
 	 * 	<br>Results are ordered alphabetically.
+	 * 	<br>List is unmodifiable.
 	 */
 	public List<MethodInfo> getDeclaredMethods() {
 		return new UnmodifiableArray<>(_getDeclaredMethods());
 	}
 
 	/**
-	 * Returns the declared method that matches the specified predicate.
+	 * Performs an action on all matching declared methods on this class.
 	 *
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public final ClassInfo getDeclaredMethods(Predicate<MethodInfo> predicate, Consumer<MethodInfo> consumer) {
+	public final ClassInfo forEachDeclaredMethod(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
 		for (MethodInfo mi : _getDeclaredMethods())
-			consume(predicate, consumer, mi);
+			consume(filter, action, mi);
 		return this;
 	}
 
 	/**
-	 * Returns the declared method that matches the specified predicate.
+	 * Returns the first matching declared method on this class.
 	 *
-	 * @param predicate The predicate.
+	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
 	 * @return The first matching method, or <jk>null</jk> if no methods matched.
 	 */
-	public MethodInfo getDeclaredMethod(Predicate<MethodInfo> predicate) {
+	public MethodInfo getDeclaredMethod(Predicate<MethodInfo> filter) {
 		for (MethodInfo mi : _getDeclaredMethods())
-			if (passes(predicate, mi))
+			if (passes(filter, mi))
 				return mi;
 		return null;
 	}
@@ -505,33 +505,34 @@ public final class ClassInfo {
 	 * @return
 	 * 	All declared methods on this class and all parent classes.
 	 * 	<br>Results are ordered child-to-parent, and then alphabetically per class.
+	 * 	<br>List is unmodifiable.
 	 */
 	public List<MethodInfo> getMethods() {
 		return new UnmodifiableArray<>(_getAllMethods());
 	}
 
 	/**
-	 * Returns the method that matches the specified predicate.
+	 * Performs an action on all matching methods on this class.
 	 *
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public final ClassInfo getMethods(Predicate<MethodInfo> predicate, Consumer<MethodInfo> consumer) {
+	public final ClassInfo forEachMethod(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
 		for (MethodInfo mi : _getAllMethods())
-			consume(predicate, consumer, mi);
+			consume(filter, action, mi);
 		return this;
 	}
 
 	/**
-	 * Returns the method that matches the specified predicate.
+	 * Returns the first matching method on this class.
 	 *
-	 * @param predicate The predicate.
+	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
 	 * @return The first matching method, or <jk>null</jk> if no methods matched.
 	 */
-	public MethodInfo getMethod(Predicate<MethodInfo> predicate) {
+	public MethodInfo getMethod(Predicate<MethodInfo> filter) {
 		for (MethodInfo mi : _getAllMethods())
-			if (passes(predicate, mi))
+			if (passes(filter, mi))
 				return mi;
 		return null;
 	}
@@ -539,25 +540,25 @@ public final class ClassInfo {
 	/**
 	 * Returns all declared methods on this class and all parent classes.
 	 *
-	 *
 	 * @return
 	 * 	All declared methods on this class and all parent classes.
 	 * 	<br>Results are ordered parent-to-child, and then alphabetically per class.
+	 * 	<br>List is unmodifiable.
 	 */
 	public List<MethodInfo> getAllMethodsParentFirst() {
 		return new UnmodifiableArray<>(_getAllMethodsParentFirst());
 	}
 
 	/**
-	 * Returns the method that matches the specified predicate from all declared methods on this class and all parent classes.
+	 * Performs an action on all matching declared methods on this class and all parent classes.
 	 *
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public final ClassInfo getAllMethodsParentFirst(Predicate<MethodInfo> predicate, Consumer<MethodInfo> consumer) {
+	public final ClassInfo forEachAllMethodParentFirst(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
 		for (MethodInfo mi : _getAllMethodsParentFirst())
-			consume(predicate, consumer, mi);
+			consume(filter, action, mi);
 		return this;
 	}
 
@@ -636,27 +637,27 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Consumes the public constructors defined on this class that match the specified predicate.
+	 * Performs an action on all matching public constructors on this class.
 	 *
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public final ClassInfo getPublicConstructors(Predicate<ConstructorInfo> predicate, Consumer<ConstructorInfo> consumer) {
+	public final ClassInfo forEachPublicConstructor(Predicate<ConstructorInfo> filter, Consumer<ConstructorInfo> action) {
 		for (ConstructorInfo mi : _getPublicConstructors())
-			consume(predicate, consumer, mi);
+			consume(filter, action, mi);
 		return this;
 	}
 
 	/**
-	 * Returns the public constructor that matches the specified predicate.
+	 * Returns the first matching public constructor on this class.
 	 *
-	 * @param predicate The predicate.
+	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
 	 * @return The public constructor that matches the specified predicate.
 	 */
-	public ConstructorInfo getPublicConstructor(Predicate<ConstructorInfo> predicate) {
+	public ConstructorInfo getPublicConstructor(Predicate<ConstructorInfo> filter) {
 		for (ConstructorInfo ci : _getPublicConstructors())
-			if (passes(predicate, ci))
+			if (passes(filter, ci))
 				return ci;
 		return null;
 	}
@@ -664,34 +665,36 @@ public final class ClassInfo {
 	/**
 	 * Returns all the constructors defined on this class.
 	 *
-	 * @return All constructors defined on this class.
+	 * @return 
+	 * 	All constructors defined on this class.
+	 * 	<br>List is unmodifiable.
 	 */
 	public List<ConstructorInfo> getDeclaredConstructors() {
 		return new UnmodifiableArray<>(_getDeclaredConstructors());
 	}
 
 	/**
-	 * Consumes the declared constructors defined on this class that match the specified predicate.
+	 * Performs an action on all matching declared constructors on this class.
 	 *
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public final ClassInfo getDeclaredConstructors(Predicate<ConstructorInfo> predicate, Consumer<ConstructorInfo> consumer) {
+	public final ClassInfo forEachDeclaredConstructor(Predicate<ConstructorInfo> filter, Consumer<ConstructorInfo> action) {
 		for (ConstructorInfo mi : _getDeclaredConstructors())
-			consume(predicate, consumer, mi);
+			consume(filter, action, mi);
 		return this;
 	}
 
 	/**
-	 * Returns the declared constructor that matches the specified predicate.
+	 * Returns the first matching declared constructor on this class.
 	 *
-	 * @param predicate The predicate.
+	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
 	 * @return The declared constructor that matches the specified predicate.
 	 */
-	public ConstructorInfo getDeclaredConstructor(Predicate<ConstructorInfo> predicate) {
+	public ConstructorInfo getDeclaredConstructor(Predicate<ConstructorInfo> filter) {
 		for (ConstructorInfo ci : _getDeclaredConstructors())
-			if (passes(predicate, ci))
+			if (passes(filter, ci))
 				return ci;
 		return null;
 	}
@@ -762,33 +765,34 @@ public final class ClassInfo {
 	 * @return
 	 * 	All public fields on this class.
 	 * 	<br>Results are in alphabetical order.
+	 * 	<br>List is unmodifiable.
 	 */
 	public List<FieldInfo> getPublicFields() {
 		return new UnmodifiableArray<>(_getPublicFields());
 	}
 
 	/**
-	 * Returns the public field that matches the specified predicate.
+	 * Performs an action on all matching public fields on this class.
 	 *
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public final ClassInfo getPublicFields(Predicate<FieldInfo> predicate, Consumer<FieldInfo> consumer) {
+	public final ClassInfo forEachPublicField(Predicate<FieldInfo> filter, Consumer<FieldInfo> action) {
 		for (FieldInfo mi : _getPublicFields())
-			consume(predicate, consumer, mi);
+			consume(filter, action, mi);
 		return this;
 	}
 
 	/**
-	 * Returns the public field that passes the specified predicate.
+	 * Returns the first matching public field on this class.
 	 *
-	 * @param predicate The predicate.
+	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
 	 * @return The public field, or <jk>null</jk> if not found.
 	 */
-	public FieldInfo getPublicField(Predicate<FieldInfo> predicate) {
+	public FieldInfo getPublicField(Predicate<FieldInfo> filter) {
 		for (FieldInfo f : _getPublicFields())
-			if (passes(predicate, f))
+			if (passes(filter, f))
 				return f;
 		return null;
 	}
@@ -799,33 +803,34 @@ public final class ClassInfo {
 	 * @return
 	 * 	All declared fields on this class.
 	 * 	<br>Results are in alphabetical order.
+	 * 	<br>List is unmodifiable.
 	 */
 	public List<FieldInfo> getDeclaredFields() {
 		return new UnmodifiableArray<>(_getDeclaredFields());
 	}
 
 	/**
-	 * Consumes all declared fields on this class that match the specified predicate.
+	 * Performs an action on all matching declared fields on this class.
 	 *
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public ClassInfo getDeclaredFields(Predicate<FieldInfo> predicate, Consumer<FieldInfo> consumer) {
+	public ClassInfo forEachDeclaredField(Predicate<FieldInfo> filter, Consumer<FieldInfo> action) {
 		for (FieldInfo fi : _getDeclaredFields())
-			consume(predicate, consumer, fi);
+			consume(filter, action, fi);
 		return this;
 	}
 
 	/**
-	 * Returns the declared field that passes the specified predicate.
+	 * Returns the first matching declared field on this class.
 	 *
-	 * @param predicate The predicate.
+	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
 	 * @return The declared field, or <jk>null</jk> if not found.
 	 */
-	public FieldInfo getDeclaredField(Predicate<FieldInfo> predicate) {
+	public FieldInfo getDeclaredField(Predicate<FieldInfo> filter) {
 		for (FieldInfo f : _getDeclaredFields())
-			if (passes(predicate, f))
+			if (passes(filter, f))
 				return f;
 		return null;
 	}
@@ -836,25 +841,27 @@ public final class ClassInfo {
 	 * <p>
 	 * 	Results are ordered parent-to-child, and then alphabetical per class.
 	 *
-	 * @return All declared fields on this class.
+	 * @return 
+	 * 	All declared fields on this class.
+	 * 	<br>List is unmodifiable.
 	 */
 	public List<FieldInfo> getAllFields() {
 		return new UnmodifiableArray<>(_getAllFields());
 	}
 
 	/**
-	 * Consumes all fields on this class and all parent classes that matches the specified predicate.
+	 * Performs an action on all matching fields on this class and all parent classes.
 	 *
 	 * <p>
 	 * 	Results are ordered parent-to-child, and then alphabetical per class.
 	 *
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public ClassInfo getAllFields(Predicate<FieldInfo> predicate, Consumer<FieldInfo> consumer) {
+	public ClassInfo forEachAllField(Predicate<FieldInfo> filter, Consumer<FieldInfo> action) {
 		for (FieldInfo fi : _getAllFields())
-			consume(predicate, consumer, fi);
+			consume(filter, action, fi);
 		return this;
 	}
 
@@ -932,24 +939,24 @@ public final class ClassInfo {
 	 */
 	public <A extends Annotation> List<A> getAnnotations(AnnotationProvider annotationProvider, Class<A> type) {
 		List<A> l = new ArrayList<>();
-		getAnnotations(annotationProvider, type, x-> true, x -> l.add(x));
+		forEachAnnotation(annotationProvider, type, x-> true, x -> l.add(x));
 		return l;
 	}
 
 	/**
-	 * Consumes all matching annotations of the specified type defined on this or parent classes/interfaces.
+	 * Performs an action on all matching annotations on this class and superclasses/interfaces.
 	 *
 	 * @param type The annotation to look for.
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public <A extends Annotation> ClassInfo getAnnotations(Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
-		return getAnnotations(AnnotationProvider.DEFAULT, type, predicate, consumer);
+	public <A extends Annotation> ClassInfo forEachAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
+		return forEachAnnotation(AnnotationProvider.DEFAULT, type, filter, action);
 	}
 
 	/**
-	 * Finds and consumes the specified annotation on the specified class and superclasses/interfaces to the specified consumer.
+	 * Performs an action on all matching annotations on this class and superclasses/interfaces.
 	 *
 	 * <p>
 	 * Annotations are appended in the following orders:
@@ -962,22 +969,22 @@ public final class ClassInfo {
 	 *
 	 * @param annotationProvider The annotation provider.
 	 * @param type The annotation to look for.
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public <A extends Annotation> ClassInfo getAnnotations(AnnotationProvider annotationProvider, Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
-		if (predicate == null) predicate = x->true;
+	public <A extends Annotation> ClassInfo forEachAnnotation(AnnotationProvider annotationProvider, Class<A> type, Predicate<A> filter, Consumer<A> action) {
+		if (filter == null) filter = x->true;
 		if (annotationProvider == null) annotationProvider = AnnotationProvider.DEFAULT;
 		A t2 = getPackageAnnotation(type);
 		if (t2 != null)
-			consume(predicate, consumer, t2);
+			consume(filter, action, t2);
 		ClassInfo[] interfaces = _getInterfaces();
 		for (int i = interfaces.length-1; i >= 0; i--)
-			annotationProvider.getDeclaredAnnotations(type, interfaces[i].inner(), predicate, consumer);
+			annotationProvider.forEachDeclaredAnnotation(type, interfaces[i].inner(), filter, action);
 		ClassInfo[] parents = _getParents();
 		for (int i = parents.length-1; i >= 0; i--)
-			annotationProvider.getDeclaredAnnotations(type, parents[i].inner(), predicate, consumer);
+			annotationProvider.forEachDeclaredAnnotation(type, parents[i].inner(), filter, action);
 		return this;
 	}
 
@@ -1048,11 +1055,11 @@ public final class ClassInfo {
 	 * Returns the first matching annotation of the specified type defined on the specified class or parent classes/interfaces in parent-to-child order.
 	 *
 	 * @param type The annotation to look for.
-	 * @param predicate The predicate.
+	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public <A extends Annotation> A getAnnotation(Class<A> type, Predicate<A> predicate) {
-		return getAnnotation(AnnotationProvider.DEFAULT, type, predicate);
+	public <A extends Annotation> A getAnnotation(Class<A> type, Predicate<A> filter) {
+		return getAnnotation(AnnotationProvider.DEFAULT, type, filter);
 	}
 
 	/**
@@ -1074,7 +1081,7 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Constructs an {@link AnnotationList} of all matching annotations found on this class.
+	 * Constructs an {@link AnnotationList} of all matching annotations on this class.
 	 *
 	 * <p>
 	 * Annotations are appended in the following orders:
@@ -1085,12 +1092,12 @@ public final class ClassInfo {
 	 * 	<li>On this class.
 	 * </ol>
 	 *
-	 * @param predicate The predicate.
+	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationList getAnnotationList(Predicate<AnnotationInfo<?>> predicate) {
+	public AnnotationList getAnnotationList(Predicate<AnnotationInfo<?>> filter) {
 		AnnotationList l = new AnnotationList();
-		getAnnotationInfos(predicate, x -> l.add(x));
+		forEachAnnotationInfo(filter, x -> l.add(x));
 		return l;
 	}
 
@@ -1132,19 +1139,19 @@ public final class ClassInfo {
 		return null;
 	}
 
-	private <A extends Annotation> A getAnnotation(AnnotationProvider ap, Class<A> a, Predicate<A> p) {
+	private <A extends Annotation> A getAnnotation(AnnotationProvider ap, Class<A> a, Predicate<A> filter) {
 		A t2 = getPackageAnnotation(a);
-		if (t2 != null && p.test(t2))
+		if (t2 != null && filter.test(t2))
 			return t2;
 		ClassInfo[] interfaces = _getInterfaces();
 		for (int i = interfaces.length-1; i >= 0; i--) {
-			A o = ap.getDeclaredAnnotation(a, interfaces[i].inner(), p);
+			A o = ap.getDeclaredAnnotation(a, interfaces[i].inner(), filter);
 			if (o != null)
 				return o;
 		}
 		ClassInfo[] parents = _getParents();
 		for (int i = parents.length-1; i >= 0; i--) {
-			A o = ap.getDeclaredAnnotation(a, parents[i].inner(), p);
+			A o = ap.getDeclaredAnnotation(a, parents[i].inner(), filter);
 			if (o != null)
 				return o;
 		}
@@ -1152,7 +1159,7 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Consumes the annotations on this class/parents/package that match the specified predicate.
+	 * Performs an action on all matching annotations on this class/parents/package.
 	 *
 	 * <p>
 	 * Annotations are consumed in the following order:
@@ -1163,26 +1170,26 @@ public final class ClassInfo {
 	 * 	<li>On this class.
 	 * </ol>
 	 *
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public ClassInfo getAnnotationInfos(Predicate<AnnotationInfo<?>> predicate, Consumer<AnnotationInfo<?>> consumer) {
+	public ClassInfo forEachAnnotationInfo(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		Package p = c.getPackage();
 		if (p != null)
 			for (Annotation a : p.getDeclaredAnnotations())
 				for (Annotation a2 : splitRepeated(a))
-					AnnotationInfo.of(p, a2).accept(predicate, consumer);
+					AnnotationInfo.of(p, a2).accept(filter, action);
 		ClassInfo[] interfaces = _getInterfaces();
 		for (int i = interfaces.length-1; i >= 0; i--)
 			for (Annotation a : interfaces[i].c.getDeclaredAnnotations())
 				for (Annotation a2 : splitRepeated(a))
-					AnnotationInfo.of(interfaces[i], a2).accept(predicate, consumer);
+					AnnotationInfo.of(interfaces[i], a2).accept(filter, action);
 		ClassInfo[] parents = _getParents();
 		for (int i = parents.length-1; i >= 0; i--)
 			for (Annotation a : parents[i].c.getDeclaredAnnotations())
 				for (Annotation a2 : splitRepeated(a))
-					AnnotationInfo.of(parents[i], a2).accept(predicate, consumer);
+					AnnotationInfo.of(parents[i], a2).accept(filter, action);
 		return this;
 	}
 
@@ -1961,16 +1968,6 @@ public final class ClassInfo {
 	}
 
 	/**
-	 * Performs a predicate check on this class.
-	 *
-	 * @param test The test to perform.
-	 * @return <jk>true</jk> if the predicate test passes.
-	 */
-	public boolean is(Predicate<Class<?>> test) {
-		return test.test(c);
-	}
-
-	/**
 	 * Checks for equality with the specified class.
 	 *
 	 * @param c The class to check equality with.
@@ -2279,23 +2276,23 @@ public final class ClassInfo {
 	/**
 	 * Returns <jk>true</jk> if this object passes the specified predicate test.
 	 *
-	 * @param predicate The predicate.
+	 * @param test The test to perform.
 	 * @return <jk>true</jk> if this object passes the specified predicate test.
 	 */
-	public boolean matches(Predicate<ClassInfo> predicate) {
-		return passes(predicate, this);
+	public boolean matches(Predicate<ClassInfo> test) {
+		return passes(test, this);
 	}
 
 	/**
-	 * Consumes this object if the specified predicate test passes.
+	 * Performs an action on this object if the specified predicate test passes.
 	 *
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param test A test to apply to determine if action should be executed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on this object.
 	 * @return This object.
 	 */
-	public ClassInfo accept(Predicate<ClassInfo> predicate, Consumer<ClassInfo> consumer) {
-		if (matches(predicate))
-			consumer.accept(this);
+	public ClassInfo accept(Predicate<ClassInfo> test, Consumer<ClassInfo> action) {
+		if (matches(test))
+			action.accept(this);
 		return this;
 	}
 

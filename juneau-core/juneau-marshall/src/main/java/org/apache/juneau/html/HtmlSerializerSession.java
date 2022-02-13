@@ -519,8 +519,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				BeanMap m = toBeanMap(o);
 				if (aType.hasAnnotation(HtmlLink.class)) {
 					Value<String> uriProperty = Value.empty(), nameProperty = Value.empty();
-					aType.getAnnotations(HtmlLink.class, x -> isNotEmpty(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));
-					aType.getAnnotations(HtmlLink.class, x -> isNotEmpty(x.nameProperty()), x -> nameProperty.set(x.nameProperty()));
+					aType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));
+					aType.forEachAnnotation(HtmlLink.class, x -> isNotEmpty(x.nameProperty()), x -> nameProperty.set(x.nameProperty()));
 					Object urlProp = m.get(uriProperty.orElse(""));
 					Object nameProp = m.get(nameProperty.orElse(""));
 

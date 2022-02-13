@@ -49,46 +49,46 @@ public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 	}
 
 	/**
-	 * Returns the specified values from all annotations in this list.
+	 * Performs an action on the specified matching values from all annotations in this list.
 	 *
 	 * @param type The annotation value type.
 	 * @param name The annotation value name.
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param filter A predicate to apply to the value to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the value.
 	 * @return This object.
 	 */
-	public <T> AnnotationList getValues(Class<T> type, String name, Predicate<T> predicate, Consumer<T> consumer) {
+	public <T> AnnotationList forEachValue(Class<T> type, String name, Predicate<T> filter, Consumer<T> action) {
 		for (AnnotationInfo<?> ai : this)
-			ai.getValue(type, name, predicate, consumer);
+			ai.forEachValue(type, name, filter, action);
 		return this;
 	}
 
 	/**
-	 * Consumes all annotations in this list that match the specified type and predicate.
+	 * Performs an action on all matching annotations in this list.
 	 *
-	 * @param a The annotation type.
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param type The annotation type.
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
-	public <A extends Annotation> AnnotationList forEach(Class<A> a, Predicate<AnnotationInfo<A>> predicate, Consumer<AnnotationInfo<A>> consumer) {
+	public <A extends Annotation> AnnotationList forEach(Class<A> type, Predicate<AnnotationInfo<A>> filter, Consumer<AnnotationInfo<A>> action) {
 		for (AnnotationInfo<?> ai : this)
-			if (ai.isType(a))
-				consume(predicate, consumer, (AnnotationInfo<A>)ai);
+			if (ai.isType(type))
+				consume(filter, action, (AnnotationInfo<A>)ai);
 		return this;
 	}
 
 	/**
-	 * Consumes all annotations in this list that match the specified predicate.
+	 * Performs an action on all matching annotations in this list.
 	 *
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public <A extends Annotation> AnnotationList forEach(Predicate<AnnotationInfo<?>> predicate, Consumer<AnnotationInfo<?>> consumer) {
+	public <A extends Annotation> AnnotationList forEach(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		for (AnnotationInfo<?> ai : this)
-			consume(predicate, consumer, ai);
+			consume(filter, action, ai);
 		return this;
 	}
 }

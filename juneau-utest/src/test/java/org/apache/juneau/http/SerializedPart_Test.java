@@ -18,9 +18,9 @@ import static org.apache.juneau.http.HttpParts.*;
 
 import java.util.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
 

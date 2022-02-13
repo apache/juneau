@@ -15,6 +15,7 @@ package org.apache.juneau.http.header;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -89,7 +90,7 @@ import org.apache.juneau.svl.*;
  * <p>
  * Various methods are provided for iterating over the headers in this list to avoid array copies.
  * <ul class='javatree'>
- * 	<li class='jm'>{@link #forEach(Consumer)} / {@link #forEach(String,Consumer)} - Use consumers to process headers.
+ * 	<li class='jm'>{@link #forEach(Consumer)} / {@link #forEach(String,Consumer)} / {@link #forEach(Predicate,Consumer)} - Use consumers to process headers.
  * 	<li class='jm'>{@link #iterator()} / {@link #iterator(String)} - Use an {@link HeaderIterator} to process headers.
  * 	<li class='jm'>{@link #stream()} / {@link #stream(String)} - Use a stream.
  * </ul>
@@ -175,6 +176,8 @@ public class HeaderList {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private static final Header[] EMPTY_ARRAY = new Header[0];
+	private static final String[] EMPTY_STRING_ARRAY = new String[0];
+	private static final Predicate<Header> NOT_NULL = x -> x != null;
 
 	/** Represents no header supplier in annotations. */
 	public static final class Null extends HeaderList {}
@@ -235,10 +238,10 @@ public class HeaderList {
 			return EMPTY;
 		if (pairs.length % 2 != 0)
 			throw runtimeException("Odd number of parameters passed into HeaderList.ofPairs()");
-		ArrayBuilder<Header> b = ArrayBuilder.create(Header.class, pairs.length / 2, true);
+		ArrayBuilder<Header> b = ArrayBuilder.of(Header.class).filter(NOT_NULL).size(pairs.length / 2);
 		for (int i = 0; i < pairs.length; i+=2)
 			b.add(BasicHeader.of(pairs[i], pairs[i+1]));
-		return new HeaderList(b.toArray());
+		return new HeaderList(b.orElse(EMPTY_ARRAY));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1048,37 +1051,37 @@ public class HeaderList {
 		}
 
 		/**
-		 * Performs an operation on the headers of this list.
+		 * Performs an action on all headers in this list.
 		 *
 		 * <p>
 		 * This is the preferred method for iterating over parts as it does not involve
 		 * creation or copy of lists/arrays.
 		 *
-		 * @param c The consumer.
+		 * @param action An action to perform on each element.
 		 * @return This object.
 		 */
-		public Builder forEach(Consumer<Header> c) {
+		public Builder forEach(Consumer<Header> action) {
 			for (int i = 0, j = entries.size(); i < j; i++)
-				c.accept(entries.get(i));
+				action.accept(entries.get(i));
 			return this;
 		}
 
 		/**
-		 * Performs an operation on the headers with the specified name in this list.
+		 * Performs an action on all headers with the specified name in this list.
 		 *
 		 * <p>
 		 * This is the preferred method for iterating over parts as it does not involve
 		 * creation or copy of lists/arrays.
 		 *
 		 * @param name The part name.
-		 * @param c The consumer.
+		 * @param action An action to perform on each element.
 		 * @return This object.
 		 */
-		public Builder forEach(String name, Consumer<Header> c) {
+		public Builder forEach(String name, Consumer<Header> action) {
 			for (int i = 0, j = entries.size(); i < j; i++) {
 				Header x = entries.get(i);
 				if (eq(name, x.getName()))
-					c.accept(x);
+					action.accept(x);
 			}
 			return this;
 		}
@@ -1208,7 +1211,7 @@ public class HeaderList {
 		if (builder.defaultEntries == null) {
 			entries = builder.entries.toArray(new Header[builder.entries.size()]);
 		} else {
-			ArrayBuilder<Header> l = ArrayBuilder.create(Header.class, builder.entries.size() + builder.defaultEntries.size(), true);
+			ArrayBuilder<Header> l = ArrayBuilder.of(Header.class).filter(NOT_NULL).size(builder.entries.size() + builder.defaultEntries.size());
 
 			for (int i = 0, j = builder.entries.size(); i < j; i++)
 				l.add(builder.entries.get(i));
@@ -1222,7 +1225,7 @@ public class HeaderList {
 					l.add(x);
 			}
 
-			entries = l.toArray();
+			entries = l.orElse(EMPTY_ARRAY);
 		}
 		this.caseSensitive = builder.caseSensitive;
 	}
@@ -1236,10 +1239,10 @@ public class HeaderList {
 	 * 	<br><jk>null</jk> entries are ignored.
 	 */
 	protected HeaderList(List<Header> headers) {
-		ArrayBuilder<Header> l = ArrayBuilder.create(Header.class, headers.size(), true);
+		ArrayBuilder<Header> l = ArrayBuilder.of(Header.class).filter(NOT_NULL).size(headers.size());
 		for (int i = 0, j = headers.size(); i < j; i++)
 			l.add(headers.get(i));
-		entries = l.toArray();
+		entries = l.orElse(EMPTY_ARRAY);
 		caseSensitive = false;
 	}
 
@@ -1251,10 +1254,10 @@ public class HeaderList {
 	 * 	<br><jk>null</jk> entries are ignored.
 	 */
 	protected HeaderList(Header...headers) {
-		ArrayBuilder<Header> l = ArrayBuilder.create(Header.class, headers.length, true);
+		ArrayBuilder<Header> l = ArrayBuilder.of(Header.class).filter(NOT_NULL).size(headers.length);
 		for (int i = 0; i < headers.length; i++)
 			l.add(headers[i]);
-		entries = l.toArray();
+		entries = l.orElse(EMPTY_ARRAY);
 		caseSensitive = false;
 	}
 
@@ -1406,25 +1409,42 @@ public class HeaderList {
 	 *
 	 * <p>
 	 * The returned array maintains the relative order in which the headers were added.
-	 *
-	 * <p>
 	 * Header name comparison is case insensitive.
+	 * Headers with null values are ignored.
+	 * Each call creates a new array not backed by this list.
+	 * 
+	 * <p>
+	 * As a general rule, it's more efficient to use the other methods with consumers to
+	 * get headers.
 	 *
 	 * @param name The header name.
 	 *
-	 * @return An array containing all matching headers, or an empty array if none are found.
+	 * @return An array containing all matching headers, never <jk>null</jk>.
 	 */
 	public Header[] getAll(String name) {
-		List<Header> l = null;
-		for (int i = 0; i < entries.length; i++) {
-			Header x = entries[i];
-			if (eq(x.getName(), name)) {
-				if (l == null)
-					l = new ArrayList<>();
-				l.add(x);
-			}
-		}
-		return l == null ? EMPTY_ARRAY : l.toArray(new Header[l.size()]);
+		ArrayBuilder<Header> b = ArrayBuilder.of(Header.class).filter(NOT_NULL);
+		for (int i = 0; i < entries.length; i++)
+			if (eq(entries[i].getName(), name))
+				b.add(entries[i]);
+		return b.orElse(EMPTY_ARRAY);
+	}
+
+	/**
+	 * Gets all of the headers contained within this list.
+	 *
+	 * <p>
+	 * The returned array maintains the relative order in which the headers were added.
+	 * Headers with null values are ignored.
+	 * Each call creates a new array not backed by this list.
+	 *
+	 * <p>
+	 * As a general rule, it's more efficient to use the other methods with consumers to
+	 * get headers.
+	 * 
+	 * @return An array of all the headers in this list, never <jk>null</jk>.
+	 */
+	public Header[] getAll() {
+		return entries.length == 0 ? EMPTY_ARRAY : Arrays.copyOf(entries, entries.length);
 	}
 
 	/**
@@ -1473,12 +1493,37 @@ public class HeaderList {
 	}
 
 	/**
-	 * Gets all of the headers contained within this list.
+	 * Performs an action on the values for all matching headers in this list.
 	 *
-	 * @return An array of all the headers in this list, or an empty array if no headers are present.
+	 * @param filter A predicate to apply to each element to determine if it should be included.  Can be <jk>null</jk>.
+	 * @param action An action to perform on each element.
+	 * @return This object.
 	 */
-	public Header[] getAll() {
-		return entries.length == 0 ? EMPTY_ARRAY : Arrays.copyOf(entries, entries.length);
+	public HeaderList forEachValue(Predicate<Header> filter, Consumer<String> action) {
+		return forEach(filter, x -> action.accept(x.getValue()));
+	}
+
+	/**
+	 * Performs an action on the values of all matching headers in this list.
+	 *
+	 * @param name The header name.
+	 * @param action An action to perform on each element.
+	 * @return This object.
+	 */
+	public HeaderList forEachValue(String name, Consumer<String> action) {
+		return forEach(name, x -> action.accept(x.getValue()));
+	}
+
+	/**
+	 * Returns all the string values for all headers with the specified name.
+	 * 
+	 * @param name The header name.
+	 * @return An array containing all values.  Never <jk>null</jk>.
+	 */
+	public String[] getValues(String name) {
+		ArrayBuilder<String> b = ArrayBuilder.of(String.class).size(1);
+		forEach(name, x -> b.add(x.getValue()));
+		return b.orElse(EMPTY_STRING_ARRAY);
 	}
 
 	/**
@@ -1520,36 +1565,48 @@ public class HeaderList {
 	}
 
 	/**
-	 * Performs an operation on the headers of this list.
+	 * Performs an action on all headers in this list.
 	 *
 	 * <p>
 	 * This is the preferred method for iterating over headers as it does not involve
 	 * creation or copy of lists/arrays.
 	 *
-	 * @param c The consumer.
+	 * @param action An action to perform on each element.
 	 * @return This object.
 	 */
-	public HeaderList forEach(Consumer<Header> c) {
-		for (int i = 0; i < entries.length; i++)
-			c.accept(entries[i]);
-		return this;
+	public HeaderList forEach(Consumer<Header> action) {
+		return forEach(x -> true, action);
 	}
 
 	/**
-	 * Performs an operation on the headers with the specified name in this list.
+	 * Performs an action on all headers with the specified name in this list.
 	 *
 	 * <p>
 	 * This is the preferred method for iterating over headers as it does not involve
 	 * creation or copy of lists/arrays.
 	 *
 	 * @param name The header name.
-	 * @param c The consumer.
+	 * @param action An action to perform on each element.
 	 * @return This object.
 	 */
-	public HeaderList forEach(String name, Consumer<Header> c) {
+	public HeaderList forEach(String name, Consumer<Header> action) {
+		return forEach(x -> eq(name, x.getName()), action);
+	}
+
+	/**
+	 * Performs an action on all matching headers in this list.
+	 *
+	 * <p>
+	 * This is the preferred method for iterating over headers as it does not involve
+	 * creation or copy of lists/arrays.
+	 *
+	 * @param filter A predicate to apply to each element to determine if it should be included.  Can be <jk>null</jk>.
+	 * @param action An action to perform on each element.
+	 * @return This object.
+	 */
+	public HeaderList forEach(Predicate<Header> filter, Consumer<Header> action) {
 		for (int i = 0; i < entries.length; i++)
-			if (eq(name, entries[i].getName()))
-				c.accept(entries[i]);
+			consume(filter, action, entries[i]);
 		return this;
 	}
 
@@ -1575,7 +1632,7 @@ public class HeaderList {
 	 * @return This object.
 	 */
 	public Stream<Header> stream(String name) {
-		return Arrays.stream(entries).filter(x->eq(name, x.getName()));
+		return stream().filter(x->eq(name, x.getName()));
 	}
 
 	private boolean eq(String s1, String s2) {

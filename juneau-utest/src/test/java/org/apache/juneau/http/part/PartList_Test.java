@@ -20,9 +20,9 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.http.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
 import org.junit.*;
 

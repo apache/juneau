@@ -90,8 +90,8 @@ public class FormDataAnnotation {
 	 */
 	public static Value<String> findName(ParamInfo pi) {
 		Value<String> n = Value.empty();
-		pi.getAnnotations(FormData.class, x -> isNotEmpty(x.value()), x -> n.set(x.value()));
-		pi.getAnnotations(FormData.class, x -> isNotEmpty(x.name()), x -> n.set(x.name()));
+		pi.forEachAnnotation(FormData.class, x -> isNotEmpty(x.value()), x -> n.set(x.value()));
+		pi.forEachAnnotation(FormData.class, x -> isNotEmpty(x.name()), x -> n.set(x.name()));
 		return n;
 	}
 

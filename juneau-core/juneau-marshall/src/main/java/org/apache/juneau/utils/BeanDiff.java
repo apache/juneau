@@ -20,6 +20,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.Bean;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Utility class for comparing two versions of a POJO.

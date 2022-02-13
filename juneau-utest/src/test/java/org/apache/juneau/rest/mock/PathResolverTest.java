@@ -15,7 +15,7 @@ package org.apache.juneau.rest.mock;
 import java.util.*;
 
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 import org.junit.*;
 
 public class PathResolverTest {

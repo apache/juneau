@@ -22,13 +22,14 @@ import java.util.*;
 
 import javax.servlet.http.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.FormData;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.http.annotation.Schema;
+import org.apache.juneau.internal.AList;
+import org.apache.juneau.internal.AMap;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.BasicUniversalJenaConfig;

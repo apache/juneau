@@ -90,8 +90,8 @@ public class PathAnnotation {
 	 */
 	public static Value<String> findName(ParamInfo pi) {
 		Value<String> n = Value.empty();
-		pi.getAnnotations(Path.class, x -> isNotEmpty(x.value()) , x -> n.set(x.value()));
-		pi.getAnnotations(Path.class, x -> isNotEmpty(x.name()) , x -> n.set(x.name()));
+		pi.forEachAnnotation(Path.class, x -> isNotEmpty(x.value()) , x -> n.set(x.value()));
+		pi.forEachAnnotation(Path.class, x -> isNotEmpty(x.name()) , x -> n.set(x.name()));
 		return n;
 	}
 

@@ -20,7 +20,6 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 
 /**

@@ -31,7 +31,6 @@ import java.util.concurrent.*;
 import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
@@ -457,19 +456,19 @@ public final class ClassMeta<T> implements Type {
 				).map(x -> x.inner())
 				.orElse(null);
 
-			ci.getAllFields(x -> x.hasAnnotation(bc, ParentProperty.class), x -> {
+			ci.forEachAllField(x -> x.hasAnnotation(bc, ParentProperty.class), x -> {
 				if (x.isStatic())
 					throw new ClassMetaRuntimeException(c, "@ParentProperty used on invalid field ''{0}''.  Must be static.", x);
 				parentPropertyMethod = new Setter.FieldSetter(x.accessible().inner());
 			});
 
-			ci.getAllFields(x -> x.hasAnnotation(bc, NameProperty.class), x -> {
+			ci.forEachAllField(x -> x.hasAnnotation(bc, NameProperty.class), x -> {
 				if (x.isStatic())
 					throw new ClassMetaRuntimeException(c, "@NameProperty used on invalid field ''{0}''.  Must be static.", x);
 				namePropertyMethod = new Setter.FieldSetter(x.accessible().inner());
 			});
 
-			ci.getDeclaredFields(x -> x.hasAnnotation(bc, Example.class), x -> {
+			ci.forEachDeclaredField(x -> x.hasAnnotation(bc, Example.class), x -> {
 				if (! (x.isStatic() && ci.isParentOf(x.getType().inner())))
 					throw new ClassMetaRuntimeException(c, "@Example used on invalid field ''{0}''.  Must be static and an instance of the type.", x);
 				exampleField = x.accessible().inner();
@@ -521,7 +520,7 @@ public final class ClassMeta<T> implements Type {
 
 			primitiveDefault = ci.getPrimitiveDefault();
 
-			ci.getPublicMethods(
+			ci.forEachPublicMethod(
 				x -> x.isNotDeprecated(),
 				x -> publicMethods.put(x.getSignature(), x.inner())
 			);
@@ -617,7 +616,7 @@ public final class ClassMeta<T> implements Type {
 				invocationHandler = new BeanProxyInvocationHandler<T>(beanMeta);
 
 			if (bc != null) {
-				bc.getAnnotations(Bean.class, c, x -> true, x -> {
+				bc.forEachAnnotation(Bean.class, c, x -> true, x -> {
 					if (x.dictionary().length != 0)
 						beanRegistry = new BeanRegistry(bc, null, x.dictionary());
 					// This could be a non-bean POJO with a type name.
@@ -627,7 +626,7 @@ public final class ClassMeta<T> implements Type {
 			}
 
 			if (example == null && bc != null) {
-				bc.getAnnotations(Example.class, c, x -> ! x.value().isEmpty(), x -> example = x.value());
+				bc.forEachAnnotation(Example.class, c, x -> ! x.value().isEmpty(), x -> example = x.value());
 			}
 
 			if (example == null) {
@@ -708,7 +707,7 @@ public final class ClassMeta<T> implements Type {
 		private void findSwaps(List<ObjectSwap> l, BeanContext bc) {
 
 			if (bc != null)
-				bc.getAnnotations(Swap.class, innerClass, x -> true, x -> l.add(createSwap(x)));
+				bc.forEachAnnotation(Swap.class, innerClass, x -> true, x -> l.add(createSwap(x)));
 
 			ObjectSwap defaultSwap = DefaultSwaps.find(ci);
 			if (defaultSwap == null)
@@ -2092,30 +2091,30 @@ public final class ClassMeta<T> implements Type {
 	}
 
 	/**
-	 * Consumes all matching annotations of the specified type defined on the specified class or parent classes/interfaces in parent-to-child order.
+	 * Performs an action on all matching annotations of the specified type defined on this class or parent classes/interfaces in parent-to-child order.
 	 *
 	 * @param type The annotation to search for.
-	 * @param predicate The predicate.
-	 * @param consumer The consumer of the annotations.
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
-	public <A extends Annotation> ClassMeta<T> getAnnotations(Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
+	public <A extends Annotation> ClassMeta<T> forEachAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
 		A[] array = (A[])annotationArrayMap.get(type);
 		if (array == null) {
 			if (beanContext == null) {
-				info.getAnnotations(BeanContext.DEFAULT, type, predicate, consumer);
+				info.forEachAnnotation(BeanContext.DEFAULT, type, filter, action);
 				return this;
 			}
 			List<A> l = new ArrayList<>();
-			info.getAnnotations(beanContext, type, x-> true, x -> l.add(x));
+			info.forEachAnnotation(beanContext, type, x-> true, x -> l.add(x));
 			array = (A[])Array.newInstance(type, l.size());
 			for (int i = 0; i < l.size(); i++)
 				Array.set(array, i, l.get(i));
 			annotationArrayMap.put(type, array);
 		}
 		for (A a : array)
-			consume(predicate, consumer, a);
+			consume(filter, action, a);
 		return this;
 	}
 

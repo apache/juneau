@@ -47,7 +47,7 @@ public class BasicDebugEnablement implements DebugEnablement {
 	public BasicDebugEnablement(DebugEnablement.Builder builder) {
 		this.defaultEnablement = firstNonNull(builder.defaultEnablement, NEVER);
 		this.enablementMap = builder.mapBuilder.build();
-		this.conditionalPredicate = firstNonNull(builder.conditionalPredicate, x -> "true".equalsIgnoreCase(x.getHeader("Debug")));
+		this.conditionalPredicate = firstNonNull(builder.conditional, x -> "true".equalsIgnoreCase(x.getHeader("Debug")));
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class BasicDebugEnablement implements DebugEnablement {
 	 *
 	 * <p>
 	 * Subclasses can override this method to provide their own implementation.
-	 * The default implementation is provided by {@link DebugEnablement.Builder#conditionalPredicate(Predicate)}
+	 * The default implementation is provided by {@link DebugEnablement.Builder#conditional(Predicate)}
 	 * which has a default predicate of <c><jv>x</jv> -> <js>"true"</js>.equalsIgnoreCase(<jv>x</jv>.getHeader(<js>"Debug"</js>)</c>.
 	 *
 	 * @param req The incoming HTTP request.

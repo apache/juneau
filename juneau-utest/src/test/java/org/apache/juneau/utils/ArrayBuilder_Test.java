@@ -23,15 +23,17 @@ public class ArrayBuilder_Test {
 
 	@Test
 	public void a01_basic() {
-		ArrayBuilder<String> x = ArrayBuilder.create(String.class, 2, true);
-		assertObject(x.toArray()).asJson().is("[]");
+		String[] empty = new String[0];
+		ArrayBuilder<String> x = ArrayBuilder.of(String.class).filter(y -> y != null).size(2);
+		assertObject(x.orElse(empty)).asJson().is("[]");
 		x.add(null);
-		assertObject(x.toArray()).asJson().is("[]");
+		assertObject(x.orElse(empty)).asJson().is("[]");
 		x.add("a");
-		assertObject(x.toArray()).asJson().is("['a']");
+		assertObject(x.orElse(empty)).asJson().is("['a']");
 		x.add("b");
 		x.add(null);
-		assertObject(x.toArray()).asJson().is("['a','b']");
-		assertThrown(()->x.add("c")).isType(ArrayIndexOutOfBoundsException.class);
+		assertObject(x.orElse(empty)).asJson().is("['a','b']");
+		x.add("c");
+		assertObject(x.orElse(empty)).asJson().is("['a','b','c']");
 	}
 }

@@ -90,8 +90,8 @@ public class QueryAnnotation {
 	 */
 	public static Value<String> findName(ParamInfo pi) {
 		Value<String> n = Value.empty();
-		pi.getAnnotations(Query.class, x -> isNotEmpty(x.value()), x -> n.set(x.value()));
-		pi.getAnnotations(Query.class, x -> isNotEmpty(x.name()), x -> n.set(x.name()));
+		pi.forEachAnnotation(Query.class, x -> isNotEmpty(x.value()), x -> n.set(x.value()));
+		pi.forEachAnnotation(Query.class, x -> isNotEmpty(x.name()), x -> n.set(x.name()));
 		return n;
 	}
 

@@ -164,7 +164,7 @@ public class MethodInfoTest {
 	public void findMatchingMethods() throws Exception {
 		MethodInfo mi = MethodInfo.of(B3.class.getMethod("foo", int.class));
 		List<MethodInfo> l = new ArrayList<>();
-		mi.getMatching(x -> true, x -> l.add(x));
+		mi.forEachMatching(x -> true, x -> l.add(x));
 		check("B3.foo(int),B2.foo(int),B1.foo(int)", l);
 	}
 
@@ -227,7 +227,7 @@ public class MethodInfoTest {
 
 	private static List<A> annotations(MethodInfo mi, Class<? extends Annotation> a) {
 		List<A> l = new ArrayList<>();
-		mi.getAnnotations(a, x -> true, x -> l.add((A)x));
+		mi.forEachAnnotation(a, x -> true, x -> l.add((A)x));
 		return l;
 	}
 

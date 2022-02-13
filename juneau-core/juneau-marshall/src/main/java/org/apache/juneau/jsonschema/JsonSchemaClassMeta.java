@@ -49,7 +49,7 @@ public class JsonSchemaClassMeta extends ExtendedClassMeta {
 				throw runtimeException(e);
 			}
 		};
-		cm.getAnnotations(Schema.class, x -> true, c);
+		cm.forEachAnnotation(Schema.class, x -> true, c);
 	}
 
 	/**

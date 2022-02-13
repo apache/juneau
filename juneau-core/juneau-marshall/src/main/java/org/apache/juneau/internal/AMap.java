@@ -10,10 +10,11 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.collections;
+package org.apache.juneau.internal;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -263,7 +264,7 @@ public class AMap<K,V> extends LinkedHashMap<K,V> {
 	 * @return This object.
 	 */
 	public AMap<K,V> appendIf(Predicate<Object> test, K key, V value) {
-		return appendIf(test.test(value), key, value);
+		return appendIf(passes(test, value), key, value);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

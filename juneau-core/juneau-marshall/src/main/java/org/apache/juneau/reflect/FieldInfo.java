@@ -120,7 +120,7 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	 */
 	public <A extends Annotation> A getAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
 		Value<A> t = Value.empty();
-		annotationProvider.getAnnotations(type, f, x -> true, x -> t.set(x));
+		annotationProvider.forEachAnnotation(type, f, x -> true, x -> t.set(x));
 		return t.orElse(null);
 	}
 
@@ -404,23 +404,23 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	/**
 	 * Returns <jk>true</jk> if this object passes the specified predicate test.
 	 *
-	 * @param predicate The predicate.
+	 * @param test The test to perform.
 	 * @return <jk>true</jk> if this object passes the specified predicate test.
 	 */
-	public boolean matches(Predicate<FieldInfo> predicate) {
-		return passes(predicate, this);
+	public boolean matches(Predicate<FieldInfo> test) {
+		return passes(test, this);
 	}
 
 	/**
-	 * Consumes this object if the specified predicate test passes.
+	 * Performs an action on this object if the specified predicate test passes.
 	 *
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param test A test to apply to determine if action should be executed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on this object.
 	 * @return This object.
 	 */
-	public FieldInfo accept(Predicate<FieldInfo> predicate, Consumer<FieldInfo> consumer) {
-		if (matches(predicate))
-			consumer.accept(this);
+	public FieldInfo accept(Predicate<FieldInfo> test, Consumer<FieldInfo> action) {
+		if (matches(test))
+			action.accept(this);
 		return this;
 	}
 

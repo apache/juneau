@@ -19,7 +19,6 @@ import java.util.*;
 import static java.util.Arrays.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 

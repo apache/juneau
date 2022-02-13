@@ -61,7 +61,7 @@ public final class RemoteOperationReturn {
 			rv = RemoteReturn.NONE;
 		} else {
 			Value<RemoteReturn> v = Value.of(RemoteReturn.BODY);
-			al.getValues(RemoteReturn.class, "returns", x -> true, x -> v.set(x));
+			al.forEachValue(RemoteReturn.class, "returns", x -> true, x -> v.set(x));
 			rv = v.get();
 		}
 

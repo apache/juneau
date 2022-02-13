@@ -26,6 +26,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.mod.*;
 import org.apache.juneau.config.store.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
 import org.junit.*;

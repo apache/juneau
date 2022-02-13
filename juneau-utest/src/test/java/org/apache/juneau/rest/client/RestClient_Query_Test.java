@@ -22,9 +22,9 @@ import static org.apache.juneau.testutils.StreamUtils.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;

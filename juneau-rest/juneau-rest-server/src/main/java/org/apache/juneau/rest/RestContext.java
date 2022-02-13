@@ -171,7 +171,7 @@ public class RestContext extends Context {
 	public static Builder create(Class<?> resourceClass, RestContext parentContext, ServletConfig servletConfig) throws ServletException {
 
 		Value<Class<? extends Builder>> v = Value.of(Builder.class);
-		ClassInfo.of(resourceClass).getAnnotations(Rest.class, x -> x.builder() != Builder.Null.class, x -> v.set(x.builder()));
+		ClassInfo.of(resourceClass).forEachAnnotation(Rest.class, x -> x.builder() != Builder.Null.class, x -> v.set(x.builder()));
 
 		if (v.get() == Builder.class)
 			return new Builder(resourceClass, parentContext, servletConfig);
@@ -368,7 +368,7 @@ public class RestContext extends Context {
 			Object r = resource.get();
 
 			Map<String,MethodInfo> map = new LinkedHashMap<>();
-			ClassInfo.ofProxy(r).getAllMethodsParentFirst(
+			ClassInfo.ofProxy(r).forEachAllMethodParentFirst(
 				y -> y.hasAnnotation(RestHook.class) && y.getAnnotation(RestHook.class).value() == HookEvent.INIT,
 				y -> {
 					String sig = y.getSignature();
@@ -582,7 +582,7 @@ public class RestContext extends Context {
 			);
 
 			// Apply @Rest(beanStore).
-			ClassInfo.of(resourceClass).getAnnotations(Rest.class, x -> x.beanStore() != BeanStore.Null.class, x -> v.get().type(x.beanStore()));
+			ClassInfo.of(resourceClass).forEachAnnotation(Rest.class, x -> x.beanStore() != BeanStore.Null.class, x -> v.get().type(x.beanStore()));
 
 			// Replace with builder from:  public [static] BeanStore.Builder createBeanStore(<args>)
 			v.get().build()
@@ -863,7 +863,7 @@ public class RestContext extends Context {
 			// Find our config file.  It's the last non-empty @RestResource(config).
 			VarResolver vr = beanStore.getBean(VarResolver.class).orElseThrow(()->runtimeException("VarResolver not found."));
 			Value<String> cfv = Value.empty();
-			ClassInfo.of(resourceClass).getAnnotations(Rest.class, x -> isNotEmpty(x.config()), x -> cfv.set(vr.resolve(x.config())));
+			ClassInfo.of(resourceClass).forEachAnnotation(Rest.class, x -> isNotEmpty(x.config()), x -> cfv.set(vr.resolve(x.config())));
 			String cf = cfv.orElse("");
 
 			// If not specified or value is set to SYSTEM_DEFAULT, use system default config.
@@ -3518,11 +3518,11 @@ public class RestContext extends Context {
 			// Gather @RestOp(debug) settings.
 			Consumer<MethodInfo> consumer = x -> {
 				Value<String> debug = Value.empty();
-				x.getAnnotationList(REST_OP_GROUP).getValues(String.class, "debug", StringUtils::isNotEmpty, y -> debug.set(y));
+				x.getAnnotationList(REST_OP_GROUP).forEachValue(String.class, "debug", StringUtils::isNotEmpty, y -> debug.set(y));
 				if (debug.isPresent())
 					v.get().enable(Enablement.fromString(debug.get()), x.getFullName());
 			};
-			ClassInfo.ofProxy(resource.get()).getPublicMethods(x -> true, consumer);
+			ClassInfo.ofProxy(resource.get()).forEachPublicMethod(x -> true, consumer);
 
 			// Replace with bean from bean store.
 			rootBeanStore
@@ -4048,7 +4048,7 @@ public class RestContext extends Context {
 				// Also include methods on @Rest-annotated interfaces.
 				if (al.size() == 0) {
 					Predicate<MethodInfo> isRestAnnotatedInterface = x -> x.getDeclaringClass().isInterface() && x.getDeclaringClass().getAnnotation(Rest.class) != null;
-					mi.getMatching(isRestAnnotatedInterface, x -> al.add(AnnotationInfo.of(x, RestOpAnnotation.DEFAULT)));
+					mi.forEachMatching(isRestAnnotatedInterface, x -> al.add(AnnotationInfo.of(x, RestOpAnnotation.DEFAULT)));
 				}
 
 				if (al.size() > 0) {
@@ -5744,9 +5744,9 @@ public class RestContext extends Context {
 			Map<String,Method> x = AMap.create();
 			Object r = resource.get();
 
-			ClassInfo.ofProxy(r).getAllMethodsParentFirst(
+			ClassInfo.ofProxy(r).forEachAllMethodParentFirst(
 				y -> y.hasAnnotation(RestHook.class),
-				y -> y.getAnnotations(RestHook.class, z -> z.value() == event, z -> x.put(y.getSignature(), y.accessible().inner()))
+				y -> y.forEachAnnotation(RestHook.class, z -> z.value() == event, z -> x.put(y.getSignature(), y.accessible().inner()))
 			);
 
 			MethodList x2 = MethodList.of(x.values());

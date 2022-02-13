@@ -20,7 +20,7 @@ import java.text.*;
 import java.util.*;
 import java.util.regex.*;
 
-import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.ASet;
 
 /**
  * Utility class for reading log files.

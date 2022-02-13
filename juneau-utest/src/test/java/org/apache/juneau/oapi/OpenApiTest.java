@@ -22,6 +22,7 @@ import java.util.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.testutils.*;
 import org.junit.*;
 

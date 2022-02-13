@@ -42,8 +42,8 @@ public class RdfClassMeta extends ExtendedClassMeta {
 		super(cm);
 		List<Rdf> rdfs = new ArrayList<>();
 		List<RdfSchema> schemas = new ArrayList<>();
-		cm.getAnnotations(Rdf.class, x -> true, x -> rdfs.add(x));
-		cm.getAnnotations(RdfSchema.class, x -> true, x -> schemas.add(x));
+		cm.forEachAnnotation(Rdf.class, x -> true, x -> rdfs.add(x));
+		cm.forEachAnnotation(RdfSchema.class, x -> true, x -> schemas.add(x));
 
 		RdfCollectionFormat _collectionFormat = RdfCollectionFormat.DEFAULT;
 		for (Rdf a : rdfs)

@@ -8,9 +8,9 @@ import static org.junit.Assert.*;
 import java.util.*;
 
 import org.apache.http.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
+import org.apache.juneau.internal.*;
 import org.junit.*;
 
 //***************************************************************************************************************************

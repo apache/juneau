@@ -14,6 +14,7 @@ package org.apache.juneau.collections;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -526,7 +527,7 @@ public class OList extends LinkedList<Object> {
 	 * @return This object.
 	 */
 	public OList appendIf(Predicate<Object> test, Object value) {
-		return appendIf(test.test(value), value);
+		return appendIf(passes(test, value), value);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -19,7 +19,6 @@ import java.util.*;
 import org.apache.http.*;
 import org.apache.http.message.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 
 /**

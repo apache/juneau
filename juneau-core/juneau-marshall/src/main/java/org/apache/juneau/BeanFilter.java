@@ -18,8 +18,8 @@ import java.util.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.swap.*;
 
 /**

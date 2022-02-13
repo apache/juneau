@@ -19,8 +19,8 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.sub.*;
+import org.apache.juneau.internal.*;
 
 import static java.util.Locale.*;
 

@@ -37,7 +37,7 @@ public class UrlEncodingClassMeta extends ExtendedClassMeta {
 		super(cm);
 
 		Value<Boolean> expandedParams = Value.empty();
-		cm.getAnnotations(UrlEncoding.class, x -> x.expandedParams(), x -> expandedParams.set(true));
+		cm.forEachAnnotation(UrlEncoding.class, x -> x.expandedParams(), x -> expandedParams.set(true));
 		this.expandedParams = expandedParams.orElse(false);
 	}
 

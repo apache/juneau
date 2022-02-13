@@ -22,8 +22,8 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.part.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.http.header.*;
 import org.junit.*;
 

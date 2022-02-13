@@ -91,8 +91,8 @@ public class RemoteOperationMeta {
 				al = mi.getReturnType().unwrap(Value.class,Optional.class).getAnnotationList(REMOTE_OP_GROUP);
 
 			Value<String> _httpMethod = Value.empty(), _path = Value.empty();
-			al.getValues(String.class, "method", StringUtils::isNotEmpty, x -> _httpMethod.set(x.trim()));
-			al.getValues(String.class, "path", StringUtils::isNotEmpty, x-> _path.set(x.trim()));
+			al.forEachValue(String.class, "method", StringUtils::isNotEmpty, x -> _httpMethod.set(x.trim()));
+			al.forEachValue(String.class, "path", StringUtils::isNotEmpty, x-> _path.set(x.trim()));
 			httpMethod = _httpMethod.orElse("").trim();
 			path = _path.orElse("").trim();
 

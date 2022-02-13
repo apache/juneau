@@ -319,7 +319,7 @@ public abstract class ExecutableInfo {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Consumes the matching parameter annotations of the specified type at the specified parameter index.
+	 * Performs an action on all matching parameter annotations at the specified parameter index.
 	 *
 	 * @param index The parameter index.
 	 * @param type The annotation type.
@@ -327,7 +327,7 @@ public abstract class ExecutableInfo {
 	 * @param consumer The consumer.
 	 * @return This object.
 	 */
-	public <A extends Annotation> ExecutableInfo getParameterAnnotations(int index, Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
+	public <A extends Annotation> ExecutableInfo forEachParameterAnnotation(int index, Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
 		for (Annotation a : getParameterAnnotations(index))
 			if (type.isInstance(a))
 				consume(predicate, consumer, type.cast(a));

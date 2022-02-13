@@ -50,7 +50,6 @@ import org.apache.http.impl.client.*;
 import org.apache.http.message.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;

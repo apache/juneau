@@ -16,7 +16,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents valid HTTP 1.1 method name static strings per the RFC 2616 spec.

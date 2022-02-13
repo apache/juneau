@@ -20,7 +20,6 @@ import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;

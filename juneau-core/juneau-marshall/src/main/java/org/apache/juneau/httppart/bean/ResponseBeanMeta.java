@@ -55,8 +55,8 @@ public class ResponseBeanMeta {
 			return null;
 		Builder b = new Builder(annotations);
 		b.apply(ci.innerType());
-		ci.getAnnotations(Response.class, x -> true, x -> b.apply(x));
-		ci.getAnnotations(StatusCode.class, x -> true, x -> b.apply(x));
+		ci.forEachAnnotation(Response.class, x -> true, x -> b.apply(x));
+		ci.forEachAnnotation(StatusCode.class, x -> true, x -> b.apply(x));
 		return b.build();
 	}
 
@@ -72,8 +72,8 @@ public class ResponseBeanMeta {
 			return null;
 		Builder b = new Builder(annotations);
 		b.apply(m.getReturnType().unwrap(Value.class, Optional.class).innerType());
-		m.getAnnotations(Response.class, x -> true, x -> b.apply(x));
-		m.getAnnotations(StatusCode.class, x -> true, x -> b.apply(x));
+		m.forEachAnnotation(Response.class, x -> true, x -> b.apply(x));
+		m.forEachAnnotation(StatusCode.class, x -> true, x -> b.apply(x));
 		return b.build();
 	}
 
@@ -89,8 +89,8 @@ public class ResponseBeanMeta {
 			return null;
 		Builder b = new Builder(annotations);
 		b.apply(mpi.getParameterType().unwrap(Value.class, Optional.class).innerType());
-		mpi.getAnnotations(Response.class, x-> true, x -> b.apply(x));
-		mpi.getAnnotations(StatusCode.class, x -> true, x -> b.apply(x));
+		mpi.forEachAnnotation(Response.class, x-> true, x -> b.apply(x));
+		mpi.forEachAnnotation(StatusCode.class, x -> true, x -> b.apply(x));
 		return b.build();
 	}
 

@@ -62,7 +62,7 @@ public class HtmlClassMeta extends ExtendedClassMeta {
 				}
 			}
 		};
-		cm.getAnnotations(Html.class, x -> true, c);
+		cm.forEachAnnotation(Html.class, x -> true, c);
 
 		this.noTables = noTables.orElse(false);
 		this.noTableHeaders = noTableHeaders.orElse(false);

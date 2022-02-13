@@ -14,8 +14,8 @@ package org.apache.juneau.rest.widget;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.dto.html5.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 
 /**

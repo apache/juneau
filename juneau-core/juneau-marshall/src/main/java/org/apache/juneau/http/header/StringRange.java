@@ -21,7 +21,7 @@ import java.util.*;
 import org.apache.http.*;
 import org.apache.http.message.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents a single value in a comma-delimited header value that optionally contains a quality metric for

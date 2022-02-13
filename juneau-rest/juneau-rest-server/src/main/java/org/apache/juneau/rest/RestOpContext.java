@@ -1223,7 +1223,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 					httpMethod = "delete";
 				else if (mi.hasAnnotation(RestOp.class)) {
 					Value<String> _httpMethod = Value.empty();
-					mi.getAnnotations(RestOp.class, x -> isNotEmpty(x.method()), x -> _httpMethod.set(x.method()));
+					mi.forEachAnnotation(RestOp.class, x -> isNotEmpty(x.method()), x -> _httpMethod.set(x.method()));
 					httpMethod = _httpMethod.orElse(null);
 				}
 

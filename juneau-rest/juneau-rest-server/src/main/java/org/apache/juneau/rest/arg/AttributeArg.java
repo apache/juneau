@@ -67,8 +67,8 @@ public class AttributeArg implements RestOpArg {
 
 	private String getName(ParamInfo paramInfo) {
 		Value<String> n = Value.empty();
-		paramInfo.getAnnotations(Attr.class, x -> isNotEmpty(x.name()), x -> n.set(x.name()));
-		paramInfo.getAnnotations(Attr.class, x -> isNotEmpty(x.value()), x -> n.set(x.value()));
+		paramInfo.forEachAnnotation(Attr.class, x -> isNotEmpty(x.name()), x -> n.set(x.name()));
+		paramInfo.forEachAnnotation(Attr.class, x -> isNotEmpty(x.value()), x -> n.set(x.value()));
 		if (n.isEmpty())
 			throw new ArgException(paramInfo, "@Attr used without name or value");
 		return n.get();

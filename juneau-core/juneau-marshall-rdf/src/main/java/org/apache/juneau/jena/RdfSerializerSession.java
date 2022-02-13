@@ -24,7 +24,6 @@ import java.util.function.Consumer;
 
 import org.apache.jena.rdf.model.*;
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.MediaType;
 import org.apache.juneau.httppart.HttpPartSchema;
 import org.apache.juneau.internal.*;

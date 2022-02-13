@@ -17,7 +17,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -53,10 +53,10 @@ public class RrpcInterfaceMeta {
 		Value<String> path = Value.of("");
 		ClassInfo ci = ClassInfo.of(c);
 
-		ci.getAnnotations(Remote.class, x -> isNotEmpty(x.path()), x -> path.set(trimSlashes(x.path())));
+		ci.forEachAnnotation(Remote.class, x -> isNotEmpty(x.path()), x -> path.set(trimSlashes(x.path())));
 
 		AMap<Method,RrpcInterfaceMethodMeta> methods = AMap.create();
-		ci.getPublicMethods(
+		ci.forEachPublicMethod(
 			x -> true,
 			x -> methods.put(x.inner(), new RrpcInterfaceMethodMeta(uri, x.inner()))
 		);

@@ -298,7 +298,7 @@ public class BeanCreator<T> {
 			Match<MethodInfo> match = new Match<>();
 
 			// Look for static creator method.
-			type.getPublicMethods(x -> isStaticCreateMethod(x), x -> {
+			type.forEachPublicMethod(x -> isStaticCreateMethod(x), x -> {
 				found.set("STATIC_CREATOR");
 				if (hasAllParams(x))
 					match.add(x);
@@ -322,7 +322,7 @@ public class BeanCreator<T> {
 
 		// Look for public constructor.
 		Match<ConstructorInfo> constructorMatch = new Match<>();
-		type.getPublicConstructors(x -> true, x -> {
+		type.forEachPublicConstructor(x -> true, x -> {
 			found.setIfEmpty("PUBLIC_CONSTRUCTOR");
 			if (hasAllParams(x))
 				constructorMatch.add(x);
@@ -330,7 +330,7 @@ public class BeanCreator<T> {
 
 		// Look for protected constructor.
 		if (! constructorMatch.isPresent()) {
-			type.getDeclaredConstructors(x -> x.isProtected(), x -> {
+			type.forEachDeclaredConstructor(x -> x.isProtected(), x -> {
 				found.setIfEmpty("PROTECTED_CONSTRUCTOR");
 				if (hasAllParams(x))
 					constructorMatch.add(x);
@@ -344,7 +344,7 @@ public class BeanCreator<T> {
 		if (builder == null) {
 			// Look for static-builder/protected-constructor pair.
 			Value<T> value = Value.empty();
-			type.getDeclaredConstructors(x -> x.hasNumParams(1) && x.isVisible(PROTECTED), x -> {
+			type.forEachDeclaredConstructor(x -> x.hasNumParams(1) && x.isVisible(PROTECTED), x -> {
 				Class<?> pt = x.getParam(0).getParameterType().inner();
 				MethodInfo m = type.getPublicMethod(y -> isStaticCreateMethod(y, pt));
 				if (m != null) {

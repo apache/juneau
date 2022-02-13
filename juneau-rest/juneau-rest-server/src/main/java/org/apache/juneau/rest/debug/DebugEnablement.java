@@ -66,7 +66,7 @@ public interface DebugEnablement {
 
 		ReflectionMap.Builder<Enablement> mapBuilder;
 		Enablement defaultEnablement = NEVER;
-		Predicate<HttpServletRequest> conditionalPredicate;
+		Predicate<HttpServletRequest> conditional;
 		BeanCreator<DebugEnablement> creator;
 
 		/**
@@ -77,7 +77,7 @@ public interface DebugEnablement {
 		protected Builder(BeanStore beanStore) {
 			mapBuilder = ReflectionMap.create(Enablement.class);
 			defaultEnablement = NEVER;
-			conditionalPredicate = x -> "true".equalsIgnoreCase(x.getHeader("Debug"));
+			conditional = x -> "true".equalsIgnoreCase(x.getHeader("Debug"));
 			creator = beanStore.createBean(DebugEnablement.class).type(BasicDebugEnablement.class).builder(Builder.class, this);
 		}
 
@@ -132,7 +132,7 @@ public interface DebugEnablement {
 		 * 	<ul>
 		 * 		<li>{@link Enablement#ALWAYS ALWAYS} - Debug is always enabled.
 		 * 		<li>{@link Enablement#NEVER NEVER} - Debug is always disabled.
-		 * 		<li>{@link Enablement#CONDITIONAL CONDITIONAL} - Debug is enabled when the {@link #conditionalPredicate(Predicate)} conditional predicate test} passes.
+		 * 		<li>{@link Enablement#CONDITIONAL CONDITIONAL} - Debug is enabled when the {@link #conditional(Predicate)} conditional predicate test} passes.
 		 * 	</ul>
 		 * @param keys
 		 * 	The mapping keys.
@@ -165,7 +165,7 @@ public interface DebugEnablement {
 		 * 	<ul>
 		 * 		<li>{@link Enablement#ALWAYS ALWAYS} - Debug is always enabled.
 		 * 		<li>{@link Enablement#NEVER NEVER} - Debug is always disabled.
-		 * 		<li>{@link Enablement#CONDITIONAL CONDITIONAL} - Debug is enabled when the {@link #conditionalPredicate(Predicate)} conditional predicate test} passes.
+		 * 		<li>{@link Enablement#CONDITIONAL CONDITIONAL} - Debug is enabled when the {@link #conditional(Predicate)} conditional predicate test} passes.
 		 * 	</ul>
 		 * @param classes
 		 * 	The classes to set the debug enablement setting on.
@@ -204,8 +204,8 @@ public interface DebugEnablement {
 		 * @param value The predicate.
 		 * @return This object.
 		 */
-		public Builder conditionalPredicate(Predicate<HttpServletRequest> value) {
-			conditionalPredicate = value;
+		public Builder conditional(Predicate<HttpServletRequest> value) {
+			conditional = value;
 			return this;
 		}
 	}

@@ -252,23 +252,23 @@ public class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns <jk>true</jk> if this object passes the specified predicate test.
 	 *
-	 * @param predicate The predicate.
+	 * @param test The test to perform.
 	 * @return <jk>true</jk> if this object passes the specified predicate test.
 	 */
-	public boolean matches(Predicate<AnnotationInfo<?>> predicate) {
-		return passes(predicate, this);
+	public boolean matches(Predicate<AnnotationInfo<?>> test) {
+		return passes(test, this);
 	}
 
 	/**
-	 * Consumes this object if the specified predicate test passes.
+	 * Performs an action on this object if the specified predicate test passes.
 	 *
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param test A test to apply to determine if action should be executed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on this object.
 	 * @return This object.
 	 */
-	public AnnotationInfo<?> accept(Predicate<AnnotationInfo<?>> predicate, Consumer<AnnotationInfo<?>> consumer) {
-		if (matches(predicate))
-			consumer.accept(this);
+	public AnnotationInfo<?> accept(Predicate<AnnotationInfo<?>> test, Consumer<AnnotationInfo<?>> action) {
+		if (matches(test))
+			action.accept(this);
 		return this;
 	}
 
@@ -278,20 +278,20 @@ public class AnnotationInfo<T extends Annotation> {
 	}
 
 	/**
-	 * Consumes a value on this annotation.
+	 * Performs an action on all matching values on this annotation.
 	 *
 	 * @param type The annotation field type.
 	 * @param name The annotation field name.
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param test A predicate to apply to the value to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the value.
 	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
-	public <V> AnnotationInfo<?> getValue(Class<V> type, String name, Predicate<V> predicate, Consumer<V> consumer) {
+	public <V> AnnotationInfo<?> forEachValue(Class<V> type, String name, Predicate<V> test, Consumer<V> action) {
 		for (Method m : a.annotationType().getMethods())
 			if (m.getName().equals(name) && m.getReturnType().equals(type)) {
 				try {
-					consume(predicate, consumer, (V)m.invoke(a));
+					consume(test, action, (V)m.invoke(a));
 				} catch (Exception e) {
 					e.printStackTrace(); // Shouldn't happen.
 				}
@@ -300,20 +300,20 @@ public class AnnotationInfo<T extends Annotation> {
 	}
 
 	/**
-	 * Returns a value on this annotation.
+	 * Returns a matching value on this annotation.
 	 *
 	 * @param type The annotation field type.
 	 * @param name The annotation field name.
-	 * @param predicate The predicate.
+	 * @param test A predicate to apply to the value to determine if value should be used.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
-	public <V> Optional<V> getValue(Class<V> type, String name, Predicate<V> predicate) {
+	public <V> Optional<V> getValue(Class<V> type, String name, Predicate<V> test) {
 		for (Method m : a.annotationType().getMethods())
 			if (m.getName().equals(name) && m.getReturnType().equals(type)) {
 				try {
 					V v = (V)m.invoke(a);
-					if (passes(predicate, v))
+					if (passes(test, v))
 						return Optional.of(v);
 				} catch (Exception e) {
 					e.printStackTrace(); // Shouldn't happen.

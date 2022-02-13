@@ -940,81 +940,81 @@ public abstract class Context implements AnnotationProvider {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> void getAnnotations(Class<A> type, Class<?> onClass, Predicate<A> predicate, Consumer<A> consumer) {
+	public <A extends Annotation> void forEachAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
 		if (type != null && onClass != null)
 			for (A a : annotations(type, onClass))
-				consume(predicate, consumer, a);
+				consume(filter, action, a);
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> A getAnnotation(Class<A> type, Class<?> onClass, Predicate<A> predicate) {
+	public <A extends Annotation> A getAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 		if (type != null && onClass != null)
 			for (A a : annotations(type, onClass))
-				if (passes(predicate, a))
+				if (passes(filter, a))
 					return a;
 		return null;
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> void getDeclaredAnnotations(Class<A> type, Class<?> onClass, Predicate<A> predicate, Consumer<A> consumer) {
+	public <A extends Annotation> void forEachDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
 		if (type != null && onClass != null)
 			for (A a : declaredAnnotations(type, onClass))
-				consume(predicate, consumer, a);
+				consume(filter, action, a);
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> A getDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> predicate) {
+	public <A extends Annotation> A getDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 		if (type != null && onClass != null)
 			for (A a : declaredAnnotations(type, onClass))
-				if (passes(predicate, a))
+				if (passes(filter, a))
 					return a;
 		return null;
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> void getAnnotations(Class<A> type, Method onMethod, Predicate<A> predicate, Consumer<A> consumer) {
+	public <A extends Annotation> void forEachAnnotation(Class<A> type, Method onMethod, Predicate<A> filter, Consumer<A> action) {
 		if (type != null && onMethod != null)
 			for (A a : annotations(type, onMethod))
-				consume(predicate, consumer, a);
+				consume(filter, action, a);
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> A getAnnotation(Class<A> type, Method onMethod, Predicate<A> predicate) {
+	public <A extends Annotation> A getAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
 		if (type != null && onMethod != null)
 			for (A a : annotations(type, onMethod))
-				if (passes(predicate, a))
+				if (passes(filter, a))
 					return a;
 		return null;
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> void getAnnotations(Class<A> type, Field onField, Predicate<A> predicate, Consumer<A> consumer) {
+	public <A extends Annotation> void forEachAnnotation(Class<A> type, Field onField, Predicate<A> filter, Consumer<A> action) {
 		if (type != null && onField != null)
 			for (A a : annotations(type, onField))
-				consume(predicate, consumer, a);
+				consume(filter, action, a);
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> A getAnnotation(Class<A> type, Field onField, Predicate<A> predicate) {
+	public <A extends Annotation> A getAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
 		if (type != null && onField != null)
 			for (A a : annotations(type, onField))
-				if (passes(predicate, a))
+				if (passes(filter, a))
 					return a;
 		return null;
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> void getAnnotations(Class<A> type, Constructor<?> onConstructor, Predicate<A> predicate, Consumer<A> consumer) {
+	public <A extends Annotation> void forEachAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter, Consumer<A> action) {
 		if (type != null && onConstructor != null)
 			for (A a : annotations(type, onConstructor))
-				consume(predicate, consumer, a);
+				consume(filter, action, a);
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> A getAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> predicate) {
+	public <A extends Annotation> A getAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
 		if (type != null && onConstructor != null)
 			for (A a : annotations(type, onConstructor))
-				if (passes(predicate, a))
+				if (passes(filter, a))
 					return a;
 		return null;
 	}

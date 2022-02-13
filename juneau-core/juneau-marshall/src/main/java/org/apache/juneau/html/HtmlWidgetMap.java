@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 
 /**
  * A collection of {@link HtmlWidget} objects keyed by their names.

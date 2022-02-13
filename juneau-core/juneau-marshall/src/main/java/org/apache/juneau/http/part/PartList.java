@@ -15,6 +15,7 @@ package org.apache.juneau.http.part;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -89,7 +90,7 @@ import org.apache.juneau.svl.*;
  * <p>
  * Various methods are provided for iterating over the parts in this list to avoid array copies.
  * <ul class='javatree'>
- * 	<li class='jm'>{@link #forEach(Consumer)} / {@link #forEach(String,Consumer)} - Use consumers to process parts.
+ * 	<li class='jm'>{@link #forEach(Consumer)} / {@link #forEach(String,Consumer)} / {@link #forEach(Predicate,Consumer)} - Use consumers to process parts.
  * 	<li class='jm'>{@link #iterator()} / {@link #iterator(String)} - Use an {@link PartIterator} to process parts.
  * 	<li class='jm'>{@link #stream()} / {@link #stream(String)} - Use a stream.
  * </ul>
@@ -162,6 +163,8 @@ public class PartList {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private static final NameValuePair[] EMPTY_ARRAY = new NameValuePair[0];
+	private static final String[] EMPTY_STRING_ARRAY = new String[0];
+	private static final Predicate<NameValuePair> NOT_NULL = x -> x != null;
 
 	/** Represents no part supplier in annotations. */
 	public static final class Null extends PartList {}
@@ -222,10 +225,10 @@ public class PartList {
 			return EMPTY;
 		if (pairs.length % 2 != 0)
 			throw runtimeException("Odd number of parameters passed into PartList.ofPairs()");
-		ArrayBuilder<NameValuePair> b = ArrayBuilder.create(NameValuePair.class, pairs.length / 2, true);
+		ArrayBuilder<NameValuePair> b = ArrayBuilder.of(NameValuePair.class).filter(NOT_NULL).size(pairs.length / 2);
 		for (int i = 0; i < pairs.length; i+=2)
 			b.add(BasicPart.of(stringify(pairs[i]), pairs[i+1]));
-		return new PartList(b.toArray());
+		return new PartList(b.orElse(EMPTY_ARRAY));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1035,37 +1038,37 @@ public class PartList {
 		}
 
 		/**
-		 * Performs an operation on the parts of this list.
+		 * Performs an action on all the parts in this list.
 		 *
 		 * <p>
 		 * This is the preferred method for iterating over parts as it does not involve
 		 * creation or copy of lists/arrays.
 		 *
-		 * @param c The consumer.
+		 * @param action An action to perform on each element.
 		 * @return This object.
 		 */
-		public Builder forEach(Consumer<NameValuePair> c) {
+		public Builder forEach(Consumer<NameValuePair> action) {
 			for (int i = 0, j = entries.size(); i < j; i++)
-				c.accept(entries.get(i));
+				action.accept(entries.get(i));
 			return this;
 		}
 
 		/**
-		 * Performs an operation on the parts with the specified name in this list.
+		 * Performs an action on the parts with the specified name in this list.
 		 *
 		 * <p>
 		 * This is the preferred method for iterating over parts as it does not involve
 		 * creation or copy of lists/arrays.
 		 *
 		 * @param name The part name.
-		 * @param c The consumer.
+		 * @param action An action to perform on each element.
 		 * @return This object.
 		 */
-		public Builder forEach(String name, Consumer<NameValuePair> c) {
+		public Builder forEach(String name, Consumer<NameValuePair> action) {
 			for (int i = 0, j = entries.size(); i < j; i++) {
 				NameValuePair x = entries.get(i);
 				if (eq(name, x.getName()))
-					c.accept(x);
+					action.accept(x);
 			}
 			return this;
 		}
@@ -1189,7 +1192,7 @@ public class PartList {
 		if (builder.defaultEntries == null) {
 			entries = builder.entries.toArray(new NameValuePair[builder.entries.size()]);
 		} else {
-			ArrayBuilder<NameValuePair> l = ArrayBuilder.create(NameValuePair.class, builder.entries.size() + builder.defaultEntries.size(), true);
+			ArrayBuilder<NameValuePair> l = ArrayBuilder.of(NameValuePair.class).filter(NOT_NULL).size(builder.entries.size() + builder.defaultEntries.size());
 
 			for (int i = 0, j = builder.entries.size(); i < j; i++)
 				l.add(builder.entries.get(i));
@@ -1203,7 +1206,7 @@ public class PartList {
 					l.add(x);
 			}
 
-			entries = l.toArray();
+			entries = l.orElse(EMPTY_ARRAY);
 		}
 		this.caseInsensitive = builder.caseInsensitive;
 	}
@@ -1217,10 +1220,10 @@ public class PartList {
 	 * 	<br><jk>null</jk> entries are ignored.
 	 */
 	protected PartList(List<NameValuePair> parts) {
-		ArrayBuilder<NameValuePair> l = ArrayBuilder.create(NameValuePair.class, parts.size(), true);
+		ArrayBuilder<NameValuePair> l = ArrayBuilder.of(NameValuePair.class).filter(NOT_NULL).size(parts.size());
 		for (int i = 0, j = parts.size(); i < j; i++)
 			l.add(parts.get(i));
-		entries = l.toArray();
+		entries = l.orElse(EMPTY_ARRAY);
 		caseInsensitive = false;
 	}
 
@@ -1232,10 +1235,10 @@ public class PartList {
 	 * 	<br><jk>null</jk> entries are ignored.
 	 */
 	protected PartList(NameValuePair...parts) {
-		ArrayBuilder<NameValuePair> l = ArrayBuilder.create(NameValuePair.class, parts.length, true);
+		ArrayBuilder<NameValuePair> l = ArrayBuilder.of(NameValuePair.class).filter(NOT_NULL).size(parts.length);
 		for (int i = 0; i < parts.length; i++)
 			l.add(parts[i]);
-		entries = l.toArray();
+		entries = l.orElse(EMPTY_ARRAY);
 		caseInsensitive = false;
 	}
 
@@ -1382,29 +1385,37 @@ public class PartList {
 	}
 
 	/**
+	 * Gets all of the parts contained within this list.
+	 *
+	 * <p>
+	 * The returned array maintains the relative order in which the parts were added.
+	 * Each call creates a new array not backed by this list.
+	 *
+	 * @return 
+	 * 	An array of all the parts in this list, or an empty array if no parts are present.
+	 */
+	public NameValuePair[] getAll() {
+		return entries.length == 0 ? EMPTY_ARRAY : Arrays.copyOf(entries, entries.length);
+	}
+
+	/**
 	 * Gets all of the parts with the given name.
 	 *
 	 * <p>
 	 * The returned array maintains the relative order in which the parts were added.
-	 *
-	 * <p>
-	 * Part name comparison is case insensitive.
+	 * Parts with null values are ignored.
+	 * Each call creates a new array not backed by this list.
 	 *
 	 * @param name The part name.
 	 *
 	 * @return An array containing all matching parts, or an empty array if none are found.
 	 */
 	public NameValuePair[] getAll(String name) {
-		List<NameValuePair> l = null;
-		for (int i = 0; i < entries.length; i++) {
-			NameValuePair x = entries[i];
-			if (eq(x.getName(), name)) {
-				if (l == null)
-					l = new ArrayList<>();
-				l.add(x);
-			}
-		}
-		return l == null ? EMPTY_ARRAY : l.toArray(new NameValuePair[l.size()]);
+		ArrayBuilder<NameValuePair> b = ArrayBuilder.of(NameValuePair.class).filter(NOT_NULL);
+		for (int i = 0; i < entries.length; i++)
+			if (eq(entries[i].getName(), name))
+				b.add(entries[i]);
+		return b.orElse(EMPTY_ARRAY);
 	}
 
 	/**
@@ -1453,12 +1464,37 @@ public class PartList {
 	}
 
 	/**
-	 * Gets all of the parts contained within this list.
+	 * Performs an action on the string values for all matching parts.
 	 *
-	 * @return An array of all the parts in this list, or an empty array if no parts are present.
+	 * @param filter A predicate to apply to each element to determine if it should be included.  Can be <jk>null</jk>.
+	 * @param action An action to perform on each element.
+	 * @return This object.
 	 */
-	public NameValuePair[] getAll() {
-		return entries.length == 0 ? EMPTY_ARRAY : Arrays.copyOf(entries, entries.length);
+	public PartList forEachValue(Predicate<NameValuePair> filter, Consumer<String> action) {
+		return forEach(filter, x -> action.accept(x.getValue()));
+	}
+
+	/**
+	 * Performs an action on the string values for all parts with the specified name.
+	 *
+	 * @param name The header name.
+	 * @param action An action to perform on each element.
+	 * @return This object.
+	 */
+	public PartList forEachValue(String name, Consumer<String> action) {
+		return forEach(name, x -> action.accept(x.getValue()));
+	}
+
+	/**
+	 * Returns all the string values for all parts with the specified name.
+	 *
+	 * @param name The part name.
+	 * @return An array containing all values.  Never <jk>null</jk>.
+	 */
+	public String[] getValues(String name) {
+		ArrayBuilder<String> b = ArrayBuilder.of(String.class).size(1);
+		forEach(name, x -> b.add(x.getValue()));
+		return b.orElse(EMPTY_STRING_ARRAY);
 	}
 
 	/**
@@ -1500,36 +1536,48 @@ public class PartList {
 	}
 
 	/**
-	 * Performs an operation on the parts of this list.
+	 * Performs an action on all parts in this list.
 	 *
 	 * <p>
 	 * This is the preferred method for iterating over parts as it does not involve
 	 * creation or copy of lists/arrays.
 	 *
-	 * @param c The consumer.
+	 * @param action An action to perform on each element.
 	 * @return This object.
 	 */
-	public PartList forEach(Consumer<NameValuePair> c) {
-		for (int i = 0; i < entries.length; i++)
-			c.accept(entries[i]);
-		return this;
+	public PartList forEach(Consumer<NameValuePair> action) {
+		return forEach(x -> true, action);
 	}
 
 	/**
-	 * Performs an operation on the parts with the specified name in this list.
+	 * Performs an action on all parts in this list with the specified name.
 	 *
 	 * <p>
 	 * This is the preferred method for iterating over parts as it does not involve
 	 * creation or copy of lists/arrays.
 	 *
-	 * @param name The part name.
-	 * @param c The consumer.
+	 * @param name The parts name.
+	 * @param action An action to perform on each element.
 	 * @return This object.
 	 */
-	public PartList forEach(String name, Consumer<NameValuePair> c) {
+	public PartList forEach(String name, Consumer<NameValuePair> action) {
+		return forEach(x -> eq(name, x.getName()), action);
+	}
+
+	/**
+	 * Performs an action on all the matching parts in this list.
+	 *
+	 * <p>
+	 * This is the preferred method for iterating over parts as it does not involve
+	 * creation or copy of lists/arrays.
+	 *
+	 * @param filter A predicate to apply to each element to determine if it should be included.  Can be <jk>null</jk>.
+	 * @param action An action to perform on each element.
+	 * @return This object.
+	 */
+	public PartList forEach(Predicate<NameValuePair> filter, Consumer<NameValuePair> action) {
 		for (int i = 0; i < entries.length; i++)
-			if (eq(name, entries[i].getName()))
-				c.accept(entries[i]);
+			consume(filter, action, entries[i]);
 		return this;
 	}
 

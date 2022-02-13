@@ -17,7 +17,7 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -86,7 +86,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 			Class<?> c = beanMeta.getClassMeta().getInnerClass();
 			Value<XmlFormat> defaultFormat = Value.empty();
 
-			mp.getAnnotations(Xml.class, c, x-> true, x -> {
+			mp.forEachAnnotation(Xml.class, c, x-> true, x -> {
 				XmlFormat xf = x.format();
 				if (xf == ATTRS)
 					defaultFormat.set(XmlFormat.ATTR);

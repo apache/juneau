@@ -19,7 +19,7 @@ import static org.junit.runners.MethodSorters.*;
 import java.time.*;
 import java.util.*;
 
-import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -246,7 +246,7 @@ public class AnyAssertion_Test {
 		Object x2 = list();
 		test(x1).asComparable().isString("1");
 		test(nil).asComparable().isNull();
-		assertThrown(()->test(x2).asComparable()).message().oneLine().is("Object was not type 'java.lang.Comparable'.  Actual='org.apache.juneau.collections.AList'.");
+		assertThrown(()->test(x2).asComparable()).message().oneLine().is("Object was not type 'java.lang.Comparable'.  Actual='org.apache.juneau.internal.AList'.");
 	}
 
 	@Test

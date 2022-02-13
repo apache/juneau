@@ -20,7 +20,6 @@ import java.net.URI;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 
 /**

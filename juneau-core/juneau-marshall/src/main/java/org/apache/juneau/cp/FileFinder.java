@@ -21,7 +21,6 @@ import java.util.regex.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 
 /**

@@ -96,16 +96,16 @@ public final class ParamInfo {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Consumers the matching parameter annotations declared on this parameter.
+	 * Performs an action on all matching annotations declared on this parameter.
 	 *
 	 * @param type The annotation type.
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public <A extends Annotation> ParamInfo getDeclaredAnnotations(Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
+	public <A extends Annotation> ParamInfo forEachDeclaredAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
 		for (Annotation a : eInfo.getParameterAnnotations(index))
-			consume(type, predicate, consumer, a);
+			consume(type, filter, action, a);
 		return this;
 	}
 
@@ -173,12 +173,12 @@ public final class ParamInfo {
 		}
 		MethodInfo mi = (MethodInfo)eInfo;
 		Value<A> v = Value.empty();
-		mi.getMatchingParentFirst(x -> true, x -> x.getParameterAnnotations(index, type, y -> true, y -> v.set(y)));
+		mi.forEachMatchingParentFirst(x -> true, x -> x.forEachParameterAnnotation(index, type, y -> true, y -> v.set(y)));
 		return v.orElseGet(() -> eInfo.getParamType(index).unwrap(Value.class,Optional.class).getAnnotation(type));
 	}
 
 	/**
-	 * Consumes all matching annotations of the specified type defined on this parameter.
+	 * Performs an action on all matching annotations on this parameter.
 	 *
 	 * <p>
 	 * Searches all methods with the same signature on the parent classes or interfaces
@@ -187,16 +187,16 @@ public final class ParamInfo {
 	 * Results are in parent-to-child order.
 	 *
 	 * @param type The annotation to look for.
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public <A extends Annotation> ParamInfo getAnnotations(Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
-		return getAnnotations(AnnotationProvider.DEFAULT, type, predicate, consumer);
+	public <A extends Annotation> ParamInfo forEachAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
+		return forEachAnnotation(AnnotationProvider.DEFAULT, type, filter, action);
 	}
 
 	/**
-	 * Returns the first annotation of the specified type defined on this method parameter that matches the specified predicate.
+	 * Returns the first matching annotation on this method parameter.
 	 *
 	 * <p>
 	 * Searches all methods with the same signature on the parent classes or interfaces
@@ -205,44 +205,44 @@ public final class ParamInfo {
 	 * Results are in parent-to-child order.
 	 *
 	 * @param type The annotation to look for.
-	 * @param predicate The predicate.
+	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
 	 * @return A list of all matching annotations found or an empty list if none found.
 	 */
 	@SuppressWarnings("unchecked")
-	public <A extends Annotation> A getAnnotation(Class<A> type, Predicate<A> predicate) {
+	public <A extends Annotation> A getAnnotation(Class<A> type, Predicate<A> filter) {
 		if (eInfo.isConstructor) {
 			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class,Optional.class);
-			A o = ci.getAnnotation(type, predicate);
+			A o = ci.getAnnotation(type, filter);
 			if (o != null)
 				return o;
 			for (Annotation a2 : eInfo.getParameterAnnotations(index))
-				if (passes(type, predicate, a2))
+				if (passes(type, filter, a2))
 					return (A)a2;
 		} else {
 			MethodInfo mi = (MethodInfo)eInfo;
 			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class,Optional.class);
-			A o = ci.getAnnotation(type, predicate);
+			A o = ci.getAnnotation(type, filter);
 			if (o != null)
 				return o;
 			Value<A> v = Value.empty();
-			mi.getMatchingParentFirst(x -> true, x -> x.getParameterAnnotations(index, type, predicate, y -> v.set(y)));
+			mi.forEachMatchingParentFirst(x -> true, x -> x.forEachParameterAnnotation(index, type, filter, y -> v.set(y)));
 			return v.orElse(null);
 		}
 		return null;
 	}
 
-	private <A extends Annotation> ParamInfo getAnnotations(AnnotationProvider ap, Class<A> a, Predicate<A> predicate, Consumer<A> consumer) {
+	private <A extends Annotation> ParamInfo forEachAnnotation(AnnotationProvider ap, Class<A> a, Predicate<A> filter, Consumer<A> action) {
 		if (eInfo.isConstructor) {
 			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class,Optional.class);
 			Annotation[] annotations = eInfo.getParameterAnnotations(index);
-			ci.getAnnotations(ap, a, predicate, consumer);
+			ci.forEachAnnotation(ap, a, filter, action);
 			for (Annotation a2 : annotations)
-				consume(a, predicate, consumer, a2);
+				consume(a, filter, action, a2);
 		} else {
 			MethodInfo mi = (MethodInfo)eInfo;
 			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class,Optional.class);
-			ci.getAnnotations(ap, a, predicate, consumer);
-			mi.getMatchingParentFirst(x -> true, x -> x.getParameterAnnotations(index, a, predicate, consumer));
+			ci.forEachAnnotation(ap, a, filter, action);
+			mi.forEachMatchingParentFirst(x -> true, x -> x.forEachParameterAnnotation(index, a, filter, action));
 		}
 		return this;
 	}
@@ -263,23 +263,23 @@ public final class ParamInfo {
 	/**
 	 * Returns <jk>true</jk> if this object passes the specified predicate test.
 	 *
-	 * @param predicate The predicate.
+	 * @param test The test to perform.
 	 * @return <jk>true</jk> if this object passes the specified predicate test.
 	 */
-	public boolean matches(Predicate<ParamInfo> predicate) {
-		return passes(predicate, this);
+	public boolean matches(Predicate<ParamInfo> test) {
+		return passes(test, this);
 	}
 
 	/**
-	 * Consumes this object if the specified predicate test passes.
+	 * Performs an action on this object if the specified predicate test passes.
 	 *
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param test A test to apply to determine if action should be executed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on this object.
 	 * @return This object.
 	 */
-	public ParamInfo accept(Predicate<ParamInfo> predicate, Consumer<ParamInfo> consumer) {
-		if (matches(predicate))
-			consumer.accept(this);
+	public ParamInfo accept(Predicate<ParamInfo> test, Consumer<ParamInfo> action) {
+		if (matches(test))
+			action.accept(this);
 		return this;
 	}
 

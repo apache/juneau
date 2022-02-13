@@ -22,7 +22,7 @@ import java.util.logging.*;
 import java.util.logging.Formatter;
 import java.util.regex.*;
 
-import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.AMap;
 
 /**
  * Log entry formatter.

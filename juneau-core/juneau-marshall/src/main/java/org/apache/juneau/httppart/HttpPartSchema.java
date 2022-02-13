@@ -662,7 +662,7 @@ public class HttpPartSchema {
 
 		Builder apply(Class<? extends Annotation> c, ParamInfo mpi) {
 			apply(c, mpi.getParameterType().innerType());
-			mpi.getDeclaredAnnotations(c, x -> true, x -> apply(x));
+			mpi.forEachDeclaredAnnotation(c, x -> true, x -> apply(x));
 			return this;
 		}
 
@@ -684,7 +684,7 @@ public class HttpPartSchema {
 
 		Builder apply(Class<? extends Annotation> c, java.lang.reflect.Type t) {
 			if (t instanceof Class<?>) {
-				ClassInfo.of((Class<?>)t).getAnnotations(c, x -> true, x -> apply(x));
+				ClassInfo.of((Class<?>)t).forEachAnnotation(c, x -> true, x -> apply(x));
 			} else if (Value.isType(t)) {
 				apply(c, Value.getParameterType(t));
 			}

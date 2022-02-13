@@ -24,13 +24,14 @@ import static org.apache.juneau.http.HttpParts.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Request;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.AList;
+import org.apache.juneau.internal.AMap;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;

@@ -12,8 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.internal.ConsumerUtils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
 
 /**
  * Builder for arrays.
@@ -30,33 +33,59 @@ import java.util.*;
  */
 public class ArrayBuilder<T> {
 
-	private final T[] array;
-	private int i = 0;
-	private final boolean skipNulls;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Static creator.
 	 *
 	 * @param elementType The element type.
-	 * @param size The array size.
-	 * @param skipNulls If <jk>true</jk>, <jk>null</jk> values will be ignored.
 	 * @return A new builder object.
 	 */
-	public static <T> ArrayBuilder<T> create(Class<T> elementType, int size, boolean skipNulls) {
-		return new ArrayBuilder<>(elementType, size, skipNulls);
+	public static <T> ArrayBuilder<T> of(Class<T> elementType) {
+		return new ArrayBuilder<>(elementType);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private Predicate<T> filter;
+	private final Class<T> elementType;
+	private int size = -1;
+	private int i = 0;
+	private List<T> list;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param elementType The element type.
-	 * @param capacity The array size.
-	 * @param skipNulls If <jk>true</jk>, <jk>null</jk> values will be ignored.
 	 */
-	@SuppressWarnings("unchecked")
-	public ArrayBuilder(Class<T> elementType, int capacity, boolean skipNulls) {
-		array = (T[])Array.newInstance(elementType, capacity);
-		this.skipNulls = skipNulls;
+	public ArrayBuilder(Class<T> elementType) {
+		this.elementType = elementType;
+	}
+
+	/**
+	 * Sets the expected size for this array.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public ArrayBuilder<T> size(int value) {
+		size = value;
+		return this;
+	}
+
+	/**
+	 * The predicate to use to filter values added to this builder.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public ArrayBuilder<T> filter(Predicate<T> value) {
+		filter = value;
+		return this;
 	}
 
 	/**
@@ -67,19 +96,28 @@ public class ArrayBuilder<T> {
 	 * @throws ArrayIndexOutOfBoundsException if size is exceeded.
 	 */
 	public ArrayBuilder<T> add(T t) {
-		if (!(skipNulls && t == null))
-			array[i++] = t;
+		if (passes(filter, t)) {
+			if (list == null)
+				list = size < 0 ? new ArrayList<>() : new ArrayList<>(size);
+			list.add(t);
+			i++;
+		}
 		return this;
 	}
 
 	/**
 	 * Returns the populated array.
 	 *
-	 * @return The populated array.
+	 * @param def The default value if no values were added to this builder.
+	 * @return A new array containing the added entries.
 	 */
-	public T[] toArray() {
-		if (i != array.length)
-			return Arrays.copyOf(array, i);
-		return array;
+	@SuppressWarnings("unchecked")
+	public T[] orElse(T[] def) {
+		if (list == null)
+			return def;
+		T[] t = (T[]) Array.newInstance(elementType, list == null ? 0 : list.size());
+		if (list != null)
+			list.toArray(t);
+		return t;
 	}
 }

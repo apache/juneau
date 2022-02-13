@@ -15,7 +15,7 @@ package org.apache.juneau.testutils.pojos;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
-import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Test bean fields of type AtomicInteger and AtomicLong.

@@ -18,9 +18,9 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.remote.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -82,7 +82,7 @@ public class RemoteMeta {
 
 		AMap<Method,RemoteOperationMeta> operations = AMap.create();
 		String path2 = path;
-		ci.getPublicMethods(
+		ci.forEachPublicMethod(
 			x -> true,
 			x -> operations.put(x.inner(), new RemoteOperationMeta(path2, x.inner(), "GET"))
 		);

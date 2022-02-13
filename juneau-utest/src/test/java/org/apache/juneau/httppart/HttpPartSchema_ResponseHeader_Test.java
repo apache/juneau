@@ -19,8 +19,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.junit.*;
 

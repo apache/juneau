@@ -24,9 +24,9 @@ import java.time.*;
 import java.util.*;
 
 import org.apache.http.Header;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.rest.annotation.*;

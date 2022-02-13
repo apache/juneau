@@ -23,7 +23,7 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -179,13 +179,13 @@ public class BeanMeta<T> {
 					bdClasses.a(beanFilter.getBeanDictionary());
 
 				Value<String> typeName = Value.empty();
-				classMeta.getAnnotations(Bean.class, x -> isNotEmpty(x.typeName()), x -> typeName.set(x.typeName()));
+				classMeta.forEachAnnotation(Bean.class, x -> isNotEmpty(x.typeName()), x -> typeName.set(x.typeName()));
 				if (typeName.isPresent())
 					bdClasses.add(classMeta.innerClass);
 				this.beanRegistry = new BeanRegistry(ctx, null, bdClasses.toArray(new Class<?>[bdClasses.size()]));
 
 				Value<String> typePropertyName = Value.empty();
-				classMeta.getAnnotations(Bean.class, x -> isNotEmpty(x.typePropertyName()), x -> typePropertyName.set(x.typePropertyName()));
+				classMeta.forEachAnnotation(Bean.class, x -> isNotEmpty(x.typePropertyName()), x -> typePropertyName.set(x.typePropertyName()));
 				this.typePropertyName = typePropertyName.orElseGet(()->ctx.getBeanTypePropertyName());
 
 				fluentSetters = (ctx.isFindFluentSetters() || (beanFilter != null && beanFilter.isFluentSetters()));
@@ -224,7 +224,7 @@ public class BeanMeta<T> {
 							throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 						constructor = x;
 						constructorArgs = new String[0];
-						ctx.getAnnotations(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = split(z.properties()));
+						ctx.forEachAnnotation(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = split(z.properties()));
 						if (! x.hasNumParams(constructorArgs.length)) {
 							if (constructorArgs.length != 0)
 								throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
@@ -249,7 +249,7 @@ public class BeanMeta<T> {
 								throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 							constructor = x;
 							constructorArgs = new String[0];
-							ctx.getAnnotations(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = split(z.properties()));
+							ctx.forEachAnnotation(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = split(z.properties()));
 							if (! x.hasNumParams(constructorArgs.length)) {
 								if (constructorArgs.length != 0)
 									throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
@@ -533,8 +533,8 @@ public class BeanMeta<T> {
 		private String findPropertyName(Field f) {
 			List<Beanp> lp = new ArrayList<>();
 			List<Name> ln = new ArrayList<>();
-			ctx.getAnnotations(Beanp.class, f, x -> true, x -> lp.add(x));
-			ctx.getAnnotations(Name.class, f, x -> true, x -> ln.add(x));
+			ctx.forEachAnnotation(Beanp.class, f, x -> true, x -> lp.add(x));
+			ctx.forEachAnnotation(Name.class, f, x -> true, x -> ln.add(x));
 			String name = bpName(lp, ln);
 			if (isNotEmpty(name))
 				return name;
@@ -669,8 +669,8 @@ public class BeanMeta<T> {
 
 				List<Beanp> lp = new ArrayList<>();
 				List<Name> ln = new ArrayList<>();
-				ctx.getAnnotations(Beanp.class, m.inner(), x -> true, x -> lp.add(x));
-				ctx.getAnnotations(Name.class, m.inner(), x -> true, x -> ln.add(x));
+				ctx.forEachAnnotation(Beanp.class, m.inner(), x -> true, x -> lp.add(x));
+				ctx.forEachAnnotation(Name.class, m.inner(), x -> true, x -> ln.add(x));
 				if (! (m.isVisible(v) || lp.size() > 0 || ln.size() > 0))
 					continue;
 
@@ -764,7 +764,7 @@ public class BeanMeta<T> {
 		List<Field> l = new LinkedList<>();
 		boolean noIgnoreTransients = ! ctx.isIgnoreTransientFields();
 		for (ClassInfo c2 : findClasses(c, stopClass)) {
-			c2.getDeclaredFields(
+			c2.forEachDeclaredField(
 				x -> x.isNotStatic()
 				&& (x.isNotTransient() || noIgnoreTransients)
 				&& (x.hasNoAnnotation(Transient.class) || noIgnoreTransients)

@@ -17,7 +17,7 @@ import static org.apache.juneau.http.HttpParts.*;
 import java.util.*;
 
 import org.apache.http.*;
-import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 
 
 /**

@@ -29,7 +29,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.MethodInfoTest.*;
 import org.apache.juneau.svl.*;

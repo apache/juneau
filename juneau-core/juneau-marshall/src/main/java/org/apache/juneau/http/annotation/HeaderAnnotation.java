@@ -91,8 +91,8 @@ public class HeaderAnnotation {
 	 */
 	public static Value<String> findName(ParamInfo pi) {
 		Value<String> n = Value.empty();
-		pi.getAnnotations(Header.class, x -> isNotEmpty(x.value()), x -> n.set(x.value()));
-		pi.getAnnotations(Header.class, x -> isNotEmpty(x.name()), x -> n.set(x.name()));
+		pi.forEachAnnotation(Header.class, x -> isNotEmpty(x.value()), x -> n.set(x.value()));
+		pi.forEachAnnotation(Header.class, x -> isNotEmpty(x.name()), x -> n.set(x.name()));
 		return n;
 	}
 

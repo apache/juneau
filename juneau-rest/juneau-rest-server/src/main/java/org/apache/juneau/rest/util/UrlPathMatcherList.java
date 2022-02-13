@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.util;
 
-import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 
 /**
  * A list of {@link UrlPathMatcher} objects.

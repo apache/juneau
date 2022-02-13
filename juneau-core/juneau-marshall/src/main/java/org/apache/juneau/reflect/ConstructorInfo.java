@@ -111,7 +111,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	 */
 	public final <A extends Annotation> A getAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
 		Value<A> t = Value.empty();
-		annotationProvider.getAnnotations(type, c, x -> true, x -> t.set(x));
+		annotationProvider.forEachAnnotation(type, c, x -> true, x -> t.set(x));
 		return t.orElse(null);
 	}
 
@@ -143,23 +143,23 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	/**
 	 * Returns <jk>true</jk> if this object passes the specified predicate test.
 	 *
-	 * @param predicate The predicate.
+	 * @param test The test to perform.
 	 * @return <jk>true</jk> if this object passes the specified predicate test.
 	 */
-	public boolean matches(Predicate<ConstructorInfo> predicate) {
-		return passes(predicate, this);
+	public boolean matches(Predicate<ConstructorInfo> test) {
+		return passes(test, this);
 	}
 
 	/**
-	 * Consumes this object if the specified predicate test passes.
+	 * Performs an action on this object if the specified predicate test passes.
 	 *
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param test A test to apply to determine if action should be executed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on this object.
 	 * @return This object.
 	 */
-	public ConstructorInfo accept(Predicate<ConstructorInfo> predicate, Consumer<ConstructorInfo> consumer) {
-		if (matches(predicate))
-			consumer.accept(this);
+	public ConstructorInfo accept(Predicate<ConstructorInfo> test, Consumer<ConstructorInfo> action) {
+		if (matches(test))
+			action.accept(this);
 		return this;
 	}
 

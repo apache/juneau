@@ -14,6 +14,7 @@ package org.apache.juneau.collections;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -498,7 +499,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @return This object.
 	 */
 	public OMap appendIf(Predicate<Object> test, String key, Object value) {
-		return appendIf(test.test(value), key, value);
+		return appendIf(passes(test, value), key, value);
 	}
 
 	/**

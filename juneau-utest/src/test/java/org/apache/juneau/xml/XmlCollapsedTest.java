@@ -20,7 +20,7 @@ import static org.junit.runners.MethodSorters.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.testutils.XmlUtils;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;

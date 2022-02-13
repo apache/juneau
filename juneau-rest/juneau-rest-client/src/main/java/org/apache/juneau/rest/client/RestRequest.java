@@ -54,6 +54,7 @@ import org.apache.juneau.http.header.Date;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;

@@ -145,35 +145,35 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	}
 
 	/**
-	 * Consumes all matching declared methods with the same name and arguments on all superclasses and interfaces.
+	 * Performs an action on all matching declared methods with the same name and arguments on all superclasses and interfaces.
 	 *
 	 * <p>
 	 * Methods are accessed from child-to-parent order.
 	 *
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public MethodInfo getMatching(Predicate<MethodInfo> predicate, Consumer<MethodInfo> consumer) {
+	public MethodInfo forEachMatching(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
 		for (MethodInfo m : _getMatching())
-			consume(predicate, consumer, m);
+			consume(filter, action, m);
 		return this;
 	}
 
 	/**
-	 * Consumes all matching declared methods with the same name and arguments on all superclasses and interfaces.
+	 * Performs an action on all matching declared methods with the same name and arguments on all superclasses and interfaces.
 	 *
 	 * <p>
 	 * Methods are accessed from parent-to-child order.
 	 *
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public MethodInfo getMatchingParentFirst(Predicate<MethodInfo> predicate, Consumer<MethodInfo> consumer) {
+	public MethodInfo forEachMatchingParentFirst(Predicate<MethodInfo> filter, Consumer<MethodInfo> action) {
 		MethodInfo[] m = _getMatching();
 		for (int i = m.length-1; i >= 0; i--)
-			consume(predicate, consumer, m[i]);
+			consume(filter, action, m[i]);
 		return this;
 	}
 
@@ -241,7 +241,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 			return null;
 		Value<A> t = Value.empty();
 		for (MethodInfo m2 : _getMatching()) {
-			annotationProvider.getAnnotations(type, m2.inner(), x -> true, x -> t.set(x));
+			annotationProvider.forEachAnnotation(type, m2.inner(), x -> true, x -> t.set(x));
 			if (t.isPresent())
 				return t.get();
 		}
@@ -297,7 +297,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	}
 
 	/**
-	 * Consumes all matching annotations of the specified type defined on this method.
+	 * Performs an action on all matching annotations defined on this method.
 	 *
 	 * <p>
 	 * Searches all methods with the same signature on the parent classes or interfaces
@@ -305,16 +305,16 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * <br>Results are parent-to-child ordered.
 	 *
 	 * @param type The annotation to look for.
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public <A extends Annotation> MethodInfo getAnnotations(Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
-		return getAnnotations(AnnotationProvider.DEFAULT, type, predicate, consumer);
+	public <A extends Annotation> MethodInfo forEachAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
+		return forEachAnnotation(AnnotationProvider.DEFAULT, type, filter, action);
 	}
 
 	/**
-	 * Consumes all annotations of the specified type defined on this method.
+	 * Performs an action on all matching annotations defined on this method.
 	 *
 	 * <p>
 	 * Searches all methods with the same signature on the parent classes or interfaces
@@ -323,17 +323,17 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 *
 	 * @param annotationProvider The annotation provider.
 	 * @param type The annotation type.
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public <A extends Annotation> MethodInfo getAnnotations(AnnotationProvider annotationProvider, Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
-		declaringClass.getAnnotations(annotationProvider, type, predicate, consumer);
+	public <A extends Annotation> MethodInfo forEachAnnotation(AnnotationProvider annotationProvider, Class<A> type, Predicate<A> filter, Consumer<A> action) {
+		declaringClass.forEachAnnotation(annotationProvider, type, filter, action);
 		MethodInfo[] m = _getMatching();
 		for (int i = m.length-1; i >= 0; i--)
 			for (Annotation a2 : m[i].getDeclaredAnnotations())
-				consume(type, predicate, consumer, a2);
-		getReturnType().unwrap(Value.class,Optional.class).getAnnotations(annotationProvider, type, predicate, consumer);
+				consume(type, filter, action, a2);
+		getReturnType().unwrap(Value.class,Optional.class).forEachAnnotation(annotationProvider, type, filter, action);
 		return this;
 	}
 
@@ -373,7 +373,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	}
 
 	/**
-	 * Constructs an {@link AnnotationList} of all annotations found on this method.
+	 * Constructs an {@link AnnotationList} of all matching annotations found on this method.
 	 *
 	 * <p>
 	 * Annotations are appended in the following orders:
@@ -385,77 +385,77 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * 	<li>On this method and matching methods ordered parent-to-child.
 	 * </ol>
 	 *
-	 * @param predicate The predicate.
+	 * @param filter A predicate to apply to the entries to determine if value should be added.  Can be <jk>null</jk>.
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationList getAnnotationList(Predicate<AnnotationInfo<?>> predicate) {
+	public AnnotationList getAnnotationList(Predicate<AnnotationInfo<?>> filter) {
 		AnnotationList al = new AnnotationList();
-		getAnnotationInfos(predicate, x -> al.add(x));
+		forEachAnnotationInfo(filter, x -> al.add(x));
 		return al;
 	}
 
 	/**
 	 * Same as {@link #getAnnotationList(Predicate)} except only returns annotations defined on methods.
 	 *
-	 * @param predicate The predicate.
+	 * @param filter A predicate to apply to the entries to determine if value should be added.  Can be <jk>null</jk>.
 	 * @return A new {@link AnnotationList} object on every call.
 	 */
-	public AnnotationList getAnnotationListMethodOnly(Predicate<AnnotationInfo<?>> predicate) {
+	public AnnotationList getAnnotationListMethodOnly(Predicate<AnnotationInfo<?>> filter) {
 		AnnotationList al = new AnnotationList();
-		getAnnotationInfosMethodOnly(predicate, x -> al.add(x));
+		forEachAnnotationInfoMethodOnly(filter, x -> al.add(x));
 		return al;
 	}
 
 	/**
-	 * Consumes the annotations that match the specified predicate on this method.
+	 * Perform an action on all matching annotations on this method.
 	 *
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	public MethodInfo getAnnotationInfos(Predicate<AnnotationInfo<?>> predicate, Consumer<AnnotationInfo<?>> consumer) {
+	public MethodInfo forEachAnnotationInfo(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		ClassInfo c = this.declaringClass;
-		getDeclaredAnnotationInfos(c.getPackage(), predicate, consumer);
+		forEachDeclaredAnnotationInfo(c.getPackage(), filter, action);
 		ClassInfo[] interfaces = c._getInterfaces();
 		for (int i = interfaces.length-1; i >= 0; i--) {
-			getDeclaredAnnotationInfos(interfaces[i], predicate, consumer);
-			getDeclaredMethodAnnotationInfos(interfaces[i], predicate, consumer);
+			forEachDeclaredAnnotationInfo(interfaces[i], filter, action);
+			forEachDeclaredMethodAnnotationInfo(interfaces[i], filter, action);
 		}
 		ClassInfo[] parents = c._getParents();
 		for (int i = parents.length-1; i >= 0; i--) {
-			getDeclaredAnnotationInfos(parents[i], predicate, consumer);
-			getDeclaredMethodAnnotationInfos(parents[i], predicate, consumer);
+			forEachDeclaredAnnotationInfo(parents[i], filter, action);
+			forEachDeclaredMethodAnnotationInfo(parents[i], filter, action);
 		}
 		return this;
 	}
 
-	private void getAnnotationInfosMethodOnly(Predicate<AnnotationInfo<?>> predicate, Consumer<AnnotationInfo<?>> consumer) {
+	private void forEachAnnotationInfoMethodOnly(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		ClassInfo c = this.declaringClass;
 		ClassInfo[] interfaces = c._getInterfaces();
 		for (int i = interfaces.length-1; i >= 0; i--)
-			getDeclaredMethodAnnotationInfos(interfaces[i], predicate, consumer);
+			forEachDeclaredMethodAnnotationInfo(interfaces[i], filter, action);
 		ClassInfo[] parents = c._getParents();
 		for (int i = parents.length-1; i >= 0; i--)
-			getDeclaredMethodAnnotationInfos(parents[i], predicate, consumer);
+			forEachDeclaredMethodAnnotationInfo(parents[i], filter, action);
 	}
 
-	private void getDeclaredAnnotationInfos(Package p, Predicate<AnnotationInfo<?>> predicate, Consumer<AnnotationInfo<?>> consumer) {
+	private void forEachDeclaredAnnotationInfo(Package p, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		if (p != null)
 			for (Annotation a : p.getDeclaredAnnotations())
-				AnnotationInfo.of(p, a).accept(predicate, consumer);
+				AnnotationInfo.of(p, a).accept(filter, action);
 	}
 
-	private void getDeclaredAnnotationInfos(ClassInfo ci, Predicate<AnnotationInfo<?>> predicate, Consumer<AnnotationInfo<?>> consumer) {
+	private void forEachDeclaredAnnotationInfo(ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		if (ci != null)
 			for (Annotation a : ci.c.getDeclaredAnnotations())
-				AnnotationInfo.of(ci, a).accept(predicate, consumer);
+				AnnotationInfo.of(ci, a).accept(filter, action);
 	}
 
-	private void getDeclaredMethodAnnotationInfos(ClassInfo ci, Predicate<AnnotationInfo<?>> predicate, Consumer<AnnotationInfo<?>> consumer) {
+	private void forEachDeclaredMethodAnnotationInfo(ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		MethodInfo m = findMatchingOnClass(ci);
 		if (m != null)
 			for (Annotation a : m.getDeclaredAnnotations())
-				AnnotationInfo.of(m, a).accept(predicate, consumer);
+				AnnotationInfo.of(m, a).accept(filter, action);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -523,23 +523,23 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	/**
 	 * Returns <jk>true</jk> if this object passes the specified predicate test.
 	 *
-	 * @param predicate The predicate.
+	 * @param test The test to perform.
 	 * @return <jk>true</jk> if this object passes the specified predicate test.
 	 */
-	public boolean matches(Predicate<MethodInfo> predicate) {
-		return passes(predicate, this);
+	public boolean matches(Predicate<MethodInfo> test) {
+		return passes(test, this);
 	}
 
 	/**
-	 * Consumes this object if the specified predicate test passes.
+	 * Performs an action on this object if the specified predicate test passes.
 	 *
-	 * @param predicate The predicate.
-	 * @param consumer The consumer.
+	 * @param test A test to apply to determine if action should be executed.  Can be <jk>null</jk>.
+	 * @param action An action to perform on this object.
 	 * @return This object.
 	 */
-	public MethodInfo accept(Predicate<MethodInfo> predicate, Consumer<MethodInfo> consumer) {
-		if (matches(predicate))
-			consumer.accept(this);
+	public MethodInfo accept(Predicate<MethodInfo> test, Consumer<MethodInfo> action) {
+		if (matches(test))
+			action.accept(this);
 		return this;
 	}
 

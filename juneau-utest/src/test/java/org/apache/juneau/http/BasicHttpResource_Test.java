@@ -21,8 +21,8 @@ import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.resource.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.http.header.*;
 import org.junit.*;
 

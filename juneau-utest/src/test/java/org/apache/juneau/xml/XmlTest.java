@@ -22,6 +22,7 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.testutils.XmlUtils;
