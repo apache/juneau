@@ -51,7 +51,7 @@ public class RoundTripToOMapsTest extends RoundTripTest {
 		assertEquals("a", aa[0].f1);
 		assertEquals(2, aa[0].f2);
 
-		List<A> a2 = list(new A(OMap.ofJson("{f1:'a',f2:2}")));
+		List<A> a2 = alist(new A(OMap.ofJson("{f1:'a',f2:2}")));
 		a2 = roundTrip(a2, List.class, A.class);
 		assertEquals(1, a2.size());
 		assertEquals("a", a2.get(0).f1);

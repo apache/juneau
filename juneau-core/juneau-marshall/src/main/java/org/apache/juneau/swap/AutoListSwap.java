@@ -81,8 +81,8 @@ import org.apache.juneau.serializer.*;
 public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {
 
 	private static final Set<String>
-		SWAP_METHOD_NAMES = unmodifiableSet("toList", "toObjectList", "toOList"),
-		UNSWAP_METHOD_NAMES = unmodifiableSet("fromList", "fromObjectList", "fromOList", "create", "valueOf");
+		SWAP_METHOD_NAMES = uset("toList", "toObjectList", "toOList"),
+		UNSWAP_METHOD_NAMES = uset("fromList", "fromObjectList", "fromOList", "create", "valueOf");
 
 	/**
 	 * Look for constructors and methods on this class and construct a dynamic swap if it's possible to do so.

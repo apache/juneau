@@ -97,7 +97,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				new ComboInput<List<A>>(
 					"List<A>",
 					getType(List.class, A.class),
-					list(a("http://foo", "bar"),a("http://baz", "qux"))
+					alist(a("http://foo", "bar"),a("http://baz", "qux"))
 				)
 				.json("[{_type:'a',a:{href:'http://foo'},c:['bar']},{_type:'a',a:{href:'http://baz'},c:['qux']}]")
 				.jsonT("[{t:'a',a:{href:'http://foo'},c:['bar']},{t:'a',a:{href:'http://baz'},c:['qux']}]")
@@ -161,7 +161,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				new ComboInput<List<List<A>>>(
 					"List<List<A>>",
 					getType(List.class, List.class, A.class),
-					list(list(a("http://a", "b"),a("http://c", "d")),list(a("http://e", "f")))
+					alist(alist(a("http://a", "b"),a("http://c", "d")),alist(a("http://e", "f")))
 				)
 				.json("[[{_type:'a',a:{href:'http://a'},c:['b']},{_type:'a',a:{href:'http://c'},c:['d']}],[{_type:'a',a:{href:'http://e'},c:['f']}]]")
 				.jsonT("[[{t:'a',a:{href:'http://a'},c:['b']},{t:'a',a:{href:'http://c'},c:['d']}],[{t:'a',a:{href:'http://e'},c:['f']}]]")
@@ -308,7 +308,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 				new ComboInput<List<BeanWithAField>>(
 					"List<BeanWithAField>",
 					getType(List.class, BeanWithAField.class),
-					list(BeanWithAField.create(a("http://b", "c")))
+					alist(BeanWithAField.create(a("http://b", "c")))
 				)
 				.json("[{f1:{a:{href:'http://b'},c:['c']},f2:[{a:{href:'http://b'},c:['c']},{a:{href:'http://b'},c:['c']}],f3:[{a:{href:'http://b'},c:['c']},{a:{href:'http://b'},c:['c']}]}]")
 				.jsonT("[{f1:{a:{href:'http://b'},c:['c']},f2:[{a:{href:'http://b'},c:['c']},{a:{href:'http://b'},c:['c']}],f3:[{a:{href:'http://b'},c:['c']},{a:{href:'http://b'},c:['c']}]}]")
@@ -2759,7 +2759,7 @@ public class Html5ComboTest extends ComboRoundTripTest {
 			BeanWithAField b = new BeanWithAField();
 			b.f1 = a;
 			b.f2 = new A[]{a,a};
-			b.f3 = list(a,a);
+			b.f3 = alist(a,a);
 			return b;
 		}
 	}

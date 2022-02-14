@@ -97,7 +97,7 @@ public class HeaderInfo extends SwaggerElement {
 		this.collectionFormat = copyFrom.collectionFormat;
 		this._default = copyFrom._default;
 		this.description = copyFrom.description;
-		this._enum = newSet(copyFrom._enum);
+		this._enum = copyOf(copyFrom._enum);
 		this.example = copyFrom.example;
 		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
@@ -371,7 +371,7 @@ public class HeaderInfo extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setEnum(Collection<Object> value) {
-		_enum = newSet(value);
+		_enum = setFrom(value);
 	}
 
 	/**

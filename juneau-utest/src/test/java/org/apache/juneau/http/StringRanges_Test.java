@@ -28,7 +28,7 @@ public class StringRanges_Test {
 
 	@Test
 	public void a01_match() throws Exception {
-		List<String> x = list("foo","bar","baz");
+		List<String> x = alist("foo","bar","baz");
 
 		assertInteger(of(null).match(x)).is(-1);
 

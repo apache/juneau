@@ -139,7 +139,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	@Test
 	public void b03a_integerListField() throws Exception {
 		B03 x = new B03();
-		x.f1 = optional(list(123));
+		x.f1 = optional(alist(123));
 		x = roundTrip(x);
 		assertEquals(123, x.f1.get().get(0).intValue());
 	}
@@ -147,7 +147,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	@Test
 	public void b03b_integerListField_listWithNull() throws Exception {
 		B03 x = new B03();
-		x.f1 = optional(list((Integer)null));
+		x.f1 = optional(alist((Integer)null));
 		x = roundTrip(x);
 		assertTrue(x.f1.isPresent());
 		assertEquals(1, x.f1.get().size());
@@ -157,7 +157,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	@Test
 	public void b03c_integerListField_emptyList() throws Exception {
 		B03 x = new B03();
-		x.f1 = optional(list());
+		x.f1 = optional(alist());
 		x = roundTrip(x);
 		assertTrue(x.f1.isPresent());
 		assertEquals(0, x.f1.get().size());
@@ -295,7 +295,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	@Test
 	public void b06a_listOfOptionalIntegers() throws Exception {
 		B06 x = new B06();
-		x.f1 = list(optional(123));
+		x.f1 = alist(optional(123));
 		x = roundTrip(x);
 		assertEquals(123, x.f1.get(0).get().intValue());
 	}
@@ -303,7 +303,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	@Test
 	public void b06b_listOfOptionalIntegers_listWithEmpty() throws Exception {
 		B06 x = new B06();
-		x.f1 = list(empty());
+		x.f1 = alist(empty());
 		x = roundTrip(x);
 		assertEquals(1, x.f1.size());
 		assertFalse(x.f1.get(0).isPresent());
@@ -312,7 +312,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	@Test
 	public void b06c_listOfOptionalIntegers_listWithNull() throws Exception {
 		B06 x = new B06();
-		x.f1 = list((Optional<Integer>)null);
+		x.f1 = alist((Optional<Integer>)null);
 		x = roundTrip(x);
 		if (isValidationOnly())
 			return;
@@ -342,7 +342,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	public void b07a_arrayOfOptionalIntegers() throws Exception {
 		B07 x = new B07();
 		x.f1 = new Optional[]{optional(123)};
-		x.f2 = new List[]{list(123)};
+		x.f2 = new List[]{alist(123)};
 		x = roundTrip(x);
 		assertEquals(123, x.f1[0].get().intValue());
 	}

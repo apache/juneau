@@ -72,7 +72,7 @@ public class BasicCsvArrayHeader_Test {
 
 	@Test
 	public void a02_contains() throws Exception {
-		BasicCsvArrayHeader x = new BasicCsvArrayHeader("Foo", list(null,"bar","baz"));
+		BasicCsvArrayHeader x = new BasicCsvArrayHeader("Foo", alist(null,"bar","baz"));
 		assertBoolean(x.contains(null)).isFalse();
 		assertBoolean(x.containsIgnoreCase(null)).isFalse();
 		assertBoolean(x.contains("bar")).isTrue();
@@ -91,7 +91,7 @@ public class BasicCsvArrayHeader_Test {
 
 	@Test
 	public void a03_assertList() throws Exception {
-		csvArrayHeader("Foo", list("bar")).assertList().contains("bar").assertList().doesNotContain("baz");
+		csvArrayHeader("Foo", alist("bar")).assertList().contains("bar").assertList().doesNotContain("baz");
 		new BasicCsvArrayHeader("Foo", (String)null).assertList().isNull();
 	}
 

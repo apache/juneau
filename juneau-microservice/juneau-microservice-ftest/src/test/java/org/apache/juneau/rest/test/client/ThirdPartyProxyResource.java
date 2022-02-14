@@ -1290,7 +1290,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet implements BasicUn
 
 	@RestGet(path="/returnBean1d3dList")
 	public List<ABean[][][]> returnBean1d3dList() {
-		return list(new ABean[][][]{{{ABean.get(),null},null},null},null);
+		return alist(new ABean[][][]{{{ABean.get(),null},null},null},null);
 	}
 
 	@RestGet(path="/returnBeanMap")
@@ -1305,7 +1305,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet implements BasicUn
 
 	@RestGet(path="/returnBean1d3dListMap")
 	public Map<String,List<ABean[][][]>> returnBean1d3dListMap() {
-		return map("foo", list(new ABean[][][]{{{ABean.get(),null},null},null},null));
+		return map("foo", alist(new ABean[][][]{{{ABean.get(),null},null},null},null));
 	}
 
 	@RestGet(path="/returnBeanListMapIntegerKeys")
@@ -1413,17 +1413,17 @@ public class ThirdPartyProxyResource extends BasicRestServlet implements BasicUn
 
 	@RestGet(path="/returnEnumList")
 	public List<TestEnum> returnEnumList() {
-		return list(TestEnum.TWO,null);
+		return alist(TestEnum.TWO,null);
 	}
 
 	@RestGet(path="/returnEnum3dList")
 	public List<List<List<TestEnum>>> returnEnum3dList() {
-		return list(list(list(TestEnum.TWO,null),null),null);
+		return alist(alist(alist(TestEnum.TWO,null),null),null);
 	}
 
 	@RestGet(path="/returnEnum1d3dList")
 	public List<TestEnum[][][]> returnEnum1d3dList() {
-		return list(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null);
+		return alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null);
 	}
 
 	@RestGet(path="/returnEnumMap")
@@ -1438,7 +1438,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet implements BasicUn
 
 	@RestGet(path="/returnEnum1d3dListMap")
 	public Map<TestEnum,List<TestEnum[][][]>> returnEnum1d3dListMap() {
-		return map(TestEnum.ONE,list(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
+		return map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

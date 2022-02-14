@@ -218,7 +218,7 @@ public class AnyAssertion_Test {
 
 	@Test
 	public void bb12_asCollection() throws Exception {
-		List<Integer> x1 = list(1), nil = null;
+		List<Integer> x1 = alist(1), nil = null;
 		Object x2 = "";
 		test(x1).asCollection().isString("[1]");
 		test(nil).asCollection().isNull();
@@ -227,7 +227,7 @@ public class AnyAssertion_Test {
 
 	@Test
 	public void bb13_asCollection_wType() throws Exception {
-		List<Integer> x1 = list(1), nil = null;
+		List<Integer> x1 = alist(1), nil = null;
 		Object x2 = "";
 		test(x1).asCollection(Integer.class).isString("[1]");
 		test(nil).asCollection(Integer.class).isNull();
@@ -273,7 +273,7 @@ public class AnyAssertion_Test {
 
 	@Test
 	public void bb18_asList() throws Exception {
-		List<Integer> x1 = list(1), nil = null;
+		List<Integer> x1 = alist(1), nil = null;
 		Object x2 = "";
 		test(x1).asList().isString("[1]");
 		test(nil).asList().isNull();
@@ -282,7 +282,7 @@ public class AnyAssertion_Test {
 
 	@Test
 	public void bb19_asList_wType() throws Exception {
-		List<Integer> x1 = list(1), nil = null;
+		List<Integer> x1 = alist(1), nil = null;
 		Object x2 = "";
 		test(x1).asList(Integer.class).isString("[1]");
 		test(nil).asList(Integer.class).isNull();
@@ -329,7 +329,7 @@ public class AnyAssertion_Test {
 
 	@Test
 	public void bb24_asBeanList() throws Exception {
-		List<A1> x1 = list(A1), nil = null;
+		List<A1> x1 = alist(A1), nil = null;
 		Object x2 = "";
 		test(x1).asBeanList(A1.class).isString("[a=1,b=2]");
 		test(nil).asBeanList(A1.class).isNull();
@@ -348,7 +348,7 @@ public class AnyAssertion_Test {
 
 	@Test
 	public void bb26_asStringList() throws Exception {
-		List<String> x1 = list("1"), nil = null;
+		List<String> x1 = alist("1"), nil = null;
 		Object x2 = "";
 		test(x1).asStringList().isString("[1]");
 		test(nil).asStringList().isNull();

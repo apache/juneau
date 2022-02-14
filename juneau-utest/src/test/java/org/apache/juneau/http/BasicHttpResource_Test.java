@@ -137,7 +137,7 @@ public class BasicHttpResource_Test {
 
 	@Test
 	public void a04_headers_List() throws Exception {
-		HeaderList x = stringResource("foo").headers(list(header("Foo","bar"),header("Foo","baz"),header(null,"bar"),header("Bar",null),null)).build().getHeaders();
+		HeaderList x = stringResource("foo").headers(alist(header("Foo","bar"),header("Foo","baz"),header(null,"bar"),header("Bar",null),null)).build().getHeaders();
 		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
 		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
 		assertObject(x.getFirst("Bar").get().getValue()).isNull();

@@ -81,8 +81,8 @@ import org.apache.juneau.serializer.*;
 public class AutoMapSwap<T> extends ObjectSwap<T,Map<?,?>> {
 
 	private static final Set<String>
-		SWAP_METHOD_NAMES = unmodifiableSet("toMap", "toObjectMap", "toOMap"),
-		UNSWAP_METHOD_NAMES = unmodifiableSet("fromMap", "fromObjectMap", "fromOMap", "create", "valueOf");
+		SWAP_METHOD_NAMES = uset("toMap", "toObjectMap", "toOMap"),
+		UNSWAP_METHOD_NAMES = uset("fromMap", "fromObjectMap", "fromOMap", "create", "valueOf");
 
 	/**
 	 * Look for constructors and methods on this class and construct a dynamic swap if it's possible to do so.

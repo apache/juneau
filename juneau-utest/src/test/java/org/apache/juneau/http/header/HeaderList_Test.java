@@ -76,7 +76,7 @@ public class HeaderList_Test {
 		x = headerList(FOO_1, FOO_2, null);
 		assertObject(x).isString("[Foo: 1, Foo: 2]");
 
-		x = headerList(list(FOO_1, FOO_2, null));
+		x = headerList(alist(FOO_1, FOO_2, null));
 		assertObject(x).isString("[Foo: 1, Foo: 2]");
 
 		x = headerList("Foo","1","Foo","2");
@@ -90,7 +90,7 @@ public class HeaderList_Test {
 		x = HeaderList.of(Collections.emptyList());
 		assertObject(x).isString("[]");
 
-		x = HeaderList.of(list(FOO_1));
+		x = HeaderList.of(alist(FOO_1));
 		assertObject(x).isString("[Foo: 1]");
 
 		x = HeaderList.of((Header[])null);
@@ -328,7 +328,7 @@ public class HeaderList_Test {
 			.append("Bar", "b1")
 			.append("Bar", ()->"b2")
 			.append((List<Header>)null)
-			.append(list(FOO_4))
+			.append(alist(FOO_4))
 			.build();
 		assertObject(x2).isString("[Foo: 1, Foo: 2, Foo: 3, Bar: b1, Bar: b2, Foo: 4]");
 	}
@@ -347,7 +347,7 @@ public class HeaderList_Test {
 			.prepend("Bar", "b1")
 			.prepend("Bar", ()->"b2")
 			.prepend((List<Header>)null)
-			.prepend(list(FOO_4))
+			.prepend(alist(FOO_4))
 			.build();
 		assertObject(x2).isString("[Foo: 4, Bar: b2, Bar: b1, Foo: 2, Foo: 3, Foo: 1]");
 	}
@@ -362,7 +362,7 @@ public class HeaderList_Test {
 			.remove(HeaderList.of(FOO_1))
 			.remove(FOO_2)
 			.remove(FOO_3, FOO_4)
-			.remove(list(FOO_5))
+			.remove(alist(FOO_5))
 			.build();
 		assertObject(x).isString("[Foo: 6, Foo: 7]");
 
@@ -403,7 +403,7 @@ public class HeaderList_Test {
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
 			.set((List<Header>)null)
-			.set(list(null,FOO_3,FOO_4,FOO_5))
+			.set(alist(null,FOO_3,FOO_4,FOO_5))
 			.build();
 		assertObject(x).isString("[Bar: 1, Bar: 2, Foo: 3, Foo: 4, Foo: 5]");
 
@@ -516,16 +516,16 @@ public class HeaderList_Test {
 		HeaderList x11 = HeaderList.create().setDefault("Accept",()->"text/xml").build();
 		assertObject(x11).isString("[Accept: text/xml]");
 
-		HeaderList x12 = HeaderList.create().set(ContentType.TEXT_XML,ContentType.TEXT_PLAIN).setDefault(list(Accept.TEXT_XML,ContentType.TEXT_HTML,null)).build();
+		HeaderList x12 = HeaderList.create().set(ContentType.TEXT_XML,ContentType.TEXT_PLAIN).setDefault(alist(Accept.TEXT_XML,ContentType.TEXT_HTML,null)).build();
 		assertObject(x12).isString("[Content-Type: text/xml, Content-Type: text/plain, Accept: text/xml]");
 
 		HeaderList x13 = HeaderList.create().set(ContentType.TEXT_XML,ContentType.TEXT_PLAIN).setDefault(HeaderList.of(Accept.TEXT_XML,ContentType.TEXT_HTML,null)).build();
 		assertObject(x13).isString("[Content-Type: text/xml, Content-Type: text/plain, Accept: text/xml]");
 
 		HeaderList x14 = HeaderList.create().set(ContentType.TEXT_XML,ContentType.TEXT_PLAIN)
-			.setDefault(list(Accept.TEXT_XML,ContentType.TEXT_HTML,null))
-			.setDefault(list(Accept.TEXT_HTML,ContentType.TEXT_XML,null))
-			.setDefault(list(Age.of(1)))
+			.setDefault(alist(Accept.TEXT_XML,ContentType.TEXT_HTML,null))
+			.setDefault(alist(Accept.TEXT_HTML,ContentType.TEXT_XML,null))
+			.setDefault(alist(Age.of(1)))
 			.build();
 		assertObject(x14).isString("[Content-Type: text/xml, Content-Type: text/plain, Accept: text/html, Age: 1]");
 	}

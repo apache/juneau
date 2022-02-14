@@ -26,32 +26,12 @@ import java.util.function.*;
 public final class CollectionUtils {
 
 	/**
-	 * Creates a new list from the specified collection.
-	 *
-	 * @param val The value to copy from.
-	 * @return A new {@link ArrayList}, or <jk>null</jk> if the input was null.
-	 */
-	public static <T> List<T> newList(Collection<T> val) {
-		return val == null ? null : new ArrayList<>(val);
-	}
-
-	/**
-	 * Creates a new list from the specified collection.
-	 *
-	 * @param val The value to copy from.
-	 * @return A new {@link ArrayList}, or <jk>null</jk> if the input was null.
-	 */
-	public static <T> List<T> newList(List<T> val) {
-		return val == null ? null : new ArrayList<>(val);
-	}
-
-	/**
 	 * Creates a new set from the specified collection.
 	 *
 	 * @param val The value to copy from.
 	 * @return A new {@link LinkedHashSet}, or <jk>null</jk> if the input was null.
 	 */
-	public static <T> Set<T> newSet(Collection<T> val) {
+	public static <T> Set<T> setFrom(Collection<T> val) {
 		return val == null ? null : new LinkedHashSet<>(val);
 	}
 
@@ -61,7 +41,7 @@ public final class CollectionUtils {
 	 * @param val The value to copy from.
 	 * @return A new {@link LinkedHashSet}, or <jk>null</jk> if the input was null.
 	 */
-	public static <T> Set<T> newSet(Set<T> val) {
+	public static <T> Set<T> copyOf(Set<T> val) {
 		return val == null ? null : new LinkedHashSet<>(val);
 	}
 
@@ -71,7 +51,7 @@ public final class CollectionUtils {
 	 * @param val The value to copy from.
 	 * @return A new {@link LinkedHashMap}, or <jk>null</jk> if the input was null.
 	 */
-	public static <K,V> Map<K,V> newMap(Map<K,V> val) {
+	public static <K,V> Map<K,V> copyOf(Map<K,V> val) {
 		return val == null ? null : new LinkedHashMap<>(val);
 	}
 
@@ -163,12 +143,25 @@ public final class CollectionUtils {
 	}
 
 	/**
+	 * Convenience method for creating an array-backed list by calling {@link Arrays#asList(Object...)}.
+	 *
+	 * @param values The values to initialize the list with.
+	 * @return A new modifiable list.
+	 */
+	@SafeVarargs
+	public static <T> List<T> alist(T...values) {
+		return Arrays.asList(values);
+	}
+
+	/**
 	 * Creates an {@link ArrayList} copy from a collection.
 	 *
 	 * @param value The collection to copy from.
 	 * @return A new modifiable list.
 	 */
 	public static <T> ArrayList<T> listFrom(Collection<T> value) {
+		if (value == null)
+			return null;
 		ArrayList<T> l = new ArrayList<>();
 		value.forEach(x -> l.add(x));
 		return l;
@@ -192,11 +185,22 @@ public final class CollectionUtils {
 	 * Convenience method for creating an unmodifiable {@link LinkedHashSet}.
 	 *
 	 * @param values The values to initialize the set with.
-	 * @return A new modifiable set.
+	 * @return A new unmodifiable set.
 	 */
 	@SafeVarargs
-	public static <T> Set<T> unmodifiableSet(T...values) {
+	public static <T> Set<T> uset(T...values) {
 		return unmodifiable(set(values));
+	}
+
+	/**
+	 * Convenience method for creating an unmodifiable list.
+	 *
+	 * @param values The values to initialize the list with.
+	 * @return A new unmodifiable list.
+	 */
+	@SafeVarargs
+	public static <T> List<T> ulist(T...values) {
+		return unmodifiable(alist(values));
 	}
 
 	/**
@@ -278,11 +282,7 @@ public final class CollectionUtils {
 	 * @return A new modifiable list.
 	 */
 	public static <T> ArrayList<T> copyOf(List<T> value) {
-		if (value == null)
-			return null;
-		ArrayList<T> l2 = new ArrayList<>();
-		value.forEach(x -> l2.add(x));
-		return l2;
+		return value == null ? null : new ArrayList<>(value);
 	}
 
 	/**

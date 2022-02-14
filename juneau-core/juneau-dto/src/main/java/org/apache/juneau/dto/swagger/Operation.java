@@ -160,15 +160,15 @@ public class Operation extends SwaggerElement {
 	public Operation(Operation copyFrom) {
 		super(copyFrom);
 
-		this.consumes = newSet(copyFrom.consumes);
+		this.consumes = copyOf(copyFrom.consumes);
 		this.deprecated = copyFrom.deprecated;
 		this.description = copyFrom.description;
 		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
 		this.operationId = copyFrom.operationId;
-		this.produces = newSet(copyFrom.produces);
-		this.schemes = newSet(copyFrom.schemes);
+		this.produces = copyOf(copyFrom.produces);
+		this.schemes = copyOf(copyFrom.schemes);
 		this.summary = copyFrom.summary;
-		this.tags = newSet(copyFrom.tags);
+		this.tags = copyOf(copyFrom.tags);
 
 		if (copyFrom.parameters == null) {
 			this.parameters = null;
@@ -193,7 +193,7 @@ public class Operation extends SwaggerElement {
 			for (Map<String,List<String>> m : copyFrom.security) {
 				Map<String,List<String>> m2 = new LinkedHashMap<>();
 				for (Map.Entry<String,List<String>> e : m.entrySet())
-					m2.put(e.getKey(), newList(e.getValue()));
+					m2.put(e.getKey(), copyOf(e.getValue()));
 				this.security.add(m2);
 			}
 		}
@@ -236,7 +236,7 @@ public class Operation extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setConsumes(Collection<MediaType> value) {
-		consumes = newSet(value);
+		consumes = setFrom(value);
 	}
 
 	/**
@@ -668,7 +668,7 @@ public class Operation extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setParameters(Collection<ParameterInfo> value) {
-		parameters = newList(value);
+		parameters = listFrom(value);
 	}
 
 	/**
@@ -771,7 +771,7 @@ public class Operation extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setProduces(Collection<MediaType> value) {
-		produces = newSet(value);
+		produces = setFrom(value);
 	}
 
 	/**
@@ -905,7 +905,7 @@ public class Operation extends SwaggerElement {
 	 * 	<br>Property value is required.
 	 */
 	public void setResponses(Map<String,ResponseInfo> value) {
-		responses = newMap(value);
+		responses = copyOf(value);
 	}
 
 	/**
@@ -1015,7 +1015,7 @@ public class Operation extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setSchemes(Collection<String> value) {
-		schemes = newSet(value);
+		schemes = setFrom(value);
 	}
 
 	/**
@@ -1103,7 +1103,7 @@ public class Operation extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setSecurity(Collection<Map<String,List<String>>> value) {
-		security = newList(value);
+		security = listFrom(value);
 	}
 
 	/**
@@ -1276,7 +1276,7 @@ public class Operation extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setTags(Collection<String> value) {
-		tags = newSet(value);
+		tags = setFrom(value);
 	}
 
 	/**

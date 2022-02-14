@@ -97,7 +97,7 @@ public class ResponseInfo_Test {
 	public void a04_examples() {
 		ResponseInfo t = new ResponseInfo();
 
-		t.examples(map("foo","bar","baz",list("qux")));
+		t.examples(map("foo","bar","baz",alist("qux")));
 		assertOptional(t.examples()).isType(Map.class).asJson().is("{foo:'bar',baz:['qux']}");
 
 		t.examples(map());
@@ -106,7 +106,7 @@ public class ResponseInfo_Test {
 		t.examples((Map<String,Object>)null);
 		assertOptional(t.examples()).isNull();
 
-		t.addExamples(map("foo","bar","baz",list("qux")));
+		t.addExamples(map("foo","bar","baz",alist("qux")));
 		assertOptional(t.examples()).isType(Map.class).asJson().is("{foo:'bar',baz:['qux']}");
 
 		t.addExamples(map());
@@ -132,7 +132,7 @@ public class ResponseInfo_Test {
 
 		t
 			.set("description", "a")
-			.set("examples", map("foo","bar","baz",list("qux")))
+			.set("examples", map("foo","bar","baz",alist("qux")))
 			.set("headers", map("a", headerInfo("a1")))
 			.set("schema", schemaInfo().type("d"))
 			.set("$ref", "ref");
@@ -189,7 +189,7 @@ public class ResponseInfo_Test {
 
 		t
 			.set("description", "a")
-			.set("examples", map("foo","bar","baz",list("qux")))
+			.set("examples", map("foo","bar","baz",alist("qux")))
 			.set("headers", map("a", headerInfo("a1")))
 			.set("schema", schemaInfo().type("d"))
 			.set("$ref", "ref")
@@ -206,7 +206,7 @@ public class ResponseInfo_Test {
 
 		t
 			.set("description", "a")
-			.set("examples", map("foo","bar","baz",list("qux")))
+			.set("examples", map("foo","bar","baz",alist("qux")))
 			.set("headers", map("a", headerInfo("a1")))
 			.set("schema", schemaInfo().type("d"))
 			.set("$ref", "ref");

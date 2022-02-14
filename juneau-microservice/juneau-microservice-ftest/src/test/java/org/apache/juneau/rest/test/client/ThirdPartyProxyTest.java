@@ -137,10 +137,10 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			new int[][][]{{{1,2},null},null},
 			new Integer[][][]{{{1,null},null},null},
 			new String[][][]{{{"foo",null},null},null},
-			list(1,null),
-			list(list(list(1,null),null),null),
-			list(new Integer[][][]{{{1,null},null},null},null),
-			list(new int[][][]{{{1,2},null},null},null),
+			alist(1,null),
+			alist(alist(alist(1,null),null),null),
+			alist(new Integer[][][]{{{1,null},null},null},null),
+			alist(new int[][][]{{{1,2},null},null},null),
 			Arrays.asList("foo","bar",null)
 		);
 		assertEquals("OK", r);
@@ -152,11 +152,11 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			ABean.get(),
 			null,
 			new ABean[][][]{{{ABean.get(),null},null},null},
-			list(ABean.get(),null),
-			list(new ABean[][][]{{{ABean.get(),null},null},null},null),
+			alist(ABean.get(),null),
+			alist(new ABean[][][]{{{ABean.get(),null},null},null},null),
 			map("foo",ABean.get()),
 			map("foo",Arrays.asList(ABean.get())),
-			map("foo",list(new ABean[][][]{{{ABean.get(),null},null},null},null)),
+			map("foo",alist(new ABean[][][]{{{ABean.get(),null},null},null},null)),
 			map(1,Arrays.asList(ABean.get()))
 		);
 		assertEquals("OK", r);
@@ -169,11 +169,11 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			TypedBeanImpl.get(),
 			null,
 			new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},
-			list(TypedBeanImpl.get(),null),
-			list(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null),
+			alist(TypedBeanImpl.get(),null),
+			alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null),
 			map("foo",TypedBeanImpl.get()),
 			map("foo",Arrays.asList((TypedBean)TypedBeanImpl.get())),
-			map("foo",list(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)),
+			map("foo",alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)),
 			map(1,Arrays.asList((TypedBean)TypedBeanImpl.get()))
 		);
 		assertEquals("OK", r);
@@ -207,12 +207,12 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			TestEnum.TWO,
 			null,
 			new TestEnum[][][]{{{TestEnum.TWO,null},null},null},
-			list(TestEnum.TWO,null),
-			list(list(list(TestEnum.TWO,null),null),null),
-			list(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null),
+			alist(TestEnum.TWO,null),
+			alist(alist(alist(TestEnum.TWO,null),null),null),
+			alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null),
 			map(TestEnum.ONE,TestEnum.TWO),
 			map(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null}),
-			map(TestEnum.ONE,list(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))
+			map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))
 		);
 		assertEquals("OK", r);
 	}
@@ -266,10 +266,10 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			new int[][][]{{{1,2},null},null},
 			new Integer[][][]{{{1,null},null},null},
 			new String[][][]{{{"foo",null},null},null},
-			list(1,null),
-			list(list(list(1,null),null),null),
-			list(new Integer[][][]{{{1,null},null},null},null),
-			list(new int[][][]{{{1,2},null},null},null),
+			alist(1,null),
+			alist(alist(alist(1,null),null),null),
+			alist(new Integer[][][]{{{1,null},null},null},null),
+			alist(new int[][][]{{{1,2},null},null},null),
 			Arrays.asList("foo","bar",null)
 		);
 		assertEquals("OK", r);
@@ -281,11 +281,11 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			ABean.get(),
 			null,
 			new ABean[][][]{{{ABean.get(),null},null},null},
-			list(ABean.get(),null),
-			list(new ABean[][][]{{{ABean.get(),null},null},null},null),
+			alist(ABean.get(),null),
+			alist(new ABean[][][]{{{ABean.get(),null},null},null},null),
 			map("foo",ABean.get()),
 			map("foo",Arrays.asList(ABean.get())),
-			map("foo",list(new ABean[][][]{{{ABean.get(),null},null},null},null)),
+			map("foo",alist(new ABean[][][]{{{ABean.get(),null},null},null},null)),
 			map(1,Arrays.asList(ABean.get()))
 		);
 		assertEquals("OK", r);
@@ -298,11 +298,11 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			TypedBeanImpl.get(),
 			null,
 			new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},
-			list(TypedBeanImpl.get(),null),
-			list(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null),
+			alist(TypedBeanImpl.get(),null),
+			alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null),
 			map("foo",TypedBeanImpl.get()),
 			map("foo",Arrays.asList((TypedBean)TypedBeanImpl.get())),
-			map("foo",list(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)),
+			map("foo",alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)),
 			map(1,Arrays.asList((TypedBean)TypedBeanImpl.get()))
 		);
 		assertEquals("OK", r);
@@ -336,12 +336,12 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			TestEnum.TWO,
 			null,
 			new TestEnum[][][]{{{TestEnum.TWO,null},null},null},
-			list(TestEnum.TWO,null),
-			list(list(list(TestEnum.TWO,null),null),null),
-			list(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null),
+			alist(TestEnum.TWO,null),
+			alist(alist(alist(TestEnum.TWO,null),null),null),
+			alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null),
 			map(TestEnum.ONE,TestEnum.TWO),
 			map(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null}),
-			map(TestEnum.ONE,list(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))
+			map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))
 		);
 		assertEquals("OK", r);
 	}
@@ -407,10 +407,10 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			new int[][][]{{{1,2},null},null},
 			new Integer[][][]{{{1,null},null},null},
 			new String[][][]{{{"foo",null},null},null},
-			list(1,null),
-			list(list(list(1,null),null),null),
-			list(new Integer[][][]{{{1,null},null},null},null),
-			list(new int[][][]{{{1,2},null},null},null),
+			alist(1,null),
+			alist(alist(alist(1,null),null),null),
+			alist(new Integer[][][]{{{1,null},null},null},null),
+			alist(new int[][][]{{{1,2},null},null},null),
 			Arrays.asList("foo","bar",null)
 		);
 		assertEquals("OK", r);
@@ -422,11 +422,11 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			ABean.get(),
 			null,
 			new ABean[][][]{{{ABean.get(),null},null},null},
-			list(ABean.get(),null),
-			list(new ABean[][][]{{{ABean.get(),null},null},null},null),
+			alist(ABean.get(),null),
+			alist(new ABean[][][]{{{ABean.get(),null},null},null},null),
 			map("foo",ABean.get()),
 			map("foo",Arrays.asList(ABean.get())),
-			map("foo",list(new ABean[][][]{{{ABean.get(),null},null},null},null)),
+			map("foo",alist(new ABean[][][]{{{ABean.get(),null},null},null},null)),
 			map(1,Arrays.asList(ABean.get()))
 		);
 		assertEquals("OK", r);
@@ -439,11 +439,11 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			TypedBeanImpl.get(),
 			null,
 			new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},
-			list(TypedBeanImpl.get(),null),
-			list(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null),
+			alist(TypedBeanImpl.get(),null),
+			alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null),
 			map("foo",TypedBeanImpl.get()),
 			map("foo",Arrays.asList((TypedBean)TypedBeanImpl.get())),
-			map("foo",list(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)),
+			map("foo",alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)),
 			map(1,Arrays.asList((TypedBean)TypedBeanImpl.get()))
 		);
 		assertEquals("OK", r);
@@ -477,12 +477,12 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			TestEnum.TWO,
 			null,
 			new TestEnum[][][]{{{TestEnum.TWO,null},null},null},
-			list(TestEnum.TWO,null),
-			list(list(list(TestEnum.TWO,null),null),null),
-			list(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null),
+			alist(TestEnum.TWO,null),
+			alist(alist(alist(TestEnum.TWO,null),null),null),
+			alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null),
 			map(TestEnum.ONE,TestEnum.TWO),
 			map(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null}),
-			map(TestEnum.ONE,list(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))
+			map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null))
 		);
 		assertEquals("OK", r);
 	}
@@ -919,22 +919,22 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 	@Test
 	public void ea13_setIntegerList() {
-		proxy.setIntegerList(list(1,null));
+		proxy.setIntegerList(alist(1,null));
 	}
 
 	@Test
 	public void ea14_setInteger3dList() {
-		proxy.setInteger3dList(list(list(list(1,null),null),null));
+		proxy.setInteger3dList(alist(alist(alist(1,null),null),null));
 	}
 
 	@Test
 	public void ea15_setInteger1d3dList() {
-		proxy.setInteger1d3dList(list(new Integer[][][]{{{1,null},null},null},null));
+		proxy.setInteger1d3dList(alist(new Integer[][][]{{{1,null},null},null},null));
 	}
 
 	@Test
 	public void ea16_setInt1d3dList() {
-		proxy.setInt1d3dList(list(new int[][][]{{{1,2},null},null},null));
+		proxy.setInt1d3dList(alist(new int[][][]{{{1,2},null},null},null));
 	}
 
 	@Test
@@ -960,7 +960,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 	@Test
 	public void eb04_setBean1d3dList() {
-		proxy.setBean1d3dList(list(new ABean[][][]{{{ABean.get(),null},null},null},null));
+		proxy.setBean1d3dList(alist(new ABean[][][]{{{ABean.get(),null},null},null},null));
 	}
 
 	@Test
@@ -975,7 +975,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 	@Test
 	public void eb07_setBean1d3dListMap() {
-		proxy.setBean1d3dListMap(map("foo",list(new ABean[][][]{{{ABean.get(),null},null},null},null)));
+		proxy.setBean1d3dListMap(map("foo",alist(new ABean[][][]{{{ABean.get(),null},null},null},null)));
 	}
 
 	@Test
@@ -1002,7 +1002,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 	@Test
 	public void ec04_setTypedBean1d3dList() {
-		proxy.setTypedBean1d3dList(list(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null));
+		proxy.setTypedBean1d3dList(alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null));
 	}
 
 	@Test
@@ -1017,7 +1017,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 	@Test
 	public void ec07_setTypedBean1d3dListMap() {
-		proxy.setTypedBean1d3dListMap(map("foo",list(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)));
+		proxy.setTypedBean1d3dListMap(map("foo",alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)));
 	}
 
 	@Test
@@ -1082,17 +1082,17 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 	@Test
 	public void ef03_setEnumList() {
-		proxy.setEnumList(list(TestEnum.TWO,null));
+		proxy.setEnumList(alist(TestEnum.TWO,null));
 	}
 
 	@Test
 	public void ef04_setEnum3dList() {
-		proxy.setEnum3dList(list(list(list(TestEnum.TWO,null),null),null));
+		proxy.setEnum3dList(alist(alist(alist(TestEnum.TWO,null),null),null));
 	}
 
 	@Test
 	public void ef05_setEnum1d3dList() {
-		proxy.setEnum1d3dList(list(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
+		proxy.setEnum1d3dList(alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
 	}
 
 	@Test
@@ -1107,7 +1107,7 @@ public class ThirdPartyProxyTest extends RestTestcase {
 
 	@Test
 	public void ef08_setEnum1d3dListMap() {
-		proxy.setEnum1d3dListMap(map(TestEnum.ONE,list(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
+		proxy.setEnum1d3dListMap(map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

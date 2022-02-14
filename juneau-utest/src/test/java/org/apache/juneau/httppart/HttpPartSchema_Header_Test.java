@@ -887,8 +887,8 @@ public class HttpPartSchema_Header_Test {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Header.class, D01.class).build();
 
 		List<String>
-			good = list("a","b"),
-			bad = list("a","a");
+			good = alist("a","b"),
+			bad = alist("a","a");
 
 		s.getItems().validateOutput(good, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(good, BeanContext.DEFAULT);

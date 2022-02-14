@@ -116,8 +116,8 @@ public class Remote_FormDataAnnotation_Test {
 		assertEquals("{f:'1'}",x.postX5(Bean.create()));
 		assertEquals("{x:'f=1,f=1'}",x.postX6(new Bean[]{Bean.create(),Bean.create()}));
 		assertEquals("{x:'@((f=1),(f=1))'}",x.postX7(new Bean[]{Bean.create(),Bean.create()}));
-		assertEquals("{x:'f=1,f=1'}",x.postX8(list(Bean.create(),Bean.create())));
-		assertEquals("{x:'@((f=1),(f=1))'}",x.postX9(list(Bean.create(),Bean.create())));
+		assertEquals("{x:'f=1,f=1'}",x.postX8(alist(Bean.create(),Bean.create())));
+		assertEquals("{x:'@((f=1),(f=1))'}",x.postX9(alist(Bean.create(),Bean.create())));
 		assertEquals("{x:'k1=f\\\\=1'}",x.postX10(map("k1",Bean.create())));
 		assertEquals("{k1:'f=1'}",x.postX11(map("k1",Bean.create())));
 		assertEquals("{k1:'f=1'}",x.postX12(map("k1",Bean.create())));
@@ -135,7 +135,7 @@ public class Remote_FormDataAnnotation_Test {
 		assertEquals("{foo:'bar'}",x.postX23(inputStream("foo=bar")));
 		assertEquals("{foo:'bar'}",x.postX24(reader("foo=bar")));
 		assertEquals("{f:'1'}",x.postX25(Bean2.create()));
-		assertEquals("{foo:'bar'}",x.postX26(list(part("foo","bar"))));
+		assertEquals("{foo:'bar'}",x.postX26(alist(part("foo","bar"))));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -918,19 +918,19 @@ public class Remote_FormDataAnnotation_Test {
 	public static class K6a {
 		@FormData
 		public List<Object> getA() {
-			return list("foo","","true","123","null",true,123,null);
+			return alist("foo","","true","123","null",true,123,null);
 		}
 		@FormData("b")
 		public List<Object> getX1() {
-			return list("foo","","true","123","null",true,123,null);
+			return alist("foo","","true","123","null",true,123,null);
 		}
 		@FormData(name="c",serializer=MockWriterSerializer.X.class)
 		public List<Object> getX2() {
-			return list("foo","","true","123","null",true,123,null);
+			return alist("foo","","true","123","null",true,123,null);
 		}
 		@FormData("d") @Schema(aev=true)
 		public List<Object> getX3() {
-			return list();
+			return alist();
 		}
 		@FormData("e")
 		public List<Object> getX4() {

@@ -195,8 +195,8 @@ public class RoundTripEnumTest extends RoundTripTest {
 			f2 = AEnum.BAR;
 			f3 = new AEnum[]{AEnum.FOO,null};
 			f4 = new AEnum[][]{{AEnum.FOO,null},null};
-			f5 = list(AEnum.FOO);
-			f6 = list(AEnum.FOO);
+			f5 = alist(AEnum.FOO);
+			f6 = alist(AEnum.FOO);
 			f7 = set(AEnum.FOO);
 			f8 = set(AEnum.FOO);
 
@@ -237,8 +237,8 @@ public class RoundTripEnumTest extends RoundTripTest {
 			f2 = BEnum.BAR;
 			f3 = new BEnum[]{BEnum.FOO,null};
 			f4 = new BEnum[][]{{BEnum.FOO,null},null};
-			f5 = list(BEnum.FOO);
-			f6 = list(BEnum.FOO);
+			f5 = alist(BEnum.FOO);
+			f6 = alist(BEnum.FOO);
 			f7 = set(BEnum.FOO);
 			f8 = set(BEnum.FOO);
 

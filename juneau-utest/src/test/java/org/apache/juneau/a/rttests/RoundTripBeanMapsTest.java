@@ -94,7 +94,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testImplListClasses() throws Exception {
-		List<IBean> l = list(new CBean());
+		List<IBean> l = alist(new CBean());
 
 		l.get(0).setF1("bar");
 		l = roundTrip(l, List.class, IBean.class);

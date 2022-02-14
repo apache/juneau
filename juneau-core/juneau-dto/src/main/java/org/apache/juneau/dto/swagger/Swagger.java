@@ -81,12 +81,12 @@ public class Swagger extends SwaggerElement {
 		super(copyFrom);
 
 		this.basePath = copyFrom.basePath;
-		this.consumes = newSet(copyFrom.consumes);
+		this.consumes = copyOf(copyFrom.consumes);
 		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
 		this.host = copyFrom.host;
 		this.info = copyFrom.info == null ? null : copyFrom.info.copy();
-		this.produces = newSet(copyFrom.produces);
-		this.schemes = newSet(copyFrom.schemes);
+		this.produces = copyOf(copyFrom.produces);
+		this.schemes = copyOf(copyFrom.schemes);
 		this.swagger = copyFrom.swagger;
 
 		// TODO - Definitions are not deep copied, so they should not contain references.
@@ -133,7 +133,7 @@ public class Swagger extends SwaggerElement {
 			for (Map<String,List<String>> m : copyFrom.security) {
 				Map<String,List<String>> m2 = new LinkedHashMap<>();
 				for (Map.Entry<String,List<String>> e : m.entrySet())
-					m2.put(e.getKey(), newList(e.getValue()));
+					m2.put(e.getKey(), copyOf(e.getValue()));
 				this.security.add(m2);
 			}
 		}
@@ -256,7 +256,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setConsumes(Collection<MediaType> value) {
-		consumes = newSet(value);
+		consumes = setFrom(value);
 	}
 
 	/**
@@ -361,7 +361,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setDefinitions(Map<String,OMap> value) {
-		definitions = newMap(value);
+		definitions = copyOf(value);
 	}
 
 	/**
@@ -686,7 +686,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setParameters(Map<String,ParameterInfo> value) {
-		parameters = newMap(value);
+		parameters = copyOf(value);
 	}
 
 	/**
@@ -898,7 +898,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setProduces(Collection<MediaType> value) {
-		produces = newSet(value);
+		produces = setFrom(value);
 	}
 
 	/**
@@ -1003,7 +1003,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setResponses(Map<String,ResponseInfo> value) {
-		responses = newMap(value);
+		responses = copyOf(value);
 	}
 
 	/**
@@ -1113,7 +1113,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setSchemes(Collection<String> value) {
-		schemes = newSet(value);
+		schemes = setFrom(value);
 	}
 
 	/**
@@ -1209,7 +1209,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setSecurity(Collection<Map<String,List<String>>> value) {
-		security = newList(value);
+		security = listFrom(value);
 	}
 
 	/**
@@ -1315,7 +1315,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setSecurityDefinitions(Map<String,SecurityScheme> value) {
-		securityDefinitions = newMap(value);
+		securityDefinitions = copyOf(value);
 	}
 
 	/**
@@ -1480,7 +1480,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setTags(Collection<Tag> value) {
-		tags = newSet(value);
+		tags = setFrom(value);
 	}
 
 	/**

@@ -93,7 +93,7 @@ public class Version_Test {
 
 	@Test
 	public void a05_compareTo() {
-		List<Version> l = list(
+		List<Version> l = alist(
 			of("1.2.3"),
 			of("1.2"),
 			of(""),

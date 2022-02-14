@@ -458,7 +458,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setScopes(Map<String,String> value) {
-		scopes = newMap(value);
+		scopes = copyOf(value);
 	}
 
 	/**

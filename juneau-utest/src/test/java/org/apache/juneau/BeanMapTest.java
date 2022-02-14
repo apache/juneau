@@ -2076,7 +2076,7 @@ public class BeanMapTest {
 		AA aa = new AA();
 		BeanMap<AA> bm = BeanContext.DEFAULT.toBeanMap(aa);
 
-		bm.put("a", list("x"));
+		bm.put("a", alist("x"));
 		assertObject(aa.a).asJson().is("['x']");
 	}
 

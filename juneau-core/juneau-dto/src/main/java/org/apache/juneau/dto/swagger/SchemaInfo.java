@@ -115,11 +115,11 @@ public class SchemaInfo extends SwaggerElement {
 		super(copyFrom);
 
 		this.additionalProperties = copyFrom.additionalProperties == null ? null : copyFrom.additionalProperties.copy();
-		this.allOf = newSet(copyFrom.allOf);
+		this.allOf = copyOf(copyFrom.allOf);
 		this._default = copyFrom._default;
 		this.description = copyFrom.description;
 		this.discriminator = copyFrom.discriminator;
-		this._enum = newSet(copyFrom._enum);
+		this._enum = copyOf(copyFrom._enum);
 		this.example = copyFrom.example;
 		this.exclusiveMaximum = copyFrom.exclusiveMaximum;
 		this.exclusiveMinimum = copyFrom.exclusiveMinimum;
@@ -139,7 +139,7 @@ public class SchemaInfo extends SwaggerElement {
 		this.readOnly = copyFrom.readOnly;
 		this.ref = copyFrom.ref;
 		this.required = copyFrom.required;
-		this.requiredProperties = newSet(copyFrom.requiredProperties);
+		this.requiredProperties = copyOf(copyFrom.requiredProperties);
 		this.title = copyFrom.title;
 		this.type = copyFrom.type;
 		this.uniqueItems = copyFrom.uniqueItems;
@@ -243,7 +243,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setAllOf(Collection<Object> value) {
-		allOf = newSet(value);
+		allOf = setFrom(value);
 	}
 
 	/**
@@ -464,7 +464,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setEnum(Collection<Object> value) {
-		_enum = newSet(value);
+		_enum = setFrom(value);
 	}
 
 	/**
@@ -1475,7 +1475,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setProperties(Map<String,SchemaInfo> value) {
-		properties = newMap(value);
+		properties = copyOf(value);
 	}
 
 	/**
@@ -1710,7 +1710,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setRequiredProperties(Collection<String> value) {
-		requiredProperties = newSet(value);
+		requiredProperties = setFrom(value);
 	}
 
 	/**

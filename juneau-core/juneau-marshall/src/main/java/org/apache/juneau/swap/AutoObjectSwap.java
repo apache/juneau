@@ -83,8 +83,8 @@ import org.apache.juneau.serializer.*;
 public class AutoObjectSwap<T> extends ObjectSwap<T,Object> {
 
 	private static final Set<String>
-		SWAP_METHOD_NAMES = unmodifiableSet("swap", "toObject"),
-		UNSWAP_METHOD_NAMES = unmodifiableSet("unswap", "create", "fromObject", "of");
+		SWAP_METHOD_NAMES = uset("swap", "toObject"),
+		UNSWAP_METHOD_NAMES = uset("unswap", "create", "fromObject", "of");
 
 	/**
 	 * Inspects the specified class and returns a swap of this type if possible.

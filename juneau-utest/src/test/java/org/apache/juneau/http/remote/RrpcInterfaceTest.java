@@ -309,17 +309,17 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public List<List<List<Integer>>> returnInteger3dList() {
-					return list(list(list(1,null),null),null);
+					return alist(alist(alist(1,null),null),null);
 				}
 
 				@Override
 				public List<Integer[][][]> returnInteger1d3dList() {
-					return list(new Integer[][][]{{{1,null},null},null},null);
+					return alist(new Integer[][][]{{{1,null},null},null},null);
 				}
 
 				@Override
 				public List<int[][][]> returnInt1d3dList() {
-					return list(new int[][][]{{{1,2},null},null},null);
+					return alist(new int[][][]{{{1,2},null},null},null);
 				}
 
 				@Override
@@ -346,7 +346,7 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public List<ABean[][][]> returnBean1d3dList() {
-					return list(new ABean[][][]{{{ABean.get(),null},null},null},null);
+					return alist(new ABean[][][]{{{ABean.get(),null},null},null},null);
 				}
 
 				@Override
@@ -361,7 +361,7 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public Map<String,List<ABean[][][]>> returnBean1d3dListMap() {
-					return map("foo",list(new ABean[][][]{{{ABean.get(),null},null},null},null));
+					return map("foo",alist(new ABean[][][]{{{ABean.get(),null},null},null},null));
 				}
 
 				@Override
@@ -388,7 +388,7 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public List<TypedBean[][][]> returnTypedBean1d3dList() {
-					return list(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null);
+					return alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null);
 				}
 
 				@Override
@@ -403,7 +403,7 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public Map<String,List<TypedBean[][][]>> returnTypedBean1d3dListMap() {
-					return map("foo",list(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null));
+					return map("foo",alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null));
 				}
 
 				@Override
@@ -469,17 +469,17 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public List<TestEnum> returnEnumList() {
-					return list(TestEnum.TWO,null);
+					return alist(TestEnum.TWO,null);
 				}
 
 				@Override
 				public List<List<List<TestEnum>>> returnEnum3dList() {
-					return list(list(list(TestEnum.TWO,null),null),null);
+					return alist(alist(alist(TestEnum.TWO,null),null),null);
 				}
 
 				@Override
 				public List<TestEnum[][][]> returnEnum1d3dList() {
-					return list(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null);
+					return alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null);
 				}
 
 				@Override
@@ -494,7 +494,7 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public Map<TestEnum,List<TestEnum[][][]>> returnEnum1d3dListMap() {
-					return map(TestEnum.ONE,list(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
+					return map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
 				}
 
 				//--------------------------------------------------------------------------------
@@ -1366,26 +1366,26 @@ public class RrpcInterfaceTest {
 
 	@Test
 	public void h14_setIntegerList() {
-		proxy.setIntegerList(list(1,null));
+		proxy.setIntegerList(alist(1,null));
 	}
 
 	@Test
 	public void h15_setInteger3dList() {
 		proxy.setInteger3dList(
-			list(list(list(1,null),null),null));
+			alist(alist(alist(1,null),null),null));
 	}
 
 	@Test
 	public void h16_setInteger1d3dList() {
 		proxy.setInteger1d3dList(
-			list(new Integer[][][]{{{1,null},null},null},null)
+			alist(new Integer[][][]{{{1,null},null},null},null)
 		);
 	}
 
 	@Test
 	public void h17_setInt1d3dList() {
 		proxy.setInt1d3dList(
-			list(new int[][][]{{{1,2},null},null},null)
+			alist(new int[][][]{{{1,2},null},null},null)
 		);
 	}
 
@@ -1412,7 +1412,7 @@ public class RrpcInterfaceTest {
 
 	@Test
 	public void h22_setBean1d3dList() {
-		proxy.setBean1d3dList(list(new ABean[][][]{{{ABean.get(),null},null},null},null));
+		proxy.setBean1d3dList(alist(new ABean[][][]{{{ABean.get(),null},null},null},null));
 	}
 
 	@Test
@@ -1427,7 +1427,7 @@ public class RrpcInterfaceTest {
 
 	@Test
 	public void h25_setBean1d3dListMap() {
-		proxy.setBean1d3dListMap(map("foo",list(new ABean[][][]{{{ABean.get(),null},null},null},null)));
+		proxy.setBean1d3dListMap(map("foo",alist(new ABean[][][]{{{ABean.get(),null},null},null},null)));
 	}
 
 	@Test
@@ -1454,7 +1454,7 @@ public class RrpcInterfaceTest {
 
 	@Test
 	public void i04_setTypedBean1d3dList() {
-		proxy.setTypedBean1d3dList(list(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null));
+		proxy.setTypedBean1d3dList(alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null));
 	}
 
 	@Test
@@ -1469,7 +1469,7 @@ public class RrpcInterfaceTest {
 
 	@Test
 	public void i07_setTypedBean1d3dListMap() {
-		proxy.setTypedBean1d3dListMap(map("foo",list(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)));
+		proxy.setTypedBean1d3dListMap(map("foo",alist(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)));
 	}
 
 	@Test
@@ -1534,17 +1534,17 @@ public class RrpcInterfaceTest {
 
 	@Test
 	public void l03_setEnumList() {
-		proxy.setEnumList(list(TestEnum.TWO,null));
+		proxy.setEnumList(alist(TestEnum.TWO,null));
 	}
 
 	@Test
 	public void l04_setEnum3dList() {
-		proxy.setEnum3dList(list(list(list(TestEnum.TWO,null),null),null));
+		proxy.setEnum3dList(alist(alist(alist(TestEnum.TWO,null),null),null));
 	}
 
 	@Test
 	public void l05_setEnum1d3dList() {
-		proxy.setEnum1d3dList(list(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
+		proxy.setEnum1d3dList(alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
 	}
 
 	@Test
@@ -1559,7 +1559,7 @@ public class RrpcInterfaceTest {
 
 	@Test
 	public void l08_setEnum1d3dListMap() {
-		proxy.setEnum1d3dListMap(map(TestEnum.ONE,list(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
+		proxy.setEnum1d3dListMap(map(TestEnum.ONE,alist(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1571,7 +1571,7 @@ public class RrpcInterfaceTest {
 		int x1 = 1;
 		int[][][] x2 = new int[][][]{{{1,2},null},null};
 		int[][][] x2n = null;
-		List<int[][][]> x3 = list(x2,null);
+		List<int[][][]> x3 = alist(x2,null);
 		List<int[][][]> x3n = null;
 		proxy.setMultiParamsInts(x1,x2,x2n,x3,x3n);
 	}
@@ -1582,7 +1582,7 @@ public class RrpcInterfaceTest {
 		Integer x1n = null;
 		Integer[][][] x2 = new Integer[][][]{{{1,null},null},null};
 		Integer[][][] x2n = null;
-		List<Integer[][][]> x3 = list(x2,null);
+		List<Integer[][][]> x3 = alist(x2,null);
 		List<Integer[][][]> x3n = null;
 		proxy.setMultiParamsInteger(x1,x1n,x2,x2n,x3,x3n);
 	}
@@ -1592,7 +1592,7 @@ public class RrpcInterfaceTest {
 		float x1 = 1;
 		float[][][] x2 = new float[][][]{{{1,2},null},null};
 		float[][][] x2n = null;
-		List<float[][][]> x3 = list(x2,null);
+		List<float[][][]> x3 = alist(x2,null);
 		List<float[][][]> x3n = null;
 		proxy.setMultiParamsFloat(x1,x2,x2n,x3,x3n);
 	}
@@ -1603,7 +1603,7 @@ public class RrpcInterfaceTest {
 		Float x1n = null;
 		Float[][][] x2 = new Float[][][]{{{1f,null},null},null};
 		Float[][][] x2n = null;
-		List<Float[][][]> x3 = list(x2,null);
+		List<Float[][][]> x3 = alist(x2,null);
 		List<Float[][][]> x3n = null;
 		proxy.setMultiParamsFloatObject(x1,x1n,x2,x2n,x3,x3n);
 	}
@@ -1613,7 +1613,7 @@ public class RrpcInterfaceTest {
 		String x1 = "foo";
 		String[][][] x2 = new String[][][]{{{"foo",null},null},null};
 		String[][][] x2n = null;
-		List<String[][][]> x3 = list(x2,null);
+		List<String[][][]> x3 = alist(x2,null);
 		List<String[][][]> x3n = null;
 		proxy.setMultiParamsString(x1,x2,x2n,x3,x3n);
 	}
@@ -1623,7 +1623,7 @@ public class RrpcInterfaceTest {
 		ABean x1 = ABean.get();
 		ABean[][][] x2 = new ABean[][][]{{{ABean.get(),null},null},null};
 		ABean[][][] x2n = null;
-		List<ABean[][][]> x3 = list(x2,null);
+		List<ABean[][][]> x3 = alist(x2,null);
 		List<ABean[][][]> x3n = null;
 		Map<String,ABean> x4 = map("foo",ABean.get());
 		Map<String,ABean> x4n = null;
@@ -1637,7 +1637,7 @@ public class RrpcInterfaceTest {
 		SwappedObject x1 = new SwappedObject();
 		SwappedObject[][][] x2 = new SwappedObject[][][]{{{new SwappedObject(),null},null},null};
 		SwappedObject[][][] x2n = null;
-		List<SwappedObject[][][]> x3 = list(x2,null);
+		List<SwappedObject[][][]> x3 = alist(x2,null);
 		List<SwappedObject[][][]> x3n = null;
 		Map<SwappedObject,SwappedObject> x4 = map(new SwappedObject(),new SwappedObject());
 		Map<SwappedObject,SwappedObject> x4n = null;
@@ -1651,7 +1651,7 @@ public class RrpcInterfaceTest {
 		ImplicitSwappedObject x1 = new ImplicitSwappedObject();
 		ImplicitSwappedObject[][][] x2 = new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null};
 		ImplicitSwappedObject[][][] x2n = null;
-		List<ImplicitSwappedObject[][][]> x3 = list(x2,null);
+		List<ImplicitSwappedObject[][][]> x3 = alist(x2,null);
 		List<ImplicitSwappedObject[][][]> x3n = null;
 		Map<ImplicitSwappedObject,ImplicitSwappedObject> x4 = map(new ImplicitSwappedObject(),new ImplicitSwappedObject());
 		Map<ImplicitSwappedObject,ImplicitSwappedObject> x4n = null;
@@ -1665,7 +1665,7 @@ public class RrpcInterfaceTest {
 		TestEnum x1 = TestEnum.TWO;
 		TestEnum[][][] x2 = new TestEnum[][][]{{{TestEnum.TWO,null},null},null};
 		TestEnum[][][] x2n = null;
-		List<TestEnum[][][]> x3 = list(x2,null);
+		List<TestEnum[][][]> x3 = alist(x2,null);
 		List<TestEnum[][][]> x3n = null;
 		Map<TestEnum,TestEnum> x4 = map(TestEnum.ONE,TestEnum.TWO);
 		Map<TestEnum,TestEnum> x4n = null;

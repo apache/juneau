@@ -33,7 +33,7 @@ public class Upgrade_Test {
 
 	private static final String HEADER = "Upgrade";
 	private static final String VALUE = "foo";
-	private static final List<String> PARSED = list("foo");
+	private static final List<String> PARSED = alist("foo");
 
 	@Rest
 	public static class A {

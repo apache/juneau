@@ -126,7 +126,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				new ComboInput<>(
 					"SERIALIZER_sortCollections",
 					List.class,
-					unmodifiable(list("c","a","b"))
+					ulist("c","a","b")
 				)
 				.json("['a','b','c']")
 				.jsonT("['a','b','c']")
@@ -407,7 +407,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 	}
 
 	public static class T5 {
-		public List<String> f1 = list();
+		public List<String> f1 = alist();
 		public String[] f2 = {};
 	}
 

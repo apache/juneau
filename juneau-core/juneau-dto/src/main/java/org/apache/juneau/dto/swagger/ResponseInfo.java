@@ -218,7 +218,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setExamples(Map<String,Object> value) {
-		examples = newMap(value);
+		examples = copyOf(value);
 	}
 
 	/**
@@ -313,7 +313,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
 	public void setHeaders(Map<String,HeaderInfo> value) {
-		headers = newMap(value);
+		headers = copyOf(value);
 	}
 
 	/**

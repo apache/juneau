@@ -210,14 +210,14 @@ public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 			paDouble = new double[][]{{1},{2},null};
 
 			// Regular lists of primitives
-			plBoolean = list(new boolean[]{true}, null);
-			plByte = list(new byte[]{1}, null);
-			plChar = list(new char[]{'a'}, null);
-			plShort = list(new short[]{1}, null);
-			plInt =list(new int[]{1}, null);
-			plLong = list(new long[]{1}, null);
-			plFloat = list(new float[]{1}, null);
-			plDouble = list(new double[]{1}, null);
+			plBoolean = alist(new boolean[]{true}, null);
+			plByte = alist(new byte[]{1}, null);
+			plChar = alist(new char[]{'a'}, null);
+			plShort = alist(new short[]{1}, null);
+			plInt =alist(new int[]{1}, null);
+			plLong = alist(new long[]{1}, null);
+			plFloat = alist(new float[]{1}, null);
+			plDouble = alist(new double[]{1}, null);
 
 			// Anonymous list of primitives
 			palBoolean = new ArrayList<>();
@@ -253,7 +253,7 @@ public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testPrimitivesBeanList() throws Exception {
-		List<PrimitivesBean> t = list(new PrimitivesBean().init(), null, new PrimitivesBean().init());
+		List<PrimitivesBean> t = alist(new PrimitivesBean().init(), null, new PrimitivesBean().init());
 		if (p == null)
 			return;
 		t = roundTrip(t, List.class, PrimitivesBean.class);

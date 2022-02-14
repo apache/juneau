@@ -167,7 +167,7 @@ public class MediaRanges_FindMatch_Test {
 	public void test() throws Exception {
 		Accept accept = accept(this.accept);
 		MediaType[] mt = JsonParser.DEFAULT.parse(mediaTypes, MediaType[].class);
-		int r = accept.match(list(mt));
+		int r = accept.match(alist(mt));
 		assertInteger(r).msg("{0} failed", label).is(expected);
 	}
 
@@ -176,7 +176,7 @@ public class MediaRanges_FindMatch_Test {
 		Accept accept = accept(this.accept);
 		MediaType[] mt = JsonParser.DEFAULT.parse(mediaTypes, MediaType[].class);
 		Collections.reverse(Arrays.asList(mt));
-		int r = accept.match(list(mt));
+		int r = accept.match(alist(mt));
 		int expected2 = expectedReverse == -1 ? -1 : mt.length-expectedReverse-1;
 		assertInteger(r).msg("{0} failed", label).is(expected2);
 	}

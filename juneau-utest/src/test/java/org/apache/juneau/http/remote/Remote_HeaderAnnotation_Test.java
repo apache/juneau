@@ -95,8 +95,8 @@ public class Remote_HeaderAnnotation_Test {
 		assertEquals("{f:'1'}",x.getX5(Bean.create()));
 		assertEquals("{x:'f=1,f=1'}",x.getX6(new Bean[]{Bean.create(),Bean.create()}));
 		assertEquals("{x:'@((f=1),(f=1))'}",x.getX7(new Bean[]{Bean.create(),Bean.create()}));
-		assertEquals("{x:'f=1,f=1'}",x.getX8(list(Bean.create(),Bean.create())));
-		assertEquals("{x:'@((f=1),(f=1))'}",x.getX9(list(Bean.create(),Bean.create())));
+		assertEquals("{x:'f=1,f=1'}",x.getX8(alist(Bean.create(),Bean.create())));
+		assertEquals("{x:'@((f=1),(f=1))'}",x.getX9(alist(Bean.create(),Bean.create())));
 		assertEquals("{x:'k1=f\\\\=1'}",x.getX10(map("k1",Bean.create())));
 		assertEquals("{k1:'f=1'}",x.getX11(map("k1",Bean.create())));
 		assertEquals("{k1:'f=1'}",x.getX12(map("k1",Bean.create())));
@@ -108,7 +108,7 @@ public class Remote_HeaderAnnotation_Test {
 		assertEquals("{foo:'bar'}",x.getX18(new org.apache.http.Header[]{header("foo","bar")}));
 		assertThrown(()->x.getX19("Foo")).messages().any(contains("Invalid value type"));
 		assertEquals("{}",x.getX19(null));
-		assertEquals("{foo:'bar'}",x.getX20(list(header("foo","bar"))));
+		assertEquals("{foo:'bar'}",x.getX20(alist(header("foo","bar"))));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -841,19 +841,19 @@ public class Remote_HeaderAnnotation_Test {
 	public static class K4a {
 		@Header
 		public List<Object> getA() {
-			return list("foo","","true","123","null",true,123,null);
+			return alist("foo","","true","123","null",true,123,null);
 		}
 		@Header("b")
 		public List<Object> getX1() {
-			return list("foo","","true","123","null",true,123,null);
+			return alist("foo","","true","123","null",true,123,null);
 		}
 		@Header(name="c",serializer=MockWriterSerializer.X.class)
 		public List<Object> getX2() {
-			return list("foo","","true","123","null",true,123,null);
+			return alist("foo","","true","123","null",true,123,null);
 		}
 		@Header(name="d") @Schema(aev=true)
 		public List<Object> getX3() {
-			return list();
+			return alist();
 		}
 		@Header("e")
 		public List<Object> getX4() {

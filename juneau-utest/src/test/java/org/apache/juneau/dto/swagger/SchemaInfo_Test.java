@@ -547,7 +547,7 @@ public class SchemaInfo_Test {
 		t
 			.set("default", "a")
 			.set("enum", set("b"))
-			.set("additionalProperties", map("c",list("c1")))
+			.set("additionalProperties", map("c",alist("c1")))
 			.set("allOf", set("d"))
 			.set("description", "e")
 			.set("discriminator", "f")
@@ -728,7 +728,7 @@ public class SchemaInfo_Test {
 		t
 			.set("default", "a")
 			.set("enum", set("b"))
-			.set("additionalProperties", map("c",list("c1")))
+			.set("additionalProperties", map("c",alist("c1")))
 			.set("allOf", set("d"))
 			.set("description", "e")
 			.set("discriminator", "f")
@@ -768,7 +768,7 @@ public class SchemaInfo_Test {
 		assertObject(t.keySet()).asJson().is("[]");
 
 		t
-			.set("additionalProperties", map("c",list("c1")))
+			.set("additionalProperties", map("c",alist("c1")))
 			.set("allOf", set("d"))
 			.set("default", "a")
 			.set("description", "e")

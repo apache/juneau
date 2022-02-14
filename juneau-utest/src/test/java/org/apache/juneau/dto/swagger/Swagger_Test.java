@@ -339,7 +339,7 @@ public class Swagger_Test {
 	public void a13_security() {
 		Swagger t = new Swagger();
 
-		t.security(set(map("foo",list("bar"))));
+		t.security(set(map("foo",alist("bar"))));
 		assertOptional(t.security()).isType(List.class).asJson().is("[{foo:['bar']}]");
 
 		t.security(set());
@@ -348,7 +348,7 @@ public class Swagger_Test {
 		t.security((Collection<Map<String, List<String>>>)null);
 		assertOptional(t.security()).isNull();
 
-		t.addSecurity(set(map("foo",list("bar"))));
+		t.addSecurity(set(map("foo",alist("bar"))));
 		assertOptional(t.security()).isType(List.class).asJson().is("[{foo:['bar']}]");
 
 		t.addSecurity(set());
@@ -427,7 +427,7 @@ public class Swagger_Test {
 			.set("produces", set(MediaType.of("text/i")))
 			.set("responses", map("j",responseInfo("j1")))
 			.set("schemes", set("k1"))
-			.set("security", set(map("l1",list("l2"))))
+			.set("security", set(map("l1",alist("l2"))))
 			.set("securityDefinitions", map("m",securityScheme("m1")))
 			.set("swagger", "n")
 			.set("tags", set(tag("o")))
@@ -545,7 +545,7 @@ public class Swagger_Test {
 			.set("produces", set(MediaType.of("text/i")))
 			.set("responses", map("j",responseInfo("j1")))
 			.set("schemes", set("k1"))
-			.set("security", set(map("l1",list("l2"))))
+			.set("security", set(map("l1",alist("l2"))))
 			.set("securityDefinitions", map("m",securityScheme("m1")))
 			.set("swagger", "n")
 			.set("tags", set(tag("o")))
@@ -573,7 +573,7 @@ public class Swagger_Test {
 			.set("produces", set(MediaType.of("text/i")))
 			.set("responses", map("j",responseInfo("j1")))
 			.set("schemes", set("k1"))
-			.set("security", set(map("l1",list("l2"))))
+			.set("security", set(map("l1",alist("l2"))))
 			.set("securityDefinitions", map("m",securityScheme("m1")))
 			.set("swagger", "n")
 			.set("tags", set(tag("o")))

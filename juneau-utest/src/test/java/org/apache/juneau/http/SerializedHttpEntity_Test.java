@@ -59,7 +59,7 @@ public class SerializedHttpEntity_Test {
 
 	@Test
 	public void a02_schema() throws Exception {
-		serializedEntity(list("foo","bar"),OpenApiSerializer.DEFAULT).schema(T_ARRAY_PIPES).build().assertString().is("foo|bar");
+		serializedEntity(alist("foo","bar"),OpenApiSerializer.DEFAULT).schema(T_ARRAY_PIPES).build().assertString().is("foo|bar");
 	}
 
 	@Test

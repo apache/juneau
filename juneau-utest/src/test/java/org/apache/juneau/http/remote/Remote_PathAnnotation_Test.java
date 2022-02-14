@@ -96,8 +96,8 @@ public class Remote_PathAnnotation_Test {
 		assertEquals("1",x.getX5(Bean.create()));
 		assertEquals("x=1,x=1",x.getX6(new Bean[]{Bean.create(),Bean.create()}));
 		assertEquals("@((x=1),(x=1))",x.getX7(new Bean[]{Bean.create(),Bean.create()}));
-		assertEquals("x=1,x=1",x.getX8(list(Bean.create(),Bean.create())));
-		assertEquals("@((x=1),(x=1))",x.getX9(list(Bean.create(),Bean.create())));
+		assertEquals("x=1,x=1",x.getX8(alist(Bean.create(),Bean.create())));
+		assertEquals("@((x=1),(x=1))",x.getX9(alist(Bean.create(),Bean.create())));
 		assertEquals("x=x\\=1",x.getX10(map("x",Bean.create())));
 		assertEquals("x=1",x.getX11(map("x",Bean.create())));
 		assertEquals("x=1",x.getX12(map("x",Bean.create())));
@@ -111,7 +111,7 @@ public class Remote_PathAnnotation_Test {
 		assertEquals("bar",x.getX20(new NameValuePair[]{part("x","bar")}));
 		assertEquals("{x}",x.getX20(null));
 		assertThrown(()->x.getX21("foo")).messages().contains("Invalid value type for path arg 'null': java.lang.String");
-		assertEquals("bar",x.getX22(list(part("x","bar"))));
+		assertEquals("bar",x.getX22(alist(part("x","bar"))));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -730,19 +730,19 @@ public class Remote_PathAnnotation_Test {
 	public static class K4a {
 		@Path
 		public List<Object> getA() {
-			return list("foo","","true","123","null",true,123,null);
+			return alist("foo","","true","123","null",true,123,null);
 		}
 		@Path("b")
 		public List<Object> getX1() {
-			return list("foo","","true","123","null",true,123,null);
+			return alist("foo","","true","123","null",true,123,null);
 		}
 		@Path(name="c",serializer=MockWriterSerializer.X.class)
 		public List<Object> getX2() {
-			return list("foo","","true","123","null",true,123,null);
+			return alist("foo","","true","123","null",true,123,null);
 		}
 		@Path("d") @Schema(aev=true)
 		public List<Object> getX3() {
-			return list();
+			return alist();
 		}
 		@Path("f")
 		public Object[] getX5() {

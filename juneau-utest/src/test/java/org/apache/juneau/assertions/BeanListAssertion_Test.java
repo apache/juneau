@@ -67,14 +67,14 @@ public class BeanListAssertion_Test {
 
 	@Test
 	public void ba01a_asString() throws Exception {
-		List<A> x = list(A1), nil = null;
+		List<A> x = alist(A1), nil = null;
 		test(x).asString().is("[(a=1,b=2)]");
 		test(nil).asString().isNull();
 	}
 
 	@Test
 	public void ba01b_asString_wSerializer() throws Exception {
-		List<A> x = list(A1), nil = null;
+		List<A> x = alist(A1), nil = null;
 		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
 		test(x).asString(s).is("[{a:1,b:2}]");
 		test(nil).asString(s).is("null");
@@ -82,53 +82,53 @@ public class BeanListAssertion_Test {
 
 	@Test
 	public void ba01c_asString_wPredicate() throws Exception {
-		List<A> x1 = list(A1);
+		List<A> x1 = alist(A1);
 		test(x1).asString(x -> "foo").is("foo");
 	}
 
 	@Test
 	public void ba02_asJson() throws Exception {
-		List<A> x = list(A1), nil = null;
+		List<A> x = alist(A1), nil = null;
 		test(x).asJson().is("[{a:1,b:2}]");
 		test(nil).asJson().is("null");
 	}
 
 	@Test
 	public void ba03_asJsonSorted() throws Exception {
-		List<A> x1 = list(A2,A1), nil = null;
+		List<A> x1 = alist(A2,A1), nil = null;
 		test(x1).asJsonSorted().is("[{a:1,b:2},{a:3,b:4}]");
 		test(nil).asJsonSorted().is("null");
 	}
 
 	@Test
 	public void ba04_apply() throws Exception {
-		List<A> x1 = list(A1), x2 = list(A2);
+		List<A> x1 = alist(A1), x2 = alist(A2);
 		test(x1).apply(x -> x2).is(x2);
 	}
 
 	@Test
 	public void bb01_asStrings() throws Exception {
-		List<A> x1 = list(A1), nil = null;
+		List<A> x1 = alist(A1), nil = null;
 		test(x1).asStrings().join().is("(a=1,b=2)");
 		test(nil).asStrings().isNull();
 	}
 
 	@Test
 	public void bb02_size() {
-		List<A> x1 = list(A1), nil = null;
+		List<A> x1 = alist(A1), nil = null;
 		test(x1).size().is(1);
 		test(nil).size().isNull();
 	}
 
 	@Test
 	public void bc01_apply2() throws Exception {
-		List<A> x1 = list(A1), x2 = list(A2);
+		List<A> x1 = alist(A1), x2 = alist(A2);
 		test(x1).apply2(x -> x2).is(x2);
 	}
 
 	@Test
 	public void bc02_item() throws Exception {
-		List<A> x = list(A1), nil = null;
+		List<A> x = alist(A1), nil = null;
 		test(x).item(0).isNotNull();
 		test(x).item(1).isNull();
 		test(x).item(-1).isNull();
@@ -137,21 +137,21 @@ public class BeanListAssertion_Test {
 
 	@Test
 	public void bc03a_sorted() throws Exception {
-		List<A> x = list(A2,A1), nil = null;
+		List<A> x = alist(A2,A1), nil = null;
 		test(x).sorted().isString("[(a=1,b=2), (a=3,b=4)]");
 		test(nil).sorted().isNull();
 	}
 
 	@Test
 	public void bc03b_sorted_wComparator() throws Exception {
-		List<A> x = list(A2,A1), nil = null;
+		List<A> x = alist(A2,A1), nil = null;
 		test(x).sorted(null).isString("[(a=1,b=2), (a=3,b=4)]");
 		test(nil).sorted(null).isNull();
 	}
 
 	@Test
 	public void bd01_extract() throws Exception {
-		List<A> x = list(A1,A2);
+		List<A> x = alist(A1,A2);
 		test(x)
 			.extract("a").asJson().is("[{a:1},{a:3}]")
 			.extract("a,b").asJson().is("[{a:1,b:2},{a:3,b:4}]")
@@ -162,7 +162,7 @@ public class BeanListAssertion_Test {
 
 	@Test
 	public void bd02_property() throws Exception {
-		List<A> x = list(A1,A2);
+		List<A> x = alist(A1,A2);
 		test(x)
 			.property("a").asJson().is("[1,3]")
 			.property("bad").asJson().is("[null,null]")
@@ -175,28 +175,28 @@ public class BeanListAssertion_Test {
 
 	@Test
 	public void ca01_exists() throws Exception {
-		List<A> x = list(), nil = null;
+		List<A> x = alist(), nil = null;
 		test(x).exists().exists();
 		assertThrown(()->test(nil).exists()).message().is("Value was null.");
 	}
 
 	@Test
 	public void ca02_isNull() throws Exception {
-		List<A> x = list(), nil = null;
+		List<A> x = alist(), nil = null;
 		test(nil).isNull();
 		assertThrown(()->test(x).isNull()).message().is("Value was not null.");
 	}
 
 	@Test
 	public void ca03_isNotNull() throws Exception {
-		List<A> x = list(), nil = null;
+		List<A> x = alist(), nil = null;
 		test(x).isNotNull();
 		assertThrown(()->test(nil).isNotNull()).message().is("Value was null.");
 	}
 
 	@Test
 	public void ca04a_is_T() throws Exception {
-		List<A> x1 = list(A1,A2), x1a = list(A1a,A2), x2 = list(A1,A3), nil = null;
+		List<A> x1 = alist(A1,A2), x1a = alist(A1a,A2), x2 = alist(A1,A3), nil = null;
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
@@ -207,7 +207,7 @@ public class BeanListAssertion_Test {
 
 	@Test
 	public void ca04b_is_predicate() throws Exception {
-		List<A> x1 = list(A1,A2);
+		List<A> x1 = alist(A1,A2);
 		test(x1).is(x->x.size()==2);
 		assertThrown(()->test(x1).is(x->x.size()==3)).message().oneLine().is("Unexpected value: '[(a=1,b=2), (a=3,b=4)]'.");
 		assertThrown(()->test(x1).is(ne(x1))).message().oneLine().is("Value unexpectedly matched.  Value='[(a=1,b=2), (a=3,b=4)]'.");
@@ -215,7 +215,7 @@ public class BeanListAssertion_Test {
 
 	@Test
 	public void ca05_isNot() throws Exception {
-		List<A> x1 = list(A1,A2), x1a = list(A1a,A2), x2 = list(A1,A3), nil = null;
+		List<A> x1 = alist(A1,A2), x1a = alist(A1a,A2), x2 = alist(A1,A3), nil = null;
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
@@ -226,7 +226,7 @@ public class BeanListAssertion_Test {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void ca06_isAny() throws Exception {
-		List<A> x1 = list(A1,A2), x1a = list(A1a,A2), x2 = list(A1,A3), nil = null;
+		List<A> x1 = alist(A1,A2), x1a = alist(A1a,A2), x2 = alist(A1,A3), nil = null;
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).message().oneLine().is("Expected value not found.  Expect='[[(a=1,b=2), (a=5,b=6)]]'.  Actual='[(a=1,b=2), (a=3,b=4)]'.");
 		assertThrown(()->test(x1).isAny()).message().oneLine().is("Expected value not found.  Expect='[]'.  Actual='[(a=1,b=2), (a=3,b=4)]'.");
@@ -236,7 +236,7 @@ public class BeanListAssertion_Test {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void ca07_isNotAny() throws Exception {
-		List<A> x1 = list(A1,A2), x1a = list(A1a,A2), x2 = list(A1,A3), nil = null;
+		List<A> x1 = alist(A1,A2), x1a = alist(A1a,A2), x2 = alist(A1,A3), nil = null;
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
@@ -256,7 +256,7 @@ public class BeanListAssertion_Test {
 
 	@Test
 	public void ca09_isSameJsonAs() throws Exception {
-		List<A> x1 = list(A1,A2), x1a = list(A1a,A2), x2 = list(A1,A3), nil = null;
+		List<A> x1 = alist(A1,A2), x1a = alist(A1a,A2), x2 = alist(A1,A3), nil = null;
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
 		assertThrown(()->test(x1a).isSameJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect='[{a:1,b:2},{a:5,b:6}]'.  Actual='[{a:1,b:2},{a:3,b:4}]'.");
@@ -266,7 +266,7 @@ public class BeanListAssertion_Test {
 
 	@Test
 	public void ca10_isSameSortedJsonAs() throws Exception {
-		List<A> x1 = list(A1,A2), x1a = list(A1a,A2), x2 = list(A1,A3), nil = null;
+		List<A> x1 = alist(A1,A2), x1a = alist(A1a,A2), x2 = alist(A1,A3), nil = null;
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
 		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect='[{a:1,b:2},{a:5,b:6}]'.  Actual='[{a:1,b:2},{a:3,b:4}]'.");
@@ -276,7 +276,7 @@ public class BeanListAssertion_Test {
 
 	@Test
 	public void ca11_isSameSerializedAs() throws Exception {
-		List<A> x1 = list(A1,A2), x1a = list(A1a,A2), x2 = list(A1,A3), nil = null;
+		List<A> x1 = alist(A1,A2), x1a = alist(A1a,A2), x2 = alist(A1,A3), nil = null;
 		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
@@ -306,7 +306,7 @@ public class BeanListAssertion_Test {
 
 	@Test
 	public void ca14_isString() throws Exception {
-		List<A> x = list(A1,A2), nil = null;
+		List<A> x = alist(A1,A2), nil = null;
 		test(x).isString("[(a=1,b=2), (a=3,b=4)]");
 		test(nil).isString(null);
 		assertThrown(()->test(x).isString("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='[(a=1,b=2), (a=3,b=4)]'.");
@@ -316,7 +316,7 @@ public class BeanListAssertion_Test {
 
 	@Test
 	public void ca15_isJson() throws Exception {
-		List<A> x = list(A1,A2), nil = null;
+		List<A> x = alist(A1,A2), nil = null;
 		test(x).isJson("[{a:1,b:2},{a:3,b:4}]");
 		test(nil).isJson("null");
 		assertThrown(()->test(x).isJson("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='[{a:1,b:2},{a:3,b:4}]'.");
@@ -326,7 +326,7 @@ public class BeanListAssertion_Test {
 
 	@Test
 	public void cb01_isEmpty() throws Exception {
-		List<A> x1 = list(), x2 = list(A1), nil = null;
+		List<A> x1 = alist(), x2 = alist(A1), nil = null;
 		test(x1).isEmpty();
 		assertThrown(()->test(nil).isEmpty()).message().is("Value was null.");
 		assertThrown(()->test(x2).isEmpty()).message().is("Collection was not empty.");
@@ -334,7 +334,7 @@ public class BeanListAssertion_Test {
 
 	@Test
 	public void cb02_isNotEmpty() throws Exception {
-		List<A> x1 = list(), x2 = list(A1), nil = null;
+		List<A> x1 = alist(), x2 = alist(A1), nil = null;
 		test(x2).isNotEmpty();
 		assertThrown(()->test(nil).isNotEmpty()).message().is("Value was null.");
 		assertThrown(()->test(x1).isNotEmpty()).message().is("Collection was empty.");
@@ -342,7 +342,7 @@ public class BeanListAssertion_Test {
 
 	@Test
 	public void cb03_contains() throws Exception {
-		List<A> x = list(A1), nil = null;
+		List<A> x = alist(A1), nil = null;
 		test(x).contains(A1);
 		assertThrown(()->test(x).contains(A2)).message().oneLine().is("Collection did not contain expected value.  Expect='(a=3,b=4)'.  Value='[(a=1,b=2)]'.");
 		assertThrown(()->test(nil).contains(A2)).message().is("Value was null.");
@@ -350,7 +350,7 @@ public class BeanListAssertion_Test {
 
 	@Test
 	public void cb04_doesNotContain() throws Exception {
-		List<A> x = list(A1), nil = null;
+		List<A> x = alist(A1), nil = null;
 		test(x).doesNotContain(A2);
 		assertThrown(()->test(x).doesNotContain(A1)).message().oneLine().is("Collection contained unexpected value.  Unexpected='(a=1,b=2)'.  Value='[(a=1,b=2)]'.");
 		assertThrown(()->test(nil).doesNotContain(A2)).message().is("Value was null.");
@@ -358,7 +358,7 @@ public class BeanListAssertion_Test {
 
 	@Test
 	public void cb05_any() throws Exception {
-		List<A> x1 = list(A1), nil = null;
+		List<A> x1 = alist(A1), nil = null;
 		test(x1).any(x->x.equals(A1));
 		assertThrown(()->test(x1).any(x->x.equals(A2))).message().oneLine().is("Collection did not contain tested value.  Value='[(a=1,b=2)]'.");
 		assertThrown(()->test(nil).any(x->x.equals(A2))).message().is("Value was null.");
@@ -366,7 +366,7 @@ public class BeanListAssertion_Test {
 
 	@Test
 	public void cb06_all() throws Exception {
-		List<A> x1 = list(A1), nil = null;
+		List<A> x1 = alist(A1), nil = null;
 		test(x1).all(x->x!=null);
 		assertThrown(()->test(x1).all(x->x.equals(A2))).message().oneLine().is("Collection did not contain tested value.  Value='[(a=1,b=2)]'.");
 		assertThrown(()->test(nil).all(x->x.equals(A2))).message().is("Value was null.");
@@ -374,7 +374,7 @@ public class BeanListAssertion_Test {
 
 	@Test
 	public void cb07_isSize() throws Exception {
-		List<A> x = list(A1), nil = null;
+		List<A> x = alist(A1), nil = null;
 		test(x).isSize(1);
 		assertThrown(()->test(x).isSize(0)).message().oneLine().is("Collection did not have the expected size.  Expect=0.  Actual=1.");
 		assertThrown(()->test(nil).isSize(0)).message().is("Value was null.");
@@ -382,7 +382,7 @@ public class BeanListAssertion_Test {
 
 	@Test
 	public void cc01_has() throws Exception {
-		List<A> x = list(A1,A2), nil = null;
+		List<A> x = alist(A1,A2), nil = null;
 		test(x).has(A1,A2);
 		assertThrown(()->test(x).has(A1)).message().oneLine().is("Collection did not have the expected size.  Expect=1.  Actual=2.");
 		assertThrown(()->test(x).has(A1,A3)).message().oneLine().is("List did not contain expected value at index 1.  Value did not match expected.  Expect='(a=5,b=6)'.  Actual='(a=3,b=4)'.");
@@ -391,7 +391,7 @@ public class BeanListAssertion_Test {
 
 	@Test
 	public void cc02_each() throws Exception {
-		List<A> x1 = list(A1,A2), nil = null;
+		List<A> x1 = alist(A1,A2), nil = null;
 		test(x1).each(x->x!=null,x->x!=null);
 		assertThrown(()->test(x1).each(x->x==null)).message().oneLine().is("Collection did not have the expected size.  Expect=1.  Actual=2.");
 		assertThrown(()->test(x1).each(x->x==null,x->x==null)).message().oneLine().is("List did not contain expected value at index 0.  Unexpected value: '(a=1,b=2)'.");

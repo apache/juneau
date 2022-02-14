@@ -42,7 +42,7 @@ public class RoundTripClassesTest extends RoundTripTest {
 		o = roundTrip(o);
 		assertObject(o).asJson().is("['java.lang.String']");
 
-		o = list(String.class, Integer.class);
+		o = alist(String.class, Integer.class);
 		o = roundTrip(o);
 		assertObject(o).asJson().is("['java.lang.String','java.lang.Integer']");
 

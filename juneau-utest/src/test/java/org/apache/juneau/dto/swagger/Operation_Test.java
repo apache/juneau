@@ -256,16 +256,16 @@ public class Operation_Test {
 	public void a11_security() {
 		Operation t = new Operation();
 
-		t.security(list(map("foo",list("bar"))));
+		t.security(alist(map("foo",alist("bar"))));
 		assertOptional(t.security()).isType(List.class).asJson().is("[{foo:['bar']}]");
 
-		t.security(list());
+		t.security(alist());
 		assertOptional(t.security()).isType(List.class).asJson().is("[]");
 
 		t.security((List<Map<String,List<String>>>)null);
 		assertOptional(t.security()).isNull();
 
-		t.addSecurity(set(map("foo",list("bar"))));
+		t.addSecurity(set(map("foo",alist("bar"))));
 		assertOptional(t.security()).isType(List.class).asJson().is("[{foo:['bar']}]");
 
 		t.addSecurity(set());
@@ -309,7 +309,7 @@ public class Operation_Test {
 			.set("produces", set(MediaType.of("text/f")))
 			.set("responses", map(1,responseInfo("g")))
 			.set("schemes", set("h"))
-			.set("security", set(map("i1",list("i2"))))
+			.set("security", set(map("i1",alist("i2"))))
 			.set("summary", "j")
 			.set("tags", set("k"))
 			.set("$ref", "ref");
@@ -410,7 +410,7 @@ public class Operation_Test {
 			.set("produces", set(MediaType.of("text/f")))
 			.set("responses", map(1,responseInfo("g")))
 			.set("schemes", set("h"))
-			.set("security", set(map("i1",list("i2"))))
+			.set("security", set(map("i1",alist("i2"))))
 			.set("summary", "j")
 			.set("tags", set("k"))
 			.set("$ref", "ref")
@@ -435,7 +435,7 @@ public class Operation_Test {
 			.set("produces", set(MediaType.of("text/f")))
 			.set("responses", map(1,responseInfo("g")))
 			.set("schemes", set("h"))
-			.set("security", set(map("i1",list("i2"))))
+			.set("security", set(map("i1",alist("i2"))))
 			.set("summary", "j")
 			.set("tags", set("k"))
 			.set("$ref", "ref");

@@ -33,7 +33,7 @@ public class BasicEntityTagArrayHeader_Test {
 
 	private static final String HEADER = "Foo";
 	private static final String VALUE = "\"foo\", \"bar\"";
-	private static final List<EntityTag> PARSED = list(EntityTag.of("\"foo\""), EntityTag.of("\"bar\""));
+	private static final List<EntityTag> PARSED = alist(EntityTag.of("\"foo\""), EntityTag.of("\"bar\""));
 
 	@Rest
 	public static class A {

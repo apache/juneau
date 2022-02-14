@@ -101,7 +101,7 @@ public class PartList_Test {
 		x = partList(FOO_1, FOO_2, null);
 		assertObject(x).isString("Foo=1&Foo=2");
 
-		x = partList(list(FOO_1, FOO_2, null));
+		x = partList(alist(FOO_1, FOO_2, null));
 		assertObject(x).isString("Foo=1&Foo=2");
 
 		x = partList("Foo","1","Foo","2");
@@ -115,7 +115,7 @@ public class PartList_Test {
 		x = PartList.of(Collections.emptyList());
 		assertObject(x).isString("");
 
-		x = PartList.of(list(FOO_1));
+		x = PartList.of(alist(FOO_1));
 		assertObject(x).isString("Foo=1");
 
 		x = PartList.of((NameValuePair[])null);
@@ -355,7 +355,7 @@ public class PartList_Test {
 			.append("Bar", "b1")
 			.append("Bar", ()->"b2")
 			.append((List<NameValuePair>)null)
-			.append(list(FOO_4))
+			.append(alist(FOO_4))
 			.build();
 		assertObject(x2).isString("Foo=1&Foo=2&Foo=3&Bar=b1&Bar=b2&Foo=4");
 	}
@@ -374,7 +374,7 @@ public class PartList_Test {
 			.prepend("Bar", "b1")
 			.prepend("Bar", ()->"b2")
 			.prepend((List<NameValuePair>)null)
-			.prepend(list(FOO_4))
+			.prepend(alist(FOO_4))
 			.build();
 		assertObject(x2).isString("Foo=4&Bar=b2&Bar=b1&Foo=2&Foo=3&Foo=1");
 	}
@@ -389,7 +389,7 @@ public class PartList_Test {
 			.remove(PartList.of(FOO_1))
 			.remove(FOO_2)
 			.remove(FOO_3, FOO_4)
-			.remove(list(FOO_5))
+			.remove(alist(FOO_5))
 			.build();
 		assertObject(x).isString("Foo=6&Foo=7");
 
@@ -430,7 +430,7 @@ public class PartList_Test {
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
 			.set((List<NameValuePair>)null)
-			.set(list(null,FOO_3,FOO_4,FOO_5))
+			.set(alist(null,FOO_3,FOO_4,FOO_5))
 			.build();
 		assertObject(x).isString("Bar=1&Bar=2&Foo=3&Foo=4&Foo=5");
 
@@ -543,16 +543,16 @@ public class PartList_Test {
 		PartList x11 = PartList.create().setDefault("a",()->"x").build();
 		assertObject(x11).isString("a=x");
 
-		PartList x12 = PartList.create().set(BPart.X,BPart.Y).setDefault(list(APart.X,BPart.Z,null)).build();
+		PartList x12 = PartList.create().set(BPart.X,BPart.Y).setDefault(alist(APart.X,BPart.Z,null)).build();
 		assertObject(x12).isString("b=x&b=y&a=x");
 
 		PartList x13 = PartList.create().set(BPart.X,BPart.Y).setDefault(PartList.of(APart.X,BPart.Z,null)).build();
 		assertObject(x13).isString("b=x&b=y&a=x");
 
 		PartList x14 = PartList.create().set(BPart.X,BPart.Y)
-			.setDefault(list(APart.X,BPart.X,null))
-			.setDefault(list(APart.Y,BPart.Y,null))
-			.setDefault(list(CPart.X))
+			.setDefault(alist(APart.X,BPart.X,null))
+			.setDefault(alist(APart.Y,BPart.Y,null))
+			.setDefault(alist(CPart.X))
 			.build();
 		assertObject(x14).isString("b=x&b=y&a=y&c=x");
 	}

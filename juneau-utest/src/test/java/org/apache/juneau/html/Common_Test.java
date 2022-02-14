@@ -122,8 +122,8 @@ public class Common_Test {
 
 		public static C create() {
 			C t = new C();
-			t.f1 = list();
-			t.f2 = list(null,A.create());
+			t.f1 = alist();
+			t.f2 = alist(null,A.create());
 			return t;
 		}
 	}
@@ -274,9 +274,9 @@ public class Common_Test {
 		@Beanp(properties="f1") public E2 x1 = new E2();
 		@Beanp(properties="f1") public Map<String,Integer> x2 = map("f1",3,"f2",4);
 		@Beanp(properties="f1") public E2[] x3 = {new E2()};
-		@Beanp(properties="f1") public List<E2> x4 = list(new E2());
+		@Beanp(properties="f1") public List<E2> x4 = alist(new E2());
 		@Beanp(properties="f1") public OMap[] x5 = {OMap.of("f1",5,"f2",6)};
-		@Beanp(properties="f1") public List<OMap> x6 = list(OMap.of("f1",7,"f2",8));
+		@Beanp(properties="f1") public List<OMap> x6 = alist(OMap.of("f1",7,"f2",8));
 	}
 
 	public static class E2 {
