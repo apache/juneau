@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -100,7 +101,7 @@ public class StringRanges {
 	 */
 	public StringRanges(HeaderElement[] e) {
 
-		List<StringRange> l = AList.create();
+		List<StringRange> l = list();
 		for (HeaderElement e2 : e)
 			l.add(new StringRange(e2));
 

@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
@@ -171,7 +171,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> description() {
-		return Optional.ofNullable(getDescription());
+		return optional(getDescription());
 	}
 
 	/**
@@ -254,7 +254,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Map<String,Object>> examples() {
-		return Optional.ofNullable(getExamples());
+		return optional(getExamples());
 	}
 
 	/**
@@ -350,7 +350,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Map<String,HeaderInfo>> headers() {
-		return Optional.ofNullable(getHeaders());
+		return optional(getHeaders());
 	}
 
 	/**
@@ -405,7 +405,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<HeaderInfo> header(String name) {
-		return Optional.ofNullable(getHeader(name));
+		return optional(getHeader(name));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -448,7 +448,7 @@ public class ResponseInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<SchemaInfo> schema() {
-		return Optional.ofNullable(getSchema());
+		return optional(getSchema());
 	}
 
 	/**
@@ -519,11 +519,12 @@ public class ResponseInfo extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		ASet<String> s = ASet.<String>of()
-			.appendIf(description != null, "description")
-			.appendIf(examples != null, "examples")
-			.appendIf(headers != null, "headers")
-			.appendIf(schema != null, "schema");
+		Set<String> s = setBuilder(String.class)
+			.addIf(description != null, "description")
+			.addIf(examples != null, "examples")
+			.addIf(headers != null, "headers")
+			.addIf(schema != null, "schema")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 

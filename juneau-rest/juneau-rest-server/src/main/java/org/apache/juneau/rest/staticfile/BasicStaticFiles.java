@@ -15,6 +15,7 @@ package org.apache.juneau.rest.staticfile;
 import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResources.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.FileUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 
@@ -50,7 +51,7 @@ public class BasicStaticFiles implements StaticFiles {
 
 	/**
 	 * Creates a new builder for this object.
-	 * 
+	 *
 	 * @param beanStore The bean store to use for creating beans.
 	 * @return A new builder for this object.
 	 */
@@ -99,8 +100,8 @@ public class BasicStaticFiles implements StaticFiles {
 		try {
 			Optional<InputStream> is = getStream(path);
 			if (! is.isPresent())
-				return Optional.empty();
-			return Optional.of(
+				return empty();
+			return optional(
 				streamResource(is.get())
 					.header(contentType(mimeTypes == null ? null : mimeTypes.getContentType(getFileName(path))))
 					.headers(headers)

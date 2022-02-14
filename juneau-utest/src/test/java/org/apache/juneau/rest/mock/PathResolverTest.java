@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.internal.*;
 import org.junit.*;
 
 public class PathResolverTest {
@@ -203,7 +204,7 @@ public class PathResolverTest {
 
 	@Test
 	public void basicWithPathVars() {
-		Map<String,Object> vars = AMap.of("foo","123");
+		Map<String,Object> vars = map("foo","123");
 
 		create(null, null, null, "/foo", vars)
 			.assertUri().is("http://localhost/foo")
@@ -222,7 +223,7 @@ public class PathResolverTest {
 
 	@Test
 	public void fullPaths() {
-		Map<String,Object> vars = AMap.of("foo","123");
+		Map<String,Object> vars = map("foo","123");
 
 		create(null, null, null, "http://foobar/foo", vars)
 			.assertUri().is("http://foobar/foo")

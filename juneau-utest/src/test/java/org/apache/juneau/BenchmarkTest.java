@@ -1,8 +1,9 @@
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.util.*;
 
-import org.apache.juneau.internal.*;
 import org.junit.*;
 import org.junit.rules.*;
 
@@ -26,7 +27,7 @@ public class BenchmarkTest {
 	@Rule
 	public TestRule benchmarkRun = new BenchmarkRule();
 
-	public static List<String> LIST = AList.of();
+	public static List<String> LIST = list();
 	public static String[] ARRAY;
 
 	public int x;

@@ -13,6 +13,7 @@
 package org.apache.juneau.cp;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.io.*;
 import java.nio.file.*;
@@ -136,8 +137,8 @@ public interface FileFinder {
 			super(BasicFileFinder.class, beanStore);
 			roots = new LinkedHashSet<>();
 			cachingLimit = -1;
-			include = AList.of(Pattern.compile(".*"));
-			exclude = AList.create();
+			include = list(Pattern.compile(".*"));
+			exclude = list();
 		}
 
 		@Override /* BeanBuilder */

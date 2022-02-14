@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.ThrowableUtils.*;
 import static java.util.Arrays.*;
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.util.*;
@@ -153,7 +154,7 @@ public final class SerializerSet {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(SerializerSet.class, beanStore);
-			this.entries = AList.create();
+			this.entries = list();
 		}
 
 		/**
@@ -163,7 +164,7 @@ public final class SerializerSet {
 		 */
 		protected Builder(SerializerSet copyFrom) {
 			super(copyFrom.getClass());
-			this.entries = AList.create().append(asList(copyFrom.entries));
+			this.entries = list((Object[])copyFrom.entries);
 		}
 
 		/**
@@ -177,7 +178,7 @@ public final class SerializerSet {
 		protected Builder(Builder copyFrom) {
 			super(copyFrom);
 			bcBuilder = copyFrom.bcBuilder == null ? null : copyFrom.bcBuilder.copy();
-			entries = AList.create();
+			entries = list();
 			copyFrom.entries.stream().map(x -> copyBuilder(x)).forEach(x -> entries.add(x));
 		}
 
@@ -499,9 +500,9 @@ public final class SerializerSet {
 
 		this.entries = builder.entries.stream().map(x -> build(x)).toArray(Serializer[]::new);
 
-		AList<MediaRange> lmtr = AList.create();
-		ASet<MediaType> lmt = ASet.of();
-		AList<Serializer> l = AList.create();
+		List<MediaRange> lmtr = list();
+		Set<MediaType> lmt = set();
+		List<Serializer> l = list();
 		for (Serializer e : entries) {
 			for (MediaRange m: e.getMediaTypeRanges().getRanges()) {
 				lmtr.add(m);
@@ -511,9 +512,9 @@ public final class SerializerSet {
 				lmt.add(mt);
 		}
 
-		this.mediaRanges = lmtr.unmodifiable();
-		this.mediaTypesList = AList.of(lmt).unmodifiable();
-		this.mediaTypeRangeSerializers = l.unmodifiable();
+		this.mediaRanges = unmodifiable(lmtr);
+		this.mediaTypesList = unmodifiable(listFrom(lmt));
+		this.mediaTypeRangeSerializers = unmodifiable(l);
 	}
 
 	private Serializer build(Object o) {

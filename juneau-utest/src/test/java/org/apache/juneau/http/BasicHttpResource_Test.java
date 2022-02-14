@@ -15,6 +15,7 @@ package org.apache.juneau.http;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResources.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
@@ -22,7 +23,6 @@ import static org.apache.juneau.testutils.StreamUtils.*;
 import java.io.*;
 
 import org.apache.juneau.http.resource.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.http.header.*;
 import org.junit.*;
 
@@ -137,7 +137,7 @@ public class BasicHttpResource_Test {
 
 	@Test
 	public void a04_headers_List() throws Exception {
-		HeaderList x = stringResource("foo").headers(AList.of(header("Foo","bar"),header("Foo","baz"),header(null,"bar"),header("Bar",null),null)).build().getHeaders();
+		HeaderList x = stringResource("foo").headers(list(header("Foo","bar"),header("Foo","baz"),header(null,"bar"),header("Bar",null),null)).build().getHeaders();
 		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
 		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
 		assertObject(x.getFirst("Bar").get().getValue()).isNull();

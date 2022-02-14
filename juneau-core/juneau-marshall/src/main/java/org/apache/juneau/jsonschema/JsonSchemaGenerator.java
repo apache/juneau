@@ -880,9 +880,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		ignoreTypes = builder.ignoreTypes == null ? emptySet() : new TreeSet<>(builder.ignoreTypes);
 
 		Set<Pattern> ignoreTypePatterns = new LinkedHashSet<>();
-		for (String s : ignoreTypes)
-			for (String s2 : split(s))
-				ignoreTypePatterns.add(Pattern.compile(s2.replace(".", "\\.").replace("*", ".*")));
+		ignoreTypes.forEach(y -> split(y, x -> ignoreTypePatterns.add(Pattern.compile(x.replace(".", "\\.").replace("*", ".*")))));
 		this.ignoreTypePatterns = ignoreTypePatterns;
 
 		try {

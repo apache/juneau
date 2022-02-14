@@ -13,6 +13,7 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -21,17 +22,11 @@ import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
 public class Assertions_Test {
-
-	@SafeVarargs
-	private static <T> List<T> list(T...objects) {
-		return AList.of(objects);
-	}
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
@@ -65,8 +60,8 @@ public class Assertions_Test {
 	@Test
 	public void a05_assertString() throws Exception {
 		assertString("foo").is("foo");
-		assertString(Optional.of("foo")).is("foo");
-		assertString(Optional.empty()).isNull();
+		assertString(optional("foo")).is("foo");
+		assertString(empty()).isNull();
 	}
 
 	@Test
@@ -185,7 +180,7 @@ public class Assertions_Test {
 
 	@Test
 	public void a21_assertMap() throws Exception {
-		assertMap(AMap.of(1,2)).size().is(1);
+		assertMap(map(1,2)).size().is(1);
 	}
 
 	@Test
@@ -202,8 +197,8 @@ public class Assertions_Test {
 
 	@Test
 	public void a24_assertOptional() throws Exception {
-		assertOptional(Optional.empty()).isNull();
-		assertOptional(Optional.of(1)).isNotNull();
+		assertOptional(empty()).isNull();
+		assertOptional(optional(1)).isNotNull();
 	}
 
 	@Test

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
@@ -30,12 +32,12 @@ public class ComboInput<T> {
 	String exceptionMsg;
 	private Predicate<String> skipTest;
 	private Function<T,T> convert;
-	private List<Function<T,String>> verify = AList.create();
-	List<Class<?>> swaps = AList.create();
+	private List<Function<T,String>> verify = list();
+	List<Class<?>> swaps = list();
 	final Type type;
 	String json, jsonT, jsonR, xml, xmlT, xmlR, xmlNs, html, htmlT, htmlR, uon, uonT, uonR, urlEncoding,
 		urlEncodingT, urlEncodingR, msgPack, msgPackT, rdfXml, rdfXmlT, rdfXmlR;
-	List<Tuple2<Class<?>,Consumer<?>>> applies = AList.create();
+	List<Tuple2<Class<?>,Consumer<?>>> applies = list();
 
 	public ComboInput<T> beanContext(Consumer<BeanContext.Builder> c) {
 		apply(BeanContext.Builder.class, c);

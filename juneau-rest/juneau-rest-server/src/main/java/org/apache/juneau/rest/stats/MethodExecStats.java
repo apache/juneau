@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.stats;
 
-import static java.util.Optional.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
@@ -147,7 +147,7 @@ public class MethodExecStats {
 	protected MethodExecStats(Builder builder) {
 		this.guid = new Random().nextLong();
 		this.method = builder.method;
-		this.thrownStore = ofNullable(builder.thrownStore).orElseGet(ThrownStore::new);
+		this.thrownStore = optional(builder.thrownStore).orElseGet(ThrownStore::new);
 	}
 
 

@@ -13,12 +13,12 @@
 package org.apache.juneau.rest;
 
 import static java.util.Collections.*;
-import static java.util.Optional.*;
 import static java.util.logging.Level.*;
 import static org.apache.juneau.Enablement.*;
 import static org.apache.juneau.html.HtmlDocSerializer.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.serializer.Serializer.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
@@ -623,7 +623,7 @@ public final class RestRequest {
 	public Optional<TimeZone> getTimeZone() {
 		String tz = headers.get("Time-Zone").asString().orElse(null);
 		if (tz != null)
-			return of(TimeZone.getTimeZone(tz));
+			return optional(TimeZone.getTimeZone(tz));
 		return empty();
 	}
 
@@ -1119,7 +1119,7 @@ public final class RestRequest {
 	 * @param addQueryParams Augment the request URI with the specified query parameters.
 	 * @return A new URI.
 	 */
-	public URI getUri(boolean includeQuery, Map<String,?> addQueryParams) {
+	public URI getUri(boolean includeQuery, Map<String,Object> addQueryParams) {
 		String uri = inner.getRequestURI();
 		if (includeQuery || addQueryParams != null) {
 			StringBuilder sb = new StringBuilder(uri);
@@ -1237,7 +1237,7 @@ public final class RestRequest {
 
 		Optional<Swagger> swagger = getSwagger();
 		if (! swagger.isPresent())
-			return Optional.empty();
+			return empty();
 
 		return swagger.get().operation(opContext.getPathPattern(), getMethod().toLowerCase());
 	}

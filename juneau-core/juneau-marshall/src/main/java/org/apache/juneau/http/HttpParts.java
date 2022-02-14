@@ -13,6 +13,7 @@
 package org.apache.juneau.http;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.time.*;
@@ -476,7 +477,7 @@ public class HttpParts {
 			case HEADER: return type.getProperty("HttpPart.header.name", HEADER_NAME_FUNCTION);
 			case PATH: return type.getProperty("HttpPart.path.name", PATH_NAME_FUNCTION);
 			case QUERY: return type.getProperty("HttpPart.query.name", QUERY_NAME_FUNCTION);
-			default: return Optional.empty();
+			default: return empty();
 		}
 	}
 

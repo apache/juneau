@@ -14,6 +14,7 @@ package org.apache.juneau.rest.util;
 
 import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -74,11 +75,11 @@ public class UrlPath {
 	 */
 	public Optional<String> getFileName() {
 		if (parts.length == 0)
-			return Optional.empty();
+			return empty();
 		String p = parts[parts.length-1];
 		if (p.indexOf('.') == -1)
-			return Optional.empty();
-		return Optional.of(p);
+			return empty();
+		return optional(p);
 	}
 
 	/**

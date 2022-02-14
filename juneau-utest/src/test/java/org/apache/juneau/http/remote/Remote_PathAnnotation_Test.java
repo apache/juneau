@@ -17,6 +17,7 @@ import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.http.HttpParts.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.math.*;
 import java.util.*;
@@ -26,7 +27,6 @@ import org.apache.http.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.part.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
@@ -96,22 +96,22 @@ public class Remote_PathAnnotation_Test {
 		assertEquals("1",x.getX5(Bean.create()));
 		assertEquals("x=1,x=1",x.getX6(new Bean[]{Bean.create(),Bean.create()}));
 		assertEquals("@((x=1),(x=1))",x.getX7(new Bean[]{Bean.create(),Bean.create()}));
-		assertEquals("x=1,x=1",x.getX8(AList.of(Bean.create(),Bean.create())));
-		assertEquals("@((x=1),(x=1))",x.getX9(AList.of(Bean.create(),Bean.create())));
-		assertEquals("x=x\\=1",x.getX10(AMap.of("x",Bean.create())));
-		assertEquals("x=1",x.getX11(AMap.of("x",Bean.create())));
-		assertEquals("x=1",x.getX12(AMap.of("x",Bean.create())));
-		assertEquals("(x=(x=1))",x.getX13(AMap.of("x",Bean.create())));
-		assertEquals("x=1",x.getX14(AMap.of("x",Bean.create())));
+		assertEquals("x=1,x=1",x.getX8(list(Bean.create(),Bean.create())));
+		assertEquals("@((x=1),(x=1))",x.getX9(list(Bean.create(),Bean.create())));
+		assertEquals("x=x\\=1",x.getX10(map("x",Bean.create())));
+		assertEquals("x=1",x.getX11(map("x",Bean.create())));
+		assertEquals("x=1",x.getX12(map("x",Bean.create())));
+		assertEquals("(x=(x=1))",x.getX13(map("x",Bean.create())));
+		assertEquals("x=1",x.getX14(map("x",Bean.create())));
 		assertEquals("bar",x.getX15(parts("x","bar")));
 		assertEquals("bar",x.getX16(parts("x","bar")));
-		assertEquals("(x=(x=1))",x.getX17(AMap.of("x",Bean.create())));
+		assertEquals("(x=(x=1))",x.getX17(map("x",Bean.create())));
 		assertEquals("bar",x.getX18(part("x","bar")));
 		assertEquals("bar",x.getX19(part("x","bar")));
 		assertEquals("bar",x.getX20(new NameValuePair[]{part("x","bar")}));
 		assertEquals("{x}",x.getX20(null));
 		assertThrown(()->x.getX21("foo")).messages().contains("Invalid value type for path arg 'null': java.lang.String");
-		assertEquals("bar",x.getX22(AList.of(part("x","bar"))));
+		assertEquals("bar",x.getX22(list(part("x","bar"))));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -650,15 +650,15 @@ public class Remote_PathAnnotation_Test {
 	public static class K2a {
 		@Path("*") @Schema(aev=true)
 		public Map<String,Object> getA() {
-			return AMap.of("a1","v1","a2",123,"a3",null,"a4","");
+			return mapBuilder(String.class,Object.class).add("a1","v1").add("a2",123).add("a3",null).add("a4","").build();
 		}
 		@Path("*")
 		public Map<String,Object> getB() {
-			return AMap.of("b1","true","b2","123","b3","null");
+			return map("b1","true","b2","123","b3","null");
 		}
 		@Path("*") @Schema(aev=true)
 		public Map<String,Object> getC() {
-			return AMap.of("c1","v1","c2",123,"c3",null,"c4","");
+			return mapBuilder(String.class,Object.class).add("c1","v1").add("c2",123).add("c3",null).add("c4","").build();
 		}
 		@Path("*")
 		public Map<String,Object> getD() {
@@ -730,19 +730,19 @@ public class Remote_PathAnnotation_Test {
 	public static class K4a {
 		@Path
 		public List<Object> getA() {
-			return AList.of("foo","","true","123","null",true,123,null);
+			return list("foo","","true","123","null",true,123,null);
 		}
 		@Path("b")
 		public List<Object> getX1() {
-			return AList.of("foo","","true","123","null",true,123,null);
+			return list("foo","","true","123","null",true,123,null);
 		}
 		@Path(name="c",serializer=MockWriterSerializer.X.class)
 		public List<Object> getX2() {
-			return AList.of("foo","","true","123","null",true,123,null);
+			return list("foo","","true","123","null",true,123,null);
 		}
 		@Path("d") @Schema(aev=true)
 		public List<Object> getX3() {
-			return AList.create();
+			return list();
 		}
 		@Path("f")
 		public Object[] getX5() {

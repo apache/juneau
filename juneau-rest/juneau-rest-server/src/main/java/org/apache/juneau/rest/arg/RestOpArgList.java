@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.arg;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
@@ -54,7 +55,7 @@ public class RestOpArgList {
 	@FluentSetters
 	public static class Builder extends BeanBuilder<RestOpArgList> {
 
-		AList<Class<? extends RestOpArg>> entries;
+		List<Class<? extends RestOpArg>> entries;
 
 		/**
 		 * Constructor.
@@ -63,7 +64,7 @@ public class RestOpArgList {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(RestOpArgList.class, beanStore);
-			entries = AList.create();
+			entries = list();
 		}
 
 		@Override /* BeanBuilder */

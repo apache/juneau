@@ -18,10 +18,10 @@ import static org.apache.juneau.testutils.StreamUtils.*;
 import java.io.*;
 
 import static org.apache.juneau.httppart.HttpPartSchema.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.http.HttpEntities.*;
 
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
@@ -59,7 +59,7 @@ public class SerializedHttpEntity_Test {
 
 	@Test
 	public void a02_schema() throws Exception {
-		serializedEntity(AList.of("foo","bar"),OpenApiSerializer.DEFAULT).schema(T_ARRAY_PIPES).build().assertString().is("foo|bar");
+		serializedEntity(list("foo","bar"),OpenApiSerializer.DEFAULT).schema(T_ARRAY_PIPES).build().assertString().is("foo|bar");
 	}
 
 	@Test

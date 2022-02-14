@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.ListOperation.*;
 import static org.apache.juneau.http.HttpParts.*;
@@ -24,7 +25,6 @@ import java.util.*;
 
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
@@ -55,14 +55,14 @@ public class RestClient_Query_Test {
 
 	@Test
 	public void a02_query_String_Object_Schema() throws Exception {
-		List<String> l = AList.of("bar","baz");
+		List<String> l = list("bar","baz");
 		client().build().get("/query").queryData(part("foo",l,T_ARRAY_PIPES)).run().assertBody().asString().urlDecode().is("foo=bar|baz");
 		client().queryData(part("foo",l,T_ARRAY_PIPES)).build().get("/query").run().assertBody().asString().urlDecode().is("foo=bar|baz");
 	}
 
 	@Test
 	public void a03_query_String_Object_Schema_Serializer() throws Exception {
-		List<String> l = AList.of("bar","baz");
+		List<String> l = list("bar","baz");
 		client().queryData(part("foo",l,T_ARRAY_PIPES).serializer(UonSerializer.DEFAULT)).build().get("/query").run().assertBody().asString().urlDecode().is("foo=@(bar,baz)");
 	}
 
@@ -79,13 +79,13 @@ public class RestClient_Query_Test {
 
 	@Test
 	public void a05_query_AddFlag_String_Object_Schema() throws Exception {
-		List<String> l = AList.of("baz","qux");
+		List<String> l = list("baz","qux");
 		client().queryData("foo","bar").build().get("/query").queryData(PREPEND,part("foo",l,T_ARRAY_PIPES)).run().assertBody().asString().urlDecode().is("foo=baz|qux&foo=bar");
 	}
 
 	@Test
 	public void a06_query_String_Supplier() throws Exception {
-		List<String> l1 = AList.of("foo","bar"), l2 = AList.of("bar","baz");
+		List<String> l1 = list("foo","bar"), l2 = list("bar","baz");
 		TestSupplier s = TestSupplier.of(l1);
 		RestClient x = client().queryData(part("foo",s,null)).build();
 		x.get("/query").run().assertBody().asString().urlDecode().is("foo=foo,bar");
@@ -105,7 +105,7 @@ public class RestClient_Query_Test {
 
 	@Test
 	public void a08_query_String_Supplier_Schema_Serializer() throws Exception {
-		List<String> l1 = AList.of("foo","bar"), l2 = AList.of("bar","baz");
+		List<String> l1 = list("foo","bar"), l2 = list("bar","baz");
 		TestSupplier s = TestSupplier.of(l1);
 		RestClient x = client().queryData(part("foo",s,T_ARRAY_PIPES).serializer(MockWriterSerializer.X)).build();
 		x.get("/query").run().assertBody().asString().urlDecode().is("foo=xfoo|barx");

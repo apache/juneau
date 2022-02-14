@@ -14,12 +14,12 @@ package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
 
@@ -285,22 +285,22 @@ public class Items_Test {
 	public void a16_enum() {
 		Items t = new Items();
 
-		t._enum(ASet.of("foo","bar"));
+		t._enum(set("foo","bar"));
 		assertOptional(t._enum()).isType(Set.class).asJson().is("['foo','bar']");
 
 		t._enum("foo","baz");
 		assertOptional(t._enum()).isType(Set.class).asJson().is("['foo','baz']");
 
-		t._enum(ASet.of());
+		t._enum(set());
 		assertOptional(t._enum()).isType(Set.class).asJson().is("[]");
 
 		t._enum((Collection<Object>)null);
 		assertOptional(t._enum()).isNull();
 
-		t.addEnum(ASet.of("foo","bar"));
+		t.addEnum(set("foo","bar"));
 		assertObject(t.getEnum()).isType(Set.class).asJson().is("['foo','bar']");
 
-		t.addEnum(ASet.of("baz"));
+		t.addEnum(set("baz"));
 		assertObject(t.getEnum()).isType(Set.class).asJson().is("['foo','bar','baz']");
 
 		t.addEnum(null);
@@ -336,7 +336,7 @@ public class Items_Test {
 
 		t
 			.set("default", "a")
-			.set("enum", ASet.of("b"))
+			.set("enum", set("b"))
 			.set("collectionFormat", "c")
 			.set("exclusiveMaximum", true)
 			.set("exclusiveMinimum", true)
@@ -457,7 +457,7 @@ public class Items_Test {
 
 		t
 			.set("default", "a")
-			.set("enum", ASet.of("b"))
+			.set("enum", set("b"))
 			.set("collectionFormat", "c")
 			.set("exclusiveMaximum", true)
 			.set("exclusiveMinimum", true)
@@ -488,7 +488,7 @@ public class Items_Test {
 		t
 			.set("collectionFormat", "c")
 			.set("default", "a")
-			.set("enum", ASet.of("b"))
+			.set("enum", set("b"))
 			.set("exclusiveMaximum", true)
 			.set("exclusiveMinimum", true)
 			.set("format", "g")

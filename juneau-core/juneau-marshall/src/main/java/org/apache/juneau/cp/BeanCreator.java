@@ -14,7 +14,7 @@ package org.apache.juneau.cp;
 
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.Visibility.*;
-import static java.util.Optional.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -244,7 +244,7 @@ public class BeanCreator<T> {
 	 * @return A new bean wrapped in an {@link Optional}.
 	 */
 	public Optional<T> execute() {
-		return ofNullable(silent().run());
+		return optional(silent().run());
 	}
 
 	/**

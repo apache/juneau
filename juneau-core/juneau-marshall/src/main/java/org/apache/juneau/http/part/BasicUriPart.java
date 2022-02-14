@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.Optional.*;
 
 import java.net.*;
 import java.util.*;
@@ -98,7 +98,7 @@ public class BasicUriPart extends BasicPart {
 	 * @return This header as a {@link URI}, or {@link Optional#empty()} if the value is <jk>null</jk>
 	 */
 	public Optional<URI> asURI() {
-		return ofNullable(getParsedValue());
+		return optional(getParsedValue());
 	}
 
 	private URI getParsedValue() {

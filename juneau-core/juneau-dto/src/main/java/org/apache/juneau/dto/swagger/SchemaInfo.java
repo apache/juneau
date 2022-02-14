@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ConverterUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
@@ -193,7 +193,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<SchemaInfo> additionalProperties() {
-		return Optional.ofNullable(getAdditionalProperties());
+		return optional(getAdditionalProperties());
 	}
 
 	/**
@@ -265,7 +265,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Set<Object>> allOf() {
-		return Optional.ofNullable(getAllOf());
+		return optional(getAllOf());
 	}
 
 	/**
@@ -333,7 +333,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Object> _default() {
-		return Optional.ofNullable(getDefault());
+		return optional(getDefault());
 	}
 
 	/**
@@ -381,7 +381,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> description() {
-		return Optional.ofNullable(getDescription());
+		return optional(getDescription());
 	}
 
 	/**
@@ -427,7 +427,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> discriminator() {
-		return Optional.ofNullable(getDiscriminator());
+		return optional(getDiscriminator());
 	}
 
 	/**
@@ -486,7 +486,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Set<Object>> _enum() {
-		return Optional.ofNullable(getEnum());
+		return optional(getEnum());
 	}
 
 	/**
@@ -544,7 +544,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Object> example() {
-		return Optional.ofNullable(getExample());
+		return optional(getExample());
 	}
 
 	/**
@@ -590,7 +590,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Boolean> exclusiveMaximum() {
-		return Optional.ofNullable(getExclusiveMaximum());
+		return optional(getExclusiveMaximum());
 	}
 
 	/**
@@ -649,7 +649,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Boolean> exclusiveMinimum() {
-		return Optional.ofNullable(getExclusiveMinimum());
+		return optional(getExclusiveMinimum());
 	}
 
 	/**
@@ -708,7 +708,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<ExternalDocumentation> externalDocs() {
-		return Optional.ofNullable(getExternalDocs());
+		return optional(getExternalDocs());
 	}
 
 	/**
@@ -784,7 +784,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> format() {
-		return Optional.ofNullable(getFormat());
+		return optional(getFormat());
 	}
 
 	/**
@@ -842,7 +842,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Items> items() {
-		return Optional.ofNullable(getItems());
+		return optional(getItems());
 	}
 
 	/**
@@ -906,7 +906,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Number> maximum() {
-		return Optional.ofNullable(getMaximum());
+		return optional(getMaximum());
 	}
 
 	/**
@@ -965,7 +965,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Integer> maxItems() {
-		return Optional.ofNullable(getMaxItems());
+		return optional(getMaxItems());
 	}
 
 	/**
@@ -1024,7 +1024,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Integer> maxLength() {
-		return Optional.ofNullable(getMaxLength());
+		return optional(getMaxLength());
 	}
 
 	/**
@@ -1083,7 +1083,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Integer> maxProperties() {
-		return Optional.ofNullable(getMaxProperties());
+		return optional(getMaxProperties());
 	}
 
 	/**
@@ -1142,7 +1142,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Number> minimum() {
-		return Optional.ofNullable(getMinimum());
+		return optional(getMinimum());
 	}
 
 	/**
@@ -1201,7 +1201,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Integer> minItems() {
-		return Optional.ofNullable(getMinItems());
+		return optional(getMinItems());
 	}
 
 	/**
@@ -1260,7 +1260,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Integer> minLength() {
-		return Optional.ofNullable(getMinLength());
+		return optional(getMinLength());
 	}
 
 	/**
@@ -1319,7 +1319,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Integer> minProperties() {
-		return Optional.ofNullable(getMinProperties());
+		return optional(getMinProperties());
 	}
 
 	/**
@@ -1378,7 +1378,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Number> multipleOf() {
-		return Optional.ofNullable(getMultipleOf());
+		return optional(getMultipleOf());
 	}
 
 	/**
@@ -1438,7 +1438,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> pattern() {
-		return Optional.ofNullable(getPattern());
+		return optional(getPattern());
 	}
 
 	/**
@@ -1497,7 +1497,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Map<String,SchemaInfo>> properties() {
-		return Optional.ofNullable(getProperties());
+		return optional(getProperties());
 	}
 
 	/**
@@ -1554,7 +1554,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Boolean> readOnly() {
-		return Optional.ofNullable(getReadOnly());
+		return optional(getReadOnly());
 	}
 
 	/**
@@ -1615,7 +1615,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> ref() {
-		return Optional.ofNullable(getRef());
+		return optional(getRef());
 	}
 
 	/**
@@ -1661,7 +1661,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Boolean> required() {
-		return Optional.ofNullable(getRequired());
+		return optional(getRequired());
 	}
 
 	/**
@@ -1735,7 +1735,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Set<String>> requiredProperties() {
-		return Optional.ofNullable(getRequiredProperties());
+		return optional(getRequiredProperties());
 	}
 
 	/**
@@ -1792,7 +1792,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> title() {
-		return Optional.ofNullable(getTitle());
+		return optional(getTitle());
 	}
 
 	/**
@@ -1848,7 +1848,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> type() {
-		return Optional.ofNullable(getType());
+		return optional(getType());
 	}
 
 	/**
@@ -1904,7 +1904,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Boolean> uniqueItems() {
-		return Optional.ofNullable(getUniqueItems());
+		return optional(getUniqueItems());
 	}
 
 	/**
@@ -1963,7 +1963,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Xml> xml() {
-		return Optional.ofNullable(getXml());
+		return optional(getXml());
 	}
 
 	/**
@@ -2082,38 +2082,39 @@ public class SchemaInfo extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		ASet<String> s = ASet.<String>of()
-			.appendIf(additionalProperties != null, "additionalProperties")
-			.appendIf(allOf != null, "allOf")
-			.appendIf(_default != null, "default")
-			.appendIf(description != null, "description")
-			.appendIf(discriminator != null, "discriminator")
-			.appendIf(_enum != null, "enum")
-			.appendIf(example != null, "example")
-			.appendIf(exclusiveMaximum != null, "exclusiveMaximum")
-			.appendIf(exclusiveMinimum != null, "exclusiveMinimum")
-			.appendIf(externalDocs != null, "externalDocs")
-			.appendIf(format != null, "format")
-			.appendIf(items != null, "items")
-			.appendIf(maximum != null, "maximum")
-			.appendIf(maxItems != null, "maxItems")
-			.appendIf(maxLength != null, "maxLength")
-			.appendIf(maxProperties != null, "maxProperties")
-			.appendIf(minimum != null, "minimum")
-			.appendIf(minItems != null, "minItems")
-			.appendIf(minLength != null, "minLength")
-			.appendIf(minProperties != null, "minProperties")
-			.appendIf(multipleOf != null, "multipleOf")
-			.appendIf(pattern != null, "pattern")
-			.appendIf(properties != null, "properties")
-			.appendIf(readOnly != null, "readOnly")
-			.appendIf(ref != null, "$ref")
-			.appendIf(required != null, "required")
-			.appendIf(requiredProperties != null, "requiredProperties")
-			.appendIf(title != null, "title")
-			.appendIf(type != null, "type")
-			.appendIf(uniqueItems != null, "uniqueItems")
-			.appendIf(xml != null, "xml");
+		Set<String> s = setBuilder(String.class)
+			.addIf(additionalProperties != null, "additionalProperties")
+			.addIf(allOf != null, "allOf")
+			.addIf(_default != null, "default")
+			.addIf(description != null, "description")
+			.addIf(discriminator != null, "discriminator")
+			.addIf(_enum != null, "enum")
+			.addIf(example != null, "example")
+			.addIf(exclusiveMaximum != null, "exclusiveMaximum")
+			.addIf(exclusiveMinimum != null, "exclusiveMinimum")
+			.addIf(externalDocs != null, "externalDocs")
+			.addIf(format != null, "format")
+			.addIf(items != null, "items")
+			.addIf(maximum != null, "maximum")
+			.addIf(maxItems != null, "maxItems")
+			.addIf(maxLength != null, "maxLength")
+			.addIf(maxProperties != null, "maxProperties")
+			.addIf(minimum != null, "minimum")
+			.addIf(minItems != null, "minItems")
+			.addIf(minLength != null, "minLength")
+			.addIf(minProperties != null, "minProperties")
+			.addIf(multipleOf != null, "multipleOf")
+			.addIf(pattern != null, "pattern")
+			.addIf(properties != null, "properties")
+			.addIf(readOnly != null, "readOnly")
+			.addIf(ref != null, "$ref")
+			.addIf(required != null, "required")
+			.addIf(requiredProperties != null, "requiredProperties")
+			.addIf(title != null, "title")
+			.addIf(type != null, "type")
+			.addIf(uniqueItems != null, "uniqueItems")
+			.addIf(xml != null, "xml")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 

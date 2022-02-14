@@ -17,6 +17,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -25,7 +26,6 @@ import static org.apache.juneau.rest.logging.RestLoggingDetail.*;
 import static org.apache.juneau.rest.processor.ResponseProcessor.*;
 import static java.util.Arrays.*;
 import static java.util.Collections.*;
-import static java.util.Optional.*;
 import static java.util.logging.Level.*;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 
@@ -333,8 +333,8 @@ public class RestContext extends Context {
 			beanStore = createBeanStore(rc, r)
 				.build()
 				.addBean(Builder.class, this)
-				.addBean(ServletConfig.class, ofNullable(inner).orElse(this))
-				.addBean(ServletContext.class, ofNullable(inner).orElse(this).getServletContext());
+				.addBean(ServletConfig.class, optional(inner).orElse(this))
+				.addBean(ServletContext.class, optional(inner).orElse(this).getServletContext());
 
 			if (rootBeanStore == null) {
 				rootBeanStore = beanStore;
@@ -407,7 +407,7 @@ public class RestContext extends Context {
 		 */
 		public final <T> Optional<T> resourceAs(Class<T> type) {
 			Object r = resource().get();
-			return Optional.ofNullable(type.isInstance(r) ? type.cast(r) : null);
+			return optional(type.isInstance(r) ? type.cast(r) : null);
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -3484,7 +3484,7 @@ public class RestContext extends Context {
 		 */
 		@FluentSetter
 		public Builder debugOn(String value) {
-			for (Map.Entry<String,String> e : splitMap(ofNullable(value).orElse(""), true).entrySet()) {
+			for (Map.Entry<String,String> e : splitMap(optional(value).orElse(""), true).entrySet()) {
 				String k = e.getKey(), v = e.getValue();
 				if (v.isEmpty())
 					v = "ALWAYS";
@@ -5578,7 +5578,7 @@ public class RestContext extends Context {
 		 * @return The media types.
 		 */
 		public Optional<List<MediaType>> produces() {
-			return ofNullable(produces);
+			return optional(produces);
 		}
 
 		/**
@@ -5641,7 +5641,7 @@ public class RestContext extends Context {
 		 * @return The media types.
 		 */
 		public Optional<List<MediaType>> consumes() {
-			return ofNullable(consumes);
+			return optional(consumes);
 		}
 
 		/**
@@ -5741,7 +5741,7 @@ public class RestContext extends Context {
 		//----------------------------------------------------------------------------------------------------
 
 		private static MethodList getHookMethods(Supplier<?> resource, HookEvent event) {
-			Map<String,Method> x = AMap.create();
+			Map<String,Method> x = map();
 			Object r = resource.get();
 
 			ClassInfo.ofProxy(r).forEachAllMethodParentFirst(
@@ -5889,7 +5889,7 @@ public class RestContext extends Context {
 				.addBean(Builder.class, builder)
 				.addBean(AnnotationWorkList.class, builder.getApplied());
 
-			path = ofNullable(builder.path).orElse("");
+			path = optional(builder.path).orElse("");
 			fullPath = (parentContext == null ? "" : (parentContext.fullPath + '/')) + path;
 			String p = path;
 			if (! p.endsWith("/*"))
@@ -5897,9 +5897,9 @@ public class RestContext extends Context {
 			pathMatcher = UrlPathMatcher.of(p);
 
 			allowBodyParam = ! builder.disableBodyParam;
-			allowedHeaderParams = newCaseInsensitiveSet(ofNullable(builder.allowedHeaderParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
-			allowedMethodParams = newCaseInsensitiveSet(ofNullable(builder.allowedMethodParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
-			allowedMethodHeaders = newCaseInsensitiveSet(ofNullable(builder.allowedMethodHeaders).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
+			allowedHeaderParams = newCaseInsensitiveSet(optional(builder.allowedHeaderParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
+			allowedMethodParams = newCaseInsensitiveSet(optional(builder.allowedMethodParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
+			allowedMethodHeaders = newCaseInsensitiveSet(optional(builder.allowedMethodHeaders).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
 			clientVersionHeader = builder.clientVersionHeader;
 			defaultCharset = builder.defaultCharset;
 			maxInput = builder.maxInput;
@@ -5948,14 +5948,14 @@ public class RestContext extends Context {
 				()->{
 					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : new LinkedHashSet<>(opContexts.get(0).getSerializers().getSupportedMediaTypes());
 					opContexts.forEach(x -> s.retainAll(x.getSerializers().getSupportedMediaTypes()));
-					return AList.unmodifiable(s);
+					return unmodifiable(listFrom(s));
 				}
 			);
 			consumes = builder.consumes().orElseGet(
 				()->{
 					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : new LinkedHashSet<>(opContexts.get(0).getParsers().getSupportedMediaTypes());
 					opContexts.forEach(x -> s.retainAll(x.getParsers().getSupportedMediaTypes()));
-					return AList.unmodifiable(s);
+					return unmodifiable(listFrom(s));
 				}
 			);
 
@@ -5982,9 +5982,8 @@ public class RestContext extends Context {
 				return v == null ? false : super.contains(v);
 			}
 		};
-		for (String v : StringUtils.split(value))
-			s.add(v);
-		return Collections.unmodifiableSet(s);
+		split(value, x -> s.add(x));
+		return unmodifiable(s);
 	}
 
 	@Override /* Context */
@@ -6630,7 +6629,7 @@ public class RestContext extends Context {
 				throw toHttpException(e, InternalServerError.class);
 			}
 		}
-		return Optional.ofNullable(s);
+		return optional(s);
 	}
 
 	/**

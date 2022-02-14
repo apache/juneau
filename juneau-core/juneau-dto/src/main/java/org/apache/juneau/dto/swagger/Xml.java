@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
@@ -133,7 +134,7 @@ public class Xml extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Boolean> attribute() {
-		return Optional.ofNullable(getAttribute());
+		return optional(getAttribute());
 	}
 
 	/**
@@ -209,7 +210,7 @@ public class Xml extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> name() {
-		return Optional.ofNullable(getName());
+		return optional(getName());
 	}
 
 	/**
@@ -267,7 +268,7 @@ public class Xml extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> namespace() {
-		return Optional.ofNullable(getNamespace());
+		return optional(getNamespace());
 	}
 
 	/**
@@ -325,7 +326,7 @@ public class Xml extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> prefix() {
-		return Optional.ofNullable(getPrefix());
+		return optional(getPrefix());
 	}
 
 	/**
@@ -396,7 +397,7 @@ public class Xml extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Boolean> wrapped() {
-		return Optional.ofNullable(getWrapped());
+		return optional(getWrapped());
 	}
 
 	/**
@@ -473,12 +474,13 @@ public class Xml extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		ASet<String> s = ASet.<String>of()
-			.appendIf(attribute != null, "attribute")
-			.appendIf(name != null, "name")
-			.appendIf(namespace != null, "namespace")
-			.appendIf(prefix != null, "prefix")
-			.appendIf(wrapped != null, "wrapped");
+		Set<String> s = setBuilder(String.class)
+			.addIf(attribute != null, "attribute")
+			.addIf(name != null, "name")
+			.addIf(namespace != null, "namespace")
+			.addIf(prefix != null, "prefix")
+			.addIf(wrapped != null, "wrapped")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 }

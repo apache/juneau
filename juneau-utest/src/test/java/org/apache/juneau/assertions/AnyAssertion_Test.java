@@ -14,12 +14,12 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.time.*;
 import java.util.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -41,11 +41,6 @@ public class AnyAssertion_Test {
 
 	private static Date date(String s) {
 		return new Date(ZonedDateTime.parse(s).toEpochSecond()*1000);
-	}
-
-	@SafeVarargs
-	private static <T> List<T> list(T...objects) {
-		return AList.of(objects);
 	}
 
 	public static final A1 A1 = new A1();
@@ -246,7 +241,7 @@ public class AnyAssertion_Test {
 		Object x2 = list();
 		test(x1).asComparable().isString("1");
 		test(nil).asComparable().isNull();
-		assertThrown(()->test(x2).asComparable()).message().oneLine().is("Object was not type 'java.lang.Comparable'.  Actual='org.apache.juneau.internal.AList'.");
+		assertThrown(()->test(x2).asComparable()).message().oneLine().is("Object was not type 'java.lang.Comparable'.  Actual='java.util.ArrayList'.");
 	}
 
 	@Test
@@ -297,7 +292,7 @@ public class AnyAssertion_Test {
 
 	@Test
 	public void bb20_asMap() throws Exception {
-		Map<String,Integer> x1 = AMap.of("a",2), nil = null;
+		Map<String,Integer> x1 = map("a",2), nil = null;
 		Object x2 = "";
 		test(x1).asMap().isString("{a=2}");
 		test(nil).asMap().isNull();
@@ -306,7 +301,7 @@ public class AnyAssertion_Test {
 
 	@Test
 	public void bb21_asMap_wTypes() throws Exception {
-		Map<String,Integer> x1 = AMap.of("a",2), nil = null;
+		Map<String,Integer> x1 = map("a",2), nil = null;
 		Object x2 = "";
 		test(x1).asMap(String.class,Integer.class).isString("{a=2}");
 		test(nil).asMap(String.class,Integer.class).isNull();

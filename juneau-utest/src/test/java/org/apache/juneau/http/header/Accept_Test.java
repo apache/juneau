@@ -15,6 +15,7 @@ package org.apache.juneau.http.header;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
@@ -68,7 +69,7 @@ public class Accept_Test {
 	@Test
 	public void a02_asRanges() throws Exception {
 		assertObject(new Accept((String)null).asMediaRanges().orElse(null)).isNull();
-		assertInteger(new Accept((String)null).match(AList.of(MediaType.JSON))).is(-1);
+		assertInteger(new Accept((String)null).match(list(MediaType.JSON))).is(-1);
 		assertObject(new Accept((String)null).getRange(0)).isNull();
 		assertObject(new Accept(MediaRanges.of("application/json"))).asString().is("Accept: application/json");
 	}

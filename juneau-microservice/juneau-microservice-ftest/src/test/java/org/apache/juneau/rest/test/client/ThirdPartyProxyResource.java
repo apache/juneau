@@ -13,28 +13,22 @@
 package org.apache.juneau.rest.test.client;
 
 import static java.util.Arrays.*;
-import static org.junit.Assert.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.testutils.Constants.*;
+import static org.junit.Assert.*;
 
 import java.io.*;
 import java.util.*;
 
 import javax.servlet.http.*;
 
-import org.apache.juneau.http.annotation.Body;
-import org.apache.juneau.http.annotation.FormData;
-import org.apache.juneau.http.annotation.Header;
-import org.apache.juneau.http.annotation.Path;
-import org.apache.juneau.http.annotation.Query;
-import org.apache.juneau.http.annotation.Schema;
-import org.apache.juneau.internal.AList;
-import org.apache.juneau.internal.AMap;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.config.BasicUniversalJenaConfig;
+import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.logging.*;
-import org.apache.juneau.rest.servlet.BasicRestServlet;
+import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.serializer.annotation.*;
 import org.apache.juneau.testutils.pojos.*;
 
@@ -1259,17 +1253,17 @@ public class ThirdPartyProxyResource extends BasicRestServlet implements BasicUn
 
 	@RestGet(path="/returnInteger3dList")
 	public List<List<List<Integer>>> returnInteger3dList() {
-		return AList.of(AList.of(AList.of(1,null),null),null);
+		return list(list(list(1,null),null),null);
 	}
 
 	@RestGet(path="/returnInteger1d3dList")
 	public List<Integer[][][]> returnInteger1d3dList() {
-		return AList.of(new Integer[][][]{{{1,null},null},null},null);
+		return list(new Integer[][][]{{{1,null},null},null},null);
 	}
 
 	@RestGet(path="/returnInt1d3dList")
 	public List<int[][][]> returnInt1d3dList() {
-		return AList.of(new int[][][]{{{1,2},null},null},null);
+		return list(new int[][][]{{{1,2},null},null},null);
 	}
 
 	@RestGet(path="/returnStringList")
@@ -1296,27 +1290,27 @@ public class ThirdPartyProxyResource extends BasicRestServlet implements BasicUn
 
 	@RestGet(path="/returnBean1d3dList")
 	public List<ABean[][][]> returnBean1d3dList() {
-		return AList.of(new ABean[][][]{{{ABean.get(),null},null},null},null);
+		return list(new ABean[][][]{{{ABean.get(),null},null},null},null);
 	}
 
 	@RestGet(path="/returnBeanMap")
 	public Map<String,ABean> returnBeanMap() {
-		return AMap.of("foo",ABean.get());
+		return map("foo",ABean.get());
 	}
 
 	@RestGet(path="/returnBeanListMap")
 	public Map<String,List<ABean>> returnBeanListMap() {
-		return AMap.of("foo",asList(ABean.get()));
+		return map("foo",asList(ABean.get()));
 	}
 
 	@RestGet(path="/returnBean1d3dListMap")
 	public Map<String,List<ABean[][][]>> returnBean1d3dListMap() {
-		return AMap.of("foo", AList.of(new ABean[][][]{{{ABean.get(),null},null},null},null));
+		return map("foo", list(new ABean[][][]{{{ABean.get(),null},null},null},null));
 	}
 
 	@RestGet(path="/returnBeanListMapIntegerKeys")
 	public Map<Integer,List<ABean>> returnBeanListMapIntegerKeys() {
-		return AMap.of(1,asList(ABean.get()));
+		return map(1,asList(ABean.get()));
 	}
 
 	// Typed beans
@@ -1338,27 +1332,27 @@ public class ThirdPartyProxyResource extends BasicRestServlet implements BasicUn
 
 	@RestGet(path="/returnTypedBean1d3dList")
 	public List<TypedBean[][][]> returnTypedBean1d3dList() {
-		return AList.of(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null);
+		return list(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null);
 	}
 
 	@RestGet(path="/returnTypedBeanMap")
 	public Map<String,TypedBean> returnTypedBeanMap() {
-		return AMap.of("foo",TypedBeanImpl.get());
+		return map("foo",TypedBeanImpl.get());
 	}
 
 	@RestGet(path="/returnTypedBeanListMap")
 	public Map<String,List<TypedBean>> returnTypedBeanListMap() {
-		return AMap.of("foo",asList((TypedBean)TypedBeanImpl.get()));
+		return map("foo",asList((TypedBean)TypedBeanImpl.get()));
 	}
 
 	@RestGet(path="/returnTypedBean1d3dListMap")
 	public Map<String,List<TypedBean[][][]>> returnTypedBean1d3dListMap() {
-		return AMap.of("foo", AList.of(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null));
+		return map("foo", list(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null));
 	}
 
 	@RestGet(path="/returnTypedBeanListMapIntegerKeys")
 	public Map<Integer,List<TypedBean>> returnTypedBeanListMapIntegerKeys() {
-		return AMap.of(1,asList((TypedBean)TypedBeanImpl.get()));
+		return map(1,asList((TypedBean)TypedBeanImpl.get()));
 	}
 
 	// Swapped POJOs
@@ -1375,12 +1369,12 @@ public class ThirdPartyProxyResource extends BasicRestServlet implements BasicUn
 
 	@RestGet(path="/returnSwappedObjectMap")
 	public Map<SwappedObject,SwappedObject> returnSwappedObjectMap() {
-		return AMap.of(new SwappedObject(),new SwappedObject());
+		return map(new SwappedObject(),new SwappedObject());
 	}
 
 	@RestGet(path="/returnSwappedObject3dMap")
 	public Map<SwappedObject,SwappedObject[][][]> returnSwappedObject3dMap() {
-		return AMap.of(new SwappedObject(),new SwappedObject[][][]{{{new SwappedObject(),null},null},null});
+		return map(new SwappedObject(),new SwappedObject[][][]{{{new SwappedObject(),null},null},null});
 	}
 
 	// Implicit swapped POJOs
@@ -1397,12 +1391,12 @@ public class ThirdPartyProxyResource extends BasicRestServlet implements BasicUn
 
 	@RestGet(path="/returnImplicitSwappedObjectMap")
 	public Map<ImplicitSwappedObject,ImplicitSwappedObject> returnImplicitSwappedObjectMap() {
-		return AMap.of(new ImplicitSwappedObject(),new ImplicitSwappedObject());
+		return map(new ImplicitSwappedObject(),new ImplicitSwappedObject());
 	}
 
 	@RestGet(path="/returnImplicitSwappedObject3dMap")
 	public Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> returnImplicitSwappedObject3dMap() {
-		return AMap.of(new ImplicitSwappedObject(),new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null});
+		return map(new ImplicitSwappedObject(),new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null});
 	}
 
 	// Enums
@@ -1419,32 +1413,32 @@ public class ThirdPartyProxyResource extends BasicRestServlet implements BasicUn
 
 	@RestGet(path="/returnEnumList")
 	public List<TestEnum> returnEnumList() {
-		return AList.of(TestEnum.TWO,null);
+		return list(TestEnum.TWO,null);
 	}
 
 	@RestGet(path="/returnEnum3dList")
 	public List<List<List<TestEnum>>> returnEnum3dList() {
-		return AList.of(AList.of(AList.of(TestEnum.TWO,null),null),null);
+		return list(list(list(TestEnum.TWO,null),null),null);
 	}
 
 	@RestGet(path="/returnEnum1d3dList")
 	public List<TestEnum[][][]> returnEnum1d3dList() {
-		return AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null);
+		return list(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null);
 	}
 
 	@RestGet(path="/returnEnumMap")
 	public Map<TestEnum,TestEnum> returnEnumMap() {
-		return AMap.of(TestEnum.ONE,TestEnum.TWO);
+		return map(TestEnum.ONE,TestEnum.TWO);
 	}
 
 	@RestGet(path="/returnEnum3dArrayMap")
 	public Map<TestEnum,TestEnum[][][]> returnEnum3dArrayMap() {
-		return AMap.of(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null});
+		return map(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null});
 	}
 
 	@RestGet(path="/returnEnum1d3dListMap")
 	public Map<TestEnum,List<TestEnum[][][]>> returnEnum1d3dListMap() {
-		return AMap.of(TestEnum.ONE,AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
+		return map(TestEnum.ONE,list(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

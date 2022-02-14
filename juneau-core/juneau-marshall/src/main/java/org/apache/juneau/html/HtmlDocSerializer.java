@@ -12,11 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import static java.util.Optional.*;
 import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
-import static java.util.Collections.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -85,6 +83,8 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	//-------------------------------------------------------------------------------------------------------------------
 	// Static
 	//-------------------------------------------------------------------------------------------------------------------
+
+	private static final String[] EMPTY_ARRAY = new String[0];
 
 	/** Default serializer, all default settings. */
 	public static final HtmlDocSerializer DEFAULT = new HtmlDocSerializer(create());
@@ -1643,20 +1643,20 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 */
 	public HtmlDocSerializer(Builder builder) {
 		super(builder);
-		style = ofNullable(builder.style).map(x -> toArray(x)).orElse(new String[0]);
-		stylesheet = ofNullable(builder.stylesheet).map(x -> toArray(x)).orElse(new String[0]);
-		script = ofNullable(builder.script).map(x -> toArray(x)).orElse(new String[0]);
-		head = ofNullable(builder.head).map(x -> toArray(x)).orElse(new String[0]);
-		header = ofNullable(builder.header).map(x -> toArray(x)).orElse(new String[0]);
-		nav = ofNullable(builder.nav).map(x -> toArray(x)).orElse(new String[0]);
-		aside = ofNullable(builder.aside).map(x -> toArray(x)).orElse(new String[0]);
-		footer = ofNullable(builder.footer).map(x -> toArray(x)).orElse(new String[0]);
-		navlinks = ofNullable(builder.navlinks).map(x -> toArray(x)).orElse(new String[0]);
+		style = optional(builder.style).map(x -> toArray(x)).orElse(EMPTY_ARRAY);
+		stylesheet = optional(builder.stylesheet).map(x -> toArray(x)).orElse(EMPTY_ARRAY);
+		script = optional(builder.script).map(x -> toArray(x)).orElse(EMPTY_ARRAY);
+		head = optional(builder.head).map(x -> toArray(x)).orElse(EMPTY_ARRAY);
+		header = optional(builder.header).map(x -> toArray(x)).orElse(EMPTY_ARRAY);
+		nav = optional(builder.nav).map(x -> toArray(x)).orElse(EMPTY_ARRAY);
+		aside = optional(builder.aside).map(x -> toArray(x)).orElse(EMPTY_ARRAY);
+		footer = optional(builder.footer).map(x -> toArray(x)).orElse(EMPTY_ARRAY);
+		navlinks = optional(builder.navlinks).map(x -> toArray(x)).orElse(EMPTY_ARRAY);
 		asideFloat = builder.asideFloat;
 		noResultsMessage = builder.noResultsMessage;
 		nowrap = builder.nowrap;
 		template = builder.template;
-		widgets = builder.widgets == null ? emptyList() : new ArrayList<>(builder.widgets);
+		widgets = builder.widgets == null ? emptyList() : copyOf(builder.widgets);
 
 		templateBean = newInstance(template);
 		widgetMap = new HtmlWidgetMap();

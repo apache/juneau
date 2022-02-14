@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.util.*;
 
 import javax.servlet.*;
@@ -75,7 +77,7 @@ public class RestChildren {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(RestChildren.class, beanStore);
-			list = AList.create();
+			list = list();
 		}
 
 		@Override /* BeanBuilder */
@@ -144,11 +146,11 @@ public class RestChildren {
 				UrlPathMatcher upp = rc.getPathMatcher();
 				UrlPathMatch uppm = upp.match(builder.getUrlPath());
 				if (uppm != null) {
-					return Optional.of(RestChildMatch.create(uppm, rc));
+					return optional(RestChildMatch.create(uppm, rc));
 				}
 			}
 		}
-		return Optional.empty();
+		return empty();
 	}
 
 	/**

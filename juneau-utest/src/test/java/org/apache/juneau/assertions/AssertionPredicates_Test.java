@@ -13,11 +13,11 @@
 package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.junit.runners.MethodSorters.*;
 import static java.util.regex.Pattern.*;
 
-import java.util.*;
 import java.util.regex.*;
 
 import org.junit.*;
@@ -29,7 +29,7 @@ public class AssertionPredicates_Test {
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static StringAssertion A1 = assertString("foo").silent(), A2 = assertString(Optional.empty()).silent();
+	private static StringAssertion A1 = assertString("foo").silent(), A2 = assertString(empty()).silent();
 
 	@Test
 	public void a00_dummyConstructor() {

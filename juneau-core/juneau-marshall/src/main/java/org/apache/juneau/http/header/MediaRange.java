@@ -13,11 +13,11 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.HttpParts.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
 import org.apache.http.*;
-import org.apache.juneau.internal.*;
 
 
 /**
@@ -48,7 +48,7 @@ public class MediaRange extends MediaType {
 
 		// The media type consists of everything up to the q parameter.
 		// The q parameter and stuff after is part of the range.
-		List<NameValuePair> extensions = AList.create();
+		List<NameValuePair> extensions = list();
 		boolean foundQ = false;
 		for (NameValuePair p : e.getParameters()) {
 			if (p.getName().equals("q")) {

@@ -15,6 +15,7 @@ package org.apache.juneau.http.remote;
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
@@ -26,7 +27,6 @@ import java.util.concurrent.atomic.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
@@ -95,20 +95,20 @@ public class Remote_HeaderAnnotation_Test {
 		assertEquals("{f:'1'}",x.getX5(Bean.create()));
 		assertEquals("{x:'f=1,f=1'}",x.getX6(new Bean[]{Bean.create(),Bean.create()}));
 		assertEquals("{x:'@((f=1),(f=1))'}",x.getX7(new Bean[]{Bean.create(),Bean.create()}));
-		assertEquals("{x:'f=1,f=1'}",x.getX8(AList.of(Bean.create(),Bean.create())));
-		assertEquals("{x:'@((f=1),(f=1))'}",x.getX9(AList.of(Bean.create(),Bean.create())));
-		assertEquals("{x:'k1=f\\\\=1'}",x.getX10(AMap.of("k1",Bean.create())));
-		assertEquals("{k1:'f=1'}",x.getX11(AMap.of("k1",Bean.create())));
-		assertEquals("{k1:'f=1'}",x.getX12(AMap.of("k1",Bean.create())));
-		assertEquals("{x:'k1=f\\\\=1'}",x.getX13(AMap.of("k1",Bean.create())));
-		assertEquals("{k1:'f=1'}",x.getX14(AMap.of("k1",Bean.create())));
+		assertEquals("{x:'f=1,f=1'}",x.getX8(list(Bean.create(),Bean.create())));
+		assertEquals("{x:'@((f=1),(f=1))'}",x.getX9(list(Bean.create(),Bean.create())));
+		assertEquals("{x:'k1=f\\\\=1'}",x.getX10(map("k1",Bean.create())));
+		assertEquals("{k1:'f=1'}",x.getX11(map("k1",Bean.create())));
+		assertEquals("{k1:'f=1'}",x.getX12(map("k1",Bean.create())));
+		assertEquals("{x:'k1=f\\\\=1'}",x.getX13(map("k1",Bean.create())));
+		assertEquals("{k1:'f=1'}",x.getX14(map("k1",Bean.create())));
 		assertEquals("{foo:'bar'}",x.getX15(headers("foo","bar")));
 		assertEquals("{foo:'bar'}",x.getX16(headers("foo","bar")));
 		assertEquals("{foo:'bar'}",x.getX17(header("foo","bar")));
 		assertEquals("{foo:'bar'}",x.getX18(new org.apache.http.Header[]{header("foo","bar")}));
 		assertThrown(()->x.getX19("Foo")).messages().any(contains("Invalid value type"));
 		assertEquals("{}",x.getX19(null));
-		assertEquals("{foo:'bar'}",x.getX20(AList.of(header("foo","bar"))));
+		assertEquals("{foo:'bar'}",x.getX20(list(header("foo","bar"))));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -757,15 +757,15 @@ public class Remote_HeaderAnnotation_Test {
 	public static class K2a {
 		@Header
 		public Map<String,Object> getA() {
-			return AMap.of("a1","v1","a2",123,"a3",null,"a4","");
+			return mapBuilder(String.class,Object.class).add("a1","v1").add("a2",123).add("a3",null).add("a4","").build();
 		}
 		@Header("*")
 		public Map<String,Object> getB() {
-			return AMap.of("b1","true","b2","123","b3","null");
+			return map("b1","true","b2","123","b3","null");
 		}
 		@Header(name="*") @Schema(aev=true)
 		public Map<String,Object> getC() {
-			return AMap.of("c1","v1","c2",123,"c3",null,"c4","");
+			return mapBuilder(String.class,Object.class).add("c1","v1").add("c2",123).add("c3",null).add("c4","").build();
 		}
 		@Header("*")
 		public Map<String,Object> getD() {
@@ -841,19 +841,19 @@ public class Remote_HeaderAnnotation_Test {
 	public static class K4a {
 		@Header
 		public List<Object> getA() {
-			return AList.of("foo","","true","123","null",true,123,null);
+			return list("foo","","true","123","null",true,123,null);
 		}
 		@Header("b")
 		public List<Object> getX1() {
-			return AList.of("foo","","true","123","null",true,123,null);
+			return list("foo","","true","123","null",true,123,null);
 		}
 		@Header(name="c",serializer=MockWriterSerializer.X.class)
 		public List<Object> getX2() {
-			return AList.of("foo","","true","123","null",true,123,null);
+			return list("foo","","true","123","null",true,123,null);
 		}
 		@Header(name="d") @Schema(aev=true)
 		public List<Object> getX3() {
-			return AList.create();
+			return list();
 		}
 		@Header("e")
 		public List<Object> getX4() {

@@ -14,6 +14,7 @@ package org.apache.juneau.config.internal;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.config.event.ConfigEventType.*;
 
 import java.io.*;
@@ -122,8 +123,7 @@ public class ConfigMap implements ConfigStoreListener {
 		}
 
 		List<Import> irl = new ArrayList<>(imports.size());
-		for (ConfigMap ic : AList.of(imports.values()).riterable())
-			irl.add(new Import(ic).register(listeners));
+		forEachReverse(listFrom(imports.values()), x -> irl.add(new Import(x).register(listeners)));
 		this.imports.addAll(irl);
 
 		// Add [blank] section.

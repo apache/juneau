@@ -13,6 +13,7 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -24,7 +25,6 @@ import javax.xml.datatype.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.dto.html5.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json.annotation.*;
 import org.apache.juneau.parser.*;
@@ -94,7 +94,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testImplListClasses() throws Exception {
-		List<IBean> l = AList.of(new CBean());
+		List<IBean> l = list(new CBean());
 
 		l.get(0).setF1("bar");
 		l = roundTrip(l, List.class, IBean.class);
@@ -114,7 +114,7 @@ public class RoundTripBeanMapsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testImplMap() throws Exception {
-		Map<String,IBean> l = AMap.of("foo",new CBean());
+		Map<String,IBean> l = map("foo",new CBean());
 
 		l.get("foo").setF1("bar");
 		l = roundTrip(l, Map.class, String.class, IBean.class);

@@ -12,22 +12,23 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.jena.Constants.*;
 
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.nio.charset.Charset;
+import java.io.*;
+import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
-import java.util.function.Consumer;
+import java.util.function.*;
 
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.util.iterator.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.header.MediaType;
-import org.apache.juneau.httppart.HttpPartSchema;
-import org.apache.juneau.internal.FluentSetters;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.xml.*;
@@ -260,7 +261,7 @@ public class RdfParserSession extends ReaderParserSession {
 		}
 
 		if (roots.isEmpty())
-			return type.isOptional() ? (T)Optional.empty() : null;
+			return type.isOptional() ? (T)empty() : null;
 
 		if (roots.size() > 1)
 			throw new ParseException(this, "Too many root nodes found in model:  {0}", roots.size());
@@ -394,7 +395,7 @@ public class RdfParserSession extends ReaderParserSession {
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)Optional.ofNullable(parseAnything(eType.getElementType(), n, outer, pMeta));
+			return (T)optional(parseAnything(eType.getElementType(), n, outer, pMeta));
 
 		setCurrentClass(sType);
 

@@ -15,6 +15,7 @@ package org.apache.juneau;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
@@ -506,7 +507,7 @@ public class BeanSession extends ContextSession {
 			}
 
 			if (to.isOptional() && (! (value instanceof Optional)))
-				return (T) Optional.ofNullable(convertToMemberType(outer, value, to.getElementType()));
+				return (T) optional(convertToMemberType(outer, value, to.getElementType()));
 
 			Class<T> tc = to.getInnerClass();
 
@@ -1400,7 +1401,7 @@ public class BeanSession extends ContextSession {
 	}
 
 	/**
-	 * Creates either an {@link OMap} or {@link AMap} depending on whether the key type is
+	 * Creates either an {@link OMap} or {@link LinkedHashMap} depending on whether the key type is
 	 * String or something else.
 	 *
 	 * @param mapMeta The metadata of the map to create.
@@ -1408,7 +1409,7 @@ public class BeanSession extends ContextSession {
 	 */
 	protected Map newGenericMap(ClassMeta mapMeta) {
 		ClassMeta<?> k = mapMeta.getKeyType();
-		return (k == null || k.isString()) ? new OMap(this) : new AMap();
+		return (k == null || k.isString()) ? new OMap(this) : map();
 	}
 
 	/**

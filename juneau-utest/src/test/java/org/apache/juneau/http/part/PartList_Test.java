@@ -14,6 +14,7 @@ package org.apache.juneau.http.part;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpParts.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -22,7 +23,6 @@ import java.util.concurrent.atomic.*;
 import org.apache.http.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
 import org.junit.*;
 
@@ -101,7 +101,7 @@ public class PartList_Test {
 		x = partList(FOO_1, FOO_2, null);
 		assertObject(x).isString("Foo=1&Foo=2");
 
-		x = partList(AList.of(FOO_1, FOO_2, null));
+		x = partList(list(FOO_1, FOO_2, null));
 		assertObject(x).isString("Foo=1&Foo=2");
 
 		x = partList("Foo","1","Foo","2");
@@ -115,7 +115,7 @@ public class PartList_Test {
 		x = PartList.of(Collections.emptyList());
 		assertObject(x).isString("");
 
-		x = PartList.of(AList.of(FOO_1));
+		x = PartList.of(list(FOO_1));
 		assertObject(x).isString("Foo=1");
 
 		x = PartList.of((NameValuePair[])null);
@@ -355,7 +355,7 @@ public class PartList_Test {
 			.append("Bar", "b1")
 			.append("Bar", ()->"b2")
 			.append((List<NameValuePair>)null)
-			.append(AList.of(FOO_4))
+			.append(list(FOO_4))
 			.build();
 		assertObject(x2).isString("Foo=1&Foo=2&Foo=3&Bar=b1&Bar=b2&Foo=4");
 	}
@@ -374,7 +374,7 @@ public class PartList_Test {
 			.prepend("Bar", "b1")
 			.prepend("Bar", ()->"b2")
 			.prepend((List<NameValuePair>)null)
-			.prepend(AList.of(FOO_4))
+			.prepend(list(FOO_4))
 			.build();
 		assertObject(x2).isString("Foo=4&Bar=b2&Bar=b1&Foo=2&Foo=3&Foo=1");
 	}
@@ -389,7 +389,7 @@ public class PartList_Test {
 			.remove(PartList.of(FOO_1))
 			.remove(FOO_2)
 			.remove(FOO_3, FOO_4)
-			.remove(AList.of(FOO_5))
+			.remove(list(FOO_5))
 			.build();
 		assertObject(x).isString("Foo=6&Foo=7");
 
@@ -430,7 +430,7 @@ public class PartList_Test {
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
 			.set((List<NameValuePair>)null)
-			.set(AList.of(null,FOO_3,FOO_4,FOO_5))
+			.set(list(null,FOO_3,FOO_4,FOO_5))
 			.build();
 		assertObject(x).isString("Bar=1&Bar=2&Foo=3&Foo=4&Foo=5");
 
@@ -543,16 +543,16 @@ public class PartList_Test {
 		PartList x11 = PartList.create().setDefault("a",()->"x").build();
 		assertObject(x11).isString("a=x");
 
-		PartList x12 = PartList.create().set(BPart.X,BPart.Y).setDefault(AList.of(APart.X,BPart.Z,null)).build();
+		PartList x12 = PartList.create().set(BPart.X,BPart.Y).setDefault(list(APart.X,BPart.Z,null)).build();
 		assertObject(x12).isString("b=x&b=y&a=x");
 
 		PartList x13 = PartList.create().set(BPart.X,BPart.Y).setDefault(PartList.of(APart.X,BPart.Z,null)).build();
 		assertObject(x13).isString("b=x&b=y&a=x");
 
 		PartList x14 = PartList.create().set(BPart.X,BPart.Y)
-			.setDefault(AList.of(APart.X,BPart.X,null))
-			.setDefault(AList.of(APart.Y,BPart.Y,null))
-			.setDefault(AList.of(CPart.X))
+			.setDefault(list(APart.X,BPart.X,null))
+			.setDefault(list(APart.Y,BPart.Y,null))
+			.setDefault(list(CPart.X))
 			.build();
 		assertObject(x14).isString("b=x&b=y&a=y&c=x");
 	}

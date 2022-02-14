@@ -12,6 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.guard;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
@@ -50,7 +54,7 @@ public class RestGuardList {
 	@FluentSetters
 	public static class Builder extends BeanBuilder<RestGuardList> {
 
-		AList<BeanCreator<RestGuard>> entries;
+		List<BeanCreator<RestGuard>> entries;
 
 		/**
 		 * Constructor.
@@ -59,7 +63,7 @@ public class RestGuardList {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(RestGuardList.class, beanStore);
-			entries = AList.create();
+			entries = list();
 		}
 
 		@Override /* BeanBuilder */
@@ -80,7 +84,7 @@ public class RestGuardList {
 		@SuppressWarnings("unchecked")
 		public Builder append(Class<? extends RestGuard>...values) {
 			for (Class<? extends RestGuard> v : values)
-				entries.append(beanStore().createBean(RestGuard.class).type(v));
+				entries.add(beanStore().createBean(RestGuard.class).type(v));
 			return this;
 		}
 
@@ -92,7 +96,7 @@ public class RestGuardList {
 		 */
 		public Builder append(RestGuard...values) {
 			for (RestGuard v : values)
-				entries.append(beanStore().createBean(RestGuard.class).impl(v));
+				entries.add(beanStore().createBean(RestGuard.class).impl(v));
 			return this;
 		}
 

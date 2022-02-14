@@ -14,6 +14,7 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -21,7 +22,6 @@ import java.util.concurrent.atomic.*;
 
 import org.apache.http.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
 import org.junit.*;
 
@@ -76,7 +76,7 @@ public class HeaderList_Test {
 		x = headerList(FOO_1, FOO_2, null);
 		assertObject(x).isString("[Foo: 1, Foo: 2]");
 
-		x = headerList(AList.of(FOO_1, FOO_2, null));
+		x = headerList(list(FOO_1, FOO_2, null));
 		assertObject(x).isString("[Foo: 1, Foo: 2]");
 
 		x = headerList("Foo","1","Foo","2");
@@ -90,7 +90,7 @@ public class HeaderList_Test {
 		x = HeaderList.of(Collections.emptyList());
 		assertObject(x).isString("[]");
 
-		x = HeaderList.of(AList.of(FOO_1));
+		x = HeaderList.of(list(FOO_1));
 		assertObject(x).isString("[Foo: 1]");
 
 		x = HeaderList.of((Header[])null);
@@ -328,7 +328,7 @@ public class HeaderList_Test {
 			.append("Bar", "b1")
 			.append("Bar", ()->"b2")
 			.append((List<Header>)null)
-			.append(AList.of(FOO_4))
+			.append(list(FOO_4))
 			.build();
 		assertObject(x2).isString("[Foo: 1, Foo: 2, Foo: 3, Bar: b1, Bar: b2, Foo: 4]");
 	}
@@ -347,7 +347,7 @@ public class HeaderList_Test {
 			.prepend("Bar", "b1")
 			.prepend("Bar", ()->"b2")
 			.prepend((List<Header>)null)
-			.prepend(AList.of(FOO_4))
+			.prepend(list(FOO_4))
 			.build();
 		assertObject(x2).isString("[Foo: 4, Bar: b2, Bar: b1, Foo: 2, Foo: 3, Foo: 1]");
 	}
@@ -362,7 +362,7 @@ public class HeaderList_Test {
 			.remove(HeaderList.of(FOO_1))
 			.remove(FOO_2)
 			.remove(FOO_3, FOO_4)
-			.remove(AList.of(FOO_5))
+			.remove(list(FOO_5))
 			.build();
 		assertObject(x).isString("[Foo: 6, Foo: 7]");
 
@@ -403,7 +403,7 @@ public class HeaderList_Test {
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
 			.set((List<Header>)null)
-			.set(AList.of(null,FOO_3,FOO_4,FOO_5))
+			.set(list(null,FOO_3,FOO_4,FOO_5))
 			.build();
 		assertObject(x).isString("[Bar: 1, Bar: 2, Foo: 3, Foo: 4, Foo: 5]");
 
@@ -516,16 +516,16 @@ public class HeaderList_Test {
 		HeaderList x11 = HeaderList.create().setDefault("Accept",()->"text/xml").build();
 		assertObject(x11).isString("[Accept: text/xml]");
 
-		HeaderList x12 = HeaderList.create().set(ContentType.TEXT_XML,ContentType.TEXT_PLAIN).setDefault(AList.of(Accept.TEXT_XML,ContentType.TEXT_HTML,null)).build();
+		HeaderList x12 = HeaderList.create().set(ContentType.TEXT_XML,ContentType.TEXT_PLAIN).setDefault(list(Accept.TEXT_XML,ContentType.TEXT_HTML,null)).build();
 		assertObject(x12).isString("[Content-Type: text/xml, Content-Type: text/plain, Accept: text/xml]");
 
 		HeaderList x13 = HeaderList.create().set(ContentType.TEXT_XML,ContentType.TEXT_PLAIN).setDefault(HeaderList.of(Accept.TEXT_XML,ContentType.TEXT_HTML,null)).build();
 		assertObject(x13).isString("[Content-Type: text/xml, Content-Type: text/plain, Accept: text/xml]");
 
 		HeaderList x14 = HeaderList.create().set(ContentType.TEXT_XML,ContentType.TEXT_PLAIN)
-			.setDefault(AList.of(Accept.TEXT_XML,ContentType.TEXT_HTML,null))
-			.setDefault(AList.of(Accept.TEXT_HTML,ContentType.TEXT_XML,null))
-			.setDefault(AList.of(Age.of(1)))
+			.setDefault(list(Accept.TEXT_XML,ContentType.TEXT_HTML,null))
+			.setDefault(list(Accept.TEXT_HTML,ContentType.TEXT_XML,null))
+			.setDefault(list(Age.of(1)))
 			.build();
 		assertObject(x14).isString("[Content-Type: text/xml, Content-Type: text/plain, Accept: text/html, Age: 1]");
 	}

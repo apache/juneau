@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.ListOperation.*;
 import static org.apache.juneau.http.HttpParts.*;
@@ -26,7 +27,6 @@ import org.apache.http.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
@@ -99,19 +99,19 @@ public class RestClient_FormData_Test {
 
 	@Test
 	public void a06_formData_String_Object_Schema() throws Exception {
-		List<String> l = AList.of("bar","baz"), l2 = AList.of("qux","quux");
+		List<String> l = list("bar","baz"), l2 = list("qux","quux");
 		client().formData(part("foo",l,T_ARRAY_PIPES)).build().post("/formData").formData(part("foo",l2,T_ARRAY_PIPES)).run().assertBody().asString().urlDecode().is("foo=bar|baz&foo=qux|quux");
 	}
 
 	@Test
 	public void a07_formData_String_Object_Schema_Serializer() throws Exception {
-		List<String> l = AList.of("bar","baz");
+		List<String> l = list("bar","baz");
 		client().formData(part("foo",l,T_ARRAY_PIPES).serializer(UonSerializer.DEFAULT)).build().post("/formData").run().assertBody().asString().urlDecode().is("foo=@(bar,baz)");
 	}
 
 	@Test
 	public void a08_formData_AddFlag_String_Object_Schema() throws Exception {
-		List<String> l = AList.of("qux","quux");
+		List<String> l = list("qux","quux");
 		client().formData("foo","bar").build().post("/formData").formData(APPEND,part("foo",l,T_ARRAY_PIPES)).run().assertBody().asString().urlDecode().is("foo=bar&foo=qux|quux");
 		client().formData("foo","bar").build().post("/formData").formData(PREPEND,part("foo",l,T_ARRAY_PIPES)).run().assertBody().asString().urlDecode().is("foo=qux|quux&foo=bar");
 		client().formData("foo","bar").build().post("/formData").formData(SET,part("foo",l,T_ARRAY_PIPES)).run().assertBody().asString().urlDecode().is("foo=qux|quux");
@@ -145,7 +145,7 @@ public class RestClient_FormData_Test {
 
 	@Test
 	public void a11_formData_String_Supplier_Schema() throws Exception {
-		List<String> l1 = AList.of("foo","bar"), l2 = AList.of("bar","baz");
+		List<String> l1 = list("foo","bar"), l2 = list("bar","baz");
 		TestSupplier s = TestSupplier.of(null);
 
 		RestClient x1 = client().formData(part("foo",s,T_ARRAY_PIPES)).build();

@@ -14,7 +14,7 @@ package org.apache.juneau.cp;
 
 import static java.util.Arrays.*;
 import static org.apache.juneau.assertions.Assertions.*;
-import static java.util.Optional.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
@@ -98,7 +98,7 @@ public class DefaultClassList {
 		assertArgNotNull("type", type);
 		for (Class<?> e : entries)
 			if (e != null && type.isAssignableFrom(e))
-				return Optional.of((Class<? extends T>)e);
+				return optional((Class<? extends T>)e);
 		return empty();
 	}
 

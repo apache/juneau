@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.arg;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.Optional.*;
 import static org.apache.juneau.http.annotation.HeaderAnnotation.*;
 
 import java.util.*;
@@ -123,7 +123,7 @@ public class HeaderArg implements RestOpArg {
 		this.name = findName(pi).orElseThrow(() -> new ArgException(pi, "@Header used without name or value"));
 		this.type = pi.getParameterType();
 		this.schema = HttpPartSchema.create(Header.class, pi);
-		this.partParser = ofNullable(schema.getParser()).map(x -> HttpPartParser.creator().type(x).apply(annotations).create()).orElse(null);
+		this.partParser = optional(schema.getParser()).map(x -> HttpPartParser.creator().type(x).apply(annotations).create()).orElse(null);
 		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
 
 		if (multi && ! type.isCollectionOrArray())

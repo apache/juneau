@@ -12,11 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.html5;
 
-import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.apache.juneau.html.annotation.HtmlFormat.*;
+import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.net.*;
-import java.net.URI;
 import java.util.*;
 import java.util.Map.*;
 

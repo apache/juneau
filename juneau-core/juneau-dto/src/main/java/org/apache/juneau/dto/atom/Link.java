@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.util.*;
@@ -109,7 +110,7 @@ public class Link extends Common {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> href() {
-		return Optional.ofNullable(href);
+		return optional(href);
 	}
 
 	/**
@@ -164,7 +165,7 @@ public class Link extends Common {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> rel() {
-		return Optional.ofNullable(rel);
+		return optional(rel);
 	}
 
 	/**
@@ -228,7 +229,7 @@ public class Link extends Common {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> type() {
-		return Optional.ofNullable(type);
+		return optional(type);
 	}
 
 	/**
@@ -283,7 +284,7 @@ public class Link extends Common {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> hreflang() {
-		return Optional.ofNullable(hreflang);
+		return optional(hreflang);
 	}
 
 	/**
@@ -338,7 +339,7 @@ public class Link extends Common {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> title() {
-		return Optional.ofNullable(title);
+		return optional(title);
 	}
 
 	/**
@@ -393,7 +394,7 @@ public class Link extends Common {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Integer> length() {
-		return Optional.ofNullable(length);
+		return optional(length);
 	}
 
 	/**

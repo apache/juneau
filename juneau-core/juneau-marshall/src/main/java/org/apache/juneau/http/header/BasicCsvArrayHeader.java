@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static java.util.Collections.*;
-import static java.util.Optional.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -156,9 +156,9 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	 */
 	public Optional<List<String>> asList() {
 		if (value != null)
-			return ofNullable(value);
+			return optional(value);
 		if (supplier != null)
-			return ofNullable(supplier.get());
+			return optional(supplier.get());
 		return empty();
 	}
 

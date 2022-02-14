@@ -13,7 +13,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.Optional.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.lang.annotation.*;
 import java.nio.charset.*;
@@ -146,7 +146,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 */
 	protected Optional<String> string(String in) {
 		in = vr.resolve(in);
-		return isEmpty(in) ? Optional.empty() : Optional.of(in);
+		return optional(isEmpty(in) ? null : in);
 	}
 
 	/**
@@ -156,7 +156,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * @return An optional containing the specified value.
 	 */
 	protected <T> Optional<Class<T>> type(Class<T> in) {
-		return in.getSimpleName().equals("Null") ? Optional.empty() : Optional.of(in);
+		return optional(in.getSimpleName().equals("Null") ? null : in);
 	}
 
 	/**
@@ -169,7 +169,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * @return The array wrapped in an {@link Optional}.
 	 */
 	protected Optional<String[]> strings(String[] in) {
-		return ofNullable(in.length == 0 ? null : Arrays.stream(in).map(x -> vr.resolve(x)).filter(x -> isNotEmpty(x)).toArray(String[]::new));
+		return optional(in.length == 0 ? null : Arrays.stream(in).map(x -> vr.resolve(x)).filter(x -> isNotEmpty(x)).toArray(String[]::new));
 	}
 
 	/**
@@ -254,7 +254,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 * @return The array wrapped in an {@link Optional}.
 	 */
 	protected Optional<Class<?>[]> classes(Class<?>[] in) {
-		return Optional.ofNullable(in.length == 0 ? null : in);
+		return optional(in.length == 0 ? null : in);
 	}
 
 	/**

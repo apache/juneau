@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static java.util.Optional.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -160,7 +160,7 @@ public class ClientVersion extends BasicStringHeader {
 	 * @return The header value as a {@link Version} object, or {@link Optional#empty()} if the value is <jk>null</jk>.
 	 */
 	public Optional<Version> asVersion() {
-		return ofNullable(value);
+		return optional(value);
 	}
 
 	/**

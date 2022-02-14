@@ -12,12 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -40,7 +40,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	// Empty Optional
 	@Test
 	public void a01_emptyOptional() throws Exception {
-		Optional<String> o = Optional.empty();
+		Optional<String> o = empty();
 		o = roundTrip(o);
 		assertFalse(o.isPresent());
 	}
@@ -48,10 +48,10 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	// Optional containing String.
 	@Test
 	public void a02_optionalContainingString() throws Exception {
-		Optional<String> o = Optional.of("foobar");
+		Optional<String> o = optional("foobar");
 		o = roundTrip(o);
 		assertEquals("foobar", o.get());
-		o = Optional.of("");
+		o = optional("");
 		o = roundTrip(o);
 		assertEquals("", o.get());
 	}
@@ -71,7 +71,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	@Test
 	public void b01a_stringField() throws Exception {
 		B01 x = new B01();
-		x.f1 = Optional.of("foo");
+		x.f1 = optional("foo");
 		x = roundTrip(x);
 		assertEquals("foo", x.f1.get());
 	}
@@ -79,7 +79,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	@Test
 	public void b01b_stringField_emptyValue() throws Exception {
 		B01 x = new B01();
-		x.f1 = Optional.empty();
+		x.f1 = empty();
 		x = roundTrip(x);
 		assertFalse(x.f1.isPresent());
 	}
@@ -105,7 +105,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	@Test
 	public void b02a_integerField() throws Exception {
 		B02 x = new B02();
-		x.f1 = Optional.of(123);
+		x.f1 = optional(123);
 		x = roundTrip(x);
 		assertEquals(123, x.f1.get().intValue());
 	}
@@ -113,7 +113,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	@Test
 	public void b02b_integerField_emptyValue() throws Exception {
 		B02 x = new B02();
-		x.f1 = Optional.empty();
+		x.f1 = empty();
 		x = roundTrip(x);
 		assertFalse(x.f1.isPresent());
 	}
@@ -139,7 +139,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	@Test
 	public void b03a_integerListField() throws Exception {
 		B03 x = new B03();
-		x.f1 = Optional.of(AList.of(123));
+		x.f1 = optional(list(123));
 		x = roundTrip(x);
 		assertEquals(123, x.f1.get().get(0).intValue());
 	}
@@ -147,7 +147,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	@Test
 	public void b03b_integerListField_listWithNull() throws Exception {
 		B03 x = new B03();
-		x.f1 = Optional.of(AList.of((Integer)null));
+		x.f1 = optional(list((Integer)null));
 		x = roundTrip(x);
 		assertTrue(x.f1.isPresent());
 		assertEquals(1, x.f1.get().size());
@@ -157,7 +157,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	@Test
 	public void b03c_integerListField_emptyList() throws Exception {
 		B03 x = new B03();
-		x.f1 = Optional.of(AList.create());
+		x.f1 = optional(list());
 		x = roundTrip(x);
 		assertTrue(x.f1.isPresent());
 		assertEquals(0, x.f1.get().size());
@@ -166,7 +166,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	@Test
 	public void b03d_integerListField_emptyValue() throws Exception {
 		B03 x = new B03();
-		x.f1 = Optional.empty();
+		x.f1 = empty();
 		x = roundTrip(x);
 		assertFalse(x.f1.isPresent());
 	}
@@ -192,7 +192,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	@Test
 	public void b04a_optionalOptionalInteger() throws Exception {
 		B04 x = new B04();
-		x.f1 = Optional.of(Optional.of(123));
+		x.f1 = optional(optional(123));
 		x = roundTrip(x);
 		assertEquals(123, x.f1.get().get().intValue());
 	}
@@ -200,7 +200,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	@Test
 	public void b04b_optionalOptionalInteger_emptyInnerValue() throws Exception {
 		B04 x = new B04();
-		x.f1 = Optional.of(Optional.empty());
+		x.f1 = optional(empty());
 		x = roundTrip(x);
 		assertTrue(x.f1.isPresent());
 		assertFalse(x.f1.get().isPresent());
@@ -209,7 +209,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	@Test
 	public void b04c_optionalOptionalInteger_emptyOuterValue() throws Exception {
 		B04 x = new B04();
-		x.f1 = Optional.empty();
+		x.f1 = empty();
 		x = roundTrip(x);
 		if (isValidationOnly())
 			return;
@@ -248,7 +248,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	@Test
 	public void b05a_optionalOptionalBean() throws Exception {
 		B05 x = new B05();
-		x.f1 = Optional.of(Optional.of(B05B.create()));
+		x.f1 = optional(optional(B05B.create()));
 		x = roundTrip(x);
 		assertEquals(123, x.f1.get().get().f2);
 	}
@@ -256,7 +256,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	@Test
 	public void b05b_optionalOptionalBean_emptyInnerValue() throws Exception {
 		B05 x = new B05();
-		x.f1 = Optional.of(Optional.empty());
+		x.f1 = optional(empty());
 		x = roundTrip(x);
 		assertTrue(x.f1.isPresent());
 		assertFalse(x.f1.get().isPresent());
@@ -265,7 +265,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	@Test
 	public void b05c_optionalOptionalBean_emptyOuterValue() throws Exception {
 		B05 x = new B05();
-		x.f1 = Optional.empty();
+		x.f1 = empty();
 		x = roundTrip(x);
 		if (isValidationOnly())
 			return;
@@ -295,7 +295,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	@Test
 	public void b06a_listOfOptionalIntegers() throws Exception {
 		B06 x = new B06();
-		x.f1 = AList.of(Optional.of(123));
+		x.f1 = list(optional(123));
 		x = roundTrip(x);
 		assertEquals(123, x.f1.get(0).get().intValue());
 	}
@@ -303,7 +303,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	@Test
 	public void b06b_listOfOptionalIntegers_listWithEmpty() throws Exception {
 		B06 x = new B06();
-		x.f1 = AList.of(Optional.empty());
+		x.f1 = list(empty());
 		x = roundTrip(x);
 		assertEquals(1, x.f1.size());
 		assertFalse(x.f1.get(0).isPresent());
@@ -312,7 +312,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	@Test
 	public void b06c_listOfOptionalIntegers_listWithNull() throws Exception {
 		B06 x = new B06();
-		x.f1 = AList.of((Optional<Integer>)null);
+		x.f1 = list((Optional<Integer>)null);
 		x = roundTrip(x);
 		if (isValidationOnly())
 			return;
@@ -341,8 +341,8 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	@SuppressWarnings("unchecked")
 	public void b07a_arrayOfOptionalIntegers() throws Exception {
 		B07 x = new B07();
-		x.f1 = new Optional[]{Optional.of(123)};
-		x.f2 = new List[]{AList.of(123)};
+		x.f1 = new Optional[]{optional(123)};
+		x.f2 = new List[]{list(123)};
 		x = roundTrip(x);
 		assertEquals(123, x.f1[0].get().intValue());
 	}
@@ -351,7 +351,7 @@ public class RoundTripOptionalObjectsTest extends RoundTripTest {
 	@SuppressWarnings("unchecked")
 	public void b07b_arrayOfOptionalIntegers_listWithEmpty() throws Exception {
 		B07 x = new B07();
-		x.f1 = new Optional[]{Optional.empty()};
+		x.f1 = new Optional[]{empty()};
 		x = roundTrip(x);
 		assertEquals(1, x.f1.length);
 		assertFalse(x.f1[0].isPresent());

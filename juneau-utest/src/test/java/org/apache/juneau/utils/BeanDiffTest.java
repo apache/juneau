@@ -12,11 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -85,7 +85,7 @@ public class BeanDiffTest {
 
 	@Test
 	public void testIncludesSet() throws Exception {
-		BeanDiff bd = BeanDiff.create(A.create(1, null), A.create(2, "b")).include(ASet.of("f1")).build();
+		BeanDiff bd = BeanDiff.create(A.create(1, null), A.create(2, "b")).include(set("f1")).build();
 		assertTrue(bd.hasDiffs());
 		assertEquals("{v1:{f1:1},v2:{f1:2}}", bd.toString());
 	}
@@ -99,7 +99,7 @@ public class BeanDiffTest {
 
 	@Test
 	public void testExcludesSet() throws Exception {
-		BeanDiff bd = BeanDiff.create(A.create(1, null), A.create(2, "b")).exclude(ASet.of("f2")).build();
+		BeanDiff bd = BeanDiff.create(A.create(1, null), A.create(2, "b")).exclude(set("f2")).build();
 		assertTrue(bd.hasDiffs());
 		assertEquals("{v1:{f1:1},v2:{f1:2}}", bd.toString());
 	}

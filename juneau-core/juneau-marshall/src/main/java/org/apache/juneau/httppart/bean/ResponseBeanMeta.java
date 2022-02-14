@@ -13,9 +13,9 @@
 package org.apache.juneau.httppart.bean;
 
 import static org.apache.juneau.httppart.bean.Utils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.annotation.InvalidAnnotationException.*;
-import static java.util.Optional.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -110,8 +110,8 @@ public class ResponseBeanMeta {
 	ResponseBeanMeta(Builder b) {
 		this.cm = b.cm;
 		this.code = b.code;
-		this.partSerializer = ofNullable(b.partSerializer).map(x -> HttpPartSerializer.creator().type(x).apply(b.annotations).create());
-		this.partParser = ofNullable(b.partParser).map(x -> HttpPartParser.creator().type(x).apply(b.annotations).create());
+		this.partSerializer = optional(b.partSerializer).map(x -> HttpPartSerializer.creator().type(x).apply(b.annotations).create());
+		this.partParser = optional(b.partParser).map(x -> HttpPartParser.creator().type(x).apply(b.annotations).create());
 		this.schema = b.schema.build();
 
 		Map<String,ResponseBeanPropertyMeta> properties = new LinkedHashMap<>();

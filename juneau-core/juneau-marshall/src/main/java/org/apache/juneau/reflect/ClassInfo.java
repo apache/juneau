@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.lang.annotation.*;
@@ -463,7 +464,7 @@ public final class ClassInfo {
 
 	/**
 	 * Returns all methods declared on this class.
-	 * 
+	 *
 	 * @return
 	 * 	All methods declared on this class.
 	 * 	<br>Results are ordered alphabetically.
@@ -665,7 +666,7 @@ public final class ClassInfo {
 	/**
 	 * Returns all the constructors defined on this class.
 	 *
-	 * @return 
+	 * @return
 	 * 	All constructors defined on this class.
 	 * 	<br>List is unmodifiable.
 	 */
@@ -841,7 +842,7 @@ public final class ClassInfo {
 	 * <p>
 	 * 	Results are ordered parent-to-child, and then alphabetical per class.
 	 *
-	 * @return 
+	 * @return
 	 * 	All declared fields on this class.
 	 * 	<br>List is unmodifiable.
 	 */
@@ -1606,25 +1607,26 @@ public final class ClassInfo {
 		pmap2.put(Double.class, double.class);
 	}
 
-	private static final Map<Class<?>,Object> primitiveDefaultMap = Collections.unmodifiableMap(
-		AMap.<Class<?>,Object>create()
-			.a(Boolean.TYPE, false)
-			.a(Character.TYPE, (char)0)
-			.a(Short.TYPE, (short)0)
-			.a(Integer.TYPE, 0)
-			.a(Long.TYPE, 0l)
-			.a(Float.TYPE, 0f)
-			.a(Double.TYPE, 0d)
-			.a(Byte.TYPE, (byte)0)
-			.a(Boolean.class, false)
-			.a(Character.class, (char)0)
-			.a(Short.class, (short)0)
-			.a(Integer.class, 0)
-			.a(Long.class, 0l)
-			.a(Float.class, 0f)
-			.a(Double.class, 0d)
-			.a(Byte.class, (byte)0)
-	);
+	@SuppressWarnings("rawtypes")
+	private static final Map<Class,Object> primitiveDefaultMap = 
+		mapBuilder(Class.class,Object.class).unmodifiable()
+			.add(Boolean.TYPE, false)
+			.add(Character.TYPE, (char)0)
+			.add(Short.TYPE, (short)0)
+			.add(Integer.TYPE, 0)
+			.add(Long.TYPE, 0l)
+			.add(Float.TYPE, 0f)
+			.add(Double.TYPE, 0d)
+			.add(Byte.TYPE, (byte)0)
+			.add(Boolean.class, false)
+			.add(Character.class, (char)0)
+			.add(Short.class, (short)0)
+			.add(Integer.class, 0)
+			.add(Long.class, 0l)
+			.add(Float.class, 0f)
+			.add(Double.class, 0d)
+			.add(Byte.class, (byte)0)
+			.build();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Labels

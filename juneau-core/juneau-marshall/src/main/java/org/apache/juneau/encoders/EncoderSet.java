@@ -14,6 +14,7 @@ package org.apache.juneau.encoders;
 
 import static java.util.Arrays.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static java.util.stream.Collectors.*;
 import static java.util.Collections.*;
@@ -131,7 +132,7 @@ public final class EncoderSet {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(EncoderSet.class, beanStore);
-			entries = AList.create();
+			entries = list();
 		}
 
 		/**
@@ -141,7 +142,7 @@ public final class EncoderSet {
 		 */
 		protected Builder(Builder copyFrom) {
 			super(copyFrom);
-			entries = AList.of(copyFrom.entries);
+			entries = copyOf(copyFrom.entries);
 		}
 
 		@Override /* BeanBuilder */
@@ -173,7 +174,7 @@ public final class EncoderSet {
 		 * @throws IllegalArgumentException if any class does not extend from {@link Encoder}.
 		 */
 		public Builder add(Class<?>...values) {
-			List<Object> l = AList.create();
+			List<Object> l = list();
 			for (Class<?> v : values)
 				if (v.getSimpleName().equals("NoInherit"))
 					clear();
@@ -203,7 +204,7 @@ public final class EncoderSet {
 		 * @throws IllegalArgumentException if any class does not extend from {@link Encoder}.
 		 */
 		public Builder set(Class<?>...values) {
-			List<Object> l = AList.create();
+			List<Object> l = list();
 			for (Class<?> v : values) {
 				if (v.getSimpleName().equals("Inherit")) {
 					l.addAll(entries);
@@ -319,8 +320,8 @@ public final class EncoderSet {
 	protected EncoderSet(Builder builder) {
 		entries = builder.entries.stream().map(x -> instantiate(builder.beanStore(), x)).toArray(Encoder[]::new);
 
-		List<String> lc = AList.create();
-		List<Encoder> l = AList.create();
+		List<String> lc = list();
+		List<Encoder> l = list();
 		for (Encoder e : entries) {
 			for (String c: e.getCodings()) {
 				lc.add(c);

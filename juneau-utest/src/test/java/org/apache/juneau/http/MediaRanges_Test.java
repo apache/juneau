@@ -14,11 +14,11 @@ package org.apache.juneau.http;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.header.MediaRanges.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.internal.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -139,13 +139,13 @@ public class MediaRanges_Test {
 	@Test
 	public void a04_match() {
 		MediaRanges x1 = of("text/json");
-		assertInteger(x1.match(AList.of(MediaType.of("text/json")))).is(0);
-		assertInteger(x1.match(AList.of(MediaType.of("text/foo")))).is(-1);
-		assertInteger(x1.match(AList.of((MediaType)null))).is(-1);
+		assertInteger(x1.match(list(MediaType.of("text/json")))).is(0);
+		assertInteger(x1.match(list(MediaType.of("text/foo")))).is(-1);
+		assertInteger(x1.match(list((MediaType)null))).is(-1);
 		assertInteger(x1.match(null)).is(-1);
 
 		MediaRanges x2 = of("");
-		assertInteger(x2.match(AList.of(MediaType.of("text/json")))).is(-1);
+		assertInteger(x2.match(list(MediaType.of("text/json")))).is(-1);
 	}
 
 	@Test

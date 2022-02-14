@@ -33,7 +33,7 @@ import org.apache.juneau.parser.*;
  * @param <K> Key type.
  * @param <V> Value type.
  */
-public class MapBuilder<K,V> {
+public final class MapBuilder<K,V> {
 
 	private Map<K,V> map;
 	private boolean unmodifiable = false, sparse = false;
@@ -222,6 +222,21 @@ public class MapBuilder<K,V> {
 		} catch (ParseException e) {
 			throw runtimeException(e);
 		}
+		return this;
+	}
+
+	/**
+	 * Adds a list of key/value pairs to this map.
+	 *
+	 * @param pairs The pairs to add.
+	 * @return This object.
+	 */
+	@SuppressWarnings("unchecked")
+	public MapBuilder<K,V> addPairs(Object...pairs) {
+		if (pairs.length % 2 != 0)
+			throw runtimeException("Odd number of parameters passed into AMap.ofPairs()");
+		for (int i = 0; i < pairs.length; i+=2)
+			add((K)pairs[i], (V)pairs[i+1]);
 		return this;
 	}
 }

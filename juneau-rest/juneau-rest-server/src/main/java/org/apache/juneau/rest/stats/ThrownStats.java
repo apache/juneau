@@ -14,7 +14,6 @@ package org.apache.juneau.rest.stats;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.Optional.*;
 
 import java.util.*;
 import java.util.concurrent.atomic.*;
@@ -172,7 +171,7 @@ public class ThrownStats implements Cloneable {
 		this.thrownClass = builder.throwable.getClass();
 		this.firstMessage = builder.throwable.getMessage();
 		this.stackTrace = listBuilder(builder.stackTrace).copy().unmodifiable().build();
-		this.causedBy = ofNullable(builder.causedBy);
+		this.causedBy = optional(builder.causedBy);
 		this.hash = builder.hash;
 		this.count = new AtomicInteger(0);
 		long ct = System.currentTimeMillis();
@@ -188,7 +187,7 @@ public class ThrownStats implements Cloneable {
 		this.thrownClass = x.thrownClass;
 		this.firstMessage = x.firstMessage;
 		this.stackTrace = listBuilder(x.stackTrace).copy().unmodifiable().build();
-		this.causedBy = Optional.ofNullable(x.causedBy.isPresent() ? x.causedBy.get().clone() : null);
+		this.causedBy = optional(x.causedBy.isPresent() ? x.causedBy.get().clone() : null);
 		this.hash = x.hash;
 		this.count = new AtomicInteger(x.count.get());
 		this.firstOccurrence = new AtomicLong(x.firstOccurrence.get());

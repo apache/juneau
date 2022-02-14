@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.Optional.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -154,9 +154,7 @@ public class BasicEntityTagHeader extends BasicHeader {
 	 * @return This header as an {@link EntityTag}, or {@link Optional#empty()} if the value is <jk>null</jk>.
 	 */
 	public Optional<EntityTag> asEntityTag() {
-		if (supplier != null)
-			return ofNullable(supplier.get());
-		return ofNullable(value);
+		return optional(supplier == null ? value : supplier.get());
 	}
 
 	private static String serialize(EntityTag value) {

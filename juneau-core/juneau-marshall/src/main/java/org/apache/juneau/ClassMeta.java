@@ -14,9 +14,9 @@ package org.apache.juneau;
 
 import static org.apache.juneau.ClassMeta.ClassCategory.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
-import static java.util.Optional.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -334,7 +334,7 @@ public final class ClassMeta<T> implements Type {
 			dictionaryName = null;
 		Throwable initException = null;
 		BeanMeta beanMeta = null;
-		AList<ObjectSwap> swaps = AList.create();
+		List<ObjectSwap> swaps = list();
 		BuilderSwap builderSwap;
 		InvocationHandler invocationHandler = null;
 		BeanRegistry beanRegistry = null;
@@ -436,7 +436,7 @@ public final class ClassMeta<T> implements Type {
 			// parse() is used by the java logging Level class.
 			// forName() is used by Class and Charset
 			String[] fromStringMethodNames = {"fromString","fromValue","valueOf","parse","parseString","forName","forString"};
-			fromStringMethod = ofNullable(
+			fromStringMethod = optional(
 				ci.getPublicMethod(
 					x -> x.isStatic()
 					&& x.isNotDeprecated()
@@ -447,7 +447,7 @@ public final class ClassMeta<T> implements Type {
 				.orElse(null);
 
 			// Find example() method if present.
-			exampleMethod = ofNullable(
+			exampleMethod = optional(
 				ci.getPublicMethod(
 					x -> x.isStatic()
 					&& x.isNotDeprecated()
@@ -529,7 +529,7 @@ public final class ClassMeta<T> implements Type {
 			MarshalledFilter marshalledFilter = findMarshalledFilter(bc);
 
 			if (swaps != null)
-				this.swaps.a(swaps);
+				addAll(this.swaps, swaps);
 
 			if (bc != null)
 				this.builderSwap = BuilderSwap.findSwapFromObjectClass(bc, c, bc.getBeanConstructorVisibility(), bc.getBeanMethodVisibility());
@@ -1704,7 +1704,7 @@ public final class ClassMeta<T> implements Type {
 	 */
 	public Optional<?> getOptionalDefault() {
 		if (isOptional())
-			return Optional.ofNullable(getElementType().getOptionalDefault());
+			return optional(getElementType().getOptionalDefault());
 		return null;
 	}
 
@@ -2084,7 +2084,7 @@ public final class ClassMeta<T> implements Type {
 		if (o == null) {
 			if (beanContext == null)
 				return info.getAnnotation(BeanContext.DEFAULT, a);
-			o = Optional.ofNullable(info.getAnnotation(beanContext, a));
+			o = optional(info.getAnnotation(beanContext, a));
 			annotationLastMap.put(a, o);
 		}
 		return o.orElse(null);
@@ -2129,7 +2129,7 @@ public final class ClassMeta<T> implements Type {
 	public <T2> Optional<T2> getProperty(String name, Function<ClassMeta<?>,T2> function) {
 		Optional<T2> t = (Optional<T2>) properties.get(name);
 		if (t == null) {
-			t = Optional.ofNullable(function.apply(this));
+			t = optional(function.apply(this));
 			properties.put(name, t);
 		}
 		return t;

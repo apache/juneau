@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.soap;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.io.IOException;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -242,7 +244,7 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 
 	@Override /* Serializer */
 	public Map<String,String> getResponseHeaders() {
-		return AMap.of("SOAPAction",getSoapAction());
+		return map("SOAPAction",getSoapAction());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

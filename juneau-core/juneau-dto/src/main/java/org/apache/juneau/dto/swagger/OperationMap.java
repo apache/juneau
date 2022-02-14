@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -45,7 +46,9 @@ public class OperationMap extends TreeMap<String,Operation> {
 	private static final long serialVersionUID = 1L;
 
 	private static final Comparator<String> OP_SORTER = new Comparator<String>() {
-		private final Map<String,String> methods = AMap.of("get","0","put","1","post","2","delete","3","options","4","head","5","patch","6");
+		private final Map<String,String> methods = mapBuilder(String.class,String.class)
+			.add("get","0").add("put","1").add("post","2").add("delete","3").add("options","4").add("head","5").add("patch","6")
+			.build();
 
 		@Override
 		public int compare(String o1, String o2) {

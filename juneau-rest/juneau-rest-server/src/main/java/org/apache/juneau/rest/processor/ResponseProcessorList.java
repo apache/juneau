@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.processor;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
@@ -65,7 +66,7 @@ public class ResponseProcessorList {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(ResponseProcessorList.class, beanStore);
-			this.entries = AList.create();
+			this.entries = list();
 		}
 
 		@Override /* BeanBuilder */

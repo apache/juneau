@@ -17,8 +17,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.internal.*;
-
 /**
  * Utility class to make it easier to work with command-line arguments pass in through a
  * <c>main(String[] args)</c> method.
@@ -156,7 +154,7 @@ public final class Args extends OMap {
 	 * @param args Arguments passed in as a raw command line.
 	 */
 	public Args(String args) {
-		this(StringUtils.splitQuoted(args));
+		this(splitQuoted(args));
 	}
 
 	/**

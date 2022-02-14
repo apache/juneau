@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -49,7 +50,7 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testOptional() throws Exception {
-		Optional<String> o = Optional.empty();
+		Optional<String> o = empty();
 		o = roundTrip(o);
 		assertFalse(o.isPresent());
 	}
@@ -72,10 +73,10 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testOptionalContainingString() throws Exception {
-		Optional<String> o = Optional.of("foobar");
+		Optional<String> o = optional("foobar");
 		o = roundTrip(o);
 		assertEquals("foobar", o.get());
-		o = Optional.of("");
+		o = optional("");
 		o = roundTrip(o);
 		assertEquals("", o.get());
 	}

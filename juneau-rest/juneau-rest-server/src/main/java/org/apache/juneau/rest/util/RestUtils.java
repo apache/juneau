@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.util;
 
 import static org.apache.juneau.internal.ArrayUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -22,7 +23,6 @@ import java.util.regex.*;
 
 import javax.servlet.http.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
@@ -47,47 +47,48 @@ public final class RestUtils {
 		return httpMsgs.get(rc);
 	}
 
-	private static Map<Integer,String> httpMsgs = AMap.<Integer,String>create()
-		.a(100, "Continue")
-		.a(101, "Switching Protocols")
-		.a(102, "Processing")
-		.a(103, "Early Hints")
-		.a(200, "OK")
-		.a(201, "Created")
-		.a(202, "Accepted")
-		.a(203, "Non-Authoritative Information")
-		.a(204, "No Content")
-		.a(205, "Reset Content")
-		.a(206, "Partial Content")
-		.a(300, "Multiple Choices")
-		.a(301, "Moved Permanently")
-		.a(302, "Temporary Redirect")
-		.a(303, "See Other")
-		.a(304, "Not Modified")
-		.a(305, "Use Proxy")
-		.a(307, "Temporary Redirect")
-		.a(400, "Bad Request")
-		.a(401, "Unauthorized")
-		.a(402, "Payment Required")
-		.a(403, "Forbidden")
-		.a(404, "Not Found")
-		.a(405, "Method Not Allowed")
-		.a(406, "Not Acceptable")
-		.a(407, "Proxy Authentication Required")
-		.a(408, "Request Time-Out")
-		.a(409, "Conflict")
-		.a(410, "Gone")
-		.a(411, "Length Required")
-		.a(412, "Precondition Failed")
-		.a(413, "Request Entity Too Large")
-		.a(414, "Request-URI Too Large")
-		.a(415, "Unsupported Media Type")
-		.a(500, "Internal Server Error")
-		.a(501, "Not Implemented")
-		.a(502, "Bad Gateway")
-		.a(503, "Service Unavailable")
-		.a(504, "Gateway Timeout")
-		.a(505, "HTTP Version Not Supported")
+	private static Map<Integer,String> httpMsgs = mapBuilder(Integer.class, String.class)
+		.add(100, "Continue")
+		.add(101, "Switching Protocols")
+		.add(102, "Processing")
+		.add(103, "Early Hints")
+		.add(200, "OK")
+		.add(201, "Created")
+		.add(202, "Accepted")
+		.add(203, "Non-Authoritative Information")
+		.add(204, "No Content")
+		.add(205, "Reset Content")
+		.add(206, "Partial Content")
+		.add(300, "Multiple Choices")
+		.add(301, "Moved Permanently")
+		.add(302, "Temporary Redirect")
+		.add(303, "See Other")
+		.add(304, "Not Modified")
+		.add(305, "Use Proxy")
+		.add(307, "Temporary Redirect")
+		.add(400, "Bad Request")
+		.add(401, "Unauthorized")
+		.add(402, "Payment Required")
+		.add(403, "Forbidden")
+		.add(404, "Not Found")
+		.add(405, "Method Not Allowed")
+		.add(406, "Not Acceptable")
+		.add(407, "Proxy Authentication Required")
+		.add(408, "Request Time-Out")
+		.add(409, "Conflict")
+		.add(410, "Gone")
+		.add(411, "Length Required")
+		.add(412, "Precondition Failed")
+		.add(413, "Request Entity Too Large")
+		.add(414, "Request-URI Too Large")
+		.add(415, "Unsupported Media Type")
+		.add(500, "Internal Server Error")
+		.add(501, "Not Implemented")
+		.add(502, "Bad Gateway")
+		.add(503, "Service Unavailable")
+		.add(504, "Gateway Timeout")
+		.add(505, "HTTP Version Not Supported")
+		.build()
 	;
 
 	/**
@@ -215,12 +216,12 @@ public final class RestUtils {
 		if (value.length == 0)
 			return fromParent;
 
-		AList<String> l = AList.create();
+		List<String> l = list();
 		for (String v : value) {
 			if (! "INHERIT".equals(v))
 				l.add(v);
 			else if (fromParent != null)
-				l.a(fromParent);
+				l.add(fromParent);
 		}
 		return join(l, '\n');
 	}
@@ -231,10 +232,10 @@ public final class RestUtils {
 		if (links.length == 0)
 			return parentLinks;
 
-		AList<String> list = AList.create();
+		List<String> list = list();
 		for (String l : links) {
 			if ("INHERIT".equals(l))
-				list.a(parentLinks);
+				addAll(list, parentLinks);
 			else if (l.indexOf('[') != -1 && INDEXED_LINK_PATTERN.matcher(l).matches()) {
 				Matcher lm = INDEXED_LINK_PATTERN.matcher(l);
 				lm.matches();
@@ -246,24 +247,24 @@ public final class RestUtils {
 				list.add(l);
 			}
 		}
-		return list.asArrayOf(String.class);
+		return array(list);
 	}
 
 	static String[] resolveContent(String[] content, String[] parentContent) {
 		if (content.length == 0)
 			return parentContent;
 
-		AList<String> list = AList.create();
+		List<String> list = list();
 		for (String l : content) {
 			if ("INHERIT".equals(l)) {
-				list.a(parentContent);
+				addAll(list, parentContent);
 			} else if ("NONE".equals(l)) {
 				return new String[0];
 			} else {
 				list.add(l);
 			}
 		}
-		return list.asArrayOf(String.class);
+		return array(list);
 	}
 
 	/**

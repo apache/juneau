@@ -14,6 +14,7 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -602,7 +603,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @return The value wrapped in an {@link Optional}.
 	 */
 	protected Optional<T> opt() {
-		return Optional.ofNullable(value);
+		return optional(value);
 	}
 
 	/**

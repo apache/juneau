@@ -13,12 +13,10 @@
 package org.apache.juneau.jena.annotation;
 
 import org.apache.juneau.*;
-import org.apache.juneau.jena.RdfCollectionFormat;
-import org.apache.juneau.jena.RdfParser;
-import org.apache.juneau.jena.RdfSerializer;
+import org.apache.juneau.jena.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.xml.Namespace;
+import org.apache.juneau.xml.*;
 
 /**
  * Utility classes and methods for the {@link RdfConfig @RdfConfig} annotation.

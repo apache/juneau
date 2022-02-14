@@ -12,13 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.ASet;
 import org.apache.juneau.json.*;
 
 /**
@@ -153,8 +153,9 @@ public abstract class SwaggerElement {
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public Set<String> keySet() {
-		ASet<String> s = ASet.<String>of()
-			.appendIf(strict, "strict");
+		Set<String> s = setBuilder(String.class)
+			.addIf(strict, "strict")
+			.build();
 		s.addAll(extraKeys());
 		return s;
 	}

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -19,7 +20,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -51,13 +51,13 @@ public class RoundTripToOMapsTest extends RoundTripTest {
 		assertEquals("a", aa[0].f1);
 		assertEquals(2, aa[0].f2);
 
-		List<A> a2 = AList.of(new A(OMap.ofJson("{f1:'a',f2:2}")));
+		List<A> a2 = list(new A(OMap.ofJson("{f1:'a',f2:2}")));
 		a2 = roundTrip(a2, List.class, A.class);
 		assertEquals(1, a2.size());
 		assertEquals("a", a2.get(0).f1);
 		assertEquals(2, a2.get(0).f2);
 
-		Map<String,A> a3 = AMap.of("a",new A(OMap.ofJson("{f1:'a',f2:2}")));
+		Map<String,A> a3 = map("a",new A(OMap.ofJson("{f1:'a',f2:2}")));
 		a3 = roundTrip(a3, Map.class, String.class, A.class);
 		assertEquals(1, a3.size());
 		assertEquals("a", a3.get("a").f1);

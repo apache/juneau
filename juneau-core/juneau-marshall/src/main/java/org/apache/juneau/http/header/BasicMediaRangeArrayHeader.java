@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.Optional.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -129,9 +129,7 @@ public class BasicMediaRangeArrayHeader extends BasicStringHeader {
 	 * @return This header as a {@link MediaRanges} object, or {@link Optional#empty()} if the value is <jk>null</jk>
 	 */
 	public Optional<MediaRanges> asMediaRanges() {
-		if (supplier != null)
-			return ofNullable(supplier.get());
-		return ofNullable(value);
+		return optional(supplier == null ? value : supplier.get());
 	}
 
 	/**

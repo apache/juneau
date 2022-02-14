@@ -14,6 +14,7 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.StringUtils.isEmpty;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import java.io.*;
 import java.util.*;
@@ -202,7 +203,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 * @return The value of this header as a string, or {@link Optional#empty()} if the value is <jk>null</jk>
 	 */
 	public Optional<String> asString() {
-		return Optional.ofNullable(getValue());
+		return optional(getValue());
 	}
 
 	/**

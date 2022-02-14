@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.util.*;
@@ -206,7 +206,7 @@ public class Swagger extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> basePath() {
-		return Optional.ofNullable(getBasePath());
+		return optional(getBasePath());
 	}
 
 	/**
@@ -285,7 +285,7 @@ public class Swagger extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Set<MediaType>> consumes() {
-		return Optional.ofNullable(getConsumes());
+		return optional(getConsumes());
 	}
 
 	/**
@@ -404,7 +404,7 @@ public class Swagger extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Map<String,OMap>> definitions() {
-		return Optional.ofNullable(getDefinitions());
+		return optional(getDefinitions());
 	}
 
 	/**
@@ -476,7 +476,7 @@ public class Swagger extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<ExternalDocumentation> externalDocs() {
-		return Optional.ofNullable(getExternalDocs());
+		return optional(getExternalDocs());
 	}
 
 	/**
@@ -557,7 +557,7 @@ public class Swagger extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> host() {
-		return Optional.ofNullable(getHost());
+		return optional(getHost());
 	}
 
 	/**
@@ -619,7 +619,7 @@ public class Swagger extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Info> info() {
-		return Optional.ofNullable(getInfo());
+		return optional(getInfo());
 	}
 
 	/**
@@ -726,7 +726,7 @@ public class Swagger extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Map<String,ParameterInfo>> parameters() {
-		return Optional.ofNullable(getParameters());
+		return optional(getParameters());
 	}
 
 	/**
@@ -837,7 +837,7 @@ public class Swagger extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Map<String,OperationMap>> paths() {
-		return Optional.ofNullable(getPaths());
+		return optional(getPaths());
 	}
 
 	/**
@@ -927,7 +927,7 @@ public class Swagger extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Set<MediaType>> produces() {
-		return Optional.ofNullable(getProduces());
+		return optional(getProduces());
 	}
 
 	/**
@@ -1046,7 +1046,7 @@ public class Swagger extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Map<String,ResponseInfo>> responses() {
-		return Optional.ofNullable(getResponses());
+		return optional(getResponses());
 	}
 
 	/**
@@ -1148,7 +1148,7 @@ public class Swagger extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Set<String>> schemes() {
-		return Optional.ofNullable(getSchemes());
+		return optional(getSchemes());
 	}
 
 	/**
@@ -1254,7 +1254,7 @@ public class Swagger extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<List<Map<String,List<String>>>> security() {
-		return Optional.ofNullable(getSecurity());
+		return optional(getSecurity());
 	}
 
 	/**
@@ -1358,7 +1358,7 @@ public class Swagger extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Map<String,SecurityScheme>> securityDefinitions() {
-		return Optional.ofNullable(getSecurityDefinitions());
+		return optional(getSecurityDefinitions());
 	}
 
 	/**
@@ -1430,7 +1430,7 @@ public class Swagger extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> swagger() {
-		return Optional.ofNullable(getSwagger());
+		return optional(getSwagger());
 	}
 
 	/**
@@ -1512,7 +1512,7 @@ public class Swagger extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Set<Tag>> tags() {
-		return Optional.ofNullable(getTags());
+		return optional(getTags());
 	}
 
 	/**
@@ -1567,7 +1567,7 @@ public class Swagger extends SwaggerElement {
 	 * @return The operation map for the specified path as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<OperationMap> path(String path) {
-		return Optional.ofNullable(getPath(path));
+		return optional(getPath(path));
 	}
 
 	/**
@@ -1592,7 +1592,7 @@ public class Swagger extends SwaggerElement {
 	 * @return The operation for the specified path and operation id as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Operation> operation(String path, String operation) {
-		return Optional.ofNullable(getOperation(path, operation));
+		return optional(getOperation(path, operation));
 	}
 
 	/**
@@ -1634,7 +1634,7 @@ public class Swagger extends SwaggerElement {
 	 * @return The operation for the specified path and operation id as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<ResponseInfo> responseInfo(String path, String operation, String status) {
-		return Optional.ofNullable(getResponseInfo(path, operation, status));
+		return optional(getResponseInfo(path, operation, status));
 	}
 
 	/**
@@ -1667,7 +1667,7 @@ public class Swagger extends SwaggerElement {
 	 * @return The parameter information as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<ParameterInfo> parameterInfo(String path, String method, String in, String name) {
-		return Optional.of(getParameterInfo(path, method, in, name));
+		return optional(getParameterInfo(path, method, in, name));
 	}
 
 
@@ -1724,22 +1724,23 @@ public class Swagger extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		ASet<String> s = ASet.<String>of()
-			.appendIf(basePath != null, "basePath")
-			.appendIf(consumes != null, "consumes")
-			.appendIf(definitions != null, "definitions")
-			.appendIf(externalDocs != null, "externalDocs")
-			.appendIf(host != null, "host")
-			.appendIf(info != null, "info")
-			.appendIf(parameters != null, "parameters")
-			.appendIf(paths != null, "paths")
-			.appendIf(produces != null, "produces")
-			.appendIf(responses != null, "responses")
-			.appendIf(schemes != null, "schemes")
-			.appendIf(security != null, "security")
-			.appendIf(securityDefinitions != null, "securityDefinitions")
-			.appendIf(swagger != null, "swagger")
-			.appendIf(tags != null, "tags");
+		Set<String> s = setBuilder(String.class)
+			.addIf(basePath != null, "basePath")
+			.addIf(consumes != null, "consumes")
+			.addIf(definitions != null, "definitions")
+			.addIf(externalDocs != null, "externalDocs")
+			.addIf(host != null, "host")
+			.addIf(info != null, "info")
+			.addIf(parameters != null, "parameters")
+			.addIf(paths != null, "paths")
+			.addIf(produces != null, "produces")
+			.addIf(responses != null, "responses")
+			.addIf(schemes != null, "schemes")
+			.addIf(security != null, "security")
+			.addIf(securityDefinitions != null, "securityDefinitions")
+			.addIf(swagger != null, "swagger")
+			.addIf(tags != null, "tags")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 

@@ -12,23 +12,21 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
-import static org.apache.juneau.collections.OMap.filteredMap;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.nio.charset.Charset;
+import static org.apache.juneau.collections.OMap.*;
+
+import java.lang.annotation.*;
+import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.header.MediaType;
-import org.apache.juneau.internal.Cache;
-import org.apache.juneau.internal.FluentSetter;
-import org.apache.juneau.internal.FluentSetters;
-import org.apache.juneau.jena.annotation.Rdf;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.utils.HashKey;
-import org.apache.juneau.utils.ThrowingFunction;
+import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 
 /**

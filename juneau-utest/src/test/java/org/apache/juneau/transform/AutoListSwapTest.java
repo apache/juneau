@@ -15,12 +15,13 @@ package org.apache.juneau.transform;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
@@ -31,7 +32,7 @@ import org.junit.*;
 @SuppressWarnings({"unchecked","rawtypes"})
 public class AutoListSwapTest {
 
-	private static final List<String> STRINGLIST = AList.of("foo");
+	private static final List<String> STRINGLIST = list("foo");
 	private static final OList OLIST = OList.of("foo");
 
 	private static ObjectSwap find(Class<?> c) {

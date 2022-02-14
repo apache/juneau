@@ -13,9 +13,9 @@
 package org.apache.juneau.rest.httppart;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
-import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
@@ -217,7 +217,7 @@ public class RequestHeaders {
 					list.removeAll(l);
 				RequestHeader x = new RequestHeader(req, name, vs.resolve(p.getValue()));
 				list.add(x);
-				map.put(key, AList.of(x));
+				map.put(key, list(x));
 			}
 		}
 		return this;
@@ -256,7 +256,7 @@ public class RequestHeaders {
 	public List<RequestHeader> getAll(String name) {
 		assertArgNotNull("name", name);
 		List<RequestHeader> l = map.get(key(name));
-		return unmodifiableList(l == null ? emptyList() : l);
+		return l == null ? emptyList() : unmodifiable(l);
 	}
 
 	/**
@@ -265,7 +265,7 @@ public class RequestHeaders {
 	 * @return All the headers in this request.
 	 */
 	public List<RequestHeader> getAll() {
-		return unmodifiableList(list);
+		return unmodifiable(list);
 	}
 
 	/**
@@ -323,7 +323,7 @@ public class RequestHeaders {
 		if (map.containsKey(key))
 			map.get(key).add(h);
 		else
-			map.put(key, AList.of(h));
+			map.put(key, list(h));
 		list.add(h);
 		return this;
 	}
@@ -366,7 +366,7 @@ public class RequestHeaders {
 		String key = key(name);
 		remove(key);
 		RequestHeader h = new RequestHeader(req, name, stringify(value)).parser(parser);
-		map.put(key, AList.of(h));
+		map.put(key, list(h));
 		list.add(h);
 		return this;
 	}

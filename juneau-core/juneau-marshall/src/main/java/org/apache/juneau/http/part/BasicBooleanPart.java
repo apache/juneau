@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.Optional.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -107,7 +107,7 @@ public class BasicBooleanPart extends BasicPart {
 	 * @return The part value as a boolean.
 	 */
 	public Optional<Boolean> asBoolean() {
-		return ofNullable(getParsedValue());
+		return optional(getParsedValue());
 	}
 
 	/**

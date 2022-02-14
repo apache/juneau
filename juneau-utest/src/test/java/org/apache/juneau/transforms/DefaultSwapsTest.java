@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
 
@@ -25,7 +26,6 @@ import javax.xml.datatype.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
@@ -146,7 +146,7 @@ public class DefaultSwapsTest {
 	//------------------------------------------------------------------------------------------------------------------
 	//	POJO_SWAPS.put(Iterator.class, new IteratorSwap());
 	//------------------------------------------------------------------------------------------------------------------
-	private static List<String> B = AList.of("foo","bar");
+	private static List<String> B = list("foo","bar");
 
 	public static class BSwap extends StringSwap<Iterator<?>> {
 		@Override /* ObjectSwap */
@@ -176,7 +176,7 @@ public class DefaultSwapsTest {
 		test1("{f1:['foo','bar'],f2:'FOO'}", new BBean());
 	}
 
-	private static List<String> Bc = AList.of("foo","bar");
+	private static List<String> Bc = list("foo","bar");
 
 	public static class BcSwap extends StringSwap<Iterator<?>> {
 		@Override /* ObjectSwap */

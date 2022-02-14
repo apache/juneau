@@ -13,8 +13,8 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.Optional.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -159,9 +159,7 @@ public class BasicLongHeader extends BasicHeader {
 	 * @return The header value as a long, or {@link Optional#empty()} if the value is <jk>null</jk>
 	 */
 	public Optional<Long> asLong() {
-		if (supplier != null)
-			return ofNullable(supplier.get());
-		return ofNullable(value);
+		return optional(supplier == null ? value : supplier.get());
 	}
 
 	/**

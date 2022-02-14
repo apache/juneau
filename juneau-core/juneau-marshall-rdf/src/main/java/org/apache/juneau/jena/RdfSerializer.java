@@ -12,25 +12,22 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
-import static java.util.Optional.*;
-import static org.apache.juneau.collections.OMap.filteredMap;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.nio.charset.Charset;
+import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+
+import java.lang.annotation.*;
+import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.header.MediaType;
-import org.apache.juneau.internal.AList;
-import org.apache.juneau.internal.Cache;
-import org.apache.juneau.internal.FluentSetter;
-import org.apache.juneau.internal.FluentSetters;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.utils.HashKey;
-import org.apache.juneau.utils.ThrowingFunction;
+import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -132,7 +129,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 			collectionFormat = copyFrom.collectionFormat;
 			juneauNs = copyFrom.juneauNs;
 			juneauBpNs = copyFrom.juneauBpNs;
-			namespaces = copyFrom.namespaces.length == 0 ? null : AList.of(copyFrom.namespaces);
+			namespaces = copyFrom.namespaces.length == 0 ? null : list(copyFrom.namespaces);
 			jenaSettings = new TreeMap<>(copyFrom.jenaSettings);
 		}
 
@@ -1883,7 +1880,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		juneauNs = builder.juneauNs;
 		juneauBpNs = builder.juneauBpNs;
 		collectionFormat = builder.collectionFormat;
-		namespaces = ofNullable(builder.namespaces).map(x -> x.toArray(new Namespace[0])).orElse(new Namespace[0]);
+		namespaces = optional(builder.namespaces).map(x -> x.toArray(new Namespace[0])).orElse(new Namespace[0]);
 		addBeanTypesRdf = builder.addBeanTypesRdf;
 		jenaSettings = new TreeMap<>(builder.jenaSettings);
 

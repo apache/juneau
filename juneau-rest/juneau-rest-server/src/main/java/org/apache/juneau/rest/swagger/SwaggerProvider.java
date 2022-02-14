@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.swagger;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 
 import java.util.*;
@@ -108,7 +109,7 @@ public interface SwaggerProvider {
 		 * @return The var resolver.
 		 */
 		public Optional<VarResolver> varResolver() {
-			return Optional.ofNullable(varResolver == null ? null : varResolver.get());
+			return optional(varResolver).map(x -> x.get());
 		}
 
 		/**
@@ -117,7 +118,7 @@ public interface SwaggerProvider {
 		 * @return The JSON schema generator.
 		 */
 		public Optional<JsonSchemaGenerator> jsonSchemaGenerator() {
-			return Optional.ofNullable(jsonSchemaGenerator == null ? null : jsonSchemaGenerator.get());
+			return optional(jsonSchemaGenerator).map(x -> x.get());
 		}
 
 		/**
@@ -126,7 +127,7 @@ public interface SwaggerProvider {
 		 * @return The messages.
 		 */
 		public Optional<Messages> messages() {
-			return Optional.ofNullable(messages == null ? null : messages.get());
+			return optional(messages).map(x -> x.get());
 		}
 
 		/**
@@ -135,7 +136,7 @@ public interface SwaggerProvider {
 		 * @return The file finder.
 		 */
 		public Optional<FileFinder> fileFinder() {
-			return Optional.ofNullable(fileFinder == null ? null : fileFinder.get());
+			return optional(fileFinder).map(x -> x.get());
 		}
 
 		/**

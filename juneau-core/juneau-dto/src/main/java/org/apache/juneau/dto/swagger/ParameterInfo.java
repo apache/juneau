@@ -12,11 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.internal.ArrayUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ConverterUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.ArrayUtils.contains;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.util.*;
 
@@ -295,7 +295,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Boolean> allowEmptyValue() {
-		return Optional.ofNullable(getAllowEmptyValue());
+		return optional(getAllowEmptyValue());
 	}
 
 	/**
@@ -386,7 +386,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> collectionFormat() {
-		return Optional.ofNullable(getCollectionFormat());
+		return optional(getCollectionFormat());
 	}
 
 	/**
@@ -462,7 +462,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Object> _default() {
-		return Optional.ofNullable(getDefault());
+		return optional(getDefault());
 	}
 
 	/**
@@ -522,7 +522,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> description() {
-		return Optional.ofNullable(getDescription());
+		return optional(getDescription());
 	}
 
 	/**
@@ -585,7 +585,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Set<Object>> _enum() {
-		return Optional.ofNullable(getEnum());
+		return optional(getEnum());
 	}
 
 	/**
@@ -641,7 +641,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Boolean> exclusiveMaximum() {
-		return Optional.ofNullable(getExclusiveMaximum());
+		return optional(getExclusiveMaximum());
 	}
 
 	/**
@@ -698,7 +698,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Boolean> exclusiveMinimum() {
-		return Optional.ofNullable(getExclusiveMinimum());
+		return optional(getExclusiveMinimum());
 	}
 
 	/**
@@ -764,7 +764,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> format() {
-		return Optional.ofNullable(getFormat());
+		return optional(getFormat());
 	}
 
 	/**
@@ -837,7 +837,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> in() {
-		return Optional.ofNullable(getIn());
+		return optional(getIn());
 	}
 
 	/**
@@ -904,7 +904,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Items> items() {
-		return Optional.ofNullable(getItems());
+		return optional(getItems());
 	}
 
 	/**
@@ -974,7 +974,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Number> maximum() {
-		return Optional.ofNullable(getMaximum());
+		return optional(getMaximum());
 	}
 
 	/**
@@ -1031,7 +1031,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Integer> maxItems() {
-		return Optional.ofNullable(getMaxItems());
+		return optional(getMaxItems());
 	}
 
 	/**
@@ -1088,7 +1088,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Integer> maxLength() {
-		return Optional.ofNullable(getMaxLength());
+		return optional(getMaxLength());
 	}
 
 	/**
@@ -1145,7 +1145,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Number> minimum() {
-		return Optional.ofNullable(getMinimum());
+		return optional(getMinimum());
 	}
 
 	/**
@@ -1202,7 +1202,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Integer> minItems() {
-		return Optional.ofNullable(getMinItems());
+		return optional(getMinItems());
 	}
 
 	/**
@@ -1259,7 +1259,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Integer> minLength() {
-		return Optional.ofNullable(getMinLength());
+		return optional(getMinLength());
 	}
 
 	/**
@@ -1318,7 +1318,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Number> multipleOf() {
-		return Optional.ofNullable(getMultipleOf());
+		return optional(getMultipleOf());
 	}
 
 	/**
@@ -1397,7 +1397,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> name() {
-		return Optional.ofNullable(getName());
+		return optional(getName());
 	}
 
 	/**
@@ -1446,7 +1446,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> pattern() {
-		return Optional.ofNullable(getPattern());
+		return optional(getPattern());
 	}
 
 	/**
@@ -1504,7 +1504,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Boolean> required() {
-		return Optional.ofNullable(getRequired());
+		return optional(getRequired());
 	}
 
 	/**
@@ -1582,7 +1582,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<SchemaInfo> schema() {
-		return Optional.ofNullable(getSchema());
+		return optional(getSchema());
 	}
 
 	/**
@@ -1677,7 +1677,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> type() {
-		return Optional.ofNullable(getType());
+		return optional(getType());
 	}
 
 	/**
@@ -1735,7 +1735,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Boolean> uniqueItems() {
-		return Optional.ofNullable(getUniqueItems());
+		return optional(getUniqueItems());
 	}
 
 	/**
@@ -1833,32 +1833,33 @@ public class ParameterInfo extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		ASet<String> s = ASet.<String>of()
-			.appendIf(allowEmptyValue != null, "allowEmptyValue")
-			.appendIf(collectionFormat != null, "collectionFormat")
-			.appendIf(_default != null, "default")
-			.appendIf(description != null, "description")
-			.appendIf(_enum != null, "enum")
-			.appendIf(example != null, "example")
-			.appendIf(examples != null, "examples")
-			.appendIf(exclusiveMaximum != null, "exclusiveMaximum")
-			.appendIf(exclusiveMinimum != null, "exclusiveMinimum")
-			.appendIf(format != null, "format")
-			.appendIf(in != null, "in")
-			.appendIf(items != null, "items")
-			.appendIf(maximum != null, "maximum")
-			.appendIf(maxItems != null, "maxItems")
-			.appendIf(maxLength != null, "maxLength")
-			.appendIf(minimum != null, "minimum")
-			.appendIf(minItems != null, "minItems")
-			.appendIf(minLength != null, "minLength")
-			.appendIf(multipleOf != null, "multipleOf")
-			.appendIf(name != null, "name")
-			.appendIf(pattern != null, "pattern")
-			.appendIf(required != null, "required")
-			.appendIf(schema != null, "schema")
-			.appendIf(type != null, "type")
-			.appendIf(uniqueItems != null, "uniqueItems");
+		Set<String> s = setBuilder(String.class)
+			.addIf(allowEmptyValue != null, "allowEmptyValue")
+			.addIf(collectionFormat != null, "collectionFormat")
+			.addIf(_default != null, "default")
+			.addIf(description != null, "description")
+			.addIf(_enum != null, "enum")
+			.addIf(example != null, "example")
+			.addIf(examples != null, "examples")
+			.addIf(exclusiveMaximum != null, "exclusiveMaximum")
+			.addIf(exclusiveMinimum != null, "exclusiveMinimum")
+			.addIf(format != null, "format")
+			.addIf(in != null, "in")
+			.addIf(items != null, "items")
+			.addIf(maximum != null, "maximum")
+			.addIf(maxItems != null, "maxItems")
+			.addIf(maxLength != null, "maxLength")
+			.addIf(minimum != null, "minimum")
+			.addIf(minItems != null, "minItems")
+			.addIf(minLength != null, "minLength")
+			.addIf(multipleOf != null, "multipleOf")
+			.addIf(name != null, "name")
+			.addIf(pattern != null, "pattern")
+			.addIf(required != null, "required")
+			.addIf(schema != null, "schema")
+			.addIf(type != null, "type")
+			.addIf(uniqueItems != null, "uniqueItems")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 

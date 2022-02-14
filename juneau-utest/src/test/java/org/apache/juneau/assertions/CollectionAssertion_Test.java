@@ -14,11 +14,11 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -32,11 +32,6 @@ public class CollectionAssertion_Test {
 
 	private <T> CollectionAssertion<T> test(Collection<T> value) {
 		return assertCollection(value).silent();
-	}
-
-	@SafeVarargs
-	private static <T> List<T> list(T...objects) {
-		return AList.of(objects);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -193,9 +188,9 @@ public class CollectionAssertion_Test {
 		List<Integer> x1 = list(1,2), x1a = list(1,2), nil = null;
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
-		assertThrown(()->test(x1).isSame(x1a)).message().oneLine().matches("Not the same value.  Expect='[1, 2](AList@*)'.  Actual='[1, 2](AList@*)'.");
-		assertThrown(()->test(nil).isSame(x1a)).message().oneLine().matches("Not the same value.  Expect='[1, 2](AList@*)'.  Actual='null(null)'.");
-		assertThrown(()->test(x1).isSame(nil)).message().oneLine().matches("Not the same value.  Expect='null(null)'.  Actual='[1, 2](AList@*)'.");
+		assertThrown(()->test(x1).isSame(x1a)).message().oneLine().matches("Not the same value.  Expect='[1, 2](ArrayList@*)'.  Actual='[1, 2](ArrayList@*)'.");
+		assertThrown(()->test(nil).isSame(x1a)).message().oneLine().matches("Not the same value.  Expect='[1, 2](ArrayList@*)'.  Actual='null(null)'.");
+		assertThrown(()->test(x1).isSame(nil)).message().oneLine().matches("Not the same value.  Expect='null(null)'.  Actual='[1, 2](ArrayList@*)'.");
 	}
 
 	@Test
@@ -234,7 +229,7 @@ public class CollectionAssertion_Test {
 		List<Integer> x = list(1,2), nil = null;
 		test(x).isType(List.class);
 		test(x).isType(Object.class);
-		assertThrown(()->test(x).isType(String.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='org.apache.juneau.internal.AList'.");
+		assertThrown(()->test(x).isType(String.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.util.ArrayList'.");
 		assertThrown(()->test(nil).isType(Integer.class)).message().oneLine().is("Value was null.");
 		assertThrown(()->test(x).isType(null)).message().oneLine().is("Argument 'parent' cannot be null.");
 	}
@@ -242,9 +237,9 @@ public class CollectionAssertion_Test {
 	@Test
 	public void ca13_isExactType() throws Exception {
 		List<Integer> x = list(1,2), nil = null;
-		test(x).isExactType(AList.class);
-		assertThrown(()->test(x).isExactType(Object.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='org.apache.juneau.internal.AList'.");
-		assertThrown(()->test(x).isExactType(String.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='org.apache.juneau.internal.AList'.");
+		test(x).isExactType(ArrayList.class);
+		assertThrown(()->test(x).isExactType(Object.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='java.util.ArrayList'.");
+		assertThrown(()->test(x).isExactType(String.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.util.ArrayList'.");
 		assertThrown(()->test(nil).isExactType(String.class)).message().oneLine().is("Value was null.");
 		assertThrown(()->test(x).isExactType(null)).message().oneLine().is("Argument 'parent' cannot be null.");
 	}

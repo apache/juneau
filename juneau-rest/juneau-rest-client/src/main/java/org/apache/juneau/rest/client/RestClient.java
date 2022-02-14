@@ -23,9 +23,9 @@ import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.rest.client.RestOperation.*;
 import static java.util.logging.Level.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StateMachineState.*;
 import static java.lang.Character.*;
-import static java.util.Optional.*;
 
 import java.io.*;
 import java.lang.annotation.Annotation;
@@ -6777,18 +6777,18 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		rootUri = builder.rootUri;
 		errorCodes = builder.errorCodes;
 		connectionManager = builder.connectionManager;
-		console = ofNullable(builder.console).orElse(System.err);
+		console = optional(builder.console).orElse(System.err);
 		executorService = builder.executorService;
 		executorServiceShutdownOnClose = builder.executorServiceShutdownOnClose;
 		ignoreErrors = builder.ignoreErrors;
 		keepHttpClientOpen = builder.keepHttpClientOpen;
 		detectLeaks = builder.detectLeaks;
-		logger = ofNullable(builder.logger).orElseGet(()->Logger.getLogger(RestClient.class.getName()));
+		logger = optional(builder.logger).orElseGet(()->Logger.getLogger(RestClient.class.getName()));
 		logToConsole = builder.logToConsole || isDebug();
-		logRequests = ofNullable(builder.logRequests).orElse(isDebug() ? DetailLevel.FULL : DetailLevel.NONE);
-		logRequestsLevel = ofNullable(builder.logRequestsLevel).orElse(isDebug() ? Level.WARNING : Level.OFF);
-		logRequestsPredicate = ofNullable(builder.logRequestsPredicate).orElse(LOG_REQUESTS_PREDICATE_DEFAULT);
-		interceptors = ofNullable(builder.interceptors).map(x -> x.toArray(new RestCallInterceptor[x.size()])).orElse(new RestCallInterceptor[0]);
+		logRequests = optional(builder.logRequests).orElse(isDebug() ? DetailLevel.FULL : DetailLevel.NONE);
+		logRequestsLevel = optional(builder.logRequestsLevel).orElse(isDebug() ? Level.WARNING : Level.OFF);
+		logRequestsPredicate = optional(builder.logRequestsPredicate).orElse(LOG_REQUESTS_PREDICATE_DEFAULT);
+		interceptors = optional(builder.interceptors).map(x -> x.toArray(new RestCallInterceptor[x.size()])).orElse(new RestCallInterceptor[0]);
 		serializers = builder.serializers().build();
 		parsers = builder.parsers().build();
 		partSerializer = builder.partSerializer().create();
@@ -7195,7 +7195,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			if (body instanceof Supplier)
 				body = ((Supplier<?>)body).get();
 			if (body instanceof NameValuePair)
-				return req.body(new UrlEncodedFormEntity(AList.of((NameValuePair)body)));
+				return req.body(new UrlEncodedFormEntity(Arrays.asList((NameValuePair)body)));
 			if (body instanceof NameValuePair[])
 				return req.body(new UrlEncodedFormEntity(Arrays.asList((NameValuePair[])body)));
 			if (body instanceof PartList)

@@ -19,16 +19,13 @@ import java.util.Map;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.dto.html5.*;
-import org.apache.juneau.html.annotation.HtmlDocConfig;
+import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Body;
-import org.apache.juneau.http.annotation.FormData;
-import org.apache.juneau.http.annotation.Path;
-import org.apache.juneau.http.annotation.Response;
-import org.apache.juneau.http.annotation.Schema;
-import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.config.BasicUniversalConfig;
-import org.apache.juneau.rest.servlet.BasicRestServlet;
 import org.apache.juneau.http.response.*;
+import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.config.*;
+import org.apache.juneau.rest.servlet.*;
 
 /**
  * Shows contents of the microservice configuration file.

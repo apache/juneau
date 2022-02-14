@@ -169,7 +169,7 @@ public final class BeanPropertyMeta {
 
 		boolean validate(BeanContext bc, BeanRegistry parentBeanRegistry, Map<Class<?>,Class<?>[]> typeVarImpls, Set<String> bpro, Set<String> bpwo) throws Exception {
 
-			AList<Class<?>> bdClasses = AList.create();
+			List<Class<?>> bdClasses = list();
 
 			if (field == null && getter == null && setter == null)
 				return false;
@@ -192,7 +192,7 @@ public final class BeanPropertyMeta {
 				for (Beanp p : lp) {
 					if (! p.properties().isEmpty())
 						properties = split(p.properties());
-					bdClasses.a(p.dictionary());
+					addAll(bdClasses, p.dictionary());
 					if (! p.ro().isEmpty())
 						readOnly = Boolean.valueOf(p.ro());
 					if (! p.wo().isEmpty())
@@ -211,7 +211,7 @@ public final class BeanPropertyMeta {
 				for (Beanp p : lp) {
 					if (properties != null && ! p.properties().isEmpty())
 						properties = split(p.properties());
-					bdClasses.a(p.dictionary());
+					addAll(bdClasses, p.dictionary());
 					if (! p.ro().isEmpty())
 						readOnly = Boolean.valueOf(p.ro());
 					if (! p.wo().isEmpty())
@@ -231,7 +231,7 @@ public final class BeanPropertyMeta {
 						swap = getPropertySwap(p);
 					if (properties != null && ! p.properties().isEmpty())
 						properties = split(p.properties());
-					bdClasses.a(p.dictionary());
+					addAll(bdClasses, p.dictionary());
 					if (! p.ro().isEmpty())
 						readOnly = Boolean.valueOf(p.ro());
 					if (! p.wo().isEmpty())

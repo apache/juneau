@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
-import static java.util.Optional.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -105,7 +105,7 @@ public class ContextBeanCreator<T> {
 	 * @return An optional containing the builder if it exists.
 	 */
 	public <T2 extends Context.Builder> Optional<T2> builder(Class<T2> c) {
-		return ofNullable(c.isInstance(builder) ? c.cast(builder) : null);
+		return optional(c.isInstance(builder) ? c.cast(builder) : null);
 	}
 
 	/**

@@ -14,12 +14,12 @@ package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
 
@@ -336,19 +336,19 @@ public class SchemaInfo_Test {
 	public void a19_enum() {
 		SchemaInfo t = new SchemaInfo();
 
-		t._enum(ASet.of("foo","bar"));
+		t._enum(set("foo","bar"));
 		assertOptional(t._enum()).isType(Set.class).asJson().is("['foo','bar']");
 
-		t._enum(ASet.of());
+		t._enum(set());
 		assertOptional(t._enum()).isType(Set.class).asJson().is("[]");
 
 		t._enum((Collection<Object>)null);
 		assertOptional(t._enum()).isNull();
 
-		t.addEnum(ASet.of("foo","bar"));
+		t.addEnum(set("foo","bar"));
 		assertOptional(t._enum()).isType(Set.class).asJson().is("['foo','bar']");
 
-		t.addEnum(ASet.of("baz"));
+		t.addEnum(set("baz"));
 		assertOptional(t._enum()).isType(Set.class).asJson().is("['foo','bar','baz']");
 
 		t.addEnum(null);
@@ -393,19 +393,19 @@ public class SchemaInfo_Test {
 	public void a22_allOf() {
 		SchemaInfo t = new SchemaInfo();
 
-		t.allOf(ASet.of("foo","bar"));
+		t.allOf(set("foo","bar"));
 		assertOptional(t.allOf()).isType(Set.class).asJson().is("['foo','bar']");
 
-		t.allOf(ASet.of());
+		t.allOf(set());
 		assertOptional(t.allOf()).isType(Set.class).asJson().is("[]");
 
 		t.allOf((Collection<Object>)null);
 		assertOptional(t.allOf()).isNull();
 
-		t.addAllOf(ASet.of("foo","bar"));
+		t.addAllOf(set("foo","bar"));
 		assertOptional(t.allOf()).isType(Set.class).asJson().is("['foo','bar']");
 
-		t.addAllOf(ASet.of());
+		t.addAllOf(set());
 		assertOptional(t.allOf()).isType(Set.class).asJson().is("['foo','bar']");
 
 		t.addAllOf(null);
@@ -419,19 +419,19 @@ public class SchemaInfo_Test {
 	public void a23_properties() {
 		SchemaInfo t = new SchemaInfo();
 
-		t.properties(AMap.of("foo",new SchemaInfo().type("foo")));
+		t.properties(map("foo",new SchemaInfo().type("foo")));
 		assertOptional(t.properties()).isType(Map.class).asJson().is("{foo:{type:'foo'}}");
 
-		t.properties(AMap.create());
+		t.properties(map());
 		assertOptional(t.properties()).isType(Map.class).asJson().is("{}");
 
 		t.properties((Map<String,SchemaInfo>)null);
 		assertOptional(t.properties()).isNull();
 
-		t.addProperties(AMap.of("foo", new SchemaInfo().type("foo")));
+		t.addProperties(map("foo", new SchemaInfo().type("foo")));
 		assertOptional(t.properties()).isType(Map.class).asJson().is("{foo:{type:'foo'}}");
 
-		t.addProperties(AMap.create());
+		t.addProperties(map());
 		assertOptional(t.properties()).isType(Map.class).asJson().is("{foo:{type:'foo'}}");
 
 		t.addProperties(null);
@@ -546,9 +546,9 @@ public class SchemaInfo_Test {
 
 		t
 			.set("default", "a")
-			.set("enum", ASet.of("b"))
-			.set("additionalProperties", AMap.of("c",AList.of("c1")))
-			.set("allOf", ASet.of("d"))
+			.set("enum", set("b"))
+			.set("additionalProperties", map("c",list("c1")))
+			.set("allOf", set("d"))
 			.set("description", "e")
 			.set("discriminator", "f")
 			.set("example", "g")
@@ -567,9 +567,9 @@ public class SchemaInfo_Test {
 			.set("minProperties", 123)
 			.set("multipleOf", 123f)
 			.set("pattern", "k")
-			.set("properties", AMap.of("l",AMap.of("l1", 1)))
+			.set("properties", map("l",map("l1", 1)))
 			.set("readOnly", true)
-			.set("requiredProperties", ASet.of("x"))
+			.set("requiredProperties", set("x"))
 			.set("title", "m")
 			.set("type", "n")
 			.set("uniqueItems", true)
@@ -727,9 +727,9 @@ public class SchemaInfo_Test {
 
 		t
 			.set("default", "a")
-			.set("enum", ASet.of("b"))
-			.set("additionalProperties", AMap.of("c",AList.of("c1")))
-			.set("allOf", ASet.of("d"))
+			.set("enum", set("b"))
+			.set("additionalProperties", map("c",list("c1")))
+			.set("allOf", set("d"))
 			.set("description", "e")
 			.set("discriminator", "f")
 			.set("example", "g")
@@ -748,9 +748,9 @@ public class SchemaInfo_Test {
 			.set("minProperties", 123)
 			.set("multipleOf", 123f)
 			.set("pattern", "k")
-			.set("properties", AMap.of("l",AMap.of("l1", 1)))
+			.set("properties", map("l",map("l1", 1)))
 			.set("readOnly", true)
-			.set("requiredProperties", ASet.of("x"))
+			.set("requiredProperties", set("x"))
 			.set("title", "m")
 			.set("type", "n")
 			.set("uniqueItems", true)
@@ -768,12 +768,12 @@ public class SchemaInfo_Test {
 		assertObject(t.keySet()).asJson().is("[]");
 
 		t
-			.set("additionalProperties", AMap.of("c",AList.of("c1")))
-			.set("allOf", ASet.of("d"))
+			.set("additionalProperties", map("c",list("c1")))
+			.set("allOf", set("d"))
 			.set("default", "a")
 			.set("description", "e")
 			.set("discriminator", "f")
-			.set("enum", ASet.of("b"))
+			.set("enum", set("b"))
 			.set("example", "g")
 			.set("exclusiveMaximum", true)
 			.set("exclusiveMinimum", true)
@@ -790,10 +790,10 @@ public class SchemaInfo_Test {
 			.set("minProperties", 123)
 			.set("multipleOf", 123f)
 			.set("pattern", "k")
-			.set("properties", AMap.of("l",AMap.of("l1", 1)))
+			.set("properties", map("l",map("l1", 1)))
 			.set("readOnly", true)
 			.set("$ref", "ref")
-			.set("requiredProperties", ASet.of("x"))
+			.set("requiredProperties", set("x"))
 			.set("title", "m")
 			.set("type", "n")
 			.set("uniqueItems", true)

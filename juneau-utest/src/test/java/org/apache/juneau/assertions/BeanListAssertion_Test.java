@@ -14,6 +14,7 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -34,11 +35,6 @@ public class BeanListAssertion_Test {
 		return assertBeanList(value).silent();
 	}
 	private static A A1 = A.of(1,2), A1a = A.of(1,2), A2 = A.of(3,4), A3 = A.of(5,6);
-
-	@SafeVarargs
-	private static <T> List<T> list(T...objects) {
-		return AList.of(objects);
-	}
 
 	public static class A implements Comparable<A> {
 		public Integer a, b;
@@ -253,9 +249,9 @@ public class BeanListAssertion_Test {
 		List<A> x1 = list(A1,A2), x1a = list(A1a,A2), nil = null;
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
-		assertThrown(()->test(x1).isSame(x1a)).message().oneLine().matches("Not the same value.  Expect='[(a=1,b=2), (a=3,b=4)](AList@*)'.  Actual='[(a=1,b=2), (a=3,b=4)](AList@*)'.");
-		assertThrown(()->test(nil).isSame(x1a)).message().oneLine().matches("Not the same value.  Expect='[(a=1,b=2), (a=3,b=4)](AList@*)'.  Actual='null(null)'.");
-		assertThrown(()->test(x1).isSame(nil)).message().oneLine().matches("Not the same value.  Expect='null(null)'.  Actual='[(a=1,b=2), (a=3,b=4)](AList@*)'.");
+		assertThrown(()->test(x1).isSame(x1a)).message().oneLine().matches("Not the same value.  Expect='[(a=1,b=2), (a=3,b=4)](ArrayList@*)'.  Actual='[(a=1,b=2), (a=3,b=4)](ArrayList@*)'.");
+		assertThrown(()->test(nil).isSame(x1a)).message().oneLine().matches("Not the same value.  Expect='[(a=1,b=2), (a=3,b=4)](ArrayList@*)'.  Actual='null(null)'.");
+		assertThrown(()->test(x1).isSame(nil)).message().oneLine().matches("Not the same value.  Expect='null(null)'.  Actual='[(a=1,b=2), (a=3,b=4)](ArrayList@*)'.");
 	}
 
 	@Test
@@ -294,7 +290,7 @@ public class BeanListAssertion_Test {
 		List<A> x = list(A1,A2), nil = null;
 		test(x).isType(List.class);
 		test(x).isType(Object.class);
-		assertThrown(()->test(x).isType(String.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='org.apache.juneau.internal.AList'.");
+		assertThrown(()->test(x).isType(String.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.util.ArrayList'.");
 		assertThrown(()->test(nil).isType(String.class)).message().oneLine().is("Value was null.");
 		assertThrown(()->test(x).isType(null)).message().oneLine().is("Argument 'parent' cannot be null.");
 	}
@@ -302,8 +298,8 @@ public class BeanListAssertion_Test {
 	@Test
 	public void ca13_isExactType() throws Exception {
 		List<A> x = list(A1,A2), nil = null;
-		test(x).isExactType(AList.class);
-		assertThrown(()->test(x).isExactType(String.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='org.apache.juneau.internal.AList'.");
+		test(x).isExactType(ArrayList.class);
+		assertThrown(()->test(x).isExactType(String.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.util.ArrayList'.");
 		assertThrown(()->test(nil).isExactType(String.class)).message().oneLine().is("Value was null.");
 		assertThrown(()->test(x).isExactType(null)).message().oneLine().is("Argument 'parent' cannot be null.");
 	}

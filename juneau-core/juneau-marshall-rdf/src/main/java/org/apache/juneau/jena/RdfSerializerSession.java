@@ -12,24 +12,25 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
-import static org.apache.juneau.jena.Constants.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.jena.Constants.*;
 
 import java.io.*;
-import java.lang.reflect.Method;
-import java.nio.charset.Charset;
+import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.util.*;
-import java.util.function.Consumer;
+import java.util.function.*;
 
 import org.apache.jena.rdf.model.*;
 import org.apache.juneau.*;
-import org.apache.juneau.http.header.MediaType;
-import org.apache.juneau.httppart.HttpPartSchema;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.svl.VarResolverSession;
+import org.apache.juneau.svl.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
@@ -52,7 +53,9 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	/**
 	 * Maps RDF writer names to property prefixes that apply to them.
 	 */
-	static final Map<String,String> LANG_PROP_MAP = AMap.of("RDF/XML","rdfXml.","RDF/XML-ABBREV","rdfXml.","N3","n3.","N3-PP","n3.","N3-PLAIN","n3.","N3-TRIPLES","n3.","TURTLE","n3.","N-TRIPLE","ntriple.");
+	static final Map<String,String> LANG_PROP_MAP = mapBuilder(String.class,String.class)
+		.add("RDF/XML","rdfXml.").add("RDF/XML-ABBREV","rdfXml.").add("N3","n3.").add("N3-PP","n3.").add("N3-PLAIN","n3.").add("N3-TRIPLES","n3.").add("TURTLE","n3.").add("N-TRIPLE","ntriple.")
+		.build();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

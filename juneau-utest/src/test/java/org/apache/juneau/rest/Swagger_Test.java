@@ -16,6 +16,8 @@ import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -72,7 +74,7 @@ public class Swagger_Test {
 		@Override
 		public Optional<InputStream> find(String name, Locale locale) throws IOException {
 			if (name.endsWith(".json"))
-				return Optional.of(SwaggerProvider.class.getResourceAsStream("BasicRestInfoProviderTest_swagger.json"));
+				return optional(SwaggerProvider.class.getResourceAsStream("BasicRestInfoProviderTest_swagger.json"));
 			return super.find(name, locale);
 		}
 	}

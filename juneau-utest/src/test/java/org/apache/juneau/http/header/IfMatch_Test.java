@@ -13,6 +13,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
 
@@ -32,7 +33,7 @@ public class IfMatch_Test {
 
 	private static final String HEADER = "If-Match";
 	private static final String VALUE = "\"foo\", \"bar\"";
-	private static final List<EntityTag> PARSED = AList.of(EntityTag.of("\"foo\""), EntityTag.of("\"bar\""));
+	private static final List<EntityTag> PARSED = list(EntityTag.of("\"foo\""), EntityTag.of("\"bar\""));
 
 	@Rest
 	public static class A {

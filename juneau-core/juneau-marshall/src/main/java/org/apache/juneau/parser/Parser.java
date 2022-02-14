@@ -12,8 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import static java.util.Optional.*;
 import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -1019,7 +1021,7 @@ public class Parser extends BeanContextable {
 		unbuffered = builder.unbuffered;
 		listener = builder.listener;
 
-		String[] _consumes = StringUtils.split(ofNullable(consumes).orElse(""), ',');
+		String[] _consumes = split(optional(consumes).orElse(""));
 		this.consumesArray = new MediaType[_consumes.length];
 		for (int i = 0; i < _consumes.length; i++) {
 			this.consumesArray[i] = MediaType.of(_consumes[i]);

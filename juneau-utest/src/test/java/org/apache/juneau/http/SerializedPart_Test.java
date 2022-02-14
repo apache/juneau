@@ -16,16 +16,14 @@ import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.http.HttpParts.*;
 
-import java.util.*;
-
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.httppart.HttpPartDataType.*;
 
 import org.junit.*;
@@ -100,10 +98,6 @@ public class SerializedPart_Test {
 	//------------------------------------------------------------------------------------------------------------------
 	// Utility methods
 	//------------------------------------------------------------------------------------------------------------------
-
-	private List<Object> list(Object...o) {
-		return AList.of(o);
-	}
 
 	private HttpPartSchema.Builder schema(HttpPartDataType dataType) {
 		return HttpPartSchema.create().type(dataType);

@@ -17,10 +17,9 @@ import static org.junit.runners.MethodSorters.*;
 import java.util.*;
 
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.internal.*;
-
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.header.StringRanges.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import org.junit.*;
 
@@ -29,7 +28,7 @@ public class StringRanges_Test {
 
 	@Test
 	public void a01_match() throws Exception {
-		List<String> x = AList.of("foo","bar","baz");
+		List<String> x = list("foo","bar","baz");
 
 		assertInteger(of(null).match(x)).is(-1);
 

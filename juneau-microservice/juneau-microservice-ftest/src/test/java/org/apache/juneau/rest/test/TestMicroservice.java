@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
-import static org.apache.juneau.internal.ThrowableUtils.runtimeException;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.io.*;
 import java.net.*;

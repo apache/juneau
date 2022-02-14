@@ -13,6 +13,7 @@
 package org.apache.juneau.transform;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -21,7 +22,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
@@ -33,7 +33,7 @@ import org.junit.*;
 public class AutoObjectSwapTest {
 
 
-	private static final Map<String,String> STRINGMAP = AMap.of("foo","bar");
+	private static final Map<String,String> STRINGMAP = map("foo","bar");
 	private static final OMap OMAP = OMap.of("foo","bar");
 
 	private static ObjectSwap find(Class<?> c) {

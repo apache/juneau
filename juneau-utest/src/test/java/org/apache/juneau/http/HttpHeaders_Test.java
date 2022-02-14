@@ -3,6 +3,7 @@ package org.apache.juneau.http;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 
 import java.util.*;
@@ -10,7 +11,6 @@ import java.util.*;
 import org.apache.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
-import org.apache.juneau.internal.*;
 import org.junit.*;
 
 //***************************************************************************************************************************
@@ -33,7 +33,7 @@ public class HttpHeaders_Test {
 		SerializedPart x2 = serializedPart("X2","2");
 		Header x3 = header("X3","3");
 		SerializedHeader x4 = serializedHeader("X4","4");
-		Map.Entry<String,Object> x5 = AMap.of("X5",(Object)"5").entrySet().iterator().next();
+		Map.Entry<String,Object> x5 = map("X5",(Object)"5").entrySet().iterator().next();
 		org.apache.http.message.BasicNameValuePair x6 = new org.apache.http.message.BasicNameValuePair("X6","6");
 		NameValuePairable x7 = new NameValuePairable() {
 			@Override

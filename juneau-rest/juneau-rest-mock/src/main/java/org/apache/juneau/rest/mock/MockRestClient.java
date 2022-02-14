@@ -13,11 +13,11 @@
 package org.apache.juneau.rest.mock;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static org.apache.juneau.Enablement.*;
 import static java.util.Collections.*;
-import static java.util.Optional.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -563,7 +563,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		 * @return This object.
 		 */
 		public Builder pathVars(String...pairs) {
-			return pathVars(AMap.<String,String>ofPairs((Object[])pairs));
+			return pathVars(mapBuilder(String.class,String.class).addPairs((Object[])pairs).build());
 		}
 
 		/**
@@ -1913,9 +1913,9 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	public MockRestClient(Builder builder) {
 		super(preInit(builder));
 		restContext = builder.restContext;
-		contextPath = ofNullable(builder.contextPath).orElse("");
-		servletPath = ofNullable(builder.servletPath).orElse("");
-		pathVars = ofNullable(builder.pathVars).orElse(emptyMap());
+		contextPath = optional(builder.contextPath).orElse("");
+		servletPath = optional(builder.servletPath).orElse("");
+		pathVars = optional(builder.pathVars).orElse(emptyMap());
 		restObject = restContext.getResource();
 
 		HttpClientConnectionManager ccm = getHttpClientConnectionManager();
@@ -1928,7 +1928,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			Object restBean = builder.restBean;
 			String contextPath = builder.contextPath;
 			String servletPath = builder.servletPath;
-			String rootUrl = ofNullable(builder.getRootUri()).orElse("http://localhost");
+			String rootUrl = optional(builder.getRootUri()).orElse("http://localhost");
 
 			Class<?> c = restBean instanceof Class ? (Class<?>)restBean : restBean.getClass();
 			if (! REST_CONTEXTS.containsKey(c)) {

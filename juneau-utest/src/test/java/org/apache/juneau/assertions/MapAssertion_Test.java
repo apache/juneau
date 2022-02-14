@@ -14,11 +14,11 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -36,7 +36,7 @@ public class MapAssertion_Test {
 
 	@SafeVarargs
 	private static <K,V> Map<K,V> map(Object...objects) {
-		return AMap.ofPairs(objects);
+		return mapBuilder(new LinkedHashMap<K,V>()).addPairs(objects).build();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -210,9 +210,9 @@ public class MapAssertion_Test {
 		Map<Integer,Integer> x1 = map(1,2), x1a = map(1,2), nil = null;
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
-		assertThrown(()->test(x1).isSame(x1a)).message().oneLine().matches("Not the same value.  Expect='{1=2}(AMap@*)'.  Actual='{1=2}(AMap@*)'.");
-		assertThrown(()->test(nil).isSame(x1a)).message().oneLine().matches("Not the same value.  Expect='{1=2}(AMap@*)'.  Actual='null(null)'.");
-		assertThrown(()->test(x1).isSame(nil)).message().oneLine().matches("Not the same value.  Expect='null(null)'.  Actual='{1=2}(AMap@*)'.");
+		assertThrown(()->test(x1).isSame(x1a)).message().oneLine().matches("Not the same value.  Expect='{1=2}(LinkedHashMap@*)'.  Actual='{1=2}(LinkedHashMap@*)'.");
+		assertThrown(()->test(nil).isSame(x1a)).message().oneLine().matches("Not the same value.  Expect='{1=2}(LinkedHashMap@*)'.  Actual='null(null)'.");
+		assertThrown(()->test(x1).isSame(nil)).message().oneLine().matches("Not the same value.  Expect='null(null)'.  Actual='{1=2}(LinkedHashMap@*)'.");
 	}
 
 	@Test
@@ -251,7 +251,7 @@ public class MapAssertion_Test {
 		Map<Integer,Integer> x = map(1,2), nil = null;
 		test(x).isType(Map.class);
 		test(x).isType(Object.class);
-		assertThrown(()->test(x).isType(String.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='org.apache.juneau.internal.AMap'.");
+		assertThrown(()->test(x).isType(String.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.util.LinkedHashMap'.");
 		assertThrown(()->test(nil).isType(String.class)).message().oneLine().is("Value was null.");
 		assertThrown(()->test(x).isType(null)).message().oneLine().is("Argument 'parent' cannot be null.");
 	}
@@ -259,9 +259,9 @@ public class MapAssertion_Test {
 	@Test
 	public void ca13_isExactType() throws Exception {
 		Map<Integer,Integer> x = map(1,2), nil = null;
-		test(x).isExactType(AMap.class);
-		assertThrown(()->test(x).isExactType(Object.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='org.apache.juneau.internal.AMap'.");
-		assertThrown(()->test(x).isExactType(String.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='org.apache.juneau.internal.AMap'.");
+		test(x).isExactType(LinkedHashMap.class);
+		assertThrown(()->test(x).isExactType(Object.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='java.util.LinkedHashMap'.");
+		assertThrown(()->test(x).isExactType(String.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.util.LinkedHashMap'.");
 		assertThrown(()->test(nil).isExactType(String.class)).message().oneLine().is("Value was null.");
 		assertThrown(()->test(x).isExactType(null)).message().oneLine().is("Argument 'parent' cannot be null.");
 	}

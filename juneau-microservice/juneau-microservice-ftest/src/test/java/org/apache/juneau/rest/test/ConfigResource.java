@@ -14,11 +14,11 @@ package org.apache.juneau.rest.test;
 
 import static org.apache.juneau.http.HttpMethod.*;
 
-import org.apache.juneau.http.annotation.Path;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.config.BasicUniversalConfig;
-import org.apache.juneau.rest.servlet.BasicRestServlet;
+import org.apache.juneau.rest.config.*;
+import org.apache.juneau.rest.servlet.*;
 
 /**
  * JUnit automated testcase resource.

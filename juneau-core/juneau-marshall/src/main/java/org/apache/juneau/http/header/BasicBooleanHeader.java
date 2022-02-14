@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.Optional.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -157,9 +157,7 @@ public class BasicBooleanHeader extends BasicHeader {
 	 * @return The header value as a boolean.
 	 */
 	public Optional<Boolean> asBoolean() {
-		if (supplier != null)
-			return ofNullable(supplier.get());
-		return ofNullable(value);
+		return optional(supplier == null ? value : supplier.get());
 	}
 
 	/**

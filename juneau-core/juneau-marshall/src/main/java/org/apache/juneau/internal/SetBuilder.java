@@ -18,7 +18,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
-
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 
@@ -31,7 +30,7 @@ import org.apache.juneau.parser.*;
  *
  * @param <E> Element type.
  */
-public class SetBuilder<E> {
+public final class SetBuilder<E> {
 
 	private Set<E> set;
 	private boolean unmodifiable, sparse;
@@ -236,6 +235,19 @@ public class SetBuilder<E> {
 		} catch (ParseException e) {
 			throw runtimeException(e);
 		}
+		return this;
+	}
+
+	/**
+	 * Adds a value to this set if the specified flag is true.
+	 *
+	 * @param flag The flag.
+	 * @param value The value.
+	 * @return This object.
+	 */
+	public SetBuilder<E> addIf(boolean flag, E value) {
+		if (flag)
+			add(value);
 		return this;
 	}
 }

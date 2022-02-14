@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -94,7 +95,7 @@ public class MediaRanges {
 	 */
 	public MediaRanges(HeaderElement[] e) {
 
-		List<MediaRange> l = AList.create();
+		List<MediaRange> l = list();
 		for (HeaderElement e2 : e)
 			l.add(new MediaRange(e2));
 

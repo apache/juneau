@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
@@ -24,7 +25,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
@@ -753,7 +753,7 @@ public class RestClient_Config_BeanContext_Test {
 		assertEquals(1,x.getFoo());
 		assertTrue(x instanceof A24b);
 
-		x = client().implClasses(AMap.of(A24a.class,A24b.class)).build().post("/echoBody",reader("{foo:1}")).run().getBody().as(A24a.class);
+		x = client().implClasses(map(A24a.class,A24b.class)).build().post("/echoBody",reader("{foo:1}")).run().getBody().as(A24a.class);
 		assertEquals(1,x.getFoo());
 		assertTrue(x instanceof A24b);
 	}

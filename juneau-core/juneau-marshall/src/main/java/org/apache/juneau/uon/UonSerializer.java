@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
-import static java.util.Optional.*;
 import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -1133,7 +1134,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		quoteCharUon = builder.quoteCharUon;
 
 		addBeanTypes = addBeanTypesUon || super.isAddBeanTypes();
-		quoteChar = ofNullable(quoteCharUon).orElse(ofNullable(super.quoteChar()).orElse('\''));
+		quoteChar = optional(quoteCharUon).orElseGet(()->optional(super.quoteChar()).orElse('\''));
 	}
 
 	@Override /* Context */

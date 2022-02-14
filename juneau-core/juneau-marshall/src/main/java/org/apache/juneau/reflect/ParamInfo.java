@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.lang.annotation.*;
@@ -146,7 +147,7 @@ public final class ParamInfo {
 	public <A extends Annotation> A getAnnotation(Class<A> type) {
 		Optional<Annotation> o = annotationMap().get(type);
 		if (o == null) {
-			o = Optional.ofNullable(findAnnotation(type));
+			o = optional(findAnnotation(type));
 			annotationMap().put(type, o);
 		}
 		return o.isPresent() ? (A)o.get() : null;

@@ -15,6 +15,7 @@ package org.apache.juneau.config;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static java.util.Collections.*;
 
@@ -130,7 +131,7 @@ public final class Config extends Context implements ConfigEventListener {
 			l.add(cmd + ".cfg");
 		}
 
-		Set<File> files = ASortedSet.of(new File(".").listFiles());
+		Set<File> files = sortedSet(new File(".").listFiles());
 		for (File f : files)
 			if (f.getName().endsWith(".cfg"))
 				l.add(f.getName());

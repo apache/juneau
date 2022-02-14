@@ -14,6 +14,7 @@ package org.apache.juneau.rest.swagger;
 
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.rest.httppart.RestPartType.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
@@ -1097,10 +1098,9 @@ public class BasicSwaggerProviderSession {
 	private Set<String> toSet(String[] ss) {
 		if (ss.length == 0)
 			return null;
-		Set<String> set = ASet.of();
+		Set<String> set = set();
 		for (String s : ss)
-			for (String s2 : split(s, ','))
-				set.add(trim(s2));
+			split(s, x -> set.add(x));
 		return set.isEmpty() ? null : set;
 	}
 

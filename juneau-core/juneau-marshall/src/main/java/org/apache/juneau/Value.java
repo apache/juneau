@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
@@ -90,7 +92,7 @@ public class Value<T> {
 	 * @return The unwrapped type, or the same type if the type isn't {@link Value}.
 	 */
 	public static Type unwrap(Type t) {
-		return Optional.ofNullable(getParameterType(t)).orElse(t);
+		return optional(getParameterType(t)).orElse(t);
 	}
 
 	/**

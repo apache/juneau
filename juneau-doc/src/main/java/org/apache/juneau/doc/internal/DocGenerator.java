@@ -13,6 +13,7 @@
 package org.apache.juneau.doc.internal;
 
 import static org.apache.juneau.doc.internal.Console.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.io.*;
 import java.nio.file.*;
@@ -265,7 +266,7 @@ public class DocGenerator {
 				title = s.substring(0, i);
 				if (title.startsWith("{")) {
 					titleMap = SimpleJson.DEFAULT.read(title, TitleMap.class);
-					List<String> tags = AList.create();
+					List<String> tags = list();
 					if (titleMap.created != null)
 						tags.add("created: " + highlightCurrentVersion(titleMap.created));
 					if (titleMap.updated != null)

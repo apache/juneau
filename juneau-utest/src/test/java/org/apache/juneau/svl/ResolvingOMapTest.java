@@ -13,11 +13,11 @@
 package org.apache.juneau.svl;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -37,10 +37,10 @@ public class ResolvingOMapTest {
 		m.put("foo", new String[]{"$X{a}"});
 		assertObject(m.get("foo")).asJson().is("['1']");
 
-		m.put("foo", AList.of("$X{a}"));
+		m.put("foo", list("$X{a}"));
 		assertObject(m.get("foo")).asJson().is("['1']");
 
-		m.put("foo", AMap.of("k1","$X{a}"));
+		m.put("foo", map("k1","$X{a}"));
 		assertObject(m.get("foo")).asJson().is("{k1:'1'}");
 	}
 
@@ -64,10 +64,10 @@ public class ResolvingOMapTest {
 		m.put("foo", new String[]{null});
 		assertObject(m.get("foo")).asJson().is("[null]");
 
-		m.put("foo", AList.<String>create().a((String)null));
+		m.put("foo", list((String)null));
 		assertObject(m.get("foo")).asJson().is("[null]");
 
-		m.put("foo", AMap.of("k1",null));
+		m.put("foo", map("k1",null));
 		assertObject(m.get("foo")).asJson().is("{k1:null}");
 	}
 
@@ -85,10 +85,10 @@ public class ResolvingOMapTest {
 		m.put("foo", new Object[]{FooEnum.ONE});
 		assertObject(m.get("foo")).asJson().is("['ONE']");
 
-		m.put("foo", AList.of(FooEnum.ONE));
+		m.put("foo", list(FooEnum.ONE));
 		assertObject(m.get("foo")).asJson().is("['ONE']");
 
-		m.put("foo", AMap.of(FooEnum.ONE,FooEnum.ONE));
+		m.put("foo", map(FooEnum.ONE,FooEnum.ONE));
 		assertObject(m.get("foo")).asJson().is("{ONE:'ONE'}");
 	}
 
@@ -114,10 +114,10 @@ public class ResolvingOMapTest {
 		m3.put("foo", new String[]{"$X{a}"});
 		assertObject(m.get("foo")).asJson().is("['1']");
 
-		m3.put("foo", AList.of("$X{a}"));
+		m3.put("foo", list("$X{a}"));
 		assertObject(m.get("foo")).asJson().is("['1']");
 
-		m3.put("foo", AMap.of("k1","$X{a}"));
+		m3.put("foo", map("k1","$X{a}"));
 		assertObject(m.get("foo")).asJson().is("{k1:'1'}");
 	}
 }

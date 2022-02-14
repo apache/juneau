@@ -15,6 +15,7 @@ package org.apache.juneau.reflect;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.reflect.ClassInfo.*;
 import static org.apache.juneau.reflect.ReflectFlags.*;
 import static org.junit.Assert.*;
@@ -29,7 +30,6 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.MethodInfoTest.*;
 import org.apache.juneau.svl.*;
@@ -1198,9 +1198,9 @@ public class ClassInfoTest {
 	// Primitive wrappers
 	//-----------------------------------------------------------------------------------------------------------------
 
-	static List<Class<?>> primitives = AList.of(boolean.class,byte.class,short.class,char.class,int.class,long.class,float.class,double.class);
-	static List<Class<?>> primitiveWrappers = AList.of(Boolean.class,Byte.class,Short.class,Character.class,Integer.class,Long.class,Float.class,Double.class);
-	static List<Object> primitiveDefaults = AList.of(false,(byte)0,(short)0,(char)0,0,0l,0f,0d);
+	static List<Class<?>> primitives = list(boolean.class,byte.class,short.class,char.class,int.class,long.class,float.class,double.class);
+	static List<Class<?>> primitiveWrappers = list(Boolean.class,Byte.class,Short.class,Character.class,Integer.class,Long.class,Float.class,Double.class);
+	static List<Object> primitiveDefaults = list(false,(byte)0,(short)0,(char)0,0,0l,0f,0d);
 
 	@Test
 	public void hasPrimitiveWrapper() {

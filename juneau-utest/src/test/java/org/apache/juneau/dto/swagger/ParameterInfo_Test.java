@@ -14,12 +14,12 @@ package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
 
@@ -378,19 +378,19 @@ public class ParameterInfo_Test {
 	public void a22_enum() {
 		ParameterInfo t = new ParameterInfo();
 
-		t._enum(ASet.of("foo","bar"));
+		t._enum(set("foo","bar"));
 		assertOptional(t._enum()).isType(Set.class).asJson().is("['foo','bar']");
 
-		t._enum(ASet.of());
+		t._enum(set());
 		assertOptional(t._enum()).isType(Set.class).asJson().is("[]");
 
 		t._enum((Collection<Object>)null);
 		assertOptional(t._enum()).isNull();
 
-		t.addEnum(ASet.of("foo","bar"));
+		t.addEnum(set("foo","bar"));
 		assertOptional(t._enum()).isType(Set.class).asJson().is("['foo','bar']");
 
-		t.addEnum(ASet.of("baz"));
+		t.addEnum(set("baz"));
 		assertOptional(t._enum()).isType(Set.class).asJson().is("['foo','bar','baz']");
 
 		t.addEnum(null);
@@ -426,7 +426,7 @@ public class ParameterInfo_Test {
 
 		t
 			.set("default", "a")
-			.set("enum", ASet.of("b"))
+			.set("enum", set("b"))
 			.set("allowEmptyValue", true)
 			.set("collectionFormat", "c")
 			.set("description", "d")
@@ -577,7 +577,7 @@ public class ParameterInfo_Test {
 
 		t
 			.set("default", "a")
-			.set("enum", ASet.of("b"))
+			.set("enum", set("b"))
 			.set("allowEmptyValue", true)
 			.set("collectionFormat", "c")
 			.set("description", "d")
@@ -616,7 +616,7 @@ public class ParameterInfo_Test {
 			.set("collectionFormat", "c")
 			.set("default", "a")
 			.set("description", "d")
-			.set("enum", ASet.of("b"))
+			.set("enum", set("b"))
 			.set("exclusiveMaximum", true)
 			.set("exclusiveMinimum", true)
 			.set("format", "e")

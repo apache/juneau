@@ -14,8 +14,8 @@ package org.apache.juneau.http.part;
 
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.Optional.*;
 
 import java.time.*;
 import java.util.*;
@@ -118,7 +118,7 @@ public class BasicDatePart extends BasicPart {
 	 */
 	public Optional<Calendar> asCalendar() {
 		ZonedDateTime zdt = getParsedValue();
-		return ofNullable(zdt == null ? null : GregorianCalendar.from(zdt));
+		return optional(zdt).map(GregorianCalendar::from);
 	}
 
 	/**
@@ -128,7 +128,7 @@ public class BasicDatePart extends BasicPart {
 	 */
 	public Optional<java.util.Date> asDate() {
 		Calendar c = asCalendar().orElse(null);
-		return ofNullable(c == null ? null : c.getTime());
+		return optional(c).map(Calendar::getTime);
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class BasicDatePart extends BasicPart {
 	 * @return This part value as a {@link ZonedDateTime}, or {@link Optional#empty()} if the part could not be parsed.
 	 */
 	public Optional<ZonedDateTime> asZonedDateTime() {
-		return ofNullable(getParsedValue());
+		return optional(getParsedValue());
 	}
 
 	/**

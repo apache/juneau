@@ -13,6 +13,8 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -76,7 +78,7 @@ public class RestOperations {
 		protected Builder(BeanStore beanStore) {
 			super(RestOperations.class, beanStore);
 			map = new TreeMap<>();
-			set = ASet.of();
+			set = set();
 		}
 
 		@Override /* BeanBuilder */
@@ -144,11 +146,11 @@ public class RestOperations {
 	 * @param builder The builder containing the settings for this object.
 	 */
 	public RestOperations(Builder builder) {
-		AMap<String,List<RestOpContext>> m = AMap.create();
+		Map<String,List<RestOpContext>> m = map();
 		for (Map.Entry<String,TreeSet<RestOpContext>> e : builder.map.entrySet())
-			m.put(e.getKey(), AList.of(e.getValue()));
+			m.put(e.getKey(), listFrom(e.getValue()));
 		this.map = m;
-		this.list = AList.of(builder.set);
+		this.list = listFrom(builder.set);
 	}
 
 	/**

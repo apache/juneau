@@ -13,6 +13,7 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -466,6 +467,56 @@ public class StringUtilsTest {
 		r = split("1,2\\\\,");
 		assertEquals("2\\", r[1]);
 		assertEquals("", r[2]);
+	}
+
+	@Test
+	public void testSplit2() throws Exception {
+		List<String> l1 = list();
+		split((String)null, x -> l1.add(x));
+		assertList(l1).isEmpty();
+
+		List<String> l2 = list();
+		split("", x->l2.add(x));
+		assertObject(l2).asJson().is("[]");
+
+		List<String> l3 = list();
+		split("1", x->l3.add(x));
+		assertObject(l3).asJson().is("['1']");
+
+		List<String> l4 = list();
+		split("1,2", x->l4.add(x));
+		assertObject(l4).asJson().is("['1','2']");
+
+		List<String> l5 = list();
+		split("1\\,2", x->l5.add(x));
+		assertObject(l5).asJson().is("['1,2']");
+
+		List<String> l6 = list();
+		split("1\\\\,2", x->l6.add(x));
+		assertEquals("1\\", l6.get(0));
+		assertEquals("2", l6.get(1));
+
+		List<String> l7 = list();
+		split("1\\\\\\,2", x->l7.add(x));
+		assertEquals(1, l7.size());
+		assertEquals("1\\,2", l7.get(0));
+
+		List<String> l8 = list();
+		split("1,2\\", x->l8.add(x));
+		assertEquals("2\\", l8.get(1));
+
+		List<String> l9 = list();
+		split("1,2\\\\", x->l9.add(x));
+		assertEquals("2\\", l9.get(1));
+
+		List<String> l10 = list();
+		split("1,2\\,", x->l10.add(x));
+		assertEquals("2,", l10.get(1));
+
+		List<String> l11 = list();
+		split("1,2\\\\,", x->l11.add(x));
+		assertEquals("2\\", l11.get(1));
+		assertEquals("", l11.get(2));
 	}
 
 	//====================================================================================================

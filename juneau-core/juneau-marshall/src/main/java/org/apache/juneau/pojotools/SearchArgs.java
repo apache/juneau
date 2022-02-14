@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.pojotools;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.internal.*;
@@ -36,7 +38,7 @@ public class SearchArgs {
 	 * @param searchArgs Search arguments.
 	 */
 	public SearchArgs(String searchArgs) {
-		this(Arrays.asList(StringUtils.split(searchArgs, ',')));
+		this(Arrays.asList(split(searchArgs)));
 	}
 
 	/**

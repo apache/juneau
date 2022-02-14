@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import org.apache.juneau.internal.*;
+import java.util.*;
 
 /**
  * A collection of {@link HtmlWidget} objects keyed by their names.
@@ -25,7 +25,7 @@ import org.apache.juneau.internal.*;
  *
  * @serial exclude
  */
-public class HtmlWidgetMap extends AMap<String,HtmlWidget> {
+public class HtmlWidgetMap extends LinkedHashMap<String,HtmlWidget> {
 	private static final long serialVersionUID = 1L;
 
 	/**

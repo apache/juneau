@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static java.util.Optional.*;
 import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.beans.*;
 import java.io.*;
@@ -2990,7 +2990,7 @@ public abstract class BeanContextable extends Context {
 	 */
 	protected BeanContextable(Builder b) {
 		super(b);
-		beanContext = ofNullable(b.bc).orElse(b.bcBuilder.build());
+		beanContext = optional(b.bc).orElseGet(()->b.bcBuilder.build());
 	}
 
 	/**

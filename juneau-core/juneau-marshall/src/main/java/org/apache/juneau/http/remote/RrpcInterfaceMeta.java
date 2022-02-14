@@ -12,12 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.remote;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -55,18 +55,18 @@ public class RrpcInterfaceMeta {
 
 		ci.forEachAnnotation(Remote.class, x -> isNotEmpty(x.path()), x -> path.set(trimSlashes(x.path())));
 
-		AMap<Method,RrpcInterfaceMethodMeta> methods = AMap.create();
+		Map<Method,RrpcInterfaceMethodMeta> methods = map();
 		ci.forEachPublicMethod(
 			x -> true,
 			x -> methods.put(x.inner(), new RrpcInterfaceMethodMeta(uri, x.inner()))
 		);
 
-		AMap<String,RrpcInterfaceMethodMeta> methodsByPath = AMap.create();
+		Map<String,RrpcInterfaceMethodMeta> methodsByPath = map();
 		for (RrpcInterfaceMethodMeta rmm : methods.values())
 			methodsByPath.put(rmm.getPath(), rmm);
 
-		this.methods = methods.unmodifiable();
-		this.methodsByPath = methodsByPath.unmodifiable();
+		this.methods = unmodifiable(methods);
+		this.methodsByPath = unmodifiable(methodsByPath);
 		this.path = path.get();
 	}
 

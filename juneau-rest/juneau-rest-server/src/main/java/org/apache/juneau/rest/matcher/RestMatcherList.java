@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.matcher;
 
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
@@ -54,7 +55,7 @@ public class RestMatcherList {
 	@FluentSetters
 	public static class Builder extends BeanBuilder<RestMatcherList> {
 
-		AList<BeanCreator<RestMatcher>> entries;
+		List<BeanCreator<RestMatcher>> entries;
 
 		/**
 		 * Constructor.
@@ -63,7 +64,7 @@ public class RestMatcherList {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(RestMatcherList.class, beanStore);
-			entries = AList.create();
+			entries = list();
 		}
 
 		@Override /* BeanBuilder */
@@ -84,7 +85,7 @@ public class RestMatcherList {
 		@SuppressWarnings("unchecked")
 		public Builder append(Class<? extends RestMatcher>...values) {
 			for (Class<? extends RestMatcher> v : values)
-				entries.append(beanStore().createBean(RestMatcher.class).type(v));
+				entries.add(beanStore().createBean(RestMatcher.class).type(v));
 			return this;
 		}
 
@@ -96,7 +97,7 @@ public class RestMatcherList {
 		 */
 		public Builder append(RestMatcher...values) {
 			for (RestMatcher v : values)
-				entries.append(beanStore().createBean(RestMatcher.class).impl(v));
+				entries.add(beanStore().createBean(RestMatcher.class).impl(v));
 			return this;
 		}
 

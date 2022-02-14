@@ -12,12 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.a.rttests;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
@@ -210,14 +210,14 @@ public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 			paDouble = new double[][]{{1},{2},null};
 
 			// Regular lists of primitives
-			plBoolean = AList.of(new boolean[]{true}, null);
-			plByte = AList.of(new byte[]{1}, null);
-			plChar = AList.of(new char[]{'a'}, null);
-			plShort = AList.of(new short[]{1}, null);
-			plInt =AList.of(new int[]{1}, null);
-			plLong = AList.of(new long[]{1}, null);
-			plFloat = AList.of(new float[]{1}, null);
-			plDouble = AList.of(new double[]{1}, null);
+			plBoolean = list(new boolean[]{true}, null);
+			plByte = list(new byte[]{1}, null);
+			plChar = list(new char[]{'a'}, null);
+			plShort = list(new short[]{1}, null);
+			plInt =list(new int[]{1}, null);
+			plLong = list(new long[]{1}, null);
+			plFloat = list(new float[]{1}, null);
+			plDouble = list(new double[]{1}, null);
 
 			// Anonymous list of primitives
 			palBoolean = new ArrayList<>();
@@ -253,7 +253,7 @@ public class RoundTripPrimitivesBeansTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testPrimitivesBeanList() throws Exception {
-		List<PrimitivesBean> t = AList.of(new PrimitivesBean().init(), null, new PrimitivesBean().init());
+		List<PrimitivesBean> t = list(new PrimitivesBean().init(), null, new PrimitivesBean().init());
 		if (p == null)
 			return;
 		t = roundTrip(t, List.class, PrimitivesBean.class);

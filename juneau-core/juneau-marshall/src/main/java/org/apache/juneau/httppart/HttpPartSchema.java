@@ -18,6 +18,7 @@ import static org.apache.juneau.httppart.HttpPartFormat.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -2772,7 +2773,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder _enum(String...values) {
-			return _enum(ASet.of(values));
+			return _enum(set(values));
 		}
 
 		/**
@@ -3291,61 +3292,62 @@ public class HttpPartSchema {
 
 		// Validation.
 		List<String> errors = new ArrayList<>();
-		AList<String> notAllowed = AList.create();
+		ListBuilder<String> notAllowed = listBuilder(String.class);
 		boolean invalidFormat = false;
 		switch (type) {
 			case STRING: {
-				notAllowed.appendIf(properties != null, "properties");
-				notAllowed.appendIf(additionalProperties != null, "additionalProperties");
-				notAllowed.appendIf(exclusiveMaximum, "exclusiveMaximum");
-				notAllowed.appendIf(exclusiveMinimum, "exclusiveMinimum");
-				notAllowed.appendIf(uniqueItems, "uniqueItems");
-				notAllowed.appendIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
-				notAllowed.appendIf(items != null, "items");
-				notAllowed.appendIf(maximum != null, "maximum");
-				notAllowed.appendIf(minimum != null, "minimum");
-				notAllowed.appendIf(multipleOf != null, "multipleOf");
-				notAllowed.appendIf(maxItems != null, "maxItems");
-				notAllowed.appendIf(minItems != null, "minItems");
-				notAllowed.appendIf(minProperties != null, "minProperties");
+				notAllowed
+					.addIf(properties != null, "properties")
+					.addIf(additionalProperties != null, "additionalProperties")
+					.addIf(exclusiveMaximum, "exclusiveMaximum")
+					.addIf(exclusiveMinimum, "exclusiveMinimum")
+					.addIf(uniqueItems, "uniqueItems")
+					.addIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat")
+					.addIf(items != null, "items")
+					.addIf(maximum != null, "maximum")
+					.addIf(minimum != null, "minimum")
+					.addIf(multipleOf != null, "multipleOf")
+					.addIf(maxItems != null, "maxItems")
+					.addIf(minItems != null, "minItems")
+					.addIf(minProperties != null, "minProperties");
 				invalidFormat = ! format.isOneOf(HttpPartFormat.BYTE, HttpPartFormat.BINARY, HttpPartFormat.BINARY_SPACED, HttpPartFormat.DATE, HttpPartFormat.DATE_TIME, HttpPartFormat.PASSWORD, HttpPartFormat.UON, HttpPartFormat.NO_FORMAT);
 				break;
 			}
 			case ARRAY: {
-				notAllowed.appendIf(properties != null, "properties");
-				notAllowed.appendIf(additionalProperties != null, "additionalProperties");
-				notAllowed.appendIf(exclusiveMaximum, "exclusiveMaximum");
-				notAllowed.appendIf(exclusiveMinimum, "exclusiveMinimum");
-				notAllowed.appendIf(pattern != null, "pattern");
-				notAllowed.appendIf(maximum != null, "maximum");
-				notAllowed.appendIf(minimum != null, "minimum");
-				notAllowed.appendIf(multipleOf != null, "multipleOf");
-				notAllowed.appendIf(maxLength != null, "maxLength");
-				notAllowed.appendIf(minLength != null, "minLength");
-				notAllowed.appendIf(maxProperties != null, "maxProperties");
-				notAllowed.appendIf(minProperties != null, "minProperties");
+				notAllowed.addIf(properties != null, "properties")
+					.addIf(additionalProperties != null, "additionalProperties")
+					.addIf(exclusiveMaximum, "exclusiveMaximum")
+					.addIf(exclusiveMinimum, "exclusiveMinimum")
+					.addIf(pattern != null, "pattern")
+					.addIf(maximum != null, "maximum")
+					.addIf(minimum != null, "minimum")
+					.addIf(multipleOf != null, "multipleOf")
+					.addIf(maxLength != null, "maxLength")
+					.addIf(minLength != null, "minLength")
+					.addIf(maxProperties != null, "maxProperties")
+					.addIf(minProperties != null, "minProperties");
 				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT, HttpPartFormat.UON);
 				break;
 			}
 			case BOOLEAN: {
-				notAllowed.appendIf(! _enum.isEmpty(), "_enum");
-				notAllowed.appendIf(properties != null, "properties");
-				notAllowed.appendIf(additionalProperties != null, "additionalProperties");
-				notAllowed.appendIf(exclusiveMaximum, "exclusiveMaximum");
-				notAllowed.appendIf(exclusiveMinimum, "exclusiveMinimum");
-				notAllowed.appendIf(uniqueItems, "uniqueItems");
-				notAllowed.appendIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
-				notAllowed.appendIf(pattern != null, "pattern");
-				notAllowed.appendIf(items != null, "items");
-				notAllowed.appendIf(maximum != null, "maximum");
-				notAllowed.appendIf(minimum != null, "minimum");
-				notAllowed.appendIf(multipleOf != null, "multipleOf");
-				notAllowed.appendIf(maxItems != null, "maxItems");
-				notAllowed.appendIf(maxLength != null, "maxLength");
-				notAllowed.appendIf(maxProperties != null, "maxProperties");
-				notAllowed.appendIf(minItems != null, "minItems");
-				notAllowed.appendIf(minLength != null, "minLength");
-				notAllowed.appendIf(minProperties != null, "minProperties");
+				notAllowed.addIf(! _enum.isEmpty(), "_enum")
+					.addIf(properties != null, "properties")
+					.addIf(additionalProperties != null, "additionalProperties")
+					.addIf(exclusiveMaximum, "exclusiveMaximum")
+					.addIf(exclusiveMinimum, "exclusiveMinimum")
+					.addIf(uniqueItems, "uniqueItems")
+					.addIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat")
+					.addIf(pattern != null, "pattern")
+					.addIf(items != null, "items")
+					.addIf(maximum != null, "maximum")
+					.addIf(minimum != null, "minimum")
+					.addIf(multipleOf != null, "multipleOf")
+					.addIf(maxItems != null, "maxItems")
+					.addIf(maxLength != null, "maxLength")
+					.addIf(maxProperties != null, "maxProperties")
+					.addIf(minItems != null, "minItems")
+					.addIf(minLength != null, "minLength")
+					.addIf(minProperties != null, "minProperties");
 				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT, HttpPartFormat.UON);
 				break;
 			}
@@ -3353,50 +3355,50 @@ public class HttpPartSchema {
 				break;
 			}
 			case INTEGER: {
-				notAllowed.appendIf(properties != null, "properties");
-				notAllowed.appendIf(additionalProperties != null, "additionalProperties");
-				notAllowed.appendIf(uniqueItems, "uniqueItems");
-				notAllowed.appendIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
-				notAllowed.appendIf(pattern != null, "pattern");
-				notAllowed.appendIf(items != null, "items");
-				notAllowed.appendIf(maxItems != null, "maxItems");
-				notAllowed.appendIf(maxLength != null, "maxLength");
-				notAllowed.appendIf(maxProperties != null, "maxProperties");
-				notAllowed.appendIf(minItems != null, "minItems");
-				notAllowed.appendIf(minLength != null, "minLength");
-				notAllowed.appendIf(minProperties != null, "minProperties");
+				notAllowed.addIf(properties != null, "properties")
+					.addIf(additionalProperties != null, "additionalProperties")
+					.addIf(uniqueItems, "uniqueItems")
+					.addIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat")
+					.addIf(pattern != null, "pattern")
+					.addIf(items != null, "items")
+					.addIf(maxItems != null, "maxItems")
+					.addIf(maxLength != null, "maxLength")
+					.addIf(maxProperties != null, "maxProperties")
+					.addIf(minItems != null, "minItems")
+					.addIf(minLength != null, "minLength")
+					.addIf(minProperties != null, "minProperties");
 				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT, HttpPartFormat.UON, HttpPartFormat.INT32, HttpPartFormat.INT64);
 				break;
 			}
 			case NUMBER: {
-				notAllowed.appendIf(properties != null, "properties");
-				notAllowed.appendIf(additionalProperties != null, "additionalProperties");
-				notAllowed.appendIf(uniqueItems, "uniqueItems");
-				notAllowed.appendIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat");
-				notAllowed.appendIf(pattern != null, "pattern");
-				notAllowed.appendIf(items != null, "items");
-				notAllowed.appendIf(maxItems != null, "maxItems");
-				notAllowed.appendIf(maxLength != null, "maxLength");
-				notAllowed.appendIf(maxProperties != null, "maxProperties");
-				notAllowed.appendIf(minItems != null, "minItems");
-				notAllowed.appendIf(minLength != null, "minLength");
-				notAllowed.appendIf(minProperties != null, "minProperties");
+				notAllowed.addIf(properties != null, "properties")
+					.addIf(additionalProperties != null, "additionalProperties")
+					.addIf(uniqueItems, "uniqueItems")
+					.addIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat")
+					.addIf(pattern != null, "pattern")
+					.addIf(items != null, "items")
+					.addIf(maxItems != null, "maxItems")
+					.addIf(maxLength != null, "maxLength")
+					.addIf(maxProperties != null, "maxProperties")
+					.addIf(minItems != null, "minItems")
+					.addIf(minLength != null, "minLength")
+					.addIf(minProperties != null, "minProperties");
 				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT, HttpPartFormat.UON, HttpPartFormat.FLOAT, HttpPartFormat.DOUBLE);
 				break;
 			}
 			case OBJECT: {
-				notAllowed.appendIf(exclusiveMaximum, "exclusiveMaximum");
-				notAllowed.appendIf(exclusiveMinimum, "exclusiveMinimum");
-				notAllowed.appendIf(uniqueItems, "uniqueItems");
-				notAllowed.appendIf(pattern != null, "pattern");
-				notAllowed.appendIf(items != null, "items");
-				notAllowed.appendIf(maximum != null, "maximum");
-				notAllowed.appendIf(minimum != null, "minimum");
-				notAllowed.appendIf(multipleOf != null, "multipleOf");
-				notAllowed.appendIf(maxItems != null, "maxItems");
-				notAllowed.appendIf(maxLength != null, "maxLength");
-				notAllowed.appendIf(minItems != null, "minItems");
-				notAllowed.appendIf(minLength != null, "minLength");
+				notAllowed.addIf(exclusiveMaximum, "exclusiveMaximum")
+					.addIf(exclusiveMinimum, "exclusiveMinimum")
+					.addIf(uniqueItems, "uniqueItems")
+					.addIf(pattern != null, "pattern")
+					.addIf(items != null, "items")
+					.addIf(maximum != null, "maximum")
+					.addIf(minimum != null, "minimum")
+					.addIf(multipleOf != null, "multipleOf")
+					.addIf(maxItems != null, "maxItems")
+					.addIf(maxLength != null, "maxLength")
+					.addIf(minItems != null, "minItems")
+					.addIf(minLength != null, "minLength");
 				invalidFormat = ! format.isOneOf(HttpPartFormat.NO_FORMAT);
 				break;
 			}
@@ -3404,8 +3406,9 @@ public class HttpPartSchema {
 				break;
 		}
 
-		if (! notAllowed.isEmpty())
-			errors.add("Attributes not allow for type='"+type+"': " + StringUtils.join(notAllowed, ","));
+		List<String> notAllowed2 = notAllowed.build();
+		if (! notAllowed2.isEmpty())
+			errors.add("Attributes not allow for type='"+type+"': " + StringUtils.join(notAllowed2, ","));
 		if (invalidFormat)
 			errors.add("Invalid format for type='"+type+"': '"+format+"'");
 		if (exclusiveMaximum && maximum == null)
@@ -4050,19 +4053,18 @@ public class HttpPartSchema {
 			isNotEmpty |= ss.length > 0;
 		if (! isNotEmpty)
 			return null;
-		Set<String> set = ASet.of();
+		Set<String> set = set();
 		for (String[] ss : s)
 			if (ss != null)
 				for (String ss2 : ss)
-					for (String ss3 : split(ss2, ','))
-						set.add(trim(ss3));
+					split(ss2, x -> set.add(x));
 		return set.isEmpty() ? null : set;
 	}
 
 	final static Set<String> toSet(String s) {
 		if (isEmpty(s))
 			return null;
-		Set<String> set = ASet.of();
+		Set<String> set = set();
 		try {
 			for (Object o : StringUtils.parseListOrCdl(s))
 				set.add(o.toString());

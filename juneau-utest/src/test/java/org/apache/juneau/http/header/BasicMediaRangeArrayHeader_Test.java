@@ -26,6 +26,7 @@ import org.apache.juneau.rest.mock.*;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import org.junit.*;
 
@@ -69,10 +70,10 @@ public class BasicMediaRangeArrayHeader_Test {
 
 	@Test
 	public void a02_match() throws Exception {
-		assertInteger(accept("text/foo").match(AList.of(MediaType.of("text/foo")))).is(0);
-		assertInteger(accept("text/foo").match(AList.of(MediaType.of("text/bar")))).is(-1);
-		assertInteger(new Accept((String)null).match(AList.of(MediaType.of("text/bar")))).is(-1);
-		assertInteger(accept("text/foo").match(AList.of(MediaType.of(null)))).is(-1);
+		assertInteger(accept("text/foo").match(list(MediaType.of("text/foo")))).is(0);
+		assertInteger(accept("text/foo").match(list(MediaType.of("text/bar")))).is(-1);
+		assertInteger(new Accept((String)null).match(list(MediaType.of("text/bar")))).is(-1);
+		assertInteger(accept("text/foo").match(list(MediaType.of(null)))).is(-1);
 		assertInteger(accept("text/foo").match(null)).is(-1);
 	}
 

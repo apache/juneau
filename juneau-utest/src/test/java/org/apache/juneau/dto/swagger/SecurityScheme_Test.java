@@ -13,12 +13,12 @@
 package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
 
@@ -133,19 +133,19 @@ public class SecurityScheme_Test {
 	public void a08_scopes() {
 		SecurityScheme t = new SecurityScheme();
 
-		t.scopes(AMap.of("foo","bar"));
+		t.scopes(map("foo","bar"));
 		assertOptional(t.scopes()).isType(Map.class).asJson().is("{foo:'bar'}");
 
-		t.scopes(AMap.create());
+		t.scopes(map());
 		assertOptional(t.scopes()).isType(Map.class).asJson().is("{}");
 
 		t.scopes((Map<String,String>)null);
 		assertOptional(t.scopes()).isNull();
 
-		t.addScopes(AMap.of("foo","bar"));
+		t.addScopes(map("foo","bar"));
 		assertOptional(t.scopes()).isType(Map.class).asJson().is("{foo:'bar'}");
 
-		t.addScopes(AMap.create());
+		t.addScopes(map());
 		assertOptional(t.scopes()).isType(Map.class).asJson().is("{foo:'bar'}");
 
 		t.addScopes(null);
@@ -165,7 +165,7 @@ public class SecurityScheme_Test {
 			.set("flow", "c")
 			.set("in", "d")
 			.set("name", "e")
-			.set("scopes", AMap.of("foo","bar"))
+			.set("scopes", map("foo","bar"))
 			.set("tokenUrl", "f")
 			.set("type", "g")
 			.set("$ref", "ref");
@@ -241,7 +241,7 @@ public class SecurityScheme_Test {
 			.set("flow", "c")
 			.set("in", "d")
 			.set("name", "e")
-			.set("scopes", AMap.of("foo","bar"))
+			.set("scopes", map("foo","bar"))
 			.set("tokenUrl", "f")
 			.set("type", "g")
 			.set("$ref", "ref")
@@ -262,7 +262,7 @@ public class SecurityScheme_Test {
 			.set("flow", "c")
 			.set("in", "d")
 			.set("name", "e")
-			.set("scopes", AMap.of("foo","bar"))
+			.set("scopes", map("foo","bar"))
 			.set("tokenUrl", "f")
 			.set("type", "g")
 			.set("$ref", "ref");

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.httppart.bean;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 import org.apache.juneau.http.annotation.*;
@@ -92,7 +94,7 @@ public class ResponseBeanPropertyMeta {
 	 * @return The HTTP part name, or <jk>null</jk> if it doesn't have a part name.
 	 */
 	public Optional<String> getPartName() {
-		return Optional.ofNullable(schema == null ? null : schema.getName());
+		return optional(schema == null ? null : schema.getName());
 	}
 
 	/**

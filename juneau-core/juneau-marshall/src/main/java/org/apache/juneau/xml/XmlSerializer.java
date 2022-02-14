@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static java.util.Optional.*;
 import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -281,7 +282,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 			disableAutoDetectNamespaces = ! copyFrom.autoDetectNamespaces;
 			enableNamespaces = copyFrom.enableNamespaces;
 			defaultNamespace = copyFrom.defaultNamespace;
-			namespaces = copyFrom.namespaces.length == 0 ? null : AList.of(copyFrom.namespaces);
+			namespaces = copyFrom.namespaces.length == 0 ? null : list(copyFrom.namespaces);
 		}
 
 		/**
@@ -296,7 +297,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 			disableAutoDetectNamespaces = copyFrom.disableAutoDetectNamespaces;
 			enableNamespaces = copyFrom.enableNamespaces;
 			defaultNamespace = copyFrom.defaultNamespace;
-			namespaces = copyFrom.namespaces == null ? null : AList.of(copyFrom.namespaces);
+			namespaces = copyOf(copyFrom.namespaces);
 		}
 
 		@Override /* Context.Builder */
@@ -1180,8 +1181,8 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		enableNamespaces = builder.enableNamespaces;
 		addNamespaceUrlsToRoot = builder.addNamespaceUrisToRoot;
 		addBeanTypesXml = builder.addBeanTypesXml;
-		defaultNamespace = ofNullable(builder.defaultNamespace).orElse(DEFAULT_JUNEAU_NAMESPACE);
-		namespaces = ofNullable(builder.namespaces).map(x -> x.toArray(new Namespace[0])).orElse(new Namespace[0]);
+		defaultNamespace = optional(builder.defaultNamespace).orElse(DEFAULT_JUNEAU_NAMESPACE);
+		namespaces = optional(builder.namespaces).map(x -> x.toArray(new Namespace[0])).orElse(new Namespace[0]);
 
 		addBeanTypes = addBeanTypesXml || super.isAddBeanTypes();
 	}

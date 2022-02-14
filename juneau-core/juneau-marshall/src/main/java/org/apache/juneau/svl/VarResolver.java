@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -258,7 +260,7 @@ public class VarResolver {
 		for (Var v : vars)
 			m.put(v.getName(), v);
 
-		this.varMap = AMap.unmodifiable(m);
+		this.varMap = unmodifiable(m);
 		this.beanStore = BeanStore.of(builder.beanStore());
 	}
 

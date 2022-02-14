@@ -13,6 +13,7 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.DateUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.junit.Assert.*;
@@ -25,7 +26,6 @@ import javax.xml.datatype.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -120,8 +120,8 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 			fByte = new byte[]{0,1,2,3};
 			fnByte = null;
 			faByte = new byte[][]{{0,1},{2,3},{4,5}};
-			flByte = AList.of(new byte[]{1,2,3},new byte[]{4,5,6},null);
-			fmByte = AMap.of("foo",new byte[]{1,2,3},"bar",new byte[]{4,5,6},"baz",null);
+			flByte = list(new byte[]{1,2,3},new byte[]{4,5,6},null);
+			fmByte = map("foo",new byte[]{1,2,3},"bar",new byte[]{4,5,6},"baz",null);
 
 			fCalendar = new GregorianCalendar() {{
 				set(2001, 01, 02, 03, 04, 05);
@@ -141,8 +141,8 @@ public class RoundTripTransformBeansTest extends RoundTripTest {
 			faDate = new Date[]{
 				new Date(1000), new Date(2000), new Date(3000)
 			};
-			flDate = AList.of(new Date(4000),null);
-			fmDate = AMap.of("foo",new Date(5000),"bar",null);
+			flDate = list(new Date(4000),null);
+			fmDate = map("foo",new Date(5000),"bar",null);
 			return this;
 		}
 	}

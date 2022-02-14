@@ -12,7 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.util;
 
-import org.apache.juneau.internal.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+
+import java.util.*;
 
 /**
  * A list of {@link UrlPathMatcher} objects.
@@ -23,7 +25,7 @@ import org.apache.juneau.internal.*;
  *
  * @serial exclude
  */
-public class UrlPathMatcherList extends AList<UrlPathMatcher> {
+public class UrlPathMatcherList extends ArrayList<UrlPathMatcher> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -32,7 +34,6 @@ public class UrlPathMatcherList extends AList<UrlPathMatcher> {
 	 *
 	 * @return An empty list.
 	 */
-	@SuppressWarnings("unchecked")
 	public static UrlPathMatcherList create() {
 		return new UrlPathMatcherList();
 	}
@@ -43,6 +44,6 @@ public class UrlPathMatcherList extends AList<UrlPathMatcher> {
 	 * @return The contents of this list as a {@link UrlPathMatcher} array.
 	 */
 	public UrlPathMatcher[] asArray() {
-		return asArrayOf(UrlPathMatcher.class);
+		return array(this, UrlPathMatcher.class);
 	}
 }

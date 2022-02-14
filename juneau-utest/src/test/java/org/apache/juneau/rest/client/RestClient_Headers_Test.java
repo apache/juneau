@@ -15,6 +15,7 @@ package org.apache.juneau.rest.client;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.runners.MethodSorters.*;
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
@@ -26,7 +27,6 @@ import java.util.*;
 import org.apache.http.Header;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.rest.annotation.*;
@@ -94,7 +94,7 @@ public class RestClient_Headers_Test {
 
 	@Test
 	public void a02_header_String_Object_Schema() throws Exception {
-		List<String> l1 = AList.of("bar","baz"), l2 = AList.of("qux","quux");
+		List<String> l1 = list("bar","baz"), l2 = list("qux","quux");
 		checkFooClient().headers(header("Foo",l1,T_ARRAY_PIPES)).build().get("/headers").header(header("Foo",l2,T_ARRAY_PIPES)).run().assertBody().is("['bar|baz','qux|quux']");
 	}
 
@@ -124,7 +124,7 @@ public class RestClient_Headers_Test {
 
 	@Test
 	public void a07_header_AddFlag_String_Object_Schema() throws Exception {
-		List<String> l = AList.of("baz","qux");
+		List<String> l = list("baz","qux");
 		checkFooClient().header("Foo","bar").build().get("/headers").headers(APPEND,header("Foo",l,T_ARRAY_PIPES)).run().assertBody().is("['bar','baz|qux']");
 		checkFooClient().header("Foo","bar").build().get("/headers").headers(SET,header("Foo",l,T_ARRAY_PIPES)).run().assertBody().is("['baz|qux']");
 		checkFooClient().header("Foo","bar").build().get("/headers").headers(PREPEND,header("Foo",l,T_ARRAY_PIPES)).run().assertBody().is("['baz|qux','bar']");

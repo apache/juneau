@@ -13,8 +13,8 @@
 package org.apache.juneau.config;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
-import static java.util.Optional.*;
 
 import java.beans.*;
 import java.lang.reflect.*;
@@ -122,7 +122,7 @@ public class Section {
 			}
 		}
 
-		return of(bm.getBean());
+		return optional(bm.getBean());
 	}
 
 	/**
@@ -138,7 +138,7 @@ public class Section {
 		OMap om = new OMap();
 		for (String k : keys)
 			om.put(k, config.get(name + '/' + k).as(Object.class).orElse(null));
-		return of(om);
+		return optional(om);
 	}
 
 	/**
@@ -223,7 +223,7 @@ public class Section {
 			}
 		};
 
-		return ofNullable((T)Proxy.newProxyInstance(c.getClassLoader(), new Class[] { c }, h));
+		return optional((T)Proxy.newProxyInstance(c.getClassLoader(), new Class[] { c }, h));
 	}
 
 	/**

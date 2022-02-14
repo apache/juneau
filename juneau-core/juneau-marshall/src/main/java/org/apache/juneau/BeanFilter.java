@@ -15,11 +15,11 @@ package org.apache.juneau;
 import java.beans.*;
 import java.util.*;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.swap.*;
 
 /**
@@ -64,11 +64,11 @@ public final class BeanFilter {
 
 		Class<?> beanClass;
 		String typeName, example;
-		ASet<String>
-			properties = ASet.of(),
-			excludeProperties = ASet.of(),
-			readOnlyProperties = ASet.of(),
-			writeOnlyProperties = ASet.of();
+		Set<String>
+			properties = set(),
+			excludeProperties = set(),
+			readOnlyProperties = set(),
+			writeOnlyProperties = set();
 		Class<?> implClass, interfaceClass, stopClass;
 		boolean sortProperties, fluentSetters;
 		BeanCreator<PropertyNamer> propertyNamer = BeanCreator.of(PropertyNamer.class);
@@ -477,10 +477,9 @@ public final class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder properties(String...value) {
-			this.properties = ASet.of();
+			this.properties = set();
 			for (String v : value)
-				if (!v.isEmpty())
-					properties.a(split(v));
+				split(v, x -> properties.add(x));
 			return this;
 		}
 
@@ -522,10 +521,9 @@ public final class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder excludeProperties(String...value) {
-			this.excludeProperties = ASet.of();
+			this.excludeProperties = set();
 			for (String v : value)
-				if (! v.isEmpty())
-					excludeProperties.a(split(v));
+				split(v, x -> excludeProperties.add(x));
 			return this;
 		}
 
@@ -569,10 +567,9 @@ public final class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder readOnlyProperties(String...value) {
-			this.readOnlyProperties = ASet.of();
+			this.readOnlyProperties = set();
 			for (String v : value)
-				if (! v.isEmpty())
-					readOnlyProperties.a(split(v));
+				split(v, x -> readOnlyProperties.add(x));
 			return this;
 		}
 
@@ -616,10 +613,9 @@ public final class BeanFilter {
 		 * @return This object.
 		 */
 		public Builder writeOnlyProperties(String...value) {
-			this.writeOnlyProperties = ASet.of();
+			this.writeOnlyProperties = set();
 			for (String v : value)
-				if (! v.isEmpty())
-					writeOnlyProperties.a(split(v));
+				split(v, x -> writeOnlyProperties.add(x));
 			return this;
 		}
 

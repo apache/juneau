@@ -13,13 +13,13 @@
 package org.apache.juneau.swap;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
@@ -81,8 +81,8 @@ import org.apache.juneau.serializer.*;
 public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {
 
 	private static final Set<String>
-		SWAP_METHOD_NAMES = ASet.unmodifiable("toList", "toObjectList", "toOList"),
-		UNSWAP_METHOD_NAMES = ASet.unmodifiable("fromList", "fromObjectList", "fromOList", "create", "valueOf");
+		SWAP_METHOD_NAMES = unmodifiableSet("toList", "toObjectList", "toOList"),
+		UNSWAP_METHOD_NAMES = unmodifiableSet("fromList", "fromObjectList", "fromOList", "create", "valueOf");
 
 	/**
 	 * Look for constructors and methods on this class and construct a dynamic swap if it's possible to do so.

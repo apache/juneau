@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
@@ -124,7 +125,7 @@ public class Tag extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> description() {
-		return Optional.ofNullable(getDescription());
+		return optional(getDescription());
 	}
 
 	/**
@@ -182,7 +183,7 @@ public class Tag extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<ExternalDocumentation> externalDocs() {
-		return Optional.ofNullable(getExternalDocs());
+		return optional(getExternalDocs());
 	}
 
 	/**
@@ -261,7 +262,7 @@ public class Tag extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> name() {
-		return Optional.ofNullable(getName());
+		return optional(getName());
 	}
 
 	/**
@@ -309,10 +310,11 @@ public class Tag extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		ASet<String> s = ASet.<String>of()
-			.appendIf(description != null, "description")
-			.appendIf(externalDocs != null, "externalDocs")
-			.appendIf(name != null, "name");
+		Set<String> s = setBuilder(String.class)
+			.addIf(description != null, "description")
+			.addIf(externalDocs != null, "externalDocs")
+			.addIf(name != null, "name")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 }

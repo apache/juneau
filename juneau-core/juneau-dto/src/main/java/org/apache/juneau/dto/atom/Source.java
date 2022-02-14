@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.util.*;
 
 /**
@@ -91,7 +93,7 @@ public class Source extends CommonEntry {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Generator> generator() {
-		return Optional.ofNullable(generator);
+		return optional(generator);
 	}
 
 	/**
@@ -145,7 +147,7 @@ public class Source extends CommonEntry {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Icon> icon() {
-		return Optional.ofNullable(icon);
+		return optional(icon);
 	}
 
 	/**
@@ -199,7 +201,7 @@ public class Source extends CommonEntry {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Logo> logo() {
-		return Optional.ofNullable(logo);
+		return optional(logo);
 	}
 
 	/**
@@ -253,7 +255,7 @@ public class Source extends CommonEntry {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Text> subtitle() {
-		return Optional.ofNullable(subtitle);
+		return optional(subtitle);
 	}
 
 	/**

@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
-import static java.util.Optional.*;
 
 import java.util.*;
 
@@ -128,7 +128,7 @@ public class BeanBuilder<T> {
 	 * @return The implementation type specified via {@link #type(Class)}.
 	 */
 	protected Optional<Class<? extends T>> type() {
-		return ofNullable(type);
+		return optional(type);
 	}
 
 	/**
@@ -153,7 +153,7 @@ public class BeanBuilder<T> {
 	 * @return The override bean specified via {@link #impl(Object)}.
 	 */
 	protected Optional<T> impl() {
-		return ofNullable(impl);
+		return optional(impl);
 	}
 
 	/**

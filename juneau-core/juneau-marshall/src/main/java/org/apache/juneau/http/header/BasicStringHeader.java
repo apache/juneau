@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.Optional.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -136,7 +136,7 @@ public class BasicStringHeader extends BasicHeader {
 
 	@Override /* BasicHeader */
 	public Optional<String> asString() {
-		return ofNullable(getValue());
+		return optional(getValue());
 	}
 
 	/**

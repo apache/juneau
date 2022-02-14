@@ -13,6 +13,7 @@
 package org.apache.juneau.xml;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -22,7 +23,6 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.testutils.XmlUtils;
@@ -297,7 +297,7 @@ public class XmlTest {
 
 	@Bean(typeName="foo")
 	public static class J1 {
-		@Beanp(properties="f2") public List<J2> f1 = AList.of(new J2());
+		@Beanp(properties="f2") public List<J2> f1 = list(new J2());
 	}
 
 	@Bean(typeName="bar")

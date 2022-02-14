@@ -12,11 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
-
-import static java.util.Optional.*;
 
 /**
  * Represents a version string such as <js>"1.2"</js> or <js>"1.2.3"</js>
@@ -91,7 +90,7 @@ public class Version implements Comparable<Version> {
 	public Optional<Integer> getPart(int index) {
 		if (index < 0 || parts.length <= index)
 			return empty();
-		return ofNullable(parts[index]);
+		return optional(parts[index]);
 	}
 
 	/**

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.io.IOException;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -261,7 +263,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)Optional.ofNullable(parseAnything(eType.getElementType(), r, outer));
+			return (T)optional(parseAnything(eType.getElementType(), r, outer));
 
 		int c = r.peekSkipWs();
 		if (c == '?')

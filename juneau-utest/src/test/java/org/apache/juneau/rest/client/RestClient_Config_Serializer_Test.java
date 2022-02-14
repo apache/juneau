@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.assertions.AssertionPredicates.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
@@ -22,7 +23,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
@@ -126,12 +126,12 @@ public class RestClient_Config_Serializer_Test {
 
 	@Test
 	public void a08_sortMapsBoolean() throws Exception {
-		AMap<String,Integer> x = AMap.of("c",3,"a",1,"b",2);
+		Map<String,Integer> x = map("c",3,"a",1,"b",2);
 		client().sortMaps().build().post("/echoBody",x).run().assertBody().is("{a:1,b:2,c:3}");
 	}
 
 	public static class A9 {
-		public List<String> f1 = AList.create();
+		public List<String> f1 = list();
 		public String[] f2 = {};
 	}
 
@@ -142,7 +142,7 @@ public class RestClient_Config_Serializer_Test {
 	}
 
 	public static class A10 {
-		public Map<String,String> f1 = AMap.create();
+		public Map<String,String> f1 = map();
 		public OMap f2 = OMap.create();
 	}
 

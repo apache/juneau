@@ -12,11 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.net.*;
-import java.net.URI;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -121,7 +121,7 @@ public class License extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> name() {
-		return Optional.ofNullable(getName());
+		return optional(getName());
 	}
 
 	/**
@@ -180,7 +180,7 @@ public class License extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<URI> url() {
-		return Optional.ofNullable(getUrl());
+		return optional(getUrl());
 	}
 
 	/**
@@ -257,9 +257,10 @@ public class License extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		ASet<String> s = ASet.<String>of()
-			.appendIf(name != null, "name")
-			.appendIf(url != null, "url");
+		Set<String> s = setBuilder(String.class)
+			.addIf(name != null, "name")
+			.addIf(url != null, "url")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 }

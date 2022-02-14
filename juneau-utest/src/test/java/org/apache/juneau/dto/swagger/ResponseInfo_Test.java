@@ -14,12 +14,12 @@ package org.apache.juneau.dto.swagger;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.junit.*;
 
@@ -67,21 +67,21 @@ public class ResponseInfo_Test {
 	public void a03_headers() {
 		ResponseInfo t = new ResponseInfo();
 
-		t.headers(AMap.of("foo",headerInfo("bar")));
+		t.headers(map("foo",headerInfo("bar")));
 		assertOptional(t.headers()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
 		assertObject(t.headers().get().get("foo")).isType(HeaderInfo.class);
 
-		t.headers(AMap.create());
+		t.headers(map());
 		assertOptional(t.headers()).isType(Map.class).asJson().is("{}");
 
 		t.headers((Map<String,HeaderInfo>)null);
 		assertOptional(t.headers()).isNull();
 
-		t.addHeaders(AMap.of("foo",headerInfo("bar")));
+		t.addHeaders(map("foo",headerInfo("bar")));
 		assertOptional(t.headers()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
 		assertObject(t.headers().get().get("foo")).isType(HeaderInfo.class);
 
-		t.addHeaders(AMap.create());
+		t.addHeaders(map());
 		assertOptional(t.headers()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
 		assertObject(t.headers().get().get("foo")).isType(HeaderInfo.class);
 
@@ -97,25 +97,25 @@ public class ResponseInfo_Test {
 	public void a04_examples() {
 		ResponseInfo t = new ResponseInfo();
 
-		t.examples(AMap.of("foo","bar","baz",AList.of("qux")));
+		t.examples(map("foo","bar","baz",list("qux")));
 		assertOptional(t.examples()).isType(Map.class).asJson().is("{foo:'bar',baz:['qux']}");
 
-		t.examples(AMap.create());
+		t.examples(map());
 		assertOptional(t.examples()).isType(Map.class).asJson().is("{}");
 
 		t.examples((Map<String,Object>)null);
 		assertOptional(t.examples()).isNull();
 
-		t.addExamples(AMap.of("foo","bar","baz",AList.of("qux")));
+		t.addExamples(map("foo","bar","baz",list("qux")));
 		assertOptional(t.examples()).isType(Map.class).asJson().is("{foo:'bar',baz:['qux']}");
 
-		t.addExamples(AMap.create());
+		t.addExamples(map());
 		assertOptional(t.examples()).isType(Map.class).asJson().is("{foo:'bar',baz:['qux']}");
 
 		t.addExamples(null);
 		assertOptional(t.examples()).isType(Map.class).asJson().is("{foo:'bar',baz:['qux']}");
 
-		t.examples(AMap.create());
+		t.examples(map());
 		t.example("text/a", "a");
 		t.example("text/b", null);
 		t.example(null, "c");
@@ -132,8 +132,8 @@ public class ResponseInfo_Test {
 
 		t
 			.set("description", "a")
-			.set("examples", AMap.of("foo","bar","baz",AList.of("qux")))
-			.set("headers", AMap.of("a", headerInfo("a1")))
+			.set("examples", map("foo","bar","baz",list("qux")))
+			.set("headers", map("a", headerInfo("a1")))
 			.set("schema", schemaInfo().type("d"))
 			.set("$ref", "ref");
 
@@ -189,8 +189,8 @@ public class ResponseInfo_Test {
 
 		t
 			.set("description", "a")
-			.set("examples", AMap.of("foo","bar","baz",AList.of("qux")))
-			.set("headers", AMap.of("a", headerInfo("a1")))
+			.set("examples", map("foo","bar","baz",list("qux")))
+			.set("headers", map("a", headerInfo("a1")))
 			.set("schema", schemaInfo().type("d"))
 			.set("$ref", "ref")
 			.copy();
@@ -206,8 +206,8 @@ public class ResponseInfo_Test {
 
 		t
 			.set("description", "a")
-			.set("examples", AMap.of("foo","bar","baz",AList.of("qux")))
-			.set("headers", AMap.of("a", headerInfo("a1")))
+			.set("examples", map("foo","bar","baz",list("qux")))
+			.set("headers", map("a", headerInfo("a1")))
 			.set("schema", schemaInfo().type("d"))
 			.set("$ref", "ref");
 

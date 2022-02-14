@@ -15,7 +15,6 @@ package org.apache.juneau.dto.html5;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.net.*;
-import java.net.URI;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;

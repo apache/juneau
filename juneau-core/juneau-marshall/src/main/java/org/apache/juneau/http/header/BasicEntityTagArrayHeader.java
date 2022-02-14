@@ -12,9 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.stream.Collectors.*;
-import static java.util.Optional.*;
 import static java.util.Collections.*;
 
 import java.util.*;
@@ -156,9 +155,7 @@ public class BasicEntityTagArrayHeader extends BasicHeader {
 	 * @return this header value as an array of {@link EntityTag} objects, or {@link Optional#empty()} if the value was <jk>null</jk>..
 	 */
 	public Optional<List<EntityTag>> asEntityTags() {
-		if (supplier != null)
-			return ofNullable(supplier.get());
-		return ofNullable(value);
+		return optional(supplier == null ? value : supplier.get());
 	}
 
 	private static String serialize(List<EntityTag> value) {
@@ -166,6 +163,10 @@ public class BasicEntityTagArrayHeader extends BasicHeader {
 	}
 
 	private List<EntityTag> parse(String value) {
-		return value == null ? null : Arrays.asList(split(value, ',')).stream().map(x -> EntityTag.of(x)).collect(toList());
+		if (value == null)
+			return null;
+		List<EntityTag> list = new ArrayList<>();
+		split(value, x -> list.add(EntityTag.of(x)));
+		return list;
 	}
 }

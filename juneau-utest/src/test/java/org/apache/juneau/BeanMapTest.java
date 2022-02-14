@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -21,7 +22,6 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -2076,7 +2076,7 @@ public class BeanMapTest {
 		AA aa = new AA();
 		BeanMap<AA> bm = BeanContext.DEFAULT.toBeanMap(aa);
 
-		bm.put("a", AList.of("x"));
+		bm.put("a", list("x"));
 		assertObject(aa.a).asJson().is("['x']");
 	}
 

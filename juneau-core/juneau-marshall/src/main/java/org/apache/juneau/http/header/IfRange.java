@@ -15,8 +15,8 @@ package org.apache.juneau.http.header;
 import static java.time.format.DateTimeFormatter.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
-import static java.util.Optional.*;
 
 import java.time.*;
 import java.util.*;
@@ -225,9 +225,9 @@ public class IfRange extends BasicDateHeader {
 	public Optional<EntityTag> asEntityTag() {
 		if (supplier != null) {
 			Object o = supplier.get();
-			return ofNullable(o instanceof EntityTag ? (EntityTag)o : null);
+			return optional(o instanceof EntityTag ? (EntityTag)o : null);
 		}
-		return ofNullable(value);
+		return optional(value);
 	}
 
 	private static boolean isEtag(String s) {

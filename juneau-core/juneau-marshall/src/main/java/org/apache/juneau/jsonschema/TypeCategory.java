@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jsonschema;
 
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import java.util.*;
-
-import org.apache.juneau.internal.*;
 
 /**
  * Represents possible values for JSONSCHEMA_addExamplesTo and JSONSCHEMA_addDescriptionsTo.
@@ -70,9 +70,8 @@ public enum TypeCategory {
 	public static Set<TypeCategory> parse(String s) {
 		if (s == null || s.isEmpty())
 			return Collections.emptySet();
-		Set<TypeCategory> set = new LinkedHashSet<>();
-		for (String ss : StringUtils.split(s))
-			set.add(valueOf(ss.toUpperCase()));
+		Set<TypeCategory> set = set();
+		split(s, x -> set.add(valueOf(x.toUpperCase())));
 		return set;
 	}
 
@@ -85,9 +84,8 @@ public enum TypeCategory {
 	public static TypeCategory[] parseArray(String s) {
 		if (s == null || s.isEmpty())
 			return new TypeCategory[0];
-		List<TypeCategory> x = new ArrayList<>();
-		for (String ss : StringUtils.split(s))
-			x.add(valueOf(ss.toUpperCase()));
-		return x.toArray(new TypeCategory[x.size()]);
+		List<TypeCategory> list = list();
+		split(s, x -> list.add(valueOf(x.toUpperCase())));
+		return list.toArray(new TypeCategory[list.size()]);
 	}
 }

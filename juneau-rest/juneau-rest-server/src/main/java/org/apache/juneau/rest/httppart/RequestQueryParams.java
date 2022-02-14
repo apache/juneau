@@ -13,9 +13,9 @@
 package org.apache.juneau.rest.httppart;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
-import static java.util.Collections.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
@@ -211,7 +211,7 @@ public class RequestQueryParams {
 					list.removeAll(l);
 				RequestQueryParam x = new RequestQueryParam(req, name, vs.resolve(p.getValue()));
 				list.add(x);
-				map.put(key, AList.of(x));
+				map.put(key, list(x));
 			}
 		}
 		return this;
@@ -252,7 +252,7 @@ public class RequestQueryParams {
 	public List<RequestQueryParam> getAll(String name) {
 		assertArgNotNull("name", name);
 		List<RequestQueryParam> l = map.get(key(name));
-		return unmodifiableList(l == null ? emptyList() : l);
+		return l == null ? emptyList() : unmodifiable(l);
 	}
 
 	/**
@@ -261,7 +261,7 @@ public class RequestQueryParams {
 	 * @return All the parameters on this request.
 	 */
 	public List<RequestQueryParam> getAll() {
-		return unmodifiableList(list);
+		return unmodifiable(list);
 	}
 
 	/**
@@ -319,7 +319,7 @@ public class RequestQueryParams {
 		if (map.containsKey(key))
 			map.get(key).add(h);
 		else
-			map.put(key, AList.of(h));
+			map.put(key, list(h));
 		list.add(h);
 		return this;
 	}
@@ -364,7 +364,7 @@ public class RequestQueryParams {
 		if (map.containsKey(key))
 			list.removeIf(x->caseSensitive?x.getName().equals(name):x.getName().equalsIgnoreCase(name));
 		list.add(p);
-		map.put(key, AList.of(p));
+		map.put(key, list(p));
 		return this;
 	}
 

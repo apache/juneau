@@ -15,6 +15,7 @@ package org.apache.juneau.http.header;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.util.*;
@@ -1132,16 +1133,16 @@ public class HeaderList {
 			for (int i = 0; i < entries.size(); i++) {
 				Header x = entries.get(i);
 				if (eq(x.getName(), name))
-					return Optional.of(x);
+					return optional(x);
 			}
 			if (defaultEntries != null) {
 				for (int i = 0; i < defaultEntries.size(); i++) {
 					Header x = defaultEntries.get(i);
 					if (eq(x.getName(), name))
-						return Optional.of(x);
+						return optional(x);
 				}
 			}
-			return Optional.empty();
+			return empty();
 		}
 
 		/**
@@ -1157,16 +1158,16 @@ public class HeaderList {
 			for (int i = entries.size() - 1; i >= 0; i--) {
 				Header x = entries.get(i);
 				if (eq(x.getName(), name))
-					return Optional.of(x);
+					return optional(x);
 			}
 			if (defaultEntries != null) {
 				for (int i = defaultEntries.size() - 1; i >= 0; i--) {
 					Header x = defaultEntries.get(i);
 					if (eq(x.getName(), name))
-						return Optional.of(x);
+						return optional(x);
 				}
 			}
-			return Optional.empty();
+			return empty();
 		}
 
 		// <FluentSetters>
@@ -1306,10 +1307,10 @@ public class HeaderList {
 		}
 
 		if (first == null)
-			return Optional.empty();
+			return empty();
 
 		if (rest == null)
-			return Optional.of(first);
+			return optional(first);
 
 		CharArrayBuffer sb = new CharArrayBuffer(128);
 		sb.append(first.getValue());
@@ -1318,7 +1319,7 @@ public class HeaderList {
 			sb.append(rest.get(i).getValue());
 		}
 
-		return Optional.of(new BasicHeader(name, sb.toString()));
+		return optional(new BasicHeader(name, sb.toString()));
 	}
 
 	/**
@@ -1365,10 +1366,10 @@ public class HeaderList {
 		}
 
 		if (first == null)
-			return Optional.empty();
+			return empty();
 
 		if (rest == null)
-			return Optional.of(HeaderBeanMeta.of(type).construct(name, first.getValue()));
+			return optional(HeaderBeanMeta.of(type).construct(name, first.getValue()));
 
 		CharArrayBuffer sb = new CharArrayBuffer(128);
 		sb.append(first.getValue());
@@ -1377,7 +1378,7 @@ public class HeaderList {
 			sb.append(rest.get(i).getValue());
 		}
 
-		return Optional.of(HeaderBeanMeta.of(type).construct(name, sb.toString()));
+		return optional(HeaderBeanMeta.of(type).construct(name, sb.toString()));
 	}
 
 	/**
@@ -1412,7 +1413,7 @@ public class HeaderList {
 	 * Header name comparison is case insensitive.
 	 * Headers with null values are ignored.
 	 * Each call creates a new array not backed by this list.
-	 * 
+	 *
 	 * <p>
 	 * As a general rule, it's more efficient to use the other methods with consumers to
 	 * get headers.
@@ -1440,7 +1441,7 @@ public class HeaderList {
 	 * <p>
 	 * As a general rule, it's more efficient to use the other methods with consumers to
 	 * get headers.
-	 * 
+	 *
 	 * @return An array of all the headers in this list, never <jk>null</jk>.
 	 */
 	public Header[] getAll() {
@@ -1469,9 +1470,9 @@ public class HeaderList {
 		for (int i = 0; i < entries.length; i++) {
 			Header x = entries[i];
 			if (eq(x.getName(), name))
-				return Optional.of(x);
+				return optional(x);
 		}
-		return Optional.empty();
+		return empty();
 	}
 
 	/**
@@ -1487,9 +1488,9 @@ public class HeaderList {
 		for (int i = entries.length - 1; i >= 0; i--) {
 			Header x = entries[i];
 			if (eq(x.getName(), name))
-				return Optional.of(x);
+				return optional(x);
 		}
-		return Optional.empty();
+		return empty();
 	}
 
 	/**
@@ -1516,7 +1517,7 @@ public class HeaderList {
 
 	/**
 	 * Returns all the string values for all headers with the specified name.
-	 * 
+	 *
 	 * @param name The header name.
 	 * @return An array containing all values.  Never <jk>null</jk>.
 	 */

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.transforms;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
@@ -20,7 +21,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
 import org.junit.runner.*;
@@ -440,29 +440,28 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 	public static class BeanWithSwappedListField {
 		public List<PojoToDynamicReader> f;
 		public BeanWithSwappedListField(String f) {
-			this.f = AList.of(new PojoToDynamicReader(f + "1"),new PojoToDynamicReader(f + "2"),null);
+			this.f = list(new PojoToDynamicReader(f + "1"),new PojoToDynamicReader(f + "2"),null);
 		}
 	}
 
 	public static class BeanWithSwappedMapField {
 		public Map<String,PojoToDynamicReader> f;
 		public BeanWithSwappedMapField(String f) {
-			this.f = AMap.of("foo",new PojoToDynamicReader(f + "1"),"bar",null,null,new PojoToDynamicReader(f + "2"));
+			this.f = map("foo",new PojoToDynamicReader(f + "1"),"bar",null,null,new PojoToDynamicReader(f + "2"));
 		}
 	}
 
 	public static class BeanWithListBeanSwappedField {
 		public List<B> f;
 		public BeanWithListBeanSwappedField(String f) {
-			this.f = AList.of(new B(f),null);
+			this.f = list(new B(f),null);
 		}
 	}
 
 	public static class BeanWithMapBeanSwappedField {
 		public Map<String,B> f;
 		public BeanWithMapBeanSwappedField(String f) {
-			this.f = AMap.of("foo",new B(f),"bar",null,null,new B(f))
-			;
+			this.f = map("foo",new B(f),"bar",null,null,new B(f));
 		}
 	}
 
@@ -477,8 +476,8 @@ public class ReaderObjectSwapTest extends ComboSerializeTest {
 			f1 = new PojoToDynamicReader(f + "1a");
 			f2 = new PojoToDynamicReader[]{new PojoToDynamicReader(f + "2a"),new PojoToDynamicReader(f + "2b"),null};
 			f3 = null;
-			f4 = AList.of(new PojoToDynamicReader(f + "4a"),new PojoToDynamicReader(f + "4b"),null);
-			f5 = AMap.of("foo",new PojoToDynamicReader(f + "5a"),"bar",null,null,new PojoToDynamicReader(f + "5c"));
+			f4 = list(new PojoToDynamicReader(f + "4a"),new PojoToDynamicReader(f + "4b"),null);
+			f5 = map("foo",new PojoToDynamicReader(f + "5a"),"bar",null,null,new PojoToDynamicReader(f + "5c"));
 		}
 	}
 }

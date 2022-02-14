@@ -13,6 +13,7 @@
 package org.apache.juneau.cp;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
@@ -20,8 +21,6 @@ import java.nio.file.*;
 import java.util.*;
 
 import org.apache.juneau.cp.sub.*;
-import org.apache.juneau.internal.*;
-
 import static java.util.Locale.*;
 
 import org.junit.*;
@@ -615,19 +614,19 @@ public class FileFinder_Test {
 	public void e01_localDir_hashCode() throws Exception {
 		Set<LocalDir> s = null;
 
-		s = ASet.of(new LocalDir(Paths.get("test")), new LocalDir(Paths.get("test")));
+		s = set(new LocalDir(Paths.get("test")), new LocalDir(Paths.get("test")));
 		assertCollection(s).isSize(1);
 
-		s = ASet.of(new LocalDir(Paths.get("test")), new LocalDir(Paths.get("test","test")));
+		s = set(new LocalDir(Paths.get("test")), new LocalDir(Paths.get("test","test")));
 		assertCollection(s).isSize(2);
 
-		s = ASet.of(new LocalDir(List.class,null), new LocalDir(List.class,null));
+		s = set(new LocalDir(List.class,null), new LocalDir(List.class,null));
 		assertCollection(s).isSize(1);
 
-		s = ASet.of(new LocalDir(List.class,null), new LocalDir(List.class,"foo"));
+		s = set(new LocalDir(List.class,null), new LocalDir(List.class,"foo"));
 		assertCollection(s).isSize(2);
 
-		s = ASet.of(new LocalDir(List.class,null), new LocalDir(String.class,null));
+		s = set(new LocalDir(List.class,null), new LocalDir(String.class,null));
 		assertCollection(s).isSize(2);
 	}
 

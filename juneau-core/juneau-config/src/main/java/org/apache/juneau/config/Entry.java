@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.BinaryFormat.*;
-import static java.util.Optional.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -209,7 +209,7 @@ public class Entry {
 			if (type == OMap.class) return (Optional<T>)asMap();
 			if (type == OList.class) return (Optional<T>)asList();
 			if (isEmpty()) return empty();
-			if (isSimpleType(type)) return ofNullable((T)config.beanSession.convertToType(v, (Class<?>)type));
+			if (isSimpleType(type)) return optional((T)config.beanSession.convertToType(v, (Class<?>)type));
 
 			if (parser instanceof JsonParser) {
 				char s1 = firstNonWhitespaceChar(v);
@@ -218,7 +218,7 @@ public class Entry {
 				else if (s1 != '[' && s1 != '{' && ! "null".equals(v))
 					v = '\'' + v + '\'';
 			}
-			return ofNullable(parser.parse(v, type, args));
+			return optional(parser.parse(v, type, args));
 		} catch (ParseException e) {
 			throw new BeanRuntimeException(e, null, "Value could not be parsed.");
 		}
@@ -251,7 +251,7 @@ public class Entry {
 	 * @return This entry as a string, or {@link Optional#empty()} if the entry does not exist.
 	 */
 	public Optional<String> asString() {
- 		return isPresent() ? of(config.varSession.resolve(value)) : empty();
+ 		return optional(isPresent() ? config.varSession.resolve(value) : null);
 	}
 
 	/**
@@ -268,12 +268,12 @@ public class Entry {
 		char s1 = firstNonWhitespaceChar(v), s2 = lastNonWhitespaceChar(v);
 		if (s1 == '[' && s2 == ']' && config.parser instanceof JsonParser) {
 			try {
-				return ofNullable(config.parser.parse(v, String[].class));
+				return optional(config.parser.parse(v, String[].class));
 			} catch (ParseException e) {
 				throw new BeanRuntimeException(e);
 			}
 		}
-		return of(split(v));
+		return optional(split(v));
 	}
 
 	/**
@@ -307,7 +307,7 @@ public class Entry {
 	 * @return The value, or {@link Optional#empty()} if the value does not exist or the value is empty.
 	 */
 	public Optional<Integer> asInteger() {
-		return isEmpty() ? empty() : of(parseIntWithSuffix(toString()));
+		return optional(isEmpty() ? null : parseIntWithSuffix(toString()));
 	}
 
 
@@ -320,7 +320,7 @@ public class Entry {
 	 * @return The value, or {@link Optional#empty()} if the value does not exist or the value is empty.
 	 */
 	public Optional<Boolean> asBoolean() {
-		return isEmpty() ? empty() : of(Boolean.parseBoolean(toString()));
+		return optional(isEmpty() ? null : Boolean.parseBoolean(toString()));
 	}
 
 	/**
@@ -354,7 +354,7 @@ public class Entry {
 	 * @return The value, or {@link Optional#empty()} if the value does not exist or the value is empty.
 	 */
 	public Optional<Long> asLong() {
-		return isEmpty() ? empty() : of(parseLongWithSuffix(toString()));
+		return optional(isEmpty() ? null : parseLongWithSuffix(toString()));
 	}
 
 
@@ -373,7 +373,7 @@ public class Entry {
 	 * @return The value, or {@link Optional#empty()} if the value does not exist or the value is empty.
 	 */
 	public Optional<Double> asDouble() {
-		return isEmpty() ? empty() : of(Double.valueOf(toString()));
+		return optional(isEmpty() ? null : Double.valueOf(toString()));
 	}
 
 
@@ -392,7 +392,7 @@ public class Entry {
 	 * @return The value, or {@link Optional#empty()} if the value does not exist or the value is empty.
 	 */
 	public Optional<Float> asFloat() {
-		return isEmpty() ? empty() : of(Float.valueOf(toString()));
+		return optional(isEmpty() ? null : Float.valueOf(toString()));
 	}
 
 
@@ -410,10 +410,10 @@ public class Entry {
 		if (s.indexOf('\n') != -1) s = s.replaceAll("\n", "");
 		try {
 			if (config.binaryFormat == HEX)
-				return of(fromHex(s));
+				return optional(fromHex(s));
 			if (config.binaryFormat == SPACED_HEX)
-				return of(fromSpacedHex(s));
-			return of(base64Decode(s));
+				return optional(fromSpacedHex(s));
+			return optional(base64Decode(s));
 		} catch (Exception e) {
 			throw new BeanRuntimeException(e, null, "Value could not be converted to a byte array.");
 		}
@@ -454,7 +454,7 @@ public class Entry {
 			if (s1 != '{' && ! "null".equals(s))
 				s = '{' + s + '}';
 		}
-		return of(OMap.ofText(s, parser));
+		return optional(OMap.ofText(s, parser));
 	}
 
 	/**
@@ -493,7 +493,7 @@ public class Entry {
 			if (s1 != '[' && ! "null".equals(s))
 				s = '[' + s + ']';
 		}
-		return of(OList.ofText(s, parser));
+		return optional(OList.ofText(s, parser));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

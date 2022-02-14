@@ -16,7 +16,6 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
-import static java.util.Optional.*;
 import static org.apache.juneau.collections.OMap.*;
 
 import java.lang.annotation.Annotation;
@@ -301,7 +300,7 @@ public abstract class Context implements AnnotationProvider {
 		 * @return The context class if it was specified.
 		 */
 		public Optional<Class<?>> getType() {
-			return Optional.ofNullable(type);
+			return optional(type);
 		}
 
 		/**
@@ -846,7 +845,7 @@ public abstract class Context implements AnnotationProvider {
 	 */
 	protected Context(Builder builder) {
 		debug = builder.debug;
-		annotations = ofNullable(builder.annotations).orElse(emptyList());
+		annotations = optional(builder.annotations).orElseGet(()->emptyList());
 
 		ReflectionMap.Builder<Annotation> rmb = ReflectionMap.create(Annotation.class);
 

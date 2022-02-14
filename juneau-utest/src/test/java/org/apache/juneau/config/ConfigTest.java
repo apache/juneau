@@ -13,6 +13,7 @@
 package org.apache.juneau.config;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
 
@@ -26,7 +27,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.mod.*;
 import org.apache.juneau.config.store.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.uon.*;
 import org.junit.*;
@@ -1341,7 +1341,7 @@ public class ConfigTest {
 
 		// Add section with contents
 		changes.clear();
-		cf.setSection("E", null, AMap.of("e1","1","e2","2"));
+		cf.setSection("E", null, map("e1","1","e2","2"));
 		cf.commit();
 		assertObject(changes).asJson().is("['E/e1=1','E/e2=2']");
 

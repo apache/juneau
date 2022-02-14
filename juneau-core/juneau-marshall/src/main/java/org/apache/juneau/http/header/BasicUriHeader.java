@@ -13,8 +13,8 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.Optional.*;
 
 import java.net.*;
 import java.util.*;
@@ -154,9 +154,7 @@ public class BasicUriHeader extends BasicHeader {
 	 * @return This header as a {@link URI}, or {@link Optional#empty()} if the value is <jk>null</jk>
 	 */
 	public Optional<URI> asURI() {
-		if (supplier != null)
-			return ofNullable(supplier.get());
-		return ofNullable(value);
+		return optional(supplier == null ? value : supplier.get());
 	}
 
 	private static String serialize(URI value) {

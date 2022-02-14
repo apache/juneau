@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
-import static java.util.Optional.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -225,7 +225,7 @@ public final class RestResponse {
 	 * @return This object.
 	 */
 	public RestResponse setOutput(Object output) {
-		this.output = ofNullable(output);
+		this.output = optional(output);
 		return this;
 	}
 
@@ -626,7 +626,7 @@ public final class RestResponse {
 	 * @return This object.
 	 */
 	public RestResponse setBodySchema(HttpPartSchema schema) {
-		this.bodySchema = ofNullable(schema);
+		this.bodySchema = optional(schema);
 		return this;
 	}
 
@@ -955,9 +955,9 @@ public final class RestResponse {
 		if (serializerMatch != null)
 			return serializerMatch;
 		if (serializer != null) {
-			serializerMatch = of(new SerializerMatch(getMediaType(), serializer));
+			serializerMatch = optional(new SerializerMatch(getMediaType(), serializer));
 		} else {
-			serializerMatch = ofNullable(opContext.getSerializers().getSerializerMatch(request.getHeader("Accept").orElse("*/*")));
+			serializerMatch = optional(opContext.getSerializers().getSerializerMatch(request.getHeader("Accept").orElse("*/*")));
 		}
 		return serializerMatch;
 	}
@@ -971,11 +971,11 @@ public final class RestResponse {
 		if (bodySchema != null)
 			return bodySchema;
 		if (responseBeanMeta != null)
-			bodySchema = ofNullable(responseBeanMeta.getSchema());
+			bodySchema = optional(responseBeanMeta.getSchema());
 		else {
 			ResponseBeanMeta rbm = opContext.getResponseBeanMeta(getOutput(Object.class));
 			if (rbm != null)
-				bodySchema = ofNullable(rbm.getSchema());
+				bodySchema = optional(rbm.getSchema());
 			else
 				bodySchema = empty();
 		}

@@ -14,6 +14,7 @@ package org.apache.juneau.assertions;
 
 import static java.util.Arrays.*;
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -362,6 +363,6 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	}
 
 	private List<E> toSortedList(Comparator<E> comparator) {
-		return valueIsNull() ? null : AList.of(value()).sortWith(comparator);
+		return valueIsNull() ? null : sortedList(comparator, value());
 	}
 }

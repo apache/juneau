@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.Optional.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -155,9 +155,7 @@ public class BasicStringRangeArrayHeader extends BasicHeader {
 	 * @return An unmodifiable list of type ranges, or {@link Optional#empty()} if the value is <jk>null</jk>
 	 */
 	public Optional<StringRanges> asRanges() {
-		if (supplier != null)
-			return ofNullable(supplier.get());
-		return ofNullable(value);
+		return optional(supplier == null ? value : supplier.get());
 	}
 
 	/**

@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static java.util.Optional.*;
 import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -798,9 +798,9 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		resolver = builder.resolver;
 		eventAllocator = builder.eventAllocator;
 
-		reporterImpl = ofNullable(reporter).map(x -> newInstance(x)).orElse(null);
-		resolverImpl = ofNullable(resolver).map(x -> newInstance(x)).orElse(null);
-		eventAllocatorImpl = ofNullable(eventAllocator).map(x -> newInstance(x)).orElse(null);
+		reporterImpl = optional(reporter).map(x -> newInstance(x)).orElse(null);
+		resolverImpl = optional(resolver).map(x -> newInstance(x)).orElse(null);
+		eventAllocatorImpl = optional(eventAllocator).map(x -> newInstance(x)).orElse(null);
 	}
 
 	@Override /* Context */

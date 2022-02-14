@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -20,7 +21,6 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.Bean;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Utility class for comparing two versions of a POJO.
@@ -126,7 +126,7 @@ public class BeanDiff {
 		 * @return This object.
 		 */
 		public Builder<T> include(String...properties) {
-			include = ASet.of(properties);
+			include = set(properties);
 			return this;
 		}
 
@@ -151,7 +151,7 @@ public class BeanDiff {
 		 * @return This object.
 		 */
 		public Builder<T> exclude(String...properties) {
-			exclude = ASet.of(properties);
+			exclude = set(properties);
 			return this;
 		}
 

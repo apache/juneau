@@ -16,8 +16,8 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.microservice.*;
 import org.apache.juneau.cp.*;
+import org.apache.juneau.microservice.*;
 
 /**
  * Implements the 'exit' console command to gracefully shut down the microservice and JVM.

@@ -13,6 +13,7 @@
 package org.apache.juneau.cp;
 
 import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.FileUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
@@ -105,12 +106,12 @@ public class BasicFileFinder implements FileFinder {
 
 	@Override /* FileFinder */
 	public final Optional<String> getString(String name) throws IOException {
-		return Optional.ofNullable(read(find(name, null).orElse(null)));
+		return optional(read(find(name, null).orElse(null)));
 	}
 
 	@Override /* FileFinder */
 	public Optional<String> getString(String name, Locale locale) throws IOException {
-		return Optional.ofNullable(read(find(name, locale).orElse(null)));
+		return optional(read(find(name, locale).orElse(null)));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -135,7 +136,7 @@ public class BasicFileFinder implements FileFinder {
 		name = StringUtils.trimSlashesAndSpaces(name);
 
 		if (isInvalidPath(name))
-			return Optional.empty();
+			return empty();
 
 		if (locale != null)
 			localizedFiles.putIfAbsent(locale, new ConcurrentHashMap<>());
@@ -168,10 +169,7 @@ public class BasicFileFinder implements FileFinder {
 			}
 		}
 
-		if (lf == null)
-			return Optional.empty();
-
-		return Optional.of(lf.read());
+		return optional(lf == null ? null : lf.read());
 	}
 
 	/**

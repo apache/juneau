@@ -12,9 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.eq;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
-import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.text.*;
 import java.util.*;
@@ -109,7 +110,7 @@ public class LinkString implements Comparable<LinkString> {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> name() {
-		return Optional.ofNullable(name);
+		return optional(name);
 	}
 
 	/**
@@ -167,7 +168,7 @@ public class LinkString implements Comparable<LinkString> {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<java.net.URI> uri() {
-		return Optional.ofNullable(uri);
+		return optional(uri);
 	}
 
 	/**

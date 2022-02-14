@@ -18,6 +18,7 @@ import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.http.HttpResources.*;
 import static org.apache.juneau.http.header.ContentType.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
@@ -29,7 +30,6 @@ import org.apache.http.*;
 import org.apache.http.client.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.part.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
@@ -118,7 +118,7 @@ public class RestClient_BasicCalls_Test {
 
 	@Test
 	public void a03_get_exhaustiveUrls() throws Exception {
-		List<Object> urls = AList.<Object>of(
+		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
 			new URL("http://localhost/bean"),
@@ -149,7 +149,7 @@ public class RestClient_BasicCalls_Test {
 
 	@Test
 	public void a06_put_exhaustiveUrls() throws Exception {
-		List<Object> urls = AList.<Object>of(
+		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
 			new URL("http://localhost/bean"),
@@ -166,7 +166,7 @@ public class RestClient_BasicCalls_Test {
 
 	@Test
 	public void a07_put_exhaustiveBodyTypes() throws Exception {
-		List<Object> bodies = AList.<Object>of(
+		List<Object> bodies = list(
 			reader("{f:1}"),
 			inputStream("{f:1}"),
 			stringResource("{f:1}").build(),
@@ -192,7 +192,7 @@ public class RestClient_BasicCalls_Test {
 
 	@Test
 	public void a10_post_exhaustiveUrls() throws Exception {
-		List<Object> urls = AList.<Object>of(
+		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
 			new URL("http://localhost/bean"),
@@ -209,7 +209,7 @@ public class RestClient_BasicCalls_Test {
 
 	@Test
 	public void a11_exhaustiveBodyTypes() throws Exception {
-		List<Object> bodies = AList.<Object>of(
+		List<Object> bodies = list(
 			reader("{f:1}"),
 			inputStream("{f:1}"),
 			stringResource("{f:1}").build(),
@@ -229,7 +229,7 @@ public class RestClient_BasicCalls_Test {
 
 	@Test
 	public void a13_delete_exhaustiveUrls() throws Exception {
-		List<Object> urls = AList.<Object>of(
+		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
 			new URL("http://localhost/bean"),
@@ -249,7 +249,7 @@ public class RestClient_BasicCalls_Test {
 
 	@Test
 	public void a15_options_exhaustiveUrls() throws Exception {
-		List<Object> urls = AList.<Object>of(
+		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
 			new URL("http://localhost/bean"),
@@ -269,7 +269,7 @@ public class RestClient_BasicCalls_Test {
 
 	@Test
 	public void a17_head_exhaustiveUrls() throws Exception {
-		List<Object> urls = AList.<Object>of(
+		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
 			new URL("http://localhost/bean"),
@@ -293,7 +293,7 @@ public class RestClient_BasicCalls_Test {
 
 	@Test
 	public void a19_formPost_exhaustiveUrls() throws Exception {
-		List<Object> urls = AList.<Object>of(
+		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
 			new URL("http://localhost/bean"),
@@ -311,7 +311,7 @@ public class RestClient_BasicCalls_Test {
 		Supplier<Object>
 			s1 = () -> reader("f=1"),
 			s2 = () -> inputStream("f=1");
-		List<Object> bodies = AList.of(
+		List<Object> bodies = list(
 			/*[ 0]*/ bean,
 			/*[ 1]*/ parts("f","1"),
 			/*[ 2]*/ new NameValuePair[]{part("f","1")},
@@ -349,7 +349,7 @@ public class RestClient_BasicCalls_Test {
 
 	@Test
 	public void a24_patch_exhaustiveBodyTypes() throws Exception {
-		List<Object> bodies = AList.<Object>of(
+		List<Object> bodies = list(
 			reader("{f:1}"),
 			inputStream("{f:1}"),
 			stringResource("{f:1}").build(),
@@ -365,7 +365,7 @@ public class RestClient_BasicCalls_Test {
 
 	@Test
 	public void a25_patch_exhaustiveUrls() throws Exception {
-		List<Object> urls = AList.<Object>of(
+		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
 			new URL("http://localhost/bean"),
@@ -386,7 +386,7 @@ public class RestClient_BasicCalls_Test {
 
 	@Test
 	public void a27_request_PATCH_exhaustiveBodyTypes() throws Exception {
-		List<Object> bodies = AList.<Object>of(
+		List<Object> bodies = list(
 			reader("{f:1}"),
 			inputStream("{f:1}"),
 			stringResource("{f:1}").build(),
@@ -402,7 +402,7 @@ public class RestClient_BasicCalls_Test {
 
 	@Test
 	public void a28_request_PATCH_exhaustiveUrls() throws Exception {
-		List<Object> urls = AList.<Object>of(
+		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
 			new URL("http://localhost/bean"),
@@ -422,7 +422,7 @@ public class RestClient_BasicCalls_Test {
 
 	@Test
 	public void a30_request_GET_exhaustiveUrls() throws Exception {
-		List<Object> urls = AList.<Object>of(
+		List<Object> urls = list(
 			new URIBuilder("http://localhost/bean"),
 			java.net.URI.create("http://localhost/bean"),
 			new URL("http://localhost/bean"),

@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.testutils.pojos;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.math.*;
 import java.util.*;
-
-import org.apache.juneau.internal.*;
 
 @SuppressWarnings({})
 public class PrimitiveObjectsBean {
@@ -126,17 +126,17 @@ public class PrimitiveObjectsBean {
 		poaBigDecimal = new BigDecimal[][]{{new BigDecimal("1")}, {new BigDecimal("2")}, null};
 
 		// Anonymous list of primitives
-		poalBoolean = AList.of(new Boolean[]{Boolean.TRUE},null);
-		poalByte = AList.of(new Byte[]{1},null);
-		poalChar = AList.of(new Character[]{'a'},null);
-		poalShort = AList.of(new Short[]{1},null);
-		poalInt = AList.of(new Integer[]{1},null);
-		poalLong = AList.of(new Long[]{1l},null);
-		poalFloat = AList.of(new Float[]{1f},null);
-		poalDouble = AList.of(new Double[]{1d},null);
-		poalNumber = AList.of(new Integer[]{1},null);
-		poalBigInteger = AList.of(new BigInteger[]{new BigInteger("1")},null);
-		poalBigDecimal = AList.of(new BigDecimal[]{new BigDecimal("1")},null);
+		poalBoolean = list(new Boolean[]{Boolean.TRUE},null);
+		poalByte = list(new Byte[]{1},null);
+		poalChar = list(new Character[]{'a'},null);
+		poalShort = list(new Short[]{1},null);
+		poalInt = list(new Integer[]{1},null);
+		poalLong = list(new Long[]{1l},null);
+		poalFloat = list(new Float[]{1f},null);
+		poalDouble = list(new Double[]{1d},null);
+		poalNumber = list(new Integer[]{1},null);
+		poalBigInteger = list(new BigInteger[]{new BigInteger("1")},null);
+		poalBigDecimal = list(new BigDecimal[]{new BigDecimal("1")},null);
 
 		// Regular list of primitives
 		polBoolean = new ArrayList<>();

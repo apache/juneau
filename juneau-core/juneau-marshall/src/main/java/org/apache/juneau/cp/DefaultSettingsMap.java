@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
-import static java.util.Optional.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
@@ -88,7 +88,7 @@ public class DefaultSettingsMap {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> Optional<T> get(Class<T> type, String name) {
-		return ofNullable((T)entries.get(name));
+		return optional((T)entries.get(name));
 	}
 
 	/**

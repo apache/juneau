@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.Optional.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -21,7 +21,6 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.internal.*;
 
 /**
  * A {@link NameValuePair} that consists of a comma-delimited list of string values.
@@ -159,7 +158,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 */
 	public Optional<List<String>> asList() {
 		List<String> l = getParsedValue();
-		return ofNullable(l == null ? null : Collections.unmodifiableList(l));
+		return optional(unmodifiable(l));
 	}
 
 	private List<String> getParsedValue() {
@@ -170,7 +169,7 @@ public class BasicCsvArrayPart extends BasicPart {
 		if (o == null)
 			return null;
 
-		AList<String> l = AList.create();
+		List<String> l = list();
 		if (o instanceof Collection) {
 			for (Object o2 : (Collection<?>)o)
 				l.add(stringify(o2));
@@ -178,9 +177,8 @@ public class BasicCsvArrayPart extends BasicPart {
 			for (int i = 0; i < Array.getLength(o); i++)
 				l.add(stringify(Array.get(o, i)));
 		} else {
-			for (String s : split(o.toString()))
-				l.add(s);
+			split(o.toString(), x -> l.add(x));
 		}
-		return l.unmodifiable();
+		return unmodifiable(l);
 	}
 }

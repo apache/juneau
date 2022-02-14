@@ -14,6 +14,7 @@ package org.apache.juneau.rest.annotation;
 
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.http.header.ContentType.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
@@ -23,7 +24,6 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.client.*;
@@ -974,7 +974,7 @@ public class Body_Test {
 			.assertCode().is(200)
 			.assertBody().is("null");
 
-		String body1 = SimpleJson.DEFAULT.toString(AList.of(ABean.get()));
+		String body1 = SimpleJson.DEFAULT.toString(list(ABean.get()));
 		j.post("/c", body1, APPLICATION_JSON)
 			.run()
 			.assertCode().is(200)
@@ -984,7 +984,7 @@ public class Body_Test {
 			.assertCode().is(200)
 			.assertBody().is("null");
 
-		String body2 = SimpleJson.DEFAULT.toString(AList.of(Optional.of(ABean.get())));
+		String body2 = SimpleJson.DEFAULT.toString(list(optional(ABean.get())));
 		j.post("/d", body2, APPLICATION_JSON)
 			.run()
 			.assertCode().is(200)

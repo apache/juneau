@@ -17,6 +17,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpParts.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
@@ -29,7 +30,6 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.part.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
@@ -116,13 +116,13 @@ public class Remote_FormDataAnnotation_Test {
 		assertEquals("{f:'1'}",x.postX5(Bean.create()));
 		assertEquals("{x:'f=1,f=1'}",x.postX6(new Bean[]{Bean.create(),Bean.create()}));
 		assertEquals("{x:'@((f=1),(f=1))'}",x.postX7(new Bean[]{Bean.create(),Bean.create()}));
-		assertEquals("{x:'f=1,f=1'}",x.postX8(AList.of(Bean.create(),Bean.create())));
-		assertEquals("{x:'@((f=1),(f=1))'}",x.postX9(AList.of(Bean.create(),Bean.create())));
-		assertEquals("{x:'k1=f\\\\=1'}",x.postX10(AMap.of("k1",Bean.create())));
-		assertEquals("{k1:'f=1'}",x.postX11(AMap.of("k1",Bean.create())));
-		assertEquals("{k1:'f=1'}",x.postX12(AMap.of("k1",Bean.create())));
-		assertEquals("{x:'k1=f\\\\=1'}",x.postX13(AMap.of("k1",Bean.create())));
-		assertEquals("{k1:'f=1'}",x.postX14(AMap.of("k1",Bean.create())));
+		assertEquals("{x:'f=1,f=1'}",x.postX8(list(Bean.create(),Bean.create())));
+		assertEquals("{x:'@((f=1),(f=1))'}",x.postX9(list(Bean.create(),Bean.create())));
+		assertEquals("{x:'k1=f\\\\=1'}",x.postX10(map("k1",Bean.create())));
+		assertEquals("{k1:'f=1'}",x.postX11(map("k1",Bean.create())));
+		assertEquals("{k1:'f=1'}",x.postX12(map("k1",Bean.create())));
+		assertEquals("{x:'k1=f\\\\=1'}",x.postX13(map("k1",Bean.create())));
+		assertEquals("{k1:'f=1'}",x.postX14(map("k1",Bean.create())));
 		assertEquals("{x:'1'}",x.postX15(reader("x=1")));
 		assertEquals("{x:'1'}",x.postX16(reader("x=1")));
 		assertEquals("{x:'1'}",x.postX17(inputStream("x=1")));
@@ -135,7 +135,7 @@ public class Remote_FormDataAnnotation_Test {
 		assertEquals("{foo:'bar'}",x.postX23(inputStream("foo=bar")));
 		assertEquals("{foo:'bar'}",x.postX24(reader("foo=bar")));
 		assertEquals("{f:'1'}",x.postX25(Bean2.create()));
-		assertEquals("{foo:'bar'}",x.postX26(AList.of(part("foo","bar"))));
+		assertEquals("{foo:'bar'}",x.postX26(list(part("foo","bar"))));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -794,15 +794,15 @@ public class Remote_FormDataAnnotation_Test {
 	public static class K2a {
 		@FormData
 		public Map<String,Object> getA() {
-			return AMap.of("a1","v1","a2",123,"a3",null,"a4","");
+			return mapBuilder(String.class,Object.class).add("a1","v1").add("a2",123).add("a3",null).add("a4","").build();
 		}
 		@FormData("*")
 		public Map<String,Object> getB() {
-			return AMap.of("b1","true","b2","123","b3","null");
+			return map("b1","true","b2","123","b3","null");
 		}
 		@FormData("*") @Schema(aev=true)
 		public Map<String,Object> getC() {
-			return AMap.of("c1","v1","c2",123,"c3",null,"c4","");
+			return mapBuilder(String.class,Object.class).add("c1","v1").add("c2",123).add("c3",null).add("c4","").build();
 		}
 		@FormData("*")
 		public Map<String,Object> getD() {
@@ -918,19 +918,19 @@ public class Remote_FormDataAnnotation_Test {
 	public static class K6a {
 		@FormData
 		public List<Object> getA() {
-			return AList.of("foo","","true","123","null",true,123,null);
+			return list("foo","","true","123","null",true,123,null);
 		}
 		@FormData("b")
 		public List<Object> getX1() {
-			return AList.of("foo","","true","123","null",true,123,null);
+			return list("foo","","true","123","null",true,123,null);
 		}
 		@FormData(name="c",serializer=MockWriterSerializer.X.class)
 		public List<Object> getX2() {
-			return AList.of("foo","","true","123","null",true,123,null);
+			return list("foo","","true","123","null",true,123,null);
 		}
 		@FormData("d") @Schema(aev=true)
 		public List<Object> getX3() {
-			return AList.create();
+			return list();
 		}
 		@FormData("e")
 		public List<Object> getX4() {

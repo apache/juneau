@@ -15,13 +15,14 @@ package org.apache.juneau.html;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.net.*;
 import java.net.URI;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
 
@@ -121,8 +122,8 @@ public class Common_Test {
 
 		public static C create() {
 			C t = new C();
-			t.f1 = AList.create();
-			t.f2 = AList.of(null,A.create());
+			t.f1 = list();
+			t.f2 = list(null,A.create());
 			return t;
 		}
 	}
@@ -271,11 +272,11 @@ public class Common_Test {
 
 	public static class E1 {
 		@Beanp(properties="f1") public E2 x1 = new E2();
-		@Beanp(properties="f1") public Map<String,Integer> x2 = AMap.of("f1",3,"f2",4);
+		@Beanp(properties="f1") public Map<String,Integer> x2 = map("f1",3,"f2",4);
 		@Beanp(properties="f1") public E2[] x3 = {new E2()};
-		@Beanp(properties="f1") public List<E2> x4 = AList.of(new E2());
+		@Beanp(properties="f1") public List<E2> x4 = list(new E2());
 		@Beanp(properties="f1") public OMap[] x5 = {OMap.of("f1",5,"f2",6)};
-		@Beanp(properties="f1") public List<OMap> x6 = AList.of(OMap.of("f1",7,"f2",8));
+		@Beanp(properties="f1") public List<OMap> x6 = list(OMap.of("f1",7,"f2",8));
 	}
 
 	public static class E2 {

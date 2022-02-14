@@ -13,6 +13,7 @@
 package org.apache.juneau.rest;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.StringUtils.firstNonEmpty;
@@ -24,7 +25,6 @@ import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static java.util.Arrays.*;
 import static java.util.Collections.*;
-import static java.util.Optional.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
@@ -325,7 +325,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		final Optional<BeanContext> getBeanContext() {
-			return beanContext == null ? empty() : of(beanContext.build());
+			return optional(beanContext).map(x -> x.build());
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -401,7 +401,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		final Optional<EncoderSet> getEncoders() {
-			return encoders == null ? empty() : of(encoders.build());
+			return optional(encoders).map(x -> x.build());
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -477,7 +477,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		final Optional<SerializerSet> getSerializers() {
-			return serializers == null ? empty() : of(serializers.build());
+			return optional(serializers).map(x -> x.build());
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -553,7 +553,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		final Optional<ParserSet> getParsers() {
-			return parsers == null ? empty() : of(parsers.build());
+			return optional(parsers).map(x -> x.build());
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -629,7 +629,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		final Optional<HttpPartSerializer> getPartSerializer() {
-			return partSerializer == null ? empty() : of(partSerializer.create());
+			return optional(partSerializer).map(x -> x.create());
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -705,7 +705,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		final Optional<HttpPartParser> getPartParser() {
-			return partParser == null ? empty() : of(partParser.create());
+			return optional(partParser).map(x -> x.create());
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -781,7 +781,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		final Optional<JsonSchemaGenerator> getJsonSchemaGenerator() {
-			return jsonSchemaGenerator == null ? empty() : of(jsonSchemaGenerator.build());
+			return optional(jsonSchemaGenerator).map(x -> x.build());
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -1037,7 +1037,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 		final RestGuardList getGuards() {
 			RestGuardList.Builder b = guards();
-			Set<String> roleGuard = ofNullable(this.roleGuard).orElseGet(()->new LinkedHashSet<>());
+			Set<String> roleGuard = optional(this.roleGuard).orElseGet(()->set());
 
 			for (String rg : roleGuard) {
 				try {
@@ -2033,7 +2033,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		@FluentSetter
 		public Builder rolesDeclared(String...values) {
 			if (rolesDeclared == null)
-				rolesDeclared = ASet.of(values);
+				rolesDeclared = set(values);
 			else
 				rolesDeclared.addAll(asList(values));
 			return this;
@@ -2088,7 +2088,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		@FluentSetter
 		public Builder roleGuard(String value) {
 			if (roleGuard == null)
-				roleGuard = ASet.of(value);
+				roleGuard = set(value);
 			else
 				roleGuard.add(value);
 			return this;
@@ -2275,8 +2275,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			pathMatchers = bs.add(UrlPathMatcher[].class, builder.getPathMatchers().asArray());
 			bs.addBean(UrlPathMatcher.class, pathMatchers.length > 0 ? pathMatchers[0] : null);
 
-			supportedAcceptTypes = unmodifiableList(ofNullable(builder.produces).orElse(serializers.getSupportedMediaTypes()));
-			supportedContentTypes = unmodifiableList(ofNullable(builder.consumes).orElse(parsers.getSupportedMediaTypes()));
+			supportedAcceptTypes = unmodifiableList(optional(builder.produces).orElseGet(()->serializers.getSupportedMediaTypes()));
+			supportedContentTypes = unmodifiableList(optional(builder.consumes).orElseGet(()->parsers.getSupportedMediaTypes()));
 
 			defaultRequestHeaders = builder.defaultRequestHeaders().build();
 			defaultResponseHeaders = builder.defaultResponseHeaders().build();
@@ -2299,8 +2299,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				_httpMethod = "*";
 			httpMethod = _httpMethod.toUpperCase(Locale.ENGLISH);
 
-			defaultCharset = ofNullable(builder.defaultCharset).orElse(context.defaultCharset);
-			maxInput = ofNullable(builder.maxInput).orElse(context.maxInput);
+			defaultCharset = optional(builder.defaultCharset).orElse(context.defaultCharset);
+			maxInput = optional(builder.maxInput).orElse(context.maxInput);
 
 			responseMeta = ResponseBeanMeta.create(mi, builder.getApplied());
 

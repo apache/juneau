@@ -12,16 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice;
 
-import static org.apache.juneau.internal.ClassUtils.className;
-import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.FileUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.io.*;
 import java.net.*;
-import java.nio.file.Paths;
+import java.nio.file.*;
 import java.text.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -29,20 +29,21 @@ import java.util.jar.*;
 import java.util.logging.*;
 import java.util.logging.Formatter;
 
-import org.apache.juneau.ExecutableException;
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.store.*;
-import org.apache.juneau.config.vars.ConfigVar;
+import org.apache.juneau.config.store.FileStore;
+import org.apache.juneau.config.vars.*;
+import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.console.*;
 import org.apache.juneau.microservice.resources.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.svl.vars.ManifestFileVar;
+import org.apache.juneau.svl.vars.*;
 import org.apache.juneau.utils.*;
-import org.apache.juneau.cp.Messages;
 
 /**
  * Parent class for all microservices.

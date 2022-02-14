@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.oapi;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartCollectionFormat.*;
 import static org.apache.juneau.httppart.HttpPartDataType.*;
@@ -252,7 +253,7 @@ public class OpenApiParserSession extends UonParserSession {
 		schema.validateOutput(t, ctx.getBeanContext());
 
 		if (isOptional)
-			t = (T)Optional.ofNullable(t);
+			t = (T)optional(t);
 
 		return t;
 	}
@@ -282,7 +283,7 @@ public class OpenApiParserSession extends UonParserSession {
 				sType = type;
 
 			if (sType.isOptional())
-				return (T)Optional.ofNullable(parseInner(partType, schema, in, sType.getElementType()));
+				return (T)optional(parseInner(partType, schema, in, sType.getElementType()));
 
 			HttpPartDataType t = schema.getType(sType);
 			if (partType == null)

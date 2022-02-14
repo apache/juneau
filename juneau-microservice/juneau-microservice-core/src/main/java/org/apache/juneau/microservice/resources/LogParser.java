@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.resources;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.io.*;
@@ -19,8 +20,6 @@ import java.nio.charset.*;
 import java.text.*;
 import java.util.*;
 import java.util.regex.*;
-
-import org.apache.juneau.internal.ASet;
 
 /**
  * Utility class for reading log files.
@@ -61,9 +60,9 @@ public final class LogParser implements Iterable<LogParser.Entry>, Iterator<LogP
 		this.end = end;
 		this.threadFilter = thread;
 		if (loggers != null)
-			this.loggerFilter = ASet.of(loggers);
+			this.loggerFilter = set(loggers);
 		if (severity != null)
-			this.severityFilter = ASet.of(severity);
+			this.severityFilter = set(severity);
 
 		// Find the first line.
 		String line;

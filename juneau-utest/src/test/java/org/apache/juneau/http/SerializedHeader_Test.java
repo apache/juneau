@@ -14,12 +14,10 @@ package org.apache.juneau.http;
 
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
-
-import java.util.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
 
@@ -99,10 +97,6 @@ public class SerializedHeader_Test {
 	//------------------------------------------------------------------------------------------------------------------
 	// Utility methods
 	//------------------------------------------------------------------------------------------------------------------
-
-	private List<Object> list(Object...o) {
-		return AList.of(o);
-	}
 
 	private HttpPartSchema.Builder schema(HttpPartDataType dataType) {
 		return HttpPartSchema.create().type(dataType);

@@ -13,14 +13,16 @@
 package org.apache.juneau.httppart;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -743,9 +745,9 @@ public class HttpPartSchema_Response_Test {
 	public void d01b_uniqueItems_collections() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().apply(Response.class, D01.class).build();
 
-		AList<String>
-			good = AList.of(split("a,b")),
-			bad = AList.of(split("a,a"));
+		List<String>
+			good = list("a","b"),
+			bad = list("a","a");
 
 		s.getItems().validateOutput(good, BeanContext.DEFAULT);
 		s.getItems().getItems().validateOutput(good, BeanContext.DEFAULT);

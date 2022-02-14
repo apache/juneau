@@ -27,6 +27,7 @@ import org.apache.juneau.rest.mock.*;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import org.junit.*;
 
@@ -35,7 +36,7 @@ public class BasicCsvArrayHeader_Test {
 
 	private static final String HEADER = "Foo";
 	private static final String VALUE = "foo, bar";
-	private static final List<String> PARSED = AList.of("foo", "bar");
+	private static final List<String> PARSED = list("foo", "bar");
 
 	@Rest
 	public static class A {
@@ -71,7 +72,7 @@ public class BasicCsvArrayHeader_Test {
 
 	@Test
 	public void a02_contains() throws Exception {
-		BasicCsvArrayHeader x = new BasicCsvArrayHeader("Foo", AList.of(null,"bar","baz"));
+		BasicCsvArrayHeader x = new BasicCsvArrayHeader("Foo", list(null,"bar","baz"));
 		assertBoolean(x.contains(null)).isFalse();
 		assertBoolean(x.containsIgnoreCase(null)).isFalse();
 		assertBoolean(x.contains("bar")).isTrue();
@@ -90,7 +91,7 @@ public class BasicCsvArrayHeader_Test {
 
 	@Test
 	public void a03_assertList() throws Exception {
-		csvArrayHeader("Foo", AList.of("bar")).assertList().contains("bar").assertList().doesNotContain("baz");
+		csvArrayHeader("Foo", list("bar")).assertList().contains("bar").assertList().doesNotContain("baz");
 		new BasicCsvArrayHeader("Foo", (String)null).assertList().isNull();
 	}
 

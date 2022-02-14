@@ -14,10 +14,10 @@ package org.apache.juneau.rest.test;
 
 import static org.apache.juneau.http.HttpMethod.*;
 
-import org.apache.juneau.http.annotation.Body;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.config.BasicUniversalJenaConfig;
-import org.apache.juneau.rest.servlet.BasicRestServlet;
+import org.apache.juneau.rest.config.*;
+import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.testutils.pojos.*;
 
 /**

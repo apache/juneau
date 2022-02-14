@@ -19,8 +19,8 @@ import org.apache.juneau.microservice.resources.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
-import org.apache.juneau.rest.config.BasicUniversalConfig;
-import org.apache.juneau.rest.servlet.BasicRestServlet;
+import org.apache.juneau.rest.config.*;
+import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.test.client.*;
 
 @Rest(

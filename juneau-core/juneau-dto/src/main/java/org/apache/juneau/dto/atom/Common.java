@@ -12,11 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.net.*;
-import java.net.URI;
 import java.util.*;
 
 import org.apache.juneau.xml.*;
@@ -89,7 +89,7 @@ public abstract class Common {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<URI> base() {
-		return Optional.ofNullable(base);
+		return optional(base);
 	}
 
 	/**
@@ -144,7 +144,7 @@ public abstract class Common {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> lang() {
-		return Optional.ofNullable(lang);
+		return optional(lang);
 	}
 
 	/**

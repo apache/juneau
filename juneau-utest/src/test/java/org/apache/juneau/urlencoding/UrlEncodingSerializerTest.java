@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -19,7 +20,6 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.junit.*;
 
@@ -573,10 +573,10 @@ public class UrlEncodingSerializerTest {
 		assertEquals("_value=(foo)", s.serialize("(foo)"));
 		assertEquals("_value=@(foo)", s.serialize("@(foo)"));
 
-		Map<String,Object> m = AMap.of("foo","foo","'foo'","'foo'","(foo)","(foo)","@(foo)","@(foo)");
+		Map<String,Object> m = mapBuilder(String.class,Object.class).add("foo","foo").add("'foo'","'foo'").add("(foo)","(foo)").add("@(foo)","@(foo)").build();
 		assertEquals("foo=foo&'foo'='foo'&(foo)=(foo)&@(foo)=@(foo)", s.serialize(m));
 
-		List<String> l = AList.of("foo", "'foo'", "(foo)", "@(foo)");
+		List<String> l = list("foo", "'foo'", "(foo)", "@(foo)");
 		assertEquals("0=foo&1='foo'&2=(foo)&3=@(foo)", s.serialize(l));
 
 		A a = new A();

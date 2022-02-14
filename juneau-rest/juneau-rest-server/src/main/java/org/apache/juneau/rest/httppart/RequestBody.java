@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.httppart;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -454,9 +455,9 @@ public class RequestBody {
 	 */
 	public Optional<ParserMatch> getParserMatch() {
 		if (mediaType != null && parser != null)
-			return Optional.of(new ParserMatch(mediaType, parser));
+			return optional(new ParserMatch(mediaType, parser));
 		MediaType mt = getMediaType();
-		return Optional.ofNullable(mt == null ? null : parsers.getParserMatch(mt));
+		return optional(mt).map(x -> parsers.getParserMatch(x));
 	}
 
 	private MediaType getMediaType() {

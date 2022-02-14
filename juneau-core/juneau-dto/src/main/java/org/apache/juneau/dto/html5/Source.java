@@ -13,7 +13,6 @@
 package org.apache.juneau.dto.html5;
 
 import java.net.*;
-import java.net.URI;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;

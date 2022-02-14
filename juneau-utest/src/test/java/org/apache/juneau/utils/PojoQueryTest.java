@@ -13,13 +13,13 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swaps.*;
@@ -37,7 +37,7 @@ public class PojoQueryTest {
 		SearchArgs sa;
 		List results;
 
-		List<A> in = AList.of(new A("foo"),new A("bar"),new A("baz"));
+		List<A> in = list(new A("foo"),new A("bar"),new A("baz"));
 
 		PojoQuery q = new PojoQuery(in, BeanContext.DEFAULT_SESSION);
 
@@ -261,7 +261,7 @@ public class PojoQueryTest {
 		SearchArgs sa;
 		List results;
 
-		List<C> in = AList.of(new C(1),new C(2),new C(3));
+		List<C> in = list(new C(1),new C(2),new C(3));
 
 		PojoQuery q = new PojoQuery(in, session);
 
@@ -309,7 +309,7 @@ public class PojoQueryTest {
 		SearchArgs sa;
 		List results;
 
-		List<E> in = AList.of(new E("foo", 1, true),new E("bar", 2, false),new E("baz", 3, true));
+		List<E> in = list(new E("foo", 1, true),new E("bar", 2, false),new E("baz", 3, true));
 
 		PojoQuery q = new PojoQuery(in, session);
 

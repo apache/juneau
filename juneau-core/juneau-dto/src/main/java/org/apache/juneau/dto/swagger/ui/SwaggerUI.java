@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger.ui;
 
-import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static java.util.Collections.*;
+import static org.apache.juneau.dto.html5.HtmlBuilder.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 import java.util.Map;
@@ -44,7 +45,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		.caching(Boolean.getBoolean("RestContext.disableClasspathResourceCaching.b") ? -1 : 1_000_000)
 		.build();
 
-	private static final Set<String> STANDARD_METHODS = ASet.of("get", "put", "post", "delete", "options");
+	private static final Set<String> STANDARD_METHODS = set("get", "put", "post", "delete", "options");
 
 	/**
 	 * This UI applies to HTML requests only.

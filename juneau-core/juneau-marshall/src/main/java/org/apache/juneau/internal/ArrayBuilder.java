@@ -31,7 +31,7 @@ import java.util.function.*;
  *
  * @param <T> The array element type.
  */
-public class ArrayBuilder<T> {
+public final class ArrayBuilder<T> {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

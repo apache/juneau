@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.internal.ArrayUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ArrayUtils.contains;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.util.*;
@@ -155,7 +155,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> authorizationUrl() {
-		return Optional.ofNullable(getAuthorizationUrl());
+		return optional(getAuthorizationUrl());
 	}
 
 	/**
@@ -214,7 +214,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> description() {
-		return Optional.ofNullable(getDescription());
+		return optional(getDescription());
 	}
 
 	/**
@@ -279,7 +279,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> flow() {
-		return Optional.ofNullable(getFlow());
+		return optional(getFlow());
 	}
 
 	/**
@@ -349,7 +349,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> in() {
-		return Optional.ofNullable(getIn());
+		return optional(getIn());
 	}
 
 	/**
@@ -412,7 +412,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> name() {
-		return Optional.ofNullable(getName());
+		return optional(getName());
 	}
 
 	/**
@@ -486,7 +486,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Map<String,String>> scopes() {
-		return Optional.ofNullable(getScopes());
+		return optional(getScopes());
 	}
 
 	/**
@@ -559,7 +559,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> tokenUrl() {
-		return Optional.ofNullable(getTokenUrl());
+		return optional(getTokenUrl());
 	}
 
 	/**
@@ -629,7 +629,7 @@ public class SecurityScheme extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> type() {
-		return Optional.ofNullable(getType());
+		return optional(getType());
 	}
 
 	/**
@@ -694,15 +694,16 @@ public class SecurityScheme extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		ASet<String> s = ASet.<String>of()
-			.appendIf(authorizationUrl != null, "authorizationUrl")
-			.appendIf(description != null, "description")
-			.appendIf(flow != null, "flow")
-			.appendIf(in != null, "in")
-			.appendIf(name != null, "name")
-			.appendIf(scopes != null, "scopes")
-			.appendIf(tokenUrl != null, "tokenUrl")
-			.appendIf(type != null, "type");
+		Set<String> s = setBuilder(String.class)
+			.addIf(authorizationUrl != null, "authorizationUrl")
+			.addIf(description != null, "description")
+			.addIf(flow != null, "flow")
+			.addIf(in != null, "in")
+			.addIf(name != null, "name")
+			.addIf(scopes != null, "scopes")
+			.addIf(tokenUrl != null, "tokenUrl")
+			.addIf(type != null, "type")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 }

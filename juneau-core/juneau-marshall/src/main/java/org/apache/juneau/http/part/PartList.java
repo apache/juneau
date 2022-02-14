@@ -15,6 +15,7 @@ package org.apache.juneau.http.part;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.util.*;
@@ -1116,16 +1117,16 @@ public class PartList {
 			for (int i = 0; i < entries.size(); i++) {
 				NameValuePair x = entries.get(i);
 				if (eq(x.getName(), name))
-					return Optional.of(x);
+					return optional(x);
 			}
 			if (defaultEntries != null) {
 				for (int i = 0; i < defaultEntries.size(); i ++) {
 					NameValuePair x = defaultEntries.get(i);
 					if (eq(x.getName(), name))
-						return Optional.of(x);
+						return optional(x);
 				}
 			}
-			return Optional.empty();
+			return empty();
 		}
 
 		/**
@@ -1138,16 +1139,16 @@ public class PartList {
 			for (int i = entries.size() - 1; i >= 0; i--) {
 				NameValuePair x = entries.get(i);
 				if (eq(x.getName(), name))
-					return Optional.of(x);
+					return optional(x);
 			}
 			if (defaultEntries != null) {
 				for (int i = defaultEntries.size() - 1; i >= 0; i--) {
 					NameValuePair x = defaultEntries.get(i);
 					if (eq(x.getName(), name))
-						return Optional.of(x);
+						return optional(x);
 				}
 			}
-			return Optional.empty();
+			return empty();
 		}
 
 		// <FluentSetters>
@@ -1287,10 +1288,10 @@ public class PartList {
 		}
 
 		if (first == null)
-			return Optional.empty();
+			return empty();
 
 		if (rest == null)
-			return Optional.of(first);
+			return optional(first);
 
 		CharArrayBuffer sb = new CharArrayBuffer(128);
 		sb.append(first.getValue());
@@ -1299,7 +1300,7 @@ public class PartList {
 			sb.append(rest.get(i).getValue());
 		}
 
-		return Optional.of(new BasicPart(name, sb.toString()));
+		return optional(new BasicPart(name, sb.toString()));
 	}
 
 	/**
@@ -1346,10 +1347,10 @@ public class PartList {
 		}
 
 		if (first == null)
-			return Optional.empty();
+			return empty();
 
 		if (rest == null)
-			return Optional.of(PartBeanMeta.of(type).construct(name, first.getValue()));
+			return optional(PartBeanMeta.of(type).construct(name, first.getValue()));
 
 		CharArrayBuffer sb = new CharArrayBuffer(128);
 		sb.append(first.getValue());
@@ -1358,7 +1359,7 @@ public class PartList {
 			sb.append(rest.get(i).getValue());
 		}
 
-		return Optional.of(PartBeanMeta.of(type).construct(name, sb.toString()));
+		return optional(PartBeanMeta.of(type).construct(name, sb.toString()));
 	}
 
 	/**
@@ -1391,7 +1392,7 @@ public class PartList {
 	 * The returned array maintains the relative order in which the parts were added.
 	 * Each call creates a new array not backed by this list.
 	 *
-	 * @return 
+	 * @return
 	 * 	An array of all the parts in this list, or an empty array if no parts are present.
 	 */
 	public NameValuePair[] getAll() {
@@ -1440,9 +1441,9 @@ public class PartList {
 		for (int i = 0; i < entries.length; i++) {
 			NameValuePair x = entries[i];
 			if (eq(x.getName(), name))
-				return Optional.of(x);
+				return optional(x);
 		}
-		return Optional.empty();
+		return empty();
 	}
 
 	/**
@@ -1458,9 +1459,9 @@ public class PartList {
 		for (int i = entries.length - 1; i >= 0; i--) {
 			NameValuePair x = entries[i];
 			if (eq(x.getName(), name))
-				return Optional.of(x);
+				return optional(x);
 		}
-		return Optional.empty();
+		return empty();
 	}
 
 	/**

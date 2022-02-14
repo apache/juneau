@@ -31,7 +31,26 @@ import org.apache.juneau.parser.*;
  *
  * @param <E> Element type.
  */
-public class ListBuilder<E> {
+public final class ListBuilder<E> {
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Static creator.
+	 *
+	 * @param elementType The element type.
+	 * @param elementTypeArgs Optional element type arguments.
+	 * @return A new builder.
+	 */
+	public static <E> ListBuilder<E> create(Class<E> elementType, Type...elementTypeArgs) {
+		return new ListBuilder<>(elementType, elementTypeArgs);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private List<E> list;
 	private boolean unmodifiable = false, sparse = false;
@@ -233,6 +252,19 @@ public class ListBuilder<E> {
 		} catch (ParseException e) {
 			throw runtimeException(e);
 		}
+		return this;
+	}
+
+	/**
+	 * Appends a value to this list of the flag is true.
+	 *
+	 * @param flag The flag.
+	 * @param value The value.
+	 * @return This object.
+	 */
+	public ListBuilder<E> addIf(boolean flag, E value) {
+		if (flag)
+			add(value);
 		return this;
 	}
 }

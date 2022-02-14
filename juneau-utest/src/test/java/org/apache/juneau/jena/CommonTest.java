@@ -13,6 +13,7 @@
 package org.apache.juneau.jena;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -22,7 +23,6 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.annotation.*;
 import org.junit.*;
 
@@ -134,8 +134,8 @@ public class CommonTest {
 
 		public static C create() {
 			C t = new C();
-			t.f1 = AList.create();
-			t.f2 = AList.of(null, A.create());
+			t.f1 = list();
+			t.f2 = list(null, A.create());
 			return t;
 		}
 	}
@@ -200,11 +200,11 @@ public class CommonTest {
 		public static E1 create() {
 			E1 t = new E1();
 			t.x1 = new E2();
-			t.x2 = AMap.of("f1",1,"f2",2);
+			t.x2 = map("f1",1,"f2",2);
 			t.x3 = new E2[] {new E2()};
-			t.x4 = AList.of(new E2());
+			t.x4 = list(new E2());
 			t.x5 = new OMap[] {OMap.of("f1","1","f2","2")};
-			t.x6 = AList.of(OMap.of("f1","1","f2","2"));
+			t.x6 = list(OMap.of("f1","1","f2","2"));
 			return t;
 		}
 	}

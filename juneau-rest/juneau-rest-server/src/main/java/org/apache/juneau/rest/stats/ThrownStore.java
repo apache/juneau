@@ -14,8 +14,8 @@ package org.apache.juneau.rest.stats;
 
 import static java.util.stream.Collectors.*;
 import static java.util.Collections.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
-import static java.util.Optional.*;
 import static java.util.Comparator.*;
 
 import java.util.*;
@@ -132,7 +132,7 @@ public class ThrownStore {
 		 * @return This object.
 		 */
 		public Builder ignoreClasses(Class<?>...value) {
-			this.ignoreClasses = ASet.of(value);
+			this.ignoreClasses = set(value);
 			return this;
 		}
 
@@ -176,7 +176,7 @@ public class ThrownStore {
 	 * @param builder The builder for this object.
 	 */
 	public ThrownStore(Builder builder) {
-		this.parent = ofNullable(builder.parent);
+		this.parent = optional(builder.parent);
 		this.beanStore = builder.beanStore();
 
 		this.statsImplClass = firstNonNull(builder.statsImplClass, parent.isPresent() ? parent.get().statsImplClass : null, null);
@@ -223,7 +223,7 @@ public class ThrownStore {
 	 */
 	public Optional<ThrownStats> getStats(long hash) {
 		ThrownStats s = db.get(hash);
-		return Optional.ofNullable(s == null ? null : s.clone());
+		return optional(s == null ? null : s.clone());
 	}
 
 	/**

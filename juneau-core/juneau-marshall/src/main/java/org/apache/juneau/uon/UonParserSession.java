@@ -13,6 +13,7 @@
 package org.apache.juneau.uon;
 
 import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -312,7 +313,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)Optional.ofNullable(parseAnything(eType.getElementType(), r, outer, isUrlParamValue, pMeta));
+			return (T)optional(parseAnything(eType.getElementType(), r, outer, isUrlParamValue, pMeta));
 
 		setCurrentClass(sType);
 

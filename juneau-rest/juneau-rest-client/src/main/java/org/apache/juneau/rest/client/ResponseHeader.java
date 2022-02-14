@@ -14,8 +14,8 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
-import static java.util.Optional.*;
 
 import java.lang.reflect.*;
 import java.time.*;
@@ -412,7 +412,7 @@ public class ResponseHeader implements Header {
 	 */
 	public <T> Optional<T> as(ClassMeta<T> type) throws RestCallException {
 		try {
-			return ofNullable(parser.parse(HEADER, schema, getValue(), type));
+			return optional(parser.parse(HEADER, schema, getValue(), type));
 		} catch (ParseException e) {
 			throw new RestCallException(response, e, "Could not parse response header {0}.", getName());
 		}

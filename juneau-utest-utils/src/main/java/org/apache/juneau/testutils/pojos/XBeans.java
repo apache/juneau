@@ -12,10 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.testutils.pojos;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.urlencoding.annotation.*;
 
 public class XBeans {
@@ -85,25 +86,25 @@ public class XBeans {
 		public static XB get() {
 			XB t = new XB();
 			t.f01 = new String[]{"a","b"};
-			t.f02 = AList.of("c","d");
+			t.f02 = list("c","d");
 			t.f03 = new int[]{1,2};
-			t.f04 = AList.of(3,4);
+			t.f04 = list(3,4);
 			t.f05 = new String[][]{{"e","f"},{"g","h"}};
-			t.f06 = AList.of(new String[]{"i","j"},new String[]{"k","l"});
+			t.f06 = list(new String[]{"i","j"},new String[]{"k","l"});
 			t.f07 = new XA[]{XA.get(),XA.get()};
-			t.f08 = AList.of(XA.get(),XA.get());
+			t.f08 = list(XA.get(),XA.get());
 			t.f09 = new XA[][]{{XA.get()},{XA.get()}};
-			t.f10 = AList.of(Arrays.asList(XA.get()),Arrays.asList(XA.get()));
+			t.f10 = list(Arrays.asList(XA.get()),Arrays.asList(XA.get()));
 			t.setF11(new String[]{"a","b"});
-			t.setF12(AList.of("c","d"));
+			t.setF12(list("c","d"));
 			t.setF13(new int[]{1,2});
-			t.setF14(AList.of(3,4));
+			t.setF14(list(3,4));
 			t.setF15(new String[][]{{"e","f"},{"g","h"}});
-			t.setF16(AList.of(new String[]{"i","j"},new String[]{"k","l"}));
+			t.setF16(list(new String[]{"i","j"},new String[]{"k","l"}));
 			t.setF17(new XA[]{XA.get(),XA.get()});
-			t.setF18(AList.of(XA.get(),XA.get()));
+			t.setF18(list(XA.get(),XA.get()));
 			t.setF19(new XA[][]{{XA.get()},{XA.get()}});
-			t.setF20(AList.of(Arrays.asList(XA.get()),Arrays.asList(XA.get())));
+			t.setF20(list(Arrays.asList(XA.get()),Arrays.asList(XA.get())));
 			return t;
 		}
 
@@ -115,25 +116,25 @@ public class XBeans {
 		public static XC get() {
 			XC t = new XC();
 			t.f01 = new String[]{"a","b"};
-			t.f02 = AList.of("c","d");
+			t.f02 = list("c","d");
 			t.f03 = new int[]{1,2};
-			t.f04 = AList.of(3, 4);
+			t.f04 = list(3, 4);
 			t.f05 = new String[][]{{"e","f"},{"g","h"}};
-			t.f06 = AList.of(new String[]{"i","j"}, new String[]{"k","l"});
+			t.f06 = list(new String[]{"i","j"}, new String[]{"k","l"});
 			t.f07 = new XA[]{XA.get(),XA.get()};
-			t.f08 = AList.of(XA.get(), XA.get());
+			t.f08 = list(XA.get(), XA.get());
 			t.f09 = new XA[][]{{XA.get()},{XA.get()}};
-			t.f10 = AList.of(Arrays.asList(XA.get()), Arrays.asList(XA.get()));
+			t.f10 = list(Arrays.asList(XA.get()), Arrays.asList(XA.get()));
 			t.setF11(new String[]{"a","b"});
-			t.setF12(AList.of("c","d"));
+			t.setF12(list("c","d"));
 			t.setF13(new int[]{1,2});
-			t.setF14(AList.of(3,4));
+			t.setF14(list(3,4));
 			t.setF15(new String[][]{{"e","f"},{"g","h"}});
-			t.setF16(AList.of(new String[]{"i","j"},new String[]{"k","l"}));
+			t.setF16(list(new String[]{"i","j"},new String[]{"k","l"}));
 			t.setF17(new XA[]{XA.get(),XA.get()});
-			t.setF18(AList.of(XA.get(), XA.get()));
+			t.setF18(list(XA.get(), XA.get()));
 			t.setF19(new XA[][]{{XA.get()},{XA.get()}});
-			t.setF20(AList.of(Arrays.asList(XA.get()), Arrays.asList(XA.get())));
+			t.setF20(list(Arrays.asList(XA.get()), Arrays.asList(XA.get())));
 			return t;
 		}
 
@@ -208,25 +209,25 @@ public class XBeans {
 		public static XE get() {
 			XE t = new XE();
 			t.f01 = new String[]{"a","b"};
-			t.f02 = AList.of("c","d");
+			t.f02 = list("c","d");
 			t.f03 = new int[]{1,2};
-			t.f04 = AList.of(3,4);
+			t.f04 = list(3,4);
 			t.f05 = new String[][]{{"e","f"},{"g","h"}};
-			t.f06 = AList.of(new String[]{"i","j"},new String[]{"k","l"});
+			t.f06 = list(new String[]{"i","j"},new String[]{"k","l"});
 			t.f07 = new XD[]{XD.get(),XD.get()};
-			t.f08 = AList.of(XD.get(),XD.get());
+			t.f08 = list(XD.get(),XD.get());
 			t.f09 = new XD[][]{{XD.get()},{XD.get()}};
-			t.f10 = AList.of(Arrays.asList(XD.get()),Arrays.asList(XD.get()));
+			t.f10 = list(Arrays.asList(XD.get()),Arrays.asList(XD.get()));
 			t.setF11(new String[]{"a","b"});
-			t.setF12(AList.of("c","d"));
+			t.setF12(list("c","d"));
 			t.setF13(new int[]{1,2});
-			t.setF14(AList.of(3,4));
+			t.setF14(list(3,4));
 			t.setF15(new String[][]{{"e","f"},{"g","h"}});
-			t.setF16(AList.of(new String[]{"i","j"},new String[]{"k","l"}));
+			t.setF16(list(new String[]{"i","j"},new String[]{"k","l"}));
 			t.setF17(new XD[]{XD.get(),XD.get()});
-			t.setF18(AList.of(XD.get(),XD.get()));
+			t.setF18(list(XD.get(),XD.get()));
 			t.setF19(new XD[][]{{XD.get()},{XD.get()}});
-			t.setF20(AList.of(Arrays.asList(XD.get()),Arrays.asList(XD.get())));
+			t.setF20(list(Arrays.asList(XD.get()),Arrays.asList(XD.get())));
 			return t;
 		}
 
@@ -237,25 +238,25 @@ public class XBeans {
 		public static XF get() {
 			XF t = new XF();
 			t.f01 = new String[]{"a","b"};
-			t.f02 = AList.of("c","d");
+			t.f02 = list("c","d");
 			t.f03 = new int[]{1,2};
-			t.f04 = AList.of(3, 4);
+			t.f04 = list(3, 4);
 			t.f05 = new String[][]{{"e","f"},{"g","h"}};
-			t.f06 = AList.of(new String[]{"i","j"}, new String[]{"k","l"});
+			t.f06 = list(new String[]{"i","j"}, new String[]{"k","l"});
 			t.f07 = new XD[]{XD.get(),XD.get()};
-			t.f08 = AList.of(XD.get(), XD.get());
+			t.f08 = list(XD.get(), XD.get());
 			t.f09 = new XD[][]{{XD.get()},{XD.get()}};
-			t.f10 = AList.of(Arrays.asList(XD.get()), Arrays.asList(XD.get()));
+			t.f10 = list(Arrays.asList(XD.get()), Arrays.asList(XD.get()));
 			t.setF11(new String[]{"a","b"});
-			t.setF12(AList.of("c","d"));
+			t.setF12(list("c","d"));
 			t.setF13(new int[]{1,2});
-			t.setF14(AList.of(3,4));
+			t.setF14(list(3,4));
 			t.setF15(new String[][]{{"e","f"},{"g","h"}});
-			t.setF16(AList.of(new String[]{"i","j"},new String[]{"k","l"}));
+			t.setF16(list(new String[]{"i","j"},new String[]{"k","l"}));
 			t.setF17(new XD[]{XD.get(),XD.get()});
-			t.setF18(AList.of(XD.get(), XD.get()));
+			t.setF18(list(XD.get(), XD.get()));
 			t.setF19(new XD[][]{{XD.get()},{XD.get()}});
-			t.setF20(AList.of(Arrays.asList(XD.get()), Arrays.asList(XD.get())));
+			t.setF20(list(Arrays.asList(XD.get()), Arrays.asList(XD.get())));
 			return t;
 		}
 

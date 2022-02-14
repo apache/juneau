@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -22,7 +23,6 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
@@ -370,7 +370,7 @@ public class BeanConfigTest {
 		assertEquals(new Integer(1), bc.convertToType(o, LinkedList.class).get(0));
 
 		// HashMap to TreeMap
-		o = AMap.of(1, "foo");
+		o = map(1, "foo");
 		assertEquals("foo", bc.convertToType(o, TreeMap.class).firstEntry().getValue());
 
 		// String to TreeMap

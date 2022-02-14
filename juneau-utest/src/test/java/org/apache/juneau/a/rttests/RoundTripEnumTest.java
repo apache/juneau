@@ -13,12 +13,12 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -195,10 +195,10 @@ public class RoundTripEnumTest extends RoundTripTest {
 			f2 = AEnum.BAR;
 			f3 = new AEnum[]{AEnum.FOO,null};
 			f4 = new AEnum[][]{{AEnum.FOO,null},null};
-			f5 = AList.of(AEnum.FOO);
-			f6 = AList.of(AEnum.FOO);
-			f7 = ASet.of(AEnum.FOO);
-			f8 = ASet.of(AEnum.FOO);
+			f5 = list(AEnum.FOO);
+			f6 = list(AEnum.FOO);
+			f7 = set(AEnum.FOO);
+			f8 = set(AEnum.FOO);
 
 			return this;
 		}
@@ -237,10 +237,10 @@ public class RoundTripEnumTest extends RoundTripTest {
 			f2 = BEnum.BAR;
 			f3 = new BEnum[]{BEnum.FOO,null};
 			f4 = new BEnum[][]{{BEnum.FOO,null},null};
-			f5 = AList.of(BEnum.FOO);
-			f6 = AList.of(BEnum.FOO);
-			f7 = ASet.of(BEnum.FOO);
-			f8 = ASet.of(BEnum.FOO);
+			f5 = list(BEnum.FOO);
+			f6 = list(BEnum.FOO);
+			f7 = set(BEnum.FOO);
+			f8 = set(BEnum.FOO);
 
 			return this;
 		}

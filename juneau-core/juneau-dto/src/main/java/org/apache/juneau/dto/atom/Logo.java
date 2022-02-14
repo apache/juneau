@@ -12,11 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.net.*;
-import java.net.URI;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -113,7 +113,7 @@ public class Logo extends Common {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<URI> uri() {
-		return Optional.ofNullable(uri);
+		return optional(uri);
 	}
 
 	/**

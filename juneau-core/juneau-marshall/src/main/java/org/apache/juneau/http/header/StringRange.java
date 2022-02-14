@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.http.HttpParts.*;
@@ -21,7 +22,6 @@ import java.util.*;
 import org.apache.http.*;
 import org.apache.http.message.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 
 /**
  * Represents a single value in a comma-delimited header value that optionally contains a quality metric for
@@ -69,7 +69,7 @@ public class StringRange {
 
 		// The media type consists of everything up to the q parameter.
 		// The q parameter and stuff after is part of the range.
-		List<NameValuePair> extensions = AList.create();
+		List<NameValuePair> extensions = list();
 		for (NameValuePair p : e.getParameters()) {
 			if (p.getName().equals("q")) {
 				qValue = Float.parseFloat(p.getValue());

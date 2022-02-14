@@ -15,6 +15,7 @@ package org.apache.juneau.rest.mock;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
@@ -141,7 +142,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest roles(String...roles) {
-		this.roles = ASet.of(roles);
+		this.roles = set(roles);
 		return this;
 	}
 
@@ -171,7 +172,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest pathVars(String...pairs) {
-		return pathVars(AMap.<String,String>ofPairs((Object[])pairs));
+		return pathVars(mapBuilder(String.class,String.class).addPairs((Object[])pairs).build());
 	}
 
 	/**
@@ -181,7 +182,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest role(String role) {
-		this.roles = ASet.of(role);
+		this.roles = set(role);
 		return this;
 	}
 

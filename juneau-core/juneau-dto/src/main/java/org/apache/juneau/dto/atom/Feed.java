@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.util.*;
@@ -127,7 +128,7 @@ public class Feed extends CommonEntry {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Generator> generator() {
-		return Optional.ofNullable(generator);
+		return optional(generator);
 	}
 
 	/**
@@ -181,7 +182,7 @@ public class Feed extends CommonEntry {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Icon> icon() {
-		return Optional.ofNullable(icon);
+		return optional(icon);
 	}
 
 	/**
@@ -235,7 +236,7 @@ public class Feed extends CommonEntry {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Logo> logo() {
-		return Optional.ofNullable(logo);
+		return optional(logo);
 	}
 
 	/**
@@ -289,7 +290,7 @@ public class Feed extends CommonEntry {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Text> subtitle() {
-		return Optional.ofNullable(subtitle);
+		return optional(subtitle);
 	}
 
 	/**
@@ -360,7 +361,7 @@ public class Feed extends CommonEntry {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Entry[]> entries() {
-		return Optional.ofNullable(entries);
+		return optional(entries);
 	}
 
 	/**

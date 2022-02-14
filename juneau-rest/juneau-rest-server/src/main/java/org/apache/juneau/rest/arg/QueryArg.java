@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.arg;
 
-import static java.util.Optional.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -81,7 +81,7 @@ public class QueryArg implements RestOpArg {
 		this.name = QueryAnnotation.findName(pi).orElseThrow(() -> new ArgException(pi, "@Query used without name or value"));
 		this.type = pi.getParameterType();
 		this.schema = HttpPartSchema.create(Query.class, pi);
-		this.partParser = ofNullable(schema.getParser()).map(x -> HttpPartParser.creator().type(x).apply(annotations).create()).orElse(null);
+		this.partParser = optional(schema.getParser()).map(x -> HttpPartParser.creator().type(x).apply(annotations).create()).orElse(null);
 		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
 
 		if (multi && ! type.isCollectionOrArray())

@@ -14,6 +14,7 @@ package org.apache.juneau.reflect;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -385,7 +386,7 @@ public class ParamInfoTest {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private static <T extends Annotation> List<T> annotations(ParamInfo pi, Class<T> a) {
-		List<T> l = AList.create();
+		List<T> l = list();
 		pi.forEachAnnotation(a, x -> true, x -> l.add(x));
 		return l;
 	}

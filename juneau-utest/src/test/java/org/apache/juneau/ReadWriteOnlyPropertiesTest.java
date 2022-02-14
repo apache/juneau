@@ -13,11 +13,11 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.parser.*;
@@ -160,14 +160,14 @@ public class ReadWriteOnlyPropertiesTest {
 		assertEquals("{f1:1}", sw.toString(C.create()));
 
 		sw = SimpleJsonSerializer.DEFAULT.copy()
-			.beanPropertiesReadOnly(AMap.of(C.class.getName(), "f1"))
-			.beanPropertiesWriteOnly(AMap.of(C.class.getName(), "f2"))
+			.beanPropertiesReadOnly(map(C.class.getName(), "f1"))
+			.beanPropertiesWriteOnly(map(C.class.getName(), "f2"))
 			.build();
 		assertEquals("{f1:1}", sw.toString(C.create()));
 
 		sw = SimpleJsonSerializer.DEFAULT.copy()
-			.beanPropertiesReadOnly(AMap.of("ReadWriteOnlyPropertiesTest$C", "f1"))
-			.beanPropertiesWriteOnly(AMap.of("ReadWriteOnlyPropertiesTest$C", "f2"))
+			.beanPropertiesReadOnly(map("ReadWriteOnlyPropertiesTest$C", "f1"))
+			.beanPropertiesWriteOnly(map("ReadWriteOnlyPropertiesTest$C", "f2"))
 			.build();
 		assertEquals("{f1:1}", sw.toString(C.create()));
 	}
@@ -202,16 +202,16 @@ public class ReadWriteOnlyPropertiesTest {
 		assertEquals(2, x.f2);
 
 		rp = JsonParser.DEFAULT.copy()
-			.beanPropertiesReadOnly(AMap.of(C.class.getName(), "f1"))
-			.beanPropertiesWriteOnly(AMap.of(C.class.getName(), "f2"))
+			.beanPropertiesReadOnly(map(C.class.getName(), "f1"))
+			.beanPropertiesWriteOnly(map(C.class.getName(), "f2"))
 			.build();
 		x = rp.parse("{f1:1,f2:2}", C.class);
 		assertEquals(0, x.f1);
 		assertEquals(2, x.f2);
 
 		rp = JsonParser.DEFAULT.copy()
-			.beanPropertiesReadOnly(AMap.of("ReadWriteOnlyPropertiesTest$C", "f1"))
-			.beanPropertiesWriteOnly(AMap.of("ReadWriteOnlyPropertiesTest$C", "f2"))
+			.beanPropertiesReadOnly(map("ReadWriteOnlyPropertiesTest$C", "f1"))
+			.beanPropertiesWriteOnly(map("ReadWriteOnlyPropertiesTest$C", "f2"))
 			.build();
 		x = rp.parse("{f1:1,f2:2}", C.class);
 		assertEquals(0, x.f1);

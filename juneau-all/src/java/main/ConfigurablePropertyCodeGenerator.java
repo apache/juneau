@@ -11,6 +11,7 @@
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
@@ -24,7 +25,7 @@ import org.apache.juneau.reflect.*;
 
 public class ConfigurablePropertyCodeGenerator {
 
-	static Set<Class<?>> ignoreClasses = ASet.of(
+	static Set<Class<?>> ignoreClasses = set(
 		org.apache.http.entity.AbstractHttpEntity.class,
 		org.apache.http.entity.BasicHttpEntity.class,
 		org.apache.http.message.AbstractHttpMessage.class,
@@ -100,7 +101,7 @@ public class ConfigurablePropertyCodeGenerator {
 			StringBuilder sb = new StringBuilder();
 			ClassInfo ci = ClassInfo.of(c);
 			String cName = ci.getSimpleName();
-			Set<String> ignore = ASet.of();
+			Set<String> ignore = set();
 			FluentSetters fs = ci.getAnnotation(FluentSetters.class);
 			if (! fs.returns().isEmpty())
 				cName = fs.returns();

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.springboot;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.util.*;
 import java.util.stream.*;
 
@@ -50,13 +52,13 @@ public class SpringBeanStore extends BeanStore {
 				return o;
 			if (appContext.isPresent()) {
 				if (name != null)
-					return Optional.ofNullable(appContext.get().getBean(name, c));
-				return Optional.ofNullable(appContext.get().getBean(c));
+					return optional(appContext.get().getBean(name, c));
+				return optional(appContext.get().getBean(c));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return Optional.empty();
+		return empty();
 	}
 
 	@SuppressWarnings("unchecked")

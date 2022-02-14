@@ -12,6 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.converter;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
@@ -50,7 +54,7 @@ public class RestConverterList {
 	@FluentSetters
 	public static class Builder extends BeanBuilder<RestConverterList> {
 
-		AList<BeanCreator<RestConverter>> entries;
+		List<BeanCreator<RestConverter>> entries;
 
 		/**
 		 * Create an empty builder.
@@ -59,7 +63,7 @@ public class RestConverterList {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(RestConverterList.class, beanStore);
-			this.entries = AList.create();
+			this.entries = list();
 		}
 
 		@Override /* BeanBuilder */
@@ -80,7 +84,7 @@ public class RestConverterList {
 		@SuppressWarnings("unchecked")
 		public Builder append(Class<? extends RestConverter>...values) {
 			for (Class<? extends RestConverter> v : values)
-				entries.append(beanStore().createBean(RestConverter.class).type(v));
+				entries.add(beanStore().createBean(RestConverter.class).type(v));
 			return this;
 		}
 
@@ -92,7 +96,7 @@ public class RestConverterList {
 		 */
 		public Builder append(RestConverter...values) {
 			for (RestConverter v : values)
-				entries.append(beanStore().createBean(RestConverter.class).impl(v));
+				entries.add(beanStore().createBean(RestConverter.class).impl(v));
 			return this;
 		}
 

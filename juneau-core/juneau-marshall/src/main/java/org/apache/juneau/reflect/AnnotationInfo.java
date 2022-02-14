@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.lang.annotation.*;
@@ -314,11 +315,11 @@ public class AnnotationInfo<T extends Annotation> {
 				try {
 					V v = (V)m.invoke(a);
 					if (passes(test, v))
-						return Optional.of(v);
+						return optional(v);
 				} catch (Exception e) {
 					e.printStackTrace(); // Shouldn't happen.
 				}
 			}
-		return Optional.empty();
+		return empty();
 	}
 }

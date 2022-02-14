@@ -16,7 +16,6 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.net.*;
-import java.net.URI;
 import java.util.*;
 
 import org.apache.juneau.*;

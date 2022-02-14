@@ -15,6 +15,7 @@ package org.apache.juneau.http.remote;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.http.HttpParts.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
 
@@ -26,7 +27,6 @@ import org.apache.http.entity.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.part.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.annotation.*;
@@ -147,8 +147,8 @@ public class Remote_BodyAnnotation_Test {
 		assertEquals("1.0",x.postX2(1f));
 		assertEquals("{f:1}",x.postX3(Bean.create()));
 		assertEquals("[{f:1}]",x.postX4(new Bean[]{Bean.create()}));
-		assertEquals("[{f:1}]",x.postX5(AList.of(Bean.create())));
-		assertEquals("{k1:{f:1}}",x.postX6(AMap.of("k1",Bean.create())));
+		assertEquals("[{f:1}]",x.postX5(list(Bean.create())));
+		assertEquals("{k1:{f:1}}",x.postX6(map("k1",Bean.create())));
 		assertEquals("xxx",x.postX7(reader("xxx")));
 		assertEquals("xxx",x.postX8(inputStream("xxx")));
 		assertEquals("xxx",x.postX9(new StringEntity("xxx")));
@@ -242,8 +242,8 @@ public class Remote_BodyAnnotation_Test {
 		assertEquals("1.0",x.postX2(1f));
 		assertEquals("{f:1}",x.postX3(Bean.create()));
 		assertEquals("[{f:1}]",x.postX4(new Bean[]{Bean.create()}));
-		assertEquals("[{f:1}]",x.postX5(AList.of(Bean.create())));
-		assertEquals("{k1:{f:1}}",x.postX6(AMap.of("k1",Bean.create())));
+		assertEquals("[{f:1}]",x.postX5(list(Bean.create())));
+		assertEquals("{k1:{f:1}}",x.postX6(map("k1",Bean.create())));
 		assertEquals("xxx",x.postX7(reader("xxx")));
 		assertEquals("xxx",x.postX8(inputStream("xxx")));
 		assertEquals("xxx",x.postX9(new StringEntity("xxx",org.apache.http.entity.ContentType.create("text/plain"))));
@@ -322,8 +322,8 @@ public class Remote_BodyAnnotation_Test {
 		assertEquals("1",x.postX1(1));
 		assertEquals("1.0",x.postX2(1f));
 		assertEquals("{f:1}",x.postX3(Bean.create()));
-		assertEquals("[{f:1}]",x.postX5(AList.of(Bean.create())));
-		assertEquals("{k1={f:1}}",x.postX6(AMap.of("k1",Bean.create())));
+		assertEquals("[{f:1}]",x.postX5(list(Bean.create())));
+		assertEquals("{k1={f:1}}",x.postX6(map("k1",Bean.create())));
 		assertEquals("xxx",x.postX7(reader("xxx")));
 		assertEquals("xxx",x.postX8(inputStream("xxx")));
 		assertEquals("xxx",x.postX9(new StringEntity("xxx",org.apache.http.entity.ContentType.create("text/plain"))));

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.nio.charset.*;
@@ -57,7 +58,7 @@ public class SystemEnv {
 		String s = System.getProperty(name);
 		if (s == null)
 			s = System.getenv(envName(name));
-		return Optional.ofNullable(s);
+		return optional(s);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

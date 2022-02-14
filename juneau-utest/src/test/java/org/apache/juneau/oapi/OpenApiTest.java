@@ -16,13 +16,13 @@ import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.testutils.*;
 import org.junit.*;
 
@@ -605,14 +605,14 @@ public class OpenApiTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void f02a_tArray_StringList() throws Exception {
-		List<String> in = AList.of("123");
+		List<String> in = list("123");
 		HttpPartSchema ps = T_ARRAY;
 		String s = serialize(ps, in);
 		assertEquals("123", s);
 		List<String> r = parse(ps, s, List.class, String.class);
 		assertEquals(in, r);
 
-		in = AList.of("123","456");
+		in = list("123","456");
 		s = serialize(ps, in);
 		assertEquals("123,456", s);
 		r = parse(ps, s, List.class, String.class);
@@ -622,7 +622,7 @@ public class OpenApiTest {
 	@Test
 	@SuppressWarnings("unchecked")
 	public void f02b_tArray_3dStringList() throws Exception {
-		List<List<List<String>>> in = AList.ofCollections(AList.ofCollections(AList.of("a")));
+		List<List<List<String>>> in = list(list(list("a")));
 		HttpPartSchema ps = tArray().items(
 			tArray().items(
 				tArray()
@@ -633,7 +633,7 @@ public class OpenApiTest {
 		List<String> r = parse(ps, s, List.class, List.class, List.class, String.class);
 		assertEquals(in, r);
 
-		in =  AList.ofCollections(AList.ofCollections(AList.of("a","b"),AList.of("c","d")),AList.ofCollections(AList.of("e","f"),AList.of("g","h")));
+		in =  list(list(list("a","b"),list("c","d")),list(list("e","f"),list("g","h")));
 		s = serialize(ps, in);
 		assertEquals("a\\\\\\,b\\,c\\\\\\,d,e\\\\\\,f\\,g\\\\\\,h", s);
 		r = parse(ps, s, List.class, List.class, List.class, String.class);

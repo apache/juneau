@@ -13,6 +13,8 @@
 package org.apache.juneau.rest.httppart;
 
 import static org.apache.juneau.httppart.HttpPartType.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.lang.reflect.*;
 import java.time.*;
 import java.util.*;
@@ -153,7 +155,7 @@ public abstract class RequestHttpPart {
 	 * @return The value of this part as a string, or {@link Optional#empty()} if the part was not present.
 	 */
 	public Optional<String> asString() {
-		return Optional.ofNullable(getValue());
+		return optional(getValue());
 	}
 
 	/**
@@ -220,14 +222,14 @@ public abstract class RequestHttpPart {
 				ConstructorInfo cc = HttpParts.getConstructor(type).orElse(null);
 				if (cc != null) {
 					if (! isPresent())
-						return Optional.empty();
+						return empty();
 					if (cc.hasParamTypes(String.class))
-						return Optional.of(cc.invoke(get()));
+						return optional(cc.invoke(get()));
 					if (cc.hasParamTypes(String.class, String.class))
-						return Optional.of(cc.invoke(getName(), get()));
+						return optional(cc.invoke(getName(), get()));
 				}
 			}
-			return Optional.ofNullable(parser.parse(HEADER, schema, orElse(null), type));
+			return optional(parser.parse(HEADER, schema, orElse(null), type));
 		} catch (ParseException e) {
 			throw new BadRequest(e, "Could not parse {0} parameter ''{1}''.", partType.toString().toLowerCase(), getName());
 		}

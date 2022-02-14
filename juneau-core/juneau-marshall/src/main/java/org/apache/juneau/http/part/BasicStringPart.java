@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -112,7 +113,7 @@ public class BasicStringPart extends BasicPart {
 	 * @return The value of this part as a string, or {@link Optional#empty()} if the value is <jk>null</jk>
 	 */
 	public Optional<String> asString() {
-		return Optional.ofNullable(getParsedValue());
+		return optional(getParsedValue());
 	}
 
 	/**

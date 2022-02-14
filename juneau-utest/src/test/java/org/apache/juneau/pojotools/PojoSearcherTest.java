@@ -13,6 +13,7 @@
 package org.apache.juneau.pojotools;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -75,8 +76,8 @@ public class PojoSearcherTest {
 		}
 	}
 
-	public static List<A> A_LIST = AList.of(A.create("foo"), A.create("bar"), A.create("baz"), A.create("q ux"), A.create("qu'ux"), null, A.create(null));
-	public static Set<A> A_SET = ASet.of(A.create("foo"), A.create("bar"), A.create("baz"), A.create("q ux"), A.create("qu'ux"), null, A.create(null));
+	public static List<A> A_LIST = list(A.create("foo"), A.create("bar"), A.create("baz"), A.create("q ux"), A.create("qu'ux"), null, A.create(null));
+	public static Set<A> A_SET = set(A.create("foo"), A.create("bar"), A.create("baz"), A.create("q ux"), A.create("qu'ux"), null, A.create(null));
 	public static A[] A_ARRAY = new A[]{A.create("foo"), A.create("bar"), A.create("baz"), A.create("q ux"), A.create("qu'ux"), null, A.create(null)};
 
 	@Test
@@ -151,21 +152,21 @@ public class PojoSearcherTest {
 
 	@Test
 	public void stringSearch_regExp_noEndSlash() throws Exception {
-		Object in = AList.of(A.create("/foo"), A.create("bar"));
+		Object in = list(A.create("/foo"), A.create("bar"));
 		for (String s : a("f=/foo","f='/foo'"))
 			assertObject(run(in, s)).asJson().is("[{f:'/foo'}]");
 	}
 
 	@Test
 	public void stringSearch_regExp_onlySlash() throws Exception {
-		Object in = AList.of(A.create("/"), A.create("bar"));
+		Object in = list(A.create("/"), A.create("bar"));
 		for (String s : a("f=/", "f='/'"))
 			assertObject(run(in, s)).asJson().is("[{f:'/'}]");
 	}
 
 	@Test
 	public void stringSearch_or_pattern() throws Exception {
-		Object in = AList.of(A.create("foo"), A.create("bar"), A.create("baz"));
+		Object in = list(A.create("foo"), A.create("bar"), A.create("baz"));
 		assertObject(run(in, "f=f* *r")).asJson().is("[{f:'foo'},{f:'bar'}]");
 		assertObject(run(in, "f='f* *r'")).asJson().is("[]");
 		assertObject(run(in, "f='f*oo'")).asJson().is("[{f:'foo'}]");
@@ -173,7 +174,7 @@ public class PojoSearcherTest {
 
 	@Test
 	public void stringSearch_explicit_or_pattern() throws Exception {
-		Object in = AList.of(A.create("foo"), A.create("bar"), A.create("baz"));
+		Object in = list(A.create("foo"), A.create("bar"), A.create("baz"));
 		assertObject(run(in, "f=^f* ^*r")).asJson().is("[{f:'foo'},{f:'bar'}]");
 		assertObject(run(in, "f=^'f* *r'")).asJson().is("[]");
 		assertObject(run(in, "f=^'f*oo'")).asJson().is("[{f:'foo'}]");
@@ -181,21 +182,21 @@ public class PojoSearcherTest {
 
 	@Test
 	public void stringSearch_and_pattern() throws Exception {
-		Object in = AList.of(A.create("foo"), A.create("bar"), A.create("baz"));
+		Object in = list(A.create("foo"), A.create("bar"), A.create("baz"));
 		assertObject(run(in, "f=+b* +*r")).asJson().is("[{f:'bar'}]");
 		assertObject(run(in, "f=+'b*' +'*r'")).asJson().is("[{f:'bar'}]");
 	}
 
 	@Test
 	public void stringSearch_not_pattern() throws Exception {
-		Object in = AList.of(A.create("foo"), A.create("bar"), A.create("baz"));
+		Object in = list(A.create("foo"), A.create("bar"), A.create("baz"));
 		assertObject(run(in, "f=b* -*r")).asJson().is("[{f:'baz'}]");
 		assertObject(run(in, "f=+'b*' -'*r'")).asJson().is("[{f:'baz'}]");
 	}
 
 	@Test
 	public void stringSearch_caseSensitive() throws Exception {
-		Object in = AList.of(A.create("foo"), A.create("bar"), A.create("baz"));
+		Object in = list(A.create("foo"), A.create("bar"), A.create("baz"));
 		assertObject(run(in, "f=F*")).asJson().is("[]");
 		assertObject(run(in, "f=\"F*\"")).asJson().is("[]");
 		assertObject(run(in, "f='F*'")).asJson().is("[{f:'foo'}]");
@@ -203,7 +204,7 @@ public class PojoSearcherTest {
 
 	@Test
 	public void stringSearch_malformedQuotes() throws Exception {
-		Object in = AList.of(A.create("'foo"), A.create("\"bar"), A.create("baz"));
+		Object in = list(A.create("'foo"), A.create("\"bar"), A.create("baz"));
 
 		assertThrown(()->run(in, "f='*")).message().contains("Unmatched string quotes");
 
@@ -216,7 +217,7 @@ public class PojoSearcherTest {
 
 	@Test
 	public void stringSearch_regexChars() throws Exception {
-		Object in = AList.of(A.create("+\\[]{}()^$."), A.create("bar"), A.create("baz"));
+		Object in = list(A.create("+\\[]{}()^$."), A.create("bar"), A.create("baz"));
 		assertObject(run(in, "f=*+*")).asJson().is("[{f:'+\\\\[]{}()^$.'}]");
 		assertObject(run(in, "f='+\\\\[]{}()^$.'")).asJson().is("[{f:'+\\\\[]{}()^$.'}]");
 		assertObject(run(in, "f=++\\\\[]{}()^$.")).asJson().is("[{f:'+\\\\[]{}()^$.'}]");
@@ -224,20 +225,20 @@ public class PojoSearcherTest {
 
 	@Test
 	public void stringSearch_metaChars() throws Exception {
-		Object in = AList.of(A.create("*?\\'\""), A.create("bar"), A.create("baz"));
+		Object in = list(A.create("*?\\'\""), A.create("bar"), A.create("baz"));
 		assertObject(run(in, "f='\\*\\?\\\\\\'\"'")).asJson().is("[{f:'*?\\\\\\'\"'}]");
 	}
 
 	@Test
 	public void stringSearch_metaChars_escapedQuotes() throws Exception {
-		Object in = AList.of(A.create("'"), A.create("\""), A.create("baz"));
+		Object in = list(A.create("'"), A.create("\""), A.create("baz"));
 		assertObject(run(in, "f=\\'")).asJson().is("[{f:'\\''}]");
 		assertObject(run(in, "f=\\\"")).asJson().is("[{f:'\"'}]");
 	}
 
 	@Test
 	public void stringSearch_metaChars_falseEscape() throws Exception {
-		Object in = AList.of(A.create("foo"), A.create("bar"), A.create("baz"));
+		Object in = list(A.create("foo"), A.create("bar"), A.create("baz"));
 		assertObject(run(in, "f=\\f\\o\\o")).asJson().is("[{f:'foo'}]");
 	}
 
@@ -713,26 +714,26 @@ public class PojoSearcherTest {
 
 	@Test
 	public void d2ListOfMaps() throws Exception {
-		List<Map<?,?>> in = AList.of(
-			AMap.of("f","foo"),
-			AMap.of("f","bar"),
+		List<Map<?,?>> in = list(
+			map("f","foo"),
+			map("f","bar"),
 			null,
-			AMap.of(null,"qux"),
-			AMap.of("quux",null),
-			AMap.of(null,null)
+			map(null,"qux"),
+			map("quux",null),
+			map(null,null)
 		);
 		assertObject(run(in, "f=foo")).asJson().is("[{f:'foo'}]");
 	}
 
 	@Test
 	public void d2SetOfMaps() throws Exception {
-		Set<Map<?,?>> in = ASet.of(
-			AMap.of("f","foo"),
-			AMap.of("f","bar"),
+		Set<Map<?,?>> in = set(
+			map("f","foo"),
+			map("f","bar"),
 			null,
-			AMap.of(null,"qux"),
-			AMap.of("quux",null),
-			AMap.of(null,null)
+			map(null,"qux"),
+			map("quux",null),
+			map(null,null)
 		);
 		assertObject(run(in, "f=foo")).asJson().is("[{f:'foo'}]");
 	}
@@ -741,25 +742,25 @@ public class PojoSearcherTest {
 	@Test
 	public void d2ArrayOfMaps() throws Exception {
 		Map<?,?>[] in = new Map[]{
-			AMap.of("f","foo"),
-			AMap.of("f","bar"),
+			map("f","foo"),
+			map("f","bar"),
 			null,
-			AMap.of(null,"qux"),
-			AMap.of("quux",null),
-			AMap.of(null,null)
+			map(null,"qux"),
+			map("quux",null),
+			map(null,null)
 		};
 		assertObject(run(in, "f=foo")).asJson().is("[{f:'foo'}]");
 	}
 
 	@Test
 	public void d2ListOfObjects() throws Exception {
-		List<Object> in = AList.of(
-			AMap.of("f","foo"),
-			AMap.of("f","bar"),
+		List<Object> in = list(
+			map("f","foo"),
+			map("f","bar"),
 			null,
-			AMap.of(null,"qux"),
-			AMap.of("quux",null),
-			AMap.of(null,null),
+			map(null,"qux"),
+			map("quux",null),
+			map(null,null),
 			"xxx",
 			123
 		);
@@ -768,13 +769,13 @@ public class PojoSearcherTest {
 
 	@Test
 	public void d2SetOfObjects() throws Exception {
-		Set<Object> in = ASet.of(
-			AMap.of("f","foo"),
-			AMap.of("f","bar"),
+		Set<Object> in = set(
+			map("f","foo"),
+			map("f","bar"),
 			null,
-			AMap.of(null,"qux"),
-			AMap.of("quux",null),
-			AMap.of(null,null),
+			map(null,"qux"),
+			map("quux",null),
+			map(null,null),
 			"xxx",
 			123
 		);
@@ -784,12 +785,12 @@ public class PojoSearcherTest {
 	@Test
 	public void d2ArrayOfObjects() throws Exception {
 		Object[] in = new Object[]{
-			AMap.of("f","foo"),
-			AMap.of("f","bar"),
+			map("f","foo"),
+			map("f","bar"),
 			null,
-			AMap.of(null,"qux"),
-			AMap.of("quux",null),
-			AMap.of(null,null),
+			map(null,"qux"),
+			map("quux",null),
+			map(null,null),
 			"xxx",
 			123
 		};
@@ -798,26 +799,26 @@ public class PojoSearcherTest {
 
 	@Test
 	public void d2ListOfMapsWithLists() throws Exception {
-		List<Map<?,?>> in = AList.of(
-			AMap.of("f",AList.of("foo")),
-			AMap.of("f",AList.of("bar")),
+		List<Map<?,?>> in = list(
+			map("f",list("foo")),
+			map("f",list("bar")),
 			null,
-			AMap.of(null,AList.of("qux")),
-			AMap.of("quux",AList.of((Object)null)),
-			AMap.of(null,AList.of((Object)null))
+			map(null,list("qux")),
+			map("quux",list((Object)null)),
+			map(null,list((Object)null))
 		);
 		assertObject(run(in, "f=foo")).asJson().is("[{f:['foo']}]");
 	}
 
 	@Test
 	public void d2SetOfMapsWithSets() throws Exception {
-		Set<Map<?,?>> in = ASet.of(
-			AMap.of("f",ASet.of("foo")),
-			AMap.of("f",ASet.of("bar")),
+		Set<Map<?,?>> in = set(
+			map("f",set("foo")),
+			map("f",set("bar")),
 			null,
-			AMap.of(null,ASet.of("qux")),
-			AMap.of("quux",ASet.of((Object)null)),
-			AMap.of(null,ASet.of((Object)null))
+			map(null,set("qux")),
+			map("quux",set((Object)null)),
+			map(null,set((Object)null))
 		);
 		assertObject(run(in, "f=foo")).asJson().is("[{f:['foo']}]");
 	}
@@ -825,19 +826,19 @@ public class PojoSearcherTest {
 	@Test
 	public void d2ArrayOfMapsWithArrays() throws Exception {
 		Map<?,?>[] in = new Map[]{
-			AMap.of("f",new Object[]{"foo"}),
-			AMap.of("f",new Object[]{"bar"}),
+			map("f",new Object[]{"foo"}),
+			map("f",new Object[]{"bar"}),
 			null,
-			AMap.of(null,new Object[]{"qux"}),
-			AMap.of("quux",new Object[]{null}),
-			AMap.of(null,new Object[]{null})
+			map(null,new Object[]{"qux"}),
+			map("quux",new Object[]{null}),
+			map(null,new Object[]{null})
 		};
 		assertObject(run(in, "f=foo")).asJson().is("[{f:['foo']}]");
 	}
 
 	@Test
 	public void d2ListOfBeans() throws Exception {
-		List<A> in = AList.of(
+		List<A> in = list(
 			A.create("foo"),
 			A.create("bar"),
 			null,
@@ -848,13 +849,13 @@ public class PojoSearcherTest {
 
 	@Test
 	public void d3ListOfListOfMaps() throws Exception {
-		List<List<Map<?,?>>> in = AList.of(
-			AList.of(AMap.of("f","foo")),
-			AList.of(AMap.of("f","bar")),
-			AList.of((Map<?,?>)null),
-			AList.of(AMap.of(null,"qux")),
-			AList.of(AMap.of("quux",null)),
-			AList.of(AMap.of(null,null)),
+		List<List<Map<?,?>>> in = list(
+			list(map("f","foo")),
+			list(map("f","bar")),
+			list((Map<?,?>)null),
+			list(map(null,"qux")),
+			list(map("quux",null)),
+			list(map(null,null)),
 			null
 		);
 		assertObject(run(in, "f=foo")).asJson().is("[[{f:'foo'}]]");
@@ -862,14 +863,14 @@ public class PojoSearcherTest {
 
 	@Test
 	public void d3SetOfSetOfMaps() throws Exception {
-		Set<Set<Map<?,?>>> in = ASet.of(
-			ASet.of(AMap.of("f","foo")),
-			ASet.of(AMap.of("f","bar")),
-			ASet.of(AMap.of("f","baz")),
-			ASet.of((Map<?,?>)null),
-			ASet.of(AMap.of(null,"qux")),
-			ASet.of(AMap.of("quux",null)),
-			ASet.of(AMap.of(null,null)),
+		Set<Set<Map<?,?>>> in = set(
+			set(map("f","foo")),
+			set(map("f","bar")),
+			set(map("f","baz")),
+			set((Map<?,?>)null),
+			set(map(null,"qux")),
+			set(map("quux",null)),
+			set(map(null,null)),
 			null
 		);
 		assertObject(run(in, "f=foo")).asJson().is("[[{f:'foo'}]]");
@@ -878,13 +879,13 @@ public class PojoSearcherTest {
 	@Test
 	public void d3ArrayOfArrayOfMaps() throws Exception {
 		Map<?,?>[][] in = new Map[][]{
-			new Map[]{AMap.of("f","foo")},
-			new Map[]{AMap.of("f","bar")},
-			new Map[]{AMap.of("f","baz")},
+			new Map[]{map("f","foo")},
+			new Map[]{map("f","bar")},
+			new Map[]{map("f","baz")},
 			new Map[]{null},
-			new Map[]{AMap.of(null,"qux")},
-			new Map[]{AMap.of("quux",null)},
-			new Map[]{AMap.of(null,null)},
+			new Map[]{map(null,"qux")},
+			new Map[]{map("quux",null)},
+			new Map[]{map(null,null)},
 			null
 		};
 		assertObject(run(in, "f=foo")).asJson().is("[[{f:'foo'}]]");
@@ -892,15 +893,15 @@ public class PojoSearcherTest {
 
 	@Test
 	public void d3ListOfListOfObjects() throws Exception {
-		List<List<Object>> in = AList.of(
-			AList.of(AMap.of("f","foo")),
-			AList.of(AMap.of("f","bar")),
-			AList.of((Object)null),
-			AList.of(AMap.of(null,"qux")),
-			AList.of(AMap.of("quux",null)),
-			AList.of(AMap.of(null,null)),
-			AList.of("xxx"),
-			AList.of(123),
+		List<List<Object>> in = list(
+			list(map("f","foo")),
+			list(map("f","bar")),
+			list((Object)null),
+			list(map(null,"qux")),
+			list(map("quux",null)),
+			list(map(null,null)),
+			list("xxx"),
+			list(123),
 			null
 		);
 		assertObject(run(in, "f=foo")).asJson().is("[[{f:'foo'}]]");
@@ -908,15 +909,15 @@ public class PojoSearcherTest {
 
 	@Test
 	public void d3SetOfSetOfObjects() throws Exception {
-		Set<Set<Object>> in = ASet.of(
-			ASet.of(AMap.of("f","foo")),
-			ASet.of(AMap.of("f","bar")),
-			ASet.of((Map<?,?>)null),
-			ASet.of(AMap.of(null,"qux")),
-			ASet.of(AMap.of("quux",null)),
-			ASet.of(AMap.of(null,null)),
-			ASet.of("xxx"),
-			ASet.of(123),
+		Set<Set<Object>> in = set(
+			set(map("f","foo")),
+			set(map("f","bar")),
+			set((Map<?,?>)null),
+			set(map(null,"qux")),
+			set(map("quux",null)),
+			set(map(null,null)),
+			set("xxx"),
+			set(123),
 			null
 		);
 		assertObject(run(in, "f=foo")).asJson().is("[[{f:'foo'}]]");
@@ -925,12 +926,12 @@ public class PojoSearcherTest {
 	@Test
 	public void d3ArrayOfArrayOfObjects() throws Exception {
 		Object[][] in = new Object[][]{
-			new Object[]{AMap.of("f","foo")},
-			new Object[]{AMap.of("f","bar")},
+			new Object[]{map("f","foo")},
+			new Object[]{map("f","bar")},
 			new Object[]{null},
-			new Object[]{AMap.of(null,"qux")},
-			new Object[]{AMap.of("quux",null)},
-			new Object[]{AMap.of(null,null)},
+			new Object[]{map(null,"qux")},
+			new Object[]{map("quux",null)},
+			new Object[]{map(null,null)},
 			new Object[]{"xxx"},
 			new Object[]{123},
 			null
@@ -940,13 +941,13 @@ public class PojoSearcherTest {
 
 	@Test
 	public void d3ListOfListOfMapsWithCollections() throws Exception {
-		List<List<Map<?,?>>> in = AList.of(
-			AList.of(AMap.of("f",AList.of("foo"))),
-			AList.of(AMap.of("f",AList.of("bar"))),
-			AList.of((Map<?,?>)null),
-			AList.of(AMap.of(null,AList.of("qux"))),
-			AList.of(AMap.of("quux",AList.of((Object)null))),
-			AList.of(AMap.of(null,AList.of((Object)null))),
+		List<List<Map<?,?>>> in = list(
+			list(map("f",list("foo"))),
+			list(map("f",list("bar"))),
+			list((Map<?,?>)null),
+			list(map(null,list("qux"))),
+			list(map("quux",list((Object)null))),
+			list(map(null,list((Object)null))),
 			null
 		);
 		assertObject(run(in, "f=foo")).asJson().is("[[{f:['foo']}]]");
@@ -954,13 +955,13 @@ public class PojoSearcherTest {
 
 	@Test
 	public void d3SetOfSetOfMapsWithCollections() throws Exception {
-		Set<Set<Map<?,?>>> in = ASet.of(
-			ASet.of(AMap.of("f",ASet.of("foo"))),
-			ASet.of(AMap.of("f",ASet.of("bar"))),
-			ASet.of((Map<?,?>)null),
-			ASet.of(AMap.of(null,ASet.of("qux"))),
-			ASet.of(AMap.of("quux",ASet.of((Object)null))),
-			ASet.of(AMap.of(null,ASet.of((Object)null))),
+		Set<Set<Map<?,?>>> in = set(
+			set(map("f",set("foo"))),
+			set(map("f",set("bar"))),
+			set((Map<?,?>)null),
+			set(map(null,set("qux"))),
+			set(map("quux",set((Object)null))),
+			set(map(null,set((Object)null))),
 			null
 		);
 		assertObject(run(in, "f=foo")).asJson().is("[[{f:['foo']}]]");
@@ -969,12 +970,12 @@ public class PojoSearcherTest {
 	@Test
 	public void d3ArrayOfArrayOfMapsWithCollections() throws Exception {
 		Map<?,?>[][] in = new Map[][]{
-			new Map[]{AMap.of("f",new Object[]{"foo"})},
-			new Map[]{AMap.of("f",new Object[]{"bar"})},
+			new Map[]{map("f",new Object[]{"foo"})},
+			new Map[]{map("f",new Object[]{"bar"})},
 			new Map[]{null},
-			new Map[]{AMap.of(null,new Object[]{"qux"})},
-			new Map[]{AMap.of("quux",new Object[]{null})},
-			new Map[]{AMap.of(null,new Object[]{null})},
+			new Map[]{map(null,new Object[]{"qux"})},
+			new Map[]{map("quux",new Object[]{null})},
+			new Map[]{map(null,new Object[]{null})},
 			null
 		};
 		assertObject(run(in, "f=foo")).asJson().is("[[{f:['foo']}]]");

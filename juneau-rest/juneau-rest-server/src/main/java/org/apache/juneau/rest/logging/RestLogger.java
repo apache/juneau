@@ -14,6 +14,7 @@ package org.apache.juneau.rest.logging;
 
 import static java.util.logging.Level.*;
 import static org.apache.juneau.Enablement.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.SystemEnv.*;
 import static org.apache.juneau.rest.logging.RestLoggingDetail.*;
 
@@ -155,7 +156,7 @@ public interface RestLogger {
 
 		Logger logger;
 		ThrownStore thrownStore;
-		List<RestLoggerRule> normalRules = AList.create(), debugRules = AList.create();
+		List<RestLoggerRule> normalRules = list(), debugRules = list();
 		Enablement enabled;
 		Predicate<HttpServletRequest> enabledTest;
 		RestLoggingDetail requestDetail, responseDetail;

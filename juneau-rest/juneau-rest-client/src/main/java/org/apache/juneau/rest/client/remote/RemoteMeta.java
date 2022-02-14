@@ -14,13 +14,13 @@ package org.apache.juneau.rest.client.remote;
 
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.remote.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -80,14 +80,14 @@ public class RemoteMeta {
 		if (clientVersion != null)
 			headersBuilder.append(stringHeader(versionHeader, clientVersion));
 
-		AMap<Method,RemoteOperationMeta> operations = AMap.create();
+		Map<Method,RemoteOperationMeta> operations = map();
 		String path2 = path;
 		ci.forEachPublicMethod(
 			x -> true,
 			x -> operations.put(x.inner(), new RemoteOperationMeta(path2, x.inner(), "GET"))
 		);
 
-		this.operations = operations.unmodifiable();
+		this.operations = unmodifiable(operations);
 		this.headers = headersBuilder.build();
 	}
 

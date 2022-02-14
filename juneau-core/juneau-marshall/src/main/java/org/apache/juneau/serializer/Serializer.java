@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
-import static java.util.Optional.*;
 import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -1330,8 +1331,8 @@ public class Serializer extends BeanTraverseContext {
 		listener = builder.listener;
 
 		this.producesMediaType = MediaType.of(produces);
-		this.acceptRanges = ofNullable(accept).map(MediaRanges::of).orElseGet(()->MediaRanges.of(produces));
-		this.acceptMediaTypes = ofNullable(builder.accept).map(x -> StringUtils.split(x, ',')).map(MediaType::ofAll).orElseGet(()->new MediaType[] {this.producesMediaType});
+		this.acceptRanges = optional(accept).map(MediaRanges::of).orElseGet(()->MediaRanges.of(produces));
+		this.acceptMediaTypes = optional(builder.accept).map(x -> split(x)).map(MediaType::ofAll).orElseGet(()->new MediaType[] {this.producesMediaType});
 	}
 
 	@Override /* Context */

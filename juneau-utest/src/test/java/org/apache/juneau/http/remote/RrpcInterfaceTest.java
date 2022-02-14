@@ -15,6 +15,7 @@ package org.apache.juneau.http.remote;
 import static java.util.Arrays.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpMethod.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.testutils.Constants.*;
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
@@ -23,7 +24,6 @@ import static org.junit.runners.MethodSorters.*;
 import java.util.*;
 
 import org.apache.juneau.html.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
@@ -309,17 +309,17 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public List<List<List<Integer>>> returnInteger3dList() {
-					return AList.of(AList.of(AList.of(1,null),null),null);
+					return list(list(list(1,null),null),null);
 				}
 
 				@Override
 				public List<Integer[][][]> returnInteger1d3dList() {
-					return AList.of(new Integer[][][]{{{1,null},null},null},null);
+					return list(new Integer[][][]{{{1,null},null},null},null);
 				}
 
 				@Override
 				public List<int[][][]> returnInt1d3dList() {
-					return AList.of(new int[][][]{{{1,2},null},null},null);
+					return list(new int[][][]{{{1,2},null},null},null);
 				}
 
 				@Override
@@ -346,27 +346,27 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public List<ABean[][][]> returnBean1d3dList() {
-					return AList.of(new ABean[][][]{{{ABean.get(),null},null},null},null);
+					return list(new ABean[][][]{{{ABean.get(),null},null},null},null);
 				}
 
 				@Override
 				public Map<String,ABean> returnBeanMap() {
-					return AMap.of("foo",ABean.get());
+					return map("foo",ABean.get());
 				}
 
 				@Override
 				public Map<String,List<ABean>> returnBeanListMap() {
-					return AMap.of("foo",asList(ABean.get()));
+					return map("foo",asList(ABean.get()));
 				}
 
 				@Override
 				public Map<String,List<ABean[][][]>> returnBean1d3dListMap() {
-					return AMap.of("foo",AList.of(new ABean[][][]{{{ABean.get(),null},null},null},null));
+					return map("foo",list(new ABean[][][]{{{ABean.get(),null},null},null},null));
 				}
 
 				@Override
 				public Map<Integer,List<ABean>> returnBeanListMapIntegerKeys() {
-					return AMap.of(1,asList(ABean.get()));
+					return map(1,asList(ABean.get()));
 				}
 
 				// Typed beans
@@ -388,27 +388,27 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public List<TypedBean[][][]> returnTypedBean1d3dList() {
-					return AList.of(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null);
+					return list(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null);
 				}
 
 				@Override
 				public Map<String,TypedBean> returnTypedBeanMap() {
-					return AMap.of("foo",TypedBeanImpl.get());
+					return map("foo",TypedBeanImpl.get());
 				}
 
 				@Override
 				public Map<String,List<TypedBean>> returnTypedBeanListMap() {
-					return AMap.of("foo",asList((TypedBean)TypedBeanImpl.get()));
+					return map("foo",asList((TypedBean)TypedBeanImpl.get()));
 				}
 
 				@Override
 				public Map<String,List<TypedBean[][][]>> returnTypedBean1d3dListMap() {
-					return AMap.of("foo",AList.of(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null));
+					return map("foo",list(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null));
 				}
 
 				@Override
 				public Map<Integer,List<TypedBean>> returnTypedBeanListMapIntegerKeys() {
-					return AMap.of(1,asList((TypedBean)TypedBeanImpl.get()));
+					return map(1,asList((TypedBean)TypedBeanImpl.get()));
 				}
 
 				// Swapped POJOs
@@ -425,12 +425,12 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public Map<SwappedObject,SwappedObject> returnSwappedObjectMap() {
-					return AMap.of(new SwappedObject(),new SwappedObject());
+					return map(new SwappedObject(),new SwappedObject());
 				}
 
 				@Override
 				public Map<SwappedObject,SwappedObject[][][]> returnSwappedObject3dMap() {
-					return AMap.of(new SwappedObject(),new SwappedObject[][][]{{{new SwappedObject(),null},null},null});
+					return map(new SwappedObject(),new SwappedObject[][][]{{{new SwappedObject(),null},null},null});
 				}
 
 				// Implicit swapped POJOs
@@ -447,12 +447,12 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public Map<ImplicitSwappedObject,ImplicitSwappedObject> returnImplicitSwappedObjectMap() {
-					return AMap.of(new ImplicitSwappedObject(),new ImplicitSwappedObject());
+					return map(new ImplicitSwappedObject(),new ImplicitSwappedObject());
 				}
 
 				@Override
 				public Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> returnImplicitSwappedObject3dMap() {
-					return AMap.of(new ImplicitSwappedObject(),new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null});
+					return map(new ImplicitSwappedObject(),new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null});
 				}
 
 				// Enums
@@ -469,32 +469,32 @@ public class RrpcInterfaceTest {
 
 				@Override
 				public List<TestEnum> returnEnumList() {
-					return AList.of(TestEnum.TWO,null);
+					return list(TestEnum.TWO,null);
 				}
 
 				@Override
 				public List<List<List<TestEnum>>> returnEnum3dList() {
-					return AList.of(AList.of(AList.of(TestEnum.TWO,null),null),null);
+					return list(list(list(TestEnum.TWO,null),null),null);
 				}
 
 				@Override
 				public List<TestEnum[][][]> returnEnum1d3dList() {
-					return AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null);
+					return list(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null);
 				}
 
 				@Override
 				public Map<TestEnum,TestEnum> returnEnumMap() {
-					return AMap.of(TestEnum.ONE,TestEnum.TWO);
+					return map(TestEnum.ONE,TestEnum.TWO);
 				}
 
 				@Override
 				public Map<TestEnum,TestEnum[][][]> returnEnum3dArrayMap() {
-					return AMap.of(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null});
+					return map(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null});
 				}
 
 				@Override
 				public Map<TestEnum,List<TestEnum[][][]>> returnEnum1d3dListMap() {
-					return AMap.of(TestEnum.ONE,AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
+					return map(TestEnum.ONE,list(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
 				}
 
 				//--------------------------------------------------------------------------------
@@ -1366,26 +1366,26 @@ public class RrpcInterfaceTest {
 
 	@Test
 	public void h14_setIntegerList() {
-		proxy.setIntegerList(AList.of(1,null));
+		proxy.setIntegerList(list(1,null));
 	}
 
 	@Test
 	public void h15_setInteger3dList() {
 		proxy.setInteger3dList(
-			AList.of(AList.of(AList.of(1,null),null),null));
+			list(list(list(1,null),null),null));
 	}
 
 	@Test
 	public void h16_setInteger1d3dList() {
 		proxy.setInteger1d3dList(
-			AList.of(new Integer[][][]{{{1,null},null},null},null)
+			list(new Integer[][][]{{{1,null},null},null},null)
 		);
 	}
 
 	@Test
 	public void h17_setInt1d3dList() {
 		proxy.setInt1d3dList(
-			AList.of(new int[][][]{{{1,2},null},null},null)
+			list(new int[][][]{{{1,2},null},null},null)
 		);
 	}
 
@@ -1412,27 +1412,27 @@ public class RrpcInterfaceTest {
 
 	@Test
 	public void h22_setBean1d3dList() {
-		proxy.setBean1d3dList(AList.of(new ABean[][][]{{{ABean.get(),null},null},null},null));
+		proxy.setBean1d3dList(list(new ABean[][][]{{{ABean.get(),null},null},null},null));
 	}
 
 	@Test
 	public void h23_setBeanMap() {
-		proxy.setBeanMap(AMap.of("foo",ABean.get()));
+		proxy.setBeanMap(map("foo",ABean.get()));
 	}
 
 	@Test
 	public void h24_setBeanListMap() {
-		proxy.setBeanListMap(AMap.of("foo",Arrays.asList(ABean.get())));
+		proxy.setBeanListMap(map("foo",Arrays.asList(ABean.get())));
 	}
 
 	@Test
 	public void h25_setBean1d3dListMap() {
-		proxy.setBean1d3dListMap(AMap.of("foo",AList.of(new ABean[][][]{{{ABean.get(),null},null},null},null)));
+		proxy.setBean1d3dListMap(map("foo",list(new ABean[][][]{{{ABean.get(),null},null},null},null)));
 	}
 
 	@Test
 	public void h26_setBeanListMapIntegerKeys() {
-		proxy.setBeanListMapIntegerKeys(AMap.of(1,Arrays.asList(ABean.get())));
+		proxy.setBeanListMapIntegerKeys(map(1,Arrays.asList(ABean.get())));
 	}
 
 	// Typed beans
@@ -1454,27 +1454,27 @@ public class RrpcInterfaceTest {
 
 	@Test
 	public void i04_setTypedBean1d3dList() {
-		proxy.setTypedBean1d3dList(AList.of(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null));
+		proxy.setTypedBean1d3dList(list(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null));
 	}
 
 	@Test
 	public void i05_setTypedBeanMap() {
-		proxy.setTypedBeanMap(AMap.of("foo",TypedBeanImpl.get()));
+		proxy.setTypedBeanMap(map("foo",TypedBeanImpl.get()));
 	}
 
 	@Test
 	public void i06_setTypedBeanListMap() {
-		proxy.setTypedBeanListMap(AMap.of("foo",Arrays.asList((TypedBean)TypedBeanImpl.get())));
+		proxy.setTypedBeanListMap(map("foo",Arrays.asList((TypedBean)TypedBeanImpl.get())));
 	}
 
 	@Test
 	public void i07_setTypedBean1d3dListMap() {
-		proxy.setTypedBean1d3dListMap(AMap.of("foo",AList.of(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)));
+		proxy.setTypedBean1d3dListMap(map("foo",list(new TypedBean[][][]{{{TypedBeanImpl.get(),null},null},null},null)));
 	}
 
 	@Test
 	public void i08_setTypedBeanListMapIntegerKeys() {
-		proxy.setTypedBeanListMapIntegerKeys(AMap.of(1,Arrays.asList((TypedBean)TypedBeanImpl.get())));
+		proxy.setTypedBeanListMapIntegerKeys(map(1,Arrays.asList((TypedBean)TypedBeanImpl.get())));
 	}
 
 	// Swapped POJOs
@@ -1491,12 +1491,12 @@ public class RrpcInterfaceTest {
 
 	@Test
 	public void j03_setSwappedObjectMap() {
-		proxy.setSwappedObjectMap(AMap.of(new SwappedObject(),new SwappedObject()));
+		proxy.setSwappedObjectMap(map(new SwappedObject(),new SwappedObject()));
 	}
 
 	@Test
 	public void j04_setSwappedObject3dMap() {
-		proxy.setSwappedObject3dMap(AMap.of(new SwappedObject(),new SwappedObject[][][]{{{new SwappedObject(),null},null},null}));
+		proxy.setSwappedObject3dMap(map(new SwappedObject(),new SwappedObject[][][]{{{new SwappedObject(),null},null},null}));
 	}
 
 	// Implicit swapped POJOs
@@ -1512,12 +1512,12 @@ public class RrpcInterfaceTest {
 
 	@Test
 	public void k03_setImplicitSwappedObjectMap() {
-		proxy.setImplicitSwappedObjectMap(AMap.of(new ImplicitSwappedObject(),new ImplicitSwappedObject()));
+		proxy.setImplicitSwappedObjectMap(map(new ImplicitSwappedObject(),new ImplicitSwappedObject()));
 	}
 
 	@Test
 	public void k04_setImplicitSwappedObject3dMap() {
-		proxy.setImplicitSwappedObject3dMap(AMap.of(new ImplicitSwappedObject(),new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null}));
+		proxy.setImplicitSwappedObject3dMap(map(new ImplicitSwappedObject(),new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null}));
 	}
 
 	// Enums
@@ -1534,32 +1534,32 @@ public class RrpcInterfaceTest {
 
 	@Test
 	public void l03_setEnumList() {
-		proxy.setEnumList(AList.of(TestEnum.TWO,null));
+		proxy.setEnumList(list(TestEnum.TWO,null));
 	}
 
 	@Test
 	public void l04_setEnum3dList() {
-		proxy.setEnum3dList(AList.of(AList.of(AList.of(TestEnum.TWO,null),null),null));
+		proxy.setEnum3dList(list(list(list(TestEnum.TWO,null),null),null));
 	}
 
 	@Test
 	public void l05_setEnum1d3dList() {
-		proxy.setEnum1d3dList(AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
+		proxy.setEnum1d3dList(list(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null));
 	}
 
 	@Test
 	public void l06_setEnumMap() {
-		proxy.setEnumMap(AMap.of(TestEnum.ONE,TestEnum.TWO));
+		proxy.setEnumMap(map(TestEnum.ONE,TestEnum.TWO));
 	}
 
 	@Test
 	public void l07_setEnum3dArrayMap() {
-		proxy.setEnum3dArrayMap(AMap.of(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null}));
+		proxy.setEnum3dArrayMap(map(TestEnum.ONE,new TestEnum[][][]{{{TestEnum.TWO,null},null},null}));
 	}
 
 	@Test
 	public void l08_setEnum1d3dListMap() {
-		proxy.setEnum1d3dListMap(AMap.of(TestEnum.ONE,AList.of(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
+		proxy.setEnum1d3dListMap(map(TestEnum.ONE,list(new TestEnum[][][]{{{TestEnum.TWO,null},null},null},null)));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1571,7 +1571,7 @@ public class RrpcInterfaceTest {
 		int x1 = 1;
 		int[][][] x2 = new int[][][]{{{1,2},null},null};
 		int[][][] x2n = null;
-		List<int[][][]> x3 = AList.of(x2,null);
+		List<int[][][]> x3 = list(x2,null);
 		List<int[][][]> x3n = null;
 		proxy.setMultiParamsInts(x1,x2,x2n,x3,x3n);
 	}
@@ -1582,7 +1582,7 @@ public class RrpcInterfaceTest {
 		Integer x1n = null;
 		Integer[][][] x2 = new Integer[][][]{{{1,null},null},null};
 		Integer[][][] x2n = null;
-		List<Integer[][][]> x3 = AList.of(x2,null);
+		List<Integer[][][]> x3 = list(x2,null);
 		List<Integer[][][]> x3n = null;
 		proxy.setMultiParamsInteger(x1,x1n,x2,x2n,x3,x3n);
 	}
@@ -1592,7 +1592,7 @@ public class RrpcInterfaceTest {
 		float x1 = 1;
 		float[][][] x2 = new float[][][]{{{1,2},null},null};
 		float[][][] x2n = null;
-		List<float[][][]> x3 = AList.of(x2,null);
+		List<float[][][]> x3 = list(x2,null);
 		List<float[][][]> x3n = null;
 		proxy.setMultiParamsFloat(x1,x2,x2n,x3,x3n);
 	}
@@ -1603,7 +1603,7 @@ public class RrpcInterfaceTest {
 		Float x1n = null;
 		Float[][][] x2 = new Float[][][]{{{1f,null},null},null};
 		Float[][][] x2n = null;
-		List<Float[][][]> x3 = AList.of(x2,null);
+		List<Float[][][]> x3 = list(x2,null);
 		List<Float[][][]> x3n = null;
 		proxy.setMultiParamsFloatObject(x1,x1n,x2,x2n,x3,x3n);
 	}
@@ -1613,7 +1613,7 @@ public class RrpcInterfaceTest {
 		String x1 = "foo";
 		String[][][] x2 = new String[][][]{{{"foo",null},null},null};
 		String[][][] x2n = null;
-		List<String[][][]> x3 = AList.of(x2,null);
+		List<String[][][]> x3 = list(x2,null);
 		List<String[][][]> x3n = null;
 		proxy.setMultiParamsString(x1,x2,x2n,x3,x3n);
 	}
@@ -1623,11 +1623,11 @@ public class RrpcInterfaceTest {
 		ABean x1 = ABean.get();
 		ABean[][][] x2 = new ABean[][][]{{{ABean.get(),null},null},null};
 		ABean[][][] x2n = null;
-		List<ABean[][][]> x3 = AList.of(x2,null);
+		List<ABean[][][]> x3 = list(x2,null);
 		List<ABean[][][]> x3n = null;
-		Map<String,ABean> x4 = AMap.of("foo",ABean.get());
+		Map<String,ABean> x4 = map("foo",ABean.get());
 		Map<String,ABean> x4n = null;
-		Map<String,List<ABean[][][]>> x5 = AMap.of("foo",x3);
+		Map<String,List<ABean[][][]>> x5 = map("foo",x3);
 		Map<String,List<ABean[][][]>> x5n = null;
 		proxy.setMultiParamsBean(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n);
 	}
@@ -1637,11 +1637,11 @@ public class RrpcInterfaceTest {
 		SwappedObject x1 = new SwappedObject();
 		SwappedObject[][][] x2 = new SwappedObject[][][]{{{new SwappedObject(),null},null},null};
 		SwappedObject[][][] x2n = null;
-		List<SwappedObject[][][]> x3 = AList.of(x2,null);
+		List<SwappedObject[][][]> x3 = list(x2,null);
 		List<SwappedObject[][][]> x3n = null;
-		Map<SwappedObject,SwappedObject> x4 = AMap.of(new SwappedObject(),new SwappedObject());
+		Map<SwappedObject,SwappedObject> x4 = map(new SwappedObject(),new SwappedObject());
 		Map<SwappedObject,SwappedObject> x4n = null;
-		Map<SwappedObject,List<SwappedObject[][][]>> x5 = AMap.of(new SwappedObject(),x3);
+		Map<SwappedObject,List<SwappedObject[][][]>> x5 = map(new SwappedObject(),x3);
 		Map<SwappedObject,List<SwappedObject[][][]>> x5n = null;
 		proxy.setMultiParamsSwappedObject(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n);
 	}
@@ -1651,11 +1651,11 @@ public class RrpcInterfaceTest {
 		ImplicitSwappedObject x1 = new ImplicitSwappedObject();
 		ImplicitSwappedObject[][][] x2 = new ImplicitSwappedObject[][][]{{{new ImplicitSwappedObject(),null},null},null};
 		ImplicitSwappedObject[][][] x2n = null;
-		List<ImplicitSwappedObject[][][]> x3 = AList.of(x2,null);
+		List<ImplicitSwappedObject[][][]> x3 = list(x2,null);
 		List<ImplicitSwappedObject[][][]> x3n = null;
-		Map<ImplicitSwappedObject,ImplicitSwappedObject> x4 = AMap.of(new ImplicitSwappedObject(),new ImplicitSwappedObject());
+		Map<ImplicitSwappedObject,ImplicitSwappedObject> x4 = map(new ImplicitSwappedObject(),new ImplicitSwappedObject());
 		Map<ImplicitSwappedObject,ImplicitSwappedObject> x4n = null;
-		Map<ImplicitSwappedObject,List<ImplicitSwappedObject[][][]>> x5 = AMap.of(new ImplicitSwappedObject(),x3);
+		Map<ImplicitSwappedObject,List<ImplicitSwappedObject[][][]>> x5 = map(new ImplicitSwappedObject(),x3);
 		Map<ImplicitSwappedObject,List<ImplicitSwappedObject[][][]>> x5n = null;
 		proxy.setMultiParamsImplicitSwappedObject(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n);
 	}
@@ -1665,11 +1665,11 @@ public class RrpcInterfaceTest {
 		TestEnum x1 = TestEnum.TWO;
 		TestEnum[][][] x2 = new TestEnum[][][]{{{TestEnum.TWO,null},null},null};
 		TestEnum[][][] x2n = null;
-		List<TestEnum[][][]> x3 = AList.of(x2,null);
+		List<TestEnum[][][]> x3 = list(x2,null);
 		List<TestEnum[][][]> x3n = null;
-		Map<TestEnum,TestEnum> x4 = AMap.of(TestEnum.ONE,TestEnum.TWO);
+		Map<TestEnum,TestEnum> x4 = map(TestEnum.ONE,TestEnum.TWO);
 		Map<TestEnum,TestEnum> x4n = null;
-		Map<TestEnum,List<TestEnum[][][]>> x5 = AMap.of(TestEnum.ONE,x3);
+		Map<TestEnum,List<TestEnum[][][]>> x5 = map(TestEnum.ONE,x3);
 		Map<TestEnum,List<TestEnum[][][]>> x5n = null;
 		proxy.setMultiParamsEnum(x1,x2,x2n,x3,x3n,x4,x4n,x5,x5n);
 	}

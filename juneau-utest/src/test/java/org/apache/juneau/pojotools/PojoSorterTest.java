@@ -13,11 +13,11 @@
 package org.apache.juneau.pojotools;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.internal.*;
 import org.junit.*;
 
 /**
@@ -86,28 +86,28 @@ public class PojoSorterTest {
 
 	@Test
 	public void beanList() {
-		Object in = AList.of(A.create("c"),A.create("a"),A.create("b"),A.create("e"),A.create("d"));
+		Object in = list(A.create("c"),A.create("a"),A.create("b"),A.create("e"),A.create("d"));
 		SortArgs sa = new SortArgs("f");
 		assertObject(p.run(bs, in, sa)).asJson().is("[{f:'a'},{f:'b'},{f:'c'},{f:'d'},{f:'e'}]");
 	}
 
 	@Test
 	public void beanList_reverse() {
-		Object in = AList.of(A.create("c"),A.create("a"),A.create("b"),A.create("e"),A.create("d"));
+		Object in = list(A.create("c"),A.create("a"),A.create("b"),A.create("e"),A.create("d"));
 		SortArgs sa = new SortArgs("f-");
 		assertObject(p.run(bs, in, sa)).asJson().is("[{f:'e'},{f:'d'},{f:'c'},{f:'b'},{f:'a'}]");
 	}
 
 	@Test
 	public void beanListContainingNull() {
-		Object in = AList.of(A.create("c"),A.create("a"),null,null,A.create("b"));
+		Object in = list(A.create("c"),A.create("a"),null,null,A.create("b"));
 		SortArgs sa = new SortArgs("f");
 		assertObject(p.run(bs, in, sa)).asJson().is("[null,null,{f:'a'},{f:'b'},{f:'c'}]");
 	}
 
 	@Test
 	public void beanListContainingDups() {
-		Object in = AList.of(A.create("c"),A.create("a"),null,A.create("a"),A.create("b"));
+		Object in = list(A.create("c"),A.create("a"),null,A.create("a"),A.create("b"));
 		SortArgs sa = new SortArgs("f");
 		assertObject(p.run(bs, in, sa)).asJson().is("[null,{f:'a'},{f:'a'},{f:'b'},{f:'c'}]");
 	}
@@ -118,28 +118,28 @@ public class PojoSorterTest {
 
 	@Test
 	public void beanSet() {
-		Object in = ASet.of(A.create("c"),A.create("a"),A.create("b"),A.create("e"),A.create("d"));
+		Object in = set(A.create("c"),A.create("a"),A.create("b"),A.create("e"),A.create("d"));
 		SortArgs sa = new SortArgs("f");
 		assertObject(p.run(bs, in, sa)).asJson().is("[{f:'a'},{f:'b'},{f:'c'},{f:'d'},{f:'e'}]");
 	}
 
 	@Test
 	public void betSet_reverse() {
-		Object in = ASet.of(A.create("c"),A.create("a"),A.create("b"),A.create("e"),A.create("d"));
+		Object in = set(A.create("c"),A.create("a"),A.create("b"),A.create("e"),A.create("d"));
 		SortArgs sa = new SortArgs("f-");
 		assertObject(p.run(bs, in, sa)).asJson().is("[{f:'e'},{f:'d'},{f:'c'},{f:'b'},{f:'a'}]");
 	}
 
 	@Test
 	public void beanSetContainingNull() {
-		Object in = ASet.of(A.create("c"),A.create("a"),null,null,A.create("b"));
+		Object in = set(A.create("c"),A.create("a"),null,null,A.create("b"));
 		SortArgs sa = new SortArgs("f");
 		assertObject(p.run(bs, in, sa)).asJson().is("[null,{f:'a'},{f:'b'},{f:'c'}]");
 	}
 
 	@Test
 	public void beanSetContainingDups() {
-		Object in = ASet.of(A.create("c"),A.create("a"),null,A.create("a"),A.create("b"));
+		Object in = set(A.create("c"),A.create("a"),null,A.create("a"),A.create("b"));
 		SortArgs sa = new SortArgs("f");
 		assertObject(p.run(bs, in, sa)).asJson().is("[null,{f:'a'},{f:'a'},{f:'b'},{f:'c'}]");
 	}
@@ -150,14 +150,14 @@ public class PojoSorterTest {
 
 	@Test
 	public void emptySort() {
-		Object in = ASet.of(A.create("c"),A.create("a"),A.create("b"));
+		Object in = set(A.create("c"),A.create("a"),A.create("b"));
 		SortArgs sa = new SortArgs();
 		assertObject(p.run(bs, in, sa)).asJson().is("[{f:'c'},{f:'a'},{f:'b'}]");
 	}
 
 	@Test
 	public void invalidDataType() {
-		Object in = AMap.of("a","b");
+		Object in = map("a","b");
 		SortArgs sa = new SortArgs("x");
 		in = p.run(bs, in, sa);
 		assertObject(in).asJson().is("{a:'b'}");
@@ -169,14 +169,14 @@ public class PojoSorterTest {
 
 	@Test
 	public void listOfMaps() {
-		Object in = AList.of(AMap.of("f","c"),AMap.of("f","a"),AMap.of("f","b"),AMap.of("f","e"),AMap.of("f","d"));
+		Object in = list(map("f","c"),map("f","a"),map("f","b"),map("f","e"),map("f","d"));
 		SortArgs sa = new SortArgs("f");
 		assertObject(p.run(bs, in, sa)).asJson().is("[{f:'a'},{f:'b'},{f:'c'},{f:'d'},{f:'e'}]");
 	}
 
 	@Test
 	public void listOfMaps_reverse() {
-		Object in = AList.of(AMap.of("f","c"),AMap.of("f","a"),AMap.of("f","b"),AMap.of("f","e"),AMap.of("f","d"));
+		Object in = list(map("f","c"),map("f","a"),map("f","b"),map("f","e"),map("f","d"));
 		SortArgs sa = new SortArgs("f-");
 		assertObject(p.run(bs, in, sa)).asJson().is("[{f:'e'},{f:'d'},{f:'c'},{f:'b'},{f:'a'}]");
 	}
@@ -187,14 +187,14 @@ public class PojoSorterTest {
 
 	@Test
 	public void listOfOther() {
-		Object in = AList.of(AList.of("c"),AList.of("a"),AList.of("b"));
+		Object in = list(list("c"),list("a"),list("b"));
 		SortArgs sa = new SortArgs("f");
 		assertObject(p.run(bs, in, sa)).asJson().is("[['c'],['a'],['b']]");
 	}
 
 	@Test
 	public void listOfOther_reverse() {
-		Object in = AList.of(AList.of("c"),AList.of("a"),AList.of("b"));
+		Object in = list(list("c"),list("a"),list("b"));
 		SortArgs sa = new SortArgs("f-");
 		assertObject(p.run(bs, in, sa)).asJson().is("[['c'],['a'],['b']]");
 	}

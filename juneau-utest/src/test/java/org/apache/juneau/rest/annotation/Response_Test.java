@@ -12,13 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.rest.client.*;
@@ -299,7 +299,7 @@ public class Response_Test {
 	public static class G {
 		@RestGet
 		public void a(@Response Value<List<Integer>> body) {
-			body.set(AList.of(1,2));
+			body.set(list(1,2));
 		}
 		@RestGet
 		public void b(Value<G1> body) {
@@ -308,7 +308,7 @@ public class Response_Test {
 		@RestGet
 		@Response
 		public List<Integer> c() {
-			return AList.of(1,2);
+			return list(1,2);
 		}
 		@RestGet
 		public G1 d() {

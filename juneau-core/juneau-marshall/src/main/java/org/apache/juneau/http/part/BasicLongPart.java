@@ -13,8 +13,8 @@
 package org.apache.juneau.http.part;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.Optional.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -108,7 +108,7 @@ public class BasicLongPart extends BasicPart {
 	 * @return The part value as a long, or {@link Optional#empty()} if the value is <jk>null</jk>
 	 */
 	public Optional<Long> asLong() {
-		return ofNullable(getParsedValue());
+		return optional(getParsedValue());
 	}
 
 	/**

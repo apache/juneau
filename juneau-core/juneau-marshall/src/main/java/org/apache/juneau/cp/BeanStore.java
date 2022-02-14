@@ -13,8 +13,8 @@
 package org.apache.juneau.cp;
 
 import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
-import static java.util.Optional.*;
 import static java.util.stream.Collectors.*;
 
 import java.lang.annotation.*;
@@ -291,8 +291,8 @@ public class BeanStore {
 	 * @param builder The builder containing the settings for this bean.
 	 */
 	protected BeanStore(Builder builder) {
-		parent = ofNullable(builder.parent);
-		outer = ofNullable(builder.outer);
+		parent = optional(builder.parent);
+		outer = optional(builder.outer);
 		readOnly = builder.readOnly;
 		threadSafe = builder.threadSafe;
 		lock = threadSafe ? new SimpleReadWriteLock() : SimpleReadWriteLock.NO_OP;
@@ -409,7 +409,7 @@ public class BeanStore {
 		try (SimpleLock x = lock.read()) {
 			BeanStoreEntry<T> e = (BeanStoreEntry<T>) unnamedEntries.get(beanType);
 			if (e != null)
-				return ofNullable(e.get());
+				return optional(e.get());
 			if (parent.isPresent())
 				return parent.get().getBean(beanType);
 			return empty();
@@ -428,7 +428,7 @@ public class BeanStore {
 		try (SimpleLock x = lock.read()) {
 			BeanStoreEntry<T> e = (BeanStoreEntry<T>)entries.stream().filter(x2 -> x2.matches(beanType, name)).findFirst().orElse(null);
 			if (e != null)
-				return ofNullable(e.get());
+				return optional(e.get());
 			if (parent.isPresent())
 				return parent.get().getBean(beanType, name);
 			return empty();
@@ -576,7 +576,7 @@ public class BeanStore {
 	 */
 	public String getMissingParams(ExecutableInfo executable) {
 		List<ParamInfo> params = executable.getParams();
-		List<String> l = AList.create();
+		List<String> l = list();
 		loop: for (int i = 0; i < params.size(); i++) {
 			ParamInfo pi = params.get(i);
 			ClassInfo pt = pi.getParameterType();

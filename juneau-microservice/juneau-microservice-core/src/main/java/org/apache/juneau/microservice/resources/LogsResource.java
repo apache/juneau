@@ -22,17 +22,14 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.dto.*;
 import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.http.annotation.Path;
-import org.apache.juneau.http.annotation.Query;
-import org.apache.juneau.http.annotation.Response;
-import org.apache.juneau.http.annotation.Schema;
+import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
-import org.apache.juneau.rest.config.BasicUniversalConfig;
+import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.converter.*;
-import org.apache.juneau.rest.servlet.BasicRestServlet;
-import org.apache.juneau.http.response.*;
+import org.apache.juneau.rest.servlet.*;
 
 /**
  * REST resource for viewing and accessing log files.

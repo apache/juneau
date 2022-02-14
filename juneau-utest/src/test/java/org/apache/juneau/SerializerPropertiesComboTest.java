@@ -12,11 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
 import org.junit.runner.*;
@@ -125,7 +126,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				new ComboInput<>(
 					"SERIALIZER_sortCollections",
 					List.class,
-					Collections.unmodifiableList(AList.of("c","a","b"))
+					unmodifiable(list("c","a","b"))
 				)
 				.json("['a','b','c']")
 				.jsonT("['a','b','c']")
@@ -154,7 +155,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 				new ComboInput<>(
 					"SERIALIZER_sortMaps",
 					Map.class,
-					Collections.unmodifiableMap(AMap.<String,String>of("c","3","a","1","b","2"))
+					unmodifiable(map("c","3","a","1","b","2"))
 				)
 				.json("{a:'1',b:'2',c:'3'}")
 				.jsonT("{a:'1',b:'2',c:'3'}")
@@ -406,12 +407,12 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 	}
 
 	public static class T5 {
-		public List<String> f1 = AList.create();
+		public List<String> f1 = list();
 		public String[] f2 = {};
 	}
 
 	public static class T6 {
-		public Map<String,String> f1 = AMap.create();
+		public Map<String,String> f1 = map();
 		public OMap f2 = OMap.create();
 	}
 

@@ -547,6 +547,16 @@ public final class StringUtils {
 	}
 
 	/**
+	 * Same as {@link #split(String)} but consumes the tokens instead of creating an array.
+	 *
+	 * @param s The string to split.
+	 * @param consumer The consumer of the tokens.
+	 */
+	public static void split(String s, Consumer<String> consumer) {
+		split(s, ',', consumer);
+	}
+
+	/**
 	 * Splits a character-delimited string into a string array.
 	 *
 	 * <p>
@@ -571,6 +581,41 @@ public final class StringUtils {
 	 */
 	public static String[] split(String s, char c) {
 		return split(s, c, Integer.MAX_VALUE);
+	}
+
+	/**
+	 * Same as {@link #split(String,char)} but consumes the tokens instead of creating an array.
+	 *
+	 * @param s The string to split.
+	 * @param c The character to split on.
+	 * @param consumer The consumer of the tokens.
+	 */
+	public static void split(String s, char c, Consumer<String> consumer) {
+		AsciiSet escapeChars = getEscapeSet(c);
+
+		if (s == null)
+			return;
+		if (isEmpty(s))
+			return;
+		if (s.indexOf(c) == -1) {
+			consumer.accept(s);
+			return;
+		}
+
+		int x1 = 0, escapeCount = 0;
+		for (int i = 0; i < s.length(); i++) {
+			if (s.charAt(i) == '\\') escapeCount++;
+			else if (s.charAt(i)==c && escapeCount % 2 == 0) {
+				String s2 = s.substring(x1, i);
+				String s3 = unEscapeChars(s2, escapeChars);
+				consumer.accept(s3.trim());
+				x1 = i+1;
+			}
+			if (s.charAt(i) != '\\') escapeCount = 0;
+		}
+		String s2 = s.substring(x1);
+		String s3 = unEscapeChars(s2, escapeChars);
+		consumer.accept(s3.trim());
 	}
 
 	/**

@@ -13,6 +13,7 @@
 package org.apache.juneau.dto.atom;
 
 import static org.apache.juneau.dto.atom.Utils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
@@ -121,7 +122,7 @@ public class Entry extends CommonEntry {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Content> content() {
-		return Optional.ofNullable(content);
+		return optional(content);
 	}
 
 	/**
@@ -175,7 +176,7 @@ public class Entry extends CommonEntry {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Calendar> published() {
-		return Optional.ofNullable(published);
+		return optional(published);
 	}
 
 	/**
@@ -245,7 +246,7 @@ public class Entry extends CommonEntry {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Source> source() {
-		return Optional.ofNullable(source);
+		return optional(source);
 	}
 
 	/**
@@ -299,7 +300,7 @@ public class Entry extends CommonEntry {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Text> summary() {
-		return Optional.ofNullable(summary);
+		return optional(summary);
 	}
 
 	/**

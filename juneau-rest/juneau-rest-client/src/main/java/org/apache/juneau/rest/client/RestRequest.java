@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.collections.OMap.*;
@@ -54,7 +55,6 @@ import org.apache.juneau.http.header.Date;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
@@ -1629,7 +1629,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			return this;
 		}
 
-		List<Header> l = AList.create();
+		List<Header> l = list();
 
 		if (HttpHeaders.canCast(value)) {
 			l.add(HttpHeaders.cast(value));
@@ -1668,7 +1668,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			return this;
 		}
 
-		List<NameValuePair> l = AList.create();
+		List<NameValuePair> l = list();
 
 		if (HttpParts.canCast(value)) {
 			l.add(HttpParts.cast(value));
@@ -1708,7 +1708,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			return this;
 		}
 
-		List<NameValuePair> l = AList.create();
+		List<NameValuePair> l = list();
 
 		if (HttpParts.canCast(value)) {
 			l.add(HttpParts.cast(value));
@@ -1745,7 +1745,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (! isMulti)
 			return pathData(createPart(name, value, PATH, serializer, schema, false));
 
-		List<NameValuePair> l = AList.create();
+		List<NameValuePair> l = list();
 
 		if (HttpParts.canCast(value)) {
 			l.add(HttpParts.cast(value));

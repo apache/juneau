@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.msgpack.DataType.*;
 
 import java.io.IOException;
@@ -216,7 +217,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)Optional.ofNullable(parseAnything(eType.getElementType(), is, outer, pMeta));
+			return (T)optional(parseAnything(eType.getElementType(), is, outer, pMeta));
 
 		setCurrentClass(sType);
 

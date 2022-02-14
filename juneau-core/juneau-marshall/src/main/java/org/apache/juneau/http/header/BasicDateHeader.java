@@ -15,9 +15,8 @@ package org.apache.juneau.http.header;
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.Optional.*;
-
 import java.time.*;
 import java.util.*;
 import java.util.function.*;
@@ -158,9 +157,7 @@ public class BasicDateHeader extends BasicHeader {
 	 * @return This header value as a {@link ZonedDateTime}, or {@link Optional#empty()} if the header could not be parsed.
 	 */
 	public Optional<ZonedDateTime> asZonedDateTime() {
-		if (supplier != null)
-			return ofNullable(supplier.get());
-		return ofNullable(value);
+		return optional(supplier == null ? value : supplier.get());
 	}
 
 	/**

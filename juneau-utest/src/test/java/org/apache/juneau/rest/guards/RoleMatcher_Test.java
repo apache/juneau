@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.guards;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
@@ -44,7 +46,7 @@ public class RoleMatcher_Test {
 			return Collections.singleton(input);
 		if (input.isEmpty())
 			return Collections.emptySet();
-		return ASortedSet.of(StringUtils.split(input, ','));
+		return sortedSet(split(input));
 	}
 
 	private RoleMatcher create(String expression, String toString, String expressionRoles) throws Exception {

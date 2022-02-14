@@ -13,6 +13,7 @@
 package org.apache.juneau.parser;
 
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static java.util.Arrays.*;
@@ -154,7 +155,7 @@ public final class ParserSet {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(ParserSet.class, beanStore);
-			this.entries = AList.create();
+			this.entries = list();
 		}
 
 		/**
@@ -164,7 +165,7 @@ public final class ParserSet {
 		 */
 		protected Builder(ParserSet copyFrom) {
 			super(copyFrom.getClass(), BeanStore.INSTANCE);
-			this.entries = AList.create().append(asList(copyFrom.entries));
+			this.entries = list((Object[])copyFrom.entries);
 		}
 
 		/**
@@ -178,7 +179,7 @@ public final class ParserSet {
 		protected Builder(Builder copyFrom) {
 			super(copyFrom);
 			bcBuilder = copyFrom.bcBuilder == null ? null : copyFrom.bcBuilder.copy();
-			entries = AList.create();
+			entries = list();
 			copyFrom.entries.stream().map(x -> copyBuilder(x)).forEach(x -> entries.add(x));
 		}
 
@@ -498,8 +499,8 @@ public final class ParserSet {
 
 		this.entries = builder.entries.stream().map(x -> build(x)).toArray(Parser[]::new);
 
-		AList<MediaType> lmt = AList.create();
-		AList<Parser> l = AList.create();
+		List<MediaType> lmt = list();
+		List<Parser> l = list();
 		for (Parser e : entries) {
 			for (MediaType m: e.getMediaTypes()) {
 				lmt.add(m);
@@ -507,8 +508,8 @@ public final class ParserSet {
 			}
 		}
 
-		this.mediaTypes = lmt.unmodifiable();
-		this.mediaTypeParsers = l.unmodifiable();
+		this.mediaTypes = unmodifiable(lmt);
+		this.mediaTypeParsers = unmodifiable(l);
 	}
 
 	private Parser build(Object o) {

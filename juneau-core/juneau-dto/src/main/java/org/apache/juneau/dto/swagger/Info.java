@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
@@ -152,7 +153,7 @@ public class Info extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Contact> contact() {
-		return Optional.ofNullable(getContact());
+		return optional(getContact());
 	}
 
 	/**
@@ -232,7 +233,7 @@ public class Info extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> description() {
-		return Optional.ofNullable(getDescription());
+		return optional(getDescription());
 	}
 
 	/**
@@ -291,7 +292,7 @@ public class Info extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<License> license() {
-		return Optional.ofNullable(getLicense());
+		return optional(getLicense());
 	}
 
 	/**
@@ -369,7 +370,7 @@ public class Info extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> siteName() {
-		return Optional.ofNullable(getSiteName());
+		return optional(getSiteName());
 	}
 
 	/**
@@ -426,7 +427,7 @@ public class Info extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> termsOfService() {
-		return Optional.ofNullable(getTermsOfService());
+		return optional(getTermsOfService());
 	}
 
 	/**
@@ -483,7 +484,7 @@ public class Info extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> title() {
-		return Optional.ofNullable(getTitle());
+		return optional(getTitle());
 	}
 
 	/**
@@ -541,7 +542,7 @@ public class Info extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> version() {
-		return Optional.ofNullable(getVersion());
+		return optional(getVersion());
 	}
 
 	/**
@@ -597,14 +598,15 @@ public class Info extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		ASet<String> s = ASet.<String>of()
-			.appendIf(contact != null, "contact")
-			.appendIf(description != null, "description")
-			.appendIf(license != null, "license")
-			.appendIf(siteName != null, "siteName")
-			.appendIf(termsOfService != null, "termsOfService")
-			.appendIf(title != null, "title")
-			.appendIf(version != null, "version");
+		Set<String> s = setBuilder(String.class)
+			.addIf(contact != null, "contact")
+			.addIf(description != null, "description")
+			.addIf(license != null, "license")
+			.addIf(siteName != null, "siteName")
+			.addIf(termsOfService != null, "termsOfService")
+			.addIf(title != null, "title")
+			.addIf(version != null, "version")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 }

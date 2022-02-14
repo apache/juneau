@@ -23,7 +23,6 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -121,12 +120,12 @@ public class BeanMeta<T> {
 
 		this.beanFilter = beanFilter;
 		this.dictionaryName = b.dictionaryName;
-		this.properties = AMap.unmodifiable(b.properties);
-		this.hiddenProperties = b.hiddenProperties.unmodifiable();
-		this.getterProps = b.getterProps.unmodifiable();
-		this.setterProps = b.setterProps.unmodifiable();
+		this.properties = unmodifiable(b.properties);
+		this.hiddenProperties = unmodifiable(b.hiddenProperties);
+		this.getterProps = unmodifiable(b.getterProps);
+		this.setterProps = unmodifiable(b.setterProps);
 		this.dynaProperty = b.dynaProperty;
-		this.typeVarImpls = AMap.unmodifiable(b.typeVarImpls);
+		this.typeVarImpls = unmodifiable(b.typeVarImpls);
 		this.constructor = b.constructor;
 		this.constructorArgs = b.constructorArgs;
 		this.beanRegistry = b.beanRegistry;
@@ -142,12 +141,12 @@ public class BeanMeta<T> {
 		BeanFilter beanFilter;
 		String[] pNames;
 		Map<String,BeanPropertyMeta> properties;
-		AMap<String,BeanPropertyMeta> hiddenProperties = AMap.create();
-		AMap<Method,String> getterProps = AMap.create();
-		AMap<Method,String> setterProps = AMap.create();
+		Map<String,BeanPropertyMeta> hiddenProperties = map();
+		Map<Method,String> getterProps = map();
+		Map<Method,String> setterProps = map();
 		BeanPropertyMeta dynaProperty;
 
-		AMap<Class<?>,Class<?>[]> typeVarImpls;
+		Map<Class<?>,Class<?>[]> typeVarImpls;
 		ConstructorInfo constructor, implClassConstructor;
 		String[] constructorArgs = {};
 		PropertyNamer propertyNamer;
@@ -174,9 +173,9 @@ public class BeanMeta<T> {
 					mVis = ctx.getBeanMethodVisibility(),
 					fVis = ctx.getBeanFieldVisibility();
 
-				AList<Class<?>> bdClasses = AList.create();
+				List<Class<?>> bdClasses = list();
 				if (beanFilter != null && beanFilter.getBeanDictionary() != null)
-					bdClasses.a(beanFilter.getBeanDictionary());
+					addAll(bdClasses, beanFilter.getBeanDictionary());
 
 				Value<String> typeName = Value.empty();
 				classMeta.forEachAnnotation(Bean.class, x -> isNotEmpty(x.typeName()), x -> typeName.set(x.typeName()));
@@ -383,7 +382,7 @@ public class BeanMeta<T> {
 					}
 				}
 
-				typeVarImpls = AMap.create();
+				typeVarImpls = map();
 				findTypeVarImpls(c, typeVarImpls);
 				if (typeVarImpls.isEmpty())
 					typeVarImpls = null;

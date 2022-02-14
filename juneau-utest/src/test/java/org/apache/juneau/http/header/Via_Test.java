@@ -13,6 +13,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
 
@@ -32,7 +33,7 @@ public class Via_Test {
 
 	private static final String HEADER = "Via";
 	private static final String VALUE = "foo";
-	private static final List<String> PARSED = AList.of("foo");
+	private static final List<String> PARSED = list("foo");
 
 	@Rest
 	public static class A {

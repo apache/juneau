@@ -13,6 +13,7 @@
 package org.apache.juneau.dto.atom;
 
 import static org.apache.juneau.dto.atom.Utils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.util.*;
@@ -106,7 +107,7 @@ public class CommonEntry extends Common {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Person[]> authors() {
-		return Optional.ofNullable(authors);
+		return optional(authors);
 	}
 
 	/**
@@ -161,7 +162,7 @@ public class CommonEntry extends Common {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Category[]> categories() {
-		return Optional.ofNullable(categories);
+		return optional(categories);
 	}
 
 	/**
@@ -216,7 +217,7 @@ public class CommonEntry extends Common {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Person[]> contributors() {
-		return Optional.ofNullable(contributors);
+		return optional(contributors);
 	}
 
 	/**
@@ -270,7 +271,7 @@ public class CommonEntry extends Common {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Id> id() {
-		return Optional.ofNullable(id);
+		return optional(id);
 	}
 
 	/**
@@ -341,7 +342,7 @@ public class CommonEntry extends Common {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Link[]> links() {
-		return Optional.ofNullable(links);
+		return optional(links);
 	}
 
 	/**
@@ -395,7 +396,7 @@ public class CommonEntry extends Common {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Text> rights() {
-		return Optional.ofNullable(rights);
+		return optional(rights);
 	}
 
 	/**
@@ -465,7 +466,7 @@ public class CommonEntry extends Common {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Text> title() {
-		return Optional.ofNullable(title);
+		return optional(title);
 	}
 
 	/**
@@ -535,7 +536,7 @@ public class CommonEntry extends Common {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Calendar> updated() {
-		return Optional.ofNullable(updated);
+		return optional(updated);
 	}
 
 	/**

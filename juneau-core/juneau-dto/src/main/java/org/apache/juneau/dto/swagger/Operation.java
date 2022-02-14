@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.swagger;
 
-import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ConverterUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
@@ -263,7 +263,7 @@ public class Operation extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Set<MediaType>> consumes() {
-		return Optional.ofNullable(getConsumes());
+		return optional(getConsumes());
 	}
 
 	/**
@@ -361,7 +361,7 @@ public class Operation extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Boolean> deprecated() {
-		return Optional.ofNullable(getDeprecated());
+		return optional(getDeprecated());
 	}
 
 	/**
@@ -436,7 +436,7 @@ public class Operation extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> description() {
-		return Optional.ofNullable(getDescription());
+		return optional(getDescription());
 	}
 
 	/**
@@ -495,7 +495,7 @@ public class Operation extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<ExternalDocumentation> externalDocs() {
-		return Optional.ofNullable(getExternalDocs());
+		return optional(getExternalDocs());
 	}
 
 	/**
@@ -577,7 +577,7 @@ public class Operation extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> operationId() {
-		return Optional.ofNullable(getOperationId());
+		return optional(getOperationId());
 	}
 
 	/**
@@ -654,7 +654,7 @@ public class Operation extends SwaggerElement {
 	 * @return The matching parameter info, or <jk>null</jk> if not found.
 	 */
 	public Optional<ParameterInfo> parameter(String in, String name) {
-		return Optional.ofNullable(getParameter(in, name));
+		return optional(getParameter(in, name));
 	}
 
 	/**
@@ -694,7 +694,7 @@ public class Operation extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<List<ParameterInfo>> parameters() {
-		return Optional.ofNullable(getParameters());
+		return optional(getParameters());
 	}
 
 	/**
@@ -797,7 +797,7 @@ public class Operation extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Set<MediaType>> produces() {
-		return Optional.ofNullable(getProduces());
+		return optional(getProduces());
 	}
 
 	/**
@@ -891,7 +891,7 @@ public class Operation extends SwaggerElement {
 	 * @return The response info as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<ResponseInfo> response(String status) {
-		return Optional.ofNullable(getResponse(status));
+		return optional(getResponse(status));
 	}
 
 	/**
@@ -943,7 +943,7 @@ public class Operation extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Map<String,ResponseInfo>> responses() {
-		return Optional.ofNullable(getResponses());
+		return optional(getResponses());
 	}
 
 	/**
@@ -1041,7 +1041,7 @@ public class Operation extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Set<String>> schemes() {
-		return Optional.ofNullable(getSchemes());
+		return optional(getSchemes());
 	}
 
 	/**
@@ -1144,7 +1144,7 @@ public class Operation extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<List<Map<String,List<String>>>> security() {
-		return Optional.ofNullable(getSecurity());
+		return optional(getSecurity());
 	}
 
 	/**
@@ -1228,7 +1228,7 @@ public class Operation extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> summary() {
-		return Optional.ofNullable(getSummary());
+		return optional(getSummary());
 	}
 
 	/**
@@ -1299,7 +1299,7 @@ public class Operation extends SwaggerElement {
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Set<String>> tags() {
-		return Optional.ofNullable(getTags());
+		return optional(getTags());
 	}
 
 	/**
@@ -1393,19 +1393,20 @@ public class Operation extends SwaggerElement {
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		ASet<String> s = ASet.<String>of()
-			.appendIf(consumes != null, "consumes")
-			.appendIf(deprecated != null, "deprecated")
-			.appendIf(description != null, "description")
-			.appendIf(externalDocs != null, "externalDocs")
-			.appendIf(operationId != null, "operationId")
-			.appendIf(parameters != null, "parameters")
-			.appendIf(produces != null, "produces")
-			.appendIf(responses != null, "responses")
-			.appendIf(schemes != null, "schemes")
-			.appendIf(security != null, "security")
-			.appendIf(summary != null, "summary")
-			.appendIf(tags != null, "tags");
+		Set<String> s = setBuilder(String.class)
+			.addIf(consumes != null, "consumes")
+			.addIf(deprecated != null, "deprecated")
+			.addIf(description != null, "description")
+			.addIf(externalDocs != null, "externalDocs")
+			.addIf(operationId != null, "operationId")
+			.addIf(parameters != null, "parameters")
+			.addIf(produces != null, "produces")
+			.addIf(responses != null, "responses")
+			.addIf(schemes != null, "schemes")
+			.addIf(security != null, "security")
+			.addIf(summary != null, "summary")
+			.addIf(tags != null, "tags")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 }

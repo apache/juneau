@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.httppart;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -156,7 +157,7 @@ public class BasicNamedAttribute implements NamedAttribute {
 	 * @return The value if present.
 	 */
 	public Object get() {
-		return Optional.ofNullable(getValue()).get();
+		return optional(getValue()).get();
 	}
 
 	/**
@@ -169,7 +170,7 @@ public class BasicNamedAttribute implements NamedAttribute {
 	 * @return The value if present or the other value if not.
 	 */
 	public Object orElse(Object other) {
-		return Optional.ofNullable(getValue()).orElse(other);
+		return optional(getValue()).orElse(other);
 	}
 
 	@Override /* Object */

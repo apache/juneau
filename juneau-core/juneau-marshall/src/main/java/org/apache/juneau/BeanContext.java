@@ -17,7 +17,6 @@ import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.Optional.*;
 import static java.util.Arrays.*;
 
 import java.beans.*;
@@ -3555,14 +3554,14 @@ public class BeanContext extends Context {
 		useJavaBeanIntrospector = builder.useJavaBeanIntrospector;
 		sortProperties = builder.sortProperties;
 		findFluentSetters = builder.findFluentSetters;
-		typePropertyName = ofNullable(builder.typePropertyName).orElse("_type");
-		locale = ofNullable(builder.locale).orElseGet(()->Locale.getDefault());
+		typePropertyName = optional(builder.typePropertyName).orElse("_type");
+		locale = optional(builder.locale).orElseGet(()->Locale.getDefault());
 		timeZone = builder.timeZone;
 		mediaType = builder.mediaType;
-		beanDictionary = ofNullable(builder.beanDictionary).map(Collections::unmodifiableList).orElse(emptyList());
-		swaps = ofNullable(builder.swaps).map(Collections::unmodifiableList).orElse(emptyList());
-		notBeanClasses = ofNullable(builder.notBeanClasses).map(ArrayList::new).map(Collections::unmodifiableList).orElse(emptyList());
-		notBeanPackages = ofNullable(builder.notBeanPackages).map(ArrayList::new).map(Collections::unmodifiableList).orElse(emptyList());
+		beanDictionary = optional(builder.beanDictionary).map(Collections::unmodifiableList).orElse(emptyList());
+		swaps = optional(builder.swaps).map(Collections::unmodifiableList).orElse(emptyList());
+		notBeanClasses = optional(builder.notBeanClasses).map(ArrayList::new).map(Collections::unmodifiableList).orElse(emptyList());
+		notBeanPackages = optional(builder.notBeanPackages).map(ArrayList::new).map(Collections::unmodifiableList).orElse(emptyList());
 		propertyNamer = builder.propertyNamer != null ? builder.propertyNamer : BasicPropertyNamer.class;
 
 		notBeanClassesArray = notBeanClasses.isEmpty() ? DEFAULT_NOTBEAN_CLASSES : Stream.of(notBeanClasses, asList(DEFAULT_NOTBEAN_CLASSES)).flatMap(Collection::stream).toArray(Class[]::new);
@@ -3578,7 +3577,7 @@ public class BeanContext extends Context {
 		}
 
 		LinkedList<ObjectSwap<?,?>> _swaps = new LinkedList<>();
-		for (Object o : ofNullable(swaps).orElse(emptyList())) {
+		for (Object o : optional(swaps).orElse(emptyList())) {
 			if (o instanceof ObjectSwap) {
 				_swaps.add((ObjectSwap<?,?>)o);
 			} else {

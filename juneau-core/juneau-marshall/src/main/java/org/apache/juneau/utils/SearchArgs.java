@@ -92,15 +92,13 @@ public class SearchArgs {
 		 * @return This object.
 		 */
 		public Builder search(String searchTerms) {
-			if (searchTerms != null) {
-				for (String s : StringUtils.split(searchTerms)) {
-					int i = StringUtils.indexOf(s, '=', '>', '<');
-					if (i == -1)
-						throw runtimeException("Invalid search terms: ''{0}''", searchTerms);
-					char c = s.charAt(i);
-					search(s.substring(0, i).trim(), s.substring(c == '=' ? i+1 : i).trim());
-				}
-			}
+			split(searchTerms, x -> {
+				int i = indexOf(x, '=', '>', '<');
+				if (i == -1)
+					throw runtimeException("Invalid search terms: ''{0}''", searchTerms);
+				char c = x.charAt(i);
+				search(x.substring(0, i).trim(), x.substring(c == '=' ? i+1 : i).trim());
+			});
 			return this;
 		}
 

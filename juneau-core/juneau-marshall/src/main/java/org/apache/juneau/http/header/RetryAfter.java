@@ -12,8 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static java.time.format.DateTimeFormatter.*;import static java.util.Optional.*;
+import static java.time.format.DateTimeFormatter.*;
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -220,8 +221,8 @@ public class RetryAfter extends BasicDateHeader {
 	public Optional<Integer> asInteger() {
 		if (supplier != null) {
 			Object o = supplier.get();
-			return ofNullable(o instanceof Integer ? (Integer)o : null);
+			return optional(o instanceof Integer ? (Integer)o : null);
 		}
-		return ofNullable(value);
+		return optional(value);
 	}
 }

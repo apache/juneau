@@ -13,6 +13,8 @@
 package org.apache.juneau.cp;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.util.*;
 import java.util.function.*;
 
@@ -210,7 +212,7 @@ public class BeanCreateMethodFinder<T> {
 	 */
 	public T run(Consumer<? super T> consumer) throws ExecutableException {
 		T t = run();
-		Optional.ofNullable(t).ifPresent(consumer);
+		optional(t).ifPresent(consumer);
 		return t;
 	}
 }

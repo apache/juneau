@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config.internal;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -52,7 +53,7 @@ public class ConfigMapEntry {
 
 		i = line.indexOf('#');
 		if (i != -1) {
-			String[] l2 = StringUtils.split(line, '#', 2);
+			String[] l2 = split(line, '#', 2);
 			line = l2[0];
 			if (l2.length == 2)
 				this.comment = l2[1].trim();
@@ -64,7 +65,7 @@ public class ConfigMapEntry {
 
 		this.value = StringUtils.replaceUnicodeSequences(line.trim());
 
-		this.preLines = AList.unmodifiable(preLines);
+		this.preLines = preLines == null ? emptyList() : unmodifiable(copyOf(preLines));
 	}
 
 	ConfigMapEntry(String key, String value, String modifiers, String comment, List<String> preLines) {
@@ -73,7 +74,7 @@ public class ConfigMapEntry {
 		this.value = value;
 		this.comment = comment;
 		this.modifiers = modifiers;
-		this.preLines = AList.unmodifiable(preLines);
+		this.preLines = preLines == null ? emptyList() : unmodifiable(copyOf(preLines));
 	}
 
 	/**

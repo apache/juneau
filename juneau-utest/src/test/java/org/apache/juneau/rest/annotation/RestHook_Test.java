@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.annotation;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.rest.annotation.HookEvent.*;
 import static org.junit.runners.MethodSorters.*;
 import static java.util.Collections.*;
@@ -24,7 +25,6 @@ import javax.servlet.http.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.Body;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.RestRequest;
@@ -166,7 +166,7 @@ public class RestHook_Test {
 		public static Map<String,String> headers(SerializerSession s) {
 			OMap sp = s.getSessionProperties();
 			if (sp.containsKey("Override-Content-Type"))
-				return AMap.of("Content-Type",sp.getString("Override-Content-Type",null));
+				return map("Content-Type",sp.getString("Override-Content-Type",null));
 			return emptyMap();
 		}
 	}
