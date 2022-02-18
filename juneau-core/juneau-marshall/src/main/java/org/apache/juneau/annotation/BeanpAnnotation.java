@@ -94,7 +94,7 @@ public class BeanpAnnotation {
 	 */
 	public static class Builder extends TargetedAnnotationMFBuilder {
 
-		Class<?> type=Null.class;
+		Class<?> type=void.class;
 		Class<?>[] dictionary=new Class[0], params=new Class[0];
 		String format="", name="", properties="", ro="", value="", wo="";
 

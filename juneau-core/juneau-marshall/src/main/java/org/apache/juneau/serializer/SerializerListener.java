@@ -29,7 +29,7 @@ public class SerializerListener {
 	/**
 	 * Represents no serializer listener.
 	 */
-	public static final class Null extends SerializerListener {}
+	public static final class Void extends SerializerListener {}
 
 	/**
 	 * Called when an exception is thrown when trying to call a bean getter method.

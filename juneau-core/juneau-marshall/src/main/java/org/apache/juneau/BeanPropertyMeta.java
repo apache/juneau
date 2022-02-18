@@ -325,9 +325,9 @@ public final class BeanPropertyMeta {
 
 		private ObjectSwap getPropertySwap(Swap s) throws RuntimeException {
 			Class<?> c = s.value();
-			if (c == Null.class)
+			if (isVoid(c))
 				c = s.impl();
-			if (c == Null.class)
+			if (isVoid(c))
 				return null;
 			ClassInfo ci = ClassInfo.of(c);
 			if (ci.isChildOf(ObjectSwap.class)) {

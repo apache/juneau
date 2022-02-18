@@ -415,7 +415,7 @@ public @interface Beanp {
 	 * 	}
 	 * </p>
 	 */
-	Class<?> type() default Null.class;
+	Class<?> type() default void.class;
 
 	/**
 	 * A synonym for {@link #name()}.

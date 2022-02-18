@@ -561,7 +561,7 @@ public @interface HtmlDocConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#template(Class)}
 	 * </ul>
 	 */
-	Class<? extends HtmlDocTemplate> template() default HtmlDocTemplate.Null.class;
+	Class<? extends HtmlDocTemplate> template() default HtmlDocTemplate.Void.class;
 
 	/**
 	 * Configuration property:  HTML Widgets.

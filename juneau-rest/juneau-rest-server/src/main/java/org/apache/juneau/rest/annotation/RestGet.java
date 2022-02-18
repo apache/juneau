@@ -120,7 +120,7 @@ public @interface RestGet {
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#type(Class)}
 	 * </ul>
 	 */
-	Class<? extends RestOpContext> contextClass() default RestOpContext.Null.class;
+	Class<? extends RestOpContext> contextClass() default RestOpContext.Void.class;
 
 	/**
 	 * Class-level response converters.

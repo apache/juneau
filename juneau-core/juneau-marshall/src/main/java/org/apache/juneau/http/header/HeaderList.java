@@ -181,7 +181,7 @@ public class HeaderList {
 	private static final Predicate<Header> NOT_NULL = x -> x != null;
 
 	/** Represents no header supplier in annotations. */
-	public static final class Null extends HeaderList {}
+	public static final class Void extends HeaderList {}
 
 	/** Predefined instance. */
 	public static final HeaderList EMPTY = new HeaderList();

@@ -742,7 +742,7 @@ public @interface BeanConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#propertyNamer(Class)}
 	 * </ul>
 	 */
-	Class<? extends PropertyNamer> propertyNamer() default PropertyNamer.Null.class;
+	Class<? extends PropertyNamer> propertyNamer() default PropertyNamer.Void.class;
 
 	/**
 	 * Configuration property:  Sort bean properties.

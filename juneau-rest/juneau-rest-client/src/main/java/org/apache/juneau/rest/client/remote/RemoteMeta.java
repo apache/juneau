@@ -14,6 +14,7 @@ package org.apache.juneau.rest.client.remote;
 
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.reflect.*;
@@ -60,15 +61,15 @@ public class RemoteMeta {
 		HeaderList.Builder headersBuilder = HeaderList.create().resolving();
 
 		for (Remote r : remotes) {
-			if (! r.path().isEmpty())
+			if (isNotEmpty(r.path()))
 				path = trimSlashes(resolve(r.path()));
 			for (String h : r.headers())
 				headersBuilder.append(stringHeader(resolve(h)));
-			if (! r.version().isEmpty())
+			if (isNotEmpty(r.version()))
 				clientVersion = resolve(r.version());
-			if (! r.versionHeader().isEmpty())
+			if (isNotEmpty(r.versionHeader()))
 				versionHeader = resolve(r.versionHeader());
-			if (r.headerList() != HeaderList.Null.class) {
+			if (isNotVoid(r.headerList())) {
 				try {
 					headersBuilder.append(r.headerList().newInstance().getAll());
 				} catch (Exception e) {

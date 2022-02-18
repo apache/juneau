@@ -13,6 +13,8 @@
 package org.apache.juneau.httppart.bean;
 
 import static org.apache.juneau.httppart.bean.Utils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.util.*;
@@ -126,10 +128,8 @@ public class RequestBeanMeta {
 
 		Builder apply(Request a) {
 			if (a != null) {
-				if (a.serializer() != HttpPartSerializer.Null.class)
-					serializer.type(a.serializer());
-				if (a.parser() != HttpPartParser.Null.class)
-					parser.type(a.parser());
+				optional(a.serializer()).filter(NOT_VOID).ifPresent(x -> serializer.type(x));
+				optional(a.parser()).filter(NOT_VOID).ifPresent(x -> parser.type(x));
 			}
 			return this;
 		}

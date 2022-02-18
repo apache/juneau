@@ -14,6 +14,7 @@ package org.apache.juneau.cp;
 
 import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static java.util.stream.Collectors.*;
 
@@ -86,7 +87,7 @@ public class BeanStore {
 	/**
 	 * Non-existent bean store.
 	 */
-	public static final class Null extends BeanStore {}
+	public static final class Void extends BeanStore {}
 
 	/**
 	 * Static read-only reusable instance.
@@ -674,7 +675,7 @@ public class BeanStore {
 	private String findBeanName(ParamInfo pi) {
 		Annotation n = pi.getAnnotation(Annotation.class, x -> x.annotationType().getSimpleName().equals("Named"));
 		if (n != null)
-			return AnnotationInfo.of((ClassInfo)null, n).getValue(String.class, "value", StringUtils::isNotEmpty).orElse(null);
+			return AnnotationInfo.of((ClassInfo)null, n).getValue(String.class, "value", NOT_EMPTY).orElse(null);
 		return null;
 	}
 

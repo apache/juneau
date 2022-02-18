@@ -80,8 +80,8 @@ public class RequestAnnotation {
 	 */
 	public static class Builder extends TargetedAnnotationTBuilder {
 
-		Class<? extends HttpPartParser> parser = HttpPartParser.Null.class;
-		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Null.class;
+		Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
+		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
 
 		/**
 		 * Constructor.

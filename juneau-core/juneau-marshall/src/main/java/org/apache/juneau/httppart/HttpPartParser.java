@@ -48,7 +48,7 @@ public interface HttpPartParser {
 	 * <p>
 	 * Used to represent the absence of a part parser in annotations.
 	 */
-	public static interface Null extends HttpPartParser {}
+	public static interface Void extends HttpPartParser {}
 
 	/**
 	 * Instantiates a creator for a part parser.

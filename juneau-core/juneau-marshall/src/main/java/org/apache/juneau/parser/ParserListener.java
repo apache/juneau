@@ -29,7 +29,7 @@ public class ParserListener {
 	/**
 	 * Represents no parser listener.
 	 */
-	public static final class Null extends ParserListener {}
+	public static final class Void extends ParserListener {}
 
 	/**
 	 * Gets called when an unknown bean property is detected in a document.

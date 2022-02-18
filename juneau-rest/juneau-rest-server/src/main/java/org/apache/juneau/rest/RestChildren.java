@@ -42,8 +42,8 @@ public class RestChildren {
 	 * Represents a null value for the {@link Rest#restChildrenClass()} annotation.
 	 */
 	@SuppressWarnings("javadoc")
-	public final class Null extends RestChildren {
-		public Null(Builder builder) throws Exception {
+	public final class Void extends RestChildren {
+		public Void(Builder builder) throws Exception {
 			super(builder);
 		}
 	}

@@ -62,7 +62,7 @@ public interface RestLogger {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/** Represents no logger */
-	public abstract class Null implements RestLogger {}
+	public abstract class Void implements RestLogger {}
 
 	/**
 	 * System property name for the default logger name to use for {@link RestLogger} objects.

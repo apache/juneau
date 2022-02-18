@@ -60,7 +60,7 @@ public interface HttpPartSerializer {
 	 * <p>
 	 * Used to represent the absence of a part serializer in annotations.
 	 */
-	public static interface Null extends HttpPartSerializer {}
+	public static interface Void extends HttpPartSerializer {}
 
 	/**
 	 * Instantiates a creator for a part serializer.

@@ -91,8 +91,8 @@ public class RemoteOperationMeta {
 				al = mi.getReturnType().unwrap(Value.class,Optional.class).getAnnotationList(REMOTE_OP_GROUP);
 
 			Value<String> _httpMethod = Value.empty(), _path = Value.empty();
-			al.forEachValue(String.class, "method", StringUtils::isNotEmpty, x -> _httpMethod.set(x.trim()));
-			al.forEachValue(String.class, "path", StringUtils::isNotEmpty, x-> _path.set(x.trim()));
+			al.forEachValue(String.class, "method", NOT_EMPTY, x -> _httpMethod.set(x.trim()));
+			al.forEachValue(String.class, "path", NOT_EMPTY, x-> _path.set(x.trim()));
 			httpMethod = _httpMethod.orElse("").trim();
 			path = _path.orElse("").trim();
 
@@ -109,7 +109,7 @@ public class RemoteOperationMeta {
 					path = v.substring(i).trim();
 				}
 			} else {
-				al.forEach(x -> ! x.isType(RemoteOp.class) && isNotEmpty(x.getValue(String.class, "value", StringUtils::isNotEmpty).orElse("").trim()),x -> value.set(x.getValue(String.class, "value", StringUtils::isNotEmpty).get().trim()));
+				al.forEach(x -> ! x.isType(RemoteOp.class) && isNotEmpty(x.getValue(String.class, "value", NOT_EMPTY).orElse("").trim()),x -> value.set(x.getValue(String.class, "value", NOT_EMPTY).get().trim()));
 				if (value.isPresent())
 					path = value.get();
 			}

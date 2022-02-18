@@ -724,7 +724,7 @@ public final class ClassMeta<T> implements Type {
 
 		private ObjectSwap<T,?> createSwap(Swap s) {
 			Class<?> c = s.value();
-			if (c == Null.class)
+			if (ClassUtils.isVoid(c))
 				c = s.impl();
 			ClassInfo ci = ClassInfo.of(c);
 

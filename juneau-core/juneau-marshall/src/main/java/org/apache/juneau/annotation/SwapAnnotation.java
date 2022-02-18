@@ -100,7 +100,7 @@ public class SwapAnnotation {
 	 */
 	public static class Builder extends TargetedAnnotationTMFBuilder {
 
-		Class<?> impl=Null.class, value=Null.class;
+		Class<?> impl=void.class, value=void.class;
 		String template="";
 		String[] mediaTypes={};
 

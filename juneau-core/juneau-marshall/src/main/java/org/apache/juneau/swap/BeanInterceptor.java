@@ -66,13 +66,13 @@ package org.apache.juneau.swap;
  */
 public class BeanInterceptor<T> {
 
-	/** Default interceptor */
-	public static class Default extends BeanInterceptor<Object> {}
+	/** Non-existent bean interceptor. */
+	public static final class Void extends BeanInterceptor<Object> {}
 
 	/**
 	 * Default reusable property filter instance.
 	 */
-	public static final BeanInterceptor<Object> DEFAULT = new Default();
+	public static final BeanInterceptor<Object> DEFAULT = new BeanInterceptor<>();
 
 	/**
 	 * Property read interceptor.

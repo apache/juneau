@@ -13,6 +13,7 @@
 package org.apache.juneau.internal;
 
 import java.lang.reflect.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.reflect.*;
@@ -25,6 +26,11 @@ import org.apache.juneau.reflect.*;
  * </ul>
  */
 public final class ClassUtils {
+
+	/**
+	 * Predicate check to filter out void classes.
+	 */
+	public static final Predicate<Class<?>> NOT_VOID = x -> isNotVoid(x);
 
 	/**
 	 * Returns the class types for the specified arguments.
@@ -169,5 +175,27 @@ public final class ClassUtils {
 		if (value instanceof Class)
 			return ((Class<?>)value).getSimpleName();
 		return value.getClass().getSimpleName();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specific class is <jk>null</jk> or <c><jk>void</jk>.<jk>class</jk></c> or {@link Void} or has the simple name <js>"Void</js>.
+	 *
+	 * @param c The class to check.
+	 * @return <jk>true</jk> if the specific class is <jk>null</jk> or <c><jk>void</jk>.<jk>class</jk></c> or {@link Void} or has the simple name <js>"Void</js>.
+	 */
+	@SuppressWarnings("rawtypes")
+	public static boolean isVoid(Class c) {
+		return (c == null || c == void.class || c == Void.class || c.getSimpleName().equalsIgnoreCase("void"));
+	}
+
+	/**
+	 * Returns <jk>false</jk> if the specific class is <jk>null</jk> or <c><jk>void</jk>.<jk>class</jk></c> or {@link Void} or has the simple name <js>"Void</js>.
+	 *
+	 * @param c The class to check.
+	 * @return <jk>false</jk> if the specific class is <jk>null</jk> or <c><jk>void</jk>.<jk>class</jk></c> or {@link Void} or has the simple name <js>"Void</js>.
+	 */
+	@SuppressWarnings("rawtypes")
+	public static boolean isNotVoid(Class c) {
+		return ! isVoid(c);
 	}
 }

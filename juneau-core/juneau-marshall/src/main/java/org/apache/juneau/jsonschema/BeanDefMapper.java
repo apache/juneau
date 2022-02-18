@@ -29,7 +29,7 @@ public interface BeanDefMapper {
 	/**
 	 * Represents the absence of a bean definition mapper class.
 	 */
-	public interface Null extends BeanDefMapper {}
+	public interface Void extends BeanDefMapper {}
 
 	/**
 	 * Returns the ID for the specified class.

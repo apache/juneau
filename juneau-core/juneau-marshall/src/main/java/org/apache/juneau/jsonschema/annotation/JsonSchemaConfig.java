@@ -187,7 +187,7 @@ public @interface JsonSchemaConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#beanDefMapper(Class)}
 	 * </ul>
 	 */
-	Class<? extends BeanDefMapper> beanDefMapper() default BeanDefMapper.Null.class;
+	Class<? extends BeanDefMapper> beanDefMapper() default BeanDefMapper.Void.class;
 
 	/**
 	 * Configuration property:  Ignore types from schema definitions.

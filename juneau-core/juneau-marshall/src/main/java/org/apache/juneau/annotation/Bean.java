@@ -170,7 +170,7 @@ public @interface Bean {
 	 * 	<jk>public class</jk> MyInterface {...}
 	 * <p>
 	 */
-	Class<?> implClass() default Null.class;
+	Class<?> implClass() default void.class;
 
 	/**
 	 * Bean property interceptor.
@@ -182,7 +182,7 @@ public @interface Bean {
 	 * 	<li class='jc'>{@link BeanInterceptor}
 	 * </ul>
 	 */
-	Class<? extends BeanInterceptor<?>> interceptor() default BeanInterceptor.Default.class;
+	Class<? extends BeanInterceptor<?>> interceptor() default BeanInterceptor.Void.class;
 
 	/**
 	 * Identifies a class to be used as the interface class for this and all subclasses.
@@ -211,7 +211,7 @@ public @interface Bean {
 	 * Note that this annotation can be used on the parent class so that it filters to all child classes,
 	 * or can be set individually on the child classes.
 	 */
-	Class<?> interfaceClass() default Null.class;
+	Class<?> interfaceClass() default void.class;
 
 	/**
 	 * Dynamically apply this annotation to the specified classes.
@@ -324,7 +324,7 @@ public @interface Bean {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#propertyNamer(Class)}
 	 * </ul>
 	 */
-	Class<? extends PropertyNamer> propertyNamer() default BasicPropertyNamer.class;
+	Class<? extends PropertyNamer> propertyNamer() default PropertyNamer.Void.class;
 
 	/**
 	 * Read-only bean properties.
@@ -403,7 +403,7 @@ public @interface Bean {
 	 * 	}
 	 * </p>
 	 */
-	Class<?> stopClass() default Null.class;
+	Class<?> stopClass() default void.class;
 
 	/**
 	 * An identifying name for this class.

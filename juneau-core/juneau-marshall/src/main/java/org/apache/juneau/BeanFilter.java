@@ -15,6 +15,7 @@ package org.apache.juneau;
 import java.beans.*;
 import java.util.*;
 
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -98,9 +99,6 @@ public final class BeanFilter {
 				if (! (b.properties().isEmpty() && b.p().isEmpty()))
 					properties(b.properties(), b.p());
 
-				if (! b.typeName().isEmpty())
-					typeName(b.typeName());
-
 				if (b.sort())
 					sortProperties(true);
 
@@ -116,26 +114,14 @@ public final class BeanFilter {
 				if (! (b.writeOnlyProperties().isEmpty() && b.wo().isEmpty()))
 					writeOnlyProperties(b.writeOnlyProperties(), b.wo());
 
-				if (b.propertyNamer() != BasicPropertyNamer.class)
-					propertyNamer(b.propertyNamer());
-
-				if (b.interfaceClass() != Null.class)
-					interfaceClass(b.interfaceClass());
-
-				if (b.stopClass() != Null.class)
-					stopClass(b.stopClass());
-
-				if (b.dictionary().length > 0)
-					dictionary(b.dictionary());
-
-				if (b.interceptor() != BeanInterceptor.Default.class)
-					interceptor(b.interceptor());
-
-				if (b.implClass() != Null.class)
-					implClass(b.implClass());
-
-				if (! b.example().isEmpty())
-					example(b.example());
+				optional(b.typeName()).filter(NOT_EMPTY).ifPresent(x -> typeName(x));
+				optional(b.propertyNamer()).filter(NOT_VOID).ifPresent(x -> propertyNamer(x));
+				optional(b.interfaceClass()).filter(NOT_VOID).ifPresent(x -> interfaceClass(x));
+				optional(b.stopClass()).filter(NOT_VOID).ifPresent(x -> stopClass(x));
+				optional(b.interceptor()).filter(NOT_VOID).ifPresent(x -> interceptor(x));
+				optional(b.implClass()).filter(NOT_VOID).ifPresent(x -> implClass(x));
+				optional(b.dictionary()).filter(x -> x.length > 0).ifPresent(x -> dictionary(x));
+				optional(b.example()).filter(NOT_EMPTY).ifPresent(x -> example(x));
 			}
 			return this;
 		}

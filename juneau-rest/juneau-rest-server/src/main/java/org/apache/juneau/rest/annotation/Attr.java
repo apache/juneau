@@ -61,7 +61,7 @@ public @interface Attr {
 	 * <p>
 	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiParser}.
 	 */
-	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
+	Class<? extends HttpPartParser> parser() default HttpPartParser.Void.class;
 
 	//=================================================================================================================
 	// Attributes common to all Swagger Parameter objects

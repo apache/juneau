@@ -3125,11 +3125,11 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>Ignored if value is <jk>null</jk> or {@link HttpPartSerializer.Null}.
+		 * 	<br>Ignored if value is <jk>null</jk> or {@link HttpPartSerializer.Void}.
 		 * @return This object.
 		 */
 		public Builder serializer(Class<? extends HttpPartSerializer> value) {
-			if (value != null && value != HttpPartSerializer.Null.class)
+			if (isNotVoid(value))
 				serializer = value;
 			return this;
 		}
@@ -3139,11 +3139,11 @@ public class HttpPartSchema {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>Ignored if value is <jk>null</jk> or {@link HttpPartParser.Null}.
+		 * 	<br>Ignored if value is <jk>null</jk> or {@link HttpPartParser.Void}.
 		 * @return This object.
 		 */
 		public Builder parser(Class<? extends HttpPartParser> value) {
-			if (value != null && value != HttpPartParser.Null.class)
+			if (isNotVoid(value))
 				parser = value;
 			return this;
 		}

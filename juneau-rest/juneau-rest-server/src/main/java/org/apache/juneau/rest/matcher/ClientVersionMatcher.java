@@ -45,7 +45,7 @@ public class ClientVersionMatcher extends RestMatcher {
 	public ClientVersionMatcher(String clientVersionHeader, MethodInfo mi) {
 		this.clientVersionHeader = isEmpty(clientVersionHeader) ? "Client-Version" : clientVersionHeader;
 		Value<String> clientVersion = Value.empty();
-		mi.getAnnotationList(REST_OP_GROUP).forEachValue(String.class, "clientVersion", StringUtils::isNotEmpty, x -> clientVersion.set(x));
+		mi.getAnnotationList(REST_OP_GROUP).forEachValue(String.class, "clientVersion", NOT_EMPTY, x -> clientVersion.set(x));
 		range = new VersionRange(clientVersion.orElse(null));
 	}
 

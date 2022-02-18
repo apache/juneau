@@ -71,7 +71,7 @@ public class RestDeleteAnnotation {
 
 		Class<? extends RestGuard>[] guards = new Class[0];
 		Class<? extends RestMatcher>[] matchers = new Class[0];
-		Class<? extends RestOpContext> contextClass = RestOpContext.Null.class;
+		Class<? extends RestOpContext> contextClass = RestOpContext.Void.class;
 		Class<? extends Encoder>[] encoders = new Class[0];
 		OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
 		String clientVersion="", debug="", defaultAccept="", defaultCharset="", rolesDeclared="", roleGuard="", summary="", value="";

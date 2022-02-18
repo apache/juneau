@@ -49,7 +49,7 @@ public @interface Swap {
 	 * <p>
 	 * A synonym for {@link #value()}.
 	 */
-	Class<?> impl() default Null.class;
+	Class<?> impl() default void.class;
 
 	/**
 	 * Identifies the media types that this swap is applicable for.
@@ -213,5 +213,5 @@ public @interface Swap {
 	 * <p>
 	 * A synonym for {@link #impl()}.
 	 */
-	Class<?> value() default Null.class;
+	Class<?> value() default void.class;
 }

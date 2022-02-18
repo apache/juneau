@@ -14,6 +14,7 @@ package org.apache.juneau;
 
 import static org.apache.juneau.Visibility.*;
 import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -4083,7 +4084,7 @@ public class BeanContext extends Context {
 
 		if (p != null) {
 
-			if (p.type() != Null.class)
+			if (isNotVoid(p.type()))
 				cm2 = resolveClassMeta(p.type(), typeVarImpls);
 
 			if (cm2.isMap()) {

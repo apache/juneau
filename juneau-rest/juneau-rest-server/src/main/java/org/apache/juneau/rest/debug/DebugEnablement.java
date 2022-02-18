@@ -43,7 +43,7 @@ public interface DebugEnablement {
 	/**
 	 * Represents no DebugEnablement.
 	 */
-	public abstract class Null implements DebugEnablement {};
+	public abstract class Void implements DebugEnablement {};
 
 	/**
 	 * Static creator.

@@ -108,8 +108,8 @@ public class QueryAnnotation {
 	 */
 	public static class Builder extends TargetedAnnotationTMFBuilder {
 
-		Class<? extends HttpPartParser> parser = HttpPartParser.Null.class;
-		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Null.class;
+		Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
+		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
 		Schema schema = SchemaAnnotation.DEFAULT;
 		String name="", value="";
 

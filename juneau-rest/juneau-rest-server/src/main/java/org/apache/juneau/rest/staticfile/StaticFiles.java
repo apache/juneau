@@ -41,7 +41,7 @@ public interface StaticFiles extends FileFinder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/** Represents no static files */
-	public abstract class Null implements StaticFiles {}
+	public abstract class Void implements StaticFiles {}
 
 	/**
 	 * Static creator.

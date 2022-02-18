@@ -87,8 +87,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/** Represents a null value for the {@link RestOp#contextClass()} annotation.*/
-	public static final class Null extends RestOpContext {
-		private Null(Builder builder) throws Exception {
+	public static final class Void extends RestOpContext {
+		private Void(Builder builder) throws Exception {
 			super(builder);
 		}
 	}

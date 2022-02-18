@@ -186,7 +186,7 @@ public @interface Query {
 	 * <p>
 	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiParser}.
 	 */
-	Class<? extends HttpPartParser> parser() default HttpPartParser.Null.class;
+	Class<? extends HttpPartParser> parser() default HttpPartParser.Void.class;
 
 	/**
 	 * <mk>schema</mk> field of the {@doc ext.SwaggerParameterObject}.
@@ -217,7 +217,7 @@ public @interface Query {
 	 * <p>
 	 * Overrides for this part the part serializer defined on the REST client which by default is {@link OpenApiSerializer}.
 	 */
-	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Null.class;
+	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Void.class;
 
 	/**
 	 * A synonym for {@link #name()}.

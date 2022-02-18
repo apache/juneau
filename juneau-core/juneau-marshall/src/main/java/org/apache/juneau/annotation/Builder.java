@@ -65,5 +65,5 @@ public @interface Builder {
 	/**
 	 * The builder for this class.
 	 */
-	Class<?> value() default Null.class;
+	Class<?> value() default void.class;
 }

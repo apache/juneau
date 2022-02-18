@@ -41,8 +41,8 @@ public class RestOperations {
 	 * Represents a null value for the {@link Rest#restOperationsClass()} annotation.
 	 */
 	@SuppressWarnings("javadoc")
-	public final class Null extends RestOperations {
-		public Null(Builder builder) throws Exception {
+	public final class Void extends RestOperations {
+		public Void(Builder builder) throws Exception {
 			super(builder);
 		}
 	}

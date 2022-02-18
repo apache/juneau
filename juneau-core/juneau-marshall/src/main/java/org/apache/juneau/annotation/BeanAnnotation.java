@@ -116,8 +116,8 @@ public class BeanAnnotation {
 	public static class Builder extends TargetedAnnotationTBuilder {
 
 		Class<?>[] dictionary = new Class[0];
-		Class<?> implClass=Null.class, interfaceClass=Null.class, stopClass=Null.class;
-		Class<? extends BeanInterceptor<?>> interceptor=BeanInterceptor.Default.class;
+		Class<?> implClass=void.class, interfaceClass=void.class, stopClass=void.class;
+		Class<? extends BeanInterceptor<?>> interceptor=BeanInterceptor.Void.class;
 		Class<? extends PropertyNamer> propertyNamer=BasicPropertyNamer.class;
 		String example="", excludeProperties="", p="", properties="", readOnlyProperties="", ro="", typeName="", typePropertyName="", wo="", writeOnlyProperties="", xp="";
 		boolean findFluentSetters, sort;

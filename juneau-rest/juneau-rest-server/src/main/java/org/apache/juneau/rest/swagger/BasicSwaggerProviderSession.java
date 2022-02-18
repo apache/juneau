@@ -241,7 +241,7 @@ public class BasicSwaggerProviderSession {
 			);
 
 			Value<String> _summary = Value.empty();
-			al.forEachValue(String.class, "summary", StringUtils::isNotEmpty, x -> _summary.set(x));
+			al.forEachValue(String.class, "summary", NOT_EMPTY, x -> _summary.set(x));
 			op.appendSkipEmpty("summary",
 				firstNonEmpty(
 					resolve(ms.summary()),

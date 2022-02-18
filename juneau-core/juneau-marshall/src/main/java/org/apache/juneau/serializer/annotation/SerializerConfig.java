@@ -192,7 +192,7 @@ public @interface SerializerConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#listener(Class)}
 	 * </ul>
 	 */
-	Class<? extends SerializerListener> listener() default SerializerListener.Null.class;
+	Class<? extends SerializerListener> listener() default SerializerListener.Void.class;
 
 	/**
 	 * Configuration property:  Sort arrays and collections alphabetically.

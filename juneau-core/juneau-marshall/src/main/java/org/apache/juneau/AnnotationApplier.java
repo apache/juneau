@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.lang.annotation.*;
@@ -150,13 +151,13 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	}
 
 	/**
-	 * Returns the specified value if it's simple name is not <js>"Null"</js>.
+	 * Returns the specified value if it's simple name is not <js>"void"</js>.
 	 *
 	 * @param in The value to return.
 	 * @return An optional containing the specified value.
 	 */
 	protected <T> Optional<Class<T>> type(Class<T> in) {
-		return optional(in.getSimpleName().equals("Null") ? null : in);
+		return optional(in).filter(NOT_VOID);
 	}
 
 	/**

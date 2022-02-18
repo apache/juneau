@@ -13,6 +13,7 @@
 package org.apache.juneau.httppart.bean;
 
 import static org.apache.juneau.httppart.bean.Utils.*;
+import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.annotation.InvalidAnnotationException.*;
@@ -179,10 +180,8 @@ public class ResponseBeanMeta {
 
 		Builder apply(Response a) {
 			if (a != null) {
-				if (a.serializer() != HttpPartSerializer.Null.class)
-					partSerializer = a.serializer();
-				if (a.parser() != HttpPartParser.Null.class)
-					partParser = a.parser();
+				optional(a.serializer()).filter(NOT_VOID).ifPresent(x -> partSerializer = x);
+				optional(a.parser()).filter(NOT_VOID).ifPresent(x -> partParser = x);
 				schema.apply(a.schema());
 			}
 			return this;

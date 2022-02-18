@@ -63,7 +63,7 @@ public interface HtmlDocTemplate {
 	/**
 	 * Represents a non-existent doc template.
 	 */
-	public interface Null extends HtmlDocTemplate {}
+	public interface Void extends HtmlDocTemplate {}
 
 	/**
 	 * Renders the contents of the <code><xt>&lt;head&gt;</xt></code> element.

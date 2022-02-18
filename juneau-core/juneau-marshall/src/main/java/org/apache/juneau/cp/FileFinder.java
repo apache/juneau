@@ -93,7 +93,7 @@ public interface FileFinder {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/** Represents no file finder */
-	public abstract class Null implements FileFinder {}
+	public abstract class Void implements FileFinder {}
 
 	/**
 	 * Static creator.

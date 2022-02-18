@@ -77,7 +77,7 @@ public @interface Remote {
 	 * 		Supplier class must provide a public no-arg constructor.
 	 * </ul>
 	 */
-	Class<? extends HeaderList> headerList() default HeaderList.Null.class;
+	Class<? extends HeaderList> headerList() default HeaderList.Void.class;
 
 	/**
 	 * Specifies the client version of this interface.

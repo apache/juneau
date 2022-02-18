@@ -66,7 +66,7 @@ public class HeaderList_Test {
 		x.append((List<Header>)null);
 		assertObject(x.build()).isString("[Foo: 1, Foo: 2, Foo: 3, Foo: 4, Foo: 5, Foo: 6, Foo: 7]");
 
-		assertObject(new HeaderList.Null()).isString("[]");
+		assertObject(new HeaderList.Void()).isString("[]");
 	}
 
 	@Test

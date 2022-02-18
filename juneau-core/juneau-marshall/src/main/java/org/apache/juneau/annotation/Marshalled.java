@@ -97,7 +97,7 @@ public @interface Marshalled {
 	 * 	<jk>public class</jk> MyInterface {...}
 	 * <p>
 	 */
-	Class<?> implClass() default Null.class;
+	Class<?> implClass() default void.class;
 
 	/**
 	 * Dynamically apply this annotation to the specified classes.

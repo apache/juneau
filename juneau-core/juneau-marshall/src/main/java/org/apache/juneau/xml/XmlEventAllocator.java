@@ -27,5 +27,5 @@ public abstract class XmlEventAllocator implements XMLEventAllocator {
 	/**
 	 * Represents the absence of this class.
 	 */
-	public static abstract class Null extends XmlEventAllocator {}
+	public static abstract class Void extends XmlEventAllocator {}
 }

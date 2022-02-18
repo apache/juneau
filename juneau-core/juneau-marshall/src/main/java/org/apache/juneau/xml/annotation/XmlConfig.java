@@ -68,7 +68,7 @@ public @interface XmlConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder#eventAllocator(Class)}
 	 * </ul>
 	 */
-	Class<? extends XMLEventAllocator> eventAllocator() default XmlEventAllocator.Null.class;
+	Class<? extends XMLEventAllocator> eventAllocator() default XmlEventAllocator.Void.class;
 
 	/**
 	 * Configuration property:  Preserve root element during generalized parsing.
@@ -109,7 +109,7 @@ public @interface XmlConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder#reporter(Class)}
 	 * </ul>
 	 */
-	Class<? extends XMLReporter> reporter() default XmlReporter.Null.class;
+	Class<? extends XMLReporter> reporter() default XmlReporter.Void.class;
 
 	/**
 	 * Configuration property:  XML resolver.
@@ -121,7 +121,7 @@ public @interface XmlConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder#resolver(Class)}
 	 * </ul>
 	 */
-	Class<? extends XMLResolver> resolver() default XmlResolver.Null.class;
+	Class<? extends XMLResolver> resolver() default XmlResolver.Void.class;
 
 	/**
 	 * Configuration property:  Enable validation.

@@ -48,6 +48,11 @@ import org.apache.juneau.reflect.*;
  */
 public final class StringUtils {
 
+	/**
+	 * Predicate check to filter out null and empty strings.
+	 */
+	public static final Predicate<String> NOT_EMPTY = x -> isNotEmpty(x);
+
 	private static final AsciiSet numberChars = AsciiSet.create("-xX.+-#pP0123456789abcdefABCDEF");
 	private static final AsciiSet firstNumberChars =AsciiSet.create("+-.#0123456789");
 	private static final AsciiSet octChars = AsciiSet.create("01234567");

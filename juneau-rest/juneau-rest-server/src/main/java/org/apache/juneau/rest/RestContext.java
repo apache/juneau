@@ -128,8 +128,8 @@ public class RestContext extends Context {
 	/**
 	 * Represents a null value for the {@link Rest#contextClass()} annotation.
 	 */
-	public static final class Null extends RestContext {
-		private Null(Builder builder) throws Exception {
+	public static final class Void extends RestContext {
+		private Void(Builder builder) throws Exception {
 			super(builder);
 		}
 	}
@@ -171,7 +171,7 @@ public class RestContext extends Context {
 	public static Builder create(Class<?> resourceClass, RestContext parentContext, ServletConfig servletConfig) throws ServletException {
 
 		Value<Class<? extends Builder>> v = Value.of(Builder.class);
-		ClassInfo.of(resourceClass).forEachAnnotation(Rest.class, x -> x.builder() != Builder.Null.class, x -> v.set(x.builder()));
+		ClassInfo.of(resourceClass).forEachAnnotation(Rest.class, x -> isNotVoid(x.builder()), x -> v.set(x.builder()));
 
 		if (v.get() == Builder.class)
 			return new Builder(resourceClass, parentContext, servletConfig);
@@ -199,8 +199,8 @@ public class RestContext extends Context {
 		/**
 		 * Represents a <jk>null</jk> value for the {@link Rest#builder()} annotation.
 		 */
-		public static final class Null extends Builder {
-			private Null(Class<?> resourceClass, RestContext parentContext, ServletConfig servletConfig) {
+		public static final class Void extends Builder {
+			private Void(Class<?> resourceClass, RestContext parentContext, ServletConfig servletConfig) {
 				super(resourceClass, parentContext, servletConfig);
 			}
 		}
@@ -582,7 +582,7 @@ public class RestContext extends Context {
 			);
 
 			// Apply @Rest(beanStore).
-			ClassInfo.of(resourceClass).forEachAnnotation(Rest.class, x -> x.beanStore() != BeanStore.Null.class, x -> v.get().type(x.beanStore()));
+			ClassInfo.of(resourceClass).forEachAnnotation(Rest.class, x -> isNotVoid(x.beanStore()), x -> v.get().type(x.beanStore()));
 
 			// Replace with builder from:  public [static] BeanStore.Builder createBeanStore(<args>)
 			v.get().build()
@@ -3518,7 +3518,7 @@ public class RestContext extends Context {
 			// Gather @RestOp(debug) settings.
 			Consumer<MethodInfo> consumer = x -> {
 				Value<String> debug = Value.empty();
-				x.getAnnotationList(REST_OP_GROUP).forEachValue(String.class, "debug", StringUtils::isNotEmpty, y -> debug.set(y));
+				x.getAnnotationList(REST_OP_GROUP).forEachValue(String.class, "debug", NOT_EMPTY, y -> debug.set(y));
 				if (debug.isPresent())
 					v.get().enable(Enablement.fromString(debug.get()), x.getFullName());
 			};
@@ -5248,8 +5248,7 @@ public class RestContext extends Context {
 		 */
 		@FluentSetter
 		public Builder parserListener(Class<? extends ParserListener> value) {
-			if (value != ParserListener.Null.class)
-				parsers.forEach(x -> x.listener(value));
+			optional(value).filter(NOT_VOID).ifPresent(x -> parsers.forEach(y -> y.listener(x)));
 			return this;
 		}
 
@@ -5511,8 +5510,7 @@ public class RestContext extends Context {
 		 */
 		@FluentSetter
 		public Builder serializerListener(Class<? extends SerializerListener> value) {
-			if (value != SerializerListener.Null.class)
-				serializers.forEach(x -> x.listener(value));
+			optional(value).filter(NOT_VOID).ifPresent(x -> serializers.forEach(y -> y.listener(x)));
 			return this;
 		}
 

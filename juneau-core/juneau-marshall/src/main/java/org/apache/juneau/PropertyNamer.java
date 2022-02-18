@@ -33,7 +33,7 @@ public interface PropertyNamer {
 	/**
 	 * Represents a non-existent class.
 	 */
-	public interface Null extends PropertyNamer {}
+	public interface Void extends PropertyNamer {}
 
 	/**
 	 * Convert the specified default property name to some other value.

@@ -77,7 +77,7 @@ public @interface Rest {
 	 * 	<li>{@link ServletConfig} - The servlet config passed in during servlet initialization.
 	 * </ul>
 	 */
-	Class<? extends RestContext.Builder> builder() default RestContext.Builder.Null.class;
+	Class<? extends RestContext.Builder> builder() default RestContext.Builder.Void.class;
 
 	/**
 	 * Disable body URL parameter.
@@ -211,7 +211,7 @@ public @interface Rest {
 	 * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
 	 * </ul>
 	 */
-	Class<? extends RestLogger> callLogger() default RestLogger.Null.class;
+	Class<? extends RestLogger> callLogger() default RestLogger.Void.class;
 
 	/**
 	 * The resolver used for resolving instances of child resources and various other beans including:
@@ -230,7 +230,7 @@ public @interface Rest {
 	 * 	<li class='link'>{@doc jrs.Injection}
 	 * </ul>
 	 */
-	Class<? extends BeanStore> beanStore() default BeanStore.Null.class;
+	Class<? extends BeanStore> beanStore() default BeanStore.Void.class;
 
 	/**
 	 * REST children.
@@ -322,7 +322,7 @@ public @interface Rest {
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#type(Class)}
 	 * </ul>
 	 */
-	Class<? extends RestContext> contextClass() default RestContext.Null.class;
+	Class<? extends RestContext> contextClass() default RestContext.Void.class;
 
 	/**
 	 * Class-level response converters.
@@ -387,7 +387,7 @@ public @interface Rest {
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugEnablement()}
 	 * </ul>
 	 */
-	Class<? extends DebugEnablement> debugEnablement() default DebugEnablement.Null.class;
+	Class<? extends DebugEnablement> debugEnablement() default DebugEnablement.Void.class;
 
 	/**
 	 * Enable debug mode on specified classes/methods.
@@ -725,7 +725,7 @@ public @interface Rest {
 	 * 	<li class='jm'>{@link RestRequest#getFileFinder()}
 	 * </ul>
 	 */
-	Class<? extends FileFinder> fileFinder() default FileFinder.Null.class;
+	Class<? extends FileFinder> fileFinder() default FileFinder.Void.class;
 
 	/**
 	 * Class-level guards.
@@ -884,7 +884,7 @@ public @interface Rest {
 	 * <p>
 	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
 	 */
-	Class<? extends HttpPartParser> partParser() default HttpPartParser.Null.class;
+	Class<? extends HttpPartParser> partParser() default HttpPartParser.Void.class;
 
 	/**
 	 * HTTP part serializer.
@@ -892,7 +892,7 @@ public @interface Rest {
 	 * <p>
 	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
 	 */
-	Class<? extends HttpPartSerializer> partSerializer() default HttpPartSerializer.Null.class;
+	Class<? extends HttpPartSerializer> partSerializer() default HttpPartSerializer.Void.class;
 
 	/**
 	 * Resource path.
@@ -1046,7 +1046,7 @@ public @interface Rest {
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#restChildrenClass(Class)}
 	 * </ul>
 	 */
-	Class<? extends RestChildren> restChildrenClass() default RestChildren.Null.class;
+	Class<? extends RestChildren> restChildrenClass() default RestChildren.Void.class;
 
 	/**
 	 * REST methods class.
@@ -1058,7 +1058,7 @@ public @interface Rest {
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#restOperationsClass(Class)}
 	 * </ul>
 	 */
-	Class<? extends RestOperations> restOperationsClass() default RestOperations.Null.class;
+	Class<? extends RestOperations> restOperationsClass() default RestOperations.Void.class;
 
 	/**
 	 * Allows you to extend the {@link RestOpContext} class to modify how any of the methods are implemented.
@@ -1067,7 +1067,7 @@ public @interface Rest {
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#restOpContextClass(Class)}
 	 * </ul>
 	 */
-	Class<? extends RestOpContext> restOpContextClass() default RestOpContext.Null.class;
+	Class<? extends RestOpContext> restOpContextClass() default RestOpContext.Void.class;
 
 	/**
 	 * Java REST operation method parameter resolvers.
@@ -1269,7 +1269,7 @@ public @interface Rest {
 	 * 	<li>Static files are are executed child-to-parent in the order they appear in the annotation.
 	 * </ul>
 	 */
-	Class<? extends StaticFiles> staticFiles() default StaticFiles.Null.class;
+	Class<? extends StaticFiles> staticFiles() default StaticFiles.Void.class;
 
 	/**
 	 * Provides swagger-specific metadata on this resource.
@@ -1307,7 +1307,7 @@ public @interface Rest {
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#swaggerProvider(Class)}
 	 * </ul>
 	 */
-	Class<? extends SwaggerProvider> swaggerProvider() default SwaggerProvider.Null.class;
+	Class<? extends SwaggerProvider> swaggerProvider() default SwaggerProvider.Void.class;
 
 	/**
 	 * Optional servlet title.

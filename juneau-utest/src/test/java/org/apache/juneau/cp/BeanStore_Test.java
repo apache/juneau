@@ -49,7 +49,7 @@ public class BeanStore_Test {
 
 	@Test
 	public void a00_dummy() {
-		new BeanStore.Null();
+		new BeanStore.Void();
 	}
 
 	@Test

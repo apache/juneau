@@ -75,7 +75,7 @@ public class RestGetAnnotation {
 		Class<? extends RestConverter>[] converters = new Class[0];
 		Class<? extends RestGuard>[] guards = new Class[0];
 		Class<? extends RestMatcher>[] matchers = new Class[0];
-		Class<? extends RestOpContext> contextClass = RestOpContext.Null.class;
+		Class<? extends RestOpContext> contextClass = RestOpContext.Void.class;
 		Class<? extends Encoder>[] encoders = new Class[0];
 		Class<? extends Serializer>[] serializers = new Class[0];
 		OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;

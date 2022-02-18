@@ -12,6 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
@@ -79,12 +83,8 @@ public final class MarshalledFilter {
 		public Builder applyAnnotations(List<Marshalled> annotations) {
 
 			for (Marshalled b : annotations) {
-
-				if (b.implClass() != Null.class)
-					implClass(b.implClass());
-
-				if (! b.example().isEmpty())
-					example(b.example());
+				optional(b.implClass()).filter(NOT_VOID).ifPresent(x -> implClass(x));
+				optional(b.example()).filter(NOT_EMPTY).ifPresent(x -> example(x));
 			}
 			return this;
 		}

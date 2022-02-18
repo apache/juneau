@@ -141,7 +141,7 @@ public @interface ParserConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#listener(Class)}
 	 * </ul>
 	 */
-	Class<? extends ParserListener> listener() default ParserListener.Null.class;
+	Class<? extends ParserListener> listener() default ParserListener.Void.class;
 
 	/**
 	 * Configuration property:  Strict mode.

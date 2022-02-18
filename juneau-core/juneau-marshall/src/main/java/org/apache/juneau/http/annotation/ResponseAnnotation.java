@@ -93,8 +93,8 @@ public class ResponseAnnotation {
 	 */
 	public static class Builder extends TargetedAnnotationTMBuilder {
 
-		Class<? extends HttpPartParser> parser = HttpPartParser.Null.class;
-		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Null.class;
+		Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
+		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
 		Header[] headers={};
 		Schema schema = SchemaAnnotation.DEFAULT;
 		String[] examples={};

@@ -95,7 +95,7 @@ public class MarshalledAnnotation {
 	 */
 	public static class Builder extends TargetedAnnotationTBuilder {
 
-		Class<?> implClass=Null.class;
+		Class<?> implClass=void.class;
 		String example="";
 
 		/**

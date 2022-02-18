@@ -97,24 +97,24 @@ public class RestAnnotation {
 	@SuppressWarnings("unchecked")
 	public static class Builder extends TargetedAnnotationTBuilder {
 
-		Class<? extends RestContext.Builder> builder = RestContext.Builder.Null.class;
+		Class<? extends RestContext.Builder> builder = RestContext.Builder.Void.class;
 		Class<? extends Encoder>[] encoders = new Class[0];
-		Class<? extends HttpPartParser> partParser = HttpPartParser.Null.class;
-		Class<? extends HttpPartSerializer> partSerializer = HttpPartSerializer.Null.class;
-		Class<? extends FileFinder> fileFinder = FileFinder.Null.class;
-		Class<? extends StaticFiles> staticFiles = StaticFiles.Null.class;
+		Class<? extends HttpPartParser> partParser = HttpPartParser.Void.class;
+		Class<? extends HttpPartSerializer> partSerializer = HttpPartSerializer.Void.class;
+		Class<? extends FileFinder> fileFinder = FileFinder.Void.class;
+		Class<? extends StaticFiles> staticFiles = StaticFiles.Void.class;
 		Class<? extends ResponseProcessor>[] responseProcessors = new Class[0];
-		Class<? extends RestLogger> callLogger = RestLogger.Null.class;
-		Class<? extends RestContext> contextClass = RestContext.Null.class;
+		Class<? extends RestLogger> callLogger = RestLogger.Void.class;
+		Class<? extends RestContext> contextClass = RestContext.Void.class;
 		Class<? extends RestConverter>[] converters = new Class[0];
 		Class<? extends RestGuard>[] guards = new Class[0];
-		Class<? extends SwaggerProvider> swaggerProvider = SwaggerProvider.Null.class;
+		Class<? extends SwaggerProvider> swaggerProvider = SwaggerProvider.Void.class;
 		Class<? extends RestOpArg>[] restOpArgs = new Class[0];
-		Class<? extends BeanStore> beanStore = BeanStore.Null.class;
-		Class<? extends RestOpContext> restOpContextClass = RestOpContext.Null.class;
-		Class<? extends RestChildren> restChildrenClass = RestChildren.Null.class;
-		Class<? extends RestOperations> restOperationsClass = RestOperations.Null.class;
-		Class<? extends DebugEnablement> debugEnablement = DebugEnablement.Null.class;
+		Class<? extends BeanStore> beanStore = BeanStore.Void.class;
+		Class<? extends RestOpContext> restOpContextClass = RestOpContext.Void.class;
+		Class<? extends RestChildren> restChildrenClass = RestChildren.Void.class;
+		Class<? extends RestOperations> restOperationsClass = RestOperations.Void.class;
+		Class<? extends DebugEnablement> debugEnablement = DebugEnablement.Void.class;
 		Class<? extends Serializer>[] serializers = new Class[0];
 		Class<?>[] children={}, parsers={};
 		Swagger swagger = SwaggerAnnotation.DEFAULT;
