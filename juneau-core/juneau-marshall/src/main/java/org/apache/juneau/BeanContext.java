@@ -18,8 +18,6 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.Arrays.*;
-
 import java.beans.*;
 import java.io.*;
 import java.lang.annotation.*;
@@ -1724,7 +1722,7 @@ public class BeanContext extends Context {
 		 */
 		@FluentSetter
 		public Builder beanDictionary(Class<?>...values) {
-			return beanDictionary(asList(values));
+			return beanDictionary(alist(values));
 		}
 
 		/**
@@ -2611,7 +2609,7 @@ public class BeanContext extends Context {
 		 */
 		@FluentSetter
 		public Builder notBeanClasses(Class<?>...values) {
-			return notBeanClasses(asList(values));
+			return notBeanClasses(alist(values));
 		}
 
 		/**
@@ -2681,7 +2679,7 @@ public class BeanContext extends Context {
 		 */
 		@FluentSetter
 		public Builder notBeanPackages(String...values) {
-			return notBeanPackages(asList(values));
+			return notBeanPackages(alist(values));
 		}
 
 		/**
@@ -3021,7 +3019,7 @@ public class BeanContext extends Context {
 		 */
 		@FluentSetter
 		public Builder swaps(Class<?>...values) {
-			return swaps(asList(values));
+			return swaps(alist(values));
 		}
 
 		/**
@@ -3571,9 +3569,9 @@ public class BeanContext extends Context {
 		notBeanPackages = optional(builder.notBeanPackages).map(ArrayList::new).map(Collections::unmodifiableList).orElse(emptyList());
 		propertyNamer = builder.propertyNamer != null ? builder.propertyNamer : BasicPropertyNamer.class;
 
-		notBeanClassesArray = notBeanClasses.isEmpty() ? DEFAULT_NOTBEAN_CLASSES : Stream.of(notBeanClasses, asList(DEFAULT_NOTBEAN_CLASSES)).flatMap(Collection::stream).toArray(Class[]::new);
+		notBeanClassesArray = notBeanClasses.isEmpty() ? DEFAULT_NOTBEAN_CLASSES : Stream.of(notBeanClasses, alist(DEFAULT_NOTBEAN_CLASSES)).flatMap(Collection::stream).toArray(Class[]::new);
 
-		String[] _notBeanPackages = notBeanPackages.isEmpty() ? DEFAULT_NOTBEAN_PACKAGES : Stream.of(notBeanPackages, asList(DEFAULT_NOTBEAN_PACKAGES)).flatMap(Collection::stream).toArray(String[]::new);
+		String[] _notBeanPackages = notBeanPackages.isEmpty() ? DEFAULT_NOTBEAN_PACKAGES : Stream.of(notBeanPackages, alist(DEFAULT_NOTBEAN_PACKAGES)).flatMap(Collection::stream).toArray(String[]::new);
 		notBeanPackageNames = Stream.of(_notBeanPackages).filter(x -> ! x.endsWith(".*")).toArray(String[]::new);
 		notBeanPackagePrefixes = Stream.of(_notBeanPackages).filter(x -> x.endsWith(".*")).map(x -> x.substring(0, x.length()-2)).toArray(String[]::new);
 

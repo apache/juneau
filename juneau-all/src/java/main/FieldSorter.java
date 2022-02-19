@@ -10,13 +10,14 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-import java.util.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.util.stream.*;
 
 public class FieldSorter {
 
 	public static void main(String[] args) {
 		String in = "properties, p, excludeProperties, x, readOnlyProperties, ro, writeOnlyProperties, wo, example, typeName, typePropertyName";
-		System.err.println(Arrays.asList(in.split("[\\s\\,]+")).stream().sorted().collect(Collectors.joining(", ")));
+		System.err.println(alist(in.split("[\\s\\,]+")).stream().sorted().collect(Collectors.joining(", ")));
 	}
 }

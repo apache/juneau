@@ -616,7 +616,7 @@ public class MockServletRequest implements HttpServletRequest {
 
 	@Override /* HttpServletRequest */
 	public Enumeration<Locale> getLocales() {
-		return Collections.enumeration(Arrays.asList(locale));
+		return Collections.enumeration(alist(locale));
 	}
 
 	@Override /* HttpServletRequest */
@@ -714,7 +714,7 @@ public class MockServletRequest implements HttpServletRequest {
 	@Override /* HttpServletRequest */
 	public Enumeration<String> getHeaders(String name) {
 		String[] s = headerMap.get(name);
-		return Collections.enumeration(Arrays.asList(s == null ? new String[0] : s));
+		return Collections.enumeration(alist(s == null ? new String[0] : s));
 	}
 
 	@Override /* HttpServletRequest */

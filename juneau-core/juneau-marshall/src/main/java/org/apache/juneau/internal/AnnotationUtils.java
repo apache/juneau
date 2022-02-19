@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.lang.annotation.*;
@@ -70,7 +71,7 @@ public class AnnotationUtils {
 	}
 
 	private static Stream<Method> getAnnotationMethods(Class<? extends Annotation> type) {
-		return Arrays.asList(type.getDeclaredMethods())
+		return alist(type.getDeclaredMethods())
 			.stream()
 			.filter(x -> x.getParameterCount() == 0 && x.getDeclaringClass().isAnnotation())
 		;

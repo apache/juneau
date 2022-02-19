@@ -37,7 +37,7 @@ public class ViewArgs {
 	 * 	<br>Values are column names.
 	 */
 	public ViewArgs(String...viewArgs) {
-		this(Arrays.asList(viewArgs));
+		this(alist(viewArgs));
 	}
 
 	/**

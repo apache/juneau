@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
-import static java.util.Arrays.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
@@ -83,7 +82,7 @@ public class DefaultClassList {
 	 * @return This object.
 	 */
 	public DefaultClassList add(Class<?>...values) {
-		entries.addAll(0, asList(values));
+		entries.addAll(0, alist(values));
 		return this;
 	}
 

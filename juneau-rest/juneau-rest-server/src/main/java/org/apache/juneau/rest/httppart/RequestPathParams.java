@@ -213,7 +213,7 @@ public class RequestPathParams {
 	 * @return This object.
 	 */
 	public RequestPathParams addDefault(NameValuePair...pairs) {
-		return addDefault(Arrays.asList(pairs));
+		return addDefault(alist(pairs));
 	}
 
 	/**

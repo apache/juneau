@@ -13,6 +13,7 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -659,7 +660,7 @@ public class SerializerSession extends BeanTraverseSession {
 				list.add(Array.get(array, i));
 			return list;
 		}
-		return Arrays.asList((Object[])array);
+		return alist((Object[])array);
 	}
 
 	/**

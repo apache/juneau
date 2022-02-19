@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.arg;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.util.*;
 
 import javax.servlet.http.*;
@@ -46,6 +48,6 @@ public class CookieList extends ArrayList<Cookie> {
 	 * @param values The values to set in the cookie list.
 	 */
 	public CookieList(Cookie[] values) {
-		super(Arrays.asList(values));
+		super(alist(values));
 	}
 }

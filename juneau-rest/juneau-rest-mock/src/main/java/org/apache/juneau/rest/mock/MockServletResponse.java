@@ -274,7 +274,7 @@ public class MockServletResponse implements HttpServletResponse {
 	@Override /* HttpServletResponse */
 	public Collection<String> getHeaders(String name) {
 		String[] s = headerMap.get(name);
-		return s == null ? Collections.emptyList() : Arrays.asList(s);
+		return s == null ? emptyList() : alist(s);
 	}
 
 	@Override /* HttpServletResponse */

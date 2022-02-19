@@ -465,7 +465,7 @@ public class PartList {
 		@FluentSetter
 		public Builder prepend(PartList value) {
 			if (value != null)
-				entries.addAll(0, Arrays.asList(value.entries));
+				entries.addAll(0, alist(value.entries));
 			return this;
 		}
 
@@ -522,7 +522,7 @@ public class PartList {
 		@FluentSetter
 		public Builder prepend(NameValuePair...values) {
 			if (values != null)
-				prepend(Arrays.asList(values));
+				prepend(alist(values));
 			return this;
 		}
 
@@ -665,7 +665,7 @@ public class PartList {
 		@FluentSetter
 		public Builder set(NameValuePair...values) {
 			if (values != null)
-				set(Arrays.asList(values));
+				set(alist(values));
 			return this;
 		}
 
@@ -790,7 +790,7 @@ public class PartList {
 		@FluentSetter
 		public Builder setDefault(NameValuePair...values) {
 			if (values != null)
-				setDefault(Arrays.asList(values));
+				setDefault(alist(values));
 			return this;
 		}
 

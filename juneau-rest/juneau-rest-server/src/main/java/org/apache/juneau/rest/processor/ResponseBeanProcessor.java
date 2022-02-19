@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.processor;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -134,7 +135,7 @@ public final class ResponseBeanProcessor implements ResponseProcessor {
 		if (o instanceof Map)
 			return ((Map<?,?>)o).entrySet();
 		if (o.getClass().isArray())
-			return Arrays.asList((Object[])o);
+			return alist((Object[])o);
 		if (o instanceof Collection)
 			return (Collection<?>)o;
 		throw new InternalServerError("Could not iterate over Headers of type ''{0}''", className(o));

@@ -151,7 +151,7 @@ public class RequestAttributes {
 	 * @return This object.
 	 */
 	public RequestAttributes addDefault(NamedAttribute...pairs) {
-		return addDefault(Arrays.asList(pairs));
+		return addDefault(alist(pairs));
 	}
 
 	/**

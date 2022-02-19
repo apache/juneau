@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.widget;
 
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
@@ -50,7 +51,7 @@ public class Tooltip {
     */
    public Tooltip(String display, Object...content) {
    	this.display = new HtmlText(display);
-   	this.content = Arrays.asList(content);
+   	this.content = alist(content);
    }
 
    /**

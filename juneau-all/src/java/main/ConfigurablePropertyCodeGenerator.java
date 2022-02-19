@@ -135,10 +135,10 @@ public class ConfigurablePropertyCodeGenerator {
 							StringBuilder sigLine = new StringBuilder();
 							sigLine.append("\n").append(indent).append("public ");
 							if (m.getTypeParameters().length > 0)
-								sigLine.append("<").append(Arrays.asList(m.getTypeParameters()).stream().map(x -> x.getName()).collect(Collectors.joining(", "))).append("> ");
+								sigLine.append("<").append(alist(m.getTypeParameters()).stream().map(x -> x.getName()).collect(Collectors.joining(", "))).append("> ");
 							sigLine.append(cName).append(" ").append(mSig).append(" ");
 							if ( m.getExceptionTypes().length > 0)
-								sigLine.append("throws ").append(Arrays.asList(m.getExceptionTypes()).stream().map(x -> x.getSimpleName()).collect(Collectors.joining(", ")));
+								sigLine.append("throws ").append(alist(m.getExceptionTypes()).stream().map(x -> x.getSimpleName()).collect(Collectors.joining(", ")));
 							sigLine.append("{");
 							String sigLine2 = sigLine.toString();
 

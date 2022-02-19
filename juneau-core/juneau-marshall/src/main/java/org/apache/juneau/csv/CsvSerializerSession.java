@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.csv;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -218,7 +220,7 @@ public final class CsvSerializerSession extends WriterSerializerSession {
 			ClassMeta<?> cm = getClassMetaForObject(o);
 			Collection<?> l = null;
 			if (cm.isArray()) {
-				l = Arrays.asList((Object[])o);
+				l = alist((Object[])o);
 			} else {
 				l = (Collection<?>)o;
 			}

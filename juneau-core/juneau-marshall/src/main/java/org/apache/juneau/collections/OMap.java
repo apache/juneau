@@ -911,7 +911,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 		else if (s instanceof String[])
 			r = (String[])s;
 		else if (s instanceof Object[])
-			r = ArrayUtils.toStringArray(Arrays.asList((Object[])s));
+			r = ArrayUtils.toStringArray(alist((Object[])s));
 		else
 			r = split(stringify(s));
 		return (r.length == 0 ? def : r);

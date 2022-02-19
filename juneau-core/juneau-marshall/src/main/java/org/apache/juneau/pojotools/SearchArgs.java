@@ -39,7 +39,7 @@ public class SearchArgs {
 	 * @param searchArgs Search arguments.
 	 */
 	public SearchArgs(String searchArgs) {
-		this(Arrays.asList(split(searchArgs)));
+		this(alist(split(searchArgs)));
 	}
 
 	/**

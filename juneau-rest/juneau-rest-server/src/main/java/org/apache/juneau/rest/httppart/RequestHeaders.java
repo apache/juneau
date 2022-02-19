@@ -233,7 +233,7 @@ public class RequestHeaders {
 	 * @return This object.
 	 */
 	public RequestHeaders addDefault(Header...pairs) {
-		return addDefault(Arrays.asList(pairs));
+		return addDefault(alist(pairs));
 	}
 
 	/**
@@ -426,8 +426,7 @@ public class RequestHeaders {
 	 * @return A new list object.
 	 */
 	public RequestHeaders subset(String...headers) {
-		Map<String,List<RequestHeader>> m = Arrays
-			.asList(headers)
+		Map<String,List<RequestHeader>> m = alist(headers)
 			.stream()
 			.map(x -> key(x))
 			.filter(map::containsKey)

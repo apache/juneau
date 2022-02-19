@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.annotation;
 
-import static java.util.Arrays.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
@@ -80,7 +80,7 @@ public class BeanConfigAnnotation {
 			classes(a.notBeanClasses()).ifPresent(x -> b.notBeanClasses(x));
 			classes(a.notBeanClasses_replace()).ifPresent(x -> { b.notBeanClasses().clear(); b.notBeanClasses(x);});
 			type(a.propertyNamer()).ifPresent(x -> b.propertyNamer(x));
-			asList(a.interfaces()).stream().map(x -> BeanAnnotation.create(x).interfaceClass(x).build()).forEach(x -> b.annotations(x));
+			alist(a.interfaces()).stream().map(x -> BeanAnnotation.create(x).interfaceClass(x).build()).forEach(x -> b.annotations(x));
 			strings(a.notBeanPackages()).ifPresent(x -> b.notBeanPackages(x));
 			strings(a.notBeanPackages_replace()).ifPresent(x -> {b.notBeanPackages().clear(); b.notBeanPackages(x);});
 		}

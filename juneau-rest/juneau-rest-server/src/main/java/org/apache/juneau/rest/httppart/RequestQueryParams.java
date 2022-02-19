@@ -229,7 +229,7 @@ public class RequestQueryParams {
 	 * @return This object.
 	 */
 	public RequestQueryParams addDefault(NameValuePair...pairs) {
-		return addDefault(Arrays.asList(pairs));
+		return addDefault(alist(pairs));
 	}
 
 	/**

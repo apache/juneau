@@ -209,6 +209,6 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	}
 
 	private List<String> parse(String value) {
-		return value == null ? null : unmodifiable(Arrays.asList(split(value)));
+		return value == null ? null : unmodifiable(alist(split(value)));
 	}
 }

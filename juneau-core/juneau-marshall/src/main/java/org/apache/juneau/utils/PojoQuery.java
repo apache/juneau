@@ -302,7 +302,7 @@ public final class PojoQuery {
 			return dm;
 		}
 		if (cm.isArray()) {
-			return replaceWithMutables(Arrays.asList((Object[])o));
+			return replaceWithMutables(alist((Object[])o));
 		}
 		return o;
 	}

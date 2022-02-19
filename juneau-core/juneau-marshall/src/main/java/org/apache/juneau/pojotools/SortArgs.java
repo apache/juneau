@@ -43,7 +43,7 @@ public class SortArgs {
 	 * 	</ul>
 	 */
 	public SortArgs(String...sortArgs) {
-		this(Arrays.asList(sortArgs));
+		this(alist(sortArgs));
 	}
 
 	/**

@@ -18,7 +18,6 @@ import static org.apache.juneau.internal.FileUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
-import static java.util.Arrays.*;
 import static java.util.stream.Collectors.*;
 
 import java.io.*;
@@ -268,11 +267,11 @@ public class BasicFileFinder implements FileFinder {
 	}
 
 	private List<String> getIncludePatterns() {
-		return asList(include).stream().map(x->x.pattern()).collect(toList());
+		return alist(include).stream().map(x->x.pattern()).collect(toList());
 	}
 
 	private List<String> getExcludePatterns() {
-		return asList(include).stream().map(x->x.pattern()).collect(toList());
+		return alist(include).stream().map(x->x.pattern()).collect(toList());
 	}
 
 	@Override

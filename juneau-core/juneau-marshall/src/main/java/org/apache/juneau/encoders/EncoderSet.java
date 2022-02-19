@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.encoders;
 
-import static java.util.Arrays.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
@@ -226,7 +225,7 @@ public final class EncoderSet {
 		 * @return This object.
 		 */
 		public Builder add(Encoder...values) {
-			entries.addAll(0, asList(values));
+			entries.addAll(0, alist(values));
 			return this;
 		}
 

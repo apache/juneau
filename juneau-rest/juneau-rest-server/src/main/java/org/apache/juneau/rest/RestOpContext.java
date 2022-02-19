@@ -23,12 +23,10 @@ import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
-import static java.util.Arrays.*;
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
 import java.nio.charset.*;
 import java.util.*;
-import java.util.ArrayList;
 import java.util.concurrent.*;
 import java.util.function.*;
 
@@ -1962,7 +1960,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			if (path == null)
 				path = list(values);
 			else
-				path.addAll(0, Arrays.asList(values));
+				path.addAll(0, alist(values));
 			return this;
 		}
 
@@ -1997,7 +1995,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			if (produces == null)
 				produces = list(values);
 			else
-				produces.addAll(Arrays.asList(values));
+				produces.addAll(alist(values));
 			return this;
 		}
 
@@ -2033,7 +2031,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			if (rolesDeclared == null)
 				rolesDeclared = set(values);
 			else
-				rolesDeclared.addAll(asList(values));
+				rolesDeclared.addAll(alist(values));
 			return this;
 		}
 
@@ -2119,9 +2117,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		@FluentSetter
 		public Builder consumes(MediaType...values) {
 			if (consumes == null)
-				consumes = new ArrayList<>(Arrays.asList(values));
+				consumes = list(values);
 			else
-				consumes.addAll(Arrays.asList(values));
+				consumes.addAll(alist(values));
 			return this;
 		}
 

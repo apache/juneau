@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.http.header.*;
@@ -23,7 +25,7 @@ public class RootContentTest extends ContentComboTestBase {
 
 	@Parameterized.Parameters
 	public static Collection<Object[]> getParameters() {
-		return Arrays.asList(new Object[][] {
+		return alist(new Object[][] {
 			{ 	/* 0 */
 				new ComboInput("HTML-stylesheet", "/", MediaType.HTML,
 					"@import '/htdocs/themes/devops.css';",

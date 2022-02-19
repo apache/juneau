@@ -478,7 +478,7 @@ public class HeaderList {
 		@FluentSetter
 		public Builder prepend(HeaderList value) {
 			if (value != null)
-				entries.addAll(0, Arrays.asList(value.entries));
+				entries.addAll(0, alist(value.entries));
 			return this;
 		}
 
@@ -535,7 +535,7 @@ public class HeaderList {
 		@FluentSetter
 		public Builder prepend(Header...values) {
 			if (values != null)
-				prepend(Arrays.asList(values));
+				prepend(alist(values));
 			return this;
 		}
 
@@ -678,7 +678,7 @@ public class HeaderList {
 		@FluentSetter
 		public Builder set(Header...values) {
 			if (values != null)
-				set(Arrays.asList(values));
+				set(alist(values));
 			return this;
 		}
 
@@ -803,7 +803,7 @@ public class HeaderList {
 		@FluentSetter
 		public Builder setDefault(Header...values) {
 			if (values != null)
-				setDefault(Arrays.asList(values));
+				setDefault(alist(values));
 			return this;
 		}
 
@@ -1640,6 +1640,6 @@ public class HeaderList {
 
 	@Override /* Object */
 	public String toString() {
-		return Arrays.asList(entries).toString();
+		return alist(entries).toString();
 	}
 }

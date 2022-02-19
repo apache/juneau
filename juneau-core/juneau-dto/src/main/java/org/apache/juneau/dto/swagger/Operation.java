@@ -1133,7 +1133,7 @@ public class Operation extends SwaggerElement {
 	 */
 	public Operation security(String scheme, String...alternatives) {
 		Map<String,List<String>> m = map();
-		m.put(scheme, Arrays.asList(alternatives));
+		m.put(scheme, alist(alternatives));
 		addSecurity(Collections.singletonList(m));
 		return this;
 	}

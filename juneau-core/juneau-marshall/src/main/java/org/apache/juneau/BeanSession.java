@@ -712,7 +712,7 @@ public class BeanSession extends ContextSession {
 				if (from.isCollection())
 					return (T)toArray(to, (Collection)value);
 				else if (from.isArray())
-					return (T)toArray(to, Arrays.asList((Object[])value));
+					return (T)toArray(to, alist((Object[])value));
 				else if (startsWith(value.toString(), '['))
 					return (T)toArray(to, OList.ofJson(value.toString()).setBeanSession(this));
 				else if (to.hasMutaterFrom(from))

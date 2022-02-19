@@ -24,7 +24,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.rest.logging.RestLoggingDetail.*;
 import static org.apache.juneau.rest.processor.ResponseProcessor.*;
-import static java.util.Arrays.*;
 import static java.util.Collections.*;
 import static java.util.logging.Level.*;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
@@ -5210,7 +5209,7 @@ public class RestContext extends Context {
 		 */
 		@FluentSetter
 		public Builder children(Object...values) {
-			children.addAll(asList(values));
+			children.addAll(alist(values));
 			return this;
 		}
 
@@ -5566,7 +5565,7 @@ public class RestContext extends Context {
 			if (produces == null)
 				produces = list(values);
 			else
-				produces.addAll(Arrays.asList(values));
+				produces.addAll(alist(values));
 			return this;
 		}
 
@@ -5629,7 +5628,7 @@ public class RestContext extends Context {
 			if (consumes == null)
 				consumes = list(values);
 			else
-				consumes.addAll(Arrays.asList(values));
+				consumes.addAll(alist(values));
 			return this;
 		}
 

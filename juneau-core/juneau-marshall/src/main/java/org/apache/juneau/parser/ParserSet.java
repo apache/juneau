@@ -16,8 +16,6 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
-import static java.util.Arrays.*;
-import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
 
 import java.util.*;
@@ -347,7 +345,7 @@ public final class ParserSet {
 		 * @return This object.
 		 */
 		public Builder add(Parser...s) {
-			entries.addAll(0, asList(s));
+			entries.addAll(0, alist(s));
 			return this;
 		}
 
@@ -602,7 +600,7 @@ public final class ParserSet {
 	 * @return An unmodifiable list of parsers in this group.
 	 */
 	public List<Parser> getParsers() {
-		return unmodifiableList(asList(entries));
+		return ulist(entries);
 	}
 
 	/**

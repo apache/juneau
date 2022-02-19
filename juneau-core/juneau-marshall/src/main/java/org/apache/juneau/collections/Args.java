@@ -13,6 +13,7 @@
 package org.apache.juneau.collections;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -120,7 +121,7 @@ public final class Args extends OMap {
 	 * @param args Arguments passed in through a <c>main(String[] args)</c> method.
 	 */
 	public Args(String[] args) {
-		List<String> argList = new LinkedList<>(Arrays.asList(args));
+		List<String> argList = linkedList(args);
 
 		// Capture the main arguments.
 		Integer i = 0;

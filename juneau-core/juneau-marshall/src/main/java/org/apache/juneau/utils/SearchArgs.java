@@ -188,7 +188,7 @@ public class SearchArgs {
 		 */
 		public Builder sort(String sortArgs) {
 			if (sortArgs != null)
-				sort(Arrays.asList(StringUtils.split(sortArgs)));
+				sort(alist(StringUtils.split(sortArgs)));
 			return this;
 		}
 

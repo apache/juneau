@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl;
 
-import static java.util.Arrays.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
@@ -85,7 +85,7 @@ public class VarList extends ArrayList<Object> {
 	 * @return This object.
 	 */
 	public VarList append(Var...vars) {
-		addAll(asList(vars));
+		addAll(alist(vars));
 		return this;
 	}
 
@@ -108,7 +108,7 @@ public class VarList extends ArrayList<Object> {
 	 */
 	@SafeVarargs
 	public final VarList append(Class<? extends Var>...vars) {
-		addAll(asList(vars));
+		addAll(alist(vars));
 		return this;
 	}
 

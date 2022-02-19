@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test.client;
 
-import static java.util.Arrays.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.testutils.Constants.*;
@@ -1248,7 +1247,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet implements BasicUn
 
 	@RestGet(path="/returnIntegerList")
 	public List<Integer> returnIntegerList() {
-		return asList(new Integer[]{1,null});
+		return alist(new Integer[]{1,null});
 	}
 
 	@RestGet(path="/returnInteger3dList")
@@ -1268,7 +1267,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet implements BasicUn
 
 	@RestGet(path="/returnStringList")
 	public List<String> returnStringList() {
-		return asList(new String[]{"foo","bar",null});
+		return alist(new String[]{"foo","bar",null});
 	}
 
 	// Beans
@@ -1285,7 +1284,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet implements BasicUn
 
 	@RestGet(path="/returnBeanList")
 	public List<ABean> returnBeanList() {
-		return asList(ABean.get());
+		return alist(ABean.get());
 	}
 
 	@RestGet(path="/returnBean1d3dList")
@@ -1300,7 +1299,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet implements BasicUn
 
 	@RestGet(path="/returnBeanListMap")
 	public Map<String,List<ABean>> returnBeanListMap() {
-		return map("foo",asList(ABean.get()));
+		return map("foo",alist(ABean.get()));
 	}
 
 	@RestGet(path="/returnBean1d3dListMap")
@@ -1310,7 +1309,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet implements BasicUn
 
 	@RestGet(path="/returnBeanListMapIntegerKeys")
 	public Map<Integer,List<ABean>> returnBeanListMapIntegerKeys() {
-		return map(1,asList(ABean.get()));
+		return map(1,alist(ABean.get()));
 	}
 
 	// Typed beans
@@ -1327,7 +1326,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet implements BasicUn
 
 	@RestGet(path="/returnTypedBeanList")
 	public List<TypedBean> returnTypedBeanList() {
-		return asList((TypedBean)TypedBeanImpl.get());
+		return alist((TypedBean)TypedBeanImpl.get());
 	}
 
 	@RestGet(path="/returnTypedBean1d3dList")
@@ -1342,7 +1341,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet implements BasicUn
 
 	@RestGet(path="/returnTypedBeanListMap")
 	public Map<String,List<TypedBean>> returnTypedBeanListMap() {
-		return map("foo",asList((TypedBean)TypedBeanImpl.get()));
+		return map("foo",alist((TypedBean)TypedBeanImpl.get()));
 	}
 
 	@RestGet(path="/returnTypedBean1d3dListMap")
@@ -1352,7 +1351,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet implements BasicUn
 
 	@RestGet(path="/returnTypedBeanListMapIntegerKeys")
 	public Map<Integer,List<TypedBean>> returnTypedBeanListMapIntegerKeys() {
-		return map(1,asList((TypedBean)TypedBeanImpl.get()));
+		return map(1,alist((TypedBean)TypedBeanImpl.get()));
 	}
 
 	// Swapped POJOs

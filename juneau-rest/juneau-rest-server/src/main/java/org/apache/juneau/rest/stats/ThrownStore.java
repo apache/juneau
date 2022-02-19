@@ -272,7 +272,7 @@ public class ThrownStore {
 	 * @return A modifiable list of strings.
 	 */
 	protected List<String> createStackTrace(Throwable t) {
-		return Arrays.asList(t.getStackTrace()).stream().filter(x -> include(x)).map(x -> normalize(x)).collect(toList());
+		return alist(t.getStackTrace()).stream().filter(x -> include(x)).map(x -> normalize(x)).collect(toList());
 	}
 
 	/**
