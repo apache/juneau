@@ -465,7 +465,7 @@ public class PartList {
 		@FluentSetter
 		public Builder prepend(PartList value) {
 			if (value != null)
-				entries.addAll(0, alist(value.entries));
+				prependAll(entries, value.entries);
 			return this;
 		}
 

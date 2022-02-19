@@ -341,7 +341,7 @@ public final class SerializerSet {
 		 * @return This object.
 		 */
 		public Builder add(Serializer...s) {
-			entries.addAll(0, alist(s));
+			prependAll(entries, (Object[])s);
 			return this;
 		}
 

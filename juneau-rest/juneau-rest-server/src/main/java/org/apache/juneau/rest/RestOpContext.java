@@ -1957,10 +1957,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 */
 		@FluentSetter
 		public Builder path(String...values) {
-			if (path == null)
-				path = list(values);
-			else
-				path.addAll(0, alist(values));
+			path = prependAll(path, values);
 			return this;
 		}
 
@@ -1992,10 +1989,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 */
 		@FluentSetter
 		public Builder produces(MediaType...values) {
-			if (produces == null)
-				produces = list(values);
-			else
-				produces.addAll(alist(values));
+			produces = addAll(produces, values);
 			return this;
 		}
 
@@ -2028,10 +2022,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 */
 		@FluentSetter
 		public Builder rolesDeclared(String...values) {
-			if (rolesDeclared == null)
-				rolesDeclared = set(values);
-			else
-				rolesDeclared.addAll(alist(values));
+			rolesDeclared = addAll(rolesDeclared, values);
 			return this;
 		}
 
@@ -2116,10 +2107,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 */
 		@FluentSetter
 		public Builder consumes(MediaType...values) {
-			if (consumes == null)
-				consumes = list(values);
-			else
-				consumes.addAll(alist(values));
+			consumes = addAll(consumes, values);
 			return this;
 		}
 

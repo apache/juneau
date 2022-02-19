@@ -5209,7 +5209,7 @@ public class RestContext extends Context {
 		 */
 		@FluentSetter
 		public Builder children(Object...values) {
-			children.addAll(alist(values));
+			addAll(children, values);
 			return this;
 		}
 
@@ -5562,10 +5562,7 @@ public class RestContext extends Context {
 		 */
 		@FluentSetter
 		public Builder produces(MediaType...values) {
-			if (produces == null)
-				produces = list(values);
-			else
-				produces.addAll(alist(values));
+			produces = addAll(produces, values);
 			return this;
 		}
 
@@ -5625,10 +5622,7 @@ public class RestContext extends Context {
 		 */
 		@FluentSetter
 		public Builder consumes(MediaType...values) {
-			if (consumes == null)
-				consumes = list(values);
-			else
-				consumes.addAll(alist(values));
+			consumes = addAll(consumes, values);
 			return this;
 		}
 

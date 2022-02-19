@@ -142,7 +142,7 @@ public class SearchArgs {
 		 */
 		public Builder view(String columns) {
 			if (columns != null)
-				Collections.addAll(this.view, StringUtils.split(columns));
+				addAll(this.view, StringUtils.split(columns));
 			return this;
 		}
 

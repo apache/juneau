@@ -99,7 +99,7 @@ public interface StaticFiles extends FileFinder {
 		 */
 		@FluentSetter
 		public Builder headers(Header...headers) {
-			this.headers.addAll(alist(headers));
+			addAll(this.headers, headers);
 			return this;
 		}
 

@@ -49,8 +49,7 @@ public final class JsonTypeArray extends LinkedList<JsonType> {
 	 * @return This object.
 	 */
 	public JsonTypeArray addAll(JsonType...types) {
-		for (JsonType t : types)
-			add(t);
+		Collections.addAll(this, types);
 		return this;
 	}
 }

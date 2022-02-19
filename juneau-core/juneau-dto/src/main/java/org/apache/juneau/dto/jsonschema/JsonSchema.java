@@ -1239,11 +1239,8 @@ public class JsonSchema {
 	 * @return This object.
 	 */
 	public JsonSchema addAllOf(JsonSchema...allOf) {
-		if (this.allOf == null)
-			this.allOf = new LinkedList<>();
 		setMasterOn(allOf);
-		for (JsonSchema s : allOf)
-			this.allOf.add(s);
+		this.allOf = addAll(this.allOf, allOf);
 		return this;
 	}
 

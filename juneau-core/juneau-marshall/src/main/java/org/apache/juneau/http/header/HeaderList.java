@@ -478,7 +478,7 @@ public class HeaderList {
 		@FluentSetter
 		public Builder prepend(HeaderList value) {
 			if (value != null)
-				entries.addAll(0, alist(value.entries));
+				prependAll(entries, value.entries);
 			return this;
 		}
 

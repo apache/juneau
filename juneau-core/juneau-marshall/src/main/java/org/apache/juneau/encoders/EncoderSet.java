@@ -225,7 +225,7 @@ public final class EncoderSet {
 		 * @return This object.
 		 */
 		public Builder add(Encoder...values) {
-			entries.addAll(0, alist(values));
+			prependAll(entries, (Object[])values);
 			return this;
 		}
 

@@ -49,8 +49,7 @@ public class JsonSchemaArray extends LinkedList<JsonSchema> {
 	 * @return This object.
 	 */
 	public JsonSchemaArray addAll(JsonSchema...schemas) {
-		for (JsonSchema s : schemas)
-			add(s);
+		Collections.addAll(this, schemas);
 		return this;
 	}
 }

@@ -696,9 +696,7 @@ public abstract class Context implements AnnotationProvider {
 		 */
 		@FluentSetter
 		public Builder annotations(Annotation...values) {
-			if (annotations == null)
-				annotations = list();
-			Collections.addAll(annotations, values);
+			annotations = addAll(annotations, values);
 			return this;
 		}
 

@@ -528,8 +528,7 @@ public final class ClassMeta<T> implements Type {
 			BeanFilter beanFilter = findBeanFilter(bc);
 			MarshalledFilter marshalledFilter = findMarshalledFilter(bc);
 
-			if (swaps != null)
-				addAll(this.swaps, swaps);
+			addAll(this.swaps, swaps);
 
 			if (bc != null)
 				this.builderSwap = BuilderSwap.findSwapFromObjectClass(bc, c, bc.getBeanConstructorVisibility(), bc.getBeanMethodVisibility());

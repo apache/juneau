@@ -345,7 +345,7 @@ public final class ParserSet {
 		 * @return This object.
 		 */
 		public Builder add(Parser...s) {
-			entries.addAll(0, alist(s));
+			prependAll(entries, (Object[])s);
 			return this;
 		}
 

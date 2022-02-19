@@ -78,10 +78,10 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		final JsonSerializer.Builder jsonSerializerBuilder;
 		final JsonParser.Builder jsonParserBuilder;
 
-		Set<TypeCategory> addDescriptionsTo, addExamplesTo;
+		SortedSet<TypeCategory> addDescriptionsTo, addExamplesTo;
 		boolean allowNestedDescriptions, allowNestedExamples, useBeanDefs;
 		Class<? extends BeanDefMapper> beanDefMapper;
-		Set<String> ignoreTypes;
+		SortedSet<String> ignoreTypes;
 
 		/**
 		 * Constructor, default settings.
@@ -198,9 +198,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 */
 		@FluentSetter
 		public Builder addDescriptionsTo(TypeCategory...values) {
-			if (addDescriptionsTo == null)
-				addDescriptionsTo = new TreeSet<>();
-			Collections.addAll(addDescriptionsTo, values);
+			addDescriptionsTo = addAll(addDescriptionsTo, values);
 			return this;
 		}
 
@@ -239,9 +237,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 */
 		@FluentSetter
 		public Builder addExamplesTo(TypeCategory...values) {
-			if (addExamplesTo == null)
-				addExamplesTo = new TreeSet<>();
-			Collections.addAll(addExamplesTo, values);
+			addExamplesTo = addAll(addExamplesTo, values);
 			return this;
 		}
 
@@ -339,9 +335,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 */
 		@FluentSetter
 		public Builder ignoreTypes(String...values) {
-			if (ignoreTypes == null)
-				ignoreTypes = new TreeSet<>();
-			Collections.addAll(ignoreTypes, values);
+			ignoreTypes = addAll(ignoreTypes, values);
 			return this;
 		}
 

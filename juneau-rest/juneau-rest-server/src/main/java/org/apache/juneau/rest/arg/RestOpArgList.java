@@ -84,7 +84,7 @@ public class RestOpArgList {
 		 * @throws IllegalArgumentException if any class does not extend from {@link RestOpArg}.
 		 */
 		public Builder add(Class<?>...values) {
-			entries.addAll(0, alist(assertClassArrayArgIsType("values", RestOpArg.class, values)));
+			prependAll(entries, assertClassArrayArgIsType("values", RestOpArg.class, values));
 			return this;
 		}
 

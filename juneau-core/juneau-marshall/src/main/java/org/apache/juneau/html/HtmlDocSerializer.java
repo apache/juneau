@@ -787,7 +787,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		@FluentSetter
 		@SuppressWarnings("unchecked")
 		public Builder widgets(Class<? extends HtmlWidget>...values) {
-			Collections.addAll(widgets(), values);
+			addAll(widgets(), values);
 			return this;
 		}
 

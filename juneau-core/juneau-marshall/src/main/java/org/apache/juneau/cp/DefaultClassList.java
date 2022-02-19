@@ -82,7 +82,7 @@ public class DefaultClassList {
 	 * @return This object.
 	 */
 	public DefaultClassList add(Class<?>...values) {
-		entries.addAll(0, alist(values));
+		prependAll(entries, values);
 		return this;
 	}
 

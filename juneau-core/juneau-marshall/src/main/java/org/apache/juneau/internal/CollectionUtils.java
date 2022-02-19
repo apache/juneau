@@ -526,13 +526,78 @@ public final class CollectionUtils {
 
 	/**
 	 * Adds all the specified values to the specified collection.
+	 * Creates a new set if the value is <jk>null</jk>.
 	 *
 	 * @param value The collection to add to.
 	 * @param entries The entries to add.
+	 * @return The set.
 	 */
 	@SafeVarargs
-	public static <T> void addAll(Collection<T> value, T...entries) {
-		Collections.addAll(value, entries);
+	public static <T> Set<T> addAll(Set<T> value, T...entries) {
+		if (entries != null) {
+			if (value == null)
+				value = set(entries);
+			else
+				Collections.addAll(value, entries);
+		}
+		return value;
+	}
+
+	/**
+	 * Adds all the specified values to the specified collection.
+	 * Creates a new set if the value is <jk>null</jk>.
+	 *
+	 * @param value The collection to add to.
+	 * @param entries The entries to add.
+	 * @return The set.
+	 */
+	@SafeVarargs
+	public static <T> SortedSet<T> addAll(SortedSet<T> value, T...entries) {
+		if (entries != null) {
+			if (value == null)
+				value = sortedSet(entries);
+			else
+				Collections.addAll(value, entries);
+		}
+		return value;
+	}
+
+	/**
+	 * Adds all the specified values to the specified collection.
+	 * Creates a new set if the value is <jk>null</jk>.
+	 *
+	 * @param value The collection to add to.
+	 * @param entries The entries to add.
+	 * @return The set.
+	 */
+	@SafeVarargs
+	public static <T> List<T> addAll(List<T> value, T...entries) {
+		if (entries != null) {
+			if (value == null)
+				value = list(entries);
+			else
+				Collections.addAll(value, entries);
+		}
+		return value;
+	}
+
+	/**
+	 * Adds all the specified values to the specified collection.
+	 * Creates a new set if the value is <jk>null</jk>.
+	 *
+	 * @param value The collection to add to.
+	 * @param entries The entries to add.
+	 * @return The set.
+	 */
+	@SafeVarargs
+	public static <T> List<T> prependAll(List<T> value, T...entries) {
+		if (entries != null) {
+			if (value == null)
+				value = list(entries);
+			else
+				value.addAll(0, alist(entries));
+		}
+		return value;
 	}
 
 	/**
