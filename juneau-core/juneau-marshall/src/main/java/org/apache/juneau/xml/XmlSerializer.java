@@ -511,7 +511,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		@FluentSetter
 		public Builder namespaces(Namespace...values) {
 			if (namespaces == null)
-				namespaces = new ArrayList<>();
+				namespaces = list();
 			Collections.addAll(namespaces, values);
 			return this;
 		}

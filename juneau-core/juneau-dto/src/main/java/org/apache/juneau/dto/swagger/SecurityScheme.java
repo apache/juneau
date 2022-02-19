@@ -94,7 +94,7 @@ public class SecurityScheme extends SwaggerElement {
 		this.flow = copyFrom.flow;
 		this.in = copyFrom.in;
 		this.name = copyFrom.name;
-		this.scopes = copyFrom.scopes == null ? null : new LinkedHashMap<>(copyFrom.scopes);
+		this.scopes = copyOf(copyFrom.scopes);
 		this.tokenUrl = copyFrom.tokenUrl;
 		this.type = copyFrom.type;
 	}

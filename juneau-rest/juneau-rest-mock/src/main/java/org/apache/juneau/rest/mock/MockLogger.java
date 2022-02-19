@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.io.*;
@@ -71,7 +72,7 @@ public class MockLogger extends Logger {
 
 	private static final String FORMAT_PROPERTY = "java.util.logging.SimpleFormatter.format";
 
-	private final List<LogRecord> logRecords = new ArrayList<>();
+	private final List<LogRecord> logRecords = list();
 	private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	private volatile Formatter formatter;
 	private volatile String format = "%4$s: %5$s%6$s%n";

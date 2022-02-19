@@ -142,7 +142,7 @@ public class RestContext extends Context {
 	 * @return An unmodifiable map of resource classes to {@link RestContext} objects.
 	 */
 	public static final Map<Class<?>, RestContext> getGlobalRegistry() {
-		return Collections.unmodifiableMap(REGISTRY);
+		return unmodifiable(REGISTRY);
 	}
 
 	/**
@@ -271,7 +271,7 @@ public class RestContext extends Context {
 		Class<? extends RestOpContext> opContextClass = RestOpContext.class;
 		Class<? extends RestOperations> operationsClass = RestOperations.class;
 
-		List<Object> children = new ArrayList<>();
+		List<Object> children = list();
 
 		/**
 		 * Constructor.
@@ -367,7 +367,7 @@ public class RestContext extends Context {
 
 			Object r = resource.get();
 
-			Map<String,MethodInfo> map = new LinkedHashMap<>();
+			Map<String,MethodInfo> map = map();
 			ClassInfo.ofProxy(r).forEachAllMethodParentFirst(
 				y -> y.hasAnnotation(RestHook.class) && y.getAnnotation(RestHook.class).value() == HookEvent.INIT,
 				y -> {
@@ -5564,7 +5564,7 @@ public class RestContext extends Context {
 		@FluentSetter
 		public Builder produces(MediaType...values) {
 			if (produces == null)
-				produces = new ArrayList<>(Arrays.asList(values));
+				produces = list(values);
 			else
 				produces.addAll(Arrays.asList(values));
 			return this;
@@ -5627,7 +5627,7 @@ public class RestContext extends Context {
 		@FluentSetter
 		public Builder consumes(MediaType...values) {
 			if (consumes == null)
-				consumes = new ArrayList<>(Arrays.asList(values));
+				consumes = list(values);
 			else
 				consumes.addAll(Arrays.asList(values));
 			return this;
@@ -5944,14 +5944,14 @@ public class RestContext extends Context {
 
 			produces = builder.produces().orElseGet(
 				()->{
-					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : new LinkedHashSet<>(opContexts.get(0).getSerializers().getSupportedMediaTypes());
+					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : setFrom(opContexts.get(0).getSerializers().getSupportedMediaTypes());
 					opContexts.forEach(x -> s.retainAll(x.getSerializers().getSupportedMediaTypes()));
 					return unmodifiable(listFrom(s));
 				}
 			);
 			consumes = builder.consumes().orElseGet(
 				()->{
-					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : new LinkedHashSet<>(opContexts.get(0).getParsers().getSupportedMediaTypes());
+					Set<MediaType> s = opContexts.isEmpty() ? emptySet() : setFrom(opContexts.get(0).getParsers().getSupportedMediaTypes());
 					opContexts.forEach(x -> s.retainAll(x.getParsers().getSupportedMediaTypes()));
 					return unmodifiable(listFrom(s));
 				}

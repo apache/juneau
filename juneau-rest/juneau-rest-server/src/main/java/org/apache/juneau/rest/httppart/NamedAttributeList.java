@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.httppart;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -61,14 +63,14 @@ public class NamedAttributeList {
 	@FluentSetters
 	public static class Builder extends BeanBuilder<NamedAttributeList> {
 
-		LinkedHashMap<String,NamedAttribute> entries;
+		Map<String,NamedAttribute> entries;
 
 		/**
 		 * Constructor.
 		 */
 		protected Builder() {
 			super(NamedAttributeList.class, BeanStore.INSTANCE);
-			entries = new LinkedHashMap<>();
+			entries = map();
 		}
 
 		/**
@@ -78,7 +80,7 @@ public class NamedAttributeList {
 		 */
 		protected Builder(Builder copyFrom) {
 			super(copyFrom);
-			entries = new LinkedHashMap<>(copyFrom.entries);
+			entries = copyOf(copyFrom.entries);
 		}
 
 		@Override /* BeanBuilder */

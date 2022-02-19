@@ -141,7 +141,7 @@ public abstract class Context implements AnnotationProvider {
 		List<Annotation> annotations;
 		Cache<HashKey,? extends Context> cache;
 
-		private final List<Object> builders = new ArrayList<>();
+		private final List<Object> builders = list();
 		private final AnnotationWorkList applied = AnnotationWorkList.create();
 
 		/**
@@ -168,7 +168,7 @@ public abstract class Context implements AnnotationProvider {
 		protected Builder(Context copyFrom) {
 			debug = copyFrom.debug;
 			type = copyFrom.getClass();
-			annotations = copyFrom.annotations.isEmpty() ? null : new ArrayList<>(copyFrom.annotations);
+			annotations = listFrom(copyFrom.annotations, true);
 			registerBuilders(this);
 		}
 
@@ -180,7 +180,7 @@ public abstract class Context implements AnnotationProvider {
 		protected Builder(Builder copyFrom) {
 			debug = copyFrom.debug;
 			type = copyFrom.type;
-			annotations = copyFrom.annotations == null ? null : new ArrayList<>(copyFrom.annotations);
+			annotations = listFrom(copyFrom.annotations, true);
 			registerBuilders(this);
 		}
 
@@ -697,7 +697,7 @@ public abstract class Context implements AnnotationProvider {
 		@FluentSetter
 		public Builder annotations(Annotation...values) {
 			if (annotations == null)
-				annotations = new ArrayList<>();
+				annotations = list();
 			Collections.addAll(annotations, values);
 			return this;
 		}

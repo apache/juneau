@@ -45,7 +45,7 @@ public class ConfigurablePropertyCodeGenerator {
 	public static void main(String[] args) throws Exception {
 		Map<Class<?>, Set<Method>> configMethods = new HashMap<>();
 
-		Map<Class<?>,File> classMap = new LinkedHashMap<>();
+		Map<Class<?>,File> classMap = map();
 		for (String sp : SOURCE_PATHS) {
 			File f = new File("../"+sp+"/src/main/java");
 			Path p = f.toPath();

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.pojotools;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -51,18 +53,18 @@ public final class PojoSorter implements PojoTool<SortArgs> {
 
 		if (type.isArray()) {
 			int size = Array.getLength(input);
-			l = new ArrayList<>(size);
+			l = list(size);
 			for (int i = 0; i < size; i++)
 				l.add(new SortEntry(session, Array.get(input, i)));
 		} else /* isCollection() */ {
 			Collection c = (Collection)input;
-			l = new ArrayList<>(c.size());
+			l = list(c.size());
 			for (Object o : c)
 				l.add(new SortEntry(session, o));
 		}
 
 		// We reverse the list and sort last to first.
-		List<String> columns = new ArrayList<>(sort.keySet());
+		List<String> columns = listFrom(sort.keySet());
 		Collections.reverse(columns);
 
 		for (final String c : columns) {
@@ -72,9 +74,8 @@ public final class PojoSorter implements PojoTool<SortArgs> {
 			Collections.sort(l);
 		}
 
-		ArrayList<Object> l2 = new ArrayList<>(l.size());
-		for (SortEntry se : l)
-			l2.add(se.o);
+		List<Object> l2 = list(l.size());
+		l.forEach(x -> l2.add(x.o));
 
 		return l2;
 	}

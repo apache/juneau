@@ -166,10 +166,7 @@ public class ParameterInfo extends SwaggerElement {
 		this.type = copyFrom.type;
 		this.uniqueItems = copyFrom.uniqueItems;
 
-		if (copyFrom.examples == null)
-			this.examples = null;
-		else
-			this.examples = new LinkedHashMap<>(copyFrom.examples);
+		this.examples = copyOf(copyFrom.examples);
 	}
 
 	/**

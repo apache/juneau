@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -428,7 +429,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	public Set<String> keySet() {
 		if (meta.dynaProperty == null)
 			return meta.properties.keySet();
-		Set<String> l = new LinkedHashSet<>();
+		Set<String> l = set();
 		for (String p : meta.properties.keySet())
 			if (! "*".equals(p))
 				l.add(p);
@@ -508,7 +509,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	public List<BeanPropertyValue> getValues(boolean keepNulls, BeanPropertyValue...prependVals) {
 		Collection<BeanPropertyMeta> properties = getProperties();
 		int capacity = ((! keepNulls) && properties.size() > 10) ? 10 : properties.size() + prependVals.length;
-		List<BeanPropertyValue> l = new ArrayList<>(capacity);
+		List<BeanPropertyValue> l = list(capacity);
 		for (BeanPropertyValue v : prependVals)
 			if (v != null)
 				l.add(v);
@@ -573,7 +574,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		// If this bean has a dyna-property, then we need to construct the entire set before returning.
 		// Otherwise, we can create an iterator without a new data structure.
 		if (meta.dynaProperty != null) {
-			Set<Entry<String,Object>> s = new LinkedHashSet<>();
+			Set<Entry<String,Object>> s = set();
 			for (BeanPropertyMeta pMeta : getProperties()) {
 				if (pMeta.isDyna()) {
 					try {

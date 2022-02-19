@@ -150,7 +150,7 @@ public class RequestFormParams {
 			for (Map.Entry<String,String[]> e : m.entrySet()) {
 				String name = e.getKey();
 				String key = key(name);
-				List<RequestFormParam> l = new ArrayList<>();
+				List<RequestFormParam> l = list();
 
 				String[] values = e.getValue();
 				if (values == null)

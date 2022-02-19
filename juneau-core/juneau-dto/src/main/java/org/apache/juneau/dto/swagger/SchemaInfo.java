@@ -148,7 +148,7 @@ public class SchemaInfo extends SwaggerElement {
 		if (copyFrom.properties == null) {
 			this.properties = null;
 		} else {
-			this.properties = new LinkedHashMap<>();
+			this.properties = map();
 			for (Map.Entry<String,SchemaInfo> e : copyFrom.properties.entrySet())
 				this.properties.put(e.getKey(), e.getValue().copy());
 		}

@@ -252,7 +252,7 @@ public class PartList {
 		 */
 		protected Builder() {
 			super(PartList.class);
-			entries = new ArrayList<>();
+			entries = list();
 		}
 
 		/**
@@ -262,9 +262,7 @@ public class PartList {
 		 */
 		protected Builder(PartList copyFrom) {
 			super(copyFrom.getClass());
-			entries = new ArrayList<>(copyFrom.entries.length);
-			for (int i = 0; i < copyFrom.entries.length; i++)
-				entries.add(copyFrom.entries[i]);
+			entries = list(copyFrom.entries);
 			caseInsensitive = copyFrom.caseInsensitive;
 		}
 
@@ -275,8 +273,8 @@ public class PartList {
 		 */
 		protected Builder(Builder copyFrom) {
 			super(copyFrom);
-			entries = new ArrayList<>(copyFrom.entries);
-			defaultEntries = copyFrom.defaultEntries == null ? null : new ArrayList<>(copyFrom.defaultEntries);
+			entries = copyOf(copyFrom.entries);
+			defaultEntries = copyOf(copyFrom.defaultEntries);
 			varResolver = copyFrom.varResolver;
 			caseInsensitive = copyFrom.caseInsensitive;
 		}
@@ -759,7 +757,7 @@ public class PartList {
 			if (value != null) {
 				boolean replaced = false;
 				if (defaultEntries == null)
-					defaultEntries = new ArrayList<>();
+					defaultEntries = list();
 				for (int i = 0, j = defaultEntries.size(); i < j; i++) {
 					NameValuePair x = defaultEntries.get(i);
 					if (eq(x.getName(), value.getName())) {
@@ -832,7 +830,7 @@ public class PartList {
 
 			if (values != null) {
 				if (defaultEntries == null)
-					defaultEntries = new ArrayList<>();
+					defaultEntries = list();
 				for (int i1 = 0, j1 = values.size(); i1 < j1; i1++) {
 					NameValuePair p = values.get(i1);
 					if (p != null) {
@@ -1281,7 +1279,7 @@ public class PartList {
 					first = x;
 				else {
 					if (rest == null)
-						rest = new ArrayList<>();
+						rest = list();
 					rest.add(x);
 				}
 			}
@@ -1340,7 +1338,7 @@ public class PartList {
 					first = x;
 				else {
 					if (rest == null)
-						rest = new ArrayList<>();
+						rest = list();
 					rest.add(x);
 				}
 			}
@@ -1613,7 +1611,7 @@ public class PartList {
 	 * @return The contents of this list as an unmodifiable list of {@link NameValuePair} objects.
 	 */
 	public List<NameValuePair> asNameValuePairs() {
-		return Collections.unmodifiableList(Arrays.asList(entries));
+		return unmodifiable(alist(entries));
 	}
 
 	private boolean eq(String s1, String s2) {

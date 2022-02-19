@@ -15,6 +15,7 @@ package org.apache.juneau.internal;
 import static org.apache.juneau.internal.ConverterUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.Collections.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -96,7 +97,7 @@ public final class ListBuilder<E> {
 			if (comparator != null)
 				Collections.sort(list, comparator);
 			if (unmodifiable)
-				list = Collections.unmodifiableList(list);
+				list = unmodifiableList(list);
 		}
  		return list;
 	}

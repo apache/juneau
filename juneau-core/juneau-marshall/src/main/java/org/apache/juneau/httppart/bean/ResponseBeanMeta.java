@@ -115,15 +115,15 @@ public class ResponseBeanMeta {
 		this.partParser = optional(b.partParser).map(x -> HttpPartParser.creator().type(x).apply(b.annotations).create());
 		this.schema = b.schema.build();
 
-		Map<String,ResponseBeanPropertyMeta> properties = new LinkedHashMap<>();
+		Map<String,ResponseBeanPropertyMeta> properties = map();
 
-		Map<String,ResponseBeanPropertyMeta> hm = new LinkedHashMap<>();
+		Map<String,ResponseBeanPropertyMeta> hm = map();
 		for (Map.Entry<String,ResponseBeanPropertyMeta.Builder> e : b.headerMethods.entrySet()) {
 			ResponseBeanPropertyMeta pm = e.getValue().build(partSerializer, partParser);
 			hm.put(e.getKey(), pm);
 			properties.put(pm.getGetter().getName(), pm);
 		}
-		this.headerMethods = Collections.unmodifiableMap(hm);
+		this.headerMethods = unmodifiable(hm);
 
 		this.bodyMethod = b.bodyMethod == null ? null : b.bodyMethod.schema(schema).build(partSerializer, partParser);
 		this.statusMethod = b.statusMethod == null ? null : b.statusMethod.build(empty(), empty());
@@ -133,7 +133,7 @@ public class ResponseBeanMeta {
 		if (statusMethod != null)
 			properties.put(statusMethod.getGetter().getName(), statusMethod);
 
-		this.properties = Collections.unmodifiableMap(properties);
+		this.properties = unmodifiable(properties);
 	}
 
 	static class Builder {
@@ -144,7 +144,7 @@ public class ResponseBeanMeta {
 		Class<? extends HttpPartParser> partParser;
 		HttpPartSchema.Builder schema = HttpPartSchema.create();
 
-		Map<String,ResponseBeanPropertyMeta.Builder> headerMethods = new LinkedHashMap<>();
+		Map<String,ResponseBeanPropertyMeta.Builder> headerMethods = map();
 		ResponseBeanPropertyMeta.Builder bodyMethod;
 		ResponseBeanPropertyMeta.Builder statusMethod;
 

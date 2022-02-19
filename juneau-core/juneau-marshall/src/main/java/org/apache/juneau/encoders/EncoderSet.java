@@ -17,8 +17,6 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static java.util.stream.Collectors.*;
-import static java.util.Collections.*;
-
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -329,7 +327,7 @@ public final class EncoderSet {
 			}
 		}
 
-		this.encodings = unmodifiableList(lc);
+		this.encodings = unmodifiable(lc);
 		this.encodingsEncoders = l.toArray(new Encoder[l.size()]);
 	}
 

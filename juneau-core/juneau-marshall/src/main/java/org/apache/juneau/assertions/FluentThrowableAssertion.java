@@ -14,6 +14,7 @@ package org.apache.juneau.assertions;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static java.util.Collections.*;
+import static org.apache.juneau.internal.CollectionUtils.list;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.io.*;
@@ -180,7 +181,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 			if (t.getCause() == null)
 				l = singletonList(t.getMessage());
 			else {
-				l = new ArrayList<>();
+				l = list();
 				while (t != null) {
 					l.add(t.getMessage());
 					t = t.getCause();
@@ -223,7 +224,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 			if (t.getCause() == null)
 				l = singletonList(t.getMessage());
 			else {
-				l = new ArrayList<>();
+				l = list();
 				while (t != null) {
 					l.add(t.getLocalizedMessage());
 					t = t.getCause();

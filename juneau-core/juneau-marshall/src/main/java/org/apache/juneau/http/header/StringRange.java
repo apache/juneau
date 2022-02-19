@@ -137,7 +137,7 @@ public class StringRange {
 	 * @return The optional list of extensions, never <jk>null</jk>.
 	 */
 	public List<NameValuePair> getExtensions() {
-		return Collections.unmodifiableList(Arrays.asList(extensions));
+		return unmodifiable(alist(extensions));
 	}
 
 	/**

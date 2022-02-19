@@ -181,7 +181,7 @@ public final class BeanPropertyMeta {
 			canWrite |= (field != null || setter != null);
 
 			if (innerField != null) {
-				List<Beanp> lp = new ArrayList<>();
+				List<Beanp> lp = list();
 				bc.forEachAnnotation(Beanp.class, innerField, x -> true, x -> lp.add(x));
 				if (field != null || lp.size() > 0) {
 					// Only use field type if it's a bean property or has @Beanp annotation.
@@ -203,7 +203,7 @@ public final class BeanPropertyMeta {
 			}
 
 			if (getter != null) {
-				List<Beanp> lp = new ArrayList<>();
+				List<Beanp> lp = list();
 				bc.forEachAnnotation(Beanp.class, getter, x -> true, x -> lp.add(x));
 				if (rawTypeMeta == null)
 					rawTypeMeta = bc.resolveClassMeta(last(lp), getter.getGenericReturnType(), typeVarImpls);
@@ -221,7 +221,7 @@ public final class BeanPropertyMeta {
 			}
 
 			if (setter != null) {
-				List<Beanp> lp = new ArrayList<>();
+				List<Beanp> lp = list();
 				bc.forEachAnnotation(Beanp.class, setter, x -> true, x -> lp.add(x));
 				if (rawTypeMeta == null)
 					rawTypeMeta = bc.resolveClassMeta(last(lp), setter.getGenericParameterTypes()[0], typeVarImpls);
@@ -629,7 +629,7 @@ public final class BeanPropertyMeta {
 					return l;
 				} else if (rawTypeMeta.isCollection()) {
 					Collection c = (Collection)o;
-					List l = new ArrayList(c.size());
+					List l = list(c.size());
 					ClassMeta childType = rawTypeMeta.getElementType();
 					for (Object cc : c)
 						l.add(applyChildPropertiesFilter(session, childType, cc));
@@ -904,7 +904,7 @@ public final class BeanPropertyMeta {
 	public Map<String,Object> getDynaMap(Object bean) throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		if (isDyna) {
 			if (extraKeys != null && getter != null && ! isDynaGetterMap) {
-				Map<String,Object> m = new LinkedHashMap<>();
+				Map<String,Object> m = map();
 				for (String key : (Collection<String>)extraKeys.invoke(bean))
 					m.put(key, getter.invoke(bean, key));
 				return m;

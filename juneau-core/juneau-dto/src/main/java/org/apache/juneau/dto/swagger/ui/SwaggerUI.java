@@ -396,7 +396,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 			return null;
 		if (s.indexOf(',') == -1)
 			return singletonList(s);
-		List<Object> l = new ArrayList<>();
+		List<Object> l = list();
 		String[] sa = s.split("\n");
 		for (int i = 0; i < sa.length; i++) {
 			if (i > 0)

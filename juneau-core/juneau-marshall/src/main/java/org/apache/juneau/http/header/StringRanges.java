@@ -200,7 +200,7 @@ public class StringRanges {
 	 * @return The string ranges that make up this object.
 	 */
 	public List<StringRange> getRanges() {
-		return Collections.unmodifiableList(Arrays.asList(ranges));
+		return unmodifiable(alist(ranges));
 	}
 
 	private static HeaderElement[] parse(String value) {

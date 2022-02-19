@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -33,7 +35,7 @@ import org.apache.juneau.collections.*;
  */
 public class DelegateBeanMap<T> extends BeanMap<T> {
 
-	private Set<String> keys = new LinkedHashSet<>();
+	private Set<String> keys = set();
 	private OMap overrideValues = new OMap();
 
 	/**
@@ -104,7 +106,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 
 	@Override /* Map */
 	public synchronized Set<Entry<String,Object>> entrySet() {
-		Set<Entry<String,Object>> s = Collections.newSetFromMap(new LinkedHashMap<Map.Entry<String,Object>,Boolean>());
+		Set<Entry<String,Object>> s = set();
 		for (final String key : keys) {
 			BeanMapEntry bme;
 			if (overrideValues.containsKey(key))

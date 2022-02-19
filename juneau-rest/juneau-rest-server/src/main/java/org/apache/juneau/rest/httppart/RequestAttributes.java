@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.httppart;
 
 import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
@@ -180,7 +181,7 @@ public class RequestAttributes {
 	 * @return All the attribute on this request.
 	 */
 	public List<RequestAttribute> getAll() {
-		ArrayList<RequestAttribute> l = new ArrayList<>();
+		List<RequestAttribute> l = list();
 		Enumeration<String> e = sreq.getAttributeNames();
 		while (e.hasMoreElements()) {
 			String n = e.nextElement();

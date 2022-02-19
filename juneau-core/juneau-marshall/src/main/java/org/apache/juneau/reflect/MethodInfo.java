@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.beans.*;
@@ -199,7 +200,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	private MethodInfo[] _getMatching() {
 		if (matching == null) {
 			synchronized(this) {
-				List<MethodInfo> l = findMatching(new ArrayList<>(), m, m.getDeclaringClass());
+				List<MethodInfo> l = findMatching(list(), m, m.getDeclaringClass());
 				matching = l.toArray(new MethodInfo[l.size()]);
 			}
 		}

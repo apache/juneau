@@ -297,8 +297,8 @@ public class BeanStore {
 		readOnly = builder.readOnly;
 		threadSafe = builder.threadSafe;
 		lock = threadSafe ? new SimpleReadWriteLock() : SimpleReadWriteLock.NO_OP;
-		entries = threadSafe ? new ConcurrentLinkedDeque<>() : new LinkedList<>();
-		unnamedEntries = threadSafe ? new ConcurrentHashMap<>() : new LinkedHashMap<>();
+		entries = threadSafe ? new ConcurrentLinkedDeque<>() : linkedList();
+		unnamedEntries = threadSafe ? new ConcurrentHashMap<>() : map();
 	}
 
 	/**

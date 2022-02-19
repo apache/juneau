@@ -38,7 +38,7 @@ public abstract class SwaggerElement {
 
 	SwaggerElement(SwaggerElement copyFrom) {
 		this.strict = copyFrom.strict;
-		this.extra = copyFrom.extra == null ? null : new LinkedHashMap<>(copyFrom.extra);
+		this.extra = copyOf(copyFrom.extra);
 	}
 
 	/**
@@ -127,7 +127,7 @@ public abstract class SwaggerElement {
 			case "strict": return strict(value);
 			default:
 				if (extra == null)
-					extra = new LinkedHashMap<>();
+					extra = map();
 				extra.put(property, value);
 				return this;
 		}

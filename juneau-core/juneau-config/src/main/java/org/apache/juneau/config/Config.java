@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
-import static java.util.Collections.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -115,7 +114,7 @@ public final class Config extends Context implements ConfigEventListener {
 	 * 	<br>Each call constructs a new list.
 	 */
 	public synchronized static List<String> getCandidateSystemDefaultConfigNames() {
-		List<String> l = new ArrayList<>();
+		List<String> l = list();
 
 		String s = System.getProperty("juneau.configFile");
 		if (s != null) {
@@ -204,7 +203,7 @@ public final class Config extends Context implements ConfigEventListener {
 			store = FileStore.DEFAULT;
 			serializer = SimpleJsonSerializer.DEFAULT;
 			parser = JsonParser.DEFAULT;
-			mods = new LinkedHashMap<>();
+			mods = map();
 			mods(XorEncodeMod.INSTANCE);
 			varResolver = VarResolver.DEFAULT;
 			binaryLineLength = env("Config.binaryLineLength", -1);
@@ -224,7 +223,7 @@ public final class Config extends Context implements ConfigEventListener {
 			store = copyFrom.store;
 			serializer = copyFrom.serializer;
 			parser = copyFrom.parser;
-			mods = new LinkedHashMap<>(copyFrom.mods);
+			mods = copyOf(copyFrom.mods);
 			varResolver = copyFrom.varResolver;
 			binaryLineLength = copyFrom.binaryLineLength;
 			binaryFormat = copyFrom.binaryFormat;
@@ -243,7 +242,7 @@ public final class Config extends Context implements ConfigEventListener {
 			store = copyFrom.store;
 			serializer = copyFrom.serializer;
 			parser = copyFrom.parser;
-			mods = new LinkedHashMap<>(copyFrom.mods);
+			mods = copyOf(copyFrom.mods);
 			varResolver = copyFrom.varResolver;
 			binaryLineLength = copyFrom.binaryLineLength;
 			binaryFormat = copyFrom.binaryFormat;
@@ -544,7 +543,7 @@ public final class Config extends Context implements ConfigEventListener {
 	final VarResolverSession varSession;
 
 	private final ConfigMap configMap;
-	private final List<ConfigEventListener> listeners = Collections.synchronizedList(new LinkedList<ConfigEventListener>());
+	private final List<ConfigEventListener> listeners = synced(linkedList());
 
 
 	@Override /* Context */
@@ -568,7 +567,7 @@ public final class Config extends Context implements ConfigEventListener {
 		serializer = builder.serializer;
 		parser = builder.parser;
 		beanSession = parser.getBeanContext().getSession();
-		mods = unmodifiableMap(new LinkedHashMap<>(builder.mods));
+		mods = unmodifiable(copyOf(builder.mods));
 		varResolver = builder.varResolver;
 		varSession = varResolver
 			.copy()
@@ -915,7 +914,7 @@ public final class Config extends Context implements ConfigEventListener {
 	 * @return The section names defined in this config.
 	 */
 	public Set<String> getSectionNames() {
-		return Collections.unmodifiableSet(configMap.getSections());
+		return unmodifiable(configMap.getSections());
 	}
 
 	/**
@@ -1172,7 +1171,7 @@ public final class Config extends Context implements ConfigEventListener {
 	}
 
 	List<ConfigEventListener> getListeners() {
-		return Collections.unmodifiableList(listeners);
+		return unmodifiable(listeners);
 	}
 
 

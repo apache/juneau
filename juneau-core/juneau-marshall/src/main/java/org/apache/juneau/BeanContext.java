@@ -289,10 +289,10 @@ public class BeanContext extends Context {
 			beanConstructorVisibility = copyFrom.beanConstructorVisibility;
 			beanMethodVisibility = copyFrom.beanMethodVisibility;
 			beanFieldVisibility = copyFrom.beanFieldVisibility;
-			beanDictionary = copyFrom.beanDictionary.isEmpty() ? null : new ArrayList<>(copyFrom.beanDictionary);
-			swaps = copyFrom.swaps.isEmpty() ? null : new ArrayList<>(copyFrom.swaps);
-			notBeanClasses = copyFrom.notBeanClasses.isEmpty() ? null : classSet(copyFrom.notBeanClasses);
-			notBeanPackages = copyFrom.notBeanPackages.isEmpty() ? null : new TreeSet<>(copyFrom.notBeanPackages);
+			beanDictionary = listFrom(copyFrom.beanDictionary, true);
+			swaps = listFrom(copyFrom.swaps, true);
+			notBeanClasses = classSet(copyFrom.notBeanClasses, true);
+			notBeanPackages = sortedSetFrom(copyFrom.notBeanPackages, true);
 			disableBeansRequireSomeProperties = ! copyFrom.beansRequireSomeProperties;
 			beanMapPutReturnsOldValue = copyFrom.beanMapPutReturnsOldValue;
 			beansRequireDefaultConstructor = copyFrom.beansRequireDefaultConstructor;
@@ -327,10 +327,10 @@ public class BeanContext extends Context {
 			beanConstructorVisibility = copyFrom.beanConstructorVisibility;
 			beanMethodVisibility = copyFrom.beanMethodVisibility;
 			beanFieldVisibility = copyFrom.beanFieldVisibility;
-			beanDictionary = copyFrom.beanDictionary == null ? null : new ArrayList<>(copyFrom.beanDictionary);
-			swaps = copyFrom.swaps == null ? null : new ArrayList<>(copyFrom.swaps);
-			notBeanClasses = copyFrom.notBeanClasses == null ? null : classSet(copyFrom.notBeanClasses);
-			notBeanPackages = copyFrom.notBeanPackages == null ? null : new TreeSet<>(copyFrom.notBeanPackages);
+			beanDictionary = copyOf(copyFrom.beanDictionary);
+			swaps = copyOf(copyFrom.swaps);
+			notBeanClasses = classSet(copyFrom.notBeanClasses);
+			notBeanPackages = sortedSetFrom(copyFrom.notBeanPackages);
 			disableBeansRequireSomeProperties = copyFrom.disableBeansRequireSomeProperties;
 			beanMapPutReturnsOldValue = copyFrom.beanMapPutReturnsOldValue;
 			beansRequireDefaultConstructor = copyFrom.beansRequireDefaultConstructor;
@@ -1752,7 +1752,7 @@ public class BeanContext extends Context {
 		 */
 		public List<Class<?>> beanDictionary() {
 			if (beanDictionary == null)
-				beanDictionary = new ArrayList<>();
+				beanDictionary = list();
 			return beanDictionary;
 		}
 
@@ -3095,7 +3095,7 @@ public class BeanContext extends Context {
 		 */
 		public List<Object> swaps() {
 			if (swaps == null)
-				swaps = new ArrayList<>();
+				swaps = list();
 			return swaps;
 		}
 
@@ -3469,6 +3469,12 @@ public class BeanContext extends Context {
 		}
 
 		private static Set<Class<?>> classSet(Collection<Class<?>> copy) {
+			return classSet(copy, false);
+		}
+
+		private static Set<Class<?>> classSet(Collection<Class<?>> copy, boolean nullIfEmpty) {
+			if (copy == null || (nullIfEmpty && copy.isEmpty()))
+				return null;
 			Set<Class<?>> x = classSet();
 			x.addAll(copy);
 			return x;
@@ -4136,7 +4142,7 @@ public class BeanContext extends Context {
 	private final <T> ObjectSwap[] findObjectSwaps(Class<T> c) {
 		// Note:  On first
 		if (c != null) {
-			List<ObjectSwap> l = new ArrayList<>();
+			List<ObjectSwap> l = list();
 			for (ObjectSwap f : swapArray)
 				if (f.getNormalClass().isParentOf(c))
 					l.add(f);
@@ -4158,7 +4164,7 @@ public class BeanContext extends Context {
 		for (ObjectSwap f : swapArray) {
 			if (f.getNormalClass().isChildOf(c)) {
 				if (l == null)
-					l = new ArrayList<>();
+					l = list();
 				l.add(f);
 			}
 		}

@@ -14,8 +14,6 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.Collections.*;
-
 import java.util.*;
 import java.util.function.*;
 
@@ -121,7 +119,8 @@ public class BasicEntityTagArrayHeader extends BasicHeader {
 	 */
 	public BasicEntityTagArrayHeader(String name, List<EntityTag> value) {
 		super(name, serialize(value));
-		this.value = value == null ? null : unmodifiableList(value);
+		int todo; // Replace with arrays.
+		this.value = unmodifiable(value);
 		this.supplier = null;
 	}
 
@@ -165,7 +164,7 @@ public class BasicEntityTagArrayHeader extends BasicHeader {
 	private List<EntityTag> parse(String value) {
 		if (value == null)
 			return null;
-		List<EntityTag> list = new ArrayList<>();
+		List<EntityTag> list = list();
 		split(value, x -> list.add(EntityTag.of(x)));
 		return list;
 	}

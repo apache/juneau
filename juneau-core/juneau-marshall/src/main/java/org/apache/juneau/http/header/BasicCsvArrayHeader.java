@@ -14,8 +14,6 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static java.util.Collections.*;
-
 import java.util.*;
 import java.util.function.*;
 
@@ -121,7 +119,7 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	 */
 	public BasicCsvArrayHeader(String name, List<String> value) {
 		super(name, serialize(value));
-		this.value = value == null ? null : unmodifiableList(value);
+		this.value = unmodifiable(value);
 		this.supplier = null;
 	}
 
@@ -211,6 +209,6 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	}
 
 	private List<String> parse(String value) {
-		return value == null ? null : unmodifiableList(Arrays.asList(split(value)));
+		return value == null ? null : unmodifiable(Arrays.asList(split(value)));
 	}
 }

@@ -265,7 +265,7 @@ public class HeaderList {
 		 */
 		protected Builder() {
 			super(HeaderList.class, BeanStore.INSTANCE);
-			entries = new ArrayList<>();
+			entries = list();
 		}
 
 		/**
@@ -275,9 +275,7 @@ public class HeaderList {
 		 */
 		protected Builder(HeaderList copyFrom) {
 			super(copyFrom.getClass(), BeanStore.INSTANCE);
-			entries = new ArrayList<>(copyFrom.entries.length);
-			for (int i = 0; i < copyFrom.entries.length; i++)
-				entries.add(copyFrom.entries[i]);
+			entries = list(copyFrom.entries);
 			caseSensitive = copyFrom.caseSensitive;
 		}
 
@@ -288,8 +286,8 @@ public class HeaderList {
 		 */
 		protected Builder(Builder copyFrom) {
 			super(copyFrom);
-			entries = new ArrayList<>(copyFrom.entries);
-			defaultEntries = copyFrom.defaultEntries == null ? null : new ArrayList<>(copyFrom.defaultEntries);
+			entries = copyOf(copyFrom.entries);
+			defaultEntries = copyOf(copyFrom.defaultEntries);
 			varResolver = copyFrom.varResolver;
 			caseSensitive = copyFrom.caseSensitive;
 		}
@@ -772,7 +770,7 @@ public class HeaderList {
 			if (value != null) {
 				boolean replaced = false;
 				if (defaultEntries == null)
-					defaultEntries = new ArrayList<>();
+					defaultEntries = list();
 				for (int i = 0, j = defaultEntries.size(); i < j; i++) {
 					Header x = defaultEntries.get(i);
 					if (eq(x.getName(), value.getName())) {
@@ -845,7 +843,7 @@ public class HeaderList {
 
 			if (values != null) {
 				if (defaultEntries == null)
-					defaultEntries = new ArrayList<>();
+					defaultEntries = list();
 				for (int i1 = 0, j1 = values.size(); i1 < j1; i1++) {
 					Header h = values.get(i1);
 					if (h != null) {
@@ -1300,7 +1298,7 @@ public class HeaderList {
 					first = x;
 				else {
 					if (rest == null)
-						rest = new ArrayList<>();
+						rest = list();
 					rest.add(x);
 				}
 			}
@@ -1359,7 +1357,7 @@ public class HeaderList {
 					first = x;
 				else {
 					if (rest == null)
-						rest = new ArrayList<>();
+						rest = list();
 					rest.add(x);
 				}
 			}

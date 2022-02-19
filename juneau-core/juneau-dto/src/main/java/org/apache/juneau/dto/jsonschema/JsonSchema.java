@@ -13,6 +13,7 @@
 package org.apache.juneau.dto.jsonschema;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.net.*;
@@ -345,7 +346,7 @@ public class JsonSchema {
 	 */
 	public JsonSchema addDefinition(String name, JsonSchema definition) {
 		if (this.definitions == null)
-			this.definitions = new LinkedHashMap<>();
+			this.definitions = map();
 		this.definitions.put(name, definition);
 		setMasterOn(definition);
 		return this;
@@ -427,7 +428,7 @@ public class JsonSchema {
 	 */
 	public JsonSchema addProperties(JsonSchema...properties) {
 		if (this.properties == null)
-			this.properties = new LinkedHashMap<>();
+			this.properties = map();
 		for (JsonSchema p : properties) {
 			if (p.getName() == null)
 				throw new BeanRuntimeException(JsonSchema.class,
@@ -478,7 +479,7 @@ public class JsonSchema {
 	 */
 	public JsonSchema addPatternProperties(JsonSchemaProperty...properties) {
 		if (this.patternProperties == null)
-			this.patternProperties = new LinkedHashMap<>();
+			this.patternProperties = map();
 		for (JsonSchema p : properties) {
 			if (p.getName() == null)
 				throw new BeanRuntimeException(JsonSchema.class,
@@ -521,7 +522,7 @@ public class JsonSchema {
 	 */
 	public JsonSchema addDependency(String name, JsonSchema dependency) {
 		if (this.dependencies == null)
-			this.dependencies = new LinkedHashMap<>();
+			this.dependencies = map();
 		this.dependencies.put(name, dependency);
 		setMasterOn(dependency);
 		return this;

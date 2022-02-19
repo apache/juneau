@@ -275,7 +275,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 */
 		public List<String> aside() {
 			if (aside == null)
-				aside = new ArrayList<>();
+				aside = list();
 			return aside;
 		}
 
@@ -353,7 +353,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 */
 		public List<String> footer() {
 			if (footer == null)
-				footer = new ArrayList<>();
+				footer = list();
 			return footer;
 		}
 
@@ -394,7 +394,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 */
 		public List<String> head() {
 			if (head == null)
-				head = new ArrayList<>();
+				head = list();
 			return head;
 		}
 
@@ -436,7 +436,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 */
 		public List<String> header() {
 			if (header == null)
-				header = new ArrayList<>();
+				header = list();
 			return header;
 		}
 
@@ -481,7 +481,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 */
 		public List<String> nav() {
 			if (nav == null)
-				nav = new ArrayList<>();
+				nav = list();
 			return nav;
 		}
 
@@ -543,7 +543,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 */
 		public List<String> navlinks() {
 			if (navlinks == null)
-				navlinks = new ArrayList<>();
+				navlinks = list();
 			return navlinks;
 		}
 
@@ -634,7 +634,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 */
 		public List<String> script() {
 			if (script == null)
-				script = new ArrayList<>();
+				script = list();
 			return script;
 		}
 
@@ -672,7 +672,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 */
 		public List<String> style() {
 			if (style == null)
-				style = new ArrayList<>();
+				style = list();
 			return style;
 		}
 
@@ -703,7 +703,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 */
 		public List<String> stylesheet() {
 			if (stylesheet == null)
-				stylesheet = new ArrayList<>();
+				stylesheet = list();
 			return stylesheet;
 		}
 
@@ -802,7 +802,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 */
 		public List<Class<? extends HtmlWidget>> widgets() {
 			if (widgets == null)
-				widgets = new ArrayList<>();
+				widgets = list();
 			return widgets;
 		}
 
@@ -1571,15 +1571,15 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		//-----------------------------------------------------------------------------------------------------------------
 
 		private static <T> List<T> copy(List<T> s) {
-			return s == null || s.isEmpty() ? null : new ArrayList<>(s);
+			return s == null || s.isEmpty() ? null : copyOf(s);
 		}
 
 		private static <T> List<T> copy(T[] s) {
-			return s.length == 0 ? null : new ArrayList<>(Arrays.asList(s));
+			return s.length == 0 ? null : list(s);
 		}
 
 		private List<String> merge(List<String> old, String[] newValues) {
-			List<String> x = new ArrayList<>(newValues.length);
+			List<String> x = list(newValues.length);
 			for (String s : newValues) {
 				if ("NONE".equals(s)) {
 					if (old != null)
@@ -1595,7 +1595,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		}
 
 		private List<String> mergeNavLinks(List<String> old, String[] newValues) {
-			List<String> x = new ArrayList<>(newValues.length);
+			List<String> x = list(newValues.length);
 			for (String s : newValues) {
 				if ("NONE".equals(s)) {
 					if (old != null)

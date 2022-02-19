@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.util.*;
 
 import javax.servlet.*;
@@ -31,7 +33,7 @@ import javax.servlet.http.*;
  */
 public class MockHttpSession implements HttpSession {
 
-	private Map<String,Object> attributes = new LinkedHashMap<>(), values = new LinkedHashMap<>();
+	private Map<String,Object> attributes = map(), values = map();
 
 	private long creationTime, lastAccessedTime;
 	private int maxInactiveInterval;

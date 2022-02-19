@@ -13,6 +13,7 @@
 package org.apache.juneau.microservice;
 
 import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.FileUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
@@ -150,7 +151,7 @@ public class Microservice implements ConfigEventListener {
 		ConfigStore configStore;
 		Config.Builder configBuilder = Config.create();
 		Boolean consoleEnabled;
-		List<ConsoleCommand> consoleCommands = new ArrayList<>();
+		List<ConsoleCommand> consoleCommands = list();
 		VarResolver.Builder varResolver = VarResolver.create().defaultVars().vars(ConfigVar.class);
 		Scanner consoleReader;
 		PrintWriter consoleWriter;
@@ -1074,7 +1075,7 @@ public class Microservice implements ConfigEventListener {
 	 */
 	public String executeCommand(String command, String input, Object...args) {
 		StringWriter sw = new StringWriter();
-		List<String> l = new ArrayList<>();
+		List<String> l = list();
 		l.add(command);
 		for (Object a : args)
 			l.add(stringify(a));

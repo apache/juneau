@@ -541,7 +541,7 @@ public class XmlParserSession extends ReaderParserSession {
 				o = builder != null ? builder.build(this, m.getBean(), eType) : m.getBean();
 			}
 		} else if (sType.isArray() || sType.isArgs()) {
-			ArrayList l = (ArrayList)parseIntoCollection(r, new ArrayList(), sType, pMeta);
+			ArrayList l = (ArrayList)parseIntoCollection(r, list(), sType, pMeta);
 			o = toArray(sType, l);
 		} else if (sType.canCreateNewInstanceFromString(outer)) {
 			o = sType.newInstanceFromString(outer, getElementText(r));
@@ -795,7 +795,7 @@ public class XmlParserSession extends ReaderParserSession {
 			else if (cpcm.isCollectionOrArray()) {
 				Object o = cp.get(m, null);
 				if (o == null)
-					cp.set(m, cp.getName(), new ArrayList<>());
+					cp.set(m, cp.getName(), list());
 			}
 		}
 

@@ -323,7 +323,7 @@ public final class ClassMeta<T> implements Type {
 			stringConstructor = null;
 		Object primitiveDefault = null;
 		Map<String,Method>
-			publicMethods = new LinkedHashMap<>();
+			publicMethods = map();
 		ClassMeta<?>
 			keyType = null,
 			valueType = null,
@@ -2106,7 +2106,7 @@ public final class ClassMeta<T> implements Type {
 				info.forEachAnnotation(BeanContext.DEFAULT, type, filter, action);
 				return this;
 			}
-			List<A> l = new ArrayList<>();
+			List<A> l = list();
 			info.forEachAnnotation(beanContext, type, x-> true, x -> l.add(x));
 			array = (A[])Array.newInstance(type, l.size());
 			for (int i = 0; i < l.size(); i++)

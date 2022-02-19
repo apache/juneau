@@ -13,6 +13,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.http.HttpParts.*;
 
@@ -251,7 +252,7 @@ public class MediaType implements Comparable<MediaType>  {
 	 * @return An unmodifiable list of subtype fragments.  Never <jk>null</jk>.
 	 */
 	public final List<String> getSubTypes() {
-		return Collections.unmodifiableList(Arrays.asList(subTypes));
+		return unmodifiable(alist(subTypes));
 	}
 
 	/**
@@ -363,7 +364,7 @@ public class MediaType implements Comparable<MediaType>  {
 	 * @return The map of additional parameters, or an empty map if there are no parameters.
 	 */
 	public List<NameValuePair> getParameters() {
-		return Collections.unmodifiableList(Arrays.asList(parameters));
+		return unmodifiable(alist(parameters));
 	}
 
 	/**

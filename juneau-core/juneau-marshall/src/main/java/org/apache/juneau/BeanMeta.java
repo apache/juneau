@@ -197,7 +197,7 @@ public class BeanMeta<T> {
 				if (stopClass == null)
 					stopClass = Object.class;
 
-				Map<String,BeanPropertyMeta.Builder> normalProps = new LinkedHashMap<>();
+				Map<String,BeanPropertyMeta.Builder> normalProps = map();
 
 				boolean hasBean = ci.hasAnnotation(ctx, Bean.class);
 				boolean hasBeanIgnore = ci.hasAnnotation(ctx, BeanIgnore.class);
@@ -280,13 +280,13 @@ public class BeanMeta<T> {
 					constructor.setAccessible();
 
 				// Explicitly defined property names in @Bean annotation.
-				Set<String> fixedBeanProps = new LinkedHashSet<>();
-				Set<String> bpi = new LinkedHashSet<>();
-				Set<String> bpx = new LinkedHashSet<>();
-				Set<String> bpro = new LinkedHashSet<>();
-				Set<String> bpwo = new LinkedHashSet<>();
+				Set<String> fixedBeanProps = set();
+				Set<String> bpi = set();
+				Set<String> bpx = set();
+				Set<String> bpro = set();
+				Set<String> bpwo = set();
 
-				Set<String> filterProps = new HashSet<>();  // Names of properties defined in @Bean(properties)
+				Set<String> filterProps = set();  // Names of properties defined in @Bean(properties)
 
 				if (beanFilter != null) {
 
@@ -429,10 +429,7 @@ public class BeanMeta<T> {
 
 				sortProperties = (ctx.isSortProperties() || (beanFilter != null && beanFilter.isSortProperties())) && fixedBeanProps.isEmpty();
 
-				if (sortProperties)
-					properties = new TreeMap<>();
-				else
-					properties = new LinkedHashMap<>();
+				properties = sortProperties ? sortedMap() : map();
 
 				if (beanFilter != null && beanFilter.getTypeName() != null)
 					dictionaryName = beanFilter.getTypeName();
@@ -456,7 +453,7 @@ public class BeanMeta<T> {
 					if (bpi.isEmpty() && ! bfbpi.isEmpty()) {
 						// Only include specified properties if BeanFilter.includeKeys is specified.
 						// Note that the order must match includeKeys.
-						Map<String,BeanPropertyMeta> properties2 = new LinkedHashMap<>();
+						Map<String,BeanPropertyMeta> properties2 = map();
 						for (String k : bfbpi) {
 							if (properties.containsKey(k))
 								properties2.put(k, properties.remove(k));
@@ -472,7 +469,7 @@ public class BeanMeta<T> {
 				}
 
 				if (! bpi.isEmpty()) {
-					Map<String,BeanPropertyMeta> properties2 = new LinkedHashMap<>();
+					Map<String,BeanPropertyMeta> properties2 = map();
 					for (String k : bpi) {
 						if (properties.containsKey(k))
 							properties2.put(k, properties.remove(k));
@@ -485,7 +482,7 @@ public class BeanMeta<T> {
 					hiddenProperties.put(ep, properties.remove(ep));
 
 				if (pNames != null) {
-					Map<String,BeanPropertyMeta> properties2 = new LinkedHashMap<>();
+					Map<String,BeanPropertyMeta> properties2 = map();
 					for (String k : pNames) {
 						if (properties.containsKey(k))
 							properties2.put(k, properties.get(k));
@@ -530,8 +527,8 @@ public class BeanMeta<T> {
 		 * Returns null if the field isn't a valid property.
 		 */
 		private String findPropertyName(Field f) {
-			List<Beanp> lp = new ArrayList<>();
-			List<Name> ln = new ArrayList<>();
+			List<Beanp> lp = list();
+			List<Name> ln = list();
 			ctx.forEachAnnotation(Beanp.class, f, x -> true, x -> lp.add(x));
 			ctx.forEachAnnotation(Name.class, f, x -> true, x -> ln.add(x));
 			String name = bpName(lp, ln);
@@ -666,8 +663,8 @@ public class BeanMeta<T> {
 				if (t != null && t.value())
 					continue;
 
-				List<Beanp> lp = new ArrayList<>();
-				List<Name> ln = new ArrayList<>();
+				List<Beanp> lp = list();
+				List<Name> ln = list();
 				ctx.forEachAnnotation(Beanp.class, m.inner(), x -> true, x -> lp.add(x));
 				ctx.forEachAnnotation(Name.class, m.inner(), x -> true, x -> ln.add(x));
 				if (! (m.isVisible(v) || lp.size() > 0 || ln.size() > 0))
@@ -824,7 +821,7 @@ public class BeanMeta<T> {
 	public Collection<BeanPropertyMeta> getPropertyMetas(final String...pNames) {
 		if (pNames == null)
 			return getPropertyMetas();
-		List<BeanPropertyMeta> l = new ArrayList<>(pNames.length);
+		List<BeanPropertyMeta> l = list(pNames.length);
 		for (int i = 0; i < pNames.length; i++)
 			l.add(getPropertyMeta(pNames[i]));
 		return l;

@@ -159,10 +159,10 @@ public class ReflectionMap<V> {
 		 * Constructor.
 		 */
 		protected Builder() {
-			classEntries = new ArrayList<>();
-			methodEntries = new ArrayList<>();
-			fieldEntries = new ArrayList<>();
-			constructorEntries = new ArrayList<>();
+			classEntries = list();
+			methodEntries = list();
+			fieldEntries = list();
+			constructorEntries = list();
 		}
 
 		/**
@@ -171,10 +171,10 @@ public class ReflectionMap<V> {
 		 * @param copyFrom The builder being copied.
 		 */
 		protected Builder(Builder<V> copyFrom) {
-			classEntries = new ArrayList<>(copyFrom.classEntries);
-			methodEntries = new ArrayList<>(copyFrom.methodEntries);
-			fieldEntries = new ArrayList<>(copyFrom.fieldEntries);
-			constructorEntries = new ArrayList<>(copyFrom.constructorEntries);
+			classEntries = copyOf(copyFrom.classEntries);
+			methodEntries = copyOf(copyFrom.methodEntries);
+			fieldEntries = copyOf(copyFrom.fieldEntries);
+			constructorEntries = copyOf(copyFrom.constructorEntries);
 		}
 
 		/**
@@ -269,7 +269,7 @@ public class ReflectionMap<V> {
 	static List<String> splitNames(String key) {
 		if (key.indexOf(',') == -1)
 			return Collections.singletonList(key.trim());
-		List<String> l = new ArrayList<>();
+		List<String> l = list();
 
 		int m = 0;
 		boolean escaped = false;
@@ -363,7 +363,7 @@ public class ReflectionMap<V> {
 
 	private static <V> List<V> lazyAdd(List<V> list, V v) {
 		if (list == null)
-			list = new ArrayList<>();
+			list = list();
 		list.add(v);
 		return list;
 	}
@@ -805,7 +805,7 @@ public class ReflectionMap<V> {
 
 	private static <V> List<V> lazyAdd(V[] array, List<V> list, V v) {
 		if (list == null)
-			list = new ArrayList<>(Arrays.asList(array));
+			list = list(array);
 		list.add(v);
 		return list;
 	}

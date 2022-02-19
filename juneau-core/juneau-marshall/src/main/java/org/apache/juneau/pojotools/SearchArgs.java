@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.pojotools;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -29,7 +30,7 @@ import org.apache.juneau.internal.*;
  */
 public class SearchArgs {
 
-	private final Map<String,String> search = new LinkedHashMap<>();
+	private final Map<String,String> search = map();
 
 
 	/**

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.util.*;
 import java.util.logging.*;
 import java.util.logging.Formatter;
@@ -39,7 +41,7 @@ public class LogConfig {
 	Boolean append;
 	Integer limit, count;
 	Level fileLevel, consoleLevel;
-	Map<String,Level> levels = new LinkedHashMap<>();
+	Map<String,Level> levels = map();
 	Formatter formatter;
 
 	LogConfig() {}
@@ -57,7 +59,7 @@ public class LogConfig {
 		this.count = copyFrom.count;
 		this.fileLevel = copyFrom.fileLevel;
 		this.consoleLevel = copyFrom.consoleLevel;
-		this.levels = new LinkedHashMap<>(copyFrom.levels);
+		this.levels = copyOf(copyFrom.levels);
 		this.formatter = copyFrom.formatter;
 	}
 

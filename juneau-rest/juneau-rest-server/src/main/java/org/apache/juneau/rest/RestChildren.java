@@ -121,7 +121,7 @@ public class RestChildren {
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private final Map<String,RestContext> children = Collections.synchronizedMap(new LinkedHashMap<String,RestContext>());
+	private final Map<String,RestContext> children = synced(map());
 
 	/**
 	 * Constructor.
@@ -162,7 +162,7 @@ public class RestChildren {
 	 * @return The children as an unmodifiable map.
 	 */
 	public Map<String,RestContext> asMap() {
-		return Collections.unmodifiableMap(children);
+		return unmodifiable(children);
 	}
 
 

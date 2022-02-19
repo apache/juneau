@@ -12,7 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.jetty;
 
-import static org.apache.juneau.internal.ClassUtils.className;
+import static org.apache.juneau.internal.ClassUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.IOUtils.read;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -124,8 +125,8 @@ public class JettyMicroservice extends Microservice {
 		String jettyXml;
 		int[] ports;
 		Boolean jettyXmlResolveVars;
-		Map<String,Servlet> servlets = new LinkedHashMap<>();
-		Map<String,Object> servletAttributes = new LinkedHashMap<>();
+		Map<String,Servlet> servlets = map();
+		Map<String,Object> servletAttributes = map();
 		JettyMicroserviceListener listener;
 		JettyServerFactory factory;
 
@@ -144,8 +145,8 @@ public class JettyMicroservice extends Microservice {
 			this.jettyXml = copyFrom.jettyXml;
 			this.ports = copyFrom.ports;
 			this.jettyXmlResolveVars = copyFrom.jettyXmlResolveVars;
-			this.servlets = new LinkedHashMap<>(copyFrom.servlets);
-			this.servletAttributes = new LinkedHashMap<>(copyFrom.servletAttributes);
+			this.servlets = copyOf(copyFrom.servlets);
+			this.servletAttributes = copyOf(copyFrom.servletAttributes);
 			this.listener = copyFrom.listener;
 		}
 

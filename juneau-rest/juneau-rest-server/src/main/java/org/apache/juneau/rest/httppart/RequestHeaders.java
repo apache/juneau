@@ -135,7 +135,7 @@ public class RequestHeaders {
 		for (Enumeration<String> e = req.getHttpServletRequest().getHeaderNames(); e.hasMoreElements();) {
 			String name = e.nextElement();
 			String key = key(name);
-			List<RequestHeader> l = new ArrayList<>();
+			List<RequestHeader> l = list();
 			for (Enumeration<String> ve = req.getHttpServletRequest().getHeaders(name); ve.hasMoreElements();) {
 				RequestHeader h = new RequestHeader(req, name, ve.nextElement());
 				list.add(h);

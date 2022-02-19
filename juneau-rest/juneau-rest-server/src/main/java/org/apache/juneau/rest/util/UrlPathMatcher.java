@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.util;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.FileUtils.*;
 
 import java.util.*;
@@ -112,7 +113,7 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 
 			this.parts = parts;
 			this.vars = new String[parts.length];
-			List<String> vars = new ArrayList<>();
+			List<String> vars = list();
 
 			for (int i = 0; i < parts.length; i++) {
 				Matcher m = VAR_PATTERN.matcher(parts[i]);

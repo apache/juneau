@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.pojotools;
 
-import static java.util.Collections.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -59,7 +59,7 @@ public class SortArgs {
 	 * 	</ul>
 	 */
 	public SortArgs(Collection<String> sortArgs) {
-		Map<String,Boolean> sort = new LinkedHashMap<>();
+		Map<String,Boolean> sort = map();
 		for (String s : sortArgs) {
 			boolean isDesc = false;
 			if (endsWith(s, '-', '+')) {
@@ -68,7 +68,7 @@ public class SortArgs {
 			}
 			sort.put(s, isDesc);
 		}
-		this.sort = unmodifiableMap(sort);
+		this.sort = unmodifiable(sort);
 	}
 
 	/**

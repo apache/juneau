@@ -414,12 +414,12 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 					o = cast(m, pMeta, eType);
 				// Handle case where it's an array, but only a single value was specified.
 				else {
-					ArrayList l = new ArrayList(1);
+					ArrayList l = list(1);
 					l.add(m.cast(sType.getElementType()));
 					o = toArray(sType, l);
 				}
 			} else {
-				ArrayList l = (ArrayList)parseIntoCollection(r, new ArrayList(), sType, isUrlParamValue, pMeta);
+				ArrayList l = (ArrayList)parseIntoCollection(r, list(), sType, isUrlParamValue, pMeta);
 				o = toArray(sType, l);
 			}
 		} else if (c == '(') {

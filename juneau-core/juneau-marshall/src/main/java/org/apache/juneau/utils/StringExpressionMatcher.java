@@ -18,6 +18,7 @@ import java.util.regex.*;
 
 import org.apache.juneau.internal.*;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StateMachineState.*;
 
 /**
@@ -98,8 +99,8 @@ public class StringExpressionMatcher {
 
 		expression = expression.trim();
 
-		List<Exp> ors = new ArrayList<>();
-		List<Exp> ands = new ArrayList<>();
+		List<Exp> ors = list();
+		List<Exp> ands = list();
 
 		StateMachineState state = S01;
 		int i = 0, mark = -1;

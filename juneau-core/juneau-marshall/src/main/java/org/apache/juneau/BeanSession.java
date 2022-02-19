@@ -756,7 +756,7 @@ public class BeanSession extends ContextSession {
 			// Target type is some sort of Collection
 			if (to.isCollection()) {
 				try {
-					Collection l = to.canCreateNewInstance(outer) ? (Collection)to.newInstance(outer) : to.isSet() ? new LinkedHashSet<>() : new OList(this);
+					Collection l = to.canCreateNewInstance(outer) ? (Collection)to.newInstance(outer) : to.isSet() ? set() : new OList(this);
 					ClassMeta elementType = to.getElementType();
 
 					if (from.isArray())

@@ -366,7 +366,7 @@ public final class ClassInfo {
 	/** Results are in child-to-parent order. */
 	synchronized ClassInfo[] _getInterfaces() {
 		if (interfaces == null) {
-			Set<ClassInfo> s = new LinkedHashSet<>();
+			Set<ClassInfo> s = set();
 			for (ClassInfo ci : _getParents())
 				for (ClassInfo ci2 : ci._getDeclaredInterfaces()) {
 					s.add(ci2);
@@ -393,7 +393,7 @@ public final class ClassInfo {
 	/** Results are in child-to-parent order. */
 	synchronized ClassInfo[] _getParents() {
 		if (parents == null) {
-			List<ClassInfo> l = new ArrayList<>();
+			List<ClassInfo> l = list();
 			Class<?> pc = c;
 			while (pc != null && pc != Object.class) {
 				l.add(of(pc));
@@ -567,7 +567,7 @@ public final class ClassInfo {
 		if (publicMethods == null) {
 			synchronized(this) {
 				Method[] mm = c == null ? new Method[0] : c.getMethods();
-				List<MethodInfo> l = new ArrayList<>(mm.length);
+				List<MethodInfo> l = list(mm.length);
 				for (Method m : mm)
 					if (m.getDeclaringClass() != Object.class)
 						l.add(getMethodInfo(m));
@@ -582,7 +582,7 @@ public final class ClassInfo {
 		if (declaredMethods == null) {
 			synchronized(this) {
 				Method[] mm = c == null ? new Method[0] : c.getDeclaredMethods();
-				List<MethodInfo> l = new ArrayList<>(mm.length);
+				List<MethodInfo> l = list(mm.length);
 				for (Method m : mm)
 					if (! "$jacocoInit".equals(m.getName())) // Jacoco adds its own simulated methods.
 						l.add(getMethodInfo(m));
@@ -596,7 +596,7 @@ public final class ClassInfo {
 	private synchronized MethodInfo[] _getAllMethods() {
 		if (allMethods == null) {
 			synchronized(this) {
-				List<MethodInfo> l = new ArrayList<>();
+				List<MethodInfo> l = list();
 				for (ClassInfo c : _getAllParents())
 					c._appendDeclaredMethods(l);
 				allMethods = l.toArray(new MethodInfo[l.size()]);
@@ -608,7 +608,7 @@ public final class ClassInfo {
 	private synchronized MethodInfo[] _getAllMethodsParentFirst() {
 		if (allMethodsParentFirst == null) {
 			synchronized(this) {
-				List<MethodInfo> l = new ArrayList<>();
+				List<MethodInfo> l = list();
 				ClassInfo[] parents = _getAllParents();
 				for (int i = parents.length-1; i >=0; i--)
 					parents[i]._appendDeclaredMethods(l);
@@ -704,7 +704,7 @@ public final class ClassInfo {
 		if (publicConstructors == null) {
 			synchronized(this) {
 				Constructor<?>[] cc = c == null ? new Constructor[0] : c.getConstructors();
-				List<ConstructorInfo> l = new ArrayList<>(cc.length);
+				List<ConstructorInfo> l = list(cc.length);
 				for (Constructor<?> ccc : cc)
 					l.add(getConstructorInfo(ccc));
 				l.sort(null);
@@ -718,7 +718,7 @@ public final class ClassInfo {
 		if (declaredConstructors == null) {
 			synchronized(this) {
 				Constructor<?>[] cc = c == null ? new Constructor[0] : c.getDeclaredConstructors();
-				List<ConstructorInfo> l = new ArrayList<>(cc.length);
+				List<ConstructorInfo> l = list(cc.length);
 				for (Constructor<?> ccc : cc)
 					l.add(getConstructorInfo(ccc));
 				l.sort(null);
@@ -869,7 +869,7 @@ public final class ClassInfo {
 	private FieldInfo[] _getPublicFields() {
 		if (publicFields == null) {
 			synchronized(this) {
-				Map<String,FieldInfo> m = new LinkedHashMap<>();
+				Map<String,FieldInfo> m = map();
 				for (ClassInfo c : _getParents()) {
 					for (FieldInfo f : c._getDeclaredFields()) {
 						String fn = f.getName();
@@ -877,7 +877,7 @@ public final class ClassInfo {
 							m.put(f.getName(), f);
 					}
 				}
-				List<FieldInfo> l = new ArrayList<>(m.values());
+				List<FieldInfo> l = listFrom(m.values());
 				l.sort(null);
 				publicFields = l.toArray(new FieldInfo[l.size()]);
 			}
@@ -889,7 +889,7 @@ public final class ClassInfo {
 		if (declaredFields == null) {
 			synchronized(this) {
 				Field[] ff = c == null ? new Field[0] : c.getDeclaredFields();
-				List<FieldInfo> l = new ArrayList<>(ff.length);
+				List<FieldInfo> l = list(ff.length);
 				for (Field f : ff)
 					if (! "$jacocoData".equals(f.getName()))
 						l.add(getFieldInfo(f));
@@ -903,7 +903,7 @@ public final class ClassInfo {
 	private synchronized FieldInfo[] _getAllFields() {
 		if (allFields == null) {
 			synchronized(this) {
-				List<FieldInfo> l = new ArrayList<>();
+				List<FieldInfo> l = list();
 				ClassInfo[] parents = _getAllParents();
 				for (int i = parents.length-1; i >=0; i--)
 					for (FieldInfo f : parents[i]._getDeclaredFields())
@@ -939,7 +939,7 @@ public final class ClassInfo {
 	 * @return The matching annotations.
 	 */
 	public <A extends Annotation> List<A> getAnnotations(AnnotationProvider annotationProvider, Class<A> type) {
-		List<A> l = new ArrayList<>();
+		List<A> l = list();
 		forEachAnnotation(annotationProvider, type, x-> true, x -> l.add(x));
 		return l;
 	}
@@ -1608,7 +1608,7 @@ public final class ClassInfo {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private static final Map<Class,Object> primitiveDefaultMap = 
+	private static final Map<Class,Object> primitiveDefaultMap =
 		mapBuilder(Class.class,Object.class).unmodifiable()
 			.add(Boolean.TYPE, false)
 			.add(Character.TYPE, (char)0)

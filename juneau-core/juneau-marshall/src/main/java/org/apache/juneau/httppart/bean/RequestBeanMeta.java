@@ -75,10 +75,10 @@ public class RequestBeanMeta {
 		this.cm = b.cm;
 		this.serializer = b.serializer.orElse(null);
 		this.parser = b.parser.orElse(null);
-		Map<String,RequestBeanPropertyMeta> properties = new LinkedHashMap<>();
+		Map<String,RequestBeanPropertyMeta> properties = map();
 		for (Map.Entry<String,RequestBeanPropertyMeta.Builder> e : b.properties.entrySet())
 			properties.put(e.getKey(), e.getValue().build(serializer, parser));
-		this.properties = Collections.unmodifiableMap(properties);
+		this.properties = unmodifiable(properties);
 	}
 
 	static class Builder {
@@ -86,7 +86,7 @@ public class RequestBeanMeta {
 		AnnotationWorkList annotations;
 		BeanCreator<HttpPartSerializer> serializer = BeanCreator.of(HttpPartSerializer.class);
 		BeanCreator<HttpPartParser> parser = BeanCreator.of(HttpPartParser.class);
-		Map<String,RequestBeanPropertyMeta.Builder> properties = new LinkedHashMap<>();
+		Map<String,RequestBeanPropertyMeta.Builder> properties = map();
 
 		Builder(AnnotationWorkList annotations) {
 			this.annotations = annotations;

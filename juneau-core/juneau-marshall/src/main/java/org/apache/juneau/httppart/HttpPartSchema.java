@@ -2960,7 +2960,7 @@ public class HttpPartSchema {
 		public Builder property(String key, Builder value) {
 			if ( key != null && value != null) {
 				if (properties == null)
-					properties = new LinkedHashMap<>();
+					properties = map();
 				properties.put(key, value);
 			}
 			return this;
@@ -2985,7 +2985,7 @@ public class HttpPartSchema {
 		public Builder property(String key, HttpPartSchema value) {
 			if ( key != null && value != null) {
 				if (properties == null)
-					properties = new LinkedHashMap<>();
+					properties = map();
 				properties.put(key, value);
 			}
 			return this;
@@ -3291,7 +3291,7 @@ public class HttpPartSchema {
 			return;
 
 		// Validation.
-		List<String> errors = new ArrayList<>();
+		List<String> errors = list();
 		ListBuilder<String> notAllowed = listBuilder(String.class);
 		boolean invalidFormat = false;
 		switch (type) {
@@ -4017,18 +4017,18 @@ public class HttpPartSchema {
 	}
 
 	private static <T> Set<T> copy(Set<T> in) {
-		return in == null ? Collections.emptySet() : unmodifiableSet(new LinkedHashSet<>(in));
+		return in == null ? emptySet() : unmodifiable(copyOf(in));
 	}
 
 	private static Map<String,HttpPartSchema> build(Map<String,Object> in, boolean noValidate) {
 		if (in == null)
 			return null;
-		Map<String,HttpPartSchema> m = new LinkedHashMap<>();
+		Map<String,HttpPartSchema> m = map();
 		for (Map.Entry<String,Object> e : in.entrySet()) {
 			Object v = e.getValue();
 			m.put(e.getKey(), build(v, noValidate));
 		}
-		return unmodifiableMap(m);
+		return unmodifiable(m);
 	}
 
 	private static HttpPartSchema build(Object in, boolean noValidate) {

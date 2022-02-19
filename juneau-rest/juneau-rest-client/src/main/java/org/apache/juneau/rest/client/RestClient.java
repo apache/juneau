@@ -4131,7 +4131,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 */
 		@FluentSetter
 		public Builder interceptors(Object...value) {
-			List<RestCallInterceptor> l = new ArrayList<>();
+			List<RestCallInterceptor> l = list();
 			for (Object o : value) {
 				ClassInfo ci = ClassInfo.of(o);
 				if (ci != null) {

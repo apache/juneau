@@ -85,15 +85,12 @@ public class ResponseInfo extends SwaggerElement {
 		this.description = copyFrom.description;
 		this.schema = copyFrom.schema == null ? null : copyFrom.schema.copy();
 
-		if (copyFrom.examples == null)
-			this.examples = null;
-		else
-			this.examples = new LinkedHashMap<>(copyFrom.examples);
+		this.examples = copyOf(copyFrom.examples);
 
 		if (copyFrom.headers == null) {
 			this.headers = null;
 		} else {
-			this.headers = new LinkedHashMap<>();
+			this.headers = map();
 			for (Map.Entry<String,HeaderInfo> e : copyFrom.headers.entrySet())
 				this.headers.put(e.getKey(), e.getValue().copy());
 		}

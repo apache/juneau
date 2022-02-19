@@ -15,7 +15,6 @@ package org.apache.juneau.http.header;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
 
 import java.util.*;
@@ -110,9 +109,9 @@ public class Thrown extends BasicCsvArrayHeader {
 	 */
 	public Thrown(String value) {
 		super(NAME, value);
-		List<Part> l = new ArrayList<>();
+		List<Part> l = list();
 		split(value, x -> l.add(new Part(x)));
-		this.value = value == null ? null : unmodifiableList(l);
+		this.value = value == null ? null : unmodifiable(l);
 	}
 
 	/**
@@ -123,7 +122,7 @@ public class Thrown extends BasicCsvArrayHeader {
 	 */
 	public Thrown(List<Part> value) {
 		super(NAME, join(value, ", "));
-		this.value = value == null ? null : unmodifiableList(value);
+		this.value = unmodifiable(value);
 	}
 
 	/**

@@ -138,7 +138,7 @@ public class RestOperations {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private final Map<String,List<RestOpContext>> map;
-	private List<RestOpContext> list;
+	private RestOpContext[] list;
 
 	/**
 	 * Constructor.
@@ -150,7 +150,7 @@ public class RestOperations {
 		for (Map.Entry<String,TreeSet<RestOpContext>> e : builder.map.entrySet())
 			m.put(e.getKey(), listFrom(e.getValue()));
 		this.map = m;
-		this.list = listFrom(builder.set);
+		this.list = array(builder.set, RestOpContext.class);
 	}
 
 	/**
@@ -209,6 +209,6 @@ public class RestOperations {
 	 * @return An unmodifiable list of method contexts in this object.
 	 */
 	public List<RestOpContext> getOpContexts() {
-		return Collections.unmodifiableList(list);
+		return unmodifiable(alist(list));
 	}
 }

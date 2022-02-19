@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.test;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -30,10 +32,10 @@ public class RestTestcase {
 	private static boolean microserviceStarted;
 
 	// Reusable RestClients keyed by label that live for the duration of a testcase class.
-	private static Map<String,RestClient> clients = new LinkedHashMap<>();
+	private static Map<String,RestClient> clients = map();
 
 	// Reusable object cache that lives for the duration of a testcase class.
-	private static Map<String,Object> cache = new LinkedHashMap<>();
+	private static Map<String,Object> cache = map();
 
 	@BeforeClass
 	public static void setUp() {

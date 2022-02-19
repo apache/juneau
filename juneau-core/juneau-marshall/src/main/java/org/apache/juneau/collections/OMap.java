@@ -14,6 +14,7 @@ package org.apache.juneau.collections;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.io.*;
@@ -1924,7 +1925,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	public Set<String> keySet() {
 		if (inner == null)
 			return super.keySet();
-		LinkedHashSet<String> s = new LinkedHashSet<>();
+		LinkedHashSet<String> s = set();
 		s.addAll(inner.keySet());
 		s.addAll(super.keySet());
 		return s;

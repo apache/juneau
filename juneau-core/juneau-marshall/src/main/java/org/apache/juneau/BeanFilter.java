@@ -642,7 +642,7 @@ public final class BeanFilter {
 		 */
 		public Builder dictionary(Class<?>...values) {
 			if (dictionary == null)
-				dictionary = new ArrayList<>(Arrays.asList(values));
+				dictionary = list(values);
 			else for (Class<?> cc : values)
 				dictionary.add(cc);
 			return this;
@@ -728,10 +728,10 @@ public final class BeanFilter {
 	BeanFilter(Builder builder) {
 		this.beanClass = builder.beanClass;
 		this.typeName = builder.typeName;
-		this.properties = new LinkedHashSet<>(builder.properties);
-		this.excludeProperties = new LinkedHashSet<>(builder.excludeProperties);
-		this.readOnlyProperties = new LinkedHashSet<>(builder.readOnlyProperties);
-		this.writeOnlyProperties = new LinkedHashSet<>(builder.writeOnlyProperties);
+		this.properties = copyOf(builder.properties);
+		this.excludeProperties = copyOf(builder.excludeProperties);
+		this.readOnlyProperties = copyOf(builder.readOnlyProperties);
+		this.writeOnlyProperties = copyOf(builder.writeOnlyProperties);
 		this.example = builder.example;
 		this.implClass = builder.implClass;
 		this.interfaceClass = builder.interfaceClass;

@@ -14,6 +14,7 @@ package org.apache.juneau.utils;
 
 import static java.util.Calendar.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
@@ -312,7 +313,7 @@ public final class PojoQuery {
 	private static void doSort(List list, Map<String,Boolean> sortList) {
 
 		// We reverse the list and sort last to first.
-		List<String> columns = new ArrayList<>(sortList.keySet());
+		List<String> columns = listFrom(sortList.keySet());
 		Collections.reverse(columns);
 
 		for (final String c : columns) {
@@ -1036,7 +1037,7 @@ public final class PojoQuery {
 			s = s.replace('\u9998', '-');
 
 			String[] sa = splitQuoted(s, ' ');
-			List<String> l = new ArrayList<>(sa.length);
+			List<String> l = list(sa.length);
 			int numOrs = 0;
 			for (int i = 0; i < sa.length; i++) {
 				String token = sa[i];

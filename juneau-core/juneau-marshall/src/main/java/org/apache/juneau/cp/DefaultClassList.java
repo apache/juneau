@@ -64,7 +64,7 @@ public class DefaultClassList {
 	 * Constructor.
 	 */
 	protected DefaultClassList() {
-		entries = new ArrayList<>();
+		entries = list();
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class DefaultClassList {
 	 * @param value The object to copy.
 	 */
 	public DefaultClassList(DefaultClassList value) {
-		entries = new ArrayList<>(value.entries);
+		entries = copyOf(value.entries);
 	}
 
 	/**

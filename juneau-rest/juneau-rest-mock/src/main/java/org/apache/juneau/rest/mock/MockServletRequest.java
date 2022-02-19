@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
+import static java.util.Collections.*;
 
 import java.io.*;
 import java.security.*;
@@ -42,10 +43,10 @@ import org.apache.juneau.urlencoding.*;
 public class MockServletRequest implements HttpServletRequest {
 
 	private String method = "GET";
-	private Map<String,String[]> queryDataMap = new LinkedHashMap<>();
+	private Map<String,String[]> queryDataMap = map();
 	private Map<String,String[]> formDataMap;
 	private Map<String,String[]> headerMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-	private Map<String,Object> attributeMap = new LinkedHashMap<>();
+	private Map<String,Object> attributeMap = map();
 	private String characterEncoding = "UTF-8";
 	private byte[] body = new byte[0];
 	private String protocol = "HTTP/1.1";
@@ -59,7 +60,7 @@ public class MockServletRequest implements HttpServletRequest {
 	private String localName;
 	private String localAddr;
 	private int localPort;
-	private Map<String,RequestDispatcher> requestDispatcher = new LinkedHashMap<>();
+	private Map<String,RequestDispatcher> requestDispatcher = map();
 	private ServletContext servletContext;
 	private DispatcherType dispatcherType;
 	private String authType;
@@ -75,7 +76,7 @@ public class MockServletRequest implements HttpServletRequest {
 	private String servletPath = "";
 	private HttpSession httpSession = MockHttpSession.create();
 	private String uri = "";
-	private Set<String> roles = new LinkedHashSet<>();
+	private Set<String> roles = set();
 
 	/**
 	 * Creates a new servlet request.
@@ -545,7 +546,7 @@ public class MockServletRequest implements HttpServletRequest {
 
 	@Override /* HttpServletRequest */
 	public Enumeration<String> getParameterNames() {
-		return Collections.enumeration(new ArrayList<>(getParameterMap().keySet()));
+		return enumeration(listFrom(getParameterMap().keySet()));
 	}
 
 	@Override /* HttpServletRequest */

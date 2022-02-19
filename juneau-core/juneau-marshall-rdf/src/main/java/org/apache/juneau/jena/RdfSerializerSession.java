@@ -468,7 +468,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 
 		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
 
-		ArrayList<Map.Entry<Object,Object>> l = new ArrayList<>(m.entrySet());
+		ArrayList<Map.Entry<Object,Object>> l = listFrom(m.entrySet());
 		Collections.reverse(l);
 		for (Map.Entry<Object,Object> me : l) {
 			Object value = me.getValue();
@@ -533,7 +533,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 
 	private RDFList serializeToList(Collection c, ClassMeta<?> type) throws IOException, SerializeException {
 		ClassMeta<?> elementType = type.getElementType();
-		List<RDFNode> l = new ArrayList<>(c.size());
+		List<RDFNode> l = list(c.size());
 		for (Object e : c) {
 			l.add(serializeAnything(e, false, elementType, null, null, null));
 		}

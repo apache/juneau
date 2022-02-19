@@ -264,7 +264,7 @@ public final class ParserSet {
 		 * @throws IllegalArgumentException If one or more values do not extend from {@link Parser}.
 		 */
 		public Builder add(Class<?>...values) {
-			List<Object> l = new ArrayList<>();
+			List<Object> l = list();
 			for (Class<?> v : values)
 				if (v.getSimpleName().equals("NoInherit"))
 					clear();
@@ -304,7 +304,7 @@ public final class ParserSet {
 		 * @throws IllegalArgumentException If one or more values do not extend from {@link Parser} or named <js>"Inherit"</js>.
 		 */
 		public Builder set(Class<?>...values) {
-			List<Object> l = new ArrayList<>();
+			List<Object> l = list();
 			for (Class<?> v : values) {
 				if (v.getSimpleName().equals("Inherit")) {
 					l.addAll(entries);

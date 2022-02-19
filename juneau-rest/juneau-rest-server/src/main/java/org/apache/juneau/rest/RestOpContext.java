@@ -24,8 +24,6 @@ import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import static java.util.Arrays.*;
-import static java.util.Collections.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
 import java.nio.charset.*;
@@ -1962,7 +1960,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		@FluentSetter
 		public Builder path(String...values) {
 			if (path == null)
-				path = new ArrayList<>(Arrays.asList(values));
+				path = list(values);
 			else
 				path.addAll(0, Arrays.asList(values));
 			return this;
@@ -1997,7 +1995,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		@FluentSetter
 		public Builder produces(MediaType...values) {
 			if (produces == null)
-				produces = new ArrayList<>(Arrays.asList(values));
+				produces = list(values);
 			else
 				produces.addAll(Arrays.asList(values));
 			return this;
@@ -2275,8 +2273,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			pathMatchers = bs.add(UrlPathMatcher[].class, builder.getPathMatchers().asArray());
 			bs.addBean(UrlPathMatcher.class, pathMatchers.length > 0 ? pathMatchers[0] : null);
 
-			supportedAcceptTypes = unmodifiableList(optional(builder.produces).orElseGet(()->serializers.getSupportedMediaTypes()));
-			supportedContentTypes = unmodifiableList(optional(builder.consumes).orElseGet(()->parsers.getSupportedMediaTypes()));
+			supportedAcceptTypes = unmodifiable(optional(builder.produces).orElseGet(()->serializers.getSupportedMediaTypes()));
+			supportedContentTypes = unmodifiable(optional(builder.consumes).orElseGet(()->parsers.getSupportedMediaTypes()));
 
 			defaultRequestHeaders = builder.defaultRequestHeaders().build();
 			defaultResponseHeaders = builder.defaultResponseHeaders().build();

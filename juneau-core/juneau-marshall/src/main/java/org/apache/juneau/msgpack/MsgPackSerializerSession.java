@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
@@ -310,7 +311,7 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 
 		// The map size may change as we're iterating over it, so
 		// grab a snapshot of the entries in a separate list.
-		List<SimpleMapEntry> entries = new ArrayList<>(m.size());
+		List<SimpleMapEntry> entries = list(m.size());
 		for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
 			entries.add(new SimpleMapEntry(e.getKey(), e.getValue()));
 
@@ -380,7 +381,7 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 	private void serializeCollection(MsgPackOutputStream out, Collection c, ClassMeta<?> type) throws IOException, SerializeException {
 
 		ClassMeta<?> elementType = type.getElementType();
-		List<Object> l = new ArrayList<>(c.size());
+		List<Object> l = list(c.size());
 
 		c = sort(c);
 		l.addAll(c);

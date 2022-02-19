@@ -15,6 +15,7 @@ package org.apache.juneau.internal;
 import static org.apache.juneau.internal.ConverterUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static java.util.Collections.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -79,7 +80,7 @@ public final class SetBuilder<E> {
 				set = s;
 			}
 			if (unmodifiable)
-				set = Collections.unmodifiableSet(set);
+				set = unmodifiableSet(set);
 		}
 		return set;
 	}

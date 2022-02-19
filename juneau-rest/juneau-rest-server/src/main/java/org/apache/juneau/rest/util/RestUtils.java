@@ -289,7 +289,7 @@ public final class RestUtils {
 		try {
 			Map<String,String[]> m = map;
 			if (m == null)
-				m = new LinkedHashMap<>();
+				m = map();
 
 			if (qs == null || ((qs instanceof CharSequence) && isEmpty(qs)))
 				return m;

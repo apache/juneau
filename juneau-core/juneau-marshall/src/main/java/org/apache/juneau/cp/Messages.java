@@ -13,6 +13,7 @@
 package org.apache.juneau.cp;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.ResourceBundleUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -177,7 +178,7 @@ public class Messages extends ResourceBundle {
 			super(Messages.class, BeanStore.INSTANCE);
 			this.forClass = forClass;
 			this.name = forClass.getSimpleName();
-			locations = new ArrayList<>();
+			locations = list();
 			locale = Locale.getDefault();
 		}
 
@@ -403,7 +404,7 @@ public class Messages extends ResourceBundle {
 			}
 		}
 
-		this.keyMap = Collections.unmodifiableMap(new LinkedHashMap<>(keyMap));
+		this.keyMap = unmodifiable(copyOf(keyMap));
 		this.rbKeys = rb == null ? Collections.emptySet() : rb.keySet();
 	}
 
@@ -438,7 +439,7 @@ public class Messages extends ResourceBundle {
 	 * @return The set of all keys in the resource bundle with the prefix.
 	 */
 	public Set<String> keySet(String prefix) {
-		Set<String> set = new LinkedHashSet<>();
+		Set<String> set = set();
 		for (String s : keySet()) {
 			if (s.equals(prefix) || (s.startsWith(prefix) && s.charAt(prefix.length()) == '.'))
 				set.add(s);

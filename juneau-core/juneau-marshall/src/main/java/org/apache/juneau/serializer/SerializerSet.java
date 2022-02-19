@@ -15,7 +15,6 @@ package org.apache.juneau.serializer;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static java.util.Arrays.*;
-import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
@@ -263,7 +262,7 @@ public final class SerializerSet {
 		 * @throws IllegalArgumentException If one or more values do not extend from {@link Serializer}.
 		 */
 		public Builder add(Class<?>...values) {
-			List<Object> l = new ArrayList<>();
+			List<Object> l = list();
 			for (Class<?> e : values) {
 				if (Serializer.class.isAssignableFrom(e)) {
 					l.add(createBuilder(e));
@@ -300,7 +299,7 @@ public final class SerializerSet {
 		 * @throws IllegalArgumentException If one or more values do not extend from {@link Serializer} or named <js>"Inherit"</js>.
 		 */
 		public Builder set(Class<?>...values) {
-			List<Object> l = new ArrayList<>();
+			List<Object> l = list();
 			for (Class<?> e : values) {
 				if (e.getSimpleName().equals("Inherit")) {
 					l.addAll(entries);
@@ -663,7 +662,7 @@ public final class SerializerSet {
 	 * @return An unmodifiable list of serializers in this group.
 	 */
 	public List<Serializer> getSerializers() {
-		return unmodifiableList(asList(entries));
+		return unmodifiable(alist(entries));
 	}
 
 	/**

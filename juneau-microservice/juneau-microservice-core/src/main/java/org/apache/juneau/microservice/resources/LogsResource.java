@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.resources;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -291,7 +292,7 @@ public class LogsResource extends BasicRestServlet implements BasicUniversalConf
 
 		@Html(format=HtmlFormat.HTML_CDC)
 		public List<Action> getActions() throws Exception {
-			List<Action> l = new ArrayList<>();
+			List<Action> l = list();
 			if (f.canRead() && ! f.isDirectory()) {
 				l.add(new Action("view", uri + "?method=VIEW"));
 				l.add(new Action("highlighted", uri + "?method=VIEW&highlight=true"));

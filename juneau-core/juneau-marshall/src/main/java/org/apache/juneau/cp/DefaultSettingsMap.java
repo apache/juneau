@@ -55,7 +55,7 @@ public class DefaultSettingsMap {
 	 * Constructor.
 	 */
 	protected DefaultSettingsMap() {
-		entries = new LinkedHashMap<>();
+		entries = map();
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class DefaultSettingsMap {
 	 * @param value The object to copy.
 	 */
 	public DefaultSettingsMap(DefaultSettingsMap value) {
-		entries = new LinkedHashMap<>(value.entries);
+		entries = copyOf(value.entries);
 	}
 
 	/**

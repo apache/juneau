@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.pojotools;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -53,12 +55,12 @@ public final class PojoViewer implements PojoTool<ViewArgs> {
 
 		if (type.isArray()) {
 			int size = Array.getLength(input);
-			l = new ArrayList<>(size);
+			l = list(size);
 			for (int i = 0; i < size; i++)
 				l.add(Array.get(input, i));
 		} else if (type.isCollection()) {
 			Collection c = (Collection)input;
-			l = new ArrayList<>(c.size());
+			l = list(c.size());
 			for (Object o : c)
 				l.add(o);
 		} else {

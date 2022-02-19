@@ -93,7 +93,7 @@ public class Swagger extends SwaggerElement {
 		if (copyFrom.definitions == null) {
 			this.definitions = null;
 		} else {
-			this.definitions = new LinkedHashMap<>();
+			this.definitions = map();
 			for (Map.Entry<String,OMap> e : copyFrom.definitions.entrySet())
 				this.definitions.put(e.getKey(), new OMap(e.getValue()));
 		}
@@ -101,7 +101,7 @@ public class Swagger extends SwaggerElement {
 		if (copyFrom.paths == null) {
 			this.paths = null;
 		} else {
-			this.paths = new LinkedHashMap<>();
+			this.paths = map();
 			for (Map.Entry<String,OperationMap> e : copyFrom.paths.entrySet()) {
 				OperationMap m = new OperationMap();
 				for (Map.Entry<String,Operation> e2 : e.getValue().entrySet())
@@ -113,7 +113,7 @@ public class Swagger extends SwaggerElement {
 		if (copyFrom.parameters == null) {
 			this.parameters = null;
 		} else {
-			this.parameters = new LinkedHashMap<>();
+			this.parameters = map();
 			for (Map.Entry<String,ParameterInfo> e : copyFrom.parameters.entrySet())
 				this.parameters.put(e.getKey(), e.getValue().copy());
 		}
@@ -121,7 +121,7 @@ public class Swagger extends SwaggerElement {
 		if (copyFrom.responses == null) {
 			this.responses = null;
 		} else {
-			this.responses = new LinkedHashMap<>();
+			this.responses = map();
 			for (Map.Entry<String,ResponseInfo> e : copyFrom.responses.entrySet())
 				this.responses.put(e.getKey(), e.getValue().copy());
 		}
@@ -129,9 +129,9 @@ public class Swagger extends SwaggerElement {
 		if (copyFrom.security == null) {
 			this.security = null;
 		} else {
-			this.security = new ArrayList<>();
+			this.security = list();
 			for (Map<String,List<String>> m : copyFrom.security) {
-				Map<String,List<String>> m2 = new LinkedHashMap<>();
+				Map<String,List<String>> m2 = map();
 				for (Map.Entry<String,List<String>> e : m.entrySet())
 					m2.put(e.getKey(), copyOf(e.getValue()));
 				this.security.add(m2);
@@ -141,7 +141,7 @@ public class Swagger extends SwaggerElement {
 		if (copyFrom.securityDefinitions == null) {
 			this.securityDefinitions = null;
 		} else {
-			this.securityDefinitions = new LinkedHashMap<>();
+			this.securityDefinitions = map();
 			for (Map.Entry<String,SecurityScheme> e : copyFrom.securityDefinitions.entrySet())
 				this.securityDefinitions.put(e.getKey(), e.getValue().copy());
 		}
@@ -149,7 +149,7 @@ public class Swagger extends SwaggerElement {
 		if (copyFrom.tags == null) {
 			this.tags = null;
 		} else {
-			this.tags = new LinkedHashSet<>();
+			this.tags = CollectionUtils.set();
 			for (Tag t : copyFrom.tags)
 				this.tags.add(t.copy());
 		}
@@ -1240,8 +1240,8 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger security(String scheme, String...alternatives) {
-		Map<String,List<String>> m = new LinkedHashMap<>();
-		m.put(scheme, Arrays.asList(alternatives));
+		Map<String,List<String>> m = map();
+		m.put(scheme, alist(alternatives));
 		return addSecurity(Collections.singleton(m));
 	}
 

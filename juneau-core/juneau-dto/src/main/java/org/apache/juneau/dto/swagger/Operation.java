@@ -173,7 +173,7 @@ public class Operation extends SwaggerElement {
 		if (copyFrom.parameters == null) {
 			this.parameters = null;
 		} else {
-			this.parameters = new ArrayList<>();
+			this.parameters = list();
 			for (ParameterInfo p : copyFrom.parameters)
 				this.parameters.add(p.copy());
 		}
@@ -181,7 +181,7 @@ public class Operation extends SwaggerElement {
 		if (copyFrom.responses == null) {
 			this.responses = null;
 		} else {
-			this.responses = new LinkedHashMap<>();
+			this.responses = map();
 			for (Map.Entry<String,ResponseInfo> e : copyFrom.responses.entrySet())
 				this.responses.put(e.getKey(), e.getValue().copy());
 		}
@@ -189,9 +189,9 @@ public class Operation extends SwaggerElement {
 		if (copyFrom.security == null) {
 			this.security = null;
 		} else {
-			this.security = new ArrayList<>();
+			this.security = list();
 			for (Map<String,List<String>> m : copyFrom.security) {
-				Map<String,List<String>> m2 = new LinkedHashMap<>();
+				Map<String,List<String>> m2 = map();
 				for (Map.Entry<String,List<String>> e : m.entrySet())
 					m2.put(e.getKey(), copyOf(e.getValue()));
 				this.security.add(m2);
@@ -1132,7 +1132,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation security(String scheme, String...alternatives) {
-		Map<String,List<String>> m = new LinkedHashMap<>();
+		Map<String,List<String>> m = map();
 		m.put(scheme, Arrays.asList(alternatives));
 		addSecurity(Collections.singletonList(m));
 		return this;

@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.pojotools;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
@@ -71,7 +72,7 @@ public final class PojoSearcher implements PojoTool<SearchArgs> {
 
 		if (type.isCollection()) {
 			Collection c = (Collection)input;
-			l = new ArrayList<>(c.size());
+			l = list(c.size());
 			for (Object o : c) {
 				if (rowMatcher.matches(o))
 					l.add(o);
@@ -79,7 +80,7 @@ public final class PojoSearcher implements PojoTool<SearchArgs> {
 
 		} else /* isArray */ {
 			int size = Array.getLength(input);
-			l = new ArrayList<>(size);
+			l = list(size);
 			for (int i = 0; i < size; i++) {
 				Object o = Array.get(input, i);
 				if (rowMatcher.matches(o))

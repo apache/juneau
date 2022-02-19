@@ -13,6 +13,7 @@
 package org.apache.juneau.dto.html5;
 
 import static org.apache.juneau.html.annotation.HtmlFormat.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.net.*;
@@ -79,14 +80,14 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	public HtmlElement attr(String key, Object val) {
-		if (this.attrs == null)
-			this.attrs = new LinkedHashMap<>();
+		if (attrs == null)
+			attrs = map();
 		if (val == null)
-			this.attrs.remove(key);
+			attrs.remove(key);
 		else {
 			if ("url".equals(key) || "href".equals(key) || key.endsWith("action"))
 				val = StringUtils.toURI(val);
-			this.attrs.put(key, val);
+			attrs.put(key, val);
 		}
 		return this;
 	}
@@ -110,9 +111,9 @@ public abstract class HtmlElement {
 	 * @return This object.
 	 */
 	public HtmlElement attrUri(String key, Object val) {
-		if (this.attrs == null)
-			this.attrs = new LinkedHashMap<>();
-		this.attrs.put(key, StringUtils.toURI(val));
+		if (attrs == null)
+			attrs = map();
+		attrs.put(key, StringUtils.toURI(val));
 		return this;
 	}
 

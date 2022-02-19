@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -37,7 +39,7 @@ public class MockServletResponse implements HttpServletResponse {
 	private Locale locale;
 	private int sc;
 	private String msg;
-	private Map<String,String[]> headerMap = new LinkedHashMap<>();
+	private Map<String,String[]> headerMap = map();
 
 	/**
 	 * Creates a new servlet response.

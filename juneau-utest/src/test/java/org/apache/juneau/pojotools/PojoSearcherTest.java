@@ -901,7 +901,6 @@ public class PojoSearcherTest {
 			list(map("quux",null)),
 			list(map(null,null)),
 			list("xxx"),
-			list(123),
 			null
 		);
 		assertObject(run(in, "f=foo")).asJson().is("[[{f:'foo'}]]");

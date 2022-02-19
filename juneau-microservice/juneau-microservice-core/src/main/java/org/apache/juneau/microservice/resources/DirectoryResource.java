@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.resources;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -259,7 +260,7 @@ public class DirectoryResource extends BasicRestServlet implements BasicUniversa
 
 		@Html(format=HtmlFormat.HTML_CDC)
 		public List<Action> getActions() throws Exception {
-			List<Action> l = new ArrayList<>();
+			List<Action> l = list();
 			if (allowViews && f.canRead() && ! f.isDirectory()) {
 				l.add(new Action("view", uri + "?method=VIEW"));
 				l.add(new Action("download", uri + "?method=DOWNLOAD"));

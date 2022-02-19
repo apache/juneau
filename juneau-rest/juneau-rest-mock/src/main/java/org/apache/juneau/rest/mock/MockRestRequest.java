@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.mock;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.net.*;
 import java.security.*;
 import java.util.*;
@@ -42,8 +44,8 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	//------------------------------------------------------------------------------------------------------------------
 	// Servlet request override values.
 	//------------------------------------------------------------------------------------------------------------------
-	private Map<String,Object> attributeMap = new LinkedHashMap<>();
-	private Map<String,RequestDispatcher> requestDispatcherMap = new LinkedHashMap<>();
+	private Map<String,Object> attributeMap = map();
+	private Map<String,RequestDispatcher> requestDispatcherMap = map();
 	private String characterEncoding, protocol, scheme, serverName, remoteAddr, remoteHost, localName, localAddr,
 		pathInfo, pathTranslated, contextPath, queryString, remoteUser, requestedSessionId, requestURI, servletPath, authType;
 	private Integer serverPort, remotePort, localPort;

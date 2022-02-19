@@ -143,6 +143,30 @@ public final class CollectionUtils {
 	}
 
 	/**
+	 * Convenience method for creating an {@link ArrayList} of the specified size.
+	 *
+	 * @param size The initial size of the list.
+	 * @return A new modifiable list.
+	 */
+	public static <T> ArrayList<T> list(int size) {
+		return new ArrayList<>(size);
+	}
+
+	/**
+	 * Convenience method for creating a {@link LinkedList}.
+	 *
+	 * @param values The values to initialize the list with.
+	 * @return A new modifiable list.
+	 */
+	@SafeVarargs
+	public static <T> LinkedList<T> linkedList(T...values) {
+		LinkedList<T> l = new LinkedList<>();
+		for (T v : values)
+			l.add(v);
+		return l;
+	}
+
+	/**
 	 * Convenience method for creating an array-backed list by calling {@link Arrays#asList(Object...)}.
 	 *
 	 * @param values The values to initialize the list with.
@@ -160,7 +184,30 @@ public final class CollectionUtils {
 	 * @return A new modifiable list.
 	 */
 	public static <T> ArrayList<T> listFrom(Collection<T> value) {
+		return listFrom(value, false);
+	}
+
+	/**
+	 * Creates an {@link ArrayList} copy from a collection.
+	 *
+	 * @param value The collection to copy from.
+	 * @return A new modifiable list.
+	 */
+	public static <K,V> LinkedHashMap<K,V> mapFrom(Map<K,V> value) {
 		if (value == null)
+			return null;
+		return new LinkedHashMap<>(value);
+	}
+
+	/**
+	 * Creates an {@link ArrayList} copy from a collection.
+	 *
+	 * @param value The collection to copy from.
+	 * @param nullIfEmpty If <jk>true</jk> will return <jk>null</jk> if the collection is empty.
+	 * @return A new modifiable list.
+	 */
+	public static <T> ArrayList<T> listFrom(Collection<T> value, boolean nullIfEmpty) {
+		if (value == null || (nullIfEmpty && value.isEmpty()))
 			return null;
 		ArrayList<T> l = new ArrayList<>();
 		value.forEach(x -> l.add(x));
@@ -214,6 +261,35 @@ public final class CollectionUtils {
 		TreeSet<T> l = new TreeSet<>();
 		for (T v : values)
 			l.add(v);
+		return l;
+	}
+
+	/**
+	 * Creates a new {@link TreeSet} from the specified collection.
+	 *
+	 * @param value The value to copy from.
+	 * @return A new {@link TreeSet}, or <jk>null</jk> if the input was null.
+	 */
+	public static <T> TreeSet<T> sortedSetFrom(Collection<T> value) {
+		if (value == null)
+			return null;
+		TreeSet<T> l = new TreeSet<>();
+		value.forEach(x -> l.add(x));
+		return l;
+	}
+
+	/**
+	 * Creates a new {@link TreeSet} from the specified collection.
+	 *
+	 * @param value The value to copy from.
+	 * @param nullIfEmpty If <jk>true</jk> returns <jk>null</jk> if the collection is empty.
+	 * @return A new {@link TreeSet}, or <jk>null</jk> if the input was null.
+	 */
+	public static <T> TreeSet<T> sortedSetFrom(Collection<T> value, boolean nullIfEmpty) {
+		if (value == null || (nullIfEmpty && value.isEmpty()))
+			return null;
+		TreeSet<T> l = new TreeSet<>();
+		value.forEach(x -> l.add(x));
 		return l;
 	}
 
@@ -273,6 +349,15 @@ public final class CollectionUtils {
 		m.put(k2, v2);
 		m.put(k3, v3);
 		return m;
+	}
+
+	/**
+	 * Convenience method for creating a {@link TreeMap}.
+	 *
+	 * @return A new modifiable set.
+	 */
+	public static <K,V> TreeMap<K,V> sortedMap() {
+		return new TreeMap<>();
 	}
 
 	/**
@@ -353,6 +438,36 @@ public final class CollectionUtils {
 	 */
 	public static <K,V> Map<K,V> unmodifiable(Map<K,V> value) {
 		return value == null ? null: Collections.unmodifiableMap(value);
+	}
+
+	/**
+	 * Wraps the specified list in {@link Collections#unmodifiableList(List)}.
+	 *
+	 * @param value The list to wrap.
+	 * @return The wrapped list.
+	 */
+	public static <T> List<T> synced(List<T> value) {
+		return value == null ? null: Collections.synchronizedList(value);
+	}
+
+	/**
+	 * Wraps the specified set in {@link Collections#unmodifiableSet(Set)}.
+	 *
+	 * @param value The set to wrap.
+	 * @return The wrapped set.
+	 */
+	public static <T> Set<T> synced(Set<T> value) {
+		return value == null ? null: Collections.synchronizedSet(value);
+	}
+
+	/**
+	 * Wraps the specified map in {@link Collections#unmodifiableMap(Map)}.
+	 *
+	 * @param value The map to wrap.
+	 * @return The wrapped map.
+	 */
+	public static <K,V> Map<K,V> synced(Map<K,V> value) {
+		return value == null ? null: Collections.synchronizedMap(value);
 	}
 
 	/**

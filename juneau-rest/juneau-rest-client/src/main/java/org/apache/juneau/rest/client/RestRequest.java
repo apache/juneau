@@ -88,7 +88,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	final RestClient client;                               // The client that created this call.
 	private final HttpRequestBase request;                 // The request.
 	private RestResponse response;                         // The response.
-	List<RestCallInterceptor> interceptors = new ArrayList<>();   // Used for intercepting and altering requests.
+	List<RestCallInterceptor> interceptors = list();   // Used for intercepting and altering requests.
 
 	private final HeaderList.Builder headerDataBuilder;
 	private final PartList.Builder queryDataBuilder, formDataBuilder, pathDataBuilder;
@@ -672,7 +672,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	@SuppressWarnings("unchecked")
 	public RestRequest rethrow(Class<?>...values) {
 		if (rethrow == null)
-			rethrow = new ArrayList<>();
+			rethrow = list();
 		for (Class<?> v : values) {
 			if (v != null && Throwable.class.isAssignableFrom(v))
 				rethrow.add((Class<? extends Throwable>)v);

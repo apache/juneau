@@ -14,6 +14,7 @@ package org.apache.juneau.jsonschema;
 
 import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static java.util.Collections.*;
 
@@ -879,7 +880,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		addDescriptionsTo = builder.addDescriptionsTo == null ? emptySet() : new TreeSet<>(builder.addDescriptionsTo);
 		ignoreTypes = builder.ignoreTypes == null ? emptySet() : new TreeSet<>(builder.ignoreTypes);
 
-		Set<Pattern> ignoreTypePatterns = new LinkedHashSet<>();
+		Set<Pattern> ignoreTypePatterns = set();
 		ignoreTypes.forEach(y -> split(y, x -> ignoreTypePatterns.add(Pattern.compile(x.replace(".", "\\.").replace("*", ".*")))));
 		this.ignoreTypePatterns = ignoreTypePatterns;
 

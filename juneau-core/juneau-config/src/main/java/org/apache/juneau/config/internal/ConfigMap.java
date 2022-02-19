@@ -41,16 +41,16 @@ public class ConfigMap implements ConfigStoreListener {
 	final String name;                       // The name  of this object.
 
 	// Changes that have been applied since the last load.
-	private final List<ConfigEvent> changes = Collections.synchronizedList(new ConfigEvents());
+	private final List<ConfigEvent> changes = synced(new ConfigEvents());
 
 	// Registered listeners listening for changes during saves or reloads.
-	private final Set<ConfigEventListener> listeners = Collections.synchronizedSet(new HashSet<ConfigEventListener>());
+	private final Set<ConfigEventListener> listeners = synced(set());
 
 	// The parsed entries of this map with all changes applied.
-	final Map<String,ConfigSection> entries = Collections.synchronizedMap(new LinkedHashMap<String,ConfigSection>());
+	final Map<String,ConfigSection> entries = synced(map());
 
 	// The original entries of this map before any changes were applied.
-	final Map<String,ConfigSection> oentries = Collections.synchronizedMap(new LinkedHashMap<String,ConfigSection>());
+	final Map<String,ConfigSection> oentries = synced(map());
 
 	// Import statements in this config.
 	final List<Import> imports = new CopyOnWriteArrayList<>();
@@ -83,13 +83,12 @@ public class ConfigMap implements ConfigStoreListener {
 
 		entries.clear();
 		oentries.clear();
-		for (Import ir : imports)
-			ir.unregisterAll();
+		imports.forEach(x -> x.unregisterAll());
 		imports.clear();
 
-		Map<String,ConfigMap> imports = new LinkedHashMap<>();
+		Map<String,ConfigMap> imports = map();
 
-		List<String> lines = new LinkedList<>();
+		List<String> lines = linkedList();
 		try (Scanner scanner = new Scanner(contents)) {
 			while (scanner.hasNextLine()) {
 				String line = scanner.nextLine();
@@ -122,7 +121,7 @@ public class ConfigMap implements ConfigStoreListener {
 			}
 		}
 
-		List<Import> irl = new ArrayList<>(imports.size());
+		List<Import> irl = list(imports.size());
 		forEachReverse(listFrom(imports.values()), x -> irl.add(new Import(x).register(listeners)));
 		this.imports.addAll(irl);
 
@@ -165,13 +164,13 @@ public class ConfigMap implements ConfigStoreListener {
 			}
 		}
 
-		lines = new ArrayList<>(lines);
+		lines = copyOf(lines);
 		int last = lines.size()-1;
 		int S1 = 1; // Looking for section.
 		int S2 = 2; // Found section, looking for start.
 		int state = S1;
 
-		List<ConfigSection> sections = new ArrayList<>();
+		List<ConfigSection> sections = list();
 
 		for (int i = last; i >= 0; i--) {
 			String l = lines.get(i);
@@ -226,13 +225,8 @@ public class ConfigMap implements ConfigStoreListener {
 			ConfigSection cs = entries.get(section);
 			ConfigMapEntry ce = cs == null ? null : cs.entries.get(key);
 
-			if (ce == null) {
-				for (Import i : imports) {
-					ce = i.getConfigMap().getEntry(section, key);
-					if (ce != null)
-						break;
-				}
-			}
+			if (ce == null)
+				ce = imports.stream().map(y -> y.getConfigMap().getEntry(section, key)).filter(y -> y != null).findFirst().orElse(null);
 
 			return ce;
 		}
@@ -266,16 +260,12 @@ public class ConfigMap implements ConfigStoreListener {
 	 * 	An unmodifiable set of keys.
 	 */
 	public Set<String> getSections() {
-		Set<String> s = null;
-		if (imports.isEmpty()) {
-			s = entries.keySet();
-		} else {
-			s = new LinkedHashSet<>();
-			for (Import ir : imports)
-				s.addAll(ir.getConfigMap().getSections());
+		Set<String> s = imports.isEmpty() ? entries.keySet() : set();
+		if (! imports.isEmpty()) {
+			imports.forEach(x -> s.addAll(x.getConfigMap().getSections()));
 			s.addAll(entries.keySet());
 		}
-		return Collections.unmodifiableSet(s);
+		return unmodifiable(s);
 	}
 
 	/**
@@ -290,18 +280,14 @@ public class ConfigMap implements ConfigStoreListener {
 	 */
 	public Set<String> getKeys(String section) {
 		checkSectionName(section);
-		Set<String> s = null;
 		ConfigSection cs = entries.get(section);
-		if (imports.isEmpty()) {
-			s = cs == null ? Collections.<String>emptySet() : cs.entries.keySet();
-		} else {
-			s = new LinkedHashSet<>();
-			for (Import i : imports)
-				s.addAll(i.getConfigMap().getKeys(section));
+		Set<String> s = imports.isEmpty() && cs != null ? cs.entries.keySet() : set();
+		if (! imports.isEmpty()) {
+			imports.forEach(x -> s.addAll(x.getConfigMap().getKeys(section)));
 			if (cs != null)
 				s.addAll(cs.entries.keySet());
 		}
-		return Collections.unmodifiableSet(s);
+		return unmodifiable(s);
 	}
 
 	/**
@@ -315,10 +301,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 */
 	public boolean hasSection(String section) {
 		checkSectionName(section);
-		for (Import i : imports)
-			if (i.getConfigMap().hasSection(section))
-				return true;
-		return entries.get(section) != null;
+		return entries.get(section) != null || imports.stream().anyMatch(x -> x.getConfigMap().hasSection(section));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -563,8 +546,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 */
 	public ConfigMap register(ConfigEventListener listener) {
 		listeners.add(listener);
-		for (Import ir : imports)
-			ir.register(listener);
+		imports.forEach(x -> x.register(listener));
 		return this;
 	}
 
@@ -582,8 +564,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 */
 	public ConfigMap unregister(ConfigEventListener listener) {
 		listeners.remove(listener);
-		for (Import ir : imports)
-			ir.register(listener);
+		imports.forEach(x -> x.register(listener));
 		return this;
 	}
 
@@ -593,7 +574,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @return The listeners currently associated with this config map.
 	 */
 	public Set<ConfigEventListener> getListeners() {
-		return Collections.unmodifiableSet(listeners);
+		return unmodifiable(listeners);
 	}
 
 	@Override /* ConfigStoreListener */
@@ -605,8 +586,7 @@ public class ConfigMap implements ConfigStoreListener {
 				load(newContents);
 
 				// Reapply our changes on top of the modifications.
-				for (ConfigEvent ce : this.changes)
-					applyChange(false, ce);
+				this.changes.forEach(y -> applyChange(false, y));
 			}
 		} catch (IOException e) {
 			throw runtimeException(e);
@@ -636,14 +616,12 @@ public class ConfigMap implements ConfigStoreListener {
 	public OMap asMap() {
 		OMap m = new OMap();
 		try (SimpleLock x = lock.read()) {
-			for (Import i : imports)
-				m.putAll(i.getConfigMap().asMap());
-			for (ConfigSection cs : entries.values()) {
-				Map<String,String> m2 = new LinkedHashMap<>();
-				for (ConfigMapEntry ce : cs.entries.values())
-					m2.put(ce.key, ce.value);
-				m.put(cs.name, m2);
-			}
+			imports.forEach(y -> m.putAll(y.getConfigMap().asMap()));
+			entries.values().forEach(z -> {
+				Map<String,String> m2 = map();
+				z.entries.values().forEach(y -> m2.put(y.key, y.value));
+				m.put(z.name, m2);
+			});
 		}
 		return m;
 	}
@@ -744,8 +722,7 @@ public class ConfigMap implements ConfigStoreListener {
 
 	private void signal(ConfigEvents changes) {
 		if (changes.size() > 0)
-			for (ConfigEventListener l : listeners)
-				l.onConfigChange(changes);
+			listeners.forEach(x -> x.onConfigChange(changes));
 	}
 
 	private ConfigEvents findDiffs(String updatedContents) throws IOException {
@@ -834,11 +811,11 @@ public class ConfigMap implements ConfigStoreListener {
 
 		final String name;   // The config section name, or blank if the default section.  Never null.
 
-		final List<String> preLines = Collections.synchronizedList(new ArrayList<String>());
+		final List<String> preLines = synced(list());
 		private final String rawLine;
 
-		final Map<String,ConfigMapEntry> oentries = Collections.synchronizedMap(new LinkedHashMap<String,ConfigMapEntry>());
-		final Map<String,ConfigMapEntry> entries = Collections.synchronizedMap(new LinkedHashMap<String,ConfigMapEntry>());
+		final Map<String,ConfigMapEntry> oentries = synced(map());
+		final Map<String,ConfigMapEntry> entries = synced(map());
 
 		/**
 		 * Constructor.
@@ -928,15 +905,14 @@ public class ConfigMap implements ConfigStoreListener {
 	class Import {
 
 		private final ConfigMap configMap;
-		private final Map<ConfigEventListener,ConfigEventListener> listenerMap = Collections.synchronizedMap(new LinkedHashMap<>());
+		private final Map<ConfigEventListener,ConfigEventListener> listenerMap = synced(map());
 
 		Import(ConfigMap configMap) {
 			this.configMap = configMap;
 		}
 
 		synchronized Import register(Collection<ConfigEventListener> listeners) {
-			for (ConfigEventListener l : listeners)
-				register(l);
+			listeners.forEach(x -> register(x));
 			return this;
 		}
 
@@ -945,10 +921,7 @@ public class ConfigMap implements ConfigStoreListener {
 				@Override
 				public void onConfigChange(ConfigEvents events) {
 					ConfigEvents events2 = new ConfigEvents();
-					for (ConfigEvent cev : events) {
-						if (! hasEntry(cev.getSection(), cev.getKey()))
-							events2.add(cev);
-					}
+					events.stream().filter(x -> ! hasEntry(x.getSection(), x.getKey())).forEach(x -> events2.add(x));
 					if (events2.size() > 0)
 						listener.onConfigChange(events2);
 				}
@@ -964,8 +937,7 @@ public class ConfigMap implements ConfigStoreListener {
 		}
 
 		synchronized Import unregisterAll() {
-			for (ConfigEventListener l : listenerMap.values())
-				configMap.unregister(l);
+			listenerMap.values().forEach(x -> configMap.unregister(x));
 			listenerMap.clear();
 			return this;
 		}

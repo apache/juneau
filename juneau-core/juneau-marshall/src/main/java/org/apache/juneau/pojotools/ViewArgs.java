@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.pojotools;
 
-import static java.util.Collections.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
@@ -48,7 +48,7 @@ public class ViewArgs {
 	 * 	<br>Values are column names.
 	 */
 	public ViewArgs(Collection<String> viewArgs) {
-		this.view = unmodifiableList(new ArrayList<>(viewArgs));
+		this.view = unmodifiable(listFrom(viewArgs));
 	}
 
 	/**

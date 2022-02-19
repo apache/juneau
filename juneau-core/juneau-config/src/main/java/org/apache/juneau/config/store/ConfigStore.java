@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.config.store;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -198,7 +200,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 		name = resolveName(name);
 		Set<ConfigStoreListener> s = listeners.get(name);
 		if (s == null) {
-			s = Collections.synchronizedSet(Collections.newSetFromMap(new IdentityHashMap<ConfigStoreListener,Boolean>()));
+			s = synced(Collections.newSetFromMap(new IdentityHashMap<ConfigStoreListener,Boolean>()));
 			listeners.put(name, s);
 		}
 		s.add(l);

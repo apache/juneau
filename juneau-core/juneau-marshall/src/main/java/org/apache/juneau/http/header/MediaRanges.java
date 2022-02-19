@@ -218,7 +218,7 @@ public class MediaRanges {
 	 * @return The media ranges that make up this object.
 	 */
 	public List<MediaRange> getRanges() {
-		return Collections.unmodifiableList(Arrays.asList(ranges));
+		return unmodifiable(alist(ranges));
 	}
 
 	private static HeaderElement[] parse(String value) {

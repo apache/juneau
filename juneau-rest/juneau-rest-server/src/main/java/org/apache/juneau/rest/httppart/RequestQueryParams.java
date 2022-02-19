@@ -139,7 +139,7 @@ public class RequestQueryParams {
 		for (Map.Entry<String,String[]> e : query.entrySet()) {
 			String name = e.getKey();
 			String key = key(name);
-			List<RequestQueryParam> l = new ArrayList<>();
+			List<RequestQueryParam> l = list();
 
 			String[] values = e.getValue();
 			if (values == null)

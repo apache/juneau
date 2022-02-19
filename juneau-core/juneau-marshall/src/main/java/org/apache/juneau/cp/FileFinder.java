@@ -135,7 +135,7 @@ public interface FileFinder {
 		 */
 		protected Builder(BeanStore beanStore) {
 			super(BasicFileFinder.class, beanStore);
-			roots = new LinkedHashSet<>();
+			roots = set();
 			cachingLimit = -1;
 			include = list(Pattern.compile(".*"));
 			exclude = list();

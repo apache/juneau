@@ -35,10 +35,7 @@ public class ConfigEvents extends ArrayList<ConfigEvent> {
 	 * @return <jk>true</jk> if the specified section was modified in this list of events.
 	 */
 	public boolean isSectionModified(String name) {
-		for (ConfigEvent ce : this)
-			if (eq(name, ce.getSection()))
-				return true;
-		return false;
+		return stream().anyMatch(x -> eq(name, x.getSection()));
 	}
 
 	/**
@@ -49,9 +46,6 @@ public class ConfigEvents extends ArrayList<ConfigEvent> {
 	 * @return <jk>true</jk> if the specified key was modified in this list of events.
 	 */
 	public boolean isKeyModified(String section, String key) {
-		for (ConfigEvent ce : this)
-			if (eq(section, ce.getSection()) && eq(key, ce.getKey()))
-				return true;
-		return false;
+		return stream().anyMatch(x -> eq(section, x.getSection()) && eq(key, x.getKey()));
 	}
 }

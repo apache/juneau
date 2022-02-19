@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static java.util.Collections.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -41,9 +41,9 @@ public class SearchArgs {
 	private final boolean ignoreCase;
 
 	SearchArgs(Builder b) {
-		this.search = unmodifiableMap(new LinkedHashMap<>(b.search));
-		this.view = unmodifiableList(new ArrayList<>(b.view));
-		this.sort = unmodifiableMap(new LinkedHashMap<>(b.sort));
+		this.search = unmodifiable(copyOf(b.search));
+		this.view = unmodifiable(copyOf(b.view));
+		this.sort = unmodifiable(copyOf(b.sort));
 		this.position = b.position;
 		this.limit = b.limit;
 		this.ignoreCase = b.ignoreCase;
@@ -62,9 +62,9 @@ public class SearchArgs {
 	 * Builder for {@link SearchArgs} class.
 	 */
 	public static final class Builder {
-		Map<String,String> search = new LinkedHashMap<>();
-		List<String> view = new ArrayList<>();
-		Map<String,Boolean> sort = new LinkedHashMap<>();
+		Map<String,String> search = map();
+		List<String> view = list();
+		Map<String,Boolean> sort = map();
 		int position, limit;
 		boolean ignoreCase;
 

@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -40,8 +42,8 @@ public class XmlClassMeta extends ExtendedClassMeta {
 	 */
 	public XmlClassMeta(ClassMeta<?> cm, XmlMetaProvider mp) {
 		super(cm);
-		List<Xml> xmls = new ArrayList<>();
-		List<XmlSchema> schemas = new ArrayList<>();
+		List<Xml> xmls = list();
+		List<XmlSchema> schemas = list();
 		if (cm != null) {
 			cm.forEachAnnotation(Xml.class, x -> true, x -> xmls.add(x));
 			cm.forEachAnnotation(XmlSchema.class, x -> true, x -> schemas.add(x));

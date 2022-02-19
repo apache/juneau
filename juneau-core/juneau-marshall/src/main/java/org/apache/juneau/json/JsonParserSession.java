@@ -361,7 +361,7 @@ public final class JsonParserSession extends ReaderParserSession {
 				parseIntoMap2(r, m, string(), object(), pMeta);
 				o = cast(m, pMeta, eType);
 			} else {
-				ArrayList l = (ArrayList)parseIntoCollection2(r, new ArrayList(), sType, pMeta);
+				ArrayList l = (ArrayList)parseIntoCollection2(r, list(), sType, pMeta);
 				o = toArray(sType, l);
 			}
 		} else if (c == '{') {

@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.stats;
 
 import static java.util.stream.Collectors.*;
-import static java.util.Collections.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static java.util.Comparator.*;
@@ -188,7 +187,7 @@ public class ThrownStore {
 			s = parent.get().ignoreClasses;
 		if (s == null)
 			s = Collections.emptySet();
-		this.ignoreClasses = unmodifiableSet(s);
+		this.ignoreClasses = unmodifiable(s);
 	}
 
 
