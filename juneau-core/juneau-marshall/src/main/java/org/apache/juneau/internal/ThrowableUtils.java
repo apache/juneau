@@ -14,6 +14,8 @@ package org.apache.juneau.internal;
 
 import java.io.*;
 
+import org.apache.juneau.assertions.*;
+
 /**
  * Various utility methods for creating and working with throwables.
  *
@@ -194,6 +196,21 @@ public class ThrowableUtils {
 	@FunctionalInterface
 	public interface SupplierWithThrowable<T> {
 		public T get() throws Throwable;
+	}
+
+	/**
+	 * Runs a snippet of code and encapsulates any throwable inside a {@link RuntimeException}.
+	 *
+	 * @param snippet The snippet of code to run.
+	 */
+	public static void safeRun(Snippet snippet) {
+		try {
+			snippet.run();
+		} catch (RuntimeException t) {
+			throw t;
+		} catch (Throwable t) {
+			throw runtimeException(t);
+		}
 	}
 
 	/**

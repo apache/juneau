@@ -16,11 +16,8 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
 import java.text.*;
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -33,7 +30,7 @@ import org.apache.juneau.serializer.*;
  *
  * @serial exclude
  */
-public class ParseException extends BasicException {
+public class ParseException extends BasicRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
@@ -126,24 +123,26 @@ public class ParseException extends BasicException {
 
 		if (session != null) {
 			Position p = session.getPosition();
+			StringBuilder sb = new StringBuilder(msg);
 
-			msg += "\n\tAt: " + p;
+			sb.append("\n\tAt: ").append(p);
 
 			OMap lastLocation = session.getLastLocation();
 			if (lastLocation != null) {
-				msg += "\n\tWhile parsing into: ";
-				for (Map.Entry<String,Object> e : lastLocation.entrySet())
-					msg += "\n\t\t" + e.getKey() + ": " + e.getValue();
+				sb.append("\n\tWhile parsing into: ");
+				lastLocation.forEach((k,v) -> sb.append("\n\t\t").append(k).append(": ").append(v));
 			}
 
 			String lines = session.getInputAsString();
 			if (lines == null)
-				msg += "\n\tUse BEAN_debug setting to display content.";
+				sb.append("\n\tUse BEAN_debug setting to display content.");
 			else {
 				int numLines = session.getDebugOutputLines();
 				int start = p.line - numLines, end = p.line + numLines;
-				msg += "\n---start--\n" + StringUtils.getNumberedLines(lines, start, end) + "---end---";
+				sb.append("\n---start--\n").append(getNumberedLines(lines, start, end)).append("---end---");
 			}
+
+			msg = sb.toString();
 		}
 		return msg;
 	}

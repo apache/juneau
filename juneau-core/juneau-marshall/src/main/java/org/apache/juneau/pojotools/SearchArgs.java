@@ -48,13 +48,13 @@ public class SearchArgs {
 	 * @param searchArgs Search arguments.
 	 */
 	public SearchArgs(List<String> searchArgs) {
-		for (String s : searchArgs) {
+		searchArgs.forEach(s -> {
 			int i = StringUtils.indexOf(s, '=', '>', '<');
 			if (i == -1)
 				throw new PatternException("Invalid search terms: ''{0}''", searchArgs);
 			char c = s.charAt(i);
 			append(s.substring(0, i).trim(), s.substring(c == '=' ? i+1 : i).trim());
-		}
+		});
 	}
 
 	/**

@@ -170,10 +170,12 @@ public final class CollectionUtils {
 	 * Convenience method for creating an array-backed list by calling {@link Arrays#asList(Object...)}.
 	 *
 	 * @param values The values to initialize the list with.
-	 * @return A new modifiable list.
+	 * @return A new modifiable list, or <jk>null</jk> if the array was <jk>null</jk>.
 	 */
 	@SafeVarargs
 	public static <T> List<T> alist(T...values) {
+		if (values == null)
+			return null;
 		return Arrays.asList(values);
 	}
 
@@ -243,10 +245,12 @@ public final class CollectionUtils {
 	 * Convenience method for creating an unmodifiable list.
 	 *
 	 * @param values The values to initialize the list with.
-	 * @return A new unmodifiable list.
+	 * @return A new unmodifiable list, or <jk>null</jk> if the array was <jk>null</jk>.
 	 */
 	@SafeVarargs
 	public static <T> List<T> ulist(T...values) {
+		if (values == null)
+			return null;
 		return unmodifiable(alist(values));
 	}
 
@@ -474,17 +478,6 @@ public final class CollectionUtils {
 	 * Converts the specified collection to an array.
 	 *
 	 * @param value The collection to convert.
-	 * @return A new array.
-	 */
-	@SuppressWarnings("unchecked")
-	public static <T> T[] array(Collection<T> value) {
-		return array(value, (Class<T>)value.getClass().getComponentType());
-	}
-
-	/**
-	 * Converts the specified collection to an array.
-	 *
-	 * @param value The collection to convert.
 	 * @param componentType The component type of the array.
 	 * @return A new array.
 	 */
@@ -643,5 +636,25 @@ public final class CollectionUtils {
 	 */
 	public static <T> Optional<T> empty() {
 		return Optional.empty();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified collection is not <jk>null</jk> and not empty.
+	 *
+	 * @param value The value being checked.
+	 * @return <jk>true</jk> if the specified collection is not <jk>null</jk> and not empty.
+	 */
+	public static <E> boolean isNotEmpty(Collection<E> value) {
+		return value != null && ! value.isEmpty();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified map is not <jk>null</jk> and not empty.
+	 *
+	 * @param value The value being checked.
+	 * @return <jk>true</jk> if the specified map is not <jk>null</jk> and not empty.
+	 */
+	public static <K,V> boolean isNotEmpty(Map<K,V> value) {
+		return value != null && ! value.isEmpty();
 	}
 }

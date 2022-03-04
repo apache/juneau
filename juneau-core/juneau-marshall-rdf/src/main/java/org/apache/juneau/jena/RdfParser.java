@@ -1690,11 +1690,11 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	@Override /* Context */
 	protected OMap properties() {
 		return filteredMap()
-			.a("trimWhitespace", trimWhitespace)
-			.a("looseCollections", looseCollections)
-			.a("language", language)
-			.a("juneauNs", juneauNs)
-			.a("juneauBpNs", juneauBpNs)
-			.a("collectionFormat", collectionFormat);
+			.append("trimWhitespace", trimWhitespace)
+			.append("looseCollections", looseCollections)
+			.append("language", language)
+			.append("juneauNs", juneauNs)
+			.append("juneauBpNs", juneauBpNs)
+			.append("collectionFormat", collectionFormat);
 	}
 }

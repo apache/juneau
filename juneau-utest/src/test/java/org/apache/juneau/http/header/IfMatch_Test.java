@@ -13,12 +13,10 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.HttpHeaders.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
-import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -33,7 +31,7 @@ public class IfMatch_Test {
 
 	private static final String HEADER = "If-Match";
 	private static final String VALUE = "\"foo\", \"bar\"";
-	private static final List<EntityTag> PARSED = alist(EntityTag.of("\"foo\""), EntityTag.of("\"bar\""));
+	private static final EntityTags PARSED = EntityTags.of(EntityTag.of("\"foo\""), EntityTag.of("\"bar\""));
 
 	@Rest
 	public static class A {
@@ -59,7 +57,7 @@ public class IfMatch_Test {
 
 		// Invalid usage.
 		c.get().header(ifMatch((String)null)).run().assertBody().isEmpty();
-		c.get().header(ifMatch((Supplier<List<EntityTag>>)null)).run().assertBody().isEmpty();
+		c.get().header(ifMatch((Supplier<EntityTags>)null)).run().assertBody().isEmpty();
 		c.get().header(ifMatch(()->null)).run().assertBody().isEmpty();
 	}
 

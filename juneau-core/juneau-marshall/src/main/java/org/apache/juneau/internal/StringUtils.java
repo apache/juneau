@@ -234,9 +234,7 @@ public final class StringUtils {
 	 * @return <jk>true</jk> if this string can be parsed without causing an exception.
 	 */
 	public static boolean isNumeric(String s) {
-		if (s == null || s.isEmpty())
-			return false;
-		if (! isFirstNumberChar(s.charAt(0)))
+		if (s == null || s.isEmpty() || ! isFirstNumberChar(s.charAt(0)))
 			return false;
 		return isDecimal(s) || isFloat(s);
 	}
@@ -283,9 +281,7 @@ public final class StringUtils {
 	 * @return <jk>true</jk> if the specified string is numeric.
 	 */
 	public static boolean isDecimal(String s) {
-		if (s == null || s.isEmpty())
-			return false;
-		if (! firstNumberChars.contains(s.charAt(0)))
+		if (s == null || s.isEmpty() || ! firstNumberChars.contains(s.charAt(0)))
 			return false;
 		int i = 0;
 		int length = s.length();
@@ -598,8 +594,6 @@ public final class StringUtils {
 	public static void split(String s, char c, Consumer<String> consumer) {
 		AsciiSet escapeChars = getEscapeSet(c);
 
-		if (s == null)
-			return;
 		if (isEmpty(s))
 			return;
 		if (s.indexOf(c) == -1) {
@@ -609,14 +603,16 @@ public final class StringUtils {
 
 		int x1 = 0, escapeCount = 0;
 		for (int i = 0; i < s.length(); i++) {
-			if (s.charAt(i) == '\\') escapeCount++;
+			if (s.charAt(i) == '\\')
+				escapeCount++;
 			else if (s.charAt(i)==c && escapeCount % 2 == 0) {
 				String s2 = s.substring(x1, i);
 				String s3 = unEscapeChars(s2, escapeChars);
 				consumer.accept(s3.trim());
 				x1 = i+1;
 			}
-			if (s.charAt(i) != '\\') escapeCount = 0;
+			if (s.charAt(i) != '\\')
+				escapeCount = 0;
 		}
 		String s2 = s.substring(x1);
 		String s3 = unEscapeChars(s2, escapeChars);
@@ -647,7 +643,8 @@ public final class StringUtils {
 		int x1 = 0, escapeCount = 0;
 		limit--;
 		for (int i = 0; i < sArray.length && limit > 0; i++) {
-			if (sArray[i] == '\\') escapeCount++;
+			if (sArray[i] == '\\')
+				escapeCount++;
 			else if (sArray[i]==c && escapeCount % 2 == 0) {
 				String s2 = new String(sArray, x1, i-x1);
 				String s3 = unEscapeChars(s2, escapeChars);
@@ -655,7 +652,8 @@ public final class StringUtils {
 				limit--;
 				x1 = i+1;
 			}
-			if (sArray[i] != '\\') escapeCount = 0;
+			if (sArray[i] != '\\')
+				escapeCount = 0;
 		}
 		String s2 = new String(sArray, x1, sArray.length-x1);
 		String s3 = unEscapeChars(s2, escapeChars);
@@ -751,7 +749,8 @@ public final class StringUtils {
 					}
 				}
 			}
-			if (c != '\\') escapeCount = 0;
+			if (c != '\\')
+				escapeCount = 0;
 		}
 
 		return m;
@@ -894,6 +893,16 @@ public final class StringUtils {
 	}
 
 	/**
+	 * Returns <jk>true</jk> if specified charsequence is <jk>null</jk> or empty.
+	 *
+	 * @param s The string to check.
+	 * @return <jk>true</jk> if specified charsequence is <jk>null</jk> or empty.
+	 */
+	public static boolean isEmpty(CharSequence s) {
+		return s == null || s.length() == 0;
+	}
+
+	/**
 	 * Returns <jk>true</jk> if specified string is <jk>null</jk> or empty or consists of only blanks.
 	 *
 	 * @param s The string to check.
@@ -901,18 +910,6 @@ public final class StringUtils {
 	 */
 	public static boolean isEmptyOrBlank(String s) {
 		return s == null || s.trim().isEmpty();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if specified string is <jk>null</jk> or it's {@link #toString()} method returns an empty
-	 * string.
-	 *
-	 * @param s The string to check.
-	 * @return
-	 * 	<jk>true</jk> if specified string is <jk>null</jk> or it's {@link #toString()} method returns an empty string.
-	 */
-	public static boolean isEmpty(Object s) {
-		return s == null || s.toString().isEmpty();
 	}
 
 	/**
@@ -926,15 +923,14 @@ public final class StringUtils {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if specified string is not <jk>null</jk> or it's {@link #toString()} method doesn't return an empty
-	 * string.
+	 * Returns <jk>true</jk> if either of the specified strings are not <jk>null</jk> or empty.
 	 *
-	 * @param s The string to check.
-	 * @return
-	 * 	<jk>true</jk> if specified string is not <jk>null</jk> or it's {@link #toString()} method doesn't return an empty string.
+	 * @param s1 The string to check.
+	 * @param s2 The string to check.
+	 * @return <jk>true</jk> if either of the specified strings are not <jk>null</jk> or empty.
 	 */
-	public static boolean isNotEmpty(Object s) {
-		return ! isEmpty(s);
+	public static boolean isNotEmpty(String s1, String s2) {
+		return isNotEmpty(s1) || isNotEmpty(s2);
 	}
 
 	/**
@@ -2078,9 +2074,7 @@ public final class StringUtils {
 	 * 	is <jk>null</jk>.
 	 */
 	public static char charAt(String s, int i) {
-		if (s == null)
-			return 0;
-		if (i < 0 || i >= s.length())
+		if (s == null || i < 0 || i >= s.length())
 			return 0;
 		return s.charAt(i);
 	}
@@ -2470,12 +2464,10 @@ public final class StringUtils {
 	public static boolean isJson(String s) {
 		if (s == null)
 			return false;
-		char c1 = StringUtils.firstNonWhitespaceChar(s), c2 = StringUtils.lastNonWhitespaceChar(s);
+		char c1 = firstNonWhitespaceChar(s), c2 = lastNonWhitespaceChar(s);
 		if (c1 == '{' && c2 == '}' || c1 == '[' && c2 == ']' || c1 == '\'' && c2 == '\'')
 			return true;
-		if (StringUtils.isOneOf(s, "true","false","null"))
-			return true;
-		if (StringUtils.isNumeric(s))
+		if (isOneOf(s, "true","false","null") || isNumeric(s))
 			return true;
 		return false;
 	}
@@ -2888,7 +2880,8 @@ public final class StringUtils {
 		if (o.getClass().isArray()) {
 			StringBuilder sb = new StringBuilder();
 			for (int i = 0, j = Array.getLength(o); i < j; i++) {
-				if (i > 0) sb.append(", ");
+				if (i > 0)
+					sb.append(", ");
 				sb.append(Array.get(o, i));
 			}
 			return sb.toString();

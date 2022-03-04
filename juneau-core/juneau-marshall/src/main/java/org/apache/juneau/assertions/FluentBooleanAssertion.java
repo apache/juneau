@@ -142,7 +142,7 @@ public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isTrue() throws AssertionError {
-		if (value() == false)
+		if (! value())
 			throw error(MSG_valueWasFalse);
 		return returns();
 	}
@@ -154,7 +154,7 @@ public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean
 	 * @throws AssertionError If assertion failed.
 	 */
 	public R isFalse() throws AssertionError {
-		if (value() == true)
+		if (value())
 			throw error(MSG_valueWasTrue);
 		return returns();
 	}

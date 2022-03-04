@@ -386,22 +386,22 @@ public class Messages extends ResourceBundle {
 
 		String cn = c.getSimpleName() + '.';
 		if (rb != null) {
-			for (String key : rb.keySet()) {
-				keyMap.put(key, key);
-				if (key.startsWith(cn)) {
-					String shortKey = key.substring(cn.length());
-					keyMap.put(shortKey, key);
+			rb.keySet().forEach(x -> {
+				keyMap.put(x, x);
+				if (x.startsWith(cn)) {
+					String shortKey = x.substring(cn.length());
+					keyMap.put(shortKey, x);
 				}
-			}
+			});
 		}
 		if (parent != null) {
-			for (String key : parent.keySet()) {
-				keyMap.put(key, key);
-				if (key.startsWith(cn)) {
-					String shortKey = key.substring(cn.length());
-					keyMap.put(shortKey, key);
+			parent.keySet().forEach(x -> {
+				keyMap.put(x, x);
+				if (x.startsWith(cn)) {
+					String shortKey = x.substring(cn.length());
+					keyMap.put(shortKey, x);
 				}
-			}
+			});
 		}
 
 		this.keyMap = unmodifiable(copyOf(keyMap));
@@ -440,10 +440,10 @@ public class Messages extends ResourceBundle {
 	 */
 	public Set<String> keySet(String prefix) {
 		Set<String> set = set();
-		for (String s : keySet()) {
-			if (s.equals(prefix) || (s.startsWith(prefix) && s.charAt(prefix.length()) == '.'))
-				set.add(s);
-		}
+		keySet().forEach(x -> {
+			if (x.equals(prefix) || (x.startsWith(prefix) && x.charAt(prefix.length()) == '.'))
+				set.add(x);
+		});
 		return set;
 	}
 

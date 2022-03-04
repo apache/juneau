@@ -335,7 +335,8 @@ public class TimeMatcherFactory extends MatcherFactory {
 
 		@Override
 		public boolean matches(ClassMeta<?> cm, Object o) {
-			if (ranges.length == 0) return true;
+			if (ranges.length == 0)
+				return true;
 
 			Calendar c = null;
 			if (cm.isCalendar())

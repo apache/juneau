@@ -103,8 +103,8 @@ public class UrlPath {
 	@Override /* Object */
 	public String toString() {
 		return filteredMap()
-			.a("raw", path)
-			.a("parts", parts)
+			.append("raw", path)
+			.append("parts", parts)
 			.asReadableString();
 	}
 }

@@ -1395,8 +1395,7 @@ public class Items extends SwaggerElement {
 				refStack.removeLast();
 				return o2;
 			}
-			for (Map.Entry<String,Object> e : om.entrySet())
-				e.setValue(resolveRefs(e.getValue(), swagger, refStack, maxDepth));
+			om.entrySet().forEach(x -> x.setValue(resolveRefs(x.getValue(), swagger, refStack, maxDepth)));
 		}
 		if (o instanceof OList)
 			for (ListIterator<Object> li = ((OList)o).listIterator(); li.hasNext();)

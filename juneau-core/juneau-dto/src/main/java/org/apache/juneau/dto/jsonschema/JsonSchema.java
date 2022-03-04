@@ -407,12 +407,13 @@ public class JsonSchema {
 	 */
 	public JsonSchema setProperties(Map<String,JsonSchema> properties) {
 		this.properties = properties;
-		if (properties != null)
-			for (Map.Entry<String,JsonSchema> e : properties.entrySet()) {
-				JsonSchema value = e.getValue();
+		if (properties != null) {
+			properties.entrySet().forEach(x -> {
+				JsonSchema value = x.getValue();
 				setMasterOn(value);
-				value.setName(e.getKey());
-			}
+				value.setName(x.getKey());
+			});
+		}
 		return this;
 	}
 
@@ -458,12 +459,13 @@ public class JsonSchema {
 	 */
 	public JsonSchema setPatternProperties(Map<String,JsonSchema> patternProperties) {
 		this.patternProperties = patternProperties;
-		if (patternProperties != null)
-			for (Map.Entry<String,JsonSchema> e : patternProperties.entrySet()) {
-				JsonSchema s = e.getValue();
+		if (patternProperties != null) {
+			patternProperties.entrySet().forEach(x -> {
+				JsonSchema s = x.getValue();
 				setMasterOn(s);
-				s.setName(e.getKey());
-			}
+				s.setName(x.getKey());
+			});
+		}
 		return this;
 	}
 
@@ -1045,8 +1047,7 @@ public class JsonSchema {
 	public JsonSchema addRequired(List<String> required) {
 		if (this.required == null)
 			this.required = new LinkedList<>();
-		for (String r : required)
-			this.required.add(r);
+		required.forEach(x -> this.required.add(x));
 		return this;
 	}
 
@@ -1379,14 +1380,12 @@ public class JsonSchema {
 
 	private void setMasterOn(Collection<JsonSchema> ss) {
 		if (ss != null)
-			for (JsonSchema s : ss)
-				setMasterOn(s);
+			ss.forEach(x -> setMasterOn(x));
 	}
 
 	private void setMasterOn(JsonSchemaArray ss) {
 		if (ss != null)
-			for (JsonSchema s : ss)
-				setMasterOn(s);
+			ss.forEach(x -> setMasterOn(x));
 	}
 
 	/**
@@ -1401,36 +1400,27 @@ public class JsonSchema {
 	protected void setMaster(JsonSchema master) {
 		this.master = master;
 		if (definitions != null)
-			for (JsonSchema s : definitions.values())
-				s.setMaster(master);
+			definitions.values().forEach(x -> x.setMaster(master));
 		if (properties != null)
-			for (JsonSchema s : properties.values())
-				s.setMaster(master);
+			properties.values().forEach(x -> x.setMaster(master));
 		if (patternProperties != null)
-			for (JsonSchema s : patternProperties.values())
-				s.setMaster(master);
+			patternProperties.values().forEach(x -> x.setMaster(master));
 		if (dependencies != null)
-			for (JsonSchema s : dependencies.values())
-				s.setMaster(master);
+			dependencies.values().forEach(x -> x.setMaster(master));
 		if (itemsSchema != null)
 			itemsSchema.setMaster(master);
 		if (itemsSchemaArray != null)
-			for (JsonSchema s : itemsSchemaArray)
-				s.setMaster(master);
+			itemsSchemaArray.forEach(x -> x.setMaster(master));
 		if (additionalItemsSchemaArray != null)
-			for (JsonSchema s : additionalItemsSchemaArray)
-				s.setMaster(master);
+			additionalItemsSchemaArray.forEach(x -> x.setMaster(master));
 		if (additionalPropertiesSchema != null)
 			additionalPropertiesSchema.setMaster(master);
 		if (allOf != null)
-			for (JsonSchema s : allOf)
-				s.setMaster(master);
+			allOf.forEach(x -> x.setMaster(master));
 		if (anyOf != null)
-			for (JsonSchema s : anyOf)
-				s.setMaster(master);
+			anyOf.forEach(x -> x.setMaster(master));
 		if (oneOf != null)
-			for (JsonSchema s : oneOf)
-				s.setMaster(master);
+			oneOf.forEach(x -> x.setMaster(master));
 		if (not != null)
 			not.setMaster(master);
 	}

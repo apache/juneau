@@ -603,9 +603,9 @@ public class ReflectionMap<V> {
 		@Override
 		public String toString() {
 			return filteredMap()
-				.a("simpleName", simpleName)
-				.a("fullName", fullName)
-				.a("value", value)
+				.append("simpleName", simpleName)
+				.append("fullName", fullName)
+				.append("value", value)
 				.asString();
 		}
 	}
@@ -662,11 +662,11 @@ public class ReflectionMap<V> {
 		@Override
 		public String toString() {
 			return filteredMap()
-				.a("simpleClassName", simpleClassName)
-				.a("fullClassName", fullClassName)
-				.a("methodName", methodName)
-				.a("args", args)
-				.a("value", value)
+				.append("simpleClassName", simpleClassName)
+				.append("fullClassName", fullClassName)
+				.append("methodName", methodName)
+				.append("args", args)
+				.append("value", value)
 				.asString();
 		}
 	}
@@ -696,10 +696,10 @@ public class ReflectionMap<V> {
 		@Override
 		public String toString() {
 			return filteredMap()
-				.a("simpleClassName", simpleClassName)
-				.a("fullClassName", fullClassName)
-				.a("args", args)
-				.a("value", value)
+				.append("simpleClassName", simpleClassName)
+				.append("fullClassName", fullClassName)
+				.append("args", args)
+				.append("value", value)
 				.asString();
 		}
 	}
@@ -729,10 +729,10 @@ public class ReflectionMap<V> {
 		@Override
 		public String toString() {
 			return filteredMap()
-				.a("simpleClassName", simpleClassName)
-				.a("fullClassName", fullClassName)
-				.a("fieldName", fieldName)
-				.a("value", value)
+				.append("simpleClassName", simpleClassName)
+				.append("fullClassName", fullClassName)
+				.append("fieldName", fieldName)
+				.append("value", value)
 				.asString();
 		}
 	}
@@ -764,9 +764,7 @@ public class ReflectionMap<V> {
 		// c.getFullName() == "org.apache.juneau.a.rttests.RountTripBeansWithBuilders$Ac$Builder"
 		// c.getPackage() == "org.apache.juneau.a.rttests"
 		String cSimple = c.getSimpleName(), cFull = c.getName();
-		if (eq(simpleName, cSimple) || eq(fullName, cFull))
-			return true;
-		if ("*".equals(simpleName))
+		if (eq(simpleName, cSimple) || eq(fullName, cFull) || "*".equals(simpleName))
 			return true;
 		if (cFull.indexOf('$') != -1) {
 			Package p = c.getPackage();
@@ -788,10 +786,10 @@ public class ReflectionMap<V> {
 	@Override /* Object */
 	public String toString() {
 		return filteredMap()
-			.a("classEntries", classEntries)
-			.a("methodEntries", methodEntries)
-			.a("fieldEntries", fieldEntries)
-			.a("constructorEntries", constructorEntries)
+			.append("classEntries", classEntries)
+			.append("methodEntries", methodEntries)
+			.append("fieldEntries", fieldEntries)
+			.append("constructorEntries", constructorEntries)
 			.asString();
 	}
 

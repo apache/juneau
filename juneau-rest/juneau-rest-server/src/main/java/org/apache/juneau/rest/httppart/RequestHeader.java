@@ -49,10 +49,10 @@ import org.apache.juneau.rest.*;
  * 			<li class='jm'>{@link RequestHeader#asBoolean() asBoolean()}
  * 			<li class='jm'>{@link RequestHeader#asBooleanHeader() asBooleanHeader()}
  * 			<li class='jm'>{@link RequestHeader#asCsvArray() asCsvArray()}
- * 			<li class='jm'>{@link RequestHeader#asCsvArrayHeader() asCsvArrayHeader()}
+ * 			<li class='jm'>{@link RequestHeader#asCsvHeader() asCsvArrayHeader()}
  * 			<li class='jm'>{@link RequestHeader#asDate() asDate()}
  * 			<li class='jm'>{@link RequestHeader#asDateHeader() asDateHeader()}
- * 			<li class='jm'>{@link RequestHeader#asEntityTagArrayHeader() asEntityTagArrayHeader()}
+ * 			<li class='jm'>{@link RequestHeader#asEntityTagsHeader() asEntityTagArrayHeader()}
  * 			<li class='jm'>{@link RequestHeader#asEntityTagHeader() asEntityTagHeader()}
  * 			<li class='jm'>{@link RequestHeader#asInteger() asInteger()}
  * 			<li class='jm'>{@link RequestHeader#asIntegerHeader() asIntegerHeader()}
@@ -62,7 +62,7 @@ import org.apache.juneau.rest.*;
  * 			<li class='jm'>{@link RequestHeader#asMatcher(String) asMatcher(String)}
  * 			<li class='jm'>{@link RequestHeader#asMatcher(String,int) asMatcher(String,int)}
  * 			<li class='jm'>{@link RequestHeader#asStringHeader() asStringHeader()}
- * 			<li class='jm'>{@link RequestHeader#asStringRangeArrayHeader() asStringRangeArrayHeader()}
+ * 			<li class='jm'>{@link RequestHeader#asStringRangesHeader() asStringRangeArrayHeader()}
  * 			<li class='jm'>{@link RequestHeader#asUriHeader() asUriHeader()}
  * 		</ul>
  * 		<li>Methods for retrieving as custom types:
@@ -119,12 +119,12 @@ public class RequestHeader extends RequestHttpPart implements Header {
 	}
 
 	/**
-	 * Returns the value of this header as a {@link BasicCsvArrayHeader}.
+	 * Returns the value of this header as a {@link BasicCsvHeader}.
 	 *
-	 * @return The value of this header as a  {@link BasicCsvArrayHeader}, never <jk>null</jk>.
+	 * @return The value of this header as a  {@link BasicCsvHeader}, never <jk>null</jk>.
 	 */
-	public BasicCsvArrayHeader asCsvArrayHeader() {
-		return new BasicCsvArrayHeader(getName(), getValue());
+	public BasicCsvHeader asCsvHeader() {
+		return new BasicCsvHeader(getName(), getValue());
 	}
 
 	/**
@@ -137,12 +137,12 @@ public class RequestHeader extends RequestHttpPart implements Header {
 	}
 
 	/**
-	 * Returns the value of this header as a {@link BasicEntityTagArrayHeader}.
+	 * Returns the value of this header as a {@link BasicEntityTagsHeader}.
 	 *
-	 * @return The value of this header as a {@link BasicEntityTagArrayHeader}, never <jk>null</jk>.
+	 * @return The value of this header as a {@link BasicEntityTagsHeader}, never <jk>null</jk>.
 	 */
-	public BasicEntityTagArrayHeader asEntityTagArrayHeader() {
-		return new BasicEntityTagArrayHeader(getName(), getValue());
+	public BasicEntityTagsHeader asEntityTagsHeader() {
+		return new BasicEntityTagsHeader(getName(), getValue());
 	}
 
 	/**
@@ -182,12 +182,12 @@ public class RequestHeader extends RequestHttpPart implements Header {
 	}
 
 	/**
-	 * Returns the value of this header as a {@link BasicStringRangeArrayHeader}.
+	 * Returns the value of this header as a {@link BasicStringRangesHeader}.
 	 *
-	 * @return The value of this header as a {@link BasicStringRangeArrayHeader}, never <jk>null</jk>.
+	 * @return The value of this header as a {@link BasicStringRangesHeader}, never <jk>null</jk>.
 	 */
-	public BasicStringRangeArrayHeader asStringRangeArrayHeader() {
-		return new BasicStringRangeArrayHeader(getName(), getValue());
+	public BasicStringRangesHeader asStringRangesHeader() {
+		return new BasicStringRangesHeader(getName(), getValue());
 	}
 
 	/**

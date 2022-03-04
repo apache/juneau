@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
+import java.net.*;
 import java.time.*;
 import java.util.*;
 import java.util.function.*;
@@ -51,7 +52,7 @@ public class HttpParts {
 	 * 	</ul>
 	 * @return A new {@link BasicBooleanPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static final BasicBooleanPart booleanPart(String name, Object value) {
+	public static final BasicBooleanPart booleanPart(String name, Boolean value) {
 		return BasicBooleanPart.of(name, value);
 	}
 
@@ -72,7 +73,7 @@ public class HttpParts {
 	 * 	</ul>
 	 * @return A new {@link BasicBooleanPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static final BasicBooleanPart booleanPart(String name, Supplier<?> value) {
+	public static final BasicBooleanPart booleanPart(String name, Supplier<Boolean> value) {
 		return BasicBooleanPart.of(name, value);
 	}
 
@@ -92,7 +93,7 @@ public class HttpParts {
 	 * 	</ul>
 	 * @return A new {@link BasicCsvArrayPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static final BasicCsvArrayPart csvArrayPart(String name, Object value) {
+	public static final BasicCsvArrayPart csvArrayPart(String name, String...value) {
 		return BasicCsvArrayPart.of(name, value);
 	}
 
@@ -115,7 +116,7 @@ public class HttpParts {
 	 * 	</ul>
 	 * @return A new {@link BasicCsvArrayPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static final BasicCsvArrayPart basicCsvArrayPart(String name, Supplier<?> value) {
+	public static final BasicCsvArrayPart basicCsvArrayPart(String name, Supplier<String[]> value) {
 		return BasicCsvArrayPart.of(name, value);
 	}
 
@@ -134,7 +135,7 @@ public class HttpParts {
 	 * 	</ul>
 	 * @return A new {@link BasicDatePart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static final BasicDatePart datePart(String name, Object value) {
+	public static final BasicDatePart datePart(String name, ZonedDateTime value) {
 		return BasicDatePart.of(name, value);
 	}
 
@@ -156,7 +157,7 @@ public class HttpParts {
 	 * 	</ul>
 	 * @return A new {@link BasicDatePart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static final BasicDatePart datePart(String name, Supplier<?> value) {
+	public static final BasicDatePart datePart(String name, Supplier<ZonedDateTime> value) {
 		return BasicDatePart.of(name, value);
 	}
 
@@ -174,7 +175,7 @@ public class HttpParts {
 	 * 	</ul>
 	 * @return A new {@link BasicIntegerPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static final BasicIntegerPart integerPart(String name, Object value) {
+	public static final BasicIntegerPart integerPart(String name, Integer value) {
 		return BasicIntegerPart.of(name, value);
 	}
 
@@ -195,7 +196,7 @@ public class HttpParts {
 	 * 	</ul>
 	 * @return A new {@link BasicIntegerPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static final BasicIntegerPart integerPart(String name, Supplier<?> value) {
+	public static final BasicIntegerPart integerPart(String name, Supplier<Integer> value) {
 		return BasicIntegerPart.of(name, value);
 	}
 
@@ -213,7 +214,7 @@ public class HttpParts {
 	 * 	</ul>
 	 * @return A new {@link BasicLongPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static final BasicLongPart longPart(String name, Object value) {
+	public static final BasicLongPart longPart(String name, Long value) {
 		return BasicLongPart.of(name, value);
 	}
 
@@ -234,7 +235,7 @@ public class HttpParts {
 	 * 	</ul>
 	 * @return A new {@link BasicLongPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static final BasicLongPart longPart(String name, Supplier<?> value) {
+	public static final BasicLongPart longPart(String name, Supplier<Long> value) {
 		return BasicLongPart.of(name, value);
 	}
 
@@ -251,7 +252,7 @@ public class HttpParts {
 	 * 	</ul>
 	 * @return A new {@link BasicUriPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static final BasicUriPart uriPart(String name, Object value) {
+	public static final BasicUriPart uriPart(String name, URI value) {
 		return BasicUriPart.of(name, value);
 	}
 
@@ -271,7 +272,7 @@ public class HttpParts {
 	 * 	</ul>
 	 * @return A new {@link BasicUriPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static final BasicUriPart uriPart(String name, Supplier<?> value) {
+	public static final BasicUriPart uriPart(String name, Supplier<URI> value) {
 		return BasicUriPart.of(name, value);
 	}
 
@@ -323,7 +324,7 @@ public class HttpParts {
 	 * 	</ul>
 	 * @return A new {@link BasicStringPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static final BasicStringPart stringPart(String name, Object value) {
+	public static final BasicStringPart stringPart(String name, String value) {
 		return BasicStringPart.of(name, value);
 	}
 
@@ -343,7 +344,7 @@ public class HttpParts {
 	 * 	</ul>
 	 * @return A new {@link BasicStringPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static final BasicStringPart stringPart(String name, Supplier<?> value) {
+	public static final BasicStringPart stringPart(String name, Supplier<String> value) {
 		return BasicStringPart.of(name, value);
 	}
 

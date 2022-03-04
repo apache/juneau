@@ -414,14 +414,15 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Page widgets.
+	 * Performs an action on all widgets defined in his session.
 	 *
+	 * @param action The action to perform.
 	 * @see HtmlDocSerializer.Builder#widgets(Class...)
-	 * @return
-	 * 	Navigation links to add to the HTML page.
+	 * @return This object.
 	 */
-	protected final Collection<HtmlWidget> getWidgets() {
-		return ctx.getWidgets().values();
+	protected final HtmlDocSerializerSession forEachWidget(Consumer<HtmlWidget> action) {
+		ctx.forEachWidget(action);
+		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

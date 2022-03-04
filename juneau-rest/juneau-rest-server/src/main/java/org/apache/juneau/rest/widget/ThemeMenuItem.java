@@ -40,7 +40,7 @@ public class ThemeMenuItem extends MenuItemWidget {
 	}
 
 	@Override /* MenuItemWidget */
-	public Div getContent(RestRequest req, RestResponse res) throws Exception {
+	public Div getContent(RestRequest req, RestResponse res) {
 		Div div = div();
 		for (String s : BUILT_IN_STYLES) {
 			java.net.URI uri = req.getUri(true, CollectionUtils.<String,Object>map("stylesheet","htdocs/themes/"+s+".css"));

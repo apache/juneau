@@ -81,7 +81,8 @@ public class QueryArg implements RestOpArg {
 		this.name = QueryAnnotation.findName(pi).orElseThrow(() -> new ArgException(pi, "@Query used without name or value"));
 		this.type = pi.getParameterType();
 		this.schema = HttpPartSchema.create(Query.class, pi);
-		this.partParser = optional(schema.getParser()).map(x -> HttpPartParser.creator().type(x).apply(annotations).create()).orElse(null);
+		Class<? extends HttpPartParser> pp = schema.getParser();
+		this.partParser = pp != null ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
 
 		if (multi && ! type.isCollectionOrArray())

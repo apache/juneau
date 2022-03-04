@@ -57,10 +57,11 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * 	The header value.
 	 * 	<br>Must be parsable using {@link Integer#parseInt(String)}.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicIntegerHeader of(String name, String value) {
-		return value == null || isEmpty(name) ? null : new BasicIntegerHeader(name, value);
+		return value == null ? null : new BasicIntegerHeader(name, value);
 	}
 
 	/**
@@ -70,10 +71,11 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicIntegerHeader of(String name, Integer value) {
-		return value == null || isEmpty(name) ? null : new BasicIntegerHeader(name, value);
+		return value == null ? null : new BasicIntegerHeader(name, value);
 	}
 
 	/**
@@ -86,10 +88,11 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * @param value
 	 * 	The supplier of the header value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicIntegerHeader of(String name, Supplier<Integer> value) {
-		return value == null || isEmpty(name) ? null : new BasicIntegerHeader(name, value);
+		return value == null ? null : new BasicIntegerHeader(name, value);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -107,6 +110,7 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * 	The header value.
 	 * 	<br>Must be parsable using {@link Integer#parseInt(String)}.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicIntegerHeader(String name, String value) {
 		super(name, value);
@@ -121,9 +125,10 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicIntegerHeader(String name, Integer value) {
-		super(name, serialize(value));
+		super(name, value);
 		this.value = value;
 		this.supplier = null;
 	}
@@ -138,6 +143,7 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * @param value
 	 * 	The supplier of the header value.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicIntegerHeader(String name, Supplier<Integer> value) {
 		super(name, null);
@@ -147,18 +153,25 @@ public class BasicIntegerHeader extends BasicHeader {
 
 	@Override /* Header */
 	public String getValue() {
-		if (supplier != null)
-			return serialize(supplier.get());
-		return super.getValue();
+		return stringify(value());
 	}
 
 	/**
-	 * Returns the header value as an integer.
+	 * Returns the header value as an {@link Integer} wrapped in an {@link Optional}.
 	 *
-	 * @return The header value as an integer, or {@link Optional#empty()} if the value is <jk>null</jk>.
+	 * @return The header value as an {@link Integer} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Integer> asInteger() {
-		return optional(supplier == null ? value : supplier.get());
+		return optional(value());
+	}
+
+	/**
+	 * Returns the header value as an {@link Integer}.
+	 *
+	 * @return The header value as an {@link Integer}.  Can be <jk>null</jk>.
+	 */
+	public Integer toInteger() {
+		return value();
 	}
 
 	/**
@@ -177,11 +190,21 @@ public class BasicIntegerHeader extends BasicHeader {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public FluentIntegerAssertion<BasicIntegerHeader> assertInteger() {
-		return new FluentIntegerAssertion<>(asInteger().orElse(null), this);
+		return new FluentIntegerAssertion<>(value(), this);
 	}
 
-	private static String serialize(Integer value) {
-		return stringify(value);
+	/**
+	 * Return the value if present, otherwise return <c>other</c>.
+	 *
+	 * <p>
+	 * This is a shortened form for calling <c>asInteger().orElse(<jv>other</jv>)</c>.
+	 *
+	 * @param other The value to be returned if there is no value present, can be <jk>null</jk>.
+	 * @return The value, if present, otherwise <c>other</c>.
+	 */
+	public Integer orElse(Integer other) {
+		Integer x = value();
+		return x != null ? x : other;
 	}
 
 	private Integer parse(String value) {
@@ -190,5 +213,11 @@ public class BasicIntegerHeader extends BasicHeader {
 		} catch (NumberFormatException e) {
 			throw runtimeException("Value ''{0}'' could not be parsed as an integer.", value);
 		}
+	}
+
+	private Integer value() {
+		if (supplier != null)
+			return supplier.get();
+		return value;
 	}
 }

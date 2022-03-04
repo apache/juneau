@@ -533,7 +533,7 @@ public class RequestBody {
 
 		MediaType mt = getMediaType();
 
-		if ((isEmpty(mt) || mt.toString().startsWith("text/plain")) && cm.hasStringMutater())
+		if ((isEmpty(stringify(mt)) || mt.toString().startsWith("text/plain")) && cm.hasStringMutater())
 			return cm.getStringMutater().mutate(asString());
 
 		Optional<ContentType> ct = req.getHeader(ContentType.class);

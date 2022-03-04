@@ -148,14 +148,12 @@ public final class ClassInfo {
 		String s = c.getName();
 		if (s.indexOf('$') == -1 || ! s.contains("$$EnhancerBySpringCGLIB$$"))
 			return null;
-		for (Method m : c.getMethods()) {
-			if (m.getName().equals("getTargetClass") && m.getParameterCount() == 0 && m.getReturnType().equals(Class.class)) {
-				try {
-					return (Class<?>) m.invoke(o);
-				} catch (Exception e) {}
-			}
-		}
-		return null;
+		Value<Class<?>> v = Value.empty();
+		ClassInfo.of(c).forEachPublicMethod(
+			m -> m.hasName("getTargetClass") && m.hasNoParams() && m.hasReturnType(Class.class),
+			m -> safeRun(() -> v.set(m.invoke(o)))
+		);
+		return v.orElse(null);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -301,7 +299,7 @@ public final class ClassInfo {
 	 * 	<br>Results are in the same order as {@link Class#getInterfaces()}.
 	 */
 	public List<ClassInfo> getDeclaredInterfaces() {
-		return new UnmodifiableArray<>(_getDeclaredInterfaces());
+		return ulist(_getDeclaredInterfaces());
 	}
 
 	/**
@@ -315,7 +313,7 @@ public final class ClassInfo {
 	 * 	<br>Results are in child-to-parent order.
 	 */
 	public List<ClassInfo> getInterfaces() {
-		return new UnmodifiableArray<>(_getInterfaces());
+		return ulist(_getInterfaces());
 	}
 
 	/**
@@ -331,7 +329,7 @@ public final class ClassInfo {
 	 * 	<br>Results are in child-to-parent order.
 	 */
 	public List<ClassInfo> getParents() {
-		return new UnmodifiableArray<>(_getParents());
+		return ulist(_getParents());
 	}
 
 	/**
@@ -344,7 +342,7 @@ public final class ClassInfo {
 	 * 	<br>Results are ordered child-to-parent order with classes listed before interfaces.
 	 */
 	public List<ClassInfo> getAllParents() {
-		return new UnmodifiableArray<>(_getAllParents());
+		return ulist(_getAllParents());
 	}
 
 	/**
@@ -433,7 +431,7 @@ public final class ClassInfo {
 	 * 	<br>Results are ordered alphabetically.
 	 */
 	public List<MethodInfo> getPublicMethods() {
-		return new UnmodifiableArray<>(_getPublicMethods());
+		return ulist(_getPublicMethods());
 	}
 
 	/**
@@ -471,7 +469,7 @@ public final class ClassInfo {
 	 * 	<br>List is unmodifiable.
 	 */
 	public List<MethodInfo> getDeclaredMethods() {
-		return new UnmodifiableArray<>(_getDeclaredMethods());
+		return ulist(_getDeclaredMethods());
 	}
 
 	/**
@@ -509,7 +507,7 @@ public final class ClassInfo {
 	 * 	<br>List is unmodifiable.
 	 */
 	public List<MethodInfo> getMethods() {
-		return new UnmodifiableArray<>(_getAllMethods());
+		return ulist(_getAllMethods());
 	}
 
 	/**
@@ -547,7 +545,7 @@ public final class ClassInfo {
 	 * 	<br>List is unmodifiable.
 	 */
 	public List<MethodInfo> getAllMethodsParentFirst() {
-		return new UnmodifiableArray<>(_getAllMethodsParentFirst());
+		return ulist(_getAllMethodsParentFirst());
 	}
 
 	/**
@@ -634,7 +632,7 @@ public final class ClassInfo {
 	 * @return All public constructors defined on this class.
 	 */
 	public List<ConstructorInfo> getPublicConstructors() {
-		return new UnmodifiableArray<>(_getPublicConstructors());
+		return ulist(_getPublicConstructors());
 	}
 
 	/**
@@ -671,7 +669,7 @@ public final class ClassInfo {
 	 * 	<br>List is unmodifiable.
 	 */
 	public List<ConstructorInfo> getDeclaredConstructors() {
-		return new UnmodifiableArray<>(_getDeclaredConstructors());
+		return ulist(_getDeclaredConstructors());
 	}
 
 	/**
@@ -769,7 +767,7 @@ public final class ClassInfo {
 	 * 	<br>List is unmodifiable.
 	 */
 	public List<FieldInfo> getPublicFields() {
-		return new UnmodifiableArray<>(_getPublicFields());
+		return ulist(_getPublicFields());
 	}
 
 	/**
@@ -807,7 +805,7 @@ public final class ClassInfo {
 	 * 	<br>List is unmodifiable.
 	 */
 	public List<FieldInfo> getDeclaredFields() {
-		return new UnmodifiableArray<>(_getDeclaredFields());
+		return ulist(_getDeclaredFields());
 	}
 
 	/**
@@ -847,7 +845,7 @@ public final class ClassInfo {
 	 * 	<br>List is unmodifiable.
 	 */
 	public List<FieldInfo> getAllFields() {
-		return new UnmodifiableArray<>(_getAllFields());
+		return ulist(_getAllFields());
 	}
 
 	/**
@@ -975,8 +973,10 @@ public final class ClassInfo {
 	 * @return This object.
 	 */
 	public <A extends Annotation> ClassInfo forEachAnnotation(AnnotationProvider annotationProvider, Class<A> type, Predicate<A> filter, Consumer<A> action) {
-		if (filter == null) filter = x->true;
-		if (annotationProvider == null) annotationProvider = AnnotationProvider.DEFAULT;
+		if (filter == null)
+			filter = x->true;
+		if (annotationProvider == null)
+			annotationProvider = AnnotationProvider.DEFAULT;
 		A t2 = getPackageAnnotation(type);
 		if (t2 != null)
 			consume(filter, action, t2);
@@ -1027,6 +1027,16 @@ public final class ClassInfo {
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
 		return hasAnnotation(AnnotationProvider.DEFAULT, type);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class doesn't have the specified annotation.
+	 *
+	 * @param type The annotation to look for.
+	 * @return The <jk>true</jk> if annotation if not found.
+	 */
+	public <A extends Annotation> boolean hasNoAnnotation(Class<A> type) {
+		return ! hasAnnotation(type);
 	}
 
 	/**

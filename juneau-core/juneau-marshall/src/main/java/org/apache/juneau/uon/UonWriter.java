@@ -81,9 +81,8 @@ public final class UonWriter extends SerializerWriter {
 	 * @param o The object being serialized.
 	 * @param isTopAttrName If this is a top-level attribute name we're serializing.
 	 * @return This object.
-	 * @throws IOException Should never happen.
 	 */
-	public final UonWriter appendObject(Object o, boolean isTopAttrName) throws IOException {
+	public final UonWriter appendObject(Object o, boolean isTopAttrName) {
 
 		if (o instanceof Boolean)
 			return appendBoolean(o);
@@ -100,16 +99,16 @@ public final class UonWriter extends SerializerWriter {
 		AsciiSet esc = plainTextParams ? noChars : escapedChars;
 
 		if (needsQuotes)
-			append(quoteChar);
+			w(quoteChar);
 		for (int i = 0; i < s.length(); i++) {
 			char c = s.charAt(i);
 			if (esc.contains(c))
-				append('~');
+				w('~');
 			if ((!encodeChars) || unenc.contains(c))
-				append(c);
+				w(c);
 			else {
 				if (c == ' ')
-					append('+');
+					w('+');
 				else {
 					int p = s.codePointAt(i);
 					if (p < 0x0080)
@@ -129,7 +128,7 @@ public final class UonWriter extends SerializerWriter {
 			}
 		}
 		if (needsQuotes)
-			append(quoteChar);
+			w(quoteChar);
 
 		return this;
 	}
@@ -139,9 +138,8 @@ public final class UonWriter extends SerializerWriter {
 	 *
 	 * @param o The boolean value to append to the output.
 	 * @return This object.
-	 * @throws IOException Thrown by underlying stream.
 	 */
-	protected UonWriter appendBoolean(Object o) throws IOException {
+	protected UonWriter appendBoolean(Object o) {
 		append(o.toString());
 		return this;
 	}
@@ -151,9 +149,8 @@ public final class UonWriter extends SerializerWriter {
 	 *
 	 * @param o The numeric value to append to the output.
 	 * @return This object.
-	 * @throws IOException Thrown by underlying stream.
 	 */
-	protected UonWriter appendNumber(Object o) throws IOException {
+	protected UonWriter appendNumber(Object o) {
 		append(o.toString());
 		return this;
 	}
@@ -161,10 +158,10 @@ public final class UonWriter extends SerializerWriter {
 	/**
 	 * Prints out a two-byte %xx sequence for the given byte value.
 	 */
-	private UonWriter appendHex(int b) throws IOException {
+	private UonWriter appendHex(int b) {
 		if (b > 255)
-			throw ioException("Invalid value passed to appendHex.  Must be in the range 0-255.  Value={0}", b);
-		append('%').append(hexArray[b>>>4]).append(hexArray[b&0x0F]);
+			throw runtimeException("Invalid value passed to appendHex.  Must be in the range 0-255.  Value={0}", b);
+		w('%').w(hexArray[b>>>4]).w(hexArray[b&0x0F]);
 		return this;
 	}
 
@@ -173,10 +170,9 @@ public final class UonWriter extends SerializerWriter {
 	 *
 	 * @param uri The URI to append to the output.
 	 * @return This object.
-	 * @throws IOException Thrown by underlying stream.
 	 */
 	@Override
-	public SerializerWriter appendUri(Object uri) throws IOException {
+	public SerializerWriter appendUri(Object uri) {
 		return appendObject(uriResolver.resolve(uri), false);
 	}
 
@@ -185,87 +181,91 @@ public final class UonWriter extends SerializerWriter {
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------
 
+	// <FluentSetters>
+
 	@Override /* SerializerWriter */
-	public UonWriter cr(int depth) throws IOException {
+	public UonWriter cr(int depth) {
 		super.cr(depth);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public UonWriter cre(int depth) throws IOException {
+	public UonWriter cre(int depth) {
 		super.cre(depth);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public UonWriter appendln(int indent, String text) throws IOException {
+	public UonWriter appendln(int indent, String text) {
 		super.appendln(indent, text);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public UonWriter appendln(String text) throws IOException {
+	public UonWriter appendln(String text) {
 		super.appendln(text);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public UonWriter append(int indent, String text) throws IOException {
+	public UonWriter append(int indent, String text) {
 		super.append(indent, text);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public UonWriter append(int indent, char c) throws IOException {
+	public UonWriter append(int indent, char c) {
 		super.append(indent, c);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public UonWriter q() throws IOException {
+	public UonWriter q() {
 		super.q();
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public UonWriter i(int indent) throws IOException {
+	public UonWriter i(int indent) {
 		super.i(indent);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public UonWriter nl(int indent) throws IOException {
+	public UonWriter nl(int indent) {
 		super.nl(indent);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public UonWriter append(Object text) throws IOException {
+	public UonWriter append(Object text) {
 		super.append(text);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public UonWriter append(String text) throws IOException {
+	public UonWriter append(String text) {
 		super.append(text);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public UonWriter appendIf(boolean b, String text) throws IOException {
+	public UonWriter appendIf(boolean b, String text) {
 		super.appendIf(b, text);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public UonWriter appendIf(boolean b, char c) throws IOException {
+	public UonWriter appendIf(boolean b, char c) {
 		super.appendIf(b, c);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public UonWriter append(char c) throws IOException {
+	public UonWriter append(char c) {
 		super.append(c);
 		return this;
 	}
+
+	// </FluentSetters>
 }

@@ -19,10 +19,13 @@ import static org.apache.juneau.jsonschema.SchemaUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
+import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
@@ -95,63 +98,73 @@ public class SchemaAnnotation {
 		OMap om = new OMap();
 		if (SchemaAnnotation.empty(a))
 			return om;
+		Predicate<String> ne = StringUtils::isNotEmpty;
+		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty;
+		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty;
+		Predicate<Boolean> nf = ObjectUtils::isTrue;
+		Predicate<Long> nm1 = ObjectUtils::isNotMinusOne;
 		return om
-			.appendSkipEmpty("additionalProperties", parseMap(a.additionalProperties()))
-			.appendSkipEmpty("allOf", joinnl(a.allOf()))
-			.appendSkipEmpty("collectionFormat", a.collectionFormat(), a.cf())
-			.appendSkipEmpty("default", joinnl(a._default(), a.df()))
-			.appendSkipEmpty("discriminator", a.discriminator())
-			.appendSkipEmpty("description", joinnl(a.description(), a.d()))
-			.appendSkipEmpty("enum", parseSet(a._enum()), parseSet(a.e()))
-			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
-			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.appendSkipEmpty("externalDocs", ExternalDocsAnnotation.merge(om.getMap("externalDocs"), a.externalDocs()))
-			.appendSkipEmpty("format", a.format(), a.f())
-			.appendSkipEmpty("ignore", a.ignore() ? "true" : null)
-			.appendSkipEmpty("items", merge(om.getMap("items"), a.items()))
-			.appendSkipEmpty("maximum", a.maximum(), a.max())
-			.appendSkipMinusOne("maxItems", a.maxItems(), a.maxi())
-			.appendSkipMinusOne("maxLength", a.maxLength(), a.maxl())
-			.appendSkipMinusOne("maxProperties", a.maxProperties(), a.maxp())
-			.appendSkipEmpty("minimum", a.minimum(), a.min())
-			.appendSkipMinusOne("minItems", a.minItems(), a.mini())
-			.appendSkipMinusOne("minLength", a.minLength(), a.minl())
-			.appendSkipMinusOne("minProperties", a.minProperties(), a.minp())
-			.appendSkipEmpty("multipleOf", a.multipleOf(), a.mo())
-			.appendSkipEmpty("pattern", a.pattern(), a.p())
-			.appendSkipEmpty("properties", parseMap(a.properties()))
-			.appendSkipFalse("readOnly", a.readOnly() || a.ro())
-			.appendSkipFalse("required", a.required() || a.r())
-			.appendSkipEmpty("title", a.title())
-			.appendSkipEmpty("type", a.type(), a.t())
-			.appendSkipFalse("uniqueItems", a.uniqueItems() || a.ui())
-			.appendSkipEmpty("xml", joinnl(a.xml()))
-			.appendSkipEmpty("$ref", a.$ref())
+			.appendIf(nem, "additionalProperties", parseMap(a.additionalProperties()))
+			.appendIf(ne, "allOf", joinnl(a.allOf()))
+			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
+			.appendIf(ne, "default", joinnl(a._default(), a.df()))
+			.appendIf(ne, "discriminator", a.discriminator())
+			.appendIf(ne, "description", joinnl(a.description(), a.d()))
+			.appendFirst(nec, "enum", parseSet(a._enum()), parseSet(a.e()))
+			.appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())
+			.appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
+			.appendIf(nem, "externalDocs", ExternalDocsAnnotation.merge(om.getMap("externalDocs"), a.externalDocs()))
+			.appendFirst(ne, "format", a.format(), a.f())
+			.appendIf(ne, "ignore", a.ignore() ? "true" : null)
+			.appendIf(nem, "items", merge(om.getMap("items"), a.items()))
+			.appendFirst(ne, "maximum", a.maximum(), a.max())
+			.appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())
+			.appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())
+			.appendFirst(nm1, "maxProperties", a.maxProperties(), a.maxp())
+			.appendFirst(ne, "minimum", a.minimum(), a.min())
+			.appendFirst(nm1, "minItems", a.minItems(), a.mini())
+			.appendFirst(nm1, "minLength", a.minLength(), a.minl())
+			.appendFirst(nm1, "minProperties", a.minProperties(), a.minp())
+			.appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())
+			.appendFirst(ne, "pattern", a.pattern(), a.p())
+			.appendIf(nem, "properties", parseMap(a.properties()))
+			.appendIf(nf, "readOnly", a.readOnly() || a.ro())
+			.appendIf(nf, "required", a.required() || a.r())
+			.appendIf(ne, "title", a.title())
+			.appendFirst(ne, "type", a.type(), a.t())
+			.appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())
+			.appendIf(ne, "xml", joinnl(a.xml()))
+			.appendIf(ne, "$ref", a.$ref())
 		;
 	}
 
 	private static OMap merge(OMap om, Items a) throws ParseException {
 		if (ItemsAnnotation.empty(a))
 			return om;
+		Predicate<String> ne = StringUtils::isNotEmpty;
+		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty;
+		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty;
+		Predicate<Boolean> nf = ObjectUtils::isTrue;
+		Predicate<Long> nm1 = ObjectUtils::isNotMinusOne;
 		return om
-			.appendSkipEmpty("collectionFormat", a.collectionFormat(), a.cf())
-			.appendSkipEmpty("default", joinnl(a._default(), a.df()))
-			.appendSkipEmpty("enum", parseSet(a._enum()), parseSet(a.e()))
-			.appendSkipEmpty("format", a.format(), a.f())
-			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
-			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.appendSkipEmpty("items", SubItemsAnnotation.merge(om.getMap("items"), a.items()))
-			.appendSkipEmpty("maximum", a.maximum(), a.max())
-			.appendSkipMinusOne("maxItems", a.maxItems(), a.maxi())
-			.appendSkipMinusOne("maxLength", a.maxLength(), a.maxl())
-			.appendSkipEmpty("minimum", a.minimum(), a.min())
-			.appendSkipMinusOne("minItems", a.minItems(), a.mini())
-			.appendSkipMinusOne("minLength", a.minLength(), a.minl())
-			.appendSkipEmpty("multipleOf", a.multipleOf(), a.mo())
-			.appendSkipEmpty("pattern", a.pattern(), a.p())
-			.appendSkipFalse("uniqueItems", a.uniqueItems() || a.ui())
-			.appendSkipEmpty("type", a.type(), a.t())
-			.appendSkipEmpty("$ref", a.$ref())
+			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
+			.appendIf(ne, "default", joinnl(a._default(), a.df()))
+			.appendFirst(nec, "enum", parseSet(a._enum()), parseSet(a.e()))
+			.appendFirst(ne, "format", a.format(), a.f())
+			.appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())
+			.appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
+			.appendIf(nem, "items", SubItemsAnnotation.merge(om.getMap("items"), a.items()))
+			.appendFirst(ne, "maximum", a.maximum(), a.max())
+			.appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())
+			.appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())
+			.appendFirst(ne, "minimum", a.minimum(), a.min())
+			.appendFirst(nm1, "minItems", a.minItems(), a.mini())
+			.appendFirst(nm1, "minLength", a.minLength(), a.minl())
+			.appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())
+			.appendFirst(ne, "pattern", a.pattern(), a.p())
+			.appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())
+			.appendFirst(ne, "type", a.type(), a.t())
+			.appendIf(ne, "$ref", a.$ref())
 		;
 	}
 
@@ -1218,10 +1231,8 @@ public class SchemaAnnotation {
 		@Override
 		public void apply(AnnotationInfo<Schema> ai, Context.Builder b) {
 			Schema a = ai.inner();
-
-			if (isEmpty(a.on()) && isEmpty(a.onClass()))
+			if (isEmptyArray(a.on(), a.onClass()))
 				return;
-
 			b.annotations(a);
 		}
 	}

@@ -149,8 +149,7 @@ public class SchemaInfo extends SwaggerElement {
 			this.properties = null;
 		} else {
 			this.properties = map();
-			for (Map.Entry<String,SchemaInfo> e : copyFrom.properties.entrySet())
-				this.properties.put(e.getKey(), e.getValue().copy());
+			copyFrom.properties.forEach((k,v) -> this.properties.put(k, v.copy()));
 		}
 	}
 
@@ -2157,8 +2156,7 @@ public class SchemaInfo extends SwaggerElement {
 			items = items.resolveRefs(swagger, refStack, maxDepth);
 
 		if (properties != null)
-			for (Map.Entry<String,SchemaInfo> e : properties.entrySet())
-				e.setValue(e.getValue().resolveRefs(swagger, refStack, maxDepth));
+			properties.entrySet().forEach(x -> x.setValue(x.getValue().resolveRefs(swagger, refStack, maxDepth)));
 
 		if (additionalProperties != null)
 			additionalProperties = additionalProperties.resolveRefs(swagger, refStack, maxDepth);

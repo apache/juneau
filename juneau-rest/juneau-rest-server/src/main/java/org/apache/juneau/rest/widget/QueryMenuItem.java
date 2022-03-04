@@ -32,19 +32,19 @@ public class QueryMenuItem extends MenuItemWidget {
 	 * Returns CSS for the tooltips.
 	 */
 	@Override
-	public String getStyle(RestRequest req, RestResponse res) throws Exception {
+	public String getStyle(RestRequest req, RestResponse res) {
 		return super.getStyle(req, res)
 			+ "\n"
 			+ loadStyle(req, "styles/QueryMenuItem.css");
 	}
 
 	@Override /* MenuItemWidget */
-	public String getLabel(RestRequest req, RestResponse res) throws Exception {
+	public String getLabel(RestRequest req, RestResponse res) {
 		return "query";
 	}
 
 	@Override /* MenuItemWidget */
-	public String getContent(RestRequest req, RestResponse res) throws Exception {
+	public String getContent(RestRequest req, RestResponse res) {
 		return loadHtml(req, "QueryMenuItem.html");
 	}
 }

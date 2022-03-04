@@ -19,12 +19,12 @@ import java.util.*;
 import java.util.function.*;
 
 /**
- * Category of headers that consist of multiple parameterized string values.
+ * Category of headers that consist of simple comma-delimited lists of strings with q-values.
  *
  * <p>
  * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
- * 	Accept: application/json;q=0.9,text/xml;q=0.1
+ * 	Accept-Encoding: compress;q=0.5, gzip;q=1.0
  * </p>
  *
  * <ul class='seealso'>
@@ -35,7 +35,7 @@ import java.util.function.*;
  *
  * @serial exclude
  */
-public class BasicMediaRangeArrayHeader extends BasicStringHeader {
+public class BasicStringRangesHeader extends BasicHeader {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -49,12 +49,13 @@ public class BasicMediaRangeArrayHeader extends BasicStringHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Must be parsable by {@link MediaRanges#of(String)}.
+	 * 	<br>Must be parsable by {@link StringRanges#of(String)}.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
-	public static BasicMediaRangeArrayHeader of(String name, String value) {
-		return value == null || isEmpty(name) ? null : new BasicMediaRangeArrayHeader(name, value);
+	public static BasicStringRangesHeader of(String name, String value) {
+		return value == null ? null : new BasicStringRangesHeader(name, value);
 	}
 
 	/**
@@ -64,18 +65,37 @@ public class BasicMediaRangeArrayHeader extends BasicStringHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
-	public static BasicMediaRangeArrayHeader of(String name, MediaRanges value) {
-		return value == null || isEmpty(name) ? null : new BasicMediaRangeArrayHeader(name, value);
+	public static BasicStringRangesHeader of(String name, StringRanges value) {
+		return value == null ? null : new BasicStringRangesHeader(name, value);
+	}
+
+	/**
+	 * Static creator with delayed value.
+	 *
+	 * <p>
+	 * Header value is re-evaluated on each call to {@link #getValue()}.
+	 *
+	 * @param name The header name.
+	 * @param value
+	 * 	The supplier of the header value.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
+	 */
+	public static BasicStringRangesHeader of(String name, Supplier<StringRanges> value) {
+		return value == null ? null : new BasicStringRangesHeader(name, value);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private final MediaRanges value;
-	private final Supplier<MediaRanges> supplier;
+	private final String stringValue;
+	private final StringRanges value;
+	private final Supplier<StringRanges> supplier;
 
 	/**
 	 * Constructor.
@@ -83,12 +103,14 @@ public class BasicMediaRangeArrayHeader extends BasicStringHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Must be parsable by {@link MediaRanges#of(String)}.
+	 * 	<br>Must be parsable by {@link StringRanges#of(String)}.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
-	public BasicMediaRangeArrayHeader(String name, String value) {
+	public BasicStringRangesHeader(String name, String value) {
 		super(name, value);
-		this.value = parse(value);
+		this.stringValue = value;
+		this.value = StringRanges.of(value);
 		this.supplier = null;
 	}
 
@@ -99,9 +121,11 @@ public class BasicMediaRangeArrayHeader extends BasicStringHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
-	public BasicMediaRangeArrayHeader(String name, MediaRanges value) {
-		super(name, serialize(value));
+	public BasicStringRangesHeader(String name, StringRanges value) {
+		super(name, stringify(value));
+		this.stringValue = null;
 		this.value = value;
 		this.supplier = null;
 	}
@@ -116,29 +140,45 @@ public class BasicMediaRangeArrayHeader extends BasicStringHeader {
 	 * @param value
 	 * 	The supplier of the header value.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
-	public BasicMediaRangeArrayHeader(String name, Supplier<MediaRanges> value) {
-		super(name, (String)null);
+	public BasicStringRangesHeader(String name, Supplier<StringRanges> value) {
+		super(name, null);
+		this.stringValue = null;
 		this.value = null;
 		this.supplier = value;
 	}
 
-	/**
-	 * Returns this header as a {@link MediaRanges} object.
-	 *
-	 * @return This header as a {@link MediaRanges} object, or {@link Optional#empty()} if the value is <jk>null</jk>
-	 */
-	public Optional<MediaRanges> asMediaRanges() {
-		return optional(supplier == null ? value : supplier.get());
+	@Override /* Header */
+	public String getValue() {
+		return stringValue != null ? stringValue : stringify(value());
 	}
 
 	/**
-	 * Given a list of media types, returns the best match for this <c>Accept</c> header.
+	 * Returns the header value as a {@link StringRanges} wrapped in an {@link Optional}.
+	 *
+	 * @return The header value as a {@link StringRanges} wrapped in an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<StringRanges> asStringRanges() {
+		return optional(value());
+	}
+
+	/**
+	 * Returns the header value as a {@link StringRanges}.
+	 *
+	 * @return The header value as a {@link StringRanges}.  Can be <jk>null</jk>.
+	 */
+	public StringRanges toStringRanges() {
+		return value();
+	}
+
+	/**
+	 * Given a list of media types, returns the best match for this string range header.
 	 *
 	 * <p>
-	 * Note that fuzzy matching is allowed on the media types where the <c>Accept</c> header may
+	 * Note that fuzzy matching is allowed on the media types where the string range header may
 	 * contain additional subtype parts.
-	 * <br>For example, given identical q-values and an <c>Accept</c> value of <js>"text/json+activity"</js>,
+	 * <br>For example, given identical q-values and an string range value of <js>"text/json+activity"</js>,
 	 * the media type <js>"text/json"</js> will match if <js>"text/json+activity"</js> or <js>"text/activity+json"</js>
 	 * isn't found.
 	 * <br>The purpose for this is to allow serializers to match when artifacts such as <c>id</c> properties are
@@ -147,11 +187,12 @@ public class BasicMediaRangeArrayHeader extends BasicStringHeader {
 	 * <p>
 	 * See {@doc https://www.w3.org/TR/activitypub/#retrieving-objects ActivityPub / Retrieving Objects}
 	 *
-	 * @param mediaTypes The media types to match against.
+	 * @param names The names to match against.
 	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
 	 */
-	public int match(List<? extends MediaType> mediaTypes) {
-		return asMediaRanges().orElse(MediaRanges.EMPTY).match(mediaTypes);
+	public int match(List<String> names) {
+		StringRanges x = value();
+		return x == null ? -1 : x.match(names);
 	}
 
 	/**
@@ -160,46 +201,28 @@ public class BasicMediaRangeArrayHeader extends BasicStringHeader {
 	 * @param index The index position of the media range.
 	 * @return The {@link MediaRange} at the specified index or <jk>null</jk> if the index is out of range.
 	 */
-	public MediaRange getRange(int index) {
-		return asMediaRanges().orElse(MediaRanges.EMPTY).getRange(index);
+	public StringRange getRange(int index) {
+		StringRanges x = value();
+		return x == null ? null : x.getRange(index);
 	}
 
 	/**
-	 * Convenience method for searching through all of the subtypes of all the media ranges in this header for the
-	 * presence of a subtype fragment.
+	 * Return the value if present, otherwise return <c>other</c>.
 	 *
 	 * <p>
-	 * For example, given the header <js>"text/json+activity"</js>, calling
-	 * <code>hasSubtypePart(<js>"activity"</js>)</code> returns <jk>true</jk>.
+	 * This is a shortened form for calling <c>asArray().orElse(<jv>other</jv>)</c>.
 	 *
-	 * @param part The media type subtype fragment.
-	 * @return <jk>true</jk> if subtype fragment exists.
+	 * @param other The value to be returned if there is no value present, can be <jk>null</jk>.
+	 * @return The value, if present, otherwise <c>other</c>.
 	 */
-	public boolean hasSubtypePart(String part) {
-		return asMediaRanges().orElse(MediaRanges.EMPTY).hasSubtypePart(part);
+	public StringRanges orElse(StringRanges other) {
+		StringRanges x = value();
+		return x != null ? x : other;
 	}
 
-	/**
-	 * Returns the media ranges that make up this object.
-	 *
-	 * @return The media ranges that make up this object.
-	 */
-	public List<MediaRange> getRanges() {
-		return asMediaRanges().orElse(MediaRanges.EMPTY).getRanges();
-	}
-
-	@Override /* Header */
-	public String getValue() {
+	private StringRanges value() {
 		if (supplier != null)
-			return serialize(supplier.get());
-		return super.getValue();
-	}
-
-	private static String serialize(MediaRanges value) {
-		return stringify(value);
-	}
-
-	private MediaRanges parse(String value) {
-		return value == null ? null : MediaRanges.of(value);
+			return supplier.get();
+		return value;
 	}
 }

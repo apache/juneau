@@ -13,8 +13,6 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.collections.OMap.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.beans.*;
 import java.io.*;
 import java.lang.annotation.*;
@@ -2990,7 +2988,7 @@ public abstract class BeanContextable extends Context {
 	 */
 	protected BeanContextable(Builder b) {
 		super(b);
-		beanContext = optional(b.bc).orElseGet(()->b.bcBuilder.build());
+		beanContext = b.bc != null ? b.bc : b.bcBuilder.build();
 	}
 
 	/**

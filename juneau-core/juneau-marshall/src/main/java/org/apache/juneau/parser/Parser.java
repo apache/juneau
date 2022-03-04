@@ -13,7 +13,6 @@
 package org.apache.juneau.parser;
 
 import static org.apache.juneau.collections.OMap.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -1021,7 +1020,7 @@ public class Parser extends BeanContextable {
 		unbuffered = builder.unbuffered;
 		listener = builder.listener;
 
-		String[] _consumes = split(optional(consumes).orElse(""));
+		String[] _consumes = split(consumes != null ? consumes : "");
 		this.consumesArray = new MediaType[_consumes.length];
 		for (int i = 0; i < _consumes.length; i++) {
 			this.consumesArray[i] = MediaType.of(_consumes[i]);
@@ -1469,11 +1468,11 @@ public class Parser extends BeanContextable {
 	@Override /* Context */
 	protected OMap properties() {
 		return filteredMap()
-			.a("autoCloseStreams", autoCloseStreams)
-			.a("debugOutputLines", debugOutputLines)
-			.a("listener", listener)
-			.a("strict", strict)
-			.a("trimStrings", trimStrings)
-			.a("unbuffered", unbuffered);
+			.append("autoCloseStreams", autoCloseStreams)
+			.append("debugOutputLines", debugOutputLines)
+			.append("listener", listener)
+			.append("strict", strict)
+			.append("trimStrings", trimStrings)
+			.append("unbuffered", unbuffered);
 	}
 }

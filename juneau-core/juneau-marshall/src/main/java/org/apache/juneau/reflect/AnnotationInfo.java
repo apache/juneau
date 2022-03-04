@@ -14,6 +14,7 @@ package org.apache.juneau.reflect;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -290,13 +291,8 @@ public class AnnotationInfo<T extends Annotation> {
 	@SuppressWarnings("unchecked")
 	public <V> AnnotationInfo<?> forEachValue(Class<V> type, String name, Predicate<V> test, Consumer<V> action) {
 		for (Method m : a.annotationType().getMethods())
-			if (m.getName().equals(name) && m.getReturnType().equals(type)) {
-				try {
-					consume(test, action, (V)m.invoke(a));
-				} catch (Exception e) {
-					e.printStackTrace(); // Shouldn't happen.
-				}
-			}
+			if (m.getName().equals(name) && m.getReturnType().equals(type))
+				safeRun(() -> consume(test, action, (V)m.invoke(a)));
 		return this;
 	}
 

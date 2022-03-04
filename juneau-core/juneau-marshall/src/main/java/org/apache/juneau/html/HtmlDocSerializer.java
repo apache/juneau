@@ -19,6 +19,7 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
+import java.util.function.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
@@ -1632,6 +1633,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	final List<Class<? extends HtmlWidget>> widgets;
 
 	private final HtmlWidgetMap widgetMap;
+	private final HtmlWidget[] widgetArray;
 	private final HtmlDocTemplate templateBean;
 
 	private volatile HtmlSchemaDocSerializer schemaSerializer;
@@ -1643,15 +1645,15 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	 */
 	public HtmlDocSerializer(Builder builder) {
 		super(builder);
-		style = optional(builder.style).map(x -> toArray(x)).orElse(EMPTY_ARRAY);
-		stylesheet = optional(builder.stylesheet).map(x -> toArray(x)).orElse(EMPTY_ARRAY);
-		script = optional(builder.script).map(x -> toArray(x)).orElse(EMPTY_ARRAY);
-		head = optional(builder.head).map(x -> toArray(x)).orElse(EMPTY_ARRAY);
-		header = optional(builder.header).map(x -> toArray(x)).orElse(EMPTY_ARRAY);
-		nav = optional(builder.nav).map(x -> toArray(x)).orElse(EMPTY_ARRAY);
-		aside = optional(builder.aside).map(x -> toArray(x)).orElse(EMPTY_ARRAY);
-		footer = optional(builder.footer).map(x -> toArray(x)).orElse(EMPTY_ARRAY);
-		navlinks = optional(builder.navlinks).map(x -> toArray(x)).orElse(EMPTY_ARRAY);
+		style = builder.style != null ? toArray(builder.style) : EMPTY_ARRAY;
+		stylesheet = builder.stylesheet != null ? toArray(builder.stylesheet) : EMPTY_ARRAY;
+		script = builder.script != null ? toArray(builder.script) : EMPTY_ARRAY;
+		head = builder.head != null ? toArray(builder.head) : EMPTY_ARRAY;
+		header = builder.header != null ? toArray(builder.header) : EMPTY_ARRAY;
+		nav = builder.nav != null ? toArray(builder.nav) : EMPTY_ARRAY;
+		aside = builder.aside != null ? toArray(builder.aside) : EMPTY_ARRAY;
+		footer = builder.footer != null ? toArray(builder.footer) : EMPTY_ARRAY;
+		navlinks = builder.navlinks != null ? toArray(builder.navlinks) : EMPTY_ARRAY;
 		asideFloat = builder.asideFloat;
 		noResultsMessage = builder.noResultsMessage;
 		nowrap = builder.nowrap;
@@ -1661,6 +1663,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		templateBean = newInstance(template);
 		widgetMap = new HtmlWidgetMap();
 		widgets.stream().map(x -> newInstance(x)).forEach(x -> widgetMap.append(x));
+		widgetArray = array(widgetMap.values(), HtmlWidget.class);
 	}
 
 	@Override /* Context */
@@ -1843,6 +1846,18 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		return widgetMap;
 	}
 
+	/**
+	 * Performs an action on all widgets defined on this serializer.
+	 *
+	 * @param action The action to perform.
+	 * @return This object.
+	 */
+	protected final HtmlDocSerializer forEachWidget(Consumer<HtmlWidget> action) {
+		for (HtmlWidget w : widgetArray)
+			action.accept(w);
+		return this;
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1862,18 +1877,18 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	@Override /* Context */
 	protected OMap properties() {
 		return filteredMap()
-			.a("header", header)
-			.a("nav", nav)
-			.a("navlinks", navlinks)
-			.a("aside", aside)
-			.a("asideFloat", asideFloat)
-			.a("footer", footer)
-			.a("style", style)
-			.a("head", head)
-			.a("stylesheet", stylesheet)
-			.a("nowrap", nowrap)
-			.a("template", template)
-			.a("noResultsMessage", noResultsMessage)
-			.a("widgets", widgets);
+			.append("header", header)
+			.append("nav", nav)
+			.append("navlinks", navlinks)
+			.append("aside", aside)
+			.append("asideFloat", asideFloat)
+			.append("footer", footer)
+			.append("style", style)
+			.append("head", head)
+			.append("stylesheet", stylesheet)
+			.append("nowrap", nowrap)
+			.append("template", template)
+			.append("noResultsMessage", noResultsMessage)
+			.append("widgets", widgets);
 	}
 }

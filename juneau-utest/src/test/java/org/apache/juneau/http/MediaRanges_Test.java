@@ -151,6 +151,6 @@ public class MediaRanges_Test {
 	@Test
 	public void a05_getRanges() {
 		MediaRanges x1 = of("text/json");
-		assertObject(x1.getRanges()).asJson().is("['text/json']");
+		assertObject(x1.toList()).asJson().is("['text/json']");
 	}
 }

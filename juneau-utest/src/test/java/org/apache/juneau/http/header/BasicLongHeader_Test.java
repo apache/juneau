@@ -16,6 +16,7 @@ import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
+import java.net.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -59,12 +60,14 @@ public class BasicLongHeader_Test {
 		c.get().header(longHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(longHeader("","*")).run().assertBody().isEmpty();
-		c.get().header(longHeader(null,"*")).run().assertBody().isEmpty();
-		c.get().header(longHeader(null,()->null)).run().assertBody().isEmpty();
 		c.get().header(longHeader(HEADER,(Supplier<Long>)null)).run().assertBody().isEmpty();
-		c.get().header(longHeader(null,(Supplier<Long>)null)).run().assertBody().isEmpty();
 		assertThrown(()->longHeader(HEADER,"foo")).message().is("Value 'foo' could not be parsed as a long.");
+		assertThrown(()->longHeader("", VALUE)).message().is("Name cannot be empty on header.");
+		assertThrown(()->longHeader(null, VALUE)).message().is("Name cannot be empty on header.");
+		assertThrown(()->longHeader("", PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->longHeader(null, PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->longHeader("", ()->PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->longHeader(null, ()->PARSED)).message().is("Name cannot be empty on header.");
 	}
 
 	@Test

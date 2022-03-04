@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.httppart;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
@@ -157,7 +156,10 @@ public class BasicNamedAttribute implements NamedAttribute {
 	 * @return The value if present.
 	 */
 	public Object get() {
-		return optional(getValue()).get();
+		Object o = getValue();
+		if (o == null)
+			throw new NoSuchElementException();
+		return o;
 	}
 
 	/**
@@ -170,7 +172,8 @@ public class BasicNamedAttribute implements NamedAttribute {
 	 * @return The value if present or the other value if not.
 	 */
 	public Object orElse(Object other) {
-		return optional(getValue()).orElse(other);
+		Object o = getValue();
+		return o != null ? o : other;
 	}
 
 	@Override /* Object */

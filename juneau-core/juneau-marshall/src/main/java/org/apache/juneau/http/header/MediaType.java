@@ -18,6 +18,7 @@ import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.http.HttpParts.*;
 
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.http.message.*;
@@ -90,7 +91,7 @@ public class MediaType implements Comparable<MediaType>  {
 	 * @return A cached media type object.
 	 */
 	public static MediaType of(String value) {
-		return isEmpty(value) ? null : CACHE.get(value, ()->new MediaType(value));
+		return value == null ? null : CACHE.get(value, ()->new MediaType(value));
 	}
 
 	/**
@@ -252,7 +253,19 @@ public class MediaType implements Comparable<MediaType>  {
 	 * @return An unmodifiable list of subtype fragments.  Never <jk>null</jk>.
 	 */
 	public final List<String> getSubTypes() {
-		return unmodifiable(alist(subTypes));
+		return ulist(subTypes);
+	}
+
+	/**
+	 * Performs an action on the subtypes broken down by fragments delimited by <js>"'"</js>.
+	 *
+	 * @param action The action to perform.
+	 * @return This object.
+	 */
+	public final MediaType forEachSubType(Consumer<String> action) {
+		for (String s : subTypes)
+			action.accept(s);
+		return this;
 	}
 
 	/**
@@ -364,7 +377,19 @@ public class MediaType implements Comparable<MediaType>  {
 	 * @return The map of additional parameters, or an empty map if there are no parameters.
 	 */
 	public List<NameValuePair> getParameters() {
-		return unmodifiable(alist(parameters));
+		return ulist(parameters);
+	}
+
+	/**
+	 * Performs an action on the additional parameters on this media type.
+	 *
+	 * @param action The action to perform.
+	 * @return This object.
+	 */
+	public MediaType forEachParameter(Consumer<NameValuePair> action) {
+		for (NameValuePair p : parameters)
+			action.accept(p);
+		return this;
 	}
 
 	/**

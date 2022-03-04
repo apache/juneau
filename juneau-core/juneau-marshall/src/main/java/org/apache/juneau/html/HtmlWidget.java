@@ -49,9 +49,8 @@ public interface HtmlWidget {
 	 *
 	 * @param session The current serializer session.
 	 * @return The HTML content of this widget.
-	 * @throws Exception Error occurred.
 	 */
-	public String getHtml(VarResolverSession session) throws Exception;
+	public String getHtml(VarResolverSession session);
 
 	/**
 	 * Resolves any Javascript that should be added to the <xt>&lt;head&gt;/&lt;script&gt;</xt> element.
@@ -61,9 +60,8 @@ public interface HtmlWidget {
 	 *
 	 * @param session The current serializer session.
 	 * @return The Javascript needed by this widget.
-	 * @throws Exception Error occurred.
 	 */
-	public String getScript(VarResolverSession session) throws Exception;
+	public String getScript(VarResolverSession session);
 
 	/**
 	 * Resolves any CSS styles that should be added to the <xt>&lt;head&gt;/&lt;style&gt;</xt> element.
@@ -73,7 +71,6 @@ public interface HtmlWidget {
 	 *
 	 * @param session The current serializer session.
 	 * @return The CSS styles needed by this widget.
-	 * @throws Exception Error occurred.
 	 */
-	public String getStyle(VarResolverSession session) throws Exception;
+	public String getStyle(VarResolverSession session);
 }

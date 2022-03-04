@@ -15,6 +15,7 @@ package org.apache.juneau.http.part;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
@@ -49,7 +50,7 @@ public class PartList_Test {
 	public static class APart extends BasicStringPart {
 		public static APart X = new APart("x"), Y = new APart("y"), Z = new APart("z");
 		public APart(Object value) {
-			super("a", value);
+			super("a", stringify(value));
 		}
 	}
 
@@ -57,7 +58,7 @@ public class PartList_Test {
 	public static class BPart extends BasicStringPart {
 		public static BPart X = new BPart("x"), Y = new BPart("y"), Z = new BPart("z");
 		public BPart(Object value) {
-			super("b", value);
+			super("b", stringify(value));
 		}
 	}
 
@@ -65,7 +66,7 @@ public class PartList_Test {
 	public static class CPart extends BasicStringPart {
 		public static CPart X = new CPart("x");
 		public CPart(Object value) {
-			super("c", value);
+			super("c", stringify(value));
 		}
 	}
 
@@ -185,7 +186,7 @@ public class PartList_Test {
 	@Query("Foo")
 	static class Foo extends BasicStringPart {
 		public Foo(Object value) {
-			super("Foo", value);
+			super("Foo", stringify(value));
 		}
 	}
 
@@ -564,7 +565,7 @@ public class PartList_Test {
 	@Test
 	public void e01_asNameValuePairs() {
 		PartList x = PartList.of(APart.X);
-		assertObject(x.asNameValuePairs()).isString("[a=x]");
+		assertObject(x.toNameValuePairs()).isString("[a=x]");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

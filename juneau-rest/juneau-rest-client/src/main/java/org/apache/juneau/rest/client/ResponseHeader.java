@@ -43,7 +43,9 @@ import org.apache.juneau.rest.client.assertion.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class ResponseHeader implements Header {
+public class ResponseHeader extends BasicHeader {
+
+	private static final long serialVersionUID = 1L;
 
 	static final Header NULL_HEADER = new Header() {
 
@@ -63,7 +65,6 @@ public class ResponseHeader implements Header {
 		}
 	};
 
-	private final String name, value;
 	private final HeaderElement[] elements;
 	private final RestRequest request;
 	private final RestResponse response;
@@ -72,16 +73,16 @@ public class ResponseHeader implements Header {
 
 	/**
 	 * Constructor.
-	 *
+	 * @param name The header name.
 	 * @param request The request object.
 	 * @param response The response object.
 	 * @param header The wrapped header.  Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
-	public ResponseHeader(RestRequest request, RestResponse response, Header header) {
+	public ResponseHeader(String name, RestRequest request, RestResponse response, Header header) {
+		super(name, header == null ? null : header.getValue());
 		this.request = request;
 		this.response = response;
-		this.name = header == null ? "" : header.getName();
-		this.value = header == null ? null : header.getValue();
 		this.elements = header == null ? new HeaderElement[0] : header.getElements();
 		parser(null);
 	}
@@ -126,52 +127,6 @@ public class ResponseHeader implements Header {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns <jk>true</jk> if this header exists on the response.
-	 *
-	 * <p>
-	 * This is a shortened form for calling <c>asString().isPresent()</c>.
-	 *
-	 * @return <jk>true</jk> if this header exists on the response.
-	 */
-	public boolean isPresent() {
-		return value != null;
-	}
-
-	/**
-	 * If a value is present, returns the value, otherwise throws {@link NoSuchElementException}.
-	 *
-	 * <p>
-	 * This is a shortened form for calling <c>asString().get()</c>.
-	 *
-	 * @return The value if present.
-	 */
-	public String get() {
-		return asString().get();
-	}
-
-	/**
-	 * Return the value if present, otherwise return other.
-	 *
-	 * <p>
-	 * This is a shortened form for calling <c>asString().orElse(<jv>other</jv>)</c>.
-	 *
-	 * @param other The value to be returned if there is no value present, may be <jk>null</jk>.
-	 * @return The value, if present, otherwise other.
-	 */
-	public String orElse(String other) {
-		return asString().orElse(other);
-	}
-
-	/**
-	 * Returns the value of this header as a string.
-	 *
-	 * @return The value of this header as a string, or {@link Optional#empty()} if the header was not present.
-	 */
-	public Optional<String> asString() {
-		return asStringHeader().asString();
-	}
-
-	/**
 	 * Returns the value of this header as an integer.
 	 *
 	 * @return The value of this header as an integer, or {@link Optional#empty()} if the header was not present.
@@ -212,8 +167,8 @@ public class ResponseHeader implements Header {
 	 *
 	 * @return The value of this header as a list from a comma-delimited string, or {@link Optional#empty()} if the header was not present.
 	 */
-	public Optional<List<String>> asCsvArray() {
-		return asCsvArrayHeader().asList();
+	public Optional<String[]> asCsvArray() {
+		return asCsvHeader().asArray();
 	}
 
 	/**
@@ -245,8 +200,8 @@ public class ResponseHeader implements Header {
 	 *
 	 * @return The value of this header as a CSV array header, never <jk>null</jk>.
 	 */
-	public BasicCsvArrayHeader asCsvArrayHeader() {
-		return new BasicCsvArrayHeader(getName(), getValue());
+	public BasicCsvHeader asCsvHeader() {
+		return new BasicCsvHeader(getName(), getValue());
 	}
 
 	/**
@@ -263,8 +218,8 @@ public class ResponseHeader implements Header {
 	 *
 	 * @return The value of this header as an entity validator array header, never <jk>null</jk>.
 	 */
-	public BasicEntityTagArrayHeader asEntityTagArrayHeader() {
-		return new BasicEntityTagArrayHeader(getName(), getValue());
+	public BasicEntityTagsHeader asEntityTagsHeader() {
+		return new BasicEntityTagsHeader(getName(), getValue());
 	}
 
 	/**
@@ -308,8 +263,8 @@ public class ResponseHeader implements Header {
 	 *
 	 * @return The value of this header as a range array header, never <jk>null</jk>.
 	 */
-	public BasicStringRangeArrayHeader asStringRangeArrayHeader() {
-		return new BasicStringRangeArrayHeader(getName(), getValue());
+	public BasicStringRangesHeader asStringRangesHeader() {
+		return new BasicStringRangesHeader(getName(), getValue());
 	}
 
 	/**
@@ -583,30 +538,6 @@ public class ResponseHeader implements Header {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Gets the name of this pair.
-	 *
-	 * @return The name of this pair, never <jk>null</jk>.
-	 */
-	@Override /* Header */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * Gets the value of this pair.
-	 *
-	 * <ul class='notes'>
-	 * 	<li>{@link #asString()} is an equivalent method and the preferred method for fluent-style coding.
-	 * </ul>
-	 *
-	 * @return The value of this pair, may be <jk>null</jk>.
-	 */
-	@Override /* Header */
-	public String getValue() {
-		return value;
-	}
-
-	/**
 	 * Parses the value.
 	 *
 	 * @return An array of {@link HeaderElement} entries, may be empty, but is never <jk>null</jk>.
@@ -615,10 +546,5 @@ public class ResponseHeader implements Header {
 	@Override /* Header */
 	public HeaderElement[] getElements() throws org.apache.http.ParseException {
 		return elements;
-	}
-
-	@Override /* Object */
-	public String toString() {
-		return getName() + ": " + getValue();
 	}
 }

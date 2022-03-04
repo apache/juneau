@@ -260,10 +260,8 @@ public class SwapAnnotation {
 		@Override
 		public void apply(AnnotationInfo<Swap> ai, BeanContext.Builder b) {
 			Swap a = ai.inner();
-
-			if (isEmpty(a.on()) && isEmpty(a.onClass()))
+			if (isEmptyArray(a.on(), a.onClass()))
 				return;
-
 			b.annotations(copy(a, vr()));
 		}
 	}

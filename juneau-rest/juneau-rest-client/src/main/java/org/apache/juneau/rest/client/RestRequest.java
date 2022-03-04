@@ -1624,7 +1624,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof HeaderList || isHeaderArray(value);
 
 		if (! isMulti) {
-			if (! (skipIfEmpty && isEmpty(value)))
+			if (! (skipIfEmpty && isEmpty(stringify(value))))
 				return header(createHeader(name, value, serializer, schema, skipIfEmpty));
 			return this;
 		}
@@ -1663,7 +1663,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
 
 		if (! isMulti) {
-			if (! (skipIfEmpty && isEmpty(value)))
+			if (! (skipIfEmpty && isEmpty(stringify(value))))
 				return queryData(createPart(name, value, QUERY, serializer, schema, skipIfEmpty));
 			return this;
 		}
@@ -1703,7 +1703,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
 
 		if (! isMulti) {
-			if (! (skipIfEmpty && isEmpty(value)))
+			if (! (skipIfEmpty && isEmpty(stringify(value))))
 				return formData(createPart(name, value, FORMDATA, serializer, schema, skipIfEmpty));
 			return this;
 		}
@@ -3130,9 +3130,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		}
 
 		boolean isValid() {
-			if (isEmpty(name))
-				return false;
-			if (value == null)
+			if (isEmpty(name) || value == null)
 				return false;
 			return true;
 		}
@@ -3185,11 +3183,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	@Override /* ContextSession */
 	protected OMap properties() {
 		return filteredMap()
-			.a("client", client.properties())
-			.a("ignoreErrors", ignoreErrors)
-			.a("interceptors", interceptors)
-			.a("requestBodySchema", requestBodySchema)
-			.a("response", response)
-			.a("serializer", serializer);
+			.append("client", client.properties())
+			.append("ignoreErrors", ignoreErrors)
+			.append("interceptors", interceptors)
+			.append("requestBodySchema", requestBodySchema)
+			.append("response", response)
+			.append("serializer", serializer);
 	}
 }

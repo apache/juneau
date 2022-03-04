@@ -141,7 +141,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			String h = String.valueOf(headers.get("Accept-Language"));
 			if (h != null) {
 				StringRanges mr = StringRanges.of(h);
-				if (! mr.getRanges().isEmpty())
+				if (! mr.toList().isEmpty())
 					return toLocale(mr.getRange(0).getName());
 			}
 		}

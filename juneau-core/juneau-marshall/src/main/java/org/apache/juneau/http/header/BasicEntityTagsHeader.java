@@ -17,15 +17,15 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.assertions.*;
-
 /**
- * Category of headers that consist of a comma-delimited list of string values.
+ * Category of headers that consist of a comma-delimited list of entity validator values.
  *
  * <p>
  * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
- * 	Allow: GET, PUT
+ * 	If-Match: "xyzzy"
+ * 	If-Match: "xyzzy", "r2d2xxxx", "c3piozzzz"
+ * 	If-Match: *
  * </p>
  *
  * <ul class='seealso'>
@@ -36,7 +36,7 @@ import org.apache.juneau.assertions.*;
  *
  * @serial exclude
  */
-public class BasicCsvArrayHeader extends BasicHeader {
+public class BasicEntityTagsHeader extends BasicHeader {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -50,12 +50,13 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Must be a comma-delimited list.
+	 * 	<br>Must be a comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
-	public static BasicCsvArrayHeader of(String name, String value) {
-		return value == null ? null : new BasicCsvArrayHeader(name, value);
+	public static BasicEntityTagsHeader of(String name, String value) {
+		return value == null ? null : new BasicEntityTagsHeader(name, value);
 	}
 
 	/**
@@ -65,10 +66,11 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
-	public static BasicCsvArrayHeader of(String name, List<String> value) {
-		return value == null ? null : new BasicCsvArrayHeader(name, value);
+	public static BasicEntityTagsHeader of(String name, EntityTags value) {
+		return value == null ? null : new BasicEntityTagsHeader(name, value);
 	}
 
 	/**
@@ -81,18 +83,19 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	 * @param value
 	 * 	The supplier of the header value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
-	public static BasicCsvArrayHeader of(String name, Supplier<List<String>> value) {
-		return value == null || isEmpty(name) ? null : new BasicCsvArrayHeader(name, value);
+	public static BasicEntityTagsHeader of(String name, Supplier<EntityTags> value) {
+		return value == null ? null : new BasicEntityTagsHeader(name, value);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private final List<String> value;
-	private final Supplier<List<String>> supplier;
+	private final EntityTags value;
+	private final Supplier<EntityTags> supplier;
 
 	/**
 	 * Constructor.
@@ -100,12 +103,13 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	 * @param name The header name.
 	 * @param value
 	 * 	The header value.
-	 * 	<br>Must be a comma-delimited list.
+	 * 	<br>Must be a comma-delimited list of entity validator values (e.g. <js>"\"xyzzy\", \"r2d2xxxx\", \"c3piozzzz\""</js>).
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
-	public BasicCsvArrayHeader(String name, String value) {
+	public BasicEntityTagsHeader(String name, String value) {
 		super(name, value);
-		this.value = parse(value);
+		this.value = EntityTags.of(value);
 		this.supplier = null;
 	}
 
@@ -116,10 +120,11 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
-	public BasicCsvArrayHeader(String name, List<String> value) {
-		super(name, serialize(value));
-		this.value = unmodifiable(value);
+	public BasicEntityTagsHeader(String name, EntityTags value) {
+		super(name, value);
+		this.value = value;
 		this.supplier = null;
 	}
 
@@ -133,8 +138,9 @@ public class BasicCsvArrayHeader extends BasicHeader {
 	 * @param value
 	 * 	The supplier of the header value.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
-	public BasicCsvArrayHeader(String name, Supplier<List<String>> value) {
+	public BasicEntityTagsHeader(String name, Supplier<EntityTags> value) {
 		super(name, null);
 		this.value = null;
 		this.supplier = value;
@@ -142,73 +148,44 @@ public class BasicCsvArrayHeader extends BasicHeader {
 
 	@Override /* Header */
 	public String getValue() {
+		return stringify(value());
+	}
+
+	/**
+	 * Returns the header value as an {@link EntityTags} wrapped in an {@link Optional}.
+	 *
+	 * @return The header value as an {@link EntityTags} wrapped in an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<EntityTags> asEntityTags() {
+		return optional(value());
+	}
+
+	/**
+	 * Returns the header value as an {@link EntityTags} wrapped in an {@link Optional}.
+	 *
+	 * @return The header value as an {@link EntityTags} wrapped in an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public EntityTags toEntityTags() {
+		return value();
+	}
+
+	/**
+	 * Return the value if present, otherwise return <c>other</c>.
+	 *
+	 * <p>
+	 * This is a shortened form for calling <c>asEntityTags().orElse(<jv>other</jv>)</c>.
+	 *
+	 * @param other The value to be returned if there is no value present, can be <jk>null</jk>.
+	 * @return The value, if present, otherwise <c>other</c>.
+	 */
+	public EntityTags orElse(EntityTags other) {
+		EntityTags x = value();
+		return x != null ? x : other;
+	}
+
+	private EntityTags value() {
 		if (supplier != null)
-			return serialize(supplier.get());
-		return super.getValue();
-	}
-
-	/**
-	 * Returns the contents of this header as a list of strings.
-	 *
-	 * @return The contents of this header as an unmodifiable list of strings, or {@link Optional#empty()} if the value was <jk>null</jk>.
-	 */
-	public Optional<List<String>> asList() {
-		if (value != null)
-			return optional(value);
-		if (supplier != null)
-			return optional(supplier.get());
-		return empty();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this header contains the specified value.
-	 *
-	 * @param val The value to check for.
-	 * @return <jk>true</jk> if this header contains the specified value.
-	 */
-	public boolean contains(String val) {
-		Optional<List<String>> o = asList();
-		if (val != null && o.isPresent()) {
-			List<String> l = o.get();
-			for (int i = 0, j = l.size(); i < j; i++)
-				if (eq(val, l.get(i)))
-					return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if this header contains the specified value using {@link String#equalsIgnoreCase(String)}.
-	 *
-	 * @param val The value to check for.
-	 * @return <jk>true</jk> if this header contains the specified value.
-	 */
-	public boolean containsIgnoreCase(String val) {
-		Optional<List<String>> o = asList();
-		if (val != null && o.isPresent()) {
-			List<String> l = o.get();
-			for (int i = 0, j = l.size(); i < j; i++)
-				if (eqic(val, l.get(i)))
-					return true;
-		}
-		return false;
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on this header.
-	 *
-	 * @return A new fluent assertion object.
-	 * @throws AssertionError If assertion failed.
-	 */
-	public FluentListAssertion<String,BasicCsvArrayHeader> assertList() {
-		return new FluentListAssertion<>(asList().orElse(null), this);
-	}
-
-	private static String serialize(List<String> value) {
-		return join(value, ", ");
-	}
-
-	private List<String> parse(String value) {
-		return value == null ? null : unmodifiable(alist(split(value)));
+			return supplier.get();
+		return value;
 	}
 }

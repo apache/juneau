@@ -18,6 +18,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.time.*;
+import java.time.format.*;
 import java.util.*;
 import java.util.function.*;
 
@@ -34,22 +35,18 @@ import org.apache.juneau.assertions.*;
  */
 public class BasicDatePart extends BasicPart {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Static creator.
 	 *
 	 * @param name The part name.
-	 * @param value
-	 * 	The part value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - An ISO-8601 formated string (e.g. <js>"1994-10-29T19:43:31Z"</js>).
-	 * 		<li>{@link ZonedDateTime}
-	 * 		<li>{@link Calendar}
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
+	 * @param value The part value.
 	 * @return A new {@link BasicDatePart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicDatePart of(String name, Object value) {
+	public static BasicDatePart of(String name, ZonedDateTime value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicDatePart(name, value);
@@ -62,82 +59,84 @@ public class BasicDatePart extends BasicPart {
 	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.
 	 *
 	 * @param name The part name.
-	 * @param value
-	 * 	The part value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - An ISO-8601 formated string (e.g. <js>"1994-10-29T19:43:31Z"</js>).
-	 * 		<li>{@link ZonedDateTime}
-	 * 		<li>{@link Calendar}
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link BasicDatePart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * @param value The part value supplier.
+	 * @return A new {@link BasicDatePart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
-	public static BasicDatePart of(String name, Supplier<?> value) {
+	public static BasicDatePart of(String name, Supplier<ZonedDateTime> value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicDatePart(name, value);
 	}
 
-	private ZonedDateTime parsed;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final ZonedDateTime value;
+	private final Supplier<ZonedDateTime> supplier;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param name The part name.
-	 * @param value The part value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - An ISO-8601 formated string (e.g. <js>"1994-10-29T19:43:31Z"</js>).
-	 * 		<li>{@link ZonedDateTime} - Will be truncated to seconds.
-	 * 		<li>{@link Calendar} - Will be truncated to seconds.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * @param name The part name.  Must not be <jk>null</jk>.
+	 * @param value The part value.  Can be <jk>null</jk>.
 	 */
-	public BasicDatePart(String name, Object value) {
+	public BasicDatePart(String name, ZonedDateTime value) {
 		super(name, value);
-		if (! isSupplier(value))
-			parsed = getParsedValue();
+		this.value = value;
+		this.supplier = null;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param name The part name.  Must not be <jk>null</jk>.
+	 * @param value The part value supplier.  Can be <jk>null</jk> or supply <jk>null</jk>.
+	 */
+	public BasicDatePart(String name, Supplier<ZonedDateTime> value) {
+		super(name, value);
+		this.value = null;
+		this.supplier = value;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * <jk>null</jk> and empty values are treated as <jk>null</jk>.
+	 * Otherwise parses using {@link DateTimeFormatter#ISO_DATE_TIME}.
+	 *
+	 * @param name The part name.  Must not be <jk>null</jk>.
+	 * @param value The part value.  Can be <jk>null</jk>.
+	 */
+	public BasicDatePart(String name, String value) {
+		super(name, value);
+		this.value = isEmpty(value) ? null : ZonedDateTime.from(ISO_DATE_TIME.parse(value)).truncatedTo(SECONDS);
+		this.supplier = null;
 	}
 
 	@Override /* Header */
 	public String getValue() {
-		Object o = getRawValue();
-		if (o == null)
-			return null;
-		if (o instanceof String)
-			return (String)o;
-		return ISO_DATE_TIME.format(getParsedValue());
+		ZonedDateTime v = value();
+		return v == null ? null : ISO_DATE_TIME.format(v);
 	}
 
 	/**
-	 * Returns this part value as a {@link java.util.Calendar}.
+	 * Returns The part value as a {@link ZonedDateTime} wrapped in an {@link Optional}.
 	 *
-	 * @return This part value as a {@link java.util.Calendar}, or {@link Optional#empty()} if the part could not be parsed.
-	 */
-	public Optional<Calendar> asCalendar() {
-		ZonedDateTime zdt = getParsedValue();
-		return optional(zdt).map(GregorianCalendar::from);
-	}
-
-	/**
-	 * Returns this part value as a {@link java.util.Date}.
-	 *
-	 * @return This part value as a {@link java.util.Date}, or {@link Optional#empty()} if the part could not be parsed.
-	 */
-	public Optional<java.util.Date> asDate() {
-		Calendar c = asCalendar().orElse(null);
-		return optional(c).map(Calendar::getTime);
-	}
-
-	/**
-	 * Returns this part value as a {@link ZonedDateTime}.
-	 *
-	 * @return This part value as a {@link ZonedDateTime}, or {@link Optional#empty()} if the part could not be parsed.
+	 * @return The part value as a {@link ZonedDateTime} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<ZonedDateTime> asZonedDateTime() {
-		return optional(getParsedValue());
+		return optional(toZonedDateTime());
+	}
+
+	/**
+	 * Returns The part value as a {@link ZonedDateTime}.
+	 *
+	 * @return The part value as a {@link ZonedDateTime}, or <jk>null</jk> if the value <jk>null</jk>.
+	 */
+	public ZonedDateTime toZonedDateTime() {
+		return value();
 	}
 
 	/**
@@ -147,22 +146,26 @@ public class BasicDatePart extends BasicPart {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public FluentZonedDateTimeAssertion<BasicDatePart> assertZonedDateTime() {
-		return new FluentZonedDateTimeAssertion<>(getParsedValue(), this);
+		return new FluentZonedDateTimeAssertion<>(value(), this);
 	}
 
-	private ZonedDateTime getParsedValue() {
-		if (parsed != null)
-			return parsed;
-		Object o = getRawValue();
-		if (o == null)
-			return null;
-		if (o instanceof ZonedDateTime)
-			return ((ZonedDateTime)o).truncatedTo(SECONDS);
-		if (o instanceof GregorianCalendar)
-			return ((GregorianCalendar)o).toZonedDateTime().truncatedTo(SECONDS);
-		String s = o.toString();
-		if (isEmpty(s))
-			return null;
-		return ZonedDateTime.from(ISO_DATE_TIME.parse(s)).truncatedTo(SECONDS);
+	/**
+	 * Return the value if present, otherwise return <c>other</c>.
+	 *
+	 * <p>
+	 * This is a shortened form for calling <c>asZonedDateTime().orElse(<jv>other</jv>)</c>.
+	 *
+	 * @param other The value to be returned if there is no value present, can be <jk>null</jk>.
+	 * @return The value, if present, otherwise <c>other</c>.
+	 */
+	public ZonedDateTime orElse(ZonedDateTime other) {
+		ZonedDateTime x = value();
+		return x != null ? x : other;
+	}
+
+	private ZonedDateTime value() {
+		if (supplier != null)
+			return supplier.get();
+		return value;
 	}
 }

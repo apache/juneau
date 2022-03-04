@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.collections.OMap.*;
 
@@ -1002,7 +1001,7 @@ public class WriterSerializer extends Serializer {
 		fileCharset = builder.fileCharset;
 		useWhitespace = builder.useWhitespace;
 
-		quoteCharValue = optional(quoteCharOverride).orElse(optional(quoteChar).orElse('"'));
+		quoteCharValue = quoteCharOverride != null ? quoteCharOverride : quoteChar != null ? quoteChar : '"';
 	}
 
 	@Override /* Context */
@@ -1110,7 +1109,7 @@ public class WriterSerializer extends Serializer {
 	 * 	The character used for quoting attributes and values.
 	 */
 	protected Character quoteChar() {
-		return optional(quoteCharOverride).orElse(quoteChar);
+		return quoteCharOverride != null ? quoteCharOverride : quoteChar;
 	}
 
 	/**

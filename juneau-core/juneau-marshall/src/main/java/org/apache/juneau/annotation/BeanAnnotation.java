@@ -524,10 +524,8 @@ public class BeanAnnotation {
 		@Override
 		public void apply(AnnotationInfo<Bean> ai, BeanContext.Builder b) {
 			Bean a = ai.inner();
-
-			if (isEmpty(a.on()) && isEmpty(a.onClass()))
+			if (isEmptyArray(a.on(), a.onClass()))
 				return;
-
 			b.annotations(copy(a, vr()));
 		}
 	}

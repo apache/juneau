@@ -424,36 +424,6 @@ public class OList extends LinkedList<Object> {
 	}
 
 	/**
-	 * Same as {@link #append(Object)}.
-	 *
-	 * @param value The entry to add to this list.
-	 * @return This object.
-	 */
-	public OList a(Object value) {
-		return append(value);
-	}
-
-	/**
-	 * Same as {@link #append(Collection)}.
-	 *
-	 * @param values The collection to add to this list.  Can be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public OList a(Collection<?> values) {
-		return append(values);
-	}
-
-	/**
-	 * Same as {@link #append(Object...)}.
-	 *
-	 * @param values The array to add to this list.
-	 * @return This object.
-	 */
-	public OList a(Object...values) {
-		return append(values);
-	}
-
-	/**
 	 * Adds an entry to this list if the boolean flag is <jk>true</jk>.
 	 *
 	 * @param flag The boolean flag.
@@ -462,20 +432,7 @@ public class OList extends LinkedList<Object> {
 	 */
 	public OList appendIf(boolean flag, Object value) {
 		if (flag)
-			a(value);
-		return this;
-	}
-
-	/**
-	 * Adds entries to this list skipping <jk>null</jk> values.
-	 *
-	 * @param values The objects to add to the list.
-	 * @return This object.
-	 */
-	public OList appendIfNotNull(Object...values) {
-		for (Object o2 : values)
-			if (o2 != null)
-				a(o2);
+			append(value);
 		return this;
 	}
 
@@ -507,26 +464,13 @@ public class OList extends LinkedList<Object> {
 	}
 
 	/**
-	 * Add values but skip any strings that are <jk>null</jk> or empty.
-	 *
-	 * @param values The objects to add to the list.
-	 * @return This object.
-	 */
-	public OList appendIfNotEmpty(String...values) {
-		for (String s : values)
-			if (isNotEmpty(s))
-				add(s);
-		return this;
-	}
-
-	/**
 	 * Add if predicate matches.
 	 *
 	 * @param test The predicate to match against.
 	 * @param value The value to add if the predicate matches.
 	 * @return This object.
 	 */
-	public OList appendIf(Predicate<Object> test, Object value) {
+	public  <T> OList appendIf(Predicate<T> test, T value) {
 		return appendIf(passes(test, value), value);
 	}
 
@@ -1053,11 +997,8 @@ public class OList extends LinkedList<Object> {
 
 		UnmodifiableOList(OList contents) {
 			super();
-			if (contents != null) {
-				for (Object e : this) {
-					super.add(e);
-				}
-			}
+			if (contents != null)
+				this.forEach(x -> super.add(x));
 		}
 
 		@Override /* List */

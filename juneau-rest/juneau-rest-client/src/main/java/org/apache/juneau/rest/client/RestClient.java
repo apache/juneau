@@ -605,9 +605,9 @@ import org.apache.juneau.xml.*;
  * 		<li class='jm'><c>{@link ResponseHeader#asIntegerHeader() asIntegerHeader()} <jk>returns</jk> {@link BasicIntegerHeader}</c>
  * 		<li class='jm'><c>{@link ResponseHeader#asLongHeader() asLongHeader()} <jk>returns</jk> {@link BasicLongHeader}</c>
  * 		<li class='jm'><c>{@link ResponseHeader#asDateHeader() asDateHeader()} <jk>returns</jk> {@link BasicDateHeader}</c>
- * 		<li class='jm'><c>{@link ResponseHeader#asCsvArrayHeader() asCsvArrayHeader()} <jk>returns</jk> {@link BasicCsvArrayHeader}</c>
- * 		<li class='jm'><c>{@link ResponseHeader#asEntityTagArrayHeader() asEntityValidatorArrayHeader()} <jk>returns</jk> {@link BasicEntityTagArrayHeader}</c>
- * 		<li class='jm'><c>{@link ResponseHeader#asStringRangeArrayHeader() asRangeArrayHeader()} <jk>returns</jk> {@link BasicStringRangeArrayHeader}</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#asCsvHeader() asCsvHeader()} <jk>returns</jk> {@link BasicCsvHeader}</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#asEntityTagsHeader() asEntityTagsHeader()} <jk>returns</jk> {@link BasicEntityTagsHeader}</c>
+ * 		<li class='jm'><c>{@link ResponseHeader#asStringRangesHeader() asStringRangesHeader()} <jk>returns</jk> {@link BasicStringRangesHeader}</c>
  * 		<li class='jm'><c>{@link ResponseHeader#asUriHeader() asUriHeader()} <jk>returns</jk> {@link BasicUriHeader}</c>
  * 	</ul>
  * </ul>
@@ -1033,6 +1033,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	//-------------------------------------------------------------------------------------------------------------------
 	// Static
 	//-------------------------------------------------------------------------------------------------------------------
+
+	private static final RestCallInterceptor[] EMPTY_REST_CALL_INTERCEPTORS = new RestCallInterceptor[0];
 
 	/**
 	 * Instantiates a new clean-slate {@link Builder} object.
@@ -6777,18 +6779,18 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		rootUri = builder.rootUri;
 		errorCodes = builder.errorCodes;
 		connectionManager = builder.connectionManager;
-		console = optional(builder.console).orElse(System.err);
+		console = builder.console != null ? builder.console : System.err;
 		executorService = builder.executorService;
 		executorServiceShutdownOnClose = builder.executorServiceShutdownOnClose;
 		ignoreErrors = builder.ignoreErrors;
 		keepHttpClientOpen = builder.keepHttpClientOpen;
 		detectLeaks = builder.detectLeaks;
-		logger = optional(builder.logger).orElseGet(()->Logger.getLogger(RestClient.class.getName()));
+		logger = builder.logger != null ? builder.logger : Logger.getLogger(RestClient.class.getName());
 		logToConsole = builder.logToConsole || isDebug();
-		logRequests = optional(builder.logRequests).orElse(isDebug() ? DetailLevel.FULL : DetailLevel.NONE);
-		logRequestsLevel = optional(builder.logRequestsLevel).orElse(isDebug() ? Level.WARNING : Level.OFF);
-		logRequestsPredicate = optional(builder.logRequestsPredicate).orElse(LOG_REQUESTS_PREDICATE_DEFAULT);
-		interceptors = optional(builder.interceptors).map(x -> x.toArray(new RestCallInterceptor[x.size()])).orElse(new RestCallInterceptor[0]);
+		logRequests = builder.logRequests != null ? builder.logRequests : isDebug() ? DetailLevel.FULL : DetailLevel.NONE;
+		logRequestsLevel = builder.logRequestsLevel != null ? builder.logRequestsLevel : isDebug() ? Level.WARNING : Level.OFF;
+		logRequestsPredicate = builder.logRequestsPredicate != null ? builder.logRequestsPredicate : LOG_REQUESTS_PREDICATE_DEFAULT;
+		interceptors = builder.interceptors != null ? builder.interceptors.toArray(EMPTY_REST_CALL_INTERCEPTORS) : EMPTY_REST_CALL_INTERCEPTORS;
 		serializers = builder.serializers().build();
 		parsers = builder.parsers().build();
 		partSerializer = builder.partSerializer().create();
@@ -7199,7 +7201,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			if (body instanceof NameValuePair[])
 				return req.body(new UrlEncodedFormEntity(alist((NameValuePair[])body)));
 			if (body instanceof PartList)
-				return req.body(new UrlEncodedFormEntity(((PartList)body).asNameValuePairs()));
+				return req.body(new UrlEncodedFormEntity(((PartList)body).toNameValuePairs()));
 			if (body instanceof HttpResource)
 				((HttpResource)body).getHeaders().forEach(x-> req.header(x));
 			if (body instanceof HttpEntity) {
@@ -8612,15 +8614,15 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	@Override /* Context */
 	protected OMap properties() {
 		return filteredMap()
-			.a("errorCodes", errorCodes)
-			.a("executorService", executorService)
-			.a("executorServiceShutdownOnClose", executorServiceShutdownOnClose)
-			.a("headerData", headerData)
-			.a("interceptors", interceptors)
-			.a("keepHttpClientOpen", keepHttpClientOpen)
-			.a("partParser", partParser)
-			.a("partSerializer", partSerializer)
-			.a("queryData", queryData)
-			.a("rootUri", rootUri);
+			.append("errorCodes", errorCodes)
+			.append("executorService", executorService)
+			.append("executorServiceShutdownOnClose", executorServiceShutdownOnClose)
+			.append("headerData", headerData)
+			.append("interceptors", interceptors)
+			.append("keepHttpClientOpen", keepHttpClientOpen)
+			.append("partParser", partParser)
+			.append("partSerializer", partSerializer)
+			.append("queryData", queryData)
+			.append("rootUri", rootUri);
 	}
 }

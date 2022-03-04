@@ -85,9 +85,9 @@ public class BasicDebugEnablement implements DebugEnablement {
 	@Override /* Object */
 	public String toString() {
 		return filteredMap()
-			.a("defaultEnablement", defaultEnablement)
-			.a("enablementMap", enablementMap)
-			.a("conditionalPredicate", conditionalPredicate)
+			.append("defaultEnablement", defaultEnablement)
+			.append("enablementMap", enablementMap)
+			.append("conditionalPredicate", conditionalPredicate)
 			.asString();
 	}
 }

@@ -14,7 +14,6 @@ package org.apache.juneau.http.header;
 
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import java.time.*;
@@ -56,10 +55,11 @@ public class BasicDateHeader extends BasicHeader {
 	 * 	The header value.
 	 * 	<br>Must be an RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicDateHeader of(String name, String value) {
-		return value == null || isEmpty(name) ? null : new BasicDateHeader(name, value);
+		return value == null ? null : new BasicDateHeader(name, value);
 	}
 
 	/**
@@ -69,10 +69,11 @@ public class BasicDateHeader extends BasicHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicDateHeader of(String name, ZonedDateTime value) {
-		return value == null || isEmpty(name) ? null : new BasicDateHeader(name, value);
+		return value == null ? null : new BasicDateHeader(name, value);
 	}
 
 	/**
@@ -85,10 +86,11 @@ public class BasicDateHeader extends BasicHeader {
 	 * @param value
 	 * 	The supplier of the header value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicDateHeader of(String name, Supplier<ZonedDateTime> value) {
-		return value == null || isEmpty(name) ? null : new BasicDateHeader(name, value);
+		return value == null ? null : new BasicDateHeader(name, value);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -106,10 +108,11 @@ public class BasicDateHeader extends BasicHeader {
 	 * 	The header value.
 	 * 	<br>Must be an RFC-1123 formated string (e.g. <js>"Sat, 29 Oct 1994 19:43:31 GMT"</js>).
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicDateHeader(String name, String value) {
 		super(name, value);
-		this.value = parse(value);
+		this.value = isEmpty(value) ? null : ZonedDateTime.from(RFC_1123_DATE_TIME.parse(value.toString())).truncatedTo(SECONDS);
 		this.supplier = null;
 	}
 
@@ -120,9 +123,10 @@ public class BasicDateHeader extends BasicHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicDateHeader(String name, ZonedDateTime value) {
-		super(name, serialize(value));
+		super(name, value);
 		this.value = value;
 		this.supplier = null;
 	}
@@ -137,6 +141,7 @@ public class BasicDateHeader extends BasicHeader {
 	 * @param value
 	 * 	The supplier of the header value.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicDateHeader(String name, Supplier<ZonedDateTime> value) {
 		super(name, null);
@@ -146,18 +151,26 @@ public class BasicDateHeader extends BasicHeader {
 
 	@Override /* Header */
 	public String getValue() {
-		if (supplier != null)
-			return serialize(supplier.get());
-		return super.getValue();
+		ZonedDateTime x = value();
+		return x == null ? null : RFC_1123_DATE_TIME.format(x);
 	}
 
 	/**
-	 * Returns this header value as a {@link ZonedDateTime}.
+	 * Returns the header value as a {@link ZonedDateTime} wrapped in an {@link Optional}.
 	 *
-	 * @return This header value as a {@link ZonedDateTime}, or {@link Optional#empty()} if the header could not be parsed.
+	 * @return The header value as a {@link ZonedDateTime} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<ZonedDateTime> asZonedDateTime() {
-		return optional(supplier == null ? value : supplier.get());
+		return optional(value());
+	}
+
+	/**
+	 * Returns the header value as a {@link ZonedDateTime}.
+	 *
+	 * @return The header value as a {@link ZonedDateTime}.  Can be <jk>null</jk>.
+	 */
+	public ZonedDateTime toZonedDateTime() {
+		return value();
 	}
 
 	/**
@@ -176,18 +189,26 @@ public class BasicDateHeader extends BasicHeader {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public FluentZonedDateTimeAssertion<BasicDateHeader> assertZonedDateTime() {
-		return new FluentZonedDateTimeAssertion<>(asZonedDateTime().orElse(null), this);
+		return new FluentZonedDateTimeAssertion<>(value(), this);
 	}
 
-	private static String serialize(ZonedDateTime value) {
-		return value == null ? null : RFC_1123_DATE_TIME.format(value);
+	/**
+	 * Return the value if present, otherwise return <c>other</c>.
+	 *
+	 * <p>
+	 * This is a shortened form for calling <c>asZonedDateTime().orElse(<jv>other</jv>)</c>.
+	 *
+	 * @param other The value to be returned if there is no value present, can be <jk>null</jk>.
+	 * @return The value, if present, otherwise <c>other</c>.
+	 */
+	public ZonedDateTime orElse(ZonedDateTime other) {
+		ZonedDateTime x = value();
+		return x != null ? x : other;
 	}
 
-	private static ZonedDateTime parse(String value) {
-		try {
-			return value == null ? null : ZonedDateTime.from(RFC_1123_DATE_TIME.parse(value.toString())).truncatedTo(SECONDS);
-		} catch (NumberFormatException e) {
-			throw runtimeException("Value ''{0}'' could not be parsed as a zoned date-time.");
-		}
+	private ZonedDateTime value() {
+		if (supplier != null)
+			return supplier.get();
+		return value;
 	}
 }

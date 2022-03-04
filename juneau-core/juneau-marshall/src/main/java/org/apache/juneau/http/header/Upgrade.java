@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -87,7 +86,7 @@ import org.apache.juneau.http.annotation.*;
  * @serial exclude
  */
 @Header("Upgrade")
-public class Upgrade extends BasicCsvArrayHeader {
+public class Upgrade extends BasicCsvHeader {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -116,7 +115,7 @@ public class Upgrade extends BasicCsvArrayHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static Upgrade of(List<String> value) {
+	public static Upgrade of(String...value) {
 		return value == null ? null : new Upgrade(value);
 	}
 
@@ -131,7 +130,7 @@ public class Upgrade extends BasicCsvArrayHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static Upgrade of(Supplier<List<String>> value) {
+	public static Upgrade of(Supplier<String[]> value) {
 		return value == null ? null : new Upgrade(value);
 	}
 
@@ -157,7 +156,7 @@ public class Upgrade extends BasicCsvArrayHeader {
 	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public Upgrade(List<String> value) {
+	public Upgrade(String...value) {
 		super(NAME, value);
 	}
 
@@ -171,7 +170,7 @@ public class Upgrade extends BasicCsvArrayHeader {
 	 * 	The supplier of the header value.
 	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public Upgrade(Supplier<List<String>> value) {
+	public Upgrade(Supplier<String[]> value) {
 		super(NAME, value);
 	}
 }

@@ -15,9 +15,8 @@ package org.apache.juneau.http.header;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static java.util.stream.Collectors.*;
-
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.http.annotation.*;
 
@@ -57,7 +56,7 @@ import org.apache.juneau.http.annotation.*;
  * @serial exclude
  */
 @Header("Thrown")
-public class Thrown extends BasicCsvArrayHeader {
+public class Thrown extends BasicCsvHeader {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -92,7 +91,7 @@ public class Thrown extends BasicCsvArrayHeader {
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
 	public static Thrown of(Throwable...values) {
-		return new Thrown(alist(values).stream().map(Part::new).collect(toList()));
+		return new Thrown(alist(values).stream().map(Part::new).collect(Collectors.toList()));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

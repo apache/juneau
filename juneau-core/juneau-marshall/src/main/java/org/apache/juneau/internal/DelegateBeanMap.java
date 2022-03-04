@@ -15,6 +15,7 @@ package org.apache.juneau.internal;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
@@ -107,31 +108,40 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 	@Override /* Map */
 	public synchronized Set<Entry<String,Object>> entrySet() {
 		Set<Entry<String,Object>> s = set();
-		for (final String key : keys) {
+		keys.forEach(k -> {
 			BeanMapEntry bme;
-			if (overrideValues.containsKey(key))
-				bme = new BeanMapEntryOverride(this, this.getPropertyMeta(key), overrideValues.get(key));
+			if (overrideValues.containsKey(k))
+				bme = new BeanMapEntryOverride(this, this.getPropertyMeta(k), overrideValues.get(k));
 			else
-				bme = this.getProperty(key);
+				bme = this.getProperty(k);
 			if (bme == null)
-				throw new BeanRuntimeException(super.getClassMeta().getInnerClass(), "Property ''{0}'' not found on class.", key);
+				throw new BeanRuntimeException(super.getClassMeta().getInnerClass(), "Property ''{0}'' not found on class.", k);
 			s.add(bme);
-		}
+		});
 		return s;
 	}
 
 	@Override /* BeanMap */
 	public Collection<BeanPropertyMeta> getProperties() {
 		List<BeanPropertyMeta> l = new ArrayList<>(keys.size());
-		for (final String key : keys) {
-			BeanPropertyMeta p = this.getPropertyMeta(key);
-			if (overrideValues.containsKey(key))
-				p = BeanPropertyMeta.builder(this.meta, key).overrideValue(overrideValues.get(key)).delegateFor(p).build();
+		keys.forEach(k -> {
+			BeanPropertyMeta p = this.getPropertyMeta(k);
+			if (overrideValues.containsKey(k))
+				p = BeanPropertyMeta.builder(this.meta, k).overrideValue(overrideValues.get(k)).delegateFor(p).build();
 			if (p == null)
-				p = BeanPropertyMeta.builder(this.meta, key).overrideValue(null).delegateFor(p).build();
+				p = BeanPropertyMeta.builder(this.meta, k).overrideValue(null).delegateFor(p).build();
 			l.add(p);
-		}
+		});
 		return l;
+	}
+
+	@Override
+	public BeanMap<T> forEachProperty(Predicate<BeanPropertyMeta> filter, Consumer<BeanPropertyMeta> action) {
+		getProperties().forEach(x -> {
+			if (filter == null || filter.test(x))
+				action.accept(x);
+		});
+		return this;
 	}
 
 	final class BeanMapEntryOverride extends BeanMapEntry {

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -53,10 +52,11 @@ public class BasicUriHeader extends BasicHeader {
 	 * 	The header value.
 	 * 	<br>Must be parsable by {@link URI#create(String)}.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicUriHeader of(String name, String value) {
-		return value == null || isEmpty(name) ? null : new BasicUriHeader(name, value);
+		return value == null ? null : new BasicUriHeader(name, value);
 	}
 
 	/**
@@ -66,10 +66,11 @@ public class BasicUriHeader extends BasicHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicUriHeader of(String name, URI value) {
-		return value == null || isEmpty(name) ? null : new BasicUriHeader(name, value);
+		return value == null ? null : new BasicUriHeader(name, value);
 	}
 
 	/**
@@ -82,10 +83,11 @@ public class BasicUriHeader extends BasicHeader {
 	 * @param value
 	 * 	The supplier of the header value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicUriHeader of(String name, Supplier<URI> value) {
-		return value == null || isEmpty(name) ? null : new BasicUriHeader(name, value);
+		return value == null ? null : new BasicUriHeader(name, value);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -103,10 +105,11 @@ public class BasicUriHeader extends BasicHeader {
 	 * 	The header value.
 	 * 	<br>Must be parsable by {@link URI#create(String)}.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicUriHeader(String name, String value) {
 		super(name, value);
-		this.value = parse(value);
+		this.value = isEmpty(value) ? null :  URI.create(value);
 		this.supplier = null;
 	}
 
@@ -117,9 +120,10 @@ public class BasicUriHeader extends BasicHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicUriHeader(String name, URI value) {
-		super(name, serialize(value));
+		super(name, stringify(value));
 		this.value = value;
 		this.supplier = null;
 	}
@@ -134,6 +138,7 @@ public class BasicUriHeader extends BasicHeader {
 	 * @param value
 	 * 	The supplier of the header value.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicUriHeader(String name, Supplier<URI> value) {
 		super(name, null);
@@ -143,29 +148,44 @@ public class BasicUriHeader extends BasicHeader {
 
 	@Override /* Header */
 	public String getValue() {
-		if (supplier != null)
-			return serialize(supplier.get());
-		return super.getValue();
+		return stringify(value());
 	}
 
 	/**
-	 * Returns this header as a {@link URI}.
+	 * Returns the header value as a {@link URI} wrapped in an {@link Optional}.
 	 *
-	 * @return This header as a {@link URI}, or {@link Optional#empty()} if the value is <jk>null</jk>
+	 * @return The header value as a {@link URI} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
-	public Optional<URI> asURI() {
-		return optional(supplier == null ? value : supplier.get());
+	public Optional<URI> asUri() {
+		return optional(value());
 	}
 
-	private static String serialize(URI value) {
-		return stringify(value);
+	/**
+	 * Returns the header value as a {@link URI} wrapped in an {@link Optional}.
+	 *
+	 * @return The header value as a {@link URI} wrapped in an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public URI toUri() {
+		return value();
 	}
 
-	private URI parse(String value) {
-		try {
-			return URI.create(value);
-		} catch (IllegalArgumentException e) {
-			throw runtimeException("Value ''{0}'' could not be parsed as a URI.", value);
-		}
+	/**
+	 * Return the value if present, otherwise return <c>other</c>.
+	 *
+	 * <p>
+	 * This is a shortened form for calling <c>asUri().orElse(<jv>other</jv>)</c>.
+	 *
+	 * @param other The value to be returned if there is no value present, can be <jk>null</jk>.
+	 * @return The value, if present, otherwise <c>other</c>.
+	 */
+	public URI orElse(URI other) {
+		URI x = value();
+		return x != null ? x : other;
+	}
+
+	private URI value() {
+		if (supplier != null)
+			return supplier.get();
+		return value;
 	}
 }

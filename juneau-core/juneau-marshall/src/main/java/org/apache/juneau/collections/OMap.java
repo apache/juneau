@@ -103,6 +103,8 @@ import org.apache.juneau.utils.*;
  */
 public class OMap extends LinkedHashMap<String,Object> {
 
+	private static final String TODO = "Rename to JsonMap";
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Static
 	//------------------------------------------------------------------------------------------------------------------
@@ -300,8 +302,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	public OMap(Map<?,?> in) {
 		this();
 		if (in != null)
-			for (Map.Entry<?,?> e : in.entrySet())
-				put(e.getKey().toString(), e.getValue());
+			in.forEach((k,v) -> put(k.toString(), v));
 	}
 
 	/**
@@ -457,27 +458,6 @@ public class OMap extends LinkedHashMap<String,Object> {
 	}
 
 	/**
-	 * Same as {@link #append(String,Object)}.
-	 *
-	 * @param key The key.
-	 * @param value The value.
-	 * @return This object.
-	 */
-	public OMap a(String key, Object value) {
-		return append(key, value);
-	}
-
-	/**
-	 * Same as {@link #append(Map)}.
-	 *
-	 * @param values The map to copy.
-	 * @return This object.
-	 */
-	public OMap a(Map<String,Object> values) {
-		return append(values);
-	}
-
-	/**
 	 * Add if flag is <jk>true</jk>.
 	 *
 	 * @param flag The flag to check.
@@ -499,81 +479,23 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param value The value.
 	 * @return This object.
 	 */
-	public OMap appendIf(Predicate<Object> test, String key, Object value) {
+	public <T> OMap appendIf(Predicate<T> test, String key, T value) {
 		return appendIf(passes(test, value), key, value);
 	}
 
 	/**
-	 * Conditionally adds an entry to this map.
+	 * Adds the first value that matches the specified predicate.
 	 *
-	 * @param overwrite Overwrite the previous value if there was one.
-	 * @param skipNullValue Skip adding the value if the value is <jk>null</jk>.
-	 * @param skipEmptyValue Skip adding the value if the value is an empty string.
+	 * @param test The predicate to match against.
 	 * @param key The key.
-	 * @param value The value.
+	 * @param values The values to test.
 	 * @return This object.
 	 */
-	public OMap appendIf(boolean overwrite, boolean skipNullValue, boolean skipEmptyValue, String key, Object value) {
-		if (value == null && skipNullValue)
-			return this;
-		if (skipEmptyValue && ObjectUtils.isEmpty(value))
-			return this;
-		Object current = get(key);
-		if (current == null || overwrite)
-			put(key, value);
-		return this;
-	}
-
-	/**
-	 * Adds any non-<jk>null</jk>/non-empty values to this map.
-	 *
-	 * @param key The key.
-	 * @param values The values.
-	 * @return This object.
-	 */
-	public OMap appendSkipEmpty(String key, Object...values) {
-		for (Object v : values)
-			appendIf(true, true, true, key, v);
-		return this;
-	}
-
-	/**
-	 * Adds any non-false values to this map.
-	 *
-	 * @param key The key.
-	 * @param value The value.
-	 * @return This object.
-	 */
-	public OMap appendSkipFalse(String key, boolean value) {
-		if (value)
-			a(key, value);
-		return this;
-	}
-
-	/**
-	 * Adds any non--1 values to this map.
-	 *
-	 * @param key The key.
-	 * @param values The values.
-	 * @return This object.
-	 */
-	public OMap appendSkipMinusOne(String key, Number...values) {
-		for (Number v : values)
-			if (v != null && v.intValue() != -1)
-				a(key, v);
-		return this;
-	}
-
-	/**
-	 * Adds a value to this map if the value is not <jk>null</jk>.
-	 *
-	 * @param key The key.
-	 * @param value The value.
-	 * @return This object.
-	 */
-	public OMap appendSkipNull(String key, Object value) {
-		if (value != null)
-			a(key, value);
+	@SafeVarargs
+	public final <T> OMap appendFirst(Predicate<T> test, String key, T...values) {
+		for (T v : values)
+			if (passes(test, v))
+				return append(key, v);
 		return this;
 	}
 
@@ -584,36 +506,21 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param value The value to set if the current value does not exist or is <jk>null</jk>.
 	 * @return This object.
 	 */
-	public OMap appendIfNull(String key, Object value) {
-		Object o = get(key);
-		if (o == null)
-			put(key, value);
-		return this;
+	public OMap appendIfAbsent(String key, Object value) {
+		return appendIfAbsentIf(x -> true, key, value);
 	}
 
 	/**
-	 * Adds a value in this map if the entry does not exist or the current value is <jk>null</jk> or an empty string.
+	 * Adds a value in this map if the entry does not exist or the current value is <jk>null</jk> and the value matches the specified predicate.
 	 *
+	 * @param predicate The predicate to test the value with.
 	 * @param key The map key.
-	 * @param value The value to set if the current value does not exist or is <jk>null</jk> or an empty string.
+	 * @param value The value to set if the current value does not exist or is <jk>null</jk>.
 	 * @return This object.
 	 */
-	public OMap appendIfEmpty(String key, Object value) {
+	public <T> OMap appendIfAbsentIf(Predicate<T> predicate, String key, T value) {
 		Object o = get(key);
-		if (o == null || o.toString().isEmpty())
-			put(key, value);
-		return this;
-	}
-
-	/**
-	 * Adds a mapping if the specified key doesn't exist.
-	 *
-	 * @param key The map key.
-	 * @param value The value to set if the current value does not exist or is <jk>null</jk> or an empty string.
-	 * @return This object.
-	 */
-	public OMap appendIfNotExists(String key, Object value) {
-		if (! containsKey(key))
+		if (o == null && predicate.test(value))
 			put(key, value);
 		return this;
 	}
@@ -1349,8 +1256,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 * @param keys The list of keys to remove.
 	 */
 	public void removeAll(Collection<String> keys) {
-		for (String k : keys)
-			remove(k);
+		keys.forEach(x -> remove(x));
 	}
 
 	/**
@@ -1402,7 +1308,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 		if (val == null)
 			return false;
 		if (val instanceof CharSequence)
-			return ! StringUtils.isEmpty(val);
+			return ! StringUtils.isEmpty((CharSequence)val);
 		return false;
 	}
 
@@ -1424,10 +1330,11 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 */
 	public OMap include(String...keys) {
 		OMap m2 = new OMap();
-		for (Map.Entry<String,Object> e : this.entrySet())
-			for (String k : keys)
-				if (k.equals(e.getKey()))
-					m2.put(k, e.getValue());
+		this.forEach((k,v) -> {
+			for (String kk : keys)
+				if (kk.equals(k))
+					m2.put(kk, v);
+		});
 		return m2;
 	}
 
@@ -1439,14 +1346,14 @@ public class OMap extends LinkedHashMap<String,Object> {
 	 */
 	public OMap exclude(String...keys) {
 		OMap m2 = new OMap();
-		for (Map.Entry<String,Object> e : this.entrySet()) {
+		this.forEach((k,v) -> {
 			boolean exclude = false;
-			for (String k : keys)
-				if (k.equals(e.getKey()))
+			for (String kk : keys)
+				if (kk.equals(k))
 					exclude = true;
 			if (! exclude)
-				m2.put(e.getKey(), e.getValue());
-		}
+				m2.put(k, v);
+		});
 		return m2;
 	}
 
@@ -1812,30 +1719,26 @@ public class OMap extends LinkedHashMap<String,Object> {
 			if (cm.isMap()) {
 				Map m2 = (cm.canCreateNewInstance() ? (Map)cm.newInstance() : new OMap(bs));
 				ClassMeta<?> kType = cm.getKeyType(), vType = cm.getValueType();
-				for (Map.Entry<String,Object> e : entrySet()) {
-					Object k = e.getKey();
-					Object v = e.getValue();
+				forEach((k,v) -> {
 					if (! k.equals(bs.getBeanTypePropertyName(cm))) {
 
 						// Attempt to recursively cast child maps.
 						if (v instanceof OMap)
 							v = ((OMap)v).cast(vType);
 
-						k = (kType.isString() ? k : bs.convertToType(k, kType));
+						Object k2 = (kType.isString() ? k : bs.convertToType(k, kType));
 						v = (vType.isObject() ? v : bs.convertToType(v, vType));
 
-						m2.put(k, v);
+						m2.put(k2, v);
 					}
-				}
+				});
 				return (T)m2;
 
 			} else if (cm.isBean()) {
 				BeanMap<? extends T> bm = bs.newBeanMap(cm.getInnerClass());
 
 				// Iterate through all the entries in the map and set the individual field values.
-				for (Map.Entry<String,Object> e : entrySet()) {
-					String k = e.getKey();
-					Object v = e.getValue();
+				forEach((k,v) -> {
 					if (! k.equals(bs.getBeanTypePropertyName(cm))) {
 
 						// Attempt to recursively cast child maps.
@@ -1844,7 +1747,7 @@ public class OMap extends LinkedHashMap<String,Object> {
 
 						bm.put(k, v);
 					}
-				}
+				});
 
 				return bm.getBean();
 
@@ -1877,11 +1780,8 @@ public class OMap extends LinkedHashMap<String,Object> {
 
 		UnmodifiableOMap(OMap contents) {
 			super();
-			if (contents != null) {
-				for (Map.Entry<String,Object> e : contents.entrySet()) {
-					super.put(e.getKey(), e.getValue());
-				}
-			}
+			if (contents != null)
+				contents.forEach((k,v) -> super.put(k, v));
 		}
 
 		@Override

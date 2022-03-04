@@ -25,6 +25,7 @@ import java.lang.reflect.*;
 import java.math.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
+import java.util.function.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
@@ -3032,9 +3033,8 @@ public class HttpPartSchema {
 		}
 
 		private Builder properties(OMap value) {
-			if (value != null && ! value.isEmpty())
-			for (Map.Entry<String,Object> e : value.entrySet())
-				property(e.getKey(), HttpPartSchema.create().apply((OMap)e.getValue()));
+			if (value != null)
+				value.forEach((k,v) -> property(k, HttpPartSchema.create().apply((OMap)v)));
 			return this;
 		}
 
@@ -3789,7 +3789,6 @@ public class HttpPartSchema {
 	 * @return The same object passed in.
 	 * @throws SchemaValidationException if the specified parsed output does not validate against this schema.
 	 */
-	@SuppressWarnings("rawtypes")
 	public <T> T validateOutput(T o, BeanContext bc) throws SchemaValidationException {
 		if (o == null) {
 			if (! isValidRequired(o))
@@ -3820,8 +3819,7 @@ public class HttpPartSchema {
 						throw new SchemaValidationException("Duplicate items not allowed.");
 					HttpPartSchema items = getItems();
 					if (items != null)
-						for (Object o2 : c)
-							items.validateOutput(o2, bc);
+						c.forEach(x -> items.validateOutput(x, bc));
 				}
 				break;
 			}
@@ -3856,12 +3854,12 @@ public class HttpPartSchema {
 						throw new SchemaValidationException("Minimum number of properties not met.");
 					if (! isValidMaxProperties(m))
 						throw new SchemaValidationException("Maximum number of properties exceeded.");
-					for (Map.Entry e : m.entrySet()) {
-						String key = e.getKey().toString();
+					m.forEach((k,v) -> {
+						String key = k.toString();
 						HttpPartSchema s2 = getProperty(key);
 						if (s2 != null)
-							s2.validateOutput(e.getValue(), bc);
-					}
+							s2.validateOutput(v, bc);
+					});
 				} else if (cm.isBean()) {
 
 				}
@@ -4024,10 +4022,7 @@ public class HttpPartSchema {
 		if (in == null)
 			return null;
 		Map<String,HttpPartSchema> m = map();
-		for (Map.Entry<String,Object> e : in.entrySet()) {
-			Object v = e.getValue();
-			m.put(e.getKey(), build(v, noValidate));
-		}
+		in.forEach((k,v) -> m.put(k, build(v, noValidate)));
 		return unmodifiable(m);
 	}
 
@@ -4066,8 +4061,7 @@ public class HttpPartSchema {
 			return null;
 		Set<String> set = set();
 		try {
-			for (Object o : StringUtils.parseListOrCdl(s))
-				set.add(o.toString());
+			parseListOrCdl(s).forEach(x -> set.add(x.toString()));
 		} catch (ParseException e) {
 			throw runtimeException(e);
 		}
@@ -4101,37 +4095,40 @@ public class HttpPartSchema {
 	@Override
 	public String toString() {
 		try {
+			Predicate<Object> ne = x -> isNotEmpty(stringify(x));
+			Predicate<Boolean> nf = ObjectUtils::isTrue;
+			Predicate<Number> nm1 = ObjectUtils::isNotMinusOne;
+			Predicate<Object> nn = ObjectUtils::isNotNull;
 			OMap m = new OMap()
-				.appendSkipEmpty("name", name)
-				.appendSkipEmpty("type", type)
-				.appendSkipEmpty("format", format)
-				.appendSkipEmpty("default", _default)
-				.appendSkipEmpty("enum", _enum)
-				.appendSkipEmpty("properties", properties)
-				.appendSkipFalse("allowEmptyValue", allowEmptyValue)
-				.appendSkipFalse("exclusiveMaximum", exclusiveMaximum)
-				.appendSkipFalse("exclusiveMinimum", exclusiveMinimum)
-				.appendSkipFalse("required", required)
-				.appendSkipFalse("uniqueItems", uniqueItems)
-				.appendSkipFalse("skipIfEmpty", skipIfEmpty)
-				.appendIf(collectionFormat != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat", collectionFormat)
-				.appendSkipEmpty("pattern", pattern)
-				.appendSkipNull("items", items)
-				.appendSkipNull("additionalProperties", additionalProperties)
-				.appendSkipMinusOne("maximum", maximum)
-				.appendSkipMinusOne("minimum", minimum)
-				.appendSkipMinusOne("multipleOf", multipleOf)
-				.appendSkipMinusOne("maxLength", maxLength)
-				.appendSkipMinusOne("minLength", minLength)
-				.appendSkipMinusOne("maxItems", maxItems)
-				.appendSkipMinusOne("minItems", minItems)
-				.appendSkipMinusOne("maxProperties", maxProperties)
-				.appendSkipMinusOne("minProperties", minProperties)
+				.appendIf(ne, "name", name)
+				.appendIf(ne, "type", type)
+				.appendIf(ne, "format", format)
+				.appendIf(ne, "default", _default)
+				.appendIf(ne, "enum", _enum)
+				.appendIf(ne, "properties", properties)
+				.appendIf(nf, "allowEmptyValue", allowEmptyValue)
+				.appendIf(nf, "exclusiveMaximum", exclusiveMaximum)
+				.appendIf(nf, "exclusiveMinimum", exclusiveMinimum)
+				.appendIf(nf, "required", required)
+				.appendIf(nf, "uniqueItems", uniqueItems)
+				.appendIf(nf, "skipIfEmpty", skipIfEmpty)
+				.appendIf(x -> x != HttpPartCollectionFormat.NO_COLLECTION_FORMAT, "collectionFormat", collectionFormat)
+				.appendIf(ne, "pattern", pattern)
+				.appendIf(nn, "items", items)
+				.appendIf(nn, "additionalProperties", additionalProperties)
+				.appendIf(nm1, "maximum", maximum)
+				.appendIf(nm1, "minimum", minimum)
+				.appendIf(nm1, "multipleOf", multipleOf)
+				.appendIf(nm1, "maxLength", maxLength)
+				.appendIf(nm1, "minLength", minLength)
+				.appendIf(nm1, "maxItems", maxItems)
+				.appendIf(nm1, "minItems", minItems)
+				.appendIf(nm1, "maxProperties", maxProperties)
+				.appendIf(nm1, "minProperties", minProperties)
 				.append("parsedType", parsedType)
 			;
 			return m.toString();
 		} catch (Exception e) {
-			e.printStackTrace();
 			return "";
 		}
 	}

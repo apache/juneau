@@ -70,8 +70,8 @@ public class HashKey {
 	@Override /* Object */
 	public String toString() {
 		return filteredMap()
-			.a("hashCode", hashCode())
-			.a("array", array)
+			.append("hashCode", hashCode())
+			.append("array", array)
 			.asString();
 	}
 }

@@ -165,6 +165,18 @@ public final class ParamInfo {
 		return getAnnotation(type) != null;
 	}
 
+	/**
+	 * Returns <jk>true</jk> if this parameter doesn't have the specified annotation.
+	 *
+	 * @param type
+	 * 	The annotation to look for.
+	 * @return
+	 * 	The <jk>true</jk> if annotation if not found.
+	 */
+	public <A extends Annotation> boolean hasNoAnnotation(Class<A> type) {
+		return ! hasAnnotation(type);
+	}
+
 	private <A extends Annotation> A findAnnotation(Class<A> type) {
 		if (eInfo.isConstructor()) {
 			for (Annotation a2 : eInfo.getParameterAnnotations(index))

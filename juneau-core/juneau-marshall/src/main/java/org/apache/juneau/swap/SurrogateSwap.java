@@ -13,8 +13,6 @@
 package org.apache.juneau.swap;
 
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -68,20 +66,18 @@ public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 	public static List<SurrogateSwap<?,?>> findObjectSwaps(Class<?> c, BeanContext bc) {
 		List<SurrogateSwap<?,?>> l = new LinkedList<>();
 		ClassInfo ci = ClassInfo.of(c);
-		for (ConstructorInfo cc : ci.getPublicConstructors()) {
-			if (! cc.hasAnnotation(bc, BeanIgnore.class) && cc.hasNumParams(1) && cc.isPublic()) {
-				Class<?> pt = cc.getRawParamType(0);
+		ci.forEachPublicConstructor(
+			x -> x.hasNoAnnotation(bc, BeanIgnore.class) && x.hasNumParams(1) && x.isPublic(),
+			x -> {
+				Class<?> pt = x.getRawParamType(0);
 				if (! pt.equals(c.getDeclaringClass())) {
 					// Find the unswap method if there is one.
-					Method unswapMethod = optional(
-						ci.getPublicMethod(
-							x -> x.hasReturnType(pt)
-						)
-					).map(x -> x.inner()).orElse(null);
-					l.add(new SurrogateSwap(pt, cc.inner(), unswapMethod));
+					MethodInfo mi = ci.getPublicMethod(y -> y.hasReturnType(pt));
+					Method unswapMethod = mi != null ? mi.inner() : null;
+					l.add(new SurrogateSwap(pt, x.inner(), unswapMethod));
 				}
 			}
-		}
+		);
 		return l;
 	}
 

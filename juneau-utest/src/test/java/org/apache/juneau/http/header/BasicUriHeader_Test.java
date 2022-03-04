@@ -61,18 +61,20 @@ public class BasicUriHeader_Test {
 		c.get().header(uriHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(uriHeader("","*")).run().assertBody().isEmpty();
-		c.get().header(uriHeader(null,"*")).run().assertBody().isEmpty();
-		c.get().header(uriHeader(null,()->null)).run().assertBody().isEmpty();
 		c.get().header(uriHeader(HEADER,(Supplier<URI>)null)).run().assertBody().isEmpty();
-		c.get().header(uriHeader(null,(Supplier<URI>)null)).run().assertBody().isEmpty();
 		c.get().header(uriHeader(HEADER,()->null)).run().assertBody().isEmpty();
+		assertThrown(()->uriHeader("", VALUE)).message().is("Name cannot be empty on header.");
+		assertThrown(()->uriHeader(null, VALUE)).message().is("Name cannot be empty on header.");
+		assertThrown(()->uriHeader("", PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->uriHeader(null, PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->uriHeader("", ()->PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->uriHeader(null, ()->PARSED)).message().is("Name cannot be empty on header.");
 	}
 
 	@Test
 	public void a02_asUri() throws Exception {
-		assertString(uriHeader(HEADER,"http://foo").asURI()).is("http://foo");
-		assertString(new BasicUriHeader(HEADER,(URI)null).asURI()).isNull();
+		assertString(uriHeader(HEADER,"http://foo").asUri()).is("http://foo");
+		assertString(new BasicUriHeader(HEADER,(URI)null).asUri()).isNull();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

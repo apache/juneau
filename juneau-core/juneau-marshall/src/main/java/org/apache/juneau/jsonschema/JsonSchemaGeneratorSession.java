@@ -245,7 +245,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
 		if (useDef && defs.containsKey(getBeanDefId(sType))) {
 			pop();
-			return new OMap().a("$ref", getBeanDefUri(sType));
+			return new OMap().append("$ref", getBeanDefUri(sType));
 		}
 
 		JsonSchemaClassMeta jscm = null;
@@ -313,8 +313,9 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
 		out.append(jscm.getSchema());
 
-		out.appendIf(false, true, true, "type", type);
-		out.appendIf(false, true, true, "format", format);
+		Predicate<String> ne = StringUtils::isNotEmpty;
+		out.appendIfAbsentIf(ne, "type", type);
+		out.appendIfAbsentIf(ne, "format", format);
 
 		if (aType != null) {
 
@@ -360,11 +361,9 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
 		out.append(jscm.getSchema());
 
-		out.appendIf(false, true, true, "description", description);
-		out.appendIf(false, true, true, "example", example);
-
-//		if (ds != null)
-//			out.appendAll(ds);
+		Predicate<Object> neo = ObjectUtils::isNotEmpty;
+		out.appendIfAbsentIf(neo, "description", description);
+		out.appendIfAbsentIf(neo, "example", example);
 
 		if (useDef) {
 			defs.put(getBeanDefId(sType), out);

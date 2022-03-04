@@ -242,7 +242,8 @@ public class NumberMatcherFactory extends MatcherFactory {
 		@Override /* Matcher */
 		public boolean matches(ClassMeta<?> cm, Object o) {
 			Number n = (Number)o;
-			if (numberRanges.length == 0) return true;
+			if (numberRanges.length == 0)
+				return true;
 			for (int i = 0; i < numberRanges.length; i++)
 				if (numberRanges[i].matches(n))
 					return true;
@@ -296,7 +297,8 @@ public class NumberMatcherFactory extends MatcherFactory {
 		public boolean matches(Number n) {
 			long i = n.longValue();
 			boolean b = (i>=start && i<=end);
-			if (isNot) b = !b;
+			if (isNot)
+				b = !b;
 			return b;
 		}
 	}

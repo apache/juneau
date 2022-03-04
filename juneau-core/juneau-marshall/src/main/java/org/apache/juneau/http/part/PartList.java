@@ -844,11 +844,10 @@ public class PartList {
 					}
 				}
 
-				for (NameValuePair v : values) {
-					if (v != null) {
-						defaultEntries.add(v);
-					}
-				}
+				values.forEach(x -> {
+					if (x != null)
+						defaultEntries.add(x);
+				});
 			}
 
 			return this;
@@ -1610,8 +1609,20 @@ public class PartList {
 	 *
 	 * @return The contents of this list as an unmodifiable list of {@link NameValuePair} objects.
 	 */
-	public List<NameValuePair> asNameValuePairs() {
-		return unmodifiable(alist(entries));
+	public List<NameValuePair> toNameValuePairs() {
+		return ulist(entries);
+	}
+
+	/**
+	 * Performs an action on the contents of this list.
+	 *
+	 * @param action The action to perform.
+	 * @return This object.
+	 */
+	public PartList forEachNameValuePair(Consumer<NameValuePair> action) {
+		for (NameValuePair p : entries)
+			action.accept(p);
+		return this;
 	}
 
 	private boolean eq(String s1, String s2) {

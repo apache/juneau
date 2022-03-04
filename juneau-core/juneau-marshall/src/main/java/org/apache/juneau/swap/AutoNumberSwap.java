@@ -159,7 +159,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 			&& (rt.isChildOf(Number.class) || (rt.isPrimitive() && rt.isAny(int.class, short.class, long.class, float.class, double.class, byte.class)))
 			&& mi.hasName(SWAP_METHOD_NAMES)
 			&& mi.hasFuzzyParamTypes(BeanSession.class)
-			&& ! mi.hasAnnotation(bc, BeanIgnore.class);
+			&& mi.hasNoAnnotation(bc, BeanIgnore.class);
 	}
 
 	private static boolean isUnswapMethod(BeanContext bc, MethodInfo mi, ClassInfo ci, ClassInfo rt) {
@@ -170,7 +170,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 			&& mi.hasName(UNSWAP_METHOD_NAMES)
 			&& mi.hasFuzzyParamTypes(BeanSession.class, rt.inner())
 			&& mi.hasReturnTypeParent(ci)
-			&& ! mi.hasAnnotation(bc, BeanIgnore.class);
+			&& mi.hasNoAnnotation(bc, BeanIgnore.class);
 	}
 
 	private static boolean isUnswapConstructor(BeanContext bc, ConstructorInfo cs, ClassInfo rt) {
@@ -178,7 +178,7 @@ public class AutoNumberSwap<T> extends ObjectSwap<T,Number> {
 			cs.isNotDeprecated()
 			&& cs.isVisible(bc.getBeanConstructorVisibility())
 			&& cs.hasMatchingParamTypes(rt)
-			&& ! cs.hasAnnotation(bc, BeanIgnore.class);
+			&& cs.hasNoAnnotation(bc, BeanIgnore.class);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

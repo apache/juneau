@@ -1581,11 +1581,11 @@ public class HtmlSerializer extends XmlSerializer implements HtmlMetaProvider {
 	@Override /* Context */
 	protected OMap properties() {
 		return filteredMap()
-			.a("uriAnchorText", uriAnchorText)
-			.a("detectLabelParameters", detectLabelParameters)
-			.a("detectLinksInStrings", detectLinksInStrings)
-			.a("labelParameter", labelParameter)
-			.a("addKeyValueTableHeaders", addKeyValueTableHeaders)
-			.a("addBeanTypesHtml", addBeanTypesHtml);
+			.append("uriAnchorText", uriAnchorText)
+			.append("detectLabelParameters", detectLabelParameters)
+			.append("detectLinksInStrings", detectLinksInStrings)
+			.append("labelParameter", labelParameter)
+			.append("addKeyValueTableHeaders", addKeyValueTableHeaders)
+			.append("addBeanTypesHtml", addBeanTypesHtml);
 	}
 }

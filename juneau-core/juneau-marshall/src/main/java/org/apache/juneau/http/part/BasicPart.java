@@ -82,20 +82,6 @@ public class BasicPart implements NameValuePair, Headerable {
 	}
 
 	/**
-	 * Static creator with delayed value.
-	 *
-	 * <p>
-	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.
-	 *
-	 * @param name The part name.
-	 * @param value The part value supplier.
-	 * @return A new {@link BasicPart} object.
-	 */
-	public static BasicPart of(String name, Supplier<?> value) {
-		return new BasicPart(name, value);
-	}
-
-	/**
 	 * Utility method for converting an arbitrary object to a {@link NameValuePair}.
 	 *
 	 * @param o
@@ -196,16 +182,6 @@ public class BasicPart implements NameValuePair, Headerable {
 	 */
 	public Object getRawValue() {
 		return unwrap(value);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified object is a {@link Supplier}.
-	 *
-	 * @param o The object to check.
-	 * @return <jk>true</jk> if the specified object is a {@link Supplier}.
-	 */
-	protected boolean isSupplier(Object o) {
-		return o instanceof Supplier;
 	}
 
 	@Override /* Object */

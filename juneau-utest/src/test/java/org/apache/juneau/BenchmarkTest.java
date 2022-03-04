@@ -1,14 +1,3 @@
-package org.apache.juneau;
-
-import static org.apache.juneau.internal.CollectionUtils.*;
-
-import java.util.*;
-
-import org.junit.*;
-import org.junit.rules.*;
-
-import com.carrotsearch.junitbenchmarks.*;
-
 //***************************************************************************************************************************
 //* Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
 //* distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
@@ -21,80 +10,125 @@ import com.carrotsearch.junitbenchmarks.*;
 //* "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 //* specific language governing permissions and limitations under the License.                                              *
 //***************************************************************************************************************************
-@BenchmarkOptions(benchmarkRounds = 50, warmupRounds = 20)
+package org.apache.juneau;
+
+import java.util.*;
+import java.util.Map.*;
+import java.util.function.*;
+import java.util.stream.*;
+
+import org.junit.*;
+import org.junit.rules.*;
+
+import com.carrotsearch.junitbenchmarks.*;
+
+@BenchmarkOptions(benchmarkRounds = 1000000, warmupRounds = 20)
 @Ignore
 public class BenchmarkTest {
+
 	@Rule
 	public TestRule benchmarkRun = new BenchmarkRule();
 
-	public static List<String> LIST = list();
-	public static String[] ARRAY;
+	public static final Random rand = new Random();
+	public static List<Integer> LIST;
+	public static Map<String,Integer> MAP;
+	static {
+		int cap = 10;
+		LIST = new ArrayList<>(cap);
+		MAP = new LinkedHashMap<>();
 
-	public int x;
+		for (int i = 0; i < cap; i++) {
+			LIST.add(rand.nextInt(10));
+			MAP.put(String.valueOf(i), rand.nextInt());
+		}
+		System.gc();
+		System.err.println("Initialized");
+	}
 
-	/** Prepare random numbers for tests. */
+	public static int result;
+
 	@BeforeClass
 	public static void beforeClass() {
-		for (int i = 0; i < 100000; i++)
-			LIST.add(String.valueOf(i));
-		ARRAY = LIST.toArray(new String[LIST.size()]);
 	}
 
-	@Test
-	public void test0() throws Exception {
-		for (int a = 0; a < 1000; a++) {
-			for (Iterator<String> i = LIST.iterator(); i.hasNext();) {
-				String s = i.next();
-				x += s.length();
-			}
-		}
+	private static final Consumer<List<Integer>> list_iterator = x -> {for (Integer i : x) result += i;};
+	private static final Consumer<List<Integer>> list_for = x -> {for (int i = 0; i < x.size(); i++) result += x.get(i);};
+	private static final Consumer<List<Integer>> list_foreach = x -> x.forEach(y -> result += y);
+	private static final Consumer<Map<String,Integer>> map_iterator1 = x -> {for (Integer i : x.values()) result += i;};
+	private static final Consumer<Map<String,Integer>> map_iterator2 = x -> {for (Entry<String,Integer> i : x.entrySet()) result += i.getValue();};
+	private static final Consumer<Map<String,Integer>> map_forEach1 = x -> x.values().forEach(y -> result += y);
+	private static final Consumer<Map<String,Integer>> map_forEach2 = x -> x.forEach((k,v) -> result += v);
+
+//	@Test public void a01a_list_iterator() { list_iterator.accept(LIST); }
+//	@Test public void a01b_list_for() { list_for.accept(LIST); }
+//	@Test public void a01c_list_foreach() { list_foreach.accept(LIST); }
+//	@Test public void b01a_list_iterator() { list_iterator.accept(LIST); }
+//	@Test public void b01b_list_for() { list_for.accept(LIST); }
+//	@Test public void b01c_list_foreach() { list_foreach.accept(LIST); }
+
+	@Test public void a01a_map_iterator1_S() { map_iterator1.accept(MAP); }
+	@Test public void a01b_map_iterator2_S() { map_iterator2.accept(MAP); }
+	@Test public void a01c_map_forEach1_S() { map_forEach1.accept(MAP); }
+	@Test public void a01d_map_forEach2_S() { map_forEach2.accept(MAP); }
+	@Test public void b01a_map_iterator1_S() { map_iterator1.accept(MAP); }
+	@Test public void b01b_map_iterator2_S() { map_iterator2.accept(MAP); }
+	@Test public void b01c_map_forEach1_S() { map_forEach1.accept(MAP); }
+	@Test public void b01d_map_forEach2_S() { map_forEach2.accept(MAP); }
+
+	public static void main(String[] args) {
+		int cap = 100000;
+		long startTime = 0;
+		List<Integer> arrayList = new ArrayList<>();
+		arrayList.forEach(x -> Objects.hash(x));
+		IntStream.of(null).forEach(null);
+
+		startTime = System.currentTimeMillis();
+		for (int i = 0; i < cap; i++) list_iterator.accept(LIST);
+		System.err.println("X1=" + (System.currentTimeMillis() - startTime));
+
+		startTime = System.currentTimeMillis();
+		for (int i = 0; i < cap; i++) list_for.accept(LIST);
+		System.err.println("X2=" + (System.currentTimeMillis() - startTime));
+
+		startTime = System.currentTimeMillis();
+		for (int i = 0; i < cap; i++) list_foreach.accept(LIST);
+		System.err.println("X3=" + (System.currentTimeMillis() - startTime));
+
+//
+//		startTime = System.currentTimeMillis();
+//		for (int i = 0; i < cap; i++) map_forEach1.accept(MAP);
+//		System.err.println("X1=" + (System.currentTimeMillis() - startTime));
+//
+//		startTime = System.currentTimeMillis();
+//		for (int i = 0; i < cap; i++) map_forEach2.accept(MAP);
+//		System.err.println("X2=" + (System.currentTimeMillis() - startTime));
+//
+//		startTime = System.currentTimeMillis();
+//		for (int i = 0; i < cap; i++) map_iterator1.accept(MAP);
+//		System.err.println("X3=" + (System.currentTimeMillis() - startTime));
+//
+//		startTime = System.currentTimeMillis();
+//		for (int i = 0; i < cap; i++) map_iterator2.accept(MAP);
+//		System.err.println("X4=" + (System.currentTimeMillis() - startTime));
+//
+//		startTime = System.currentTimeMillis();
+//		for (int i = 0; i < cap; i++) map_forEach1.accept(MAP);
+//		System.err.println("X1=" + (System.currentTimeMillis() - startTime));
+//
+//		startTime = System.currentTimeMillis();
+//		for (int i = 0; i < cap; i++) map_forEach2.accept(MAP);
+//		System.err.println("X2=" + (System.currentTimeMillis() - startTime));
+//
+//		startTime = System.currentTimeMillis();
+//		for (int i = 0; i < cap; i++) map_iterator1.accept(MAP);
+//		System.err.println("X3=" + (System.currentTimeMillis() - startTime));
+//
+//		startTime = System.currentTimeMillis();
+//		for (int i = 0; i < cap; i++) map_iterator2.accept(MAP);
+//		System.err.println("X4=" + (System.currentTimeMillis() - startTime));
+
+		startTime = System.currentTimeMillis();
+
 	}
 
-	@Test
-	public void testIterator() throws Exception {
-		for (int a = 0; a < 1000; a++) {
-			for (Iterator<String> i = LIST.iterator(); i.hasNext();) {
-				String s = i.next();
-				x += s.length();
-			}
-		}
-	}
-
-	@Test
-	public void testLoop1() throws Exception {
-		for (int a = 0; a < 1000; a++) {
-			for (int i = 0; i < LIST.size(); i++) {
-				String s = LIST.get(i);
-				x += s.length();
-			}
-		}
-	}
-
-	@Test
-	public void testLoop2() throws Exception {
-		for (int a = 0; a < 1000; a++) {
-			for (int i = 0, j = LIST.size(); i < j; i++) {
-				String s = LIST.get(i);
-				x += s.length();
-			}
-		}
-	}
-
-	@Test
-	public void testForEach() throws Exception {
-		for (int a = 0; a < 1000; a++) {
-			for (String s : LIST) {
-				x += s.length();
-			}
-		}
-	}
-
-	@Test
-	public void testArray() throws Exception {
-		for (int a = 0; a < 1000; a++) {
-			for (String s : ARRAY) {
-				x += s.length();
-			}
-		}
-	}
 }

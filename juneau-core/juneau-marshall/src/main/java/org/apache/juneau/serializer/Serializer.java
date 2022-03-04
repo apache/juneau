@@ -13,13 +13,13 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.collections.OMap.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -1331,8 +1331,8 @@ public class Serializer extends BeanTraverseContext {
 		listener = builder.listener;
 
 		this.producesMediaType = MediaType.of(produces);
-		this.acceptRanges = optional(accept).map(MediaRanges::of).orElseGet(()->MediaRanges.of(produces));
-		this.acceptMediaTypes = optional(builder.accept).map(x -> split(x)).map(MediaType::ofAll).orElseGet(()->new MediaType[] {this.producesMediaType});
+		this.acceptRanges = accept != null ? MediaRanges.of(accept) : MediaRanges.of(produces);
+		this.acceptMediaTypes = builder.accept != null ? MediaType.ofAll(split(builder.accept)) : new MediaType[] {this.producesMediaType};
 	}
 
 	@Override /* Context */
@@ -1483,15 +1483,18 @@ public class Serializer extends BeanTraverseContext {
 	}
 
 	/**
-	 * Returns the media types handled based on the value of the <c>accept</c> parameter passed into the constructor.
+	 * Performs an action on the media types handled based on the value of the <c>accept</c> parameter passed into the constructor.
 	 *
 	 * <p>
 	 * The order of the media types are the same as those in the <c>accept</c> parameter.
 	 *
-	 * @return The list of media types.  Never <jk>null</jk>.
+	 * @param action The action to perform on the media types.
+	 * @return This object.
 	 */
-	public final MediaType[] getAcceptMediaTypes() {
-		return acceptMediaTypes;
+	public final Serializer forEachAcceptMediaType(Consumer<MediaType> action) {
+		for (MediaType m : acceptMediaTypes)
+			action.accept(m);
+		return this;
 	}
 
 	/**
@@ -1658,17 +1661,17 @@ public class Serializer extends BeanTraverseContext {
 	@Override /* Context */
 	protected OMap properties() {
 		return filteredMap()
-			.a("addBeanTypes", addBeanTypes)
-			.a("keepNullProperties", keepNullProperties)
-			.a("trimEmptyCollections", trimEmptyCollections)
-			.a("trimEmptyMaps", trimEmptyMaps)
-			.a("trimStrings", trimStrings)
-			.a("sortCollections", sortCollections)
-			.a("sortMaps", sortMaps)
-			.a("addRootType", addRootType)
-			.a("uriContext", uriContext)
-			.a("uriResolution", uriResolution)
-			.a("uriRelativity", uriRelativity)
-			.a("listener", listener);
+			.append("addBeanTypes", addBeanTypes)
+			.append("keepNullProperties", keepNullProperties)
+			.append("trimEmptyCollections", trimEmptyCollections)
+			.append("trimEmptyMaps", trimEmptyMaps)
+			.append("trimStrings", trimStrings)
+			.append("sortCollections", sortCollections)
+			.append("sortMaps", sortMaps)
+			.append("addRootType", addRootType)
+			.append("uriContext", uriContext)
+			.append("uriResolution", uriResolution)
+			.append("uriRelativity", uriRelativity)
+			.append("listener", listener);
 	}
 }

@@ -17,6 +17,7 @@ import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Simple wrapper around a standard {@link Writer} with additional methods.
@@ -35,6 +36,7 @@ import org.apache.juneau.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
+@FluentSetters
 public class SerializerWriter extends Writer {
 
 	/** The underlying writer. */
@@ -65,8 +67,7 @@ public class SerializerWriter extends Writer {
 	 * @param quoteChar The character to write when {@link #q()} is called.
 	 * @param uriResolver The URI resolver for resolving URIs to absolute or root-relative form.
 	 */
-	public SerializerWriter(Writer out, boolean useWhitespace, int maxIndent, boolean trimStrings, char quoteChar,
-			UriResolver uriResolver) {
+	public SerializerWriter(Writer out, boolean useWhitespace, int maxIndent, boolean trimStrings, char quoteChar, UriResolver uriResolver) {
 		this.out = out;
 		this.useWhitespace = useWhitespace;
 		this.maxIndent = maxIndent;
@@ -82,10 +83,10 @@ public class SerializerWriter extends Writer {
 	 * Adds a newline and the specified number of tabs (if the {@code useWhitespace} setting is enabled) to the output.
 	 *
 	 * @param depth The indentation.
-	 * @throws IOException If a problem occurred trying to write to the writer.
 	 * @return This object.
 	 */
-	public SerializerWriter cr(int depth) throws IOException {
+	@FluentSetter
+	public SerializerWriter cr(int depth) {
 		if (useWhitespace && depth <= maxIndent)
 			return nl(depth).i(depth);
 		return this;
@@ -98,10 +99,10 @@ public class SerializerWriter extends Writer {
 	 * Adds a newline and the specified number of tabs (if the {@code useWhitespace} setting is enabled) to the output.
 	 *
 	 * @param depth The indentation.
-	 * @throws IOException If a problem occurred trying to write to the writer.
 	 * @return This object.
 	 */
-	public SerializerWriter cre(int depth) throws IOException {
+	@FluentSetter
+	public SerializerWriter cre(int depth) {
 		if (useWhitespace && depth <= maxIndent-1)
 			return nl(depth).i(depth);
 		return this;
@@ -112,47 +113,47 @@ public class SerializerWriter extends Writer {
 	 * (if the {@code useWhitespace} setting is enabled).
 	 *
 	 * @param indent The number of tabs to indent.
-	 * @param text The text to write.
-	 * @throws IOException If a problem occurred trying to write to the writer.
+	 * @param value The text to write.
 	 * @return This object.
 	 */
-	public SerializerWriter appendln(int indent, String text) throws IOException {
-		return append(indent, true, text);
+	@FluentSetter
+	public SerializerWriter appendln(int indent, String value) {
+		return append(indent, true, value);
 	}
 
 	/**
 	 * Writes the specified text followed by a newline (if the {@code useWhitespace} setting is enabled).
 	 *
-	 * @param text The text to write.
-	 * @throws IOException If a problem occurred trying to write to the writer.
+	 * @param value The text to write.
 	 * @return This object.
 	 */
-	public SerializerWriter appendln(String text) throws IOException {
-		return append(0, true, text);
+	@FluentSetter
+	public SerializerWriter appendln(String value) {
+		return append(0, true, value);
 	}
 
 	/**
 	 * Writes an indent (if the {@code useWhitespace} setting is enabled), followed by text.
 	 *
 	 * @param indent The number of tabs to indent.
-	 * @param text The text to write.
-	 * @throws IOException If a problem occurred trying to write to the writer.
+	 * @param value The text to write.
 	 * @return This object.
 	 */
-	public SerializerWriter append(int indent, String text) throws IOException {
-		return append(indent, false, text);
+	@FluentSetter
+	public SerializerWriter append(int indent, String value) {
+		return append(indent, false, value);
 	}
 
 	/**
 	 * Writes an indent (if the {@code useWhitespace} setting is enabled), followed by text.
 	 *
 	 * @param indent The number of tabs to indent.
-	 * @param c The character to write.
-	 * @throws IOException If a problem occurred trying to write to the writer.
+	 * @param value The character to write.
 	 * @return This object.
 	 */
-	public SerializerWriter append(int indent, char c) throws IOException {
-		return i(indent).append(c);
+	@FluentSetter
+	public SerializerWriter append(int indent, char value) {
+		return i(indent).w(value);
 	}
 
 	/**
@@ -161,28 +162,26 @@ public class SerializerWriter extends Writer {
 	 *
 	 * @param indent The number of tabs to indent.
 	 * @param newline If <jk>true</jk>, then a newline is written.
-	 * @param text The text to write.
+	 * @param value The text to write.
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 * @return This object.
 	 */
-	private SerializerWriter append(int indent, boolean newline, String text) throws IOException {
+	private SerializerWriter append(int indent, boolean newline, String value) {
 
-		if (text == null)
+		if (value == null)
 			return this;
 
 		// If text contains newlines, we break it up into lines and indent them separately.
-		if (text.indexOf('\n') != -1 && useWhitespace && indent <= maxIndent) {
-			for (StringTokenizer st = new StringTokenizer(text, "\n"); st.hasMoreTokens();) {
-				i(indent);
-				out.write(st.nextToken());
-				out.write("\n");
-			}
+		if (value.indexOf('\n') != -1 && useWhitespace && indent <= maxIndent) {
+			for (StringTokenizer st = new StringTokenizer(value, "\n"); st.hasMoreTokens();)
+				i(indent).w(st.nextToken()).w("\n");
 		} else {
-			i(indent);
-			out.write(text);
+			i(indent).w(value);
 		}
+
 		if (newline)
 			nl(indent);
+
 		return this;
 	}
 
@@ -198,25 +197,25 @@ public class SerializerWriter extends Writer {
 	 * {@link Serializer.Builder#uriResolution(UriResolution)} settings and the {@link UriContext} that's part of the
 	 * session.
 	 *
-	 * @param uri The URI to serialize.
+	 * @param value The URI to serialize.
 	 * @return This object.
-	 * @throws IOException If a problem occurred trying to write to the writer.
 	 */
-	public SerializerWriter appendUri(Object uri) throws IOException {
-		uriResolver.append(this, uri);
+	@FluentSetter
+	public SerializerWriter appendUri(Object value) {
+		uriResolver.append(this, value);
 		return this;
 	}
 
 	/**
 	 * Appends the specified characters to this writer.
 	 *
-	 * @param characters The characters to append to this writer.
+	 * @param value The characters to append to this writer.
 	 * @return This object.
-	 * @throws IOException Thrown by underlying stream.
 	 */
-	public SerializerWriter append(char[] characters) throws IOException {
-		for (char c : characters)
-			append(c);
+	@FluentSetter
+	public SerializerWriter append(char[] value) {
+		for (char c : value)
+			w(c);
 		return this;
 	}
 
@@ -224,11 +223,11 @@ public class SerializerWriter extends Writer {
 	 * Adds a whitespace character to the output if the {@code useWhitespace} setting is enabled.
 	 *
 	 * @return This object.
-	 * @throws IOException If a problem occurred trying to write to the writer.
 	 */
-	public SerializerWriter s() throws IOException {
+	@FluentSetter
+	public SerializerWriter s() {
 		if (useWhitespace)
-			out.write(' ');
+			w(' ');
 		return this;
 	}
 
@@ -236,10 +235,10 @@ public class SerializerWriter extends Writer {
 	 * Adds the quote character specified by the {@code quoteChar} setting to the output.
 	 *
 	 * @return This object.
-	 * @throws IOException If a problem occurred trying to write to the writer.
 	 */
-	public SerializerWriter q() throws IOException {
-		out.write(quoteChar);
+	@FluentSetter
+	public SerializerWriter q() {
+		w(quoteChar);
 		return this;
 	}
 
@@ -247,13 +246,13 @@ public class SerializerWriter extends Writer {
 	 * Writes an indent to the writer if the {@code useWhitespace} setting is enabled.
 	 *
 	 * @param indent The number of tabs to indent.
-	 * @throws IOException If a problem occurred trying to write to the writer.
 	 * @return This object.
 	 */
-	public SerializerWriter i(int indent) throws IOException {
+	@FluentSetter
+	public SerializerWriter i(int indent) {
 		if (useWhitespace && indent <= maxIndent)
 			for (int i = 0; i < indent; i++)
-				out.write('\t');
+				w('\t');
 		return this;
 	}
 
@@ -261,13 +260,13 @@ public class SerializerWriter extends Writer {
 	 * Writes an end-of-line indent to the writer if the {@code useWhitespace} setting is enabled.
 	 *
 	 * @param indent The number of tabs to indent.
-	 * @throws IOException If a problem occurred trying to write to the writer.
 	 * @return This object.
 	 */
-	public SerializerWriter ie(int indent) throws IOException {
+	@FluentSetter
+	public SerializerWriter ie(int indent) {
 		if (useWhitespace && indent <= maxIndent-1)
 			for (int i = 0; i < indent; i++)
-				out.write('\t');
+				w('\t');
 		return this;
 	}
 
@@ -275,12 +274,12 @@ public class SerializerWriter extends Writer {
 	 * Writes a newline to the writer if the {@code useWhitespace} setting is enabled.
 	 *
 	 * @param indent The current indentation level.
-	 * @throws IOException If a problem occurred trying to write to the writer.
 	 * @return This object.
 	 */
-	public SerializerWriter nl(int indent) throws IOException {
+	@FluentSetter
+	public SerializerWriter nl(int indent) {
 		if (useWhitespace && indent <= maxIndent)
-			out.write('\n');
+			w('\n');
 		return this;
 	}
 
@@ -291,97 +290,136 @@ public class SerializerWriter extends Writer {
 	 * Intended for cases in XML where text should be separated by either a space or newline.
 	 * This ensures the text is separated by a space if whitespace is disabled.
 	 *
-	 * @param b The boolean flag.
+	 * @param flag The boolean flag.
 	 * @return This object.
-	 * @throws IOException If a problem occurred trying to write to the writer.
 	 */
-	public SerializerWriter sIf(boolean b) throws IOException {
-		if (b && ! useWhitespace)
-			out.write(' ');
+	@FluentSetter
+	public SerializerWriter sIf(boolean flag) {
+		if (flag && ! useWhitespace)
+			w(' ');
 		return this;
 	}
 
 	/**
 	 * Writes a newline to the writer if the {@code useWhitespace} setting is enabled and the boolean flag is true.
 	 *
-	 * @param b The boolean flag.
+	 * @param flag The boolean flag.
 	 * @param indent The current indentation level.
 	 * @return This object.
-	 * @throws IOException If a problem occurred trying to write to the writer.
 	 */
-	public SerializerWriter nlIf(boolean b, int indent) throws IOException {
-		if (b && useWhitespace && indent <= maxIndent)
-			out.write('\n');
+	@FluentSetter
+	public SerializerWriter nlIf(boolean flag, int indent) {
+		if (flag && useWhitespace && indent <= maxIndent)
+			w('\n');
 		return this;
 	}
 
 	/**
-	 * Writes the specified text to the writer.
+	 * Writes the specified text to the writer if it isn't <jk>null</jk>.
 	 *
-	 * @param text The text to write.
-	 * @throws IOException If a problem occurred trying to write to the writer.
+	 * @param value The text to write.
 	 * @return This object.
 	 */
-	public SerializerWriter append(Object text) throws IOException {
-		out.append(text == null ? null : text.toString());
+	@FluentSetter
+	public SerializerWriter append(Object value) {
+		w(value == null ? null : value.toString());
 		return this;
 	}
 
 	/**
-	 * Writes the specified text to the writer.
+	 * Writes the specified text to the writer if it isn't <jk>null</jk>.
 	 *
-	 * @param text The text to write.
-	 * @throws IOException If a problem occurred trying to write to the writer.
+	 * @param value The text to write.
 	 * @return This object.
 	 */
-	public SerializerWriter append(String text) throws IOException {
-		if (text != null)
-			out.append(text);
-		return this;
-	}
-
-	/**
-	 * Writes the specified text to the writer if b is true.
-	 *
-	 * @param b Boolean flag.
-	 * @param text The text to write.
-	 * @throws IOException If a problem occurred trying to write to the writer.
-	 * @return This object.
-	 */
-	public SerializerWriter appendIf(boolean b, String text) throws IOException {
-		if (b)
-			out.write(text);
+	@FluentSetter
+	public SerializerWriter append(String value) {
+		if (value != null)
+			w(value);
 		return this;
 	}
 
 	/**
 	 * Writes the specified text to the writer if b is true.
 	 *
-	 * @param b Boolean flag.
-	 * @param c The text to write.
-	 * @throws IOException If a problem occurred trying to write to the writer.
+	 * @param flag Boolean flag.
+	 * @param value The text to write.
 	 * @return This object.
 	 */
-	public SerializerWriter appendIf(boolean b, char c) throws IOException {
-		if (b)
-			out.write(c);
+	@FluentSetter
+	public SerializerWriter appendIf(boolean flag, String value) {
+		if (flag)
+			w(value);
 		return this;
 	}
 
+	/**
+	 * Writes the specified text to the writer if b is true.
+	 *
+	 * @param flag Boolean flag.
+	 * @param value The text to write.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public SerializerWriter appendIf(boolean flag, char value) {
+		if (flag)
+			w(value);
+		return this;
+	}
+
+	/**
+	 * Writes the specified character to the writer.
+	 *
+	 * @param value The character to write.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public SerializerWriter w(char value) {
+		try {
+			out.write(value);
+		} catch (IOException e) {
+			throw new SerializeException(e);
+		}
+		return this;
+	}
+
+	/**
+	 * Writes the specified string to the writer.
+	 *
+	 * @param value The string to write.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public SerializerWriter w(String value) {
+		try {
+			out.write(value);
+		} catch (IOException e) {
+			throw new SerializeException(e);
+		}
+		return this;
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Writer */
-	public SerializerWriter append(char c) throws IOException {
-		out.write(c);
+	public SerializerWriter append(char c) {
+		try {
+			out.write(c);
+		} catch (IOException e) {
+			throw new SerializeException(e);
+		}
 		return this;
 	}
 
 	@Override /* Writer */
-	public void write(char[] cbuf, int off, int len) throws IOException {
-		out.write(cbuf, off, len);
+	public void write(char[] cbuf, int off, int len) {
+		try {
+			out.write(cbuf, off, len);
+		} catch (IOException e) {
+			throw new SerializeException(e);
+		}
 	}
 
 	@Override /* Writer */

@@ -145,9 +145,7 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 					else if (pip.length < parts.length)
 						return null;
 				} else {
-					if (pip.length != parts.length + 1)
-						return null;
-					if (! urlPath.isTrailingSlash())
+					if (pip.length != parts.length + 1 || ! urlPath.isTrailingSlash())
 						return null;
 				}
 			}

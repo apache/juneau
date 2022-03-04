@@ -33,11 +33,13 @@ public class SimpleLock implements AutoCloseable {
 	 */
 	public SimpleLock(Lock lock) {
 		this.lock = lock;
-		if (lock != null) lock.lock();
+		if (lock != null)
+			lock.lock();
 	}
 
 	@Override
 	public void close() {
-		if (lock != null) lock.unlock();
+		if (lock != null)
+			lock.unlock();
 	}
 }

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.msgpack.DataType.*;
 
 import java.io.*;
@@ -20,6 +19,7 @@ import java.math.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.internal.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * Specialized output stream for serializing MessagePack streams.
@@ -48,73 +48,89 @@ public final class MsgPackOutputStream extends OutputStream {
 	}
 
 	@Override /* OutputStream */
-	public void write(int b) throws IOException {
-		os.write(b);
+	public void write(int b) {
+		try {
+			os.write(b);
+		} catch (IOException e) {
+			throw new SerializeException(e);
+		}
 	}
 
 	/**
 	 * Same as {@link #write(int)}.
 	 */
-	final MsgPackOutputStream append(byte b) throws IOException {
-		os.write(b);
+	final MsgPackOutputStream append(byte b) {
+		try {
+			os.write(b);
+		} catch (IOException e) {
+			throw new SerializeException(e);
+		}
 		return this;
 	}
 
 	/**
 	 * Same as {@link #write(byte[])}.
 	 */
-	final MsgPackOutputStream append(byte[] b) throws IOException {
-		os.write(b);
+	final MsgPackOutputStream append(byte[] b) {
+		try {
+			os.write(b);
+		} catch (IOException e) {
+			throw new SerializeException(e);
+		}
 		return this;
 	}
 
 	/**
 	 * Appends one byte to the stream.
 	 */
-	final MsgPackOutputStream append1(int i) throws IOException {
-		os.write(i);
+	final MsgPackOutputStream append1(int i) {
+		try {
+			os.write(i);
+		} catch (IOException e) {
+			throw new SerializeException(e);
+		}
 		return this;
 	}
 
 	/**
 	 * Appends two bytes to the stream.
 	 */
-	final MsgPackOutputStream append2(int i) throws IOException {
+	final MsgPackOutputStream append2(int i) {
 		return append1(i>>8).append1(i);
 	}
 
 	/**
 	 * Appends four bytes to the stream.
 	 */
-	final MsgPackOutputStream append4(int i) throws IOException {
+	final MsgPackOutputStream append4(int i) {
 		return append1(i>>24).append1(i>>16).append1(i>>8).append1(i);
 	}
 
 	/**
 	 * Appends eight bytes to the stream.
 	 */
-	final MsgPackOutputStream append8(long l) throws IOException {
+	final MsgPackOutputStream append8(long l) {
 		return append1((int)(l>>56)).append1((int)(l>>48)).append1((int)(l>>40)).append1((int)(l>>32)).append1((int)(l>>24)).append1((int)(l>>16)).append1((int)(l>>8)).append1((int)(l));
 	}
 
 	/**
 	 * Appends a NULL flag to the stream.
 	 */
-	final MsgPackOutputStream appendNull() throws IOException {
+	final MsgPackOutputStream appendNull() {
 		return append1(NIL);
 	}
 
 	/**
 	 * Appends a boolean to the stream.
 	 */
-	final MsgPackOutputStream appendBoolean(boolean b) throws IOException {
+	final MsgPackOutputStream appendBoolean(boolean b) {
 		return append1(b ? TRUE : FALSE);
 	}
 
 	/**
 	 * Appends an integer to the stream.
 	 */
-	final MsgPackOutputStream appendInt(int i) throws IOException {
+	final MsgPackOutputStream appendInt(int i) {
 		// POSFIXINT_L  = 0x00,  //   pos fixint     0xxxxxxx     0x00 - 0x7f
 		// POSFIXINT_U  = 0x7F,
 		// UINT8        = 0xCC,  //   uint 8         11001100     0xcc
@@ -148,7 +164,7 @@ public final class MsgPackOutputStream extends OutputStream {
 	/**
 	 * Appends a long to the stream.
 	 */
-	final MsgPackOutputStream appendLong(long l) throws IOException {
+	final MsgPackOutputStream appendLong(long l) {
 		if (l < L2X31 && l > -(L2X31))
 			return appendInt((int)l);
 		return append1(INT64).append8(l);
@@ -157,7 +173,7 @@ public final class MsgPackOutputStream extends OutputStream {
 	/**
 	 * Appends a generic Number to the stream.
 	 */
-	final MsgPackOutputStream appendNumber(Number n) throws IOException {
+	final MsgPackOutputStream appendNumber(Number n) {
 		Class<?> c = n.getClass();
 		if (c == Integer.class || c == Short.class || c == Byte.class || c == AtomicInteger.class)
 			return appendInt(n.intValue());
@@ -177,7 +193,7 @@ public final class MsgPackOutputStream extends OutputStream {
 	/**
 	 * Appends a float to the stream.
 	 */
-	final MsgPackOutputStream appendFloat(float f) throws IOException {
+	final MsgPackOutputStream appendFloat(float f) {
 		// FLOAT32      = 0xCA,  //   float 32       11001010     0xca
 		return append1(FLOAT32).append4(Float.floatToIntBits(f));
 
@@ -186,7 +202,7 @@ public final class MsgPackOutputStream extends OutputStream {
 	/**
 	 * Appends a double to the stream.
 	 */
-	final MsgPackOutputStream appendDouble(double d) throws IOException {
+	final MsgPackOutputStream appendDouble(double d) {
 		// FLOAT64      = 0xCB,  //   float 64       11001011     0xcb
 		return append1(FLOAT64).append8(Double.doubleToLongBits(d));
 	}
@@ -194,7 +210,7 @@ public final class MsgPackOutputStream extends OutputStream {
 	/**
 	 * Appends a string to the stream.
 	 */
-	final MsgPackOutputStream appendString(CharSequence cs) throws IOException {
+	final MsgPackOutputStream appendString(CharSequence cs) {
 
 		// fixstr stores a byte array whose length is up to 31 bytes:
 		// +--------+========+
@@ -235,7 +251,7 @@ public final class MsgPackOutputStream extends OutputStream {
 		int length2 = writeUtf8To(cs, os);
 
 		if (length != length2)
-			throw ioException("Unexpected length.  Expected={0}, Actual={1}", length, length2);
+			throw new SerializeException("Unexpected length.  Expected={0}, Actual={1}", length, length2);
 
 		return this;
 	}
@@ -243,7 +259,7 @@ public final class MsgPackOutputStream extends OutputStream {
 	/**
 	 * Appends a binary field to the stream.
 	 */
-	final MsgPackOutputStream appendBinary(byte[] b) throws IOException {
+	final MsgPackOutputStream appendBinary(byte[] b) {
 		// bin 8 stores a byte array whose length is up to (2^8)-1 bytes:
 		// +--------+--------+========+
 		// |  0xc4  |XXXXXXXX|  data  |
@@ -275,10 +291,10 @@ public final class MsgPackOutputStream extends OutputStream {
 	/**
 	 * Appends a binary field to the stream.
 	 */
-	final MsgPackOutputStream appendBinary(InputStream is) throws IOException {
+	final MsgPackOutputStream appendBinary(InputStream is) {
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		IOUtils.pipe(is, baos);
+		IOUtils.pipe(is, baos, x -> { throw new SerializeException(x); });
 
 		byte[] b = baos.toByteArray();
 
@@ -313,7 +329,7 @@ public final class MsgPackOutputStream extends OutputStream {
 	/**
 	 * Appends an array data type flag to the stream.
 	 */
-	final MsgPackOutputStream startArray(int size) throws IOException {
+	final MsgPackOutputStream startArray(int size) {
 		// fixarray stores an array whose length is up to 15 elements:
 		// +--------+~~~~~~~~~~~~~~~~~+
 		// |1001XXXX|    N objects    |
@@ -345,7 +361,7 @@ public final class MsgPackOutputStream extends OutputStream {
 	/**
 	 * Appends a map data type flag to the stream.
 	 */
-	final MsgPackOutputStream startMap(int size) throws IOException {
+	final MsgPackOutputStream startMap(int size) {
 		// fixmap stores a map whose length is up to 15 elements
 		// +--------+~~~~~~~~~~~~~~~~~+
 		// |1000XXXX|   N*2 objects   |
@@ -376,29 +392,29 @@ public final class MsgPackOutputStream extends OutputStream {
 		return append1(MAP32).append4(size);
 	}
 
-	private int writeUtf8To(CharSequence in, OutputStream out) throws IOException {
+	private int writeUtf8To(CharSequence in, OutputStream out) {
 		int count = 0;
 		for (int i = 0, len = in.length(); i < len; i++) {
 			int c = (in.charAt(i) & 0xFFFF);
 			if (c <= 0x7F) {
-				out.write((byte) (c & 0xFF));
+				write((byte) (c & 0xFF));
 				count++;
 			} else if (c <= 0x7FF) {
-				out.write((byte) (0xC0 + ((c>>6) & 0x1F)));
-				out.write((byte) (0x80 + (c & 0x3F)));
+				write((byte) (0xC0 + ((c>>6) & 0x1F)));
+				write((byte) (0x80 + (c & 0x3F)));
 				count += 2;
 			} else if (c >= 0xD800 && c <= 0xDFFF) {
 				int jchar2 = in.charAt(++i) & 0xFFFF;
 				int n = (c<<10) + jchar2 + 0xFCA02400;
-				out.write((byte) (0xF0 + ((n>>18) & 0x07)));
-				out.write((byte) (0x80 + ((n>>12) & 0x3F)));
-				out.write((byte) (0x80 + ((n>>6) & 0x3F)));
-				out.write((byte) (0x80 + (n & 0x3F)));
+				write((byte) (0xF0 + ((n>>18) & 0x07)));
+				write((byte) (0x80 + ((n>>12) & 0x3F)));
+				write((byte) (0x80 + ((n>>6) & 0x3F)));
+				write((byte) (0x80 + (n & 0x3F)));
 				count += 4;
 			} else {
-				out.write((byte) (0xE0 + ((c>>12) & 0x0F)));
-				out.write((byte) (0x80 + ((c>>6) & 0x3F)));
-				out.write((byte) (0x80 + (c & 0x3F)));
+				write((byte) (0xE0 + ((c>>12) & 0x0F)));
+				write((byte) (0x80 + ((c>>6) & 0x3F)));
+				write((byte) (0x80 + (c & 0x3F)));
 				count += 3;
 			}
 		}

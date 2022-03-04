@@ -174,28 +174,25 @@ public class Operation extends SwaggerElement {
 			this.parameters = null;
 		} else {
 			this.parameters = list();
-			for (ParameterInfo p : copyFrom.parameters)
-				this.parameters.add(p.copy());
+			copyFrom.parameters.forEach(x -> this.parameters.add(x.copy()));
 		}
 
 		if (copyFrom.responses == null) {
 			this.responses = null;
 		} else {
 			this.responses = map();
-			for (Map.Entry<String,ResponseInfo> e : copyFrom.responses.entrySet())
-				this.responses.put(e.getKey(), e.getValue().copy());
+			copyFrom.responses.forEach((k,v) -> this.responses.put(k, v.copy()));
 		}
 
 		if (copyFrom.security == null) {
 			this.security = null;
 		} else {
 			this.security = list();
-			for (Map<String,List<String>> m : copyFrom.security) {
+			copyFrom.security.forEach(x -> {
 				Map<String,List<String>> m2 = map();
-				for (Map.Entry<String,List<String>> e : m.entrySet())
-					m2.put(e.getKey(), copyOf(e.getValue()));
+				x.forEach((k,v) -> m2.put(k, copyOf(v)));
 				this.security.add(m2);
-			}
+			});
 		}
 	}
 

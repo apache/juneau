@@ -24,6 +24,7 @@ import java.lang.reflect.*;
 import java.net.*;
 import java.net.URI;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
@@ -51,7 +52,7 @@ import org.apache.juneau.swaps.*;
  * </ul>
  */
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public final class BeanPropertyMeta {
+public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 	final BeanMeta<?> beanMeta;                               // The bean that this property belongs to.
 	private final BeanContext beanContext;                    // The context that created this meta.
@@ -273,9 +274,7 @@ public final class BeanPropertyMeta {
 						return false;
 					}
 				} else {
-					if (pt.length != 1)
-						return false;
-					if (! ci.isChildOf(pt[0]))
+					if (pt.length != 1 || ! ci.isChildOf(pt[0]))
 						return false;
 				}
 			}
@@ -1134,21 +1133,22 @@ public final class BeanPropertyMeta {
 	}
 
 	/**
-	 * Returns all instances of the specified annotation on the getter/setter/field of the property.
+	 * Performs an action on all matching instances of the specified annotation on the getter/setter/field of the property.
 	 *
 	 * @param <A> The class to find annotations for.
 	 * @param a The class to find annotations for.
+	 * @param filter The filter to apply to the annotation.
+	 * @param action The action to perform against the annotation.
 	 * @return A list of annotations ordered in child-to-parent order.  Never <jk>null</jk>.
 	 */
-	public <A extends Annotation> List<A> getAnnotations(Class<A> a) {
-		List<A> l = new LinkedList<>();
+	public <A extends Annotation> BeanPropertyMeta forEachAnnotation(Class<A> a, Predicate<A> filter, Consumer<A> action) {
 		BeanContext bc = beanContext;
-		if (a == null)
-			return l;
-		bc.forEachAnnotation(a, field, x -> true, x -> l.add(x));
-		bc.forEachAnnotation(a, getter, x -> true, x -> l.add(x));
-		bc.forEachAnnotation(a, setter, x -> true, x -> l.add(x));
-		return l;
+		if (a != null) {
+			bc.forEachAnnotation(a, field, filter, action);
+			bc.forEachAnnotation(a, getter, filter, action);
+			bc.forEachAnnotation(a, setter, filter, action);
+		}
+		return this;
 	}
 
 	private Object transform(BeanSession session, Object o) throws SerializeException {
@@ -1261,6 +1261,11 @@ public final class BeanPropertyMeta {
 	 */
 	protected boolean isWriteOnly() {
 		return writeOnly;
+	}
+
+	@Override /* Comparable */
+	public int compareTo(BeanPropertyMeta o) {
+		return name.compareTo(o.name);
 	}
 
 	@Override /* Object */

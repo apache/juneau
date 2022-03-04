@@ -216,7 +216,8 @@ public final class CsvSerializerSession extends WriterSerializerSession {
 
 	@Override /* SerializerSession */
 	protected final void doSerialize(SerializerPipe pipe, Object o) throws IOException, SerializeException {
-		try (Writer w = pipe.getWriter()) {
+
+		try (CsvWriter w = getCsvWriter(pipe)) {
 			ClassMeta<?> cm = getClassMetaForObject(o);
 			Collection<?> l = null;
 			if (cm.isArray()) {
@@ -229,47 +230,32 @@ public final class CsvSerializerSession extends WriterSerializerSession {
 				ClassMeta<?> entryType = getClassMetaForObject(l.iterator().next());
 				if (entryType.isBean()) {
 					BeanMeta<?> bm = entryType.getBeanMeta();
-					int i = 0;
-					for (BeanPropertyMeta pm : bm.getPropertyMetas()) {
-						if (pm.canRead()) {
-							if (i++ > 0)
-								w.append(',');
-							append(w, pm.getName());
-						}
-					}
+					Flag addComma = Flag.create();
+					bm.forEachProperty(x -> x.canRead(), x -> {
+						addComma.ifSet(() -> w.w(',')).set();
+						w.writeEntry(x.getName());
+					});
 					w.append('\n');
-					for (Object o2 : l) {
-						i = 0;
-						BeanMap<?> bean = toBeanMap(o2);
-						for (BeanPropertyMeta pm : bm.getPropertyMetas()) {
-							if (pm.canRead()) {
-								if (i++ > 0)
-									w.append(',');
-								append(w, pm.get(bean, pm.getName()));
-							}
-						}
-						w.append('\n');
-					}
+					l.forEach(x -> {
+						Flag addComma2 = Flag.create();
+						BeanMap<?> bean = toBeanMap(x);
+						bm.forEachProperty(y -> y.canRead(), y -> {
+							addComma2.ifSet(() -> w.w(',')).set();
+							w.writeEntry(y.get(bean, y.getName()));
+						});
+						w.w('\n');
+					});
 				}
 			}
 		}
 	}
 
-	private static void append(Writer w, Object o) throws IOException {
-		if (o == null)
-			w.append("null");
-		else {
-			String s = o.toString();
-			boolean mustQuote = false;
-			for (int i = 0; i < s.length() && ! mustQuote; i++) {
-				char c = s.charAt(i);
-				if (Character.isWhitespace(c) || c == ',')
-					mustQuote = true;
-			}
-			if (mustQuote)
-				w.append('"').append(s).append('"');
-			else
-				w.append(s);
-		}
+	final CsvWriter getCsvWriter(SerializerPipe out) throws IOException {
+		Object output = out.getRawOutput();
+		if (output instanceof CsvWriter)
+			return (CsvWriter)output;
+		CsvWriter w = new CsvWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), getQuoteChar(), isTrimStrings(), getUriResolver());
+		out.setWriter(w);
+		return w;
 	}
 }

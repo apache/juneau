@@ -374,18 +374,18 @@ public class XmlSerializerSession extends WriterSerializerSession {
 					findNsfMappings(o2);
 			}
 			if (bm != null) {
-				for (BeanPropertyValue p : bm.getValues(isKeepNullProperties())) {
-
-					Namespace ns = getXmlBeanPropertyMeta(p.getMeta()).getNamespace();
+				Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
+				bm.forEachValue(checkNull, (pMeta,key,value,thrown) -> {
+					Namespace ns = getXmlBeanPropertyMeta(pMeta).getNamespace();
 					if (ns != null && ns.uri != null)
 						addNamespace(ns);
 
 					try {
-						findNsfMappings(p.getValue());
+						findNsfMappings(value);
 					} catch (Throwable x) {
 						// Ignore
 					}
-				}
+				});
 			}
 		}
 
@@ -408,7 +408,6 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 * 	<jk>true</jk> if we're serializing {@link XmlFormat#MIXED_PWS} or {@link XmlFormat#TEXT_PWS}.
 	 * @param pMeta The bean property metadata if this is a bean property being serialized.
 	 * @return The same writer passed in so that calls to the writer can be chained.
-	 * @throws IOException Thrown by underlying stream.
 	 * @throws SerializeException General serialization error occurred.
 	 */
 	protected ContentResult serializeAnything(
@@ -422,7 +421,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			XmlFormat format,
 			boolean isMixedOrText,
 			boolean preserveWhitespace,
-			BeanPropertyMeta pMeta) throws IOException, SerializeException {
+			BeanPropertyMeta pMeta) throws SerializeException {
 
 		JsonType type = null;              // The type string (e.g. <type> or <x x='type'>
 		int i = isMixedOrText ? 0 : indent;       // Current indentation
@@ -597,7 +596,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			}
 
 			if (o != null && ! (sType.isMapOrBean() || en == null))
-				out.append('>');
+				out.w('>');
 
 			if (cr && ! (sType.isMapOrBean()))
 				out.nl(i+1);
@@ -636,9 +635,9 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				if (isCollapsed)
 					this.indent++;
 			} else if (sType.isReader()) {
-				pipe((Reader)o, out);
+				pipe((Reader)o, out, SerializerSession::handleThrown);
 			} else if (sType.isInputStream()) {
-				pipe((InputStream)o, out);
+				pipe((InputStream)o, out, SerializerSession::handleThrown);
 			} else {
 				if (isXmlText(format, sType))
 					out.append(toString(o));
@@ -654,11 +653,11 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			if (en != null) {
 				if (rc == CR_EMPTY) {
 					if (isHtmlMode())
-						out.append('>').eTag(elementNs, en, encodeEn);
+						out.w('>').eTag(elementNs, en, encodeEn);
 					else
-						out.append('/').append('>');
+						out.w('/').w('>');
 				} else if (rc == CR_VOID || o == null) {
-					out.append('/').append('>');
+					out.w('/').w('>');
 				}
 				else
 					out.ie(cr && rc != CR_MIXED ? i : 0).eTag(elementNs, en, encodeEn);
@@ -680,7 +679,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	}
 
 	private ContentResult serializeMap(XmlWriter out, Map m, ClassMeta<?> sType,
-			ClassMeta<?> eKeyType, ClassMeta<?> eValueType, boolean isMixed) throws IOException, SerializeException {
+			ClassMeta<?> eKeyType, ClassMeta<?> eValueType, boolean isMixed) throws SerializeException {
 
 		m = sort(m);
 
@@ -704,7 +703,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 			if (! hasChildren) {
 				hasChildren = true;
-				out.append('>').nlIf(! isMixed, indent);
+				out.w('>').nlIf(! isMixed, indent);
 			}
 			serializeAnything(out, value, valueType, toString(k), null, null, false, XmlFormat.DEFAULT, isMixed, false, null);
 		}
@@ -712,11 +711,16 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	}
 
 	private ContentResult serializeBeanMap(XmlWriter out, BeanMap<?> m,
-			Namespace elementNs, boolean isCollapsed, boolean isMixedOrText) throws IOException, SerializeException {
+			Namespace elementNs, boolean isCollapsed, boolean isMixedOrText) throws SerializeException {
 		boolean hasChildren = false;
 		BeanMeta<?> bm = m.getMeta();
 
-		List<BeanPropertyValue> lp = m.getValues(isKeepNullProperties());
+		List<BeanPropertyValue> lp = new ArrayList<>();
+
+		Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
+		m.forEachValue(checkNull, (pMeta,key,value,thrown) -> {
+			lp.add(new BeanPropertyValue(pMeta, key, value, thrown));
+		});
 
 		XmlBeanMeta xbm = getXmlBeanMeta(bm);
 
@@ -756,14 +760,11 @@ public class XmlSerializerSession extends WriterSerializerSession {
 					} else if (n.equals(attrsProperty)) {
 						if (value instanceof BeanMap) {
 							BeanMap<?> bm2 = (BeanMap)value;
-							for (BeanPropertyValue p2 : bm2.getValues(false)) {
-								String key2 = p2.getName();
-								Object value2 = p2.getValue();
-								Throwable t2 = p2.getThrown();
-								if (t2 != null)
-									onBeanGetterException(pMeta, t);
+							bm2.forEachValue(x -> true, (pMeta2,key2,value2,thrown2) -> {
+								if (thrown2 != null)
+									onBeanGetterException(pMeta, thrown2);
 								out.attr(ns, key2, value2);
-							}
+							});
 						} else /* Map */ {
 							Map m2 = (Map)value;
 							if (m2 != null)
@@ -826,7 +827,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 		// Serialize XML content.
 		if (content != null) {
-			out.append('>').nlIf(! isMixedOrText, indent);
+			out.w('>').nlIf(! isMixedOrText, indent);
 			if (contentType == null) {
 			} else if (contentType.isCollection()) {
 				Collection c = (Collection)content;
@@ -844,13 +845,13 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				serializeAnything(out, content, contentType, null, null, null, false, cf, isMixedOrText, preserveWhitespace, null);
 			}
 		} else {
-			out.attr("nil", "true").append('>').nlIf(! isMixedOrText, indent);
+			out.attr("nil", "true").w('>').nlIf(! isMixedOrText, indent);
 		}
 		return isMixedOrText ? CR_MIXED : CR_ELEMENTS;
 	}
 
 	private XmlWriter serializeCollection(XmlWriter out, Object in, ClassMeta<?> sType,
-			ClassMeta<?> eType, BeanPropertyMeta ppMeta, boolean isMixed) throws IOException, SerializeException {
+			ClassMeta<?> eType, BeanPropertyMeta ppMeta, boolean isMixed) throws SerializeException {
 
 		ClassMeta<?> eeType = eType.getElementType();
 

@@ -1913,9 +1913,9 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	public MockRestClient(Builder builder) {
 		super(preInit(builder));
 		restContext = builder.restContext;
-		contextPath = optional(builder.contextPath).orElse("");
-		servletPath = optional(builder.servletPath).orElse("");
-		pathVars = optional(builder.pathVars).orElse(emptyMap());
+		contextPath = builder.contextPath != null ? builder.contextPath : "";
+		servletPath = builder.servletPath != null ? builder.servletPath : "";
+		pathVars = builder.pathVars != null ? builder.pathVars : emptyMap();
 		restObject = restContext.getResource();
 
 		HttpClientConnectionManager ccm = getHttpClientConnectionManager();
@@ -1928,7 +1928,9 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			Object restBean = builder.restBean;
 			String contextPath = builder.contextPath;
 			String servletPath = builder.servletPath;
-			String rootUrl = optional(builder.getRootUri()).orElse("http://localhost");
+			String rootUrl = builder.getRootUri();
+			if (rootUrl == null)
+				rootUrl = "http://localhost";
 
 			Class<?> c = restBean instanceof Class ? (Class<?>)restBean : restBean.getClass();
 			if (! REST_CONTEXTS.containsKey(c)) {

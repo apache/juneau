@@ -327,10 +327,8 @@ public class BeanpAnnotation {
 		@Override
 		public void apply(AnnotationInfo<Beanp> ai, BeanContext.Builder b) {
 			Beanp a = ai.inner();
-
-			if (isEmpty(a.on()))
+			if (isEmptyArray(a.on()))
 				return;
-
 			b.annotations(copy(a, vr()));
 		}
 	}

@@ -30,7 +30,7 @@ public class StringRanges_Test {
 	public void a01_match() throws Exception {
 		List<String> x = alist("foo","bar","baz");
 
-		assertInteger(of(null).match(x)).is(-1);
+		assertInteger(of((String)null).match(x)).is(-1);
 
 		assertInteger(of("foo;q=0.5,bar").match(x)).is(1);
 		assertInteger(of("foo;q=0.5,bar").match(x)).is(1);
@@ -46,16 +46,16 @@ public class StringRanges_Test {
 	@Test
 	public void a02_getRange() throws Exception {
 		assertString(of("foo").getRange(0)).isNotNull();
-		assertString(of(null).getRange(0)).isNull();
+		assertString(of((String)null).getRange(0)).isNull();
 		assertString(of("").getRange(0)).isNull();
-		assertString(of(null).getRange(-1)).isNull();
-		assertString(of(null).getRange(1)).isNull();
+		assertString(of((String)null).getRange(-1)).isNull();
+		assertString(of((String)null).getRange(1)).isNull();
 	}
 
 	@Test
 	public void a03_getRanges() throws Exception {
-		assertObject(of("foo").getRanges()).asJson().is("['foo']");
-		assertObject(of(null).getRanges()).asJson().is("[]");
+		assertObject(of("foo").toList()).asJson().is("['foo']");
+		assertObject(of((String)null).toList()).asJson().is("[]");
 	}
 
 	@Test

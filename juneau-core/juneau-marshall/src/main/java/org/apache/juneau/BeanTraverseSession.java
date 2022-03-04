@@ -15,7 +15,6 @@ package org.apache.juneau;
 import static org.apache.juneau.collections.OMap.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-
 import java.text.*;
 import java.util.*;
 import java.util.function.*;
@@ -251,9 +250,7 @@ public class BeanTraverseSession extends BeanSession {
 	 * @throws BeanRecursionException If recursion occurred.
 	 */
 	protected final boolean willRecurse(String attrName, Object o, ClassMeta<?> cm) throws BeanRecursionException {
-		if (! (isDetectRecursions() || isDebug()))
-			return false;
-		if (! set.containsKey(o))
+		if (! (isDetectRecursions() || isDebug()) || ! set.containsKey(o))
 			return false;
 		if (isIgnoreRecursions() && ! isDebug())
 			return true;
@@ -386,10 +383,12 @@ public class BeanTraverseSession extends BeanSession {
 	 * @return A map, typically containing something like <c>{line:123,column:456,currentProperty:"foobar"}</c>
 	 */
 	public final OMap getLastLocation() {
+		Predicate<Object> nn = ObjectUtils::isNotNull;
+		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty;
 		return OMap.create()
-			.appendSkipNull("currentClass", currentClass)
-			.appendSkipNull("currentProperty", currentProperty)
-			.appendSkipEmpty("stack", stack);
+			.appendIf(nn, "currentClass", currentClass)
+			.appendIf(nn, "currentProperty", currentProperty)
+			.appendIf(nec, "stack", stack);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

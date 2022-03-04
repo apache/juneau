@@ -83,9 +83,8 @@ public final class JsonWriter extends SerializerWriter {
 	 *
 	 * @param s The object being serialized.
 	 * @return This object.
-	 * @throws IOException Should never happen.
 	 */
-	public JsonWriter stringValue(String s) throws IOException {
+	public JsonWriter stringValue(String s) {
 		if (s == null)
 			return this;
 		boolean doConvert = false;
@@ -95,29 +94,29 @@ public final class JsonWriter extends SerializerWriter {
 		}
 		q();
 		if (! doConvert) {
-			out.append(s);
+			w(s);
 		} else {
 			for (int i = 0; i < s.length(); i++) {
 				char c = s.charAt(i);
 				if (ec.contains(c)) {
 					if (c == '\n')
-						out.append('\\').append('n');
+						w('\\').w('n');
 					else if (c == '\t')
-						out.append('\\').append('t');
+						w('\\').w('t');
 					else if (c == '\b')
-						out.append('\\').append('b');
+						w('\\').w('b');
 					else if (c == '\f')
-						out.append('\\').append('f');
+						w('\\').w('f');
 					else if (c == quoteChar)
-						out.append('\\').append(quoteChar);
+						w('\\').w(quoteChar);
 					else if (c == '\\')
-						out.append('\\').append('\\');
+						w('\\').w('\\');
 					else if (c == '/' && escapeSolidus)
-						out.append('\\').append('/');
+						w('\\').w('/');
 					else if (c != '\r')
-						out.append(c);
+						w(c);
 				} else {
-					out.append(c);
+					w(c);
 				}
 			}
 		}
@@ -130,9 +129,8 @@ public final class JsonWriter extends SerializerWriter {
 	 *
 	 * @param s The object being serialized.
 	 * @return This object.
-	 * @throws IOException Should never happen.
 	 */
-	public JsonWriter attr(String s) throws IOException {
+	public JsonWriter attr(String s) {
 
 		if (trimStrings)
 			s = StringUtils.trim(s);
@@ -172,7 +170,7 @@ public final class JsonWriter extends SerializerWriter {
 		if (doConvert)
 			stringValue(s);
 		else
-			out.append(s);
+			w(s);
 
 		return this;
 	}
@@ -182,26 +180,9 @@ public final class JsonWriter extends SerializerWriter {
 	 *
 	 * @param uri The URI to append to the output.
 	 * @return This object.
-	 * @throws IOException Thrown by underlying stream.
 	 */
-	public SerializerWriter uriValue(Object uri) throws IOException {
+	public SerializerWriter uriValue(Object uri) {
 		return stringValue(uriResolver.resolve(uri));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Overridden methods
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Override /* SerializerWriter */
-	public JsonWriter cr(int depth) throws IOException {
-		super.cr(depth);
-		return this;
-	}
-
-	@Override /* SerializerWriter */
-	public JsonWriter cre(int depth) throws IOException {
-		super.cre(depth);
-		return this;
 	}
 
 	/**
@@ -209,41 +190,10 @@ public final class JsonWriter extends SerializerWriter {
 	 *
 	 * @param depth The current indentation depth.
 	 * @return This object.
-	 * @throws IOException Thrown by underlying stream.
 	 */
-	public JsonWriter smi(int depth) throws IOException {
+	public JsonWriter smi(int depth) {
 		if (depth > maxIndent)
 			super.s();
-		return this;
-	}
-
-	@Override /* SerializerWriter */
-	public JsonWriter appendln(int indent, String text) throws IOException {
-		super.appendln(indent, text);
-		return this;
-	}
-
-	@Override /* SerializerWriter */
-	public JsonWriter appendln(String text) throws IOException {
-		super.appendln(text);
-		return this;
-	}
-
-	@Override /* SerializerWriter */
-	public JsonWriter append(int indent, String text) throws IOException {
-		super.append(indent, text);
-		return this;
-	}
-
-	@Override /* SerializerWriter */
-	public JsonWriter append(int indent, char c) throws IOException {
-		super.append(indent, c);
-		return this;
-	}
-
-	@Override /* SerializerWriter */
-	public JsonWriter s() throws IOException {
-		super.s();
 		return this;
 	}
 
@@ -252,59 +202,120 @@ public final class JsonWriter extends SerializerWriter {
 	 *
 	 * @param indent The number of spaces to indent.
 	 * @return This object.
-	 * @throws IOException Thrown by underlying stream.
 	 */
-	public JsonWriter s(int indent) throws IOException {
+	public JsonWriter s(int indent) {
 		if (indent <= maxIndent)
 			super.s();
 		return this;
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Overridden methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	// <FluentSetters>
+
 	@Override /* SerializerWriter */
-	public JsonWriter q() throws IOException {
+	public JsonWriter cr(int depth) {
+		super.cr(depth);
+		return this;
+	}
+
+	@Override /* SerializerWriter */
+	public JsonWriter cre(int depth) {
+		super.cre(depth);
+		return this;
+	}
+
+	@Override /* SerializerWriter */
+	public JsonWriter appendln(int indent, String text) {
+		super.appendln(indent, text);
+		return this;
+	}
+
+	@Override /* SerializerWriter */
+	public JsonWriter appendln(String text) {
+		super.appendln(text);
+		return this;
+	}
+
+	@Override /* SerializerWriter */
+	public JsonWriter append(int indent, String text) {
+		super.append(indent, text);
+		return this;
+	}
+
+	@Override /* SerializerWriter */
+	public JsonWriter append(int indent, char c) {
+		super.append(indent, c);
+		return this;
+	}
+
+	@Override /* SerializerWriter */
+	public JsonWriter s() {
+		super.s();
+		return this;
+	}
+
+	@Override /* SerializerWriter */
+	public JsonWriter w(char value) {
+		super.w(value);
+		return this;
+	}
+
+	@Override /* SerializerWriter */
+	public JsonWriter w(String value) {
+		super.w(value);
+		return this;
+	}
+
+	@Override /* SerializerWriter */
+	public JsonWriter q() {
 		super.q();
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public JsonWriter i(int indent) throws IOException {
+	public JsonWriter i(int indent) {
 		super.i(indent);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public JsonWriter nl(int indent) throws IOException {
+	public JsonWriter nl(int indent) {
 		super.nl(indent);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public JsonWriter append(Object text) throws IOException {
+	public JsonWriter append(Object text) {
 		super.append(text);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public JsonWriter append(String text) throws IOException {
+	public JsonWriter append(String text) {
 		super.append(text);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public JsonWriter appendIf(boolean b, String text) throws IOException {
+	public JsonWriter appendIf(boolean b, String text) {
 		super.appendIf(b, text);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public JsonWriter appendIf(boolean b, char c) throws IOException {
+	public JsonWriter appendIf(boolean b, char c) {
 		super.appendIf(b, c);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public JsonWriter append(char c) throws IOException {
+	public JsonWriter append(char c) {
 		super.append(c);
 		return this;
 	}
+
+	// </FluentSetters>
 }

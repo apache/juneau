@@ -75,7 +75,7 @@ import org.apache.juneau.internal.*;
  * @serial exclude
  */
 @Header("Accept-Charset")
-public class AcceptCharset extends BasicStringRangeArrayHeader {
+public class AcceptCharset extends BasicStringRangesHeader {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

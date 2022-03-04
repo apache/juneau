@@ -31,21 +31,18 @@ import org.apache.juneau.assertions.*;
  */
 public class BasicBooleanPart extends BasicPart {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Static creator.
 	 *
 	 * @param name The part name.
-	 * @param value
-	 * 	The part value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Boolean} - As-is.
-	 * 		<li>{@link String} - Parsed using {@link Boolean#parseBoolean(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c> and then parsed.
-	 * 	</ul>
+	 * @param value The part value.
 	 * @return A new {@link BasicBooleanPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicBooleanPart of(String name, Object value) {
+	public static BasicBooleanPart of(String name, Boolean value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicBooleanPart(name, value);
@@ -58,56 +55,83 @@ public class BasicBooleanPart extends BasicPart {
 	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.
 	 *
 	 * @param name The part name.
-	 * @param value
-	 * 	The part value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Boolean} - As-is.
-	 * 		<li>{@link String} - Parsed using {@link Boolean#parseBoolean(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c> and then parsed.
-	 * 	</ul>
-	 * @return A new {@link BasicBooleanPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * @param value The part value supplier.
+	 * @return A new {@link BasicBooleanPart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
-	public static BasicBooleanPart of(String name, Supplier<?> value) {
+	public static BasicBooleanPart of(String name, Supplier<Boolean> value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicBooleanPart(name, value);
 	}
 
-	private Boolean parsed;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final Boolean value;
+	private final Supplier<Boolean> supplier;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param name The part name.
-	 * @param value
-	 * 	The part value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Boolean} - As-is.
-	 * 		<li>{@link String} - Parsed using {@link Boolean#parseBoolean(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c> and then parsed.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * @param name The part name.  Must not be <jk>null</jk>.
+	 * @param value The part value.  Can be <jk>null</jk>.
 	 */
-	public BasicBooleanPart(String name, Object value) {
+	public BasicBooleanPart(String name, Boolean value) {
 		super(name, value);
-		if (! isSupplier(value))
-			parsed = getParsedValue();
+		this.value = value;
+		this.supplier = null;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param name The part name.  Must not be <jk>null</jk>.
+	 * @param value The part value supplier.  Can be <jk>null</jk> or supply <jk>null</jk>.
+	 */
+	public BasicBooleanPart(String name, Supplier<Boolean> value) {
+		super(name, value);
+		this.value = null;
+		this.supplier = value;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * <jk>null</jk> and empty values are treated as <jk>null</jk>.
+	 * Otherwise parses using {@link Boolean#valueOf(String)}.
+	 *
+	 * @param name The part name.  Must not be <jk>null</jk>.
+	 * @param value The part value.  Can be <jk>null</jk>.
+	 */
+	public BasicBooleanPart(String name, String value) {
+		super(name, value);
+		this.value = isEmpty(value) ? null : Boolean.valueOf(value);
+		this.supplier = null;
 	}
 
 	@Override /* NameValuePair */
 	public String getValue() {
-		return stringify(getParsedValue());
+		return stringify(value());
 	}
 
 	/**
-	 * Returns The part value as a boolean.
+	 * Returns The part value as a {@link Boolean} wrapped in an {@link Optional}.
 	 *
-	 * @return The part value as a boolean.
+	 * @return The part value as a {@link Boolean} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Boolean> asBoolean() {
-		return optional(getParsedValue());
+		return optional(toBoolean());
+	}
+
+	/**
+	 * Returns The part value as a {@link Boolean}.
+	 *
+	 * @return The part value as a {@link Boolean}, or <jk>null</jk> if the value <jk>null</jk>.
+	 */
+	public Boolean toBoolean() {
+		return value();
 	}
 
 	/**
@@ -117,20 +141,26 @@ public class BasicBooleanPart extends BasicPart {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public FluentBooleanAssertion<BasicBooleanPart> assertBoolean() {
-		return new FluentBooleanAssertion<>(getParsedValue(), this);
+		return new FluentBooleanAssertion<>(value(), this);
 	}
 
-	private Boolean getParsedValue() {
-		if (parsed != null)
-			return parsed;
-		Object o = getRawValue();
-		if (o == null)
-			return null;
-		if (o instanceof Boolean)
-			return (Boolean)o;
-		String s = o.toString();
-		if (isEmpty(s))
-			return null;
-		return Boolean.parseBoolean(s);
+	/**
+	 * Return the value if present, otherwise return <c>other</c>.
+	 *
+	 * <p>
+	 * This is a shortened form for calling <c>asBoolean().orElse(<jv>other</jv>)</c>.
+	 *
+	 * @param other The value to be returned if there is no value present, can be <jk>null</jk>.
+	 * @return The value, if present, otherwise <c>other</c>.
+	 */
+	public Boolean orElse(Boolean other) {
+		Boolean x = value();
+		return x != null ? x : other;
+	}
+
+	private Boolean value() {
+		if (supplier != null)
+			return supplier.get();
+		return value;
 	}
 }

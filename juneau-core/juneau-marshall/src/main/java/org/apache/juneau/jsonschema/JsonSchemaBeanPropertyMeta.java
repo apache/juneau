@@ -49,8 +49,7 @@ public class JsonSchemaBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		this.schema = new OMap();
 
 		try {
-			for (Schema s : bpm.getAnnotations(Schema.class))
-				schema.append(SchemaAnnotation.asMap(s));
+			bpm.forEachAnnotation(Schema.class, x -> true, x -> schema.append(SchemaAnnotation.asMap(x)));
 		} catch (ParseException e) {
 			throw runtimeException(e);
 		}

@@ -351,7 +351,8 @@ public class BeanStore {
 		BeanStoreEntry<T> e = createEntry(beanType, bean, name);
 		try (SimpleLock x = lock.write()) {
 			entries.addFirst(e);
-			if (name == null) unnamedEntries.put(beanType, e);
+			if (name == null)
+				unnamedEntries.put(beanType, e);
 		}
 		return this;
 	}
@@ -476,7 +477,8 @@ public class BeanStore {
 	public BeanStore removeBean(Class<?> beanType, String name) {
 		assertCanWrite();
 		try (SimpleLock x = lock.write()) {
-			if (name == null) unnamedEntries.remove(beanType);
+			if (name == null)
+				unnamedEntries.remove(beanType);
 			entries.removeIf(y -> y.matches(beanType, name));
 		}
 		return this;
@@ -611,9 +613,7 @@ public class BeanStore {
 				continue loop;
 			String beanName = findBeanName(pi);
 			Class<?> ptc = pt.inner();
-			if (beanName == null && !hasBean(ptc))
-				return false;
-			if (beanName != null && !hasBean(ptc, beanName))
+			if ((beanName == null && !hasBean(ptc)) || (beanName != null && !hasBean(ptc, beanName)))
 				return false;
 		}
 		return true;
@@ -685,12 +685,13 @@ public class BeanStore {
 	}
 
 	private OMap properties() {
+		Predicate<Boolean> nf = ObjectUtils::isTrue;
 		return filteredMap()
-			.a("entries", entries.stream().map(x -> x.properties()).collect(toList()))
-			.a("outer", ObjectUtils.identity(outer.orElse(null)))
-			.a("parent", parent.map(x->x.properties()).orElse(null))
-			.appendSkipFalse("readOnly", readOnly)
-			.appendSkipFalse("threadSafe", threadSafe)
+			.append("entries", entries.stream().map(x -> x.properties()).collect(toList()))
+			.append("outer", ObjectUtils.identity(outer.orElse(null)))
+			.append("parent", parent.map(x->x.properties()).orElse(null))
+			.appendIf(nf, "readOnly", readOnly)
+			.appendIf(nf, "threadSafe", threadSafe)
 		;
 	}
 }

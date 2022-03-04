@@ -1251,7 +1251,7 @@ public class BeanMapTest {
 		// With _type
 		OMap m = new OMap(session);
 		m.put("_type", "S");
-		m.put("f1", new OMap(session).a("_type", "R1").a("f1", 1));
+		m.put("f1", new OMap(session).append("_type", "R1").append("f1", 1));
 
 		S t = (S)m.cast(Object.class);
 		assertEquals(1, t.f1.f1);
@@ -1264,7 +1264,7 @@ public class BeanMapTest {
 
 		// Without _type
 		m = new OMap(session);
-		m.put("f1", new OMap(session).a("_type", R1.class.getName()).a("f1", 1));
+		m.put("f1", new OMap(session).append("_type", R1.class.getName()).append("f1", 1));
 
 		m = (OMap)m.cast(Object.class);
 		assertEquals(1, t.f1.f1);
@@ -1484,7 +1484,7 @@ public class BeanMapTest {
 		// With _type
 		OMap m = new OMap(session);
 		m.put("_type", "LinkedListOfR1");
-		m.put("items", new OList(session).a("{f1:1}"));
+		m.put("items", new OList(session).append("{f1:1}"));
 
 		List l = (List)m.cast(Object.class);
 		assertTrue(l instanceof LinkedList);
@@ -1518,7 +1518,7 @@ public class BeanMapTest {
 
 		// Without _type
 		m = new OMap(session);
-		m.put("items", new OList(session).a("{f1:1}"));
+		m.put("items", new OList(session).append("{f1:1}"));
 
 		l = m.cast(List.class);
 		assertTrue(l instanceof OList);
@@ -2035,37 +2035,6 @@ public class BeanMapTest {
 
 	public static class Y {
 		public List<String> f1 = new LinkedList<>();
-	}
-
-	//====================================================================================================
-	// entrySet(false).
-	//====================================================================================================
-	@Test
-	public void testIgnoreNulls() {
-		Z z = new Z();
-		BeanMap<Z> bm = BeanContext.DEFAULT.toBeanMap(z);
-
-		Iterator i = bm.getValues(false).iterator();
-		assertFalse(i.hasNext());
-
-		z.b = "";
-		i = bm.getValues(false).iterator();
-		assertTrue(i.hasNext());
-		i.next();
-		assertFalse(i.hasNext());
-
-		i = bm.getValues(true).iterator();
-		assertTrue(i.hasNext());
-		i.next();
-		assertTrue(i.hasNext());
-		i.next();
-		assertTrue(i.hasNext());
-		i.next();
-		assertFalse(i.hasNext());
-	}
-
-	public static class Z {
-		public String a, b, c;
 	}
 
 	//====================================================================================================

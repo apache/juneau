@@ -95,7 +95,7 @@ import org.apache.juneau.internal.*;
  * @serial exclude
  */
 @Header("Accept-Encoding")
-public class AcceptEncoding extends BasicStringRangeArrayHeader {
+public class AcceptEncoding extends BasicStringRangesHeader {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

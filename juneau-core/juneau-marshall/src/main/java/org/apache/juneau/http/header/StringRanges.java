@@ -12,10 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.internal.ArrayUtils.copyOf;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.http.message.*;
@@ -71,18 +73,28 @@ public class StringRanges {
 	/**
 	 * Returns a parsed string range header value.
 	 *
-	 * @param value The raw string range header value.
-	 * @return A parsed string range header value.
+	 * @param value The raw header value.
+	 * @return A parsed header value.
 	 */
 	public static StringRanges of(String value) {
 		return isEmpty(value) ? EMPTY : CACHE.get(value, ()->new StringRanges(value));
+	}
+
+	/**
+	 * Returns a parsed string range header value.
+	 *
+	 * @param value The raw header value.
+	 * @return A parsed header value.
+	 */
+	public static StringRanges of(StringRange...value) {
+		return value == null ? null : new StringRanges(value);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private final StringRange[] ranges;
+	private final StringRange[] value;
 	private final String string;
 
 	/**
@@ -97,18 +109,26 @@ public class StringRanges {
 	/**
 	 * Constructor.
 	 *
+	 * @param value The string range header value.
+	 */
+	public StringRanges(StringRange...value) {
+		this.string = join(value, ", ");
+		this.value = copyOf(value);
+	}
+
+	/**
+	 * Constructor.
+	 *
 	 * @param e The parsed string range header value.
 	 */
-	public StringRanges(HeaderElement[] e) {
+	public StringRanges(HeaderElement...e) {
 
-		List<StringRange> l = list();
-		for (HeaderElement e2 : e)
-			l.add(new StringRange(e2));
+		value = new StringRange[e.length];
+		for (int i = 0; i < e.length; i++)
+			value[i] = new StringRange(e[i]);
+		Arrays.sort(value, RANGE_COMPARATOR);
 
-		l.sort(RANGE_COMPARATOR);
-		ranges = l.toArray(new StringRange[l.size()]);
-
-		this.string = ranges.length == 1 ? ranges[0].toString() : StringUtils.join(l, ", ");
+		this.string = value.length == 1 ? value[0].toString() : StringUtils.join(value, ", ");
 	}
 
 	/**
@@ -161,7 +181,7 @@ public class StringRanges {
 
 		// Media ranges are ordered by 'q'.
 		// So we only need to search until we've found a match.
-		for (StringRange mr : ranges) {
+		for (StringRange mr : value) {
 			float q2 = mr.getQValue();
 
 			if (q2 < q || q2 == 0)
@@ -189,9 +209,9 @@ public class StringRanges {
 	 * @return The {@link MediaRange} at the specified index or <jk>null</jk> if the index is out of range.
 	 */
 	public StringRange getRange(int index) {
-		if (index < 0 || index >= ranges.length)
+		if (index < 0 || index >= value.length)
 			return null;
-		return ranges[index];
+		return value[index];
 	}
 
 	/**
@@ -199,12 +219,24 @@ public class StringRanges {
 	 *
 	 * @return The string ranges that make up this object.
 	 */
-	public List<StringRange> getRanges() {
-		return unmodifiable(alist(ranges));
+	public List<StringRange> toList() {
+		return ulist(value);
+	}
+
+	/**
+	 * Performs an action on the string ranges that make up this object.
+	 *
+	 * @param action The action to perform.
+	 * @return This object.
+	 */
+	public StringRanges forEachRange(Consumer<StringRange> action) {
+		for (StringRange r : value)
+			action.accept(r);
+		return this;
 	}
 
 	private static HeaderElement[] parse(String value) {
-		return BasicHeaderValueParser.parseElements(emptyIfNull(trim(value)), null);
+		return value == null ? null : BasicHeaderValueParser.parseElements(emptyIfNull(trim(value)), null);
 	}
 
 	@Override /* Object */

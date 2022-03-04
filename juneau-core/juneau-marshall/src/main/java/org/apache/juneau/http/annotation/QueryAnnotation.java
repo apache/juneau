@@ -14,6 +14,7 @@ package org.apache.juneau.http.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.annotation.*;
@@ -287,10 +288,8 @@ public class QueryAnnotation {
 		@Override
 		public void apply(AnnotationInfo<Query> ai, BeanContext.Builder b) {
 			Query a = ai.inner();
-
-			if (isEmpty(a.on()) && isEmpty(a.onClass()))
+			if (isEmptyArray(a.on(), a.onClass()))
 				return;
-
 			b.annotations(a);
 		}
 	}

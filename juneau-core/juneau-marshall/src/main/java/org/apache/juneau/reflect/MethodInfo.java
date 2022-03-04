@@ -276,6 +276,17 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	/**
 	 * Returns <jk>true</jk> if the specified annotation is not present on this method.
 	 *
+	 * @param annotationProvider The annotation provider.
+	 * @param type The annotation to look for.
+	 * @return <jk>true</jk> if the specified annotation is not present on this method.
+	 */
+	public final <A extends Annotation> boolean hasNoAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
+		return ! hasAnnotation(annotationProvider, type);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified annotation is not present on this method.
+	 *
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is not present on this method.
 	 */

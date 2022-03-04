@@ -144,7 +144,7 @@ import org.apache.juneau.internal.*;
  * @serial exclude
  */
 @Header("Accept")
-public class Accept extends BasicMediaRangeArrayHeader {
+public class Accept extends BasicMediaRangesHeader {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

@@ -18,6 +18,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.http.HttpParts.*;
 
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.http.message.*;
@@ -89,13 +90,11 @@ public class StringRange {
 		if (Float.compare(qValue.floatValue(), 1f) == 0) {
 			if (this.extensions.length > 0) {
 				sb.append(";q=").append(qValue);
-				for (NameValuePair p : extensions)
-					sb.append(';').append(p.getName()).append('=').append(p.getValue());
+				extensions.forEach(x -> sb.append(';').append(x.getName()).append('=').append(x.getValue()));
 			}
 		} else {
 			sb.append(";q=").append(qValue);
-			for (NameValuePair p : extensions)
-				sb.append(';').append(p.getName()).append('=').append(p.getValue());
+			extensions.forEach(x -> sb.append(';').append(x.getName()).append('=').append(x.getValue()));
 		}
 		string = sb.toString();
 	}
@@ -137,7 +136,19 @@ public class StringRange {
 	 * @return The optional list of extensions, never <jk>null</jk>.
 	 */
 	public List<NameValuePair> getExtensions() {
-		return unmodifiable(alist(extensions));
+		return ulist(extensions);
+	}
+
+	/**
+	 * Performs an action on the optional set of custom extensions defined for this type.
+	 *
+	 * @param action The action to perform.
+	 * @return This object.
+	 */
+	public StringRange forEachExtension(Consumer<NameValuePair> action) {
+		for (NameValuePair p : extensions)
+			action.accept(p);
+		return this;
 	}
 
 	/**

@@ -591,7 +591,8 @@ public final class PojoQuery {
 		}
 
 		public boolean matches(Number number) {
-			if (numberRanges.length == 0) return true;
+			if (numberRanges.length == 0)
+				return true;
 			for (int i = 0; i < numberRanges.length; i++)
 				if (numberRanges[i].matches(number))
 					return true;
@@ -637,7 +638,8 @@ public final class PojoQuery {
 		public boolean matches(Number n) {
 			long i = n.longValue();
 			boolean b = (i>=start && i<=end);
-			if (isNot) b = !b;
+			if (isNot)
+				b = !b;
 			return b;
 		}
 	}
@@ -686,7 +688,8 @@ public final class PojoQuery {
 		 */
 		@Override /* IMatcher */
 		public boolean matches(Object in) {
-			if (in == null) return false;
+			if (in == null)
+				return false;
 
 			Calendar c = null;
 			if (in instanceof Calendar)
@@ -784,7 +787,8 @@ public final class PojoQuery {
 		}
 
 		public boolean matches(Calendar c) {
-			if (ranges.length == 0) return true;
+			if (ranges.length == 0)
+				return true;
 			for (int i = 0; i < ranges.length; i++)
 				if (ranges[i].matches(c))
 					return true;
@@ -936,7 +940,8 @@ public final class PojoQuery {
 		 */
 		@Override /* IMatcher */
 		public boolean matches(Object in) {
-			if (in == null) return false;
+			if (in == null)
+				return false;
 			for (int i = 0; i < searchPatterns.length; i++) {
 				if (! searchPatterns[i].matches(in.toString()))
 					return false;
@@ -1007,14 +1012,20 @@ public final class PojoQuery {
 			boolean inDoubleQuote = false;
 			char[] ca = s.toCharArray();
 			for (int i = 0; i < ca.length; i++) {
-				if (ca[i] == '\\') escapeCount++;
+				if (ca[i] == '\\')
+					escapeCount++;
 				else if (escapeCount % 2 == 0) {
-					if (ca[i] == '\'') inSingleQuote = ! inSingleQuote;
-					else if (ca[i] == '"') inDoubleQuote = ! inDoubleQuote;
-					else if (ca[i] == '+' && (inSingleQuote || inDoubleQuote)) ca[i] = '\u9999';
-					else if (ca[i] == '-' && (inSingleQuote || inDoubleQuote)) ca[i] = '\u9998';
+					if (ca[i] == '\'')
+						inSingleQuote = ! inSingleQuote;
+					else if (ca[i] == '"')
+						inDoubleQuote = ! inDoubleQuote;
+					else if (ca[i] == '+' && (inSingleQuote || inDoubleQuote))
+						ca[i] = '\u9999';
+					else if (ca[i] == '-' && (inSingleQuote || inDoubleQuote))
+						ca[i] = '\u9998';
 				}
-				if (ca[i] != '\\') escapeCount = 0;
+				if (ca[i] != '\\')
+					escapeCount = 0;
 			}
 			s = new String(ca);
 
@@ -1079,7 +1090,8 @@ public final class PojoQuery {
 		}
 
 		public boolean matches(String input) {
-			if (input == null) return false;
+			if (input == null)
+				return false;
 			for (int i = 0; i < andPatterns.length; i++)
 				if (! andPatterns[i].matcher(input).matches())
 					return false;
@@ -1114,17 +1126,21 @@ public final class PojoQuery {
 		boolean inSingleQuote = false;
 		boolean inDoubleQuote = false;
 		for (int i = 0; i < sArray.length; i++) {
-			if (sArray[i] == '\\') escapeCount++;
+			if (sArray[i] == '\\')
+				escapeCount++;
 			else if (escapeCount % 2 == 0) {
-				if (sArray[i] == '\'' && ! inDoubleQuote) inSingleQuote = ! inSingleQuote;
-				else if (sArray[i] == '"' && ! inSingleQuote) inDoubleQuote = ! inDoubleQuote;
+				if (sArray[i] == '\'' && ! inDoubleQuote)
+					inSingleQuote = ! inSingleQuote;
+				else if (sArray[i] == '"' && ! inSingleQuote)
+					inDoubleQuote = ! inDoubleQuote;
 				else if (sArray[i] == c && ! inSingleQuote && ! inDoubleQuote) {
 					String s2 = new String(sArray, x1, i-x1).trim();
 					l.add(s2);
 					x1 = i+1;
 				}
 			}
-			if (sArray[i] != '\\') escapeCount = 0;
+			if (sArray[i] != '\\')
+				escapeCount = 0;
 		}
 		String s2 = new String(sArray, x1, sArray.length-x1).trim();
 		l.add(s2);
@@ -1145,7 +1161,8 @@ public final class PojoQuery {
 	 * @param ignoreEscapedChars Specify 'true' if escaped 'from' characters should be ignored.
 	 */
 	static String replace(String s, char from, char to, boolean ignoreEscapedChars) {
-		if (s == null) return null;
+		if (s == null)
+			return null;
 
 		char[] sArray = s.toCharArray();
 
@@ -1160,7 +1177,8 @@ public final class PojoQuery {
 				if (c == from && singleQuoteCount % 2 == 0 && doubleQuoteCount % 2 == 0)
 				sArray[i] = to;
 			}
-			if (sArray[i] != '\\') escapeCount = 0;
+			if (sArray[i] != '\\')
+				escapeCount = 0;
 		}
 		return new String(sArray);
 	}
@@ -1170,8 +1188,10 @@ public final class PojoQuery {
 	 */
 	static String unEscapeChars(String s, char[] toEscape) {
 		char escapeChar = '\\';
-		if (s == null) return null;
-		if (s.length() == 0) return s;
+		if (s == null)
+			return null;
+		if (s.length() == 0)
+			return s;
 		StringBuffer sb = new StringBuffer(s.length());
 		char[] sArray = s.toCharArray();
 		for (int i = 0; i < sArray.length; i++) {

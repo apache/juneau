@@ -136,8 +136,8 @@ public class UrlPathMatch {
 	@Override /* Object */
 	public String toString() {
 		return filteredMap()
-			.a("v", getVars())
-			.a("r", getRemainder())
+			.append("v", getVars())
+			.append("r", getRemainder())
 			.asString();
 	}
 }

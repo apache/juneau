@@ -12,13 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.http.HttpHeaders.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
-import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -26,19 +23,22 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
+
+import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.http.HttpHeaders.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class BasicEntityTagArrayHeader_Test {
+public class BasicCsvHeader_Test {
 
 	private static final String HEADER = "Foo";
-	private static final String VALUE = "\"foo\", \"bar\"";
-	private static final List<EntityTag> PARSED = alist(EntityTag.of("\"foo\""), EntityTag.of("\"bar\""));
+	private static final String VALUE = "foo, bar";
+	private static final String[] PARSED = { "foo", "bar" };
 
 	@Rest
 	public static class A {
 		@RestOp
-		public StringReader get(@Header(name=HEADER) @Schema(cf="multi",aev=true) String[] h) {
+		public StringReader get(@Header(name=HEADER) @Schema(cf="multi") String[] h) {
 			return reader(h == null ? "null" : StringUtils.join(h, '|'));
 		}
 	}
@@ -52,18 +52,45 @@ public class BasicEntityTagArrayHeader_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(entityTagArrayHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(entityTagArrayHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(entityTagArrayHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
-		c.get().header(entityTagArrayHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(csvHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(csvHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(csvHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
+		c.get().header(csvHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(entityTagArrayHeader("","*")).run().assertBody().isEmpty();
-		c.get().header(entityTagArrayHeader(null,"*")).run().assertBody().isEmpty();
-		c.get().header(entityTagArrayHeader(null,()->null)).run().assertBody().isEmpty();
-		c.get().header(entityTagArrayHeader(HEADER,(Supplier<List<EntityTag>>)null)).run().assertBody().isEmpty();
-		c.get().header(entityTagArrayHeader(null,(Supplier<List<EntityTag>>)null)).run().assertBody().isEmpty();
-		c.get().header(entityTagArrayHeader(HEADER,()->null)).run().assertBody().isEmpty();
+		c.get().header(csvHeader(HEADER,(Supplier<String[]>)null)).run().assertBody().isEmpty();
+		c.get().header(csvHeader(HEADER,()->null)).run().assertBody().isEmpty();
+		assertThrown(()->csvHeader("", VALUE)).message().is("Name cannot be empty on header.");
+		assertThrown(()->csvHeader(null, VALUE)).message().is("Name cannot be empty on header.");
+		assertThrown(()->csvHeader("", PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->csvHeader(null, PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->csvHeader("", ()->PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->csvHeader(null, ()->PARSED)).message().is("Name cannot be empty on header.");
+	}
+
+	@Test
+	public void a02_contains() throws Exception {
+		BasicCsvHeader x = new BasicCsvHeader("Foo", (String)null,"bar","baz");
+		assertBoolean(x.contains(null)).isTrue();
+		assertBoolean(x.containsIgnoreCase(null)).isTrue();
+		assertBoolean(x.contains("bar")).isTrue();
+		assertBoolean(x.containsIgnoreCase("bar")).isTrue();
+		assertBoolean(x.contains("qux")).isFalse();
+		assertBoolean(x.containsIgnoreCase("qux")).isFalse();
+		assertBoolean(x.contains("BAR")).isFalse();
+		assertBoolean(x.containsIgnoreCase("BAR")).isTrue();
+
+		BasicCsvHeader x2 = csvHeader("Foo",()->null);
+		assertBoolean(x2.contains((String)null)).isFalse();
+		assertBoolean(x2.containsIgnoreCase(null)).isFalse();
+		assertBoolean(x2.contains("bar")).isFalse();
+		assertBoolean(x2.containsIgnoreCase("bar")).isFalse();
+	}
+
+	@Test
+	public void a03_assertList() throws Exception {
+		csvHeader("Foo", "bar").assertList().contains("bar").assertList().doesNotContain("baz");
+		new BasicCsvHeader("Foo", (String)null).assertList().isNull();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -61,6 +61,8 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
+	private static final Namespace[] EMPTY_NAMESPACE_ARRAY = new Namespace[0];
+
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -1878,7 +1880,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		juneauNs = builder.juneauNs;
 		juneauBpNs = builder.juneauBpNs;
 		collectionFormat = builder.collectionFormat;
-		namespaces = optional(builder.namespaces).map(x -> x.toArray(new Namespace[0])).orElse(new Namespace[0]);
+		namespaces = builder.namespaces != null ? builder.namespaces.toArray(EMPTY_NAMESPACE_ARRAY) : EMPTY_NAMESPACE_ARRAY;
 		addBeanTypesRdf = builder.addBeanTypesRdf;
 		jenaSettings = new TreeMap<>(builder.jenaSettings);
 
@@ -2151,16 +2153,16 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	@Override /* Context */
 	protected OMap properties() {
 		return filteredMap()
-			.a("addLiteralTypes", addLiteralTypes)
-			.a("addRootProperty", addRootProperty)
-			.a("useXmlNamespaces", useXmlNamespaces)
-			.a("looseCollections", looseCollections)
-			.a("autoDetectNamespaces", autoDetectNamespaces)
-			.a("language", language)
-			.a("juneauNs", juneauNs)
-			.a("juneauBpNs", juneauBpNs)
-			.a("collectionFormat", collectionFormat)
-			.a("namespaces", namespaces)
-			.a("addBeanTypes", addBeanTypes);
+			.append("addLiteralTypes", addLiteralTypes)
+			.append("addRootProperty", addRootProperty)
+			.append("useXmlNamespaces", useXmlNamespaces)
+			.append("looseCollections", looseCollections)
+			.append("autoDetectNamespaces", autoDetectNamespaces)
+			.append("language", language)
+			.append("juneauNs", juneauNs)
+			.append("juneauBpNs", juneauBpNs)
+			.append("collectionFormat", collectionFormat)
+			.append("namespaces", namespaces)
+			.append("addBeanTypes", addBeanTypes);
 	}
 }

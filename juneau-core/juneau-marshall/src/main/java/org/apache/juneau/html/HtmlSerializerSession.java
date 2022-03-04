@@ -256,9 +256,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @return <jk>true</jk> if the specified object is a URL.
 	 */
 	public boolean isUri(ClassMeta<?> cm, BeanPropertyMeta pMeta, Object o) {
-		if (cm.isUri())
-			return true;
-		if (pMeta != null && pMeta.isUri())
+		if (cm.isUri() || (pMeta != null && pMeta.isUri()))
 			return true;
 		if (isDetectLinksInStrings() && o instanceof CharSequence && urlPattern.matcher(o.toString()).matches())
 			return true;
@@ -349,7 +347,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			XmlFormat format,
 			boolean isMixed,
 			boolean preserveWhitespace,
-			BeanPropertyMeta pMeta) throws IOException, SerializeException {
+			BeanPropertyMeta pMeta) throws SerializeException {
 
 		// If this is a bean, then we want to serialize it as HTML unless it's @Html(format=XML).
 		ClassMeta<?> type = push2(elementName, o, eType);
@@ -388,12 +386,11 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 * @param isRoot <jk>true</jk> if this is the root element of the document.
 	 * @param nlIfElement <jk>true</jk> if we should add a newline to the output before serializing only if the object is an element and not text.
 	 * @return The type of content encountered.  Either simple (no whitespace) or normal (elements with whitespace).
-	 * @throws IOException Thrown by underlying stream.
 	 * @throws SerializeException Generic serialization error occurred.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected ContentResult serializeAnything(XmlWriter out, Object o,
-			ClassMeta<?> eType, String name, BeanPropertyMeta pMeta, int xIndent, boolean isRoot, boolean nlIfElement) throws IOException, SerializeException {
+			ClassMeta<?> eType, String name, BeanPropertyMeta pMeta, int xIndent, boolean isRoot, boolean nlIfElement) throws SerializeException {
 
 		ClassMeta<?> aType = null;       // The actual type
 		ClassMeta<?> wType = null;     // The wrapped type (delegate)
@@ -456,9 +453,9 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				pop();
 				indent -= xIndent;
 				if (sType.isReader())
-					pipe((Reader)o, out);
+					pipe((Reader)o, out, SerializerSession::handleThrown);
 				else
-					pipe((InputStream)o, out);
+					pipe((InputStream)o, out, SerializerSession::handleThrown);
 				return ContentResult.CR_MIXED;
 			}
 
@@ -487,7 +484,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				return cr;
 
 			} else if (cHtml.isPlainText() || bpHtml.isPlainText()) {
-				out.write(o == null ? "null" : o.toString());
+				out.w(o == null ? "null" : o.toString());
 				cr = CR_MIXED;
 
 			} else if (o == null || (sType.isChar() && ((Character)o).charValue() == 0)) {
@@ -524,7 +521,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					Object urlProp = m.get(uriProperty.orElse(""));
 					Object nameProp = m.get(nameProperty.orElse(""));
 
-					out.oTag("a").attrUri("href", urlProp).append('>').text(nameProp).eTag("a");
+					out.oTag("a").attrUri("href", urlProp).w('>').text(nameProp).eTag("a");
 					cr = CR_MIXED;
 				} else {
 					out.nlIf(! isRoot, xIndent+2);
@@ -537,7 +534,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 			} else if (isUri(sType, pMeta, o)) {
 				String label = getAnchorText(pMeta, o);
-				out.oTag("a").attrUri("href", o).append('>');
+				out.oTag("a").attrUri("href", o).w('>');
 				out.text(label);
 				out.eTag("a");
 				cr = CR_MIXED;
@@ -557,7 +554,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void serializeMap(XmlWriter out, Map m, ClassMeta<?> sType,
-			ClassMeta<?> eKeyType, ClassMeta<?> eValueType, String typeName, BeanPropertyMeta ppMeta) throws IOException, SerializeException {
+			ClassMeta<?> eKeyType, ClassMeta<?> eValueType, String typeName, BeanPropertyMeta ppMeta) throws SerializeException {
 
 		ClassMeta<?> keyType = eKeyType == null ? string() : eKeyType;
 		ClassMeta<?> valueType = eValueType == null ? object() : eValueType;
@@ -583,45 +580,49 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		if (isSortMaps())
 			m = sort(m);
 
-		for (Map.Entry e : (Set<Map.Entry>)m.entrySet()) {
+		((Set<Map.Entry>)m.entrySet()).forEach(x -> serializeMapEntry(out, x, keyType, valueType, i, ppMeta));
 
-			Object key = generalize(e.getKey(), keyType);
-			Object value = null;
-			try {
-				value = e.getValue();
-			} catch (StackOverflowError t) {
-				throw t;
-			} catch (Throwable t) {
-				onError(t, "Could not call getValue() on property ''{0}'', {1}", e.getKey(), t.getLocalizedMessage());
-			}
-
-			String link = getLink(ppMeta);
-			String style = getStyle(this, ppMeta, value);
-
-			out.sTag(i+1, "tr").nl(i+2);
-			out.oTag(i+2, "td");
-			if (style != null)
-				out.attr("style", style);
-			out.cTag();
-			if (link != null)
-				out.oTag(i+3, "a").attrUri("href", link.replace("{#}", stringify(value))).cTag();
-			ContentResult cr = serializeAnything(out, key, keyType, null, null, 2, false, false);
-			if (link != null)
-				out.eTag("a");
-			if (cr == CR_ELEMENTS)
-				out.i(i+2);
-			out.eTag("td").nl(i+2);
-			out.sTag(i+2, "td");
-			cr = serializeAnything(out, value, valueType, (key == null ? "_x0000_" : toString(key)), null, 2, false, true);
-			if (cr == CR_ELEMENTS)
-				out.ie(i+2);
-			out.eTag("td").nl(i+2);
-			out.ie(i+1).eTag("tr").nl(i+1);
-		}
 		out.ie(i).eTag("table").nl(i);
 	}
 
-	private void serializeBeanMap(XmlWriter out, BeanMap<?> m, ClassMeta<?> eType, BeanPropertyMeta ppMeta) throws IOException, SerializeException {
+	@SuppressWarnings("rawtypes")
+	private void serializeMapEntry(XmlWriter out, Map.Entry e, ClassMeta<?> keyType, ClassMeta<?> valueType, int i, BeanPropertyMeta ppMeta) throws SerializeException {
+		Object key = generalize(e.getKey(), keyType);
+		Object value = null;
+		try {
+			value = e.getValue();
+		} catch (StackOverflowError t) {
+			throw t;
+		} catch (Throwable t) {
+			onError(t, "Could not call getValue() on property ''{0}'', {1}", e.getKey(), t.getLocalizedMessage());
+		}
+
+		String link = getLink(ppMeta);
+		String style = getStyle(this, ppMeta, value);
+
+		out.sTag(i+1, "tr").nl(i+2);
+		out.oTag(i+2, "td");
+		if (style != null)
+			out.attr("style", style);
+		out.cTag();
+		if (link != null)
+			out.oTag(i+3, "a").attrUri("href", link.replace("{#}", stringify(value))).cTag();
+		ContentResult cr = serializeAnything(out, key, keyType, null, null, 2, false, false);
+		if (link != null)
+			out.eTag("a");
+		if (cr == CR_ELEMENTS)
+			out.i(i+2);
+		out.eTag("td").nl(i+2);
+		out.sTag(i+2, "td");
+		cr = serializeAnything(out, value, valueType, (key == null ? "_x0000_" : toString(key)), null, 2, false, true);
+		if (cr == CR_ELEMENTS)
+			out.ie(i+2);
+		out.eTag("td").nl(i+2);
+		out.ie(i+1).eTag("tr").nl(i+1);
+
+	}
+
+	private void serializeBeanMap(XmlWriter out, BeanMap<?> m, ClassMeta<?> eType, BeanPropertyMeta ppMeta) throws SerializeException {
 
 		HtmlClassMeta cHtml = getHtmlClassMeta(m.getClassMeta());
 		HtmlBeanPropertyMeta bpHtml = getHtmlBeanPropertyMeta(ppMeta);
@@ -634,7 +635,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		if (typeName != null && eType != m.getClassMeta())
 			out.attr(getBeanTypePropertyName(m.getClassMeta()), typeName);
 
-		out.append('>').nl(i);
+		out.w('>').nl(i);
 		if (isAddKeyValueTableHeaders() && ! (cHtml.isNoTableHeaders() || bpHtml.isNoTableHeaders())) {
 			out.sTag(i+1, "tr").nl(i+1);
 			out.sTag(i+2, "th").append("key").eTag("th").nl(i+2);
@@ -642,18 +643,16 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			out.ie(i+1).eTag("tr").nl(i+1);
 		}
 
-		for (BeanPropertyValue p : m.getValues(isKeepNullProperties())) {
-			BeanPropertyMeta pMeta = p.getMeta();
-			ClassMeta<?> cMeta = p.getClassMeta();
+		Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
 
-			String key = p.getName();
-			Object value = p.getValue();
-			Throwable t = p.getThrown();
-			if (t != null)
-				onBeanGetterException(pMeta, t);
+		m.forEachValue(checkNull, (pMeta,key,value,thrown) -> {
+			ClassMeta<?> cMeta = pMeta.getClassMeta();
+
+			if (thrown != null)
+				onBeanGetterException(pMeta, thrown);
 
 			if (canIgnoreValue(cMeta, key, value))
-				continue;
+				return;
 
 			String link = null, anchorText = null;
 			if (! cMeta.isCollectionOrArray()) {
@@ -685,17 +684,17 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			} catch (Error e) {
 				throw e;
 			} catch (Throwable e) {
-				e.printStackTrace();
 				onBeanGetterException(pMeta, e);
 			}
 			out.eTag("td").nl(i+2);
 			out.ie(i+1).eTag("tr").nl(i+1);
-		}
+		});
+
 		out.ie(i).eTag("table").nl(i);
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void serializeCollection(XmlWriter out, Object in, ClassMeta<?> sType, ClassMeta<?> eType, String name, BeanPropertyMeta ppMeta) throws IOException, SerializeException {
+	private void serializeCollection(XmlWriter out, Object in, ClassMeta<?> sType, ClassMeta<?> eType, String name, BeanPropertyMeta ppMeta) throws SerializeException {
 
 		HtmlClassMeta cHtml = getHtmlClassMeta(sType);
 		HtmlBeanPropertyMeta bpHtml = getHtmlBeanPropertyMeta(ppMeta);
@@ -730,7 +729,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 
 		if (th != null) {
 
-			out.oTag(i, "table").attr(btpn, type2).append('>').nl(i+1);
+			out.oTag(i, "table").attr(btpn, type2).w('>').nl(i+1);
 			if (th.length > 0) {
 				out.sTag(i+1, "tr").nl(i+2);
 				for (Object key : th) {
@@ -823,7 +822,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			out.oTag(i, isDc ? "p" : "ul");
 			if (! type2.equals("array"))
 				out.attr(btpn, type2);
-			out.append('>').nl(i+1);
+			out.w('>').nl(i+1);
 			boolean isFirst = true;
 			for (Object o : c) {
 				if (isDc && ! isFirst)
@@ -927,13 +926,12 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					if (! cm1.isInstance(o))
 						return null;
 					Map m = sort((Map)o);
-					for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
-						if (! set.contains(e.getKey()))
-							set.add(e.getKey());
+					m.forEach((k,v) -> {
+						if (! set.contains(k)) set.add(k);
+					});
 				}
 			}
 			return set.toArray(new Object[set.size()]);
-
 		}
 
 		// Must be a bean or BeanMap.

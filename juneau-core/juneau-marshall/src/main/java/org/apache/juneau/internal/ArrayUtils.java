@@ -265,9 +265,7 @@ public final class ArrayUtils {
 	 * 	<c>-1</c> if the array doesn't contain the element, or the array or element is <jk>null</jk>.
 	 */
 	public static int indexOf(String element, String[] array) {
-		if (element == null)
-			return -1;
-		if (array == null)
+		if (element == null || array == null)
 			return -1;
 		for (int i = 0; i < array.length; i++)
 			if (element.equals(array[i]))
@@ -318,5 +316,36 @@ public final class ArrayUtils {
 	 */
 	public static <T> T[] copyOf(T[] array) {
 		return array == null ? null : Arrays.copyOf(array, array.length);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified array is not null and has a length greater than zero.
+	 *
+	 * @param array The array to check.
+	 * @return <jk>true</jk> if the specified array is not null and has a length greater than zero.
+	 */
+	public static final boolean isNotEmptyArray(Object[] array) {
+		return array != null && array.length > 0;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified array is null or has a length of zero.
+	 *
+	 * @param array The array to check.
+	 * @return <jk>true</jk> if the specified array is null or has a length of zero.
+	 */
+	public static final boolean isEmptyArray(Object[] array) {
+		return array == null || array.length == 0;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if both specified arrays are null or have a length of zero.
+	 *
+	 * @param array1 The array to check.
+	 * @param array2 The array to check.
+	 * @return <jk>true</jk> if the specified array is null or has a length of zero.
+	 */
+	public static final boolean isEmptyArray(Object[] array1, Object[] array2) {
+		return isEmptyArray(array1) && isEmptyArray(array2);
 	}
 }

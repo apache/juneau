@@ -19,7 +19,6 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.*;
 import java.util.regex.*;
-import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
@@ -126,7 +125,7 @@ public interface FileFinder {
 
 		final Set<LocalDir> roots;
 		long cachingLimit;
-		List<Pattern> include, exclude;
+		Pattern[] include, exclude;
 
 		/**
 		 * Constructor.
@@ -137,8 +136,8 @@ public interface FileFinder {
 			super(BasicFileFinder.class, beanStore);
 			roots = set();
 			cachingLimit = -1;
-			include = list(Pattern.compile(".*"));
-			exclude = list();
+			include = new Pattern[]{Pattern.compile(".*")};
+			exclude = new Pattern[0];
 		}
 
 		@Override /* BeanBuilder */
@@ -214,7 +213,7 @@ public interface FileFinder {
 		 */
 		@FluentSetter
 		public Builder include(String...patterns) {
-			this.include = alist(patterns).stream().map(x->Pattern.compile(x)).collect(Collectors.toList());
+			this.include = alist(patterns).stream().map(x->Pattern.compile(x)).toArray(Pattern[]::new);
 			return this;
 		}
 
@@ -228,7 +227,7 @@ public interface FileFinder {
 		 */
 		@FluentSetter
 		public Builder exclude(String...patterns) {
-			this.exclude = alist(patterns).stream().map(x->Pattern.compile(x)).collect(Collectors.toList());
+			this.exclude = alist(patterns).stream().map(x->Pattern.compile(x)).toArray(Pattern[]::new);
 			return this;
 		}
 

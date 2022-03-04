@@ -13,7 +13,6 @@
 package org.apache.juneau.xml;
 
 import static org.apache.juneau.collections.OMap.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -798,9 +797,9 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		resolver = builder.resolver;
 		eventAllocator = builder.eventAllocator;
 
-		reporterImpl = optional(reporter).map(x -> newInstance(x)).orElse(null);
-		resolverImpl = optional(resolver).map(x -> newInstance(x)).orElse(null);
-		eventAllocatorImpl = optional(eventAllocator).map(x -> newInstance(x)).orElse(null);
+		reporterImpl = reporter != null ? newInstance(reporter) : null;
+		resolverImpl = resolver != null ? newInstance(resolver) : null;
+		eventAllocatorImpl = eventAllocator != null ? newInstance(eventAllocator) : null;
 	}
 
 	@Override /* Context */
@@ -928,10 +927,10 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	@Override /* Context */
 	protected OMap properties() {
 		return filteredMap()
-			.a("validating", validating)
-			.a("preserveRootElement", preserveRootElement)
-			.a("reporter", reporter)
-			.a("resolver", resolver)
-			.a("eventAllocator", eventAllocator);
+			.append("validating", validating)
+			.append("preserveRootElement", preserveRootElement)
+			.append("reporter", reporter)
+			.append("resolver", resolver)
+			.append("eventAllocator", eventAllocator);
 	}
 }

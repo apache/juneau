@@ -24,6 +24,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 
 import org.junit.*;
@@ -58,12 +59,14 @@ public class BasicBooleanHeader_Test {
 		c.get().header(booleanHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(booleanHeader("","*")).run().assertBody().isEmpty();
-		c.get().header(booleanHeader(null,"*")).run().assertBody().isEmpty();
-		c.get().header(booleanHeader(null,()->null)).run().assertBody().isEmpty();
 		c.get().header(booleanHeader(HEADER,(Supplier<Boolean>)null)).run().assertBody().isEmpty();
-		c.get().header(booleanHeader(null,(Supplier<Boolean>)null)).run().assertBody().isEmpty();
 		c.get().header(booleanHeader(HEADER,()->null)).run().assertBody().isEmpty();
+		assertThrown(()->booleanHeader("", VALUE)).message().is("Name cannot be empty on header.");
+		assertThrown(()->booleanHeader(null, VALUE)).message().is("Name cannot be empty on header.");
+		assertThrown(()->booleanHeader("", PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->booleanHeader(null, PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->booleanHeader("", ()->PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->booleanHeader(null, ()->PARSED)).message().is("Name cannot be empty on header.");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

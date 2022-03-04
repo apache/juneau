@@ -128,8 +128,8 @@ public class BeanStoreEntry<T> {
 	 */
 	protected OMap properties() {
 		return filteredMap()
-			.a("type", simpleClassName(getType()))
-			.a("bean", ObjectUtils.identity(get()))
-			.a("name", getName());
+			.append("type", simpleClassName(getType()))
+			.append("bean", ObjectUtils.identity(get()))
+			.append("name", getName());
 	}
 }

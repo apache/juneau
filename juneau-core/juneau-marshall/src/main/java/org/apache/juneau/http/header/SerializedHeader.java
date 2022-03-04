@@ -57,10 +57,11 @@ public class SerializedHeader extends BasicHeader {
 	 * @param value
 	 * 	The POJO to serialize as the header value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static SerializedHeader of(String name, Object value) {
-		return isEmpty(name) ? null : new SerializedHeader(name, value, null, null, false);
+		return new SerializedHeader(name, value, null, null, false);
 	}
 
 	/**
@@ -73,10 +74,11 @@ public class SerializedHeader extends BasicHeader {
 	 * @param value
 	 * 	The supplier of the POJO to serialize as the header value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static SerializedHeader of(String name, Supplier<?> value) {
-		return isEmpty(name) ? null : new SerializedHeader(name, value, null, null, false);
+		return new SerializedHeader(name, value, null, null, false);
 	}
 
 	/**
@@ -94,10 +96,11 @@ public class SerializedHeader extends BasicHeader {
 	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * 	<br>Can also be a {@link Supplier}.
 	 * @param skipIfEmpty If value is a blank string, the value should return as <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static SerializedHeader of(String name, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
-		return isEmpty(name) ? null : new SerializedHeader(name, value, serializer, schema, skipIfEmpty);
+		return new SerializedHeader(name, value, serializer, schema, skipIfEmpty);
 	}
 
 	/**
@@ -118,10 +121,11 @@ public class SerializedHeader extends BasicHeader {
 	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * 	<br>Can also be a {@link Supplier}.
 	 * @param skipIfEmpty If value is a blank string, the value should return as <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static SerializedHeader of(String name, Supplier<?> value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
-		return isEmpty(name) ? null : new SerializedHeader(name, value, serializer, schema, skipIfEmpty);
+		return new SerializedHeader(name, value, serializer, schema, skipIfEmpty);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -148,6 +152,7 @@ public class SerializedHeader extends BasicHeader {
 	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * 	<br>Can also be a {@link Supplier}.
 	 * @param skipIfEmpty If value is a blank string, the value should return as <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	@SuppressWarnings("unchecked")
 	public SerializedHeader(String name, Object value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
@@ -176,6 +181,7 @@ public class SerializedHeader extends BasicHeader {
 	 * 	<br>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * 	<br>Can also be a {@link Supplier}.
 	 * @param skipIfEmpty If value is a blank string, the value should return as <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public SerializedHeader(String name, Supplier<Object> value, HttpPartSerializerSession serializer, HttpPartSchema schema, boolean skipIfEmpty) {
 		super(name, null);
@@ -292,12 +298,10 @@ public class SerializedHeader extends BasicHeader {
 			HttpPartSchema schema = this.schema == null ? HttpPartSchema.DEFAULT : this.schema;
 			String def = schema.getDefault();
 			if (v == null) {
-				if (def == null && ! schema.isRequired())
-					return null;
-				if (def == null && schema.isAllowEmptyValue())
+				if ((def == null && ! schema.isRequired()) || (def == null && schema.isAllowEmptyValue()))
 					return null;
 			}
-			if (isEmpty(v) && skipIfEmpty && def == null)
+			if (isEmpty(stringify(v)) && skipIfEmpty && def == null)
 				return null;
 			return serializer == null ? stringify(v) : serializer.serialize(HttpPartType.HEADER, schema, v);
 		} catch (SchemaValidationException e) {

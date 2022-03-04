@@ -56,7 +56,8 @@ public class BasicBooleanHeader extends BasicHeader {
 	 * 	The header value.
 	 * 	<br>Must be parsable by {@link Boolean#parseBoolean(String)}.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicBooleanHeader of(String name, String value) {
 		return value == null ? null : new BasicBooleanHeader(name, value);
@@ -69,7 +70,8 @@ public class BasicBooleanHeader extends BasicHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicBooleanHeader of(String name, Boolean value) {
 		return value == null ? null : new BasicBooleanHeader(name, value);
@@ -85,10 +87,11 @@ public class BasicBooleanHeader extends BasicHeader {
 	 * @param value
 	 * 	The supplier of the header value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicBooleanHeader of(String name, Supplier<Boolean> value) {
-		return value == null || isEmpty(name) ? null : new BasicBooleanHeader(name, value);
+		return value == null ? null : new BasicBooleanHeader(name, value);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -106,10 +109,11 @@ public class BasicBooleanHeader extends BasicHeader {
 	 * 	The header value.
 	 * 	<br>Must be parsable by {@link Boolean#parseBoolean(String)}.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicBooleanHeader(String name, String value) {
 		super(name, value);
-		this.value = parse(value);
+		this.value = isEmpty(value) ? null : Boolean.valueOf(value);
 		this.supplier = null;
 	}
 
@@ -120,9 +124,10 @@ public class BasicBooleanHeader extends BasicHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicBooleanHeader(String name, Boolean value) {
-		super(name, serialize(value));
+		super(name, value);
 		this.value = value;
 		this.supplier = null;
 	}
@@ -137,6 +142,7 @@ public class BasicBooleanHeader extends BasicHeader {
 	 * @param value
 	 * 	The supplier of the header value.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicBooleanHeader(String name, Supplier<Boolean> value) {
 		super(name, null);
@@ -146,18 +152,25 @@ public class BasicBooleanHeader extends BasicHeader {
 
 	@Override /* Header */
 	public String getValue() {
-		if (supplier != null)
-			return serialize(supplier.get());
-		return super.getValue();
+		return stringify(value());
 	}
 
 	/**
-	 * Returns the header value as a boolean.
+	 * Returns the header value as a {@link Boolean} wrapped in an {@link Optional}.
 	 *
-	 * @return The header value as a boolean.
+	 * @return The header value as a {@link Boolean} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Boolean> asBoolean() {
-		return optional(supplier == null ? value : supplier.get());
+		return optional(value());
+	}
+
+	/**
+	 * Returns the header value as a {@link Boolean}.
+	 *
+	 * @return The header value as a {@link Boolean}.  Can be <jk>null</jk>.
+	 */
+	public Boolean toBoolean() {
+		return value();
 	}
 
 	/**
@@ -166,7 +179,8 @@ public class BasicBooleanHeader extends BasicHeader {
 	 * @return <jk>true</jk> if the header value is <jk>true</jk>.
 	 */
 	public boolean isTrue() {
-		return asBoolean().orElse(false).booleanValue();
+		Boolean x = value();
+		return x == null ? value : x;
 	}
 
 	/**
@@ -185,14 +199,26 @@ public class BasicBooleanHeader extends BasicHeader {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public FluentBooleanAssertion<BasicBooleanHeader> assertBoolean() {
-		return new FluentBooleanAssertion<>(asBoolean().orElse(null), this);
+		return new FluentBooleanAssertion<>(value(), this);
 	}
 
-	private static String serialize(Boolean value) {
-		return stringify(value);
+	/**
+	 * Return the value if present, otherwise return <c>other</c>.
+	 *
+	 * <p>
+	 * This is a shortened form for calling <c>asBoolean().orElse(<jv>other</jv>)</c>.
+	 *
+	 * @param other The value to be returned if there is no value present, can be <jk>null</jk>.
+	 * @return The value, if present, otherwise <c>other</c>.
+	 */
+	public Boolean orElse(Boolean other) {
+		Boolean x = value();
+		return x != null ? x : other;
 	}
 
-	private Boolean parse(String value) {
-		return value == null ? null : Boolean.parseBoolean(value);
+	private Boolean value() {
+		if (supplier != null)
+			return supplier.get();
+		return value;
 	}
 }

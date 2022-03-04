@@ -26,6 +26,7 @@ import static org.apache.juneau.rest.logging.RestLoggingDetail.*;
 import static org.apache.juneau.rest.processor.ResponseProcessor.*;
 import static java.util.Collections.*;
 import static java.util.logging.Level.*;
+import static java.util.Optional.*;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 
 import java.io.*;
@@ -332,8 +333,8 @@ public class RestContext extends Context {
 			beanStore = createBeanStore(rc, r)
 				.build()
 				.addBean(Builder.class, this)
-				.addBean(ServletConfig.class, optional(inner).orElse(this))
-				.addBean(ServletContext.class, optional(inner).orElse(this).getServletContext());
+				.addBean(ServletConfig.class, inner != null ? inner : this)
+				.addBean(ServletContext.class, (inner != null ? inner : this).getServletContext());
 
 			if (rootBeanStore == null) {
 				rootBeanStore = beanStore;
@@ -3483,7 +3484,7 @@ public class RestContext extends Context {
 		 */
 		@FluentSetter
 		public Builder debugOn(String value) {
-			for (Map.Entry<String,String> e : splitMap(optional(value).orElse(""), true).entrySet()) {
+			for (Map.Entry<String,String> e : splitMap(value != null ? value : "", true).entrySet()) {
 				String k = e.getKey(), v = e.getValue();
 				if (v.isEmpty())
 					v = "ALWAYS";
@@ -5247,7 +5248,8 @@ public class RestContext extends Context {
 		 */
 		@FluentSetter
 		public Builder parserListener(Class<? extends ParserListener> value) {
-			optional(value).filter(NOT_VOID).ifPresent(x -> parsers.forEach(y -> y.listener(x)));
+			if (isNotVoid(value))
+				parsers.forEach(x -> x.listener(value));
 			return this;
 		}
 
@@ -5509,7 +5511,8 @@ public class RestContext extends Context {
 		 */
 		@FluentSetter
 		public Builder serializerListener(Class<? extends SerializerListener> value) {
-			optional(value).filter(NOT_VOID).ifPresent(x -> serializers.forEach(y -> y.listener(x)));
+			if (isNotVoid(value))
+				serializers.forEach(x -> x.listener(value));
 			return this;
 		}
 
@@ -5880,7 +5883,7 @@ public class RestContext extends Context {
 				.addBean(Builder.class, builder)
 				.addBean(AnnotationWorkList.class, builder.getApplied());
 
-			path = optional(builder.path).orElse("");
+			path = builder.path != null ? builder.path : "";
 			fullPath = (parentContext == null ? "" : (parentContext.fullPath + '/')) + path;
 			String p = path;
 			if (! p.endsWith("/*"))
@@ -5888,9 +5891,9 @@ public class RestContext extends Context {
 			pathMatcher = UrlPathMatcher.of(p);
 
 			allowBodyParam = ! builder.disableBodyParam;
-			allowedHeaderParams = newCaseInsensitiveSet(optional(builder.allowedHeaderParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
-			allowedMethodParams = newCaseInsensitiveSet(optional(builder.allowedMethodParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
-			allowedMethodHeaders = newCaseInsensitiveSet(optional(builder.allowedMethodHeaders).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
+			allowedHeaderParams = newCaseInsensitiveSet(ofNullable(builder.allowedHeaderParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
+			allowedMethodParams = newCaseInsensitiveSet(ofNullable(builder.allowedMethodParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
+			allowedMethodHeaders = newCaseInsensitiveSet(ofNullable(builder.allowedMethodHeaders).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
 			clientVersionHeader = builder.clientVersionHeader;
 			defaultCharset = builder.defaultCharset;
 			maxInput = builder.maxInput;
@@ -7176,27 +7179,27 @@ public class RestContext extends Context {
 	@Override /* Context */
 	protected OMap properties() {
 		return filteredMap()
-			.a("allowBodyParam", allowBodyParam)
-			.a("allowedMethodHeader", allowedMethodHeaders)
-			.a("allowedMethodParams", allowedMethodParams)
-			.a("allowedHeaderParams", allowedHeaderParams)
-			.a("beanStore", beanStore)
-			.a("clientVersionHeader", clientVersionHeader)
-			.a("consumes", consumes)
-			.a("defaultRequestHeaders", defaultRequestHeaders)
-			.a("defaultResponseHeaders", defaultResponseHeaders)
-			.a("fileFinder", fileFinder)
-			.a("restOpArgs", restOpArgs)
-			.a("partParser", partParser)
-			.a("partSerializer", partSerializer)
-			.a("produces", produces)
-			.a("renderResponseStackTraces", renderResponseStackTraces)
-			.a("responseProcessors", responseProcessors)
-			.a("staticFiles", staticFiles)
-			.a("swaggerProvider", swaggerProvider)
-			.a("uriAuthority", uriAuthority)
-			.a("uriContext", uriContext)
-			.a("uriRelativity", uriRelativity)
-			.a("uriResolution", uriResolution);
+			.append("allowBodyParam", allowBodyParam)
+			.append("allowedMethodHeader", allowedMethodHeaders)
+			.append("allowedMethodParams", allowedMethodParams)
+			.append("allowedHeaderParams", allowedHeaderParams)
+			.append("beanStore", beanStore)
+			.append("clientVersionHeader", clientVersionHeader)
+			.append("consumes", consumes)
+			.append("defaultRequestHeaders", defaultRequestHeaders)
+			.append("defaultResponseHeaders", defaultResponseHeaders)
+			.append("fileFinder", fileFinder)
+			.append("restOpArgs", restOpArgs)
+			.append("partParser", partParser)
+			.append("partSerializer", partSerializer)
+			.append("produces", produces)
+			.append("renderResponseStackTraces", renderResponseStackTraces)
+			.append("responseProcessors", responseProcessors)
+			.append("staticFiles", staticFiles)
+			.append("swaggerProvider", swaggerProvider)
+			.append("uriAuthority", uriAuthority)
+			.append("uriContext", uriContext)
+			.append("uriRelativity", uriRelativity)
+			.append("uriResolution", uriResolution);
 	}
 }

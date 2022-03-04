@@ -66,20 +66,20 @@ public class RestClient_Response_Headers_Test {
 
 	@Test
 	public void a02_asHeader() throws Exception {
-		Header h = checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(BasicStringHeader.class).assertName().is("Foo").assertValue().is("bar");
+		Header h = checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(BasicStringHeader.class).assertName().is("Foo").assertStringValue().is("bar");
 		assertTrue(h instanceof BasicStringHeader);
 
-		h = checkFooClient().build().get("/echo").header("Foo","\"bar\"").run().getHeader("Foo").asHeader(ETag.class).assertName().is("ETag").assertValue().is("\"bar\"");
+		h = checkFooClient().build().get("/echo").header("Foo","\"bar\"").run().getHeader("Foo").asHeader(ETag.class).assertName().is("ETag").assertStringValue().is("\"bar\"");
 		assertTrue(h instanceof ETag);
 
 		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(Age.class)).message().contains("Value 'bar' could not be parsed as an integer.");
 		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(A2.class)).message().contains("Could not determine a method to construct type");
 
-		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asCsvArrayHeader().assertName().is("Foo").assertValue().is("bar");
-		checkFooClient().build().get("/echo").header("Foo","*").run().getHeader("Foo").asEntityTagArrayHeader().assertName().is("Foo").assertValue().is("*");
-		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asStringRangeArrayHeader().assertName().is("Foo").assertValue().is("bar");
-		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asStringHeader().assertName().is("Foo").assertValue().is("bar");
-		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asUriHeader().assertName().is("Foo").assertValue().is("bar");
+		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asCsvHeader().assertName().is("Foo").assertStringValue().is("bar");
+		checkFooClient().build().get("/echo").header("Foo","*").run().getHeader("Foo").asEntityTagsHeader().assertName().is("Foo").assertStringValue().is("*");
+		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asStringRangesHeader().assertName().is("Foo").assertStringValue().is("bar");
+		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asStringHeader().assertName().is("Foo").assertStringValue().is("bar");
+		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asUriHeader().assertName().is("Foo").assertStringValue().is("bar");
 	}
 
 	@Test

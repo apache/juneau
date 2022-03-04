@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -99,7 +98,7 @@ import org.apache.juneau.http.annotation.*;
  * @serial exclude
  */
 @Header("If-None-Match")
-public class IfNoneMatch extends BasicEntityTagArrayHeader {
+public class IfNoneMatch extends BasicEntityTagsHeader {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -129,7 +128,7 @@ public class IfNoneMatch extends BasicEntityTagArrayHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static IfNoneMatch of(List<EntityTag> value) {
+	public static IfNoneMatch of(EntityTags value) {
 		return value == null ? null : new IfNoneMatch(value);
 	}
 
@@ -144,7 +143,7 @@ public class IfNoneMatch extends BasicEntityTagArrayHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static IfNoneMatch of(Supplier<List<EntityTag>> value) {
+	public static IfNoneMatch of(Supplier<EntityTags> value) {
 		return value == null ? null : new IfNoneMatch(value);
 	}
 
@@ -171,7 +170,7 @@ public class IfNoneMatch extends BasicEntityTagArrayHeader {
 	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public IfNoneMatch(List<EntityTag> value) {
+	public IfNoneMatch(EntityTags value) {
 		super(NAME, value);
 	}
 
@@ -185,7 +184,7 @@ public class IfNoneMatch extends BasicEntityTagArrayHeader {
 	 * 	The supplier of the header value.
 	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public IfNoneMatch(Supplier<List<EntityTag>> value) {
+	public IfNoneMatch(Supplier<EntityTags> value) {
 		super(NAME, value);
 	}
 }

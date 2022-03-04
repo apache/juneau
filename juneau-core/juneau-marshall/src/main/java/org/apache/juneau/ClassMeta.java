@@ -1570,11 +1570,7 @@ public final class ClassMeta<T> implements Type {
 	public boolean canCreateNewInstance() {
 		if (isMemberClass)
 			return false;
-		if (noArgConstructor != null)
-			return true;
-		if (getProxyInvocationHandler() != null)
-			return true;
-		if (isArray() && elementType.canCreateNewInstance())
+		if (noArgConstructor != null || getProxyInvocationHandler() != null || (isArray() && elementType.canCreateNewInstance()))
 			return true;
 		return false;
 	}
@@ -1606,9 +1602,7 @@ public final class ClassMeta<T> implements Type {
 	 * 	<jk>true</jk> if a new instance of this bean can be created within the context of the specified outer object.
 	 */
 	public boolean canCreateNewBean(Object outer) {
-		if (beanMeta == null)
-			return false;
-		if (beanMeta.constructor == null)
+		if (beanMeta == null || beanMeta.constructor == null)
 			return false;
 		if (isMemberClass)
 			return outer != null && beanMeta.constructor.hasParamTypes(outer.getClass());

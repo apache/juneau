@@ -102,9 +102,7 @@ public class Verify {
 	 * @return An error message if the object is not of the specified type, otherwise <jk>null</jk>.
 	 */
 	public String isType(Class<?> type) {
-		if (type == null && o == null)
-			return null;
-		if (type != null && type.isInstance(o))
+		if ((type == null && o == null) || (type != null && type.isInstance(o)))
 			return null;
 		return msg != null ? msg.get() : StringUtils.format(MSG_unexpectedType, type, (o == null ? null : o.getClass()));
 	}
@@ -118,9 +116,7 @@ public class Verify {
 	public String is(Object expected) {
 		if (expected == o)
 			return null;
-		if (expected == null || o == null)
-			return msg != null ? msg.get() : StringUtils.format(MSG_unexpectedValue, expected, o);
-		if (! expected.equals(o))
+		if (expected == null || o == null || ! expected.equals(o))
 			return msg != null ? msg.get() : StringUtils.format(MSG_unexpectedValue, expected, o);
 		return null;
 	}

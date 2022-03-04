@@ -124,12 +124,12 @@ public final class Args extends OMap {
 		List<String> argList = linkedList(args);
 
 		// Capture the main arguments.
-		Integer i = 0;
+		int i = 0;
 		while (! argList.isEmpty()) {
 			String s = argList.get(0);
 			if (startsWith(s,'-'))
 				break;
-			put(i.toString(), argList.remove(0));
+			put(Integer.toString(i), argList.remove(0));
 			i++;
 		}
 

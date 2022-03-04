@@ -291,15 +291,15 @@ public class HtmlDocConfigAnnotation_Test {
 			return "E";
 		}
 		@Override
-		public String getHtml(VarResolverSession session) throws Exception {
+		public String getHtml(VarResolverSession session) {
 			return "xxx";
 		}
 		@Override
-		public String getScript(VarResolverSession session) throws Exception {
+		public String getScript(VarResolverSession session) {
 			return "yyy";
 		}
 		@Override
-		public String getStyle(VarResolverSession session) throws Exception {
+		public String getStyle(VarResolverSession session) {
 			return "zzz";
 		}
 	}

@@ -16,9 +16,11 @@ import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.jsonschema.SchemaUtils.*;
 
 import java.lang.annotation.*;
+import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 
 /**
@@ -67,9 +69,10 @@ public class ExternalDocsAnnotation {
 	public static OMap merge(OMap om, ExternalDocs a) throws ParseException {
 		if (ExternalDocsAnnotation.empty(a))
 			return om;
+		Predicate<String> ne = StringUtils::isNotEmpty;
 		return om
-			.appendSkipEmpty("description", joinnl(a.description()))
-			.appendSkipEmpty("url", a.url())
+			.appendIf(ne, "description", joinnl(a.description()))
+			.appendIf(ne, "url", a.url())
 		;
 	}
 

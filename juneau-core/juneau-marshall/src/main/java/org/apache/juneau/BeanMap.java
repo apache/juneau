@@ -18,6 +18,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
@@ -26,7 +27,6 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.xml.annotation.*;
 
 /**
  * Java bean wrapper class.
@@ -154,7 +154,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		}
 
 		// Initialize any null Optional<X> fields.
-		for (BeanPropertyMeta pMeta : this.meta.properties.values()) {
+		for (BeanPropertyMeta pMeta : this.meta.propertyArray) {
 			ClassMeta<?> cm = pMeta.getClassMeta();
 			if (cm.isOptional() && pMeta.get(this, pMeta.getName()) == null)
 				pMeta.set(this, pMeta.getName(), cm.getOptionalDefault());
@@ -249,10 +249,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	public Object put(String property, Object value) {
 		BeanPropertyMeta p = getPropertyMeta(property);
 		if (p == null) {
-			if (meta.ctx.isIgnoreUnknownBeanProperties())
-				return meta.onWriteProperty(bean, property, null);
-
-			if (property.equals(typePropertyName))
+			if (meta.ctx.isIgnoreUnknownBeanProperties() || property.equals(typePropertyName))
 				return meta.onWriteProperty(bean, property, null);
 
 			p = getPropertyMeta("*");
@@ -276,7 +273,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * As a general rule, adding to arrays is not recommended since the array must be recreate each time this method is
 	 * called.
 	 *
-	 * @param property Property name or child-element name (if {@link Xml#childName() @Xml(childName)} is specified).
+	 * @param property Property name or child-element name (if {@link org.apache.juneau.xml.annotation.Xml#childName() @Xml(childName)} is specified).
 	 * @param value The value to add to the collection or array.
 	 */
 	public void add(String property, Object value) {
@@ -494,53 +491,66 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	}
 
 	/**
-	 * Invokes all the getters on this bean and return the values as a list of {@link BeanPropertyValue} objects.
+	 * Invokes all the getters on this bean and consumes the results.
 	 *
-	 * <p>
-	 * This allows a snapshot of all values to be grabbed from a bean in one call.
-	 *
-	 * @param keepNulls
-	 * 	Also return properties whose values are null.
-	 * @param prependVals
-	 * 	Additional bean property values to prepended to this list.
-	 * 	Any <jk>null</jk> values in this list will be ignored.
+	 * @param valueFilter Filter to apply to value before applying action.
+	 * @param action The action to perform.
 	 * @return The list of all bean property values.
 	 */
-	public List<BeanPropertyValue> getValues(boolean keepNulls, BeanPropertyValue...prependVals) {
-		Collection<BeanPropertyMeta> properties = getProperties();
-		int capacity = ((! keepNulls) && properties.size() > 10) ? 10 : properties.size() + prependVals.length;
-		List<BeanPropertyValue> l = list(capacity);
-		for (BeanPropertyValue v : prependVals)
-			if (v != null)
-				l.add(v);
-		for (BeanPropertyMeta bpm : properties) {
-			if (bpm.canRead()) {
+	public BeanMap<T> forEachValue(Predicate<Object> valueFilter, BeanPropertyConsumer action) {
+
+		// Normal bean.
+		if (meta.dynaProperty == null) {
+			forEachProperty(x -> x.canRead(), bpm -> {
 				try {
-					if (bpm.isDyna()) {
-						Map<String,Object> dynaMap = bpm.getDynaMap(bean);
-						if (dynaMap != null) {
-							for (String pName : bpm.getDynaMap(bean).keySet()) {
-								Object val = bpm.get(this, pName);
-								if (val != null || keepNulls)
-									l.add(new BeanPropertyValue(bpm, pName, val, null));
-							}
-						}
-					} else {
-						Object val = bpm.get(this, null);
-						if (val != null || keepNulls)
-							l.add(new BeanPropertyValue(bpm, bpm.getName(), val, null));
-					}
+					Object val = bpm.get(this, null);
+					if (valueFilter.test(val))
+						action.apply(bpm, bpm.getName(), val, null);
 				} catch (Error e) {
 					// Errors should always be uncaught.
 					throw e;
 				} catch (Throwable t) {
-					l.add(new BeanPropertyValue(bpm, bpm.getName(), null, t));
+					action.apply(bpm, bpm.getName(), null, t);
 				}
-			}
-		}
-		if (meta.sortProperties && meta.dynaProperty != null)
-			Collections.sort(l);
-		return l;
+			});
+
+		// Bean with dyna properties.
+		} else {
+			Map<String,BeanPropertyValue> actions = (meta.sortProperties ? sortedMap() : map());
+
+			forEachProperty(x -> ! x.isDyna(), bpm -> {
+				try {
+					actions.put(bpm.getName(), new BeanPropertyValue(bpm, bpm.getName(), bpm.get(this, null), null));
+				} catch (Error e) {
+					// Errors should always be uncaught.
+					throw e;
+				} catch (Throwable t) {
+					actions.put(bpm.getName(), new BeanPropertyValue(bpm, bpm.getName(), null, t));
+				}
+			});
+
+			forEachProperty(x -> x.isDyna(), bpm -> {
+				try {
+					// TODO - This is kind of inefficient.
+					Map<String,Object> dynaMap = bpm.getDynaMap(bean);
+					if (dynaMap != null) {
+						for (String pName : dynaMap.keySet()) {
+							Object val = bpm.get(this, pName);
+							actions.put(pName, new BeanPropertyValue(bpm, pName, val, null));
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			});
+
+			actions.forEach((k,v) -> {
+				if (valueFilter.test(v.getValue()))
+					action.apply(v.getMeta(), v.getName(), v.getValue(), v.getThrown());
+			});
+		};
+
+		return this;
 	}
 
 	/**
@@ -560,7 +570,21 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @return A simple collection of properties for this bean map.
 	 */
 	protected Collection<BeanPropertyMeta> getProperties() {
-		return meta.properties.values();
+		return ulist(meta.propertyArray);
+	}
+
+	/**
+	 * Performs an action on each property in this bean map.
+	 *
+	 * @param filter The filter to apply to properties.
+	 * @param action The action.
+	 * @return This object.
+	 */
+	public BeanMap<T> forEachProperty(Predicate<BeanPropertyMeta> filter, Consumer<BeanPropertyMeta> action) {
+		for (BeanPropertyMeta bpm : meta.propertyArray)
+			if (filter.test(bpm))
+				action.accept(bpm);
+		return this;
 	}
 
 	/**
@@ -575,18 +599,17 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		// Otherwise, we can create an iterator without a new data structure.
 		if (meta.dynaProperty != null) {
 			Set<Entry<String,Object>> s = set();
-			for (BeanPropertyMeta pMeta : getProperties()) {
-				if (pMeta.isDyna()) {
+			forEachProperty(x -> true, x -> {
+				if (x.isDyna()) {
 					try {
-						for (Map.Entry<String,Object> e : pMeta.getDynaMap(bean).entrySet())
-							s.add(new BeanMapEntry(this, pMeta, e.getKey()));
+						x.getDynaMap(bean).entrySet().forEach(y -> s.add(new BeanMapEntry(this, x, y.getKey())));
 					} catch (Exception e) {
 						throw new BeanRuntimeException(e);
 					}
 				} else {
-					s.add(new BeanMapEntry(this, pMeta, pMeta.getName()));
+					s.add(new BeanMapEntry(this, x, x.getName()));
 				}
-			}
+			});
 			return s;
 		}
 

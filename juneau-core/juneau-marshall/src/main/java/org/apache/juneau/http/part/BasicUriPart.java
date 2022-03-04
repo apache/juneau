@@ -31,20 +31,18 @@ import org.apache.http.*;
  */
 public class BasicUriPart extends BasicPart {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Static creator.
 	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
-	 * 	</ul>
+	 * @param name The part name.
+	 * @param value The part value.
 	 * @return A new {@link BasicUriPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicUriPart of(String name, Object value) {
+	public static BasicUriPart of(String name, URI value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicUriPart(name, value);
@@ -56,60 +54,98 @@ public class BasicUriPart extends BasicPart {
 	 * <p>
 	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.
 	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	The header value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
-	 * 	</ul>
-	 * @return A new {@link BasicUriPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * @param name The part name.
+	 * @param value The part value supplier.
+	 * @return A new {@link BasicUriPart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
-	public static BasicUriPart of(String name, Supplier<?> value) {
+	public static BasicUriPart of(String name, Supplier<URI> value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicUriPart(name, value);
 	}
 
-	private URI parsed;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final URI value;
+	private final Supplier<URI> supplier;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
-	 * @param name The header name.
-	 * @param value
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * @param name The part name.  Must not be <jk>null</jk>.
+	 * @param value The part value.  Can be <jk>null</jk>.
 	 */
-	public BasicUriPart(String name, Object value) {
+	public BasicUriPart(String name, URI value) {
 		super(name, value);
-		if (! isSupplier(value))
-			parsed = getParsedValue();
+		this.value = value;
+		this.supplier = null;
 	}
 
 	/**
-	 * Returns this header as a {@link URI}.
+	 * Constructor.
 	 *
-	 * @return This header as a {@link URI}, or {@link Optional#empty()} if the value is <jk>null</jk>
+	 * @param name The part name.  Must not be <jk>null</jk>.
+	 * @param value The part value supplier.  Can be <jk>null</jk> or supply <jk>null</jk>.
 	 */
-	public Optional<URI> asURI() {
-		return optional(getParsedValue());
+	public BasicUriPart(String name, Supplier<URI> value) {
+		super(name, value);
+		this.value = null;
+		this.supplier = value;
 	}
 
-	private URI getParsedValue() {
-		if (parsed != null)
-			return parsed;
-		Object o = getRawValue();
-		if (o == null)
-			return null;
-		String s = o.toString();
-		if (isEmpty(s))
-			return null;
-		return URI.create(s);
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * <jk>null</jk> and empty values are treated as <jk>null</jk>.
+	 * Otherwise parses using {@link URI#create(String)}.
+	 *
+	 * @param name The part name.  Must not be <jk>null</jk>.
+	 * @param value The part value.  Can be <jk>null</jk>.
+	 */
+	public BasicUriPart(String name, String value) {
+		super(name, value);
+		this.value = isEmpty(value) ? null : URI.create(value);
+		this.supplier = null;
+	}
+
+	/**
+	 * Returns The part value as a {@link URI} wrapped in an {@link Optional}.
+	 *
+	 * @return The part value as a {@link URI} wrapped in an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<URI> asUri() {
+		return optional(value());
+	}
+
+	/**
+	 * Returns The part value as a {@link URI}.
+	 *
+	 * @return The part value as a {@link URI}, or <jk>null</jk> if the value <jk>null</jk>.
+	 */
+	public URI toUri() {
+		return value();
+	}
+
+	/**
+	 * Return the value if present, otherwise return <c>other</c>.
+	 *
+	 * <p>
+	 * This is a shortened form for calling <c>asString().orElse(<jv>other</jv>)</c>.
+	 *
+	 * @param other The value to be returned if there is no value present, can be <jk>null</jk>.
+	 * @return The value, if present, otherwise <c>other</c>.
+	 */
+	public URI orElse(URI other) {
+		URI x = value();
+		return x != null ? x : other;
+	}
+
+	private URI value() {
+		if (supplier != null)
+			return supplier.get();
+		return value;
 	}
 }

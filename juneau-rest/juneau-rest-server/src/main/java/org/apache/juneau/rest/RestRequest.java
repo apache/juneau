@@ -323,7 +323,7 @@ public final class RestRequest {
 	 * @return A new assertion object.
 	 */
 	public FluentRequestLineAssertion<RestRequest> assertRequestLine() {
-		return new FluentRequestLineAssertion<RestRequest>(getRequestLine(), this);
+		return new FluentRequestLineAssertion<>(getRequestLine(), this);
 	}
 
 	/**
@@ -339,7 +339,7 @@ public final class RestRequest {
 	 * @return A new fluent assertion on the body, never <jk>null</jk>.
 	 */
 	public FluentRequestBodyAssertion<RestRequest> assertBody() {
-		return new FluentRequestBodyAssertion<RestRequest>(getBody(), this);
+		return new FluentRequestBodyAssertion<>(getBody(), this);
 	}
 
 	/**
@@ -356,7 +356,7 @@ public final class RestRequest {
 	 * @return A new fluent assertion on the parameter, never <jk>null</jk>.
 	 */
 	public FluentRequestHeaderAssertion<RestRequest> assertHeader(String name) {
-		return new FluentRequestHeaderAssertion<RestRequest>(getHeader(name), this);
+		return new FluentRequestHeaderAssertion<>(getHeader(name), this);
 	}
 
 	/**
@@ -373,7 +373,7 @@ public final class RestRequest {
 	 * @return A new fluent assertion on the parameter, never <jk>null</jk>.
 	 */
 	public FluentRequestQueryParamAssertion<RestRequest> assertQueryParam(String name) {
-		return new FluentRequestQueryParamAssertion<RestRequest>(getQueryParam(name), this);
+		return new FluentRequestQueryParamAssertion<>(getQueryParam(name), this);
 	}
 
 
@@ -391,7 +391,7 @@ public final class RestRequest {
 	 * @return A new fluent assertion on the parameter, never <jk>null</jk>.
 	 */
 	public FluentRequestFormParamAssertion<RestRequest> assertFormParam(String name) {
-		return new FluentRequestFormParamAssertion<RestRequest>(getFormParam(name), this);
+		return new FluentRequestFormParamAssertion<>(getFormParam(name), this);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -543,7 +543,7 @@ public final class RestRequest {
 		if (h != null) {
 			StringRanges sr = StringRanges.of(h);
 			float qValue = 0;
-			for (StringRange r : sr.getRanges()) {
+			for (StringRange r : sr.toList()) {
 				if (r.getQValue() > qValue) {
 					best = toLocale(r.getName());
 					qValue = r.getQValue();

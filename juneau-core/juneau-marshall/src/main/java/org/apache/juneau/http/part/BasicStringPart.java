@@ -31,20 +31,18 @@ import org.apache.juneau.assertions.*;
  */
 public class BasicStringPart extends BasicPart {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Static creator.
 	 *
 	 * @param name The part name.
-	 * @param value
-	 * 	The part value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
-	 * 	</ul>
+	 * @param value The part value.
 	 * @return A new {@link BasicStringPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicStringPart of(String name, Object value) {
+	public static BasicStringPart of(String name, String value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicStringPart(name, value);
@@ -57,39 +55,44 @@ public class BasicStringPart extends BasicPart {
 	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.
 	 *
 	 * @param name The part name.
-	 * @param value
-	 * 	The part value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
-	 * 	</ul>
-	 * @return A new {@link BasicStringPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * @param value The part value supplier.
+	 * @return A new {@link BasicStringPart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
-	public static BasicStringPart of(String name, Supplier<?> value) {
+	public static BasicStringPart of(String name, Supplier<String> value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicStringPart(name, value);
 	}
 
-	private String parsed;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final String value;
+	private final Supplier<String> supplier;
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 *
-	 * @param name The part name.
-	 * @param value
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link String}
-	 * 		<li>Anything else - Converted to <c>String</c> then parsed.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * @param name The part name.  Must not be <jk>null</jk>.
+	 * @param value The part value.  Can be <jk>null</jk>.
 	 */
-	public BasicStringPart(String name, Object value) {
+	public BasicStringPart(String name, String value) {
 		super(name, value);
-		if (! isSupplier(value))
-			parsed = getParsedValue();
+		this.value = value;
+		this.supplier = null;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param name The part name.  Must not be <jk>null</jk>.
+	 * @param value The part value supplier.  Can be <jk>null</jk> or supply <jk>null</jk>.
+	 */
+	public BasicStringPart(String name, Supplier<String> value) {
+		super(name, value);
+		this.value = null;
+		this.supplier = value;
 	}
 
 	/**
@@ -99,39 +102,40 @@ public class BasicStringPart extends BasicPart {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public FluentStringAssertion<BasicStringPart> assertString() {
-		return new FluentStringAssertion<>(getValue(), this);
+		return new FluentStringAssertion<>(value(), this);
 	}
 
 	@Override /* Header */
 	public String getValue() {
-		return getParsedValue();
+		return value();
 	}
 
 	/**
-	 * Returns the value of this part as a string.
+	 * Returns The part value as a {@link String} wrapped in an {@link Optional}.
 	 *
-	 * @return The value of this part as a string, or {@link Optional#empty()} if the value is <jk>null</jk>
+	 * @return The part value as a {@link String} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> asString() {
-		return optional(getParsedValue());
+		return optional(value());
 	}
 
 	/**
-	 * Return the value if present, otherwise return other.
+	 * Return the value if present, otherwise return <c>other</c>.
 	 *
 	 * <p>
 	 * This is a shortened form for calling <c>asString().orElse(<jv>other</jv>)</c>.
 	 *
-	 * @param other The value to be returned if there is no value present, may be <jk>null</jk>.
-	 * @return The value, if present, otherwise other.
+	 * @param other The value to be returned if there is no value present, can be <jk>null</jk>.
+	 * @return The value, if present, otherwise <c>other</c>.
 	 */
 	public String orElse(String other) {
-		return asString().orElse(other);
+		String x = value();
+		return x != null ? x : other;
 	}
 
-	private String getParsedValue() {
-		if (parsed != null)
-			return parsed;
-		return stringify(getRawValue());
+	private String value() {
+		if (supplier != null)
+			return supplier.get();
+		return value;
 	}
 }

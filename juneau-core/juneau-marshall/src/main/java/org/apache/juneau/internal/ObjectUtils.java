@@ -126,6 +126,28 @@ public class ObjectUtils {
 	}
 
 	/**
+	 * Tests two arrays for equality, gracefully handling nulls.
+	 *
+	 * @param o1 Array 1.
+	 * @param o2 Array 2.
+	 * @return <jk>true</jk> if both arrays are equal based on the {@link Object#equals(Object)} method on each element.
+	 */
+	public static <T> boolean eq(T[] o1, T[] o2) {
+		if (o1 == null || o2 == null) {
+			if (o1 != null || o2 != null)
+				return false;
+			return true;
+		}
+		if (o1.length != o2.length)
+			return false;
+		for (int i = 0; i < o1.length; i++)
+			if (! eq(o1[i], o2[i]))
+				return false;
+		return true;
+
+	}
+
+	/**
 	 * Tests two objects for inequality, gracefully handling nulls.
 	 *
 	 * @param <T> Object 1 type.
@@ -268,10 +290,56 @@ public class ObjectUtils {
 			methods = methods2;
 			PROPERTIES_METHODS.put(o.getClass(), methods);
 		}
-		OMap m = OMap.create().a("id", identity(o));
-		for (Map.Entry<String,MethodInfo> e : methods.entrySet()) {
-			m.put(e.getKey(), e.getValue().invoke(o));
-		}
+		OMap m = OMap.create().append("id", identity(o));
+		methods.forEach((k,v) -> m.put(k, v.invoke(o)));
 		return m;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified object is not <jk>null</jk>.
+	 *
+	 * @param value The value being checked.
+	 * @return <jk>true</jk> if the specified object is not <jk>null</jk>.
+	 */
+	public static <T> boolean isNotNull(T value) {
+		return value != null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified boolean is not <jk>null</jk> and is <jk>true</jk>.
+	 *
+	 * @param value The value being checked.
+	 * @return <jk>true</jk> if the specified boolean is not <jk>null</jk> and is <jk>true</jk>.
+	 */
+	public static <T> boolean isTrue(Boolean value) {
+		return value != null && value;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified number is not <jk>null</jk> and not <c>-1</c>.
+	 *
+	 * @param value The value being checked.
+	 * @return <jk>true</jk> if the specified number is not <jk>null</jk> and not <c>-1</c>.
+	 */
+	public static <T extends Number> boolean isNotMinusOne(T value) {
+		return value != null && value.intValue() != -1;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified object is not <jk>null</jk> and not empty.
+	 *
+	 * Works on any of the following data types:  String, CharSequence, Collection, Map, array.
+	 * All other types are stringified and then checked as a String.
+	 *
+	 * @param value The value being checked.
+	 * @return <jk>true</jk> if the specified object is not <jk>null</jk> and not empty.
+	 */
+	public static boolean isNotEmpty(Object value) {
+		if (value == null) return false;
+		if (value instanceof CharSequence) return CharSequence.class.cast(value).length() > 0;
+		if (value instanceof Collection) return ! Collection.class.cast(value).isEmpty();
+		if (value instanceof Map) return ! Map.class.cast(value).isEmpty();
+		if (value.getClass().isArray()) return Array.getLength(value) > 0;
+		return StringUtils.isNotEmpty(StringUtils.stringify(value));
 	}
 }

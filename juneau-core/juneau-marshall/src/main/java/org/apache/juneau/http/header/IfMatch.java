@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -96,7 +95,7 @@ import org.apache.juneau.http.annotation.*;
  * @serial exclude
  */
 @Header("If-Match")
-public class IfMatch extends BasicEntityTagArrayHeader {
+public class IfMatch extends BasicEntityTagsHeader {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -126,7 +125,7 @@ public class IfMatch extends BasicEntityTagArrayHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static IfMatch of(List<EntityTag> value) {
+	public static IfMatch of(EntityTags value) {
 		return value == null ? null : new IfMatch(value);
 	}
 
@@ -141,7 +140,7 @@ public class IfMatch extends BasicEntityTagArrayHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static IfMatch of(Supplier<List<EntityTag>> value) {
+	public static IfMatch of(Supplier<EntityTags> value) {
 		return value == null ? null : new IfMatch(value);
 	}
 
@@ -168,7 +167,7 @@ public class IfMatch extends BasicEntityTagArrayHeader {
 	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public IfMatch(List<EntityTag> value) {
+	public IfMatch(EntityTags value) {
 		super(NAME, value);
 	}
 
@@ -182,7 +181,7 @@ public class IfMatch extends BasicEntityTagArrayHeader {
 	 * 	The supplier of the header value.
 	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public IfMatch(Supplier<List<EntityTag>> value) {
+	public IfMatch(Supplier<EntityTags> value) {
 		super(NAME, value);
 	}
 }

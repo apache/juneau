@@ -127,27 +127,27 @@ public class BasicHttpResource_Test {
 
 	@Test
 	public void a03_header_Header() throws Exception {
-		HeaderList x = stringResource("foo").header(null).header(header("Foo","bar")).header(header("Foo","baz")).header(header(null,"bar")).header(header("Bar",null)).header(null).build().getHeaders();
+		HeaderList x = stringResource("foo").header(null).header(header("Foo","bar")).header(header("Foo","baz")).header(header("Bar",null)).header(null).build().getHeaders();
 		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
 		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
 		assertObject(x.getFirst("Bar").get().getValue()).isNull();
 		assertObject(x.getLast("Bar").get().getValue()).isNull();
-		assertObject(x.getAll()).asJson().is("['Foo: bar','Foo: baz','null: bar','Bar: null']");
+		assertObject(x.getAll()).asJson().is("['Foo: bar','Foo: baz','Bar: null']");
 	}
 
 	@Test
 	public void a04_headers_List() throws Exception {
-		HeaderList x = stringResource("foo").headers(alist(header("Foo","bar"),header("Foo","baz"),header(null,"bar"),header("Bar",null),null)).build().getHeaders();
+		HeaderList x = stringResource("foo").headers(alist(header("Foo","bar"),header("Foo","baz"),header("Bar",null),null)).build().getHeaders();
 		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
 		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
 		assertObject(x.getFirst("Bar").get().getValue()).isNull();
 		assertObject(x.getLast("Bar").get().getValue()).isNull();
-		assertObject(x.getAll()).asJson().is("['Foo: bar','Foo: baz','null: bar','Bar: null']");
+		assertObject(x.getAll()).asJson().is("['Foo: bar','Foo: baz','Bar: null']");
 	}
 
 	@Test
 	public void a05_headers_array() throws Exception {
-		HeaderList x = stringResource("foo").headers(header("Foo","bar"),header("Foo","baz"),header(null,"bar"),header("Bar",null),null).build().getHeaders();
+		HeaderList x = stringResource("foo").headers(header("Foo","bar"),header("Foo","baz"),header("Bar",null),null).build().getHeaders();
 		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
 		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
 		assertObject(x.getFirst("Bar").get().getValue()).isNull();

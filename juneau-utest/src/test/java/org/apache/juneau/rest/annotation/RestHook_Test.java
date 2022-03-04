@@ -470,10 +470,10 @@ public class RestHook_Test {
 		@RestGet(path="/")
 		public OMap a(RestRequest req, RestResponse res) {
 			return OMap.create()
-				.a("1", res.getHeader("start1-called"))
-				.a("2", res.getHeader("start2-called"))
-				.a("3", res.getHeader("start3-called"))
-				.a("4", res.getHeader("start4-called"));
+				.append("1", res.getHeader("start1-called"))
+				.append("2", res.getHeader("start2-called"))
+				.append("3", res.getHeader("start3-called"))
+				.append("4", res.getHeader("start4-called"));
 		}
 	}
 
@@ -521,10 +521,10 @@ public class RestHook_Test {
 		@RestGet(path="/")
 		public OMap a(RestRequest req, RestResponse res) {
 			return OMap.create()
-				.a("1", res.getHeader("pre1-called"))
-				.a("2", res.getHeader("pre2-called"))
-				.a("3", res.getHeader("pre3-called"))
-				.a("4", res.getHeader("pre4-called"));
+				.append("1", res.getHeader("pre1-called"))
+				.append("2", res.getHeader("pre2-called"))
+				.append("3", res.getHeader("pre3-called"))
+				.append("4", res.getHeader("pre4-called"));
 		}
 	}
 

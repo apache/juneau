@@ -441,16 +441,14 @@ public class ParserSession extends BeanSession {
 			BeanMap<?> bm = m.getBeanSession().newBeanMap(cm.getInnerClass());
 
 			// Iterate through all the entries in the map and set the individual field values.
-			for (Map.Entry<String,Object> e : m.entrySet()) {
-				String k = e.getKey();
-				Object v = e.getValue();
+			m.forEach((k,v) -> {
 				if (! k.equals(btpn)) {
 					// Attempt to recursively cast child maps.
 					if (v instanceof OMap)
 						v = cast((OMap)v, pMeta, eType);
 					bm.put(k, v);
 				}
-			}
+			});
 			return bm.getBean();
 		}
 

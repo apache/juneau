@@ -62,8 +62,7 @@ public class RrpcInterfaceMeta {
 		);
 
 		Map<String,RrpcInterfaceMethodMeta> methodsByPath = map();
-		for (RrpcInterfaceMethodMeta rmm : methods.values())
-			methodsByPath.put(rmm.getPath(), rmm);
+		methods.values().forEach(x -> methodsByPath.put(x.getPath(), x));
 
 		this.methods = unmodifiable(methods);
 		this.methodsByPath = unmodifiable(methodsByPath);

@@ -52,7 +52,7 @@ public class ResponseBeanMeta {
 	 */
 	public static ResponseBeanMeta create(Type t, AnnotationWorkList annotations) {
 		ClassInfo ci = ClassInfo.of(t).unwrap(Value.class, Optional.class);
-		if (! ci.hasAnnotation(Response.class))
+		if (ci.hasNoAnnotation(Response.class))
 			return null;
 		Builder b = new Builder(annotations);
 		b.apply(ci.innerType());
@@ -86,7 +86,7 @@ public class ResponseBeanMeta {
 	 * @return Metadata about the class, or <jk>null</jk> if class not annotated with {@link Response}.
 	 */
 	public static ResponseBeanMeta create(ParamInfo mpi, AnnotationWorkList annotations) {
-		if (! mpi.hasAnnotation(Response.class))
+		if (mpi.hasNoAnnotation(Response.class))
 			return null;
 		Builder b = new Builder(annotations);
 		b.apply(mpi.getParameterType().unwrap(Value.class, Optional.class).innerType());
@@ -118,11 +118,11 @@ public class ResponseBeanMeta {
 		Map<String,ResponseBeanPropertyMeta> properties = map();
 
 		Map<String,ResponseBeanPropertyMeta> hm = map();
-		for (Map.Entry<String,ResponseBeanPropertyMeta.Builder> e : b.headerMethods.entrySet()) {
-			ResponseBeanPropertyMeta pm = e.getValue().build(partSerializer, partParser);
-			hm.put(e.getKey(), pm);
+		b.headerMethods.forEach((k,v) -> {
+			ResponseBeanPropertyMeta pm = v.build(partSerializer, partParser);
+			hm.put(k, pm);
 			properties.put(pm.getGetter().getName(), pm);
-		}
+		});
 		this.headerMethods = unmodifiable(hm);
 
 		this.bodyMethod = b.bodyMethod == null ? null : b.bodyMethod.schema(schema).build(partSerializer, partParser);
@@ -156,32 +156,34 @@ public class ResponseBeanMeta {
 			Class<?> c = ClassUtils.toClass(t);
 			this.cm = BeanContext.DEFAULT.getClassMeta(c);
 			ClassInfo ci = cm.getInfo();
-			for (MethodInfo m : ci.getPublicMethods()) {
-				assertNoInvalidAnnotations(m, Query.class, FormData.class);
-				if (m.hasAnnotation(Header.class)) {
-					assertNoArgs(m, Header.class);
-					assertReturnNotVoid(m, Header.class);
-					HttpPartSchema s = HttpPartSchema.create(m.getAnnotation(Header.class), m.getPropertyName());
-					headerMethods.put(s.getName(), ResponseBeanPropertyMeta.create(RESPONSE_HEADER, s, m));
-				} else if (m.hasAnnotation(StatusCode.class)) {
-					assertNoArgs(m, Header.class);
-					assertReturnType(m, Header.class, int.class, Integer.class);
-					statusMethod = ResponseBeanPropertyMeta.create(RESPONSE_STATUS, m);
-				} else if (m.hasAnnotation(Body.class)) {
-					if (m.hasNoParams())
-						assertReturnNotVoid(m, Header.class);
+			ci.forEachPublicMethod(x -> true, x -> {
+				assertNoInvalidAnnotations(x, Query.class, FormData.class);
+				if (x.hasAnnotation(Header.class)) {
+					assertNoArgs(x, Header.class);
+					assertReturnNotVoid(x, Header.class);
+					HttpPartSchema s = HttpPartSchema.create(x.getAnnotation(Header.class), x.getPropertyName());
+					headerMethods.put(s.getName(), ResponseBeanPropertyMeta.create(RESPONSE_HEADER, s, x));
+				} else if (x.hasAnnotation(StatusCode.class)) {
+					assertNoArgs(x, Header.class);
+					assertReturnType(x, Header.class, int.class, Integer.class);
+					statusMethod = ResponseBeanPropertyMeta.create(RESPONSE_STATUS, x);
+				} else if (x.hasAnnotation(Body.class)) {
+					if (x.hasNoParams())
+						assertReturnNotVoid(x, Header.class);
 					else
-						assertArgType(m, Header.class, OutputStream.class, Writer.class);
-					bodyMethod = ResponseBeanPropertyMeta.create(RESPONSE_BODY, m);
+						assertArgType(x, Header.class, OutputStream.class, Writer.class);
+					bodyMethod = ResponseBeanPropertyMeta.create(RESPONSE_BODY, x);
 				}
-			}
+			});
 			return this;
 		}
 
 		Builder apply(Response a) {
 			if (a != null) {
-				optional(a.serializer()).filter(NOT_VOID).ifPresent(x -> partSerializer = x);
-				optional(a.parser()).filter(NOT_VOID).ifPresent(x -> partParser = x);
+				if (isNotVoid(a.serializer()))
+					partSerializer = a.serializer();
+				if (isNotVoid(a.parser()))
+					partParser = a.parser();
 				schema.apply(a.schema());
 			}
 			return this;

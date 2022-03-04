@@ -43,7 +43,7 @@ public class RequestBeanMeta {
 	 * @return Metadata about the parameter, or <jk>null</jk> if parameter or parameter type not annotated with {@link Request}.
 	 */
 	public static RequestBeanMeta create(ParamInfo mpi, AnnotationWorkList annotations) {
-		if (! mpi.hasAnnotation(Request.class))
+		if (mpi.hasNoAnnotation(Request.class))
 			return null;
 		return new RequestBeanMeta.Builder(annotations).apply(mpi).build();
 	}
@@ -57,7 +57,7 @@ public class RequestBeanMeta {
 	 */
 	public static RequestBeanMeta create(Class<?> c, AnnotationWorkList annotations) {
 		ClassInfo ci = ClassInfo.of(c);
-		if (! ci.hasAnnotation(Request.class))
+		if (ci.hasNoAnnotation(Request.class))
 			return null;
 		return new RequestBeanMeta.Builder(annotations).apply(c).build();
 	}
@@ -76,8 +76,7 @@ public class RequestBeanMeta {
 		this.serializer = b.serializer.orElse(null);
 		this.parser = b.parser.orElse(null);
 		Map<String,RequestBeanPropertyMeta> properties = map();
-		for (Map.Entry<String,RequestBeanPropertyMeta.Builder> e : b.properties.entrySet())
-			properties.put(e.getKey(), e.getValue().build(serializer, parser));
+		b.properties.forEach((k,v) -> properties.put(k, v.build(serializer, parser)));
 		this.properties = unmodifiable(properties);
 	}
 
@@ -99,37 +98,39 @@ public class RequestBeanMeta {
 		Builder apply(Class<?> c) {
 			this.cm = BeanContext.DEFAULT.getClassMeta(c);
 			apply(cm.getLastAnnotation(Request.class));
-			for (MethodInfo m : cm.getInfo().getPublicMethods()) {
-				String n = m.getSimpleName();
-				if (m.hasAnnotation(Header.class)) {
-					assertNoArgs(m, Header.class);
-					assertReturnNotVoid(m, Header.class);
-					properties.put(n, RequestBeanPropertyMeta.create(HEADER, Header.class, m));
-				} else if (m.hasAnnotation(Query.class)) {
-					assertNoArgs(m, Query.class);
-					assertReturnNotVoid(m, Query.class);
-					properties.put(n, RequestBeanPropertyMeta.create(QUERY, Query.class, m));
-				} else if (m.hasAnnotation(FormData.class)) {
-					assertNoArgs(m, FormData.class);
-					assertReturnNotVoid(m, FormData.class);
-					properties.put(n, RequestBeanPropertyMeta.create(FORMDATA, FormData.class, m));
-				} else if (m.hasAnnotation(Path.class)) {
-					assertNoArgs(m, Path.class);
-					assertReturnNotVoid(m, Path.class);
-					properties.put(n, RequestBeanPropertyMeta.create(PATH, Path.class, m));
-				} else if (m.hasAnnotation(Body.class)) {
-					assertNoArgs(m, Body.class);
-					assertReturnNotVoid(m, Body.class);
-					properties.put(n, RequestBeanPropertyMeta.create(BODY, Body.class, m));
+			cm.getInfo().forEachPublicMethod(x -> true, x -> {
+				String n = x.getSimpleName();
+				if (x.hasAnnotation(Header.class)) {
+					assertNoArgs(x, Header.class);
+					assertReturnNotVoid(x, Header.class);
+					properties.put(n, RequestBeanPropertyMeta.create(HEADER, Header.class, x));
+				} else if (x.hasAnnotation(Query.class)) {
+					assertNoArgs(x, Query.class);
+					assertReturnNotVoid(x, Query.class);
+					properties.put(n, RequestBeanPropertyMeta.create(QUERY, Query.class, x));
+				} else if (x.hasAnnotation(FormData.class)) {
+					assertNoArgs(x, FormData.class);
+					assertReturnNotVoid(x, FormData.class);
+					properties.put(n, RequestBeanPropertyMeta.create(FORMDATA, FormData.class, x));
+				} else if (x.hasAnnotation(Path.class)) {
+					assertNoArgs(x, Path.class);
+					assertReturnNotVoid(x, Path.class);
+					properties.put(n, RequestBeanPropertyMeta.create(PATH, Path.class, x));
+				} else if (x.hasAnnotation(Body.class)) {
+					assertNoArgs(x, Body.class);
+					assertReturnNotVoid(x, Body.class);
+					properties.put(n, RequestBeanPropertyMeta.create(BODY, Body.class, x));
 				}
-			}
+			});
 			return this;
 		}
 
 		Builder apply(Request a) {
 			if (a != null) {
-				optional(a.serializer()).filter(NOT_VOID).ifPresent(x -> serializer.type(x));
-				optional(a.parser()).filter(NOT_VOID).ifPresent(x -> parser.type(x));
+				if (isNotVoid(a.serializer()))
+					serializer.type(a.serializer());
+				if (isNotVoid(a.parser()))
+					parser.type(a.parser());
 			}
 			return this;
 		}

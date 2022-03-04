@@ -641,7 +641,8 @@ public final class Config extends Context implements ConfigEventListener {
 
 		ConfigMapEntry ce = configMap.getEntry(sname, skey);
 
-		if (ce == null) return null;
+		if (ce == null)
+			return null;
 
 		return removeMods(ce.getModifiers(), ce.getValue());
 	}

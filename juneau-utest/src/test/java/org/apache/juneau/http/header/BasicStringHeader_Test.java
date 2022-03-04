@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
@@ -56,11 +57,11 @@ public class BasicStringHeader_Test {
 		c.get().header(stringHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(stringHeader("","*")).run().assertBody().isEmpty();
-		c.get().header(stringHeader(null,"*")).run().assertBody().isEmpty();
-		c.get().header(stringHeader(null,()->null)).run().assertBody().isEmpty();
 		c.get().header(stringHeader(HEADER,(Supplier<String>)null)).run().assertBody().isEmpty();
-		c.get().header(stringHeader(null,(Supplier<String>)null)).run().assertBody().isEmpty();
+		assertThrown(()->stringHeader("", VALUE)).message().is("Name cannot be empty on header.");
+		assertThrown(()->stringHeader(null, VALUE)).message().is("Name cannot be empty on header.");
+		assertThrown(()->stringHeader("", ()->PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->stringHeader(null, ()->PARSED)).message().is("Name cannot be empty on header.");
 	}
 
 	@Test

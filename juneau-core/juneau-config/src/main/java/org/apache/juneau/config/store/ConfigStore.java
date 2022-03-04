@@ -258,8 +258,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 		name = resolveName(name);
 		Set<ConfigStoreListener> s = listeners.get(name);
 		if (s != null)
-			for (ConfigStoreListener l : listeners.get(name))
-				l.onChange(contents);
+			listeners.get(name).forEach(x -> x.onChange(contents));
 		return this;
 	}
 

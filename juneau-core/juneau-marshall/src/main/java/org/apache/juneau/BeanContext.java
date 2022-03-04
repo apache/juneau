@@ -159,6 +159,8 @@ import org.apache.juneau.utils.*;
 @SuppressWarnings({"unchecked","rawtypes"})
 public class BeanContext extends Context {
 
+	private final String TODO = "ignoreUnknownEnumValues";
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
 	//-----------------------------------------------------------------------------------------------------------------
@@ -3559,8 +3561,8 @@ public class BeanContext extends Context {
 		useJavaBeanIntrospector = builder.useJavaBeanIntrospector;
 		sortProperties = builder.sortProperties;
 		findFluentSetters = builder.findFluentSetters;
-		typePropertyName = optional(builder.typePropertyName).orElse("_type");
-		locale = optional(builder.locale).orElseGet(()->Locale.getDefault());
+		typePropertyName = builder.typePropertyName != null ? builder.typePropertyName : "_type";
+		locale = builder.locale != null ? builder.locale : Locale.getDefault();
 		timeZone = builder.timeZone;
 		mediaType = builder.mediaType;
 		beanDictionary = optional(builder.beanDictionary).map(Collections::unmodifiableList).orElse(emptyList());
@@ -3937,16 +3939,12 @@ public class BeanContext extends Context {
 			if (params == null)
 				return rawType;
 			if (rawType.isMap()) {
-				if (params.length != 2)
-					return rawType;
-				if (params[0].isObject() && params[1].isObject())
+				if (params.length != 2 || (params[0].isObject() && params[1].isObject()))
 					return rawType;
 				return new ClassMeta(rawType, params[0], params[1], null);
 			}
 			if (rawType.isCollection() || rawType.isOptional()) {
-				if (params.length != 1)
-					return rawType;
-				if (params[0].isObject())
+				if (params.length != 1 || params[0].isObject())
 					return rawType;
 				return new ClassMeta(rawType, null, null, params[0]);
 			}
@@ -4593,28 +4591,28 @@ public class BeanContext extends Context {
 	@Override /* Context */
 	protected OMap properties() {
 		return filteredMap()
-			.a("id", System.identityHashCode(this))
-			.a("beanClassVisibility", beanClassVisibility)
-			.a("beanConstructorVisibility", beanConstructorVisibility)
-			.a("beanDictionary", beanDictionary)
-			.a("beanFieldVisibility", beanFieldVisibility)
-			.a("beanMethodVisibility", beanMethodVisibility)
-			.a("beansRequireDefaultConstructor", beansRequireDefaultConstructor)
-			.a("beansRequireSerializable", beansRequireSerializable)
-			.a("beansRequireSettersForGetters", beansRequireSettersForGetters)
-			.a("beansRequireSomeProperties", beansRequireSomeProperties)
-			.a("ignoreTransientFields", ignoreTransientFields)
-			.a("ignoreInvocationExceptionsOnGetters", ignoreInvocationExceptionsOnGetters)
-			.a("ignoreInvocationExceptionsOnSetters", ignoreInvocationExceptionsOnSetters)
-			.a("ignoreUnknownBeanProperties", ignoreUnknownBeanProperties)
-			.a("ignoreUnknownNullBeanProperties", ignoreUnknownNullBeanProperties)
-			.a("notBeanClasses", notBeanClasses)
-			.a("notBeanPackageNames", notBeanPackageNames)
-			.a("notBeanPackagePrefixes", notBeanPackagePrefixes)
-			.a("swaps", swaps)
-			.a("sortProperties", sortProperties)
-			.a("useEnumNames", useEnumNames)
-			.a("useInterfaceProxies", useInterfaceProxies)
-			.a("useJavaBeanIntrospector", useJavaBeanIntrospector);
+			.append("id", System.identityHashCode(this))
+			.append("beanClassVisibility", beanClassVisibility)
+			.append("beanConstructorVisibility", beanConstructorVisibility)
+			.append("beanDictionary", beanDictionary)
+			.append("beanFieldVisibility", beanFieldVisibility)
+			.append("beanMethodVisibility", beanMethodVisibility)
+			.append("beansRequireDefaultConstructor", beansRequireDefaultConstructor)
+			.append("beansRequireSerializable", beansRequireSerializable)
+			.append("beansRequireSettersForGetters", beansRequireSettersForGetters)
+			.append("beansRequireSomeProperties", beansRequireSomeProperties)
+			.append("ignoreTransientFields", ignoreTransientFields)
+			.append("ignoreInvocationExceptionsOnGetters", ignoreInvocationExceptionsOnGetters)
+			.append("ignoreInvocationExceptionsOnSetters", ignoreInvocationExceptionsOnSetters)
+			.append("ignoreUnknownBeanProperties", ignoreUnknownBeanProperties)
+			.append("ignoreUnknownNullBeanProperties", ignoreUnknownNullBeanProperties)
+			.append("notBeanClasses", notBeanClasses)
+			.append("notBeanPackageNames", notBeanPackageNames)
+			.append("notBeanPackagePrefixes", notBeanPackagePrefixes)
+			.append("swaps", swaps)
+			.append("sortProperties", sortProperties)
+			.append("useEnumNames", useEnumNames)
+			.append("useInterfaceProxies", useInterfaceProxies)
+			.append("useJavaBeanIntrospector", useJavaBeanIntrospector);
 	}
 }

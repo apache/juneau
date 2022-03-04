@@ -247,7 +247,7 @@ public final class RestUtils {
 				list.add(l);
 			}
 		}
-		return array(list);
+		return array(list, String.class);
 	}
 
 	static String[] resolveContent(String[] content, String[] parentContent) {
@@ -264,7 +264,7 @@ public final class RestUtils {
 				list.add(l);
 			}
 		}
-		return array(list);
+		return array(list, String.class);
 	}
 
 	/**
@@ -291,7 +291,7 @@ public final class RestUtils {
 			if (m == null)
 				m = map();
 
-			if (qs == null || ((qs instanceof CharSequence) && isEmpty(qs)))
+			if (qs == null || ((qs instanceof CharSequence) && isEmpty(stringify(qs))))
 				return m;
 
 			try (ParserPipe p = new ParserPipe(qs)) {
@@ -437,9 +437,7 @@ public final class RestUtils {
 			return false;
 		if (value.isEmpty())
 			return true;
-		if (value.charAt(value.length()-1) == '/')
-			return false;
-		if (value.charAt(0) != '/')
+		if (value.charAt(value.length()-1) == '/' || value.charAt(0) != '/')
 			return false;
 		return true;
 	}
@@ -492,11 +490,7 @@ public final class RestUtils {
 			return false;
 		if (value.isEmpty())
 			return true;
-		if (value.equals("/"))
-			return false;
-		if (value.charAt(value.length()-1) == '/')
-			return false;
-		if (value.charAt(0) != '/')
+		if (value.equals("/") || value.charAt(value.length()-1) == '/' || value.charAt(0) != '/')
 			return false;
 		return true;
 	}
@@ -523,9 +517,7 @@ public final class RestUtils {
 	public static boolean isValidPathInfo(String value) {
 		if (value == null)
 			return true;
-		if (value.isEmpty())
-			return false;
-		if (value.charAt(0) != '/')
+		if (value.isEmpty() || value.charAt(0) != '/')
 			return false;
 		return true;
 	}

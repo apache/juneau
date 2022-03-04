@@ -368,10 +368,7 @@ public class RestLoggerRule {
 	 */
 	public boolean matches(HttpServletRequest req, HttpServletResponse res) {
 
-		if (requestFilter != null && ! requestFilter.test(req))
-			return false;
-
-		if (responseFilter != null && ! responseFilter.test(res))
+		if ((requestFilter != null && ! requestFilter.test(req)) || (responseFilter != null && ! responseFilter.test(res)))
 			return false;
 
 		if (statusFilter != null && ! statusFilter.test(res.getStatus()))
@@ -441,15 +438,15 @@ public class RestLoggerRule {
 	@Override /* Object */
 	public String toString() {
 		return filteredMap()
-			.a("codeFilter", statusFilter)
-			.a("exceptionFilter", exceptionFilter)
-			.a("requestFilter", requestFilter)
-			.a("responseFilter", responseFilter)
-			.a("level", level)
-			.a("requestDetail", requestDetail)
-			.a("responseDetail", responseDetail)
-			.a("enabled", enabled)
-			.a("enabledTest", enabledTest)
+			.append("codeFilter", statusFilter)
+			.append("exceptionFilter", exceptionFilter)
+			.append("requestFilter", requestFilter)
+			.append("responseFilter", responseFilter)
+			.append("level", level)
+			.append("requestDetail", requestDetail)
+			.append("responseDetail", responseDetail)
+			.append("enabled", enabled)
+			.append("enabledTest", enabledTest)
 			.asReadableString();
 	}
 }

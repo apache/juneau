@@ -232,12 +232,12 @@ class MockPathResolver {
 	@Override
 	public String toString() {
 		return OMap.create()
-			.a("uri", uri)
-			.a("contextPath", contextPath)
-			.a("servletPath", servletPath)
-			.a("remainder", remainder)
-			.a("target", target)
-			.a("error", error)
+			.append("uri", uri)
+			.append("contextPath", contextPath)
+			.append("servletPath", servletPath)
+			.append("remainder", remainder)
+			.append("target", target)
+			.append("error", error)
 			.toString();
 	}
 }

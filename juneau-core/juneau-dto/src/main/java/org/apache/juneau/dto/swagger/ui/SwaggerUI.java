@@ -84,13 +84,13 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		outer.child(div()._class("tag-block tag-block-open").children(tagBlockContents(s, null)));
 
 		if (s.swagger.tags().isPresent()) {
-			for (Tag t : s.swagger.getTags()) {
+			s.swagger.getTags().forEach(x -> {
 				Div tagBlock = div()._class("tag-block tag-block-open").children(
-					tagBlockSummary(t),
-					tagBlockContents(s, t)
+					tagBlockSummary(x),
+					tagBlockContents(s, x)
 				);
 				outer.child(tagBlock);
-			}
+			});
 		}
 
 		if (s.swagger.definitions().isPresent()) {
@@ -168,15 +168,12 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	private Div tagBlockContents(Session s, Tag t) {
 		Div tagBlockContents = div()._class("tag-block-contents");
 
-		for (Map.Entry<String,OperationMap> e : s.swagger.getPaths().entrySet()) {
-			String path = e.getKey();
-			for (Map.Entry<String,Operation> e2 : e.getValue().entrySet()) {
-				String opName = e2.getKey();
-				Operation op = e2.getValue();
+		s.swagger.getPaths().forEach((path,v) -> {
+			v.forEach((opName,op) -> {
 				if ((t == null && ! op.tags().isPresent()) || (t != null && op.hasTag(t.getName())))
 					tagBlockContents.child(opBlock(s, path, opName, op));
-			}
-		}
+			});
+		});
 
 		return tagBlockContents;
 	}
@@ -212,24 +209,24 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 
 			Table parameters = table(tr(th("Name")._class("parameter-key"), th("Description")._class("parameter-key")))._class("parameters");
 
-			for (ParameterInfo pi : op.getParameters()) {
-				String piName = "body".equals(pi.getIn()) ? "body" : pi.getName();
-				boolean required = pi.getRequired() == null ? false : pi.getRequired();
+			op.getParameters().forEach(x -> {
+				String piName = "body".equals(x.getIn()) ? "body" : x.getName();
+				boolean required = x.getRequired() == null ? false : x.getRequired();
 
 				Td parameterKey = td(
 					div(piName)._class("name" + (required ? " required" : "")),
 					required ? div("required")._class("requiredlabel") : null,
-					div(pi.getType())._class("type"),
-					div('(' + pi.getIn() + ')')._class("in")
+					div(x.getType())._class("type"),
+					div('(' + x.getIn() + ')')._class("in")
 				)._class("parameter-key");
 
 				Td parameterValue = td(
-					div(toBRL(pi.getDescription()))._class("description"),
-					examples(s, pi)
+					div(toBRL(x.getDescription()))._class("description"),
+					examples(s, x)
 				)._class("parameter-value");
 
 				parameters.child(tr(parameterKey, parameterValue));
-			}
+			});
 
 			tableContainer.child(parameters);
 		}
@@ -240,19 +237,17 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 			Table responses = table(tr(th("Code")._class("response-key"), th("Description")._class("response-key")))._class("responses");
 			tableContainer.child(responses);
 
-			for (Map.Entry<String,ResponseInfo> e3 : op.getResponses().entrySet()) {
-				ResponseInfo ri = e3.getValue();
-
-				Td code = td(e3.getKey())._class("response-key");
+			op.getResponses().forEach((k,v) -> {
+				Td code = td(k)._class("response-key");
 
 				Td codeValue = td(
-					div(toBRL(ri.getDescription()))._class("description"),
-					examples(s, ri),
-					headers(s, ri)
+					div(toBRL(v.getDescription()))._class("description"),
+					examples(s, v),
+					headers(s, v)
 				)._class("response-value");
 
 				responses.child(tr(code, codeValue));
-			}
+			});
 		}
 
 		return tableContainer;
@@ -269,17 +264,15 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 			sectionTable
 		)._class("headers");
 
-		for (Map.Entry<String,HeaderInfo> e : ri.getHeaders().entrySet()) {
-			String name = e.getKey();
-			HeaderInfo hi = e.getValue();
+		ri.getHeaders().forEach((k,v) -> {
 			sectionTable.child(
 				tr(
-					td(name)._class("name"),
-					td(toBRL(hi.getDescription()))._class("description"),
-					td(hi.asMap().keepAll("type","format","items","collectionFormat","default","maximum","exclusiveMaximum","minimum","exclusiveMinimum","maxLength","minLength","pattern","maxItems","minItems","uniqueItems","enum","multipleOf"))
+					td(k)._class("name"),
+					td(toBRL(v.getDescription()))._class("description"),
+					td(v.asMap().keepAll("type","format","items","collectionFormat","default","maximum","exclusiveMaximum","minimum","exclusiveMinimum","maxLength","minLength","pattern","maxItems","minItems","uniqueItems","enum","multipleOf"))
 				)
 			);
-		}
+		});
 
 		return headers;
 	}
@@ -325,8 +318,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 
 			Map<String,?> examples = ri.getExamples();
 			if (examples != null)
-				for (Map.Entry<String,?> e : examples.entrySet())
-					m.put(e.getKey(), e.getValue());
+				examples.forEach((k,v) -> m.put(k,v));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -352,11 +344,12 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 			select.child(option("model","model"));
 		div.child(div(m.remove("model"))._class("model active").attr("data-name", "model"));
 
-		for (Map.Entry<String,Object> e : m.entrySet()) {
-			if (select != null)
-				select.child(option(e.getKey(), e.getKey()));
-			div.child(div(e.getValue().toString().replaceAll("\\n", "\n"))._class("example").attr("data-name", e.getKey()));
-		}
+		Select select2 = select;
+		m.forEach((k,v) -> {
+			if (select2 != null)
+				select2.child(option(k, k));
+			div.child(div(v.toString().replaceAll("\\n", "\n"))._class("example").attr("data-name", k));
+		});
 
 		return div;
 	}
@@ -369,8 +362,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	// Creates the contents under the "Model" header.
 	private Div modelsBlockContents(Session s) {
 		Div modelBlockContents = div()._class("tag-block-contents");
-		for (Map.Entry<String,OMap> e : s.swagger.getDefinitions().entrySet())
-			modelBlockContents.child(modelBlock(e.getKey(), e.getValue()));
+		s.swagger.getDefinitions().forEach((k,v) -> modelBlockContents.child(modelBlock(k,v)));
 		return modelBlockContents;
 	}
 

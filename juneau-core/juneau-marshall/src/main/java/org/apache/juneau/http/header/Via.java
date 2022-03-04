@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -123,7 +122,7 @@ import org.apache.juneau.http.annotation.*;
  * @serial exclude
  */
 @Header("Via")
-public class Via extends BasicCsvArrayHeader {
+public class Via extends BasicCsvHeader {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -152,7 +151,7 @@ public class Via extends BasicCsvArrayHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static Via of(List<String> value) {
+	public static Via of(String...value) {
 		return value == null ? null : new Via(value);
 	}
 
@@ -167,7 +166,7 @@ public class Via extends BasicCsvArrayHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static Via of(Supplier<List<String>> value) {
+	public static Via of(Supplier<String[]> value) {
 		return value == null ? null : new Via(value);
 	}
 
@@ -193,7 +192,7 @@ public class Via extends BasicCsvArrayHeader {
 	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public Via(List<String> value) {
+	public Via(String...value) {
 		super(NAME, value);
 	}
 
@@ -207,7 +206,7 @@ public class Via extends BasicCsvArrayHeader {
 	 * 	The supplier of the header value.
 	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public Via(Supplier<List<String>> value) {
+	public Via(Supplier<String[]> value) {
 		super(NAME, value);
 	}
 }

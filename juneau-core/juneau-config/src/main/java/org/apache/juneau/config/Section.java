@@ -107,7 +107,8 @@ public class Section {
 	 */
 	public <T> Optional<T> asBean(Class<T> c, boolean ignoreUnknownProperties) throws ParseException {
 		assertArgNotNull("c", c);
-		if (! isPresent()) return empty();
+		if (! isPresent())
+			return empty();
 
 		Set<String> keys = configMap.getKeys(name);
 
@@ -131,7 +132,8 @@ public class Section {
 	 * @return A new {@link OMap}, or {@link Optional#empty()} if this section doesn't exist.
 	 */
 	public Optional<OMap> asMap() {
-		if (! isPresent()) return empty();
+		if (! isPresent())
+			return empty();
 
 		Set<String> keys = configMap.getKeys(name);
 

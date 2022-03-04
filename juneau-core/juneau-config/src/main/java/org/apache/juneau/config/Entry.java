@@ -79,7 +79,8 @@ public class Entry {
 	 * @throws NullPointerException if value was <jk>null</jk>.
 	 */
 	public String get() {
-		if (isNull()) throw new NullPointerException("Value was null");
+		if (isNull())
+			throw new NullPointerException("Value was null");
 		return toString();
 	}
 
@@ -196,15 +197,15 @@ public class Entry {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T> Optional<T> as(Parser parser, Type type, Type...args) {
-		if (isNull()) return empty();
+		if (isNull())
+			return empty();
 
 		try {
 			String v = toString();
 			if (type == String.class) return (Optional<T>)asString();
 			if (type == String[].class) return (Optional<T>)asStringArray();
 			if (type == byte[].class) return (Optional<T>)asBytes();
-			if (type == int.class) return (Optional<T>)asInteger();
-			if (type == int.class || type == Integer.class) return (Optional<T>)asInteger();
+			if (type == int.class || type == int.class || type == Integer.class) return (Optional<T>)asInteger();
 			if (type == long.class || type == Long.class) return (Optional<T>)asLong();
 			if (type == OMap.class) return (Optional<T>)asMap();
 			if (type == OList.class) return (Optional<T>)asList();
@@ -263,7 +264,8 @@ public class Entry {
 	 * @return This entry as a string array, or {@link Optional#empty()} if the entry does not exist.
 	 */
 	public Optional<String[]> asStringArray() {
-		if (! isPresent()) return empty();
+		if (! isPresent())
+			return empty();
 		String v = toString();
 		char s1 = firstNonWhitespaceChar(v), s2 = lastNonWhitespaceChar(v);
 		if (s1 == '[' && s2 == ']' && config.parser instanceof JsonParser) {
@@ -405,9 +407,11 @@ public class Entry {
 	 * @return The value, or {@link Optional#empty()} if the section or key does not exist.
 	 */
 	public Optional<byte[]> asBytes() {
-		if (isNull()) return empty();
+		if (isNull())
+			return empty();
 		String s = toString();
-		if (s.indexOf('\n') != -1) s = s.replaceAll("\n", "");
+		if (s.indexOf('\n') != -1)
+			s = s.replaceAll("\n", "");
 		try {
 			if (config.binaryFormat == HEX)
 				return optional(fromHex(s));
@@ -446,8 +450,10 @@ public class Entry {
 	 * @throws ParseException If value could not be parsed.
 	 */
 	public Optional<OMap> asMap(Parser parser) throws ParseException {
-		if (isNull()) return empty();
-		if (parser == null) parser = config.parser;
+		if (isNull())
+			return empty();
+		if (parser == null)
+			parser = config.parser;
 		String s = toString();
 		if (parser instanceof JsonParser) {
 			char s1 = firstNonWhitespaceChar(s);
@@ -485,8 +491,10 @@ public class Entry {
 	 * @throws ParseException If value could not be parsed.
 	 */
 	public Optional<OList> asList(Parser parser) throws ParseException {
-		if (isNull()) return empty();
-		if (parser == null) parser = config.parser;
+		if (isNull())
+			return empty();
+		if (parser == null)
+			parser = config.parser;
 		String s = toString();
 		if (parser instanceof JsonParser) {
 			char s1 = firstNonWhitespaceChar(s);

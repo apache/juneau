@@ -234,14 +234,12 @@ public final class ListBuilder<E> {
 				for (Object o : values) {
 					if (o != null) {
 						if (o instanceof Collection) {
-							for (Object o2 : (Collection<?>)o)
-								addAny(o2);
+							((Collection<?>)o).forEach(x -> addAny(x));
 						} else if (o.getClass().isArray()) {
 							for (int i = 0; i < Array.getLength(o); i++)
 								addAny(Array.get(o, i));
 						} else if (isJsonArray(o, false)) {
-							for (Object o2 : new OList(o.toString()))
-								addAny(o2);
+							new OList(o.toString()).forEach(x -> addAny(x));
 						} else if (elementType.isInstance(o)) {
 							add(elementType.cast(o));
 						} else {

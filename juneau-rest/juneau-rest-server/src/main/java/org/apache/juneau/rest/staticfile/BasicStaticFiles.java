@@ -145,7 +145,7 @@ public class BasicStaticFiles implements StaticFiles {
 	@Override /* Object */
 	public String toString() {
 		return filteredMap()
-			.a("headers", headers)
+			.append("headers", headers)
 			.asReadableString();
 	}
 }

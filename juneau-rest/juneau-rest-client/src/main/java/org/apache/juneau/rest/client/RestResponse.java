@@ -640,7 +640,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public ResponseHeader[] getHeaders(String name) {
-		return headers.stream(name).map(x -> new ResponseHeader(request, this, x).parser(getPartParserSession())).toArray(ResponseHeader[]::new);
+		return headers.stream(name).map(x -> new ResponseHeader(name, request, this, x).parser(getPartParserSession())).toArray(ResponseHeader[]::new);
 	}
 
 	/**
@@ -656,7 +656,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public ResponseHeader getFirstHeader(String name) {
-		return new ResponseHeader(request, this, headers.getFirst(name).orElse(null)).parser(getPartParserSession());
+		return new ResponseHeader(name, request, this, headers.getFirst(name).orElse(null)).parser(getPartParserSession());
 	}
 
 	/**
@@ -672,7 +672,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public ResponseHeader getLastHeader(String name) {
-		return new ResponseHeader(request, this, headers.getLast(name).orElse(null)).parser(getPartParserSession());
+		return new ResponseHeader(name, request, this, headers.getLast(name).orElse(null)).parser(getPartParserSession());
 	}
 
 	/**
@@ -685,7 +685,7 @@ public class RestResponse implements HttpResponse {
 	 * @return The header, never <jk>null</jk>.
 	 */
 	public ResponseHeader getHeader(String name) {
-		return new ResponseHeader(request, this, headers.get(name).orElse(null)).parser(getPartParserSession());
+		return new ResponseHeader(name, request, this, headers.get(name).orElse(null)).parser(getPartParserSession());
 	}
 
 	/**
@@ -697,7 +697,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public ResponseHeader[] getAllHeaders() {
-		return headers.stream().map(x -> new ResponseHeader(request, this, x).parser(getPartParserSession())).toArray(ResponseHeader[]::new);
+		return headers.stream().map(x -> new ResponseHeader(x.getName(), request, this, x).parser(getPartParserSession())).toArray(ResponseHeader[]::new);
 	}
 
 	/**
@@ -831,7 +831,7 @@ public class RestResponse implements HttpResponse {
 		isClosed = true;
 		EntityUtils.consumeQuietly(response.getEntity());
 
-		if (request.isLoggingSuppressed() == false && (request.isDebug() || client.logRequestsPredicate.test(request, this))) {
+		if (!request.isLoggingSuppressed() && (request.isDebug() || client.logRequestsPredicate.test(request, this))) {
 			if (client.logRequests == DetailLevel.SIMPLE) {
 				client.log(client.logRequestsLevel, "HTTP {0} {1}, {2}", request.getMethod(), request.getURI(), this.getStatusLine());
 			} else if (request.isDebug() || client.logRequests == DetailLevel.FULL) {

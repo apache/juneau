@@ -12,6 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.annotation;
 
+import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import static java.lang.annotation.ElementType.*;
@@ -287,10 +288,8 @@ public class FormDataAnnotation {
 		@Override
 		public void apply(AnnotationInfo<FormData> ai, BeanContext.Builder b) {
 			FormData a = ai.inner();
-
-			if (isEmpty(a.on()) && isEmpty(a.onClass()))
+			if (isEmptyArray(a.on(), a.onClass()))
 				return;
-
 			b.annotations(a);
 		}
 	}

@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.util;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.util.*;
+
+import org.apache.juneau.internal.*;
 
 /**
  * A list of {@link UrlPathMatcher} objects.
@@ -44,6 +44,6 @@ public class UrlPathMatcherList extends ArrayList<UrlPathMatcher> {
 	 * @return The contents of this list as a {@link UrlPathMatcher} array.
 	 */
 	public UrlPathMatcher[] asArray() {
-		return array(this, UrlPathMatcher.class);
+		return CollectionUtils.array(this, UrlPathMatcher.class);
 	}
 }

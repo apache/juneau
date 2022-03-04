@@ -80,6 +80,8 @@ import org.apache.juneau.rest.annotation.*;
  */
 public interface ResponseProcessor {
 
+	public static final String TODO = "Convert to filter-based design";
+
 	/**
 	 * Return code indicating to proceed to the next response processor in the chain.
 	 */

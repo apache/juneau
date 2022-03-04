@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.widget;
 
+import static org.apache.juneau.internal.ThrowableUtils.*;
+
 import java.io.*;
 
 import org.apache.juneau.rest.*;
@@ -69,17 +71,17 @@ public abstract class Widget implements HtmlWidget {
 	}
 
 	@Override /* HtmlWidget */
-	public String getHtml(VarResolverSession session) throws Exception {
+	public String getHtml(VarResolverSession session) {
 		return getHtml(req(session), res(session));
 	}
 
 	@Override /* HtmlWidget */
-	public String getScript(VarResolverSession session) throws Exception {
+	public String getScript(VarResolverSession session) {
 		return getScript(req(session), res(session));
 	}
 
 	@Override /* HtmlWidget */
-	public String getStyle(VarResolverSession session) throws Exception {
+	public String getStyle(VarResolverSession session) {
 		return getStyle(req(session), res(session));
 	}
 
@@ -92,9 +94,8 @@ public abstract class Widget implements HtmlWidget {
 	 * @param req The HTTP request object.
 	 * @param res The current HTTP response.
 	 * @return The HTML content of this widget.
-	 * @throws Exception Error occurred.
 	 */
-	public String getHtml(RestRequest req, RestResponse res) throws Exception {
+	public String getHtml(RestRequest req, RestResponse res) {
 		return null;
 	}
 
@@ -107,9 +108,8 @@ public abstract class Widget implements HtmlWidget {
 	 * @param req The HTTP request object.
 	 * @param res The current HTTP response.
 	 * @return The Javascript needed by this widget.
-	 * @throws Exception Error occurred.
 	 */
-	public String getScript(RestRequest req, RestResponse res) throws Exception {
+	public String getScript(RestRequest req, RestResponse res) {
 		return null;
 	}
 
@@ -122,9 +122,8 @@ public abstract class Widget implements HtmlWidget {
 	 * @param req The HTTP request object.
 	 * @param res The current HTTP response.
 	 * @return The CSS styles needed by this widget.
-	 * @throws Exception Error occurred.
 	 */
-	public String getStyle(RestRequest req, RestResponse res) throws Exception {
+	public String getStyle(RestRequest req, RestResponse res) {
 		return null;
 	}
 
@@ -147,13 +146,16 @@ public abstract class Widget implements HtmlWidget {
 	 * @param req The HTTP request object.
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException Thrown by underlying stream.
 	 */
-	protected String loadScript(RestRequest req, String name) throws IOException {
-		String s = getFileFinder(req).getString(name).orElse(null);
-		if (s != null)
-			s = s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "");
-		return s;
+	protected String loadScript(RestRequest req, String name) {
+		try {
+			String s = getFileFinder(req).getString(name).orElse(null);
+			if (s != null)
+				s = s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "");
+			return s;
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**
@@ -183,13 +185,16 @@ public abstract class Widget implements HtmlWidget {
 	 * @param req The HTTP request object.
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException Thrown by underlying stream.
 	 */
-	protected String loadStyle(RestRequest req, String name) throws IOException {
-		String s = getFileFinder(req).getString(name).orElse(null);
-		if (s != null)
-			s = s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "");
-		return s;
+	protected String loadStyle(RestRequest req, String name) {
+		try {
+			String s = getFileFinder(req).getString(name).orElse(null);
+			if (s != null)
+				s = s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "");
+			return s;
+		} catch (IOException e) {
+			throw runtimeException(e);
+		}
 	}
 
 	/**
@@ -219,13 +224,16 @@ public abstract class Widget implements HtmlWidget {
 	 * @param req The HTTP request object.
 	 * @param name Name of the desired resource.
 	 * @return The resource converted to a string, or <jk>null</jk> if the resource could not be found.
-	 * @throws IOException Thrown by underlying stream.
 	 */
-	protected String loadHtml(RestRequest req, String name) throws IOException {
-		String s = getFileFinder(req).getString(name).orElse(null);
-		if (s != null)
-			s = s.replaceAll("(?s)<!--(.*?)-->\\s*", "");
-		return s;
+	protected String loadHtml(RestRequest req, String name) {
+		try {
+			String s = getFileFinder(req).getString(name).orElse(null);
+			if (s != null)
+				s = s.replaceAll("(?s)<!--(.*?)-->\\s*", "");
+			return s;
+		} catch (IOException e) {
+			throw runtimeException(e);
+		}
 	}
 
 	/**

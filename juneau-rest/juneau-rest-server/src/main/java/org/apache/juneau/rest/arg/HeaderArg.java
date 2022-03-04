@@ -123,7 +123,8 @@ public class HeaderArg implements RestOpArg {
 		this.name = findName(pi).orElseThrow(() -> new ArgException(pi, "@Header used without name or value"));
 		this.type = pi.getParameterType();
 		this.schema = HttpPartSchema.create(Header.class, pi);
-		this.partParser = optional(schema.getParser()).map(x -> HttpPartParser.creator().type(x).apply(annotations).create()).orElse(null);
+		Class<? extends HttpPartParser> pp = schema.getParser();
+		this.partParser = pp != null ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 		this.multi = schema.getCollectionFormat() == HttpPartCollectionFormat.MULTI;
 
 		if (multi && ! type.isCollectionOrArray())

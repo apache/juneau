@@ -16,6 +16,7 @@ import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.http.*;
 
@@ -68,13 +69,11 @@ public class MediaRange extends MediaType {
 		if (qValue.floatValue() == 1.0) {
 			if (this.extensions.length > 0) {
 				sb.append(";q=").append(qValue);
-				for (NameValuePair p : extensions)
-					sb.append(';').append(p.getName()).append('=').append(p.getValue());
+				extensions.forEach(x -> sb.append(';').append(x.getName()).append('=').append(x.getValue()));
 			}
 		} else {
 			sb.append(";q=").append(qValue);
-			for (NameValuePair p : extensions)
-				sb.append(';').append(p.getName()).append('=').append(p.getValue());
+			extensions.forEach(x -> sb.append(';').append(x.getName()).append('=').append(x.getValue()));
 		}
 		string = sb.toString();
 	}
@@ -104,7 +103,22 @@ public class MediaRange extends MediaType {
 	 * @return The optional list of extensions, never <jk>null</jk>.
 	 */
 	public List<NameValuePair> getExtensions() {
-		return unmodifiable(alist(extensions));
+		return ulist(extensions);
+	}
+
+	/**
+	 * Performs an action on the optional set of custom extensions defined for this type.
+	 *
+	 * <p>
+	 * Values are lowercase and never <jk>null</jk>.
+	 *
+	 * @param action The action to perform.
+	 * @return This object.
+	 */
+	public MediaRange forEachExtension(Consumer<NameValuePair> action) {
+		for (NameValuePair r : extensions)
+			action.accept(r);
+		return this;
 	}
 
 	@Override /* Object */

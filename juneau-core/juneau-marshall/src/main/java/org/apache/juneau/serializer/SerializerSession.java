@@ -442,7 +442,7 @@ public class SerializerSession extends BeanTraverseSession {
 			throw e;
 		} catch (StackOverflowError e) {
 			throw new SerializeException(this,
-				"Stack overflow occurred.  This can occur when trying to serialize models containing loops.  It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.").initCause(e);
+				"Stack overflow occurred.  This can occur when trying to serialize models containing loops.  It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
 		} catch (Exception e) {
 			throw new SerializeException(this, e);
 		} finally {
@@ -610,6 +610,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return A new sorted {@link TreeSet}.
 	 */
 	public final <E> Collection<E> sort(Collection<E> c) {
+		String TODO = "Inline?";
 		if (isSortCollections() && isSortable(c))
 			return c.stream().sorted().collect(Collectors.toList());
 		return c;
@@ -622,6 +623,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return A new sorted {@link TreeSet}.
 	 */
 	public final <E> List<E> sort(List<E> c) {
+		String TODO = "Inline?";
 		if (isSortCollections() && isSortable(c))
 			return c.stream().sorted().collect(Collectors.toList());
 		return c;
@@ -782,10 +784,7 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return The bean dictionary name, or <jk>null</jk> if a name could not be found.
 	 */
 	protected final String getBeanTypeName(SerializerSession session, ClassMeta<?> eType, ClassMeta<?> aType, BeanPropertyMeta pMeta) {
-		if (eType == aType)
-			return null;
-
-		if (! (isAddBeanTypes() || (session.isRoot() && isAddRootType())))
+		if (eType == aType || ! (isAddBeanTypes() || (session.isRoot() && isAddRootType())))
 			return null;
 
 		String eTypeTn = eType.getDictionaryName();
@@ -1057,6 +1056,23 @@ public class SerializerSession extends BeanTraverseSession {
 	 */
 	protected final UriResolution getUriResolution() {
 		return ctx.getUriResolution();
+	}
+
+	/**
+	 * Converts the specified throwable to either a {@link RuntimeException} or {@link SerializeException}.
+	 *
+	 * @param causedBy The exception to cast or wrap.
+	 */
+	protected static <T extends Throwable> void handleThrown(T causedBy) {
+		if (causedBy instanceof Error)
+			throw (Error)causedBy;
+		if (causedBy instanceof RuntimeException)
+			throw (RuntimeException)causedBy;
+		if (causedBy instanceof StackOverflowError)
+			throw new SerializeException("Stack overflow occurred.  This can occur when trying to serialize models containing loops.  It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
+		if (causedBy instanceof SerializeException)
+			throw (SerializeException)causedBy;
+		throw new SerializeException(causedBy);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -134,9 +134,7 @@ public class BeanRegistry {
 	 * @return The class metadata for the bean.
 	 */
 	public ClassMeta<?> getClassMeta(String typeName) {
-		if (isEmpty)
-			return null;
-		if (typeName == null)
+		if (isEmpty || typeName == null)
 			return null;
 		ClassMeta<?> cm = map.get(typeName);
 		if (cm != null)

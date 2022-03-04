@@ -284,9 +284,7 @@ public class UriResolver {
 			return false;
 		for (int i = 0; i < s.length()-1; i++) {
 			char c = s.charAt(i);
-			if (i == 0 && c == '/')
-				return true;
-			if (c == '/' && s.charAt(i+1) == '.')
+			if ((i == 0 && c == '/') || (c == '/' && s.charAt(i+1) == '.'))
 				return true;
 		}
 		return false;

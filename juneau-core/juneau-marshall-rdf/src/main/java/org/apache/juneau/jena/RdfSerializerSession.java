@@ -484,7 +484,18 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	private void serializeBeanMap(BeanMap<?> m, Resource r, String typeName) throws IOException, SerializeException {
-		List<BeanPropertyValue> l = m.getValues(isKeepNullProperties(), typeName != null ? createBeanTypeNameProperty(m, typeName) : null);
+		List<BeanPropertyValue> l = new ArrayList<>();
+
+		if (typeName != null) {
+			BeanPropertyMeta pm = m.getMeta().getTypeProperty();
+			l.add(new BeanPropertyValue(pm, pm.getName(), typeName, null));
+		}
+
+		Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
+		m.forEachValue(checkNull, (pMeta,key,value,thrown) -> {
+			l.add(new BeanPropertyValue(pMeta, key, value, thrown));
+		});
+
 		Collections.reverse(l);
 		for (BeanPropertyValue bpv : l) {
 

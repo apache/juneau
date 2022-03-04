@@ -59,20 +59,20 @@ public final class PojoSorter implements PojoTool<SortArgs> {
 		} else /* isCollection() */ {
 			Collection c = (Collection)input;
 			l = list(c.size());
-			for (Object o : c)
-				l.add(new SortEntry(session, o));
+			List<SortEntry> l2 = l;
+			c.forEach(x -> l2.add(new SortEntry(session, x)));
 		}
 
 		// We reverse the list and sort last to first.
 		List<String> columns = listFrom(sort.keySet());
 		Collections.reverse(columns);
 
-		for (final String c : columns) {
+		List<SortEntry> l3 = l;
+		columns.forEach(c -> {
 			final boolean isDesc = sort.get(c);
-			for (SortEntry se : l)
-				se.setSort(c, isDesc);
-			Collections.sort(l);
-		}
+			l3.forEach(se -> se.setSort(c, isDesc));
+			Collections.sort(l3);
+		});
 
 		List<Object> l2 = list(l.size());
 		l.forEach(x -> l2.add(x.o));

@@ -53,10 +53,11 @@ public class BasicStringHeader extends BasicHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicStringHeader of(String name, String value) {
-		return value == null || isEmpty(name) ? null : new BasicStringHeader(name, value);
+		return value == null ? null : new BasicStringHeader(name, value);
 	}
 
 	/**
@@ -69,10 +70,11 @@ public class BasicStringHeader extends BasicHeader {
 	 * @param value
 	 * 	The supplier of the header value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicStringHeader of(String name, Supplier<String> value) {
-		return value == null || isEmpty(name) ? null : new BasicStringHeader(name, value);
+		return value == null ? null : new BasicStringHeader(name, value);
 	}
 
 	/**
@@ -96,6 +98,7 @@ public class BasicStringHeader extends BasicHeader {
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
+	private final String value;
 	private final Supplier<String> supplier;
 
 	/**
@@ -105,9 +108,11 @@ public class BasicStringHeader extends BasicHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicStringHeader(String name, String value) {
 		super(name, value);
+		this.value = value;
 		this.supplier = null;
 	}
 
@@ -121,22 +126,22 @@ public class BasicStringHeader extends BasicHeader {
 	 * @param value
 	 * 	The supplier of the header value.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicStringHeader(String name, Supplier<String> value) {
 		super(name, null);
+		this.value = null;
 		this.supplier = value;
 	}
 
 	@Override /* Header */
 	public String getValue() {
-		if (supplier != null)
-			return supplier.get();
-		return super.getValue();
+		return stringify(value());
 	}
 
 	@Override /* BasicHeader */
 	public Optional<String> asString() {
-		return optional(getValue());
+		return optional(value());
 	}
 
 	/**
@@ -155,6 +160,28 @@ public class BasicStringHeader extends BasicHeader {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public FluentStringAssertion<BasicStringHeader> assertString() {
-		return new FluentStringAssertion<>(getValue(), this);
+		return new FluentStringAssertion<>(value(), this);
+	}
+
+
+	/**
+	 * Return the value if present, otherwise return <c>other</c>.
+	 *
+	 * <p>
+	 * This is a shortened form for calling <c>asString().orElse(<jv>other</jv>)</c>.
+	 *
+	 * @param other The value to be returned if there is no value present, can be <jk>null</jk>.
+	 * @return The value, if present, otherwise <c>other</c>.
+	 */
+	@Override
+	public String orElse(String other) {
+		String x = value();
+		return x != null ? x : other;
+	}
+
+	private String value() {
+		if (supplier != null)
+			return supplier.get();
+		return value;
 	}
 }

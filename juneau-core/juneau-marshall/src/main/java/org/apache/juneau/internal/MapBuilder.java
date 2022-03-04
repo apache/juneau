@@ -209,11 +209,9 @@ public final class MapBuilder<K,V> {
 			for (Object o : values) {
 				if (o != null) {
 					if (o instanceof Map) {
-						for (Map.Entry<Object,Object> e : ((Map<Object,Object>)o).entrySet())
-							add(toType(e.getKey(), keyType), toType(e.getValue(), valueType, valueTypeArgs));
+						((Map<Object,Object>)o).forEach((k,v) -> add(toType(k, keyType), toType(v, valueType, valueTypeArgs)));
 					} else if (isJsonObject(o, false)) {
-						for (Map.Entry<String,Object> e : OMap.ofJson(o.toString()).entrySet())
-							add(toType(e.getKey(), keyType), toType(e.getValue(), valueType, valueTypeArgs));
+						OMap.ofJson(o.toString()).forEach((k,v) -> add(toType(k, keyType), toType(v, valueType, valueTypeArgs)));
 					} else {
 						throw runtimeException("Invalid object type {0} passed to addAny()", className(o));
 					}

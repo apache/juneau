@@ -233,9 +233,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	private boolean shouldUseExpandedParams(BeanPropertyMeta pMeta) {
 		ClassMeta<?> cm = pMeta.getClassMeta().getSerializedClassMeta(this);
 		if (cm.isCollectionOrArray()) {
-			if (isExpandedParams())
-				return true;
-			if (getUrlEncodingClassMeta(pMeta.getBeanMeta().getClassMeta()).isExpandedParams())
+			if (isExpandedParams() || getUrlEncodingClassMeta(pMeta.getBeanMeta().getClassMeta()).isExpandedParams())
 				return true;
 		}
 		return false;
@@ -337,7 +335,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		return m;
 	}
 
-	private SerializerWriter serializeMap(UonWriter out, Map m, ClassMeta<?> type) throws IOException, SerializeException {
+	private SerializerWriter serializeMap(UonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
 
 		m = sort(m);
 
@@ -370,7 +368,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		return out;
 	}
 
-	private SerializerWriter serializeCollectionMap(UonWriter out, Map m, ClassMeta<?> type) throws IOException, SerializeException {
+	private SerializerWriter serializeCollectionMap(UonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
 
 		ClassMeta<?> valueType = type.getValueType();
 
@@ -387,51 +385,42 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		return out;
 	}
 
-	private SerializerWriter serializeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws IOException, SerializeException {
-		boolean addAmp = false;
+	private SerializerWriter serializeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
+		Flag addAmp = Flag.create();
 
-		for (BeanPropertyValue p : m.getValues(isKeepNullProperties(), typeName != null ? createBeanTypeNameProperty(m, typeName) : null)) {
-			BeanPropertyMeta pMeta = p.getMeta();
-			if (pMeta.canRead()) {
-				ClassMeta<?> cMeta = p.getClassMeta();
-				ClassMeta<?> sMeta = cMeta.getSerializedClassMeta(this);
-
-				String key = p.getName();
-				Object value = p.getValue();
-				Throwable t = p.getThrown();
-				if (t != null)
-					onBeanGetterException(pMeta, t);
-
-				if (canIgnoreValue(sMeta, key, value))
-					continue;
-
-				if (value != null && shouldUseExpandedParams(pMeta)) {
-					// Transformed object array bean properties may be transformed resulting in ArrayLists,
-					// so we need to check type if we think it's an array.
-					Iterator i = (sMeta.isCollection() || value instanceof Collection) ? ((Collection)value).iterator() : iterator(value);
-					while (i.hasNext()) {
-						if (addAmp)
-							out.cr(indent).append('&');
-
-						out.appendObject(key, true).append('=');
-
-						super.serializeAnything(out, i.next(), cMeta.getElementType(), key, pMeta);
-
-						addAmp = true;
-					}
-				} else {
-					if (addAmp)
-						out.cr(indent).append('&');
-
-					out.appendObject(key, true).append('=');
-
-					super.serializeAnything(out, value, cMeta, key, pMeta);
-
-					addAmp = true;
-				}
-
-			}
+		if (typeName != null) {
+			BeanPropertyMeta pm = m.getMeta().getTypeProperty();
+			out.appendObject(pm.getName(), true).append('=').appendObject(typeName, false);
+			addAmp.set();
 		}
+
+		Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
+		m.forEachValue(checkNull, (pMeta,key,value,thrown) -> {
+			ClassMeta<?> cMeta = pMeta.getClassMeta();
+			ClassMeta<?> sMeta = cMeta.getSerializedClassMeta(this);
+
+			if (thrown != null)
+				onBeanGetterException(pMeta, thrown);
+
+			if (canIgnoreValue(sMeta, key, value))
+				return;
+
+			if (value != null && shouldUseExpandedParams(pMeta)) {
+				// Transformed object array bean properties may be transformed resulting in ArrayLists,
+				// so we need to check type if we think it's an array.
+				Iterator i = (sMeta.isCollection() || value instanceof Collection) ? ((Collection)value).iterator() : iterator(value);
+				while (i.hasNext()) {
+					addAmp.ifSet(()->out.cr(indent).append('&')).set();
+					out.appendObject(key, true).append('=');
+					super.serializeAnything(out, i.next(), cMeta.getElementType(), key, pMeta);
+				}
+			} else {
+				addAmp.ifSet(()->out.cr(indent).append('&')).set();
+				out.appendObject(key, true).append('=');
+				super.serializeAnything(out, value, cMeta, key, pMeta);
+			}
+		});
+
 		return out;
 	}
 

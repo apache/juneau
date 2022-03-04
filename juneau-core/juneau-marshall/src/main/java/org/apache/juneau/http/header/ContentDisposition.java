@@ -52,7 +52,7 @@ import org.apache.juneau.internal.*;
  * @serial exclude
  */
 @Header("Content-Disposition")
-public class ContentDisposition extends BasicStringRangeArrayHeader {
+public class ContentDisposition extends BasicStringRangesHeader {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

@@ -32,37 +32,37 @@ public class RestOp_ReqHeaders_Test {
 		@RestOp(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
 		public OMap a(RequestHeaders headers) {
 			return OMap.create()
-				.a("h1", headers.get("H1").orElse(null))
-				.a("h2", headers.get("H2").orElse(null))
-				.a("h3", headers.get("H3").orElse(null));
+				.append("h1", headers.get("H1").orElse(null))
+				.append("h2", headers.get("H2").orElse(null))
+				.append("h3", headers.get("H3").orElse(null));
 		}
 		@RestGet(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
 		public OMap b(RequestHeaders headers) {
 			return OMap.create()
-				.a("h1", headers.get("H1").orElse(null))
-				.a("h2", headers.get("H2").orElse(null))
-				.a("h3", headers.get("H3").orElse(null));
+				.append("h1", headers.get("H1").orElse(null))
+				.append("h2", headers.get("H2").orElse(null))
+				.append("h3", headers.get("H3").orElse(null));
 		}
 		@RestPut(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
 		public OMap c(RequestHeaders headers) {
 			return OMap.create()
-				.a("h1", headers.get("H1").orElse(null))
-				.a("h2", headers.get("H2").orElse(null))
-				.a("h3", headers.get("H3").orElse(null));
+				.append("h1", headers.get("H1").orElse(null))
+				.append("h2", headers.get("H2").orElse(null))
+				.append("h3", headers.get("H3").orElse(null));
 		}
 		@RestPost(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
 		public OMap d(RequestHeaders headers) {
 			return OMap.create()
-				.a("h1", headers.get("H1").orElse(null))
-				.a("h2", headers.get("H2").orElse(null))
-				.a("h3", headers.get("H3").orElse(null));
+				.append("h1", headers.get("H1").orElse(null))
+				.append("h2", headers.get("H2").orElse(null))
+				.append("h3", headers.get("H3").orElse(null));
 		}
 		@RestDelete(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
 		public OMap e(RequestHeaders headers) {
 			return OMap.create()
-				.a("h1", headers.get("H1").orElse(null))
-				.a("h2", headers.get("H2").orElse(null))
-				.a("h3", headers.get("H3").orElse(null));
+				.append("h1", headers.get("H1").orElse(null))
+				.append("h2", headers.get("H2").orElse(null))
+				.append("h3", headers.get("H3").orElse(null));
 		}
 	}
 
@@ -100,9 +100,9 @@ public class RestOp_ReqHeaders_Test {
 		@RestGet(defaultRequestHeaders={"H1:1","H2=2"," H3 : 3 "})
 		public OMap a(RequestHeaders headers) {
 			return OMap.create()
-				.a("h1", headers.get("h1").orElse(null))
-				.a("h2", headers.get("h2").orElse(null))
-				.a("h3", headers.get("h3").orElse(null));
+				.append("h1", headers.get("h1").orElse(null))
+				.append("h2", headers.get("h2").orElse(null))
+				.append("h3", headers.get("h3").orElse(null));
 		}
 	}
 

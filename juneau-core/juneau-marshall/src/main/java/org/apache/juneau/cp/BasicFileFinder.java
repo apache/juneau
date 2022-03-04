@@ -18,7 +18,6 @@ import static org.apache.juneau.internal.FileUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
-import static java.util.stream.Collectors.*;
 
 import java.io.*;
 import java.util.*;
@@ -60,6 +59,7 @@ public class BasicFileFinder implements FileFinder {
 	private final LocalDir[] roots;
 	private final long cachingLimit;
 	private final Pattern[] include, exclude;
+	private final String[] includePatterns, excludePatterns;
 	private final int hashCode;
 
 	/**
@@ -70,9 +70,11 @@ public class BasicFileFinder implements FileFinder {
 	public BasicFileFinder(FileFinder.Builder builder) {
 		this.roots = builder.roots.toArray(new LocalDir[builder.roots.size()]);
 		this.cachingLimit = builder.cachingLimit;
-		this.include = builder.include.toArray(new Pattern[builder.include.size()]);
-		this.exclude = builder.exclude.toArray(new Pattern[builder.exclude.size()]);
-		this.hashCode = HashCode.of(getClass(), roots, cachingLimit, getIncludePatterns(), getExcludePatterns());
+		this.include = builder.include;
+		this.exclude = builder.exclude;
+		this.includePatterns = alist(include).stream().map(x->x.pattern()).toArray(String[]::new);
+		this.excludePatterns = alist(exclude).stream().map(x->x.pattern()).toArray(String[]::new);
+		this.hashCode = HashCode.of(getClass(), roots, cachingLimit, includePatterns, excludePatterns);
 	}
 
 	/**
@@ -86,7 +88,9 @@ public class BasicFileFinder implements FileFinder {
 		this.cachingLimit = -1;
 		this.include = new Pattern[0];
 		this.exclude = new Pattern[0];
-		this.hashCode = HashCode.of(getClass(), roots, cachingLimit, getIncludePatterns(), getExcludePatterns());
+		this.includePatterns = new String[0];
+		this.excludePatterns = new String[0];
+		this.hashCode = HashCode.of(getClass(), roots, cachingLimit, includePatterns, excludePatterns);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -201,15 +205,15 @@ public class BasicFileFinder implements FileFinder {
 		String baseName = getBaseName(fileName);
 		String ext = getExtension(fileName);
 
-		for (Locale l : getCandidateLocales(locale)) {
-			String ls = l.toString();
+		getCandidateLocales(locale).forEach(x -> {
+			String ls = x.toString();
 			if (ls.isEmpty())
 				list.add(fileName);
 			else {
 				list.add(baseName + "_" + ls + (ext.isEmpty() ? "" : ('.' + ext)));
 				list.add(ls.replace('_', '/') + '/' + fileName);
 			}
-		}
+		});
 
 		return list;
 	}
@@ -266,14 +270,6 @@ public class BasicFileFinder implements FileFinder {
 		return true;
 	}
 
-	private List<String> getIncludePatterns() {
-		return alist(include).stream().map(x->x.pattern()).collect(toList());
-	}
-
-	private List<String> getExcludePatterns() {
-		return alist(include).stream().map(x->x.pattern()).collect(toList());
-	}
-
 	@Override
 	public int hashCode() {
 		return hashCode;
@@ -281,18 +277,18 @@ public class BasicFileFinder implements FileFinder {
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		return o instanceof BasicFileFinder && eq(this, (BasicFileFinder)o, (x,y)->eq(x.hashCode, y.hashCode) && eq(x.getClass(), y.getClass()) && eq(x.roots, y.roots) && eq(x.cachingLimit, y.cachingLimit) && eq(x.getIncludePatterns(), y.getIncludePatterns()) && eq(x.getExcludePatterns(), y.getExcludePatterns()));
+		return o instanceof BasicFileFinder && eq(this, (BasicFileFinder)o, (x,y)->eq(x.hashCode, y.hashCode) && eq(x.getClass(), y.getClass()) && eq(x.roots, y.roots) && eq(x.cachingLimit, y.cachingLimit) && eq(x.includePatterns, y.includePatterns) && eq(x.excludePatterns, y.excludePatterns));
 	}
 
 	@Override /* Object */
 	public String toString() {
 		return filteredMap()
-			.a("class", getClass().getSimpleName())
-			.a("roots", roots)
-			.a("cachingLimit", cachingLimit)
-			.a("include", getIncludePatterns())
-			.a("exclude", getExcludePatterns())
-			.a("hashCode", hashCode)
+			.append("class", getClass().getSimpleName())
+			.append("roots", roots)
+			.append("cachingLimit", cachingLimit)
+			.append("include", includePatterns)
+			.append("exclude", excludePatterns)
+			.append("hashCode", hashCode)
 			.asReadableString();
 	}
 }

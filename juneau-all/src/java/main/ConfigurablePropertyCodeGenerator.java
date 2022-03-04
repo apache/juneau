@@ -109,7 +109,7 @@ public class ConfigurablePropertyCodeGenerator {
 				ignore.add(i);
 
 			String indent = c.getDeclaringClass() != null ? "\t\t" : "\t";
-			Set<String> sigsAdded = new HashSet<String>();
+			Set<String> sigsAdded = new HashSet<>();
 
 			List<ClassInfo> l = ClassInfo.of(c).getParents();
 			for (int i = l.size()-1; i>=0; i--) {
@@ -159,9 +159,7 @@ public class ConfigurablePropertyCodeGenerator {
 							if (m.isVarArgs()) {
 								Type t = m.getParameters()[m.getParameterCount()-1].getParameterizedType();
 								if (t.toString().contains(" extends ")) {
-									sb.append("\n").append(indent)
-										.append("@SuppressWarnings(\"unchecked\")");
-									;
+									sb.append("\n").append(indent).append("@SuppressWarnings(\"unchecked\")");
 								}
 							}
 

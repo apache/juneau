@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -73,7 +72,7 @@ import org.apache.juneau.http.annotation.*;
  * @serial exclude
  */
 @Header("Allow")
-public class Allow extends BasicCsvArrayHeader {
+public class Allow extends BasicCsvHeader {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -102,7 +101,7 @@ public class Allow extends BasicCsvArrayHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static Allow of(List<String> value) {
+	public static Allow of(String...value) {
 		return value == null ? null : new Allow(value);
 	}
 
@@ -117,7 +116,7 @@ public class Allow extends BasicCsvArrayHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static Allow of(Supplier<List<String>> value) {
+	public static Allow of(Supplier<String[]> value) {
 		return value == null ? null : new Allow(value);
 	}
 
@@ -143,7 +142,7 @@ public class Allow extends BasicCsvArrayHeader {
 	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public Allow(List<String> value) {
+	public Allow(String...value) {
 		super(NAME, value);
 	}
 
@@ -157,7 +156,7 @@ public class Allow extends BasicCsvArrayHeader {
 	 * 	The supplier of the header value.
 	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public Allow(Supplier<List<String>> value) {
+	public Allow(Supplier<String[]> value) {
 		super(NAME, value);
 	}
 }

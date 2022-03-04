@@ -12,9 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -57,10 +57,11 @@ public class BasicLongHeader extends BasicHeader {
 	 * 	The header value.
 	 * 	<br>Must be parsable by {@link Long#parseLong(String)}.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicLongHeader of(String name, String value) {
-		return value == null || isEmpty(name) ? null : new BasicLongHeader(name, value);
+		return value == null ? null : new BasicLongHeader(name, value);
 	}
 
 	/**
@@ -71,10 +72,11 @@ public class BasicLongHeader extends BasicHeader {
 	 * 	The header value.
 	 * 	<br>Must be parsable by {@link Long#parseLong(String)}.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicLongHeader of(String name, Long value) {
-		return value == null || isEmpty(name) ? null : new BasicLongHeader(name, value);
+		return value == null ? null : new BasicLongHeader(name, value);
 	}
 
 	/**
@@ -87,10 +89,11 @@ public class BasicLongHeader extends BasicHeader {
 	 * @param value
 	 * 	The supplier of the header value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicLongHeader of(String name, Supplier<Long> value) {
-		return value == null || isEmpty(name) ? null : new BasicLongHeader(name, value);
+		return value == null ? null : new BasicLongHeader(name, value);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -108,6 +111,7 @@ public class BasicLongHeader extends BasicHeader {
 	 * 	The header value.
 	 * 	<br>Must be parsable by {@link Long#parseLong(String)}.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicLongHeader(String name, String value) {
 		super(name, value);
@@ -122,9 +126,10 @@ public class BasicLongHeader extends BasicHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicLongHeader(String name, Long value) {
-		super(name, serialize(value));
+		super(name, value);
 		this.value = value;
 		this.supplier = null;
 	}
@@ -139,6 +144,7 @@ public class BasicLongHeader extends BasicHeader {
 	 * @param value
 	 * 	The supplier of the header value.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicLongHeader(String name, Supplier<Long> value) {
 		super(name, null);
@@ -148,18 +154,25 @@ public class BasicLongHeader extends BasicHeader {
 
 	@Override /* Header */
 	public String getValue() {
-		if (supplier != null)
-			return serialize(supplier.get());
-		return super.getValue();
+		return stringify(value());
 	}
 
 	/**
-	 * Returns the header value as a long.
+	 * Returns the header value as a {@link Long} wrapped in an {@link Optional}.
 	 *
-	 * @return The header value as a long, or {@link Optional#empty()} if the value is <jk>null</jk>
+	 * @return The header value as a {@link Long} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Long> asLong() {
-		return optional(supplier == null ? value : supplier.get());
+		return optional(value());
+	}
+
+	/**
+	 * Returns the header value as a {@link Long}.
+	 *
+	 * @return The header value as a {@link Long}.  Can be <jk>null</jk>.
+	 */
+	public Long toLong() {
+		return value();
 	}
 
 	/**
@@ -178,11 +191,21 @@ public class BasicLongHeader extends BasicHeader {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public FluentLongAssertion<BasicLongHeader> assertLong() {
-		return new FluentLongAssertion<>(asLong().orElse(null), this);
+		return new FluentLongAssertion<>(value(), this);
 	}
 
-	private static String serialize(Long value) {
-		return stringify(value);
+	/**
+	 * Return the value if present, otherwise return <c>other</c>.
+	 *
+	 * <p>
+	 * This is a shortened form for calling <c>asLong().orElse(<jv>other</jv>)</c>.
+	 *
+	 * @param other The value to be returned if there is no value present, can be <jk>null</jk>.
+	 * @return The value, if present, otherwise <c>other</c>.
+	 */
+	public Long orElse(Long other) {
+		Long x = value();
+		return x != null ? x : other;
 	}
 
 	private Long parse(String value) {
@@ -191,5 +214,11 @@ public class BasicLongHeader extends BasicHeader {
 		} catch (NumberFormatException e) {
 			throw runtimeException("Value ''{0}'' could not be parsed as a long.", value);
 		}
+	}
+
+	private Long value() {
+		if (supplier != null)
+			return supplier.get();
+		return value;
 	}
 }

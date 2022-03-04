@@ -13,8 +13,6 @@
 package org.apache.juneau.rest.stats;
 
 import static java.util.stream.Collectors.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -162,7 +160,7 @@ public class MethodExecStore {
 	 */
 	protected MethodExecStore(Builder builder) {
 		this.beanStore = builder.beanStore();
-		this.thrownStore = optional(builder.thrownStore).orElse(beanStore.getBean(ThrownStore.class).orElseGet(ThrownStore::new));
+		this.thrownStore = builder.thrownStore != null ? builder.thrownStore : beanStore.getBean(ThrownStore.class).orElseGet(ThrownStore::new);
 		this.statsImplClass = builder.statsImplClass;
 	}
 

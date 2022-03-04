@@ -209,6 +209,6 @@ public class RestOperations {
 	 * @return An unmodifiable list of method contexts in this object.
 	 */
 	public List<RestOpContext> getOpContexts() {
-		return unmodifiable(alist(list));
+		return ulist(list);
 	}
 }

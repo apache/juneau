@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.http.HttpHeaders.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
 
@@ -23,23 +25,19 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
-
-import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.HttpHeaders.*;
-
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class BasicStringRangeArrayHeader_Test {
+public class BasicEntityTagsHeader_Test {
 
 	private static final String HEADER = "Foo";
-	private static final String VALUE = "foo, bar";
-	private static final StringRanges PARSED = StringRanges.of("foo, bar");
+	private static final String VALUE = "\"foo\", \"bar\"";
+	private static final EntityTags PARSED = EntityTags.of(EntityTag.of("\"foo\""), EntityTag.of("\"bar\""));
 
 	@Rest
 	public static class A {
 		@RestOp
-		public StringReader get(@Header(name=HEADER) @Schema(cf="multi") String[] h) {
+		public StringReader get(@Header(name=HEADER) @Schema(cf="multi",aev=true) String[] h) {
 			return reader(h == null ? "null" : StringUtils.join(h, '|'));
 		}
 	}
@@ -53,28 +51,20 @@ public class BasicStringRangeArrayHeader_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(stringRangeArrayHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(stringRangeArrayHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(stringRangeArrayHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
-		c.get().header(stringRangeArrayHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(entityTagsHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(entityTagsHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(entityTagsHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
+		c.get().header(entityTagsHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(stringRangeArrayHeader("","*")).run().assertBody().isEmpty();
-		c.get().header(stringRangeArrayHeader(null,"*")).run().assertBody().isEmpty();
-		c.get().header(stringRangeArrayHeader(null,()->null)).run().assertBody().isEmpty();
-		c.get().header(stringRangeArrayHeader(HEADER,(Supplier<StringRanges>)null)).run().assertBody().isEmpty();
-		c.get().header(stringRangeArrayHeader(null,(Supplier<StringRanges>)null)).run().assertBody().isEmpty();
-		c.get().header(stringRangeArrayHeader(HEADER,()->null)).run().assertBody().isEmpty();
-	}
-
-	@Test
-	public void a02_getRange() throws Exception {
-		assertString(stringRangeArrayHeader(HEADER,PARSED).getRange(0)).is("foo");
-	}
-
-	@Test
-	public void a03_getRanges() throws Exception {
-		assertObject(stringRangeArrayHeader(HEADER,PARSED).getRanges()).asJson().is("['foo','bar']");
+		c.get().header(entityTagsHeader(HEADER,(Supplier<EntityTags>)null)).run().assertBody().isEmpty();
+		c.get().header(entityTagsHeader(HEADER,()->null)).run().assertBody().isEmpty();
+		assertThrown(()->entityTagsHeader("", VALUE)).message().is("Name cannot be empty on header.");
+		assertThrown(()->entityTagsHeader(null, VALUE)).message().is("Name cannot be empty on header.");
+		assertThrown(()->entityTagsHeader("", PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->entityTagsHeader(null, PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->entityTagsHeader("", ()->PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->entityTagsHeader(null, ()->PARSED)).message().is("Name cannot be empty on header.");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

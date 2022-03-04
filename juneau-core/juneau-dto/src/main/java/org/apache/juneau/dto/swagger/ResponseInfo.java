@@ -91,8 +91,7 @@ public class ResponseInfo extends SwaggerElement {
 			this.headers = null;
 		} else {
 			this.headers = map();
-			for (Map.Entry<String,HeaderInfo> e : copyFrom.headers.entrySet())
-				this.headers.put(e.getKey(), e.getValue().copy());
+			copyFrom.headers.forEach((k,v) -> this.headers.put(k, v.copy()));
 		}
 
 	}
@@ -544,8 +543,7 @@ public class ResponseInfo extends SwaggerElement {
 			schema = schema.resolveRefs(swagger, refStack, maxDepth);
 
 		if (headers != null)
-			for (Map.Entry<String,HeaderInfo> e : headers.entrySet())
-				e.setValue(e.getValue().resolveRefs(swagger, refStack, maxDepth));
+			headers.entrySet().forEach(x -> x.setValue(x.getValue().resolveRefs(swagger, refStack, maxDepth)));
 
 		return this;
 	}

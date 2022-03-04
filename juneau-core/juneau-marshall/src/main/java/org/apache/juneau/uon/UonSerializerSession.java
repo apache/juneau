@@ -275,11 +275,10 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	 * 	<jk>null</jk> if this isn't a bean property being serialized.
 	 * @param pMeta The bean property metadata.
 	 * @return The same writer passed in.
-	 * @throws IOException Thrown by underlying stream.
 	 * @throws SerializeException Generic serialization error occurred.
 	 */
 	@SuppressWarnings({ "rawtypes" })
-	protected SerializerWriter serializeAnything(UonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws IOException, SerializeException {
+	protected SerializerWriter serializeAnything(UonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
 
 		if (o == null) {
 			out.appendObject(null, false);
@@ -347,10 +346,10 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 			serializeCollection(out, toList(sType.getInnerClass(), o), eType);
 		}
 		else if (sType.isReader()) {
-			pipe((Reader)o, out);
+			pipe((Reader)o, out, SerializerSession::handleThrown);
 		}
 		else if (sType.isInputStream()) {
-			pipe((InputStream)o, out);
+			pipe((InputStream)o, out, SerializerSession::handleThrown);
 		}
 		else {
 			out.appendObject(o, false);
@@ -362,7 +361,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private SerializerWriter serializeMap(UonWriter out, Map m, ClassMeta<?> type) throws IOException, SerializeException {
+	private SerializerWriter serializeMap(UonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
 
 		m = sort(m);
 
@@ -392,37 +391,35 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		return out;
 	}
 
-	private SerializerWriter serializeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws IOException, SerializeException {
+	private SerializerWriter serializeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
 
 		if (! plainTextParams)
 			out.append('(');
 
-		boolean addComma = false;
+		Flag addComma = Flag.create();
 
-		for (BeanPropertyValue p : m.getValues(isKeepNullProperties(), typeName != null ? createBeanTypeNameProperty(m, typeName) : null)) {
-			BeanPropertyMeta pMeta = p.getMeta();
-			if (pMeta.canRead()) {
-				ClassMeta<?> cMeta = p.getClassMeta();
-
-				String key = p.getName();
-				Object value = p.getValue();
-				Throwable t = p.getThrown();
-				if (t != null)
-					onBeanGetterException(pMeta, t);
-
-				if (canIgnoreValue(cMeta, key, value))
-					continue;
-
-				if (addComma)
-					out.append(',');
-
-				out.cr(indent).appendObject(key, false).append('=');
-
-				serializeAnything(out, value, cMeta, key, pMeta);
-
-				addComma = true;
-			}
+		if (typeName != null) {
+			BeanPropertyMeta pm = m.getMeta().getTypeProperty();
+			out.cr(indent).appendObject(pm.getName(), false).append('=').appendObject(typeName, false);
+			addComma.set();
 		}
+
+		Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
+		m.forEachValue(checkNull, (pMeta,key,value,thrown) -> {
+			ClassMeta<?> cMeta = pMeta.getClassMeta();
+
+			if (thrown != null)
+				onBeanGetterException(pMeta, thrown);
+
+			if (canIgnoreValue(cMeta, key, value))
+				return;
+
+			addComma.ifSet(() -> out.append(',')).set();
+
+			out.cr(indent).appendObject(key, false).append('=');
+
+			serializeAnything(out, value, cMeta, key, pMeta);
+		});
 
 		if (m.size() > 0)
 			out.cre(indent-1);
@@ -433,7 +430,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private SerializerWriter serializeCollection(UonWriter out, Collection c, ClassMeta<?> type) throws IOException, SerializeException {
+	private SerializerWriter serializeCollection(UonWriter out, Collection c, ClassMeta<?> type) throws SerializeException {
 
 		ClassMeta<?> elementType = type.getElementType();
 

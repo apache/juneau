@@ -483,11 +483,14 @@ public final class SerializerSet {
 	// Maps Accept headers to matching serializers.
 	private final ConcurrentHashMap<String,SerializerMatch> cache = new ConcurrentHashMap<>();
 
-	private final List<MediaRange> mediaRanges;
-	private final List<Serializer> mediaTypeRangeSerializers;
+	private final MediaRange[] mediaRanges;
+	private final List<MediaRange> mediaRangesList;
+	private final Serializer[] mediaTypeRangeSerializers;
 
+	private final MediaType[] mediaTypes;
 	private final List<MediaType> mediaTypesList;
 	final Serializer[] entries;
+	private final List<Serializer> entriesList;
 
 	/**
 	 * Constructor.
@@ -497,22 +500,24 @@ public final class SerializerSet {
 	protected SerializerSet(Builder builder) {
 
 		this.entries = builder.entries.stream().map(x -> build(x)).toArray(Serializer[]::new);
+		this.entriesList = ulist(entries);
 
 		List<MediaRange> lmtr = list();
 		Set<MediaType> lmt = set();
 		List<Serializer> l = list();
 		for (Serializer e : entries) {
-			for (MediaRange m: e.getMediaTypeRanges().getRanges()) {
-				lmtr.add(m);
+			e.getMediaTypeRanges().forEachRange(x -> {
+				lmtr.add(x);
 				l.add(e);
-			}
-			for (MediaType mt : e.getAcceptMediaTypes())
-				lmt.add(mt);
+			});
+			e.forEachAcceptMediaType(x -> lmt.add(x));
 		}
 
-		this.mediaRanges = unmodifiable(lmtr);
-		this.mediaTypesList = unmodifiable(listFrom(lmt));
-		this.mediaTypeRangeSerializers = unmodifiable(l);
+		this.mediaRanges = lmtr.toArray(new MediaRange[lmtr.size()]);
+		this.mediaRangesList = ulist(mediaRanges);
+		this.mediaTypes = lmt.toArray(new MediaType[lmt.size()]);
+		this.mediaTypesList = ulist(mediaTypes);
+		this.mediaTypeRangeSerializers = l.toArray(new Serializer[l.size()]);
 	}
 
 	private Serializer build(Object o) {
@@ -561,9 +566,9 @@ public final class SerializerSet {
 			return sm;
 
 		Accept a = accept(acceptHeader);
-		int match = a.match(mediaRanges);
+		int match = a.match(mediaRangesList);
 		if (match >= 0) {
-			sm = new SerializerMatch(mediaRanges.get(match), mediaTypeRangeSerializers.get(match));
+			sm = new SerializerMatch(mediaRanges[match], mediaTypeRangeSerializers[match]);
 			cache.putIfAbsent(acceptHeader, sm);
 		}
 
@@ -661,7 +666,7 @@ public final class SerializerSet {
 	 * @return An unmodifiable list of serializers in this group.
 	 */
 	public List<Serializer> getSerializers() {
-		return unmodifiable(alist(entries));
+		return entriesList;
 	}
 
 	/**

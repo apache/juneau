@@ -138,6 +138,8 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
+	private static final Namespace[] EMPTY_NAMESPACE_ARRAY = new Namespace[0];
+
 	/** Default serializer without namespaces. */
 	public static final XmlSerializer DEFAULT = new XmlSerializer(create());
 
@@ -1179,9 +1181,8 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		enableNamespaces = builder.enableNamespaces;
 		addNamespaceUrlsToRoot = builder.addNamespaceUrisToRoot;
 		addBeanTypesXml = builder.addBeanTypesXml;
-		defaultNamespace = optional(builder.defaultNamespace).orElse(DEFAULT_JUNEAU_NAMESPACE);
-		namespaces = optional(builder.namespaces).map(x -> x.toArray(new Namespace[0])).orElse(new Namespace[0]);
-
+		defaultNamespace = builder.defaultNamespace != null ? builder.defaultNamespace : DEFAULT_JUNEAU_NAMESPACE;
+		namespaces = builder.namespaces != null ? builder.namespaces.toArray(EMPTY_NAMESPACE_ARRAY) : EMPTY_NAMESPACE_ARRAY;
 		addBeanTypes = addBeanTypesXml || super.isAddBeanTypes();
 	}
 
@@ -1313,11 +1314,11 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 	@Override /* Context */
 	protected OMap properties() {
 		return filteredMap()
-			.a("autoDetectNamespaces", autoDetectNamespaces)
-			.a("enableNamespaces", enableNamespaces)
-			.a("addNamespaceUrlsToRoot", addNamespaceUrlsToRoot)
-			.a("defaultNamespace", defaultNamespace)
-			.a("namespaces", namespaces)
-			.a("addBeanTypes", addBeanTypes);
+			.append("autoDetectNamespaces", autoDetectNamespaces)
+			.append("enableNamespaces", enableNamespaces)
+			.append("addNamespaceUrlsToRoot", addNamespaceUrlsToRoot)
+			.append("defaultNamespace", defaultNamespace)
+			.append("namespaces", namespaces)
+			.append("addBeanTypes", addBeanTypes);
 	}
 }

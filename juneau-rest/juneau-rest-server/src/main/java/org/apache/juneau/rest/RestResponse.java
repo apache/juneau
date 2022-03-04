@@ -152,7 +152,7 @@ public final class RestResponse {
 		Charset charset = null;
 		if (h == null)
 			charset = opContext.getDefaultCharset();
-		else for (StringRange r : StringRanges.of(h).getRanges()) {
+		else for (StringRange r : StringRanges.of(h).toList()) {
 			if (r.getQValue() > 0) {
 				if (r.getName().equals("*"))
 					charset = opContext.getDefaultCharset();

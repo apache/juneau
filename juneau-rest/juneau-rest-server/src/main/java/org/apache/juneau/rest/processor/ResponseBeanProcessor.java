@@ -48,10 +48,7 @@ public final class ResponseBeanProcessor implements ResponseProcessor {
 
 		Object output = res.getOutput(Object.class);
 
-		if (output == null)
-			return NEXT;
-
-		if (! (output.getClass().getAnnotation(Response.class) != null || res.getResponseBeanMeta() != null))
+		if (output == null || ! (output.getClass().getAnnotation(Response.class) != null || res.getResponseBeanMeta() != null))
 			return NEXT;
 
 		ResponseBeanMeta rm = res.getResponseBeanMeta();

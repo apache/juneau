@@ -60,7 +60,7 @@ public class BasicHeader_Test {
 	@Test
 	public void a05_assertions() {
 		BasicHeader x = header("X1","1");
-		x.assertName().is("X1").assertValue().is("1");
+		x.assertName().is("X1").assertStringValue().is("1");
 	}
 
 	@Test

@@ -87,9 +87,6 @@ public class RestClient_Headers_Test {
 		checkFooClient().header("Foo","bar").build().get("/headers").header("Foo","baz").run().assertBody().is("['bar','baz']");
 		checkFooClient().headers(header("Foo",bean,null)).build().get("/headers").header("Foo",bean).run().assertBody().is("['f=1','f=1']");
 		checkFooClient().headers(header("Foo",null,null)).build().get("/headers").header("Foo",null).run().assertBody().is("[]");
-
-		checkClient("null").header(null,"bar").build().get("/headers").header(null,"Foo").run().assertBody().is("[]");
-		checkClient("null").header(null,(String)null).build().get("/headers").header((String)null,null).run().assertBody().is("[]");
 	}
 
 	@Test

@@ -249,11 +249,10 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 * @param attrName The attribute name.
 	 * @param pMeta The bean property currently being parsed.
 	 * @return The same writer passed in.
-	 * @throws IOException Thrown by underlying stream.
 	 * @throws SerializeException General serialization error occurred.
 	 */
 	@SuppressWarnings({ "rawtypes" })
-	protected JsonWriter serializeAnything(JsonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws IOException, SerializeException {
+	protected JsonWriter serializeAnything(JsonWriter out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
 
 		if (o == null) {
 			out.append("null");
@@ -299,7 +298,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 
 		String wrapperAttr = getJsonClassMeta(sType).getWrapperAttr();
 		if (wrapperAttr != null) {
-			out.append('{').cr(indent).attr(wrapperAttr).append(':').s(indent);
+			out.w('{').cr(indent).attr(wrapperAttr).w(':').s(indent);
 			indent++;
 		}
 
@@ -322,16 +321,16 @@ public class JsonSerializerSession extends WriterSerializerSession {
 		} else if (sType.isArray()) {
 			serializeCollection(out, toList(sType.getInnerClass(), o), eType);
 		} else if (sType.isReader()) {
-			pipe((Reader)o, out);
+			pipe((Reader)o, out, SerializerSession::handleThrown);
 		} else if (sType.isInputStream()) {
-			pipe((InputStream)o, out);
+			pipe((InputStream)o, out, SerializerSession::handleThrown);
 		} else {
 			out.stringValue(toString(o));
 		}
 
 		if (wrapperAttr != null) {
 			indent--;
-			out.cre(indent-1).append('}');
+			out.cre(indent-1).w('}');
 		}
 
 		if (! isRecursion)
@@ -340,14 +339,14 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private SerializerWriter serializeMap(JsonWriter out, Map m, ClassMeta<?> type) throws IOException, SerializeException {
+	private SerializerWriter serializeMap(JsonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
 
 		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
 
 		m = sort(m);
 
 		int i = indent;
-		out.append('{');
+		out.w('{');
 
 		Iterator mapEntries = m.entrySet().iterator();
 
@@ -357,68 +356,68 @@ public class JsonSerializerSession extends WriterSerializerSession {
 
 			Object key = generalize(e.getKey(), keyType);
 
-			out.cr(i).attr(toString(key)).append(':').s(i);
+			out.cr(i).attr(toString(key)).w(':').s(i);
 
 			serializeAnything(out, value, valueType, (key == null ? null : toString(key)), null);
 
 			if (mapEntries.hasNext())
-				out.append(',').smi(i);
+				out.w(',').smi(i);
 		}
 
-		out.cre(i-1).append('}');
+		out.cre(i-1).w('}');
 
 		return out;
 	}
 
-	private SerializerWriter serializeBeanMap(JsonWriter out, BeanMap<?> m, String typeName) throws IOException, SerializeException {
+	private SerializerWriter serializeBeanMap(JsonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
 		int i = indent;
-		out.append('{');
+		out.w('{');
 
-		boolean addComma = false;
-		for (BeanPropertyValue p : m.getValues(isKeepNullProperties(), typeName != null ? createBeanTypeNameProperty(m, typeName) : null)) {
-			BeanPropertyMeta pMeta = p.getMeta();
-			if (pMeta.canRead()) {
-				ClassMeta<?> cMeta = p.getClassMeta();
-				String key = p.getName();
-				Object value = p.getValue();
-				Throwable t = p.getThrown();
-				if (t != null)
-					onBeanGetterException(pMeta, t);
+		Flag addComma = Flag.create();
+		Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
 
-				if (canIgnoreValue(cMeta, key, value))
-					continue;
-
-				if (addComma)
-					out.append(',').smi(i);
-
-				out.cr(i).attr(key).append(':').s(i);
-
-				serializeAnything(out, value, cMeta, key, pMeta);
-
-				addComma = true;
-			}
+		if (typeName != null) {
+			BeanPropertyMeta pm = m.getMeta().getTypeProperty();
+			out.cr(i).attr(pm.getName()).w(':').s(i).stringValue(typeName);
+			addComma.set();
 		}
-		out.cre(i-1).append('}');
+
+		m.forEachValue(checkNull, (pMeta,key,value,thrown) -> {
+			ClassMeta<?> cMeta = pMeta.getClassMeta();
+			if (thrown != null)
+				onBeanGetterException(pMeta, thrown);
+
+			if (canIgnoreValue(cMeta, key, value))
+				return;
+
+			addComma.ifSet(()->out.append(',').smi(i)).set();
+
+			out.cr(i).attr(key).w(':').s(i);
+
+			serializeAnything(out, value, cMeta, key, pMeta);
+		});
+
+		out.cre(i-1).w('}');
 		return out;
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private SerializerWriter serializeCollection(JsonWriter out, Collection c, ClassMeta<?> type) throws IOException, SerializeException {
+	private SerializerWriter serializeCollection(JsonWriter out, Collection c, ClassMeta<?> type) throws SerializeException {
 
 		ClassMeta<?> elementType = type.getElementType();
 
 		c = sort(c);
 
-		out.append('[');
+		out.w('[');
 
 		for (Iterator i = c.iterator(); i.hasNext();) {
 			Object value = i.next();
 			out.cr(indent);
 			serializeAnything(out, value, elementType, "<iterator>", null);
 			if (i.hasNext())
-				out.append(',').smi(indent);
+				out.w(',').smi(indent);
 		}
-		out.cre(indent-1).append(']');
+		out.cre(indent-1).w(']');
 		return out;
 	}
 

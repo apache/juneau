@@ -55,7 +55,7 @@ public class PoweredByApache extends Widget {
 	 * Returns an Apache image tag hyperlinked to <js>"http://apache.org"</js>
 	 */
 	@Override /* Widget */
-	public String getHtml(RestRequest req, RestResponse res) throws Exception {
+	public String getHtml(RestRequest req, RestResponse res) {
 		UriResolver r = req.getUriResolver();
 		return "<a href='http://apache.org'><img style='float:right;padding-right:20px;height:32px' src='"+r.resolve("servlet:/htdocs/asf.png")+"'>";
 	}

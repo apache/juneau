@@ -158,7 +158,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @see MockRestClient.Builder#pathVars(Map)
 	 */
 	public MockServletRequest pathVars(Map<String,String> pathVars) {
-		if (isNotEmpty(pathVars))
+		if (pathVars != null)
 			this.attributeMap.put("juneau.pathVars", new TreeMap<>(pathVars));
 		return this;
 	}

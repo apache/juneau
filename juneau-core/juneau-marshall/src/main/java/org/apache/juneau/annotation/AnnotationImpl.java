@@ -96,7 +96,7 @@ public class AnnotationImpl implements Annotation {
 		stream(annotationType().getDeclaredMethods())
 			.filter(x->x.getParameterCount() == 0 && x.getDeclaringClass().isAnnotation())
 			.sorted(Comparator.comparing(Method::getName))
-			.forEach(x -> om.a(x.getName(), safeSupplier(()->x.invoke(this))));
+			.forEach(x -> om.append(x.getName(), safeSupplier(()->x.invoke(this))));
 		return om;
 	}
 

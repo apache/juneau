@@ -73,9 +73,7 @@ public class VersionRange {
 		if (isEmpty(v))
 			return (minVersion == null && maxVersion == null);
 		Version ver = new Version(v);
-		if (minVersion != null && ! ver.isAtLeast(minVersion, minExclusive))
-			return false;
-		if (maxVersion != null && ! ver.isAtMost(maxVersion, maxExclusive))
+		if ((minVersion != null && ! ver.isAtLeast(minVersion, minExclusive)) || (maxVersion != null && ! ver.isAtMost(maxVersion, maxExclusive)))
 			return false;
 		return true;
 	}

@@ -856,12 +856,10 @@ public class HeaderList {
 						}
 					}
 				}
-
-				for (Header v : values) {
-					if (v != null) {
-						defaultEntries.add(v);
-					}
-				}
+				values.forEach(x -> {
+					if (x != null)
+						defaultEntries.add(x);
+				});
 			}
 
 			return this;

@@ -92,7 +92,7 @@ import org.apache.juneau.internal.*;
  * @serial exclude
  */
 @Header("TE")
-public class TE extends BasicStringRangeArrayHeader {
+public class TE extends BasicStringRangesHeader {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static

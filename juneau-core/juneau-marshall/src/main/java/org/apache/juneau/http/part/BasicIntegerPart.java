@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -32,21 +31,18 @@ import org.apache.juneau.assertions.*;
  */
 public class BasicIntegerPart extends BasicPart {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Static creator.
 	 *
 	 * @param name The part name.
-	 * @param value
-	 * 	The part value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to an integer using {@link Number#intValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Integer#parseInt(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
+	 * @param value The part value.
 	 * @return A new {@link BasicIntegerPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicIntegerPart of(String name, Object value) {
+	public static BasicIntegerPart of(String name, Integer value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicIntegerPart(name, value);
@@ -59,56 +55,83 @@ public class BasicIntegerPart extends BasicPart {
 	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.
 	 *
 	 * @param name The part name.
-	 * @param value
-	 * 	The part value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to an integer using {@link Number#intValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Integer#parseInt(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link BasicIntegerPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * @param value The part value supplier.
+	 * @return A new {@link BasicIntegerPart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
-	public static BasicIntegerPart of(String name, Supplier<?> value) {
+	public static BasicIntegerPart of(String name, Supplier<Integer> value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicIntegerPart(name, value);
 	}
 
-	private Integer parsed;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final Integer value;
+	private final Supplier<Integer> supplier;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param name The part name.
-	 * @param value
-	 * 	The part value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to an integer using {@link Number#intValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Integer#parseInt(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * @param name The part name.  Must not be <jk>null</jk>.
+	 * @param value The part value.  Can be <jk>null</jk>.
 	 */
-	public BasicIntegerPart(String name, Object value) {
+	public BasicIntegerPart(String name, Integer value) {
 		super(name, value);
-		if (! isSupplier(value))
-			parsed = getParsedValue();
+		this.value = value;
+		this.supplier = null;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param name The part name.  Must not be <jk>null</jk>.
+	 * @param value The part value supplier.  Can be <jk>null</jk> or supply <jk>null</jk>.
+	 */
+	public BasicIntegerPart(String name, Supplier<Integer> value) {
+		super(name, value);
+		this.value = null;
+		this.supplier = value;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * <jk>null</jk> and empty values are treated as <jk>null</jk>.
+	 * Otherwise parses using {@link Integer#valueOf(String)}.
+	 *
+	 * @param name The part name.  Must not be <jk>null</jk>.
+	 * @param value The part value.  Can be <jk>null</jk>.
+	 */
+	public BasicIntegerPart(String name, String value) {
+		super(name, value);
+		this.value = isEmpty(value) ? null : Integer.valueOf(value);
+		this.supplier = null;
 	}
 
 	@Override /* Header */
 	public String getValue() {
-		return stringify(getParsedValue());
+		return stringify(value());
 	}
 
 	/**
-	 * Returns The part value as an integer.
+	 * Returns The part value as an {@link Integer} wrapped in an {@link Optional}.
 	 *
-	 * @return The part value as an integer, or {@link Optional#empty()} if the value is <jk>null</jk>.
+	 * @return The part value as an {@link Integer} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Integer> asInteger() {
-		return optional(getParsedValue());
+		return optional(toInteger());
+	}
+
+	/**
+	 * Returns The part value as an {@link Integer}.
+	 *
+	 * @return The part value as an {@link Integer}, or <jk>null</jk> if the value <jk>null</jk>.
+	 */
+	public Integer toInteger() {
+		return value();
 	}
 
 	/**
@@ -118,31 +141,26 @@ public class BasicIntegerPart extends BasicPart {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public FluentIntegerAssertion<BasicIntegerPart> assertInteger() {
-		return new FluentIntegerAssertion<>(getParsedValue(), this);
+		return new FluentIntegerAssertion<>(value(), this);
 	}
 
-	private Integer getParsedValue() {
-		if (parsed != null)
-			return parsed;
-		Object o = getRawValue();
-		if (o == null)
-			return null;
-		if (o instanceof Integer)
-			return (Integer)o;
-		if (o instanceof Number)
-			return ((Number)o).intValue();
-		String s = o.toString();
-		if (isEmpty(s))
-			return null;
-		try {
-			return Integer.parseInt(s);
-		} catch (NumberFormatException e) {
-			try {
-				Long.parseLong(s);
-				return Integer.MAX_VALUE;
-			} catch (NumberFormatException e2) {
-				throw illegalArgumentException("Value could not be parsed as an int: {0}", o);
-			}
-		}
+	/**
+	 * Return the value if present, otherwise return <c>other</c>.
+	 *
+	 * <p>
+	 * This is a shortened form for calling <c>asInteger().orElse(<jv>other</jv>)</c>.
+	 *
+	 * @param other The value to be returned if there is no value present, can be <jk>null</jk>.
+	 * @return The value, if present, otherwise <c>other</c>.
+	 */
+	public Integer orElse(Integer other) {
+		Integer x = value();
+		return x != null ? x : other;
+	}
+
+	private Integer value() {
+		if (supplier != null)
+			return supplier.get();
+		return value;
 	}
 }

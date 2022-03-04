@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -78,7 +77,7 @@ import org.apache.juneau.http.annotation.*;
  * @serial exclude
  */
 @Header("Content-Language")
-public class ContentLanguage extends BasicCsvArrayHeader {
+public class ContentLanguage extends BasicCsvHeader {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -107,7 +106,7 @@ public class ContentLanguage extends BasicCsvArrayHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static ContentLanguage of(List<String> value) {
+	public static ContentLanguage of(String...value) {
 		return value == null ? null : new ContentLanguage(value);
 	}
 
@@ -122,7 +121,7 @@ public class ContentLanguage extends BasicCsvArrayHeader {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static ContentLanguage of(Supplier<List<String>> value) {
+	public static ContentLanguage of(Supplier<String[]> value) {
 		return value == null ? null : new ContentLanguage(value);
 	}
 
@@ -148,7 +147,7 @@ public class ContentLanguage extends BasicCsvArrayHeader {
 	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public ContentLanguage(List<String> value) {
+	public ContentLanguage(String...value) {
 		super(NAME, value);
 	}
 
@@ -162,7 +161,7 @@ public class ContentLanguage extends BasicCsvArrayHeader {
 	 * 	The supplier of the header value.
 	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public ContentLanguage(Supplier<List<String>> value) {
+	public ContentLanguage(Supplier<String[]> value) {
 		super(NAME, value);
 	}
 }

@@ -22,7 +22,6 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
@@ -256,16 +255,6 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	 */
 	protected Optional<Class<?>[]> classes(Class<?>[] in) {
 		return optional(in.length == 0 ? null : in);
-	}
-
-	/**
-	 * Convenience method for detecting if an array is empty.
-	 *
-	 * @param value The array to check.
-	 * @return <jk>true</jk> if the specified array is empty.
-	 */
-	protected boolean isEmpty(Object value) {
-		return ObjectUtils.isEmpty(value);
 	}
 
 	/**

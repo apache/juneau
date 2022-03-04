@@ -96,9 +96,9 @@ public class BeanPropertyValue implements Comparable<BeanPropertyValue> {
 	@Override /* Object */
 	public String toString() {
 		return OMap.create()
-			.a("name", name)
-			.a("value", value)
-			.a("type", pMeta.getClassMeta().getInnerClass().getSimpleName())
+			.append("name", name)
+			.append("value", value)
+			.append("type", pMeta.getClassMeta().getInnerClass().getSimpleName())
 			.toString();
 	}
 }

@@ -2259,8 +2259,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			pathMatchers = bs.add(UrlPathMatcher[].class, builder.getPathMatchers().asArray());
 			bs.addBean(UrlPathMatcher.class, pathMatchers.length > 0 ? pathMatchers[0] : null);
 
-			supportedAcceptTypes = unmodifiable(optional(builder.produces).orElseGet(()->serializers.getSupportedMediaTypes()));
-			supportedContentTypes = unmodifiable(optional(builder.consumes).orElseGet(()->parsers.getSupportedMediaTypes()));
+			supportedAcceptTypes = unmodifiable(builder.produces != null ? builder.produces : serializers.getSupportedMediaTypes());
+			supportedContentTypes = unmodifiable(builder.consumes != null ? builder.consumes : parsers.getSupportedMediaTypes());
 
 			defaultRequestHeaders = builder.defaultRequestHeaders().build();
 			defaultResponseHeaders = builder.defaultResponseHeaders().build();
@@ -2283,8 +2283,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				_httpMethod = "*";
 			httpMethod = _httpMethod.toUpperCase(Locale.ENGLISH);
 
-			defaultCharset = optional(builder.defaultCharset).orElse(context.defaultCharset);
-			maxInput = optional(builder.maxInput).orElse(context.maxInput);
+			defaultCharset = builder.defaultCharset != null ? builder.defaultCharset : context.defaultCharset;
+			maxInput = builder.maxInput != null ? builder.maxInput : context.maxInput;
 
 			responseMeta = ResponseBeanMeta.create(mi, builder.getApplied());
 
@@ -2709,10 +2709,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	@Override /* Context */
 	protected OMap properties() {
 		return filteredMap()
-			.a("defaultRequestFormData", defaultRequestFormData)
-			.a("defaultRequestHeaders", defaultRequestHeaders)
-			.a("defaultRequestQueryData", defaultRequestQueryData)
-			.a("httpMethod", httpMethod);
+			.append("defaultRequestFormData", defaultRequestFormData)
+			.append("defaultRequestHeaders", defaultRequestHeaders)
+			.append("defaultRequestQueryData", defaultRequestQueryData)
+			.append("httpMethod", httpMethod);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

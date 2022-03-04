@@ -1237,7 +1237,7 @@ public class ResponseBody implements HttpEntity {
 	 */
 	@Override /* HttpEntity */
 	public ResponseHeader getContentType() {
-		return new ResponseHeader(request, response, entity.getContentType());
+		return new ResponseHeader("Content-Type", request, response, entity.getContentType());
 	}
 
 	/**
@@ -1251,7 +1251,7 @@ public class ResponseBody implements HttpEntity {
 	 */
 	@Override /* HttpEntity */
 	public ResponseHeader getContentEncoding() {
-		return new ResponseHeader(request, response, entity.getContentEncoding());
+		return new ResponseHeader("Content-Encoding", request, response, entity.getContentEncoding());
 	}
 
 	/**

@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
+import static org.apache.juneau.internal.ArrayUtils.copyOf;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
-import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
@@ -32,23 +32,20 @@ import org.apache.juneau.assertions.*;
  */
 public class BasicCsvArrayPart extends BasicPart {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private static final String[] EMPTY = new String[0];
+
 	/**
 	 * Static creator.
 	 *
 	 * @param name The part name.
-	 * @param value
-	 * 	The part value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - A comma-delimited string.
-	 * 		<li><c>String[]</c> - A pre-parsed value.
-	 * 		<li>Any other array type - Converted to <c>String[]</c>.
-	 * 		<li>Any {@link Collection} - Converted to <c>String[]</c>.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
+	 * @param value The part value.
 	 * @return A new {@link BasicCsvArrayPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicCsvArrayPart of(String name, Object value) {
+	public static BasicCsvArrayPart of(String name, String...value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicCsvArrayPart(name, value);
@@ -61,54 +58,73 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.
 	 *
 	 * @param name The part name.
-	 * @param value
-	 * 	The part value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - A comma-delimited string.
-	 * 		<li><c>String[]</c> - A pre-parsed value.
-	 * 		<li>Any other array type - Converted to <c>String[]</c>.
-	 * 		<li>Any {@link Collection} - Converted to <c>String[]</c>.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link BasicCsvArrayPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * @param value The part value supplier.
+	 * @return A new {@link BasicCsvArrayPart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
-	public static BasicCsvArrayPart of(String name, Supplier<?> value) {
+	public static BasicCsvArrayPart of(String name, Supplier<String[]> value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicCsvArrayPart(name, value);
 	}
 
-	private List<String> parsed;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final String[] value;
+	private final Supplier<String[]> supplier;
+	private String stringValue;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param name The part name.
-	 * @param value
-	 * 	The part value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li><c>String</c> - A comma-delimited string.
-	 * 		<li><c>String[]</c> - A pre-parsed value.
-	 * 		<li>Any other array type - Converted to <c>String[]</c>.
-	 * 		<li>Any {@link Collection} - Converted to <c>String[]</c>.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * @param name The part name.  Must not be <jk>null</jk>.
+	 * @param value The part value.  Can be <jk>null</jk>.
 	 */
-	public BasicCsvArrayPart(String name, Object value) {
+	public BasicCsvArrayPart(String name, String...value) {
 		super(name, value);
-		if (! isSupplier(value))
-			parsed = getParsedValue();
+		this.value = value;
+		this.supplier = null;
+		this.stringValue = null;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param name The part name.  Must not be <jk>null</jk>.
+	 * @param value The part value supplier.  Can be <jk>null</jk> or supply <jk>null</jk>.
+	 */
+	public BasicCsvArrayPart(String name, Supplier<String[]> value) {
+		super(name, value);
+		this.value = null;
+		this.supplier = value;
+		this.stringValue = null;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * <jk>null</jk> values are treated as <jk>null</jk>.
+	 * Otherwise parses as a comma-delimited list with whitespace trimmed.
+	 *
+	 * @param name The part name.  Must not be <jk>null</jk>.
+	 * @param value The part value.  Can be <jk>null</jk>.
+	 */
+	public BasicCsvArrayPart(String name, String value) {
+		super(name, value);
+		this.value = split(value);
+		this.supplier = null;
+		this.stringValue = value;
 	}
 
 	@Override /* Header */
 	public String getValue() {
-		Object o = getRawValue();
-		if (o instanceof String)
-			return (String)o;
-		return joine(getParsedValue(), ',');
+		if (supplier != null)
+			return join(supplier.get(), ',');
+		if (stringValue != null)
+			stringValue = join(value, ',');
+		return stringValue;
 	}
 
 	/**
@@ -118,9 +134,8 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @return <jk>true</jk> if this part contains the specified value.
 	 */
 	public boolean contains(String val) {
-		List<String> vv = getParsedValue();
-		if (val != null && vv != null)
-			for (String v : vv)
+		if (val != null)
+			for (String v : value())
 				if (eq(v, val))
 					return true;
 		return false;
@@ -133,9 +148,8 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @return <jk>true</jk> if this part contains the specified value.
 	 */
 	public boolean containsIgnoreCase(String val) {
-		List<String> vv = getParsedValue();
-		if (val != null && vv != null)
-			for (String v : vv)
+		if (val != null)
+			for (String v : value())
 				if (eqic(v, val))
 					return true;
 		return false;
@@ -148,37 +162,76 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public FluentListAssertion<String,BasicCsvArrayPart> assertList() {
-		return new FluentListAssertion<>(getParsedValue(), this);
+		return new FluentListAssertion<>(ulist(value()), this);
 	}
 
 	/**
-	 * Returns the contents of this part as a list of strings.
+	 * Returns The part value as a {@link List}.
 	 *
-	 * @return The contents of this part as an unmodifiable list of strings, or {@link Optional#empty()} if the value was <jk>null</jk>.
+	 * <p>
+	 * The list is unmodifiable.
+	 *
+	 * @return The part value as a {@link List}, or <jk>null</jk> if the value <jk>null</jk>.
 	 */
-	public Optional<List<String>> asList() {
-		List<String> l = getParsedValue();
-		return optional(unmodifiable(l));
+	public List<String> toList() {
+		return ulist(value());
 	}
 
-	private List<String> getParsedValue() {
-		if (parsed != null)
-			return parsed;
+	/**
+	 * Returns The part value as a {@link List} wrapped in an {@link Optional}.
+	 *
+	 * <p>
+	 * The list is unmodifiable.
+	 *
+	 * @return The part value as a {@link List} wrapped in an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<List<String>> asList() {
+		return optional(toList());
+	}
 
-		Object o = getRawValue();
-		if (o == null)
-			return null;
+	/**
+	 * Returns The part value as an array.
+	 *
+	 * <p>
+	 * The array is a copy of the value of this part.
+	 *
+	 * @return The part value as an array, or <jk>null</jk> if the value <jk>null</jk>.
+	 */
+	public String[] toArray() {
+		return copyOf(value());
+	}
 
-		List<String> l = list();
-		if (o instanceof Collection) {
-			for (Object o2 : (Collection<?>)o)
-				l.add(stringify(o2));
-		} else if (o.getClass().isArray()) {
-			for (int i = 0; i < Array.getLength(o); i++)
-				l.add(stringify(Array.get(o, i)));
-		} else {
-			split(o.toString(), x -> l.add(x));
+	/**
+	 * Returns The part value as an array wrapped in an {@link Optional}.
+	 *
+	 * <p>
+	 * Array is a copy of the value of this part.
+	 *
+	 * @return The part value as an array wrapped in an {@link Optional}.  Never <jk>null</jk>.
+	 */
+	public Optional<String[]> asArray() {
+		return optional(copyOf(value()));
+	}
+
+	/**
+	 * Return the value if present, otherwise return <c>other</c>.
+	 *
+	 * <p>
+	 * This is a shortened form for calling <c>asArray().orElse(<jv>other</jv>)</c>.
+	 *
+	 * @param other The value to be returned if there is no value present, can be <jk>null</jk>.
+	 * @return The value, if present, otherwise <c>other</c>.
+	 */
+	public String[] orElse(String[] other) {
+		String[] x = value();
+		return x != null ? x : other;
+	}
+
+	private String[] value() {
+		if (supplier != null) {
+			String[] v = supplier.get();
+			return v != null ? v : EMPTY;
 		}
-		return unmodifiable(l);
+		return value;
 	}
 }

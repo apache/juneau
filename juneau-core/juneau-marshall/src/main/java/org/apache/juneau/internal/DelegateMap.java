@@ -12,6 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -39,10 +41,10 @@ public class DelegateMap<T extends Map> extends OMap implements Delegate<T> {
 	 * @param m The metadata object that created this delegate object.
 	 * @param session The current bean session.
 	 */
+	@SuppressWarnings("unchecked")
 	public DelegateMap(T m, BeanSession session) {
 		this.classMeta = session.getClassMetaForObject(m);
-		for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
-			put(StringUtils.stringify(e.getKey()), e.getValue());
+		m.forEach((k,v) -> put(stringify(k), v));
 	}
 
 	@Override /* Delegate */
@@ -61,9 +63,10 @@ public class DelegateMap<T extends Map> extends OMap implements Delegate<T> {
 	 */
 	public DelegateMap<T> filterKeys(List<String> keys) {
 		OMap m2 = new OMap();
-		for (String k : keys)
+		keys.forEach(k -> {
 			if (containsKey(k))
 				m2.put(k, get(k));
+		});
 		this.clear();
 		this.putAll(m2);
 		return this;

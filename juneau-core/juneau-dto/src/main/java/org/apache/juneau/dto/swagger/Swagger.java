@@ -94,64 +94,57 @@ public class Swagger extends SwaggerElement {
 			this.definitions = null;
 		} else {
 			this.definitions = map();
-			for (Map.Entry<String,OMap> e : copyFrom.definitions.entrySet())
-				this.definitions.put(e.getKey(), new OMap(e.getValue()));
+			copyFrom.definitions.forEach((k,v) -> this.definitions.put(k, new OMap(v)));
 		}
 
 		if (copyFrom.paths == null) {
 			this.paths = null;
 		} else {
 			this.paths = map();
-			for (Map.Entry<String,OperationMap> e : copyFrom.paths.entrySet()) {
+			copyFrom.paths.forEach((k,v) -> {
 				OperationMap m = new OperationMap();
-				for (Map.Entry<String,Operation> e2 : e.getValue().entrySet())
-					m.put(e2.getKey(), e2.getValue().copy());
-				this.paths.put(e.getKey(), m);
-			}
+				v.forEach((k2,v2) -> m.put(k2, v2.copy()));
+				this.paths.put(k, m);
+			});
 		}
 
 		if (copyFrom.parameters == null) {
 			this.parameters = null;
 		} else {
 			this.parameters = map();
-			for (Map.Entry<String,ParameterInfo> e : copyFrom.parameters.entrySet())
-				this.parameters.put(e.getKey(), e.getValue().copy());
+			copyFrom.parameters.forEach((k,v) -> this.parameters.put(k, v.copy()));
 		}
 
 		if (copyFrom.responses == null) {
 			this.responses = null;
 		} else {
 			this.responses = map();
-			for (Map.Entry<String,ResponseInfo> e : copyFrom.responses.entrySet())
-				this.responses.put(e.getKey(), e.getValue().copy());
+			copyFrom.responses.forEach((k,v) -> this.responses.put(k, v.copy()));
 		}
 
 		if (copyFrom.security == null) {
 			this.security = null;
 		} else {
 			this.security = list();
-			for (Map<String,List<String>> m : copyFrom.security) {
+			copyFrom.security.forEach(x -> {
 				Map<String,List<String>> m2 = map();
-				for (Map.Entry<String,List<String>> e : m.entrySet())
-					m2.put(e.getKey(), copyOf(e.getValue()));
+				x.forEach((k,v) -> m2.put(k, copyOf(v)));
 				this.security.add(m2);
-			}
+			});
 		}
 
 		if (copyFrom.securityDefinitions == null) {
 			this.securityDefinitions = null;
 		} else {
 			this.securityDefinitions = map();
-			for (Map.Entry<String,SecurityScheme> e : copyFrom.securityDefinitions.entrySet())
-				this.securityDefinitions.put(e.getKey(), e.getValue().copy());
+			copyFrom.securityDefinitions.forEach((k,v) -> this.securityDefinitions.put(k, v.copy()));
 		}
 
 		if (copyFrom.tags == null) {
 			this.tags = null;
 		} else {
 			this.tags = CollectionUtils.set();
-			for (Tag t : copyFrom.tags)
-				this.tags.add(t.copy());
+			copyFrom.tags.forEach(x -> this.tags.add(x.copy()));
 		}
 	}
 

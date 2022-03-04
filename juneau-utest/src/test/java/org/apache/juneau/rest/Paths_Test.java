@@ -29,15 +29,15 @@ public class Paths_Test {
 
 	static OMap getPaths(RestRequest req) {
 		return OMap.create()
-			.a("pathInfo", req.getPathInfo())
-			.a("pathRemainder", req.getPathParams().getRemainder().orElse(null))
-			.a("pathRemainderUndecoded", req.getPathParams().getRemainderUndecoded().orElse(null))
-			.a("requestURI", req.getRequestURI())
-			.a("requestParentURI", req.getUriContext().getRootRelativePathInfoParent())
-			.a("requestURL", req.getRequestURL())
-			.a("servletPath", req.getServletPath())
-			.a("servletURI", req.getUriContext().getRootRelativeServletPath())
-			.a("servletParentURI", req.getUriContext().getRootRelativeServletPathParent());
+			.append("pathInfo", req.getPathInfo())
+			.append("pathRemainder", req.getPathParams().getRemainder().orElse(null))
+			.append("pathRemainderUndecoded", req.getPathParams().getRemainderUndecoded().orElse(null))
+			.append("requestURI", req.getRequestURI())
+			.append("requestParentURI", req.getUriContext().getRootRelativePathInfoParent())
+			.append("requestURL", req.getRequestURL())
+			.append("servletPath", req.getServletPath())
+			.append("servletURI", req.getUriContext().getRootRelativeServletPath())
+			.append("servletParentURI", req.getUriContext().getRootRelativeServletPathParent());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

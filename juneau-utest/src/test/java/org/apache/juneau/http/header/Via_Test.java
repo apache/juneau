@@ -13,12 +13,10 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.http.HttpHeaders.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
-import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -33,7 +31,7 @@ public class Via_Test {
 
 	private static final String HEADER = "Via";
 	private static final String VALUE = "foo";
-	private static final List<String> PARSED = alist("foo");
+	private static final String[] PARSED = { "foo" };
 
 	@Rest
 	public static class A {
@@ -59,7 +57,7 @@ public class Via_Test {
 
 		// Invalid usage.
 		c.get().header(via((String)null)).run().assertBody().isEmpty();
-		c.get().header(via((Supplier<List<String>>)null)).run().assertBody().isEmpty();
+		c.get().header(via((Supplier<String[]>)null)).run().assertBody().isEmpty();
 		c.get().header(via(()->null)).run().assertBody().isEmpty();
 	}
 

@@ -494,7 +494,7 @@ public class XmlParserSession extends ReaderParserSession {
 				OMap m = new OMap(this);
 				parseIntoMap(r, m, string(), object(), pMeta);
 				if (wrapperAttr != null)
-					m = new OMap(this).a(wrapperAttr, m);
+					m = new OMap(this).append(wrapperAttr, m);
 				o = cast(m, pMeta, eType);
 			} else if (jsonType == ARRAY)
 				o = parseIntoCollection(r, new OList(this), null, pMeta);
@@ -519,7 +519,7 @@ public class XmlParserSession extends ReaderParserSession {
 			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 			o = parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 			if (wrapperAttr != null)
-				o = new OMap(this).a(wrapperAttr, m);
+				o = new OMap(this).append(wrapperAttr, m);
 		} else if (sType.isCollection()) {
 			Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new OList(this));
 			o = parseIntoCollection(r, l, sType, pMeta);
@@ -549,7 +549,7 @@ public class XmlParserSession extends ReaderParserSession {
 			OMap m = new OMap(this);
 			parseIntoMap(r, m, string(), object(), pMeta);
 			if (wrapperAttr != null)
-				m = new OMap(this).a(wrapperAttr, m);
+				m = new OMap(this).append(wrapperAttr, m);
 			o = newBeanMap(outer, sType.getInnerClass()).load(m).getBean();
 		} else {
 			throw new ParseException(this,

@@ -54,10 +54,11 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * 	The header value.
 	 * 	<br>Must be parsable by {@link MediaType#of(String)}.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicMediaTypeHeader of(String name, String value) {
-		return value == null || isEmpty(name) ? null : new BasicMediaTypeHeader(name, value);
+		return value == null ? null : new BasicMediaTypeHeader(name, value);
 	}
 
 	/**
@@ -67,10 +68,11 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicMediaTypeHeader of(String name, MediaType value) {
-		return value == null || isEmpty(name) ? null : new BasicMediaTypeHeader(name, value);
+		return value == null ? null : new BasicMediaTypeHeader(name, value);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -88,6 +90,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * 	The header value.
 	 * 	<br>Must be parsable by {@link MediaType#of(String)}.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicMediaTypeHeader(String name, String value) {
 		super(name, value);
@@ -102,9 +105,10 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicMediaTypeHeader(String name, MediaType value) {
-		super(name, serialize(value));
+		super(name, stringify(value));
 		this.value = value;
 		this.supplier = null;
 	}
@@ -119,6 +123,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @param value
 	 * 	The supplier of the header value.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicMediaTypeHeader(String name, Supplier<MediaType> value) {
 		super(name, (String)null);
@@ -128,18 +133,25 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 
 	@Override /* Header */
 	public String getValue() {
-		if (supplier != null)
-			return serialize(supplier.get());
-		return super.getValue();
+		return stringify(value());
 	}
 
 	/**
-	 * Returns this header as a {@link MediaType} object.
+	 * Returns the header value as a {@link MediaType} wrapped in an {@link Optional}.
 	 *
-	 * @return This header as a {@link MediaType} object, or {@link Optional#empty()} if the value is <jk>null</jk>
+	 * @return The header value as a {@link MediaType} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<MediaType> asMediaType() {
-		return optional(supplier == null ? value : supplier.get());
+		return optional(value());
+	}
+
+	/**
+	 * Returns the header value as a {@link MediaType}.
+	 *
+	 * @return The header value as a {@link MediaType}.  Can be <jk>null</jk>.
+	 */
+	public MediaType toMediaType() {
+		return value();
 	}
 
 	/**
@@ -162,7 +174,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 
 		for (int i = 0; i < mediaTypes.size(); i++) {
 			MediaType mt = mediaTypes.get(i);
-			int matchQuant2 = mt.match(asMediaType().orElse(MediaType.EMPTY), true);
+			int matchQuant2 = mt.match(orElse(MediaType.EMPTY), true);
 			if (matchQuant2 > matchQuant) {
 				matchQuant = matchQuant2;
 				matchIndex = i;
@@ -177,7 +189,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @return The media type.
 	 */
 	public final String getType() {
-		return asMediaType().orElse(MediaType.EMPTY).getType();
+		return orElse(MediaType.EMPTY).getType();
 	}
 
 	/**
@@ -186,19 +198,19 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @return The media subtype.
 	 */
 	public final String getSubType() {
-		return asMediaType().orElse(MediaType.EMPTY).getSubType();
+		return orElse(MediaType.EMPTY).getSubType();
 	}
 
 	/**
 	 * Returns <jk>true</jk> if the subtype contains the specified <js>'+'</js> delimited subtype value.
 	 *
-	 * @param st
+	 * @param value
 	 * 	The subtype string.
 	 * 	Case is ignored.
 	 * @return <jk>true</jk> if the subtype contains the specified subtype string.
 	 */
-	public final boolean hasSubType(String st) {
-		return asMediaType().orElse(MediaType.EMPTY).hasSubType(st);
+	public final boolean hasSubType(String value) {
+		return orElse(MediaType.EMPTY).hasSubType(value);
 	}
 
 	/**
@@ -208,10 +220,10 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * For example, the media type <js>"text/foo+bar"</js> will return a list of
 	 * <code>[<js>'foo'</js>,<js>'bar'</js>]</code>
 	 *
-	 * @return An unmodifiable list of subtype fragments.  Never <jk>null</jk>.
+	 * @return An unmodifiable list of subtype fragments.  Can be <jk>null</jk>.
 	 */
 	public final List<String> getSubTypes() {
-		return asMediaType().orElse(MediaType.EMPTY).getSubTypes();
+		return orElse(MediaType.EMPTY).getSubTypes();
 	}
 
 	/**
@@ -220,7 +232,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @return <jk>true</jk> if this media type contains the <js>'*'</js> meta character.
 	 */
 	public final boolean isMetaSubtype() {
-		return asMediaType().orElse(MediaType.EMPTY).isMetaSubtype();
+		return orElse(MediaType.EMPTY).isMetaSubtype();
 	}
 
 	/**
@@ -265,7 +277,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @return <jk>true</jk> if the media types match.
 	 */
 	public final int match(MediaType o, boolean allowExtraSubTypes) {
-		return asMediaType().orElse(MediaType.EMPTY).match(o, allowExtraSubTypes);
+		return orElse(MediaType.EMPTY).match(o, allowExtraSubTypes);
 	}
 
 	/**
@@ -278,7 +290,7 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @return The map of additional parameters, or an empty map if there are no parameters.
 	 */
 	public List<NameValuePair> getParameters() {
-		return asMediaType().orElse(MediaType.EMPTY).getParameters();
+		return orElse(MediaType.EMPTY).getParameters();
 	}
 
 	/**
@@ -293,11 +305,21 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 	 * @return The header value, or <jk>null</jk> if the parameter is not present.
 	 */
 	public String getParameter(String name) {
-		return asMediaType().orElse(MediaType.EMPTY).getParameter(name);
+		return orElse(MediaType.EMPTY).getParameter(name);
 	}
 
-	private static String serialize(MediaType value) {
-		return stringify(value);
+	/**
+	 * Return the value if present, otherwise return <c>other</c>.
+	 *
+	 * <p>
+	 * This is a shortened form for calling <c>asMediaType().orElse(<jv>other</jv>)</c>.
+	 *
+	 * @param other The value to be returned if there is no value present, can be <jk>null</jk>.
+	 * @return The value, if present, otherwise <c>other</c>.
+	 */
+	public MediaType orElse(MediaType other) {
+		MediaType x = value();
+		return x != null ? x : other;
 	}
 
 	private MediaType parse(String value) {
@@ -308,5 +330,11 @@ public class BasicMediaTypeHeader extends BasicStringHeader {
 				value = value.substring(i+1);
 		}
 		return MediaType.of(value);
+	}
+
+	private MediaType value() {
+		if (supplier != null)
+			return supplier.get();
+		return value;
 	}
 }

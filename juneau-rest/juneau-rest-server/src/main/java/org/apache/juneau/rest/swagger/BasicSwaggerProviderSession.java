@@ -23,6 +23,7 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.function.*;
 
 import javax.servlet.*;
 
@@ -97,6 +98,10 @@ public class BasicSwaggerProviderSession {
 
 		InputStream is = ff.getStream(rci.getSimpleName() + ".json", locale).orElse(null);
 
+		Predicate<String> ne = StringUtils::isNotEmpty;
+		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty;
+		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty;
+
 		// Load swagger JSON from classpath.
 		OMap omSwagger = SimpleJson.DEFAULT.read(is, OMap.class);
 		if (omSwagger == null)
@@ -108,13 +113,13 @@ public class BasicSwaggerProviderSession {
 			OMap sInfo = omSwagger.getMap("info", true);
 
 			sInfo
-				.appendSkipEmpty("title",
+				.appendIf(ne, "title",
 					firstNonEmpty(
 						sInfo.getString("title"),
 						resolve(rr.title())
 					)
 				)
-				.appendSkipEmpty("description",
+				.appendIf(ne, "description",
 					firstNonEmpty(
 						sInfo.getString("description"),
 						resolve(rr.description())
@@ -129,17 +134,17 @@ public class BasicSwaggerProviderSession {
 				OMap info = omSwagger.getMap("info", true);
 
 				info
-					.appendSkipEmpty("title", resolve(r.title()))
-					.appendSkipEmpty("description", resolve(r.description()))
-					.appendSkipEmpty("version", resolve(r.version()))
-					.appendSkipEmpty("termsOfService", resolve(r.termsOfService()))
-					.appendSkipEmpty("contact",
+					.appendIf(ne, "title", resolve(r.title()))
+					.appendIf(ne, "description", resolve(r.description()))
+					.appendIf(ne, "version", resolve(r.version()))
+					.appendIf(ne, "termsOfService", resolve(r.termsOfService()))
+					.appendIf(nem, "contact",
 						merge(
 							info.getMap("contact"),
 							toMap(r.contact(), "@Swagger(contact) on class {0}", c)
 						)
 					)
-					.appendSkipEmpty("license",
+					.appendIf(nem, "license",
 						merge(
 							info.getMap("license"),
 							toMap(r.license(), "@Swagger(license) on class {0}", c)
@@ -148,13 +153,13 @@ public class BasicSwaggerProviderSession {
 			}
 
 			omSwagger
-				.appendSkipEmpty("externalDocs",
+				.appendIf(nem, "externalDocs",
 					merge(
 						omSwagger.getMap("externalDocs"),
 						toMap(r.externalDocs(), "@Swagger(externalDocs) on class {0}", c)
 					)
 				)
-				.appendSkipEmpty("tags",
+				.appendIf(nec, "tags",
 					merge(
 						omSwagger.getList("tags"),
 						toList(r.tags(), "@Swagger(tags) on class {0}", c)
@@ -162,17 +167,17 @@ public class BasicSwaggerProviderSession {
 				);
 		}
 
-		omSwagger.appendSkipEmpty("externalDocs", parseMap(mb.findFirstString("externalDocs"), "Messages/externalDocs on class {0}", c));
+		omSwagger.appendIf(nem, "externalDocs", parseMap(mb.findFirstString("externalDocs"), "Messages/externalDocs on class {0}", c));
 
 		OMap info = omSwagger.getMap("info", true);
 
 		info
-			.appendSkipEmpty("title", resolve(mb.findFirstString("title")))
-			.appendSkipEmpty("description", resolve(mb.findFirstString("description")))
-			.appendSkipEmpty("version", resolve(mb.findFirstString("version")))
-			.appendSkipEmpty("termsOfService", resolve(mb.findFirstString("termsOfService")))
-			.appendSkipEmpty("contact", parseMap(mb.findFirstString("contact"), "Messages/contact on class {0}", c))
-			.appendSkipEmpty("license", parseMap(mb.findFirstString("license"), "Messages/license on class {0}", c));
+			.appendIf(ne, "title", resolve(mb.findFirstString("title")))
+			.appendIf(ne, "description", resolve(mb.findFirstString("description")))
+			.appendIf(ne, "version", resolve(mb.findFirstString("version")))
+			.appendIf(ne, "termsOfService", resolve(mb.findFirstString("termsOfService")))
+			.appendIf(nem, "contact", parseMap(mb.findFirstString("contact"), "Messages/contact on class {0}", c))
+			.appendIf(nem, "license", parseMap(mb.findFirstString("license"), "Messages/license on class {0}", c));
 
 		if (info.isEmpty())
 			omSwagger.remove("info");
@@ -232,7 +237,7 @@ public class BasicSwaggerProviderSession {
 			OpSwagger ms = _ms.orElseGet(()->OpSwaggerAnnotation.create().build());
 
 			op.append(parseMap(ms.value(), "@OpSwagger(value) on class {0} method {1}", c, m));
-			op.appendSkipEmpty("operationId",
+			op.appendIf(ne, "operationId",
 				firstNonEmpty(
 					resolve(ms.operationId()),
 					op.getString("operationId"),
@@ -242,7 +247,7 @@ public class BasicSwaggerProviderSession {
 
 			Value<String> _summary = Value.empty();
 			al.forEachValue(String.class, "summary", NOT_EMPTY, x -> _summary.set(x));
-			op.appendSkipEmpty("summary",
+			op.appendIf(ne, "summary",
 				firstNonEmpty(
 					resolve(ms.summary()),
 					resolve(mb.findFirstString(mn + ".summary")),
@@ -253,7 +258,7 @@ public class BasicSwaggerProviderSession {
 
 			Value<String[]> _description = Value.empty();
 			al.forEachValue(String[].class, "description",x -> x.length > 0, x -> _description.set(x));
-			op.appendSkipEmpty("description",
+			op.appendIf(ne, "description",
 				firstNonEmpty(
 					resolve(ms.description()),
 					resolve(mb.findFirstString(mn + ".description")),
@@ -261,49 +266,49 @@ public class BasicSwaggerProviderSession {
 					resolve(_description.orElse(new String[0]))
 				)
 			);
-			op.appendSkipEmpty("deprecated",
+			op.appendIf(ne, "deprecated",
 				firstNonEmpty(
 					resolve(ms.deprecated()),
 					(m.getAnnotation(Deprecated.class) != null || m.getDeclaringClass().getAnnotation(Deprecated.class) != null) ? "true" : null
 				)
 			);
-			op.appendSkipEmpty("tags",
+			op.appendIf(nec, "tags",
 				merge(
 					parseListOrCdl(mb.findFirstString(mn + ".tags"), "Messages/tags on class {0} method {1}", c, m),
 					parseListOrCdl(ms.tags(), "@OpSwagger(tags) on class {0} method {1}", c, m)
 				)
 			);
-			op.appendSkipEmpty("schemes",
+			op.appendIf(nec, "schemes",
 				merge(
 					parseListOrCdl(mb.findFirstString(mn + ".schemes"), "Messages/schemes on class {0} method {1}", c, m),
 					parseListOrCdl(ms.schemes(), "@OpSwagger(schemes) on class {0} method {1}", c, m)
 				)
 			);
-			op.appendSkipEmpty("consumes",
+			op.appendIf(nec, "consumes",
 				firstNonEmpty(
 					parseListOrCdl(mb.findFirstString(mn + ".consumes"), "Messages/consumes on class {0} method {1}", c, m),
 					parseListOrCdl(ms.consumes(), "@OpSwagger(consumes) on class {0} method {1}", c, m)
 				)
 			);
-			op.appendSkipEmpty("produces",
+			op.appendIf(nec, "produces",
 				firstNonEmpty(
 					parseListOrCdl(mb.findFirstString(mn + ".produces"), "Messages/produces on class {0} method {1}", c, m),
 					parseListOrCdl(ms.produces(), "@OpSwagger(produces) on class {0} method {1}", c, m)
 				)
 			);
-			op.appendSkipEmpty("parameters",
+			op.appendIf(nec, "parameters",
 				merge(
 					parseList(mb.findFirstString(mn + ".parameters"), "Messages/parameters on class {0} method {1}", c, m),
 					parseList(ms.parameters(), "@OpSwagger(parameters) on class {0} method {1}", c, m)
 				)
 			);
-			op.appendSkipEmpty("responses",
+			op.appendIf(nem, "responses",
 				merge(
 					parseMap(mb.findFirstString(mn + ".responses"), "Messages/responses on class {0} method {1}", c, m),
 					parseMap(ms.responses(), "@OpSwagger(responses) on class {0} method {1}", c, m)
 				)
 			);
-			op.appendSkipEmpty("externalDocs",
+			op.appendIf(nem, "externalDocs",
 				merge(
 					op.getMap("externalDocs"),
 					parseMap(mb.findFirstString(mn + ".externalDocs"), "Messages/externalDocs on class {0} method {1}", c, m),
@@ -328,18 +333,18 @@ public class BasicSwaggerProviderSession {
 				Type type = pt.innerType();
 
 				if (mpi.hasAnnotation(Body.class) || pt.hasAnnotation(Body.class)) {
-					OMap param = paramMap.getMap(BODY + ".body", true).a("in", BODY);
+					OMap param = paramMap.getMap(BODY + ".body", true).append("in", BODY);
 					OMap schema = getSchema(param.getMap("schema"), type, bs);
 					mpi.forEachAnnotation(Schema.class, x -> true, x -> merge(schema, x));
 					mpi.forEachAnnotation(Body.class, x -> true, x -> merge(schema, x.schema()));
 					pushupSchemaFields(BODY, param, schema);
-					param.appendIf(true, true, true, "schema", schema);
+					param.appendIf(nem, "schema", schema);
 					param.putIfAbsent("required", true);
 					addBodyExamples(sm, param, false, type, locale);
 
 				} else if (mpi.hasAnnotation(Query.class) || pt.hasAnnotation(Query.class)) {
 					String name = QueryAnnotation.findName(mpi).orElse(null);
-					OMap param = paramMap.getMap(QUERY + "." + name, true).a("name", name).a("in", QUERY);
+					OMap param = paramMap.getMap(QUERY + "." + name, true).append("name", name).append("in", QUERY);
 					mpi.forEachAnnotation(Schema.class, x -> true, x -> merge(param, x));
 					mpi.forEachAnnotation(Query.class, x -> true, x -> merge(param, x.schema()));
 					pushupSchemaFields(QUERY, param, getSchema(param.getMap("schema"), type, bs));
@@ -347,7 +352,7 @@ public class BasicSwaggerProviderSession {
 
 				} else if (mpi.hasAnnotation(FormData.class) || pt.hasAnnotation(FormData.class)) {
 					String name = FormDataAnnotation.findName(mpi).orElse(null);
-					OMap param = paramMap.getMap(FORM_DATA + "." + name, true).a("name", name).a("in", FORM_DATA);
+					OMap param = paramMap.getMap(FORM_DATA + "." + name, true).append("name", name).append("in", FORM_DATA);
 					mpi.forEachAnnotation(Schema.class, x -> true, x -> merge(param, x));
 					mpi.forEachAnnotation(FormData.class, x -> true, x -> merge(param, x.schema()));
 					pushupSchemaFields(FORM_DATA, param, getSchema(param.getMap("schema"), type, bs));
@@ -355,7 +360,7 @@ public class BasicSwaggerProviderSession {
 
 				} else if (mpi.hasAnnotation(Header.class) || pt.hasAnnotation(Header.class)) {
 					String name = HeaderAnnotation.findName(mpi).orElse(null);
-					OMap param = paramMap.getMap(HEADER + "." + name, true).a("name", name).a("in", HEADER);
+					OMap param = paramMap.getMap(HEADER + "." + name, true).append("name", name).append("in", HEADER);
 					mpi.forEachAnnotation(Schema.class, x -> true, x -> merge(param, x));
 					mpi.forEachAnnotation(Header.class, x -> true, x -> merge(param, x.schema()));
 					pushupSchemaFields(HEADER, param, getSchema(param.getMap("schema"), type, bs));
@@ -363,7 +368,7 @@ public class BasicSwaggerProviderSession {
 
 				} else if (mpi.hasAnnotation(Path.class) || pt.hasAnnotation(Path.class)) {
 					String name = PathAnnotation.findName(mpi).orElse(null);
-					OMap param = paramMap.getMap(PATH + "." + name, true).a("name", name).a("in", PATH);
+					OMap param = paramMap.getMap(PATH + "." + name, true).append("name", name).append("in", PATH);
 					mpi.forEachAnnotation(Schema.class, x -> true, x -> merge(param, x));
 					mpi.forEachAnnotation(Path.class, x -> true, x -> merge(param, x.schema()));
 					pushupSchemaFields(PATH, param, getSchema(param.getMap("schema"), type, bs));
@@ -389,7 +394,7 @@ public class BasicSwaggerProviderSession {
 							OMap schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
 							eci.forEachAnnotation(Schema.class, x -> true, x -> merge(schema, x));
 							pushupSchemaFields(RESPONSE, om, schema);
-							om.appendIf(true, true, true, "schema", schema);
+							om.appendIf(nem, "schema", schema);
 						}
 					}
 					List<MethodInfo> methods = eci.getMethods();
@@ -424,7 +429,7 @@ public class BasicSwaggerProviderSession {
 						OMap schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
 						mi.forEachAnnotation(context, Schema.class, x -> true, x -> merge(schema, x));
 						pushupSchemaFields(RESPONSE, om, schema);
-						om.appendIf(true, true, true, "schema", schema);
+						om.appendIf(nem, "schema", schema);
 						addBodyExamples(sm, om, true, m.getGenericReturnType(), locale);
 					}
 				}
@@ -453,7 +458,7 @@ public class BasicSwaggerProviderSession {
 				OMap schema = getSchema(om.getMap("schema"), m.getGenericReturnType(), bs);
 				pt2.forEachAnnotation(Schema.class, x -> true, x -> merge(schema, x));
 				pushupSchemaFields(RESPONSE, om, schema);
-				om.appendIf(true, true, true, "schema", schema);
+				om.appendIf(nem, "schema", schema);
 				addBodyExamples(sm, om, true, m.getGenericReturnType(), locale);
 			}
 
@@ -500,7 +505,7 @@ public class BasicSwaggerProviderSession {
 							mpi.forEachAnnotation(Schema.class, x -> true, x -> merge(schema, x));
 							la.forEach(x -> merge(schema, x.schema()));
 							pushupSchemaFields(RESPONSE, om, schema);
-							om.appendIf(true, true, true, "schema", schema);
+							om.appendIf(nem, "schema", schema);
 						}
 					}
 				}
@@ -511,7 +516,7 @@ public class BasicSwaggerProviderSession {
 				String key = e.getKey();
 				OMap val = responses.getMap(key);
 				if (StringUtils.isDecimal(key))
-					val.appendIf(false, true, true, "description", RestUtils.getHttpResponseText(Integer.parseInt(key)));
+					val.appendIfAbsentIf(ne, "description", RestUtils.getHttpResponseText(Integer.parseInt(key)));
 			}
 
 			if (responses.isEmpty())
@@ -727,37 +732,42 @@ public class BasicSwaggerProviderSession {
 	private OMap toMap(ExternalDocs a, String location, Object...locationArgs) {
 		if (ExternalDocsAnnotation.empty(a))
 			return null;
+		Predicate<String> ne = StringUtils::isNotEmpty;
 		OMap om = OMap.create()
-			.appendSkipEmpty("description", resolve(joinnl(a.description())))
-			.appendSkipEmpty("url", resolve(a.url()));
+			.appendIf(ne, "description", resolve(joinnl(a.description())))
+			.appendIf(ne, "url", resolve(a.url()));
 		return nullIfEmpty(om);
 	}
 
 	private OMap toMap(Contact a, String location, Object...locationArgs) {
 		if (ContactAnnotation.empty(a))
 			return null;
+		Predicate<String> ne = StringUtils::isNotEmpty;
 		OMap om = OMap.create()
-			.appendSkipEmpty("name", resolve(a.name()))
-			.appendSkipEmpty("url", resolve(a.url()))
-			.appendSkipEmpty("email", resolve(a.email()));
+			.appendIf(ne, "name", resolve(a.name()))
+			.appendIf(ne, "url", resolve(a.url()))
+			.appendIf(ne, "email", resolve(a.email()));
 		return nullIfEmpty(om);
 	}
 
 	private OMap toMap(License a, String location, Object...locationArgs) {
 		if (LicenseAnnotation.empty(a))
 			return null;
+		Predicate<String> ne = StringUtils::isNotEmpty;
 		OMap om = OMap.create()
-			.appendSkipEmpty("name", resolve(a.name()))
-			.appendSkipEmpty("url", resolve(a.url()));
+			.appendIf(ne, "name", resolve(a.name()))
+			.appendIf(ne, "url", resolve(a.url()));
 		return nullIfEmpty(om);
 	}
 
 	private OMap toMap(Tag a, String location, Object...locationArgs) {
 		OMap om = OMap.create();
+		Predicate<String> ne = StringUtils::isNotEmpty;
+		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty;
 		om
-			.appendSkipEmpty("name", resolve(a.name()))
-			.appendSkipEmpty("description", resolve(joinnl(a.description())))
-			.appendSkipNull("externalDocs", merge(om.getMap("externalDocs"), toMap(a.externalDocs(), location, locationArgs)));
+			.appendIf(ne, "name", resolve(a.name()))
+			.appendIf(ne, "description", resolve(joinnl(a.description())))
+			.appendIf(nem, "externalDocs", merge(om.getMap("externalDocs"), toMap(a.externalDocs(), location, locationArgs)));
 		return nullIfEmpty(om);
 	}
 
@@ -794,12 +804,13 @@ public class BasicSwaggerProviderSession {
 	 * Replaces non-standard JSON-Schema attributes with standard Swagger attributes.
 	 */
 	private OMap fixSwaggerExtensions(OMap om) {
+		Predicate<Object> nn = ObjectUtils::isNotNull;
 		om
-			.appendSkipNull("discriminator", om.remove("x-discriminator"))
-			.appendSkipNull("readOnly", om.remove("x-readOnly"))
-			.appendSkipNull("xml", om.remove("x-xml"))
-			.appendSkipNull("externalDocs", om.remove("x-externalDocs"))
-			.appendSkipNull("example", om.remove("x-example"));
+			.appendIf(nn, "discriminator", om.remove("x-discriminator"))
+			.appendIf(nn, "readOnly", om.remove("x-readOnly"))
+			.appendIf(nn, "xml", om.remove("x-xml"))
+			.appendIf(nn, "externalDocs", om.remove("x-externalDocs"))
+			.appendIf(nn, "example", om.remove("x-example"));
 		return nullIfEmpty(om);
 	}
 
@@ -921,38 +932,43 @@ public class BasicSwaggerProviderSession {
 			if (SchemaAnnotation.empty(a))
 				return om;
 			om = newMap(om);
+			Predicate<String> ne = StringUtils::isNotEmpty;
+			Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty;
+			Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty;
+			Predicate<Boolean> nf = ObjectUtils::isTrue;
+			Predicate<Long> nm1 = ObjectUtils::isNotMinusOne;
 			return om
-				.appendSkipEmpty("additionalProperties", toOMap(a.additionalProperties()))
-				.appendSkipEmpty("allOf", joinnl(a.allOf()))
-				.appendSkipEmpty("collectionFormat", a.collectionFormat(), a.cf())
-				.appendSkipEmpty("default", joinnl(a._default(), a.df()))
-				.appendSkipEmpty("discriminator", a.discriminator())
-				.appendSkipEmpty("description", resolve(a.description(), a.d()))
-				.appendSkipEmpty("enum", toSet(a._enum()), toSet(a.e()))
-				.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
-				.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-				.appendSkipEmpty("externalDocs", merge(om.getMap("externalDocs"), a.externalDocs()))
-				.appendSkipEmpty("format", a.format(), a.f())
-				.appendSkipEmpty("ignore", a.ignore() ? "true" : null)
-				.appendSkipEmpty("items", merge(om.getMap("items"), a.items()))
-				.appendSkipEmpty("maximum", a.maximum(), a.max())
-				.appendSkipMinusOne("maxItems", a.maxItems(), a.maxi())
-				.appendSkipMinusOne("maxLength", a.maxLength(), a.maxl())
-				.appendSkipMinusOne("maxProperties", a.maxProperties(), a.maxp())
-				.appendSkipEmpty("minimum", a.minimum(), a.min())
-				.appendSkipMinusOne("minItems", a.minItems(), a.mini())
-				.appendSkipMinusOne("minLength", a.minLength(), a.minl())
-				.appendSkipMinusOne("minProperties", a.minProperties(), a.minp())
-				.appendSkipEmpty("multipleOf", a.multipleOf(), a.mo())
-				.appendSkipEmpty("pattern", a.pattern(), a.p())
-				.appendSkipEmpty("properties", toOMap(a.properties()))
-				.appendSkipFalse("readOnly", a.readOnly() || a.ro())
-				.appendSkipFalse("required", a.required() || a.r())
-				.appendSkipEmpty("title", a.title())
-				.appendSkipEmpty("type", a.type(), a.t())
-				.appendSkipFalse("uniqueItems", a.uniqueItems() || a.ui())
-				.appendSkipEmpty("xml", joinnl(a.xml()))
-				.appendSkipEmpty("$ref", a.$ref())
+				.appendIf(nem, "additionalProperties", toOMap(a.additionalProperties()))
+				.appendIf(ne, "allOf", joinnl(a.allOf()))
+				.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
+				.appendIf(ne, "default", joinnl(a._default(), a.df()))
+				.appendIf(ne, "discriminator", a.discriminator())
+				.appendIf(ne, "description", resolve(a.description(), a.d()))
+				.appendFirst(nec, "enum", toSet(a._enum()), toSet(a.e()))
+				.appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())
+				.appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
+				.appendIf(nem, "externalDocs", merge(om.getMap("externalDocs"), a.externalDocs()))
+				.appendFirst(ne, "format", a.format(), a.f())
+				.appendIf(ne, "ignore", a.ignore() ? "true" : null)
+				.appendIf(nem, "items", merge(om.getMap("items"), a.items()))
+				.appendFirst(ne, "maximum", a.maximum(), a.max())
+				.appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())
+				.appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())
+				.appendFirst(nm1, "maxProperties", a.maxProperties(), a.maxp())
+				.appendFirst(ne, "minimum", a.minimum(), a.min())
+				.appendFirst(nm1, "minItems", a.minItems(), a.mini())
+				.appendFirst(nm1, "minLength", a.minLength(), a.minl())
+				.appendFirst(nm1, "minProperties", a.minProperties(), a.minp())
+				.appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())
+				.appendFirst(ne, "pattern", a.pattern(), a.p())
+				.appendIf(nem, "properties", toOMap(a.properties()))
+				.appendIf(nf, "readOnly", a.readOnly() || a.ro())
+				.appendIf(nf, "required", a.required() || a.r())
+				.appendIf(ne, "title", a.title())
+				.appendFirst(ne, "type", a.type(), a.t())
+				.appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())
+				.appendIf(ne, "xml", joinnl(a.xml()))
+				.appendIf(ne, "$ref", a.$ref())
 			;
 		} catch (ParseException e) {
 			throw new RuntimeException(e);
@@ -963,9 +979,10 @@ public class BasicSwaggerProviderSession {
 		if (ExternalDocsAnnotation.empty(a))
 			return om;
 		om = newMap(om);
+		Predicate<String> ne = StringUtils::isNotEmpty;
 		return om
-			.appendSkipEmpty("description", resolve(a.description()))
-			.appendSkipEmpty("url", a.url())
+			.appendIf(ne, "description", resolve(a.description()))
+			.appendIf(ne, "url", a.url())
 		;
 	}
 
@@ -973,25 +990,30 @@ public class BasicSwaggerProviderSession {
 		if (ItemsAnnotation.empty(a))
 			return om;
 		om = newMap(om);
+		Predicate<String> ne = StringUtils::isNotEmpty;
+		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty;
+		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty;
+		Predicate<Boolean> nf = ObjectUtils::isTrue;
+		Predicate<Long> nm1 = ObjectUtils::isNotMinusOne;
 		return om
-			.appendSkipEmpty("collectionFormat", a.collectionFormat(), a.cf())
-			.appendSkipEmpty("default", joinnl(a._default(), a.df()))
-			.appendSkipEmpty("enum", toSet(a._enum()), toSet(a.e()))
-			.appendSkipEmpty("format", a.format(), a.f())
-			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
-			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.appendSkipEmpty("items", merge(om.getMap("items"), a.items()))
-			.appendSkipEmpty("maximum", a.maximum(), a.max())
-			.appendSkipMinusOne("maxItems", a.maxItems(), a.maxi())
-			.appendSkipMinusOne("maxLength", a.maxLength(), a.maxl())
-			.appendSkipEmpty("minimum", a.minimum(), a.min())
-			.appendSkipMinusOne("minItems", a.minItems(), a.mini())
-			.appendSkipMinusOne("minLength", a.minLength(), a.minl())
-			.appendSkipEmpty("multipleOf", a.multipleOf(), a.mo())
-			.appendSkipEmpty("pattern", a.pattern(), a.p())
-			.appendSkipFalse("uniqueItems", a.uniqueItems() || a.ui())
-			.appendSkipEmpty("type", a.type(), a.t())
-			.appendSkipEmpty("$ref", a.$ref())
+			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
+			.appendIf(ne, "default", joinnl(a._default(), a.df()))
+			.appendFirst(nec, "enum", toSet(a._enum()), toSet(a.e()))
+			.appendFirst(ne, "format", a.format(), a.f())
+			.appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())
+			.appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
+			.appendIf(nem, "items", merge(om.getMap("items"), a.items()))
+			.appendFirst(ne, "maximum", a.maximum(), a.max())
+			.appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())
+			.appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())
+			.appendFirst(ne, "minimum", a.minimum(), a.min())
+			.appendFirst(nm1, "minItems", a.minItems(), a.mini())
+			.appendFirst(nm1, "minLength", a.minLength(), a.minl())
+			.appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())
+			.appendFirst(ne, "pattern", a.pattern(), a.p())
+			.appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())
+			.appendFirst(ne, "type", a.type(), a.t())
+			.appendIf(ne, "$ref", a.$ref())
 		;
 	}
 
@@ -999,25 +1021,30 @@ public class BasicSwaggerProviderSession {
 		if (SubItemsAnnotation.empty(a))
 			return om;
 		om = newMap(om);
+		Predicate<String> ne = StringUtils::isNotEmpty;
+		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty;
+		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty;
+		Predicate<Boolean> nf = ObjectUtils::isTrue;
+		Predicate<Long> nm1 = ObjectUtils::isNotMinusOne;
 		return om
-			.appendSkipEmpty("collectionFormat", a.collectionFormat(), a.cf())
-			.appendSkipEmpty("default", joinnl(a._default(), a.df()))
-			.appendSkipEmpty("enum", toSet(a._enum()), toSet(a.e()))
-			.appendSkipFalse("exclusiveMaximum", a.exclusiveMaximum() || a.emax())
-			.appendSkipFalse("exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.appendSkipEmpty("format", a.format(), a.f())
-			.appendSkipEmpty("items", toOMap(a.items()))
-			.appendSkipEmpty("maximum", a.maximum(), a.max())
-			.appendSkipMinusOne("maxItems", a.maxItems(), a.maxi())
-			.appendSkipMinusOne("maxLength", a.maxLength(), a.maxl())
-			.appendSkipEmpty("minimum", a.minimum(), a.min())
-			.appendSkipMinusOne("minItems", a.minItems(), a.mini())
-			.appendSkipMinusOne("minLength", a.minLength(), a.minl())
-			.appendSkipEmpty("multipleOf", a.multipleOf(), a.mo())
-			.appendSkipEmpty("pattern", a.pattern(), a.p())
-			.appendSkipEmpty("type", a.type(), a.t())
-			.appendSkipFalse("uniqueItems", a.uniqueItems() || a.ui())
-			.appendSkipEmpty("$ref", a.$ref())
+			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
+			.appendIf(ne, "default", joinnl(a._default(), a.df()))
+			.appendFirst(nec, "enum", toSet(a._enum()), toSet(a.e()))
+			.appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())
+			.appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
+			.appendFirst(ne, "format", a.format(), a.f())
+			.appendIf(nem, "items", toOMap(a.items()))
+			.appendFirst(ne, "maximum", a.maximum(), a.max())
+			.appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())
+			.appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())
+			.appendFirst(ne, "minimum", a.minimum(), a.min())
+			.appendFirst(nm1, "minItems", a.minItems(), a.mini())
+			.appendFirst(nm1, "minLength", a.minLength(), a.minl())
+			.appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())
+			.appendFirst(ne, "pattern", a.pattern(), a.p())
+			.appendFirst(ne, "type", a.type(), a.t())
+			.appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())
+			.appendIf(ne, "$ref", a.$ref())
 		;
 	}
 
@@ -1025,12 +1052,13 @@ public class BasicSwaggerProviderSession {
 		if (ResponseAnnotation.empty(a))
 			return om;
 		om = newMap(om);
+		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty;
 		if (! SchemaAnnotation.empty(a.schema()))
 			merge(om, a.schema());
 		return om
-			.appendSkipEmpty("examples", parseMap(a.examples()))
-			.appendSkipEmpty("headers", merge(om.getMap("headers"), a.headers()))
-			.appendSkipEmpty("schema", merge(om.getMap("schema"), a.schema()))
+			.appendIf(nem, "examples", parseMap(a.examples()))
+			.appendIf(nem, "headers", merge(om.getMap("headers"), a.headers()))
+			.appendIf(nem, "schema", merge(om.getMap("schema"), a.schema()))
 		;
 	}
 
@@ -1048,32 +1076,33 @@ public class BasicSwaggerProviderSession {
 	}
 
 	private OMap pushupSchemaFields(RestPartType type, OMap param, OMap schema) {
+		Predicate<Object> ne = ObjectUtils::isNotEmpty;
 		if (schema != null && ! schema.isEmpty()) {
 			if (type == BODY || type == RESPONSE) {
 				param
-					.appendIf(true, true, true, "description", schema.remove("description"));
+					.appendIf(ne, "description", schema.remove("description"));
 			} else {
 				param
-					.appendIf(false, true, true, "collectionFormat", schema.remove("collectionFormat"))
-					.appendIf(false, true, true, "default", schema.remove("default"))
-					.appendIf(false, true, true, "description", schema.remove("description"))
-					.appendIf(false, true, true, "enum", schema.remove("enum"))
-					.appendIf(false, true, true, "example", schema.remove("example"))
-					.appendIf(false, true, true, "exclusiveMaximum", schema.remove("exclusiveMaximum"))
-					.appendIf(false, true, true, "exclusiveMinimum", schema.remove("exclusiveMinimum"))
-					.appendIf(false, true, true, "format", schema.remove("format"))
-					.appendIf(false, true, true, "items", schema.remove("items"))
-					.appendIf(false, true, true, "maximum", schema.remove("maximum"))
-					.appendIf(false, true, true, "maxItems", schema.remove("maxItems"))
-					.appendIf(false, true, true, "maxLength", schema.remove("maxLength"))
-					.appendIf(false, true, true, "minimum", schema.remove("minimum"))
-					.appendIf(false, true, true, "minItems", schema.remove("minItems"))
-					.appendIf(false, true, true, "minLength", schema.remove("minLength"))
-					.appendIf(false, true, true, "multipleOf", schema.remove("multipleOf"))
-					.appendIf(false, true, true, "pattern", schema.remove("pattern"))
-					.appendIf(false, true, true, "required", schema.remove("required"))
-					.appendIf(false, true, true, "type", schema.remove("type"))
-					.appendIf(false, true, true, "uniqueItems", schema.remove("uniqueItems"));
+					.appendIfAbsentIf(ne, "collectionFormat", schema.remove("collectionFormat"))
+					.appendIfAbsentIf(ne, "default", schema.remove("default"))
+					.appendIfAbsentIf(ne, "description", schema.remove("description"))
+					.appendIfAbsentIf(ne, "enum", schema.remove("enum"))
+					.appendIfAbsentIf(ne, "example", schema.remove("example"))
+					.appendIfAbsentIf(ne, "exclusiveMaximum", schema.remove("exclusiveMaximum"))
+					.appendIfAbsentIf(ne, "exclusiveMinimum", schema.remove("exclusiveMinimum"))
+					.appendIfAbsentIf(ne, "format", schema.remove("format"))
+					.appendIfAbsentIf(ne, "items", schema.remove("items"))
+					.appendIfAbsentIf(ne, "maximum", schema.remove("maximum"))
+					.appendIfAbsentIf(ne, "maxItems", schema.remove("maxItems"))
+					.appendIfAbsentIf(ne, "maxLength", schema.remove("maxLength"))
+					.appendIfAbsentIf(ne, "minimum", schema.remove("minimum"))
+					.appendIfAbsentIf(ne, "minItems", schema.remove("minItems"))
+					.appendIfAbsentIf(ne, "minLength", schema.remove("minLength"))
+					.appendIfAbsentIf(ne, "multipleOf", schema.remove("multipleOf"))
+					.appendIfAbsentIf(ne, "pattern", schema.remove("pattern"))
+					.appendIfAbsentIf(ne, "required", schema.remove("required"))
+					.appendIfAbsentIf(ne, "type", schema.remove("type"))
+					.appendIfAbsentIf(ne, "uniqueItems", schema.remove("uniqueItems"));
 
 			if ("object".equals(param.getString("type")) && ! schema.isEmpty())
 				param.put("schema", schema);

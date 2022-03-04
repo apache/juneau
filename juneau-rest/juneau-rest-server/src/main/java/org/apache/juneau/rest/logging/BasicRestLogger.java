@@ -350,14 +350,14 @@ public class BasicRestLogger implements RestLogger {
 	@Override /* Object */
 	public String toString() {
 		return filteredMap()
-			.a("logger", logger)
-			.a("thrownStore", thrownStore)
-			.a("enabled", enabled)
-			.a("level", level)
-			.a("requestDetail", requestDetail)
-			.a("responseDetail", responseDetail)
-			.a("normalRules", normalRules.length == 0 ? null : normalRules)
-			.a("debugRules", debugRules.length == 0 ? null : debugRules)
+			.append("logger", logger)
+			.append("thrownStore", thrownStore)
+			.append("enabled", enabled)
+			.append("level", level)
+			.append("requestDetail", requestDetail)
+			.append("responseDetail", responseDetail)
+			.append("normalRules", normalRules.length == 0 ? null : normalRules)
+			.append("debugRules", debugRules.length == 0 ? null : debugRules)
 			.asReadableString();
 	}
 }

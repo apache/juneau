@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.widget;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
@@ -37,7 +38,7 @@ public abstract class MenuItemWidget extends Widget {
 	 * Returns the Javascript needed for the show and hide actions of the menu item.
 	 */
 	@Override /* Widget */
-	public String getScript(RestRequest req, RestResponse res) throws Exception {
+	public String getScript(RestRequest req, RestResponse res) {
 		return loadScript(req, "scripts/MenuItemWidget.js");
 	}
 
@@ -86,9 +87,8 @@ public abstract class MenuItemWidget extends Widget {
 	 * @param req The HTTP request object.
 	 * @param res The HTTP response object.
 	 * @return Javascript code to execute, or <jk>null</jk> if there isn't any.
-	 * @throws Exception Error occurred.
 	 */
-	public String getBeforeShowScript(RestRequest req, RestResponse res) throws Exception {
+	public String getBeforeShowScript(RestRequest req, RestResponse res) {
 		return null;
 	}
 
@@ -101,9 +101,8 @@ public abstract class MenuItemWidget extends Widget {
 	 * @param req The HTTP request object.
 	 * @param res The HTTP response object.
 	 * @return Javascript code to execute, or <jk>null</jk> if there isn't any.
-	 * @throws Exception Error occurred.
 	 */
-	public String getAfterShowScript(RestRequest req, RestResponse res) throws Exception {
+	public String getAfterShowScript(RestRequest req, RestResponse res) {
 		return null;
 	}
 
@@ -112,12 +111,12 @@ public abstract class MenuItemWidget extends Widget {
 	 * {@link #getHtml(RestRequest,RestResponse)} method.
 	 */
 	@Override /* Widget */
-	public String getStyle(RestRequest req, RestResponse res) throws Exception {
+	public String getStyle(RestRequest req, RestResponse res) {
 		return loadStyle(req, "styles/MenuItemWidget.css");
 	}
 
 	@Override /* Widget */
-	public String getHtml(RestRequest req, RestResponse res) throws Exception {
+	public String getHtml(RestRequest req, RestResponse res) {
 		StringBuilder sb = new StringBuilder();
 
 		// Need a unique number to define unique function names.
@@ -151,6 +150,8 @@ public abstract class MenuItemWidget extends Widget {
 		if (o instanceof Reader) {
 			try (Reader r = (Reader)o; Writer w = new StringBuilderWriter(sb)) {
 				pipe(r, w);
+			} catch (IOException e) {
+				throw runtimeException(e);
 			}
 		} else if (o instanceof CharSequence) {
 			sb.append((CharSequence)o);
@@ -164,7 +165,11 @@ public abstract class MenuItemWidget extends Widget {
 				.resolver(req.getVarResolverSession())
 				.build();
 			session.indent = 2;
-			session.serialize(o, sb);
+			try {
+				session.serialize(o, sb);
+			} catch (Exception e) {
+				throw runtimeException(e);
+			}
 		}
 		sb.append(""
 			+ "\n\t</div>"
@@ -185,9 +190,8 @@ public abstract class MenuItemWidget extends Widget {
 	 * @param req The HTTP request object.
 	 * @param res The HTTP response object.
 	 * @return The menu item label.
-	 * @throws Exception Error occurred.
 	 */
-	public abstract String getLabel(RestRequest req, RestResponse res) throws Exception;
+	public abstract String getLabel(RestRequest req, RestResponse res);
 
 	/**
 	 * The content of the popup.
@@ -203,7 +207,6 @@ public abstract class MenuItemWidget extends Widget {
 	 * 		<li>Other - Serialized as HTML using {@link HtmlSerializer#DEFAULT}.
 	 * 			<br>Note that this includes any of the {@link org.apache.juneau.dto.html5} beans.
 	 * 	</ul>
-	 * @throws Exception Error occurred.
 	 */
-	public abstract Object getContent(RestRequest req, RestResponse res) throws Exception;
+	public abstract Object getContent(RestRequest req, RestResponse res);
 }

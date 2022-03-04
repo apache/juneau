@@ -16,6 +16,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.http.message.*;
@@ -95,14 +96,12 @@ public class MediaRanges {
 	 */
 	public MediaRanges(HeaderElement[] e) {
 
-		List<MediaRange> l = list();
-		for (HeaderElement e2 : e)
-			l.add(new MediaRange(e2));
+		ranges = new MediaRange[e.length];
+		for (int i = 0; i < e.length; i++)
+			ranges[i] = new MediaRange(e[i]);
+		Arrays.sort(ranges, RANGE_COMPARATOR);
 
-		l.sort(RANGE_COMPARATOR);
-		ranges = l.toArray(new MediaRange[l.size()]);
-
-		this.string = ranges.length == 1 ? ranges[0].toString() : StringUtils.join(l, ',');
+		this.string = ranges.length == 1 ? ranges[0].toString() : StringUtils.join(ranges, ',');
 	}
 
 	/**
@@ -217,8 +216,20 @@ public class MediaRanges {
 	 *
 	 * @return The media ranges that make up this object.
 	 */
-	public List<MediaRange> getRanges() {
-		return unmodifiable(alist(ranges));
+	public List<MediaRange> toList() {
+		return ulist(ranges);
+	}
+
+	/**
+	 * Performs an action on the media ranges that make up this object.
+	 *
+	 * @param action The action to perform.
+	 * @return This object.
+	 */
+	public MediaRanges forEachRange(Consumer<MediaRange> action) {
+		for (MediaRange r : ranges)
+			action.accept(r);
+		return this;
 	}
 
 	private static HeaderElement[] parse(String value) {

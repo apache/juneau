@@ -170,8 +170,7 @@ public abstract class SwaggerElement {
 	 */
 	public OMap asMap() {
 		OMap m = new OMap();
-		for (String s : keySet())
-			m.put(s, get(s, Object.class));
+		keySet().forEach(x -> m.put(x, get(x, Object.class)));
 		return m;
 	}
 

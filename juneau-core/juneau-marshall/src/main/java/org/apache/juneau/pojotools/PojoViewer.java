@@ -61,8 +61,8 @@ public final class PojoViewer implements PojoTool<ViewArgs> {
 		} else if (type.isCollection()) {
 			Collection c = (Collection)input;
 			l = list(c.size());
-			for (Object o : c)
-				l.add(o);
+			List<Object> l2 = l;
+			c.forEach(x -> l2.add(x));
 		} else {
 			return input;
 		}

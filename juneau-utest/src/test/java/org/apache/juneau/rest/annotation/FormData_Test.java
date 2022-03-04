@@ -99,30 +99,30 @@ public class FormData_Test {
 		@RestPost(defaultRequestFormData={"f1:1","f2=2"," f3 : 3 "})
 		public OMap a(RequestFormParams formData) {
 			return OMap.create()
-				.a("f1", formData.get("f1").asString())
-				.a("f2", formData.get("f2").asString())
-				.a("f3", formData.get("f3").asString());
+				.append("f1", formData.get("f1").asString())
+				.append("f2", formData.get("f2").asString())
+				.append("f3", formData.get("f3").asString());
 		}
 		@RestPost
 		public OMap b(@FormData("f1") String f1, @FormData("f2") String f2, @FormData("f3") String f3) {
 			return OMap.create()
-				.a("f1", f1)
-				.a("f2", f2)
-				.a("f3", f3);
+				.append("f1", f1)
+				.append("f2", f2)
+				.append("f3", f3);
 		}
 		@RestPost
 		public OMap c(@FormData("f1") @Schema(_default="1") String f1, @FormData("f2") @Schema(_default="2") String f2, @FormData("f3") @Schema(_default="3") String f3) {
 			return OMap.create()
-				.a("f1", f1)
-				.a("f2", f2)
-				.a("f3", f3);
+				.append("f1", f1)
+				.append("f2", f2)
+				.append("f3", f3);
 		}
 		@RestPost(defaultRequestFormData={"f1:1","f2=2"," f3 : 3 "})
 		public OMap d(@FormData("f1") @Schema(_default="4") String f1, @FormData("f2") @Schema(_default="5") String f2, @FormData("f3") @Schema(_default="6") String f3) {
 			return OMap.create()
-				.a("f1", f1)
-				.a("f2", f2)
-				.a("f3", f3);
+				.append("f1", f1)
+				.append("f2", f2)
+				.append("f3", f3);
 		}
 	}
 

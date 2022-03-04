@@ -970,7 +970,6 @@ public class BeanSession extends ContextSession {
 			try {
 				Array.set(array, i++, o);
 			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
 				throw e;
 			}
 		}

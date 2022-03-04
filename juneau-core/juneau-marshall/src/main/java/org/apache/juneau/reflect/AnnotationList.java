@@ -58,8 +58,7 @@ public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 	 * @return This object.
 	 */
 	public <T> AnnotationList forEachValue(Class<T> type, String name, Predicate<T> filter, Consumer<T> action) {
-		for (AnnotationInfo<?> ai : this)
-			ai.forEachValue(type, name, filter, action);
+		forEach(x -> x.forEachValue(type, name, filter, action));
 		return this;
 	}
 
@@ -73,9 +72,10 @@ public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 	 */
 	@SuppressWarnings("unchecked")
 	public <A extends Annotation> AnnotationList forEach(Class<A> type, Predicate<AnnotationInfo<A>> filter, Consumer<AnnotationInfo<A>> action) {
-		for (AnnotationInfo<?> ai : this)
-			if (ai.isType(type))
-				consume(filter, action, (AnnotationInfo<A>)ai);
+		forEach(x -> {
+			if (x.isType(type))
+				consume(filter, action, (AnnotationInfo<A>)x);
+		});
 		return this;
 	}
 
@@ -87,8 +87,7 @@ public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 	 * @return This object.
 	 */
 	public <A extends Annotation> AnnotationList forEach(Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
-		for (AnnotationInfo<?> ai : this)
-			consume(filter, action, ai);
+		forEach(x -> consume(filter, action, x));
 		return this;
 	}
 }

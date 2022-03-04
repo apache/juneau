@@ -22,6 +22,8 @@ import java.beans.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
+
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.reflect.*;
 
@@ -58,6 +60,8 @@ import org.apache.juneau.reflect.*;
  */
 public class BeanMeta<T> {
 
+	private static final BeanPropertyMeta[] EMPTY_PROPERTIES = new BeanPropertyMeta[0];
+
 	/** The target class type that this meta object describes. */
 	protected final ClassMeta<T> classMeta;
 
@@ -66,6 +70,9 @@ public class BeanMeta<T> {
 
 	/** The properties on the target class. */
 	protected final Map<String,BeanPropertyMeta> properties;
+
+	/** The properties on the target class. */
+	protected final BeanPropertyMeta[] propertyArray;
 
 	/** The hidden properties on the target class. */
 	protected final Map<String,BeanPropertyMeta> hiddenProperties;
@@ -121,6 +128,7 @@ public class BeanMeta<T> {
 		this.beanFilter = beanFilter;
 		this.dictionaryName = b.dictionaryName;
 		this.properties = unmodifiable(b.properties);
+		this.propertyArray = properties == null ? EMPTY_PROPERTIES : array(properties.values(), BeanPropertyMeta.class);
 		this.hiddenProperties = unmodifiable(b.hiddenProperties);
 		this.getterProps = unmodifiable(b.getterProps);
 		this.setterProps = unmodifiable(b.setterProps);
@@ -133,6 +141,9 @@ public class BeanMeta<T> {
 		this.typeProperty = BeanPropertyMeta.builder(this, typePropertyName).canRead().canWrite().rawMetaType(ctx.string()).beanRegistry(beanRegistry).build();
 		this.sortProperties = b.sortProperties;
 		this.fluentSetters = b.fluentSetters;
+
+		if (sortProperties)
+			Arrays.sort(propertyArray);
 	}
 
 	private static final class Builder<T> {
@@ -650,14 +661,7 @@ public class BeanMeta<T> {
 
 		for (ClassInfo c2 : findClasses(c, stopClass)) {
 			for (MethodInfo m : c2.getDeclaredMethods()) {
-				if (m.isStatic())
-					continue;
-				if (m.isBridge())   // This eliminates methods with covariant return types from parent classes on child classes.
-					continue;
-				if (m.getParamCount() > 2)
-					continue;
-
-				if (m.hasAnnotation(ctx, BeanIgnore.class))
+				if (m.isStatic() || m.isBridge() || m.getParamCount() > 2 || m.hasAnnotation(ctx, BeanIgnore.class))
 					continue;
 				Transient t = m.getAnnotation(ctx, Transient.class);
 				if (t != null && t.value())
@@ -809,22 +813,19 @@ public class BeanMeta<T> {
 	 * @return Metadata on all properties associated with this bean.
 	 */
 	public Collection<BeanPropertyMeta> getPropertyMetas() {
-		return this.properties.values();
+		return ulist(propertyArray);
 	}
 
 	/**
-	 * Returns the metadata on the specified list of properties.
+	 * Performs an action on all matching properties.
 	 *
-	 * @param pNames The list of properties to retrieve.  If <jk>null</jk>, returns all properties.
-	 * @return The metadata on the specified list of properties.
+	 * @param filter The filter to apply.
+	 * @param action The action to apply.
 	 */
-	public Collection<BeanPropertyMeta> getPropertyMetas(final String...pNames) {
-		if (pNames == null)
-			return getPropertyMetas();
-		List<BeanPropertyMeta> l = list(pNames.length);
-		for (int i = 0; i < pNames.length; i++)
-			l.add(getPropertyMeta(pNames[i]));
-		return l;
+	public void forEachProperty(Predicate<BeanPropertyMeta> filter, Consumer<BeanPropertyMeta> action) {
+		for (BeanPropertyMeta x : propertyArray)
+			if (filter.test(x))
+				action.accept(x);
 	}
 
 	/**
@@ -981,7 +982,7 @@ public class BeanMeta<T> {
 	public String toString() {
 		StringBuilder sb = new StringBuilder(c.getName());
 		sb.append(" {\n");
-		for (BeanPropertyMeta pm : this.properties.values())
+		for (BeanPropertyMeta pm : propertyArray)
 			sb.append('\t').append(pm.toString()).append(",\n");
 		sb.append('}');
 		return sb.toString();

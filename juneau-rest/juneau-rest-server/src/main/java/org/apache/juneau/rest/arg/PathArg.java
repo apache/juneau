@@ -13,8 +13,6 @@
 package org.apache.juneau.rest.arg;
 
 import static org.apache.juneau.http.annotation.PathAnnotation.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
@@ -80,7 +78,8 @@ public class PathArg implements RestOpArg {
 		this.name = getName(paramInfo, pathMatcher);
 		this.type = paramInfo.getParameterType().innerType();
 		this.schema = HttpPartSchema.create(Path.class, paramInfo);
-		this.partParser = optional(schema.getParser()).map(x -> HttpPartParser.creator().type(x).apply(annotations).create()).orElse(null);
+		Class<? extends HttpPartParser> pp = schema.getParser();
+		this.partParser = pp != null ? HttpPartParser.creator().type(pp).apply(annotations).create() : null;
 	}
 
 	private String getName(ParamInfo pi, UrlPathMatcher pathMatcher) {

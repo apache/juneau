@@ -16,6 +16,7 @@ import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
+import java.util.function.*;
 
 /**
  * Various I/O related utility methods.
@@ -123,6 +124,30 @@ public final class IOUtils {
 	}
 
 	/**
+	 * Pipes the contents of the specified <c>Reader</c> to the specified <c>Writer</c>.
+	 *
+	 * @param in
+	 * 	The reader to pipe from.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Reader is automatically closed.
+	 * @param out
+	 * 	The file to write the output to.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Writer is flushed but not automatically closed.
+	 * @param onException Consumer of any {@link IOException I/O exceptions}.
+	 * @return
+	 * 	The number of characters piped.
+	 */
+	public static long pipe(Reader in, Writer out, Consumer<IOException> onException) {
+		try {
+			return pipe(in, out);
+		} catch (IOException e) {
+			onException.accept(e);
+			return -1;
+		}
+	}
+
+	/**
 	 * Pipes the contents of the specified <c>Reader</c> to the specified <c>Writer</c> a line at a time.
 	 *
 	 * <p>
@@ -182,6 +207,32 @@ public final class IOUtils {
 	}
 
 	/**
+	 * Pipes the contents of the specified input stream to the writer.
+	 *
+	 * @param in
+	 * 	The stream to pipe from.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Streams is automatically closed.
+	 * @param out
+	 * 	The writer to pipe to.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is not automatically closed.
+	 * @param onException Consumer of any {@link IOException I/O exceptions}.
+	 * @return
+	 * 	The number of bytes written.
+	 */
+	public static long pipe(InputStream in, Writer out, Consumer<IOException> onException) {
+		try {
+			if (in == null || out == null)
+				return 0;
+			return pipe(new InputStreamReader(in, UTF8), out);
+		} catch (IOException e) {
+			onException.accept(e);
+			return -2;
+		}
+	}
+
+	/**
 	 * Pipes the specified input stream to the specified output stream.
 	 *
 	 * <p>
@@ -201,6 +252,34 @@ public final class IOUtils {
 	public static long pipe(InputStream in, OutputStream out) throws IOException {
 		try (InputStream in2 = in) {
 			return pipe(in, out, -1);
+		}
+	}
+
+	/**
+	 * Pipes the specified input stream to the specified output stream.
+	 *
+	 * <p>
+	 * Either stream is not automatically closed.
+	 *
+	 * @param in
+	 * 	The input stream.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is automatically closed.
+	 * @param out
+	 * 	The output stream.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is not automatically closed.
+	 * @param onException Consumer of any {@link IOException I/O exceptions}.
+	 * @return The number of bytes written.
+	 */
+	public static long pipe(InputStream in, OutputStream out, Consumer<IOException> onException) {
+		try {
+			try (InputStream in2 = in) {
+				return pipe(in, out, -1);
+			}
+		} catch (IOException e) {
+			onException.accept(e);
+			return -1;
 		}
 	}
 
@@ -278,6 +357,29 @@ public final class IOUtils {
 			osw.flush();
 		}
 		return total;
+	}
+
+	/**
+	 * Pipes the specified reader to the specified output stream.
+	 *
+	 * @param in
+	 * 	The input reader.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is automatically closed.
+	 * @param out
+	 * 	The output stream.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is not automatically closed.
+	 * @param onException Consumer of any {@link IOException I/O exceptions}.
+	 * @return The number of bytes written.
+	 */
+	public static long pipe(Reader in, OutputStream out, Consumer<IOException> onException) {
+		try {
+			return pipe(in, out);
+		} catch (IOException e) {
+			onException.accept(e);
+			return -1;
+		}
 	}
 
 	/**

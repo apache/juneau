@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -32,21 +31,18 @@ import org.apache.juneau.assertions.*;
  */
 public class BasicLongPart extends BasicPart {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Static creator.
 	 *
 	 * @param name The part name.
-	 * @param value
-	 * 	The part value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Long#parseLong(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
+	 * @param value The part value.
 	 * @return A new {@link BasicLongPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static BasicLongPart of(String name, Object value) {
+	public static BasicLongPart of(String name, Long value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicLongPart(name, value);
@@ -59,58 +55,85 @@ public class BasicLongPart extends BasicPart {
 	 * Part value is re-evaluated on each call to {@link NameValuePair#getValue()}.
 	 *
 	 * @param name The part name.
-	 * @param value
-	 * 	The part value supplier.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Long#parseLong(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 	</ul>
-	 * @return A new {@link BasicLongPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
+	 * @param value The part value supplier.
+	 * @return A new {@link BasicLongPart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
-	public static BasicLongPart of(String name, Supplier<?> value) {
+	public static BasicLongPart of(String name, Supplier<Long> value) {
 		if (isEmpty(name) || value == null)
 			return null;
 		return new BasicLongPart(name, value);
 	}
 
-	private Long parsed;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final Long value;
+	private final Supplier<Long> supplier;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param name The part name.
-	 * @param value
-	 * 	The part value.
-	 * 	<br>Can be any of the following:
-	 * 	<ul>
-	 * 		<li>{@link Number} - Converted to a long using {@link Number#longValue()}.
-	 * 		<li>{@link String} - Parsed using {@link Long#parseLong(String)}.
-	 * 		<li>Anything else - Converted to <c>String</c>.
-	 * 		<li>A {@link Supplier} of anything on this list.
-	 * 	</ul>
+	 * @param name The part name.  Must not be <jk>null</jk>.
+	 * @param value The part value.  Can be <jk>null</jk>.
 	 */
-	public BasicLongPart(String name, Object value) {
+	public BasicLongPart(String name, Long value) {
 		super(name, value);
-		if (! isSupplier(value))
-			parsed = getParsedValue();
+		this.value = value;
+		this.supplier = null;
+
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param name The part name.  Must not be <jk>null</jk>.
+	 * @param value The part value supplier.  Can be <jk>null</jk> or supply <jk>null</jk>.
+	 */
+	public BasicLongPart(String name, Supplier<Long> value) {
+		super(name, value);
+		this.value = null;
+		this.supplier = value;
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * <p>
+	 * <jk>null</jk> and empty values are treated as <jk>null</jk>.
+	 * Otherwise parses using {@link Long#valueOf(String)}.
+	 *
+	 * @param name The part name.  Must not be <jk>null</jk>.
+	 * @param value The part value.  Can be <jk>null</jk>.
+	 */
+	public BasicLongPart(String name, String value) {
+		super(name, value);
+		this.value = isEmpty(value) ? null : Long.valueOf(value);
+		this.supplier = null;
 	}
 
 	@Override /* Header */
 	public String getValue() {
-		return stringify(getParsedValue());
+		return stringify(value());
 	}
 
 	/**
-	 * Returns The part value as a long.
+	 * Returns The part value as a {@link Long} wrapped in an {@link Optional}.
 	 *
-	 * @return The part value as a long, or {@link Optional#empty()} if the value is <jk>null</jk>
+	 * @return The part value as a {@link Long} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Long> asLong() {
-		return optional(getParsedValue());
+		return optional(value());
 	}
 
+	/**
+	 * Returns The part value as a {@link Long}.
+	 *
+	 * @return The part value as a {@link Long}, or <jk>null</jk> if the value <jk>null</jk>.
+	 */
+	public Long toLong() {
+		return value();
+	}
 	/**
 	 * Provides the ability to perform fluent-style assertions on this part.
 	 *
@@ -118,24 +141,26 @@ public class BasicLongPart extends BasicPart {
 	 * @throws AssertionError If assertion failed.
 	 */
 	public FluentLongAssertion<BasicLongPart> assertLong() {
-		return new FluentLongAssertion<>(getParsedValue(), this);
+		return new FluentLongAssertion<>(value(), this);
 	}
 
-	private Long getParsedValue() {
-		if (parsed != null)
-			return parsed;
-		Object o = getRawValue();
-		if (o == null)
-			return null;
-		if (o instanceof Number)
-			return ((Number)o).longValue();
-		String s = o.toString();
-		if (isEmpty(s))
-			return null;
-		try {
-			return Long.parseLong(s);
-		} catch (NumberFormatException e) {
-			throw illegalArgumentException("Value could not be parsed as a long: {0}", o);
-		}
+	/**
+	 * Return the value if present, otherwise return <c>other</c>.
+	 *
+	 * <p>
+	 * This is a shortened form for calling <c>asLong().orElse(<jv>other</jv>)</c>.
+	 *
+	 * @param other The value to be returned if there is no value present, can be <jk>null</jk>.
+	 * @return The value, if present, otherwise <c>other</c>.
+	 */
+	public Long orElse(Long other) {
+		Long x = value();
+		return x != null ? x : other;
+	}
+
+	private Long value() {
+		if (supplier != null)
+			return supplier.get();
+		return value;
 	}
 }

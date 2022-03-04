@@ -18,6 +18,7 @@ import java.util.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ArrayUtils.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.cp.*;
@@ -95,33 +96,20 @@ public final class BeanFilter {
 		public Builder applyAnnotations(List<Bean> annotations) {
 
 			for (Bean b : annotations) {
-
-				if (! (b.properties().isEmpty() && b.p().isEmpty()))
-					properties(b.properties(), b.p());
-
-				if (b.sort())
-					sortProperties(true);
-
-				if (b.findFluentSetters())
-					findFluentSetters();
-
-				if (! (b.excludeProperties().isEmpty() && b.xp().isEmpty()))
-					excludeProperties(b.excludeProperties(), b.xp());
-
-				if (! (b.readOnlyProperties().isEmpty() && b.ro().isEmpty()))
-					readOnlyProperties(b.readOnlyProperties(), b.ro());
-
-				if (! (b.writeOnlyProperties().isEmpty() && b.wo().isEmpty()))
-					writeOnlyProperties(b.writeOnlyProperties(), b.wo());
-
-				optional(b.typeName()).filter(NOT_EMPTY).ifPresent(x -> typeName(x));
-				optional(b.propertyNamer()).filter(NOT_VOID).ifPresent(x -> propertyNamer(x));
-				optional(b.interfaceClass()).filter(NOT_VOID).ifPresent(x -> interfaceClass(x));
-				optional(b.stopClass()).filter(NOT_VOID).ifPresent(x -> stopClass(x));
-				optional(b.interceptor()).filter(NOT_VOID).ifPresent(x -> interceptor(x));
-				optional(b.implClass()).filter(NOT_VOID).ifPresent(x -> implClass(x));
-				optional(b.dictionary()).filter(x -> x.length > 0).ifPresent(x -> dictionary(x));
-				optional(b.example()).filter(NOT_EMPTY).ifPresent(x -> example(x));
+				if (isNotEmpty(b.properties(), b.p())) properties(b.properties(), b.p());
+				if (b.sort()) sortProperties(true);
+				if (b.findFluentSetters()) findFluentSetters();
+				if (isNotEmpty(b.excludeProperties(), b.xp())) excludeProperties(b.excludeProperties(), b.xp());
+				if (isNotEmpty(b.readOnlyProperties(), b.ro())) readOnlyProperties(b.readOnlyProperties(), b.ro());
+				if (isNotEmpty(b.writeOnlyProperties(), b.wo())) writeOnlyProperties(b.writeOnlyProperties(), b.wo());
+				if (isNotEmpty(b.typeName())) typeName(b.typeName());
+				if (isNotVoid(b.propertyNamer())) propertyNamer(b.propertyNamer());
+				if (isNotVoid(b.interfaceClass())) interfaceClass(b.interfaceClass());
+				if (isNotVoid(b.stopClass())) stopClass(b.stopClass());
+				if (isNotVoid(b.interceptor())) interceptor(b.interceptor());
+				if (isNotVoid(b.implClass())) implClass(b.implClass());
+				if (isNotEmptyArray(b.dictionary())) dictionary(b.dictionary());
+				if (isNotEmpty(b.example())) example(b.example());
 			}
 			return this;
 		}

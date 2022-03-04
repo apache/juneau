@@ -14,6 +14,8 @@ package org.apache.juneau.annotation;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.internal.ArrayUtils.*;
+
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 
@@ -155,10 +157,8 @@ public class NamePropertyAnnotation {
 		@Override
 		public void apply(AnnotationInfo<NameProperty> ai, BeanContext.Builder b) {
 			NameProperty a = ai.inner();
-
-			if (isEmpty(a.on()))
+			if (isEmptyArray(a.on()))
 				return;
-
 			b.annotations(copy(a, vr()));
 		}
 	}

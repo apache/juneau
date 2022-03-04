@@ -14,6 +14,7 @@ package org.apache.juneau.html;
 
 import static org.apache.juneau.html.AsideFloat.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -76,15 +77,16 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @throws Exception Any exception can be thrown.
 	 */
 	protected void style(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
-		int i = 0;
+		Flag addSpace = Flag.create();
 		for (String s : session.getStylesheet())
-			w.sIf(i++ > 0).append(3, "@import ").q().append(session.resolveUri(session.resolve(s))).q().appendln(";");
+			w.sIf(addSpace.getAndSet()).append(3, "@import ").q().append(session.resolveUri(session.resolve(s))).q().appendln(";");
 		if (session.isNowrap())
 			w.appendln(3, "div.data * {white-space:nowrap;} ");
 		for (String s : session.getStyle())
-			w.sIf(i++ > 0).appendln(3, session.resolve(s));
-		for (HtmlWidget hw : session.getWidgets())
-			w.sIf(i++ > 0).appendln(3, session.resolve(hw.getStyle(session.getVarResolver())));
+			w.sIf(addSpace.getAndSet()).appendln(3, session.resolve(s));
+		session.forEachWidget(x -> {
+			w.sIf(addSpace.getAndSet()).appendln(3, session.resolve(x.getStyle(session.getVarResolver())));
+		});
 	}
 
 	/**
@@ -96,11 +98,12 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 	 * @throws Exception Any exception can be thrown.
 	 */
 	protected void script(HtmlDocSerializerSession session, HtmlWriter w, Object o) throws Exception {
-		int i = 0;
+		Flag addSpace = Flag.create();
 		for (String s : session.getScript())
-			w.sIf(i++ > 0).append(3, session.resolve(s)).append('\n'); // Must always append a newline even if whitespace disabled!
-		for (HtmlWidget hw : session.getWidgets())
-			w.sIf(i++ > 0).append(3, session.resolve(hw.getScript(session.getVarResolver()))).append('\n'); // Must always append a newline even if whitespace disabled!
+			w.sIf(addSpace.getAndSet()).append(3, session.resolve(s)).append('\n'); // Must always append a newline even if whitespace disabled!
+		session.forEachWidget(x -> {
+			w.sIf(addSpace.getAndSet()).append(3, session.resolve(x.getScript(session.getVarResolver()))).w('\n'); // Must always append a newline even if whitespace disabled!
+		});
 	}
 
 	/**

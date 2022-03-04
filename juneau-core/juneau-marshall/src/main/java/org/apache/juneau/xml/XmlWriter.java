@@ -63,12 +63,11 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter oTag(String ns, String name, boolean needsEncoding) throws IOException {
-		append('<');
+	public XmlWriter oTag(String ns, String name, boolean needsEncoding) {
+		w('<');
 		if (enableNs && ns != null && ! (ns.isEmpty() || ns.equals(defaultNsPrefix)))
-			append(ns).append(':');
+			w(ns).w(':');
 		if (needsEncoding)
 			XmlUtils.encodeElementName(out, name);
 		else
@@ -82,9 +81,8 @@ public class XmlWriter extends SerializerWriter {
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter oTag(String ns, String name) throws IOException {
+	public XmlWriter oTag(String ns, String name) {
 		return oTag(ns, name, false);
 	}
 
@@ -93,9 +91,8 @@ public class XmlWriter extends SerializerWriter {
 	 *
 	 * @param name The element name.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter oTag(String name) throws IOException {
+	public XmlWriter oTag(String name) {
 		return oTag(null, name, false);
 	}
 
@@ -107,9 +104,8 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter oTag(int indent, String ns, String name, boolean needsEncoding) throws IOException {
+	public XmlWriter oTag(int indent, String ns, String name, boolean needsEncoding) {
 		return i(indent).oTag(ns, name, needsEncoding);
 	}
 
@@ -120,9 +116,8 @@ public class XmlWriter extends SerializerWriter {
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter oTag(int indent, String ns, String name) throws IOException {
+	public XmlWriter oTag(int indent, String ns, String name) {
 		return i(indent).oTag(ns, name, false);
 	}
 
@@ -132,9 +127,8 @@ public class XmlWriter extends SerializerWriter {
 	 * @param indent The number of prefix tabs to add.
 	 * @param name The element name.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter oTag(int indent, String name) throws IOException {
+	public XmlWriter oTag(int indent, String name) {
 		return i(indent).oTag(null, name, false);
 	}
 
@@ -145,10 +139,9 @@ public class XmlWriter extends SerializerWriter {
 	 * Shortcut for <code>append(<js>'>'</js>);</code>
 	 *
 	 * @return This object.
-	 * @throws IOException Thrown by underlying stream.
 	 */
-	public XmlWriter cTag() throws IOException {
-		append('>');
+	public XmlWriter cTag() {
+		w('>');
 		return this;
 	}
 
@@ -159,10 +152,9 @@ public class XmlWriter extends SerializerWriter {
 	 * Shortcut for <code>append(<js>'/'</js>).append(<js>'>'</js>);</code>
 	 *
 	 * @return This object.
-	 * @throws IOException Thrown by underlying stream.
 	 */
-	public XmlWriter ceTag() throws IOException {
-		append('/').append('>');
+	public XmlWriter ceTag() {
+		w('/').w('>');
 		return this;
 	}
 
@@ -173,17 +165,17 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter tag(String ns, String name, boolean needsEncoding) throws IOException {
-		append('<');
+	public XmlWriter tag(String ns, String name, boolean needsEncoding) {
+		w('<');
 		if (enableNs && ns != null && ! (ns.isEmpty() || ns.equals(defaultNsPrefix)))
-			append(ns).append(':');
+			w(ns).w(':');
 		if (needsEncoding)
 			XmlUtils.encodeElementName(out, name);
 		else
-			append(name);
-		return append('/').append('>');
+			w(name);
+		w('/').w('>');
+		return this;
 	}
 
 	/**
@@ -192,9 +184,8 @@ public class XmlWriter extends SerializerWriter {
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter tag(String ns, String name) throws IOException {
+	public XmlWriter tag(String ns, String name) {
 		return tag(ns, name, false);
 	}
 
@@ -203,9 +194,8 @@ public class XmlWriter extends SerializerWriter {
 	 *
 	 * @param name The element name.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter tag(String name) throws IOException {
+	public XmlWriter tag(String name) {
 		return tag(null, name, false);
 	}
 
@@ -215,9 +205,8 @@ public class XmlWriter extends SerializerWriter {
 	 * @param indent The number of prefix tabs to add.
 	 * @param name The element name.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter tag(int indent, String name) throws IOException {
+	public XmlWriter tag(int indent, String name) {
 		return i(indent).tag(name);
 	}
 
@@ -229,9 +218,8 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter tag(int indent, String ns, String name, boolean needsEncoding) throws IOException {
+	public XmlWriter tag(int indent, String ns, String name, boolean needsEncoding) {
 		return i(indent).tag(ns, name, needsEncoding);
 	}
 
@@ -242,9 +230,8 @@ public class XmlWriter extends SerializerWriter {
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter tag(int indent, String ns, String name) throws IOException {
+	public XmlWriter tag(int indent, String ns, String name) {
 		return i(indent).tag(ns, name);
 	}
 
@@ -256,10 +243,10 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter sTag(String ns, String name, boolean needsEncoding) throws IOException {
-		return oTag(ns, name, needsEncoding).append('>');
+	public XmlWriter sTag(String ns, String name, boolean needsEncoding) {
+		oTag(ns, name, needsEncoding).w('>');
+		return this;
 	}
 
 	/**
@@ -268,9 +255,8 @@ public class XmlWriter extends SerializerWriter {
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter sTag(String ns, String name) throws IOException {
+	public XmlWriter sTag(String ns, String name) {
 		return sTag(ns, name, false);
 	}
 
@@ -279,9 +265,8 @@ public class XmlWriter extends SerializerWriter {
 	 *
 	 * @param name The element name.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter sTag(String name) throws IOException {
+	public XmlWriter sTag(String name) {
 		return sTag(null, name);
 	}
 
@@ -293,9 +278,8 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter sTag(int indent, String ns, String name, boolean needsEncoding) throws IOException {
+	public XmlWriter sTag(int indent, String ns, String name, boolean needsEncoding) {
 		return i(indent).sTag(ns, name, needsEncoding);
 	}
 
@@ -306,9 +290,8 @@ public class XmlWriter extends SerializerWriter {
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter sTag(int indent, String ns, String name) throws IOException {
+	public XmlWriter sTag(int indent, String ns, String name) {
 		return i(indent).sTag(ns, name, false);
 	}
 
@@ -318,9 +301,8 @@ public class XmlWriter extends SerializerWriter {
 	 * @param indent The number of prefix tabs to add.
 	 * @param name The element name.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter sTag(int indent, String name) throws IOException {
+	public XmlWriter sTag(int indent, String name) {
 		return i(indent).sTag(null, name, false);
 	}
 
@@ -332,17 +314,17 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter eTag(String ns, String name, boolean needsEncoding) throws IOException {
-		append('<').append('/');
+	public XmlWriter eTag(String ns, String name, boolean needsEncoding) {
+		w('<').w('/');
 		if (enableNs && ns != null && ! (ns.isEmpty() || ns.equals(defaultNsPrefix)))
-			append(ns).append(':');
+			w(ns).w(':');
 		if (needsEncoding)
 			XmlUtils.encodeElementName(out, name);
 		else
 			append(name);
-		return append('>');
+		w('>');
+		return this;
 	}
 
 	/**
@@ -351,9 +333,8 @@ public class XmlWriter extends SerializerWriter {
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter eTag(String ns, String name) throws IOException {
+	public XmlWriter eTag(String ns, String name) {
 		return eTag(ns, name, false);
 	}
 
@@ -362,9 +343,8 @@ public class XmlWriter extends SerializerWriter {
 	 *
 	 * @param name The element name.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter eTag(String name) throws IOException {
+	public XmlWriter eTag(String name) {
 		return eTag(null, name);
 	}
 
@@ -376,9 +356,8 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The element name.
 	 * @param needsEncoding If <jk>true</jk>, element name will be encoded.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter eTag(int indent, String ns, String name, boolean needsEncoding) throws IOException {
+	public XmlWriter eTag(int indent, String ns, String name, boolean needsEncoding) {
 		return i(indent).eTag(ns, name, needsEncoding);
 	}
 
@@ -389,9 +368,8 @@ public class XmlWriter extends SerializerWriter {
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The element name.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter eTag(int indent, String ns, String name) throws IOException {
+	public XmlWriter eTag(int indent, String ns, String name) {
 		return i(indent).eTag(ns, name, false);
 	}
 
@@ -401,9 +379,8 @@ public class XmlWriter extends SerializerWriter {
 	 * @param indent The number of prefix tabs to add.
 	 * @param name The element name.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter eTag(int indent, String name) throws IOException {
+	public XmlWriter eTag(int indent, String name) {
 		return i(indent).eTag(name);
 	}
 
@@ -415,9 +392,8 @@ public class XmlWriter extends SerializerWriter {
 	 * @param value The attribute value.
 	 * @param valNeedsEncoding If <jk>true</jk>, attribute name will be encoded.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter attr(String ns, String name, Object value, boolean valNeedsEncoding) throws IOException {
+	public XmlWriter attr(String ns, String name, Object value, boolean valNeedsEncoding) {
 		return oAttr(ns, name).q().attrValue(value, valNeedsEncoding).q();
 	}
 
@@ -428,9 +404,8 @@ public class XmlWriter extends SerializerWriter {
 	 * @param value The attribute value.
 	 * @param valNeedsEncoding If <jk>true</jk>, attribute name will be encoded.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter attr(String name, Object value, boolean valNeedsEncoding) throws IOException {
+	public XmlWriter attr(String name, Object value, boolean valNeedsEncoding) {
 		return attr(null, name, value, valNeedsEncoding);
 	}
 
@@ -441,9 +416,8 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The attribute name.
 	 * @param value The attribute value.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter attr(String ns, String name, Object value) throws IOException {
+	public XmlWriter attr(String ns, String name, Object value) {
 		return oAttr(ns, name).q().attrValue(value, false).q();
 	}
 
@@ -454,9 +428,8 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The attribute name.
 	 * @param value The attribute value.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter attr(Namespace ns, String name, Object value) throws IOException {
+	public XmlWriter attr(Namespace ns, String name, Object value) {
 		return oAttr(ns == null ? null : ns.name, name).q().attrValue(value, false).q();
 	}
 
@@ -466,9 +439,8 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The attribute name.
 	 * @param value The attribute value.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter attr(String name, Object value) throws IOException {
+	public XmlWriter attr(String name, Object value) {
 		return attr((String)null, name, value);
 	}
 
@@ -479,13 +451,12 @@ public class XmlWriter extends SerializerWriter {
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The attribute name.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter oAttr(String ns, String name) throws IOException {
-		append(' ');
+	public XmlWriter oAttr(String ns, String name) {
+		w(' ');
 		if (enableNs && ns != null && ! (ns.isEmpty() || ns.equals(defaultNsPrefix)))
-			append(ns).append(':');
-		append(name).append('=');
+			w(ns).w(':');
+		w(name).w('=');
 		return this;
 	}
 
@@ -495,9 +466,8 @@ public class XmlWriter extends SerializerWriter {
 	 * @param ns The namespace.  Can be <jk>null</jk>.
 	 * @param name The attribute name.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter oAttr(Namespace ns, String name) throws IOException {
+	public XmlWriter oAttr(Namespace ns, String name) {
 		return oAttr(ns == null ? null : ns.name, name);
 	}
 
@@ -508,9 +478,8 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The attribute name.
 	 * @param value The attribute value, convertible to a URI via <c>toString()</c>
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter attrUri(Namespace ns, String name, Object value) throws IOException {
+	public XmlWriter attrUri(Namespace ns, String name, Object value) {
 		return attr(ns, name, uriResolver.resolve(value));
 	}
 
@@ -521,9 +490,8 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The attribute name.
 	 * @param value The attribute value, convertible to a URI via <c>toString()</c>
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter attrUri(String ns, String name, Object value) throws IOException {
+	public XmlWriter attrUri(String ns, String name, Object value) {
 		return attr(ns, name, uriResolver.resolve(value), true);
 	}
 
@@ -533,143 +501,159 @@ public class XmlWriter extends SerializerWriter {
 	 * @param name The attribute name.
 	 * @param value The attribute value.  Can be any object whose <c>toString()</c> method returns a URI.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter attrUri(String name, Object value) throws IOException {
+	public XmlWriter attrUri(String name, Object value) {
 		return attrUri((String)null, name, value);
 	}
 
 	/**
 	 * Shortcut for calling <code>text(o, <jk>false</jk>);</code>
 	 *
-	 * @param o The object being serialized.
+	 * @param value The object being serialized.
 	 * @return This object.
-	 * @throws IOException If a problem occurred.
 	 */
-	public XmlWriter text(Object o) throws IOException {
-		text(o, false);
+	public XmlWriter text(Object value) {
+		text(value, false);
 		return this;
 	}
 
 	/**
 	 * Serializes and encodes the specified object as valid XML text.
 	 *
-	 * @param o The object being serialized.
+	 * @param value The object being serialized.
 	 * @param preserveWhitespace
 	 * 	If <jk>true</jk>, then we're serializing {@link XmlFormat#MIXED_PWS} or {@link XmlFormat#TEXT_PWS} content.
 	 * @return This object.
-	 * @throws IOException Thrown by underlying stream.
 	 */
-	public XmlWriter text(Object o, boolean preserveWhitespace) throws IOException {
-		XmlUtils.encodeText(this, o, trimStrings, preserveWhitespace);
+	public XmlWriter text(Object value, boolean preserveWhitespace) {
+		XmlUtils.encodeText(this, value, trimStrings, preserveWhitespace);
 		return this;
 	}
 
 	/**
 	 * Same as {@link #text(Object)} but treats the value as a URL to resolved then serialized.
 	 *
-	 * @param o The object being serialized.
+	 * @param value The object being serialized.
 	 * @return This object.
-	 * @throws IOException Thrown by underlying stream.
 	 */
-	public XmlWriter textUri(Object o) throws IOException {
-		text(uriResolver.resolve(o), false);
+	public XmlWriter textUri(Object value) {
+		text(uriResolver.resolve(value), false);
 		return this;
 	}
 
-	private XmlWriter attrValue(Object o, boolean needsEncoding) throws IOException {
+	private XmlWriter attrValue(Object value, boolean needsEncoding) {
 		if (needsEncoding)
-			XmlUtils.encodeAttrValue(out, o, this.trimStrings);
-		else if (o instanceof URI || o instanceof URL)
-			append(uriResolver.resolve(o));
+			XmlUtils.encodeAttrValue(out, value, this.trimStrings);
+		else if (value instanceof URI || value instanceof URL)
+			append(uriResolver.resolve(value));
 		else
-			append(o);
+			append(value);
 		return this;
 	}
+
+	// <FluentSetters>
 
 	@Override /* SerializerWriter */
-	public XmlWriter cr(int depth) throws IOException {
+	public XmlWriter cr(int depth) {
 		super.cr(depth);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public XmlWriter cre(int depth) throws IOException {
+	public XmlWriter cre(int depth) {
 		super.cre(depth);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public XmlWriter appendln(int indent, String text) throws IOException {
+	public XmlWriter appendln(int indent, String text) {
 		super.appendln(indent, text);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public XmlWriter appendln(String text) throws IOException {
+	public XmlWriter appendln(String text) {
 		super.appendln(text);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public XmlWriter append(int indent, String text) throws IOException {
+	public XmlWriter append(int indent, String text) {
 		super.append(indent, text);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public XmlWriter append(int indent, char c) throws IOException {
+	public XmlWriter append(int indent, char c) {
 		super.append(indent, c);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public XmlWriter s() throws IOException {
+	public XmlWriter s() {
 		super.s();
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public XmlWriter q() throws IOException {
+	public XmlWriter q() {
 		super.q();
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public XmlWriter i(int indent) throws IOException {
+	public XmlWriter i(int indent) {
 		super.i(indent);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public XmlWriter ie(int indent) throws IOException {
+	public XmlWriter ie(int indent) {
 		super.ie(indent);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public XmlWriter nl(int indent) throws IOException {
+	public XmlWriter nl(int indent) {
 		super.nl(indent);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public XmlWriter append(Object text) throws IOException {
+	public XmlWriter append(Object text) {
 		super.append(text);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public XmlWriter append(String text) throws IOException {
+	public XmlWriter append(String text) {
 		super.append(text);
 		return this;
 	}
 
 	@Override /* SerializerWriter */
-	public XmlWriter append(char c) throws IOException {
-		out.write(c);
+	public XmlWriter append(char c) {
+		try {
+			out.write(c);
+		} catch (IOException e) {
+			throw new SerializeException(e);
+		}
 		return this;
 	}
+
+	@Override /* SerializerWriter */
+	public XmlWriter w(char c) {
+		super.w(c);
+		return this;
+	}
+
+	@Override /* SerializerWriter */
+	public XmlWriter w(String s) {
+		super.w(s);
+		return this;
+	}
+
+	// </FluentSetters>
 
 	@Override /* Object */
 	public String toString() {

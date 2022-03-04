@@ -74,10 +74,7 @@ public class VarResolverSession {
 	 */
 	public String resolve(String s) {
 
-		if (s == null || s.isEmpty())
-			return s;
-
-		if (s.indexOf('$') == -1 && s.indexOf('\\') == -1)
+		if (s == null || s.isEmpty() || (s.indexOf('$') == -1 && s.indexOf('\\') == -1))
 			return s;
 
 		// Special case where value consists of a single variable with no embedded variables (e.g. "$X{...}").
@@ -151,8 +148,7 @@ public class VarResolverSession {
 				if (! containsVars(c))
 					return o;
 				Collection c2 = c.getClass().newInstance();
-				for (Object o2 : c)
-					c2.add(resolve(o2));
+				c.forEach(x -> c2.add(resolve(x)));
 				return (T)c2;
 			} catch (VarResolverException e) {
 				throw e;
@@ -166,8 +162,7 @@ public class VarResolverSession {
 				if (! containsVars(m))
 					return o;
 				Map m2 = m.getClass().newInstance();
-				for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
-					m2.put(e.getKey(), resolve(e.getValue()));
+				m.forEach((k,v) -> m2.put(k, resolve(v)));
 				return (T)m2;
 			} catch (VarResolverException e) {
 				throw e;

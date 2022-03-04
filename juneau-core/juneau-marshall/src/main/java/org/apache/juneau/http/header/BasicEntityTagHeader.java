@@ -53,7 +53,8 @@ public class BasicEntityTagHeader extends BasicHeader {
 	 * 	The header value.
 	 * 	<br>Must be an entity tag value (e.g. <js>"\"xyzzy\""</js>).
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicEntityTagHeader of(String name, String value) {
 		return value == null ? null : new BasicEntityTagHeader(name, value);
@@ -66,7 +67,8 @@ public class BasicEntityTagHeader extends BasicHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicEntityTagHeader of(String name, EntityTag value) {
 		return value == null ? null : new BasicEntityTagHeader(name, value);
@@ -82,10 +84,11 @@ public class BasicEntityTagHeader extends BasicHeader {
 	 * @param value
 	 * 	The supplier of the header value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicEntityTagHeader of(String name, Supplier<EntityTag> value) {
-		return value == null || isEmpty(name) ? null : new BasicEntityTagHeader(name, value);
+		return value == null ? null : new BasicEntityTagHeader(name, value);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -103,10 +106,11 @@ public class BasicEntityTagHeader extends BasicHeader {
 	 * 	The header value.
 	 * 	<br>Must be an entity tag value (e.g. <js>"\"xyzzy\""</js>).
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicEntityTagHeader(String name, String value) {
 		super(name, value);
-		this.value = parse(value);
+		this.value = EntityTag.of(value);
 		this.supplier = null;
 	}
 
@@ -117,9 +121,10 @@ public class BasicEntityTagHeader extends BasicHeader {
 	 * @param value
 	 * 	The header value.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicEntityTagHeader(String name, EntityTag value) {
-		super(name, serialize(value));
+		super(name, value);
 		this.value = value;
 		this.supplier = null;
 	}
@@ -134,6 +139,7 @@ public class BasicEntityTagHeader extends BasicHeader {
 	 * @param value
 	 * 	The supplier of the header value.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicEntityTagHeader(String name, Supplier<EntityTag> value) {
 		super(name, null);
@@ -143,25 +149,44 @@ public class BasicEntityTagHeader extends BasicHeader {
 
 	@Override /* Header */
 	public String getValue() {
-		if (supplier != null)
-			return serialize(supplier.get());
-		return super.getValue();
+		return stringify(value());
 	}
 
 	/**
-	 * Returns this header as an {@link EntityTag}.
+	 * Returns the header value as an {@link EntityTag} wrapped in an {@link Optional}.
 	 *
-	 * @return This header as an {@link EntityTag}, or {@link Optional#empty()} if the value is <jk>null</jk>.
+	 * @return The header value as an {@link EntityTag} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<EntityTag> asEntityTag() {
-		return optional(supplier == null ? value : supplier.get());
+		return optional(value());
 	}
 
-	private static String serialize(EntityTag value) {
-		return stringify(value);
+	/**
+	 * Returns the header value as an {@link EntityTag}.
+	 *
+	 * @return The header value as an {@link EntityTag}.  Can be <jk>null</jk>.
+	 */
+	public EntityTag toEntityTag() {
+		return value();
 	}
 
-	private EntityTag parse(String value) {
-		return EntityTag.of(value);
+	/**
+	 * Return the value if present, otherwise return <c>other</c>.
+	 *
+	 * <p>
+	 * This is a shortened form for calling <c>asEntityTag().orElse(<jv>other</jv>)</c>.
+	 *
+	 * @param other The value to be returned if there is no value present, can be <jk>null</jk>.
+	 * @return The value, if present, otherwise <c>other</c>.
+	 */
+	public EntityTag orElse(EntityTag other) {
+		EntityTag x = value();
+		return x != null ? x : other;
+	}
+
+	private EntityTag value() {
+		if (supplier != null)
+			return supplier.get();
+		return value;
 	}
 }

@@ -605,7 +605,6 @@ public class FileStore extends ConfigStore {
 						break;
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
 				throw runtimeException(e);
 			}
 		};

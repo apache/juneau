@@ -350,7 +350,7 @@ public class HttpHeaders {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static final Allow allow(List<String> value) {
+	public static final Allow allow(String...value) {
 		return Allow.of(value);
 	}
 
@@ -365,7 +365,7 @@ public class HttpHeaders {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static final Allow allow(Supplier<List<String>> value) {
+	public static final Allow allow(Supplier<String[]> value) {
 		return Allow.of(value);
 	}
 
@@ -577,7 +577,7 @@ public class HttpHeaders {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static final ContentLanguage contentLanguage(List<String> value) {
+	public static final ContentLanguage contentLanguage(String...value) {
 		return ContentLanguage.of(value);
 	}
 
@@ -592,7 +592,7 @@ public class HttpHeaders {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static final ContentLanguage contentLanguage(Supplier<List<String>> value) {
+	public static final ContentLanguage contentLanguage(Supplier<String[]> value) {
 		return ContentLanguage.of(value);
 	}
 
@@ -1033,7 +1033,7 @@ public class HttpHeaders {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static final IfMatch ifMatch(List<EntityTag> value) {
+	public static final IfMatch ifMatch(EntityTags value) {
 		return IfMatch.of(value);
 	}
 
@@ -1048,7 +1048,7 @@ public class HttpHeaders {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static final IfMatch ifMatch(Supplier<List<EntityTag>> value) {
+	public static final IfMatch ifMatch(Supplier<EntityTags> value) {
 		return IfMatch.of(value);
 	}
 
@@ -1113,7 +1113,7 @@ public class HttpHeaders {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static final IfNoneMatch ifNoneMatch(List<EntityTag> value) {
+	public static final IfNoneMatch ifNoneMatch(EntityTags value) {
 		return IfNoneMatch.of(value);
 	}
 
@@ -1128,7 +1128,7 @@ public class HttpHeaders {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static final IfNoneMatch ifNoneMatch(Supplier<List<EntityTag>> value) {
+	public static final IfNoneMatch ifNoneMatch(Supplier<EntityTags> value) {
 		return IfNoneMatch.of(value);
 	}
 
@@ -1779,7 +1779,7 @@ public class HttpHeaders {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static final Upgrade upgrade(List<String> value) {
+	public static final Upgrade upgrade(String...value) {
 		return Upgrade.of(value);
 	}
 
@@ -1794,7 +1794,7 @@ public class HttpHeaders {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static final Upgrade upgrade(Supplier<List<String>> value) {
+	public static final Upgrade upgrade(Supplier<String[]> value) {
 		return Upgrade.of(value);
 	}
 
@@ -1872,7 +1872,7 @@ public class HttpHeaders {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static final Via via(List<String> value) {
+	public static final Via via(String...value) {
 		return Via.of(value);
 	}
 
@@ -1887,7 +1887,7 @@ public class HttpHeaders {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the value is <jk>null</jk>.
 	 */
-	public static final Via via(Supplier<List<String>> value) {
+	public static final Via via(Supplier<String[]> value) {
 		return Via.of(value);
 	}
 
@@ -1993,7 +1993,7 @@ public class HttpHeaders {
 	}
 
 	/**
-	 * Creates a new {@link BasicCsvArrayHeader} header.
+	 * Creates a new {@link BasicCsvHeader} header.
 	 *
 	 * @param name The header name.
 	 * @param value
@@ -2002,12 +2002,12 @@ public class HttpHeaders {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static final BasicCsvArrayHeader csvArrayHeader(String name, String value) {
-		return BasicCsvArrayHeader.of(name, value);
+	public static final BasicCsvHeader csvHeader(String name, String value) {
+		return BasicCsvHeader.of(name, value);
 	}
 
 	/**
-	 * Creates a new {@link BasicCsvArrayHeader} header.
+	 * Creates a new {@link BasicCsvHeader} header.
 	 *
 	 * @param name The header name.
 	 * @param value
@@ -2015,12 +2015,12 @@ public class HttpHeaders {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static final BasicCsvArrayHeader csvArrayHeader(String name, List<String> value) {
-		return BasicCsvArrayHeader.of(name, value);
+	public static final BasicCsvHeader csvHeader(String name, String...value) {
+		return BasicCsvHeader.of(name, value);
 	}
 
 	/**
-	 * Creates a new {@link BasicCsvArrayHeader} header with a delayed value.
+	 * Creates a new {@link BasicCsvHeader} header with a delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
@@ -2031,8 +2031,8 @@ public class HttpHeaders {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static final BasicCsvArrayHeader csvArrayHeader(String name, Supplier<List<String>> value) {
-		return BasicCsvArrayHeader.of(name, value);
+	public static final BasicCsvHeader csvHeader(String name, Supplier<String[]> value) {
+		return BasicCsvHeader.of(name, value);
 	}
 
 	/**
@@ -2079,7 +2079,7 @@ public class HttpHeaders {
 	}
 
 	/**
-	 * Creates a new {@link BasicEntityTagArrayHeader} header.
+	 * Creates a new {@link BasicEntityTagsHeader} header.
 	 *
 	 * @param name The header name.
 	 * @param value
@@ -2088,12 +2088,12 @@ public class HttpHeaders {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static final BasicEntityTagArrayHeader entityTagArrayHeader(String name, String value) {
-		return BasicEntityTagArrayHeader.of(name, value);
+	public static final BasicEntityTagsHeader entityTagsHeader(String name, String value) {
+		return BasicEntityTagsHeader.of(name, value);
 	}
 
 	/**
-	 * Creates a new {@link BasicEntityTagArrayHeader} header.
+	 * Creates a new {@link BasicEntityTagsHeader} header.
 	 *
 	 * @param name The header name.
 	 * @param value
@@ -2101,12 +2101,12 @@ public class HttpHeaders {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static final BasicEntityTagArrayHeader entityTagArrayHeader(String name, List<EntityTag> value) {
-		return BasicEntityTagArrayHeader.of(name, value);
+	public static final BasicEntityTagsHeader entityTagsHeader(String name, EntityTags value) {
+		return BasicEntityTagsHeader.of(name, value);
 	}
 
 	/**
-	 * Creates a new {@link BasicEntityTagArrayHeader} header with a delayed value.
+	 * Creates a new {@link BasicEntityTagsHeader} header with a delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
@@ -2117,8 +2117,8 @@ public class HttpHeaders {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static final BasicEntityTagArrayHeader entityTagArrayHeader(String name, Supplier<List<EntityTag>> value) {
-		return BasicEntityTagArrayHeader.of(name, value);
+	public static final BasicEntityTagsHeader entityTagsHeader(String name, Supplier<EntityTags> value) {
+		return BasicEntityTagsHeader.of(name, value);
 	}
 
 	/**
@@ -2252,7 +2252,7 @@ public class HttpHeaders {
 	}
 
 	/**
-	 * Creates a new {@link BasicMediaRangeArrayHeader} header.
+	 * Creates a new {@link BasicMediaRangesHeader} header.
 	 *
 	 * @param name The header name.
 	 * @param value
@@ -2261,12 +2261,12 @@ public class HttpHeaders {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static final BasicMediaRangeArrayHeader mediaRangeArrayHeader(String name, String value) {
-		return BasicMediaRangeArrayHeader.of(name, value);
+	public static final BasicMediaRangesHeader mediaRangesHeader(String name, String value) {
+		return BasicMediaRangesHeader.of(name, value);
 	}
 
 	/**
-	 * Creates a new {@link BasicMediaRangeArrayHeader} header.
+	 * Creates a new {@link BasicMediaRangesHeader} header.
 	 *
 	 * @param name The header name.
 	 * @param value
@@ -2274,12 +2274,12 @@ public class HttpHeaders {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static final BasicMediaRangeArrayHeader mediaRangeArrayHeader(String name, MediaRanges value) {
-		return BasicMediaRangeArrayHeader.of(name, value);
+	public static final BasicMediaRangesHeader mediaRangesHeader(String name, MediaRanges value) {
+		return BasicMediaRangesHeader.of(name, value);
 	}
 
 	/**
-	 * Creates a new {@link BasicMediaRangeArrayHeader} header with a delayed value.
+	 * Creates a new {@link BasicMediaRangesHeader} header with a delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
@@ -2291,10 +2291,8 @@ public class HttpHeaders {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static final BasicMediaRangeArrayHeader mediaRangeArrayHeader(String name, Supplier<MediaRanges> value) {
-		if (isEmpty(name) || value == null)
-			return null;
-		return new BasicMediaRangeArrayHeader(name, value);
+	public static final BasicMediaRangesHeader mediaRangesHeader(String name, Supplier<MediaRanges> value) {
+		return value == null ? null : new BasicMediaRangesHeader(name, value);
 	}
 
 	/**
@@ -2337,9 +2335,7 @@ public class HttpHeaders {
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
 	public static final BasicMediaTypeHeader mediaTypeHeader(String name, Supplier<MediaType> value) {
-		if (isEmpty(name) || value == null)
-			return null;
-		return new BasicMediaTypeHeader(name, value);
+		return value == null ? null : new BasicMediaTypeHeader(name, value);
 	}
 
 	/**
@@ -2485,7 +2481,7 @@ public class HttpHeaders {
 	}
 
 	/**
-	 * Creates a new {@link BasicStringRangeArrayHeader} header.
+	 * Creates a new {@link BasicStringRangesHeader} header.
 	 *
 	 * @param name The header name.
 	 * @param value
@@ -2494,12 +2490,12 @@ public class HttpHeaders {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static final BasicStringRangeArrayHeader stringRangeArrayHeader(String name, String value) {
-		return BasicStringRangeArrayHeader.of(name, value);
+	public static final BasicStringRangesHeader stringRangesHeader(String name, String value) {
+		return BasicStringRangesHeader.of(name, value);
 	}
 
 	/**
-	 * Creates a new {@link BasicStringRangeArrayHeader} header.
+	 * Creates a new {@link BasicStringRangesHeader} header.
 	 *
 	 * @param name The header name.
 	 * @param value
@@ -2507,12 +2503,12 @@ public class HttpHeaders {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static final BasicStringRangeArrayHeader stringRangeArrayHeader(String name, StringRanges value) {
-		return BasicStringRangeArrayHeader.of(name, value);
+	public static final BasicStringRangesHeader stringRangesHeader(String name, StringRanges value) {
+		return BasicStringRangesHeader.of(name, value);
 	}
 
 	/**
-	 * Creates a new {@link BasicStringRangeArrayHeader} header with a delayed value.
+	 * Creates a new {@link BasicStringRangesHeader} header with a delayed value.
 	 *
 	 * <p>
 	 * Header value is re-evaluated on each call to {@link Header#getValue()}.
@@ -2523,8 +2519,8 @@ public class HttpHeaders {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
 	 */
-	public static final BasicStringRangeArrayHeader stringRangeArrayHeader(String name, Supplier<StringRanges> value) {
-		return BasicStringRangeArrayHeader.of(name, value);
+	public static final BasicStringRangesHeader stringRangesHeader(String name, Supplier<StringRanges> value) {
+		return BasicStringRangesHeader.of(name, value);
 	}
 
 	/**

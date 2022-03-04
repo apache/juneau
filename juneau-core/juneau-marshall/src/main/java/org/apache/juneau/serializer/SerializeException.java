@@ -31,7 +31,7 @@ import org.apache.juneau.json.*;
  *
  * @serial exclude
  */
-public class SerializeException extends BasicException {
+public class SerializeException extends BasicRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 

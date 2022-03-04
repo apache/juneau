@@ -218,12 +218,10 @@ public class SerializedPart extends BasicPart implements Headerable {
 			HttpPartSchema schema = this.schema == null ? HttpPartSchema.DEFAULT : this.schema;
 			String def = schema.getDefault();
 			if (v == null) {
-				if (def == null && ! schema.isRequired())
-					return null;
-				if (def == null && schema.isAllowEmptyValue())
+				if ((def == null && ! schema.isRequired()) || (def == null && schema.isAllowEmptyValue()))
 					return null;
 			}
-			if (isEmpty(v) && skipIfEmpty && def == null)
+			if (isEmpty(stringify(v)) && skipIfEmpty && def == null)
 				return null;
 			return serializer == null ? stringify(v) : serializer.serialize(type, schema, v);
 		} catch (SchemaValidationException e) {

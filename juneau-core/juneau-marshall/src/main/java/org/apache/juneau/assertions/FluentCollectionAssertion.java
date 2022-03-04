@@ -224,9 +224,10 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
 	public R doesNotContain(E entry) throws AssertionError {
-		for (Object v : value())
-			if (eq(v, entry))
+		value().forEach(x -> {
+			if (eq(x, entry))
 				throw error(MSG_collectionContainedUnexpectedValue, entry, value());
+		});
 		return returns();
 	}
 
@@ -256,9 +257,10 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	public R all(Predicate<E> test) throws AssertionError {
 		if (test == null)
 			return returns();
-		for (E v : value())
-			if (! test.test(v))
+		value().forEach(x -> {
+			if (! test.test(x))
 				throw error(MSG_collectionDidNotContainTestedValue, value());
+		});
 		return returns();
 	}
 

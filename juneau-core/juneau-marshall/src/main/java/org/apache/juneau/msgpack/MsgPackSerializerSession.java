@@ -222,7 +222,7 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 	 * Determines the type of object, and then calls the appropriate type-specific serialization method.
 	 */
 	@SuppressWarnings({ "rawtypes" })
-	private MsgPackOutputStream serializeAnything(MsgPackOutputStream out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws IOException, SerializeException {
+	private MsgPackOutputStream serializeAnything(MsgPackOutputStream out, Object o, ClassMeta<?> eType, String attrName, BeanPropertyMeta pMeta) throws SerializeException {
 
 		if (o == null)
 			return out.appendNull();
@@ -289,10 +289,10 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 			serializeCollection(out, toList(sType.getInnerClass(), o), eType);
 		}
 		else if (sType.isReader()) {
-			pipe((Reader)o, out);
+			pipe((Reader)o, out, SerializerSession::handleThrown);
 		}
 		else if (sType.isInputStream()) {
-			pipe((InputStream)o, out);
+			pipe((InputStream)o, out, SerializerSession::handleThrown);
 		}
 		else
 			out.appendString(toString(o));
@@ -303,7 +303,7 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void serializeMap(MsgPackOutputStream out, Map m, ClassMeta<?> type) throws IOException, SerializeException {
+	private void serializeMap(MsgPackOutputStream out, Map m, ClassMeta<?> type) throws SerializeException {
 
 		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
 
@@ -312,52 +312,55 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 		// The map size may change as we're iterating over it, so
 		// grab a snapshot of the entries in a separate list.
 		List<SimpleMapEntry> entries = list(m.size());
-		for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
-			entries.add(new SimpleMapEntry(e.getKey(), e.getValue()));
+		m.forEach((k,v) -> entries.add(new SimpleMapEntry(k, v)));
 
 		out.startMap(entries.size());
 
-		for (SimpleMapEntry e : entries) {
-			Object value = e.value;
-			Object key = generalize(e.key, keyType);
-
+		entries.forEach(x -> {
+			Object value = x.value;
+			Object key = generalize(x.key, keyType);
 			serializeAnything(out, key, keyType, null, null);
 			serializeAnything(out, value, valueType, null, null);
-		}
+		});
 	}
 
-	private void serializeBeanMap(MsgPackOutputStream out, final BeanMap<?> m, String typeName) throws IOException, SerializeException {
+	private void serializeBeanMap(MsgPackOutputStream out, final BeanMap<?> m, String typeName) throws SerializeException {
 
-		List<BeanPropertyValue> values = m.getValues(isKeepNullProperties(), typeName != null ? createBeanTypeNameProperty(m, typeName) : null);
+		Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
 
-		int size = values.size();
-		for (BeanPropertyValue p : values) {
-			if (p.getThrown() != null)
-				size--;
-			// Must handle the case where recursion occurs and property is not serialized.
-			if ((! isKeepNullProperties()) && willRecurse(p))
-				size--;
+		List<BeanPropertyValue> values = new ArrayList<>();
+
+		if (typeName != null) {
+			BeanPropertyMeta pm = m.getMeta().getTypeProperty();
+			values.add(new BeanPropertyValue(pm, pm.getName(), typeName, null));
 		}
 
-		out.startMap(size);
-
-		for (BeanPropertyValue p : values) {
-			BeanPropertyMeta pMeta = p.getMeta();
-			if (pMeta.canRead()) {
-				ClassMeta<?> cMeta = p.getClassMeta();
-				String key = p.getName();
-				Object value = p.getValue();
-				Throwable t = p.getThrown();
-				if (t != null) {
-					onBeanGetterException(pMeta, t);
-				} else if ((! isKeepNullProperties()) && willRecurse(p)) {
-					/* Ignored */
-				} else {
-					serializeAnything(out, key, null, null, null);
-					serializeAnything(out, value, cMeta, key, pMeta);
-				}
+		m.forEachValue(checkNull, (pMeta,key,value,thrown) -> {
+			if (thrown != null) {
+				onBeanGetterException(pMeta, thrown);
+				return;
 			}
-		}
+			BeanPropertyValue p = new BeanPropertyValue(pMeta, key, value, null);
+
+			if ((! isKeepNullProperties()) && willRecurse(p)) {
+				return; // Must handle the case where recursion occurs and property is not serialized.
+			}
+
+			values.add(p);
+		});
+
+		out.startMap(values.size());
+
+		values.forEach(x -> {
+			BeanPropertyMeta pMeta = x.getMeta();
+			if (pMeta.canRead()) {
+				ClassMeta<?> cMeta = x.getClassMeta();
+				String key = x.getName();
+				Object value = x.getValue();
+				serializeAnything(out, key, null, null, null);
+				serializeAnything(out, value, cMeta, key, pMeta);
+			}
+		});
 	}
 
 	private boolean willRecurse(BeanPropertyValue v) throws SerializeException {
@@ -378,18 +381,13 @@ public final class MsgPackSerializerSession extends OutputStreamSerializerSessio
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private void serializeCollection(MsgPackOutputStream out, Collection c, ClassMeta<?> type) throws IOException, SerializeException {
-
+	private void serializeCollection(MsgPackOutputStream out, Collection c, ClassMeta<?> type) throws SerializeException {
 		ClassMeta<?> elementType = type.getElementType();
 		List<Object> l = list(c.size());
-
 		c = sort(c);
 		l.addAll(c);
-
 		out.startArray(l.size());
-
-		for (Object o : l)
-			serializeAnything(out, o, elementType, "<iterator>", null);
+		l.forEach(x -> serializeAnything(out, x, elementType, "<iterator>", null));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

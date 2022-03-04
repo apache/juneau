@@ -71,12 +71,13 @@ public final class PojoSearcher implements PojoTool<SearchArgs> {
 		RowMatcher rowMatcher = new RowMatcher(session, search);
 
 		if (type.isCollection()) {
-			Collection c = (Collection)input;
+			Collection<?> c = (Collection)input;
 			l = list(c.size());
-			for (Object o : c) {
-				if (rowMatcher.matches(o))
-					l.add(o);
-			}
+			List<Object> l2 = l;
+			c.forEach(x -> {
+				if (rowMatcher.matches(x))
+					l2.add(x);
+			});
 
 		} else /* isArray */ {
 			int size = Array.getLength(input);
@@ -102,10 +103,10 @@ public final class PojoSearcher implements PojoTool<SearchArgs> {
 		Map<String,ColumnMatcher> entryMatchers = new HashMap<>();
 		BeanSession bs;
 
+		@SuppressWarnings("unchecked")
 		RowMatcher(BeanSession bs, Map query) {
 			this.bs = bs;
-			for (Map.Entry e : (Set<Map.Entry>)query.entrySet())
-				entryMatchers.put(stringify(e.getKey()), new ColumnMatcher(bs, stringify(e.getValue())));
+			query.forEach((k,v) -> entryMatchers.put(stringify(k), new ColumnMatcher(bs, stringify(v))));
 		}
 
 		boolean matches(Object o) {

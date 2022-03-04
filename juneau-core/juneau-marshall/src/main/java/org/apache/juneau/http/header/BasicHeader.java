@@ -13,7 +13,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.StringUtils.isEmpty;
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import java.io.*;
@@ -69,10 +69,11 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 * @param value
 	 * 	The parameter value.
 	 * 	<br>Can be <jk>null</jk>.
-	 * @return A new header bean, or <jk>null</jk> if the name is <jk>null</jk> or empty or the value is <jk>null</jk>.
+	 * @return A new header bean, or <jk>null</jk> if value is <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public static BasicHeader of(String name, Object value) {
-		return value == null || isEmpty(name) ? null : new BasicHeader(name, value);
+		return value == null ? null : new BasicHeader(name, value);
 	}
 
 	/**
@@ -107,8 +108,10 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 * 	The parameter value.
 	 * 	<br>Any non-String value will be converted to a String using {@link Object#toString()}.
 	 * 	<br>Can also be an <l>Object</l> {@link Supplier}.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicHeader(String name, Object value) {
+		assertArg(StringUtils.isNotEmpty(name), "Name cannot be empty on header.");
 		this.name = name;
 		this.value = value instanceof Supplier ? null : value;
 		this.stringValue = stringify(value);
@@ -125,8 +128,10 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 * @param value
 	 * 	The supplier of the header value.
 	 * 	<br>Can be <jk>null</jk>.
+	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicHeader(String name, Supplier<Object> value) {
+		assertArg(StringUtils.isNotEmpty(name), "Name cannot be empty on header.");
 		this.name = name;
 		this.value = null;
 		this.stringValue = null;
@@ -193,7 +198,7 @@ public class BasicHeader implements Header, Cloneable, Serializable {
 	 *
 	 * @return An object for performing assertions against the value of this header.
 	 */
-	public FluentStringAssertion<BasicHeader> assertValue() {
+	public FluentStringAssertion<BasicHeader> assertStringValue() {
 		return new FluentStringAssertion<>(getValue(), this);
 	}
 

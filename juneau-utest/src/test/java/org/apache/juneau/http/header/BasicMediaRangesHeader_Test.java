@@ -16,7 +16,6 @@ import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
-import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;
@@ -32,11 +31,11 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class BasicCsvArrayHeader_Test {
+public class BasicMediaRangesHeader_Test {
 
 	private static final String HEADER = "Foo";
-	private static final String VALUE = "foo, bar";
-	private static final List<String> PARSED = list("foo", "bar");
+	private static final String VALUE = "foo/bar;x=1";
+	private static final MediaRanges PARSED = MediaRanges.of("foo/bar;x=1");
 
 	@Rest
 	public static class A {
@@ -55,44 +54,51 @@ public class BasicCsvArrayHeader_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(csvArrayHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(csvArrayHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(csvArrayHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
-		c.get().header(csvArrayHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(mediaRangesHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(mediaRangesHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
+		c.get().header(mediaRangesHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
+		c.get().header(mediaRangesHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(csvArrayHeader("","*")).run().assertBody().isEmpty();
-		c.get().header(csvArrayHeader(null,"*")).run().assertBody().isEmpty();
-		c.get().header(csvArrayHeader(null,()->null)).run().assertBody().isEmpty();
-		c.get().header(csvArrayHeader(HEADER,(Supplier<List<String>>)null)).run().assertBody().isEmpty();
-		c.get().header(csvArrayHeader(null,(Supplier<List<String>>)null)).run().assertBody().isEmpty();
-		c.get().header(csvArrayHeader(HEADER,()->null)).run().assertBody().isEmpty();
-
+		c.get().header(mediaRangesHeader(HEADER,(Supplier<MediaRanges>)null)).run().assertBody().isEmpty();
+		c.get().header(mediaRangesHeader(HEADER,()->null)).run().assertBody().isEmpty();
+		assertThrown(()->mediaRangesHeader("", VALUE)).message().is("Name cannot be empty on header.");
+		assertThrown(()->mediaRangesHeader(null, VALUE)).message().is("Name cannot be empty on header.");
+		assertThrown(()->mediaRangesHeader("", PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->mediaRangesHeader(null, PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->mediaRangesHeader("", ()->PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->mediaRangesHeader(null, ()->PARSED)).message().is("Name cannot be empty on header.");
 	}
 
 	@Test
-	public void a02_contains() throws Exception {
-		BasicCsvArrayHeader x = new BasicCsvArrayHeader("Foo", alist(null,"bar","baz"));
-		assertBoolean(x.contains(null)).isFalse();
-		assertBoolean(x.containsIgnoreCase(null)).isFalse();
-		assertBoolean(x.contains("bar")).isTrue();
-		assertBoolean(x.containsIgnoreCase("bar")).isTrue();
-		assertBoolean(x.contains("qux")).isFalse();
-		assertBoolean(x.containsIgnoreCase("qux")).isFalse();
-		assertBoolean(x.contains("BAR")).isFalse();
-		assertBoolean(x.containsIgnoreCase("BAR")).isTrue();
-
-		BasicCsvArrayHeader x2 = csvArrayHeader("Foo",()->null);
-		assertBoolean(x2.contains(null)).isFalse();
-		assertBoolean(x2.containsIgnoreCase(null)).isFalse();
-		assertBoolean(x2.contains("bar")).isFalse();
-		assertBoolean(x2.containsIgnoreCase("bar")).isFalse();
+	public void a02_match() throws Exception {
+		assertInteger(accept("text/foo").match(alist(MediaType.of("text/foo")))).is(0);
+		assertInteger(accept("text/foo").match(alist(MediaType.of("text/bar")))).is(-1);
+		assertInteger(new Accept((String)null).match(alist(MediaType.of("text/bar")))).is(-1);
+		assertInteger(accept("text/foo").match(alist(MediaType.of(null)))).is(-1);
+		assertInteger(accept("text/foo").match(null)).is(-1);
 	}
 
 	@Test
-	public void a03_assertList() throws Exception {
-		csvArrayHeader("Foo", alist("bar")).assertList().contains("bar").assertList().doesNotContain("baz");
-		new BasicCsvArrayHeader("Foo", (String)null).assertList().isNull();
+	public void a03_getRange() throws Exception {
+		assertString(accept("text/foo").getRange(0)).is("text/foo");
+		assertString(accept("text/foo").getRange(1)).isNull();
+		assertString(accept("text/foo").getRange(-1)).isNull();
+		assertString(new Accept((String)null).getRange(0)).isNull();
+	}
+
+	@Test
+	public void a04_hasSubtypePart() throws Exception {
+		assertBoolean(accept("text/foo").hasSubtypePart("foo")).isTrue();
+		assertBoolean(accept("text/foo").hasSubtypePart("bar")).isFalse();
+		assertBoolean(accept("text/foo").hasSubtypePart(null)).isFalse();
+		assertBoolean(new Accept((String)null).hasSubtypePart("foo")).isFalse();
+	}
+
+	@Test
+	public void a05_getRanges() throws Exception {
+		assertObject(accept("text/foo,text/bar").toMediaRanges().toList()).asJson().is("['text/foo','text/bar']");
+		assertObject(new Accept((String)null).toMediaRanges()).isNull();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
