@@ -133,22 +133,26 @@ public final class SerializerPipe implements Closeable {
 	 * 	The output object wrapped in a writer.
 	 * 	Calling {@link Writer#close()} on the returned object simply flushes the response and does not close
 	 * 	the underlying writer.
-	 * @throws IOException If object could not be converted to a writer.
+	 * @throws SerializeException If object could not be converted to a writer.
 	 */
-	public Writer getWriter() throws IOException {
+	public Writer getWriter() throws SerializeException {
 		if (output == null)
-			throw ioException("Output cannot be null.");
+			throw serializeException("Output cannot be null.");
 
-		if (output instanceof Writer)
-			writer = (Writer)output;
-		else if (output instanceof OutputStream)
-			writer = new OutputStreamWriter((OutputStream)output, charset);
-		else if (output instanceof File)
-			writer = new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream((File)output)));
-		else if (output instanceof StringBuilder)
-			writer = new StringBuilderWriter((StringBuilder)output);
-		else
-			throw ioException("Cannot convert object of type {0} to a Writer.", className(output));
+		try {
+			if (output instanceof Writer)
+				writer = (Writer)output;
+			else if (output instanceof OutputStream)
+				writer = new OutputStreamWriter((OutputStream)output, charset);
+			else if (output instanceof File)
+				writer = new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream((File)output)));
+			else if (output instanceof StringBuilder)
+				writer = new StringBuilderWriter((StringBuilder)output);
+			else
+				throw serializeException("Cannot convert object of type {0} to a Writer.", className(output));
+		} catch (FileNotFoundException e) {
+			throw serializeException(e);
+		}
 
 		return new NoCloseWriter(writer);
 	}

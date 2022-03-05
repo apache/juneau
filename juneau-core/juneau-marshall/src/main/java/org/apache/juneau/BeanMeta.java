@@ -829,6 +829,20 @@ public class BeanMeta<T> {
 	}
 
 	/**
+	 * Performs a function on the first property that matches the specified filter.
+	 *
+	 * @param filter The filter to apply.
+	 * @param function The function to apply to the matching property.
+	 * @return The result of the function.  Never <jk>null</jk>.
+	 */
+	public <T2> Optional<T2> firstProperty(Predicate<BeanPropertyMeta> filter, Function<BeanPropertyMeta,T2> function) {
+		for (BeanPropertyMeta x : propertyArray)
+			if (filter.test(x))
+				return Optional.ofNullable(function.apply(x));
+		return Optional.empty();
+	}
+
+	/**
 	 * Returns metadata about the specified property.
 	 *
 	 * @param name The name of the property on this bean.

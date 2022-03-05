@@ -475,6 +475,26 @@ public final class IOUtils {
 	}
 
 	/**
+	 * Reads the contents of a reader into a string.
+	 *
+	 * @param in
+	 * 	The input reader.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is automatically closed.
+	 * @param onException Consumer of any {@link IOException I/O exceptions}.
+	 * @return
+	 * 	The contents of the reader as a string, or <jk>null</jk> if the reader was <jk>null</jk>.
+	 */
+	public static String read(Reader in, Consumer<IOException> onException) {
+		try (Reader in2 = in) {
+			return read(in, -1);
+		} catch (IOException e) {
+			onException.accept(e);
+			return null;
+		}
+	}
+
+	/**
 	 * Reads the specified input into a {@link String} until the end of the input is reached.
 	 *
 	 * @param in
@@ -519,6 +539,24 @@ public final class IOUtils {
 	}
 
 	/**
+	 * Reads the contents of an input stream into a string.
+	 *
+	 * <p>
+	 * Assumes UTF-8 encoding.
+	 *
+	 * @param in
+	 * 	The input stream.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is automatically closed.
+	 * @param onException Consumer of any {@link IOException I/O exceptions}.
+	 * @return
+	 * 	The contents of the reader as a string, or <jk>null</jk> if the input stream was <jk>null</jk>.
+	 */
+	public static String read(InputStream in, Consumer<IOException> onException) {
+		return read(in, UTF8, onException);
+	}
+
+	/**
 	 * Reads the contents of an input stream into a string using the specified charset.
 	 *
 	 * @param in
@@ -536,6 +574,30 @@ public final class IOUtils {
 			return null;
 		try (InputStreamReader isr = new InputStreamReader(in, cs)) {
 			return read(isr);
+		}
+	}
+
+	/**
+	 * Reads the contents of an input stream into a string using the specified charset.
+	 *
+	 * @param in
+	 * 	The input stream.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Stream is automatically closed.
+	 * @param cs
+	 * 	The charset of the contents of the input stream.
+	 * @param onException Consumer of any {@link IOException I/O exceptions}.
+	 * @return
+	 * 	The contents of the reader as a string or <jk>null</jk> if input stream was <jk>null</jk>.
+	 */
+	public static String read(InputStream in, Charset cs, Consumer<IOException> onException) {
+		if (in == null)
+			return null;
+		try (InputStreamReader isr = new InputStreamReader(in, cs)) {
+			return read(isr);
+		} catch (IOException e) {
+			onException.accept(e);
+			return null;
 		}
 	}
 

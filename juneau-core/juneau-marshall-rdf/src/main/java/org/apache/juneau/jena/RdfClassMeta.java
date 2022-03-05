@@ -47,11 +47,7 @@ public class RdfClassMeta extends ExtendedClassMeta {
 		cm.forEachAnnotation(Rdf.class, x -> true, x -> rdfs.add(x));
 		cm.forEachAnnotation(RdfSchema.class, x -> true, x -> schemas.add(x));
 
-		RdfCollectionFormat _collectionFormat = RdfCollectionFormat.DEFAULT;
-		for (Rdf a : rdfs)
-			if (a.collectionFormat() != RdfCollectionFormat.DEFAULT)
-				_collectionFormat = a.collectionFormat();
-		this.collectionFormat = _collectionFormat;
+		this.collectionFormat = rdfs.stream().map(x -> x.collectionFormat()).filter(x -> x != RdfCollectionFormat.DEFAULT).findFirst().orElse(RdfCollectionFormat.DEFAULT);
 		this.namespace = RdfUtils.findNamespace(rdfs, schemas);
 	}
 

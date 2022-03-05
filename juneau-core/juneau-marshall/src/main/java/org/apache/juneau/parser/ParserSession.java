@@ -960,12 +960,11 @@ public class ParserSession extends BeanSession {
 	 * @param type The class type to convert the string to.
 	 * @return The string converted as an object of the specified type.
 	 * @param <T> The class type to convert the string to.
-	 * @throws IOException Thrown by underlying stream.
 	 * @throws ParseException Malformed input encountered.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected final <T> T convertAttrToType(Object outer, String s, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
+	protected final <T> T convertAttrToType(Object outer, String s, ClassMeta<T> type) throws ParseException {
 		if (s == null)
 			return null;
 

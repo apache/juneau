@@ -51,12 +51,12 @@ public class RdfBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		List<Rdf> rdfs = bpm.getAllAnnotationsParentFirst(Rdf.class);
 		List<RdfSchema> schemas = bpm.getAllAnnotationsParentFirst(RdfSchema.class);
 
-		for (Rdf rdf : rdfs) {
-			if (rdf.collectionFormat() != RdfCollectionFormat.DEFAULT)
-				collectionFormat = rdf.collectionFormat();
-			if (rdf.beanUri())
+		rdfs.forEach(x -> {
+			if (x.collectionFormat() != RdfCollectionFormat.DEFAULT)
+				collectionFormat = x.collectionFormat();
+			if (x.beanUri())
 				isBeanUri = true;
-		}
+		});
 
 		namespace = RdfUtils.findNamespace(rdfs, schemas);
 	}

@@ -250,7 +250,7 @@ public final class CsvSerializerSession extends WriterSerializerSession {
 		}
 	}
 
-	final CsvWriter getCsvWriter(SerializerPipe out) throws IOException {
+	final CsvWriter getCsvWriter(SerializerPipe out) {
 		Object output = out.getRawOutput();
 		if (output instanceof CsvWriter)
 			return (CsvWriter)output;

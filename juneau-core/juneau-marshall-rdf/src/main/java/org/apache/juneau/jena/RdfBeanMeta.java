@@ -37,15 +37,7 @@ public class RdfBeanMeta extends ExtendedBeanMeta {
 	 */
 	public RdfBeanMeta(BeanMeta<?> beanMeta, RdfMetaProvider mp) {
 		super(beanMeta);
-
-		BeanPropertyMeta t_beanUriProperty = null;
-		for (BeanPropertyMeta p : beanMeta.getPropertyMetas()) {
-			RdfBeanPropertyMeta bpm = mp.getRdfBeanPropertyMeta(p);
-			if (bpm.isBeanUri())
-				t_beanUriProperty = p;
-		}
-
-		this.beanUriProperty = t_beanUriProperty;
+		this.beanUriProperty = beanMeta.firstProperty(x -> mp.getRdfBeanPropertyMeta(x).isBeanUri(), x -> x).orElse(null);
 	}
 
 	/**

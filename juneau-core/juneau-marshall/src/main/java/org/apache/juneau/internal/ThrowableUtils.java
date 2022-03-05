@@ -15,6 +15,8 @@ package org.apache.juneau.internal;
 import java.io.*;
 
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * Various utility methods for creating and working with throwables.
@@ -153,6 +155,68 @@ public class ThrowableUtils {
 	 */
 	public static IllegalArgumentException illegalArgumentException(String msg, Object...args) {
 		return illegalArgumentException().message(msg, args).build();
+	}
+
+	/**
+	 * Creates a new builder for {@link ParseException} objects.
+	 *
+	 * @return A new builder for {@link ParseException} objects.
+	 */
+	public static ExceptionBuilder<SerializeException> serializeException() {
+		return new ExceptionBuilder<>(SerializeException.class);
+	}
+
+	/**
+	 * Creates a new {@link ParseException}.
+	 *
+	 * @param msg The exception message.  Can be <jk>null</jk>.
+	 * 	<br>If <jk>null</jk>, then the caused-by message is used if available.
+	 * @param args The exception message arguments.
+	 * @return A new {@link ParseException}.
+	 */
+	public static SerializeException serializeException(String msg, Object...args) {
+		return serializeException().message(msg, args).build();
+	}
+
+	/**
+	 * Creates a new {@link SerializeException}.
+	 *
+	 * @param cause The caused-by exception.
+	 * @return A new {@link SerializeException}, or the same exception if it's already of that type.
+	 */
+	public static SerializeException serializeException(Throwable cause) {
+		return cause instanceof SerializeException ? (SerializeException)cause : serializeException().causedBy(cause).build();
+	}
+
+	/**
+	 * Creates a new builder for {@link ParseException} objects.
+	 *
+	 * @return A new builder for {@link ParseException} objects.
+	 */
+	public static ExceptionBuilder<ParseException> parseException() {
+		return new ExceptionBuilder<>(ParseException.class);
+	}
+
+	/**
+	 * Creates a new {@link ParseException}.
+	 *
+	 * @param msg The exception message.  Can be <jk>null</jk>.
+	 * 	<br>If <jk>null</jk>, then the caused-by message is used if available.
+	 * @param args The exception message arguments.
+	 * @return A new {@link ParseException}.
+	 */
+	public static ParseException parseException(String msg, Object...args) {
+		return parseException().message(msg, args).build();
+	}
+
+	/**
+	 * Creates a new {@link ParseException}.
+	 *
+	 * @param cause The caused-by exception.
+	 * @return A new {@link ParseException}, or the same exception if it's already of that type.
+	 */
+	public static ParseException parseException(Throwable cause) {
+		return cause instanceof ParseException ? (ParseException)cause : parseException().causedBy(cause).build();
 	}
 
 	/**

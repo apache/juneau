@@ -257,9 +257,10 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 			writer.setProperty("attributeQuoteChar", Character.toString(getQuoteChar()));
 		}
 
-		for (Map.Entry<String,Object> e : ctx.getJenaSettings().entrySet())
-			if (e.getKey().startsWith(propPrefix, 5))
-				writer.setProperty(e.getKey().substring(5 + propPrefix.length()), e.getValue());
+		ctx.getJenaSettings().forEach((k,v) -> {
+			if (k.startsWith(propPrefix, 5))
+				writer.setProperty(k.substring(5 + propPrefix.length()), v);
+		});
 	}
 
 	/*
@@ -287,15 +288,14 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	@Override /* Serializer */
-	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+	protected void doSerialize(SerializerPipe out, Object o) throws SerializeException {
 
 		Resource r = null;
 
 		ClassMeta<?> cm = getClassMetaForObject(o);
 		if (isLooseCollections() && cm != null && cm.isCollectionOrArray()) {
 			Collection c = sort(cm.isCollection() ? (Collection)o : toList(cm.getInnerClass(), o));
-			for (Object o2 : c)
-				serializeAnything(o2, false, object(), "root", null, null);
+			c.forEach(x -> serializeAnything(x, false, object(), "root", null, null));
 		} else {
 			RDFNode n = serializeAnything(o, false, getExpectedRootType(o), "root", null, null);
 			if (n.isLiteral()) {
@@ -312,8 +312,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		writer.write(model, out.getWriter(), "http://unknown/");
 	}
 
-	private RDFNode serializeAnything(Object o, boolean isURI, ClassMeta<?> eType,
-			String attrName, BeanPropertyMeta bpm, Resource parentResource) throws IOException, SerializeException {
+	private RDFNode serializeAnything(Object o, boolean isURI, ClassMeta<?> eType, String attrName, BeanPropertyMeta bpm, Resource parentResource) throws SerializeException {
 		Model m = model;
 
 		ClassMeta<?> aType = null;       // The actual type
@@ -438,9 +437,9 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 			}
 
 		} else if (sType.isReader()) {
-			n = m.createLiteral(encodeTextInvalidChars(read((Reader)o)));
+			n = m.createLiteral(encodeTextInvalidChars(read((Reader)o, SerializerSession::handleThrown)));
 		} else if (sType.isInputStream()) {
-			n = m.createLiteral(encodeTextInvalidChars(read((InputStream)o)));
+			n = m.createLiteral(encodeTextInvalidChars(read((InputStream)o, SerializerSession::handleThrown)));
 
 		} else {
 			n = m.createLiteral(encodeTextInvalidChars(toString(o)));
@@ -462,7 +461,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		return getUriResolver().resolve(s);
 	}
 
-	private void serializeMap(Map m, Resource r, ClassMeta<?> type) throws IOException, SerializeException {
+	private void serializeMap(Map m, Resource r, ClassMeta<?> type) throws SerializeException {
 
 		m = sort(m);
 
@@ -470,20 +469,18 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 
 		ArrayList<Map.Entry<Object,Object>> l = listFrom(m.entrySet());
 		Collections.reverse(l);
-		for (Map.Entry<Object,Object> me : l) {
-			Object value = me.getValue();
-
-			Object key = generalize(me.getKey(), keyType);
-
+		l.forEach(x -> {
+			Object value = x.getValue();
+			Object key = generalize(x.getKey(), keyType);
 			Namespace ns = getJuneauBpNs();
 			Property p = model.createProperty(ns.getUri(), encodeElementName(toString(key)));
 			RDFNode n = serializeAnything(value, false, valueType, toString(key), null, r);
 			if (n != null)
 				r.addProperty(p, n);
-		}
+		});
 	}
 
-	private void serializeBeanMap(BeanMap<?> m, Resource r, String typeName) throws IOException, SerializeException {
+	private void serializeBeanMap(BeanMap<?> m, Resource r, String typeName) throws SerializeException {
 		List<BeanPropertyValue> l = new ArrayList<>();
 
 		if (typeName != null) {
@@ -497,24 +494,23 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 		});
 
 		Collections.reverse(l);
-		for (BeanPropertyValue bpv : l) {
-
-			BeanPropertyMeta bpMeta = bpv.getMeta();
+		l.forEach(x -> {
+			BeanPropertyMeta bpMeta = x.getMeta();
 			ClassMeta<?> cMeta = bpMeta.getClassMeta();
 			RdfBeanPropertyMeta bpRdf = getRdfBeanPropertyMeta(bpMeta);
 			XmlBeanPropertyMeta bpXml = getXmlBeanPropertyMeta(bpMeta);
 
 			if (bpRdf.isBeanUri())
-				continue;
+				return;
 
-			String key = bpv.getName();
-			Object value = bpv.getValue();
-			Throwable t = bpv.getThrown();
+			String key = x.getName();
+			Object value = x.getValue();
+			Throwable t = x.getThrown();
 			if (t != null)
 				onBeanGetterException(bpMeta, t);
 
 			if (canIgnoreValue(cMeta, key, value))
-				continue;
+				return;
 
 			Namespace ns = bpRdf.getNamespace();
 			if (ns == null && isUseXmlNamespaces())
@@ -528,37 +524,31 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 			RDFNode n = serializeAnything(value, bpMeta.isUri(), cMeta, key, bpMeta, r);
 			if (n != null)
 				r.addProperty(p, n);
-		}
+		});
 	}
 
 
-	private Container serializeToContainer(Collection c, ClassMeta<?> type, Container list) throws IOException, SerializeException {
-
+	private Container serializeToContainer(Collection c, ClassMeta<?> type, Container list) throws SerializeException {
 		ClassMeta<?> elementType = type.getElementType();
-		for (Object e : c) {
-			RDFNode n = serializeAnything(e, false, elementType, null, null, null);
-			list = list.add(n);
-		}
+		c.forEach(x -> list.add(serializeAnything(x, false, elementType, null, null, null)));
 		return list;
 	}
 
-	private RDFList serializeToList(Collection c, ClassMeta<?> type) throws IOException, SerializeException {
+	private RDFList serializeToList(Collection c, ClassMeta<?> type) throws SerializeException {
 		ClassMeta<?> elementType = type.getElementType();
 		List<RDFNode> l = list(c.size());
-		for (Object e : c) {
-			l.add(serializeAnything(e, false, elementType, null, null, null));
-		}
+		c.forEach(x -> l.add(serializeAnything(x, false, elementType, null, null, null)));
 		return model.createList(l.iterator());
 	}
 
 	private void serializeToMultiProperties(Collection c, ClassMeta<?> sType,
-			BeanPropertyMeta bpm, String attrName, Resource parentResource) throws IOException, SerializeException {
+			BeanPropertyMeta bpm, String attrName, Resource parentResource) throws SerializeException {
 
 		ClassMeta<?> elementType = sType.getElementType();
 		RdfBeanPropertyMeta bpRdf = getRdfBeanPropertyMeta(bpm);
 		XmlBeanPropertyMeta bpXml = getXmlBeanPropertyMeta(bpm);
 
-		for (Object e : c) {
+		c.forEach(x -> {
 			Namespace ns = bpRdf.getNamespace();
 			if (ns == null && isUseXmlNamespaces())
 				ns = bpXml.getNamespace();
@@ -566,10 +556,10 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 				ns = getJuneauBpNs();
 			else if (isAutoDetectNamespaces())
 				addModelPrefix(ns);
-			RDFNode n2 = serializeAnything(e, false, elementType, null, null, null);
+			RDFNode n2 = serializeAnything(x, false, elementType, null, null, null);
 			Property p = model.createProperty(ns.getUri(), encodeElementName(attrName));
 			parentResource.addProperty(p, n2);
-		}
+		});
 	}
 
 

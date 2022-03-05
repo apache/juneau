@@ -20,6 +20,7 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
+import java.util.concurrent.atomic.*;
 import java.util.function.*;
 
 import org.apache.jena.rdf.model.*;
@@ -224,10 +225,8 @@ public class RdfParserSession extends ReaderParserSession {
 		rdfReader = model.getReader(ctx.getLanguage());
 
 		// Note: NTripleReader throws an exception if you try to set any properties on it.
-		if (! ctx.getLanguage().equals(LANG_NTRIPLE)) {
-			for (Map.Entry<String,Object> e : ctx.getJenaSettings().entrySet())
-				rdfReader.setProperty(e.getKey(), e.getValue());
-		}
+		if (! ctx.getLanguage().equals(LANG_NTRIPLE))
+			ctx.getJenaSettings().forEach((k,v) -> rdfReader.setProperty(k, v));
 	}
 
 	@Override /* ReaderParserSession */
@@ -250,10 +249,9 @@ public class RdfParserSession extends ReaderParserSession {
 					: new OList(this)
 				);
 
-			int argIndex = 0;
-			for (Resource resource : roots)
-				c.add(parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), resource,
-					getOuter(), null));
+			AtomicInteger argIndex = new AtomicInteger(0);
+			Collection c2 = c;
+			roots.forEach(x -> c2.add(parseAnything(type.isArgs() ? type.getArg(argIndex.getAndIncrement()) : type.getElementType(), x, getOuter(), null)));
 
 			if (type.isArray() || type.isArgs())
 				return (T)toArray(type, c);
@@ -327,7 +325,7 @@ public class RdfParserSession extends ReaderParserSession {
 		return l;
 	}
 
-	private <T> BeanMap<T> parseIntoBeanMap(Resource r2, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
+	private <T> BeanMap<T> parseIntoBeanMap(Resource r2, BeanMap<T> m) throws ParseException {
 		BeanMeta<T> bm = m.getMeta();
 		RdfBeanMeta rbm = getRdfBeanMeta(bm);
 		if (rbm.hasBeanUri() && r2.getURI() != null)
@@ -380,7 +378,7 @@ public class RdfParserSession extends ReaderParserSession {
 		return getCollectionFormat() == RdfCollectionFormat.MULTI_VALUED;
 	}
 
-	private <T> T parseAnything(ClassMeta<?> eType, RDFNode n, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+	private <T> T parseAnything(ClassMeta<?> eType, RDFNode n, Object outer, BeanPropertyMeta pMeta) throws ParseException {
 
 		if (eType == null)
 			eType = object();
@@ -541,7 +539,7 @@ public class RdfParserSession extends ReaderParserSession {
 		return false;
 	}
 
-	private Object getValue(RDFNode n, Object outer) throws IOException, ParseException, ExecutableException {
+	private Object getValue(RDFNode n, Object outer) throws ParseException {
 		if (n.isLiteral())
 			return n.asLiteral().getValue();
 		if (n.isResource()) {
@@ -556,8 +554,7 @@ public class RdfParserSession extends ReaderParserSession {
 		throw new ParseException(this, "Unknown value type for node ''{0}''", n);
 	}
 
-	private <K,V> Map<K,V> parseIntoMap(Resource r, Map<K,V> m, ClassMeta<K> keyType,
-			ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+	private <K,V> Map<K,V> parseIntoMap(Resource r, Map<K,V> m, ClassMeta<K> keyType, ClassMeta<V> valueType, BeanPropertyMeta pMeta) throws ParseException {
 		// Add URI as "uri" to generic maps.
 		if (r.getURI() != null) {
 			K uri = convertAttrToType(m, "uri", keyType);
@@ -581,8 +578,7 @@ public class RdfParserSession extends ReaderParserSession {
 		return m;
 	}
 
-	private <E> Collection<E> parseIntoCollection(Container c, Collection<E> l,
-			ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+	private <E> Collection<E> parseIntoCollection(Container c, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws ParseException {
 		int argIndex = 0;
 		for (NodeIterator ni = c.iterator(); ni.hasNext();) {
 			E e = (E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), ni.next(), l, pMeta);
@@ -591,8 +587,7 @@ public class RdfParserSession extends ReaderParserSession {
 		return l;
 	}
 
-	private <E> Collection<E> parseIntoCollection(RDFList list, Collection<E> l,
-			ClassMeta<?> type, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+	private <E> Collection<E> parseIntoCollection(RDFList list, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws ParseException {
 		int argIndex = 0;
 		for (ExtendedIterator<RDFNode> ni = list.iterator(); ni.hasNext();) {
 			E e = (E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), ni.next(), l, pMeta);
