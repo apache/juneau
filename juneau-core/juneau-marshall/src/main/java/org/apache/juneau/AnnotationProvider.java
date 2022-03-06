@@ -49,81 +49,151 @@ public interface AnnotationProvider {
 		@Override /* MetaProvider */
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
 			if (type != null && onClass != null)
-				for (A a : (A[])classAnnotationCache.get(onClass,type))
+				for (A a : annotations(type, onClass))
 					consume(filter, action, a);
 		}
 
 		@Override /* MetaProvider */
-		public <A extends Annotation> A getAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
+		public <A extends Annotation> A firstAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 			if (type != null && onClass != null)
-				for (A a : (A[])classAnnotationCache.get(onClass,type))
+				for (A a : annotations(type, onClass))
 					if (passes(filter, a))
 						return a;
 			return null;
+		}
+
+		@Override /* MetaProvider */
+		public <A extends Annotation> A lastAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
+			A x = null;
+			if (type != null && onClass != null)
+				for (A a : annotations(type, onClass))
+					if (passes(filter, a))
+						x = a;
+			return x;
 		}
 
 		@Override /* MetaProvider */
 		public <A extends Annotation> void forEachDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter, Consumer<A> action) {
 			if (type != null && onClass != null)
-				for (A a : (A[])declaredClassAnnotationCache.get(onClass,type))
+				for (A a : declaredAnnotations(type, onClass))
 					consume(filter, action, a);
 		}
 
 		@Override /* MetaProvider */
-		public <A extends Annotation> A getDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
+		public <A extends Annotation> A firstDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 			if (type != null && onClass != null)
-				for (A a : (A[])declaredClassAnnotationCache.get(onClass,type))
+				for (A a : declaredAnnotations(type, onClass))
 					if (passes(filter, a))
 						return a;
 			return null;
+		}
+
+		@Override /* MetaProvider */
+		public <A extends Annotation> A lastDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
+			A x = null;
+			if (type != null && onClass != null)
+				for (A a : declaredAnnotations(type, onClass))
+					if (passes(filter, a))
+						x = a;
+			return x;
 		}
 
 		@Override /* MetaProvider */
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Method onMethod, Predicate<A> filter, Consumer<A> action) {
 			if (type != null && onMethod != null)
-				for (A a : (A[])methodAnnotationCache.get(onMethod,type))
+				for (A a : annotations(type, onMethod))
 					consume(filter, action, a);
 		}
 
 		@Override /* MetaProvider */
-		public <A extends Annotation> A getAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
+		public <A extends Annotation> A firstAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
 			if (type != null && onMethod != null)
-				for (A a : (A[])methodAnnotationCache.get(onMethod,type))
+				for (A a : annotations(type, onMethod))
 					if (passes(filter, a))
 						return a;
 			return null;
+		}
+
+		@Override /* MetaProvider */
+		public <A extends Annotation> A lastAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
+			A x = null;
+			if (type != null && onMethod != null)
+				for (A a : annotations(type, onMethod))
+					if (passes(filter, a))
+						x = a;
+			return x;
 		}
 
 		@Override /* MetaProvider */
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Field onField, Predicate<A> filter, Consumer<A> action) {
 			if (type != null && onField != null)
-				for (A a : (A[])fieldAnnotationCache.get(onField,type))
+				for (A a : annotations(type, onField))
 					consume(filter, action, a);
 		}
 
 		@Override /* MetaProvider */
-		public <A extends Annotation> A getAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
+		public <A extends Annotation> A firstAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
 			if (type != null && onField != null)
-				for (A a : (A[])fieldAnnotationCache.get(onField,type))
+				for (A a : annotations(type, onField))
 					if (passes(filter, a))
 						return a;
 			return null;
+		}
+
+		@Override /* MetaProvider */
+		public <A extends Annotation> A lastAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
+			A x = null;
+			if (type != null && onField != null)
+				for (A a : annotations(type, onField))
+					if (passes(filter, a))
+						x = a;
+			return x;
 		}
 
 		@Override /* MetaProvider */
 		public <A extends Annotation> void forEachAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter, Consumer<A> action) {
 			if (type != null && onConstructor != null)
-				for (A a : (A[])constructorAnnotationCache.get(onConstructor,type))
+				for (A a : annotations(type, onConstructor))
 					consume(filter, action, a);
 		}
 
 		@Override /* MetaProvider */
-		public <A extends Annotation> A getAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
+		public <A extends Annotation> A firstAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
 			if (type != null && onConstructor != null)
-				for (A a : (A[])constructorAnnotationCache.get(onConstructor,type))
+				for (A a : annotations(type, onConstructor))
 					if (passes(filter, a))
 						return a;
 			return null;
+		}
+
+		@Override /* MetaProvider */
+		public <A extends Annotation> A lastAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
+			A x = null;
+			if (type != null && onConstructor != null)
+				for (A a : annotations(type, onConstructor))
+					if (passes(filter, a))
+						x = a;
+			return x;
+		}
+
+		private <A extends Annotation> A[] annotations(Class<A> type, Class<?> onClass) {
+			return (A[])classAnnotationCache.get(onClass, type);
+		}
+
+		private <A extends Annotation> A[] declaredAnnotations(Class<A> type, Class<?> onClass) {
+			return (A[])declaredClassAnnotationCache.get(onClass, type);
+		}
+
+		private <A extends Annotation> A[] annotations(Class<A> type, Method onMethod) {
+			return (A[])methodAnnotationCache.get(onMethod, type);
+		}
+
+		private <A extends Annotation> A[] annotations(Class<A> type, Field onField) {
+			return (A[])fieldAnnotationCache.get(onField, type);
+		}
+
+		private <A extends Annotation> A[] annotations(Class<A> type, Constructor<?> onConstructor) {
+			return (A[])constructorAnnotationCache.get(onConstructor, type);
 		}
 	};
 
@@ -143,9 +213,19 @@ public interface AnnotationProvider {
 	 * @param type The annotation type to find.
 	 * @param onClass The class to search on.
 	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
-	 * @return The annotations in an unmodifiable list, or an empty list if not found.
+	 * @return The matched annotation, or <jk>null</jk> if not found.
 	 */
-	<A extends Annotation> A getAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter);
+	<A extends Annotation> A firstAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter);
+
+	/**
+	 * Finds the last matching annotation on the specified class.
+	 *
+	 * @param type The annotation type to find.
+	 * @param onClass The class to search on.
+	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
+	 * @return The matched annotation, or <jk>null</jk> if not found.
+	 */
+	<A extends Annotation> A lastAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter);
 
 	/**
 	 * Performs an action on the matching declared annotations on the specified class.
@@ -165,7 +245,17 @@ public interface AnnotationProvider {
 	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
 	 * @return The matched annotation, or <jk>null</jk> if no annotations matched.
 	 */
-	<A extends Annotation> A getDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter);
+	<A extends Annotation> A firstDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter);
+
+	/**
+	 * Finds the last matching declared annotations on the specified class.
+	 *
+	 * @param type The annotation type to find.
+	 * @param onClass The class to search on.
+	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
+	 * @return The matched annotation, or <jk>null</jk> if no annotations matched.
+	 */
+	<A extends Annotation> A lastDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter);
 
 	/**
 	 * Performs an action on the matching annotations on the specified method.
@@ -187,7 +277,18 @@ public interface AnnotationProvider {
 	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
 	 * @return The matched annotation, or <jk>null</jk> if no annotations matched.
 	 */
-	<A extends Annotation> A getAnnotation(Class<A> type, Method onMethod, Predicate<A> filter);
+	<A extends Annotation> A firstAnnotation(Class<A> type, Method onMethod, Predicate<A> filter);
+
+	/**
+	 * Finds the last matching annotation on the specified method.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param type The annotation type to find.
+	 * @param onMethod The method to search on.
+	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
+	 * @return The matched annotation, or <jk>null</jk> if no annotations matched.
+	 */
+	<A extends Annotation> A lastAnnotation(Class<A> type, Method onMethod, Predicate<A> filter);
 
 	/**
 	 * Performs an action on the matching annotations on the specified field.
@@ -209,7 +310,18 @@ public interface AnnotationProvider {
 	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
 	 * @return The matched annotation, or <jk>null</jk> if no annotations matched.
 	 */
-	<A extends Annotation> A getAnnotation(Class<A> type, Field onField, Predicate<A> filter);
+	<A extends Annotation> A firstAnnotation(Class<A> type, Field onField, Predicate<A> filter);
+
+	/**
+	 * Finds the last matching annotation on the specified field.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param type The annotation type to find.
+	 * @param onField The field to search on.
+	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
+	 * @return The matched annotation, or <jk>null</jk> if no annotations matched.
+	 */
+	<A extends Annotation> A lastAnnotation(Class<A> type, Field onField, Predicate<A> filter);
 
 	/**
 	 * Performs an action on the matching annotations on the specified constructor.
@@ -231,5 +343,16 @@ public interface AnnotationProvider {
 	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
 	 * @return The matched annotation, or <jk>null</jk> if no annotations matched.
 	 */
-	<A extends Annotation> A getAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter);
+	<A extends Annotation> A firstAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter);
+
+	/**
+	 * Finds the last matching annotation on the specified constructor.
+	 *
+	 * @param <A> The annotation type to find.
+	 * @param type The annotation type to find.
+	 * @param onConstructor The constructor to search on.
+	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
+	 * @return The matched annotation, or <jk>null</jk> if no annotations matched.
+	 */
+	<A extends Annotation> A lastAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter);
 }

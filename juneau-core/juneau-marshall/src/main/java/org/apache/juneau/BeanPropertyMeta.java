@@ -200,7 +200,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 						writeOnly = Boolean.valueOf(p.wo());
 				}
 				bc.forEachAnnotation(Swap.class, innerField, x -> true, x -> swap = getPropertySwap(x));
-				isUri |= bc.getAnnotation(Uri.class, innerField, x->true) != null;
+				isUri |= bc.firstAnnotation(Uri.class, innerField, x->true) != null;
 			}
 
 			if (getter != null) {

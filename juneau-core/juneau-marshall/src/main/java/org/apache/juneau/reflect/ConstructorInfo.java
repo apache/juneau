@@ -133,7 +133,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	 * @return <jk>true</jk> if the specified annotation is present on this constructor.
 	 */
 	public final <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
-		return annotationProvider.getAnnotation(type, c, x -> true) != null;
+		return annotationProvider.firstAnnotation(type, c, x -> true) != null;
 	}
 
 	/**

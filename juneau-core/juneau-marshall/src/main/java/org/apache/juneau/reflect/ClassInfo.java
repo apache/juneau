@@ -1047,7 +1047,7 @@ public final class ClassInfo {
 	 * @return The <jk>true</jk> if annotation if found.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
-		return annotationProvider.getAnnotation(type, c, x -> true) != null;
+		return annotationProvider.firstAnnotation(type, c, x -> true) != null;
 	}
 
 	/**
@@ -1133,7 +1133,7 @@ public final class ClassInfo {
 	private <A extends Annotation> A findAnnotation(AnnotationProvider ap, Class<A> a) {
 		if (a == null)
 			return null;
-		A t = ap.getDeclaredAnnotation(a, c, x -> true);
+		A t = ap.firstDeclaredAnnotation(a, c, x -> true);
 		if (t != null)
 			return t;
 		ClassInfo sci = getParent();
@@ -1156,13 +1156,13 @@ public final class ClassInfo {
 			return t2;
 		ClassInfo[] interfaces = _getInterfaces();
 		for (int i = interfaces.length-1; i >= 0; i--) {
-			A o = ap.getDeclaredAnnotation(a, interfaces[i].inner(), filter);
+			A o = ap.firstDeclaredAnnotation(a, interfaces[i].inner(), filter);
 			if (o != null)
 				return o;
 		}
 		ClassInfo[] parents = _getParents();
 		for (int i = parents.length-1; i >= 0; i--) {
-			A o = ap.getDeclaredAnnotation(a, parents[i].inner(), filter);
+			A o = ap.firstDeclaredAnnotation(a, parents[i].inner(), filter);
 			if (o != null)
 				return o;
 		}

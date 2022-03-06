@@ -152,7 +152,7 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	 * @return <jk>true</jk> if the specified annotation is present.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
-		return annotationProvider.getAnnotation(type, f, x -> true) != null;
+		return annotationProvider.firstAnnotation(type, f, x -> true) != null;
 	}
 
 	/**

@@ -944,12 +944,22 @@ public abstract class Context implements AnnotationProvider {
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> A getAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
+	public <A extends Annotation> A firstAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 		if (type != null && onClass != null)
 			for (A a : annotations(type, onClass))
 				if (passes(filter, a))
 					return a;
 		return null;
+	}
+
+	@Override /* MetaProvider */
+	public <A extends Annotation> A lastAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
+		A x = null;
+		if (type != null && onClass != null)
+			for (A a : annotations(type, onClass))
+				if (passes(filter, a))
+					x = a;
+		return x;
 	}
 
 	@Override /* MetaProvider */
@@ -960,12 +970,22 @@ public abstract class Context implements AnnotationProvider {
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> A getDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
+	public <A extends Annotation> A firstDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 		if (type != null && onClass != null)
 			for (A a : declaredAnnotations(type, onClass))
 				if (passes(filter, a))
 					return a;
 		return null;
+	}
+
+	@Override /* MetaProvider */
+	public <A extends Annotation> A lastDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
+		A x = null;
+		if (type != null && onClass != null)
+			for (A a : declaredAnnotations(type, onClass))
+				if (passes(filter, a))
+					x = a;
+		return x;
 	}
 
 	@Override /* MetaProvider */
@@ -976,12 +996,22 @@ public abstract class Context implements AnnotationProvider {
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> A getAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
+	public <A extends Annotation> A firstAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
 		if (type != null && onMethod != null)
 			for (A a : annotations(type, onMethod))
 				if (passes(filter, a))
 					return a;
 		return null;
+	}
+
+	@Override /* MetaProvider */
+	public <A extends Annotation> A lastAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
+		A x = null;
+		if (type != null && onMethod != null)
+			for (A a : annotations(type, onMethod))
+				if (passes(filter, a))
+					x = a;
+		return x;
 	}
 
 	@Override /* MetaProvider */
@@ -992,12 +1022,22 @@ public abstract class Context implements AnnotationProvider {
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> A getAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
+	public <A extends Annotation> A firstAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
 		if (type != null && onField != null)
 			for (A a : annotations(type, onField))
 				if (passes(filter, a))
 					return a;
 		return null;
+	}
+
+	@Override /* MetaProvider */
+	public <A extends Annotation> A lastAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
+		A x = null;
+		if (type != null && onField != null)
+			for (A a : annotations(type, onField))
+				if (passes(filter, a))
+					x = a;
+		return x;
 	}
 
 	@Override /* MetaProvider */
@@ -1008,12 +1048,22 @@ public abstract class Context implements AnnotationProvider {
 	}
 
 	@Override /* MetaProvider */
-	public <A extends Annotation> A getAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
+	public <A extends Annotation> A firstAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
 		if (type != null && onConstructor != null)
 			for (A a : annotations(type, onConstructor))
 				if (passes(filter, a))
 					return a;
 		return null;
+	}
+
+	@Override /* MetaProvider */
+	public <A extends Annotation> A lastAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
+		A x = null;
+		if (type != null && onConstructor != null)
+			for (A a : annotations(type, onConstructor))
+				if (passes(filter, a))
+					x = a;
+		return x;
 	}
 
 	/**

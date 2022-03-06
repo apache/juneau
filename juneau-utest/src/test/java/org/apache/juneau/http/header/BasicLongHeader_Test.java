@@ -16,7 +16,6 @@ import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
-import java.net.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.annotation.*;

@@ -268,7 +268,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 */
 	public final <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
 		for (MethodInfo m2 : _getMatching())
-			if (annotationProvider.getAnnotation(type, m2.inner(), x -> true) != null)
+			if (annotationProvider.firstAnnotation(type, m2.inner(), x -> true) != null)
 				return true;
 		return false;
 	}
