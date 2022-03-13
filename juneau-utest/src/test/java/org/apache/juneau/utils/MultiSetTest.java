@@ -85,7 +85,7 @@ public class MultiSetTest {
 
 		l1 = new LinkedList<>(Arrays.asList(new String[]{"1","2"}));
 		l2 = new LinkedList<>(Arrays.asList(new String[]{"3","4"}));
-		ms = new MultiSet<>(l1).append(l2);
+		ms = new MultiSet<>(l1, l2);
 		assertObject(ms).asJson().is("['1','2','3','4']");
 		assertObject(ms.enumerator()).asJson().is("['1','2','3','4']");
 		assertEquals(4, ms.size());

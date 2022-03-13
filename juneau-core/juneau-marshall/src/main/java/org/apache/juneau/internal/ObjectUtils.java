@@ -285,7 +285,7 @@ public class ObjectUtils {
 				MethodInfo mi = ci.getDeclaredMethod(x -> x.hasName("properties"));
 				if (mi != null)
 					methods2.put(cname, mi.accessible());
-				ci = ci.getParent();
+				ci = ci.getSuperclass();
 			} while (ci != null);
 			methods = methods2;
 			PROPERTIES_METHODS.put(o.getClass(), methods);

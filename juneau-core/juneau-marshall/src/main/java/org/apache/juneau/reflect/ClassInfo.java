@@ -45,7 +45,7 @@ import org.apache.juneau.internal.*;
  * 	ClassInfo <jv>classInfo</jv> = ClassInfo.<jsm>of</jsm>(MyClass.<jk>class</jk>);
  *
  * 	<jc>// Get all methods in parent-to-child order, sorted alphabetically per class.</jc>
- * 	<jk>for</jk> (MethodInfo <jv>methodInfo</jv> : <jv>classInfo</jv>.getAllMethodsParentFirst()) {
+ * 	<jk>for</jk> (MethodInfo <jv>methodInfo</jv> : <jv>classInfo</jv>.getAllMethods()) {
  * 		<jc>// Do something with it.</jc>
  * 	}
  *
@@ -169,6 +169,7 @@ public final class ClassInfo {
 	private volatile MethodInfo repeatedAnnotationMethod;
 	private volatile ConstructorInfo[] publicConstructors, declaredConstructors;
 	private volatile FieldInfo[] publicFields, declaredFields, allFields;
+	private volatile Annotation[] declaredAnnotations;
 	private int dim = -1;
 	private ClassInfo componentType;
 
@@ -281,7 +282,7 @@ public final class ClassInfo {
 	 * @return
 	 * 	The parent class, or <jk>null</jk> if the class has no parent.
 	 */
-	public ClassInfo getParent() {
+	public ClassInfo getSuperclass() {
 		return c == null ? null : of(c.getSuperclass());
 	}
 
@@ -362,56 +363,64 @@ public final class ClassInfo {
 	}
 
 	/** Results are in child-to-parent order. */
-	synchronized ClassInfo[] _getInterfaces() {
+	ClassInfo[] _getInterfaces() {
 		if (interfaces == null) {
-			Set<ClassInfo> s = set();
-			for (ClassInfo ci : _getParents())
-				for (ClassInfo ci2 : ci._getDeclaredInterfaces()) {
-					s.add(ci2);
-					for (ClassInfo ci3 : ci2._getInterfaces())
-						s.add(ci3);
-				}
-			interfaces = s.toArray(new ClassInfo[s.size()]);
+			synchronized(this) {
+				Set<ClassInfo> s = set();
+				for (ClassInfo ci : _getParents())
+					for (ClassInfo ci2 : ci._getDeclaredInterfaces()) {
+						s.add(ci2);
+						for (ClassInfo ci3 : ci2._getInterfaces())
+							s.add(ci3);
+					}
+				interfaces = s.toArray(new ClassInfo[s.size()]);
+			}
 		}
 		return interfaces;
 	}
 
 	/** Results are in the same order as Class.getInterfaces(). */
-	private synchronized ClassInfo[] _getDeclaredInterfaces() {
+	ClassInfo[] _getDeclaredInterfaces() {
 		if (declaredInterfaces == null) {
-			Class<?>[] ii = c == null ? new Class[0] : c.getInterfaces();
-			ClassInfo[] l = new ClassInfo[ii.length];
-			for (int i = 0; i < ii.length; i++)
-				l[i] = of(ii[i]);
-			declaredInterfaces = l;
+			synchronized(this) {
+				Class<?>[] ii = c == null ? new Class[0] : c.getInterfaces();
+				ClassInfo[] l = new ClassInfo[ii.length];
+				for (int i = 0; i < ii.length; i++)
+					l[i] = of(ii[i]);
+				declaredInterfaces = l;
+			}
 		}
 		return declaredInterfaces;
 	}
 
 	/** Results are in child-to-parent order. */
-	synchronized ClassInfo[] _getParents() {
+	ClassInfo[] _getParents() {
 		if (parents == null) {
-			List<ClassInfo> l = list();
-			Class<?> pc = c;
-			while (pc != null && pc != Object.class) {
-				l.add(of(pc));
-				pc = pc.getSuperclass();
+			synchronized(this) {
+				List<ClassInfo> l = list();
+				Class<?> pc = c;
+				while (pc != null && pc != Object.class) {
+					l.add(of(pc));
+					pc = pc.getSuperclass();
+				}
+				parents = l.toArray(new ClassInfo[l.size()]);
 			}
-			parents = l.toArray(new ClassInfo[l.size()]);
 		}
 		return parents;
 	}
 
 	/** Results are classes-before-interfaces, then child-to-parent order. */
-	private synchronized ClassInfo[] _getAllParents() {
+	ClassInfo[] _getAllParents() {
 		if (allParents == null) {
-			ClassInfo[] a1 = _getParents(), a2 = _getInterfaces();
-			ClassInfo[] l = new ClassInfo[a1.length + a2.length];
-			for (int i = 0; i < a1.length; i++)
-				l[i] = a1[i];
-			for (int i = 0; i < a2.length; i++)
-				l[i+a1.length] = a2[i];
-			allParents = l;
+			synchronized(this) {
+				ClassInfo[] a1 = _getParents(), a2 = _getInterfaces();
+				ClassInfo[] l = new ClassInfo[a1.length + a2.length];
+				for (int i = 0; i < a1.length; i++)
+					l[i] = a1[i];
+				for (int i = 0; i < a2.length; i++)
+					l[i+a1.length] = a2[i];
+				allParents = l;
+			}
 		}
 		return allParents;
 	}
@@ -561,7 +570,7 @@ public final class ClassInfo {
 		return this;
 	}
 
-	private synchronized MethodInfo[] _getPublicMethods() {
+	MethodInfo[] _getPublicMethods() {
 		if (publicMethods == null) {
 			synchronized(this) {
 				Method[] mm = c == null ? new Method[0] : c.getMethods();
@@ -576,7 +585,7 @@ public final class ClassInfo {
 		return publicMethods;
 	}
 
-	private synchronized MethodInfo[] _getDeclaredMethods() {
+	MethodInfo[] _getDeclaredMethods() {
 		if (declaredMethods == null) {
 			synchronized(this) {
 				Method[] mm = c == null ? new Method[0] : c.getDeclaredMethods();
@@ -591,7 +600,7 @@ public final class ClassInfo {
 		return declaredMethods;
 	}
 
-	private synchronized MethodInfo[] _getAllMethods() {
+	MethodInfo[] _getAllMethods() {
 		if (allMethods == null) {
 			synchronized(this) {
 				List<MethodInfo> l = list();
@@ -603,7 +612,7 @@ public final class ClassInfo {
 		return allMethods;
 	}
 
-	private synchronized MethodInfo[] _getAllMethodsParentFirst() {
+	MethodInfo[] _getAllMethodsParentFirst() {
 		if (allMethodsParentFirst == null) {
 			synchronized(this) {
 				List<MethodInfo> l = list();
@@ -698,7 +707,7 @@ public final class ClassInfo {
 		return null;
 	}
 
-	private synchronized ConstructorInfo[] _getPublicConstructors() {
+	ConstructorInfo[] _getPublicConstructors() {
 		if (publicConstructors == null) {
 			synchronized(this) {
 				Constructor<?>[] cc = c == null ? new Constructor[0] : c.getConstructors();
@@ -712,7 +721,7 @@ public final class ClassInfo {
 		return publicConstructors;
 	}
 
-	private synchronized ConstructorInfo[] _getDeclaredConstructors() {
+	ConstructorInfo[] _getDeclaredConstructors() {
 		if (declaredConstructors == null) {
 			synchronized(this) {
 				Constructor<?>[] cc = c == null ? new Constructor[0] : c.getDeclaredConstructors();
@@ -864,7 +873,7 @@ public final class ClassInfo {
 		return this;
 	}
 
-	private FieldInfo[] _getPublicFields() {
+	FieldInfo[] _getPublicFields() {
 		if (publicFields == null) {
 			synchronized(this) {
 				Map<String,FieldInfo> m = map();
@@ -883,7 +892,7 @@ public final class ClassInfo {
 		return publicFields;
 	}
 
-	private synchronized FieldInfo[] _getDeclaredFields() {
+	FieldInfo[] _getDeclaredFields() {
 		if (declaredFields == null) {
 			synchronized(this) {
 				Field[] ff = c == null ? new Field[0] : c.getDeclaredFields();
@@ -898,7 +907,7 @@ public final class ClassInfo {
 		return declaredFields;
 	}
 
-	private synchronized FieldInfo[] _getAllFields() {
+	FieldInfo[] _getAllFields() {
 		if (allFields == null) {
 			synchronized(this) {
 				List<FieldInfo> l = list();
@@ -1256,7 +1265,7 @@ public final class ClassInfo {
 		A t = ap.firstDeclaredAnnotation(a, c, x -> true);
 		if (t != null)
 			return t;
-		ClassInfo sci = getParent();
+		ClassInfo sci = getSuperclass();
 		if (sci != null) {
 			t = sci.getAnnotation(ap, a);
 			if (t != null)
@@ -1324,6 +1333,15 @@ public final class ClassInfo {
 				for (Annotation a2 : splitRepeated(a))
 					AnnotationInfo.of(parents[i], a2).accept(filter, action);
 		return this;
+	}
+
+	Annotation[] _getDeclaredAnnotations() {
+		if (declaredAnnotations == null) {
+			synchronized(this) {
+				declaredAnnotations = c.getDeclaredAnnotations();
+			}
+		}
+		return declaredAnnotations;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

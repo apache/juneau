@@ -162,7 +162,7 @@ public abstract class ExecutableInfo {
 	 * @return The parameter types on this executable.
 	 */
 	public final List<ClassInfo> getParamTypes() {
-		return ulist(_getParamTypes());
+		return ulist(_getParameterTypes());
 	}
 
 	/**
@@ -173,7 +173,7 @@ public abstract class ExecutableInfo {
 	 */
 	public final ClassInfo getParamType(int index) {
 		checkIndex(index);
-		return _getParamTypes()[index];
+		return _getParameterTypes()[index];
 	}
 
 	/**
@@ -238,7 +238,7 @@ public abstract class ExecutableInfo {
 		return _getRawParameters()[index];
 	}
 
-	private ParamInfo[] _getParams() {
+	final ParamInfo[] _getParams() {
 		if (params == null) {
 			synchronized(this) {
 				Parameter[] rp = _getRawParameters();
@@ -251,7 +251,7 @@ public abstract class ExecutableInfo {
 		return params;
 	}
 
-	ClassInfo[] _getParamTypes() {
+	final ClassInfo[] _getParameterTypes() {
 		if (paramTypes == null) {
 			synchronized(this) {
 				Class<?>[] ptc = _getRawParamTypes();
@@ -289,7 +289,7 @@ public abstract class ExecutableInfo {
 		return rawParamTypes;
 	}
 
-	private Type[] _getRawGenericParamTypes() {
+	final Type[] _getRawGenericParamTypes() {
 		if (rawGenericParamTypes == null) {
 			synchronized(this) {
 				rawGenericParamTypes = e.getGenericParameterTypes();
@@ -298,7 +298,7 @@ public abstract class ExecutableInfo {
 		return rawGenericParamTypes;
 	}
 
-	private Parameter[] _getRawParameters() {
+	final Parameter[] _getRawParameters() {
 		if (rawParameters == null) {
 			synchronized(this) {
 				rawParameters = e.getParameters();
@@ -328,8 +328,8 @@ public abstract class ExecutableInfo {
 	 * @param consumer The consumer.
 	 * @return This object.
 	 */
-	public <A extends Annotation> ExecutableInfo forEachParameterAnnotation(int index, Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
-		for (Annotation a : getParameterAnnotations(index))
+	public final <A extends Annotation> ExecutableInfo forEachParameterAnnotation(int index, Class<A> type, Predicate<A> predicate, Consumer<A> consumer) {
+		for (Annotation a : _getParameterAnnotations(index))
 			if (type.isInstance(a))
 				consume(predicate, consumer, type.cast(a));
 		return this;
@@ -344,7 +344,7 @@ public abstract class ExecutableInfo {
 		return parameterAnnotations;
 	}
 
-	final Annotation[] getParameterAnnotations(int index) {
+	final Annotation[] _getParameterAnnotations(int index) {
 		checkIndex(index);
 		Annotation[][] x = _getParameterAnnotations();
 		int c = e.getParameterCount();
@@ -361,7 +361,7 @@ public abstract class ExecutableInfo {
 		return x[index];
 	}
 
-	final Annotation[] getDeclaredAnnotations() {
+	final Annotation[] _getDeclaredAnnotations() {
 		if (declaredAnnotations == null) {
 			synchronized(this) {
 				declaredAnnotations = e.getDeclaredAnnotations();
@@ -383,7 +383,7 @@ public abstract class ExecutableInfo {
 		return ulist(_getExceptionTypes());
 	}
 
-	private ClassInfo[] _getExceptionTypes() {
+	final ClassInfo[] _getExceptionTypes() {
 		if (exceptionInfos == null) {
 			synchronized(this) {
 				Class<?>[] exceptionTypes = e.getExceptionTypes();
@@ -470,7 +470,7 @@ public abstract class ExecutableInfo {
 	 * @param flags The flags to test for.
 	 * @return <jk>true</jk> if all specified flags are applicable to this field.
 	 */
-	public boolean is(ReflectFlags...flags) {
+	public final boolean is(ReflectFlags...flags) {
 		return isAll(flags);
 	}
 
@@ -579,7 +579,7 @@ public abstract class ExecutableInfo {
 	 * @return <jk>true</jk> if this method has this arguments in the exact order.
 	 */
 	public final boolean hasMatchingParamTypes(Class<?>...args) {
-		ClassInfo[] pt = _getParamTypes();
+		ClassInfo[] pt = _getParameterTypes();
 		if (pt.length != args.length)
 			return false;
 		for (int i = 0; i < pt.length; i++) {
@@ -600,7 +600,7 @@ public abstract class ExecutableInfo {
 	 * @return <jk>true</jk> if this method has this arguments in the exact order.
 	 */
 	public final boolean hasMatchingParamTypes(ClassInfo...args) {
-		ClassInfo[] pt = _getParamTypes();
+		ClassInfo[] pt = _getParameterTypes();
 		if (pt.length != args.length)
 			return false;
 		for (int i = 0; i < pt.length; i++) {
@@ -634,7 +634,7 @@ public abstract class ExecutableInfo {
 	 * @param argTypes The arg types to check against.
 	 * @return How many parameters match or <c>-1</c> if method cannot handle one or more of the arguments.
 	 */
-	public int fuzzyArgsMatch(Class<?>... argTypes) {
+	public final int fuzzyArgsMatch(Class<?>... argTypes) {
 		int matches = 0;
 		outer: for (ClassInfo pi : getParamTypes()) {
 			for (Class<?> a : argTypes) {
@@ -658,7 +658,7 @@ public abstract class ExecutableInfo {
 	 * @param argTypes The arg types to check against.
 	 * @return How many parameters match or <c>-1</c> if method cannot handle one or more of the arguments.
 	 */
-	public int fuzzyArgsMatch(Object... argTypes) {
+	public final int fuzzyArgsMatch(Object... argTypes) {
 		int matches = 0;
 		outer: for (ClassInfo pi : getParamTypes()) {
 			for (Object a : argTypes) {
@@ -678,7 +678,7 @@ public abstract class ExecutableInfo {
 	 * @param args The arguments to test for.
 	 * @return <jk>true</jk> if this method has at most only this arguments in any order.
 	 */
-	public boolean hasFuzzyParamTypes(ClassInfo...args) {
+	public final boolean hasFuzzyParamTypes(ClassInfo...args) {
 		return fuzzyArgsMatch(args) != -1;
 	}
 
@@ -692,7 +692,7 @@ public abstract class ExecutableInfo {
 	 * @param argTypes The arg types to check against.
 	 * @return How many parameters match or <c>-1</c> if method cannot handle one or more of the arguments.
 	 */
-	public int fuzzyArgsMatch(ClassInfo... argTypes) {
+	public final int fuzzyArgsMatch(ClassInfo... argTypes) {
 		int matches = 0;
 		outer: for (ClassInfo pi : getParamTypes()) {
 			for (ClassInfo a : argTypes) {

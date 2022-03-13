@@ -289,8 +289,8 @@ public class ExecutableInfoTest {
 
 	@Test
 	public void getParameterAnnotations_atIndex() {
-		check("@CA()", c_c2.getParameterAnnotations(0));
-		check("@CA()", c_m2.getParameterAnnotations(0));
+		check("@CA()", c_c2._getParameterAnnotations(0));
+		check("@CA()", c_m2._getParameterAnnotations(0));
 	}
 
 	@Test

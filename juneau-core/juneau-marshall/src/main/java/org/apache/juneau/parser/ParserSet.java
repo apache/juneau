@@ -483,8 +483,8 @@ public final class ParserSet {
 	// Maps Content-Type headers to matches.
 	private final ConcurrentHashMap<String,ParserMatch> cache = new ConcurrentHashMap<>();
 
-	private final List<MediaType> mediaTypes;
-	private final List<Parser> mediaTypeParsers;
+	private final MediaType[] mediaTypes;
+	private final Parser[] mediaTypeParsers;
 
 	final Parser[] entries;
 
@@ -500,14 +500,14 @@ public final class ParserSet {
 		List<MediaType> lmt = list();
 		List<Parser> l = list();
 		for (Parser e : entries) {
-			for (MediaType m: e.getMediaTypes()) {
-				lmt.add(m);
+			e.getMediaTypes().forEach(x -> {
+				lmt.add(x);
 				l.add(e);
-			}
+			});
 		}
 
-		this.mediaTypes = unmodifiable(lmt);
-		this.mediaTypeParsers = unmodifiable(l);
+		this.mediaTypes = array(lmt, MediaType.class);
+		this.mediaTypeParsers = array(l, Parser.class);
 	}
 
 	private Parser build(Object o) {
@@ -540,10 +540,10 @@ public final class ParserSet {
 			return pm;
 
 		ContentType ct = contentType(contentTypeHeader);
-		int match = ct.match(mediaTypes);
+		int match = ct.match(ulist(mediaTypes));
 
 		if (match >= 0) {
-			pm = new ParserMatch(mediaTypes.get(match), mediaTypeParsers.get(match));
+			pm = new ParserMatch(mediaTypes[match], mediaTypeParsers[match]);
 			cache.putIfAbsent(contentTypeHeader, pm);
 		}
 
@@ -591,7 +591,7 @@ public final class ParserSet {
 	 * @return An unmodifiable list of media types.
 	 */
 	public List<MediaType> getSupportedMediaTypes() {
-		return mediaTypes;
+		return ulist(mediaTypes);
 	}
 
 	/**

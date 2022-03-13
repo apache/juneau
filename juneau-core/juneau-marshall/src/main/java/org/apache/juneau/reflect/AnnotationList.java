@@ -28,7 +28,7 @@ import java.util.function.*;
  *
  * @serial exclude
  */
-public class AnnotationList extends ArrayList<AnnotationInfo<?>> {
+public final class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 	private static final long serialVersionUID = 1L;
 
 	private static final Comparator<AnnotationInfo<?>> RANK_COMPARATOR = new Comparator<AnnotationInfo<?>>() {

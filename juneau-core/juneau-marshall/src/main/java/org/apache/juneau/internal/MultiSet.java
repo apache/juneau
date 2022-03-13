@@ -13,6 +13,7 @@
 package org.apache.juneau.internal;
 
 import static org.apache.juneau.assertions.Assertions.*;
+
 import java.util.*;
 
 /**
@@ -27,7 +28,7 @@ import java.util.*;
 public class MultiSet<E> extends AbstractSet<E> {
 
 	/** Inner collections. */
-	final List<Collection<E>> l = new ArrayList<>();
+	final Collection<E>[] l;
 
 	/**
 	 * Create a new Set that consists as a coalesced set of the specified collections.
@@ -36,20 +37,10 @@ public class MultiSet<E> extends AbstractSet<E> {
 	 */
 	@SafeVarargs
 	public MultiSet(Collection<E>...c) {
-		for (Collection<E> cc : c)
-			append(cc);
-	}
-
-	/**
-	 * Appends the specified collection to this set of collections.
-	 *
-	 * @param c The collection to append to this set of collections.
-	 * @return This object.
-	 */
-	public MultiSet<E> append(Collection<E> c) {
 		assertArgNotNull("c", c);
-		l.add(c);
-		return this;
+		for (Collection<E> cc : c)
+			assertArgNotNull("c", cc);
+		l = c;
 	}
 
 	/**
@@ -59,7 +50,7 @@ public class MultiSet<E> extends AbstractSet<E> {
 	public Iterator<E> iterator() {
 		return new Iterator<E>() {
 			int i = 0;
-			Iterator<E> i2 = (l.size() > 0 ? l.get(i++).iterator() : null);
+			Iterator<E> i2 = (l.length > 0 ? l[i++].iterator() : null);
 
 			@Override /* Iterator */
 			public boolean hasNext() {
@@ -67,8 +58,8 @@ public class MultiSet<E> extends AbstractSet<E> {
 					return false;
 				if (i2.hasNext())
 					return true;
-				for (int j = i; j < l.size(); j++)
-					if (l.get(j).size() > 0)
+				for (int j = i; j < l.length; j++)
+					if (l[j].size() > 0)
 						return true;
 				return false;
 			}
@@ -78,9 +69,9 @@ public class MultiSet<E> extends AbstractSet<E> {
 				if (i2 == null)
 					throw new NoSuchElementException();
 				while (! i2.hasNext()) {
-					if (i >= l.size())
+					if (i >= l.length)
 						throw new NoSuchElementException();
-					i2 = l.get(i++).iterator();
+					i2 = l[i++].iterator();
 				}
 				return i2.next();
 			}

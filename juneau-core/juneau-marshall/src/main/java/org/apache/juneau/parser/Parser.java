@@ -13,6 +13,7 @@
 package org.apache.juneau.parser;
 
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -1362,8 +1363,8 @@ public class Parser extends BeanContextable {
 	 *
 	 * @return The list of media types.  Never <jk>null</jk>.
 	 */
-	public final MediaType[] getMediaTypes() {
-		return consumesArray;
+	public final List<MediaType> getMediaTypes() {
+		return ulist(consumesArray);
 	}
 
 	/**

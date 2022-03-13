@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.reflect.*;
 
 /**
@@ -23,6 +22,10 @@ import java.lang.reflect.*;
  * </ul>
  */
 public class HttpUtils {
+
+	private static final String[]
+		LC_METHODS = new String[]{"get","put","post","delete","options","head","connect","trace","patch"},
+		UC_METHODS = new String[]{"GET","PUT","POST","DELETE","OPTIONS","HEAD","CONNECT","TRACE","PATCH"};
 
 	/**
 	 * Given a method name, infers the REST method name.
@@ -37,10 +40,11 @@ public class HttpUtils {
 		if (detectMethod) {
 			if (n.startsWith("do") && n.length() > 2) {
 				String n2 = n.substring(2).toUpperCase();
-				if (isOneOf(n2, "GET","PUT","POST","DELETE","OPTIONS","HEAD","CONNECT","TRACE","PATCH"))
-					return n2;
+				for (String t : UC_METHODS)
+					if (n2.equals(t))
+						return n2;
 			}
-			for (String t : new String[]{"get","put","post","delete","options","head","connect","trace","patch"})
+			for (String t : LC_METHODS)
 				if (n.startsWith(t) && (n.length() == t.length() || Character.isUpperCase(n.charAt(t.length()))))
 					return t.toUpperCase();
 		}
@@ -59,10 +63,11 @@ public class HttpUtils {
 		if (method == null) {
 			if (n.startsWith("do") && n.length() > 2) {
 				String n2 = n.substring(2).toUpperCase();
-				if (isOneOf(n2, "GET","PUT","POST","DELETE","OPTIONS","HEAD","CONNECT","TRACE","PATCH"))
-					return "/";
+				for (String t : UC_METHODS)
+					if (n2.equals(t))
+						return "/";
 			}
-			for (String t : new String[]{"get","put","post","delete","options","head","connect","trace","patch"}) {
+			for (String t : LC_METHODS) {
 				if (n.startsWith(t) && (n.length() == t.length() || Character.isUpperCase(n.charAt(t.length())))) {
 					return '/' + java.beans.Introspector.decapitalize(n.substring(t.length()));
 				}

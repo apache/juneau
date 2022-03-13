@@ -105,7 +105,7 @@ public final class ParamInfo {
 	 * @return This object.
 	 */
 	public <A extends Annotation> ParamInfo forEachDeclaredAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
-		for (Annotation a : eInfo.getParameterAnnotations(index))
+		for (Annotation a : eInfo._getParameterAnnotations(index))
 			consume(type, filter, action, a);
 		return this;
 	}
@@ -121,7 +121,7 @@ public final class ParamInfo {
 	 */
 	public <A extends Annotation> A getDeclaredAnnotation(Class<A> type) {
 		if (type != null)
-			for (Annotation a : eInfo.getParameterAnnotations(index))
+			for (Annotation a : eInfo._getParameterAnnotations(index))
 				if (type.isInstance(a))
 					return type.cast(a);
 		return null;
@@ -179,7 +179,7 @@ public final class ParamInfo {
 
 	private <A extends Annotation> A findAnnotation(Class<A> type) {
 		if (eInfo.isConstructor()) {
-			for (Annotation a2 : eInfo.getParameterAnnotations(index))
+			for (Annotation a2 : eInfo._getParameterAnnotations(index))
 				if (type.isInstance(a2))
 					return type.cast(a2);
 			return eInfo.getParamType(index).unwrap(Value.class,Optional.class).getAnnotation(type);
@@ -228,7 +228,7 @@ public final class ParamInfo {
 			A o = ci.getAnnotation(type, filter);
 			if (o != null)
 				return o;
-			for (Annotation a2 : eInfo.getParameterAnnotations(index))
+			for (Annotation a2 : eInfo._getParameterAnnotations(index))
 				if (passes(type, filter, a2))
 					return (A)a2;
 		} else {
@@ -247,7 +247,7 @@ public final class ParamInfo {
 	private <A extends Annotation> ParamInfo forEachAnnotation(AnnotationProvider ap, Class<A> a, Predicate<A> filter, Consumer<A> action) {
 		if (eInfo.isConstructor) {
 			ClassInfo ci = eInfo.getParamType(index).unwrap(Value.class,Optional.class);
-			Annotation[] annotations = eInfo.getParameterAnnotations(index);
+			Annotation[] annotations = eInfo._getParameterAnnotations(index);
 			ci.forEachAnnotation(ap, a, filter, action);
 			for (Annotation a2 : annotations)
 				consume(a, filter, action, a2);
@@ -260,7 +260,7 @@ public final class ParamInfo {
 		return this;
 	}
 
-	private synchronized Map<Class<?>,Optional<Annotation>> annotationMap() {
+	private Map<Class<?>,Optional<Annotation>> annotationMap() {
 		if (annotationMap == null) {
 			synchronized(this) {
 				annotationMap = new ConcurrentHashMap<>();

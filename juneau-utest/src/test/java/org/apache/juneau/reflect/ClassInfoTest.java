@@ -270,21 +270,21 @@ public class ClassInfoTest {
 
 	@Test
 	public void getParent() {
-		check("BC2", bc3.getParent());
-		check("BC1", bc2.getParent());
-		check("Object", bc1.getParent());
-		check(null, object.getParent());
-		check(null, bi2.getParent());
-		check(null, bi1.getParent());
+		check("BC2", bc3.getSuperclass());
+		check("BC1", bc2.getSuperclass());
+		check("Object", bc1.getSuperclass());
+		check(null, object.getSuperclass());
+		check(null, bi2.getSuperclass());
+		check(null, bi1.getSuperclass());
 	}
 
 	@Test
 	public void getParent_onType() {
-		check("Object", aTypeInfo.getParent());
-		check(null, pTypeInfo.getParent());
-		check(null, pTypeDimensionalInfo.getParent());
-		check("Object", pTypeGenericInfo.getParent());
-		check(null, pTypeGenericArgInfo.getParent());
+		check("Object", aTypeInfo.getSuperclass());
+		check(null, pTypeInfo.getSuperclass());
+		check(null, pTypeDimensionalInfo.getSuperclass());
+		check("Object", pTypeGenericInfo.getSuperclass());
+		check(null, pTypeGenericArgInfo.getSuperclass());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

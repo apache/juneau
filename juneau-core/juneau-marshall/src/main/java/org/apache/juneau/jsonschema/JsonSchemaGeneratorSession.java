@@ -539,7 +539,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 * @return
 	 * 	Custom schema information for particular class types.
 	 */
-	protected final Set<Pattern> getIgnoreTypes() {
+	protected final List<Pattern> getIgnoreTypes() {
 		return ctx.getIgnoreTypes();
 	}
 

@@ -854,7 +854,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	private final BeanDefMapper beanDefMapperBean;
 	final JsonSerializer jsonSerializer;
 	final JsonParser jsonParser;
-	private final Set<Pattern> ignoreTypePatterns;
+	private final Pattern[] ignoreTypePatterns;
 	private final Map<ClassMeta<?>,JsonSchemaClassMeta> jsonSchemaClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,JsonSchemaBeanPropertyMeta> jsonSchemaBeanPropertyMetas = new ConcurrentHashMap<>();
 
@@ -876,7 +876,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 
 		Set<Pattern> ignoreTypePatterns = set();
 		ignoreTypes.forEach(y -> split(y, x -> ignoreTypePatterns.add(Pattern.compile(x.replace(".", "\\.").replace("*", ".*")))));
-		this.ignoreTypePatterns = ignoreTypePatterns;
+		this.ignoreTypePatterns = ignoreTypePatterns.toArray(new Pattern[ignoreTypePatterns.size()]);
 
 		try {
 			beanDefMapperBean = beanDefMapper.newInstance();
@@ -977,8 +977,8 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	 * @return
 	 * 	Custom schema information for particular class types.
 	 */
-	public Set<Pattern> getIgnoreTypes() {
-		return ignoreTypePatterns;
+	public List<Pattern> getIgnoreTypes() {
+		return ulist(ignoreTypePatterns);
 	}
 
 	/**

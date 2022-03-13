@@ -133,7 +133,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 */
 	public int canAcceptFuzzy(Object...args) {
 		int matches = 0;
-		outer: for (ClassInfo pi : getParamTypes()) {
+		outer: for (ClassInfo pi : _getParameterTypes()) {
 			for (Object a : args) {
 				if (pi.canAcceptArg(a)) {
 					matches++;
@@ -178,29 +178,29 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 		return this;
 	}
 
-	private static List<MethodInfo> findMatching(List<MethodInfo> l, Method m, Class<?> c) {
-		for (Method m2 : c.getDeclaredMethods())
-			if (m.getName().equals(m2.getName()) && Arrays.equals(m.getParameterTypes(), m2.getParameterTypes()))
-				l.add(MethodInfo.of(m2));
-		Class<?> pc = c.getSuperclass();
+	private static List<MethodInfo> findMatching(List<MethodInfo> l, MethodInfo m, ClassInfo c) {
+		for (MethodInfo m2 : c._getDeclaredMethods())
+			if (m.hasName(m2.getName()) && Arrays.equals(m._getParameterTypes(), m2._getParameterTypes()))
+				l.add(m2);
+		ClassInfo pc = c.getSuperclass();
 		if (pc != null)
 			findMatching(l, m, pc);
-		for (Class<?> ic : c.getInterfaces())
+		for (ClassInfo ic : c._getDeclaredInterfaces())
 			findMatching(l, m, ic);
 		return l;
 	}
 
 	private MethodInfo findMatchingOnClass(ClassInfo c) {
-		for (Method m2 : c.inner().getDeclaredMethods())
-			if (m.getName().equals(m2.getName()) && Arrays.equals(m.getParameterTypes(), m2.getParameterTypes()))
-				return MethodInfo.of(m2);
+		for (MethodInfo m2 : c._getDeclaredMethods())
+			if (hasName(m2.getName()) && Arrays.equals(_getParameterTypes(), m2._getParameterTypes()))
+				return m2;
 		return null;
 	}
 
-	private MethodInfo[] _getMatching() {
+	MethodInfo[] _getMatching() {
 		if (matching == null) {
 			synchronized(this) {
-				List<MethodInfo> l = findMatching(list(), m, m.getDeclaringClass());
+				List<MethodInfo> l = findMatching(list(), this, getDeclaringClass());
 				matching = l.toArray(new MethodInfo[l.size()]);
 			}
 		}
@@ -343,7 +343,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 		declaringClass.forEachAnnotation(annotationProvider, type, filter, action);
 		MethodInfo[] m = _getMatching();
 		for (int i = m.length-1; i >= 0; i--)
-			for (Annotation a2 : m[i].getDeclaredAnnotations())
+			for (Annotation a2 : m[i]._getDeclaredAnnotations())
 				consume(type, filter, action, a2);
 		getReturnType().unwrap(Value.class,Optional.class).forEachAnnotation(annotationProvider, type, filter, action);
 		return this;
@@ -459,14 +459,14 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 
 	private void forEachDeclaredAnnotationInfo(ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		if (ci != null)
-			for (Annotation a : ci.c.getDeclaredAnnotations())
+			for (Annotation a : ci._getDeclaredAnnotations())
 				AnnotationInfo.of(ci, a).accept(filter, action);
 	}
 
 	private void forEachDeclaredMethodAnnotationInfo(ClassInfo ci, Predicate<AnnotationInfo<?>> filter, Consumer<AnnotationInfo<?>> action) {
 		MethodInfo m = findMatchingOnClass(ci);
 		if (m != null)
-			for (Annotation a : m.getDeclaredAnnotations())
+			for (Annotation a : m._getDeclaredAnnotations())
 				AnnotationInfo.of(m, a).accept(filter, action);
 	}
 

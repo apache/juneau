@@ -14,6 +14,7 @@ package org.apache.juneau.reflect;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.lang.annotation.*;
@@ -38,12 +39,13 @@ import org.apache.juneau.svl.*;
  *
  * @param <T> The annotation type.
  */
-public class AnnotationInfo<T extends Annotation> {
+public final class AnnotationInfo<T extends Annotation> {
 
 	private final ClassInfo c;
 	private final MethodInfo m;
 	private final Package p;
 	private final T a;
+	private volatile Method[] methods;
 	final int rank;
 
 	/**
@@ -158,19 +160,19 @@ public class AnnotationInfo<T extends Annotation> {
 		if (p != null)
 			jm.put("package", p.getName());
 		JsonMap ja = new JsonMap();
-		Class<?> ca = a.annotationType();
-		for (Method m : ca.getDeclaredMethods()) {
+		ClassInfo ca = ClassInfo.of(a.annotationType());
+		ca.forEachDeclaredMethod(null, x -> {
 			try {
-				Object v = m.invoke(a);
-				Object d = m.getDefaultValue();
-				if (! Objects.equals(v, d)) {
+				Object v = x.invoke(a);
+				Object d = x.inner().getDefaultValue();
+				if (ne(v, d)) {
 					if (! (ArrayUtils.isArray(v) && Array.getLength(v) == 0 && Array.getLength(d) == 0))
 						ja.put(m.getName(), v);
 				}
 			} catch (Exception e) {
 				ja.put(m.getName(), e.getLocalizedMessage());
 			}
-		}
+		});
 		jm.put("@" + ca.getSimpleName(), ja);
 		return jm;
 	}
@@ -290,7 +292,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 */
 	@SuppressWarnings("unchecked")
 	public <V> AnnotationInfo<?> forEachValue(Class<V> type, String name, Predicate<V> test, Consumer<V> action) {
-		for (Method m : a.annotationType().getMethods())
+		for (Method m : _getMethods())
 			if (m.getName().equals(name) && m.getReturnType().equals(type))
 				safeRun(() -> consume(test, action, (V)m.invoke(a)));
 		return this;
@@ -306,7 +308,7 @@ public class AnnotationInfo<T extends Annotation> {
 	 */
 	@SuppressWarnings("unchecked")
 	public <V> Optional<V> getValue(Class<V> type, String name, Predicate<V> test) {
-		for (Method m : a.annotationType().getMethods())
+		for (Method m : _getMethods())
 			if (m.getName().equals(name) && m.getReturnType().equals(type)) {
 				try {
 					V v = (V)m.invoke(a);
@@ -317,5 +319,13 @@ public class AnnotationInfo<T extends Annotation> {
 				}
 			}
 		return empty();
+	}
+
+	Method[] _getMethods() {
+		if (methods == null)
+			synchronized(this) {
+				methods = a.annotationType().getMethods();
+			}
+		return methods;
 	}
 }
