@@ -625,8 +625,44 @@ public class ClassInfoTest {
 	}
 
 	@Test
-	public void getAnnotationsParentFirst() {
+	public void getAnnotations() {
 		check("@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)", g3.getAnnotations(A.class));
+		check("@A(2),@A(1),@A(3),@A(5),@A(6),@A(7)", g4.getAnnotations(A.class));
+		check("@A(3)", g5.getAnnotations(A.class));
+	}
+
+	@Test
+	public void forEachAnnotation() {
+		List<Integer> l1 = list();
+		g3.forEachAnnotation(A.class, null, x -> l1.add(x.value()));
+		assertList(l1).asCdl().isString("2,1,3,5,6,7");
+
+		List<Integer> l2 = list();
+		g4.forEachAnnotation(A.class, null, x -> l2.add(x.value()));
+		assertList(l2).asCdl().isString("2,1,3,5,6,7");
+
+		List<Integer> l3 = list();
+		g5.forEachAnnotation(A.class, null, x -> l3.add(x.value()));
+		assertList(l3).asCdl().isString("3");
+
+		List<Integer> l4 = list();
+		g3.forEachAnnotation(A.class, x -> x.value() == 5, x -> l4.add(x.value()));
+		assertList(l4).asCdl().isString("5");
+	}
+
+	@Test
+	public void firstAnnotation() {
+		assertInteger(g3.firstAnnotation(A.class, null).value()).is(2);
+		assertInteger(g4.firstAnnotation(A.class, null).value()).is(2);
+		assertInteger(g5.firstAnnotation(A.class, null).value()).is(3);
+		assertInteger(g3.firstAnnotation(A.class, x -> x.value() == 5).value()).is(5);
+	}
+	@Test
+	public void lastAnnotation() {
+		assertInteger(g3.lastAnnotation(A.class, null).value()).is(7);
+		assertInteger(g4.lastAnnotation(A.class, null).value()).is(7);
+		assertInteger(g5.lastAnnotation(A.class, null).value()).is(3);
+		assertInteger(g3.lastAnnotation(A.class, x -> x.value() == 5).value()).is(5);
 	}
 
 	@Test

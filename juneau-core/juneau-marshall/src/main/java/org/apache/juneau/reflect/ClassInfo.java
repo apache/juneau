@@ -923,7 +923,7 @@ public final class ClassInfo {
 	 * @return The matching annotations.
 	 */
 	public <A extends Annotation> List<A> getAnnotations(Class<A> type) {
-		return getAnnotations(AnnotationProvider.DEFAULT, type);
+		return getAnnotations(null, type);
 	}
 
 	/**
@@ -951,7 +951,7 @@ public final class ClassInfo {
 	 * @return This object.
 	 */
 	public <A extends Annotation> ClassInfo forEachAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
-		return forEachAnnotation(AnnotationProvider.DEFAULT, type, filter, action);
+		return forEachAnnotation(null, type, filter, action);
 	}
 
 	/**
@@ -961,8 +961,8 @@ public final class ClassInfo {
 	 * Annotations are appended in the following orders:
 	 * <ol>
 	 * 	<li>On the package of this class.
-	 * 	<li>On interfaces ordered child-to-parent.
-	 * 	<li>On parent classes ordered child-to-parent.
+	 * 	<li>On interfaces ordered parent-to-child.
+	 * 	<li>On parent classes ordered parent-to-child.
 	 * 	<li>On this class.
 	 * </ol>
 	 *
@@ -973,8 +973,6 @@ public final class ClassInfo {
 	 * @return This object.
 	 */
 	public <A extends Annotation> ClassInfo forEachAnnotation(AnnotationProvider annotationProvider, Class<A> type, Predicate<A> filter, Consumer<A> action) {
-		if (filter == null)
-			filter = x->true;
 		if (annotationProvider == null)
 			annotationProvider = AnnotationProvider.DEFAULT;
 		A t2 = getPackageAnnotation(type);
@@ -990,6 +988,124 @@ public final class ClassInfo {
 	}
 
 	/**
+	 * Returns the first matching annotation on this class and superclasses/interfaces.
+	 *
+	 * <p>
+	 * Annotations are searched in the following orders:
+	 * <ol>
+	 * 	<li>On the package of this class.
+	 * 	<li>On interfaces ordered parent-to-child.
+	 * 	<li>On parent classes ordered parent-to-child.
+	 * 	<li>On this class.
+	 * </ol>
+	 *
+	 * @param type The annotation to look for.
+	 * @param filter A predicate to apply to the entries to determine if annotation should be returned.  Can be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public <A extends Annotation> A firstAnnotation(Class<A> type, Predicate<A> filter) {
+		return firstAnnotation(null, type, filter);
+	}
+
+	/**
+	 * Returns the first matching annotation on this class and superclasses/interfaces.
+	 *
+	 * <p>
+	 * Annotations are searched in the following orders:
+	 * <ol>
+	 * 	<li>On the package of this class.
+	 * 	<li>On interfaces ordered parent-to-child.
+	 * 	<li>On parent classes ordered parent-to-child.
+	 * 	<li>On this class.
+	 * </ol>
+	 *
+	 * @param annotationProvider The annotation provider.
+	 * @param type The annotation to look for.
+	 * @param filter A predicate to apply to the entries to determine if annotation should be returned.  Can be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public <A extends Annotation> A firstAnnotation(AnnotationProvider annotationProvider, Class<A> type, Predicate<A> filter) {
+		if (annotationProvider == null)
+			annotationProvider = AnnotationProvider.DEFAULT;
+		A x = null;
+		x = getPackageAnnotation(type);
+		if (x != null && passes(filter, x))
+			return x;
+		ClassInfo[] interfaces = _getInterfaces();
+		for (int i = interfaces.length-1; i >= 0; i--) {
+			x = annotationProvider.firstAnnotation(type, interfaces[i].inner(), filter);
+			if (x != null)
+				return x;
+		}
+		ClassInfo[] parents = _getParents();
+		for (int i = parents.length-1; i >= 0; i--) {
+			x = annotationProvider.firstAnnotation(type, parents[i].inner(), filter);
+			if (x != null)
+				return x;
+		}
+		return null;
+	}
+
+	/**
+	 * Returns the last matching annotation on this class and superclasses/interfaces.
+	 *
+	 * <p>
+	 * Annotations are searched in the following orders:
+	 * <ol>
+	 * 	<li>On this class.
+	 * 	<li>On parent classes ordered child-to-parent.
+	 * 	<li>On interfaces ordered child-to-parent.
+	 * 	<li>On the package of this class.
+	 * </ol>
+	 *
+	 * @param type The annotation to look for.
+	 * @param filter A predicate to apply to the entries to determine if annotation should be returned.  Can be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public <A extends Annotation> A lastAnnotation(Class<A> type, Predicate<A> filter) {
+		return lastAnnotation(null, type, filter);
+	}
+
+	/**
+	 * Returns the last matching annotation on this class and superclasses/interfaces.
+	 *
+	 * <p>
+	 * Annotations are searched in the following orders:
+	 * <ol>
+	 * 	<li>On this class.
+	 * 	<li>On parent classes ordered child-to-parent.
+	 * 	<li>On interfaces ordered child-to-parent.
+	 * 	<li>On the package of this class.
+	 * </ol>
+	 *
+	 * @param annotationProvider The annotation provider.
+	 * @param type The annotation to look for.
+	 * @param filter A predicate to apply to the entries to determine if annotation should be returned.  Can be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public <A extends Annotation> A lastAnnotation(AnnotationProvider annotationProvider, Class<A> type, Predicate<A> filter) {
+		if (annotationProvider == null)
+			annotationProvider = AnnotationProvider.DEFAULT;
+		A x = null;
+		ClassInfo[] parents = _getParents();
+		for (int i = 0; i < parents.length; i++) {
+			x = annotationProvider.lastAnnotation(type, parents[i].inner(), filter);
+			if (x != null)
+				return x;
+		}
+		ClassInfo[] interfaces = _getInterfaces();
+		for (int i = 0; i < interfaces.length; i++) {
+			x = annotationProvider.lastAnnotation(type, interfaces[i].inner(), filter);
+			if (x != null)
+				return x;
+		}
+		x = getPackageAnnotation(type);
+		if (x != null && passes(filter, x))
+			return x;
+		return null;
+	}
+
+	/**
 	 * Finds the annotation of the specified type defined on this class or parent class/interface.
 	 *
 	 * <p>
@@ -1001,7 +1117,7 @@ public final class ClassInfo {
 	 * @return The annotation if found, or <jk>null</jk> if not.
 	 */
 	public <A extends Annotation> A getAnnotation(Class<A> type) {
-		return getAnnotation(AnnotationProvider.DEFAULT, type);
+		return getAnnotation(null, type);
 	}
 
 	/**
@@ -1026,7 +1142,7 @@ public final class ClassInfo {
 	 * @return The <jk>true</jk> if annotation if found.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(Class<A> type) {
-		return hasAnnotation(AnnotationProvider.DEFAULT, type);
+		return hasAnnotation(null, type);
 	}
 
 	/**
@@ -1047,6 +1163,8 @@ public final class ClassInfo {
 	 * @return The <jk>true</jk> if annotation if found.
 	 */
 	public <A extends Annotation> boolean hasAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
+		if (annotationProvider == null)
+			annotationProvider = AnnotationProvider.DEFAULT;
 		return annotationProvider.firstAnnotation(type, c, x -> true) != null;
 	}
 
@@ -1070,7 +1188,7 @@ public final class ClassInfo {
 	 * @return This object.
 	 */
 	public <A extends Annotation> A getAnnotation(Class<A> type, Predicate<A> filter) {
-		return getAnnotation(AnnotationProvider.DEFAULT, type, filter);
+		return getAnnotation(null, type, filter);
 	}
 
 	/**
@@ -1133,6 +1251,8 @@ public final class ClassInfo {
 	private <A extends Annotation> A findAnnotation(AnnotationProvider ap, Class<A> a) {
 		if (a == null)
 			return null;
+		if (ap == null)
+			ap = AnnotationProvider.DEFAULT;
 		A t = ap.firstDeclaredAnnotation(a, c, x -> true);
 		if (t != null)
 			return t;
@@ -1151,6 +1271,8 @@ public final class ClassInfo {
 	}
 
 	private <A extends Annotation> A getAnnotation(AnnotationProvider ap, Class<A> a, Predicate<A> filter) {
+		if (ap == null)
+			ap = AnnotationProvider.DEFAULT;
 		A t2 = getPackageAnnotation(a);
 		if (t2 != null && filter.test(t2))
 			return t2;

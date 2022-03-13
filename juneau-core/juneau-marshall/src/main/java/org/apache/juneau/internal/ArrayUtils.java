@@ -348,4 +348,19 @@ public final class ArrayUtils {
 	public static final boolean isEmptyArray(Object[] array1, Object[] array2) {
 		return isEmptyArray(array1) && isEmptyArray(array2);
 	}
+
+	/**
+	 * Reverses the entries in an array.
+	 * 
+	 * @param array The array to reverse.
+	 * @return The same array.
+	 */
+	public static final <T> T[] reverse(T[] array) {
+		for (int i = 0; i < array.length / 2; i++) {
+			T temp = array[i];
+			array[i] = array[array.length - i - 1];
+			array[array.length - i - 1] = temp;
+		}
+		return array;
+	}
 }

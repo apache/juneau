@@ -2091,14 +2091,62 @@ public final class ClassMeta<T> implements Type {
 	 * @param action An action to perform on the entry.
 	 * @return This object.
 	 */
-	@SuppressWarnings("unchecked")
 	public <A extends Annotation> ClassMeta<T> forEachAnnotation(Class<A> type, Predicate<A> filter, Consumer<A> action) {
-		A[] array = (A[])annotationArrayMap.get(type);
+		A[] array = annotationArray(type);
 		if (array == null) {
-			if (beanContext == null) {
+			if (beanContext == null)
 				info.forEachAnnotation(BeanContext.DEFAULT, type, filter, action);
-				return this;
-			}
+			return this;
+		}
+		for (A a : array)
+			consume(filter, action, a);
+		return this;
+	}
+
+	/**
+	 * Returns the first matching annotation on this class or parent classes/interfaces in parent-to-child order.
+	 *
+	 * @param type The annotation to search for.
+	 * @param filter A predicate to apply to the entries to determine if annotation should be used.  Can be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public <A extends Annotation> Optional<A> firstAnnotation(Class<A> type, Predicate<A> filter) {
+		A[] array = annotationArray(type);
+		if (array == null) {
+			if (beanContext == null)
+				return Optional.ofNullable(info.firstAnnotation(BeanContext.DEFAULT, type, filter));
+			return Optional.empty();
+		}
+		for (A a : array)
+			if (passes(filter, a))
+				return Optional.of(a);
+		return Optional.empty();
+	}
+
+	/**
+	 * Returns the last matching annotation on this class or parent classes/interfaces in parent-to-child order.
+	 *
+	 * @param type The annotation to search for.
+	 * @param filter A predicate to apply to the entries to determine if annotation should be used.  Can be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public <A extends Annotation> Optional<A> lastAnnotation(Class<A> type, Predicate<A> filter) {
+		A[] array = annotationArray(type);
+		if (array == null) {
+			if (beanContext == null)
+				return Optional.ofNullable(info.lastAnnotation(BeanContext.DEFAULT, type, filter));
+			return Optional.empty();
+		}
+		for (int i = array.length-1; i >= 0; i--)
+			if (passes(filter, array[i]))
+				return Optional.of(array[i]);
+		return Optional.empty();
+	}
+
+	@SuppressWarnings("unchecked")
+	private <A extends Annotation> A[] annotationArray(Class<A> type) {
+		A[] array = (A[])annotationArrayMap.get(type);
+		if (array == null && beanContext != null) {
 			List<A> l = list();
 			info.forEachAnnotation(beanContext, type, x-> true, x -> l.add(x));
 			array = (A[])Array.newInstance(type, l.size());
@@ -2106,9 +2154,7 @@ public final class ClassMeta<T> implements Type {
 				Array.set(array, i, l.get(i));
 			annotationArrayMap.put(type, array);
 		}
-		for (A a : array)
-			consume(filter, action, a);
-		return this;
+		return array;
 	}
 
 	/**

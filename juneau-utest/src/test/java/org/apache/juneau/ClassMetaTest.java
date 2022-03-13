@@ -12,11 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.assertions.Assertions.*;
 
 import java.util.*;
 
+import org.apache.juneau.reflect.ClassInfoTest.*;
 import org.apache.juneau.swap.*;
 import org.junit.*;
 
@@ -26,13 +29,14 @@ public class ClassMetaTest {
 
 	BeanContext bc = BeanContext.DEFAULT;
 
-	//====================================================================================================
-	// Map<String,String> field
-	//====================================================================================================
+	//-----------------------------------------------------------------------------------------------------------------
+	// Basic tests
+	//-----------------------------------------------------------------------------------------------------------------
+
 	public Map<String,String> fa;
 
 	@Test
-	public void testMap() throws Exception {
+	public void a01_map() throws Exception {
 		ClassMeta t = bc.getClassMeta(this.getClass().getField("fa").getGenericType());
 		assertEquals("java.util.Map<java.lang.String,java.lang.String>", t.toString());
 		assertTrue(t.isMap());
@@ -43,77 +47,72 @@ public class ClassMetaTest {
 		assertEquals(String.class, t.getValueType().getInnerClass());
 	}
 
-	//====================================================================================================
-	// String field
-	//====================================================================================================
 	public String fb;
 
 	@Test
-	public void testString() throws Exception {
+	public void a02_string() throws Exception {
 		ClassMeta t = bc.getClassMeta(this.getClass().getField("fb").getGenericType());
 		assertEquals(String.class, t.getInnerClass());
 		t = bc.getClassMeta(this.getClass().getField("fb").getType());
 		assertEquals(String.class, t.getInnerClass());
 	}
 
-	//====================================================================================================
-	// Map<String,Map<String,Integer>> field
-	//====================================================================================================
 	public Map<String,Map<String,Integer>> fc;
 
 	@Test
-	public void testMapWithMapValues() throws Exception {
+	public void a03_mapWithMapValues() throws Exception {
 		ClassMeta t = bc.getClassMeta(this.getClass().getField("fc").getGenericType());
 		assertEquals("java.util.Map<java.lang.String,java.util.Map<java.lang.String,java.lang.Integer>>", t.toString());
 		t = bc.getClassMeta(this.getClass().getField("fc").getType());
 		assertEquals("java.util.Map", t.toString());
 	}
 
-	//====================================================================================================
-	// List<Map<String,List>> field
-	//====================================================================================================
 	public List<Map<String,List>> fd;
 
 	@Test
-	public void testListWithMapValues() throws Exception {
+	public void a04_listWithMapValues() throws Exception {
 		ClassMeta t = bc.getClassMeta(this.getClass().getField("fd").getGenericType());
 		assertEquals("java.util.List<java.util.Map<java.lang.String,java.util.List>>", t.toString());
 	}
 
-	//====================================================================================================
-	// List<? extends String> field, List<? super String> field
-	//====================================================================================================
 	public List<? extends String> fe1;
 	public List<? super String> fe2;
 
 	@Test
-	public void testListWithUpperBoundGenericEntryTypes() throws Exception {
+	public void a05_listWithUpperBoundGenericEntryTypes() throws Exception {
 		ClassMeta t = bc.getClassMeta(this.getClass().getField("fe1").getGenericType());
 		assertEquals("java.util.List", t.toString());
 		t = bc.getClassMeta(this.getClass().getField("fe2").getGenericType());
 		assertEquals("java.util.List", t.toString());
 	}
 
-	//====================================================================================================
-	// Bean extends HashMap<String,Object> field
-	//====================================================================================================
 	public class G extends HashMap<String,Object> {}
 	public G g;
 
 	@Test
-	public void testBeanExtendsMap() throws Exception {
+	public void a06_beanExtendsMap() throws Exception {
 		ClassMeta t = bc.getClassMeta(this.getClass().getField("g").getGenericType());
 		assertEquals("org.apache.juneau.ClassMetaTest$G<java.lang.String,java.lang.Object>", t.toString());
 		assertTrue(t.isMap());
 		assertFalse(t.isCollection());
 	}
 
-	//====================================================================================================
-	// testSwaps
+	//-----------------------------------------------------------------------------------------------------------------
+	// Swaps
 	// Ensure swaps on parent and child classes are properly detected.
-	//====================================================================================================
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public interface BI1 {}
+	public class BC1 implements BI1 {}
+	public interface BI2 extends BI1 {}
+	public class BC2 extends BC1 implements BI2 {}
+	public static class BC1Swap extends ObjectSwap<BC1,Map> {}
+	public static class BI1Swap extends ObjectSwap<BI1,Map> {}
+	public static class BC2Swap extends ObjectSwap<BC2,Map> {}
+	public static class BI2Swap extends ObjectSwap<BI2,Map> {}
+
 	@Test
-	public void testSwaps() throws Exception {
+	public void b01_swaps() throws Exception {
 		BeanContext bc;
 		ClassMeta<?> ooo, hi1, hc1, hi2, hc2;
 		BeanSession bs;
@@ -121,10 +120,10 @@ public class ClassMetaTest {
 		bc = BeanContext.DEFAULT;
 		bs = bc.getSession();
 		ooo = bc.getClassMeta(Object.class);
-		hi1 = bc.getClassMeta(HI1.class);
-		hc1 = bc.getClassMeta(HC1.class);
-		hi2 = bc.getClassMeta(HI2.class);
-		hc2 = bc.getClassMeta(HC2.class);
+		hi1 = bc.getClassMeta(BI1.class);
+		hc1 = bc.getClassMeta(BC1.class);
+		hi2 = bc.getClassMeta(BI2.class);
+		hc2 = bc.getClassMeta(BC2.class);
 		assertFalse(ooo.hasChildSwaps());
 		assertFalse(hi1.hasChildSwaps());
 		assertFalse(hc1.hasChildSwaps());
@@ -136,41 +135,41 @@ public class ClassMetaTest {
 		assertNull(hi2.getSwap(bs));
 		assertNull(hc2.getSwap(bs));
 		assertEquals(ooo.getSerializedClassMeta(bs).getInnerClass(), Object.class);
-		assertEquals(hi1.getSerializedClassMeta(bs).getInnerClass(), HI1.class);
-		assertEquals(hc1.getSerializedClassMeta(bs).getInnerClass(), HC1.class);
-		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), HI2.class);
-		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), HC2.class);
+		assertEquals(hi1.getSerializedClassMeta(bs).getInnerClass(), BI1.class);
+		assertEquals(hc1.getSerializedClassMeta(bs).getInnerClass(), BC1.class);
+		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), BI2.class);
+		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), BC2.class);
 
-		bc = BeanContext.create().swaps(HI1Swap.class).build();
+		bc = BeanContext.create().swaps(BI1Swap.class).build();
 		bs = bc.getSession();
 		ooo = bc.getClassMeta(Object.class);
-		hi1 = bc.getClassMeta(HI1.class);
-		hc1 = bc.getClassMeta(HC1.class);
-		hi2 = bc.getClassMeta(HI2.class);
-		hc2 = bc.getClassMeta(HC2.class);
+		hi1 = bc.getClassMeta(BI1.class);
+		hc1 = bc.getClassMeta(BC1.class);
+		hi2 = bc.getClassMeta(BI2.class);
+		hc2 = bc.getClassMeta(BC2.class);
 		assertTrue(ooo.hasChildSwaps());
 		assertTrue(hi1.hasChildSwaps());
 		assertFalse(hc1.hasChildSwaps());
 		assertFalse(hi2.hasChildSwaps());
 		assertFalse(hc2.hasChildSwaps());
 		assertNull(ooo.getSwap(bs));
-		assertEquals(hi1.getSwap(bs).getClass(), HI1Swap.class);
-		assertEquals(hc1.getSwap(bs).getClass(), HI1Swap.class);
-		assertEquals(hi2.getSwap(bs).getClass(), HI1Swap.class);
-		assertEquals(hc2.getSwap(bs).getClass(), HI1Swap.class);
+		assertEquals(hi1.getSwap(bs).getClass(), BI1Swap.class);
+		assertEquals(hc1.getSwap(bs).getClass(), BI1Swap.class);
+		assertEquals(hi2.getSwap(bs).getClass(), BI1Swap.class);
+		assertEquals(hc2.getSwap(bs).getClass(), BI1Swap.class);
 		assertEquals(ooo.getSerializedClassMeta(bs).getInnerClass(), Object.class);
 		assertEquals(hi1.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 		assertEquals(hc1.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 
-		bc = BeanContext.create().swaps(HC1Swap.class).build();
+		bc = BeanContext.create().swaps(BC1Swap.class).build();
 		bs = bc.getSession();
 		ooo = bc.getClassMeta(Object.class);
-		hi1 = bc.getClassMeta(HI1.class);
-		hc1 = bc.getClassMeta(HC1.class);
-		hi2 = bc.getClassMeta(HI2.class);
-		hc2 = bc.getClassMeta(HC2.class);
+		hi1 = bc.getClassMeta(BI1.class);
+		hc1 = bc.getClassMeta(BC1.class);
+		hi2 = bc.getClassMeta(BI2.class);
+		hc2 = bc.getClassMeta(BC2.class);
 		assertTrue(ooo.hasChildSwaps());
 		assertTrue(hi1.hasChildSwaps());
 		assertTrue(hc1.hasChildSwaps());
@@ -178,22 +177,22 @@ public class ClassMetaTest {
 		assertFalse(hc2.hasChildSwaps());
 		assertNull(ooo.getSwap(bs));
 		assertNull(hi1.getSwap(bs));
-		assertEquals(hc1.getSwap(bs).getClass(), HC1Swap.class);
+		assertEquals(hc1.getSwap(bs).getClass(), BC1Swap.class);
 		assertNull(hi2.getSwap(bs));
-		assertEquals(hc2.getSwap(bs).getClass(), HC1Swap.class);
+		assertEquals(hc2.getSwap(bs).getClass(), BC1Swap.class);
 		assertEquals(ooo.getSerializedClassMeta(bs).getInnerClass(), Object.class);
-		assertEquals(hi1.getSerializedClassMeta(bs).getInnerClass(), HI1.class);
+		assertEquals(hi1.getSerializedClassMeta(bs).getInnerClass(), BI1.class);
 		assertEquals(hc1.getSerializedClassMeta(bs).getInnerClass(), Map.class);
-		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), HI2.class);
+		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), BI2.class);
 		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 
-		bc = BeanContext.create().swaps(HI2Swap.class).build();
+		bc = BeanContext.create().swaps(BI2Swap.class).build();
 		bs = bc.getSession();
 		ooo = bc.getClassMeta(Object.class);
-		hi1 = bc.getClassMeta(HI1.class);
-		hc1 = bc.getClassMeta(HC1.class);
-		hi2 = bc.getClassMeta(HI2.class);
-		hc2 = bc.getClassMeta(HC2.class);
+		hi1 = bc.getClassMeta(BI1.class);
+		hc1 = bc.getClassMeta(BC1.class);
+		hi2 = bc.getClassMeta(BI2.class);
+		hc2 = bc.getClassMeta(BC2.class);
 		assertTrue(ooo.hasChildSwaps());
 		assertTrue(hi1.hasChildSwaps());
 		assertFalse(hc1.hasChildSwaps());
@@ -202,21 +201,21 @@ public class ClassMetaTest {
 		assertNull(ooo.getSwap(bs));
 		assertNull(hi1.getSwap(bs));
 		assertNull(hc1.getSwap(bs));
-		assertEquals(hi2.getSwap(bs).getClass(), HI2Swap.class);
-		assertEquals(hc2.getSwap(bs).getClass(), HI2Swap.class);
+		assertEquals(hi2.getSwap(bs).getClass(), BI2Swap.class);
+		assertEquals(hc2.getSwap(bs).getClass(), BI2Swap.class);
 		assertEquals(ooo.getSerializedClassMeta(bs).getInnerClass(), Object.class);
-		assertEquals(hi1.getSerializedClassMeta(bs).getInnerClass(), HI1.class);
-		assertEquals(hc1.getSerializedClassMeta(bs).getInnerClass(), HC1.class);
+		assertEquals(hi1.getSerializedClassMeta(bs).getInnerClass(), BI1.class);
+		assertEquals(hc1.getSerializedClassMeta(bs).getInnerClass(), BC1.class);
 		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 
-		bc = BeanContext.create().swaps(HC2Swap.class).build();
+		bc = BeanContext.create().swaps(BC2Swap.class).build();
 		bs = bc.getSession();
 		ooo = bc.getClassMeta(Object.class);
-		hi1 = bc.getClassMeta(HI1.class);
-		hc1 = bc.getClassMeta(HC1.class);
-		hi2 = bc.getClassMeta(HI2.class);
-		hc2 = bc.getClassMeta(HC2.class);
+		hi1 = bc.getClassMeta(BI1.class);
+		hc1 = bc.getClassMeta(BC1.class);
+		hi2 = bc.getClassMeta(BI2.class);
+		hc2 = bc.getClassMeta(BC2.class);
 		assertTrue(ooo.hasChildSwaps());
 		assertTrue(hi1.hasChildSwaps());
 		assertTrue(hc1.hasChildSwaps());
@@ -226,53 +225,53 @@ public class ClassMetaTest {
 		assertNull(hi1.getSwap(bs));
 		assertNull(hc1.getSwap(bs));
 		assertNull(hi2.getSwap(bs));
-		assertEquals(hc2.getSwap(bs).getClass(), HC2Swap.class);
+		assertEquals(hc2.getSwap(bs).getClass(), BC2Swap.class);
 		assertEquals(ooo.getSerializedClassMeta(bs).getInnerClass(), Object.class);
-		assertEquals(hi1.getSerializedClassMeta(bs).getInnerClass(), HI1.class);
-		assertEquals(hc1.getSerializedClassMeta(bs).getInnerClass(), HC1.class);
-		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), HI2.class);
+		assertEquals(hi1.getSerializedClassMeta(bs).getInnerClass(), BI1.class);
+		assertEquals(hc1.getSerializedClassMeta(bs).getInnerClass(), BC1.class);
+		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), BI2.class);
 		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 
-		bc = BeanContext.create().swaps(HI1Swap.class,HC1Swap.class,HI2Swap.class, HC2Swap.class).build();
+		bc = BeanContext.create().swaps(BI1Swap.class,BC1Swap.class,BI2Swap.class, BC2Swap.class).build();
 		bs = bc.getSession();
 		ooo = bc.getClassMeta(Object.class);
-		hi1 = bc.getClassMeta(HI1.class);
-		hc1 = bc.getClassMeta(HC1.class);
-		hi2 = bc.getClassMeta(HI2.class);
-		hc2 = bc.getClassMeta(HC2.class);
+		hi1 = bc.getClassMeta(BI1.class);
+		hc1 = bc.getClassMeta(BC1.class);
+		hi2 = bc.getClassMeta(BI2.class);
+		hc2 = bc.getClassMeta(BC2.class);
 		assertTrue(ooo.hasChildSwaps());
 		assertTrue(hi1.hasChildSwaps());
 		assertTrue(hc1.hasChildSwaps());
 		assertTrue(hi2.hasChildSwaps());
 		assertTrue(hc2.hasChildSwaps());
 		assertNull(ooo.getSwap(bs));
-		assertEquals(hi1.getSwap(bs).getClass(), HI1Swap.class);
-		assertEquals(hc1.getSwap(bs).getClass(), HI1Swap.class);
-		assertEquals(hi2.getSwap(bs).getClass(), HI1Swap.class);
-		assertEquals(hc2.getSwap(bs).getClass(), HI1Swap.class);
+		assertEquals(hi1.getSwap(bs).getClass(), BI1Swap.class);
+		assertEquals(hc1.getSwap(bs).getClass(), BI1Swap.class);
+		assertEquals(hi2.getSwap(bs).getClass(), BI1Swap.class);
+		assertEquals(hc2.getSwap(bs).getClass(), BI1Swap.class);
 		assertEquals(ooo.getSerializedClassMeta(bs).getInnerClass(), Object.class);
 		assertEquals(hi1.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 		assertEquals(hc1.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 		assertEquals(hi2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 
-		bc = BeanContext.create().swaps(HC2Swap.class,HI2Swap.class,HC1Swap.class, HI1Swap.class).build();
+		bc = BeanContext.create().swaps(BC2Swap.class,BI2Swap.class,BC1Swap.class, BI1Swap.class).build();
 		bs = bc.getSession();
 		ooo = bc.getClassMeta(Object.class);
-		hi1 = bc.getClassMeta(HI1.class);
-		hc1 = bc.getClassMeta(HC1.class);
-		hi2 = bc.getClassMeta(HI2.class);
-		hc2 = bc.getClassMeta(HC2.class);
+		hi1 = bc.getClassMeta(BI1.class);
+		hc1 = bc.getClassMeta(BC1.class);
+		hi2 = bc.getClassMeta(BI2.class);
+		hc2 = bc.getClassMeta(BC2.class);
 		assertTrue(ooo.hasChildSwaps());
 		assertTrue(hi1.hasChildSwaps());
 		assertTrue(hc1.hasChildSwaps());
 		assertTrue(hi2.hasChildSwaps());
 		assertTrue(hc2.hasChildSwaps());
 		assertNull(ooo.getSwap(bs));
-		assertEquals(hi1.getSwap(bs).getClass(), HI1Swap.class);
-		assertEquals(hc1.getSwap(bs).getClass(), HC1Swap.class);
-		assertEquals(hi2.getSwap(bs).getClass(), HI2Swap.class);
-		assertEquals(hc2.getSwap(bs).getClass(), HC2Swap.class);
+		assertEquals(hi1.getSwap(bs).getClass(), BI1Swap.class);
+		assertEquals(hc1.getSwap(bs).getClass(), BC1Swap.class);
+		assertEquals(hi2.getSwap(bs).getClass(), BI2Swap.class);
+		assertEquals(hc2.getSwap(bs).getClass(), BC2Swap.class);
 		assertEquals(ooo.getSerializedClassMeta(bs).getInnerClass(), Object.class);
 		assertEquals(hi1.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 		assertEquals(hc1.getSerializedClassMeta(bs).getInnerClass(), Map.class);
@@ -280,12 +279,61 @@ public class ClassMetaTest {
 		assertEquals(hc2.getSerializedClassMeta(bs).getInnerClass(), Map.class);
 	}
 
-	public interface HI1 {}
-	public class HC1 implements HI1 {}
-	public interface HI2 extends HI1 {}
-	public class HC2 extends HC1 implements HI2 {}
-	public static class HC1Swap extends ObjectSwap<HC1,Map> {}
-	public static class HI1Swap extends ObjectSwap<HI1,Map> {}
-	public static class HC2Swap extends ObjectSwap<HC2,Map> {}
-	public static class HI2Swap extends ObjectSwap<HI2,Map> {}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Annotations
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@A(1) static interface CI1 {}
+	@A(2) static interface CI2 extends CI1 {}
+	@A(3) static interface CI3 {}
+	@A(4) static interface CI4 {}
+	@A(5) static class C1 implements CI1, CI2 {}
+	@A(6) static class C2 extends C1 implements CI3 {}
+	@A(7) static class C3 extends C2 {}
+	static class C4 extends C3 {}
+	static class C5 implements CI3 {}
+
+	@Test
+	public void forEachAnnotation() {
+		ClassMeta<?> c3 = bc.getClassMeta(C3.class);
+		ClassMeta<?> c4 = bc.getClassMeta(C4.class);
+		ClassMeta<?> c5 = bc.getClassMeta(C5.class);
+
+		List<Integer> l1 = list();
+		c3.forEachAnnotation(A.class, null, x -> l1.add(x.value()));
+		assertList(l1).asCdl().isString("2,1,3,5,6,7");
+
+		List<Integer> l2 = list();
+		c4.forEachAnnotation(A.class, null, x -> l2.add(x.value()));
+		assertList(l2).asCdl().isString("2,1,3,5,6,7");
+
+		List<Integer> l3 = list();
+		c5.forEachAnnotation(A.class, null, x -> l3.add(x.value()));
+		assertList(l3).asCdl().isString("3");
+
+		List<Integer> l4 = list();
+		c3.forEachAnnotation(A.class, x -> x.value() == 5, x -> l4.add(x.value()));
+		assertList(l4).asCdl().isString("5");
+	}
+
+	@Test
+	public void firstAnnotation() {
+		ClassMeta<?> c3 = bc.getClassMeta(C3.class);
+		ClassMeta<?> c4 = bc.getClassMeta(C4.class);
+		ClassMeta<?> c5 = bc.getClassMeta(C5.class);
+		assertInteger(c3.firstAnnotation(A.class, null).get().value()).is(2);
+		assertInteger(c4.firstAnnotation(A.class, null).get().value()).is(2);
+		assertInteger(c5.firstAnnotation(A.class, null).get().value()).is(3);
+		assertInteger(c3.firstAnnotation(A.class, x -> x.value() == 5).get().value()).is(5);
+	}
+	@Test
+	public void lastAnnotation() {
+		ClassMeta<?> c3 = bc.getClassMeta(C3.class);
+		ClassMeta<?> c4 = bc.getClassMeta(C4.class);
+		ClassMeta<?> c5 = bc.getClassMeta(C5.class);
+		assertInteger(c3.lastAnnotation(A.class, null).get().value()).is(7);
+		assertInteger(c4.lastAnnotation(A.class, null).get().value()).is(7);
+		assertInteger(c5.lastAnnotation(A.class, null).get().value()).is(3);
+		assertInteger(c3.lastAnnotation(A.class, x -> x.value() == 5).get().value()).is(5);
+	}
 }
