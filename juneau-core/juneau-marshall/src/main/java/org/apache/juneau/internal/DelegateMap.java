@@ -30,7 +30,7 @@ import org.apache.juneau.collections.*;
  * @serial exclude
  */
 @SuppressWarnings("rawtypes")
-public class DelegateMap<T extends Map> extends OMap implements Delegate<T> {
+public class DelegateMap<T extends Map> extends JsonMap implements Delegate<T> {
 	private static final long serialVersionUID = 1L;
 
 	private transient ClassMeta<T> classMeta;
@@ -62,13 +62,13 @@ public class DelegateMap<T extends Map> extends OMap implements Delegate<T> {
 	 * @return This object.
 	 */
 	public DelegateMap<T> filterKeys(List<String> keys) {
-		OMap m2 = new OMap();
+		JsonMap m = new JsonMap();
 		keys.forEach(k -> {
 			if (containsKey(k))
-				m2.put(k, get(k));
+				m.put(k, get(k));
 		});
 		this.clear();
-		this.putAll(m2);
+		this.putAll(m);
 		return this;
 	}
 }

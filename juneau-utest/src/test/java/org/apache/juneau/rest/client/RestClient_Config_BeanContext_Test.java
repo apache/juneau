@@ -378,7 +378,7 @@ public class RestClient_Config_BeanContext_Test {
 	@Test
 	public void a10_bpi() throws Exception {
 		client(A2b.class)
-			.beanProperties(OMap.of("A9","f2"))
+			.beanProperties(JsonMap.of("A9","f2"))
 			.build()
 			.post("/test",A9.get())
 			.header("X",A9.get())
@@ -416,7 +416,7 @@ public class RestClient_Config_BeanContext_Test {
 		RestResponse x = null;
 
 		x = client(A2b.class)
-			.beanPropertiesReadOnly(OMap.of("09","f2"))
+			.beanPropertiesReadOnly(JsonMap.of("09","f2"))
 			.build()
 			.post("/test",A9.get())
 			.header("X",A9.get())
@@ -457,7 +457,7 @@ public class RestClient_Config_BeanContext_Test {
 		RestResponse x = null;
 
 		x = client(A2b.class)
-			.beanPropertiesWriteOnly(OMap.of("A9","f2"))
+			.beanPropertiesWriteOnly(JsonMap.of("A9","f2"))
 			.build()
 			.post("/test",A9.get())
 			.header("X",A9.get())
@@ -496,7 +496,7 @@ public class RestClient_Config_BeanContext_Test {
 	@Test
 	public void a13_bpx() throws Exception {
 		client(A2b.class)
-			.beanPropertiesExcludes(OMap.of("A9","f1"))
+			.beanPropertiesExcludes(JsonMap.of("A9","f1"))
 			.build()
 			.post("/test",A9.get())
 			.header("X",A9.get()).
@@ -574,8 +574,8 @@ public class RestClient_Config_BeanContext_Test {
 		Object o = client().beanDictionary(A15a.class,A15b.class).addRootType().addBeanTypes().build().post("/echoBody",A15a.get()).run().cacheBody().assertBody().contains("{_type:'foo',foo:'1'}").getBody().as(Object.class);;
 		assertTrue(o instanceof A15a);
 
-		OMap m = OMap.of("x",A15a.get(),"y",A15b.get());
-		m = client().beanDictionary(A15a.class,A15b.class).addRootType().addBeanTypes().build().post("/echoBody",m).run().cacheBody().assertBody().is("{x:{_type:'foo',foo:'1'},y:{_type:'bar',foo:'2'}}").getBody().as(OMap.class);;
+		JsonMap m = JsonMap.of("x",A15a.get(),"y",A15b.get());
+		m = client().beanDictionary(A15a.class,A15b.class).addRootType().addBeanTypes().build().post("/echoBody",m).run().cacheBody().assertBody().is("{x:{_type:'foo',foo:'1'},y:{_type:'bar',foo:'2'}}").getBody().as(JsonMap.class);;
 		assertTrue(m.get("x") instanceof A15a);
 		assertTrue(m.get("y") instanceof A15b);
 

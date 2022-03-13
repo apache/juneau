@@ -23,7 +23,7 @@ import org.apache.juneau.collections.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class OListTest {
+public class JsonListTest {
 
 	//====================================================================================================
 	// testBasic
@@ -33,17 +33,17 @@ public class OListTest {
 
 		assertEquals(
 			"['A','B','C']",
-			new OList((Object[])new String[]{"A","B","C"}).toString()
+			new JsonList((Object[])new String[]{"A","B","C"}).toString()
 		);
 
 		assertEquals(
 			"['A','B','C']",
-			new OList("A","B","C").toString()
+			new JsonList("A","B","C").toString()
 		);
 
 		assertEquals(
 			"['A','B','C']",
-			new OList(Arrays.asList(new String[]{"A","B","C"})).toString()
+			new JsonList(Arrays.asList(new String[]{"A","B","C"})).toString()
 		);
 	}
 
@@ -53,14 +53,14 @@ public class OListTest {
 	@Test
 	public void testIterateAs() throws Exception {
 
-		// Iterate over a list of OMaps.
-		OList l = new OList("[{foo:'bar'},{baz:123}]");
-		Iterator<OMap> i1 = l.elements(OMap.class).iterator();
+		// Iterate over a list of JsonMaps.
+		JsonList l = new JsonList("[{foo:'bar'},{baz:123}]");
+		Iterator<JsonMap> i1 = l.elements(JsonMap.class).iterator();
 		assertEquals("bar", i1.next().getString("foo"));
 		assertEquals(123, (int)i1.next().getInt("baz"));
 
 		// Iterate over a list of ints.
-		l = new OList("[1,2,3]");
+		l = new JsonList("[1,2,3]");
 		Iterator<Integer> i2 = l.elements(Integer.class).iterator();
 		assertEquals(1, (int)i2.next());
 		assertEquals(2, (int)i2.next());
@@ -68,7 +68,7 @@ public class OListTest {
 
 		// Iterate over a list of beans.
 		// Automatically converts to beans.
-		l = new OList("[{name:'John Smith',age:45}]");
+		l = new JsonList("[{name:'John Smith',age:45}]");
 		Iterator<Person> i3 = l.elements(Person.class).iterator();
 		assertEquals("John Smith", i3.next().name);
 	}
@@ -83,7 +83,7 @@ public class OListTest {
 	//====================================================================================================
 	@Test
 	public void testAtMethods() throws Exception {
-		OList l = new OList("[{foo:'bar'},{baz:123}]");
+		JsonList l = new JsonList("[{foo:'bar'},{baz:123}]");
 		String r;
 
 		r = l.getAt("0/foo", String.class);
@@ -93,7 +93,7 @@ public class OListTest {
 		r = l.getAt("0/foo", String.class);
 		assertEquals("bing", r);
 
-		l.postAt("", OMap.ofJson("{a:'b'}"));
+		l.postAt("", JsonMap.ofJson("{a:'b'}"));
 		r = l.getAt("2/a", String.class);
 		assertEquals("b", r);
 
@@ -102,11 +102,11 @@ public class OListTest {
 	}
 
 	//====================================================================================================
-	// OList(Reader)
+	// JsonList(Reader)
 	//====================================================================================================
 	@Test
 	public void testFromReader() throws Exception {
-		assertObject(new OList(reader("[1,2,3]"))).asJson().is("[1,2,3]");
+		assertObject(new JsonList(reader("[1,2,3]"))).asJson().is("[1,2,3]");
 	}
 
 	//====================================================================================================
@@ -114,7 +114,7 @@ public class OListTest {
 	//====================================================================================================
 	@Test
 	public void testGetMap() throws Exception {
-		OList l = new OList("[{1:'true',2:'false'}]");
+		JsonList l = new JsonList("[{1:'true',2:'false'}]");
 		Map<Integer,Boolean> m2 = l.getMap(0, Integer.class, Boolean.class);
 		assertObject(m2).asJson().is("{'1':true,'2':false}");
 		assertEquals(Integer.class, m2.keySet().iterator().next().getClass());
@@ -131,7 +131,7 @@ public class OListTest {
 	//====================================================================================================
 	@Test
 	public void testGetList() throws Exception {
-		OList l = new OList("[['123','456']]");
+		JsonList l = new JsonList("[['123','456']]");
 		List<Integer> l2 = l.getList(0, Integer.class);
 		assertObject(l2).asJson().is("[123,456]");
 		assertEquals(Integer.class, l2.iterator().next().getClass());

@@ -222,7 +222,7 @@ public final class SetBuilder<E> {
 							for (int i = 0; i < Array.getLength(o); i++)
 								addAny(Array.get(o, i));
 						} else if (isJsonArray(o, false)) {
-							new OList(o.toString()).forEach(x -> addAny(x));
+							new JsonList(o.toString()).forEach(x -> addAny(x));
 						} else if (elementType.isInstance(o)) {
 							add(elementType.cast(o));
 						} else {

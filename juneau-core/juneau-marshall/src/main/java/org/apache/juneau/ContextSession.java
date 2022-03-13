@@ -13,7 +13,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 import static java.util.Collections.*;
 
 import java.text.*;
@@ -46,7 +46,7 @@ public abstract class ContextSession {
 	@FluentSetters
 	public static abstract class Builder {
 		Context ctx;
-		OMap properties;
+		JsonMap properties;
 		boolean unmodifiable;
 		Boolean debug;
 
@@ -123,7 +123,7 @@ public abstract class ContextSession {
 		 */
 		@FluentSetter
 		public Builder properties(Map<String,Object> value) {
-			properties = OMap.of(value);
+			properties = JsonMap.of(value);
 			return this;
 		}
 
@@ -137,7 +137,7 @@ public abstract class ContextSession {
 		@FluentSetter
 		public Builder property(String key, Object value) {
 			if (properties == null)
-				properties = OMap.create();
+				properties = JsonMap.create();
 			if (value == null) {
 				properties.remove(key);
 			} else {
@@ -169,7 +169,7 @@ public abstract class ContextSession {
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private final OMap properties;
+	private final JsonMap properties;
 	private List<String> warnings;	// Any warnings encountered.
 
 	private final Context ctx;
@@ -184,7 +184,7 @@ public abstract class ContextSession {
 	protected ContextSession(Builder builder) {
 		ctx = builder.ctx;
 		unmodifiable = builder.unmodifiable;
-		OMap sp = builder.properties == null ? OMap.EMPTY_MAP : builder.properties;
+		JsonMap sp = builder.properties == null ? JsonMap.EMPTY_MAP : builder.properties;
 		if (unmodifiable)
 			sp = sp.unmodifiable();
 		properties = sp;
@@ -196,7 +196,7 @@ public abstract class ContextSession {
 	 *
 	 * @return The session properties on this session.  Never <jk>null</jk>.
 	 */
-	public final OMap getSessionProperties() {
+	public final JsonMap getSessionProperties() {
 		return properties;
 	}
 
@@ -264,7 +264,7 @@ public abstract class ContextSession {
 	 *
 	 * @return The properties on this bean as a map for debugging.
 	 */
-	protected OMap properties() {
+	protected JsonMap properties() {
 		return filteredMap("debug", debug);
 	}
 

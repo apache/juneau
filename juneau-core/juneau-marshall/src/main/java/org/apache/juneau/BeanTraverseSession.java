@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import java.text.*;
@@ -382,10 +382,10 @@ public class BeanTraverseSession extends BeanSession {
 	 *
 	 * @return A map, typically containing something like <c>{line:123,column:456,currentProperty:"foobar"}</c>
 	 */
-	public final OMap getLastLocation() {
+	public final JsonMap getLastLocation() {
 		Predicate<Object> nn = ObjectUtils::isNotNull;
 		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty;
-		return OMap.create()
+		return JsonMap.create()
 			.appendIf(nn, "currentClass", currentClass)
 			.appendIf(nn, "currentProperty", currentProperty)
 			.appendIf(nec, "stack", stack);
@@ -446,7 +446,7 @@ public class BeanTraverseSession extends BeanSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* ContextSession */
-	protected OMap properties() {
+	protected JsonMap properties() {
 		return filteredMap("indent", indent, "depth", depth);
 	}
 }

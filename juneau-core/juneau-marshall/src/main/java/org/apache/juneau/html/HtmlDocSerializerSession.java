@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 
 import java.io.IOException;
 import java.lang.reflect.*;
@@ -430,7 +430,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* ContextSession */
-	protected OMap properties() {
+	protected JsonMap properties() {
 		return filteredMap("ctx", ctx, "varResolver", getVarResolver());
 	}
 }

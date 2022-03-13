@@ -97,29 +97,29 @@ public class FormData_Test {
 	@Rest
 	public static class C {
 		@RestPost(defaultRequestFormData={"f1:1","f2=2"," f3 : 3 "})
-		public OMap a(RequestFormParams formData) {
-			return OMap.create()
+		public JsonMap a(RequestFormParams formData) {
+			return JsonMap.create()
 				.append("f1", formData.get("f1").asString())
 				.append("f2", formData.get("f2").asString())
 				.append("f3", formData.get("f3").asString());
 		}
 		@RestPost
-		public OMap b(@FormData("f1") String f1, @FormData("f2") String f2, @FormData("f3") String f3) {
-			return OMap.create()
+		public JsonMap b(@FormData("f1") String f1, @FormData("f2") String f2, @FormData("f3") String f3) {
+			return JsonMap.create()
 				.append("f1", f1)
 				.append("f2", f2)
 				.append("f3", f3);
 		}
 		@RestPost
-		public OMap c(@FormData("f1") @Schema(_default="1") String f1, @FormData("f2") @Schema(_default="2") String f2, @FormData("f3") @Schema(_default="3") String f3) {
-			return OMap.create()
+		public JsonMap c(@FormData("f1") @Schema(_default="1") String f1, @FormData("f2") @Schema(_default="2") String f2, @FormData("f3") @Schema(_default="3") String f3) {
+			return JsonMap.create()
 				.append("f1", f1)
 				.append("f2", f2)
 				.append("f3", f3);
 		}
 		@RestPost(defaultRequestFormData={"f1:1","f2=2"," f3 : 3 "})
-		public OMap d(@FormData("f1") @Schema(_default="4") String f1, @FormData("f2") @Schema(_default="5") String f2, @FormData("f3") @Schema(_default="6") String f3) {
-			return OMap.create()
+		public JsonMap d(@FormData("f1") @Schema(_default="4") String f1, @FormData("f2") @Schema(_default="5") String f2, @FormData("f3") @Schema(_default="6") String f3) {
+			return JsonMap.create()
 				.append("f1", f1)
 				.append("f2", f2)
 				.append("f3", f3);

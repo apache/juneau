@@ -26,7 +26,7 @@ import org.apache.juneau.collections.*;
  * Utility class for working with Jar manifest files.
  *
  * <p>
- * Copies the contents of a {@link Manifest} into an {@link OMap} so that the various convenience methods on that
+ * Copies the contents of a {@link Manifest} into an {@link JsonMap} so that the various convenience methods on that
  * class can be used to retrieve values.
  *
  * <ul class='seealso'>
@@ -35,7 +35,7 @@ import org.apache.juneau.collections.*;
  *
  * @serial exclude
  */
-public class ManifestFile extends OMap {
+public class ManifestFile extends JsonMap {
 
 	private static final long serialVersionUID = 1L;
 

@@ -16,7 +16,7 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
@@ -1144,7 +1144,7 @@ public abstract class Context implements AnnotationProvider {
 	 *
 	 * @return The properties on this bean as a map for debugging.
 	 */
-	protected OMap properties() {
+	protected JsonMap properties() {
 		return filteredMap("annotations", annotations, "debug", debug);
 	}
 

@@ -59,13 +59,13 @@ import org.apache.juneau.utils.*;
  * This parser handles the following input, and automatically returns the corresponding Java class.
  * <ul class='spaced-list'>
  * 	<li>
- * 		JSON objects (<js>"{...}"</js>) are converted to {@link OMap OMaps}.
+ * 		JSON objects (<js>"{...}"</js>) are converted to {@link JsonMap JsonMaps}.
  * 		<b>Note:</b>  If a <code><xa>_type</xa>=<xs>'xxx'</xs></code> attribute is specified on the object, then an
  * 		attempt is made to convert the object to an instance of the specified Java bean class.
  * 		See the {@link org.apache.juneau.BeanContext.Builder#typePropertyName(String)} setting for more information about parsing
  * 		beans from JSON.
  * 	<li>
- * 		JSON arrays (<js>"[...]"</js>) are converted to {@link OList OLists}.
+ * 		JSON arrays (<js>"[...]"</js>) are converted to {@link JsonList JsonLists}.
  * 	<li>
  * 		JSON string literals (<js>"'xyz'"</js>) are converted to {@link String Strings}.
  * 	<li>
@@ -84,10 +84,10 @@ import org.apache.juneau.utils.*;
  * Input can be any of the following:
  * <ul class='spaced-list'>
  * 	<li>
- * 		<js>"{...}"</js> - Converted to an {@link OMap} or an instance of a Java bean if a <xa>_type</xa>
+ * 		<js>"{...}"</js> - Converted to an {@link JsonMap} or an instance of a Java bean if a <xa>_type</xa>
  * 		attribute is present.
  * 	<li>
- * 		<js>"[...]"</js> - Converted to an {@link OList}.
+ * 		<js>"[...]"</js> - Converted to an {@link JsonList}.
  * 	<li>
  * 		<js>"123..."</js> - Converted to a {@link Number} (either {@link Integer}, {@link Long}, {@link Float},
  * 		or {@link Double}).
@@ -105,8 +105,8 @@ import org.apache.juneau.utils.*;
  *
  * <p>
  * TIP:  If you know you're parsing a JSON object or array, it can be easier to parse it using the
- * {@link OMap#OMap(CharSequence) OMap(CharSequence)} or {@link OList#OList(CharSequence)
- * OList(CharSequence)} constructors instead of using this class.
+ * {@link JsonMap#JsonMap(CharSequence) JsonMap(CharSequence)} or {@link JsonList#JsonList(CharSequence)
+ * JsonList(CharSequence)} constructors instead of using this class.
  * The end result should be the same.
  *
  * <ul class='spaced-list'>

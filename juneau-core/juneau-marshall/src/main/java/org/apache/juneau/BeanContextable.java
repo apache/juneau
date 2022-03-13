@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 import java.beans.*;
 import java.io.*;
 import java.lang.annotation.*;
@@ -3005,7 +3005,7 @@ public abstract class BeanContextable extends Context {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	protected OMap properties() {
+	protected JsonMap properties() {
 		return filteredMap("beanContext", beanContext.properties());
 	}
 }

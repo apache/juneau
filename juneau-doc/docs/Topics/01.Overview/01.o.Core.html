@@ -231,7 +231,7 @@
 	<h5 class='figure'>Examples:</h5>
 	<p class='bjava'>
 		|	<jc>// Some free-form JSON.</jc>
-		|	Map <jv>map</jv> = OMap.<jsm>of</jsm>(
+		|	Map <jv>map</jv> = JsonMap.<jsm>of</jsm>(
 		|		<js>"foo"</js>, <js>"x1"</js>,
 		|		<js>"_bar"</js>, <js>"x2"</js>,
 		|		<js>" baz "</js>, <js>"x3"</js>,
@@ -348,22 +348,22 @@
 	</ul>
 </div>
 
-<h5 class='topic'>OMap/OList</h5>
+<h5 class='topic'>JsonMap/JsonList</h5>
 <div class='topic'>
 	<p>
-		The {@link oaj.collections.OMap} and {@link oaj.collections.OList} collections classes allow you
+		The {@link oaj.collections.JsonMap} and {@link oaj.collections.JsonList} collections classes allow you
 		to programmatically build generic JSON data structures.  They are similar in concept to 
 		<c>JSONObject</c> and <c>JSONArray</c> that you find in other JSON marshalling APIs, but
 		can be used to generate DOMs in any of the supported languages.
 	</p>
 	<p class='bjava'>
 		|	<jc>// Create JSON strings from scratch using fluent-style code.</jc>
-		|	String <jv>jsonObject</jv> = OMap.<jsm>create</jsm>().append(<js>"foo"</js>,<js>"bar"</js>).toString(); 
-		|	String <jv>jsonArray</jv> = OList.<jsm>of</jsm>(<js>"foo"</js>, 123, <jk>null</jk>, <jv>jsonObject</jv>).toString(); 
+		|	String <jv>myMap</jv> = JsonMap.<jsm>create</jsm>().append(<js>"foo"</js>,<js>"bar"</js>).toString(); 
+		|	String <jv>myList</jv> = JsonList.<jsm>of</jsm>(<js>"foo"</js>, 123, <jk>null</jk>, <jv>jsonObject</jv>).toString(); 
 		|	
 		|	<jc>// Parse directly from JSON into generic DOMs.</jc>
-		|	Map&lt;String,Object&gt; <jv>myMap</jv> = OMap.<jsm>ofJson</jsm>(<js>"{foo:'bar'}"</js>); 
-		|	List&lt;Object&gt; <jv>myList</jv> = OList.<jsm>ofJson</jsm>(<js>"['foo',123,null]"</js>); 
+		|	Map&lt;String,Object&gt; <jv>myMap</jv> = JsonMap.<jsm>ofJson</jsm>(<js>"{foo:'bar'}"</js>); 
+		|	List&lt;Object&gt; <jv>myList</jv> = JsonList.<jsm>ofJson</jsm>(<js>"['foo',123,null]"</js>); 
 	</p>
 	<p>
 		These classes provide lots of convenience methods including:
@@ -373,7 +373,7 @@
 		<li>Methods for quick conversions to other data types including collections, beans, arrays, etc...
 	</ul>
 	<ul class='seealso'>
-		<li class='link'>{@doc jm.OMap OMap and OList} for more information.
+		<li class='link'>{@doc jm.JsonMap JsonMap and JsonList} for more information.
 	</ul>
 </div>
 

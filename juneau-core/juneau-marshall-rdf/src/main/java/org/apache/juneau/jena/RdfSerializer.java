@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.lang.annotation.*;
@@ -2151,7 +2151,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 	}
 
 	@Override /* Context */
-	protected OMap properties() {
+	protected JsonMap properties() {
 		return filteredMap()
 			.append("addLiteralTypes", addLiteralTypes)
 			.append("addRootProperty", addRootProperty)

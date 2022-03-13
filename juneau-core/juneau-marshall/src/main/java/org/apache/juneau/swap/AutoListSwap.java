@@ -40,16 +40,16 @@ import org.apache.juneau.serializer.*;
  * <ul>
  * 	<li class='jm'><c><jk>public</jk> S toList()</c>
  * 	<li class='jm'><c><jk>public</jk> S toList(BeanSession)</c>
- * 	<li class='jm'><c><jk>public</jk> S toOList()</c>
- * 	<li class='jm'><c><jk>public</jk> S toOList(BeanSession)</c>
+ * 	<li class='jm'><c><jk>public</jk> S toJsonList()</c>
+ * 	<li class='jm'><c><jk>public</jk> S toJsonList(BeanSession)</c>
  * </ul>
  *
  * <h5 class='figure'>Valid unswap methods (N = Normal type, S = Swapped type)</h5>
  * <ul>
  * 	<li class='jm'><c><jk>public static</jk> N fromList(S)</c>
  * 	<li class='jm'><c><jk>public static</jk> N fromList(BeanSession, S)</c>
- * 	<li class='jm'><c><jk>public static</jk> N fromOList(S)</c>
- * 	<li class='jm'><c><jk>public static</jk> N fromOList(BeanSession, S)</c>
+ * 	<li class='jm'><c><jk>public static</jk> N fromJsonList(S)</c>
+ * 	<li class='jm'><c><jk>public static</jk> N fromJsonList(BeanSession, S)</c>
  * 	<li class='jm'><c><jk>public static</jk> N create(S)</c>
  * 	<li class='jm'><c><jk>public static</jk> N create(BeanSession, S)</c>
  * 	<li class='jm'><c><jk>public static</jk> N valueOf(S)</c>
@@ -81,8 +81,8 @@ import org.apache.juneau.serializer.*;
 public class AutoListSwap<T> extends ObjectSwap<T,List<?>> {
 
 	private static final Set<String>
-		SWAP_METHOD_NAMES = uset("toList", "toObjectList", "toOList"),
-		UNSWAP_METHOD_NAMES = uset("fromList", "fromObjectList", "fromOList", "create", "valueOf");
+		SWAP_METHOD_NAMES = uset("toList", "toJsonList"),
+		UNSWAP_METHOD_NAMES = uset("fromList", "fromJsonList", "create", "valueOf");
 
 	/**
 	 * Look for constructors and methods on this class and construct a dynamic swap if it's possible to do so.

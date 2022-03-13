@@ -14,7 +14,7 @@ package org.apache.juneau.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -7177,7 +7177,7 @@ public class RestContext extends Context {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	protected OMap properties() {
+	protected JsonMap properties() {
 		return filteredMap()
 			.append("allowBodyParam", allowBodyParam)
 			.append("allowedMethodHeader", allowedMethodHeaders)

@@ -273,7 +273,7 @@ public class ObjectUtils {
 	 * @param o The object to return a property map of.
 	 * @return A new property map.
 	 */
-	public static OMap toPropertyMap(Object o) {
+	public static JsonMap toPropertyMap(Object o) {
 		if (o == null)
 			return null;
 		Map<String,MethodInfo> methods = PROPERTIES_METHODS.get(o.getClass());
@@ -290,7 +290,7 @@ public class ObjectUtils {
 			methods = methods2;
 			PROPERTIES_METHODS.put(o.getClass(), methods);
 		}
-		OMap m = OMap.create().append("id", identity(o));
+		JsonMap m = JsonMap.create().append("id", identity(o));
 		methods.forEach((k,v) -> m.put(k, v.invoke(o)));
 		return m;
 	}

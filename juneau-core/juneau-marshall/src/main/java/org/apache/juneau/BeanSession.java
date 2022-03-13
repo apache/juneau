@@ -367,25 +367,25 @@ public class BeanSession extends ContextSession {
 	 * 	</tr>
 	 * 	<tr>
 	 * 		<td>
-	 * 			{@code Map} (e.g. {@code Map}, {@code HashMap}, {@code TreeMap}, {@code OMap})
+	 * 			{@code Map} (e.g. {@code Map}, {@code HashMap}, {@code TreeMap}, {@code JsonMap})
 	 * 		</td>
 	 * 		<td>
 	 * 			{@code Map}
 	 * 		</td>
 	 * 		<td>
-	 * 			If {@code Map} is not constructible, an {@code OMap} is created.
+	 * 			If {@code Map} is not constructible, an {@code JsonMap} is created.
 	 * 		</td>
 	 * 	</tr>
 	 * 	<tr>
 	 * 		<td>
-	 * 		{@code Collection} (e.g. {@code List}, {@code LinkedList}, {@code HashSet}, {@code OList})
+	 * 		{@code Collection} (e.g. {@code List}, {@code LinkedList}, {@code HashSet}, {@code JsonList})
 	 * 		</td>
 	 * 		<td>
 	 * 			{@code Collection<Object>}
 	 * 			<br>{@code Object[]}
 	 * 		</td>
 	 * 		<td>
-	 * 			If {@code Collection} is not constructible, an {@code OList} is created.
+	 * 			If {@code Collection} is not constructible, an {@code JsonList} is created.
 	 * 		</td>
 	 * 	</tr>
 	 * 	<tr>
@@ -714,13 +714,13 @@ public class BeanSession extends ContextSession {
 				else if (from.isArray())
 					return (T)toArray(to, alist((Object[])value));
 				else if (startsWith(value.toString(), '['))
-					return (T)toArray(to, OList.ofJson(value.toString()).setBeanSession(this));
+					return (T)toArray(to, JsonList.ofJson(value.toString()).setBeanSession(this));
 				else if (to.hasMutaterFrom(from))
 					return to.mutateFrom(value);
 				else if (from.hasMutaterTo(to))
 					return from.mutateTo(value, to);
 				else
-					return (T)toArray(to, new OList((Object[])StringUtils.split(value.toString())).setBeanSession(this));
+					return (T)toArray(to, new JsonList((Object[])StringUtils.split(value.toString())).setBeanSession(this));
 			}
 
 			// Target type is some sort of Map that needs to be converted.
@@ -744,7 +744,7 @@ public class BeanSession extends ContextSession {
 						}
 						return (T)m;
 					} else if (!to.canCreateNewInstanceFromString(outer)) {
-						OMap m = OMap.ofJson(value.toString());
+						JsonMap m = JsonMap.ofJson(value.toString());
 						m.setBeanSession(this);
 						return convertToMemberType(outer, m, to);
 					}
@@ -756,7 +756,7 @@ public class BeanSession extends ContextSession {
 			// Target type is some sort of Collection
 			if (to.isCollection()) {
 				try {
-					Collection l = to.canCreateNewInstance(outer) ? (Collection)to.newInstance(outer) : to.isSet() ? set() : new OList(this);
+					Collection l = to.canCreateNewInstance(outer) ? (Collection)to.newInstance(outer) : to.isSet() ? set() : new JsonList(this);
 					ClassMeta elementType = to.getElementType();
 
 					if (from.isArray())
@@ -772,7 +772,7 @@ public class BeanSession extends ContextSession {
 					else if (from.isString()) {
 						String s = value.toString();
 						if (isJsonArray(s, false)) {
-							OList l2 = OList.ofJson(s);
+							JsonList l2 = JsonList.ofJson(s);
 							l2.setBeanSession(this);
 							for (Object o : l2)
 								l.add(elementType.isObject() ? o : convertToMemberType(l, o, elementType));
@@ -815,13 +815,13 @@ public class BeanSession extends ContextSession {
 				Class<?> c = value.getClass();
 				if (c.isArray()) {
 					if (c.getComponentType().isPrimitive()) {
-						OList l = new OList(this);
+						JsonList l = new JsonList(this);
 						int size = Array.getLength(value);
 						for (int i = 0; i < size; i++)
 							l.add(Array.get(value, i));
 						value = l;
 					}
-					value = new OList((Object[])value).setBeanSession(this);
+					value = new JsonList((Object[])value).setBeanSession(this);
 				}
 
 				return to.newInstanceFromString(outer, value.toString());
@@ -840,8 +840,8 @@ public class BeanSession extends ContextSession {
 			if (to.isBean() && value instanceof Map) {
 				BuilderSwap<T,Object> builder = (BuilderSwap<T,Object>)to.getBuilderSwap(this);
 
-				if (value instanceof OMap && builder == null) {
-					OMap m2 = (OMap)value;
+				if (value instanceof JsonMap && builder == null) {
+					JsonMap m2 = (JsonMap)value;
 					String typeName = m2.getString(getBeanTypePropertyName(to));
 					if (typeName != null) {
 						ClassMeta cm = to.getBeanRegistry().getClassMeta(typeName);
@@ -1400,7 +1400,7 @@ public class BeanSession extends ContextSession {
 	}
 
 	/**
-	 * Creates either an {@link OMap} or {@link LinkedHashMap} depending on whether the key type is
+	 * Creates either an {@link JsonMap} or {@link LinkedHashMap} depending on whether the key type is
 	 * String or something else.
 	 *
 	 * @param mapMeta The metadata of the map to create.
@@ -1408,7 +1408,7 @@ public class BeanSession extends ContextSession {
 	 */
 	protected Map newGenericMap(ClassMeta mapMeta) {
 		ClassMeta<?> k = mapMeta.getKeyType();
-		return (k == null || k.isString()) ? new OMap(this) : map();
+		return (k == null || k.isString()) ? new JsonMap(this) : map();
 	}
 
 	/**

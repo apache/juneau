@@ -114,7 +114,7 @@ public class PathArg implements RestOpArg {
 	public Object resolve(RestOpSession opSession) throws Exception {
 		RestRequest req = opSession.getRequest();
 		if (name.equals("*")) {
-			OMap m = new OMap();
+			JsonMap m = new JsonMap();
 			req.getPathParams().getAll().stream().forEach(x -> m.put(x.getName(), x.getValue()));
 			return req.getBeanSession().convertToType(m, type);
 		}

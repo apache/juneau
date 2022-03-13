@@ -161,7 +161,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private final JsonSchemaGenerator ctx;
-	private final Map<String,OMap> defs;
+	private final Map<String,JsonMap> defs;
 	private JsonSerializerSession jsSession;
 	private JsonParserSession jpSession;
 
@@ -186,7 +186,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 * @throws BeanRecursionException Bean recursion occurred.
 	 * @throws SerializeException Error occurred.
 	 */
-	public OMap getSchema(Object o) throws BeanRecursionException, SerializeException {
+	public JsonMap getSchema(Object o) throws BeanRecursionException, SerializeException {
 		return getSchema(toClassMeta(o), "root", null, false, false, null);
 	}
 
@@ -198,7 +198,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 * @throws BeanRecursionException Bean recursion occurred.
 	 * @throws SerializeException Error occurred.
 	 */
-	public OMap getSchema(Type type) throws BeanRecursionException, SerializeException {
+	public JsonMap getSchema(Type type) throws BeanRecursionException, SerializeException {
 		return getSchema(getClassMeta(type), "root", null, false, false, null);
 	}
 
@@ -210,17 +210,17 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 * @throws BeanRecursionException Bean recursion occurred.
 	 * @throws SerializeException Error occurred.
 	 */
-	public OMap getSchema(ClassMeta<?> cm) throws BeanRecursionException, SerializeException {
+	public JsonMap getSchema(ClassMeta<?> cm) throws BeanRecursionException, SerializeException {
 		return getSchema(cm, "root", null, false, false, null);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private OMap getSchema(ClassMeta<?> eType, String attrName, String[] pNames, boolean exampleAdded, boolean descriptionAdded, JsonSchemaBeanPropertyMeta jsbpm) throws BeanRecursionException, SerializeException {
+	private JsonMap getSchema(ClassMeta<?> eType, String attrName, String[] pNames, boolean exampleAdded, boolean descriptionAdded, JsonSchemaBeanPropertyMeta jsbpm) throws BeanRecursionException, SerializeException {
 
 		if (ctx.isIgnoredType(eType))
 			return null;
 
-		OMap out = new OMap();
+		JsonMap out = new JsonMap();
 
 		if (eType == null)
 			eType = object();
@@ -245,7 +245,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
 		if (useDef && defs.containsKey(getBeanDefId(sType))) {
 			pop();
-			return new OMap().append("$ref", getBeanDefUri(sType));
+			return new JsonMap().append("$ref", getBeanDefUri(sType));
 		}
 
 		JsonSchemaClassMeta jscm = null;
@@ -325,7 +325,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 			descriptionAdded |= description != null;
 
 			if (tc == BEAN) {
-				OMap properties = new OMap();
+				JsonMap properties = new JsonMap();
 				BeanMeta bm = getBeanMeta(sType.getInnerClass());
 				if (pNames != null)
 					bm = new BeanMetaFiltered(bm, pNames);
@@ -352,7 +352,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 				out.put("enum", getEnums(sType));
 
 			} else if (tc == MAP) {
-				OMap om = getSchema(sType.getValueType(), "additionalProperties", null, exampleAdded, descriptionAdded, null);
+				JsonMap om = getSchema(sType.getValueType(), "additionalProperties", null, exampleAdded, descriptionAdded, null);
 				if (! om.isEmpty())
 					out.put("additionalProperties", om);
 
@@ -367,7 +367,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 
 		if (useDef) {
 			defs.put(getBeanDefId(sType), out);
-			out = OMap.of("$ref", getBeanDefUri(sType));
+			out = JsonMap.of("$ref", getBeanDefUri(sType));
 		}
 
 		pop();
@@ -456,7 +456,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 * @return
 	 * 	The definitions that were gathered during this session, or <jk>null</jk> if {@link JsonSchemaGenerator.Builder#useBeanDefs()} was not enabled.
 	 */
-	public Map<String,OMap> getBeanDefs() {
+	public Map<String,JsonMap> getBeanDefs() {
 		return defs;
 	}
 
@@ -467,7 +467,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	 * @param def The definition schema.
 	 * @return This object.
 	 */
-	public JsonSchemaGeneratorSession addBeanDef(String id, OMap def) {
+	public JsonSchemaGeneratorSession addBeanDef(String id, JsonMap def) {
 		if (defs != null)
 			defs.put(id, def);
 		return this;

@@ -280,7 +280,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	private Div examples(Session s, ParameterInfo pi) {
 		boolean isBody = "body".equals(pi.getIn());
 
-		OMap m = new OMap();
+		JsonMap m = new JsonMap();
 
 		try {
 			if (isBody) {
@@ -288,12 +288,12 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 				if (si != null)
 					m.put("model", si.copy().resolveRefs(s.swagger, new ArrayDeque<String>(), s.resolveRefsMaxDepth));
 			} else {
-				OMap om = pi
+				JsonMap m2 = pi
 					.copy()
 					.resolveRefs(s.swagger, new ArrayDeque<String>(), s.resolveRefsMaxDepth)
 					.asMap()
 					.keepAll("format","pattern","collectionFormat","maximum","minimum","multipleOf","maxLength","minLength","maxItems","minItems","allowEmptyValue","exclusiveMaximum","exclusiveMinimum","uniqueItems","items","default","enum");
-				m.put("model", om.isEmpty() ? i("none") : om);
+				m.put("model", m2.isEmpty() ? i("none") : m2);
 			}
 
 		} catch (Exception e) {
@@ -309,7 +309,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	private Div examples(Session s, ResponseInfo ri) {
 		SchemaInfo si = ri.getSchema();
 
-		OMap m = new OMap();
+		JsonMap m = new JsonMap();
 		try {
 			if (si != null) {
 				si = si.copy().resolveRefs(s.swagger, new ArrayDeque<String>(), s.resolveRefsMaxDepth);
@@ -329,7 +329,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		return examplesDiv(m);
 	}
 
-	private Div examplesDiv(OMap m) {
+	private Div examplesDiv(JsonMap m) {
 		if (m.isEmpty())
 			return null;
 
@@ -366,14 +366,14 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		return modelBlockContents;
 	}
 
-	private Div modelBlock(String modelName, OMap model) {
+	private Div modelBlock(String modelName, JsonMap model) {
 		return div()._class("op-block op-block-closed model").children(
 			modelBlockSummary(modelName, model),
 			div(model)._class("op-block-contents")
 		);
 	}
 
-	private HtmlElement modelBlockSummary(String modelName, OMap model) {
+	private HtmlElement modelBlockSummary(String modelName, JsonMap model) {
 		return div()._class("op-block-summary").children(
 			span(modelName)._class("method-button"),
 			model.containsKey("description") ? span(toBRL(model.remove("description").toString()))._class("summary") : null

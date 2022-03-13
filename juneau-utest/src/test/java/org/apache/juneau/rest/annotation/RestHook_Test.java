@@ -89,7 +89,7 @@ public class RestHook_Test {
 		}
 
 		private static Object in(ReaderParserSession session) {
-			OMap sp = session.getSessionProperties();
+			JsonMap sp = session.getSessionProperties();
 			return "p1="+sp.get("p1",null)+",p2="+sp.get("p2",null)+",p3="+sp.get("p3",null)+",p4="+sp.get("p4",null)+",p5="+sp.get("p5",null);
 
 		}
@@ -160,11 +160,11 @@ public class RestHook_Test {
 			super(b.produces("test/s1").accept("text/s1,text/s2,text/s3").function((s,o) -> out(s)).headers(s->headers(s)));
 		}
 		public static String out(SerializerSession s) {
-			OMap sp = s.getSessionProperties();
+			JsonMap sp = s.getSessionProperties();
 			return "p1="+sp.get("p1",null)+",p2="+sp.get("p2",null)+",p3="+sp.get("p3",null)+",p4="+sp.get("p4",null)+",p5="+sp.get("p5",null);
 		}
 		public static Map<String,String> headers(SerializerSession s) {
-			OMap sp = s.getSessionProperties();
+			JsonMap sp = s.getSessionProperties();
 			if (sp.containsKey("Override-Content-Type"))
 				return map("Content-Type",sp.getString("Override-Content-Type",null));
 			return emptyMap();
@@ -197,7 +197,7 @@ public class RestHook_Test {
 
 	@Rest(path="/super")
 	public static class C_Super {
-		protected OList events = new OList();
+		protected JsonList events = new JsonList();
 		@RestHook(INIT)
 		public void init1c(RestContext.Builder builder) {
 			events.add("super-1c");
@@ -215,7 +215,7 @@ public class RestHook_Test {
 			events.add("super-2a");
 		}
 		@RestGet
-		public OList getEvents() {
+		public JsonList getEvents() {
 			return events;
 		}
 	}
@@ -272,7 +272,7 @@ public class RestHook_Test {
 
 	@Rest(path="/super")
 	public static class D_Super {
-		protected OList events = new OList();
+		protected JsonList events = new JsonList();
 		@RestHook(POST_INIT)
 		public void postInit1c(RestContext context) {
 			events.add("super-1c");
@@ -290,7 +290,7 @@ public class RestHook_Test {
 			events.add("super-2a");
 		}
 		@RestGet
-		public OList getEvents() {
+		public JsonList getEvents() {
 			return events;
 		}
 	}
@@ -367,7 +367,7 @@ public class RestHook_Test {
 
 	@Rest(path="/super")
 	public static class E_Super {
-		protected OList events = new OList();
+		protected JsonList events = new JsonList();
 		@RestHook(POST_INIT_CHILD_FIRST)
 		public void postInitChildFirst1c(RestContext context) {
 			events.add("super-1c");
@@ -385,7 +385,7 @@ public class RestHook_Test {
 			events.add("super-2a");
 		}
 		@RestGet
-		public OList getPostInitChildFirstEvents() {
+		public JsonList getPostInitChildFirstEvents() {
 			return events;
 		}
 	}
@@ -468,8 +468,8 @@ public class RestHook_Test {
 			res.setHeader("start4-called", "true");
 		}
 		@RestGet(path="/")
-		public OMap a(RestRequest req, RestResponse res) {
-			return OMap.create()
+		public JsonMap a(RestRequest req, RestResponse res) {
+			return JsonMap.create()
 				.append("1", res.getHeader("start1-called"))
 				.append("2", res.getHeader("start2-called"))
 				.append("3", res.getHeader("start3-called"))
@@ -519,8 +519,8 @@ public class RestHook_Test {
 			res.setHeader("pre4-called", "true");
 		}
 		@RestGet(path="/")
-		public OMap a(RestRequest req, RestResponse res) {
-			return OMap.create()
+		public JsonMap a(RestRequest req, RestResponse res) {
+			return JsonMap.create()
 				.append("1", res.getHeader("pre1-called"))
 				.append("2", res.getHeader("pre2-called"))
 				.append("3", res.getHeader("pre3-called"))

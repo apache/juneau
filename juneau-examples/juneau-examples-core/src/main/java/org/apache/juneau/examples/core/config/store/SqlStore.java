@@ -149,16 +149,13 @@ public class SqlStore extends ConfigStore {
 	synchronized void poll() {
 
 		// Loop through all our entries and find the latest values.
-		for (Map.Entry<String,String> e : cache.entrySet()) {
-			String name = e.getKey();
-			String cacheContents = e.getValue();
+		cache.forEach((name,cacheContents) -> {
 			String newContents = getDatabaseValue(name);
 
 			// Change detected!
 			if (! cacheContents.equals(newContents))
 				update(name, newContents);
-		}
-
+		});
 	}
 
 	// Reads the value from the database.

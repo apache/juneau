@@ -518,9 +518,9 @@ public class UonParserTest {
 		Reader r;
 
 		r = reader("(foo=bar)(foo=bar)");
-		x = p.parse(r, OMap.class);
+		x = p.parse(r, JsonMap.class);
 		assertObject(x).asJson().is("{foo:'bar'}");
-		assertThrown(()->p.parse(r, OMap.class)).messages().contains("Reader is closed");
+		assertThrown(()->p.parse(r, JsonMap.class)).messages().contains("Reader is closed");
 	}
 
 	//====================================================================================================
@@ -534,15 +534,15 @@ public class UonParserTest {
 		Reader r;
 
 		r = reader("(foo=bar)(baz=qux)");
-		x = p.parse(r, OMap.class);
+		x = p.parse(r, JsonMap.class);
 		assertObject(x).asJson().is("{foo:'bar'}");
-		x = p.parse(r, OMap.class);
+		x = p.parse(r, JsonMap.class);
 		assertObject(x).asJson().is("{baz:'qux'}");
 
 		r = reader("@(123)@(456)");
-		x = p.parse(r, OList.class);
+		x = p.parse(r, JsonList.class);
 		assertObject(x).asJson().is("[123]");
-		x = p.parse(r, OList.class);
+		x = p.parse(r, JsonList.class);
 		assertObject(x).asJson().is("[456]");
 	}
 

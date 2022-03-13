@@ -53,13 +53,13 @@ public class BeanMapTest {
 	public void testFilteredEntryWithMultipleMatchingFilters() throws Exception {
 		BeanSession session = BeanContext.create().swaps(B2Swap.class, B1Swap.class).build().getSession();
 		BeanMap<B> bm = session.toBeanMap(B.create());
-		OMap om = (OMap)bm.get("b1");
-		assertEquals("b2", om.getString("type"));
+		JsonMap m = (JsonMap)bm.get("b1");
+		assertEquals("b2", m.getString("type"));
 
 		session = BeanContext.create().swaps(B1Swap.class, B2Swap.class).build().getSession();
 		bm = session.toBeanMap(B.create());
-		om = (OMap)bm.get("b1");
-		assertEquals("b1", om.getString("type"));
+		m = (JsonMap)bm.get("b1");
+		assertEquals("b1", m.getString("type"));
 	}
 
 
@@ -86,15 +86,15 @@ public class BeanMapTest {
 
 	public static class B1Swap extends MapSwap<B1> {
 		@Override /* ObjectSwap */
-		public OMap swap(BeanSession session, B1 b1) {
-			return OMap.of("type", "b1", "f1", b1.f1);
+		public JsonMap swap(BeanSession session, B1 b1) {
+			return JsonMap.of("type", "b1", "f1", b1.f1);
 		}
 	}
 
 	public static class B2Swap extends MapSwap<B2> {
 		@Override /* ObjectSwap */
-		public OMap swap(BeanSession session, B2 b2) {
-			return OMap.of("type", "b2", "f1", b2.f1);
+		public JsonMap swap(BeanSession session, B2 b2) {
+			return JsonMap.of("type", "b2", "f1", b2.f1);
 		}
 	}
 }

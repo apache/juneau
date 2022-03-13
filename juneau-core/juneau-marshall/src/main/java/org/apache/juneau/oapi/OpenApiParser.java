@@ -217,10 +217,10 @@ public class OpenApiParser extends UonParser implements OpenApiMetaProvider {
 		 * 		.build();
 		 *
 		 * 	<jc>// Parse CSV.</jc>
-		 * 	OList <jv>list1</jv> = <jv>parser1</jv>.parse(<js>"foo=bar,baz=qux\,true\,123"</js>, OList.<jk>class</jk>)
+		 * 	JsonList <jv>list1</jv> = <jv>parser1</jv>.parse(<js>"foo=bar,baz=qux\,true\,123"</js>, JsonList.<jk>class</jk>)
 		 *
 		 * 	<jc>// Parse UON.</jc>
-		 * 	OList <jv>list2</jv> = <jv>parser2</jv>.parse(<js>"(foo=bar,baz=@(qux,true,123))"</js>, OList.<jk>class</jk>)
+		 * 	JsonList <jv>list2</jv> = <jv>parser2</jv>.parse(<js>"(foo=bar,baz=@(qux,true,123))"</js>, JsonList.<jk>class</jk>)
 		 * </p>
 		 *
 		 * @param value The new value for this property.

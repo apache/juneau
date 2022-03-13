@@ -58,7 +58,7 @@ public class Remote_QueryAnnotation_Test {
 	@Rest
 	public static class A {
 		@RestGet
-		public String a(@Query("*") OMap m) {
+		public String a(@Query("*") JsonMap m) {
 			return m.toString();
 		}
 	}
@@ -128,7 +128,7 @@ public class Remote_QueryAnnotation_Test {
 	@Rest
 	public static class B {
 		@RestOp
-		public String get(@Query("*") OMap m) {
+		public String get(@Query("*") JsonMap m) {
 			return m.toString();
 		}
 	}
@@ -161,7 +161,7 @@ public class Remote_QueryAnnotation_Test {
 	@Rest
 	public static class C {
 		@RestGet
-		public String a(@Query("*") OMap m) {
+		public String a(@Query("*") JsonMap m) {
 			return m.toString();
 		}
 		@RestGet
@@ -214,7 +214,7 @@ public class Remote_QueryAnnotation_Test {
 	@Rest
 	public static class D {
 		@RestOp
-		public String get(@Query("*") OMap m) {
+		public String get(@Query("*") JsonMap m) {
 			return m.toString();
 		}
 	}
@@ -463,7 +463,7 @@ public class Remote_QueryAnnotation_Test {
 	@Rest
 	public static class E {
 		@RestOp
-		public String get(@Query("*") OMap m) {
+		public String get(@Query("*") JsonMap m) {
 			return m.toString();
 		}
 	}
@@ -506,7 +506,7 @@ public class Remote_QueryAnnotation_Test {
 	@Rest
 	public static class F {
 		@RestOp
-		public String get(@Query("*") OMap m) {
+		public String get(@Query("*") JsonMap m) {
 			return m.toString();
 		}
 	}
@@ -555,7 +555,7 @@ public class Remote_QueryAnnotation_Test {
 	@Rest
 	public static class G {
 		@RestOp
-		public String get(@Query("*") OMap m) {
+		public String get(@Query("*") JsonMap m) {
 			return m.toString();
 		}
 	}
@@ -618,7 +618,7 @@ public class Remote_QueryAnnotation_Test {
 	@Rest
 	public static class H {
 		@RestOp
-		public String get(@Query("*") OMap m) {
+		public String get(@Query("*") JsonMap m) {
 			return m.toString();
 		}
 	}
@@ -646,7 +646,7 @@ public class Remote_QueryAnnotation_Test {
 	@Rest
 	public static class I {
 		@RestOp
-		public String get(@Query("*") OMap m) {
+		public String get(@Query("*") JsonMap m) {
 			return m.toString();
 		}
 	}
@@ -673,7 +673,7 @@ public class Remote_QueryAnnotation_Test {
 	@Rest
 	public static class J {
 		@RestOp
-		public String get(@Query("*") OMap m) {
+		public String get(@Query("*") JsonMap m) {
 			return m.toString();
 		}
 	}

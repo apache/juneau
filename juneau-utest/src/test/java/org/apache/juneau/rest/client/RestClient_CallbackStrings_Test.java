@@ -34,12 +34,12 @@ public class RestClient_CallbackStrings_Test {
 	@Rest
 	public static class A {
 		@RestGet(path="/*")
-		public OMap get(RestRequest req) throws Exception {
-			return OMap.of("method","GET","headers",getFooHeaders(req),"content",req.getBody().asString());
+		public JsonMap get(RestRequest req) throws Exception {
+			return JsonMap.of("method","GET","headers",getFooHeaders(req),"content",req.getBody().asString());
 		}
 		@RestPut(path="/*")
-		public OMap put(RestRequest req) throws Exception {
-			return OMap.of("method","PUT","headers",getFooHeaders(req),"content",req.getBody().asString());
+		public JsonMap put(RestRequest req) throws Exception {
+			return JsonMap.of("method","PUT","headers",getFooHeaders(req),"content",req.getBody().asString());
 		}
 		private Map<String,Object> getFooHeaders(RestRequest req) {
 			Map<String,Object> m = new TreeMap<>();

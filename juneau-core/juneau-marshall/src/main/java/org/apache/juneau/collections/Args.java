@@ -89,7 +89,7 @@ import java.util.*;
  *
  * <p>
  * Main arguments are available through numeric string keys (e.g. <js>"0"</js>, <js>"1"</js>, ...).
- * So you could use the {@link OMap} API to convert main arguments directly to POJOs, such as an <c>Enum</c>
+ * So you could use the {@link JsonMap} API to convert main arguments directly to POJOs, such as an <c>Enum</c>
  * <p class='bjava'>
  * 	<jc>// Get 1st main argument as an Enum</jc>
  * 	MyEnum <jv>_enum</jv> = <jv>args</jv>.get(MyEnum.<jk>class</jk>, <js>"0"</js>);
@@ -111,7 +111,7 @@ import java.util.*;
  *
  * @serial exclude
  */
-public final class Args extends OMap {
+public final class Args extends JsonMap {
 
 	private static final long serialVersionUID = 1L;
 
@@ -142,9 +142,9 @@ public final class Args extends OMap {
 				if (key.matches("\\d*"))
 					throw runtimeException("Invalid optional key name ''{0}''", key);
 				if (! containsKey(key))
-					put(key, new OList());
+					put(key, new JsonList());
 			} else {
-				((OList)get(key)).add(s);
+				((JsonList)get(key)).add(s);
 			}
 		}
 	}
@@ -207,7 +207,7 @@ public final class Args extends OMap {
 	 * @return <jk>true</jk> if the named argument exists.
 	 */
 	public boolean hasArg(String name) {
-		OList l = (OList)get(name);
+		JsonList l = (JsonList)get(name);
 		return l != null;
 	}
 
@@ -221,7 +221,7 @@ public final class Args extends OMap {
 	 * @return The optional argument value, or blank if the optional argument was not specified.
 	 */
 	public String getArg(String name) {
-		OList l = (OList)get(name);
+		JsonList l = (JsonList)get(name);
 		if (l == null || l.size() == 0)
 			return null;
 		if (l.size() == 1)
@@ -248,7 +248,7 @@ public final class Args extends OMap {
 	 * @return The optional argument value, or blank if the optional argument was not specified.
 	 */
 	public <T> T getArg(Class<T> c, String name) {
-		OList l = (OList)get(name);
+		JsonList l = (JsonList)get(name);
 		if (l == null || l.size() == 0)
 			return null;
 		return l.get(0, c);
@@ -269,7 +269,7 @@ public final class Args extends OMap {
 	 */
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public List<String> getArgs(String name) {
-		List l = (OList)get(name);
+		List l = (JsonList)get(name);
 		if (l == null)
 			return Collections.emptyList();
 		return l;

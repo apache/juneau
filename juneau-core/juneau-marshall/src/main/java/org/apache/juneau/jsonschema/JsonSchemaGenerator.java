@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jsonschema;
 
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -354,7 +354,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		 * <p>
 		 * The definitions can then be retrieved from the session using {@link JsonSchemaGeneratorSession#getBeanDefs()}.
 		 * <p>
-		 * Definitions can also be added programmatically using {@link JsonSchemaGeneratorSession#addBeanDef(String, OMap)}.
+		 * Definitions can also be added programmatically using {@link JsonSchemaGeneratorSession#addBeanDef(String, JsonMap)}.
 		 *
 		 * @return This object.
 		 */
@@ -1042,7 +1042,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	protected OMap properties() {
+	protected JsonMap properties() {
 		return filteredMap()
 			.append("useBeanDefs", useBeanDefs)
 			.append("allowNestedExamples", allowNestedExamples)

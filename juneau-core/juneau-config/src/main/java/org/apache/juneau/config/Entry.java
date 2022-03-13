@@ -207,8 +207,8 @@ public class Entry {
 			if (type == byte[].class) return (Optional<T>)asBytes();
 			if (type == int.class || type == int.class || type == Integer.class) return (Optional<T>)asInteger();
 			if (type == long.class || type == Long.class) return (Optional<T>)asLong();
-			if (type == OMap.class) return (Optional<T>)asMap();
-			if (type == OList.class) return (Optional<T>)asList();
+			if (type == JsonMap.class) return (Optional<T>)asMap();
+			if (type == JsonList.class) return (Optional<T>)asList();
 			if (isEmpty()) return empty();
 			if (isSimpleType(type)) return optional((T)config.beanSession.convertToType(v, (Class<?>)type));
 
@@ -435,7 +435,7 @@ public class Entry {
 	 * @return The value, or {@link Optional#empty()} if the section or key does not exist.
 	 * @throws ParseException If value could not be parsed.
 	 */
-	public Optional<OMap> asMap() throws ParseException {
+	public Optional<JsonMap> asMap() throws ParseException {
 		return asMap(config.parser);
 	}
 
@@ -449,7 +449,7 @@ public class Entry {
 	 * @return The value, or <jk>null</jk> if the section or key does not exist.
 	 * @throws ParseException If value could not be parsed.
 	 */
-	public Optional<OMap> asMap(Parser parser) throws ParseException {
+	public Optional<JsonMap> asMap(Parser parser) throws ParseException {
 		if (isNull())
 			return empty();
 		if (parser == null)
@@ -460,7 +460,7 @@ public class Entry {
 			if (s1 != '{' && ! "null".equals(s))
 				s = '{' + s + '}';
 		}
-		return optional(OMap.ofText(s, parser));
+		return optional(JsonMap.ofText(s, parser));
 	}
 
 	/**
@@ -475,7 +475,7 @@ public class Entry {
 	 * @return The value, or {@link Optional#empty()} if the section or key does not exist.
 	 * @throws ParseException If value could not be parsed.
 	 */
-	public Optional<OList> asList() throws ParseException {
+	public Optional<JsonList> asList() throws ParseException {
 		return asList(config.parser);
 	}
 
@@ -490,7 +490,7 @@ public class Entry {
 	 * @return The value, or {@link Optional#empty()} if the section or key does not exist.
 	 * @throws ParseException If value could not be parsed.
 	 */
-	public Optional<OList> asList(Parser parser) throws ParseException {
+	public Optional<JsonList> asList(Parser parser) throws ParseException {
 		if (isNull())
 			return empty();
 		if (parser == null)
@@ -501,7 +501,7 @@ public class Entry {
 			if (s1 != '[' && ! "null".equals(s))
 				s = '[' + s + ']';
 		}
-		return optional(OList.ofText(s, parser));
+		return optional(JsonList.ofText(s, parser));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

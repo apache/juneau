@@ -516,7 +516,7 @@ public class Swagger_Test {
 		assertObject(x.getTags()).asJson().is("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'foo'},{name:'bar'}]");
 	}
 
-	// OList
+	// JsonList
 	@Rest
 	public static class C10 {
 		@RestGet(swagger=@OpSwagger(tags="['foo', 'bar']"))
@@ -534,7 +534,7 @@ public class Swagger_Test {
 		assertObject(x.getTags()).asJson().is("[{name:'s-name',description:'s-description',externalDocs:{description:'s-description',url:'s-url'}},{name:'foo'},{name:'bar'}]");
 	}
 
-	// OList localized
+	// JsonList localized
 	@Rest(messages="BasicRestInfoProviderTest")
 	public static class C11 {
 		@RestGet(swagger=@OpSwagger(tags="['$L{foo}', '$L{bar}']"))

@@ -35,17 +35,17 @@
 	</p>
 	<p class='bjava'>
 		|	<jc>// Sample swap for converting a bean to a specialized map of key-value pairs.</jc>
-		|	<jk>public class</jk> MyBeanSwap <jk>extends</jk> ObjectSwap&lt;MyBean,OMap&gt; {
+		|	<jk>public class</jk> MyBeanSwap <jk>extends</jk> ObjectSwap&lt;MyBean,JsonMap&gt; {
 		|		
 		|		<jc>// Converts a bean to a generic map.</jc>
 		|		<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
-		|		<jk>public</jk> OMap swap(BeanSession <jv>session</jv>, MyBean <jv>bean</jv>) {
-		|			<jk>return</jk> OMap.<jsm>of</jsm>(<js>"foo"</js>, <jv>bean</jv>.getBar());
+		|		<jk>public</jk> JsonMap swap(BeanSession <jv>session</jv>, MyBean <jv>bean</jv>) {
+		|			<jk>return</jk> JsonMap.<jsm>of</jsm>(<js>"foo"</js>, <jv>bean</jv>.getBar());
 		|		}
 		|		
 		|		<jc>// Converts the generic map back into a bean.</jc>
 		|		<ja>@Override</ja> <jc>/* ObjectSwap */</jc>
-		|		<jk>public</jk> MyBean unswap(BeanSession <jv>session</jv>, OMap <jv>map</jv>, ClassMeta&lt;?&gt; <jv>hint</jv>) <jk>throws</jk> Exception {
+		|		<jk>public</jk> MyBean unswap(BeanSession <jv>session</jv>, JsonMap <jv>map</jv>, ClassMeta&lt;?&gt; <jv>hint</jv>) <jk>throws</jk> Exception {
 		|			MyBean <jv>bean</jv> = <jk>new</jk> MyBean();
 		|			<jv>bean</jv>.setBar(<jv>map</jv>.getString(<js>"foo"</js>));
 		|			<jk>return</jk> <jv>bean</jv>;

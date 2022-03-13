@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -726,7 +726,7 @@ public class ReaderParser extends Parser {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	protected OMap properties() {
+	protected JsonMap properties() {
 		return filteredMap("fileCharset", fileCharset, "streamCharset", streamCharset);
 	}
 }

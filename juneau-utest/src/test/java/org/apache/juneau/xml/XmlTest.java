@@ -80,11 +80,11 @@ public class XmlTest {
 			+"	<fico_x0020_score>_x0020_&gt; 640</fico_x0020_score>\n"
 			+"</object>\n";
 
-		OMap m = (OMap) XmlParser.DEFAULT.parse(xml1, Object.class);
+		JsonMap m = (JsonMap) XmlParser.DEFAULT.parse(xml1, Object.class);
 		String json2 = JsonSerializer.create().simpleMode().ws().keepNullProperties().build().serialize(m);
 		assertEquals(json1, json2);
 
-		m = (OMap) JsonParser.DEFAULT.parse(json1, Object.class);
+		m = (JsonMap) JsonParser.DEFAULT.parse(json1, Object.class);
 		String xml2 = XmlSerializer.create().sq().ws()
 			.keepNullProperties()
 			.build()
@@ -136,7 +136,7 @@ public class XmlTest {
 			+"	<fico_x0020_score>_x0020_&gt; 640</fico_x0020_score>\n"
 			+"</object>\n";
 
-		OMap m = (OMap) JsonParser.DEFAULT.parse(json1, Object.class);
+		JsonMap m = (JsonMap) JsonParser.DEFAULT.parse(json1, Object.class);
 		String r = XmlSerializer.create().ns().sq().ws()
 			.addNamespaceUrisToRoot()
 			.defaultNamespace(Namespace.of("http://www.apache.org"))

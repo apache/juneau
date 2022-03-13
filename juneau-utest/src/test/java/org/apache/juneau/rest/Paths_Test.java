@@ -27,8 +27,8 @@ public class Paths_Test {
 	// Setup
 	//------------------------------------------------------------------------------------------------------------------
 
-	static OMap getPaths(RestRequest req) {
-		return OMap.create()
+	static JsonMap getPaths(RestRequest req) {
+		return JsonMap.create()
 			.append("pathInfo", req.getPathInfo())
 			.append("pathRemainder", req.getPathParams().getRemainder().orElse(null))
 			.append("pathRemainderUndecoded", req.getPathParams().getRemainderUndecoded().orElse(null))
@@ -47,7 +47,7 @@ public class Paths_Test {
 	@Rest
 	public static class A {
 		@RestGet(path="/*")
-		public OMap get(RestRequest req, @Path("/*") String r) {
+		public JsonMap get(RestRequest req, @Path("/*") String r) {
 			return getPaths(req).append("pathRemainder2", r).append("method",1);
 		}
 	}
@@ -195,7 +195,7 @@ public class Paths_Test {
 
 	public static class B {
 		@RestGet(path="/subpath/*")
-		public OMap get(RestRequest req, @Path("/*") String r) {
+		public JsonMap get(RestRequest req, @Path("/*") String r) {
 			return getPaths(req).append("pathRemainder2", r).append("method",2);
 		}
 	}
@@ -347,7 +347,7 @@ public class Paths_Test {
 	@Rest(path="/a")
 	public static class C1 {
 		@RestGet(path="/*")
-		public OMap get(RestRequest req, @Path("/*") String r) {
+		public JsonMap get(RestRequest req, @Path("/*") String r) {
 			return getPaths(req).append("pathRemainder2", r).append("method",3);
 		}
 	}
@@ -499,7 +499,7 @@ public class Paths_Test {
 	@Rest(path="/a")
 	public static class D1 {
 		@RestGet(path="/subpath/*")
-		public OMap get(RestRequest req, @Path("/*") String r) {
+		public JsonMap get(RestRequest req, @Path("/*") String r) {
 			return getPaths(req).append("pathRemainder2", r).append("method",4);
 		}
 	}

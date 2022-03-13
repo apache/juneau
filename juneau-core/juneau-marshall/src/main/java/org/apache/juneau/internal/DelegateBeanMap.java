@@ -37,7 +37,7 @@ import org.apache.juneau.collections.*;
 public class DelegateBeanMap<T> extends BeanMap<T> {
 
 	private Set<String> keys = set();
-	private OMap overrideValues = new OMap();
+	private JsonMap overrideValues = new JsonMap();
 
 	/**
 	 * Constructor.

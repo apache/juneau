@@ -14,7 +14,7 @@ package org.apache.juneau.rest.debug;
 
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.Enablement.*;
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 
 import java.lang.reflect.*;
 import java.util.function.*;

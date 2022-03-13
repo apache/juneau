@@ -62,7 +62,7 @@ public class JsonTest {
 		r = "\\w[\\w\\-\\.]{3,}\\w";
 		m.put("x", r);
 		assertEquals("{x:\"\\\\w[\\\\w\\\\-\\\\.]{3,}\\\\w\"}", s2.serialize(m));
-		assertEquals(r, OMap.ofJson(s2.serialize(m)).getString("x"));
+		assertEquals(r, JsonMap.ofJson(s2.serialize(m)).getString("x"));
 
 		// String = [foo\bar]
 		// JSON = {x:"foo\\bar"}
@@ -143,7 +143,7 @@ public class JsonTest {
 	//====================================================================================================
 	@Test
 	public void testIndentation() throws Exception {
-		OMap m = OMap.ofJson("{J:{B:['c',{D:'e'},['f',{G:'h'},1,false]]},I:'j'}");
+		JsonMap m = JsonMap.ofJson("{J:{B:['c',{D:'e'},['f',{G:'h'},1,false]]},I:'j'}");
 		String e = ""
 			+ "{"
 			+ "\n	J: {"
@@ -173,10 +173,10 @@ public class JsonTest {
 	@Test
 	public void testEscapingDoubleQuotes() throws Exception {
 		JsonSerializer s = JsonSerializer.DEFAULT;
-		String r = s.serialize(OMap.of("f1", "x'x\"x"));
+		String r = s.serialize(JsonMap.of("f1", "x'x\"x"));
 		assertEquals("{\"f1\":\"x'x\\\"x\"}", r);
 		JsonParser p = JsonParser.DEFAULT;
-		assertEquals("x'x\"x", p.parse(r, OMap.class).getString("f1"));
+		assertEquals("x'x\"x", p.parse(r, JsonMap.class).getString("f1"));
 	}
 
 	//====================================================================================================
@@ -185,10 +185,10 @@ public class JsonTest {
 	@Test
 	public void testEscapingSingleQuotes() throws Exception {
 		JsonSerializer s = SimpleJsonSerializer.DEFAULT;
-		String r = s.serialize(OMap.of("f1", "x'x\"x"));
+		String r = s.serialize(JsonMap.of("f1", "x'x\"x"));
 		assertEquals("{f1:'x\\'x\"x'}", r);
 		JsonParser p = JsonParser.DEFAULT;
-		assertEquals("x'x\"x", p.parse(r, OMap.class).getString("f1"));
+		assertEquals("x'x\"x", p.parse(r, JsonMap.class).getString("f1"));
 	}
 
 	//====================================================================================================

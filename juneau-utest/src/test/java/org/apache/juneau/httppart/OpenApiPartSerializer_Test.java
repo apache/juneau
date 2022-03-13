@@ -298,7 +298,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("foo,bar,null", serialize(ps, list("foo","bar",null)));
 		assertEquals("foo,bar,null", serialize(ps, list("foo","bar",null)));
 		assertEquals("foo,bar,null,null", serialize(ps, list(new D("foo"),new D("bar"),new D(null),null)));
-		assertEquals("foo,bar,null", serialize(ps, OList.of("foo","bar",null)));
+		assertEquals("foo,bar,null", serialize(ps, JsonList.of("foo","bar",null)));
 
 		assertEquals("foo\\,bar,null", serialize(ps, new String[]{"foo,bar",null}));
 	}
@@ -312,7 +312,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("foo|bar|null", serialize(ps, list("foo","bar",null)));
 		assertEquals("foo|bar|null", serialize(ps, list("foo","bar",null)));
 		assertEquals("foo|bar|null|null", serialize(ps, list(new D("foo"),new D("bar"),new D(null),null)));
-		assertEquals("foo|bar|null", serialize(ps, OList.of("foo","bar",null)));
+		assertEquals("foo|bar|null", serialize(ps, JsonList.of("foo","bar",null)));
 	}
 
 	@Test
@@ -324,7 +324,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("foo bar null", serialize(ps, list("foo","bar",null)));
 		assertEquals("foo bar null", serialize(ps, list("foo","bar",null)));
 		assertEquals("foo bar null null", serialize(ps, list(new D("foo"),new D("bar"),new D(null),null)));
-		assertEquals("foo bar null", serialize(ps, OList.of("foo","bar",null)));
+		assertEquals("foo bar null", serialize(ps, JsonList.of("foo","bar",null)));
 	}
 
 	@Test
@@ -336,7 +336,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("foo\tbar\tnull", serialize(ps, list("foo","bar",null)));
 		assertEquals("foo\tbar\tnull", serialize(ps, list("foo","bar",null)));
 		assertEquals("foo\tbar\tnull\tnull", serialize(ps, list(new D("foo"),new D("bar"),new D(null),null)));
-		assertEquals("foo\tbar\tnull", serialize(ps, OList.of("foo","bar",null)));
+		assertEquals("foo\tbar\tnull", serialize(ps, JsonList.of("foo","bar",null)));
 	}
 
 	@Test
@@ -348,7 +348,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("@(foo,bar,'null',null)", serialize(ps, list("foo","bar","null",null)));
 		assertEquals("@(foo,bar,'null',null)", serialize(ps, list("foo","bar","null",null)));
 		assertEquals("@(foo,bar,'null',null)", serialize(ps, list(new D("foo"),new D("bar"),new D("null"),null)));
-		assertEquals("@(foo,bar,'null',null)", serialize(ps, OList.of("foo","bar","null",null)));
+		assertEquals("@(foo,bar,'null',null)", serialize(ps, JsonList.of("foo","bar","null",null)));
 	}
 
 	@Test
@@ -360,7 +360,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("foo,bar,null", serialize(ps, list("foo","bar",null)));
 		assertEquals("foo,bar,null", serialize(ps, list("foo","bar",null)));
 		assertEquals("foo,bar,null,null", serialize(ps, list(new D("foo"),new D("bar"),new D(null),null)));
-		assertEquals("foo,bar,null", serialize(ps, OList.of("foo","bar",null)));
+		assertEquals("foo,bar,null", serialize(ps, JsonList.of("foo","bar",null)));
 	}
 
 	@Test
@@ -373,7 +373,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("foo,bar,null", serialize(ps, list("foo","bar",null)));
 		assertEquals("foo,bar,null", serialize(ps, list("foo","bar",null)));
 		assertEquals("foo,bar,null,null", serialize(ps, list(new D("foo"),new D("bar"),new D(null),null)));
-		assertEquals("foo,bar,null", serialize(ps, OList.of("foo","bar",null)));
+		assertEquals("foo,bar,null", serialize(ps, JsonList.of("foo","bar",null)));
 	}
 
 	@Test
@@ -838,8 +838,8 @@ public class OpenApiPartSerializer_Test {
 		HttpPartSchema ps = tObject().allowEmptyValue().build();
 		assertEquals("f1=1,f2=2,f3=true", serialize(ps, new H1("1",2,true)));
 		assertEquals("", serialize(ps, new H1(null,null,null)));
-		assertEquals("f1=1,f2=2,f3=true", serialize(ps, OMap.ofJson("{f1:'1',f2:2,f3:true}")));
-		assertEquals("f1=null,f2=null,f3=null", serialize(ps, OMap.ofJson("{f1:null,f2:null,f3:null}")));
+		assertEquals("f1=1,f2=2,f3=true", serialize(ps, JsonMap.ofJson("{f1:'1',f2:2,f3:true}")));
+		assertEquals("f1=null,f2=null,f3=null", serialize(ps, JsonMap.ofJson("{f1:null,f2:null,f3:null}")));
 		assertEquals("null", serialize(ps, null));
 	}
 
@@ -848,8 +848,8 @@ public class OpenApiPartSerializer_Test {
 		HttpPartSchema ps = T_OBJECT_UON;
 		assertEquals("(f1='1',f2=2,f3=true)", serialize(ps, new H1("1",2,true)));
 		assertEquals("()", serialize(ps, new H1(null,null,null)));
-		assertEquals("(f1='1',f2=2,f3=true)", serialize(ps, OMap.ofJson("{f1:'1',f2:2,f3:true}")));
-		assertEquals("(f1=null,f2=null,f3=null)", serialize(ps, OMap.ofJson("{f1:null,f2:null,f3:null}")));
+		assertEquals("(f1='1',f2=2,f3=true)", serialize(ps, JsonMap.ofJson("{f1:'1',f2:2,f3:true}")));
+		assertEquals("(f1=null,f2=null,f3=null)", serialize(ps, JsonMap.ofJson("{f1:null,f2:null,f3:null}")));
 		assertEquals("null", serialize(ps, null));
 	}
 
@@ -858,10 +858,10 @@ public class OpenApiPartSerializer_Test {
 		HttpPartSchema ps = tArray(tObject().allowEmptyValue()).build();
 		assertEquals("f1=1\\,f2=2\\,f3=true,,null", serialize(ps, new H1[]{new H1("1",2,true),new H1(null,null,null),null}));
 		assertEquals("f1=1\\,f2=2\\,f3=true,,null", serialize(ps, list(new H1("1",2,true),new H1(null,null,null),null)));
-		assertEquals("f1=1\\,f2=2\\,f3=true,f1=null\\,f2=null\\,f3=null,null", serialize(ps, new OMap[]{OMap.ofJson("{f1:'1',f2:2,f3:true}"),OMap.ofJson("{f1:null,f2:null,f3:null}"),null}));
-		assertEquals("f1=1\\,f2=2\\,f3=true,f1=null\\,f2=null\\,f3=null,null", serialize(ps, list(OMap.ofJson("{f1:'1',f2:2,f3:true}"),OMap.ofJson("{f1:null,f2:null,f3:null}"),null)));
-		assertEquals("f1=1\\,f2=2\\,f3=true,f1=1\\,f2=2\\,f3=true,null", serialize(ps, new Object[]{new H1("1",2,true),OMap.ofJson("{f1:'1',f2:2,f3:true}"),null}));
-		assertEquals("f1=1\\,f2=2\\,f3=true,f1=1\\,f2=2\\,f3=true,null", serialize(ps, list(new H1("1",2,true),OMap.ofJson("{f1:'1',f2:2,f3:true}"),null)));
+		assertEquals("f1=1\\,f2=2\\,f3=true,f1=null\\,f2=null\\,f3=null,null", serialize(ps, new JsonMap[]{JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null}));
+		assertEquals("f1=1\\,f2=2\\,f3=true,f1=null\\,f2=null\\,f3=null,null", serialize(ps, list(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null)));
+		assertEquals("f1=1\\,f2=2\\,f3=true,f1=1\\,f2=2\\,f3=true,null", serialize(ps, new Object[]{new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),null}));
+		assertEquals("f1=1\\,f2=2\\,f3=true,f1=1\\,f2=2\\,f3=true,null", serialize(ps, list(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),null)));
 	}
 
 	@Test
@@ -869,10 +869,10 @@ public class OpenApiPartSerializer_Test {
 		HttpPartSchema ps = tArrayPipes(tObject().allowEmptyValue()).build();
 		assertEquals("f1=1,f2=2,f3=true||null", serialize(ps, new H1[]{new H1("1",2,true),new H1(null,null,null),null}));
 		assertEquals("f1=1,f2=2,f3=true||null", serialize(ps, list(new H1("1",2,true),new H1(null,null,null),null)));
-		assertEquals("f1=1,f2=2,f3=true|f1=null,f2=null,f3=null|null", serialize(ps, new OMap[]{OMap.ofJson("{f1:'1',f2:2,f3:true}"),OMap.ofJson("{f1:null,f2:null,f3:null}"),null}));
-		assertEquals("f1=1,f2=2,f3=true|f1=null,f2=null,f3=null|null", serialize(ps, list(OMap.ofJson("{f1:'1',f2:2,f3:true}"),OMap.ofJson("{f1:null,f2:null,f3:null}"),null)));
-		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true|null", serialize(ps, new Object[]{new H1("1",2,true),OMap.ofJson("{f1:'1',f2:2,f3:true}"),null}));
-		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true|null", serialize(ps, list(new H1("1",2,true),OMap.ofJson("{f1:'1',f2:2,f3:true}"),null)));
+		assertEquals("f1=1,f2=2,f3=true|f1=null,f2=null,f3=null|null", serialize(ps, new JsonMap[]{JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null}));
+		assertEquals("f1=1,f2=2,f3=true|f1=null,f2=null,f3=null|null", serialize(ps, list(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null)));
+		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true|null", serialize(ps, new Object[]{new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),null}));
+		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true|null", serialize(ps, list(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),null)));
 	}
 
 	@Test
@@ -880,10 +880,10 @@ public class OpenApiPartSerializer_Test {
 		HttpPartSchema ps = tArrayUon(tObject()).build();
 		assertEquals("@((f1='1',f2=2,f3=true),(),null)", serialize(ps, new H1[]{new H1("1",2,true),new H1(null,null,null),null}));
 		assertEquals("@((f1='1',f2=2,f3=true),(),null)", serialize(ps, list(new H1("1",2,true),new H1(null,null,null),null)));
-		assertEquals("@((f1='1',f2=2,f3=true),(f1=null,f2=null,f3=null),null)", serialize(ps, new OMap[]{OMap.ofJson("{f1:'1',f2:2,f3:true}"),OMap.ofJson("{f1:null,f2:null,f3:null}"),null}));
-		assertEquals("@((f1='1',f2=2,f3=true),(f1=null,f2=null,f3=null),null)", serialize(ps, list(OMap.ofJson("{f1:'1',f2:2,f3:true}"),OMap.ofJson("{f1:null,f2:null,f3:null}"),null)));
-		assertEquals("@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true),null)", serialize(ps, new Object[]{new H1("1",2,true),OMap.ofJson("{f1:'1',f2:2,f3:true}"),null}));
-		assertEquals("@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true),null)", serialize(ps, list(new H1("1",2,true),OMap.ofJson("{f1:'1',f2:2,f3:true}"),null)));
+		assertEquals("@((f1='1',f2=2,f3=true),(f1=null,f2=null,f3=null),null)", serialize(ps, new JsonMap[]{JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null}));
+		assertEquals("@((f1='1',f2=2,f3=true),(f1=null,f2=null,f3=null),null)", serialize(ps, list(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null)));
+		assertEquals("@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true),null)", serialize(ps, new Object[]{new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),null}));
+		assertEquals("@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true),null)", serialize(ps, list(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),null)));
 	}
 
 	@Test
@@ -892,12 +892,12 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=3\\\\\\,f3=false,\\,null,null", serialize(ps, new H1[][]{{new H1("1",2,true),new H1("x",3,false)},{new H1(null,null,null),null},null}));
 		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=3\\\\\\,f3=false,\\,null,null", serialize(ps, list(new H1[]{new H1("1",2,true),new H1("x",3,false)},new H1[]{new H1(null,null,null),null},null)));
 		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=3\\\\\\,f3=false,\\,null,null", serialize(ps, list(list(new H1("1",2,true),new H1("x",3,false)),list(new H1(null,null,null),null),null)));
-		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=4\\\\\\,f3=false,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, new OMap[][]{{OMap.ofJson("{f1:'1',f2:2,f3:true}"),OMap.ofJson("{f1:'x',f2:4,f3:false}")},{OMap.ofJson("{f1:null,f2:null,f3:null}"),null},null}));
-		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=4\\\\\\,f3=false,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, list(new OMap[]{OMap.ofJson("{f1:'1',f2:2,f3:true}"),OMap.ofJson("{f1:'x',f2:4,f3:false}")},new OMap[]{OMap.ofJson("{f1:null,f2:null,f3:null}"),null},null)));
-		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=4\\\\\\,f3=false,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, list(list(OMap.ofJson("{f1:'1',f2:2,f3:true}"),OMap.ofJson("{f1:'x',f2:4,f3:false}")),list(OMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
-		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=1\\\\\\,f2=2\\\\\\,f3=true,\\,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, new Object[][]{{new H1("1",2,true),OMap.ofJson("{f1:'1',f2:2,f3:true}")},{new H1(null,null,null),OMap.ofJson("{f1:null,f2:null,f3:null}"),null},null}));
-		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=1\\\\\\,f2=2\\\\\\,f3=true,\\,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, list(new Object[]{new H1("1",2,true),OMap.ofJson("{f1:'1',f2:2,f3:true}")},new Object[]{new H1(null,null,null),OMap.ofJson("{f1:null,f2:null,f3:null}"),null},null)));
-		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=1\\\\\\,f2=2\\\\\\,f3=true,\\,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, list(list(new H1("1",2,true),OMap.ofJson("{f1:'1',f2:2,f3:true}")),list(new H1(null,null,null),OMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=4\\\\\\,f3=false,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, new JsonMap[][]{{JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")},{JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null},null}));
+		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=4\\\\\\,f3=false,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, list(new JsonMap[]{JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")},new JsonMap[]{JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null},null)));
+		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=x\\\\\\,f2=4\\\\\\,f3=false,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, list(list(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")),list(JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=1\\\\\\,f2=2\\\\\\,f3=true,\\,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, new Object[][]{{new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")},{new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null},null}));
+		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=1\\\\\\,f2=2\\\\\\,f3=true,\\,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, list(new Object[]{new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")},new Object[]{new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null},null)));
+		assertEquals("f1=1\\\\\\,f2=2\\\\\\,f3=true\\,f1=1\\\\\\,f2=2\\\\\\,f3=true,\\,f1=null\\\\\\,f2=null\\\\\\,f3=null\\,null,null", serialize(ps, list(list(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")),list(new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
 	}
 
 	@Test
@@ -908,12 +908,12 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=3,f3=false |null null", serialize(ps, new H1[][]{{new H1("1",2,true),new H1("x",3,false)},{new H1(null,null,null),null},null}));
 		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=3,f3=false |null null", serialize(ps, list(new H1[]{new H1("1",2,true),new H1("x",3,false)},new H1[]{new H1(null,null,null),null},null)));
 		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=3,f3=false |null null", serialize(ps, list(list(new H1("1",2,true),new H1("x",3,false)),list(new H1(null,null,null),null),null)));
-		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=4,f3=false f1=null,f2=null,f3=null|null null", serialize(ps, new OMap[][]{{OMap.ofJson("{f1:'1',f2:2,f3:true}"),OMap.ofJson("{f1:'x',f2:4,f3:false}")},{OMap.ofJson("{f1:null,f2:null,f3:null}"),null},null}));
-		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=4,f3=false f1=null,f2=null,f3=null|null null", serialize(ps, list(new OMap[]{OMap.ofJson("{f1:'1',f2:2,f3:true}"),OMap.ofJson("{f1:'x',f2:4,f3:false}")},new OMap[]{OMap.ofJson("{f1:null,f2:null,f3:null}"),null},null)));
-		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=4,f3=false f1=null,f2=null,f3=null|null null", serialize(ps, list(list(OMap.ofJson("{f1:'1',f2:2,f3:true}"),OMap.ofJson("{f1:'x',f2:4,f3:false}")),list(OMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
-		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true |f1=null,f2=null,f3=null|null null", serialize(ps, new Object[][]{{new H1("1",2,true),OMap.ofJson("{f1:'1',f2:2,f3:true}")},{new H1(null,null,null),OMap.ofJson("{f1:null,f2:null,f3:null}"),null},null}));
-		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true |f1=null,f2=null,f3=null|null null", serialize(ps, list(new Object[]{new H1("1",2,true),OMap.ofJson("{f1:'1',f2:2,f3:true}")},new Object[]{new H1(null,null,null),OMap.ofJson("{f1:null,f2:null,f3:null}"),null},null)));
-		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true |f1=null,f2=null,f3=null|null null", serialize(ps, list(list(new H1("1",2,true),OMap.ofJson("{f1:'1',f2:2,f3:true}")),list(new H1(null,null,null),OMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=4,f3=false f1=null,f2=null,f3=null|null null", serialize(ps, new JsonMap[][]{{JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")},{JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null},null}));
+		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=4,f3=false f1=null,f2=null,f3=null|null null", serialize(ps, list(new JsonMap[]{JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")},new JsonMap[]{JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null},null)));
+		assertEquals("f1=1,f2=2,f3=true|f1=x,f2=4,f3=false f1=null,f2=null,f3=null|null null", serialize(ps, list(list(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")),list(JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true |f1=null,f2=null,f3=null|null null", serialize(ps, new Object[][]{{new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")},{new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null},null}));
+		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true |f1=null,f2=null,f3=null|null null", serialize(ps, list(new Object[]{new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")},new Object[]{new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null},null)));
+		assertEquals("f1=1,f2=2,f3=true|f1=1,f2=2,f3=true |f1=null,f2=null,f3=null|null null", serialize(ps, list(list(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")),list(new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
 	}
 
 	@Test
@@ -922,12 +922,12 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=3,f3=false)),@((),null),null)", serialize(ps, new H1[][]{{new H1("1",2,true),new H1("x",3,false)},{new H1(null,null,null),null},null}));
 		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=3,f3=false)),@((),null),null)", serialize(ps, list(new H1[]{new H1("1",2,true),new H1("x",3,false)},new H1[]{new H1(null,null,null),null},null)));
 		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=3,f3=false)),@((),null),null)", serialize(ps, list(list(new H1("1",2,true),new H1("x",3,false)),list(new H1(null,null,null),null),null)));
-		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=4,f3=false)),@((f1=null,f2=null,f3=null),null),null)", serialize(ps, new OMap[][]{{OMap.ofJson("{f1:'1',f2:2,f3:true}"),OMap.ofJson("{f1:'x',f2:4,f3:false}")},{OMap.ofJson("{f1:null,f2:null,f3:null}"),null},null}));
-		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=4,f3=false)),@((f1=null,f2=null,f3=null),null),null)", serialize(ps, list(new OMap[]{OMap.ofJson("{f1:'1',f2:2,f3:true}"),OMap.ofJson("{f1:'x',f2:4,f3:false}")},new OMap[]{OMap.ofJson("{f1:null,f2:null,f3:null}"),null},null)));
-		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=4,f3=false)),@((f1=null,f2=null,f3=null),null),null)", serialize(ps, list(list(OMap.ofJson("{f1:'1',f2:2,f3:true}"),OMap.ofJson("{f1:'x',f2:4,f3:false}")),list(OMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
-		assertEquals("@(@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true)),@((),(f1=null,f2=null,f3=null),null),null)", serialize(ps, new Object[][]{{new H1("1",2,true),OMap.ofJson("{f1:'1',f2:2,f3:true}")},{new H1(null,null,null),OMap.ofJson("{f1:null,f2:null,f3:null}"),null},null}));
-		assertEquals("@(@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true)),@((),(f1=null,f2=null,f3=null),null),null)", serialize(ps, list(new Object[]{new H1("1",2,true),OMap.ofJson("{f1:'1',f2:2,f3:true}")},new Object[]{new H1(null,null,null),OMap.ofJson("{f1:null,f2:null,f3:null}"),null},null)));
-		assertEquals("@(@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true)),@((),(f1=null,f2=null,f3=null),null),null)", serialize(ps, list(list(new H1("1",2,true),OMap.ofJson("{f1:'1',f2:2,f3:true}")),list(new H1(null,null,null),OMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=4,f3=false)),@((f1=null,f2=null,f3=null),null),null)", serialize(ps, new JsonMap[][]{{JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")},{JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null},null}));
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=4,f3=false)),@((f1=null,f2=null,f3=null),null),null)", serialize(ps, list(new JsonMap[]{JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")},new JsonMap[]{JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null},null)));
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1=x,f2=4,f3=false)),@((f1=null,f2=null,f3=null),null),null)", serialize(ps, list(list(JsonMap.ofJson("{f1:'1',f2:2,f3:true}"),JsonMap.ofJson("{f1:'x',f2:4,f3:false}")),list(JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true)),@((),(f1=null,f2=null,f3=null),null),null)", serialize(ps, new Object[][]{{new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")},{new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null},null}));
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true)),@((),(f1=null,f2=null,f3=null),null),null)", serialize(ps, list(new Object[]{new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")},new Object[]{new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null},null)));
+		assertEquals("@(@((f1='1',f2=2,f3=true),(f1='1',f2=2,f3=true)),@((),(f1=null,f2=null,f3=null),null),null)", serialize(ps, list(list(new H1("1",2,true),JsonMap.ofJson("{f1:'1',f2:2,f3:true}")),list(new H1(null,null,null),JsonMap.ofJson("{f1:null,f2:null,f3:null}"),null),null)));
 	}
 
 	public static class H2 {
@@ -976,7 +976,7 @@ public class OpenApiPartSerializer_Test {
 		assertEquals("null", serialize(ps, null));
 		assertEquals(
 			"f01=foo,f02=Zm9v,f04=2012-12-21T12:34:56Z,f05=666F6F,f06=66 6F 6F,f07=foo,f08=1,f09=2,f10=1.0,f11=1.0,f12=true,f99=1",
-			serialize(ps, OMap.of("f01","foo","f02",foob,"f04",parseIsoCalendar("2012-12-21T12:34:56Z"),"f05",foob,"f06",foob,"f07","foo","f08",1,"f09",2,"f10",1.0,"f11",1.0,"f12",true,"f99",1))
+			serialize(ps, JsonMap.of("f01","foo","f02",foob,"f04",parseIsoCalendar("2012-12-21T12:34:56Z"),"f05",foob,"f06",foob,"f07","foo","f08",1,"f09",2,"f10",1.0,"f11",1.0,"f12",true,"f99",1))
 		);
 	}
 

@@ -33,7 +33,7 @@ import org.junit.*;
 public class AutoListSwapTest {
 
 	private static final List<String> STRINGLIST = list("foo");
-	private static final OList OLIST = OList.of("foo");
+	private static final JsonList JSONLIST = JsonList.of("foo");
 
 	private static ObjectSwap find(Class<?> c) {
 		return AutoListSwap.find(BeanContext.DEFAULT, ClassInfo.of(c));
@@ -57,17 +57,17 @@ public class AutoListSwapTest {
 		}
 	}
 	public static class A02 {
-		public OList toOList() {
-			return OLIST;
+		public JsonList toJsonList() {
+			return JSONLIST;
 		}
 	}
 	public static class A03 {
-		public OList toOList() throws SerializeException {
+		public JsonList toJsonList() throws SerializeException {
 			throw new SerializeException("foo");
 		}
 	}
 	public static class A04 {
-		public OList toOList() {
+		public JsonList toJsonList() {
 			throw new RuntimeException("foo");
 		}
 	}
@@ -78,7 +78,7 @@ public class AutoListSwapTest {
 	}
 
 	@Test
-	public void a02_swap_toOList() throws Exception {
+	public void a02_swap_toJsonList() throws Exception {
 		assertObject(find(A02.class).swap(null, new A02())).asJson().is("['foo']");
 	}
 
@@ -106,10 +106,10 @@ public class AutoListSwapTest {
 		}
 	}
 	public static class B02 {
-		public OList toOList() {
-			return OLIST;
+		public JsonList toJsonList() {
+			return JSONLIST;
 		}
-		public static B02 fromOList(OList o) {
+		public static B02 fromJsonList(JsonList o) {
 			assertObject(o).asJson().is("['foo']");
 			return new B02();
 		}
@@ -135,8 +135,8 @@ public class AutoListSwapTest {
 	}
 
 	@Test
-	public void b02_unswap_fromOList() throws Exception {
-		assertNotNull(find(B02.class).unswap(null, OLIST, null));
+	public void b02_unswap_fromJsonList() throws Exception {
+		assertNotNull(find(B02.class).unswap(null, JSONLIST, null));
 	}
 
 	@Test

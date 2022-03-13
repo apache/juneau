@@ -613,8 +613,8 @@ public class ConfigMap implements ConfigStoreListener {
 	 *
 	 * @return A copy of this config as a map of maps.
 	 */
-	public OMap asMap() {
-		OMap m = new OMap();
+	public JsonMap asMap() {
+		JsonMap m = new JsonMap();
 		try (SimpleLock x = lock.read()) {
 			imports.forEach(y -> m.putAll(y.getConfigMap().asMap()));
 			entries.values().forEach(z -> {

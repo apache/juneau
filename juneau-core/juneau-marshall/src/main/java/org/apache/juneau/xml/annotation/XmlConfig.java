@@ -74,7 +74,7 @@ public @interface XmlConfig {
 	 * Configuration property:  Preserve root element during generalized parsing.
 	 *
 	 * <p>
-	 * If <js>"true"</js>, when parsing into a generic {@link OMap}, the map will contain a single entry whose key
+	 * If <js>"true"</js>, when parsing into a generic {@link JsonMap}, the map will contain a single entry whose key
 	 * is the root element name.
 	 *
 	 * <ul class='notes'>

@@ -116,7 +116,7 @@ public @interface Query {
 	 * 		<p class='bjava'>
 	 * 	<jc>// When used on a REST method</jc>
 	 * 	<ja>@RestPost</ja>
-	 * 	<jk>public void</jk> addPet(<ja>@Query</ja> OMap <jv>allQueryParameters</jv>) {...}
+	 * 	<jk>public void</jk> addPet(<ja>@Query</ja> JsonMap <jv>allQueryParameters</jv>) {...}
 	 * 		</p>
 	 * 		<p class='bjava'>
 	 * 	<jc>// When used on a remote method parameter</jc>

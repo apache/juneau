@@ -40,7 +40,7 @@ public class Remote_RequestAnnotation_Test {
 	public static class A {
 		@RestOp(path="/{x}")
 		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
-			return OMap.of(
+			return JsonMap.of(
 				"body",read(r),
 				"header",h,
 				"query",q,
@@ -89,7 +89,7 @@ public class Remote_RequestAnnotation_Test {
 	public static class B {
 		@RestOp(path="/{x}")
 		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
-			return OMap.of(
+			return JsonMap.of(
 				"body",read(r),
 				"header",h,
 				"query",q,
@@ -145,7 +145,7 @@ public class Remote_RequestAnnotation_Test {
 	public static class C {
 		@RestOp(path="/{x}")
 		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
-			return OMap.of(
+			return JsonMap.of(
 				"body",read(r),
 				"header",h,
 				"query",q,
@@ -201,7 +201,7 @@ public class Remote_RequestAnnotation_Test {
 	public static class D {
 		@RestOp(path="/{x}")
 		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
-			return OMap.of(
+			return JsonMap.of(
 				"body",read(r),
 				"header",h,
 				"query",q,
@@ -249,7 +249,7 @@ public class Remote_RequestAnnotation_Test {
 	public static class E {
 		@RestOp(path="/{x}")
 		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
-			return OMap.of(
+			return JsonMap.of(
 				"body",read(r),
 				"header",h,
 				"query",q,

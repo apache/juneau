@@ -36,8 +36,8 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 			{ 	/* 0 */
 				new ComboInput<>(
 					"SERIALIZER_addBeanTypes",
-					OMap.class,
-					OMap.of("a", T0.create())
+					JsonMap.class,
+					JsonMap.of("a", T0.create())
 				)
 				.json("{a:{_type:'BwT',f:1}}")
 				.jsonT("{a:{t:'BwT',f:1}}")
@@ -413,7 +413,7 @@ public class SerializerPropertiesComboTest extends ComboRoundTripTest {
 
 	public static class T6 {
 		public Map<String,String> f1 = map();
-		public OMap f2 = OMap.create();
+		public JsonMap f2 = JsonMap.create();
 	}
 
 	public static class T7 {

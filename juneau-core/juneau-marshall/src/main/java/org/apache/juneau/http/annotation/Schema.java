@@ -1033,11 +1033,11 @@ public @interface Schema {
 	 * 		<js>"array"</js>
 	 * 		<br>Parameter must be an array or collection.
 	 * 		<br>Elements must be strings or POJOs convertible from strings.
-	 * 		<br>If parameter is <c>Object</c>, creates an {@link OList}.
+	 * 		<br>If parameter is <c>Object</c>, creates an {@link JsonList}.
 	 * 	<li>
 	 * 		<js>"object"</js>
 	 * 		<br>Parameter must be a map or bean.
-	 * 		<br>If parameter is <c>Object</c>, creates an {@link OMap}.
+	 * 		<br>If parameter is <c>Object</c>, creates an {@link JsonMap}.
 	 * 		<br>Note that this is an extension of the OpenAPI schema as Juneau allows for arbitrarily-complex POJOs to be serialized as HTTP parts.
 	 * 	<li>
 	 * 		<js>"file"</js>

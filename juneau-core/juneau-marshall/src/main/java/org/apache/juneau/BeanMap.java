@@ -383,7 +383,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public BeanMap<T> load(String input) throws ParseException {
-		putAll(OMap.ofJson(input));
+		putAll(JsonMap.ofJson(input));
 		return this;
 	}
 
@@ -397,7 +397,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @throws IOException Thrown by <c>Reader</c>.
 	 */
 	public BeanMap<T> load(Reader r, ReaderParser p) throws ParseException, IOException {
-		putAll(OMap.ofText(r, p));
+		putAll(JsonMap.ofText(r, p));
 		return this;
 	}
 

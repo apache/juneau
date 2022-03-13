@@ -668,7 +668,7 @@ public class JettyMicroservice extends Microservice {
 		listener.onCreateServer(this);
 
 		Config cf = getConfig();
-		OMap mf = getManifest();
+		JsonMap mf = getManifest();
 		VarResolver vr = getVarResolver();
 
 		int[] ports = ObjectUtils.firstNonNull(builder.ports, cf.get("Jetty/port").as(int[].class).orElseGet(()->mf.getWithDefault("Jetty-Port", new int[]{8000}, int[].class)));
@@ -711,7 +711,7 @@ public class JettyMicroservice extends Microservice {
 			}
 		}
 
-		for (Map.Entry<String,Object> e : cf.get("Jetty/servletMap").asMap().orElse(OMap.EMPTY_MAP).entrySet()) {
+		for (Map.Entry<String,Object> e : cf.get("Jetty/servletMap").asMap().orElse(JsonMap.EMPTY_MAP).entrySet()) {
 			try {
 				ClassInfo c = ClassInfo.of(Class.forName(e.getValue().toString()));
 				if (c.isChildOf(Servlet.class)) {
@@ -725,7 +725,7 @@ public class JettyMicroservice extends Microservice {
 			}
 		}
 
-		for (Map.Entry<String,Object> e : cf.get("Jetty/servletAttributes").asMap().orElse(OMap.EMPTY_MAP).entrySet())
+		for (Map.Entry<String,Object> e : cf.get("Jetty/servletAttributes").asMap().orElse(JsonMap.EMPTY_MAP).entrySet())
 			addServletAttribute(e.getKey(), e.getValue());
 
 		for (Map.Entry<String,Servlet> e : builder.servlets.entrySet())

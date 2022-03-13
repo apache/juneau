@@ -21,7 +21,7 @@ import org.apache.juneau.collections.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class ResolvingOMapTest {
+public class ResolvingJsonMapTest {
 
 	//====================================================================================================
 	// test - Basic tests
@@ -29,7 +29,7 @@ public class ResolvingOMapTest {
 	@Test
 	public void testBasic() throws Exception {
 		VarResolver vr = VarResolver.create().defaultVars().vars(XVar.class).build();
-		OMap m = new ResolvingOMap(vr.createSession());
+		JsonMap m = new ResolvingJsonMap(vr.createSession());
 
 		m.put("foo", "$X{a}");
 		assertEquals(m.get("foo"), "1");
@@ -46,7 +46,7 @@ public class ResolvingOMapTest {
 
 	public static class XVar extends MapVar {
 		public XVar() {
-			super("X", OMap.of("a", 1, "b", 2, "c", 3));
+			super("X", JsonMap.of("a", 1, "b", 2, "c", 3));
 		}
 	}
 
@@ -56,7 +56,7 @@ public class ResolvingOMapTest {
 	@Test
 	public void testNulls() throws Exception {
 		VarResolver vr = VarResolver.create().defaultVars().vars(XVar.class).build();
-		OMap m = new ResolvingOMap(vr.createSession());
+		JsonMap m = new ResolvingJsonMap(vr.createSession());
 
 		m.put("foo", null);
 		assertNull(m.get("foo"));
@@ -77,7 +77,7 @@ public class ResolvingOMapTest {
 	@Test
 	public void testNonStrings() throws Exception {
 		VarResolver vr = VarResolver.create().defaultVars().vars(XVar.class).build();
-		OMap m = new ResolvingOMap(vr.createSession());
+		JsonMap m = new ResolvingJsonMap(vr.createSession());
 
 		m.put("foo", FooEnum.ONE);
 		assertObject(m.get("foo")).asJson().is("'ONE'");
@@ -102,9 +102,9 @@ public class ResolvingOMapTest {
 	@Test
 	public void testInner() throws Exception {
 		VarResolver vr = VarResolver.create().defaultVars().vars(XVar.class).build();
-		OMap m = new ResolvingOMap(vr.createSession());
-		OMap m2 = new OMap();
-		OMap m3 = new OMap();
+		JsonMap m = new ResolvingJsonMap(vr.createSession());
+		JsonMap m2 = new JsonMap();
+		JsonMap m3 = new JsonMap();
 		m.inner(m2);
 		m2.inner(m3);
 

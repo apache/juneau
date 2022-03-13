@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.html;
 
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import java.lang.annotation.*;
@@ -1875,7 +1875,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 	}
 
 	@Override /* Context */
-	protected OMap properties() {
+	protected JsonMap properties() {
 		return filteredMap()
 			.append("header", header)
 			.append("nav", nav)

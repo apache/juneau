@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -1080,7 +1080,7 @@ public class SerializerSession extends BeanTraverseSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* ContextSession */
-	protected OMap properties() {
+	protected JsonMap properties() {
 		return filteredMap("uriResolver", uriResolver);
 	}
 }

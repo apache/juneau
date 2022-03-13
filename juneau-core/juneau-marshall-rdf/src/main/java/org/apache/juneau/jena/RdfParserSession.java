@@ -246,7 +246,7 @@ public class RdfParserSession extends ReaderParserSession {
 				c = (
 					type.canCreateNewInstance(getOuter())
 					? (Collection<?>)type.newInstance(getOuter())
-					: new OList(this)
+					: new JsonList(this)
 				);
 
 			AtomicInteger argIndex = new AtomicInteger(0);
@@ -426,13 +426,13 @@ public class RdfParserSession extends ReaderParserSession {
 				else if (r.getProperty(pValue) != null) {
 					o = parseAnything(object(), n.asResource().getProperty(pValue).getObject(), outer, null);
 				} else if (isSeq(r)) {
-					o = new OList(this);
+					o = new JsonList(this);
 					parseIntoCollection(r.as(Seq.class), (Collection)o, sType, pMeta);
 				} else if (isBag(r)) {
-					o = new OList(this);
+					o = new JsonList(this);
 					parseIntoCollection(r.as(Bag.class), (Collection)o, sType, pMeta);
 				} else if (r.canAs(RDFList.class)) {
-					o = new OList(this);
+					o = new JsonList(this);
 					parseIntoCollection(r.as(RDFList.class), (Collection)o, sType, pMeta);
 				} else {
 					// If it has a URI and no child properties, we interpret this as an
@@ -441,7 +441,7 @@ public class RdfParserSession extends ReaderParserSession {
 					if (uri != null && ! r.listProperties().hasNext()) {
 						o = r.getURI();
 					} else {
-						OMap m2 = new OMap(this);
+						JsonMap m2 = new JsonMap(this);
 						parseIntoMap(r, m2, null, null, pMeta);
 						o = cast(m2, pMeta, eType);
 					}
@@ -467,7 +467,7 @@ public class RdfParserSession extends ReaderParserSession {
 			if (sType.isArray() || sType.isArgs())
 				o = list();
 			else
-				o = (sType.canCreateNewInstance(outer) ? (Collection<?>)sType.newInstance(outer) : new OList(this));
+				o = (sType.canCreateNewInstance(outer) ? (Collection<?>)sType.newInstance(outer) : new JsonList(this));
 			Resource r = n.asResource();
 			if (! urisVisited.add(r))
 				return null;
@@ -503,7 +503,7 @@ public class RdfParserSession extends ReaderParserSession {
 			Map m = newGenericMap(sType);
 			parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 			if (m.containsKey(getBeanTypePropertyName(eType)))
-				o = cast((OMap)m, pMeta, eType);
+				o = cast((JsonMap)m, pMeta, eType);
 			else if (sType.getProxyInvocationHandler() != null)
 				o = newBeanMap(outer, sType.getInnerClass()).load(m).getBean();
 			else

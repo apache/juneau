@@ -66,7 +66,7 @@ public class RestClient_Config_OpenApi_Test {
 
 	@Test
 	public void a03_paramFormat() throws Exception {
-		 OMap m = OMap.of(
+		 JsonMap m = JsonMap.of(
 			"foo","bar",
 			"baz",new String[]{"qux","true","123"}
 		);

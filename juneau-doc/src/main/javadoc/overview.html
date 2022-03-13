@@ -1142,7 +1142,7 @@
 <h5 class='topic'>OMap/OList</h5>
 <div class='topic'>
 	<p>
-		The {@link org.apache.juneau.collections.OMap} and {@link org.apache.juneau.collections.OList} collections classes allow you
+		The {@link org.apache.juneau.collections.JsonMap} and {@link org.apache.juneau.collections.JsonList} collections classes allow you
 		to programmatically build generic JSON data structures.  They are similar in concept to 
 		<c>JSONObject</c> and <c>JSONArray</c> that you find in other JSON marshalling APIs, but
 		can be used to generate DOMs in any of the supported languages.
@@ -3434,7 +3434,7 @@
 <div class='topic'><!-- START: 2.8 - juneau-marshall.jm.OMap -->
 <div class='topic'>
 	<p>
-		The {@link org.apache.juneau.collections.OMap} and {@link org.apache.juneau.collections.OList} classes are generic Java 
+		The {@link org.apache.juneau.collections.JsonMap} and {@link org.apache.juneau.collections.JsonList} classes are generic Java 
 		representations of JSON objects and arrays.  
 		These classes can be used to create "unstructured" models for serialization (as opposed to "structured" 
 		models consisting of beans).  
@@ -3449,14 +3449,14 @@
 			{@link java.util.LinkedHashMap java.util.LinkedHashMap}
 			<ul>
 				<li class='jc'> 
-				{@link org.apache.juneau.collections.OMap org.apache.juneau.collections.OMap}
+				{@link org.apache.juneau.collections.JsonMap org.apache.juneau.collections.JsonMap}
 			</ul>
 		</li>
 		<li class='jc'> 
 			{@link java.util.LinkedList java.util.LinkedList}
 			<ul>
 				<li class='jc'> 
-					{@link org.apache.juneau.collections.OList org.apache.juneau.collections.OList}
+					{@link org.apache.juneau.collections.JsonList org.apache.juneau.collections.JsonList}
 			</ul>
 		</li>
 	</ul>
@@ -3471,17 +3471,17 @@
 	</p>
 	<ol class='spaced-list'>
 		<li>
-			Using the provided {@link org.apache.juneau.collections.OMap#writeTo(java.io.Writer)} or 
-			{@link org.apache.juneau.collections.OList#writeTo(java.io.Writer)} methods.
+			Using the provided {@link org.apache.juneau.collections.JsonMap#writeTo(java.io.Writer)} or 
+			{@link org.apache.juneau.collections.JsonList#writeTo(java.io.Writer)} methods.
 		<li>
 			Passing them to one of the {@link org.apache.juneau.serializer.Serializer} serialize methods.
 		<li>
-			Simply calling the {@link org.apache.juneau.collections.OMap#toString()} or {@link org.apache.juneau.collections.OList#toString()}
+			Simply calling the {@link org.apache.juneau.collections.JsonMap#toString()} or {@link org.apache.juneau.collections.JsonList#toString()}
 			methods which will serialize it as Simplified JSON.
 	</ol>
 	<p>
 		Any valid JSON can be parsed into an unstructured model consisting of generic 
-		{@link org.apache.juneau.collections.OMap} and {@link org.apache.juneau.collections.OList} objects. 
+		{@link org.apache.juneau.collections.JsonMap} and {@link org.apache.juneau.collections.JsonList} objects. 
 		
 		(Any valid XML can also be parsed into an unstructured model)
 	</p>
@@ -4855,11 +4855,11 @@
 	</p>
 	<p>
 		You can parse into any <c>Map</c> type (e.g. <c>HashMap</c>, <c>TreeMap</c>), but
-		using {@link org.apache.juneau.collections.OMap} is recommended since it has many convenience methods
+		using {@link org.apache.juneau.collections.JsonMap} is recommended since it has many convenience methods
 		for converting values to various types.
 		The same is true when parsing collections.  You can use any Collection (e.g. <c>HashSet</c>, 
 		<c>LinkedList</c>) or array (e.g. <c>Object[]</c>, <c>String[]</c>, 
-		<c>String[][]</c>), but using {@link org.apache.juneau.collections.OList} is recommended.
+		<c>String[][]</c>), but using {@link org.apache.juneau.collections.JsonList} is recommended.
 	</p>
 	<p>
 		When the map or list type is not specified, or is the abstract <c>Map</c>, <c>Collection</c>, 
@@ -13310,7 +13310,7 @@
 	List&lt;Address&gt; <jv>addresses</jv> = <jv>config</jv>.get(<js>"addresses"</js>).to(ArrayList.<jk>class</jk>, Address.<jk>class</jk>);
 	</p>
 	<p>
-		Oftentimes, it might be useful to parse into the {@link org.apache.juneau.collections.OList} and {@link org.apache.juneau.collections.OMap}
+		Oftentimes, it might be useful to parse into the {@link org.apache.juneau.collections.JsonList} and {@link org.apache.juneau.collections.JsonMap}
 		classes that provide the various convenience methods for working with JSON-like data structures:
 	</p>
 	<p class='bcode'>
@@ -24284,7 +24284,7 @@
 	<p>
 		The manifest file can be retrieved using the the {@link org.apache.juneau.microservice.Microservice#getManifest()} method which 
 		provides an API for accessing manifest file entries.
-		This method returns an instance of {@link org.apache.juneau.utils.ManifestFile} which extends from {@link org.apache.juneau.collections.OMap} allowing
+		This method returns an instance of {@link org.apache.juneau.utils.ManifestFile} which extends from {@link org.apache.juneau.collections.JsonMap} allowing
 		you to retrieve entries as any data types supported by that class.
 	</p>
 	<h5 class='figure'>Example:</h5>
@@ -35728,13 +35728,13 @@
 				<li class='jc'>{@link org.apache.juneau.collections.ASortedSet}
 				<li class='jc'>{@link org.apache.juneau.collections.AMap}
 				<li class='jc'>{@link org.apache.juneau.collections.ASortedMap}
-				<li class='jc'>{@link org.apache.juneau.collections.OMap}
-				<li class='jc'>{@link org.apache.juneau.collections.OList}
+				<li class='jc'>{@link org.apache.juneau.collections.JsonMap}
+				<li class='jc'>{@link org.apache.juneau.collections.JsonList}
 			</ul>
 		<li>
-			{@del org.apache.juneau.ObjectMap} is being deprecated and replaced with {@link org.apache.juneau.collections.OMap}.
+			{@del org.apache.juneau.ObjectMap} is being deprecated and replaced with {@link org.apache.juneau.collections.JsonMap}.
 		<li>
-			{@del org.apache.juneau.ObjectList} is being deprecated and replaced with {@link org.apache.juneau.collections.OList}.
+			{@del org.apache.juneau.ObjectList} is being deprecated and replaced with {@link org.apache.juneau.collections.JsonList}.
 		<li>
 			All classes in the {@link org.apache.juneau.http.response} and {@del org.apache.juneau.http.exception} now have <c>header(String,Object)</c>
 			methods for adding response headers.

@@ -61,7 +61,7 @@ public class Swagger extends SwaggerElement {
 		produces;
 	private Set<Tag> tags;
 	private List<Map<String,List<String>>> security;
-	private Map<String,OMap> definitions;
+	private Map<String,JsonMap> definitions;
 	private Map<String,ParameterInfo> parameters;
 	private Map<String,ResponseInfo> responses;
 	private Map<String,SecurityScheme> securityDefinitions;
@@ -94,7 +94,7 @@ public class Swagger extends SwaggerElement {
 			this.definitions = null;
 		} else {
 			this.definitions = map();
-			copyFrom.definitions.forEach((k,v) -> this.definitions.put(k, new OMap(v)));
+			copyFrom.definitions.forEach((k,v) -> this.definitions.put(k, new JsonMap(v)));
 		}
 
 		if (copyFrom.paths == null) {
@@ -339,7 +339,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,OMap> getDefinitions() {
+	public Map<String,JsonMap> getDefinitions() {
 		return definitions;
 	}
 
@@ -353,7 +353,7 @@ public class Swagger extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 */
-	public void setDefinitions(Map<String,OMap> value) {
+	public void setDefinitions(Map<String,JsonMap> value) {
 		definitions = copyOf(value);
 	}
 
@@ -368,7 +368,7 @@ public class Swagger extends SwaggerElement {
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object.
 	 */
-	public Swagger addDefinitions(Map<String,OMap> values) {
+	public Swagger addDefinitions(Map<String,JsonMap> values) {
 		definitions = mapBuilder(definitions).sparse().addAll(values).build();
 		return this;
 	}
@@ -383,7 +383,7 @@ public class Swagger extends SwaggerElement {
 	 * @param schema The schema that the name defines.
 	 * @return This object.
 	 */
-	public Swagger definition(String name, OMap schema) {
+	public Swagger definition(String name, JsonMap schema) {
 		definitions = mapBuilder(definitions).sparse().add(name, schema).build();
 		return this;
 	}
@@ -396,7 +396,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
 	 */
-	public Optional<Map<String,OMap>> definitions() {
+	public Optional<Map<String,JsonMap>> definitions() {
 		return optional(getDefinitions());
 	}
 
@@ -410,7 +410,7 @@ public class Swagger extends SwaggerElement {
 	 * 	The new value for this property.
 	 * @return This object.
 	 */
-	public Swagger definitions(Map<String,OMap> value) {
+	public Swagger definitions(Map<String,JsonMap> value) {
 		setDefinitions(value);
 		return this;
 	}
@@ -426,7 +426,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger definitions(String json) {
-		setDefinitions(mapBuilder(String.class,OMap.class).sparse().addJson(json).build());
+		setDefinitions(mapBuilder(String.class,JsonMap.class).sparse().addJson(json).build());
 		return this;
 	}
 
@@ -1696,7 +1696,7 @@ public class Swagger extends SwaggerElement {
 		switch (property) {
 			case "basePath": return basePath(stringify(value));
 			case "consumes": return consumes(listBuilder(MediaType.class).sparse().addAny(value).build());
-			case "definitions": return definitions(mapBuilder(String.class,OMap.class).sparse().addAny(value).build());
+			case "definitions": return definitions(mapBuilder(String.class,JsonMap.class).sparse().addAny(value).build());
 			case "externalDocs": return externalDocs(toType(value, ExternalDocumentation.class));
 			case "host": return host(stringify(value));
 			case "info": return info(toType(value, Info.class));

@@ -53,7 +53,7 @@
 		|	WriterSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>().simple().swaps(IteratorSwap.<jk>class</jk>).build();
 		|	
 		|	<jc>// Construct an iterator we want to serialize.</jc>
-		|	Iterator <jv>iterator</jv> = OList.<jsm>of</jsm>(1,2,3).iterator();
+		|	Iterator <jv>iterator</jv> = JsonList.<jsm>of</jsm>(1,2,3).iterator();
 		|	
 		|	<jc>// Serialize our Iterator</jc>
 		|	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>iterator</jv>);		<jc>// Produces "[1,2,3]"</jc>

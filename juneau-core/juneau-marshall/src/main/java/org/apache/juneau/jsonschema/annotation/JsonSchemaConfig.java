@@ -225,7 +225,7 @@ public @interface JsonSchemaConfig {
 	 * The definitions can then be retrieved from the session using {@link JsonSchemaGeneratorSession#getBeanDefs()}.
 	 *
 	 * <p>
-	 * Definitions can also be added programmatically using {@link JsonSchemaGeneratorSession#addBeanDef(String, OMap)}.
+	 * Definitions can also be added programmatically using {@link JsonSchemaGeneratorSession#addBeanDef(String, JsonMap)}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>

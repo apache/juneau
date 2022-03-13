@@ -17,7 +17,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.StringUtils.firstNonEmpty;
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
@@ -2707,7 +2707,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	}
 
 	@Override /* Context */
-	protected OMap properties() {
+	protected JsonMap properties() {
 		return filteredMap()
 			.append("defaultRequestFormData", defaultRequestFormData)
 			.append("defaultRequestHeaders", defaultRequestHeaders)

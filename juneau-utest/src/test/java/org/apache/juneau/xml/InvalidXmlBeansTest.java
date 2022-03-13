@@ -154,72 +154,72 @@ public class InvalidXmlBeansTest {
 
 	public static class BeanWithMultipleAttrs {
 		@Xml(format=XmlFormat.ATTRS)
-		public OMap f1;
+		public JsonMap f1;
 		@Xml(format=XmlFormat.ATTRS)
-		public OMap f2;
+		public JsonMap f2;
 	}
 
 	public static class BeanWithWrongAttrsType {
 		@Xml(format=XmlFormat.ATTRS)
-		public OList f1;
+		public JsonList f1;
 	}
 
 	public static class BeanWithMulipleElements {
 		@Xml(format=XmlFormat.ELEMENTS)
-		public OList f1;
+		public JsonList f1;
 		@Xml(format=XmlFormat.ELEMENTS)
-		public OList f2;
+		public JsonList f2;
 	}
 
 	public static class BeanWithWrongElementsType {
 		@Xml(format=XmlFormat.ELEMENTS)
-		public OMap f1;
+		public JsonMap f1;
 	}
 
 	public static class BeanWithMulipleMixed {
 		@Xml(format=XmlFormat.MIXED)
-		public OList f1;
+		public JsonList f1;
 		@Xml(format=XmlFormat.MIXED)
-		public OList f2;
+		public JsonList f2;
 	}
 
 	public static class BeanWithConflictingChildNames {
 		@Xml(format=XmlFormat.COLLAPSED, childName="X")
-		public OList f1;
+		public JsonList f1;
 		@Xml(format=XmlFormat.COLLAPSED, childName="X")
-		public OList f2;
+		public JsonList f2;
 	}
 
 	public static class BeanWithElementsAndMixed {
 		@Xml(format=XmlFormat.ELEMENTS)
-		public OList f1;
+		public JsonList f1;
 		@Xml(format=XmlFormat.MIXED)
-		public OList f2;
+		public JsonList f2;
 	}
 
 	public static class BeanWithElementsAndElement {
 		@Xml(format=XmlFormat.ELEMENTS)
-		public OList f1;
+		public JsonList f1;
 		@Xml(format=XmlFormat.ELEMENT)
-		public OList f2;
+		public JsonList f2;
 	}
 
 	public static class BeanWithElementsAndDefault {
 		@Xml(format=XmlFormat.ELEMENTS)
-		public OList f1;
-		public OList f2;
+		public JsonList f1;
+		public JsonList f2;
 	}
 
 	public static class BeanWithElementsAndCollapsed {
 		@Xml(format=XmlFormat.ELEMENTS)
-		public OList f1;
+		public JsonList f1;
 		@Xml(format=XmlFormat.COLLAPSED)
-		public OList f2;
+		public JsonList f2;
 	}
 
 	public static class BeanWithChildAndPropNameConflict {
 		@Xml(format=XmlFormat.COLLAPSED, childName="f2")
-		public OList f1;
-		public OList f2;
+		public JsonList f1;
+		public JsonList f2;
 	}
 }

@@ -59,8 +59,8 @@ public class OpenApiParserSession extends UonParserSession {
 	private static final ClassMeta<Double> CM_Double = BC.getClassMeta(Double.class);
 	private static final ClassMeta<Float> CM_Float = BC.getClassMeta(Float.class);
 	private static final ClassMeta<Boolean> CM_Boolean = BC.getClassMeta(Boolean.class);
-	private static final ClassMeta<OList> CM_OList = BC.getClassMeta(OList.class);
-	private static final ClassMeta<OMap> CM_OMap = BC.getClassMeta(OMap.class);
+	private static final ClassMeta<JsonList> CM_JsonList = BC.getClassMeta(JsonList.class);
+	private static final ClassMeta<JsonMap> CM_JsonMap = BC.getClassMeta(JsonMap.class);
 
 	private static final HttpPartSchema DEFAULT_SCHEMA = HttpPartSchema.DEFAULT;
 
@@ -382,7 +382,7 @@ public class OpenApiParserSession extends UonParserSession {
 					return super.parse(partType, schema, in, type);
 
 				if (type.isObject())
-					type = (ClassMeta<T>)CM_OList;
+					type = (ClassMeta<T>)CM_JsonList;
 
 				ClassMeta<?> eType = type.isObject() ? string() : type.getElementType();
 				if (eType == null)
@@ -430,7 +430,7 @@ public class OpenApiParserSession extends UonParserSession {
 					return super.parse(partType, schema, in, type);
 
 				if (type.isObject())
-					type = (ClassMeta<T>)CM_OMap;
+					type = (ClassMeta<T>)CM_JsonMap;
 
 				if (! type.isMapOrBean())
 					throw new ParseException("Invalid type {0} for part type OBJECT.", type);
@@ -479,7 +479,7 @@ public class OpenApiParserSession extends UonParserSession {
 				try {
 					Map<String,Object> m = (Map<String,Object>)type.newInstance();
 					if (m == null)
-						m = OMap.create();
+						m = JsonMap.create();
 
 					for (String s : ss) {
 						String[] kv = split(s, '=', 2);

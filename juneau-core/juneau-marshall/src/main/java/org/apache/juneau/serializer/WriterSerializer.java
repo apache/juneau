@@ -13,7 +13,7 @@
 package org.apache.juneau.serializer;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -1139,7 +1139,7 @@ public class WriterSerializer extends Serializer {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	protected OMap properties() {
+	protected JsonMap properties() {
 		return filteredMap("fileCharset", fileCharset, "maxIndent", maxIndent, "quoteChar", quoteChar, "streamCharset", streamCharset, "useWhitespace", useWhitespace);
 	}
 }

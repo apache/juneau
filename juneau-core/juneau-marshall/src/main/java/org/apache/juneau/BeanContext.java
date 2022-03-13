@@ -13,7 +13,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.Visibility.*;
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
@@ -4589,7 +4589,7 @@ public class BeanContext extends Context {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	protected OMap properties() {
+	protected JsonMap properties() {
 		return filteredMap()
 			.append("id", System.identityHashCode(this))
 			.append("beanClassVisibility", beanClassVisibility)

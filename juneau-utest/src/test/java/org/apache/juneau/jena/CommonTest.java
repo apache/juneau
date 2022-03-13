@@ -194,8 +194,8 @@ public class CommonTest {
 		@Beanp(properties="f1") public Map<String,Integer> x2;
 		@Beanp(properties="f1") public E2[] x3;
 		@Beanp(properties="f1") public List<E2> x4;
-		@Beanp(properties="f1") public OMap[] x5;
-		@Beanp(properties="f1") public List<OMap> x6;
+		@Beanp(properties="f1") public JsonMap[] x5;
+		@Beanp(properties="f1") public List<JsonMap> x6;
 
 		public static E1 create() {
 			E1 t = new E1();
@@ -203,8 +203,8 @@ public class CommonTest {
 			t.x2 = map("f1",1,"f2",2);
 			t.x3 = new E2[] {new E2()};
 			t.x4 = list(new E2());
-			t.x5 = new OMap[] {OMap.of("f1","1","f2","2")};
-			t.x6 = list(OMap.of("f1","1","f2","2"));
+			t.x5 = new JsonMap[] {JsonMap.of("f1","1","f2","2")};
+			t.x6 = list(JsonMap.of("f1","1","f2","2"));
 			return t;
 		}
 	}

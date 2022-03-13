@@ -74,13 +74,13 @@ public class ContentComboTestBase extends RestTestcase {
 
 	@AfterClass
 	public static void tearDown() {
-		for (RestClient rc : clients.values()) {
+		clients.values().forEach(rc -> {
 			try {
 				rc.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
+		});
 		clients.clear();
 	}
 

@@ -40,7 +40,7 @@ public class ObjectSwapTest {
 		r = p.parse(r, String.class);
 		assertEquals("foobar", r);
 
-		OMap m = OMap.ofJson("{foo:'bar'}");
+		JsonMap m = JsonMap.ofJson("{foo:'bar'}");
 		r = s.serialize(m);
 		assertEquals("{xfoox:'xbarx'}", r);
 	}

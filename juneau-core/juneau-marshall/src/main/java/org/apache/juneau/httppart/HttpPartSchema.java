@@ -821,7 +821,7 @@ public class HttpPartSchema {
 			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
 			exclusiveMinimum(a.exclusiveMinimum() || a.emin());
 			format(firstNonEmpty(a.format(), a.f()));
-			items(HttpPartSchema.toOMap(a.items()));
+			items(HttpPartSchema.toJsonMap(a.items()));
 			maximum(toNumber(a.maximum(), a.max()));
 			maxItems(firstNmo(a.maxItems(), a.maxi()));
 			maxLength(firstNmo(a.maxLength(), a.maxl()));
@@ -837,7 +837,7 @@ public class HttpPartSchema {
 		Builder apply(Schema a) {
 			_default(joinnlOrNull(a._default(), a.df()));
 			_enum(toSet(a._enum(), a.e()));
-			additionalProperties(HttpPartSchema.toOMap(a.additionalProperties()));
+			additionalProperties(HttpPartSchema.toJsonMap(a.additionalProperties()));
 			allowEmptyValue(a.allowEmptyValue() || a.aev());
 			collectionFormat(firstNonEmpty(a.collectionFormat(), a.cf()));
 			exclusiveMaximum(a.exclusiveMaximum() || a.emax());
@@ -854,7 +854,7 @@ public class HttpPartSchema {
 			minProperties(firstNmo(a.minProperties(), a.minp()));
 			multipleOf(toNumber(a.multipleOf(), a.mo()));
 			pattern(firstNonEmpty(a.pattern(), a.p()));
-			properties(HttpPartSchema.toOMap(a.properties()));
+			properties(HttpPartSchema.toJsonMap(a.properties()));
 			required(a.required() || a.r());
 			skipIfEmpty(a.skipIfEmpty() || a.sie());
 			type(firstNonEmpty(a.type(), a.t()));
@@ -872,7 +872,7 @@ public class HttpPartSchema {
 			return this;
 		}
 
-		Builder apply(OMap m) {
+		Builder apply(JsonMap m) {
 			if (m != null && ! m.isEmpty()) {
 				_default(m.getString("default"));
 				_enum(HttpPartSchema.toSet(m.getString("enum")));
@@ -1091,11 +1091,11 @@ public class HttpPartSchema {
 		 * 		<js>"array"</js>
 		 * 		<br>Parameter must be an array or collection.
 		 * 		<br>Elements must be strings or POJOs convertible from strings.
-		 * 		<br>If parameter is <c>Object</c>, creates an {@link OList}.
+		 * 		<br>If parameter is <c>Object</c>, creates an {@link JsonList}.
 		 * 	<li>
 		 * 		<js>"object"</js>
 		 * 		<br>Parameter must be a map or bean.
-		 * 		<br>If parameter is <c>Object</c>, creates an {@link OMap}.
+		 * 		<br>If parameter is <c>Object</c>, creates an {@link JsonMap}.
 		 * 		<br>Note that this is an extension of the OpenAPI schema as Juneau allows for arbitrarily-complex POJOs to be serialized as HTTP parts.
 		 * 	<li>
 		 * 		<js>"file"</js>
@@ -1253,11 +1253,11 @@ public class HttpPartSchema {
 		 * 			{@link HttpPartDataType#ARRAY ARRAY}
 		 * 			<br>Parameter must be an array or collection.
 		 * 			<br>Elements must be strings or POJOs convertible from strings.
-		 * 			<br>If parameter is <c>Object</c>, creates an {@link OList}.
+		 * 			<br>If parameter is <c>Object</c>, creates an {@link JsonList}.
 		 * 		<li class='jf'>
 		 * 			{@link HttpPartDataType#OBJECT OBJECT}
 		 * 			<br>Parameter must be a map or bean.
-		 * 			<br>If parameter is <c>Object</c>, creates an {@link OMap}.
+		 * 			<br>If parameter is <c>Object</c>, creates an {@link JsonMap}.
 		 * 			<br>Note that this is an extension of the OpenAPI schema as Juneau allows for arbitrarily-complex POJOs to be serialized as HTTP parts.
 		 * 		<li class='jf'>
 		 * 			{@link HttpPartDataType#FILE FILE}
@@ -1755,7 +1755,7 @@ public class HttpPartSchema {
 			return items(value);
 		}
 
-		Builder items(OMap value) {
+		Builder items(JsonMap value) {
 			if (value != null && ! value.isEmpty())
 				items = HttpPartSchema.create().apply(value);
 			return this;
@@ -3032,9 +3032,9 @@ public class HttpPartSchema {
 			return property(key, value);
 		}
 
-		private Builder properties(OMap value) {
+		private Builder properties(JsonMap value) {
 			if (value != null)
-				value.forEach((k,v) -> property(k, HttpPartSchema.create().apply((OMap)v)));
+				value.forEach((k,v) -> property(k, HttpPartSchema.create().apply((JsonMap)v)));
 			return this;
 		}
 
@@ -3114,7 +3114,7 @@ public class HttpPartSchema {
 			return additionalProperties(value);
 		}
 
-		private Builder additionalProperties(OMap value) {
+		private Builder additionalProperties(JsonMap value) {
 			if (value != null && ! value.isEmpty())
 				additionalProperties = HttpPartSchema.create().apply(value);
 			return this;
@@ -4079,14 +4079,14 @@ public class HttpPartSchema {
 		}
 	}
 
-	final static OMap toOMap(String[] ss) {
+	final static JsonMap toJsonMap(String[] ss) {
 		String s = joinnl(ss);
 		if (s.isEmpty())
 			return null;
 		if (! isJsonObject(s, true))
 			s = "{" + s + "}";
 		try {
-			return OMap.ofJson(s);
+			return JsonMap.ofJson(s);
 		} catch (ParseException e) {
 			throw runtimeException(e);
 		}
@@ -4099,7 +4099,7 @@ public class HttpPartSchema {
 			Predicate<Boolean> nf = ObjectUtils::isTrue;
 			Predicate<Number> nm1 = ObjectUtils::isNotMinusOne;
 			Predicate<Object> nn = ObjectUtils::isNotNull;
-			OMap m = new OMap()
+			JsonMap m = new JsonMap()
 				.appendIf(ne, "name", name)
 				.appendIf(ne, "type", type)
 				.appendIf(ne, "format", format)

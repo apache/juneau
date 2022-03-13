@@ -141,7 +141,7 @@ public class UriContext {
 	 * 	If input string is not a valid JSON object.
 	 */
 	public UriContext(String s) throws ParseException {
-		OMap m = OMap.ofJson(s);
+		JsonMap m = JsonMap.ofJson(s);
 		this.authority = nullIfEmpty(trimSlashes(m.getString("authority")));
 		this.contextRoot = nullIfEmpty(trimSlashes(m.getString("contextRoot")));
 		this.servletPath = nullIfEmpty(trimSlashes(m.getString("servletPath")));

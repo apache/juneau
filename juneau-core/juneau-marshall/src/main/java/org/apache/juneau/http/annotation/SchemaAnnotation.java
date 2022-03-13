@@ -92,18 +92,18 @@ public class SchemaAnnotation {
 	 * @return The schema converted to a map, or and empty map if the annotation was null.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static OMap asMap(Schema a) throws ParseException {
+	public static JsonMap asMap(Schema a) throws ParseException {
 		if (a == null)
-			return OMap.EMPTY_MAP;
-		OMap om = new OMap();
+			return JsonMap.EMPTY_MAP;
+		JsonMap m = new JsonMap();
 		if (SchemaAnnotation.empty(a))
-			return om;
+			return m;
 		Predicate<String> ne = StringUtils::isNotEmpty;
 		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty;
 		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty;
 		Predicate<Boolean> nf = ObjectUtils::isTrue;
 		Predicate<Long> nm1 = ObjectUtils::isNotMinusOne;
-		return om
+		return m
 			.appendIf(nem, "additionalProperties", parseMap(a.additionalProperties()))
 			.appendIf(ne, "allOf", joinnl(a.allOf()))
 			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
@@ -113,10 +113,10 @@ public class SchemaAnnotation {
 			.appendFirst(nec, "enum", parseSet(a._enum()), parseSet(a.e()))
 			.appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())
 			.appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.appendIf(nem, "externalDocs", ExternalDocsAnnotation.merge(om.getMap("externalDocs"), a.externalDocs()))
+			.appendIf(nem, "externalDocs", ExternalDocsAnnotation.merge(m.getMap("externalDocs"), a.externalDocs()))
 			.appendFirst(ne, "format", a.format(), a.f())
 			.appendIf(ne, "ignore", a.ignore() ? "true" : null)
-			.appendIf(nem, "items", merge(om.getMap("items"), a.items()))
+			.appendIf(nem, "items", merge(m.getMap("items"), a.items()))
 			.appendFirst(ne, "maximum", a.maximum(), a.max())
 			.appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())
 			.appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())
@@ -138,22 +138,22 @@ public class SchemaAnnotation {
 		;
 	}
 
-	private static OMap merge(OMap om, Items a) throws ParseException {
+	private static JsonMap merge(JsonMap m, Items a) throws ParseException {
 		if (ItemsAnnotation.empty(a))
-			return om;
+			return m;
 		Predicate<String> ne = StringUtils::isNotEmpty;
 		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty;
 		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty;
 		Predicate<Boolean> nf = ObjectUtils::isTrue;
 		Predicate<Long> nm1 = ObjectUtils::isNotMinusOne;
-		return om
+		return m
 			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
 			.appendIf(ne, "default", joinnl(a._default(), a.df()))
 			.appendFirst(nec, "enum", parseSet(a._enum()), parseSet(a.e()))
 			.appendFirst(ne, "format", a.format(), a.f())
 			.appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())
 			.appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.appendIf(nem, "items", SubItemsAnnotation.merge(om.getMap("items"), a.items()))
+			.appendIf(nem, "items", SubItemsAnnotation.merge(m.getMap("items"), a.items()))
 			.appendFirst(ne, "maximum", a.maximum(), a.max())
 			.appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())
 			.appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())

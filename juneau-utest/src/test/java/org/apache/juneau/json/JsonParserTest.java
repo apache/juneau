@@ -42,7 +42,7 @@ public class JsonParserTest {
 	@Test
 	public void testNonExistentAttribute() throws Exception {
 		String json = "{foo:,bar:}";
-		OMap m = p.parse(json, OMap.class);
+		JsonMap m = p.parse(json, JsonMap.class);
 		assertEquals("{foo:null,bar:null}", m.toString());
 	}
 
@@ -87,13 +87,13 @@ public class JsonParserTest {
 	@Test
 	public void testStrictMode() throws Exception {
 		JsonParser p = sp;
-		assertThrown(()->p.parse("{\"foo\":,\"bar\":}", OMap.class)).message().contains("Missing value detected.");
-		assertThrown(()->p.parse("{\"foo\":'bar'}", OMap.class)).message().contains("Invalid quote character");
-		assertThrown(()->p.parse("{'foo':\"bar\"}", OMap.class)).message().contains("Invalid quote character");
-		assertThrown(()->p.parse("{foo:\"bar\"}", OMap.class)).message().contains("Unquoted attribute detected.");
-		assertThrown(()->p.parse("{\"foo\":\"bar\"+\"baz\"}", OMap.class)).message().contains("String concatenation detected.");
-		assertThrown(()->p.parse("{\"foo\":\"bar\" + \"baz\"}", OMap.class)).message().contains("String concatenation detected.");
-		assertThrown(()->p.parse("{\"foo\":/*comment*/\"bar\"}", OMap.class)).message().contains("Javascript comment detected.");
+		assertThrown(()->p.parse("{\"foo\":,\"bar\":}", JsonMap.class)).message().contains("Missing value detected.");
+		assertThrown(()->p.parse("{\"foo\":'bar'}", JsonMap.class)).message().contains("Invalid quote character");
+		assertThrown(()->p.parse("{'foo':\"bar\"}", JsonMap.class)).message().contains("Invalid quote character");
+		assertThrown(()->p.parse("{foo:\"bar\"}", JsonMap.class)).message().contains("Unquoted attribute detected.");
+		assertThrown(()->p.parse("{\"foo\":\"bar\"+\"baz\"}", JsonMap.class)).message().contains("String concatenation detected.");
+		assertThrown(()->p.parse("{\"foo\":\"bar\" + \"baz\"}", JsonMap.class)).message().contains("String concatenation detected.");
+		assertThrown(()->p.parse("{\"foo\":/*comment*/\"bar\"}", JsonMap.class)).message().contains("Javascript comment detected.");
 	}
 
 	/**
@@ -226,9 +226,9 @@ public class JsonParserTest {
 		Reader r;
 
 		r = reader("{foo:'bar'}{baz:'qux'}");
-		x = p.parse(r, OMap.class);
+		x = p.parse(r, JsonMap.class);
 		assertObject(x).asJson().is("{foo:'bar'}");
-		assertThrown(()->p.parse(r, OMap.class)).message().contains("Reader is closed");
+		assertThrown(()->p.parse(r, JsonMap.class)).message().contains("Reader is closed");
 	}
 
 	//====================================================================================================
@@ -242,15 +242,15 @@ public class JsonParserTest {
 		Reader r;
 
 		r = reader("{foo:'bar'}{baz:'qux'}");
-		x = p.parse(r, OMap.class);
+		x = p.parse(r, JsonMap.class);
 		assertObject(x).asJson().is("{foo:'bar'}");
-		x = p.parse(r, OMap.class);
+		x = p.parse(r, JsonMap.class);
 		assertObject(x).asJson().is("{baz:'qux'}");
 
 		r = reader("[123][456]");
-		x = p.parse(r, OList.class);
+		x = p.parse(r, JsonList.class);
 		assertObject(x).asJson().is("[123]");
-		x = p.parse(r, OList.class);
+		x = p.parse(r, JsonList.class);
 		assertObject(x).asJson().is("[456]");
 	}
 

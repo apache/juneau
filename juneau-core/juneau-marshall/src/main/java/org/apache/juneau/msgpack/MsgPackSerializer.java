@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack;
 
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -854,7 +854,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	protected OMap properties() {
+	protected JsonMap properties() {
 		return filteredMap("addBeanTypesMsgPack", addBeanTypesMsgPack);
 	}
 }

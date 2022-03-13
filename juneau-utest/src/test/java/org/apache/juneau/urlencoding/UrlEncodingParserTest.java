@@ -433,14 +433,14 @@ public class UrlEncodingParserTest {
 	@Test
 	public void testNoValues() throws Exception {
 		UrlEncodingParser p = UrlEncodingParser.DEFAULT;
-		OMap m;
+		JsonMap m;
 
 		String s = "?f1";
-		m = p.parse(s, OMap.class);
+		m = p.parse(s, JsonMap.class);
 		assertTrue(m.containsKey("f1"));
 		assertNull(m.get("f1"));
 		s = "?f1=f2&f3";
-		m = p.parse(s, OMap.class);
+		m = p.parse(s, JsonMap.class);
 		assertEquals("f2", m.get("f1"));
 		assertTrue(m.containsKey("f3"));
 		assertNull(m.get("f3"));
@@ -526,27 +526,27 @@ public class UrlEncodingParserTest {
 		assertObject(c).asJson().is("{f1:['\\'~','\\'~']}");
 
 		s = "?a~b=a~b";
-		OMap m = p.parse(s, OMap.class);
+		JsonMap m = p.parse(s, JsonMap.class);
 		assertEquals("{'a~b':'a~b'}", m.toString());
 
 		s = "?'a~b'='a~b'";
-		m = p.parse(s, OMap.class);
+		m = p.parse(s, JsonMap.class);
 		assertEquals("{'a~b':'a~b'}", m.toString());
 
 		s = "?~~=~~";
-		m = p.parse(s, OMap.class);
+		m = p.parse(s, JsonMap.class);
 		assertEquals("{'~':'~'}", m.toString());
 
 		s = "?'~~'='~~'";
-		m = p.parse(s, OMap.class);
+		m = p.parse(s, JsonMap.class);
 		assertEquals("{'~':'~'}", m.toString());
 
 		s = "?~~~~~~=~~~~~~";
-		m = p.parse(s, OMap.class);
+		m = p.parse(s, JsonMap.class);
 		assertEquals("{'~~~':'~~~'}", m.toString());
 
 		s = "?'~~~~~~'='~~~~~~'";
-		m = p.parse(s, OMap.class);
+		m = p.parse(s, JsonMap.class);
 		assertEquals("{'~~~':'~~~'}", m.toString());
 	}
 
@@ -561,43 +561,43 @@ public class UrlEncodingParserTest {
 	public void testWhitespace() throws Exception {
 		UrlEncodingParser p = UrlEncodingParser.DEFAULT;
 		String s;
-		OMap m;
+		JsonMap m;
 
 		s = "?f1=foo\n\t&f2=bar\n\t";
-		m = p.parse(s, OMap.class);
+		m = p.parse(s, JsonMap.class);
 		assertEquals("{f1:'foo',f2:'bar'}", m.toString());
 
 		s = "?f1='\n\t'&f2='\n\t'";
-		m = p.parse(s, OMap.class);
+		m = p.parse(s, JsonMap.class);
 		assertEquals("\n\t", m.getString("f1"));
 		assertEquals("\n\t", m.getString("f2"));
 
 		s = "?f1='\n\t'\n\t&f2='\n\t'\n\t";
-		m = p.parse(s, OMap.class);
+		m = p.parse(s, JsonMap.class);
 		assertEquals("\n\t", m.getString("f1"));
 		assertEquals("\n\t", m.getString("f2"));
 		assertEquals("{f1:'\\n\\t',f2:'\\n\\t'}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
 
 		s = "?f1='\n\t'\n\t&f2='\n\t'\n\t";
-		m = p.parse(s, OMap.class);
+		m = p.parse(s, JsonMap.class);
 		assertEquals("\n\t", m.getString("f1"));
 		assertEquals("\n\t", m.getString("f2"));
 		assertEquals("{f1:'\\n\\t',f2:'\\n\\t'}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
 
 		s = "?f1=(\n\tf1a=a,\n\tf1b=b\n\t)\n\t&f2=(\n\tf2a=a,\n\tf2b=b\n\t)\n\t";
-		m = p.parse(s, OMap.class);
+		m = p.parse(s, JsonMap.class);
 		assertEquals("{f1:{f1a:'a',f1b:'b'},f2:{f2a:'a',f2b:'b'}}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
 		D d = p.parse(s, D.class);
 		assertObject(d).asJson().is("{f1:{f1a:'a',f1b:'b'},f2:{f2a:'a',f2b:'b'}}");  // Note that JsonSerializer escapes newlines and tabs.
 
 		s = "?f1=(\n\tf1a='\n\t',\n\tf1b='\n\t'\n\t)\n\t&f2=(\n\tf2a='\n\t',\n\tf2b='\n\t'\n\t)\n\t";
-		m = p.parse(s, OMap.class);
+		m = p.parse(s, JsonMap.class);
 		assertEquals("{f1:{f1a:'\\n\\t',f1b:'\\n\\t'},f2:{f2a:'\\n\\t',f2b:'\\n\\t'}}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
 		d = p.parse(s, D.class);
 		assertObject(d).asJson().is("{f1:{f1a:'\\n\\t',f1b:'\\n\\t'},f2:{f2a:'\\n\\t',f2b:'\\n\\t'}}");  // Note that JsonSerializer escapes newlines and tabs.
 
 		s = "?f1=@(\n\tfoo,\n\tbar\n\t)\n\t&f2=@(\n\tfoo,\n\tbar\n\t)\n\t";
-		m = p.parse(s, OMap.class);
+		m = p.parse(s, JsonMap.class);
 		assertEquals("{f1:['foo','bar'],f2:['foo','bar']}", m.toString());  // Note that JsonSerializer escapes newlines and tabs.
 
 		s = "f1=a,\n\tb,\n\tc\n\t&f2=1,\n\t2,\n\t3\n\t&f3=true,\n\tfalse\n\t";

@@ -129,18 +129,18 @@ public class Section {
 	/**
 	 * Returns this section as a map.
 	 *
-	 * @return A new {@link OMap}, or {@link Optional#empty()} if this section doesn't exist.
+	 * @return A new {@link JsonMap}, or {@link Optional#empty()} if this section doesn't exist.
 	 */
-	public Optional<OMap> asMap() {
+	public Optional<JsonMap> asMap() {
 		if (! isPresent())
 			return empty();
 
 		Set<String> keys = configMap.getKeys(name);
 
-		OMap om = new OMap();
+		JsonMap m = new JsonMap();
 		for (String k : keys)
-			om.put(k, config.get(name + '/' + k).as(Object.class).orElse(null));
-		return optional(om);
+			m.put(k, config.get(name + '/' + k).as(Object.class).orElse(null));
+		return optional(m);
 	}
 
 	/**

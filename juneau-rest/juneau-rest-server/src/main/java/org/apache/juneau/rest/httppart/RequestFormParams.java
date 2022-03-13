@@ -608,7 +608,7 @@ public class RequestFormParams {
 	 * @return A JSON string containing the contents of the parameters.
 	 */
 	public String toString(boolean sorted) {
-		OMap m = OMap.create();
+		JsonMap m = JsonMap.create();
 		if (sorted) {
 			for (List<RequestFormParam> p1 : map.values())
 				for (RequestFormParam p2 : p1)

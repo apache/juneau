@@ -241,15 +241,15 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 			else if (dt == BIN)
 				o = is.readBinary();
 			else if (dt == ARRAY && sType.isObject()) {
-				OList ol = new OList(this);
+				JsonList jl = new JsonList(this);
 				for (int i = 0; i < length; i++)
-					ol.add(parseAnything(object(), is, outer, pMeta));
-				o = ol;
+					jl.add(parseAnything(object(), is, outer, pMeta));
+				o = jl;
 			} else if (dt == MAP && sType.isObject()) {
-				OMap om = new OMap(this);
+				JsonMap jm = new JsonMap(this);
 				for (int i = 0; i < length; i++)
-					om.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, om, pMeta));
-				o = cast(om, pMeta, eType);
+					jm.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, jm, pMeta));
+				o = cast(jm, pMeta, eType);
 			}
 
 			if (sType.isObject()) {
@@ -301,7 +301,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 				o = sType.newInstanceFromString(outer, o == null ? "" : o.toString());
 			} else if (sType.isCollection()) {
 				if (dt == MAP) {
-					OMap m = new OMap(this);
+					JsonMap m = new JsonMap(this);
 					for (int i = 0; i < length; i++)
 						m.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
 					o = cast(m, pMeta, eType);
@@ -309,7 +309,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 					Collection l = (
 						sType.canCreateNewInstance(outer)
 						? (Collection)sType.newInstance()
-						: new OList(this)
+						: new JsonList(this)
 					);
 					for (int i = 0; i < length; i++)
 						l.add(parseAnything(sType.getElementType(), is, l, pMeta));
@@ -319,7 +319,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 				}
 			} else if (sType.isArray() || sType.isArgs()) {
 				if (dt == MAP) {
-					OMap m = new OMap(this);
+					JsonMap m = new JsonMap(this);
 					for (int i = 0; i < length; i++)
 						m.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
 					o = cast(m, pMeta, eType);
@@ -327,7 +327,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 					Collection l = (
 						sType.isCollection() && sType.canCreateNewInstance(outer)
 						? (Collection)sType.newInstance()
-						: new OList(this)
+						: new JsonList(this)
 					);
 					for (int i = 0; i < length; i++)
 						l.add(parseAnything(sType.isArgs() ? sType.getArg(i) : sType.getElementType(), is, l, pMeta));
@@ -336,7 +336,7 @@ public final class MsgPackParserSession extends InputStreamParserSession {
 					throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
 				}
 			} else if (dt == MAP) {
-				OMap m = new OMap(this);
+				JsonMap m = new JsonMap(this);
 				for (int i = 0; i < length; i++)
 					m.put((String)parseAnything(string(), is, outer, pMeta), parseAnything(object(), is, m, pMeta));
 				if (m.containsKey(getBeanTypePropertyName(eType)))

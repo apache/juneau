@@ -143,7 +143,7 @@ public class RestClient_Config_Serializer_Test {
 
 	public static class A10 {
 		public Map<String,String> f1 = map();
-		public OMap f2 = OMap.create();
+		public JsonMap f2 = JsonMap.create();
 	}
 
 	@Test

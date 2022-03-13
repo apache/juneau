@@ -60,11 +60,11 @@ public class CommonParser_UrlEncodingTest {
 		assertEquals("foo bar", m.get("b"));
 		assertEquals(false, m.get("c"));
 
-		OMap jm = (OMap)p.parse("x=@((attribute=value),(attribute=~'value~'))", Object.class);
+		JsonMap jm = (JsonMap)p.parse("x=@((attribute=value),(attribute=~'value~'))", Object.class);
 		assertEquals("value", jm.getList("x").getMap(0).getString("attribute"));
 		assertEquals("'value'", jm.getList("x").getMap(1).getString("attribute"));
 
-		OList jl = (OList)p.parse("_value=@((attribute=value),(attribute=~'value~'))", Object.class);
+		JsonList jl = (JsonList)p.parse("_value=@((attribute=value),(attribute=~'value~'))", Object.class);
 		assertEquals("value", jl.getMap(0).getString("attribute"));
 		assertEquals("'value'", jl.getMap(1).getString("attribute"));
 
@@ -172,7 +172,7 @@ public class CommonParser_UrlEncodingTest {
 		WriterSerializer s = UrlEncodingSerializer.DEFAULT;
 		ReaderParser p = UrlEncodingParser.DEFAULT;
 
-		List l = OList.of("foo","bar");
+		List l = JsonList.of("foo","bar");
 		assertEquals("0=foo&1=bar", s.serialize(l));
 
 		String in =  "0=foo&1=bar";

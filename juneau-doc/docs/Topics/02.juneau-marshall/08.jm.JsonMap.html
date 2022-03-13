@@ -13,11 +13,11 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'OMap and OList', updated:'8.2.0'}
+{title:'JsonMap and JsonList', updated:'8.2.0'}
 
 <div class='topic'>
 	<p>
-		The {@link oaj.collections.OMap} and {@link oaj.collections.OList} classes are generic Java 
+		The {@link oaj.collections.JsonMap} and {@link oaj.collections.JsonList} classes are generic Java 
 		representations of JSON objects and arrays.  
 		These classes can be used to create "unstructured" models for serialization (as opposed to "structured" 
 		models consisting of beans).  
@@ -32,19 +32,19 @@
 			{@link java.util.LinkedHashMap java.util.LinkedHashMap}
 			<ul>
 				<li class='jc'> 
-				{@link oaj.collections.OMap org.apache.juneau.collections.OMap}
+				{@link oaj.collections.JsonMap org.apache.juneau.collections.JsonMap}
 			</ul>
 		</li>
 		<li class='jc'> 
 			{@link java.util.LinkedList java.util.LinkedList}
 			<ul>
 				<li class='jc'> 
-					{@link oaj.collections.OList org.apache.juneau.collections.OList}
+					{@link oaj.collections.JsonList org.apache.juneau.collections.JsonList}
 			</ul>
 		</li>
 	</ul>
 	<p>
-		The <l>OMap</l> and <l>OList</l> classes are very similar to the <l>JSONObject</l> and 
+		The <l>JsonMap</l> and <l>JsonList</l> classes are very similar to the <l>JSONObject</l> and 
 		<l>JSONArray</l> classes found in other libraries.  
 		However, the names were chosen because the concepts of <l>Maps</l> and <l>Lists</l> are already familiar to 
 		Java programmers, and these classes can be used with any of the serializers or parsers.
@@ -54,71 +54,71 @@
 	</p>
 	<ol class='spaced-list'>
 		<li>
-			Using the provided {@link oaj.collections.OMap#writeTo(java.io.Writer)} or 
-			{@link oaj.collections.OList#writeTo(java.io.Writer)} methods.
+			Using the provided {@link oaj.collections.JsonMap#writeTo(java.io.Writer)} or 
+			{@link oaj.collections.JsonList#writeTo(java.io.Writer)} methods.
 		<li>
 			Passing them to one of the {@link oaj.serializer.Serializer} serialize methods.
 		<li>
-			Simply calling the {@link oaj.collections.OMap#toString()} or {@link oaj.collections.OList#toString()}
+			Simply calling the {@link oaj.collections.JsonMap#toString()} or {@link oaj.collections.JsonList#toString()}
 			methods which will serialize it as Simplified JSON.
 	</ol>
 	<p>
 		Any valid JSON can be parsed into an unstructured model consisting of generic 
-		{@link oaj.collections.OMap} and {@link oaj.collections.OList} objects. 
+		{@link oaj.collections.JsonMap} and {@link oaj.collections.JsonList} objects. 
 		
 		(Any valid XML can also be parsed into an unstructured model)
 	</p>
 	<p class='bjava'>
 		|	<jc>// Parse an arbitrary JSON document into an unstructered data model
-		|	// consisting of OMaps, OLists, and java primitive objects.</jc>
+		|	// consisting of JsonMaps, JsonLists, and java primitive objects.</jc>
 		|	Parser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
 		|	String <jv>json</jv> = <js>"{a:{name:'John Smith',age:21},b:{name:'Joe Smith',age:42}}"</js>;
-		|	OMap <jv>omap</jv> = <jv>parser</jv>.parse(<jv>json</jv>, OMap.<jk>class</jk>);
+		|	JsonMap <jv>map</jv> = <jv>parser</jv>.parse(<jv>json</jv>, JsonMap.<jk>class</jk>);
 		|
-		|	<jc>// Use OMap API to extract data from the unstructured model.</jc>
-		|	<jk>int</jk> <jv>johnSmithAge</jv> = <jv>omap</jv>.getMap(<js>"a"</js>).getInt(<js>"age"</js>);
+		|	<jc>// Use JsonMap API to extract data from the unstructured model.</jc>
+		|	<jk>int</jk> <jv>johnSmithAge</jv> = <jv>map</jv>.getMap(<js>"a"</js>).getInt(<js>"age"</js>);
 		|	
 		|	<jc>// Convert it back into JSON.</jc>
-		|	<jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>omap</jv>);
+		|	<jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>map</jv>);
 		|	
 		|	<jc>// Or convert it to XML.</jc>
-		|	String <jv>xml</jv> = XmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>omap</jv>);
+		|	String <jv>xml</jv> = XmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>map</jv>);
 		|
 		|	<jc>// Or just use toString().</jc>
-		|	<jv>json</jv> = <jv>omap</jv>.toString();
+		|	<jv>json</jv> = <jv>map</jv>.toString();
 	</p>
 	<p>
-		The <c>OMap</c> and <c>OList</c> classes have many convenience features:
+		The <c>JsonMap</c> and <c>JsonList</c> classes have many convenience features:
 	</p>
 	<p class='bjava'>	
 		|	<jc>// Convert the map to a bean.</jc>		
-		|	MyBean <jv>myBean</jv> = <jv>omap</jv>.cast(MyBean.<jk>class</jk>);
+		|	MyBean <jv>myBean</jv> = <jv>map</jv>.cast(MyBean.<jk>class</jk>);
 		|			
 		|	<jc>// Find entries by multiple keys.</jc>
-		|	MyBean <jv>myBean</jv> = <jv>omap</jv>.find(MyBean.<jk>class</jk>, <js>"key1"</js>, <js>"key2"</js>);
+		|	MyBean <jv>myBean</jv> = <jv>map</jv>.find(MyBean.<jk>class</jk>, <js>"key1"</js>, <js>"key2"</js>);
 		|	
 		|	<jc>// Fluent-style appenders.</jc>
-		|	<jv>omap</jv>.append(<js>"key1"</js>, <js>"val1"</js>).append(<js>"key2"</js>, <js>"val2"</js>);
+		|	<jv>map</jv>.append(<js>"key1"</js>, <js>"val1"</js>).append(<js>"key2"</js>, <js>"val2"</js>);
 		|			
 		|	<jc>// REST-like functions for manipulating nodes in the data structure using URL-like notation.</jc>
-		|	<jv>omap</jv>.getAt(<js>"foo/bar/myBean"</js>, MyBean.<jk>class</jk>);		
-		|	<jv>omap</jv>.putAt(<js>"foo/bar/myBean"</js>, MyBean.<jk>class</jk>);		
-		|	<jv>omap</jv>.postAt(<js>"foo/bar/myListOfBeans"</js>, MyBean.<jk>class</jk>);		
-		|	<jv>omap</jv>.deleteAt(<js>"foo/bar/myBean"</js>);		
+		|	<jv>map</jv>.getAt(<js>"foo/bar/myBean"</js>, MyBean.<jk>class</jk>);		
+		|	<jv>map</jv>.putAt(<js>"foo/bar/myBean"</js>, MyBean.<jk>class</jk>);		
+		|	<jv>map</jv>.postAt(<js>"foo/bar/myListOfBeans"</js>, MyBean.<jk>class</jk>);		
+		|	<jv>map</jv>.deleteAt(<js>"foo/bar/myBean"</js>);		
 		|	
 		|	<jc>// Copy with inclusion or exclusion.</jc>
-		|	OMap <jv>omap2</jv> = <jv>omap</jv>.include(<js>"key1"</js>, <js>"key2"</js>, <js>"key3"</js>);
-		|	OMap <jv>omap3</jv> = <jv>omap</jv>.exclude(<js>"key1"</js>, <js>"key2"</js>, <js>"key3"</js>);
+		|	JsonMap <jv>map2</jv> = <jv>map</jv>.include(<js>"key1"</js>, <js>"key2"</js>, <js>"key3"</js>);
+		|	JsonMap <jv>map3</jv> = <jv>map</jv>.exclude(<js>"key1"</js>, <js>"key2"</js>, <js>"key3"</js>);
 		|	
 		|	<jc>// Serialize using another serializer.</jc>
-		|	String <jv>xml</jv> = <jv>omap</jv>.serializeTo(XmlSerializer.<jsf>DEFAULT</jsf>);
+		|	String <jv>xml</jv> = <jv>map</jv>.serializeTo(XmlSerializer.<jsf>DEFAULT</jsf>);
 		|	
 		|	<jc>// Nested maps.</jc>
-		|	<jv>omap</jv>.inner(<jv>anotherMap</jv>);
+		|	<jv>map</jv>.inner(<jv>anotherMap</jv>);
 	</p>
 	
 	<div class='info'>
 		As a general rule, if you do not specify a target type during parsing, or if the target type cannot be 
-		determined through reflection, the parsers automatically generate <l>OMaps</l> and <l>OLists</l>.
+		determined through reflection, the parsers automatically generate <l>JsonMaps</l> and <l>JsonLists</l>.
 	</div>
 </div>

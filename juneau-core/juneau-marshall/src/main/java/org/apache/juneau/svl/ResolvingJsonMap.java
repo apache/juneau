@@ -15,7 +15,7 @@ package org.apache.juneau.svl;
 import org.apache.juneau.collections.*;
 
 /**
- * Subclass of an {@link OMap} that automatically resolves any SVL variables in values.
+ * Subclass of an {@link JsonMap} that automatically resolves any SVL variables in values.
  *
  * <p>
  * Resolves variables in the following values:
@@ -35,7 +35,7 @@ import org.apache.juneau.collections.*;
  * </ul>
  */
 @SuppressWarnings({"serial"})
-public class ResolvingOMap extends OMap {
+public class ResolvingJsonMap extends JsonMap {
 
 	private final VarResolverSession varResolver;
 
@@ -44,7 +44,7 @@ public class ResolvingOMap extends OMap {
 	 *
 	 * @param varResolver The var resolver session to use for resolving SVL variables.
 	 */
-	public ResolvingOMap(VarResolverSession varResolver) {
+	public ResolvingJsonMap(VarResolverSession varResolver) {
 		super();
 		this.varResolver = varResolver;
 	}

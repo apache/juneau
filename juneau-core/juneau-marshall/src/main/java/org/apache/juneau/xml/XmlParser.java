@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.xml;
 
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -172,7 +172,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		 * Preserve root element during generalized parsing.
 		 *
 		 * <p>
-		 * When enabled, when parsing into a generic {@link OMap}, the map will contain a single entry whose key
+		 * When enabled, when parsing into a generic {@link JsonMap}, the map will contain a single entry whose key
 		 * is the root element name.
 		 *
 		 * <h5 class='section'>Example:</h5>
@@ -191,10 +191,10 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 		 * 	String <jv>xml</jv> = <js>"&lt;root&gt;&lt;a&gt;foobar&lt;/a&gt;&lt;/root&gt;"</js>;
 		 *
 		 * 	<jc>// Produces:  "{ root: { a:'foobar' }}"</jc>
-		 * 	OMap <jv>map1</jv> = <jv>parser1</jv>.parse(<jv>xml</jv>, OMap.<jk>class</jk>);
+		 * 	JsonMap <jv>map1</jv> = <jv>parser1</jv>.parse(<jv>xml</jv>, JsonMap.<jk>class</jk>);
 		 *
 		 * 	<jc>// Produces:  "{ a:'foobar' }"</jc>
-		 * 	OMap <jv>map2</jv> = <jv>parser2</jv>.parse(<jv>xml</jv>, OMap.<jk>class</jk>);
+		 * 	JsonMap <jv>map2</jv> = <jv>parser2</jv>.parse(<jv>xml</jv>, JsonMap.<jk>class</jk>);
 		 * </p>
 		 *
 		 * @return This object.
@@ -872,7 +872,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	 *
 	 * @see Builder#preserveRootElement()
 	 * @return
-	 * 	<jk>true</jk> if when parsing into a generic {@link OMap}, the map will contain a single entry whose key
+	 * 	<jk>true</jk> if when parsing into a generic {@link JsonMap}, the map will contain a single entry whose key
 	 * 	is the root element name.
 	 */
 	protected final boolean isPreserveRootElement() {
@@ -925,7 +925,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider {
 	}
 
 	@Override /* Context */
-	protected OMap properties() {
+	protected JsonMap properties() {
 		return filteredMap()
 			.append("validating", validating)
 			.append("preserveRootElement", preserveRootElement)

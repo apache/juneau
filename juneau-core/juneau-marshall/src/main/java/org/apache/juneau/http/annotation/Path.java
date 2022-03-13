@@ -107,7 +107,7 @@ public @interface Path {
 	 * 		<p class='bjava'>
 	 * 	<jc>// When used on a REST method</jc>
 	 * 	<ja>@RestPost</ja>
-	 * 	<jk>public void</jk> addPet(<ja>@Path</ja> OMap <jv>allPathParameters</jv>) {...}
+	 * 	<jk>public void</jk> addPet(<ja>@Path</ja> JsonMap <jv>allPathParameters</jv>) {...}
 	 * 		</p>
 	 * 		<p class='bjava'>
 	 * 	<jc>// When used on a remote method parameter</jc>

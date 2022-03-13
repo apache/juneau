@@ -335,7 +335,7 @@ public class Messages extends ResourceBundle {
 
 		ResourceBundle getBundle() {
 			ClassLoader cl = forClass.getClassLoader();
-			OMap m = OMap.of("name", name, "package", forClass.getPackage().getName());
+			JsonMap m = JsonMap.of("name", name, "package", forClass.getPackage().getName());
 			for (String bn : baseNames) {
 				bn = StringUtils.replaceVars(bn, m);
 				ResourceBundle rb = findBundle(bn, locale, cl);
@@ -506,9 +506,9 @@ public class Messages extends ResourceBundle {
 
 	@Override /* Object */
 	public String toString() {
-		OMap om = new OMap();
+		JsonMap m = new JsonMap();
 		for (String k : new TreeSet<>(keySet()))
-			om.put(k, getString(k));
-		return json(om);
+			m.put(k, getString(k));
+		return json(m);
 	}
 }

@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.jena;
 
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -1688,7 +1688,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	protected OMap properties() {
+	protected JsonMap properties() {
 		return filteredMap()
 			.append("trimWhitespace", trimWhitespace)
 			.append("looseCollections", looseCollections)

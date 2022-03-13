@@ -41,7 +41,7 @@ public class DataConversionTest {
 	//====================================================================================================
 	@Test
 	public void testBasic() throws Exception {
-		OMap m = new OMap();
+		JsonMap m = new JsonMap();
 
 		// *** Number ***
 		m.put("x", 123);
@@ -65,8 +65,8 @@ public class DataConversionTest {
 		m.put("x", new HashMap());
 		assertEquals(m.getString("x"), "{}");
 
-		// *** OMap ***
-		m.put("x", OMap.ofJson("{foo:123}"));
+		// *** JsonMap ***
+		m.put("x", JsonMap.ofJson("{foo:123}"));
 		assertEquals(m.getString("x"), "{foo:123}");
 
 		// *** Collection ***
@@ -75,8 +75,8 @@ public class DataConversionTest {
 		m.put("x", s);
 		assertEquals(m.getString("x"), "[123]");
 
-		// *** OList ***
-		m.put("x", OList.ofJson("[123]"));
+		// *** JsonList ***
+		m.put("x", JsonList.ofJson("[123]"));
 		assertEquals(m.getString("x"), "[123]");
 		assertEquals(m.getList("x").size(), 1);
 

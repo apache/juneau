@@ -220,7 +220,7 @@ public class JsonSchemaGeneratorTest {
 	@Test
 	public void beanDefsPreloaded() throws Exception {
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().useBeanDefs().build().getSession();
-		s.addBeanDef("SimpleBean", new OMap().append("test", 123));
+		s.addBeanDef("SimpleBean", new JsonMap().append("test", 123));
 		assertObject(s.getSchema(SimpleBean.class)).asJson().is("{'$ref':'#/definitions/SimpleBean'}");
 		assertObject(s.getBeanDefs()).asJson().is("{SimpleBean:{test:123}}");
 	}
@@ -228,7 +228,7 @@ public class JsonSchemaGeneratorTest {
 	@Test
 	public void useBeanDefsPreloaded_beanList() throws Exception {
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().useBeanDefs().build().getSession();
-		s.addBeanDef("SimpleBean", new OMap().append("test", 123));
+		s.addBeanDef("SimpleBean", new JsonMap().append("test", 123));
 		assertObject(s.getSchema(BeanList.class)).asJson().is("{type:'array',items:{'$ref':'#/definitions/SimpleBean'}}");
 		assertObject(s.getBeanDefs()).asJson().is("{SimpleBean:{test:123}}");
 	}
@@ -236,7 +236,7 @@ public class JsonSchemaGeneratorTest {
 	@Test
 	public void useBeanDefsPreloaded_beanList2d() throws Exception {
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().useBeanDefs().build().getSession();
-		s.addBeanDef("SimpleBean", new OMap().append("test", 123));
+		s.addBeanDef("SimpleBean", new JsonMap().append("test", 123));
 		assertObject(s.getSchema(BeanList2d.class)).asJson().is("{type:'array',items:{type:'array',items:{'$ref':'#/definitions/SimpleBean'}}}");
 		assertObject(s.getBeanDefs()).asJson().is("{SimpleBean:{test:123}}");
 	}
@@ -244,7 +244,7 @@ public class JsonSchemaGeneratorTest {
 	@Test
 	public void useBeanDefsPreloaded_beanArray2d() throws Exception {
 		JsonSchemaGeneratorSession s = JsonSchemaGenerator.DEFAULT.copy().useBeanDefs().build().getSession();
-		s.addBeanDef("SimpleBean", new OMap().append("test", 123));
+		s.addBeanDef("SimpleBean", new JsonMap().append("test", 123));
 		assertObject(s.getSchema(SimpleBean[][].class)).asJson().is("{type:'array',items:{type:'array',items:{'$ref':'#/definitions/SimpleBean'}}}");
 		assertObject(s.getBeanDefs()).asJson().is("{SimpleBean:{test:123}}");
 	}

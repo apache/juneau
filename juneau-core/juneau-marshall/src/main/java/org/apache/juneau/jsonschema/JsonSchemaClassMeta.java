@@ -32,7 +32,7 @@ import org.apache.juneau.parser.*;
  */
 public class JsonSchemaClassMeta extends ExtendedClassMeta {
 
-	private final OMap schema = new OMap();
+	private final JsonMap schema = new JsonMap();
 
 	/**
 	 * Constructor.
@@ -57,7 +57,7 @@ public class JsonSchemaClassMeta extends ExtendedClassMeta {
 	 *
 	 * @return The value of the annotation, or <jk>null</jk> if not specified.
 	 */
-	protected OMap getSchema() {
+	protected JsonMap getSchema() {
 		return schema;
 	}
 }

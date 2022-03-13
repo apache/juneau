@@ -56,7 +56,7 @@ import org.apache.juneau.parser.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Construct an unstructured POJO model</jc>
- * 	OMap <jv>map</jv> = OMap.<jsm>ofJson</jsm>(<js>""</js>
+ * 	JsonMap <jv>map</jv> = JsonMap.<jsm>ofJson</jsm>(<js>""</js>
  * 		+ <js>"{"</js>
  * 		+ <js>"	name:'John Smith', "</js>
  * 		+ <js>"	address:{ "</js>
@@ -104,7 +104,7 @@ import org.apache.juneau.parser.*;
  * 	<jv>johnSmith</jv>.delete(<js>"fico score"</js>);
  *
  * 	<jc>// Add entirely new structures to the tree</jc>
- * 	OMap <jv>medicalInfo</jv> = OMap.<jsm>ofJson</jsm>(<js>""</js>
+ * 	JsonMap <jv>medicalInfo</jv> = JsonMap.<jsm>ofJson</jsm>(<js>""</js>
  * 		+ <js>"{"</js>
  * 		+ <js>"	currentStatus: 'deceased',"</js>
  * 		+ <js>"	health: 'non-existent',"</js>
@@ -527,58 +527,58 @@ public final class PojoRest {
 	 * Returns the specified entry value converted to a {@link Map}.
 	 *
 	 * <p>
-	 * Shortcut for <code>get(OMap.<jk>class</jk>, key)</code>.
+	 * Shortcut for <code>get(JsonMap.<jk>class</jk>, key)</code>.
 	 *
 	 * @param url The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
-	public OMap getOMap(String url) {
-		return get(url, OMap.class);
+	public JsonMap getJsonMap(String url) {
+		return get(url, JsonMap.class);
 	}
 
 	/**
-	 * Returns the specified entry value converted to a {@link OMap}.
+	 * Returns the specified entry value converted to a {@link JsonMap}.
 	 *
 	 * <p>
-	 * Shortcut for <code>get(OMap.<jk>class</jk>, key, defVal)</code>.
+	 * Shortcut for <code>get(JsonMap.<jk>class</jk>, key, defVal)</code>.
 	 *
 	 * @param url The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
 	 * @return The converted value, or the default value if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
-	public OMap getOMap(String url, OMap defVal) {
-		return getWithDefault(url, defVal, OMap.class);
+	public JsonMap getJsonMap(String url, JsonMap defVal) {
+		return getWithDefault(url, defVal, JsonMap.class);
 	}
 
 	/**
-	 * Returns the specified entry value converted to a {@link OList}.
+	 * Returns the specified entry value converted to a {@link JsonList}.
 	 *
 	 * <p>
-	 * Shortcut for <code>get(OList.<jk>class</jk>, key)</code>.
+	 * Shortcut for <code>get(JsonList.<jk>class</jk>, key)</code>.
 	 *
 	 * @param url The key.
 	 * @return The converted value, or <jk>null</jk> if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
-	public OList getOList(String url) {
-		return get(url, OList.class);
+	public JsonList getJsonList(String url) {
+		return get(url, JsonList.class);
 	}
 
 	/**
-	 * Returns the specified entry value converted to a {@link OList}.
+	 * Returns the specified entry value converted to a {@link JsonList}.
 	 *
 	 * <p>
-	 * Shortcut for <code>get(OList.<jk>class</jk>, key, defVal)</code>.
+	 * Shortcut for <code>get(JsonList.<jk>class</jk>, key, defVal)</code>.
 	 *
 	 * @param url The key.
 	 * @param defVal The default value if the map doesn't contain the specified mapping.
 	 * @return The converted value, or the default value if the map contains no mapping for this key.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
-	public OList getOList(String url, OList defVal) {
-		return getWithDefault(url, defVal, OList.class);
+	public JsonList getJsonList(String url, JsonList defVal) {
+		return getWithDefault(url, defVal, JsonList.class);
 	}
 
 	/**

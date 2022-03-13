@@ -182,29 +182,29 @@ public class Query_Test {
 	@Rest
 	public static class D {
 		@RestGet(defaultRequestQueryData={"f1:1","f2=2"," f3 : 3 "})
-		public OMap a(RequestQueryParams query) {
-			return OMap.create()
+		public JsonMap a(RequestQueryParams query) {
+			return JsonMap.create()
 				.append("f1", query.get("f1").asString())
 				.append("f2", query.get("f2").asString())
 				.append("f3", query.get("f3").asString());
 		}
 		@RestGet
-		public OMap b(@Query("f1") String f1, @Query("f2") String f2, @Query("f3") String f3) {
-			return OMap.create()
+		public JsonMap b(@Query("f1") String f1, @Query("f2") String f2, @Query("f3") String f3) {
+			return JsonMap.create()
 				.append("f1", f1)
 				.append("f2", f2)
 				.append("f3", f3);
 		}
 		@RestGet
-		public OMap c(@Query("f1") @Schema(df="1") String f1, @Query("f2") @Schema(df="2") String f2, @Query("f3") @Schema(df="3") String f3) {
-			return OMap.create()
+		public JsonMap c(@Query("f1") @Schema(df="1") String f1, @Query("f2") @Schema(df="2") String f2, @Query("f3") @Schema(df="3") String f3) {
+			return JsonMap.create()
 				.append("f1", f1)
 				.append("f2", f2)
 				.append("f3", f3);
 		}
 		@RestGet(defaultRequestQueryData={"f1:1","f2=2"," f3 : 3 "})
-		public OMap d(@Query("f1") @Schema(df="4") String f1, @Query("f2") @Schema(df="5") String f2, @Query("f3") @Schema(df="6") String f3) {
-			return OMap.create()
+		public JsonMap d(@Query("f1") @Schema(df="4") String f1, @Query("f2") @Schema(df="5") String f2, @Query("f3") @Schema(df="6") String f3) {
+			return JsonMap.create()
 				.append("f1", f1)
 				.append("f2", f2)
 				.append("f3", f3);

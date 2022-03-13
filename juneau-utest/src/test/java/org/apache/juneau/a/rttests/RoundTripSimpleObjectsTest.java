@@ -602,11 +602,11 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	}
 
 	//====================================================================================================
-	// testOMap
+	// testJsonMap
 	//====================================================================================================
 	@Test
-	public void testOMap() throws Exception {
-		OMap t = OMap.ofJson("{a:'b',c:123,d:false,e:null,f:[123,'abc',true,false,null]}");
+	public void testJsonMap() throws Exception {
+		JsonMap t = JsonMap.ofJson("{a:'b',c:123,d:false,e:null,f:[123,'abc',true,false,null]}");
 		t = roundTrip(t);
 		assertEquals("b", t.get("a"));
 		assertEquals(123, t.get("c"));
@@ -621,11 +621,11 @@ public class RoundTripSimpleObjectsTest extends RoundTripTest {
 	}
 
 	//====================================================================================================
-	// testOList
+	// testJsonList
 	//====================================================================================================
 	@Test
-	public void testOList() throws Exception {
-		OList t = new OList("['abc',123,true,false,null,{a:'b'}]");
+	public void testJsonList() throws Exception {
+		JsonList t = new JsonList("['abc',123,true,false,null,{a:'b'}]");
 		t = roundTrip(t);
 		assertEquals("abc", t.get(0));
 		assertEquals(123, t.get(1));

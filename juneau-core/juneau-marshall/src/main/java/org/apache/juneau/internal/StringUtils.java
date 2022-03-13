@@ -2443,12 +2443,12 @@ public final class StringUtils {
 	 * @return The parsed string.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static OList parseListOrCdl(String s) throws ParseException {
+	public static JsonList parseListOrCdl(String s) throws ParseException {
 		if (isEmpty(s))
 			return null;
 		if (! isJsonArray(s, true))
-			return new OList((Object[])StringUtils.split(s.trim(), ','));
-		return new OList(s);
+			return new JsonList((Object[])StringUtils.split(s.trim(), ','));
+		return new JsonList(s);
 	}
 
 	/**

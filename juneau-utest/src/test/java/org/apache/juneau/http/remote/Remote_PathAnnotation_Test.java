@@ -156,7 +156,7 @@ public class Remote_PathAnnotation_Test {
 	@Rest
 	public static class C {
 		@RestOp(path="/a/{x}")
-		public String get(@Path("*") OMap m) {
+		public String get(@Path("*") JsonMap m) {
 			m.removeAll("/*","/**");
 			return m.toString();
 		}
@@ -388,7 +388,7 @@ public class Remote_PathAnnotation_Test {
 	@Rest
 	public static class D {
 		@RestOp(path="/{x}")
-		public String get(@Path("*") OMap m) {
+		public String get(@Path("*") JsonMap m) {
 			m.removeAll("/*","/**");
 			return m.toString();
 		}
@@ -432,7 +432,7 @@ public class Remote_PathAnnotation_Test {
 	@Rest
 	public static class E {
 		@RestOp(path="/{x}")
-		public String get(@Path("*") OMap m) {
+		public String get(@Path("*") JsonMap m) {
 			m.removeAll("/*","/**");
 			return m.toString();
 		}
@@ -479,7 +479,7 @@ public class Remote_PathAnnotation_Test {
 	@Rest
 	public static class F {
 		@RestOp(path="/{x}")
-		public String get(@Path("*") OMap m) {
+		public String get(@Path("*") JsonMap m) {
 			m.removeAll("/*","/**");
 			return m.toString();
 		}
@@ -562,7 +562,7 @@ public class Remote_PathAnnotation_Test {
 	@Rest
 	public static class H {
 		@RestOp(path="/{x}")
-		public String get(@Path("*") OMap m) {
+		public String get(@Path("*") JsonMap m) {
 			m.removeAll("/*","/**");
 			return m.toString();
 		}

@@ -37,11 +37,11 @@ public class PojoRestTest {
 
 		// TODO: Need to write some exhaustive tests here. Will open work item
 		// to do that later.
-		PojoRest model = new PojoRest(new OMap()); // An empty model.
+		PojoRest model = new PojoRest(new JsonMap()); // An empty model.
 
 		// Do a PUT
-		model.put("A", new OMap());
-		model.put("A/B", new OMap());
+		model.put("A", new JsonMap());
+		model.put("A/B", new JsonMap());
 		model.put("A/B/C", "A new string");
 		assertEquals("{A:{B:{C:'A new string'}}}", model.toString());
 
@@ -67,7 +67,7 @@ public class PojoRestTest {
 		PojoRest model;
 
 		// Java beans.
-		model = new PojoRest(new OMap());
+		model = new PojoRest(new JsonMap());
 		Person p = new Person("some name", 123,
 			new Address("street A", "city A", "state A", 12345, true),
 			new Address("street B", "city B", "state B", 12345, false)
@@ -163,7 +163,7 @@ public class PojoRestTest {
 
 		// Make sure we can get non-existent branches without throwing any exceptions.
 		// get() method should just return null.
-		model = new PojoRest(new OMap());
+		model = new PojoRest(new JsonMap());
 		Object o = model.get("xxx");
 		assertEquals("null", (""+o));
 
@@ -174,17 +174,17 @@ public class PojoRestTest {
 		assertEquals("{}", s);
 
 		// Make sure doing a PUT against "" or "/" replaces the root object.
-		OMap m2 = OMap.ofJson("{x:1}");
+		JsonMap m2 = JsonMap.ofJson("{x:1}");
 		model.put("", m2);
 		s = model.get("").toString();
 		assertEquals("{x:1}", s);
-		m2 = OMap.ofJson("{x:2}");
+		m2 = JsonMap.ofJson("{x:2}");
 		model.put("/", m2);
 		s = model.get("").toString();
 		assertEquals("{x:2}", s);
 
 		// Make sure doing a POST against "" or "/" adds to the root object.
-		model = new PojoRest(new OList());
+		model = new PojoRest(new JsonList());
 		model.post("", new Integer(1));
 		model.post("/", new Integer(2));
 		s = model.get("").toString();
@@ -324,16 +324,16 @@ public class PojoRestTest {
 	// getMap(String url, Map<?,?> defVal)
 	// getList(String url)
 	// getList(String url, List<?> defVal)
-	// getOMap(String url)
-	// getOMap(String url, OMap defVal)
-	// getOList(String url)
-	// getOList(String url, OList defVal)
+	// getJsonMap(String url)
+	// getJsonMap(String url, JsonMap defVal)
+	// getJsonList(String url)
+	// getJsonList(String url, JsonList defVal)
 	//====================================================================================================
 	@Test
 	public void testGetMethods() throws Exception {
 		PojoRest model = new PojoRest(new A());
-		OList l = OList.ofJson("[{a:'b'}]");
-		OMap m = OMap.ofJson("{a:'b'}");
+		JsonList l = JsonList.ofJson("[{a:'b'}]");
+		JsonMap m = JsonMap.ofJson("{a:'b'}");
 
 		assertNull(model.get("f1"));
 		assertEquals(0, model.get("f2"));
@@ -480,28 +480,28 @@ public class PojoRestTest {
 		assertEquals("{a:'b'}", model.getMap("f8", m).toString());
 
 		assertNull(model.getMap("f1"));
-		assertThrown(()->model.getOMap("f2")).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOMap("f3")).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOMap("f4")).isType(InvalidDataConversionException.class);
-		assertNull(model.getOMap("f2a"));
-		assertNull(model.getOMap("f3a"));
-		assertNull(model.getOMap("f4a"));
-		assertNull(model.getOMap("f5"));
-		assertNull(model.getOMap("f6"));
-		assertNull(model.getOMap("f7"));
-		assertNull(model.getOMap("f8"));
+		assertThrown(()->model.getJsonMap("f2")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonMap("f3")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonMap("f4")).isType(InvalidDataConversionException.class);
+		assertNull(model.getJsonMap("f2a"));
+		assertNull(model.getJsonMap("f3a"));
+		assertNull(model.getJsonMap("f4a"));
+		assertNull(model.getJsonMap("f5"));
+		assertNull(model.getJsonMap("f6"));
+		assertNull(model.getJsonMap("f7"));
+		assertNull(model.getJsonMap("f8"));
 
-		assertEquals("{a:'b'}", model.getOMap("f1", m).toString());
-		assertThrown(()->model.getOMap("f2", m)).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOMap("f3", m)).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOMap("f4", m)).isType(InvalidDataConversionException.class);
-		assertEquals("{a:'b'}", model.getOMap("f2a", m).toString());
-		assertEquals("{a:'b'}", model.getOMap("f3a", m).toString());
-		assertEquals("{a:'b'}", model.getOMap("f4a", m).toString());
-		assertEquals("{a:'b'}", model.getOMap("f5", m).toString());
-		assertEquals("{a:'b'}", model.getOMap("f6", m).toString());
-		assertEquals("{a:'b'}", model.getOMap("f7", m).toString());
-		assertEquals("{a:'b'}", model.getOMap("f8", m).toString());
+		assertEquals("{a:'b'}", model.getJsonMap("f1", m).toString());
+		assertThrown(()->model.getJsonMap("f2", m)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonMap("f3", m)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonMap("f4", m)).isType(InvalidDataConversionException.class);
+		assertEquals("{a:'b'}", model.getJsonMap("f2a", m).toString());
+		assertEquals("{a:'b'}", model.getJsonMap("f3a", m).toString());
+		assertEquals("{a:'b'}", model.getJsonMap("f4a", m).toString());
+		assertEquals("{a:'b'}", model.getJsonMap("f5", m).toString());
+		assertEquals("{a:'b'}", model.getJsonMap("f6", m).toString());
+		assertEquals("{a:'b'}", model.getJsonMap("f7", m).toString());
+		assertEquals("{a:'b'}", model.getJsonMap("f8", m).toString());
 
 		assertNull(model.getList("f1"));
 		assertThrown(()->model.getList("f2")).isType(InvalidDataConversionException.class);
@@ -527,29 +527,29 @@ public class PojoRestTest {
 		assertEquals("[{a:'b'}]", model.getList("f7", l).toString());
 		assertEquals("[{a:'b'}]", model.getList("f8", l).toString());
 
-		assertNull(model.getOList("f1"));
-		assertThrown(()->model.getOList("f2")).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOList("f3")).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOList("f4")).isType(InvalidDataConversionException.class);
-		assertNull(model.getOList("f2a"));
-		assertNull(model.getOList("f3a"));
-		assertNull(model.getOList("f4a"));
-		assertNull(model.getOList("f5"));
-		assertNull(model.getOList("f6"));
-		assertNull(model.getOList("f7"));
-		assertNull(model.getOList("f8"));
+		assertNull(model.getJsonList("f1"));
+		assertThrown(()->model.getJsonList("f2")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonList("f3")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonList("f4")).isType(InvalidDataConversionException.class);
+		assertNull(model.getJsonList("f2a"));
+		assertNull(model.getJsonList("f3a"));
+		assertNull(model.getJsonList("f4a"));
+		assertNull(model.getJsonList("f5"));
+		assertNull(model.getJsonList("f6"));
+		assertNull(model.getJsonList("f7"));
+		assertNull(model.getJsonList("f8"));
 
-		assertEquals("[{a:'b'}]", model.getOList("f1", l).toString());
-		assertThrown(()->model.getOList("f2", l)).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOList("f3", l)).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOList("f4", l)).isType(InvalidDataConversionException.class);
-		assertEquals("[{a:'b'}]", model.getOList("f2a", l).toString());
-		assertEquals("[{a:'b'}]", model.getOList("f3a", l).toString());
-		assertEquals("[{a:'b'}]", model.getOList("f4a", l).toString());
-		assertEquals("[{a:'b'}]", model.getOList("f5", l).toString());
-		assertEquals("[{a:'b'}]", model.getOList("f6", l).toString());
-		assertEquals("[{a:'b'}]", model.getOList("f7", l).toString());
-		assertEquals("[{a:'b'}]", model.getOList("f8", l).toString());
+		assertEquals("[{a:'b'}]", model.getJsonList("f1", l).toString());
+		assertThrown(()->model.getJsonList("f2", l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonList("f3", l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonList("f4", l)).isType(InvalidDataConversionException.class);
+		assertEquals("[{a:'b'}]", model.getJsonList("f2a", l).toString());
+		assertEquals("[{a:'b'}]", model.getJsonList("f3a", l).toString());
+		assertEquals("[{a:'b'}]", model.getJsonList("f4a", l).toString());
+		assertEquals("[{a:'b'}]", model.getJsonList("f5", l).toString());
+		assertEquals("[{a:'b'}]", model.getJsonList("f6", l).toString());
+		assertEquals("[{a:'b'}]", model.getJsonList("f7", l).toString());
+		assertEquals("[{a:'b'}]", model.getJsonList("f8", l).toString());
 
 		((A)model.getRootObject()).init();
 
@@ -697,29 +697,29 @@ public class PojoRestTest {
 		assertEquals("{f5a:'a'}", model.getMap("f7", m).toString());
 		assertThrown(()->model.getMap("f8", m)).isType(InvalidDataConversionException.class);
 
-		assertThrown(()->model.getOMap("f1")).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOMap("f2")).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOMap("f3")).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOMap("f4")).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOMap("f2a")).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOMap("f3a")).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOMap("f4a")).isType(InvalidDataConversionException.class);
-		assertEquals("{f5a:'a'}", model.getOMap("f5").toString());
-		assertThrown(()->model.getOMap("f6")).isType(InvalidDataConversionException.class);
-		assertEquals("{f5a:'a'}", model.getOMap("f7").toString());
-		assertThrown(()->model.getOMap("f8")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonMap("f1")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonMap("f2")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonMap("f3")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonMap("f4")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonMap("f2a")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonMap("f3a")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonMap("f4a")).isType(InvalidDataConversionException.class);
+		assertEquals("{f5a:'a'}", model.getJsonMap("f5").toString());
+		assertThrown(()->model.getJsonMap("f6")).isType(InvalidDataConversionException.class);
+		assertEquals("{f5a:'a'}", model.getJsonMap("f7").toString());
+		assertThrown(()->model.getJsonMap("f8")).isType(InvalidDataConversionException.class);
 
-		assertThrown(()->model.getOMap("f1", m)).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOMap("f2", m)).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOMap("f3", m)).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOMap("f4", m)).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOMap("f2a", m)).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOMap("f3a", m)).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOMap("f4a", m)).isType(InvalidDataConversionException.class);
-		assertEquals("{f5a:'a'}", model.getOMap("f5", m).toString());
-		assertThrown(()->model.getOMap("f6", m)).isType(InvalidDataConversionException.class);
-		assertEquals("{f5a:'a'}", model.getOMap("f7", m).toString());
-		assertThrown(()->model.getOMap("f8", m)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonMap("f1", m)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonMap("f2", m)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonMap("f3", m)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonMap("f4", m)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonMap("f2a", m)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonMap("f3a", m)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonMap("f4a", m)).isType(InvalidDataConversionException.class);
+		assertEquals("{f5a:'a'}", model.getJsonMap("f5", m).toString());
+		assertThrown(()->model.getJsonMap("f6", m)).isType(InvalidDataConversionException.class);
+		assertEquals("{f5a:'a'}", model.getJsonMap("f7", m).toString());
+		assertThrown(()->model.getJsonMap("f8", m)).isType(InvalidDataConversionException.class);
 
 		assertThrown(()->model.getList("f1")).isType(InvalidDataConversionException.class);
 		assertThrown(()->model.getList("f2")).isType(InvalidDataConversionException.class);
@@ -745,29 +745,29 @@ public class PojoRestTest {
 		assertEquals("[{f5a:'a'}]", model.getList("f7", l).toString());
 		assertEquals("[{f6a:'a'}]", model.getList("f8", l).toString());
 
-		assertThrown(()->model.getOList("f1")).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOList("f2")).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOList("f3")).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOList("f4")).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOList("f2a")).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOList("f3a")).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOList("f4a")).isType(InvalidDataConversionException.class);
-		assertEquals("[{f5a:'a'}]", model.getOList("f5").toString());
-		assertEquals("[{f6a:'a'}]", model.getOList("f6").toString());
-		assertEquals("[{f5a:'a'}]", model.getOList("f7").toString());
-		assertEquals("[{f6a:'a'}]", model.getOList("f8").toString());
+		assertThrown(()->model.getJsonList("f1")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonList("f2")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonList("f3")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonList("f4")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonList("f2a")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonList("f3a")).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonList("f4a")).isType(InvalidDataConversionException.class);
+		assertEquals("[{f5a:'a'}]", model.getJsonList("f5").toString());
+		assertEquals("[{f6a:'a'}]", model.getJsonList("f6").toString());
+		assertEquals("[{f5a:'a'}]", model.getJsonList("f7").toString());
+		assertEquals("[{f6a:'a'}]", model.getJsonList("f8").toString());
 
-		assertThrown(()->model.getOList("f1", l)).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOList("f2", l)).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOList("f3", l)).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOList("f4", l)).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOList("f2a", l)).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOList("f3a", l)).isType(InvalidDataConversionException.class);
-		assertThrown(()->model.getOList("f4a", l)).isType(InvalidDataConversionException.class);
-		assertEquals("[{f5a:'a'}]", model.getOList("f5", l).toString());
-		assertEquals("[{f6a:'a'}]", model.getOList("f6", l).toString());
-		assertEquals("[{f5a:'a'}]", model.getOList("f7", l).toString());
-		assertEquals("[{f6a:'a'}]", model.getOList("f8", l).toString());
+		assertThrown(()->model.getJsonList("f1", l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonList("f2", l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonList("f3", l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonList("f4", l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonList("f2a", l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonList("f3a", l)).isType(InvalidDataConversionException.class);
+		assertThrown(()->model.getJsonList("f4a", l)).isType(InvalidDataConversionException.class);
+		assertEquals("[{f5a:'a'}]", model.getJsonList("f5", l).toString());
+		assertEquals("[{f6a:'a'}]", model.getJsonList("f6", l).toString());
+		assertEquals("[{f5a:'a'}]", model.getJsonList("f7", l).toString());
+		assertEquals("[{f6a:'a'}]", model.getJsonList("f8", l).toString());
 	}
 
 	public static class A {
@@ -780,8 +780,8 @@ public class PojoRestTest {
 		public Boolean f4a;
 		public Map f5;
 		public List f6;
-		public OMap f7;
-		public OList f8;
+		public JsonMap f7;
+		public JsonList f8;
 
 		public A init() {
 			f1 = "1";
@@ -792,10 +792,10 @@ public class PojoRestTest {
 			f3a = 3l;
 			f4a = true;
 			try {
-				f5 = OMap.ofJson("{f5a:'a'}");
-				f6 = OList.ofJson("[{f6a:'a'}]");
-				f7 = OMap.ofJson("{f5a:'a'}");
-				f8 = OList.ofJson("[{f6a:'a'}]");
+				f5 = JsonMap.ofJson("{f5a:'a'}");
+				f6 = JsonList.ofJson("[{f6a:'a'}]");
+				f7 = JsonMap.ofJson("{f5a:'a'}");
+				f8 = JsonList.ofJson("[{f6a:'a'}]");
 			} catch (ParseException e) {
 				throw new RuntimeException(e);
 			}

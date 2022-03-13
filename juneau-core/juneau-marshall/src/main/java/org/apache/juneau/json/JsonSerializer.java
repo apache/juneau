@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.json;
 
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -285,7 +285,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 * 		.build();
 		 *
 		 * 	<jc>// Produces: "{foo:'&lt;\/bar&gt;'"</jc>
-		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(OMap.<jsm>of</jsm>(<js>"foo"</js>, <js>"&lt;/bar&gt;"</js>);
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(JsonMap.<jsm>of</jsm>(<js>"foo"</js>, <js>"&lt;/bar&gt;"</js>);
 		 * </p>
 		 *
 		 * @return This object.
@@ -342,7 +342,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 * 		.simple()
 		 * 		.build();
 		 *
-		 * 	OMap <jv>myMap</jv> = OMap.<jsm>of</jsm>(
+		 * 	JsonMap <jv>myMap</jv> = JsonMap.<jsm>of</jsm>(
 		 * 		<js>"foo"</js>, <js>"x1"</js>,
 		 * 		<js>"_bar"</js>, <js>"x2"</js>,
 		 * 		<js>" baz "</js>, <js>"x3"</js>,
@@ -1172,7 +1172,7 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	protected OMap properties() {
+	protected JsonMap properties() {
 		return filteredMap("simpleMode", simpleMode, "escapeSolidus", escapeSolidus, "addBeanTypesJson", addBeanTypesJson);
 	}
 }

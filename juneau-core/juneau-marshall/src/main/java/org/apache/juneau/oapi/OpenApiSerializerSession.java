@@ -492,7 +492,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 	private Map<String,Object> toMap(HttpPartType partType, ClassMeta<?> type, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
 		if (s == null)
 			s = DEFAULT_SCHEMA;
-		OMap m = new OMap();
+		JsonMap m = new JsonMap();
 		if (type.isBean()) {
 			Predicate<Object> checkNull = x -> isKeepNullProperties() || x != null;
 			HttpPartSchema s2 = s;
@@ -513,7 +513,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 	private List toList(HttpPartType partType, ClassMeta<?> type, Object o, HttpPartSchema s) throws SerializeException, SchemaValidationException {
 		if (s == null)
 			s = DEFAULT_SCHEMA;
-		OList l = new OList();
+		JsonList l = new JsonList();
 		HttpPartSchema items = s.getItems();
 		if (type.isArray()) {
 			for (int i = 0; i < Array.getLength(o); i++)

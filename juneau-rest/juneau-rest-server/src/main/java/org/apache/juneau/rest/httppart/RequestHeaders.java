@@ -528,7 +528,7 @@ public class RequestHeaders {
 	 * @return A JSON string containing the contents of the headers.
 	 */
 	public String toString(boolean sorted) {
-		OMap m = OMap.create();
+		JsonMap m = JsonMap.create();
 		if (sorted) {
 			for (List<RequestHeader> h1 : map.values())
 				for (RequestHeader h2 : h1)

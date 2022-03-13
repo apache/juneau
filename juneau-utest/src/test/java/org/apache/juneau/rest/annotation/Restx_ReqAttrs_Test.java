@@ -39,12 +39,12 @@ public class Restx_ReqAttrs_Test {
 	@Rest
 	public static class A2 extends A1 {
 		@RestOp
-		public OMap a1(RequestAttributes attrs) {
+		public JsonMap a1(RequestAttributes attrs) {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}
 			return transform(attrs);
 		}
 		@RestOp(defaultRequestAttributes={"p4:v4a","p5:v5"})
-		public OMap a2(RequestAttributes attrs, @HasQuery("override") boolean override) {
+		public JsonMap a2(RequestAttributes attrs, @HasQuery("override") boolean override) {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'} when override is false.
 			// Should show {p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'} when override is true.
 			if (override) {
@@ -58,12 +58,12 @@ public class Restx_ReqAttrs_Test {
 		}
 
 		@RestGet
-		public OMap b1(RequestAttributes attrs) {
+		public JsonMap b1(RequestAttributes attrs) {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}
 			return transform(attrs);
 		}
 		@RestGet(defaultRequestAttributes={"p4:v4a","p5:v5"})
-		public OMap b2(RequestAttributes attrs, @HasQuery("override") boolean override) {
+		public JsonMap b2(RequestAttributes attrs, @HasQuery("override") boolean override) {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'} when override is false.
 			// Should show {p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'} when override is true.
 			if (override) {
@@ -77,12 +77,12 @@ public class Restx_ReqAttrs_Test {
 		}
 
 		@RestPut
-		public OMap c1(RequestAttributes attrs) {
+		public JsonMap c1(RequestAttributes attrs) {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}
 			return transform(attrs);
 		}
 		@RestPut(defaultRequestAttributes={"p4:v4a","p5:v5"})
-		public OMap c2(RequestAttributes attrs, @HasQuery("override") boolean override) {
+		public JsonMap c2(RequestAttributes attrs, @HasQuery("override") boolean override) {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'} when override is false.
 			// Should show {p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'} when override is true.
 			if (override) {
@@ -96,12 +96,12 @@ public class Restx_ReqAttrs_Test {
 		}
 
 		@RestPost
-		public OMap d1(RequestAttributes attrs) {
+		public JsonMap d1(RequestAttributes attrs) {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}
 			return transform(attrs);
 		}
 		@RestPost(defaultRequestAttributes={"p4:v4a","p5:v5"})
-		public OMap d2(RequestAttributes attrs, @HasQuery("override") boolean override) {
+		public JsonMap d2(RequestAttributes attrs, @HasQuery("override") boolean override) {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'} when override is false.
 			// Should show {p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'} when override is true.
 			if (override) {
@@ -115,12 +115,12 @@ public class Restx_ReqAttrs_Test {
 		}
 
 		@RestDelete
-		public OMap e1(RequestAttributes attrs) {
+		public JsonMap e1(RequestAttributes attrs) {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}
 			return transform(attrs);
 		}
 		@RestDelete(defaultRequestAttributes={"p4:v4a","p5:v5"})
-		public OMap e2(RequestAttributes attrs, @HasQuery("override") boolean override) {
+		public JsonMap e2(RequestAttributes attrs, @HasQuery("override") boolean override) {
 			// Should show {p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'} when override is false.
 			// Should show {p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'} when override is true.
 			if (override) {
@@ -133,8 +133,8 @@ public class Restx_ReqAttrs_Test {
 			return transform(attrs);
 		}
 
-		private OMap transform(RequestAttributes attrs) {
-			OMap m = new OMap();
+		private JsonMap transform(RequestAttributes attrs) {
+			JsonMap m = new JsonMap();
 			for (Map.Entry<String,Object> e : attrs.asMap().entrySet()) {
 				if (e.getKey().startsWith("p"))
 					m.put(e.getKey(), e.getValue());

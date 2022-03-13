@@ -1159,7 +1159,7 @@ public final class Config extends Context implements ConfigEventListener {
 	 *
 	 * @return The contents of this config as a simple map.
 	 */
-	public OMap toMap() {
+	public JsonMap toMap() {
 		return configMap.asMap();
 	}
 

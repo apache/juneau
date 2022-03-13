@@ -349,15 +349,15 @@ public class BeanConfigTest {
 		assertEquals("xxx", file.getName());
 
 		// List of ints to array
-		o = OList.of(1, 2, 3);
+		o = JsonList.of(1, 2, 3);
 		assertEquals(1, bc.convertToType(o, int[].class)[0]);
 
 		// List of beans to array
-		o = OList.of(new ReadOnlyPerson("x", 123));
+		o = JsonList.of(new ReadOnlyPerson("x", 123));
 		assertEquals("x", bc.convertToType(o, ReadOnlyPerson[].class)[0].getName());
 
 		// Multi-dimensional array of beans.
-		o = OList.ofCollections(OList.of(new ReadOnlyPerson("x", 123)));
+		o = JsonList.ofCollections(JsonList.of(new ReadOnlyPerson("x", 123)));
 		assertEquals("x", bc.convertToType(o, ReadOnlyPerson[][].class)[0][0].getName());
 
 		// Array of strings to array of ints
@@ -401,7 +401,7 @@ public class BeanConfigTest {
 		assertEquals("{name:'x',age:123}", bc.convertToType(o, String.class));
 
 		// List of Maps to array of beans.
-		o = OList.of(OMap.ofJson("{name:'x',age:1}"), OMap.ofJson("{name:'y',age:2}"));
+		o = JsonList.of(JsonMap.ofJson("{name:'x',age:1}"), JsonMap.ofJson("{name:'y',age:2}"));
 		assertEquals(1, bc.convertToType(o, ReadOnlyPerson[].class)[0].getAge());
 	}
 
@@ -441,7 +441,7 @@ public class BeanConfigTest {
 		assertEquals("{name:'x',age:123}", bc.convertToType(o, String.class));
 
 		// List of Maps to array of beans.
-		o = OList.of(OMap.ofJson("{name:'x',age:1}"), OMap.ofJson("{name:'y',age:2}"));
+		o = JsonList.of(JsonMap.ofJson("{name:'x',age:1}"), JsonMap.ofJson("{name:'y',age:2}"));
 		assertEquals(1, bc.convertToType(o, ReadOnlyPerson2[].class)[0].getAge());
 	}
 

@@ -14,7 +14,7 @@ package org.apache.juneau.config.store;
 
 import static java.nio.file.StandardWatchEventKinds.*;
 import static java.nio.file.StandardOpenOption.*;
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -643,7 +643,7 @@ public class FileStore extends ConfigStore {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	protected OMap properties() {
+	protected JsonMap properties() {
 		return filteredMap("charset", charset, "extensions", extensions, "updateOnWrite", updateOnWrite);
 	}
 }

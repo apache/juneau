@@ -60,7 +60,7 @@ public class CommonParserTest {
 		assertEquals("street A", m.get("street"));
 		assertEquals(12345, m.get("zip"));
 
-		OList jl = (OList)p.parse("[{attribute:'value'},{attribute:'value'}]", Object.class);
+		JsonList jl = (JsonList)p.parse("[{attribute:'value'},{attribute:'value'}]", Object.class);
 		assertEquals("value", jl.getMap(0).getString("attribute"));
 		assertEquals("value", jl.getMap(1).getString("attribute"));
 
@@ -73,7 +73,7 @@ public class CommonParserTest {
 		assertNull(p.parse("   /*foo*/   ", Object.class));
 		assertNull(p.parse("   //foo   ", Object.class));
 
-		jl = (OList)p.parse("[{attribute:'value'},{attribute:'value'}]", Object.class);
+		jl = (JsonList)p.parse("[{attribute:'value'},{attribute:'value'}]", Object.class);
 		assertEquals("value", jl.getMap(0).getString("attribute"));
 		assertEquals("value", jl.getMap(1).getString("attribute"));
 

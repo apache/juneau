@@ -122,24 +122,24 @@ public class RestClient_FormData_Test {
 		TestSupplier s = TestSupplier.of(null);
 
 		RestClient x1 = client().formData(part("foo",s,null)).build();
-		s.set(OList.of("foo","bar"));
+		s.set(JsonList.of("foo","bar"));
 		x1.post("/formData").run().assertBody().asString().urlDecode().is("foo=foo,bar");
-		s.set(OList.of("bar","baz"));
+		s.set(JsonList.of("bar","baz"));
 		x1.post("/formData").run().assertBody().asString().urlDecode().is("foo=bar,baz");
 
 		RestClient x2 = client().build();
-		s.set(OList.of("foo","bar"));
+		s.set(JsonList.of("foo","bar"));
 		x2.post("/formData").formData("foo",s).run().assertBody().asString().urlDecode().is("foo=foo,bar");
-		s.set(OList.of("bar","baz"));
+		s.set(JsonList.of("bar","baz"));
 		x2.post("/formData").formData("foo",s).run().assertBody().asString().urlDecode().is("foo=bar,baz");
 	}
 
 	@Test
 	public void a10_formData_String_Supplier_Schema_Serializer() throws Exception {
-		TestSupplier s = TestSupplier.of(OList.of("foo","bar"));
+		TestSupplier s = TestSupplier.of(JsonList.of("foo","bar"));
 		RestClient x = client().formData(part("foo",s,T_ARRAY_PIPES).serializer(MockWriterSerializer.X)).build();
 		x.post("/formData").run().assertBody().asString().urlDecode().is("foo=xfoo|barx");
-		s.set(OList.of("bar","baz"));
+		s.set(JsonList.of("bar","baz"));
 		x.post("/formData").run().assertBody().asString().urlDecode().is("foo=xbar|bazx");
 	}
 

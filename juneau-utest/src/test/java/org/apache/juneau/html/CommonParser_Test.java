@@ -57,7 +57,7 @@ public class CommonParser_Test {
 		assertEquals(false, m.get("c"));
 
 		in = "<table _type='array'><tr><th>attribute</th></tr><tr><td><string>value</string></td></tr><tr><td><string>value</string></td></tr></table>";
-		OList jl = (OList)p.parse(in, Object.class);
+		JsonList jl = (JsonList)p.parse(in, Object.class);
 		assertEquals("value", jl.getMap(0).getString("attribute"));
 		assertEquals("value", jl.getMap(1).getString("attribute"));
 

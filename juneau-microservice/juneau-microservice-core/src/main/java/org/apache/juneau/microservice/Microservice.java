@@ -805,7 +805,7 @@ public class Microservice implements ConfigEventListener {
 			}
 		}
 
-		OMap loggerLevels = config.get("Logging/levels").as(OMap.class).orElseGet(OMap::new);
+		JsonMap loggerLevels = config.get("Logging/levels").as(JsonMap.class).orElseGet(JsonMap::new);
 		for (String l : loggerLevels.keySet())
 			Logger.getLogger(l).setLevel(loggerLevels.get(l, Level.class));
 		for (String l : logConfig.levels.keySet())
@@ -990,7 +990,7 @@ public class Microservice implements ConfigEventListener {
 	}
 
 	/**
-	 * Returns the main jar manifest file contents as a simple {@link OMap}.
+	 * Returns the main jar manifest file contents as a simple {@link JsonMap}.
 	 *
 	 * <p>
 	 * This map consists of the contents of {@link Manifest#getMainAttributes()} with the keys and entries converted to

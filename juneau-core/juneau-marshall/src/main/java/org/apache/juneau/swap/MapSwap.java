@@ -24,12 +24,12 @@ import org.apache.juneau.collections.*;
  * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> MapSwap&lt;<jk>byte</jk>[]&gt; {
  *
  * 		<ja>@Override</ja>
- * 		<jk>public</jk> OMap swap(BeanSession <jv>session</jv>, MyBean <jv>bean</jv>) <jk>throws</jk> Exception {
- * 			<jk>return</jk> OMap.<jsm>of<jsm>(<js>"foo"</js>, <jv>bean</jv>.getFoo());
+ * 		<jk>public</jk> JsonMap swap(BeanSession <jv>session</jv>, MyBean <jv>bean</jv>) <jk>throws</jk> Exception {
+ * 			<jk>return</jk> JsonMap.<jsm>of<jsm>(<js>"foo"</js>, <jv>bean</jv>.getFoo());
  * 		}
  *
  * 		<ja>@Override</ja>
- * 		<jk>public</jk> MyBean unswap(BeanSession <jv>session</jv>, OMap <jv>map</jv>, ClassMeta&lt;?&gt; <jv>hint</jv>) <jk>throws</jk> Exception {
+ * 		<jk>public</jk> MyBean unswap(BeanSession <jv>session</jv>, JsonMap <jv>map</jv>, ClassMeta&lt;?&gt; <jv>hint</jv>) <jk>throws</jk> Exception {
  * 			<jk>return</jk> new</jk> MyBean(<jv>map</jv>.get(<js>"foo"</js>));
  * 		}
  * 	}
@@ -46,15 +46,15 @@ import org.apache.juneau.collections.*;
  *
  * @param <T> The normal form of the class.
  */
-public abstract class MapSwap<T> extends ObjectSwap<T,OMap> {
+public abstract class MapSwap<T> extends ObjectSwap<T,JsonMap> {
 
 	@Override /* ObjectSwap */
-	public OMap swap(BeanSession session, T o) throws Exception {
+	public JsonMap swap(BeanSession session, T o) throws Exception {
 		return super.swap(session, o);
 	}
 
 	@Override /* ObjectSwap */
-	public T unswap(BeanSession session, OMap f, ClassMeta<?> hint) throws Exception {
+	public T unswap(BeanSession session, JsonMap f, ClassMeta<?> hint) throws Exception {
 		return super.unswap(session, f, hint);
 	}
 }

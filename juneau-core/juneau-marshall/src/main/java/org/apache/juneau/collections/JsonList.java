@@ -43,54 +43,54 @@ import org.apache.juneau.utils.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Construct an empty List</jc>
- * 	OList <jv>list</jv> = OList.<jsm>of</jsm>();
+ * 	JsonList <jv>list</jv> = JsonList.<jsm>of</jsm>();
  *
  * 	<jc>// Construct a list of objects using various methods</jc>
- * 	<jv>list</jv> = OList.<jsm>of</jsm>().a(<js>"foo"</js>).a(123).a(<jk>true</jk>);
- * 	<jv>list</jv> = OList.<jsm>of</jsm>().a(<js>"foo"</js>, 123, <jk>true</jk>);  <jc>// Equivalent</jc>
- * 	<jv>list</jv> = OList.<jsm>of</jsm>(<js>"foo"</js>, 123, <jk>true</jk>);  <jc>// Equivalent</jc>
+ * 	<jv>list</jv> = JsonList.<jsm>of</jsm>().a(<js>"foo"</js>).a(123).a(<jk>true</jk>);
+ * 	<jv>list</jv> = JsonList.<jsm>of</jsm>().a(<js>"foo"</js>, 123, <jk>true</jk>);  <jc>// Equivalent</jc>
+ * 	<jv>list</jv> = JsonList.<jsm>of</jsm>(<js>"foo"</js>, 123, <jk>true</jk>);  <jc>// Equivalent</jc>
  *
  * 	<jc>// Construct a list of integers from JSON</jc>
- * 	<jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"[1,2,3]"</js>);
+ * 	<jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"[1,2,3]"</js>);
  *
- * 	<jc>// Construct a list of generic OMap objects from JSON</jc>
- * 	<jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"[{foo:'bar'},{baz:'bing'}]"</js>);
+ * 	<jc>// Construct a list of generic JsonMap objects from JSON</jc>
+ * 	<jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"[{foo:'bar'},{baz:'bing'}]"</js>);
  *
  * 	<jc>// Construct a list of integers from XML</jc>
  * 	String <jv>xml</jv> = <js>"&lt;array&gt;&lt;number&gt;1&lt;/number&gt;&lt;number&gt;2&lt;/number&gt;&lt;number&gt;3&lt;/number&gt;&lt;/array&gt;"</js>;
- * 	<jv>list</jv> = OList.<jsm>of</jsm>(<jv>xml</jv>, XmlParser.<jsf>DEFAULT</jsf>);
+ * 	<jv>list</jv> = JsonList.<jsm>of</jsm>(<jv>xml</jv>, XmlParser.<jsf>DEFAULT</jsf>);
  * 	<jv>list</jv> = (List)XmlParser.<jsf>DEFAULT</jsf>.parse(<jv>xml</jv>);  <jc>// Equivalent</jc>
  * 	<jv>list</jv> = (List)XmlParser.<jsf>DEFAULT</jsf>.parse(Object.<jk>class</jk>, <jv>xml</jv>);  <jc>// Equivalent</jc>
  * 	<jv>list</jv> = XmlParser.<jsf>DEFAULT</jsf>.parse(List.<jk>class</jk>, <jv>xml</jv>);  <jc>// Equivalent</jc>
- * 	<jv>list</jv> = XmlParser.<jsf>DEFAULT</jsf>.parse(OList.<jk>class</jk>, <jv>xml</jv>);  <jc>// Equivalent</jc>
+ * 	<jv>list</jv> = XmlParser.<jsf>DEFAULT</jsf>.parse(JsonList.<jk>class</jk>, <jv>xml</jv>);  <jc>// Equivalent</jc>
  *
- * 	<jc>// Construct JSON from OList</jc>
- * 	<jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"[{foo:'bar'},{baz:'bing'}]"</js>);
+ * 	<jc>// Construct JSON from JsonList</jc>
+ * 	<jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"[{foo:'bar'},{baz:'bing'}]"</js>);
  * 	String <jv>json</jv> = <jv>list</jv>.toString();  <jc>// Produces "[{foo:'bar'},{baz:'bing'}]"</jc>
  * 	<jv>json</jv> = <jv>list</jv>.toString(JsonSerializer.<jsf>DEFAULT</jsf>);  <jc>// Equivalent</jc>
  * 	<jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>list</jv>);  <jc>// Equivalent</jc>
  *
  * 	<jc>// Get one of the entries in the list as an Integer</jc>
- * 	<jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"[1,2,3]"</js>);
+ * 	<jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"[1,2,3]"</js>);
  * 	Integer <jv>integer</jv> = <jv>list</jv>.getInt(1);
  * 	<jv>list</jv> = <jv>list</jv>.get(Integer.<jk>class</jk>, 1);  <jc>// Equivalent</jc>
  *
  * 	<jc>// Get one of the entries in the list as an Float</jc>
- * 	<jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"[1,2,3]"</js>);
+ * 	<jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"[1,2,3]"</js>);
  * 	Float <jv>_float</jv> = <jv>list</jv>.getFloat(1); <jc>// Returns 2f </jc>
  * 	<jv>_float</jv> = <jv>list</jv>.get(Float.<jk>class</jk>, 1);  <jc>// Equivalent</jc>
  *
  * 	<jc>// Same as above, except converted to a String</jc>
- * 	<jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"[1,2,3]"</js>);
+ * 	<jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"[1,2,3]"</js>);
  * 	String <jv>string</jv> = <jv>list</jv>.getString(1); <jc>// Returns "2" </jc>
  * 	<jv>string</jv> = <jv>list</jv>.get(String.<jk>class</jk>, 1);  <jc>// Equivalent</jc>
  *
  * 	<jc>// Get one of the entries in the list as a bean (converted to a bean if it isn't already one)</jc>
- * 	<jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"[{name:'John Smith',age:45}]"</js>);
+ * 	<jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"[{name:'John Smith',age:45}]"</js>);
  * 	Person <jv>person</jv> = <jv>list</jv>.get(Person.<jk>class</jk>, 0);
  *
  * 	<jc>// Iterate over a list of beans using the elements() method</jc>
- * 	<jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"[{name:'John Smith',age:45}]"</js>);
+ * 	<jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"[{name:'John Smith',age:45}]"</js>);
  * 	<jk>for</jk> (Person <jv>person</jv> : <jv>list</jv>.elements(Person.<jk>class</jk>) {
  * 		<jc>// Do something with p</jc>
  * 	}
@@ -106,18 +106,18 @@ import org.apache.juneau.utils.*;
  *
  * @serial exclude
  */
-public class OList extends LinkedList<Object> {
+public class JsonList extends LinkedList<Object> {
 	private static final long serialVersionUID = 1L;
 
 	transient BeanSession session = null;
 	private transient PojoRest pojoRest;
 
 	/**
-	 * An empty read-only OList.
+	 * An empty read-only JsonList.
 	 *
 	 * @serial exclude
 	 */
-	public static final OList EMPTY_LIST = new OList() {
+	public static final JsonList EMPTY_LIST = new JsonList() {
 		private static final long serialVersionUID = 1L;
 
 		@Override /* List */
@@ -153,14 +153,14 @@ public class OList extends LinkedList<Object> {
 	/**
 	 * Construct an empty list.
 	 */
-	public OList() {}
+	public JsonList() {}
 
 	/**
 	 * Construct an empty list with the specified bean context.
 	 *
 	 * @param session The bean session to use for creating beans.
 	 */
-	public OList(BeanSession session) {
+	public JsonList(BeanSession session) {
 		super();
 		this.session = session;
 	}
@@ -172,7 +172,7 @@ public class OList extends LinkedList<Object> {
 	 * 	The list to copy.
 	 * 	<br>Can be <jk>null</jk>.
 	 */
-	public OList(Collection<?> copyFrom) {
+	public JsonList(Collection<?> copyFrom) {
 		super(copyFrom);
 	}
 
@@ -184,7 +184,7 @@ public class OList extends LinkedList<Object> {
 	 * 	<br>Can be normal or simplified JSON.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public OList(CharSequence json) throws ParseException {
+	public JsonList(CharSequence json) throws ParseException {
 		this(json, JsonParser.DEFAULT);
 	}
 
@@ -199,7 +199,7 @@ public class OList extends LinkedList<Object> {
 	 * 	<br>If <jk>null</jk>, uses {@link JsonParser}.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public OList(CharSequence in, Parser p) throws ParseException {
+	public JsonList(CharSequence in, Parser p) throws ParseException {
 		this(p == null ? BeanContext.DEFAULT_SESSION : p.getBeanContext().getSession());
 		if (p == null)
 			p = JsonParser.DEFAULT;
@@ -215,7 +215,7 @@ public class OList extends LinkedList<Object> {
 	 * 	<br>Can contain normal or simplified JSON.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public OList(Reader json) throws ParseException {
+	public JsonList(Reader json) throws ParseException {
 		parse(json, JsonParser.DEFAULT);
 	}
 
@@ -230,7 +230,7 @@ public class OList extends LinkedList<Object> {
 	 * 	<br>If <jk>null</jk>, uses {@link JsonParser}.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public OList(Reader in, Parser p) throws ParseException {
+	public JsonList(Reader in, Parser p) throws ParseException {
 		this(p == null ? BeanContext.DEFAULT_SESSION : p.getBeanContext().getSession());
 		parse(in, p);
 	}
@@ -240,7 +240,7 @@ public class OList extends LinkedList<Object> {
 	 *
 	 * @param entries The entries to add to this list.
 	 */
-	public OList(Object... entries) {
+	public JsonList(Object... entries) {
 		super();
 		Collections.addAll(this, entries);
 	}
@@ -254,8 +254,8 @@ public class OList extends LinkedList<Object> {
 	 *
 	 * @return An empty list.
 	 */
-	public static OList create() {
-		return new OList();
+	public static JsonList create() {
+		return new JsonList();
 	}
 
 	/**
@@ -266,8 +266,8 @@ public class OList extends LinkedList<Object> {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new list or <jk>null</jk> if the list was <jk>null</jk>.
 	 */
-	public static OList of(Collection<?> values) {
-		return values == null ? null : new OList(values);
+	public static JsonList of(Collection<?> values) {
+		return values == null ? null : new JsonList(values);
 	}
 
 	/**
@@ -276,8 +276,8 @@ public class OList extends LinkedList<Object> {
 	 * @param values The initial values.
 	 * @return A new list.
 	 */
-	public static OList ofCollections(Collection<?>...values) {
-		OList l = new OList();
+	public static JsonList ofCollections(Collection<?>...values) {
+		JsonList l = new JsonList();
 		for (Collection<?> v : values)
 			l.add(v);
 		return l;
@@ -289,8 +289,8 @@ public class OList extends LinkedList<Object> {
 	 * @param values The initial values.
 	 * @return A new list.
 	 */
-	public static OList ofArrays(Object[]...values) {
-		OList l = new OList();
+	public static JsonList ofArrays(Object[]...values) {
+		JsonList l = new JsonList();
 		for (Object[] v : values)
 			l.add(v);
 		return l;
@@ -305,8 +305,8 @@ public class OList extends LinkedList<Object> {
 	 * @return A new list or <jk>null</jk> if the string was null.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static OList ofJson(CharSequence json) throws ParseException {
-		return json == null ? null : new OList(json);
+	public static JsonList ofJson(CharSequence json) throws ParseException {
+		return json == null ? null : new JsonList(json);
 	}
 
 	/**
@@ -321,8 +321,8 @@ public class OList extends LinkedList<Object> {
 	 * @return A new list or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static OList ofText(CharSequence in, Parser p) throws ParseException {
-		return in == null ? null : new OList(in, p);
+	public static JsonList ofText(CharSequence in, Parser p) throws ParseException {
+		return in == null ? null : new JsonList(in, p);
 	}
 
 	/**
@@ -334,8 +334,8 @@ public class OList extends LinkedList<Object> {
 	 * @return A new list or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static OList ofJson(Reader json) throws ParseException {
-		return json == null ? null : new OList(json);
+	public static JsonList ofJson(Reader json) throws ParseException {
+		return json == null ? null : new JsonList(json);
 	}
 
 	/**
@@ -350,8 +350,8 @@ public class OList extends LinkedList<Object> {
 	 * @return A new list or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static OList ofText(Reader in, Parser p) throws ParseException {
-		return in == null ? null : new OList(in);
+	public static JsonList ofText(Reader in, Parser p) throws ParseException {
+		return in == null ? null : new JsonList(in);
 	}
 
 	/**
@@ -360,8 +360,8 @@ public class OList extends LinkedList<Object> {
 	 * @param values The values to add to this list.
 	 * @return A new list, never <jk>null</jk>.
 	 */
-	public static OList of(Object... values) {
-		return new OList(values);
+	public static JsonList of(Object... values) {
+		return new JsonList(values);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -380,7 +380,7 @@ public class OList extends LinkedList<Object> {
 	 * @param session The new bean session.
 	 * @return This object.
 	 */
-	public OList session(BeanSession session) {
+	public JsonList session(BeanSession session) {
 		this.session = session;
 		return this;
 	}
@@ -395,7 +395,7 @@ public class OList extends LinkedList<Object> {
 	 * @param value The value to add to this list.
 	 * @return This object.
 	 */
-	public OList append(Object value) {
+	public JsonList append(Object value) {
 		add(value);
 		return this;
 	}
@@ -406,7 +406,7 @@ public class OList extends LinkedList<Object> {
 	 * @param values The values to add to this list.
 	 * @return This object.
 	 */
-	public OList append(Object...values) {
+	public JsonList append(Object...values) {
 		Collections.addAll(this, values);
 		return this;
 	}
@@ -417,7 +417,7 @@ public class OList extends LinkedList<Object> {
 	 * @param values The values to add to this list.
 	 * @return This object.
 	 */
-	public OList append(Collection<?> values) {
+	public JsonList append(Collection<?> values) {
 		if (values != null)
 			addAll(values);
 		return this;
@@ -430,7 +430,7 @@ public class OList extends LinkedList<Object> {
 	 * @param value The value to add.
 	 * @return This object.
 	 */
-	public OList appendIf(boolean flag, Object value) {
+	public JsonList appendIf(boolean flag, Object value) {
 		if (flag)
 			append(value);
 		return this;
@@ -442,7 +442,7 @@ public class OList extends LinkedList<Object> {
 	 * @param values The collection to add to this list.
 	 * @return This object.
 	 */
-	public OList appendReverse(List<?> values) {
+	public JsonList appendReverse(List<?> values) {
 		for (ListIterator<?> i = values.listIterator(values.size()); i.hasPrevious();)
 			add(i.previous());
 		return this;
@@ -457,7 +457,7 @@ public class OList extends LinkedList<Object> {
 	 * @param values The collection to add to this list.
 	 * @return This object.
 	 */
-	public OList appendReverse(Object...values) {
+	public JsonList appendReverse(Object...values) {
 		for (int i = values.length - 1; i >= 0; i--)
 			add(values[i]);
 		return this;
@@ -470,7 +470,7 @@ public class OList extends LinkedList<Object> {
 	 * @param value The value to add if the predicate matches.
 	 * @return This object.
 	 */
-	public  <T> OList appendIf(Predicate<T> test, T value) {
+	public  <T> JsonList appendIf(Predicate<T> test, T value) {
 		return appendIf(passes(test, value), value);
 	}
 
@@ -486,7 +486,7 @@ public class OList extends LinkedList<Object> {
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
-	 * 	OList <jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"..."</js>);
+	 * 	JsonList <jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"..."</js>);
 	 *
 	 * 	<jc>// Value converted to a string.</jc>
 	 * 	String <jv>string</jv> = <jv>list</jv>.get(1, String.<jk>class</jk>);
@@ -524,7 +524,7 @@ public class OList extends LinkedList<Object> {
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
-	 * 	OList <jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"..."</js>);
+	 * 	JsonList <jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"..."</js>);
 	 *
 	 * 	<jc>// Value converted to a linked-list of strings.</jc>
 	 * 	List&lt;String&gt; <jv>list1</jv> = <jv>list</jv>.get(1, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
@@ -608,14 +608,14 @@ public class OList extends LinkedList<Object> {
 	}
 
 	/**
-	 * Shortcut for calling <code>get(index, OMap.<jk>class</jk>)</code>.
+	 * Shortcut for calling <code>get(index, JsonMap.<jk>class</jk>)</code>.
 	 *
 	 * @param index The index.
 	 * @return The converted value.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
-	public OMap getMap(int index) {
-		return get(index, OMap.class);
+	public JsonMap getMap(int index) {
+		return get(index, JsonMap.class);
 	}
 
 	/**
@@ -632,14 +632,14 @@ public class OList extends LinkedList<Object> {
 	}
 
 	/**
-	 * Shortcut for calling <code>get(index, OList.<jk>class</jk>)</code>.
+	 * Shortcut for calling <code>get(index, JsonList.<jk>class</jk>)</code>.
 	 *
 	 * @param index The index.
 	 * @return The converted value.
 	 * @throws InvalidDataConversionException If value cannot be converted.
 	 */
-	public OList getList(int index) {
-		return get(index, OList.class);
+	public JsonList getList(int index) {
+		return get(index, JsonList.class);
 	}
 
 	/**
@@ -666,7 +666,7 @@ public class OList extends LinkedList<Object> {
 	 * For example, the following code is equivalent:
 	 * </p>
 	 * <p class='bjava'>
-	 * 	OList <jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"..."</js>);
+	 * 	JsonList <jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"..."</js>);
 	 *
 	 * 	<jc>// Long way</jc>
 	 * 	<jk>long</jk> <jv>long1</jv> = <jv>list</jv>.getMap(<js>"0"</js>).getLong(<js>"baz"</js>);
@@ -711,7 +711,7 @@ public class OList extends LinkedList<Object> {
 	 * For example, the following code is equivalent:
 	 * </p>
 	 * <p class='bjava'>
-	 * 	OList <jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"..."</js>);
+	 * 	JsonList <jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"..."</js>);
 	 *
 	 * 	<jc>// Long way</jc>
 	 * 	<jv>list</jv>.getMap(<js>"0"</js>).put(<js>"baz"</js>, 123);
@@ -739,7 +739,7 @@ public class OList extends LinkedList<Object> {
 	 * For example, the following code is equivalent:
 	 * </p>
 	 * <p class='bjava'>
-	 * 	OList <jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"..."</js>);
+	 * 	JsonList <jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"..."</js>);
 	 *
 	 * 	<jc>// Long way</jc>
 	 * 	<jv>list</jv>.getMap(0).getList(<js>"bar"</js>).append(123);
@@ -768,7 +768,7 @@ public class OList extends LinkedList<Object> {
 	 * For example, the following code is equivalent:
 	 * </p>
 	 * <p class='bjava'>
-	 * 	OList <jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"..."</js>);
+	 * 	JsonList <jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"..."</js>);
 	 *
 	 * 	<jc>// Long way</jc>
 	 * 	<jv>list</jv>.getMap(0).getList(<js>"bar"</js>).delete(0);
@@ -807,7 +807,7 @@ public class OList extends LinkedList<Object> {
 	 * @param value The {@link BeanSession} currently associated with this list.
 	 * @return This object.
 	 */
-	public OList setBeanSession(BeanSession value) {
+	public JsonList setBeanSession(BeanSession value) {
 		this.session = value;
 		return this;
 	}
@@ -827,21 +827,21 @@ public class OList extends LinkedList<Object> {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Iterate over a list of OMaps.</jc>
-	 * 	OList <jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"[{foo:'bar'},{baz:123}]"</js>);
-	 * 	<jk>for</jk> (OMap <jv>map</jv> : <jv>list</jv>.elements(OMap.<jk>class</jk>)) {
+	 * 	<jc>// Iterate over a list of JsonMaps.</jc>
+	 * 	JsonList <jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"[{foo:'bar'},{baz:123}]"</js>);
+	 * 	<jk>for</jk> (JsonMap <jv>map</jv> : <jv>list</jv>.elements(JsonMap.<jk>class</jk>)) {
 	 * 		<jc>// Do something with map.</jc>
 	 * 	}
 	 *
 	 * 	<jc>// Iterate over a list of ints.</jc>
-	 * 	OList <jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"[1,2,3]"</js>);
+	 * 	JsonList <jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"[1,2,3]"</js>);
 	 * 	<jk>for</jk> (Integer <jv>i</jv> : <jv>list</jv>.elements(Integer.<jk>class</jk>)) {
 	 * 		<jc>// Do something with i.</jc>
 	 * 	}
 	 *
 	 * 	<jc>// Iterate over a list of beans.</jc>
 	 * 	<jc>// Automatically converts to beans.</jc>
-	 * 	OList <jv>list</jv> = OList.<jsm>ofJson</jsm>(<js>"[{name:'John Smith',age:45}]"</js>);
+	 * 	JsonList <jv>list</jv> = JsonList.<jsm>ofJson</jsm>(<js>"[{name:'John Smith',age:45}]"</js>);
 	 * 	<jk>for</jk> (Person <jv>p</jv> : <jv>list</jv>.elements(Person.<jk>class</jk>)) {
 	 * 		<jc>// Do something with p.</jc>
 	 * 	}
@@ -922,9 +922,9 @@ public class OList extends LinkedList<Object> {
 	 *
 	 * @return A modifiable copy of this list if it's unmodifiable, or this list if it is already modifiable.
 	 */
-	public OList modifiable() {
+	public JsonList modifiable() {
 		if (isUnmodifiable())
-			return new OList(this);
+			return new JsonList(this);
 		return this;
 	}
 
@@ -933,14 +933,14 @@ public class OList extends LinkedList<Object> {
 	 *
 	 * @return An unmodifiable copy of this list if it's modifiable, or this list if it is already unmodifiable.
 	 */
-	public OList unmodifiable() {
-		if (this instanceof UnmodifiableOList)
+	public JsonList unmodifiable() {
+		if (this instanceof UnmodifiableJsonList)
 			return this;
-		return new UnmodifiableOList(this);
+		return new UnmodifiableJsonList(this);
 	}
 
 	/**
-	 * Convenience method for serializing this OList to the specified Writer using the JsonSerializer.DEFAULT
+	 * Convenience method for serializing this JsonList to the specified Writer using the JsonSerializer.DEFAULT
 	 * serializer.
 	 *
 	 * @param w The writer to send the serialized contents of this object.
@@ -948,7 +948,7 @@ public class OList extends LinkedList<Object> {
 	 * @throws IOException If a problem occurred trying to write to the writer.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	public OList writeTo(Writer w) throws IOException, SerializeException {
+	public JsonList writeTo(Writer w) throws IOException, SerializeException {
 		JsonSerializer.DEFAULT.serialize(this, w);
 		return this;
 	}
@@ -992,10 +992,10 @@ public class OList extends LinkedList<Object> {
 		return session;
 	}
 
-	private static final class UnmodifiableOList extends OList {
+	private static final class UnmodifiableJsonList extends JsonList {
 		private static final long serialVersionUID = 1L;
 
-		UnmodifiableOList(OList contents) {
+		UnmodifiableJsonList(JsonList contents) {
 			super();
 			if (contents != null)
 				this.forEach(x -> super.add(x));

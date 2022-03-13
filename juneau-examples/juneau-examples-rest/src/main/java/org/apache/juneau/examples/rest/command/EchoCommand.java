@@ -40,7 +40,7 @@ public class EchoCommand extends ConsoleCommand {
 
 	@Override /* ConsoleCommand */
 	public String getDescription() {
-		return "Simple prints the args of the command as a serialized OMap.";
+		return "Simple prints the args of the command as a serialized JsonMap.";
 	}
 
 	@Override /* ConsoleCommand */

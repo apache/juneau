@@ -168,8 +168,8 @@ public abstract class SwaggerElement {
 	 *
 	 * @return A map containing all the values in this swagger element.
 	 */
-	public OMap asMap() {
-		OMap m = new OMap();
+	public JsonMap asMap() {
+		JsonMap m = new JsonMap();
 		keySet().forEach(x -> m.put(x, get(x, Object.class)));
 		return m;
 	}

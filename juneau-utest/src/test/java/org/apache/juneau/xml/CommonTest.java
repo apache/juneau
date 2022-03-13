@@ -189,8 +189,8 @@ public class CommonTest {
 		@Beanp(properties="f1,f2") public Map<String,Integer> x2 = map("f1",1,"f3",3);
 		@Beanp(properties="f1,f2") public E2[] x3 = {new E2()};
 		@Beanp(properties="f1,f2") public List<E2> x4 = list(new E2());
-		@Beanp(properties="f1") public OMap[] x5 = {OMap.of("f1",1,"f3",3)};
-		@Beanp(properties="f1") public List<OMap> x6 = list(OMap.of("f1",1,"f3",3));
+		@Beanp(properties="f1") public JsonMap[] x5 = {JsonMap.of("f1",1,"f3",3)};
+		@Beanp(properties="f1") public List<JsonMap> x6 = list(JsonMap.of("f1",1,"f3",3));
 	}
 
 	public static class E2 {

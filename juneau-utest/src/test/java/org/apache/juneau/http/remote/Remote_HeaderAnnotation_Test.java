@@ -55,7 +55,7 @@ public class Remote_HeaderAnnotation_Test {
 	@Rest
 	public static class A {
 		@RestGet
-		public String a(@Header("*") OMap m) {
+		public String a(@Header("*") JsonMap m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -118,7 +118,7 @@ public class Remote_HeaderAnnotation_Test {
 	@Rest
 	public static class B {
 		@RestOp
-		public String get(@Header("*") OMap m) {
+		public String get(@Header("*") JsonMap m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -152,7 +152,7 @@ public class Remote_HeaderAnnotation_Test {
 	@Rest
 	public static class C {
 		@RestGet
-		public String a(@Header("*") OMap m) {
+		public String a(@Header("*") JsonMap m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -188,7 +188,7 @@ public class Remote_HeaderAnnotation_Test {
 	@Rest
 	public static class D {
 		@RestOp
-		public String get(@Header("*") OMap m) {
+		public String get(@Header("*") JsonMap m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -438,7 +438,7 @@ public class Remote_HeaderAnnotation_Test {
 	@Rest
 	public static class E {
 		@RestOp
-		public String get(@Header("*") OMap m) {
+		public String get(@Header("*") JsonMap m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -482,7 +482,7 @@ public class Remote_HeaderAnnotation_Test {
 	@Rest
 	public static class F {
 		@RestOp
-		public String get(@Header("*") OMap m) {
+		public String get(@Header("*") JsonMap m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -532,7 +532,7 @@ public class Remote_HeaderAnnotation_Test {
 	@Rest
 	public static class G {
 		@RestOp
-		public String get(@Header("*") OMap m) {
+		public String get(@Header("*") JsonMap m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -596,7 +596,7 @@ public class Remote_HeaderAnnotation_Test {
 	@Rest
 	public static class H {
 		@RestOp
-		public String get(@Header("*") OMap m) {
+		public String get(@Header("*") JsonMap m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -625,7 +625,7 @@ public class Remote_HeaderAnnotation_Test {
 	@Rest
 	public static class I {
 		@RestOp
-		public String get(@Header("*") OMap m) {
+		public String get(@Header("*") JsonMap m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}
@@ -653,7 +653,7 @@ public class Remote_HeaderAnnotation_Test {
 	@Rest
 	public static class J {
 		@RestOp
-		public String get(@Header("*") OMap m) {
+		public String get(@Header("*") JsonMap m) {
 			m.removeAll("Accept-Encoding","Connection","Host","User-Agent");
 			return m.toString();
 		}

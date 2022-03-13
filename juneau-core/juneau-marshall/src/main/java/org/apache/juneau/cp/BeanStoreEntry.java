@@ -13,7 +13,7 @@
 package org.apache.juneau.cp;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.util.function.*;
@@ -126,7 +126,7 @@ public class BeanStoreEntry<T> {
 	 *
 	 * @return The properties in this object as a simple map.
 	 */
-	protected OMap properties() {
+	protected JsonMap properties() {
 		return filteredMap()
 			.append("type", simpleClassName(getType()))
 			.append("bean", ObjectUtils.identity(get()))

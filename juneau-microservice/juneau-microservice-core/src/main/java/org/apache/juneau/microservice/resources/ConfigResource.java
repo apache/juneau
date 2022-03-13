@@ -57,14 +57,14 @@ public class ConfigResource extends BasicRestServlet implements BasicUniversalCo
 	@RestGet(
 		path="/",
 		summary="Get config file contents",
-		description="Show contents of config file as an OMap.",
+		description="Show contents of config file as a JsonMap.",
 		swagger=@OpSwagger(
 			responses={
 				"200:{ description:'Config file as a map of map of objects.', example:{'':{defaultKey:'defaultValue'},'Section1':{key1:'val1',key2:123}}}"
 			}
 		)
 	)
-	public OMap getConfig() {
+	public JsonMap getConfig() {
 		return getContext().getConfig().toMap();
 	}
 
@@ -91,14 +91,14 @@ public class ConfigResource extends BasicRestServlet implements BasicUniversalCo
 	@RestGet(
 		path="/{section}",
 		summary="Get config file section contents",
-		description="Show contents of config file section as an OMap.",
+		description="Show contents of config file section as a JsonMap.",
 		swagger=@OpSwagger(
 			responses={
 				"200:{ description:'Config file section as a map of objects.', example:{key1:'val1',key2:123}}"
 			}
 		)
 	)
-	public OMap getConfigSection(
+	public JsonMap getConfigSection(
 			@Path("section") @Schema(d="Section name in config file.") String section
 		) throws SectionNotFound {
 
@@ -133,7 +133,7 @@ public class ConfigResource extends BasicRestServlet implements BasicUniversalCo
 			}
 		)
 	)
-	public OMap setConfigContentsFormPost(
+	public JsonMap setConfigContentsFormPost(
 			@FormData("contents") @Schema(d="New contents in INI file format.") String contents
 		) throws Exception {
 
@@ -150,7 +150,7 @@ public class ConfigResource extends BasicRestServlet implements BasicUniversalCo
 			}
 		)
 	)
-	public OMap setConfigContents(
+	public JsonMap setConfigContents(
 			@Body @Schema(d="New contents in INI file format.") Reader contents
 		) throws Exception {
 
@@ -167,7 +167,7 @@ public class ConfigResource extends BasicRestServlet implements BasicUniversalCo
 			}
 		)
 	)
-	public OMap setConfigSection(
+	public JsonMap setConfigSection(
 			@Path("section") @Schema(d="Section name in config file.") String section,
 			@Body @Schema(d="New contents of config section as a simple map of key/value pairs.")
 			Map<String,Object> contents
@@ -214,7 +214,7 @@ public class ConfigResource extends BasicRestServlet implements BasicUniversalCo
 	// Helper methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private OMap getSection(String name) throws SectionNotFound {
+	private JsonMap getSection(String name) throws SectionNotFound {
 		return getContext().getConfig().getSection(name).asMap().orElseThrow(SectionNotFound::new);
 	}
 }

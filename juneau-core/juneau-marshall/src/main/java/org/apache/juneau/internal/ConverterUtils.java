@@ -63,25 +63,25 @@ import org.apache.juneau.swap.*;
  * 	</tr>
  * 	<tr>
  * 		<td>
- * 			{@code Map} (e.g. {@code Map}, {@code HashMap}, {@code TreeMap}, {@code OMap})
+ * 			{@code Map} (e.g. {@code Map}, {@code HashMap}, {@code TreeMap}, {@code JsonMap})
  * 		</td>
  * 		<td>
  * 			{@code Map}
  * 		</td>
  * 		<td>
- * 			If {@code Map} is not constructible, an {@code OMap} is created.
+ * 			If {@code Map} is not constructible, an {@code JsonMap} is created.
  * 		</td>
  * 	</tr>
  * 	<tr>
  * 		<td>
- * 			<c>Collection</c> (e.g. <c>List</c>, <c>LinkedList</c>, <c>HashSet</c>, <c>OList</c>)
+ * 			<c>Collection</c> (e.g. <c>List</c>, <c>LinkedList</c>, <c>HashSet</c>, <c>JsonList</c>)
  * 		</td>
  * 		<td>
  * 			<c>Collection&lt;Object&gt;</c>
  * 			<br><c>Object[]</c>
  * 		</td>
  * 		<td>
- * 			If <c>Collection</c> is not constructible, a <c>OList</c> is created.
+ * 			If <c>Collection</c> is not constructible, a <c>JsonList</c> is created.
  * 		</td>
  * 	</tr>
  * 	<tr>

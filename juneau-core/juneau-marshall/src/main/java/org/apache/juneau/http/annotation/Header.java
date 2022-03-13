@@ -108,7 +108,7 @@ public @interface Header {
 	 * 		<p class='bjava'>
 	 * 	<jc>// When used on a REST method</jc>
 	 * 	<ja>@RestPost</ja>(<js>"/addPet"</js>)
-	 * 	<jk>public void</jk> addPet(<ja>@Header</ja> OMap <jv>allHeaderParameters</jv>) {...}
+	 * 	<jk>public void</jk> addPet(<ja>@Header</ja> JsonMap <jv>allHeaderParameters</jv>) {...}
 	 * 		</p>
 	 * 		<p class='bjava'>
 	 * 	<jc>// When used on a remote method parameter</jc>

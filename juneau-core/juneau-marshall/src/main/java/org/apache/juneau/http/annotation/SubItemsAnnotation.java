@@ -67,7 +67,7 @@ public class SubItemsAnnotation {
 	 * @return The same map with the annotation contents applied.
 	 * @throws ParseException Invalid JSON found in value.
 	 */
-	public static OMap merge(OMap om, SubItems a) throws ParseException {
+	public static JsonMap merge(JsonMap om, SubItems a) throws ParseException {
 		if (SubItemsAnnotation.empty(a))
 			return om;
 		Predicate<String> ne = StringUtils::isNotEmpty;

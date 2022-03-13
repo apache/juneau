@@ -13,7 +13,7 @@
 package org.apache.juneau.annotation;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 import static java.util.Arrays.*;
 
 import java.lang.annotation.*;
@@ -91,13 +91,13 @@ public class AnnotationImpl implements Annotation {
 	 *
 	 * @return This annotation as a map of key/value pairs.
 	 */
-	public OMap toMap() {
-		OMap om = create();
+	public JsonMap toMap() {
+		JsonMap m = create();
 		stream(annotationType().getDeclaredMethods())
 			.filter(x->x.getParameterCount() == 0 && x.getDeclaringClass().isAnnotation())
 			.sorted(Comparator.comparing(Method::getName))
-			.forEach(x -> om.append(x.getName(), safeSupplier(()->x.invoke(this))));
-		return om;
+			.forEach(x -> m.append(x.getName(), safeSupplier(()->x.invoke(this))));
+		return m;
 	}
 
 	@Override /* Object */

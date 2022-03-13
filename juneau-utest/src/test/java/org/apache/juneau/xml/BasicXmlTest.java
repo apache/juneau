@@ -1426,7 +1426,7 @@ public class BasicXmlTest {
 		@Xml(format=XmlFormat.ATTR)
 		public int b;
 		BeanWithXmlFormatAttrsProperty init() {
-			a = OMap.of("k1", "foo", "k2", 123);
+			a = JsonMap.of("k1", "foo", "k2", 123);
 			b = 456;
 			return this;
 		}

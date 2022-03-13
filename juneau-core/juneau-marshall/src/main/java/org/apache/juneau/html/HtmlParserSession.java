@@ -393,10 +393,10 @@ public final class HtmlParserSession extends XmlParserSession {
 
 			} else if (typeName.equals("array")) {
 				if (sType.isObject())
-					o = parseTableIntoCollection(r, (Collection)new OList(this), sType, pMeta);
+					o = parseTableIntoCollection(r, (Collection)new JsonList(this), sType, pMeta);
 				else if (sType.isCollection())
 					o = parseTableIntoCollection(r, (Collection)(sType.canCreateNewInstance(outer)
-						? sType.newInstance(outer) : new OList(this)), sType, pMeta);
+						? sType.newInstance(outer) : new JsonList(this)), sType, pMeta);
 				else if (sType.isArray() || sType.isArgs()) {
 					ArrayList l = (ArrayList)parseTableIntoCollection(r, list(), sType, pMeta);
 					o = toArray(sType, l);
@@ -416,10 +416,10 @@ public final class HtmlParserSession extends XmlParserSession {
 				sType = eType = cm;
 
 			if (sType.isObject())
-				o = parseIntoCollection(r, new OList(this), sType, pMeta);
+				o = parseIntoCollection(r, new JsonList(this), sType, pMeta);
 			else if (sType.isCollection() || sType.isObject())
 				o = parseIntoCollection(r, (Collection)(sType.canCreateNewInstance(outer)
-					? sType.newInstance(outer) : new OList(this)), sType, pMeta);
+					? sType.newInstance(outer) : new JsonList(this)), sType, pMeta);
 			else if (sType.isArray() || sType.isArgs())
 				o = toArray(sType, parseIntoCollection(r, list(), sType, pMeta));
 			else
@@ -637,11 +637,11 @@ public final class HtmlParserSession extends XmlParserSession {
 					}
 				}
 				if (m != null && c != null) {
-					OMap m2 = (m instanceof OMap ? (OMap)m : new OMap(m).session(this));
+					JsonMap m2 = (m instanceof JsonMap ? (JsonMap)m : new JsonMap(m).session(this));
 					m2.put(getBeanTypePropertyName(type.getElementType()), c);
 					l.add((E)cast(m2, pMeta, elementType));
 				} else {
-					if (m instanceof OMap)
+					if (m instanceof JsonMap)
 						l.add((E)convertToType(m, elementType));
 					else
 						l.add((E)m);

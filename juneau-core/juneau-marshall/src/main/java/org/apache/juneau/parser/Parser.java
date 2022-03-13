@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -115,8 +115,8 @@ import org.apache.juneau.xml.*;
  * data types and generates the following object types...
  * <table class='styled'>
  * 	<tr><th>JSON type</th><th>Class type</th></tr>
- * 	<tr><td>object</td><td>{@link OMap}</td></tr>
- * 	<tr><td>array</td><td>{@link OList}</td></tr>
+ * 	<tr><td>object</td><td>{@link JsonMap}</td></tr>
+ * 	<tr><td>array</td><td>{@link JsonList}</td></tr>
  * 	<tr><td>number</td><td>{@link Number}<br>(depending on length and format, could be {@link Integer},
  * 		{@link Double}, {@link Float}, etc...)</td></tr>
  * 	<tr><td>boolean</td><td>{@link Boolean}</td></tr>
@@ -1260,7 +1260,7 @@ public class Parser extends BeanContextable {
 	 * 	The class type of the object to create.
 	 * 	If <jk>null</jk> or <code>Object.<jk>class</jk></code>, object type is based on what's being parsed.
 	 * 	For example, when parsing JSON text, it may return a <c>String</c>, <c>Number</c>,
-	 * 	<c>OMap</c>, etc...
+	 * 	<c>JsonMap</c>, etc...
 	 * @param <T> The class type of the object to create.
 	 * @return The parsed object.
 	 * @throws IOException Thrown by underlying stream.
@@ -1285,8 +1285,8 @@ public class Parser extends BeanContextable {
 	 * Used in the following locations:
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The various character-based constructors in {@link OMap} (e.g.
-	 * 		{@link OMap#OMap(CharSequence,Parser)}).
+	 * 		The various character-based constructors in {@link JsonMap} (e.g.
+	 * 		{@link JsonMap#JsonMap(CharSequence,Parser)}).
 	 * </ul>
 	 *
 	 * @param <K> The key class type.
@@ -1310,8 +1310,8 @@ public class Parser extends BeanContextable {
 	 * Used in the following locations:
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		The various character-based constructors in {@link OList} (e.g.
-	 * 		{@link OList#OList(CharSequence,Parser)}.
+	 * 		The various character-based constructors in {@link JsonList} (e.g.
+	 * 		{@link JsonList#JsonList(CharSequence,Parser)}.
 	 * </ul>
 	 *
 	 * @param <E> The element class type.
@@ -1466,7 +1466,7 @@ public class Parser extends BeanContextable {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	protected OMap properties() {
+	protected JsonMap properties() {
 		return filteredMap()
 			.append("autoCloseStreams", autoCloseStreams)
 			.append("debugOutputLines", debugOutputLines)

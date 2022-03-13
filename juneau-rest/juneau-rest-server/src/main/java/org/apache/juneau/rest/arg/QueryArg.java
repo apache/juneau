@@ -99,13 +99,13 @@ public class QueryArg implements RestOpArg {
 		ClassMeta<?> cm = bs.getClassMeta(type.innerType());
 
 		if (multi) {
-			Collection c = cm.isArray() ? list() : (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : new OList());
+			Collection c = cm.isArray() ? list() : (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : new JsonList());
 			rh.getAll(name).stream().map(x -> x.parser(ps).schema(schema).as(cm.getElementType()).orElse(null)).forEach(x -> c.add(x));
 			return cm.isArray() ? ArrayUtils.toArray(c, cm.getElementType().getInnerClass()) : c;
 		}
 
 		if (cm.isMapOrBean() && isOneOf(name, "*", "")) {
-			OMap m = new OMap();
+			JsonMap m = new JsonMap();
 			for (RequestQueryParam e : rh.getAll())
 				m.put(e.getName(), e.parser(ps).schema(schema == null ? null : schema.getProperty(e.getName())).as(cm.getValueType()).orElse(null));
 			return req.getBeanSession().convertToType(m, cm);

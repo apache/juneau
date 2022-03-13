@@ -231,7 +231,7 @@ class MockPathResolver {
 
 	@Override
 	public String toString() {
-		return OMap.create()
+		return JsonMap.create()
 			.append("uri", uri)
 			.append("contextPath", contextPath)
 			.append("servletPath", servletPath)

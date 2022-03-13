@@ -309,11 +309,11 @@ public final class JsonParserSession extends ReaderParserSession {
 			parseKeyword("null", r);
 		} else if (sType.isObject()) {
 			if (c == '{') {
-				OMap m2 = new OMap(this);
+				JsonMap m2 = new JsonMap(this);
 				parseIntoMap2(r, m2, string(), object(), pMeta);
 				o = cast(m2, pMeta, eType);
 			} else if (c == '[') {
-				o = parseIntoCollection2(r, new OList(this), object(), pMeta);
+				o = parseIntoCollection2(r, new JsonList(this), object(), pMeta);
 			} else if (c == '\'' || c == '"') {
 				o = parseString(r);
 				if (sType.isChar())
@@ -340,11 +340,11 @@ public final class JsonParserSession extends ReaderParserSession {
 			o = parseIntoMap2(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 		} else if (sType.isCollection()) {
 			if (c == '{') {
-				OMap m = new OMap(this);
+				JsonMap m = new JsonMap(this);
 				parseIntoMap2(r, m, string(), object(), pMeta);
 				o = cast(m, pMeta, eType);
 			} else {
-				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new OList(this));
+				Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance() : new JsonList(this));
 				o = parseIntoCollection2(r, l, sType, pMeta);
 			}
 		} else if (builder != null) {
@@ -357,7 +357,7 @@ public final class JsonParserSession extends ReaderParserSession {
 			o = sType.newInstanceFromString(outer, parseString(r));
 		} else if (sType.isArray() || sType.isArgs()) {
 			if (c == '{') {
-				OMap m = new OMap(this);
+				JsonMap m = new JsonMap(this);
 				parseIntoMap2(r, m, string(), object(), pMeta);
 				o = cast(m, pMeta, eType);
 			} else {
@@ -365,10 +365,10 @@ public final class JsonParserSession extends ReaderParserSession {
 				o = toArray(sType, l);
 			}
 		} else if (c == '{') {
-			Map m = new OMap(this);
+			Map m = new JsonMap(this);
 			parseIntoMap2(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 			if (m.containsKey(getBeanTypePropertyName(eType)))
-				o = cast((OMap)m, pMeta, eType);
+				o = cast((JsonMap)m, pMeta, eType);
 			else if (sType.getProxyInvocationHandler() != null)
 				o = newBeanMap(outer, sType.getInnerClass()).load(m).getBean();
 			else

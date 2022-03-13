@@ -18,7 +18,7 @@ import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.rest.client.RestOperation.*;
 import static java.util.logging.Level.*;
@@ -7440,7 +7440,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		try {
 			RestRequest req = request(method, uri, isNotEmpty(content));
 			if (headers != null)
-				for (Map.Entry<String,Object> e : OMap.ofJson(headers).entrySet())
+				for (Map.Entry<String,Object> e : JsonMap.ofJson(headers).entrySet())
 					req.header(stringHeader(e.getKey(), stringify(e.getValue())));
 			if (isNotEmpty(content))
 				req.bodyString(content);
@@ -8612,7 +8612,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	}
 
 	@Override /* Context */
-	protected OMap properties() {
+	protected JsonMap properties() {
 		return filteredMap()
 			.append("errorCodes", errorCodes)
 			.append("executorService", executorService)

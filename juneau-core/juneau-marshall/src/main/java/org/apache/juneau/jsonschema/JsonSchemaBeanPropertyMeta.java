@@ -35,7 +35,7 @@ public class JsonSchemaBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 */
 	public static final JsonSchemaBeanPropertyMeta DEFAULT = new JsonSchemaBeanPropertyMeta();
 
-	private final OMap schema;
+	private final JsonMap schema;
 
 	/**
 	 * Constructor.
@@ -46,7 +46,7 @@ public class JsonSchemaBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	public JsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm, JsonSchemaMetaProvider mp) {
 		super(bpm);
 
-		this.schema = new OMap();
+		this.schema = new JsonMap();
 
 		try {
 			bpm.forEachAnnotation(Schema.class, x -> true, x -> schema.append(SchemaAnnotation.asMap(x)));
@@ -57,7 +57,7 @@ public class JsonSchemaBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 	private JsonSchemaBeanPropertyMeta() {
 		super(null);
-		this.schema = OMap.EMPTY_MAP;
+		this.schema = JsonMap.EMPTY_MAP;
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class JsonSchemaBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 *
 	 * @return The schema information as a generic map.  Never <jk>null</jk>.
 	 */
-	protected OMap getSchema() {
+	protected JsonMap getSchema() {
 		return schema;
 	}
 }

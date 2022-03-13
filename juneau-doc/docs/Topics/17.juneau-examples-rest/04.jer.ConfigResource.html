@@ -59,7 +59,7 @@
 		|	<jk>public class</jk> ConfigResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig { 
 		|		
 		|		<ja>@RestGet</ja>(path=<js>"/"</js>, description=<js>"Show contents of config file."</js>) 
-		|		<jk>public</jk> OMap getConfig() <jk>throws</jk> Exception {
+		|		<jk>public</jk> JsonMap getConfig() <jk>throws</jk> Exception {
 		|			<jk>return</jk> getServletConfig().getConfig().asMap();
 		|		}
 		|		
@@ -87,7 +87,7 @@
 		|				<js>"]"</js>
 		|			}
 		|		) 
-		|		<jk>public</jk> OMap getConfigSection(<ja>@Path</ja>(<js>"section"</js>) String <jv>section</jv>) <jk>throws</jk> Exception { 
+		|		<jk>public</jk> JsonMap getConfigSection(<ja>@Path</ja>(<js>"section"</js>) String <jv>section</jv>) <jk>throws</jk> Exception { 
 		|			<jk>return</jk> getSection(<jv>section</jv>); 
 		|		} 
 		|		
@@ -137,7 +137,7 @@
 		|				<js>"]"</js>
 		|			}
 		|		) 
-		|		<jk>public</jk> OMap setConfigSection(<ja>@Path</ja>(<js>"section"</js>) String <jv>section</jv>, <ja>@Body</ja> Map&lt;String,String&gt; <jv>contents</jv>) <jk>throws</jk> Exception { 
+		|		<jk>public</jk> JsonMap setConfigSection(<ja>@Path</ja>(<js>"section"</js>) String <jv>section</jv>, <ja>@Body</ja> Map&lt;String,String&gt; <jv>contents</jv>) <jk>throws</jk> Exception { 
 		|			getServletConfig().getConfig().setSection(<jv>section</jv>, <jv>contents</jv>); 
 		|			<jk>return</jk> getSection(section); 
 		|		} 
@@ -157,8 +157,8 @@
 		|			<jk>return</jk> getSection(<jv>section</jv>).getString(<jv>key</jv>); 
 		|		} 
 		|		
-		|		<jk>private</jk> OMap getSection(String <jv>name</jv>) { 
-		|			OMap <jv>map</jv> = getServletConfig().getConfig().getSectionMap(<jv>name</jv>); 
+		|		<jk>private</jk> JsonMap getSection(String <jv>name</jv>) { 
+		|			JsonMap <jv>map</jv> = getServletConfig().getConfig().getSectionMap(<jv>name</jv>); 
 		|			<jk>if</jk> (<jv>map</jv> == <jk>null</jk>) 
 		|				<jk>throw new</jk> RestException(<jsf>SC_NOT_FOUND</jsf>, <js>"Section not found."</js>); 
 		|			<jk>return</jk> <jv>map</jv>; 

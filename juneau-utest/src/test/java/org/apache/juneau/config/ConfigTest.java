@@ -620,31 +620,31 @@ public class ConfigTest {
 			"\t}"
 		);
 
-		Map a1 = c.get("a1").as(Map.class).orElseGet(OMap::new);
+		Map a1 = c.get("a1").as(Map.class).orElseGet(JsonMap::new);
 		assertObject(a1).asJson().is("{foo:123}");
 		assertObject(a1.keySet().iterator().next()).isType(String.class);
 		assertObject(a1.values().iterator().next()).isType(Integer.class);
 
-		Map a1b = c.get("a1b").as(Map.class).orElseGet(OMap::new);
+		Map a1b = c.get("a1b").as(Map.class).orElseGet(JsonMap::new);
 		assertObject(a1b).asJson().is("{}");
 
-		List a2a = c.get("a2").as(List.class).orElseGet(OList::new);
+		List a2a = c.get("a2").as(List.class).orElseGet(JsonList::new);
 		assertObject(a2a).asJson().is("[{foo:123}]");
 		assertObject(((Map)a2a.get(0)).keySet().iterator().next()).isType(String.class);
 		assertObject(((Map)a2a.get(0)).values().iterator().next()).isType(Integer.class);
 
-		List a2b = c.get("a2b").as(List.class).orElseGet(OList::new);
+		List a2b = c.get("a2b").as(List.class).orElseGet(JsonList::new);
 		assertObject(a2b).asJson().is("[]");
 
-		Map a3 = c.get("a3").as(Map.class).orElseGet(OMap::new);
+		Map a3 = c.get("a3").as(Map.class).orElseGet(JsonMap::new);
 		assertObject(a3).asJson().is("{}");
 
-		Map a4a = c.get("a4").as(Map.class).orElseGet(OMap::new);
+		Map a4a = c.get("a4").as(Map.class).orElseGet(JsonMap::new);
 		assertObject(a4a).asJson().is("{foo:123}");
 		assertObject(a4a.keySet().iterator().next()).isType(String.class);
 		assertObject(a4a.values().iterator().next()).isType(Integer.class);
 
-		Map a4b = c.get("a4b").as(Map.class).orElseGet(OMap::new);
+		Map a4b = c.get("a4b").as(Map.class).orElseGet(JsonMap::new);
 		assertObject(a4b).asJson().is("{}");
 
 		ABean a4c = c.get("a4c").as(ABean.class).orElse(new ABean().init());
@@ -667,31 +667,31 @@ public class ConfigTest {
 			"\t)"
 		);
 
-		Map a1 = c.get("a1").as(UonParser.DEFAULT, Map.class).orElseGet(OMap::new);
+		Map a1 = c.get("a1").as(UonParser.DEFAULT, Map.class).orElseGet(JsonMap::new);
 		assertObject(a1).asJson().is("{foo:123}");
 		assertObject(a1.keySet().iterator().next()).isType(String.class);
 		assertObject(a1.values().iterator().next()).isType(Integer.class);
 
-		Map a1b = c.get("a1b").as(UonParser.DEFAULT, Map.class).orElseGet(OMap::new);
+		Map a1b = c.get("a1b").as(UonParser.DEFAULT, Map.class).orElseGet(JsonMap::new);
 		assertObject(a1b).asJson().is("{}");
 
-		List a2a = c.get("a2").as(UonParser.DEFAULT, List.class).orElseGet(OList::new);
+		List a2a = c.get("a2").as(UonParser.DEFAULT, List.class).orElseGet(JsonList::new);
 		assertObject(a2a).asJson().is("[{foo:123}]");
 		assertObject(((Map)a2a.get(0)).keySet().iterator().next()).isType(String.class);
 		assertObject(((Map)a2a.get(0)).values().iterator().next()).isType(Integer.class);
 
-		List a2b = c.get("a2b").as(UonParser.DEFAULT, List.class).orElseGet(OList::new);
+		List a2b = c.get("a2b").as(UonParser.DEFAULT, List.class).orElseGet(JsonList::new);
 		assertObject(a2b).asJson().is("[]");
 
-		Map a3 = c.get("a3").as(UonParser.DEFAULT, Map.class).orElseGet(OMap::new);
+		Map a3 = c.get("a3").as(UonParser.DEFAULT, Map.class).orElseGet(JsonMap::new);
 		assertObject(a3).asJson().is("{}");
 
-		Map a4a = c.get("a4").as(UonParser.DEFAULT, Map.class).orElseGet(OMap::new);
+		Map a4a = c.get("a4").as(UonParser.DEFAULT, Map.class).orElseGet(JsonMap::new);
 		assertObject(a4a).asJson().is("{foo:123}");
 		assertObject(a4a.keySet().iterator().next()).isType(String.class);
 		assertObject(a4a.values().iterator().next()).isType(Integer.class);
 
-		Map a4b = c.get("a4b").as(UonParser.DEFAULT, Map.class).orElseGet(OMap::new);
+		Map a4b = c.get("a4b").as(UonParser.DEFAULT, Map.class).orElseGet(JsonMap::new);
 		assertObject(a4b).asJson().is("{}");
 
 		ABean a4c = c.get("a4c").as(UonParser.DEFAULT, ABean.class).orElse(new ABean().init());
@@ -730,7 +730,7 @@ public class ConfigTest {
 		List<ABean> a2b = (List<ABean>) c.get("a2b").as(List.class, ABean.class).orElse(new ArrayList<ABean>());
 		assertObject(a2b).asJson().is("[]");
 
-		Map<String,Object> a3 = (Map<String,Object>) c.get("a3").as(Map.class, String.class, Object.class).orElse(new OMap());
+		Map<String,Object> a3 = (Map<String,Object>) c.get("a3").as(Map.class, String.class, Object.class).orElse(new JsonMap());
 		assertObject(a3).asJson().is("{}");
 
 		Map<String,Integer> a4a = (Map<String,Integer>) c.get("a4").as(Map.class, String.class, Integer.class).orElse(new HashMap<String,Integer>());
@@ -777,7 +777,7 @@ public class ConfigTest {
 		List<ABean> a2b = (List<ABean>) c.get("a2b").as(UonParser.DEFAULT, List.class, ABean.class).orElse(new ArrayList<ABean>());
 		assertObject(a2b).asJson().is("[]");
 
-		Map<String,Object> a3 = (Map<String,Object>) c.get("a3").as(UonParser.DEFAULT,Map.class, String.class, Object.class).orElse( new OMap());
+		Map<String,Object> a3 = (Map<String,Object>) c.get("a3").as(UonParser.DEFAULT,Map.class, String.class, Object.class).orElse( new JsonMap());
 		assertObject(a3).asJson().is("{}");
 
 		Map<String,Integer> a4a = (Map<String,Integer>) c.get("a4").as(UonParser.DEFAULT, Map.class, String.class, Integer.class).orElse(new HashMap<String,Integer>());
@@ -881,7 +881,7 @@ public class ConfigTest {
 	}
 
 	//====================================================================================================
-	//	public OMap getSectionAsMap(String section) throws ParseException {
+	//	public JsonMap getSectionAsMap(String section) throws ParseException {
 	//====================================================================================================
 	@Test
 	public void getSectionAsMap() throws Exception {
@@ -971,7 +971,7 @@ public class ConfigTest {
 	@Test
 	public void setSection2() throws Exception {
 		Config c = init();
-		OMap m = OMap.of("a", "b");
+		JsonMap m = JsonMap.of("a", "b");
 
 		c.setSection("", Arrays.asList("#C1", "#C2"), m);
 		assertString(c).replaceAll("\\r?\\n", "|").is("#C1|#C2||a = b|");
@@ -1431,7 +1431,7 @@ public class ConfigTest {
 		assertFalse(cf.getSection("B").asMap().isPresent());
 		assertObject(cf.getSection("C").asMap().orElse(null)).asJson().is("null");
 
-		OMap m = cf.getSection("A").asMap().get();
+		JsonMap m = cf.getSection("A").asMap().get();
 		assertObject(m).asJson().is("{a1:'1'}");
 
 		System.setProperty("X", "x");

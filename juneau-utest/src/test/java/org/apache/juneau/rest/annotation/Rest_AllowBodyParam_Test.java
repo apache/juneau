@@ -30,14 +30,14 @@ public class Rest_AllowBodyParam_Test {
 	@Rest(disableBodyParam="false")
 	public static class A1 {
 		@RestOp
-		public OMap put(@Body OMap body) {
+		public JsonMap put(@Body JsonMap body) {
 			return body;
 		}
 	}
 	@Rest(disableBodyParam="true")
 	public static class A2 {
 		@RestOp
-		public OMap put(@Body OMap body) {
+		public JsonMap put(@Body JsonMap body) {
 			return body;
 		}
 	}

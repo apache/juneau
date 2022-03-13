@@ -62,7 +62,7 @@ public class CommonParser_UonTest {
 		assertEquals("foo bar", m.get("b"));
 		assertEquals(false, m.get("c"));
 
-		OList jl = (OList)p.parse("@((attribute=value),(attribute=~'value~'))", Object.class);
+		JsonList jl = (JsonList)p.parse("@((attribute=value),(attribute=~'value~'))", Object.class);
 		assertEquals("value", jl.getMap(0).getString("attribute"));
 		assertEquals("'value'", jl.getMap(1).getString("attribute"));
 

@@ -491,13 +491,13 @@ public class XmlParserSession extends ReaderParserSession {
 
 		if (sType.isObject()) {
 			if (jsonType == OBJECT) {
-				OMap m = new OMap(this);
+				JsonMap m = new JsonMap(this);
 				parseIntoMap(r, m, string(), object(), pMeta);
 				if (wrapperAttr != null)
-					m = new OMap(this).append(wrapperAttr, m);
+					m = new JsonMap(this).append(wrapperAttr, m);
 				o = cast(m, pMeta, eType);
 			} else if (jsonType == ARRAY)
-				o = parseIntoCollection(r, new OList(this), null, pMeta);
+				o = parseIntoCollection(r, new JsonList(this), null, pMeta);
 			else if (jsonType == STRING) {
 				o = getElementText(r);
 				if (sType.isChar())
@@ -519,9 +519,9 @@ public class XmlParserSession extends ReaderParserSession {
 			Map m = (sType.canCreateNewInstance(outer) ? (Map)sType.newInstance(outer) : newGenericMap(sType));
 			o = parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 			if (wrapperAttr != null)
-				o = new OMap(this).append(wrapperAttr, m);
+				o = new JsonMap(this).append(wrapperAttr, m);
 		} else if (sType.isCollection()) {
-			Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new OList(this));
+			Collection l = (sType.canCreateNewInstance(outer) ? (Collection)sType.newInstance(outer) : new JsonList(this));
 			o = parseIntoCollection(r, l, sType, pMeta);
 		} else if (sType.isNumber()) {
 			o = parseNumber(getElementText(r), (Class<? extends Number>)sType.getInnerClass());
@@ -546,10 +546,10 @@ public class XmlParserSession extends ReaderParserSession {
 		} else if (sType.canCreateNewInstanceFromString(outer)) {
 			o = sType.newInstanceFromString(outer, getElementText(r));
 		} else if (sType.getProxyInvocationHandler() != null) {
-			OMap m = new OMap(this);
+			JsonMap m = new JsonMap(this);
 			parseIntoMap(r, m, string(), object(), pMeta);
 			if (wrapperAttr != null)
-				m = new OMap(this).append(wrapperAttr, m);
+				m = new JsonMap(this).append(wrapperAttr, m);
 			o = newBeanMap(outer, sType.getInnerClass()).load(m).getBean();
 		} else {
 			throw new ParseException(this,
@@ -595,7 +595,7 @@ public class XmlParserSession extends ReaderParserSession {
 					if (o instanceof List)
 						((List)o).add(value);
 					else
-						m.put(key, (V)new OList(o, value).setBeanSession(this));
+						m.put(key, (V)new JsonList(o, value).setBeanSession(this));
 				} else {
 					m.put(key, value);
 				}
@@ -811,11 +811,11 @@ public class XmlParserSession extends ReaderParserSession {
 		if (r.getEventType() != START_ELEMENT) {
 			throw new ParseException(this, "Parser must be on START_ELEMENT to read next text.");
 		}
-		OMap m = null;
+		JsonMap m = null;
 
-		// If this element has attributes, then it's always an OMap.
+		// If this element has attributes, then it's always a JsonMap.
 		if (r.getAttributeCount() > 0) {
-			m = new OMap(this);
+			m = new JsonMap(this);
 			for (int i = 0; i < r.getAttributeCount(); i++) {
 				String key = getAttributeName(r, i);
 				String val = r.getAttributeValue(i);
@@ -836,7 +836,7 @@ public class XmlParserSession extends ReaderParserSession {
 				// Oops...this has an element in it.
 				// Parse it as a map.
 				if (m == null)
-					m = new OMap(this);
+					m = new JsonMap(this);
 				int depth = 0;
 				do {
 					int event = (eventType == -1 ? r.nextTag() : eventType);
@@ -850,10 +850,10 @@ public class XmlParserSession extends ReaderParserSession {
 						Object value = parseAnything(object(), currAttr, r, null, false, null);
 						if (m.containsKey(key)) {
 							Object o = m.get(key);
-							if (o instanceof OList)
-								((OList)o).add(value);
+							if (o instanceof JsonList)
+								((JsonList)o).add(value);
 							else
-								m.put(key, new OList(o, value).setBeanSession(this));
+								m.put(key, new JsonList(o, value).setBeanSession(this));
 						} else {
 							m.put(key, value);
 						}
@@ -901,7 +901,7 @@ public class XmlParserSession extends ReaderParserSession {
 	 *
 	 * @see XmlParser.Builder#preserveRootElement()
 	 * @return
-	 * 	<jk>true</jk> if when parsing into a generic {@link OMap}, the map will contain a single entry whose key
+	 * 	<jk>true</jk> if when parsing into a generic {@link JsonMap}, the map will contain a single entry whose key
 	 * 	is the root element name.
 	 */
 	protected final boolean isPreserveRootElement() {

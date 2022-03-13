@@ -336,23 +336,23 @@ public class Path_Test {
 	public static class E  {
 		@RestGet(path="/x/{foo}/{bar}")
 		public Object a(@Path String foo, @Path String bar) {
-			return OMap.of("m", "normal1", "foo", foo, "bar", bar);
+			return JsonMap.of("m", "normal1", "foo", foo, "bar", bar);
 		}
 		@RestGet(path="/x/{foo}/x/{bar}/x")
 		public Object b(@Path String foo, @Path String bar) {
-			return OMap.of("m", "normal2", "foo", foo, "bar", bar);
+			return JsonMap.of("m", "normal2", "foo", foo, "bar", bar);
 		}
 		@RestGet(path="/y/{0}/{1}")
 		public Object c(@Path String foo, @Path String bar) {
-			return OMap.of("m", "numbers1", "0", foo, "1", bar);
+			return JsonMap.of("m", "numbers1", "0", foo, "1", bar);
 		}
 		@RestGet(path="/y/{0}/y/{1}/y")
 		public Object d(@Path String foo, @Path String bar) {
-			return OMap.of("m", "numbers2", "0", foo, "1", bar);
+			return JsonMap.of("m", "numbers2", "0", foo, "1", bar);
 		}
 		@RestGet(path="/z/{1}/z/{0}/z")
 		public Object e(@Path String foo, @Path String bar) {
-			return OMap.of("m", "numbers3", "0", foo, "1", bar);
+			return JsonMap.of("m", "numbers3", "0", foo, "1", bar);
 		}
 	}
 

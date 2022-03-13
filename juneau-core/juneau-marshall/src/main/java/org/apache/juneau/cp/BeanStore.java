@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
@@ -684,7 +684,7 @@ public class BeanStore {
 			throw runtimeException("Method cannot be used because BeanStore is read-only.");
 	}
 
-	private OMap properties() {
+	private JsonMap properties() {
 		Predicate<Boolean> nf = ObjectUtils::isTrue;
 		return filteredMap()
 			.append("entries", entries.stream().map(x -> x.properties()).collect(toList()))

@@ -33,11 +33,11 @@ public class Rest_Messages_Test {
 	@Rest
 	public static class A1 {
 		@RestGet
-		public OMap a(ResourceBundle rb) {
+		public JsonMap a(ResourceBundle rb) {
 			return asMap(rb);
 		}
 		@RestGet
-		public OMap b(Messages m) {
+		public JsonMap b(Messages m) {
 			return asMap(m);
 		}
 		@RestGet
@@ -63,11 +63,11 @@ public class Rest_Messages_Test {
 	@Rest(messages="B1x")
 	public static class B1 {
 		@RestGet
-		public OMap a(ResourceBundle rb) {
+		public JsonMap a(ResourceBundle rb) {
 			return asMap(rb);
 		}
 		@RestGet
-		public OMap b(Messages m) {
+		public JsonMap b(Messages m) {
 			return asMap(m);
 		}
 		@RestGet
@@ -122,8 +122,8 @@ public class Rest_Messages_Test {
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static OMap asMap(ResourceBundle rb) {
-		OMap m = new OMap();
+	private static JsonMap asMap(ResourceBundle rb) {
+		JsonMap m = new JsonMap();
 		for (String k : new TreeSet<>(rb.keySet()))
 			m.put(k, rb.getString(k));
 		return m;

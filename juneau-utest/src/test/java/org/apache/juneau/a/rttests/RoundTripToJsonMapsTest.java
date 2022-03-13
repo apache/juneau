@@ -29,18 +29,18 @@ import org.junit.*;
  * with the same objects for all serializers and parsers.
  */
 @FixMethodOrder(NAME_ASCENDING)
-public class RoundTripToOMapsTest extends RoundTripTest {
+public class RoundTripToJsonMapsTest extends RoundTripTest {
 
-	public RoundTripToOMapsTest(String label, Serializer.Builder s, Parser.Builder p, int flags) throws Exception {
+	public RoundTripToJsonMapsTest(String label, Serializer.Builder s, Parser.Builder p, int flags) throws Exception {
 		super(label, s, p, flags);
 	}
 
 	//====================================================================================================
-	// Class with X(OMap) constructor and toOMap() method.
+	// Class with X(JsonMap) constructor and toJsonMap() method.
 	//====================================================================================================
 	@Test
 	public void test() throws Exception {
-		A a = new A(OMap.ofJson("{f1:'a',f2:2}"));
+		A a = new A(JsonMap.ofJson("{f1:'a',f2:2}"));
 		a = roundTrip(a, A.class);
 		assertEquals("a", a.f1);
 		assertEquals(2, a.f2);
@@ -51,13 +51,13 @@ public class RoundTripToOMapsTest extends RoundTripTest {
 		assertEquals("a", aa[0].f1);
 		assertEquals(2, aa[0].f2);
 
-		List<A> a2 = alist(new A(OMap.ofJson("{f1:'a',f2:2}")));
+		List<A> a2 = alist(new A(JsonMap.ofJson("{f1:'a',f2:2}")));
 		a2 = roundTrip(a2, List.class, A.class);
 		assertEquals(1, a2.size());
 		assertEquals("a", a2.get(0).f1);
 		assertEquals(2, a2.get(0).f2);
 
-		Map<String,A> a3 = map("a",new A(OMap.ofJson("{f1:'a',f2:2}")));
+		Map<String,A> a3 = map("a",new A(JsonMap.ofJson("{f1:'a',f2:2}")));
 		a3 = roundTrip(a3, Map.class, String.class, A.class);
 		assertEquals(1, a3.size());
 		assertEquals("a", a3.get("a").f1);
@@ -67,12 +67,12 @@ public class RoundTripToOMapsTest extends RoundTripTest {
 	public static class A {
 		private String f1;
 		private int f2;
-		public A(OMap m) {
+		public A(JsonMap m) {
 			this.f1 = m.getString("f1");
 			this.f2 = m.getInt("f2");
 		}
-		public OMap swap(BeanSession session) {
-			return OMap.of("f1",f1,"f2",f2);
+		public JsonMap swap(BeanSession session) {
+			return JsonMap.of("f1",f1,"f2",f2);
 		}
 	}
 

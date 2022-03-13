@@ -90,7 +90,7 @@ public class CommonParserTest {
 		assertEquals(12345, m.get("zip"));
 
 		in = wrap("<rdf:Seq><rdf:li rdf:parseType='Resource'><jp:attribute>value</jp:attribute></rdf:li><rdf:li rdf:parseType='Resource'><jp:attribute>value</jp:attribute></rdf:li></rdf:Seq>");
-		OList jl = (OList)p.parse(in, Object.class);
+		JsonList jl = (JsonList)p.parse(in, Object.class);
 		assertEquals("value", jl.getMap(0).getString("attribute"));
 		assertEquals("value", jl.getMap(1).getString("attribute"));
 

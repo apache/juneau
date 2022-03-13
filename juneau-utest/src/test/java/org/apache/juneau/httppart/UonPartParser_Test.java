@@ -277,10 +277,10 @@ public class UonPartParser_Test {
 	}
 
 	@Test
-	public void testParseParameterOMap() throws Exception {
+	public void testParseParameterJsonMap() throws Exception {
 		String in = "(name='foo bar')";
 
-		OMap r =  parse(in, BeanContext.DEFAULT.getClassMeta(OMap.class));
+		JsonMap r =  parse(in, BeanContext.DEFAULT.getClassMeta(JsonMap.class));
 
 		assertEquals("{name:'foo bar'}", SimpleJsonSerializer.DEFAULT.toString(r));
 	}

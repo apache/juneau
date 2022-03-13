@@ -61,16 +61,16 @@ public class ExternalDocsAnnotation {
 	/**
 	 * Merges the contents of the specified annotation into the specified generic map.
 	 *
-	 * @param om The map to copy the contents to.
+	 * @param m The map to copy the contents to.
 	 * @param a The annotation to apply.
 	 * @return The same map with the annotation contents applied.
 	 * @throws ParseException Invalid JSON found in value.
 	 */
-	public static OMap merge(OMap om, ExternalDocs a) throws ParseException {
+	public static JsonMap merge(JsonMap m, ExternalDocs a) throws ParseException {
 		if (ExternalDocsAnnotation.empty(a))
-			return om;
+			return m;
 		Predicate<String> ne = StringUtils::isNotEmpty;
-		return om
+		return m
 			.appendIf(ne, "description", joinnl(a.description()))
 			.appendIf(ne, "url", a.url())
 		;

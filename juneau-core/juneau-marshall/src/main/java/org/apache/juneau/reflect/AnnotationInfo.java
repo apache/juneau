@@ -149,15 +149,15 @@ public class AnnotationInfo<T extends Annotation> {
 	 *
 	 * @return A new map showing the attributes of this object as a JSON object.
 	 */
-	public OMap toOMap() {
-		OMap om = new OMap();
+	public JsonMap toJsonMap() {
+		JsonMap jm = new JsonMap();
 		if (c != null)
-			om.put("class", c.getSimpleName());
+			jm.put("class", c.getSimpleName());
 		if (m != null)
-			om.put("method", m.getShortName());
+			jm.put("method", m.getShortName());
 		if (p != null)
-			om.put("package", p.getName());
-		OMap oa = new OMap();
+			jm.put("package", p.getName());
+		JsonMap ja = new JsonMap();
 		Class<?> ca = a.annotationType();
 		for (Method m : ca.getDeclaredMethods()) {
 			try {
@@ -165,14 +165,14 @@ public class AnnotationInfo<T extends Annotation> {
 				Object d = m.getDefaultValue();
 				if (! Objects.equals(v, d)) {
 					if (! (ArrayUtils.isArray(v) && Array.getLength(v) == 0 && Array.getLength(d) == 0))
-						oa.put(m.getName(), v);
+						ja.put(m.getName(), v);
 				}
 			} catch (Exception e) {
-				oa.put(m.getName(), e.getLocalizedMessage());
+				ja.put(m.getName(), e.getLocalizedMessage());
 			}
 		}
-		om.put("@" + ca.getSimpleName(), oa);
-		return om;
+		jm.put("@" + ca.getSimpleName(), ja);
+		return jm;
 	}
 
 	private Constructor<? extends AnnotationApplier<?,?>>[] applyConstructors;
@@ -276,7 +276,7 @@ public class AnnotationInfo<T extends Annotation> {
 
 	@Override /* Object */
 	public String toString() {
-		return SimpleJson.DEFAULT_READABLE.toString(toOMap());
+		return SimpleJson.DEFAULT_READABLE.toString(toJsonMap());
 	}
 
 	/**

@@ -208,13 +208,13 @@ public class RequestBody {
 	 * 		<td>object</td>
 	 * 		<td><js>"{...}"</js></td>
 	 * 		<td><code><xt>&lt;object&gt;</xt>...<xt>&lt;/object&gt;</xt></code><br><code><xt>&lt;x</xt> <xa>type</xa>=<xs>'object'</xs><xt>&gt;</xt>...<xt>&lt;/x&gt;</xt></code></td>
-	 * 		<td>{@link OMap}</td>
+	 * 		<td>{@link JsonMap}</td>
 	 * 	</tr>
 	 * 	<tr>
 	 * 		<td>array</td>
 	 * 		<td><js>"[...]"</js></td>
 	 * 		<td><code><xt>&lt;array&gt;</xt>...<xt>&lt;/array&gt;</xt></code><br><code><xt>&lt;x</xt> <xa>type</xa>=<xs>'array'</xs><xt>&gt;</xt>...<xt>&lt;/x&gt;</xt></code></td>
-	 * 		<td>{@link OList}</td>
+	 * 		<td>{@link JsonList}</td>
 	 * 	</tr>
 	 * 	<tr>
 	 * 		<td>string</td>

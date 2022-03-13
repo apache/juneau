@@ -127,7 +127,7 @@ public class ParseException extends BasicRuntimeException {
 
 			sb.append("\n\tAt: ").append(p);
 
-			OMap lastLocation = session.getLastLocation();
+			JsonMap lastLocation = session.getLastLocation();
 			if (lastLocation != null) {
 				sb.append("\n\tWhile parsing into: ");
 				lastLocation.forEach((k,v) -> sb.append("\n\t\t").append(k).append(": ").append(v));

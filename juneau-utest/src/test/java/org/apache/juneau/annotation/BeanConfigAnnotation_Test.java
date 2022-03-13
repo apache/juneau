@@ -52,8 +52,8 @@ public class BeanConfigAnnotation_Test {
 					.collect(Collectors.joining(","));
 			if (t.getClass().isArray())
 				return apply(ArrayUtils.toList(t, Object.class));
-			if (t instanceof OMap)
-				return ((OMap)t).toString();
+			if (t instanceof JsonMap)
+				return ((JsonMap)t).toString();
 			if (t instanceof Map)
 				return ((Map<?,?>)t)
 					.entrySet()

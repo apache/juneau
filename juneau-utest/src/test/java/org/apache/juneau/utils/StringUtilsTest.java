@@ -257,7 +257,7 @@ public class StringUtilsTest {
 	//====================================================================================================
 	@Test
 	public void testReplaceVars() throws Exception {
-		OMap m = OMap.ofJson("{a:'A',b:1,c:true,d:'{e}',e:'E{f}E',f:'F',g:'{a}',h:'a',i:null}");
+		JsonMap m = JsonMap.ofJson("{a:'A',b:1,c:true,d:'{e}',e:'E{f}E',f:'F',g:'{a}',h:'a',i:null}");
 
 		String s = "xxx";
 		assertEquals("xxx", replaceVars(s, m));

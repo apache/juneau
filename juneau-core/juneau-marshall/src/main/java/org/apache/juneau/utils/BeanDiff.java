@@ -37,8 +37,8 @@ import org.apache.juneau.collections.*;
  * 	<jc>// Check for differences.</jc>
  * 	<jk>boolean</jk> <jv>hasDiff</jv> = <jv>beanDiff</jv>.hasDiffs();
  *
- * 	OMap <jv>v1Diffs</jv> = <jv>beanDiff</jv>.getV1();  <jc>// Get version 1 differences.</jc>
- * 	OMap <jv>v2Diffs</jv> = <jv>beanDiff</jv>.getV2();  <jc>// Get version 2 differences.</jc>
+ * 	JsonMap <jv>v1Diffs</jv> = <jv>beanDiff</jv>.getV1();  <jc>// Get version 1 differences.</jc>
+ * 	JsonMap <jv>v2Diffs</jv> = <jv>beanDiff</jv>.getV2();  <jc>// Get version 2 differences.</jc>
  *
  * 	<jc>// Display differences.</jc>
  * 	System.<jsf>err</jsf>.println(<jv>beanDiff</jv>);
@@ -181,7 +181,7 @@ public class BeanDiff {
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private OMap v1 = new OMap(), v2 = new OMap();
+	private JsonMap v1 = new JsonMap(), v2 = new JsonMap();
 
 	/**
 	 * Constructor.
@@ -231,7 +231,7 @@ public class BeanDiff {
 	 *
 	 * @return The differences in the first bean.
 	 */
-	public OMap getV1() {
+	public JsonMap getV1() {
 		return v1;
 	}
 
@@ -240,7 +240,7 @@ public class BeanDiff {
 	 *
 	 * @return The differences in the second bean.
 	 */
-	public OMap getV2() {
+	public JsonMap getV2() {
 		return v2;
 	}
 

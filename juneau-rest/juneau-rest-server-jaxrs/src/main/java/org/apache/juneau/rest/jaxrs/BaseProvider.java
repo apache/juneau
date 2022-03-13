@@ -84,13 +84,13 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			if (sm == null)
 				throw new WebApplicationException(SC_NOT_ACCEPTABLE);
 			Serializer s = sm.getSerializer();
-			OMap mp = OMap.create();
-			mp.append("mediaType", mediaType.toString());
+			JsonMap m = JsonMap.create();
+			m.append("mediaType", mediaType.toString());
 			Locale locale = getLocale(headers);
 			TimeZone timeZone = getTimeZone(headers);
 
 			SerializerSession session = s.createSession()
-				.properties(mp)
+				.properties(m)
 				.locale(locale)
 				.timeZone(timeZone)
 				.mediaType(sm.getMediaType())
@@ -118,12 +118,12 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			if (pm == null)
 				throw new WebApplicationException(SC_UNSUPPORTED_MEDIA_TYPE);
 			Parser p = pm.getParser();
-			OMap mp = OMap.create();
-			mp.put("mediaType", mediaType.toString());
+			JsonMap m = JsonMap.create();
+			m.put("mediaType", mediaType.toString());
 			Locale locale = getLocale(headers);
 			TimeZone timeZone = getTimeZone(headers);
 			ParserSession session = p.createSession()
-				.properties(mp)
+				.properties(m)
 				.locale(locale)
 				.timeZone(timeZone)
 				.mediaType(pm.getMediaType())

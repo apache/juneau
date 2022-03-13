@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -336,11 +336,11 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 				throw new ParseException(this, "Expected ''null'' for void value, but was ''{0}''.", s);
 		} else if (sType.isObject()) {
 			if (c == '(') {
-				OMap m = new OMap(this);
+				JsonMap m = new JsonMap(this);
 				parseIntoMap(r, m, string(), object(), pMeta);
 				o = cast(m, pMeta, eType);
 			} else if (c == '@') {
-				Collection l = new OList(this);
+				Collection l = new JsonList(this);
 				o = parseIntoCollection(r, l, sType, isUrlParamValue, pMeta);
 			} else {
 				String s = parseString(r, isUrlParamValue);
@@ -370,7 +370,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			o = parseIntoMap(r, m, sType.getKeyType(), sType.getValueType(), pMeta);
 		} else if (sType.isCollection()) {
 			if (c == '(') {
-				OMap m = new OMap(this);
+				JsonMap m = new JsonMap(this);
 				parseIntoMap(r, m, string(), object(), pMeta);
 				// Handle case where it's a collection, but serialized as a map with a _type or _value key.
 				if (m.containsKey(getBeanTypePropertyName(sType)))
@@ -380,7 +380,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 					Collection l = (
 						sType.canCreateNewInstance(outer)
 						? (Collection)sType.newInstance(outer)
-						: new OList(this)
+						: new JsonList(this)
 					);
 					l.add(m.cast(sType.getElementType()));
 					o = l;
@@ -389,7 +389,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 				Collection l = (
 					sType.canCreateNewInstance(outer)
 					? (Collection)sType.newInstance(outer)
-					: new OList(this)
+					: new JsonList(this)
 				);
 				o = parseIntoCollection(r, l, sType, isUrlParamValue, pMeta);
 			}
@@ -407,7 +407,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 				o = sType.newInstanceFromString(outer, s);
 		} else if (sType.isArray() || sType.isArgs()) {
 			if (c == '(') {
-				OMap m = new OMap(this);
+				JsonMap m = new JsonMap(this);
 				parseIntoMap(r, m, string(), object(), pMeta);
 				// Handle case where it's an array, but serialized as a map with a _type or _value key.
 				if (m.containsKey(getBeanTypePropertyName(sType)))
@@ -424,7 +424,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			}
 		} else if (c == '(') {
 			// It could be a non-bean with _type attribute.
-			OMap m = new OMap(this);
+			JsonMap m = new JsonMap(this);
 			parseIntoMap(r, m, string(), object(), pMeta);
 			if (m.containsKey(getBeanTypePropertyName(sType)))
 				o = cast(m, pMeta, eType);
@@ -1007,7 +1007,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* ContextSession */
-	protected OMap properties() {
+	protected JsonMap properties() {
 		return filteredMap("decoding", decoding);
 	}
 }

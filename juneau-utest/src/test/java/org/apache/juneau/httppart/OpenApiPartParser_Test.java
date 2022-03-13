@@ -286,7 +286,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s, "foo,bar", List.class, Object.class)).asJson().is("['foo','bar']");
 		Object o = parse(s, "foo,bar", Object.class);
 		assertObject(o).asJson().is("['foo','bar']");
-		assertObject(o).isType(OList.class);
+		assertObject(o).isType(JsonList.class);
 		assertObject(parse(s, "foo,bar", C2[].class)).asJson().is("['C2-foo','C2-bar']");
 		assertObject(parse(s, "foo,bar", List.class, C2.class)).asJson().is("['C2-foo','C2-bar']");
 		assertEquals("C3-['foo','bar']", parse(s, "foo,bar", C3.class).toString());
@@ -303,7 +303,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s, "foo,bar|baz", List.class, List.class, Object.class)).asJson().is("[['foo','bar'],['baz']]");
 		Object o = parse(s, "foo,bar|baz", Object.class);
 		assertObject(o).asJson().is("[['foo','bar'],['baz']]");
-		assertObject(o).isType(OList.class);
+		assertObject(o).isType(JsonList.class);
 		assertObject(parse(s, "foo,bar|baz", C2[][].class)).asJson().is("[['C2-foo','C2-bar'],['C2-baz']]");
 		assertObject(parse(s, "foo,bar|baz", List.class, C2[].class)).asJson().is("[['C2-foo','C2-bar'],['C2-baz']]");
 		assertObject(parse(s, "foo,bar|baz", List.class, List.class, C2.class)).asJson().is("[['C2-foo','C2-bar'],['C2-baz']]");
@@ -366,7 +366,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s, "foo,bar", List.class, Object.class)).asJson().is("['foo','bar']");
 		assertObject(parse(s, "foo,bar", List.class, D.class)).asJson().is("['D-foo','D-bar']");
 		assertObject(parse(s, "foo,bar", Object.class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo,bar", OList.class)).asJson().is("['foo','bar']");
+		assertObject(parse(s, "foo,bar", JsonList.class)).asJson().is("['foo','bar']");
 	}
 
 	@Test
@@ -379,7 +379,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s, "foo|bar", List.class, Object.class)).asJson().is("['foo','bar']");
 		assertObject(parse(s, "foo|bar", List.class, D.class)).asJson().is("['D-foo','D-bar']");
 		assertObject(parse(s, "foo|bar", Object.class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo|bar", OList.class)).asJson().is("['foo','bar']");
+		assertObject(parse(s, "foo|bar", JsonList.class)).asJson().is("['foo','bar']");
 	}
 
 	@Test
@@ -392,7 +392,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s, "foo bar", List.class, Object.class)).asJson().is("['foo','bar']");
 		assertObject(parse(s, "foo bar", List.class, D.class)).asJson().is("['D-foo','D-bar']");
 		assertObject(parse(s, "foo bar", Object.class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo bar", OList.class)).asJson().is("['foo','bar']");
+		assertObject(parse(s, "foo bar", JsonList.class)).asJson().is("['foo','bar']");
 	}
 
 	@Test
@@ -405,7 +405,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s, "foo\tbar", List.class, Object.class)).asJson().is("['foo','bar']");
 		assertObject(parse(s, "foo\tbar", List.class, D.class)).asJson().is("['D-foo','D-bar']");
 		assertObject(parse(s, "foo\tbar", Object.class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "foo\tbar", OList.class)).asJson().is("['foo','bar']");
+		assertObject(parse(s, "foo\tbar", JsonList.class)).asJson().is("['foo','bar']");
 	}
 
 	@Test
@@ -418,7 +418,7 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s, "@(foo,bar)", List.class, Object.class)).asJson().is("['foo','bar']");
 		assertObject(parse(s, "@(foo,bar)", List.class, D.class)).asJson().is("['D-foo','D-bar']");
 		assertObject(parse(s, "@(foo,bar)", Object.class)).asJson().is("['foo','bar']");
-		assertObject(parse(s, "@(foo,bar)", OList.class)).asJson().is("['foo','bar']");
+		assertObject(parse(s, "@(foo,bar)", JsonList.class)).asJson().is("['foo','bar']");
 	}
 
 	@Test
@@ -946,10 +946,10 @@ public class OpenApiPartParser_Test {
 	public void h01_objectType() throws Exception {
 		HttpPartSchema s = HttpPartSchema.create().type("object").build();
 		assertObject(parse(s, "f=1", H1.class)).asJson().is("{f:1}");
-		assertObject(parse(s, "f=1", OMap.class)).asJson().is("{f:'1'}");
+		assertObject(parse(s, "f=1", JsonMap.class)).asJson().is("{f:'1'}");
 		Object o = parse(s, "f=1", Object.class);
 		assertObject(o).asJson().is("{f:'1'}");
-		assertObject(o).isType(OMap.class);
+		assertObject(o).isType(JsonMap.class);
 	}
 
 	@Test
@@ -957,13 +957,13 @@ public class OpenApiPartParser_Test {
 		HttpPartSchema s = tArrayUon(tObject()).build();
 		assertObject(parse(s, "@((f=1),(f=2))", H1[].class)).asJson().is("[{f:1},{f:2}]");
 		assertObject(parse(s, "@((f=1),(f=2))", List.class, H1.class)).asJson().is("[{f:1},{f:2}]");
-		assertObject(parse(s, "@((f=1),(f=2))", OMap[].class)).asJson().is("[{f:1},{f:2}]");
-		assertObject(parse(s, "@((f=1),(f=2))", List.class, OMap.class)).asJson().is("[{f:1},{f:2}]");
+		assertObject(parse(s, "@((f=1),(f=2))", JsonMap[].class)).asJson().is("[{f:1},{f:2}]");
+		assertObject(parse(s, "@((f=1),(f=2))", List.class, JsonMap.class)).asJson().is("[{f:1},{f:2}]");
 		assertObject(parse(s, "@((f=1),(f=2))", Object[].class)).asJson().is("[{f:1},{f:2}]");
 		assertObject(parse(s, "@((f=1),(f=2))", List.class, Object.class)).asJson().is("[{f:1},{f:2}]");
 		Object o = parse(s, "@((f=1),(f=2))", Object.class);
 		assertObject(o).asJson().is("[{f:1},{f:2}]");
-		assertObject(o).isType(OList.class);
+		assertObject(o).isType(JsonList.class);
 	}
 
 	@Test
@@ -972,15 +972,15 @@ public class OpenApiPartParser_Test {
 		assertObject(parse(s, "@(@((f=1),(f=2)),@((f=3)))", H1[][].class)).asJson().is("[[{f:1},{f:2}],[{f:3}]]");
 		assertObject(parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, H1[].class)).asJson().is("[[{f:1},{f:2}],[{f:3}]]");
 		assertObject(parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, H1.class)).asJson().is("[[{f:1},{f:2}],[{f:3}]]");
-		assertObject(parse(s, "@(@((f=1),(f=2)),@((f=3)))", OMap[][].class)).asJson().is("[[{f:1},{f:2}],[{f:3}]]");
-		assertObject(parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, OMap[].class)).asJson().is("[[{f:1},{f:2}],[{f:3}]]");
-		assertObject(parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, OMap.class)).asJson().is("[[{f:1},{f:2}],[{f:3}]]");
+		assertObject(parse(s, "@(@((f=1),(f=2)),@((f=3)))", JsonMap[][].class)).asJson().is("[[{f:1},{f:2}],[{f:3}]]");
+		assertObject(parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, JsonMap[].class)).asJson().is("[[{f:1},{f:2}],[{f:3}]]");
+		assertObject(parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, JsonMap.class)).asJson().is("[[{f:1},{f:2}],[{f:3}]]");
 		assertObject(parse(s, "@(@((f=1),(f=2)),@((f=3)))", Object[][].class)).asJson().is("[[{f:1},{f:2}],[{f:3}]]");
 		assertObject(parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, Object[].class)).asJson().is("[[{f:1},{f:2}],[{f:3}]]");
 		assertObject(parse(s, "@(@((f=1),(f=2)),@((f=3)))", List.class, List.class, Object.class)).asJson().is("[[{f:1},{f:2}],[{f:3}]]");
 		Object o =  parse(s, "@(@((f=1),(f=2)),@((f=3)))", Object.class);
 		assertObject(o).asJson().is("[[{f:1},{f:2}],[{f:3}]]");
-		assertObject(o).isType(OList.class);
+		assertObject(o).isType(JsonList.class);
 	}
 
 	public static class H2 {
@@ -1022,7 +1022,7 @@ public class OpenApiPartParser_Test {
 		assertObject(h2.f12).isType(Boolean.class);
 		assertObject(h2.f99).isType(Integer.class);
 
-		OMap om = parse(s, in, OMap.class);
+		JsonMap om = parse(s, in, JsonMap.class);
 		assertObject(om).asJson().is("{f01:'foo',f02:[102,111,111],f04:'2012-12-21T12:34:56Z',f05:[102,111,111],f06:[102,111,111],f07:'foo',f08:1,f09:1,f10:1.0,f11:1.0,f12:true,f99:1}");
 		assertObject(om.get("f01")).isType(String.class);
 		assertObject(om.get("f02")).isType(byte[].class);
@@ -1037,7 +1037,7 @@ public class OpenApiPartParser_Test {
 		assertObject(om.get("f12")).isType(Boolean.class);
 		assertObject(om.get("f99")).isType(Integer.class);
 
-		om = (OMap)parse(s, in, Object.class);
+		om = (JsonMap)parse(s, in, Object.class);
 		assertObject(om).asJson().is("{f01:'foo',f02:[102,111,111],f04:'2012-12-21T12:34:56Z',f05:[102,111,111],f06:[102,111,111],f07:'foo',f08:1,f09:1,f10:1.0,f11:1.0,f12:true,f99:1}");
 		assertObject(om.get("f01")).isType(String.class);
 		assertObject(om.get("f02")).isType(byte[].class);
@@ -1076,10 +1076,10 @@ public class OpenApiPartParser_Test {
 		H2 h2 = parse(s, in, H2.class);
 		assertObject(h2).asJson().is("{f01:['foo'],f02:[[102,111,111]],f04:['2012-12-21T12:34:56Z'],f05:[[102,111,111]],f06:[[102,111,111]],f07:['foo'],f08:[1],f09:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}");
 
-		OMap om = parse(s, in, OMap.class);
+		JsonMap om = parse(s, in, JsonMap.class);
 		assertObject(om).asJson().is("{f01:['foo'],f02:[[102,111,111]],f04:['2012-12-21T12:34:56Z'],f05:[[102,111,111]],f06:[[102,111,111]],f07:['foo'],f08:[1],f09:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}");
 
-		om = (OMap)parse(s, in, Object.class);
+		om = (JsonMap)parse(s, in, Object.class);
 		assertObject(om).asJson().is("{f01:['foo'],f02:[[102,111,111]],f04:['2012-12-21T12:34:56Z'],f05:[[102,111,111]],f06:[[102,111,111]],f07:['foo'],f08:[1],f09:[1],f10:[1.0],f11:[1.0],f12:[true],f99:[1]}");
 	}
 
@@ -1106,10 +1106,10 @@ public class OpenApiPartParser_Test {
 		H2 h2 = parse(s, in, H2.class);
 		assertObject(h2).asJson().is("{f01:['foo','bar'],f02:[[102,111,111],[98,97,114]],f04:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f05:[[102,111,111],[98,97,114]],f06:[[102,111,111],[98,97,114]],f07:['foo','bar'],f08:[1,2],f09:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}");
 
-		OMap om = parse(s, in, OMap.class);
+		JsonMap om = parse(s, in, JsonMap.class);
 		assertObject(om).asJson().is("{f01:['foo','bar'],f02:[[102,111,111],[98,97,114]],f04:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f05:[[102,111,111],[98,97,114]],f06:[[102,111,111],[98,97,114]],f07:['foo','bar'],f08:[1,2],f09:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}");
 
-		om = (OMap)parse(s, in, Object.class);
+		om = (JsonMap)parse(s, in, Object.class);
 		assertObject(om).asJson().is("{f01:['foo','bar'],f02:[[102,111,111],[98,97,114]],f04:['2012-12-21T12:34:56Z','2012-12-21T12:34:56Z'],f05:[[102,111,111],[98,97,114]],f06:[[102,111,111],[98,97,114]],f07:['foo','bar'],f08:[1,2],f09:[1,2],f10:[1.0,2.0],f11:[1.0,2.0],f12:[true,true],f99:[1,2]}");
 	}
 }

@@ -710,7 +710,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 					if (! (value instanceof Map)) {
 						if (value instanceof CharSequence)
-							value = OMap.ofJson((CharSequence)value).session(session);
+							value = JsonMap.ofJson((CharSequence)value).session(session);
 						else
 							throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), findClassName(value));
 					}
@@ -767,7 +767,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 					if (! (value instanceof Collection)) {
 						if (value instanceof CharSequence)
-							value = new OList((CharSequence)value).setBeanSession(session);
+							value = new JsonList((CharSequence)value).setBeanSession(session);
 						else
 							throw new BeanRuntimeException(beanMeta.c, "Cannot set property ''{0}'' of type ''{1}'' to object of type ''{2}''", name, propertyClass.getName(), findClassName(value));
 					}
@@ -785,7 +785,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 							if (propertyClass.isInstance(valueList) || (setter != null && setter.getParameterTypes()[0] == Collection.class)) {
 								if (! elementType.isObject()) {
-										List l = new OList(valueList);
+										List l = new JsonList(valueList);
 										for (ListIterator<Object> i = l.listIterator(); i.hasNext(); ) {
 											Object v = i.next();
 											if (v != null && (! elementType.getInnerClass().isInstance(v))) {
@@ -953,8 +953,8 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		// Read-only beans get their properties stored in a cache.
 		if (m.bean == null) {
 			if (! m.propertyCache.containsKey(name))
-				m.propertyCache.put(name, new OList(m.getBeanSession()));
-			((OList)m.propertyCache.get(name)).add(value);
+				m.propertyCache.put(name, new JsonList(m.getBeanSession()));
+			((JsonList)m.propertyCache.get(name)).add(value);
 			return;
 		}
 
@@ -984,7 +984,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				if (rawTypeMeta.canCreateNewInstance())
 					c = (Collection)rawTypeMeta.newInstance();
 				else
-					c = new OList(session);
+					c = new JsonList(session);
 
 				c.add(v);
 
@@ -1032,8 +1032,8 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
  		// Read-only beans get their properties stored in a cache.
 		if (m.bean == null) {
 			if (! m.propertyCache.containsKey(name))
-				m.propertyCache.put(name, new OMap(m.getBeanSession()));
-			((OMap)m.propertyCache.get(name)).append(key.toString(), value);
+				m.propertyCache.put(name, new JsonMap(m.getBeanSession()));
+			((JsonMap)m.propertyCache.get(name)).append(key.toString(), value);
 			return;
 		}
 
@@ -1063,7 +1063,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				if (rawTypeMeta.canCreateNewInstance())
 					map = (Map)rawTypeMeta.newInstance();
 				else
-					map = new OMap(session);
+					map = new JsonMap(session);
 
 				map.put(key, v);
 

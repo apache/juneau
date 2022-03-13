@@ -39,7 +39,7 @@ public class SchemaUtils {
 	 * @return The parsed contents.
 	 * @throws ParseException Invalid JSON encountered.
 	 */
-	public static OMap parseMap(String[] ss) throws ParseException {
+	public static JsonMap parseMap(String[] ss) throws ParseException {
 		if (ss.length == 0)
 			return null;
 		String s = joinnl(ss);
@@ -47,17 +47,17 @@ public class SchemaUtils {
 			return null;
 		if (! isJsonObject(s, true))
 			s = "{" + s + "}";
-		return OMap.ofJson(s);
+		return JsonMap.ofJson(s);
 	}
 
 	/**
-	 * Parses a generic object as JSON and converts it to an {@link OMap}.
+	 * Parses a generic object as JSON and converts it to an {@link JsonMap}.
 	 *
 	 * @param o The object to convert.
 	 * @return The parsed contents.
 	 * @throws ParseException Invalid JSON encountered.
 	 */
-	public static OMap parseMap(Object o) throws ParseException {
+	public static JsonMap parseMap(Object o) throws ParseException {
 		if (o == null)
 			return null;
 		if (o instanceof String[])
@@ -67,14 +67,14 @@ public class SchemaUtils {
 			if (s.isEmpty())
 				return null;
 			if ("IGNORE".equalsIgnoreCase(s))
-				return OMap.of("ignore", true);
+				return JsonMap.of("ignore", true);
 			if (! isJsonObject(s, true))
 				s = "{" + s + "}";
-			return OMap.ofJson(s);
+			return JsonMap.ofJson(s);
 		}
-		if (o instanceof OMap)
-			return (OMap)o;
-		throw new ParseException("Unexpected data type ''{0}''.  Expected OMap or String.", className(o));
+		if (o instanceof JsonMap)
+			return (JsonMap)o;
+		throw new ParseException("Unexpected data type ''{0}''.  Expected JsonMap or String.", className(o));
 	}
 
 	/**

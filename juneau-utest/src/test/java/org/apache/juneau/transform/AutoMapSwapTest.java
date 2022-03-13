@@ -33,7 +33,7 @@ import org.junit.*;
 public class AutoMapSwapTest {
 
 	private static final Map<String,String> STRINGMAP = map("foo","bar");
-	private static final OMap OMAP = OMap.of("foo","bar");
+	private static final JsonMap JSONMAP = JsonMap.of("foo","bar");
 
 	private static ObjectSwap find(Class<?> c) {
 		return AutoMapSwap.find(BeanContext.DEFAULT, ClassInfo.of(c));
@@ -57,17 +57,17 @@ public class AutoMapSwapTest {
 		}
 	}
 	public static class A02 {
-		public OMap toOMap() {
-			return OMAP;
+		public JsonMap toJsonMap() {
+			return JSONMAP;
 		}
 	}
 	public static class A03 {
-		public OMap toOMap() throws SerializeException {
+		public JsonMap toJsonMap() throws SerializeException {
 			throw new SerializeException("foo");
 		}
 	}
 	public static class A04 {
-		public OMap toOMap() {
+		public JsonMap toJsonMap() {
 			throw new RuntimeException("foo");
 		}
 	}
@@ -78,7 +78,7 @@ public class AutoMapSwapTest {
 	}
 
 	@Test
-	public void a02_swap_toOMap() throws Exception {
+	public void a02_swap_toJsonMap() throws Exception {
 		assertObject(find(A02.class).swap(null, new A02())).asJson().is("{foo:'bar'}");
 	}
 
@@ -106,10 +106,10 @@ public class AutoMapSwapTest {
 		}
 	}
 	public static class B02 {
-		public OMap toOMap() {
-			return OMAP;
+		public JsonMap toJsonMap() {
+			return JSONMAP;
 		}
-		public static B02 fromOMap(OMap o) {
+		public static B02 fromJsonMap(JsonMap o) {
 			assertObject(o).asJson().is("{foo:'bar'}");
 			return new B02();
 		}
@@ -135,8 +135,8 @@ public class AutoMapSwapTest {
 	}
 
 	@Test
-	public void b02_unswap_fromOMap() throws Exception {
-		assertNotNull(find(B02.class).unswap(null, OMAP, null));
+	public void b02_unswap_fromJsonMap() throws Exception {
+		assertNotNull(find(B02.class).unswap(null, JSONMAP, null));
 	}
 
 	@Test

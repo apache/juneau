@@ -43,12 +43,12 @@ public class RoundTripGenericsTest extends RoundTripTest {
 			return;
 
 		// Unbound type variables should be interpreted as Object.
-		// During parsing, these become OMaps.
+		// During parsing, these become JsonMaps.
 		Pair pair = new Pair<>(new Source().init(), new Target().init());
 		pair = roundTrip(pair);
 		assertObject(pair).asJsonSorted().is("{s:{s1:'a1'},t:{t1:'b1'}}");
-		assertEquals("OMap", pair.getS().getClass().getSimpleName());
-		assertEquals("OMap", pair.getT().getClass().getSimpleName());
+		assertEquals("JsonMap", pair.getS().getClass().getSimpleName());
+		assertEquals("JsonMap", pair.getT().getClass().getSimpleName());
 
 		// If you specify a concrete class, the type variables become bound and
 		// the property types correctly resolve.

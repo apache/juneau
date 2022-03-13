@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -311,7 +311,7 @@ public class Serializer extends BeanTraverseContext {
 		 * 	<jk>public class</jk> MyBean {
 		 * 		<jk>public</jk> String <jf>foo</jf> = <js>"bar"</js>;
 		 * 	}
-		 * 	OMap <jv>myMap</jv> = OMap.of(<js>"foo"</js>, <jk>new</jk> MyBean());
+		 * 	JsonMap <jv>myMap</jv> = JsonMap.of(<js>"foo"</js>, <jk>new</jk> MyBean());
 		 *
 		 * 	<jc>// Will contain:  {"foo":{"_type":"mybean","foo":"bar"}}</jc>
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myMap</jv>);
@@ -553,7 +553,7 @@ public class Serializer extends BeanTraverseContext {
 		 * 		.build();
 		 *
 		 * 	<jc>// An unsorted map.</jc>
-		 * 	OMap <jv>myMap</jv> = OMap.<jsm>of</jsm>(<js>"foo"</js>,1,<js>"bar"</js>,2,<js>"baz"</js>,3);
+		 * 	JsonMap <jv>myMap</jv> = JsonMap.<jsm>of</jsm>(<js>"foo"</js>,1,<js>"bar"</js>,2,<js>"baz"</js>,3);
 		 *
 		 * 	<jc>// Produces {"bar":2,"baz":3,"foo":1}</jc>
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myMap</jv>);
@@ -652,7 +652,7 @@ public class Serializer extends BeanTraverseContext {
 		 *
 		 * 	<jc>// A bean with a field with an empty map.</jc>
 		 * 	<jk>public class</jk> MyBean {
-		 * 		<jk>public</jk> OMap <jf>foo</jf> = OMap.<jsm>of</jsm>();
+		 * 		<jk>public</jk> JsonMap <jf>foo</jf> = JsonMap.<jsm>of</jsm>();
 		 * 	}
 		 *
 		 * 	<jc>// Produces {}</jc>
@@ -693,7 +693,7 @@ public class Serializer extends BeanTraverseContext {
 		 * 		.build();
 		 *
 		 *	<jc>// A map with space-padded keys/values</jc>
-		 * 	OMap <jv>myMap</jv> = OMap.<jsm>of</jsm>(<js>" foo "</js>, <js>" bar "</js>);
+		 * 	JsonMap <jv>myMap</jv> = JsonMap.<jsm>of</jsm>(<js>" foo "</js>, <js>" bar "</js>);
 		 *
 		 * 	<jc>// Produces "{foo:'bar'}"</jc>
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.toString(<jv>myMap</jv>);
@@ -1659,7 +1659,7 @@ public class Serializer extends BeanTraverseContext {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	protected OMap properties() {
+	protected JsonMap properties() {
 		return filteredMap()
 			.append("addBeanTypes", addBeanTypes)
 			.append("keepNullProperties", keepNullProperties)

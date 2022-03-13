@@ -219,11 +219,11 @@ public class OpenApiSerializer extends UonSerializer implements OpenApiMetaProvi
 		 * 		.build();
 		 *
 		 * 	<jc>// An arbitrary data structure.</jc>
-		 * 	OList <jv>list</jv> = OList.<jsm>of</jsm>(
+		 * 	JsonList <jv>list</jv> = JsonList.<jsm>of</jsm>(
 		 * 		<js>"foo"</js>,
 		 * 		<js>"bar"</js>,
-		 * 		OMap.<jsm>of</jsm>(
-		 * 			<js>"baz"</js>, OList.<jsm>of</jsm>(<js>"qux"</js>,<js>"true"</js>,<js>"123"</js>)
+		 * 		JsonMap.<jsm>of</jsm>(
+		 * 			<js>"baz"</js>, JsonList.<jsm>of</jsm>(<js>"qux"</js>,<js>"true"</js>,<js>"123"</js>)
 		 *		)
 		 *	);
 		 *

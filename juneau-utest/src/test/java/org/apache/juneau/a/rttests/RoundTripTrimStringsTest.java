@@ -51,18 +51,18 @@ public class RoundTripTrimStringsTest extends RoundTripTest {
 		a = p2.parse(s.serialize(in), String.class);
 		assertObject(e).isSameJsonAs(a);
 
-		in = OMap.ofJson("{' foo ': ' bar '}");
-		e = OMap.ofJson("{foo:'bar'}");
-		a = p.parse(s2.serialize(in), OMap.class);
+		in = JsonMap.ofJson("{' foo ': ' bar '}");
+		e = JsonMap.ofJson("{foo:'bar'}");
+		a = p.parse(s2.serialize(in), JsonMap.class);
 		assertObject(e).isSameJsonAs(a);
-		a = p2.parse(s.serialize(in), OMap.class);
+		a = p2.parse(s.serialize(in), JsonMap.class);
 		assertObject(e).isSameJsonAs(a);
 
-		in = new OList("[' foo ', {' foo ': ' bar '}]");
-		e = new OList("['foo',{foo:'bar'}]");
-		a = p.parse(s2.serialize(in), OList.class);
+		in = new JsonList("[' foo ', {' foo ': ' bar '}]");
+		e = new JsonList("['foo',{foo:'bar'}]");
+		a = p.parse(s2.serialize(in), JsonList.class);
 		assertObject(e).isSameJsonAs(a);
-		a = p2.parse(s.serialize(in), OList.class);
+		a = p2.parse(s.serialize(in), JsonList.class);
 		assertObject(e).isSameJsonAs(a);
 
 		in = new A().init1();
@@ -76,22 +76,22 @@ public class RoundTripTrimStringsTest extends RoundTripTest {
 	public static class A {
 		public String f1;
 		public String[] f2;
-		public OList f3;
-		public OMap f4;
+		public JsonList f3;
+		public JsonMap f4;
 
 		public A init1() throws Exception {
 			f1 = " f1 ";
 			f2 = new String[]{" f2a ", " f2b "};
-			f3 = OList.ofJson("[' f3a ',' f3b ']");
-			f4 = OMap.ofJson("{' foo ':' bar '}");
+			f3 = JsonList.ofJson("[' f3a ',' f3b ']");
+			f4 = JsonMap.ofJson("{' foo ':' bar '}");
 			return this;
 		}
 
 		public A init2() throws Exception {
 			f1 = "f1";
 			f2 = new String[]{"f2a", "f2b"};
-			f3 = OList.ofJson("['f3a','f3b']");
-			f4 = OMap.ofJson("{'foo':'bar'}");
+			f3 = JsonList.ofJson("['f3a','f3b']");
+			f4 = JsonMap.ofJson("{'foo':'bar'}");
 			return this;
 		}
 	}

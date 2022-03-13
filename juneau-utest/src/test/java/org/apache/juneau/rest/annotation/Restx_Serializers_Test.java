@@ -151,19 +151,19 @@ public class Restx_Serializers_Test {
 	@Rest
 	public static class B2 extends B1 {
 		@RestGet
-		public OList a(RestResponse res) {
+		public JsonList a(RestResponse res) {
 			// Should show ['text/s3','text/s4','text/s1','text/s2']
-			return OList.of(res.getOpContext().getSupportedAcceptTypes());
+			return JsonList.of(res.getOpContext().getSupportedAcceptTypes());
 		}
 		@RestGet(serializers=S5.class)
-		public OList b(RestResponse res) {
+		public JsonList b(RestResponse res) {
 			// Should show ['text/s5']
-			return OList.of(res.getOpContext().getSupportedAcceptTypes());
+			return JsonList.of(res.getOpContext().getSupportedAcceptTypes());
 		}
 		@RestGet(serializers={S5.class,SerializerSet.Inherit.class})
-		public OList c(RestResponse res) {
+		public JsonList c(RestResponse res) {
 			// Should show ['text/s5','text/s3','text/s4','text/s1','text/s2']
-			return OList.of(res.getOpContext().getSupportedAcceptTypes());
+			return JsonList.of(res.getOpContext().getSupportedAcceptTypes());
 		}
 	}
 

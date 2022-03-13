@@ -892,23 +892,23 @@ public class OpenApiTest {
 
 	@Test
 	public void g01a_objectType_formatDefault_Map() throws Exception {
-		OMap in = OMap.of("a","b");
+		JsonMap in = JsonMap.of("a","b");
 		HttpPartSchema ps = T_OBJECT;
 		String s = serialize(ps, in);
 		assertEquals("a=b", s);
-		OMap r = parse(ps, s, OMap.class);
+		JsonMap r = parse(ps, s, JsonMap.class);
 		assertObject(in).isSameJsonAs(r);
 
-		in = OMap.of("a","b","c","d");
+		in = JsonMap.of("a","b","c","d");
 		s = serialize(ps, in);
 		assertEquals("a=b,c=d", s);
-		r = parse(ps, s, OMap.class);
+		r = parse(ps, s, JsonMap.class);
 		assertObject(in).isSameJsonAs(r);
 	}
 
 	@Test
 	public void g01b_objectType_formatDefault_Map_3d() throws Exception {
-		OMap in = OMap.of("a",OMap.of("b",OMap.of("c","d")));
+		JsonMap in = JsonMap.of("a",JsonMap.of("b",JsonMap.of("c","d")));
 		HttpPartSchema ps = tObject()
 			.p("a", tObject()
 				.p("b", tObject())
@@ -917,13 +917,13 @@ public class OpenApiTest {
 			.build();
 		String s = serialize(ps, in);
 		assertEquals("a=b\\=c\\\\\\=d", s);
-		OMap r = parse(ps, s, OMap.class);
+		JsonMap r = parse(ps, s, JsonMap.class);
 		assertObject(in).isSameJsonAs(r);
 
-		in = OMap.of("a",OMap.of("b",OMap.of("c","d"),"e",OMap.of("f","g")));
+		in = JsonMap.of("a",JsonMap.of("b",JsonMap.of("c","d"),"e",JsonMap.of("f","g")));
 		s = serialize(ps, in);
 		assertEquals("a=b\\=c\\\\\\=d\\,e\\=f\\\\\\=g", s);
-		r = parse(ps, s, OMap.class);
+		r = parse(ps, s, JsonMap.class);
 		assertObject(in).isSameJsonAs(r);
 	}
 }

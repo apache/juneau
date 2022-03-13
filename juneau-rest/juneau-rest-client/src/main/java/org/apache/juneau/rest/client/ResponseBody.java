@@ -701,7 +701,7 @@ public class ResponseBody implements HttpEntity {
 
 					T t = parser
 						.createSession()
-						.properties(OMap.create().inner(request.getSessionProperties()))
+						.properties(JsonMap.create().inner(request.getSessionProperties()))
 						.locale(response.getLocale())
 						.mediaType(mt)
 						.schema(schema)
@@ -967,7 +967,7 @@ public class ResponseBody implements HttpEntity {
 	}
 
 	/**
-	 * Converts the output from the connection into an {@link OMap} and then wraps that in a {@link PojoRest}.
+	 * Converts the output from the connection into an {@link JsonMap} and then wraps that in a {@link PojoRest}.
 	 *
 	 * <p>
 	 * Useful if you want to quickly retrieve a single value from inside of a larger JSON document.
@@ -980,7 +980,7 @@ public class ResponseBody implements HttpEntity {
 	 * 	</ul>
 	 */
 	public PojoRest asPojoRest() throws RestCallException {
-		return asPojoRest(OMap.class);
+		return asPojoRest(JsonMap.class);
 	}
 
 	/**

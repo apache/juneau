@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
-import static org.apache.juneau.collections.OMap.*;
+import static org.apache.juneau.collections.JsonMap.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
@@ -96,7 +96,7 @@ import org.apache.juneau.utils.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Serialize a Map</jc>
- * 	Map <jv>map</jv> = OMap.<jsm>ofJson</jsm>(<js>"{a:'b',c:1,d:false,e:['f',1,false],g:{h:'i'}}"</js>);
+ * 	Map <jv>map</jv> = JsonMap.<jsm>ofJson</jsm>(<js>"{a:'b',c:1,d:false,e:['f',1,false],g:{h:'i'}}"</js>);
  *
  * 	<jc>// Serialize to value equivalent to JSON.</jc>
  * 	<jc>// Produces "(a=b,c=1,d=false,e=@(f,1,false),g=(h=i))"</jc>
@@ -346,7 +346,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * 		.encoding()
 		 * 		.build();
 		 *
-		 * 	OMap <jv>map</jv> = OMap.<jsm>of</jsm>(<js>"foo"</js>, <js>"foo bar"</js>);
+		 * 	JsonMap <jv>map</jv> = JsonMap.<jsm>of</jsm>(<js>"foo"</js>, <js>"foo bar"</js>);
 		 *
 		 * 	<jc>// Produces: "(foo=foo bar)"</jc>
 		 * 	String <jv>uon1</jv> = <jv>serializer1</jv>.serialize(<jv>map</jv>)
@@ -399,7 +399,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * 		.paramFormat(<jsf>PLAIN_TEXT</jsf>)
 		 * 		.build();
 		 *
-		 * 	OMap <jv>map</jv> = OMap.<jsm>of</jsm>(
+		 * 	JsonMap <jv>map</jv> = JsonMap.<jsm>of</jsm>(
 		 * 		<js>"foo"</js>, <js>"bar"</js>,
 		 * 		<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>}
 		 * 	);
@@ -436,7 +436,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * 		.paramFormatPlain()
 		 * 		.build();
 		 *
-		 * 	OMap <jv>map</jv> = OMap.<jsm>of</jsm>(
+		 * 	JsonMap <jv>map</jv> = JsonMap.<jsm>of</jsm>(
 		 * 		<js>"foo"</js>, <js>"bar"</js>,
 		 * 		<js>"baz"</js>, <jk>new</jk> String[]{<js>"qux"</js>, <js>"true"</js>, <js>"123"</js>}
 		 * 	);
@@ -1237,7 +1237,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Context */
-	protected OMap properties() {
+	protected JsonMap properties() {
 		return filteredMap("encoding", encoding, "addBeanTypes", addBeanTypes, "paramFormat", paramFormat);
 	}
 }

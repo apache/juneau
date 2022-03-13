@@ -207,16 +207,16 @@ public class Swagger_Test {
 	public void a09_definitions() {
 		Swagger t = new Swagger();
 
-		t.definitions(map("foo",OMap.of("type","bar")));
+		t.definitions(map("foo",JsonMap.of("type","bar")));
 		assertOptional(t.definitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
 
 		t.definitions(map());
 		assertOptional(t.definitions()).isType(Map.class).asJson().is("{}");
 
-		t.definitions((Map<String,OMap>)null);
+		t.definitions((Map<String,JsonMap>)null);
 		assertOptional(t.definitions()).isNull();
 
-		t.addDefinitions(map("foo",OMap.of("type", "bar")));
+		t.addDefinitions(map("foo",JsonMap.of("type", "bar")));
 		assertOptional(t.definitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
 
 		t.addDefinitions(map());
@@ -226,9 +226,9 @@ public class Swagger_Test {
 		assertOptional(t.definitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
 
 		t.setDefinitions(null);
-		t.definition("a", OMap.of("type","a1"));
-		t.definition("b", (OMap)null);
-		t.definition(null, OMap.of("type", "c1"));
+		t.definition("a", JsonMap.of("type","a1"));
+		t.definition("b", (JsonMap)null);
+		t.definition(null, JsonMap.of("type", "c1"));
 
 		assertOptional(t.definitions()).asJson().is("{a:{type:'a1'},b:null,null:{type:'c1'}}");
 	}
@@ -496,7 +496,7 @@ public class Swagger_Test {
 		assertObject(t.get("consumes", Object.class)).isType(Set.class);
 		assertObject(t.get("consumes", List.class).get(0)).isType(MediaType.class);
 		assertObject(t.get("definitions", Object.class)).isType(Map.class);
-		assertObject(t.get("definitions", Map.class).values().iterator().next()).isType(OMap.class);
+		assertObject(t.get("definitions", Map.class).values().iterator().next()).isType(JsonMap.class);
 		assertObject(t.get("externalDocs", Object.class)).isType(ExternalDocumentation.class);
 		assertObject(t.get("host", Object.class)).isType(String.class);
 		assertObject(t.get("info", Object.class)).isType(Info.class);
