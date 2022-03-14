@@ -95,22 +95,22 @@ public final class BeanFilter {
 		 */
 		public Builder applyAnnotations(List<Bean> annotations) {
 
-			for (Bean b : annotations) {
-				if (isNotEmpty(b.properties(), b.p())) properties(b.properties(), b.p());
-				if (b.sort()) sortProperties(true);
-				if (b.findFluentSetters()) findFluentSetters();
-				if (isNotEmpty(b.excludeProperties(), b.xp())) excludeProperties(b.excludeProperties(), b.xp());
-				if (isNotEmpty(b.readOnlyProperties(), b.ro())) readOnlyProperties(b.readOnlyProperties(), b.ro());
-				if (isNotEmpty(b.writeOnlyProperties(), b.wo())) writeOnlyProperties(b.writeOnlyProperties(), b.wo());
-				if (isNotEmpty(b.typeName())) typeName(b.typeName());
-				if (isNotVoid(b.propertyNamer())) propertyNamer(b.propertyNamer());
-				if (isNotVoid(b.interfaceClass())) interfaceClass(b.interfaceClass());
-				if (isNotVoid(b.stopClass())) stopClass(b.stopClass());
-				if (isNotVoid(b.interceptor())) interceptor(b.interceptor());
-				if (isNotVoid(b.implClass())) implClass(b.implClass());
-				if (isNotEmptyArray(b.dictionary())) dictionary(b.dictionary());
-				if (isNotEmpty(b.example())) example(b.example());
-			}
+			annotations.forEach(x -> {
+				if (isNotEmpty(x.properties(), x.p())) properties(x.properties(), x.p());
+				if (x.sort()) sortProperties(true);
+				if (x.findFluentSetters()) findFluentSetters();
+				if (isNotEmpty(x.excludeProperties(), x.xp())) excludeProperties(x.excludeProperties(), x.xp());
+				if (isNotEmpty(x.readOnlyProperties(), x.ro())) readOnlyProperties(x.readOnlyProperties(), x.ro());
+				if (isNotEmpty(x.writeOnlyProperties(), x.wo())) writeOnlyProperties(x.writeOnlyProperties(), x.wo());
+				if (isNotEmpty(x.typeName())) typeName(x.typeName());
+				if (isNotVoid(x.propertyNamer())) propertyNamer(x.propertyNamer());
+				if (isNotVoid(x.interfaceClass())) interfaceClass(x.interfaceClass());
+				if (isNotVoid(x.stopClass())) stopClass(x.stopClass());
+				if (isNotVoid(x.interceptor())) interceptor(x.interceptor());
+				if (isNotVoid(x.implClass())) implClass(x.implClass());
+				if (isNotEmptyArray(x.dictionary())) dictionary(x.dictionary());
+				if (isNotEmpty(x.example())) example(x.example());
+			});
 			return this;
 		}
 

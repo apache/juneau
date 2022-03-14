@@ -125,40 +125,6 @@ public final class ArrayUtils {
 	}
 
 	/**
-	 * Returns an iterator against an array.
-	 *
-	 * <p>
-	 * This works with any array type (e.g. <c>String[]</c>, <c>Object[]</c>,
-	 * <code><jk>int</jk>[]</code>, etc...).
-	 *
-	 * @param array The array to create an iterator over.
-	 * @return An iterator over the specified array.
-	 */
-	public static Iterator<Object> iterator(final Object array) {
-		return new Iterator<Object>() {
-			int i = 0;
-			int length = array == null ? 0 : Array.getLength(array);
-
-			@Override /* Iterator */
-			public boolean hasNext() {
-				return i < length;
-			}
-
-			@Override /* Iterator */
-			public Object next() {
-				if (i >= length)
-					throw new NoSuchElementException();
-				return Array.get(array, i++);
-			}
-
-			@Override /* Iterator */
-			public void remove() {
-				throw unsupportedOperationException("Not supported.");
-			}
-		};
-	}
-
-	/**
 	 * Converts the specified collection to an array.
 	 *
 	 * <p>
@@ -351,7 +317,7 @@ public final class ArrayUtils {
 
 	/**
 	 * Reverses the entries in an array.
-	 * 
+	 *
 	 * @param array The array to reverse.
 	 * @return The same array.
 	 */

@@ -100,7 +100,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 					throw new BeanRuntimeException(c, "Invalid format specified in @Xml annotation on bean: {0}.  Must be one of the following: DEFAULT,ATTRS,ELEMENTS,VOID", x.format());
 			});
 
-			for (BeanPropertyMeta p : beanMeta.getPropertyMetas()) {
+			beanMeta.forEachProperty(null, p -> {
 				XmlFormat xf = mp.getXmlBeanPropertyMeta(p).getXmlFormat();
 				ClassMeta<?> pcm = p.getClassMeta();
 				if (xf == ATTR) {
@@ -138,7 +138,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 						throw new BeanRuntimeException(c, "Multiple properties found with the child name ''{0}''.", n);
 					collapsedProperties.put(n, p);
 				}
-			}
+			});
 		}
 	}
 

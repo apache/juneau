@@ -13,6 +13,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ConsumerUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
@@ -25,6 +26,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -228,8 +230,30 @@ public class BeanMeta<T> {
 					return "Class is not serializable";
 
 				// Look for @Beanc constructor on public constructors.
-				for (ConstructorInfo x : ci.getPublicConstructors()) {
-					if (x.hasAnnotation(ctx, Beanc.class)) {
+				ci.forEachPublicConstructor(x -> x.hasAnnotation(ctx, Beanc.class), x -> {
+					if (constructor != null)
+						throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
+					constructor = x;
+					constructorArgs = new String[0];
+					ctx.forEachAnnotation(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = split(z.properties()));
+					if (! x.hasNumParams(constructorArgs.length)) {
+						if (constructorArgs.length != 0)
+							throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
+						constructorArgs = new String[x.getParamCount()];
+						IntValue i = IntValue.create();
+						x.forEachParam(null, pi -> {
+							String pn = pi.getName();
+							if (pn == null)
+								throw new BeanRuntimeException(c, "Could not find name for parameter #{0} of constructor ''{1}''", i, x.getFullName());
+							constructorArgs[i.getAndIncrement()] = pn;
+						});
+					}
+					constructor.setAccessible();
+				});
+
+				// Look for @Beanc on all other constructors.
+				if (constructor == null) {
+					ci.forEachDeclaredConstructor(x -> x.hasAnnotation(ctx, Beanc.class), x -> {
 						if (constructor != null)
 							throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
 						constructor = x;
@@ -239,42 +263,16 @@ public class BeanMeta<T> {
 							if (constructorArgs.length != 0)
 								throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
 							constructorArgs = new String[x.getParamCount()];
-							int i = 0;
-							for (ParamInfo pi : x.getParams()) {
-								String pn = pi.getName();
+							IntValue i = IntValue.create();
+							x.forEachParam(null, y -> {
+								String pn = y.getName();
 								if (pn == null)
 									throw new BeanRuntimeException(c, "Could not find name for parameter #{0} of constructor ''{1}''", i, x.getFullName());
-								constructorArgs[i++] = pn;
-							}
+								constructorArgs[i.getAndIncrement()] = pn;
+							});
 						}
 						constructor.setAccessible();
-					}
-				}
-
-				// Look for @Beanc on all other constructors.
-				if (constructor == null) {
-					for (ConstructorInfo x : ci.getDeclaredConstructors()) {
-						if (x.hasAnnotation(ctx, Beanc.class)) {
-							if (constructor != null)
-								throw new BeanRuntimeException(c, "Multiple instances of '@Beanc' found.");
-							constructor = x;
-							constructorArgs = new String[0];
-							ctx.forEachAnnotation(Beanc.class, x.inner(), y -> ! y.properties().isEmpty(), z -> constructorArgs = split(z.properties()));
-							if (! x.hasNumParams(constructorArgs.length)) {
-								if (constructorArgs.length != 0)
-									throw new BeanRuntimeException(c, "Number of properties defined in '@Beanc' annotation does not match number of parameters in constructor.");
-								constructorArgs = new String[x.getParamCount()];
-								int i = 0;
-								for (ParamInfo pi : x.getParams()) {
-									String pn = pi.getName();
-									if (pn == null)
-										throw new BeanRuntimeException(c, "Could not find name for parameter #{0} of constructor ''{1}''", i, x.getFullName());
-									constructorArgs[i++] = pn;
-								}
-							}
-							constructor.setAccessible();
-						}
-					}
+					});
 				}
 
 				// If this is an interface, look for impl classes defined in the context.
@@ -323,8 +321,7 @@ public class BeanMeta<T> {
 
 				// First populate the properties with those specified in the bean annotation to
 				// ensure that ordering first.
-				for (String name : fixedBeanProps)
-					normalProps.put(name, BeanPropertyMeta.builder(beanMeta, name));
+				fixedBeanProps.forEach(x -> normalProps.put(x, BeanPropertyMeta.builder(beanMeta, x)));
 
 				if (ctx.isUseJavaBeanIntrospector()) {
 					BeanInfo bi = null;
@@ -343,25 +340,25 @@ public class BeanMeta<T> {
 
 				} else /* Use 'better' introspection */ {
 
-					for (Field f : findBeanFields(ctx, c2, stopClass, fVis)) {
-						String name = findPropertyName(f);
+					findBeanFields(ctx, c2, stopClass, fVis).forEach(x -> {
+						String name = findPropertyName(x);
 						if (name != null) {
 							if (! normalProps.containsKey(name))
 								normalProps.put(name, BeanPropertyMeta.builder(beanMeta, name));
-							normalProps.get(name).setField(f);
+							normalProps.get(name).setField(x);
 						}
-					}
+					});
 
 					List<BeanMethod> bms = findBeanMethods(ctx, c2, stopClass, mVis, propertyNamer, fluentSetters);
 
 					// Iterate through all the getters.
-					for (BeanMethod bm : bms) {
-						String pn = bm.propertyName;
-						Method m = bm.method;
+					bms.forEach(x -> {
+						String pn = x.propertyName;
+						Method m = x.method;
 						if (! normalProps.containsKey(pn))
 							normalProps.put(pn, new BeanPropertyMeta.Builder(beanMeta, pn));
 						BeanPropertyMeta.Builder bpm = normalProps.get(pn);
-						if (bm.methodType == GETTER) {
+						if (x.methodType == GETTER) {
 							// Two getters.  Pick the best.
 							if (bpm.getter != null) {
 
@@ -373,24 +370,24 @@ public class BeanMeta<T> {
 							}
 							bpm.setGetter(m);
 						}
-					}
+					});
 
 					// Now iterate through all the setters.
-					for (BeanMethod bm : bms) {
-						if (bm.methodType == SETTER) {
-							BeanPropertyMeta.Builder bpm = normalProps.get(bm.propertyName);
-							if (bm.matchesPropertyType(bpm))
-								bpm.setSetter(bm.method);
+					bms.forEach(x -> {
+						if (x.methodType == SETTER) {
+							BeanPropertyMeta.Builder bpm = normalProps.get(x.propertyName);
+							if (x.matchesPropertyType(bpm))
+								bpm.setSetter(x.method);
 						}
-					}
+					});
 
 					// Now iterate through all the extraKeys.
-					for (BeanMethod bm : bms) {
-						if (bm.methodType == EXTRAKEYS) {
-							BeanPropertyMeta.Builder bpm = normalProps.get(bm.propertyName);
-							bpm.setExtraKeys(bm.method);
+					bms.forEach(x -> {
+						if (x.methodType == EXTRAKEYS) {
+							BeanPropertyMeta.Builder bpm = normalProps.get(x.propertyName);
+							bpm.setExtraKeys(x.method);
 						}
-					}
+					});
 				}
 
 				typeVarImpls = map();
@@ -422,9 +419,10 @@ public class BeanMeta<T> {
 				}
 
 				// Check for missing properties.
-				for (String fp : fixedBeanProps)
-					if (! normalProps.containsKey(fp))
-						throw new BeanRuntimeException(c, "The property ''{0}'' was defined on the @Bean(properties=X) annotation of class ''{1}'' but was not found on the class definition.", fp, ci.getSimpleName());
+				fixedBeanProps.forEach(x -> {
+					if (! normalProps.containsKey(x))
+						throw new BeanRuntimeException(c, "The property ''{0}'' was defined on the @Bean(properties=X) annotation of class ''{1}'' but was not found on the class definition.", x, ci.getSimpleName());
+				});
 
 				// Mark constructor arg properties.
 				for (String fp : constructorArgs) {
@@ -447,12 +445,12 @@ public class BeanMeta<T> {
 				if (dictionaryName == null)
 					dictionaryName = findDictionaryName(this.classMeta);
 
-				for (Map.Entry<String,BeanPropertyMeta.Builder> e : normalProps.entrySet()) {
-					BeanPropertyMeta pMeta = e.getValue().build();
+				normalProps.forEach((k,v) -> {
+					BeanPropertyMeta pMeta = v.build();
 					if (pMeta.isDyna())
 						dynaProperty = pMeta;
-					properties.put(e.getKey(), pMeta);
-				}
+					properties.put(k, pMeta);
+				});
 
 				// If a beanFilter is defined, look for inclusion and exclusion lists.
 				if (beanFilter != null) {
@@ -465,32 +463,29 @@ public class BeanMeta<T> {
 						// Only include specified properties if BeanFilter.includeKeys is specified.
 						// Note that the order must match includeKeys.
 						Map<String,BeanPropertyMeta> properties2 = map();
-						for (String k : bfbpi) {
-							if (properties.containsKey(k))
-								properties2.put(k, properties.remove(k));
-						}
+						bfbpi.forEach(x -> {
+							if (properties.containsKey(x))
+								properties2.put(x, properties.remove(x));
+						});
 						hiddenProperties.putAll(properties);
 						properties = properties2;
 					}
 					if (bpx.isEmpty() && ! bfbpx.isEmpty()) {
-						for (String k : bfbpx) {
-							hiddenProperties.put(k, properties.remove(k));
-						}
+						bfbpx.forEach(x -> hiddenProperties.put(x, properties.remove(x)));
 					}
 				}
 
 				if (! bpi.isEmpty()) {
 					Map<String,BeanPropertyMeta> properties2 = map();
-					for (String k : bpi) {
-						if (properties.containsKey(k))
-							properties2.put(k, properties.remove(k));
-					}
+					bpi.forEach(x -> {
+						if (properties.containsKey(x))
+							properties2.put(x, properties.remove(x));
+					});
 					hiddenProperties.putAll(properties);
 					properties = properties2;
 				}
 
-				for (String ep : bpx)
-					hiddenProperties.put(ep, properties.remove(ep));
+				bpx.forEach(x -> hiddenProperties.put(x, properties.remove(x)));
 
 				if (pNames != null) {
 					Map<String,BeanPropertyMeta> properties2 = map();
@@ -659,6 +654,7 @@ public class BeanMeta<T> {
 	static final List<BeanMethod> findBeanMethods(BeanContext ctx, Class<?> c, Class<?> stopClass, Visibility v, PropertyNamer pn, boolean fluentSetters) {
 		List<BeanMethod> l = new LinkedList<>();
 
+		String TODO = "Make more efficient";
 		for (ClassInfo c2 : findClasses(c, stopClass)) {
 			for (MethodInfo m : c2.getDeclaredMethods()) {
 				if (m.isStatic() || m.isBridge() || m.getParamCount() > 2 || m.hasAnnotation(ctx, BeanIgnore.class))
@@ -824,7 +820,7 @@ public class BeanMeta<T> {
 	 */
 	public void forEachProperty(Predicate<BeanPropertyMeta> filter, Consumer<BeanPropertyMeta> action) {
 		for (BeanPropertyMeta x : propertyArray)
-			if (filter.test(x))
+			if (passes(filter, x))
 				action.accept(x);
 	}
 
@@ -837,7 +833,7 @@ public class BeanMeta<T> {
 	 */
 	public <T2> Optional<T2> firstProperty(Predicate<BeanPropertyMeta> filter, Function<BeanPropertyMeta,T2> function) {
 		for (BeanPropertyMeta x : propertyArray)
-			if (filter.test(x))
+			if (passes(filter, x))
 				return Optional.ofNullable(function.apply(x));
 		return Optional.empty();
 	}
@@ -979,17 +975,15 @@ public class BeanMeta<T> {
 		if (! n.isEmpty())
 			return last(n).value();
 
-		String name = p.isEmpty() ? null : "";
-		for (Beanp pp : p) {
-			if (! pp.value().isEmpty())
-				name = pp.value();
-			if (! pp.name().isEmpty())
-				name = pp.name();
-		}
-		if (name != null)
-			return name;
+		Value<String> name = Value.of(p.isEmpty() ? null : "");
+		p.forEach(x -> {
+			if (! x.value().isEmpty())
+				name.set(x.value());
+			if (! x.name().isEmpty())
+				name.set(x.name());
+		});
 
-		return null;
+		return name.orElse(null);
 	}
 
 	@Override /* Object */

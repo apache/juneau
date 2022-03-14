@@ -140,16 +140,13 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 		// If we have any arrays that need to be constructed, do it now.
 		if (arrayPropertyCache != null) {
-			for (Map.Entry<String,List<?>> e : arrayPropertyCache.entrySet()) {
-				String key = e.getKey();
-				List<?> value = e.getValue();
-				BeanPropertyMeta bpm = getPropertyMeta(key);
+			arrayPropertyCache.forEach((k,v) -> {
 				try {
-					bpm.setArray(b, value);
+					 getPropertyMeta(k).setArray(b, v);
 				} catch (Exception e1) {
 					throw runtimeException(e1);
 				}
-			}
+			});
 			arrayPropertyCache = null;
 		}
 
@@ -160,11 +157,11 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				pMeta.set(this, pMeta.getName(), cm.getOptionalDefault());
 		}
 		// Do the same for hidden fields.
-		for (BeanPropertyMeta pMeta : this.meta.hiddenProperties.values()) {
-			ClassMeta<?> cm = pMeta.getClassMeta();
-			if (cm.isOptional() && pMeta.get(this, pMeta.getName()) == null)
-				pMeta.set(this, pMeta.getName(), cm.getOptionalDefault());
-		}
+		this.meta.hiddenProperties.forEach((k,v) -> {
+			ClassMeta<?> cm = v.getClassMeta();
+			if (cm.isOptional() && v.get(this, v.getName()) == null)
+				v.set(this, v.getName(), cm.getOptionalDefault());
+		});
 
 		return b;
 	}
@@ -193,8 +190,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				args[i] = propertyCache.remove(props[i]);
 			try {
 				bean = c.<T>invoke(args);
-				for (Map.Entry<String,Object> e : propertyCache.entrySet())
-					put(e.getKey(), e.getValue());
+				propertyCache.forEach((k,v) -> put(k, v));
 				propertyCache = null;
 			} catch (IllegalArgumentException e) {
 				throw new BeanRuntimeException(e, meta.classMeta.innerClass, "IllegalArgumentException occurred on call to class constructor ''{0}'' with argument types ''{1}''", c.getSimpleName(), SimpleJsonSerializer.DEFAULT.toString(ClassUtils.getClasses(args)));
@@ -427,9 +423,10 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		if (meta.dynaProperty == null)
 			return meta.properties.keySet();
 		Set<String> l = set();
-		for (String p : meta.properties.keySet())
-			if (! "*".equals(p))
-				l.add(p);
+		meta.properties.forEach((k,v) -> {
+			if (! "*".equals(k))
+				l.add(k);
+		});
 		try {
 			l.addAll(meta.dynaProperty.getDynaMap(bean).keySet());
 		} catch (Exception e) {
@@ -534,10 +531,10 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 					// TODO - This is kind of inefficient.
 					Map<String,Object> dynaMap = bpm.getDynaMap(bean);
 					if (dynaMap != null) {
-						for (String pName : dynaMap.keySet()) {
-							Object val = bpm.get(this, pName);
-							actions.put(pName, new BeanPropertyValue(bpm, pName, val, null));
-						}
+						dynaMap.forEach((k,v) -> {
+							Object val = bpm.get(this, k);
+							actions.put(k, new BeanPropertyValue(bpm, k, val, null));
+						});
 					}
 				} catch (Exception e) {
 					e.printStackTrace();

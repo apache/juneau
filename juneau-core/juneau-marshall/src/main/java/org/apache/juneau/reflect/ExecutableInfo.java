@@ -146,6 +146,20 @@ public abstract class ExecutableInfo {
 	}
 
 	/**
+	 * Performs an action on every parameter that matches the specified filter.
+	 *
+	 * @param filter The filter, can be <jk>null</jk>.
+	 * @param action The action to perform.
+	 * @return This object.
+	 */
+	public ExecutableInfo forEachParam(Predicate<ParamInfo> filter, Consumer<ParamInfo> action) {
+		for (ParamInfo pi : _getParams())
+			if (passes(filter, pi))
+				action.accept(pi);
+		return this;
+	}
+
+	/**
 	 * Returns parameter information at the specified index.
 	 *
 	 * @param index The parameter index.

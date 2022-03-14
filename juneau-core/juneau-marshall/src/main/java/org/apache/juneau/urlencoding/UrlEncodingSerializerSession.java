@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.urlencoding;
 
-import static org.apache.juneau.internal.ArrayUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -319,9 +319,8 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	 */
 	private static Map<Integer,Object> getCollectionMap(Collection<?> c) {
 		Map<Integer,Object> m = new TreeMap<>();
-		int i = 0;
-		for (Object o : c)
-			m.put(i++, o);
+		IntValue i = IntValue.create();
+		c.forEach(o -> m.put(i.getAndIncrement(), o));
 		return m;
 	}
 
@@ -341,46 +340,47 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 
 		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
 
-		boolean addAmp = false;
+		Flag addAmp = Flag.create();
 
 		for (Map.Entry e : (Set<Map.Entry>)m.entrySet()) {
 			Object key = generalize(e.getKey(), keyType);
 			Object value = e.getValue();
 
 			if (shouldUseExpandedParams(value)) {
-				Iterator i = value instanceof Collection ? ((Collection)value).iterator() : iterator(value);
-				while (i.hasNext()) {
-					if (addAmp)
-						out.cr(indent).append('&');
-					out.appendObject(key, true).append('=');
-					super.serializeAnything(out, i.next(), null, (key == null ? null : key.toString()), null);
-					addAmp = true;
+				if (value instanceof Collection) {
+					((Collection<?>)value).forEach(x -> {
+						addAmp.ifSet(()->out.cr(indent).append('&')).set();
+						out.appendObject(key, true).append('=');
+						super.serializeAnything(out, x, null, stringify(key), null);
+					});
+				} else /* array */ {
+					for (int i = 0; i < Array.getLength(value); i++) {
+						addAmp.ifSet(()->out.cr(indent).append('&')).set();
+						out.appendObject(key, true).append('=');
+						super.serializeAnything(out, Array.get(value, i), null, stringify(key), null);
+					}
 				}
 			} else {
-				if (addAmp)
-					out.cr(indent).append('&');
+				addAmp.ifSet(()->out.cr(indent).append('&')).set();
 				out.appendObject(key, true).append('=');
 				super.serializeAnything(out, value, valueType, (key == null ? null : key.toString()), null);
-				addAmp = true;
 			}
 		}
 
 		return out;
 	}
 
-	private SerializerWriter serializeCollectionMap(UonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
+	private SerializerWriter serializeCollectionMap(UonWriter out, Map<?,?> m, ClassMeta<?> type) throws SerializeException {
 
 		ClassMeta<?> valueType = type.getValueType();
 
-		boolean addAmp = false;
+		Flag addAmp = Flag.create();
 
-		for (Map.Entry e : (Set<Map.Entry>)m.entrySet()) {
-			if (addAmp)
-				out.cr(indent).append('&');
-			out.append(e.getKey()).append('=');
-			super.serializeAnything(out, e.getValue(), valueType, null, null);
-			addAmp = true;
-		}
+		m.forEach((k,v) -> {
+			addAmp.ifSet(()->out.cr(indent).append('&')).set();
+			out.append(k).append('=');
+			super.serializeAnything(out, v, valueType, null, null);
+		});
 
 		return out;
 	}
@@ -408,11 +408,18 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 			if (value != null && shouldUseExpandedParams(pMeta)) {
 				// Transformed object array bean properties may be transformed resulting in ArrayLists,
 				// so we need to check type if we think it's an array.
-				Iterator i = (sMeta.isCollection() || value instanceof Collection) ? ((Collection)value).iterator() : iterator(value);
-				while (i.hasNext()) {
-					addAmp.ifSet(()->out.cr(indent).append('&')).set();
-					out.appendObject(key, true).append('=');
-					super.serializeAnything(out, i.next(), cMeta.getElementType(), key, pMeta);
+				if (sMeta.isCollection() || value instanceof Collection) {
+					((Collection<?>)value).forEach(x -> {
+						addAmp.ifSet(()->out.cr(indent).append('&')).set();
+						out.appendObject(key, true).append('=');
+						super.serializeAnything(out, x, cMeta.getElementType(), key, pMeta);
+					});
+				} else /* array */ {
+					for (int i = 0; i < Array.getLength(value); i++) {
+						addAmp.ifSet(()->out.cr(indent).append('&')).set();
+						out.appendObject(key, true).append('=');
+						super.serializeAnything(out, Array.get(value, i), cMeta.getElementType(), key, pMeta);
+					}
 				}
 			} else {
 				addAmp.ifSet(()->out.cr(indent).append('&')).set();

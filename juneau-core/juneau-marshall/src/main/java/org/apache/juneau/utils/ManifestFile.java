@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 import java.net.*;
-import java.util.*;
 import java.util.jar.*;
 
 import org.apache.juneau.collections.*;
@@ -114,15 +113,13 @@ public class ManifestFile extends JsonMap {
 	}
 
 	private void load(Manifest mf) {
-		for (Map.Entry<Object,Object> e : mf.getMainAttributes().entrySet())
-			put(e.getKey().toString(), e.getValue().toString());
+		mf.getMainAttributes().forEach((k,v) -> put(k.toString(), v.toString()));
 	}
 
 	@Override /* Object */
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		for (Map.Entry<String,Object> e : entrySet())
-			sb.append(e.getKey()).append(": ").append(e.getValue());
+		forEach((k,v) -> sb.append(k).append(": ").append(v));
 		return sb.toString();
 	}
 }

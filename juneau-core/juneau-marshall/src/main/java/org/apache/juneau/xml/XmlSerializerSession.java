@@ -338,37 +338,30 @@ public class XmlSerializerSession extends WriterSerializerSession {
 				bm = toBeanMap(o);
 			} else if (aType.isDelegate()) {
 				ClassMeta<?> innerType = ((Delegate<?>)o).getClassMeta();
-				Namespace ns = getXmlClassMeta(innerType).getNamespace();
-				if (ns != null) {
-					if (ns.uri != null)
-						addNamespace(ns);
+				Value<Namespace >ns = Value.of(getXmlClassMeta(innerType).getNamespace());
+				if (ns.isPresent()) {
+					if (ns.get().uri != null)
+						addNamespace(ns.get());
 					else
-						ns = null;
+						ns.getAndUnset();
 				}
 
 				if (innerType.isBean()) {
-					for (BeanPropertyMeta bpm : innerType.getBeanMeta().getPropertyMetas()) {
-						if (bpm.canRead()) {
-							ns = getXmlBeanPropertyMeta(bpm).getNamespace();
-							if (ns != null && ns.uri != null)
-								addNamespace(ns);
-						}
-					}
-
+					innerType.getBeanMeta().forEachProperty(x -> x.canRead(), x -> {
+						ns.set(getXmlBeanPropertyMeta(x).getNamespace());
+						if (ns.isPresent() && ns.get().uri != null)
+							addNamespace(ns.get());
+					});
 				} else if (innerType.isMap()) {
-					for (Object o2 : ((Map<?,?>)o).values())
-						findNsfMappings(o2);
+					((Map<?,?>)o).forEach((k,v) -> findNsfMappings(v));
 				} else if (innerType.isCollection()) {
-					for (Object o2 : ((Collection<?>)o))
-						findNsfMappings(o2);
+					((Collection<?>)o).forEach(x -> findNsfMappings(x));
 				}
 
 			} else if (aType.isMap()) {
-				for (Object o2 : ((Map<?,?>)o).values())
-					findNsfMappings(o2);
+				((Map<?,?>)o).forEach((k,v) -> findNsfMappings(v));
 			} else if (aType.isCollection()) {
-				for (Object o2 : ((Collection<?>)o))
-					findNsfMappings(o2);
+				((Collection<?>)o).forEach(x -> findNsfMappings(x));
 			} else if (aType.isArray() && ! aType.getElementType().isPrimitive()) {
 				for (Object o2 : ((Object[])o))
 					findNsfMappings(o2);
@@ -768,8 +761,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 						} else /* Map */ {
 							Map m2 = (Map)value;
 							if (m2 != null)
-								for (Map.Entry e : (Set<Map.Entry>)(m2.entrySet()))
-									out.attr(ns, toString(e.getKey()), e.getValue());
+								m2.forEach((k,v) -> out.attr(ns, stringify(k), v));
 						}
 					} else {
 						out.attr(ns, key, value);

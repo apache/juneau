@@ -208,14 +208,14 @@ public class SearchArgs {
 		 * @return This object.
 		 */
 		public Builder sort(Collection<String> sortArgs) {
-			for (String s : sortArgs) {
+			sortArgs.forEach(x -> {
 				boolean isDesc = false;
-				if (endsWith(s, '-', '+')) {
-					isDesc = endsWith(s, '-');
-					s = s.substring(0, s.length()-1);
+				if (endsWith(x, '-', '+')) {
+					isDesc = endsWith(x, '-');
+					x = x.substring(0, x.length()-1);
 				}
-				this.sort.put(s, isDesc);
-			}
+				this.sort.put(x, isDesc);
+			});
 			return this;
 		}
 

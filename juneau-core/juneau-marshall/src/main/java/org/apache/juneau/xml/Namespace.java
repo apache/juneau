@@ -143,9 +143,9 @@ public final class Namespace {
 			int i = 0;
 			for (Object o2 : c){
 				if (o2 instanceof Namespace)
-					n[i] = (Namespace)o2;
+					n[i++] = (Namespace)o2;
 				else if (o2 instanceof CharSequence)
-					n[i] = create(o2.toString());
+					n[i++] = create(o2.toString());
 				else
 					throw runtimeException("Invalid type passed to NamespaceFactory.createArray: ''{0}''", o);
 			}

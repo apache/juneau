@@ -190,15 +190,15 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					rawTypeMeta = bc.resolveClassMeta(last(lp), innerField.getGenericType(), typeVarImpls);
 					isUri |= (rawTypeMeta.isUri());
 				}
-				for (Beanp p : lp) {
-					if (! p.properties().isEmpty())
-						properties = split(p.properties());
-					addAll(bdClasses, p.dictionary());
-					if (! p.ro().isEmpty())
-						readOnly = Boolean.valueOf(p.ro());
-					if (! p.wo().isEmpty())
-						writeOnly = Boolean.valueOf(p.wo());
-				}
+				lp.forEach(x -> {
+					if (! x.properties().isEmpty())
+						properties = split(x.properties());
+					addAll(bdClasses, x.dictionary());
+					if (! x.ro().isEmpty())
+						readOnly = Boolean.valueOf(x.ro());
+					if (! x.wo().isEmpty())
+						writeOnly = Boolean.valueOf(x.wo());
+				});
 				bc.forEachAnnotation(Swap.class, innerField, x -> true, x -> swap = getPropertySwap(x));
 				isUri |= bc.firstAnnotation(Uri.class, innerField, x->true) != null;
 			}
@@ -209,15 +209,15 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				if (rawTypeMeta == null)
 					rawTypeMeta = bc.resolveClassMeta(last(lp), getter.getGenericReturnType(), typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || bc.hasAnnotation(Uri.class, getter));
-				for (Beanp p : lp) {
-					if (properties != null && ! p.properties().isEmpty())
-						properties = split(p.properties());
-					addAll(bdClasses, p.dictionary());
-					if (! p.ro().isEmpty())
-						readOnly = Boolean.valueOf(p.ro());
-					if (! p.wo().isEmpty())
-						writeOnly = Boolean.valueOf(p.wo());
-				}
+				lp.forEach(x -> {
+					if (properties != null && ! x.properties().isEmpty())
+						properties = split(x.properties());
+					addAll(bdClasses, x.dictionary());
+					if (! x.ro().isEmpty())
+						readOnly = Boolean.valueOf(x.ro());
+					if (! x.wo().isEmpty())
+						writeOnly = Boolean.valueOf(x.wo());
+				});
 				bc.forEachAnnotation(Swap.class, getter, x -> true, x -> swap = getPropertySwap(x));
 			}
 
@@ -227,17 +227,17 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				if (rawTypeMeta == null)
 					rawTypeMeta = bc.resolveClassMeta(last(lp), setter.getGenericParameterTypes()[0], typeVarImpls);
 				isUri |= (rawTypeMeta.isUri() || bc.hasAnnotation(Uri.class, setter));
-				for (Beanp p : lp) {
+				lp.forEach(x -> {
 					if (swap == null)
-						swap = getPropertySwap(p);
-					if (properties != null && ! p.properties().isEmpty())
-						properties = split(p.properties());
-					addAll(bdClasses, p.dictionary());
-					if (! p.ro().isEmpty())
-						readOnly = Boolean.valueOf(p.ro());
-					if (! p.wo().isEmpty())
-						writeOnly = Boolean.valueOf(p.wo());
-				}
+						swap = getPropertySwap(x);
+					if (properties != null && ! x.properties().isEmpty())
+						properties = split(x.properties());
+					addAll(bdClasses, x.dictionary());
+					if (! x.ro().isEmpty())
+						readOnly = Boolean.valueOf(x.ro());
+					if (! x.wo().isEmpty())
+						writeOnly = Boolean.valueOf(x.wo());
+				});
 				bc.forEachAnnotation(Swap.class, setter, x -> true, x -> swap = getPropertySwap(x));
 			}
 
@@ -316,7 +316,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 			return new BeanPropertyMeta(this);
 		}
 
-		private ObjectSwap getPropertySwap(Beanp p) throws Exception {
+		private ObjectSwap getPropertySwap(Beanp p) {
 			if (! p.format().isEmpty())
 				return BeanCreator.of(ObjectSwap.class).type(StringFormatSwap.class).arg(String.class, p.format()).run();
 			return null;
@@ -630,8 +630,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					Collection c = (Collection)o;
 					List l = list(c.size());
 					ClassMeta childType = rawTypeMeta.getElementType();
-					for (Object cc : c)
-						l.add(applyChildPropertiesFilter(session, childType, cc));
+					c.forEach(x -> l.add(applyChildPropertiesFilter(session, childType, x)));
 					return l;
 				} else {
 					return applyChildPropertiesFilter(session, rawTypeMeta, o);
@@ -728,15 +727,13 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 							if (propertyClass.isInstance(valueMap)) {
 								if (! valueType.isObject()) {
-									boolean needsConversion = false;
-									for (Map.Entry e : (Set<Map.Entry>)valueMap.entrySet()) {
-										Object v = e.getValue();
+									Flag needsConversion = Flag.create();
+									valueMap.forEach((k,v) -> {
 										if (v != null && ! valueType.getInnerClass().isInstance(v)) {
-											needsConversion = true;
-											break;
+											needsConversion.set();
 										}
-									}
-									if (needsConversion)
+									});
+									if (needsConversion.isSet())
 										valueMap = (Map)session.convertToType(valueMap, rawTypeMeta);
 								}
 								invokeSetter(bean, pName, valueMap);
@@ -753,13 +750,12 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					}
 
 					// Set the values.
-					for (Map.Entry e : (Set<Map.Entry>)valueMap.entrySet()) {
-						Object k = e.getKey();
-						Object v = e.getValue();
+					Map propMap2 = propMap;
+					valueMap.forEach((k,v) -> {
 						if (! valueType.isObject())
 							v = session.convertToType(v, valueType);
-						propMap.put(k, v);
-					}
+						propMap2.put(k, v);
+					});
 					if (setter != null || field != null)
 						invokeSetter(bean, pName, propMap);
 
@@ -810,11 +806,12 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					}
 
 					// Set the values.
-					for (Object v : valueList) {
+					Collection propList2 = propList;
+					valueList.forEach(x -> {
 						if (! elementType.isObject())
-							v = session.convertToType(v, elementType);
-						propList.add(v);
-					}
+							x = session.convertToType(x, elementType);
+						propList2.add(x);
+					});
 
 				} else {
 					if (swap != null && value != null && swap.getSwapClass().isParentOf(value.getClass())) {
@@ -904,8 +901,7 @@ public final class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		if (isDyna) {
 			if (extraKeys != null && getter != null && ! isDynaGetterMap) {
 				Map<String,Object> m = map();
-				for (String key : (Collection<String>)extraKeys.invoke(bean))
-					m.put(key, getter.invoke(bean, key));
+				((Collection<String>)extraKeys.invoke(bean)).forEach(x -> safeRun(()->m.put(x, getter.invoke(bean, x))));
 				return m;
 			}
 			if (getter != null && isDynaGetterMap)

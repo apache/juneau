@@ -322,11 +322,9 @@ public abstract class Context implements AnnotationProvider {
 		 * @return <jk>true</jk> if any of the annotations/appliers can be applied to this builder.
 		 */
 		public boolean canApply(AnnotationWorkList work) {
-			for (AnnotationWork w : work)
-				for (Object b : builders)
-					if (w.canApply(b))
-						return true;
-			return false;
+			Flag f = Flag.create();
+			work.forEach(x -> builders.forEach(b -> f.setIf(x.canApply(b))));
+			return f.isSet();
 		}
 
 		/**
@@ -360,9 +358,7 @@ public abstract class Context implements AnnotationProvider {
 		@FluentSetter
 		public Builder apply(AnnotationWorkList work) {
 			applied.addAll(work);
-			for (AnnotationWork w : work)
-				for (Object b : builders)
-					w.apply(b);
+			work.forEach(x -> builders.forEach(y -> x.apply(y)));
 			return this;
 		}
 
@@ -847,7 +843,7 @@ public abstract class Context implements AnnotationProvider {
 
 		ReflectionMap.Builder<Annotation> rmb = ReflectionMap.create(Annotation.class);
 
-		for (Annotation a : annotations) {
+		annotations.forEach(a -> {
 			try {
 				ClassInfo ci = ClassInfo.of(a.getClass());
 
@@ -870,7 +866,7 @@ public abstract class Context implements AnnotationProvider {
 			} catch (Exception e) {
 				throw new ConfigException(e, "Invalid annotation @{0} used in BEAN_annotations property.", className(a));
 			}
-		}
+		});
 		this.annotationMap = rmb.build();
 		boolean disabled = Boolean.getBoolean("juneau.disableAnnotationCaching");
 		classAnnotationCache = new TwoKeyConcurrentCache<>(disabled, (k1,k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));

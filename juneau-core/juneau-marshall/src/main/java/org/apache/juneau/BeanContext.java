@@ -1064,8 +1064,7 @@ public class BeanContext extends Context {
 		 */
 		@FluentSetter
 		public Builder beanProperties(Map<String,Object> values) {
-			for (Map.Entry<String,Object> e : values.entrySet())
-				annotations(BeanAnnotation.create(e.getKey()).p(stringify(e.getValue())).build());
+			values.forEach((k,v) -> annotations(BeanAnnotation.create(k).p(stringify(v)).build()));
 			return this;
 		}
 
@@ -1234,8 +1233,7 @@ public class BeanContext extends Context {
 		 */
 		@FluentSetter
 		public Builder beanPropertiesExcludes(Map<String,Object> values) {
-			for (Map.Entry<String,Object> e : values.entrySet())
-				annotations(BeanAnnotation.create(e.getKey()).xp(stringify(e.getValue())).build());
+			values.forEach((k,v) -> annotations(BeanAnnotation.create(k).xp(stringify(v)).build()));
 			return this;
 		}
 
@@ -1402,8 +1400,7 @@ public class BeanContext extends Context {
 		 */
 		@FluentSetter
 		public Builder beanPropertiesReadOnly(Map<String,Object> values) {
-			for (Map.Entry<String,Object> e : values.entrySet())
-				annotations(BeanAnnotation.create(e.getKey()).ro(stringify(e.getValue())).build());
+			values.forEach((k,v) -> annotations(BeanAnnotation.create(k).ro(stringify(v)).build()));
 			return this;
 		}
 
@@ -1571,8 +1568,7 @@ public class BeanContext extends Context {
 		 */
 		@FluentSetter
 		public Builder beanPropertiesWriteOnly(Map<String,Object> values) {
-			for (Map.Entry<String,Object> e : values.entrySet())
-				annotations(BeanAnnotation.create(e.getKey()).wo(stringify(e.getValue())).build());
+			values.forEach((k,v) -> annotations(BeanAnnotation.create(k).wo(stringify(v)).build()));
 			return this;
 		}
 
@@ -2372,8 +2368,7 @@ public class BeanContext extends Context {
 		 */
 		@FluentSetter
 		public Builder implClasses(Map<Class<?>,Class<?>> values) {
-			for (Map.Entry<Class<?>,Class<?>> e : values.entrySet())
-				annotations(MarshalledAnnotation.create(e.getKey()).implClass(e.getValue()).build());
+			values.forEach((k,v) -> annotations(MarshalledAnnotation.create(k).implClass(v).build()));
 			return this;
 		}
 
@@ -3584,11 +3579,11 @@ public class BeanContext extends Context {
 		}
 
 		LinkedList<ObjectSwap<?,?>> _swaps = new LinkedList<>();
-		for (Object o : optional(swaps).orElse(emptyList())) {
-			if (o instanceof ObjectSwap) {
-				_swaps.add((ObjectSwap<?,?>)o);
+		swaps.forEach(x -> {
+			if (x instanceof ObjectSwap) {
+				_swaps.add((ObjectSwap<?,?>)x);
 			} else {
-				ClassInfo ci = ClassInfo.of((Class<?>)o);
+				ClassInfo ci = ClassInfo.of((Class<?>)x);
 				if (ci.isChildOf(ObjectSwap.class))
 					_swaps.add(BeanCreator.of(ObjectSwap.class).type(ci).run());
 				else if (ci.isChildOf(Surrogate.class))
@@ -3596,7 +3591,7 @@ public class BeanContext extends Context {
 				else
 					throw runtimeException("Invalid class {0} specified in BeanContext.swaps property.  Must be a subclass of ObjectSwap or Surrogate.", ci.inner());
 			}
-		}
+		});
 		swapArray = _swaps.toArray(new ObjectSwap[_swaps.size()]);
 
 		cmCache = new ConcurrentHashMap<>();

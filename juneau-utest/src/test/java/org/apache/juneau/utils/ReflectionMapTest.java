@@ -369,20 +369,4 @@ public class ReflectionMapTest {
 		assertFalse(RM_G.find(C1.class.getField("f1"), null).isPresent());
 		assertFalse(RM_G.find(D1.class.getConstructor(), null).isPresent());
 	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Split names test
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Test
-	public void h01_splitNamesTest() throws Exception {
-		assertObject(ReflectionMap.splitNames("foo")).asJson().is("['foo']");
-		assertObject(ReflectionMap.splitNames(" foo ")).asJson().is("['foo']");
-		assertObject(ReflectionMap.splitNames("foo,bar")).asJson().is("['foo','bar']");
-		assertObject(ReflectionMap.splitNames(" foo , bar ")).asJson().is("['foo','bar']");
-		assertObject(ReflectionMap.splitNames("foo(),bar()")).asJson().is("['foo()','bar()']");
-		assertObject(ReflectionMap.splitNames(" foo() , bar() ")).asJson().is("['foo()','bar()']");
-		assertObject(ReflectionMap.splitNames("foo(bar,baz),bar(baz,qux)")).asJson().is("['foo(bar,baz)','bar(baz,qux)']");
-		assertObject(ReflectionMap.splitNames(" foo(bar,baz) , bar(baz,qux) ")).asJson().is("['foo(bar,baz)','bar(baz,qux)']");
-	}
 }

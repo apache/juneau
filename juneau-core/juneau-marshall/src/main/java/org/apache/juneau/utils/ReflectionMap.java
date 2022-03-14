@@ -20,6 +20,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
 
 /**
  * Allows arbitrary objects to be mapped to classes and methods base on class/method name keys.
@@ -198,7 +199,7 @@ public class ReflectionMap<V> {
 			if (isEmpty(key))
 				throw runtimeException("Invalid reflection signature: [{0}]", key);
 			try {
-				for (String k : ReflectionMap.splitNames(key)) {
+				splitNames(key, k -> {
 					if (k.endsWith(")")) {
 						int i = k.substring(0, k.indexOf('(')).lastIndexOf('.');
 						if (i == -1 || isUpperCase(k.charAt(i+1))) {
@@ -218,7 +219,7 @@ public class ReflectionMap<V> {
 							fieldEntries.add(new FieldEntry<>(k, value));
 						}
 					}
-				}
+				});
 			} catch (IndexOutOfBoundsException e) {
 				throw runtimeException("Invalid reflection signature: [{0}]", key);
 			}
@@ -266,27 +267,25 @@ public class ReflectionMap<V> {
 		this.constructorEntries = b.constructorEntries.toArray(new ConstructorEntry[b.constructorEntries.size()]);
 	}
 
-	static List<String> splitNames(String key) {
-		if (key.indexOf(',') == -1)
-			return Collections.singletonList(key.trim());
-		List<String> l = list();
-
-		int m = 0;
-		boolean escaped = false;
-		for (int i = 0; i < key.length(); i++) {
-			char c = key.charAt(i);
-			if (c == '(')
-				escaped = true;
-			else if (c == ')')
-				escaped = false;
-			else if (c == ',' && ! escaped) {
-				l.add(key.substring(m, i).trim());
-				m = i+1;
+	static void splitNames(String key, Consumer<String> consumer) {
+		if (key.indexOf(',') == -1) {
+			consumer.accept(key);
+		} else {
+			int m = 0;
+			boolean escaped = false;
+			for (int i = 0; i < key.length(); i++) {
+				char c = key.charAt(i);
+				if (c == '(')
+					escaped = true;
+				else if (c == ')')
+					escaped = false;
+				else if (c == ',' && ! escaped) {
+					consumer.accept(key.substring(m, i).trim());
+					m = i+1;
+				}
 			}
+			consumer.accept(key.substring(m).trim());
 		}
-		l.add(key.substring(m).trim());
-
-		return l;
 	}
 
 	/**

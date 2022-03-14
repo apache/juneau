@@ -174,6 +174,17 @@ public class Value<T> {
 	}
 
 	/**
+	 * Returns the value and then unsets it.
+	 *
+	 * @return The value before it was unset.
+	 */
+	public T getAndUnset() {
+		T t2 = t;
+		t = null;
+		return t2;
+	}
+
+	/**
 	 * Returns <jk>true</jk> if the value is set.
 	 *
 	 * @return <jk>true</jk> if the value is set.

@@ -18,7 +18,6 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
-
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 
@@ -182,20 +181,22 @@ public class VarResolverSession {
 		return false;
 	}
 
-	@SuppressWarnings("rawtypes")
-	private static boolean containsVars(Collection c) {
-		for (Object o : c)
-			if (o instanceof CharSequence && o.toString().contains("$"))
-				return true;
-		return false;
+	private static boolean containsVars(Collection<?> c) {
+		Flag f = Flag.create();
+		c.forEach(x -> {
+			if (x instanceof CharSequence && x.toString().contains("$"))
+				f.set();
+		});
+		return f.isSet();
 	}
 
-	@SuppressWarnings("rawtypes")
-	private static boolean containsVars(Map m) {
-		for (Object o : m.values())
-			if (o instanceof CharSequence && o.toString().contains("$"))
-				return true;
-		return false;
+	private static boolean containsVars(Map<?,?> m) {
+		Flag f = Flag.create();
+		m.forEach((k,v) -> {
+			if (v instanceof CharSequence && v.toString().contains("$"))
+				f.set();
+		});
+		return f.isSet();
 	}
 
 	/*

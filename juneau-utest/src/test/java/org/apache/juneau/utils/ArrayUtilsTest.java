@@ -25,16 +25,6 @@ import org.junit.*;
 public class ArrayUtilsTest {
 
 	//====================================================================================================
-	// iterator(T[])
-	//====================================================================================================
-	@Test
-	public void testArrayIterator() throws Exception {
-		assertObject(iterator(new Object[]{1,2,3})).asJson().is("[1,2,3]");
-		assertObject(iterator(new int[]{1,2,3})).asJson().is("[1,2,3]");
-		assertObject(iterator(null)).asJson().is("[]");
-	}
-
-	//====================================================================================================
 	// append(T[], T...)
 	//====================================================================================================
 	@Test
@@ -68,21 +58,6 @@ public class ArrayUtilsTest {
 
 		s = new String[]{"a"};
 		Iterator<String> i = asSet(s).iterator();
-		assertEquals("a", i.next());
-
-		assertThrown(()->i.remove()).isType(UnsupportedOperationException.class);
-		assertThrown(()->i.next()).isType(NoSuchElementException.class);
-	}
-
-	//====================================================================================================
-	// iterator(T[])
-	//====================================================================================================
-	@Test
-	public void testIterator() throws Exception {
-		String[] s = null;
-
-		s = new String[]{"a"};
-		Iterator<Object> i = iterator(s);
 		assertEquals("a", i.next());
 
 		assertThrown(()->i.remove()).isType(UnsupportedOperationException.class);

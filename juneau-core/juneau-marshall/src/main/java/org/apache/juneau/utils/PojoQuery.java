@@ -276,29 +276,25 @@ public final class PojoQuery {
 		ClassMeta cm = session.getClassMetaForObject(o);
 		if (cm.isCollection()) {
 			JsonList l = new DelegateList(session.getClassMetaForObject(o));
-			for (Object o2 : (Collection)o)
-				l.add(replaceWithMutables(o2));
+			((Collection)o).forEach(x -> l.add(replaceWithMutables(x)));
 			return l;
 		}
 		if (cm.isMap() && o instanceof BeanMap) {
 			BeanMap bm = (BeanMap)o;
 			DelegateBeanMap dbm = new DelegateBeanMap(bm.getBean(), session);
-			for (Object key : bm.keySet())
-				dbm.addKey(key.toString());
+			bm.forEach((k,v) -> dbm.addKey(k.toString()));
 			return dbm;
 		}
 		if (cm.isBean()) {
 			BeanMap bm = session.toBeanMap(o);
 			DelegateBeanMap dbm = new DelegateBeanMap(bm.getBean(), session);
-			for (Object key : bm.keySet())
-				dbm.addKey(key.toString());
+			bm.forEach((k,v) -> dbm.addKey(k.toString()));
 			return dbm;
 		}
 		if (cm.isMap()) {
 			Map m = (Map)o;
 			DelegateMap dm = new DelegateMap(m, session);
-			for (Map.Entry e : (Set<Map.Entry>)m.entrySet())
-				dm.put(e.getKey().toString(), e.getValue());
+			m.forEach((k,v) -> dm.put(k.toString(), v));
 			return dm;
 		}
 		if (cm.isArray()) {
@@ -411,9 +407,10 @@ public final class PojoQuery {
 		Map<String,IMatcher> entryMatchers = new HashMap<>();
 
 		public MapMatcher(Map query, boolean ignoreCase) {
-			for (Map.Entry e : (Set<Map.Entry>)query.entrySet())
-				if (e.getKey() != null && e.getValue() != null)
-					entryMatchers.put(e.getKey().toString(), new ObjectMatcher(e.getValue().toString(), ignoreCase));
+			query.forEach((k,v) -> {
+				if (k != null && v != null)
+					entryMatchers.put(k.toString(), new ObjectMatcher(v.toString(), ignoreCase));
+			});
 		}
 
 		@Override /* IMatcher */
@@ -962,9 +959,9 @@ public final class PojoQuery {
 			List<Pattern> ands = new LinkedList<>();
 			List<Pattern> nots = new LinkedList<>();
 
-			for (String arg : breakUpTokens(searchPattern)) {
-				char prefix = arg.charAt(0);
-				String token = arg.substring(1);
+			breakUpTokens(searchPattern).forEach(x -> {
+				char prefix = x.charAt(0);
+				String token = x.substring(1);
 
 				token = token.replaceAll("([\\?\\*\\+\\\\\\[\\]\\{\\}\\(\\)\\^\\$\\.])", "\\\\$1");
 				token = token.replace("\u9997", ".*");
@@ -987,7 +984,7 @@ public final class PojoQuery {
 					ands.add(p);
 				else if (prefix == '-')
 					nots.add(p);
-			}
+			});
 			orPatterns = ors.toArray(new Pattern[ors.size()]);
 			andPatterns = ands.toArray(new Pattern[ands.size()]);
 			notPatterns = nots.toArray(new Pattern[nots.size()]);

@@ -362,18 +362,18 @@ public class BeanTraverseSession extends BeanSession {
 	 */
 	protected String getStack(boolean full) {
 		StringBuilder sb = new StringBuilder();
-		for (StackElement e : stack) {
+		stack.forEach(x -> {
 			if (full) {
 				sb.append("\n\t");
-				for (int i = 1; i < e.depth; i++)
+				for (int i = 1; i < x.depth; i++)
 					sb.append("  ");
-				if (e.depth > 0)
+				if (x.depth > 0)
 					sb.append("->");
-				sb.append(e.toString(false));
+				sb.append(x.toString(false));
 			} else {
-				sb.append(" > ").append(e.toString(true));
+				sb.append(" > ").append(x.toString(true));
 			}
-		}
+		});
 		return sb.toString();
 	}
 

@@ -729,19 +729,19 @@ public class BeanSession extends ContextSession {
 					if (from.isMap()) {
 						Map m = to.canCreateNewInstance(outer) ? (Map)to.newInstance(outer) : newGenericMap(to);
 						ClassMeta keyType = to.getKeyType(), valueType = to.getValueType();
-						for (Map.Entry e : (Set<Map.Entry>)((Map)value).entrySet()) {
-							Object k = e.getKey();
+						((Map<?,?>)value).forEach((k,v) -> {
+							Object k2 = k;
 							if (keyType.isNotObject()) {
 								if (keyType.isString() && k.getClass() != Class.class)
-									k = k.toString();
+									k2 = k.toString();
 								else
-									k = convertToMemberType(m, k, keyType);
+									k2 = convertToMemberType(m, k, keyType);
 							}
-							Object v = e.getValue();
+							Object v2 = v;
 							if (valueType.isNotObject())
-								v = convertToMemberType(m, v, valueType);
-							m.put(k, v);
-						}
+								v2 = convertToMemberType(m, v, valueType);
+							m.put(k2, v2);
+						});
 						return (T)m;
 					} else if (!to.canCreateNewInstanceFromString(outer)) {
 						JsonMap m = JsonMap.ofJson(value.toString());
@@ -763,8 +763,7 @@ public class BeanSession extends ContextSession {
 						for (Object o : (Object[])value)
 							l.add(elementType.isObject() ? o : convertToMemberType(l, o, elementType));
 					else if (from.isCollection())
-						for (Object o : (Collection)value)
-							l.add(elementType.isObject() ? o : convertToMemberType(l, o, elementType));
+						((Collection)value).forEach(x -> l.add(elementType.isObject() ? x : convertToMemberType(l, x, elementType)));
 					else if (from.isMap())
 						l.add(elementType.isObject() ? value : convertToMemberType(l, value, elementType));
 					else if (isNullOrEmpty(value))
@@ -774,8 +773,7 @@ public class BeanSession extends ContextSession {
 						if (isJsonArray(s, false)) {
 							JsonList l2 = JsonList.ofJson(s);
 							l2.setBeanSession(this);
-							for (Object o : l2)
-								l.add(elementType.isObject() ? o : convertToMemberType(l, o, elementType));
+							l2.forEach(x -> l.add(elementType.isObject() ? x : convertToMemberType(l, x, elementType)));
 						} else {
 							throw new InvalidDataConversionException(value.getClass(), to, null);
 						}
@@ -957,22 +955,23 @@ public class BeanSession extends ContextSession {
 			return null;
 		ClassMeta<?> componentType = type.isArgs() ? object() : type.getElementType();
 		Object array = Array.newInstance(componentType.getInnerClass(), list.size());
-		int i = 0;
-		for (Object o : list) {
-			if (! type.getInnerClass().isInstance(o)) {
-				if (componentType.isArray() && o instanceof Collection)
-					o = toArray(componentType, (Collection<?>)o);
-				else if (o == null && componentType.isPrimitive())
-					o = componentType.getPrimitiveDefault();
+		IntValue i = IntValue.create();
+		list.forEach(x -> {
+			Object x2 = x;
+			if (! type.getInnerClass().isInstance(x)) {
+				if (componentType.isArray() && x instanceof Collection)
+					x2 = toArray(componentType, (Collection<?>)x);
+				else if (x == null && componentType.isPrimitive())
+					x2 = componentType.getPrimitiveDefault();
 				else
-					o = convertToType(o, componentType);
+					x2 = convertToType(x, componentType);
 			}
 			try {
-				Array.set(array, i++, o);
+				Array.set(array, i.getAndIncrement(), x2);
 			} catch (IllegalArgumentException e) {
 				throw e;
 			}
-		}
+		});
 		return array;
 	}
 

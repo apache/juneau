@@ -492,31 +492,27 @@ public final class ClassMeta<T> implements Type {
 				}
 			}
 
-			for (MethodInfo m : ci.getDeclaredMethods()) {
-				if (m.hasAnnotation(bc, Example.class)) {
-					if (! (m.isStatic() && m.hasFuzzyParamTypes(BeanSession.class) && ci.isParentOf(m.getReturnType().inner())))
-						throw new ClassMetaRuntimeException(c, "@Example used on invalid method ''{0}''.  Must be static and return an instance of the declaring class.", m.toString());
-					m.setAccessible();
-					exampleMethod = m.inner();
-				}
-			}
+			ci.forEachDeclaredMethod(m -> m.hasAnnotation(bc, Example.class), m -> {
+				if (! (m.isStatic() && m.hasFuzzyParamTypes(BeanSession.class) && ci.isParentOf(m.getReturnType().inner())))
+					throw new ClassMetaRuntimeException(c, "@Example used on invalid method ''{0}''.  Must be static and return an instance of the declaring class.", m.toString());
+				m.setAccessible();
+				exampleMethod = m.inner();
+			});
 
 			// Note:  Primitive types are normally abstract.
 			isAbstract = ci.isAbstract() && ci.isNotPrimitive();
 
 			// Find constructor(String) method if present.
-			for (ConstructorInfo cs : ci.getPublicConstructors()) {
-				if (cs.isPublic() && cs.isNotDeprecated()) {
-					List<ClassInfo> pt = cs.getParamTypes();
-					if (pt.size() == (isMemberClass ? 1 : 0) && c != Object.class && ! isAbstract) {
-						noArgConstructor = cs;
-					} else if (pt.size() == (isMemberClass ? 2 : 1)) {
-						ClassInfo arg = pt.get(isMemberClass ? 1 : 0);
-						if (arg.is(String.class))
-							stringConstructor = cs;
-					}
+			ci.forEachPublicConstructor(cs -> cs.isPublic() && cs.isNotDeprecated(), cs -> {
+				List<ClassInfo> pt = cs.getParamTypes();
+				if (pt.size() == (isMemberClass ? 1 : 0) && c != Object.class && ! isAbstract) {
+					noArgConstructor = cs;
+				} else if (pt.size() == (isMemberClass ? 2 : 1)) {
+					ClassInfo arg = pt.get(isMemberClass ? 1 : 0);
+					if (arg.is(String.class))
+						stringConstructor = cs;
 				}
-			}
+			});
 
 			primitiveDefault = ci.getPrimitiveDefault();
 

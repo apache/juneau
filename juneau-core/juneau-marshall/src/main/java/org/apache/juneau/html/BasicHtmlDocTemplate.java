@@ -14,7 +14,6 @@ package org.apache.juneau.html;
 
 import static org.apache.juneau.html.AsideFloat.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**

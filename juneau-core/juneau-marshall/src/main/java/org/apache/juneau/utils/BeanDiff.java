@@ -203,7 +203,7 @@ public class BeanDiff {
 		BeanMap<?> bm1 = first == null ? null : bc.toBeanMap(first);
 		BeanMap<?> bm2 = second == null ? null : bc.toBeanMap(second);
 		Set<String> keys = bm1 != null ? bm1.keySet() : bm2.keySet();
-		for (String k : keys) {
+		keys.forEach(k -> {
 			if ((include == null || include.contains(k)) && (exclude == null || ! exclude.contains(k))) {
 				Object o1 = bm1 == null ? null : bm1.get(k);
 				Object o2 = bm2 == null ? null : bm2.get(k);
@@ -214,7 +214,7 @@ public class BeanDiff {
 						v2.put(k, o2);
 				}
 			}
-		}
+		});
 	}
 
 	/**

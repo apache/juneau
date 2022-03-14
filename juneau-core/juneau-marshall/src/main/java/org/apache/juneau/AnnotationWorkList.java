@@ -103,8 +103,7 @@ public class AnnotationWorkList extends ArrayList<AnnotationWork> {
 	 * @return This object.
 	 */
 	public AnnotationWorkList add(AnnotationList annotations) {
-		for (AnnotationInfo<?> ai : annotations.sort())
-			ai.getApplies(vrs, x -> add(ai, x));
+		annotations.sort().forEach(x ->  x.getApplies(vrs, y -> add(x, y)));
 		return this;
 	}
 }

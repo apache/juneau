@@ -81,12 +81,12 @@ public final class MarshalledFilter {
 		 */
 		public Builder applyAnnotations(List<Marshalled> annotations) {
 
-			for (Marshalled b : annotations) {
-				if (isNotVoid(b.implClass()))
-					implClass(b.implClass());
-				if (isNotEmpty(b.example()))
-					example(b.example());
-			}
+			annotations.forEach(x -> {
+				if (isNotVoid(x.implClass()))
+					implClass(x.implClass());
+				if (isNotEmpty(x.example()))
+					example(x.example());
+			});
 			return this;
 		}
 

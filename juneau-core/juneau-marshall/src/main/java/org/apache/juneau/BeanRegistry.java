@@ -56,11 +56,9 @@ public class BeanRegistry {
 		this.beanContext = beanContext;
 		this.map = new ConcurrentHashMap<>();
 		this.reverseMap = new ConcurrentHashMap<>();
-		for (Class<?> c : beanContext.getBeanDictionary())
-			addClass(c);
+		beanContext.getBeanDictionary().forEach(c -> addClass(c));
 		if (parent != null)
-			for (Map.Entry<String,ClassMeta<?>> e : parent.map.entrySet())
-				addToMap(e.getKey(), e.getValue());
+			parent.map.forEach((k,v) -> addToMap(k, v));
 		for (Class<?> c : classes)
 			addClass(c);
 		isEmpty = map.isEmpty();
@@ -71,19 +69,17 @@ public class BeanRegistry {
 			if (c != null) {
 				ClassInfo ci = ClassInfo.of(c);
 				if (ci.isChildOf(Collection.class)) {
-					@SuppressWarnings("rawtypes")
-					Collection cc = BeanCreator.of(Collection.class).type(c).run();
-					for (Object o : cc) {
-						if (o instanceof Class)
-							addClass((Class<?>)o);
+					Collection<?> cc = BeanCreator.of(Collection.class).type(c).run();
+					cc.forEach(x -> {
+						if (x instanceof Class)
+							addClass((Class<?>)x);
 						else
 							throw new BeanRuntimeException("Collection class ''{0}'' passed to BeanRegistry does not contain Class objects.", className(c));
-					}
+					});
 				} else if (ci.isChildOf(Map.class)) {
 					Map<?,?> m = BeanCreator.of(Map.class).type(c).run();
-					for (Map.Entry<?,?> e : m.entrySet()) {
-						String typeName = stringify(e.getKey());
-						Object v = e.getValue();
+					m.forEach((k,v) -> {
+						String typeName = stringify(k);
 						ClassMeta<?> val = null;
 						if (v instanceof Type)
 							val = beanContext.getClassMeta((Type)v);
@@ -92,7 +88,7 @@ public class BeanRegistry {
 						else
 							throw new BeanRuntimeException("Class ''{0}'' was passed to BeanRegistry but value of type ''{1}'' found in map is not a Type object.", className(c), className(v));
 						addToMap(typeName, val);
-					}
+					});
 				} else {
 					Value<String> typeName = Value.empty();
 					ci.forEachAnnotation(beanContext, Bean.class, x -> isNotEmpty(x.typeName()), x -> typeName.set(x.typeName()));
@@ -176,8 +172,7 @@ public class BeanRegistry {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append('{');
-		for (Map.Entry<String,ClassMeta<?>> e : map.entrySet())
-			sb.append(e.getKey()).append(":").append(e.getValue().toString(true)).append(", ");
+		map.forEach((k,v) -> sb.append(k).append(":").append(v.toString(true)).append(", "));
 		sb.append('}');
 		return sb.toString();
 	}
