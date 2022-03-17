@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.IOUtils.read;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.collections.JsonMap.*;
 
 import java.io.*;
 import java.net.*;
@@ -711,28 +712,25 @@ public class JettyMicroservice extends Microservice {
 			}
 		}
 
-		for (Map.Entry<String,Object> e : cf.get("Jetty/servletMap").asMap().orElse(JsonMap.EMPTY_MAP).entrySet()) {
+		cf.get("Jetty/servletMap").asMap().orElse(EMPTY_MAP).forEach((k,v) -> {
 			try {
-				ClassInfo c = ClassInfo.of(Class.forName(e.getValue().toString()));
+				ClassInfo c = ClassInfo.of(Class.forName(v.toString()));
 				if (c.isChildOf(Servlet.class)) {
 					Servlet rs = (Servlet)c.newInstance();
-					addServlet(rs, e.getKey());
+					addServlet(rs, k);
 				} else {
-					throw runtimeException("Invalid servlet specified in Jetty/servletMap.  Must be a subclass of Servlet.", e.getValue());
+					throw runtimeException("Invalid servlet specified in Jetty/servletMap.  Must be a subclass of Servlet.", v);
 				}
 			} catch (ClassNotFoundException e1) {
 				throw new ExecutableException(e1);
 			}
-		}
+		});
 
-		for (Map.Entry<String,Object> e : cf.get("Jetty/servletAttributes").asMap().orElse(JsonMap.EMPTY_MAP).entrySet())
-			addServletAttribute(e.getKey(), e.getValue());
+		cf.get("Jetty/servletAttributes").asMap().orElse(EMPTY_MAP).forEach((k,v) -> addServletAttribute(k, v));
 
-		for (Map.Entry<String,Servlet> e : builder.servlets.entrySet())
-			addServlet(e.getValue(), e.getKey());
+		builder.servlets.forEach((k,v) -> addServlet(v, k));
 
-		for (Map.Entry<String,Object> e : builder.servletAttributes.entrySet())
-			addServletAttribute(e.getKey(), e.getValue());
+		builder.servletAttributes.forEach((k,v) -> addServletAttribute(k, v));
 
 		if (System.getProperty("juneau.serverPort") == null)
 			System.setProperty("juneau.serverPort", String.valueOf(availablePort));

@@ -127,8 +127,9 @@ public final class LogParser implements Iterable<LogParser.Entry>, Iterator<LogP
 		try {
 			if (! hasNext())
 				w.append("[EMPTY]");
-			else for (LogParser.Entry le : this)
-				le.append(w);
+			else {
+				forEach(le -> safeRun(()->le.append(w)));
+			}
 		} finally {
 			close();
 		}
@@ -183,8 +184,7 @@ public final class LogParser implements Iterable<LogParser.Entry>, Iterator<LogP
 				i += s.length() + 1;
 			StringBuilder sb = new StringBuilder(i);
 			sb.append(text);
-			for (String s : additionalText)
-				sb.append('\n').append(s);
+			additionalText.forEach(s -> sb.append('\n').append(s));
 			return sb.toString();
 		}
 

@@ -61,8 +61,7 @@ public class HelpCommand extends ConsoleCommand {
 		Map<String,ConsoleCommand> commands = Microservice.getInstance().getConsoleCommands();
 		if (args.size() == 1) {
 			out.println(mb.getString("ListOfAvailableCommands"));
-			for (ConsoleCommand cc : commands.values())
-				out.append("\t").append(cc.getName()).append(" -- ").append(indent(cc.getInfo())).println();
+			commands.forEach((k,v) -> out.append("\t").append(v.getName()).append(" -- ").append(indent(v.getInfo())).println());
 			out.println();
 		} else {
 			ConsoleCommand cc = commands.get(args.getArg(1));
