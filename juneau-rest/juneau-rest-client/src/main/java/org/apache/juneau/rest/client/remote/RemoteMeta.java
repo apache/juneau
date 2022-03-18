@@ -53,9 +53,6 @@ public class RemoteMeta {
 
 		ClassInfo ci = ClassInfo.of(c);
 		List<Remote> remotes = ci.getAnnotations(Remote.class);
-		for (Remote r : remotes)
-			if (! r.path().isEmpty())
-				path = trimSlashes(r.path());
 
 		String versionHeader = "Client-Version", clientVersion = null;
 		HeaderList.Builder headersBuilder = HeaderList.create().resolving();

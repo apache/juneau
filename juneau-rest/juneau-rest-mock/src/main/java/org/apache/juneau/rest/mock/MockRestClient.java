@@ -2286,9 +2286,10 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			sres.set(res);
 
 			HttpResponse response = new BasicHttpResponse(new BasicStatusLine(HttpVersion.HTTP_1_1, res.getStatus(), res.getMessage()));
-			for (Map.Entry<String,String[]> e : res.getHeaders().entrySet())
-				for (String hv : e.getValue())
-					response.addHeader(e.getKey(), hv);
+			res.getHeaders().forEach((k,v) -> {
+				for (String hv : v)
+					response.addHeader(k, hv);
+			});
 
 			return response;
 		} catch (Exception e) {

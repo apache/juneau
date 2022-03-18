@@ -764,11 +764,12 @@ public class MockServletRequest implements HttpServletRequest {
 				queryString = "";
 			else {
 				StringBuilder sb = new StringBuilder();
-				for (Map.Entry<String,String[]> e : queryDataMap.entrySet())
-					if (e.getValue() == null)
-						sb.append(sb.length() == 0 ? "" : "&").append(urlEncode(e.getKey()));
-					else for (String v : e.getValue())
-						sb.append(sb.length() == 0 ? "" : "&").append(urlEncode(e.getKey())).append('=').append(urlEncode(v));
+				queryDataMap.forEach((k,v) -> {
+					if (v == null)
+						sb.append(sb.length() == 0 ? "" : "&").append(urlEncode(k));
+					else for (String v2 : v)
+						sb.append(sb.length() == 0 ? "" : "&").append(urlEncode(k)).append('=').append(urlEncode(v2));
+				});
 				queryString = sb.toString();
 			}
 		}
@@ -989,10 +990,8 @@ public class MockServletRequest implements HttpServletRequest {
 
 		if (req instanceof MockRestRequest) {
 			MockRestRequest mreq = (MockRestRequest)req;
-			for (Map.Entry<String,Object> a : mreq.getAttributeMap().entrySet())
-				attribute(a.getKey(), a.getValue());
-			for (Map.Entry<String,RequestDispatcher> a : mreq.getRequestDispatcherMap().entrySet())
-				requestDispatcher(a.getKey(), a.getValue());
+			mreq.getAttributeMap().forEach((k,v) -> attribute(k, v));
+			mreq.getRequestDispatcherMap().forEach((k,v) -> requestDispatcher(k, v));
 			if (mreq.getCharacterEncoding() != null)
 				characterEncoding(mreq.getCharacterEncoding());
 			if (mreq.getProtocol() != null)

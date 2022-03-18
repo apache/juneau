@@ -7440,8 +7440,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		try {
 			RestRequest req = request(method, uri, isNotEmpty(content));
 			if (headers != null)
-				for (Map.Entry<String,Object> e : JsonMap.ofJson(headers).entrySet())
-					req.header(stringHeader(e.getKey(), stringify(e.getValue())));
+				JsonMap.ofJson(headers).forEach((k,v) -> req.header(stringHeader(k, stringify(v))));
 			if (isNotEmpty(content))
 				req.bodyString(content);
 			return req;
@@ -7740,30 +7739,21 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					rc.parser(parser);
 
 					rm.getHeaders().forEach(x -> rc.header(x));
-
-					for (RemoteOperationArg a : rom.getPathArgs())
-						rc.pathArg(a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer().orElse(partSerializer));
-
-					for (RemoteOperationArg a : rom.getQueryArgs())
-						rc.queryArg(a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
-
-					for (RemoteOperationArg a : rom.getFormDataArgs())
-						rc.formDataArg(a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
-
-					for (RemoteOperationArg a : rom.getHeaderArgs())
-						rc.headerArg(a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty());
+					rom.forEachPathArg(a -> rc.pathArg(a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer().orElse(partSerializer)));
+					rom.forEachQueryArg(a -> rc.queryArg(a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty()));
+					rom.forEachFormDataArg(a -> rc.formDataArg(a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty()));
+					rom.forEachHeaderArg(a -> rc.headerArg(a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty()));
 
 					RemoteOperationArg ba = rom.getBodyArg();
 					if (ba != null)
 						rc.body(args[ba.getIndex()], ba.getSchema());
 
-					if (rom.getRequestArgs().length > 0) {
-						for (RemoteOperationBeanArg rmba : rom.getRequestArgs()) {
+					rom.forEachRequestArg(rmba -> {
 							RequestBeanMeta rbm = rmba.getMeta();
 							Object bean = args[rmba.getIndex()];
 							if (bean != null) {
 								for (RequestBeanPropertyMeta p : rbm.getProperties()) {
-									Object val = p.getGetter().invoke(bean);
+									Object val = safeSupplier(()->p.getGetter().invoke(bean));
 									HttpPartType pt = p.getPartType();
 									String pn = p.getPartName();
 									HttpPartSchema schema = p.getSchema();
@@ -7781,8 +7771,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 									}
 								}
 							}
-						}
-					}
+					});
 
 					RemoteOperationReturn ror = rom.getReturns();
 					if (ror.isFuture()) {
@@ -7825,7 +7814,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		try {
 			Object ret = null;
 			RestResponse res = null;
-			rc.rethrow(RuntimeException.class).rethrow(rom.getExceptions());
+			rc.rethrow(RuntimeException.class);
+			rom.forEachException(x -> rc.rethrow(x));
 			if (ror.getReturnValue() == RemoteReturn.NONE) {
 				res = rc.complete();
 			} else if (ror.getReturnValue() == RemoteReturn.STATUS) {

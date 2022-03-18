@@ -1311,8 +1311,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (! isBean(value))
 			throw runtimeException("Object passed into headersBean(Object) is not a bean.");
 		HeaderList.Builder b = getHeaderDataBuilder();
-		for (Map.Entry<String,Object> e : toBeanMap(value, PropertyNamerDUCS.INSTANCE).entrySet())
-			b.append(createHeader(e.getKey(), e.getValue()));
+		toBeanMap(value, PropertyNamerDUCS.INSTANCE).forEach((k,v) -> b.append(createHeader(k, v)));
 		return this;
 	}
 
@@ -1340,8 +1339,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (! isBean(value))
 			throw runtimeException("Object passed into queryDataBean(Object) is not a bean.");
 		PartList.Builder b = getQueryDataBuilder();
-		for (Map.Entry<String,Object> e : toBeanMap(value).entrySet())
-			b.append(createPart(QUERY, e.getKey(), e.getValue()));
+		toBeanMap(value).forEach((k,v) -> b.append(createPart(QUERY, k, v)));
 		return this;
 	}
 
@@ -1369,8 +1367,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (! isBean(value))
 			throw runtimeException("Object passed into formDataBean(Object) is not a bean.");
 		PartList.Builder b = getFormDataBuilder();
-		for (Map.Entry<String,Object> e : toBeanMap(value).entrySet())
-			b.append(createPart(FORMDATA, e.getKey(), e.getValue()));
+		toBeanMap(value).forEach((k,v) -> b.append(createPart(FORMDATA, k, v)));
 		return this;
 	}
 
@@ -1398,8 +1395,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (! isBean(value))
 			throw runtimeException("Object passed into pathDataBean(Object) is not a bean.");
 		PartList.Builder b = getPathDataBuilder();
-		for (Map.Entry<String,Object> e : toBeanMap(value).entrySet())
-			b.set(createPart(PATH, e.getKey(), e.getValue()));
+		toBeanMap(value).forEach((k,v) -> b.set(createPart(PATH, k, v)));
 		return this;
 	}
 
@@ -1546,9 +1542,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 			{@link PartList} - Converted to a URL-encoded query.
 	 * 	</ul>
 	 * @return This object.
-	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest queryCustom(Object value) throws RestCallException {
+	public RestRequest queryCustom(Object value) {
 		try {
 			String q = null;
 			if (value instanceof Reader)
@@ -1559,7 +1554,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				q = stringify(value);  // Works for NameValuePairs.
 			uriBuilder.setCustomQuery(q);
 		} catch (IOException e) {
-			throw new RestCallException(null, e, "Could not read custom query.");
+			throw runtimeException(e, "Could not read custom query.");
 		}
 		return this;
 	}
@@ -1608,9 +1603,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 			{@link PartList} - Converted to a URL-encoded FORM post.
 	 * 	</ul>
 	 * @return This object.
-	 * @throws RestCallException Invalid input.
 	 */
-	public RestRequest formDataCustom(Object value) throws RestCallException {
+	public RestRequest formDataCustom(Object value) {
 		header(ContentType.APPLICATION_FORM_URLENCODED);
 		body(value instanceof CharSequence ? new StringReader(value.toString()) : value);
 		return this;
@@ -1620,7 +1614,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	// Args
 	//------------------------------------------------------------------------------------------------------------------
 
-	RestRequest headerArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) throws RestCallException {
+	RestRequest headerArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) {
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof HeaderList || isHeaderArray(value);
 
 		if (! isMulti) {
@@ -1636,19 +1630,16 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		} else if (value instanceof HeaderList) {
 			((HeaderList)value).forEach(x->l.add(x));
 		} else if (value instanceof Collection) {
-			for (Object o : (Collection<?>)value)
-				l.add(HttpHeaders.cast(o));
+			((Collection<?>)value).forEach(x -> l.add(HttpHeaders.cast(x)));
 		} else if (value != null && value.getClass().isArray()) {
 			for (int i = 0; i < Array.getLength(value); i++)
 				l.add(HttpHeaders.cast(Array.get(value, i)));
 		} else if (value instanceof Map) {
-			for (Map.Entry<Object,Object> e : toMap(value).entrySet())
-				l.add(createHeader(stringify(e.getKey()), e.getValue(), serializer, schema, skipIfEmpty));
+			toMap(value).forEach((k,v) -> l.add(createHeader(stringify(k), v, serializer, schema, skipIfEmpty)));
 		} else if (isBean(value)) {
-			for (Map.Entry<String,Object> e : toBeanMap(value).entrySet())
-				l.add(createHeader(e.getKey(), e.getValue(), serializer, schema, skipIfEmpty));
+			toBeanMap(value).forEach((k,v) -> l.add(createHeader(k, v, serializer, schema, skipIfEmpty)));
 		} else if (value != null) {
-			throw new RestCallException(null, null, "Invalid value type for header arg ''{0}'': {1}", name, className(value));
+			throw runtimeException("Invalid value type for header arg ''{0}'': {1}", name, className(value));
 		}
 
 		if (skipIfEmpty)
@@ -1659,7 +1650,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return this;
 	}
 
-	RestRequest queryArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) throws RestCallException {
+	RestRequest queryArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) {
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
 
 		if (! isMulti) {
@@ -1675,17 +1666,14 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		} else if (value instanceof PartList) {
 			((PartList)value).forEach(x->l.add(x));
 		} else if (value instanceof Collection) {
-			for (Object o : (Collection<?>)value)
-				l.add(HttpParts.cast(o));
+			((Collection<?>)value).forEach(x -> l.add(HttpParts.cast(x)));
 		} else if (value != null && value.getClass().isArray()) {
 			for (int i = 0; i < Array.getLength(value); i++)
 				l.add(HttpParts.cast(Array.get(value, i)));
 		} else if (value instanceof Map) {
-			for (Map.Entry<Object,Object> e : toMap(value).entrySet())
-				l.add(createPart(stringify(e.getKey()), e.getValue(), QUERY, serializer, schema, skipIfEmpty));
+			toMap(value).forEach((k,v) -> l.add(createPart(stringify(k), v, QUERY, serializer, schema, skipIfEmpty)));
 		} else if (isBean(value)) {
-			for (Map.Entry<String,Object> e : toBeanMap(value).entrySet())
-				l.add(createPart(e.getKey(), e.getValue(), QUERY, serializer, schema, skipIfEmpty));
+			toBeanMap(value).forEach((k,v) -> l.add(createPart(k, v, QUERY, serializer, schema, skipIfEmpty)));
 		} else if (value != null) {
 			queryCustom(value);
 			return this;
@@ -1699,7 +1687,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return this;
 	}
 
-	RestRequest formDataArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) throws RestCallException {
+	RestRequest formDataArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) {
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
 
 		if (! isMulti) {
@@ -1715,17 +1703,14 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		} else if (value instanceof PartList) {
 			((PartList)value).forEach(x->l.add(x));
 		} else if (value instanceof Collection) {
-			for (Object o : (Collection<?>)value)
-				l.add(HttpParts.cast(o));
+			((Collection<?>)value).forEach(x -> l.add(HttpParts.cast(x)));
 		} else if (value != null && value.getClass().isArray()) {
 			for (int i = 0; i < Array.getLength(value); i++)
 				l.add(HttpParts.cast(Array.get(value, i)));
 		} else if (value instanceof Map) {
-			for (Map.Entry<Object,Object> e : toMap(value).entrySet())
-				l.add(createPart(stringify(e.getKey()), e.getValue(), FORMDATA, serializer, schema, skipIfEmpty));
+			toMap(value).forEach((k,v) -> l.add(createPart(stringify(k), v, FORMDATA, serializer, schema, skipIfEmpty)));
 		} else if (isBean(value)) {
-			for (Map.Entry<String,Object> e : toBeanMap(value).entrySet())
-				l.add(createPart(e.getKey(), e.getValue(), FORMDATA, serializer, schema, skipIfEmpty));
+			toBeanMap(value).forEach((k,v) -> l.add(createPart(k, v, FORMDATA, serializer, schema, skipIfEmpty)));
 		} else if (value != null) {
 			formDataCustom(value);
 			return this;
@@ -1739,7 +1724,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		return this;
 	}
 
-	RestRequest pathArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer) throws RestCallException {
+	RestRequest pathArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer) {
 		boolean isMulti = isEmpty(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
 
 		if (! isMulti)
@@ -1752,19 +1737,16 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		} else if (value instanceof PartList) {
 			((PartList)value).forEach(x->l.add(x));
 		} else if (value instanceof Collection) {
-			for (Object o : (Collection<?>)value)
-				l.add(HttpParts.cast(o));
+			((Collection<?>)value).forEach(x -> l.add(HttpParts.cast(x)));
 		} else if (value != null && value.getClass().isArray()) {
 			for (int i = 0; i < Array.getLength(value); i++)
 				l.add(HttpParts.cast(Array.get(value, i)));
 		} else if (value instanceof Map) {
-			for (Map.Entry<Object,Object> e : toMap(value).entrySet())
-				l.add(createPart(stringify(e.getKey()), e.getValue(), PATH, serializer, schema, false));
+			toMap(value).forEach((k,v) -> l.add(createPart(stringify(k), v, PATH, serializer, schema, false)));
 		} else if (isBean(value)) {
-			for (Map.Entry<String,Object> e : toBeanMap(value).entrySet())
-				l.add(createPart(e.getKey(), e.getValue(), PATH, serializer, schema, false));
+			toBeanMap(value).forEach((k,v) -> l.add(createPart(k, v, PATH, serializer, schema, false)));
 		} else if (value != null) {
-			throw new RestCallException(null, null, "Invalid value type for path arg ''{0}'': {1}", name, className(value));
+			throw runtimeException("Invalid value type for path arg ''{0}'': {1}", name, className(value));
 		}
 
 		getPathDataBuilder().append(l);
@@ -1800,9 +1782,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 			A {@link Supplier} of anything on this list.
 	 * 	</ul>
 	 * @return This object.
-	 * @throws RestCallException If a retry was attempted, but the entity was not repeatable.
 	 */
-	public RestRequest body(Object input) throws RestCallException {
+	public RestRequest body(Object input) {
 		this.input = input;
 		return this;
 	}
@@ -1871,9 +1852,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<li>Only used if serializer is schema-aware (e.g. {@link OpenApiSerializer}).
 	 * 	</ul>
 	 * @return This object.
-	 * @throws RestCallException If a retry was attempted, but the entity was not repeatable.
 	 */
-	public RestRequest body(Object input, HttpPartSchema schema) throws RestCallException {
+	public RestRequest body(Object input, HttpPartSchema schema) {
 		this.input = input;
 		this.requestBodySchema = schema;
 		return this;

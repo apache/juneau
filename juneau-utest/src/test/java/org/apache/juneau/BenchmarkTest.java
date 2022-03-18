@@ -12,11 +12,14 @@
 //***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.junit.runners.MethodSorters.*;
+
 import java.util.*;
 import java.util.Map.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+import org.apache.juneau.utils.*;
 import org.junit.*;
 import org.junit.rules.*;
 
@@ -24,6 +27,7 @@ import com.carrotsearch.junitbenchmarks.*;
 
 @BenchmarkOptions(benchmarkRounds = 1000000, warmupRounds = 20)
 @Ignore
+@FixMethodOrder(NAME_ASCENDING)
 public class BenchmarkTest {
 
 	@Rule
@@ -58,22 +62,31 @@ public class BenchmarkTest {
 	private static final Consumer<Map<String,Integer>> map_iterator2 = x -> {for (Entry<String,Integer> i : x.entrySet()) result += i.getValue();};
 	private static final Consumer<Map<String,Integer>> map_forEach1 = x -> x.values().forEach(y -> result += y);
 	private static final Consumer<Map<String,Integer>> map_forEach2 = x -> x.forEach((k,v) -> result += v);
+	private static final ThrowingConsumer<List<Integer>> slist_iterator = x -> {for (Integer i : x) result += i;};
+	private static final ThrowingConsumer<List<Integer>> slist_for = x -> {for (int i = 0; i < x.size(); i++) result += x.get(i);};
+	private static final ThrowingConsumer<List<Integer>> slist_foreach = x -> x.forEach(y -> result += y);
+	private static final ThrowingConsumer<Map<String,Integer>> smap_iterator1 = x -> {for (Integer i : x.values()) result += i;};
+	private static final ThrowingConsumer<Map<String,Integer>> smap_iterator2 = x -> {for (Entry<String,Integer> i : x.entrySet()) result += i.getValue();};
+	private static final ThrowingConsumer<Map<String,Integer>> smap_forEach1 = x -> x.values().forEach(y -> result += y);
+	private static final ThrowingConsumer<Map<String,Integer>> smap_forEach2 = x -> x.forEach((k,v) -> result += v);
 
-//	@Test public void a01a_list_iterator() { list_iterator.accept(LIST); }
-//	@Test public void a01b_list_for() { list_for.accept(LIST); }
-//	@Test public void a01c_list_foreach() { list_foreach.accept(LIST); }
-//	@Test public void b01a_list_iterator() { list_iterator.accept(LIST); }
-//	@Test public void b01b_list_for() { list_for.accept(LIST); }
-//	@Test public void b01c_list_foreach() { list_foreach.accept(LIST); }
+	@Test public void a01a_list_iterator() { list_iterator.accept(LIST); }
+	@Test public void a01b_list_for() { list_for.accept(LIST); }
+	@Test public void a01c_list_foreach() { list_foreach.accept(LIST); }
 
 	@Test public void a01a_map_iterator1_S() { map_iterator1.accept(MAP); }
 	@Test public void a01b_map_iterator2_S() { map_iterator2.accept(MAP); }
 	@Test public void a01c_map_forEach1_S() { map_forEach1.accept(MAP); }
 	@Test public void a01d_map_forEach2_S() { map_forEach2.accept(MAP); }
-	@Test public void b01a_map_iterator1_S() { map_iterator1.accept(MAP); }
-	@Test public void b01b_map_iterator2_S() { map_iterator2.accept(MAP); }
-	@Test public void b01c_map_forEach1_S() { map_forEach1.accept(MAP); }
-	@Test public void b01d_map_forEach2_S() { map_forEach2.accept(MAP); }
+
+	@Test public void b01a_list_iterator() { slist_iterator.accept(LIST); }
+	@Test public void b01b_list_for() { slist_for.accept(LIST); }
+	@Test public void b01c_list_foreach() { slist_foreach.accept(LIST); }
+
+	@Test public void b01a_map_iterator1_S() { smap_iterator1.accept(MAP); }
+	@Test public void b01b_map_iterator2_S() { smap_iterator2.accept(MAP); }
+	@Test public void b01c_map_forEach1_S() { smap_forEach1.accept(MAP); }
+	@Test public void b01d_map_forEach2_S() { smap_forEach2.accept(MAP); }
 
 	public static void main(String[] args) {
 		int cap = 100000;

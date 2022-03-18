@@ -18,6 +18,7 @@ import static org.apache.juneau.http.remote.RemoteUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
@@ -130,8 +131,8 @@ public class RemoteOperationMeta {
 
 			fullPath = path.indexOf("://") != -1 ? path : (parentPath.isEmpty() ? urlEncodePath(path) : (trimSlashes(parentPath) + '/' + urlEncodePath(path)));
 
-			for (ParamInfo mpi : mi.getParams()) {
-				RemoteOperationArg rma = RemoteOperationArg.create(mpi);
+			mi.getParams().forEach(x -> {
+				RemoteOperationArg rma = RemoteOperationArg.create(x);
 				if (rma != null) {
 					HttpPartType pt = rma.getPartType();
 					if (pt == HEADER)
@@ -145,11 +146,11 @@ public class RemoteOperationMeta {
 					else
 						bodyArg = rma;
 				}
-				RequestBeanMeta rmba = RequestBeanMeta.create(mpi, AnnotationWorkList.create());
+				RequestBeanMeta rmba = RequestBeanMeta.create(x, AnnotationWorkList.create());
 				if (rmba != null) {
-					requestArgs.add(new RemoteOperationBeanArg(mpi.getIndex(), rmba));
+					requestArgs.add(new RemoteOperationBeanArg(x.getIndex(), rmba));
 				}
-			}
+			});
 		}
 	}
 
@@ -172,48 +173,63 @@ public class RemoteOperationMeta {
 	}
 
 	/**
-	 * Returns the {@link Path @Path} annotated arguments on this Java method.
+	 * Performs an action on the {@link Path @Path} annotated arguments on this Java method.
 	 *
-	 * @return A map of {@link Path#value() @Path(value)} names to zero-indexed argument indices.
+	 * @param action The action to perform.
+	 * @return This object.
 	 */
-	public RemoteOperationArg[] getPathArgs() {
-		return pathArgs;
+	public RemoteOperationMeta forEachPathArg(Consumer<RemoteOperationArg> action) {
+		for (RemoteOperationArg a : pathArgs)
+			action.accept(a);
+		return this;
 	}
 
 	/**
-	 * Returns the {@link Query @Query} annotated arguments on this Java method.
+	 * Performs an action on the {@link Query @Query} annotated arguments on this Java method.
 	 *
-	 * @return A map of {@link Query#value() @Query(value)} names to zero-indexed argument indices.
+	 * @param action The action to perform.
+	 * @return This object.
 	 */
-	public RemoteOperationArg[] getQueryArgs() {
-		return queryArgs;
+	public RemoteOperationMeta forEachQueryArg(Consumer<RemoteOperationArg> action) {
+		for (RemoteOperationArg a : queryArgs)
+			action.accept(a);
+		return this;
 	}
 
 	/**
-	 * Returns the {@link FormData @FormData} annotated arguments on this Java method.
+	 * Performs an action on the {@link FormData @FormData} annotated arguments on this Java method.
 	 *
-	 * @return A map of {@link FormData#value() @FormData(value)} names to zero-indexed argument indices.
+	 * @param action The action to perform.
+	 * @return This object.
 	 */
-	public RemoteOperationArg[] getFormDataArgs() {
-		return formDataArgs;
+	public RemoteOperationMeta forEachFormDataArg(Consumer<RemoteOperationArg> action) {
+		for (RemoteOperationArg a : formDataArgs)
+			action.accept(a);
+		return this;
 	}
 
 	/**
-	 * Returns the {@link Header @Header} annotated arguments on this Java method.
+	 * Performs an action on the {@link Header @Header} annotated arguments on this Java method.
 	 *
-	 * @return A map of {@link Header#value() @Header(value)} names to zero-indexed argument indices.
+	 * @param action The action to perform.
+	 * @return This object.
 	 */
-	public RemoteOperationArg[] getHeaderArgs() {
-		return headerArgs;
+	public RemoteOperationMeta forEachHeaderArg(Consumer<RemoteOperationArg> action) {
+		for (RemoteOperationArg a : headerArgs)
+			action.accept(a);
+		return this;
 	}
 
 	/**
-	 * Returns the {@link Request @Request} annotated arguments on this Java method.
+	 * Performs an action on the {@link Request @Request} annotated arguments on this Java method.
 	 *
-	 * @return A list of zero-indexed argument indices.
+	 * @param action The action to perform.
+	 * @return This object.
 	 */
-	public RemoteOperationBeanArg[] getRequestArgs() {
-		return requestArgs;
+	public RemoteOperationMeta forEachRequestArg(Consumer<RemoteOperationBeanArg> action) {
+		for (RemoteOperationBeanArg a : requestArgs)
+			action.accept(a);
+		return this;
 	}
 
 	/**
@@ -235,11 +251,14 @@ public class RemoteOperationMeta {
 	}
 
 	/**
-	 * Returns the exceptions thrown by this method.
+	 * Performs an action on the exceptions thrown by this method.
 	 *
-	 * @return The exceptions thrown by this method.  Never <jk>null</jk>.
+	 * @param action The action to perform.
+	 * @return This object.
 	 */
-	public Class<?>[] getExceptions() {
-		return exceptions;
+	public RemoteOperationMeta forEachException(Consumer<Class<?>> action) {
+		for (Class<?> e : exceptions)
+			action.accept(e);
+		return this;
 	}
 }
