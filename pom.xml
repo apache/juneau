@@ -41,7 +41,7 @@
 		<jaxrs.version>1.1.1</jaxrs.version>
 		<servlet.version>3.1.0</servlet.version>
 		<httpcore.version>4.4.13</httpcore.version>
-		<httpclient.version>4.5.6</httpclient.version>
+		<httpclient.version>4.5.13</httpclient.version>
 		<jetty.version>9.4.13.v20181111</jetty.version>
 		<juneau.compare.version>8.0.0</juneau.compare.version>
 		<javadoc.juneau.version>9.0.0</javadoc.juneau.version>
