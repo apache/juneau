@@ -131,6 +131,8 @@ public @interface Json {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] on() default {};
 
@@ -143,6 +145,8 @@ public @interface Json {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
 
@@ -180,6 +184,8 @@ public @interface Json {
 	 * 		}
 	 * 	}
 	 * </p>
+	 *
+	 * @return The annotation value.
 	 */
 	String wrapperAttr() default "";
 }

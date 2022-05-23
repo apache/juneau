@@ -94,12 +94,13 @@ public class ThrowableAssertion<T extends Throwable> extends FluentThrowableAsse
 	/**
 	 * Static creator.
 	 *
+	 * @param <X> The throwable type.
 	 * @param value
 	 * 	The object being tested.
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return A new assertion object.
 	 */
-	public static <V extends Throwable> ThrowableAssertion<V> create(V value) {
+	public static <X extends Throwable> ThrowableAssertion<X> create(X value) {
 		return new ThrowableAssertion<>(value);
 	}
 

@@ -541,7 +541,7 @@ public class UrlEncodingParserSession extends UonParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Parser bean property collections/arrays as separate key/value pairs.
+	 * Parser bean property collections/arrays as separate key/value pairs.
 	 *
 	 * @see UrlEncodingParser.Builder#expandedParams()
 	 * @return

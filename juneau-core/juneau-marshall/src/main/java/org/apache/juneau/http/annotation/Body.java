@@ -149,6 +149,8 @@ public @interface Body {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] on() default {};
 
@@ -161,6 +163,8 @@ public @interface Body {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
 
@@ -188,6 +192,8 @@ public @interface Body {
 	 * 	<li>
 	 * 		Client-side schema-based serializing and serializing validation.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Schema schema() default @Schema;
 }

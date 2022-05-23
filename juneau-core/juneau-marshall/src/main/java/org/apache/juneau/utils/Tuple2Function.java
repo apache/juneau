@@ -21,7 +21,7 @@ import java.util.function.*;
  * Same as {@link BiFunction}.
  *
  * <p class='bjava'>
- * 	Tuple2Function&lt;A,B,R&gt; <jv>x</jv> = (<jv>a</jv>,<jv>b</jv>) -> <jsm>doSomething</jsm>(<jv>a</jv>,<jv>b</jv>);
+ * 	Tuple2Function&lt;A,B,R&gt; <jv>x</jv> = (<jv>a</jv>,<jv>b</jv>) -&gt; <jsm>doSomething</jsm>(<jv>a</jv>,<jv>b</jv>);
  *
  * 	R <jv>result</jv> = <jv>x</jv>.apply(<jv>xa</jv>,<jv>xb</jv>);
  * </p>

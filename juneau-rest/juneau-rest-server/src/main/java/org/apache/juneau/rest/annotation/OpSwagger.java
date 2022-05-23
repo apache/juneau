@@ -44,6 +44,8 @@ public @interface OpSwagger {
 	 * 	<li>
 	 * 		Values defined on this annotation override values defined for the method in the class swagger.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] consumes() default {};
 
@@ -70,6 +72,8 @@ public @interface OpSwagger {
 	 * 	<li>
 	 * 		If not specified, set to <js>"true"</js> if the method is annotated with {@link Deprecated @Deprecated}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String deprecated() default "";
 
@@ -88,6 +92,8 @@ public @interface OpSwagger {
 	 * 	<li>
 	 * 		If not specified, the value is pulled from {@link RestOp#description()}.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] description() default {};
 
@@ -110,6 +116,8 @@ public @interface OpSwagger {
 	 * 	<li>
 	 * 		Values defined on this annotation override values defined for the method in the class swagger.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	ExternalDocs externalDocs() default @ExternalDocs;
 
@@ -127,6 +135,8 @@ public @interface OpSwagger {
 	 * 	<li>
 	 * 		If not specified, the value used is the Java method name.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String operationId() default "";
 
@@ -162,6 +172,8 @@ public @interface OpSwagger {
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] parameters() default {};
 
@@ -180,6 +192,8 @@ public @interface OpSwagger {
 	 * 	<li>
 	 * 		Values defined on this annotation override values defined for the method in the class swagger.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] produces() default {};
 
@@ -196,8 +210,8 @@ public @interface OpSwagger {
 	 * 		path=<js>"/"</js>,
 	 * 		swagger=<ja>@OpSwagger</ja>(
 	 * 			responses={
-					<js>"200:{ description:'Okay' },"</js>,
-					<js>"302:{ description:'Thing wasn't found here', headers={Location:{description:'The place to find the thing.'}}}"</js>
+	 * 				<js>"200:{ description:'Okay' },"</js>,
+	 * 				<js>"302:{ description:'Thing wasn't found here', headers={Location:{description:'The place to find the thing.'}}}"</js>
 	 * 			}
 	 * 		)
 	 * 	)
@@ -211,6 +225,8 @@ public @interface OpSwagger {
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] responses() default {};
 
@@ -226,6 +242,8 @@ public @interface OpSwagger {
 	 * 	<li>
 	 * 		Values defined on this annotation override values defined for the method in the class swagger.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] schemes() default {};
 
@@ -244,6 +262,8 @@ public @interface OpSwagger {
 	 * 	<li>
 	 * 		If not specified, the value is pulled from {@link RestOp#summary()}.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] summary() default {};
 
@@ -273,40 +293,10 @@ public @interface OpSwagger {
 	 * 	<li>
 	 * 		Corresponds to the swagger field <c>/paths/{path}/{method}/tags</c>.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] tags() default {};
-
-	/**
-	 * Defines the swagger field <c>/paths/{path}/{method}</c>.
-	 *
-	 * <p>
-	 * Used for free-form Swagger documentation of a REST Java method.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<ja>@RestGet</ja>(
-	 * 		swagger=<ja>@OpSwagger</ja>(
-	 * 			<js>"tags:['pet'],"</js>,
-	 * 			<js>"security:[ { petstore_auth:['write:pets','read:pets'] } ]"</js>
-	 * 		)
-	 * 	)
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li>
-	 * 		The format is a {@link SimpleJsonSerializer#DEFAULT Simple-JSON} object.
-	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 		<br>Comments and whitespace are ignored.
-	 * 		<br>The leading and trailing <js>'{'</js>/<js>'}'</js> characters are optional.
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
-	 * 		Values defined on this annotation override values defined for the method in the class swagger.
-	 * 	<li>
-	 *
-	 * </ul>
-	 */
 
 	/**
 	 * Free-form value for the swagger of a resource method.
@@ -385,6 +375,8 @@ public @interface OpSwagger {
 	 * 	<li>
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] value() default {};
 }

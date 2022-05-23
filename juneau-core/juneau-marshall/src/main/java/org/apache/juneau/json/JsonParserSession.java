@@ -954,7 +954,7 @@ public final class JsonParserSession extends ReaderParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Validate end.
+	 * Validate end.
 	 *
 	 * @see JsonParser.Builder#validateEnd()
 	 * @return

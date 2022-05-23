@@ -123,6 +123,7 @@ public class VarResolverSession {
 	 * 		<br>Map class must have a no-arg constructor.
 	 * </ul>
 	 *
+	 * @param <T> The value type.
 	 * @param o The object.
 	 * @return The same object if no resolution was needed, otherwise a new object or data structure if resolution was
 	 * needed.
@@ -367,6 +368,7 @@ public class VarResolverSession {
 	/**
 	 * Returns the bean from the registered bean store.
 	 *
+	 * @param <T> The value type.
 	 * @param c The bean type.
 	 * @return
 	 * 	The bean.

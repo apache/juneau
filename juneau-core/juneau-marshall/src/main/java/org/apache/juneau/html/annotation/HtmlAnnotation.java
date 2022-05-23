@@ -323,6 +323,8 @@ public class HtmlAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		Html[] value();
 	}

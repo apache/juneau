@@ -111,6 +111,8 @@ public @interface HasQuery {
 	 * 	<li>
 	 * 		The format is plain-text.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String name() default "";
 
@@ -128,6 +130,8 @@ public @interface HasQuery {
 	 * <p class='bjava'>
 	 * 	<jk>public</jk> Order placeOrder(<ja>@HasQuery</ja>(<js>"petId"</js>) <jk>boolean</jk> <jv>hasPetId</jv>) {...}
 	 * </p>
+	 *
+	 * @return The annotation value.
 	 */
 	String value() default "";
 }

@@ -59,6 +59,7 @@ public class Section {
 	/**
 	 * Shortcut for calling <code>asBean(sectionName, c, <jk>false</jk>)</code>.
 	 *
+	 * @param <T> The bean class to create.
 	 * @param c The bean class to create.
 	 * @return A new bean instance, or {@link Optional#empty()} if this section does not exist.
 	 * @throws ParseException Malformed input encountered.
@@ -98,6 +99,7 @@ public class Section {
 	 * 	Address <jv>address</jv> = <jv>config</jv>.getSection(<js>"MySection"</js>).asBean(Address.<jk>class</jk>).orElse(<jk>null</jk>);
 	 * </p>
 	 *
+	 * @param <T> The bean class to create.
 	 * @param c The bean class to create.
 	 * @param ignoreUnknownProperties
 	 * 	If <jk>false</jk>, throws a {@link ParseException} if the section contains an entry that isn't a bean property
@@ -199,6 +201,7 @@ public class Section {
 	 * 	<li>Calls to setters when the configuration is read-only will cause {@link UnsupportedOperationException} to be thrown.
 	 * </ul>
 	 *
+	 * @param <T> The proxy interface class.
 	 * @param c The proxy interface class.
 	 * @return The proxy interface.
 	 */

@@ -21,7 +21,7 @@ import java.util.function.*;
  * Similar to {@link BiFunction} except for 5 parameters.
  *
  * <p class='bjava'>
- * 	Tuple5Function&lt;A,B,C,D,E,R&gt; <jv>x</jv> = (<jv>a</jv>,<jv>b</jv>,<jv>c</jv>,<jv>d</jv>,<jv>e</jv>) -> <jsm>doSomething</jsm>(<jv>a</jv>,<jv>b</jv>,<jv>c</jv>,<jv>d</jv>,<jv>e</jv>);
+ * 	Tuple5Function&lt;A,B,C,D,E,R&gt; <jv>x</jv> = (<jv>a</jv>,<jv>b</jv>,<jv>c</jv>,<jv>d</jv>,<jv>e</jv>) -&gt; <jsm>doSomething</jsm>(<jv>a</jv>,<jv>b</jv>,<jv>c</jv>,<jv>d</jv>,<jv>e</jv>);
  *
  * 	R <jv>result</jv> = <jv>x</jv>.apply(<jv>xa</jv>,<jv>xb</jv>,<jv>xc</jv>,<jv>xd</jv>,<jv>xe</jv>);
  * </p>

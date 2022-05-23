@@ -58,6 +58,8 @@ public @interface Bean {
 	 * 	<li class='ja'>{@link BeanConfig#dictionary_replace()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] dictionary() default {};
 
@@ -96,6 +98,8 @@ public @interface Bean {
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Example}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String example() default "";
 
@@ -122,6 +126,8 @@ public @interface Bean {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesExcludes(String, String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesExcludes(Map)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String excludeProperties() default "";
 
@@ -153,6 +159,8 @@ public @interface Bean {
 	 * 	<li class='ja'>{@link BeanConfig#findFluentSetters()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#findFluentSetters()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	boolean findFluentSetters() default false;
 
@@ -169,6 +177,8 @@ public @interface Bean {
 	 * 	<ja>@Bean</ja>(implClass=MyInterfaceImpl.<jk>class</jk>)
 	 * 	<jk>public class</jk> MyInterface {...}
 	 * <p>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?> implClass() default void.class;
 
@@ -181,6 +191,8 @@ public @interface Bean {
 	 * <ul class='seealso'>
 	 * 	<li class='jc'>{@link BeanInterceptor}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends BeanInterceptor<?>> interceptor() default BeanInterceptor.Void.class;
 
@@ -210,6 +222,8 @@ public @interface Bean {
 	 * <p>
 	 * Note that this annotation can be used on the parent class so that it filters to all child classes,
 	 * or can be set individually on the child classes.
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?> interfaceClass() default void.class;
 
@@ -249,6 +263,8 @@ public @interface Bean {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] on() default {};
 
@@ -261,11 +277,15 @@ public @interface Bean {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
 
 	/**
 	 * Synonym for {@link #properties()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String p() default "";
 
@@ -304,6 +324,8 @@ public @interface Bean {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanProperties(String, String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanProperties(Map)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String properties() default "";
 
@@ -323,6 +345,8 @@ public @interface Bean {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#propertyNamer(Class)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends PropertyNamer> propertyNamer() default PropertyNamer.Void.class;
 
@@ -350,11 +374,15 @@ public @interface Bean {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(String, String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(Map)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String readOnlyProperties() default "";
 
 	/**
 	 * Synonym for {@link #readOnlyProperties()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String ro() default "";
 
@@ -375,6 +403,8 @@ public @interface Bean {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#sortProperties()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	boolean sort() default false;
 
@@ -402,6 +432,8 @@ public @interface Bean {
 	 * 		<jk>public int</jk> getP3();
 	 * 	}
 	 * </p>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?> stopClass() default void.class;
 
@@ -426,6 +458,8 @@ public @interface Bean {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String typeName() default "";
 
@@ -449,11 +483,15 @@ public @interface Bean {
 	 * 	<li class='ja'>{@link BeanConfig#typePropertyName()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#typePropertyName(String)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String typePropertyName() default "";
 
 	/**
 	 * Synonym for {@link #writeOnlyProperties()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String wo() default "";
 
@@ -481,11 +519,15 @@ public @interface Bean {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(String, String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(Map)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String writeOnlyProperties() default "";
 
 	/**
 	 * Synonym for {@link #excludeProperties()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String xp() default "";
 }

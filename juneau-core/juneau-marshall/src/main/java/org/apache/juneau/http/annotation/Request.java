@@ -154,6 +154,8 @@ public @interface Request {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] on() default {};
 
@@ -166,6 +168,8 @@ public @interface Request {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
 
@@ -174,6 +178,8 @@ public @interface Request {
 	 *
 	 * <p>
 	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiParser}.
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Void.class;
 
@@ -182,6 +188,8 @@ public @interface Request {
 	 *
 	 * <p>
 	 * Overrides for this part the part serializer defined on the REST client which by default is {@link OpenApiSerializer}.
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Void.class;
 }

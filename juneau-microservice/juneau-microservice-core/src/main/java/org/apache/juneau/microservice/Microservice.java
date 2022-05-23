@@ -900,7 +900,7 @@ public class Microservice implements ConfigEventListener {
 	 * 		The <c>Main-Config</c> entry in the microservice jar manifest file.
 	 * 	<li>
 	 * 		The name of the microservice jar with a <js>".cfg"</js> suffix (e.g.
-	 * 		<js>"mymicroservice.jar"</js>-><js>"mymicroservice.cfg"</js>).
+	 * 		<js>"mymicroservice.jar"</js>-&gt;<js>"mymicroservice.cfg"</js>).
 	 * </ol>
 	 *
 	 * <p>

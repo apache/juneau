@@ -149,6 +149,7 @@ public abstract class ContextSession {
 		/**
 		 * Applies a consumer to this builder if it's the specified type.
 		 *
+		 * @param <T> The expected type.
 		 * @param type The expected type.
 		 * @param apply	The consumer to apply.
 		 * @return This object.

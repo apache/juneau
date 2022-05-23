@@ -886,7 +886,7 @@ public class XmlParserSession extends ReaderParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  XML event allocator.
+	 * XML event allocator.
 	 *
 	 * @see XmlParser.Builder#eventAllocator(Class)
 	 * @return
@@ -897,7 +897,7 @@ public class XmlParserSession extends ReaderParserSession {
 	}
 
 	/**
-	 * Configuration property:  Preserve root element during generalized parsing.
+	 * Preserve root element during generalized parsing.
 	 *
 	 * @see XmlParser.Builder#preserveRootElement()
 	 * @return
@@ -909,7 +909,7 @@ public class XmlParserSession extends ReaderParserSession {
 	}
 
 	/**
-	 * Configuration property:  XML reporter.
+	 * XML reporter.
 	 *
 	 * @see XmlParser.Builder#reporter(Class)
 	 * @return
@@ -920,7 +920,7 @@ public class XmlParserSession extends ReaderParserSession {
 	}
 
 	/**
-	 * Configuration property:  XML resolver.
+	 * XML resolver.
 	 *
 	 * @see XmlParser.Builder#resolver(Class)
 	 * @return
@@ -931,7 +931,7 @@ public class XmlParserSession extends ReaderParserSession {
 	}
 
 	/**
-	 * Configuration property:  Enable validation.
+	 * Enable validation.
 	 *
 	 * @see XmlParser.Builder#validating()
 	 * @return

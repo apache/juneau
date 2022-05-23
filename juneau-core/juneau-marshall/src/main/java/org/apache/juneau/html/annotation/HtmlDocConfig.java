@@ -44,6 +44,8 @@ public @interface HtmlDocConfig {
 	 *
 	 * <p>
 	 * Can be used to override default ordering and application of config annotations.
+	 *
+	 * @return The annotation value.
 	 */
 	int rank() default 0;
 
@@ -52,7 +54,7 @@ public @interface HtmlDocConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Aside section contents.
+	 * Aside section contents.
 	 *
 	 * <p>
 	 * Allows you to specify the contents of the aside section on the HTML page.
@@ -94,11 +96,13 @@ public @interface HtmlDocConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#aside(String...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] aside() default {};
 
 	/**
-	 * Configuration property:  Float aside section contents.
+	 * Float aside section contents.
 	 *
 	 * <p>
 	 * Allows you to position the aside contents of the page around the main contents.
@@ -143,11 +147,13 @@ public @interface HtmlDocConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#asideFloat(AsideFloat)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String asideFloat() default "DEFAULT";
 
 	/**
-	 * Configuration property:  Footer section contents.
+	 * Footer section contents.
 	 *
 	 * <p>
 	 * Allows you to specify the contents of the footer section on the HTML page.
@@ -183,11 +189,13 @@ public @interface HtmlDocConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#footer(String...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] footer() default {};
 
 	/**
-	 * Configuration property:  Additional head section content.
+	 * Additional head section content.
 	 *
 	 * <p>
 	 * Adds the specified HTML content to the head section of the page.
@@ -221,11 +229,13 @@ public @interface HtmlDocConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#head(String...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] head() default {};
 
 	/**
-	 * Configuration property:  Header section contents.
+	 * Header section contents.
 	 *
 	 * <p>
 	 * Allows you to override the contents of the header section on the HTML page.
@@ -262,11 +272,13 @@ public @interface HtmlDocConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#header(String...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] header() default {};
 
 	/**
-	 * Configuration property:  Nav section contents.
+	 * Nav section contents.
 	 *
 	 * <p>
 	 * Allows you to override the contents of the nav section on the HTML page.
@@ -305,11 +317,13 @@ public @interface HtmlDocConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#nav(String...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] nav() default {};
 
 	/**
-	 * Configuration property:  Page navigation links.
+	 * Page navigation links.
 	 *
 	 * <p>
 	 * Adds a list of hyperlinks immediately under the title and description but above the content of the page.
@@ -367,11 +381,13 @@ public @interface HtmlDocConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#navlinks(String...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] navlinks() default {};
 
 	/**
-	 * Configuration property:  No-results message.
+	 * No-results message.
 	 *
 	 * <p>
 	 * Allows you to specify the string message used when trying to serialize an empty array or empty list.
@@ -396,11 +412,13 @@ public @interface HtmlDocConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#noResultsMessage(String)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String noResultsMessage() default "";
 
 	/**
-	 * Configuration property:  Prevent word wrap on page.
+	 * Prevent word wrap on page.
 	 *
 	 * <p>
 	 * Adds <js>"* {white-space:nowrap}"</js> to the CSS instructions on the page to prevent word wrapping.
@@ -420,11 +438,13 @@ public @interface HtmlDocConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#nowrap()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String nowrap() default "";
 
 	/**
-	 * Configuration property:  Javascript code.
+	 * Javascript code.
 	 *
 	 * <p>
 	 * Adds the specified Javascript code to the HTML page.
@@ -460,11 +480,13 @@ public @interface HtmlDocConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#script(String...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] script() default {};
 
 	/**
-	 * Configuration property:  CSS style code.
+	 * CSS style code.
 	 *
 	 * <p>
 	 * Adds the specified CSS instructions to the HTML page.
@@ -501,11 +523,13 @@ public @interface HtmlDocConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#style(String...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] style() default {};
 
 	/**
-	 * Configuration property:  Stylesheet import URLs.
+	 * Stylesheet import URLs.
 	 *
 	 * <p>
 	 * Adds a link to the specified stylesheet URL.
@@ -529,11 +553,13 @@ public @interface HtmlDocConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#stylesheet(String...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] stylesheet() default {};
 
 	/**
-	 * Configuration property:  HTML document template.
+	 * HTML document template.
 	 *
 	 * <p>
 	 * Specifies the template to use for serializing the page.
@@ -560,11 +586,13 @@ public @interface HtmlDocConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlDocSerializer.Builder#template(Class)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends HtmlDocTemplate> template() default HtmlDocTemplate.Void.class;
 
 	/**
-	 * Configuration property:  HTML Widgets.
+	 * HTML Widgets.
 	 *
 	 * <p>
 	 * Defines widgets that can be used in conjunction with string variables of the form <js>"$W{name}"</js>to quickly
@@ -606,6 +634,8 @@ public @interface HtmlDocConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jrs.HtmlWidgets}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends HtmlWidget>[] widgets() default {};
 }

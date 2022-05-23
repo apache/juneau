@@ -49,6 +49,8 @@ public @interface Remote {
 	 * 		Supports {@doc jm.DefaultVarResolver}
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String path() default "";
 
@@ -63,6 +65,8 @@ public @interface Remote {
 	 * 		Supports {@doc jm.DefaultVarResolver}
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] headers() default {};
 
@@ -76,6 +80,8 @@ public @interface Remote {
 	 * 	<li>
 	 * 		Supplier class must provide a public no-arg constructor.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends HeaderList> headerList() default HeaderList.Void.class;
 
@@ -111,6 +117,8 @@ public @interface Remote {
 	 * 		Supports {@doc jm.DefaultVarResolver}
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String version() default "";
 
@@ -125,6 +133,8 @@ public @interface Remote {
 	 * 		Supports {@doc jm.DefaultVarResolver}
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String versionHeader() default "";
 }

@@ -32,6 +32,7 @@ public interface HttpPartParserSession {
 	/**
 	 * Converts the specified input to the specified class type.
 	 *
+	 * @param <T> The POJO type to transform the input into.
 	 * @param partType The part type being parsed.
 	 * @param schema
 	 * 	Schema information about the part.

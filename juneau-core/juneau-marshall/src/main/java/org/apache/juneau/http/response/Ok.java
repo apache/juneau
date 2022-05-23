@@ -48,6 +48,9 @@ public class Ok extends BasicHttpResponse {
 	/** Reusable unmodifiable instance */
 	public static final Ok INSTANCE = create().unmodifiable().build();
 
+	/** Reusable unmodifiable instance */
+	public static final Ok OK = create().unmodifiable().build();
+
 	/**
 	 * Creates a builder for this class.
 	 *

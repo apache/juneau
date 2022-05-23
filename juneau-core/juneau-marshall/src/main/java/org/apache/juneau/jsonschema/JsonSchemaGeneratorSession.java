@@ -478,7 +478,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Add descriptions to types.
+	 * Add descriptions to types.
 	 *
 	 * @see JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...)
 	 * @return
@@ -489,7 +489,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	}
 
 	/**
-	 * Configuration property:  Add examples.
+	 * Add examples.
 	 *
 	 * @see JsonSchemaGenerator.Builder#addExamplesTo(TypeCategory...)
 	 * @return
@@ -500,7 +500,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	}
 
 	/**
-	 * Configuration property:  Allow nested descriptions.
+	 * Allow nested descriptions.
 	 *
 	 * @see JsonSchemaGenerator.Builder#allowNestedDescriptions()
 	 * @return
@@ -511,7 +511,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	}
 
 	/**
-	 * Configuration property:  Allow nested examples.
+	 * Allow nested examples.
 	 *
 	 * @see JsonSchemaGenerator.Builder#allowNestedExamples()
 	 * @return
@@ -522,7 +522,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	}
 
 	/**
-	 * Configuration property:  Bean schema definition mapper.
+	 * Bean schema definition mapper.
 	 *
 	 * @see JsonSchemaGenerator.Builder#beanDefMapper(Class)
 	 * @return
@@ -533,7 +533,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	}
 
 	/**
-	 * Configuration property:  Ignore types from schema definitions.
+	 * Ignore types from schema definitions.
 	 *
 	 * @see JsonSchemaGenerator.Builder#ignoreTypes(String...)
 	 * @return
@@ -544,7 +544,7 @@ public class JsonSchemaGeneratorSession extends BeanTraverseSession {
 	}
 
 	/**
-	 * Configuration property:  Use bean definitions.
+	 * Use bean definitions.
 	 *
 	 * @see JsonSchemaGenerator.Builder#useBeanDefs()
 	 * @return

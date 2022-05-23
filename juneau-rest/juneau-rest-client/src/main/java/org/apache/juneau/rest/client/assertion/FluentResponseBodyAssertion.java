@@ -153,7 +153,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().passes(<jv>x</jv> -> <jv>x</jv>.contains(<js>"OK"</js>));
+	 * 		.assertBody().passes(<jv>x</jv> -&gt; <jv>x</jv>.contains(<js>"OK"</js>));
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression.</jc>
 	 * 	<jv>client</jv>
@@ -240,13 +240,14 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * 	<jv>client</jv>
 	 * 		.get(<js>"/myBean"</js>)
 	 * 		.run()
-	 * 		.assertBody().as(List.<jk>class</jk>, String.<jk>class</jk>).passes(<jv>x</jv> -> <jv>x</jv>.size() > 0);
+	 * 		.assertBody().as(List.<jk>class</jk>, String.<jk>class</jk>).passes(<jv>x</jv> -&gt; <jv>x</jv>.size() &gt; 0);
 	 * </p>
 	 *
+	 * @param <T> The object type to create.
 	 * @param type The object type to create.
 	 * @return A new fluent assertion object.
 	 */
-	public <V> FluentAnyAssertion<V,R> as(Class<V> type) {
+	public <T> FluentAnyAssertion<T,R> as(Class<T> type) {
 		return new FluentAnyAssertion<>(valueAsType(type), returns());
 	}
 
@@ -259,7 +260,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * 	<jv>client</jv>
 	 * 		.get(<js>"/myBean"</js>)
 	 * 		.run()
-	 * 		.assertBody().as(List.<jk>class</jk>, String.<jk>class</jk>).passes(<jv>x</jv> -> <jv>x</jv>.size() > 0);
+	 * 		.assertBody().as(List.<jk>class</jk>, String.<jk>class</jk>).passes(<jv>x</jv> -&gt; <jv>x</jv>.size() &gt; 0);
 	 * </p>
 	 *
 	 * <p>

@@ -320,7 +320,7 @@ public interface RestLogger {
 		 * This setting has no effect if the enablement setting is not {@link Enablement#CONDITIONAL CONDITIONALLY}.
 		 *
 		 * <p>
-		 * The default if not specified is <c><jv>x</jv> -> <jk>false</jk></c> (never log).
+		 * The default if not specified is <c><jv>x</jv> -&gt; <jk>false</jk></c> (never log).
 		 *
 		 * @param value
 		 * 	The default enablement flag value.  Can be <jk>null</jk> to use the default.

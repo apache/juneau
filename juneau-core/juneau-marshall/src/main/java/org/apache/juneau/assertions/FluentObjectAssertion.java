@@ -179,7 +179,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
-	 * 	<jsm>assertObject<jsm>(<jv>myPojo</jv>).asString(XmlSerializer.<jsf>DEFAULT</jsf>).is(<js>"&lt;object>&lt;foo>bar&lt;/foo>&lt;baz>qux&lt;/baz>&lt;/object>"</js>);
+	 * 	<jsm>assertObject<jsm>(<jv>myPojo</jv>).asString(XmlSerializer.<jsf>DEFAULT</jsf>).is(<js>"&lt;object&gt;&lt;foo&gt;bar&lt;/foo&gt;&lt;baz&gt;qux&lt;/baz&gt;&lt;/object&gt;"</js>);
 	 * </p>
 	 *
 	 * @param ws The serializer to use to convert the object to text.
@@ -199,7 +199,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified object is "foobar" after converting to a string.</jc>
-	 * 	<jsm>assertObject<jsm>(<jv>myPojo</jv>).asString(<jv>x</jv>-><jv>x</jv>.toString()).is(<js>"foobar"</js>);
+	 * 	<jsm>assertObject<jsm>(<jv>myPojo</jv>).asString(<jv>x</jv>-&gt;<jv>x</jv>.toString()).is(<js>"foobar"</js>);
 	 * </p>
 	 *
 	 * @param function The conversion function.
@@ -252,6 +252,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	/**
 	 * Applies a transform on the inner object and returns a new inner object.
 	 *
+	 * @param <T2> The transform-to type.
 	 * @param function The function to apply.
 	 * @return This object.
 	 */
@@ -609,6 +610,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	/**
 	 * Returns the result of running the specified function against the value and returns the result.
 	 *
+	 * @param <T2> The mapper-to type.
 	 * @param mapper The function to run against the value.
 	 * @return The result, never <jk>null</jk>.
 	 */

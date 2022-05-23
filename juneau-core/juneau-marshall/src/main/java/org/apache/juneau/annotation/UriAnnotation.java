@@ -201,6 +201,8 @@ public class UriAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		Uri[] value();
 	}

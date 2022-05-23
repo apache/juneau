@@ -89,6 +89,8 @@ public @interface Response {
 	 * 		Resolution of variables is delayed until request time and occurs before parsing.
 	 * 		<br>This allows you to, for example, pull in a JSON construct from a properties file based on the locale of the HTTP request.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] examples() default {};
 
@@ -100,6 +102,8 @@ public @interface Response {
 	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Header[] headers() default {};
 
@@ -109,6 +113,8 @@ public @interface Response {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] on() default {};
 
@@ -121,6 +127,8 @@ public @interface Response {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
 
@@ -129,6 +137,8 @@ public @interface Response {
 	 *
 	 * <p>
 	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiParser}.
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Void.class;
 
@@ -142,6 +152,8 @@ public @interface Response {
 	 * 	<li>
 	 * 		Server-side generated Swagger documentation.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Schema schema() default @Schema;
 
@@ -150,6 +162,8 @@ public @interface Response {
 	 *
 	 * <p>
 	 * Overrides for this part the part serializer defined on the REST resource which by default is {@link OpenApiSerializer}.
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Void.class;
 }

@@ -43,6 +43,8 @@ public @interface MsgPackConfig {
 	 *
 	 * <p>
 	 * Can be used to override default ordering and application of config annotations.
+	 *
+	 * @return The annotation value.
 	 */
 	int rank() default 0;
 
@@ -55,7 +57,7 @@ public @interface MsgPackConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * Add <js>"_type"</js> properties when needed.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
@@ -79,6 +81,8 @@ public @interface MsgPackConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.msgpack.MsgPackSerializer.Builder#addBeanTypesMsgPack()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String addBeanTypes() default "";
 }

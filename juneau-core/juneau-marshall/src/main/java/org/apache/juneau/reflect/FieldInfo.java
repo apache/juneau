@@ -104,6 +104,7 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	/**
 	 * Returns the specified annotation on this field.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param type The annotation to look for.
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
@@ -114,6 +115,7 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	/**
 	 * Returns the specified annotation on this field.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param annotationProvider The annotation provider.
 	 * @param type The annotation to look for.
 	 * @return The annotation, or <jk>null</jk> if not found.
@@ -127,6 +129,7 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	/**
 	 * Returns <jk>true</jk> if the specified annotation is present.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is present.
 	 */
@@ -137,6 +140,7 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	/**
 	 * Returns <jk>true</jk> if the specified annotation is not present on this field.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is not present on this field.
 	 */
@@ -147,6 +151,7 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	/**
 	 * Returns <jk>true</jk> if the specified annotation is present.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param annotationProvider The annotation provider.
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is present.
@@ -158,6 +163,7 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	/**
 	 * Returns <jk>true</jk> if the specified annotation is not present.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param annotationProvider The annotation provider.
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is not present.

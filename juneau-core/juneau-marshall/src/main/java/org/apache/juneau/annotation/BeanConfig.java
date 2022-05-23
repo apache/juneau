@@ -46,6 +46,8 @@ public @interface BeanConfig {
 	 *
 	 * <p>
 	 * Can be used to override default ordering and application of config annotations.
+	 *
+	 * @return The annotation value.
 	 */
 	int rank() default 0;
 
@@ -54,7 +56,7 @@ public @interface BeanConfig {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Minimum bean class visibility.
+	 * Minimum bean class visibility.
 	 *
 	 * <p>
 	 * Classes are not considered beans unless they meet the minimum visibility requirements.
@@ -80,11 +82,13 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanClassVisibility(Visibility)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String beanClassVisibility() default "";
 
 	/**
-	 * Configuration property:  Minimum bean constructor visibility.
+	 * Minimum bean constructor visibility.
 	 *
 	 * <p>
 	 * Only look for constructors with the specified minimum visibility.
@@ -110,11 +114,13 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanConstructorVisibility(Visibility)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String beanConstructorVisibility() default "";
 
 	/**
-	 * Configuration property:  Minimum bean field visibility.
+	 * Minimum bean field visibility.
 	 *
 	 * <p>
 	 * Only look for bean fields with the specified minimum visibility.
@@ -140,11 +146,13 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanFieldVisibility(Visibility)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String beanFieldVisibility() default "";
 
 	/**
-	 * Configuration property:  BeanMap.put() returns old property value.
+	 * BeanMap.put() returns old property value.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, then the {@link BeanMap#put(String,Object) BeanMap.put()} method will return old property
@@ -165,11 +173,13 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanMapPutReturnsOldValue()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String beanMapPutReturnsOldValue() default "";
 
 	/**
-	 * Configuration property:  Minimum bean method visibility.
+	 * Minimum bean method visibility.
 	 *
 	 * <p>
 	 * Only look for bean methods with the specified minimum visibility.
@@ -195,11 +205,13 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanMethodVisibility(Visibility)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String beanMethodVisibility() default "";
 
 	/**
-	 * Configuration property:  Beans require no-arg constructors.
+	 * Beans require no-arg constructors.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, a Java class must implement a default no-arg constructor to be considered a bean.
@@ -221,11 +233,13 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beansRequireDefaultConstructor()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String beansRequireDefaultConstructor() default "";
 
 	/**
-	 * Configuration property:  Beans require Serializable interface.
+	 * Beans require Serializable interface.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, a Java class must implement the {@link Serializable} interface to be considered a bean.
@@ -247,11 +261,13 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beansRequireSerializable()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String beansRequireSerializable() default "";
 
 	/**
-	 * Configuration property:  Beans require setters for getters.
+	 * Beans require setters for getters.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, only getters that have equivalent setters will be considered as properties on a bean.
@@ -271,11 +287,13 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beansRequireSettersForGetters()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String beansRequireSettersForGetters() default "";
 
 	/**
-	 * Configuration property:  Beans don't require at least one property.
+	 * Beans don't require at least one property.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, then a Java class doesn't need to contain at least 1 property to be considered a bean.
@@ -295,11 +313,13 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableBeansRequireSomeProperties()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String disableBeansRequireSomeProperties() default "";
 
 	/**
-	 * Configuration property:  Bean type property name.
+	 * Bean type property name.
 	 *
 	 * <p>
 	 * This specifies the name of the bean property used to store the dictionary name of a bean type so that the
@@ -316,11 +336,13 @@ public @interface BeanConfig {
 	 * 	<li class='ja'>{@link Bean#typePropertyName()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#typePropertyName(String)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String typePropertyName() default "";
 
 	/**
-	 * Configuration property:  Debug mode.
+	 * Debug mode.
 	 *
 	 * <p>
 	 * Enables the following additional information during serialization:
@@ -354,11 +376,13 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.Context.Builder#debug()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String debug() default "";
 
 	/**
-	 * Configuration property:  Bean dictionary.
+	 * Bean dictionary.
 	 *
 	 * <p>
 	 * The list of classes that make up the bean dictionary in this bean context.
@@ -380,11 +404,13 @@ public @interface BeanConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
 	 * 	<li class='link'>{@doc jm.BeanDictionaries}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] dictionary() default {};
 
 	/**
-	 * Configuration property:  Replace bean dictionary.
+	 * Replace bean dictionary.
 	 *
 	 * <p>
 	 * Same as {@link #dictionary()} but replaces any existing value.
@@ -395,11 +421,13 @@ public @interface BeanConfig {
 	 * 	<li class='ja'>{@link BeanConfig#dictionary()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanDictionary(Class...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] dictionary_replace() default {};
 
 	/**
-	 * Configuration property:  Find fluent setters.
+	 * Find fluent setters.
 	 *
 	 * <p>
 	 * When enabled, fluent setters are detected on beans.
@@ -428,11 +456,13 @@ public @interface BeanConfig {
 	 * 	<li class='ja'>{@link Bean#findFluentSetters()}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#findFluentSetters()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String findFluentSetters() default "";
 
 	/**
-	 * Configuration property:  Ignore invocation errors on getters.
+	 * Ignore invocation errors on getters.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, errors thrown when calling bean getter methods will silently be ignored.
@@ -452,11 +482,13 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#ignoreInvocationExceptionsOnGetters()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String ignoreInvocationExceptionsOnGetters() default "";
 
 	/**
-	 * Configuration property:  Ignore invocation errors on setters.
+	 * Ignore invocation errors on setters.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, errors thrown when calling bean setter methods will silently be ignored.
@@ -476,11 +508,13 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#ignoreInvocationExceptionsOnSetters()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String ignoreInvocationExceptionsOnSetters() default "";
 
 	/**
-	 * Configuration property:  Don't silently ignore missing setters.
+	 * Don't silently ignore missing setters.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, trying to set a value on a bean property without a setter will throw a {@code BeanRuntimeException}.
@@ -500,11 +534,13 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableIgnoreMissingSetters()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String disableIgnoreMissingSetters() default "";
 
 	/**
-	 * Configuration property:  Don't ignore transient fields.
+	 * Don't ignore transient fields.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, methods and fields marked as <jk>transient</jk> will not be ignored as bean properties.
@@ -523,11 +559,13 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableIgnoreTransientFields()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String disableIgnoreTransientFields() default "";
 
 	/**
-	 * Configuration property:  Ignore unknown properties.
+	 * Ignore unknown properties.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, trying to set a value on a non-existent bean property will silently be ignored.
@@ -547,11 +585,38 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#ignoreUnknownBeanProperties()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String ignoreUnknownBeanProperties() default "";
 
 	/**
-	 * Configuration property:  Don't ignore unknown properties with null values.
+	 * Ignore unknown enum values.
+	 *
+	 * <p>
+	 * If <js>"true"</js>, unknown enum values are set to <jk>null</jk> instead of throwing an exception.
+	 *
+	 * <ul class='notes'>
+	 * 	<li>
+	 * 		Possible values:
+	 * 		<ul>
+	 * 			<li><js>"true"</js>
+	 * 			<li><js>"false"</js> (default)
+	 * 		</ul>
+	 * 	<li>
+	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <ul class='seealso'>
+	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#ignoreUnknownEnumValues()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 */
+	String ignoreUnknownEnumValues() default "";
+
+	/**
+	 * Don't ignore unknown properties with null values.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, trying to set a <jk>null</jk> value on a non-existent bean property will throw a {@code BeanRuntimeException}.
@@ -571,6 +636,8 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableIgnoreUnknownNullBeanProperties()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String disableIgnoreUnknownNullBeanProperties() default "";
 
@@ -607,11 +674,13 @@ public @interface BeanConfig {
 	 * <ul class='notes'>
 	 * 	<li>The {@link Bean#interfaceClass() @Bean(interfaceClass)} annotation is the equivalent annotation-based solution.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] interfaces() default {};
 
 	/**
-	 * Configuration property:  Locale.
+	 * Locale.
 	 *
 	 * <p>
 	 * Specifies the default locale for serializer and parser sessions.
@@ -625,11 +694,13 @@ public @interface BeanConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanSession.Builder#locale(Locale)}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#locale(Locale)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String locale() default "";
 
 	/**
-	 * Configuration property:  Media type.
+	 * Media type.
 	 *
 	 * <p>
 	 * Specifies the default media type value for serializer and parser sessions.
@@ -643,11 +714,13 @@ public @interface BeanConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanSession.Builder#mediaType(MediaType)}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#mediaType(MediaType)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String mediaType() default "";
 
 	/**
-	 * Configuration property:  Bean class exclusions.
+	 * Bean class exclusions.
 	 *
 	 * <p>
 	 * List of classes that should not be treated as beans even if they appear to be bean-like.
@@ -662,11 +735,13 @@ public @interface BeanConfig {
 	 * 	<li class='ja'>{@link BeanIgnore}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#notBeanClasses(Class...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] notBeanClasses() default {};
 
 	/**
-	 * Configuration property:  Replace classes that should not be considered beans.
+	 * Replace classes that should not be considered beans.
 	 *
 	 * <p>
 	 * Same as {@link #notBeanClasses()} but replaces any existing value.
@@ -674,11 +749,13 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#notBeanClasses(Class...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] notBeanClasses_replace() default {};
 
 	/**
-	 * Configuration property:  Bean package exclusions.
+	 * Bean package exclusions.
 	 *
 	 * <p>
 	 * When specified, the current list of ignore packages are appended to.
@@ -709,11 +786,13 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#notBeanPackages(String...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] notBeanPackages() default {};
 
 	/**
-	 * Configuration property:  Replace packages whose classes should not be considered beans.
+	 * Replace packages whose classes should not be considered beans.
 	 *
 	 * <p>
 	 * Same as {@link #notBeanPackages()} but replaces any existing value.
@@ -721,11 +800,13 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#notBeanPackages(String...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] notBeanPackages_replace() default {};
 
 	/**
-	 * Configuration property:  Bean property namer.
+	 * Bean property namer.
 	 *
 	 * <p>
 	 * The class to use for calculating bean property names.
@@ -741,11 +822,13 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#propertyNamer(Class)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends PropertyNamer> propertyNamer() default PropertyNamer.Void.class;
 
 	/**
-	 * Configuration property:  Sort bean properties.
+	 * Sort bean properties.
 	 *
 	 * <p>
 	 * When <jk>true</jk>, all bean properties will be serialized and access in alphabetical order.
@@ -772,11 +855,13 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#sortProperties()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String sortProperties() default "";
 
 	/**
-	 * Configuration property:  Java object swaps.
+	 * Java object swaps.
 	 *
 	 * <p>
 	 * Swaps are used to "swap out" non-serializable classes with serializable equivalents during serialization,
@@ -799,11 +884,13 @@ public @interface BeanConfig {
 	 * 	<li class='link'>{@doc jm.AutoSwaps}
 	 * 	<li class='link'>{@doc jm.SurrogateClasses}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] swaps() default {};
 
 	/**
-	 * Configuration property: Replace Java object swap classes.
+	 * Replace Java object swap classes.
 	 *
 	 * <p>
 	 * Same as {@link #swaps()} but replaces any existing value.
@@ -811,11 +898,13 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#swaps(Class...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] swaps_replace() default {};
 
 	/**
-	 * Configuration property:  Time zone.
+	 * Time zone.
 	 *
 	 * <p>
 	 * Specifies the default timezone for serializer and parser sessions.
@@ -829,11 +918,13 @@ public @interface BeanConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanSession.Builder#timeZone(TimeZone)}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#timeZone(TimeZone)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String timeZone() default "";
 
 	/**
-	 * Configuration property:  Use enum names.
+	 * Use enum names.
 	 *
 	 * <p>
 	 * When enabled, enums are always serialized by name, not using {@link Object#toString()}.
@@ -852,11 +943,13 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#useEnumNames()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String useEnumNames() default "";
 
 	/**
-	 * Configuration property:  Don't use interface proxies.
+	 * Don't use interface proxies.
 	 *
 	 * <p>
 	 * Disables the feature where interfaces will be instantiated as proxy classes through the use of an
@@ -877,11 +970,13 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#disableInterfaceProxies()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String disableInterfaceProxies() default "";
 
 	/**
-	 * Configuration property:  Use Java Introspector.
+	 * Use Java Introspector.
 	 *
 	 * <p>
 	 * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.
@@ -901,6 +996,8 @@ public @interface BeanConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#useJavaBeanIntrospector()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String useJavaBeanIntrospector() default "";
 }

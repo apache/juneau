@@ -729,6 +729,7 @@ public final class RestResponse {
 	/**
 	 * Returns this value cast to the specified class.
 	 *
+	 * @param <T> The class to cast to.
 	 * @param c The class to cast to.
 	 * @return This value cast to the specified class, or <jk>null</jk> if the object doesn't exist or isn't the specified type.
 	 */

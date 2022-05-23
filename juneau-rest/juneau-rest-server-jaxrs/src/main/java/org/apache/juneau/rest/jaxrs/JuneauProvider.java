@@ -48,6 +48,8 @@ public @interface JuneauProvider {
 	 * <p>
 	 * If the specified class is an instance of {@link ObjectSwap}, then that swap is added.
 	 * Any other classes are wrapped in a {@link SurrogateSwap}.
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] swaps() default {};
 
@@ -56,6 +58,8 @@ public @interface JuneauProvider {
 	 *
 	 * <p>
 	 * This annotation can only be used on {@link Serializer} classes that have no-arg constructors.
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends Serializer>[] serializers() default {};
 
@@ -64,6 +68,8 @@ public @interface JuneauProvider {
 	 *
 	 * <p>
 	 * This annotation can only be used on {@link Parser} classes that have no-arg constructors.
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends Parser>[] parsers() default {};
 }

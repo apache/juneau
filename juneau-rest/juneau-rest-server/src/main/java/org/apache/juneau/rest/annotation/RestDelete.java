@@ -104,6 +104,8 @@ public @interface RestDelete {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#clientVersionHeader(String)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String clientVersion() default "";
 
@@ -113,6 +115,8 @@ public @interface RestDelete {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#type(Class)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends RestOpContext> contextClass() default RestOpContext.Void.class;
 
@@ -146,6 +150,8 @@ public @interface RestDelete {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugEnablement()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String debug() default "";
 
@@ -157,6 +163,8 @@ public @interface RestDelete {
 	 *
 	 * <p>
 	 * This is a shortcut for using {@link #defaultRequestHeaders()} for just this specific header.
+	 *
+	 * @return The annotation value.
 	 */
 	String defaultAccept() default "";
 
@@ -177,6 +185,8 @@ public @interface RestDelete {
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#defaultCharset(Charset)}
 	 * 	<li class='ja'>{@link Rest#defaultCharset}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String defaultCharset() default "";
 
@@ -204,6 +214,8 @@ public @interface RestDelete {
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] defaultRequestQueryData() default {};
 
@@ -243,6 +255,8 @@ public @interface RestDelete {
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestAttributes(NamedAttribute...)}
 	 * 	<li class='ja'>{@link Rest#defaultRequestAttributes()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] defaultRequestAttributes() default {};
 
@@ -268,6 +282,8 @@ public @interface RestDelete {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestHeaders(org.apache.http.Header...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] defaultRequestHeaders() default {};
 
@@ -293,6 +309,8 @@ public @interface RestDelete {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultResponseHeaders(org.apache.http.Header...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] defaultResponseHeaders() default {};
 
@@ -317,6 +335,8 @@ public @interface RestDelete {
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] description() default {};
 
@@ -362,6 +382,8 @@ public @interface RestDelete {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jrs.Encoders}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends Encoder>[] encoders() default {};
 
@@ -374,6 +396,8 @@ public @interface RestDelete {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#guards()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends RestGuard>[] guards() default {};
 
@@ -390,6 +414,8 @@ public @interface RestDelete {
 	 * <ul class='seealso'>
 	 * 	<li class='jac'>{@link RestMatcher}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends RestMatcher>[] matchers() default {};
 
@@ -399,6 +425,8 @@ public @interface RestDelete {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] on() default {};
 
@@ -427,6 +455,8 @@ public @interface RestDelete {
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] path() default {};
 
@@ -480,6 +510,8 @@ public @interface RestDelete {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#roleGuard(String)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String roleGuard() default "";
 
@@ -509,6 +541,8 @@ public @interface RestDelete {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#rolesDeclared(String...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String rolesDeclared() default "";
 
@@ -533,6 +567,8 @@ public @interface RestDelete {
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String summary() default "";
 
@@ -582,6 +618,8 @@ public @interface RestDelete {
 	 * 	<li class='ja'>{@link OpSwagger}
 	 * 	<li class='jc'>{@link SwaggerProvider}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	OpSwagger swagger() default @OpSwagger;
 
@@ -600,6 +638,8 @@ public @interface RestDelete {
 	 * 	<jc>// Shortened form</jc>
 	 * 	<ja>@RestDelete</ja>(<js>"/{propertyName}"</js>)
 	 * </p>
+	 *
+	 * @return The annotation value.
 	 */
 	String value() default "";
 }

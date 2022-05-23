@@ -485,7 +485,7 @@ public class ResponseHeader extends BasicHeader {
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).assertValue().passes(<jv>x</jv> -> <jv>x</jv>.equals(<js>"application/json"</js>));
+	 * 		.getHeader(<js>"Content-Type"</js>).assertValue().passes(<jv>x</jv> -&gt; <jv>x</jv>.equals(<js>"application/json"</js>));
 	 *
 	 * 	<jc>// Validates the content type is JSON by just checking for substring.</jc>
 	 * 	<jv>client</jv>

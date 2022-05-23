@@ -53,26 +53,27 @@ public final class ArrayUtils {
 	/**
 	 * Combine an arbitrary number of arrays into a single array.
 	 *
+	 * @param <E> The element type.
 	 * @param arrays Collection of arrays to combine.
 	 * @return A new combined array, or <jk>null</jk> if all arrays are <jk>null</jk>.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T[] combine(T[]...arrays) {
+	public static <E> E[] combine(E[]...arrays) {
 		assertArgNotNull("arrays", arrays);
 		int l = 0;
-		T[] a1 = null;
-		for (T[] a : arrays) {
+		E[] a1 = null;
+		for (E[] a : arrays) {
 			if (a1 == null && a != null)
 				a1 = a;
 			l += (a == null ? 0 : a.length);
 		}
 		if (a1 == null)
 			return null;
-		T[] a = (T[])Array.newInstance(a1.getClass().getComponentType(), l);
+		E[] a = (E[])Array.newInstance(a1.getClass().getComponentType(), l);
 		int i = 0;
-		for (T[] aa : arrays)
+		for (E[] aa : arrays)
 			if (aa != null)
-				for (T t : aa)
+				for (E t : aa)
 					a[i++] = t;
 		return a;
 	}
@@ -130,12 +131,13 @@ public final class ArrayUtils {
 	 * <p>
 	 * Works on both object and primitive arrays.
 	 *
+	 * @param <E> The element type.
 	 * @param c The collection to convert to an array.
-	 * @param componentType The component type of the collection.
+	 * @param elementType The component type of the collection.
 	 * @return A new array.
 	 */
-	public static <T> Object toArray(Collection<?> c, Class<T> componentType) {
-		Object a = Array.newInstance(componentType, c.size());
+	public static <E> Object toArray(Collection<?> c, Class<E> elementType) {
+		Object a = Array.newInstance(elementType, c.size());
 		Iterator<?> it = c.iterator();
 		int i = 0;
 		while (it.hasNext())
@@ -156,17 +158,18 @@ public final class ArrayUtils {
 	/**
 	 * Converts the specified array to an <c>ArrayList</c>
 	 *
+	 * @param <E> The element type.
 	 * @param array The array to convert.
-	 * @param componentType
+	 * @param elementType
 	 * 	The type of objects in the array.
 	 * 	It must match the actual component type in the array.
 	 * @return A new {@link ArrayList}
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> List<T> toList(Object array, Class<T> componentType) {
-		List<T> l = new ArrayList<>(Array.getLength(array));
+	public static <E> List<E> toList(Object array, Class<E> elementType) {
+		List<E> l = new ArrayList<>(Array.getLength(array));
 		for (int i = 0; i < Array.getLength(array); i++)
-			l.add((T)Array.get(array, i));
+			l.add((E)Array.get(array, i));
 		return l;
 	}
 
@@ -318,12 +321,13 @@ public final class ArrayUtils {
 	/**
 	 * Reverses the entries in an array.
 	 *
+	 * @param <E> The element type.
 	 * @param array The array to reverse.
 	 * @return The same array.
 	 */
-	public static final <T> T[] reverse(T[] array) {
+	public static final <E> E[] reverse(E[] array) {
 		for (int i = 0; i < array.length / 2; i++) {
-			T temp = array[i];
+			E temp = array[i];
 			array[i] = array[array.length - i - 1];
 			array[array.length - i - 1] = temp;
 		}

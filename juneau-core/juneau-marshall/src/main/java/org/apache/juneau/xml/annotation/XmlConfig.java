@@ -47,6 +47,8 @@ public @interface XmlConfig {
 	 *
 	 * <p>
 	 * Can be used to override default ordering and application of config annotations.
+	 *
+	 * @return The annotation value.
 	 */
 	int rank() default 0;
 
@@ -59,7 +61,7 @@ public @interface XmlConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  XML event allocator.
+	 * XML event allocator.
 	 *
 	 * <p>
 	 * Associates an {@link XMLEventAllocator} with this parser.
@@ -67,11 +69,13 @@ public @interface XmlConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder#eventAllocator(Class)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends XMLEventAllocator> eventAllocator() default XmlEventAllocator.Void.class;
 
 	/**
-	 * Configuration property:  Preserve root element during generalized parsing.
+	 * Preserve root element during generalized parsing.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, when parsing into a generic {@link JsonMap}, the map will contain a single entry whose key
@@ -91,11 +95,13 @@ public @interface XmlConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder#preserveRootElement()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String preserveRootElement() default "";
 
 	/**
-	 * Configuration property:  XML reporter.
+	 * XML reporter.
 	 *
 	 * <p>
 	 * Associates an {@link XMLReporter} with this parser.
@@ -108,11 +114,13 @@ public @interface XmlConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder#reporter(Class)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends XMLReporter> reporter() default XmlReporter.Void.class;
 
 	/**
-	 * Configuration property:  XML resolver.
+	 * XML resolver.
 	 *
 	 * <p>
 	 * Associates an {@link XMLResolver} with this parser.
@@ -120,11 +128,13 @@ public @interface XmlConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder#resolver(Class)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends XMLResolver> resolver() default XmlResolver.Void.class;
 
 	/**
-	 * Configuration property:  Enable validation.
+	 * Enable validation.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, XML document will be validated.
@@ -146,6 +156,8 @@ public @interface XmlConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlParser.Builder#validating()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String validating() default "";
 
@@ -154,7 +166,7 @@ public @interface XmlConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * Add <js>"_type"</js> properties when needed.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
@@ -178,11 +190,13 @@ public @interface XmlConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#addBeanTypesXml()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String addBeanTypes() default "";
 
 	/**
-	 * Configuration property:  Add namespace URLs to the root element.
+	 * Add namespace URLs to the root element.
 	 *
 	 * <p>
 	 * Use this setting to add {@code xmlns:x} attributes to the root element for the default and all mapped namespaces.
@@ -204,11 +218,13 @@ public @interface XmlConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#addNamespaceUrisToRoot()}
 	 * 	<li class='link'>{@doc jm.XmlNamespaces}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String addNamespaceUrisToRoot() default "";
 
 	/**
-	 * Configuration property:  Don't auto-detect namespace usage.
+	 * Don't auto-detect namespace usage.
 	 *
 	 * <p>
 	 * Don't detect namespace usage before serialization.
@@ -243,11 +259,13 @@ public @interface XmlConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#disableAutoDetectNamespaces()}
 	 * 	<li class='link'>{@doc jm.XmlNamespaces}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String disableAutoDetectNamespaces() default "";
 
 	/**
-	 * Configuration property:  Default namespace.
+	 * Default namespace.
 	 *
 	 * <p>
 	 * Specifies the default namespace URI for this document.
@@ -261,11 +279,13 @@ public @interface XmlConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#defaultNamespace(Namespace)}
 	 * 	<li class='link'>{@doc jm.XmlNamespaces}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String defaultNamespace() default "";
 
 	/**
-	 * Configuration property:  Enable support for XML namespaces.
+	 * Enable support for XML namespaces.
 	 *
 	 * <p>
 	 * If not enabled, XML output will not contain any namespaces regardless of any other settings.
@@ -285,11 +305,13 @@ public @interface XmlConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#enableNamespaces()}
 	 * 	<li class='link'>{@doc jm.XmlNamespaces}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String enableNamespaces() default "";
 
 	/**
-	 * Configuration property:  Default namespaces.
+	 * Default namespaces.
 	 *
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
@@ -303,6 +325,8 @@ public @interface XmlConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.xml.XmlSerializer.Builder#namespaces(Namespace...)}
 	 * 	<li class='link'>{@doc jm.XmlNamespaces}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] namespaces() default {};
 }

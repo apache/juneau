@@ -80,6 +80,7 @@ public final class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Convenience constructor when annotation is found on a class.
 	 *
+	 * @param <A> The annotation class.
 	 * @param onClass The class where the annotation was found.
 	 * @param value The annotation found.
 	 * @return A new {@link AnnotationInfo} object.
@@ -91,6 +92,7 @@ public final class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Convenience constructor when annotation is found on a method.
 	 *
+	 * @param <A> The annotation class.
 	 * @param onMethod The method where the annotation was found.
 	 * @param value The annotation found.
 	 * @return A new {@link AnnotationInfo} object.
@@ -102,6 +104,7 @@ public final class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Convenience constructor when annotation is found on a package.
 	 *
+	 * @param <A> The annotation class.
 	 * @param onPackage The package where the annotation was found.
 	 * @param value The annotation found.
 	 * @return A new {@link AnnotationInfo} object.
@@ -224,6 +227,7 @@ public final class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns <jk>true</jk> if this annotation is the specified type.
 	 *
+	 * @param <A> The annotation class.
 	 * @param type The type to test against.
 	 * @return <jk>true</jk> if this annotation is the specified type.
 	 */
@@ -235,6 +239,7 @@ public final class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns <jk>true</jk> if this annotation has the specified annotation defined on it.
 	 *
+	 * @param <A> The annotation class.
 	 * @param type The annotation to test for.
 	 * @return <jk>true</jk> if this annotation has the specified annotation defined on it.
 	 */
@@ -245,6 +250,7 @@ public final class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns <jk>true</jk> if this annotation is in the specified {@link AnnotationGroup group}.
 	 *
+	 * @param <A> The annotation class.
 	 * @param group The group annotation.
 	 * @return <jk>true</jk> if this annotation is in the specified {@link AnnotationGroup group}.
 	 */
@@ -284,6 +290,7 @@ public final class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Performs an action on all matching values on this annotation.
 	 *
+	 * @param <V> The annotation field type.
 	 * @param type The annotation field type.
 	 * @param name The annotation field name.
 	 * @param test A predicate to apply to the value to determine if action should be performed.  Can be <jk>null</jk>.
@@ -301,6 +308,7 @@ public final class AnnotationInfo<T extends Annotation> {
 	/**
 	 * Returns a matching value on this annotation.
 	 *
+	 * @param <V> The annotation field type.
 	 * @param type The annotation field type.
 	 * @param name The annotation field name.
 	 * @param test A predicate to apply to the value to determine if value should be used.  Can be <jk>null</jk>.

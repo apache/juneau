@@ -309,6 +309,8 @@ public class FormDataAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		FormData[] value();
 	}

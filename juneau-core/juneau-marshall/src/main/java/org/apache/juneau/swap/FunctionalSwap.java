@@ -20,9 +20,9 @@ import org.apache.juneau.utils.*;
  *
  * <p class='bjava'>
  * 	<jc>// Example</jc>
- * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> FunctionalSwap<MyBean,String> {
+ * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> FunctionalSwap&lt;MyBean,String&gt; {
  * 		<jk>public</jk> MyBeanSwap() {
- * 			<jk>super</jk>(MyBean.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -> <jsm>myStringifyier</jsm>(<jv>x</jv>), <jv>x</jv> -> <jsm>myDeStringifier</jsm>(<jv>x</jv>));
+ * 			<jk>super</jk>(MyBean.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -&gt; <jsm>myStringifyier</jsm>(<jv>x</jv>), <jv>x</jv> -&gt; <jsm>myDeStringifier</jsm>(<jv>x</jv>));
  * 		}
  * 	}
  * </p>

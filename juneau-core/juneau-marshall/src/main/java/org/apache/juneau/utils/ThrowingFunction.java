@@ -43,7 +43,7 @@ public interface ThrowingFunction<T,R> extends Function<T,R> {
 	 *
 	 * @param t The type of the input to the function.
 	 * @return The type of the result of the function.
-	 * @throws Exception
+	 * @throws Exception Any exception.
 	 */
 	R applyThrows(T t) throws Exception;
 }

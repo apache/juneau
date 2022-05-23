@@ -62,6 +62,8 @@ public @interface Tag {
 	 * 	<li>
 	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] description() default {};
 
@@ -73,6 +75,8 @@ public @interface Tag {
 	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	ExternalDocs externalDocs() default @ExternalDocs;
 
@@ -83,6 +87,8 @@ public @interface Tag {
 	 * 	<li>
 	 * 		The format is plain text.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String name() default "";
 }

@@ -827,6 +827,7 @@ public class BeanMeta<T> {
 	/**
 	 * Performs a function on the first property that matches the specified filter.
 	 *
+	 * @param <T2> The type to convert the property to.
 	 * @param filter The filter to apply.
 	 * @param function The function to apply to the matching property.
 	 * @return The result of the function.  Never <jk>null</jk>.

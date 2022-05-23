@@ -112,6 +112,7 @@ public enum Visibility {
 	 * <p>
 	 * Security exceptions thrown on the call to {@link Constructor#setAccessible(boolean)} are quietly ignored.
 	 *
+	 * @param <T> The class type.
 	 * @param x The constructor.
 	 * @return
 	 * 	The same constructor if visibility requirements met, or <jk>null</jk> if visibility requirement not

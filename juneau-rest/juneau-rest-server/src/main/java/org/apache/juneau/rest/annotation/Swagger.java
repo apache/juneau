@@ -64,6 +64,8 @@ public @interface Swagger {
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Contact contact() default @Contact;
 
@@ -98,6 +100,8 @@ public @interface Swagger {
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] description() default {};
 
@@ -120,6 +124,8 @@ public @interface Swagger {
 	 * 		)
 	 * 	)
 	 * </p>
+	 *
+	 * @return The annotation value.
 	 */
 	ExternalDocs externalDocs() default @ExternalDocs;
 
@@ -160,6 +166,8 @@ public @interface Swagger {
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	License license() default @License;
 
@@ -209,6 +217,8 @@ public @interface Swagger {
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Tag[] tags() default {};
 
@@ -233,6 +243,8 @@ public @interface Swagger {
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] termsOfService() default {};
 
@@ -264,6 +276,8 @@ public @interface Swagger {
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] title() default {};
 
@@ -378,6 +392,8 @@ public @interface Swagger {
 	 * 	<li>
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] value() default {};
 
@@ -402,6 +418,8 @@ public @interface Swagger {
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String version() default "";
 }

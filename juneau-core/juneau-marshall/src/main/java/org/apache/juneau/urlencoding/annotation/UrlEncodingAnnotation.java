@@ -227,6 +227,8 @@ public class UrlEncodingAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		UrlEncoding[] value();
 	}

@@ -60,27 +60,27 @@ public class LogsResource extends BasicRestServlet implements BasicUniversalConf
 	private static final String PREFIX = "LogsResource.";
 
 	/**
-	 * Configuration property:  Root directory.
+	 * Root directory.
 	 */
 	public static final String LOGS_RESOURCE_logDir = PREFIX + "logDir.s";
 
 	/**
-	 * Configuration property:  Allow deletes on files.
+	 * Allow deletes on files.
 	 */
 	public static final String LOGS_RESOURCE_allowDeletes = PREFIX + "allowDeletes.b";
 
 	/**
-	 * Configuration property:  Log entry format.
+	 * Log entry format.
 	 */
 	public static final String LOGS_RESOURCE_logFormat = PREFIX + "logFormat.s";
 
 	/**
-	 * Configuration property:  Log entry format.
+	 * Log entry format.
 	 */
 	public static final String LOGS_RESOURCE_dateFormat = PREFIX + "dateFormat.s";
 
 	/**
-	 * Configuration property:  Log entry format.
+	 * Log entry format.
 	 */
 	public static final String LOGS_RESOURCE_useStackTraceHashes = PREFIX + "useStackTraceHashes.b";
 

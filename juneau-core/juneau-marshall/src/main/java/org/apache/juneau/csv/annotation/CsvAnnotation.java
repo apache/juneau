@@ -203,6 +203,8 @@ public class CsvAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		Csv[] value();
 	}

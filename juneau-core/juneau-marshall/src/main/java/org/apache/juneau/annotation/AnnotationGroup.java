@@ -32,6 +32,8 @@ public @interface AnnotationGroup {
 
 	/**
 	 * The annotation group.
+	 *
+	 * @return The annotation value.
 	 */
 	public Class<? extends Annotation> value();
 }

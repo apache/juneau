@@ -35,11 +35,15 @@ public @interface XmlNs {
 
 	/**
 	 * XML namespace URL.
+	 *
+	 * @return The annotation value.
 	 */
 	String namespaceURI();
 
 	/**
 	 * XML namespace prefix.
+	 *
+	 * @return The annotation value.
 	 */
 	String prefix();
 }

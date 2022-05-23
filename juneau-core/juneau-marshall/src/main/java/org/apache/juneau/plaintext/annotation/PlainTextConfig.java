@@ -42,6 +42,8 @@ public @interface PlainTextConfig {
 	 *
 	 * <p>
 	 * Can be used to override default ordering and application of config annotations.
+	 *
+	 * @return The annotation value.
 	 */
 	int rank() default 0;
 

@@ -281,6 +281,8 @@ public class SwapAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		Swap[] value();
 	}

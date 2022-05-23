@@ -256,6 +256,7 @@ public class Assertion {
 	/**
 	 * Convenience method for getting the array class of the specified element type.
 	 *
+	 * @param <E> The element type.
 	 * @param c The object to get the class name for.
 	 * @return The class name for an object.
 	 */

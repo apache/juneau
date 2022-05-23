@@ -19,7 +19,6 @@ import org.apache.juneau.examples.serializer.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.servlet.*;
@@ -46,7 +45,6 @@ import java.net.*;
 @HtmlDocConfig(
 	navlinks="options: ?method=OPTIONS"
 )
-@SuppressWarnings({ "javadoc" })
 public class PhotosResource extends BasicRestServlet implements BasicUniversalConfig {
 
 	private static final long serialVersionUID = 1L;
@@ -64,52 +62,93 @@ public class PhotosResource extends BasicRestServlet implements BasicUniversalCo
 			this.image = image;
 		}
 
-		public URI getURI() throws URISyntaxException {
-			return new URI("photos/"+id);
+		/**
+		 * The photo URL.
+		 *
+		 * @return The photo URL.
+		 */
+		public URI getURI() {
+			try {
+				return new URI("photos/"+id);
+			} catch (URISyntaxException e) {
+				throw new RuntimeException(e); // Shouldn't happen.
+			}
 		}
 
+		/**
+		 * The photo ID
+		 *
+		 * @return The photo ID.
+		 */
 		public int getID() {
 			return id;
 		}
 	}
 
-	/** GET request handler for list of all photos */
+	/**
+	 * GET request handler for list of all photos.
+	 *
+	 * @return A list of photo beans.
+	 */
 	@RestGet("/")
-	public Collection<Photo> getAllPhotos(RestRequest req, RestResponse res) throws Exception {
+	public Collection<Photo> getAllPhotos() {
 		return photos.values();
 	}
 
-	/** GET request handler for single photo */
+	/**
+	 * GET request handler for single photo.
+	 *
+	 * @param id The photo ID.
+	 * @return The photo image.
+	 * @throws NotFound If photo not found.
+	 */
 	@RestGet(path="/{id}", serializers=ImageSerializer.class)
-	public BufferedImage getPhoto(RestRequest req, @Path("id") int id) throws Exception {
+	public BufferedImage getPhoto(@Path("id") int id) throws NotFound {
 		Photo p = photos.get(id);
 		if (p == null)
 			throw new NotFound("Photo not found");
 		return p.image;
 	}
 
-	/** PUT request handler */
+	/**
+	 * PUT request handler.
+	 *
+	 * @param id The photo ID.
+	 * @param image The photo image.
+	 * @return OK.
+	 */
 	@RestPut(path="/{id}", parsers=ImageParser.class)
-	public String addPhoto(RestRequest req, @Path("id") int id, @Body BufferedImage image) throws Exception {
+	public Ok addPhoto(@Path("id") int id, @Body BufferedImage image) {
 		photos.put(id, new Photo(id, image));
-		return "OK";
+		return Ok.OK;
 	}
 
-	/** POST request handler */
+	/**
+	 * POST request handler.
+	 *
+	 * @param image The photo image.
+	 * @return The created photo bean.
+	 */
 	@RestPost(path="/", parsers=ImageParser.class)
-	public Photo setPhoto(RestRequest req, @Body BufferedImage image) throws Exception {
+	public Photo setPhoto(@Body BufferedImage image) {
 		int id = photos.size();
 		Photo p = new Photo(id, image);
 		photos.put(id, p);
 		return p;
 	}
 
-	/** DELETE request handler */
+	/**
+	 * DELETE request handler
+	 *
+	 * @param id The photo ID.
+	 * @return OK.
+	 * @throws NotFound If photo not found.
+	 */
 	@RestDelete("/{id}")
-	public String deletePhoto(RestRequest req, @Path("id") int id) throws Exception {
+	public Ok deletePhoto(@Path("id") int id) throws NotFound {
 		Photo p = photos.remove(id);
 		if (p == null)
 			throw new NotFound("Photo not found");
-		return "OK";
+		return Ok.OK;
 	}
 }

@@ -74,6 +74,7 @@ public class PartBeanMeta<T> {
 	/**
 	 * Finds the part bean meta for the specified type.
 	 *
+	 * @param <T> The part bean type.
 	 * @param type The part bean type.
 	 * @return The metadata, or <jk>null</jk> if a valid constructor could not be found.
 	 */

@@ -343,6 +343,7 @@ public class AssertionPredicates {
 	 * Assertion error message is <js>"Predicate test #x failed."</js> followed by
 	 * the inner failed message if the failed predicate extends from {@link AssertionPredicate}.
 	 *
+	 * @param <T> The predicate type.
 	 * @param predicates The predicates to combine.
 	 * @return The combined predicates.
 	 */
@@ -357,6 +358,7 @@ public class AssertionPredicates {
 	 * <p>
 	 * Assertion error message is <js>"No predicate tests passed."</js>.
 	 *
+	 * @param <T> The predicate type.
 	 * @param predicates The predicates to combine.
 	 * @return The combined predicates.
 	 */
@@ -371,6 +373,7 @@ public class AssertionPredicates {
 	 * <p>
 	 * Assertion error message is <js>"Predicate test unexpectedly passed."</js>.
 	 *
+	 * @param <T> The predicate type.
 	 * @param predicate The predicate to negate.
 	 * @return The combined predicates.
 	 */

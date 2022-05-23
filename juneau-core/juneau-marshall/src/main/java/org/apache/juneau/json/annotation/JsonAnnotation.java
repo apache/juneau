@@ -225,6 +225,8 @@ public class JsonAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		Json[] value();
 	}

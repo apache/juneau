@@ -51,6 +51,7 @@ public final class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 	/**
 	 * Performs an action on the specified matching values from all annotations in this list.
 	 *
+	 * @param <T> The annotation value type.
 	 * @param type The annotation value type.
 	 * @param name The annotation value name.
 	 * @param filter A predicate to apply to the value to determine if action should be performed.  Can be <jk>null</jk>.
@@ -65,6 +66,7 @@ public final class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 	/**
 	 * Performs an action on all matching annotations in this list.
 	 *
+	 * @param <A> The annotation type.
 	 * @param type The annotation type.
 	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
 	 * @param action An action to perform on the entry.
@@ -82,6 +84,7 @@ public final class AnnotationList extends ArrayList<AnnotationInfo<?>> {
 	/**
 	 * Performs an action on all matching annotations in this list.
 	 *
+	 * @param <A> The annotation type.
 	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
 	 * @param action An action to perform on the entry.
 	 * @return This object.

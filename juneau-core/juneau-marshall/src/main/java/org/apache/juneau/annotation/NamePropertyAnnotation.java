@@ -178,6 +178,8 @@ public class NamePropertyAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		NameProperty[] value();
 	}

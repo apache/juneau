@@ -201,6 +201,7 @@ public final class ClassInfo {
 	/**
 	 * Returns the wrapped class as a {@link Class}.
 	 *
+	 * @param <T> The inner class type.
 	 * @return The wrapped class as a {@link Class}, or <jk>null</jk> if it's not a class (e.g. it's a {@link ParameterizedType}).
 	 */
 	@SuppressWarnings("unchecked")
@@ -928,6 +929,7 @@ public final class ClassInfo {
 	/**
 	 * Returns all annotations of the specified type defined on the specified class or parent classes/interfaces in parent-to-child order.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param type The annotation type to look for.
 	 * @return The matching annotations.
 	 */
@@ -941,6 +943,7 @@ public final class ClassInfo {
 	 * <p>
 	 * Returns the list in reverse (parent-to-child) order.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param annotationProvider The annotation provider.
 	 * @param type The annotation type to look for.
 	 * @return The matching annotations.
@@ -954,6 +957,7 @@ public final class ClassInfo {
 	/**
 	 * Performs an action on all matching annotations on this class and superclasses/interfaces.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param type The annotation to look for.
 	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
 	 * @param action An action to perform on the entry.
@@ -975,6 +979,7 @@ public final class ClassInfo {
 	 * 	<li>On this class.
 	 * </ol>
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param annotationProvider The annotation provider.
 	 * @param type The annotation to look for.
 	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
@@ -1008,6 +1013,7 @@ public final class ClassInfo {
 	 * 	<li>On this class.
 	 * </ol>
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param type The annotation to look for.
 	 * @param filter A predicate to apply to the entries to determine if annotation should be returned.  Can be <jk>null</jk>.
 	 * @return This object.
@@ -1028,6 +1034,7 @@ public final class ClassInfo {
 	 * 	<li>On this class.
 	 * </ol>
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param annotationProvider The annotation provider.
 	 * @param type The annotation to look for.
 	 * @param filter A predicate to apply to the entries to determine if annotation should be returned.  Can be <jk>null</jk>.
@@ -1067,6 +1074,7 @@ public final class ClassInfo {
 	 * 	<li>On the package of this class.
 	 * </ol>
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param type The annotation to look for.
 	 * @param filter A predicate to apply to the entries to determine if annotation should be returned.  Can be <jk>null</jk>.
 	 * @return This object.
@@ -1087,6 +1095,7 @@ public final class ClassInfo {
 	 * 	<li>On the package of this class.
 	 * </ol>
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param annotationProvider The annotation provider.
 	 * @param type The annotation to look for.
 	 * @param filter A predicate to apply to the entries to determine if annotation should be returned.  Can be <jk>null</jk>.
@@ -1122,6 +1131,7 @@ public final class ClassInfo {
 	 * signature on the parent classes or interfaces.
 	 * <br>The search is performed in child-to-parent order.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param type The annotation to look for.
 	 * @return The annotation if found, or <jk>null</jk> if not.
 	 */
@@ -1135,9 +1145,10 @@ public final class ClassInfo {
 	 * <p>
 	 * If the annotation cannot be found on the immediate class, searches methods with the same signature on the parent classes or interfaces. <br>
 	 * The search is performed in child-to-parent order.
+	 *
+	 * @param <A> The annotation type to look for.
 	 * @param annotationProvider The annotation provider.
 	 * @param type The annotation to look for.
-	 *
 	 * @return The annotation if found, or <jk>null</jk> if not.
 	 */
 	public <A extends Annotation> A getAnnotation(AnnotationProvider annotationProvider, Class<A> type) {
@@ -1147,6 +1158,7 @@ public final class ClassInfo {
 	/**
 	 * Returns <jk>true</jk> if this class has the specified annotation.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param type The annotation to look for.
 	 * @return The <jk>true</jk> if annotation if found.
 	 */
@@ -1157,6 +1169,7 @@ public final class ClassInfo {
 	/**
 	 * Returns <jk>true</jk> if this class doesn't have the specified annotation.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param type The annotation to look for.
 	 * @return The <jk>true</jk> if annotation if not found.
 	 */
@@ -1167,6 +1180,7 @@ public final class ClassInfo {
 	/**
 	 * Returns <jk>true</jk> if this class has the specified annotation.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param annotationProvider The annotation provider.
 	 * @param type The annotation to look for.
 	 * @return The <jk>true</jk> if annotation if found.
@@ -1180,7 +1194,7 @@ public final class ClassInfo {
 	/**
 	 * Returns the specified annotation only if it's been declared on the package of this class.
 	 *
-	 * @param <A> The annotation class type.
+	 * @param <A> The annotation type to look for.
 	 * @param type The annotation class.
 	 * @return The annotation, or <jk>null</jk> if not found.
 	 */
@@ -1192,6 +1206,7 @@ public final class ClassInfo {
 	/**
 	 * Returns the first matching annotation of the specified type defined on the specified class or parent classes/interfaces in parent-to-child order.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param type The annotation to look for.
 	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
 	 * @return This object.

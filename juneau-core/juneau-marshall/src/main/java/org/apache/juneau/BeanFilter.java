@@ -115,7 +115,7 @@ public final class BeanFilter {
 		}
 
 		/**
-		 * Configuration property:  Bean dictionary type name.
+		 * Bean dictionary type name.
 		 *
 		 * <p>
 		 * Specifies the dictionary type name for this bean.
@@ -218,7 +218,7 @@ public final class BeanFilter {
 		}
 
 		/**
-		 * Configuration property:  Bean stop class.
+		 * Bean stop class.
 		 *
 		 * <p>
 		 * Identifies a stop class for this class and all subclasses.
@@ -275,7 +275,7 @@ public final class BeanFilter {
 		}
 
 		/**
-		 * Configuration property:  Sort bean properties.
+		 * Sort bean properties.
 		 *
 		 * <p>
 		 * When <jk>true</jk>, all bean properties will be serialized and access in alphabetical order.
@@ -316,7 +316,7 @@ public final class BeanFilter {
 		}
 
 		/**
-		 * Configuration property:  Sort bean properties.
+		 * Sort bean properties.
 		 *
 		 * <p>
 		 * Shortcut for calling <code>sortProperties(<jk>true</jk>)</code>.
@@ -334,7 +334,7 @@ public final class BeanFilter {
 		}
 
 		/**
-		 * Configuration property:  Find fluent setters.
+		 * Find fluent setters.
 		 *
 		 * <p>
 		 * When enabled, fluent setters are detected on beans.
@@ -371,7 +371,7 @@ public final class BeanFilter {
 		}
 
 		/**
-		 * Configuration property:  Bean property namer
+		 * Bean property namer
 		 *
 		 * <p>
 		 * The class to use for calculating bean property names.
@@ -414,7 +414,7 @@ public final class BeanFilter {
 		}
 
 		/**
-		 * Configuration property:  Bean property includes.
+		 * Bean property includes.
 		 *
 		 * <p>
 		 * Specifies the set and order of names of properties associated with the bean class.
@@ -458,7 +458,7 @@ public final class BeanFilter {
 		}
 
 		/**
-		 * Configuration property:  Bean property excludes.
+		 * Bean property excludes.
 		 *
 		 * <p>
 		 * Specifies properties to exclude from the bean class.
@@ -502,7 +502,7 @@ public final class BeanFilter {
 		}
 
 		/**
-		 * Configuration property:  Read-only bean properties.
+		 * Read-only bean properties.
 		 *
 		 * <p>
 		 * Specifies one or more properties on a bean that are read-only despite having valid getters.
@@ -548,7 +548,7 @@ public final class BeanFilter {
 		}
 
 		/**
-		 * Configuration property:  Write-only bean properties.
+		 * Write-only bean properties.
 		 *
 		 * <p>
 		 * Specifies one or more properties on a bean that are write-only despite having valid setters.
@@ -594,7 +594,7 @@ public final class BeanFilter {
 		}
 
 		/**
-		 * Configuration property:  Bean dictionary.
+		 * Bean dictionary.
 		 *
 		 * <p>
 		 * Adds to the list of classes that make up the bean dictionary for this bean.
@@ -649,7 +649,7 @@ public final class BeanFilter {
 		}
 
 		/**
-		 * Configuration property:  Bean interceptor.
+		 * Bean interceptor.
 		 *
 		 * <p>
 		 * The interceptor to use for intercepting and altering getter and setter calls.

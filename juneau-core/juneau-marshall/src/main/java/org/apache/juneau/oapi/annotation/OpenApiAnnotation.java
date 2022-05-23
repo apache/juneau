@@ -203,6 +203,8 @@ public class OpenApiAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		OpenApi[] value();
 	}

@@ -39,7 +39,7 @@ import org.apache.juneau.svl.*;
  * 	PartList <jv>parts</jv> = PartList
  * 		.<jsm>create</jsm>()
  * 		.append(MyPart.<jsm>of</jsm>("foo"))
- * 		.append(<js>"Bar"</js>, ()-><jsm>getDynamicValueFromSomewhere</jsm>())
+ * 		.append(<js>"Bar"</js>, ()-&gt;<jsm>getDynamicValueFromSomewhere</jsm>())
  * 		.build();
  * </p>
  *
@@ -129,10 +129,10 @@ import org.apache.juneau.svl.*;
  * 		.<jsm>create</jsm>()
  * 		.resolving()
  * 		.append(<js>"X1"</js>, <js>"$S{foo}"</js>)
- * 		.append(<js>"X2"</js>, ()-><js>"$S{foo}"</js>)
+ * 		.append(<js>"X2"</js>, ()-&gt;<js>"$S{foo}"</js>)
  * 		.build();
  *
- * 	<jsm>assertObject</jsm>(<jv>parts</jv>).isString(<js>"X1=bar&X2=bar"</js>);
+ * 	<jsm>assertObject</jsm>(<jv>parts</jv>).isString(<js>"X1=bar&amp;X2=bar"</js>);
  * </p>
  *
  * <p>
@@ -1321,9 +1321,9 @@ public class PartList {
 	 * 	BasicIntegerPart <jv>age</jv> = <jv>partList</jv>.get(<js>"age"</js>, BasicIntegerPart.<jk>class</jk>);
 	 * </p>
 	 *
+	 * @param <T> The part implementation class.
 	 * @param name The part name.
 	 * @param type The part implementation class.
-
 	 * @return A part with a condensed value or <jk>null</jk> if no parts by the given name are present
 	 */
 	public <T> Optional<T> get(String name, Class<T> type) {
@@ -1370,6 +1370,7 @@ public class PartList {
 	 * 	Age <jv>age</jv> = <jv>partList</jv>.get(Age.<jk>class</jk>);
 	 * </p>
 	 *
+	 * @param <T> The part implementation class.
 	 * @param type The part implementation class.
 	 * @return A part with a condensed value or <jk>null</jk> if no parts by the given name are present
 	 */

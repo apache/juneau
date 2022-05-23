@@ -18,25 +18,25 @@ import org.apache.juneau.dto.html5.*;
  * Defines a simple hyperlink class.
  *
  * <h5 class='figure'>Examples:</h5>
- * <p class='bjava>
+ * <p class='bjava'>
  * 	<ja>@Rest</ja>
  * 	<jk>public class</jk> MyRest <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
  *
- * 		<jc>// Produces &lt;a href=&quot;/foo&quot;>bar&lt;/a></jc>
+ * 		<jc>// Produces &lt;a href=&quot;/foo&quot;&gt;bar&lt;/a&gt;</jc>
  * 		<ja>@RestGet</ja>
  * 		<jk>public</jk> Hyperlink a01() {
  * 			<jk>return new</jk> Hyperlink(<js>"foo"</js>, <js>"bar"</js>);
  * 		}
  *
- * 		<jc>// Produces &lt;ul>&lt;li>&lt;a href=&quot;/foo&quot;>bar&lt;/a>&lt;/li>&lt;/ul></jc>
+ * 		<jc>// Produces &lt;ul&gt;&lt;li&gt;&lt;a href=&quot;/foo&quot;&gt;bar&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;</jc>
  * 		<ja>@RestGet</ja>
  * 		<jk>public</jk> Hyperlink[] a02() {
  * 			<jk>return new</jk> Hyperlink[]{a01()};
  * 		}
  *
- * 		<jc>// Produces &lt;ul>&lt;li>&lt;a href=&quot;/foo&quot;>bar&lt;/a>&lt;/li>&lt;/ul></jc>
+ * 		<jc>// Produces &lt;ul&gt;&lt;li&gt;&lt;a href=&quot;/foo&quot;&gt;bar&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;</jc>
  * 		<ja>@RestGet</ja>
- * 		<jk>public</jk> Collection&lt;Hyperlink> a03() {
+ * 		<jk>public</jk> Collection&lt;Hyperlink&gt; a03() {
  * 			<jk>return</jk> Arrays.<jsm>asList</jsm>(a02());
  * 		}
  * 	}

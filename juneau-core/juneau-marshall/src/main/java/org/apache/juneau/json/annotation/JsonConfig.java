@@ -43,6 +43,8 @@ public @interface JsonConfig {
 	 *
 	 * <p>
 	 * Can be used to override default ordering and application of config annotations.
+	 *
+	 * @return The annotation value.
 	 */
 	int rank() default 0;
 
@@ -55,7 +57,7 @@ public @interface JsonConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Validate end.
+	 * Validate end.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, after parsing a POJO from the input, verifies that the remaining input in
@@ -75,6 +77,8 @@ public @interface JsonConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.json.JsonParser.Builder#validateEnd()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String validateEnd() default "";
 
@@ -83,7 +87,7 @@ public @interface JsonConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * Add <js>"_type"</js> properties when needed.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
@@ -107,11 +111,13 @@ public @interface JsonConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.json.JsonSerializer.Builder#addBeanTypesJson()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String addBeanTypes() default "";
 
 	/**
-	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
+	 * Prefix solidus <js>'/'</js> characters with escapes.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, solidus (e.g. slash) characters should be escaped.
@@ -133,11 +139,13 @@ public @interface JsonConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.json.JsonSerializer.Builder#escapeSolidus()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String escapeSolidus() default "";
 
 	/**
-	 * Configuration property:  Simple JSON mode.
+	 * Simple JSON mode.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, JSON attribute names will only be quoted when necessary.
@@ -172,6 +180,8 @@ public @interface JsonConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.json.JsonSerializer.Builder#simpleMode()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String simpleMode() default "";
 }

@@ -60,11 +60,15 @@ public @interface Html {
 	 *
 	 * <p>
 	 * This overrides the behavior specified by {@link org.apache.juneau.html.HtmlSerializer.Builder#uriAnchorText(AnchorText)}.
+	 *
+	 * @return The annotation value.
 	 */
 	String anchorText() default "";
 
 	/**
 	 * Specifies what format to use for the HTML element.
+	 *
+	 * @return The annotation value.
 	 */
 	HtmlFormat format() default HtmlFormat.HTML;
 
@@ -94,6 +98,8 @@ public @interface Html {
 	 * 		}
 	 * 	}
 	 * </p>
+	 *
+	 * @return The annotation value.
 	 */
 	String link() default "";
 
@@ -103,6 +109,8 @@ public @interface Html {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlSerializer.Builder#addKeyValueTableHeaders()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	boolean noTableHeaders() default false;
 
@@ -111,6 +119,8 @@ public @interface Html {
 	 *
 	 * <p>
 	 * Default is <jk>false</jk>.
+	 *
+	 * @return The annotation value.
 	 */
 	boolean noTables() default false;
 
@@ -196,6 +206,8 @@ public @interface Html {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] on() default {};
 
@@ -208,6 +220,8 @@ public @interface Html {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
 
@@ -216,6 +230,8 @@ public @interface Html {
 	 *
 	 * <p>
 	 * This annotation applies to bean properties and classes.
+	 *
+	 * @return The annotation value.
 	 */
 	@SuppressWarnings("rawtypes")
 	Class<? extends HtmlRender> render() default HtmlRender.class;

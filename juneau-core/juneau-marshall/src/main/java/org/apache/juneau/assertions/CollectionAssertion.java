@@ -96,6 +96,7 @@ public class CollectionAssertion<E> extends FluentCollectionAssertion<E,Collecti
 	/**
 	 * Static creator.
 	 *
+	 * @param <E> The element type.
 	 * @param value
 	 * 	The object being tested.
 	 * 	<br>Can be <jk>null</jk>.

@@ -45,6 +45,8 @@ public @interface RdfConfig {
 	 *
 	 * <p>
 	 * Can be used to override default ordering and application of config annotations.
+	 *
+	 * @return The annotation value.
 	 */
 	int rank() default 0;
 
@@ -53,7 +55,7 @@ public @interface RdfConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  RDF language.
+	 * RDF language.
 	 *
 	 * <p>
 	 * 	The RDF language to use.
@@ -96,11 +98,13 @@ public @interface RdfConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#language(String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#language(String)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String language() default "";
 
 	/**
-	 * Configuration property:  XML namespace for Juneau properties.
+	 * XML namespace for Juneau properties.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -111,11 +115,13 @@ public @interface RdfConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#juneauNs(Namespace)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#juneauNs(Namespace)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String juneauNs() default "";
 
 	/**
-	 * Configuration property:  Default XML namespace for bean properties.
+	 * Default XML namespace for bean properties.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -126,11 +132,13 @@ public @interface RdfConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#juneauBpNs(Namespace)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#juneauBpNs(Namespace)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String juneauBpNs() default "";
 
 	/**
-	 * Configuration property:  RDF/XML property: <c>iri_rules</c>.
+	 * RDF/XML property: <c>iri_rules</c>.
 	 *
 	 * <p>
 	 * Set the engine for checking and resolving.
@@ -153,11 +161,13 @@ public @interface RdfConfig {
 	 * 	<li>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String rdfxml_iriRules() default "";
 
 	/**
-	 * Configuration property:  RDF/XML ARP property: <c>error-mode</c>.
+	 * RDF/XML ARP property: <c>error-mode</c>.
 	 *
 	 * <p>
 	 * This allows a coarse-grained approach to control of error handling.
@@ -188,11 +198,13 @@ public @interface RdfConfig {
 	 * 	<li>
 	 * 		{@doc ext.ARP/ARPOptions.html#setStrictErrorMode(int) ARPOptions.setStrictErrorMode(int)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String rdfxml_errorMode() default "";
 
 	/**
-	 * Configuration property:  RDF/XML ARP property: <c>embedding</c>.
+	 * RDF/XML ARP property: <c>embedding</c>.
 	 *
 	 * <p>
 	 * Sets ARP to look for RDF embedded within an enclosing XML document.
@@ -206,11 +218,13 @@ public @interface RdfConfig {
 	 * 	<li>
 	 * 		{@doc ext.ARP/ARPOptions.html#setEmbedding(boolean) ARPOptions.setEmbedding(boolean)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String rdfxml_embedding() default "";
 
 	/**
-	 * Configuration property:  RDF/XML property: <c>xmlbase</c>.
+	 * RDF/XML property: <c>xmlbase</c>.
 	 *
 	 * <p>
 	 * The value to be included for an <xa>xml:base</xa> attribute on the root element in the file.
@@ -224,11 +238,13 @@ public @interface RdfConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_xmlbase(String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_xmlbase(String)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String rdfxml_xmlBase() default "";
 
 	/**
-	 * Configuration property:  RDF/XML property: <c>longId</c>.
+	 * RDF/XML property: <c>longId</c>.
 	 *
 	 * <p>
 	 * Whether to use long ID's for anon resources.
@@ -243,11 +259,13 @@ public @interface RdfConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_longId()}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_longId()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String rdfxml_longId() default "";
 
 	/**
-	 * Configuration property:  RDF/XML property: <c>allowBadURIs</c>.
+	 * RDF/XML property: <c>allowBadURIs</c>.
 	 *
 	 * <p>
 	 * URIs in the graph are, by default, checked prior to serialization.
@@ -261,11 +279,13 @@ public @interface RdfConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_allowBadUris()}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_allowBadUris()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String rdfxml_allowBadUris() default "";
 
 	/**
-	 * Configuration property:  RDF/XML property: <c>relativeURIs</c>.
+	 * RDF/XML property: <c>relativeURIs</c>.
 	 *
 	 * <p>
 	 * What sort of relative URIs should be used.
@@ -301,11 +321,13 @@ public @interface RdfConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_relativeUris(String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_relativeUris(String)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String rdfxml_relativeUris() default "";
 
 	/**
-	 * Configuration property:  RDF/XML property: <c>showXmlDeclaration</c>.
+	 * RDF/XML property: <c>showXmlDeclaration</c>.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -328,11 +350,13 @@ public @interface RdfConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_showXmlDeclaration(String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_showXmlDeclaration(String)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String rdfxml_showXmlDeclaration() default "";
 
 	/**
-	 * Configuration property:  RDF/XML property: <c>disableShowDoctypeDeclaration</c>.
+	 * RDF/XML property: <c>disableShowDoctypeDeclaration</c>.
 	 *
 	 * <p>
 	 * If true, an XML doctype declaration isn't included in the output.
@@ -349,11 +373,13 @@ public @interface RdfConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_disableShowDoctypeDeclaration()}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_disableShowDoctypeDeclaration()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String rdfxml_disableShowDoctypeDeclaration() default "";
 
 	/**
-	 * Configuration property:  RDF/XML property: <c>tab</c>.
+	 * RDF/XML property: <c>tab</c>.
 	 *
 	 * <p>
 	 * The number of spaces with which to indent XML child elements.
@@ -367,11 +393,13 @@ public @interface RdfConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_tab(int)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_tab(int)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String rdfxml_tab() default "";
 
 	/**
-	 * Configuration property:  RDF/XML property: <c>attributeQuoteChar</c>.
+	 * RDF/XML property: <c>attributeQuoteChar</c>.
 	 *
 	 * <p>
 	 * The XML attribute quote character.
@@ -385,11 +413,13 @@ public @interface RdfConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_attributeQuoteChar(char)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_attributeQuoteChar(char)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String rdfxml_attributeQuoteChar() default "";
 
 	/**
-	 * Configuration property:  RDF/XML property: <c>blockRules</c>.
+	 * RDF/XML property: <c>blockRules</c>.
 	 *
 	 * <p>
 	 * A list of <c>Resource</c> or a <c>String</c> being a comma separated list of fragment IDs from
@@ -405,11 +435,13 @@ public @interface RdfConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#rdfxml_blockRules(String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#rdfxml_blockRules(String)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String rdfxml_blockRules() default "";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>minGap</c>.
+	 * N3/Turtle property: <c>minGap</c>.
 	 *
 	 * <p>
 	 * Minimum gap between items on a line.
@@ -423,11 +455,13 @@ public @interface RdfConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_minGap(int)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_minGap(int)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String n3_minGap() default "";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>disableObjectLists</c>.
+	 * N3/Turtle property: <c>disableObjectLists</c>.
 	 *
 	 * <p>
 	 * Don't print object lists as comma separated lists.
@@ -441,11 +475,13 @@ public @interface RdfConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_disableObjectLists()}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_disableObjectLists()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String n3_disableObjectLists() default "";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>subjectColumn</c>.
+	 * N3/Turtle property: <c>subjectColumn</c>.
 	 *
 	 * <p>
 	 * If the subject is shorter than this value, the first property may go on the same line.
@@ -459,11 +495,13 @@ public @interface RdfConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_subjectColumn(int)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_subjectColumn(int)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String n3_subjectColumn() default "";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>propertyColumn</c>.
+	 * N3/Turtle property: <c>propertyColumn</c>.
 	 *
 	 * <p>
 	 * Width of the property column.
@@ -477,11 +515,13 @@ public @interface RdfConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_propertyColumn(int)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_propertyColumn(int)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String n3_propertyColumn() default "";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>indentProperty</c>.
+	 * N3/Turtle property: <c>indentProperty</c>.
 	 *
 	 * <p>
 	 * Width to indent properties.
@@ -495,11 +535,13 @@ public @interface RdfConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_indentProperty(int)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_indentProperty(int)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String n3_indentProperty() default "";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>widePropertyLen</c>.
+	 * N3/Turtle property: <c>widePropertyLen</c>.
 	 *
 	 * <p>
 	 * Width of the property column.
@@ -514,11 +556,13 @@ public @interface RdfConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_widePropertyLen(int)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_widePropertyLen(int)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String n3_widePropertyLen() default "";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>disableAbbrevBaseURI</c>.
+	 * N3/Turtle property: <c>disableAbbrevBaseURI</c>.
 	 *
 	 * <p>
 	 * Controls whether to use abbreviations <c>&lt;&gt;</c> or <c>&lt;#&gt;</c>.
@@ -532,11 +576,13 @@ public @interface RdfConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_disableAbbrevBaseUri()}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_disableAbbrevBaseUri()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String n3_disableAbbrevBaseUri() default "";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>disableUsePropertySymbols</c>.
+	 * N3/Turtle property: <c>disableUsePropertySymbols</c>.
 	 *
 	 * <p>
 	 * Controls whether to use <c>a</c>, <c>=</c> and <c>=&gt;</c> in output
@@ -550,11 +596,13 @@ public @interface RdfConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_disableUsePropertySymbols()}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_disableUsePropertySymbols()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String n3_disableUsePropertySymbols() default "";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>disableUseTripleQuotedStrings</c>.
+	 * N3/Turtle property: <c>disableUseTripleQuotedStrings</c>.
 	 *
 	 * <p>
 	 * Disallow the use of <c>"""</c> to delimit long strings.
@@ -568,11 +616,13 @@ public @interface RdfConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_disableUseTripleQuotedStrings()}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_disableUseTripleQuotedStrings()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String n3_disableUseTripleQuotedStrings() default "";
 
 	/**
-	 * Configuration property:  N3/Turtle property: <c>disableUseDoubles</c>.
+	 * N3/Turtle property: <c>disableUseDoubles</c>.
 	 *
 	 * <p>
 	 * Disallow the use doubles as <c>123.456</c>.
@@ -586,11 +636,13 @@ public @interface RdfConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#n3_disableUseDoubles()}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#n3_disableUseDoubles()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String n3_disableUseDoubles() default "";
 
 	/**
-	 * Configuration property:  RDF format for representing collections and arrays.
+	 * RDF format for representing collections and arrays.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -618,11 +670,13 @@ public @interface RdfConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#collectionFormat(RdfCollectionFormat)}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#collectionFormat(RdfCollectionFormat)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String collectionFormat() default "";
 
 	/**
-	 * Configuration property:  Collections should be serialized and parsed as loose collections.
+	 * Collections should be serialized and parsed as loose collections.
 	 *
 	 * <p>
 	 * When specified, collections of resources are handled as loose collections of resources in RDF instead of
@@ -646,6 +700,8 @@ public @interface RdfConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#looseCollections()}
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#looseCollections()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String looseCollections() default "";
 
@@ -654,7 +710,7 @@ public @interface RdfConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Trim whitespace from text elements.
+	 * Trim whitespace from text elements.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, whitespace in text elements will be automatically trimmed.
@@ -667,6 +723,8 @@ public @interface RdfConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfParser.Builder#trimWhitespace()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String trimWhitespace() default "";
 
@@ -675,7 +733,7 @@ public @interface RdfConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * Add <js>"_type"</js> properties when needed.
 	 *
 	 * If <js>"true"</js>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
 	 * through reflection.
@@ -692,11 +750,13 @@ public @interface RdfConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#addBeanTypes()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String addBeanTypes() default "";
 
 	/**
-	 * Configuration property:  Add XSI data types to non-<c>String</c> literals.
+	 * Add XSI data types to non-<c>String</c> literals.
 	 *
 	 * <ul class='notes'>
 	 * 	<li>
@@ -706,11 +766,13 @@ public @interface RdfConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#addLiteralTypes()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String addLiteralTypes() default "";
 
 	/**
-	 * Configuration property:  Add RDF root identifier property to root node.
+	 * Add RDF root identifier property to root node.
 	 *
 	 * <p>
 	 * When enabled an RDF property <c>http://www.apache.org/juneau/root</c> is added with a value of <js>"true"</js>
@@ -729,11 +791,13 @@ public @interface RdfConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#addRootProperty()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String addRootProperty() default "";
 
 	/**
-	 * Configuration property:  Disable auto-detect namespace usage.
+	 * Disable auto-detect namespace usage.
 	 *
 	 * <p>
 	 * Don't detect namespace usage before serialization.
@@ -750,11 +814,13 @@ public @interface RdfConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#disableAutoDetectNamespaces()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String disableAutoDetectNamespaces() default "";
 
 	/**
-	 * Configuration property:  Default namespaces.
+	 * Default namespaces.
 	 *
 	 * <p>
 	 * The default list of namespaces associated with this serializer.
@@ -767,11 +833,13 @@ public @interface RdfConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#namespaces(Namespace...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] namespaces() default {};
 
 	/**
-	 * Configuration property:  Disable reuse of XML namespaces when RDF namespaces not specified.
+	 * Disable reuse of XML namespaces when RDF namespaces not specified.
 	 *
 	 * <p>
 	 * When specified, namespaces defined using {@link XmlNs @XmlNs} and {@link Xml @Xml} will be inherited by the RDF serializers.
@@ -791,6 +859,8 @@ public @interface RdfConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.jena.RdfSerializer.Builder#disableUseXmlNamespaces()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String disableUseXmlNamespaces() default "";
 }

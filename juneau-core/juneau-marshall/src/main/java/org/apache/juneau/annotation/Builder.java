@@ -64,6 +64,8 @@ public @interface Builder {
 
 	/**
 	 * The builder for this class.
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?> value() default void.class;
 }

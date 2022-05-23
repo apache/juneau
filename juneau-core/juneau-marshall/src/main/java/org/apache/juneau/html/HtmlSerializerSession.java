@@ -952,7 +952,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * Add <js>"_type"</js> properties when needed.
 	 *
 	 * @see HtmlSerializer.Builder#addBeanTypesHtml()
 	 * @return
@@ -965,7 +965,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Add key/value headers on bean/map tables.
+	 * Add key/value headers on bean/map tables.
 	 *
 	 * @see HtmlSerializer.Builder#addKeyValueTableHeaders()
 	 * @return
@@ -976,7 +976,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Look for link labels in URIs.
+	 * Look for link labels in URIs.
 	 *
 	 * @see HtmlSerializer.Builder#disableDetectLabelParameters()
 	 * @return
@@ -987,7 +987,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Look for URLs in {@link String Strings}.
+	 * Look for URLs in {@link String Strings}.
 	 *
 	 * @see HtmlSerializer.Builder#disableDetectLinksInStrings()
 	 * @return
@@ -998,7 +998,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Link label parameter name.
+	 * Link label parameter name.
 	 *
 	 * @see HtmlSerializer.Builder#labelParameter(String)
 	 * @return
@@ -1009,7 +1009,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Anchor text source.
+	 * Anchor text source.
 	 *
 	 * @see HtmlSerializer.Builder#uriAnchorText(AnchorText)
 	 * @return

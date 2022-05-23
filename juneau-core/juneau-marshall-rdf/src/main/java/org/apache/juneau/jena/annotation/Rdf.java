@@ -59,6 +59,8 @@ public @interface Rdf {
 	 * 		{@link RdfSerializer} - Will be rendered as the value of the <js>"rdf:about"</js> attribute
 	 * 		for the bean.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	boolean beanUri() default false;
 
@@ -66,6 +68,7 @@ public @interface Rdf {
 	 * The format for how collections (lists and arrays for example) are serialized in RDF.
 	 *
 	 * @see RdfCollectionFormat
+	 * @return The annotation value.
 	 */
 	RdfCollectionFormat collectionFormat() default RdfCollectionFormat.DEFAULT;
 
@@ -75,6 +78,8 @@ public @interface Rdf {
 	 * <p>
 	 * Must be matched with a {@link #prefix() @Rdf(prefix)} annotation on this object, a parent object, or a {@link RdfNs @RdfNs} with the
 	 * same name through the {@link RdfSchema#rdfNs() @RdfSchema(rdfNs)} annotation on the package.
+	 *
+	 * @return The annotation value.
 	 */
 	String namespace() default "";
 
@@ -160,6 +165,8 @@ public @interface Rdf {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] on() default {};
 
@@ -172,6 +179,8 @@ public @interface Rdf {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
 
@@ -181,6 +190,8 @@ public @interface Rdf {
 	 * <p>
 	 * Must either be matched to a {@link #namespace() @Rdf(namespace)} annotation on the same object, parent object, or a {@link RdfNs @RdfNs}
 	 * with the same name through the {@link RdfSchema#rdfNs() @RdfSchema(rdfNs)} annotation on the package.
+	 *
+	 * @return The annotation value.
 	 */
 	String prefix() default "";
 }

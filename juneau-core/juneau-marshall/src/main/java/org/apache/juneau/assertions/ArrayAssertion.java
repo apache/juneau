@@ -106,6 +106,7 @@ public class ArrayAssertion<E> extends FluentArrayAssertion<E,ArrayAssertion<E>>
 	/**
 	 * Static creator.
 	 *
+	 * @param <E> The element type.
 	 * @param value
 	 * 	The object being tested.
 	 * 	<br>Can be <jk>null</jk>.

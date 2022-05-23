@@ -86,6 +86,7 @@ public class ObjectAssertion<T> extends FluentObjectAssertion<T,ObjectAssertion<
 	/**
 	 * Static creator.
 	 *
+	 * @param <T> The value type.
 	 * @param value
 	 * 	The object being tested.
 	 * 	<br>Can be <jk>null</jk>.

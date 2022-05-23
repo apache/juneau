@@ -281,6 +281,8 @@ public class XmlAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		Xml[] value();
 	}

@@ -57,6 +57,7 @@ public class BasicHttpResponse implements HttpResponse {
 	/**
 	 * Creates a builder for this class.
 	 *
+	 * @param <T> The implementation type.
 	 * @param implClass The subclass that the builder is going to create.
 	 * @return A new builder bean.
 	 */

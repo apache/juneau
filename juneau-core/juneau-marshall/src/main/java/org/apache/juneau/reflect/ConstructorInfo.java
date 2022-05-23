@@ -81,6 +81,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	/**
 	 * Returns the wrapped method.
 	 *
+	 * @param <T> The inner class type.
 	 * @return The wrapped method.
 	 */
 	@SuppressWarnings("unchecked")
@@ -95,6 +96,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	/**
 	 * Finds the annotation of the specified type defined on this constructor.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param type The annotation to look for.
 	 * @return The annotation if found, or <jk>null</jk> if not.
 	 */
@@ -105,6 +107,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	/**
 	 * Finds the annotation of the specified type defined on this constructor.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param annotationProvider The annotation provider.
 	 * @param type The annotation to look for.
 	 * @return The first annotation found, or <jk>null</jk> if it doesn't exist.
@@ -118,6 +121,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	/**
 	 * Returns <jk>true</jk> if the specified annotation is present on this constructor.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is present on this constructor.
 	 */
@@ -128,6 +132,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	/**
 	 * Returns <jk>true</jk> if the specified annotation is present on this constructor.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param annotationProvider The annotation provider.
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is present on this constructor.
@@ -139,6 +144,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	/**
 	 * Returns <jk>true</jk> if the specified annotation is not present on this constructor.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param annotationProvider The annotation provider.
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is not present on this constructor.
@@ -193,6 +199,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	/**
 	 * Shortcut for calling the new-instance method on the underlying constructor.
 	 *
+	 * @param <T> The constructor class type.
 	 * @param args the arguments used for the method call.
 	 * 	<br>Extra parameters are ignored.
 	 * 	<br>Missing parameters are set to null.
@@ -206,6 +213,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	/**
 	 * Shortcut for calling the new-instance method on the underlying constructor.
 	 *
+	 * @param <T> The constructor class type.
 	 * @param args the arguments used for the method call.
 	 * @return The object returned from the constructor.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.

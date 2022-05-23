@@ -481,7 +481,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * Add <js>"_type"</js> properties when needed.
 	 *
 	 * @see UonSerializer.Builder#addBeanTypesUon()
 	 * @return
@@ -494,7 +494,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	}
 
 	/**
-	 * Configuration property:  Encode non-valid URI characters.
+	 * Encode non-valid URI characters.
 	 *
 	 * @see UonSerializer.Builder#encoding()
 	 * @return
@@ -505,7 +505,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	}
 
 	/**
-	 * Configuration property:  Format to use for query/form-data/header values.
+	 * Format to use for query/form-data/header values.
 	 *
 	 * @see UonSerializer.Builder#paramFormat(ParamFormat)
 	 * @return
@@ -516,7 +516,7 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	}
 
 	/**
-	 * Configuration property:  Quote character.
+	 * Quote character.
 	 *
 	 * @see UonSerializer.Builder#quoteCharUon(char)
 	 * @return

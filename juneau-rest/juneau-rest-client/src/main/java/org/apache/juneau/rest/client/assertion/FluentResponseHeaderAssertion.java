@@ -202,11 +202,12 @@ public class FluentResponseHeaderAssertion<R> extends FluentStringAssertion<R> {
 	/**
 	 * Converts the parameter value to a type using {@link ResponseHeader#as(Class)} and then returns the value as an any-object assertion.
 	 *
+	 * @param <T> The object type to create.
 	 * @param type The object type to create.
 	 * @return A new fluent assertion object.
 	 * @throws RestCallException If value could not be parsed.
 	 */
-	public <V> FluentAnyAssertion<V,R> as(Class<V> type) throws RestCallException {
+	public <T> FluentAnyAssertion<T,R> as(Class<T> type) throws RestCallException {
 		return new FluentAnyAssertion<>(value.as(type).orElse(null), returns());
 	}
 

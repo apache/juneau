@@ -61,6 +61,8 @@ public @interface ExternalDocs {
 	 * 	<li>
 	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] description() default {};
 
@@ -78,6 +80,8 @@ public @interface ExternalDocs {
 	 * 	<li>
 	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String url() default "";
 }

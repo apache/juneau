@@ -53,13 +53,13 @@ import org.apache.juneau.rest.util.*;
  * 			.logger(<js>"MyLogger"</js>)  <jc>// Use MyLogger Java logger.</jc>
  * 			.normalRules(  <jc>// Rules when debugging is not enabled.</jc>
  * 				<jsm>createRule</jsm>()  <jc>// Log 500+ errors with status-line and header information.</jc>
- * 					.statusFilter(x -> x &gt;= 500)
+ * 					.statusFilter(x -&gt; x &gt;= 500)
  * 					.level(<jsf>SEVERE</jsf>)
  * 					.requestDetail(<jsf>HEADER</jsf>)
  * 					.responseDetail<jsf>(HEADER</jsf>)
  * 					.build(),
  * 				<jsm>createRule</jsm>()  <jc>// Log 400-500 errors with just status-line information.</jc>
- * 					.statusFilter(x -> x &gt;= 400)
+ * 					.statusFilter(x -&gt; x &gt;= 400)
  * 					.level(<jsf>WARNING</jsf>)
  * 					.requestDetail(<jsf>STATUS_LINE</jsf>)
  * 					.responseDetail(<jsf>STATUS_LINE</jsf>)

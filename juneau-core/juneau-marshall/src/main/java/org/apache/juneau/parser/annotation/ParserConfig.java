@@ -49,6 +49,8 @@ public @interface ParserConfig {
 	 *
 	 * <p>
 	 * Can be used to override default ordering and application of config annotations.
+	 *
+	 * @return The annotation value.
 	 */
 	int rank() default 0;
 
@@ -57,7 +59,7 @@ public @interface ParserConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Binary input format.
+	 * Binary input format.
 	 *
 	 * <p>
 	 * When using the {@link Parser#parse(Object,Class)} method on stream-based parsers and the input is a string, this defines the format to use
@@ -78,6 +80,8 @@ public @interface ParserConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.parser.InputStreamParser.Builder#binaryFormat(BinaryFormat)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String binaryFormat() default "";
 
@@ -86,7 +90,7 @@ public @interface ParserConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Auto-close streams.
+	 * Auto-close streams.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, <l>InputStreams</l> and <l>Readers</l> passed into parsers will be closed
@@ -106,11 +110,13 @@ public @interface ParserConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#autoCloseStreams()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String autoCloseStreams() default "";
 
 	/**
-	 * Configuration property:  Debug output lines.
+	 * Debug output lines.
 	 *
 	 * <p>
 	 * When parse errors occur, this specifies the number of lines of input before and after the
@@ -128,11 +134,13 @@ public @interface ParserConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#debugOutputLines(int)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String debugOutputLines() default "";
 
 	/**
-	 * Configuration property:  Parser listener.
+	 * Parser listener.
 	 *
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during parsing.
@@ -140,11 +148,13 @@ public @interface ParserConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#listener(Class)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends ParserListener> listener() default ParserListener.Void.class;
 
 	/**
-	 * Configuration property:  Strict mode.
+	 * Strict mode.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, strict mode for the parser is enabled.
@@ -191,11 +201,13 @@ public @interface ParserConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#strict()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String strict() default "";
 
 	/**
-	 * Configuration property:  Trim parsed strings.
+	 * Trim parsed strings.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, string values will be trimmed of whitespace using {@link String#trim()} before being added to
@@ -215,11 +227,13 @@ public @interface ParserConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#trimStrings()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String trimStrings() default "";
 
 	/**
-	 * Configuration property:  Unbuffered.
+	 * Unbuffered.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, don't use internal buffering during parsing.
@@ -255,6 +269,8 @@ public @interface ParserConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.parser.Parser.Builder#unbuffered()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String unbuffered() default "";
 
@@ -263,7 +279,7 @@ public @interface ParserConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  File charset.
+	 * File charset.
 	 *
 	 * <p>
 	 * The character set to use for reading <c>Files</c> from the file system.
@@ -281,11 +297,13 @@ public @interface ParserConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.parser.ReaderParser.Builder#fileCharset(Charset)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String fileCharset() default "";
 
 	/**
-	 * Configuration property:  Input stream charset.
+	 * Input stream charset.
 	 *
 	 * <p>
 	 * The character set to use for converting <c>InputStreams</c> and byte arrays to readers.
@@ -303,6 +321,8 @@ public @interface ParserConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String streamCharset() default "";
 }

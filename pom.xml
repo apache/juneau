@@ -219,8 +219,13 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>2.10.4</version>
+					<version>3.0.1</version>
 					<configuration>
+						<doclint>missing,reference,syntax</doclint>
+						<sourcetab>3</sourcetab>
+						<notimestamp>true</notimestamp>
+						<verbose>true</verbose>
+						<additionalparam>&#45;&#45;allow-script-in-comments</additionalparam>
 						<additionalJOptions>
 							<additionalJOption>-J-DjuneauVersion=${juneauVersion}</additionalJOption>
 							<additionalJOption>-J-DjuneauVersionNext=${juneauVersionNext}</additionalJOption>
@@ -231,11 +236,11 @@
 						<linksource>true</linksource>
 						<source>1.8</source>
 						<bootclasspath>${sun.boot.class.path}</bootclasspath>
+						<classpath>${basedir}/juneau-doc/tools.jar</classpath>
 						<overview>${basedir}/juneau-doc/src/main/javadoc/overview.html</overview>
 						<stylesheetfile>${basedir}/juneau-doc/src/main/javadoc/javadoc.css</stylesheetfile>
 						<use>false</use>
-						<additionalparam>-sourcetab 3 -notimestamp -Xdoclint:none --allow-script-in-comments</additionalparam>
-						<verbose>false</verbose>
+						<additionalparams>-sourcetab 3 -notimestamp -Xdoclint:none --allow-script-in-comments</additionalparams>
 						<excludePackageNames>*proto*:*test*:org.apache.juneau.doc.internal</excludePackageNames>
 						<linksource>true</linksource>
  						<links>
@@ -246,6 +251,7 @@
 						</links>
 						<docfilessubdirs>true</docfilessubdirs>
 						<javadocDirectory>${basedir}/juneau-doc/src/main/javadoc</javadocDirectory>
+						<javadocExecutable>/Library/Java/JavaVirtualMachines/jdk1.8.0_162.jdk/Contents/Home/bin/javadoc</javadocExecutable>
 						<taglets>
 							<taglet>
 								<tagletClass>org.apache.juneau.doc.internal.DelTag</tagletClass>
@@ -269,7 +275,7 @@
 								<tagletClass>org.apache.juneau.doc.internal.ReviewedTag</tagletClass>
 							</taglet>
 						</taglets>
-						<tagletpath>${basedir}/juneau-doc/juneau-doc.jar</tagletpath>
+						<tagletpath>${basedir}/juneau-doc/tools.jar:${basedir}/juneau-doc/juneau-doc.jar</tagletpath>
 					</configuration>
 					<executions>
 						<execution>

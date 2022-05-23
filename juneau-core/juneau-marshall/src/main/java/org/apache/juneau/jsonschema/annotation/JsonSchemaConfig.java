@@ -46,6 +46,8 @@ public @interface JsonSchemaConfig {
 	 *
 	 * <p>
 	 * Can be used to override default ordering and application of config annotations.
+	 *
+	 * @return The annotation value.
 	 */
 	int rank() default 0;
 
@@ -54,7 +56,7 @@ public @interface JsonSchemaConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Add descriptions to types.
+	 * Add descriptions to types.
 	 *
 	 * <p>
 	 * Identifies which categories of types that descriptions should be automatically added to generated schemas.
@@ -83,11 +85,13 @@ public @interface JsonSchemaConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String addDescriptionsTo() default "";
 
 	/**
-	 * Configuration property:  Add examples.
+	 * Add examples.
 	 *
 	 * <p>
 	 * Identifies which categories of types that examples should be automatically added to generated schemas.
@@ -120,11 +124,13 @@ public @interface JsonSchemaConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String addExamplesTo() default "";
 
 	/**
-	 * Configuration property:  Allow nested descriptions.
+	 * Allow nested descriptions.
 	 *
 	 * <p>
 	 * Identifies whether nested descriptions are allowed in schema definitions.
@@ -143,11 +149,13 @@ public @interface JsonSchemaConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#allowNestedDescriptions()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String allowNestedDescriptions() default "";
 
 	/**
-	 * Configuration property:  Allow nested examples.
+	 * Allow nested examples.
 	 *
 	 * <p>
 	 * Identifies whether nested examples are allowed in schema definitions.
@@ -166,11 +174,13 @@ public @interface JsonSchemaConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#allowNestedExamples()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String allowNestedExamples() default "";
 
 	/**
-	 * Configuration property:  Bean schema definition mapper.
+	 * Bean schema definition mapper.
 	 *
 	 * <p>
 	 * Interface to use for converting Bean classes to definition IDs and URIs.
@@ -186,11 +196,13 @@ public @interface JsonSchemaConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#beanDefMapper(Class)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends BeanDefMapper> beanDefMapper() default BeanDefMapper.Void.class;
 
 	/**
-	 * Configuration property:  Ignore types from schema definitions.
+	 * Ignore types from schema definitions.
 	 *
 	 * <p>
 	 * Defines class name patterns that should be ignored when generating schema definitions in the generated
@@ -206,11 +218,13 @@ public @interface JsonSchemaConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#ignoreTypes(String...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String ignoreTypes() default "";
 
 	/**
-	 * Configuration property:  Use bean definitions.
+	 * Use bean definitions.
 	 *
 	 * <p>
 	 * When enabled, schemas on beans will be serialized as the following:
@@ -241,6 +255,8 @@ public @interface JsonSchemaConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#useBeanDefs()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String useBeanDefs() default "";
 
@@ -249,7 +265,7 @@ public @interface JsonSchemaConfig {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Automatically detect POJO recursions.
+	 * Automatically detect POJO recursions.
 	 *
 	 * <p>
 	 * Specifies that recursions should be checked for during traversal.
@@ -263,7 +279,7 @@ public @interface JsonSchemaConfig {
 	 * The behavior when recursions are detected depends on the value for {@link org.apache.juneau.BeanTraverseContext.Builder#ignoreRecursions()}.
 	 *
 	 * <p>
-	 * For example, if a model contains the links A->B->C->A, then the JSON generated will look like
+	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
 	 * 	the following when <jsf>BEANTRAVERSE_ignoreRecursions</jsf> is <jk>true</jk>...
 	 *
 	 * <p class='bjson'>
@@ -286,11 +302,13 @@ public @interface JsonSchemaConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#detectRecursions()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String detectRecursions() default "";
 
 	/**
-	 * Configuration property:  Ignore recursion errors.
+	 * Ignore recursion errors.
 	 *
 	 * <p>
 	 * Used in conjunction with {@link org.apache.juneau.BeanTraverseContext.Builder#detectRecursions()}.
@@ -314,11 +332,13 @@ public @interface JsonSchemaConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#ignoreRecursions()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String ignoreRecursions() default "";
 
 	/**
-	 * Configuration property:  Initial depth.
+	 * Initial depth.
 	 *
 	 * <p>
 	 * The initial indentation level at the root.
@@ -336,11 +356,13 @@ public @interface JsonSchemaConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#initialDepth(int)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String initialDepth() default "";
 
 	/**
-	 * Configuration property:  Max traversal depth.
+	 * Max traversal depth.
 	 *
 	 * <p>
 	 * Abort traversal if specified depth is reached in the POJO tree.
@@ -358,6 +380,8 @@ public @interface JsonSchemaConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#maxDepth(int)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String maxDepth() default "";
 }

@@ -396,7 +396,7 @@ public class BeanTraverseSession extends BeanSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Automatically detect POJO recursions.
+	 * Automatically detect POJO recursions.
 	 *
 	 * @see BeanTraverseContext.Builder#detectRecursions()
 	 * @return
@@ -407,7 +407,7 @@ public class BeanTraverseSession extends BeanSession {
 	}
 
 	/**
-	 * Configuration property:  Ignore recursion errors.
+	 * Ignore recursion errors.
 	 *
 	 * @see BeanTraverseContext.Builder#ignoreRecursions()
 	 * @return
@@ -419,7 +419,7 @@ public class BeanTraverseSession extends BeanSession {
 	}
 
 	/**
-	 * Configuration property:  Initial depth.
+	 * Initial depth.
 	 *
 	 * @see BeanTraverseContext.Builder#initialDepth(int)
 	 * @return
@@ -430,7 +430,7 @@ public class BeanTraverseSession extends BeanSession {
 	}
 
 	/**
-	 * Configuration property:  Max traversal depth.
+	 * Max traversal depth.
 	 *
 	 * @see BeanTraverseContext.Builder#maxDepth(int)
 	 * @return

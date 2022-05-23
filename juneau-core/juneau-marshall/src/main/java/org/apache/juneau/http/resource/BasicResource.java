@@ -49,6 +49,7 @@ public class BasicResource implements HttpResource {
 	/**
 	 * Creates a builder for this class.
 	 *
+	 * @param <T> The subclass that the builder is going to create.
 	 * @param implClass The subclass that the builder is going to create.
 	 * @param entityImplClass The entity subclass that the builder is going to create.
 	 * @return A new builder bean.

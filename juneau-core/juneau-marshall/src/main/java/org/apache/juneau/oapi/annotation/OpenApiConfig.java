@@ -43,6 +43,8 @@ public @interface OpenApiConfig {
 	 *
 	 * <p>
 	 * Can be used to override default ordering and application of config annotations.
+	 *
+	 * @return The annotation value.
 	 */
 	int rank() default 0;
 
@@ -80,11 +82,13 @@ public @interface OpenApiConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.oapi.OpenApiSerializer.Builder#format(HttpPartFormat)}
 	 * 	<li class='jm'>{@link org.apache.juneau.oapi.OpenApiParser.Builder#format(HttpPartFormat)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String format() default "";
 
 	/**
-	 * Configuration property:  Default collection format for HTTP parts.
+	 * Default collection format for HTTP parts.
 	 *
 	 * <p>
 	 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.http.annotation.Schema#collectionFormat()}.
@@ -107,6 +111,8 @@ public @interface OpenApiConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.oapi.OpenApiSerializer.Builder#collectionFormat(HttpPartCollectionFormat)}
 	 * 	<li class='jm'>{@link org.apache.juneau.oapi.OpenApiParser.Builder#collectionFormat(HttpPartCollectionFormat)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String collectionFormat() default "";
 

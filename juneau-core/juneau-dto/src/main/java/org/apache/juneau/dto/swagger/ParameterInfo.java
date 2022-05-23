@@ -1604,7 +1604,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * <p>
 	 * The schema defining the type used for the body parameter as raw JSON.
 	 *
-	 * <h5 class='section'>Example:,/h5>
+	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	schema(<js>"{type:'type',description:'description',...}"</js>);
 	 * </p>

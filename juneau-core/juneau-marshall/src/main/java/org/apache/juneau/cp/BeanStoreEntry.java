@@ -43,6 +43,7 @@ public class BeanStoreEntry<T> {
 	/**
 	 * Static creator.
 	 *
+	 * @param <T> The class type to associate with the bean.
 	 * @param type The class type to associate with the bean.
 	 * @param bean The bean supplier.
 	 * @param name Optional name to associate with the bean.  Can be <jk>null</jk>.

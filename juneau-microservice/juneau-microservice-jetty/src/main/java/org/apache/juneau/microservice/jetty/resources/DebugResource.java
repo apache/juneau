@@ -15,6 +15,7 @@ package org.apache.juneau.microservice.jetty.resources;
 import java.io.*;
 
 import org.apache.juneau.html.annotation.HtmlDocConfig;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.microservice.jetty.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -45,7 +46,6 @@ import org.apache.juneau.rest.servlet.BasicRestServlet;
 		"stats: servlet:/stats"
 	}
 )
-@SuppressWarnings("javadoc")
 public class DebugResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -53,10 +53,9 @@ public class DebugResource extends BasicRestServlet {
 	 * [GET /] - Shows child utilities.
 	 *
 	 * @return Child utility links.
-	 * @throws Exception
 	 */
 	@RestGet(path="/", description="Show contents of config file.")
-	public ResourceDescriptions getChildren() throws Exception {
+	public ResourceDescriptions getChildren() {
 		return new ResourceDescriptions()
 			.append("jetty/dump", "Jetty thread dump")
 		;
@@ -64,6 +63,10 @@ public class DebugResource extends BasicRestServlet {
 
 	/**
 	 * [GET /jetty/dump] - Generates and retrieves the jetty thread dump.
+	 *
+	 * @param req The request.
+	 * @param res The response.
+	 * @return The thread dump contents.
 	 */
 	@RestGet(path="/jetty/dump", description="Generates and retrieves the jetty thread dump.")
 	public Reader getJettyDump(RestRequest req, RestResponse res) {
@@ -73,13 +76,18 @@ public class DebugResource extends BasicRestServlet {
 
 	/**
 	 * [POST /jetty/dump] - Generates and saves the jetty thread dump file to jetty-thread-dump.log.
+	 *
+	 * @param req The request.
+	 * @param res The response.
+	 * @throws Exception Gets converted to 500 response.
+	 * @return The thread dump contents.
 	 */
 	@RestPost(path="/jetty/dump", description="Generates and saves the jetty thread dump file to jetty-thread-dump.log.")
-	public String createJettyDump(RestRequest req, RestResponse res) throws Exception {
+	public Ok createJettyDump(RestRequest req, RestResponse res) throws Exception {
 		String dump = JettyMicroservice.getInstance().getServer().dump();
 		try (FileWriter fw = new FileWriter(req.getConfig().get("Logging/logDir").orElse("") + "/jetty-thread-dump.log")) {
 			fw.write(dump);
 		}
-		return "OK";
+		return Ok.OK;
 	}
 }

@@ -109,6 +109,7 @@ public class BeanListAssertion<E> extends FluentBeanListAssertion<E,BeanListAsse
 	/**
 	 * Static creator.
 	 *
+	 * @param <E> The element type.
 	 * @param value
 	 * 	The object being tested.
 	 * 	<br>Can be <jk>null</jk>.

@@ -568,7 +568,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  RDF format for representing collections and arrays.
+	 * RDF format for representing collections and arrays.
 	 *
 	 * @see RdfSerializer.Builder#collectionFormat(RdfCollectionFormat)
 	 * @return
@@ -579,7 +579,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Default XML namespace for bean properties.
+	 * Default XML namespace for bean properties.
 	 *
 	 * @see RdfSerializer.Builder#juneauBpNs(Namespace)
 	 * @return
@@ -590,7 +590,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  XML namespace for Juneau properties.
+	 * XML namespace for Juneau properties.
 	 *
 	 * @see RdfSerializer.Builder#juneauNs(Namespace)
 	 * @return
@@ -601,7 +601,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  RDF language.
+	 * RDF language.
 	 *
 	 * @see RdfSerializer.Builder#language(String)
 	 * @return
@@ -612,7 +612,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Collections should be serialized and parsed as loose collections.
+	 * Collections should be serialized and parsed as loose collections.
 	 *
 	 * @see RdfSerializer.Builder#looseCollections()
 	 * @return
@@ -628,7 +628,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  All Jena-related configuration properties.
+	 * All Jena-related configuration properties.
 	 *
 	 * @return
 	 * 	A map of all Jena-related configuration properties.
@@ -642,7 +642,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * Add <js>"_type"</js> properties when needed.
 	 *
 	 * @see RdfSerializer.Builder#addBeanTypes()
 	 * @return
@@ -655,7 +655,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Add XSI data types to non-<c>String</c> literals.
+	 * Add XSI data types to non-<c>String</c> literals.
 	 *
 	 * @see RdfSerializer.Builder#addLiteralTypes()
 	 * @return
@@ -666,7 +666,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Add RDF root identifier property to root node.
+	 * Add RDF root identifier property to root node.
 	 *
 	 * @see RdfSerializer.Builder#addRootProperty()
 	 * @return
@@ -678,7 +678,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Auto-detect namespace usage.
+	 * Auto-detect namespace usage.
 	 *
 	 * @see RdfSerializer.Builder#disableAutoDetectNamespaces()
 	 * @return
@@ -689,7 +689,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Default namespaces.
+	 * Default namespaces.
 	 *
 	 * @see RdfSerializer.Builder#namespaces(Namespace...)
 	 * @return
@@ -700,7 +700,7 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Reuse XML namespaces when RDF namespaces not specified.
+	 * Reuse XML namespaces when RDF namespaces not specified.
 	 *
 	 * @see RdfSerializer.Builder#disableUseXmlNamespaces()
 	 * @return

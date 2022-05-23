@@ -32,6 +32,7 @@ public class SimpleRestOperationArg implements RestOpArg {
 	/**
 	 * Constructor.
 	 *
+	 * @param <T> The function return type.
 	 * @param function The function to use to retrieve the parameter value from the {@link RestSession}.
 	 */
 	@SuppressWarnings("unchecked")

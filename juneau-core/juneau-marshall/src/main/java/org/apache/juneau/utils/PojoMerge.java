@@ -86,6 +86,7 @@ public class PojoMerge {
 	 * <p>
 	 * This is a shortcut to calling <code>merge(interfaceClass, <jk>false</jk>, pojos);</code>
 	 *
+	 * @param <T> The pojo types.
 	 * @param interfaceClass The common interface class.
 	 * @param pojos
 	 * 	Zero or more POJOs to merge.
@@ -100,6 +101,7 @@ public class PojoMerge {
 	/**
 	 * Create a proxy interface on top of zero or more POJOs.
 	 *
+	 * @param <T> The pojo types.
 	 * @param interfaceClass The common interface class.
 	 * @param callAllNonGetters
 	 * 	If <jk>true</jk>, when calling a method that's not a getter, the method will be invoked on all POJOs.

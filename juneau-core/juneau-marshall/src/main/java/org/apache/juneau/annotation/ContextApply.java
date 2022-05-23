@@ -35,6 +35,8 @@ public @interface ContextApply {
 
 	/**
 	 * Identifies the class used to push values from an annotation into a property store.
+	 *
+	 * @return The annotation value.
 	 */
 	@SuppressWarnings("rawtypes")
 	public Class<? extends AnnotationApplier>[] value();

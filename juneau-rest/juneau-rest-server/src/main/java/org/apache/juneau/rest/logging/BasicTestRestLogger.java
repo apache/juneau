@@ -40,7 +40,7 @@ import org.apache.juneau.rest.*;
  * <h5 class='section'>Configured Settings:</h5>
  * <ul>
  * 	<li>Logs to the {@link RestContext#getLogger() context logger}.
- * 	<li>Only calls with status code &gt=400 will be logged.
+ * 	<li>Only calls with status code &gt;=400 will be logged.
  * 	<li>Logs full request and response entity.
  * </ul>
  *

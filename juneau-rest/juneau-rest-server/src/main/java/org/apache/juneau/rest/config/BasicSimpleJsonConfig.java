@@ -100,6 +100,7 @@ import org.apache.juneau.serializer.annotation.*;
 )
 @BeanConfig(
 	// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.
-	ignoreUnknownBeanProperties="true"
+	ignoreUnknownBeanProperties="true",
+	ignoreUnknownEnumValues="true"
 )
 public interface BasicSimpleJsonConfig {}

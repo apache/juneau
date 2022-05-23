@@ -60,6 +60,8 @@ public @interface Attr {
 	 *
 	 * <p>
 	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiParser}.
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Void.class;
 
@@ -87,6 +89,8 @@ public @interface Attr {
 	 * 		</p>
 	 * 	</li>
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String name() default "";
 
@@ -104,6 +108,8 @@ public @interface Attr {
 	 * <p class='bjava'>
 	 * 	<jk>public</jk> Order placeOrder(<ja>@Attr</ja>(<js>"api_key"</js>) String <jv>apiKey</jv>) {...}
 	 * </p>
+	 *
+	 * @return The annotation value.
 	 */
 	String value() default "";
 }

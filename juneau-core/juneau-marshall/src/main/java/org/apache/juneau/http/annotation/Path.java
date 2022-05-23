@@ -150,6 +150,8 @@ public @interface Path {
 	 * 	<li>
 	 * 		The format is plain-text.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String name() default "";
 
@@ -159,6 +161,8 @@ public @interface Path {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] on() default {};
 
@@ -171,6 +175,8 @@ public @interface Path {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
 
@@ -179,6 +185,8 @@ public @interface Path {
 	 *
 	 * <p>
 	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiParser}.
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Void.class;
 
@@ -202,6 +210,8 @@ public @interface Path {
 	 * 	<li>
 	 * 		Client-side schema-based serializing and serializing validation.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Schema schema() default @Schema;
 
@@ -210,6 +220,8 @@ public @interface Path {
 	 *
 	 * <p>
 	 * Overrides for this part the part serializer defined on the REST client which by default is {@link OpenApiSerializer}.
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Void.class;
 
@@ -229,6 +241,8 @@ public @interface Path {
 	 * 	<ja>@RestGet</ja>(<js>"/pet/{petId}"</js>)
 	 * 	<jk>public</jk> Pet getPet(<ja>@Path</ja>(<js>"petId"</js>) <jk>long</jk> <jv>petId</jv>) { ... }
 	 * </p>
+	 *
+	 * @return The annotation value.
 	 */
 	String value() default "";
 }

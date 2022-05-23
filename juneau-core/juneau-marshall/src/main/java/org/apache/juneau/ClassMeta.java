@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
+import static java.util.Arrays.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -120,6 +121,7 @@ public final class ClassMeta<T> implements Type {
 	private final Map<Class<?>,Annotation[]> annotationArrayMap = new ConcurrentHashMap<>();
 	private final Map<Class<?>,Optional<?>> annotationLastMap = new ConcurrentHashMap<>();
 	private final Map<String,Optional<?>> properties = new ConcurrentHashMap<>();
+	private final BiMap<Object,String> enumValues;
 
 	private final SimpleReadWriteLock lock = new SimpleReadWriteLock(false);
 
@@ -188,6 +190,7 @@ public final class ClassMeta<T> implements Type {
 			this.example = builder.example;
 			this.args = null;
 			this.stringMutater = builder.stringMutater;
+			this.enumValues = builder.enumValues == null ? null : builder.enumValues.build();
 		} catch (ClassMetaRuntimeException e) {
 			notABeanReason = e.getMessage();
 			throw e;
@@ -258,6 +261,7 @@ public final class ClassMeta<T> implements Type {
 		this.example = mainType.example;
 		this.args = null;
 		this.stringMutater = mainType.stringMutater;
+		this.enumValues = mainType.enumValues;
 	}
 
 	/**
@@ -300,6 +304,7 @@ public final class ClassMeta<T> implements Type {
 		this.exampleField = null;
 		this.example = null;
 		this.stringMutater = null;
+		this.enumValues = null;
 	}
 
 	@SuppressWarnings({"unchecked","rawtypes","hiding"})
@@ -346,6 +351,7 @@ public final class ClassMeta<T> implements Type {
 		Field exampleField;
 		String example;
 		Mutater<String,T> stringMutater;
+		BiMap.Builder<Object,String> enumValues;
 
 		ClassMetaBuilder(Class<T> innerClass, BeanContext beanContext, ObjectSwap<T,?>[] swaps, ObjectSwap<?,?>[] childSwaps) {
 			this.innerClass = innerClass;
@@ -675,6 +681,14 @@ public final class ClassMeta<T> implements Type {
 			}
 
 			this.stringMutater = Mutaters.get(String.class, c);
+
+			if (cc == ENUM) {
+				Class<? extends Enum> ec = (Class<? extends Enum<?>>)c;
+				boolean useEnumNames = bc != null && bc.isUseEnumNames();
+				enumValues = BiMap.create();
+				enumValues.unmodifiable();
+				stream(ec.getEnumConstants()).forEach(x -> enumValues.add(x, useEnumNames ? x.name() : x.toString()));
+			}
 		}
 
 		private BeanFilter findBeanFilter(BeanContext bc) {
@@ -905,6 +919,7 @@ public final class ClassMeta<T> implements Type {
 	 * If class is abstract, always returns <jk>null</jk>.
 	 * Note that this also returns the 1-arg constructor for non-static member classes.
 	 *
+	 * @param <T> The class from which to locate the no-arg constructor.
 	 * @param c The class from which to locate the no-arg constructor.
 	 * @param v The minimum visibility.
 	 * @return The constructor, or <jk>null</jk> if no no-arg constructor exists with the required visibility.
@@ -1728,11 +1743,15 @@ public final class ClassMeta<T> implements Type {
 	 * @return A new instance of the object, or <jk>null</jk> if there is no string constructor on the object.
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "unchecked" })
 	public T newInstanceFromString(Object outer, String arg) throws ExecutableException {
 
-		if (isEnum() && beanContext.isUseEnumNames())
-			return (T)Enum.valueOf((Class<? extends Enum>)this.innerClass, arg);
+		if (isEnum()) {
+			T t = (T)enumValues.getKey(arg);
+			if (t == null && ! beanContext.isIgnoreUnknownEnumValues())
+				throw new ExecutableException("Could not resolve enum value '"+arg+"' on class '"+getInnerClass().getName()+"'");
+			return t;
+		}
 
 		Method m = fromStringMethod;
 		if (m != null) {
@@ -1748,7 +1767,7 @@ public final class ClassMeta<T> implements Type {
 				return c.<T>invoke(outer, arg);
 			return c.<T>invoke(arg);
 		}
-		throw new InstantiationError("No string constructor or valueOf(String) method found for class '"+getInnerClass().getName()+"'");
+		throw new ExecutableException("No string constructor or valueOf(String) method found for class '"+getInnerClass().getName()+"'");
 	}
 
 	/**
@@ -1990,6 +2009,7 @@ public final class ClassMeta<T> implements Type {
 	/**
 	 * Transforms the specified object into an instance of this class.
 	 *
+	 * @param <O> The transform-to class.
 	 * @param o The object to transform.
 	 * @param c The class
 	 * @return The transformed object.
@@ -2003,6 +2023,7 @@ public final class ClassMeta<T> implements Type {
 	/**
 	 * Transforms the specified object into an instance of this class.
 	 *
+	 * @param <O> The transform-to class.
 	 * @param o The object to transform.
 	 * @param c The class
 	 * @return The transformed object.
@@ -2014,6 +2035,7 @@ public final class ClassMeta<T> implements Type {
 	/**
 	 * Returns the transform for this class for creating instances from other object types.
 	 *
+	 * @param <I> The transform-from class.
 	 * @param c The transform-from class.
 	 * @return The transform, or <jk>null</jk> if no such transform exists.
 	 */
@@ -2034,6 +2056,7 @@ public final class ClassMeta<T> implements Type {
 	/**
 	 * Returns the transform for this class for creating instances from other object types.
 	 *
+	 * @param <O> The transform-to class.
 	 * @param c The transform-from class.
 	 * @return The transform, or <jk>null</jk> if no such transform exists.
 	 */
@@ -2064,6 +2087,7 @@ public final class ClassMeta<T> implements Type {
 	/**
 	 * Shortcut for calling <c>getInnerClass().getAnnotation(a)</c>.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param a The annotation to retrieve.
 	 * @return The specified annotation, or <jk>null</jk> if the class does not have the specified annotation.
 	 */
@@ -2082,6 +2106,7 @@ public final class ClassMeta<T> implements Type {
 	/**
 	 * Performs an action on all matching annotations of the specified type defined on this class or parent classes/interfaces in parent-to-child order.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param type The annotation to search for.
 	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
 	 * @param action An action to perform on the entry.
@@ -2102,6 +2127,7 @@ public final class ClassMeta<T> implements Type {
 	/**
 	 * Returns the first matching annotation on this class or parent classes/interfaces in parent-to-child order.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param type The annotation to search for.
 	 * @param filter A predicate to apply to the entries to determine if annotation should be used.  Can be <jk>null</jk>.
 	 * @return This object.
@@ -2122,6 +2148,7 @@ public final class ClassMeta<T> implements Type {
 	/**
 	 * Returns the last matching annotation on this class or parent classes/interfaces in parent-to-child order.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param type The annotation to search for.
 	 * @param filter A predicate to apply to the entries to determine if annotation should be used.  Can be <jk>null</jk>.
 	 * @return This object.
@@ -2156,6 +2183,7 @@ public final class ClassMeta<T> implements Type {
 	/**
 	 * Returns a calculated property on this context.
 	 *
+	 * @param <T2> The type to convert the property to.
 	 * @param name The name of the property.
 	 * @param function The function used to create this property.
 	 * @return The property value.  Never <jk>null</jk>.

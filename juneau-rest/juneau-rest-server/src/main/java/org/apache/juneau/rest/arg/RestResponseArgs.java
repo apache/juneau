@@ -57,6 +57,7 @@ public class RestResponseArgs extends SimpleRestOperationArg {
 	/**
 	 * Constructor.
 	 *
+	 * @param <T> The function return type.
 	 * @param function The function for finding the arg.
 	 */
 	protected <T> RestResponseArgs(ThrowingFunction<RestResponse,T> function) {

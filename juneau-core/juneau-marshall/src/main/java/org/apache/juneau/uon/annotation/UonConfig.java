@@ -44,6 +44,8 @@ public @interface UonConfig {
 	 *
 	 * <p>
 	 * Can be used to override default ordering and application of config annotations.
+	 *
+	 * @return The annotation value.
 	 */
 	int rank() default 0;
 
@@ -56,7 +58,7 @@ public @interface UonConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property: Decode <js>"%xx"</js> sequences.
+	 * Decode <js>"%xx"</js> sequences.
 	 *
 	 * <p>
 	 * Specify <js>"true"</js> if URI encoded characters should be decoded, <js>"false"</js> if they've already been decoded
@@ -78,11 +80,13 @@ public @interface UonConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonParser.Builder#decoding()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String decoding() default "";
 
 	/**
-	 * Configuration property:  Validate end.
+	 * Validate end.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, after parsing a POJO from the input, verifies that the remaining input in
@@ -102,6 +106,8 @@ public @interface UonConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonParser.Builder#validateEnd()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String validateEnd() default "";
 
@@ -110,7 +116,7 @@ public @interface UonConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * Add <js>"_type"</js> properties when needed.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
@@ -134,11 +140,13 @@ public @interface UonConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonSerializer.Builder#addBeanTypesUon()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String addBeanTypes() default "";
 
 	/**
-	 * Configuration property:  Encode non-valid URI characters.
+	 * Encode non-valid URI characters.
 	 *
 	 * <p>
 	 * Encode non-valid URI characters with <js>"%xx"</js> constructs.
@@ -171,11 +179,13 @@ public @interface UonConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonSerializer.Builder#encoding()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String encoding() default "";
 
 	/**
-	 * Configuration property:  Format to use for query/form-data/header values.
+	 * Format to use for query/form-data/header values.
 	 *
 	 * <p>
 	 * Specifies the format to use for URL GET parameter keys and values.
@@ -194,6 +204,8 @@ public @interface UonConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.uon.UonSerializer.Builder#paramFormat(ParamFormat)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String paramFormat() default "";
 }

@@ -472,6 +472,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Add if predicate matches value.
 	 *
+	 * @param <T> The value type.
 	 * @param test The predicate to match against.
 	 * @param key The key.
 	 * @param value The value.
@@ -484,6 +485,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Adds the first value that matches the specified predicate.
 	 *
+	 * @param <T> The value types.
 	 * @param test The predicate to match against.
 	 * @param key The key.
 	 * @param values The values to test.
@@ -511,6 +513,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Adds a value in this map if the entry does not exist or the current value is <jk>null</jk> and the value matches the specified predicate.
 	 *
+	 * @param <T> The value type.
 	 * @param predicate The predicate to test the value with.
 	 * @param key The map key.
 	 * @param value The value to set if the current value does not exist or is <jk>null</jk>.
@@ -972,6 +975,8 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Same as {@link #getMap(String, JsonMap)} except converts the keys and values to the specified types.
 	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
 	 * @param key The key.
 	 * @param keyType The key type class.
 	 * @param valType The value type class.
@@ -1035,6 +1040,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Same as {@link #getList(String, JsonList)} except converts the elements to the specified types.
 	 *
+	 * @param <E> The element type.
 	 * @param key The key.
 	 * @param elementType The element type class.
 	 * @param def The default value if the map doesn't contain the specified mapping.

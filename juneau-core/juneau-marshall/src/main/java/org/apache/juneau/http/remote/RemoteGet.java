@@ -62,6 +62,8 @@ public @interface RemoteGet {
 	 *
 	 * <p>
 	 * Note that you can also use {@link #value()} to specify the method name and path in shortened form.
+	 *
+	 * @return The annotation value.
 	 */
 	String path() default "";
 
@@ -100,6 +102,8 @@ public @interface RemoteGet {
 	 * 			<li><jk>boolean</jk>/<c>Boolean</c> - <jk>true</jk> if the response code is <c>&lt;400</c>
 	 * 		</ul>
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	RemoteReturn returns() default RemoteReturn.BODY;
 
@@ -118,6 +122,8 @@ public @interface RemoteGet {
 	 * 	<jc>// Shortened form</jc>
 	 * 	<ja>@RemoteGet</ja>(<js>"/{propertyName}"</js>)
 	 * </p>
+	 *
+	 * @return The annotation value.
 	 */
 	String value() default "";
 }

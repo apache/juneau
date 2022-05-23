@@ -98,6 +98,7 @@ public class HtmlElementContainer extends HtmlElement {
 	/**
 	 * Returns the child node at the specified index.
 	 *
+	 * @param <T> The class type of the node.
 	 * @param type The class type of the node.
 	 * @param index The index of the node in the list of children.
 	 * @return The child node, or <jk>null</jk> if it doesn't exist.

@@ -81,7 +81,7 @@ import org.apache.juneau.xml.*;
  * 	</li>
  * 	<li class='ja'>{@link HtmlDocConfig}:
  * 		<ul>
- * 			<li class='jma'>{@link HtmlDocConfig#header() header}:  <js>"&lt;h1>$RS{title}&lt;/h1>&lt;h2>$RS{operationSummary,description}&lt;/h2>$C{REST/header}"</js>
+ * 			<li class='jma'>{@link HtmlDocConfig#header() header}:  <js>"&lt;h1&gt;$RS{title}&lt;/h1&gt;&lt;h2&gt;$RS{operationSummary,description}&lt;/h2&gt;$C{REST/header}"</js>
  * 			<li class='jma'>{@link HtmlDocConfig#navlinks() navlinks}:  <js>"up: request:/.."</js>
  * 			<li class='jma'>{@link HtmlDocConfig#stylesheet() stylesheet}:  <js>"$C{REST/theme,servlet:/htdocs/themes/devops.css}"</js>
  * 			<li class='jma'>{@link HtmlDocConfig#head() head}:  <js>"$C{REST/head}"</js>
@@ -159,7 +159,8 @@ import org.apache.juneau.xml.*;
 )
 @BeanConfig(
 	// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.
-	ignoreUnknownBeanProperties="true"
+	ignoreUnknownBeanProperties="true",
+	ignoreUnknownEnumValues="true"
 )
 @SerializerConfig(
 	// Enable automatic resolution of URI objects to root-relative values.

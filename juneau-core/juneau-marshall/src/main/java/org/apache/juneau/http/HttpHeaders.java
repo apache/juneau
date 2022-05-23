@@ -2578,6 +2578,7 @@ public class HttpHeaders {
 	 * 	<li><c><jk>public</jk> X(String <jv>headerName</jv>, Object <jv>headerValue</jv>)</c>
 	 * </ul>
 	 *
+	 * @param <T> The header implementation class.
 	 * @param type The header implementation class.
 	 * @param name The header name.
 	 * @param value The header value.
@@ -2594,6 +2595,7 @@ public class HttpHeaders {
 	 * Same as {@link #header(Class, String, Object)} but the header name is pulled from the {@link org.apache.juneau.http.annotation.Header#name() @Header(name)} or
 	 * 	{@link org.apache.juneau.http.annotation.Header#value() @Header(value)} annotations.
 	 *
+	 * @param <T> The header implementation class.
 	 * @param type The header implementation class.
 	 * @param value The header value.
 	 * @return A new unmodifiable instance, never <jk>null</jk>.

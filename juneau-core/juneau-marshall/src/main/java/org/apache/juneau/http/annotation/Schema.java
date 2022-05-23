@@ -109,6 +109,8 @@ public @interface Schema {
 	 * 	<li>
 	 * 		Client-side schema-based serializing.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] _default() default {};
 
@@ -146,6 +148,8 @@ public @interface Schema {
 	 * 	<li>
 	 * 		Client-side schema-based serializing validation.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] _enum() default {};
 
@@ -159,6 +163,8 @@ public @interface Schema {
 	 * 	<li>
 	 * 		The format is a <a href='https://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03'>JSON Reference</a>.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String $ref() default "";
 
@@ -170,6 +176,8 @@ public @interface Schema {
 	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] additionalProperties() default {};
 
@@ -181,11 +189,15 @@ public @interface Schema {
 	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] allOf() default {};
 
 	/**
 	 * Synonym for {@link #allowEmptyValue()}.
+	 *
+	 * @return The annotation value.
 	 */
 	boolean aev() default false;
 
@@ -207,11 +219,15 @@ public @interface Schema {
 	 *
 	 * <p>
 	 * <b>Note:</b>  This is technically only valid for either query or formData parameters, but support is provided anyway for backwards compatability.
+	 *
+	 * @return The annotation value.
 	 */
 	boolean allowEmptyValue() default false;
 
 	/**
 	 * Synonym for {@link #collectionFormat()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String cf() default "";
 
@@ -260,11 +276,15 @@ public @interface Schema {
 	 *
 	 * <p>
 	 * Note that for collections/arrays parameters with POJO element types, the input is broken into a string array before being converted into POJO elements.
+	 *
+	 * @return The annotation value.
 	 */
 	String collectionFormat() default "";
 
 	/**
 	 * Synonym for {@link #description()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String[] d() default {};
 
@@ -298,11 +318,15 @@ public @interface Schema {
 	 * 	<li>
 	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] description() default {};
 
 	/**
 	 * Synonym for {@link #_default()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String[] df() default {};
 
@@ -314,21 +338,29 @@ public @interface Schema {
 	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String discriminator() default "";
 
 	/**
 	 * Synonym for {@link #_enum()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String[] e() default {};
 
 	/**
 	 * Synonym for {@link #exclusiveMaximum()}.
+	 *
+	 * @return The annotation value.
 	 */
 	boolean emax() default false;
 
 	/**
 	 * Synonym for {@link #exclusiveMinimum()}.
+	 *
+	 * @return The annotation value.
 	 */
 	boolean emin() default false;
 
@@ -356,6 +388,8 @@ public @interface Schema {
 	 * 	<li>
 	 * 		Client-side schema-based serializing validation.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	boolean exclusiveMaximum() default false;
 
@@ -383,6 +417,8 @@ public @interface Schema {
 	 * 	<li>
 	 * 		Client-side schema-based serializing validation.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	boolean exclusiveMinimum() default false;
 
@@ -394,11 +430,15 @@ public @interface Schema {
 	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	ExternalDocs externalDocs() default @ExternalDocs;
 
 	/**
 	 * Synonym for {@link #format()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String f() default "";
 
@@ -480,11 +520,15 @@ public @interface Schema {
 	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc ext.SwaggerDataTypeFormats}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String format() default "";
 
 	/**
 	 * Specifies that schema information for this part should not be shown in the generated Swagger documentation.
+	 *
+	 * @return The annotation value.
 	 */
 	boolean ignore() default false;
 
@@ -507,16 +551,22 @@ public @interface Schema {
 	 * 	<li>
 	 * 		Client-side schema-based serializing and serializing validation.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Items items() default @Items;
 
 	/**
 	 * Synonym for {@link #maximum()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String max() default "";
 
 	/**
 	 * Synonym for {@link #maxItems()}.
+	 *
+	 * @return The annotation value.
 	 */
 	long maxi() default -1;
 
@@ -544,6 +594,8 @@ public @interface Schema {
 	 * 	<li>
 	 * 		Client-side schema-based serializing validation.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String maximum() default "";
 
@@ -570,11 +622,15 @@ public @interface Schema {
 	 * 	<li>
 	 * 		Client-side schema-based serializing validation.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	long maxItems() default -1;
 
 	/**
 	 * Synonym for {@link #maxLength()}.
+	 *
+	 * @return The annotation value.
 	 */
 	long maxl() default -1;
 
@@ -603,11 +659,15 @@ public @interface Schema {
 	 * 	<li>
 	 * 		Client-side schema-based serializing validation.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	long maxLength() default -1;
 
 	/**
 	 * Synonym for {@link #maxProperties()}.
+	 *
+	 * @return The annotation value.
 	 */
 	long maxp() default -1;
 
@@ -619,16 +679,22 @@ public @interface Schema {
 	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	long maxProperties() default -1;
 
 	/**
 	 * Synonym for {@link #minimum()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String min() default "";
 
 	/**
 	 * Synonym for {@link #minItems()}.
+	 *
+	 * @return The annotation value.
 	 */
 	long mini() default -1;
 
@@ -656,6 +722,8 @@ public @interface Schema {
 	 * 	<li>
 	 * 		Client-side schema-based serializing validation.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String minimum() default "";
 
@@ -682,11 +750,15 @@ public @interface Schema {
 	 * 	<li>
 	 * 		Client-side schema-based serializing validation.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	long minItems() default -1;
 
 	/**
 	 * Synonym for {@link #minLength()}.
+	 *
+	 * @return The annotation value.
 	 */
 	long minl() default -1;
 
@@ -715,11 +787,15 @@ public @interface Schema {
 	 * 	<li>
 	 * 		Client-side schema-based serializing validation.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	long minLength() default -1;
 
 	/**
 	 * Synonym for {@link #minProperties()}.
+	 *
+	 * @return The annotation value.
 	 */
 	long minp() default -1;
 
@@ -731,11 +807,15 @@ public @interface Schema {
 	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	long minProperties() default -1;
 
 	/**
 	 * Synonym for {@link #multipleOf()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String mo() default "";
 
@@ -763,6 +843,8 @@ public @interface Schema {
 	 * 	<li>
 	 * 		Client-side schema-based serializing validation.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String multipleOf() default "";
 
@@ -848,6 +930,8 @@ public @interface Schema {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] on() default {};
 
@@ -860,11 +944,15 @@ public @interface Schema {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
 
 	/**
 	 * Synonym for {@link #pattern()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String p() default "";
 
@@ -897,6 +985,8 @@ public @interface Schema {
 	 * 	<li>
 	 * 		Client-side schema-based serializing validation.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String pattern() default "";
 
@@ -908,11 +998,15 @@ public @interface Schema {
 	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] properties() default {};
 
 	/**
 	 * Synonym for {@link #required()}.
+	 *
+	 * @return The annotation value.
 	 */
 	boolean r() default false;
 
@@ -924,6 +1018,8 @@ public @interface Schema {
 	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	boolean readOnly() default false;
 
@@ -964,16 +1060,22 @@ public @interface Schema {
 	 * 	<li>
 	 * 		Client-side schema-based serializing validation.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	boolean required() default false;
 
 	/**
 	 * Synonym for {@link #readOnly()}.
+	 *
+	 * @return The annotation value.
 	 */
 	boolean ro() default false;
 
 	/**
 	 * Synonym for {@link #skipIfEmpty()}.
+	 *
+	 * @return The annotation value.
 	 */
 	boolean sie() default false;
 
@@ -988,11 +1090,15 @@ public @interface Schema {
 	 * 	<li>
 	 * 		Client-side schema-based serializing.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	boolean skipIfEmpty() default false;
 
 	/**
 	 * Synonym for {@link #type()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String t() default "";
 
@@ -1003,6 +1109,8 @@ public @interface Schema {
 	 * 	<li>
 	 * 		The format is plain text.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String title() default "";
 
@@ -1077,11 +1185,15 @@ public @interface Schema {
 	 * <ul class='seealso'>
 	 * 	<li class='extlink'>{@doc ext.SwaggerDataTypes}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String type() default "";
 
 	/**
 	 * Synonym for {@link #uniqueItems()}.
+	 *
+	 * @return The annotation value.
 	 */
 	boolean ui() default false;
 
@@ -1112,6 +1224,8 @@ public @interface Schema {
 	 * 	<li>
 	 * 		Client-side schema-based serializing validation.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	boolean uniqueItems() default false;
 
@@ -1123,6 +1237,8 @@ public @interface Schema {
 	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] xml() default {};
 }

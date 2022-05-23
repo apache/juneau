@@ -123,6 +123,7 @@ public class AnyAssertion<T> extends FluentAnyAssertion<T,AnyAssertion<T>> {
 	/**
 	 * Static creator.
 	 *
+	 * @param <T> The value type.
 	 * @param value
 	 * 	The object being tested.
 	 * 	<br>Can be <jk>null</jk>.

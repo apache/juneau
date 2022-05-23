@@ -33,6 +33,7 @@ public class ObjectUtils {
 	/**
 	 * If the specified object is an instance of the specified class, casts it to that type.
 	 *
+	 * @param <T> The class to cast to.
 	 * @param o The object to cast.
 	 * @param c The class to cast to.
 	 * @return The cast object, or <jk>null</jk> if the object wasn't an instance of the specified class.
@@ -108,6 +109,7 @@ public class ObjectUtils {
 	/**
 	 * Tests two objects for equality, gracefully handling nulls and arrays.
 	 *
+	 * @param <T> The value types.
 	 * @param o1 Object 1.
 	 * @param o2 Object 2.
 	 * @return <jk>true</jk> if both objects are equal based on the {@link Object#equals(Object)} method.
@@ -128,6 +130,7 @@ public class ObjectUtils {
 	/**
 	 * Tests two arrays for equality, gracefully handling nulls.
 	 *
+	 * @param <T> The value types.
 	 * @param o1 Array 1.
 	 * @param o2 Array 2.
 	 * @return <jk>true</jk> if both arrays are equal based on the {@link Object#equals(Object)} method on each element.
@@ -229,6 +232,7 @@ public class ObjectUtils {
 	/**
 	 * Returns the first non-null value in the specified array
 	 *
+	 * @param <T> The value types.
 	 * @param t The values to check.
 	 * @return The first non-null value, or <jk>null</jk> if the array is null or empty or contains only <jk>null</jk> values.
 	 */
@@ -244,6 +248,7 @@ public class ObjectUtils {
 	/**
 	 * Casts an object to a specific type if it's an instance of that type.
 	 *
+	 * @param <T> The type to cast to.
 	 * @param c The type to cast to.
 	 * @param o The object to cast to.
 	 * @return The cast object, or <jk>null</jk> if the object wasn't the specified type.
@@ -298,6 +303,7 @@ public class ObjectUtils {
 	/**
 	 * Returns <jk>true</jk> if the specified object is not <jk>null</jk>.
 	 *
+	 * @param <T> The value type.
 	 * @param value The value being checked.
 	 * @return <jk>true</jk> if the specified object is not <jk>null</jk>.
 	 */
@@ -311,13 +317,14 @@ public class ObjectUtils {
 	 * @param value The value being checked.
 	 * @return <jk>true</jk> if the specified boolean is not <jk>null</jk> and is <jk>true</jk>.
 	 */
-	public static <T> boolean isTrue(Boolean value) {
+	public static boolean isTrue(Boolean value) {
 		return value != null && value;
 	}
 
 	/**
 	 * Returns <jk>true</jk> if the specified number is not <jk>null</jk> and not <c>-1</c>.
 	 *
+	 * @param <T> The value types.
 	 * @param value The value being checked.
 	 * @return <jk>true</jk> if the specified number is not <jk>null</jk> and not <c>-1</c>.
 	 */

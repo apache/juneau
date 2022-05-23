@@ -230,6 +230,8 @@ public class MarshalledAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		Marshalled[] value();
 	}

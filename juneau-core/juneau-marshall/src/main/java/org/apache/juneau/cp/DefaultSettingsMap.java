@@ -82,6 +82,7 @@ public class DefaultSettingsMap {
 	/**
 	 * Returns the value of the specified setting if it exists.
 	 *
+	 * @param <T> The return type.
 	 * @param type The setting type.
 	 * @param name The setting name.
 	 * @return The setting value.

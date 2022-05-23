@@ -89,6 +89,7 @@ public class DefaultClassList {
 	/**
 	 * Returns the first class in this list which is a subclass of (or same as) the specified type.
 	 *
+	 * @param <T> The parent type.
 	 * @param type The parent type to check for.
 	 * @return The first class in this list which is a subclass of the specified type.
 	 */

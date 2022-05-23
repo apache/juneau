@@ -872,7 +872,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		/**
 		 * Same as {@link #looseCollections()} but explicitly specifies the setting value.
 		 *
-		 * @param value
+		 * @param value The new value for this property.
 		 * @return This object.
 		 */
 		@FluentSetter

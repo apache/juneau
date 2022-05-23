@@ -50,6 +50,8 @@ public @interface UrlEncoding {
 	 * <p>
 	 * This annotation is identical in behavior to using the {@link org.apache.juneau.urlencoding.UrlEncodingSerializer.Builder#expandedParams()}
 	 * and {@link org.apache.juneau.urlencoding.UrlEncodingParser.Builder#expandedParams()} properties, but applies to only instances of this bean.
+	 *
+	 * @return The annotation value.
 	 */
 	boolean expandedParams() default false;
 
@@ -135,6 +137,8 @@ public @interface UrlEncoding {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] on() default {};
 
@@ -147,6 +151,8 @@ public @interface UrlEncoding {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
 }

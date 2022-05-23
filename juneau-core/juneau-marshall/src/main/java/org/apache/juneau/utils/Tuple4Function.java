@@ -21,7 +21,7 @@ import java.util.function.*;
  * Similar to {@link BiFunction} except for 4 parameters.
  *
  * <p class='bjava'>
- * 	Tuple4Function&lt;A,B,C,D,R&gt; <jv>x</jv> = (<jv>a</jv>,<jv>b</jv>,<jv>c</jv>,<jv>d</jv>) -> <jsm>doSomething</jsm>(<jv>a</jv>,<jv>b</jv>,<jv>c</jv>,<jv>d</jv>);
+ * 	Tuple4Function&lt;A,B,C,D,R&gt; <jv>x</jv> = (<jv>a</jv>,<jv>b</jv>,<jv>c</jv>,<jv>d</jv>) -&gt; <jsm>doSomething</jsm>(<jv>a</jv>,<jv>b</jv>,<jv>c</jv>,<jv>d</jv>);
  *
  * 	R <jv>result</jv> = <jv>x</jv>.apply(<jv>xa</jv>,<jv>xb</jv>,<jv>xc</jv>,<jv>xd</jv>);
  * </p>

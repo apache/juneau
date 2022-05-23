@@ -99,7 +99,8 @@ public final class ParamInfo {
 	/**
 	 * Performs an action on all matching annotations declared on this parameter.
 	 *
-	 * @param type The annotation type.
+	 * @param <A> The annotation type to look for.
+	 * @param type The annotation type to look for.
 	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
 	 * @param action An action to perform on the entry.
 	 * @return This object.
@@ -113,10 +114,8 @@ public final class ParamInfo {
 	/**
 	 * Returns the specified parameter annotation declared on this parameter.
 	 *
-	 * @param type
-	 * 	The annotation to look for.
-	 * @param <A>
-	 * 	The annotation type.
+	 * @param <A> The annotation type to look for.
+	 * @param type The annotation type to look for.
 	 * @return The specified parameter annotation declared on this parameter, or <jk>null</jk> if not found.
 	 */
 	public <A extends Annotation> A getDeclaredAnnotation(Class<A> type) {
@@ -138,8 +137,8 @@ public final class ParamInfo {
 	 * <p>
 	 * If still not found, searches for the annotation on the return type of the method.
 	 *
-	 * @param type
-	 * 	The annotation to look for.
+	 * @param <A> The annotation type to look for.
+	 * @param type The annotation type to look for.
 	 * @return
 	 * 	The annotation if found, or <jk>null</jk> if not.
 	 */
@@ -156,8 +155,8 @@ public final class ParamInfo {
 	/**
 	 * Returns <jk>true</jk> if this parameter has the specified annotation.
 	 *
-	 * @param type
-	 * 	The annotation to look for.
+	 * @param <A> The annotation type to look for.
+	 * @param type The annotation type to look for.
 	 * @return
 	 * 	The <jk>true</jk> if annotation if found.
 	 */
@@ -168,8 +167,8 @@ public final class ParamInfo {
 	/**
 	 * Returns <jk>true</jk> if this parameter doesn't have the specified annotation.
 	 *
-	 * @param type
-	 * 	The annotation to look for.
+	 * @param <A> The annotation type to look for.
+	 * @param type The annotation type to look for.
 	 * @return
 	 * 	The <jk>true</jk> if annotation if not found.
 	 */
@@ -199,7 +198,8 @@ public final class ParamInfo {
 	 * <p>
 	 * Results are in parent-to-child order.
 	 *
-	 * @param type The annotation to look for.
+	 * @param <A> The annotation type to look for.
+	 * @param type The annotation type to look for.
 	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
 	 * @param action An action to perform on the entry.
 	 * @return This object.
@@ -217,7 +217,8 @@ public final class ParamInfo {
 	 * <p>
 	 * Results are in parent-to-child order.
 	 *
-	 * @param type The annotation to look for.
+	 * @param <A> The annotation type to look for.
+	 * @param type The annotation type to look for.
 	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
 	 * @return A list of all matching annotations found or an empty list if none found.
 	 */

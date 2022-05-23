@@ -61,6 +61,8 @@ public @interface Beanp {
 	 *
 	 * <p>
 	 * This annotation can also be used on private fields of a property.
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] dictionary() default {};
 
@@ -95,6 +97,8 @@ public @interface Beanp {
 	 * 		}
 	 * 	}
 	 * </p>
+	 *
+	 * @return The annotation value.
 	 */
 	String format() default "";
 
@@ -208,6 +212,8 @@ public @interface Beanp {
 	 * <div class='info'>
 	 * 		Note that the {@link Name @Name} annotation can also be used for identifying a property name.
 	 * </div>
+	 *
+	 * @return The annotation value.
 	 */
 	String name() default "";
 
@@ -272,6 +278,8 @@ public @interface Beanp {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] on() default {};
 
@@ -304,6 +312,8 @@ public @interface Beanp {
 	 * 		}
 	 * 	}
 	 * </p>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] params() default {};
 
@@ -352,6 +362,8 @@ public @interface Beanp {
 	 * 		}
 	 * 	}
 	 * </p>
+	 *
+	 * @return The annotation value.
 	 */
 	String properties() default "";
 
@@ -374,6 +386,8 @@ public @interface Beanp {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(String, String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesReadOnly(Map)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String ro() default "";
 
@@ -414,6 +428,8 @@ public @interface Beanp {
 	 * 		}
 	 * 	}
 	 * </p>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?> type() default void.class;
 
@@ -428,6 +444,8 @@ public @interface Beanp {
 	 *
 	 * 	<ja>@Beanp</ja>(<js>"foo"</js>)
 	 * </p>
+	 *
+	 * @return The annotation value.
 	 */
 	String value() default "";
 
@@ -450,6 +468,8 @@ public @interface Beanp {
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(String, String)}
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanContext.Builder#beanPropertiesWriteOnly(Map)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String wo() default "";
 }

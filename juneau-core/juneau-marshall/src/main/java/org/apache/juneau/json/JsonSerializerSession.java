@@ -443,7 +443,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * Add <js>"_type"</js> properties when needed.
 	 *
 	 * @see JsonSerializer.Builder#addBeanTypesJson()
 	 * @return
@@ -456,7 +456,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Prefix solidus <js>'/'</js> characters with escapes.
+	 * Prefix solidus <js>'/'</js> characters with escapes.
 	 *
 	 * @see JsonSerializer.Builder#escapeSolidus()
 	 * @return
@@ -467,7 +467,7 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Simple JSON mode.
+	 * Simple JSON mode.
 	 *
 	 * @see JsonSerializer.Builder#simpleMode()
 	 * @return

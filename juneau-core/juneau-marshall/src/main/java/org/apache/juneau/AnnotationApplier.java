@@ -35,7 +35,7 @@ import org.apache.juneau.svl.*;
  * <p>
  * The following code shows the general design pattern.
  *
- * <p class 'bjava'>
+ * <p class='bjava'>
  * 	<jc>// The annotation applied to classes and methods.</jc>
  * 	<ja>@Target</ja>({METHOD,TYPE})
  * 	<ja>@Retention</ja>(<jsf>RUNTIME</jsf>)
@@ -152,6 +152,7 @@ public abstract class AnnotationApplier<A extends Annotation, B> {
 	/**
 	 * Returns the specified value if it's simple name is not <js>"void"</js>.
 	 *
+	 * @param <T> The value to return.
 	 * @param in The value to return.
 	 * @return An optional containing the specified value.
 	 */

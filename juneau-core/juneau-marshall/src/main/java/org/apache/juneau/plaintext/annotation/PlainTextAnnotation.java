@@ -203,6 +203,8 @@ public class PlainTextAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		PlainText[] value();
 	}

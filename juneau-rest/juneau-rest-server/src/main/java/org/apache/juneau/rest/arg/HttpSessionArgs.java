@@ -47,6 +47,7 @@ public class HttpSessionArgs extends SimpleRestOperationArg {
 	/**
 	 * Constructor.
 	 *
+	 * @param <T> The function return type.
 	 * @param function The function for finding the arg.
 	 */
 	protected <T> HttpSessionArgs(ThrowingFunction<HttpSession,T> function) {

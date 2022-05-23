@@ -566,15 +566,15 @@ public final class StringUtils {
 	 *
 	 * <p>
 	 * <b>NOTE:</b>  This behavior is different than the Jakarta equivalent.
-	 * split("a,b,c",',') -> {"a","b","c"}
-	 * split("a, b ,c ",',') -> {"a","b","c"}
-	 * split("a,,c",',') -> {"a","","c"}
-	 * split(",,",',') -> {"","",""}
-	 * split("",',') -> {}
-	 * split(null,',') -> null
-	 * split("a,b\,c,d", ',', false) -> {"a","b\,c","d"}
-	 * split("a,b\\,c,d", ',', false) -> {"a","b\","c","d"}
-	 * split("a,b\,c,d", ',', true) -> {"a","b,c","d"}
+	 * split("a,b,c",',') -&gt; {"a","b","c"}
+	 * split("a, b ,c ",',') -&gt; {"a","b","c"}
+	 * split("a,,c",',') -&gt; {"a","","c"}
+	 * split(",,",',') -&gt; {"","",""}
+	 * split("",',') -&gt; {}
+	 * split(null,',') -&gt; null
+	 * split("a,b\,c,d", ',', false) -&gt; {"a","b\,c","d"}
+	 * split("a,b\\,c,d", ',', false) -&gt; {"a","b\","c","d"}
+	 * split("a,b\,c,d", ',', true) -&gt; {"a","b,c","d"}
 	 *
 	 * @param s The string to split.  Can be <jk>null</jk>.
 	 * @param c The character to split on.

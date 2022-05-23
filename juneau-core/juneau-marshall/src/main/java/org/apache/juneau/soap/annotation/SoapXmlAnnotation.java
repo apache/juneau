@@ -203,6 +203,8 @@ public class SoapXmlAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		SoapXml[] value();
 	}

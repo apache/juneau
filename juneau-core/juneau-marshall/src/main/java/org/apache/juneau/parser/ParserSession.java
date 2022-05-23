@@ -394,6 +394,7 @@ public class ParserSession extends BeanSession {
 	/**
 	 * Trims the specified object if it's a <c>String</c> and {@link #isTrimStrings()} returns <jk>true</jk>.
 	 *
+	 * @param <K> The object type.
 	 * @param o The object to trim.
 	 * @return The trimmed string if it's a string.
 	 */
@@ -848,6 +849,8 @@ public class ParserSession extends BeanSession {
 	 * <p>
 	 * Default implementation throws an {@link UnsupportedOperationException}.
 	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
 	 * @param pipe The parser input.
 	 * @param m The map being loaded.
 	 * @param keyType The class type of the keys, or <jk>null</jk> to default to <code>String.<jk>class</jk></code>.
@@ -902,6 +905,7 @@ public class ParserSession extends BeanSession {
 	 * <p>
 	 * Default implementation throws an {@link UnsupportedOperationException}.
 	 *
+	 * @param <E> The element type.
 	 * @param pipe The parser input.
 	 * @param c The collection being loaded.
 	 * @param elementType The class type of the elements, or <jk>null</jk> to default to whatever is being parsed.
@@ -1027,6 +1031,7 @@ public class ParserSession extends BeanSession {
 	/**
 	 * Returns the listener associated with this session.
 	 *
+	 * @param <T> The listener type.
 	 * @param c The listener class to cast to.
 	 * @return The listener associated with this session, or <jk>null</jk> if there is no listener.
 	 */
@@ -1145,7 +1150,7 @@ public class ParserSession extends BeanSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Auto-close streams.
+	 * Auto-close streams.
 	 *
 	 * @see Parser.Builder#autoCloseStreams()
 	 * @return
@@ -1157,7 +1162,7 @@ public class ParserSession extends BeanSession {
 	}
 
 	/**
-	 * Configuration property:  Debug output lines.
+	 * Debug output lines.
 	 *
 	 * @see Parser.Builder#debugOutputLines(int)
 	 * @return
@@ -1177,7 +1182,7 @@ public class ParserSession extends BeanSession {
 	}
 
 	/**
-	 * Configuration property:  Strict mode.
+	 * Strict mode.
 	 *
 	 * @see Parser.Builder#strict()
 	 * @return
@@ -1188,7 +1193,7 @@ public class ParserSession extends BeanSession {
 	}
 
 	/**
-	 * Configuration property:  Trim parsed strings.
+	 * Trim parsed strings.
 	 *
 	 * @see Parser.Builder#trimStrings()
 	 * @return
@@ -1200,7 +1205,7 @@ public class ParserSession extends BeanSession {
 	}
 
 	/**
-	 * Configuration property:  Unbuffered.
+	 * Unbuffered.
 	 *
 	 * @see Parser.Builder#unbuffered()
 	 * @return
@@ -1224,7 +1229,7 @@ public class ParserSession extends BeanSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Parser listener.
+	 * Parser listener.
 	 *
 	 * @see Parser.Builder#listener(Class)
 	 * @return

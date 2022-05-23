@@ -179,6 +179,7 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	/**
 	 * Converts this object assertion into an array assertion.
 	 *
+	 * @param <E> The element type of the array.
 	 * @param elementType The element type of the array.
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not an array.
@@ -301,6 +302,7 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	/**
 	 * Converts this object assertion into a collection assertion.
 	 *
+	 * @param <E> The element type of the collection.
 	 * @param elementType The element type of the collection.
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a collection.
@@ -325,6 +327,7 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	/**
 	 * Converts this object assertion into a comparable object assertion.
 	 *
+	 * @param <T2> The comparable type.
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not an instance of {@link Comparable}.
 	 */
@@ -376,6 +379,7 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	/**
 	 * Converts this object assertion into a list assertion.
 	 *
+	 * @param <E> The element type.
 	 * @param elementType The element type.
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a list.
@@ -399,6 +403,8 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	/**
 	 * Converts this object assertion into a map assertion with the specified key and value types.
 	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
 	 * @param keyType The key type.
 	 * @param valueType The value type.
 	 * @return A new assertion.
@@ -414,6 +420,7 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	/**
 	 * Converts this object assertion into a bean assertion.
 	 *
+	 * @param <T2> The bean type.
 	 * @param beanType The bean type.
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a bean.
@@ -436,6 +443,7 @@ public class FluentAnyAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	/**
 	 * Converts this object assertion into a list-of-beans assertion.
 	 *
+	 * @param <T2> The bean type.
 	 * @param beanType The bean type.
 	 * @return A new assertion.
 	 * @throws AssertionError If object is not a bean.

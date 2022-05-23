@@ -129,6 +129,7 @@ public abstract class HtmlElement {
 	/**
 	 * Returns the attribute with the specified name converted to the specified class type.
 	 *
+	 * @param <T> The class type to convert this class to.
 	 * @param type
 	 * 	The class type to convert this class to.
 	 * 	See {@link ConverterUtils} for a list of supported conversion types.

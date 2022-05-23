@@ -19,10 +19,10 @@ import java.beans.*;
  *
  * <h5 class='section'>Example:</h5>
  * <ul>
- * 	<li><js>"fooBar"</js> -> <js>"fooBar"</js>
- * 	<li><js>"fooBarURL"</js> -> <js>"fooBarURL"</js>
- * 	<li><js>"FooBarURL"</js> -> <js>"fooBarURL"</js>
- * 	<li><js>"URL"</js> -> <js>"URL"</js>
+ * 	<li><js>"fooBar"</js> -&gt; <js>"fooBar"</js>
+ * 	<li><js>"fooBarURL"</js> -&gt; <js>"fooBarURL"</js>
+ * 	<li><js>"FooBarURL"</js> -&gt; <js>"fooBarURL"</js>
+ * 	<li><js>"URL"</js> -&gt; <js>"URL"</js>
  * </ul>
  *
  * <p>

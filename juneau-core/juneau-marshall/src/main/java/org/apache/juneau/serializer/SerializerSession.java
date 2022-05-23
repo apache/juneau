@@ -300,6 +300,7 @@ public class SerializerSession extends BeanTraverseSession {
 	/**
 	 * Adds a session object to the {@link VarResolverSession} in this session.
 	 *
+	 * @param <T> The bean type.
 	 * @param c The bean type being added.
 	 * @param value The bean being added.
 	 * @return This object.
@@ -594,6 +595,8 @@ public class SerializerSession extends BeanTraverseSession {
 	/**
 	 * Sorts the specified map if {@link SerializerSession#isSortMaps()} returns <jk>true</jk>.
 	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
 	 * @param m The map being sorted.
 	 * @return A new sorted {@link TreeMap}.
 	 */
@@ -606,6 +609,7 @@ public class SerializerSession extends BeanTraverseSession {
 	/**
 	 * Sorts the specified collection if {@link SerializerSession#isSortCollections()} returns <jk>true</jk>.
 	 *
+	 * @param <E> The element type.
 	 * @param c The collection being sorted.
 	 * @return A new sorted {@link TreeSet}.
 	 */
@@ -619,6 +623,7 @@ public class SerializerSession extends BeanTraverseSession {
 	/**
 	 * Sorts the specified collection if {@link SerializerSession#isSortCollections()} returns <jk>true</jk>.
 	 *
+	 * @param <E> The element type.
 	 * @param c The collection being sorted.
 	 * @return A new sorted {@link TreeSet}.
 	 */
@@ -867,6 +872,7 @@ public class SerializerSession extends BeanTraverseSession {
 	/**
 	 * Returns the listener associated with this session.
 	 *
+	 * @param <T> The listener type.
 	 * @param c The listener class to cast to.
 	 * @return The listener associated with this session, or <jk>null</jk> if there is no listener.
 	 */
@@ -928,7 +934,7 @@ public class SerializerSession extends BeanTraverseSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * Add <js>"_type"</js> properties when needed.
 	 *
 	 * @see Serializer.Builder#addBeanTypes()
 	 * @return
@@ -940,7 +946,7 @@ public class SerializerSession extends BeanTraverseSession {
 	}
 
 	/**
-	 * Configuration property:  Add type attribute to root nodes.
+	 * Add type attribute to root nodes.
 	 *
 	 * @see Serializer.Builder#addRootType()
 	 * @return
@@ -960,7 +966,7 @@ public class SerializerSession extends BeanTraverseSession {
 	}
 
 	/**
-	 * Configuration property:  Sort arrays and collections alphabetically.
+	 * Sort arrays and collections alphabetically.
 	 *
 	 * @see Serializer.Builder#sortCollections()
 	 * @return
@@ -971,7 +977,7 @@ public class SerializerSession extends BeanTraverseSession {
 	}
 
 	/**
-	 * Configuration property:  Sort maps alphabetically.
+	 * Sort maps alphabetically.
 	 *
 	 * @see Serializer.Builder#sortMaps()
 	 * @return
@@ -982,7 +988,7 @@ public class SerializerSession extends BeanTraverseSession {
 	}
 
 	/**
-	 * Configuration property:  Trim empty lists and arrays.
+	 * Trim empty lists and arrays.
 	 *
 	 * @see Serializer.Builder#trimEmptyCollections()
 	 * @return
@@ -993,7 +999,7 @@ public class SerializerSession extends BeanTraverseSession {
 	}
 
 	/**
-	 * Configuration property:  Trim empty maps.
+	 * Trim empty maps.
 	 *
 	 * @see Serializer.Builder#trimEmptyMaps()
 	 * @return
@@ -1004,7 +1010,7 @@ public class SerializerSession extends BeanTraverseSession {
 	}
 
 	/**
-	 * Configuration property:  Don't trim null bean property values.
+	 * Don't trim null bean property values.
 	 *
 	 * @see Serializer.Builder#keepNullProperties()
 	 * @return
@@ -1015,7 +1021,7 @@ public class SerializerSession extends BeanTraverseSession {
 	}
 
 	/**
-	 * Configuration property:  Trim strings.
+	 * Trim strings.
 	 *
 	 * @see Serializer.Builder#trimStrings()
 	 * @return
@@ -1026,7 +1032,7 @@ public class SerializerSession extends BeanTraverseSession {
 	}
 
 	/**
-	 * Configuration property:  URI context bean.
+	 * URI context bean.
 	 *
 	 * @see Serializer.Builder#uriContext(UriContext)
 	 * @return
@@ -1037,7 +1043,7 @@ public class SerializerSession extends BeanTraverseSession {
 	}
 
 	/**
-	 * Configuration property:  URI relativity.
+	 * URI relativity.
 	 *
 	 * @see Serializer.Builder#uriRelativity(UriRelativity)
 	 * @return
@@ -1048,7 +1054,7 @@ public class SerializerSession extends BeanTraverseSession {
 	}
 
 	/**
-	 * Configuration property:  URI resolution.
+	 * URI resolution.
 	 *
 	 * @see Serializer.Builder#uriResolution(UriResolution)
 	 * @return
@@ -1061,6 +1067,7 @@ public class SerializerSession extends BeanTraverseSession {
 	/**
 	 * Converts the specified throwable to either a {@link RuntimeException} or {@link SerializeException}.
 	 *
+	 * @param <T> The throwable type.
 	 * @param causedBy The exception to cast or wrap.
 	 */
 	protected static <T extends Throwable> void handleThrown(T causedBy) {

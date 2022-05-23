@@ -253,6 +253,7 @@ public abstract class Context implements AnnotationProvider {
 		/**
 		 * Convenience method for calling {@link #build()} while avoiding a cast.
 		 *
+		 * @param <T> The type to cast the built object to.
 		 * @param c The type to cast the built object to.
 		 * @return The built context bean.
 		 */
@@ -266,6 +267,7 @@ public abstract class Context implements AnnotationProvider {
 		/**
 		 * Apply a consumer to this builder.
 		 *
+		 * @param <T> The builder subtype that this consumer can be applied to.
 		 * @param subtype The builder subtype that this consumer can be applied to.
 		 * @param consumer The consumer.
 		 * @return This object.
@@ -776,6 +778,7 @@ public abstract class Context implements AnnotationProvider {
 		 * First looks in system properties.  Then converts the name to env-safe and looks in the system environment.
 		 * Then returns the default if it can't be found.
 		 *
+		 * @param <T> The type to convert to.
 		 * @param name The property name.
 		 * @param def The default value if not found.
 		 * @return The default value.
@@ -1065,6 +1068,7 @@ public abstract class Context implements AnnotationProvider {
 	/**
 	 * Returns <jk>true</jk> if <c>getAnnotation(a,c)</c> returns a non-null value.
 	 *
+	 * @param <A> The annotation being checked for.
 	 * @param type The annotation being checked for.
 	 * @param onClass The class being checked on.
 	 * @return <jk>true</jk> if the annotation exists on the specified class.
@@ -1076,6 +1080,7 @@ public abstract class Context implements AnnotationProvider {
 	/**
 	 * Returns <jk>true</jk> if <c>getAnnotation(a,m)</c> returns a non-null value.
 	 *
+	 * @param <A> The annotation being checked for.
 	 * @param type The annotation being checked for.
 	 * @param onMethod The method being checked on.
 	 * @return <jk>true</jk> if the annotation exists on the specified method.
@@ -1087,6 +1092,7 @@ public abstract class Context implements AnnotationProvider {
 	/**
 	 * Returns <jk>true</jk> if <c>getAnnotation(a,f)</c> returns a non-null value.
 	 *
+	 * @param <A> The annotation being checked for.
 	 * @param type The annotation being checked for.
 	 * @param onField The field being checked on.
 	 * @return <jk>true</jk> if the annotation exists on the specified field.
@@ -1098,6 +1104,7 @@ public abstract class Context implements AnnotationProvider {
 	/**
 	 * Returns <jk>true</jk> if <c>getAnnotation(a,c)</c> returns a non-null value.
 	 *
+	 * @param <A> The annotation being checked for.
 	 * @param type The annotation being checked for.
 	 * @param onConstructor The constructor being checked on.
 	 * @return <jk>true</jk> if the annotation exists on the specified field.

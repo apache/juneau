@@ -20,9 +20,9 @@ import static org.apache.juneau.internal.StringUtils.*;
  *
  * <h5 class='section'>Example:</h5>
  * <ul>
- * 	<li><js>"fooBar"</js> -> <js>"foo-bar"</js>
- * 	<li><js>"fooBarURL"</js> -> <js>"foo-bar-url"</js>
- * 	<li><js>"FooBarURL"</js> -> <js>"foo-bar-url"</js>
+ * 	<li><js>"fooBar"</js> -&gt; <js>"foo-bar"</js>
+ * 	<li><js>"fooBarURL"</js> -&gt; <js>"foo-bar-url"</js>
+ * 	<li><js>"FooBarURL"</js> -&gt; <js>"foo-bar-url"</js>
  * </ul>
  *
  * <ul class='seealso'>

@@ -116,6 +116,7 @@ public class Entry {
 	/**
 	 * Returns this entry converted to the specified type.
 	 *
+	 * @param <T> The type to convert the value to.
 	 * @param type The type to convert the value to.
 	 * @return This entry converted to the specified type.
 	 */
@@ -167,6 +168,7 @@ public class Entry {
 	 * 		Use the {@link #as(Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>
 	 *
+	 * @param <T> The object type to create.
 	 * @param type
 	 * 	The object type to create.
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
@@ -184,6 +186,7 @@ public class Entry {
 	/**
 	 * Same as {@link #as(Type, Type...)} but specifies the parser to use to parse the entry.
 	 *
+	 * @param <T> The object type to create.
 	 * @param parser
 	 * 	The parser to use to parse the entry.
 	 * @param type
@@ -228,6 +231,7 @@ public class Entry {
 	/**
 	 * Returns this entry converted to the specified type.
 	 *
+	 * @param <T> The type to convert the value to.
 	 * @param parser The parser to use to parse the entry value.
 	 * @param type The type to convert the value to.
 	 * @return This entry converted to the specified type, or {@link Optional#empty()} if the entry does not exist.
@@ -288,13 +292,13 @@ public class Entry {
 	 * <h5 class='section'>Example:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		<code><js>"100K"</js> => 1024000</code>
+	 * 		<code><js>"100K"</js> -&gt; 1024000</code>
 	 * 	<li>
-	 * 		<code><js>"100M"</js> => 104857600</code>
+	 * 		<code><js>"100M"</js> -&gt; 104857600</code>
 	 * 	<li>
-	 * 		<code><js>"100k"</js> => 1000000</code>
+	 * 		<code><js>"100k"</js> -&gt; 1000000</code>
 	 * 	<li>
-	 * 		<code><js>"100m"</js> => 100000000</code>
+	 * 		<code><js>"100m"</js> -&gt; 100000000</code>
 	 * </ul>
 	 *
 	 * <p>
@@ -335,13 +339,13 @@ public class Entry {
 	 * <h5 class='section'>Example:</h5>
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		<code><js>"100K"</js> => 1024000</code>
+	 * 		<code><js>"100K"</js> -&gt; 1024000</code>
 	 * 	<li>
-	 * 		<code><js>"100M"</js> => 104857600</code>
+	 * 		<code><js>"100M"</js> -&gt; 104857600</code>
 	 * 	<li>
-	 * 		<code><js>"100k"</js> => 1000000</code>
+	 * 		<code><js>"100k"</js> -&gt; 1000000</code>
 	 * 	<li>
-	 * 		<code><js>"100m"</js> => 100000000</code>
+	 * 		<code><js>"100m"</js> -&gt; 100000000</code>
 	 * </ul>
 	 *
 	 * <p>

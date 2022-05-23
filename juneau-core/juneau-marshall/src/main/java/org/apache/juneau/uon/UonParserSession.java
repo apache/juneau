@@ -979,7 +979,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property: Decode <js>"%xx"</js> sequences.
+	 * Decode <js>"%xx"</js> sequences.
 	 *
 	 * @see UonParser.Builder#decoding()
 	 * @return
@@ -991,7 +991,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 	}
 
 	/**
-	 * Configuration property:  Validate end.
+	 * Validate end.
 	 *
 	 * @see UonParser.Builder#validateEnd()
 	 * @return

@@ -37,7 +37,7 @@ import org.apache.juneau.serializer.annotation.*;
  * 					<li class='jc'>{@link JsonParser}
  * 					<li class='jc'>{@link SimpleJsonParser}
  * 				</ul>
- * 			</li class='jma'>
+ * 			</li>
  * 			<li class='jma'>{@link Rest#defaultAccept() defaultAccept}:  <js>"text/json"</js>
  * 			<li class='jma'>{@link Rest#config() config}:  <js>"$S{juneau.configFile,SYSTEM_DEFAULT}"</js>
  *		</ul>
@@ -100,7 +100,8 @@ import org.apache.juneau.serializer.annotation.*;
 )
 @BeanConfig(
 	// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.
-	ignoreUnknownBeanProperties="true"
+	ignoreUnknownBeanProperties="true",
+	ignoreUnknownEnumValues="true"
 )
 @SerializerConfig(
 	// Enable automatic resolution of URI objects to root-relative values.

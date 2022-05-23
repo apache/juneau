@@ -64,7 +64,7 @@ import org.apache.juneau.reflect.*;
  * 		.createMethodFinder(A.<jk>class</jk>, <mv>b</mv>)  <jc>// Looking for creator for A on b object.</jc>
  * 		.find(<js>"createA"</js>)                         <jc>// Look for method called "createA".</jc>
  * 		.thenFind(<js>"createA2"</js>)                    <jc>// Then look for method called "createA2".</jc>
- * 		.withDefault(()-><jk>new</jk> A())                        <jc>// Optionally supply a default value if method not found.</jc>
+ * 		.withDefault(()-&gt;<jk>new</jk> A())                        <jc>// Optionally supply a default value if method not found.</jc>
  * 		.run();                                  <jc>// Execute.</jc>
  * </p>
  *
@@ -104,6 +104,7 @@ public class BeanCreateMethodFinder<T> {
 	/**
 	 * Adds a bean to the lookup for parameters.
 	 *
+	 * @param <T2> The bean type.
 	 * @param c The bean type.
 	 * @param t The bean.
 	 * @return This object.

@@ -84,22 +84,22 @@ public class DirectoryResource extends BasicRestServlet implements BasicUniversa
 	private static final String PREFIX = "DirectoryResource.";
 
 	/**
-	 * Configuration property:  Root directory.
+	 * Root directory.
 	 */
 	public static final String DIRECTORY_RESOURCE_rootDir = PREFIX + "rootDir.s";
 
 	/**
-	 * Configuration property:  Allow view and downloads on files.
+	 * Allow view and downloads on files.
 	 */
 	public static final String DIRECTORY_RESOURCE_allowViews = PREFIX + "allowViews.b";
 
 	/**
-	 * Configuration property:  Allow deletes on files.
+	 * Allow deletes on files.
 	 */
 	public static final String DIRECTORY_RESOURCE_allowDeletes = PREFIX + "allowDeletes.b";
 
 	/**
-	 * Configuration property:  Allow uploads on files.
+	 * Allow uploads on files.
 	 */
 	public static final String DIRECTORY_RESOURCE_allowUploads = PREFIX + "allowUploads.b";
 

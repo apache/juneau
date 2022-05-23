@@ -178,6 +178,8 @@ public class ParentPropertyAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		ParentProperty[] value();
 	}

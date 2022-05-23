@@ -63,8 +63,8 @@ import org.apache.juneau.reflect.*;
  * 	<jc>// Construct a new parser group builder</jc>
  * 	ParserSet <jv>parsers</jv> = ParserSet.<jsm>create</jsm>();
  * 		.add(JsonParser.<jk>class</jk>, XmlParser.<jk>class</jk>); <jc>// Add some parsers to it</jc>
- *		.forEach(<jv>x</jv> -> <jv>x</jv>.swaps(CalendarSwap.IsoLocalDateTime.<jk>class</jk>))
- *		.forEach(<jv>x</jv> -> <jv>x</jv>.beansRequireSerializable())
+ *		.forEach(<jv>x</jv> -&gt; <jv>x</jv>.swaps(CalendarSwap.IsoLocalDateTime.<jk>class</jk>))
+ *		.forEach(<jv>x</jv> -&gt; <jv>x</jv>.beansRequireSerializable())
  * 		.build();
  *
  * 	<jc>// Find the appropriate parser by Content-Type</jc>
@@ -93,7 +93,7 @@ public final class ParserSet {
 	/**
 	 * An identifier that the previous entries in this group should be inherited.
 	 * <p>
-	 * Used by {@link Builder#set(Class...)}
+	 * Used by {@link ParserSet.Builder#set(Class...)}
 	 */
 	@SuppressWarnings("javadoc")
 	public static abstract class Inherit extends Parser {
@@ -105,7 +105,7 @@ public final class ParserSet {
 	/**
 	 * An identifier that the previous entries in this group should not be inherited.
 	 * <p>
-	 * Used by {@link Builder#add(Class...)}
+	 * Used by {@link ParserSet.Builder#add(Class...)}
 	 */
 	@SuppressWarnings("javadoc")
 	public static abstract class NoInherit extends Parser {
@@ -417,11 +417,12 @@ public final class ParserSet {
 		/**
 		 * Performs an action on all parser builders of the specified type in this group.
 		 *
+		 * @param <B> The parser builder type.
 		 * @param type The parser builder type.
 		 * @param action The action to perform.
 		 * @return This object.
 		 */
-		public <T extends Parser.Builder> Builder forEach(Class<T> type, Consumer<T> action) {
+		public <B extends Parser.Builder> Builder forEach(Class<B> type, Consumer<B> action) {
 			builders(type).forEach(action);
 			return this;
 		}

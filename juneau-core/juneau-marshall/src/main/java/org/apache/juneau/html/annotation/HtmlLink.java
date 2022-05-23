@@ -55,6 +55,8 @@ public @interface HtmlLink {
 
 	/**
 	 * The bean property whose value becomes the name in the hyperlink.
+	 *
+	 * @return The annotation value.
 	 */
 	String nameProperty() default "name";
 
@@ -80,6 +82,8 @@ public @interface HtmlLink {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] on() default {};
 
@@ -92,11 +96,15 @@ public @interface HtmlLink {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
 
 	/**
 	 * The bean property whose value becomes the url in the hyperlink.
+	 *
+	 * @return The annotation value.
 	 */
 	String uriProperty() default "uri";
 }

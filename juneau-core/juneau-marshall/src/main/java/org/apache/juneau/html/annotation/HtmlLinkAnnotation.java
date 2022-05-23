@@ -230,6 +230,8 @@ public class HtmlLinkAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		HtmlLink[] value();
 	}

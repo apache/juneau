@@ -184,6 +184,8 @@ public @interface FormData {
 	 * 	<li>
 	 * 		The format is plain-text.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String name() default "";
 
@@ -193,6 +195,8 @@ public @interface FormData {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] on() default {};
 
@@ -205,6 +209,8 @@ public @interface FormData {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
 
@@ -213,6 +219,8 @@ public @interface FormData {
 	 *
 	 * <p>
 	 * Overrides for this part the part parser defined on the REST resource which by default is {@link OpenApiParser}.
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends HttpPartParser> parser() default HttpPartParser.Void.class;
 
@@ -236,6 +244,8 @@ public @interface FormData {
 	 * 	<li>
 	 * 		Client-side schema-based serializing and serializing validation.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Schema schema() default @Schema;
 
@@ -244,6 +254,8 @@ public @interface FormData {
 	 *
 	 * <p>
 	 * Overrides for this part the part serializer defined on the REST client which by default is {@link OpenApiSerializer}.
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends HttpPartSerializer> serializer() default HttpPartSerializer.Void.class;
 
@@ -261,6 +273,8 @@ public @interface FormData {
 	 * <p class='bjava'>
 	 * 	<jk>public</jk> Order placeOrder(<ja>@FormData</ja>(<js>"petId"</js>) <jk>long</jk> <jv>petId</jv>) {...}
 	 * </p>
+	 *
+	 * @return The annotation value.
 	 */
 	String value() default "";
 }

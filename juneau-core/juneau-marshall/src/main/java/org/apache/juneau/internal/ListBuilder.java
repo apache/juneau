@@ -41,6 +41,7 @@ public final class ListBuilder<E> {
 	/**
 	 * Static creator.
 	 *
+	 * @param <E> The element type.
 	 * @param elementType The element type.
 	 * @param elementTypeArgs Optional element type arguments.
 	 * @return A new builder.

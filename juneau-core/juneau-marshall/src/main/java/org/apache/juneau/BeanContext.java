@@ -159,8 +159,6 @@ import org.apache.juneau.utils.*;
 @SuppressWarnings({"unchecked","rawtypes"})
 public class BeanContext extends Context {
 
-	private final String TODO = "ignoreUnknownEnumValues";
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
 	//-----------------------------------------------------------------------------------------------------------------
@@ -229,7 +227,7 @@ public class BeanContext extends Context {
 		boolean disableBeansRequireSomeProperties, beanMapPutReturnsOldValue, beansRequireDefaultConstructor, beansRequireSerializable,
 			beansRequireSettersForGetters, disableIgnoreTransientFields, disableIgnoreUnknownNullBeanProperties, disableIgnoreMissingSetters,
 			disableInterfaceProxies, findFluentSetters, ignoreInvocationExceptionsOnGetters, ignoreInvocationExceptionsOnSetters,
-			ignoreUnknownBeanProperties, sortProperties, useEnumNames, useJavaBeanIntrospector;
+			ignoreUnknownBeanProperties, ignoreUnknownEnumValues, sortProperties, useEnumNames, useJavaBeanIntrospector;
 		String typePropertyName;
 		MediaType mediaType;
 		Locale locale;
@@ -268,6 +266,7 @@ public class BeanContext extends Context {
 			ignoreInvocationExceptionsOnGetters = env("BeanContext.ignoreInvocationExceptionsOnGetters", false);
 			ignoreInvocationExceptionsOnSetters = env("BeanContext.ignoreInvocationExceptionsOnSetters", false);
 			ignoreUnknownBeanProperties = env("BeanContext.ignoreUnknownBeanProperties", false);
+			ignoreUnknownEnumValues = env("BeanContext.ignoreUnknownEnumValues", false);
 			sortProperties = env("BeanContext.sortProperties", false);
 			useEnumNames = env("BeanContext.useEnumNames", false);
 			useJavaBeanIntrospector = env("BeanContext.useJavaBeanIntrospector", false);
@@ -306,6 +305,7 @@ public class BeanContext extends Context {
 			ignoreInvocationExceptionsOnGetters = copyFrom.ignoreInvocationExceptionsOnGetters;
 			ignoreInvocationExceptionsOnSetters = copyFrom.ignoreInvocationExceptionsOnSetters;
 			ignoreUnknownBeanProperties = copyFrom.ignoreUnknownBeanProperties;
+			ignoreUnknownEnumValues = copyFrom.ignoreUnknownEnumValues;
 			sortProperties = copyFrom.sortProperties;
 			useEnumNames = copyFrom.useEnumNames;
 			useJavaBeanIntrospector = copyFrom.useJavaBeanIntrospector;
@@ -344,6 +344,7 @@ public class BeanContext extends Context {
 			ignoreInvocationExceptionsOnGetters = copyFrom.ignoreInvocationExceptionsOnGetters;
 			ignoreInvocationExceptionsOnSetters = copyFrom.ignoreInvocationExceptionsOnSetters;
 			ignoreUnknownBeanProperties = copyFrom.ignoreUnknownBeanProperties;
+			ignoreUnknownEnumValues = copyFrom.ignoreUnknownEnumValues;
 			sortProperties = copyFrom.sortProperties;
 			useEnumNames = copyFrom.useEnumNames;
 			useJavaBeanIntrospector = copyFrom.useJavaBeanIntrospector;
@@ -390,6 +391,7 @@ public class BeanContext extends Context {
 					ignoreInvocationExceptionsOnGetters,
 					ignoreInvocationExceptionsOnSetters,
 					ignoreUnknownBeanProperties,
+					ignoreUnknownEnumValues,
 					sortProperties,
 					useEnumNames,
 					useJavaBeanIntrospector
@@ -1838,6 +1840,7 @@ public class BeanContext extends Context {
 		 * 	<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
 		 * </ul>
 		 *
+		 * @param <T> The POJO class.
 		 * @param pojoClass The POJO class.
 		 * @param o
 		 * 	An instance of the POJO class used for examples.
@@ -2247,6 +2250,35 @@ public class BeanContext extends Context {
 		}
 
 		/**
+		 * Ignore unknown properties.
+		 *
+		 * <p>
+		 * When enabled, unknown enum values will be set to <jk>null</jk> instead of throwing an exception.
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.BeanConfig#ignoreUnknownEnumValues()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder ignoreUnknownEnumValues() {
+			return ignoreUnknownEnumValues(true);
+		}
+
+		/**
+		 * Same as {@link #ignoreUnknownEnumValues()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder ignoreUnknownEnumValues(boolean value) {
+			ignoreUnknownEnumValues = value;
+			return this;
+		}
+
+		/**
 		 * Don't ignore unknown properties with null values.
 		 *
 		 * <p>
@@ -2479,7 +2511,7 @@ public class BeanContext extends Context {
 		 * 	<jc>// Define a POJO swap that skips serializing beans if we're in the UK.</jc>
 		 * 	<jk>public class</jk> MyBeanSwap <jk>extends</jk> StringSwap&lt;MyBean&gt; {
 		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> String swap(BeanSession <jv>session</jv>, MyBean <jv>bean/jv>) <jk>throws</jk> Exception {
+		 * 		<jk>public</jk> String swap(BeanSession <jv>session</jv>, MyBean <jv>bean</jv>) <jk>throws</jk> Exception {
 		 * 			<jk>if</jk> (<jv>session</jv>.getLocale().equals(Locale.<jsf>UK</jsf>))
 		 * 				<jk>return null</jk>;
 		 * 			<jk>return</jk> <jv>bean</jv>.toString();
@@ -3041,10 +3073,12 @@ public class BeanContext extends Context {
 		 * 	<jc>// Create a serializer that performs a custom format for DAte objects.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
-		 * 		.swap(Date.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -> <jsm>format</jsm>(<jv>x</jv>))
+		 * 		.swap(Date.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -&gt; <jsm>format</jsm>(<jv>x</jv>))
 		 * 		.build();
 		 * </p>
 		 *
+		 * @param <T> The object type being swapped out.
+		 * @param <S> The object type being swapped in.
 		 * @param normalClass The object type being swapped out.
 		 * @param swappedClass The object type being swapped in.
 		 * @param swapFunction The function to convert the object.
@@ -3060,13 +3094,15 @@ public class BeanContext extends Context {
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
-		 * 	<jc>// Create a serializer that performs a custom format for DAte objects.</jc>
+		 * 	<jc>// Create a serializer that performs a custom format for Date objects.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
-		 * 		.swap(Date.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -> <jsm>format</jsm>(<jv>x</jv>), <jv>x</jv> -> <jsm>parse</jsm>(<jv>x</jv>))
+		 * 		.swap(Date.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -&gt; <jsm>format</jsm>(<jv>x</jv>), <jv>x</jv> -&gt; <jsm>parse</jsm>(<jv>x</jv>))
 		 * 		.build();
 		 * </p>
 		 *
+		 * @param <T> The object type being swapped out.
+		 * @param <S> The object type being swapped in.
 		 * @param normalClass The object type being swapped out.
 		 * @param swappedClass The object type being swapped in.
 		 * @param swapFunction The function to convert the object during serialization.
@@ -3489,6 +3525,7 @@ public class BeanContext extends Context {
 		useInterfaceProxies,
 		ignoreUnknownBeanProperties,
 		ignoreUnknownNullBeanProperties,
+		ignoreUnknownEnumValues,
 		ignoreMissingSetters,
 		ignoreTransientFields,
 		ignoreInvocationExceptionsOnGetters,
@@ -3549,6 +3586,7 @@ public class BeanContext extends Context {
 		useInterfaceProxies = ! builder.disableInterfaceProxies;
 		ignoreUnknownBeanProperties = builder.ignoreUnknownBeanProperties;
 		ignoreUnknownNullBeanProperties = ! builder.disableIgnoreUnknownNullBeanProperties;
+		ignoreUnknownEnumValues = builder.ignoreUnknownEnumValues;
 		ignoreMissingSetters = ! builder.disableIgnoreMissingSetters;
 		ignoreTransientFields = ! builder.disableIgnoreTransientFields;
 		ignoreInvocationExceptionsOnGetters = builder.ignoreInvocationExceptionsOnGetters;
@@ -3859,6 +3897,8 @@ public class BeanContext extends Context {
 	 * 		A map containing string keys and values of lists containing beans.
 	 * </ul>
 	 *
+	 * @param <T>
+	 * 	The class to resolve.
 	 * @param type
 	 * 	The class to resolve.
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
@@ -4418,6 +4458,17 @@ public class BeanContext extends Context {
 	 */
 	public final boolean isIgnoreUnknownBeanProperties() {
 		return ignoreUnknownBeanProperties;
+	}
+
+	/**
+	 * Ignore unknown enum values.
+	 *
+	 * @see BeanContext.Builder#ignoreUnknownEnumValues()
+	 * @return
+	 * 	<jk>true</jk> if unknown enum values should be set as <jk>null</jk> instead of throwing an exception.
+	 */
+	public final boolean isIgnoreUnknownEnumValues() {
+		return ignoreUnknownEnumValues;
 	}
 
 	/**

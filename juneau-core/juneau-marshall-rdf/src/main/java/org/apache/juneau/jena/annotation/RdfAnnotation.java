@@ -307,6 +307,8 @@ public class RdfAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		Rdf[] value();
 	}

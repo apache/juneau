@@ -1745,6 +1745,7 @@ public class Swagger extends SwaggerElement {
 	/**
 	 * Resolves a <js>"$ref"</js> tags to nodes in this swagger document.
 	 *
+	 * @param <T> The class to convert the reference to.
 	 * @param ref The ref tag value.
 	 * @param c The class to convert the reference to.
 	 * @return The referenced node, or <jk>null</jk> if the ref was <jk>null</jk> or empty or not found.

@@ -28,26 +28,30 @@ public final class CollectionUtils {
 	/**
 	 * Creates a new set from the specified collection.
 	 *
+	 * @param <E> The element type.
 	 * @param val The value to copy from.
 	 * @return A new {@link LinkedHashSet}, or <jk>null</jk> if the input was null.
 	 */
-	public static <T> Set<T> setFrom(Collection<T> val) {
+	public static <E> Set<E> setFrom(Collection<E> val) {
 		return val == null ? null : new LinkedHashSet<>(val);
 	}
 
 	/**
 	 * Creates a new set from the specified collection.
 	 *
+	 * @param <E> The element type.
 	 * @param val The value to copy from.
 	 * @return A new {@link LinkedHashSet}, or <jk>null</jk> if the input was null.
 	 */
-	public static <T> Set<T> copyOf(Set<T> val) {
+	public static <E> Set<E> copyOf(Set<E> val) {
 		return val == null ? null : new LinkedHashSet<>(val);
 	}
 
 	/**
 	 * Creates a new map from the specified map.
 	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
 	 * @param val The value to copy from.
 	 * @return A new {@link LinkedHashMap}, or <jk>null</jk> if the input was null.
 	 */
@@ -58,6 +62,8 @@ public final class CollectionUtils {
 	/**
 	 * Instantiates a new builder on top of the specified map.
 	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
 	 * @param addTo The map to add to.
 	 * @return A new builder on top of the specified map.
 	 */
@@ -68,6 +74,8 @@ public final class CollectionUtils {
 	/**
 	 * Instantiates a new builder of the specified map type.
 	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
 	 * @param keyType The key type.
 	 * @param valueType The value type.
 	 * @param valueTypeArgs The value type args.
@@ -80,6 +88,7 @@ public final class CollectionUtils {
 	/**
 	 * Instantiates a new builder on top of the specified list.
 	 *
+	 * @param <E> The element type.
 	 * @param addTo The list to add to.
 	 * @return A new builder on top of the specified list.
 	 */
@@ -90,6 +99,7 @@ public final class CollectionUtils {
 	/**
 	 * Instantiates a new builder of the specified list type.
 	 *
+	 * @param <E> The element type.
 	 * @param elementType The element type.
 	 * @param elementTypeArgs The element type args.
 	 * @return A new builder on top of the specified list.
@@ -101,6 +111,7 @@ public final class CollectionUtils {
 	/**
 	 * Instantiates a new builder on top of the specified set.
 	 *
+	 * @param <E> The element type.
 	 * @param addTo The set to add to.
 	 * @return A new builder on top of the specified set.
 	 */
@@ -111,6 +122,7 @@ public final class CollectionUtils {
 	/**
 	 * Instantiates a new builder of the specified set.
 	 *
+	 * @param <E> The element type.
 	 * @param elementType The element type.
 	 * @param elementTypeArgs The element type args.
 	 * @return A new builder on top of the specified set.
@@ -122,22 +134,24 @@ public final class CollectionUtils {
 	/**
 	 * Simple passthrough to {@link Collections#emptyList()}
 	 *
+	 * @param <E> The element type.
 	 * @return A new unmodifiable empty list.
 	 */
-	public static <T> List<T> emptyList() {
+	public static <E> List<E> emptyList() {
 		return Collections.emptyList();
 	}
 
 	/**
 	 * Convenience method for creating an {@link ArrayList}.
 	 *
+	 * @param <E> The element type.
 	 * @param values The values to initialize the list with.
 	 * @return A new modifiable list.
 	 */
 	@SafeVarargs
-	public static <T> ArrayList<T> list(T...values) {
-		ArrayList<T> l = new ArrayList<>(values.length);
-		for (T v : values)
+	public static <E> ArrayList<E> list(E...values) {
+		ArrayList<E> l = new ArrayList<>(values.length);
+		for (E v : values)
 			l.add(v);
 		return l;
 	}
@@ -145,23 +159,25 @@ public final class CollectionUtils {
 	/**
 	 * Convenience method for creating an {@link ArrayList} of the specified size.
 	 *
+	 * @param <E> The element type.
 	 * @param size The initial size of the list.
 	 * @return A new modifiable list.
 	 */
-	public static <T> ArrayList<T> list(int size) {
+	public static <E> ArrayList<E> list(int size) {
 		return new ArrayList<>(size);
 	}
 
 	/**
 	 * Convenience method for creating a {@link LinkedList}.
 	 *
+	 * @param <E> The element type.
 	 * @param values The values to initialize the list with.
 	 * @return A new modifiable list.
 	 */
 	@SafeVarargs
-	public static <T> LinkedList<T> linkedList(T...values) {
-		LinkedList<T> l = new LinkedList<>();
-		for (T v : values)
+	public static <E> LinkedList<E> linkedList(E...values) {
+		LinkedList<E> l = new LinkedList<>();
+		for (E v : values)
 			l.add(v);
 		return l;
 	}
@@ -169,11 +185,12 @@ public final class CollectionUtils {
 	/**
 	 * Convenience method for creating an array-backed list by calling {@link Arrays#asList(Object...)}.
 	 *
+	 * @param <E> The element type.
 	 * @param values The values to initialize the list with.
 	 * @return A new modifiable list, or <jk>null</jk> if the array was <jk>null</jk>.
 	 */
 	@SafeVarargs
-	public static <T> List<T> alist(T...values) {
+	public static <E> List<E> alist(E...values) {
 		if (values == null)
 			return null;
 		return Arrays.asList(values);
@@ -182,16 +199,19 @@ public final class CollectionUtils {
 	/**
 	 * Creates an {@link ArrayList} copy from a collection.
 	 *
+	 * @param <E> The element type.
 	 * @param value The collection to copy from.
 	 * @return A new modifiable list.
 	 */
-	public static <T> ArrayList<T> listFrom(Collection<T> value) {
+	public static <E> ArrayList<E> listFrom(Collection<E> value) {
 		return listFrom(value, false);
 	}
 
 	/**
 	 * Creates an {@link ArrayList} copy from a collection.
 	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
 	 * @param value The collection to copy from.
 	 * @return A new modifiable list.
 	 */
@@ -204,14 +224,15 @@ public final class CollectionUtils {
 	/**
 	 * Creates an {@link ArrayList} copy from a collection.
 	 *
+	 * @param <E> The element type.
 	 * @param value The collection to copy from.
 	 * @param nullIfEmpty If <jk>true</jk> will return <jk>null</jk> if the collection is empty.
 	 * @return A new modifiable list.
 	 */
-	public static <T> ArrayList<T> listFrom(Collection<T> value, boolean nullIfEmpty) {
+	public static <E> ArrayList<E> listFrom(Collection<E> value, boolean nullIfEmpty) {
 		if (value == null || (nullIfEmpty && value.isEmpty()))
 			return null;
-		ArrayList<T> l = new ArrayList<>();
+		ArrayList<E> l = new ArrayList<>();
 		value.forEach(x -> l.add(x));
 		return l;
 	}
@@ -219,13 +240,14 @@ public final class CollectionUtils {
 	/**
 	 * Convenience method for creating a {@link LinkedHashSet}.
 	 *
+	 * @param <E> The element type.
 	 * @param values The values to initialize the set with.
 	 * @return A new modifiable set.
 	 */
 	@SafeVarargs
-	public static <T> LinkedHashSet<T> set(T...values) {
-		LinkedHashSet<T> l = new LinkedHashSet<>();
-		for (T v : values)
+	public static <E> LinkedHashSet<E> set(E...values) {
+		LinkedHashSet<E> l = new LinkedHashSet<>();
+		for (E v : values)
 			l.add(v);
 		return l;
 	}
@@ -233,22 +255,24 @@ public final class CollectionUtils {
 	/**
 	 * Convenience method for creating an unmodifiable {@link LinkedHashSet}.
 	 *
+	 * @param <E> The element type.
 	 * @param values The values to initialize the set with.
 	 * @return A new unmodifiable set.
 	 */
 	@SafeVarargs
-	public static <T> Set<T> uset(T...values) {
+	public static <E> Set<E> uset(E...values) {
 		return unmodifiable(set(values));
 	}
 
 	/**
 	 * Convenience method for creating an unmodifiable list.
 	 *
+	 * @param <E> The element type.
 	 * @param values The values to initialize the list with.
 	 * @return A new unmodifiable list, or <jk>null</jk> if the array was <jk>null</jk>.
 	 */
 	@SafeVarargs
-	public static <T> List<T> ulist(T...values) {
+	public static <E> List<E> ulist(E...values) {
 		if (values == null)
 			return null;
 		return unmodifiable(alist(values));
@@ -257,13 +281,14 @@ public final class CollectionUtils {
 	/**
 	 * Convenience method for creating a {@link TreeSet}.
 	 *
+	 * @param <E> The element type.
 	 * @param values The values to initialize the set with.
 	 * @return A new modifiable set.
 	 */
 	@SafeVarargs
-	public static <T> TreeSet<T> sortedSet(T...values) {
-		TreeSet<T> l = new TreeSet<>();
-		for (T v : values)
+	public static <E> TreeSet<E> sortedSet(E...values) {
+		TreeSet<E> l = new TreeSet<>();
+		for (E v : values)
 			l.add(v);
 		return l;
 	}
@@ -271,13 +296,14 @@ public final class CollectionUtils {
 	/**
 	 * Creates a new {@link TreeSet} from the specified collection.
 	 *
+	 * @param <E> The element type.
 	 * @param value The value to copy from.
 	 * @return A new {@link TreeSet}, or <jk>null</jk> if the input was null.
 	 */
-	public static <T> TreeSet<T> sortedSetFrom(Collection<T> value) {
+	public static <E> TreeSet<E> sortedSetFrom(Collection<E> value) {
 		if (value == null)
 			return null;
-		TreeSet<T> l = new TreeSet<>();
+		TreeSet<E> l = new TreeSet<>();
 		value.forEach(x -> l.add(x));
 		return l;
 	}
@@ -285,14 +311,15 @@ public final class CollectionUtils {
 	/**
 	 * Creates a new {@link TreeSet} from the specified collection.
 	 *
+	 * @param <E> The element type.
 	 * @param value The value to copy from.
 	 * @param nullIfEmpty If <jk>true</jk> returns <jk>null</jk> if the collection is empty.
 	 * @return A new {@link TreeSet}, or <jk>null</jk> if the input was null.
 	 */
-	public static <T> TreeSet<T> sortedSetFrom(Collection<T> value, boolean nullIfEmpty) {
+	public static <E> TreeSet<E> sortedSetFrom(Collection<E> value, boolean nullIfEmpty) {
 		if (value == null || (nullIfEmpty && value.isEmpty()))
 			return null;
-		TreeSet<T> l = new TreeSet<>();
+		TreeSet<E> l = new TreeSet<>();
 		value.forEach(x -> l.add(x));
 		return l;
 	}
@@ -300,6 +327,8 @@ public final class CollectionUtils {
 	/**
 	 * Convenience method for creating a {@link LinkedHashMap}.
 	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
 	 * @return A new modifiable map.
 	 */
 	public static <K,V> LinkedHashMap<K,V> map() {
@@ -310,6 +339,8 @@ public final class CollectionUtils {
 	/**
 	 * Convenience method for creating a {@link LinkedHashMap}.
 	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
 	 * @param k1 Key 1.
 	 * @param v1 Value 1.
 	 * @return A new modifiable map.
@@ -323,6 +354,8 @@ public final class CollectionUtils {
 	/**
 	 * Convenience method for creating a {@link LinkedHashMap}.
 	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
 	 * @param k1 Key 1.
 	 * @param v1 Value 1.
 	 * @param k2 Key 2.
@@ -339,6 +372,8 @@ public final class CollectionUtils {
 	/**
 	 * Convenience method for creating a {@link LinkedHashMap}.
 	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
 	 * @param k1 Key 1.
 	 * @param v1 Value 1.
 	 * @param k2 Key 2.
@@ -358,6 +393,8 @@ public final class CollectionUtils {
 	/**
 	 * Convenience method for creating a {@link TreeMap}.
 	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
 	 * @return A new modifiable set.
 	 */
 	public static <K,V> TreeMap<K,V> sortedMap() {
@@ -367,23 +404,25 @@ public final class CollectionUtils {
 	/**
 	 * Convenience method for copying a list.
 	 *
+	 * @param <E> The element type.
 	 * @param value The list to copy.
 	 * @return A new modifiable list.
 	 */
-	public static <T> ArrayList<T> copyOf(List<T> value) {
+	public static <E> ArrayList<E> copyOf(List<E> value) {
 		return value == null ? null : new ArrayList<>(value);
 	}
 
 	/**
 	 * Convenience method for creating an {@link ArrayList} and sorting it.
 	 *
+	 * @param <E> The element type.
 	 * @param values The values to initialize the list with.
 	 * @return A new modifiable list.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@SafeVarargs
-	public static <T> ArrayList<T> sortedList(T...values) {
-		ArrayList<T> l = list(values);
+	public static <E> ArrayList<E> sortedList(E...values) {
+		ArrayList<E> l = list(values);
 		Collections.sort((List<Comparable>) l);
 		return l;
 	}
@@ -391,12 +430,13 @@ public final class CollectionUtils {
 	/**
 	 * Convenience method for creating an {@link ArrayList} and sorting it.
 	 *
+	 * @param <E> The element type.
 	 * @param comparator The comparator to use to sort the list.
 	 * @param values The values to initialize the list with.
 	 * @return A new modifiable list.
 	 */
-	public static <T> ArrayList<T> sortedList(Comparator<T> comparator, T[] values) {
-		ArrayList<T> l = list(values);
+	public static <E> ArrayList<E> sortedList(Comparator<E> comparator, E[] values) {
+		ArrayList<E> l = list(values);
 		Collections.sort(l, comparator);
 		return l;
 	}
@@ -404,12 +444,13 @@ public final class CollectionUtils {
 	/**
 	 * Convenience method for creating an {@link ArrayList} and sorting it.
 	 *
+	 * @param <E> The element type.
 	 * @param comparator The comparator to use to sort the list.
 	 * @param value The values to initialize the list with.
 	 * @return A new modifiable list.
 	 */
-	public static <T> ArrayList<T> sortedList(Comparator<T> comparator, Collection<T> value) {
-		ArrayList<T> l = listFrom(value);
+	public static <E> ArrayList<E> sortedList(Comparator<E> comparator, Collection<E> value) {
+		ArrayList<E> l = listFrom(value);
 		Collections.sort(l, comparator);
 		return l;
 	}
@@ -417,26 +458,30 @@ public final class CollectionUtils {
 	/**
 	 * Wraps the specified list in {@link Collections#unmodifiableList(List)}.
 	 *
+	 * @param <E> The element type.
 	 * @param value The list to wrap.
 	 * @return The wrapped list.
 	 */
-	public static <T> List<T> unmodifiable(List<T> value) {
+	public static <E> List<E> unmodifiable(List<E> value) {
 		return value == null ? null: Collections.unmodifiableList(value);
 	}
 
 	/**
 	 * Wraps the specified set in {@link Collections#unmodifiableSet(Set)}.
 	 *
+	 * @param <E> The element type.
 	 * @param value The set to wrap.
 	 * @return The wrapped set.
 	 */
-	public static <T> Set<T> unmodifiable(Set<T> value) {
+	public static <E> Set<E> unmodifiable(Set<E> value) {
 		return value == null ? null: Collections.unmodifiableSet(value);
 	}
 
 	/**
 	 * Wraps the specified map in {@link Collections#unmodifiableMap(Map)}.
 	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
 	 * @param value The map to wrap.
 	 * @return The wrapped map.
 	 */
@@ -447,26 +492,30 @@ public final class CollectionUtils {
 	/**
 	 * Wraps the specified list in {@link Collections#unmodifiableList(List)}.
 	 *
+	 * @param <E> The element type.
 	 * @param value The list to wrap.
 	 * @return The wrapped list.
 	 */
-	public static <T> List<T> synced(List<T> value) {
+	public static <E> List<E> synced(List<E> value) {
 		return value == null ? null: Collections.synchronizedList(value);
 	}
 
 	/**
 	 * Wraps the specified set in {@link Collections#unmodifiableSet(Set)}.
 	 *
+	 * @param <E> The element type.
 	 * @param value The set to wrap.
 	 * @return The wrapped set.
 	 */
-	public static <T> Set<T> synced(Set<T> value) {
+	public static <E> Set<E> synced(Set<E> value) {
 		return value == null ? null: Collections.synchronizedSet(value);
 	}
 
 	/**
 	 * Wraps the specified map in {@link Collections#unmodifiableMap(Map)}.
 	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
 	 * @param value The map to wrap.
 	 * @return The wrapped map.
 	 */
@@ -477,30 +526,32 @@ public final class CollectionUtils {
 	/**
 	 * Converts the specified collection to an array.
 	 *
+	 * @param <E> The element type.
 	 * @param value The collection to convert.
 	 * @param componentType The component type of the array.
 	 * @return A new array.
 	 */
 	@SuppressWarnings("unchecked")
-	public static <T> T[] array(Collection<T> value, Class<T> componentType) {
+	public static <E> E[] array(Collection<E> value, Class<E> componentType) {
 		if (value == null)
 			return null;
-		T[] array = (T[])Array.newInstance(componentType, value.size());
+		E[] array = (E[])Array.newInstance(componentType, value.size());
 		return value.toArray(array);
 	}
 
 	/**
 	 * Iterates the specified list in reverse order.
 	 *
+	 * @param <E> The element type.
 	 * @param value The list to iterate.
 	 * @param action The action to perform.
 	 */
-	public static <T> void forEachReverse(List<T> value, Consumer<T> action) {
+	public static <E> void forEachReverse(List<E> value, Consumer<E> action) {
 		if (value instanceof ArrayList) {
 			for (int i = value.size()-1; i >= 0; i--)
 				action.accept(value.get(i));
 		} else {
-			ListIterator<T> i = value.listIterator(value.size());
+			ListIterator<E> i = value.listIterator(value.size());
 			while (i.hasPrevious())
 				action.accept(i.previous());
 		}
@@ -509,10 +560,11 @@ public final class CollectionUtils {
 	/**
 	 * Iterates the specified array in reverse order.
 	 *
+	 * @param <E> The element type.
 	 * @param value The array to iterate.
 	 * @param action The action to perform.
 	 */
-	public static <T> void forEachReverse(T[] value, Consumer<T> action) {
+	public static <E> void forEachReverse(E[] value, Consumer<E> action) {
 		for (int i = value.length-1; i >= 0; i--)
 			action.accept(value[i]);
 	}
@@ -521,12 +573,13 @@ public final class CollectionUtils {
 	 * Adds all the specified values to the specified collection.
 	 * Creates a new set if the value is <jk>null</jk>.
 	 *
+	 * @param <E> The element type.
 	 * @param value The collection to add to.
 	 * @param entries The entries to add.
 	 * @return The set.
 	 */
 	@SafeVarargs
-	public static <T> Set<T> addAll(Set<T> value, T...entries) {
+	public static <E> Set<E> addAll(Set<E> value, E...entries) {
 		if (entries != null) {
 			if (value == null)
 				value = set(entries);
@@ -540,12 +593,13 @@ public final class CollectionUtils {
 	 * Adds all the specified values to the specified collection.
 	 * Creates a new set if the value is <jk>null</jk>.
 	 *
+	 * @param <E> The element type.
 	 * @param value The collection to add to.
 	 * @param entries The entries to add.
 	 * @return The set.
 	 */
 	@SafeVarargs
-	public static <T> SortedSet<T> addAll(SortedSet<T> value, T...entries) {
+	public static <E> SortedSet<E> addAll(SortedSet<E> value, E...entries) {
 		if (entries != null) {
 			if (value == null)
 				value = sortedSet(entries);
@@ -559,12 +613,13 @@ public final class CollectionUtils {
 	 * Adds all the specified values to the specified collection.
 	 * Creates a new set if the value is <jk>null</jk>.
 	 *
+	 * @param <E> The element type.
 	 * @param value The collection to add to.
 	 * @param entries The entries to add.
 	 * @return The set.
 	 */
 	@SafeVarargs
-	public static <T> List<T> addAll(List<T> value, T...entries) {
+	public static <E> List<E> addAll(List<E> value, E...entries) {
 		if (entries != null) {
 			if (value == null)
 				value = list(entries);
@@ -578,12 +633,13 @@ public final class CollectionUtils {
 	 * Adds all the specified values to the specified collection.
 	 * Creates a new set if the value is <jk>null</jk>.
 	 *
+	 * @param <E> The element type.
 	 * @param value The collection to add to.
 	 * @param entries The entries to add.
 	 * @return The set.
 	 */
 	@SafeVarargs
-	public static <T> List<T> prependAll(List<T> value, T...entries) {
+	public static <E> List<E> prependAll(List<E> value, E...entries) {
 		if (entries != null) {
 			if (value == null)
 				value = list(entries);
@@ -596,11 +652,11 @@ public final class CollectionUtils {
 	/**
 	 * Returns the last entry in a list.
 	 *
-	 * @param <T> The element type.
+	 * @param <E> The element type.
 	 * @param l The list.
 	 * @return The last element, or <jk>null</jk> if the list is <jk>null</jk> or empty.
 	 */
-	public static <T> T last(List<T> l) {
+	public static <E> E last(List<E> l) {
 		if (l == null || l.isEmpty())
 			return null;
 		return l.get(l.size()-1);
@@ -609,11 +665,11 @@ public final class CollectionUtils {
 	/**
 	 * Returns the last entry in an array.
 	 *
-	 * @param <T> The element type.
+	 * @param <E> The element type.
 	 * @param l The array.
 	 * @return The last element, or <jk>null</jk> if the array is <jk>null</jk> or empty.
 	 */
-	public static <T> T last(T[] l) {
+	public static <E> E last(E[] l) {
 		if (l == null || l.length == 0)
 			return null;
 		return l[l.length-1];
@@ -622,6 +678,7 @@ public final class CollectionUtils {
 	/**
 	 * Returns an optional of the specified value.
 	 *
+	 * @param <T> The component type.
 	 * @param value The value.
 	 * @return A new Optional.
 	 */
@@ -632,6 +689,7 @@ public final class CollectionUtils {
 	/**
 	 * Returns an empty {@link Optional}.
 	 *
+	 * @param <T> The component type.
 	 * @return An empty {@link Optional}.
 	 */
 	public static <T> Optional<T> empty() {
@@ -641,6 +699,7 @@ public final class CollectionUtils {
 	/**
 	 * Returns <jk>true</jk> if the specified collection is not <jk>null</jk> and not empty.
 	 *
+	 * @param <E> The element type.
 	 * @param value The value being checked.
 	 * @return <jk>true</jk> if the specified collection is not <jk>null</jk> and not empty.
 	 */
@@ -651,6 +710,8 @@ public final class CollectionUtils {
 	/**
 	 * Returns <jk>true</jk> if the specified map is not <jk>null</jk> and not empty.
 	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
 	 * @param value The value being checked.
 	 * @return <jk>true</jk> if the specified map is not <jk>null</jk> and not empty.
 	 */

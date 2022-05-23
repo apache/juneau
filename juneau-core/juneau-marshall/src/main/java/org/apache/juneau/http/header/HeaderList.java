@@ -39,7 +39,7 @@ import org.apache.juneau.svl.*;
  * 	HeaderList <jv>headers</jv> = HeaderList
  * 		.<jsm>create</jsm>()
  * 		.append(Accept.<jsm>of</jsm>(<js>"text/xml"</js>))
- * 		.append(<js>"Content-Type"</js>, ()-><jsm>getDynamicContentTypeFromSomewhere</jsm>())
+ * 		.append(<js>"Content-Type"</js>, ()-&gt;<jsm>getDynamicContentTypeFromSomewhere</jsm>())
  * 		.build();
  * </p>
  *
@@ -129,7 +129,7 @@ import org.apache.juneau.svl.*;
  * 		.<jsm>create</jsm>()
  * 		.resolving()
  * 		.append(<js>"X1"</js>, <js>"$S{foo}"</js>)
- * 		.append(<js>"X2"</js>, ()-><js>"$S{foo}"</js>)
+ * 		.append(<js>"X2"</js>, ()-&gt;<js>"$S{foo}"</js>)
  * 		.build();
  *
  * 	<jsm>assertObject</jsm>(<jv>headers</jv>).isString(<js>"[X1: bar, X2: bar]"</js>);
@@ -1339,9 +1339,9 @@ public class HeaderList {
 	 * 	BasicIntegerHeader <jv>age</jv> = headerList.get(<js>"Age"</js>, BasicIntegerHeader.<jk>class</jk>);
 	 * </p>
 	 *
+	 * @param <T> The header implementation class.
 	 * @param name The header name.
 	 * @param type The header implementation class.
-
 	 * @return A header with a condensed value or <jk>null</jk> if no headers by the given name are present
 	 */
 	public <T> Optional<T> get(String name, Class<T> type) {
@@ -1389,6 +1389,7 @@ public class HeaderList {
 	 * 	Age <jv>age</jv> = headerList.get(Age.<jk>class</jk>);
 	 * </p>
 	 *
+	 * @param <T> The return type.
 	 * @param type The header implementation class.
 	 * @return A header with a condensed value or <jk>null</jk> if no headers by the given name are present
 	 */

@@ -466,6 +466,7 @@ public class JsonList extends LinkedList<Object> {
 	/**
 	 * Add if predicate matches.
 	 *
+	 * @param <T> The type being tested.
 	 * @param test The predicate to match against.
 	 * @param value The value to add if the predicate matches.
 	 * @return This object.
@@ -621,6 +622,8 @@ public class JsonList extends LinkedList<Object> {
 	/**
 	 * Same as {@link #getMap(int)} except converts the keys and values to the specified types.
 	 *
+	 * @param <K> The key type class.
+	 * @param <V> The value type class.
 	 * @param index The index.
 	 * @param keyType The key type class.
 	 * @param valType The value type class.
@@ -645,6 +648,7 @@ public class JsonList extends LinkedList<Object> {
 	/**
 	 * Same as {@link #getList(int)} except converts the elements to the specified types.
 	 *
+	 * @param <E> The element type.
 	 * @param index The index.
 	 * @param elementType The element type class.
 	 * @return The converted value.

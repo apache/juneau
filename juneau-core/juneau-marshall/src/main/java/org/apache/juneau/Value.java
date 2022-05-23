@@ -43,6 +43,7 @@ public class Value<T> {
 	/**
 	 * Static creator.
 	 *
+	 * @param <T> The value type.
 	 * @param object The object being wrapped.
 	 * @return A new {@link Value} object.
 	 */
@@ -53,6 +54,7 @@ public class Value<T> {
 	/**
 	 * Static creator.
 	 *
+	 * @param <T> The value type.
 	 * @return An empty {@link Value} object.
 	 */
 	public static <T> Value<T> empty() {
@@ -206,6 +208,7 @@ public class Value<T> {
 	/**
 	 * Applies a mapping function against the contents of this value.
 	 *
+	 * @param <T2> The mapped value type.
 	 * @param mapper The mapping function.
 	 * @return The mapped value.
 	 */
@@ -251,6 +254,7 @@ public class Value<T> {
 	 * Return the contained value, if present, otherwise throw an exception
 	 * to be created by the provided supplier.
 	 *
+	 * @param <X> The exception type.
 	 * @param exceptionSupplier The supplier which will return the exception to
 	 * be thrown
 	 * @return the present value

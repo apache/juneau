@@ -101,6 +101,8 @@ public class Mutaters {
 	/**
 	 * Returns the transform for converting the specified input type to the specified output type.
 	 *
+	 * @param <I> The input type.
+	 * @param <O> The output type.
 	 * @param ic The input type.
 	 * @param oc The output type.
 	 * @return The transform for performing the conversion, or <jk>null</jk> if the conversion cannot be made.
@@ -131,6 +133,8 @@ public class Mutaters {
 	/**
 	 * Returns the transform for converting the specified input type to the specified output type.
 	 *
+	 * @param <I> The input type.
+	 * @param <O> The output type.
 	 * @param ic The input type.
 	 * @param oc The output type.
 	 * @return The transform for performing the conversion, or <jk>null</jk> if the conversion cannot be made.
@@ -266,7 +270,8 @@ public class Mutaters {
 	 * 	<li>Be an <c>enum</c>.
 	 * </ul>
 	 *
-	 * @param c The class.
+	 * @param <T> The class type.
+	 * @param c The class type.
 	 * @param s The string to create the instance from.
 	 * @return A new object instance, or <jk>null</jk> if a method for converting the string to an object could not be found.
 	 */

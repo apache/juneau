@@ -199,7 +199,7 @@ public interface DebugEnablement {
 		 * is {@link Enablement#CONDITIONAL CONDITIONAL}.
 		 *
 		 * <p>
-		 * The default value for this setting is <c>(<jv>x</jv>)-><js>"true"</js>.equalsIgnoreCase(<jv>x</jv>.getHeader(<js>"Debug"</js>))</c>.
+		 * The default value for this setting is <c>(<jv>x</jv>)-&gt;<js>"true"</js>.equalsIgnoreCase(<jv>x</jv>.getHeader(<js>"Debug"</js>))</c>.
 		 *
 		 * @param value The predicate.
 		 * @return This object.

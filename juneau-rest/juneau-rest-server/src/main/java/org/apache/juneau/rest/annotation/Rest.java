@@ -73,9 +73,11 @@ public @interface Rest {
 	 * The subclass must contain a public constructor that takes in the following arguments that should be passed to the parent constructor:
 	 * <ul>
 	 * 	<li>{@link Class} - The resource class.
-	 * 	<li>{@link RestContext} - The parent context if this is a child of another resource.  Can be <jk>null</jk..
+	 * 	<li>{@link RestContext} - The parent context if this is a child of another resource.  Can be <jk>null</jk>.
 	 * 	<li>{@link ServletConfig} - The servlet config passed in during servlet initialization.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends RestContext.Builder> builder() default RestContext.Builder.Void.class;
 
@@ -100,11 +102,13 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#disableBodyParam()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String disableBodyParam() default "";
 
 	/**
-	 * Configuration property:  Allowed header URL parameters.
+	 * Allowed header URL parameters.
 	 *
 	 * <p>
 	 * When specified, allows headers such as <js>"Accept"</js> and <js>"Content-Type"</js> to be passed in as URL query
@@ -128,11 +132,13 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#allowedHeaderParams(String)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String allowedHeaderParams() default "";
 
 	/**
-	 * Configuration property:  Allowed method headers.
+	 * Allowed method headers.
 	 *
 	 * <p>
 	 * A comma-delimited list of HTTP method names that are allowed to be passed as values in an <c>X-Method</c> HTTP header
@@ -154,6 +160,8 @@ public @interface Rest {
 	 * 	<li>
 	 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String allowedMethodHeaders() default "";
 
@@ -182,6 +190,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#allowedMethodParams(String)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String allowedMethodParams() default "";
 
@@ -210,6 +220,8 @@ public @interface Rest {
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#callLogger()}
 	 * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends RestLogger> callLogger() default RestLogger.Void.class;
 
@@ -229,6 +241,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jrs.Injection}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends BeanStore> beanStore() default BeanStore.Void.class;
 
@@ -247,6 +261,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#children(Object...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] children() default {};
 
@@ -265,6 +281,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#clientVersionHeader(String)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String clientVersionHeader() default "";
 
@@ -291,6 +309,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#config(Config)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String config() default "";
 
@@ -309,6 +329,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#consumes(MediaType...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] consumes() default {};
 
@@ -321,6 +343,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#type(Class)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends RestContext> contextClass() default RestContext.Void.class;
 
@@ -340,6 +364,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#converters()} - Registering converters with REST resources.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends RestConverter>[] converters() default {};
 
@@ -375,6 +401,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugEnablement()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String debug() default "";
 
@@ -386,6 +414,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugEnablement()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends DebugEnablement> debugEnablement() default DebugEnablement.Void.class;
 
@@ -482,7 +512,7 @@ public @interface Rest {
 	 * A more-typical scenario is to pull this setting from an external source such as system property or environment
 	 * variable:
 	 *
-	 * <h5 class='figure'>Example:</h5
+	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<ja>@Rest</ja>(
 	 * 		debugOn=<js>"$E{DEBUG_ON_SETTINGS}"</js>
@@ -503,6 +533,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugOn(String)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String debugOn() default "";
 
@@ -520,6 +552,8 @@ public @interface Rest {
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String defaultAccept() default "";
 
@@ -544,6 +578,8 @@ public @interface Rest {
 	 * 	<li class='ja'>{@link RestPost#defaultCharset}
 	 * 	<li class='ja'>{@link RestDelete#defaultCharset}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String defaultCharset() default "";
 
@@ -561,6 +597,8 @@ public @interface Rest {
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String defaultContentType() default "";
 
@@ -603,6 +641,8 @@ public @interface Rest {
 	 * 	<li class='ja'>{@link RestPost#defaultRequestAttributes()}
 	 * 	<li class='ja'>{@link RestDelete#defaultRequestAttributes()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] defaultRequestAttributes() default {};
 
@@ -621,6 +661,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestHeaders(org.apache.http.Header...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] defaultRequestHeaders() default {};
 
@@ -639,6 +681,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultResponseHeaders(org.apache.http.Header...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] defaultResponseHeaders() default {};
 
@@ -661,6 +705,8 @@ public @interface Rest {
 	 * 		The format is plain-text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] description() default {};
 
@@ -706,6 +752,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jrs.Encoders}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends Encoder>[] encoders() default {};
 
@@ -724,6 +772,8 @@ public @interface Rest {
 	 * 	<li class='jm'>{@link RestContext#getFileFinder()}
 	 * 	<li class='jm'>{@link RestRequest#getFileFinder()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends FileFinder> fileFinder() default FileFinder.Void.class;
 
@@ -743,6 +793,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#guards()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends RestGuard>[] guards() default {};
 
@@ -766,6 +818,8 @@ public @interface Rest {
 	 * 	<li class='ja'>{@link RestPost#maxInput}
 	 * 	<li class='ja'>{@link RestPut#maxInput}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String maxInput() default "";
 
@@ -799,6 +853,8 @@ public @interface Rest {
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String messages() default "";
 
@@ -808,6 +864,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] on() default {};
 
@@ -820,6 +878,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
 
@@ -875,6 +935,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jrs.Marshalling}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] parsers() default {};
 
@@ -883,6 +945,8 @@ public @interface Rest {
 	 *
 	 * <p>
 	 * Specifies the {@link HttpPartParser} to use for parsing headers, query/form parameters, and URI parts.
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends HttpPartParser> partParser() default HttpPartParser.Void.class;
 
@@ -891,6 +955,8 @@ public @interface Rest {
 	 *
 	 * <p>
 	 * Specifies the {@link HttpPartSerializer} to use for serializing headers, query/form parameters, and URI parts.
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends HttpPartSerializer> partSerializer() default HttpPartSerializer.Void.class;
 
@@ -928,7 +994,7 @@ public @interface Rest {
 	 *		path=<js>"/grandchild"</js>
 	 *	)
 	 *	<jk>public class</jk> GrandchildResource {
-	 *		<ja>@RestGet</ja>(js>"/"</js>)
+	 *		<ja>@RestGet</ja>(<js>"/"</js>)
 	 *		<jk>public</jk> String sayHello() {
 	 *			<jk>return</jk> <js>"Hello!"</js>;
 	 *		}
@@ -988,6 +1054,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#path(String)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String path() default "";
 
@@ -1006,6 +1074,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#produces(MediaType...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] produces() default {};
 
@@ -1020,6 +1090,8 @@ public @interface Rest {
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String renderResponseStackTraces() default "";
 
@@ -1033,6 +1105,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#responseProcessors()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends ResponseProcessor>[] responseProcessors() default {};
 
@@ -1045,6 +1119,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#restChildrenClass(Class)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends RestChildren> restChildrenClass() default RestChildren.Void.class;
 
@@ -1057,6 +1133,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#restOperationsClass(Class)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends RestOperations> restOperationsClass() default RestOperations.Void.class;
 
@@ -1066,6 +1144,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#restOpContextClass(Class)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends RestOpContext> restOpContextClass() default RestOpContext.Void.class;
 
@@ -1080,6 +1160,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#restOpArgs(Class...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends RestOpArg>[] restOpArgs() default {};
 
@@ -1132,6 +1214,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#roleGuard(String)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String roleGuard() default "";
 
@@ -1161,6 +1245,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#rolesDeclared(String...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String rolesDeclared() default "";
 
@@ -1216,6 +1302,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jrs.Marshalling}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends Serializer>[] serializers() default {};
 
@@ -1242,6 +1330,8 @@ public @interface Rest {
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String siteName() default "";
 
@@ -1268,6 +1358,8 @@ public @interface Rest {
 	 * 	<li>Static files on child are combined with those on parent class.
 	 * 	<li>Static files are are executed child-to-parent in the order they appear in the annotation.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends StaticFiles> staticFiles() default StaticFiles.Void.class;
 
@@ -1297,6 +1389,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Swagger}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Swagger swagger() default @Swagger;
 
@@ -1306,6 +1400,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#swaggerProvider(Class)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends SwaggerProvider> swaggerProvider() default SwaggerProvider.Void.class;
 
@@ -1327,6 +1423,8 @@ public @interface Rest {
 	 * 	<li>
 	 * 		Corresponds to the swagger field <c>/info/title</c>.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] title() default {};
 
@@ -1345,6 +1443,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#uriAuthority(String)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String uriAuthority() default "";
 
@@ -1363,6 +1463,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#uriContext(String)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String uriContext() default "";
 
@@ -1384,6 +1486,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#uriRelativity(UriRelativity)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String uriRelativity() default "";
 
@@ -1405,6 +1509,8 @@ public @interface Rest {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#uriResolution(UriResolution)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String uriResolution() default "";
 }

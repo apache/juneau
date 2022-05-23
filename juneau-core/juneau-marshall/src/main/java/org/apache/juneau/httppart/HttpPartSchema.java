@@ -3784,6 +3784,7 @@ public class HttpPartSchema {
 	/**
 	 * Throws a {@link ParseException} if the specified parsed output does not validate against this schema.
 	 *
+	 * @param <T> The return type.
 	 * @param o The parsed output.
 	 * @param bc The bean context used to detect POJO types.
 	 * @return The same object passed in.

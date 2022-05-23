@@ -57,6 +57,8 @@ public @interface License {
 	 * 	<li>
 	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String name() default "";
 
@@ -69,6 +71,8 @@ public @interface License {
 	 * 	<li>
 	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String url() default "";
 }

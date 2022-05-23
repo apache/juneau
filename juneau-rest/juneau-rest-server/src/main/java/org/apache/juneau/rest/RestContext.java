@@ -402,6 +402,7 @@ public class RestContext extends Context {
 		/**
 		 * Returns the REST servlet/bean instance that this context is defined against if it's the specified type.
 		 *
+		 * @param <T> The expected type of the resource bean.
 		 * @param type The expected type of the resource bean.
 		 * @return The bean cast to that instance, or {@link Optional#empty()} if it's not the specified type.
 		 */
@@ -530,7 +531,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.beanStore(<jv>x</jv> -> <jv>x</jv>.addSupplier(MyBean.<jk>class</jk>, ()-><jsm>getMyBean</jsm>()))
+		 * 		.beanStore(<jv>x</jv> -&gt; <jv>x</jv>.addSupplier(MyBean.<jk>class</jk>, ()-&gt;<jsm>getMyBean</jsm>()))
 		 * 		.build();
 		 * </p>
 		 *
@@ -649,7 +650,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.varResolver(<jv>x</jv> -> <jv>x</jv>.vars(MyVar.<jk>class</jk>))
+		 * 		.varResolver(<jv>x</jv> -&gt; <jv>x</jv>.vars(MyVar.<jk>class</jk>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -672,12 +673,12 @@ public class RestContext extends Context {
 		 * <ol>
 		 * 	<li>
 		 * 		Looks for the following method on the resource class and sets it as the implementation bean:
-		 * 		<br><c><jk>public static</jk> VarResolver createVarResolver(<any-bean-types-in-bean-store>) {}</c>
+		 * 		<br><c><jk>public static</jk> VarResolver createVarResolver(&lt;any-bean-types-in-bean-store&gt;) {}</c>
 		 * 	<li>
 		 * 		Looks for bean of type {@link org.apache.juneau.svl.VarResolver} in bean store and sets it as the implementation bean.
 		 * 	<li>
 		 * 		Looks for the following method on the resource class:
-		 * 		<br><c><jk>public static</jk> VarResolver.Builder createVarResolver(<any-bean-types-in-bean-store>) {}</c>
+		 * 		<br><c><jk>public static</jk> VarResolver.Builder createVarResolver(&lt;any-bean-types-in-bean-store&gt;) {}</c>
 		 * 	<li>
 		 * 		Looks for bean of type {@link org.apache.juneau.svl.VarResolver.Builder} in bean store and returns a copy of it.
 		 * 	<li>
@@ -730,7 +731,7 @@ public class RestContext extends Context {
 		 * <ol>
 		 * 	<li>
 		 * 		Looks for the following method on the resource class:
-		 * 		<br><c><jk>public static</jk> VarList createVars(<any-bean-types-in-bean-store>) {}</c>
+		 * 		<br><c><jk>public static</jk> VarList createVars(&lt;any-bean-types-in-bean-store&gt;) {}</c>
 		 * 	<li>
 		 * 		Looks for bean of type {@link org.apache.juneau.svl.VarList} in bean store and returns a copy of it.
 		 * 	<li>
@@ -819,7 +820,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.config(<jv>x</jv> -> <jv>x</jv>.set(<js>"Foo/bar"</js>, <js>"baz"</js>).save())
+		 * 		.config(<jv>x</jv> -&gt; <jv>x</jv>.set(<js>"Foo/bar"</js>, <js>"baz"</js>).save())
 		 * 		.build();
 		 * </p>
 		 *
@@ -919,7 +920,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.logger(<jv>x</jv> -> <jv>x</jv>.setFilter(<jv>logFilter</jv>))
+		 * 		.logger(<jv>x</jv> -&gt; <jv>x</jv>.setFilter(<jv>logFilter</jv>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -951,7 +952,7 @@ public class RestContext extends Context {
 		 * <p>
 		 * Instantiates based on the following logic:
 		 * <ul>
-		 * 	<li>Looks for a static or non-static <c>createLogger()</> method that returns <c>{@link Logger}</c> on the
+		 * 	<li>Looks for a static or non-static <c>createLogger()</c> method that returns <c>{@link Logger}</c> on the
 		 * 		resource class with any of the following arguments:
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
@@ -1016,7 +1017,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.logger(<jv>x</jv> -> <jv>x</jv>.statsImplClass(MyStatsImplClass.<jk>class</jk>))
+		 * 		.logger(<jv>x</jv> -&gt; <jv>x</jv>.statsImplClass(MyStatsImplClass.<jk>class</jk>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1034,7 +1035,7 @@ public class RestContext extends Context {
 		 * <p>
 		 * Instantiates based on the following logic:
 		 * <ul>
-		 * 	<li>Looks for a static or non-static <c>createThrownStore()</> method that returns <c>{@link ThrownStore}</c> on the
+		 * 	<li>Looks for a static or non-static <c>createThrownStore()</c> method that returns <c>{@link ThrownStore}</c> on the
 		 * 		resource class with any of the following arguments:
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
@@ -1116,7 +1117,7 @@ public class RestContext extends Context {
 		 * <p class='bcodbjavae w800'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.encoders(<jv>x</jv> -> <jv>x</jv>.add(MyEncoder.<jk>class</jk>))
+		 * 		.encoders(<jv>x</jv> -&gt; <jv>x</jv>.add(MyEncoder.<jk>class</jk>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1140,7 +1141,7 @@ public class RestContext extends Context {
 		 * 			<li>{@link RestOp#encoders()}.
 		 * 			<li>{@link Rest#encoders()}.
 		 * 		</ul>
-		 * 	<li>Looks for a static or non-static <c>createEncoders()</> method that returns <c>{@link Encoder}[]</c> on the
+		 * 	<li>Looks for a static or non-static <c>createEncoders()</c> method that returns <c>{@link Encoder}[]</c> on the
 		 * 		resource class with any of the following arguments:
 		 * 		<ul>
 		 * 			<li>{@link Method} - The Java method this context belongs to.
@@ -1220,7 +1221,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.serializers(<jv>x</jv> -> <jv>x</jv>.add(MySerializer.<jk>class</jk>))
+		 * 		.serializers(<jv>x</jv> -&gt; <jv>x</jv>.add(MySerializer.<jk>class</jk>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1302,7 +1303,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.parsers(<jv>x</jv> -> <jv>x</jv>.add(MyParser.<jk>class</jk>))
+		 * 		.parsers(<jv>x</jv> -&gt; <jv>x</jv>.add(MyParser.<jk>class</jk>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1384,7 +1385,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.methodExecStore(<jv>x</jv> -> <jv>x</jv>.statsImplClass(MyStats.<jk>class</jk>))
+		 * 		.methodExecStore(<jv>x</jv> -&gt; <jv>x</jv>.statsImplClass(MyStats.<jk>class</jk>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1465,7 +1466,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.messages(<jv>x</jv> -> <jv>x</jv>.name(<js>"MyMessages"</js>))
+		 * 		.messages(<jv>x</jv> -&gt; <jv>x</jv>.name(<js>"MyMessages"</js>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1694,7 +1695,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.responseProcessors(<jv>x</jv> -> <jv>x</jv>.add(MyResponseProcessor.<jk>class</jk>))
+		 * 		.responseProcessors(<jv>x</jv> -&gt; <jv>x</jv>.add(MyResponseProcessor.<jk>class</jk>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1717,7 +1718,7 @@ public class RestContext extends Context {
 		 * 			<li>{@link RestContext.Builder#responseProcessors()}
 		 * 			<li>{@link Rest#responseProcessors()}.
 		 * 		</ul>
-		 * 	<li>Looks for a static or non-static <c>createResponseProcessors()</> method that returns <c>{@link ResponseProcessor}[]</c> on the
+		 * 	<li>Looks for a static or non-static <c>createResponseProcessors()</c> method that returns <c>{@link ResponseProcessor}[]</c> on the
 		 * 		resource class with any of the following arguments:
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
@@ -1857,7 +1858,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.callLogger(<jv>x</jv> -> <jv>x</jv>.disabled())
+		 * 		.callLogger(<jv>x</jv> -&gt; <jv>x</jv>.disabled())
 		 * 		.build();
 		 * </p>
 		 *
@@ -1881,7 +1882,7 @@ public class RestContext extends Context {
 		 * 			<li>{@link RestContext.Builder#callLogger()}
 		 * 			<li>{@link Rest#callLogger()}.
 		 * 		</ul>
-		 * 	<li>Looks for a static or non-static <c>createCallLogger()</> method that returns {@link RestLogger} on the
+		 * 	<li>Looks for a static or non-static <c>createCallLogger()</c> method that returns {@link RestLogger} on the
 		 * 		resource class with any of the following arguments:
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
@@ -1988,7 +1989,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.beanContext(<jv>x</jv> -> <jv>x</jv>.interfaces(MyInterface.<jk>class</jk>))
+		 * 		.beanContext(<jv>x</jv> -&gt; <jv>x</jv>.interfaces(MyInterface.<jk>class</jk>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -2012,7 +2013,7 @@ public class RestContext extends Context {
 		 * 			<li>{@link RestContext.Builder#partSerializer()}
 		 * 			<li>{@link Rest#partSerializer()}.
 		 * 		</ul>
-		 * 	<li>Looks for a static or non-static <c>createPartSerializer()</> method that returns <c>{@link HttpPartSerializer}</c> on the
+		 * 	<li>Looks for a static or non-static <c>createPartSerializer()</c> method that returns <c>{@link HttpPartSerializer}</c> on the
 		 * 		resource class with any of the following arguments:
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
@@ -2089,7 +2090,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.partSerializer(<jv>x</jv> -> <jv>x</jv>.builder(OpenApiSerializer.Builder.<jk>class</jk>, <jv>y</jv> -> <jv>y</jv>.sortProperties()))
+		 * 		.partSerializer(<jv>x</jv> -&gt; <jv>x</jv>.builder(OpenApiSerializer.Builder.<jk>class</jk>, <jv>y</jv> -&gt; <jv>y</jv>.sortProperties()))
 		 * 		.build();
 		 * </p>
 		 *
@@ -2113,7 +2114,7 @@ public class RestContext extends Context {
 		 * 			<li>{@link RestContext.Builder#partSerializer()}
 		 * 			<li>{@link Rest#partSerializer()}.
 		 * 		</ul>
-		 * 	<li>Looks for a static or non-static <c>createPartSerializer()</> method that returns <c>{@link HttpPartSerializer}</c> on the
+		 * 	<li>Looks for a static or non-static <c>createPartSerializer()</c> method that returns <c>{@link HttpPartSerializer}</c> on the
 		 * 		resource class with any of the following arguments:
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
@@ -2201,7 +2202,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.partParser(<jv>x</jv> -> <jv>x</jv>.builder(OpenApiParser.Builder.<jk>class</jk>, <jv>y</jv> -> <jv>y</jv>.ignoreUnknownBeanProperties()))
+		 * 		.partParser(<jv>x</jv> -&gt; <jv>x</jv>.builder(OpenApiParser.Builder.<jk>class</jk>, <jv>y</jv> -&gt; <jv>y</jv>.ignoreUnknownBeanProperties()))
 		 * 		.build();
 		 * </p>
 		 *
@@ -2225,7 +2226,7 @@ public class RestContext extends Context {
 		 * 			<li>{@link RestContext.Builder#partParser()}
 		 * 			<li>{@link Rest#partParser()}.
 		 * 		</ul>
-		 * 	<li>Looks for a static or non-static <c>createPartParser()</> method that returns <c>{@link HttpPartParser}</c> on the
+		 * 	<li>Looks for a static or non-static <c>createPartParser()</c> method that returns <c>{@link HttpPartParser}</c> on the
 		 * 		resource class with any of the following arguments:
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
@@ -2313,7 +2314,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.jsonSchemaGenerator(<jv>x</jv> -> <jv>x</jv>.allowNestedExamples()))
+		 * 		.jsonSchemaGenerator(<jv>x</jv> -&gt; <jv>x</jv>.allowNestedExamples()))
 		 * 		.build();
 		 * </p>
 		 *
@@ -2331,7 +2332,7 @@ public class RestContext extends Context {
 		 * <p>
 		 * Instantiates based on the following logic:
 		 * <ul>
-		 * 	<li>Looks for a static or non-static <c>createJsonSchemaGenerator()</> method that returns <c>{@link JsonSchemaGenerator}</c> on the
+		 * 	<li>Looks for a static or non-static <c>createJsonSchemaGenerator()</c> method that returns <c>{@link JsonSchemaGenerator}</c> on the
 		 * 		resource class with any of the following arguments:
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
@@ -2408,7 +2409,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.fileFinder(<jv>x</jv> -> <jv>x</jv>.dir(<js>"/mydir"</js>)))
+		 * 		.fileFinder(<jv>x</jv> -&gt; <jv>x</jv>.dir(<js>"/mydir"</js>)))
 		 * 		.build();
 		 * </p>
 		 *
@@ -2445,7 +2446,7 @@ public class RestContext extends Context {
 		 * <ul>
 		 * 	<li>Returns the resource class itself if it's an instance of {@link FileFinder}.
 		 * 	<li>Looks for file finder setting.
-		 * 	<li>Looks for a public <c>createFileFinder()</> method on the resource class with an optional {@link RestContext} argument.
+		 * 	<li>Looks for a public <c>createFileFinder()</c> method on the resource class with an optional {@link RestContext} argument.
 		 * 	<li>Instantiates the default file finder as specified via file finder default setting.
 		 * 	<li>Instantiates a {@link BasicFileFinder} which provides basic support for finding localized
 		 * 		resources on the classpath and JVM working directory.
@@ -2617,7 +2618,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.staticFiles(<jv>x</jv> -> <jv>x</jv>.dir(<js>"/mydir"</js>)))
+		 * 		.staticFiles(<jv>x</jv> -&gt; <jv>x</jv>.dir(<js>"/mydir"</js>)))
 		 * 		.build();
 		 * </p>
 		 *
@@ -2799,7 +2800,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.defaultRequestHeaders(<jv>x</jv> -> <jv>x</jv>.remove(<js>"Foo"</js>)))
+		 * 		.defaultRequestHeaders(<jv>x</jv> -&gt; <jv>x</jv>.remove(<js>"Foo"</js>)))
 		 * 		.build();
 		 * </p>
 		 *
@@ -2965,7 +2966,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.defaultResponseHeaders(<jv>x</jv> -> <jv>x</jv>.remove(<js>"Foo"</js>)))
+		 * 		.defaultResponseHeaders(<jv>x</jv> -&gt; <jv>x</jv>.remove(<js>"Foo"</js>)))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3097,7 +3098,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.defaultRequestAttributes(<jv>x</jv> -> <jv>x</jv>.add(BasicNamedAttribute.<jsm>of</jsm>(<js>"Foo"</js>, ()-><jsm>getFoo</jsm>()))
+		 * 		.defaultRequestAttributes(<jv>x</jv> -&gt; <jv>x</jv>.add(BasicNamedAttribute.<jsm>of</jsm>(<js>"Foo"</js>, ()-&gt;<jsm>getFoo</jsm>()))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3225,7 +3226,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.restOpArgs(<jv>x</jv> -> <jv>x</jv>.add(MyRestOpArg.<jk>class</jk>))
+		 * 		.restOpArgs(<jv>x</jv> -&gt; <jv>x</jv>.add(MyRestOpArg.<jk>class</jk>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3323,7 +3324,7 @@ public class RestContext extends Context {
 		 * 			<li>{@link RestContext.Builder#restOpArgs(Class...)}/{@link RestContext.Builder#restOpArgs(Class...)}
 		 * 			<li>{@link Rest#restOpArgs()}.
 		 * 		</ul>
-		 * 	<li>Looks for a static or non-static <c>createRestParams()</> method that returns <c>{@link Class}[]</c>.
+		 * 	<li>Looks for a static or non-static <c>createRestParams()</c> method that returns <c>{@link Class}[]</c>.
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates a default set of parameters.
 		 * </ul>
@@ -3426,7 +3427,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.debugEnablement(<jv>x</jv> -> <jv>x</jv>.defaultEnable(<jsf>ALWAYS</jsf>))
+		 * 		.debugEnablement(<jv>x</jv> -&gt; <jv>x</jv>.defaultEnable(<jsf>ALWAYS</jsf>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3580,7 +3581,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.startCallMethods(<jv>x</jv> -> <jv>x</jv>.add(<jv>extraMethod</jv>))
+		 * 		.startCallMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3643,7 +3644,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.endCallMethods(<jv>x</jv> -> <jv>x</jv>.add(<jv>extraMethod</jv>))
+		 * 		.endCallMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3706,7 +3707,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.postInitMethods(<jv>x</jv> -> <jv>x</jv>.add(<jv>extraMethod</jv>))
+		 * 		.postInitMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3769,7 +3770,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.postInitChildFirstMethods(<jv>x</jv> -> <jv>x</jv>.add(<jv>extraMethod</jv>))
+		 * 		.postInitChildFirstMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3832,7 +3833,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.destroyMethods(<jv>x</jv> -> <jv>x</jv>.add(<jv>extraMethod</jv>))
+		 * 		.destroyMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3898,7 +3899,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.preCallMethods(<jv>x</jv> -> <jv>x</jv>.add(<jv>extraMethod</jv>))
+		 * 		.preCallMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3964,7 +3965,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.postCallMethods(<jv>x</jv> -> <jv>x</jv>.add(<jv>extraMethod</jv>))
+		 * 		.postCallMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -4230,7 +4231,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.swaggerProvider(<jv>x</jv> -> <jv>x</jv>.fileFinder(<jv>aDifferentFileFinder</jv>))
+		 * 		.swaggerProvider(<jv>x</jv> -&gt; <jv>x</jv>.fileFinder(<jv>aDifferentFileFinder</jv>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -4254,7 +4255,7 @@ public class RestContext extends Context {
 		 * 			<li>{@link RestContext.Builder#swaggerProvider(Class)}/{@link RestContext.Builder#swaggerProvider(SwaggerProvider)}
 		 * 			<li>{@link Rest#swaggerProvider()}.
 		 * 		</ul>
-		 * 	<li>Looks for a static or non-static <c>createSwaggerProvider()</> method that returns {@link SwaggerProvider} on the
+		 * 	<li>Looks for a static or non-static <c>createSwaggerProvider()</c> method that returns {@link SwaggerProvider} on the
 		 * 		resource class with any of the following arguments:
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
@@ -4532,7 +4533,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	<jc>// Call this method if Client-Version is at least 2.0.
 		 * 	// Note that this also matches 2.0.1.</jc>
-		 * 	<ja>@RestGet/ja>(path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
+		 * 	<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
 		 * 	<jk>public</jk> Object method1() {
 		 * 		...
 		 * 	}
@@ -5399,7 +5400,7 @@ public class RestContext extends Context {
 		 * 		<jc>// Constructor that takes in builder and optional injected attribute provider.</jc>
 		 * 		<jk>public</jk> MyRestOperationContext(RestOpContext.Builder <jv>builder</jv>, Optional&lt;AnInjectedFooSupplier&gt; <jv>fooSupplier</jv>) {
 		 * 			<jk>super</jk>(<jv>builder</jv>);
-		 * 			<jk>this</jk>.<jf>fooSupplier</jf> = <jv>fooSupplier</jv>.orElseGet(()-><jk>null</jk>);
+		 * 			<jk>this</jk>.<jf>fooSupplier</jf> = <jv>fooSupplier</jv>.orElseGet(()-&gt;<jk>null</jk>);
 		 * 		}
 		 *
 		 * 		<jc>// Override the method used to create default request attributes.</jc>
@@ -5407,7 +5408,7 @@ public class RestContext extends Context {
 		 * 		<jk>protected</jk> NamedAttributeList createDefaultRequestAttributes(Object <jv>resource</jv>, BeanStore <jv>beanStore</jv>, Method <jv>method</jv>, RestContext <jv>context</jv>) <jk>throws</jk> Exception {
 		 * 			<jk>return super</jk>
 		 * 				.createDefaultRequestAttributes(<jv>resource</jv>, <jv>beanStore</jv>, <jv>method</jv>, <jv>context</jv>)
-		 * 				.append(NamedAttribute.<jsm>of</jsm>(<js>"foo"</js>, ()-><jf>fooSupplier</jf>.get());
+		 * 				.append(NamedAttribute.<jsm>of</jsm>(<js>"foo"</js>, ()-&gt;<jf>fooSupplier</jf>.get());
 		 * 		}
 		 * 	}
 		 * </p>
@@ -6877,7 +6878,7 @@ public class RestContext extends Context {
 		try {
 			ConstructorInfo cci = eci.getPublicConstructor(x -> x.hasParamTypes(Throwable.class, String.class, Object[].class));
 			if (cci != null)
-	 			return toHttpException((Throwable)cci.invoke(t), InternalServerError.class);
+	 			return toHttpException((Throwable)cci.invoke(t, t.getMessage(), new Object[0]), InternalServerError.class);
 
 			cci = eci.getPublicConstructor(x -> x.hasParamTypes(Throwable.class));
 			if (cci != null)

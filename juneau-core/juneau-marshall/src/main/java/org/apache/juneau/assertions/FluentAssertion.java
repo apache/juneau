@@ -30,8 +30,8 @@ import org.apache.juneau.internal.*;
  * 	MyPojo <jv>myPojo</jv> = ...;
  * 	MyTestedBean <jv>myTestedBean</jv> = ...;
  *
- * 	Assertion <jv>assertion</jv> = <jk>new</jk> FluentBeanAssertion&lt;MyPojo,MyTestedBean>(<jv>myPojo</jv>, <jv>myTestedBean</jv>);
- * 	<jv>myPojo</jv> = <jv>assertion</jv>.test(<jv>x</jv> -> <jv>x</jv>.getMyProperty().equals(<js>"foo"</js>));  <jc>// Returns myPojo after test.</jc>
+ * 	Assertion <jv>assertion</jv> = <jk>new</jk> FluentBeanAssertion&lt;MyPojo,MyTestedBean&gt;(<jv>myPojo</jv>, <jv>myTestedBean</jv>);
+ * 	<jv>myPojo</jv> = <jv>assertion</jv>.test(<jv>x</jv> -&gt; <jv>x</jv>.getMyProperty().equals(<js>"foo"</js>));  <jc>// Returns myPojo after test.</jc>
  * </p>
  *
  * For subclasses such as {@link IntegerAssertion}, the return object is simply itself so that multiple tests

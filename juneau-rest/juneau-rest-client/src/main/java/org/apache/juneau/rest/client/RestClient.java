@@ -365,7 +365,7 @@ import org.apache.juneau.xml.*;
  * <h5 class='figure'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Create a client that adds a dynamic Authorization header to every request.</jc>
- * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().header(<js>"Authorization"</js>, ()->getMyAuthToken()).build();
+ * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().header(<js>"Authorization"</js>, ()-&gt;getMyAuthToken()).build();
  * </p>
  *
  * <p>
@@ -555,7 +555,7 @@ import org.apache.juneau.xml.*;
  * 	<jc>// Status assertion using a predicate.</jc>
  * 	String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
  * 		.run()
- * 		.assertStatus().code().passes(<jv>x</jv> -> <jv>x</jv>&lt;400)
+ * 		.assertStatus().code().passes(<jv>x</jv> -&gt; <jv>x</jv>&lt;400)
  * 		.getBody().asString();
  * </p>
  *
@@ -843,7 +843,7 @@ import org.apache.juneau.xml.*;
  * 	MyBean <jv>bean</jv> = RestClient
  * 		.<jsm>create</jsm>()
  * 		.simpleJson()
- * 		.logRequests(DetailLevel.<jsf>FULL</jsf>, Level.<jsf>SEVERE</jsf>, (<jv>req</jv>,<jv>res</jv>)-><jv>req</jv>.getUri().endsWith(<js>"/bean"</js>))
+ * 		.logRequests(DetailLevel.<jsf>FULL</jsf>, Level.<jsf>SEVERE</jsf>, (<jv>req</jv>,<jv>res</jv>)-&gt;<jv>req</jv>.getUri().endsWith(<js>"/bean"</js>))
  * 		.logToConsole()
  * 		.build()
  * 		.post(<js>"http://localhost/bean"</js>, <jv>anotherBean</jv>)
@@ -1694,7 +1694,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.httpClientBuilder(<jv>x</jv> -> <jv>x</jv>.disableAuthCaching())
+		 * 		.httpClientBuilder(<jv>x</jv> -&gt; <jv>x</jv>.disableAuthCaching())
 		 * 		.build();
 		 * </p>
 		 *
@@ -2499,7 +2499,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.headerData(<jv>x</jv> -> <jv>x</jv>.setDefault(<js>"Foo"</js>, <js>"bar"</js>))
+		 * 		.headerData(<jv>x</jv> -&gt; <jv>x</jv>.setDefault(<js>"Foo"</js>, <js>"bar"</js>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -2567,7 +2567,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.headersDefault(<jsm>stringHeader</jsm>(<js>"Foo"</js>, ()-><js>"bar"</js>));
+		 * 		.headersDefault(<jsm>stringHeader</jsm>(<js>"Foo"</js>, ()-&gt;<js>"bar"</js>));
 		 * 		.build();
 		 * </p>
 		 *
@@ -2615,7 +2615,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.header(<js>"Foo"</js>, ()-><js>"bar"</js>);
+		 * 		.header(<js>"Foo"</js>, ()-&gt;<js>"bar"</js>);
 		 * 		.build();
 		 * </p>
 		 *
@@ -3018,7 +3018,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.queryData(<jv>x</jv> -> <jv>x</jv>.setDefault(<js>"foo"</js>, <js>"bar"</js>))
+		 * 		.queryData(<jv>x</jv> -&gt; <jv>x</jv>.setDefault(<js>"foo"</js>, <js>"bar"</js>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3086,7 +3086,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.queryDataDefault(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-><js>"bar"</js>));
+		 * 		.queryDataDefault(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-&gt;<js>"bar"</js>));
 		 * 		.build();
 		 * </p>
 		 *
@@ -3134,7 +3134,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.queryData(<js>"foo"</js>, ()-><js>"bar"</js>)
+		 * 		.queryData(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
 		 * 		.build();
 		 * </p>
 		 *
@@ -3201,7 +3201,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.formData(<jv>x</jv> -> <jv>x</jv>.setDefault(<js>"foo"</js>, <js>"bar"</js>))
+		 * 		.formData(<jv>x</jv> -&gt; <jv>x</jv>.setDefault(<js>"foo"</js>, <js>"bar"</js>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3269,7 +3269,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.formDataDefault(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-><js>"bar"</js>));
+		 * 		.formDataDefault(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-&gt;<js>"bar"</js>));
 		 * 		.build();
 		 * </p>
 		 *
@@ -3317,7 +3317,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.formData(<js>"foo"</js>, ()-><js>"bar"</js>)
+		 * 		.formData(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
 		 * 		.build();
 		 * </p>
 		 *
@@ -3384,7 +3384,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.pathData(<jv>x</jv> -> <jv>x</jv>.setDefault(<js>"foo"</js>, <js>"bar"</js>))
+		 * 		.pathData(<jv>x</jv> -&gt; <jv>x</jv>.setDefault(<js>"foo"</js>, <js>"bar"</js>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3452,7 +3452,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.pathDataDefault(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-><js>"bar"</js>));
+		 * 		.pathDataDefault(<jsm>stringPart</jsm>(<js>"foo"</js>, ()-&gt;<js>"bar"</js>));
 		 * 		.build();
 		 * </p>
 		 *
@@ -3500,7 +3500,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.pathData(<js>"foo"</js>, ()-><js>"bar"</js>)
+		 * 		.pathData(<js>"foo"</js>, ()-&gt;<js>"bar"</js>)
 		 * 		.build();
 		 * </p>
 		 *
@@ -3578,7 +3578,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p class='bjava'>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.callHandler(<jv>x</jv> -> <jv>x</jv>.impl(<jv>myCallHandler</jv>))
+		 * 		.callHandler(<jv>x</jv> -&gt; <jv>x</jv>.impl(<jv>myCallHandler</jv>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -3641,13 +3641,13 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<jc>// Create a client that considers any 300+ responses to be errors.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.errorCodes(<jv>x</jv> -> <jv>x</jv>&gt;=300)
+		 * 		.errorCodes(<jv>x</jv> -&gt; <jv>x</jv>&gt;=300)
 		 * 		.build();
 		 * </p>
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * 	<br>The default value is <code>x -> x &gt;= 400</code>.
+		 * 	<br>The default value is <code>x -&gt; x &gt;= 400</code>.
 		 * @return This object.
 		 */
 		@FluentSetter
@@ -3995,7 +3995,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * When enabled, HTTP error response codes (e.g. <l>&gt;=400</l>) will not cause a {@link RestCallException} to
 		 * be thrown.
 		 * <p>
-		 * Note that this is equivalent to <c>builder.errorCodes(x -> <jk>false</jk>);</c>
+		 * Note that this is equivalent to <c>builder.errorCodes(x -&gt; <jk>false</jk>);</c>
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
@@ -4484,7 +4484,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * When enabled, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
 		 *
 		 * <p>
-		 * For example, if a model contains the links A->B->C->A, then the JSON generated will look like
+		 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
 		 * 	the following when <jsf>BEANTRAVERSE_ignoreRecursions</jsf> is <jk>true</jk>...
 		 *
 		 * <p class='bjson'>
@@ -7671,6 +7671,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * 	<li class='link'>{@doc jrc.Proxies}
 	 * </ul>
 	 *
+	 * @param <T> The interface to create a proxy for.
 	 * @param interfaceClass The interface to create a proxy for.
 	 * @return The new proxy interface.
 	 * @throws RemoteMetadataException If the REST URI cannot be determined based on the information given.
@@ -7686,6 +7687,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * 	<li class='link'>{@doc jrc.Proxies}
 	 * </ul>
 	 *
+	 * @param <T> The interface to create a proxy for.
 	 * @param interfaceClass The interface to create a proxy for.
 	 * @param rootUri The URI of the REST interface.
 	 * @return The new proxy interface.
@@ -7701,6 +7703,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * 	<li class='link'>{@doc jrc.Proxies}
 	 * </ul>
 
+	 * @param <T> The interface to create a proxy for.
 	 * @param interfaceClass The interface to create a proxy for.
 	 * @param rootUri The URI of the REST interface.
 	 * @param serializer The serializer used to serialize POJOs to the body of the HTTP request.
@@ -7890,6 +7893,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * 	<li class='link'>{@doc jrs.RestRpc}
 	 * </ul>
 	 *
+	 * @param <T> The interface to create a proxy for.
 	 * @param interfaceClass The interface to create a proxy for.
 	 * @return The new proxy interface.
 	 * @throws RemoteMetadataException If the REST URI cannot be determined based on the information given.
@@ -7905,6 +7909,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * 	<li class='link'>{@doc jrs.RestRpc}
 	 * </ul>
 	 *
+	 * @param <T> The interface to create a proxy for.
 	 * @param interfaceClass The interface to create a proxy for.
 	 * @param uri The URI of the REST interface.
 	 * @return The new proxy interface.
@@ -7920,6 +7925,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * 	<li class='link'>{@doc jrs.RestRpc}
 	 * </ul>
 	 *
+	 * @param <T> The interface to create a proxy for.
 	 * @param interfaceClass The interface to create a proxy for.
 	 * @param uri The URI of the REST interface.
 	 * @param serializer The serializer used to serialize POJOs to the body of the HTTP request.

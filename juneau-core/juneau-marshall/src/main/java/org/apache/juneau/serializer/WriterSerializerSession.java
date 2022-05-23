@@ -322,7 +322,7 @@ public class WriterSerializerSession extends SerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Maximum indentation.
+	 * Maximum indentation.
 	 *
 	 * @see WriterSerializer.Builder#maxIndent(int)
 	 * @return
@@ -333,7 +333,7 @@ public class WriterSerializerSession extends SerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Quote character.
+	 * Quote character.
 	 *
 	 * @see WriterSerializer.Builder#quoteChar(char)
 	 * @return
@@ -344,7 +344,7 @@ public class WriterSerializerSession extends SerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Use whitespace.
+	 * Use whitespace.
 	 *
 	 * @see WriterSerializer.Builder#useWhitespace()
 	 * @return

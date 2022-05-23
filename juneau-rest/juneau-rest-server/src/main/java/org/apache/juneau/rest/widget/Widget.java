@@ -219,7 +219,7 @@ public abstract class Widget implements HtmlWidget {
 	 * Loads the specified HTML file and strips HTML comments from the file.
 	 *
 	 * <p>
-	 * Comment are assumed to be <js>"<!-- -->"</js> code blocks.
+	 * Comment are assumed to be <js>"&lt;!-- --&gt;"</js> code blocks.
 	 *
 	 * @param req The HTTP request object.
 	 * @param name Name of the desired resource.

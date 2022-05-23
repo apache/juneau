@@ -619,7 +619,7 @@ public class ResponseBody implements HttpEntity {
 	 *
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
 	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm1</jv> = <jv>beanContext</jv>.getClassMeta(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 * 	List&lt;String> <jv>list1</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().as(<jv>cm1</jv>);
+	 * 	List&lt;String&gt; <jv>list1</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().as(<jv>cm1</jv>);
 	 *
 	 * 	<jc>// Parse into a linked-list of beans.</jc>
 	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm2</jv> = <jv>beanContext</jv>.getClassMeta(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
@@ -1117,7 +1117,7 @@ public class ResponseBody implements HttpEntity {
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getBody().assertValue().passes(<jv>x</jv> -> <jv>x</jv>.contains(<js>"OK"</js>));
+	 * 		.getBody().assertValue().passes(<jv>x</jv> -&gt; <jv>x</jv>.contains(<js>"OK"</js>));
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression.</jc>
 	 * 	<jv>client</jv>

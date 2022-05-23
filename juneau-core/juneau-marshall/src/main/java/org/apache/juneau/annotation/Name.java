@@ -48,6 +48,8 @@ public @interface Name {
 
 	/**
 	 * The bean property or parameter name.
+	 *
+	 * @return The annotation value.
 	 */
 	String value();
 }

@@ -113,7 +113,7 @@ public class OutputStreamSerializer extends Serializer {
 		//-----------------------------------------------------------------------------------------------------------------
 
 		/**
-		 * <Binary output format.
+		 * Binary output format.
 		 *
 		 * <p>
 		 * When using the {@link OutputStreamSerializer#serializeToString(Object)} method on stream-based serializers, this defines the format to use

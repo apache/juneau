@@ -42,6 +42,8 @@ public @interface UrlEncodingConfig {
 	 *
 	 * <p>
 	 * Can be used to override default ordering and application of config annotations.
+	 *
+	 * @return The annotation value.
 	 */
 	int rank() default 0;
 
@@ -54,7 +56,7 @@ public @interface UrlEncodingConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Parser bean property collections/arrays as separate key/value pairs.
+	 * Parser bean property collections/arrays as separate key/value pairs.
 	 *
 	 * <p>
 	 * This is the parser-side equivalent of the {@link org.apache.juneau.urlencoding.UrlEncodingSerializer.Builder#expandedParams()} setting.
@@ -83,6 +85,8 @@ public @interface UrlEncodingConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer.Builder#expandedParams()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String expandedParams() default "";
 

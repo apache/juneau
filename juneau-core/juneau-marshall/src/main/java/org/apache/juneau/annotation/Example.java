@@ -150,6 +150,8 @@ public @interface Example {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] on() default {};
 
@@ -162,6 +164,8 @@ public @interface Example {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
 
@@ -173,6 +177,8 @@ public @interface Example {
 	 *
 	 * <p>
 	 * This value is only used when the annotation is used on a type.
+	 *
+	 * @return The annotation value.
 	 */
 	String value() default "";
 }

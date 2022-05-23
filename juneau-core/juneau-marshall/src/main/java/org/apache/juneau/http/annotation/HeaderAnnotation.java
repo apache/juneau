@@ -310,6 +310,8 @@ public class HeaderAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		Header[] value();
 	}

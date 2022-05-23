@@ -309,6 +309,8 @@ public class QueryAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		Query[] value();
 	}

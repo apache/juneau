@@ -85,6 +85,8 @@ public @interface Xml {
 	 * 		<xt>&lt;/children&gt;</xt>
 	 * 	<xt>&lt;/object&gt;</xt>
 	 * </p>
+	 *
+	 * @return The annotation value.
 	 */
 	String childName() default "";
 
@@ -134,6 +136,8 @@ public @interface Xml {
 	 * 		<xt>&lt;child&gt;</xt>bar<xt>&lt;/child&gt;</xt>
 	 * 	<xt>&lt;/object&gt;</xt>
 	 * </p>
+	 *
+	 * @return The annotation value.
 	 */
 	XmlFormat format() default XmlFormat.DEFAULT;
 
@@ -143,6 +147,8 @@ public @interface Xml {
 	 * <p>
 	 * Must be matched with a {@link #prefix()} annotation on this object, a parent object, or a {@link XmlNs @XmlNs} with the
 	 * same name through the {@link XmlSchema#xmlNs() @XmlSchema(xmlNs)} annotation on the package.
+	 *
+	 * @return The annotation value.
 	 */
 	String namespace() default "";
 
@@ -228,6 +234,8 @@ public @interface Xml {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] on() default {};
 
@@ -240,6 +248,8 @@ public @interface Xml {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
 
@@ -258,6 +268,8 @@ public @interface Xml {
 	 * <p>
 	 * Must either be matched to a {@link #namespace()} annotation on the same object, parent object, or a
 	 * {@link XmlNs @XmlNs} with the same name through the {@link XmlSchema#xmlNs() @XmlSchema(xmlNs)} annotation on the package.
+	 *
+	 * @return The annotation value.
 	 */
 	String prefix() default "";
 }

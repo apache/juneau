@@ -60,6 +60,8 @@ public @interface RemoteOp {
 	 *
 	 * <p>
 	 * Note that you can also use {@link #value()} to specify the method name and path in shortened form.
+	 *
+	 * @return The annotation value.
 	 */
 	String path() default "";
 
@@ -79,6 +81,8 @@ public @interface RemoteOp {
 	 *
 	 * <p>
 	 * Note that you can also use {@link #value()} to specify the method name and path in shortened form.
+	 *
+	 * @return The annotation value.
 	 */
 	String method() default "";
 
@@ -117,6 +121,8 @@ public @interface RemoteOp {
 	 * 			<li><jk>boolean</jk>/<c>Boolean</c> - <jk>true</jk> if the response code is <c>&lt;400</c>
 	 * 		</ul>
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	RemoteReturn returns() default RemoteReturn.BODY;
 
@@ -140,6 +146,8 @@ public @interface RemoteOp {
 	 * 	<li>
 	 * 		The path portion is optional.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String value() default "";
 }

@@ -200,6 +200,7 @@ public interface AnnotationProvider {
 	/**
 	 * Performs an action on the matching annotations on the specified class.
 	 *
+	 * @param <A> The annotation type to find.
 	 * @param type The annotation type to find.
 	 * @param onClass The class to search on.
 	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
@@ -210,6 +211,7 @@ public interface AnnotationProvider {
 	/**
 	 * Finds the first matching annotation on the specified class.
 	 *
+	 * @param <A> The annotation type to find.
 	 * @param type The annotation type to find.
 	 * @param onClass The class to search on.
 	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
@@ -220,6 +222,7 @@ public interface AnnotationProvider {
 	/**
 	 * Finds the last matching annotation on the specified class.
 	 *
+	 * @param <A> The annotation type to find.
 	 * @param type The annotation type to find.
 	 * @param onClass The class to search on.
 	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
@@ -230,6 +233,7 @@ public interface AnnotationProvider {
 	/**
 	 * Performs an action on the matching declared annotations on the specified class.
 	 *
+	 * @param <A> The annotation type to find.
 	 * @param type The annotation type to find.
 	 * @param onClass The class to search on.
 	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
@@ -240,6 +244,7 @@ public interface AnnotationProvider {
 	/**
 	 * Finds the first matching declared annotations on the specified class.
 	 *
+	 * @param <A> The annotation type to find.
 	 * @param type The annotation type to find.
 	 * @param onClass The class to search on.
 	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.
@@ -250,6 +255,7 @@ public interface AnnotationProvider {
 	/**
 	 * Finds the last matching declared annotations on the specified class.
 	 *
+	 * @param <A> The annotation type to find.
 	 * @param type The annotation type to find.
 	 * @param onClass The class to search on.
 	 * @param filter A predicate to apply to the entries to determine if value should be used.  Can be <jk>null</jk>.

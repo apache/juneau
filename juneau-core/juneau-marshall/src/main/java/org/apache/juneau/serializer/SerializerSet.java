@@ -61,8 +61,8 @@ import org.apache.juneau.reflect.*;
  * 	<jc>// Construct a new serializer group</jc>
  * 	SerializerSet <jv>serializers</jv> = SerializerSet.<jsm>create</jsm>();
  * 		.add(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>) <jc>// Add some serializers to it</jc>
- * 		.forEach(<jv>x</jv> -> <jv>x</jv>.swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>))
- * 		.forEachWS(<jv>x</jv> -> <jv>x</jv>.ws())
+ * 		.forEach(<jv>x</jv> -&gt; <jv>x</jv>.swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>))
+ * 		.forEachWS(<jv>x</jv> -&gt; <jv>x</jv>.ws())
  * 		.build();
  *
  * 	<jc>// Find the appropriate serializer by Accept type</jc>
@@ -92,7 +92,7 @@ public final class SerializerSet {
 	/**
 	 * An identifier that the previous entries in this group should be inherited.
 	 * <p>
-	 * Used by {@link Builder#set(Class...)}
+	 * Used by {@link SerializerSet.Builder#set(Class...)}
 	 */
 	@SuppressWarnings("javadoc")
 	public static abstract class Inherit extends Serializer {
@@ -104,7 +104,7 @@ public final class SerializerSet {
 	/**
 	 * An identifier that the previous entries in this group should not be inherited.
 	 * <p>
-	 * Used by {@link Builder#add(Class...)}
+	 * Used by {@link SerializerSet.Builder#add(Class...)}
 	 */
 	@SuppressWarnings("javadoc")
 	public static abstract class NoInherit extends Serializer {
@@ -413,6 +413,7 @@ public final class SerializerSet {
 		/**
 		 * Performs an action on all serializer builders of the specified type in this group.
 		 *
+		 * @param <T> The serializer builder type.
 		 * @param type The serializer builder type.
 		 * @param action The action to perform.
 		 * @return This object.

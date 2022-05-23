@@ -121,6 +121,7 @@ public class BeanCreator<T> {
 	/**
 	 * Shortcut for calling <c>BeanStore.INSTANCE.createBean(beanType)</c>.
 	 *
+	 * @param <T> The bean type to create.
 	 * @param beanType The bean type to create.
 	 * @return A new creator.
 	 */
@@ -186,6 +187,7 @@ public class BeanCreator<T> {
 	/**
 	 * Adds an argument to this creator.
 	 *
+	 * @param <T2> The parameter type.
 	 * @param beanType The parameter type.
 	 * @param bean The parameter value.
 	 * @return This object.
@@ -213,6 +215,7 @@ public class BeanCreator<T> {
 	 * 	<li class='note'>When specified, we don't look for a static creator method.
 	 * </ul>
 	 *
+	 * @param <B> The class type of the builder.
 	 * @param type The class type of the builder.
 	 * @param value The value for this setting.
 	 * @return This object.

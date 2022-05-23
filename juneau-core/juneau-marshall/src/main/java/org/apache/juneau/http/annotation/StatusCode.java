@@ -114,6 +114,8 @@ public @interface StatusCode {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] on() default {};
 
@@ -126,6 +128,8 @@ public @interface StatusCode {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
 
@@ -133,6 +137,8 @@ public @interface StatusCode {
 	 * The HTTP response codes.
 	 *
 	 * The default value is <c>500</c> for exceptions and <c>200</c> for return types.
+	 *
+	 * @return The annotation value.
 	 */
 	int[] value() default {};
 }

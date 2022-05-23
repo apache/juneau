@@ -436,7 +436,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Serialize bean property collections/arrays as separate key/value pairs.
+	 * Serialize bean property collections/arrays as separate key/value pairs.
 	 *
 	 * @see UrlEncodingSerializer.Builder#expandedParams()
 	 * @return

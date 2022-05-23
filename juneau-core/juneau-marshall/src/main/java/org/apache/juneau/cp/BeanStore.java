@@ -316,6 +316,7 @@ public class BeanStore {
 	/**
 	 * Adds a named bean of the specified type to this factory.
 	 *
+	 * @param <T> The class to associate this bean with.
 	 * @param beanType The class to associate this bean with.
 	 * @param bean The bean.  Can be <jk>null</jk>.
 	 * @param name The bean name if this is a named bean.  Can be <jk>null</jk>.
@@ -373,6 +374,7 @@ public class BeanStore {
 	/**
 	 * Same as {@link #addBean(Class,Object,String)} but returns the bean instead of this object for fluent calls.
 	 *
+	 * @param <T> The class to associate this bean with.
 	 * @param beanType The class to associate this bean with.
 	 * @param bean The bean.  Can be <jk>null</jk>.
 	 * @param name The bean name if this is a named bean.  Can be <jk>null</jk>.
@@ -403,6 +405,7 @@ public class BeanStore {
 	/**
 	 * Returns the unnamed bean of the specified type.
 	 *
+	 * @param <T> The type of bean to return.
 	 * @param beanType The type of bean to return.
 	 * @return The bean.
 	 */
@@ -421,6 +424,7 @@ public class BeanStore {
 	/**
 	 * Returns the named bean of the specified type.
 	 *
+	 * @param <T> The type of bean to return.
 	 * @param beanType The type of bean to return.
 	 * @param name The bean name.  Can be <jk>null</jk>.
 	 * @return The bean.
@@ -446,6 +450,7 @@ public class BeanStore {
 	 * <p>
 	 * The results from the parent bean store are appended to the list of beans from this beans store.
 	 *
+	 * @param <T> The bean type to return.
 	 * @param beanType The bean type to return.
 	 * @return The bean entries.  Never <jk>null</jk>.
 	 */
@@ -512,6 +517,7 @@ public class BeanStore {
 	 * 	<li class='jc'>{@link BeanCreator} for usage.
 	 * </ul>
 	 *
+	 * @param <T> The bean type to create.
 	 * @param beanType The bean type to create.
 	 * @return A new bean creator.
 	 */
@@ -546,6 +552,7 @@ public class BeanStore {
 	 * 	<li class='jc'>{@link BeanCreateMethodFinder} for usage.
 	 * </ul>
 	 *
+	 * @param <T> The bean type to create.
 	 * @param beanType The bean type to create.
 	 * @param resourceClass The class containing the bean creator method.
 	 * @return The method finder.  Never <jk>null</jk>.
@@ -564,6 +571,7 @@ public class BeanStore {
 	 * 	<li class='jc'>{@link BeanCreateMethodFinder} for usage.
 	 * </ul>
 	 *
+	 * @param <T> The bean type to create.
 	 * @param beanType The bean type to create.
 	 * @return The method finder.  Never <jk>null</jk>.
 	 */
@@ -660,6 +668,7 @@ public class BeanStore {
 	 * <p>
 	 * Subclasses can override this method to create their own entry subtypes.
 	 *
+	 * @param <T> The class type to associate with the bean.
 	 * @param type The class type to associate with the bean.
 	 * @param bean The bean supplier.
 	 * @param name Optional name to associate with the bean.  Can be <jk>null</jk>.

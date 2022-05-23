@@ -223,6 +223,8 @@ public class ExampleAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		Example[] value();
 	}

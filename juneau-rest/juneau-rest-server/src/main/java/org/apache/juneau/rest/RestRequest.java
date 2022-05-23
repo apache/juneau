@@ -605,6 +605,7 @@ public final class RestRequest {
 	 * 	<li class='jc'>{@link Warning}
 	 * </ul>
 	 *
+	 * @param <T> The bean type to create.
 	 * @param type The bean type to create.
 	 * @return The parsed header on the request, never <jk>null</jk>.
 	 */
@@ -755,6 +756,7 @@ public final class RestRequest {
 	 * Type must have a name specified via the {@link org.apache.juneau.http.annotation.Query} annotation
 	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
 	 *
+	 * @param <T> The bean type to create.
 	 * @param type The bean type to create.
 	 * @return The parsed query parameter on the request, never <jk>null</jk>.
 	 */
@@ -850,6 +852,7 @@ public final class RestRequest {
 	 * Type must have a name specified via the {@link org.apache.juneau.http.annotation.FormData} annotation
 	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
 	 *
+	 * @param <T> The bean type to create.
 	 * @param type The bean type to create.
 	 * @return The parsed form-data parameter on the request, never <jk>null</jk>.
 	 */
@@ -924,6 +927,7 @@ public final class RestRequest {
 	 * Type must have a name specified via the {@link org.apache.juneau.http.annotation.Path} annotation
 	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
 	 *
+	 * @param <T> The bean type to create.
 	 * @param type The bean type to create.
 	 * @return The parsed form-data parameter on the request, never <jk>null</jk>.
 	 */
@@ -1582,6 +1586,7 @@ public final class RestRequest {
 	 * 		Map&lt;String,Object&gt; getHeaders();
 	 * </p>
 	 *
+	 * @param <T> The request bean interface to instantiate.
 	 * @param c The request bean interface to instantiate.
 	 * @return A new request bean proxy for this REST request.
 	 */
@@ -1592,6 +1597,7 @@ public final class RestRequest {
 	/**
 	 * Same as {@link #getRequest(Class)} but used on pre-instantiated {@link RequestBeanMeta} objects.
 	 *
+	 * @param <T> The request bean interface to instantiate.
 	 * @param rbm The metadata about the request bean interface to create.
 	 * @return A new request bean proxy for this REST request.
 	 */

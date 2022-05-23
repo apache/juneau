@@ -42,6 +42,8 @@ public @interface SoapXmlConfig {
 	 *
 	 * <p>
 	 * Can be used to override default ordering and application of config annotations.
+	 *
+	 * @return The annotation value.
 	 */
 	int rank() default 0;
 
@@ -54,11 +56,13 @@ public @interface SoapXmlConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  The <c>SOAPAction</c> HTTP header value to set on responses.
+	 * The <c>SOAPAction</c> HTTP header value to set on responses.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.soap.SoapXmlSerializer.Builder#soapAction(String)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String soapAction() default "";
 

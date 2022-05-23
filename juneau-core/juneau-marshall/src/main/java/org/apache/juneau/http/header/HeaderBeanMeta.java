@@ -73,6 +73,7 @@ public class HeaderBeanMeta<T> {
 	/**
 	 * Finds the header bean meta for the specified type.
 	 *
+	 * @param <T> The header bean type.
 	 * @param type The header bean type.
 	 * @return The metadata, or <jk>null</jk> if a valid constructor could not be found.
 	 */

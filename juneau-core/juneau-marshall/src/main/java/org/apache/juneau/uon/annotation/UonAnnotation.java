@@ -203,6 +203,8 @@ public class UonAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		Uon[] value();
 	}

@@ -106,6 +106,7 @@ public class ListAssertion<E> extends FluentListAssertion<E,ListAssertion<E>> {
 	/**
 	 * Static creator.
 	 *
+	 * @param <E> The element type.
 	 * @param value
 	 * 	The object being tested.
 	 * 	<br>Can be <jk>null</jk>.
@@ -118,6 +119,7 @@ public class ListAssertion<E> extends FluentListAssertion<E,ListAssertion<E>> {
 	/**
 	 * Static creator.
 	 *
+	 * @param <E> The element type.
 	 * @param value
 	 * 	The object being tested.
 	 * 	<br>Can be <jk>null</jk>.

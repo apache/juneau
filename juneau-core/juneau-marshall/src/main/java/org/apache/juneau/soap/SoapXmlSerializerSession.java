@@ -252,7 +252,7 @@ public class SoapXmlSerializerSession extends XmlSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  The SOAPAction HTTP header value to set on responses.
+	 * The SOAPAction HTTP header value to set on responses.
 	 *
 	 * @see SoapXmlSerializer.Builder#soapAction(String)
 	 * @return

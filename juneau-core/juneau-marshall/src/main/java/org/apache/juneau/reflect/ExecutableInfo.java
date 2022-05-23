@@ -336,6 +336,7 @@ public abstract class ExecutableInfo {
 	/**
 	 * Performs an action on all matching parameter annotations at the specified parameter index.
 	 *
+	 * @param <A> The annotation type.
 	 * @param index The parameter index.
 	 * @param type The annotation type.
 	 * @param predicate The predicate.

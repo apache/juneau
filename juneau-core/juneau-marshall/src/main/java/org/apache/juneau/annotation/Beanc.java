@@ -135,6 +135,8 @@ public @interface Beanc {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] on() default {};
 
@@ -185,6 +187,8 @@ public @interface Beanc {
 	 * 	arguments.  If neither this annotation or {@link Name @Name} is used, then we try to get the property names
 	 * 	from the parameter names if they are available in the bytecode.
 	 * </p>
+	 *
+	 * @return The annotation value.
 	 */
 	String properties() default "";
 }

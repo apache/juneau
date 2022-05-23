@@ -139,6 +139,8 @@ public class RestHookAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		RestHook[] value();
 	}

@@ -1521,6 +1521,7 @@ public abstract class BeanContextable extends Context {
 		 * 	<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
 		 * </ul>
 		 *
+		 * @param <T> The POJO class.
 		 * @param pojoClass The POJO class.
 		 * @param o
 		 * 	An instance of the POJO class used for examples.
@@ -1869,6 +1870,25 @@ public abstract class BeanContextable extends Context {
 		@FluentSetter
 		public Builder ignoreUnknownBeanProperties() {
 			bcBuilder.ignoreUnknownBeanProperties();
+			return this;
+		}
+
+		/**
+		 * Ignore unknown enum values.
+		 *
+		 * <p>
+		 * When enabled, unknown enum values are set to <jk>null</jk> instead of throwing a parse exception.
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='ja'>{@link BeanConfig#ignoreUnknownEnumValues()}
+		 * 	<li class='jm'>{@link BeanContext.Builder#ignoreUnknownEnumValues()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 */
+		@FluentSetter
+		public Builder ignoreUnknownEnumValues() {
+			bcBuilder.ignoreUnknownEnumValues();
 			return this;
 		}
 
@@ -2597,10 +2617,12 @@ public abstract class BeanContextable extends Context {
 		 * 	<jc>// Create a serializer that performs a custom format for Date objects.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
-		 * 		.swap(Date.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -> <jsm>format</jsm>(<jv>x</jv>))
+		 * 		.swap(Date.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -&gt; <jsm>format</jsm>(<jv>x</jv>))
 		 * 		.build();
 		 * </p>
 		 *
+		 * @param <T> The object type being swapped out.
+		 * @param <S> The object type being swapped in.
 		 * @param normalClass The object type being swapped out.
 		 * @param swappedClass The object type being swapped in.
 		 * @param swapFunction The function to convert the object.
@@ -2620,10 +2642,12 @@ public abstract class BeanContextable extends Context {
 		 * 	<jc>// Create a serializer that performs a custom format for Date objects.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
-		 * 		.swap(Date.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -> <jsm>format</jsm>(<jv>x</jv>), <jv>x</jv> -> <jsm>parse</jsm>(<jv>x</jv>))
+		 * 		.swap(Date.<jk>class</jk>, String.<jk>class</jk>, <jv>x</jv> -&gt; <jsm>format</jsm>(<jv>x</jv>), <jv>x</jv> -&gt; <jsm>parse</jsm>(<jv>x</jv>))
 		 * 		.build();
 		 * </p>
 		 *
+		 * @param <T> The object type being swapped out.
+		 * @param <S> The object type being swapped in.
 		 * @param normalClass The object type being swapped out.
 		 * @param swappedClass The object type being swapped in.
 		 * @param swapFunction The function to convert the object during serialization.

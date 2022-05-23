@@ -906,7 +906,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * Add <js>"_type"</js> properties when needed.
 	 *
 	 * @see XmlSerializer.Builder#addBeanTypesXml()
 	 * @return
@@ -919,7 +919,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Add namespace URLs to the root element.
+	 * Add namespace URLs to the root element.
 	 *
 	 * @see XmlSerializer.Builder#addNamespaceUrisToRoot()
 	 * @return
@@ -930,7 +930,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Auto-detect namespace usage.
+	 * Auto-detect namespace usage.
 	 *
 	 * @see XmlSerializer.Builder#disableAutoDetectNamespaces()
 	 * @return
@@ -941,7 +941,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Default namespace.
+	 * Default namespace.
 	 *
 	 * @see XmlSerializer.Builder#defaultNamespace(Namespace)
 	 * @return
@@ -952,7 +952,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Enable support for XML namespaces.
+	 * Enable support for XML namespaces.
 	 *
 	 * @see XmlSerializer.Builder#enableNamespaces()
 	 * @return
@@ -963,7 +963,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Default namespaces.
+	 * Default namespaces.
 	 *
 	 * @see XmlSerializer.Builder#namespaces(Namespace...)
 	 * @return

@@ -64,6 +64,7 @@ public class BeanConfigAnnotation {
 			bool(a.disableIgnoreMissingSetters()).ifPresent(x -> b.disableIgnoreMissingSetters(x));
 			bool(a.disableIgnoreTransientFields()).ifPresent(x -> b.disableIgnoreTransientFields(x));
 			bool(a.ignoreUnknownBeanProperties()).ifPresent(x -> b.ignoreUnknownBeanProperties(x));
+			bool(a.ignoreUnknownEnumValues()).ifPresent(x -> b.ignoreUnknownEnumValues(x));
 			bool(a.disableIgnoreUnknownNullBeanProperties()).ifPresent(x -> b.disableIgnoreUnknownNullBeanProperties(x));
 			bool(a.sortProperties()).ifPresent(x -> b.sortProperties(x));
 			bool(a.useEnumNames()).ifPresent(x -> b.useEnumNames(x));

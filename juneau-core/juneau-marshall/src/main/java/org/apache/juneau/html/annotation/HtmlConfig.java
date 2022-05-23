@@ -43,6 +43,8 @@ public @interface HtmlConfig {
 	 *
 	 * <p>
 	 * Can be used to override default ordering and application of config annotations.
+	 *
+	 * @return The annotation value.
 	 */
 	int rank() default 0;
 
@@ -55,7 +57,7 @@ public @interface HtmlConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * Add <js>"_type"</js> properties when needed.
 	 *
 	 * <p>
 	 * If <jk>true</jk>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
@@ -79,11 +81,13 @@ public @interface HtmlConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlSerializer.Builder#addBeanTypesHtml()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String addBeanTypes() default "";
 
 	/**
-	 * Configuration property:  Add key/value headers on bean/map tables.
+	 * Add key/value headers on bean/map tables.
 	 *
 	 * <p>
 	 * When enabled, <bc>key</bc> and <bc>value</bc> column headers are added to tables.
@@ -127,11 +131,13 @@ public @interface HtmlConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlSerializer.Builder#addKeyValueTableHeaders()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String addKeyValueTableHeaders() default "";
 
 	/**
-	 * Configuration property:  Don't look for URLs in {@link String Strings}.
+	 * Don't look for URLs in {@link String Strings}.
 	 *
 	 * <p>
 	 * Disables the feature where if a string looks like a URL (i.e. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
@@ -175,11 +181,13 @@ public @interface HtmlConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlSerializer.Builder#disableDetectLinksInStrings()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String disableDetectLinksInStrings() default "";
 
 	/**
-	 * Configuration property:  Link label parameter name.
+	 * Link label parameter name.
 	 *
 	 * <p>
 	 * The parameter name to look for when resolving link labels.
@@ -194,11 +202,13 @@ public @interface HtmlConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlSerializer.Builder#labelParameter(String)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String labelParameter() default "";
 
 	/**
-	 * Configuration property:  Don't look for link labels in URIs.
+	 * Don't look for link labels in URIs.
 	 *
 	 * <p>
 	 * Disables the feature where if the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
@@ -245,11 +255,13 @@ public @interface HtmlConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlSerializer.Builder#disableDetectLabelParameters()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String disableDetectLabelParameters() default "";
 
 	/**
-	 * Configuration property:  Anchor text source.
+	 * Anchor text source.
 	 *
 	 * <p>
 	 * When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs>
@@ -275,6 +287,8 @@ public @interface HtmlConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.html.HtmlSerializer.Builder#uriAnchorText(AnchorText)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String uriAnchorText() default "";
 }

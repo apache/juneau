@@ -35,11 +35,15 @@ public @interface RdfNs {
 
 	/**
 	 * RDF namespace URL.
+	 *
+	 * @return The annotation value.
 	 */
 	String namespaceURI();
 
 	/**
 	 * RDF namespace prefix.
+	 *
+	 * @return The annotation value.
 	 */
 	String prefix();
 }

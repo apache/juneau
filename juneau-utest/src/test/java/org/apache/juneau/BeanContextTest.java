@@ -12,9 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau;
 
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
+import org.apache.juneau.testutils.pojos.*;
+import org.apache.juneau.json.*;
 import org.junit.*;
 
 @SuppressWarnings({"rawtypes"})
@@ -30,7 +33,7 @@ public class BeanContextTest {
 	}
 
 	@Test
-	public void normalCachableBean() throws ExecutableException {
+	public void a01_normalCachableBean() throws ExecutableException {
 		ClassMeta cm1 = bc.getClassMeta(A1.class), cm2 = bc.getClassMeta(A1.class);
 		assertTrue(cm1 == cm2);
 	}
@@ -40,7 +43,7 @@ public class BeanContextTest {
 	}
 
 	@Test
-	public void lambdaExpressionsNotCached() throws ExecutableException {
+	public void a02_lambdaExpressionsNotCached() throws ExecutableException {
 		BeanContext bc = BeanContext.DEFAULT;
 		A2 fi = (x) -> System.out.println(x);
 		ClassMeta cm1 = bc.getClassMeta(fi.getClass()), cm2 = bc.getClassMeta(fi.getClass());
@@ -48,9 +51,19 @@ public class BeanContextTest {
 	}
 
 	@Test
-	public void proxiesNotCached() throws ExecutableException {
+	public void a03_proxiesNotCached() throws ExecutableException {
 		A1 a1 = bs.getBeanMeta(A1.class).newBean(null);
 		ClassMeta cm1 = bc.getClassMeta(a1.getClass()), cm2 = bc.getClassMeta(a1.getClass());
 		assertTrue(cm1 != cm2);
+	}
+
+	@Test
+	public void b01_ignoreUnknownEnumValues() {
+		JsonParser p1 = JsonParser.DEFAULT;
+		assertThrown(() -> p1.parse("'UNKNOWN'", TestEnum.class)).message().contains("Could not resolve enum value 'UNKNOWN' on class 'org.apache.juneau.testutils.pojos.TestEnum'");
+
+		JsonParser p2 = (JsonParser) JsonParser.create().ignoreUnknownEnumValues().build();
+		assertNull(p2.parse("'UNKNOWN'", TestEnum.class));
+
 	}
 }

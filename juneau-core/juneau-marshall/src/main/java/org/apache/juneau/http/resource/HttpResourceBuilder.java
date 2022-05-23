@@ -156,7 +156,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	/**
 	 * Sets the content type on this entity bean.
 	 *
-	 * @param value The new <c>Content-Type</ header, or <jk>null</jk> to unset.
+	 * @param value The new <c>Content-Type</c> header, or <jk>null</jk> to unset.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -168,7 +168,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	/**
 	 * Sets the content type on this entity bean.
 	 *
-	 * @param value The new <c>Content-Type</ header, or <jk>null</jk> to unset.
+	 * @param value The new <c>Content-Type</c> header, or <jk>null</jk> to unset.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -192,7 +192,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	/**
 	 * Sets the content encoding header on this entity bean.
 	 *
-	 * @param value The new <c>Content-Encoding</ header, or <jk>null</jk> to unset.
+	 * @param value The new <c>Content-Encoding</c> header, or <jk>null</jk> to unset.
 	 * @return This object.
 	 */
 	@FluentSetter
@@ -204,7 +204,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	/**
 	 * Sets the content encoding header on this entity bean.
 	 *
-	 * @param value The new <c>Content-Encoding</ header, or <jk>null</jk> to unset.
+	 * @param value The new <c>Content-Encoding</c> header, or <jk>null</jk> to unset.
 	 * @return This object.
 	 */
 	@FluentSetter

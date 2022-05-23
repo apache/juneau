@@ -45,6 +45,8 @@ public @interface SerializerConfig {
 	 *
 	 * <p>
 	 * Can be used to override default ordering and application of config annotations.
+	 *
+	 * @return The annotation value.
 	 */
 	int rank() default 0;
 
@@ -53,7 +55,7 @@ public @interface SerializerConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Binary output format.
+	 * Binary output format.
 	 *
 	 * <p>
 	 * When using the {@link OutputStreamSerializer#serializeToString(Object)} method on stream-based serializers, this defines the format to use
@@ -74,6 +76,8 @@ public @interface SerializerConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.serializer.OutputStreamSerializer.Builder#binaryFormat(BinaryFormat)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String binaryFormat() default "";
 
@@ -82,7 +86,7 @@ public @interface SerializerConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Add <js>"_type"</js> properties when needed.
+	 * Add <js>"_type"</js> properties when needed.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, then <js>"_type"</js> properties will be added to beans if their type cannot be inferred
@@ -114,11 +118,13 @@ public @interface SerializerConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String addBeanTypes() default "";
 
 	/**
-	 * Configuration property:  Add type attribute to root nodes.
+	 * Add type attribute to root nodes.
 	 *
 	 * <p>
 	 * When disabled, it is assumed that the parser knows the exact Java POJO type being parsed, and therefore top-level
@@ -149,11 +155,13 @@ public @interface SerializerConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#addRootType()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String addRootType() default "";
 
 	/**
-	 * Configuration property:  Don't trim null bean property values.
+	 * Don't trim null bean property values.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, null bean values will be serialized to the output.
@@ -179,11 +187,13 @@ public @interface SerializerConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#keepNullProperties()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String keepNullProperties() default "";
 
 	/**
-	 * Configuration property:  Serializer listener.
+	 * Serializer listener.
 	 *
 	 * <p>
 	 * Class used to listen for errors and warnings that occur during serialization.
@@ -191,11 +201,13 @@ public @interface SerializerConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#listener(Class)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends SerializerListener> listener() default SerializerListener.Void.class;
 
 	/**
-	 * Configuration property:  Sort arrays and collections alphabetically.
+	 * Sort arrays and collections alphabetically.
 	 *
 	 * <p>
 	 * Copies and sorts the contents of arrays and collections before serializing them.
@@ -217,11 +229,13 @@ public @interface SerializerConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#sortCollections()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String sortCollections() default "";
 
 	/**
-	 * Configuration property:  Sort maps alphabetically.
+	 * Sort maps alphabetically.
 	 *
 	 * <p>
 	 * Copies and sorts the contents of maps by their keys before serializing them.
@@ -243,11 +257,13 @@ public @interface SerializerConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#sortMaps()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String sortMaps() default "";
 
 	/**
-	 * Configuration property:  Trim empty lists and arrays.
+	 * Trim empty lists and arrays.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, empty lists and arrays will not be serialized.
@@ -275,11 +291,13 @@ public @interface SerializerConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#trimEmptyCollections()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String trimEmptyCollections() default "";
 
 	/**
-	 * Configuration property:  Trim empty maps.
+	 * Trim empty maps.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, empty map values will not be serialized to the output.
@@ -305,11 +323,13 @@ public @interface SerializerConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#trimEmptyMaps()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String trimEmptyMaps() default "";
 
 	/**
-	 * Configuration property:  Trim strings.
+	 * Trim strings.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
@@ -328,11 +348,13 @@ public @interface SerializerConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#trimStrings()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String trimStrings() default "";
 
 	/**
-	 * Configuration property:  URI context bean.
+	 * URI context bean.
 	 *
 	 * <h5 class='section'>Description:</h5>
 	 * <p>
@@ -348,11 +370,13 @@ public @interface SerializerConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#uriContext(UriContext)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String uriContext() default "";
 
 	/**
-	 * Configuration property:  URI relativity.
+	 * URI relativity.
 	 *
 	 * <p>
 	 * Defines what relative URIs are relative to when serializing any of the following:
@@ -377,11 +401,13 @@ public @interface SerializerConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#uriRelativity(UriRelativity)}
 	 * 	<li class='link'>{@doc jm.MarshallingUris}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String uriRelativity() default "";
 
 	/**
-	 * Configuration property:  URI resolution.
+	 * URI resolution.
 	 *
 	 * <p>
 	 * Defines the resolution level for URIs when serializing any of the following:
@@ -407,6 +433,8 @@ public @interface SerializerConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#uriResolution(UriResolution)}
 	 * 	<li class='link'>{@doc jm.MarshallingUris}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String uriResolution() default "";
 
@@ -415,7 +443,7 @@ public @interface SerializerConfig {
 	//-------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  File charset.
+	 * File charset.
 	 *
 	 * <p>
 	 * The character set to use for writing Files to the file system.
@@ -439,11 +467,13 @@ public @interface SerializerConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#fileCharset(java.nio.charset.Charset)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String fileCharset() default "";
 
 	/**
-	 * Configuration property:  Maximum indentation.
+	 * Maximum indentation.
 	 *
 	 * <p>
 	 * Specifies the maximum indentation level in the serialized document.
@@ -462,11 +492,13 @@ public @interface SerializerConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#maxIndent(int)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String maxIndent() default "";
 
 	/**
-	 * Configuration property:  Quote character.
+	 * Quote character.
 	 *
 	 * <p>
 	 * This is the character used for quoting attributes and values.
@@ -483,11 +515,13 @@ public @interface SerializerConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#quoteChar(char)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String quoteChar() default "";
 
 	/**
-	 * Configuration property:  Output stream charset.
+	 * Output stream charset.
 	 *
 	 * <p>
 	 * The character set to use when writing to OutputStreams.
@@ -509,11 +543,13 @@ public @interface SerializerConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#streamCharset(Charset)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String streamCharset() default "";
 
 	/**
-	 * Configuration property:  Use whitespace.
+	 * Use whitespace.
 	 *
 	 * <p>
 	 * If <js>"true"</js>, whitespace is added to the output to improve readability.
@@ -532,6 +568,8 @@ public @interface SerializerConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.serializer.WriterSerializer.Builder#useWhitespace()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String useWhitespace() default "";
 
@@ -540,7 +578,7 @@ public @interface SerializerConfig {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Automatically detect POJO recursions.
+	 * Automatically detect POJO recursions.
 	 *
 	 * <p>
 	 * Specifies that recursions should be checked for during traversal.
@@ -554,7 +592,7 @@ public @interface SerializerConfig {
 	 * The behavior when recursions are detected depends on the value for {@link org.apache.juneau.BeanTraverseContext.Builder#ignoreRecursions()}.
 	 *
 	 * <p>
-	 * For example, if a model contains the links A->B->C->A, then the JSON generated will look like
+	 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
 	 * 	the following when <jsf>BEANTRAVERSE_ignoreRecursions</jsf> is <jk>true</jk>...
 	 *
 	 * <p class='bjson'>
@@ -577,11 +615,13 @@ public @interface SerializerConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#detectRecursions()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String detectRecursions() default "";
 
 	/**
-	 * Configuration property:  Ignore recursion errors.
+	 * Ignore recursion errors.
 	 *
 	 * <p>
 	 * Used in conjunction with {@link org.apache.juneau.BeanTraverseContext.Builder#detectRecursions()}.
@@ -605,11 +645,13 @@ public @interface SerializerConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#ignoreRecursions()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String ignoreRecursions() default "";
 
 	/**
-	 * Configuration property:  Initial depth.
+	 * Initial depth.
 	 *
 	 * <p>
 	 * The initial indentation level at the root.
@@ -627,11 +669,13 @@ public @interface SerializerConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#initialDepth(int)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String initialDepth() default "";
 
 	/**
-	 * Configuration property:  Max traversal depth.
+	 * Max traversal depth.
 	 *
 	 * <p>
 	 * Abort traversal if specified depth is reached in the POJO tree.
@@ -649,6 +693,8 @@ public @interface SerializerConfig {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.BeanTraverseContext.Builder#maxDepth(int)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String maxDepth() default "";
 }

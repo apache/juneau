@@ -545,6 +545,8 @@ public class BeanAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		Bean[] value();
 	}

@@ -348,6 +348,9 @@ public class BeanpAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		Beanp[] value();
-	}}
+	}
+}

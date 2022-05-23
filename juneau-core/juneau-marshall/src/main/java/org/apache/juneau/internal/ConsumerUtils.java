@@ -22,6 +22,7 @@ public final class ConsumerUtils {
 	/**
 	 * Returns <jk>true</jk> if the specified predicate is <jk>null</jk> or matches the specified value.
 
+	 * @param <T> The type being tested.
 	 * @param predicate The predicate.
 	 * @param value The value to test.
 	 * @return <jk>true</jk> if the specified predicate is <jk>null</jk> or matches the specified value.
@@ -33,6 +34,7 @@ public final class ConsumerUtils {
 	/**
 	 * Returns <jk>true</jk> if the specified object is the specified type and the specified predicate is <jk>null</jk> or matches the specified value.
 	 *
+	 * @param <T> The type being tested.
 	 * @param type The expected type.
 	 * @param predicate The predicate.
 	 * @param value The value.
@@ -45,6 +47,7 @@ public final class ConsumerUtils {
 	/**
 	 * Consumes the specified value if the predicate is <jk>null</jk> or matches the specified value.
 	 *
+	 * @param <T> The type being consumed.
 	 * @param predicate The predicate.
 	 * @param consumer The consumer.
 	 * @param value The value.
@@ -57,6 +60,7 @@ public final class ConsumerUtils {
 	/**
 	 * Consumes the specified value if it's the specified type and the predicate is <jk>null</jk> or matches the specified value.
 	 *
+	 * @param <T> The type being consumed.
 	 * @param type The expected type.
 	 * @param predicate The predicate.
 	 * @param consumer The consumer.

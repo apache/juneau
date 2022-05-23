@@ -239,6 +239,7 @@ public class ThrowableUtils {
 	/**
 	 * Allows you to wrap a supplier that throws an exception so that it can be used in a fluent interface.
 	 *
+	 * @param <T> The supplier type.
 	 * @param supplier The supplier throwing an exception.
 	 * @return The supplied result.
 	 * @throws RuntimeException if supplier threw an exception.

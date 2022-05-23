@@ -219,6 +219,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * signature on the parent classes or interfaces.
 	 * <br>The search is performed in child-to-parent order.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param type The annotation to look for.
 	 * @return The annotation if found, or <jk>null</jk> if not.
 	 */
@@ -233,6 +234,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * Searches all methods with the same signature on the parent classes or interfaces
 	 * and the return type on the method.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param annotationProvider The annotation provider.
 	 * @param type The annotation to look for.
 	 * @return The first annotation found, or <jk>null</jk> if it doesn't exist.
@@ -252,6 +254,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	/**
 	 * Returns <jk>true</jk> if the specified annotation is present on this method.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is present on this method.
 	 */
@@ -262,6 +265,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	/**
 	 * Returns <jk>true</jk> if the specified annotation is present on this method.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param annotationProvider The annotation provider.
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is present on this method.
@@ -276,6 +280,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	/**
 	 * Returns <jk>true</jk> if the specified annotation is not present on this method.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param annotationProvider The annotation provider.
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is not present on this method.
@@ -287,6 +292,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	/**
 	 * Returns <jk>true</jk> if the specified annotation is not present on this method.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param type The annotation to look for.
 	 * @return <jk>true</jk> if the specified annotation is not present on this method.
 	 */
@@ -316,6 +322,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * and the return type on the method.
 	 * <br>Results are parent-to-child ordered.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param type The annotation to look for.
 	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
 	 * @param action An action to perform on the entry.
@@ -333,6 +340,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * and the return type on the method.
 	 * <br>Results are parent-to-child ordered.
 	 *
+	 * @param <A> The annotation type to look for.
 	 * @param annotationProvider The annotation provider.
 	 * @param type The annotation type.
 	 * @param filter A predicate to apply to the entries to determine if action should be performed.  Can be <jk>null</jk>.
@@ -558,6 +566,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	/**
 	 * Shortcut for calling the invoke method on the underlying method.
 	 *
+	 * @param <T> The method return type.
 	 * @param obj the object the underlying method is invoked from.
 	 * @param args the arguments used for the method call
 	 * @return The object returned from the method.

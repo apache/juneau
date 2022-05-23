@@ -58,6 +58,7 @@ public class BeanDiff {
 	/**
 	 * Create a new builder for this class.
 	 *
+	 * @param <T> The bean types.
 	 * @param first The first bean to compare.
 	 * @param second The second bean to compare.
 	 * @return A new builder.
@@ -174,7 +175,6 @@ public class BeanDiff {
 		public BeanDiff build() {
 			return new BeanDiff(beanContext, first, second, include, exclude);
 		}
-
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -186,6 +186,7 @@ public class BeanDiff {
 	/**
 	 * Constructor.
 	 *
+	 * @param <T> The bean types.
 	 * @param bc The bean context to use for comparing beans.
 	 * @param first The first bean to compare.
 	 * @param second The second bean to compare.

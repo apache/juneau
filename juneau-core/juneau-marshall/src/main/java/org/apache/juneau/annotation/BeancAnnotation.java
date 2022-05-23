@@ -193,6 +193,8 @@ public class BeancAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		Beanc[] value();
 	}

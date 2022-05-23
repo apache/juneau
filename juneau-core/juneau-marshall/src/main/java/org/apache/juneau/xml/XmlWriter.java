@@ -136,7 +136,7 @@ public class XmlWriter extends SerializerWriter {
 	 * Closes a tag.
 	 *
 	 * <p>
-	 * Shortcut for <code>append(<js>'>'</js>);</code>
+	 * Shortcut for <code>append(<js>'-&gt;'</js>);</code>
 	 *
 	 * @return This object.
 	 */
@@ -149,7 +149,7 @@ public class XmlWriter extends SerializerWriter {
 	 * Closes an empty tag.
 	 *
 	 * <p>
-	 * Shortcut for <code>append(<js>'/'</js>).append(<js>'>'</js>);</code>
+	 * Shortcut for <code>append(<js>'/'</js>).append(<js>'-&gt;'</js>);</code>
 	 *
 	 * @return This object.
 	 */

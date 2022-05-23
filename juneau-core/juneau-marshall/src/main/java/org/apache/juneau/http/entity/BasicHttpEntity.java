@@ -63,6 +63,7 @@ public class BasicHttpEntity implements HttpEntity {
 	/**
 	 * Creates a builder for this class.
 	 *
+	 * @param <T> The subclass that the builder is going to create.
 	 * @param implClass The subclass that the builder is going to create.
 	 * @return A new builder bean.
 	 */
@@ -153,6 +154,7 @@ public class BasicHttpEntity implements HttpEntity {
 	/**
 	 * Returns the content of this entity.
 	 *
+	 * @param <T> The value type.
 	 * @param def The default value if <jk>null</jk>.
 	 * @return The content object.
 	 */

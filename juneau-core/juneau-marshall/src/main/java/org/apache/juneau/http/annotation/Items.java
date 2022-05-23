@@ -77,6 +77,8 @@ public @interface Items {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] _default() default {};
 
@@ -87,6 +89,8 @@ public @interface Items {
 	 * 	<li>
 	 * 		Each entry is a possible value.  Can also contain comma-delimited lists of values.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] _enum() default {};
 
@@ -97,11 +101,15 @@ public @interface Items {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String $ref() default "";
 
 	/**
 	 * Synonym for {@link #collectionFormat()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String cf() default "";
 
@@ -112,26 +120,36 @@ public @interface Items {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String collectionFormat() default "";
 
 	/**
 	 * Synonym for {@link #_default()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String[] df() default {};
 
 	/**
 	 * Synonym for {@link #_enum()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String[] e() default {};
 
 	/**
 	 * Synonym for {@link #exclusiveMaximum()}.
+	 *
+	 * @return The annotation value.
 	 */
 	boolean emax() default false;
 
 	/**
 	 * Synonym for {@link #exclusiveMinimum()}.
+	 *
+	 * @return The annotation value.
 	 */
 	boolean emin() default false;
 
@@ -142,6 +160,8 @@ public @interface Items {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	boolean exclusiveMaximum() default false;
 
@@ -152,11 +172,15 @@ public @interface Items {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	boolean exclusiveMinimum() default false;
 
 	/**
 	 * Synonym for {@link #format()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String f() default "";
 
@@ -167,6 +191,8 @@ public @interface Items {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String format() default "";
 
@@ -175,16 +201,22 @@ public @interface Items {
 	 *
 	 * <p>
 	 * Describes the type of items in the array.
+	 *
+	 * @return The annotation value.
 	 */
 	SubItems items() default @SubItems;
 
 	/**
 	 * Synonym for {@link #maximum()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String max() default "";
 
 	/**
 	 * Synonym for {@link #maxItems()}.
+	 *
+	 * @return The annotation value.
 	 */
 	long maxi() default -1;
 
@@ -195,6 +227,8 @@ public @interface Items {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String maximum() default "";
 
@@ -205,11 +239,15 @@ public @interface Items {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	long maxItems() default -1;
 
 	/**
 	 * Synonym for {@link #maxLength()}.
+	 *
+	 * @return The annotation value.
 	 */
 	long maxl() default -1;
 
@@ -220,16 +258,22 @@ public @interface Items {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	long maxLength() default -1;
 
 	/**
 	 * Synonym for {@link #minimum()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String min() default "";
 
 	/**
 	 * Synonym for {@link #minItems()}.
+	 *
+	 * @return The annotation value.
 	 */
 	long mini() default -1;
 
@@ -240,6 +284,8 @@ public @interface Items {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String minimum() default "";
 
@@ -250,11 +296,15 @@ public @interface Items {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	long minItems() default -1;
 
 	/**
 	 * Synonym for {@link #minLength()}.
+	 *
+	 * @return The annotation value.
 	 */
 	long minl() default -1;
 
@@ -265,11 +315,15 @@ public @interface Items {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	long minLength() default -1;
 
 	/**
 	 * Synonym for {@link #multipleOf()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String mo() default "";
 
@@ -280,11 +334,15 @@ public @interface Items {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String multipleOf() default "";
 
 	/**
 	 * Synonym for {@link #pattern()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String p() default "";
 
@@ -295,11 +353,15 @@ public @interface Items {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String pattern() default "";
 
 	/**
 	 * Synonym for {@link #type()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String t() default "";
 
@@ -310,11 +372,15 @@ public @interface Items {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String type() default "";
 
 	/**
 	 * Synonym for {@link #uniqueItems()}.
+	 *
+	 * @return The annotation value.
 	 */
 	boolean ui() default false;
 
@@ -325,6 +391,8 @@ public @interface Items {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	boolean uniqueItems() default false;
 }

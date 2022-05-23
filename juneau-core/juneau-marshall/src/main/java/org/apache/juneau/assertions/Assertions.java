@@ -48,7 +48,7 @@ import org.apache.juneau.cp.*;
  * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
  *
  *	<jc>// Assert that calling doBadCall() causes a RuntimeException.</jc>
- * 	<jsm>assertThrown</jsm>(() -> <jv>myPojo</jv>.doBadCall())
+ * 	<jsm>assertThrown</jsm>(() -&gt; <jv>myPojo</jv>.doBadCall())
  * 		.isType(RuntimeException.<jk>class</jk>)
  * 		.message().contains(<js>"Bad thing happened."</js>);
  * </p>
@@ -105,6 +105,7 @@ public class Assertions {
 	 * <p>
 	 * See {@doc jm.FluentAssertions Fluent Assertions} for general assertion usage and {@link AnyAssertion} for supported operations on this type.
 	 *
+	 * @param <T> The value type.
 	 * @param value
 	 * 	The object being tested.
 	 * 	<br>Can be <jk>null</jk>.
@@ -132,6 +133,7 @@ public class Assertions {
 	 * <p>
 	 * See {@doc jm.FluentAssertions Fluent Assertions} for general assertion usage and {@link ArrayAssertion} for supported operations on this type.
 	 *
+	 * @param <E> The value element type.
 	 * @param value
 	 * 	The object being tested.
 	 * 	<br>Can be <jk>null</jk>.
@@ -160,6 +162,7 @@ public class Assertions {
 	 * <p>
 	 * See {@doc jm.FluentAssertions Fluent Assertions} for general assertion usage and {@link BeanAssertion} for supported operations on this type.
 	 *
+	 * @param <T> The value type.
 	 * @param value
 	 * 	The object being tested.
 	 * 	<br>Can be <jk>null</jk>.
@@ -167,7 +170,7 @@ public class Assertions {
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public static final <V> BeanAssertion<V> assertBean(V value) {
+	public static final <T> BeanAssertion<T> assertBean(T value) {
 		return BeanAssertion.create(value);
 	}
 
@@ -188,6 +191,7 @@ public class Assertions {
 	 * <p>
 	 * See {@doc jm.FluentAssertions Fluent Assertions} for general assertion usage and {@link BeanListAssertion} for supported operations on this type.
 	 *
+	 * @param <E> The element type.
 	 * @param value
 	 * 	The object being tested.
 	 * 	<br>Can be <jk>null</jk>.
@@ -235,7 +239,7 @@ public class Assertions {
 	 *	<jc>// Asserts that a Boolean array has size of 3 and all entries are TRUE.</jc>
 	 * 	<jsm>assertBooleanArray</jsm>(<jv>myBooleanArray</jv>)
 	 * 		.isSize(3)
-	 * 		.all(<jv>x</jv> -> <jv>x</jv> == <jk>true</jk>);
+	 * 		.all(<jv>x</jv> -&gt; <jv>x</jv> == <jk>true</jk>);
 	 * </p>
 	 *
 	 * <p>
@@ -267,7 +271,7 @@ public class Assertions {
 	 *	<jc>// Asserts that a byte array has size of 3 and all bytes are larger than 10.</jc>
 	 * 	<jsm>assertByteArray</jsm>(<jv>myByteArray</jv>)
 	 * 		.isSize(3)
-	 * 		.all(<jv>x</jv> -> <jv>x</jv> &gt; 10);
+	 * 		.all(<jv>x</jv> -&gt; <jv>x</jv> &gt; 10);
 	 * </p>
 	 *
 	 * <p>
@@ -389,6 +393,7 @@ public class Assertions {
 	 * <p>
 	 * See {@doc jm.FluentAssertions Fluent Assertions} for general assertion usage and {@link CollectionAssertion} for supported operations on this type.
 	 *
+	 * @param <E> The element type.
 	 * @param value
 	 * 	The object being tested.
 	 * 	<br>Can be <jk>null</jk>.
@@ -415,6 +420,7 @@ public class Assertions {
 	 * <p>
 	 * See {@doc jm.FluentAssertions Fluent Assertions} for general assertion usage and {@link ComparableAssertion} for supported operations on this type.
 	 *
+	 * @param <T> The value type.
 	 * @param value
 	 * 	The object being tested.
 	 * 	<br>Can be <jk>null</jk>.
@@ -462,7 +468,7 @@ public class Assertions {
 	 * 	<jc>// Asserts that a double array is at least size 100 and all values are greater than 1000.</jc>
 	 * 	<jsm>assertDoubleArray</jsm>(<jv>myDoubleArray</jv>)
 	 * 		.size().isGte(100f)
-	 * 		.all(<jv>x</jv> -> <jv>x</jv> &gt; 1000f);
+	 * 		.all(<jv>x</jv> -&gt; <jv>x</jv> &gt; 1000f);
 	 * </p>
 	 *
 	 * <p>
@@ -489,7 +495,7 @@ public class Assertions {
 	 * 	<jc>// Asserts that a float array is at least size 100 and all values are greater than 1000.</jc>
 	 * 	<jsm>assertFloatArray</jsm>(<jv>myFloatArray</jv>)
 	 * 		.size().isGte(100f)
-	 * 		.all(<jv>x</jv> -> <jv>x</jv> &gt; 1000f);
+	 * 		.all(<jv>x</jv> -&gt; <jv>x</jv> &gt; 1000f);
 	 * </p>
 	 *
 	 * <p>
@@ -516,7 +522,7 @@ public class Assertions {
 	 * 	<jc>// Asserts that a double array is at least size 100 and all values are greater than 1000.</jc>
 	 * 	<jsm>assertIntArray</jsm>(<jv>myIntArray</jv>)
 	 * 		.size().isGte(100)
-	 * 		.all(<jv>x</jv> -> <jv>x</jv> &gt; 1000);
+	 * 		.all(<jv>x</jv> -&gt; <jv>x</jv> &gt; 1000);
 	 * </p>
 	 *
 	 * <p>
@@ -575,6 +581,7 @@ public class Assertions {
 	 * <p>
 	 * See {@doc jm.FluentAssertions Fluent Assertions} for general assertion usage and {@link ListAssertion} for supported operations on this type.
 	 *
+	 * @param <E> The element type.
 	 * @param value
 	 * 	The object being tested.
 	 * 	<br>Can be <jk>null</jk>.
@@ -602,6 +609,7 @@ public class Assertions {
 	 * <p>
 	 * See {@doc jm.FluentAssertions Fluent Assertions} for general assertion usage and {@link ListAssertion} for supported operations on this type.
 	 *
+	 * @param <E> The element type.
 	 * @param value
 	 * 	The object being tested.
 	 * 	<br>Can be <jk>null</jk>.
@@ -651,7 +659,7 @@ public class Assertions {
 	 * 	<jc>// Asserts that a long array is at least size 100 and all values are greater than 1000.</jc>
 	 * 	<jsm>assertLongArray</jsm>(<jv>myLongArray</jv>)
 	 * 		.size().isGte(100)
-	 * 		.all(<jv>x</jv> -> <jv>x</jv> &gt; 1000);
+	 * 		.all(<jv>x</jv> -&gt; <jv>x</jv> &gt; 1000);
 	 * </p>
 	 *
 	 * <p>
@@ -684,6 +692,8 @@ public class Assertions {
 	 * <p>
 	 * See {@doc jm.FluentAssertions Fluent Assertions} for general assertion usage and {@link MapAssertion} for supported operations on this type.
 	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
 	 * @param value
 	 * 	The object being tested.
 	 * 	<br>Can be <jk>null</jk>.
@@ -712,6 +722,7 @@ public class Assertions {
 	 * <p>
 	 * See {@doc jm.FluentAssertions Fluent Assertions} for general assertion usage and {@link ObjectAssertion} for supported operations on this type.
 	 *
+	 * @param <T> The value type.
 	 * @param value
 	 * 	The object being tested.
 	 * 	<br>Can be <jk>null</jk>.
@@ -740,6 +751,7 @@ public class Assertions {
 	 * <p>
 	 * See {@doc jm.FluentAssertions Fluent Assertions} for general assertion usage and {@link AnyAssertion} for supported operations on this type.
 	 *
+	 * @param <T> The value type.
 	 * @param value
 	 * 	The object being tested.
 	 * 	<br>Can be <jk>null</jk>.
@@ -789,7 +801,7 @@ public class Assertions {
 	 * 	<jc>// Asserts that a float array is at least size 10 and all values are greater than 100.</jc>
 	 * 	<jsm>assertShortArray</jsm>(<jv>myShortArray</jv>)
 	 * 		.size().isGte(10)
-	 * 		.all(<jv>x</jv> -> <jv>x</jv> &gt; 100);
+	 * 		.all(<jv>x</jv> -&gt; <jv>x</jv> &gt; 100);
 	 * </p>
 	 *
 	 * <p>
@@ -880,6 +892,7 @@ public class Assertions {
 	 * <p>
 	 * See {@doc jm.FluentAssertions Fluent Assertions} for general assertion usage and {@link ThrowableAssertion} for supported operations on this type.
 	 *
+	 * @param <T> The value type.
 	 * @param value
 	 * 	The object being tested.
 	 * 	<br>Can be <jk>null</jk>.
@@ -887,7 +900,7 @@ public class Assertions {
 	 * 	A new assertion object.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public static final <V extends Throwable> ThrowableAssertion<V> assertThrowable(V value) {
+	public static final <T extends Throwable> ThrowableAssertion<T> assertThrowable(T value) {
 		return ThrowableAssertion.create(value);
 	}
 
@@ -955,7 +968,7 @@ public class Assertions {
 	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
 	 *
 	 * 	<jc>// Asserts that the specified method throws a RuntimeException containing "foobar" in the message. </jc>
-	 * 	<jsm>assertThrown</jsm>(()-><jv>foo</jv>.getBar())
+	 * 	<jsm>assertThrown</jsm>(()-&gt;<jv>foo</jv>.getBar())
 	 * 		.isType(RuntimeException.<jk>class</jk>)
 	 * 		.message().contains(<js>"foobar"</js>);
 	 * </p>
@@ -1008,7 +1021,7 @@ public class Assertions {
 	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
 	 *
 	 *	<jk>public</jk> String setFoo(List&lt;String&gt; <jv>foo</jv>) {
-	 *		<jsm>assertArg</jsm>(<jv>foo</jv> != <jk>null</jk> && ! <jv>foo</jv>.isEmpty(), <js>"'foo' cannot be null or empty."</js>);
+	 *		<jsm>assertArg</jsm>(<jv>foo</jv> != <jk>null</jk> &amp;&amp; ! <jv>foo</jv>.isEmpty(), <js>"'foo' cannot be null or empty."</js>);
 	 *		...
 	 *	}
 	 * </p>
@@ -1026,6 +1039,7 @@ public class Assertions {
 	/**
 	 * Throws an {@link IllegalArgumentException} if the specified value doesn't have all subclasses of the specified type.
 	 *
+	 * @param <E> The element type.
 	 * @param name The argument name.
 	 * @param type The expected parent class.
 	 * @param value The array value being checked.
@@ -1033,11 +1047,11 @@ public class Assertions {
 	 * @throws IllegalArgumentException Constructed exception.
 	 */
 	@SuppressWarnings("unchecked")
-	public static final <T> Class<T>[] assertClassArrayArgIsType(String name, Class<T> type, Class<?>[] value) throws IllegalArgumentException {
+	public static final <E> Class<E>[] assertClassArrayArgIsType(String name, Class<E> type, Class<?>[] value) throws IllegalArgumentException {
 		for (int i = 0; i < value.length; i++)
 			if (! type.isAssignableFrom(value[i]))
 				throw illegalArgumentException("Arg {0} did not have arg of type {1} at index {2}: {3}", name, type.getName(), i, value[i].getName());
-		return (Class<T>[])value;
+		return (Class<E>[])value;
 	}
 
 }

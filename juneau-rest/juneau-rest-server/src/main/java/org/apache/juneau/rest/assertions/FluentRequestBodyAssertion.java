@@ -181,10 +181,11 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	 * <p>
 	 * See {@doc jm.ComplexDataTypes Complex Data Types} for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
 	 *
+	 * @param <T> The object type to create.
 	 * @param type The object type to create.
 	 * @return A new fluent assertion object.
 	 */
-	public <V> FluentObjectAssertion<V,R> as(Class<V> type) {
+	public <T> FluentObjectAssertion<T,R> as(Class<T> type) {
 		return new FluentObjectAssertion<>(valueAsType(type), returns());
 	}
 
@@ -212,11 +213,12 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	 * <p>
 	 * See {@doc jm.ComplexDataTypes Complex Data Types} for information on defining complex generic types of {@link Map Maps} and {@link Collection Collections}.
 	 *
+	 * @param <T> The type to create.
 	 * @param type The object type to create.
 	 * @param args Optional type arguments.
 	 * @return A new fluent assertion object.
 	 */
-	public <V> FluentObjectAssertion<V,R> as(Type type, Type...args) {
+	public <T> FluentObjectAssertion<T,R> as(Type type, Type...args) {
 		return new FluentObjectAssertion<>(valueAsType(type, args), returns());
 	}
 

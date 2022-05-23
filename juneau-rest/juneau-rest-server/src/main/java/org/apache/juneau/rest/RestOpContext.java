@@ -273,7 +273,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.beanContext(<jv>x</jv> -> <jv>x</jv>.ignoreUnknownBeanProperties())
+		 * 		.beanContext(<jv>x</jv> -&gt; <jv>x</jv>.ignoreUnknownBeanProperties())
 		 * 		.build();
 		 * </p>
 		 *
@@ -349,7 +349,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.encoders(<jv>x</jv> -> <jv>x</jv>.add(MyEncoder.<jk>class</jk>))
+		 * 		.encoders(<jv>x</jv> -&gt; <jv>x</jv>.add(MyEncoder.<jk>class</jk>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -425,7 +425,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.serializers(<jv>x</jv> -> <jv>x</jv>.add(MySerializer.<jk>class</jk>))
+		 * 		.serializers(<jv>x</jv> -&gt; <jv>x</jv>.add(MySerializer.<jk>class</jk>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -501,7 +501,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.parsers(<jv>x</jv> -> <jv>x</jv>.add(MyParser.<jk>class</jk>))
+		 * 		.parsers(<jv>x</jv> -&gt; <jv>x</jv>.add(MyParser.<jk>class</jk>))
 		 * 		.build();
 		 * </p>
 		 *
@@ -577,7 +577,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.partSerializer(<jv>x</jv> -> <jv>x</jv>.builder(OpenApiSerializer.Builder.<jk>class</jk>, <jv>y</jv> -> <jv>y</jv>.sortProperties()))
+		 * 		.partSerializer(<jv>x</jv> -&gt; <jv>x</jv>.builder(OpenApiSerializer.Builder.<jk>class</jk>, <jv>y</jv> -&gt; <jv>y</jv>.sortProperties()))
 		 * 		.build();
 		 * </p>
 		 *
@@ -653,7 +653,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.partParser(<jv>x</jv> -> <jv>x</jv>.builder(OpenApiParser.Builder.<jk>class</jk>, <jv>y</jv> -> <jv>y</jv>.ignoreUnknownBeanProperties()))
+		 * 		.partParser(<jv>x</jv> -&gt; <jv>x</jv>.builder(OpenApiParser.Builder.<jk>class</jk>, <jv>y</jv> -&gt; <jv>y</jv>.ignoreUnknownBeanProperties()))
 		 * 		.build();
 		 * </p>
 		 *
@@ -729,7 +729,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.jsonSchemaGenerator(<jv>x</jv> -> <jv>x</jv>.allowNestedExamples()))
+		 * 		.jsonSchemaGenerator(<jv>x</jv> -&gt; <jv>x</jv>.allowNestedExamples()))
 		 * 		.build();
 		 * </p>
 		 *
@@ -805,7 +805,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.converters(<jv>x</jv> -> <jv>x</jv>.add(MyConverter.<jk>class</jk>)))
+		 * 		.converters(<jv>x</jv> -&gt; <jv>x</jv>.add(MyConverter.<jk>class</jk>)))
 		 * 		.build();
 		 * </p>
 		 *
@@ -954,7 +954,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.guards(<jv>x</jv> -> <jv>x</jv>.add(MyGuard.<jk>class</jk>)))
+		 * 		.guards(<jv>x</jv> -&gt; <jv>x</jv>.add(MyGuard.<jk>class</jk>)))
 		 * 		.build();
 		 * </p>
 		 *
@@ -978,7 +978,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 			<li>{@link RestOp#guards()}.
 		 * 			<li>{@link Rest#guards()}.
 		 * 		</ul>
-		 * 	<li>Looks for a static or non-static <c>createGuards()</> method that returns <c>{@link RestGuard}[]</c> on the
+		 * 	<li>Looks for a static or non-static <c>createGuards()</c> method that returns <c>{@link RestGuard}[]</c> on the
 		 * 		resource class with any of the following arguments:
 		 * 		<ul>
 		 * 			<li>{@link Method} - The Java method this context belongs to.
@@ -1071,7 +1071,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.matchers(<jv>x</jv> -> <jv>x</jv>.add(MyMatcher.<jk>class</jk>)))
+		 * 		.matchers(<jv>x</jv> -&gt; <jv>x</jv>.add(MyMatcher.<jk>class</jk>)))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1121,7 +1121,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 		<ul>
 		 * 			<li>{@link RestOp#matchers()}.
 		 * 		</ul>
-		 * 	<li>Looks for a static or non-static <c>createMatchers()</> method that returns <c>{@link RestMatcher}[]</c> on the
+		 * 	<li>Looks for a static or non-static <c>createMatchers()</c> method that returns <c>{@link RestMatcher}[]</c> on the
 		 * 		resource class with any of the following arguments:
 		 * 		<ul>
 		 * 			<li>{@link java.lang.reflect.Method} - The Java method this context belongs to.
@@ -1275,7 +1275,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.defaultRequestHeaders(<jv>x</jv> -> <jv>x</jv>.remove(<js>"Foo"</js>)))
+		 * 		.defaultRequestHeaders(<jv>x</jv> -&gt; <jv>x</jv>.remove(<js>"Foo"</js>)))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1346,7 +1346,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.defaultResponseHeaders(<jv>x</jv> -> <jv>x</jv>.remove(<js>"Foo"</js>)))
+		 * 		.defaultResponseHeaders(<jv>x</jv> -&gt; <jv>x</jv>.remove(<js>"Foo"</js>)))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1417,7 +1417,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.defaultRequestAttributes(<jv>x</jv> -> <jv>x</jv>.add(BasicNamedAttribute.<jsm>of</jsm>(<js>"Foo"</js>, ()-><jsm>getFoo</jsm>()))
+		 * 		.defaultRequestAttributes(<jv>x</jv> -&gt; <jv>x</jv>.add(BasicNamedAttribute.<jsm>of</jsm>(<js>"Foo"</js>, ()-&gt;<jsm>getFoo</jsm>()))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1488,7 +1488,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.defaultRequestQueryData(<jv>x</jv> -> <jv>x</jv>.add(BasicPart.<jsm>of</jsm>(<js>"foo"</js>, ()-><jsm>getFoo</jsm>()))
+		 * 		.defaultRequestQueryData(<jv>x</jv> -&gt; <jv>x</jv>.add(BasicPart.<jsm>of</jsm>(<js>"foo"</js>, ()-&gt;<jsm>getFoo</jsm>()))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1561,7 +1561,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * <p class='bjava'>
 		 * 	RestOpContext <jv>context</jv> = RestOpContext
 		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.defaultRequestFormData(<jv>x</jv> -> <jv>x</jv>.add(BasicPart.<jsm>of</jsm>(<js>"foo"</js>, ()-><jsm>getFoo</jsm>()))
+		 * 		.defaultRequestFormData(<jv>x</jv> -&gt; <jv>x</jv>.add(BasicPart.<jsm>of</jsm>(<js>"foo"</js>, ()-&gt;<jsm>getFoo</jsm>()))
 		 * 		.build();
 		 * </p>
 		 *
@@ -1938,7 +1938,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		/**
-		 * Configuration property:  Resource method paths.
+		 * Resource method paths.
 		 *
 		 * <p>
 		 * Identifies the URL subpath relative to the servlet class.

@@ -601,7 +601,7 @@ public class RdfParserSession extends ReaderParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  RDF format for representing collections and arrays.
+	 * RDF format for representing collections and arrays.
 	 *
 	 * @see RdfParser.Builder#collectionFormat(RdfCollectionFormat)
 	 * @return
@@ -612,7 +612,7 @@ public class RdfParserSession extends ReaderParserSession {
 	}
 
 	/**
-	 * Configuration property:  Default XML namespace for bean properties.
+	 * Default XML namespace for bean properties.
 	 *
 	 * @see RdfParser.Builder#juneauBpNs(Namespace)
 	 * @return
@@ -623,7 +623,7 @@ public class RdfParserSession extends ReaderParserSession {
 	}
 
 	/**
-	 * Configuration property:  XML namespace for Juneau properties.
+	 * XML namespace for Juneau properties.
 	 *
 	 * @see RdfParser.Builder#juneauNs(Namespace)
 	 * @return
@@ -634,7 +634,7 @@ public class RdfParserSession extends ReaderParserSession {
 	}
 
 	/**
-	 * Configuration property:  RDF language.
+	 * RDF language.
 	 *
 	 * @see RdfParser.Builder#language(String)
 	 * @return
@@ -645,7 +645,7 @@ public class RdfParserSession extends ReaderParserSession {
 	}
 
 	/**
-	 * Configuration property:  Collections should be serialized and parsed as loose collections.
+	 * Collections should be serialized and parsed as loose collections.
 	 *
 	 * @see RdfParser.Builder#looseCollections()
 	 * @return
@@ -661,7 +661,7 @@ public class RdfParserSession extends ReaderParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  All Jena-related configuration properties.
+	 * All Jena-related configuration properties.
 	 *
 	 * @return
 	 * 	A map of all Jena-related configuration properties.
@@ -675,7 +675,7 @@ public class RdfParserSession extends ReaderParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Trim whitespace from text elements.
+	 * Trim whitespace from text elements.
 	 *
 	 * @see RdfParser.Builder#trimWhitespace()
 	 * @return

@@ -221,7 +221,7 @@ public class InputStreamParserSession extends ParserSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Binary input format.
+	 * Binary input format.
 	 *
 	 * @see InputStreamParser.Builder#binaryFormat(BinaryFormat)
 	 * @return

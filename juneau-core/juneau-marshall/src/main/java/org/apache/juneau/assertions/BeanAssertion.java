@@ -91,6 +91,7 @@ public class BeanAssertion<T> extends FluentBeanAssertion<T,BeanAssertion<T>> {
 	/**
 	 * Static creator.
 	 *
+	 * @param <T> The value type.
 	 * @param value
 	 * 	The object being tested.
 	 * 	<br>Can be <jk>null</jk>.

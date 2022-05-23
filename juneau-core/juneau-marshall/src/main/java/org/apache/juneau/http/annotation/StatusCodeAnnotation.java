@@ -203,6 +203,8 @@ public class StatusCodeAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		StatusCode[] value();
 	}

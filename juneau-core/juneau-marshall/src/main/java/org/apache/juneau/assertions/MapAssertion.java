@@ -97,6 +97,8 @@ public class MapAssertion<K,V> extends FluentMapAssertion<K,V,MapAssertion<K,V>>
 	/**
 	 * Static creator.
 	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
 	 * @param value
 	 * 	The object being tested.
 	 * 	<br>Can be <jk>null</jk>.

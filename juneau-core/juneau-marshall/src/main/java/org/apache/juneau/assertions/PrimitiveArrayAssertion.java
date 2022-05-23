@@ -98,6 +98,8 @@ public class PrimitiveArrayAssertion<E,T> extends FluentPrimitiveArrayAssertion<
 	/**
 	 * Static creator.
 	 *
+	 * @param <E> The element type.
+	 * @param <T> The value type.
 	 * @param value
 	 * 	The object being tested.
 	 * 	<br>Can be <jk>null</jk>.

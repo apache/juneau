@@ -80,6 +80,8 @@ public @interface Marshalled {
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link Example}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String example() default "";
 
@@ -96,6 +98,8 @@ public @interface Marshalled {
 	 * 	<ja>@Marshalled</ja>(implClass=MyInterfaceImpl.<jk>class</jk>)
 	 * 	<jk>public class</jk> MyInterface {...}
 	 * <p>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?> implClass() default void.class;
 
@@ -151,6 +155,8 @@ public @interface Marshalled {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] on() default {};
 
@@ -163,6 +169,8 @@ public @interface Marshalled {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
 }

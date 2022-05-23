@@ -1108,8 +1108,8 @@ public final class PojoQuery {
 	 * single quotes.
 	 * Does not split on escaped delimiters, and escaped quotes are also ignored.
 	 * Example:
-	 * split("a,b,c",',') -> {"a","b","c"}
-	 * split("a,'b,b,b',c",',') -> {"a","'b,b,b'","c"}
+	 * split("a,b,c",',') -&gt; {"a","b","c"}
+	 * split("a,'b,b,b',c",',') -&gt; {"a","'b,b,b'","c"}
 	 */
 	static final String[] splitQuoted(String s, char c) {
 
@@ -1149,12 +1149,12 @@ public final class PojoQuery {
 	 * Replaces tokens in a string with a different token.
 	 *
 	 * <p>
-	 * replace("A and B and C", "and", "or") -> "A or B or C"
-	 * replace("andandand", "and", "or") -> "ororor"
-	 * replace(null, "and", "or") -> null
-	 * replace("andandand", null, "or") -> "andandand"
-	 * replace("andandand", "", "or") -> "andandand"
-	 * replace("A and B and C", "and", null) -> "A  B  C"
+	 * replace("A and B and C", "and", "or") -&gt; "A or B or C"
+	 * replace("andandand", "and", "or") -&gt; "ororor"
+	 * replace(null, "and", "or") -&gt; null
+	 * replace("andandand", null, "or") -&gt; "andandand"
+	 * replace("andandand", "", "or") -&gt; "andandand"
+	 * replace("A and B and C", "and", null) -&gt; "A  B  C"
 	 * @param ignoreEscapedChars Specify 'true' if escaped 'from' characters should be ignored.
 	 */
 	static String replace(String s, char from, char to, boolean ignoreEscapedChars) {

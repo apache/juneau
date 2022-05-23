@@ -473,6 +473,7 @@ public class RequestQueryParams {
 	 * Type must have a name specified via the {@link org.apache.juneau.http.annotation.Query} annotation
 	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
 	 *
+	 * @param <T> The bean type to create.
 	 * @param type The bean type to create.
 	 * @return The bean, never <jk>null</jk>.
 	 */

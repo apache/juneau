@@ -271,7 +271,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Aside section contents.
+	 * Aside section contents.
 	 *
 	 * @see HtmlDocSerializer.Builder#aside(String...)
 	 * @return
@@ -282,7 +282,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Aside section contents float.
+	 * Aside section contents float.
 	 *
 	 * @see HtmlDocSerializer.Builder#asideFloat(AsideFloat)
 	 * @return
@@ -293,7 +293,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Footer section contents.
+	 * Footer section contents.
 	 *
 	 * @see HtmlDocSerializer.Builder#footer(String...)
 	 * @return
@@ -304,7 +304,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Additional head section content.
+	 * Additional head section content.
 	 *
 	 * @see HtmlDocSerializer.Builder#head(String...)
 	 * @return
@@ -315,7 +315,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Header section contents.
+	 * Header section contents.
 	 *
 	 * @see HtmlDocSerializer.Builder#header(String...)
 	 * @return
@@ -326,7 +326,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Nav section contents.
+	 * Nav section contents.
 	 *
 	 * @see HtmlDocSerializer.Builder#nav(String...)
 	 * @return
@@ -337,7 +337,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Page navigation links.
+	 * Page navigation links.
 	 *
 	 * @see HtmlDocSerializer.Builder#navlinks(String...)
 	 * @return
@@ -348,7 +348,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  No-results message.
+	 * No-results message.
 	 *
 	 * @see HtmlDocSerializer.Builder#noResultsMessage(String)
 	 * @return
@@ -359,7 +359,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Prevent word wrap on page.
+	 * Prevent word wrap on page.
 	 *
 	 * @see HtmlDocSerializer.Builder#nowrap()
 	 * @return
@@ -370,7 +370,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Javascript code.
+	 * Javascript code.
 	 *
 	 * @see HtmlDocSerializer.Builder#script(String...)
 	 * @return
@@ -381,7 +381,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  CSS style code.
+	 * CSS style code.
 	 *
 	 * @see HtmlDocSerializer.Builder#style(String...)
 	 * @return
@@ -392,7 +392,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  Stylesheet import URLs.
+	 * Stylesheet import URLs.
 	 *
 	 * @see HtmlDocSerializer.Builder#stylesheet(String...)
 	 * @return
@@ -403,7 +403,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	/**
-	 * Configuration property:  HTML document template.
+	 * HTML document template.
 	 *
 	 * @see HtmlDocSerializer.Builder#template(Class)
 	 * @return

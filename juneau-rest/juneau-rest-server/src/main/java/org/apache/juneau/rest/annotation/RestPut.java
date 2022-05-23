@@ -110,6 +110,8 @@ public @interface RestPut {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#clientVersionHeader(String)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String clientVersion() default "";
 
@@ -128,6 +130,8 @@ public @interface RestPut {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#consumes(MediaType...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] consumes() default {};
 
@@ -137,6 +141,8 @@ public @interface RestPut {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#type(Class)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends RestOpContext> contextClass() default RestOpContext.Void.class;
 
@@ -149,6 +155,8 @@ public @interface RestPut {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#converters()} - Registering converters with REST resources.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends RestConverter>[] converters() default {};
 
@@ -182,6 +190,8 @@ public @interface RestPut {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugEnablement()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String debug() default "";
 
@@ -193,6 +203,8 @@ public @interface RestPut {
 	 *
 	 * <p>
 	 * This is a shortcut for using {@link #defaultRequestHeaders()} for just this specific header.
+	 *
+	 * @return The annotation value.
 	 */
 	String defaultAccept() default "";
 
@@ -213,6 +225,8 @@ public @interface RestPut {
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#defaultCharset(Charset)}
 	 * 	<li class='ja'>{@link Rest#defaultCharset}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String defaultCharset() default "";
 
@@ -224,6 +238,8 @@ public @interface RestPut {
 	 *
 	 * <p>
 	 * This is a shortcut for using {@link #defaultRequestHeaders()} for just this specific header.
+	 *
+	 * @return The annotation value.
 	 */
 	String defaultContentType() default "";
 
@@ -252,6 +268,8 @@ public @interface RestPut {
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] defaultRequestFormData() default {};
 
@@ -279,6 +297,8 @@ public @interface RestPut {
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] defaultRequestQueryData() default {};
 
@@ -318,6 +338,8 @@ public @interface RestPut {
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestAttributes(NamedAttribute...)}
 	 * 	<li class='ja'>{@link Rest#defaultRequestAttributes()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] defaultRequestAttributes() default {};
 
@@ -343,6 +365,8 @@ public @interface RestPut {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestHeaders(org.apache.http.Header...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] defaultRequestHeaders() default {};
 
@@ -368,6 +392,8 @@ public @interface RestPut {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultResponseHeaders(org.apache.http.Header...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] defaultResponseHeaders() default {};
 
@@ -392,6 +418,8 @@ public @interface RestPut {
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] description() default {};
 
@@ -437,6 +465,8 @@ public @interface RestPut {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jrs.Encoders}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends Encoder>[] encoders() default {};
 
@@ -449,6 +479,8 @@ public @interface RestPut {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#guards()}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends RestGuard>[] guards() default {};
 
@@ -465,6 +497,8 @@ public @interface RestPut {
 	 * <ul class='seealso'>
 	 * 	<li class='jac'>{@link RestMatcher}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends RestMatcher>[] matchers() default {};
 
@@ -493,6 +527,8 @@ public @interface RestPut {
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#maxInput(String)}
 	 * 	<li class='ja'>{@link Rest#maxInput}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String maxInput() default "";
 
@@ -502,6 +538,8 @@ public @interface RestPut {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] on() default {};
 
@@ -554,6 +592,8 @@ public @interface RestPut {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jrs.Marshalling}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] parsers() default {};
 
@@ -592,6 +632,8 @@ public @interface RestPut {
 	 * <ul class='seealso'>
 	 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] path() default {};
 
@@ -610,6 +652,8 @@ public @interface RestPut {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#produces(MediaType...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] produces() default {};
 
@@ -663,6 +707,8 @@ public @interface RestPut {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#roleGuard(String)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String roleGuard() default "";
 
@@ -692,6 +738,8 @@ public @interface RestPut {
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#rolesDeclared(String...)}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String rolesDeclared() default "";
 
@@ -744,6 +792,8 @@ public @interface RestPut {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jrs.Marshalling}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<? extends Serializer>[] serializers() default {};
 
@@ -768,6 +818,8 @@ public @interface RestPut {
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String summary() default "";
 
@@ -817,6 +869,8 @@ public @interface RestPut {
 	 * 	<li class='ja'>{@link OpSwagger}
 	 * 	<li class='jc'>{@link SwaggerProvider}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	OpSwagger swagger() default @OpSwagger;
 
@@ -835,6 +889,8 @@ public @interface RestPut {
 	 * 	<jc>// Shortened form</jc>
 	 * 	<ja>@RestPut</ja>(<js>"/{propertyName}"</js>)
 	 * </p>
+	 *
+	 * @return The annotation value.
 	 */
 	String value() default "";
 }

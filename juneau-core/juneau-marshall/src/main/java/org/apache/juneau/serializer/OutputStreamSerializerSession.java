@@ -248,7 +248,7 @@ public class OutputStreamSerializerSession extends SerializerSession {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Configuration property:  Binary output format.
+	 * Binary output format.
 	 *
 	 * @see OutputStreamSerializer.Builder#binaryFormat(BinaryFormat)
 	 * @return

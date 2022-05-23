@@ -215,6 +215,8 @@ public class RequestAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		Request[] value();
 	}

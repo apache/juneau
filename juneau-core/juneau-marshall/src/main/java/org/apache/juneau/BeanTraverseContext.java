@@ -170,7 +170,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		 * When enabled, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
 		 *
 		 * <p>
-		 * For example, if a model contains the links A->B->C->A, then the JSON generated will look like
+		 * For example, if a model contains the links A-&gt;B-&gt;C-&gt;A, then the JSON generated will look like
 		 * 	the following when this setting is <jk>true</jk>...
 		 *
 		 * <p class='bjson'>

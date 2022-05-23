@@ -38,6 +38,7 @@ public class ContextBeanCreator<T> {
 	/**
 	 * Creator.
 	 *
+	 * @param <T> The bean type.
 	 * @param type The bean type.
 	 * @return A new creator object.
 	 */
@@ -101,10 +102,11 @@ public class ContextBeanCreator<T> {
 	/**
 	 * Returns access to the inner builder if the builder exists and is of the specified type.
 	 *
+	 * @param <B> The builder class type.
 	 * @param c The builder class type.
 	 * @return An optional containing the builder if it exists.
 	 */
-	public <T2 extends Context.Builder> Optional<T2> builder(Class<T2> c) {
+	public <B extends Context.Builder> Optional<B> builder(Class<B> c) {
 		return optional(c.isInstance(builder) ? c.cast(builder) : null);
 	}
 
@@ -115,11 +117,12 @@ public class ContextBeanCreator<T> {
 	 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
 	 * The operation is ignored if the builder isn't the specified type.
 	 *
+	 * @param <B> The builder class type.
 	 * @param c The builder class type.
 	 * @param operation The operation to apply.
 	 * @return This object.
 	 */
-	public <T2 extends Context.Builder> ContextBeanCreator<T> builder(Class<T2> c, Consumer<T2> operation) {
+	public <B extends Context.Builder> ContextBeanCreator<T> builder(Class<B> c, Consumer<B> operation) {
 		if (c.isInstance(builder))
 			operation.accept(c.cast(builder));
 		return this;

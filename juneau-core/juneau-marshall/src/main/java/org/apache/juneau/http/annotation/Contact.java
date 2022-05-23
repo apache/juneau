@@ -61,6 +61,8 @@ public @interface Contact {
 	 * 	<li>
 	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String email() default "";
 
@@ -76,6 +78,8 @@ public @interface Contact {
 	 * 	<li>
 	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String name() default "";
 
@@ -92,6 +96,8 @@ public @interface Contact {
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String url() default "";
 }

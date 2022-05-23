@@ -207,6 +207,8 @@ public class BeanIgnoreAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		BeanIgnore[] value();
 	}

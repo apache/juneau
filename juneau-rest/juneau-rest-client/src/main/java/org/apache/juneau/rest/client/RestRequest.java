@@ -611,7 +611,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * Allows you to override what status codes are considered error codes that would result in a {@link RestCallException}.
 	 *
 	 * <p>
-	 * The default error code predicate is: <code>x -> x &gt;= 400</code>.
+	 * The default error code predicate is: <code>x -&gt; x &gt;= 400</code>.
 	 *
 	 * @param value The new predicate for calculating error codes.
 	 * @return This object.
@@ -1199,7 +1199,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Adds query parameters "foo=bar&baz=qux".</jc>
+	 * 	<jc>// Adds query parameters "foo=bar&amp;baz=qux".</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.queryDataPairs(<js>"foo"</js>,<js>"bar"</js>,<js>"baz"</js>,<js>"qux"</js>)
@@ -1228,7 +1228,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Creates form data "key1=val1&key2=val2".</jc>
+	 * 	<jc>// Creates form data "key1=val1&amp;key2=val2".</jc>
 	 * 	<jv>client</jv>
 	 * 		.formPost(<jsf>URI</jsf>)
 	 * 		.formDataPairs(<js>"key1"</js>,<js>"val1"</js>,<js>"key2"</js>,<js>"val2"</js>)
@@ -1325,7 +1325,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<jk>public</jk> Integer getQux() { <jk>return</jk> 123; }
 	 * 	}
 	 *
-	 * 	<jc>// Appends query "fooBar=baz&qux=123".</jc>
+	 * 	<jc>// Appends query "fooBar=baz&amp;qux=123".</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.queryDataBean(<jk>new</jk> MyQuery())
@@ -1353,7 +1353,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 		<jk>public</jk> Integer getQux() { <jk>return</jk> 123; }
 	 * 	}
 	 *
-	 * 	<jc>// Appends form data "fooBar=baz&qux=123".</jc>
+	 * 	<jc>// Appends form data "fooBar=baz&amp;qux=123".</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.formDataBean(<jk>new</jk> MyFormData())
@@ -1522,10 +1522,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Adds query parameter "foo=bar&baz=qux".</jc>
+	 * 	<jc>// Adds query parameter "foo=bar&amp;baz=qux".</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
-	 * 		.queryCustom(<js>"foo=bar&baz=qux"</js>)
+	 * 		.queryCustom(<js>"foo=bar&amp;baz=qux"</js>)
 	 * 		.run();
 	 * </p>
 	 *
@@ -1564,22 +1564,22 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Creates form data "foo=bar&baz=qux".</jc>
+	 * 	<jc>// Creates form data "foo=bar&amp;baz=qux".</jc>
 	 * 	<jv>client</jv>
 	 * 		.formPost(<jsf>URI</jsf>)
-	 * 		.formDataCustom(<js>"foo=bar&baz=qux"</js>)
+	 * 		.formDataCustom(<js>"foo=bar&amp;baz=qux"</js>)
 	 * 		.run();
 	 *
-	 * 	<jc>// Creates form data "foo=bar&baz=qux" using StringEntity.</jc>
+	 * 	<jc>// Creates form data "foo=bar&amp;baz=qux" using StringEntity.</jc>
 	 * 	<jv>client</jv>
 	 * 		.formPost(<jsf>URI</jsf>)
-	 * 		.formDataCustom(<jk>new</jk> StringEntity(<js>"foo=bar&baz=qux"</js>,<js>"application/x-www-form-urlencoded"</js>))
+	 * 		.formDataCustom(<jk>new</jk> StringEntity(<js>"foo=bar&amp;baz=qux"</js>,<js>"application/x-www-form-urlencoded"</js>))
 	 * 		.run();
 	 *
-	 * 	<jc>// Creates form data "foo=bar&baz=qux" using StringEntity and body().</jc>
+	 * 	<jc>// Creates form data "foo=bar&amp;baz=qux" using StringEntity and body().</jc>
 	 * 	<jv>client</jv>
 	 * 		.formPost(<jsf>URI</jsf>)
-	 * 		.body(<jk>new</jk> StringEntity(<js>"foo=bar&baz=qux"</js>,<js>"application/x-www-form-urlencoded"</js>))
+	 * 		.body(<jk>new</jk> StringEntity(<js>"foo=bar&amp;baz=qux"</js>,<js>"application/x-www-form-urlencoded"</js>))
 	 * 		.run();
 	 * </p>
 	 *

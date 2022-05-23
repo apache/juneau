@@ -41,7 +41,7 @@ public interface ThrowingConsumer<T> extends Consumer<T> {
 	 * The functional method to implement.
 	 *
 	 * @param t The type of the input to the consumer.
-	 * @throws Exception
+	 * @throws Exception Any exception.
 	 */
 	void acceptThrows(T t) throws Exception;
 }

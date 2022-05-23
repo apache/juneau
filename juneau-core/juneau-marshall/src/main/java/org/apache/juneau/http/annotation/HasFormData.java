@@ -116,6 +116,8 @@ public @interface HasFormData {
 	 * 	<li>
 	 * 		The format is plain-text.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String name() default "";
 
@@ -133,6 +135,8 @@ public @interface HasFormData {
 	 * <p class='bjava'>
 	 * 	<jk>public</jk> Order placeOrder(<ja>@HasFormData</ja>(<js>"petId"</js>) <jk>boolean</jk> <jv>hasPetId</jv>) {...}
 	 * </p>
+	 *
+	 * @return The annotation value.
 	 */
 	String value() default "";
 }

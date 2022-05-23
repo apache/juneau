@@ -289,6 +289,8 @@ public class ResponseAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		Response[] value();
 	}

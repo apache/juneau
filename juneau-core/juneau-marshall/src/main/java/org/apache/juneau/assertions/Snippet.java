@@ -31,7 +31,7 @@ public interface Snippet {
 	/**
 	 * Run arbitrary code and optionally throw an exception.
 	 *
-	 * @throws Throwable
+	 * @throws Throwable Any throwable.
 	 */
 	void run() throws Throwable;
 }

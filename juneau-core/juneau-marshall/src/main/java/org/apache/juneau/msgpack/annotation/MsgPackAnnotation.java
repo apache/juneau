@@ -203,6 +203,8 @@ public class MsgPackAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		MsgPack[] value();
 	}

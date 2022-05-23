@@ -29,7 +29,7 @@ public interface JettyServerFactory {
 	 *
 	 * @param jettyXml The contents of the jetty.xml file.
 	 * @return A newly-created but not-yet-started server.
-	 * @throws Exception
+	 * @throws Exception Any exception.
 	 */
 	Server create(String jettyXml) throws Exception;
 }

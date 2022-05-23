@@ -36,6 +36,7 @@ public interface Consumer3<A,B,C> {
 	/**
 	 * Returns a composed {@link Consumer} that performs, in sequence, this operation followed by the <c>after</c> operation.
 	 *
+	 * @param <V> The return type.
 	 * @param after The operation to perform after this operation.
 	 * @return A composed {@link Consumer} that performs in sequence this operation followed by the after operation.
 	 */

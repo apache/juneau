@@ -309,6 +309,8 @@ public class PathAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		Path[] value();
 	}

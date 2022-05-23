@@ -67,7 +67,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 	 * This class is called often and not cached, so any caching should occur in the subclass if necessary.
 	 *
 	 * @return The service map.
-	 * @throws Exception
+	 * @throws Exception Any exception.
 	 */
 	protected abstract Map<Class<?>,Object> getServiceMap() throws Exception;
 

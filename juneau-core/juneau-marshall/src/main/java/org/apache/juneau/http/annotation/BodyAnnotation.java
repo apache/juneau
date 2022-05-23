@@ -212,6 +212,8 @@ public class BodyAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		Body[] value();
 	}

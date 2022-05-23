@@ -37,6 +37,8 @@ public @interface RdfSchema {
 	 * <p>
 	 * Must either be matched with a {@link #prefix()} annotation, or an {@link #rdfNs()} mapping with the same
 	 * {@link RdfNs#namespaceURI() @RdfNs(namespaceURI)} value.
+	 *
+	 * @return The annotation value.
 	 */
 	public String namespace() default "";
 
@@ -46,6 +48,8 @@ public @interface RdfSchema {
 	 * <p>
 	 * Must either be matched with a {@link #namespace()} annotation, or an {@link #rdfNs()} mapping with the same
 	 * {@link RdfNs#prefix} value.
+	 *
+	 * @return The annotation value.
 	 */
 	public String prefix() default "";
 
@@ -93,6 +97,8 @@ public @interface RdfSchema {
 	 * 		<jk>public</jk> String <jf>street</jf>, <jf>city</jf>, <jf>state</jf>;
 	 * 	}
 	 * </p>
+	 *
+	 * @return The annotation value.
 	 */
 	public RdfNs[] rdfNs() default {};
 }

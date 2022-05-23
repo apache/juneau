@@ -1252,6 +1252,8 @@ public class SchemaAnnotation {
 
 		/**
 		 * The child annotations.
+		 *
+		 * @return The annotation value.
 		 */
 		Schema[] value();
 	}

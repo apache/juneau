@@ -44,6 +44,8 @@ public @interface SubItems {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] _default() default {};
 
@@ -54,6 +56,8 @@ public @interface SubItems {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] _enum() default {};
 
@@ -64,11 +68,15 @@ public @interface SubItems {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String $ref() default "";
 
 	/**
 	 * Synonym for {@link #collectionFormat()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String cf() default "";
 
@@ -79,26 +87,36 @@ public @interface SubItems {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String collectionFormat() default "";
 
 	/**
 	 * Synonym for {@link #_default()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String[] df() default {};
 
 	/**
 	 * Synonym for {@link #_enum()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String[] e() default {};
 
 	/**
 	 * Synonym for {@link #exclusiveMaximum()}.
+	 *
+	 * @return The annotation value.
 	 */
 	boolean emax() default false;
 
 	/**
 	 * Synonym for {@link #exclusiveMinimum()}.
+	 *
+	 * @return The annotation value.
 	 */
 	boolean emin() default false;
 
@@ -109,6 +127,8 @@ public @interface SubItems {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	boolean exclusiveMaximum() default false;
 
@@ -119,11 +139,15 @@ public @interface SubItems {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	boolean exclusiveMinimum() default false;
 
 	/**
 	 * Synonym for {@link #format()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String f() default "";
 
@@ -134,6 +158,8 @@ public @interface SubItems {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String format() default "";
 
@@ -146,16 +172,22 @@ public @interface SubItems {
 	 * <p>
 	 * This is a {@doc jd.Swagger} object.
 	 * <br>It must be declared free-form because it's not possible to nest annotations in Java.
+	 *
+	 * @return The annotation value.
 	 */
 	String[] items() default {};
 
 	/**
 	 * Synonym for {@link #maximum()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String max() default "";
 
 	/**
 	 * Synonym for {@link #maxItems()}.
+	 *
+	 * @return The annotation value.
 	 */
 	long maxi() default -1;
 
@@ -166,6 +198,8 @@ public @interface SubItems {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String maximum() default "";
 
@@ -176,11 +210,15 @@ public @interface SubItems {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	long maxItems() default -1;
 
 	/**
 	 * Synonym for {@link #maxLength()}.
+	 *
+	 * @return The annotation value.
 	 */
 	long maxl() default -1;
 
@@ -191,16 +229,22 @@ public @interface SubItems {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	long maxLength() default -1;
 
 	/**
 	 * Synonym for {@link #minimum()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String min() default "";
 
 	/**
 	 * Synonym for {@link #minItems()}.
+	 *
+	 * @return The annotation value.
 	 */
 	long mini() default -1;
 
@@ -211,6 +255,8 @@ public @interface SubItems {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String minimum() default "";
 
@@ -221,11 +267,15 @@ public @interface SubItems {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	long minItems() default -1;
 
 	/**
 	 * Synonym for {@link #minLength()}.
+	 *
+	 * @return The annotation value.
 	 */
 	long minl() default -1;
 
@@ -236,11 +286,15 @@ public @interface SubItems {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	long minLength() default -1;
 
 	/**
 	 * Synonym for {@link #multipleOf()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String mo() default "";
 
@@ -251,11 +305,15 @@ public @interface SubItems {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String multipleOf() default "";
 
 	/**
 	 * Synonym for {@link #pattern()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String p() default "";
 
@@ -266,11 +324,15 @@ public @interface SubItems {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String pattern() default "";
 
 	/**
 	 * Synonym for {@link #type()}.
+	 *
+	 * @return The annotation value.
 	 */
 	String t() default "";
 
@@ -281,11 +343,15 @@ public @interface SubItems {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String type() default "";
 
 	/**
 	 * Synonym for {@link #uniqueItems()}.
+	 *
+	 * @return The annotation value.
 	 */
 	boolean ui() default false;
 
@@ -296,6 +362,8 @@ public @interface SubItems {
 	 * 	<li>
 	 * 		The format is a plain-text string.
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	boolean uniqueItems() default false;
 }

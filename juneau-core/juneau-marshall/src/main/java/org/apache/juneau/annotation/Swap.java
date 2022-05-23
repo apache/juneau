@@ -48,6 +48,8 @@ public @interface Swap {
 	 *
 	 * <p>
 	 * A synonym for {@link #value()}.
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?> impl() default void.class;
 
@@ -71,6 +73,8 @@ public @interface Swap {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.PerMediaTypeSwaps}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] mediaTypes() default {};
 
@@ -156,6 +160,8 @@ public @interface Swap {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String[] on() default {};
 
@@ -168,6 +174,8 @@ public @interface Swap {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.DynamicallyAppliedAnnotations}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?>[] onClass() default {};
 
@@ -204,6 +212,8 @@ public @interface Swap {
 	 * <ul class='seealso'>
 	 * 	<li class='link'>{@doc jm.TemplatedSwaps}
 	 * </ul>
+	 *
+	 * @return The annotation value.
 	 */
 	String template() default "";
 
@@ -212,6 +222,8 @@ public @interface Swap {
 	 *
 	 * <p>
 	 * A synonym for {@link #impl()}.
+	 *
+	 * @return The annotation value.
 	 */
 	Class<?> value() default void.class;
 }

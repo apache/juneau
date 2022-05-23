@@ -31,11 +31,15 @@ public @interface FluentSetters {
 
 	/**
 	 * Overrides the return type on the child methods.
+	 *
+	 * @return The annotation value.
 	 */
 	String returns() default "";
 
 	/**
 	 * Specifies method signatures to ignore.
+	 *
+	 * @return The annotation value.
 	 */
 	String[] ignore() default {};
 }
