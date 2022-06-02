@@ -363,27 +363,21 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private SerializerWriter serializeMap(UonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
 
-		m = sort(m);
-
 		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
 
 		if (! plainTextParams)
 			out.append('(');
 
-		Iterator mapEntries = m.entrySet().iterator();
-
-		while (mapEntries.hasNext()) {
-			Map.Entry e = (Map.Entry) mapEntries.next();
-			Object value = e.getValue();
-			Object key = generalize(e.getKey(), keyType);
+		Flag addComma = Flag.create();
+		forEachEntry(m, x -> {
+			addComma.ifSet(()->out.append(',')).set();
+			Object value = x.getValue();
+			Object key = generalize(x.getKey(), keyType);
 			out.cr(indent).appendObject(key, false).append('=');
 			serializeAnything(out, value, valueType, toString(key), null);
-			if (mapEntries.hasNext())
-				out.append(',');
-		}
+		});
 
-		if (m.size() > 0)
-			out.cre(indent-1);
+		addComma.ifSet(()->out.cre(indent-1));
 
 		if (! plainTextParams)
 			out.append(')');
@@ -434,20 +428,17 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 
 		ClassMeta<?> elementType = type.getElementType();
 
-		c = sort(c);
-
 		if (! plainTextParams)
 			out.append('@').append('(');
 
-		for (Iterator i = c.iterator(); i.hasNext();) {
+		Flag addComma = Flag.create();
+		forEachEntry(c, x -> {
+			addComma.ifSet(()->out.append(',')).set();
 			out.cr(indent);
-			serializeAnything(out, i.next(), elementType, "<iterator>", null);
-			if (i.hasNext())
-				out.append(',');
-		}
+			serializeAnything(out, x, elementType, "<iterator>", null);
+		});
 
-		if (c.size() > 0)
-			out.cre(indent-1);
+		addComma.ifSet(()->out.cre(indent-1));
 		if (! plainTextParams)
 			out.append(')');
 

@@ -674,14 +674,11 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	private ContentResult serializeMap(XmlWriter out, Map m, ClassMeta<?> sType,
 			ClassMeta<?> eKeyType, ClassMeta<?> eValueType, boolean isMixed) throws SerializeException {
 
-		m = sort(m);
-
 		ClassMeta<?> keyType = eKeyType == null ? sType.getKeyType() : eKeyType;
 		ClassMeta<?> valueType = eValueType == null ? sType.getValueType() : eValueType;
 
-		boolean hasChildren = false;
-		for (Iterator i = m.entrySet().iterator(); i.hasNext();) {
-			Map.Entry e = (Map.Entry)i.next();
+		Flag hasChildren = Flag.create();
+		forEachEntry(m, e -> {
 
 			Object k = e.getKey();
 			if (k == null) {
@@ -694,13 +691,11 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 			Object value = e.getValue();
 
-			if (! hasChildren) {
-				hasChildren = true;
-				out.w('>').nlIf(! isMixed, indent);
-			}
+			hasChildren.ifNotSet(()->out.w('>').nlIf(! isMixed, indent)).set();
 			serializeAnything(out, value, valueType, toString(k), null, null, false, XmlFormat.DEFAULT, isMixed, false, null);
-		}
-		return hasChildren ? CR_ELEMENTS : CR_EMPTY;
+		});
+
+		return hasChildren.isSet() ? CR_ELEMENTS : CR_EMPTY;
 	}
 
 	private ContentResult serializeBeanMap(XmlWriter out, BeanMap<?> m,
@@ -849,23 +844,19 @@ public class XmlSerializerSession extends WriterSerializerSession {
 
 		Collection c = (sType.isCollection() ? (Collection)in : toList(sType.getInnerClass(), in));
 
-		c = sort(c);
-
 		String type2 = null;
 
-		String eName = type2;
-		Namespace eNs = null;
+		Value<String> eName = Value.of(type2);
+		Value<Namespace> eNs = Value.empty();
 
 		if (ppMeta != null) {
 			XmlBeanPropertyMeta bpXml = getXmlBeanPropertyMeta(ppMeta);
-			eName = bpXml.getChildName();
-			eNs = bpXml.getNamespace();
+			eName.set(bpXml.getChildName());
+			eNs.set(bpXml.getNamespace());
 		}
 
-		for (Iterator i = c.iterator(); i.hasNext();) {
-			Object value = i.next();
-			serializeAnything(out, value, eeType, null, eName, eNs, false, XmlFormat.DEFAULT, isMixed, false, null);
-		}
+		forEachEntry(c, x -> serializeAnything(out, x, eeType, null, eName.get(), eNs.get(), false, XmlFormat.DEFAULT, isMixed, false, null));
+
 		return out;
 	}
 

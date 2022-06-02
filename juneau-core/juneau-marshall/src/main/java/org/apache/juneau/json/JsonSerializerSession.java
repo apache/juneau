@@ -343,26 +343,17 @@ public class JsonSerializerSession extends WriterSerializerSession {
 
 		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
 
-		m = sort(m);
-
 		int i = indent;
 		out.w('{');
 
-		Iterator mapEntries = m.entrySet().iterator();
-
-		while (mapEntries.hasNext()) {
-			Map.Entry e = (Map.Entry) mapEntries.next();
-			Object value = e.getValue();
-
-			Object key = generalize(e.getKey(), keyType);
-
+		Flag addComma = Flag.create();
+		forEachEntry(m, x -> {
+			addComma.ifSet(()->out.w(',').smi(i)).set();
+			Object value = x.getValue();
+			Object key = generalize(x.getKey(), keyType);
 			out.cr(i).attr(toString(key)).w(':').s(i);
-
 			serializeAnything(out, value, valueType, (key == null ? null : toString(key)), null);
-
-			if (mapEntries.hasNext())
-				out.w(',').smi(i);
-		}
+		});
 
 		out.cre(i-1).w('}');
 
@@ -406,17 +397,14 @@ public class JsonSerializerSession extends WriterSerializerSession {
 
 		ClassMeta<?> elementType = type.getElementType();
 
-		c = sort(c);
-
 		out.w('[');
-
-		for (Iterator i = c.iterator(); i.hasNext();) {
-			Object value = i.next();
+		Flag addComma = Flag.create();
+		forEachEntry(c, x -> {
+			addComma.ifSet(()->out.w(',').smi(indent)).set();
 			out.cr(indent);
-			serializeAnything(out, value, elementType, "<iterator>", null);
-			if (i.hasNext())
-				out.w(',').smi(indent);
-		}
+			serializeAnything(out, x, elementType, "<iterator>", null);
+		});
+
 		out.cre(indent-1).w(']');
 		return out;
 	}

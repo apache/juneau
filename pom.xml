@@ -52,6 +52,7 @@
 		<javax.inject.version>1</javax.inject.version>
 		<springboot.version>2.4.2</springboot.version>
 		<xml.apis.version>1.4.01</xml.apis.version>
+		<javadoc.executable></javadoc.executable>
 	</properties>
 
 	<dependencyManagement>
@@ -225,10 +226,10 @@
 						<sourcetab>3</sourcetab>
 						<notimestamp>true</notimestamp>
 						<verbose>true</verbose>
-						<additionalparam>&#45;&#45;allow-script-in-comments</additionalparam>
 						<additionalJOptions>
 							<additionalJOption>-J-DjuneauVersion=${juneauVersion}</additionalJOption>
 							<additionalJOption>-J-DjuneauVersionNext=${juneauVersionNext}</additionalJOption>
+							<additionalJOption>--allow-script-in-comments</additionalJOption>
 						</additionalJOptions>
 						<show>protected</show>
 						<windowtitle>Apache Juneau ${project.version}</windowtitle>
@@ -251,7 +252,7 @@
 						</links>
 						<docfilessubdirs>true</docfilessubdirs>
 						<javadocDirectory>${basedir}/juneau-doc/src/main/javadoc</javadocDirectory>
-						<javadocExecutable>/Library/Java/JavaVirtualMachines/jdk1.8.0_162.jdk/Contents/Home/bin/javadoc</javadocExecutable>
+						<javadocExecutable>${javadoc.executable}</javadocExecutable>
 						<taglets>
 							<taglet>
 								<tagletClass>org.apache.juneau.doc.internal.DelTag</tagletClass>
@@ -275,7 +276,7 @@
 								<tagletClass>org.apache.juneau.doc.internal.ReviewedTag</tagletClass>
 							</taglet>
 						</taglets>
-						<tagletpath>${basedir}/juneau-doc/tools.jar:${basedir}/juneau-doc/juneau-doc.jar</tagletpath>
+						<tagletpath>${basedir}/juneau-doc/juneau-doc.jar</tagletpath>
 					</configuration>
 					<executions>
 						<execution>

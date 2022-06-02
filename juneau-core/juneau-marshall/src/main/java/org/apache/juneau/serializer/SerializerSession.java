@@ -601,9 +601,29 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return A new sorted {@link TreeMap}.
 	 */
 	public final <K,V> Map<K,V> sort(Map<K,V> m) {
-		if (isSortMaps() && isSortable(m == null ? null : m.keySet()))
+		if (m == null || m.isEmpty() || SortedMap.class.isInstance(m))
+			return m;
+		if (isSortMaps() && isSortable(m.keySet()))
 			return new TreeMap<>(m);
 		return m;
+	}
+
+	/**
+	 * Consumes each map entry in the map.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param m The map being consumed.
+	 * @param consumer The map entry consumer.
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public final <K,V> void forEachEntry(Map<K,V> m, Consumer<Map.Entry<K,V>> consumer) {
+		if (m == null || m.isEmpty())
+			return;
+		if (isSortMaps() && ! SortedMap.class.isInstance(m) && isSortable(m.keySet()))
+			((Map)m).entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(x -> consumer.accept((Map.Entry<K,V>) x));
+		else
+			m.entrySet().forEach(consumer);
 	}
 
 	/**
@@ -614,10 +634,27 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return A new sorted {@link TreeSet}.
 	 */
 	public final <E> Collection<E> sort(Collection<E> c) {
-		String TODO = "Inline?";
+		if (c == null || c.isEmpty() || SortedSet.class.isInstance(c))
+			return c;
 		if (isSortCollections() && isSortable(c))
 			return c.stream().sorted().collect(Collectors.toList());
 		return c;
+	}
+
+	/**
+	 * Consumes each entry in the list.
+	 *
+	 * @param <E> The element type.
+	 * @param c The collection being sorted.
+	 * @param consumer The entry consumer.
+	 */
+	public final <E> void forEachEntry(Collection<E> c, Consumer<E> consumer) {
+		if (c == null || c.isEmpty())
+			return;
+		if (isSortCollections() && ! SortedSet.class.isInstance(c) && isSortable(c))
+			c.stream().sorted().forEach(consumer);
+		else
+			c.forEach(consumer);
 	}
 
 	/**
@@ -628,7 +665,8 @@ public class SerializerSession extends BeanTraverseSession {
 	 * @return A new sorted {@link TreeSet}.
 	 */
 	public final <E> List<E> sort(List<E> c) {
-		String TODO = "Inline?";
+		if (c == null || c.isEmpty())
+			return c;
 		if (isSortCollections() && isSortable(c))
 			return c.stream().sorted().collect(Collectors.toList());
 		return c;

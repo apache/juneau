@@ -25,7 +25,7 @@ timestamps {
 	
 				withMaven(jdk: 'JDK 1.8 (latest)', maven: 'Maven 3.2.5') { 
 					sh "echo hello"
-					sh "mvn clean install deploy javadoc:aggregate"
+					sh "mvn clean install deploy"
 				}
 				
 				junit '**/target/surefire-reports/*.xml' 

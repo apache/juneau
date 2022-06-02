@@ -294,8 +294,8 @@ public final class RdfSerializerSession extends WriterSerializerSession {
 
 		ClassMeta<?> cm = getClassMetaForObject(o);
 		if (isLooseCollections() && cm != null && cm.isCollectionOrArray()) {
-			Collection c = sort(cm.isCollection() ? (Collection)o : toList(cm.getInnerClass(), o));
-			c.forEach(x -> serializeAnything(x, false, object(), "root", null, null));
+			Collection c = cm.isCollection() ? (Collection)o : toList(cm.getInnerClass(), o);
+			forEachEntry(c, x -> serializeAnything(x, false, object(), "root", null, null));
 		} else {
 			RDFNode n = serializeAnything(o, false, getExpectedRootType(o), "root", null, null);
 			if (n.isLiteral()) {

@@ -577,10 +577,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			out.ie(i+1).eTag("tr").nl(i+2);
 		}
 
-		if (isSortMaps())
-			m = sort(m);
-
-		((Set<Map.Entry>)m.entrySet()).forEach(x -> serializeMapEntry(out, x, keyType, valueType, i, ppMeta));
+		forEachEntry(m, x -> serializeMapEntry(out, x, keyType, valueType, i, ppMeta));
 
 		out.ie(i).eTag("table").nl(i);
 	}
@@ -925,10 +922,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				if (! canIgnoreValue(cm1, null, o)) {
 					if (! cm1.isInstance(o))
 						return null;
-					Map m = sort((Map)o);
-					m.forEach((k,v) -> {
-						if (! set.contains(k)) set.add(k);
-					});
+					forEachEntry((Map)o, x -> set.add(x.getKey()));
 				}
 			}
 			return set.toArray(new Object[set.size()]);

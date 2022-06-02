@@ -336,13 +336,11 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 
 	private SerializerWriter serializeMap(UonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
 
-		m = sort(m);
-
 		ClassMeta<?> keyType = type.getKeyType(), valueType = type.getValueType();
 
 		Flag addAmp = Flag.create();
 
-		for (Map.Entry e : (Set<Map.Entry>)m.entrySet()) {
+		forEachEntry(m, e -> {
 			Object key = generalize(e.getKey(), keyType);
 			Object value = e.getValue();
 
@@ -365,7 +363,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 				out.appendObject(key, true).append('=');
 				super.serializeAnything(out, value, valueType, (key == null ? null : key.toString()), null);
 			}
-		}
+		});
 
 		return out;
 	}
