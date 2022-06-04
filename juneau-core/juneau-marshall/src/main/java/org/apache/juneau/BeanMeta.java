@@ -654,8 +654,7 @@ public class BeanMeta<T> {
 	static final List<BeanMethod> findBeanMethods(BeanContext ctx, Class<?> c, Class<?> stopClass, Visibility v, PropertyNamer pn, boolean fluentSetters) {
 		List<BeanMethod> l = new LinkedList<>();
 
-		String TODO = "Make more efficient";
-		for (ClassInfo c2 : findClasses(c, stopClass)) {
+		forEachClass(ClassInfo.of(c), stopClass, c2 -> {
 			for (MethodInfo m : c2.getDeclaredMethods()) {
 				if (m.isStatic() || m.isBridge() || m.getParamCount() > 2 || m.hasAnnotation(ctx, BeanIgnore.class))
 					continue;
@@ -752,14 +751,14 @@ public class BeanMeta<T> {
 						l.add(new BeanMethod(n, methodType, m.inner()));
 				}
 			}
-		}
+		});
 		return l;
 	}
 
 	static final Collection<Field> findBeanFields(BeanContext ctx, Class<?> c, Class<?> stopClass, Visibility v) {
 		List<Field> l = new LinkedList<>();
 		boolean noIgnoreTransients = ! ctx.isIgnoreTransientFields();
-		for (ClassInfo c2 : findClasses(c, stopClass)) {
+		forEachClass(ClassInfo.of(c), stopClass, c2 -> {
 			c2.forEachDeclaredField(
 				x -> x.isNotStatic()
 				&& (x.isNotTransient() || noIgnoreTransients)
@@ -768,13 +767,14 @@ public class BeanMeta<T> {
 				&& (v.isVisible(x.inner()) || x.hasAnnotation(ctx, Beanp.class)),
 				x -> l.add(x.inner())
 			);
-		}
+		});
 		return l;
 	}
 
 	static final Field findInnerBeanField(BeanContext ctx, Class<?> c, Class<?> stopClass, String name) {
 		boolean noIgnoreTransients = ! ctx.isIgnoreTransientFields();
-		for (ClassInfo c2 : findClasses(c, stopClass)) {
+		Value<Field> value = Value.empty();
+		forEachClass(ClassInfo.of(c), stopClass, c2 -> {
 			FieldInfo f = c2.getDeclaredField(
 				x -> x.isNotStatic()
 				&& (x.isNotTransient() || noIgnoreTransients)
@@ -783,24 +783,23 @@ public class BeanMeta<T> {
 				&& x.hasName(name)
 			);
 			if (f != null)
-				return f.inner();
-		}
-		return null;
+				value.set(f.inner());
+		});
+		return value.get();
 	}
 
-	private static List<ClassInfo> findClasses(Class<?> c, Class<?> stopClass) {
-		LinkedList<ClassInfo> l = new LinkedList<>();
-		findClasses(c, l, stopClass);
-		return l;
-	}
+//	private static List<ClassInfo> findClasses(Class<?> c, Class<?> stopClass) {
+//		LinkedList<ClassInfo> l = new LinkedList<>();
+//		forEachClass(ClassInfo.of(c), stopClass, x -> l.add(x));
+//		return l;
+//	}
 
-	private static void findClasses(Class<?> c, LinkedList<ClassInfo> l, Class<?> stopClass) {
-		while (c != null && stopClass != c) {
-			l.addFirst(ClassInfo.of(c));
-			for (Class<?> ci : c.getInterfaces())
-				findClasses(ci, l, stopClass);
-			c = c.getSuperclass();
-		}
+	private static void forEachClass(ClassInfo c, Class<?> stopClass, Consumer<ClassInfo> consumer) {
+		ClassInfo sc = c.getSuperclass();
+		if (sc != null && ! sc.is(stopClass))
+			forEachClass(sc, stopClass, consumer);
+		c.getInterfaces().forEach(x -> forEachClass(x, stopClass, consumer));
+		consumer.accept(c);
 	}
 
 	/**
