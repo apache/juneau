@@ -72,9 +72,9 @@ public class RestClient_Config_BeanContext_Test {
 		x1.post("/echoBody",new A1()).run().assertBody().is("'O1'");
 		x2.post("/echoBody",new A1()).run().assertBody().is("{f:1}");
 		x1.get("/checkQuery").queryData("foo",new A1()).run().assertBody().is("foo=O1");
-		x2.get("/checkQuery").queryData("foo",new A1()).run().assertBody().is("foo=f%3D1").assertBody().asString().urlDecode().is("foo=f=1");
+		x2.get("/checkQuery").queryData("foo",new A1()).run().assertBody().is("foo=f%3D1").assertBody().asString().asUrlDecode().is("foo=f=1");
 		x1.formPost("/checkFormData").formData("foo",new A1()).run().assertBody().is("foo=O1");
-		x2.formPost("/checkFormData").formData("foo",new A1()).run().assertBody().is("foo=f%3D1").assertBody().asString().urlDecode().is("foo=f=1");
+		x2.formPost("/checkFormData").formData("foo",new A1()).run().assertBody().is("foo=f%3D1").assertBody().asString().asUrlDecode().is("foo=f=1");
 		x1.get("/checkHeader").header("foo",new A1()).header("Check","foo").run().assertBody().is("['O1']");
 		x2.get("/checkHeader").header("foo",new A1()).header("Check","foo").run().assertBody().is("['f=1']");
 	}
@@ -537,7 +537,7 @@ public class RestClient_Config_BeanContext_Test {
 	public void a14_debug() throws Exception {
 		A14 x = new A14();
 		x.f = x;
-		assertThrown(()->client().debug().build().post("/echo",x).run()).messages().any(contains("Recursion occurred"));
+		assertThrown(()->client().debug().build().post("/echo",x).run()).asMessages().isAny(contains("Recursion occurred"));
 	}
 
 	@org.apache.juneau.annotation.Bean(typeName="foo")
@@ -571,7 +571,7 @@ public class RestClient_Config_BeanContext_Test {
 
 	@Test
 	public void a15_dictionary() throws Exception {
-		Object o = client().beanDictionary(A15a.class,A15b.class).addRootType().addBeanTypes().build().post("/echoBody",A15a.get()).run().cacheBody().assertBody().contains("{_type:'foo',foo:'1'}").getBody().as(Object.class);;
+		Object o = client().beanDictionary(A15a.class,A15b.class).addRootType().addBeanTypes().build().post("/echoBody",A15a.get()).run().cacheBody().assertBody().isContains("{_type:'foo',foo:'1'}").getBody().as(Object.class);;
 		assertTrue(o instanceof A15a);
 
 		JsonMap m = JsonMap.of("x",A15a.get(),"y",A15b.get());
@@ -597,9 +597,9 @@ public class RestClient_Config_BeanContext_Test {
 
 	@Test
 	public void a16_disableIgnorePropertiesWithoutSetters() throws Exception {
-		A16 x = client().build().post("/echoBody",A16.get()).run().cacheBody().assertBody().contains("{foo:'foo'}").getBody().as(A16.class);
+		A16 x = client().build().post("/echoBody",A16.get()).run().cacheBody().assertBody().isContains("{foo:'foo'}").getBody().as(A16.class);
 		assertNull(x.foo);
-		assertThrown(()->client().disableIgnoreMissingSetters().build().post("/echoBody",A16.get()).run().cacheBody().assertBody().contains("{foo:'foo'}").getBody().as(A16.class)).messages().any(contains("Setter or public field not defined"));
+		assertThrown(()->client().disableIgnoreMissingSetters().build().post("/echoBody",A16.get()).run().cacheBody().assertBody().isContains("{foo:'foo'}").getBody().as(A16.class)).asMessages().isAny(contains("Setter or public field not defined"));
 	}
 
 	public static class A17 {
@@ -615,9 +615,9 @@ public class RestClient_Config_BeanContext_Test {
 
 	@Test
 	public void a17_disableIgnoreTransientFields() throws Exception {
-		A17 x = client().build().post("/echoBody",A17.get()).run().cacheBody().assertBody().contains("{foo:'1'}").getBody().as(A17.class);;
+		A17 x = client().build().post("/echoBody",A17.get()).run().cacheBody().assertBody().isContains("{foo:'1'}").getBody().as(A17.class);;
 		assertNull(x.bar);
-		x = client().disableIgnoreTransientFields().build().post("/echoBody",A17.get()).run().cacheBody().assertBody().contains("{bar:'2',foo:'1'}").getBody().as(A17.class);
+		x = client().disableIgnoreTransientFields().build().post("/echoBody",A17.get()).run().cacheBody().assertBody().isContains("{bar:'2',foo:'1'}").getBody().as(A17.class);
 		assertEquals("2",x.bar);
 	}
 
@@ -627,8 +627,8 @@ public class RestClient_Config_BeanContext_Test {
 
 	@Test
 	public void a18_disableIgnoreUnknownNullBeanProperties() throws Exception {
-		client().build().post("/echoBody",reader("{foo:'1',bar:null}")).run().cacheBody().assertBody().contains("{foo:'1',bar:null}").getBody().as(A18.class);;
-		assertThrown(()->client().disableIgnoreUnknownNullBeanProperties().build().post("/echoBody",reader("{foo:'1',bar:null}")).run().cacheBody().assertBody().contains("{foo:'1',bar:null}").getBody().as(A18.class)).messages().any(contains("Unknown property 'bar'"));
+		client().build().post("/echoBody",reader("{foo:'1',bar:null}")).run().cacheBody().assertBody().isContains("{foo:'1',bar:null}").getBody().as(A18.class);;
+		assertThrown(()->client().disableIgnoreUnknownNullBeanProperties().build().post("/echoBody",reader("{foo:'1',bar:null}")).run().cacheBody().assertBody().isContains("{foo:'1',bar:null}").getBody().as(A18.class)).asMessages().isAny(contains("Unknown property 'bar'"));
 	}
 
 	public static interface A19 {
@@ -638,9 +638,9 @@ public class RestClient_Config_BeanContext_Test {
 
 	@Test
 	public void a19_disableInterfaceProxies() throws Exception {
-		A19 x = client().build().post("/echoBody",reader("{foo:'1'}")).run().cacheBody().assertBody().contains("{foo:'1'}").getBody().as(A19.class);;
+		A19 x = client().build().post("/echoBody",reader("{foo:'1'}")).run().cacheBody().assertBody().isContains("{foo:'1'}").getBody().as(A19.class);;
 		assertEquals("1",x.getFoo());
-		assertThrown(()->client().disableInterfaceProxies().build().post("/echoBody",reader("{foo:'1'}")).run().cacheBody().assertBody().contains("{foo:'1'}").getBody().as(A19.class)).messages().any(contains("could not be instantiated"));
+		assertThrown(()->client().disableInterfaceProxies().build().post("/echoBody",reader("{foo:'1'}")).run().cacheBody().assertBody().isContains("{foo:'1'}").getBody().as(A19.class)).asMessages().isAny(contains("could not be instantiated"));
 	}
 
 	public static class A20 {
@@ -656,9 +656,9 @@ public class RestClient_Config_BeanContext_Test {
 
 	@Test
 	public void a20_fluentSetters() throws Exception {
-		A20 x = client().findFluentSetters().build().post("/echoBody",reader("{foo:'1'}")).run().cacheBody().assertBody().contains("{foo:'1'}").getBody().as(A20.class);;
+		A20 x = client().findFluentSetters().build().post("/echoBody",reader("{foo:'1'}")).run().cacheBody().assertBody().isContains("{foo:'1'}").getBody().as(A20.class);;
 		assertEquals("1",x.getFoo());
-		x = client().findFluentSetters(A20.class).build().post("/echoBody",reader("{foo:'1'}")).run().cacheBody().assertBody().contains("{foo:'1'}").getBody().as(A20.class);;
+		x = client().findFluentSetters(A20.class).build().post("/echoBody",reader("{foo:'1'}")).run().cacheBody().assertBody().isContains("{foo:'1'}").getBody().as(A20.class);;
 		assertEquals("1",x.getFoo());
 	}
 
@@ -684,8 +684,8 @@ public class RestClient_Config_BeanContext_Test {
 
 	@Test
 	public void a21_ignoreInvocationExceptionsOnGetters() throws Exception {
-		assertThrown(()->client().build().post("/echoBody",A21.get()).run()).messages().any(contains("Could not call getValue() on property 'bar'"));
-		A21 x = client().ignoreInvocationExceptionsOnGetters().build().post("/echoBody",A21.get()).run().cacheBody().assertBody().contains("{foo:'1'}").getBody().as(A21.class);;
+		assertThrown(()->client().build().post("/echoBody",A21.get()).run()).asMessages().isAny(contains("Could not call getValue() on property 'bar'"));
+		A21 x = client().ignoreInvocationExceptionsOnGetters().build().post("/echoBody",A21.get()).run().cacheBody().assertBody().isContains("{foo:'1'}").getBody().as(A21.class);;
 		assertEquals("1",x.getFoo());
 	}
 
@@ -714,7 +714,7 @@ public class RestClient_Config_BeanContext_Test {
 
 	@Test
 	public void a22_ignoreInvocationExceptionsOnSetters() throws Exception {
-		assertThrown(()->client().build().post("/echoBody",A22.get()).run().getBody().as(A22.class)).messages().any(contains("Error occurred trying to set property 'bar'"));
+		assertThrown(()->client().build().post("/echoBody",A22.get()).run().getBody().as(A22.class)).asMessages().isAny(contains("Error occurred trying to set property 'bar'"));
 		A22 x = client().ignoreInvocationExceptionsOnSetters().build().post("/echoBody",A22.get()).run().cacheBody().getBody().as(A22.class);;
 		assertEquals("1",x.getFoo());
 	}
@@ -725,7 +725,7 @@ public class RestClient_Config_BeanContext_Test {
 
 	@Test
 	public void a23_ignoreUnknownBeanProperties() throws Exception {
-		assertThrown(()->client().build().post("/echoBody",reader("{foo:'1',bar:'2'}")).run().getBody().as(A23.class)).messages().any(contains("Unknown property 'bar' encountered"));
+		assertThrown(()->client().build().post("/echoBody",reader("{foo:'1',bar:'2'}")).run().getBody().as(A23.class)).asMessages().isAny(contains("Unknown property 'bar' encountered"));
 		A23 x = client().ignoreUnknownBeanProperties().build().post("/echoBody",reader("{foo:'1',bar:'2'}")).run().cacheBody().getBody().as(A23.class);;
 		assertEquals("1",x.foo);
 	}

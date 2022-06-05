@@ -23,7 +23,7 @@ import org.apache.juneau.xml.annotation.*;
  * Specialized writer for serializing XML.
  *
  * <ul class='notes'>
- * 	<li>
+ * 	<li class='note'>
  * 		This class is not intended for external use.
  * </ul>
  *

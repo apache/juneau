@@ -20,7 +20,6 @@ import org.apache.juneau.oapi.*;
 
 /**
  * Swagger items annotation.
- * {@review}
  *
  * <p>
  * A limited subset of JSON-Schema's items object.
@@ -34,12 +33,14 @@ import org.apache.juneau.oapi.*;
  * 	<jc>// Items have a specific set of enumerated string values</jc>
  * 	<ja>@Query</ja>(
  * 		name=<js>"status"</js>,
- * 		type=<js>"array"</js>,
- * 		collectionFormat=<js>"csv"</js>,
- * 		items=<ja>@Items</ja>(
- * 			type=<js>"string"</js>,
- * 			_enum=<js>"AVAILABLE,PENDING,SOLD"</js>,
- * 			_default=<js>"AVAILABLE"</js>
+ * 		schema=<ja>@Schema</ja>(
+ * 			type=<js>"array"</js>,
+ * 			collectionFormat=<js>"csv"</js>,
+ * 			items=<ja>@Items</ja>(
+ * 				type=<js>"string"</js>,
+ * 				_enum=<js>"AVAILABLE,PENDING,SOLD"</js>,
+ * 				_default=<js>"AVAILABLE"</js>
+ *			)
  *		)
  * 	)
  * </p>
@@ -47,14 +48,16 @@ import org.apache.juneau.oapi.*;
  * 	<jc>// An array of arrays, the internal array being of type integer, numbers must be between 0 and 63 (inclusive)</jc>
  * 	<ja>@Query</ja>(
  * 		name=<js>"status"</js>,
- * 		type=<js>"array"</js>,
- * 		collectionFormat=<js>"csv"</js>,
- * 		items=<ja>@Items</ja>(
+ * 		schema=<ja>@Schema</ja>(
  * 			type=<js>"array"</js>,
- * 			items=<ja>@SubItems</ja>(
- * 				type=<js>"integer"</js>,
- * 				minimum=<js>"0"</js>,
- * 				maximum=<js>"63"</js>
+ * 			collectionFormat=<js>"csv"</js>,
+ * 			items=<ja>@Items</ja>(
+ * 				type=<js>"array"</js>,
+ * 				items=<ja>@SubItems</ja>(
+ * 					type=<js>"integer"</js>,
+ * 					minimum=<js>"0"</js>,
+ * 					maximum=<js>"63"</js>
+ * 				)
  * 			)
  *		)
  * 	)
@@ -74,7 +77,7 @@ public @interface Items {
 	 * <mk>default</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -86,7 +89,7 @@ public @interface Items {
 	 * <mk>enum</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Each entry is a possible value.  Can also contain comma-delimited lists of values.
 	 * </ul>
 	 *
@@ -98,7 +101,7 @@ public @interface Items {
 	 * <mk>$ref</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -117,7 +120,7 @@ public @interface Items {
 	 * <mk>collectionFormat</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -157,7 +160,7 @@ public @interface Items {
 	 * <mk>exclusiveMaximum</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -169,7 +172,7 @@ public @interface Items {
 	 * <mk>exclusiveMinimum</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -188,7 +191,7 @@ public @interface Items {
 	 * <mk>format</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -224,7 +227,7 @@ public @interface Items {
 	 * <mk>maximum</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -236,7 +239,7 @@ public @interface Items {
 	 * <mk>maxItems</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -255,7 +258,7 @@ public @interface Items {
 	 * <mk>maxLength</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -281,7 +284,7 @@ public @interface Items {
 	 * <mk>minimum</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -293,7 +296,7 @@ public @interface Items {
 	 * <mk>minItems</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -312,7 +315,7 @@ public @interface Items {
 	 * <mk>minLength</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -331,7 +334,7 @@ public @interface Items {
 	 * <mk>multipleOf</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -350,7 +353,7 @@ public @interface Items {
 	 * <mk>pattern</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -369,7 +372,7 @@ public @interface Items {
 	 * <mk>type</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -388,7 +391,7 @@ public @interface Items {
 	 * <mk>uniqueItems</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *

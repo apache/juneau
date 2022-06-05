@@ -206,9 +206,9 @@ public class PojoSearcherTest {
 	public void stringSearch_malformedQuotes() throws Exception {
 		Object in = list(A.create("'foo"), A.create("\"bar"), A.create("baz"));
 
-		assertThrown(()->run(in, "f='*")).message().contains("Unmatched string quotes");
+		assertThrown(()->run(in, "f='*")).asMessage().isContains("Unmatched string quotes");
 
-		assertThrown(()->run(in, "f=\"*")).message().contains("Unmatched string quotes");
+		assertThrown(()->run(in, "f=\"*")).asMessage().isContains("Unmatched string quotes");
 
 		assertObject(run(in, "f='\\'*'")).asJson().is("[{f:'\\'foo'}]");
 		assertObject(run(in, "f='\"*'")).asJson().is("[{f:'\"bar'}]");
@@ -416,7 +416,7 @@ public class PojoSearcherTest {
 
 		for (int i = 0; i < ss.length; i+=2) {
 			final int i2 = i;
-			assertThrown(()->run(INT_BEAN_ARRAY, ss[i2])).message().contains(ss[i+1]);
+			assertThrown(()->run(INT_BEAN_ARRAY, ss[i2])).asMessage().isContains(ss[i+1]);
 		}
 	}
 
@@ -704,7 +704,7 @@ public class PojoSearcherTest {
 
 		for (int i = 0; i < ss.length; i+=2) {
 			final int i2 = i;
-			assertThrown(()->run(in, ss[i2])).message().contains(ss[i+1]);
+			assertThrown(()->run(in, ss[i2])).asMessage().isContains(ss[i+1]);
 		}
 	}
 

@@ -23,10 +23,9 @@ import org.apache.juneau.oapi.*;
 
 /**
  * REST request form-data annotation.
- * {@review}
  *
  * <p>
- * Identifies a POJO to be used as a form-data entry on an HTTP request.
+ * 	Identifies a POJO to be used as a form-data entry on an HTTP request.
  *
  * <p>
  * Can be used in the following locations:
@@ -37,10 +36,10 @@ import org.apache.juneau.oapi.*;
  * </ul>
  *
  * <h5 class='topic'>Arguments and argument-types of server-side @RestOp-annotated methods</h5>
- *
+ * <p>
  * Annotation that can be applied to a parameter of a <ja>@RestOp</ja>-annotated method to identify it as a URL query parameter.
  *
- * <p>
+ * <p class='w800'>
  * Unlike {@link FormData @FormData}, using this annotation does not result in the servlet reading the contents of
  * URL-encoded form posts.
  * Therefore, this annotation can be used in conjunction with the {@link Body @Body} annotation or
@@ -74,17 +73,17 @@ import org.apache.juneau.oapi.*;
  * </ul>
  *
  * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
- *
+ * <p>
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrc.Query}
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
- *
+ * <p>
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrc.Request}
  * </ul>
- *
+ * <p>
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
@@ -153,7 +152,7 @@ public @interface Query {
 	 * 	</li>
 	 * </ul>
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is plain-text.
 	 * </ul>
 	 *

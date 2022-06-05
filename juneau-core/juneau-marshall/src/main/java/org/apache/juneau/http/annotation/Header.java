@@ -23,7 +23,6 @@ import org.apache.juneau.oapi.*;
 
 /**
  * REST request header annotation.
- * {@review}
  *
  * <p>
  * Identifies a POJO to be used as the header of an HTTP request.
@@ -37,7 +36,7 @@ import org.apache.juneau.oapi.*;
  * </ul>
  *
  * <h5 class='topic'>Arguments and argument-types of server-side @RestOp-annotated methods</h5>
- *
+ * <p>
  * Annotation that can be applied to a parameter of a <ja>@RestOp</ja>-annotated method to identify it as a HTTP
  * request header.
  *
@@ -63,7 +62,7 @@ import org.apache.juneau.oapi.*;
  * </ul>
  *
  * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
- *
+ * <p>
  * Annotation applied to Java method arguments of interface proxies to denote that they are serialized as an HTTP
  * header value.
  *
@@ -72,11 +71,11 @@ import org.apache.juneau.oapi.*;
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
- *
+ * <p>
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrc.Request}
  * </ul>
- *
+ * <p>
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>

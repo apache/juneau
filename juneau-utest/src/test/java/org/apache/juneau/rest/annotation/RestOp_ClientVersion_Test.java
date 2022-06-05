@@ -55,13 +55,13 @@ public class RestOp_ClientVersion_Test {
 		RestClient a = MockRestClient.build(A1.class);
 		a.get("/").run().assertBody().is("no-version");
 		for (String s : "1, 1.0, 1.0.0, 1.0.1".split("\\s*,\\s*")) {
-			a.get("/").clientVersion(s).run().assertBody().msg("s=[{0}]",s).is("[1.0,1.0]");
+			a.get("/").clientVersion(s).run().assertBody().setMsg("s=[{0}]",s).is("[1.0,1.0]");
 		}
 		for (String s : "1.1, 1.1.1, 1.2, 1.9.9".split("\\s*,\\s*")) {
-			a.get("/").clientVersion(s).run().assertBody().msg("s=[{0}]").is("[1.1,2)");
+			a.get("/").clientVersion(s).run().assertBody().setMsg("s=[{0}]").is("[1.1,2)");
 		}
 		for (String s : "2, 2.0, 2.1, 9, 9.9".split("\\s*,\\s*")) {
-			a.get("/").clientVersion(s).run().assertBody().msg("s=[{0}]").is("2");
+			a.get("/").clientVersion(s).run().assertBody().setMsg("s=[{0}]").is("2");
 		}
 	}
 
@@ -94,13 +94,13 @@ public class RestOp_ClientVersion_Test {
 		RestClient a = MockRestClient.build(A2.class);
 		a.get("/").run().assertBody().is("no-version");
 		for (String s : "1, 1.0, 1.0.0, 1.0.1".split("\\s*,\\s*")) {
-			a.get("/").clientVersion(s).run().assertBody().msg("s=[{0}]",s).is("[1.0,1.0]");
+			a.get("/").clientVersion(s).run().assertBody().setMsg("s=[{0}]",s).is("[1.0,1.0]");
 		}
 		for (String s : "1.1, 1.1.1, 1.2, 1.9.9".split("\\s*,\\s*")) {
-			a.get("/").clientVersion(s).run().assertBody().msg("s=[{0}]").is("[1.1,2)");
+			a.get("/").clientVersion(s).run().assertBody().setMsg("s=[{0}]").is("[1.1,2)");
 		}
 		for (String s : "2, 2.0, 2.1, 9, 9.9".split("\\s*,\\s*")) {
-			a.get("/").clientVersion(s).run().assertBody().msg("s=[{0}]").is("2");
+			a.get("/").clientVersion(s).run().assertBody().setMsg("s=[{0}]").is("2");
 		}
 	}
 

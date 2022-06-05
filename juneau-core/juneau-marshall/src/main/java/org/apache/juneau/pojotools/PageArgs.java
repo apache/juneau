@@ -14,7 +14,6 @@ package org.apache.juneau.pojotools;
 
 /**
  * TODO
- * {@review}
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.PojoTools}

@@ -113,7 +113,7 @@ public class RestClient_BasicCalls_Test {
 	public void a02_get() throws Exception {
 		client().build().get("/bean").run().assertBody().is("{f:1}");
 
-		assertThrown(()->client().build().get("/bean").body(bean).run()).message().contains("Method does not support content entity.");
+		assertThrown(()->client().build().get("/bean").body(bean).run()).asMessage().isContains("Method does not support content entity.");
 	}
 
 	@Test
@@ -326,8 +326,8 @@ public class RestClient_BasicCalls_Test {
 			/*[15]*/ s2
 		);
 		for (int i = 0; i < bodies.size(); i++) {
-			client().header("Check","Content-Type").accept("application/json+simple").build().formPost("/checkHeader",bodies.get(i)).run().assertBody().msg("Body {0} failed",i).asString().matches("['application/x-www-form-urlencoded*']");
-			client().build().formPost("/bean",bodies.get(i)).accept("application/json+simple").run().assertBody().msg("Body {0} failed","#"+i).is("{f:1}");
+			client().header("Check","Content-Type").accept("application/json+simple").build().formPost("/checkHeader",bodies.get(i)).run().assertBody().setMsg("Body {0} failed",i).asString().isMatches("['application/x-www-form-urlencoded*']");
+			client().build().formPost("/bean",bodies.get(i)).accept("application/json+simple").run().assertBody().setMsg("Body {0} failed","#"+i).is("{f:1}");
 		}
 	}
 

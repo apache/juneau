@@ -29,7 +29,7 @@ public class Verify_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private StringAssertion test(Object value) {
-		return assertString(value).silent();
+		return assertString(value).setSilent();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

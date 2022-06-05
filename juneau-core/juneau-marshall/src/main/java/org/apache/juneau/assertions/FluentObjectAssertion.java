@@ -29,48 +29,58 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Used for fluent assertion calls against POJOs.
- * {@review}
- *
  *
  * <h5 class='topic'>Test Methods</h5>
- * 	<ul>
- * 		<li class='jm'>{@link FluentObjectAssertion#exists()}
- * 		<li class='jm'>{@link FluentObjectAssertion#is(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#is(Predicate)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNot(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isAny(Object...)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNotAny(Object...)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNull()}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNotNull()}
- * 		<li class='jm'>{@link FluentObjectAssertion#isString(String)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isJson(String)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSame(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameJsonAs(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameSortedJsonAs(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameSerializedAs(Object, WriterSerializer)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class)}
+ * <p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link FluentObjectAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentObjectAssertion#isExists() isExists()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#is(Object) is(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#is(Predicate) is(Predicate)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNot(Object) isNot(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isAny(Object...) isAny(Object...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNotAny(Object...) isNotAny(Object...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNull() isNull()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNotNull() isNotNull()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isString(String) isString(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isJson(String) isJson(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSame(Object) isSame(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameJsonAs(Object) isSameJsonAs(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameSortedJsonAs(Object) isSameSortedJsonAs(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameSerializedAs(Object, WriterSerializer) isSameSerializedAs(Object, WriterSerializer)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class) isType(Class)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class) isExactType(Class)}
  * 	</ul>
+ * </ul>
  *
  * <h5 class='topic'>Transform Methods</h5>
- * 	<ul>
- * 		<li class='jm'>{@link FluentObjectAssertion#asString()}
- * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asJson()}
- * 		<li class='jm'>{@link FluentObjectAssertion#asJsonSorted()}
- * 		<li class='jm'>{@link FluentObjectAssertion#apply(Function)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asAny()}
+ * <p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link FluentObjectAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString() asString()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer) asString(WriterSerializer)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function) asString(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asJson() asJson()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asJsonSorted() asJsonSorted()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asTransformed(Function) asApplied(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asAny() asAny()}
  *	</ul>
+ * </ul>
  *
  * <h5 class='topic'>Configuration Methods</h5>
- * 	<ul>
- * 		<li class='jm'>{@link Assertion#msg(String, Object...)}
- * 		<li class='jm'>{@link Assertion#out(PrintStream)}
- * 		<li class='jm'>{@link Assertion#silent()}
- * 		<li class='jm'>{@link Assertion#stdout()}
- * 		<li class='jm'>{@link Assertion#throwable(Class)}
+ * <p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link Assertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link Assertion#setMsg(String, Object...) setMsg(String, Object...)}
+ * 		<li class='jm'>{@link Assertion#setOut(PrintStream) setOut(PrintStream)}
+ * 		<li class='jm'>{@link Assertion#setSilent() setSilent()}
+ * 		<li class='jm'>{@link Assertion#setStdOut() setStdOut()}
+ * 		<li class='jm'>{@link Assertion#setThrowable(Class) setThrowable(Class)}
  * 	</ul>
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.FluentAssertions}
@@ -164,7 +174,9 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified object is "foobar" after converting to a string.</jc>
-	 * 	<jsm>assertObject<jsm>(<jv>myPojo</jv>).asString().is(<js>"foobar"</js>);
+	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>)
+	 * 		.asString()
+	 * 		.is(<js>"foobar"</js>);
 	 * </p>
 	 *
 	 * @return A new fluent string assertion.
@@ -179,7 +191,9 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
-	 * 	<jsm>assertObject<jsm>(<jv>myPojo</jv>).asString(XmlSerializer.<jsf>DEFAULT</jsf>).is(<js>"&lt;object&gt;&lt;foo&gt;bar&lt;/foo&gt;&lt;baz&gt;qux&lt;/baz&gt;&lt;/object&gt;"</js>);
+	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>)
+	 * 		.asString(XmlSerializer.<jsf>DEFAULT</jsf>)
+	 * 		.is(<js>"&lt;object&gt;&lt;foo&gt;bar&lt;/foo&gt;&lt;baz&gt;qux&lt;/baz&gt;&lt;/object&gt;"</js>);
 	 * </p>
 	 *
 	 * @param ws The serializer to use to convert the object to text.
@@ -199,7 +213,9 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified object is "foobar" after converting to a string.</jc>
-	 * 	<jsm>assertObject<jsm>(<jv>myPojo</jv>).asString(<jv>x</jv>-&gt;<jv>x</jv>.toString()).is(<js>"foobar"</js>);
+	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>)
+	 * 		.asString(<jv>x</jv>-&gt;<jv>x</jv>.toString())
+	 * 		.is(<js>"foobar"</js>);
 	 * </p>
 	 *
 	 * @param function The conversion function.
@@ -215,7 +231,9 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
-	 * 	<jsm>assertObject<jsm>(<jv>myPojo</jv>).asJson().is(<js>"{foo:'bar',baz:'qux'}"</js>);
+	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>)
+	 * 		.asJson()
+	 * 		.is(<js>"{foo:'bar',baz:'qux'}"</js>);
 	 * </p>
 	 *
 	 * @return A new fluent string assertion.
@@ -230,7 +248,9 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
-	 * 	<jsm>assertObject<jsm>(<jv>myPojo</jv>).asJsonSorted().is(<js>"{baz:'qux',foo:'bar'}"</js>);
+	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>)
+	 * 		.asJsonSorted()
+	 * 		.is(<js>"{baz:'qux',foo:'bar'}"</js>);
 	 * </p>
 	 *
 	 * @return A new fluent string assertion.
@@ -245,7 +265,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @param function The function to apply.
 	 * @return This object.
 	 */
-	public FluentObjectAssertion<T,R> apply(Function<T,T> function) {
+	public FluentObjectAssertion<T,R> asTransformed(Function<T,T> function) {
 		return new FluentObjectAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
@@ -256,7 +276,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @param function The function to apply.
 	 * @return This object.
 	 */
-	public <T2> FluentObjectAssertion<T2,R> transform(Function<T,T2> function) {
+	public <T2> FluentObjectAssertion<T2,R> asTransformedTo(Function<T,T2> function) {
 		return new FluentObjectAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
@@ -282,7 +302,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R exists() throws AssertionError {
+	public R isExists() throws AssertionError {
 		return isNotNull();
 	}
 
@@ -445,7 +465,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
-	 * 	<jsm>assertObject<jsm>(<jv>myPojo</jv>).isType(MyBean.<jk>class</jk>);
+	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>).isType(MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param parent The value to check against.
@@ -465,7 +485,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
-	 * 	<jsm>assertObject<jsm>(<jv>myPojo</jv>).isExactType(MyBean.<jk>class</jk>);
+	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>).isExactType(MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param type The value to check against.
@@ -498,7 +518,9 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified object is an instance of MyBean.</jc>
-	 * 	<jsm>assertObject<jsm>(<jv>myPojo</jv>).asJson().is(<js>"{foo:'bar',baz:'qux'}"</js>);
+	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>)
+	 * 		.asJson()
+	 * 		.is(<js>"{foo:'bar',baz:'qux'}"</js>);
 	 * </p>
 	 *
 	 * @param value The expected string value.
@@ -515,32 +537,32 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentObjectAssertion<T,R> msg(String msg, Object...args) {
-		super.msg(msg, args);
+	public FluentObjectAssertion<T,R> setMsg(String msg, Object...args) {
+		super.setMsg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentObjectAssertion<T,R> out(PrintStream value) {
-		super.out(value);
+	public FluentObjectAssertion<T,R> setOut(PrintStream value) {
+		super.setOut(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentObjectAssertion<T,R> silent() {
-		super.silent();
+	public FluentObjectAssertion<T,R> setSilent() {
+		super.setSilent();
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentObjectAssertion<T,R> stdout() {
-		super.stdout();
+	public FluentObjectAssertion<T,R> setStdOut() {
+		super.setStdOut();
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentObjectAssertion<T,R> throwable(Class<? extends java.lang.RuntimeException> value) {
-		super.throwable(value);
+	public FluentObjectAssertion<T,R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+		super.setThrowable(value);
 		return this;
 	}
 
@@ -557,7 +579,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @throws AssertionError If inner value was <jk>null</jk>.
 	 */
 	protected T value() throws AssertionError {
-		exists();
+		isExists();
 		return value;
 	}
 

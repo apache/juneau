@@ -34,7 +34,7 @@ public class Rest_Debug_Test {
 	}
 
 	private static void assertLogged() {
-		LOGGER.assertMessageAndReset().exists();
+		LOGGER.assertMessageAndReset().isExists();
 	}
 
 	private static void assertNotLogged() {
@@ -42,7 +42,7 @@ public class Rest_Debug_Test {
 	}
 
 	private static void assertLogged(String msg) {
-		LOGGER.assertMessageAndReset().contains(msg);
+		LOGGER.assertMessageAndReset().isContains(msg);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

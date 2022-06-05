@@ -31,10 +31,9 @@ import org.apache.juneau.xml.*;
 
 /**
  * Parses RDF into POJOs.
- * {@review}
  *
  * <h5 class='topic'>Behavior-specific subclasses</h5>
- *
+ * <p>
  * The following direct subclasses are provided for language-specific parsers:
  * <ul class='spaced-list'>
  * 	<li>
@@ -47,7 +46,7 @@ import org.apache.juneau.xml.*;
  * 		{@link N3Parser} - N3.
  * </ul>
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
@@ -178,9 +177,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * <p>
 		 * Set the engine for checking and resolving.
 		 *
-		 * <p>
-		 * Possible values:
-		 * <ul class='spaced-list'>
+		 * <ul class='values spaced-list'>
 		 * 	<li>
 		 * 		<js>"lax"</js> - The rules for RDF URI references only, which does permit spaces although the use of spaces
 		 * 		is not good practice.
@@ -209,9 +206,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		 * <p>
 		 * This allows a coarse-grained approach to control of error handling.
 		 *
-		 * <p>
-		 * Possible values:
-		 * <ul>
+		 * <ul class='values'>
 		 * 	<li><js>"default"</js>
 		 * 	<li><js>"lax"</js>
 		 * 	<li><js>"strict"</js>
@@ -392,9 +387,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		/**
 		 * RDF/XML property: <c>showXmlDeclaration</c>.
 		 *
-		 * <p>
-		 * Possible values:
-		 * <ul class='spaced-list'>
+		 * <ul class='values spaced-list'>
 		 * 	<li>
 		 * 		<js>"true"</js> - Add XML Declaration to the output.
 		 * 	<li>
@@ -714,9 +707,7 @@ public class RdfParser extends ReaderParser implements RdfMetaProvider {
 		/**
 		 * RDF format for representing collections and arrays.
 		 *
-		 * <p>
-		 * Possible values:
-		 * <ul class='spaced-list'>
+		 * <ul class='values spaced-list'>
 		 * 	<li>
 		 * 		<js>"DEFAULT"</js> - Default format.  The default is an RDF Sequence container.
 		 * 	<li>

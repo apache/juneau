@@ -26,57 +26,73 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Used for fluent assertion calls against maps.
- * {@review}
- *
  *
  * <h5 class='topic'>Test Methods</h5>
- * 	<ul>
- * 		<li class='jm'>{@link FluentMapAssertion#isEmpty()}
- * 		<li class='jm'>{@link FluentMapAssertion#isNotEmpty()}
- * 		<li class='jm'>{@link FluentMapAssertion#containsKey(String)}
- * 		<li class='jm'>{@link FluentMapAssertion#doesNotContainKey(String)}
- * 		<li class='jm'>{@link FluentMapAssertion#isSize(int)}
- * 		<li class='jm'>{@link FluentObjectAssertion#exists()}
- * 		<li class='jm'>{@link FluentObjectAssertion#is(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#is(Predicate)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNot(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isAny(Object...)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNotAny(Object...)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNull()}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNotNull()}
- * 		<li class='jm'>{@link FluentObjectAssertion#isString(String)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isJson(String)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSame(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameJsonAs(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameSortedJsonAs(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameSerializedAs(Object, WriterSerializer)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class)}
+ * <p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link FluentMapAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentMapAssertion#isEmpty() isEmpty()}
+ * 		<li class='jm'>{@link FluentMapAssertion#isNotEmpty() isNotEmpty()}
+ * 		<li class='jm'>{@link FluentMapAssertion#isContainsKey(String) isContainsKey(String)}
+ * 		<li class='jm'>{@link FluentMapAssertion#isNotContainsKey(String) isNotContainsKey(String)}
+ * 		<li class='jm'>{@link FluentMapAssertion#isSize(int) isSize(int)}
  * 	</ul>
+ * 	<li class='jc'>{@link FluentObjectAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentObjectAssertion#isExists() isExists()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#is(Object) is(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#is(Predicate) is(Predicate)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNot(Object) isNot(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isAny(Object...) isAny(Object...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNotAny(Object...) isNotAny(Object...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNull() isNull()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNotNull() isNotNull()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isString(String) isString(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isJson(String) isJson(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSame(Object) isSame(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameJsonAs(Object) isSameJsonAs(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameSortedJsonAs(Object) isSameSortedJsonAs(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameSerializedAs(Object, WriterSerializer) isSameSerializedAs(Object, WriterSerializer)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class) isType(Class)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class) isExactType(Class)}
+ * 	</ul>
+ * </ul>
  *
  * <h5 class='topic'>Transform Methods</h5>
- * 	<ul>
- * 		<li class='jm'>{@link FluentMapAssertion#value(Object)}
- * 		<li class='jm'>{@link FluentMapAssertion#values(Object...)}
- * 		<li class='jm'>{@link FluentMapAssertion#extract(Object...)}
- * 		<li class='jm'>{@link FluentMapAssertion#size()}
- * 		<li class='jm'>{@link FluentObjectAssertion#asString()}
- * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asJson()}
- * 		<li class='jm'>{@link FluentObjectAssertion#asJsonSorted()}
- * 		<li class='jm'>{@link FluentObjectAssertion#apply(Function)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asAny()}
+ * <p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link FluentMapAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentMapAssertion#asValue(Object) asValue(Object)}
+ * 		<li class='jm'>{@link FluentMapAssertion#asValues(Object...) asValues(Object...)}
+ * 		<li class='jm'>{@link FluentMapAssertion#asValueMap(Object...) asValueMap(Object...)}
+ * 		<li class='jm'>{@link FluentMapAssertion#asSize() asSize()}
+ * 	</ul>
+ * 	<li class='jc'>{@link FluentObjectAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString() asString()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer) asString(WriterSerializer)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function) asString(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asJson() asJson()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asJsonSorted() asJsonSorted()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asTransformed(Function) asApplied(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asAny() asAny()}
  *	</ul>
+ * </ul>
  *
  * <h5 class='topic'>Configuration Methods</h5>
- * 	<ul>
- * 		<li class='jm'>{@link Assertion#msg(String, Object...)}
- * 		<li class='jm'>{@link Assertion#out(PrintStream)}
- * 		<li class='jm'>{@link Assertion#silent()}
- * 		<li class='jm'>{@link Assertion#stdout()}
- * 		<li class='jm'>{@link Assertion#throwable(Class)}
+ * <p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link Assertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link Assertion#setMsg(String, Object...) setMsg(String, Object...)}
+ * 		<li class='jm'>{@link Assertion#setOut(PrintStream) setOut(PrintStream)}
+ * 		<li class='jm'>{@link Assertion#setSilent() setSilent()}
+ * 		<li class='jm'>{@link Assertion#setStdOut() setStdOut()}
+ * 		<li class='jm'>{@link Assertion#setThrowable(Class) setThrowable(Class)}
  * 	</ul>
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.FluentAssertions}
@@ -147,7 +163,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* FluentObjectAssertion */
-	public FluentMapAssertion<K,V,R> apply(Function<Map<K,V>,Map<K,V>> function) {
+	public FluentMapAssertion<K,V,R> asTransformed(Function<Map<K,V>,Map<K,V>> function) {
 		return new FluentMapAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
@@ -156,12 +172,12 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 *
 	 * <p>
 	 * If the map is <jk>null</jk> or the map doesn't contain the specified key, the returned assertion is a null assertion
-	 * (meaning {@link FluentAnyAssertion#exists()} returns <jk>false</jk>).
+	 * (meaning {@link FluentAnyAssertion#isExists()} returns <jk>false</jk>).
 	 *
 	 * @param key The key of the item to retrieve from the map.
 	 * @return A new assertion.
 	 */
-	public FluentAnyAssertion<V,R> value(K key) {
+	public FluentAnyAssertion<V,R> asValue(K key) {
 		return new FluentAnyAssertion<>(this, get(key), returns());
 	}
 
@@ -169,12 +185,12 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 * Returns a {@link FluentListAssertion} of the values of the specified keys.
 	 *
 	 * If the map is <jk>null</jk>, the returned assertion is a null assertion
-	 * (meaning {@link FluentObjectAssertion#exists()} returns <jk>false</jk>).
+	 * (meaning {@link FluentObjectAssertion#isExists()} returns <jk>false</jk>).
 	 *
 	 * @param keys The keys of the values to retrieve from the map.
 	 * @return A new assertion.
 	 */
-	public FluentListAssertion<Object,R> values(@SuppressWarnings("unchecked") K...keys) {
+	public FluentListAssertion<Object,R> asValues(@SuppressWarnings("unchecked") K...keys) {
 		return new FluentListAssertion<>(this, valueIsNull() ? null : stream(keys).map(x -> get(x)).collect(toList()), returns());
 	}
 
@@ -185,7 +201,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
-	public FluentMapAssertion<K,V,R> extract(K...keys) {
+	public FluentMapAssertion<K,V,R> asValueMap(K...keys) {
 		if (valueIsNull())
 			return new FluentMapAssertion<>(this, null, returns());
 		Map<K,V> m1 = value(), m2 = CollectionUtils.map();
@@ -200,11 +216,11 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 *
 	 * <p>
 	 * If the map is <jk>null</jk>, the returned assertion is a null assertion
-	 * (meaning {@link FluentIntegerAssertion#exists()} returns <jk>false</jk>).
+	 * (meaning {@link FluentIntegerAssertion#isExists()} returns <jk>false</jk>).
 	 *
 	 * @return A new assertion.
 	 */
-	public FluentIntegerAssertion<R> size() {
+	public FluentIntegerAssertion<R> asSize() {
 		return new FluentIntegerAssertion<>(this, valueIsNull() ? null : value().size(), returns());
 	}
 
@@ -243,7 +259,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
-	public R containsKey(String name) throws AssertionError {
+	public R isContainsKey(String name) throws AssertionError {
 		if (value().containsKey(name))
 			return returns();
 		throw error(MSG_mapDidNotContainExpectedKey, name, value());
@@ -256,7 +272,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
-	public R doesNotContainKey(String name) throws AssertionError {
+	public R isNotContainsKey(String name) throws AssertionError {
 		if (! value().containsKey(name))
 			return returns();
 		throw error(MSG_mapContainedUnexpectedKey, name, value());
@@ -282,32 +298,32 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentMapAssertion<K,V,R> msg(String msg, Object...args) {
-		super.msg(msg, args);
+	public FluentMapAssertion<K,V,R> setMsg(String msg, Object...args) {
+		super.setMsg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentMapAssertion<K,V,R> out(PrintStream value) {
-		super.out(value);
+	public FluentMapAssertion<K,V,R> setOut(PrintStream value) {
+		super.setOut(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentMapAssertion<K,V,R> silent() {
-		super.silent();
+	public FluentMapAssertion<K,V,R> setSilent() {
+		super.setSilent();
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentMapAssertion<K,V,R> stdout() {
-		super.stdout();
+	public FluentMapAssertion<K,V,R> setStdOut() {
+		super.setStdOut();
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentMapAssertion<K,V,R> throwable(Class<? extends java.lang.RuntimeException> value) {
-		super.throwable(value);
+	public FluentMapAssertion<K,V,R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+		super.setThrowable(value);
 		return this;
 	}
 

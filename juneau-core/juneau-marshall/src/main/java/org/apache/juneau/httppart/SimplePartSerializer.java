@@ -23,7 +23,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * More precisely, uses the {@link Mutaters#toString(Object)} method to stringify objects.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *

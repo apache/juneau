@@ -159,11 +159,11 @@ div.header > div.subTitle > div.block > h1.title { padding:0px; border-radius:0p
 
 l { color:#3b596d; font-weight:bold; font-family:monospace; font-size:1.1em; }
 
-.spaced-list>li, .notes>li {  padding:5px; max-width:800px; }
-.footer .spaced-list ul, .notes>li {  margin:0; max-width:800px; }
+.spaced-list>li, .notes>li, .values>li, .format>li {  padding:5px; max-width:800px; }
+.footer .spaced-list ul, .notes>li, .values>li, .format>li {  margin:0; max-width:800px; }
 
 /* Documentation Tree */
-.doctree li, .javatree li, .seealso li, .notes li { max-width:800px; margin-top:0px; }
+.doctree li, .javatree li, .seealso>li, .notes>li, .values>li, .format>li { max-width:800px; margin-top:0px; }
 .doctree>li, .seealso>li { margin-bottom:10px; }
 .doctree li, .seealso li {  margin-top:5px; }
 .doctree ul, .seealso ul {  padding:0px 0px 0px 15px; margin-top:-2px; margin-bottom:-2px; }
@@ -173,23 +173,33 @@ l { color:#3b596d; font-weight:bold; font-family:monospace; font-size:1.1em; }
 
 ul.seealso:before { content:'See Also:'; }
 ul.notes:before { content: 'Notes:'; }
+ul.values:before { content: 'Possible Values:'; }
+ul.format:before { content: 'Format:'; }
 div.description ul.seealso:before, 
 div.description ul.notes:before,
+div.description ul.values:before,
+div.description ul.format:before,
 div.topic ul.seealso:before, 
-div.topic ul.notes:before {
+div.topic ul.notes:before,
+div.topic ul.values:before,
+div.topic ul.format:before {
 	white-space:pre; font-size:1.1em; font-weight:bold; color:#4e4e4e; margin-left:-40px; padding-bottom:20px; line-height:30px;
 }
 div.details ul.seealso:before, 
 div.details ul.notes:before,
+div.details ul.values:before,
+div.details ul.format:before,
 div.topic ul.seealso:before, 
-div.topic ul.notes:before {
+div.topic ul.notes:before,
+div.topic ul.values:before,
+div.topic ul.format:before {
 	white-space:pre; font-size:1.1em; font-weight:bold; color:#4e4e4e; margin-left:-40px; padding-bottom:20px; line-height:30px;
 }
-ul.seealso, ul.notes { margin-top:20px; }
+ul.seealso, ul.notes, ul.values, ul.format { margin-top:20px; }
 
 li.normal { list-style-image:none; }
-ul.notes ul li { padding:10px; }
-ul.notes ul.compact li { padding:0px; }
+ul.notes ul li, ul.values ul li, ul.format ul li { padding:10px; }
+ul.notes ul.compact li, ul.values li, ul.format li { padding:0px; }
 .topic a { border-bottom:1px dotted #4c6b87; }
 
 /* Article links */

@@ -22,7 +22,6 @@ import org.apache.juneau.internal.*;
 
 /**
  * Designed to provide paging on POJOs consisting of arrays and collections.
- * {@review}
  *
  * <p>
  * Allows you to quickly return subsets of arrays and collections based on position/limit arguments.

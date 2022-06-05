@@ -21,7 +21,6 @@ import org.apache.juneau.cp.*;
 
 /**
  * Wrapper around a {@link Predicate} that allows for an error message for when the predicate fails.
- * {@review}
  *
  * <p>
  * Typically used wherever predicates are allowed for testing of {@link Assertion} objects such as...
@@ -29,7 +28,7 @@ import org.apache.juneau.cp.*;
  * 	<li>{@link FluentObjectAssertion#is(Predicate)}
  * 	<li>{@link FluentArrayAssertion#is(Predicate...)}
  * 	<li>{@link FluentPrimitiveArrayAssertion#is(Predicate...)}
- * 	<li>{@link FluentListAssertion#each(Predicate...)}
+ * 	<li>{@link FluentListAssertion#isEach(Predicate...)}
  * </ul>
  *
  * <p>
@@ -44,7 +43,7 @@ import org.apache.juneau.cp.*;
  * 		<js>"Foo did not equal bar.  Bean was=''{0}''"</js>,
  * 		<jsf>VALUE</jsf>
  * 	);
- * 	<jsm>assertObject<jsm>(<jv>myBean</jv>).passes(<jv>predicate</jv>);
+ * 	<jsm>assertObject</jsm>(<jv>myBean</jv>).passes(<jv>predicate</jv>);
  * </p>
  *
  * <ul class='seealso'>

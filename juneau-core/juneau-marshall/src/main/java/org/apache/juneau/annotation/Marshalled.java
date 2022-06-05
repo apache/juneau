@@ -61,19 +61,19 @@ public @interface Marshalled {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Setting applies to specified class and all subclasses.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Keys are the class of the example.
 	 * 		<br>Values are Simple-JSON representation of that class.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		POJO examples can also be defined on classes via the following:
 	 * 		<ul class='spaced-list'>
 	 * 			<li>A static field annotated with {@link Example @Example}.
 	 * 			<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link BeanSession} argument.
 	 * 			<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
 	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *

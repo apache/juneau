@@ -20,7 +20,6 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Used for assertion calls against throwable objects.
- * {@review}
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -30,52 +29,67 @@ import org.apache.juneau.serializer.*;
  *
  *
  * <h5 class='topic'>Test Methods</h5>
- * 	<ul>
- * 		<li class='jm'>{@link FluentObjectAssertion#exists()}
- * 		<li class='jm'>{@link FluentObjectAssertion#is(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#is(Predicate)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNot(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isAny(Object...)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNotAny(Object...)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNull()}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNotNull()}
- * 		<li class='jm'>{@link FluentObjectAssertion#isString(String)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isJson(String)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSame(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameJsonAs(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameSortedJsonAs(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameSerializedAs(Object, WriterSerializer)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class)}
+ * <p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link FluentObjectAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentObjectAssertion#isExists() isExists()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#is(Object) is(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#is(Predicate) is(Predicate)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNot(Object) isNot(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isAny(Object...) isAny(Object...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNotAny(Object...) isNotAny(Object...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNull() isNull()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNotNull() isNotNull()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isString(String) isString(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isJson(String) isJson(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSame(Object) isSame(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameJsonAs(Object) isSameJsonAs(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameSortedJsonAs(Object) isSameSortedJsonAs(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameSerializedAs(Object, WriterSerializer) isSameSerializedAs(Object, WriterSerializer)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class) isType(Class)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class) isExactType(Class)}
  * 	</ul>
+ * </ul>
  *
  * <h5 class='topic'>Transform Methods</h5>
- * 	<ul>
- * 		<li class='jm'>{@link FluentThrowableAssertion#message()}
- * 		<li class='jm'>{@link FluentThrowableAssertion#messages()}
- * 		<li class='jm'>{@link FluentThrowableAssertion#localizedMessage()}
- * 		<li class='jm'>{@link FluentThrowableAssertion#localizedMessages()}
- * 		<li class='jm'>{@link FluentThrowableAssertion#stackTrace()}
- * 		<li class='jm'>{@link FluentThrowableAssertion#causedBy()}
- * 		<li class='jm'>{@link FluentThrowableAssertion#causedBy(Class)}
- * 		<li class='jm'>{@link FluentThrowableAssertion#find(Class)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asString()}
- * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asJson()}
- * 		<li class='jm'>{@link FluentObjectAssertion#asJsonSorted()}
- * 		<li class='jm'>{@link FluentObjectAssertion#apply(Function)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asAny()}
+ * <p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link FluentThrowableAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentThrowableAssertion#asMessage() asMessage()}
+ * 		<li class='jm'>{@link FluentThrowableAssertion#asMessages() asMessages()}
+ * 		<li class='jm'>{@link FluentThrowableAssertion#asLocalizedMessage() asLocalizedMessage()}
+ * 		<li class='jm'>{@link FluentThrowableAssertion#asLocalizedMessages() asLocalizedMessages()}
+ * 		<li class='jm'>{@link FluentThrowableAssertion#asStackTrace() asStackTrace()}
+ * 		<li class='jm'>{@link FluentThrowableAssertion#asCausedBy() asCausedBy()}
+ * 		<li class='jm'>{@link FluentThrowableAssertion#asCausedBy(Class) asCausedBy(Class)}
+ * 		<li class='jm'>{@link FluentThrowableAssertion#asFind(Class) asFind(Class)}
+ * 	</ul>
+ * 	<li class='jc'>{@link FluentObjectAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString() asString()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer) asString(WriterSerializer)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function) asString(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asJson() asJson()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asJsonSorted() asJsonSorted()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asTransformed(Function) asApplied(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asAny() asAny()}
  *	</ul>
+ * </ul>
  *
  * <h5 class='topic'>Configuration Methods</h5>
- * 	<ul>
- * 		<li class='jm'>{@link Assertion#msg(String, Object...)}
- * 		<li class='jm'>{@link Assertion#out(PrintStream)}
- * 		<li class='jm'>{@link Assertion#silent()}
- * 		<li class='jm'>{@link Assertion#stdout()}
- * 		<li class='jm'>{@link Assertion#throwable(Class)}
+ * <p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link Assertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link Assertion#setMsg(String, Object...) setMsg(String, Object...)}
+ * 		<li class='jm'>{@link Assertion#setOut(PrintStream) setOut(PrintStream)}
+ * 		<li class='jm'>{@link Assertion#setSilent() setSilent()}
+ * 		<li class='jm'>{@link Assertion#setStdOut() setStdOut()}
+ * 		<li class='jm'>{@link Assertion#setThrowable(Class) setThrowable(Class)}
  * 	</ul>
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.FluentAssertions}
@@ -126,32 +140,32 @@ public class ThrowableAssertion<T extends Throwable> extends FluentThrowableAsse
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public ThrowableAssertion<T> msg(String msg, Object...args) {
-		super.msg(msg, args);
+	public ThrowableAssertion<T> setMsg(String msg, Object...args) {
+		super.setMsg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public ThrowableAssertion<T> out(PrintStream value) {
-		super.out(value);
+	public ThrowableAssertion<T> setOut(PrintStream value) {
+		super.setOut(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public ThrowableAssertion<T> silent() {
-		super.silent();
+	public ThrowableAssertion<T> setSilent() {
+		super.setSilent();
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public ThrowableAssertion<T> stdout() {
-		super.stdout();
+	public ThrowableAssertion<T> setStdOut() {
+		super.setStdOut();
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public ThrowableAssertion<T> throwable(Class<? extends java.lang.RuntimeException> value) {
-		super.throwable(value);
+	public ThrowableAssertion<T> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+		super.setThrowable(value);
 		return this;
 	}
 

@@ -16,7 +16,6 @@ import org.apache.juneau.*;
 
 /**
  * Indicates an invalid search pattern was specified.
- * {@review}
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.PojoTools}

@@ -61,12 +61,12 @@ public class BasicBooleanHeader_Test {
 		// Invalid usage.
 		c.get().header(booleanHeader(HEADER,(Supplier<Boolean>)null)).run().assertBody().isEmpty();
 		c.get().header(booleanHeader(HEADER,()->null)).run().assertBody().isEmpty();
-		assertThrown(()->booleanHeader("", VALUE)).message().is("Name cannot be empty on header.");
-		assertThrown(()->booleanHeader(null, VALUE)).message().is("Name cannot be empty on header.");
-		assertThrown(()->booleanHeader("", PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->booleanHeader(null, PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->booleanHeader("", ()->PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->booleanHeader(null, ()->PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->booleanHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->booleanHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->booleanHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->booleanHeader(null, PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->booleanHeader("", ()->PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->booleanHeader(null, ()->PARSED)).asMessage().is("Name cannot be empty on header.");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

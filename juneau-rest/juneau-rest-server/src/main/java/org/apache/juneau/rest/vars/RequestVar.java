@@ -46,9 +46,9 @@ import org.apache.juneau.svl.*;
  * </p>
  *
  * <ul class='notes'>
- * 	<li>
+ * 	<li class='note'>
  * 		This variable resolver requires that a {@link RestRequest} bean be available in the session bean store.
- * 	<li>
+ * 	<li class='note'>
  * 		For security reasons, nested and recursive variables are not resolved.
  * </ul>
  *

@@ -22,7 +22,7 @@ import java.util.*;
  * <p>
  * Consists of a simple string-keyed map of arbitrary objects.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *

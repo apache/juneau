@@ -1355,12 +1355,12 @@ public class ParameterInfo extends SwaggerElement {
 	 * The name of the parameter.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Parameter names are case sensitive.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If <c>in</c> is <js>"path"</js>, the <c>name</c> field MUST correspond to the associated path segment
 	 * 		from the <c>path</c> field in the {@doc ext.SwaggerPathsObject Paths Object}.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		For all other cases, the name corresponds to the parameter name used based on the <c>in</c> property.
 	 * </ul>
 	 *

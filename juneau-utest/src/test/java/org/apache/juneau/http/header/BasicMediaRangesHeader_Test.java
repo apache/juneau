@@ -62,12 +62,12 @@ public class BasicMediaRangesHeader_Test {
 		// Invalid usage.
 		c.get().header(mediaRangesHeader(HEADER,(Supplier<MediaRanges>)null)).run().assertBody().isEmpty();
 		c.get().header(mediaRangesHeader(HEADER,()->null)).run().assertBody().isEmpty();
-		assertThrown(()->mediaRangesHeader("", VALUE)).message().is("Name cannot be empty on header.");
-		assertThrown(()->mediaRangesHeader(null, VALUE)).message().is("Name cannot be empty on header.");
-		assertThrown(()->mediaRangesHeader("", PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->mediaRangesHeader(null, PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->mediaRangesHeader("", ()->PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->mediaRangesHeader(null, ()->PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->mediaRangesHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->mediaRangesHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->mediaRangesHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->mediaRangesHeader(null, PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->mediaRangesHeader("", ()->PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->mediaRangesHeader(null, ()->PARSED)).asMessage().is("Name cannot be empty on header.");
 	}
 
 	@Test

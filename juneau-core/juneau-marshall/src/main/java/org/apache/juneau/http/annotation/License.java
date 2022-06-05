@@ -18,7 +18,6 @@ import java.lang.annotation.*;
 
 /**
  * Swagger license annotation.
- * {@review}
  *
  * <p>
  * License information for the exposed API.
@@ -28,12 +27,10 @@ import java.lang.annotation.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<ja>@Rest</ja>(
- * 		swagger=<ja>@Swagger</ja>(
- * 			license=<ja>@License</ja>(
- * 				name=<js>"Apache 2.0"</js>,
- * 				url=<js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>
- * 			)
+ * 	<ja>@Swagger</ja>(
+ * 		license=<ja>@License</ja>(
+ * 			name=<js>"Apache 2.0"</js>,
+ * 			url=<js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>
  * 		)
  * 	)
  * </p>
@@ -52,9 +49,9 @@ public @interface License {
 	 * <mk>name</mk> field of the {@doc ext.SwaggerLicenseObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 *
@@ -66,9 +63,9 @@ public @interface License {
 	 * <mk>url</mk> field of the {@doc ext.SwaggerLicenseObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 *

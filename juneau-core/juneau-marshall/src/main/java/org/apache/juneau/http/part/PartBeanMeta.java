@@ -24,7 +24,6 @@ import org.apache.juneau.reflect.*;
 
 /**
  * Holds metadata about http part beans (POJOs that get serialized as HTTP parts such as form data or query parameters).
- * {@review}
  *
  * <p>
  * HTTP part beans are typically annotated with {@link Query @Query}, {@link FormData @FormData}, or {@link Path @Path}

@@ -23,7 +23,6 @@ import org.apache.juneau.oapi.*;
 
 /**
  * Request bean annotation.
- * {@review}
  *
  * <p>
  * Identifies an interface to use to interact with HTTP parts of an HTTP request through a bean.
@@ -36,7 +35,7 @@ import org.apache.juneau.oapi.*;
  * </ul>
  *
  * <h5 class='topic'>Arguments and argument-types of server-side @RestOp-annotated methods</h5>
- *
+ * <p>
  * Annotation that can be applied to a parameter of a <ja>@RestOp</ja>-annotated method to identify it as an interface for retrieving HTTP parts through a bean interface.
  *
  * <h5 class='section'>Example:</h5>
@@ -89,9 +88,9 @@ import org.apache.juneau.oapi.*;
  * </ul>
  *
  * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
- *
+ * <p>
  * Annotation applied to Java method arguments of interface proxies to denote a bean with remote resource annotations.
-
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<ja>@RemoteResource</ja>(path=<js>"/myproxy"</js>)
@@ -117,11 +116,13 @@ import org.apache.juneau.oapi.*;
  *
  *		<jc>// Schema-based query parameter:  Pipe-delimited lists of comma-delimited lists of integers.</jc>
  * 		<ja>@Query</ja>(
- * 			collectionFormat=<js>"pipes"</js>
- * 			items=<ja>@Items</ja>(
- * 				items=<ja>@SubItems</ja>(
- * 					collectionFormat=<js>"csv"</js>
- * 					type=<js>"integer"</js>
+ * 			schema=<ja>@Query</ja>(
+ * 				collectionFormat=<js>"pipes"</js>
+ * 				items=<ja>@Items</ja>(
+ * 					items=<ja>@SubItems</ja>(
+ * 						collectionFormat=<js>"csv"</js>
+ * 						type=<js>"integer"</js>
+ * 					)
  * 				)
  * 			)
  * 		)
@@ -135,7 +136,7 @@ import org.apache.juneau.oapi.*;
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrc.Request}
  * </ul>
- *
+ * <p>
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>

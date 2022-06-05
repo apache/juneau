@@ -67,14 +67,13 @@ public @interface HtmlConfig {
 	 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerSet}.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -117,14 +116,13 @@ public @interface HtmlConfig {
 	 * 	</tr>
 	 * </table>
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -167,14 +165,13 @@ public @interface HtmlConfig {
 	 * 	</tr>
 	 * </table>
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -193,9 +190,9 @@ public @interface HtmlConfig {
 	 * The parameter name to look for when resolving link labels.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Default value: <js>"label"</js>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -241,14 +238,13 @@ public @interface HtmlConfig {
 	 * 	</tr>
 	 * </table>
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -267,20 +263,19 @@ public @interface HtmlConfig {
 	 * When creating anchor tags (e.g. <code><xt>&lt;a</xt> <xa>href</xa>=<xs>'...'</xs>
 	 * <xt>&gt;</xt>text<xt>&lt;/a&gt;</xt></code>) in HTML, this setting defines what to set the inner text to.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"TO_STRING"</js> - Set to whatever is returned by {@link #toString()} on the object.
+	 * 	<li><js>"PROPERTY_NAME"</js> - Set to the bean property name.
+	 * 	<li><js>"URI"</js> - Set to the URI value.
+	 * 	<li><js>"LAST_TOKEN"</js> - Set to the last token of the URI value.
+	 * 	<li><js>"URI_ANCHOR"</js> - Set to the anchor of the URL.
+	 * 	<li><js>"CONTEXT_RELATIVE"</js> - Same as <js>"TO_STRING"</js> but assumes it's a context-relative path.
+	 * 	<li><js>"SERVLET_RELATIVE"</js> - Same as <js>"TO_STRING"</js> but assumes it's a servlet-relative path.
+	 * 	<li><js>"PATH_RELATIVE"</js> - Same as <js>"TO_STRING"</js> but assumes it's a path-relative path.
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"TO_STRING"</js> - Set to whatever is returned by {@link #toString()} on the object.
-	 * 			<li><js>"PROPERTY_NAME"</js> - Set to the bean property name.
-	 * 			<li><js>"URI"</js> - Set to the URI value.
-	 * 			<li><js>"LAST_TOKEN"</js> - Set to the last token of the URI value.
-	 * 			<li><js>"URI_ANCHOR"</js> - Set to the anchor of the URL.
-	 * 			<li><js>"CONTEXT_RELATIVE"</js> - Same as <js>"TO_STRING"</js> but assumes it's a context-relative path.
-	 * 			<li><js>"SERVLET_RELATIVE"</js> - Same as <js>"TO_STRING"</js> but assumes it's a servlet-relative path.
-	 * 			<li><js>"PATH_RELATIVE"</js> - Same as <js>"TO_STRING"</js> but assumes it's a path-relative path.
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *

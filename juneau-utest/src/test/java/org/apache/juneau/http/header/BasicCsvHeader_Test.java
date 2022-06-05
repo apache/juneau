@@ -60,12 +60,12 @@ public class BasicCsvHeader_Test {
 		// Invalid usage.
 		c.get().header(csvHeader(HEADER,(Supplier<String[]>)null)).run().assertBody().isEmpty();
 		c.get().header(csvHeader(HEADER,()->null)).run().assertBody().isEmpty();
-		assertThrown(()->csvHeader("", VALUE)).message().is("Name cannot be empty on header.");
-		assertThrown(()->csvHeader(null, VALUE)).message().is("Name cannot be empty on header.");
-		assertThrown(()->csvHeader("", PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->csvHeader(null, PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->csvHeader("", ()->PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->csvHeader(null, ()->PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->csvHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->csvHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->csvHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->csvHeader(null, PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->csvHeader("", ()->PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->csvHeader(null, ()->PARSED)).asMessage().is("Name cannot be empty on header.");
 	}
 
 	@Test
@@ -89,7 +89,7 @@ public class BasicCsvHeader_Test {
 
 	@Test
 	public void a03_assertList() throws Exception {
-		csvHeader("Foo", "bar").assertList().contains("bar").assertList().doesNotContain("baz");
+		csvHeader("Foo", "bar").assertList().isContains("bar").assertList().isNotContains("baz");
 		new BasicCsvHeader("Foo", (String)null).assertList().isNull();
 	}
 

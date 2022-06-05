@@ -93,7 +93,7 @@ public class Restx_Parsers_Test {
 			.contentType("text/b")
 			.run()
 			.assertCode().is(415)
-			.assertBody().contains(
+			.assertBody().isContains(
 				"Unsupported media-type in request header 'Content-Type': 'text/b'",
 				"Supported media-types: ['text/a"
 			);
@@ -106,7 +106,7 @@ public class Restx_Parsers_Test {
 			.contentType("text/a")
 			.run()
 			.assertCode().is(415)
-			.assertBody().contains(
+			.assertBody().isContains(
 				"Unsupported media-type in request header 'Content-Type': 'text/a'",
 				"Supported media-types: ['text/b']"
 			);
@@ -133,7 +133,7 @@ public class Restx_Parsers_Test {
 			.contentType("text/bad")
 			.run()
 			.assertCode().is(415)
-			.assertBody().contains(
+			.assertBody().isContains(
 				"Unsupported media-type in request header 'Content-Type': 'text/bad'",
 				"Supported media-types: ['text/a"
 			);

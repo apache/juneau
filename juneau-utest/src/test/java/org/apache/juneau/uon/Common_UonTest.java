@@ -241,11 +241,11 @@ public class Common_UonTest {
 		r3.r1 = r1;
 
 		// No recursion detection
-		assertThrown(()->s.build().serialize(r1)).message().contains("It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
+		assertThrown(()->s.build().serialize(r1)).asMessage().isContains("It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
 
 		// Recursion detection, no ignore
 		s.detectRecursions();
-		assertThrown(()->s.build().serialize(r1)).message().contains("$R1", "$R2", "$R3");
+		assertThrown(()->s.build().serialize(r1)).asMessage().isContains("$R1", "$R2", "$R3");
 
 		s.ignoreRecursions();
 		assertEquals("(name=foo,r2=(name=bar,r3=(name=baz)))", s.build().serialize(r1));

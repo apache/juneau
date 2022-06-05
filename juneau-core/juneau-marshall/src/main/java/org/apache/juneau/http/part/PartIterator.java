@@ -19,8 +19,6 @@ import org.apache.http.*;
 /**
  * A type-safe iterator for {@link NameValuePair} objects.
  *
- * {@review}
- *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.HttpParts}
  * 	<li class='extlink'>{@source}

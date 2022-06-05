@@ -64,16 +64,13 @@ public @interface UonConfig {
 	 * Specify <js>"true"</js> if URI encoded characters should be decoded, <js>"false"</js> if they've already been decoded
 	 * before being passed to this parser.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js> (default for {@link UrlEncodingParser})
+	 * 	<li><js>"false"</js> (default for {@link UonParser})
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js>
-	 * 		</ul>
-	 * 	<li>
-	 * 		The default is <js>"false"</js> for {@link UonParser}, <js>"true"</js> for {@link UrlEncodingParser}.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -92,14 +89,13 @@ public @interface UonConfig {
 	 * If <js>"true"</js>, after parsing a POJO from the input, verifies that the remaining input in
 	 * the stream consists of only comments or whitespace.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 
@@ -126,14 +122,13 @@ public @interface UonConfig {
 	 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerSet}.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -156,23 +151,13 @@ public @interface UonConfig {
 	 * <br>Set to <js>"false"</js> if parameter value is being passed to some other code that will already perform
 	 * URL-encoding of non-valid URI characters.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul>
-	 * 	<li><js>"true"</js>
-	 * 	<li><js>"false"</js>
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js> (default for {@link UrlEncodingSerializer})
+	 * 	<li><js>"false"</js> (default for {@link UonSerializer})
 	 * </ul>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js>
-	 * 		</ul>
-	 * 	<li>
-	 * 		The default is <js>"false"</js> for {@link UonSerializer}, <js>"true"</js> for {@link UrlEncodingSerializer}.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -190,14 +175,13 @@ public @interface UonConfig {
 	 * <p>
 	 * Specifies the format to use for URL GET parameter keys and values.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"UON"</js> (default) - Use UON notation for parameters.
+	 * 	<li><js>"PLAINTEXT"</js> - Use plain text for parameters.
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"UON"</js> (default) - Use UON notation for parameters.
-	 * 			<li><js>"PLAINTEXT"</js> - Use plain text for parameters.
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *

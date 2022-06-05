@@ -45,7 +45,7 @@ import org.apache.juneau.reflect.*;
  * <p>
  * Schema objects are created via builders instantiated through the {@link #create()} method.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
@@ -1071,8 +1071,18 @@ public class HttpPartSchema {
 		 * The type of the parameter.
 		 *
 		 * <p>
-		 * The possible values are:
-		 * <ul class='spaced-list'>
+		 * If the type is not specified, it will be auto-detected based on the parameter class type.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerSecuritySchemeObject SecurityScheme}
+		 * </ul>
+		 *
+		 * <ul class='values'>
 		 * 	<li>
 		 * 		<js>"string"</js>
 		 * 		<br>Parameter must be a string or a POJO convertible from a string.
@@ -1100,18 +1110,6 @@ public class HttpPartSchema {
 		 * 	<li>
 		 * 		<js>"file"</js>
 		 * 		<br>This type is currently not supported.
-		 * </ul>
-		 *
-		 * <p>
-		 * If the type is not specified, it will be auto-detected based on the parameter class type.
-		 *
-		 * <p>
-		 * Applicable to the following Swagger schema objects:
-		 * <ul>
-		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
-		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
-		 * 	<li>{@doc ext.SwaggerItemsObject Items}
-		 * 	<li>{@doc ext.SwaggerSecuritySchemeObject SecurityScheme}
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
@@ -1231,8 +1229,18 @@ public class HttpPartSchema {
 		 * The type of the parameter.
 		 *
 		 * <p>
-		 * The possible values are:
-		 * <ul class='javatree'>
+		 * If the type is not specified, it will be auto-detected based on the parameter class type.
+		 *
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerSecuritySchemeObject SecurityScheme}
+		 * </ul>
+		 *
+		 * <ul class='values javatree'>
 		 * 	<li class='jc'>{@link HttpPartDataType}
 		 * 	<ul>
 		 * 		<li class='jf'>
@@ -1263,18 +1271,6 @@ public class HttpPartSchema {
 		 * 			{@link HttpPartDataType#FILE FILE}
 		 * 			<br>This type is currently not supported.
 		 * 	</ul>
-		 * </ul>
-		 *
-		 * <p>
-		 * If the type is not specified, it will be auto-detected based on the parameter class type.
-		 *
-		 * <p>
-		 * Applicable to the following Swagger schema objects:
-		 * <ul>
-		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
-		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
-		 * 	<li>{@doc ext.SwaggerItemsObject Items}
-		 * 	<li>{@doc ext.SwaggerSecuritySchemeObject SecurityScheme}
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
@@ -1308,8 +1304,15 @@ public class HttpPartSchema {
 		 * The extending format for the previously mentioned {@doc ext.SwaggerParameterTypes parameter type}.
 		 *
 		 * <p>
-		 * The possible values are:
-		 * <ul class='spaced-list'>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
+		 * </ul>
+		 *
+		 * <ul class='values'>
 		 * 	<li>
 		 * 		<js>"int32"</js> - Signed 32 bits.
 		 * 		<br>Only valid with type <js>"integer"</js>.
@@ -1349,15 +1352,6 @@ public class HttpPartSchema {
 		 * 		<br>If not specified, then the input is interpreted as plain-text and is converted to a POJO directly.
 		 * </ul>
 		 *
-		 * <p>
-		 * Applicable to the following Swagger schema objects:
-		 * <ul>
-		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
-		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
-		 * 	<li>{@doc ext.SwaggerItemsObject Items}
-		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
-		 * </ul>
-		 *
 		 * <ul class='seealso'>
 		 * 	<li class='extlink'>{@doc ext.SwaggerDataTypeFormats}
 		 * </ul>
@@ -1395,8 +1389,15 @@ public class HttpPartSchema {
 		 * The extending format for the previously mentioned {@doc ext.SwaggerParameterTypes parameter type}.
 		 *
 		 * <p>
-		 * The possible values are:
-		 * <ul class='javatree'>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
+		 * </ul>
+		 *
+		 * <ul class='values javatree'>
 		 * 	<ul class='jc'>{@link HttpPartFormat}
 		 * 	<ul>
 		 * 		<li class='jf'>
@@ -1437,15 +1438,6 @@ public class HttpPartSchema {
 		 * 			<br>Only valid with type <js>"object"</js>.
 		 * 			<br>If not specified, then the input is interpreted as plain-text and is converted to a POJO directly.
 		 * 	</ul>
-		 * </ul>
-		 *
-		 * <p>
-		 * Applicable to the following Swagger schema objects:
-		 * <ul>
-		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
-		 * 	<li>{@doc ext.SwaggerSchemaObject Schema}
-		 * 	<li>{@doc ext.SwaggerItemsObject Items}
-		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
@@ -1781,8 +1773,18 @@ public class HttpPartSchema {
 		 * Determines the format of the array if <c>type</c> <js>"array"</js> is used.
 		 * <br>Can only be used if <c>type</c> is <js>"array"</js>.
 		 *
-		 * <br>Possible values are:
-		 * <ul class='spaced-list'>
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
+		 * </ul>
+		 *
+		 * <p>
+		 * Note that for collections/arrays parameters with POJO element types, the input is broken into a string array before being converted into POJO elements.
+		 *
+		 * <ul class='values'>
 		 * 	<li>
 		 * 		<js>"csv"</js> (default) - Comma-separated values (e.g. <js>"foo,bar"</js>).
 		 * 	<li>
@@ -1797,17 +1799,6 @@ public class HttpPartSchema {
 		 * 		<js>"uon"</js> - UON notation (e.g. <js>"@(foo,bar)"</js>).
 		 * 	<li>
 		 * </ul>
-		 *
-		 * <p>
-		 * Applicable to the following Swagger schema objects:
-		 * <ul>
-		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
-		 * 	<li>{@doc ext.SwaggerItemsObject Items}
-		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
-		 * </ul>
-		 *
-		 * <p>
-		 * Note that for collections/arrays parameters with POJO element types, the input is broken into a string array before being converted into POJO elements.
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -1842,8 +1833,18 @@ public class HttpPartSchema {
 		 * Determines the format of the array if <c>type</c> <js>"array"</js> is used.
 		 * <br>Can only be used if <c>type</c> is <js>"array"</js>.
 		 *
-		 * <br>Possible values are:
-		 * <ul class='javatree'>
+		 * <p>
+		 * Applicable to the following Swagger schema objects:
+		 * <ul>
+		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
+		 * 	<li>{@doc ext.SwaggerItemsObject Items}
+		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
+		 * </ul>
+		 *
+		 * <p>
+		 * Note that for collections/arrays parameters with POJO element types, the input is broken into a string array before being converted into POJO elements.
+		 *
+		 * <ul class='values javatree'>
 		 * 	<ul class='jc'>{@link HttpPartCollectionFormat}
 		 * 	<ul>
 		 * 		<li>
@@ -1860,17 +1861,6 @@ public class HttpPartSchema {
 		 * 			{@link HttpPartCollectionFormat#UONC UONC} - UON collection notation (e.g. <js>"@(foo,bar)"</js>).
 		 * 	</ul>
 		 * </ul>
-		 *
-		 * <p>
-		 * Applicable to the following Swagger schema objects:
-		 * <ul>
-		 * 	<li>{@doc ext.SwaggerParameterObject Parameter}
-		 * 	<li>{@doc ext.SwaggerItemsObject Items}
-		 * 	<li>{@doc ext.SwaggerHeaderObject Header}
-		 * </ul>
-		 *
-		 * <p>
-		 * Note that for collections/arrays parameters with POJO element types, the input is broken into a string array before being converted into POJO elements.
 		 *
 		 * @param value
 		 * 	The new value for this property.

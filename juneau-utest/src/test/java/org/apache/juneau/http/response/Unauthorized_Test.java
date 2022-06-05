@@ -57,23 +57,23 @@ public class Unauthorized_Test {
 		RestClient c = MockRestClient.create(A.class).ignoreErrors().noTrace().build();
 
 		c.get("/f1").run()
-			.assertStatus().code().is(STATUS_CODE)
+			.assertStatus().asCode().is(STATUS_CODE)
 			.assertBody().is(REASON_PHRASE);
 		c.get("/f2").run()
-			.assertStatus().code().is(STATUS_CODE)
+			.assertStatus().asCode().is(STATUS_CODE)
 			.assertBody().is("foo bar");
 		c.get("/f3").run()
-			.assertStatus().code().is(STATUS_CODE)
+			.assertStatus().asCode().is(STATUS_CODE)
 			.assertBody().is("baz");
 		c.get("/f4").run()
-			.assertStatus().code().is(STATUS_CODE)
+			.assertStatus().asCode().is(STATUS_CODE)
 			.assertBody().is("foo bar");
 		c.get("/f5").run()
-			.assertStatus().code().is(STATUS_CODE)
+			.assertStatus().asCode().is(STATUS_CODE)
 			.assertBody().is(REASON_PHRASE)
 			.assertHeader("Foo").is("bar");
 		c.get("/f6").run()
-			.assertStatus().code().is(STATUS_CODE)
+			.assertStatus().asCode().is(STATUS_CODE)
 			.assertBody().is("foo");
 	}
 }

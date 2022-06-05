@@ -19,7 +19,6 @@ import java.lang.annotation.*;
 
 /**
  * REST has-form-data annotation.
- * {@review}
  *
  * Identifies whether or not an HTTP request has the specified multipart form POST parameter.
  *
@@ -28,75 +27,71 @@ import java.lang.annotation.*;
  * <ul>
  * 	<li>Arguments and argument-types of server-side <ja>@RestOp</ja>-annotated methods.
  * </ul>
-<p>
-	This annotation can be used to detect the existence of a parameter when it's not set to a particular value.
-</p>
-<ul class='javatree'>
-	<li class='ja'>{@link HasFormData}
-</ul>
-
-<h5 class='figure'>Example:</h5>
-<p class='bjava'>
-	<ja>@RestPost</ja>
-	<jk>public void</jk> doPost(<ja>@HasFormData</ja>(<js>"p1"</js>) <jk>boolean</jk> <jv>p1</jv>) {...}
-</p>
-<p>
-	This is functionally equivalent to the following code:
-</p>
-<p class='bjava'>
-	<ja>@RestPost</ja>
-	<jk>public void</jk> doPost(RestRequest <jv>req</jv>) {
-		<jk>boolean</jk> <jv>p1</jv> = <jv>req</jv>.getFormParam(<js>"p1"</js>).isPresent();
-		...
-	}
-</p>
-<p>
-	The parameter type must be either <jk>boolean</jk> or {@link java.lang.Boolean}.
-</p>
-<p>
-	The following table shows the behavioral differences between <ja>@HasFormData</ja> and <ja>@FormData</ja>:
-</p>
-<table class='styled w400'>
-	<tr>
-		<th><c>Body content</c></th>
-		<th><c><ja>@HasFormData</ja>(<js>"a"</js>)</c></th>
-		<th><c><ja>@FormData</ja>(<js>"a"</js>)</c></th>
-	</tr>
-	<tr>
-		<td><c>a=foo</c></td>
-		<td><jk>true</jk></td>
-		<td><js>"foo"</js></td>
-	</tr>
-	<tr>
-		<td><c>a=</c></td>
-		<td><jk>true</jk></td>
-		<td><js>""</js></td>
-	</tr>
-	<tr>
-		<td><c>a</c></td>
-		<td><jk>true</jk></td>
-		<td><jk>null</jk></td>
-	</tr>
-	<tr>
-		<td><c>b=foo</c></td>
-		<td><jk>false</jk></td>
-		<td><jk>null</jk></td>
-	</tr>
-</table>
-
-<h5 class='topic'>Important note concerning FORM posts</h5>
-<p>
-	This annotation should not be combined with the {@link Body @Body} annotation or {@code RestRequest.getBody()} method
-	for <c>application/x-www-form-urlencoded POST</c> posts, since it will trigger the underlying servlet API to
-	parse the body content as key-value pairs, resulting in empty content.
-</p>
-<p>
-	The {@link HasQuery @HasQuery} annotation can be used to check for the existing of a URL parameter in the URL string
-	without triggering the servlet to drain the body content.
-</p>
-
+ * <p>
+ * 	This annotation can be used to detect the existence of a parameter when it's not set to a particular value.
+ * </p>
  *
+ * <h5 class='figure'>Example:</h5>
+ * <p class='bjava'>
+ * 	<ja>@RestPost</ja>
+ * 	<jk>public void</jk> doPost(<ja>@HasFormData</ja>(<js>"p1"</js>) <jk>boolean</jk> <jv>p1</jv>) {...}
+ * </p>
+ * <p>
+ * 	This is functionally equivalent to the following code:
+ * </p>
+ * <p class='bjava'>
+ * 	<ja>@RestPost</ja>
+ * 	<jk>public void</jk> doPost(RestRequest <jv>req</jv>) {
+ * 		<jk>boolean</jk> <jv>p1</jv> = <jv>req</jv>.getFormParam(<js>"p1"</js>).isPresent();
+ * 		...
+ * 	}
+ * </p>
+ * <p>
+ * 	The parameter type must be either <jk>boolean</jk> or {@link java.lang.Boolean}.
+ * </p>
+ * <p>
+ * 	The following table shows the behavioral differences between <ja>@HasFormData</ja> and <ja>@FormData</ja>:
+ * </p>
+ * <table class='styled w400'>
+ * 	<tr>
+ * 		<th><c>Body content</c></th>
+ * 		<th><c><ja>@HasFormData</ja>(<js>"a"</js>)</c></th>
+ * 		<th><c><ja>@FormData</ja>(<js>"a"</js>)</c></th>
+ * 	</tr>
+ * 	<tr>
+ * 		<td><c>a=foo</c></td>
+ * 		<td><jk>true</jk></td>
+ * 		<td><js>"foo"</js></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td><c>a=</c></td>
+ * 		<td><jk>true</jk></td>
+ * 		<td><js>""</js></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td><c>a</c></td>
+ * 		<td><jk>true</jk></td>
+ * 		<td><jk>null</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td><c>b=foo</c></td>
+ * 		<td><jk>false</jk></td>
+ * 		<td><jk>null</jk></td>
+ * 	</tr>
+ * </table>
  *
+ * <h5 class='topic'>Important note concerning FORM posts</h5>
+ * <p>
+ * 	This annotation should not be combined with the {@link Body @Body} annotation or {@code RestRequest.getBody()} method
+ * 	for <c>application/x-www-form-urlencoded POST</c> posts, since it will trigger the underlying servlet API to
+ * 	parse the body content as key-value pairs, resulting in empty content.
+ * </p>
+ * <p>
+ * 	The {@link HasQuery @HasQuery} annotation can be used to check for the existing of a URL parameter in the URL string
+ * 	without triggering the servlet to drain the body content.
+ * </p>
+ *
+ * <p>
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
@@ -113,7 +108,7 @@ public @interface HasFormData {
 	 * Required. The name of the parameter. Parameter names are case sensitive.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is plain-text.
 	 * </ul>
 	 *

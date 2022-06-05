@@ -69,7 +69,7 @@ import java.util.Objects;
  * will always return 0. Also, this class doesn't support {@link InputStream#mark(int)}.
  * <p>
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *

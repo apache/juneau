@@ -55,7 +55,7 @@ public class MethodExecStore_Test {
 
 	@Test
 	public void a04_builder_implClass_bad() {
-		assertThrown(()->MethodExecStore.create().type(A4.class).build()).messages().contains("foobar");
+		assertThrown(()->MethodExecStore.create().type(A4.class).build()).asMessages().isContains("foobar");
 	}
 
 	public static class A5a {}
@@ -80,7 +80,7 @@ public class MethodExecStore_Test {
 	public void a05_builder_beanFactory() throws Exception {
 		BeanStore bs = BeanStore.create().build();
 
-		assertThrown(()->MethodExecStore.create(bs).type(A5b.class).build()).messages().any(contains("Public constructor found but could not find prerequisites: A5a"));
+		assertThrown(()->MethodExecStore.create(bs).type(A5b.class).build()).asMessages().isAny(contains("Public constructor found but could not find prerequisites: A5a"));
 		assertObject(MethodExecStore.create(bs).type(A5c.class).build()).isType(A5c.class);
 
 		bs.addBean(A5a.class, new A5a());
@@ -112,7 +112,7 @@ public class MethodExecStore_Test {
 		BeanStore bs = BeanStore.create().build();
 		Method m = MethodExecStore_Test.class.getMethod("a06_builder_statsImplClass");
 
-		assertThrown(()->MethodExecStore.create(bs).statsImplClass(A6b.class).build().getStats(m)).messages().any(contains("Public constructor found but could not find prerequisites: A6a"));
+		assertThrown(()->MethodExecStore.create(bs).statsImplClass(A6b.class).build().getStats(m)).asMessages().isAny(contains("Public constructor found but could not find prerequisites: A6a"));
 		assertObject(MethodExecStore.create(bs).statsImplClass(A6c.class).build().getStats(m)).isType(A6c.class);
 
 		bs.addBean(A6a.class, new A6a());
@@ -186,6 +186,6 @@ public class MethodExecStore_Test {
 		assertInteger(stats.getAvgTime()).is(150);
 		assertLong(stats.getTotalTime()).is(300l);
 
-		assertObject(stats).asString().contains("300");
+		assertObject(stats).asString().isContains("300");
 	}
 }

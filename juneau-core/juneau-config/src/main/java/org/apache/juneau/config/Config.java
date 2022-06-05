@@ -38,9 +38,8 @@ import org.apache.juneau.svl.*;
 
 /**
  * Main configuration API class.
- * {@review}
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
@@ -408,9 +407,7 @@ public final class Config extends Context implements ConfigEventListener {
 		 * <p>
 		 * The format to use when persisting byte arrays.
 		 *
-		 * <p>
-		 * Possible values:
-		 * <ul>
+		 * <ul class='values'>
 		 * 	<li>{@link BinaryFormat#BASE64} - BASE64-encoded string.
 		 * 	<li>{@link BinaryFormat#HEX} - Hexadecimal.
 		 * 	<li>{@link BinaryFormat#SPACED_HEX} - Hexadecimal with spaces between bytes.
@@ -871,7 +868,7 @@ public final class Config extends Context implements ConfigEventListener {
 	 * <p>
 	 * If entry does not exist, returns <jk>null</jk>.
 	 *
-	 * <ul>
+	 * <ul class='notes'>
 	 * 	<li class='note'>This method is equivalent to calling <c>get(<jv>key</jv>).orElse(<jk>null</jk>);</c>.
 	 * </ul>
 	 *

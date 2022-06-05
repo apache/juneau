@@ -295,7 +295,7 @@ public final class PojoRest {
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Use the {@link #get(String, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>
 	 *
@@ -672,7 +672,7 @@ public final class PojoRest {
 	 * This method expands the POJO model as necessary to create the new element.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		You can only post to three types of nodes:
 	 * 		<ul>
 	 * 			<li>{@link List Lists}

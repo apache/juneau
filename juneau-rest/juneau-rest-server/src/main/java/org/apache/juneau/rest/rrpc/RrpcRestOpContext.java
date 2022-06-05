@@ -22,7 +22,7 @@ import org.apache.juneau.rest.*;
 /**
  * A specialized {@link RestOpContext} for handling <js>"RRPC"</js> HTTP methods.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *

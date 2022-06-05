@@ -26,7 +26,7 @@ import org.apache.juneau.utils.*;
 /**
  * Subclass of {@link Serializer} for byte-based serializers.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *

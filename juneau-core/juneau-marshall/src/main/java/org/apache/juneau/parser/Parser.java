@@ -37,10 +37,9 @@ import org.apache.juneau.xml.*;
 
 /**
  * Parent class for all Juneau parsers.
- * {@review}
  *
  * <h5 class='topic'>Valid data conversions</h5>
- *
+ * <p>
  * Parsers can parse any parsable POJO types, as specified in the {@doc jm.PojoCategories}.
  *
  * <p>
@@ -124,7 +123,7 @@ import org.apache.juneau.xml.*;
  * 	<tr><td>string</td><td>{@link String}</td></tr>
  * </table>
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
@@ -554,7 +553,7 @@ public class Parser extends BeanContextable {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		This only allows for multi-input streams for the following parsers:
 		 * 		<ul>
 		 * 			<li class='jc'>{@link JsonParser}
@@ -1086,7 +1085,7 @@ public class Parser extends BeanContextable {
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Use the {@link #parse(Object, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>
 	 *

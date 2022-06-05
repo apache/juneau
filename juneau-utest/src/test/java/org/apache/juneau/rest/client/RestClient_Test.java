@@ -105,19 +105,19 @@ public class RestClient_Test {
 	public void a04_request_whenClosed() throws Exception {
 		RestClient rc = client().build();
 		rc.closeQuietly();
-		assertThrown(()->rc.request("get","/bean",null)).message().contains("RestClient.close() has already been called");
+		assertThrown(()->rc.request("get","/bean",null)).asMessage().isContains("RestClient.close() has already been called");
 	}
 
 	@Test
 	public void a05_request_whenClosed_withStackCreation() throws Exception {
 		RestClient rc = client().debug().build();
 		rc.closeQuietly();
-		assertThrown(()->rc.request("get","/bean",null)).message().contains("RestClient.close() has already been called");
+		assertThrown(()->rc.request("get","/bean",null)).asMessage().isContains("RestClient.close() has already been called");
 	}
 
 	@Test
 	public void a06_request_runCalledTwice() throws Exception {
-		assertThrown(()->{RestRequest r = client().build().get("/echo"); r.run(); r.run();}).message().is("run() already called.");
+		assertThrown(()->{RestRequest r = client().build().get("/echo"); r.run(); r.run();}).asMessage().is("run() already called.");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -191,9 +191,9 @@ public class RestClient_Test {
 		};
 
 		client().addInterceptorFirst(x1).addInterceptorLast(x2).addInterceptorFirst(x3).addInterceptorLast(x4)
-			.build().get("/echo").run().assertBody().contains("A1: 1","A2: 2").assertHeader("B1").is("1").assertHeader("B2").is("2");
-		client().interceptors(C01.class).build().get("/echo").run().assertBody().contains("A1: 1").assertHeader("B1").is("1");
-		client().interceptors(new C01()).build().get("/echo").run().assertBody().contains("A1: 1").assertHeader("B1").is("1");
+			.build().get("/echo").run().assertBody().isContains("A1: 1","A2: 2").assertHeader("B1").is("1").assertHeader("B2").is("2");
+		client().interceptors(C01.class).build().get("/echo").run().assertBody().isContains("A1: 1").assertHeader("B1").is("1");
+		client().interceptors(new C01()).build().get("/echo").run().assertBody().isContains("A1: 1").assertHeader("B1").is("1");
 	}
 
 	@Test
@@ -208,7 +208,7 @@ public class RestClient_Test {
 				response.setHeader("B1","1");
 			}
 		};
-		client().httpProcessor(x).build().get("/echo").run().assertBody().contains("A1: 1").assertHeader("B1").is("1");
+		client().httpProcessor(x).build().get("/echo").run().assertBody().isContains("A1: 1").assertHeader("B1").is("1");
 	}
 
 	@Test
@@ -221,13 +221,13 @@ public class RestClient_Test {
 				return super.execute(request, conn, context);
 			}
 		};
-		client().requestExecutor(x).build().get("/echo").run().assertBody().contains("GET /echo HTTP/1.1");
+		client().requestExecutor(x).build().get("/echo").run().assertBody().isContains("GET /echo HTTP/1.1");
 		assertTrue(b1.get());
 	}
 
 	@Test
 	public void c04_httpClient_defaultHeaders() throws RestCallException {
-		client().headersDefault(stringHeader("Foo","bar")).build().get("/echo").run().assertBody().contains("GET /echo HTTP/1.1","Foo: bar");
+		client().headersDefault(stringHeader("Foo","bar")).build().get("/echo").run().assertBody().isContains("GET /echo HTTP/1.1","Foo: bar");
 	}
 
 	@Test
@@ -338,7 +338,7 @@ public class RestClient_Test {
 
 	@Test
 	public void d01_basicAuth() throws RestCallException {
-		client(D.class).basicAuth(AuthScope.ANY_HOST,AuthScope.ANY_PORT,"user","pw").build().get("/echo").run().assertBody().contains("OK");
+		client(D.class).basicAuth(AuthScope.ANY_HOST,AuthScope.ANY_PORT,"user","pw").build().get("/echo").run().assertBody().isContains("OK");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

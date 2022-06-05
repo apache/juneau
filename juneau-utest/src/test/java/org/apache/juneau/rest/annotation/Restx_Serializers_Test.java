@@ -88,7 +88,7 @@ public class Restx_Serializers_Test {
 			.accept("text/b")
 			.run()
 			.assertCode().is(406)
-			.assertBody().contains(
+			.assertBody().isContains(
 				"Unsupported media-type in request header 'Accept': 'text/b'",
 				"Supported media-types: ['text/a'"
 			);
@@ -96,7 +96,7 @@ public class Restx_Serializers_Test {
 			.accept("text/a")
 			.run()
 			.assertCode().is(406)
-			.assertBody().contains(
+			.assertBody().isContains(
 				"Unsupported media-type in request header 'Accept': 'text/a'",
 				"Supported media-types: ['text/b']"
 			);
@@ -120,7 +120,7 @@ public class Restx_Serializers_Test {
 			.accept("text/bad")
 			.run()
 			.assertCode().is(406)
-			.assertBody().contains(
+			.assertBody().isContains(
 				"Unsupported media-type in request header 'Accept': 'text/bad'",
 				"Supported media-types: ['text/a"
 			);

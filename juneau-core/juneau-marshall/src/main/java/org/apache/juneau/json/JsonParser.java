@@ -27,14 +27,13 @@ import org.apache.juneau.utils.*;
 
 /**
  * Parses any valid JSON text into a POJO model.
- * {@review}
  *
  * <h5 class='topic'>Media types</h5>
- *
+ * <p>
  * Handles <c>Content-Type</c> types:  <bc>application/json, text/json</bc>
  *
  * <h5 class='topic'>Description</h5>
- *
+ * <p>
  * This parser uses a state machine, which makes it very fast and efficient.  It parses JSON in about 70% of the
  * time that it takes the built-in Java DOM parsers to parse equivalent XML.
  *
@@ -49,7 +48,7 @@ import org.apache.juneau.utils.*;
  * 	<li>
  * 		Automatically joins concatenated strings (e.g. <code><js>"aaa"</js> + <js>'bbb'</js></code>).
  * 	<li>
- * 		Unquoted attributes.
+ * 		Unquoted attributes and values.
  * </ul>
  *
  * <p>
@@ -109,7 +108,7 @@ import org.apache.juneau.utils.*;
  * JsonList(CharSequence)} constructors instead of using this class.
  * The end result should be the same.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *

@@ -100,7 +100,7 @@ import org.apache.juneau.reflect.*;
  *		</ul>
  * </ol>
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>The {@link #builder(Class,Object)} method can be used to set an existing initialized builder object to pass to a constructor.
  * 	<li class='note'>An existing initialized builder can be set using the {@link #builder(Class,Object)} method.
  * </ul>

@@ -18,7 +18,6 @@ import org.apache.juneau.internal.*;
 
 /**
  * Parent class of all fluent assertion calls.
- * {@review}
  *
  * <p>
  * Defines a {@link #returns()} method that returns an original object.
@@ -33,14 +32,14 @@ import org.apache.juneau.internal.*;
  * 	Assertion <jv>assertion</jv> = <jk>new</jk> FluentBeanAssertion&lt;MyPojo,MyTestedBean&gt;(<jv>myPojo</jv>, <jv>myTestedBean</jv>);
  * 	<jv>myPojo</jv> = <jv>assertion</jv>.test(<jv>x</jv> -&gt; <jv>x</jv>.getMyProperty().equals(<js>"foo"</js>));  <jc>// Returns myPojo after test.</jc>
  * </p>
- *
+ * <p>
  * For subclasses such as {@link IntegerAssertion}, the return object is simply itself so that multiple tests
  * can be performed using the same assertion.
  * <h5 class='figure'>Example:</h5>
  * <p class='bjava'>
  * 	<jk>public class</jk> IntegerAssertion <jk>extends</jk> FluentIntegerAssertion&lt;IntegerAssertion&gt; {
  *  	...
- *  }
+ * 	}
  *
  * 	Assertion <jv>assertion</jv> = <jk>new</jk> IntegerAssertion(123);
  * 	<jv>assertion</jv>
@@ -51,23 +50,29 @@ import org.apache.juneau.internal.*;
  *
  *
  * <h5 class='topic'>Test Methods</h5>
- * 	<ul>
- * 		<li>None
- * 	</ul>
- *
+ * <p>
+ * <ul class='javatree'>
+ * 	<li>None
+ * </ul>
+  *
  * <h5 class='topic'>Transform Methods</h5>
- * 	<ul>
- * 		<li>None
- * 	</ul>
+ * <p>
+ * <ul class='javatree'>
+ * 	<li>None
+ * </ul>
  *
  * <h5 class='topic'>Configuration Methods</h5>
- * 	<ul>
- * 		<li class='jm'>{@link Assertion#msg(String, Object...)}
- * 		<li class='jm'>{@link Assertion#out(PrintStream)}
- * 		<li class='jm'>{@link Assertion#silent()}
- * 		<li class='jm'>{@link Assertion#stdout()}
- * 		<li class='jm'>{@link Assertion#throwable(Class)}
+ * <p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link Assertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link Assertion#setMsg(String, Object...) setMsg(String, Object...)}
+ * 		<li class='jm'>{@link Assertion#setOut(PrintStream) setOut(PrintStream)}
+ * 		<li class='jm'>{@link Assertion#setSilent() setSilent()}
+ * 		<li class='jm'>{@link Assertion#setStdOut() setStdOut()}
+ * 		<li class='jm'>{@link Assertion#setThrowable(Class) setThrowable(Class)}
  * 	</ul>
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.FluentAssertions}
@@ -108,32 +113,32 @@ public abstract class FluentAssertion<R> extends Assertion {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentAssertion<R> msg(String msg, Object...args) {
-		super.msg(msg, args);
+	public FluentAssertion<R> setMsg(String msg, Object...args) {
+		super.setMsg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentAssertion<R> out(PrintStream value) {
-		super.out(value);
+	public FluentAssertion<R> setOut(PrintStream value) {
+		super.setOut(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentAssertion<R> silent() {
-		super.silent();
+	public FluentAssertion<R> setSilent() {
+		super.setSilent();
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentAssertion<R> stdout() {
-		super.stdout();
+	public FluentAssertion<R> setStdOut() {
+		super.setStdOut();
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentAssertion<R> throwable(Class<? extends java.lang.RuntimeException> value) {
-		super.throwable(value);
+	public FluentAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+		super.setThrowable(value);
 		return this;
 	}
 

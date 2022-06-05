@@ -424,13 +424,13 @@ public final class RestRequest {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		This object is modifiable.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Values are converted from strings using the registered part parser on the resource class.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The {@link RequestHeaders} object can also be passed as a parameter on the method.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The {@link Header @Header} annotation can be used to access individual header values.
 	 * </ul>
 	 *
@@ -652,13 +652,13 @@ public final class RestRequest {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		This object is modifiable.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Values are converted from strings using the registered part parser on the resource class.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The {@link RequestAttributes} object can also be passed as a parameter on the method.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The {@link Attr @Attr} annotation can be used to access individual attribute values.
 	 * </ul>
 	 *
@@ -723,7 +723,7 @@ public final class RestRequest {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		This object is modifiable.
 	 * </ul>
 	 *
@@ -804,13 +804,13 @@ public final class RestRequest {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		This object is modifiable.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Values are converted from strings using the registered part parser on the resource class.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The {@link RequestFormParams} object can also be passed as a parameter on the method.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The {@link FormData @FormDAta} annotation can be used to access individual form data parameter values.
 	 * </ul>
 	 *
@@ -898,7 +898,7 @@ public final class RestRequest {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		This object is modifiable.
 	 * </ul>
 	 *
@@ -966,9 +966,9 @@ public final class RestRequest {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The {@link RequestBody} object can also be passed as a parameter on the method.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The {@link Body @Body} annotation can be used to access the body as well.
 	 * </ul>
 	 *
@@ -1214,7 +1214,7 @@ public final class RestRequest {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The {@link Swagger} object can also be passed as a parameter on the method.
 	 * </ul>
 	 *
@@ -1302,7 +1302,7 @@ public final class RestRequest {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The {@link Messages} object can also be passed as a parameter on the method.
 	 * </ul>
 	 *
@@ -1456,7 +1456,7 @@ public final class RestRequest {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The {@link VarResolverSession} object can also be passed as a parameter on the method.
 	 * </ul>
 	 *
@@ -1530,7 +1530,7 @@ public final class RestRequest {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The {@link Config} object can also be passed as a parameter on the method.
 	 * </ul>
 	 *

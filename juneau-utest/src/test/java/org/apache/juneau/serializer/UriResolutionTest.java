@@ -566,9 +566,9 @@ public class UriResolutionTest {
 
 			if (isRdf) {
 				Object[] args = { label, s.getClass().getSimpleName() };
-				assertString(r).msg("{0}/{1} serialize-normal failed", args).isSortedLines(expected);
+				assertString(r).setMsg("{0}/{1} serialize-normal failed", args).isSortedLines(expected);
 			} else
-				assertString(r).msg("{0}/{1} serialize-normal failed", label, s.getClass().getSimpleName()).is(expected);
+				assertString(r).setMsg("{0}/{1} serialize-normal failed", label, s.getClass().getSimpleName()).is(expected);
 
 		} catch (AssertionError e) {
 			throw e;
@@ -585,7 +585,7 @@ public class UriResolutionTest {
 			TreeMap<String,String> m = p.parse(r, TreeMap.class, String.class, String.class);
 
 			String r2 = SimpleJsonSerializer.DEFAULT.toString(m);
-			assertString(results.json).msg("{0}/{1} parse failed", label, s.getClass().getSimpleName()).is(r2);
+			assertString(results.json).setMsg("{0}/{1} parse failed", label, s.getClass().getSimpleName()).is(r2);
 
 		} catch (AssertionError e) {
 			throw e;

@@ -30,7 +30,7 @@ public class StringAssertion_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private StringAssertion test(Object value) {
-		return assertString(value).silent();
+		return assertString(value).setSilent();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -39,18 +39,18 @@ public class StringAssertion_Test {
 
 	@Test
 	public void a01_msg() throws Exception {
-		assertThrown(()->test(null).msg("Foo {0}", 1).exists()).message().is("Foo 1");
-		assertThrown(()->test(null).msg("Foo {0}", 1).throwable(RuntimeException.class).exists()).isExactType(RuntimeException.class).message().is("Foo 1");
+		assertThrown(()->test(null).setMsg("Foo {0}", 1).isExists()).asMessage().is("Foo 1");
+		assertThrown(()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists()).isExactType(RuntimeException.class).asMessage().is("Foo 1");
 	}
 
 	@Test
 	public void a02_stdout() throws Exception {
-		test(null).stdout();
+		test(null).setStdOut();
 	}
 
 	@Test
 	public void a03_javaStrings() throws Exception {
-		test(null).javaStrings();
+		test(null).asJavaStrings();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -95,60 +95,60 @@ public class StringAssertion_Test {
 	@Test
 	public void ba04_apply() throws Exception {
 		String x1 = "1", x2 = "2";
-		test(x1).apply(x -> x2).is(x2);
+		test(x1).asTransformed(x -> x2).is(x2);
 	}
 
 	@Test
 	public void bb01_replaceAll() throws Exception {
 		String x = "foobar", nil = null;
-		test(x).replaceAll("fo+","bar").is("barbar").is("foobar");
-		test(nil).replaceAll("fo+","bar").isNull();
-		assertThrown(()->test(x).replaceAll(null,"")).message().is("Argument 'regex' cannot be null.");
-		assertThrown(()->test(x).replaceAll("",null)).message().is("Argument 'replacement' cannot be null.");
+		test(x).asReplaceAll("fo+","bar").is("barbar").is("foobar");
+		test(nil).asReplaceAll("fo+","bar").isNull();
+		assertThrown(()->test(x).asReplaceAll(null,"")).asMessage().is("Argument 'regex' cannot be null.");
+		assertThrown(()->test(x).asReplaceAll("",null)).asMessage().is("Argument 'replacement' cannot be null.");
 	}
 
 	@Test
 	public void bb02_replace() throws Exception {
 		String x = "foobar", nil = null;
-		test(x).replace("foo","bar").is("barbar").is("foobar");
-		test(nil).replace("foo","bar").isNull();
-		assertThrown(()->test(x).replace(null,"bar").isNull()).message().is("Argument 'target' cannot be null.");
-		assertThrown(()->test(x).replace("foo",null).isNull()).message().is("Argument 'replacement' cannot be null.");
+		test(x).asReplace("foo","bar").is("barbar").is("foobar");
+		test(nil).asReplace("foo","bar").isNull();
+		assertThrown(()->test(x).asReplace(null,"bar").isNull()).asMessage().is("Argument 'target' cannot be null.");
+		assertThrown(()->test(x).asReplace("foo",null).isNull()).asMessage().is("Argument 'replacement' cannot be null.");
 	}
 
 	@Test
 	public void bb03_urlDecode() throws Exception {
 		String x = "foo%20bar", nil = null;
-		test(x).urlDecode().is("foo bar").is("foo%20bar");
-		test(nil).urlDecode().isNull();
+		test(x).asUrlDecode().is("foo bar").is("foo%20bar");
+		test(nil).asUrlDecode().isNull();
 	}
 
 	@Test
 	public void bb04_lc() throws Exception {
 		String x = "FOOBAR", nil = null;
-		test(x).lc().is("foobar").is("FOOBAR");
-		test(nil).lc().isNull();
+		test(x).asLc().is("foobar").is("FOOBAR");
+		test(nil).asLc().isNull();
 	}
 
 	@Test
 	public void bb05_uc() throws Exception {
 		String x = "foobar", nil = null;
-		test(x).uc().is("FOOBAR").is("foobar");
-		test(nil).uc().isNull();
+		test(x).asUc().is("FOOBAR").is("foobar");
+		test(nil).asUc().isNull();
 	}
 
 	@Test
 	public void bb06_lines() throws Exception {
 		String x = "foo\nbar", nil = null;
-		test(x).lines().has("foo","bar");
-		test(nil).lines().isNull();
+		test(x).asLines().isHas("foo","bar");
+		test(nil).asLines().isNull();
 	}
 
 	@Test
 	public void bb07_oneLine() throws Exception {
 		String x = "foo  bar", nil = null;
-		test(x).oneLine().is("foo  bar");
-		test(nil).oneLine().isNull();
+		test(x).asOneLine().is("foo  bar");
+		test(nil).asOneLine().isNull();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -158,22 +158,22 @@ public class StringAssertion_Test {
 	@Test
 	public void ca01_exists() throws Exception {
 		String x = "1", nil = null;
-		test(x).exists().exists();
-		assertThrown(()->test(nil).exists()).message().is("Value was null.");
+		test(x).isExists().isExists();
+		assertThrown(()->test(nil).isExists()).asMessage().is("Value was null.");
 	}
 
 	@Test
 	public void ca02_isNull() throws Exception {
 		String x = "1", nil = null;
 		test(nil).isNull();
-		assertThrown(()->test(x).isNull()).message().is("Value was not null.");
+		assertThrown(()->test(x).isNull()).asMessage().is("Value was not null.");
 	}
 
 	@Test
 	public void ca03_isNotNull() throws Exception {
 		String x = "1", nil = null;
 		test(x).isNotNull();
-		assertThrown(()->test(nil).isNotNull()).message().is("Value was null.");
+		assertThrown(()->test(nil).isNotNull()).asMessage().is("Value was null.");
 	}
 
 	@Test
@@ -182,17 +182,17 @@ public class StringAssertion_Test {
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
-		assertThrown(()->test(x1).is(x2)).message().oneLine().is("String differed at position 0.  Expect='2'.  Actual='1'.");
-		assertThrown(()->test(x1).is(nil)).message().oneLine().is("String differed at position 0.  Expect='null'.  Actual='1'.");
-		assertThrown(()->test(nil).is(x2)).message().oneLine().is("String differed at position 0.  Expect='2'.  Actual='null'.");
+		assertThrown(()->test(x1).is(x2)).asMessage().asOneLine().is("String differed at position 0.  Expect='2'.  Actual='1'.");
+		assertThrown(()->test(x1).is(nil)).asMessage().asOneLine().is("String differed at position 0.  Expect='null'.  Actual='1'.");
+		assertThrown(()->test(nil).is(x2)).asMessage().asOneLine().is("String differed at position 0.  Expect='2'.  Actual='null'.");
 	}
 
 	@Test
 	public void ca04b_is_predicate() throws Exception {
 		String x1 = "1";
 		test(x1).is(x->x.length()==1);
-		assertThrown(()->test(x1).is(x->x.length()==2)).message().oneLine().is("Unexpected value: '1'.");
-		assertThrown(()->test(x1).is(ne(x1))).message().oneLine().is("Value unexpectedly matched.  Value='1'.");
+		assertThrown(()->test(x1).is(x->x.length()==2)).asMessage().asOneLine().is("Unexpected value: '1'.");
+		assertThrown(()->test(x1).is(ne(x1))).asMessage().asOneLine().is("Value unexpectedly matched.  Value='1'.");
 	}
 
 	@Test
@@ -201,17 +201,17 @@ public class StringAssertion_Test {
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
-		assertThrown(()->test(x1).isNot(x1a)).message().oneLine().is("String equaled unexpected.  Value='1'.");
-		assertThrown(()->test(nil).isNot(nil)).message().oneLine().is("String equaled unexpected.  Value='null'.");
+		assertThrown(()->test(x1).isNot(x1a)).asMessage().asOneLine().is("String equaled unexpected.  Value='1'.");
+		assertThrown(()->test(nil).isNot(nil)).asMessage().asOneLine().is("String equaled unexpected.  Value='null'.");
 	}
 
 	@Test
 	public void ca06_isAny() throws Exception {
 		String x1 = "1", x1a = "1", x2 = "2", nil = null;
 		test(x1).isAny(x1a, x2);
-		assertThrown(()->test(x1).isAny(x2)).message().oneLine().is("Expected value not found.  Expect='[2]'.  Actual='1'.");
-		assertThrown(()->test(x1).isAny()).message().oneLine().is("Expected value not found.  Expect='[]'.  Actual='1'.");
-		assertThrown(()->test(nil).isAny(x2)).message().oneLine().is("Expected value not found.  Expect='[2]'.  Actual='null'.");
+		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[2]'.  Actual='1'.");
+		assertThrown(()->test(x1).isAny()).asMessage().asOneLine().is("Expected value not found.  Expect='[]'.  Actual='1'.");
+		assertThrown(()->test(nil).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[2]'.  Actual='null'.");
 	}
 
 	@Test
@@ -220,8 +220,8 @@ public class StringAssertion_Test {
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
-		assertThrown(()->test(x1).isNotAny(x1a)).message().oneLine().is("Unexpected value found.  Unexpected='1'.  Actual='1'.");
-		assertThrown(()->test(nil).isNotAny(nil)).message().oneLine().is("Unexpected value found.  Unexpected='null'.  Actual='null'.");
+		assertThrown(()->test(x1).isNotAny(x1a)).asMessage().asOneLine().is("Unexpected value found.  Unexpected='1'.  Actual='1'.");
+		assertThrown(()->test(nil).isNotAny(nil)).asMessage().asOneLine().is("Unexpected value found.  Unexpected='null'.  Actual='null'.");
 	}
 
 	@Test
@@ -229,9 +229,9 @@ public class StringAssertion_Test {
 		String x1 = new String("1"), x1a = new String("1"), nil = null;
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
-		assertThrown(()->test(x1).isSame(x1a)).message().oneLine().matches("Not the same value.  Expect='1(String@*)'.  Actual='1(String@*)'.");
-		assertThrown(()->test(nil).isSame(x1a)).message().oneLine().matches("Not the same value.  Expect='1(String@*)'.  Actual='null(null)'.");
-		assertThrown(()->test(x1).isSame(nil)).message().oneLine().matches("Not the same value.  Expect='null(null)'.  Actual='1(String@*)'.");
+		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='1(String@*)'.  Actual='1(String@*)'.");
+		assertThrown(()->test(nil).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='1(String@*)'.  Actual='null(null)'.");
+		assertThrown(()->test(x1).isSame(nil)).asMessage().asOneLine().isMatches("Not the same value.  Expect='null(null)'.  Actual='1(String@*)'.");
 	}
 
 	@Test
@@ -239,9 +239,9 @@ public class StringAssertion_Test {
 		String x1 = "1", x1a = "1", x2 = "2", nil = null;
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
-		assertThrown(()->test(x1a).isSameJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect=''2''.  Actual=''1''.");
-		assertThrown(()->test(nil).isSameJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect=''2''.  Actual='null'.");
-		assertThrown(()->test(x1).isSameJsonAs(nil)).message().oneLine().is("Unexpected comparison.  Expect='null'.  Actual=''1''.");
+		assertThrown(()->test(x1a).isSameJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect=''2''.  Actual=''1''.");
+		assertThrown(()->test(nil).isSameJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect=''2''.  Actual='null'.");
+		assertThrown(()->test(x1).isSameJsonAs(nil)).asMessage().asOneLine().is("Unexpected comparison.  Expect='null'.  Actual=''1''.");
 	}
 
 	@Test
@@ -249,9 +249,9 @@ public class StringAssertion_Test {
 		String x1 = "1", x1a = "1", x2 = "2", nil = null;
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
-		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect=''2''.  Actual=''1''.");
-		assertThrown(()->test(nil).isSameSortedJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect=''2''.  Actual='null'.");
-		assertThrown(()->test(x1).isSameSortedJsonAs(nil)).message().oneLine().is("Unexpected comparison.  Expect='null'.  Actual=''1''.");
+		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect=''2''.  Actual=''1''.");
+		assertThrown(()->test(nil).isSameSortedJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect=''2''.  Actual='null'.");
+		assertThrown(()->test(x1).isSameSortedJsonAs(nil)).asMessage().asOneLine().is("Unexpected comparison.  Expect='null'.  Actual=''1''.");
 	}
 
 	@Test
@@ -260,9 +260,9 @@ public class StringAssertion_Test {
 		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
-		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).message().oneLine().is("Unexpected comparison.  Expect=''2''.  Actual=''1''.");
-		assertThrown(()->test(nil).isSameSerializedAs(x2, s)).message().oneLine().is("Unexpected comparison.  Expect=''2''.  Actual='null'.");
-		assertThrown(()->test(x1).isSameSerializedAs(nil, s)).message().oneLine().is("Unexpected comparison.  Expect='null'.  Actual=''1''.");
+		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect=''2''.  Actual=''1''.");
+		assertThrown(()->test(nil).isSameSerializedAs(x2, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect=''2''.  Actual='null'.");
+		assertThrown(()->test(x1).isSameSerializedAs(nil, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect='null'.  Actual=''1''.");
 	}
 
 	@Test
@@ -270,19 +270,19 @@ public class StringAssertion_Test {
 		String x = "1", nil = null;
 		test(x).isType(String.class);
 		test(x).isType(Object.class);
-		assertThrown(()->test(x).isType(Integer.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.Integer'.  Actual='java.lang.String'.");
-		assertThrown(()->test(nil).isType(Integer.class)).message().oneLine().is("Value was null.");
-		assertThrown(()->test(x).isType(null)).message().oneLine().is("Argument 'parent' cannot be null.");
+		assertThrown(()->test(x).isType(Integer.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Integer'.  Actual='java.lang.String'.");
+		assertThrown(()->test(nil).isType(Integer.class)).asMessage().asOneLine().is("Value was null.");
+		assertThrown(()->test(x).isType(null)).asMessage().asOneLine().is("Argument 'parent' cannot be null.");
 	}
 
 	@Test
 	public void ca13_isExactType() throws Exception {
 		String x = "1", nil = null;
 		test(x).isExactType(String.class);
-		assertThrown(()->test(x).isExactType(Object.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='java.lang.String'.");
-		assertThrown(()->test(x).isExactType(Integer.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.Integer'.  Actual='java.lang.String'.");
-		assertThrown(()->test(nil).isExactType(Integer.class)).message().oneLine().is("Value was null.");
-		assertThrown(()->test(x).isExactType(null)).message().oneLine().is("Argument 'parent' cannot be null.");
+		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='java.lang.String'.");
+		assertThrown(()->test(x).isExactType(Integer.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Integer'.  Actual='java.lang.String'.");
+		assertThrown(()->test(nil).isExactType(Integer.class)).asMessage().asOneLine().is("Value was null.");
+		assertThrown(()->test(x).isExactType(null)).asMessage().asOneLine().is("Argument 'parent' cannot be null.");
 	}
 
 	@Test
@@ -290,9 +290,9 @@ public class StringAssertion_Test {
 		String x = "1", nil = null;
 		test(x).isString("1");
 		test(nil).isString(null);
-		assertThrown(()->test(x).isString("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='1'.");
-		assertThrown(()->test(x).isString(null)).message().oneLine().is("String differed at position 0.  Expect='null'.  Actual='1'.");
-		assertThrown(()->test(nil).isString("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
+		assertThrown(()->test(x).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='1'.");
+		assertThrown(()->test(x).isString(null)).asMessage().asOneLine().is("String differed at position 0.  Expect='null'.  Actual='1'.");
+		assertThrown(()->test(nil).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
 
 	@Test
@@ -300,26 +300,26 @@ public class StringAssertion_Test {
 		String x = "1", nil = null;
 		test(x).isJson("'1'");
 		test(nil).isJson("null");
-		assertThrown(()->test(x).isJson("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual=''1''.");
-		assertThrown(()->test(x).isJson(null)).message().oneLine().is("String differed at position 0.  Expect='null'.  Actual=''1''.");
-		assertThrown(()->test(nil).isJson("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
+		assertThrown(()->test(x).isJson("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual=''1''.");
+		assertThrown(()->test(x).isJson(null)).asMessage().asOneLine().is("String differed at position 0.  Expect='null'.  Actual=''1''.");
+		assertThrown(()->test(nil).isJson("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
 
 	@Test
 	public void cb01_isIc() throws Exception {
 		String x = "foobar", nil = null;
 		test(x).isIc("FOOBAR");
-		assertThrown(()->test(x).isIc("FOOBAZ")).message().oneLine().is("String differed at position 5.  Expect='FOOBAZ'.  Actual='foobar'.");
-		assertThrown(()->test(nil).isIc("FOOBAZ")).message().oneLine().is("String differed at position 0.  Expect='FOOBAZ'.  Actual='null'.");
-		assertThrown(()->test(x).isIc(null)).message().oneLine().is("String differed at position 0.  Expect='null'.  Actual='foobar'.");
+		assertThrown(()->test(x).isIc("FOOBAZ")).asMessage().asOneLine().is("String differed at position 5.  Expect='FOOBAZ'.  Actual='foobar'.");
+		assertThrown(()->test(nil).isIc("FOOBAZ")).asMessage().asOneLine().is("String differed at position 0.  Expect='FOOBAZ'.  Actual='null'.");
+		assertThrown(()->test(x).isIc(null)).asMessage().asOneLine().is("String differed at position 0.  Expect='null'.  Actual='foobar'.");
 	}
 
 	@Test
 	public void cb02_isNotIc() throws Exception {
 		String x = "foobar", nil = null;
 		test(x).isNotIc("foobaz");
-		assertThrown(()->test(x).isNotIc("Foobar")).message().oneLine().is("String equaled unexpected.  Value='foobar'.");
-		assertThrown(()->test(nil).isNotIc(null)).message().oneLine().is("String equaled unexpected.  Value='null'.");
+		assertThrown(()->test(x).isNotIc("Foobar")).asMessage().asOneLine().is("String equaled unexpected.  Value='foobar'.");
+		assertThrown(()->test(nil).isNotIc(null)).asMessage().asOneLine().is("String equaled unexpected.  Value='null'.");
 		test(x).isNotIc(null);
 		test(nil).isNotIc("foobar");
 	}
@@ -328,44 +328,44 @@ public class StringAssertion_Test {
 	public void cb03_isLines() throws Exception {
 		String x = "foo\nbar\nbaz", nil = null;
 		test(x).isLines("foo","bar","baz");
-		assertThrown(()->test(nil).isLines((String[])null)).message().is("Argument 'lines' cannot be null.");
-		assertThrown(()->test(nil).isLines((String)null)).message().is("Value was null.");
-		assertThrown(()->test(x).javaStrings().isLines("foo","bar","bar")).message().oneLine().is("String differed at position 10.  Expect='foo\\nbar\\nbar'.  Actual='foo\\nbar\\nbaz'.");
+		assertThrown(()->test(nil).isLines((String[])null)).asMessage().is("Argument 'lines' cannot be null.");
+		assertThrown(()->test(nil).isLines((String)null)).asMessage().is("Value was null.");
+		assertThrown(()->test(x).asJavaStrings().isLines("foo","bar","bar")).asMessage().asOneLine().is("String differed at position 10.  Expect='foo\\nbar\\nbar'.  Actual='foo\\nbar\\nbaz'.");
 	}
 
 	@Test
 	public void cb04_isSortedLines() throws Exception {
 		String x1 = "foo\nbar\nbaz", x2 = "foo", empty = "", nil = null;
 		test(x1).isSortedLines("bar","foo","baz");
-		assertThrown(()->test(nil).isSortedLines((String[])null)).message().is("Argument 'lines' cannot be null.");
+		assertThrown(()->test(nil).isSortedLines((String[])null)).asMessage().is("Argument 'lines' cannot be null.");
 		test(empty).isSortedLines((String)null);
-		assertThrown(()->test(nil).isSortedLines()).message().is("Value was null.");
-		assertThrown(()->test(x1).isSortedLines("bar","foo","bar")).message().oneLine().is("Expected string had different values at line 2.  Expect='bar'.  Actual='baz'.");
-		assertThrown(()->test(x1).isSortedLines("bar","foo")).message().oneLine().is("Expected string had different numbers of lines.  Expect='2'.  Actual='3'.");
-		assertThrown(()->test(nil).isSortedLines("foo")).message().is("Value was null.");
-		assertThrown(()->test(x2).isSortedLines((String)null)).message().oneLine().is("Expected string had different values at line 1.  Expect=''.  Actual='foo'.");
+		assertThrown(()->test(nil).isSortedLines()).asMessage().is("Value was null.");
+		assertThrown(()->test(x1).isSortedLines("bar","foo","bar")).asMessage().asOneLine().is("Expected string had different values at line 2.  Expect='bar'.  Actual='baz'.");
+		assertThrown(()->test(x1).isSortedLines("bar","foo")).asMessage().asOneLine().is("Expected string had different numbers of lines.  Expect='2'.  Actual='3'.");
+		assertThrown(()->test(nil).isSortedLines("foo")).asMessage().is("Value was null.");
+		assertThrown(()->test(x2).isSortedLines((String)null)).asMessage().asOneLine().is("Expected string had different values at line 1.  Expect=''.  Actual='foo'.");
 	}
 
 	@Test
 	public void cb05_contains() throws Exception {
 		String x = "foobar", nil = null;
-		test(x).contains("foo","bar");
-		assertThrown(()->test(x).contains("foo","baz")).message().oneLine().is("String did not contain expected substring.  Substring='baz'.  Value='foobar'.");
-		test(nil).contains();
-		assertThrown(()->test(x).contains((String[])null)).message().is("Argument 'values' cannot be null.");
-		test(x).contains((String)null);
-		assertThrown(()->test(nil).contains("foobar")).message().oneLine().is("String did not contain expected substring.  Substring='foobar'.  Value='null'.");
+		test(x).isContains("foo","bar");
+		assertThrown(()->test(x).isContains("foo","baz")).asMessage().asOneLine().is("String did not contain expected substring.  Substring='baz'.  Value='foobar'.");
+		test(nil).isContains();
+		assertThrown(()->test(x).isContains((String[])null)).asMessage().is("Argument 'values' cannot be null.");
+		test(x).isContains((String)null);
+		assertThrown(()->test(nil).isContains("foobar")).asMessage().asOneLine().is("String did not contain expected substring.  Substring='foobar'.  Value='null'.");
 	}
 
 	@Test
 	public void cb06_doesNotContain() throws Exception {
 		String x = "foobar", nil = null;
-		test(x).doesNotContain("baz","qux");
-		assertThrown(()->test(x).doesNotContain("foo","baz")).message().oneLine().is("String contained unexpected substring.  Substring='foo'.  Value='foobar'.");
-		test(nil).doesNotContain();
-		assertThrown(()->test(x).doesNotContain((String[])null)).message().is("Argument 'values' cannot be null.");
-		test(x).doesNotContain((String)null);
-		test(nil).doesNotContain("foobar");
+		test(x).isNotContains("baz","qux");
+		assertThrown(()->test(x).isNotContains("foo","baz")).asMessage().asOneLine().is("String contained unexpected substring.  Substring='foo'.  Value='foobar'.");
+		test(nil).isNotContains();
+		assertThrown(()->test(x).isNotContains((String[])null)).asMessage().is("Argument 'values' cannot be null.");
+		test(x).isNotContains((String)null);
+		test(nil).isNotContains("foobar");
 	}
 
 	@Test
@@ -373,66 +373,66 @@ public class StringAssertion_Test {
 		String x = "1", empty = "", nil = null;
 		test(empty).isEmpty();
 		test(nil).isEmpty();
-		assertThrown(()->test(x).isEmpty()).message().oneLine().is("String was not empty.  Value='1'.");
+		assertThrown(()->test(x).isEmpty()).asMessage().asOneLine().is("String was not empty.  Value='1'.");
 	}
 
 	@Test
 	public void cb08_isNotEmpty() throws Exception {
 		String x = "1", empty = "", nil = null;
 		test(x).isNotEmpty();
-		assertThrown(()->test(empty).isNotEmpty()).message().is("String was empty.");
-		assertThrown(()->test(nil).isNotEmpty()).message().is("String was null.");
+		assertThrown(()->test(empty).isNotEmpty()).asMessage().is("String was empty.");
+		assertThrown(()->test(nil).isNotEmpty()).asMessage().is("String was null.");
 	}
 
 	@Test
 	public void cb09_matches() throws Exception {
 		String x = "foo", empty = "", nil = null;
-		test(x).matches("fo*");
-		assertThrown(()->test(x).matches("b*")).message().oneLine().is("String did not match expected pattern.  Pattern='\\Qb\\E.*\\Q\\E'.  Value='foo'.");
-		assertThrown(()->test(nil).matches("b*")).message().is("Value was null.");
-		assertThrown(()->test(empty).matches(null)).message().is("Argument 'searchPattern' cannot be null.");
+		test(x).isMatches("fo*");
+		assertThrown(()->test(x).isMatches("b*")).asMessage().asOneLine().is("String did not match expected pattern.  Pattern='\\Qb\\E.*\\Q\\E'.  Value='foo'.");
+		assertThrown(()->test(nil).isMatches("b*")).asMessage().is("Value was null.");
+		assertThrown(()->test(empty).isMatches(null)).asMessage().is("Argument 'searchPattern' cannot be null.");
 	}
 
 	@Test
 	public void cb10_regex() throws Exception {
 		String x = "foo", empty = "", nil = null;
-		test(x).regex("fo+");
-		assertThrown(()->test(x).regex("bar")).message().oneLine().is("String did not match expected pattern.  Pattern='bar'.  Value='foo'.");
-		assertThrown(()->test(nil).regex("fo+")).message().is("Value was null.");
-		assertThrown(()->test(empty).regex((String)null)).message().is("Argument 'regex' cannot be null.");
+		test(x).isPattern("fo+");
+		assertThrown(()->test(x).isPattern("bar")).asMessage().asOneLine().is("String did not match expected pattern.  Pattern='bar'.  Value='foo'.");
+		assertThrown(()->test(nil).isPattern("fo+")).asMessage().is("Value was null.");
+		assertThrown(()->test(empty).isPattern((String)null)).asMessage().is("Argument 'regex' cannot be null.");
 	}
 
 	@Test
 	public void cb10b_regex_wFlags() throws Exception {
 		String x = "foo", empty = "", nil = null;
-		test(x).regex("FO+", Pattern.CASE_INSENSITIVE);
-		assertThrown(()->test(x).regex("bar")).message().oneLine().is("String did not match expected pattern.  Pattern='bar'.  Value='foo'.");
-		assertThrown(()->test(nil).regex("fo+")).message().is("Value was null.");
-		assertThrown(()->test(empty).regex((String)null)).message().is("Argument 'regex' cannot be null.");
+		test(x).isPattern("FO+", Pattern.CASE_INSENSITIVE);
+		assertThrown(()->test(x).isPattern("bar")).asMessage().asOneLine().is("String did not match expected pattern.  Pattern='bar'.  Value='foo'.");
+		assertThrown(()->test(nil).isPattern("fo+")).asMessage().is("Value was null.");
+		assertThrown(()->test(empty).isPattern((String)null)).asMessage().is("Argument 'regex' cannot be null.");
 	}
 
 	@Test
 	public void cb10c_regex_wPattern() throws Exception {
 		String x = "foo", empty = "", nil = null;
-		test(x).regex(Pattern.compile("FO+", Pattern.CASE_INSENSITIVE));
-		assertThrown(()->test(x).regex("bar")).message().oneLine().is("String did not match expected pattern.  Pattern='bar'.  Value='foo'.");
-		assertThrown(()->test(nil).regex("fo+")).message().is("Value was null.");
-		assertThrown(()->test(empty).regex((String)null)).message().is("Argument 'regex' cannot be null.");
+		test(x).isPattern(Pattern.compile("FO+", Pattern.CASE_INSENSITIVE));
+		assertThrown(()->test(x).isPattern("bar")).asMessage().asOneLine().is("String did not match expected pattern.  Pattern='bar'.  Value='foo'.");
+		assertThrown(()->test(nil).isPattern("fo+")).asMessage().is("Value was null.");
+		assertThrown(()->test(empty).isPattern((String)null)).asMessage().is("Argument 'regex' cannot be null.");
 	}
 
 	@Test
 	public void cb12_startsWith() throws Exception {
 		String x = "foo", nil = null;
-		test(x).startsWith("fo");
-		assertThrown(()->test(x).startsWith("x")).message().oneLine().is("String did not start with expected substring.  Substring='x'.  Value='foo'.");
-		assertThrown(()->test(nil).startsWith("x")).message().is("Value was null.");
+		test(x).isStartsWith("fo");
+		assertThrown(()->test(x).isStartsWith("x")).asMessage().asOneLine().is("String did not start with expected substring.  Substring='x'.  Value='foo'.");
+		assertThrown(()->test(nil).isStartsWith("x")).asMessage().is("Value was null.");
 	}
 
 	@Test
 	public void cb13_endsWith() throws Exception {
 		String x = "foo", nil = null;
-		test(x).endsWith("oo");
-		assertThrown(()->test(x).endsWith("x")).message().oneLine().is("String did not end with expected substring.  Substring='x'.  Value='foo'.");
-		assertThrown(()->test(nil).endsWith("x")).message().is("Value was null.");
+		test(x).isEndsWith("oo");
+		assertThrown(()->test(x).isEndsWith("x")).asMessage().asOneLine().is("String did not end with expected substring.  Substring='x'.  Value='foo'.");
+		assertThrown(()->test(nil).isEndsWith("x")).asMessage().is("Value was null.");
 	}
 }

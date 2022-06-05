@@ -65,7 +65,7 @@ public @interface JsonSchemaConfig {
 	 * The description is the result of calling {@link ClassMeta#getFullName()}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a comma-delimited list of any of the following values:
 	 * 		<ul class='doctree'>
 	 * 			<li><js>"BEAN"</js>
@@ -78,7 +78,7 @@ public @interface JsonSchemaConfig {
 	 * 			<li><js>"ANY"</js>
 	 * 			<li><js>"OTHER"</js>
 	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -104,7 +104,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a comma-delimited list of any of the following values:
 	 * 		<ul class='doctree'>
 	 * 			<li><js>"BEAN"</js>
@@ -117,7 +117,7 @@ public @interface JsonSchemaConfig {
 	 * 			<li><js>"ANY"</js>
 	 * 			<li><js>"OTHER"</js>
 	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -135,14 +135,13 @@ public @interface JsonSchemaConfig {
 	 * <p>
 	 * Identifies whether nested descriptions are allowed in schema definitions.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -160,14 +159,13 @@ public @interface JsonSchemaConfig {
 	 * <p>
 	 * Identifies whether nested examples are allowed in schema definitions.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -189,7 +187,7 @@ public @interface JsonSchemaConfig {
 	 * Used primarily for defining common definition sections for beans in Swagger JSON.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		This setting is ignored if {@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder#useBeanDefs()} is not enabled.
 	 * </ul>
 	 *
@@ -209,9 +207,9 @@ public @interface JsonSchemaConfig {
 	 * Swagger documentation.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Format: Comma-delimited list of patterns
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -241,14 +239,13 @@ public @interface JsonSchemaConfig {
 	 * <p>
 	 * Definitions can also be added programmatically using {@link JsonSchemaGeneratorSession#addBeanDef(String, JsonMap)}.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -286,16 +283,15 @@ public @interface JsonSchemaConfig {
 	 * 	{A:{B:{C:<jk>null</jk>}}}
 	 * </p>
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='warn'>
 	 * 		Checking for recursion can cause a small performance penalty.
-	 * 	<li>
-	 *		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -318,14 +314,13 @@ public @interface JsonSchemaConfig {
 	 * If <js>"true"</js>, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
 	 * <br>Otherwise, a {@link BeanRecursionException} is thrown with the message <js>"Recursion occurred, stack=..."</js>.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 *		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -345,11 +340,11 @@ public @interface JsonSchemaConfig {
 	 * <br>Useful when constructing document fragments that need to be indented at a certain level.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Format: integer
-	 *	<li>
+	 *	<li class='note'>
 	 * 		Default value: <js>"0"</js>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -369,11 +364,11 @@ public @interface JsonSchemaConfig {
 	 * <br>If this depth is exceeded, an exception is thrown.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Format: integer
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Default value: <js>"100"</js>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *

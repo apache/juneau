@@ -108,7 +108,7 @@ public class PartList_Test {
 		x = partList("Foo","1","Foo","2");
 		assertObject(x).isString("Foo=1&Foo=2");
 
-		assertThrown(()->partList("Foo")).message().is("Odd number of parameters passed into PartList.ofPairs()");
+		assertThrown(()->partList("Foo")).asMessage().is("Odd number of parameters passed into PartList.ofPairs()");
 
 		x = PartList.of((List<NameValuePair>)null);
 		assertObject(x).isString("");
@@ -201,7 +201,7 @@ public class PartList_Test {
 		assertOptional(x.get("Bar", APart.class)).isNull();
 		assertOptional(x.get(Foo.class)).isString("Foo=1,2,3");
 		final PartList x2 = x;
-		assertThrown(()->x2.get(String.class)).message().is("Part name could not be found on bean type 'java.lang.String'");
+		assertThrown(()->x2.get(String.class)).asMessage().is("Part name could not be found on bean type 'java.lang.String'");
 	}
 
 	@Test
@@ -476,27 +476,27 @@ public class PartList_Test {
 		PartIterator i1 = x.iterator();
 		assertObject(i1.next()).isString("a=x");
 		assertObject(i1.next()).isString("b=x");
-		assertThrown(()->i1.next()).message().is("Iteration already finished.");
+		assertThrown(()->i1.next()).asMessage().is("Iteration already finished.");
 
 		PartIterator i2 = x.iterator();
 		assertObject(i2.next()).isString("a=x");
 		assertObject(i2.next()).isString("b=x");
-		assertThrown(()->i2.next()).message().is("Iteration already finished.");
+		assertThrown(()->i2.next()).asMessage().is("Iteration already finished.");
 
 		PartIterator i3 = x.iterator("a");
 		assertObject(i3.next()).isString("a=x");
-		assertThrown(()->i3.next()).message().is("Iteration already finished.");
+		assertThrown(()->i3.next()).asMessage().is("Iteration already finished.");
 
 		PartIterator i4 = x.iterator("A");
-		assertThrown(()->i4.next()).message().is("Iteration already finished.");
+		assertThrown(()->i4.next()).asMessage().is("Iteration already finished.");
 
 		PartList x2 = PartList.create().append(APart.X,BPart.X).caseInsensitive().build();
 
 		PartIterator i5 = x2.iterator("A");
 		assertObject(i5.next()).isString("a=x");
-		assertThrown(()->i5.next()).message().is("Iteration already finished.");
+		assertThrown(()->i5.next()).asMessage().is("Iteration already finished.");
 
-		assertThrown(()->i5.remove()).message().is("Not supported.");
+		assertThrown(()->i5.remove()).asMessage().is("Not supported.");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

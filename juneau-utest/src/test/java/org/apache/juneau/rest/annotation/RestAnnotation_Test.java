@@ -249,8 +249,8 @@ public class RestAnnotation_Test {
 		Rest c1 = RestAnnotation.create(C1.class).on(C2.class).build();
 		Rest c2 = RestAnnotation.create("a").on("b").build();
 
-		assertObject(c1).asJson().contains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
-		assertObject(c2).asJson().contains("on:['a','b']");
+		assertObject(c1).asJson().isContains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
+		assertObject(c2).asJson().isContains("on:['a','b']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -31,7 +31,7 @@ public class ZonedDateTimeAssertion_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	private ZonedDateTimeAssertion test(ZonedDateTime value) {
-		return assertZonedDateTime(value).silent();
+		return assertZonedDateTime(value).setSilent();
 	}
 
 	private static ZonedDateTime zdt(String s) {
@@ -51,13 +51,13 @@ public class ZonedDateTimeAssertion_Test {
 
 	@Test
 	public void a01_msg() throws Exception {
-		assertThrown(()->test(null).msg("Foo {0}", 1).exists()).message().is("Foo 1");
-		assertThrown(()->test(null).msg("Foo {0}", 1).throwable(RuntimeException.class).exists()).isExactType(RuntimeException.class).message().is("Foo 1");
+		assertThrown(()->test(null).setMsg("Foo {0}", 1).isExists()).asMessage().is("Foo 1");
+		assertThrown(()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists()).isExactType(RuntimeException.class).asMessage().is("Foo 1");
 	}
 
 	@Test
 	public void a02_stdout() throws Exception {
-		test(null).stdout();
+		test(null).setStdOut();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -102,7 +102,7 @@ public class ZonedDateTimeAssertion_Test {
 	@Test
 	public void ba04_apply() throws Exception {
 		ZonedDateTime x1 = MID1, x2 = MID2;
-		test(x1).apply(x -> x2).is(x2);
+		test(x1).asTransformed(x -> x2).is(x2);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -112,22 +112,22 @@ public class ZonedDateTimeAssertion_Test {
 	@Test
 	public void ca01_exists() throws Exception {
 		ZonedDateTime x = MID1, nil = null;
-		test(x).exists().exists();
-		assertThrown(()->test(nil).exists()).message().is("Value was null.");
+		test(x).isExists().isExists();
+		assertThrown(()->test(nil).isExists()).asMessage().is("Value was null.");
 	}
 
 	@Test
 	public void ca02_isNull() throws Exception {
 		ZonedDateTime x = MID1, nil = null;
 		test(nil).isNull();
-		assertThrown(()->test(x).isNull()).message().is("Value was not null.");
+		assertThrown(()->test(x).isNull()).asMessage().is("Value was not null.");
 	}
 
 	@Test
 	public void ca03_isNotNull() throws Exception {
 		ZonedDateTime x = MID1, nil = null;
 		test(x).isNotNull();
-		assertThrown(()->test(nil).isNotNull()).message().is("Value was null.");
+		assertThrown(()->test(nil).isNotNull()).asMessage().is("Value was null.");
 	}
 
 	@Test
@@ -136,17 +136,17 @@ public class ZonedDateTimeAssertion_Test {
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
-		assertThrown(()->test(x1).is(x2)).message().oneLine().is("Unexpected value.  Expect='2010-06-01T12:34:56Z'.  Actual='2000-06-01T12:34:56Z'.");
-		assertThrown(()->test(x1).is(nil)).message().oneLine().is("Unexpected value.  Expect='null'.  Actual='2000-06-01T12:34:56Z'.");
-		assertThrown(()->test(nil).is(x2)).message().oneLine().is("Unexpected value.  Expect='2010-06-01T12:34:56Z'.  Actual='null'.");
+		assertThrown(()->test(x1).is(x2)).asMessage().asOneLine().is("Unexpected value.  Expect='2010-06-01T12:34:56Z'.  Actual='2000-06-01T12:34:56Z'.");
+		assertThrown(()->test(x1).is(nil)).asMessage().asOneLine().is("Unexpected value.  Expect='null'.  Actual='2000-06-01T12:34:56Z'.");
+		assertThrown(()->test(nil).is(x2)).asMessage().asOneLine().is("Unexpected value.  Expect='2010-06-01T12:34:56Z'.  Actual='null'.");
 	}
 
 	@Test
 	public void ca04b_is_predicate() throws Exception {
 		ZonedDateTime x1 = MID1;
 		test(x1).is(x->x!=null);
-		assertThrown(()->test(x1).is(x->x==null)).message().oneLine().is("Unexpected value: '2000-06-01T12:34:56Z'.");
-		assertThrown(()->test(x1).is(ne(x1))).message().oneLine().is("Value unexpectedly matched.  Value='2000-06-01T12:34:56Z'.");
+		assertThrown(()->test(x1).is(x->x==null)).asMessage().asOneLine().is("Unexpected value: '2000-06-01T12:34:56Z'.");
+		assertThrown(()->test(x1).is(ne(x1))).asMessage().asOneLine().is("Value unexpectedly matched.  Value='2000-06-01T12:34:56Z'.");
 	}
 
 	@Test
@@ -155,17 +155,17 @@ public class ZonedDateTimeAssertion_Test {
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
-		assertThrown(()->test(x1).isNot(x1a)).message().oneLine().is("Unexpected value.  Did not expect='2000-06-01T12:34:56Z'.  Actual='2000-06-01T12:34:56Z'.");
-		assertThrown(()->test(nil).isNot(nil)).message().oneLine().is("Unexpected value.  Did not expect='null'.  Actual='null'.");
+		assertThrown(()->test(x1).isNot(x1a)).asMessage().asOneLine().is("Unexpected value.  Did not expect='2000-06-01T12:34:56Z'.  Actual='2000-06-01T12:34:56Z'.");
+		assertThrown(()->test(nil).isNot(nil)).asMessage().asOneLine().is("Unexpected value.  Did not expect='null'.  Actual='null'.");
 	}
 
 	@Test
 	public void ca06_isAny() throws Exception {
 		ZonedDateTime x1 = MID1, x1a = MID1a, x2 = MID2, nil = null;
 		test(x1).isAny(x1a, x2);
-		assertThrown(()->test(x1).isAny(x2)).message().oneLine().is("Expected value not found.  Expect='[2010-06-01T12:34:56Z]'.  Actual='2000-06-01T12:34:56Z'.");
-		assertThrown(()->test(x1).isAny()).message().oneLine().is("Expected value not found.  Expect='[]'.  Actual='2000-06-01T12:34:56Z'.");
-		assertThrown(()->test(nil).isAny(x2)).message().oneLine().is("Expected value not found.  Expect='[2010-06-01T12:34:56Z]'.  Actual='null'.");
+		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[2010-06-01T12:34:56Z]'.  Actual='2000-06-01T12:34:56Z'.");
+		assertThrown(()->test(x1).isAny()).asMessage().asOneLine().is("Expected value not found.  Expect='[]'.  Actual='2000-06-01T12:34:56Z'.");
+		assertThrown(()->test(nil).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[2010-06-01T12:34:56Z]'.  Actual='null'.");
 	}
 
 	@Test
@@ -174,8 +174,8 @@ public class ZonedDateTimeAssertion_Test {
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
-		assertThrown(()->test(x1).isNotAny(x1a)).message().oneLine().is("Unexpected value found.  Unexpected='2000-06-01T12:34:56Z'.  Actual='2000-06-01T12:34:56Z'.");
-		assertThrown(()->test(nil).isNotAny(nil)).message().oneLine().is("Unexpected value found.  Unexpected='null'.  Actual='null'.");
+		assertThrown(()->test(x1).isNotAny(x1a)).asMessage().asOneLine().is("Unexpected value found.  Unexpected='2000-06-01T12:34:56Z'.  Actual='2000-06-01T12:34:56Z'.");
+		assertThrown(()->test(nil).isNotAny(nil)).asMessage().asOneLine().is("Unexpected value found.  Unexpected='null'.  Actual='null'.");
 	}
 
 	@Test
@@ -183,9 +183,9 @@ public class ZonedDateTimeAssertion_Test {
 		ZonedDateTime x1 = MID1, x1a = MID1a, nil = null;
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
-		assertThrown(()->test(x1).isSame(x1a)).message().oneLine().matches("Not the same value.  Expect='2000-06-01T12:34:56Z(ZonedDateTime@*)'.  Actual='2000-06-01T12:34:56Z(ZonedDateTime@*)'.");
-		assertThrown(()->test(nil).isSame(x1a)).message().oneLine().matches("Not the same value.  Expect='2000-06-01T12:34:56Z(ZonedDateTime@*)'.  Actual='null(null)'.");
-		assertThrown(()->test(x1).isSame(nil)).message().oneLine().matches("Not the same value.  Expect='null(null)'.  Actual='2000-06-01T12:34:56Z(ZonedDateTime@*)'.");
+		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='2000-06-01T12:34:56Z(ZonedDateTime@*)'.  Actual='2000-06-01T12:34:56Z(ZonedDateTime@*)'.");
+		assertThrown(()->test(nil).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='2000-06-01T12:34:56Z(ZonedDateTime@*)'.  Actual='null(null)'.");
+		assertThrown(()->test(x1).isSame(nil)).asMessage().asOneLine().isMatches("Not the same value.  Expect='null(null)'.  Actual='2000-06-01T12:34:56Z(ZonedDateTime@*)'.");
 	}
 
 	@Test
@@ -193,9 +193,9 @@ public class ZonedDateTimeAssertion_Test {
 		ZonedDateTime x1 = MID1, x1a = MID1a, x2 = MID2, nil = null;
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
-		assertThrown(()->test(x1a).isSameJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect=''2010-06-01T12:34:56Z''.  Actual=''2000-06-01T12:34:56Z''.");
-		assertThrown(()->test(nil).isSameJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect=''2010-06-01T12:34:56Z''.  Actual='null'.");
-		assertThrown(()->test(x1).isSameJsonAs(nil)).message().oneLine().is("Unexpected comparison.  Expect='null'.  Actual=''2000-06-01T12:34:56Z''.");
+		assertThrown(()->test(x1a).isSameJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect=''2010-06-01T12:34:56Z''.  Actual=''2000-06-01T12:34:56Z''.");
+		assertThrown(()->test(nil).isSameJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect=''2010-06-01T12:34:56Z''.  Actual='null'.");
+		assertThrown(()->test(x1).isSameJsonAs(nil)).asMessage().asOneLine().is("Unexpected comparison.  Expect='null'.  Actual=''2000-06-01T12:34:56Z''.");
 	}
 
 	@Test
@@ -203,9 +203,9 @@ public class ZonedDateTimeAssertion_Test {
 		ZonedDateTime x1 = MID1, x1a = MID1a, x2 = MID2, nil = null;
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
-		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect=''2010-06-01T12:34:56Z''.  Actual=''2000-06-01T12:34:56Z''.");
-		assertThrown(()->test(nil).isSameSortedJsonAs(x2)).message().oneLine().is("Unexpected comparison.  Expect=''2010-06-01T12:34:56Z''.  Actual='null'.");
-		assertThrown(()->test(x1).isSameSortedJsonAs(nil)).message().oneLine().is("Unexpected comparison.  Expect='null'.  Actual=''2000-06-01T12:34:56Z''.");
+		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect=''2010-06-01T12:34:56Z''.  Actual=''2000-06-01T12:34:56Z''.");
+		assertThrown(()->test(nil).isSameSortedJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect=''2010-06-01T12:34:56Z''.  Actual='null'.");
+		assertThrown(()->test(x1).isSameSortedJsonAs(nil)).asMessage().asOneLine().is("Unexpected comparison.  Expect='null'.  Actual=''2000-06-01T12:34:56Z''.");
 	}
 
 	@Test
@@ -214,9 +214,9 @@ public class ZonedDateTimeAssertion_Test {
 		WriterSerializer s = SimpleJsonSerializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
-		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).message().oneLine().is("Unexpected comparison.  Expect=''2010-06-01T12:34:56Z''.  Actual=''2000-06-01T12:34:56Z''.");
-		assertThrown(()->test(nil).isSameSerializedAs(x2, s)).message().oneLine().is("Unexpected comparison.  Expect=''2010-06-01T12:34:56Z''.  Actual='null'.");
-		assertThrown(()->test(x1).isSameSerializedAs(nil, s)).message().oneLine().is("Unexpected comparison.  Expect='null'.  Actual=''2000-06-01T12:34:56Z''.");
+		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect=''2010-06-01T12:34:56Z''.  Actual=''2000-06-01T12:34:56Z''.");
+		assertThrown(()->test(nil).isSameSerializedAs(x2, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect=''2010-06-01T12:34:56Z''.  Actual='null'.");
+		assertThrown(()->test(x1).isSameSerializedAs(nil, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect='null'.  Actual=''2000-06-01T12:34:56Z''.");
 	}
 
 	@Test
@@ -224,19 +224,19 @@ public class ZonedDateTimeAssertion_Test {
 		ZonedDateTime x = MID1, nil = null;
 		test(x).isType(ZonedDateTime.class);
 		test(x).isType(Object.class);
-		assertThrown(()->test(x).isType(String.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.time.ZonedDateTime'.");
-		assertThrown(()->test(nil).isType(String.class)).message().oneLine().is("Value was null.");
-		assertThrown(()->test(x).isType(null)).message().oneLine().is("Argument 'parent' cannot be null.");
+		assertThrown(()->test(x).isType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.time.ZonedDateTime'.");
+		assertThrown(()->test(nil).isType(String.class)).asMessage().asOneLine().is("Value was null.");
+		assertThrown(()->test(x).isType(null)).asMessage().asOneLine().is("Argument 'parent' cannot be null.");
 	}
 
 	@Test
 	public void ca13_isExactType() throws Exception {
 		ZonedDateTime x = MID1, nil = null;
 		test(x).isExactType(ZonedDateTime.class);
-		assertThrown(()->test(x).isExactType(Object.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='java.time.ZonedDateTime'.");
-		assertThrown(()->test(x).isExactType(String.class)).message().oneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.time.ZonedDateTime'.");
-		assertThrown(()->test(nil).isExactType(String.class)).message().oneLine().is("Value was null.");
-		assertThrown(()->test(x).isExactType(null)).message().oneLine().is("Argument 'parent' cannot be null.");
+		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='java.time.ZonedDateTime'.");
+		assertThrown(()->test(x).isExactType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.time.ZonedDateTime'.");
+		assertThrown(()->test(nil).isExactType(String.class)).asMessage().asOneLine().is("Value was null.");
+		assertThrown(()->test(x).isExactType(null)).asMessage().asOneLine().is("Argument 'parent' cannot be null.");
 	}
 
 	@Test
@@ -244,9 +244,9 @@ public class ZonedDateTimeAssertion_Test {
 		ZonedDateTime x = MID1, nil = null;
 		test(x).isString("2000-06-01T12:34:56Z");
 		test(nil).isString(null);
-		assertThrown(()->test(x).isString("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='2000-06-01T12:34:56Z'.");
-		assertThrown(()->test(x).isString(null)).message().oneLine().is("String differed at position 0.  Expect='null'.  Actual='2000-06-01T12:34:56Z'.");
-		assertThrown(()->test(nil).isString("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
+		assertThrown(()->test(x).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='2000-06-01T12:34:56Z'.");
+		assertThrown(()->test(x).isString(null)).asMessage().asOneLine().is("String differed at position 0.  Expect='null'.  Actual='2000-06-01T12:34:56Z'.");
+		assertThrown(()->test(nil).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
 
 	@Test
@@ -254,19 +254,19 @@ public class ZonedDateTimeAssertion_Test {
 		ZonedDateTime x = MID1, nil = null;
 		test(x).isJson("'2000-06-01T12:34:56Z'");
 		test(nil).isJson("null");
-		assertThrown(()->test(x).isJson("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual=''2000-06-01T12:34:56Z''.");
-		assertThrown(()->test(x).isJson(null)).message().oneLine().is("String differed at position 0.  Expect='null'.  Actual=''2000-06-01T12:34:56Z''.");
-		assertThrown(()->test(nil).isJson("bad")).message().oneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
+		assertThrown(()->test(x).isJson("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual=''2000-06-01T12:34:56Z''.");
+		assertThrown(()->test(x).isJson(null)).asMessage().asOneLine().is("String differed at position 0.  Expect='null'.  Actual=''2000-06-01T12:34:56Z''.");
+		assertThrown(()->test(nil).isJson("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
 
 	@Test
 	public void cb01_isGt() throws Exception {
 		ZonedDateTime x1 = MIN, x2 = MID1, nil = null;
 		test(x2).isGt(x1);
-		assertThrown(()->test(x1).isGt(x1)).message().oneLine().is("Value was not greater than expected.  Expect='1900-06-01T12:34:56Z'.  Actual='1900-06-01T12:34:56Z'.");
-		assertThrown(()->test(x1).isGt(x2)).message().oneLine().is("Value was not greater than expected.  Expect='2000-06-01T12:34:56Z'.  Actual='1900-06-01T12:34:56Z'.");
-		assertThrown(()->test(x1).isGt(nil)).message().is("Argument 'value' cannot be null.");
-		assertThrown(()->test(nil).isGt(x2)).message().is("Value was null.");
+		assertThrown(()->test(x1).isGt(x1)).asMessage().asOneLine().is("Value was not greater than expected.  Expect='1900-06-01T12:34:56Z'.  Actual='1900-06-01T12:34:56Z'.");
+		assertThrown(()->test(x1).isGt(x2)).asMessage().asOneLine().is("Value was not greater than expected.  Expect='2000-06-01T12:34:56Z'.  Actual='1900-06-01T12:34:56Z'.");
+		assertThrown(()->test(x1).isGt(nil)).asMessage().is("Argument 'value' cannot be null.");
+		assertThrown(()->test(nil).isGt(x2)).asMessage().is("Value was null.");
 	}
 
 	@Test
@@ -274,19 +274,19 @@ public class ZonedDateTimeAssertion_Test {
 		ZonedDateTime x1 = MIN, x2 = MID1, nil = null;
 		test(x2).isGte(x1);
 		test(x1).isGte(x1);
-		assertThrown(()->test(x1).isGte(x2)).message().oneLine().is("Value was not greater than or equals to expected.  Expect='2000-06-01T12:34:56Z'.  Actual='1900-06-01T12:34:56Z'.");
-		assertThrown(()->test(x1).isGte(nil)).message().is("Argument 'value' cannot be null.");
-		assertThrown(()->test(nil).isGte(x2)).message().is("Value was null.");
+		assertThrown(()->test(x1).isGte(x2)).asMessage().asOneLine().is("Value was not greater than or equals to expected.  Expect='2000-06-01T12:34:56Z'.  Actual='1900-06-01T12:34:56Z'.");
+		assertThrown(()->test(x1).isGte(nil)).asMessage().is("Argument 'value' cannot be null.");
+		assertThrown(()->test(nil).isGte(x2)).asMessage().is("Value was null.");
 	}
 
 	@Test
 	public void cb03_isLt() throws Exception {
 		ZonedDateTime x1 = MIN, x2 = MID1, nil = null;
 		test(x1).isLt(x2);
-		assertThrown(()->test(x1).isLt(x1)).message().oneLine().is("Value was not less than expected.  Expect='1900-06-01T12:34:56Z'.  Actual='1900-06-01T12:34:56Z'.");
-		assertThrown(()->test(x2).isLt(x1)).message().oneLine().is("Value was not less than expected.  Expect='1900-06-01T12:34:56Z'.  Actual='2000-06-01T12:34:56Z'.");
-		assertThrown(()->test(x2).isLt(nil)).message().is("Argument 'value' cannot be null.");
-		assertThrown(()->test(nil).isLt(x1)).message().is("Value was null.");
+		assertThrown(()->test(x1).isLt(x1)).asMessage().asOneLine().is("Value was not less than expected.  Expect='1900-06-01T12:34:56Z'.  Actual='1900-06-01T12:34:56Z'.");
+		assertThrown(()->test(x2).isLt(x1)).asMessage().asOneLine().is("Value was not less than expected.  Expect='1900-06-01T12:34:56Z'.  Actual='2000-06-01T12:34:56Z'.");
+		assertThrown(()->test(x2).isLt(nil)).asMessage().is("Argument 'value' cannot be null.");
+		assertThrown(()->test(nil).isLt(x1)).asMessage().is("Value was null.");
 	}
 
 	@Test
@@ -294,9 +294,9 @@ public class ZonedDateTimeAssertion_Test {
 		ZonedDateTime x1 = MIN, x2 = MID1, nil = null;
 		test(x1).isLte(x2);
 		test(x1).isLte(x1);
-		assertThrown(()->test(x2).isLte(x1)).message().oneLine().is("Value was not less than or equals to expected.  Expect='1900-06-01T12:34:56Z'.  Actual='2000-06-01T12:34:56Z'.");
-		assertThrown(()->test(x2).isLte(nil)).message().is("Argument 'value' cannot be null.");
-		assertThrown(()->test(nil).isLte(x1)).message().is("Value was null.");
+		assertThrown(()->test(x2).isLte(x1)).asMessage().asOneLine().is("Value was not less than or equals to expected.  Expect='1900-06-01T12:34:56Z'.  Actual='2000-06-01T12:34:56Z'.");
+		assertThrown(()->test(x2).isLte(nil)).asMessage().is("Argument 'value' cannot be null.");
+		assertThrown(()->test(nil).isLte(x1)).asMessage().is("Value was null.");
 	}
 
 	@Test
@@ -305,10 +305,10 @@ public class ZonedDateTimeAssertion_Test {
 		test(x1).isBetween(x1, x3);
 		test(x2).isBetween(x1, x3);
 		test(x3).isBetween(x1, x3);
-		assertThrown(()->test(x4).isBetween(x1, x3)).message().oneLine().is("Value was not less than or equals to expected.  Expect='2010-06-01T12:34:56Z'.  Actual='2100-06-01T12:34:56Z'.");
-		assertThrown(()->test(nil).isBetween(x1, x3)).message().is("Value was null.");
-		assertThrown(()->test(x1).isBetween(nil, x3)).message().is("Argument 'lower' cannot be null.");
-		assertThrown(()->test(x1).isBetween(x1, nil)).message().oneLine().is("Argument 'upper' cannot be null.");
+		assertThrown(()->test(x4).isBetween(x1, x3)).asMessage().asOneLine().is("Value was not less than or equals to expected.  Expect='2010-06-01T12:34:56Z'.  Actual='2100-06-01T12:34:56Z'.");
+		assertThrown(()->test(nil).isBetween(x1, x3)).asMessage().is("Value was null.");
+		assertThrown(()->test(x1).isBetween(nil, x3)).asMessage().is("Argument 'lower' cannot be null.");
+		assertThrown(()->test(x1).isBetween(x1, nil)).asMessage().asOneLine().is("Argument 'upper' cannot be null.");
 	}
 
 	@Test
@@ -317,43 +317,43 @@ public class ZonedDateTimeAssertion_Test {
 		test(x1).is(x1a, HOURS);
 		test(x1).is(x1a, MINUTES);
 		test(nil).is(nil, MINUTES);
-		assertThrown(()->test(x1).is(x1a, SECONDS)).message().oneLine().is("Unexpected value.  Expect='1950-01-01T12:35:55Z'.  Actual='1950-01-01T12:34:56Z'.");
-		assertThrown(()->test(x1).is(nil, SECONDS)).message().oneLine().is("Unexpected value.  Expect='null'.  Actual='1950-01-01T12:34:56Z'.");
-		assertThrown(()->test(nil).is(x1a, SECONDS)).message().oneLine().is("Unexpected value.  Expect='1950-01-01T12:35:55Z'.  Actual='null'.");
-		assertThrown(()->test(x1).is(x1a, null)).message().oneLine().is("Argument 'precision' cannot be null.");
+		assertThrown(()->test(x1).is(x1a, SECONDS)).asMessage().asOneLine().is("Unexpected value.  Expect='1950-01-01T12:35:55Z'.  Actual='1950-01-01T12:34:56Z'.");
+		assertThrown(()->test(x1).is(nil, SECONDS)).asMessage().asOneLine().is("Unexpected value.  Expect='null'.  Actual='1950-01-01T12:34:56Z'.");
+		assertThrown(()->test(nil).is(x1a, SECONDS)).asMessage().asOneLine().is("Unexpected value.  Expect='1950-01-01T12:35:55Z'.  Actual='null'.");
+		assertThrown(()->test(x1).is(x1a, null)).asMessage().asOneLine().is("Argument 'precision' cannot be null.");
 	}
 
 	@Test
 	public void cc02_isAfter() throws Exception {
 		ZonedDateTime x1 = zdt("1950-01-01T12:34:56Z"), x2 = zdt("2050-01-01T12:34:56Z"), nil = null;
 		test(x2).isAfter(x1);
-		assertThrown(()->test(x1).isAfter(x2)).message().contains("Value was not after expected.");
-		assertThrown(()->test(x1).isAfter(nil)).message().is("Argument 'value' cannot be null.");
-		assertThrown(()->test(nil).isAfter(x2)).message().contains("Value was null.");
+		assertThrown(()->test(x1).isAfter(x2)).asMessage().isContains("Value was not after expected.");
+		assertThrown(()->test(x1).isAfter(nil)).asMessage().is("Argument 'value' cannot be null.");
+		assertThrown(()->test(nil).isAfter(x2)).asMessage().isContains("Value was null.");
 	}
 
 	@Test
 	public void cc03_isAfterNow() throws Exception {
 		ZonedDateTime x1 = zdt("1950-01-01T12:34:56Z"), x2 = zdt("2050-01-01T12:34:56Z"), nil = null;
 		test(x2).isAfterNow();
-		assertThrown(()->test(x1).isAfterNow()).message().contains("Value was not after expected.");
-		assertThrown(()->test(nil).isAfterNow()).message().contains("Value was null.");
+		assertThrown(()->test(x1).isAfterNow()).asMessage().isContains("Value was not after expected.");
+		assertThrown(()->test(nil).isAfterNow()).asMessage().isContains("Value was null.");
 	}
 
 	@Test
 	public void cc04_isBefore() throws Exception {
 		ZonedDateTime x1 = zdt("1950-01-01T12:34:56Z"), x2 = zdt("2050-01-01T12:34:56Z"), nil = null;
 		test(x1).isBefore(x2);
-		assertThrown(()->test(x2).isBefore(x1)).message().contains("Value was not before expected.");
-		assertThrown(()->test(x1).isBefore(nil)).message().is("Argument 'value' cannot be null.");
-		assertThrown(()->test(nil).isBefore(x2)).message().contains("Value was null.");
+		assertThrown(()->test(x2).isBefore(x1)).asMessage().isContains("Value was not before expected.");
+		assertThrown(()->test(x1).isBefore(nil)).asMessage().is("Argument 'value' cannot be null.");
+		assertThrown(()->test(nil).isBefore(x2)).asMessage().isContains("Value was null.");
 	}
 
 	@Test
 	public void cc05_isBeforeNow() throws Exception {
 		ZonedDateTime x1 = zdt("1950-01-01T12:34:56Z"), x2 = zdt("2050-01-01T12:34:56Z"), nil = null;
 		test(x1).isBeforeNow();
-		assertThrown(()->test(x2).isBeforeNow()).message().contains("Value was not before expected.");
-		assertThrown(()->test(nil).isBeforeNow()).message().contains("Value was null.");
+		assertThrown(()->test(x2).isBeforeNow()).asMessage().isContains("Value was not before expected.");
+		assertThrown(()->test(nil).isBeforeNow()).asMessage().isContains("Value was null.");
 	}
 }

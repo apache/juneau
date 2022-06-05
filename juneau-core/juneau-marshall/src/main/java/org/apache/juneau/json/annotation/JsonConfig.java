@@ -63,14 +63,13 @@ public @interface JsonConfig {
 	 * If <js>"true"</js>, after parsing a POJO from the input, verifies that the remaining input in
 	 * the stream consists of only comments or whitespace.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -97,14 +96,13 @@ public @interface JsonConfig {
 	 * When present, this value overrides the {@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} setting and is
 	 * provided to customize the behavior of specific serializers in a {@link SerializerSet}.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -125,14 +123,13 @@ public @interface JsonConfig {
 	 * <br>However, if you're embedding JSON in an HTML script tag, this setting prevents confusion when trying to serialize
 	 * <xt>&lt;\/script&gt;</xt>.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -166,14 +163,13 @@ public @interface JsonConfig {
 	 * 		</p>
 	 * </ol>
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *

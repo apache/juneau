@@ -65,9 +65,8 @@ import org.apache.juneau.svl.*;
 
 /**
  * Represents a single Java servlet/resource method annotated with {@link RestOp @RestOp}.
- * {@review}
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
@@ -868,7 +867,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		When defined as a class, the implementation must have one of the following constructors:
 		 * 		<ul>
 		 * 			<li><code><jk>public</jk> T(BeanContext)</code>
@@ -876,7 +875,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
 		 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
 		 * 		</ul>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Inner classes of the REST resource class are allowed.
 		 * </ul>
 		 *
@@ -1094,7 +1093,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * <br>Note that this is different than guards where <b>ALL</b> guards needs to pass.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		When defined as a class, the implementation must have one of the following constructors:
 		 * 		<ul>
 		 * 			<li><code><jk>public</jk> T(RestContext)</code>
@@ -1102,7 +1101,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
 		 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
 		 * 		</ul>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Inner classes of the REST resource class are allowed.
 		 * </ul>
 		 *
@@ -1905,12 +1904,12 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		String value that gets resolved to a <jk>long</jk>.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Can be suffixed with any of the following representing kilobytes, megabytes, and gigabytes:
 		 * 		<js>'K'</js>, <js>'M'</js>, <js>'G'</js>.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		A value of <js>"-1"</js> can be used to represent no limit.
 		 * </ul>
 		 *
@@ -1945,9 +1944,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * <p>
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		This method is only applicable for Java methods.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Slashes are trimmed from the path ends.
 		 * 		<br>As a convention, you may want to start your path with <js>'/'</js> simple because it make it easier to read.
 		 * </ul>
@@ -2044,7 +2043,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Supports any of the following expression constructs:
 		 * 		<ul>
 		 * 			<li><js>"foo"</js> - Single arguments.
@@ -2056,15 +2055,15 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 			<li><js>"fo* &amp;&amp; *oo"</js> - Multiple AND'ed arguments, Java-AND syntax.
 		 * 			<li><js>"fo* || (*oo || bar)"</js> - Parenthesis.
 		 * 		</ul>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		AND operations take precedence over OR operations (as expected).
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Whitespace is ignored.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		<jk>null</jk> or empty expressions always match as <jk>false</jk>.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		If patterns are used, you must specify the list of declared roles using {@link Rest#rolesDeclared()} or {@link RestOpContext.Builder#rolesDeclared(String...)}.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Supports {@doc jrs.SvlVariables}
 		 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 		 * </ul>

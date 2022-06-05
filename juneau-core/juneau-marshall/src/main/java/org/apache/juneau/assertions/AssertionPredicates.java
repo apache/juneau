@@ -26,7 +26,6 @@ import org.apache.juneau.internal.*;
 
 /**
  * Predefined {@link AssertionPredicate} objects.
- * {@review}
  *
  * <p>
  * Typically used wherever predicates are allowed for testing of {@link Assertion} objects such as...
@@ -34,7 +33,7 @@ import org.apache.juneau.internal.*;
  * 	<li>{@link FluentObjectAssertion#is(Predicate)}
  * 	<li>{@link FluentArrayAssertion#is(Predicate...)}
  * 	<li>{@link FluentPrimitiveArrayAssertion#is(Predicate...)}
- * 	<li>{@link FluentListAssertion#each(Predicate...)}
+ * 	<li>{@link FluentListAssertion#isEach(Predicate...)}
  * </ul>
  *
  * <h5 class='section'>Example:</h5>

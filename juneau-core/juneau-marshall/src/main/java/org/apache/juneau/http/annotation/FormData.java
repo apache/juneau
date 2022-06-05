@@ -23,7 +23,6 @@ import org.apache.juneau.oapi.*;
 
 /**
  * REST request form-data annotation.
- * {@review}
  *
  * <p>
  * Identifies a POJO to be used as a form-data entry on an HTTP request.
@@ -37,7 +36,7 @@ import org.apache.juneau.oapi.*;
  * </ul>
  *
  * <h5 class='topic'>Arguments and argument-types of server-side @RestOp-annotated methods</h5>
- *
+ * <p>
  * Annotation that can be applied to a parameter of a <ja>@RestOp</ja>-annotated method to identify it as a form-data parameter.
  *
  * <h5 class='section'>Example:</h5>
@@ -68,7 +67,7 @@ import org.apache.juneau.oapi.*;
  * </ul>
  *
  * <h5 class='topic'>Important note concerning FORM posts</h5>
- *
+ * <p>
  * This annotation should not be combined with the {@link Body @Body} annotation or <c>RestRequest.getBody()</c> method
  * for <c>application/x-www-form-urlencoded POST</c> posts, since it will trigger the underlying servlet
  * API to parse the body content as key-value pairs resulting in empty content.
@@ -78,7 +77,7 @@ import org.apache.juneau.oapi.*;
  * servlet to drain the body content.
  *
  * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
- *
+ * <p>
  * Annotation applied to Java method arguments of interface proxies to denote that they are FORM post parameters on the
  * request.
  *
@@ -88,7 +87,7 @@ import org.apache.juneau.oapi.*;
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
- *
+ * <p>
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrc.Request}
  * </ul>
@@ -181,7 +180,7 @@ public @interface FormData {
 	 * </ul>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is plain-text.
 	 * </ul>
 	 *

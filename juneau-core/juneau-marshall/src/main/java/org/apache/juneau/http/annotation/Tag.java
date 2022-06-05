@@ -18,7 +18,6 @@ import java.lang.annotation.*;
 
 /**
  * Swagger tag annotation.
- * {@review}
  *
  * <p>
  * Allows adding meta data to a single tag that is used by the {@doc ext.SwaggerOperationObject}.
@@ -56,10 +55,10 @@ public @interface Tag {
 	 * <mk>description</mk> field of the {@doc ext.SwaggerTagObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 *
@@ -71,7 +70,7 @@ public @interface Tag {
 	 * <mk>externalDocs</mk> field of the {@doc ext.SwaggerTagObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
@@ -84,7 +83,7 @@ public @interface Tag {
 	 * <mk>name</mk> field of the {@doc ext.SwaggerTagObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * </ul>
 	 *

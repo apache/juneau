@@ -24,7 +24,6 @@ import org.apache.juneau.swap.*;
 
 /**
  * Used to tailor how beans get interpreted by the framework.
- * {@review}
  *
  * <p>
  * Can be used in the following locations:
@@ -79,19 +78,19 @@ public @interface Bean {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Setting applies to specified class and all subclasses.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Keys are the class of the example.
 	 * 		<br>Values are Simple-JSON representation of that class.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		POJO examples can also be defined on classes via the following:
 	 * 		<ul class='spaced-list'>
 	 * 			<li>A static field annotated with {@link Example @Example}.
 	 * 			<li>A static method annotated with {@link Example @Example} with zero arguments or one {@link BeanSession} argument.
 	 * 			<li>A static method with name <c>example</c> with no arguments or one {@link BeanSession} argument.
 	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -117,7 +116,7 @@ public @interface Bean {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		{@link #xp()} is a shortened synonym for this value.
 	 * </ul>
 	 *
@@ -315,7 +314,7 @@ public @interface Bean {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		{@link #p()} is a shortened synonym for this value.
 	 * </ul>
 	 *
@@ -365,7 +364,7 @@ public @interface Bean {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		{@link #ro()} is a shortened synonym for this value.
 	 * </ul>
 	 *
@@ -510,7 +509,7 @@ public @interface Bean {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		{@link #wo()} is a shortened synonym for this value.
 	 * </ul>
 	 *

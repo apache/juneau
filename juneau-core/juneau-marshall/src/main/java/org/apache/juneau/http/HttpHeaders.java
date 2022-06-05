@@ -32,7 +32,6 @@ import org.apache.juneau.reflect.*;
 
 /**
  * Standard predefined HTTP headers.
- * {@review}
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.HttpParts}

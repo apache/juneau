@@ -14,7 +14,6 @@ package org.apache.juneau.swap;
 
 /**
  * Bean interceptor.
- * {@reviewed}
  *
  * <p>
  * Bean interceptors intercept calls to bean getters and setters to allow them to override values in transit.

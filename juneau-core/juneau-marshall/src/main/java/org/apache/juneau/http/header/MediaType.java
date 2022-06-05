@@ -75,12 +75,12 @@ public class MediaType implements Comparable<MediaType>  {
 	 * can be compared for equality using '=='.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Spaces are replaced with <js>'+'</js> characters.
 	 * 		This gets around the issue where passing media type strings with <js>'+'</js> as HTTP GET parameters
 	 * 		get replaced with spaces by your browser.  Since spaces aren't supported by the spec, this
 	 * 		is doesn't break anything.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Anything including and following the <js>';'</js> character is ignored (e.g. <js>";charset=X"</js>).
 	 * </ul>
 	 *

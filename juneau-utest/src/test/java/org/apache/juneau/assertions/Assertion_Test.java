@@ -53,30 +53,30 @@ public class Assertion_Test {
 	@Test
 	public void a01_basicErrorHandling() throws Exception {
 		A a = new A("");
-		a.silent();
+		a.setSilent();
 
 		assertThrown(()->a.doError())
 			.isExactType(BasicAssertionError.class)
-			.message().is("bar baz")
-			.causedBy().isExactType(A1.class)
-			.causedBy().message().is("foo")
-			.causedBy().causedBy().isNull();
+			.asMessage().is("bar baz")
+			.asCausedBy().isExactType(A1.class)
+			.asCausedBy().asMessage().is("foo")
+			.asCausedBy().asCausedBy().isNull();
 
-		a.throwable(A2.class);
+		a.setThrowable(A2.class);
 		assertThrown(()->a.doError())
 			.isExactType(A2.class)
-			.message().is("bar baz")
-			.causedBy().isExactType(A1.class)
-			.causedBy().message().is("foo")
-			.causedBy().causedBy().isNull();
+			.asMessage().is("bar baz")
+			.asCausedBy().isExactType(A1.class)
+			.asCausedBy().asMessage().is("foo")
+			.asCausedBy().asCausedBy().isNull();
 
-		a.throwable(A3.class);
+		a.setThrowable(A3.class);
 		assertThrown(()->a.doError())
 			.isExactType(RuntimeException.class)
-			.message().is("bar baz")
-			.causedBy().isExactType(A1.class)
-			.causedBy().message().is("foo")
-			.causedBy().causedBy().isNull();
+			.asMessage().is("bar baz")
+			.asCausedBy().isExactType(A1.class)
+			.asCausedBy().asMessage().is("foo")
+			.asCausedBy().asCausedBy().isNull();
 	}
 
 	@Test
@@ -84,9 +84,9 @@ public class Assertion_Test {
 		PrintStream out = printStream();
 
 		try {
-			assertString("x").out(out).isNull();
+			assertString("x").setOut(out).isNull();
 		} catch (BasicAssertionError e) {}
 
-		assertString(out).contains("Value was not null.");
+		assertString(out).isContains("Value was not null.");
 	}
 }

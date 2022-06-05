@@ -41,7 +41,7 @@ import org.apache.juneau.utils.*;
  *
  * Produces the JSON-schema for the JSON produced by the {@link JsonSerializer} class with the same properties.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *

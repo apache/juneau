@@ -51,18 +51,18 @@ public class RestOp_BeanConfig_Test {
 	public void a01_bpi() throws Exception {
 		RestClient a1 = MockRestClient.build(A1.class);
 		a1.get("/a").json().run().assertBody().is("{\"a\":1,\"_b\":\"foo\"}");
-		a1.get("/a").xml().run().assertBody().contains("<object><a>1</a><_b>foo</_b></object>");
-		a1.get("/a").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
+		a1.get("/a").xml().run().assertBody().isContains("<object><a>1</a><_b>foo</_b></object>");
+		a1.get("/a").html().run().assertBody().isContains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
 		a1.get("/a").uon().run().assertBody().is("(a=1,_b=foo)");
 		a1.get("/a").urlEnc().run().assertBody().is("a=1&_b=foo");
 		a1.get("/b").json().run().assertBody().is("{\"a\":1}");
-		a1.get("/b").xml().run().assertBody().contains("<object><a>1</a></object>");
-		a1.get("/b").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr></table>");
+		a1.get("/b").xml().run().assertBody().isContains("<object><a>1</a></object>");
+		a1.get("/b").html().run().assertBody().isContains("<table><tr><td>a</td><td>1</td></tr></table>");
 		a1.get("/b").uon().run().assertBody().is("(a=1)");
 		a1.get("/b").urlEnc().run().assertBody().is("a=1");
 		a1.get("/c").json().run().assertBody().is("{\"_b\":\"foo\"}");
-		a1.get("/c").xml().run().assertBody().contains("<object><_b>foo</_b></object>");
-		a1.get("/c").html().run().assertBody().contains("<table><tr><td>_b</td><td>foo</td></tr></table>");
+		a1.get("/c").xml().run().assertBody().isContains("<object><_b>foo</_b></object>");
+		a1.get("/c").html().run().assertBody().isContains("<table><tr><td>_b</td><td>foo</td></tr></table>");
 		a1.get("/c").uon().run().assertBody().is("(_b=foo)");
 		a1.get("/c").urlEnc().run().assertBody().is("_b=foo");
 	}
@@ -93,18 +93,18 @@ public class RestOp_BeanConfig_Test {
 	public void a02_bpx() throws Exception {
 		RestClient a2 = MockRestClient.build(A2.class);
 		a2.get("/a").json().run().assertBody().is("{}");
-		a2.get("/a").xml().run().assertBody().contains("<object/>");
-		a2.get("/a").html().run().assertBody().contains("<table></table>");
+		a2.get("/a").xml().run().assertBody().isContains("<object/>");
+		a2.get("/a").html().run().assertBody().isContains("<table></table>");
 		a2.get("/a").uon().run().assertBody().is("()");
 		a2.get("/a").urlEnc().run().assertBody().is("");
 		a2.get("/b").json().run().assertBody().is("{\"_b\":\"foo\"}");
-		a2.get("/b").xml().run().assertBody().contains("<object><_b>foo</_b></object>");
-		a2.get("/b").html().run().assertBody().contains("<table><tr><td>_b</td><td>foo</td></tr></table>");
+		a2.get("/b").xml().run().assertBody().isContains("<object><_b>foo</_b></object>");
+		a2.get("/b").html().run().assertBody().isContains("<table><tr><td>_b</td><td>foo</td></tr></table>");
 		a2.get("/b").uon().run().assertBody().is("(_b=foo)");
 		a2.get("/b").urlEnc().run().assertBody().is("_b=foo");
 		a2.get("/c").json().run().assertBody().is("{\"a\":1}");
-		a2.get("/c").xml().run().assertBody().contains("<object><a>1</a></object>");
-		a2.get("/c").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr></table>");
+		a2.get("/c").xml().run().assertBody().isContains("<object><a>1</a></object>");
+		a2.get("/c").html().run().assertBody().isContains("<table><tr><td>a</td><td>1</td></tr></table>");
 		a2.get("/c").uon().run().assertBody().is("(a=1)");
 		a2.get("/c").urlEnc().run().assertBody().is("a=1");
 	}
@@ -135,18 +135,18 @@ public class RestOp_BeanConfig_Test {
 	public void a03_bpi_overridesClass() throws Exception {
 		RestClient c = MockRestClient.build(A3.class);
 		c.get("/a").json().run().assertBody().is("{\"a\":1,\"_b\":\"foo\"}");
-		c.get("/a").xml().run().assertBody().contains("<object><a>1</a><_b>foo</_b></object>");
-		c.get("/a").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
+		c.get("/a").xml().run().assertBody().isContains("<object><a>1</a><_b>foo</_b></object>");
+		c.get("/a").html().run().assertBody().isContains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
 		c.get("/a").uon().run().assertBody().is("(a=1,_b=foo)");
 		c.get("/a").urlEnc().run().assertBody().is("a=1&_b=foo");
 		c.get("/b").json().run().assertBody().is("{\"a\":1}");
-		c.get("/b").xml().run().assertBody().contains("<object><a>1</a></object>");
-		c.get("/b").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr></table>");
+		c.get("/b").xml().run().assertBody().isContains("<object><a>1</a></object>");
+		c.get("/b").html().run().assertBody().isContains("<table><tr><td>a</td><td>1</td></tr></table>");
 		c.get("/b").uon().run().assertBody().is("(a=1)");
 		c.get("/b").urlEnc().run().assertBody().is("a=1");
 		c.get("/c").json().run().assertBody().is("{\"_b\":\"foo\"}");
-		c.get("/c").xml().run().assertBody().contains("<object><_b>foo</_b></object>");
-		c.get("/c").html().run().assertBody().contains("<table><tr><td>_b</td><td>foo</td></tr></table>");
+		c.get("/c").xml().run().assertBody().isContains("<object><_b>foo</_b></object>");
+		c.get("/c").html().run().assertBody().isContains("<table><tr><td>_b</td><td>foo</td></tr></table>");
 		c.get("/c").uon().run().assertBody().is("(_b=foo)");
 		c.get("/c").urlEnc().run().assertBody().is("_b=foo");
 	}
@@ -177,18 +177,18 @@ public class RestOp_BeanConfig_Test {
 	public void a04_bpx_overridesClass() throws Exception {
 		RestClient a4 = MockRestClient.build(A4.class);
 		a4.get("/a").json().run().assertBody().is("{}");
-		a4.get("/a").xml().run().assertBody().contains("<object/>");
-		a4.get("/a").html().run().assertBody().contains("<table></table>");
+		a4.get("/a").xml().run().assertBody().isContains("<object/>");
+		a4.get("/a").html().run().assertBody().isContains("<table></table>");
 		a4.get("/a").uon().run().assertBody().is("()");
 		a4.get("/a").urlEnc().run().assertBody().is("");
 		a4.get("/b").json().run().assertBody().is("{\"_b\":\"foo\"}");
-		a4.get("/b").xml().run().assertBody().contains("<object><_b>foo</_b></object>");
-		a4.get("/b").html().run().assertBody().contains("<table><tr><td>_b</td><td>foo</td></tr></table>");
+		a4.get("/b").xml().run().assertBody().isContains("<object><_b>foo</_b></object>");
+		a4.get("/b").html().run().assertBody().isContains("<table><tr><td>_b</td><td>foo</td></tr></table>");
 		a4.get("/b").uon().run().assertBody().is("(_b=foo)");
 		a4.get("/b").urlEnc().run().assertBody().is("_b=foo");
 		a4.get("/c").json().run().assertBody().is("{\"a\":1}");
-		a4.get("/c").xml().run().assertBody().contains("<object><a>1</a></object>");
-		a4.get("/c").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr></table>");
+		a4.get("/c").xml().run().assertBody().isContains("<object><a>1</a></object>");
+		a4.get("/c").html().run().assertBody().isContains("<table><tr><td>a</td><td>1</td></tr></table>");
 		a4.get("/c").uon().run().assertBody().is("(a=1)");
 		a4.get("/c").urlEnc().run().assertBody().is("a=1");
 	}
@@ -209,8 +209,8 @@ public class RestOp_BeanConfig_Test {
 	public void a05_bpi_metaMatching() throws Exception {
 		RestClient a5 = MockRestClient.build(A5.class);
 		a5.get("/a").json().run().assertBody().is("{\"a\":1}");
-		a5.get("/a").xml().run().assertBody().contains("<object><a>1</a></object>");
-		a5.get("/a").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr></table>");
+		a5.get("/a").xml().run().assertBody().isContains("<object><a>1</a></object>");
+		a5.get("/a").html().run().assertBody().isContains("<table><tr><td>a</td><td>1</td></tr></table>");
 		a5.get("/a").uon().run().assertBody().is("(a=1)");
 		a5.get("/a").urlEnc().run().assertBody().is("a=1");
 	}
@@ -231,8 +231,8 @@ public class RestOp_BeanConfig_Test {
 	public void a06_bpi_fullyQualifiedClassNames() throws Exception {
 		RestClient a6 = MockRestClient.build(A6.class);
 		a6.get("/a").json().run().assertBody().is("{\"a\":1}");
-		a6.get("/a").xml().run().assertBody().contains("<object><a>1</a></object>");
-		a6.get("/a").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr></table>");
+		a6.get("/a").xml().run().assertBody().isContains("<object><a>1</a></object>");
+		a6.get("/a").html().run().assertBody().isContains("<table><tr><td>a</td><td>1</td></tr></table>");
 		a6.get("/a").uon().run().assertBody().is("(a=1)");
 		a6.get("/a").urlEnc().run().assertBody().is("a=1");
 	}
@@ -260,13 +260,13 @@ public class RestOp_BeanConfig_Test {
 	public void a07_bpi_negativeMatching() throws Exception {
 		RestClient a7 = MockRestClient.build(A7.class);
 		a7.get("/a").json().run().assertBody().is("{\"a\":1,\"_b\":\"foo\"}");
-		a7.get("/a").xml().run().assertBody().contains("<object><a>1</a><_b>foo</_b></object>");
-		a7.get("/a").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
+		a7.get("/a").xml().run().assertBody().isContains("<object><a>1</a><_b>foo</_b></object>");
+		a7.get("/a").html().run().assertBody().isContains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
 		a7.get("/a").uon().run().assertBody().is("(a=1,_b=foo)");
 		a7.get("/a").urlEnc().run().assertBody().is("a=1&_b=foo");
 		a7.get("/b").json().run().assertBody().is("{\"a\":1,\"_b\":\"foo\"}");
-		a7.get("/b").xml().run().assertBody().contains("<object><a>1</a><_b>foo</_b></object>");
-		a7.get("/b").html().run().assertBody().contains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
+		a7.get("/b").xml().run().assertBody().isContains("<object><a>1</a><_b>foo</_b></object>");
+		a7.get("/b").html().run().assertBody().isContains("<table><tr><td>a</td><td>1</td></tr><tr><td>_b</td><td>foo</td></tr></table>");
 		a7.get("/b").uon().run().assertBody().is("(a=1,_b=foo)");
 		a7.get("/b").urlEnc().run().assertBody().is("a=1&_b=foo");
 	}

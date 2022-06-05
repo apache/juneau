@@ -27,7 +27,7 @@ import org.apache.juneau.utils.*;
 /**
  * TODO - Work in progress.  CSV parser.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *

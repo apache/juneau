@@ -18,7 +18,6 @@ import java.lang.annotation.*;
 
 /**
  * Swagger items annotation.
- * {@review}
  *
  * <p>
  * This class is essentially identical to {@link Items} except it's used for defining items of items.
@@ -41,7 +40,7 @@ public @interface SubItems {
 	 * <mk>default</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -53,7 +52,7 @@ public @interface SubItems {
 	 * <mk>enum</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -65,7 +64,7 @@ public @interface SubItems {
 	 * <mk>$ref</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -84,7 +83,7 @@ public @interface SubItems {
 	 * <mk>collectionFormat</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -124,7 +123,7 @@ public @interface SubItems {
 	 * <mk>exclusiveMaximum</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -136,7 +135,7 @@ public @interface SubItems {
 	 * <mk>exclusiveMinimum</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -155,7 +154,7 @@ public @interface SubItems {
 	 * <mk>format</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -195,7 +194,7 @@ public @interface SubItems {
 	 * <mk>maximum</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -207,7 +206,7 @@ public @interface SubItems {
 	 * <mk>maxItems</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -226,7 +225,7 @@ public @interface SubItems {
 	 * <mk>maxLength</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -252,7 +251,7 @@ public @interface SubItems {
 	 * <mk>minimum</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -264,7 +263,7 @@ public @interface SubItems {
 	 * <mk>minItems</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -283,7 +282,7 @@ public @interface SubItems {
 	 * <mk>minLength</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -302,7 +301,7 @@ public @interface SubItems {
 	 * <mk>multipleOf</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -321,7 +320,7 @@ public @interface SubItems {
 	 * <mk>pattern</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -340,7 +339,7 @@ public @interface SubItems {
 	 * <mk>type</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *
@@ -359,7 +358,7 @@ public @interface SubItems {
 	 * <mk>uniqueItems</mk> field of the {@doc ext.SwaggerItemsObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * </ul>
 	 *

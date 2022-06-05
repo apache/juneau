@@ -75,20 +75,19 @@ public @interface HtmlDocConfig {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Format: HTML
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Multiple values are combined with newlines into a single string.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
 	 * 		parent class.
 	 * </ul>
@@ -124,22 +123,19 @@ public @interface HtmlDocConfig {
 	 * 	)
 	 * </p>
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"RIGHT"</js>
+	 * 	<li><js>"LEFT"</js>
+	 * 	<li><js>"TOP"</js>
+	 * 	<li><js>"BOTTOM"</js>
+	 * 	<li><js>"DEFAULT"</js> (defaults to <js>"RIGHT"</js>)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"RIGHT"</js>
-	 * 			<li><js>"LEFT"</js>
-	 * 			<li><js>"TOP"</js>
-	 * 			<li><js>"BOTTOM"</js>
-	 * 			<li><js>"DEFAULT"</js> (defaults to <js>"RIGHT"</js>)
-	 * 		</ul>
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
-	 * 	<li>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
 	 * 		parent class.
 	 * </ul>
@@ -168,20 +164,19 @@ public @interface HtmlDocConfig {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Format: HTML
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Multiple values are combined with newlines into a single string.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
 	 * 		parent class.
 	 * </ul>
@@ -210,18 +205,17 @@ public @interface HtmlDocConfig {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Format: HTML
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The head content from the parent can be included by adding the literal <js>"INHERIT"</js> as a value.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
 	 * 		parent class.
 	 * </ul>
@@ -251,20 +245,19 @@ public @interface HtmlDocConfig {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Format: HTML
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		A value of <js>"NONE"</js> can be used to force no header.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
 	 * 		Multiple values are combined with newlines into a single string.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
 	 * 		parent class if not overridden.
 	 * </ul>
@@ -294,22 +287,21 @@ public @interface HtmlDocConfig {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Format: HTML
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		When {@link #navlinks()} is also specified, this content is placed AFTER the navigation links.
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Multiple values are combined with newlines into a single string.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
 	 * 		parent class.
 	 * </ul>
@@ -360,20 +352,19 @@ public @interface HtmlDocConfig {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The parent links can be included by adding the literal <js>"INHERIT"</js> as a value.
 	 * 		<br>Use the syntax <js>"key[index]: value"</js> or <js>"[index]: value"</js> to specify an index location
 	 * 		to place a link inside the list of parent links.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.MarshallingUris} (e.g. <js>"servlet:/..."</js>, <js>"request:/..."</js>).
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
 	 * 		parent class.
 	 * </ul>
@@ -400,13 +391,12 @@ public @interface HtmlDocConfig {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Format: HTML
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		A value of <js>"NONE"</js> can be used to represent no value to differentiate it from an empty string.
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -423,16 +413,14 @@ public @interface HtmlDocConfig {
 	 * <p>
 	 * Adds <js>"* {white-space:nowrap}"</js> to the CSS instructions on the page to prevent word wrapping.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -459,20 +447,19 @@ public @interface HtmlDocConfig {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Format: Javascript
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Multiple values are combined with newlines into a single string.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
 	 * 		parent class.
 	 * </ul>
@@ -502,20 +489,19 @@ public @interface HtmlDocConfig {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Format: CSS
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
 	 * 		A value of <js>"NONE"</js> can be used to force no value.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Multiple values are combined with newlines into a single string.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
 	 * 		parent class.
 	 * </ul>
@@ -538,14 +524,13 @@ public @interface HtmlDocConfig {
 	 * Note that this stylesheet is controlled by the <code><ja>@Rest</ja>.stylesheet()</code> annotation.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Format: URL
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
 	 * 		parent class.
 	 * </ul>
@@ -576,9 +561,9 @@ public @interface HtmlDocConfig {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
 	 * 		parent class.
 	 * </ul>
@@ -625,9 +610,9 @@ public @interface HtmlDocConfig {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Widgets are inherited from parent to child, but can be overridden by reusing the widget name.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Values are appended to the existing list.
 	 * </ul>
 	 *

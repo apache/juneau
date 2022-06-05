@@ -37,7 +37,7 @@ import org.apache.juneau.internal.*;
  * 		Ensuring infinite loops don't occur from loops in the model (when detectRecursions is enabled.
  * </ul>
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *

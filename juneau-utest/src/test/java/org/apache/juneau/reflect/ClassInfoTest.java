@@ -1119,10 +1119,10 @@ public class ClassInfoTest {
 	@Test
 	public void isAll_invalid() {
 		ClassInfo a = aClass;
-		assertThrown(()->a.isAll(HAS_PARAMS)).exists();
-		assertThrown(()->a.isAll(HAS_NO_PARAMS)).exists();
-		assertThrown(()->a.isAll(TRANSIENT)).exists();
-		assertThrown(()->a.isAll(NOT_TRANSIENT)).exists();
+		assertThrown(()->a.isAll(HAS_PARAMS)).isExists();
+		assertThrown(()->a.isAll(HAS_NO_PARAMS)).isExists();
+		assertThrown(()->a.isAll(TRANSIENT)).isExists();
+		assertThrown(()->a.isAll(NOT_TRANSIENT)).isExists();
 	}
 
 	@Test
@@ -1224,10 +1224,10 @@ public class ClassInfoTest {
 	@Test
 	public void isAny_invalid() {
 		ClassInfo a = aClass;
-		assertThrown(()->a.isAny(HAS_PARAMS)).exists();
-		assertThrown(()->a.isAny(HAS_NO_PARAMS)).exists();
-		assertThrown(()->a.isAny(TRANSIENT)).exists();
-		assertThrown(()->a.isAny(NOT_TRANSIENT)).exists();
+		assertThrown(()->a.isAny(HAS_PARAMS)).isExists();
+		assertThrown(()->a.isAny(HAS_NO_PARAMS)).isExists();
+		assertThrown(()->a.isAny(TRANSIENT)).isExists();
+		assertThrown(()->a.isAny(NOT_TRANSIENT)).isExists();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1856,27 +1856,27 @@ public class ClassInfoTest {
 
 	@Test
 	public void getParameterType_outOfBounds() {
-		assertThrown(()->ma.getParameterType(2, HashMap.class)).message().is("Invalid type index. index=2, argsLength=2");
+		assertThrown(()->ma.getParameterType(2, HashMap.class)).asMessage().is("Invalid type index. index=2, argsLength=2");
 	}
 
 	@Test
 	public void getParameterType_notASubclass() {
-		assertThrown(()->aClass.getParameterType(2, HashMap.class)).message().is("Class 'AClass' is not a subclass of parameterized type 'HashMap'");
+		assertThrown(()->aClass.getParameterType(2, HashMap.class)).asMessage().is("Class 'AClass' is not a subclass of parameterized type 'HashMap'");
 	}
 
 	@Test
 	public void getParameterType_nullParameterizedType() {
-		assertThrown(()->aClass.getParameterType(2, null)).message().is("Argument 'pt' cannot be null.");
+		assertThrown(()->aClass.getParameterType(2, null)).asMessage().is("Argument 'pt' cannot be null.");
 	}
 
 	@Test
 	public void getParameterType_notParamerizedType() {
-		assertThrown(()->mb.getParameterType(2, MA.class)).message().is("Class 'MA' is not a parameterized type");
+		assertThrown(()->mb.getParameterType(2, MA.class)).asMessage().is("Class 'MA' is not a parameterized type");
 	}
 
 	@Test
 	public void getParameterType_unresolvedTypes() {
-		assertThrown(()->mc.getParameterType(1, HashMap.class)).message().is("Could not resolve variable 'E' to a type.");
+		assertThrown(()->mc.getParameterType(1, HashMap.class)).asMessage().is("Could not resolve variable 'E' to a type.");
 	}
 
 	@Test
@@ -1906,12 +1906,12 @@ public class ClassInfoTest {
 
 	@Test
 	public void getParameterType_unresolvedGenericArrayType() {
-		assertThrown(()->mi.getParameterType(1, HashMap.class)).message().is("Could not resolve variable 'X[]' to a type.");
+		assertThrown(()->mi.getParameterType(1, HashMap.class)).asMessage().is("Could not resolve variable 'X[]' to a type.");
 	}
 
 	@Test
 	public void getParameterType_wildcardType() {
-		assertThrown(()->mj.getParameterType(1, HashMap.class)).message().is("Could not resolve variable 'X' to a type.");
+		assertThrown(()->mj.getParameterType(1, HashMap.class)).asMessage().is("Could not resolve variable 'X' to a type.");
 	}
 
 	@Test

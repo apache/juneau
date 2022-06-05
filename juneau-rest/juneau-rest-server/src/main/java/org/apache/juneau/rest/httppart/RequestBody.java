@@ -264,7 +264,7 @@ public class RequestBody {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
 	 * </ul>
 	 *
@@ -301,11 +301,11 @@ public class RequestBody {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		<c>Collections</c> must be followed by zero or one parameter representing the value type.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		<c>Maps</c> must be followed by zero or two parameters representing the key and value types.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
 	 * </ul>
 	 *
@@ -330,7 +330,7 @@ public class RequestBody {
 	 * Returns the HTTP body content as a plain string.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
 	 * </ul>
 	 *
@@ -346,7 +346,7 @@ public class RequestBody {
 	 * Returns the HTTP body content as a plain string.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
 	 * </ul>
 	 *
@@ -394,9 +394,9 @@ public class RequestBody {
 	 * Returns the HTTP body content as a {@link Reader}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Automatically handles GZipped input streams.
 	 * </ul>
 	 *

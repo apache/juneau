@@ -32,7 +32,7 @@ import org.apache.juneau.swap.*;
 /**
  * Session object that lives for the duration of a single use of {@link JsonParser}.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *

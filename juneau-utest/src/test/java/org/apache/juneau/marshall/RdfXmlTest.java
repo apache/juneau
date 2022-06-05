@@ -37,19 +37,19 @@ public class RdfXmlTest {
 
 	@Test
 	public void write1() throws Exception {
-		assertString(m.write("foo")).contains("<j:value>foo</j:value>");
+		assertString(m.write("foo")).isContains("<j:value>foo</j:value>");
 	}
 
 	@Test
 	public void write2() throws Exception {
 		StringWriter sw = new StringWriter();
 		m.write("foo", sw);
-		assertString(sw.toString()).contains("<j:value>foo</j:value>");
+		assertString(sw.toString()).isContains("<j:value>foo</j:value>");
 	}
 
 	@Test
 	public void toString1() throws Exception {
-		assertString(m.toString("foo")).contains("<j:value>foo</j:value>");
+		assertString(m.toString("foo")).isContains("<j:value>foo</j:value>");
 	}
 
 	@Test

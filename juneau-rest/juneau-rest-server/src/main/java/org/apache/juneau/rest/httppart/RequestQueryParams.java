@@ -543,7 +543,7 @@ public class RequestQueryParams {
 	 * </ul>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Whitespace is trimmed in the parameters.
 	 * </ul>
 	 *

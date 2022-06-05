@@ -198,7 +198,7 @@ public class Section {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>Calls to setters when the configuration is read-only will cause {@link UnsupportedOperationException} to be thrown.
+	 * 	<li class='note'>Calls to setters when the configuration is read-only will cause {@link UnsupportedOperationException} to be thrown.
 	 * </ul>
 	 *
 	 * @param <T> The proxy interface class.

@@ -61,12 +61,12 @@ public class BasicMediaTypeHeader_Test {
 		// Invalid usage.
 		c.get().header(mediaTypeHeader(HEADER,(Supplier<MediaType>)null)).run().assertBody().isEmpty();
 		c.get().header(mediaTypeHeader(HEADER,()->null)).run().assertBody().isEmpty();
-		assertThrown(()->mediaTypeHeader("", VALUE)).message().is("Name cannot be empty on header.");
-		assertThrown(()->mediaTypeHeader(null, VALUE)).message().is("Name cannot be empty on header.");
-		assertThrown(()->mediaTypeHeader("", PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->mediaTypeHeader(null, PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->mediaTypeHeader("", ()->PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->mediaTypeHeader(null, ()->PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->mediaTypeHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->mediaTypeHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->mediaTypeHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->mediaTypeHeader(null, PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->mediaTypeHeader("", ()->PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->mediaTypeHeader(null, ()->PARSED)).asMessage().is("Name cannot be empty on header.");
 	}
 
 	@Test

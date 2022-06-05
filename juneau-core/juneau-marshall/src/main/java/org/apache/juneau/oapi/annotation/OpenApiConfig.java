@@ -58,9 +58,7 @@ public @interface OpenApiConfig {
 	 * <p>
 	 * Specifies the format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.http.annotation.Schema#format()}.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul class='javatree'>
+	 * <ul class='values javatree'>
 	 * 	<li class='jc'>{@link HttpPartFormat}
 	 * 	<ul>
 	 * 		<li class='jf'>{@link HttpPartFormat#UON UON} - UON notation (e.g. <js>"'foo bar'"</js>).
@@ -93,9 +91,7 @@ public @interface OpenApiConfig {
 	 * <p>
 	 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.http.annotation.Schema#collectionFormat()}.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul class='javatree'>
+	 * <ul class='values javatree'>
 	 * 	<li class='jc'>{@link HttpPartCollectionFormat}
 	 * 	<ul>
 	 * 		<li class='jf'>{@link HttpPartCollectionFormat#CSV CSV} - (default) Comma-separated values (e.g. <js>"foo,bar"</js>).

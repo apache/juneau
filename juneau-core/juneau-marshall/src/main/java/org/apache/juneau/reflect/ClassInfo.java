@@ -30,7 +30,6 @@ import org.apache.juneau.internal.*;
 
 /**
  * Lightweight utility class for introspecting information about a class.
- * {@review}
  *
  * <p>
  * Provides various convenience methods for introspecting fields/methods/annotations
@@ -51,7 +50,7 @@ import org.apache.juneau.internal.*;
  *
  * 	<jc>// Get all class-level annotations in parent-to-child order.</jc>
  * 	<jk>for</jk> (MyAnnotation <jv>annotation</jv> : <jv>classInfo</jv>.getAnnotations(MyAnnotation.<jk>class</jk>)) {
- * 		// Do something with it.
+ * 		<jc>// Do something with it.</jc>
  * 	}
  * </p>
  *

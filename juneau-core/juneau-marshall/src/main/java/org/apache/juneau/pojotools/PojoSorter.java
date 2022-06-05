@@ -22,7 +22,6 @@ import org.apache.juneau.internal.*;
 
 /**
  * Sorts arrays and collections of maps and beans.
- * {@review}
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.PojoTools}

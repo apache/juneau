@@ -25,7 +25,6 @@ import org.apache.juneau.utils.*;
 
 /**
  * Parent class for all classes that traverse POJOs.
- * {@reviewed}
  *
  * <h5 class='topic'>Description</h5>
  * <p>
@@ -121,7 +120,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		 * <br>These show up as {@link BeanRecursionException BeanRecursionException} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Checking for recursion can cause a small performance penalty.
 		 * </ul>
 		 *
@@ -178,7 +177,7 @@ public abstract class BeanTraverseContext extends BeanContextable {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Checking for recursion can cause a small performance penalty.
 		 * </ul>
 		 *

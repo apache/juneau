@@ -15,7 +15,7 @@ package org.apache.juneau.jena;
 /**
  * Subclass of {@link RdfParser} for parsing RDF in Turtle notation.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *

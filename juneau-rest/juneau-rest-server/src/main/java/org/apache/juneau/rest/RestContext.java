@@ -110,7 +110,7 @@ import org.apache.juneau.svl.vars.*;
  * 	}
  * </p>
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
@@ -1545,7 +1545,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>Mappings are cumulative from super classes.
+		 * 	<li class='note'>Mappings are cumulative from super classes.
 		 * 		<br>Therefore, you can find and retrieve messages up the class-hierarchy chain.
 		 * </ul>
 		 *
@@ -1663,9 +1663,9 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Response processors are always inherited from ascendant resources.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		When defined as a class, the implementation must have one of the following constructors:
 		 * 		<ul>
 		 * 			<li><code><jk>public</jk> T(RestContext)</code>
@@ -1673,7 +1673,7 @@ public class RestContext extends Context {
 		 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
 		 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
 		 * 		</ul>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Inner classes of the REST resource class are allowed.
 		 * </ul>
 		 *
@@ -1817,12 +1817,12 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		The default call logger if not specified is {@link BasicRestLogger}.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		The resource class itself will be used if it implements the {@link RestLogger} interface and not
 		 * 		explicitly overridden via this annotation.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		When defined as a class, the implementation must have one of the following constructors:
 		 * 		<ul>
 		 * 			<li><code><jk>public</jk> T(RestContext)</code>
@@ -1830,7 +1830,7 @@ public class RestContext extends Context {
 		 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
 		 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
 		 * 		</ul>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Inner classes of the REST resource class are allowed.
 		 * </ul>
 		 *
@@ -2819,9 +2819,9 @@ public class RestContext extends Context {
 		 * Specifies default values for request headers if they're not passed in through the request.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Affects values returned by {@link RestRequest#getHeader(String)} when the header is not present on the request.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		The most useful reason for this annotation is to provide a default <c>Accept</c> header when one is not
 		 * 		specified so that a particular default {@link Serializer} is picked.
 		 * </ul>
@@ -2985,10 +2985,10 @@ public class RestContext extends Context {
 		 * Specifies default values for response headers if they're not set after the Java REST method is called.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		This is equivalent to calling {@link RestResponse#setHeader(String, String)} programmatically in each of
 		 * 		the Java methods.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		The header value will not be set if the header value has already been specified (hence the 'default' in the name).
 		 * </ul>
 		 *
@@ -3152,7 +3152,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>Use {@link BasicNamedAttribute#of(String, Supplier)} to provide a dynamically changeable attribute value.
+		 * 	<li class='note'>Use {@link BasicNamedAttribute#of(String, Supplier)} to provide a dynamically changeable attribute value.
 		 * </ul>
 		 *
 		 * @param values The attributes.
@@ -3297,9 +3297,9 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Inner classes of the REST resource class are allowed.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Refer to {@link RestOpArg} for the list of predefined parameter resolvers.
 		 * </ul>
 		 *
@@ -4332,14 +4332,14 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Useful for debugging REST interface using only a browser so that you can quickly simulate header values
 		 * 		in the URL bar.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Header names are case-insensitive.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Use <js>"*"</js> to allow any headers to be specified as URL parameters.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
 		 * </ul>
 
@@ -4398,11 +4398,11 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Method names are case-insensitive.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Use <js>"*"</js> to represent all methods.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
 		 * </ul>
 		 *
@@ -4469,13 +4469,13 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Format is a comma-delimited list of HTTP method names that can be passed in as a method parameter.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		<js>'method'</js> parameter name is case-insensitive.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Use <js>"*"</js> to represent all methods.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
 		 * </ul>
 		 *
@@ -4657,9 +4657,9 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		<js>'body'</js> parameter name is case-insensitive.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Useful for debugging PUT and POST methods using only a browser.
 		 * </ul>
 		 *
@@ -4718,12 +4718,12 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		String value that gets resolved to a <jk>long</jk>.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Can be suffixed with any of the following representing kilobytes, megabytes, and gigabytes:
 		 * 		<js>'K'</js>, <js>'M'</js>, <js>'G'</js>.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		A value of <js>"-1"</js> can be used to represent no limit.
 		 * </ul>
 		 *
@@ -5185,7 +5185,7 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		When defined as classes, instances are resolved using the registered bean store which
 		 * 		by default is {@link BeanStore} which requires the class have one of the following
 		 * 		constructors:
@@ -5286,17 +5286,17 @@ public class RestContext extends Context {
 		 *
 		 * <p>
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		This annotation is ignored on top-level servlets (i.e. servlets defined in <c>web.xml</c> files).
 		 * 		<br>Therefore, implementers can optionally specify a path value for documentation purposes.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Typically, this setting is only applicable to resources defined as children through the
 		 * 		{@link Rest#children() @Rest(children)} annotation.
 		 * 		<br>However, it may be used in other ways (e.g. defining paths for top-level resources in microservices).
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Slashes are trimmed from the path ends.
 		 * 		<br>As a convention, you may want to start your path with <js>'/'</js> simple because it make it easier to read.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		This path is available through the following method:
 		 * 		<ul>
 		 * 			<li class='jm'>{@link RestContext#getPath() RestContext.getPath()}

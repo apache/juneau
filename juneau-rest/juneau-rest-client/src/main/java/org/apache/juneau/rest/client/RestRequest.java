@@ -72,7 +72,7 @@ import org.apache.juneau.xml.*;
  * <p>
  * Instances of this class are created by the various creator methods on the {@link RestClient} class.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *
@@ -2354,10 +2354,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>Calling this method multiple times will return the same original response object.
-	 * 	<li>You must close the returned object if you do not consume the response or execute a method that consumes
+	 * 	<li class='note'>Calling this method multiple times will return the same original response object.
+	 * 	<li class='note'>You must close the returned object if you do not consume the response or execute a method that consumes
 	 * 		the response.
-	 * 	<li>If you are only interested in the response code, use the {@link #complete()} method which will automatically
+	 * 	<li class='note'>If you are only interested in the response code, use the {@link #complete()} method which will automatically
 	 * 		consume the response so that you don't need to call {@link InputStream#close()} on the response body.
 	 * </ul>
 	 *
@@ -2538,7 +2538,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>Use the {@link RestClient.Builder#executorService(ExecutorService, boolean)} method to customize the
+	 * 	<li class='note'>Use the {@link RestClient.Builder#executorService(ExecutorService, boolean)} method to customize the
 	 * 		executor service used for creating {@link Future Futures}.
 	 * </ul>
 	 *
@@ -2565,7 +2565,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * will cause a {@link RestCallException} to be thrown.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>You do not need to execute {@link InputStream#close()} on the response body to consume the response.
+	 * 	<li class='note'>You do not need to execute {@link InputStream#close()} on the response body to consume the response.
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -2595,9 +2595,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>Use the {@link RestClient.Builder#executorService(ExecutorService, boolean)} method to customize the
+	 * 	<li class='note'>Use the {@link RestClient.Builder#executorService(ExecutorService, boolean)} method to customize the
 	 * 		executor service used for creating {@link Future Futures}.
-	 * 	<li>You do not need to execute {@link InputStream#close()} on the response body to consume the response.
+	 * 	<li class='note'>You do not need to execute {@link InputStream#close()} on the response body to consume the response.
 	 * </ul>
 	 *
 	 * @return The HTTP status code.
@@ -2724,7 +2724,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * Returns the original request URI.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>URI remains unchanged in the course of request execution and is not updated if the request is redirected to another location.
+	 * 	<li class='note'>URI remains unchanged in the course of request execution and is not updated if the request is redirected to another location.
 	 * </ul>
 	 *
 	 * @return The original request URI.
@@ -2845,7 +2845,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * The header will be appended to the end of the list.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>{@link #header(Header)} is an equivalent method and the preferred method for fluent-style coding.
+	 * 	<li class='note'>{@link #header(Header)} is an equivalent method and the preferred method for fluent-style coding.
 	 * </ul>
 	 *
 	 * @param header The header to append.
@@ -2861,7 +2861,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * The header will be appended to the end of the list.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>{@link #header(String,Object)} is an equivalent method and the preferred method for fluent-style coding.
+	 * 	<li class='note'>{@link #header(String,Object)} is an equivalent method and the preferred method for fluent-style coding.
 	 * </ul>
 	 *
 	 * @param name The name of the header.

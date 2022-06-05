@@ -61,12 +61,12 @@ public class BasicStringRangesHeader_Test {
 		// Invalid usage.
 		c.get().header(stringRangesHeader(HEADER,(Supplier<StringRanges>)null)).run().assertBody().isEmpty();
 		c.get().header(stringRangesHeader(HEADER,()->null)).run().assertBody().isEmpty();
-		assertThrown(()->stringRangesHeader("", VALUE)).message().is("Name cannot be empty on header.");
-		assertThrown(()->stringRangesHeader(null, VALUE)).message().is("Name cannot be empty on header.");
-		assertThrown(()->stringRangesHeader("", PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->stringRangesHeader(null, PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->stringRangesHeader("", ()->PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->stringRangesHeader(null, ()->PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->stringRangesHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->stringRangesHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->stringRangesHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->stringRangesHeader(null, PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->stringRangesHeader("", ()->PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->stringRangesHeader(null, ()->PARSED)).asMessage().is("Name cannot be empty on header.");
 	}
 
 	@Test

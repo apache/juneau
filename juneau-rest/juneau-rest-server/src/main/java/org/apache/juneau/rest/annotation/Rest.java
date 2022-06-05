@@ -94,7 +94,7 @@ public @interface Rest {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
@@ -120,12 +120,12 @@ public @interface Rest {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Use <js>"*"</js> to represent all methods.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
 	 * </ul>
 	 *
@@ -150,14 +150,14 @@ public @interface Rest {
 	 * <c>HTTP POST /foo</c> request call which will make the HTTP call look like a <c>PATCH</c> request in any of the REST APIs.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Method names are case-insensitive.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Use <js>"*"</js> to represent all methods.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
 	 * </ul>
 	 *
@@ -178,12 +178,12 @@ public @interface Rest {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Use <js>"*"</js> to represent all methods.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
 	 * </ul>
 	 *
@@ -199,12 +199,12 @@ public @interface Rest {
 	 * Specifies the logger to use for logging of HTTP requests and responses.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The default call logger if not specified is {@link BasicRestLogger}.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The resource class itself will be used if it implements the {@link RestLogger} interface and not
 	 * 		explicitly overridden via this annotation.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The implementation must have one of the following constructors:
 	 * 		<ul>
 	 * 			<li><code><jk>public</jk> T(RestContext)</code>
@@ -212,7 +212,7 @@ public @interface Rest {
 	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>(RestContext)</code>
 	 * 			<li><code><jk>public static</jk> T <jsm>create</jsm>()</code>
 	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Inner classes of the REST resource class are allowed.
 	 * </ul>
 	 *
@@ -273,7 +273,7 @@ public @interface Rest {
 	 * Specifies the name of the header used to denote the client version on HTTP requests.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
@@ -298,10 +298,10 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Use the keyword <c>SYSTEM_DEFAULT</c> to refer to the system default configuration
 	 * 		returned by the {@link Config#getSystemDefault()}.
 	 * </ul>
@@ -321,7 +321,7 @@ public @interface Rest {
 	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
@@ -381,19 +381,17 @@ public @interface Rest {
 	 * 		HTTP requests/responses are logged to the registered {@link RestLogger}.
 	 * </ul>
 	 *
-	 * <p>
-	 * Possible values (case insensitive):
-	 * <ul>
+	 * <ul class='values'>
 	 * 	<li><js>"true"</js> - Debug is enabled for all requests.
 	 * 	<li><js>"false"</js> - Debug is disabled for all requests.
 	 * 	<li><js>"conditional"</js> - Debug is enabled only for requests that have a <c class='snippet'>Debug: true</c> header.
 	 * </ul>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		These debug settings can be overridden by the {@link Rest#debugOn()} annotation or at runtime by directly
 	 * 		calling {@link RestRequest#setDebug()}.
 	 * </ul>
@@ -521,12 +519,12 @@ public @interface Rest {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		These debug settings override the settings define via {@link Rest#debug()} and {@link RestOp#debug()}.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		These debug settings can be overridden at runtime by directly calling {@link RestRequest#setDebug()}.
 	 * </ul>
 	 *
@@ -548,7 +546,7 @@ public @interface Rest {
 	 * This is a shortcut for using {@link #defaultRequestHeaders()} for just this specific header.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
@@ -564,7 +562,7 @@ public @interface Rest {
 	 * The default character encoding for the request and response if not specified on the request.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
@@ -593,7 +591,7 @@ public @interface Rest {
 	 * This is a shortcut for using {@link #defaultRequestHeaders()} for just this specific header.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
@@ -628,7 +626,7 @@ public @interface Rest {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
@@ -653,7 +651,7 @@ public @interface Rest {
 	 * Specifies default values for request headers if they're not passed in through the request.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
@@ -673,7 +671,7 @@ public @interface Rest {
 	 * Specifies default values for response headers if they're not set after the Java REST method is called.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
@@ -698,10 +696,10 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is plain-text.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
@@ -806,7 +804,7 @@ public @interface Rest {
 	 * in out-of-memory errors which could affect system stability.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
@@ -849,7 +847,7 @@ public @interface Rest {
 	 * If the bundle name is not specified, the class name of the resource object is used.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
@@ -1038,11 +1036,11 @@ public @interface Rest {
 	 * the first part of the URL must be a literal which will be used as the servlet path of the registered servlet.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The leading slash is optional.  <js>"/myResource"</js> and <js>"myResource"</js> is equivalent.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The paths <js>"/myResource"</js> and <js>"/myResource/*"</js> are equivalent.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Paths must not end with <js>"/"</js> (per the servlet spec).
 	 * </ul>
 	 *
@@ -1066,7 +1064,7 @@ public @interface Rest {
 	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
@@ -1086,7 +1084,7 @@ public @interface Rest {
 	 * Render stack traces in HTTP response bodies when errors occur.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
@@ -1186,7 +1184,7 @@ public @interface Rest {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports any of the following expression constructs:
 	 * 		<ul>
 	 * 			<li><js>"foo"</js> - Single arguments.
@@ -1326,7 +1324,7 @@ public @interface Rest {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
@@ -1417,10 +1415,10 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Corresponds to the swagger field <c>/info/title</c>.
 	 * </ul>
 	 *
@@ -1435,7 +1433,7 @@ public @interface Rest {
 	 * Overrides the authority path value for this resource and any child resources.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
@@ -1455,7 +1453,7 @@ public @interface Rest {
 	 * Overrides the context path value for this resource and any child resources.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
@@ -1478,7 +1476,7 @@ public @interface Rest {
 	 * See {@link UriResolution} for possible values.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
@@ -1501,7 +1499,7 @@ public @interface Rest {
 	 * See {@link UriResolution} for possible values.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>

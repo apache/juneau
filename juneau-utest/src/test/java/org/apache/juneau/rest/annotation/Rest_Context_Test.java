@@ -91,7 +91,7 @@ public class Rest_Context_Test {
 
 	@Test
 	public void a05_invalidConstructor() throws Exception {
-		assertThrown(()->client(A5.class)).messages().contains("Could not instantiate RestContext.");
+		assertThrown(()->client(A5.class)).asMessages().isContains("Could not instantiate RestContext.");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

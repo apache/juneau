@@ -28,10 +28,9 @@ import org.apache.juneau.utils.*;
 
 /**
  * Serializes POJO models to URL-encoded notation with UON-encoded values (a notation for URL-encoded query paramter values).
- * {@review}
  *
  * <h5 class='section'>Media types:</h5>
- *
+ * <p>
  * Handles <c>Accept</c> types:  <bc>application/x-www-form-urlencoded</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>application/x-www-form-urlencoded</bc>
@@ -121,7 +120,7 @@ import org.apache.juneau.utils.*;
  * 	String <jv>uenc</jv> = UrlEncodingSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>person</jv>);
  * </p>
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
@@ -282,7 +281,7 @@ public class UrlEncodingSerializer extends UonSerializer implements UrlEncodingM
 		 * This option only applies to beans.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		If parsing multi-part parameters, it's highly recommended to use <c>Collections</c> or <c>Lists</c>
 		 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
 		 * 		is added to it.

@@ -90,7 +90,7 @@ public class BasicHttpResource_Test {
 		assertTrue(x.isRepeatable());
 
 		x = stringResource((String)null).cached().build();
-		assertBytes(x.getContent()).exists().asString().isEmpty();
+		assertBytes(x.getContent()).isExists().asString().isEmpty();
 		assertTrue(x.isRepeatable());
 		x.writeTo(new ByteArrayOutputStream());
 

@@ -26,79 +26,99 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Used for fluent assertion calls against {@link ResponseHeader} objects.
- * {@review}
- *
  *
  * <h5 class='topic'>Test Methods</h5>
- * 	<ul>
- * 		<li class='jm'>{@link FluentStringAssertion#is(String)}
- * 		<li class='jm'>{@link FluentStringAssertion#isNot(String)}
- * 		<li class='jm'>{@link FluentStringAssertion#isLines(String...)}
- * 		<li class='jm'>{@link FluentStringAssertion#isSortedLines(String...)}
- * 		<li class='jm'>{@link FluentStringAssertion#isIc(String)}
- * 		<li class='jm'>{@link FluentStringAssertion#isNotIc(String)}
- * 		<li class='jm'>{@link FluentStringAssertion#contains(String...)}
- * 		<li class='jm'>{@link FluentStringAssertion#doesNotContain(String...)}
- * 		<li class='jm'>{@link FluentStringAssertion#isEmpty()}
- * 		<li class='jm'>{@link FluentStringAssertion#isNotEmpty()}
- * 		<li class='jm'>{@link FluentStringAssertion#matches(String)}
- * 		<li class='jm'>{@link FluentStringAssertion#regex(String)}
- * 		<li class='jm'>{@link FluentStringAssertion#regex(String,int)}
- * 		<li class='jm'>{@link FluentStringAssertion#regex(Pattern)}
- * 		<li class='jm'>{@link FluentStringAssertion#startsWith(String)}
- * 		<li class='jm'>{@link FluentStringAssertion#endsWith(String)}
- * 		<li class='jm'>{@link FluentObjectAssertion#exists()}
- * 		<li class='jm'>{@link FluentObjectAssertion#is(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#is(Predicate)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNot(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isAny(Object...)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNotAny(Object...)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNull()}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNotNull()}
- * 		<li class='jm'>{@link FluentObjectAssertion#isString(String)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isJson(String)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSame(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameJsonAs(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameSortedJsonAs(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameSerializedAs(Object, WriterSerializer)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class)}
+ * <p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link FluentStringAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentStringAssertion#is(String) is(String)}
+ * 		<li class='jm'>{@link FluentStringAssertion#isNot(String) isNot(String)}
+ * 		<li class='jm'>{@link FluentStringAssertion#isLines(String...) isLines(String...)}
+ * 		<li class='jm'>{@link FluentStringAssertion#isSortedLines(String...) isSortedLines(String...)}
+ * 		<li class='jm'>{@link FluentStringAssertion#isIc(String) isIc(String)}
+ * 		<li class='jm'>{@link FluentStringAssertion#isNotIc(String) isNotIc(String)}
+ * 		<li class='jm'>{@link FluentStringAssertion#isContains(String...) isContains(String...)}
+ * 		<li class='jm'>{@link FluentStringAssertion#isNotContains(String...) isNotContains(String...)}
+ * 		<li class='jm'>{@link FluentStringAssertion#isEmpty() isEmpty()}
+ * 		<li class='jm'>{@link FluentStringAssertion#isNotEmpty() isNotEmpty()}
+ * 		<li class='jm'>{@link FluentStringAssertion#isString(Object) isString(Object)}
+ * 		<li class='jm'>{@link FluentStringAssertion#isMatches(String) isMatches(String)}
+ * 		<li class='jm'>{@link FluentStringAssertion#isPattern(String) isPattern(String)}
+ * 		<li class='jm'>{@link FluentStringAssertion#isPattern(String,int) isPattern(String,int)}
+ * 		<li class='jm'>{@link FluentStringAssertion#isPattern(Pattern) isPattern(Pattern)}
+ * 		<li class='jm'>{@link FluentStringAssertion#isStartsWith(String) isStartsWith(String)}
+ * 		<li class='jm'>{@link FluentStringAssertion#isEndsWith(String) isEndsWith(String)}
  * 	</ul>
+ * 	<li class='jc'>{@link FluentObjectAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentObjectAssertion#isExists() isExists()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#is(Object) is(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#is(Predicate) is(Predicate)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNot(Object) isNot(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isAny(Object...) isAny(Object...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNotAny(Object...) isNotAny(Object...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNull() isNull()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNotNull() isNotNull()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isString(String) isString(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isJson(String) isJson(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSame(Object) isSame(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameJsonAs(Object) isSameJsonAs(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameSortedJsonAs(Object) isSameSortedJsonAs(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameSerializedAs(Object, WriterSerializer) isSameSerializedAs(Object, WriterSerializer)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class) isType(Class)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class) isExactType(Class)}
+ * 	</ul>
+ * </ul>
  *
  * <h5 class='topic'>Transform Methods</h5>
- * 	<ul>
- * 		<li class='jm'>{@link FluentResponseHeaderAssertion#asBoolean()}
- * 		<li class='jm'>{@link FluentResponseHeaderAssertion#asInteger()}
- * 		<li class='jm'>{@link FluentResponseHeaderAssertion#asLong()}
- * 		<li class='jm'>{@link FluentResponseHeaderAssertion#asZonedDateTime()}
- * 		<li class='jm'>{@link FluentResponseHeaderAssertion#as(Class)}
- * 		<li class='jm'>{@link FluentResponseHeaderAssertion#as(Type,Type...)}
- * 		<li class='jm'>{@link FluentStringAssertion#replaceAll(String,String)}
- * 		<li class='jm'>{@link FluentStringAssertion#replace(String,String)}
- * 		<li class='jm'>{@link FluentStringAssertion#urlDecode()}
- * 		<li class='jm'>{@link FluentStringAssertion#lc()}
- * 		<li class='jm'>{@link FluentStringAssertion#uc()}
- * 		<li class='jm'>{@link FluentStringAssertion#lines()}
- * 		<li class='jm'>{@link FluentStringAssertion#split(String)}
- * 		<li class='jm'>{@link FluentStringAssertion#length()}
- * 		<li class='jm'>{@link FluentStringAssertion#oneLine()}
- * 		<li class='jm'>{@link FluentObjectAssertion#asString()}
- * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asJson()}
- * 		<li class='jm'>{@link FluentObjectAssertion#asJsonSorted()}
- * 		<li class='jm'>{@link FluentObjectAssertion#apply(Function)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asAny()}
+ * <p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link FluentResponseHeaderAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentResponseHeaderAssertion#asBoolean() asBoolean()}
+ * 		<li class='jm'>{@link FluentResponseHeaderAssertion#asInteger() asInteger()}
+ * 		<li class='jm'>{@link FluentResponseHeaderAssertion#asLong() asLong()}
+ * 		<li class='jm'>{@link FluentResponseHeaderAssertion#asZonedDateTime() asZonedDateTime()}
+ * 		<li class='jm'>{@link FluentResponseHeaderAssertion#as(Class) as(Class)}
+ * 		<li class='jm'>{@link FluentResponseHeaderAssertion#as(Type,Type...) as(Type,Type...)}
+ * 	</ul>
+ * 	<li class='jc'>{@link FluentStringAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentStringAssertion#asReplaceAll(String,String) asReplaceAll(String,String)}
+ * 		<li class='jm'>{@link FluentStringAssertion#asReplace(String,String) asReplace(String,String)}
+ * 		<li class='jm'>{@link FluentStringAssertion#asUrlDecode() asUrlDecode()}
+ * 		<li class='jm'>{@link FluentStringAssertion#asLc() asLc()}
+ * 		<li class='jm'>{@link FluentStringAssertion#asUc() asUc()}
+ * 		<li class='jm'>{@link FluentStringAssertion#asLines() asLines()}
+ * 		<li class='jm'>{@link FluentStringAssertion#asSplit(String) asSplit(String)}
+ * 		<li class='jm'>{@link FluentStringAssertion#asLength() asLength()}
+ * 		<li class='jm'>{@link FluentStringAssertion#asOneLine() asOneLine()}
+ * 	</ul>
+ * 	<li class='jc'>{@link FluentObjectAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString() asString()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer) asString(WriterSerializer)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function) asString(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asJson() asJson()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asJsonSorted() asJsonSorted()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asTransformed(Function) asApplied(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asAny() asAny()}
  *	</ul>
+ * </ul>
  *
  * <h5 class='topic'>Configuration Methods</h5>
- * 	<ul>
- * 		<li class='jm'>{@link Assertion#msg(String, Object...)}
- * 		<li class='jm'>{@link Assertion#out(PrintStream)}
- * 		<li class='jm'>{@link Assertion#silent()}
- * 		<li class='jm'>{@link Assertion#stdout()}
- * 		<li class='jm'>{@link Assertion#throwable(Class)}
+ * <p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link Assertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link Assertion#setMsg(String, Object...) setMsg(String, Object...)}
+ * 		<li class='jm'>{@link Assertion#setOut(PrintStream) setOut(PrintStream)}
+ * 		<li class='jm'>{@link Assertion#setSilent() setSilent()}
+ * 		<li class='jm'>{@link Assertion#setStdOut() setStdOut()}
+ * 		<li class='jm'>{@link Assertion#setThrowable(Class) setThrowable(Class)}
  * 	</ul>
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.FluentAssertions}
@@ -152,7 +172,7 @@ public class FluentResponseHeaderAssertion<R> extends FluentStringAssertion<R> {
 	public FluentResponseHeaderAssertion(Assertion creator, ResponseHeader value, R returns) {
 		super(creator, value.asString().orElse(null), returns);
 		this.value = value;
-		throwable(BadRequest.class);
+		setThrowable(BadRequest.class);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -233,38 +253,38 @@ public class FluentResponseHeaderAssertion<R> extends FluentStringAssertion<R> {
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentResponseHeaderAssertion<R> msg(String msg, Object...args) {
-		super.msg(msg, args);
+	public FluentResponseHeaderAssertion<R> setMsg(String msg, Object...args) {
+		super.setMsg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentResponseHeaderAssertion<R> out(PrintStream value) {
-		super.out(value);
+	public FluentResponseHeaderAssertion<R> setOut(PrintStream value) {
+		super.setOut(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentResponseHeaderAssertion<R> silent() {
-		super.silent();
+	public FluentResponseHeaderAssertion<R> setSilent() {
+		super.setSilent();
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentResponseHeaderAssertion<R> stdout() {
-		super.stdout();
+	public FluentResponseHeaderAssertion<R> setStdOut() {
+		super.setStdOut();
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentResponseHeaderAssertion<R> throwable(Class<? extends java.lang.RuntimeException> value) {
-		super.throwable(value);
+	public FluentResponseHeaderAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+		super.setThrowable(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.FluentStringAssertion */
-	public FluentResponseHeaderAssertion<R> javaStrings() {
-		super.javaStrings();
+	public FluentResponseHeaderAssertion<R> asJavaStrings() {
+		super.asJavaStrings();
 		return this;
 	}
 

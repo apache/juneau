@@ -32,16 +32,15 @@ import org.apache.juneau.xml.*;
 
 /**
  * Serializes POJOs to HTTP responses as HTML documents.
- * {@review}
  *
  * <h5 class='topic'>Media types</h5>
- *
+ * <p>
  * Handles <c>Accept</c> types:  <bc>text/html</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>text/html</bc>
  *
  * <h5 class='topic'>Description</h5>
- *
+ * <p>
  * Same as {@link HtmlSerializer}, except wraps the response in <code><xt>&lt;html&gt;</code>,
  * <code><xt>&lt;head&gt;</code>, and <code><xt>&lt;body&gt;</code> tags so that it can be rendered in a browser.
  *
@@ -70,7 +69,7 @@ import org.apache.juneau.xml.*;
  * <br>These variables are replaced at runtime based on the HTTP request locale.
  * <br>Several built-in runtime variable types are defined, and the API can be extended to include user-defined variables.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
@@ -237,20 +236,20 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Format: HTML
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Supports {@doc jrs.SvlVariables}
 		 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		A value of <js>"NONE"</js> can be used to force no value.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		The parent value can be included by adding the literal <js>"INHERIT"</js> as a value.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Multiple values are combined with newlines into a single string.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		On methods, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the servlet/resource class.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		On servlet/resource classes, this value is inherited from the <ja>@HtmlDocConfig</ja> annotation on the
 		 * 		parent class.
 		 * </ul>
@@ -774,7 +773,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Widgets are inherited from super classes, but can be overridden by reusing the widget name.
 		 * </ul>
 		 *

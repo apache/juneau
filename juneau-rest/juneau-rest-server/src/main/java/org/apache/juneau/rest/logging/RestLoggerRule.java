@@ -180,14 +180,6 @@ public class RestLoggerRule {
 		/**
 		 * Specifies whether logging is enabled when using this rule.
 		 *
-		 * <p>
-		 * The possible values are:
-		 * <ul>
-		 * 	<li>{@link Enablement#ALWAYS ALWAYS} - Logging is enabled.
-		 * 	<li>{@link Enablement#NEVER NEVER} - Logging is disabled.
-		 * 	<li>{@link Enablement#CONDITIONAL CONDITIONALLY} - Logging is enabled if it passes the {@link #enabledPredicate(Predicate)} test.
-		 * </ul>
-		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a logger rule where logging is only enabled if the query string contains "foobar".</jc>
@@ -197,6 +189,12 @@ public class RestLoggerRule {
 		 * 		.enabledPredicate(<jv>x</jv> -&gt; <jv>x</jv>.getQueryString().contains(<js>"foobar"</js>))
 		 * 		.build();
 		 * </p>
+		 *
+		 * <ul class='values'>
+		 * 	<li>{@link Enablement#ALWAYS ALWAYS} - Logging is enabled.
+		 * 	<li>{@link Enablement#NEVER NEVER} - Logging is disabled.
+		 * 	<li>{@link Enablement#CONDITIONAL CONDITIONALLY} - Logging is enabled if it passes the {@link #enabledPredicate(Predicate)} test.
+		 * </ul>
 		 *
 		 * @param value
 		 * 	The enablement flag value, or <jk>null</jk> to inherit from the call logger whose default value is {@link Enablement#ALWAYS ALWAYS}
@@ -245,9 +243,7 @@ public class RestLoggerRule {
 		/**
 		 * The level of detail to log on a request.
 		 *
-		 * <p>
-		 * The possible values are:
-		 * <ul>
+		 * <ul class='values'>
 		 * 	<li>{@link RestLoggingDetail#STATUS_LINE STATUS_LINE} - Log only the status line.
 		 * 	<li>{@link RestLoggingDetail#HEADER HEADER} - Log the status line and headers.
 		 * 	<li>{@link RestLoggingDetail#ENTITY ENTITY} - Log the status line and headers and body if available.
@@ -265,9 +261,7 @@ public class RestLoggerRule {
 		/**
 		 * The level of detail to log on a response.
 		 *
-		 * <p>
-		 * The possible values are:
-		 * <ul>
+		 * <ul class='values'>
 		 * 	<li>{@link RestLoggingDetail#STATUS_LINE STATUS_LINE} - Log only the status line.
 		 * 	<li>{@link RestLoggingDetail#HEADER HEADER} - Log the status line and headers.
 		 * 	<li>{@link RestLoggingDetail#ENTITY ENTITY} - Log the status line and headers and body if available.

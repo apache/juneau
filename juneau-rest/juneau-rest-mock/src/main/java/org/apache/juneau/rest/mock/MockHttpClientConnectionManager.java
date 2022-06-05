@@ -26,7 +26,7 @@ import org.apache.http.protocol.*;
  * <p>
  * This class is instantiated by the {@link MockRestClient.Builder} class.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='warn'>This implementation is not thread safe.
  * </ul>
  *

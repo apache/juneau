@@ -60,13 +60,13 @@ public class BasicIntegerHeader_Test {
 
 		// Invalid usage.
 		c.get().header(integerHeader(HEADER,(Supplier<Integer>)null)).run().assertBody().isEmpty();
-		assertThrown(()->integerHeader(HEADER,"foo")).message().is("Value 'foo' could not be parsed as an integer.");
-		assertThrown(()->integerHeader("", VALUE)).message().is("Name cannot be empty on header.");
-		assertThrown(()->integerHeader(null, VALUE)).message().is("Name cannot be empty on header.");
-		assertThrown(()->integerHeader("", PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->integerHeader(null, PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->integerHeader("", ()->PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->integerHeader(null, ()->PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->integerHeader(HEADER,"foo")).asMessage().is("Value 'foo' could not be parsed as an integer.");
+		assertThrown(()->integerHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->integerHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->integerHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->integerHeader(null, PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->integerHeader("", ()->PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->integerHeader(null, ()->PARSED)).asMessage().is("Name cannot be empty on header.");
 	}
 
 	@Test

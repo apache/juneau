@@ -25,56 +25,72 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Used for fluent assertion calls against {@link RequestBody} objects.
- * {@review}
- *
  *
  * <h5 class='topic'>Test Methods</h5>
- * 	<ul>
- * 		<li class='jm'>{@link FluentRequestBodyAssertion#is(String)}
- * 		<li class='jm'>{@link FluentRequestBodyAssertion#contains(String...)}
- * 		<li class='jm'>{@link FluentRequestBodyAssertion#doesNotContain(String...)}
- * 		<li class='jm'>{@link FluentRequestBodyAssertion#isEmpty()}
- * 		<li class='jm'>{@link FluentRequestBodyAssertion#isNotEmpty()}
- * 		<li class='jm'>{@link FluentObjectAssertion#exists()}
- * 		<li class='jm'>{@link FluentObjectAssertion#is(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#is(Predicate)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNot(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isAny(Object...)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNotAny(Object...)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNull()}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNotNull()}
- * 		<li class='jm'>{@link FluentObjectAssertion#isString(String)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isJson(String)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSame(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameJsonAs(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameSortedJsonAs(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameSerializedAs(Object, WriterSerializer)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class)}
+ * <p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link FluentRequestBodyAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentRequestBodyAssertion#is(String) is(String)}
+ * 		<li class='jm'>{@link FluentRequestBodyAssertion#isContains(String...) isContains(String...)}
+ * 		<li class='jm'>{@link FluentRequestBodyAssertion#isNotContains(String...) isNotContains(String...)}
+ * 		<li class='jm'>{@link FluentRequestBodyAssertion#isEmpty() isEmpty()}
+ * 		<li class='jm'>{@link FluentRequestBodyAssertion#isNotEmpty() isNotEmpty()}
  * 	</ul>
+ * 	<li class='jc'>{@link FluentObjectAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentObjectAssertion#isExists() isExists()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#is(Object) is(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#is(Predicate) is(Predicate)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNot(Object) isNot(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isAny(Object...) isAny(Object...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNotAny(Object...) isNotAny(Object...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNull() isNull()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNotNull() isNotNull()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isString(String) isString(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isJson(String) isJson(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSame(Object) isSame(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameJsonAs(Object) isSameJsonAs(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameSortedJsonAs(Object) isSameSortedJsonAs(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameSerializedAs(Object, WriterSerializer) isSameSerializedAs(Object, WriterSerializer)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class) isType(Class)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class) isExactType(Class)}
+ * 	</ul>
+ * </ul>
  *
  * <h5 class='topic'>Transform Methods</h5>
- * 	<ul>
- * 		<li class='jm'>{@link FluentRequestBodyAssertion#asBytes()}
- * 		<li class='jm'>{@link FluentRequestBodyAssertion#as(Class)}
- * 		<li class='jm'>{@link FluentRequestBodyAssertion#as(Type,Type...)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asString()}
- * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asJson()}
- * 		<li class='jm'>{@link FluentObjectAssertion#asJsonSorted()}
- * 		<li class='jm'>{@link FluentObjectAssertion#apply(Function)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asAny()}
+ * <p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link FluentRequestBodyAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentRequestBodyAssertion#asBytes() asBytes()}
+ * 		<li class='jm'>{@link FluentRequestBodyAssertion#as(Class) as(Class)}
+ * 		<li class='jm'>{@link FluentRequestBodyAssertion#as(Type,Type...) as(Type,Type...)}
+ * 	</ul>
+ * 	<li class='jc'>{@link FluentObjectAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString() asString()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer) asString(WriterSerializer)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function) asString(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asJson() asJson()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asJsonSorted() asJsonSorted()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asTransformed(Function) asApplied(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asAny() asAny()}
  *	</ul>
+ * </ul>
  *
  * <h5 class='topic'>Configuration Methods</h5>
- * 	<ul>
- * 		<li class='jm'>{@link Assertion#msg(String, Object...)}
- * 		<li class='jm'>{@link Assertion#out(PrintStream)}
- * 		<li class='jm'>{@link Assertion#silent()}
- * 		<li class='jm'>{@link Assertion#stdout()}
- * 		<li class='jm'>{@link Assertion#throwable(Class)}
+ * <p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link Assertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link Assertion#setMsg(String, Object...) setMsg(String, Object...)}
+ * 		<li class='jm'>{@link Assertion#setOut(PrintStream) setOut(PrintStream)}
+ * 		<li class='jm'>{@link Assertion#setSilent() setSilent()}
+ * 		<li class='jm'>{@link Assertion#setStdOut() setStdOut()}
+ * 		<li class='jm'>{@link Assertion#setThrowable(Class) setThrowable(Class)}
  * 	</ul>
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.FluentAssertions}
@@ -125,7 +141,7 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	 */
 	public FluentRequestBodyAssertion(Assertion creator, RequestBody value, R returns) {
 		super(creator, value, returns);
-		throwable(BadRequest.class);
+		setThrowable(BadRequest.class);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -143,11 +159,11 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> request header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
+	 *  <li class='note'>
 	 *		When using this method, the body is automatically cached by calling the {@link RequestBody#cache()}.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
 	 *
@@ -170,11 +186,11 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> request header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
+	 *  <li class='note'>
 	 *		When using this method, the body is automatically cached by calling the {@link RequestBody#cache()}.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
 	 *
@@ -202,11 +218,11 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> request header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
+	 *  <li class='note'>
 	 *		When using this method, the body is automatically cached by calling the {@link RequestBody#cache()}.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
 	 *
@@ -244,8 +260,8 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R contains(String...values) throws AssertionError {
-		return asString().contains(values);
+	public R isContains(String...values) throws AssertionError {
+		return asString().isContains(values);
 	}
 
 	/**
@@ -255,8 +271,8 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	 * @return This object.
 	 * @throws AssertionError If assertion failed.
 	 */
-	public R doesNotContain(String...values) throws AssertionError {
-		return asString().doesNotContain(values);
+	public R isNotContains(String...values) throws AssertionError {
+		return asString().isNotContains(values);
 	}
 
 	/**
@@ -323,32 +339,32 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentRequestBodyAssertion<R> msg(String msg, Object...args) {
-		super.msg(msg, args);
+	public FluentRequestBodyAssertion<R> setMsg(String msg, Object...args) {
+		super.setMsg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentRequestBodyAssertion<R> out(PrintStream value) {
-		super.out(value);
+	public FluentRequestBodyAssertion<R> setOut(PrintStream value) {
+		super.setOut(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentRequestBodyAssertion<R> silent() {
-		super.silent();
+	public FluentRequestBodyAssertion<R> setSilent() {
+		super.setSilent();
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentRequestBodyAssertion<R> stdout() {
-		super.stdout();
+	public FluentRequestBodyAssertion<R> setStdOut() {
+		super.setStdOut();
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentRequestBodyAssertion<R> throwable(Class<? extends java.lang.RuntimeException> value) {
-		super.throwable(value);
+	public FluentRequestBodyAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+		super.setThrowable(value);
 		return this;
 	}
 

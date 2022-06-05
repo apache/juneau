@@ -43,14 +43,6 @@ public @interface RemotePut {
 	 * REST service path.
 	 *
 	 * <p>
-	 * The possible values are:
-	 * <ul class='spaced-list'>
-	 * 	<li>An absolute URL.
-	 * 	<li>A relative URL interpreted as relative to the root URL defined on the <c>RestClient</c> and/or {@link Remote#path()}.
-	 * 	<li>No path.
-	 * </ul>
-	 *
-	 * <p>
 	 * If you do not specify a path, then the path is inferred from the Java method name.
 	 *
 	 * <h5 class='figure'>Example:</h5>
@@ -62,6 +54,12 @@ public @interface RemotePut {
 	 * <p>
 	 * Note that you can also use {@link #value()} to specify the method name and path in shortened form.
 	 *
+	 * <ul class='values'>
+	 * 	<li>An absolute URL.
+	 * 	<li>A relative URL interpreted as relative to the root URL defined on the <c>RestClient</c> and/or {@link Remote#path()}.
+	 * 	<li>No path.
+	 * </ul>
+	 *
 	 * @return The annotation value.
 	 */
 	String path() default "";
@@ -69,9 +67,7 @@ public @interface RemotePut {
 	/**
 	 * The value the remote method returns.
 	 *
-	 * <p>
-	 * Possible values:
-	 * <ul class='spaced-list'>
+	 * <ul class='values'>
 	 * 	<li>
 	 * 		{@link RemoteReturn#BODY} (default) - The body of the HTTP response converted to a POJO.
 	 * 		<br>The return type on the Java method can be any of the following:

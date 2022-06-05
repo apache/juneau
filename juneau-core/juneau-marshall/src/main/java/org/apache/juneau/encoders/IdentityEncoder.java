@@ -20,7 +20,7 @@ import java.io.*;
  * <p>
  * Identity encoding is just another name for no encoding at all.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *

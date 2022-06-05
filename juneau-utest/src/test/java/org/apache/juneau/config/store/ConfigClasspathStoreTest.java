@@ -31,8 +31,8 @@ public class ConfigClasspathStoreTest {
 	@Test
 	public void testRealFiles() throws Exception {
 		ClasspathStore fs = ClasspathStore.create().build();
-		assertString(fs.read("foo1.cfg")).contains("bar1");
-		assertString(fs.read("sub/foo2.cfg")).contains("bar2");
+		assertString(fs.read("foo1.cfg")).isContains("bar1");
+		assertString(fs.read("sub/foo2.cfg")).isContains("bar2");
 		assertEquals("", fs.read("sub/bad.cfg"));
 		assertEquals("", fs.read("bad/bad.cfg"));
 	}
@@ -40,7 +40,7 @@ public class ConfigClasspathStoreTest {
 	@Test
 	public void testOverwriteRealFiles() throws Exception {
 		ClasspathStore fs = ClasspathStore.create().build();
-		assertString(fs.read("foo1.cfg")).contains("bar1");
+		assertString(fs.read("foo1.cfg")).isContains("bar1");
 		fs.write("foo1.cfg", fs.read("foo1.cfg"), "xxx");
 		assertEquals("xxx", fs.read("foo1.cfg"));
 	}

@@ -22,7 +22,6 @@ import org.apache.juneau.*;
 
 /**
  * Used tailor how bean properties get interpreted by the framework.
- * {@review}
  *
  * <p>
  * Can be used in the following locations:
@@ -130,7 +129,7 @@ public @interface Beanp {
 	 * 	<jk>public class</jk> BeanWithDynaField {
 	 *
 	 * 		<ja>@Beanp</ja>(name=<js>"*"</js>)
-	 * 		<jk>public</jk> Map&lt;String,Object&gt; <jf>extraStuff</jf> = <jk>new</jk> LinkedHashMap&lt;String,Object&gt;();
+	 * 		<jk>public</jk> Map&lt;String,Object&gt; <jf>extraStuff</jf> = <jk>new</jk> LinkedHashMap&lt;&gt;();
 	 * 	}
 	 *
 	 * 	<jc>// Option #2 - Getters and setters.

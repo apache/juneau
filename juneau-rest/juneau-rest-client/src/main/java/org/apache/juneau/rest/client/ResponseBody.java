@@ -162,7 +162,7 @@ public class ResponseBody implements HttpEntity {
 	 * Calling this method allows methods that read the response body to be called multiple times.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Multiple calls to this method are ignored.
 	 * </ul>
 	 *
@@ -181,11 +181,11 @@ public class ResponseBody implements HttpEntity {
 	 * Returns the HTTP response message body as an input stream.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Once this input stream is exhausted, it will automatically be closed.
-	 *  <li>
+	 *  <li class='note'>
 	 *		This method can be called multiple times if {@link #cache()} has been called.
-	 *  <li>
+	 *  <li class='note'>
 	 *		Calling this method multiple times without caching enabled will cause a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} to be thrown.
 	 * </ul>
@@ -249,13 +249,13 @@ public class ResponseBody implements HttpEntity {
 	 * Returns the HTTP response message body as a reader based on the charset on the <code>Content-Type</code> response header.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Once this input stream is exhausted, it will automatically be closed.
-	 *  <li>
+	 *  <li class='note'>
 	 *		This method can be called multiple times if {@link #cache()} has been called.
-	 *  <li>
+	 *  <li class='note'>
 	 *		Calling this method multiple times without caching enabled will cause a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} to be thrown.
 	 * </ul>
@@ -283,11 +283,11 @@ public class ResponseBody implements HttpEntity {
 	 * Returns the HTTP response message body as a reader using the specified charset.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Once this input stream is exhausted, it will automatically be closed.
-	 *  <li>
+	 *  <li class='note'>
 	 *		This method can be called multiple times if {@link #cache()} has been called.
-	 *  <li>
+	 *  <li class='note'>
 	 *		Calling this method multiple times without caching enabled will cause a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} to be thrown.
 	 * </ul>
@@ -335,13 +335,13 @@ public class ResponseBody implements HttpEntity {
 	 * Pipes the contents of the response to the specified output stream.
 	 *
 	 * <ul class='notes'>
-	 *	<li>
+	 *	<li class='note'>
 	 *		The output stream is not automatically closed.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Once the input stream is exhausted, it will automatically be closed.
-	 *  <li>
+	 *  <li class='note'>
 	 *		This method can be called multiple times if {@link #cache()} has been called.
-	 *  <li>
+	 *  <li class='note'>
 	 *		Calling this method multiple times without caching enabled will cause a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} to be thrown.
 	 * </ul>
@@ -359,15 +359,15 @@ public class ResponseBody implements HttpEntity {
 	 * Pipes the contents of the response to the specified writer.
 	 *
 	 * <ul class='notes'>
-	 *	<li>
+	 *	<li class='note'>
 	 *		The writer is not automatically closed.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Once the reader is exhausted, it will automatically be closed.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
+	 *  <li class='note'>
 	 *		This method can be called multiple times if {@link #cache()} has been called.
-	 *  <li>
+	 *  <li class='note'>
 	 *		Calling this method multiple times without caching enabled will cause a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} to be thrown.
 	 * </ul>
@@ -384,13 +384,13 @@ public class ResponseBody implements HttpEntity {
 	 * Pipes the contents of the response to the specified writer.
 	 *
 	 * <ul class='notes'>
-	 *	<li>
+	 *	<li class='note'>
 	 *		The writer is not automatically closed.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Once the reader is exhausted, it will automatically be closed.
-	 *  <li>
+	 *  <li class='note'>
 	 *		This method can be called multiple times if {@link #cache()} has been called.
-	 *  <li>
+	 *  <li class='note'>
 	 *		Calling this method multiple times without caching enabled will cause a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} to be thrown.
 	 * </ul>
@@ -410,15 +410,15 @@ public class ResponseBody implements HttpEntity {
 	 * Pipes the contents of the response to the specified writer.
 	 *
 	 * <ul class='notes'>
-	 *	<li>
+	 *	<li class='note'>
 	 *		The writer is not automatically closed.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Once the reader is exhausted, it will automatically be closed.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
+	 *  <li class='note'>
 	 *		This method can be called multiple times if {@link #cache()} has been called.
-	 *  <li>
+	 *  <li class='note'>
 	 *		Calling this method multiple times without caching enabled will cause a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} to be thrown.
 	 * </ul>
@@ -436,13 +436,13 @@ public class ResponseBody implements HttpEntity {
 	 * Pipes the contents of the response to the specified writer.
 	 *
 	 * <ul class='notes'>
-	 *	<li>
+	 *	<li class='note'>
 	 *		The writer is not automatically closed.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Once the reader is exhausted, it will automatically be closed.
-	 *  <li>
+	 *  <li class='note'>
 	 *		This method can be called multiple times if {@link #cache()} has been called.
-	 *  <li>
+	 *  <li class='note'>
 	 *		Calling this method multiple times without caching enabled will cause a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} to be thrown.
 	 * </ul>
@@ -516,9 +516,9 @@ public class ResponseBody implements HttpEntity {
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Use the {@link #as(Class)} method instead if you don't need a parameterized map/collection.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		You can also specify any of the following types:
 	 * 		<ul class='compact'>
 	 * 			<li>{@link ResponseBody}/{@link HttpEntity} - Returns access to this object.
@@ -527,11 +527,11 @@ public class ResponseBody implements HttpEntity {
 	 * 			<li>{@link HttpResource} - Response will be converted to an {@link BasicResource}.
 	 * 			<li>Any type that takes in an {@link HttpResponse} object.
 	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
 	 *
@@ -580,7 +580,7 @@ public class ResponseBody implements HttpEntity {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		You can also specify any of the following types:
 	 * 		<ul class='compact'>
 	 * 			<li>{@link ResponseBody}/{@link HttpEntity} - Returns access to this object.
@@ -589,11 +589,11 @@ public class ResponseBody implements HttpEntity {
 	 * 			<li>{@link HttpResource} - Response will be converted to an {@link BasicResource}.
 	 * 			<li>Any type that takes in an {@link HttpResponse} object.
 	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
 	 *
@@ -639,11 +639,11 @@ public class ResponseBody implements HttpEntity {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
 	 *
@@ -747,11 +747,11 @@ public class ResponseBody implements HttpEntity {
 	 * Same as {@link #as(Class)} but allows you to run the call asynchronously.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The input stream is automatically closed after the execution of the future.
 	 * </ul>
 	 *
@@ -778,11 +778,11 @@ public class ResponseBody implements HttpEntity {
 	 * Same as {@link #as(ClassMeta)} but allows you to run the call asynchronously.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The input stream is automatically closed after the execution of the future.
 	 * </ul>
 	 *
@@ -811,11 +811,11 @@ public class ResponseBody implements HttpEntity {
 	 * Same as {@link #as(Type,Type...)} but allows you to run the call asynchronously.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The input stream is automatically closed after the execution of the future.
 	 * </ul>
 	 *
@@ -850,11 +850,11 @@ public class ResponseBody implements HttpEntity {
 	 * Returns the contents of this body as a string.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
+	 *  <li class='note'>
 	 *		This method automatically calls {@link #cache()} so that the body can be retrieved multiple times.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
 	 *
@@ -879,11 +879,11 @@ public class ResponseBody implements HttpEntity {
 	 * Same as {@link #asString()} but allows you to run the call asynchronously.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
+	 *  <li class='note'>
 	 *		This method automatically calls {@link #cache()} so that the body can be retrieved multiple times.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
 	 *
@@ -1000,11 +1000,11 @@ public class ResponseBody implements HttpEntity {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
+	 *  <li class='note'>
 	 *		This method automatically calls {@link #cache()} so that the body can be retrieved multiple times.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
 	 *
@@ -1034,13 +1034,13 @@ public class ResponseBody implements HttpEntity {
 	 *
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
+	 *  <li class='note'>
 	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
 	 *
@@ -1070,13 +1070,13 @@ public class ResponseBody implements HttpEntity {
 	 *
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
+	 *  <li class='note'>
 	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
 	 *
@@ -1152,11 +1152,11 @@ public class ResponseBody implements HttpEntity {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
+	 *  <li class='note'>
 	 *		This method automatically calls {@link #cache()} so that the body can be retrieved multiple times.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
 	 *
@@ -1187,7 +1187,7 @@ public class ResponseBody implements HttpEntity {
 	 * once whereas a non-repeatable entity's can not.
 	 *
 	 * <ul class='notes'>
-	 *	<li>This method always returns <jk>true</jk> if the response body is cached (see {@link #cache()}).
+	 *	<li class='note'>This method always returns <jk>true</jk> if the response body is cached (see {@link #cache()}).
 	 * </ul>
 	 *
 	 * @return <jk>true</jk> if the entity is repeatable, <jk>false</jk> otherwise.
@@ -1258,11 +1258,11 @@ public class ResponseBody implements HttpEntity {
 	 * Returns a content stream of the entity.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>This method is equivalent to {@link #asInputStream()} which is the preferred method for fluent-style coding.
-	 * 	<li>This input stream will auto-close once the end of stream has been reached.
-	 * 	<li>It is up to the caller to properly close this stream if not fully consumed.
-	 * 	<li>This method can be called multiple times if the entity is repeatable or the cache flag is set on this object.
-	 * 	<li>Calling this method multiple times on a non-repeatable or cached body will throw a {@link IllegalStateException}.
+	 * 	<li class='note'>This method is equivalent to {@link #asInputStream()} which is the preferred method for fluent-style coding.
+	 * 	<li class='note'>This input stream will auto-close once the end of stream has been reached.
+	 * 	<li class='note'>It is up to the caller to properly close this stream if not fully consumed.
+	 * 	<li class='note'>This method can be called multiple times if the entity is repeatable or the cache flag is set on this object.
+	 * 	<li class='note'>Calling this method multiple times on a non-repeatable or cached body will throw a {@link IllegalStateException}.
 	 * 		Note that this is different from the HttpClient specs for this method.
 	 * </ul>
 	 *
@@ -1277,7 +1277,7 @@ public class ResponseBody implements HttpEntity {
 	 * Writes the entity content out to the output stream.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>This method is equivalent to {@link #pipeTo(OutputStream)} which is the preferred method for fluent-style coding.
+	 * 	<li class='note'>This method is equivalent to {@link #pipeTo(OutputStream)} which is the preferred method for fluent-style coding.
 	 * </ul>
 	 *
 	 * @param outstream The output stream to write entity content to.
@@ -1291,7 +1291,7 @@ public class ResponseBody implements HttpEntity {
 	 * Tells whether this entity depends on an underlying stream.
 	 *
 	 * <ul class='notes'>
-	 *	<li>This method always returns <jk>false</jk> if the response body is cached (see {@link #cache()}.
+	 *	<li class='note'>This method always returns <jk>false</jk> if the response body is cached (see {@link #cache()}.
 	 * </ul>
 	 *
 	 * @return <jk>true</jk> if the entity content is streamed, <jk>false</jk> otherwise.

@@ -36,6 +36,6 @@ public class DefaultClassList_Test {
 		assertOptional(x.get(Number.class)).isNotNull();
 		assertOptional(x.get(Object.class)).isNotNull();
 
-		assertThrown(()->create().get(null)).message().is("Argument 'type' cannot be null.");
+		assertThrown(()->create().get(null)).asMessage().is("Argument 'type' cannot be null.");
 	}
 }

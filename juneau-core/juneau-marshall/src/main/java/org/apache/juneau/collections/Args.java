@@ -101,7 +101,7 @@ import java.util.*;
  * <p>
  * Equivalent operations are available on optional arguments through the {@link #getArg(Class, String)} method.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *

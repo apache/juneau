@@ -303,7 +303,7 @@ public class MaxIndentTest {
 				return;
 			}
 
-			assertString(r).msg("{0}/{1} parse-normal failed", input.label, testName).is(expected);
+			assertString(r).setMsg("{0}/{1} parse-normal failed", input.label, testName).is(expected);
 
 		} catch (AssertionError e) {
 			throw e;

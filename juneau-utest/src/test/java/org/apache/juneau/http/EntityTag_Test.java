@@ -70,12 +70,12 @@ public class EntityTag_Test {
 		assertObject(EntityTag.of(null)).isNull();
 		assertObject(EntityTag.of((Supplier<?>)()->null)).isNull();
 
-		assertThrown(()->new EntityTag("foo")).message().is("Invalid value for entity-tag: [foo]");
-		assertThrown(()->new EntityTag("\"")).message().is("Invalid value for entity-tag: [\"]");
-		assertThrown(()->new EntityTag("")).message().is("Invalid value for entity-tag: []");
-		assertThrown(()->new EntityTag(null)).message().is("Argument 'value' cannot be null.");
-		assertThrown(()->new EntityTag("\"a")).message().is("Invalid value for entity-tag: [\"a]");
-		assertThrown(()->new EntityTag("a\"")).message().is("Invalid value for entity-tag: [a\"]");
-		assertThrown(()->new EntityTag("W/\"")).message().is("Invalid value for entity-tag: [W/\"]");
+		assertThrown(()->new EntityTag("foo")).asMessage().is("Invalid value for entity-tag: [foo]");
+		assertThrown(()->new EntityTag("\"")).asMessage().is("Invalid value for entity-tag: [\"]");
+		assertThrown(()->new EntityTag("")).asMessage().is("Invalid value for entity-tag: []");
+		assertThrown(()->new EntityTag(null)).asMessage().is("Argument 'value' cannot be null.");
+		assertThrown(()->new EntityTag("\"a")).asMessage().is("Invalid value for entity-tag: [\"a]");
+		assertThrown(()->new EntityTag("a\"")).asMessage().is("Invalid value for entity-tag: [a\"]");
+		assertThrown(()->new EntityTag("W/\"")).asMessage().is("Invalid value for entity-tag: [W/\"]");
 	}
 }

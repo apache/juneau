@@ -25,7 +25,6 @@ import org.apache.juneau.cp.*;
 
 /**
  * Main class for creation of assertions for stand-alone testing.
- * {@reviewed}
  *
  * <p>
  * Provides assertions for various common POJO types.
@@ -89,7 +88,7 @@ public class Assertions {
 	 * the operations of the former, but adds various transform methods for conversion to specific assertion types.
 	 *
 	 * <p>
-	 * Various transform methods such as {@link FluentListAssertion#item(int)} and {@link FluentBeanAssertion#property(String)}
+	 * Various transform methods such as {@link FluentListAssertion#asItem(int)} and {@link FluentBeanAssertion#asProperty(String)}
 	 * return generic any-assertions so that they can be easily transformed into other assertion types.
 	 *
 	 * <h5 class='section'>Example:</h5>

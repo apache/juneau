@@ -38,7 +38,7 @@ import org.apache.juneau.http.header.*;
  * <p>
  * If the <c>unmodifiable</c> flag is set on this bean, calls to the setters will throw {@link UnsupportedOperationException} exceptions.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='warn'>Beans are not thread safe unless they're marked as unmodifiable.
  * </ul>
  *
@@ -178,7 +178,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		assertArgNotNull("response", response);
 		int expected = getStatusLine().getStatusCode();
 		int actual = response.getStatusLine().getStatusCode();
-		assertInteger(actual).msg("Unexpected status code.  Expected:[{0}], Actual:[{1}]", expected, actual).is(expected);
+		assertInteger(actual).setMsg("Unexpected status code.  Expected:[{0}], Actual:[{1}]", expected, actual).is(expected);
 	}
 
 	/**

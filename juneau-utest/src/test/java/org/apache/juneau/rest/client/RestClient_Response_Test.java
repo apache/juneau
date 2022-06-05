@@ -72,7 +72,7 @@ public class RestClient_Response_Test {
 	@Test
 	public void a01_getStatusLine() throws RestCallException {
 		assertEquals(200,client().build().get("/bean").run().getStatusLine().getStatusCode());
-		assertThrown(()->client().build(A1.class).get("/bean").run()).message().contains("caused response code '0, null'");
+		assertThrown(()->client().build(A1.class).get("/bean").run()).asMessage().isContains("caused response code '0, null'");
 		assertEquals(0,client().ignoreErrors().build(A1.class).get("/bean").run().getStatusLine().getStatusCode());
 	}
 
@@ -114,11 +114,11 @@ public class RestClient_Response_Test {
 		r.setStatusLine(sl);
 		r
 			.assertCode().is(299)
-			.assertStatus().code().is(299)
-			.assertStatus().protocol().is("http")
-			.assertStatus().major().is(9)
-			.assertStatus().minor().is(8)
-			.assertStatus().reason().is("foo");
+			.assertStatus().asCode().is(299)
+			.assertStatus().asProtocol().is("http")
+			.assertStatus().asMajor().is(9)
+			.assertStatus().asMinor().is(8)
+			.assertStatus().asReason().is("foo");
 
 		r.setStatusCode(298);
 		r.assertCode().is(298);

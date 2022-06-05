@@ -291,9 +291,9 @@ public class PojoRestTest {
 	@Test
 	public void testRootLocked() throws Exception {
 		PojoRest model = new PojoRest(new AddressBook()).setRootLocked();
-		assertThrown(()->model.put("", new AddressBook())).message().is("Cannot overwrite root object");
-		assertThrown(()->model.put(null, new AddressBook())).message().is("Cannot overwrite root object");
-		assertThrown(()->model.put("/", new AddressBook())).message().is("Cannot overwrite root object");
+		assertThrown(()->model.put("", new AddressBook())).asMessage().is("Cannot overwrite root object");
+		assertThrown(()->model.put(null, new AddressBook())).asMessage().is("Cannot overwrite root object");
+		assertThrown(()->model.put("/", new AddressBook())).asMessage().is("Cannot overwrite root object");
 	}
 
 	//====================================================================================================

@@ -23,7 +23,6 @@ import org.apache.juneau.reflect.*;
 
 /**
  * Holds metadata about header beans (POJOs that get serialized as HTTP headers).
- * {@reviewed}
  *
  * <p>
  * Header beans are typically annotated with {@link org.apache.juneau.http.annotation.Header @Header} although it's not an

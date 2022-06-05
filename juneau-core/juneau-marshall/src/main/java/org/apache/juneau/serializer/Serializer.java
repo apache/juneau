@@ -31,10 +31,9 @@ import org.apache.juneau.utils.*;
 
 /**
  * Parent class for all Juneau serializers.
- * {@review}
  *
  * <h5 class='topic'>Description</h5>
- *
+ * <p>
  * Base serializer class that serves as the parent class for all serializers.
  *
  * <p>
@@ -55,8 +54,9 @@ import org.apache.juneau.utils.*;
  * 	<li class='jmp'>{@link #doSerialize(SerializerSession, SerializerPipe, Object)}
  * 	<li class='jmp'>{@link SerializerSession#doSerialize(SerializerPipe, Object)}
  * </ul>
+ * <br>
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
@@ -401,7 +401,7 @@ public class Serializer extends BeanTraverseContext {
 		 * When enabled, null bean values will be serialized to the output.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>Not enabling this setting will cause <c>Map</c>s with <jk>null</jk> values to be lost during parsing.
+		 * 	<li class='note'>Not enabling this setting will cause <c>Map</c>s with <jk>null</jk> values to be lost during parsing.
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
@@ -775,16 +775,14 @@ public class Serializer extends BeanTraverseContext {
 		 * </ul>
 		 *
 		 * <p>
-		 * Possible values are:
-		 * <ul class='javatree'>
+		 * See {@link #uriContext(UriContext)} for examples.
+		 *
+		 * <ul class='values javatree'>
 		 * 	<li class='jf'>{@link org.apache.juneau.UriRelativity#RESOURCE}
 		 * 		- Relative URIs should be considered relative to the servlet URI.
 		 * 	<li class='jf'>{@link org.apache.juneau.UriRelativity#PATH_INFO}
 		 * 		- Relative URIs should be considered relative to the request URI.
 		 * </ul>
-		 *
-		 * <p>
-		 * See {@link #uriContext(UriContext)} for examples.
 		 *
 		 * <ul class='seealso'>
 		 * 	<li class='link'>{@doc jm.MarshallingUris}
@@ -813,8 +811,9 @@ public class Serializer extends BeanTraverseContext {
 		 * </ul>
 		 *
 		 * <p>
-		 * Possible values are:
-		 * <ul>
+		 * See {@link #uriContext(UriContext)} for examples.
+		 *
+		 * <ul class='values javatree'>
 		 * 	<li class='jf'>{@link UriResolution#ABSOLUTE}
 		 * 		- Resolve to an absolute URL (e.g. <js>"http://host:port/context-root/servlet-path/path-info"</js>).
 		 * 	<li class='jf'>{@link UriResolution#ROOT_RELATIVE}
@@ -822,9 +821,6 @@ public class Serializer extends BeanTraverseContext {
 		 * 	<li class='jf'>{@link UriResolution#NONE}
 		 * 		- Don't do any URL resolution.
 		 * </ul>
-		 *
-		 * <p>
-		 * See {@link #uriContext(UriContext)} for examples.
 		 *
 		 * <ul class='seealso'>
 		 * 	<li class='link'>{@doc jm.MarshallingUris}

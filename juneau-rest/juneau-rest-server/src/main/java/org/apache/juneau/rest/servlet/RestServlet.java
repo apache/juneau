@@ -54,7 +54,7 @@ import org.apache.juneau.http.response.*;
  * 	information about your resource in a read-only object.
  * </p>
  *
- * <ul>
+ * <ul class='notes'>
  * 	<li class='note'>
  * 		Users will typically extend from {@link BasicRestServlet} or {@link BasicRestServletGroup}
  * 		instead of this class directly.
@@ -312,7 +312,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The default implementation of this method is a no-op.
 	 * 	<li>
 	 * 		Multiple INIT methods can be defined on a class.
@@ -336,13 +336,13 @@ public abstract class RestServlet extends HttpServlet {
 	 * object has been created.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The default implementation of this method is a no-op.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Multiple POST_INIT methods can be defined on a class.
 	 * 		<br>POST_INIT methods on parent classes are invoked before POST_INIT methods on child classes.
 	 * 		<br>The order of POST_INIT method invocations within a class is alphabetical, then by parameter count, then by parameter types.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The method can throw any exception causing initialization of the servlet to fail.
 	 * </ul>
 	 *
@@ -367,13 +367,13 @@ public abstract class RestServlet extends HttpServlet {
 	 * about the servlet.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The default implementation of this method is a no-op.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Multiple POST_INIT_CHILD_FIRST methods can be defined on a class.
 	 * 		<br>POST_INIT_CHILD_FIRST methods on parent classes are invoked before POST_INIT_CHILD_FIRST methods on child classes.
 	 * 		<br>The order of POST_INIT_CHILD_FIRST method invocations within a class is alphabetical, then by parameter count, then by parameter types.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The method can throw any exception causing initialization of the servlet to fail.
 	 * </ul>
 	 *
@@ -405,13 +405,13 @@ public abstract class RestServlet extends HttpServlet {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The default implementation of this method is a no-op.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Multiple DESTROY methods can be defined on a class.
 	 * 		<br>DESTROY methods on child classes are invoked before DESTROY methods on parent classes.
 	 * 		<br>The order of DESTROY method invocations within a class is alphabetical, then by parameter count, then by parameter types.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		In general, destroy methods should not throw any exceptions, although if any are thrown, the stack trace will be
 	 * 		printed to <c>System.err</c>.
 	 * </ul>
@@ -443,13 +443,13 @@ public abstract class RestServlet extends HttpServlet {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The default implementation of this method is a no-op.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Multiple START_CALL methods can be defined on a class.
 	 * 		<br>START_CALL methods on parent classes are invoked before START_CALL methods on child classes.
 	 * 		<br>The order of START_CALL method invocations within a class is alphabetical, then by parameter count, then by parameter types.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The method can throw any exception.
 	 * 		<br>{@link BasicHttpException HttpExceptions} can be thrown to cause a particular HTTP error status code.
 	 * 		<br>All other exceptions cause an HTTP 500 error status code.
@@ -470,17 +470,17 @@ public abstract class RestServlet extends HttpServlet {
 	 * {@link RestMatcher} objects have been called.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The default implementation of this method is a no-op.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Multiple PRE_CALL methods can be defined on a class.
 	 * 		<br>PRE_CALL methods on parent classes are invoked before PRE_CALL methods on child classes.
 	 * 		<br>The order of PRE_CALL method invocations within a class is alphabetical, then by parameter count, then by parameter types.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The method can throw any exception.
 	 * 		<br>{@link BasicHttpException HttpExceptions} can be thrown to cause a particular HTTP error status code.
 	 * 		<br>All other exceptions cause an HTTP 500 error status code.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		It's advisable not to mess around with the HTTP body itself since you may end up consuming the body
 	 * 		before the actual REST method has a chance to use it.
 	 * </ul>
@@ -500,13 +500,13 @@ public abstract class RestServlet extends HttpServlet {
 	 * {@link RestConverter RestConverters} have not yet been executed and the response has not yet been written.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The default implementation of this method is a no-op.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Multiple POST_CALL methods can be defined on a class.
 	 * 		<br>POST_CALL methods on parent classes are invoked before POST_CALL methods on child classes.
 	 * 		<br>The order of POST_CALL method invocations within a class is alphabetical, then by parameter count, then by parameter types.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The method can throw any exception, although at this point it is too late to set an HTTP error status code.
 	 * </ul>
 	 *
@@ -531,15 +531,15 @@ public abstract class RestServlet extends HttpServlet {
 	 * </ul>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The default implementation of this method is a no-op.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Multiple END_CALL methods can be defined on a class.
 	 * 		<br>END_CALL methods on parent classes are invoked before END_CALL methods on child classes.
 	 * 		<br>The order of END_CALL method invocations within a class is alphabetical, then by parameter count, then by parameter types.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The method can throw any exception, although at this point it is too late to set an HTTP error status code.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Note that if you override a parent method, you probably need to call <code><jk>super</jk>.parentMethod(...)</code>.
 	 * 		<br>The method is still considered part of the parent class for ordering purposes even though it's
 	 * 		overridden by the child class.

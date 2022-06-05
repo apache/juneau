@@ -23,9 +23,7 @@ import org.apache.juneau.internal.*;
 /**
  * Basic implementation of a {@link PartIterator}.
  *
- * {@review}
- *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *

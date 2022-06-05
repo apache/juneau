@@ -24,27 +24,31 @@ import org.apache.juneau.internal.*;
 
 /**
  * Base class for all assertion objects.
- * {@review}
- *
  *
  * <h5 class='topic'>Test Methods</h5>
- * 	<ul>
- * 		<li>None
- * 	</ul>
+ * <p>
+ * <ul class='javatree'>
+ * 	<li>None
+ * </ul>
  *
  * <h5 class='topic'>Transform Methods</h5>
- * 	<ul>
- * 		<li>None
- * 	</ul>
+ * <p>
+ * <ul class='javatree'>
+ * 	<li>None
+ * </ul>
  *
  * <h5 class='topic'>Configuration Methods</h5>
- * 	<ul>
- * 		<li class='jm'>{@link Assertion#msg(String, Object...)}
- * 		<li class='jm'>{@link Assertion#out(PrintStream)}
- * 		<li class='jm'>{@link Assertion#silent()}
- * 		<li class='jm'>{@link Assertion#stdout()}
- * 		<li class='jm'>{@link Assertion#throwable(Class)}
+ * <p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link Assertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link Assertion#setMsg(String, Object...) setMsg(String, Object...)}
+ * 		<li class='jm'>{@link Assertion#setOut(PrintStream) setOut(PrintStream)}
+ * 		<li class='jm'>{@link Assertion#setSilent() setSilent()}
+ * 		<li class='jm'>{@link Assertion#setStdOut() setStdOut()}
+ * 		<li class='jm'>{@link Assertion#setThrowable(Class) setThrowable(Class)}
  * 	</ul>
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.FluentAssertions}
@@ -103,7 +107,7 @@ public class Assertion {
 	 *
 	 *	<jc>// Throws an assertion with a custom message instead of the default "Value was null."</jc>
 	 * 	<jsm>assertString</jsm>(<jv>myString</jv>)
-	 * 		.msg(<js>"My string was bad:  {msg}"</js>)
+	 * 		.setMsg(<js>"My string was bad:  {msg}"</js>)
 	 * 		.isNotNull();
 	 * </p>
 	 *
@@ -112,7 +116,7 @@ public class Assertion {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public Assertion msg(String msg, Object...args) {
+	public Assertion setMsg(String msg, Object...args) {
 		this.msg = msg.replace("{msg}", "<<<MSG>>>");
 		this.msgArgs = args;
 		return this;
@@ -124,8 +128,8 @@ public class Assertion {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public Assertion stdout() {
-		return out(System.out);
+	public Assertion setStdOut() {
+		return setOut(System.out);
 	}
 
 	/**
@@ -137,7 +141,7 @@ public class Assertion {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public Assertion out(PrintStream value) {
+	public Assertion setOut(PrintStream value) {
 		this.out = value;
 		return this;
 	}
@@ -151,8 +155,8 @@ public class Assertion {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public Assertion silent() {
-		return out(null);
+	public Assertion setSilent() {
+		return setOut(null);
 	}
 
 	/**
@@ -174,7 +178,7 @@ public class Assertion {
 	 *
 	 *	<jc>// Throws a BadRequest instead of an AssertionError if the string is null.</jc>
 	 * 	<jsm>assertString</jsm>(<jv>myString</jv>)
-	 * 		.throwable(BadRequest.<jk>class</jk>)
+	 * 		.setThrowable(BadRequest.<jk>class</jk>)
 	 * 		.isNotNull();
 	 * </p>
 	 *
@@ -182,7 +186,7 @@ public class Assertion {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public Assertion throwable(Class<? extends RuntimeException> value) {
+	public Assertion setThrowable(Class<? extends RuntimeException> value) {
 		this.throwable = value;
 		return this;
 	}

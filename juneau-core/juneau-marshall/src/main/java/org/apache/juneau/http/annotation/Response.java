@@ -23,7 +23,6 @@ import org.apache.juneau.oapi.*;
 
 /**
  * REST response annotation.
- * {@review}
  *
  * <p>
  * Identifies an interface to use to interact with HTTP parts of an HTTP response through a bean.
@@ -77,15 +76,15 @@ public @interface Response {
 	 * </ul>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a {@doc jd.Swagger} object with string keys (media type) and string values (example for that media type) .
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The leading/trailing <c>{ }</c> characters are optional.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable:
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Resolution of variables is delayed until request time and occurs before parsing.
 	 * 		<br>This allows you to, for example, pull in a JSON construct from a properties file based on the locale of the HTTP request.
 	 * </ul>

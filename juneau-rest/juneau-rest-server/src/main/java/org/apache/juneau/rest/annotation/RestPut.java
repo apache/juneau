@@ -122,7 +122,7 @@ public @interface RestPut {
 	 * Overrides the media types inferred from the parsers that identify what media types can be consumed by the resource.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
@@ -172,9 +172,7 @@ public @interface RestPut {
 	 * 		Request/response messages are automatically logged.
 	 * </ul>
 	 *
-	 * <p>
-	 * Possible values (case insensitive):
-	 * <ul>
+	 * <ul class='values'>
 	 * 	<li><js>"true"</js> - Debug is enabled for all requests.
 	 * 	<li><js>"false"</js> - Debug is disabled for all requests.
 	 * 	<li><js>"conditional"</js> - Debug is enabled only for requests that have a <c class='snippet'>Debug: true</c> header.
@@ -182,7 +180,7 @@ public @interface RestPut {
 	 * </ul>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
@@ -215,7 +213,7 @@ public @interface RestPut {
 	 * The default character encoding for the request and response if not specified on the request.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
@@ -260,11 +258,11 @@ public @interface RestPut {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Key and value is trimmed of whitespace.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
@@ -289,11 +287,11 @@ public @interface RestPut {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		You can use either <js>':'</js> or <js>'='</js> as the key/value delimiter.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Key and value is trimmed of whitespace.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
@@ -329,7 +327,7 @@ public @interface RestPut {
 	 *
 	 * </ul>
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
@@ -357,7 +355,7 @@ public @interface RestPut {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
@@ -384,7 +382,7 @@ public @interface RestPut {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
@@ -412,9 +410,9 @@ public @interface RestPut {
 	 * </ul>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Corresponds to the swagger field <c>/paths/{path}/{method}/description</c>.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
@@ -517,7 +515,7 @@ public @interface RestPut {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
@@ -644,7 +642,7 @@ public @interface RestPut {
 	 * Overrides the media types inferred from the serializers that identify what media types can be produced by the resource.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$S{mySystemProperty}"</js>).
 	 * </ul>
@@ -677,7 +675,7 @@ public @interface RestPut {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports any of the following expression constructs:
 	 * 		<ul>
 	 * 			<li><js>"foo"</js> - Single arguments.
@@ -689,18 +687,18 @@ public @interface RestPut {
 	 * 			<li><js>"fo* &amp;&amp; *oo"</js> - Multiple AND'ed arguments, Java-AND syntax.
 	 * 			<li><js>"fo* || (*oo || bar)"</js> - Parenthesis.
 	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		AND operations take precedence over OR operations (as expected).
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Whitespace is ignored.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		<jk>null</jk> or empty expressions always match as <jk>false</jk>.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If patterns are used, you must specify the list of declared roles using {@link #rolesDeclared()} or {@link org.apache.juneau.rest.RestOpContext.Builder#rolesDeclared(String...)}.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		When defined on parent/child classes and methods, ALL guards within the hierarchy must pass.
 	 * </ul>
 	 *
@@ -812,9 +810,9 @@ public @interface RestPut {
 	 * </ul>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Corresponds to the swagger field <c>/paths/{path}/{method}/summary</c>.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
@@ -853,14 +851,14 @@ public @interface RestPut {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is {@doc jd.Swagger}.
 	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The starting and ending <js>'{'</js>/<js>'}'</js> characters around the entire value are optional.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		These values are superimposed on top of any Swagger JSON file present for the resource in the classpath.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>

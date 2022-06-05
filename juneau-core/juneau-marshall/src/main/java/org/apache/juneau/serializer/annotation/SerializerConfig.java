@@ -61,15 +61,14 @@ public @interface SerializerConfig {
 	 * When using the {@link OutputStreamSerializer#serializeToString(Object)} method on stream-based serializers, this defines the format to use
 	 * when converting the resulting byte array to a string.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"SPACED_HEX"</js>
+	 * 	<li><js>"HEX"</js> (default)
+	 * 	<li><js>"BASE64"</js>
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"SPACED_HEX"</js>
-	 * 			<li><js>"HEX"</js> (default)
-	 * 			<li><js>"BASE64"</js>
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -104,14 +103,13 @@ public @interface SerializerConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
 	 * </ul>
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -141,14 +139,13 @@ public @interface SerializerConfig {
 	 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#addBeanTypes()} - Affects whether <js>'_type'</js> is added to any nodes.
 	 * </ul>
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -173,14 +170,13 @@ public @interface SerializerConfig {
 	 * 		Map entries with <jk>null</jk> values will be lost.
 	 * </ul>
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -215,14 +211,13 @@ public @interface SerializerConfig {
 	 * <p>
 	 * Note that this introduces a performance penalty.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -243,14 +238,13 @@ public @interface SerializerConfig {
 	 * <p>
 	 * Note that this introduces a performance penalty.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -277,14 +271,13 @@ public @interface SerializerConfig {
 	 * 		Bean properties with empty list values will not be set.
 	 * </ul>
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -309,14 +302,13 @@ public @interface SerializerConfig {
 	 * 		Bean properties with empty map values will not be set.
 	 * </ul>
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -334,14 +326,13 @@ public @interface SerializerConfig {
 	 * <p>
 	 * If <js>"true"</js>, string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -361,9 +352,9 @@ public @interface SerializerConfig {
 	 * Bean used for resolution of URIs to absolute or root-relative form.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Format: JSON object representing a {@link UriContext}
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -386,14 +377,13 @@ public @interface SerializerConfig {
 	 * 	<li>Properties and classes annotated with {@link Uri @Uri}
 	 * </ul>
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"RESOURCE"</js> (default) - Relative URIs should be considered relative to the servlet URI.
+	 * 	<li><js>"PATH_INFO"</js> - Relative URIs should be considered relative to the request URI.
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"RESOURCE"</js> (default) - Relative URIs should be considered relative to the servlet URI.
-	 * 			<li><js>"PATH_INFO"</js> - Relative URIs should be considered relative to the request URI.
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -417,15 +407,14 @@ public @interface SerializerConfig {
 	 * 	<li>Properties and classes annotated with {@link Uri @Uri}
 	 * </ul>
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"ABSOLUTE"</js> - Resolve to an absolute URL (e.g. <js>"http://host:port/context-root/servlet-path/path-info"</js>).
+	 * 	<li><js>"ROOT_RELATIVE"</js> - Resolve to a root-relative URL (e.g. <js>"/context-root/servlet-path/path-info"</js>).
+	 * 	<li><js>"NONE"</js> (default) - Don't do any URL resolution.
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"ABSOLUTE"</js> - Resolve to an absolute URL (e.g. <js>"http://host:port/context-root/servlet-path/path-info"</js>).
-	 * 			<li><js>"ROOT_RELATIVE"</js> - Resolve to a root-relative URL (e.g. <js>"/context-root/servlet-path/path-info"</js>).
-	 * 			<li><js>"NONE"</js> (default) - Don't do any URL resolution.
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -452,15 +441,15 @@ public @interface SerializerConfig {
 	 * Used when passing in files to {@link Serializer#serialize(Object, Object)}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Format: string
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		"DEFAULT" can be used to indicate the JVM default file system charset.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Default: JVM system default.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		This setting does not apply to the RDF serializers.
 	 * </ul>
 	 *
@@ -479,13 +468,13 @@ public @interface SerializerConfig {
 	 * Specifies the maximum indentation level in the serialized document.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Format: integer
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Default: 100
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		This setting does not apply to the RDF serializers.
 	 * </ul>
 	 *
@@ -504,11 +493,11 @@ public @interface SerializerConfig {
 	 * This is the character used for quoting attributes and values.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Default: <c>"</c>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		This setting does not apply to the RDF serializers.
 	 * </ul>
 	 *
@@ -530,13 +519,13 @@ public @interface SerializerConfig {
 	 * Used when passing in output streams and byte arrays to {@link WriterSerializer#serialize(Object, Object)}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Format: string
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Default: <js>"utf-8"</js>.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		This setting does not apply to the RDF serializers.
 	 * </ul>
 	 *
@@ -554,14 +543,13 @@ public @interface SerializerConfig {
 	 * <p>
 	 * If <js>"true"</js>, whitespace is added to the output to improve readability.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -599,16 +587,15 @@ public @interface SerializerConfig {
 	 * 	{A:{B:{C:<jk>null</jk>}}}
 	 * </p>
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='warn'>
 	 * 		Checking for recursion can cause a small performance penalty.
-	 * 	<li>
-	 *		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -631,14 +618,13 @@ public @interface SerializerConfig {
 	 * If <js>"true"</js>, when we encounter the same object when traversing a tree, we set the value to <jk>null</jk>.
 	 * <br>Otherwise, a {@link BeanRecursionException} is thrown with the message <js>"Recursion occurred, stack=..."</js>.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 *		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -658,11 +644,11 @@ public @interface SerializerConfig {
 	 * <br>Useful when constructing document fragments that need to be indented at a certain level.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Format: integer
-	 *	<li>
+	 *	<li class='note'>
 	 * 		Default value: <js>"0"</js>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -682,11 +668,11 @@ public @interface SerializerConfig {
 	 * <br>If this depth is exceeded, an exception is thrown.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Format: integer
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Default value: <js>"100"</js>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *

@@ -56,9 +56,9 @@ public class UserAgent_Test {
 		c.get().header(userAgent(()->PARSED)).run().assertBody().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(userAgent((String)null)).run().assertBody().contains("Apache");
-		c.get().header(userAgent((Supplier<String>)null)).run().assertBody().contains("Apache");
-		c.get().header(userAgent(()->null)).run().assertBody().contains("Apache");
+		c.get().header(userAgent((String)null)).run().assertBody().isContains("Apache");
+		c.get().header(userAgent((Supplier<String>)null)).run().assertBody().isContains("Apache");
+		c.get().header(userAgent(()->null)).run().assertBody().isContains("Apache");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

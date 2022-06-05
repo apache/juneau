@@ -34,12 +34,12 @@ import org.apache.juneau.utils.*;
 
 /**
  * Generates JSON-schema metadata about POJOs.
- * {@review}
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
+ * <p>
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.JsonSchemaDetails}
  * 	<li class='extlink'>{@source}

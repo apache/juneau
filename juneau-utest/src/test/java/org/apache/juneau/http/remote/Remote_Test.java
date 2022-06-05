@@ -367,16 +367,16 @@ public class Remote_Test {
 	@Test
 	public void c04_rethrownExceptions() throws Exception {
 		C4b x = remote(C4a.class,C4b.class);
-		assertThrown(()->x.x1()).message().is("foo");
-		assertThrown(()->x.x1a().get()).messages().contains("foo");
-		assertThrown(()->x.x1b().get()).messages().contains("foo");
-		assertThrown(()->x.x2()).message().is("foo");
-		assertThrown(()->x.x3().get()).messages().contains("foo");
-		assertThrown(()->x.x4()).message().is("foo");
-		assertThrown(()->x.x4a().get()).messages().contains("foo");
-		assertThrown(()->x.x4b().get()).messages().contains("foo");
-		assertThrown(()->x.x5()).message().is("foo");
-		assertThrown(()->x.x6().get()).messages().contains("foo");
+		assertThrown(()->x.x1()).asMessage().is("foo");
+		assertThrown(()->x.x1a().get()).asMessages().isContains("foo");
+		assertThrown(()->x.x1b().get()).asMessages().isContains("foo");
+		assertThrown(()->x.x2()).asMessage().is("foo");
+		assertThrown(()->x.x3().get()).asMessages().isContains("foo");
+		assertThrown(()->x.x4()).asMessage().is("foo");
+		assertThrown(()->x.x4a().get()).asMessages().isContains("foo");
+		assertThrown(()->x.x4b().get()).asMessages().isContains("foo");
+		assertThrown(()->x.x5()).asMessage().is("foo");
+		assertThrown(()->x.x6().get()).asMessages().isContains("foo");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -420,8 +420,8 @@ public class Remote_Test {
 		assertEquals(400,x.x7().intValue());
 		assertEquals(false,x.x8());
 		assertEquals(false,x.x9());
-		assertThrown(()->x.x5()).messages().any(contains("Only integer and booleans types are valid."));
-		assertThrown(()->x.x10()).messages().any(contains("Only integer and booleans types are valid."));
+		assertThrown(()->x.x5()).asMessages().isAny(contains("Only integer and booleans types are valid."));
+		assertThrown(()->x.x10()).asMessages().isAny(contains("Only integer and booleans types are valid."));
 	}
 
 	@Rest
@@ -528,7 +528,7 @@ public class Remote_Test {
 	@Test
 	public void e05_rrpc_rethrownCheckedException() throws Exception {
 		RestClient x = client(E5.class).build();
-		assertThrown(()->x.getRrpcInterface(E5b.class,"/proxy").echo("foo")).message().is("foobar");
+		assertThrown(()->x.getRrpcInterface(E5b.class,"/proxy").echo("foo")).asMessage().is("foobar");
 	}
 
 	@Rest
@@ -547,7 +547,7 @@ public class Remote_Test {
 	@Test
 	public void e06_rrpc_rethrownUncheckedException() throws Exception {
 		RestClient x = client(E6.class).build();
-		assertThrown(()->x.getRrpcInterface(E5b.class,"/proxy").echo("foo")).messages().any(contains("foobar"));
+		assertThrown(()->x.getRrpcInterface(E5b.class,"/proxy").echo("foo")).asMessages().isAny(contains("foobar"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -598,7 +598,7 @@ public class Remote_Test {
 
 	@Test
 	public void f02_headers_badSupplier() throws Exception {
-		assertThrown(()->client(F.class).build().getRemote(F2a.class)).messages().contains("foo");
+		assertThrown(()->client(F.class).build().getRemote(F2a.class)).asMessages().isContains("foo");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -616,7 +616,7 @@ public class Remote_Test {
 
 	@Test
 	public void g01_badMethodName() throws Exception {
-		assertThrown(()->client(G.class).header("Check","Foo").build().getRemote(G1.class)).isType(RemoteMetadataException.class).message().contains("Invalid value");
+		assertThrown(()->client(G.class).header("Check","Foo").build().getRemote(G1.class)).isType(RemoteMetadataException.class).asMessage().isContains("Invalid value");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

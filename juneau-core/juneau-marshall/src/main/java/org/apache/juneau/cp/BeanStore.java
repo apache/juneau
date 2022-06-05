@@ -68,7 +68,7 @@ import org.apache.juneau.reflect.*;
  * 	<li class='jm'>{@link #createMethodFinder(Class,Object) createMethodFinder(Class,Object)}
  * </ul>
  *
- * <ul>
+ * <ul class='notes'>
  * 	<li class='note'>Bean stores can be nested using {@link Builder#parent(BeanStore)}.
  * 	<li class='note'>Bean stores can be made read-only using {@link Builder#readOnly()}.
  * 	<li class='note'>Bean stores can be made thread-safe using {@link Builder#threadSafe()}.

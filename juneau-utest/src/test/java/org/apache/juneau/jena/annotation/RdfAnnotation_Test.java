@@ -96,10 +96,10 @@ public class RdfAnnotation_Test {
 		Rdf c3 = RdfAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
 		Rdf c4 = RdfAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
-		assertObject(c1).asJson().contains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
-		assertObject(c2).asJson().contains("on:['a','b']");
-		assertObject(c3).asJson().contains("on:['"+CNAME+"$C1.f1','"+CNAME+"$C2.f2']");
-		assertObject(c4).asJson().contains("on:['"+CNAME+"$C1.m1()','"+CNAME+"$C2.m2()']");
+		assertObject(c1).asJson().isContains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
+		assertObject(c2).asJson().isContains("on:['a','b']");
+		assertObject(c3).asJson().isContains("on:['"+CNAME+"$C1.f1','"+CNAME+"$C2.f2']");
+		assertObject(c4).asJson().isContains("on:['"+CNAME+"$C1.m1()','"+CNAME+"$C2.m2()']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

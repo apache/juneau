@@ -60,13 +60,13 @@ public class BasicLongHeader_Test {
 
 		// Invalid usage.
 		c.get().header(longHeader(HEADER,(Supplier<Long>)null)).run().assertBody().isEmpty();
-		assertThrown(()->longHeader(HEADER,"foo")).message().is("Value 'foo' could not be parsed as a long.");
-		assertThrown(()->longHeader("", VALUE)).message().is("Name cannot be empty on header.");
-		assertThrown(()->longHeader(null, VALUE)).message().is("Name cannot be empty on header.");
-		assertThrown(()->longHeader("", PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->longHeader(null, PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->longHeader("", ()->PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->longHeader(null, ()->PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->longHeader(HEADER,"foo")).asMessage().is("Value 'foo' could not be parsed as a long.");
+		assertThrown(()->longHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->longHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->longHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->longHeader(null, PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->longHeader("", ()->PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->longHeader(null, ()->PARSED)).asMessage().is("Name cannot be empty on header.");
 	}
 
 	@Test

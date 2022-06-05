@@ -26,7 +26,7 @@ import org.apache.juneau.rest.*;
 /**
  * A session for a single HTTP request against an RRPC Java method.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *

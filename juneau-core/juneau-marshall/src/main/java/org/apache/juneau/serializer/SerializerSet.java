@@ -74,7 +74,7 @@ import org.apache.juneau.reflect.*;
  * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>addressBook</jv>);
  * </p>
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *

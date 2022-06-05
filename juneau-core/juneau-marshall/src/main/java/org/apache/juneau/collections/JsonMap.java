@@ -93,7 +93,7 @@ import org.apache.juneau.utils.*;
  * 	<jk>int</jk> <jv>_int</jv> = <jv>map2</jv>.getInt(<js>"a"</js>);  <jc>// a == 1 </jc>
  * </p>
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *
@@ -645,7 +645,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * See {@link BeanSession#convertToType(Object, ClassMeta)} for the list of valid data conversions.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Use the {@link #get(String, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>
 	 *

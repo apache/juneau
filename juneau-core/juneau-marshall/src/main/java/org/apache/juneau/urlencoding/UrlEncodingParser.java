@@ -28,14 +28,13 @@ import org.apache.juneau.utils.*;
 
 /**
  * Parses URL-encoded text into POJO models.
- * {@review}
  *
  * <h5 class='topic'>Media types</h5>
- *
+ * <p>
  * Handles <c>Content-Type</c> types:  <bc>application/x-www-form-urlencoded</bc>
  *
  * <h5 class='topic'>Description</h5>
- *
+ * <p>
  * Parses URL-Encoded text (e.g. <js>"foo=bar&amp;baz=bing"</js>) into POJOs.
  *
  * <p>
@@ -44,7 +43,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * This parser uses a state machine, which makes it very fast and efficient.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
@@ -166,7 +165,7 @@ public class UrlEncodingParser extends UonParser implements UrlEncodingMetaProvi
 		 * This option only applies to beans.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		If parsing multi-part parameters, it's highly recommended to use Collections or Lists
 		 * 		as bean property types instead of arrays since arrays have to be recreated from scratch every time a value
 		 * 		is added to it.

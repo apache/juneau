@@ -28,7 +28,7 @@ import org.apache.juneau.internal.*;
 /**
  * Subclass of parser session objects for character-based parsers.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *

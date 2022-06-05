@@ -23,7 +23,6 @@ import org.apache.juneau.svl.*;
 
 /**
  * Basic implementation of a {@link SwaggerProvider}.
- * {@review}
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.Swagger}

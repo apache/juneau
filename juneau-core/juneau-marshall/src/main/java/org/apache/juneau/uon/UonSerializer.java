@@ -29,16 +29,15 @@ import org.apache.juneau.utils.*;
 
 /**
  * Serializes POJO models to UON (a notation for URL-encoded query parameter values).
- * {@review}
  *
  * <h5 class='topic'>Media types</h5>
- *
+ * <p>
  * Handles <c>Accept</c> types:  <bc>text/uon</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>text/uon</bc>
  *
  * <h5 class='topic'>Description</h5>
- *
+ * <p>
  * This serializer provides several serialization options.
  * Typically, one of the predefined DEFAULT serializers will be sufficient.
  * However, custom serializers can be constructed to fine-tune behavior.
@@ -125,7 +124,7 @@ import org.apache.juneau.utils.*;
  * 	String <jv>uon</jv> = UonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>person</jv>);
  * </p>
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
@@ -379,13 +378,6 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * <p>
 		 * Specifies the format to use for URL GET parameter keys and values.
 		 *
-		 * <p>
-		 * Possible values:
-		 * <ul class='javatree'>
-		 * 	<li class='jf'>{@link ParamFormat#UON} (default) - Use UON notation for parameters.
-		 * 	<li class='jf'>{@link ParamFormat#PLAINTEXT} - Use plain text for parameters.
-		 * </ul>
-		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a normal UON serializer.</jc>
@@ -410,6 +402,12 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 		 * 	<jc>// Produces: "foo=bar,baz=qux,true,123"</jc>
 		 * 	String <jv>uon2</jv> = <jv>serializer2</jv>.serialize(<jv>map</jv>)
 		 * </p>
+		 *
+		 * <p>
+		 * <ul class='values javatree'>
+		 * 	<li class='jf'>{@link ParamFormat#UON} (default) - Use UON notation for parameters.
+		 * 	<li class='jf'>{@link ParamFormat#PLAINTEXT} - Use plain text for parameters.
+		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property.

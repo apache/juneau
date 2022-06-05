@@ -219,9 +219,9 @@ public class Items extends SwaggerElement {
 	 * Declares the value of the item that the server will use if none is provided.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		<js>"default"</js> has no meaning for required items.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Unlike JSON Schema this value MUST conform to the defined <c>type</c> for the data type.
 	 * </ul>
 	 *
@@ -238,9 +238,9 @@ public class Items extends SwaggerElement {
 	 * Declares the value of the item that the server will use if none is provided.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		<js>"default"</js> has no meaning for required items.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Unlike JSON Schema this value MUST conform to the defined <c>type</c> for the data type.
 	 * </ul>
 	 *
@@ -259,9 +259,9 @@ public class Items extends SwaggerElement {
 	 * Declares the value of the item that the server will use if none is provided.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		<js>"default"</js> has no meaning for required items.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Unlike JSON Schema this value MUST conform to the defined <c>type</c> for the data type.
 	 * </ul>
 	 *
@@ -278,9 +278,9 @@ public class Items extends SwaggerElement {
 	 * Declares the value of the item that the server will use if none is provided.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		<js>"default"</js> has no meaning for required items.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Unlike JSON Schema this value MUST conform to the defined <c>type</c> for the data type.
 	 * </ul>
 	 *

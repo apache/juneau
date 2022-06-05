@@ -65,12 +65,12 @@ import org.apache.juneau.ExecutableException;
  * </p>
  *
  * <ul class='notes'>
- * 	<li>
+ * 	<li class='note'>
  * 		Null POJOs are ignored.
- * 	<li>
+ * 	<li class='note'>
  * 		Non-getter methods are either invoked on the first POJO or all POJOs depending on the <c>callAllNonGetters</c> flag
  * 		passed into the constructor.
- * 	<li>
+ * 	<li class='note'>
  * 		For purposes of this interface, a getter is any method with zero arguments and a non-<c>void</c> return type.
  * </ul>
  *

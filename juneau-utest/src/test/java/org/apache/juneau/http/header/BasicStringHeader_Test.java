@@ -58,10 +58,10 @@ public class BasicStringHeader_Test {
 
 		// Invalid usage.
 		c.get().header(stringHeader(HEADER,(Supplier<String>)null)).run().assertBody().isEmpty();
-		assertThrown(()->stringHeader("", VALUE)).message().is("Name cannot be empty on header.");
-		assertThrown(()->stringHeader(null, VALUE)).message().is("Name cannot be empty on header.");
-		assertThrown(()->stringHeader("", ()->PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->stringHeader(null, ()->PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->stringHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->stringHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->stringHeader("", ()->PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->stringHeader(null, ()->PARSED)).asMessage().is("Name cannot be empty on header.");
 	}
 
 	@Test

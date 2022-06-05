@@ -63,7 +63,7 @@ import org.apache.juneau.xml.annotation.*;
  * 		<li>This bean is non-thread-safe and meant for one-time use.
  * 	</ul>
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *

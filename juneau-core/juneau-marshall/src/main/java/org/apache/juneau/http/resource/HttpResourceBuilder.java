@@ -233,7 +233,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * Sets the 'chunked' flag value.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>If the {@link HttpEntity#getContentLength()} method returns a negative value, the HttpClient code will always
+	 * 	<li class='note'>If the {@link HttpEntity#getContentLength()} method returns a negative value, the HttpClient code will always
 	 * 		use chunked encoding.
 	 * </ul>
 	 *

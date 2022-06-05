@@ -91,9 +91,8 @@ public interface RestLogger {
 	 * System property name for the default request detail setting for {@link RestLogger} objects.
 	 * <p>
 	 * Can also use a <c>JUNEAU_RESTLOGGER_REQUESTDETAIL</c> environment variable.
-	 * <p>
-	 * The possible values are:
-	 * <ul>
+	 *
+	 * <ul class='values'>
 	 * 	<li>{@link RestLoggingDetail#STATUS_LINE "STATUS_LINE"} (default) - Log only the status line.
 	 * 	<li>{@link RestLoggingDetail#HEADER "HEADER"} - Log the status line and headers.
 	 * 	<li>{@link RestLoggingDetail#ENTITY "ENTITY"} - Log the status line and headers and body if available.
@@ -105,9 +104,8 @@ public interface RestLogger {
 	 * System property name for the default response detail setting for {@link RestLogger} objects.
 	 * <p>
 	 * Can also use a <c>JUNEAU_RESTLOGGER_RESPONSEDETAIL</c> environment variable.
-	 * <p>
-	 * The possible values are:
-	 * <ul>
+	 *
+	 * <ul class='values'>
 	 * 	<li>{@link RestLoggingDetail#STATUS_LINE "STATUS_LINE"} (default) - Log only the status line.
 	 * 	<li>{@link RestLoggingDetail#HEADER "HEADER"} - Log the status line and headers.
 	 * 	<li>{@link RestLoggingDetail#ENTITY "ENTITY"} - Log the status line and headers and body if available.
@@ -119,9 +117,8 @@ public interface RestLogger {
 	 * System property name for the logging level setting for {@link RestLogger} objects.
 	 * <p>
 	 * Can also use a <c>JUNEAU_RESTLOGGER_LEVEL</c> environment variable.
-	 * <p>
-	 * The possible values are:
-	 * <ul>
+	 *
+	 * <ul class='values'>
 	 * 	<li>{@link Level#OFF "OFF"} (default)
 	 * 	<li>{@link Level#SEVERE "SEVERE"}
 	 * 	<li>{@link Level#WARNING "WARNING"}
@@ -285,19 +282,17 @@ public interface RestLogger {
 		 * This specifies the default logging enablement value if not set on the first matched rule or if no rules match.
 		 *
 		 * <p>
-		 * The possible values are:
-		 * <ul>
-		 * 	<li>{@link Enablement#ALWAYS ALWAYS} (default) - Logging is enabled.
-		 * 	<li>{@link Enablement#NEVER NEVER} - Logging is disabled.
-		 * 	<li>{@link Enablement#CONDITIONAL CONDITIONALLY} - Logging is enabled if it passes the {@link #enabledTest(Predicate)} test.
-		 * </ul>
-		 *
-		 * <p>
 		 * If not specified, the setting is determined via the following:
 		 * <ul>
 		 * 	<li><js>{@link RestLogger#SP_enabled "juneau.restLogger.enabled"} system property.
 		 * 	<li><js>{@link RestLogger#SP_enabled "JUNEAU_RESTLOGGER_ENABLED"} environment variable.
 		 * 	<li><js>"ALWAYS"</js>.
+		 * </ul>
+		 *
+		 * <ul class='values'>
+		 * 	<li>{@link Enablement#ALWAYS ALWAYS} (default) - Logging is enabled.
+		 * 	<li>{@link Enablement#NEVER NEVER} - Logging is disabled.
+		 * 	<li>{@link Enablement#CONDITIONAL CONDITIONALLY} - Logging is enabled if it passes the {@link #enabledTest(Predicate)} test.
 		 * </ul>
 		 *
 		 * <p>
@@ -347,19 +342,17 @@ public interface RestLogger {
 		 * This specifies the default level of request detail if not set on the first matched rule or if no rules match.
 		 *
 		 * <p>
-		 * The possible values are:
-		 * <ul>
-		 * 	<li>{@link RestLoggingDetail#STATUS_LINE STATUS_LINE} - Log only the status line.
-		 * 	<li>{@link RestLoggingDetail#HEADER HEADER} - Log the status line and headers.
-		 * 	<li>{@link RestLoggingDetail#ENTITY ENTITY} - Log the status line and headers and body if available.
-		 * </ul>
-		 *
-		 * <p>
 		 * If not specified, the setting is determined via the following:
 		 * <ul>
 		 * 	<li><js>{@link RestLogger#SP_requestDetail "juneau.restLogger.requestDetail"} system property.
 		 * 	<li><js>{@link RestLogger#SP_requestDetail "JUNEAU_RESTLOGGER_requestDetail"} environment variable.
 		 * 	<li><js>"STATUS_LINE"</js>.
+		 * </ul>
+		 *
+		 * <ul class='values'>
+		 * 	<li>{@link RestLoggingDetail#STATUS_LINE STATUS_LINE} - Log only the status line.
+		 * 	<li>{@link RestLoggingDetail#HEADER HEADER} - Log the status line and headers.
+		 * 	<li>{@link RestLoggingDetail#ENTITY ENTITY} - Log the status line and headers and body if available.
 		 * </ul>
 		 *
 		 * @param value
@@ -378,19 +371,17 @@ public interface RestLogger {
 		 * This specifies the default level of response detail if not set on the first matched rule or if no rules match.
 		 *
 		 * <p>
-		 * The possible values are:
-		 * <ul>
-		 * 	<li>{@link RestLoggingDetail#STATUS_LINE STATUS_LINE} - Log only the status line.
-		 * 	<li>{@link RestLoggingDetail#HEADER HEADER} - Log the status line and headers.
-		 * 	<li>{@link RestLoggingDetail#ENTITY ENTITY} - Log the status line and headers and body if available.
-		 * </ul>
-		 *
-		 * <p>
 		 * If not specified, the setting is determined via the following:
 		 * <ul>
 		 * 	<li><js>{@link RestLogger#SP_responseDetail "juneau.restLogger.responseDetail"} system property.
 		 * 	<li><js>{@link RestLogger#SP_responseDetail "JUNEAU_RESTLOGGER_responseDetail"} environment variable.
 		 * 	<li><js>"STATUS_LINE"</js>.
+		 * </ul>
+		 *
+		 * <ul class='values'>
+		 * 	<li>{@link RestLoggingDetail#STATUS_LINE STATUS_LINE} - Log only the status line.
+		 * 	<li>{@link RestLoggingDetail#HEADER HEADER} - Log the status line and headers.
+		 * 	<li>{@link RestLoggingDetail#ENTITY ENTITY} - Log the status line and headers and body if available.
 		 * </ul>
 		 *
 		 * @param value

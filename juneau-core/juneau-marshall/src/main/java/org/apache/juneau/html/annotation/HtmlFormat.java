@@ -13,7 +13,7 @@
 package org.apache.juneau.html.annotation;
 
 /**
- * Possible values for the {@link Html#format()} annotation.
+ * Identifies possible values for the {@link Html#format()} annotation.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.HtmlDetails}

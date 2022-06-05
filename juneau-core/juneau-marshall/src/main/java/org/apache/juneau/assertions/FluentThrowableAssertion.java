@@ -27,56 +27,69 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Used for fluent assertion calls against throwables.
- * {@review}
- *
  *
  * <h5 class='topic'>Test Methods</h5>
- * 	<ul>
- * 		<li class='jm'>{@link FluentObjectAssertion#exists()}
- * 		<li class='jm'>{@link FluentObjectAssertion#is(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#is(Predicate)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNot(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isAny(Object...)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNotAny(Object...)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNull()}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNotNull()}
- * 		<li class='jm'>{@link FluentObjectAssertion#isString(String)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isJson(String)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSame(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameJsonAs(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameSortedJsonAs(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameSerializedAs(Object, WriterSerializer)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class)}
+ * <p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link FluentObjectAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentObjectAssertion#isExists() isExists()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#is(Object) is(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#is(Predicate) is(Predicate)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNot(Object) isNot(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isAny(Object...) isAny(Object...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNotAny(Object...) isNotAny(Object...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNull() isNull()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNotNull() isNotNull()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isString(String) isString(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isJson(String) isJson(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSame(Object) isSame(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameJsonAs(Object) isSameJsonAs(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameSortedJsonAs(Object) isSameSortedJsonAs(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameSerializedAs(Object, WriterSerializer) isSameSerializedAs(Object, WriterSerializer)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class) isType(Class)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class) isExactType(Class)}
  * 	</ul>
+ * </ul>
  *
  * <h5 class='topic'>Transform Methods</h5>
- * 	<ul>
- * 		<li class='jm'>{@link FluentThrowableAssertion#message()}
- * 		<li class='jm'>{@link FluentThrowableAssertion#messages()}
- * 		<li class='jm'>{@link FluentThrowableAssertion#localizedMessage()}
- * 		<li class='jm'>{@link FluentThrowableAssertion#localizedMessages()}
- * 		<li class='jm'>{@link FluentThrowableAssertion#stackTrace()}
- * 		<li class='jm'>{@link FluentThrowableAssertion#causedBy()}
- * 		<li class='jm'>{@link FluentThrowableAssertion#causedBy(Class)}
- * 		<li class='jm'>{@link FluentThrowableAssertion#find(Class)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asString()}
- * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asJson()}
- * 		<li class='jm'>{@link FluentObjectAssertion#asJsonSorted()}
- * 		<li class='jm'>{@link FluentObjectAssertion#apply(Function)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asAny()}
+ * <p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link FluentThrowableAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentThrowableAssertion#asMessage() asMessage()}
+ * 		<li class='jm'>{@link FluentThrowableAssertion#asMessages() asMessages()}
+ * 		<li class='jm'>{@link FluentThrowableAssertion#asLocalizedMessage() asLocalizedMessage()}
+ * 		<li class='jm'>{@link FluentThrowableAssertion#asLocalizedMessages() asLocalizedMessages()}
+ * 		<li class='jm'>{@link FluentThrowableAssertion#asStackTrace() asStackTrace()}
+ * 		<li class='jm'>{@link FluentThrowableAssertion#asCausedBy() asCausedBy()}
+ * 		<li class='jm'>{@link FluentThrowableAssertion#asCausedBy(Class) asCausedBy(Class)}
+ * 		<li class='jm'>{@link FluentThrowableAssertion#asFind(Class) asFind(Class)}
+ * 	</ul>
+ * 	<li class='jc'>{@link FluentObjectAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString() asString()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer) asString(WriterSerializer)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function) asString(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asJson() asJson()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asJsonSorted() asJsonSorted()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asTransformed(Function) asApplied(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asAny() asAny()}
  *	</ul>
+ * </ul>
  *
  * <h5 class='topic'>Configuration Methods</h5>
- * 	<ul>
- * 		<li class='jm'>{@link Assertion#msg(String, Object...)}
- * 		<li class='jm'>{@link Assertion#out(PrintStream)}
- * 		<li class='jm'>{@link Assertion#silent()}
- * 		<li class='jm'>{@link Assertion#stdout()}
- * 		<li class='jm'>{@link Assertion#throwable(Class)}
- * 	</ul>
+ * <p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link Assertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link Assertion#setMsg(String, Object...) setMsg(String, Object...)}
+ * 		<li class='jm'>{@link Assertion#setOut(PrintStream) setOut(PrintStream)}
+ * 		<li class='jm'>{@link Assertion#setSilent() setSilent()}
+ * 		<li class='jm'>{@link Assertion#setStdOut() setStdOut()}
+ * 		<li class='jm'>{@link Assertion#setThrowable(Class) setThrowable(Class)}
+* 	</ul>
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.FluentAssertions}
@@ -144,7 +157,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* FluentObjectAssertion */
-	public FluentThrowableAssertion<T,R> apply(Function<T,T> function) {
+	public FluentThrowableAssertion<T,R> asTransformed(Function<T,T> function) {
 		return new FluentThrowableAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
@@ -153,13 +166,16 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Asserts that the specified method throws an exception with 'foobar' somewhere in the messages. </jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar()).message().matches(<js>".*foobar.*"</js>);
+	 * 	<jc>// Asserts that the specified method throws an exception
+	 *	// with 'foobar' somewhere in the messages. </jc>
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar())
+	 * 		.asMessage()
+	 * 		.isPattern(<js>".*foobar.*"</js>);
 	 * </p>
 	 *
 	 * @return An assertion against the throwable message.  Never <jk>null</jk>.
 	 */
-	public FluentStringAssertion<R> message() {
+	public FluentStringAssertion<R> asMessage() {
 		return new FluentStringAssertion<>(this, map(Throwable::getMessage).orElse(null), returns());
 	}
 
@@ -168,13 +184,16 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Asserts that the specified method throws an exception with 'foobar' somewhere in the messages. </jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar()).messages().containsMatch(<js>".*foobar.*"</js>);
+	 * 	<jc>// Asserts that the specified method throws an exception with
+	 * 	// 'foobar' somewhere in the messages. </jc>
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar())
+	 * 		.asMessages()
+	 * 		.isPattern(<js>".*foobar.*"</js>);
 	 * </p>
 	 *
 	 * @return An assertion against the throwable message.  Never <jk>null</jk>.
 	 */
-	public FluentListAssertion<String,R> messages() {
+	public FluentListAssertion<String,R> asMessages() {
 		List<String> l = null;
 		Throwable t = orElse(null);
 		if (t != null) {
@@ -196,13 +215,16 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Asserts that the specified method throws an exception with 'foobar' somewhere in the localized messages. </jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar()).localizedMessage().matches(<js>".*foobar.*"</js>);
+	 * 	<jc>// Asserts that the specified method throws an exception with
+	 * 	// 'foobar' somewhere in the localized messages. </jc>
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar())
+	 * 		.asLocalizedMessage()
+	 * 		.isPattern(<js>".*foobar.*"</js>);
 	 * </p>
 	 *
 	 * @return An assertion against the throwable localized message.  Never <jk>null</jk>.
 	 */
-	public FluentStringAssertion<R> localizedMessage() {
+	public FluentStringAssertion<R> asLocalizedMessage() {
 		return new FluentStringAssertion<>(this, map(Throwable::getLocalizedMessage).orElse(null), returns());
 	}
 
@@ -211,13 +233,16 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Asserts that the specified method throws an exception with 'foobar' somewhere in the messages. </jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar()).localizedMessages().contains(<js>".*foobar.*"</js>);
+	 * 	<jc>// Asserts that the specified method throws an exception with
+	 * 	// 'foobar' somewhere in the messages. </jc>
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar())
+	 * 		.asLocalizedMessages()
+	 * 		.isPattern(<js>".*foobar.*"</js>);
 	 * </p>
 	 *
 	 * @return An assertion against the throwable message.  Never <jk>null</jk>.
 	 */
-	public FluentListAssertion<String,R> localizedMessages() {
+	public FluentListAssertion<String,R> asLocalizedMessages() {
 		List<String> l = null;
 		Throwable t = orElse(null);
 		if (t != null) {
@@ -239,13 +264,16 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Asserts that the specified method throws an exception with 'foobar' somewhere in the stack trace. </jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar()).stackTrace().contains(<js>"foobar"</js>);
+	 * 	<jc>// Asserts that the specified method throws an exception with
+	 * 	// 'foobar' somewhere in the stack trace. </jc>
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar())
+	 * 		.asStackTrace()
+	 * 		.isPattern(<js>"foobar"</js>);
 	 * </p>
 	 *
 	 * @return An assertion against the throwable stacktrace.  Never <jk>null</jk>.
 	 */
-	public FluentStringListAssertion<R> stackTrace() {
+	public FluentStringListAssertion<R> asStackTrace() {
 		return new FluentStringListAssertion<>(this, valueIsNull() ? null : Arrays.asList(getStackTrace(value())), returns());
 	}
 
@@ -254,14 +282,18 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Asserts that the specified method throws an exception whose caused-by message contains 'foobar'. </jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar()).causedBy().message().contains(<js>"foobar"</js>);
+	 * 	<jc>// Asserts that the specified method throws an exception whose
+	 * 	// caused-by message contains 'foobar'. </jc>
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar())
+	 * 		.asCausedBy()
+	 * 		.asMessage()
+	 * 		.isPattern(<js>"foobar"</js>);
 	 * </p>
 	 *
 	 * @return An assertion against the caused-by.  Never <jk>null</jk>.
 	 */
-	public FluentThrowableAssertion<Throwable,R> causedBy() {
-		return causedBy(Throwable.class);
+	public FluentThrowableAssertion<Throwable,R> asCausedBy() {
+		return asCausedBy(Throwable.class);
 	}
 
 	/**
@@ -269,15 +301,19 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Asserts that the specified method throws an exception whose caused-by message contains 'foobar'. </jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar()).causedBy().message().contains(<js>"foobar"</js>);
+	 * 	<jc>// Asserts that the specified method throws an exception whose
+	 * 	// caused-by message contains 'foobar'. </jc>
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar())
+	 * 		.asCausedBy(RuntimeException.<jk>class</jk>)
+	 * 		.asMessage()
+	 * 		.isPattern(<js>"foobar"</js>);
 	 * </p>
 	 *
 	 * @param <X> The throwable type.
 	 * @param type The expected exception type.
 	 * @return An assertion against the caused-by.  Never <jk>null</jk>.
 	 */
-	public <X extends Throwable> FluentThrowableAssertion<X,R> causedBy(Class<X> type) {
+	public <X extends Throwable> FluentThrowableAssertion<X,R> asCausedBy(Class<X> type) {
 		Throwable t = map(Throwable::getCause).orElse(null);
 		if (t == null || type.isInstance(t))
 			return new FluentThrowableAssertion<>(this, type.cast(t), returns());
@@ -289,15 +325,20 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Asserts that the specified method throws an exception with a caused-by RuntimeException containing 'foobar'</jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar()).causedBy(RuntimeException.<jk>class</jk>).exists().contains(<js>"foobar"</js>);
+	 * 	<jc>// Asserts that the specified method throws an exception with a
+	 * 	// caused-by RuntimeException containing 'foobar'</jc>
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar())
+	 * 		.findCausedBy(RuntimeException.<jk>class</jk>)
+	 * 		.isExists()
+	 * 		.asMessage()
+	 * 		.isPattern(<js>"foobar"</js>);
 	 * </p>
 	 *
 	 * @param <X> The throwable type.
 	 * @param throwableClass The class type to search for in the caused-by chain.
 	 * @return An assertion against the caused-by throwable.  Never <jk>null</jk>.
 	 */
-	public <X extends Throwable> FluentThrowableAssertion<X,R> find(Class<X> throwableClass) {
+	public <X extends Throwable> FluentThrowableAssertion<X,R> asFind(Class<X> throwableClass) {
 		Throwable t = orElse(null);
 		while (t != null) {
 			if (throwableClass.isInstance(t))
@@ -359,13 +400,13 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Asserts that the specified method throws any exception.</jc>
-	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar()).exists();
+	 * 	ThrowableAssertion.<jsm>assertThrown</jsm>(() -&gt; <jv>foo</jv>.getBar()).isExists();
 	 * </p>
 	 *
 	 * @return The fluent return object.
 	 */
 	@Override
-	public R exists() {
+	public R isExists() {
 		if (valueIsNull())
 			throw error(MSG_exceptionWasNotThrown);
 		return returns();
@@ -378,32 +419,32 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentThrowableAssertion<T,R> msg(String msg, Object...args) {
-		super.msg(msg, args);
+	public FluentThrowableAssertion<T,R> setMsg(String msg, Object...args) {
+		super.setMsg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentThrowableAssertion<T,R> out(PrintStream value) {
-		super.out(value);
+	public FluentThrowableAssertion<T,R> setOut(PrintStream value) {
+		super.setOut(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentThrowableAssertion<T,R> silent() {
-		super.silent();
+	public FluentThrowableAssertion<T,R> setSilent() {
+		super.setSilent();
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentThrowableAssertion<T,R> stdout() {
-		super.stdout();
+	public FluentThrowableAssertion<T,R> setStdOut() {
+		super.setStdOut();
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentThrowableAssertion<T,R> throwable(Class<? extends java.lang.RuntimeException> value) {
-		super.throwable(value);
+	public FluentThrowableAssertion<T,R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+		super.setThrowable(value);
 		return this;
 	}
 

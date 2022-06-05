@@ -18,7 +18,6 @@ import java.lang.annotation.*;
 
 /**
  * Swagger contact annotation.
- * {@review}
  *
  * <p>
  * The contact information for the exposed API.
@@ -28,13 +27,11 @@ import java.lang.annotation.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<ja>@Rest</ja>(
- * 		swagger=<ja>@Swagger</ja>(
- * 			contact=<ja>@Contact</ja>(
- * 				name=<js>"Juneau Development Team"</js>,
- * 				email=<js>"dev@juneau.apache.org"</js>,
- * 				url=<js>"http://juneau.apache.org"</js>
- * 			)
+ * 	<ja>@Swagger</ja>(
+ * 		contact=<ja>@Contact</ja>(
+ * 			name=<js>"Juneau Development Team"</js>,
+ * 			email=<js>"dev@juneau.apache.org"</js>,
+ * 			url=<js>"http://juneau.apache.org"</js>
  * 		)
  * 	)
  * </p>
@@ -56,9 +53,9 @@ public @interface Contact {
 	 * The email address of the contact person/organization. MUST be in the format of an email address.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is an email string.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 *
@@ -73,9 +70,9 @@ public @interface Contact {
 	 * The identifying name of the contact person/organization.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 *
@@ -90,9 +87,9 @@ public @interface Contact {
 	 * The URL pointing to the contact information. MUST be in the format of a URL.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a URL string.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables}
 	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>

@@ -286,17 +286,17 @@ public class CommonTest {
 		r3.r1 = r1;
 
 		// No recursion detection
-		assertThrown(()->s.build().serialize(r1)).message().contains("It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
+		assertThrown(()->s.build().serialize(r1)).asMessage().isContains("It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
 
 		// Recursion detection, no ignore
 		s.detectRecursions();
-		assertThrown(()->s.build().serialize(r1)).messages().asString().contains("[0] root:org.apache.juneau.jena.CommonTest$R1", "->[1] r2:org.apache.juneau.jena.CommonTest$R2", "->[2] r3:org.apache.juneau.jena.CommonTest$R3", "->[3] r1:org.apache.juneau.jena.CommonTest$R1");
+		assertThrown(()->s.build().serialize(r1)).asMessages().asString().isContains("[0] root:org.apache.juneau.jena.CommonTest$R1", "->[1] r2:org.apache.juneau.jena.CommonTest$R2", "->[2] r3:org.apache.juneau.jena.CommonTest$R3", "->[3] r1:org.apache.juneau.jena.CommonTest$R1");
 
 		s.ignoreRecursions();
 		String r = s.build().serialize(r1).replace("\r", "");
 		// Note...the order of the namespaces is not always the same depending on the JVM.
 		// The Jena libraries appear to use a hashmap for these.
-		assertString(r).contains(
+		assertString(r).isContains(
 			"<rdf:Description>\n"+
 			"<jp:name>foo</jp:name>\n"+
 			"<jp:r2 rdf:parseType='Resource'>\n"+
@@ -308,7 +308,7 @@ public class CommonTest {
 			"</rdf:Description>\n"+
 			"</rdf:RDF>\n"
 		);
-		assertString(r).contains("xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#", "xmlns:j='http://www.apache.org/juneau/", "xmlns:jp='http://www.apache.org/juneaubp/");
+		assertString(r).isContains("xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#", "xmlns:j='http://www.apache.org/juneau/", "xmlns:jp='http://www.apache.org/juneaubp/");
 	}
 
 	public static class R1 {

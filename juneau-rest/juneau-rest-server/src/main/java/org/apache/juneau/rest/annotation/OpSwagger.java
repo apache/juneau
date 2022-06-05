@@ -36,12 +36,11 @@ public @interface OpSwagger {
 	 * Use this value to override the supported <c>Content-Type</c> media types defined by the parsers defined via {@link RestOp#parsers()}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is either a comma-delimited list of simple strings or a {@doc jd.Swagger} array.
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
 	 * 		Values defined on this annotation override values defined for the method in the class swagger.
 	 * </ul>
 	 *
@@ -62,14 +61,13 @@ public @interface OpSwagger {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is boolean.
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
 	 * 		Values defined on this annotation override values defined for the method in the class swagger.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If not specified, set to <js>"true"</js> if the method is annotated with {@link Deprecated @Deprecated}
 	 * </ul>
 	 *
@@ -81,15 +79,14 @@ public @interface OpSwagger {
 	 * Defines the swagger field <c>/paths/{path}/{method}/description</c>.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
 	 * 		Values defined on this annotation override values defined for the method in the class swagger.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If not specified, the value is pulled from {@link RestOp#description()}.
 	 * </ul>
 	 *
@@ -110,10 +107,9 @@ public @interface OpSwagger {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
 	 * 		Values defined on this annotation override values defined for the method in the class swagger.
 	 * </ul>
 	 *
@@ -125,14 +121,13 @@ public @interface OpSwagger {
 	 * Defines the swagger field <c>/paths/{path}/{method}/operationId</c>.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is plain text.
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
 	 * 		Values defined on this annotation override values defined for the method in the class swagger.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If not specified, the value used is the Java method name.
 	 * </ul>
 	 *
@@ -164,12 +159,11 @@ public @interface OpSwagger {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a {@doc jd.Swagger} array consisting of the concatenated individual strings.
 	 * 		<br>The leading and trailing <js>'['</js> and <js>']'</js> characters are optional.
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * 	<li>
 	 * </ul>
 	 *
@@ -184,12 +178,11 @@ public @interface OpSwagger {
 	 * Use this value to override the supported <c>Accept</c> media types defined by the serializers defined via {@link RestOp#serializers()}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is either a comma-delimited list of simple strings or a {@doc jd.Swagger} array.
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
 	 * 		Values defined on this annotation override values defined for the method in the class swagger.
 	 * </ul>
 	 *
@@ -218,12 +211,11 @@ public @interface OpSwagger {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a {@doc jd.Swagger} objc consisting of the concatenated individual strings.
 	 * 		<br>The leading and trailing <js>'{'</js> and <js>'}'</js> characters are optional.
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -234,12 +226,11 @@ public @interface OpSwagger {
 	 * Defines the swagger field <c>/paths/{path}/{method}/schemes</c>.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is either a comma-delimited list of simple strings or a {@doc jd.Swagger} array.
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
 	 * 		Values defined on this annotation override values defined for the method in the class swagger.
 	 * </ul>
 	 *
@@ -251,15 +242,14 @@ public @interface OpSwagger {
 	 * Defines the swagger field <c>/paths/{path}/{method}/summary</c>.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
 	 * 		Values defined on this annotation override values defined for the method in the class swagger.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If not specified, the value is pulled from {@link RestOp#summary()}.
 	 * </ul>
 	 *
@@ -287,10 +277,9 @@ public @interface OpSwagger {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
 	 * 		Corresponds to the swagger field <c>/paths/{path}/{method}/tags</c>.
 	 * </ul>
 	 *
@@ -356,9 +345,9 @@ public @interface OpSwagger {
 	 * </ul>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a {@doc jd.Swagger} object.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
 	 * 		<p class='bjava'>
@@ -367,12 +356,11 @@ public @interface OpSwagger {
 	 * 		<p class='bjava'>
 	 * 	<ja>@OpSwagger</ja>(<js>"summary: 'Add pet'"</js>)
 	 * 		</p>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.
 	 * </ul>
 	 *

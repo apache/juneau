@@ -18,7 +18,6 @@ import java.util.*;
 
 /**
  * Encapsulates arguments for the {@link PojoViewer} class.
- * {@review}
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.PojoTools}

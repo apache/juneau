@@ -26,7 +26,6 @@ import org.apache.juneau.swap.*;
 
 /**
  * Annotation for specifying config properties defined in {@link BeanContext} and {@link BeanTraverseContext}.
- * {@review}
  *
  * <p>
  * Used primarily for specifying bean configuration properties on REST classes and methods.
@@ -66,16 +65,15 @@ public @interface BeanConfig {
 	 * will not be interpreted as a bean class and be serialized as a string.
 	 * <br>Use this setting to reduce the visibility requirement.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"PUBLIC"</js> (default)
+	 * 	<li><js>"PROTECTED"</js>
+	 * 	<li><js>"DEFAULT"</js>
+	 * 	<li><js>"PRIVATE"</js>
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"PUBLIC"</js> (default)
-	 * 			<li><js>"PROTECTED"</js>
-	 * 			<li><js>"DEFAULT"</js>
-	 * 			<li><js>"PRIVATE"</js>
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -98,16 +96,15 @@ public @interface BeanConfig {
 	 * <br>Normally, only <jk>public</jk> no-arg constructors are used.
 	 * <br>Use this setting if you want to reduce the visibility requirement.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"PUBLIC"</js> (default)
+	 * 	<li><js>"PROTECTED"</js>
+	 * 	<li><js>"DEFAULT"</js>
+	 * 	<li><js>"PRIVATE"</js>
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"PUBLIC"</js> (default)
-	 * 			<li><js>"PROTECTED"</js>
-	 * 			<li><js>"DEFAULT"</js>
-	 * 			<li><js>"PRIVATE"</js>
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -130,16 +127,15 @@ public @interface BeanConfig {
 	 * <br>Normally only <jk>public</jk> fields are considered.
 	 * <br>Use this setting if you want to reduce the visibility requirement.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"PUBLIC"</js> (default)
+	 * 	<li><js>"PROTECTED"</js>
+	 * 	<li><js>"DEFAULT"</js>
+	 * 	<li><js>"PRIVATE"</js>
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"PUBLIC"</js> (default)
-	 * 			<li><js>"PROTECTED"</js>
-	 * 			<li><js>"DEFAULT"</js>
-	 * 			<li><js>"PRIVATE"</js>
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -159,14 +155,13 @@ public @interface BeanConfig {
 	 * values.
 	 * <br>Otherwise, it returns <jk>null</jk>.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default because it introduces a slight performance penalty during serialization)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default because it introduces a slight performance penalty during serialization)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -189,16 +184,15 @@ public @interface BeanConfig {
 	 * <br>Normally only <jk>public</jk> getters and setters are considered.
 	 * <br>Use this setting if you want to reduce the visibility requirement.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"PUBLIC"</js> (default)
+	 * 	<li><js>"PROTECTED"</js>
+	 * 	<li><js>"DEFAULT"</js>
+	 * 	<li><js>"PRIVATE"</js>
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"PUBLIC"</js> (default)
-	 * 			<li><js>"PROTECTED"</js>
-	 * 			<li><js>"DEFAULT"</js>
-	 * 			<li><js>"PRIVATE"</js>
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -217,16 +211,15 @@ public @interface BeanConfig {
 	 * If <js>"true"</js>, a Java class must implement a default no-arg constructor to be considered a bean.
 	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The {@link Bean @Bean} annotation can be used on a class to override this setting when <js>"true"</js>.
 	 * </ul>
 	 *
@@ -245,16 +238,15 @@ public @interface BeanConfig {
 	 * If <js>"true"</js>, a Java class must implement the {@link Serializable} interface to be considered a bean.
 	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The {@link Bean @Bean} annotation can be used on a class to override this setting when <js>"true"</js>.
 	 * </ul>
 	 *
@@ -273,14 +265,13 @@ public @interface BeanConfig {
 	 * If <js>"true"</js>, only getters that have equivalent setters will be considered as properties on a bean.
 	 * <br>Otherwise, they will be ignored.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -299,14 +290,13 @@ public @interface BeanConfig {
 	 * If <js>"true"</js>, then a Java class doesn't need to contain at least 1 property to be considered a bean.
 	 * <br>Otherwise, the bean will be serialized as a string using the {@link Object#toString()} method.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -326,9 +316,9 @@ public @interface BeanConfig {
 	 * parser knows the data type to reconstruct.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Default value: <js>"_type"</js>.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 
@@ -362,14 +352,13 @@ public @interface BeanConfig {
 	 * 		in order to determine how that method was invoked.
 	 * </ul>
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -441,14 +430,13 @@ public @interface BeanConfig {
 	 * 	<li>Return the bean itself.
 	 * </ul>
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -468,14 +456,13 @@ public @interface BeanConfig {
 	 * If <js>"true"</js>, errors thrown when calling bean getter methods will silently be ignored.
 	 * <br>Otherwise, a {@code BeanRuntimeException} is thrown.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -494,14 +481,13 @@ public @interface BeanConfig {
 	 * If <js>"true"</js>, errors thrown when calling bean setter methods will silently be ignored.
 	 * <br>Otherwise, a {@code BeanRuntimeException} is thrown.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -520,14 +506,13 @@ public @interface BeanConfig {
 	 * If <js>"true"</js>, trying to set a value on a bean property without a setter will throw a {@code BeanRuntimeException}.
 	 * <br>Otherwise it will be sliently ignored.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -545,14 +530,13 @@ public @interface BeanConfig {
 	 * <p>
 	 * If <jk>true</jk>, methods and fields marked as <jk>transient</jk> will not be ignored as bean properties.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -571,14 +555,13 @@ public @interface BeanConfig {
 	 * If <js>"true"</js>, trying to set a value on a non-existent bean property will silently be ignored.
 	 * <br>Otherwise, a {@code RuntimeException} is thrown.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -596,14 +579,13 @@ public @interface BeanConfig {
 	 * <p>
 	 * If <js>"true"</js>, unknown enum values are set to <jk>null</jk> instead of throwing an exception.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -622,14 +604,13 @@ public @interface BeanConfig {
 	 * If <js>"true"</js>, trying to set a <jk>null</jk> value on a non-existent bean property will throw a {@code BeanRuntimeException}.
 	 * Otherwise it will be silently ignored.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -672,7 +653,7 @@ public @interface BeanConfig {
 	 * individually on the child classes.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>The {@link Bean#interfaceClass() @Bean(interfaceClass)} annotation is the equivalent annotation-based solution.
+	 * 	<li class='note'>The {@link Bean#interfaceClass() @Bean(interfaceClass)} annotation is the equivalent annotation-based solution.
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -686,7 +667,7 @@ public @interface BeanConfig {
 	 * Specifies the default locale for serializer and parser sessions.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -706,7 +687,7 @@ public @interface BeanConfig {
 	 * Specifies the default media type value for serializer and parser sessions.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -727,7 +708,7 @@ public @interface BeanConfig {
 	 * <br>Not-bean classes are converted to <c>Strings</c> during serialization.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -767,19 +748,19 @@ public @interface BeanConfig {
 	 * Note that you can specify suffix patterns to include all subpackages.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The default value excludes the following packages:
-	 * 		<ul>
-	 * 			<li><c>java.lang</c>
-	 * 			<li><c>java.lang.annotation</c>
-	 * 			<li><c>java.lang.ref</c>
-	 * 			<li><c>java.lang.reflect</c>
-	 * 			<li><c>java.io</c>
-	 * 			<li><c>java.net</c>
-	 * 			<li><c>java.nio.*</c>
-	 * 			<li><c>java.util.*</c>
+	 * 		<ul class='compact'>
+	 * 			<li class='jp'><c>java.lang</c>
+	 * 			<li class='jp'><c>java.lang.annotation</c>
+	 * 			<li class='jp'><c>java.lang.ref</c>
+	 * 			<li class='jp'><c>java.lang.reflect</c>
+	 * 			<li class='jp'><c>java.io</c>
+	 * 			<li class='jp'><c>java.net</c>
+	 * 			<li class='jp'><c>java.nio.*</c>
+	 * 			<li class='jp'><c>java.util.*</c>
 	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -841,13 +822,12 @@ public @interface BeanConfig {
 	 * to force bean properties to be in a particular order and can just alter the order of the fields/methods
 	 * in the Java file.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
 	 * 	<li>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
@@ -910,7 +890,7 @@ public @interface BeanConfig {
 	 * Specifies the default timezone for serializer and parser sessions.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -929,14 +909,13 @@ public @interface BeanConfig {
 	 * <p>
 	 * When enabled, enums are always serialized by name, not using {@link Object#toString()}.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 *		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -956,14 +935,13 @@ public @interface BeanConfig {
 	 * {@link InvocationHandler} if there is no other way of instantiating them.
 	 * <br>Setting this to <js>"true"</js> causes this to be a {@link BeanRuntimeException}.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 *		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -982,14 +960,13 @@ public @interface BeanConfig {
 	 * Using the built-in Java bean introspector will not pick up fields or non-standard getters/setters.
 	 * <br>Most {@link Bean @Bean} annotations will be ignored.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 *		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *

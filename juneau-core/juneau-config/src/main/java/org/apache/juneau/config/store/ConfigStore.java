@@ -26,7 +26,6 @@ import org.apache.juneau.internal.*;
 
 /**
  * Represents a storage location for configuration files.
- * {@review}
  *
  * <p>
  * Content stores require two methods to be implemented:
@@ -35,7 +34,7 @@ import org.apache.juneau.internal.*;
  * 	<li class='jm'>{@link #write(String,String,String)} - ConfigStore a config file.
  * </ul>
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *

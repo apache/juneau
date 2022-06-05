@@ -23,7 +23,6 @@ import org.apache.juneau.*;
 
 /**
  * Lightweight utility class for introspecting information about a field.
- * {@review}
  *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}

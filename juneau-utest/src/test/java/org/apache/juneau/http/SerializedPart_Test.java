@@ -43,7 +43,7 @@ public class SerializedPart_Test {
 	@Test
 	public void a02_type() throws Exception {
 		SerializedPart x1 = serializedPart("Foo",2).type(HEADER).serializer(OAPI_SERIALIZER).schema(schema(INTEGER).maximum(1).build());
-		assertThrown(()->x1.toString()).message().is("Validation error on request HEADER part 'Foo'='2'");
+		assertThrown(()->x1.toString()).asMessage().is("Validation error on request HEADER part 'Foo'='2'");
 	}
 
 	@Test
@@ -67,7 +67,7 @@ public class SerializedPart_Test {
 		SerializedPart x2 = serializedPart("Foo","").skipIfEmpty();
 		assertString(x2.getValue()).isNull();
 		SerializedPart x3 = serializedPart("Foo","").schema(schema(STRING)._default("bar").build()).serializer(OAPI_SERIALIZER).skipIfEmpty();
-		assertThrown(()->x3.getValue()).messages().contains("Empty value not allowed.");
+		assertThrown(()->x3.getValue()).asMessages().isContains("Empty value not allowed.");
 	}
 
 	@Test
@@ -82,10 +82,10 @@ public class SerializedPart_Test {
 		assertString(x3.getValue()).isNull();
 
 		SerializedPart x4 = serializedPart("Foo",null).schema(schema(STRING).required().build()).serializer(OAPI_SESSION);
-		assertThrown(()->x4.getValue()).messages().contains("Required value not provided.");
+		assertThrown(()->x4.getValue()).asMessages().isContains("Required value not provided.");
 
 		SerializedPart x5 = serializedPart("Foo",null).schema(schema(STRING).required().build()).serializer(new BadPartSerializerSession());
-		assertThrown(()->x5.getValue()).messages().contains("Bad");
+		assertThrown(()->x5.getValue()).asMessages().isContains("Bad");
 	}
 
 	private static class BadPartSerializerSession implements HttpPartSerializerSession {

@@ -20,8 +20,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
- * TODO
- * {@review}
+ * Number matcher used by {@link PojoSearcher}
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.PojoTools}

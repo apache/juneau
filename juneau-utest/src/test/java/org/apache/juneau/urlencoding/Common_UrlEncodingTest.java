@@ -243,11 +243,11 @@ public class Common_UrlEncodingTest {
 		r3.r1 = r1;
 
 		// No recursion detection
-		assertThrown(()->s.build().serialize(r1)).message().contains("It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
+		assertThrown(()->s.build().serialize(r1)).asMessage().isContains("It's recommended you use the BeanTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
 
 		// Recursion detection, no ignore
 		s.detectRecursions();
-		assertThrown(()->s.build().serialize(r1)).message().contains("[0] root:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R1", "->[1] r2:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R2", "->[2] r3:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R3", "->[3] r1:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R1");
+		assertThrown(()->s.build().serialize(r1)).asMessage().isContains("[0] root:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R1", "->[1] r2:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R2", "->[2] r3:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R3", "->[3] r1:org.apache.juneau.urlencoding.Common_UrlEncodingTest$R1");
 
 		s.ignoreRecursions();
 		assertEquals("name=foo&r2=(name=bar,r3=(name=baz))", s.build().serialize(r1));

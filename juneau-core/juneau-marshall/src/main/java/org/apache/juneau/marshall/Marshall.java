@@ -265,7 +265,7 @@ public abstract class Marshall {
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Use the {@link #read(Object, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>
 	 *

@@ -79,7 +79,7 @@ public class Nls_Test {
 	@Test
 	public void b01_optionsPageWithoutNls() throws Exception {
 		MockRestClient b = MockRestClient.build(B.class);
-		b.options("/").run().assertBody().contains("foo");
+		b.options("/").run().assertBody().isContains("foo");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

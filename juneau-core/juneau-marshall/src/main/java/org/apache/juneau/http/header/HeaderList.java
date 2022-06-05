@@ -161,7 +161,7 @@ import org.apache.juneau.svl.*;
  * 	}
  * </p>
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe.
  * </ul>
  *

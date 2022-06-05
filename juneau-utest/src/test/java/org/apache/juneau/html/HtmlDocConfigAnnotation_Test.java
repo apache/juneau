@@ -327,7 +327,7 @@ public class HtmlDocConfigAnnotation_Test {
 		AnnotationWorkList al = AnnotationWorkList.of(sr, e.getAnnotationList());
 		HtmlDocSerializerSession x = HtmlDocSerializer.create().apply(al).build().getSession();
 		String r = x.serialize(null).replaceAll("[\r\n]+", "|");
-		assertString(r).contains(
+		assertString(r).isContains(
 			"<aside>xxx</aside>",
 			"<footer>xxx</footer>",
 			"<head>xxx",

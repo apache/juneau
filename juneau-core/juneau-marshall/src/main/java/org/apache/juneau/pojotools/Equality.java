@@ -13,8 +13,7 @@
 package org.apache.juneau.pojotools;
 
 /**
- * TODO
- * {@review}
+ * Represents possible values for number and date comparisons.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.PojoTools}

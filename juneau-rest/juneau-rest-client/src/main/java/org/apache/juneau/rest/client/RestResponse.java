@@ -197,7 +197,7 @@ public class RestResponse implements HttpResponse {
 	 * @return A new fluent assertion object.
 	 */
 	public FluentIntegerAssertion<RestResponse> assertCode() {
-		return assertStatus().code();
+		return assertStatus().asCode();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -392,11 +392,11 @@ public class RestResponse implements HttpResponse {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
-	 *  <li>
+	 *  <li class='note'>
 	 *		When using this method, the body is automatically cached by calling the {@link ResponseBody#cache()}.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
 	 *
@@ -554,7 +554,7 @@ public class RestResponse implements HttpResponse {
 	 * The entity is provided by calling setEntity.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>Unlike the {@link HttpResponse#getEntity()} method, this method never returns a <jk>null</jk> response.
+	 * 	<li class='note'>Unlike the {@link HttpResponse#getEntity()} method, this method never returns a <jk>null</jk> response.
 	 * 		Instead, <c>getBody().isPresent()</c> can be used to determine whether the response has a body.
 	 * </ul>
 	 *
@@ -569,7 +569,7 @@ public class RestResponse implements HttpResponse {
 	 * Associates a response entity with this response.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>If an entity has already been set for this response and it depends on an input stream
+	 * 	<li class='note'>If an entity has already been set for this response and it depends on an input stream
 	 * 		({@link HttpEntity#isStreaming()} returns <jk>true</jk>), it must be fully consumed in order to ensure
 	 * 		release of resources.
 	 * </ul>

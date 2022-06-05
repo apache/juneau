@@ -62,11 +62,11 @@ public class HtmlDocConfig_Test {
 	@Test
 	public void a01_aside() throws Exception {
 		RestClient a1 = client(A1.class);
-		a1.get("/a01").accept("text/html").run().assertBody().contains("<aside>a01a a01b</aside>");
-		a1.get("/a02").accept("text/html").run().assertBody().contains("<aside>a02a a02b</aside>");
-		a1.get("/a03").accept("text/html").run().assertBody().contains("<aside>a01a a01b a03a a03b</aside>");
-		a1.get("/a04").accept("text/html").run().assertBody().contains("<aside>a04a a01a a01b a04b</aside>");
-		a1.get("/a05").accept("text/html").run().assertBody().contains("<aside>a05a a05b a01a a01b</aside>");
+		a1.get("/a01").accept("text/html").run().assertBody().isContains("<aside>a01a a01b</aside>");
+		a1.get("/a02").accept("text/html").run().assertBody().isContains("<aside>a02a a02b</aside>");
+		a1.get("/a03").accept("text/html").run().assertBody().isContains("<aside>a01a a01b a03a a03b</aside>");
+		a1.get("/a04").accept("text/html").run().assertBody().isContains("<aside>a04a a01a a01b a04b</aside>");
+		a1.get("/a05").accept("text/html").run().assertBody().isContains("<aside>a05a a05b a01a a01b</aside>");
 	}
 
 	@Rest
@@ -101,11 +101,11 @@ public class HtmlDocConfig_Test {
 	@Test
 	public void a02_aside_inherited() throws Exception {
 		RestClient a2 = client(A2.class);
-		a2.get("/b01").accept("text/html").run().assertBody().contains("<aside>a01a a01b b01a b01b</aside>");
-		a2.get("/b02").accept("text/html").run().assertBody().contains("<aside>b02a b02b</aside>");
-		a2.get("/b03").accept("text/html").run().assertBody().contains("<aside>a01a a01b b01a b01b b03a b03b</aside>");
-		a2.get("/b04").accept("text/html").run().assertBody().contains("<aside>b04a a01a a01b b01a b01b b04b</aside>");
-		a2.get("/b05").accept("text/html").run().assertBody().contains("<aside>b05a b05b a01a a01b b01a b01b</aside>");
+		a2.get("/b01").accept("text/html").run().assertBody().isContains("<aside>a01a a01b b01a b01b</aside>");
+		a2.get("/b02").accept("text/html").run().assertBody().isContains("<aside>b02a b02b</aside>");
+		a2.get("/b03").accept("text/html").run().assertBody().isContains("<aside>a01a a01b b01a b01b b03a b03b</aside>");
+		a2.get("/b04").accept("text/html").run().assertBody().isContains("<aside>b04a a01a a01b b01a b01b b04b</aside>");
+		a2.get("/b05").accept("text/html").run().assertBody().isContains("<aside>b05a b05b a01a a01b b01a b01b</aside>");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -144,11 +144,11 @@ public class HtmlDocConfig_Test {
 	@Test
 	public void b01_footer() throws Exception {
 		RestClient b1 = client(B1.class);
-		b1.get("/a01").accept("text/html").run().assertBody().contains("<footer>a01a a01b</footer>");
-		b1.get("/a02").accept("text/html").run().assertBody().contains("<footer>a02a a02b</footer>");
-		b1.get("/a03").accept("text/html").run().assertBody().contains("<footer>a01a a01b a03a a03b</footer>");
-		b1.get("/a04").accept("text/html").run().assertBody().contains("<footer>a04a a01a a01b a04b</footer>");
-		b1.get("/a05").accept("text/html").run().assertBody().contains("<footer>a05a a05b a01a a01b</footer>");
+		b1.get("/a01").accept("text/html").run().assertBody().isContains("<footer>a01a a01b</footer>");
+		b1.get("/a02").accept("text/html").run().assertBody().isContains("<footer>a02a a02b</footer>");
+		b1.get("/a03").accept("text/html").run().assertBody().isContains("<footer>a01a a01b a03a a03b</footer>");
+		b1.get("/a04").accept("text/html").run().assertBody().isContains("<footer>a04a a01a a01b a04b</footer>");
+		b1.get("/a05").accept("text/html").run().assertBody().isContains("<footer>a05a a05b a01a a01b</footer>");
 	}
 
 	@Rest
@@ -183,11 +183,11 @@ public class HtmlDocConfig_Test {
 	@Test
 	public void b02_footer_inherited() throws Exception {
 		RestClient b2 = client(B2.class);
-		b2.get("/b01").accept("text/html").run().assertBody().contains("<footer>b01a a01a a01b b01b</footer>");
-		b2.get("/b02").accept("text/html").run().assertBody().contains("<footer>b02a b02b</footer>");
-		b2.get("/b03").accept("text/html").run().assertBody().contains("<footer>b01a a01a a01b b01b b03a b03b</footer>");
-		b2.get("/b04").accept("text/html").run().assertBody().contains("<footer>b04a b01a a01a a01b b01b b04b</footer>");
-		b2.get("/b05").accept("text/html").run().assertBody().contains("<footer>b05a b05b b01a a01a a01b b01b</footer>");
+		b2.get("/b01").accept("text/html").run().assertBody().isContains("<footer>b01a a01a a01b b01b</footer>");
+		b2.get("/b02").accept("text/html").run().assertBody().isContains("<footer>b02a b02b</footer>");
+		b2.get("/b03").accept("text/html").run().assertBody().isContains("<footer>b01a a01a a01b b01b b03a b03b</footer>");
+		b2.get("/b04").accept("text/html").run().assertBody().isContains("<footer>b04a b01a a01a a01b b01b b04b</footer>");
+		b2.get("/b05").accept("text/html").run().assertBody().isContains("<footer>b05a b05b b01a a01a a01b b01b</footer>");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -226,11 +226,11 @@ public class HtmlDocConfig_Test {
 	@Test
 	public void c01_header() throws Exception {
 		RestClient c1 = client(C1.class);
-		c1.get("/a01").accept("text/html").run().assertBody().contains("<header>a01a a01b</header>");
-		c1.get("/a02").accept("text/html").run().assertBody().contains("<header>a02a a02b</header>");
-		c1.get("/a03").accept("text/html").run().assertBody().contains("<header>a01a a01b a03a a03b</header>");
-		c1.get("/a04").accept("text/html").run().assertBody().contains("<header>a04a a01a a01b a04b</header>");
-		c1.get("/a05").accept("text/html").run().assertBody().contains("<header>a05a a05b a01a a01b</header>");
+		c1.get("/a01").accept("text/html").run().assertBody().isContains("<header>a01a a01b</header>");
+		c1.get("/a02").accept("text/html").run().assertBody().isContains("<header>a02a a02b</header>");
+		c1.get("/a03").accept("text/html").run().assertBody().isContains("<header>a01a a01b a03a a03b</header>");
+		c1.get("/a04").accept("text/html").run().assertBody().isContains("<header>a04a a01a a01b a04b</header>");
+		c1.get("/a05").accept("text/html").run().assertBody().isContains("<header>a05a a05b a01a a01b</header>");
 	}
 
 	@Rest
@@ -265,11 +265,11 @@ public class HtmlDocConfig_Test {
 	@Test
 	public void c02_header_inherited() throws Exception {
 		RestClient c2 = client(C2.class);
-		c2.get("/b01").accept("text/html").run().assertBody().contains("<header>b01a b01b a01a a01b</header>");
-		c2.get("/b02").accept("text/html").run().assertBody().contains("<header>b02a b02b</header>");
-		c2.get("/b03").accept("text/html").run().assertBody().contains("<header>b01a b01b a01a a01b b03a b03b</header>");
-		c2.get("/b04").accept("text/html").run().assertBody().contains("<header>b04a b01a b01b a01a a01b b04b</header>");
-		c2.get("/b05").accept("text/html").run().assertBody().contains("<header>b05a b05b b01a b01b a01a a01b</header>");
+		c2.get("/b01").accept("text/html").run().assertBody().isContains("<header>b01a b01b a01a a01b</header>");
+		c2.get("/b02").accept("text/html").run().assertBody().isContains("<header>b02a b02b</header>");
+		c2.get("/b03").accept("text/html").run().assertBody().isContains("<header>b01a b01b a01a a01b b03a b03b</header>");
+		c2.get("/b04").accept("text/html").run().assertBody().isContains("<header>b04a b01a b01b a01a a01b b04b</header>");
+		c2.get("/b05").accept("text/html").run().assertBody().isContains("<header>b05a b05b b01a b01b a01a a01b</header>");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -338,17 +338,17 @@ public class HtmlDocConfig_Test {
 	@Test
 	public void d01_navlinks() throws Exception {
 		RestClient d1 = client(D1.class);
-		d1.get("/a01").accept("text/html").run().assertBody().contains("<nav><ol><li>a01a</li><li>a01b</li></ol></nav>");
-		d1.get("/a02").accept("text/html").run().assertBody().contains("<nav><ol><li>a02a</li><li>a02b</li></ol></nav>");
-		d1.get("/a03").accept("text/html").run().assertBody().contains("<nav><ol><li>a01a</li><li>a01b</li><li>a03a</li><li>a03b</li></ol></nav>");
-		d1.get("/a04").accept("text/html").run().assertBody().contains("<nav><ol><li>a04a</li><li>a01a</li><li>a01b</li><li>a04b</li></ol></nav>");
-		d1.get("/a05").accept("text/html").run().assertBody().contains("<nav><ol><li>a05a</li><li>a05b</li><li>a01a</li><li>a01b</li></ol></nav>");
-		d1.get("/a06").accept("text/html").run().assertBody().contains("<nav><ol><li>a06a</li><li>a01a</li><li>a01b</li><li>a06b</li></ol></nav>");
-		d1.get("/a07").accept("text/html").run().assertBody().contains("<nav><ol><li>a07a</li><li>a07b</li><li>a01a</li><li>a01b</li></ol></nav>");
-		d1.get("/a08").accept("text/html").run().assertBody().contains("<nav><ol><li>a08b</li><li>a08a</li></ol></nav>");
-		d1.get("/a09").accept("text/html").run().assertBody().contains("<nav><ol><li><a href=\"/a09a\">foo</a></li><li>a01a</li><li>a01b</li><li><a href=\"/a09b\">bar</a></li></ol></nav>");
-		d1.get("/a10").accept("text/html").run().assertBody().contains("<nav><ol><li><a href=\"/a10a\">foo</a></li><li><a href=\"/a10b\">bar</a></li><li>a01a</li><li>a01b</li></ol></nav>");
-		d1.get("/a11").accept("text/html").run().assertBody().contains("<nav><ol><li><a href=\"/a11b\">bar</a></li><li><a href=\"/a11a\">foo</a></li></ol></nav>");
+		d1.get("/a01").accept("text/html").run().assertBody().isContains("<nav><ol><li>a01a</li><li>a01b</li></ol></nav>");
+		d1.get("/a02").accept("text/html").run().assertBody().isContains("<nav><ol><li>a02a</li><li>a02b</li></ol></nav>");
+		d1.get("/a03").accept("text/html").run().assertBody().isContains("<nav><ol><li>a01a</li><li>a01b</li><li>a03a</li><li>a03b</li></ol></nav>");
+		d1.get("/a04").accept("text/html").run().assertBody().isContains("<nav><ol><li>a04a</li><li>a01a</li><li>a01b</li><li>a04b</li></ol></nav>");
+		d1.get("/a05").accept("text/html").run().assertBody().isContains("<nav><ol><li>a05a</li><li>a05b</li><li>a01a</li><li>a01b</li></ol></nav>");
+		d1.get("/a06").accept("text/html").run().assertBody().isContains("<nav><ol><li>a06a</li><li>a01a</li><li>a01b</li><li>a06b</li></ol></nav>");
+		d1.get("/a07").accept("text/html").run().assertBody().isContains("<nav><ol><li>a07a</li><li>a07b</li><li>a01a</li><li>a01b</li></ol></nav>");
+		d1.get("/a08").accept("text/html").run().assertBody().isContains("<nav><ol><li>a08b</li><li>a08a</li></ol></nav>");
+		d1.get("/a09").accept("text/html").run().assertBody().isContains("<nav><ol><li><a href=\"/a09a\">foo</a></li><li>a01a</li><li>a01b</li><li><a href=\"/a09b\">bar</a></li></ol></nav>");
+		d1.get("/a10").accept("text/html").run().assertBody().isContains("<nav><ol><li><a href=\"/a10a\">foo</a></li><li><a href=\"/a10b\">bar</a></li><li>a01a</li><li>a01b</li></ol></nav>");
+		d1.get("/a11").accept("text/html").run().assertBody().isContains("<nav><ol><li><a href=\"/a11b\">bar</a></li><li><a href=\"/a11a\">foo</a></li></ol></nav>");
 	}
 
 	@Rest
@@ -413,17 +413,17 @@ public class HtmlDocConfig_Test {
 	@Test
 	public void d02_navlinks_inherited() throws Exception {
 		RestClient d2 = client(D2.class);
-		d2.get("/b01").accept("text/html").run().assertBody().contains("<nav><ol><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li></ol></nav>");
-		d2.get("/b02").accept("text/html").run().assertBody().contains("<nav><ol><li>b02a</li><li>b02b</li></ol></nav>");
-		d2.get("/b03").accept("text/html").run().assertBody().contains("<nav><ol><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li><li>b03a</li><li>b03b</li></ol></nav>");
-		d2.get("/b04").accept("text/html").run().assertBody().contains("<nav><ol><li>b04a</li><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li><li>b04b</li></ol></nav>");
-		d2.get("/b05").accept("text/html").run().assertBody().contains("<nav><ol><li>b05a</li><li>b05b</li><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li></ol></nav>");
-		d2.get("/b06").accept("text/html").run().assertBody().contains("<nav><ol><li>b06a</li><li>a01a</li><li>a01b</li><li>b06b</li><li>b01a</li><li>b01b</li></ol></nav>");
-		d2.get("/b07").accept("text/html").run().assertBody().contains("<nav><ol><li>b07a</li><li>b07b</li><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li></ol></nav>");
-		d2.get("/b08").accept("text/html").run().assertBody().contains("<nav><ol><li>b08b</li><li>b08a</li></ol></nav>");
-		d2.get("/b09").accept("text/html").run().assertBody().contains("<nav><ol><li><a href=\"/b09a\">foo</a></li><li>a01a</li><li>a01b</li><li><a href=\"/b09b\">bar</a></li><li>b01a</li><li>b01b</li></ol></nav>");
-		d2.get("/b10").accept("text/html").run().assertBody().contains("<nav><ol><li><a href=\"/b10a\">foo</a></li><li><a href=\"/b10b\">bar</a></li><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li></ol></nav>");
-		d2.get("/b11").accept("text/html").run().assertBody().contains("<nav><ol><li><a href=\"/b11b\">bar</a></li><li><a href=\"/b11a\">foo</a></li></ol></nav>");
+		d2.get("/b01").accept("text/html").run().assertBody().isContains("<nav><ol><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li></ol></nav>");
+		d2.get("/b02").accept("text/html").run().assertBody().isContains("<nav><ol><li>b02a</li><li>b02b</li></ol></nav>");
+		d2.get("/b03").accept("text/html").run().assertBody().isContains("<nav><ol><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li><li>b03a</li><li>b03b</li></ol></nav>");
+		d2.get("/b04").accept("text/html").run().assertBody().isContains("<nav><ol><li>b04a</li><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li><li>b04b</li></ol></nav>");
+		d2.get("/b05").accept("text/html").run().assertBody().isContains("<nav><ol><li>b05a</li><li>b05b</li><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li></ol></nav>");
+		d2.get("/b06").accept("text/html").run().assertBody().isContains("<nav><ol><li>b06a</li><li>a01a</li><li>a01b</li><li>b06b</li><li>b01a</li><li>b01b</li></ol></nav>");
+		d2.get("/b07").accept("text/html").run().assertBody().isContains("<nav><ol><li>b07a</li><li>b07b</li><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li></ol></nav>");
+		d2.get("/b08").accept("text/html").run().assertBody().isContains("<nav><ol><li>b08b</li><li>b08a</li></ol></nav>");
+		d2.get("/b09").accept("text/html").run().assertBody().isContains("<nav><ol><li><a href=\"/b09a\">foo</a></li><li>a01a</li><li>a01b</li><li><a href=\"/b09b\">bar</a></li><li>b01a</li><li>b01b</li></ol></nav>");
+		d2.get("/b10").accept("text/html").run().assertBody().isContains("<nav><ol><li><a href=\"/b10a\">foo</a></li><li><a href=\"/b10b\">bar</a></li><li>a01a</li><li>a01b</li><li>b01a</li><li>b01b</li></ol></nav>");
+		d2.get("/b11").accept("text/html").run().assertBody().isContains("<nav><ol><li><a href=\"/b11b\">bar</a></li><li><a href=\"/b11a\">foo</a></li></ol></nav>");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -462,11 +462,11 @@ public class HtmlDocConfig_Test {
 	@Test
 	public void e01_nav() throws Exception {
 		RestClient e1 = client(E1.class);
-		e1.get("/a01").accept("text/html").run().assertBody().contains("<nav>a01a a01b</nav>");
-		e1.get("/a02").accept("text/html").run().assertBody().contains("<nav>a02a a02b</nav>");
-		e1.get("/a03").accept("text/html").run().assertBody().contains("<nav>a01a a01b a03a a03b</nav>");
-		e1.get("/a04").accept("text/html").run().assertBody().contains("<nav>a04a a01a a01b a04b</nav>");
-		e1.get("/a05").accept("text/html").run().assertBody().contains("<nav>a05a a05b a01a a01b</nav>");
+		e1.get("/a01").accept("text/html").run().assertBody().isContains("<nav>a01a a01b</nav>");
+		e1.get("/a02").accept("text/html").run().assertBody().isContains("<nav>a02a a02b</nav>");
+		e1.get("/a03").accept("text/html").run().assertBody().isContains("<nav>a01a a01b a03a a03b</nav>");
+		e1.get("/a04").accept("text/html").run().assertBody().isContains("<nav>a04a a01a a01b a04b</nav>");
+		e1.get("/a05").accept("text/html").run().assertBody().isContains("<nav>a05a a05b a01a a01b</nav>");
 	}
 
 	@Rest
@@ -501,11 +501,11 @@ public class HtmlDocConfig_Test {
 	@Test
 	public void e02_nav_inherited() throws Exception {
 		RestClient e2 = client(E2.class);
-		e2.get("/b01").accept("text/html").run().assertBody().contains("<nav>a01a a01b b01a b01b</nav>");
-		e2.get("/b02").accept("text/html").run().assertBody().contains("<nav>b02a b02b</nav>");
-		e2.get("/b03").accept("text/html").run().assertBody().contains("<nav>a01a a01b b01a b01b b03a b03b</nav>");
-		e2.get("/b04").accept("text/html").run().assertBody().contains("<nav>b04a a01a a01b b01a b01b b04b</nav>");
-		e2.get("/b05").accept("text/html").run().assertBody().contains("<nav>b05a b05b a01a a01b b01a b01b</nav>");
+		e2.get("/b01").accept("text/html").run().assertBody().isContains("<nav>a01a a01b b01a b01b</nav>");
+		e2.get("/b02").accept("text/html").run().assertBody().isContains("<nav>b02a b02b</nav>");
+		e2.get("/b03").accept("text/html").run().assertBody().isContains("<nav>a01a a01b b01a b01b b03a b03b</nav>");
+		e2.get("/b04").accept("text/html").run().assertBody().isContains("<nav>b04a a01a a01b b01a b01b b04b</nav>");
+		e2.get("/b05").accept("text/html").run().assertBody().isContains("<nav>b05a b05b a01a a01b b01a b01b</nav>");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -544,11 +544,11 @@ public class HtmlDocConfig_Test {
 	@Test
 	public void f01_script() throws Exception {
 		RestClient f1 = client(F1.class);
-		f1.get("/a01").accept("text/html").run().assertBody().contains("<script>a01a\n a01b\n</script>");
-		f1.get("/a02").accept("text/html").run().assertBody().contains("<script>a02a\n a02b\n</script>");
-		f1.get("/a03").accept("text/html").run().assertBody().contains("<script>a01a\n a01b\n a03a\n a03b\n</script>");
-		f1.get("/a04").accept("text/html").run().assertBody().contains("<script>a04a\n a01a\n a01b\n a04b\n</script>");
-		f1.get("/a05").accept("text/html").run().assertBody().contains("<script>a05a\n a05b\n a01a\n a01b\n</script>");
+		f1.get("/a01").accept("text/html").run().assertBody().isContains("<script>a01a\n a01b\n</script>");
+		f1.get("/a02").accept("text/html").run().assertBody().isContains("<script>a02a\n a02b\n</script>");
+		f1.get("/a03").accept("text/html").run().assertBody().isContains("<script>a01a\n a01b\n a03a\n a03b\n</script>");
+		f1.get("/a04").accept("text/html").run().assertBody().isContains("<script>a04a\n a01a\n a01b\n a04b\n</script>");
+		f1.get("/a05").accept("text/html").run().assertBody().isContains("<script>a05a\n a05b\n a01a\n a01b\n</script>");
 	}
 
 	@Rest
@@ -583,11 +583,11 @@ public class HtmlDocConfig_Test {
 	@Test
 	public void f02_script_inherited() throws Exception {
 		RestClient f2 = client(F2.class);
-		f2.get("/b01").accept("text/html").run().assertBody().contains("<script>b01a\n b01b\n</script>");
-		f2.get("/b02").accept("text/html").run().assertBody().contains("<script>b02a\n b02b\n</script>");
-		f2.get("/b03").accept("text/html").run().assertBody().contains("<script>b01a\n b01b\n b03a\n b03b\n</script>");
-		f2.get("/b04").accept("text/html").run().assertBody().contains("<script>b04a\n b01a\n b01b\n b04b\n</script>");
-		f2.get("/b05").accept("text/html").run().assertBody().contains("<script>b05a\n b05b\n b01a\n b01b\n</script>");
+		f2.get("/b01").accept("text/html").run().assertBody().isContains("<script>b01a\n b01b\n</script>");
+		f2.get("/b02").accept("text/html").run().assertBody().isContains("<script>b02a\n b02b\n</script>");
+		f2.get("/b03").accept("text/html").run().assertBody().isContains("<script>b01a\n b01b\n b03a\n b03b\n</script>");
+		f2.get("/b04").accept("text/html").run().assertBody().isContains("<script>b04a\n b01a\n b01b\n b04b\n</script>");
+		f2.get("/b05").accept("text/html").run().assertBody().isContains("<script>b05a\n b05b\n b01a\n b01b\n</script>");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -626,11 +626,11 @@ public class HtmlDocConfig_Test {
 	@Test
 	public void g01_style() throws Exception {
 		RestClient g1 = client(G1.class);
-		g1.get("/a01").accept("text/html").run().assertBody().contains("<style>@import \"/a01s\"; a01a a01b</style>");
-		g1.get("/a02").accept("text/html").run().assertBody().contains("<style>@import \"/a02s\"; a02a a02b</style>");
-		g1.get("/a03").accept("text/html").run().assertBody().contains("<style>@import \"/a01s\"; a01a a01b a03a a03b</style>");
-		g1.get("/a04").accept("text/html").run().assertBody().contains("<style>@import \"/a01s\"; a04a a01a a01b a04b</style>");
-		g1.get("/a05").accept("text/html").run().assertBody().contains("<style>@import \"/a01s\"; a05a a05b a01a a01b</style>");
+		g1.get("/a01").accept("text/html").run().assertBody().isContains("<style>@import \"/a01s\"; a01a a01b</style>");
+		g1.get("/a02").accept("text/html").run().assertBody().isContains("<style>@import \"/a02s\"; a02a a02b</style>");
+		g1.get("/a03").accept("text/html").run().assertBody().isContains("<style>@import \"/a01s\"; a01a a01b a03a a03b</style>");
+		g1.get("/a04").accept("text/html").run().assertBody().isContains("<style>@import \"/a01s\"; a04a a01a a01b a04b</style>");
+		g1.get("/a05").accept("text/html").run().assertBody().isContains("<style>@import \"/a01s\"; a05a a05b a01a a01b</style>");
 	}
 
 	@Rest
@@ -665,11 +665,11 @@ public class HtmlDocConfig_Test {
 	@Test
 	public void g02_style_inherited() throws Exception {
 		RestClient g2 = client(G2.class);
-		g2.get("/b01").accept("text/html").run().assertBody().contains("<style>@import \"/b01s\"; b01a b01b</style>");
-		g2.get("/b02").accept("text/html").run().assertBody().contains("<style>@import \"/b02s\"; b02a b02b</style>");
-		g2.get("/b03").accept("text/html").run().assertBody().contains("<style>@import \"/b01s\"; b01a b01b b03a b03b</style>");
-		g2.get("/b04").accept("text/html").run().assertBody().contains("<style>@import \"/b01s\"; b04a b01a b01b b04b</style>");
-		g2.get("/b05").accept("text/html").run().assertBody().contains("<style>@import \"/b01s\"; b05a b05b b01a b01b</style>");
+		g2.get("/b01").accept("text/html").run().assertBody().isContains("<style>@import \"/b01s\"; b01a b01b</style>");
+		g2.get("/b02").accept("text/html").run().assertBody().isContains("<style>@import \"/b02s\"; b02a b02b</style>");
+		g2.get("/b03").accept("text/html").run().assertBody().isContains("<style>@import \"/b01s\"; b01a b01b b03a b03b</style>");
+		g2.get("/b04").accept("text/html").run().assertBody().isContains("<style>@import \"/b01s\"; b04a b01a b01b b04b</style>");
+		g2.get("/b05").accept("text/html").run().assertBody().isContains("<style>@import \"/b01s\"; b05a b05b b01a b01b</style>");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

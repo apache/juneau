@@ -72,8 +72,8 @@ public class RestClient_Response_Headers_Test {
 		h = checkFooClient().build().get("/echo").header("Foo","\"bar\"").run().getHeader("Foo").asHeader(ETag.class).assertName().is("ETag").assertStringValue().is("\"bar\"");
 		assertTrue(h instanceof ETag);
 
-		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(Age.class)).message().contains("Value 'bar' could not be parsed as an integer.");
-		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(A2.class)).message().contains("Could not determine a method to construct type");
+		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(Age.class)).asMessage().isContains("Value 'bar' could not be parsed as an integer.");
+		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asHeader(A2.class)).asMessage().isContains("Could not determine a method to construct type");
 
 		checkFooClient().build().get("/echo").header("Foo","bar").run().getHeader("Foo").asCsvHeader().assertName().is("Foo").assertStringValue().is("bar");
 		checkFooClient().build().get("/echo").header("Foo","*").run().getHeader("Foo").asEntityTagsHeader().assertName().is("Foo").assertStringValue().is("*");
@@ -128,7 +128,7 @@ public class RestClient_Response_Headers_Test {
 		checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(m3,cm1);
 		assertObject(m3.get()).asJson().is("[1,2]");
 
-		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","foo").run().getHeader("Foo").as(m2,cm1)).messages().any(contains("Invalid number"));
+		assertThrown(()->checkFooClient().build().get("/echo").header("Foo","foo").run().getHeader("Foo").as(m2,cm1)).asMessages().isAny(contains("Invalid number"));
 
 		Optional<List<Integer>> o1 = checkFooClient().build().get("/echo").header("Foo","1,2").run().getHeader("Foo").as(LinkedList.class,Integer.class);
 		assertObject(o1.get()).asJson().is("[1,2]");
@@ -169,7 +169,7 @@ public class RestClient_Response_Headers_Test {
 		checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Bar").assertValue().isNull();
 		checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Foo").assertValue().asLong().is(123l);
 		checkFooClient().build().get("/echo").header("Foo","123").run().getHeader("Bar").assertValue().asLong().isNull();
-		checkFooClient().build().get("/echo").header(dateHeader("Foo",ZONEDDATETIME)).run().getHeader("Foo").assertValue().asZonedDateTime().exists();
+		checkFooClient().build().get("/echo").header(dateHeader("Foo",ZONEDDATETIME)).run().getHeader("Foo").assertValue().asZonedDateTime().isExists();
 		checkFooClient().build().get("/echo").header(dateHeader("Foo",ZONEDDATETIME)).run().getHeader("Bar").assertValue().asZonedDateTime().isNull();
 	}
 

@@ -23,7 +23,7 @@ import org.springframework.context.*;
 /**
  * Subclass of a {@link RestServlet} that hooks into Spring Boot for using Spring Beans.
  *
- * <ul>
+ * <ul class='notes'>
  * 	<li class='note'>
  * 		Users will typically extend from {@link BasicSpringRestServlet} or {@link BasicSpringRestServletGroup}
  * 		instead of this class directly.

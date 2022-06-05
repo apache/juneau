@@ -607,17 +607,17 @@ public class Operation extends SwaggerElement {
 	 * A list of parameters that are applicable for this operation.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If a parameter is already defined at the {@doc ext.SwaggerPathItemObject Path Item},
 	 * 		the new definition will override it, but can never remove it.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The list MUST NOT include duplicated parameters.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		A unique parameter is defined by a combination of a <c>name</c> and <c>location</c>.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The list can use the {@doc ext.SwaggerReferenceObject}
 	 * 		to link to parameters that are defined at the {@doc ext.SwaggerParameterObject Swagger Object's parameters}.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		There can be one <js>"body"</js> parameter at most.
 	 * </ul>
 	 *

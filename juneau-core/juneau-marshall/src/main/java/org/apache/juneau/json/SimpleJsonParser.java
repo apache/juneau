@@ -23,7 +23,7 @@ package org.apache.juneau.json;
  *
  * Identical to {@link JsonParser} but with the media type <bc>application/json+simple</bc>.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *

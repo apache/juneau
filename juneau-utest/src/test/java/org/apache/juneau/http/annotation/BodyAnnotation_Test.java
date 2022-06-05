@@ -42,7 +42,7 @@ public class BodyAnnotation_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(a1).asJson().matches(""
+		assertObject(a1).asJson().isMatches(""
 			+ "{"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"$X1'],"
@@ -87,9 +87,9 @@ public class BodyAnnotation_Test {
 		Body c2 = BodyAnnotation.create("a").on("b").build();
 		Body c4 = BodyAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
-		assertObject(c1).asJson().contains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
-		assertObject(c2).asJson().contains("on:['a','b']");
-		assertObject(c4).asJson().contains("on:['"+CNAME+"$C1.m1()','"+CNAME+"$C2.m2()']");
+		assertObject(c1).asJson().isContains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
+		assertObject(c2).asJson().isContains("on:['a','b']");
+		assertObject(c4).asJson().isContains("on:['"+CNAME+"$C1.m1()','"+CNAME+"$C2.m2()']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

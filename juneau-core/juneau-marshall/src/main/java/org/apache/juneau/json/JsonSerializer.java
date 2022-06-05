@@ -29,16 +29,15 @@ import org.apache.juneau.utils.*;
 
 /**
  * Serializes POJO models to JSON.
- * {@review}
  *
  * <h5 class='topic'>Media types</h5>
- *
+ * <p>
  * Handles <c>Accept</c> types:  <bc>application/json, text/json</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>application/json</bc>
  *
  * <h5 class='topic'>Description</h5>
- *
+ * <p>
  * The conversion is as follows...
  * <ul class='spaced-list'>
  * 	<li>
@@ -73,7 +72,7 @@ import org.apache.juneau.utils.*;
  * However, custom serializers can be constructed to fine-tune behavior.
  *
  * <h5 class='topic'>Behavior-specific subclasses</h5>
- *
+ * <p>
  * The following direct subclasses are provided for convenience:
  * <ul class='spaced-list'>
  * 	<li>
@@ -97,7 +96,7 @@ import org.apache.juneau.utils.*;
  * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>someObject</jv>);
  * </p>
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *

@@ -42,7 +42,7 @@ import org.apache.juneau.utils.*;
  * Also serializes objects using a transform if the object class has an {@link ObjectSwap ObjectSwap&lt;?,String&gt;}
  * transform defined on it.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *

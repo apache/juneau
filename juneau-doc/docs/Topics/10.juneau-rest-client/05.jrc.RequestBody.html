@@ -74,7 +74,7 @@
 	</p>
 	
 	<ul class='notes'>
-		<li>If the serializer on the client or request is explicitly set to <jk>null</jk>, POJOs will be converted to strings
+		<li class='note'>If the serializer on the client or request is explicitly set to <jk>null</jk>, POJOs will be converted to strings
 			using the registered part serializer as content type <js>"text/plain</js>.  If the part serializer is also <jk>null</jk>,
 			POJOs will be converted to strings using {@link oaj.ClassMeta#toString(Object)} which typically just calls {@link java.lang.Object#toString()}.
 	</ul>

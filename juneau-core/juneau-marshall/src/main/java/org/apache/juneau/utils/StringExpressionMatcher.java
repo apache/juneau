@@ -38,9 +38,9 @@ import static org.apache.juneau.internal.StateMachineState.*;
  * </ul>
  *
  * <ul class='notes'>
- * 	<li>AND operations take precedence over OR operations (as expected).
- * 	<li>Whitespace is ignored.
- * 	<li><jk>null</jk> or empty expressions always match as <jk>false</jk>.
+ * 	<li class='note'>AND operations take precedence over OR operations (as expected).
+ * 	<li class='note'>Whitespace is ignored.
+ * 	<li class='note'><jk>null</jk> or empty expressions always match as <jk>false</jk>.
  * </ul>
  *
  * <ul class='seealso'>

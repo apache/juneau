@@ -391,7 +391,7 @@ public class Body_Test {
 		// Input stream transform requests must not specify Content-Type or else gets resolved as POJO.
 		a.put("/InputStreamTransform?noTrace=true", "'a'", APPLICATION_JSON)
 			.run()
-			.assertBody().contains("Bad Request");
+			.assertBody().isContains("Bad Request");
 		a.put("/InputStreamTransform", "'a'")
 			.run()
 			.assertBody().is("'\\'a\\''");
@@ -399,7 +399,7 @@ public class Body_Test {
 		// Reader transform requests must not specify Content-Type or else gets resolved as POJO.
 		a.put("/ReaderTransform?noTrace=true", "'a'", APPLICATION_JSON)
 			.run()
-			.assertBody().contains("Bad Request");
+			.assertBody().isContains("Bad Request");
 		a.put("/ReaderTransform", "'a'")
 			.run()
 			.assertBody().is("'\\'a\\''");
@@ -495,14 +495,14 @@ public class Body_Test {
 		// When Content-Type matched, treated as parsed POJO.
 		b.put("/InputStreamTransform?noTrace=true", "a", APPLICATION_JSON)
 			.run()
-			.assertBody().contains("Bad Request");
+			.assertBody().isContains("Bad Request");
 		b.put("/ReaderTransform", "a")
 			.run()
 			.assertBody().is("'a'");
 		// When Content-Type matched, treated as parsed POJO.
 		b.put("/ReaderTransform?noTrace=true", "a", APPLICATION_JSON)
 			.run()
-			.assertBody().contains("Bad Request");
+			.assertBody().isContains("Bad Request");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -912,7 +912,7 @@ public class Body_Test {
 		i.post("/a", "", APPLICATION_JSON)
 			.run()
 			.assertCode().is(400)
-			.assertBody().contains("Required value not provided.");
+			.assertBody().isContains("Required value not provided.");
 		i.post("/a", "{}", APPLICATION_JSON)
 			.run()
 			.assertCode().is(200);
@@ -920,7 +920,7 @@ public class Body_Test {
 		i.post("/b", "", APPLICATION_JSON)
 			.run()
 			.assertCode().is(400)
-			.assertBody().contains("Required value not provided.");
+			.assertBody().isContains("Required value not provided.");
 		i.post("/b", "{}", APPLICATION_JSON)
 			.run()
 			.assertCode().is(200);

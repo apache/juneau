@@ -33,10 +33,9 @@ import org.apache.juneau.xml.annotation.*;
 
 /**
  * Serializes POJOs to RDF.
- * {@review}
  *
  * <h5 class='topic'>Behavior-specific subclasses</h5>
- *
+ * <p>
  * The following direct subclasses are provided for language-specific serializers:
  * <ul>
  * 	<li>{@link RdfXmlSerializer} - RDF/XML.
@@ -46,7 +45,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li>{@link N3Serializer} - N3.
  * </ul>
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
@@ -230,9 +229,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * <p>
 		 * Set the engine for checking and resolving.
 		 *
-		 * <p>
-		 * Possible values:
-		 * <ul class='spaced-list'>
+		 * <ul class='values spaced-list'>
 		 * 	<li>
 		 * 		<js>"lax"</js> - The rules for RDF URI references only, which does permit spaces although the use of spaces
 		 * 		is not good practice.
@@ -260,9 +257,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		 * <p>
 		 * This allows a coarse-grained approach to control of error handling.
 		 *
-		 * <p>
-		 * Possible values:
-		 * <ul>
+		 * <ul class='values'>
 		 * 	<li><js>"default"</js>
 		 * 	<li><js>"lax"</js>
 		 * 	<li><js>"strict"</js>
@@ -443,9 +438,7 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		/**
 		 * RDF/XML property: <c>showXmlDeclaration</c>.
 		 *
-		 * <p>
-		 * Possible values:
-		 * <ul class='spaced-list'>
+		 * <ul class='values spaced-list'>
 		 * 	<li>
 		 * 		<js>"true"</js> - Add XML Declaration to the output.
 		 * 	<li>
@@ -872,24 +865,22 @@ public class RdfSerializer extends WriterSerializer implements RdfMetaProvider {
 		/**
 		 * RDF format for representing collections and arrays.
 		 *
-		 * <p>
+		 * <ul class='values'>
+		 * 	<li><js>"DEFAULT"</js> - Default format.  The default is an RDF Sequence container.
+		 * 	<li><js>"SEQ"</js> - RDF Sequence container.
+		 * 	<li><js>"BAG"</js> - RDF Bag container.
+		 * 	<li><js>"LIST"</js> - RDF List container.
+		 * 	<li><js>"MULTI_VALUED"</js> - Multi-valued properties.
+		 * </ul>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get
 		 * 		lost.
 		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this setting.
-		 * 	<br>Possible values:
-		 * 	<ul>
-		 * 		<li><js>"DEFAULT"</js> - Default format.  The default is an RDF Sequence container.
-		 * 		<li><js>"SEQ"</js> - RDF Sequence container.
-		 * 		<li><js>"BAG"</js> - RDF Bag container.
-		 * 		<li><js>"LIST"</js> - RDF List container.
-		 * 		<li><js>"MULTI_VALUED"</js> - Multi-valued properties.
-		 * 	</ul>
 		 * @return This object.
 		 */
 		@FluentSetter

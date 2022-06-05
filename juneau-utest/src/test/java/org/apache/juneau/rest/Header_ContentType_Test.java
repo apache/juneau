@@ -55,7 +55,7 @@ public class Header_ContentType_Test {
 		a.put("/a?noTrace=true", null, ContentType.of("text/p3"))
 			.run()
 			.assertCode().is(415)
-			.assertBody().contains("Unsupported media-type in request header 'Content-Type': 'text/p3'");
+			.assertBody().isContains("Unsupported media-type in request header 'Content-Type': 'text/p3'");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -81,21 +81,21 @@ public class Header_ContentType_Test {
 		b.put("/a?noTrace=true", null, ContentType.of(""))
 			.run()
 			.assertCode().is(415)
-			.assertBody().contains(
+			.assertBody().isContains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p2'",
 				"Supported media-types: ['text/p3']"
 			);
 		b.put("/a?noTrace=true", null, ContentType.of("text/p1"))
 			.run()
 			.assertCode().is(415)
-			.assertBody().contains(
+			.assertBody().isContains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p1'",
 				"Supported media-types: ['text/p3']"
 			);
 		b.put("/a?noTrace=true", null, ContentType.of("text/p2"))
 			.run()
 			.assertCode().is(415)
-			.assertBody().contains(
+			.assertBody().isContains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p2'",
 				"Supported media-types: ['text/p3']"
 			);
@@ -127,7 +127,7 @@ public class Header_ContentType_Test {
 		c.put("/a?noTrace=true", null).contentType("text/p4")
 			.run()
 			.assertCode().is(415)
-			.assertBody().contains(
+			.assertBody().isContains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p4'",
 				"Supported media-types: ['text/p3','text/p1','text/p2']"
 			);
@@ -161,14 +161,14 @@ public class Header_ContentType_Test {
 		d.put("/a?noTrace=true", null, ContentType.of("text/p1"))
 			.run()
 			.assertCode().is(415)
-			.assertBody().contains(
+			.assertBody().isContains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p1'",
 				"Supported media-types: ['text/p3']"
 			);
 		d.put("/a?noTrace=true", null, ContentType.of("text/p2"))
 			.run()
 			.assertCode().is(415)
-			.assertBody().contains(
+			.assertBody().isContains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p2'",
 				"Supported media-types: ['text/p3']"
 			);

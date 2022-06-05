@@ -352,15 +352,15 @@
 		|	JsonMap <jv>map</jv> = <jv>parser</jv>.parse(<jv>schema</jv>, <jv>input</jv>, JsonMap.<jk>class</jk>);
 	</p>
 	<ul class='notes'>
-		<li>
+		<li class='note'>
 			Array properties can also use CSV/SSV/PIPES for array notation.
 			<br>Various notations can be mixed throughout.
-		<li>
+		<li class='note'>
 			Schemas and POJOs can be defined arbitrarily deep.
-		<li>
+		<li class='note'>
 			Schemas are optional.
 			They can be skipped or partially defined.
-		<li>
+		<li class='note'>
 			We make our best attempt to convert the output to the matching type.  
 			However, you will get <c>ParseExceptions</c> if you attempt an impossible conversion.
 			(e.g. trying to parse the string "foo" into a boolean). 

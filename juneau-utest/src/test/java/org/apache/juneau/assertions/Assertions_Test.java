@@ -104,18 +104,18 @@ public class Assertions_Test {
 
 	@Test
 	public void a13_assertThrown() throws Exception {
-		assertThrown(()->{throw new RuntimeException("foo");}).message().is("foo");
+		assertThrown(()->{throw new RuntimeException("foo");}).asMessage().is("foo");
 		assertThrown(()->{}).isNull();
 	}
 
 	@Test
 	public void a14_assertZonedDateTime() throws Exception {
-		assertZonedDateTime(ZonedDateTime.now()).exists();
+		assertZonedDateTime(ZonedDateTime.now()).isExists();
 	}
 
 	@Test
 	public void a15_assertBean() throws Exception {
-		assertBean("123").exists();
+		assertBean("123").isExists();
 	}
 
 	@Test
@@ -140,59 +140,59 @@ public class Assertions_Test {
 
 	@Test
 	public void a20a_assertIntArray() throws Exception {
-		assertIntArray(new int[]{1}).length().is(1);
+		assertIntArray(new int[]{1}).asLength().is(1);
 	}
 
 	@Test
 	public void a20b_assertLongArray() throws Exception {
-		assertLongArray(new long[]{1l}).length().is(1);
+		assertLongArray(new long[]{1l}).asLength().is(1);
 	}
 
 	@Test
 	public void a20c_assertShortArray() throws Exception {
-		assertShortArray(new short[]{1}).length().is(1);
+		assertShortArray(new short[]{1}).asLength().is(1);
 	}
 
 	@Test
 	public void a20d_assertFloatArray() throws Exception {
-		assertFloatArray(new float[]{1}).length().is(1);
+		assertFloatArray(new float[]{1}).asLength().is(1);
 	}
 
 	@Test
 	public void a20e_assertDoubleArray() throws Exception {
-		assertDoubleArray(new double[]{1}).length().is(1);
+		assertDoubleArray(new double[]{1}).asLength().is(1);
 	}
 
 	@Test
 	public void a20f_assertBooleanArray() throws Exception {
-		assertBooleanArray(new boolean[]{true}).length().is(1);
+		assertBooleanArray(new boolean[]{true}).asLength().is(1);
 	}
 
 	@Test
 	public void a20g_assertCharArray() throws Exception {
-		assertCharArray(new char[]{'a'}).length().is(1);
+		assertCharArray(new char[]{'a'}).asLength().is(1);
 	}
 
 	@Test
 	public void a20h_assertByteArray() throws Exception {
-		assertByteArray(new byte[]{1}).length().is(1);
+		assertByteArray(new byte[]{1}).asLength().is(1);
 	}
 
 	@Test
 	public void a21_assertMap() throws Exception {
-		assertMap(map(1,2)).size().is(1);
+		assertMap(map(1,2)).asSize().is(1);
 	}
 
 	@Test
 	public void a22_assertArgNotNull() throws Exception {
 		assertArgNotNull("foo", 123);
-		assertThrown(()->assertArgNotNull("foo", null)).message().is("Argument 'foo' cannot be null.");
+		assertThrown(()->assertArgNotNull("foo", null)).asMessage().is("Argument 'foo' cannot be null.");
 	}
 
 	@Test
 	public void a23_assertArg() throws Exception {
 		assertArg(true, "foo {0}", 1);
-		assertThrown(()->assertArg(false, "foo {0}", 1)).message().is("foo 1");
+		assertThrown(()->assertArg(false, "foo {0}", 1)).asMessage().is("foo 1");
 	}
 
 	@Test

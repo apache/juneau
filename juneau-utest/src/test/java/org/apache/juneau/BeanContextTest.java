@@ -60,7 +60,7 @@ public class BeanContextTest {
 	@Test
 	public void b01_ignoreUnknownEnumValues() {
 		JsonParser p1 = JsonParser.DEFAULT;
-		assertThrown(() -> p1.parse("'UNKNOWN'", TestEnum.class)).message().contains("Could not resolve enum value 'UNKNOWN' on class 'org.apache.juneau.testutils.pojos.TestEnum'");
+		assertThrown(() -> p1.parse("'UNKNOWN'", TestEnum.class)).asMessage().isContains("Could not resolve enum value 'UNKNOWN' on class 'org.apache.juneau.testutils.pojos.TestEnum'");
 
 		JsonParser p2 = (JsonParser) JsonParser.create().ignoreUnknownEnumValues().build();
 		assertNull(p2.parse("'UNKNOWN'", TestEnum.class));

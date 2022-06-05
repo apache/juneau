@@ -380,8 +380,8 @@ public class HttpPartSchema_Query_Test {
 
 		s.validateInput("x");
 
-		assertThrown(()->s.validateInput(null)).message().is("No value specified.");
-		assertThrown(()->s.validateInput("")).message().is("Empty value not allowed.");
+		assertThrown(()->s.validateInput(null)).asMessage().is("No value specified.");
+		assertThrown(()->s.validateInput("")).asMessage().is("Empty value not allowed.");
 	}
 
 	@Query @Schema(aev=true)
@@ -404,7 +404,7 @@ public class HttpPartSchema_Query_Test {
 
 		s.validateInput("");
 
-		assertThrown(()->s.validateInput(null)).message().is("No value specified.");
+		assertThrown(()->s.validateInput(null)).asMessage().is("No value specified.");
 	}
 
 	@Query @Schema(p="x.*")
@@ -415,9 +415,9 @@ public class HttpPartSchema_Query_Test {
 		HttpPartSchema s = HttpPartSchema.create().applyAll(Query.class, B02a.class).build();
 		s.validateInput("x");
 		s.validateInput("xx");
-		assertThrown(()->s.validateInput("y")).message().is("Value does not match expected pattern.  Must match pattern: x.*");
-		assertThrown(()->s.validateInput("yx")).message().is("Value does not match expected pattern.  Must match pattern: x.*");
-		assertThrown(()->s.validateInput("")).message().is("Empty value not allowed.");
+		assertThrown(()->s.validateInput("y")).asMessage().is("Value does not match expected pattern.  Must match pattern: x.*");
+		assertThrown(()->s.validateInput("yx")).asMessage().is("Value does not match expected pattern.  Must match pattern: x.*");
+		assertThrown(()->s.validateInput("")).asMessage().is("Empty value not allowed.");
 	}
 
 	@Query @Schema(minl=2, maxl=3)
@@ -429,8 +429,8 @@ public class HttpPartSchema_Query_Test {
 		s.validateInput("12");
 		s.validateInput("123");
 		s.validateInput(null);
-		assertThrown(()->s.validateInput("1")).message().is("Minimum length of value not met.");
-		assertThrown(()->s.validateInput("1234")).message().is("Maximum length of value exceeded.");
+		assertThrown(()->s.validateInput("1")).asMessage().is("Minimum length of value not met.");
+		assertThrown(()->s.validateInput("1234")).asMessage().is("Maximum length of value exceeded.");
 	}
 
 	@Query
@@ -467,15 +467,15 @@ public class HttpPartSchema_Query_Test {
 		s.getItems().getItems().getItems().validateInput(null);
 		s.getItems().getItems().getItems().getItems().validateInput(null);
 
-		assertThrown(()->s.getItems().validateInput("1")).message().is("Minimum length of value not met.");
-		assertThrown(()->s.getItems().getItems().validateInput("12")).message().is("Minimum length of value not met.");
-		assertThrown(()->s.getItems().getItems().getItems().validateInput("123")).message().is("Minimum length of value not met.");
-		assertThrown(()->s.getItems().getItems().getItems().getItems().validateInput("1234")).message().is("Minimum length of value not met.");
+		assertThrown(()->s.getItems().validateInput("1")).asMessage().is("Minimum length of value not met.");
+		assertThrown(()->s.getItems().getItems().validateInput("12")).asMessage().is("Minimum length of value not met.");
+		assertThrown(()->s.getItems().getItems().getItems().validateInput("123")).asMessage().is("Minimum length of value not met.");
+		assertThrown(()->s.getItems().getItems().getItems().getItems().validateInput("1234")).asMessage().is("Minimum length of value not met.");
 
-		assertThrown(()->s.getItems().validateInput("1234")).message().is("Maximum length of value exceeded.");
-		assertThrown(()->s.getItems().getItems().validateInput("12345")).message().is("Maximum length of value exceeded.");
-		assertThrown(()->s.getItems().getItems().getItems().validateInput("123456")).message().is("Maximum length of value exceeded.");
-		assertThrown(()->s.getItems().getItems().getItems().getItems().validateInput("1234567")).message().is("Maximum length of value exceeded.");
+		assertThrown(()->s.getItems().validateInput("1234")).asMessage().is("Maximum length of value exceeded.");
+		assertThrown(()->s.getItems().getItems().validateInput("12345")).asMessage().is("Maximum length of value exceeded.");
+		assertThrown(()->s.getItems().getItems().getItems().validateInput("123456")).asMessage().is("Maximum length of value exceeded.");
+		assertThrown(()->s.getItems().getItems().getItems().getItems().validateInput("1234567")).asMessage().is("Maximum length of value exceeded.");
 	}
 
 	@Query @Schema(e="X,Y")
@@ -487,7 +487,7 @@ public class HttpPartSchema_Query_Test {
 		s.validateInput("X");
 		s.validateInput("Y");
 		s.validateInput(null);
-		assertThrown(()->s.validateInput("Z")).message().is("Value does not match one of the expected values.  Must be one of the following:  X, Y");
+		assertThrown(()->s.validateInput("Z")).asMessage().is("Value does not match one of the expected values.  Must be one of the following:  X, Y");
 	}
 
 	@Query @Schema(e=" X , Y ")
@@ -499,7 +499,7 @@ public class HttpPartSchema_Query_Test {
 		s.validateInput("X");
 		s.validateInput("Y");
 		s.validateInput(null);
-		assertThrown(()->s.validateInput("Z")).message().is("Value does not match one of the expected values.  Must be one of the following:  X, Y");
+		assertThrown(()->s.validateInput("Z")).asMessage().is("Value does not match one of the expected values.  Must be one of the following:  X, Y");
 	}
 
 	@Query @Schema(e="X,Y")
@@ -511,7 +511,7 @@ public class HttpPartSchema_Query_Test {
 		s.validateInput("X");
 		s.validateInput("Y");
 		s.validateInput(null);
-		assertThrown(()->s.validateInput("Z")).message().is("Value does not match one of the expected values.  Must be one of the following:  X, Y");
+		assertThrown(()->s.validateInput("Z")).asMessage().is("Value does not match one of the expected values.  Must be one of the following:  X, Y");
 	}
 
 	@Query
@@ -538,10 +538,10 @@ public class HttpPartSchema_Query_Test {
 		s.getItems().getItems().getItems().validateInput("Y");
 		s.getItems().getItems().getItems().getItems().validateInput("Z");
 
-		assertThrown(()->s.getItems().validateInput("V")).message().is("Value does not match one of the expected values.  Must be one of the following:  W");
-		assertThrown(()->s.getItems().getItems().validateInput("V")).message().is("Value does not match one of the expected values.  Must be one of the following:  X");
-		assertThrown(()->s.getItems().getItems().getItems().validateInput("V")).message().is("Value does not match one of the expected values.  Must be one of the following:  Y");
-		assertThrown(()->s.getItems().getItems().getItems().getItems().validateInput("V")).message().is("Value does not match one of the expected values.  Must be one of the following:  Z");
+		assertThrown(()->s.getItems().validateInput("V")).asMessage().is("Value does not match one of the expected values.  Must be one of the following:  W");
+		assertThrown(()->s.getItems().getItems().validateInput("V")).asMessage().is("Value does not match one of the expected values.  Must be one of the following:  X");
+		assertThrown(()->s.getItems().getItems().getItems().validateInput("V")).asMessage().is("Value does not match one of the expected values.  Must be one of the following:  Y");
+		assertThrown(()->s.getItems().getItems().getItems().getItems().validateInput("V")).asMessage().is("Value does not match one of the expected values.  Must be one of the following:  Z");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -557,8 +557,8 @@ public class HttpPartSchema_Query_Test {
 		s.validateOutput(10, BeanContext.DEFAULT);
 		s.validateOutput(100, BeanContext.DEFAULT);
 		s.validateOutput(null, BeanContext.DEFAULT);
-		assertThrown(()->s.validateOutput(9, BeanContext.DEFAULT)).message().is("Minimum value not met.");
-		assertThrown(()->s.validateOutput(101, BeanContext.DEFAULT)).message().is("Maximum value exceeded.");
+		assertThrown(()->s.validateOutput(9, BeanContext.DEFAULT)).asMessage().is("Minimum value not met.");
+		assertThrown(()->s.validateOutput(101, BeanContext.DEFAULT)).asMessage().is("Maximum value exceeded.");
 	}
 
 	@Query
@@ -590,15 +590,15 @@ public class HttpPartSchema_Query_Test {
 		s.getItems().getItems().getItems().validateOutput(10000, BeanContext.DEFAULT);
 		s.getItems().getItems().getItems().getItems().validateOutput(100000, BeanContext.DEFAULT);
 
-		assertThrown(()->s.getItems().validateOutput(9, BeanContext.DEFAULT)).message().is("Minimum value not met.");
-		assertThrown(()->s.getItems().getItems().validateOutput(99, BeanContext.DEFAULT)).message().is("Minimum value not met.");
-		assertThrown(()->s.getItems().getItems().getItems().validateOutput(999, BeanContext.DEFAULT)).message().is("Minimum value not met.");
-		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(9999, BeanContext.DEFAULT)).message().is("Minimum value not met.");
+		assertThrown(()->s.getItems().validateOutput(9, BeanContext.DEFAULT)).asMessage().is("Minimum value not met.");
+		assertThrown(()->s.getItems().getItems().validateOutput(99, BeanContext.DEFAULT)).asMessage().is("Minimum value not met.");
+		assertThrown(()->s.getItems().getItems().getItems().validateOutput(999, BeanContext.DEFAULT)).asMessage().is("Minimum value not met.");
+		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(9999, BeanContext.DEFAULT)).asMessage().is("Minimum value not met.");
 
-		assertThrown(()->s.getItems().validateOutput(101, BeanContext.DEFAULT)).message().is("Maximum value exceeded.");
-		assertThrown(()->s.getItems().getItems().validateOutput(1001, BeanContext.DEFAULT)).message().is("Maximum value exceeded.");
-		assertThrown(()->s.getItems().getItems().getItems().validateOutput(10001, BeanContext.DEFAULT)).message().is("Maximum value exceeded.");
-		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(100001, BeanContext.DEFAULT)).message().is("Maximum value exceeded.");
+		assertThrown(()->s.getItems().validateOutput(101, BeanContext.DEFAULT)).asMessage().is("Maximum value exceeded.");
+		assertThrown(()->s.getItems().getItems().validateOutput(1001, BeanContext.DEFAULT)).asMessage().is("Maximum value exceeded.");
+		assertThrown(()->s.getItems().getItems().getItems().validateOutput(10001, BeanContext.DEFAULT)).asMessage().is("Maximum value exceeded.");
+		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(100001, BeanContext.DEFAULT)).asMessage().is("Maximum value exceeded.");
 	}
 
 	@Query @Schema(min="10", max="100", emin=true, emax=true)
@@ -610,8 +610,8 @@ public class HttpPartSchema_Query_Test {
 		s.validateOutput(11, BeanContext.DEFAULT);
 		s.validateOutput(99, BeanContext.DEFAULT);
 		s.validateOutput(null, BeanContext.DEFAULT);
-		assertThrown(()->s.validateOutput(10, BeanContext.DEFAULT)).message().is("Minimum value not met.");
-		assertThrown(()->s.validateOutput(100, BeanContext.DEFAULT)).message().is("Maximum value exceeded.");
+		assertThrown(()->s.validateOutput(10, BeanContext.DEFAULT)).asMessage().is("Minimum value not met.");
+		assertThrown(()->s.validateOutput(100, BeanContext.DEFAULT)).asMessage().is("Maximum value exceeded.");
 	}
 
 	@Query
@@ -643,15 +643,15 @@ public class HttpPartSchema_Query_Test {
 		s.getItems().getItems().getItems().validateOutput(9999, BeanContext.DEFAULT);
 		s.getItems().getItems().getItems().getItems().validateOutput(99999, BeanContext.DEFAULT);
 
-		assertThrown(()->s.getItems().validateOutput(10, BeanContext.DEFAULT)).message().is("Minimum value not met.");
-		assertThrown(()->s.getItems().getItems().validateOutput(100, BeanContext.DEFAULT)).message().is("Minimum value not met.");
-		assertThrown(()->s.getItems().getItems().getItems().validateOutput(1000, BeanContext.DEFAULT)).message().is("Minimum value not met.");
-		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(10000, BeanContext.DEFAULT)).message().is("Minimum value not met.");
+		assertThrown(()->s.getItems().validateOutput(10, BeanContext.DEFAULT)).asMessage().is("Minimum value not met.");
+		assertThrown(()->s.getItems().getItems().validateOutput(100, BeanContext.DEFAULT)).asMessage().is("Minimum value not met.");
+		assertThrown(()->s.getItems().getItems().getItems().validateOutput(1000, BeanContext.DEFAULT)).asMessage().is("Minimum value not met.");
+		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(10000, BeanContext.DEFAULT)).asMessage().is("Minimum value not met.");
 
-		assertThrown(()->s.getItems().validateOutput(100, BeanContext.DEFAULT)).message().is("Maximum value exceeded.");
-		assertThrown(()->s.getItems().getItems().validateOutput(1000, BeanContext.DEFAULT)).message().is("Maximum value exceeded.");
-		assertThrown(()->s.getItems().getItems().getItems().validateOutput(10000, BeanContext.DEFAULT)).message().is("Maximum value exceeded.");
-		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(100000, BeanContext.DEFAULT)).message().is("Maximum value exceeded.");
+		assertThrown(()->s.getItems().validateOutput(100, BeanContext.DEFAULT)).asMessage().is("Maximum value exceeded.");
+		assertThrown(()->s.getItems().getItems().validateOutput(1000, BeanContext.DEFAULT)).asMessage().is("Maximum value exceeded.");
+		assertThrown(()->s.getItems().getItems().getItems().validateOutput(10000, BeanContext.DEFAULT)).asMessage().is("Maximum value exceeded.");
+		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(100000, BeanContext.DEFAULT)).asMessage().is("Maximum value exceeded.");
 	}
 
 	@Query @Schema(min="10.1", max="100.1")
@@ -663,8 +663,8 @@ public class HttpPartSchema_Query_Test {
 		s.validateOutput(10.1f, BeanContext.DEFAULT);
 		s.validateOutput(100.1f, BeanContext.DEFAULT);
 		s.validateOutput(null, BeanContext.DEFAULT);
-		assertThrown(()->s.validateOutput(10f, BeanContext.DEFAULT)).message().is("Minimum value not met.");
-		assertThrown(()->s.validateOutput(100.2f, BeanContext.DEFAULT)).message().is("Maximum value exceeded.");
+		assertThrown(()->s.validateOutput(10f, BeanContext.DEFAULT)).asMessage().is("Minimum value not met.");
+		assertThrown(()->s.validateOutput(100.2f, BeanContext.DEFAULT)).asMessage().is("Maximum value exceeded.");
 	}
 
 	@Query
@@ -696,15 +696,15 @@ public class HttpPartSchema_Query_Test {
 		s.getItems().getItems().getItems().validateOutput(10000.1f, BeanContext.DEFAULT);
 		s.getItems().getItems().getItems().getItems().validateOutput(100000.1f, BeanContext.DEFAULT);
 
-		assertThrown(()->s.getItems().validateOutput(10f, BeanContext.DEFAULT)).message().is("Minimum value not met.");
-		assertThrown(()->s.getItems().getItems().validateOutput(100f, BeanContext.DEFAULT)).message().is("Minimum value not met.");
-		assertThrown(()->s.getItems().getItems().getItems().validateOutput(1000f, BeanContext.DEFAULT)).message().is("Minimum value not met.");
-		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(10000f, BeanContext.DEFAULT)).message().is("Minimum value not met.");
+		assertThrown(()->s.getItems().validateOutput(10f, BeanContext.DEFAULT)).asMessage().is("Minimum value not met.");
+		assertThrown(()->s.getItems().getItems().validateOutput(100f, BeanContext.DEFAULT)).asMessage().is("Minimum value not met.");
+		assertThrown(()->s.getItems().getItems().getItems().validateOutput(1000f, BeanContext.DEFAULT)).asMessage().is("Minimum value not met.");
+		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(10000f, BeanContext.DEFAULT)).asMessage().is("Minimum value not met.");
 
-		assertThrown(()->s.getItems().validateOutput(100.2f, BeanContext.DEFAULT)).message().is("Maximum value exceeded.");
-		assertThrown(()->s.getItems().getItems().validateOutput(1000.2f, BeanContext.DEFAULT)).message().is("Maximum value exceeded.");
-		assertThrown(()->s.getItems().getItems().getItems().validateOutput(10000.2f, BeanContext.DEFAULT)).message().is("Maximum value exceeded.");
-		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(100000.2f, BeanContext.DEFAULT)).message().is("Maximum value exceeded.");
+		assertThrown(()->s.getItems().validateOutput(100.2f, BeanContext.DEFAULT)).asMessage().is("Maximum value exceeded.");
+		assertThrown(()->s.getItems().getItems().validateOutput(1000.2f, BeanContext.DEFAULT)).asMessage().is("Maximum value exceeded.");
+		assertThrown(()->s.getItems().getItems().getItems().validateOutput(10000.2f, BeanContext.DEFAULT)).asMessage().is("Maximum value exceeded.");
+		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(100000.2f, BeanContext.DEFAULT)).asMessage().is("Maximum value exceeded.");
 	}
 
 	@Query @Schema(min="10.1", max="100.1", emin=true, emax=true)
@@ -716,8 +716,8 @@ public class HttpPartSchema_Query_Test {
 		s.validateOutput(10.2f, BeanContext.DEFAULT);
 		s.validateOutput(100f, BeanContext.DEFAULT);
 		s.validateOutput(null, BeanContext.DEFAULT);
-		assertThrown(()->s.validateOutput(10.1f, BeanContext.DEFAULT)).message().is("Minimum value not met.");
-		assertThrown(()->s.validateOutput(100.1f, BeanContext.DEFAULT)).message().is("Maximum value exceeded.");
+		assertThrown(()->s.validateOutput(10.1f, BeanContext.DEFAULT)).asMessage().is("Minimum value not met.");
+		assertThrown(()->s.validateOutput(100.1f, BeanContext.DEFAULT)).asMessage().is("Maximum value exceeded.");
 	}
 
 	@Query
@@ -749,15 +749,15 @@ public class HttpPartSchema_Query_Test {
 		s.getItems().getItems().getItems().validateOutput(10000f, BeanContext.DEFAULT);
 		s.getItems().getItems().getItems().getItems().validateOutput(100000f, BeanContext.DEFAULT);
 
-		assertThrown(()->s.getItems().validateOutput(10.1f, BeanContext.DEFAULT)).message().is("Minimum value not met.");
-		assertThrown(()->s.getItems().getItems().validateOutput(100.1f, BeanContext.DEFAULT)).message().is("Minimum value not met.");
-		assertThrown(()->s.getItems().getItems().getItems().validateOutput(1000.1f, BeanContext.DEFAULT)).message().is("Minimum value not met.");
-		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(10000.1f, BeanContext.DEFAULT)).message().is("Minimum value not met.");
+		assertThrown(()->s.getItems().validateOutput(10.1f, BeanContext.DEFAULT)).asMessage().is("Minimum value not met.");
+		assertThrown(()->s.getItems().getItems().validateOutput(100.1f, BeanContext.DEFAULT)).asMessage().is("Minimum value not met.");
+		assertThrown(()->s.getItems().getItems().getItems().validateOutput(1000.1f, BeanContext.DEFAULT)).asMessage().is("Minimum value not met.");
+		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(10000.1f, BeanContext.DEFAULT)).asMessage().is("Minimum value not met.");
 
-		assertThrown(()->s.getItems().validateOutput(100.1f, BeanContext.DEFAULT)).message().is("Maximum value exceeded.");
-		assertThrown(()->s.getItems().getItems().validateOutput(1000.1f, BeanContext.DEFAULT)).message().is("Maximum value exceeded.");
-		assertThrown(()->s.getItems().getItems().getItems().validateOutput(10000.1f, BeanContext.DEFAULT)).message().is("Maximum value exceeded.");
-		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(100000.1f, BeanContext.DEFAULT)).message().is("Maximum value exceeded.");
+		assertThrown(()->s.getItems().validateOutput(100.1f, BeanContext.DEFAULT)).asMessage().is("Maximum value exceeded.");
+		assertThrown(()->s.getItems().getItems().validateOutput(1000.1f, BeanContext.DEFAULT)).asMessage().is("Maximum value exceeded.");
+		assertThrown(()->s.getItems().getItems().getItems().validateOutput(10000.1f, BeanContext.DEFAULT)).asMessage().is("Maximum value exceeded.");
+		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(100000.1f, BeanContext.DEFAULT)).asMessage().is("Maximum value exceeded.");
 	}
 
 	@Query @Schema(mo="10")
@@ -772,7 +772,7 @@ public class HttpPartSchema_Query_Test {
 		s.validateOutput(10f, BeanContext.DEFAULT);
 		s.validateOutput(20f, BeanContext.DEFAULT);
 		s.validateOutput(null, BeanContext.DEFAULT);
-		assertThrown(()->s.validateOutput(11, BeanContext.DEFAULT)).message().is("Multiple-of not met.");
+		assertThrown(()->s.validateOutput(11, BeanContext.DEFAULT)).asMessage().is("Multiple-of not met.");
 	}
 
 	@Query
@@ -819,10 +819,10 @@ public class HttpPartSchema_Query_Test {
 		s.getItems().getItems().getItems().validateOutput(2000f, BeanContext.DEFAULT);
 		s.getItems().getItems().getItems().getItems().validateOutput(20000f, BeanContext.DEFAULT);
 
-		assertThrown(()->s.getItems().validateOutput(11, BeanContext.DEFAULT)).message().is("Multiple-of not met.");
-		assertThrown(()->s.getItems().getItems().validateOutput(101, BeanContext.DEFAULT)).message().is("Multiple-of not met.");
-		assertThrown(()->s.getItems().getItems().getItems().validateOutput(1001, BeanContext.DEFAULT)).message().is("Multiple-of not met.");
-		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(10001, BeanContext.DEFAULT)).message().is("Multiple-of not met.");
+		assertThrown(()->s.getItems().validateOutput(11, BeanContext.DEFAULT)).asMessage().is("Multiple-of not met.");
+		assertThrown(()->s.getItems().getItems().validateOutput(101, BeanContext.DEFAULT)).asMessage().is("Multiple-of not met.");
+		assertThrown(()->s.getItems().getItems().getItems().validateOutput(1001, BeanContext.DEFAULT)).asMessage().is("Multiple-of not met.");
+		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(10001, BeanContext.DEFAULT)).asMessage().is("Multiple-of not met.");
 	}
 
 	@Query @Schema(mo="10.1")
@@ -835,7 +835,7 @@ public class HttpPartSchema_Query_Test {
 		s.validateOutput(10.1f, BeanContext.DEFAULT);
 		s.validateOutput(20.2f, BeanContext.DEFAULT);
 		s.validateOutput(null, BeanContext.DEFAULT);
-		assertThrown(()->s.validateOutput(10.2f, BeanContext.DEFAULT)).message().is("Multiple-of not met.");
+		assertThrown(()->s.validateOutput(10.2f, BeanContext.DEFAULT)).asMessage().is("Multiple-of not met.");
 	}
 
 	@Query
@@ -872,10 +872,10 @@ public class HttpPartSchema_Query_Test {
 		s.getItems().getItems().getItems().validateOutput(2000.2f, BeanContext.DEFAULT);
 		s.getItems().getItems().getItems().getItems().validateOutput(20000.2f, BeanContext.DEFAULT);
 
-		assertThrown(()->s.getItems().validateOutput(10.2f, BeanContext.DEFAULT)).message().is("Multiple-of not met.");
-		assertThrown(()->s.getItems().getItems().validateOutput(100.2f, BeanContext.DEFAULT)).message().is("Multiple-of not met.");
-		assertThrown(()->s.getItems().getItems().getItems().validateOutput(1000.2f, BeanContext.DEFAULT)).message().is("Multiple-of not met.");
-		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(10000.2f, BeanContext.DEFAULT)).message().is("Multiple-of not met.");
+		assertThrown(()->s.getItems().validateOutput(10.2f, BeanContext.DEFAULT)).asMessage().is("Multiple-of not met.");
+		assertThrown(()->s.getItems().getItems().validateOutput(100.2f, BeanContext.DEFAULT)).asMessage().is("Multiple-of not met.");
+		assertThrown(()->s.getItems().getItems().getItems().validateOutput(1000.2f, BeanContext.DEFAULT)).asMessage().is("Multiple-of not met.");
+		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(10000.2f, BeanContext.DEFAULT)).asMessage().is("Multiple-of not met.");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -910,10 +910,10 @@ public class HttpPartSchema_Query_Test {
 		s.getItems().getItems().getItems().getItems().validateOutput(good, BeanContext.DEFAULT);
 		s.getItems().validateOutput(null, BeanContext.DEFAULT);
 
-		assertThrown(()->s.getItems().validateOutput(bad, BeanContext.DEFAULT)).message().is("Duplicate items not allowed.");
-		assertThrown(()->s.getItems().getItems().validateOutput(bad, BeanContext.DEFAULT)).message().is("Duplicate items not allowed.");
-		assertThrown(()->s.getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT)).message().is("Duplicate items not allowed.");
-		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT)).message().is("Duplicate items not allowed.");
+		assertThrown(()->s.getItems().validateOutput(bad, BeanContext.DEFAULT)).asMessage().is("Duplicate items not allowed.");
+		assertThrown(()->s.getItems().getItems().validateOutput(bad, BeanContext.DEFAULT)).asMessage().is("Duplicate items not allowed.");
+		assertThrown(()->s.getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT)).asMessage().is("Duplicate items not allowed.");
+		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT)).asMessage().is("Duplicate items not allowed.");
 	}
 
 	@Test
@@ -930,10 +930,10 @@ public class HttpPartSchema_Query_Test {
 		s.getItems().getItems().getItems().getItems().validateOutput(good, BeanContext.DEFAULT);
 		s.getItems().validateOutput(null, BeanContext.DEFAULT);
 
-		assertThrown(()->s.getItems().validateOutput(bad, BeanContext.DEFAULT)).message().is("Duplicate items not allowed.");
-		assertThrown(()->s.getItems().getItems().validateOutput(bad, BeanContext.DEFAULT)).message().is("Duplicate items not allowed.");
-		assertThrown(()->s.getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT)).message().is("Duplicate items not allowed.");
-		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT)).message().is("Duplicate items not allowed.");
+		assertThrown(()->s.getItems().validateOutput(bad, BeanContext.DEFAULT)).asMessage().is("Duplicate items not allowed.");
+		assertThrown(()->s.getItems().getItems().validateOutput(bad, BeanContext.DEFAULT)).asMessage().is("Duplicate items not allowed.");
+		assertThrown(()->s.getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT)).asMessage().is("Duplicate items not allowed.");
+		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(bad, BeanContext.DEFAULT)).asMessage().is("Duplicate items not allowed.");
 	}
 
 	@Query
@@ -966,14 +966,14 @@ public class HttpPartSchema_Query_Test {
 		s.getItems().getItems().getItems().validateOutput(split("1,2,3,4"), BeanContext.DEFAULT);
 		s.getItems().getItems().getItems().getItems().validateOutput(split("1,2,3,4,5"), BeanContext.DEFAULT);
 
-		assertThrown(()->s.getItems().validateOutput(new String[0], BeanContext.DEFAULT)).message().is("Minimum number of items not met.");
-		assertThrown(()->s.getItems().getItems().validateOutput(split("1"), BeanContext.DEFAULT)).message().is("Minimum number of items not met.");
-		assertThrown(()->s.getItems().getItems().getItems().validateOutput(split("1,2"), BeanContext.DEFAULT)).message().is("Minimum number of items not met.");
-		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(split("1,2,3"), BeanContext.DEFAULT)).message().is("Minimum number of items not met.");
+		assertThrown(()->s.getItems().validateOutput(new String[0], BeanContext.DEFAULT)).asMessage().is("Minimum number of items not met.");
+		assertThrown(()->s.getItems().getItems().validateOutput(split("1"), BeanContext.DEFAULT)).asMessage().is("Minimum number of items not met.");
+		assertThrown(()->s.getItems().getItems().getItems().validateOutput(split("1,2"), BeanContext.DEFAULT)).asMessage().is("Minimum number of items not met.");
+		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(split("1,2,3"), BeanContext.DEFAULT)).asMessage().is("Minimum number of items not met.");
 
-		assertThrown(()->s.getItems().validateOutput(split("1,2,3"), BeanContext.DEFAULT)).message().is("Maximum number of items exceeded.");
-		assertThrown(()->s.getItems().getItems().validateOutput(split("1,2,3,4"), BeanContext.DEFAULT)).message().is("Maximum number of items exceeded.");
-		assertThrown(()->s.getItems().getItems().getItems().validateOutput(split("1,2,3,4,5"), BeanContext.DEFAULT)).message().is("Maximum number of items exceeded.");
-		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(split("1,2,3,4,5,6"), BeanContext.DEFAULT)).message().is("Maximum number of items exceeded.");
+		assertThrown(()->s.getItems().validateOutput(split("1,2,3"), BeanContext.DEFAULT)).asMessage().is("Maximum number of items exceeded.");
+		assertThrown(()->s.getItems().getItems().validateOutput(split("1,2,3,4"), BeanContext.DEFAULT)).asMessage().is("Maximum number of items exceeded.");
+		assertThrown(()->s.getItems().getItems().getItems().validateOutput(split("1,2,3,4,5"), BeanContext.DEFAULT)).asMessage().is("Maximum number of items exceeded.");
+		assertThrown(()->s.getItems().getItems().getItems().getItems().validateOutput(split("1,2,3,4,5,6"), BeanContext.DEFAULT)).asMessage().is("Maximum number of items exceeded.");
 	}
 }

@@ -21,7 +21,6 @@ import org.apache.juneau.internal.*;
 
 /**
  * Encapsulates arguments for the {@link PojoSorter} class.
- * {@review}
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.PojoTools}

@@ -34,7 +34,7 @@ import org.apache.juneau.svl.*;
  * <p>
  * See {@link Serializer} for details.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *

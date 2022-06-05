@@ -38,7 +38,7 @@ import org.apache.juneau.xml.annotation.*;
 /**
  * Session object that lives for the duration of a single use of {@link RdfSerializer}.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *

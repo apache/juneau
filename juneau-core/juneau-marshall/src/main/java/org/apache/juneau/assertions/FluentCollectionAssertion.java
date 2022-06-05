@@ -26,57 +26,73 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Used for fluent assertion calls against collections objects.
- * {@review}
- *
  *
  * <h5 class='topic'>Test Methods</h5>
- * 	<ul>
- * 		<li class='jm'>{@link FluentCollectionAssertion#isEmpty()}
- * 		<li class='jm'>{@link FluentCollectionAssertion#isNotEmpty()}
- * 		<li class='jm'>{@link FluentCollectionAssertion#contains(Object)}
- * 		<li class='jm'>{@link FluentCollectionAssertion#doesNotContain(Object)}
- * 		<li class='jm'>{@link FluentCollectionAssertion#any(Predicate)}
- * 		<li class='jm'>{@link FluentCollectionAssertion#all(Predicate)}
- * 		<li class='jm'>{@link FluentCollectionAssertion#isSize(int size)}
- * 		<li class='jm'>{@link FluentObjectAssertion#exists()}
- * 		<li class='jm'>{@link FluentObjectAssertion#is(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#is(Predicate)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNot(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isAny(Object...)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNotAny(Object...)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNull()}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNotNull()}
- * 		<li class='jm'>{@link FluentObjectAssertion#isString(String)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isJson(String)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSame(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameJsonAs(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameSortedJsonAs(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameSerializedAs(Object, WriterSerializer)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class)}
+ * <p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link FluentCollectionAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentCollectionAssertion#isEmpty() isEmpty()}
+ * 		<li class='jm'>{@link FluentCollectionAssertion#isNotEmpty() isNotEmpty()}
+ * 		<li class='jm'>{@link FluentCollectionAssertion#isContains(Object) isContains(Object)}
+ * 		<li class='jm'>{@link FluentCollectionAssertion#isNotContains(Object) isNotContains(Object)}
+ * 		<li class='jm'>{@link FluentCollectionAssertion#isAny(Predicate) isAny(Predicate)}
+ * 		<li class='jm'>{@link FluentCollectionAssertion#isAll(Predicate) isAll(Predicate)}
+ * 		<li class='jm'>{@link FluentCollectionAssertion#isSize(int size) isSize(int size)}
  * 	</ul>
+ * 	<li class='jc'>{@link FluentObjectAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentObjectAssertion#isExists() isExists()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#is(Object) is(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#is(Predicate) is(Predicate)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNot(Object) isNot(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isAny(Object...) isAny(Object...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNotAny(Object...) isNotAny(Object...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNull() isNull()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNotNull() isNotNull()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isString(String) isString(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isJson(String) isJson(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSame(Object) isSame(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameJsonAs(Object) isSameJsonAs(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameSortedJsonAs(Object) isSameSortedJsonAs(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameSerializedAs(Object, WriterSerializer) isSameSerializedAs(Object, WriterSerializer)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class) isType(Class)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class) isExactType(Class)}
+ * 	</ul>
+ * </ul>
  *
  * <h5 class='topic'>Transform Methods</h5>
- * 	<ul>
- * 		<li class='jm'>{@link FluentCollectionAssertion#asStrings()}
- * 		<li class='jm'>{@link FluentCollectionAssertion#size()}
- * 		<li class='jm'>{@link FluentObjectAssertion#asString()}
- * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asJson()}
- * 		<li class='jm'>{@link FluentObjectAssertion#asJsonSorted()}
- * 		<li class='jm'>{@link FluentObjectAssertion#apply(Function)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asAny()}
+ * <p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link FluentCollectionAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentCollectionAssertion#asStrings() asStrings()}
+ * 		<li class='jm'>{@link FluentCollectionAssertion#asSize() asSize()}
+ * 	</ul>
+ * 	<li class='jc'>{@link FluentObjectAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString() asString()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer) asString(WriterSerializer)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function) asString(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asJson() asJson()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asJsonSorted() asJsonSorted()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asTransformed(Function) asApplied(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asAny() asAny()}
  *	</ul>
+ * </ul>
  *
  * <h5 class='topic'>Configuration Methods</h5>
- * 	<ul>
- * 		<li class='jm'>{@link Assertion#msg(String, Object...)}
- * 		<li class='jm'>{@link Assertion#out(PrintStream)}
- * 		<li class='jm'>{@link Assertion#silent()}
- * 		<li class='jm'>{@link Assertion#stdout()}
- * 		<li class='jm'>{@link Assertion#throwable(Class)}
+ * <p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link Assertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link Assertion#setMsg(String, Object...) setMsg(String, Object...)}
+ * 		<li class='jm'>{@link Assertion#setOut(PrintStream) setOut(PrintStream)}
+ * 		<li class='jm'>{@link Assertion#setSilent() setSilent()}
+ * 		<li class='jm'>{@link Assertion#setStdOut() setStdOut()}
+ * 		<li class='jm'>{@link Assertion#setThrowable(Class) setThrowable(Class)}
  * 	</ul>
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.FluentAssertions}
@@ -147,7 +163,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* FluentObjectAssertion */
-	public FluentCollectionAssertion<E,R> apply(Function<Collection<E>,Collection<E>> function) {
+	public FluentCollectionAssertion<E,R> asTransformed(Function<Collection<E>,Collection<E>> function) {
 		return new FluentCollectionAssertion<>(this, function.apply(orElse(null)), returns());
 	}
 
@@ -166,11 +182,11 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 *
 	 * <p>
 	 * If the collection is <jk>null</jk>, the returned assertion is a null assertion
-	 * (meaning {@link FluentIntegerAssertion#exists()} returns <jk>false</jk>).
+	 * (meaning {@link FluentIntegerAssertion#isExists()} returns <jk>false</jk>).
 	 *
 	 * @return A new assertion.
 	 */
-	public FluentIntegerAssertion<R> size() {
+	public FluentIntegerAssertion<R> asSize() {
 		return new FluentIntegerAssertion<>(this, valueIsNull() ? null : value().size(), returns());
 	}
 
@@ -209,7 +225,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
-	public R contains(E entry) throws AssertionError {
+	public R isContains(E entry) throws AssertionError {
 		for (Object v : value())
 			if (eq(v, entry))
 				return returns();
@@ -223,7 +239,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
-	public R doesNotContain(E entry) throws AssertionError {
+	public R isNotContains(E entry) throws AssertionError {
 		value().forEach(x -> {
 			if (eq(x, entry))
 				throw error(MSG_collectionContainedUnexpectedValue, entry, value());
@@ -238,7 +254,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
-	public R any(Predicate<E> test) throws AssertionError {
+	public R isAny(Predicate<E> test) throws AssertionError {
 		if (test == null)
 			return returns();
 		for (E v : value())
@@ -254,7 +270,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 * @return The fluent return object.
 	 * @throws AssertionError If assertion failed or value was <jk>null</jk>.
 	 */
-	public R all(Predicate<E> test) throws AssertionError {
+	public R isAll(Predicate<E> test) throws AssertionError {
 		if (test == null)
 			return returns();
 		value().forEach(x -> {
@@ -284,32 +300,32 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentCollectionAssertion<E,R> msg(String msg, Object...args) {
-		super.msg(msg, args);
+	public FluentCollectionAssertion<E,R> setMsg(String msg, Object...args) {
+		super.setMsg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentCollectionAssertion<E,R> out(PrintStream value) {
-		super.out(value);
+	public FluentCollectionAssertion<E,R> setOut(PrintStream value) {
+		super.setOut(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentCollectionAssertion<E,R> silent() {
-		super.silent();
+	public FluentCollectionAssertion<E,R> setSilent() {
+		super.setSilent();
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentCollectionAssertion<E,R> stdout() {
-		super.stdout();
+	public FluentCollectionAssertion<E,R> setStdOut() {
+		super.setStdOut();
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentCollectionAssertion<E,R> throwable(Class<? extends java.lang.RuntimeException> value) {
-		super.throwable(value);
+	public FluentCollectionAssertion<E,R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+		super.setThrowable(value);
 		return this;
 	}
 

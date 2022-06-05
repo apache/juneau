@@ -16,7 +16,6 @@ import org.apache.juneau.*;
 
 /**
  * Interface for classes that convert POJOs in some way using some predefined arguments object.
- * {@review}
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.PojoTools}

@@ -1024,7 +1024,7 @@ public class BeanMapTest {
 		t = p.parse(json, O.class);
 		assertEquals(123, t.foo);
 
-		assertThrown(()->JsonParser.DEFAULT.parse(json, O.class)).exists();
+		assertThrown(()->JsonParser.DEFAULT.parse(json, O.class)).isExists();
 
 		// XML
 		String xml = "<object><baz type='number'>789</baz><foo type='number'>123</foo><bar type='number'>456</bar></object>";
@@ -1032,7 +1032,7 @@ public class BeanMapTest {
 		t = p.parse(xml, O.class);
 		assertEquals(123, t.foo);
 
-		assertThrown(()->XmlParser.DEFAULT.parse(json, O.class)).exists();
+		assertThrown(()->XmlParser.DEFAULT.parse(json, O.class)).isExists();
 
 		// HTML
 		String html = "<table _type='object'><tr><th><string>key</string></th><th><string>value</string></th></tr><tr><td><string>baz</string></td><td><number>789</number></td></tr><tr><td><string>foo</string></td><td><number>123</number></td></tr><tr><td><string>bar</string></td><td><number>456</number></td></tr></table>";
@@ -1040,7 +1040,7 @@ public class BeanMapTest {
 		t = p.parse(html, O.class);
 		assertEquals(123, t.foo);
 
-		assertThrown(()->HtmlParser.DEFAULT.parse(json, O.class)).exists();
+		assertThrown(()->HtmlParser.DEFAULT.parse(json, O.class)).isExists();
 
 		// UON
 		String uon = "(baz=789,foo=123,bar=456)";
@@ -1048,7 +1048,7 @@ public class BeanMapTest {
 		t = p.parse(uon, O.class);
 		assertEquals(123, t.foo);
 
-		assertThrown(()->UonParser.DEFAULT.parse(json, O.class)).exists();
+		assertThrown(()->UonParser.DEFAULT.parse(json, O.class)).isExists();
 
 		// URL-Encoding
 		String urlencoding = "baz=789&foo=123&bar=456";
@@ -1056,7 +1056,7 @@ public class BeanMapTest {
 		t = p.parse(urlencoding, O.class);
 		assertEquals(123, t.foo);
 
-		assertThrown(()->UrlEncodingParser.DEFAULT.parse(json, O.class)).exists();
+		assertThrown(()->UrlEncodingParser.DEFAULT.parse(json, O.class)).isExists();
 	}
 
 	public static class O {

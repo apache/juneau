@@ -30,16 +30,15 @@ import org.apache.juneau.xml.*;
 
 /**
  * Serializes POJO models to HTML.
- * {@review}
  *
  * <h5 class='topic'>Media types</h5>
- *
+ * <p>
  * Handles <c>Accept</c> types:  <bc>text/html</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>text/html</bc>
  *
  * <h5 class='topic'>Description</h5>
- *
+ * <p>
  * The conversion is as follows...
  * <ul class='spaced-list'>
  * 	<li>
@@ -63,7 +62,7 @@ import org.apache.juneau.xml.*;
  * The {@link HtmlLink} annotation can be used on beans to add hyperlinks to the output.
  *
  * <h5 class='topic'>Behavior-specific subclasses</h5>
- *
+ * <p>
  * The following direct subclasses are provided for convenience:
  * <ul class='spaced-list'>
  * 	<li>
@@ -133,7 +132,7 @@ import org.apache.juneau.xml.*;
  * 	String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>map</jv>);
  * </p>
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *

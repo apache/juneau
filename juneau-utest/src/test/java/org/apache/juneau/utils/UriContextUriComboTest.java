@@ -231,36 +231,36 @@ public class UriContextUriComboTest {
 
 	@Test
 	public void a1_testAbsoluteAuthority() {
-		assertString(in.uriContext.getAbsoluteAuthority()).msg("{0}: testAbsoluteAuthority() failed", label).is(r.eAbsoluteAuthority);
+		assertString(in.uriContext.getAbsoluteAuthority()).setMsg("{0}: testAbsoluteAuthority() failed", label).is(r.eAbsoluteAuthority);
 	}
 
 	@Test
 	public void a2_testAbsoluteContext() {
-		assertString(in.uriContext.getAbsoluteContextRoot()).msg("{0}: testAbsoluteContext() failed", label).is(r.eAbsoluteContext);
+		assertString(in.uriContext.getAbsoluteContextRoot()).setMsg("{0}: testAbsoluteContext() failed", label).is(r.eAbsoluteContext);
 	}
 
 	@Test
 	public void a3_testAbsoluteResource() {
-		assertString(in.uriContext.getAbsoluteServletPath()).msg("{0}: testAbsoluteResource() failed", label).is(r.eAbsoluteResource);
+		assertString(in.uriContext.getAbsoluteServletPath()).setMsg("{0}: testAbsoluteResource() failed", label).is(r.eAbsoluteResource);
 	}
 
 	@Test
 	public void a4_testAbsolutePath() {
-		assertString(in.uriContext.getAbsolutePathInfo()).msg("{0}: testAbsolutePath() failed", label).is(r.eAbsolutePath);
+		assertString(in.uriContext.getAbsolutePathInfo()).setMsg("{0}: testAbsolutePath() failed", label).is(r.eAbsolutePath);
 	}
 
 	@Test
 	public void a5_testRootRelativeContext() {
-		assertString(in.uriContext.getRootRelativeContextRoot()).msg("{0}: testRootRelativeContext() failed", label).is(r.eRootRelativeContext);
+		assertString(in.uriContext.getRootRelativeContextRoot()).setMsg("{0}: testRootRelativeContext() failed", label).is(r.eRootRelativeContext);
 	}
 
 	@Test
 	public void a6_testRootRelativeResource() {
-		assertString(in.uriContext.getRootRelativeServletPath()).msg("{0}: testRootRelativeResource() failed", label).is(r.eRootRelativeResource);
+		assertString(in.uriContext.getRootRelativeServletPath()).setMsg("{0}: testRootRelativeResource() failed", label).is(r.eRootRelativeResource);
 	}
 
 	@Test
 	public void a7_testRootRelativePath() {
-		assertString(in.uriContext.getRootRelativePathInfo()).msg("{0}: testRootRelativePath() failed", label).is(r.eRootRelativePath);
+		assertString(in.uriContext.getRootRelativePathInfo()).setMsg("{0}: testRootRelativePath() failed", label).is(r.eRootRelativePath);
 	}
 }

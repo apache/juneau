@@ -104,11 +104,11 @@ import org.apache.juneau.internal.*;
  * </ul>
  *
  * <ul class='notes'>
- * 	<li>
+ * 	<li class='note'>
  * 		Whitespace is ignored around search patterns.
- * 	<li>
+ * 	<li class='note'>
  * 		Prepend <tt>+</tt> to tokens that must match.  (e.g. <tt>+foo* +*bar</tt>)
- * 	<li>
+ * 	<li class='note'>
  * 		Prepend <tt>-</tt> to tokens that must not match.  (e.g. <tt>+foo* -*bar</tt>)
  * </ul>
  *
@@ -129,9 +129,9 @@ import org.apache.juneau.internal.*;
  * </ul>
  *
  * <ul class='notes'>
- * 	<li>
+ * 	<li class='note'>
  * 		Whitespace is ignored in search patterns.
- * 	<li>
+ * 	<li class='note'>
  * 		Negative numbers are supported.
  * </ul>
  *
@@ -163,7 +163,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  *
  * <ul class='notes'>
- * 	<li>
+ * 	<li class='note'>
  * 		Whitespace is ignored in search patterns.
  * </ul>
  *

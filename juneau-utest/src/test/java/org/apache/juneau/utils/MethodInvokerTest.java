@@ -52,7 +52,7 @@ public class MethodInvokerTest {
 		mi.invoke(a);
 		mi.invoke(a);
 
-		assertBean(mi.getStats()).extract("runs","errors").asJson().is("{runs:3,errors:0}");
+		assertBean(mi.getStats()).asPropertyMap("runs","errors").asJson().is("{runs:3,errors:0}");
 	}
 
 	@Test
@@ -62,11 +62,11 @@ public class MethodInvokerTest {
 		MethodInvoker mi = create(m);
 
 		A a = new A();
-		assertThrown(()->mi.invoke(a)).exists();
-		assertThrown(()->mi.invoke(a)).exists();
-		assertThrown(()->mi.invoke(a)).exists();
+		assertThrown(()->mi.invoke(a)).isExists();
+		assertThrown(()->mi.invoke(a)).isExists();
+		assertThrown(()->mi.invoke(a)).isExists();
 
-		assertBean(mi.getStats()).extract("runs","errors").asJson().is("{runs:3,errors:3}");
+		assertBean(mi.getStats()).asPropertyMap("runs","errors").asJson().is("{runs:3,errors:3}");
 	}
 
 	@Test
@@ -76,11 +76,11 @@ public class MethodInvokerTest {
 		MethodInvoker mi = create(m);
 
 		A a = new A();
-		assertThrown(()->mi.invoke(a, "x")).exists();
-		assertThrown(()->mi.invoke(a)).exists();
-		assertThrown(()->mi.invoke(a, 1, "x")).exists();
+		assertThrown(()->mi.invoke(a, "x")).isExists();
+		assertThrown(()->mi.invoke(a)).isExists();
+		assertThrown(()->mi.invoke(a, 1, "x")).isExists();
 
-		assertBean(mi.getStats()).extract("runs","errors").asJson().is("{runs:3,errors:3}");
+		assertBean(mi.getStats()).asPropertyMap("runs","errors").asJson().is("{runs:3,errors:3}");
 	}
 
 	@Test

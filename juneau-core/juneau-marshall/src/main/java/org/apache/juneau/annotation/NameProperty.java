@@ -28,7 +28,7 @@ import java.lang.annotation.*;
  * </ul>
  *
  * <ul class='notes'>
- * 	<li>
+ * 	<li class='note'>
  * 		The annotated field or method does not need to be public.
  * </ul>
  *

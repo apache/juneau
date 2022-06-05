@@ -78,7 +78,7 @@ public class Header_Accept_Test {
 			.accept("text/s3")
 			.run()
 			.assertCode().is(406)
-			.assertBody().contains("Unsupported media-type in request header 'Accept': 'text/s3'");
+			.assertBody().isContains("Unsupported media-type in request header 'Accept': 'text/s3'");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -105,7 +105,7 @@ public class Header_Accept_Test {
 			.accept("text/s4")
 			.run()
 			.assertCode().is(406)
-			.assertBody().contains(
+			.assertBody().isContains(
 				"Unsupported media-type in request header 'Accept': 'text/s4'",
 				"Supported media-types: ['text/s3']"
 			);
@@ -149,7 +149,7 @@ public class Header_Accept_Test {
 			.accept("text/s4")
 			.run()
 			.assertCode().is(406)
-			.assertBody().contains(
+			.assertBody().isContains(
 				"Unsupported media-type in request header 'Accept': 'text/s4'",
 				"Supported media-types: ['text/s3','text/s1','text/s2']"
 			);
@@ -185,7 +185,7 @@ public class Header_Accept_Test {
 			.accept("bad/*")
 			.run()
 			.assertCode().is(406)
-			.assertBody().contains(
+			.assertBody().isContains(
 				"Unsupported media-type in request header 'Accept': 'bad/*'",
 				"Supported media-types: ['text/s1','text/s2']"
 			);
@@ -216,13 +216,13 @@ public class Header_Accept_Test {
 			.accept("text/s1")
 			.run()
 			.assertCode().is(406)
-			.assertBody().contains(
+			.assertBody().isContains(
 				"Unsupported media-type in request header 'Accept': 'text/s1'",
 				"Supported media-types: ['text/s3']"
 			);
 		e.put("?noTrace=true", null).accept("text/s2").run()
 			.assertCode().is(406)
-			.assertBody().contains(
+			.assertBody().isContains(
 				"Unsupported media-type in request header 'Accept': 'text/s2'",
 				"Supported media-types: ['text/s3']"
 			);

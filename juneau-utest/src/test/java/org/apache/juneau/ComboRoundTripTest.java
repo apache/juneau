@@ -131,21 +131,21 @@ public abstract class ComboRoundTripTest {
 
 			if (isRdf) {
 				Object[] args = { comboInput.label, testName };
-				assertString(r).msg("{0}/{1} parse-normal failed.\n{msg}", args).isSortedLines(expected);
+				assertString(r).setMsg("{0}/{1} parse-normal failed.\n{msg}", args).isSortedLines(expected);
 			} else
-				assertString(r).msg("{0}/{1} parse-normal failed.\n{msg}", comboInput.label, testName).is(expected);
+				assertString(r).setMsg("{0}/{1} parse-normal failed.\n{msg}", comboInput.label, testName).is(expected);
 
 		} catch (AssertionError e) {
 			if (comboInput.exceptionMsg == null)
 				throw e;
-			assertThrowable(e).messages().any(contains(comboInput.exceptionMsg));
+			assertThrowable(e).asMessages().isAny(contains(comboInput.exceptionMsg));
 		} catch (Exception e) {
 			if (comboInput.exceptionMsg == null) {
 				e.printStackTrace();
 				throw new AssertionError(comboInput.label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
 
 			}
-			assertThrowable(e).messages().any(contains(comboInput.exceptionMsg));
+			assertThrowable(e).asMessages().isAny(contains(comboInput.exceptionMsg));
 		}
 	}
 
@@ -169,20 +169,20 @@ public abstract class ComboRoundTripTest {
 
 			if (isRdf) {
 				Object[] args = { comboInput.label, testName };
-				assertString(r).msg("{0}/{1} parse-normal failed", args).isSortedLines(expected);
+				assertString(r).setMsg("{0}/{1} parse-normal failed", args).isSortedLines(expected);
 			} else
-				assertString(r).msg("{0}/{1} parse-normal failed", comboInput.label, testName).is(expected);
+				assertString(r).setMsg("{0}/{1} parse-normal failed", comboInput.label, testName).is(expected);
 
 		} catch (AssertionError e) {
 			if (comboInput.exceptionMsg == null)
 				throw e;
-			assertThrowable(e).messages().any(contains(comboInput.exceptionMsg));
+			assertThrowable(e).asMessages().isAny(contains(comboInput.exceptionMsg));
 		} catch (Throwable e) {
 			if (comboInput.exceptionMsg == null) {
 				e.printStackTrace();
 				throw new AssertionError(comboInput.label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
 			}
-			assertThrowable(e).messages().any(contains(comboInput.exceptionMsg));
+			assertThrowable(e).asMessages().isAny(contains(comboInput.exceptionMsg));
 		}
 	}
 
@@ -201,13 +201,13 @@ public abstract class ComboRoundTripTest {
 		} catch (AssertionError e) {
 			if (comboInput.exceptionMsg == null)
 				throw e;
-			assertThrowable(e).messages().any(contains(comboInput.exceptionMsg));
+			assertThrowable(e).asMessages().isAny(contains(comboInput.exceptionMsg));
 		} catch (Exception e) {
 			if (comboInput.exceptionMsg == null) {
 				e.printStackTrace();
 				throw new AssertionError(comboInput.label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
 			}
-			assertThrowable(e).messages().any(contains(comboInput.exceptionMsg));
+			assertThrowable(e).asMessages().isAny(contains(comboInput.exceptionMsg));
 		}
 	}
 
@@ -225,13 +225,13 @@ public abstract class ComboRoundTripTest {
 		} catch (AssertionError e) {
 			if (comboInput.exceptionMsg == null)
 				throw e;
-			assertThrowable(e).messages().any(contains(comboInput.exceptionMsg));
+			assertThrowable(e).asMessages().isAny(contains(comboInput.exceptionMsg));
 		} catch (Exception e) {
 			if (comboInput.exceptionMsg == null) {
 				e.printStackTrace();
 				throw new AssertionError(comboInput.label + "/" + testName + " failed.  exception=" + e.getLocalizedMessage());
 			}
-			assertThrowable(e).messages().any(contains(comboInput.exceptionMsg));
+			assertThrowable(e).asMessages().isAny(contains(comboInput.exceptionMsg));
 		}
 	}
 

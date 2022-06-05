@@ -29,11 +29,11 @@
 		|		.get(<jsf>URI</jsf>)
 		|		.run()
 		|		.assertStatus().code().is(200)
-		|		.assertHeader(<js>"Content-Type"</js>).matches(<js>"application/json*"</js>)
-		|		.getBody().assertValue().asString().contains(<js>"OK"</js>)
+		|		.assertHeader(<js>"Content-Type"</js>).isMatches(<js>"application/json*"</js>)
+		|		.getBody().assertValue().asString().isContains(<js>"OK"</js>)
 		|		.getBody().as(MyBean.<jk>class</jk>);
 	</p>
-	<ul>
+	<ul class='notes'>
 		<li class='note'>The REST API is described later in the documentation.</i>
 	</ul>
 	<p>
@@ -88,14 +88,14 @@
 		|	
 		|	<jc>// Check the contents of a string.</jc>
 		|	<jsm>assertString</jsm>(<js>"foo, bar"</js>)
-		|		.split(<js>","</js>)
-		|		.trim()
-		|		.has(<js>"foo"</js>, <js>"bar"</js>);
+		|		.asSplit(<js>","</js>)
+		|		.asTrimmed()
+		|		.isHas(<js>"foo"</js>, <js>"bar"</js>);
 		|
 		|	<jc>// Extract a subset of properties from a list of beans and compare using Simplified JSON.</jc>
 		|	List&lt;MyBean&gt; <jv>myListOfBeans</jv> = ...;
 		|	<jsm>assertBeanList</jsm>(<jv>myListOfBeans</jv>)
-		|		.extract(<js>"a,b"</js>)
+		|		.asPropertyMap(<js>"a,b"</js>)
 		|		.asJson().is(<js>"[{a:1,b:'foo'}]"</js>);
 		|	
 		|	<jc>// Perform an arbitrary Predicate check against a bean.</jc>
@@ -107,15 +107,15 @@
 		|	<jc>// 3 entries are [foo, bar*, null] using assertion predicates.</jc>
 		|	List&lt;String&gt; <jv>myListOfStrings</jv> = ...;
 		|	<jsm>assertStringList</jsm>(<jv>myListOfStrings</jv>)
-		|		.size().isLt(10)
-		|		.first(3)
-		|			.each(<jsm>eq</jsm>(<js>"foo"</js>),<jsm>match</jsm>(<js>"bar*"</js>),<jsm>isNull</jsm>())
+		|		.asSize().isLt(10)
+		|		.asFirst(3)
+		|			.isEach(<jsm>eq</jsm>(<js>"foo"</js>),<jsm>match</jsm>(<js>"bar*"</js>),<jsm>isNull</jsm>())
 		|	
 		|	<jc>// Check that an exception is thrown and is the specified type and has the specified message.</jc>
 		|	<jsm>assertThrown</jsm>(()-><jv>myBean</jv>.runBadMethod())
 		|		.exists()
 		|		.isExactType(RuntimeException.<jk>class</jk>)
-		|		.message().is(<js>"foo"</js>);
+		|		.asMessage().is(<js>"foo"</js>);
 	</p>
 	<p>
 		Assertions have 3 categories of methods:
@@ -128,6 +128,7 @@
 	<p>
 		Testing methods perform an assertion on the specified value and throws a {@link java.lang.AssertionError} if
 		the test fails.  Otherwise, the method returns the original assertion object to allow you to chain the command.
+		Testing methods start with <c>is</c>.
 	</p>
 	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
@@ -138,29 +139,28 @@
 	</p>	
 	<p>
 		Transform methods allow you to convert assertions of one type to another type or to convert the tested value to
-		some other form wrapped in another assertion.
+		some other form wrapped in another assertion.  Transform methods start with <c>as</c>.
 	</p>
 	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
 		|	<jc>// Customize the behavior of an assertion.</jc>
 		|	<jsm>assertString</jsm>(<jv>myString</jv>)
-		|		.length()  <jc>// Converts to a FluentIntegerAssertion.</jc>
+		|		.asString()  <jc>// Converts to a FluentIntegerAssertion.</jc>
 		|			.isLt(100)  <jc>// Runs test and returns original FluentStringAssertion.</jc>
-		|		.uc()  <jc>// Converts string to uppercase and returns a new FluentStringAssertion.</jc>
-		|			.contains(<js>"FOO"</js>);  <jc>// Runs test and returns original FluentStringAssertion.</jc>
+		|		.asUc()  <jc>// Converts string to uppercase and returns a new FluentStringAssertion.</jc>
+		|			.isContains(<js>"FOO"</js>);  <jc>// Runs test and returns original FluentStringAssertion.</jc>
 	</p>	
 	<p>
-		Configuration methods allow you to tailor the behavior of assertions when they fail.
-		They always return the same assertion object.
-		Transformed assertions inherit the configurations of the created-by assertions.
+		Configuration methods allow you to tailor the behavior of assertions when they fail.  They always return the same assertion object.
+		Transformed assertions inherit the configurations of the created-by assertions.  Configuration methods start with <c>set</c>.
 	</p>
 	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
 		|	<jc>// Customize the behavior of an assertion.</jc>
 		|	<jsm>assertString</jsm>(<jv>myString</jv>)
-		|		.msg(<js>"My string was null.  Value was {VALUE}."</js>)  <jc>// Custom error message when error occurs.</jc>
-		|		.out(<jv>myPrintWriter</jv>)  <jc>// Print error message to a separate writer.</jc>
-		|		.throwable(MyAssertionThrowable.<jk>class</jk>)  <jc>// Throw a customized assertion exception.</jc>
+		|		.setMsg(<js>"My string was null.  Value was {VALUE}."</js>)  <jc>// Custom error message when error occurs.</jc>
+		|		.setOut(<jv>myPrintWriter</jv>)  <jc>// Print error message to a separate writer.</jc>
+		|		.setThrowable(MyAssertionThrowable.<jk>class</jk>)  <jc>// Throw a customized assertion exception.</jc>
 		|		.isNotNull();
 	</p>	
 	<p>

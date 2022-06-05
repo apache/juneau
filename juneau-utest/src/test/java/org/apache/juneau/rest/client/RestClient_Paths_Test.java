@@ -53,31 +53,31 @@ public class RestClient_Paths_Test {
 
 	@Test
 	public void a01_path_String_Object() throws Exception {
-		client().build().get("/echo/{x}").pathData("x",new A1().init()).run().assertBody().contains("GET /echo/x=1 HTTP/1.1");
-		client().build().get("/echo/*").pathData("/*",new A1().init()).run().assertBody().contains("GET /echo/x=1 HTTP/1.1");
-		assertThrown(()->client().build().get("/echo/{x}").pathData("y","foo").run()).message().is("Path variable {y} was not found in path.");
+		client().build().get("/echo/{x}").pathData("x",new A1().init()).run().assertBody().isContains("GET /echo/x=1 HTTP/1.1");
+		client().build().get("/echo/*").pathData("/*",new A1().init()).run().assertBody().isContains("GET /echo/x=1 HTTP/1.1");
+		assertThrown(()->client().build().get("/echo/{x}").pathData("y","foo").run()).asMessage().is("Path variable {y} was not found in path.");
 	}
 
 	@Test
 	public void a02_path_NameValuePair() throws Exception {
-		client().build().get("/echo/{x}").pathData(part("x","foo")).run().assertBody().contains("GET /echo/foo HTTP/1.1");
+		client().build().get("/echo/{x}").pathData(part("x","foo")).run().assertBody().isContains("GET /echo/foo HTTP/1.1");
 	}
 
 	@Test
 	public void a03_paths_Object() throws Exception {
-		client().build().get("/echo/{x}").pathData(part("x","foo")).run().assertBody().contains("GET /echo/foo HTTP/1.1");
+		client().build().get("/echo/{x}").pathData(part("x","foo")).run().assertBody().isContains("GET /echo/foo HTTP/1.1");
 	}
 
 	@Test
 	public void a04_pathPairs_Objects() throws Exception {
-		client().build().get("/echo/{x}").pathDataPairs("x","1").run().assertBody().contains("GET /echo/1 HTTP/1.1");
-		assertThrown(()->client().build().get("/echo/{x}").pathDataPairs("x")).message().is("Odd number of parameters passed into pathDataPairs(String...)");
+		client().build().get("/echo/{x}").pathDataPairs("x","1").run().assertBody().isContains("GET /echo/1 HTTP/1.1");
+		assertThrown(()->client().build().get("/echo/{x}").pathDataPairs("x")).asMessage().is("Odd number of parameters passed into pathDataPairs(String...)");
 	}
 
 	@Test
 	public void a05_path_String_Object_Schema() throws Exception {
 		String[] a = new String[]{"foo","bar"};
-		client().build().get("/echo/{x}").pathData(part("x",a,T_ARRAY_PIPES)).run().assertBody().contains("GET /echo/foo%7Cbar HTTP/1.1");
+		client().build().get("/echo/{x}").pathData(part("x",a,T_ARRAY_PIPES)).run().assertBody().isContains("GET /echo/foo%7Cbar HTTP/1.1");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

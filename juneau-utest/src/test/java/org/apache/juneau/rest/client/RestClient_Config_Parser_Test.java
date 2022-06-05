@@ -42,7 +42,7 @@ public class RestClient_Config_Parser_Test {
 
 	@Test
 	public void a02_parser_strict() throws Exception {
-		assertThrown(()->MockRestClient.create(A.class).json().strict().build().post("/echoBody",reader("{f:1}")).run().getBody().as(A2.class)).messages().any(contains("Unquoted attribute detected."));
+		assertThrown(()->MockRestClient.create(A.class).json().strict().build().post("/echoBody",reader("{f:1}")).run().getBody().as(A2.class)).asMessages().isAny(contains("Unquoted attribute detected."));
 	}
 
 	public static class A3 {

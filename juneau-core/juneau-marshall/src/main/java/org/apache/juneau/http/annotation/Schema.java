@@ -25,9 +25,8 @@ import org.apache.juneau.oapi.*;
 
 /**
  * Swagger schema annotation.
- * {@review}
  *
- * <p>
+ * <p class='w800'>
  * The Schema Object allows the definition of input and output data types.
  * These types can be objects, but also primitives and arrays.
  * This object is based on the JSON Schema Specification Draft 4 and uses a predefined subset of it.
@@ -48,7 +47,8 @@ import org.apache.juneau.oapi.*;
  * 	)
  * </p>
  * <p class='bjava'>
- * 	<jc>// A request body consisting of an array of arrays, the internal array being of type integer, numbers must be between 0 and 63 (inclusive)</jc>
+ * 	<jc>// A request body consisting of an array of arrays, the internal
+ * 	// array being of type integer, numbers must be between 0 and 63 (inclusive)</jc>
  * 	<ja>@Body</ja>(
  * 		schema=<ja>@Schema</ja>(
  * 			items=<ja>@Items</ja>(
@@ -94,9 +94,17 @@ public @interface Schema {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
 	 * 	<jk>public</jk> Order placeOrder(
-	 * 		<ja>@Header</ja>(<js>"X-PetId"</js>) <ja>@Schema</ja>(_default=<js>"100"</js>) <jk>long</jk> <jv>petId</jv>,
-	 * 		<ja>@Header</ja>(<js>"X-AdditionalInfo"</js>) <ja>@Schema</ja>(format=<js>"uon"</js>, _default=<js>"(rushOrder=false)"</js>) AdditionalInfo <jv>additionalInfo</jv>,
-	 * 		<ja>@Header</ja>(<js>"X-Flags"</js>) <ja>@Schema</ja>(collectionFormat=<js>"uon"</js>, _default=<js>"@(new-customer)"</js>) String[] <jv>flags</jv>
+	 * 		<ja>@Header</ja>(<js>"X-PetId"</js>)
+	 * 		<ja>@Schema</ja>(_default=<js>"100"</js>)
+	 * 		<jk>long</jk> <jv>petId</jv>,
+	 *
+	 * 		<ja>@Header</ja>(<js>"X-AdditionalInfo"</js>)
+	 * 		<ja>@Schema</ja>(format=<js>"uon"</js>, _default=<js>"(rushOrder=false)"</js>)
+	 * 		AdditionalInfo <jv>additionalInfo</jv>,
+	 *
+	 * 		<ja>@Header</ja>(<js>"X-Flags"</js>)
+	 * 		<ja>@Schema</ja>(collectionFormat=<js>"uon"</js>, _default=<js>"@(new-customer)"</js>)
+	 * 		String[] <jv>flags</jv>
 	 * 	) {...}
 	 * </p>
 	 *
@@ -160,7 +168,7 @@ public @interface Schema {
 	 * 	A JSON reference to the schema definition.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a <a href='https://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03'>JSON Reference</a>.
 	 * </ul>
 	 *
@@ -172,7 +180,7 @@ public @interface Schema {
 	 * <mk>additionalProperties</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
@@ -185,7 +193,7 @@ public @interface Schema {
 	 * <mk>allOf</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
@@ -242,22 +250,6 @@ public @interface Schema {
 	 * Determines the format of the array if <c>type</c> <js>"array"</js> is used.
 	 * <br>Can only be used if <c>type</c> is <js>"array"</js>.
 	 *
-	 * <br>Possible values are:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"csv"</js> (default) - Comma-separated values (e.g. <js>"foo,bar"</js>).
-	 * 	<li>
-	 * 		<js>"ssv"</js> - Space-separated values (e.g. <js>"foo bar"</js>).
-	 * 	<li>
-	 * 		<js>"tsv"</js> - Tab-separated values (e.g. <js>"foo\tbar"</js>).
-	 * 	<li>
-	 * 		<js>"pipes</js> - Pipe-separated values (e.g. <js>"foo|bar"</js>).
-	 * 	<li>
-	 * 		<js>"multi"</js> - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
-	 * 	<li>
-	 * 		<js>"uon"</js> - UON notation (e.g. <js>"@(foo,bar)"</js>).
-	 * </ul>
-	 *
 	 * <p>
 	 * Static strings are defined in {@link CollectionFormatType}.
 	 *
@@ -276,6 +268,15 @@ public @interface Schema {
 	 *
 	 * <p>
 	 * Note that for collections/arrays parameters with POJO element types, the input is broken into a string array before being converted into POJO elements.
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"csv"</js> (default) - Comma-separated values (e.g. <js>"foo,bar"</js>).
+	 * 	<li><js>"ssv"</js> - Space-separated values (e.g. <js>"foo bar"</js>).
+	 * 	<li><js>"tsv"</js> - Tab-separated values (e.g. <js>"foo\tbar"</js>).
+	 * 	<li><js>"pipes</js> - Pipe-separated values (e.g. <js>"foo|bar"</js>).
+	 * 	<li><js>"multi"</js> - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
+	 * 	<li><js>"uon"</js> - UON notation (e.g. <js>"@(foo,bar)"</js>).
+	 * </ul>
 	 *
 	 * @return The annotation value.
 	 */
@@ -312,10 +313,10 @@ public @interface Schema {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 *
@@ -334,7 +335,7 @@ public @interface Schema {
 	 * <mk>discriminator</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
@@ -426,7 +427,7 @@ public @interface Schema {
 	 * <mk>externalDocs</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
@@ -449,8 +450,28 @@ public @interface Schema {
 	 * The extending format for the previously mentioned {@doc ext.SwaggerParameterTypes parameter type}.
 	 *
 	 * <p>
-	 * The possible values are:
+	 * Static strings are defined in {@link FormatType}.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Used on parameter</jc>
+	 * 	<ja>@RestPut</ja>
+	 * 	<jk>public void</jk> setAge(
+	 * 		<ja>@Body</ja> <ja>@Schema</ja>(type=<js>"integer"</js>, format=<js>"int32"</js>) String <jv>input</jv>
+	 * 	) {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing.
+	 * </ul>
+	 *
+	 * <ul class='values'>
 	 * 	<li>
 	 * 		<js>"int32"</js> - Signed 32 bits.
 	 * 		<br>Only valid with type <js>"integer"</js>.
@@ -486,34 +507,8 @@ public @interface Schema {
 	 * 		<br>If not specified, then the input is interpreted as plain-text and is converted to a POJO directly.
 	 * </ul>
 	 *
-	 * <p>
-	 * Static strings are defined in {@link FormatType}.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Used on parameter</jc>
-	 * 	<ja>@RestPut</ja>
-	 * 	<jk>public void</jk> setAge(
-	 * 		<ja>@Body</ja> <ja>@Schema</ja>(type=<js>"integer"</js>, format=<js>"int32"</js>) String <jv>input</jv>
-	 * 	) {...}
-	 * </p>
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side schema-based parsing.
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * 	<li>
-	 * 		Client-side schema-based serializing.
-	 * </ul>
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='extlink'>{@doc ext.SwaggerDataTypeFormats}
-	 * </ul>
-
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * </ul>
 	 *
@@ -675,7 +670,7 @@ public @interface Schema {
 	 * <mk>maxProperties</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
@@ -803,7 +798,7 @@ public @interface Schema {
 	 * <mk>minProperties</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
@@ -994,7 +989,7 @@ public @interface Schema {
 	 * <mk>properties</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
@@ -1014,7 +1009,7 @@ public @interface Schema {
 	 * <mk>readOnly</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>
@@ -1106,7 +1101,7 @@ public @interface Schema {
 	 * <mk>title</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * </ul>
 	 *
@@ -1120,9 +1115,34 @@ public @interface Schema {
 	 * <p>
 	 * The type of the parameter.
 	 *
-	 * <p>
-	 * The possible values are:
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Used on parameter</jc>
+	 * 	<ja>@RestPost</ja>
+	 * 	<jk>public void</jk> addPet(
+	 * 		<ja>@Body</ja> <ja>@Schema</ja>(type=<js>"object"</js>) Pet <jv>input</jv>
+	 * 	) {...}
+	 * </p>
+	 * <p class='bjava'>
+	 * 	<jc>// Used on class</jc>
+	 * 	<ja>@RestPost</ja>
+	 * 	<jk>public void</jk> addPet(Pet <jv>input</jv>) {...}
+	 *
+	 * 	<ja>@Body</ja> <ja>@Schema</ja>(type=<js>"object"</js>)
+	 * 	<jk>public class</jk> Pet {...}
+	 * </p>
+	 *
+	 * <h5 class='section'>Used for:</h5>
 	 * <ul class='spaced-list'>
+	 * 	<li>
+	 * 		Server-side schema-based parsing.
+	 * 	<li>
+	 * 		Server-side generated Swagger documentation.
+	 * 	<li>
+	 * 		Client-side schema-based serializing.
+	 * </ul>
+	 *
+	 * <ul class='values spaced-list'>
 	 * 	<li>
 	 * 		<js>"string"</js>
 	 * 		<br>Parameter must be a string or a POJO convertible from a string.
@@ -1152,34 +1172,8 @@ public @interface Schema {
 	 * 		<br>This type is currently not supported.
 	 * </ul>
 	 *
-	 * <p>
-	 * Static strings are defined in {@link ParameterType}.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Used on parameter</jc>
-	 * 	<ja>@RestPost</ja>
-	 * 	<jk>public void</jk> addPet(
-	 * 		<ja>@Body</ja> <ja>@Schema</ja>(type=<js>"object"</js>) Pet <jv>input</jv>
-	 * 	) {...}
-	 * </p>
-	 * <p class='bjava'>
-	 * 	<jc>// Used on class</jc>
-	 * 	<ja>@RestPost</ja>
-	 * 	<jk>public void</jk> addPet(Pet <jv>input</jv>) {...}
-	 *
-	 * 	<ja>@Body</ja> <ja>@Schema</ja>(type=<js>"object"</js>)
-	 * 	<jk>public class</jk> Pet {...}
-	 * </p>
-	 *
-	 * <h5 class='section'>Used for:</h5>
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		Server-side schema-based parsing.
-	 * 	<li>
-	 * 		Server-side generated Swagger documentation.
-	 * 	<li>
-	 * 		Client-side schema-based serializing.
+	 * <ul class='notes'>
+	 * 	<li class='note'>Static strings are defined in {@link ParameterType}.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -1233,7 +1227,7 @@ public @interface Schema {
 	 * <mk>xml</mk> field of the {@doc ext.SwaggerSchemaObject}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
 	 * </ul>

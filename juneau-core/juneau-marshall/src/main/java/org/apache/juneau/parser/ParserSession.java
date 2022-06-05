@@ -36,7 +36,7 @@ import org.apache.juneau.utils.*;
 /**
  * Session object that lives for the duration of a single use of {@link Parser}.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *
@@ -559,7 +559,7 @@ public class ParserSession extends BeanSession {
 	 * The array can be arbitrarily long to indicate arbitrarily complex data structures.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Use the {@link #parse(Object, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>
 	 *

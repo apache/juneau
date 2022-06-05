@@ -148,7 +148,7 @@ public class RestClient_Logging_Test {
 		client().logger(l).logRequests(DetailLevel.SIMPLE,Level.WARNING,null).build().post("/bean",bean).complete();
 		l.assertLastLevel(Level.WARNING);
 		l.assertLastMessage().is("HTTP POST http://localhost/bean, HTTP/1.1 200 ");
-		l.assertContents().contains("WARNING: HTTP POST http://localhost/bean, HTTP/1.1 200 \n");
+		l.assertContents().isContains("WARNING: HTTP POST http://localhost/bean, HTTP/1.1 200 \n");
 		l.reset();
 
 		client().logger(l).logRequests(DetailLevel.FULL,Level.WARNING,null).build().post("/bean",bean).complete();
@@ -172,7 +172,7 @@ public class RestClient_Logging_Test {
 			"{f:1}",
 			"=== END ======================================================================="
 		);
-		l.assertContents().javaStrings().contains(
+		l.assertContents().asJavaStrings().isContains(
 			"WARNING: ",
 			"=== HTTP Call (outgoing) ======================================================",
 			"=== REQUEST ===",
@@ -215,7 +215,7 @@ public class RestClient_Logging_Test {
 		ml.reset();
 		client().logger(ml).logToConsole().console(mc).interceptors(A1.class).build().post("/bean",bean).complete();
 		ml.assertRecordCount().is(5);
-		ml.assertContents().contains(
+		ml.assertContents().isContains(
 			"WARNING: Foo",
 			"WARNING: Bar",
 			"WARNING: Baz",

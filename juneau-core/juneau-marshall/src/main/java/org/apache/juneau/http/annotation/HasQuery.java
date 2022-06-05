@@ -19,7 +19,6 @@ import java.lang.annotation.*;
 
 /**
  * REST has-query-parameter annotation.
- * {@review}
  *
  * <p>
  * Identifies whether or not an HTTP request has the specified query parameter.
@@ -29,69 +28,65 @@ import java.lang.annotation.*;
  * <ul>
  * 	<li>Arguments and argument-types of server-side <ja>@RestOp</ja>-annotated methods.
  * </ul>
-<p>
-	Identical to {@link HasFormData @HasFormData}, but only checks the existing of the parameter in the URL string, not
-	URL-encoded form posts.
-</p>
-<ul class='javatree'>
-	<li class='ja'>{@link HasQuery}
-</ul>
-<p>
-	Unlike {@link HasFormData @HasFormData}, using this annotation does not result in the servlet reading the contents
-	of URL-encoded form posts.
-	Therefore, this annotation can be used in conjunction with the {@link Body @Body} annotation or
-	{@code RestRequestgetBody()} method for <c>application/x-www-form-urlencoded POST</c> calls.
- </p>
-<h5 class='figure'>Example:</h5>
-<p class='bjava'>
-	<ja>@RestGet</ja>
-	<jk>public void</jk> doGet(<ja>@HasQuery</ja>(<js>"p1"</js>) <jk>boolean</jk> <jv>p1</jv>) {...}
-</p>
-<p>
-	This is functionally equivalent to the following code:
-</p>
-<p class='bjava'>
-	<ja>@RestGet</ja>
-	<jk>public void</jk> doGet(RestRequest <jv>req</jv>) {
-		<jk>boolean</jk> <jv>p1</jv> = <jv>req</jv>.getQueryParam(<js>"p1"</js>).isPresent();
-		...
-	}
-</p>
-<p>
-	The parameter type must be either <jk>boolean</jk> or {@link java.lang.Boolean}.
-</p>
-<p>
-	The following table shows the behavioral differences between <ja>@HasQuery</ja> and <ja>@Query</ja>:
-</p>
-<table class='styled w400'>
-	<tr>
-		<th><c>Query content</c></th>
-		<th><c><ja>@HasQuery</ja>(<js>"a"</js>)</c></th>
-		<th><c><ja>@Query</ja>(<js>"a"</js>)</c></th>
-	</tr>
-	<tr>
-		<td><c>?a=foo</c></td>
-		<td><jk>true</jk></td>
-		<td><js>"foo"</js></td>
-	</tr>
-	<tr>
-		<td><c>?a=</c></td>
-		<td><jk>true</jk></td>
-		<td><js>""</js></td>
-	</tr>
-	<tr>
-		<td><c>?a</c></td>
-		<td><jk>true</jk></td>
-		<td><jk>null</jk></td>
-	</tr>
-	<tr>
-		<td><c>?b=foo</c></td>
-		<td><jk>false</jk></td>
-		<td><jk>null</jk></td>
-	</tr>
-</table>
- *
- *
+ * <p>
+ * 	Identical to {@link HasFormData @HasFormData}, but only checks the existing of the parameter in the URL string, not
+ * 	URL-encoded form posts.
+ * </p>
+ * <p>
+ * 	Unlike {@link HasFormData @HasFormData}, using this annotation does not result in the servlet reading the contents
+ * 	of URL-encoded form posts.
+ * 	Therefore, this annotation can be used in conjunction with the {@link Body @Body} annotation or
+ * 	{@code RestRequestgetBody()} method for <c>application/x-www-form-urlencoded POST</c> calls.
+ *  </p>
+ * <h5 class='figure'>Example:</h5>
+ * <p class='bjava'>
+ * 	<ja>@RestGet</ja>
+ * 	<jk>public void</jk> doGet(<ja>@HasQuery</ja>(<js>"p1"</js>) <jk>boolean</jk> <jv>p1</jv>) {...}
+ * </p>
+ * <p>
+ * 	This is functionally equivalent to the following code:
+ * </p>
+ * <p class='bjava'>
+ * 	<ja>@RestGet</ja>
+ * 	<jk>public void</jk> doGet(RestRequest <jv>req</jv>) {
+ * 		<jk>boolean</jk> <jv>p1</jv> = <jv>req</jv>.getQueryParam(<js>"p1"</js>).isPresent();
+ * 		...
+ * 	}
+ * </p>
+ * <p>
+ * 	The parameter type must be either <jk>boolean</jk> or {@link java.lang.Boolean}.
+ * </p>
+ * <p>
+ * 	The following table shows the behavioral differences between <ja>@HasQuery</ja> and <ja>@Query</ja>:
+ * </p>
+ * <table class='styled w400'>
+ * 	<tr>
+ * 		<th><c>Query content</c></th>
+ * 		<th><c><ja>@HasQuery</ja>(<js>"a"</js>)</c></th>
+ * 		<th><c><ja>@Query</ja>(<js>"a"</js>)</c></th>
+ * 	</tr>
+ * 	<tr>
+ * 		<td><c>?a=foo</c></td>
+ * 		<td><jk>true</jk></td>
+ * 		<td><js>"foo"</js></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td><c>?a=</c></td>
+ * 		<td><jk>true</jk></td>
+ * 		<td><js>""</js></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td><c>?a</c></td>
+ * 		<td><jk>true</jk></td>
+ * 		<td><jk>null</jk></td>
+ * 	</tr>
+ * 	<tr>
+ * 		<td><c>?b=foo</c></td>
+ * 		<td><jk>false</jk></td>
+ * 		<td><jk>null</jk></td>
+ * 	</tr>
+ * </table>
+ * <p>
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
@@ -108,7 +103,7 @@ public @interface HasQuery {
 	 * Required. The name of the parameter. Parameter names are case sensitive.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is plain-text.
 	 * </ul>
 	 *

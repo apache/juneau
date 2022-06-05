@@ -29,19 +29,19 @@ public class NTripleTest {
 
 	@Test
 	public void write1() throws Exception {
-		assertString(m.write("foo")).contains("<http://www.apache.org/juneau/value> \"foo\"");
+		assertString(m.write("foo")).isContains("<http://www.apache.org/juneau/value> \"foo\"");
 	}
 
 	@Test
 	public void write2() throws Exception {
 		StringWriter sw = new StringWriter();
 		m.write("foo", sw);
-		assertString(sw.toString()).contains("<http://www.apache.org/juneau/value> \"foo\"");
+		assertString(sw.toString()).isContains("<http://www.apache.org/juneau/value> \"foo\"");
 	}
 
 	@Test
 	public void toString1() throws Exception {
-		assertString(m.toString("foo")).contains("<http://www.apache.org/juneau/value> \"foo\"");
+		assertString(m.toString("foo")).isContains("<http://www.apache.org/juneau/value> \"foo\"");
 	}
 
 	@Test

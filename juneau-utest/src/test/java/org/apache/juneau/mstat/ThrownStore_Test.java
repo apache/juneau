@@ -207,7 +207,7 @@ public class ThrownStore_Test {
 
 	@Test
 	public void b04_builder_implClass_bad() {
-		assertThrown(()->ThrownStore.create().type(B4.class).build()).messages().contains("foobar");
+		assertThrown(()->ThrownStore.create().type(B4.class).build()).asMessages().isContains("foobar");
 	}
 
 	public static class B5a {}
@@ -230,7 +230,7 @@ public class ThrownStore_Test {
 	public void b05_builder_beanFactory() throws Exception {
 		BeanStore bs = BeanStore.create().build();
 
-		assertThrown(()->ThrownStore.create(bs).type(B5b.class).build()).messages().any(contains("Public constructor found but could not find prerequisites: B5a"));
+		assertThrown(()->ThrownStore.create(bs).type(B5b.class).build()).asMessages().isAny(contains("Public constructor found but could not find prerequisites: B5a"));
 		assertObject(ThrownStore.create(bs).type(B5c.class).build()).isType(B5c.class);
 
 		bs.addBean(B5a.class, new B5a());
@@ -263,7 +263,7 @@ public class ThrownStore_Test {
 		Throwable t1 = new Throwable();
 		t1.fillInStackTrace();
 
-		assertThrown(()->ThrownStore.create(bs).statsImplClass(B6b.class).build().add(t1)).messages().any(contains("Public constructor found but could not find prerequisites: B6a"));
+		assertThrown(()->ThrownStore.create(bs).statsImplClass(B6b.class).build().add(t1)).asMessages().isAny(contains("Public constructor found but could not find prerequisites: B6a"));
 		assertObject(ThrownStore.create(bs).statsImplClass(B6c.class).build().add(t1)).isType(B6c.class);
 
 		bs.addBean(B6a.class, new B6a());
@@ -290,8 +290,8 @@ public class ThrownStore_Test {
 		assertLong(stats.getFirstOccurrence()).isNot(0l);
 		assertLong(stats.getLastOccurrence()).isNot(0l);
 		assertString(stats.getFirstMessage()).is("bar");
-		assertObject(stats.getStackTrace()).asJson().contains("org.apache.juneau");
-		assertObject(stats).asString().contains("bar");
+		assertObject(stats.getStackTrace()).asJson().isContains("org.apache.juneau");
+		assertObject(stats).asString().isContains("bar");
 
 		stats = stats.clone();
 		assertLong(stats.getHash()).isNot(0l);
@@ -299,8 +299,8 @@ public class ThrownStore_Test {
 		assertLong(stats.getFirstOccurrence()).isNot(0l);
 		assertLong(stats.getLastOccurrence()).isNot(0l);
 		assertString(stats.getFirstMessage()).is("bar");
-		assertObject(stats.getStackTrace()).asJson().contains("org.apache.juneau");
-		assertObject(stats).asString().contains("bar");
+		assertObject(stats.getStackTrace()).asJson().isContains("org.apache.juneau");
+		assertObject(stats).asString().isContains("bar");
 
 		stats = stats.getCausedBy().get();
 		assertLong(stats.getHash()).isNot(0l);
@@ -308,8 +308,8 @@ public class ThrownStore_Test {
 		assertLong(stats.getFirstOccurrence()).isNot(0l);
 		assertLong(stats.getLastOccurrence()).isNot(0l);
 		assertString(stats.getFirstMessage()).is("foo");
-		assertObject(stats.getStackTrace()).asJson().contains("org.apache.juneau");
-		assertObject(stats).asString().contains("foo");
+		assertObject(stats.getStackTrace()).asJson().isContains("org.apache.juneau");
+		assertObject(stats).asString().isContains("foo");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

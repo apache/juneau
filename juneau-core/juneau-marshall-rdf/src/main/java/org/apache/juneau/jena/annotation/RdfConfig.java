@@ -60,37 +60,36 @@ public @interface RdfConfig {
 	 * <p>
 	 * 	The RDF language to use.
 	 *
+	 * <ul class='values spaced-list'>
+	 * 	<li>
+	 * 		<js>"RDF/XML"</js>
+	 * 	<li>
+	 * 		<js>"RDF/XML-ABBREV"</js> (default)
+	 * 	<li>
+	 * 		<js>"N-TRIPLE"</js>
+	 * 	<li>
+	 * 		<js>"N3"</js> - General name for the N3 writer.
+	 * 		Will make a decision on exactly which writer to use (pretty writer, plain writer or simple writer) when
+	 * 		created.
+	 * 		Default is the pretty writer but can be overridden with system property
+	 * 		<c>org.apache.jena.n3.N3JenaWriter.writer</c>.
+	 * 	<li>
+	 * 		<js>"N3-PP"</js> - Name of the N3 pretty writer.
+	 * 		The pretty writer uses a frame-like layout, with prefixing, clustering like properties and embedding
+	 * 		one-referenced bNodes.
+	 * 	<li>
+	 * 		<js>"N3-PLAIN"</js> - Name of the N3 plain writer.
+	 * 		The plain writer writes records by subject.
+	 * 	<li>
+	 * 		<js>"N3-TRIPLES"</js> - Name of the N3 triples writer.
+	 * 		This writer writes one line per statement, like N-Triples, but does N3-style prefixing.
+	 * 	<li>
+	 * 		<js>"TURTLE"</js> -  Turtle writer.
+	 * 		http://www.dajobe.org/2004/01/turtle/
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul class='spaced-list'>
-	 * 			<li>
-	 * 				<js>"RDF/XML"</js>
-	 * 			<li>
-	 * 				<js>"RDF/XML-ABBREV"</js> (default)
-	 * 			<li>
-	 * 				<js>"N-TRIPLE"</js>
-	 * 			<li>
-	 * 				<js>"N3"</js> - General name for the N3 writer.
-	 * 				Will make a decision on exactly which writer to use (pretty writer, plain writer or simple writer) when
-	 * 				created.
-	 * 				Default is the pretty writer but can be overridden with system property
-	 * 				<c>org.apache.jena.n3.N3JenaWriter.writer</c>.
-	 * 			<li>
-	 * 				<js>"N3-PP"</js> - Name of the N3 pretty writer.
-	 * 				The pretty writer uses a frame-like layout, with prefixing, clustering like properties and embedding
-	 * 				one-referenced bNodes.
-	 * 			<li>
-	 * 				<js>"N3-PLAIN"</js> - Name of the N3 plain writer.
-	 * 				The plain writer writes records by subject.
-	 * 			<li>
-	 * 				<js>"N3-TRIPLES"</js> - Name of the N3 triples writer.
-	 * 				This writer writes one line per statement, like N-Triples, but does N3-style prefixing.
-	 * 			<li>
-	 * 				<js>"TURTLE"</js> -  Turtle writer.
-	 * 				http://www.dajobe.org/2004/01/turtle/
-	 *		 </ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -107,7 +106,7 @@ public @interface RdfConfig {
 	 * XML namespace for Juneau properties.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -124,7 +123,7 @@ public @interface RdfConfig {
 	 * Default XML namespace for bean properties.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -143,22 +142,21 @@ public @interface RdfConfig {
 	 * <p>
 	 * Set the engine for checking and resolving.
 	 *
+	 * <ul class='values spaced-list'>
+	 * 	<li>
+	 * 		<js>"lax"</js> - The rules for RDF URI references only, which does permit spaces although the use of spaces
+	 * 		is not good practice.
+	 * 	<li>
+	 * 		<js>"strict"</js> - Sets the IRI engine with rules for valid IRIs, XLink and RDF; it does not permit spaces
+	 * 		in IRIs.
+	 * 	<li>
+	 * 		<js>"iri"</js> - Sets the IRI engine to IRI
+	 * 		({@doc http://www.ietf.org/rfc/rfc3986.txt RFC 3986},
+	 * 		{@doc http://www.ietf.org/rfc/rfc3987.txt RFC 3987}).
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul class='spaced-list'>
-	 * 			<li>
-	 * 				<js>"lax"</js> - The rules for RDF URI references only, which does permit spaces although the use of spaces
-	 * 				is not good practice.
-	 * 			<li>
-	 * 				<js>"strict"</js> - Sets the IRI engine with rules for valid IRIs, XLink and RDF; it does not permit spaces
-	 * 				in IRIs.
-	 * 			<li>
-	 * 				<js>"iri"</js> - Sets the IRI engine to IRI
-	 * 				({@doc http://www.ietf.org/rfc/rfc3986.txt RFC 3986},
-	 * 				{@doc http://www.ietf.org/rfc/rfc3987.txt RFC 3987}).
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -172,19 +170,18 @@ public @interface RdfConfig {
 	 * <p>
 	 * This allows a coarse-grained approach to control of error handling.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"default"</js>
+	 * 	<li><js>"lax"</js>
+	 * 	<li><js>"strict"</js>
+	 * 	<li><js>"strict-ignore"</js>
+	 * 	<li><js>"strict-warning"</js>
+	 * 	<li><js>"strict-error"</js>
+	 * 	<li><js>"strict-fatal"</js>
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"default"</js>
-	 * 			<li><js>"lax"</js>
-	 * 			<li><js>"strict"</js>
-	 * 			<li><js>"strict-ignore"</js>
-	 * 			<li><js>"strict-warning"</js>
-	 * 			<li><js>"strict-error"</js>
-	 * 			<li><js>"strict-fatal"</js>
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -210,7 +207,7 @@ public @interface RdfConfig {
 	 * Sets ARP to look for RDF embedded within an enclosing XML document.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -230,7 +227,7 @@ public @interface RdfConfig {
 	 * The value to be included for an <xa>xml:base</xa> attribute on the root element in the file.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -251,7 +248,7 @@ public @interface RdfConfig {
 	 * <br>Short ID's are easier to read, but can run out of memory on very large models.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -271,7 +268,7 @@ public @interface RdfConfig {
 	 * URIs in the graph are, by default, checked prior to serialization.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -313,7 +310,7 @@ public @interface RdfConfig {
 	 * Relative URIs of any of these types are output where possible if and only if the option has been specified.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -329,20 +326,19 @@ public @interface RdfConfig {
 	/**
 	 * RDF/XML property: <c>showXmlDeclaration</c>.
 	 *
+	 * <ul class='values spaced-list'>
+	 * 	<li>
+	 * 		<js>"true"</js> - Add XML Declaration to the output.
+	 * 	<li>
+	 * 		<js>"false"</js> - Don't add XML Declaration to the output.
+	 * 	<li>
+	 * 		<js>"default"</js> - Only add an XML Declaration when asked to write to an <c>OutputStreamWriter</c>
+	 * 		that uses some encoding other than <c>UTF-8</c> or <c>UTF-16</c>.
+	 * 		In this case the encoding is shown in the XML declaration.
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul class='spaced-list'>
-	 * 			<li>
-	 * 				<js>"true"</js> - Add XML Declaration to the output.
-	 * 			<li>
-	 * 				<js>"false"</js> - Don't add XML Declaration to the output.
-	 * 			<li>
-	 * 				<js>"default"</js> - Only add an XML Declaration when asked to write to an <c>OutputStreamWriter</c>
-	 * 				that uses some encoding other than <c>UTF-8</c> or <c>UTF-16</c>.
-	 * 				In this case the encoding is shown in the XML declaration.
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -365,7 +361,7 @@ public @interface RdfConfig {
 	 * invocation.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -385,7 +381,7 @@ public @interface RdfConfig {
 	 * The number of spaces with which to indent XML child elements.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -405,7 +401,7 @@ public @interface RdfConfig {
 	 * The XML attribute quote character.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -427,7 +423,7 @@ public @interface RdfConfig {
 	 * rules that will not be used.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -447,7 +443,7 @@ public @interface RdfConfig {
 	 * Minimum gap between items on a line.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -467,7 +463,7 @@ public @interface RdfConfig {
 	 * Don't print object lists as comma separated lists.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -487,7 +483,7 @@ public @interface RdfConfig {
 	 * If the subject is shorter than this value, the first property may go on the same line.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -507,7 +503,7 @@ public @interface RdfConfig {
 	 * Width of the property column.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -527,7 +523,7 @@ public @interface RdfConfig {
 	 * Width to indent properties.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -548,7 +544,7 @@ public @interface RdfConfig {
 	 * <br>Must be longer than <c>propertyColumn</c>.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -568,7 +564,7 @@ public @interface RdfConfig {
 	 * Controls whether to use abbreviations <c>&lt;&gt;</c> or <c>&lt;#&gt;</c>.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -588,7 +584,7 @@ public @interface RdfConfig {
 	 * Controls whether to use <c>a</c>, <c>=</c> and <c>=&gt;</c> in output
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -608,7 +604,7 @@ public @interface RdfConfig {
 	 * Disallow the use of <c>"""</c> to delimit long strings.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -628,7 +624,7 @@ public @interface RdfConfig {
 	 * Disallow the use doubles as <c>123.456</c>.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -644,25 +640,24 @@ public @interface RdfConfig {
 	/**
 	 * RDF format for representing collections and arrays.
 	 *
+	 * <ul class='values spaced-list'>
+	 * 	<li>
+	 * 		<js>"DEFAULT"</js> - Default format.  The default is an RDF Sequence container.
+	 * 	<li>
+	 * 		<js>"SEQ"</js> - RDF Sequence container.
+	 * 	<li>
+	 * 		<js>"BAG"</js> - RDF Bag container.
+	 * 	<li>
+	 * 		<js>"LIST"</js> - RDF List container.
+	 * 	<li>
+	 * 		<js>"MULTI_VALUED"</js> - Multi-valued properties.
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul class='spaced-list'>
-	 * 			<li>
-	 * 				<js>"DEFAULT"</js> - Default format.  The default is an RDF Sequence container.
-	 * 			<li>
-	 * 				<js>"SEQ"</js> - RDF Sequence container.
-	 * 			<li>
-	 * 				<js>"BAG"</js> - RDF Bag container.
-	 * 			<li>
-	 * 				<js>"LIST"</js> - RDF List container.
-	 * 			<li>
-	 * 				<js>"MULTI_VALUED"</js> - Multi-valued properties.
-	 *		 </ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If you use <js>"BAG"</js> or <js>"MULTI_VALUED"</js>, the order of the elements in the collection will get
 	 * 		lost.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -692,7 +687,7 @@ public @interface RdfConfig {
 	 * annotated with {@link Rdf#beanUri @Rdf(beanUri=true)}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -716,7 +711,7 @@ public @interface RdfConfig {
 	 * If <js>"true"</js>, whitespace in text elements will be automatically trimmed.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -743,7 +738,7 @@ public @interface RdfConfig {
 	 * provided to customize the behavior of specific serializers in a {@link SerializerSet}.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -759,7 +754,7 @@ public @interface RdfConfig {
 	 * Add XSI data types to non-<c>String</c> literals.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -784,7 +779,7 @@ public @interface RdfConfig {
 	 * identify root notes, which can introduce a considerable performance degradation.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -807,7 +802,7 @@ public @interface RdfConfig {
 	 * the root element is serialized.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *
@@ -845,14 +840,13 @@ public @interface RdfConfig {
 	 * When specified, namespaces defined using {@link XmlNs @XmlNs} and {@link Xml @Xml} will be inherited by the RDF serializers.
 	 * <br>Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
 	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
 	 * <ul class='notes'>
-	 * 	<li>
-	 * 		Possible values:
-	 * 		<ul>
-	 * 			<li><js>"true"</js>
-	 * 			<li><js>"false"</js> (default)
-	 * 		</ul>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver} (e.g. <js>"$C{myConfigVar}"</js>).
 	 * </ul>
 	 *

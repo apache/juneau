@@ -19,7 +19,7 @@ import org.apache.juneau.reflect.*;
 /**
  * Session object that lives for the duration of a single use of {@link SimplePartParser}.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *

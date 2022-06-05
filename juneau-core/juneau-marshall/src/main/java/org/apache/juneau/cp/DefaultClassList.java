@@ -20,7 +20,7 @@ import java.util.*;
 /**
  * A list of default implementation classes.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *

@@ -18,7 +18,6 @@ import java.lang.annotation.*;
 
 /**
  * Swagger external documentation annotation.
- * {@review}
  *
  * <p>
  * Allows referencing an external resource for extended documentation.
@@ -28,12 +27,10 @@ import java.lang.annotation.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<ja>@Rest</ja>(
- * 		swagger=<ja>@Swagger</ja>(
- * 			externalDocs=<ja>@ExternalDocs</ja>(
- * 				description=<js>"Apache Juneau"</js>,
- * 				url=<js>"http://juneau.apache.org"</js>
- * 			)
+ * 	<ja>@Swagger</ja>(
+ * 		externalDocs=<ja>@ExternalDocs</ja>(
+ * 			description=<js>"Apache Juneau"</js>,
+ * 			url=<js>"http://juneau.apache.org"</js>
  * 		)
  * 	)
  * </p>
@@ -55,10 +52,10 @@ public @interface ExternalDocs {
 	 * A short description of the target documentation.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a plain-text string.
 	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 *
@@ -73,11 +70,11 @@ public @interface ExternalDocs {
 	 * The URL for the target documentation. Value MUST be in the format of a URL.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The value is required.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a URL string.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>) for the swagger generator.
 	 * </ul>
 	 *

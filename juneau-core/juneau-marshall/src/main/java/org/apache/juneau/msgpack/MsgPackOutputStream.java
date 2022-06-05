@@ -25,7 +25,7 @@ import org.apache.juneau.serializer.*;
  * Specialized output stream for serializing MessagePack streams.
  *
  * <ul class='notes'>
- * 	<li>
+ * 	<li class='note'>
  * 		This class is not intended for external use.
  * </ul>
  *

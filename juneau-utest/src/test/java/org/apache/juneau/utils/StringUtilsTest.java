@@ -140,9 +140,9 @@ public class StringUtilsTest {
 		assertTrue(isNumeric("0x123e1"));
 		assertEquals(0x123e1, parseNumber("0x123e1", null));
 
-		assertThrown(()->parseNumber("x", Number.class)).exists();
-		assertThrown(()->parseNumber("x", null)).exists();
-		assertThrown(()->parseNumber("x", BadNumber.class)).message().contains("Unsupported Number type");
+		assertThrown(()->parseNumber("x", Number.class)).isExists();
+		assertThrown(()->parseNumber("x", null)).isExists();
+		assertThrown(()->parseNumber("x", BadNumber.class)).asMessage().isContains("Unsupported Number type");
 	}
 
 	@SuppressWarnings("serial")
@@ -629,7 +629,7 @@ public class StringUtilsTest {
 		s = "\u0000\uffff";
 		assertEquals(s, base64DecodeToString(base64EncodeToString(s)));
 
-		assertThrown(()->base64Decode("a")).message().is("Invalid BASE64 string length.  Must be multiple of 4.");
+		assertThrown(()->base64Decode("a")).asMessage().is("Invalid BASE64 string length.  Must be multiple of 4.");
 		assertThrown(()->base64Decode("aaa")).isType(IllegalArgumentException.class);
 	}
 

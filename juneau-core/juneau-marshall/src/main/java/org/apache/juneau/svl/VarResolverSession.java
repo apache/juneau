@@ -34,8 +34,8 @@ import org.apache.juneau.internal.*;
  * Instances of this class are created through the {@link VarResolver#createSession()} and
  * {@link VarResolver#createSession(BeanStore)} methods.
  *
- * <ul class='spaced-list'>
- * 	<li class='warn'>This class are not guaranteed to be thread safe.
+ * <ul class='notes'>
+ * 	<li class='warn'>This class is not guaranteed to be thread safe.
  * </ul>
  *
  * <ul class='seealso'>

@@ -40,7 +40,7 @@ import org.apache.juneau.xml.*;
  *
  * Essentially the same output as {@link XmlDocSerializer}, except wrapped in a standard SOAP envelope.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *

@@ -53,7 +53,7 @@ public class ResponseAnnotation_Test {
 
 	@Test
 	public void a01_basic() {
-		assertObject(a1).asJson().matches(""
+		assertObject(a1).asJson().isMatches(""
 			+ "{"
 				+ "examples:['examples'],"
 				+ "headers:[*],"
@@ -102,9 +102,9 @@ public class ResponseAnnotation_Test {
 		Response c2 = ResponseAnnotation.create("a").on("b").build();
 		Response c4 = ResponseAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
-		assertObject(c1).asJson().contains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
-		assertObject(c2).asJson().contains("on:['a','b']");
-		assertObject(c4).asJson().contains("on:['"+CNAME+"$C1.m1()','"+CNAME+"$C2.m2()']");
+		assertObject(c1).asJson().isContains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
+		assertObject(c2).asJson().isContains("on:['a','b']");
+		assertObject(c4).asJson().isContains("on:['"+CNAME+"$C1.m1()','"+CNAME+"$C2.m2()']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

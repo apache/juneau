@@ -103,7 +103,7 @@ public class BasicHeader_Test {
 	@Test
 	public void a09_equals() {
 		BasicHeader h1 = header("Foo","bar"), h2 = header("Foo","bar"), h3 = header("Bar","bar"), h4 = header("Foo","baz");
-		assertInteger(h1.hashCode()).exists();
+		assertInteger(h1.hashCode()).isExists();
 		assertBoolean(h1.equals(h2)).isTrue();
 		assertBoolean(h1.equals(h3)).isFalse();
 		assertBoolean(h1.equals(h4)).isFalse();

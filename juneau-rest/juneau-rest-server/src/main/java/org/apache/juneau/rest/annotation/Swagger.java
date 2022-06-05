@@ -57,12 +57,11 @@ public @interface Swagger {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -85,10 +84,10 @@ public @interface Swagger {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The precedence of lookup for this field is:
 	 * 		<ol>
 	 * 			<li><c>{resource-class}.description</c> property in resource bundle.
@@ -96,9 +95,8 @@ public @interface Swagger {
 	 * 			<li>Value defined in Swagger JSON file.
 	 * 			<li>{@link Rest#description()} on this class, then any parent classes.
 	 * 		</ol>
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -159,12 +157,11 @@ public @interface Swagger {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a {@doc jd.Swagger} object.
 	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -210,12 +207,11 @@ public @interface Swagger {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a {@doc jd.Swagger} array.
 	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -236,12 +232,11 @@ public @interface Swagger {
 	 * (e.g. <js>"termsOfService = foo"</js> or <js>"MyServlet.termsOfService = foo"</js>).
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is plain text.
 	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -261,10 +256,10 @@ public @interface Swagger {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is plain-text.
 	 * 		<br>Multiple lines are concatenated with newlines.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The precedence of lookup for this field is:
 	 * 		<ol>
 	 * 			<li><c>{resource-class}.title</c> property in resource bundle.
@@ -272,9 +267,8 @@ public @interface Swagger {
 	 * 			<li>Value defined in Swagger JSON file.
 	 * 			<li>{@link Rest#title()} on this class, then any parent classes.
 	 * 		</ol>
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -373,9 +367,9 @@ public @interface Swagger {
 	 * </ul>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is a {@doc jd.Swagger} object.
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The leading/trailing <c>{ }</c> characters are optional.
 	 * 		<br>The following two example are considered equivalent:
 	 * 		<p class='bjava'>
@@ -384,12 +378,11 @@ public @interface Swagger {
 	 * 		<p class='bjava'>
 	 * 	<ja>@Swagger</ja>(<js>"title:'Petstore application'"</js>)
 	 * 		</p>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Multiple lines are concatenated with newlines so that you can format the value to be readable.
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
-	 * 	<li>
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
 	 * 		Values defined in this field supersede values pulled from the Swagger JSON file and are superseded by individual values defined on this annotation.
 	 * </ul>
 	 *
@@ -412,11 +405,10 @@ public @interface Swagger {
 	 * (e.g. <js>"version = 2.0"</js> or <js>"MyServlet.version = 2.0"</js>).
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is plain text.
-	 * 	<li>
-	 * 		Supports {@doc jrs.SvlVariables}
-	 * 		(e.g. <js>"$L{my.localized.variable}"</js>).
+	 * 	<li class='note'>
+	 * 		Supports {@doc jrs.SvlVariables} (e.g. <js>"$L{my.localized.variable}"</js>).
 	 * </ul>
 	 *
 	 * @return The annotation value.

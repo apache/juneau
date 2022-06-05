@@ -23,64 +23,83 @@ import org.apache.juneau.serializer.*;
 
 /**
  * Used for fluent assertion calls against byte arrays.
- * {@review}
- *
  *
  * <h5 class='topic'>Test Methods</h5>
- * 	<ul>
- * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#has(Object...)}
- * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#is(Predicate)}
- * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#any(Predicate)}
- * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#all(Predicate)}
- * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#isEmpty()}
- * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#isNotEmpty()}
- * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#isSize(int)}
- * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#contains(Object)}
- * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#doesNotContain(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#exists()}
- * 		<li class='jm'>{@link FluentObjectAssertion#is(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#is(Predicate)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNot(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isAny(Object...)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNotAny(Object...)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNull()}
- * 		<li class='jm'>{@link FluentObjectAssertion#isNotNull()}
- * 		<li class='jm'>{@link FluentObjectAssertion#isString(String)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isJson(String)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSame(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameJsonAs(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameSortedJsonAs(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameSerializedAs(Object, WriterSerializer)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class)}
+ * <p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link FluentPrimitiveArrayAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#isHas(Object...) isHas(Object...)}
+ * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#is(Predicate) is(Predicate)}
+ * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#isAny(Predicate) isAny(Predicate)}
+ * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#isAll(Predicate) isAll(Predicate)}
+ * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#isEmpty() isEmpty()}
+ * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#isNotEmpty() isNotEmpty()}
+ * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#isSize(int) isSize(int)}
+ * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#isContains(Object) isContains(Object)}
+ * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#isNotContains(Object) isNotContains(Object)}
  * 	</ul>
+ * 	<li class='jc'>{@link FluentObjectAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentObjectAssertion#isExists() isExists()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#is(Object) is(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#is(Predicate) is(Predicate)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNot(Object) isNot(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isAny(Object...) isAny(Object...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNotAny(Object...) isNotAny(Object...)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNull() isNull()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isNotNull() isNotNull()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isString(String) isString(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isJson(String) isJson(String)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSame(Object) isSame(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameJsonAs(Object) isSameJsonAs(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameSortedJsonAs(Object) isSameSortedJsonAs(Object)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isSameSerializedAs(Object, WriterSerializer) isSameSerializedAs(Object, WriterSerializer)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class) isType(Class)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class) isExactType(Class)}
+ * 	</ul>
+ * </ul>
  *
  * <h5 class='topic'>Transform Methods</h5>
- * 	<ul>
- * 		<li class='jm'>{@link FluentByteArrayAssertion#asString()}
- * 		<li class='jm'>{@link FluentByteArrayAssertion#asString(Charset)}
- * 		<li class='jm'>{@link FluentByteArrayAssertion#asBase64()}
- * 		<li class='jm'>{@link FluentByteArrayAssertion#asHex()}
- * 		<li class='jm'>{@link FluentByteArrayAssertion#asSpacedHex()}
- * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#item(int)}
- * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#length()}
- * 		<li class='jm'>{@link FluentObjectAssertion#asString()}
- * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asJson()}
- * 		<li class='jm'>{@link FluentObjectAssertion#asJsonSorted()}
- * 		<li class='jm'>{@link FluentObjectAssertion#apply(Function)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asAny()}
+ * <p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link FluentByteArrayAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentByteArrayAssertion#asString() asString()}
+ * 		<li class='jm'>{@link FluentByteArrayAssertion#asString(Charset) asString(Charset)}
+ * 		<li class='jm'>{@link FluentByteArrayAssertion#asBase64() asBase64()}
+ * 		<li class='jm'>{@link FluentByteArrayAssertion#asHex() asHex()}
+ * 		<li class='jm'>{@link FluentByteArrayAssertion#asSpacedHex() asSpacedHex()}
+ * 	</ul>
+ * 	<li class='jc'>{@link FluentPrimitiveArrayAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#asItem(int) asItem(int)}
+ * 		<li class='jm'>{@link FluentPrimitiveArrayAssertion#asLength() asLength()}
+ * 	</ul>
+ * 	<li class='jc'>{@link FluentObjectAssertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString() asString()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer) asString(WriterSerializer)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function) asString(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asJson() asJson()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asJsonSorted() asJsonSorted()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asTransformed(Function) asApplied(Function)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asAny() asAny()}
  *	</ul>
+ * </ul>
  *
  * <h5 class='topic'>Configuration Methods</h5>
- * 	<ul>
- * 		<li class='jm'>{@link Assertion#msg(String, Object...)}
- * 		<li class='jm'>{@link Assertion#out(PrintStream)}
- * 		<li class='jm'>{@link Assertion#silent()}
- * 		<li class='jm'>{@link Assertion#stdout()}
- * 		<li class='jm'>{@link Assertion#throwable(Class)}
+ * <p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link Assertion}
+ * 	<ul class='javatreec'>
+ * 		<li class='jm'>{@link Assertion#setMsg(String, Object...) setMsg(String, Object...)}
+ * 		<li class='jm'>{@link Assertion#setOut(PrintStream) setOut(PrintStream)}
+ * 		<li class='jm'>{@link Assertion#setSilent() setSilent()}
+ * 		<li class='jm'>{@link Assertion#setStdOut() setStdOut()}
+ * 		<li class='jm'>{@link Assertion#setThrowable(Class) setThrowable(Class)}
  * 	</ul>
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.FluentAssertions}
@@ -142,7 +161,7 @@ public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<B
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified byte array contains the string "foobar".</jc>
-	 * 	<jsm>assertBytes<jsm>(<jv>myByteArray</jv>).asString().is(<js>"foobar"</js>);
+	 * 	<jsm>assertBytes</jsm>(<jv>myByteArray</jv>).asString().is(<js>"foobar"</js>);
 	 * </p>
 	 *
 	 * @return A new fluent string assertion.
@@ -158,7 +177,7 @@ public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<B
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified byte array contains the string "foobar" encoded in ASCII.</jc>
-	 * 	<jsm>assertBytes<jsm>(<jv>myByteArray</jv>).asString(<js>"iso8859-1"</js>).is(<js>"foobar"</js>);
+	 * 	<jsm>assertBytes</jsm>(<jv>myByteArray</jv>).asString(<js>"iso8859-1"</js>).is(<js>"foobar"</js>);
 	 * </p>
 	 *
 	 * @param cs The charset to use to decode the string.
@@ -174,7 +193,7 @@ public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<B
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified byte array contains the string "foo".</jc>
-	 * 	<jsm>assertBytes<jsm>(<jv>myByteArray</jv>).asBase64().is(<js>"Zm9v"</js>);
+	 * 	<jsm>assertBytes</jsm>(<jv>myByteArray</jv>).asBase64().is(<js>"Zm9v"</js>);
 	 * </p>
 	 *
 	 * @return A new fluent string assertion.
@@ -189,7 +208,7 @@ public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<B
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified byte array contains the string "foo".</jc>
-	 * 	<jsm>assertBytes<jsm>(<jv>myByteArray</jv>).asHex().is(<js>"666F6F"</js>);
+	 * 	<jsm>assertBytes</jsm>(<jv>myByteArray</jv>).asHex().is(<js>"666F6F"</js>);
 	 * </p>
 	 *
 	 * @return A new string consisting of hexadecimal characters.
@@ -204,7 +223,7 @@ public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<B
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Validates that the specified byte array contains the string "foo".</jc>
-	 * 	<jsm>assertBytes<jsm>(<jv>myByteArray</jv>).asSpacedHex().is(<js>"66 6F 6F"</js>);
+	 * 	<jsm>assertBytes</jsm>(<jv>myByteArray</jv>).asSpacedHex().is(<js>"66 6F 6F"</js>);
 	 * </p>
 	 *
 	 * @return A new string consisting of hexadecimal characters.
@@ -220,32 +239,32 @@ public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<B
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentByteArrayAssertion<R> msg(String msg, Object...args) {
-		super.msg(msg, args);
+	public FluentByteArrayAssertion<R> setMsg(String msg, Object...args) {
+		super.setMsg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentByteArrayAssertion<R> out(PrintStream value) {
-		super.out(value);
+	public FluentByteArrayAssertion<R> setOut(PrintStream value) {
+		super.setOut(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentByteArrayAssertion<R> silent() {
-		super.silent();
+	public FluentByteArrayAssertion<R> setSilent() {
+		super.setSilent();
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentByteArrayAssertion<R> stdout() {
-		super.stdout();
+	public FluentByteArrayAssertion<R> setStdOut() {
+		super.setStdOut();
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentByteArrayAssertion<R> throwable(Class<? extends java.lang.RuntimeException> value) {
-		super.throwable(value);
+	public FluentByteArrayAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+		super.setThrowable(value);
 		return this;
 	}
 

@@ -101,8 +101,8 @@ public class Version_Test {
 			of("2.0"),
 			of("2")
 		);
-		assertList(l).sorted().asString().is("[0, 1.2, 1.2.3, 1.2.3.4, 2, 2.0]");
+		assertList(l).asSorted().asString().is("[0, 1.2, 1.2.3, 1.2.3.4, 2, 2.0]");
 		Collections.reverse(l);
-		assertList(l).sorted().asString().is("[0, 1.2, 1.2.3, 1.2.3.4, 2, 2.0]");
+		assertList(l).asSorted().asString().is("[0, 1.2, 1.2.3, 1.2.3.4, 2, 2.0]");
 	}
 }

@@ -177,7 +177,7 @@ public class RestClient_Headers_Test {
 
 	@Test
 	public void a12_badSerialization() throws Exception {
-		assertThrown(()->checkFooClient().headers(header("Foo","bar",null).serializer(new A12())).build().get().run()).messages().contains("bad");
+		assertThrown(()->checkFooClient().headers(header("Foo","bar",null).serializer(new A12())).build().get().run()).asMessages().isContains("bad");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

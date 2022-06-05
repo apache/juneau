@@ -18,7 +18,7 @@ import org.apache.juneau.serializer.*;
 /**
  * Base class for implementations of {@link HttpPartSerializer}
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *

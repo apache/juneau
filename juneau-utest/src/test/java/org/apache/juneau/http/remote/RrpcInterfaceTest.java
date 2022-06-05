@@ -1311,7 +1311,7 @@ public class RrpcInterfaceTest {
 
 	@Test
 	public void h03_setWrongInt() {
-		assertThrown(()->proxy.setInt(2)).message().is("expected:<1> but was:<2>");
+		assertThrown(()->proxy.setInt(2)).asMessage().is("expected:<1> but was:<2>");
 	}
 
 	@Test
@@ -1346,7 +1346,7 @@ public class RrpcInterfaceTest {
 
 	@Test
 	public void h10_setNullStringBad() {
-		assertThrown(()->proxy.setNullString("foo")).message().is("expected null, but was:<foo>");
+		assertThrown(()->proxy.setNullString("foo")).asMessage().is("expected null, but was:<foo>");
 	}
 
 	@Test

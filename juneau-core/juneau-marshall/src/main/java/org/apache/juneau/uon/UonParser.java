@@ -29,17 +29,16 @@ import org.apache.juneau.utils.*;
 
 /**
  * Parses UON (a notation for URL-encoded query parameter values) text into POJO models.
- * {@review}
  *
  * <h5 class='topic'>Media types</h5>
- *
+ * <p>
  * Handles <c>Content-Type</c> types:  <bc>text/uon</bc>
  *
  * <h5 class='topic'>Description</h5>
- *
+ * <p>
  * This parser uses a state machine, which makes it very fast and efficient.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *

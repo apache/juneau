@@ -1430,7 +1430,7 @@ public class JsonSchemaGeneratorTest {
 	public void schemaOnClass_onConfig() throws Exception {
 		AnnotationWorkList al = AnnotationWorkList.of(bConfig.getAnnotationList());
 		JsonSchemaGeneratorSession x = JsonSchemaGenerator.create().apply(al).build().getSession();
-		assertObject(x.getSchema(new B())).asJson().contains("'$ref':'ref'");
+		assertObject(x.getSchema(new B())).asJson().isContains("'$ref':'ref'");
 	}
 
 }

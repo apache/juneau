@@ -23,7 +23,6 @@ import org.apache.juneau.oapi.*;
 
 /**
  * REST request path annotation.
- * {@review}
  *
  * <p>
  * Identifies a POJO to be used as a path entry on an HTTP request.
@@ -37,7 +36,7 @@ import org.apache.juneau.oapi.*;
  * </ul>
  *
  * <h5 class='topic'>Arguments and argument-types of server-side @RestOp-annotated methods</h5>
- *
+ * <p>
  * Annotation that can be applied to a parameter of a <ja>@RestOp</ja>-annotated method to identify it as a variable
  * in a URL path pattern.
  *
@@ -61,7 +60,7 @@ import org.apache.juneau.oapi.*;
  * </ul>
  *
  * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
- *
+ * <p>
  * Annotation applied to Java method arguments of interface proxies to denote that they are path variables on the request.
  *
  * <ul class='seealso'>
@@ -69,7 +68,7 @@ import org.apache.juneau.oapi.*;
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
- *
+ * <p>
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrc.Request}
  * </ul>
@@ -147,7 +146,7 @@ public @interface Path {
 	 * See {@doc ext.SwaggerPathTemplating Path Templating} for further information.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		The format is plain-text.
 	 * </ul>
 	 *

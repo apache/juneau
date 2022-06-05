@@ -22,7 +22,6 @@ import org.apache.juneau.annotation.*;
 
 /**
  * REST response status annotation.
- * {@review}
  *
  * <p>
  * Annotation used to denote an HTTP response status code.
@@ -52,7 +51,6 @@ import org.apache.juneau.annotation.*;
  * The parameter type must be {@link Value} with a parameterized type of {@link Integer}.
  *
  * <h5 class='topic'>Public methods of <ja>@Response</ja>-annotated types</h5>
- *
  *
  * <p>
  * On {@link Response @Response}-annotated classes, this method can be used to denote an HTTP status code on a response.
@@ -96,6 +94,7 @@ import org.apache.juneau.annotation.*;
  * 	<li class='link'>{@doc jrc.Response}
  * </ul>
  *
+ * <p>
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>

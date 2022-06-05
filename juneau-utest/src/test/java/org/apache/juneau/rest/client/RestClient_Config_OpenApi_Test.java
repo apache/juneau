@@ -52,15 +52,15 @@ public class RestClient_Config_OpenApi_Test {
 
 	@Test
 	public void a01_oapiFormat() throws Exception {
-		client().oapiFormat(HttpPartFormat.UON).build().get("/checkQuery").queryData("Foo","bar baz").run().assertBody().asString().urlDecode().is("Foo='bar baz'");
+		client().oapiFormat(HttpPartFormat.UON).build().get("/checkQuery").queryData("Foo","bar baz").run().assertBody().asString().asUrlDecode().is("Foo='bar baz'");
 	}
 
 	@Test
 	public void a02_oapiCollectionFormat() throws Exception {
 		String[] a = {"bar","baz"};
 		RestClient x = client().oapiCollectionFormat(PIPES).build();
-		x.get("/checkQuery").queryData("Foo",a).run().assertBody().asString().urlDecode().is("Foo=bar|baz");
-		x.post("/checkFormData").formData("Foo",a).run().assertBody().asString().urlDecode().is("Foo=bar|baz");
+		x.get("/checkQuery").queryData("Foo",a).run().assertBody().asString().asUrlDecode().is("Foo=bar|baz");
+		x.post("/checkFormData").formData("Foo",a).run().assertBody().asString().asUrlDecode().is("Foo=bar|baz");
 		x.get("/checkHeader").header("Check","Foo").header("Foo",a).accept("text/json+simple").run().assertBody().is("['bar|baz']");
 	}
 

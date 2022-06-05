@@ -31,7 +31,7 @@ import java.lang.annotation.*;
  * Used by the parsers to add references to parent objects in child objects.
  *
  * <ul class='notes'>
- * 	<li>
+ * 	<li class='note'>
  * 		The annotated field or method does not need to be public.
  * </ul>
  *

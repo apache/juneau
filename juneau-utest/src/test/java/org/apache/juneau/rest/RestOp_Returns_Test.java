@@ -65,28 +65,28 @@ public class RestOp_Returns_Test {
 	@Test
 	public void a01_responseBeans() throws Exception {
 		RestClient c = client(A.class);
-		c.get("/accepted").run().assertStatus().code().is(Accepted.STATUS_CODE).assertBody().is(Accepted.REASON_PHRASE);
-		c.get("/alreadyReported").run().assertStatus().code().is(AlreadyReported.STATUS_CODE).assertBody().is(AlreadyReported.REASON_PHRASE);
-		c.get("/continue").run().assertStatus().code().is(Continue.STATUS_CODE + 1000).assertBody().is(Continue.REASON_PHRASE);
-		c.get("/created").run().assertStatus().code().is(Created.STATUS_CODE).assertBody().is(Created.REASON_PHRASE);
-		c.get("/earlyHints").run().assertStatus().code().is(EarlyHints.STATUS_CODE + 1000).assertBody().is(EarlyHints.REASON_PHRASE);
-		c.get("/found").run().assertStatus().code().is(Found.STATUS_CODE).assertBody().is(Found.REASON_PHRASE);
-		c.get("/imUsed").run().assertStatus().code().is(IMUsed.STATUS_CODE).assertBody().is(IMUsed.REASON_PHRASE);
-		c.get("/movedPermanently").run().assertStatus().code().is(MovedPermanently.STATUS_CODE).assertBody().is(MovedPermanently.REASON_PHRASE);
-		c.get("/multipleChoices").run().assertStatus().code().is(MultipleChoices.STATUS_CODE).assertBody().is(MultipleChoices.REASON_PHRASE);
-		c.get("/multiStatus").run().assertStatus().code().is(MultiStatus.STATUS_CODE).assertBody().is(MultiStatus.REASON_PHRASE);
-		c.get("/noContent").run().assertStatus().code().is(NoContent.STATUS_CODE).assertBody().isEmpty();
-		c.get("/nonAuthoritiveInformation").run().assertStatus().code().is(NonAuthoritiveInformation.STATUS_CODE).assertBody().is(NonAuthoritiveInformation.REASON_PHRASE);
-		c.get("/notModified").run().assertStatus().code().is(NotModified.STATUS_CODE).assertBody().isEmpty();
-		c.get("/ok").run().assertStatus().code().is(Ok.STATUS_CODE).assertBody().is(Ok.REASON_PHRASE);
-		c.get("/partialContent").run().assertStatus().code().is(PartialContent.STATUS_CODE).assertBody().is(PartialContent.REASON_PHRASE);
-		c.get("/permanentRedirect").run().assertStatus().code().is(PermanentRedirect.STATUS_CODE).assertBody().is(PermanentRedirect.REASON_PHRASE);
-		c.get("/processing").run().assertStatus().code().is(Processing.STATUS_CODE + 1000).assertBody().is(Processing.REASON_PHRASE);
-		c.get("/resetContent").run().assertStatus().code().is(ResetContent.STATUS_CODE).assertBody().isEmpty();
-		c.get("/seeOther").run().assertStatus().code().is(SeeOther.STATUS_CODE).assertBody().is(SeeOther.REASON_PHRASE);
-		c.get("/switchingProtocols").run().assertStatus().code().is(SwitchingProtocols.STATUS_CODE + 1000).assertBody().is(SwitchingProtocols.REASON_PHRASE);
-		c.get("/temporaryRedirect").run().assertStatus().code().is(TemporaryRedirect.STATUS_CODE).assertBody().is(TemporaryRedirect.REASON_PHRASE);
-		c.get("/useProxy").run().assertStatus().code().is(UseProxy.STATUS_CODE).assertBody().is(UseProxy.REASON_PHRASE);
+		c.get("/accepted").run().assertStatus().asCode().is(Accepted.STATUS_CODE).assertBody().is(Accepted.REASON_PHRASE);
+		c.get("/alreadyReported").run().assertStatus().asCode().is(AlreadyReported.STATUS_CODE).assertBody().is(AlreadyReported.REASON_PHRASE);
+		c.get("/continue").run().assertStatus().asCode().is(Continue.STATUS_CODE + 1000).assertBody().is(Continue.REASON_PHRASE);
+		c.get("/created").run().assertStatus().asCode().is(Created.STATUS_CODE).assertBody().is(Created.REASON_PHRASE);
+		c.get("/earlyHints").run().assertStatus().asCode().is(EarlyHints.STATUS_CODE + 1000).assertBody().is(EarlyHints.REASON_PHRASE);
+		c.get("/found").run().assertStatus().asCode().is(Found.STATUS_CODE).assertBody().is(Found.REASON_PHRASE);
+		c.get("/imUsed").run().assertStatus().asCode().is(IMUsed.STATUS_CODE).assertBody().is(IMUsed.REASON_PHRASE);
+		c.get("/movedPermanently").run().assertStatus().asCode().is(MovedPermanently.STATUS_CODE).assertBody().is(MovedPermanently.REASON_PHRASE);
+		c.get("/multipleChoices").run().assertStatus().asCode().is(MultipleChoices.STATUS_CODE).assertBody().is(MultipleChoices.REASON_PHRASE);
+		c.get("/multiStatus").run().assertStatus().asCode().is(MultiStatus.STATUS_CODE).assertBody().is(MultiStatus.REASON_PHRASE);
+		c.get("/noContent").run().assertStatus().asCode().is(NoContent.STATUS_CODE).assertBody().isEmpty();
+		c.get("/nonAuthoritiveInformation").run().assertStatus().asCode().is(NonAuthoritiveInformation.STATUS_CODE).assertBody().is(NonAuthoritiveInformation.REASON_PHRASE);
+		c.get("/notModified").run().assertStatus().asCode().is(NotModified.STATUS_CODE).assertBody().isEmpty();
+		c.get("/ok").run().assertStatus().asCode().is(Ok.STATUS_CODE).assertBody().is(Ok.REASON_PHRASE);
+		c.get("/partialContent").run().assertStatus().asCode().is(PartialContent.STATUS_CODE).assertBody().is(PartialContent.REASON_PHRASE);
+		c.get("/permanentRedirect").run().assertStatus().asCode().is(PermanentRedirect.STATUS_CODE).assertBody().is(PermanentRedirect.REASON_PHRASE);
+		c.get("/processing").run().assertStatus().asCode().is(Processing.STATUS_CODE + 1000).assertBody().is(Processing.REASON_PHRASE);
+		c.get("/resetContent").run().assertStatus().asCode().is(ResetContent.STATUS_CODE).assertBody().isEmpty();
+		c.get("/seeOther").run().assertStatus().asCode().is(SeeOther.STATUS_CODE).assertBody().is(SeeOther.REASON_PHRASE);
+		c.get("/switchingProtocols").run().assertStatus().asCode().is(SwitchingProtocols.STATUS_CODE + 1000).assertBody().is(SwitchingProtocols.REASON_PHRASE);
+		c.get("/temporaryRedirect").run().assertStatus().asCode().is(TemporaryRedirect.STATUS_CODE).assertBody().is(TemporaryRedirect.REASON_PHRASE);
+		c.get("/useProxy").run().assertStatus().asCode().is(UseProxy.STATUS_CODE).assertBody().is(UseProxy.REASON_PHRASE);
 	}
 
 	@Test

@@ -63,12 +63,12 @@ public class BasicUriHeader_Test {
 		// Invalid usage.
 		c.get().header(uriHeader(HEADER,(Supplier<URI>)null)).run().assertBody().isEmpty();
 		c.get().header(uriHeader(HEADER,()->null)).run().assertBody().isEmpty();
-		assertThrown(()->uriHeader("", VALUE)).message().is("Name cannot be empty on header.");
-		assertThrown(()->uriHeader(null, VALUE)).message().is("Name cannot be empty on header.");
-		assertThrown(()->uriHeader("", PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->uriHeader(null, PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->uriHeader("", ()->PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->uriHeader(null, ()->PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->uriHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->uriHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->uriHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->uriHeader(null, PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->uriHeader("", ()->PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->uriHeader(null, ()->PARSED)).asMessage().is("Name cannot be empty on header.");
 	}
 
 	@Test

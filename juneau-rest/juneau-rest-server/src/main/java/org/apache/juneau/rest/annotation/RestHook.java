@@ -76,7 +76,7 @@ import org.apache.juneau.rest.servlet.*;
  * </ul>
  *
  * <ul class='notes'>
- * 	<li>
+ * 	<li class='note'>
  * 		The {@link RestServlet} class itself implements several convenience methods annotated with this annotation
  * 		that can be overridden directly:
  * 		<ul class='javatree'>

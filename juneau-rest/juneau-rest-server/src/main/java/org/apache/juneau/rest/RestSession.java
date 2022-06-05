@@ -30,7 +30,7 @@ import org.apache.juneau.rest.util.*;
 /**
  * Represents a single HTTP request.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *

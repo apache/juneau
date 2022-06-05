@@ -94,7 +94,6 @@ import org.apache.juneau.xml.*;
 
 /**
  * Utility class for interfacing with remote REST interfaces.
- * {@review}
  *
  * <p class='w900'>
  * Built upon the feature-rich Apache HttpClient library, the Juneau RestClient API adds support for fluent-style
@@ -385,7 +384,7 @@ import org.apache.juneau.xml.*;
  * replace existing headers with the same name.
  *
  * <ul class='notes'>
- * 	<li>Methods that pass in POJOs convert values to strings using the part serializers.  Methods that pass in <c>Header</c> or
+ * 	<li class='note'>Methods that pass in POJOs convert values to strings using the part serializers.  Methods that pass in <c>Header</c> or
  * 		<c>NameValuePair</c> objects use the values returned by that bean directly.
  * </ul>
  *
@@ -423,8 +422,8 @@ import org.apache.juneau.xml.*;
  * </p>
  *
  * <ul class='notes'>
- * 	<li>Like header values, dynamic values and OpenAPI schemas are supported.
- * 	<li>Methods that pass in POJOs convert values to strings using the part serializers.  Methods that pass in <c>NameValuePair</c>
+ * 	<li class='note'>Like header values, dynamic values and OpenAPI schemas are supported.
+ * 	<li class='note'>Methods that pass in POJOs convert values to strings using the part serializers.  Methods that pass in <c>NameValuePair</c>
  * 		objects use the values returned by that bean directly.
  * </ul>
  *
@@ -454,8 +453,8 @@ import org.apache.juneau.xml.*;
  * </ul>
  *
  * <ul class='notes'>
- * 	<li>Like header values, dynamic values and OpenAPI schemas are supported.
- * 	<li>Methods that pass in POJOs convert values to strings using the part serializers.  Methods that pass in <c>NameValuePair</c>
+ * 	<li class='note'>Like header values, dynamic values and OpenAPI schemas are supported.
+ * 	<li class='note'>Methods that pass in POJOs convert values to strings using the part serializers.  Methods that pass in <c>NameValuePair</c>
  * 		objects use the values returned by that bean directly.
  * </ul>
  *
@@ -494,7 +493,7 @@ import org.apache.juneau.xml.*;
  * 	</ul>
  *
  * <ul class='notes'>
- * 	<li>If the serializer on the client or request is explicitly set to <jk>null</jk>, POJOs will be converted to strings
+ * 	<li class='note'>If the serializer on the client or request is explicitly set to <jk>null</jk>, POJOs will be converted to strings
  * 		using the registered part serializer as content type <js>"text/plain</js>.  If the part serializer is also <jk>null</jk>,
  * 		POJOs will be converted to strings using {@link ClassMeta#toString(Object)} which typically just calls {@link Object#toString()}.
  * </ul>
@@ -536,7 +535,7 @@ import org.apache.juneau.xml.*;
  * </p>
  *
  * <ul class='notes'>
- * 	<li>If you are only interested in the response status and not the response body, be sure to use {@link RestRequest#complete()} instead
+ * 	<li class='note'>If you are only interested in the response status and not the response body, be sure to use {@link RestRequest#complete()} instead
  * 		of {@link RestRequest#run()} to make sure the response body gets automatically cleaned up.  Otherwise you must
  * 		consume the response yourself.
  * </ul>
@@ -1019,7 +1018,7 @@ import org.apache.juneau.xml.*;
  * The {@link RestRequest} and {@link RestResponse} objects can also be extended and integrated by overriding the
  * {@link RestClient#createRequest(URI,String,boolean)} and {@link RestClient#createResponse(RestRequest,HttpResponse,Parser)} methods.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
@@ -1875,7 +1874,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * The serializer is used to serialize POJOs into the HTTP request body.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>When using this method that takes in a class, the serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
+		 * 	<li class='note'>When using this method that takes in a class, the serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
 		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * </ul>
 		 *
@@ -1910,7 +1909,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * The serializer is used to serialize POJOs into the HTTP request body.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>When using this method that takes in a pre-instantiated serializer, the serializer property setters (e.g. {@link #sortCollections()}) or
+		 * 	<li class='note'>When using this method that takes in a pre-instantiated serializer, the serializer property setters (e.g. {@link #sortCollections()}) or
 		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined
 		 * 	on this builder class have no effect.
 		 * </ul>
@@ -1948,7 +1947,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <br>If no <c>Content-Type</c> header is specified, the first serializer in the list will be used.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>When using this method that takes in classes, the serializers can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
+		 * 	<li class='note'>When using this method that takes in classes, the serializers can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
 		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * </ul>
 		 *
@@ -1988,7 +1987,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <br>If no <c>Content-Type</c> header is specified, the first serializer in the list will be used.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>When using this method that takes in a pre-instantiated serializers, the serializer property setters (e.g. {@link #sortCollections()}) or
+		 * 	<li class='note'>When using this method that takes in a pre-instantiated serializers, the serializer property setters (e.g. {@link #sortCollections()}) or
 		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined
 		 * 	on this builder class have no effect.
 		 * </ul>
@@ -2061,7 +2060,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * The parser is used to parse the HTTP response body into a POJO.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>When using this method that takes in a class, the parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 	<li class='note'>When using this method that takes in a class, the parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
 		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * </ul>
 		 *
@@ -2096,7 +2095,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * The parser is used to parse the HTTP response body into a POJO.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>When using this method that takes in a pre-instantiated parser, the parser property setters (e.g. {@link #strict()}) or
+		 * 	<li class='note'>When using this method that takes in a pre-instantiated parser, the parser property setters (e.g. {@link #strict()}) or
 		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined
 		 * 	on this builder class have no effect.
 		 * </ul>
@@ -2134,7 +2133,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>When using this method that takes in classes, the parsers can be configured using any of the parser property setters (e.g. {@link #strict()}) or
+		 * 	<li class='note'>When using this method that takes in classes, the parsers can be configured using any of the parser property setters (e.g. {@link #strict()}) or
 		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * </ul>
 		 *
@@ -2174,7 +2173,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <br>If no <c>Accept</c> header is specified, the first parser in the list will be used.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>When using this method that takes in pre-instantiated parsers, the parser property setters (e.g. {@link #strict()}) or
+		 * 	<li class='note'>When using this method that takes in pre-instantiated parsers, the parser property setters (e.g. {@link #strict()}) or
 		 * 	bean context property setters (e.g. {@link #swaps(Class...)}) defined
 		 * 	on this builder class have no effect.
 		 * </ul>
@@ -3546,11 +3545,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		The {@link RestClient#run(HttpHost, HttpRequest, HttpContext)} method can also be overridden to produce the same results.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Use {@link BeanCreator#impl(Object)} to specify an already instantiated instance.
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Use {@link BeanCreator#type(Class)} to specify a subtype to instantiate.
 		 * 		<br>Subclass must have a public constructor that takes in any args available
 		 * 		in the bean store of this builder (including {@link RestClient} itself).
@@ -3844,7 +3843,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Defines the connection manager is to be shared by multiple client instances.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>If the connection manager is shared its life-cycle is expected to be managed by the caller and it will not be shut down if the client is closed.
+		 * 	<li class='note'>If the connection manager is shared its life-cycle is expected to be managed by the caller and it will not be shut down if the client is closed.
 		 * </ul>
 		 *
 		 * @param shared New property value.
@@ -4053,7 +4052,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>The {@link RestClient#onInit(RestRequest)}, {@link RestClient#onConnect(RestRequest,RestResponse)}, and
+		 * 	<li class='note'>The {@link RestClient#onInit(RestRequest)}, {@link RestClient#onConnect(RestRequest,RestResponse)}, and
 		 * {@link RestClient#onClose(RestRequest,RestResponse)} methods can also be overridden to produce the same results.
 		 * </ul>
 		 *
@@ -4117,7 +4116,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>The {@link RestClient#onInit(RestRequest)}, {@link RestClient#onConnect(RestRequest,RestResponse)}, and
+		 * 	<li class='note'>The {@link RestClient#onInit(RestRequest)}, {@link RestClient#onConnect(RestRequest,RestResponse)}, and
 		 * {@link RestClient#onClose(RestRequest,RestResponse)} methods can also be overridden to produce the same results.
 		 * </ul>
 		 *
@@ -4195,7 +4194,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * using the serializer and parser defined in a marshall.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>When using this method that takes in a pre-instantiated serializers and parsers, the serializer property setters (e.g. {@link #sortCollections()}),
+		 * 	<li class='note'>When using this method that takes in a pre-instantiated serializers and parsers, the serializer property setters (e.g. {@link #sortCollections()}),
 		 * 	parser property setters (e.g. {@link #strict()}), or bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class have no effect.
 		 * </ul>
 		 *
@@ -4226,7 +4225,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * using the serializer and parser defined in a marshall.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>When using this method that takes in a pre-instantiated serializers and parsers, the serializer property setters (e.g. {@link #sortCollections()}),
+		 * 	<li class='note'>When using this method that takes in a pre-instantiated serializers and parsers, the serializer property setters (e.g. {@link #sortCollections()}),
 		 * 	parser property setters (e.g. {@link #strict()}), or bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class have no effect.
 		 * </ul>
 		 *
@@ -4435,7 +4434,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <br>These show up as {@link BeanRecursionException BeanRecursionException} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Checking for recursion can cause a small performance penalty.
 		 * </ul>
 		 *
@@ -4492,7 +4491,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Checking for recursion can cause a small performance penalty.
 		 * </ul>
 		 *
@@ -4731,7 +4730,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * When enabled, null bean values will be serialized to the output.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>Not enabling this setting will cause <c>Map</c>s with <jk>null</jk> values to be lost during parsing.
+		 * 	<li class='note'>Not enabling this setting will cause <c>Map</c>s with <jk>null</jk> values to be lost during parsing.
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
@@ -5032,16 +5031,14 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * <p>
-		 * Possible values are:
-		 * <ul class='javatree'>
+		 * See {@link #uriContext(UriContext)} for examples.
+		 *
+		 * <ul class='values javatree'>
 		 * 	<li class='jf'>{@link org.apache.juneau.UriRelativity#RESOURCE}
 		 * 		- Relative URIs should be considered relative to the servlet URI.
 		 * 	<li class='jf'>{@link org.apache.juneau.UriRelativity#PATH_INFO}
 		 * 		- Relative URIs should be considered relative to the request URI.
 		 * </ul>
-		 *
-		 * <p>
-		 * See {@link #uriContext(UriContext)} for examples.
 		 *
 		 * <ul class='seealso'>
 		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#uriRelativity(UriRelativity)}
@@ -5071,8 +5068,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </ul>
 		 *
 		 * <p>
-		 * Possible values are:
-		 * <ul>
+		 * See {@link #uriContext(UriContext)} for examples.
+		 *
+		 * <ul class='values'>
 		 * 	<li class='jf'>{@link UriResolution#ABSOLUTE}
 		 * 		- Resolve to an absolute URI (e.g. <js>"http://host:port/context-root/servlet-path/path-info"</js>).
 		 * 	<li class='jf'>{@link UriResolution#ROOT_RELATIVE}
@@ -5080,9 +5078,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='jf'>{@link UriResolution#NONE}
 		 * 		- Don't do any URI resolution.
 		 * </ul>
-		 *
-		 * <p>
-		 * See {@link #uriContext(UriContext)} for examples.
 		 *
 		 * <ul class='seealso'>
 		 * 	<li class='jm'>{@link org.apache.juneau.serializer.Serializer.Builder#uriResolution(UriResolution)}
@@ -5111,7 +5106,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Specifies the maximum indentation level in the serialized document.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This setting does not apply to the RDF serializers.
+		 * 	<li class='note'>This setting does not apply to the RDF serializers.
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
@@ -5147,7 +5142,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Specifies the character to use for quoting attributes and values.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This setting does not apply to the RDF serializers.
+		 * 	<li class='note'>This setting does not apply to the RDF serializers.
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
@@ -5192,7 +5187,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Specifies to use single quotes for quoting attributes and values.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This setting does not apply to the RDF serializers.
+		 * 	<li class='note'>This setting does not apply to the RDF serializers.
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
@@ -5476,9 +5471,22 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Specifies the format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.http.annotation.Schema#format()} for
 		 * the OpenAPI serializer and parser on this client.
 		 *
-		 * <p>
-		 * Possible values:
-		 * <ul class='javatree'>
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a REST client with UON part serialization and parsing.</jc>
+		 * 	RestClient <jv>client</jv>  = RestClient
+		 * 		.<jsm>create</jsm>()
+		 * 		.oapiFormat(<jsf>UON</jsf>)
+		 * 		.build();
+		 *
+		 * 	<jc>// Set a header with a value in UON format.</jc>
+		 * 	<jv>client</jv>
+		 * 		.get(<js>"/uri"</js>)
+		 * 		.header(<js>"Foo"</js>, <js>"bar baz"</js>)  <jc>// Will be serialized as:  'bar baz'</jc>
+		 * 		.run();
+		 * </p>
+		 *
+		 * <ul class='values javatree'>
 		 * 	<li class='jc'>{@link org.apache.juneau.httppart.HttpPartFormat}
 		 * 	<ul>
 		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#UON UON} - UON notation (e.g. <js>"'foo bar'"</js>).
@@ -5495,21 +5503,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 		<li class='jf'>{@link org.apache.juneau.httppart.HttpPartFormat#NO_FORMAT NO_FORMAT} - (default) Not specified.
 		 * 	</ul>
 		 * </ul>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a REST client with UON part serialization and parsing.</jc>
-		 * 	RestClient <jv>client</jv>  = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.oapiFormat(<jsf>UON</jsf>)
-		 * 		.build();
-		 *
-		 * 	<jc>// Set a header with a value in UON format.</jc>
-		 * 	<jv>client</jv>
-		 * 		.get(<js>"/uri"</js>)
-		 * 		.header(<js>"Foo"</js>, <js>"bar baz"</js>)  <jc>// Will be serialized as:  'bar baz'</jc>
-		 * 		.run();
-		 * </p>
 		 *
 		 * <ul class='seealso'>
 		 * 	<li class='jm'>{@link org.apache.juneau.oapi.OpenApiSerializer.Builder#format(HttpPartFormat)}
@@ -5537,20 +5530,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.http.annotation.Schema#collectionFormat()} for the
 		 * OpenAPI serializer and parser on this client.
 		 *
-		 * <p>
-		 * Possible values:
-		 * <ul class='javatree'>
-		 * 	<li class='jc'>{@link HttpPartCollectionFormat}
-		 * 	<ul>
-		 * 		<li class='jf'>{@link HttpPartCollectionFormat#CSV CSV} - (default) Comma-separated values (e.g. <js>"foo,bar"</js>).
-		 * 		<li class='jf'>{@link HttpPartCollectionFormat#SSV SSV} - Space-separated values (e.g. <js>"foo bar"</js>).
-		 * 		<li class='jf'>{@link HttpPartCollectionFormat#TSV TSV} - Tab-separated values (e.g. <js>"foo\tbar"</js>).
-		 * 		<li class='jf'>{@link HttpPartCollectionFormat#PIPES PIPES} - Pipe-separated values (e.g. <js>"foo|bar"</js>).
-		 * 		<li class='jf'>{@link HttpPartCollectionFormat#MULTI MULTI} - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
-		 * 		<li class='jf'>{@link HttpPartCollectionFormat#UONC UONC} - UON collection notation (e.g. <js>"@(foo,bar)"</js>).
-		 * 	</ul>
-		 * </ul>
-		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with CSV format for http parts.</jc>
@@ -5574,6 +5553,18 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 		.header(<js>"Foo"</js>, <jv>list</jv>)  <jc>// Will be serialized as: foo=bar,baz=qux\,true\,123</jc>
 		 * 		.run();
 		 * </p>
+		 *
+		 * <ul class='values javatree'>
+		 * 	<li class='jc'>{@link HttpPartCollectionFormat}
+		 * 	<ul>
+		 * 		<li class='jf'>{@link HttpPartCollectionFormat#CSV CSV} - (default) Comma-separated values (e.g. <js>"foo,bar"</js>).
+		 * 		<li class='jf'>{@link HttpPartCollectionFormat#SSV SSV} - Space-separated values (e.g. <js>"foo bar"</js>).
+		 * 		<li class='jf'>{@link HttpPartCollectionFormat#TSV TSV} - Tab-separated values (e.g. <js>"foo\tbar"</js>).
+		 * 		<li class='jf'>{@link HttpPartCollectionFormat#PIPES PIPES} - Pipe-separated values (e.g. <js>"foo|bar"</js>).
+		 * 		<li class='jf'>{@link HttpPartCollectionFormat#MULTI MULTI} - Corresponds to multiple parameter instances instead of multiple values for a single instance (e.g. <js>"foo=bar&amp;foo=baz"</js>).
+		 * 		<li class='jf'>{@link HttpPartCollectionFormat#UONC UONC} - UON collection notation (e.g. <js>"@(foo,bar)"</js>).
+		 * 	</ul>
+		 * </ul>
 		 *
 		 * <ul class='seealso'>
 		 * 	<li class='jm'>{@link org.apache.juneau.oapi.OpenApiSerializer.Builder#collectionFormat(HttpPartCollectionFormat)}
@@ -5607,13 +5598,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <p>
 		 * Specifies the format to use for GET parameter keys and values.
 		 *
-		 * <p>
-		 * Possible values:
-		 * <ul class='javatree'>
-		 * 	<li class='jf'>{@link ParamFormat#UON} (default) - Use UON notation for parameters.
-		 * 	<li class='jf'>{@link ParamFormat#PLAINTEXT} - Use plain text for parameters.
-		 * </ul>
-		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Create a REST client with URL-Encoded serializer that serializes values in plain-text format.</jc>
@@ -5634,6 +5618,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 		.post(<js>"/uri"</js>, <jv>map</jv>)
 		 * 		.run();
 		 * </p>
+		 *
+		 * <ul class='values javatree'>
+		 * 	<li class='jf'>{@link ParamFormat#UON} (default) - Use UON notation for parameters.
+		 * 	<li class='jf'>{@link ParamFormat#PLAINTEXT} - Use plain text for parameters.
+		 * </ul>
 		 *
 		 * <ul class='seealso'>
 		 * 	<li class='jm'>{@link org.apache.juneau.uon.UonSerializer.Builder#paramFormat(ParamFormat)}
@@ -6079,7 +6068,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link RedirectStrategy} instance.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This value can be overridden by the {@link #disableRedirectHandling()} method.
+		 * 	<li class='note'>This value can be overridden by the {@link #disableRedirectHandling()} method.
 		 * </ul>
 		 *
 		 * @param redirectStrategy New property value.
@@ -6122,7 +6111,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link javax.net.ssl.HostnameVerifier} instance.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)}
+		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)}
 		 * 		and the {@link #sslSocketFactory(LayeredConnectionSocketFactory)} methods.
 		 * </ul>
 		 *
@@ -6140,7 +6129,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns file containing public suffix matcher.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>Instances of this class can be created with {@link PublicSuffixMatcherLoader}.
+		 * 	<li class='note'>Instances of this class can be created with {@link PublicSuffixMatcherLoader}.
 		 * </ul>
 		 *
 		 * @param publicSuffixMatcher New property value.
@@ -6157,7 +6146,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link SSLContext} instance.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)}
+		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)}
 		 *  	and the {@link #sslSocketFactory(LayeredConnectionSocketFactory)} methods.
 		 * </ul>
 		 *
@@ -6175,7 +6164,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link LayeredConnectionSocketFactory} instance.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
+		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
 		 * </ul>
 		 *
 		 * @param sslSocketFactory New property value.
@@ -6192,7 +6181,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns maximum total connection value.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
+		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
 		 * </ul>
 		 *
 		 * @param maxConnTotal New property value.
@@ -6209,7 +6198,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns maximum connection per route value.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
+		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
 		 * </ul>
 		 *
 		 * @param maxConnPerRoute New property value.
@@ -6226,7 +6215,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns default {@link SocketConfig}.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
+		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
 		 * </ul>
 		 *
 		 * @param config New property value.
@@ -6243,7 +6232,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns default {@link ConnectionConfig}.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
+		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
 		 * </ul>
 		 *
 		 * @param config New property value.
@@ -6260,7 +6249,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Sets maximum time to live for persistent connections.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
+		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
 		 * </ul>
 		 *
 		 * @param connTimeToLive New property value.
@@ -6330,7 +6319,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link UserTokenHandler} instance.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This value can be overridden by the {@link #disableConnectionState()} method.
+		 * 	<li class='note'>This value can be overridden by the {@link #disableConnectionState()} method.
 		 * </ul>
 		 *
 		 * @param userTokenHandler New property value.
@@ -6372,7 +6361,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Adds this protocol interceptor to the head of the protocol processing list.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
+		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
 		 * </ul>
 		 *
 		 * @param itcp New property value.
@@ -6389,7 +6378,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Adds this protocol interceptor to the tail of the protocol processing list.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
+		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
 		 * </ul>
 		 *
 		 * @param itcp New property value.
@@ -6406,7 +6395,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Adds this protocol interceptor to the head of the protocol processing list.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
+		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
 		 * </ul>
 		 *
 		 * @param itcp New property value.
@@ -6423,7 +6412,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Adds this protocol interceptor to the tail of the protocol processing list.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
+		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
 		 * </ul>
 		 *
 		 * @param itcp New property value.
@@ -6440,7 +6429,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Disables state (cookie) management.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
+		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
 		 * </ul>
 		 *
 		 * @return This object.
@@ -6456,7 +6445,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Disables automatic content decompression.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
+		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
 		 * </ul>
 		 *
 		 * @return This object.
@@ -6472,7 +6461,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Disables authentication scheme caching.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
+		 * 	<li class='note'>This value can be overridden by the {@link #httpProcessor(HttpProcessor)} method.
 		 * </ul>
 		 *
 		 * @return This object.
@@ -6501,7 +6490,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns {@link HttpRequestRetryHandler} instance.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This value can be overridden by the {@link #disableAutomaticRetries()} method.
+		 * 	<li class='note'>This value can be overridden by the {@link #disableAutomaticRetries()} method.
 		 * </ul>
 		 *
 		 * @param retryHandler New property value.
@@ -6530,7 +6519,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Assigns default proxy value.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This value can be overridden by the {@link #routePlanner(HttpRoutePlanner)} method.
+		 * 	<li class='note'>This value can be overridden by the {@link #routePlanner(HttpRoutePlanner)} method.
 		 * </ul>
 		 *
 		 * @param proxy New property value.
@@ -6676,9 +6665,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Makes this instance of {@link HttpClient} proactively evict expired connections from the connection pool using a background thread.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>One MUST explicitly close HttpClient with {@link CloseableHttpClient#close()} in order to stop and release the background thread.
-		 * 	<li>This method has no effect if the instance of {@link HttpClient} is configured to use a shared connection manager.
-		 * 	<li>This method may not be used when the instance of {@link HttpClient} is created inside an EJB container.
+		 * 	<li class='note'>One MUST explicitly close HttpClient with {@link CloseableHttpClient#close()} in order to stop and release the background thread.
+		 * 	<li class='note'>This method has no effect if the instance of {@link HttpClient} is configured to use a shared connection manager.
+		 * 	<li class='note'>This method may not be used when the instance of {@link HttpClient} is created inside an EJB container.
 		 * </ul>
 		 *
 		 * @return This object.
@@ -6694,9 +6683,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * Makes this instance of {@link HttpClient} proactively evict idle connections from the connection pool using a background thread.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>One MUST explicitly close HttpClient with {@link CloseableHttpClient#close()} in order to stop and release the background thread.
-		 * 	<li>This method has no effect if the instance of {@link HttpClient} is configured to use a shared connection manager.
-		 * 	<li>This method may not be used when the instance of {@link HttpClient} is created inside an EJB container.
+		 * 	<li class='note'>One MUST explicitly close HttpClient with {@link CloseableHttpClient#close()} in order to stop and release the background thread.
+		 * 	<li class='note'>This method has no effect if the instance of {@link HttpClient} is configured to use a shared connection manager.
+		 * 	<li class='note'>This method may not be used when the instance of {@link HttpClient} is created inside an EJB container.
 		 * </ul>
 		 *
 		 * @param maxIdleTime New property value.
@@ -6998,7 +6987,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * Perform a <c>POST</c> request against the specified URI.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>Use {@link #formPost(Object, Object)} for <c>application/x-www-form-urlencoded</c> form posts.
+	 * 	<li class='note'>Use {@link #formPost(Object, Object)} for <c>application/x-www-form-urlencoded</c> form posts.
 	 * </ul>
 	 *
 	 * @param uri
@@ -7072,7 +7061,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * contents on the result object.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>Use {@link #formPost(Object, Object)} for <c>application/x-www-form-urlencoded</c> form posts.
+	 * 	<li class='note'>Use {@link #formPost(Object, Object)} for <c>application/x-www-form-urlencoded</c> form posts.
 	 * </ul>
 	 *
 	 * @param uri
@@ -7630,7 +7619,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>package</jk> <jk>org.apache.foo</jk>;
+	 * 	<jk>package</jk> org.apache.foo;
 	 *
 	 * 	<ja>@RemoteResource</ja>(path=<js>"http://hostname/resturi/myinterface1"</js>)
 	 * 	<jk>public interface</jk> MyInterface1 { ... }
@@ -7662,7 +7651,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If you plan on using your proxy in a multi-threaded environment, you'll want to use an underlying
 	 * 		pooling client connection manager.
 	 * </ul>
@@ -7884,7 +7873,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * If the information is not available to resolve to an absolute URI, a {@link RemoteMetadataException} is thrown.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		If you plan on using your proxy in a multi-threaded environment, you'll want to use an underlying
 	 * 		pooling client connection manager.
 	 * </ul>
@@ -8311,7 +8300,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * Executes HTTP request using the default context.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>This method gets passed on directly to the underlying {@link HttpClient} class.
+	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
 	 * </ul>
 	 *
 	 * @param request The request to execute.
@@ -8332,7 +8321,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * Executes HTTP request using the given context.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>This method gets passed on directly to the underlying {@link HttpClient} class.
+	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
 	 * </ul>
 	 *
 	 * @param request The request to execute.
@@ -8354,7 +8343,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * Executes HTTP request using the default context.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>This method gets passed on directly to the underlying {@link HttpClient} class.
+	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
 	 * </ul>
 	 *
 	 * @param target The target host for the request.
@@ -8377,10 +8366,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * Executes HTTP request using the given context.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>This method gets passed on directly to the underlying {@link HttpClient} class.
-	 * 	<li>The {@link #run(HttpHost,HttpRequest,HttpContext)} method has been provided as a wrapper around this method.
+	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
+	 * 	<li class='note'>The {@link #run(HttpHost,HttpRequest,HttpContext)} method has been provided as a wrapper around this method.
 	 * 		Subclasses can override these methods for handling requests with and without bodies separately.
-	 * 	<li>The {@link RestCallHandler} interface can also be implemented to intercept this method.
+	 * 	<li class='note'>The {@link RestCallHandler} interface can also be implemented to intercept this method.
 	 * </ul>
 	 *
 	 * @param target The target host for the request.
@@ -8410,7 +8399,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * from having to manage resource deallocation internally.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>This method gets passed on directly to the underlying {@link HttpClient} class.
+	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
 	 * </ul>
 	 *
 	 * @param request The request to execute.
@@ -8433,7 +8422,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * from having to manage resource deallocation internally.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>This method gets passed on directly to the underlying {@link HttpClient} class.
+	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
 	 * </ul>
 	 *
 	 * @param request The request to execute.
@@ -8457,7 +8446,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * from having to manage resource deallocation internally.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>This method gets passed on directly to the underlying {@link HttpClient} class.
+	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
 	 * </ul>
 	 *
 	 * @param target
@@ -8483,7 +8472,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * from having to manage resource deallocation internally.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>This method gets passed on directly to the underlying {@link HttpClient} class.
+	 * 	<li class='note'>This method gets passed on directly to the underlying {@link HttpClient} class.
 	 * </ul>
 	 *
 	 * @param target

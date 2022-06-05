@@ -51,7 +51,7 @@ import org.apache.juneau.swap.*;
  * 		Allowing serializer properties to be overridden on method calls.
  * </ul>
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
  * </ul>
  *

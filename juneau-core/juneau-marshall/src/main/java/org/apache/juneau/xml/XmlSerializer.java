@@ -31,16 +31,15 @@ import org.apache.juneau.utils.*;
 
 /**
  * Serializes POJO models to XML.
- * {@review}
  *
  * <h5 class='topic'>Media types</h5>
- *
+ * <p>
  * Handles <c>Accept</c> types:  <bc>text/xml</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>text/xml</bc>
  *
  * <h5 class='topic'>Description</h5>
- *
+ * <p>
  * See the {@link JsonSerializer} class for details on how Java models map to JSON.
  *
  * <p>
@@ -116,14 +115,14 @@ import org.apache.juneau.utils.*;
  * {@code _x####_} notation.
  *
  * <h5 class='topic'>Behavior-specific subclasses</h5>
- *
+ * <p>
  * The following direct subclasses are provided for convenience:
  * <ul>
  * 	<li>{@link Sq} - Default serializer, single quotes.
  * 	<li>{@link SqReadable} - Default serializer, single quotes, whitespace added.
  * </ul>
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
@@ -409,7 +408,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 		 * This setting is ignored if {@link Builder#enableNamespaces()} is not enabled.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>
+		 * 	<li class='note'>
 		 * 		Auto-detection of namespaces can be costly performance-wise.
 		 * 		<br>In high-performance environments, it's recommended that namespace detection be
 		 * 		disabled, and that namespaces be manually defined through the {@link Builder#namespaces(Namespace...)} property.

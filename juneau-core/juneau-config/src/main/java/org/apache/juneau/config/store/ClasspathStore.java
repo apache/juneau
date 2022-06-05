@@ -24,7 +24,6 @@ import org.apache.juneau.internal.*;
 
 /**
  * Classpath-based storage location for configuration files.
- * {@review}
  *
  * <p>
  * Looks inside the JVM classpath for configuration files.
@@ -32,7 +31,7 @@ import org.apache.juneau.internal.*;
  * <p>
  * Configuration files retrieved from the classpath can be modified but not persisted.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *

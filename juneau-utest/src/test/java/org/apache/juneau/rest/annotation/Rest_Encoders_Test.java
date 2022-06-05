@@ -55,7 +55,7 @@ public class Rest_Encoders_Test {
 		a.put("/", "foo").contentEncoding("identity").run().assertBody().is("foo");
 		a.put("?noTrace=true", StringUtils.compress("foo")).contentEncoding("mycoding").run()
 			.assertCode().is(415)
-			.assertBody().contains(
+			.assertBody().isContains(
 				"Unsupported encoding in request header 'Content-Encoding': 'mycoding'",
 				"Supported codings: ['identity']"
 			);

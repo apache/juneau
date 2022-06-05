@@ -33,12 +33,11 @@ import org.apache.juneau.internal.*;
 
 /**
  * Filesystem-based storage location for configuration files.
- * {@review}
  *
  * <p>
  * Points to a file system directory containing configuration files.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
@@ -207,7 +206,7 @@ public class FileStore extends ConfigStore {
 		 * Use a file system watcher for file system changes.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>Calling {@link FileStore#close()} closes the watcher.
+		 * 	<li class='note'>Calling {@link FileStore#close()} closes the watcher.
 		 * </ul>
 		 *
 		 *	<p>
@@ -232,7 +231,7 @@ public class FileStore extends ConfigStore {
 		 * Determines how frequently the file system is polled for updates.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This relies on internal Sun packages and may not work on all JVMs.
+		 * 	<li class='note'>This relies on internal Sun packages and may not work on all JVMs.
 		 * </ul>
 		 *
 		 * @param value

@@ -36,16 +36,14 @@ public @interface Remote {
 	/**
 	 * REST service path.
 	 *
-	 * <p>
-	 * The possible values are:
-	 * <ul class='spaced-list'>
+	 * <ul class='values'>
 	 * 	<li>An absolute URL.
 	 * 	<li>A relative URL interpreted as relative to the root URL defined on the <c>RestClient</c>
 	 * 	<li>No path interpreted as the class name (e.g. <js>"http://localhost/root-url/org.foo.MyInterface"</js>)
 	 * </ul>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver}
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
 	 * </ul>
@@ -61,7 +59,7 @@ public @interface Remote {
 	 * Specifies headers to set on all requests.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver}
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
 	 * </ul>
@@ -77,7 +75,7 @@ public @interface Remote {
 	 * Specifies a supplier of headers to set on all requests.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supplier class must provide a public no-arg constructor.
 	 * </ul>
 	 *
@@ -113,7 +111,7 @@ public @interface Remote {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver}
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
 	 * </ul>
@@ -129,7 +127,7 @@ public @interface Remote {
 	 * The default value is <js>"Client-Version"</js>.
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Supports {@doc jm.DefaultVarResolver}
 	 * 		(e.g. <js>"$P{mySystemProperty}"</js>).
 	 * </ul>

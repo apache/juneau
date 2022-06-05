@@ -22,7 +22,6 @@ import org.apache.juneau.json.*;
 
 /**
  * REST request body annotation.
- * {@review}
  *
  * <p>
  * Identifies a POJO to be used as the body of an HTTP request.
@@ -64,42 +63,6 @@ import org.apache.juneau.json.*;
  * 		...
  * 	}
  * </p>
- *
- * <p>
- * Also used to populate the auto-generated Swagger documentation.
- *
- * <h5 class='section'>Examples:</h5>
- * <p class='bjava'>
- * 	<ja>@RestPost</ja>(<js>"/pets"</js>)
- * 	<jk>public void</jk> addPet(Pet <jv>pet</jv>) {...}
- *
- * 	<ja>@Body</ja>(
- * 		description=<js>"Pet object to add to the store"</js>,
- * 		required=<jk>true</jk>,
- * 		example=<js>"{name:'Doggie',price:9.99,species:'Dog',tags:['friendly','cute']}"</js>
- * 	)
- * 	<jk>public class</jk> Pet {...}
- * </p>
- *
- * <p>
- * Swagger documentation values are coalesced from multiple sources in the following order of precedence:
- * <ol>
- * 	<li><ja>@Body</ja> annotation on parameter.
- * 	<li><ja>@Body</ja> annotation on parameter class.
- * 	<li><ja>@Body</ja> annotation on parent classes and interfaces.
- * 	<li><ja>@OpSwagger(value)</ja> annotation.
- * 	<li>Localized resource bundle property <js>"[method-name].produces"</js>.
- * 	<li><ja>@Swagger(value)</ja> annotation.
- * 	<li>Localized classpath resource file <js>"[enclosing-class].[simple-class-name]_[locale].json"</js> (if it's an inner or member class).
- * 	<li>Default classpath resource file <js>"[enclosing-class].[simple-class-name].json"</js> (if it's an inner or member class).
- * 	<li>Localized classpath resource file <js>"[simple-class-name]_[locale].json"</js>.
- * 	<li>Default classpath resource file <js>"[simple-class-name].json"</js>.
- * </ol>
- *
- * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.Swagger}
- * 	<li class='extlink'>{@doc ext.SwaggerParameterObject}
- * </ul>
  *
  * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
  *

@@ -64,12 +64,12 @@ public class BasicDateHeader_Test {
 		// Invalid usage.
 		c.get().header(dateHeader(HEADER,(Supplier<ZonedDateTime>)null)).run().assertBody().isEmpty();
 		c.get().header(dateHeader(HEADER,()->null)).run().assertBody().isEmpty();
-		assertThrown(()->dateHeader("", VALUE)).message().is("Name cannot be empty on header.");
-		assertThrown(()->dateHeader(null, VALUE)).message().is("Name cannot be empty on header.");
-		assertThrown(()->dateHeader("", PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->dateHeader(null, PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->dateHeader("", ()->PARSED)).message().is("Name cannot be empty on header.");
-		assertThrown(()->dateHeader(null, ()->PARSED)).message().is("Name cannot be empty on header.");
+		assertThrown(()->dateHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->dateHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->dateHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->dateHeader(null, PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->dateHeader("", ()->PARSED)).asMessage().is("Name cannot be empty on header.");
+		assertThrown(()->dateHeader(null, ()->PARSED)).asMessage().is("Name cannot be empty on header.");
 	}
 
 	@Test

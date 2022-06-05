@@ -55,19 +55,19 @@ public class HttpException_Test {
 		RestClient c = MockRestClient.create(A.class).ignoreErrors().build();
 
 		c.get("/f1").run()
-			.assertStatus().code().is(225)
+			.assertStatus().asCode().is(225)
 			.assertBody().is("bar baz");
 		c.get("/f2").run()
-			.assertStatus().code().is(225)
+			.assertStatus().asCode().is(225)
 			.assertBody().is("foo");
 		c.get("/f3").run()
-			.assertStatus().code().is(225)
+			.assertStatus().asCode().is(225)
 			.assertBody().is("baz");
 		c.get("/f4").run()
-			.assertStatus().code().is(225)
+			.assertStatus().asCode().is(225)
 			.assertBody().is("bar baz");
 		c.get("/f5").run()
-			.assertStatus().code().is(225)
+			.assertStatus().asCode().is(225)
 			.assertBody().is("")
 			.assertHeader("Foo").is("bar");
 	}
@@ -108,6 +108,6 @@ public class HttpException_Test {
 		assertString(x.getFullStackMessage(false)).is("foo<bar>&baz\nCaused by (RuntimeException)");
 		assertString(x.getFullStackMessage(true)).is("foo bar  baz\nCaused by (RuntimeException)");
 
-		assertInteger(x.hashCode()).exists();
+		assertInteger(x.hashCode()).isExists();
 	}
 }

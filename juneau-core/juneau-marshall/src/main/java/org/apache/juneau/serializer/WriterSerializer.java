@@ -30,7 +30,7 @@ import org.apache.juneau.utils.*;
 /**
  * Subclass of {@link Serializer} for character-based serializers.
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
@@ -178,7 +178,7 @@ public class WriterSerializer extends Serializer {
 		 * Specifies the maximum indentation level in the serialized document.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This setting does not apply to the RDF serializers.
+		 * 	<li class='note'>This setting does not apply to the RDF serializers.
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
@@ -209,7 +209,7 @@ public class WriterSerializer extends Serializer {
 		 * Specifies the character to use for quoting attributes and values.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This setting does not apply to the RDF serializers.
+		 * 	<li class='note'>This setting does not apply to the RDF serializers.
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
@@ -268,7 +268,7 @@ public class WriterSerializer extends Serializer {
 		 * Specifies to use single quotes for quoting attributes and values.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This setting does not apply to the RDF serializers.
+		 * 	<li class='note'>This setting does not apply to the RDF serializers.
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>

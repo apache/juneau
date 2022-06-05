@@ -30,7 +30,7 @@ import org.apache.juneau.utils.*;
  *
  * Handles <c>Content-Type</c> types:  <bc>octal/msgpack</bc>
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *

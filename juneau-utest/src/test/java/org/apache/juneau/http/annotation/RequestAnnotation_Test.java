@@ -92,8 +92,8 @@ public class RequestAnnotation_Test {
 		Request c1 = RequestAnnotation.create(C1.class).on(C2.class).build();
 		Request c2 = RequestAnnotation.create("a").on("b").build();
 
-		assertObject(c1).asJson().contains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
-		assertObject(c2).asJson().contains("on:['a','b']");
+		assertObject(c1).asJson().isContains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
+		assertObject(c2).asJson().isContains("on:['a','b']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

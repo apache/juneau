@@ -28,7 +28,6 @@ import org.apache.juneau.utils.*;
 
 /**
  * Serializes POJO models to MessagePack.
- * {@review}
  *
  * <h5 class='section'>Media types:</h5>
  *
@@ -36,7 +35,7 @@ import org.apache.juneau.utils.*;
  * <p>
  * Produces <c>Content-Type</c> types: <bc>octal/msgpack</bc>
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *

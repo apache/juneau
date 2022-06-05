@@ -104,8 +104,8 @@ public class RestClient_Response_Body_Test {
 		RestClient x = client().build();
 		ABean b = x.post("/echo",bean).run().getBody().parser(JsonParser.DEFAULT).as(ABean.class);
 		assertObject(b).asJson().is("{f:1}");
-		assertThrown(()->x.post("/echo",bean).run().getBody().parser(XmlParser.DEFAULT).as(ABean.class)).messages().any(contains("ParseError at [row,col]:[1,1]"));
-		assertThrown(()->x.post("/echo",bean).run().getBody().parser(XmlParser.DEFAULT).assertValue().as(ABean.class)).messages().any(contains("ParseError at [row,col]:[1,1]"));
+		assertThrown(()->x.post("/echo",bean).run().getBody().parser(XmlParser.DEFAULT).as(ABean.class)).asMessages().isAny(contains("ParseError at [row,col]:[1,1]"));
+		assertThrown(()->x.post("/echo",bean).run().getBody().parser(XmlParser.DEFAULT).assertValue().as(ABean.class)).asMessages().isAny(contains("ParseError at [row,col]:[1,1]"));
 	}
 
 	@Test
@@ -113,13 +113,13 @@ public class RestClient_Response_Body_Test {
 		RestResponse r1 = client().build().get("/bean").run();
 		InputStream is = r1.getBody().asInputStream();
 		assertBytes(is).asString().is("{f:1}");
-		assertThrown(()->r1.getBody().asInputStream()).message().contains("Response has already been consumed.");
+		assertThrown(()->r1.getBody().asInputStream()).asMessage().isContains("Response has already been consumed.");
 
 		// Non-repeatable entity.
 		TestClient x = testClient().entity(inputStreamEntity("{f:2}"));
 		RestResponse r2 = x.get("/bean").run();
 		r2.getBody().asInputStream();
-		assertThrown(()->r2.getBody().asInputStream()).message().contains("Response has already been consumed");
+		assertThrown(()->r2.getBody().asInputStream()).asMessage().isContains("Response has already been consumed");
 
 		// Repeatable entity.
 		x.entity(new StringEntity("{f:2}"));
@@ -138,9 +138,9 @@ public class RestClient_Response_Body_Test {
 		};
 
 		TestClient x2 = client().interceptors(rci).build(TestClient.class).entity(new StringEntity("{f:2}"));
-		assertThrown(()->x2.get("/bean").run().getBody().cache().asInputStream()).message().is("foo");
-		assertThrown(()->x2.get("/bean").run().getBody().asInputStream().close()).message().is("foo");
-		assertThrown(()->((EofSensorInputStream)x2.get("/bean").run().getBody().asInputStream()).abortConnection()).message().is("foo");
+		assertThrown(()->x2.get("/bean").run().getBody().cache().asInputStream()).asMessage().is("foo");
+		assertThrown(()->x2.get("/bean").run().getBody().asInputStream().close()).asMessage().is("foo");
+		assertThrown(()->((EofSensorInputStream)x2.get("/bean").run().getBody().asInputStream()).abortConnection()).asMessage().is("foo");
 	}
 
 	@Test
@@ -167,7 +167,7 @@ public class RestClient_Response_Body_Test {
 		x = client().build().get("/bean").run().assertBody().asBytes().asString().is("{f:1}").getBody().asBytes();
 		assertBytes(x).asString().is("{f:1}");
 
-		assertThrown(()->testClient().entity(new InputStreamEntity(badStream())).get().run().getBody().asBytes()).messages().contains("foo");
+		assertThrown(()->testClient().entity(new InputStreamEntity(badStream())).get().run().getBody().asBytes()).asMessages().isContains("foo");
 	}
 
 	@Test
@@ -225,8 +225,8 @@ public class RestClient_Response_Body_Test {
 
 		plainTestClient().entity(stringEntity("foo")).get().run().assertBody().as(A7a.class).is(x->x.x.equals("foo"));
 		plainTestClient().entity(stringEntity("foo")).get().run().assertBody().as(A7b.class).is(x->x.x.equals("foo"));
-		assertThrown(()->plainTestClient().entity(stringEntity("foo")).headers(header("Content-Type","foo")).get().run().getBody().as(A7c.class)).exists().messages().any(contains("Unsupported media-type"));
-		assertThrown(()->testClient().entity(stringEntity("")).get().run().getBody().as(A7c.class)).messages().contains("foo");
+		assertThrown(()->plainTestClient().entity(stringEntity("foo")).headers(header("Content-Type","foo")).get().run().getBody().as(A7c.class)).isExists().asMessages().isAny(contains("Unsupported media-type"));
+		assertThrown(()->testClient().entity(stringEntity("")).get().run().getBody().as(A7c.class)).asMessages().isContains("foo");
 
 		Future<ABean> x8 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().asFuture(ABean.class);
 		assertObject(x8.get()).asJson().is("{f:1}");
@@ -240,7 +240,7 @@ public class RestClient_Response_Body_Test {
 		String x14 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().asString();
 		assertString(x14).is("{f:1}");
 
-		assertThrown(()->testClient().entity(new InputStreamEntity(badStream())).get().run().getBody().asString()).messages().contains("foo");
+		assertThrown(()->testClient().entity(new InputStreamEntity(badStream())).get().run().getBody().asString()).asMessages().isContains("foo");
 
 		Future<String> x16 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().asStringFuture();
 		assertString(x16.get()).is("{f:1}");

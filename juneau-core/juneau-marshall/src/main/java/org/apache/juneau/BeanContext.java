@@ -147,7 +147,7 @@ import org.apache.juneau.utils.*;
  * 	Person <jv>person</jv> = <jv>map2</jv>.getBean();  <jc>// Get the bean instance that was created.</jc>
  * </p>
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *
@@ -442,8 +442,8 @@ public class BeanContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>The {@link Bean @Bean} annotation can be used on a non-public bean class to override this setting.
-		 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean class to ignore it as a bean.
+		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on a non-public bean class to override this setting.
+		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean class to ignore it as a bean.
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
@@ -491,8 +491,8 @@ public class BeanContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>The {@link Beanc @Beanc} annotation can also be used to expose a non-public constructor.
-		 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean constructor to ignore it.
+		 * 	<li class='note'>The {@link Beanc @Beanc} annotation can also be used to expose a non-public constructor.
+		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean constructor to ignore it.
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
@@ -549,8 +549,8 @@ public class BeanContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>The {@link Beanp @Beanp} annotation can also be used to expose a non-public field.
-		 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean field to ignore it as a bean property.
+		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can also be used to expose a non-public field.
+		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean field to ignore it as a bean property.
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
@@ -698,8 +698,8 @@ public class BeanContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>The {@link Beanp @Beanp} annotation can also be used to expose a non-public method.
-		 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean getter/setter to ignore it as a bean property.
+		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can also be used to expose a non-public method.
+		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a public bean getter/setter to ignore it as a bean property.
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
@@ -754,8 +754,8 @@ public class BeanContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>The {@link Bean @Bean} annotation can be used on a bean class to override this setting.
-		 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
+		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on a bean class to override this setting.
+		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
@@ -813,8 +813,8 @@ public class BeanContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>The {@link Bean @Bean} annotation can be used on a bean class to override this setting.
-		 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
+		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on a bean class to override this setting.
+		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on a class to ignore it as a bean.
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
@@ -870,8 +870,8 @@ public class BeanContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>The {@link Beanp @Beanp} annotation can be used on the getter to override this setting.
-		 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters to ignore them as bean properties.
+		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can be used on the getter to override this setting.
+		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters to ignore them as bean properties.
 		 * </ul>
 		 *
 		 * @return This object.
@@ -920,7 +920,7 @@ public class BeanContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>The {@link Bean @Bean} annotation can be used on the class to force it to be recognized as a bean class
+		 * 	<li class='note'>The {@link Bean @Bean} annotation can be used on the class to force it to be recognized as a bean class
 		 * 		even if it has no properties.
 		 * </ul>
 		 *
@@ -1827,7 +1827,7 @@ public class BeanContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>Using this method assumes the serialized form of the object is the same as that produced
+		 * 	<li class='note'>Using this method assumes the serialized form of the object is the same as that produced
 		 * 		by the default serializer.  This may not be true based on settings or swaps on the constructed serializer.
 		 * </ul>
 		 *
@@ -1933,8 +1933,8 @@ public class BeanContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>The {@link Beanp @Beanp} annotation can also be used on methods to individually identify them as fluent setters.
-		 * 	<li>The {@link Bean#findFluentSetters() @Bean.fluentSetters()} annotation can also be used on classes to specify to look for fluent setters.
+		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can also be used on methods to individually identify them as fluent setters.
+		 * 	<li class='note'>The {@link Bean#findFluentSetters() @Bean.fluentSetters()} annotation can also be used on classes to specify to look for fluent setters.
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
@@ -1985,7 +1985,7 @@ public class BeanContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>This method is functionally equivalent to using the {@link Bean#findFluentSetters()} annotation.
+		 * 	<li class='note'>This method is functionally equivalent to using the {@link Bean#findFluentSetters()} annotation.
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
@@ -2126,7 +2126,7 @@ public class BeanContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters and fields to ignore them.
+		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on getters and fields to ignore them.
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
@@ -2176,7 +2176,7 @@ public class BeanContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>The {@link Beanp @Beanp} annotation can also be used on transient fields to keep them from being ignored.
+		 * 	<li class='note'>The {@link Beanp @Beanp} annotation can also be used on transient fields to keep them from being ignored.
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
@@ -2437,7 +2437,7 @@ public class BeanContext extends Context {
 		 * individually on the child classes.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>The {@link Bean#interfaceClass() @Bean(interfaceClass)} annotation is the equivalent annotation-based solution.
+		 * 	<li class='note'>The {@link Bean#interfaceClass() @Bean(interfaceClass)} annotation is the equivalent annotation-based solution.
 		 * </ul>
 		 *
 		 * @param on The class that the interface class applies to.
@@ -2483,7 +2483,7 @@ public class BeanContext extends Context {
 		 * individually on the child classes.
 		 *
 		 * <ul class='notes'>
-		 * 	<li>The {@link Bean#interfaceClass() @Bean(interfaceClass)} annotation is the equivalent annotation-based solution.
+		 * 	<li class='note'>The {@link Bean#interfaceClass() @Bean(interfaceClass)} annotation is the equivalent annotation-based solution.
 		 * </ul>
 		 *
 		 * @param value
@@ -2619,7 +2619,7 @@ public class BeanContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>The {@link BeanIgnore @BeanIgnore} annotation can also be used on classes to prevent them from being recognized as beans.
+		 * 	<li class='note'>The {@link BeanIgnore @BeanIgnore} annotation can also be used on classes to prevent them from being recognized as beans.
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
@@ -2857,7 +2857,7 @@ public class BeanContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>The {@link Bean#sort() @Bean.sort()} annotation can also be used to sort properties on just a single class.
+		 * 	<li class='note'>The {@link Bean#sort() @Bean.sort()} annotation can also be used to sort properties on just a single class.
 		 * </ul>
 		 *
 		 * @return This object.
@@ -3032,8 +3032,8 @@ public class BeanContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>The {@link Swap @Swap} annotation can also be used on classes to identify swaps for the class.
-		 * 	<li>The {@link Swap @Swap} annotation can also be used on bean methods and fields to identify swaps for values of those bean properties.
+		 * 	<li class='note'>The {@link Swap @Swap} annotation can also be used on classes to identify swaps for the class.
+		 * 	<li class='note'>The {@link Swap @Swap} annotation can also be used on bean methods and fields to identify swaps for values of those bean properties.
 		 * </ul>
 		 *
 		 * @param values
@@ -3199,7 +3199,7 @@ public class BeanContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li>Equivalent to the {@link Bean#typeName() Bean(typeName)} annotation.
+		 * 	<li class='note'>Equivalent to the {@link Bean#typeName() Bean(typeName)} annotation.
 		 * </ul>
 		 *
 		 * <ul class='seealso'>

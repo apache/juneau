@@ -96,7 +96,7 @@ import org.apache.juneau.utils.*;
  * 	}
  * </p>
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='warn'>This class is not thread safe.
  * </ul>
  *

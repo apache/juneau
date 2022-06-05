@@ -25,7 +25,7 @@ import org.apache.juneau.collections.*;
  *
  * 		<ja>@Override</ja>
  * 		<jk>public</jk> JsonMap swap(BeanSession <jv>session</jv>, MyBean <jv>bean</jv>) <jk>throws</jk> Exception {
- * 			<jk>return</jk> JsonMap.<jsm>of<jsm>(<js>"foo"</js>, <jv>bean</jv>.getFoo());
+ * 			<jk>return</jk> JsonMap.<jsm>of</jsm>(<js>"foo"</js>, <jv>bean</jv>.getFoo());
  * 		}
  *
  * 		<ja>@Override</ja>

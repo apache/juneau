@@ -41,7 +41,7 @@ public class MsgPackParserTest {
 		is = is("00 01");
 		r = p.parse(is, Object.class);
 		assertObject(r).asJson().is("0");
-		assertThrown(()->p.parse(is, Object.class)).message().contains("Stream is closed");
+		assertThrown(()->p.parse(is, Object.class)).asMessage().isContains("Stream is closed");
 	}
 
 	//====================================================================================================

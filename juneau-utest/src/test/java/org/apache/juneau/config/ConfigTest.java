@@ -53,7 +53,7 @@ public class ConfigTest {
 		assertNull(c.get("b").orElse(null));
 		assertNull(c.get("S/c").orElse(null));
 		assertNull(c.get("T/d").orElse(null));
-		assertThrown(()->c.get(null)).message().is("Argument 'key' cannot be null.");
+		assertThrown(()->c.get(null)).asMessage().is("Argument 'key' cannot be null.");
 		c.close();
 	}
 
@@ -96,7 +96,7 @@ public class ConfigTest {
 		assertEquals("6", c.get("S/b2").get());
 		assertEquals("7", c.get("T/c1").get());
 
-		assertString(c).replaceAll("\\r?\\n", "|").is("a1 = 2|a2 = 3|a3 = 4|[S]|b1 = 5|b2 = 6|[T]|c1 = 7|");
+		assertString(c).asReplaceAll("\\r?\\n", "|").is("a1 = 2|a2 = 3|a3 = 4|[S]|b1 = 5|b2 = 6|[T]|c1 = 7|");
 	}
 
 	//====================================================================================================
@@ -138,7 +138,7 @@ public class ConfigTest {
 		assertEquals("6", c.get("S/b2").get());
 		assertEquals("7", c.get("T/c1").get());
 
-		assertString(c).replaceAll("\\r?\\n", "|").is("a1 = 2|a2 = 3|a3 = 4|[S]|b1 = 5|b2 = 6|[T]|c1 = 7|");
+		assertString(c).asReplaceAll("\\r?\\n", "|").is("a1 = 2|a2 = 3|a3 = 4|[S]|b1 = 5|b2 = 6|[T]|c1 = 7|");
 	}
 
 	//====================================================================================================
@@ -179,11 +179,11 @@ public class ConfigTest {
 		c.set("S/b2", b, UonSerializer.DEFAULT, "*", "comment", Arrays.asList("#c1","#c2"));
 		c.set("T/c1", b, UonSerializer.DEFAULT, "*", "comment", Arrays.asList("#c1","#c2"));
 
-		assertString(c).replaceAll("\\r?\\n", "|").is("#c1|#c2|a1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a2<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a3<*> = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|b2<*> = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1<*> = {RhMWWFIFVksf} # comment|");
+		assertString(c).asReplaceAll("\\r?\\n", "|").is("#c1|#c2|a1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a2<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a3<*> = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|b2<*> = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1<*> = {RhMWWFIFVksf} # comment|");
 		c.commit();
-		assertString(c).replaceAll("\\r?\\n", "|").is("#c1|#c2|a1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a2<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a3<*> = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|b2<*> = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1<*> = {RhMWWFIFVksf} # comment|");
+		assertString(c).asReplaceAll("\\r?\\n", "|").is("#c1|#c2|a1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a2<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a3<*> = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|b2<*> = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1<*> = {RhMWWFIFVksf} # comment|");
 		c = cb.build();
-		assertString(c).replaceAll("\\r?\\n", "|").is("#c1|#c2|a1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a2<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a3<*> = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|b2<*> = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1<*> = {RhMWWFIFVksf} # comment|");
+		assertString(c).asReplaceAll("\\r?\\n", "|").is("#c1|#c2|a1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a2<*> = {RhMWWFIFVksf} # comment|#c1|#c2|a3<*> = {RhMWWFIFVksf} # comment|[S]|#c1|#c2|b1<*> = {RhMWWFIFVksf} # comment|#c1|#c2|b2<*> = {RhMWWFIFVksf} # comment|[T]|#c1|#c2|c1<*> = {RhMWWFIFVksf} # comment|");
 
 		assertEquals("(foo=bar)", c.get("a1").get());
 		assertEquals("(foo=bar)", c.get("a2").get());
@@ -206,11 +206,11 @@ public class ConfigTest {
 		c.remove("S/b1");
 		c.remove("T/c1");
 
-		assertString(c).replaceAll("\\r?\\n", "|").is("[S]|");
+		assertString(c).asReplaceAll("\\r?\\n", "|").is("[S]|");
 		c.commit();
-		assertString(c).replaceAll("\\r?\\n", "|").is("[S]|");
+		assertString(c).asReplaceAll("\\r?\\n", "|").is("[S]|");
 		c = cb.build();
-		assertString(c).replaceAll("\\r?\\n", "|").is("[S]|");
+		assertString(c).asReplaceAll("\\r?\\n", "|").is("[S]|");
 	}
 
 	//====================================================================================================
@@ -292,10 +292,10 @@ public class ConfigTest {
 	@Test
 	public void getInt1BadValues() throws Exception {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
-		assertThrown(()->c.get("a1").asInteger().orElse(0)).exists();
-		assertThrown(()->c.get("a2").asInteger().orElse(0)).exists();
-		assertThrown(()->c.get("a3").asInteger().orElse(0)).exists();
-		assertThrown(()->c.get("a4").asInteger().orElse(0)).exists();
+		assertThrown(()->c.get("a1").asInteger().orElse(0)).isExists();
+		assertThrown(()->c.get("a2").asInteger().orElse(0)).isExists();
+		assertThrown(()->c.get("a3").asInteger().orElse(0)).isExists();
+		assertThrown(()->c.get("a4").asInteger().orElse(0)).isExists();
 	}
 
 	//====================================================================================================
@@ -316,10 +316,10 @@ public class ConfigTest {
 	@Test
 	public void getInt2BadValues() throws Exception {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
-		assertThrown(()->c.get("a1").asInteger().orElse(-1)).exists();
-		assertThrown(()->c.get("a2").asInteger().orElse(-1)).exists();
-		assertThrown(()->c.get("a3").asInteger().orElse(-1)).exists();
-		assertThrown(()->c.get("a4").asInteger().orElse(-1)).exists();
+		assertThrown(()->c.get("a1").asInteger().orElse(-1)).isExists();
+		assertThrown(()->c.get("a2").asInteger().orElse(-1)).isExists();
+		assertThrown(()->c.get("a3").asInteger().orElse(-1)).isExists();
+		assertThrown(()->c.get("a4").asInteger().orElse(-1)).isExists();
 	}
 
 	//====================================================================================================
@@ -388,10 +388,10 @@ public class ConfigTest {
 	@Test
 	public void getLong1BadValues() throws Exception {
 		Config c = init("a1=foo", "a2=2.3", "a3=[1]", "a4=false");
-		assertThrown(()->c.get("a1").as(long.class)).exists();
-		assertThrown(()->c.get("a2").as(long.class)).exists();
-		assertThrown(()->c.get("a3").as(long.class)).exists();
-		assertThrown(()->c.get("a4").as(long.class)).exists();
+		assertThrown(()->c.get("a1").as(long.class)).isExists();
+		assertThrown(()->c.get("a2").as(long.class)).isExists();
+		assertThrown(()->c.get("a3").as(long.class)).isExists();
+		assertThrown(()->c.get("a4").as(long.class)).isExists();
 	}
 
 	//====================================================================================================
@@ -805,7 +805,7 @@ public class ConfigTest {
 		assertObject(c.getKeys("S")).asJson().is("['b1','b2']");
 		assertTrue(c.getKeys("T").isEmpty());
 
-		assertThrown(()->c.getKeys(null)).message().is("Argument 'section' cannot be null.");
+		assertThrown(()->c.getKeys(null)).asMessage().is("Argument 'section' cannot be null.");
 	}
 
 	//====================================================================================================
@@ -821,8 +821,8 @@ public class ConfigTest {
 		assertObject(a).asJson().is("{foo:'baz'}");
 		c.getSection("S").writeToBean(b, true);
 		assertObject(b).asJson().is("{foo:'baz'}");
-		assertThrown(()->c.getSection("S").writeToBean(a, false)).message().is("Unknown property 'bar' encountered in configuration section 'S'.");
-		assertThrown(()->c.getSection("S").writeToBean(b, false)).message().is("Unknown property 'bar' encountered in configuration section 'S'.");
+		assertThrown(()->c.getSection("S").writeToBean(a, false)).asMessage().is("Unknown property 'bar' encountered in configuration section 'S'.");
+		assertThrown(()->c.getSection("S").writeToBean(b, false)).asMessage().is("Unknown property 'bar' encountered in configuration section 'S'.");
 		c.getSection("").writeToBean(b, true);
 		assertObject(b).asJson().is("{foo:'qux'}");
 		c.getSection("").writeToBean(a, true);
@@ -857,8 +857,8 @@ public class ConfigTest {
 		b = c.getSection("S").asBean(BBean.class).get();
 		assertObject(b).asJson().is("{foo:'baz'}");
 
-		assertThrown(()->c.getSection("T").asBean(ABean.class).get()).message().is("Unknown property 'bar' encountered in configuration section 'T'.");
-		assertThrown(()->c.getSection("T").asBean(BBean.class).get()).message().is("Unknown property 'bar' encountered in configuration section 'T'.");
+		assertThrown(()->c.getSection("T").asBean(ABean.class).get()).asMessage().is("Unknown property 'bar' encountered in configuration section 'T'.");
+		assertThrown(()->c.getSection("T").asBean(BBean.class).get()).asMessage().is("Unknown property 'bar' encountered in configuration section 'T'.");
 	}
 
 	//====================================================================================================
@@ -876,8 +876,8 @@ public class ConfigTest {
 		b = c.getSection("T").asBean(BBean.class, true).get();
 		assertObject(b).asJson().is("{foo:'qux'}");
 
-		assertThrown(()->c.getSection("T").asBean(ABean.class, false).get()).message().is("Unknown property 'bar' encountered in configuration section 'T'.");
-		assertThrown(()->c.getSection("T").asBean(BBean.class, false).get()).message().is("Unknown property 'bar' encountered in configuration section 'T'.");
+		assertThrown(()->c.getSection("T").asBean(ABean.class, false).get()).asMessage().is("Unknown property 'bar' encountered in configuration section 'T'.");
+		assertThrown(()->c.getSection("T").asBean(BBean.class, false).get()).asMessage().is("Unknown property 'bar' encountered in configuration section 'T'.");
 	}
 
 	//====================================================================================================
@@ -918,7 +918,7 @@ public class ConfigTest {
 		a = c.getSection("T").asInterface(AInterface.class).get();
 		assertEquals("qux", a.getFoo());
 
-		assertThrown(()->c.getSection("T").asInterface(ABean.class).get()).message().is("Class 'org.apache.juneau.config.ConfigTest$ABean' passed to toInterface() is not an interface.");
+		assertThrown(()->c.getSection("T").asInterface(ABean.class).get()).asMessage().is("Class 'org.apache.juneau.config.ConfigTest$ABean' passed to toInterface() is not an interface.");
 	}
 
 	public static interface AInterface {
@@ -948,21 +948,21 @@ public class ConfigTest {
 		Config c = init();
 
 		c.setSection("", Arrays.asList("#C1", "#C2"));
-		assertString(c).replaceAll("\\r?\\n", "|").is("#C1|#C2||");
+		assertString(c).asReplaceAll("\\r?\\n", "|").is("#C1|#C2||");
 
 		c.setSection("", Arrays.asList("#C3", "#C4"));
-		assertString(c).replaceAll("\\r?\\n", "|").is("#C3|#C4||");
+		assertString(c).asReplaceAll("\\r?\\n", "|").is("#C3|#C4||");
 
 		c.setSection("S1", Arrays.asList("", "#C5", "#C6"));
-		assertString(c).replaceAll("\\r?\\n", "|").is("#C3|#C4|||#C5|#C6|[S1]|");
+		assertString(c).asReplaceAll("\\r?\\n", "|").is("#C3|#C4|||#C5|#C6|[S1]|");
 
 		c.setSection("S1", null);
-		assertString(c).replaceAll("\\r?\\n", "|").is("#C3|#C4|||#C5|#C6|[S1]|");
+		assertString(c).asReplaceAll("\\r?\\n", "|").is("#C3|#C4|||#C5|#C6|[S1]|");
 
 		c.setSection("S1", Collections.<String>emptyList());
-		assertString(c).replaceAll("\\r?\\n", "|").is("#C3|#C4||[S1]|");
+		assertString(c).asReplaceAll("\\r?\\n", "|").is("#C3|#C4||[S1]|");
 
-		assertThrown(()->c.setSection(null, Arrays.asList("", "#C5", "#C6"))).message().is("Argument 'section' cannot be null.");
+		assertThrown(()->c.setSection(null, Arrays.asList("", "#C5", "#C6"))).asMessage().is("Argument 'section' cannot be null.");
 	}
 
 	//====================================================================================================
@@ -974,21 +974,21 @@ public class ConfigTest {
 		JsonMap m = JsonMap.of("a", "b");
 
 		c.setSection("", Arrays.asList("#C1", "#C2"), m);
-		assertString(c).replaceAll("\\r?\\n", "|").is("#C1|#C2||a = b|");
+		assertString(c).asReplaceAll("\\r?\\n", "|").is("#C1|#C2||a = b|");
 
 		c.setSection("", Arrays.asList("#C3", "#C4"), m);
-		assertString(c).replaceAll("\\r?\\n", "|").is("#C3|#C4||a = b|");
+		assertString(c).asReplaceAll("\\r?\\n", "|").is("#C3|#C4||a = b|");
 
 		c.setSection("S1", Arrays.asList("", "#C5", "#C6"), m);
-		assertString(c).replaceAll("\\r?\\n", "|").is("#C3|#C4||a = b||#C5|#C6|[S1]|a = b|");
+		assertString(c).asReplaceAll("\\r?\\n", "|").is("#C3|#C4||a = b||#C5|#C6|[S1]|a = b|");
 
 		c.setSection("S1", null, m);
-		assertString(c).replaceAll("\\r?\\n", "|").is("#C3|#C4||a = b||#C5|#C6|[S1]|a = b|");
+		assertString(c).asReplaceAll("\\r?\\n", "|").is("#C3|#C4||a = b||#C5|#C6|[S1]|a = b|");
 
 		c.setSection("S1", Collections.<String>emptyList(), m);
-		assertString(c).replaceAll("\\r?\\n", "|").is("#C3|#C4||a = b|[S1]|a = b|");
+		assertString(c).asReplaceAll("\\r?\\n", "|").is("#C3|#C4||a = b|[S1]|a = b|");
 
-		assertThrown(()->c.setSection(null, Arrays.asList("", "#C5", "#C6"), m)).message().is("Argument 'section' cannot be null.");
+		assertThrown(()->c.setSection(null, Arrays.asList("", "#C5", "#C6"), m)).asMessage().is("Argument 'section' cannot be null.");
 	}
 
 	//====================================================================================================
@@ -1001,10 +1001,10 @@ public class ConfigTest {
 		c.removeSection("S");
 		c.removeSection("T");
 
-		assertString(c).replaceAll("\\r?\\n", "|").is("a=1|");
+		assertString(c).asReplaceAll("\\r?\\n", "|").is("a=1|");
 
 		c.removeSection("");
-		assertString(c).replaceAll("\\r?\\n", "|").is("");
+		assertString(c).asReplaceAll("\\r?\\n", "|").is("");
 	}
 
 	//====================================================================================================
@@ -1014,7 +1014,7 @@ public class ConfigTest {
 	public void writeTo() throws Exception {
 		Config c = init("a=1", "[S]", "b=2", "c=", "[T]");
 
-		assertString(c.writeTo(new StringWriter())).replaceAll("\\r?\\n", "|").is("a=1|[S]|b=2|c=|[T]|");
+		assertString(c.writeTo(new StringWriter())).asReplaceAll("\\r?\\n", "|").is("a=1|[S]|b=2|c=|[T]|");
 	}
 
 	//====================================================================================================
@@ -1098,7 +1098,7 @@ public class ConfigTest {
 
 		cf.commit();
 
-		assertString(cf).replaceAll("\\r?\\n", "|").is("[s1]||foo<*> = {AwwJVhwUQFZEMg==}|");
+		assertString(cf).asReplaceAll("\\r?\\n", "|").is("[s1]||foo<*> = {AwwJVhwUQFZEMg==}|");
 
 		assertEquals("mypassword", cf.get("s1/foo").get());
 
@@ -1111,7 +1111,7 @@ public class ConfigTest {
 		// INI output should be encoded
 		StringWriter sw = new StringWriter();
 		cf.writeTo(new PrintWriter(sw));
-		assertString(sw).replaceAll("\\r?\\n", "|").is("[s1]|foo<*> = {AwwJVhwUQFZEMg==}|");
+		assertString(sw).asReplaceAll("\\r?\\n", "|").is("[s1]|foo<*> = {AwwJVhwUQFZEMg==}|");
 	}
 
 	//====================================================================================================
@@ -1125,7 +1125,7 @@ public class ConfigTest {
 
 		cf.applyMods();
 		cf.commit();
-		assertString(MemoryStore.DEFAULT.read("Test.cfg")).replaceAll("\\r?\\n", "|").is("[s1]||foo<*> = {AwwJVhwUQFZEMg==}|");
+		assertString(MemoryStore.DEFAULT.read("Test.cfg")).asReplaceAll("\\r?\\n", "|").is("[s1]||foo<*> = {AwwJVhwUQFZEMg==}|");
 	}
 
 	//====================================================================================================
@@ -1226,7 +1226,7 @@ public class ConfigTest {
 
 		StringWriter sw = new StringWriter();
 		cf.writeTo(sw);
-		assertString(sw).replaceAll("\\r?\\n", "|").is("[s1]|f1 = x |\ty |\tz|");
+		assertString(sw).asReplaceAll("\\r?\\n", "|").is("[s1]|f1 = x |\ty |\tz|");
 	}
 
 	//====================================================================================================
@@ -1449,7 +1449,7 @@ public class ConfigTest {
 
 		StringWriter sw = new StringWriter();
 		cf.writeTo(sw);
-		assertString(sw).replaceAll("\\r?\\n", "|").is("a = b|");
+		assertString(sw).asReplaceAll("\\r?\\n", "|").is("a = b|");
 	}
 
 
@@ -1537,15 +1537,15 @@ public class ConfigTest {
 		cf.set("a", "a,#b,=c");
 		cf.set("A/a", "a,#b,=c");
 
-		assertString(cf).replaceAll("\\r?\\n", "|").is("a = a,\\u0023b,=c|[A]|a = a,\\u0023b,=c|");
+		assertString(cf).asReplaceAll("\\r?\\n", "|").is("a = a,\\u0023b,=c|[A]|a = a,\\u0023b,=c|");
 		cf.commit();
-		assertString(cf).replaceAll("\\r?\\n", "|").is("a = a,\\u0023b,=c|[A]|a = a,\\u0023b,=c|");
+		assertString(cf).asReplaceAll("\\r?\\n", "|").is("a = a,\\u0023b,=c|[A]|a = a,\\u0023b,=c|");
 
 		assertEquals("a,#b,=c", cf.get("a").get());
 		assertEquals("a,#b,=c", cf.get("A/a").get());
 
 		cf.set("a", "a,#b,=c", null, null, "comment#comment", null);
-		assertString(cf).replaceAll("\\r?\\n", "|").is("a = a,\\u0023b,=c # comment#comment|[A]|a = a,\\u0023b,=c|");
+		assertString(cf).asReplaceAll("\\r?\\n", "|").is("a = a,\\u0023b,=c # comment#comment|[A]|a = a,\\u0023b,=c|");
 		assertEquals("a,#b,=c", cf.get("a").get());
 	}
 

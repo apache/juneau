@@ -210,7 +210,7 @@ public final class RestResponse {
 	 * </p>
 	 *
 	 * <ul class='notes'>
-	 * 	<li>
+	 * 	<li class='note'>
 	 * 		Calling this method with a <jk>null</jk> value is NOT the same as not calling this method at all.
 	 * 		<br>A <jk>null</jk> output value means we want to serialize <jk>null</jk> as a response (e.g. as a JSON <c>null</c>).
 	 * 		<br>Not calling this method or returning a value means you're handing the response yourself via the underlying stream or writer.

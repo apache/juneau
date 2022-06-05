@@ -520,7 +520,7 @@ public class UonParserTest {
 		r = reader("(foo=bar)(foo=bar)");
 		x = p.parse(r, JsonMap.class);
 		assertObject(x).asJson().is("{foo:'bar'}");
-		assertThrown(()->p.parse(r, JsonMap.class)).messages().contains("Reader is closed");
+		assertThrown(()->p.parse(r, JsonMap.class)).asMessages().isContains("Reader is closed");
 	}
 
 	//====================================================================================================

@@ -26,17 +26,16 @@ import org.apache.juneau.utils.*;
 
 /**
  * Subclass of {@link Parser} for characters-based parsers.
- * {@review}
  *
  * <h5 class='topic'>Description</h5>
- *
+ * <p>
  * This class is typically the parent class of all character-based parsers.
- * It has 1 abstract method to implement...
+ * It has 1 abstract method to implement on the session object...
  * <ul>
  * 	<li><c>parse(ParserSession, ClassMeta)</c>
  * </ul>
  *
- * <ul class='spaced-list'>
+ * <ul class='notes'>
  * 	<li class='note'>This class is thread safe and reusable.
  * </ul>
  *

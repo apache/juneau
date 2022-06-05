@@ -135,7 +135,7 @@ public class RestClient_Marshalls_Test {
 		x.post("/a01",bean).header("Accept","application/x-www-form-urlencoded").header("Content-Type","application/x-www-form-urlencoded").header("X-Accept","application/x-www-form-urlencoded").header("X-Content-Type","application/x-www-form-urlencoded").run().assertCode().is(200).getBody().as(Bean.class).check();
 		x.post("/a01",bean).header("Accept","text/openapi").header("Content-Type","text/openapi").header("X-Accept","text/openapi").header("X-Content-Type","text/openapi").run().assertCode().is(200).getBody().as(Bean.class).check();
 
-		assertThrown(()->x.post("/a01",bean).run()).message().is("Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.");
+		assertThrown(()->x.post("/a01",bean).run()).asMessage().is("Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -154,7 +154,7 @@ public class RestClient_Marshalls_Test {
 		x.post("/a01",bean).header("Accept","application/x-www-form-urlencoded").header("Content-Type","application/x-www-form-urlencoded").header("X-Accept","application/x-www-form-urlencoded").header("X-Content-Type","application/x-www-form-urlencoded").run().assertCode().is(200).getBody().as(Bean.class).check();
 		x.post("/a01",bean).header("Accept","text/openapi").header("Content-Type","text/openapi").header("X-Accept","text/openapi").header("X-Content-Type","text/openapi").run().assertCode().is(200).getBody().as(Bean.class).check();
 
-		assertThrown(()->x.post("/a01",bean).run()).message().is("Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.");
+		assertThrown(()->x.post("/a01",bean).run()).asMessage().is("Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
