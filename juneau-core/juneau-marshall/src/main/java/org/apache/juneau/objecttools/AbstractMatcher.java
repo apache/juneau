@@ -10,56 +10,26 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.pojotools;
+package org.apache.juneau.objecttools;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
-
-import java.util.*;
+import org.apache.juneau.*;
 
 /**
- * Encapsulates arguments for the {@link PojoViewer} class.
+ * Common interface for matchers used by the {@link ObjectSearcher} class.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.PojoTools}
+ * 	<li class='link'>{@doc jm.ObjectTools}
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class ViewArgs {
-
-	private final List<String> view;
+public abstract class AbstractMatcher {
 
 	/**
-	 * Constructor.
+	 * Returns <jk>true</jk> if this matcher matches the specified object..
 	 *
-	 * @param viewArgs
-	 * 	View arguments.
-	 * 	<br>Values are column names.
+	 * @param cm The class type of the object being matched.  Never <jk>null</jk>.
+	 * @param o The object being matched.  Never <jk>null</jk>.
+	 * @return <jk>true</jk> if the specified object matches the specified pattern.
 	 */
-	public ViewArgs(String...viewArgs) {
-		this(alist(viewArgs));
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param viewArgs
-	 * 	View arguments.
-	 * 	<br>Values are column names.
-	 */
-	public ViewArgs(Collection<String> viewArgs) {
-		this.view = unmodifiable(listFrom(viewArgs));
-	}
-
-	/**
-	 * The view columns.
-	 *
-	 * <p>
-	 * The view columns are the list of columns that should be displayed.
-	 * An empty list implies all columns should be displayed.
-	 *
-	 * @return An unmodifiable list of columns to view.
-	 */
-	public List<String> getView() {
-		return view;
-	}
+	public abstract boolean matches(ClassMeta<?> cm, Object o);
 }

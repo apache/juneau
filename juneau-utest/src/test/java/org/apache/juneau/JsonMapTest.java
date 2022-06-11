@@ -20,7 +20,7 @@ import static org.apache.juneau.testutils.StreamUtils.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.objecttools.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
@@ -238,12 +238,12 @@ public class JsonMapTest {
 	}
 
 	private String getDeepString(JsonMap m, String url) {
-		PojoRest r = new PojoRest(m);
+		ObjectRest r = ObjectRest.create(m);
 		return (String)r.get(url);
 	}
 
 	private Boolean getDeepBoolean(JsonMap m, String url) {
-		PojoRest r = new PojoRest(m);
+		ObjectRest r = ObjectRest.create(m);
 		return (Boolean)r.get(url);
 	}
 

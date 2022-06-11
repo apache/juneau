@@ -10,76 +10,56 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.pojotools;
+package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.internal.*;
-
 /**
- * Encapsulates arguments for the {@link PojoSorter} class.
+ * Encapsulates arguments for the {@link ObjectViewer} class.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.PojoTools}
+ * 	<li class='link'>{@doc jm.ObjectTools}
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class SearchArgs {
+public class ViewArgs {
 
-	private final Map<String,String> search = map();
-
-
-	/**
-	 * Constructor.
-	 *
-	 * @param searchArgs Search arguments.
-	 */
-	public SearchArgs(String searchArgs) {
-		this(alist(split(searchArgs)));
-	}
+	private final List<String> view;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param searchArgs Search arguments.
+	 * @param viewArgs
+	 * 	View arguments.
+	 * 	<br>Values are column names.
 	 */
-	public SearchArgs(List<String> searchArgs) {
-		searchArgs.forEach(s -> {
-			int i = StringUtils.indexOf(s, '=', '>', '<');
-			if (i == -1)
-				throw new PatternException("Invalid search terms: ''{0}''", searchArgs);
-			char c = s.charAt(i);
-			append(s.substring(0, i).trim(), s.substring(c == '=' ? i+1 : i).trim());
-		});
+	public ViewArgs(String...viewArgs) {
+		this(alist(viewArgs));
 	}
 
 	/**
-	 * Appends the specified search argument.
+	 * Constructor.
 	 *
-	 * @param column The column name to search.
-	 * @param searchTerm The search term.
-	 * @return This object.
+	 * @param viewArgs
+	 * 	View arguments.
+	 * 	<br>Values are column names.
 	 */
-	public SearchArgs append(String column, String searchTerm) {
-		this.search.put(column, searchTerm);
-		return this;
+	public ViewArgs(Collection<String> viewArgs) {
+		this.view = unmodifiable(listFrom(viewArgs));
 	}
 
 	/**
-	 * The query search terms.
+	 * The view columns.
 	 *
 	 * <p>
-	 * The search terms are key/value pairs consisting of column-names and search tokens.
+	 * The view columns are the list of columns that should be displayed.
+	 * An empty list implies all columns should be displayed.
 	 *
-	 * <p>
-	 * It's up to implementers to decide the syntax and meaning of the search term.
-	 *
-	 * @return An unmodifiable map of query search terms.
+	 * @return An unmodifiable list of columns to view.
 	 */
-	public Map<String,String> getSearch() {
-		return search;
+	public List<String> getView() {
+		return view;
 	}
 }

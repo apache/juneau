@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.objecttools;
 
 import static java.net.HttpURLConnection.*;
 
@@ -76,8 +76,8 @@ import org.apache.juneau.parser.*;
  * 		+ <js>"} "</js>
  * 	);
  *
- * 	<jc>// Wrap Map inside a PojoRest object</jc>
- * 	PojoRest <jv>johnSmith</jv> = <jk>new</jk> PojoRest(<jv>map</jv>);
+ * 	<jc>// Wrap Map inside an ObjectRest object</jc>
+ * 	ObjectRest <jv>johnSmith</jv> = ObjectRest.<jsf>create</jsf>(<jv>map</jv>);
  *
  * 	<jc>// Get a simple value at the top level</jc>
  * 	<jc>// "John Smith"</jc>
@@ -122,7 +122,7 @@ import org.apache.juneau.parser.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Get map/bean with name attribute value of 'foo' from a list of items</jc>
- * 	Map <jv>map</jv> = <jv>pojoRest</jv>.getMap(<js>"/items/@name=foo"</js>);
+ * 	Map <jv>map</jv> = <jv>objectRest</jv>.getMap(<js>"/items/@name=foo"</js>);
  * </p>
  *
  * <ul class='seealso'>
@@ -130,10 +130,37 @@ import org.apache.juneau.parser.*;
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})
-public final class PojoRest {
+public final class ObjectRest {
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/** The list of possible request types. */
 	private static final int GET=1, PUT=2, POST=3, DELETE=4;
+
+	/**
+	 * Static creator.
+	 * @param o The object being wrapped.
+	 * @return A new {@link ObjectRest} object.
+	 */
+	public static ObjectRest create(Object o) {
+		return new ObjectRest(o);
+	}
+
+	/**
+	 * Static creator.
+	 * @param o The object being wrapped.
+	 * @param parser The parser to use for parsing arguments and converting objects to the correct data type.
+	 * @return A new {@link ObjectRest} object.
+	 */
+	public static ObjectRest create(Object o, ReaderParser parser) {
+		return new ObjectRest(o, parser);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private ReaderParser parser = JsonParser.DEFAULT;
 	final BeanSession session;
@@ -152,7 +179,7 @@ public final class PojoRest {
 	 *
 	 * @param o The object to be wrapped.
 	 */
-	public PojoRest(Object o) {
+	public ObjectRest(Object o) {
 		this(o, null);
 	}
 
@@ -165,7 +192,7 @@ public final class PojoRest {
 	 * @param o The object to be wrapped.
 	 * @param parser The parser to use for parsing arguments and converting objects to the correct data type.
 	 */
-	public PojoRest(Object o, ReaderParser parser) {
+	public ObjectRest(Object o, ReaderParser parser) {
 		this.session = parser == null ? BeanContext.DEFAULT_SESSION : parser.getBeanContext().getSession();
 		if (parser == null)
 			parser = JsonParser.DEFAULT;
@@ -178,7 +205,7 @@ public final class PojoRest {
 	 *
 	 * @return This object.
 	 */
-	public PojoRest setRootLocked() {
+	public ObjectRest setRootLocked() {
 		this.rootLocked = true;
 		return this;
 	}
@@ -226,22 +253,22 @@ public final class PojoRest {
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
-	 * 	PojoRest <jv>pojoRest</jv> = <jk>new</jk> PojoRest(<jv>object</jv>);
+	 * 	ObjectRest <jv>objectRest</jv> = <jk>new</jk> ObjectRest(<jv>object</jv>);
 	 *
 	 * 	<jc>// Value converted to a string.</jc>
-	 * 	String <jv>string</jv> = <jv>pojoRest</jv>.get(<js>"path/to/string"</js>, String.<jk>class</jk>);
+	 * 	String <jv>string</jv> = <jv>objectRest</jv>.get(<js>"path/to/string"</js>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a bean.</jc>
-	 * 	MyBean <jv>bean</jv> = <jv>pojoRest</jv>.get(<js>"path/to/bean"</js>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>bean</jv> = <jv>objectRest</jv>.get(<js>"path/to/bean"</js>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a bean array.</jc>
-	 * 	MyBean[] <jv>beanArray</jv> = <jv>pojoRest</jv>.get(<js>"path/to/beanarray"</js>, MyBean[].<jk>class</jk>);
+	 * 	MyBean[] <jv>beanArray</jv> = <jv>objectRest</jv>.get(<js>"path/to/beanarray"</js>, MyBean[].<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a linked-list of objects.</jc>
-	 * 	List <jv>list</jv> = <jv>pojoRest</jv>.get(<js>"path/to/list"</js>, LinkedList.<jk>class</jk>);
+	 * 	List <jv>list</jv> = <jv>objectRest</jv>.get(<js>"path/to/list"</js>, LinkedList.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a map of object keys/values.</jc>
-	 * 	Map <jv>map</jv> = <jv>pojoRest</jv>.get(<js>"path/to/map"</js>, TreeMap.<jk>class</jk>);
+	 * 	Map <jv>map</jv> = <jv>objectRest</jv>.get(<js>"path/to/map"</js>, TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param url
@@ -267,22 +294,22 @@ public final class PojoRest {
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
-	 * 	PojoRest <jv>pojoRest</jv> = <jk>new</jk> PojoRest(<jv>object</jv>);
+	 * 	ObjectRest <jv>objectRest</jv> = <jk>new</jk> ObjectRest(<jv>object</jv>);
 	 *
 	 * 	<jc>// Value converted to a linked-list of strings.</jc>
-	 * 	List&lt;String&gt; <jv>list1</jv> = <jv>pojoRest</jv>.get(<js>"path/to/list1"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;String&gt; <jv>list1</jv> = <jv>objectRest</jv>.get(<js>"path/to/list1"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a linked-list of beans.</jc>
-	 * 	List&lt;MyBean&gt; <jv>list2</jv> = <jv>pojoRest</jv>.get(<js>"path/to/list2"</js>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	List&lt;MyBean&gt; <jv>list2</jv> = <jv>objectRest</jv>.get(<js>"path/to/list2"</js>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a linked-list of linked-lists of strings.</jc>
-	 * 	List&lt;List&lt;String&gt;&gt; <jv>list3</jv> = <jv>pojoRest</jv>.get(<js>"path/to/list3"</js>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;List&lt;String&gt;&gt; <jv>list3</jv> = <jv>objectRest</jv>.get(<js>"path/to/list3"</js>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a map of string keys/values.</jc>
-	 * 	Map&lt;String,String&gt; <jv>map1</jv> = <jv>pojoRest</jv>.get(<js>"path/to/map1"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	Map&lt;String,String&gt; <jv>map1</jv> = <jv>objectRest</jv>.get(<js>"path/to/map1"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a map containing string keys and values of lists containing beans.</jc>
-	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>map2</jv> = <jv>pojoRest</jv>.get(<js>"path/to/map2"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>map2</jv> = <jv>objectRest</jv>.get(<js>"path/to/map2"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <p>
@@ -610,7 +637,7 @@ public final class PojoRest {
 	 */
 	public Object invokeMethod(String url, String method, String args) throws ExecutableException, ParseException, IOException {
 		try {
-			return new PojoIntrospector(get(url), parser).invokeMethod(method, args);
+			return new ObjectIntrospector(get(url), parser).invokeMethod(method, args);
 		} catch (NoSuchMethodException | IllegalArgumentException | InvocationTargetException | IllegalAccessException e) {
 			throw new ExecutableException(e);
 		}
@@ -729,7 +756,7 @@ public final class PojoRest {
 	/*
 	 * Workhorse method.
 	 */
-	private Object service(int method, String url, Object val) throws PojoRestException {
+	private Object service(int method, String url, Object val) throws ObjectRestException {
 
 		url = normalizeUrl(url);
 
@@ -746,14 +773,14 @@ public final class PojoRest {
 		if (method == PUT) {
 			if (url.length() == 0) {
 				if (rootLocked)
-					throw new PojoRestException(HTTP_FORBIDDEN, "Cannot overwrite root object");
+					throw new ObjectRestException(HTTP_FORBIDDEN, "Cannot overwrite root object");
 				Object o = root.o;
 				root = new JsonNode(null, null, val, session.object());
 				return o;
 			}
 			JsonNode n = (parentUrl == null ? root : getNode(parentUrl, root));
 			if (n == null)
-				throw new PojoRestException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", parentUrl);
+				throw new ObjectRestException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", parentUrl);
 			ClassMeta cm = n.cm;
 			Object o = n.o;
 			if (cm.isMap())
@@ -773,11 +800,11 @@ public final class PojoRest {
 					m.put(n.keyName, o);
 					return url;
 				}
-				throw new PojoRestException(HTTP_BAD_REQUEST, "Cannot perform PUT on ''{0}'' with parent node type ''{1}''", url, pct);
+				throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform PUT on ''{0}'' with parent node type ''{1}''", url, pct);
 			}
 			if (cm.isBean())
 				return session.toBeanMap(o).put(childKey, val);
-			throw new PojoRestException(HTTP_BAD_REQUEST, "Cannot perform PUT on ''{0}'' whose parent is of type ''{1}''", url, cm);
+			throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform PUT on ''{0}'' whose parent is of type ''{1}''", url, cm);
 		}
 
 		if (method == POST) {
@@ -795,11 +822,11 @@ public final class PojoRest {
 					root = new JsonNode(null, null, o2, null);
 					return url + "/" + (o2.length-1);
 				}
-				throw new PojoRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' of type ''{1}''", url, cm);
+				throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' of type ''{1}''", url, cm);
 			}
 			JsonNode n = getNode(url, root);
 			if (n == null)
-				throw new PojoRestException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", url);
+				throw new ObjectRestException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", url);
 			ClassMeta cm = n.cm;
 			Object o = n.o;
 			if (cm.isArray()) {
@@ -815,20 +842,20 @@ public final class PojoRest {
 					m.put(childKey, o2);
 					return url + "/" + (o2.length-1);
 				}
-				throw new PojoRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' with parent node type ''{1}''", url, pct);
+				throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' with parent node type ''{1}''", url, pct);
 			}
 			if (cm.isCollection()) {
 				Collection c = (Collection)o;
 				c.add(convert(val, cm.getElementType()));
 				return (c instanceof List ? url + "/" + (c.size()-1) : null);
 			}
-			throw new PojoRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' of type ''{1}''", url, cm);
+			throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' of type ''{1}''", url, cm);
 		}
 
 		if (method == DELETE) {
 			if (url.length() == 0) {
 				if (rootLocked)
-					throw new PojoRestException(HTTP_FORBIDDEN, "Cannot overwrite root object");
+					throw new ObjectRestException(HTTP_FORBIDDEN, "Cannot overwrite root object");
 				Object o = root.o;
 				root = new JsonNode(null, null, null, session.object());
 				return o;
@@ -855,11 +882,11 @@ public final class PojoRest {
 					m.put(n.keyName, o2);
 					return old;
 				}
-				throw new PojoRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' with parent node type ''{1}''", url, pct);
+				throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' with parent node type ''{1}''", url, pct);
 			}
 			if (cm.isBean())
 				return session.toBeanMap(o).put(childKey, null);
-			throw new PojoRestException(HTTP_BAD_REQUEST, "Cannot perform PUT on ''{0}'' whose parent is of type ''{1}''", url, cm);
+			throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform PUT on ''{0}'' whose parent is of type ''{1}''", url, cm);
 		}
 
 		return null;	// Never gets here.
@@ -955,7 +982,7 @@ public final class PojoRest {
 			o2 = m.get(parentKey);
 			BeanPropertyMeta pMeta = m.getPropertyMeta(parentKey);
 			if (pMeta == null)
-				throw new PojoRestException(HTTP_BAD_REQUEST,
+				throw new ObjectRestException(HTTP_BAD_REQUEST,
 					"Unknown property ''{0}'' encountered while trying to parse into class ''{1}''",
 					parentKey, m.getClassMeta()
 				);
@@ -980,7 +1007,7 @@ public final class PojoRest {
 		try {
 			return Integer.parseInt(key);
 		} catch (NumberFormatException e) {
-			throw new PojoRestException(HTTP_BAD_REQUEST,
+			throw new ObjectRestException(HTTP_BAD_REQUEST,
 				"Cannot address an item in an array with a non-integer key ''{0}''", key
 			);
 		}

@@ -10,70 +10,29 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.vars;
+package org.apache.juneau.objecttools;
 
-import org.apache.juneau.http.response.*;
-import org.apache.juneau.objecttools.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.svl.*;
+import org.apache.juneau.*;
 
 /**
- * Swagger attribute variable resolver.
- *
- * <p>
- * The format for this var is <js>"$SS{key1[,key2...]}"</js>.
- * <br>When multiple keys are used, returns the first non-null/empty value.
- *
- * <p>
- * Example values:
- * <ul>
- * 	<li><js>"info/title"</js>
- * 	<li><js>"info/description"</js>
- * 	<li><js>"info/contact/name"</js>
- * </ul>
- *
- * <ul class='notes'>
- * 	<li class='note'>
- * 		This variable resolver requires that a {@link RestRequest} bean be available in the session bean store.
- * 	<li class='note'>
- * 		For security reasons, nested and recursive variables are not resolved.
- * </ul>
+ * Interface for classes that convert POJOs in some way using some predefined arguments object.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.SvlVariables}
+ * 	<li class='link'>{@doc jm.ObjectTools}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @param <T> The argument object type.
  */
-public class SwaggerVar extends MultipartResolvingVar {
-
-	/** The name of this variable. */
-	public static final String NAME = "SS";
+public interface ObjectTool<T> {
 
 	/**
-	 * Constructor.
+	 * Converts the specified input to some other output.
+	 *
+	 * @param session The current bean session.
+	 * @param input The input POJO.
+	 * @param args The arguments.
+	 * @return The output POJO.
 	 */
-	public SwaggerVar() {
-		super(NAME);
-	}
-
-	@Override /* Var */
-	protected boolean allowNested() {
-		return false;
-	}
-
-	@Override /* Var */
-	protected boolean allowRecurse() {
-		return false;
-	}
-
-	@Override /* Var */
-	public String resolve(VarResolverSession session, String key) {
-		RestRequest req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
-		return new ObjectRest(req.getSwagger()).getString(key);
-	}
-
-	@Override /* Var */
-	public boolean canResolve(VarResolverSession session) {
-		return session.getBean(RestRequest.class).isPresent();
-	}
+	public Object run(BeanSession session, Object input, T args);
 }

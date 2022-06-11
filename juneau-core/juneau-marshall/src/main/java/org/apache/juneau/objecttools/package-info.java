@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 
 /**
- * POJO Tools
+ * Java Object Tools
  */
-package org.apache.juneau.pojotools;
+package org.apache.juneau.objecttools;
 

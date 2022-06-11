@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.objecttools;
 
 import java.net.*;
 import java.text.*;
@@ -18,7 +18,7 @@ import java.text.*;
 import org.apache.juneau.*;
 
 /**
- * Generic exception thrown from the {@link PojoRest} class.
+ * Generic exception thrown from the {@link ObjectRest} class.
  *
  * <p>
  * Typically, this is a user-error, such as trying to address a non-existent node in the tree.
@@ -43,7 +43,7 @@ import org.apache.juneau.*;
  *
  * @serial exclude
  */
-public final class PojoRestException extends BasicRuntimeException {
+public final class ObjectRestException extends BasicRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
@@ -57,7 +57,7 @@ public final class PojoRestException extends BasicRuntimeException {
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public PojoRestException(Throwable cause, int status, String message, Object... args) {
+	public ObjectRestException(Throwable cause, int status, String message, Object... args) {
 		super(cause, message, args);
 		this.status = status;
 	}
@@ -69,7 +69,7 @@ public final class PojoRestException extends BasicRuntimeException {
 	 * @param message The detailed message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public PojoRestException(int status, String message, Object...args) {
+	public ObjectRestException(int status, String message, Object...args) {
 		this(null, status, message, args);
 	}
 

@@ -10,33 +10,76 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.pojotools;
+package org.apache.juneau.objecttools;
+
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
+
+import java.util.*;
 
 /**
- * TODO
+ * Encapsulates arguments for the {@link ObjectSorter} class.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.PojoTools}
+ * 	<li class='link'>{@doc jm.ObjectTools}
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class PageArgs {
+public class SortArgs {
+
+	private final Map<String,Boolean> sort;
 
 	/**
-	 * TODO
+	 * Constructor.
 	 *
-	 * @return TODO
+	 * @param sortArgs
+	 * 	Sort arguments.
+	 * 	<br>Values are of the following forms:
+	 * 	<ul>
+	 * 		<li><js>"column"</js> - Sort column ascending.
+	 * 		<li><js>"column+"</js> - Sort column ascending.
+	 * 		<li><js>"column-"</js> - Sort column descending.
+	 * 	</ul>
 	 */
-	public int getLimit() {
-		return 0;
+	public SortArgs(String...sortArgs) {
+		this(alist(sortArgs));
 	}
 
 	/**
-	 * TODO
+	 * Constructor.
 	 *
-	 * @return TODO
+	 * @param sortArgs
+	 * 	Sort arguments.
+	 * 	<br>Values are of the following forms:
+	 * 	<ul>
+	 * 		<li><js>"column"</js> - Sort column ascending.
+	 * 		<li><js>"column+"</js> - Sort column ascending.
+	 * 		<li><js>"column-"</js> - Sort column descending.
+	 * 	</ul>
 	 */
-	public int getPosition() {
-		return 0;
+	public SortArgs(Collection<String> sortArgs) {
+		Map<String,Boolean> sort = map();
+		sortArgs.forEach(s -> {
+			boolean isDesc = false;
+			if (endsWith(s, '-', '+')) {
+				isDesc = endsWith(s, '-');
+				s = s.substring(0, s.length()-1);
+			}
+			sort.put(s, isDesc);
+		});
+		this.sort = unmodifiable(sort);
+	}
+
+	/**
+	 * The sort columns.
+	 *
+	 * <p>
+	 * The sort columns are key/value pairs consisting of column-names and direction flags
+	 * (<jk>false</jk> = ascending, <jk>true</jk> = descending).
+	 *
+	 * @return An unmodifiable ordered map of sort columns and directions.
+	 */
+	public Map<String,Boolean> getSort() {
+		return sort;
 	}
 }

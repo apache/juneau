@@ -29,6 +29,7 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
+import org.apache.juneau.objecttools.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.swaps.*;
 import org.apache.juneau.uon.*;
@@ -1338,7 +1339,7 @@ public class Parser extends BeanContextable {
 	 * Used in the following locations:
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		Used to parse argument strings in the {@link PojoIntrospector#invokeMethod(Method, Reader)} method.
+	 * 		Used to parse argument strings in the {@link ObjectIntrospector#invokeMethod(Method, Reader)} method.
 	 * </ul>
 	 *
 	 * @param input The input.  Subclasses can support different input types.

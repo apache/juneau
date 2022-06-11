@@ -23,11 +23,11 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.objecttools.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 
@@ -606,7 +606,7 @@ public class BeanMapTest {
 		F t5 = new F();
 		ReaderParser p = JsonParser.DEFAULT;
 		BeanMap m = bc.toBeanMap(t5);
-		new PojoIntrospector(t5, p).invokeMethod("doSetAProperty(java.lang.String)", "['baz']");
+		ObjectIntrospector.create(t5, p).invokeMethod("doSetAProperty(java.lang.String)", "['baz']");
 		assertEquals("baz", m.get("prop"));
 	}
 

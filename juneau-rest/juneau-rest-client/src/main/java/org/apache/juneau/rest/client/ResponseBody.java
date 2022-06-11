@@ -21,6 +21,7 @@ import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.concurrent.*;
 import java.util.regex.*;
+import java.util.regex.Matcher;
 
 import org.apache.http.*;
 import org.apache.http.conn.*;
@@ -32,11 +33,11 @@ import org.apache.juneau.http.resource.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.oapi.*;
+import org.apache.juneau.objecttools.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.client.assertion.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Represents the body of an HTTP response.
@@ -949,38 +950,38 @@ public class ResponseBody implements HttpEntity {
 	}
 
 	/**
-	 * Parses the output from the body into the specified type and then wraps that in a {@link PojoRest}.
+	 * Parses the output from the body into the specified type and then wraps that in a {@link ObjectRest}.
 	 *
 	 * <p>
 	 * Useful if you want to quickly retrieve a single value from inside of a larger JSON document.
 	 *
 	 * @param innerType The class type of the POJO being wrapped.
-	 * @return The parsed output wrapped in a {@link PojoRest}.
+	 * @return The parsed output wrapped in a {@link ObjectRest}.
 	 * @throws RestCallException
 	 * 	<ul>
 	 * 		<li>If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 * 		<li>If a connection error occurred.
 	 * 	</ul>
 	 */
-	public PojoRest asPojoRest(Class<?> innerType) throws RestCallException {
-		return new PojoRest(as(innerType));
+	public ObjectRest asObjectRest(Class<?> innerType) throws RestCallException {
+		return new ObjectRest(as(innerType));
 	}
 
 	/**
-	 * Converts the output from the connection into an {@link JsonMap} and then wraps that in a {@link PojoRest}.
+	 * Converts the output from the connection into an {@link JsonMap} and then wraps that in a {@link ObjectRest}.
 	 *
 	 * <p>
 	 * Useful if you want to quickly retrieve a single value from inside of a larger JSON document.
 	 *
-	 * @return The parsed output wrapped in a {@link PojoRest}.
+	 * @return The parsed output wrapped in a {@link ObjectRest}.
 	 * @throws RestCallException
 	 * 	<ul>
 	 * 		<li>If the input contains a syntax error or is malformed, or is not valid for the specified type.
 	 * 		<li>If a connection error occurred.
 	 * 	</ul>
 	 */
-	public PojoRest asPojoRest() throws RestCallException {
-		return asPojoRest(JsonMap.class);
+	public ObjectRest asObjectRest() throws RestCallException {
+		return asObjectRest(JsonMap.class);
 	}
 
 	/**

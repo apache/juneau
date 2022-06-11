@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.pojotools;
+package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.internal.StateMachineState.*;
 
@@ -20,10 +20,10 @@ import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Number matcher used by {@link PojoSearcher}
+ * Number matcher used by {@link ObjectSearcher}
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.PojoTools}
+ * 	<li class='link'>{@doc jm.ObjectTools}
  * 	<li class='extlink'>{@source}
  * </ul>
  */
@@ -40,14 +40,14 @@ public class NumberMatcherFactory extends MatcherFactory {
 	}
 
 	@Override
-	public Matcher create(String pattern) {
+	public AbstractMatcher create(String pattern) {
 		return new NumberMatcher(pattern);
 	}
 
 	/**
 	 * A construct representing a single search pattern.
 	 */
-	private static class NumberMatcher extends Matcher {
+	private static class NumberMatcher extends AbstractMatcher {
 		NumberRange[] numberRanges;
 		String pattern;
 		private static final AsciiSet

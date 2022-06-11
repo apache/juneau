@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
@@ -19,7 +19,7 @@ import static org.junit.runners.MethodSorters.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class PojoIntrospectorTest {
+public class ObjectIntrospectorTest {
 
 	//====================================================================================================
 	// testBasic
@@ -29,28 +29,28 @@ public class PojoIntrospectorTest {
 		String in = null;
 		Object r;
 
-		r = new PojoIntrospector(in, null).invokeMethod("substring(int,int)", "[3,6]");
+		r = new ObjectIntrospector(in, null).invokeMethod("substring(int,int)", "[3,6]");
 		assertNull(r);
 
 		in = "foobar";
-		r = new PojoIntrospector(in).invokeMethod("substring(int,int)", "[3,6]");
+		r = new ObjectIntrospector(in).invokeMethod("substring(int,int)", "[3,6]");
 		assertEquals("bar", r);
 
-		r = new PojoIntrospector(in).invokeMethod("toString", null);
+		r = new ObjectIntrospector(in).invokeMethod("toString", null);
 		assertEquals("foobar", r);
 
-		r = new PojoIntrospector(in).invokeMethod("toString", "");
+		r = new ObjectIntrospector(in).invokeMethod("toString", "");
 		assertEquals("foobar", r);
 
-		r = new PojoIntrospector(in).invokeMethod("toString", "[]");
+		r = new ObjectIntrospector(in).invokeMethod("toString", "[]");
 		assertEquals("foobar", r);
 
-		assertThrown(()->new PojoIntrospector("foobar").invokeMethod("noSuchMethod", "[3,6]")).isType(NoSuchMethodException.class);
+		assertThrown(()->new ObjectIntrospector("foobar").invokeMethod("noSuchMethod", "[3,6]")).isType(NoSuchMethodException.class);
 
-		r = new PojoIntrospector(null).invokeMethod(String.class.getMethod("toString"), null);
+		r = new ObjectIntrospector(null).invokeMethod(String.class.getMethod("toString"), null);
 		assertNull(r);
 
-		r = new PojoIntrospector("foobar").invokeMethod(String.class.getMethod("toString"), null);
+		r = new ObjectIntrospector("foobar").invokeMethod(String.class.getMethod("toString"), null);
 		assertEquals("foobar", r);
 	}
 }

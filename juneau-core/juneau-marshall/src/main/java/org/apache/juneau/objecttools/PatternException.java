@@ -10,33 +10,31 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.pojotools;
+package org.apache.juneau.objecttools;
 
 import org.apache.juneau.*;
 
 /**
- * Common interface for matchers used by the {@link PojoSearcher} class.
+ * Indicates an invalid search pattern was specified.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.PojoTools}
+ * 	<li class='link'>{@doc jm.ObjectTools}
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @serial exclude
  */
-public abstract class MatcherFactory {
+public class PatternException extends BasicRuntimeException {
+
+	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Returns <jk>true</jk> if this matcher can be used on the specified object.
+	 * Constructor.
 	 *
-	 * @param cm The class type of the object being matched.  Never <jk>null</jk>.
-	 * @return <jk>true</jk> if this matcher can be used on the specified object.
+	 * @param message Message.
+	 * @param args Message arguments.
 	 */
-	public abstract boolean canMatch(ClassMeta<?> cm);
-
-	/**
-	 * Instantiates a matcher for the specified pattern.
-	 *
-	 * @param pattern The pattern string.
-	 * @return A matcher for the specified pattern.
-	 */
-	public abstract Matcher create(String pattern);
+	public PatternException(String message, Object...args) {
+		super(message, args);
+	}
 }

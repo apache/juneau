@@ -10,31 +10,17 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.pojotools;
-
-import org.apache.juneau.*;
+package org.apache.juneau.objecttools;
 
 /**
- * Indicates an invalid search pattern was specified.
+ * Represents possible values for number and date comparisons.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.PojoTools}
+ * 	<li class='link'>{@doc jm.ObjectTools}
  * 	<li class='extlink'>{@source}
  * </ul>
- *
- * @serial exclude
  */
-public class PatternException extends BasicRuntimeException {
-
-	private static final long serialVersionUID = 1L;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param message Message.
-	 * @param args Message arguments.
-	 */
-	public PatternException(String message, Object...args) {
-		super(message, args);
-	}
+@SuppressWarnings("javadoc")
+public enum Equality {
+	GT, GTE, LT, LTE, NONE
 }

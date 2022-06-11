@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.objecttools;
 
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
@@ -21,7 +21,7 @@ import org.junit.*;
  * Test the PojoMerge class.
  */
 @FixMethodOrder(NAME_ASCENDING)
-public class PojoMergeTest {
+public class ObjectMergerTest {
 
 	//====================================================================================================
 	// Basic tests
@@ -31,7 +31,7 @@ public class PojoMergeTest {
 		IA a1, a2, am;
 
 		a1 = new A("1"); a2 = new A("2");
-		am = PojoMerge.merge(IA.class, a1, a2);
+		am = ObjectMerger.merge(IA.class, a1, a2);
 		assertEquals("1", am.getA());
 		am.setA("x");
 		assertEquals("x", am.getA());
@@ -39,7 +39,7 @@ public class PojoMergeTest {
 		assertEquals("2", a2.getA());
 
 		a1 = new A("1"); a2 = new A("2");
-		am = PojoMerge.merge(IA.class, true, a1, a2);
+		am = ObjectMerger.merge(IA.class, true, a1, a2);
 		assertEquals("1", am.getA());
 		am.setA("x");
 		assertEquals("x", am.getA());
@@ -47,7 +47,7 @@ public class PojoMergeTest {
 		assertEquals("x", a2.getA());
 
 		a1 = new A(null); a2 = new A("2");
-		am = PojoMerge.merge(IA.class, a1, a2);
+		am = ObjectMerger.merge(IA.class, a1, a2);
 		assertEquals("2", am.getA());
 		am.setA("x");
 		assertEquals("x", am.getA());
@@ -55,11 +55,11 @@ public class PojoMergeTest {
 		assertEquals("2", a2.getA());
 
 		a1 = new A(null); a2 = new A(null);
-		am = PojoMerge.merge(IA.class, a1, a2);
+		am = ObjectMerger.merge(IA.class, a1, a2);
 		assertEquals(null, am.getA());
 
 		a1 = new A(null); a2 = new A("2");
-		am = PojoMerge.merge(IA.class, null, a1, null, null, a2, null);
+		am = ObjectMerger.merge(IA.class, null, a1, null, null, a2, null);
 		assertEquals("2", am.getA());
 	}
 

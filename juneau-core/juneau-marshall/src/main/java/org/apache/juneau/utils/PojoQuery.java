@@ -21,10 +21,12 @@ import java.lang.reflect.*;
 import java.text.*;
 import java.util.*;
 import java.util.regex.*;
+import java.util.regex.Matcher;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.objecttools.*;
 
 /**
  * Designed to provide search/view/sort/paging filtering on tabular in-memory POJO models.
@@ -199,7 +201,10 @@ import org.apache.juneau.internal.*;
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
+ *
+ * @deprecated Use {@link ObjectSearcher}
  */
+@Deprecated
 @SuppressWarnings({"unchecked","rawtypes"})
 public final class PojoQuery {
 

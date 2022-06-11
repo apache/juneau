@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
@@ -27,7 +27,7 @@ import org.junit.*;
 
 @SuppressWarnings({"unchecked","rawtypes","serial"})
 @FixMethodOrder(NAME_ASCENDING)
-public class PojoRestTest {
+public class ObjectRestTest {
 
 	//====================================================================================================
 	// testBasic
@@ -37,7 +37,7 @@ public class PojoRestTest {
 
 		// TODO: Need to write some exhaustive tests here. Will open work item
 		// to do that later.
-		PojoRest model = new PojoRest(new JsonMap()); // An empty model.
+		ObjectRest model = ObjectRest.create(new JsonMap()); // An empty model.
 
 		// Do a PUT
 		model.put("A", new JsonMap());
@@ -64,10 +64,10 @@ public class PojoRestTest {
 	//====================================================================================================
 	@Test
 	public void testBeans() throws Exception {
-		PojoRest model;
+		ObjectRest model;
 
 		// Java beans.
-		model = new PojoRest(new JsonMap());
+		model = ObjectRest.create(new JsonMap());
 		Person p = new Person("some name", 123,
 			new Address("street A", "city A", "state A", 12345, true),
 			new Address("street B", "city B", "state B", 12345, false)
@@ -109,7 +109,7 @@ public class PojoRestTest {
 		assertEquals(expectedValue, s);
 
 		// Try adding an address
-		model = new PojoRest(p);
+		model = ObjectRest.create(p);
 		model.post("addresses", new Address("street C", "city C", "state C", 12345, true));
 		s = ((Address)model.get("addresses/2")).toString();
 		expectedValue = "Address(street=street C,city=city C,state=state C,zip=12345,isCurrent=true)";
@@ -163,7 +163,7 @@ public class PojoRestTest {
 
 		// Make sure we can get non-existent branches without throwing any exceptions.
 		// get() method should just return null.
-		model = new PojoRest(new JsonMap());
+		model = ObjectRest.create(new JsonMap());
 		Object o = model.get("xxx");
 		assertEquals("null", (""+o));
 
@@ -184,7 +184,7 @@ public class PojoRestTest {
 		assertEquals("{x:2}", s);
 
 		// Make sure doing a POST against "" or "/" adds to the root object.
-		model = new PojoRest(new JsonList());
+		model = ObjectRest.create(new JsonList());
 		model.post("", new Integer(1));
 		model.post("/", new Integer(2));
 		s = model.get("").toString();
@@ -196,9 +196,9 @@ public class PojoRestTest {
 	//====================================================================================================
 	@Test
 	public void testAddressBook() {
-		PojoRest model;
+		ObjectRest model;
 
-		model = new PojoRest(new AddressBook());
+		model = ObjectRest.create(new AddressBook());
 
 		// Try adding a person to the address book.
 		Person billClinton = new Person("Bill Clinton", 65,
@@ -272,7 +272,7 @@ public class PojoRestTest {
 	//====================================================================================================
 	@Test
 	public void testConstructors() throws Exception {
-		PojoRest model = new PojoRest(new AddressBook(), JsonParser.DEFAULT);
+		ObjectRest model = ObjectRest.create(new AddressBook(), JsonParser.DEFAULT);
 
 		// Try adding a person to the address book.
 		Person billClinton = new Person("Bill Clinton", 65,
@@ -290,7 +290,7 @@ public class PojoRestTest {
 	//====================================================================================================
 	@Test
 	public void testRootLocked() throws Exception {
-		PojoRest model = new PojoRest(new AddressBook()).setRootLocked();
+		ObjectRest model = ObjectRest.create(new AddressBook()).setRootLocked();
 		assertThrown(()->model.put("", new AddressBook())).asMessage().is("Cannot overwrite root object");
 		assertThrown(()->model.put(null, new AddressBook())).asMessage().is("Cannot overwrite root object");
 		assertThrown(()->model.put("/", new AddressBook())).asMessage().is("Cannot overwrite root object");
@@ -301,7 +301,7 @@ public class PojoRestTest {
 	//====================================================================================================
 	@Test
 	public void testGetRootObject() throws Exception {
-		PojoRest model = new PojoRest(new AddressBook());
+		ObjectRest model = ObjectRest.create(new AddressBook());
 		assertTrue(model.getRootObject() instanceof AddressBook);
 		model.put("", "foobar");
 		assertTrue(model.getRootObject() instanceof String);
@@ -331,7 +331,7 @@ public class PojoRestTest {
 	//====================================================================================================
 	@Test
 	public void testGetMethods() throws Exception {
-		PojoRest model = new PojoRest(new A());
+		ObjectRest model = ObjectRest.create(new A());
 		JsonList l = JsonList.ofJson("[{a:'b'}]");
 		JsonMap m = JsonMap.ofJson("{a:'b'}");
 
@@ -809,10 +809,10 @@ public class PojoRestTest {
 	@Test
 	public void testInvokeMethod() throws Exception {
 
-		PojoRest model = new PojoRest(new AddressBook().init());
+		ObjectRest model = ObjectRest.create(new AddressBook().init());
 		assertEquals("Person(name=Bill Clinton,age=65)", model.invokeMethod("0", "toString", ""));
 
-		model = new PojoRest(new AddressBook().init(), JsonParser.DEFAULT);
+		model = ObjectRest.create(new AddressBook().init(), JsonParser.DEFAULT);
 		assertEquals("Person(name=Bill Clinton,age=65)", model.invokeMethod("0", "toString", ""));
 		assertEquals("NY", model.invokeMethod("0/addresses/0/state", "toString", ""));
 		assertNull(model.invokeMethod("1", "toString", ""));
@@ -823,7 +823,7 @@ public class PojoRestTest {
 	//====================================================================================================
 	@Test
 	public void testGetPublicMethods() throws Exception {
-		PojoRest model = new PojoRest(new AddressBook().init());
+		ObjectRest model = ObjectRest.create(new AddressBook().init());
 		assertTrue(SimpleJsonSerializer.DEFAULT.toString(model.getPublicMethods("0")).contains("'toString'"));
 		assertTrue(SimpleJsonSerializer.DEFAULT.toString(model.getPublicMethods("0/addresses/0/state")).contains("'toString'"));
 		assertNull(model.getPublicMethods("1"));
@@ -834,7 +834,7 @@ public class PojoRestTest {
 	//====================================================================================================
 	@Test
 	public void testGetClassMeta() throws Exception {
-		PojoRest model = new PojoRest(new AddressBook().init());
+		ObjectRest model = ObjectRest.create(new AddressBook().init());
 		assertEquals("Person", model.getClassMeta("0").getInnerClass().getSimpleName());
 		assertEquals("String", model.getClassMeta("0/addresses/0/state").getInnerClass().getSimpleName());
 		assertNull(model.getClassMeta("1"));

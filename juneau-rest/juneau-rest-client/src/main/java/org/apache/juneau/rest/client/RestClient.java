@@ -80,6 +80,7 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
+import org.apache.juneau.objecttools.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.plaintext.*;
@@ -679,8 +680,8 @@ import org.apache.juneau.xml.*;
  * 		<li class='jm'><c>{@link ResponseBody#asString() asString()} <jk>returns</jk> String</c>
  * 		<li class='jm'><c>{@link ResponseBody#asStringFuture() asStringFuture()} <jk>returns</jk> Future&lt;String&gt;</c>
  * 		<li class='jm'><c>{@link ResponseBody#asAbbreviatedString(int) asAbbreviatedString(int)} <jk>returns</jk> String</c>
- * 		<li class='jm'><c>{@link ResponseBody#asPojoRest(Class) asPojoRest(Class&lt;?&gt;)} <jk>returns</jk> {@link PojoRest}</c>
- * 		<li class='jm'><c>{@link ResponseBody#asPojoRest() asPojoRest()} <jk>returns</jk> {@link PojoRest}</c>
+ * 		<li class='jm'><c>{@link ResponseBody#asObjectRest(Class) asObjectRest(Class&lt;?&gt;)} <jk>returns</jk> {@link ObjectRest}</c>
+ * 		<li class='jm'><c>{@link ResponseBody#asObjectRest() asObjectRest()} <jk>returns</jk> {@link ObjectRest}</c>
  * 		<li class='jm'><c>{@link ResponseBody#asMatcher(Pattern) asMatcher(Pattern)} <jk>returns</jk> {@link Matcher}</c>
  * 		<li class='jm'><c>{@link ResponseBody#asMatcher(String) asMatcher(String)} <jk>returns</jk> {@link Matcher}</c>
  * 	</ul>

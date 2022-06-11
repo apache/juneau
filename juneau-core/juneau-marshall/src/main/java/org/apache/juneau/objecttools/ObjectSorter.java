@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.pojotools;
+package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 
@@ -24,14 +24,36 @@ import org.apache.juneau.internal.*;
  * Sorts arrays and collections of maps and beans.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.PojoTools}
+ * 	<li class='link'>{@doc jm.ObjectTools}
  * 	<li class='extlink'>{@source}
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})
-public final class PojoSorter implements PojoTool<SortArgs> {
+public final class ObjectSorter implements ObjectTool<SortArgs> {
 
-	@Override /* PojoTool */
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Default reusable searcher.
+	 */
+	public static final ObjectSorter DEFAULT = new ObjectSorter();
+
+	/**
+	 * Static creator.
+	 *
+	 * @return A new {@link ObjectSorter} object.
+	 */
+	public static ObjectSorter create() {
+		return new ObjectSorter();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* ObjectTool */
 	public Object run(BeanSession session, Object input, SortArgs args) {
 		if (input == null)
 			return null;

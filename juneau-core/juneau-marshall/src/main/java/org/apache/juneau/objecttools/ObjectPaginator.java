@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.pojotools;
+package org.apache.juneau.objecttools;
 
 import org.apache.juneau.*;
 
@@ -21,13 +21,29 @@ import org.apache.juneau.*;
  * Allows you to quickly return subsets of arrays and collections based on position/limit arguments.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.PojoTools}
+ * 	<li class='link'>{@doc jm.ObjectTools}
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public final class PojoPaginator implements PojoTool<Object> {
+public final class ObjectPaginator implements ObjectTool<Object> {
 
-	@Override /* PojoTool */
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Static creator.
+	 * @return A new {@link ObjectPaginator} object.
+	 */
+	public static ObjectPaginator create() {
+		return new ObjectPaginator();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* ObjectTool */
 	public Object run(BeanSession session, Object input, Object args) {
 
 //		if (input == null)

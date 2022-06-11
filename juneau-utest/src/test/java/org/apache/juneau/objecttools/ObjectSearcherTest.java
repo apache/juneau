@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.pojotools;
+package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -29,10 +29,10 @@ import org.junit.*;
  * Tests the PojoSearcher class.
  */
 @FixMethodOrder(NAME_ASCENDING)
-public class PojoSearcherTest {
+public class ObjectSearcherTest {
 
 	private static BeanSession bs = BeanContext.DEFAULT_SESSION;
-	private static PojoSearcher ps = PojoSearcher.DEFAULT;
+	private static ObjectSearcher ps = ObjectSearcher.DEFAULT;
 	private static WriterSerializer ws = JsonSerializer.create().ssq().swaps(TemporalCalendarSwap.IsoLocalDateTime.class).build();
 
 	//-----------------------------------------------------------------------------------------------------------------

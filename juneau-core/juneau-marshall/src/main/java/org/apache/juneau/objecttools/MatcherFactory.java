@@ -10,29 +10,33 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.pojotools;
+package org.apache.juneau.objecttools;
 
 import org.apache.juneau.*;
 
 /**
- * Interface for classes that convert POJOs in some way using some predefined arguments object.
+ * Common interface for matchers used by the {@link ObjectSearcher} class.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.PojoTools}
+ * 	<li class='link'>{@doc jm.ObjectTools}
  * 	<li class='extlink'>{@source}
  * </ul>
- *
- * @param <T> The argument object type.
  */
-public interface PojoTool<T> {
+public abstract class MatcherFactory {
 
 	/**
-	 * Converts the specified input to some other output.
+	 * Returns <jk>true</jk> if this matcher can be used on the specified object.
 	 *
-	 * @param session The current bean session.
-	 * @param input The input POJO.
-	 * @param args The arguments.
-	 * @return The output POJO.
+	 * @param cm The class type of the object being matched.  Never <jk>null</jk>.
+	 * @return <jk>true</jk> if this matcher can be used on the specified object.
 	 */
-	public Object run(BeanSession session, Object input, T args);
+	public abstract boolean canMatch(ClassMeta<?> cm);
+
+	/**
+	 * Instantiates a matcher for the specified pattern.
+	 *
+	 * @param pattern The pattern string.
+	 * @return A matcher for the specified pattern.
+	 */
+	public abstract AbstractMatcher create(String pattern);
 }

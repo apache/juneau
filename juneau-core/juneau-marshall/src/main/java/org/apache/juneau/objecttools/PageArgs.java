@@ -10,17 +10,33 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.pojotools;
+package org.apache.juneau.objecttools;
 
 /**
- * Represents possible values for number and date comparisons.
+ * TODO
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.PojoTools}
+ * 	<li class='link'>{@doc jm.ObjectTools}
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-@SuppressWarnings("javadoc")
-public enum Equality {
-	GT, GTE, LT, LTE, NONE
+public class PageArgs {
+
+	/**
+	 * TODO
+	 *
+	 * @return TODO
+	 */
+	public int getLimit() {
+		return 0;
+	}
+
+	/**
+	 * TODO
+	 *
+	 * @return TODO
+	 */
+	public int getPosition() {
+		return 0;
+	}
 }

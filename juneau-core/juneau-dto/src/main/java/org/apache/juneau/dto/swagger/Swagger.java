@@ -26,7 +26,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.objecttools.*;
 
 /**
  * This is the root document object for the API specification.
@@ -1756,7 +1756,7 @@ public class Swagger extends SwaggerElement {
 		if (! ref.startsWith("#/"))
 			throw runtimeException("Unsupported reference:  ''{0}''", ref);
 		try {
-			return new PojoRest(this).get(ref.substring(1), c);
+			return new ObjectRest(this).get(ref.substring(1), c);
 		} catch (Exception e) {
 			throw new BeanRuntimeException(e, c, "Reference ''{0}'' could not be converted to type ''{1}''.", ref, className(c));
 		}

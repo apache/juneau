@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.objecttools;
 
 import java.lang.reflect.*;
 
@@ -52,15 +52,13 @@ import org.apache.juneau.ExecutableException;
  * The getters will be called in order until the first non-null value is returned...
  *
  * <p class='bjava'>
- * 	PojoMerge <jv>merge</jv>;
- *
- * 	<jv>merge</jv> = PojoMerge.<jsm>merge</jsm>(IA.<jk>class</jk>, <jk>new</jk> A(<js>"1"</js>), <jk>new</jk> A(<js>"2"</js>));
+ * 	<jv>merge</jv> = ObjectMerger.<jsm>merger</jsm>(IA.<jk>class</jk>, <jk>new</jk> A(<js>"1"</js>), <jk>new</jk> A(<js>"2"</js>));
  * 	<jsm>assertEquals</jsm>(<js>"1"</js>, <jv>merge</jv>.getX());
  *
- * 	<jv>merge</jv> = PojoMerge.<jsm>merge</jsm>(IA.<jk>class</jk>, <jk>new</jk> A(<jk>null</jk>), <jk>new</jk> A(<js>"2"</js>));
+ * 	<jv>merge</jv> = ObjectMerger.<jsm>merger</jsm>(IA.<jk>class</jk>, <jk>new</jk> A(<jk>null</jk>), <jk>new</jk> A(<js>"2"</js>));
  * 	<jsm>assertEquals</jsm>(<js>"2"</js>, <jv>merge</jv>.getX());
  *
- * 	<jv>merge</jv> = PojoMerge.<jsm>merge</jsm>(IA.<jk>class</jk>, <jk>new</jk> A(<jk>null</jk>), <jk>new</jk> A(<jk>null</jk>));
+ * 	<jv>merge</jv> = ObjectMerger.<jsm>merger</jsm>(IA.<jk>class</jk>, <jk>new</jk> A(<jk>null</jk>), <jk>new</jk> A(<jk>null</jk>));
  * 	<jsm>assertEquals</jsm>(<jk>null</jk>, <jv>merge</jv>.getX());
  * </p>
  *
@@ -78,7 +76,7 @@ import org.apache.juneau.ExecutableException;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class PojoMerge {
+public class ObjectMerger {
 
 	/**
 	 * Create a proxy interface on top of zero or more POJOs.
@@ -113,21 +111,21 @@ public class PojoMerge {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T merge(Class<T> interfaceClass, boolean callAllNonGetters, T...pojos) {
-		return (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class[] { interfaceClass }, new PojoMergeInvocationHandler(callAllNonGetters, pojos));
+		return (T)Proxy.newProxyInstance(interfaceClass.getClassLoader(), new Class[] { interfaceClass }, new MergeInvocationHandler(callAllNonGetters, pojos));
 	}
 
-	private static class PojoMergeInvocationHandler implements InvocationHandler {
+	private static class MergeInvocationHandler implements InvocationHandler {
 		private final Object[] pojos;
 		private final boolean callAllNonGetters;
 
-		public PojoMergeInvocationHandler(boolean callAllNonGetters, Object...pojos) {
+		public MergeInvocationHandler(boolean callAllNonGetters, Object...pojos) {
 			this.callAllNonGetters = callAllNonGetters;
 			this.pojos = pojos;
 		}
 
 		/**
 		 * Implemented to handle the method called.
-	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
+		 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 		 */
 		@Override /* InvocationHandler */
 		public Object invoke(Object proxy, Method method, Object[] args) throws ExecutableException {

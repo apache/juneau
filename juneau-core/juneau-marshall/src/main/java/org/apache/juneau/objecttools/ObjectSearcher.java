@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.pojotools;
+package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -27,37 +27,62 @@ import org.apache.juneau.*;
  * Allows you to quickly return subsets of arrays and collections based on position/limit arguments.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.PojoTools}
+ * 	<li class='link'>{@doc jm.ObjectTools}
  * 	<li class='extlink'>{@source}
  * </ul>
  */
 @SuppressWarnings({"rawtypes"})
-public final class PojoSearcher implements PojoTool<SearchArgs> {
+public final class ObjectSearcher implements ObjectTool<SearchArgs> {
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Default reusable searcher.
 	 */
-	public static final PojoSearcher DEFAULT = new PojoSearcher();
+	public static final ObjectSearcher DEFAULT = new ObjectSearcher();
+
+	/**
+	 * Static creator.
+	 *
+	 * @param factories
+	 * 	The matcher factories to use.
+	 * 	<br>If not specified, uses the following:
+	 * 	<ul>
+	 * 		<li>{@link NumberMatcherFactory#DEFAULT}
+	 * 		<li>{@link TimeMatcherFactory#DEFAULT}
+	 * 		<li>{@link StringMatcherFactory#DEFAULT}
+	 * 	</ul>
+	 * @return A new {@link ObjectSearcher} object.
+	 */
+	public static ObjectSearcher create(MatcherFactory...factories) {
+		return new ObjectSearcher(factories);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	final MatcherFactory[] factories;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param factories The matcher factories to use.
+	 * @param factories
+	 * 	The matcher factories to use.
+	 * 	<br>If not specified, uses the following:
+	 * 	<ul>
+	 * 		<li>{@link NumberMatcherFactory#DEFAULT}
+	 * 		<li>{@link TimeMatcherFactory#DEFAULT}
+	 * 		<li>{@link StringMatcherFactory#DEFAULT}
+	 * 	</ul>
 	 */
-	public PojoSearcher(MatcherFactory...factories) {
-		this.factories = factories;
+	public ObjectSearcher(MatcherFactory...factories) {
+		this.factories = factories.length == 0 ? new MatcherFactory[]{NumberMatcherFactory.DEFAULT, TimeMatcherFactory.DEFAULT, StringMatcherFactory.DEFAULT} : factories;
 	}
 
-	/**
-	 * Constructor.
-	 */
-	public PojoSearcher() {
-		this(NumberMatcherFactory.DEFAULT, TimeMatcherFactory.DEFAULT, StringMatcherFactory.DEFAULT);
-	}
-
-	@Override /* PojoTool */
+	@Override /* ObjectTool */
 	public Object run(BeanSession session, Object input, SearchArgs args) {
 
 		ClassMeta<?> type = session.getClassMetaForObject(input);
@@ -153,13 +178,13 @@ public final class PojoSearcher implements PojoTool<SearchArgs> {
 	private class ColumnMatcher {
 
 		String searchPattern;
-		Matcher[] matchers;
+		AbstractMatcher[] matchers;
 		BeanSession bs;
 
 		ColumnMatcher(BeanSession bs, String searchPattern) {
 			this.bs = bs;
 			this.searchPattern = searchPattern;
-			this.matchers = new Matcher[factories.length];
+			this.matchers = new AbstractMatcher[factories.length];
 		}
 
 		boolean matches(Object o) {

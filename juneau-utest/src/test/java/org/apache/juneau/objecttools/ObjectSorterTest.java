@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.pojotools;
+package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -24,9 +24,9 @@ import org.junit.*;
  * Tests the PojoPaginator class.
  */
 @FixMethodOrder(NAME_ASCENDING)
-public class PojoSorterTest {
+public class ObjectSorterTest {
 
-	PojoSorter p = new PojoSorter();
+	ObjectSorter p = new ObjectSorter();
 	BeanSession bs = BeanContext.DEFAULT_SESSION;
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.pojotools;
+package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 
@@ -27,14 +27,36 @@ import org.apache.juneau.internal.*;
  * Allows you to quickly return subsets of arrays and collections based on position/limit arguments.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.PojoTools}
+ * 	<li class='link'>{@doc jm.ObjectTools}
  * 	<li class='extlink'>{@source}
  * </ul>
  */
 @SuppressWarnings({"unchecked","rawtypes"})
-public final class PojoViewer implements PojoTool<ViewArgs> {
+public final class ObjectViewer implements ObjectTool<ViewArgs> {
 
-	@Override /* PojoTool */
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Default reusable searcher.
+	 */
+	public static final ObjectViewer DEFAULT = new ObjectViewer();
+
+	/**
+	 * Static creator.
+	 *
+	 * @return A new {@link ObjectViewer} object.
+	 */
+	public static ObjectViewer create() {
+		return new ObjectViewer();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override /* ObjectTool */
 	public Object run(BeanSession session, Object input, ViewArgs args) {
 
 		if (input == null)

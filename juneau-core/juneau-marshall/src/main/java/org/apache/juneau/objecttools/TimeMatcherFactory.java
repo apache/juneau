@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.pojotools;
+package org.apache.juneau.objecttools;
 
 import static java.util.Calendar.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
@@ -26,7 +26,7 @@ import org.apache.juneau.internal.*;
  * TODO
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.PojoTools}
+ * 	<li class='link'>{@doc jm.ObjectTools}
  * 	<li class='extlink'>{@source}
  * </ul>
  */
@@ -81,14 +81,14 @@ public class TimeMatcherFactory extends MatcherFactory {
 	}
 
 	@Override
-	public Matcher create(String pattern) {
+	public AbstractMatcher create(String pattern) {
 		return new TimeMatcher(formats, pattern);
 	}
 
 	/**
 	 * A construct representing a single search pattern.
 	 */
-	private static class TimeMatcher extends Matcher {
+	private static class TimeMatcher extends AbstractMatcher {
 
 		private static final AsciiSet
 			DT = AsciiSet.create("0123456789-:T./"),

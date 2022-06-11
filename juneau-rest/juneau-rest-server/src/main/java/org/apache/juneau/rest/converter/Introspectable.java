@@ -14,13 +14,13 @@ package org.apache.juneau.rest.converter;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.objecttools.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.utils.*;
 
 /**
- * Converter for enablement of {@link PojoIntrospector} support on response objects returned by a
+ * Converter for enablement of {@link ObjectIntrospector} support on response objects returned by a
  * <c>@RestOp</c>-annotated method.
  *
  * <p>
@@ -42,7 +42,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='jc'>{@link PojoIntrospector} - Additional information on introspection of POJO methods.
+ * 	<li class='jc'>{@link ObjectIntrospector} - Additional information on introspection of POJO methods.
  * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#converters()} - Registering converters with REST resources.
  * 	<li class='link'>{@doc jrs.Converters}
  * 	<li class='extlink'>{@source}
@@ -70,7 +70,7 @@ public final class Introspectable implements RestConverter {
 			ObjectSwap swap = bs.getClassMetaForObject(o).getSwap(bs);
 			if (swap != null)
 				o = swap.swap(bs, o);
-			return new PojoIntrospector(o, JsonParser.DEFAULT).invokeMethod(method, args);
+			return ObjectIntrospector.create(o, JsonParser.DEFAULT).invokeMethod(method, args);
 		} catch (Exception e) {
 			return new InternalServerError(e,
 				"Error occurred trying to invoke method: {0}",

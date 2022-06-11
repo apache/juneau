@@ -23,9 +23,9 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.objecttools.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Java implementation of a JSON array.
@@ -110,7 +110,7 @@ public class JsonList extends LinkedList<Object> {
 	private static final long serialVersionUID = 1L;
 
 	transient BeanSession session = null;
-	private transient PojoRest pojoRest;
+	private transient ObjectRest objectRest;
 
 	/**
 	 * An empty read-only JsonList.
@@ -680,8 +680,8 @@ public class JsonList extends LinkedList<Object> {
 	 * </p>
 	 *
 	 * <p>
-	 * This method uses the {@link PojoRest} class to perform the lookup, so the map can contain any of the various
-	 * class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
+	 * This method uses the {@link ObjectRest} class to perform the lookup, so the map can contain any of the various
+	 * class types that the {@link ObjectRest} class supports (e.g. beans, collections, arrays).
 	 *
 	 * @param path The path to the entry.
 	 * @param type The class type.
@@ -690,7 +690,7 @@ public class JsonList extends LinkedList<Object> {
 	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
 	 */
 	public <T> T getAt(String path, Class<T> type) {
-		return getPojoRest().get(path, type);
+		return getObjectRest().get(path, type);
 	}
 
 	/**
@@ -704,7 +704,7 @@ public class JsonList extends LinkedList<Object> {
 	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
 	 */
 	public <T> T getAt(String path, Type type, Type...args) {
-		return getPojoRest().get(path, type, args);
+		return getObjectRest().get(path, type, args);
 	}
 
 	/**
@@ -725,15 +725,15 @@ public class JsonList extends LinkedList<Object> {
 	 * </p>
 	 *
 	 * <p>
-	 * This method uses the {@link PojoRest} class to perform the lookup, so the map can contain any of the various
-	 * class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
+	 * This method uses the {@link ObjectRest} class to perform the lookup, so the map can contain any of the various
+	 * class types that the {@link ObjectRest} class supports (e.g. beans, collections, arrays).
 	 *
 	 * @param path The path to the entry.
 	 * @param o The new value.
 	 * @return The previous value, or <jk>null</jk> if the entry doesn't exist.
 	 */
 	public Object putAt(String path, Object o) {
-		return getPojoRest().put(path, o);
+		return getObjectRest().put(path, o);
 	}
 
 	/**
@@ -753,15 +753,15 @@ public class JsonList extends LinkedList<Object> {
 	 * </p>
 	 *
 	 * <p>
-	 * This method uses the {@link PojoRest} class to perform the lookup, so the map can contain any of the various
-	 * class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
+	 * This method uses the {@link ObjectRest} class to perform the lookup, so the map can contain any of the various
+	 * class types that the {@link ObjectRest} class supports (e.g. beans, collections, arrays).
 	 *
 	 * @param path The path to the entry.
 	 * @param o The new value.
 	 * @return The previous value, or <jk>null</jk> if the entry doesn't exist.
 	 */
 	public Object postAt(String path, Object o) {
-		return getPojoRest().post(path, o);
+		return getObjectRest().post(path, o);
 	}
 
 	/**
@@ -782,14 +782,14 @@ public class JsonList extends LinkedList<Object> {
 	 * </p>
 	 *
 	 * <p>
-	 * This method uses the {@link PojoRest} class to perform the lookup, so the map can contain any of the various
-	 * class types that the {@link PojoRest} class supports (e.g. beans, collections, arrays).
+	 * This method uses the {@link ObjectRest} class to perform the lookup, so the map can contain any of the various
+	 * class types that the {@link ObjectRest} class supports (e.g. beans, collections, arrays).
 	 *
 	 * @param path The path to the entry.
 	 * @return The previous value, or <jk>null</jk> if the entry doesn't exist.
 	 */
 	public Object deleteAt(String path) {
-		return getPojoRest().delete(path);
+		return getObjectRest().delete(path);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -984,10 +984,10 @@ public class JsonList extends LinkedList<Object> {
 		p.parseIntoCollection(r, this, bs().object());
 	}
 
-	private PojoRest getPojoRest() {
-		if (pojoRest == null)
-			pojoRest = new PojoRest(this);
-		return pojoRest;
+	private ObjectRest getObjectRest() {
+		if (objectRest == null)
+			objectRest = new ObjectRest(this);
+		return objectRest;
 	}
 
 	BeanSession bs() {

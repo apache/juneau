@@ -32,11 +32,11 @@ import org.apache.http.entity.ContentType;
 import org.apache.http.message.*;
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.objecttools.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
-import org.apache.juneau.utils.*;
 import org.apache.juneau.xml.*;
 import org.junit.*;
 
@@ -248,10 +248,10 @@ public class RestClient_Response_Body_Test {
 		String x18 = testClient().entity(stringEntity("12345")).get().run().getBody().asAbbreviatedString(4);
 		assertString(x18).is("1...");
 
-		PojoRest x20 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().asPojoRest(ABean.class);
+		ObjectRest x20 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().asObjectRest(ABean.class);
 		assertString(x20.get("f")).is("1");
 
-		PojoRest x22 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().asPojoRest();
+		ObjectRest x22 = testClient().entity(stringEntity("{f:1}")).get().run().getBody().asObjectRest();
 		assertString(x22.get("f")).is("1");
 
 		Matcher x24 = testClient().entity(stringEntity("foo=123")).get().run().getBody().asMatcher(Pattern.compile("foo=(.*)"));
