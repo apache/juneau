@@ -149,7 +149,7 @@ import org.apache.juneau.svl.*;
  * 	}
  *
  * 	<jc>// Use it on a remote proxy to add headers on all requests.</jc>
- *  <ja>@Remote</ja>(path=<js>"/petstore"</js>, headerList=MyHeaderList.<jk>class</jk>)
+ * 	<ja>@Remote</ja>(path=<js>"/petstore"</js>, headerList=MyHeaderList.<jk>class</jk>)
  * 	<jk>public interface</jk> PetStore {
  *
  * 		<ja>@RemotePost</ja>(<js>"/pets"</js>)
