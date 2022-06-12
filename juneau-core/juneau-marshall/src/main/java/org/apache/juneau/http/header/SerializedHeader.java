@@ -17,23 +17,12 @@ import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.function.*;
 
-import org.apache.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.urlencoding.*;
 
 /**
- * Subclass of {@link NameValuePair} for serializing POJOs as URL-encoded form post entries using the
- * {@link UrlEncodingSerializer class}.
- *
- * <h5 class='section'>Example:</h5>
- * <p class='bjava'>
- * 	NameValuePairs <jv>params</jv> = <jk>new</jk> NameValuePairs()
- * 		.append(<jk>new</jk> SerializedNameValuePair(<js>"myPojo"</js>, <jv>pojo</jv>, UrlEncodingSerializer.<jsf>DEFAULT_SIMPLE</jsf>))
- * 		.append(<jk>new</jk> BasicNameValuePair(<js>"someOtherParam"</js>, <js>"foobar"</js>));
- * 	<jv>request</jv>.setEntity(<jk>new</jk> UrlEncodedFormEntity(<jv>params</jv>));
- * </p>
+ * TODO
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.HttpParts}

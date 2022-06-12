@@ -222,7 +222,17 @@
 			<li><p><a class='doclink' href='#juneau-marshall.jm.SimpleVariableLanguage.jm.SvlOtherNotes'>Other Notes</a></p>
 		</ol>
 		<li><p><a class='doclink' href='#juneau-marshall.jm.Encoders'>Encoders</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#juneau-marshall.jm.HttpParts'>HTTP Parts</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></p>
+		<li><p><a class='doclink' href='#juneau-marshall.jm.HttpParts'>HTTP Parts</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<ol>
+			<li><p><a class='doclink' href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http'>org.apache.juneau.http</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></p>
+			<li><p><a class='doclink' href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.annotation'>org.apache.juneau.http.annotation</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></p>
+			<li><p><a class='doclink' href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.header'>org.apache.juneau.http.header</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></p>
+			<li><p><a class='doclink' href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.part'>org.apache.juneau.http.part</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></p>
+			<li><p><a class='doclink' href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.entity'>org.apache.juneau.http.entity</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></p>
+			<li><p><a class='doclink' href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.resource'>org.apache.juneau.http.resource</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></p>
+			<li><p><a class='doclink' href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.response'>org.apache.juneau.http.response</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></p>
+			<li><p><a class='doclink' href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.remote'>org.apache.juneau.http.remote</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></p>
+		</ol>
 		<li><p><a class='doclink' href='#juneau-marshall.jm.ObjectTools'>Object Tools</a><span class='update'>created: <b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#juneau-marshall.jm.JsonDetails'>JSON Details</a></p>
 		<ol>
@@ -6246,13 +6256,334 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HttpParts' id='juneau-marshall.jm.HttpParts'>2.24 - HTTP Parts</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HttpParts' id='juneau-marshall.jm.HttpParts'>2.24 - HTTP Parts</a><span class='update'>created: <b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 2.24 - juneau-marshall.jm.HttpParts -->
 <div class='topic'>
 	<p>
-		TODO
+		The {@link org.apache.juneau.http} package contains a slew of useful extensions to the Apache HttpComponents libraries
+		and define APIs used extensively in the REST server and client APIs.
+	</p>
+	<ul class='javatree'>
+		<li class='jp'>{@link org.apache.juneau.http} - Utility classes used for HTTP parts/headers/entities.
+		<li class='jp'>{@link org.apache.juneau.http.annotation} - Swagger-based annotations used on both server-side APIs and client-side proxy interfaces.
+		<li class='jp'>{@link org.apache.juneau.http.entity} - HTTP entity classes.
+		<li class='jp'>{@link org.apache.juneau.http.header} - HTTP header classes.
+		<li class='jp'>{@link org.apache.juneau.http.part} - HTTP query/form-data/path classes.
+		<li class='jp'>{@link org.apache.juneau.http.remote} - Remote proxy interface API
+		<li class='jp'>{@link org.apache.juneau.http.resource} - HTTP resource classes.
+		<li class='jp'>{@link org.apache.juneau.http.response} - HTTP response classes.
+	</ul>
+	
+	<p>
+		These APIs extend from the Apache HttpComponents libraries and can be used with libraries based on it such
+		as Apache HttpClient.  The REST Client API described later is built on top of Apache HttpClient and many
+		of the classes defined in this package make up integral components of that API.  Likewise, the APIs
+		defined here are also used in the REST Server APIs also described later.
+	</p>
+	
+	
+</div>
+
+<!-- ==================================================================================================== -->
+
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http' id='juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http'>2.24.1 - org.apache.juneau.http</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 2.24.1 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http -->
+<div class='topic'>
+
+BasicStatusLine.java
+HttpEntities.java
+HttpHeaders.java
+HttpMethod.java
+HttpParts.java
+HttpResources.java
+HttpResponses.java
+</div>
+</div><!-- END: 2.24.1 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http -->
+
+<!-- ==================================================================================================== -->
+
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.annotation' id='juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.annotation'>2.24.2 - org.apache.juneau.http.annotation</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 2.24.2 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.annotation -->
+<div class='topic'>
+Body.java
+Contact.java
+ExternalDocs.java
+FormData.java
+HasFormData.java
+HasQuery.java
+Header.java
+Items.java
+License.java
+Path.java
+Query.java
+Request.java
+Response.java
+Schema.java
+StatusCode.java
+SubItems.java
+Tag.java
+</div>
+</div><!-- END: 2.24.2 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.annotation -->
+
+<!-- ==================================================================================================== -->
+
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.header' id='juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.header'>2.24.3 - org.apache.juneau.http.header</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 2.24.3 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.header -->
+<div class='topic'>
+
+Accept.java
+AcceptCharset.java
+AcceptEncoding.java
+AcceptLanguage.java
+AcceptRanges.java
+Age.java
+Allow.java
+Authorization.java
+BasicBooleanHeader.java
+BasicCsvHeader.java
+BasicDateHeader.java
+BasicEntityTagHeader.java
+BasicEntityTagsHeader.java
+BasicHeader.java
+BasicHeaderIterator.java
+BasicIntegerHeader.java
+BasicLongHeader.java
+BasicMediaRangesHeader.java
+BasicMediaTypeHeader.java
+BasicStringHeader.java
+BasicStringRangesHeader.java
+BasicUriHeader.java
+CacheControl.java
+ClientVersion.java
+Connection.java
+ContentDisposition.java
+ContentEncoding.java
+ContentLanguage.java
+ContentLength.java
+ContentLocation.java
+ContentRange.java
+ContentType.java
+Date.java
+Debug.java
+EntityTag.java
+EntityTags.java
+ETag.java
+Expect.java
+Expires.java
+Forwarded.java
+From.java
+Headerable.java
+HeaderBeanMeta.java
+HeaderList.java
+Host.java
+IfMatch.java
+IfModifiedSince.java
+IfNoneMatch.java
+IfRange.java
+IfUnmodifiedSince.java
+LastModified.java
+Location.java
+MaxForwards.java
+MediaRange.java
+MediaRanges.java
+MediaType.java
+NoTrace.java
+Origin.java
+package-info.java
+Pragma.java
+ProxyAuthenticate.java
+ProxyAuthorization.java
+Range.java
+Referer.java
+RetryAfter.java
+SerializedHeader.java
+Server.java
+StringRange.java
+StringRanges.java
+TE.java
+Thrown.java
+Trailer.java
+TransferEncoding.java
+Upgrade.java
+UserAgent.java
+Vary.java
+Via.java
+Warning.java
+WwwAuthenticate.java
+</div>
+</div><!-- END: 2.24.3 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.header -->
+
+<!-- ==================================================================================================== -->
+
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.part' id='juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.part'>2.24.4 - org.apache.juneau.http.part</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 2.24.4 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.part -->
+<div class='topic'>
+
+BasicBooleanPart.java
+BasicCsvArrayPart.java
+BasicDatePart.java
+BasicIntegerPart.java
+BasicLongPart.java
+BasicPart.java
+BasicPartIterator.java
+BasicStringPart.java
+BasicUriPart.java
+NameValuePairable.java
+package-info.java
+PartBeanMeta.java
+PartIterator.java
+PartList.java
+SerializedPart.java
+</div>
+</div><!-- END: 2.24.4 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.part -->
+
+<!-- ==================================================================================================== -->
+
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.entity' id='juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.entity'>2.24.5 - org.apache.juneau.http.entity</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 2.24.5 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.entity -->
+<div class='topic'>
+BasicHttpEntity.java
+ByteArrayEntity.java
+FileEntity.java
+HttpEntityBuilder.java
+InputStreamEntity.java
+package-info.java
+ReaderEntity.java
+SerializedEntity.java
+SerializedEntityBuilder.java
+StringEntity.java
+
+</div>
+</div><!-- END: 2.24.5 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.entity -->
+
+<!-- ==================================================================================================== -->
+
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.resource' id='juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.resource'>2.24.6 - org.apache.juneau.http.resource</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 2.24.6 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.resource -->
+<div class='topic'>
+BasicResource.java
+ByteArrayResource.java
+FileResource.java
+HttpResource.java
+HttpResourceBuilder.java
+InputStreamResource.java
+package-info.java
+ReaderResource.java
+StringResource.java
+</div>
+</div><!-- END: 2.24.6 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.resource -->
+
+<!-- ==================================================================================================== -->
+
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.response' id='juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.response'>2.24.7 - org.apache.juneau.http.response</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 2.24.7 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.response -->
+<div class='topic'>
+	<p>
+		The {@link org.apache.juneau.http.response} package contains predefined <c>org.apache.http.HttpResponse</c> implementations for most standard HTTP
+		responses. 
+	</p>
+	<ul class='javatreec'>
+		<li class='jc'>{@link org.apache.juneau.http.response.Accepted}
+		<li class='jc'>{@link org.apache.juneau.http.response.AlreadyReported}
+		<li class='jc'>{@link org.apache.juneau.http.response.BadRequest}
+		<li class='jc'>{@link org.apache.juneau.http.response.Conflict}
+		<li class='jc'>{@link org.apache.juneau.http.response.Continue}
+		<li class='jc'>{@link org.apache.juneau.http.response.Created}
+		<li class='jc'>{@link org.apache.juneau.http.response.EarlyHints}
+		<li class='jc'>{@link org.apache.juneau.http.response.ExpectationFailed}
+		<li class='jc'>{@link org.apache.juneau.http.response.FailedDependency}
+		<li class='jc'>{@link org.apache.juneau.http.response.Forbidden}
+		<li class='jc'>{@link org.apache.juneau.http.response.Found}
+		<li class='jc'>{@link org.apache.juneau.http.response.Gone}
+		<li class='jc'>{@link org.apache.juneau.http.response.HttpVersionNotSupported}
+		<li class='jc'>{@link org.apache.juneau.http.response.IMUsed}
+		<li class='jc'>{@link org.apache.juneau.http.response.InsufficientStorage}
+		<li class='jc'>{@link org.apache.juneau.http.response.InternalServerError}
+		<li class='jc'>{@link org.apache.juneau.http.response.LengthRequired}
+		<li class='jc'>{@link org.apache.juneau.http.response.Locked}
+		<li class='jc'>{@link org.apache.juneau.http.response.LoopDetected}
+		<li class='jc'>{@link org.apache.juneau.http.response.MethodNotAllowed}
+		<li class='jc'>{@link org.apache.juneau.http.response.MisdirectedRequest}
+		<li class='jc'>{@link org.apache.juneau.http.response.MovedPermanently}
+		<li class='jc'>{@link org.apache.juneau.http.response.MultipleChoices}
+		<li class='jc'>{@link org.apache.juneau.http.response.MultiStatus}
+		<li class='jc'>{@link org.apache.juneau.http.response.NetworkAuthenticationRequired}
+		<li class='jc'>{@link org.apache.juneau.http.response.NoContent}
+		<li class='jc'>{@link org.apache.juneau.http.response.NonAuthoritiveInformation}
+		<li class='jc'>{@link org.apache.juneau.http.response.NotAcceptable}
+		<li class='jc'>{@link org.apache.juneau.http.response.NotExtended}
+		<li class='jc'>{@link org.apache.juneau.http.response.NotFound}
+		<li class='jc'>{@link org.apache.juneau.http.response.NotImplemented}
+		<li class='jc'>{@link org.apache.juneau.http.response.NotModified}
+		<li class='jc'>{@link org.apache.juneau.http.response.Ok}
+		<li class='jc'>{@link org.apache.juneau.http.response.PartialContent}
+		<li class='jc'>{@link org.apache.juneau.http.response.PayloadTooLarge}
+		<li class='jc'>{@link org.apache.juneau.http.response.PermanentRedirect}
+		<li class='jc'>{@link org.apache.juneau.http.response.PreconditionFailed}
+		<li class='jc'>{@link org.apache.juneau.http.response.PreconditionRequired}
+		<li class='jc'>{@link org.apache.juneau.http.response.Processing}
+		<li class='jc'>{@link org.apache.juneau.http.response.RangeNotSatisfiable}
+		<li class='jc'>{@link org.apache.juneau.http.response.RequestHeaderFieldsTooLarge}
+		<li class='jc'>{@link org.apache.juneau.http.response.ResetContent}
+		<li class='jc'>{@link org.apache.juneau.http.response.SeeOther}
+		<li class='jc'>{@link org.apache.juneau.http.response.ServiceUnavailable}
+		<li class='jc'>{@link org.apache.juneau.http.response.SwitchingProtocols}
+		<li class='jc'>{@link org.apache.juneau.http.response.TemporaryRedirect}
+		<li class='jc'>{@link org.apache.juneau.http.response.TooManyRequests}
+		<li class='jc'>{@link org.apache.juneau.http.response.Unauthorized}
+		<li class='jc'>{@link org.apache.juneau.http.response.UnavailableForLegalReasons}
+		<li class='jc'>{@link org.apache.juneau.http.response.UnprocessableEntity}
+		<li class='jc'>{@link org.apache.juneau.http.response.UnsupportedMediaType}
+		<li class='jc'>{@link org.apache.juneau.http.response.UpgradeRequired}
+		<li class='jc'>{@link org.apache.juneau.http.response.UriTooLong}
+		<li class='jc'>{@link org.apache.juneau.http.response.UseProxy}
+		<li class='jc'>{@link org.apache.juneau.http.response.VariantAlsoNegotiates}
+	</ul>	
+	
+	<p>
+		The most common location where these responses are used are in REST operation methods described later.
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+	<ja>@RestDelete</ja>(path=<js>"/{id}"</js>)
+	<jk>public</jk> Ok doDelete(<ja>@Path</ja> <jk>int</jk> <jv>id</jv>) <jk>throws</jk> NotFound, Unauthorized {
+		<jf>pojoService</jf>.delete(<jf>pojoService</jf>.find(<jv>id</jv>).orElseThrow(NotFound::<jk>new</jk>));
+		<jk>return</jk> Ok.OK;
+	}
+	</p>
+	
+	<p>
+		The following classes are also provided for constructing your own custom responses:
+	</p>
+	<ul class='javatreec'>
+		<li class='jc'>{@link org.apache.juneau.http.response.BasicHttpException}
+		<li class='jc'>{@link org.apache.juneau.http.response.BasicHttpResponse}
+		<li class='jc'>{@link org.apache.juneau.http.response.HttpExceptionBuilder}
+		<li class='jc'>{@link org.apache.juneau.http.response.HttpResponseBuilder}
+	</ul>
+</div>
+</div><!-- END: 2.24.7 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.response -->
+
+<!-- ==================================================================================================== -->
+
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.remote' id='juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.remote'>2.24.8 - org.apache.juneau.http.remote</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></h4>
+<div class='topic'><!-- START: 2.24.8 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.remote -->
+<div class='topic'>
+	<p>
+		The {@link org.apache.juneau.http.remote} package contains the annotations used for defining client-side remote proxies.
+	</p>
+	<ul class='javatreec'>
+		<li class='ja'>{@link org.apache.juneau.http.remote.Remote}
+		<li class='ja'>{@link org.apache.juneau.http.remote.RemoteGet}
+		<li class='ja'>{@link org.apache.juneau.http.remote.RemotePut}
+		<li class='ja'>{@link org.apache.juneau.http.remote.RemotePost}
+		<li class='ja'>{@link org.apache.juneau.http.remote.RemoteDelete}
+		<li class='ja'>{@link org.apache.juneau.http.remote.RemoteOp}
+	</ul>
+	<p>
+		See {@doc jrc.Proxies Proxies} for more information on use of these annotations.
 	</p>
 </div>
+</div><!-- END: 2.24.8 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.remote -->
 </div><!-- END: 2.24 - juneau-marshall.jm.HttpParts -->
 
 <!-- ==================================================================================================== -->

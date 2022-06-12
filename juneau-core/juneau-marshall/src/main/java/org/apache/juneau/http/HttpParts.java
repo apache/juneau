@@ -29,7 +29,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.reflect.*;
 
 /**
- * Standard predefined HTTP headers.
+ * Standard predefined HTTP parts.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.HttpParts}

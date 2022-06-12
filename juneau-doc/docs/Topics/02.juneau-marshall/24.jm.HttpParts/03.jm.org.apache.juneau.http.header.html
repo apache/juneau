@@ -1,0 +1,126 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'org.apache.juneau.http.header', created:'9.0.0', flags:'todo'}
+
+<div class='topic'>
+	<p>
+		The {@link oaj.http.header} package contains implementations of <c>org.apache.http.Header</c> for all common HTTP
+		headers.
+	</p>
+	<ul class='javatreec'>
+		<li class='jc'>{@link oaj.http.header.Accept}
+		<li class='jc'>{@link oaj.http.header.AcceptCharset}
+		<li class='jc'>{@link oaj.http.header.AcceptEncoding}
+		<li class='jc'>{@link oaj.http.header.AcceptLanguage}
+		<li class='jc'>{@link oaj.http.header.AcceptRanges}
+		<li class='jc'>{@link oaj.http.header.Age}
+		<li class='jc'>{@link oaj.http.header.Allow}
+		<li class='jc'>{@link oaj.http.header.Authorization}
+		<li class='jc'>{@link oaj.http.header.CacheControl}
+		<li class='jc'>{@link oaj.http.header.ClientVersion}
+		<li class='jc'>{@link oaj.http.header.Connection}
+		<li class='jc'>{@link oaj.http.header.ContentDisposition}
+		<li class='jc'>{@link oaj.http.header.ContentEncoding}
+		<li class='jc'>{@link oaj.http.header.ContentLanguage}
+		<li class='jc'>{@link oaj.http.header.ContentLength}
+		<li class='jc'>{@link oaj.http.header.ContentLocation}
+		<li class='jc'>{@link oaj.http.header.ContentRange}
+		<li class='jc'>{@link oaj.http.header.ContentType}
+		<li class='jc'>{@link oaj.http.header.Date}
+		<li class='jc'>{@link oaj.http.header.Debug}
+		<li class='jc'>{@link oaj.http.header.ETag}
+		<li class='jc'>{@link oaj.http.header.Expect}
+		<li class='jc'>{@link oaj.http.header.Expires}
+		<li class='jc'>{@link oaj.http.header.Forwarded}
+		<li class='jc'>{@link oaj.http.header.From}
+		<li class='jc'>{@link oaj.http.header.Host}
+		<li class='jc'>{@link oaj.http.header.IfMatch}
+		<li class='jc'>{@link oaj.http.header.IfModifiedSince}
+		<li class='jc'>{@link oaj.http.header.IfNoneMatch}
+		<li class='jc'>{@link oaj.http.header.IfRange}
+		<li class='jc'>{@link oaj.http.header.IfUnmodifiedSince}
+		<li class='jc'>{@link oaj.http.header.LastModified}
+		<li class='jc'>{@link oaj.http.header.Location}
+		<li class='jc'>{@link oaj.http.header.MaxForwards}
+		<li class='jc'>{@link oaj.http.header.MediaRange}
+		<li class='jc'>{@link oaj.http.header.MediaRanges}
+		<li class='jc'>{@link oaj.http.header.MediaType}
+		<li class='jc'>{@link oaj.http.header.NoTrace}
+		<li class='jc'>{@link oaj.http.header.Origin}
+		<li class='jc'>{@link oaj.http.header.Pragma}
+		<li class='jc'>{@link oaj.http.header.ProxyAuthenticate}
+		<li class='jc'>{@link oaj.http.header.ProxyAuthorization}
+		<li class='jc'>{@link oaj.http.header.Range}
+		<li class='jc'>{@link oaj.http.header.Referer}
+		<li class='jc'>{@link oaj.http.header.RetryAfter}
+		<li class='jc'>{@link oaj.http.header.Server}
+		<li class='jc'>{@link oaj.http.header.TE}
+		<li class='jc'>{@link oaj.http.header.Thrown}
+		<li class='jc'>{@link oaj.http.header.Trailer}
+		<li class='jc'>{@link oaj.http.header.TransferEncoding}
+		<li class='jc'>{@link oaj.http.header.Upgrade}
+		<li class='jc'>{@link oaj.http.header.UserAgent}
+		<li class='jc'>{@link oaj.http.header.Vary}
+		<li class='jc'>{@link oaj.http.header.Via}
+		<li class='jc'>{@link oaj.http.header.Warning}
+		<li class='jc'>{@link oaj.http.header.WwwAuthenticate}
+	</ul>
+	<p>
+		TODO - Examples
+	</p>
+	<p>
+		These headers extend from the following classes that provide data-type specific functionality for each category of header.
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.http.header.BasicHeader}
+		<ul>
+			<li class='jc'>{@link oaj.http.header.BasicBooleanHeader}	
+			<li class='jc'>{@link oaj.http.header.BasicCsvHeader}
+			<li class='jc'>{@link oaj.http.header.BasicDateHeader}
+			<li class='jc'>{@link oaj.http.header.BasicEntityTagHeader}
+			<li class='jc'>{@link oaj.http.header.BasicEntityTagsHeader}
+			<li class='jc'>{@link oaj.http.header.BasicIntegerHeader}
+			<li class='jc'>{@link oaj.http.header.BasicLongHeader}
+			<li class='jc'>{@link oaj.http.header.BasicMediaRangesHeader}
+			<li class='jc'>{@link oaj.http.header.BasicMediaTypeHeader}
+			<li class='jc'>{@link oaj.http.header.BasicStringHeader}
+			<li class='jc'>{@link oaj.http.header.BasicStringRangesHeader}
+			<li class='jc'>{@link oaj.http.header.BasicUriHeader}
+		</ul>
+	</ul>
+	<p>
+		These subclasses provide various convenience methods to allow for easy fluent-style coding.
+	</p>
+	<h5 class='figure'>Examples</h5>
+	<p class='bjava'>
+	|	<jc>// Validates the response body content is not expired.</jc>
+	|	<jv>restClient</jv>
+	|			.get(<jsf>URL</jsf>)
+	|			.run()
+	|			.getHeader(<js>"Expires"</js>).asDateHeader().assertZonedDateTime().isLessThan(<jk>new</jk> Date());
+	</p>
+	
+	<h5 class='topic'>HeaderList</h5>
+	<p>
+		The {@link HeaderList} 
+		
+
+
+HeaderList.java
+BasicHeaderIterator.java
+SerializedHeader.java
+
+</div>
