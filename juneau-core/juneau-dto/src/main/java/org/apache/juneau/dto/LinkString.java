@@ -26,7 +26,6 @@ import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Simple bean that implements a hyperlink for the HTML serializer.

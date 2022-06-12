@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.converter;
 
+import org.apache.juneau.*;
 import org.apache.juneau.objecttools.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.utils.*;
-import org.apache.juneau.utils.SearchArgs;
+import org.apache.juneau.rest.httppart.*;
 
 /**
  * Converter for enabling of search/view/sort/page support on response objects returned by a <c>@RestOp</c>-annotated method.
@@ -120,16 +120,6 @@ public final class Queryable implements RestConverter {
 		+ "},"
 		+ "{"
 			+ "in:'query',"
-			+ "name:'i',"
-			+ "description:'"
-				+ "Case-insensitive.\n"
-				+ "Flag for case-insensitive matching on the search parameters."
-			+ "',"
-			+ "type:'boolean',"
-			+ "examples:{example:'?i=true'}"
-		+ "},"
-		+ "{"
-			+ "in:'query',"
 			+ "name:'p',"
 			+ "description:'"
 				+ "Position.\n"
@@ -156,9 +146,15 @@ public final class Queryable implements RestConverter {
 	public Object convert(RestRequest req, Object o) {
 		if (o == null)
 			return null;
-		SearchArgs searchArgs = req.getQueryParams().getSearchArgs();
-		if (searchArgs == null)
-			return o;
-		return new PojoQuery(o, req.getBeanSession()).filter(searchArgs);
+
+		Value<Object> v = Value.of(o);
+		RequestQueryParams params = req.getQueryParams();
+		BeanSession bs = req.getBeanSession();
+
+		params.getSearchArgs().ifPresent(x -> v.set(ObjectSearcher.create().run(bs, v.get(), x)));
+		params.getSortArgs().ifPresent(x -> v.set(ObjectSorter.create().run(bs, v.get(), x)));
+		params.getViewArgs().ifPresent(x -> v.set(ObjectViewer.create().run(bs, v.get(), x)));
+		params.getPageArgs().ifPresent(x -> v.set(ObjectPaginator.create().run(bs, v.get(), x)));
+		return v.get();
 	}
 }

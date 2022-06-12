@@ -38,6 +38,7 @@ public class ViewArgs {
 	 * @return A new {@link ViewArgs} object.
 	 */
 	public static ViewArgs create(String args) {
+		if (args == null) return null;
 		return new ViewArgs(args);
 	}
 
@@ -48,6 +49,7 @@ public class ViewArgs {
 	 * @return A new {@link ViewArgs} object.
 	 */
 	public static ViewArgs create(List<String> args) {
+		if (args == null) return null;
 		return new ViewArgs(args);
 	}
 

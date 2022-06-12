@@ -36,21 +36,23 @@ public class SearchArgs {
 	/**
 	 * Static creator.
 	 *
-	 * @param searchArgs Comma-delimited list of search arguments.
+	 * @param args Comma-delimited list of search arguments.
 	 * @return A new {@link SearchArgs} object.
 	 */
-	public static SearchArgs create(String searchArgs) {
-		return new SearchArgs(searchArgs);
+	public static SearchArgs create(String args) {
+		if (args == null) return null;
+		return new SearchArgs(args);
 	}
 
 	/**
 	 * Static creator.
 	 *
-	 * @param searchArgs List of search arguments.
+	 * @param args List of search arguments.
 	 * @return A new {@link SearchArgs} object.
 	 */
-	public static SearchArgs create(List<String> searchArgs) {
-		return new SearchArgs(searchArgs);
+	public static SearchArgs create(List<String> args) {
+		if (args == null) return null;
+		return new SearchArgs(args);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

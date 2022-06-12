@@ -34,7 +34,7 @@ public class SortArgs {
 	/**
 	 * Static creator.
 	 *
-	 * @param sortArgs
+	 * @param args
 	 * 	Comma-delimited list of sort arguments.
 	 * 	<br>Values are of the following forms:
 	 * 	<ul>
@@ -44,14 +44,15 @@ public class SortArgs {
 	 * 	</ul>
 	 * @return A new {@link SortArgs} object.
 	 */
-	public static SortArgs create(String sortArgs) {
-		return new SortArgs(sortArgs);
+	public static SortArgs create(String args) {
+		if (args == null) return null;
+		return new SortArgs(args);
 	}
 
 	/**
 	 * Static creator.
 	 *
-	 * @param sortArgs
+	 * @param args
 	 * 	Sort arguments.
 	 * 	<br>Values are of the following forms:
 	 * 	<ul>
@@ -61,8 +62,9 @@ public class SortArgs {
 	 * 	</ul>
 	 * @return A new {@link SortArgs} object.
 	 */
-	public static SortArgs create(List<String> sortArgs) {
-		return new SortArgs(sortArgs);
+	public static SortArgs create(List<String> args) {
+		if (args == null) return null;
+		return new SortArgs(args);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -34,7 +34,6 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.utils.*;
 
 /**
  * Represents the parsed form-data parameters in an HTTP request.
@@ -80,7 +79,6 @@ import org.apache.juneau.utils.*;
  * 			<li class='jm'>{@link RequestFormParams#getAll(String) getAll(String)}
  * 			<li class='jm'>{@link RequestFormParams#getFirst(String) getFirst(String)}
  * 			<li class='jm'>{@link RequestFormParams#getLast(String) getLast(String)}
- * 			<li class='jm'>{@link RequestFormParams#getSearchArgs() getSearchArgs()}
  * 		</ul>
  * 		<li>Methods overridding form data parameters:
  * 		<ul class='javatreec'>
@@ -549,57 +547,6 @@ public class RequestFormParams {
 	 */
 	public RequestFormParams copy() {
 		return new RequestFormParams(this);
-	}
-
-	/**
-	 * Locates the special search query arguments in the query and returns them as a {@link SearchArgs} object.
-	 *
-	 * <p>
-	 * The query arguments are as follows:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"&amp;s="</js> - A comma-delimited list of column-name/search-token pairs.
-	 * 		<br>Example: <js>"&amp;s=column1=foo*,column2=*bar"</js>
-	 * 	<li>
-	 * 		<js>"&amp;v="</js> - A comma-delimited list column names to view.
-	 * 		<br>Example: <js>"&amp;v=column1,column2"</js>
-	 * 	<li>
-	 * 		<js>"&amp;o="</js> - A comma-delimited list column names to sort by.
-	 * 		<br>Column names can be suffixed with <js>'-'</js> to indicate descending order.
-	 * 		<br>Example: <js>"&amp;o=column1,column2-"</js>
-	 * 	<li>
-	 * 		<js>"&amp;p="</js> - The zero-index row number of the first row to display.
-	 * 		<br>Example: <js>"&amp;p=100"</js>
-	 * 	<li>
-	 * 		<js>"&amp;l="</js> - The number of rows to return.
-	 * 		<br><c>0</c> implies return all rows.
-	 * 		<br>Example: <js>"&amp;l=100"</js>
-	 * 	<li>
-	 * 		<js>"&amp;i="</js> - The case-insensitive search flag.
-	 * 		<br>Example: <js>"&amp;i=true"</js>
-	 * </ul>
-	 *
-	 * <ul class='notes'>
-	 * 	<li class='note'>
-	 * 		Whitespace is trimmed in the parameters.
-	 * </ul>
-	 *
-	 * @return
-	 * 	A new {@link SearchArgs} object initialized with the special search query arguments.
-	 * 	<br>Returns <jk>null</jk> if no search arguments were found.
-	 */
-	public SearchArgs getSearchArgs() {
-		if (contains("s","v","o","p","l","i")) {
-			return new SearchArgs.Builder()
-				.search(get("s").asString().orElse(null))
-				.view(get("v").asString().orElse(null))
-				.sort(get("o").asString().orElse(null))
-				.position(get("p").asInteger().orElse(null))
-				.limit(get("l").asInteger().orElse(null))
-				.ignoreCase(get("i").asBoolean().orElse(null))
-				.build();
-		}
-		return null;
 	}
 
 	/**

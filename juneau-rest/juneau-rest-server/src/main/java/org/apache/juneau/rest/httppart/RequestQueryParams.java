@@ -18,15 +18,16 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
+import static java.util.Optional.*;
 
 import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.objecttools.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.svl.*;
-import org.apache.juneau.utils.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
@@ -81,6 +82,9 @@ import org.apache.juneau.http.part.*;
  * 			<li class='jm'>{@link RequestQueryParams#getFirst(String) getFirst(String)}
  * 			<li class='jm'>{@link RequestQueryParams#getLast(String) getLast(String)}
  * 			<li class='jm'>{@link RequestQueryParams#getSearchArgs() getSearchArgs()}
+ * 			<li class='jm'>{@link RequestQueryParams#getViewArgs() getViewArgs()}
+ * 			<li class='jm'>{@link RequestQueryParams#getSortArgs() getSortArgs()}
+ * 			<li class='jm'>{@link RequestQueryParams#getPageArgs() getPageArgs()}
  * 		</ul>
  * 		<li>Methods overridding query parameters:
  * 		<ul class='javatreec'>
@@ -515,54 +519,43 @@ public class RequestQueryParams {
 	}
 
 	/**
-	 * Locates the special search query arguments in the query and returns them as a {@link SearchArgs} object.
-	 *
-	 * <p>
-	 * The query arguments are as follows:
-	 * <ul class='spaced-list'>
-	 * 	<li>
-	 * 		<js>"&amp;s="</js> - A comma-delimited list of column-name/search-token pairs.
-	 * 		<br>Example: <js>"&amp;s=column1=foo*,column2=*bar"</js>
-	 * 	<li>
-	 * 		<js>"&amp;v="</js> - A comma-delimited list column names to view.
-	 * 		<br>Example: <js>"&amp;v=column1,column2"</js>
-	 * 	<li>
-	 * 		<js>"&amp;o="</js> - A comma-delimited list column names to sort by.
-	 * 		<br>Column names can be suffixed with <js>'-'</js> to indicate descending order.
-	 * 		<br>Example: <js>"&amp;o=column1,column2-"</js>
-	 * 	<li>
-	 * 		<js>"&amp;p="</js> - The zero-index row number of the first row to display.
-	 * 		<br>Example: <js>"&amp;p=100"</js>
-	 * 	<li>
-	 * 		<js>"&amp;l="</js> - The number of rows to return.
-	 * 		<br><c>0</c> implies return all rows.
-	 * 		<br>Example: <js>"&amp;l=100"</js>
-	 * 	<li>
-	 * 		<js>"&amp;i="</js> - The case-insensitive search flag.
-	 * 		<br>Example: <js>"&amp;i=true"</js>
-	 * </ul>
-	 *
-	 * <ul class='notes'>
-	 * 	<li class='note'>
-	 * 		Whitespace is trimmed in the parameters.
-	 * </ul>
+	 * Locates the search query argument ({@code &amp;s=}) in the query string and returns them as a {@link SearchArgs} object.
 	 *
 	 * @return
-	 * 	A new {@link SearchArgs} object initialized with the special search query arguments.
-	 * 	<br>Returns <jk>null</jk> if no search arguments were found.
+	 * 	A new {@link SearchArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
 	 */
-	public SearchArgs getSearchArgs() {
-		if (contains("s","v","o","p","l","i")) {
-			return new SearchArgs.Builder()
-				.search(get("s").asString().orElse(null))
-				.view(get("v").asString().orElse(null))
-				.sort(get("o").asString().orElse(null))
-				.position(get("p").asInteger().orElse(null))
-				.limit(get("l").asInteger().orElse(null))
-				.ignoreCase(get("i").asBoolean().orElse(null))
-				.build();
-		}
-		return null;
+	public Optional<SearchArgs> getSearchArgs() {
+		return ofNullable(SearchArgs.create(get("s").asString().orElse(null)));
+	}
+
+	/**
+	 * Locates the view query argument ({@code &amp;v=}) in the query string and returns them as a {@link ViewArgs} object.
+	 *
+	 * @return
+	 * 	A new {@link ViewArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
+	 */
+	public Optional<ViewArgs> getViewArgs() {
+		return ofNullable(ViewArgs.create(get("v").asString().orElse(null)));
+	}
+
+	/**
+	 * Locates the sort query argument ({@code &amp;o=}) in the query string and returns them as a {@link SortArgs} object.
+	 *
+	 * @return
+	 * 	A new {@link SortArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
+	 */
+	public Optional<SortArgs> getSortArgs() {
+		return ofNullable(SortArgs.create(get("o").asString().orElse(null)));
+	}
+
+	/**
+	 * Locates the position/limit query arguments ({@code &amp;p=}, {@code &amp;l=}) in the query string and returns them as a {@link PageArgs} object.
+	 *
+	 * @return
+	 * 	A new {@link PageArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
+	 */
+	public Optional<PageArgs> getPageArgs() {
+		return ofNullable(PageArgs.create(get("p").asInteger().orElse(null), get("l").asInteger().orElse(null)));
 	}
 
 	/**
