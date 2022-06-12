@@ -21,23 +21,29 @@ import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Sorts arrays and collections of maps and beans.
+ * POJO model sorter.
  *
  * <p>
- * 	The {@link ObjectSorter} class is designed to sort arrays and collections of beans and maps.
+ * 	This class is designed to sort arrays and collections of maps or beans.
  * </p>
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	MyBean[] <jv>arrayOfBeans</jv> = ...;
  * 	ObjectSorter <jv>sorter</jv> = ObjectSorter.<jsm>create</jsm>();
  *
- * 	BeanSession <jv>beanSession</jv> = BeanContext.<jsf>DEFAULT</jsf>.createSession();
- *
- * 	<jc>// Sort beans by foo ascending then bar descending.</jc>
- * 	SortArgs <jv>sortArgs</jv> = SortArgs.create("foo,bar-");
- *
  * 	<jc>// Returns a list of beans sorted accordingly.</jc>
- * 	Object <jv>result</jv> = sorter.run(<jv>beanSession</jv>, <jv>arrayOfBeans</jv>, <jv>sortArgs</jv>);
+ * 	List&lt;MyBean&gt; <jv>result</jv> = <jv>sorter</jv>.run(<jv>arrayOfBeans</jv>, <js>"foo,bar-"</js>);
+ * </p>
+ * <p>
+ * 	The tool can be used against the following data types:
+ * </p>
+ * <ul>
+ * 	<li>Arrays/collections of maps or beans.
+ * </ul>
+ * <p>
+ * 	The arguments are a simple comma-delimited list of property names optionally suffixed with <js>'+'</js> and <js>'-'</js> to
+ * 	denote ascending/descending order.
  * </p>
  *
  * <ul class='seealso'>
@@ -73,6 +79,7 @@ public final class ObjectSorter implements ObjectTool<SortArgs> {
 	/**
 	 * Convenience method for executing the sorter.
 	 *
+	 * @param <R> The return type.
 	 * @param input The input.
 	 * @param sortArgs The sort arguments.  See {@link SortArgs} for format.
 	 * @return A list of maps/beans matching the

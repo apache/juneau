@@ -24,9 +24,10 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 
 /**
- * Provides the ability to perform standard REST operations (GET, PUT, POST, DELETE) against nodes in a POJO model.
+ * POJO REST API.
  *
  * <p>
+ * Provides the ability to perform standard REST operations (GET, PUT, POST, DELETE) against nodes in a POJO model.
  * Nodes in the POJO model are addressed using URLs.
  *
  * <p>
@@ -77,7 +78,7 @@ import org.apache.juneau.parser.*;
  * 	);
  *
  * 	<jc>// Wrap Map inside an ObjectRest object</jc>
- * 	ObjectRest <jv>johnSmith</jv> = ObjectRest.<jsf>create</jsf>(<jv>map</jv>);
+ * 	ObjectRest <jv>johnSmith</jv> = ObjectRest.<jsm>create</jsm>(<jv>map</jv>);
  *
  * 	<jc>// Get a simple value at the top level</jc>
  * 	<jc>// "John Smith"</jc>

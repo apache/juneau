@@ -12,15 +12,17 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.converter;
 
+import org.apache.juneau.objecttools.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.utils.*;
+import org.apache.juneau.utils.SearchArgs;
 
 /**
- * Converter for enabling of {@link PojoQuery} support on response objects returned by a <c>@RestOp</c>-annotated method.
+ * Converter for enabling of search/view/sort/page support on response objects returned by a <c>@RestOp</c>-annotated method.
  *
  * <p>
- * When enabled, objects in a POJO tree can be filtered using the functionality described in the {@link PojoQuery}
- * class.
+ * When enabled, objects in a POJO tree can be filtered using the functionality described in the {@link ObjectSearcher},
+ * {@link ObjectViewer}, {@link ObjectSorter}, and {@link ObjectPaginator} classes.
  *
  * <p>
  * The following HTTP request parameters are available for tabular data (e.g. {@code Collections} of {@code Maps},
@@ -63,7 +65,10 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='jc'>{@link PojoQuery} - Additional information on filtering POJO models.
+ * 	<li class='jc'>{@link ObjectSearcher} - Additional information on searching POJO models.
+ * 	<li class='jc'>{@link ObjectViewer} - Additional information on filtering POJO models.
+ * 	<li class='jc'>{@link ObjectSorter} - Additional information on sorting POJO models.
+ * 	<li class='jc'>{@link ObjectPaginator} - Additional information on paginating POJO models.
  * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#converters()} - Registering converters with REST resources.
  * 	<li class='link'>{@doc jrs.Converters}
  * 	<li class='extlink'>{@source}

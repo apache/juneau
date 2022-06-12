@@ -21,7 +21,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Provides string search capability for the {@link ObjectSearcher} class.
+ * String matcher factory for the {@link ObjectSearcher} class.
  *
  * <p>
  * 	The class provides searching based on the following patterns:

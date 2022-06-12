@@ -20,7 +20,7 @@ import java.util.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Encapsulates arguments for the {@link ObjectSearcher} class.
+ * Arguments passed to {@link ObjectSearcher}.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.ObjectTools}

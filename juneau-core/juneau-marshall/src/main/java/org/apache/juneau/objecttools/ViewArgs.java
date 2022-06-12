@@ -18,7 +18,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.util.*;
 
 /**
- * Encapsulates arguments for the {@link ObjectViewer} class.
+ * Arguments passed to {@link ObjectViewer}.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.ObjectTools}

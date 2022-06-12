@@ -18,7 +18,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.util.*;
 
 /**
- * Encapsulates arguments for the {@link ObjectSorter} class.
+ * Arguments passed to {@link ObjectSorter}.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.ObjectTools}

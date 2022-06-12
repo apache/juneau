@@ -32,7 +32,6 @@ import org.apache.juneau.svl.*;
 
 /**
  * An immutable list of HTTP headers.
- * {@review}
  *
  * <h5 class='figure'>Example</h5>
  * <p class='bjava'>

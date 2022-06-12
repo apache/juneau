@@ -20,7 +20,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Provides number search capability for the {@link ObjectSearcher} class.
+ * Number matcher factory for the {@link ObjectSearcher} class.
  *
  * <p>
  * 	The class provides searching based on the following patterns:

@@ -20,10 +20,26 @@ import java.util.*;
 import org.apache.juneau.*;
 
 /**
- * Designed to provide paging on POJOs consisting of arrays and collections.
+ * POJO model paginator.
  *
  * <p>
- * Allows you to quickly return subsets of arrays and collections based on position/limit arguments.
+ * 	This class is designed to extract sublists from arrays/collections of maps or beans.
+ * </p>
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	MyBean[] <jv>arrayOfBeans</jv> = ...;
+ * 	ObjectPaginator <jv>paginator</jv> = ObjectPaginator.<jsm>create</jsm>();
+ *
+ * 	<jc>// Returns all rows from 100 to 110.</jc>
+ * 	List&lt;MyBean&gt; <jv>result</jv> = <jv>paginator</jv>.run(<jv>arrayOfBeans</jv>, 100, 10);
+ * </p>
+ * <p>
+ * 	The tool can be used against the following data types:
+ * </p>
+ * <ul>
+ * 	<li>Arrays/collections of maps or beans.
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.ObjectTools}

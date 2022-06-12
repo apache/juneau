@@ -23,7 +23,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Provides date search capability for the {@link ObjectSearcher} class.
+ * Date/time matcher factory for the {@link ObjectSearcher} class.
  *
  * <p>
  * 	The class provides searching based on the following patterns:

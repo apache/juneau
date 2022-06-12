@@ -17,7 +17,7 @@ import java.lang.reflect.*;
 import org.apache.juneau.ExecutableException;
 
 /**
- * Utility class for merging POJOs behind a single interface.
+ * POJO merger.
  *
  * <p>
  * Useful in cases where you want to define beans with 'default' values.

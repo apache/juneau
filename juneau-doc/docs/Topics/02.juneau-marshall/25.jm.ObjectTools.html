@@ -13,11 +13,11 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Object Tools', created:'9.0.0', flags:'TODO'}
+{title:'Object Tools', created:'9.0.0'}
 
 <div class='topic'>
 	<p>
-		The {@link org.apache.juneau.objecttools} package defines convenience utility classes for accessing
+		The {@link oaj.objecttools} package defines convenience utility classes for accessing
 		and manipulating POJOs.  It consists of the following classes:
 	</p>
 	<ul class='javatree'>
@@ -50,16 +50,12 @@
 		Leaves of the tree can be any type of object.
 	</p>
 	<p>
-		Use {@link #get(String) get()} to retrieve an element from a JSON tree.
-		<br>Use {@link #put(String,Object) put()} to create (or overwrite) an element in a JSON tree.
-		<br>Use {@link #post(String,Object) post()} to add an element to a list in a JSON tree.
-		<br>Use {@link #delete(String) delete()} to remove an element from a JSON tree.
+		Use {@link oaj.objecttools.ObjectRest#get(String) get()} to retrieve an element from a JSON tree.
+		<br>Use {@link oaj.objecttools.ObjectRest#put(String,Object) put()} to create (or overwrite) an element in a JSON tree.
+		<br>Use {@link oaj.objecttools.ObjectRest#post(String,Object) post()} to add an element to a list in a JSON tree.
+		<br>Use {@link oaj.objecttools.ObjectRest#delete(String) delete()} to remove an element from a JSON tree.
 	</p>
-	<p>
-		Leading slashes in URLs are ignored.
-		So <js>"/xxx/yyy/zzz"</js> and <js>"xxx/yyy/zzz"</js> are considered identical.
- 	</p>
-	<h5 class='section'>Example:</h5>
+	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
 	|	<jc>// Construct an unstructured POJO model</jc>
 	|	JsonMap <jv>map</jv> = JsonMap.<jsm>ofJson</jsm>(<js>""</js>
@@ -83,7 +79,7 @@
 	|	);
 	|
 	|	<jc>// Wrap Map inside an ObjectRest object</jc>
-	|	ObjectRest <jv>johnSmith</jv> = ObjectRest.<jsf>create</jsf>(<jv>map</jv>);
+	|	ObjectRest <jv>johnSmith</jv> = ObjectRest.<jsm>create</jsm>(<jv>map</jv>);
 	|
 	|	<jc>// Get a simple value at the top level</jc>
 	|	<jc>// "John Smith"</jc>
@@ -126,33 +122,38 @@
 		<br>The syntax is {@code @attr=val}, where attr is the attribute name on the child map, and val is the matching value.
 	</p>
 	
-	<h5 class='section'>Example:</h5>
+	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
 	|	<jc>// Get map/bean with name attribute value of 'foo' from a list of items</jc>
 	|	Map <jv>map</jv> = <jv>objectRest</jv>.getMap(<js>"/items/@name=foo"</js>);
 	</p>
+	<ul class='notes'>
+		<li class='note'>This class is used in the {@link oajr.converter.Traversable} REST response converter.
+	</ul>
 	
 	<h5 class='topic'>ObjectSearcher</h5>
 	<p>
-		The {@link ObjectSearcher} class is designed to provide searches across arrays and collections of beans and maps.
+		The {@link oaj.objecttools.ObjectSearcher} class is designed to provide searches across arrays and collections of maps or beans.
 		It allows you to quickly filter beans and maps using simple yet sophisticated search arguments.
 	</p>
 	
-	<h5 class='section'>Example:</h5>
+	<h5 class='figure'>Example:</h5>
 	<p class='bjava'> 
 	|	MyBean[] <jv>arrayOfBeans</jv> = ...;
 	|	ObjectSearcher <jv>searcher</jv> = ObjectSearcher.<jsm>create</jsm>();
-	|	BeanSession <jv>beanSession</jv> = BeanContext.<jsf>DEFAULT</jsf>.createSession();
 	|	
-	|	<jc>// Find beans whose 'foo' property is 'bar'.</jc>
-	|	SearchArgs <jv>args</jv> = SearchArgs.create("foo=X,bar=Y");  
-	|
 	|	<jc>// Returns a list of beans whose 'foo' property is 'X' and 'bar' property is 'Y'.</jc>		
-	|	Object <jv>result</jv> = searcher.run(<jv>beanSession</jv>, <jv>arrayOfBeans</jv>, <jv>args</jv>);  
+	|	List&lt;MyBean&gt; <jv>result</jv> = <jv>searcher</jv>.run(<jv>arrayOfBeans</jv>, <js>"foo=X,bar=Y"</js>);  
 	</p>
 	<p>
+		The tool can be used against the following data types:
+	</p>
+	<ul>
+		<li>Arrays/collections of maps or beans.
+	</ul>
+	<p>
 		The default searcher is configured with the following matcher factories that provides the capabilities of matching
-		against various data types:
+		against various data types.  This list is extensible:
 	</p>
 	<ul class='javatreec'>
 		<li class='jc'>{@link oaj.objecttools.StringMatcherFactory}
@@ -160,7 +161,7 @@
 		<li class='jc'>{@link oaj.objecttools.TimeMatcherFactory}
 	</ul>
 	<p>
-		The {@link oaj.objectools.StringMatcherFactory} class provides searching based on the following patterns:
+		The {@link oaj.objecttools.StringMatcherFactory} class provides searching based on the following patterns:
 	</p>
 	<ul>
 		<li><js>"property=foo"</js> - Simple full word match
@@ -173,7 +174,7 @@
 		<li><js>"property=/foo\\s+bar"</js> - Regular expression match
 	</ul>
 	<p>
-		The {@link oaj.objectools.NumberMatcherFactory} class provides searching based on the following patterns:
+		The {@link oaj.objecttools.NumberMatcherFactory} class provides searching based on the following patterns:
 	</p>
 	<ul>
 		<li><js>"property=1"</js> - A single number
@@ -185,7 +186,7 @@
 		<li><js>"property=!1"</js>,<js>"property=!1-2"</js> - Negation
 	</ul>
 	<p>
-		The {@link oaj.objectools.TimeMatcherFactory} class provides searching based on the following patterns:
+		The {@link oaj.objecttools.TimeMatcherFactory} class provides searching based on the following patterns:
 	</p>
 	<ul>
 		<li><js>"property=2011"</js> - A single year
@@ -199,368 +200,144 @@
 		<li><js>"property=&gt;2011"</js>,<js>"property=&gt;=2011"</js>,<js>"property=&lt;2011"</js>,<js>"property=&lt;=2011"</js> - Open-ended ranges
 		<li><js>"property=2011 - 2013-06-30"</js> - Closed ranges
 	</ul>
+	<ul class='notes'>
+		<li class='note'>This class is used in the {@link oajr.converter.Queryable} REST response converter.
+	</ul>
 
 	<h5 class='topic'>ObjectSorter</h5>
 	<p>
-		The {@link ObjectSorter} class is designed to sort arrays and collections of beans and maps.
+		The {@link oaj.objecttools.ObjectSorter} class is designed to sort arrays and collections of maps or beans.
 	</p>
-	<h5 class='section'>Example:</h5>
+	<h5 class='figure'>Example:</h5>
 	<p class='bjava'> 
 	|	MyBean[] <jv>arrayOfBeans</jv> = ...;
 	|	ObjectSorter <jv>sorter</jv> = ObjectSorter.<jsm>create</jsm>();
-	|	BeanSession <jv>beanSession</jv> = BeanContext.<jsf>DEFAULT</jsf>.createSession();
 	|	
-	|	<jc>// Sort beans by foo ascending then bar descending.</jc>
-	|	SortArgs <jv>args</jv> = SortArgs.create("foo,bar-");  
-	|
 	|	<jc>// Returns a list of beans sorted accordingly.</jc>		
-	|	Object <jv>result</jv> = sorter.run(<jv>beanSession</jv>, <jv>arrayOfBeans</jv>, <jv>args</jv>);  
+	|	List&lt;MyBean&gt; <jv>result</jv> = <jv>sorter</jv>.run(<jv>arrayOfBeans</jv>, <js>"foo,bar-"</js>);  
 	</p>
+	<p>
+		The tool can be used against the following data types:
+	</p>
+	<ul>
+		<li>Arrays/collections of maps or beans.
+	</ul>
+	<p>
+		The arguments are a simple comma-delimited list of property names optionally suffixed with <js>'+'</js> and <js>'-'</js> to 
+		denote ascending/descending order.
+	</p>
+	<ul class='notes'>
+		<li class='note'>This class is used in the {@link oajr.converter.Queryable} REST response converter.
+	</ul>
 	
 	<h5 class='topic'>ObjectViewer</h5>
 	<p>
-		The {@link ObjectViewer} class is designed to extract properties from collections of maps and beans.
+		The {@link oaj.objecttools.ObjectViewer} class is designed to extract properties from collections of maps or beans.
 	</p>
-	<h5 class='section'>Example:</h5>
+	<h5 class='figure'>Example:</h5>
 	<p class='bjava'> 
 	|	MyBean[] <jv>arrayOfBeans</jv> = ...;
-	|	ObjectSorter <jv>sorter</jv> = ObjectSorter.<jsm>create</jsm>();
-	|	BeanSession <jv>beanSession</jv> = BeanContext.<jsf>DEFAULT</jsf>.createSession();
-	|	
-	|	<jc>// Extract properties 'foo' and 'bar' from the beans.</jc>
-	|	ViewArgs <jv>args</jv> = ViewArgs.create("foo,bar");  
-	|
-	|	<jc>// Returns list of maps with just .</jc>		
-	|	Object <jv>result</jv> = sorter.run(<jv>beanSession</jv>, <jv>arrayOfBeans</jv>, <jv>sortArgs</jv>);  
+	|	ObjectViewer <jv>viewer</jv> = ObjectViewer.<jsm>create</jsm>();
+
+	|	<jc>// Returns the 'foo' and 'bar' properties extracted into a list of maps.</jc>		
+	|	List&lt;Map&gt; <jv>result</jv> = <jv>viewer</jv>.run(<jv>arrayOfBeans</jv>, <js>"foo,bar"</js>);  
 	</p>
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Null input
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	public void nullInput() {
-		assertNull(p.run(bs, null, null));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Simple bean
-	//-----------------------------------------------------------------------------------------------------------------
-
-	public static class A {
-		public String f1,f2;
-
-		public static A create(String f1, String f2) {
-			A a = new A();
-			a.f1 = f1;
-			a.f2 = f2;
-			return a;
-		}
-	}
-
-	@Test
-	public void simpleBean() {
-		ViewArgs sa = new ViewArgs("f1");;
-		Object in = A.create("x1","x2");
-		assertObject(p.run(bs, in, sa)).asJson().is("{f1:'x1'}");
-	}
-
-	@Test
-	public void simpleBean_reverseColumns() {
-		ViewArgs sa = new ViewArgs("f2","f1");
-		Object in = A.create("x1","x2");
-		assertObject(p.run(bs, in, sa)).asJson().is("{f2:'x2',f1:'x1'}");
-	}
-
-	@Test
-	public void simpleBean_dupColumns() {
-		ViewArgs sa = new ViewArgs("f1","f1");
-		Object in = A.create("x1","x2");
-		assertObject(p.run(bs, in, sa)).asJson().is("{f1:'x1'}");
-	}
-
-	@Test
-	public void simpleBean_nonExistentColumns() {
-		ViewArgs sa = new ViewArgs("fx");
-		Object in = A.create("x1","x2");
-		assertObject(p.run(bs, in, sa)).asJson().is("{}");
-	}
-
-	@Test
-	public void simpleBean_nullColumn() {
-		ViewArgs sa = new ViewArgs("f1",null);
-		Object in = A.create("x1","x2");
-		assertObject(p.run(bs, in, sa)).asJson().is("{f1:'x1'}");
-	}
-
-	@Test
-	public void simpleBean_emptyArgs() {
-		ViewArgs sa = new ViewArgs();
-		Object in = A.create("x1","x2");
-		assertObject(p.run(bs, in, sa)).asJson().is("{}");
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Simple BeanMap
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	public void simpleBeanMap() {
-		ViewArgs sa = new ViewArgs("f1");
-		Object in = bs.toBeanMap(A.create("x1","x2"));
-		assertObject(p.run(bs, in, sa)).asJson().is("{f1:'x1'}");
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Simple map
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	public void simpleMap() {
-		ViewArgs sa = new ViewArgs("f1");
-		Object in = map("f1","x1","f2","x2");
-		assertObject(p.run(bs, in, sa)).asJson().is("{f1:'x1'}");
-	}
-
-	@Test
-	public void simpleMap_reverseColumns() {
-		ViewArgs sa = new ViewArgs("f2","f1");
-		Object in = map("f1","x1","f2","x2");
-		assertObject(p.run(bs, in, sa)).asJson().is("{f2:'x2',f1:'x1'}");
-	}
-
-	@Test
-	public void simpleMap_nonExistentColumns() {
-		ViewArgs sa = new ViewArgs("fx");
-		Object in = map("f1","x1","f2","x2");
-		assertObject(p.run(bs, in, sa)).asJson().is("{}");
-	}
-
-	@Test
-	public void simpleMap_nullColumn() {
-		ViewArgs sa = new ViewArgs("f1",null);
-		Object in = map("f1","x1","f2","x2");
-		assertObject(p.run(bs, in, sa)).asJson().is("{f1:'x1'}");
-	}
-
-	@Test
-	public void simpleMap_emptyView() {
-		ViewArgs sa = new ViewArgs();
-		Object in = map("f1","x1","f2","x2");
-		assertObject(p.run(bs, in, sa)).asJson().is("{}");
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Bean array
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	public void beanArray() {
-		ViewArgs sa = new ViewArgs("f1");;
-		Object in = new A[]{A.create("x1","x2")};
-		assertObject(p.run(bs, in, sa)).asJson().is("[{f1:'x1'}]");
-	}
-
-	@Test
-	public void beanArray_reverseColumns() {
-		ViewArgs sa = new ViewArgs("f2","f1");
-		Object in = new A[]{A.create("x1","x2")};
-		assertObject(p.run(bs, in, sa)).asJson().is("[{f2:'x2',f1:'x1'}]");
-	}
-
-	@Test
-	public void beanArray_dupColumns() {
-		ViewArgs sa = new ViewArgs("f1","f1");
-		Object in = new A[]{A.create("x1","x2")};
-		assertObject(p.run(bs, in, sa)).asJson().is("[{f1:'x1'}]");
-	}
-
-	@Test
-	public void beanArray_nonExistentColumns() {
-		ViewArgs sa = new ViewArgs("fx");
-		Object in = new A[]{A.create("x1","x2")};
-		assertObject(p.run(bs, in, sa)).asJson().is("[{}]");
-	}
-
-	@Test
-	public void beanArray_nullColumn() {
-		ViewArgs sa = new ViewArgs("f1",null);
-		Object in = new A[]{A.create("x1","x2")};
-		assertObject(p.run(bs, in, sa)).asJson().is("[{f1:'x1'}]");
-	}
-
-	@Test
-	public void beanArray_emptyArgs() {
-		ViewArgs sa = new ViewArgs();
-		Object in = new A[]{A.create("x1","x2")};
-		assertObject(p.run(bs, in, sa)).asJson().is("[{}]");
-	}
-
-	@Test
-	public void beanArray_withNull() {
-		ViewArgs sa = new ViewArgs("f1");;
-		Object in = new A[]{A.create("x1","x2"),null};
-		assertObject(p.run(bs, in, sa)).asJson().is("[{f1:'x1'},null]");
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Bean list
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	public void beanList() {
-		ViewArgs sa = new ViewArgs("f1");;
-		Object in = list(A.create("x1","x2"));
-		assertObject(p.run(bs, in, sa)).asJson().is("[{f1:'x1'}]");
-	}
-
-	@Test
-	public void beanList_reverseColumns() {
-		ViewArgs sa = new ViewArgs("f2","f1");
-		Object in = list(A.create("x1","x2"));
-		assertObject(p.run(bs, in, sa)).asJson().is("[{f2:'x2',f1:'x1'}]");
-	}
-
-	@Test
-	public void beanList_dupColumns() {
-		ViewArgs sa = new ViewArgs("f1","f1");
-		Object in = list(A.create("x1","x2"));
-		assertObject(p.run(bs, in, sa)).asJson().is("[{f1:'x1'}]");
-	}
-
-	@Test
-	public void beanList_nonExistentColumns() {
-		ViewArgs sa = new ViewArgs("fx");
-		Object in = list(A.create("x1","x2"));
-		assertObject(p.run(bs, in, sa)).asJson().is("[{}]");
-	}
-
-	@Test
-	public void beanList_nullColumn() {
-		ViewArgs sa = new ViewArgs("f1",null);
-		Object in = list(A.create("x1","x2"));
-		assertObject(p.run(bs, in, sa)).asJson().is("[{f1:'x1'}]");
-	}
-
-	@Test
-	public void beanList_emptyArgs() {
-		ViewArgs sa = new ViewArgs();
-		Object in = list(A.create("x1","x2"));
-		assertObject(p.run(bs, in, sa)).asJson().is("[{}]");
-	}
-
-	@Test
-	public void beanList_withNull() {
-		ViewArgs sa = new ViewArgs("f1");;
-		Object in = list(A.create("x1","x2"),null);
-		assertObject(p.run(bs, in, sa)).asJson().is("[{f1:'x1'},null]");
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Bean set
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	public void beanSet() {
-		ViewArgs sa = new ViewArgs("f1");;
-		Object in = set(A.create("x1","x2"));
-		assertObject(p.run(bs, in, sa)).asJson().is("[{f1:'x1'}]");
-	}
-
-	@Test
-	public void beanSet_reverseColumns() {
-		ViewArgs sa = new ViewArgs("f2","f1");
-		Object in = set(A.create("x1","x2"));
-		assertObject(p.run(bs, in, sa)).asJson().is("[{f2:'x2',f1:'x1'}]");
-	}
-
-	@Test
-	public void beanSet_dupColumns() {
-		ViewArgs sa = new ViewArgs("f1","f1");
-		Object in = set(A.create("x1","x2"));
-		assertObject(p.run(bs, in, sa)).asJson().is("[{f1:'x1'}]");
-	}
-
-	@Test
-	public void beanSet_nonExistentColumns() {
-		ViewArgs sa = new ViewArgs("fx");
-		Object in = set(A.create("x1","x2"));
-		assertObject(p.run(bs, in, sa)).asJson().is("[{}]");
-	}
-
-	@Test
-	public void beanSet_nullColumn() {
-		ViewArgs sa = new ViewArgs("f1",null);
-		Object in = set(A.create("x1","x2"));
-		assertObject(p.run(bs, in, sa)).asJson().is("[{f1:'x1'}]");
-	}
-
-	@Test
-	public void beanSet_emptyArgs() {
-		ViewArgs sa = new ViewArgs();
-		Object in = set(A.create("x1","x2"));
-		assertObject(p.run(bs, in, sa)).asJson().is("[{}]");
-	}
-
-	@Test
-	public void beanSet_withNull() {
-		ViewArgs sa = new ViewArgs("f1");;
-		Object in = set(A.create("x1","x2"),null);
-		assertObject(p.run(bs, in, sa)).asJson().is("[{f1:'x1'},null]");
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other object
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	public void otherObject() {
-		ViewArgs sa = new ViewArgs("f1");;
-		Object in = "foobar";
-		assertObject(p.run(bs, in, sa)).asJson().is("'foobar'");
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Map list
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	public void mapList() {
-		ViewArgs sa = new ViewArgs("f1");;
-		Object in = list(map("f1","x1","f2","x2"));
-		assertObject(p.run(bs, in, sa)).asJson().is("[{f1:'x1'}]");
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// BeanMap list
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	public void beanMapList() {
-		ViewArgs sa = new ViewArgs("f1");;
-		Object in = list(bs.toBeanMap(A.create("x1","x2")));
-		assertObject(p.run(bs, in, sa)).asJson().is("[{f1:'x1'}]");
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other object list
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	public void otherObjectList() {
-		ViewArgs sa = new ViewArgs("f1");;
-		Object in = list("foobar");
-		assertObject(p.run(bs, in, sa)).asJson().is("['foobar']");
-	}
-	
-	
-	 * Designed to provide paging on POJOs consisting of arrays and collections.
- *
- * <p>
- * Allows you to quickly return subsets of arrays and collections based on position/limit arguments.
-	
+	<p>
+		The tool can be used against the following data types:
+	</p>
+	<ul>
+		<li>Arrays/collections of maps or beans.
+		<li>Singular maps or beans.
+	</ul>
+	<ul class='notes'>
+		<li class='note'>This class is used in the {@link oajr.converter.Queryable} REST response converter.
+	</ul>
 	
 	<h5 class='topic'>ObjectPaginator</h5>
+	<p>
+		The {@link oaj.objecttools.ObjectPaginator} class is designed to extract sublists from arrays/collections of maps or beans.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'> 
+	|	MyBean[] <jv>arrayOfBeans</jv> = ...;
+	|	ObjectPaginator <jv>paginator</jv> = ObjectPaginator.<jsm>create</jsm>();
+	|	
+	|	<jc>// Returns all rows from 100 to 110.</jc>		
+	|	List&lt;MyBean&gt; <jv>result</jv> = <jv>paginator</jv>.run(<jv>arrayOfBeans</jv>, 100, 10);  
+	</p>
+	<p>
+		The tool can be used against the following data types:
+	</p>
+	<ul>
+		<li>Arrays/collections of maps or beans.
+	</ul>
+	<ul class='notes'>
+		<li class='note'>This class is used in the {@link oajr.converter.Queryable} REST response converter.
+	</ul>
+
 	<h5 class='topic'>ObjectIntrospector</h5>
+	<p>
+		The {@link oaj.objecttools.ObjectIntrospector} class is used to invoke methods on {@code Objects} using arguments in serialized form.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+	|	String <jv>string1</jv> = <js>"foobar"</js>;
+	|	String <jv>string2</jv> = ObjectIntrospector
+	|		.create(<jv>string</jv>)
+	|		.invoke(String.<jk>class</jk>, <js>"substring(int,int)"</js>, <js>"[3,6]"</js>);  <jc>// "bar"</jc>
+	</p>
+	<p>
+		The arguments passed to the identified method are POJOs serialized in JSON format.  Arbitrarily complex arguments can be passed
+		in as arguments.
+	</p>
+	<ul class='notes'>
+		<li class='note'>This class is used in the {@link oajr.converter.Introspectable} REST response converter.
+		<li class='warn'>This is an extremely powerful but potentially dangerous tool.  Use wisely.
+	</ul>
+	
 	<h5 class='topic'>ObjectMerger</h5>
+	<p>
+		The {@link oaj.objecttools.ObjectMerger} class is used for merging POJOs behind a single interface.
+		This is particularly useful in cases where you want to define beans with 'default' values.
+	</p>
+	<p>
+		For example, given the following bean classes:
+	</p>
+
+	<p class='bjava'>
+	|	<jk>public interface</jk> IA {
+	|		String getX();
+	|		<jk>void</jk> setX(String <jv>x</jv>);
+	|	}
+	|
+	|	<jk>public class</jk> A <jk>implements</jk> IA {
+	|		<jk>private</jk> String <jf>x</jf>;
+	|
+	|		<jk>public</jk> A(String <jv>x</jv>) {
+	|			<jk>this</jk>.<jf>x</jf> = <jv>x</jv>;
+	|		}
+	|
+	|		<jk>public</jk> String getX() {
+	|			<jk>return</jk> <jf>x</jf>;
+	|		}
+	|
+	|		<jk>public void</jk> setX(String <jv>x</jv>) {
+	|			<jk>this</jk>.<jf>x</jf> = <jv>x</jv>;
+	|		}
+	|	}
+	</p>
+	<p>
+		The getters will be called in order until the first non-null value is returned:
+ 	</p>
+	<p class='bjava'>
+	|	<jv>merge</jv> = ObjectMerger.<jsm>merger</jsm>(IA.<jk>class</jk>, <jk>new</jk> A(<js>"1"</js>), <jk>new</jk> A(<js>"2"</js>));
+	|	<jsm>assertEquals</jsm>(<js>"1"</js>, <jv>merge</jv>.getX());
+	|
+	|	<jv>merge</jv> = ObjectMerger.<jsm>merger</jsm>(IA.<jk>class</jk>, <jk>new</jk> A(<jk>null</jk>), <jk>new</jk> A(<js>"2"</js>));
+	|	<jsm>assertEquals</jsm>(<js>"2"</js>, <jv>merge</jv>.getX());
+	|
+	|	<jv>merge</jv> = ObjectMerger.<jsm>merger</jsm>(IA.<jk>class</jk>, <jk>new</jk> A(<jk>null</jk>), <jk>new</jk> A(<jk>null</jk>));
+	|	<jsm>assertEquals</jsm>(<jk>null</jk>, <jv>merge</jv>.getX());
+	</p>
+	
 </div>

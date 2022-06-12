@@ -21,10 +21,27 @@ import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Designed to provide paging on POJOs consisting of arrays and collections.
+ * POJO model viewer.
  *
  * <p>
- * Allows you to quickly return subsets of arrays and collections based on position/limit arguments.
+ * 	This class is designed to extract properties from collections of maps or beans.
+ * </p>
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	MyBean[] <jv>arrayOfBeans</jv> = ...;
+ * 	ObjectViewer <jv>viewer</jv> = ObjectViewer.<jsm>create</jsm>();
+ *
+ * 	<jc>// Returns the 'foo' and 'bar' properties extracted into a list of maps.</jc>
+ * 	List&lt;Map&gt; <jv>result</jv> = <jv>viewer</jv>.run(<jv>arrayOfBeans</jv>, <js>"foo,bar"</js>);
+ * </p>
+ * <p>
+ * 	The tool can be used against the following data types:
+ * </p>
+ * <ul>
+ * 	<li>Arrays/collections of maps or beans.
+ * 	<li>Singular maps or beans.
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.ObjectTools}

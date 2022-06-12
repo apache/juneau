@@ -20,7 +20,11 @@ import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 
 /**
- * Used to invoke methods on {@code Objects} using arguments in serialized form.
+ * POJO method introspector.
+ *
+ * <p>
+ * 	This class is used to invoke methods on {@code Objects} using arguments in serialized form.
+ * </p>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -29,6 +33,13 @@ import org.apache.juneau.reflect.*;
  * 		.create(<jv>string</jv>)
  * 		.invoke(String.<jk>class</jk>, <js>"substring(int,int)"</js>, <js>"[3,6]"</js>);  <jc>// "bar"</jc>
  * </p>
+ * <p>
+ * 	The arguments passed to the identified method are POJOs serialized in JSON format.  Arbitrarily complex arguments can be passed
+ * 	in as arguments.
+ * </p>
+ * <ul>
+ * 	<li class='warn'>This is an extremely powerful but potentially dangerous tool.  Use wisely.
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}

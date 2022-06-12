@@ -21,10 +21,10 @@ import java.util.*;
 import org.apache.juneau.*;
 
 /**
- * Provides searches against arrays and collections of maps and beans.
+ * POJO model searcher.
  *
  * <p>
- * 	The {@link ObjectSearcher} class is designed to provide searches across arrays and collections of beans and maps.
+ * 	This class is designed to provide searches across arrays and collections of maps or beans.
  * 	It allows you to quickly filter beans and maps using simple yet sophisticated search arguments.
  * </p>
  *
@@ -33,22 +33,63 @@ import org.apache.juneau.*;
  * 	MyBean[] <jv>arrayOfBeans</jv> = ...;
  * 	ObjectSearcher <jv>searcher</jv> = ObjectSearcher.<jsm>create</jsm>();
  *
- * 	BeanSession <jv>beanSession</jv> = BeanContext.<jsf>DEFAULT</jsf>.createSession();
- *
- * 	<jc>// Find beans whose 'foo' property is 'bar'.</jc>
- * 	SearchArgs <jv>searchArgs</jv> = SearchArgs.create("foo=X,bar=Y");
- *
  * 	<jc>// Returns a list of beans whose 'foo' property is 'X' and 'bar' property is 'Y'.</jc>
- * 	Object <jv>result</jv> = searcher.run(<jv>beanSession</jv>, <jv>arrayOfBeans</jv>, <jv>searchArgs</jv>);
+ * 	List&lt;MyBean&gt; <jv>result</jv> = <jv>searcher</jv>.run(<jv>arrayOfBeans</jv>, <js>"foo=X,bar=Y"</js>);
  * </p>
  * <p>
- * 	The default searcher is configured with the following matcher factories that provides the capabilities of matching
- * 	against various data types:
+ * 	The tool can be used against the following data types:
  * </p>
- * <ul class='javatreec'>
+ * <ul>
+ * 	<li>Arrays/collections of maps or beans.
+ * </ul>
+ * <p>
+ * 	The default searcher is configured with the following matcher factories that provides the capabilities of matching
+ * 	against various data types.  This list is extensible:
+ * </p>
+ * 	<ul class='javatreec'>
  * 	<li class='jc'>{@link StringMatcherFactory}
  * 	<li class='jc'>{@link NumberMatcherFactory}
  * 	<li class='jc'>{@link TimeMatcherFactory}
+ * </ul>
+ * <p>
+ * 	The {@link StringMatcherFactory} class provides searching based on the following patterns:
+ * </p>
+ * <ul>
+ * 	<li><js>"property=foo"</js> - Simple full word match
+ * 	<li><js>"property=fo*"</js>, <js>"property=?ar"</js> - Meta-character matching
+ * 	<li><js>"property=foo bar"</js>(implicit), <js>"property=^foo ^bar"</js>(explicit) - Multiple OR'ed patterns
+ * 	<li><js>"property=+fo* +*ar"</js> - Multiple AND'ed patterns
+ * 	<li><js>"property=fo* -bar"</js> - Negative patterns
+ * 	<li><js>"property='foo bar'"</js> - Patterns with whitespace
+ * 	<li><js>"property=foo\\'bar"</js> - Patterns with single-quotes
+ * 	<li><js>"property=/foo\\s+bar"</js> - Regular expression match
+ * </ul>
+ * <p>
+ * 	The {@link NumberMatcherFactory} class provides searching based on the following patterns:
+ * </p>
+ * <ul>
+ * 	<li><js>"property=1"</js> - A single number
+ * 	<li><js>"property=1 2"</js> - Multiple OR'ed numbers
+ * 	<li><js>"property=-1 -2"</js> - Multiple OR'ed negative numbers
+ * 	<li><js>"property=1-2"</js>,<js>"property=-2--1"</js>  - A range of numbers (whitespace ignored)
+ * 	<li><js>"property=1-2 4-5"</js> - Multiple OR'ed ranges
+ * 	<li><js>"property=&lt;1"</js>,<js>"property=&lt;=1"</js>,<js>"property=&gt;1"</js>,<js>"property=&gt;=1"</js> - Open-ended ranges
+ * 	<li><js>"property=!1"</js>,<js>"property=!1-2"</js> - Negation
+ * </ul>
+ * <p>
+ * 	The {@link TimeMatcherFactory} class provides searching based on the following patterns:
+ * </p>
+ * <ul>
+ * 	<li><js>"property=2011"</js> - A single year
+ * 	<li><js>"property=2011 2013 2015"</js> - Multiple years
+ * 	<li><js>"property=2011-01"</js> - A single month
+ * 	<li><js>"property=2011-01-01"</js> - A single day
+ * 	<li><js>"property=2011-01-01T12"</js> - A single hour
+ * 	<li><js>"property=2011-01-01T12:30"</js> - A single minute
+ * 	<li><js>"property=2011-01-01T12:30:45"</js> - A single second
+ * 	<li><js>"property=&gt;2011"</js>,<js>"property=&gt;=2011"</js>,<js>"property=&lt;2011"</js>,<js>"property=&lt;=2011"</js> - Open-ended ranges
+ * 	<li><js>"property=&gt;2011"</js>,<js>"property=&gt;=2011"</js>,<js>"property=&lt;2011"</js>,<js>"property=&lt;=2011"</js> - Open-ended ranges
+ * 	<li><js>"property=2011 - 2013-06-30"</js> - Closed ranges
  * </ul>
  *
  * <ul class='seealso'>
@@ -110,6 +151,7 @@ public final class ObjectSearcher implements ObjectTool<SearchArgs> {
 	/**
 	 * Convenience method for executing the searcher.
 	 *
+	 * @param <R> The return type.
 	 * @param input The input.
 	 * @param searchArgs The search arguments.  See {@link SearchArgs} for format.
 	 * @return A list of maps/beans matching the

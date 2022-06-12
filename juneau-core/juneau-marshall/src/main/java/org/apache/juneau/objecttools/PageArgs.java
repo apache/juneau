@@ -13,7 +13,7 @@
 package org.apache.juneau.objecttools;
 
 /**
- * TODO
+ * Arguments passed to {@link ObjectPaginator}.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.ObjectTools}
