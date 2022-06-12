@@ -13,6 +13,7 @@
 package org.apache.juneau.objecttools;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
 
@@ -26,6 +27,34 @@ import java.util.*;
  */
 public class ViewArgs {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Static creator.
+	 *
+	 * @param args Comma-delimited list of view arguments.
+	 * @return A new {@link ViewArgs} object.
+	 */
+	public static ViewArgs create(String args) {
+		return new ViewArgs(args);
+	}
+
+	/**
+	 * Static creator.
+	 *
+	 * @param args List of view arguments.
+	 * @return A new {@link ViewArgs} object.
+	 */
+	public static ViewArgs create(List<String> args) {
+		return new ViewArgs(args);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private final List<String> view;
 
 	/**
@@ -35,8 +64,8 @@ public class ViewArgs {
 	 * 	View arguments.
 	 * 	<br>Values are column names.
 	 */
-	public ViewArgs(String...viewArgs) {
-		this(alist(viewArgs));
+	public ViewArgs(String viewArgs) {
+		this(alist(split(viewArgs)));
 	}
 
 	/**

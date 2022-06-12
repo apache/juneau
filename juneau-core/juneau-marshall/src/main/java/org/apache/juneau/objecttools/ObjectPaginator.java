@@ -12,6 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.objecttools;
 
+import static java.util.Arrays.*;
+
+import java.lang.reflect.*;
+import java.util.*;
+
 import org.apache.juneau.*;
 
 /**
@@ -25,7 +30,7 @@ import org.apache.juneau.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public final class ObjectPaginator implements ObjectTool<Object> {
+public final class ObjectPaginator implements ObjectTool<PageArgs> {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -43,50 +48,66 @@ public final class ObjectPaginator implements ObjectTool<Object> {
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* ObjectTool */
-	public Object run(BeanSession session, Object input, Object args) {
+	/**
+	 * Convenience method for executing the paginator.
+	 *
+	 * @param <R> The collection element type.
+	 * @param input The input.  Must be a collection or array of objects.
+	 * @param pos The zero-index position to start from.
+	 * @param limit The max number of entries to retrieve.
+	 * @return A sublist of representing the entries from the position with the specified limit.
+	 */
+	@SuppressWarnings("unchecked")
+	public <R> List<R> run(Object input, int pos, int limit) {
+		BeanSession bs = BeanContext.DEFAULT_SESSION;
+		Object r = run(BeanContext.DEFAULT_SESSION, input, PageArgs.create(pos, limit));
+		if (r instanceof List)
+			return (List<R>)r;
+		return bs.convertToType(r, List.class);
+	}
 
-//		if (input == null)
-//			return null;
-//
-//		ClassMeta type = session.getClassMetaForObject(input);
-//
-//		if (! type.isCollectionOrArray())
-//			return input;
-//
-//		int pos = args.getPosition();
-//		int limit = args.getLimit();
-//
-//		if (type.isArray()) {
-//			int size = Array.getLength(input);
-//			int end = (limit+pos >= size) ? size : limit + pos;
-//			pos = Math.min(pos, size);
-//			ClassMeta<?> et = type.getElementType();
-// 			if (! et.isPrimitive())
-//				return copyOfRange((Object[])input, pos, end);
-//			if (et.isType(boolean.class))
-//				return copyOfRange((boolean[])input, pos, end);
-//			if (et.isType(byte.class))
-//				return copyOfRange((byte[])input, pos, end);
-//			if (et.isType(char.class))
-//				return copyOfRange((char[])input, pos, end);
-//			if (et.isType(double.class))
-//				return copyOfRange((double[])input, pos, end);
-//			if (et.isType(float.class))
-//				return copyOfRange((float[])input, pos, end);
-//			if (et.isType(int.class))
-//				return copyOfRange((int[])input, pos, end);
-//			if (et.isType(long.class))
-//				return copyOfRange((long[])input, pos, end);
-//			if (et.isType(short.class))
-//				return copyOfRange((short[])input, pos, end);
-//			return null;
-//		}
-//
-//		List l = type.isList() ? (List)input : new ArrayList((Collection)input);
-//		int end = (limit+pos >= l.size()) ? l.size() : limit + pos;
-//		pos = Math.min(pos, l.size());
-//		return l.subList(pos, end);
-		return null;
+	@Override /* ObjectTool */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public Object run(BeanSession session, Object input, PageArgs args) {
+
+		if (input == null)
+			return null;
+
+		ClassMeta type = session.getClassMetaForObject(input);
+
+		if (! type.isCollectionOrArray())
+			return input;
+
+		int pos = args.getPosition();
+		int limit = args.getLimit();
+
+		if (type.isArray()) {
+			int size = Array.getLength(input);
+			int end = (limit+pos >= size) ? size : limit + pos;
+			pos = Math.min(pos, size);
+			ClassMeta<?> et = type.getElementType();
+ 			if (! et.isPrimitive())
+				return copyOfRange((Object[])input, pos, end);
+			if (et.is(boolean.class))
+				return copyOfRange((boolean[])input, pos, end);
+			if (et.is(byte.class))
+				return copyOfRange((byte[])input, pos, end);
+			if (et.is(char.class))
+				return copyOfRange((char[])input, pos, end);
+			if (et.is(double.class))
+				return copyOfRange((double[])input, pos, end);
+			if (et.is(float.class))
+				return copyOfRange((float[])input, pos, end);
+			if (et.is(int.class))
+				return copyOfRange((int[])input, pos, end);
+			if (et.is(long.class))
+				return copyOfRange((long[])input, pos, end);
+			return copyOfRange((short[])input, pos, end);
+		}
+
+		List l = type.isList() ? (List)input : new ArrayList((Collection)input);
+		int end = (limit+pos >= l.size()) ? l.size() : limit + pos;
+		pos = Math.min(pos, l.size());
+		return l.subList(pos, end);
 	}
 }

@@ -759,9 +759,12 @@ public class BeanSession extends ContextSession {
 					Collection l = to.canCreateNewInstance(outer) ? (Collection)to.newInstance(outer) : to.isSet() ? set() : new JsonList(this);
 					ClassMeta elementType = to.getElementType();
 
-					if (from.isArray())
-						for (Object o : (Object[])value)
+					if (from.isArray()) {
+						for (int i = 0; i < Array.getLength(value); i++) {
+							Object o = Array.get(value, i);
 							l.add(elementType.isObject() ? o : convertToMemberType(l, o, elementType));
+						}
+					}
 					else if (from.isCollection())
 						((Collection)value).forEach(x -> l.add(elementType.isObject() ? x : convertToMemberType(l, x, elementType)));
 					else if (from.isMap())

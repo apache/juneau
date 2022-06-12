@@ -21,10 +21,35 @@ import java.util.*;
 import org.apache.juneau.*;
 
 /**
- * Designed to provide paging on POJOs consisting of arrays and collections.
+ * Provides searches against arrays and collections of maps and beans.
  *
  * <p>
- * Allows you to quickly return subsets of arrays and collections based on position/limit arguments.
+ * 	The {@link ObjectSearcher} class is designed to provide searches across arrays and collections of beans and maps.
+ * 	It allows you to quickly filter beans and maps using simple yet sophisticated search arguments.
+ * </p>
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	MyBean[] <jv>arrayOfBeans</jv> = ...;
+ * 	ObjectSearcher <jv>searcher</jv> = ObjectSearcher.<jsm>create</jsm>();
+ *
+ * 	BeanSession <jv>beanSession</jv> = BeanContext.<jsf>DEFAULT</jsf>.createSession();
+ *
+ * 	<jc>// Find beans whose 'foo' property is 'bar'.</jc>
+ * 	SearchArgs <jv>searchArgs</jv> = SearchArgs.create("foo=X,bar=Y");
+ *
+ * 	<jc>// Returns a list of beans whose 'foo' property is 'X' and 'bar' property is 'Y'.</jc>
+ * 	Object <jv>result</jv> = searcher.run(<jv>beanSession</jv>, <jv>arrayOfBeans</jv>, <jv>searchArgs</jv>);
+ * </p>
+ * <p>
+ * 	The default searcher is configured with the following matcher factories that provides the capabilities of matching
+ * 	against various data types:
+ * </p>
+ * <ul class='javatreec'>
+ * 	<li class='jc'>{@link StringMatcherFactory}
+ * 	<li class='jc'>{@link NumberMatcherFactory}
+ * 	<li class='jc'>{@link TimeMatcherFactory}
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.ObjectTools}
@@ -50,9 +75,9 @@ public final class ObjectSearcher implements ObjectTool<SearchArgs> {
 	 * 	The matcher factories to use.
 	 * 	<br>If not specified, uses the following:
 	 * 	<ul>
+	 * 		<li>{@link StringMatcherFactory#DEFAULT}
 	 * 		<li>{@link NumberMatcherFactory#DEFAULT}
 	 * 		<li>{@link TimeMatcherFactory#DEFAULT}
-	 * 		<li>{@link StringMatcherFactory#DEFAULT}
 	 * 	</ul>
 	 * @return A new {@link ObjectSearcher} object.
 	 */
@@ -80,6 +105,25 @@ public final class ObjectSearcher implements ObjectTool<SearchArgs> {
 	 */
 	public ObjectSearcher(MatcherFactory...factories) {
 		this.factories = factories.length == 0 ? new MatcherFactory[]{NumberMatcherFactory.DEFAULT, TimeMatcherFactory.DEFAULT, StringMatcherFactory.DEFAULT} : factories;
+	}
+
+	/**
+	 * Convenience method for executing the searcher.
+	 *
+	 * @param input The input.
+	 * @param searchArgs The search arguments.  See {@link SearchArgs} for format.
+	 * @return A list of maps/beans matching the
+	 */
+	@SuppressWarnings("unchecked")
+	public <R> List<R> run(Object input, String searchArgs) {
+		Object r = run(BeanContext.DEFAULT_SESSION, input, SearchArgs.create(searchArgs));
+		if (r instanceof List)
+			return (List<R>)r;
+		if (r instanceof Collection)
+			return new ArrayList<R>((Collection)r);
+		if (r.getClass().isArray())
+			return Arrays.asList((R[])r);
+		return null;
 	}
 
 	@Override /* ObjectTool */

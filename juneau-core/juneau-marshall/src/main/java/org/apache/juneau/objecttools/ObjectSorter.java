@@ -23,6 +23,23 @@ import org.apache.juneau.internal.*;
 /**
  * Sorts arrays and collections of maps and beans.
  *
+ * <p>
+ * 	The {@link ObjectSorter} class is designed to sort arrays and collections of beans and maps.
+ * </p>
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	MyBean[] <jv>arrayOfBeans</jv> = ...;
+ * 	ObjectSorter <jv>sorter</jv> = ObjectSorter.<jsm>create</jsm>();
+ *
+ * 	BeanSession <jv>beanSession</jv> = BeanContext.<jsf>DEFAULT</jsf>.createSession();
+ *
+ * 	<jc>// Sort beans by foo ascending then bar descending.</jc>
+ * 	SortArgs <jv>sortArgs</jv> = SortArgs.create("foo,bar-");
+ *
+ * 	<jc>// Returns a list of beans sorted accordingly.</jc>
+ * 	Object <jv>result</jv> = sorter.run(<jv>beanSession</jv>, <jv>arrayOfBeans</jv>, <jv>sortArgs</jv>);
+ * </p>
+ *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.ObjectTools}
  * 	<li class='extlink'>{@source}
@@ -52,6 +69,24 @@ public final class ObjectSorter implements ObjectTool<SortArgs> {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Convenience method for executing the sorter.
+	 *
+	 * @param input The input.
+	 * @param sortArgs The sort arguments.  See {@link SortArgs} for format.
+	 * @return A list of maps/beans matching the
+	 */
+	public <R> List<R> run(Object input, String sortArgs) {
+		Object r = run(BeanContext.DEFAULT_SESSION, input, SortArgs.create(sortArgs));
+		if (r instanceof List)
+			return (List<R>)r;
+		if (r instanceof Collection)
+			return new ArrayList<R>((Collection)r);
+		if (r.getClass().isArray())
+			return Arrays.asList((R[])r);
+		return null;
+	}
 
 	@Override /* ObjectTool */
 	public Object run(BeanSession session, Object input, SortArgs args) {

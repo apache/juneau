@@ -27,10 +27,29 @@ import java.util.*;
  */
 public class SortArgs {
 
-	private final Map<String,Boolean> sort;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Constructor.
+	 * Static creator.
+	 *
+	 * @param sortArgs
+	 * 	Comma-delimited list of sort arguments.
+	 * 	<br>Values are of the following forms:
+	 * 	<ul>
+	 * 		<li><js>"column"</js> - Sort column ascending.
+	 * 		<li><js>"column+"</js> - Sort column ascending.
+	 * 		<li><js>"column-"</js> - Sort column descending.
+	 * 	</ul>
+	 * @return A new {@link SortArgs} object.
+	 */
+	public static SortArgs create(String sortArgs) {
+		return new SortArgs(sortArgs);
+	}
+
+	/**
+	 * Static creator.
 	 *
 	 * @param sortArgs
 	 * 	Sort arguments.
@@ -40,9 +59,32 @@ public class SortArgs {
 	 * 		<li><js>"column+"</js> - Sort column ascending.
 	 * 		<li><js>"column-"</js> - Sort column descending.
 	 * 	</ul>
+	 * @return A new {@link SortArgs} object.
 	 */
-	public SortArgs(String...sortArgs) {
-		this(alist(sortArgs));
+	public static SortArgs create(List<String> sortArgs) {
+		return new SortArgs(sortArgs);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final Map<String,Boolean> sort;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param sortArgs
+	 * 	Comma-delimited list of sort arguments.
+	 * 	<br>Values are of the following forms:
+	 * 	<ul>
+	 * 		<li><js>"column"</js> - Sort column ascending.
+	 * 		<li><js>"column+"</js> - Sort column ascending.
+	 * 		<li><js>"column-"</js> - Sort column descending.
+	 * 	</ul>
+	 */
+	public SortArgs(String sortArgs) {
+		this(alist(split(sortArgs)));
 	}
 
 	/**

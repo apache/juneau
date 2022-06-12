@@ -23,7 +23,23 @@ import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
- * TODO
+ * Provides date search capability for the {@link ObjectSearcher} class.
+ *
+ * <p>
+ * 	The class provides searching based on the following patterns:
+ * </p>
+ * <ul>
+ * 	<li><js>"property=2011"</js> - A single year
+ * 	<li><js>"property=2011 2013 2015"</js> - Multiple years
+ * 	<li><js>"property=2011-01"</js> - A single month
+ * 	<li><js>"property=2011-01-01"</js> - A single day
+ * 	<li><js>"property=2011-01-01T12"</js> - A single hour
+ * 	<li><js>"property=2011-01-01T12:30"</js> - A single minute
+ * 	<li><js>"property=2011-01-01T12:30:45"</js> - A single second
+ * 	<li><js>"property=&gt;2011"</js>,<js>"property=&gt;=2011"</js>,<js>"property=&lt;2011"</js>,<js>"property=&lt;=2011"</js> - Open-ended ranges
+ * 	<li><js>"property=&gt;2011"</js>,<js>"property=&gt;=2011"</js>,<js>"property=&lt;2011"</js>,<js>"property=&lt;=2011"</js> - Open-ended ranges
+ * 	<li><js>"property=2011 - 2013-06-30"</js> - Closed ranges
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.ObjectTools}

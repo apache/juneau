@@ -56,6 +56,28 @@ public final class ObjectViewer implements ObjectTool<ViewArgs> {
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Runs this viewer on the specified collection or array of objects.
+	 *
+	 * @param input The input.  Must be an array or collection.
+	 * @param args The view args.  See {@link ViewArgs} for format.
+	 * @return The extracted properties from the collection of objects.
+	 */
+	public List<Map> run(Object input, String args) {
+		return (List<Map>)run(BeanContext.DEFAULT_SESSION, input, ViewArgs.create(args));
+	}
+
+	/**
+	 * Runs this viewer on a singleton object.
+	 *
+	 * @param input The input.  Must be a singleton object.
+	 * @param args The view args.  See {@link ViewArgs} for format.
+	 * @return The extracted properties from the object.
+	 */
+	public Map runSingle(Object input, String args) {
+		return (Map)run(BeanContext.DEFAULT_SESSION, input, ViewArgs.create(args));
+	}
+
 	@Override /* ObjectTool */
 	public Object run(BeanSession session, Object input, ViewArgs args) {
 

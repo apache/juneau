@@ -20,7 +20,20 @@ import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Number matcher used by {@link ObjectSearcher}
+ * Provides number search capability for the {@link ObjectSearcher} class.
+ *
+ * <p>
+ * 	The class provides searching based on the following patterns:
+ * </p>
+ * <ul>
+ * 	<li><js>"property=1"</js> - A single number
+ * 	<li><js>"property=1 2"</js> - Multiple OR'ed numbers
+ * 	<li><js>"property=-1 -2"</js> - Multiple OR'ed negative numbers
+ * 	<li><js>"property=1-2"</js>,<js>"property=-2--1"</js>  - A range of numbers (whitespace ignored)
+ * 	<li><js>"property=1-2 4-5"</js> - Multiple OR'ed ranges
+ * 	<li><js>"property=&lt;1"</js>,<js>"property=&lt;=1"</js>,<js>"property=&gt;1"</js>,<js>"property=&gt;=1"</js> - Open-ended ranges
+ * 	<li><js>"property=!1"</js>,<js>"property=!1-2"</js> - Negation
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.ObjectTools}

@@ -27,13 +27,13 @@ import org.junit.*;
 
 @SuppressWarnings({"unchecked","rawtypes","serial"})
 @FixMethodOrder(NAME_ASCENDING)
-public class ObjectRestTest {
+public class ObjectRest_Test {
 
 	//====================================================================================================
 	// testBasic
 	//====================================================================================================
 	@Test
-	public void testBasic() {
+	public void a01_basic() {
 
 		// TODO: Need to write some exhaustive tests here. Will open work item
 		// to do that later.
@@ -63,7 +63,7 @@ public class ObjectRestTest {
 	// testBeans
 	//====================================================================================================
 	@Test
-	public void testBeans() throws Exception {
+	public void b01_beans() throws Exception {
 		ObjectRest model;
 
 		// Java beans.
@@ -195,7 +195,7 @@ public class ObjectRestTest {
 	// testAddressBook
 	//====================================================================================================
 	@Test
-	public void testAddressBook() {
+	public void b02_addressBook() {
 		ObjectRest model;
 
 		model = ObjectRest.create(new AddressBook());
@@ -271,7 +271,7 @@ public class ObjectRestTest {
 	// PojoRest(Object,ReaderParser)
 	//====================================================================================================
 	@Test
-	public void testConstructors() throws Exception {
+	public void c01_constructors() throws Exception {
 		ObjectRest model = ObjectRest.create(new AddressBook(), JsonParser.DEFAULT);
 
 		// Try adding a person to the address book.
@@ -289,7 +289,7 @@ public class ObjectRestTest {
 	// setRootLocked()
 	//====================================================================================================
 	@Test
-	public void testRootLocked() throws Exception {
+	public void d01_rootLocked() throws Exception {
 		ObjectRest model = ObjectRest.create(new AddressBook()).setRootLocked();
 		assertThrown(()->model.put("", new AddressBook())).asMessage().is("Cannot overwrite root object");
 		assertThrown(()->model.put(null, new AddressBook())).asMessage().is("Cannot overwrite root object");
@@ -300,7 +300,7 @@ public class ObjectRestTest {
 	// getRootObject()
 	//====================================================================================================
 	@Test
-	public void testGetRootObject() throws Exception {
+	public void e01_getRootObject() throws Exception {
 		ObjectRest model = ObjectRest.create(new AddressBook());
 		assertTrue(model.getRootObject() instanceof AddressBook);
 		model.put("", "foobar");
@@ -330,7 +330,7 @@ public class ObjectRestTest {
 	// getJsonList(String url, JsonList defVal)
 	//====================================================================================================
 	@Test
-	public void testGetMethods() throws Exception {
+	public void f01_getMethods() throws Exception {
 		ObjectRest model = ObjectRest.create(new A());
 		JsonList l = JsonList.ofJson("[{a:'b'}]");
 		JsonMap m = JsonMap.ofJson("{a:'b'}");
@@ -807,7 +807,7 @@ public class ObjectRestTest {
 	// invokeMethod(String url, String method, String args)
 	//====================================================================================================
 	@Test
-	public void testInvokeMethod() throws Exception {
+	public void f02_invokeMethod() throws Exception {
 
 		ObjectRest model = ObjectRest.create(new AddressBook().init());
 		assertEquals("Person(name=Bill Clinton,age=65)", model.invokeMethod("0", "toString", ""));
@@ -822,7 +822,7 @@ public class ObjectRestTest {
 	// getPublicMethods(String url)
 	//====================================================================================================
 	@Test
-	public void testGetPublicMethods() throws Exception {
+	public void f03_getPublicMethods() throws Exception {
 		ObjectRest model = ObjectRest.create(new AddressBook().init());
 		assertTrue(SimpleJsonSerializer.DEFAULT.toString(model.getPublicMethods("0")).contains("'toString'"));
 		assertTrue(SimpleJsonSerializer.DEFAULT.toString(model.getPublicMethods("0/addresses/0/state")).contains("'toString'"));
@@ -833,7 +833,7 @@ public class ObjectRestTest {
 	// getClassMeta(String url)
 	//====================================================================================================
 	@Test
-	public void testGetClassMeta() throws Exception {
+	public void f04_getClassMeta() throws Exception {
 		ObjectRest model = ObjectRest.create(new AddressBook().init());
 		assertEquals("Person", model.getClassMeta("0").getInnerClass().getSimpleName());
 		assertEquals("String", model.getClassMeta("0/addresses/0/state").getInnerClass().getSimpleName());

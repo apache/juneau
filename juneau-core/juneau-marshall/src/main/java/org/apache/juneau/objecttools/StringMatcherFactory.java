@@ -21,7 +21,21 @@ import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 
 /**
- * TODO
+ * Provides string search capability for the {@link ObjectSearcher} class.
+ *
+ * <p>
+ * 	The class provides searching based on the following patterns:
+ * </p>
+ * <ul>
+ * 	<li><js>"property=foo"</js> - Simple full word match
+ * 	<li><js>"property=fo*"</js>, <js>"property=?ar"</js> - Meta-character matching
+ * 	<li><js>"property=foo bar"</js>(implicit), <js>"property=^foo ^bar"</js>(explicit) - Multiple OR'ed patterns
+ * 	<li><js>"property=+fo* +*ar"</js> - Multiple AND'ed patterns
+ * 	<li><js>"property=fo* -bar"</js> - Negative patterns
+ * 	<li><js>"property='foo bar'"</js> - Patterns with whitespace
+ * 	<li><js>"property=foo\\'bar"</js> - Patterns with single-quotes
+ * 	<li><js>"property=/foo\\s+bar"</js> - Regular expression match
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.ObjectTools}

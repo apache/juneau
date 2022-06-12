@@ -20,7 +20,7 @@ import java.util.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Encapsulates arguments for the {@link ObjectSorter} class.
+ * Encapsulates arguments for the {@link ObjectSearcher} class.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.ObjectTools}
@@ -29,8 +29,35 @@ import org.apache.juneau.internal.*;
  */
 public class SearchArgs {
 
-	private final Map<String,String> search = map();
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Static creator.
+	 *
+	 * @param searchArgs Comma-delimited list of search arguments.
+	 * @return A new {@link SearchArgs} object.
+	 */
+	public static SearchArgs create(String searchArgs) {
+		return new SearchArgs(searchArgs);
+	}
+
+	/**
+	 * Static creator.
+	 *
+	 * @param searchArgs List of search arguments.
+	 * @return A new {@link SearchArgs} object.
+	 */
+	public static SearchArgs create(List<String> searchArgs) {
+		return new SearchArgs(searchArgs);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final Map<String,String> search = map();
 
 	/**
 	 * Constructor.

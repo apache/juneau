@@ -12,77 +12,45 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.objecttools;
 
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import org.junit.*;
 
-/**
- * Test the PojoMerge class.
- */
 @FixMethodOrder(NAME_ASCENDING)
-public class ObjectMergerTest {
+public class ObjectIntrospector_Test {
 
 	//====================================================================================================
-	// Basic tests
+	// testBasic
 	//====================================================================================================
 	@Test
-	public void basicTests() throws Exception {
-		IA a1, a2, am;
+	public void a01_Basic() throws Exception {
+		String in = null;
+		Object r;
 
-		a1 = new A("1"); a2 = new A("2");
-		am = ObjectMerger.merge(IA.class, a1, a2);
-		assertEquals("1", am.getA());
-		am.setA("x");
-		assertEquals("x", am.getA());
-		assertEquals("x", a1.getA());
-		assertEquals("2", a2.getA());
+		r = new ObjectIntrospector(in, null).invokeMethod("substring(int,int)", "[3,6]");
+		assertNull(r);
 
-		a1 = new A("1"); a2 = new A("2");
-		am = ObjectMerger.merge(IA.class, true, a1, a2);
-		assertEquals("1", am.getA());
-		am.setA("x");
-		assertEquals("x", am.getA());
-		assertEquals("x", a1.getA());
-		assertEquals("x", a2.getA());
+		in = "foobar";
+		r = new ObjectIntrospector(in).invokeMethod("substring(int,int)", "[3,6]");
+		assertEquals("bar", r);
 
-		a1 = new A(null); a2 = new A("2");
-		am = ObjectMerger.merge(IA.class, a1, a2);
-		assertEquals("2", am.getA());
-		am.setA("x");
-		assertEquals("x", am.getA());
-		assertEquals("x", a1.getA());
-		assertEquals("2", a2.getA());
+		r = new ObjectIntrospector(in).invokeMethod("toString", null);
+		assertEquals("foobar", r);
 
-		a1 = new A(null); a2 = new A(null);
-		am = ObjectMerger.merge(IA.class, a1, a2);
-		assertEquals(null, am.getA());
+		r = new ObjectIntrospector(in).invokeMethod("toString", "");
+		assertEquals("foobar", r);
 
-		a1 = new A(null); a2 = new A("2");
-		am = ObjectMerger.merge(IA.class, null, a1, null, null, a2, null);
-		assertEquals("2", am.getA());
-	}
+		r = new ObjectIntrospector(in).invokeMethod("toString", "[]");
+		assertEquals("foobar", r);
 
-	public static interface IA {
-		String getA();
-		void setA(String a);
-	}
+		assertThrown(()->new ObjectIntrospector("foobar").invokeMethod("noSuchMethod", "[3,6]")).isType(NoSuchMethodException.class);
 
-	public static class A implements IA {
-		private String a;
+		r = new ObjectIntrospector(null).invokeMethod(String.class.getMethod("toString"), null);
+		assertNull(r);
 
-		public A(String a) {
-			this.a = a;
-		}
-
-		@Override
-		public String getA() {
-			return a;
-		}
-
-		@Override
-		public void setA(String a) {
-			this.a = a;
-		}
+		r = new ObjectIntrospector("foobar").invokeMethod(String.class.getMethod("toString"), null);
+		assertEquals("foobar", r);
 	}
 }

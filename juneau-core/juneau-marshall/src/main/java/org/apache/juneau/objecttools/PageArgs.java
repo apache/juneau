@@ -22,21 +22,54 @@ package org.apache.juneau.objecttools;
  */
 public class PageArgs {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * TODO
+	 * Static creator.
 	 *
-	 * @return TODO
+	 * @param position The zero-indexed position to start the page on.
+	 * @param limit The number of rows to return.
+	 *
+	 * @return A new {@link PageArgs} object.
 	 */
-	public int getLimit() {
-		return 0;
+	public static PageArgs create(int position, int limit) {
+		return new PageArgs(position, limit);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	final int position, limit;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param position The zero-indexed position to start the page on.
+	 * @param limit The number of rows to return.
+	 */
+	public PageArgs(int position, int limit) {
+		this.position = position;
+		this.limit = limit;
 	}
 
 	/**
-	 * TODO
+	 * Returns the number of rows to return.
 	 *
-	 * @return TODO
+	 * @return The number of rows to return.
+	 */
+	public int getLimit() {
+		return limit;
+	}
+
+	/**
+	 * Returns the zero-indexed position to start the page on.
+	 *
+	 * @return The zero-indexed position to start the page on.
 	 */
 	public int getPosition() {
-		return 0;
+		return position;
 	}
 }
