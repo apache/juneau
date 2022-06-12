@@ -227,7 +227,7 @@ public class LinkString implements Comparable<LinkString> {
 
 
 	/**
-	 * Returns the name so that the {@link PojoQuery} class can search against it.
+	 * Returns the name so that the {@link ObjectSearcher} class can search against it.
 	 */
 	@Override /* Object */
 	public String toString() {
