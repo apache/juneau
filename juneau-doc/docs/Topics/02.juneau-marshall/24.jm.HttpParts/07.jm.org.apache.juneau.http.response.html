@@ -79,6 +79,20 @@
 	</ul>	
 	
 	<p>
+		These are built upon existing HttpComponents APIs:
+	</p>
+	<ul class='javatree'>
+		<li class='jic'>{@code org.apache.http.HttpMessage}
+		<ul>
+			<li class='jic'>{@code org.apache.http.HttpResponse}
+			<ul>
+				<li class='jc'>{@link oaj.http.response.BasicHttpResponse} - 100-399 response codes
+				<li class='jc'>{@link oaj.http.response.BasicHttpException} - 400+ response codes
+			</ul>
+		</ul>
+	</ul>
+	
+	<p>
 		The most common location where these responses are used are in REST operation methods described later.
 	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
