@@ -7033,14 +7033,31 @@
 			<li class='jm'>{@link org.apache.juneau.http.entity.HttpEntityBuilder#chunked() chunked()}
 			<li class='jm'>{@link org.apache.juneau.http.entity.HttpEntityBuilder#chunked(boolean) chunked(boolean)}
 			<li class='jm'>{@link org.apache.juneau.http.entity.HttpEntityBuilder#content(Object) content(Object)}
+			<li class='jm'>{@link org.apache.juneau.http.entity.HttpEntityBuilder#content(Supplier) content(Supplier)}
 			<li class='jm'>{@link org.apache.juneau.http.entity.HttpEntityBuilder#contentEncoding(ContentEncoding) contentEncoding(ContentEncoding)}
 			<li class='jm'>{@link org.apache.juneau.http.entity.HttpEntityBuilder#contentEncoding(String) contentEncoding(String)}
 			<li class='jm'>{@link org.apache.juneau.http.entity.HttpEntityBuilder#contentLength(long) contentLength(long)}
-			<li class='jm'>{@link org.apache.juneau.http.entity.HttpEntityBuilder#contentSupplier(Supplier) contentSupplier(Supplier)}
 			<li class='jm'>{@link org.apache.juneau.http.entity.HttpEntityBuilder#contentType(ContentType) contentType(ContentType)}
 			<li class='jm'>{@link org.apache.juneau.http.entity.HttpEntityBuilder#contentType(String) contentType(String)}
 		</ul>
 	</ul>
+	
+	<h5 class='figure'>Example</h5>
+	<p class='bjava'>
+	<jk>import static</jk> org.apache.juneau.http.HttpEntities.*;
+
+	<jk>byte</jk>[] <jv>payload</jv> = {...};
+
+	<jc>// Create via type builder.</jc>
+	HttpEntity <jv>entity</jv> = ByteArrayEntity
+		.<jsm>create</jsm>()
+		.content(<jv>payload</jv>)
+		.contentType(ContentType.<jsf>APPLICATION_OCTET_STREAM</jsf>)
+		.build();
+
+	<jc>// Create via HttpEntities.</jc>
+	HttpEntity <jv>entity</jv> = <jsm>byteArrayEntity</jsm>(<jv>payload</jv>, ContentType.<jsf>APPLICATION_OCTET_STREAM</jsf>).build();
+	</p>
 </div>
 </div><!-- END: 2.24.5 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.entity -->
 
@@ -7082,10 +7099,10 @@
 			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#chunked() chunked()}
 			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#chunked(boolean) chunked(boolean)}
 			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#content(Object) content(Object)}
+			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#content(Supplier) content(Supplier)}
 			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#contentEncoding(ContentEncoding) contentEncoding(ContentEncoding)}
 			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#contentEncoding(String) contentEncoding(String)}
 			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#contentLength(long) contentLength(long)}
-			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#contentSupplier(Supplier) contentSupplier(Supplier)}
 			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#contentType(ContentType) contentType(ContentType)}
 			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#contentType(String) contentType(String)}
 			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#copyFrom(HttpResponse) copyFrom(HttpResponse)}
@@ -7097,6 +7114,26 @@
 			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#headers(HeaderList) headers(HeaderList)}
 			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#headers(List) headers(List&lt;Header&gt;)}
 			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#getHeaders() getHeaders()}
+		</ul>
+	</ul>
+	
+	<h5 class='figure'>Example</h5>
+	<p class='bjava'>
+	<jk>import static</jk> org.apache.juneau.http.HttpResources.*;
+
+	<jk>byte</jk>[] <jv>payload</jv> = {...};
+
+	<jc>// Create via type builder.</jc>
+	HttpResource <jv>resource</jv> = ByteArrayResource
+		.<jsm>create</jsm>()
+		.content(<jv>payload</jv>)
+		.contentType(ContentType.<jsf>APPLICATION_OCTET_STREAM</jsf>)
+		.build();
+
+	<jc>// Create via HttpResources.</jc>
+	HttpResource <jv>resource</jv> = <jsm>byteArrayResource</jsm>(<jv>payload</jv>, ContentType.<jsf>APPLICATION_OCTET_STREAM</jsf>).build();
+	</p>
+	
 </div>
 </div><!-- END: 2.24.6 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.resource -->
 
@@ -7210,8 +7247,8 @@
 	<ul class='javatree'>
 		<li class='jc'>{@link org.apache.juneau.http.response.HttpResponseBuilder}
 		<ul>
-			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#body(HttpEntity) body(HttpEntity)}
-			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#body(String) body(String)}
+			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#content(HttpEntity) content(HttpEntity)}
+			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#content(String) content(String)}
 			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#copyFrom(HttpResponse) copyFrom(HttpResponse)}
 			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#getHeaders() getHeaders()}
 			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#getStatusLine() getStatusLine()}
@@ -7231,6 +7268,7 @@
 			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#unmodifiable() unmodifiable()}
 		</ul>
 	</ul>
+	
 </div>
 </div><!-- END: 2.24.7 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.response -->
 
@@ -16927,7 +16965,7 @@
 	<p>
 		The return type of the Java method can be any serializable POJO as defined in {@doc jm.PojoCategories POJO Categories}.
 		It can also be <jk>void</jk> if the method is not sending any output (e.g. a request redirect) or is 
-		setting the output using the {@link org.apache.juneau.rest.RestResponse#setOutput(Object)} method.
+		setting the output using the {@link org.apache.juneau.rest.RestResponse#setContent(Object)} method.
 	</p>
 	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
@@ -17035,7 +17073,7 @@
 	</p>
 	<ul class='spaced-list'>
 		<li>
-			By calling {@link org.apache.juneau.rest.RestResponse#setOutput(Object)} with any of the types above.
+			By calling {@link org.apache.juneau.rest.RestResponse#setContent(Object)} with any of the types above.
 		<li>
 			By accessing the {@link java.io.Writer} directly by calling 
 			{@link org.apache.juneau.rest.RestResponse#getNegotiatedWriter()} and writing the output yourself.
@@ -17053,7 +17091,7 @@
 	<ja>@RestGet</ja>(<js>"/example2/{personId}"</js>)
 	<jk>public void</jk> doGet2(RestResponse <jv>res</jv>, <ja>@Path</ja>(<js>"personId"</js>) UUID <jv>personId</jv>) {
 		Person <jv>person</jv> = <jsm>getPersonById</jsm>(<jv>personId</jv>);
-		<jv>res</jv>.setOutput(<jv>person</jv>);
+		<jv>res</jv>.setContent(<jv>person</jv>);
 	}
 	</p>
 	<p>
@@ -30472,7 +30510,7 @@
 			</ul>
 		</li>
 		<li>
-			HTTP response content POJOs can now simply be returned from methods instead of calling {@link org.apache.juneau.rest.RestResponse#setOutput(Object)}.		
+			HTTP response content POJOs can now simply be returned from methods instead of calling {@del org.apache.juneau.rest.RestResponse#setOutput(Object)}.		
 		</li>	
 	</ul>
 </div>
