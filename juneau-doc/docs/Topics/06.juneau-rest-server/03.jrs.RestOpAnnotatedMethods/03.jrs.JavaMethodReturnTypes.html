@@ -19,7 +19,7 @@
 	<p>
 		The return type of the Java method can be any serializable POJO as defined in {@doc jm.PojoCategories POJO Categories}.
 		It can also be <jk>void</jk> if the method is not sending any output (e.g. a request redirect) or is 
-		setting the output using the {@link oajr.RestResponse#setOutput(Object)} method.
+		setting the output using the {@link oajr.RestResponse#setContent(Object)} method.
 	</p>
 	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
@@ -127,7 +127,7 @@
 	</p>
 	<ul class='spaced-list'>
 		<li>
-			By calling {@link oajr.RestResponse#setOutput(Object)} with any of the types above.
+			By calling {@link oajr.RestResponse#setContent(Object)} with any of the types above.
 		<li>
 			By accessing the {@link java.io.Writer} directly by calling 
 			{@link oajr.RestResponse#getNegotiatedWriter()} and writing the output yourself.
@@ -145,7 +145,7 @@
 		|	<ja>@RestGet</ja>(<js>"/example2/{personId}"</js>)
 		|	<jk>public void</jk> doGet2(RestResponse <jv>res</jv>, <ja>@Path</ja>(<js>"personId"</js>) UUID <jv>personId</jv>) {
 		|		Person <jv>person</jv> = <jsm>getPersonById</jsm>(<jv>personId</jv>);
-		|		<jv>res</jv>.setOutput(<jv>person</jv>);
+		|		<jv>res</jv>.setContent(<jv>person</jv>);
 		|	}
 	</p>
 	<p>

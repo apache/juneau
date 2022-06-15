@@ -49,10 +49,10 @@
 			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#chunked() chunked()}
 			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#chunked(boolean) chunked(boolean)}
 			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#content(Object) content(Object)}
+			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#content(Supplier) content(Supplier)}
 			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#contentEncoding(ContentEncoding) contentEncoding(ContentEncoding)}
 			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#contentEncoding(String) contentEncoding(String)}
 			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#contentLength(long) contentLength(long)}
-			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#contentSupplier(Supplier) contentSupplier(Supplier)}
 			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#contentType(ContentType) contentType(ContentType)}
 			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#contentType(String) contentType(String)}
 			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#copyFrom(HttpResponse) copyFrom(HttpResponse)}
@@ -64,4 +64,24 @@
 			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#headers(HeaderList) headers(HeaderList)}
 			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#headers(List) headers(List&lt;Header&gt;)}
 			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#getHeaders() getHeaders()}
+		</ul>
+	</ul>
+	
+	<h5 class='figure'>Example</h5>
+	<p class='bjava'>
+	|	<jk>import static</jk> org.apache.juneau.http.HttpResources.*;
+	|
+	|	<jk>byte</jk>[] <jv>payload</jv> = {...};
+	|
+	|	<jc>// Create via type builder.</jc>
+	|	HttpResource <jv>resource</jv> = ByteArrayResource
+	|		.<jsm>create</jsm>()
+	|		.content(<jv>payload</jv>)
+	|		.contentType(ContentType.<jsf>APPLICATION_OCTET_STREAM</jsf>)
+	|		.build();
+	|
+	|	<jc>// Create via HttpResources.</jc>
+	|	HttpResource <jv>resource</jv> = <jsm>byteArrayResource</jsm>(<jv>payload</jv>, ContentType.<jsf>APPLICATION_OCTET_STREAM</jsf>).build();
+	</p>
+	
 </div>
