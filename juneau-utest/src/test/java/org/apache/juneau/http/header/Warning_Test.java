@@ -50,15 +50,15 @@ public class Warning_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(warning(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(warning(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(warning(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(warning(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(warning(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(warning(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(warning(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(warning(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(warning((String)null)).run().assertBody().isEmpty();
-		c.get().header(warning((Supplier<String>)null)).run().assertBody().isEmpty();
-		c.get().header(warning(()->null)).run().assertBody().isEmpty();
+		c.get().header(warning((String)null)).run().assertContent().isEmpty();
+		c.get().header(warning((Supplier<String>)null)).run().assertContent().isEmpty();
+		c.get().header(warning(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

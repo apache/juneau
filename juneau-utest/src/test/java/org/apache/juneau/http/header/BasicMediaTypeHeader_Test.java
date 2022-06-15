@@ -53,14 +53,14 @@ public class BasicMediaTypeHeader_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(mediaTypeHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(mediaTypeHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(mediaTypeHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
-		c.get().header(mediaTypeHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(mediaTypeHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
+		c.get().header(mediaTypeHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
+		c.get().header(mediaTypeHeader(HEADER,PARSED)).run().assertContent().is(VALUE);
+		c.get().header(mediaTypeHeader(HEADER,()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(mediaTypeHeader(HEADER,(Supplier<MediaType>)null)).run().assertBody().isEmpty();
-		c.get().header(mediaTypeHeader(HEADER,()->null)).run().assertBody().isEmpty();
+		c.get().header(mediaTypeHeader(HEADER,(Supplier<MediaType>)null)).run().assertContent().isEmpty();
+		c.get().header(mediaTypeHeader(HEADER,()->null)).run().assertContent().isEmpty();
 		assertThrown(()->mediaTypeHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
 		assertThrown(()->mediaTypeHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
 		assertThrown(()->mediaTypeHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");

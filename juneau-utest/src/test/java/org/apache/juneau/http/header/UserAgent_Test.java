@@ -50,15 +50,15 @@ public class UserAgent_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(userAgent(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(userAgent(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(userAgent(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(userAgent(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(userAgent(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(userAgent(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(userAgent(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(userAgent(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(userAgent((String)null)).run().assertBody().isContains("Apache");
-		c.get().header(userAgent((Supplier<String>)null)).run().assertBody().isContains("Apache");
-		c.get().header(userAgent(()->null)).run().assertBody().isContains("Apache");
+		c.get().header(userAgent((String)null)).run().assertContent().isContains("Apache");
+		c.get().header(userAgent((Supplier<String>)null)).run().assertContent().isContains("Apache");
+		c.get().header(userAgent(()->null)).run().assertContent().isContains("Apache");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

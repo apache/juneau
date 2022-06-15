@@ -50,15 +50,15 @@ public class Range_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(range(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(range(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(range(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(range(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(range(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(range(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(range(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(range(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(range((String)null)).run().assertBody().isEmpty();
-		c.get().header(range((Supplier<String>)null)).run().assertBody().isEmpty();
-		c.get().header(range(()->null)).run().assertBody().isEmpty();
+		c.get().header(range((String)null)).run().assertContent().isEmpty();
+		c.get().header(range((Supplier<String>)null)).run().assertContent().isEmpty();
+		c.get().header(range(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

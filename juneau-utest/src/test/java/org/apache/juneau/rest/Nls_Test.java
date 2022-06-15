@@ -59,8 +59,8 @@ public class Nls_Test {
 	@Test
 	public void a01_basic() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
-		a.get("/a").run().assertBody().is("value1");
-		a.get("/b").run().assertBody().is("value2");
+		a.get("/a").run().assertContent().is("value1");
+		a.get("/b").run().assertContent().is("value2");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -79,7 +79,7 @@ public class Nls_Test {
 	@Test
 	public void b01_optionsPageWithoutNls() throws Exception {
 		MockRestClient b = MockRestClient.build(B.class);
-		b.options("/").run().assertBody().isContains("foo");
+		b.options("/").run().assertContent().isContains("foo");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -98,6 +98,6 @@ public class Nls_Test {
 	@Test
 	public void c01_missingResourceBundle() throws Exception {
 		MockRestClient c = MockRestClient.build(C.class);
-		c.get("/a").run().assertBody().is("{!bad}");
+		c.get("/a").run().assertContent().is("{!bad}");
 	}
 }

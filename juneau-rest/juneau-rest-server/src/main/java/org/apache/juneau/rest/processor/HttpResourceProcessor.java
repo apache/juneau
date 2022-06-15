@@ -33,7 +33,7 @@ public final class HttpResourceProcessor implements ResponseProcessor {
 	public int process(RestOpSession opSession) throws IOException {
 
 		RestResponse res = opSession.getResponse();
-		HttpResource r = res.getOutput(HttpResource.class);
+		HttpResource r = res.getContent(HttpResource.class);
 
 		if (r == null)
 			return NEXT;

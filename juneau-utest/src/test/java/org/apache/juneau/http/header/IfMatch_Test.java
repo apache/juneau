@@ -50,15 +50,15 @@ public class IfMatch_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(ifMatch(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(ifMatch(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(ifMatch(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(ifMatch(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(ifMatch(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(ifMatch(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(ifMatch(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(ifMatch(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(ifMatch((String)null)).run().assertBody().isEmpty();
-		c.get().header(ifMatch((Supplier<EntityTags>)null)).run().assertBody().isEmpty();
-		c.get().header(ifMatch(()->null)).run().assertBody().isEmpty();
+		c.get().header(ifMatch((String)null)).run().assertContent().isEmpty();
+		c.get().header(ifMatch((Supplier<EntityTags>)null)).run().assertContent().isEmpty();
+		c.get().header(ifMatch(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

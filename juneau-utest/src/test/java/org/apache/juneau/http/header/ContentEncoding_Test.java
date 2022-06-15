@@ -50,15 +50,15 @@ public class ContentEncoding_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(contentEncoding(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(contentEncoding(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(contentEncoding(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(contentEncoding(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(contentEncoding(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(contentEncoding(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(contentEncoding(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(contentEncoding(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(contentEncoding((String)null)).run().assertBody().isEmpty();
-		c.get().header(contentEncoding((Supplier<String>)null)).run().assertBody().isEmpty();
-		c.get().header(contentEncoding(()->null)).run().assertBody().isEmpty();
+		c.get().header(contentEncoding((String)null)).run().assertContent().isEmpty();
+		c.get().header(contentEncoding((Supplier<String>)null)).run().assertContent().isEmpty();
+		c.get().header(contentEncoding(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

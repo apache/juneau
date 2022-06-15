@@ -84,7 +84,7 @@ public interface RestConverter {
 	 * Performs post-call conversion on the specified response object.
 	 *
 	 * @param req The servlet request.
-	 * @param res The response object set by the REST method through the {@link RestResponse#setOutput(Object)} method.
+	 * @param res The response object set by the REST method through the {@link RestResponse#setContent(Object)} method.
 	 * @return The converted object.
 	 * @throws BasicHttpException Thrown if any errors occur during conversion.
 	 * @throws SerializeException Generic serialization error occurred.

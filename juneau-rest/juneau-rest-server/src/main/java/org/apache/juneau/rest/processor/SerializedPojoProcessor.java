@@ -40,9 +40,9 @@ public final class SerializedPojoProcessor implements ResponseProcessor {
 		RestRequest req = opSession.getRequest();
 		RestResponse res = opSession.getResponse();
 		SerializerMatch sm = res.getSerializerMatch().orElse(null);
-		HttpPartSchema schema = res.getBodySchema().orElse(null);
+		HttpPartSchema schema = res.getContentSchema().orElse(null);
 
-		Object o = res.getOutput(Object.class);
+		Object o = res.getContent(Object.class);
 
 		if (sm != null) {
 			try {

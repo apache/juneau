@@ -53,13 +53,13 @@ public class BasicLongHeader_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(longHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(longHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(longHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
-		c.get().header(longHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(longHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
+		c.get().header(longHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
+		c.get().header(longHeader(HEADER,PARSED)).run().assertContent().is(VALUE);
+		c.get().header(longHeader(HEADER,()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(longHeader(HEADER,(Supplier<Long>)null)).run().assertBody().isEmpty();
+		c.get().header(longHeader(HEADER,(Supplier<Long>)null)).run().assertContent().isEmpty();
 		assertThrown(()->longHeader(HEADER,"foo")).asMessage().is("Value 'foo' could not be parsed as a long.");
 		assertThrown(()->longHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
 		assertThrown(()->longHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");

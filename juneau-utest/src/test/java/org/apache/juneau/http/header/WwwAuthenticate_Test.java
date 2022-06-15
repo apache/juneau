@@ -50,15 +50,15 @@ public class WwwAuthenticate_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(wwwAuthenticate(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(wwwAuthenticate(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(wwwAuthenticate(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(wwwAuthenticate(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(wwwAuthenticate(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(wwwAuthenticate(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(wwwAuthenticate(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(wwwAuthenticate(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(wwwAuthenticate((String)null)).run().assertBody().isEmpty();
-		c.get().header(wwwAuthenticate((Supplier<String>)null)).run().assertBody().isEmpty();
-		c.get().header(wwwAuthenticate(()->null)).run().assertBody().isEmpty();
+		c.get().header(wwwAuthenticate((String)null)).run().assertContent().isEmpty();
+		c.get().header(wwwAuthenticate((Supplier<String>)null)).run().assertContent().isEmpty();
+		c.get().header(wwwAuthenticate(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

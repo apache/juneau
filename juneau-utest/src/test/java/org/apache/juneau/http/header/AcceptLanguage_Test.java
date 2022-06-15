@@ -50,15 +50,15 @@ public class AcceptLanguage_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(acceptLanguage(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(acceptLanguage(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(acceptLanguage(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(acceptLanguage(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(acceptLanguage(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(acceptLanguage(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(acceptLanguage(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(acceptLanguage(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(acceptLanguage((String)null)).run().assertBody().isEmpty();
-		c.get().header(acceptLanguage((Supplier<StringRanges>)null)).run().assertBody().isEmpty();
-		c.get().header(acceptLanguage(()->null)).run().assertBody().isEmpty();
+		c.get().header(acceptLanguage((String)null)).run().assertContent().isEmpty();
+		c.get().header(acceptLanguage((Supplier<StringRanges>)null)).run().assertContent().isEmpty();
+		c.get().header(acceptLanguage(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

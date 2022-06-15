@@ -50,15 +50,15 @@ public class Allow_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(allow(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(allow(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(allow(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(allow(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(allow(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(allow(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(allow(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(allow(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(allow((String)null)).run().assertBody().isEmpty();
-		c.get().header(allow((Supplier<String[]>)null)).run().assertBody().isEmpty();
-		c.get().header(allow(()->null)).run().assertBody().isEmpty();
+		c.get().header(allow((String)null)).run().assertContent().isEmpty();
+		c.get().header(allow((Supplier<String[]>)null)).run().assertContent().isEmpty();
+		c.get().header(allow(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

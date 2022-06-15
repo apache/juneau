@@ -112,7 +112,7 @@ public class HttpEntityBuilder<T extends BasicHttpEntity> {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HttpEntityBuilder<T> contentSupplier(Supplier<?> value) {
+	public HttpEntityBuilder<T> content(Supplier<?> value) {
 		this.contentSupplier = value == null ? ()->null : value;
 		return this;
 	}

@@ -54,14 +54,14 @@ public class BasicMediaRangesHeader_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(mediaRangesHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(mediaRangesHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(mediaRangesHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
-		c.get().header(mediaRangesHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(mediaRangesHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
+		c.get().header(mediaRangesHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
+		c.get().header(mediaRangesHeader(HEADER,PARSED)).run().assertContent().is(VALUE);
+		c.get().header(mediaRangesHeader(HEADER,()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(mediaRangesHeader(HEADER,(Supplier<MediaRanges>)null)).run().assertBody().isEmpty();
-		c.get().header(mediaRangesHeader(HEADER,()->null)).run().assertBody().isEmpty();
+		c.get().header(mediaRangesHeader(HEADER,(Supplier<MediaRanges>)null)).run().assertContent().isEmpty();
+		c.get().header(mediaRangesHeader(HEADER,()->null)).run().assertContent().isEmpty();
 		assertThrown(()->mediaRangesHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
 		assertThrown(()->mediaRangesHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
 		assertThrown(()->mediaRangesHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");

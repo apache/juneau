@@ -25,7 +25,7 @@ public class SwitchingProtocols_Test {
 	@Rest
 	public static class A {
 		@RestGet public SwitchingProtocols a1() { return SWITCHING_PROTOCOLS; }
-		@RestGet public SwitchingProtocols a2() { return switchingProtocols().body("foo").build(); }
+		@RestGet public SwitchingProtocols a2() { return switchingProtocols().content("foo").build(); }
 		@RestGet public SwitchingProtocols a3() { return switchingProtocols().header("Foo","bar").build(); }
 	}
 
@@ -36,11 +36,11 @@ public class SwitchingProtocols_Test {
 		client.get("/a1")
 			.run()
 			.assertCode().is(1101)
-			.assertBody().is("Switching Protocols");
+			.assertContent().is("Switching Protocols");
 		client.get("/a2")
 			.run()
 			.assertCode().is(1101)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		client.get("/a3")
 			.run()
 			.assertCode().is(1101)

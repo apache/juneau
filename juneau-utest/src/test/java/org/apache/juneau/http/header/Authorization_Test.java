@@ -49,14 +49,14 @@ public class Authorization_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(authorization(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(authorization(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(authorization(()->VALUE)).run().assertBody().is(VALUE);
+		c.get().header(authorization(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(authorization(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(authorization(()->VALUE)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(authorization((String)null)).run().assertBody().isEmpty();
-		c.get().header(authorization((Supplier<String>)null)).run().assertBody().isEmpty();
-		c.get().header(authorization(()->null)).run().assertBody().isEmpty();
+		c.get().header(authorization((String)null)).run().assertContent().isEmpty();
+		c.get().header(authorization((Supplier<String>)null)).run().assertContent().isEmpty();
+		c.get().header(authorization(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

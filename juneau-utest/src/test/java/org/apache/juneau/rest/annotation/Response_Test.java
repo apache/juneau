@@ -63,7 +63,7 @@ public class Response_Test {
 		a.get("/a")
 			.run()
 			.assertCode().is(201)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		a.get("/b")
 			.run()
 			.assertCode().is(501);
@@ -112,19 +112,19 @@ public class Response_Test {
 		b.get("/a")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		b.get("/b")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		b.get("/c")
 			.run()
 			.assertCode().is(500)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		b.get("/d")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -203,35 +203,35 @@ public class Response_Test {
 		d.get("/a")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("foo|bar");
+			.assertContent().is("foo|bar");
 		d.get("/b")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("Zm9v");
+			.assertContent().is("Zm9v");
 		d.get("/c")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("foo|bar");
+			.assertContent().is("foo|bar");
 		d.get("/d")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("Zm9v");
+			.assertContent().is("Zm9v");
 		d.get("/e")
 			.run()
 			.assertCode().is(500)
-			.assertBody().is("foo|bar");
+			.assertContent().is("foo|bar");
 		d.get("/f")
 			.run()
 			.assertCode().is(500)
-			.assertBody().is("Zm9v");
+			.assertContent().is("Zm9v");
 		d.get("/g")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("foo|bar");
+			.assertContent().is("foo|bar");
 		d.get("/h")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("Zm9v");
+			.assertContent().is("Zm9v");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -276,19 +276,19 @@ public class Response_Test {
 		e.get("/a")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		e.get("/b")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		e.get("/c")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		e.get("/d")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -330,18 +330,18 @@ public class Response_Test {
 		g.get("/a").json()
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("[1,2]");
+			.assertContent().is("[1,2]");
 		g.get("/b").json()
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("[1,2]");
+			.assertContent().is("[1,2]");
 		g.get("/c").json()
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("[1,2]");
+			.assertContent().is("[1,2]");
 		g.get("/d").json()
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("[1,2]");
+			.assertContent().is("[1,2]");
 	}
 }

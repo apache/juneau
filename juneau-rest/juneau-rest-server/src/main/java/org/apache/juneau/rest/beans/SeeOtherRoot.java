@@ -46,6 +46,6 @@ public class SeeOtherRoot extends SeeOther {
 	 * @param body Message to send as the response.
 	 */
 	public SeeOtherRoot(String body) {
-		super(create().location("servlet:/").body(body));
+		super(create().location("servlet:/").content(body));
 	}
 }

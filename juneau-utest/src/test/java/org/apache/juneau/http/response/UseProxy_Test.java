@@ -25,7 +25,7 @@ public class UseProxy_Test {
 	@Rest
 	public static class A {
 		@RestGet public UseProxy a1() { return USE_PROXY; }
-		@RestGet public UseProxy a2() { return useProxy().body("foo").build(); }
+		@RestGet public UseProxy a2() { return useProxy().content("foo").build(); }
 		@RestGet public UseProxy a3() { return useProxy().header("Foo","bar").build(); }
 	}
 
@@ -36,11 +36,11 @@ public class UseProxy_Test {
 		client.get("/a1")
 			.run()
 			.assertCode().is(305)
-			.assertBody().is("Use Proxy");
+			.assertContent().is("Use Proxy");
 		client.get("/a2")
 			.run()
 			.assertCode().is(305)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		client.get("/a3")
 			.run()
 			.assertCode().is(305)

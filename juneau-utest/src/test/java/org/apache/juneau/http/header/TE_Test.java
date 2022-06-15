@@ -50,15 +50,15 @@ public class TE_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(te(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(te(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(te(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(te(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(te(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(te(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(te(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(te(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(te((String)null)).run().assertBody().isEmpty();
-		c.get().header(te((Supplier<StringRanges>)null)).run().assertBody().isEmpty();
-		c.get().header(te(()->null)).run().assertBody().isEmpty();
+		c.get().header(te((String)null)).run().assertContent().isEmpty();
+		c.get().header(te((Supplier<StringRanges>)null)).run().assertContent().isEmpty();
+		c.get().header(te(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

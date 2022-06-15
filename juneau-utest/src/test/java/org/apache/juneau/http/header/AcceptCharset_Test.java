@@ -50,15 +50,15 @@ public class AcceptCharset_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(acceptCharset(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(acceptCharset(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(acceptCharset(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(acceptCharset(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(acceptCharset(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(acceptCharset(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(acceptCharset(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(acceptCharset(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(acceptCharset((String)null)).run().assertBody().isEmpty();
-		c.get().header(acceptCharset((Supplier<StringRanges>)null)).run().assertBody().isEmpty();
-		c.get().header(acceptCharset(()->null)).run().assertBody().isEmpty();
+		c.get().header(acceptCharset((String)null)).run().assertContent().isEmpty();
+		c.get().header(acceptCharset((Supplier<StringRanges>)null)).run().assertContent().isEmpty();
+		c.get().header(acceptCharset(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

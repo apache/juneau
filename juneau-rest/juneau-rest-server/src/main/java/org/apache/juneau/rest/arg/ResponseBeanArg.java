@@ -29,7 +29,7 @@ import org.apache.juneau.rest.annotation.*;
  * <p class='bjava'>
  * 	<jv>opSession</jv>
  * 		.{@link RestOpSession#getResponse() getResponse}()
- * 		.{@link RestResponse#setOutput(Object) setOutput}(<jv>value</jv>);
+ * 		.{@link RestResponse#setContent(Object) setOutput}(<jv>value</jv>);
  * </p>
  *
  * <ul class='seealso'>
@@ -81,7 +81,7 @@ public class ResponseBeanArg implements RestOpArg {
 				if (meta == null)
 					meta = ResponseBeanArg.this.meta;
 				res.setResponseBeanMeta(meta);
-				res.setOutput(o);
+				res.setContent(o);
 			}
 		});
 		return v;

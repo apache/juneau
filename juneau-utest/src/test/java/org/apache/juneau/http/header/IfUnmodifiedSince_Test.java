@@ -53,15 +53,15 @@ public class IfUnmodifiedSince_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(ifUnmodifiedSince(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(ifUnmodifiedSince(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(ifUnmodifiedSince(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(ifUnmodifiedSince(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(ifUnmodifiedSince(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(ifUnmodifiedSince(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(ifUnmodifiedSince(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(ifUnmodifiedSince(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(ifUnmodifiedSince((String)null)).run().assertBody().isEmpty();
-		c.get().header(ifUnmodifiedSince((Supplier<ZonedDateTime>)null)).run().assertBody().isEmpty();
-		c.get().header(ifUnmodifiedSince(()->null)).run().assertBody().isEmpty();
+		c.get().header(ifUnmodifiedSince((String)null)).run().assertContent().isEmpty();
+		c.get().header(ifUnmodifiedSince((Supplier<ZonedDateTime>)null)).run().assertContent().isEmpty();
+		c.get().header(ifUnmodifiedSince(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

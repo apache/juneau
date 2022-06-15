@@ -65,20 +65,20 @@ public class Header_Accept_Test {
 		RestClient a = MockRestClient.buildLax(A.class);
 		a.put("/", null)
 			.run()
-			.assertBody().is("s2");
+			.assertContent().is("s2");
 		a.put("/", null)
 			.accept("text/s1")
 			.run()
-			.assertBody().is("s1");
+			.assertContent().is("s1");
 		a.put("/", null)
 			.accept("text/s2")
 			.run()
-			.assertBody().is("s2");
+			.assertContent().is("s2");
 		a.put("?noTrace=true", null)
 			.accept("text/s3")
 			.run()
 			.assertCode().is(406)
-			.assertBody().isContains("Unsupported media-type in request header 'Accept': 'text/s3'");
+			.assertContent().isContains("Unsupported media-type in request header 'Accept': 'text/s3'");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -100,12 +100,12 @@ public class Header_Accept_Test {
 	@Test
 	public void b01_restMethodWithParsersSerializers() throws Exception {
 		RestClient b = MockRestClient.buildLax(B.class);
-		b.put("/", null).accept("text/s3").run().assertBody().is("s3");
+		b.put("/", null).accept("text/s3").run().assertContent().is("s3");
 		b.put("?noTrace=true", null)
 			.accept("text/s4")
 			.run()
 			.assertCode().is(406)
-			.assertBody().isContains(
+			.assertContent().isContains(
 				"Unsupported media-type in request header 'Accept': 'text/s4'",
 				"Supported media-types: ['text/s3']"
 			);
@@ -132,24 +132,24 @@ public class Header_Accept_Test {
 		RestClient c = MockRestClient.buildLax(C.class);
 		c.put("/", null)
 			.run()
-			.assertBody().is("s2");
+			.assertContent().is("s2");
 		c.put("/", null)
 			.accept("text/s1")
 			.run()
-			.assertBody().is("s1");
+			.assertContent().is("s1");
 		c.put("/", null)
 			.accept("text/s2")
 			.run()
-			.assertBody().is("s2");
+			.assertContent().is("s2");
 		c.put("/", null)
 			.accept("text/s3")
 			.run()
-			.assertBody().is("s3");
+			.assertContent().is("s3");
 		c.put("?noTrace=true", null)
 			.accept("text/s4")
 			.run()
 			.assertCode().is(406)
-			.assertBody().isContains(
+			.assertContent().isContains(
 				"Unsupported media-type in request header 'Accept': 'text/s4'",
 				"Supported media-types: ['text/s3','text/s1','text/s2']"
 			);
@@ -174,18 +174,18 @@ public class Header_Accept_Test {
 	public void d01_accept_valid() throws Exception {
 		RestClient d = MockRestClient.buildLax(D.class);
 		// "*/*" should match the first serializer, not the default serializer.
-		d.put("/", null).accept("*/*").run().assertBody().is("s1");
+		d.put("/", null).accept("*/*").run().assertContent().is("s1");
 		// "text/*" should match the first serializer, not the default serializer.
-		d.put("/", null).accept("text/*").run().assertBody().is("s1");
-		d.put("/", null).accept("bad/*,text/*").run().assertBody().is("s1");
-		d.put("/", null).accept("text/*,bad/*").run().assertBody().is("s1");
-		d.put("/", null).accept("text/s1;q=0.5,text/s2").run().assertBody().is("s2");
-		d.put("/", null).accept("text/s1,text/s2;q=0.5").run().assertBody().is("s1");
+		d.put("/", null).accept("text/*").run().assertContent().is("s1");
+		d.put("/", null).accept("bad/*,text/*").run().assertContent().is("s1");
+		d.put("/", null).accept("text/*,bad/*").run().assertContent().is("s1");
+		d.put("/", null).accept("text/s1;q=0.5,text/s2").run().assertContent().is("s2");
+		d.put("/", null).accept("text/s1,text/s2;q=0.5").run().assertContent().is("s1");
 		d.put("?noTrace=true", null)
 			.accept("bad/*")
 			.run()
 			.assertCode().is(406)
-			.assertBody().isContains(
+			.assertContent().isContains(
 				"Unsupported media-type in request header 'Accept': 'bad/*'",
 				"Supported media-types: ['text/s1','text/s2']"
 			);
@@ -210,19 +210,19 @@ public class Header_Accept_Test {
 	@Test
 	public void e01_restMethodParserSerializerAnnotations() throws Exception {
 		RestClient e = MockRestClient.buildLax(E.class);
-		e.put("/", null).run().assertBody().is("s3");
-		e.put("/", null).accept("text/s3").run().assertBody().is("s3");
+		e.put("/", null).run().assertContent().is("s3");
+		e.put("/", null).accept("text/s3").run().assertContent().is("s3");
 		e.put("?noTrace=true", null)
 			.accept("text/s1")
 			.run()
 			.assertCode().is(406)
-			.assertBody().isContains(
+			.assertContent().isContains(
 				"Unsupported media-type in request header 'Accept': 'text/s1'",
 				"Supported media-types: ['text/s3']"
 			);
 		e.put("?noTrace=true", null).accept("text/s2").run()
 			.assertCode().is(406)
-			.assertBody().isContains(
+			.assertContent().isContains(
 				"Unsupported media-type in request header 'Accept': 'text/s2'",
 				"Supported media-types: ['text/s3']"
 			);
@@ -247,9 +247,9 @@ public class Header_Accept_Test {
 	@Test
 	public void f01_restMethodAddParsersSerializersAnnotations() throws Exception {
 		RestClient f = MockRestClient.build(F.class);
-		f.put("/", null).run().assertBody().is("s3");
-		f.put("/", null).accept("text/s1").run().assertBody().is("s1");
-		f.put("/", null).accept("text/s2").run().assertBody().is("s2");
-		f.put("/", null).accept("text/s3").run().assertBody().is("s3");
+		f.put("/", null).run().assertContent().is("s3");
+		f.put("/", null).accept("text/s1").run().assertContent().is("s1");
+		f.put("/", null).accept("text/s2").run().assertContent().is("s2");
+		f.put("/", null).accept("text/s3").run().assertContent().is("s3");
 	}
 }

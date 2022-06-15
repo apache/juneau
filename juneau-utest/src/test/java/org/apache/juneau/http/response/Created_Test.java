@@ -25,7 +25,7 @@ public class Created_Test {
 	@Rest
 	public static class A {
 		@RestGet public Created a1() { return CREATED; }
-		@RestGet public Created a2() { return created().body("foo").build(); }
+		@RestGet public Created a2() { return created().content("foo").build(); }
 		@RestGet public Created a3() { return created().header("Foo","bar").build(); }
 	}
 
@@ -36,11 +36,11 @@ public class Created_Test {
 		client.get("/a1")
 			.run()
 			.assertCode().is(201)
-			.assertBody().is("Created");
+			.assertContent().is("Created");
 		client.get("/a2")
 			.run()
 			.assertCode().is(201)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		client.get("/a3")
 			.run()
 			.assertCode().is(201)

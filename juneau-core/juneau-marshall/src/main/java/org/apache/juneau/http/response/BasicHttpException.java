@@ -58,7 +58,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	BasicStatusLine statusLine;
 	HeaderList.Builder headersBuilder;
 	BasicStatusLine.Builder statusLineBuilder;
-	HttpEntity body;
+	HttpEntity content;
 
 	/**
 	 * Creates a builder for this class.
@@ -78,9 +78,9 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 */
 	public BasicHttpException(HttpExceptionBuilder<?> builder) {
 		super(builder);
-		headers = builder.headers();
-		statusLine = builder.statusLine();
-		body = builder.body;
+		headers = builder.buildHeaders();
+		statusLine = builder.buildStatusLine();
+		content = builder.content;
 	}
 
 	/**
@@ -361,15 +361,15 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	@Override /* HttpMessage */
 	public HttpEntity getEntity() {
 		// Constructing a StringEntity is somewhat expensive, so don't create it unless it's needed.
-		if (body == null)
-			body = stringEntity(getMessage()).build();
-		return body;
+		if (content == null)
+			content = stringEntity(getMessage()).build();
+		return content;
 	}
 
 	@Override /* HttpMessage */
 	public void setEntity(HttpEntity entity) {
 		assertModifiable();
-		this.body = entity;
+		this.content = entity;
 	}
 
 	@Override /* HttpMessage */

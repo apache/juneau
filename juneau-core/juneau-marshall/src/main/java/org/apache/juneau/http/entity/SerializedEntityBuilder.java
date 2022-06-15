@@ -151,8 +151,8 @@ public class SerializedEntityBuilder<T extends SerializedEntity> extends HttpEnt
 	}
 
 	@Override /* GENERATED - org.apache.juneau.http.entity.HttpEntityBuilder */
-	public SerializedEntityBuilder<T> contentSupplier(Supplier<?> value) {
-		super.contentSupplier(value);
+	public SerializedEntityBuilder<T> content(Supplier<?> value) {
+		super.content(value);
 		return this;
 	}
 

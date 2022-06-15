@@ -53,13 +53,13 @@ public class BasicIntegerHeader_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(integerHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(integerHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(integerHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
-		c.get().header(integerHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(integerHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
+		c.get().header(integerHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
+		c.get().header(integerHeader(HEADER,PARSED)).run().assertContent().is(VALUE);
+		c.get().header(integerHeader(HEADER,()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(integerHeader(HEADER,(Supplier<Integer>)null)).run().assertBody().isEmpty();
+		c.get().header(integerHeader(HEADER,(Supplier<Integer>)null)).run().assertContent().isEmpty();
 		assertThrown(()->integerHeader(HEADER,"foo")).asMessage().is("Value 'foo' could not be parsed as an integer.");
 		assertThrown(()->integerHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
 		assertThrown(()->integerHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");

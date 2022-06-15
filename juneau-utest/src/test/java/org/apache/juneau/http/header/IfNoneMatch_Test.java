@@ -50,15 +50,15 @@ public class IfNoneMatch_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(ifNoneMatch(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(ifNoneMatch(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(ifNoneMatch(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(ifNoneMatch(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(ifNoneMatch(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(ifNoneMatch(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(ifNoneMatch(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(ifNoneMatch(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(ifNoneMatch((String)null)).run().assertBody().isEmpty();
-		c.get().header(ifNoneMatch((Supplier<EntityTags>)null)).run().assertBody().isEmpty();
-		c.get().header(ifNoneMatch(()->null)).run().assertBody().isEmpty();
+		c.get().header(ifNoneMatch((String)null)).run().assertContent().isEmpty();
+		c.get().header(ifNoneMatch((Supplier<EntityTags>)null)).run().assertContent().isEmpty();
+		c.get().header(ifNoneMatch(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

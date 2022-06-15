@@ -25,7 +25,7 @@ public class NonAuthoritativeInformation_Test {
 	@Rest
 	public static class A {
 		@RestGet public NonAuthoritiveInformation a1() { return NON_AUTHORATIVE_INFORMATION; }
-		@RestGet public NonAuthoritiveInformation a2() { return nonAuthoritiveInformation().body("foo").build(); }
+		@RestGet public NonAuthoritiveInformation a2() { return nonAuthoritiveInformation().content("foo").build(); }
 		@RestGet public NonAuthoritiveInformation a3() { return nonAuthoritiveInformation().header("Foo","bar").build(); }
 	}
 
@@ -36,11 +36,11 @@ public class NonAuthoritativeInformation_Test {
 		client.get("/a1")
 			.run()
 			.assertCode().is(203)
-			.assertBody().is("Non-Authoritative Information");
+			.assertContent().is("Non-Authoritative Information");
 		client.get("/a2")
 			.run()
 			.assertCode().is(203)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		client.get("/a3")
 			.run()
 			.assertCode().is(203)

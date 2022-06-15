@@ -25,7 +25,7 @@ public class IMUsed_Test {
 	@Rest
 	public static class A {
 		@RestGet public IMUsed a1() { return IM_USED; }
-		@RestGet public IMUsed a2() { return imUsed().body("foo").build(); }
+		@RestGet public IMUsed a2() { return imUsed().content("foo").build(); }
 		@RestGet public IMUsed a3() { return imUsed().header("Foo","bar").build(); }
 	}
 
@@ -36,11 +36,11 @@ public class IMUsed_Test {
 		client.get("/a1")
 			.run()
 			.assertCode().is(226)
-			.assertBody().is("IM Used");
+			.assertContent().is("IM Used");
 		client.get("/a2")
 			.run()
 			.assertCode().is(226)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		client.get("/a3")
 			.run()
 			.assertCode().is(226)

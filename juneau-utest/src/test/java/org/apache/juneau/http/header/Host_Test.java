@@ -50,15 +50,15 @@ public class Host_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(host(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(host(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(host(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(host(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(host(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(host(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(host(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(host(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(host((String)null)).run().assertBody().is("localhost");
-		c.get().header(host((Supplier<String>)null)).run().assertBody().is("localhost");
-		c.get().header(host(()->null)).run().assertBody().is("localhost");
+		c.get().header(host((String)null)).run().assertContent().is("localhost");
+		c.get().header(host((Supplier<String>)null)).run().assertContent().is("localhost");
+		c.get().header(host(()->null)).run().assertContent().is("localhost");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

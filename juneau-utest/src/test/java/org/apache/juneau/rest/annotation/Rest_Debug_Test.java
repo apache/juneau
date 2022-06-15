@@ -118,74 +118,74 @@ public class Rest_Debug_Test {
 		RestClient a1 = MockRestClient.buildSimpleJson(A1_RestOp.class);
 		RestClient a1d = MockRestClient.create(A1_RestOp.class).simpleJson().debug().suppressLogging().build();
 
-		a1.get("/aa").run().assertBody().is("false");
+		a1.get("/aa").run().assertContent().is("false");
 		assertNotLogged();
-		a1d.get("/aa").run().assertBody().is("true");
+		a1d.get("/aa").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /aa");
 
-		a1.get("/ab").run().assertBody().is("false");
+		a1.get("/ab").run().assertContent().is("false");
 		assertNotLogged();
-		a1d.get("/ab").run().assertBody().is("false");
+		a1d.get("/ab").run().assertContent().is("false");
 		assertNotLogged();
 
-		a1.get("/ac").run().assertBody().is("true");
+		a1.get("/ac").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /ac");
-		a1d.get("/ac").run().assertBody().is("true");
+		a1d.get("/ac").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /ac");
 
-		a1.get("/ad").run().assertBody().is("false");
+		a1.get("/ad").run().assertContent().is("false");
 		assertNotLogged();
-		a1d.get("/ad").run().assertBody().is("true");
+		a1d.get("/ad").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /ad");
 
-		a1.get("/ae").run().assertBody().is("false");
+		a1.get("/ae").run().assertContent().is("false");
 		assertNotLogged();
-		a1d.get("/ae").run().assertBody().is("true");
+		a1d.get("/ae").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /ae");
 
-		a1.get("/af").run().assertBody().is("true");
+		a1.get("/af").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /af");
-		a1d.get("/af").run().assertBody().is("true");
+		a1d.get("/af").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /af");
 
-		a1.get("/ag").run().assertBody().is("false");
+		a1.get("/ag").run().assertContent().is("false");
 		assertNotLogged();
-		a1d.get("/ag").run().assertBody().is("false");
+		a1d.get("/ag").run().assertContent().is("false");
 		assertNotLogged();
 
-		a1.get("/ba").run().assertBody().is("false");
+		a1.get("/ba").run().assertContent().is("false");
 		assertNotLogged();
-		a1d.get("/ba").run().assertBody().is("true");
+		a1d.get("/ba").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /ba");
 
-		a1.get("/bb").run().assertBody().is("false");
+		a1.get("/bb").run().assertContent().is("false");
 		assertNotLogged();
-		a1d.get("/bb").run().assertBody().is("false");
+		a1d.get("/bb").run().assertContent().is("false");
 		assertNotLogged();
 
-		a1.get("/bc").run().assertBody().is("true");
+		a1.get("/bc").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /bc");
-		a1d.get("/bc").run().assertBody().is("true");
+		a1d.get("/bc").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /bc");
 
-		a1.get("/bd").run().assertBody().is("false");
+		a1.get("/bd").run().assertContent().is("false");
 		assertNotLogged();
-		a1d.get("/bd").run().assertBody().is("true");
+		a1d.get("/bd").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /bd");
 
-		a1.get("/be").run().assertBody().is("false");
+		a1.get("/be").run().assertContent().is("false");
 		assertNotLogged();
-		a1d.get("/be").run().assertBody().is("true");
+		a1d.get("/be").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /be");
 
-		a1.get("/bf").run().assertBody().is("true");
+		a1.get("/bf").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /bf");
-		a1d.get("/bf").run().assertBody().is("true");
+		a1d.get("/bf").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /bf");
 
-		a1.get("/bg").run().assertBody().is("false");
+		a1.get("/bg").run().assertContent().is("false");
 		assertNotLogged();
-		a1d.get("/bg").run().assertBody().is("false");
+		a1d.get("/bg").run().assertContent().is("false");
 		assertNotLogged();
 	}
 
@@ -262,39 +262,39 @@ public class Rest_Debug_Test {
 		RestClient a1a = MockRestClient.buildSimpleJson(A1a.class);
 		RestClient a1ad = MockRestClient.create(A1a.class).simpleJson().debug().suppressLogging().build();
 
-		a1a.get("/a").run().assertBody().is("false");
+		a1a.get("/a").run().assertContent().is("false");
 		assertNotLogged();
-		a1ad.get("/a").run().assertBody().is("true");
+		a1ad.get("/a").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /a");
 
-		a1a.get("/b").run().assertBody().is("false");
+		a1a.get("/b").run().assertContent().is("false");
 		assertNotLogged();
-		a1ad.get("/b").run().assertBody().is("false");
+		a1ad.get("/b").run().assertContent().is("false");
 		assertNotLogged();
 
-		a1a.get("/c").run().assertBody().is("true");
+		a1a.get("/c").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /c");
-		a1ad.get("/c").run().assertBody().is("true");
+		a1ad.get("/c").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /c");
 
-		a1a.get("/d").run().assertBody().is("false");
+		a1a.get("/d").run().assertContent().is("false");
 		assertNotLogged();
-		a1ad.get("/d").run().assertBody().is("true");
+		a1ad.get("/d").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /d");
 
-		a1a.get("/e").run().assertBody().is("false");
+		a1a.get("/e").run().assertContent().is("false");
 		assertNotLogged();
-		a1ad.get("/e").run().assertBody().is("true");
+		a1ad.get("/e").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /e");
 
-		a1a.get("/f").run().assertBody().is("true");
+		a1a.get("/f").run().assertContent().is("true");
 		assertLogged();
-		a1ad.get("/f").run().assertBody().is("true");
+		a1ad.get("/f").run().assertContent().is("true");
 		assertLogged();
 
-		a1a.get("/g").run().assertBody().is("false");
+		a1a.get("/g").run().assertContent().is("false");
 		assertNotLogged();
-		a1ad.get("/g").run().assertBody().is("false");
+		a1ad.get("/g").run().assertContent().is("false");
 		assertNotLogged();
 	}
 
@@ -341,39 +341,39 @@ public class Rest_Debug_Test {
 		RestClient a2 = MockRestClient.buildSimpleJson(A2.class);
 		RestClient a2d = MockRestClient.create(A2.class).simpleJson().debug().suppressLogging().build();
 
-		a2.get("/a").run().assertBody().is("true");
+		a2.get("/a").run().assertContent().is("true");
 		assertLogged();
-		a2d.get("/a").run().assertBody().is("true");
+		a2d.get("/a").run().assertContent().is("true");
 		assertLogged();
 
-		a2.get("/b").run().assertBody().is("false");
+		a2.get("/b").run().assertContent().is("false");
 		assertNotLogged();
-		a2d.get("/b").run().assertBody().is("false");
+		a2d.get("/b").run().assertContent().is("false");
 		assertNotLogged();
 
-		a2.get("/c").run().assertBody().is("true");
+		a2.get("/c").run().assertContent().is("true");
 		assertLogged();
-		a2d.get("/c").run().assertBody().is("true");
+		a2d.get("/c").run().assertContent().is("true");
 		assertLogged();
 
-		a2.get("/d").run().assertBody().is("false");
+		a2.get("/d").run().assertContent().is("false");
 		assertNotLogged();
-		a2d.get("/d").run().assertBody().is("true");
+		a2d.get("/d").run().assertContent().is("true");
 		assertLogged();
 
-		a2.get("/e").run().assertBody().is("true");
+		a2.get("/e").run().assertContent().is("true");
 		assertLogged();
-		a2d.get("/e").run().assertBody().is("true");
-		assertLogged();
-
-		a2.get("/f").run().assertBody().is("true");
-		assertLogged();
-		a2d.get("/f").run().assertBody().is("true");
+		a2d.get("/e").run().assertContent().is("true");
 		assertLogged();
 
-		a2.get("/g").run().assertBody().is("false");
+		a2.get("/f").run().assertContent().is("true");
+		assertLogged();
+		a2d.get("/f").run().assertContent().is("true");
+		assertLogged();
+
+		a2.get("/g").run().assertContent().is("false");
 		assertNotLogged();
-		a2d.get("/g").run().assertBody().is("false");
+		a2d.get("/g").run().assertContent().is("false");
 		assertNotLogged();
 	}
 
@@ -420,39 +420,39 @@ public class Rest_Debug_Test {
 		RestClient a3 = MockRestClient.buildSimpleJson(A3.class);
 		RestClient a3d = MockRestClient.create(A3.class).simpleJson().debug().suppressLogging().build();
 
-		a3.get("/a").run().assertBody().is("false");
+		a3.get("/a").run().assertContent().is("false");
 		assertNotLogged();
-		a3d.get("/a").run().assertBody().is("false");
-		assertNotLogged();
-
-		a3.get("/b").run().assertBody().is("false");
-		assertNotLogged();
-		a3d.get("/b").run().assertBody().is("false");
+		a3d.get("/a").run().assertContent().is("false");
 		assertNotLogged();
 
-		a3.get("/c").run().assertBody().is("true");
+		a3.get("/b").run().assertContent().is("false");
+		assertNotLogged();
+		a3d.get("/b").run().assertContent().is("false");
+		assertNotLogged();
+
+		a3.get("/c").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /c");
-		a3d.get("/c").run().assertBody().is("true");
+		a3d.get("/c").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /c");
 
-		a3.get("/d").run().assertBody().is("false");
+		a3.get("/d").run().assertContent().is("false");
 		assertNotLogged();
-		a3d.get("/d").run().assertBody().is("true");
+		a3d.get("/d").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /d");
 
-		a3.get("/e").run().assertBody().is("false");
+		a3.get("/e").run().assertContent().is("false");
 		assertNotLogged();
-		a3d.get("/e").run().assertBody().is("false");
+		a3d.get("/e").run().assertContent().is("false");
 		assertNotLogged();
 
-		a3.get("/f").run().assertBody().is("true");
+		a3.get("/f").run().assertContent().is("true");
 		assertLogged();
-		a3d.get("/f").run().assertBody().is("true");
+		a3d.get("/f").run().assertContent().is("true");
 		assertLogged();
 
-		a3.get("/g").run().assertBody().is("false");
+		a3.get("/g").run().assertContent().is("false");
 		assertNotLogged();
-		a3d.get("/g").run().assertBody().is("false");
+		a3d.get("/g").run().assertContent().is("false");
 		assertNotLogged();
 	}
 
@@ -499,39 +499,39 @@ public class Rest_Debug_Test {
 		RestClient a4 = MockRestClient.buildSimpleJson(A4.class);
 		RestClient a4d = MockRestClient.create(A4.class).simpleJson().debug().suppressLogging().build();
 
-		a4.get("/a").run().assertBody().is("false");
+		a4.get("/a").run().assertContent().is("false");
 		assertNotLogged();
-		a4d.get("/a").run().assertBody().is("true");
+		a4d.get("/a").run().assertContent().is("true");
 		assertLogged();
 
-		a4.get("/b").run().assertBody().is("false");
+		a4.get("/b").run().assertContent().is("false");
 		assertNotLogged();
-		a4d.get("/b").run().assertBody().is("false");
+		a4d.get("/b").run().assertContent().is("false");
 		assertNotLogged();
 
-		a4.get("/c").run().assertBody().is("true");
+		a4.get("/c").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /c");
-		a4d.get("/c").run().assertBody().is("true");
+		a4d.get("/c").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /c");
 
-		a4.get("/d").run().assertBody().is("false");
+		a4.get("/d").run().assertContent().is("false");
 		assertNotLogged();
-		a4d.get("/d").run().assertBody().is("true");
+		a4d.get("/d").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /d");
 
-		a4.get("/e").run().assertBody().is("false");
+		a4.get("/e").run().assertContent().is("false");
 		assertNotLogged();
-		a4d.get("/e").run().assertBody().is("true");
+		a4d.get("/e").run().assertContent().is("true");
 		assertLogged();
 
-		a4.get("/f").run().assertBody().is("true");
+		a4.get("/f").run().assertContent().is("true");
 		assertLogged();
-		a4d.get("/f").run().assertBody().is("true");
+		a4d.get("/f").run().assertContent().is("true");
 		assertLogged();
 
-		a4.get("/g").run().assertBody().is("false");
+		a4.get("/g").run().assertContent().is("false");
 		assertNotLogged();
-		a4d.get("/g").run().assertBody().is("false");
+		a4d.get("/g").run().assertContent().is("false");
 		assertNotLogged();
 	}
 
@@ -718,155 +718,155 @@ public class Rest_Debug_Test {
 		RestClient c1 = MockRestClient.buildSimpleJson(C1.class);
 		RestClient c1d = MockRestClient.create(C1.class).simpleJson().debug().suppressLogging().build();
 
-		c1.get("/a1").run().assertBody().is("false");
+		c1.get("/a1").run().assertContent().is("false");
 		assertNotLogged();
-		c1d.get("/a1").run().assertBody().is("true");
+		c1d.get("/a1").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /a1");
-		c1.get("/a2").run().assertBody().is("false");
+		c1.get("/a2").run().assertContent().is("false");
 		assertNotLogged();
-		c1d.get("/a2").run().assertBody().is("false");
+		c1d.get("/a2").run().assertContent().is("false");
 		assertNotLogged();
-		c1.get("/a3").run().assertBody().is("true");
+		c1.get("/a3").run().assertContent().is("true");
 		assertLogged();
-		c1d.get("/a3").run().assertBody().is("true");
+		c1d.get("/a3").run().assertContent().is("true");
 		assertLogged();
-		c1.get("/a4").run().assertBody().is("false");
+		c1.get("/a4").run().assertContent().is("false");
 		assertNotLogged();
-		c1d.get("/a4").run().assertBody().is("true");
-		assertLogged();
-
-		c1.get("/b1").run().assertBody().is("false");
-		assertNotLogged();
-		c1d.get("/b1").run().assertBody().is("false");
-		assertNotLogged();
-		c1.get("/b2").run().assertBody().is("false");
-		assertNotLogged();
-		c1d.get("/b2").run().assertBody().is("false");
-		assertNotLogged();
-		c1.get("/b3").run().assertBody().is("false");
-		assertNotLogged();
-		c1d.get("/b3").run().assertBody().is("false");
-		assertNotLogged();
-		c1.get("/b4").run().assertBody().is("false");
-		assertNotLogged();
-		c1d.get("/b4").run().assertBody().is("false");
-		assertNotLogged();
-		c1.get("/b5").run().assertBody().is("true");
-		assertLogged();
-		c1d.get("/b5").run().assertBody().is("true");
-		assertLogged();
-		c1.get("/b6").run().assertBody().is("false");
-		assertNotLogged();
-		c1d.get("/b6").run().assertBody().is("true");
+		c1d.get("/a4").run().assertContent().is("true");
 		assertLogged();
 
-		c1.get("/c1").run().assertBody().is("true");
+		c1.get("/b1").run().assertContent().is("false");
+		assertNotLogged();
+		c1d.get("/b1").run().assertContent().is("false");
+		assertNotLogged();
+		c1.get("/b2").run().assertContent().is("false");
+		assertNotLogged();
+		c1d.get("/b2").run().assertContent().is("false");
+		assertNotLogged();
+		c1.get("/b3").run().assertContent().is("false");
+		assertNotLogged();
+		c1d.get("/b3").run().assertContent().is("false");
+		assertNotLogged();
+		c1.get("/b4").run().assertContent().is("false");
+		assertNotLogged();
+		c1d.get("/b4").run().assertContent().is("false");
+		assertNotLogged();
+		c1.get("/b5").run().assertContent().is("true");
+		assertLogged();
+		c1d.get("/b5").run().assertContent().is("true");
+		assertLogged();
+		c1.get("/b6").run().assertContent().is("false");
+		assertNotLogged();
+		c1d.get("/b6").run().assertContent().is("true");
+		assertLogged();
+
+		c1.get("/c1").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /c1");
-		c1d.get("/c1").run().assertBody().is("true");
+		c1d.get("/c1").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /c1");
-		c1.get("/c2").run().assertBody().is("true");
+		c1.get("/c2").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /c2");
-		c1d.get("/c2").run().assertBody().is("true");
+		c1d.get("/c2").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /c2");
-		c1.get("/c3").run().assertBody().is("true");
+		c1.get("/c3").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /c3");
-		c1d.get("/c3").run().assertBody().is("true");
+		c1d.get("/c3").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /c3");
-		c1.get("/c4").run().assertBody().is("false");
+		c1.get("/c4").run().assertContent().is("false");
 		assertNotLogged();
-		c1d.get("/c4").run().assertBody().is("false");
+		c1d.get("/c4").run().assertContent().is("false");
 		assertNotLogged();
-		c1.get("/c5").run().assertBody().is("true");
+		c1.get("/c5").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /c5");
-		c1d.get("/c5").run().assertBody().is("true");
+		c1d.get("/c5").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /c5");
-		c1.get("/c6").run().assertBody().is("false");
+		c1.get("/c6").run().assertContent().is("false");
 		assertNotLogged();
-		c1d.get("/c6").run().assertBody().is("true");
+		c1d.get("/c6").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /c6");
 
-		c1.get("/d1").run().assertBody().is("false");
+		c1.get("/d1").run().assertContent().is("false");
 		assertNotLogged();
-		c1d.get("/d1").run().assertBody().is("true");
+		c1d.get("/d1").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /d1");
-		c1.get("/d2").run().assertBody().is("false");
+		c1.get("/d2").run().assertContent().is("false");
 		assertNotLogged();
-		c1d.get("/d2").run().assertBody().is("true");
+		c1d.get("/d2").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /d2");
-		c1.get("/d3").run().assertBody().is("false");
+		c1.get("/d3").run().assertContent().is("false");
 		assertNotLogged();
-		c1d.get("/d3").run().assertBody().is("true");
+		c1d.get("/d3").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /d3");
-		c1.get("/d4").run().assertBody().is("false");
+		c1.get("/d4").run().assertContent().is("false");
 		assertNotLogged();
-		c1d.get("/d4").run().assertBody().is("false");
+		c1d.get("/d4").run().assertContent().is("false");
 		assertNotLogged();
-		c1.get("/d5").run().assertBody().is("true");
+		c1.get("/d5").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /d5");
-		c1d.get("/d5").run().assertBody().is("true");
+		c1d.get("/d5").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /d5");
-		c1.get("/d6").run().assertBody().is("false");
+		c1.get("/d6").run().assertContent().is("false");
 		assertNotLogged();
-		c1d.get("/d6").run().assertBody().is("true");
+		c1d.get("/d6").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /d6");
 
-		c1.get("/e1").run().assertBody().is("false");
+		c1.get("/e1").run().assertContent().is("false");
 		assertNotLogged();
-		c1d.get("/e1").run().assertBody().is("true");
+		c1d.get("/e1").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /e1");
-		c1.get("/e2").run().assertBody().is("true");
+		c1.get("/e2").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /e2");
-		c1d.get("/e2").run().assertBody().is("true");
+		c1d.get("/e2").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /e2");
-		c1.get("/e3").run().assertBody().is("false");
+		c1.get("/e3").run().assertContent().is("false");
 		assertNotLogged();
-		c1d.get("/e3").run().assertBody().is("true");
+		c1d.get("/e3").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /e3");
-		c1.get("/e4").run().assertBody().is("false");
+		c1.get("/e4").run().assertContent().is("false");
 		assertNotLogged();
-		c1d.get("/e4").run().assertBody().is("false");
+		c1d.get("/e4").run().assertContent().is("false");
 		assertNotLogged();
-		c1.get("/e5").run().assertBody().is("true");
+		c1.get("/e5").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /e5");
-		c1d.get("/e5").run().assertBody().is("true");
+		c1d.get("/e5").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /e5");
-		c1.get("/e6").run().assertBody().is("false");
+		c1.get("/e6").run().assertContent().is("false");
 		assertNotLogged();
-		c1d.get("/e6").run().assertBody().is("true");
+		c1d.get("/e6").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /e6");
 
-		c1.get("/f1").run().assertBody().is("true");
+		c1.get("/f1").run().assertContent().is("true");
 		assertLogged();
-		c1d.get("/f1").run().assertBody().is("true");
+		c1d.get("/f1").run().assertContent().is("true");
 		assertLogged();
-		c1.get("/f2").run().assertBody().is("true");
+		c1.get("/f2").run().assertContent().is("true");
 		assertLogged();
-		c1d.get("/f2").run().assertBody().is("true");
+		c1d.get("/f2").run().assertContent().is("true");
 		assertLogged();
-		c1.get("/f3").run().assertBody().is("true");
+		c1.get("/f3").run().assertContent().is("true");
 		assertLogged();
-		c1d.get("/f3").run().assertBody().is("true");
+		c1d.get("/f3").run().assertContent().is("true");
 		assertLogged();
-		c1.get("/f4").run().assertBody().is("true");
+		c1.get("/f4").run().assertContent().is("true");
 		assertLogged();
-		c1d.get("/f4").run().assertBody().is("true");
+		c1d.get("/f4").run().assertContent().is("true");
 		assertLogged();
 
-		c1.get("/g1").run().assertBody().is("false");
+		c1.get("/g1").run().assertContent().is("false");
 		assertNotLogged();
-		c1d.get("/g1").run().assertBody().is("false");
+		c1d.get("/g1").run().assertContent().is("false");
 		assertNotLogged();
-		c1.get("/g2").run().assertBody().is("false");
+		c1.get("/g2").run().assertContent().is("false");
 		assertNotLogged();
-		c1d.get("/g2").run().assertBody().is("false");
+		c1d.get("/g2").run().assertContent().is("false");
 		assertNotLogged();
-		c1.get("/g3").run().assertBody().is("false");
+		c1.get("/g3").run().assertContent().is("false");
 		assertNotLogged();
-		c1d.get("/g3").run().assertBody().is("false");
+		c1d.get("/g3").run().assertContent().is("false");
 		assertNotLogged();
-		c1.get("/g4").run().assertBody().is("false");
+		c1.get("/g4").run().assertContent().is("false");
 		assertNotLogged();
-		c1d.get("/g4").run().assertBody().is("false");
+		c1d.get("/g4").run().assertContent().is("false");
 		assertNotLogged();
 	}
 
@@ -1052,155 +1052,155 @@ public class Rest_Debug_Test {
 		RestClient c2 = MockRestClient.buildSimpleJson(C2.class);
 		RestClient c2d = MockRestClient.create(C2.class).simpleJson().debug().suppressLogging().build();
 
-		c2.get("/a1").run().assertBody().is("true");
+		c2.get("/a1").run().assertContent().is("true");
 		assertLogged();
-		c2d.get("/a1").run().assertBody().is("true");
+		c2d.get("/a1").run().assertContent().is("true");
 		assertLogged();
-		c2.get("/a2").run().assertBody().is("false");
+		c2.get("/a2").run().assertContent().is("false");
 		assertNotLogged();
-		c2d.get("/a2").run().assertBody().is("false");
+		c2d.get("/a2").run().assertContent().is("false");
 		assertNotLogged();
-		c2.get("/a3").run().assertBody().is("true");
+		c2.get("/a3").run().assertContent().is("true");
 		assertLogged();
-		c2d.get("/a3").run().assertBody().is("true");
+		c2d.get("/a3").run().assertContent().is("true");
 		assertLogged();
-		c2.get("/a4").run().assertBody().is("false");
+		c2.get("/a4").run().assertContent().is("false");
 		assertNotLogged();
-		c2d.get("/a4").run().assertBody().is("true");
-		assertLogged();
-
-		c2.get("/b1").run().assertBody().is("false");
-		assertNotLogged();
-		c2d.get("/b1").run().assertBody().is("false");
-		assertNotLogged();
-		c2.get("/b2").run().assertBody().is("false");
-		assertNotLogged();
-		c2d.get("/b2").run().assertBody().is("false");
-		assertNotLogged();
-		c2.get("/b3").run().assertBody().is("false");
-		assertNotLogged();
-		c2d.get("/b3").run().assertBody().is("false");
-		assertNotLogged();
-		c2.get("/b4").run().assertBody().is("false");
-		assertNotLogged();
-		c2d.get("/b4").run().assertBody().is("false");
-		assertNotLogged();
-		c2.get("/b5").run().assertBody().is("true");
-		assertLogged();
-		c2d.get("/b5").run().assertBody().is("true");
-		assertLogged();
-		c2.get("/b6").run().assertBody().is("false");
-		assertNotLogged();
-		c2d.get("/b6").run().assertBody().is("true");
+		c2d.get("/a4").run().assertContent().is("true");
 		assertLogged();
 
-		c2.get("/c1").run().assertBody().is("true");
+		c2.get("/b1").run().assertContent().is("false");
+		assertNotLogged();
+		c2d.get("/b1").run().assertContent().is("false");
+		assertNotLogged();
+		c2.get("/b2").run().assertContent().is("false");
+		assertNotLogged();
+		c2d.get("/b2").run().assertContent().is("false");
+		assertNotLogged();
+		c2.get("/b3").run().assertContent().is("false");
+		assertNotLogged();
+		c2d.get("/b3").run().assertContent().is("false");
+		assertNotLogged();
+		c2.get("/b4").run().assertContent().is("false");
+		assertNotLogged();
+		c2d.get("/b4").run().assertContent().is("false");
+		assertNotLogged();
+		c2.get("/b5").run().assertContent().is("true");
+		assertLogged();
+		c2d.get("/b5").run().assertContent().is("true");
+		assertLogged();
+		c2.get("/b6").run().assertContent().is("false");
+		assertNotLogged();
+		c2d.get("/b6").run().assertContent().is("true");
+		assertLogged();
+
+		c2.get("/c1").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /c1");
-		c2d.get("/c1").run().assertBody().is("true");
+		c2d.get("/c1").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /c1");
-		c2.get("/c2").run().assertBody().is("true");
+		c2.get("/c2").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /c2");
-		c2d.get("/c2").run().assertBody().is("true");
+		c2d.get("/c2").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /c2");
-		c2.get("/c3").run().assertBody().is("true");
+		c2.get("/c3").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /c3");
-		c2d.get("/c3").run().assertBody().is("true");
+		c2d.get("/c3").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /c3");
-		c2.get("/c4").run().assertBody().is("false");
+		c2.get("/c4").run().assertContent().is("false");
 		assertNotLogged();
-		c2d.get("/c4").run().assertBody().is("false");
+		c2d.get("/c4").run().assertContent().is("false");
 		assertNotLogged();
-		c2.get("/c5").run().assertBody().is("true");
+		c2.get("/c5").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /c5");
-		c2d.get("/c5").run().assertBody().is("true");
+		c2d.get("/c5").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /c5");
-		c2.get("/c6").run().assertBody().is("false");
+		c2.get("/c6").run().assertContent().is("false");
 		assertNotLogged();
-		c2d.get("/c6").run().assertBody().is("true");
+		c2d.get("/c6").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /c6");
 
-		c2.get("/d1").run().assertBody().is("false");
+		c2.get("/d1").run().assertContent().is("false");
 		assertNotLogged();
-		c2d.get("/d1").run().assertBody().is("true");
+		c2d.get("/d1").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /d1");
-		c2.get("/d2").run().assertBody().is("false");
+		c2.get("/d2").run().assertContent().is("false");
 		assertNotLogged();
-		c2d.get("/d2").run().assertBody().is("true");
+		c2d.get("/d2").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /d2");
-		c2.get("/d3").run().assertBody().is("false");
+		c2.get("/d3").run().assertContent().is("false");
 		assertNotLogged();
-		c2d.get("/d3").run().assertBody().is("true");
+		c2d.get("/d3").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /d3");
-		c2.get("/d4").run().assertBody().is("false");
+		c2.get("/d4").run().assertContent().is("false");
 		assertNotLogged();
-		c2d.get("/d4").run().assertBody().is("false");
+		c2d.get("/d4").run().assertContent().is("false");
 		assertNotLogged();
-		c2.get("/d5").run().assertBody().is("true");
+		c2.get("/d5").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /d5");
-		c2d.get("/d5").run().assertBody().is("true");
+		c2d.get("/d5").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /d5");
-		c2.get("/d6").run().assertBody().is("false");
+		c2.get("/d6").run().assertContent().is("false");
 		assertNotLogged();
-		c2d.get("/d6").run().assertBody().is("true");
+		c2d.get("/d6").run().assertContent().is("true");
 		assertLogged("[200] HTTP GET /d6");
 
-		c2.get("/e1").run().assertBody().is("true");
+		c2.get("/e1").run().assertContent().is("true");
 		assertLogged();
-		c2d.get("/d1").run().assertBody().is("true");
+		c2d.get("/d1").run().assertContent().is("true");
 		assertLogged();
-		c2.get("/e2").run().assertBody().is("true");
+		c2.get("/e2").run().assertContent().is("true");
 		assertLogged();
-		c2d.get("/e2").run().assertBody().is("true");
+		c2d.get("/e2").run().assertContent().is("true");
 		assertLogged();
-		c2.get("/e3").run().assertBody().is("true");
+		c2.get("/e3").run().assertContent().is("true");
 		assertLogged();
-		c2d.get("/e3").run().assertBody().is("true");
+		c2d.get("/e3").run().assertContent().is("true");
 		assertLogged();
-		c2.get("/e4").run().assertBody().is("false");
+		c2.get("/e4").run().assertContent().is("false");
 		assertNotLogged();
-		c2d.get("/e4").run().assertBody().is("false");
+		c2d.get("/e4").run().assertContent().is("false");
 		assertNotLogged();
-		c2.get("/e5").run().assertBody().is("true");
+		c2.get("/e5").run().assertContent().is("true");
 		assertLogged();
-		c2d.get("/e5").run().assertBody().is("true");
+		c2d.get("/e5").run().assertContent().is("true");
 		assertLogged();
-		c2.get("/e6").run().assertBody().is("false");
+		c2.get("/e6").run().assertContent().is("false");
 		assertNotLogged();
-		c2d.get("/e6").run().assertBody().is("true");
+		c2d.get("/e6").run().assertContent().is("true");
 		assertLogged();
 
-		c2.get("/f1").run().assertBody().is("true");
+		c2.get("/f1").run().assertContent().is("true");
 		assertLogged();
-		c2d.get("/f1").run().assertBody().is("true");
+		c2d.get("/f1").run().assertContent().is("true");
 		assertLogged();
-		c2.get("/f2").run().assertBody().is("true");
+		c2.get("/f2").run().assertContent().is("true");
 		assertLogged();
-		c2d.get("/f2").run().assertBody().is("true");
+		c2d.get("/f2").run().assertContent().is("true");
 		assertLogged();
-		c2.get("/f3").run().assertBody().is("true");
+		c2.get("/f3").run().assertContent().is("true");
 		assertLogged();
-		c2d.get("/f3").run().assertBody().is("true");
+		c2d.get("/f3").run().assertContent().is("true");
 		assertLogged();
-		c2.get("/f4").run().assertBody().is("true");
+		c2.get("/f4").run().assertContent().is("true");
 		assertLogged();
-		c2d.get("/f4").run().assertBody().is("true");
+		c2d.get("/f4").run().assertContent().is("true");
 		assertLogged();
 
-		c2.get("/g1").run().assertBody().is("false");
+		c2.get("/g1").run().assertContent().is("false");
 		assertNotLogged();
-		c2d.get("/g1").run().assertBody().is("false");
+		c2d.get("/g1").run().assertContent().is("false");
 		assertNotLogged();
-		c2.get("/g2").run().assertBody().is("false");
+		c2.get("/g2").run().assertContent().is("false");
 		assertNotLogged();
-		c2d.get("/g2").run().assertBody().is("false");
+		c2d.get("/g2").run().assertContent().is("false");
 		assertNotLogged();
-		c2.get("/g3").run().assertBody().is("false");
+		c2.get("/g3").run().assertContent().is("false");
 		assertNotLogged();
-		c2d.get("/g3").run().assertBody().is("false");
+		c2d.get("/g3").run().assertContent().is("false");
 		assertNotLogged();
-		c2.get("/g4").run().assertBody().is("false");
+		c2.get("/g4").run().assertContent().is("false");
 		assertNotLogged();
-		c2d.get("/g4").run().assertBody().is("false");
+		c2d.get("/g4").run().assertContent().is("false");
 		assertNotLogged();
 	}
 

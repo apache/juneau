@@ -34,7 +34,7 @@ public final class ThrowableProcessor implements ResponseProcessor {
 	public int process(RestOpSession opSession) throws IOException {
 
 		RestResponse res = opSession.getResponse();
-		Throwable t = res.getOutput(Throwable.class);
+		Throwable t = res.getContent(Throwable.class);
 
 		if (t == null)
 			return NEXT;

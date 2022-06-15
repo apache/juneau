@@ -51,13 +51,13 @@ public class BasicStringHeader_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(stringHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(stringHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(stringHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
-		c.get().header(stringHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(stringHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
+		c.get().header(stringHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
+		c.get().header(stringHeader(HEADER,PARSED)).run().assertContent().is(VALUE);
+		c.get().header(stringHeader(HEADER,()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(stringHeader(HEADER,(Supplier<String>)null)).run().assertBody().isEmpty();
+		c.get().header(stringHeader(HEADER,(Supplier<String>)null)).run().assertContent().isEmpty();
 		assertThrown(()->stringHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
 		assertThrown(()->stringHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
 		assertThrown(()->stringHeader("", ()->PARSED)).asMessage().is("Name cannot be empty on header.");

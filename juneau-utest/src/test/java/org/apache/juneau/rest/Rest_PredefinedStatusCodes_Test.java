@@ -118,62 +118,62 @@ public class Rest_PredefinedStatusCodes_Test {
 		b.put("/a?noTrace=true", "{f2:'foo'}", APPLICATION_JSON)
 			.run()
 			.assertCode().is(400)
-			.assertBody().isContains(
+			.assertContent().isContains(
 				"Unknown property 'f2' encountered while trying to parse into class"
 			);
 		b.put("/a?noTrace=true", "{f1:'foo', f2:'foo'}", APPLICATION_JSON)
 			.run()
 			.assertCode().is(400)
-			.assertBody().isContains(
+			.assertContent().isContains(
 				"Unknown property 'f2' encountered while trying to parse into class"
 			);
 		b.put("/b?noTrace=true", "{f1:'foo'}", APPLICATION_JSON)
 			.run()
 			.assertCode().is(400)
-			.assertBody().isContains(
+			.assertContent().isContains(
 				"Invalid number"
 			);
 		b.put("/c?noTrace=true", "{f1:1}", APPLICATION_JSON)
 			.run()
 			.assertCode().is(400)
-			.assertBody().isContains(
+			.assertContent().isContains(
 				"could not be instantiated"
 			);
 		b.put("/d?noTrace=true", "{f1:1}", APPLICATION_JSON)
 			.run()
 			.assertCode().is(400)
-			.assertBody().isContains(
+			.assertContent().isContains(
 				"could not be instantiated"
 			);
 		b.put("/e?noTrace=true", "{f1:1}", APPLICATION_JSON)
 			.run()
 			.assertCode().is(400)
-			.assertBody().isContains(
+			.assertContent().isContains(
 				"Class is not public"
 			);
 		b.put("/f?noTrace=true", "'foo'", APPLICATION_JSON)
 			.run()
 			.assertCode().is(400)
-			.assertBody().isContains(
+			.assertContent().isContains(
 				"Test error"
 			);
 		b.put("/g/123?noTrace=true&p1=foo", "'foo'", APPLICATION_JSON)
 			.run()
 			.assertCode().is(400)
-			.assertBody().isContains(
+			.assertContent().isContains(
 				"Could not parse query parameter 'p1'."
 			);
 		b.put("/g/foo?noTrace=true&p1=1", "'foo'", APPLICATION_JSON)
 			.run()
 			.assertCode().is(400)
-			.assertBody().isContains(
+			.assertContent().isContains(
 				"Could not parse path parameter 'a1'."
 			);
 		b.put("/g/123?noTrace=true&p1=1", "'foo'", APPLICATION_JSON)
 			.header("h1", "foo")
 			.run()
 			.assertCode().is(400)
-			.assertBody().isContains(
+			.assertContent().isContains(
 				"Could not parse header parameter 'h1'."
 			);
 	}
@@ -196,7 +196,7 @@ public class Rest_PredefinedStatusCodes_Test {
 		c.get("/bad?noTrace=true")
 			.run()
 			.assertCode().is(404)
-			.assertBody().isContains(
+			.assertContent().isContains(
 				"Method 'GET' not found on resource with matching pattern on path '/bad'"
 			);
 	}
@@ -204,7 +204,7 @@ public class Rest_PredefinedStatusCodes_Test {
 		c.put("?noTrace=true", null)
 			.run()
 			.assertCode().is(405)
-			.assertBody().isContains(
+			.assertContent().isContains(
 				"Method 'PUT' not found on resource."
 			);
 	}
@@ -233,7 +233,7 @@ public class Rest_PredefinedStatusCodes_Test {
 		d.get("/d?noTrace=true")
 			.run()
 			.assertCode().is(412)
-			.assertBody().isContains(
+			.assertContent().isContains(
 				"Method 'GET' not found on resource on path '/d' with matching matcher."
 			);
 	}

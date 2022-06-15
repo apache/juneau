@@ -25,7 +25,7 @@ public class NoContent_Test {
 	@Rest
 	public static class A {
 		@RestGet public NoContent a1() { return NO_CONTENT; }
-		@RestGet public NoContent a2() { return noContent().body("foo").build(); }
+		@RestGet public NoContent a2() { return noContent().content("foo").build(); }
 		@RestGet public NoContent a3() { return noContent().header("Foo","bar").build(); }
 	}
 

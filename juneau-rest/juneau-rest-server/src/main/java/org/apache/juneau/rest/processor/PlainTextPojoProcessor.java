@@ -40,7 +40,7 @@ public final class PlainTextPojoProcessor implements ResponseProcessor {
 		if (res.getSerializerMatch().isPresent() || ! (isEmpty(accept) || accept.startsWith("text/plain") || accept.contains("*/*")))
 			return NEXT;
 
-		Object o = res.getOutput(Object.class);
+		Object o = res.getContent(Object.class);
 
 		if (isEmpty(res.getContentType()))
 			res.setHeader(ContentType.TEXT_PLAIN);

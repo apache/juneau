@@ -55,15 +55,15 @@ public class Accept_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(accept(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(accept(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(accept(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(accept(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(accept(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(accept(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(accept(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(accept(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(accept((String)null)).run().assertBody().isEmpty();
-		c.get().header(accept((Supplier<MediaRanges>)null)).run().assertBody().isEmpty();
-		c.get().header(accept(()->null)).run().assertBody().isEmpty();
+		c.get().header(accept((String)null)).run().assertContent().isEmpty();
+		c.get().header(accept((Supplier<MediaRanges>)null)).run().assertContent().isEmpty();
+		c.get().header(accept(()->null)).run().assertContent().isEmpty();
 	}
 
 	@Test

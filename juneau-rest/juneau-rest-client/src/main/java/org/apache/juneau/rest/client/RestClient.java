@@ -159,8 +159,8 @@ import org.apache.juneau.xml.*;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestClient} <jk>extends</jk> {@link HttpClient}, creates {@link RestRequest} objects.
  * 	<li class='jc'>{@link RestRequest} <jk>extends</jk> {@link HttpUriRequest}, creates {@link RestResponse} objects.
- * 	<li class='jc'>{@link RestResponse} creates {@link ResponseBody} and {@link ResponseHeader} objects.
- * 	<li class='jc'>{@link ResponseBody} <jk>extends</jk> {@link HttpEntity}
+ * 	<li class='jc'>{@link RestResponse} creates {@link ResponseContent} and {@link ResponseHeader} objects.
+ * 	<li class='jc'>{@link ResponseContent} <jk>extends</jk> {@link HttpEntity}
  * 	<li class='jc'>{@link ResponseHeader} <jk>extends</jk> {@link Header}
  * </ul>
  *
@@ -215,7 +215,7 @@ import org.apache.juneau.xml.*;
  * <p class='w900'>
  * The distinction between the two methods is that {@link RestRequest#complete() complete()} automatically consumes the response body and
  * {@link RestRequest#run() run()} does not.  Note that you must consume response bodies in order for HTTP connections to be freed up
- * for reuse!  The {@link InputStream InputStreams} returned by the {@link ResponseBody} object are auto-closing once
+ * for reuse!  The {@link InputStream InputStreams} returned by the {@link ResponseContent} object are auto-closing once
  * they are exhausted, so it is often not necessary to explicitly close them.
  *
  * <p class='w900'>
@@ -469,8 +469,8 @@ import org.apache.juneau.xml.*;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestRequest}
  * 	<ul>
- * 		<li class='jm'>{@link RestRequest#body(Object) body(Object)}
- * 		<li class='jm'>{@link RestRequest#body(Object,HttpPartSchema) body(Object,HttpPartSchema)}
+ * 		<li class='jm'>{@link RestRequest#content(Object) body(Object)}
+ * 		<li class='jm'>{@link RestRequest#content(Object,HttpPartSchema) body(Object,HttpPartSchema)}
  * 	</ul>
  * </ul>
  *
@@ -657,33 +657,33 @@ import org.apache.juneau.xml.*;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestResponse}
  * 	<ul>
- * 		<li class='jm'><c>{@link RestResponse#getBody() getBody()} <jk>returns</jk> {@link ResponseBody}</c>
+ * 		<li class='jm'><c>{@link RestResponse#getContent() getBody()} <jk>returns</jk> {@link ResponseContent}</c>
  * 	</ul>
  * </ul>
  *
  * <p class='w900'>
- * The {@link ResponseBody} class extends from the HttpClient {@link HttpEntity} class and provides several convenience
+ * The {@link ResponseContent} class extends from the HttpClient {@link HttpEntity} class and provides several convenience
  * methods:
  *
  * <ul class='javatree'>
- * 	<li class='jc'>{@link ResponseBody}
+ * 	<li class='jc'>{@link ResponseContent}
  * 	<ul>
- * 		<li class='jm'><c>{@link ResponseBody#asInputStream() asInputStream()} <jk>returns</jk> InputStream</c>
- * 		<li class='jm'><c>{@link ResponseBody#asReader() asReader()} <jk>returns</jk> Reader</c>
- * 		<li class='jm'><c>{@link ResponseBody#asReader(Charset) asReader(Charset)} <jk>returns</jk> Reader</c>
- * 		<li class='jm'><c>{@link ResponseBody#pipeTo(OutputStream) pipeTo(OutputStream)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link ResponseBody#pipeTo(Writer) pipeTo(Writer)} <jk>returns</jk> {@link RestResponse}</c>
- * 		<li class='jm'><c>{@link ResponseBody#as(Type,Type...) as(Type,Type...)} <jk>returns</jk> T</c>
- * 		<li class='jm'><c>{@link ResponseBody#as(Class) as(Class&lt;T&gt;)} <jk>returns</jk> T</c>
- * 		<li class='jm'><c>{@link ResponseBody#asFuture(Class) asFuture(Class&lt;T&gt;)} <jk>returns</jk> Future&lt;T&gt;</c>
- * 		<li class='jm'><c>{@link ResponseBody#asFuture(Type,Type...) asFuture(Type,Type...)} <jk>returns</jk> Future&lt;T&gt;</c>
- * 		<li class='jm'><c>{@link ResponseBody#asString() asString()} <jk>returns</jk> String</c>
- * 		<li class='jm'><c>{@link ResponseBody#asStringFuture() asStringFuture()} <jk>returns</jk> Future&lt;String&gt;</c>
- * 		<li class='jm'><c>{@link ResponseBody#asAbbreviatedString(int) asAbbreviatedString(int)} <jk>returns</jk> String</c>
- * 		<li class='jm'><c>{@link ResponseBody#asObjectRest(Class) asObjectRest(Class&lt;?&gt;)} <jk>returns</jk> {@link ObjectRest}</c>
- * 		<li class='jm'><c>{@link ResponseBody#asObjectRest() asObjectRest()} <jk>returns</jk> {@link ObjectRest}</c>
- * 		<li class='jm'><c>{@link ResponseBody#asMatcher(Pattern) asMatcher(Pattern)} <jk>returns</jk> {@link Matcher}</c>
- * 		<li class='jm'><c>{@link ResponseBody#asMatcher(String) asMatcher(String)} <jk>returns</jk> {@link Matcher}</c>
+ * 		<li class='jm'><c>{@link ResponseContent#asInputStream() asInputStream()} <jk>returns</jk> InputStream</c>
+ * 		<li class='jm'><c>{@link ResponseContent#asReader() asReader()} <jk>returns</jk> Reader</c>
+ * 		<li class='jm'><c>{@link ResponseContent#asReader(Charset) asReader(Charset)} <jk>returns</jk> Reader</c>
+ * 		<li class='jm'><c>{@link ResponseContent#pipeTo(OutputStream) pipeTo(OutputStream)} <jk>returns</jk> {@link RestResponse}</c>
+ * 		<li class='jm'><c>{@link ResponseContent#pipeTo(Writer) pipeTo(Writer)} <jk>returns</jk> {@link RestResponse}</c>
+ * 		<li class='jm'><c>{@link ResponseContent#as(Type,Type...) as(Type,Type...)} <jk>returns</jk> T</c>
+ * 		<li class='jm'><c>{@link ResponseContent#as(Class) as(Class&lt;T&gt;)} <jk>returns</jk> T</c>
+ * 		<li class='jm'><c>{@link ResponseContent#asFuture(Class) asFuture(Class&lt;T&gt;)} <jk>returns</jk> Future&lt;T&gt;</c>
+ * 		<li class='jm'><c>{@link ResponseContent#asFuture(Type,Type...) asFuture(Type,Type...)} <jk>returns</jk> Future&lt;T&gt;</c>
+ * 		<li class='jm'><c>{@link ResponseContent#asString() asString()} <jk>returns</jk> String</c>
+ * 		<li class='jm'><c>{@link ResponseContent#asStringFuture() asStringFuture()} <jk>returns</jk> Future&lt;String&gt;</c>
+ * 		<li class='jm'><c>{@link ResponseContent#asAbbreviatedString(int) asAbbreviatedString(int)} <jk>returns</jk> String</c>
+ * 		<li class='jm'><c>{@link ResponseContent#asObjectRest(Class) asObjectRest(Class&lt;?&gt;)} <jk>returns</jk> {@link ObjectRest}</c>
+ * 		<li class='jm'><c>{@link ResponseContent#asObjectRest() asObjectRest()} <jk>returns</jk> {@link ObjectRest}</c>
+ * 		<li class='jm'><c>{@link ResponseContent#asMatcher(Pattern) asMatcher(Pattern)} <jk>returns</jk> {@link Matcher}</c>
+ * 		<li class='jm'><c>{@link ResponseContent#asMatcher(String) asMatcher(String)} <jk>returns</jk> {@link Matcher}</c>
  * 	</ul>
  * </ul>
  *
@@ -724,9 +724,9 @@ import org.apache.juneau.xml.*;
  *
  * <p class='w900'>
  * The response body can only be consumed once unless it has been cached into memory.  In many cases, the body is
- * automatically cached when using the assertions methods or methods such as {@link ResponseBody#asString()}.
+ * automatically cached when using the assertions methods or methods such as {@link ResponseContent#asString()}.
  * However, methods that involve reading directly from the input stream cannot be called twice.
- * In these cases, the {@link RestResponse#cacheBody()} and {@link ResponseBody#cache()} methods are provided
+ * In these cases, the {@link RestResponse#cacheContent()} and {@link ResponseContent#cache()} methods are provided
  * to cache the response body in memory so that you can perform several operations against it.
  *
  * <p class='bjava'>
@@ -743,9 +743,9 @@ import org.apache.juneau.xml.*;
  * Assertion methods are also provided for fluent-style calls:
  *
  * <ul class='javatree'>
- * 	<li class='jc'>{@link ResponseBody}
+ * 	<li class='jc'>{@link ResponseContent}
  * 	<ul>
- * 		<li class='jm'><c>{@link ResponseBody#assertValue() assertValue()} <jk>returns</jk> {@link FluentResponseBodyAssertion}</c>
+ * 		<li class='jm'><c>{@link ResponseContent#assertValue() assertValue()} <jk>returns</jk> {@link FluentResponseBodyAssertion}</c>
  * 	</ul>
  * </ul>
  *
@@ -1572,7 +1572,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<ul>
 		 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link #sortCollections()}) or
 		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
-		 * 		<li>Typically the {@link RestRequest#body(Object, HttpPartSchema)} method will be used to specify the body of the request with the
+		 * 		<li>Typically the {@link RestRequest#content(Object, HttpPartSchema)} method will be used to specify the body of the request with the
 		 * 			schema describing it's structure.
 		 * 	</ul>
 		 * <p>
@@ -1580,7 +1580,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<ul>
 		 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link #strict()}) or
 		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
-		 * 		<li>Typically the {@link ResponseBody#schema(HttpPartSchema)} method will be used to specify the structure of the response body.
+		 * 		<li>Typically the {@link ResponseContent#schema(HttpPartSchema)} method will be used to specify the structure of the response body.
 		 * 	</ul>
 		 * <p>
 		 * 	<c>Accept</c> request header will be set to <js>"text/openapi"</js> unless overridden
@@ -3916,7 +3916,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * <ul>
 		 * 	<li class='jm'>{@link RestRequest#runFuture()}
 		 * 	<li class='jm'>{@link RestRequest#completeFuture()}
-		 * 	<li class='jm'>{@link ResponseBody#asFuture(Class)} (and similar methods)
+		 * 	<li class='jm'>{@link ResponseContent#asFuture(Class)} (and similar methods)
 		 * </ul>
 		 *
 		 * <p>
@@ -6962,7 +6962,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * Same as {@link #put(Object, Object)} but don't specify the input yet.
 	 *
 	 * <p>
-	 * You must call either {@link RestRequest#body(Object)} or {@link RestRequest#formData(String, Object)}
+	 * You must call either {@link RestRequest#content(Object)} or {@link RestRequest#formData(String, Object)}
 	 * to set the contents on the result object.
 	 *
 	 * @param uri
@@ -7058,7 +7058,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * Same as {@link #post(Object, Object)} but don't specify the input yet.
 	 *
 	 * <p>
-	 * You must call either {@link RestRequest#body(Object)} or {@link RestRequest#formData(String, Object)} to set the
+	 * You must call either {@link RestRequest#content(Object)} or {@link RestRequest#formData(String, Object)} to set the
 	 * contents on the result object.
 	 *
 	 * <ul class='notes'>
@@ -7187,22 +7187,22 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			if (body instanceof Supplier)
 				body = ((Supplier<?>)body).get();
 			if (body instanceof NameValuePair)
-				return req.body(new UrlEncodedFormEntity(alist((NameValuePair)body)));
+				return req.content(new UrlEncodedFormEntity(alist((NameValuePair)body)));
 			if (body instanceof NameValuePair[])
-				return req.body(new UrlEncodedFormEntity(alist((NameValuePair[])body)));
+				return req.content(new UrlEncodedFormEntity(alist((NameValuePair[])body)));
 			if (body instanceof PartList)
-				return req.body(new UrlEncodedFormEntity(((PartList)body).toNameValuePairs()));
+				return req.content(new UrlEncodedFormEntity(((PartList)body).toNameValuePairs()));
 			if (body instanceof HttpResource)
 				((HttpResource)body).getHeaders().forEach(x-> req.header(x));
 			if (body instanceof HttpEntity) {
 				HttpEntity e = (HttpEntity)body;
 				if (e.getContentType() == null)
 					req.header(ContentType.APPLICATION_FORM_URLENCODED);
-				return req.body(e);
+				return req.content(e);
 			}
 			if (body instanceof Reader || body instanceof InputStream)
-				return req.header(ContentType.APPLICATION_FORM_URLENCODED).body(body);
-			return req.body(serializedEntity(body, urlEncodingSerializer, null).build());
+				return req.header(ContentType.APPLICATION_FORM_URLENCODED).content(body);
+			return req.content(serializedEntity(body, urlEncodingSerializer, null).build());
 		} catch (IOException e) {
 			throw new RestCallException(null, e, "Could not read form post body.");
 		}
@@ -7329,7 +7329,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * Same as {@link #patch(Object, Object)} but don't specify the input yet.
 	 *
 	 * <p>
-	 * You must call {@link RestRequest#body(Object)} to set the contents on the result object.
+	 * You must call {@link RestRequest#content(Object)} to set the contents on the result object.
 	 *
 	 * @param uri
 	 * 	The URI of the remote REST resource.
@@ -7432,7 +7432,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			if (headers != null)
 				JsonMap.ofJson(headers).forEach((k,v) -> req.header(stringHeader(k, stringify(v))));
 			if (isNotEmpty(content))
-				req.bodyString(content);
+				req.contentString(content);
 			return req;
 		} catch (ParseException e) {
 			throw new RestCallException(null, e, "Invalid format for call string.");
@@ -7558,7 +7558,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 		onInit(req);
 
-		req.body(op.getBody());
+		req.content(op.getBody());
 
 		return req;
 	}
@@ -7739,7 +7739,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 					RemoteOperationArg ba = rom.getBodyArg();
 					if (ba != null)
-						rc.body(args[ba.getIndex()], ba.getSchema());
+						rc.content(args[ba.getIndex()], ba.getSchema());
 
 					rom.forEachRequestArg(rmba -> {
 							RequestBeanMeta rbm = rmba.getMeta();
@@ -7760,7 +7760,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 										else if (pt == HEADER)
 											rc.headerArg(pn, val, schema, p.getSerializer().orElse(partSerializer), schema.isSkipIfEmpty());
 										else /* (pt == HttpPartType.BODY) */
-											rc.body(val, schema);
+											rc.content(val, schema);
 									}
 								}
 							}
@@ -7830,7 +7830,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 				if (Throwable.class.isAssignableFrom(rt))
 					rc.ignoreErrors();
 				res = rc.run();
-				Object v = res.getBody().as(ror.getReturnType());
+				Object v = res.getContent().as(ror.getReturnType());
 				if (v == null && rt.isPrimitive())
 					v = ClassInfo.of(rt).getPrimitiveDefault();
 				ret = v;
@@ -7955,13 +7955,13 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					try {
 						RestRequest rc = request("POST", uri, true)
 							.serializer(serializer)
-							.body(args)
+							.content(args)
 							.rethrow(RuntimeException.class)
 							.rethrow(method.getExceptionTypes());
 
 						res = rc.run();
 
-						Object v = res.getBody().as(method.getGenericReturnType());
+						Object v = res.getContent().as(method.getGenericReturnType());
 						if (v == null && method.getReturnType().isPrimitive())
 							v = ClassInfo.of(method.getReturnType()).getPrimitiveDefault();
 						return v;

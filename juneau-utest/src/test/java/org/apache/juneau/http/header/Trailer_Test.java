@@ -50,15 +50,15 @@ public class Trailer_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(trailer(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(trailer(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(trailer(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(trailer(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(trailer(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(trailer(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(trailer(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(trailer(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(trailer((String)null)).run().assertBody().isEmpty();
-		c.get().header(trailer((Supplier<String>)null)).run().assertBody().isEmpty();
-		c.get().header(trailer(()->null)).run().assertBody().isEmpty();
+		c.get().header(trailer((String)null)).run().assertContent().isEmpty();
+		c.get().header(trailer((Supplier<String>)null)).run().assertContent().isEmpty();
+		c.get().header(trailer(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

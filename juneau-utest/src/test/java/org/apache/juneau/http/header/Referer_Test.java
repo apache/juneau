@@ -51,15 +51,15 @@ public class Referer_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(referer(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(referer(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(referer(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(referer(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(referer(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(referer(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(referer(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(referer(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(referer((String)null)).run().assertBody().isEmpty();
-		c.get().header(referer((Supplier<URI>)null)).run().assertBody().isEmpty();
-		c.get().header(referer(()->null)).run().assertBody().isEmpty();
+		c.get().header(referer((String)null)).run().assertContent().isEmpty();
+		c.get().header(referer((Supplier<URI>)null)).run().assertContent().isEmpty();
+		c.get().header(referer(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

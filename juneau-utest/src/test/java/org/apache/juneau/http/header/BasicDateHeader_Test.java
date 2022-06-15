@@ -56,14 +56,14 @@ public class BasicDateHeader_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(dateHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(dateHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(dateHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
-		c.get().header(dateHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(dateHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
+		c.get().header(dateHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
+		c.get().header(dateHeader(HEADER,PARSED)).run().assertContent().is(VALUE);
+		c.get().header(dateHeader(HEADER,()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(dateHeader(HEADER,(Supplier<ZonedDateTime>)null)).run().assertBody().isEmpty();
-		c.get().header(dateHeader(HEADER,()->null)).run().assertBody().isEmpty();
+		c.get().header(dateHeader(HEADER,(Supplier<ZonedDateTime>)null)).run().assertContent().isEmpty();
+		c.get().header(dateHeader(HEADER,()->null)).run().assertContent().isEmpty();
 		assertThrown(()->dateHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
 		assertThrown(()->dateHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
 		assertThrown(()->dateHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");

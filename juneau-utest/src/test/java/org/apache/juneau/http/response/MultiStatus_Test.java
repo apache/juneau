@@ -25,7 +25,7 @@ public class MultiStatus_Test {
 	@Rest
 	public static class A {
 		@RestGet public MultiStatus a1() { return MULTI_STATUS; }
-		@RestGet public MultiStatus a2() { return multiStatus().body("foo").build(); }
+		@RestGet public MultiStatus a2() { return multiStatus().content("foo").build(); }
 		@RestGet public MultiStatus a3() { return multiStatus().header("Foo","bar").build(); }
 	}
 
@@ -36,11 +36,11 @@ public class MultiStatus_Test {
 		client.get("/a1")
 			.run()
 			.assertCode().is(207)
-			.assertBody().is("Multi-Status");
+			.assertContent().is("Multi-Status");
 		client.get("/a2")
 			.run()
 			.assertCode().is(207)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		client.get("/a3")
 			.run()
 			.assertCode().is(207)

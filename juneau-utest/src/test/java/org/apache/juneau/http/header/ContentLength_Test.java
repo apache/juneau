@@ -50,15 +50,15 @@ public class ContentLength_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(contentLength(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(contentLength(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(contentLength(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(contentLength(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(contentLength(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(contentLength(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(contentLength(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(contentLength(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(contentLength((String)null)).run().assertBody().isEmpty();
-		c.get().header(contentLength((Supplier<Long>)null)).run().assertBody().isEmpty();
-		c.get().header(contentLength(()->null)).run().assertBody().isEmpty();
+		c.get().header(contentLength((String)null)).run().assertContent().isEmpty();
+		c.get().header(contentLength((Supplier<Long>)null)).run().assertContent().isEmpty();
+		c.get().header(contentLength(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

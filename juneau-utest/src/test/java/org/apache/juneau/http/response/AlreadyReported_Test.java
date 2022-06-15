@@ -25,7 +25,7 @@ public class AlreadyReported_Test {
 	@Rest
 	public static class A {
 		@RestGet public AlreadyReported a1() { return ALREADY_REPORTED; }
-		@RestGet public AlreadyReported a2() { return alreadyReported().body("foo").build(); }
+		@RestGet public AlreadyReported a2() { return alreadyReported().content("foo").build(); }
 		@RestGet public AlreadyReported a3() { return alreadyReported().header("Foo","bar").build(); }
 	}
 
@@ -36,11 +36,11 @@ public class AlreadyReported_Test {
 		client.get("/a1")
 			.run()
 			.assertCode().is(208)
-			.assertBody().is("Already Reported");
+			.assertContent().is("Already Reported");
 		client.get("/a2")
 			.run()
 			.assertCode().is(208)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		client.get("/a3")
 			.run()
 			.assertCode().is(208)

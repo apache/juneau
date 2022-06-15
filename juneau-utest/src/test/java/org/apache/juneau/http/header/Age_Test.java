@@ -50,15 +50,15 @@ public class Age_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(age(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(age(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(age(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(age(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(age(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(age(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(age(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(age(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(age((String)null)).run().assertBody().isEmpty();
-		c.get().header(age((Supplier<Integer>)null)).run().assertBody().isEmpty();
-		c.get().header(age(()->null)).run().assertBody().isEmpty();
+		c.get().header(age((String)null)).run().assertContent().isEmpty();
+		c.get().header(age((Supplier<Integer>)null)).run().assertContent().isEmpty();
+		c.get().header(age(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

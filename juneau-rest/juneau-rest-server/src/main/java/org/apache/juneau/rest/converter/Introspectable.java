@@ -24,7 +24,7 @@ import org.apache.juneau.http.response.*;
  * <c>@RestOp</c>-annotated method.
  *
  * <p>
- * When enabled, public methods can be called on objects returned through the {@link RestResponse#setOutput(Object)}
+ * When enabled, public methods can be called on objects returned through the {@link RestResponse#setContent(Object)}
  * method.
  *
  * <p>

@@ -116,7 +116,7 @@ public class HttpParts {
 	 * 	</ul>
 	 * @return A new {@link BasicCsvArrayPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
-	public static final BasicCsvArrayPart basicCsvArrayPart(String name, Supplier<String[]> value) {
+	public static final BasicCsvArrayPart csvArrayPart(String name, Supplier<String[]> value) {
 		return BasicCsvArrayPart.of(name, value);
 	}
 
@@ -379,7 +379,7 @@ public class HttpParts {
 	 *
 	 * @return A new empty builder.
 	 */
-	public static final PartList.Builder partListBuilder() {
+	public static final PartList.Builder partList() {
 		return PartList.create();
 	}
 

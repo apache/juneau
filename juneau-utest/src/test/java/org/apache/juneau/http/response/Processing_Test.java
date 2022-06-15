@@ -25,7 +25,7 @@ public class Processing_Test {
 	@Rest
 	public static class A {
 		@RestGet public Processing a1() { return PROCESSING; }
-		@RestGet public Processing a2() { return processing().body("foo").build(); }
+		@RestGet public Processing a2() { return processing().content("foo").build(); }
 		@RestGet public Processing a3() { return processing().header("Foo","bar").build(); }
 	}
 
@@ -36,11 +36,11 @@ public class Processing_Test {
 		client.get("/a1")
 			.run()
 			.assertCode().is(1102)
-			.assertBody().is("Processing");
+			.assertContent().is("Processing");
 		client.get("/a2")
 			.run()
 			.assertCode().is(1102)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		client.get("/a3")
 			.run()
 			.assertCode().is(1102)

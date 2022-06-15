@@ -97,14 +97,14 @@ public class RestClient_Body_Test {
 		;
 
 		HttpResource x7 = readerResource(reader("foo")).build();
-		client().build().post("/",x7).run().assertBody().is("foo");
+		client().build().post("/",x7).run().assertContent().is("foo");
 
 		HttpResource x8 = readerResource(reader("foo")).cached().build();
-		client().build().post("/",x8).run().assertBody().is("foo");
-		client().build().post("/",x8).run().assertBody().is("foo");
+		client().build().post("/",x8).run().assertContent().is("foo");
+		client().build().post("/",x8).run().assertContent().is("foo");
 
 		HttpResource x9 = readerResource(null).build();
-		client().build().post("/",x9).run().assertBody().isEmpty();
+		client().build().post("/",x9).run().assertContent().isEmpty();
 	}
 
 	@Test
@@ -142,14 +142,14 @@ public class RestClient_Body_Test {
 		;
 
 		HttpEntity x7 = readerEntity(reader("foo")).build();
-		client().build().post("/",x7).run().assertBody().is("foo");
+		client().build().post("/",x7).run().assertContent().is("foo");
 
 		HttpEntity x8 = readerEntity(reader("foo")).cached().build();
-		client().build().post("/",x8).run().assertBody().is("foo");
-		client().build().post("/",x8).run().assertBody().is("foo");
+		client().build().post("/",x8).run().assertContent().is("foo");
+		client().build().post("/",x8).run().assertContent().is("foo");
 
 		HttpEntity x9 = readerEntity(null).build();
-		client().build().post("/",x9).run().assertBody().isEmpty();
+		client().build().post("/",x9).run().assertContent().isEmpty();
 
 		BasicHttpEntity x12 = stringEntity("foo").build();
 		x12.assertString().is("foo");
@@ -173,14 +173,14 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Content-Length").isNull()
 			.assertHeader("X-Content-Encoding").isNull()
 			.assertHeader("X-Content-Type").is("application/json")
-			.assertBody().as(ABean.class).asJson().is("{a:1,b:'foo'}");
+			.assertContent().as(ABean.class).asJson().is("{a:1,b:'foo'}");
 
 		SerializedEntity x3 = serializedEntity(()->ABean.get(),js,null).build();
 		client().build().post("/",x3).run()
 			.assertHeader("X-Content-Length").isNull()
 			.assertHeader("X-Content-Encoding").isNull()
 			.assertHeader("X-Content-Type").is("application/json")
-			.assertBody().as(ABean.class).asJson().is("{a:1,b:'foo'}");
+			.assertContent().as(ABean.class).asJson().is("{a:1,b:'foo'}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

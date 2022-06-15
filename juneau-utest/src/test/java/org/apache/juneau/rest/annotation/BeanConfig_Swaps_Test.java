@@ -123,11 +123,11 @@ public class BeanConfig_Swaps_Test {
 	@Test
 	public void a01_swaps() throws Exception {
 		RestClient a = MockRestClient.build(A1.class);
-		a.get("/a").json().run().assertBody().is("'A2-0'");
-		a.put("/b", "'A2-1'", APPLICATION_JSON).run().assertBody().is("'A2-1'");
-		a.put("/c/A2-2", null, APPLICATION_JSON).run().assertBody().is("'A2-2'");
-		a.get("/d").json().run().assertBody().is("'A3-0'");
-		a.put("/e", "'A3-1'", APPLICATION_JSON).run().assertBody().is("'A3-1'");
-		a.put("/f/A3-2", null, APPLICATION_JSON).run().assertBody().is("'A3-2'");
+		a.get("/a").json().run().assertContent().is("'A2-0'");
+		a.put("/b", "'A2-1'", APPLICATION_JSON).run().assertContent().is("'A2-1'");
+		a.put("/c/A2-2", null, APPLICATION_JSON).run().assertContent().is("'A2-2'");
+		a.get("/d").json().run().assertContent().is("'A3-0'");
+		a.put("/e", "'A3-1'", APPLICATION_JSON).run().assertContent().is("'A3-1'");
+		a.put("/f/A3-2", null, APPLICATION_JSON).run().assertContent().is("'A3-2'");
 	}
 }

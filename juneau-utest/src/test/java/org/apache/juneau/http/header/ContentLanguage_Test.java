@@ -50,15 +50,15 @@ public class ContentLanguage_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(contentLanguage(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(contentLanguage(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(contentLanguage(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(contentLanguage(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(contentLanguage(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(contentLanguage(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(contentLanguage(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(contentLanguage(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(contentLanguage((String)null)).run().assertBody().isEmpty();
-		c.get().header(contentLanguage((Supplier<String[]>)null)).run().assertBody().isEmpty();
-		c.get().header(contentLanguage(()->null)).run().assertBody().isEmpty();
+		c.get().header(contentLanguage((String)null)).run().assertContent().isEmpty();
+		c.get().header(contentLanguage((Supplier<String[]>)null)).run().assertContent().isEmpty();
+		c.get().header(contentLanguage(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

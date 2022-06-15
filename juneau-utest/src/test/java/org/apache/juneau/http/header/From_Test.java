@@ -50,15 +50,15 @@ public class From_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(from(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(from(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(from(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(from(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(from(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(from(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(from(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(from(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(from((String)null)).run().assertBody().isEmpty();
-		c.get().header(from((Supplier<String>)null)).run().assertBody().isEmpty();
-		c.get().header(from(()->null)).run().assertBody().isEmpty();
+		c.get().header(from((String)null)).run().assertContent().isEmpty();
+		c.get().header(from((Supplier<String>)null)).run().assertContent().isEmpty();
+		c.get().header(from(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

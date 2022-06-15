@@ -51,15 +51,15 @@ public class Connection_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(connection(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(connection(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(connection(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(connection(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(connection(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(connection(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(connection(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(connection(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(connection((String)null)).run().assertBody().is("Keep-Alive");
-		c.get().header(connection((Supplier<String>)null)).run().assertBody().is("Keep-Alive");
-		c.get().header(connection(()->null)).run().assertBody().is("Keep-Alive");
+		c.get().header(connection((String)null)).run().assertContent().is("Keep-Alive");
+		c.get().header(connection((Supplier<String>)null)).run().assertContent().is("Keep-Alive");
+		c.get().header(connection(()->null)).run().assertContent().is("Keep-Alive");
 	}
 
 	@Test

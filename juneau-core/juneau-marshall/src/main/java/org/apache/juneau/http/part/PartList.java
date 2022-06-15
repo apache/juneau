@@ -37,7 +37,7 @@ import org.apache.juneau.svl.*;
  * <p class='bjava'>
  * 	PartList <jv>parts</jv> = PartList
  * 		.<jsm>create</jsm>()
- * 		.append(MyPart.<jsm>of</jsm>("foo"))
+ * 		.append(MyPart.<jsm>of</jsm>(<js>"foo"</js>))
  * 		.append(<js>"Bar"</js>, ()-&gt;<jsm>getDynamicValueFromSomewhere</jsm>())
  * 		.build();
  * </p>
@@ -45,7 +45,7 @@ import org.apache.juneau.svl.*;
  * <p>
  * Convenience creators are provided for creating lists with minimal code:
  * <p class='bjava'>
- * 	PartList <jv>parts</jv> = PartList.<jsm>of</jsm>(BasicIntegerPart.of(<js>"foo"</js>, 1));
+ * 	PartList <jv>parts</jv> = PartList.<jsm>of</jsm>(BasicIntegerPart.<jsm>of</jsm>(<js>"foo"</js>, 1));
  * </p>
  *
  * <p>
@@ -98,11 +98,11 @@ import org.apache.juneau.svl.*;
  * In general, try to use these over the {@link #getAll()}/{@link #getAll(String)} methods that require array copies.
  *
  * <p>
- * The {@link #get(String)} method is special in that it will collapse multiple parts with the same name into
- * a single comma-delimited list (see <a href='https://tools.ietf.org/html/rfc2616#section-4.2'>RFC 2616 Section 4.2</a> for rules).
+ * Similar to the way multiple headers can be collapsed into a single value, the {@link #get(String)} method is special in that it will collapse multiple
+ * parts with the same name into a single comma-delimited list.
  *
  * <p>
- * The {@link #get(Class)} and {@link #get(String, Class)} methods are provided for working with {@link FormData}/{@link Query}/{@link Path}/{@link FormData}-annotated
+ * The {@link #get(Class)} and {@link #get(String, Class)} methods are provided for working with {@link FormData}/{@link Query}/{@link Path}-annotated
  * beans.
  *
  * <h5 class='figure'>Example</h5>
@@ -146,6 +146,7 @@ import org.apache.juneau.svl.*;
  * 			<jk>super</jk>(BasicIntegerPart.<jsm>of</jsm>(<js>"foo"</js>,1), BasicBooleanPart.<jsm>of</jsm>(<js>"bar"</js>,<jk>false</jk>));
  * 		}
  * 	}
+ * </p>
  *
  * <ul class='notes'>
  * 	<li class='note'>This class is thread safe.

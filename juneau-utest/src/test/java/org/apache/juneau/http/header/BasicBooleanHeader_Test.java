@@ -53,14 +53,14 @@ public class BasicBooleanHeader_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(booleanHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(booleanHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(booleanHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
-		c.get().header(booleanHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(booleanHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
+		c.get().header(booleanHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
+		c.get().header(booleanHeader(HEADER,PARSED)).run().assertContent().is(VALUE);
+		c.get().header(booleanHeader(HEADER,()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(booleanHeader(HEADER,(Supplier<Boolean>)null)).run().assertBody().isEmpty();
-		c.get().header(booleanHeader(HEADER,()->null)).run().assertBody().isEmpty();
+		c.get().header(booleanHeader(HEADER,(Supplier<Boolean>)null)).run().assertContent().isEmpty();
+		c.get().header(booleanHeader(HEADER,()->null)).run().assertContent().isEmpty();
 		assertThrown(()->booleanHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
 		assertThrown(()->booleanHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
 		assertThrown(()->booleanHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");

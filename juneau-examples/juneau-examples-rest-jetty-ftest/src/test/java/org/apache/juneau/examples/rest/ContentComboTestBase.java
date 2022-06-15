@@ -107,7 +107,7 @@ public class ContentComboTestBase extends RestTestcase {
 	@Test
 	public void doTest() throws Exception {
 		RestClient rc = getClient(comboInput.mediaType);
-		String s = rc.get(comboInput.url).run().getBody().asString();
+		String s = rc.get(comboInput.url).run().getContent().asString();
 		assertContains(s, comboInput.expectedResults);
 	}
 }

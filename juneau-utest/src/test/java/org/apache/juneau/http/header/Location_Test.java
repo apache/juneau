@@ -51,15 +51,15 @@ public class Location_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(location(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(location(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(location(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(location(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(location(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(location(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(location(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(location(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(location((String)null)).run().assertBody().isEmpty();
-		c.get().header(location((Supplier<URI>)null)).run().assertBody().isEmpty();
-		c.get().header(location(()->null)).run().assertBody().isEmpty();
+		c.get().header(location((String)null)).run().assertContent().isEmpty();
+		c.get().header(location((Supplier<URI>)null)).run().assertContent().isEmpty();
+		c.get().header(location(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

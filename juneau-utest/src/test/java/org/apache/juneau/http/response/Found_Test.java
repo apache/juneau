@@ -25,7 +25,7 @@ public class Found_Test {
 	@Rest
 	public static class A {
 		@RestGet public Found a1() { return FOUND; }
-		@RestGet public Found a2() { return found("servlet:/foo").body("foo").build(); }
+		@RestGet public Found a2() { return found("servlet:/foo").content("foo").build(); }
 		@RestGet public Found a3() { return found("servlet:/foo").build(); }
 		@RestGet public Found a4() { return found("servlet:/foo").header("Foo","bar").build(); }
 	}
@@ -37,11 +37,11 @@ public class Found_Test {
 		client.get("/a1")
 			.run()
 			.assertCode().is(302)
-			.assertBody().is("Found");
+			.assertContent().is("Found");
 		client.get("/a2")
 			.run()
 			.assertCode().is(302)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		client.get("/a3")
 			.run()
 			.assertCode().is(302)

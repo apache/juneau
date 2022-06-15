@@ -40,7 +40,7 @@ public class Path_Test {
 	public static class A  {
 		@RestGet(path="/")
 		public void a(RestResponse res) {
-			res.setOutput(GET);
+			res.setContent(GET);
 		}
 		@RestGet(path="/a")
 		public String b() {
@@ -70,26 +70,26 @@ public class Path_Test {
 
 		a.get(null)
 			.run()
-			.assertBody().is("GET");
+			.assertContent().is("GET");
 		a.get()
 			.run()
-			.assertBody().is("GET");
+			.assertContent().is("GET");
 
 		a.get("/a")
 			.run()
-			.assertBody().is("GET /a");
+			.assertContent().is("GET /a");
 
 		a.get("/a/foo")
 			.run()
-			.assertBody().is("GET /a foo");
+			.assertContent().is("GET /a foo");
 
 		a.get("/a/foo/bar")
 			.run()
-			.assertBody().is("GET /a foo,bar");
+			.assertContent().is("GET /a foo,bar");
 
 		a.get("/a/foo/123/baz")
 			.run()
-			.assertBody().is("GET /a foo,123,r=baz");
+			.assertContent().is("GET /a foo,123,r=baz");
 
 		// URL-encoded part should not get decoded before finding method to invoke.
 		// This should match /get1/{foo} and not /get1/{foo}/{bar}
@@ -97,10 +97,10 @@ public class Path_Test {
 		// -Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true
 		a.get("/a/x%2Fy")
 			.run()
-			.assertBody().is("GET /a x/y");
+			.assertContent().is("GET /a x/y");
 		a.get("/a/x%2Fy/x%2Fy")
 			.run()
-			.assertBody().is("GET /a x/y,x/y");
+			.assertContent().is("GET /a x/y,x/y");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -149,56 +149,56 @@ public class Path_Test {
 
 		b.get("/a/123/foo")
 			.run()
-			.assertBody().is("123");
+			.assertContent().is("123");
 		b.get("/a/bad/foo?noTrace=true")
 			.run()
 			.assertCode().is(400);
 
 		b.get("/b/123/foo")
 			.run()
-			.assertBody().is("123");
+			.assertContent().is("123");
 		b.get("/b/bad/foo?noTrace=true")
 			.run()
 			.assertCode().is(400);
 
 		b.get("/c/123/foo")
 			.run()
-			.assertBody().is("123");
+			.assertContent().is("123");
 		b.get("/c/bad/foo?noTrace=true")
 			.run()
 			.assertCode().is(400);
 
 		b.get("/d/c/foo")
 			.run()
-			.assertBody().is("c");
+			.assertContent().is("c");
 		b.get("/d/bad/foo?noTrace=true")
 			.run()
 			.assertCode().is(400);
 
 		b.get("/e/1.23/foo")
 			.run()
-			.assertBody().is("1.23");
+			.assertContent().is("1.23");
 		b.get("/e/bad/foo?noTrace=true")
 			.run()
 			.assertCode().is(400);
 
 		b.get("/f/1.23/foo")
 			.run()
-			.assertBody().is("1.23");
+			.assertContent().is("1.23");
 		b.get("/f/bad/foo?noTrace=true")
 			.run()
 			.assertCode().is(400);
 
 		b.get("/g/123/foo")
 			.run()
-			.assertBody().is("123");
+			.assertContent().is("123");
 		b.get("/g/bad/foo?noTrace=true")
 			.run()
 			.assertCode().is(400);
 
 		b.get("/h/true/foo")
 			.run()
-			.assertBody().is("true");
+			.assertContent().is("true");
 		b.get("/h/bad/foo?noTrace=true")
 			.run()
 			.assertCode().is(400);
@@ -250,56 +250,56 @@ public class Path_Test {
 
 		c.get("/a/123/foo")
 			.run()
-			.assertBody().is("123");
+			.assertContent().is("123");
 		c.get("/a/bad/foo?noTrace=true")
 			.run()
 			.assertCode().is(400);
 
 		c.get("/b/123/foo")
 			.run()
-			.assertBody().is("123");
+			.assertContent().is("123");
 		c.get("/b/bad/foo?noTrace=true")
 			.run()
 			.assertCode().is(400);
 
 		c.get("/c/123/foo")
 			.run()
-			.assertBody().is("123");
+			.assertContent().is("123");
 		c.get("/c/bad/foo?noTrace=true")
 			.run()
 			.assertCode().is(400);
 
 		c.get("/d/c/foo")
 			.run()
-			.assertBody().is("c");
+			.assertContent().is("c");
 		c.get("/d/bad/foo?noTrace=true")
 			.run()
 			.assertCode().is(400);
 
 		c.get("/e/1.23/foo")
 			.run()
-			.assertBody().is("1.23");
+			.assertContent().is("1.23");
 		c.get("/e/bad/foo?noTrace=true")
 			.run()
 			.assertCode().is(400);
 
 		c.get("/f/1.23/foo")
 			.run()
-			.assertBody().is("1.23");
+			.assertContent().is("1.23");
 		c.get("/f/bad/foo?noTrace=true")
 			.run()
 			.assertCode().is(400);
 
 		c.get("/g/123/foo")
 			.run()
-			.assertBody().is("123");
+			.assertContent().is("123");
 		c.get("/g/bad/foo?noTrace=true")
 			.run()
 			.assertCode().is(400);
 
 		c.get("/h/true/foo")
 			.run()
-			.assertBody().is("true");
+			.assertContent().is("true");
 		c.get("/h/bad/foo?noTrace=true")
 			.run()
 			.assertCode().is(400);
@@ -325,7 +325,7 @@ public class Path_Test {
 		UUID uuid = UUID.randomUUID();
 		d.get("/a/" + uuid)
 			.run()
-			.assertBody().is(uuid.toString());
+			.assertContent().is(uuid.toString());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -361,19 +361,19 @@ public class Path_Test {
 		RestClient e = MockRestClient.build(E.class);
 		e.get("/x/x1/x2")
 			.run()
-			.assertBody().is("{m:'normal1',foo:'x1',bar:'x2'}");
+			.assertContent().is("{m:'normal1',foo:'x1',bar:'x2'}");
 		e.get("/x/x1/x/x2/x")
 			.run()
-			.assertBody().is("{m:'normal2',foo:'x1',bar:'x2'}");
+			.assertContent().is("{m:'normal2',foo:'x1',bar:'x2'}");
 		e.get("/y/y1/y2")
 			.run()
-			.assertBody().is("{m:'numbers1','0':'y1','1':'y2'}");
+			.assertContent().is("{m:'numbers1','0':'y1','1':'y2'}");
 		e.get("/y/y1/y/y2/y")
 			.run()
-			.assertBody().is("{m:'numbers2','0':'y1','1':'y2'}");
+			.assertContent().is("{m:'numbers2','0':'y1','1':'y2'}");
 		e.get("/z/z1/z/z2/z")
 			.run()
-			.assertBody().is("{m:'numbers3','0':'z2','1':'z1'}");
+			.assertContent().is("{m:'numbers3','0':'z2','1':'z1'}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -416,7 +416,7 @@ public class Path_Test {
 		RestClient f = MockRestClient.createLax(F.class).servletPath("/f").build();
 		f.get("http://localhost/f/x1/x2")
 			.run()
-			.assertBody().is("a: {a:'x1',b:'x2'}");
+			.assertContent().is("a: {a:'x1',b:'x2'}");
 		f.get("http://localhost/f/x1")
 			.run()
 			.assertCode().is(404);
@@ -434,7 +434,7 @@ public class Path_Test {
 			.assertCode().is(404);
 		f.get("http://localhost/f/x1/x2/foo")
 			.run()
-			.assertBody().is("b: {'/*':'foo','/**':'foo',a:'x1',b:'x2'}");
+			.assertContent().is("b: {'/*':'foo','/**':'foo',a:'x1',b:'x2'}");
 		f.get("http://localhost/f///foo")
 			.run()
 			.assertCode().is(404);
@@ -446,7 +446,7 @@ public class Path_Test {
 			.assertCode().is(404);
 		f.get("http://localhost/f/x1/x2/fc")
 			.run()
-			.assertBody().is("c: {a:'x1',b:'x2'}");
+			.assertContent().is("c: {a:'x1',b:'x2'}");
 		f.get("http://localhost/f///a")
 			.run()
 			.assertCode().is(404);
@@ -458,7 +458,7 @@ public class Path_Test {
 			.assertCode().is(404);
 		f.get("http://localhost/f/x1/x2/fd/x3/x4")
 			.run()
-			.assertBody().is("d: {a:'x1',b:'x2',c:'x3',d:'x4'}");
+			.assertContent().is("d: {a:'x1',b:'x2',c:'x3',d:'x4'}");
 		f.get("http://localhost/f//x2/b/x3/x4")
 			.run()
 			.assertCode().is(404);
@@ -476,16 +476,16 @@ public class Path_Test {
 			.assertCode().is(404);
 		f.get("http://localhost/f/x1/x2/fe/x3/x4")
 			.run()
-			.assertBody().is("e: {a:'x3',b:'x4'}");
+			.assertContent().is("e: {a:'x3',b:'x4'}");
 		f.get("http://localhost/f/x1/x2/ff/x3/x4")
 			.run()
-			.assertBody().is("f: {a:'x1',b:'x2',c:'x3',d:'x4'}");
+			.assertContent().is("f: {a:'x1',b:'x2',c:'x3',d:'x4'}");
 		f.get("http://localhost/f/x1/x2/ff/x3/x4/")
 			.run()
-			.assertBody().is("f: {'/*':'','/**':'',a:'x1',b:'x2',c:'x3',d:'x4'}");
+			.assertContent().is("f: {'/*':'','/**':'',a:'x1',b:'x2',c:'x3',d:'x4'}");
 		f.get("http://localhost/f/x1/x2/ff/x3/x4/foo/bar")
 			.run()
-			.assertBody().is("f: {'/*':'foo/bar','/**':'foo/bar',a:'x1',b:'x2',c:'x3',d:'x4'}");
+			.assertContent().is("f: {'/*':'foo/bar','/**':'foo/bar',a:'x1',b:'x2',c:'x3',d:'x4'}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -501,7 +501,7 @@ public class Path_Test {
 		RestClient g = MockRestClient.buildLax(G.class);
 		g.get("http://localhost/f/x1/x2")
 			.run()
-			.assertBody().is("a: {a:'x1',b:'x2'}");
+			.assertContent().is("a: {a:'x1',b:'x2'}");
 		g.get("http://localhost/f/x1")
 			.run()
 			.assertCode().is(404);
@@ -519,7 +519,7 @@ public class Path_Test {
 			.assertCode().is(404);
 		g.get("http://localhost/f/x1/x2/fc")
 			.run()
-			.assertBody().is("c: {a:'x1',b:'x2'}");
+			.assertContent().is("c: {a:'x1',b:'x2'}");
 		g.get("http://localhost/f///a")
 			.run()
 			.assertCode().is(404);
@@ -531,7 +531,7 @@ public class Path_Test {
 			.assertCode().is(404);
 		g.get("http://localhost/f/x1/x2/fd/x3/x4")
 			.run()
-			.assertBody().is("d: {a:'x1',b:'x2',c:'x3',d:'x4'}");
+			.assertContent().is("d: {a:'x1',b:'x2',c:'x3',d:'x4'}");
 		g.get("http://localhost/f//x2/b/x3/x4")
 			.run()
 			.assertCode().is(404);
@@ -549,16 +549,16 @@ public class Path_Test {
 			.assertCode().is(404);
 		g.get("http://localhost/f/x1/x2/fe/x3/x4")
 			.run()
-			.assertBody().is("e: {a:'x3',b:'x4'}");
+			.assertContent().is("e: {a:'x3',b:'x4'}");
 		g.get("http://localhost/f/x1/x2/ff/x3/x4")
 			.run()
-			.assertBody().is("f: {a:'x1',b:'x2',c:'x3',d:'x4'}");
+			.assertContent().is("f: {a:'x1',b:'x2',c:'x3',d:'x4'}");
 		g.get("http://localhost/f/x1/x2/ff/x3/x4/")
 			.run()
-			.assertBody().is("f: {'/*':'','/**':'',a:'x1',b:'x2',c:'x3',d:'x4'}");
+			.assertContent().is("f: {'/*':'','/**':'',a:'x1',b:'x2',c:'x3',d:'x4'}");
 		g.get("http://localhost/f/x1/x2/ff/x3/x4/foo/bar")
 			.run()
-			.assertBody().is("f: {'/*':'foo/bar','/**':'foo/bar',a:'x1',b:'x2',c:'x3',d:'x4'}");
+			.assertContent().is("f: {'/*':'foo/bar','/**':'foo/bar',a:'x1',b:'x2',c:'x3',d:'x4'}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -573,7 +573,7 @@ public class Path_Test {
 		RestClient h = MockRestClient.createLax(H.class).servletPath("/h").build();
 		h.get("http://localhost/h/ha1/hb1/f/x1/x2")
 			.run()
-			.assertBody().is("a: {a:'x1',b:'x2',ha:'ha1',hb:'hb1'}");
+			.assertContent().is("a: {a:'x1',b:'x2',ha:'ha1',hb:'hb1'}");
 		// These are 405 instead of 404 because when children don't match, we try to find a matching Java method.
 		h.get("http://localhost/h/ha1/hb1/f/x1")
 			.run()
@@ -607,7 +607,7 @@ public class Path_Test {
 			.assertCode().is(404);
 		h.get("http://localhost/h/ha1/hb1/f/x1/x2/foo")
 			.run()
-			.assertBody().is("b: {'/*':'foo','/**':'foo',a:'x1',b:'x2',ha:'ha1',hb:'hb1'}");
+			.assertContent().is("b: {'/*':'foo','/**':'foo',a:'x1',b:'x2',ha:'ha1',hb:'hb1'}");
 		h.get("http://localhost/h//hb1/f/x1/x2/foo")
 			.run()
 			.assertCode().is(404);
@@ -625,7 +625,7 @@ public class Path_Test {
 			.assertCode().is(404);
 		h.get("http://localhost/h/ha1/hb1/f/x1/x2/fc")
 			.run()
-			.assertBody().is("c: {a:'x1',b:'x2',ha:'ha1',hb:'hb1'}");
+			.assertContent().is("c: {a:'x1',b:'x2',ha:'ha1',hb:'hb1'}");
 		h.get("http://localhost/h//hb1/f/x1/x2/a")
 			.run()
 			.assertCode().is(404);
@@ -643,19 +643,19 @@ public class Path_Test {
 			.assertCode().is(404);
 		h.get("http://localhost/h/ha1/hb1/f/x1/x2/fd/x3/x4")
 			.run()
-			.assertBody().is("d: {a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1'}");
+			.assertContent().is("d: {a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1'}");
 		h.get("http://localhost/h/ha1/hb1/f/x1/x2/fe/x3/x4")
 			.run()
-			.assertBody().is("e: {a:'x3',b:'x4',ha:'ha1',hb:'hb1'}");
+			.assertContent().is("e: {a:'x3',b:'x4',ha:'ha1',hb:'hb1'}");
 		h.get("http://localhost/h/ha1/hb1/f/x1/x2/ff/x3/x4")
 			.run()
-			.assertBody().is("f: {a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1'}");
+			.assertContent().is("f: {a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1'}");
 		h.get("http://localhost/h/ha1/hb1/f/x1/x2/ff/x3/x4/")
 			.run()
-			.assertBody().is("f: {'/*':'','/**':'',a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1'}");
+			.assertContent().is("f: {'/*':'','/**':'',a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1'}");
 		h.get("http://localhost/h/ha1/hb1/f/x1/x2/ff/x3/x4/foo/bar")
 			.run()
-			.assertBody().is("f: {'/*':'foo/bar','/**':'foo/bar',a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1'}");
+			.assertContent().is("f: {'/*':'foo/bar','/**':'foo/bar',a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1'}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -670,7 +670,7 @@ public class Path_Test {
 		RestClient i = MockRestClient.createLax(I.class).servletPath("/i").build();
 		i.get("http://localhost/i/ia1/ib1/h/ha1/hb1/f/x1/x2")
 			.run()
-			.assertBody().is("a: {a:'x1',b:'x2',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
+			.assertContent().is("a: {a:'x1',b:'x2',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
 		i.get("http://localhost/i/ia1/ib1/h/ha1/hb1/f/x1")
 			.run()
 			.assertCode().is(404);
@@ -718,25 +718,25 @@ public class Path_Test {
 			.assertCode().is(404);
 		i.get("http://localhost/i/ia1/ib1/h/ha1/hb1/f/x1/x2/foo")
 			.run()
-			.assertBody().is("b: {'/*':'foo','/**':'foo',a:'x1',b:'x2',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
+			.assertContent().is("b: {'/*':'foo','/**':'foo',a:'x1',b:'x2',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
 		i.get("http://localhost/i/ia1/ib1/h/ha1/hb1/f/x1/x2/fc")
 			.run()
-			.assertBody().is("c: {a:'x1',b:'x2',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
+			.assertContent().is("c: {a:'x1',b:'x2',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
 		i.get("http://localhost/i/ia1/ib1/h/ha1/hb1/f/x1/x2/fd/x3/x4")
 			.run()
-			.assertBody().is("d: {a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
+			.assertContent().is("d: {a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
 		i.get("http://localhost/i/ia1/ib1/h/ha1/hb1/f/x1/x2/fe/x3/x4")
 			.run()
-			.assertBody().is("e: {a:'x3',b:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
+			.assertContent().is("e: {a:'x3',b:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
 		i.get("http://localhost/i/ia1/ib1/h/ha1/hb1/f/x1/x2/ff/x3/x4")
 			.run()
-			.assertBody().is("f: {a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
+			.assertContent().is("f: {a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
 		i.get("http://localhost/i/ia1/ib1/h/ha1/hb1/f/x1/x2/ff/x3/x4/")
 			.run()
-			.assertBody().is("f: {'/*':'','/**':'',a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
+			.assertContent().is("f: {'/*':'','/**':'',a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
 		i.get("http://localhost/i/ia1/ib1/h/ha1/hb1/f/x1/x2/ff/x3/x4/foo/bar")
 			.run()
-			.assertBody().is("f: {'/*':'foo/bar','/**':'foo/bar',a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
+			.assertContent().is("f: {'/*':'foo/bar','/**':'foo/bar',a:'x1',b:'x2',c:'x3',d:'x4',ha:'ha1',hb:'hb1',ia:'ia1',ib:'ib1'}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -772,19 +772,19 @@ public class Path_Test {
 		j.get("/a/123")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("123");
+			.assertContent().is("123");
 		j.get("/b/a=1,b=foo")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("{a:1,b:'foo'}");
+			.assertContent().is("{a:1,b:'foo'}");
 		j.get("/c/@((a=1,b=foo))")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("[{a:1,b:'foo'}]");
+			.assertContent().is("[{a:1,b:'foo'}]");
 		j.get("/d/@((a=1,b=foo))")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("[{a:1,b:'foo'}]");
+			.assertContent().is("[{a:1,b:'foo'}]");
 	}
 
 
@@ -815,19 +815,19 @@ public class Path_Test {
 		k1.get("http://localhost/k1/foo/k2")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		k1.get("http://localhost/k1/foo/k2/foo/xxx")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("foo,xxx");
+			.assertContent().is("foo,xxx");
 		k2.get("/")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("nil");
+			.assertContent().is("nil");
 		k2.get("/foo/xxx")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("nil,xxx");
+			.assertContent().is("nil,xxx");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -857,34 +857,34 @@ public class Path_Test {
 		l1.get("http://localhost/l1/l1foo/l2")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("1,l1foo,nil");
+			.assertContent().is("1,l1foo,nil");
 		l1.get("http://localhost/l1/l1foo/l2/l2foo")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("1,l1foo,l2foo");
+			.assertContent().is("1,l1foo,l2foo");
 		l1.get("http://localhost/l1/l1foo/l2/foo")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("2,l1foo,nil");
+			.assertContent().is("2,l1foo,nil");
 		l1.get("http://localhost/l1/l1foo/l2/foo/l2foo")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("2,l1foo,l2foo");
+			.assertContent().is("2,l1foo,l2foo");
 		l2.get("http://localhost/l2")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("1,nil,nil");
+			.assertContent().is("1,nil,nil");
 		l2.get("http://localhost/l2/l2foo")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("1,nil,l2foo");
+			.assertContent().is("1,nil,l2foo");
 		l2.get("http://localhost/l2/foo")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("2,nil,nil");
+			.assertContent().is("2,nil,nil");
 		l2.get("http://localhost/l2/foo/l2foo")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("2,nil,l2foo");
+			.assertContent().is("2,nil,l2foo");
 	}
 }

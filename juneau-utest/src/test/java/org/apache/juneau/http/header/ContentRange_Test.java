@@ -50,15 +50,15 @@ public class ContentRange_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(contentRange(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(contentRange(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(contentRange(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(contentRange(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(contentRange(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(contentRange(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(contentRange(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(contentRange(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(contentRange((String)null)).run().assertBody().isEmpty();
-		c.get().header(contentRange((Supplier<String>)null)).run().assertBody().isEmpty();
-		c.get().header(contentRange(()->null)).run().assertBody().isEmpty();
+		c.get().header(contentRange((String)null)).run().assertContent().isEmpty();
+		c.get().header(contentRange((Supplier<String>)null)).run().assertContent().isEmpty();
+		c.get().header(contentRange(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

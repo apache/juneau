@@ -56,21 +56,21 @@ public class RetryAfter_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(retryAfter(VALUE1)).run().assertBody().is(VALUE1);
-		c.get().header(retryAfter(VALUE1)).run().assertBody().is(VALUE1);
-		c.get().header(retryAfter(PARSED1)).run().assertBody().is(VALUE1);
-		c.get().header(retryAfter(()->PARSED1)).run().assertBody().is(VALUE1);
+		c.get().header(retryAfter(VALUE1)).run().assertContent().is(VALUE1);
+		c.get().header(retryAfter(VALUE1)).run().assertContent().is(VALUE1);
+		c.get().header(retryAfter(PARSED1)).run().assertContent().is(VALUE1);
+		c.get().header(retryAfter(()->PARSED1)).run().assertContent().is(VALUE1);
 
-		c.get().header(retryAfter(VALUE2)).run().assertBody().is(VALUE2);
-		c.get().header(retryAfter(VALUE2)).run().assertBody().is(VALUE2);
-		c.get().header(retryAfter(PARSED2)).run().assertBody().is(VALUE2);
-		c.get().header(retryAfter(()->PARSED2)).run().assertBody().is(VALUE2);
+		c.get().header(retryAfter(VALUE2)).run().assertContent().is(VALUE2);
+		c.get().header(retryAfter(VALUE2)).run().assertContent().is(VALUE2);
+		c.get().header(retryAfter(PARSED2)).run().assertContent().is(VALUE2);
+		c.get().header(retryAfter(()->PARSED2)).run().assertContent().is(VALUE2);
 
 		// Invalid usage.
-		c.get().header(retryAfter((String)null)).run().assertBody().isEmpty();
-		c.get().header(retryAfter((ZonedDateTime)null)).run().assertBody().isEmpty();
-		c.get().header(retryAfter((Supplier<?>)null)).run().assertBody().isEmpty();
-		c.get().header(retryAfter(()->null)).run().assertBody().isEmpty();
+		c.get().header(retryAfter((String)null)).run().assertContent().isEmpty();
+		c.get().header(retryAfter((ZonedDateTime)null)).run().assertContent().isEmpty();
+		c.get().header(retryAfter((Supplier<?>)null)).run().assertContent().isEmpty();
+		c.get().header(retryAfter(()->null)).run().assertContent().isEmpty();
 	}
 
 	@Test

@@ -64,7 +64,7 @@ public class HttpEntities {
 	 * @return A new {@link ByteArrayEntity} builder.
 	 */
 	public static final HttpEntityBuilder<ByteArrayEntity> byteArrayEntity(Supplier<byte[]> content) {
-		return ByteArrayEntity.create().contentSupplier(content);
+		return ByteArrayEntity.create().content(content);
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class HttpEntities {
 	 * @return A new {@link ByteArrayEntity} builder.
 	 */
 	public static final HttpEntityBuilder<ByteArrayEntity> byteArrayEntity(Supplier<byte[]> content, ContentType contentType) {
-		return ByteArrayEntity.create().contentSupplier(content).contentType(contentType);
+		return ByteArrayEntity.create().content(content).contentType(contentType);
 	}
 
 	/**
@@ -150,7 +150,7 @@ public class HttpEntities {
 	 * @return A new {@link SerializedEntity} object.
 	 */
 	public static final SerializedEntityBuilder<SerializedEntity> serializedEntity(Supplier<?> content, Serializer serializer) {
-		return SerializedEntity.create().contentSupplier(content).serializer(serializer);
+		return SerializedEntity.create().content(content).serializer(serializer);
 	}
 
 	/**
@@ -184,7 +184,7 @@ public class HttpEntities {
 	 * @return A new {@link SerializedEntity} object.
 	 */
 	public static final SerializedEntityBuilder<SerializedEntity> serializedEntity(Supplier<?> content, Serializer serializer, HttpPartSchema schema) {
-		return SerializedEntity.create().contentSupplier(content).serializer(serializer).schema(schema);
+		return SerializedEntity.create().content(content).serializer(serializer).schema(schema);
 	}
 
 	/**
@@ -240,7 +240,7 @@ public class HttpEntities {
 	 * @return A new {@link StringEntity} builder.
 	 */
 	public static final HttpEntityBuilder<StringEntity> stringEntity(Supplier<String> content) {
-		return StringEntity.create().contentSupplier(content);
+		return StringEntity.create().content(content);
 	}
 
 	/**
@@ -251,6 +251,6 @@ public class HttpEntities {
 	 * @return A new {@link StringEntity} builder.
 	 */
 	public static final HttpEntityBuilder<StringEntity> stringEntity(Supplier<String> content, ContentType contentType) {
-		return StringEntity.create().contentSupplier(content).contentType(contentType);
+		return StringEntity.create().content(content).contentType(contentType);
 	}
 }

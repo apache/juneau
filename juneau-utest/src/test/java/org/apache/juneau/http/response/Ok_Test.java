@@ -25,7 +25,7 @@ public class Ok_Test {
 	@Rest
 	public static class A {
 		@RestGet public Ok a1() { return OK; }
-		@RestGet public Ok a2() { return ok().body("foo").build(); }
+		@RestGet public Ok a2() { return ok().content("foo").build(); }
 		@RestGet public Ok a3() { return ok().header("Foo","bar").build(); }
 	}
 
@@ -36,11 +36,11 @@ public class Ok_Test {
 		client.get("/a1")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("OK");
+			.assertContent().is("OK");
 		client.get("/a2")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		client.get("/a3")
 			.run()
 			.assertCode().is(200)

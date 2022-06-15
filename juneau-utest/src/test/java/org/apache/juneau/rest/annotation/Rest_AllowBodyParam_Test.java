@@ -51,19 +51,19 @@ public class Rest_AllowBodyParam_Test {
 	@Test
 	public void a01_basic() throws Exception {
 		RestClient a1 = MockRestClient.build(A1.class);
-		a1.put("/", "{a:'b'}").run().assertBody().is("{a:'b'}");
-		a1.put("/?body=(c=d)", "{a:'b'}").run().assertBody().is("{c:'d'}");
+		a1.put("/", "{a:'b'}").run().assertContent().is("{a:'b'}");
+		a1.put("/?body=(c=d)", "{a:'b'}").run().assertContent().is("{c:'d'}");
 
 		RestClient a2 = MockRestClient.build(A2.class);
-		a2.put("/", "{a:'b'}").run().assertBody().is("{a:'b'}");
-		a2.put("/?body=(c=d)", "{a:'b'}").run().assertBody().is("{a:'b'}");
+		a2.put("/", "{a:'b'}").run().assertContent().is("{a:'b'}");
+		a2.put("/?body=(c=d)", "{a:'b'}").run().assertContent().is("{a:'b'}");
 
 		RestClient a3 = MockRestClient.build(A3.class);
-		a3.put("/", "{a:'b'}").run().assertBody().is("{a:'b'}");
-		a3.put("/?body=(c=d)", "{a:'b'}").run().assertBody().is("{a:'b'}");
+		a3.put("/", "{a:'b'}").run().assertContent().is("{a:'b'}");
+		a3.put("/?body=(c=d)", "{a:'b'}").run().assertContent().is("{a:'b'}");
 
 		RestClient a4 = MockRestClient.build(A4.class);
-		a4.put("/", "{a:'b'}").run().assertBody().is("{a:'b'}");
-		a4.put("/?body=(c=d)", "{a:'b'}").run().assertBody().is("{c:'d'}");
+		a4.put("/", "{a:'b'}").run().assertContent().is("{a:'b'}");
+		a4.put("/?body=(c=d)", "{a:'b'}").run().assertContent().is("{c:'d'}");
 	}
 }

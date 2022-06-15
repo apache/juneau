@@ -25,7 +25,7 @@ public class MultipleChoices_Test {
 	@Rest
 	public static class A {
 		@RestGet public MultipleChoices a1() { return MULTIPLE_CHOICES; }
-		@RestGet public MultipleChoices a2() { return multipleChoices().body("foo").build(); }
+		@RestGet public MultipleChoices a2() { return multipleChoices().content("foo").build(); }
 		@RestGet public MultipleChoices a3() { return multipleChoices().header("Foo","bar").build(); }
 	}
 
@@ -36,11 +36,11 @@ public class MultipleChoices_Test {
 		client.get("/a1")
 			.run()
 			.assertCode().is(300)
-			.assertBody().is("Multiple Choices");
+			.assertContent().is("Multiple Choices");
 		client.get("/a2")
 			.run()
 			.assertCode().is(300)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		client.get("/a3")
 			.run()
 			.assertCode().is(300)

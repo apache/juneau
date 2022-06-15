@@ -25,7 +25,7 @@ public class PartialContent_Test {
 	@Rest
 	public static class A {
 		@RestGet public PartialContent a1() { return PARTIAL_CONTENT; }
-		@RestGet public PartialContent a2() { return partialContent().body("foo").build(); }
+		@RestGet public PartialContent a2() { return partialContent().content("foo").build(); }
 		@RestGet public PartialContent a3() { return partialContent().header("Foo","bar").build(); }
 	}
 
@@ -36,11 +36,11 @@ public class PartialContent_Test {
 		client.get("/a1")
 			.run()
 			.assertCode().is(206)
-			.assertBody().is("Partial Content");
+			.assertContent().is("Partial Content");
 		client.get("/a2")
 			.run()
 			.assertCode().is(206)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		client.get("/a3")
 			.run()
 			.assertCode().is(206)

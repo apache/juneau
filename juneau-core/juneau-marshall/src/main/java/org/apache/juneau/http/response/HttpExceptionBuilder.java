@@ -42,7 +42,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	HeaderList headers = HeaderList.EMPTY;
 	BasicStatusLine.Builder statusLineBuilder;
 	HeaderList.Builder headersBuilder;
-	HttpEntity body;
+	HttpEntity content;
 
 	private final Class<? extends BasicHttpException> implClass;
 
@@ -67,7 +67,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 		implClass = copyFrom.getClass();
 		statusLine = copyFrom.statusLine;
 		headers = copyFrom.headers;
-		body = copyFrom.body;
+		content = copyFrom.content;
 	}
 
 	/**
@@ -95,17 +95,17 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 		if (h != null)
 			message(thrown(h.getValue()).asParts().get().get(0).getMessage());
 		headers(response.getAllHeaders());
-		body(response.getEntity());
+		content(response.getEntity());
 		return this;
 	}
 
-	BasicStatusLine statusLine() {
+	BasicStatusLine buildStatusLine() {
 		if (statusLineBuilder != null)
 			return statusLineBuilder.build();
 		return statusLine;
 	}
 
-	HeaderList headers() {
+	HeaderList buildHeaders() {
 		if (headersBuilder != null)
 			return headersBuilder.build();
 		if (headers == null)
@@ -116,6 +116,19 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	//-----------------------------------------------------------------------------------------------------------------
 	// BasicStatusLine setters.
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns access to the underlying builder for the status line.
+	 *
+	 * @return The underlying builder for the status line.
+	 */
+	public BasicStatusLine.Builder getStatusLine() {
+		if (statusLineBuilder == null) {
+			statusLineBuilder = statusLine == null ? BasicStatusLine.create() : statusLine.copy();
+			statusLine = null;
+		}
+		return statusLineBuilder;
+	}
 
 	/**
 	 * Sets the protocol version on the status line.
@@ -144,7 +157,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 */
 	@FluentSetter
 	public HttpExceptionBuilder<T> protocolVersion(ProtocolVersion value) {
-		statusLineBuilder().protocolVersion(value);
+		getStatusLine().protocolVersion(value);
 		return this;
 	}
 
@@ -159,7 +172,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 */
 	@FluentSetter
 	public HttpExceptionBuilder<T> statusCode(int value) {
-		statusLineBuilder().statusCode(value);
+		getStatusLine().statusCode(value);
 		return this;
 	}
 
@@ -175,7 +188,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 */
 	@FluentSetter
 	public HttpExceptionBuilder<T> reasonPhrase(String value) {
-		statusLineBuilder().reasonPhrase(value);
+		getStatusLine().reasonPhrase(value);
 		return this;
 	}
 
@@ -190,7 +203,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 */
 	@FluentSetter
 	public HttpExceptionBuilder<T> reasonPhraseCatalog(ReasonPhraseCatalog value) {
-		statusLineBuilder().reasonPhraseCatalog(value);
+		getStatusLine().reasonPhraseCatalog(value);
 		return this;
 	}
 
@@ -205,7 +218,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 */
 	@FluentSetter
 	public HttpExceptionBuilder<T> locale(Locale value) {
-		statusLineBuilder().locale(value);
+		getStatusLine().locale(value);
 		return this;
 	}
 
@@ -214,10 +227,20 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Sets the protocol version on the status line.
+	 * Returns access to the underlying builder for the headers.
 	 *
-	 * <p>
-	 * If not specified, <js>"HTTP/1.1"</js> will be used.
+	 * @return The underlying builder for the headers.
+	 */
+	public HeaderList.Builder getHeaders() {
+		if (headersBuilder == null) {
+			headersBuilder = headers == null ? HeaderList.create() : headers.copy();
+			headers = null;
+		}
+		return headersBuilder;
+	}
+
+	/**
+	 * Sets the specified headers on this response.
 	 *
 	 * @param value The new value.
 	 * @return This object.
@@ -230,23 +253,13 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	}
 
 	/**
-	 * Removes any headers already in this builder.
-	 *
-	 * @return This object.
-	 */
-	public HttpExceptionBuilder<T> clearHeaders() {
-		headersBuilder().clear();
-		return this;
-	}
-
-	/**
 	 * Adds the specified header to the end of the headers in this builder.
 	 *
 	 * @param value The header to add.  <jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
 	public HttpExceptionBuilder<T> header(Header value) {
-		headersBuilder().append(value);
+		getHeaders().append(value);
 		return this;
 	}
 
@@ -258,7 +271,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object.
 	 */
 	public HttpExceptionBuilder<T> header(String name, String value) {
-		headersBuilder().append(name, value);
+		getHeaders().append(name, value);
 		return this;
 	}
 
@@ -269,7 +282,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object.
 	 */
 	public HttpExceptionBuilder<T> headers(Header...values) {
-		headersBuilder().append(values);
+		getHeaders().append(values);
 		return this;
 	}
 
@@ -280,110 +293,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object.
 	 */
 	public HttpExceptionBuilder<T> headers(List<Header> values) {
-		headersBuilder().append(values);
-		return this;
-	}
-
-	/**
-	 * Removes the specified header from this builder.
-	 *
-	 * @param value The header to remove.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public HttpExceptionBuilder<T> removeHeader(Header value) {
-		headersBuilder().remove(value);
-		return this;
-	}
-
-	/**
-	 * Removes the specified headers from this builder.
-	 *
-	 * @param values The headers to remove.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public HttpExceptionBuilder<T> removeHeaders(Header...values) {
-		headersBuilder().remove(values);
-		return this;
-	}
-
-	/**
-	 * Removes the specified headers from this builder.
-	 *
-	 * @param values The headers to remove.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public HttpExceptionBuilder<T> removeHeaders(List<Header> values) {
-		headersBuilder().remove(values);
-		return this;
-	}
-
-	/**
-	 * Replaces the first occurrence of the header with the same name.
-	 *
-	 * <p>
-	 * If no header with the same name is found the given header is added to the end of the list.
-	 *
-	 * @param value The headers to replace.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public HttpExceptionBuilder<T> updateHeader(Header value) {
-		headersBuilder().set(value);
-		return this;
-	}
-
-	/**
-	 * Replaces the first occurrence of the headers with the same name.
-	 *
-	 * <p>
-	 * If no header with the same name is found the given header is added to the end of the list.
-	 *
-	 * @param values The headers to replace.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public HttpExceptionBuilder<T> updateHeaders(Header...values) {
-		headersBuilder().set(values);
-		return this;
-	}
-
-	/**
-	 * Replaces the first occurrence of the headers with the same name.
-	 *
-	 * <p>
-	 * If no header with the same name is found the given header is added to the end of the list.
-	 *
-	 * @param values The headers to replace.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public HttpExceptionBuilder<T> updateHeaders(List<Header> values) {
-		headersBuilder().set(values);
-		return this;
-	}
-
-	/**
-	 * Sets all of the headers contained within this group overriding any existing headers.
-	 *
-	 * <p>
-	 * The headers are added in the order in which they appear in the array.
-	 *
-	 * @param values The headers to set
-	 * @return This object.
-	 */
-	public HttpExceptionBuilder<T> setHeaders(Header...values) {
-		headersBuilder().clear().append(values);
-		return this;
-	}
-
-	/**
-	 * Sets all of the headers contained within this group overriding any existing headers.
-	 *
-	 * <p>
-	 * The headers are added in the order in which they appear in the list.
-	 *
-	 * @param values The headers to set
-	 * @return This object.
-	 */
-	public HttpExceptionBuilder<T> setHeaders(List<Header> values) {
-		headersBuilder().clear().append(values);
+		getHeaders().append(values);
 		return this;
 	}
 
@@ -397,8 +307,8 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @param value The body on this response.
 	 * @return This object.
 	 */
-	public HttpExceptionBuilder<T> body(String value) {
-		body(stringEntity(value).build());
+	public HttpExceptionBuilder<T> content(String value) {
+		content(stringEntity(value).build());
 		return this;
 	}
 
@@ -408,30 +318,14 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @param value The body on this response.
 	 * @return This object.
 	 */
-	public HttpExceptionBuilder<T> body(HttpEntity value) {
-		this.body = value;
+	public HttpExceptionBuilder<T> content(HttpEntity value) {
+		this.content = value;
 		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
-
-	private BasicStatusLine.Builder statusLineBuilder() {
-		if (statusLineBuilder == null) {
-			statusLineBuilder = statusLine == null ? BasicStatusLine.create() : statusLine.copy();
-			statusLine = null;
-		}
-		return statusLineBuilder;
-	}
-
-	private HeaderList.Builder headersBuilder() {
-		if (headersBuilder == null) {
-			headersBuilder = headers == null ? HeaderList.create() : headers.copy();
-			headers = null;
-		}
-		return headersBuilder;
-	}
 
 	// <FluentSetters>
 

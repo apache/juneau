@@ -25,7 +25,7 @@ public class TemporaryRedirect_Test {
 	@Rest
 	public static class A {
 		@RestGet public TemporaryRedirect a1() { return TEMPORARY_REDIRECT; }
-		@RestGet public TemporaryRedirect a2() { return temporaryRedirect("servlet:/foo").body("foo").build(); }
+		@RestGet public TemporaryRedirect a2() { return temporaryRedirect("servlet:/foo").content("foo").build(); }
 		@RestGet public TemporaryRedirect a3() { return temporaryRedirect("servlet:/foo").build(); }
 		@RestGet public TemporaryRedirect a4() { return temporaryRedirect("servlet:/foo").header("Foo","bar").build(); }
 	}
@@ -37,11 +37,11 @@ public class TemporaryRedirect_Test {
 		client.get("/a1")
 			.run()
 			.assertCode().is(307)
-			.assertBody().is("Temporary Redirect");
+			.assertContent().is("Temporary Redirect");
 		client.get("/a2")
 			.run()
 			.assertCode().is(307)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		client.get("/a3")
 			.run()
 			.assertCode().is(307)

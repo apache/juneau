@@ -143,7 +143,7 @@ public class LogsResource extends BasicRestServlet implements BasicUniversalConf
 			Object o = getReader(f, startDate, endDate, thread, loggers, severity);
 			res.setContentType("text/plain");
 			if (o instanceof Reader)
-				res.setOutput(o);
+				res.setContent(o);
 			else {
 				try (LogParser p = (LogParser)o; Writer w = res.getNegotiatedWriter()) {
 					p.writeTo(w);

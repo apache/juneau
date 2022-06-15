@@ -46,7 +46,7 @@ public final class ResponseBeanProcessor implements ResponseProcessor {
 		RestResponse res = opSession.getResponse();
 		HttpPartSerializer defaultPartSerializer = req.getOpContext().getPartSerializer();
 
-		Object output = res.getOutput(Object.class);
+		Object output = res.getContent(Object.class);
 
 		if (output == null || ! (output.getClass().getAnnotation(Response.class) != null || res.getResponseBeanMeta() != null))
 			return NEXT;
@@ -117,7 +117,7 @@ public final class ResponseBeanProcessor implements ResponseProcessor {
 						m.invoke(output, res.getWriter());
 					return 1;
 				}
-				res.setOutput(m.invoke(output));
+				res.setContent(m.invoke(output));
 			} catch (Exception e) {
 				throw new InternalServerError(e, "Could not get body.");
 			}

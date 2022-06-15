@@ -81,42 +81,42 @@ public class RestClient_Marshalls_Test {
 		RestClient x9 = client().openApi().build();
 		RestClient x10 = client().htmlDoc().build();
 		RestClient x11 = client().htmlStrippedDoc().build();
-		x1.post("/a01",bean).header("X-Accept","application/json+simple").header("X-Content-Type","application/json+simple").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x2.post("/a01",bean).header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x3.post("/a01",bean).header("X-Accept","text/xml").header("X-Content-Type","text/xml").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x4.post("/a01",bean).header("X-Accept","text/html").header("X-Content-Type","text/html").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x5.post("/a01",bean).header("X-Accept","text/plain").header("X-Content-Type","text/plain").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x6.post("/a01",bean).header("X-Accept","octal/msgpack").header("X-Content-Type","octal/msgpack").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x7.post("/a01",bean).header("X-Accept","text/uon").header("X-Content-Type","text/uon").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x8.post("/a01",bean).header("X-Accept","application/x-www-form-urlencoded").header("X-Content-Type","application/x-www-form-urlencoded").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x9.post("/a01",bean).header("X-Accept","text/openapi").header("X-Content-Type","text/openapi").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x10.post("/a01",bean).header("X-Accept","text/html").header("X-Content-Type","text/html").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x11.post("/a01",bean).header("X-Accept","text/html").header("X-Content-Type","text/html+stripped").run().assertCode().is(200).getBody().as(Bean.class).check();
+		x1.post("/a01",bean).header("X-Accept","application/json+simple").header("X-Content-Type","application/json+simple").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x2.post("/a01",bean).header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x3.post("/a01",bean).header("X-Accept","text/xml").header("X-Content-Type","text/xml").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x4.post("/a01",bean).header("X-Accept","text/html").header("X-Content-Type","text/html").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x5.post("/a01",bean).header("X-Accept","text/plain").header("X-Content-Type","text/plain").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x6.post("/a01",bean).header("X-Accept","octal/msgpack").header("X-Content-Type","octal/msgpack").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x7.post("/a01",bean).header("X-Accept","text/uon").header("X-Content-Type","text/uon").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x8.post("/a01",bean).header("X-Accept","application/x-www-form-urlencoded").header("X-Content-Type","application/x-www-form-urlencoded").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x9.post("/a01",bean).header("X-Accept","text/openapi").header("X-Content-Type","text/openapi").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x10.post("/a01",bean).header("X-Accept","text/html").header("X-Content-Type","text/html").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x11.post("/a01",bean).header("X-Accept","text/html").header("X-Content-Type","text/html+stripped").run().assertCode().is(200).getContent().as(Bean.class).check();
 
 		// With override
-		x1.post("/a01",bean).header("Accept","application/json").header("Content-Type","application/json").header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertCode().is(200).getBody().as(Bean.class).check();
+		x1.post("/a01",bean).header("Accept","application/json").header("Content-Type","application/json").header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertCode().is(200).getContent().as(Bean.class).check();
 	}
 
 	@Test
 	public void a02_singleLanguages_perRequest() throws Exception {
 		RestClient x = client().build();
-		x.post("/a01",bean).header("X-Accept","application/json+simple").header("X-Content-Type","application/json+simple").simpleJson().run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("X-Accept","application/json").header("X-Content-Type","application/json").json().run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("X-Accept","text/xml").header("X-Content-Type","text/xml").xml().run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("X-Accept","text/html").header("X-Content-Type","text/html").html().run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("X-Accept","text/plain").header("X-Content-Type","text/plain").plainText().run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("X-Accept","octal/msgpack").header("X-Content-Type","octal/msgpack").msgPack().run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("X-Accept","text/uon").header("X-Content-Type","text/uon").uon().run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("X-Accept","application/x-www-form-urlencoded").header("X-Content-Type","application/x-www-form-urlencoded").urlEnc().run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("X-Accept","text/openapi").header("X-Content-Type","text/openapi").openApi().run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("X-Accept","text/html").header("X-Content-Type","text/html").htmlDoc().run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("X-Accept","text/html").header("X-Content-Type","text/html+stripped").htmlStrippedDoc().run().assertCode().is(200).getBody().as(Bean.class).check();
+		x.post("/a01",bean).header("X-Accept","application/json+simple").header("X-Content-Type","application/json+simple").simpleJson().run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("X-Accept","application/json").header("X-Content-Type","application/json").json().run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("X-Accept","text/xml").header("X-Content-Type","text/xml").xml().run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("X-Accept","text/html").header("X-Content-Type","text/html").html().run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("X-Accept","text/plain").header("X-Content-Type","text/plain").plainText().run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("X-Accept","octal/msgpack").header("X-Content-Type","octal/msgpack").msgPack().run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("X-Accept","text/uon").header("X-Content-Type","text/uon").uon().run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("X-Accept","application/x-www-form-urlencoded").header("X-Content-Type","application/x-www-form-urlencoded").urlEnc().run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("X-Accept","text/openapi").header("X-Content-Type","text/openapi").openApi().run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("X-Accept","text/html").header("X-Content-Type","text/html").htmlDoc().run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("X-Accept","text/html").header("X-Content-Type","text/html+stripped").htmlStrippedDoc().run().assertCode().is(200).getContent().as(Bean.class).check();
 	}
 
 	@Test
 	public void a03_noLanguages() throws Exception {
 		RestClient x = client().build();
-		x.post("/a01",bean).header("Accept","application/json").header("Content-Type","application/json").header("X-Accept","application/json").header("X-Content-Type","application/json").body("{f:1}").run().assertCode().is(200).assertBody().is("{\"f\":1}");
+		x.post("/a01",bean).header("Accept","application/json").header("Content-Type","application/json").header("X-Accept","application/json").header("X-Content-Type","application/json").content("{f:1}").run().assertCode().is(200).assertContent().is("{\"f\":1}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -126,14 +126,14 @@ public class RestClient_Marshalls_Test {
 	@Test
 	public void b01_multiLanguages() throws Exception {
 		RestClient x = client().simpleJson().json().xml().html().plainText().msgPack().uon().urlEnc().openApi().build();
-		x.post("/a01",bean).header("Accept","application/json").header("Content-Type","application/json").header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("Accept","text/xml").header("Content-Type","text/xml").header("X-Accept","text/xml").header("X-Content-Type","text/xml").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("Accept","text/html").header("Content-Type","text/html").header("X-Accept","text/html").header("X-Content-Type","text/html").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("Accept","text/plain").header("Content-Type","text/plain").header("X-Accept","text/plain").header("X-Content-Type","text/plain").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("Accept","octal/msgpack").header("Content-Type","octal/msgpack").header("X-Accept","octal/msgpack").header("X-Content-Type","octal/msgpack").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("Accept","text/uon").header("Content-Type","text/uon").header("X-Accept","text/uon").header("X-Content-Type","text/uon").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("Accept","application/x-www-form-urlencoded").header("Content-Type","application/x-www-form-urlencoded").header("X-Accept","application/x-www-form-urlencoded").header("X-Content-Type","application/x-www-form-urlencoded").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("Accept","text/openapi").header("Content-Type","text/openapi").header("X-Accept","text/openapi").header("X-Content-Type","text/openapi").run().assertCode().is(200).getBody().as(Bean.class).check();
+		x.post("/a01",bean).header("Accept","application/json").header("Content-Type","application/json").header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("Accept","text/xml").header("Content-Type","text/xml").header("X-Accept","text/xml").header("X-Content-Type","text/xml").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("Accept","text/html").header("Content-Type","text/html").header("X-Accept","text/html").header("X-Content-Type","text/html").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("Accept","text/plain").header("Content-Type","text/plain").header("X-Accept","text/plain").header("X-Content-Type","text/plain").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("Accept","octal/msgpack").header("Content-Type","octal/msgpack").header("X-Accept","octal/msgpack").header("X-Content-Type","octal/msgpack").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("Accept","text/uon").header("Content-Type","text/uon").header("X-Accept","text/uon").header("X-Content-Type","text/uon").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("Accept","application/x-www-form-urlencoded").header("Content-Type","application/x-www-form-urlencoded").header("X-Accept","application/x-www-form-urlencoded").header("X-Content-Type","application/x-www-form-urlencoded").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("Accept","text/openapi").header("Content-Type","text/openapi").header("X-Accept","text/openapi").header("X-Content-Type","text/openapi").run().assertCode().is(200).getContent().as(Bean.class).check();
 
 		assertThrown(()->x.post("/a01",bean).run()).asMessage().is("Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.");
 	}
@@ -145,14 +145,14 @@ public class RestClient_Marshalls_Test {
 	@Test
 	public void c01_universal() throws Exception {
 		RestClient x = client().universal().build();
-		x.post("/a01",bean).header("Accept","application/json").header("Content-Type","application/json").header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("Accept","text/xml").header("Content-Type","text/xml").header("X-Accept","text/xml").header("X-Content-Type","text/xml").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("Accept","text/html").header("Content-Type","text/html").header("X-Accept","text/html").header("X-Content-Type","text/html").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("Accept","text/plain").header("Content-Type","text/plain").header("X-Accept","text/plain").header("X-Content-Type","text/plain").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("Accept","octal/msgpack").header("Content-Type","octal/msgpack").header("X-Accept","octal/msgpack").header("X-Content-Type","octal/msgpack").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("Accept","text/uon").header("Content-Type","text/uon").header("X-Accept","text/uon").header("X-Content-Type","text/uon").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("Accept","application/x-www-form-urlencoded").header("Content-Type","application/x-www-form-urlencoded").header("X-Accept","application/x-www-form-urlencoded").header("X-Content-Type","application/x-www-form-urlencoded").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("Accept","text/openapi").header("Content-Type","text/openapi").header("X-Accept","text/openapi").header("X-Content-Type","text/openapi").run().assertCode().is(200).getBody().as(Bean.class).check();
+		x.post("/a01",bean).header("Accept","application/json").header("Content-Type","application/json").header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("Accept","text/xml").header("Content-Type","text/xml").header("X-Accept","text/xml").header("X-Content-Type","text/xml").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("Accept","text/html").header("Content-Type","text/html").header("X-Accept","text/html").header("X-Content-Type","text/html").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("Accept","text/plain").header("Content-Type","text/plain").header("X-Accept","text/plain").header("X-Content-Type","text/plain").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("Accept","octal/msgpack").header("Content-Type","octal/msgpack").header("X-Accept","octal/msgpack").header("X-Content-Type","octal/msgpack").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("Accept","text/uon").header("Content-Type","text/uon").header("X-Accept","text/uon").header("X-Content-Type","text/uon").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("Accept","application/x-www-form-urlencoded").header("Content-Type","application/x-www-form-urlencoded").header("X-Accept","application/x-www-form-urlencoded").header("X-Content-Type","application/x-www-form-urlencoded").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("Accept","text/openapi").header("Content-Type","text/openapi").header("X-Accept","text/openapi").header("X-Content-Type","text/openapi").run().assertCode().is(200).getContent().as(Bean.class).check();
 
 		assertThrown(()->x.post("/a01",bean).run()).asMessage().is("Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.");
 	}
@@ -165,24 +165,24 @@ public class RestClient_Marshalls_Test {
 	@Test
 	public void d01_universal() throws Exception {
 		RestClient x = client().universal().headersDefault(Accept.APPLICATION_JSON, ContentType.APPLICATION_JSON).build();
-		x.post("/a01",bean).header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("Accept","application/json").header("Content-Type","application/json").header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("Accept","text/xml").header("Content-Type","text/xml").header("X-Accept","text/xml").header("X-Content-Type","text/xml").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("Accept","text/html").header("Content-Type","text/html").header("X-Accept","text/html").header("X-Content-Type","text/html").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("Accept","text/plain").header("Content-Type","text/plain").header("X-Accept","text/plain").header("X-Content-Type","text/plain").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("Accept","octal/msgpack").header("Content-Type","octal/msgpack").header("X-Accept","octal/msgpack").header("X-Content-Type","octal/msgpack").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("Accept","text/uon").header("Content-Type","text/uon").header("X-Accept","text/uon").header("X-Content-Type","text/uon").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("Accept","application/x-www-form-urlencoded").header("Content-Type","application/x-www-form-urlencoded").header("X-Accept","application/x-www-form-urlencoded").header("X-Content-Type","application/x-www-form-urlencoded").run().assertCode().is(200).getBody().as(Bean.class).check();
-		x.post("/a01",bean).header("Accept","text/openapi").header("Content-Type","text/openapi").header("X-Accept","text/openapi").header("X-Content-Type","text/openapi").run().assertCode().is(200).getBody().as(Bean.class).check();
+		x.post("/a01",bean).header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("Accept","application/json").header("Content-Type","application/json").header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("Accept","text/xml").header("Content-Type","text/xml").header("X-Accept","text/xml").header("X-Content-Type","text/xml").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("Accept","text/html").header("Content-Type","text/html").header("X-Accept","text/html").header("X-Content-Type","text/html").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("Accept","text/plain").header("Content-Type","text/plain").header("X-Accept","text/plain").header("X-Content-Type","text/plain").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("Accept","octal/msgpack").header("Content-Type","octal/msgpack").header("X-Accept","octal/msgpack").header("X-Content-Type","octal/msgpack").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("Accept","text/uon").header("Content-Type","text/uon").header("X-Accept","text/uon").header("X-Content-Type","text/uon").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("Accept","application/x-www-form-urlencoded").header("Content-Type","application/x-www-form-urlencoded").header("X-Accept","application/x-www-form-urlencoded").header("X-Content-Type","application/x-www-form-urlencoded").run().assertCode().is(200).getContent().as(Bean.class).check();
+		x.post("/a01",bean).header("Accept","text/openapi").header("Content-Type","text/openapi").header("X-Accept","text/openapi").header("X-Content-Type","text/openapi").run().assertCode().is(200).getContent().as(Bean.class).check();
 
 		// Default
-		x.post("/a01",bean).header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertCode().is(200).getBody().as(Bean.class).check();
+		x.post("/a01",bean).header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertCode().is(200).getContent().as(Bean.class).check();
 	}
 
 	@Test
 	public void d03_nullMarshalls() throws Exception {
 		RestClient x = client().marshall(null).marshalls(Json.DEFAULT,null).build();
-		x.post("/a01",bean).header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertCode().is(200).getBody().as(Bean.class).check();
+		x.post("/a01",bean).header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertCode().is(200).getContent().as(Bean.class).check();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

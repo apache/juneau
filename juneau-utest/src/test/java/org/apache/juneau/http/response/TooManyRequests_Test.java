@@ -58,22 +58,22 @@ public class TooManyRequests_Test {
 
 		c.get("/f1").run()
 			.assertStatus().asCode().is(STATUS_CODE)
-			.assertBody().is(REASON_PHRASE);
+			.assertContent().is(REASON_PHRASE);
 		c.get("/f2").run()
 			.assertStatus().asCode().is(STATUS_CODE)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		c.get("/f3").run()
 			.assertStatus().asCode().is(STATUS_CODE)
-			.assertBody().is("baz");
+			.assertContent().is("baz");
 		c.get("/f4").run()
 			.assertStatus().asCode().is(STATUS_CODE)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		c.get("/f5").run()
 			.assertStatus().asCode().is(STATUS_CODE)
-			.assertBody().is(REASON_PHRASE)
+			.assertContent().is(REASON_PHRASE)
 			.assertHeader("Foo").is("bar");
 		c.get("/f6").run()
 			.assertStatus().asCode().is(STATUS_CODE)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 	}
 }

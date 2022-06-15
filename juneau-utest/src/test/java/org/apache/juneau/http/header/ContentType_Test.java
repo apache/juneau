@@ -51,16 +51,16 @@ public class ContentType_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(contentType(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(contentType(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(contentType(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(contentType(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(contentType(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(contentType(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(contentType(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(contentType(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(contentType((String)null)).run().assertBody().isEmpty();
-		c.get().header(contentType((MediaType)null)).run().assertBody().isEmpty();
-		c.get().header(contentType((Supplier<MediaType>)null)).run().assertBody().isEmpty();
-		c.get().header(contentType(()->null)).run().assertBody().isEmpty();
+		c.get().header(contentType((String)null)).run().assertContent().isEmpty();
+		c.get().header(contentType((MediaType)null)).run().assertContent().isEmpty();
+		c.get().header(contentType((Supplier<MediaType>)null)).run().assertContent().isEmpty();
+		c.get().header(contentType(()->null)).run().assertContent().isEmpty();
 	}
 
 	@Test

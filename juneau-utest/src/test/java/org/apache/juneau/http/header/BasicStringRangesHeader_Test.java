@@ -53,14 +53,14 @@ public class BasicStringRangesHeader_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(stringRangesHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(stringRangesHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(stringRangesHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
-		c.get().header(stringRangesHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(stringRangesHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
+		c.get().header(stringRangesHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
+		c.get().header(stringRangesHeader(HEADER,PARSED)).run().assertContent().is(VALUE);
+		c.get().header(stringRangesHeader(HEADER,()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(stringRangesHeader(HEADER,(Supplier<StringRanges>)null)).run().assertBody().isEmpty();
-		c.get().header(stringRangesHeader(HEADER,()->null)).run().assertBody().isEmpty();
+		c.get().header(stringRangesHeader(HEADER,(Supplier<StringRanges>)null)).run().assertContent().isEmpty();
+		c.get().header(stringRangesHeader(HEADER,()->null)).run().assertContent().isEmpty();
 		assertThrown(()->stringRangesHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
 		assertThrown(()->stringRangesHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
 		assertThrown(()->stringRangesHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");

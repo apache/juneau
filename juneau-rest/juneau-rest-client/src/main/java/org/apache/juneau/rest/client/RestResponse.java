@@ -50,7 +50,7 @@ public class RestResponse implements HttpResponse {
 	private final RestRequest request;
 	private final HttpResponse response;
 	private final Parser parser;
-	private ResponseBody responseBody;
+	private ResponseContent responseContent;
 	private boolean isClosed;
 	private HeaderList headers;
 
@@ -70,7 +70,7 @@ public class RestResponse implements HttpResponse {
 		this.request = request;
 		this.parser = parser;
 		this.response = response == null ? new BasicHttpResponse(null, 0, null) : response;
-		this.responseBody = new ResponseBody(client, request, this, parser);
+		this.responseContent = new ResponseContent(client, request, this, parser);
 		this.headers = HeaderList.of(this.response.getAllHeaders());
 	}
 
@@ -332,8 +332,8 @@ public class RestResponse implements HttpResponse {
 	 *
 	 * @return The body of the response.
 	 */
-	public ResponseBody getBody() {
-		return responseBody;
+	public ResponseContent getContent() {
+		return responseContent;
 	}
 
 	/**
@@ -395,15 +395,15 @@ public class RestResponse implements HttpResponse {
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li class='note'>
-	 *		When using this method, the body is automatically cached by calling the {@link ResponseBody#cache()}.
+	 *		When using this method, the body is automatically cached by calling the {@link ResponseContent#cache()}.
 	 * 	<li class='note'>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
 	 *
 	 * @return A new fluent assertion object.
 	 */
-	public FluentResponseBodyAssertion<RestResponse> assertBody() {
-		return new FluentResponseBodyAssertion<>(responseBody, this);
+	public FluentResponseBodyAssertion<RestResponse> assertContent() {
+		return new FluentResponseBodyAssertion<>(responseContent, this);
 	}
 
 	/**
@@ -416,8 +416,8 @@ public class RestResponse implements HttpResponse {
 	 *
 	 * @return The body of the response.
 	 */
-	public RestResponse cacheBody() {
-		responseBody.cache();
+	public RestResponse cacheContent() {
+		responseContent.cache();
 		return this;
 	}
 
@@ -441,7 +441,7 @@ public class RestResponse implements HttpResponse {
 						return getHeader(name).parser(pp).schema(schema).as(type).orElse(null);
 					if (pt == RESPONSE_STATUS)
 						return getStatusCode();
-					return getBody().schema(schema).as(type);
+					return getContent().schema(schema).as(type);
 				}
 		});
 	}
@@ -561,8 +561,8 @@ public class RestResponse implements HttpResponse {
 	 * @return The response entity.  Never <jk>null</jk>.
 	 */
 	@Override /* HttpResponse */
-	public ResponseBody getEntity() {
-		return responseBody;
+	public ResponseContent getEntity() {
+		return responseContent;
 	}
 
 	/**
@@ -579,7 +579,7 @@ public class RestResponse implements HttpResponse {
 	@Override /* HttpResponse */
 	public void setEntity(HttpEntity entity) {
 		response.setEntity(entity);
-		this.responseBody = new ResponseBody(client, request, this, parser);
+		this.responseContent = new ResponseContent(client, request, this, parser);
 	}
 
 	/**
@@ -835,7 +835,7 @@ public class RestResponse implements HttpResponse {
 			if (client.logRequests == DetailLevel.SIMPLE) {
 				client.log(client.logRequestsLevel, "HTTP {0} {1}, {2}", request.getMethod(), request.getURI(), this.getStatusLine());
 			} else if (request.isDebug() || client.logRequests == DetailLevel.FULL) {
-				String output = getBody().asString();
+				String output = getContent().asString();
 				StringBuilder sb = new StringBuilder();
 				sb.append("\n=== HTTP Call (outgoing) ======================================================");
 				sb.append("\n=== REQUEST ===\n");

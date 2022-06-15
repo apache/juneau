@@ -66,7 +66,7 @@ public class RestClient_Config_Serializer_Test {
 	@Test
 	public void a01_addBeanTypes() throws Exception {
 		A1 l1 = A1.get();
-		client().addBeanTypes().build().post("/echoBody",l1).run().assertBody().is("{f1:{_type:'L',f2:1}}");
+		client().addBeanTypes().build().post("/echoBody",l1).run().assertContent().is("{f1:{_type:'L',f2:1}}");
 	}
 
 	@org.apache.juneau.annotation.Bean(typeName="L")
@@ -82,7 +82,7 @@ public class RestClient_Config_Serializer_Test {
 	@Test
 	public void a02_addRootType() throws Exception {
 		A2 l2 = A2.get();
-		client().addBeanTypes().addRootType().build().post("/echoBody",l2).run().assertBody().is("{_type:'L',f2:1}");
+		client().addBeanTypes().addRootType().build().post("/echoBody",l2).run().assertContent().is("{_type:'L',f2:1}");
 	}
 
 	@Test
@@ -96,12 +96,12 @@ public class RestClient_Config_Serializer_Test {
 	public void a04_ignoreRecursions() throws Exception {
 		A1 l1 = new A1();
 		l1.f1 = l1;
-		client().ignoreRecursions().build().post("/echoBody",l1).run().assertBody().is("{}");
+		client().ignoreRecursions().build().post("/echoBody",l1).run().assertContent().is("{}");
 	}
 
 	@Test
 	public void a05_initialDepth() throws Exception {
-		client().initialDepth(2).ws().build().post("/echoBody",bean).run().assertBody().is("\t\t{\n\t\t\tf: 1\n\t\t}");
+		client().initialDepth(2).ws().build().post("/echoBody",bean).run().assertContent().is("\t\t{\n\t\t\tf: 1\n\t\t}");
 	}
 
 	public static class A6 {
@@ -115,19 +115,19 @@ public class RestClient_Config_Serializer_Test {
 
 	@Test
 	public void a06_maxDepth() throws Exception {
-		client().maxDepth(1).build().post("/echoBody",A6.get()).run().assertBody().is("{}");
+		client().maxDepth(1).build().post("/echoBody",A6.get()).run().assertContent().is("{}");
 	}
 
 	@Test
 	public void a07_sortCollections() throws Exception {
 		String[] x = new String[]{"c","a","b"};
-		client().sortCollections().build().post("/echoBody",x).run().assertBody().is("['a','b','c']");
+		client().sortCollections().build().post("/echoBody",x).run().assertContent().is("['a','b','c']");
 	}
 
 	@Test
 	public void a08_sortMapsBoolean() throws Exception {
 		Map<String,Integer> x = map("c",3,"a",1,"b",2);
-		client().sortMaps().build().post("/echoBody",x).run().assertBody().is("{a:1,b:2,c:3}");
+		client().sortMaps().build().post("/echoBody",x).run().assertContent().is("{a:1,b:2,c:3}");
 	}
 
 	public static class A9 {
@@ -138,7 +138,7 @@ public class RestClient_Config_Serializer_Test {
 	@Test
 	public void a09_trimEmptyCollections() throws Exception {
 		A9 x = new A9();
-		client().trimEmptyCollections().build().post("/echoBody",x).run().assertBody().is("{}");
+		client().trimEmptyCollections().build().post("/echoBody",x).run().assertContent().is("{}");
 	}
 
 	public static class A10 {
@@ -149,7 +149,7 @@ public class RestClient_Config_Serializer_Test {
 	@Test
 	public void a10_trimEmptyMaps() throws Exception {
 		A10 x = new A10();
-		client().trimEmptyMaps().build().post("/echoBody",x).run().assertBody().is("{}");
+		client().trimEmptyMaps().build().post("/echoBody",x).run().assertContent().is("{}");
 	}
 
 	public static class A11 {
@@ -159,7 +159,7 @@ public class RestClient_Config_Serializer_Test {
 	@Test
 	public void a11_trimNullPropertiesBoolean() throws Exception {
 		A11 x = new A11();
-		client().keepNullProperties().build().post("/echoBody",x).run().assertBody().is("{f:null}");
+		client().keepNullProperties().build().post("/echoBody",x).run().assertContent().is("{f:null}");
 	}
 
 	public static class A12 {
@@ -169,7 +169,7 @@ public class RestClient_Config_Serializer_Test {
 	@Test
 	public void a12_trimStringsOnWrite() throws Exception {
 		A12 x = new A12();
-		client().trimStringsOnWrite().build().post("/echoBody",x).run().assertBody().is("{f:'foo'}");
+		client().trimStringsOnWrite().build().post("/echoBody",x).run().assertContent().is("{f:'foo'}");
 	}
 
 	public static class A13 {
@@ -180,8 +180,8 @@ public class RestClient_Config_Serializer_Test {
 	@Test
 	public void a13_uriContext_uriResolution_uriRelativity() throws Exception {
 		A13 x = new A13();
-		client().uriResolution(UriResolution.ABSOLUTE).uriRelativity(UriRelativity.PATH_INFO).uriContext(UriContext.of("http://localhost:80","/context","/resource","/path")).build().post("/echoBody",x).run().assertBody().is("{f:'http://localhost:80/context/resource/foo'}");
-		client().uriResolution(UriResolution.NONE).uriRelativity(UriRelativity.RESOURCE).uriContext(UriContext.of("http://localhost:80","/context","/resource","/path")).build().post("/echoBody",x).run().assertBody().is("{f:'foo'}");
+		client().uriResolution(UriResolution.ABSOLUTE).uriRelativity(UriRelativity.PATH_INFO).uriContext(UriContext.of("http://localhost:80","/context","/resource","/path")).build().post("/echoBody",x).run().assertContent().is("{f:'http://localhost:80/context/resource/foo'}");
+		client().uriResolution(UriResolution.NONE).uriRelativity(UriRelativity.RESOURCE).uriContext(UriContext.of("http://localhost:80","/context","/resource","/path")).build().post("/echoBody",x).run().assertContent().is("{f:'foo'}");
 	}
 
 	public static class A14 {
@@ -203,7 +203,7 @@ public class RestClient_Config_Serializer_Test {
 	@Test
 	public void a14_maxIndent() throws Exception {
 		A14 x = A14.get();
-		client().maxIndent(2).ws().build().post("/echoBody",x).run().assertBody().is("{\n\tf1: 1,\n\tf2: {\n\t\tf1: 2,\n\t\tf2: {f1:3}\n\t}\n}");
+		client().maxIndent(2).ws().build().post("/echoBody",x).run().assertContent().is("{\n\tf1: 1,\n\tf2: {\n\t\tf1: 2,\n\t\tf2: {f1:3}\n\t}\n}");
 	}
 
 	public static class A15 {
@@ -213,22 +213,22 @@ public class RestClient_Config_Serializer_Test {
 	@Test
 	public void a15_quoteChar() throws Exception {
 		A15 x = new A15();
-		MockRestClient.create(A.class).json().quoteChar('\'').build().post("/echoBody",x).run().assertBody().is("{'f1':'foo'}");
-		MockRestClient.create(A.class).json().quoteChar('|').build().post("/echoBody",x).run().assertBody().is("{|f1|:|foo|}");
+		MockRestClient.create(A.class).json().quoteChar('\'').build().post("/echoBody",x).run().assertContent().is("{'f1':'foo'}");
+		MockRestClient.create(A.class).json().quoteChar('|').build().post("/echoBody",x).run().assertContent().is("{|f1|:|foo|}");
 	}
 
 	@Test
 	public void a16_sq() throws Exception {
 		A15 x = new A15();
-		MockRestClient.create(A.class).json().sq().build().post("/echoBody",x).run().assertBody().is("{'f1':'foo'}");
-		client().sq().build().post("/echoBody",x).run().assertBody().is("{f1:'foo'}");
+		MockRestClient.create(A.class).json().sq().build().post("/echoBody",x).run().assertContent().is("{'f1':'foo'}");
+		client().sq().build().post("/echoBody",x).run().assertContent().is("{f1:'foo'}");
 	}
 
 	@Test
 	public void a17_useWhitespace() throws Exception {
 		A15 x = new A15();
-		client().ws().build().post("/echoBody",x).run().assertBody().is("{\n\tf1: 'foo'\n}");
-		client().useWhitespace().build().post("/echoBody",x).run().assertBody().is("{\n\tf1: 'foo'\n}");
+		client().ws().build().post("/echoBody",x).run().assertContent().is("{\n\tf1: 'foo'\n}");
+		client().useWhitespace().build().post("/echoBody",x).run().assertContent().is("{\n\tf1: 'foo'\n}");
 	}
 
 

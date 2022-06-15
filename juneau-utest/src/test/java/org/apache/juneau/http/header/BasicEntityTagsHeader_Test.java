@@ -51,14 +51,14 @@ public class BasicEntityTagsHeader_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(entityTagsHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(entityTagsHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(entityTagsHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
-		c.get().header(entityTagsHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(entityTagsHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
+		c.get().header(entityTagsHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
+		c.get().header(entityTagsHeader(HEADER,PARSED)).run().assertContent().is(VALUE);
+		c.get().header(entityTagsHeader(HEADER,()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(entityTagsHeader(HEADER,(Supplier<EntityTags>)null)).run().assertBody().isEmpty();
-		c.get().header(entityTagsHeader(HEADER,()->null)).run().assertBody().isEmpty();
+		c.get().header(entityTagsHeader(HEADER,(Supplier<EntityTags>)null)).run().assertContent().isEmpty();
+		c.get().header(entityTagsHeader(HEADER,()->null)).run().assertContent().isEmpty();
 		assertThrown(()->entityTagsHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
 		assertThrown(()->entityTagsHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
 		assertThrown(()->entityTagsHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");

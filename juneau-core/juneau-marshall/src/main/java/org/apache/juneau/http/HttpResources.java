@@ -66,7 +66,7 @@ public class HttpResources {
 	 * @return A new {@link ByteArrayResource} builder.
 	 */
 	public static final HttpResourceBuilder<ByteArrayResource> byteArrayResource(Supplier<byte[]> content) {
-		return ByteArrayResource.create().contentSupplier(content);
+		return ByteArrayResource.create().content(content);
 	}
 
 	/**
@@ -77,7 +77,7 @@ public class HttpResources {
 	 * @return A new {@link ByteArrayResource} builder.
 	 */
 	public static final HttpResourceBuilder<ByteArrayResource> byteArrayResource(Supplier<byte[]> content, ContentType contentType) {
-		return ByteArrayResource.create().contentSupplier(content).contentType(contentType);
+		return ByteArrayResource.create().content(content).contentType(contentType);
 	}
 
 	/**
@@ -178,7 +178,7 @@ public class HttpResources {
 	 * @return A new {@link StringResource} builder.
 	 */
 	public static final HttpResourceBuilder<StringResource> stringResource(Supplier<String> content) {
-		return StringResource.create().contentSupplier(content);
+		return StringResource.create().content(content);
 	}
 
 	/**
@@ -189,6 +189,6 @@ public class HttpResources {
 	 * @return A new {@link StringResource} builder.
 	 */
 	public static final HttpResourceBuilder<StringResource> stringResource(Supplier<String> content, ContentType contentType) {
-		return StringResource.create().contentSupplier(content).contentType(contentType);
+		return StringResource.create().content(content).contentType(contentType);
 	}
 }

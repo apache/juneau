@@ -35,7 +35,7 @@ public final class InputStreamProcessor implements ResponseProcessor {
 	public int process(RestOpSession opSession) throws IOException {
 
 		RestResponse res = opSession.getResponse();
-		InputStream is = res.getOutput(InputStream.class);
+		InputStream is = res.getContent(InputStream.class);
 
 		if (is == null)
 			return NEXT;

@@ -52,14 +52,14 @@ public class BasicCsvHeader_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(csvHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(csvHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(csvHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
-		c.get().header(csvHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(csvHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
+		c.get().header(csvHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
+		c.get().header(csvHeader(HEADER,PARSED)).run().assertContent().is(VALUE);
+		c.get().header(csvHeader(HEADER,()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(csvHeader(HEADER,(Supplier<String[]>)null)).run().assertBody().isEmpty();
-		c.get().header(csvHeader(HEADER,()->null)).run().assertBody().isEmpty();
+		c.get().header(csvHeader(HEADER,(Supplier<String[]>)null)).run().assertContent().isEmpty();
+		c.get().header(csvHeader(HEADER,()->null)).run().assertContent().isEmpty();
 		assertThrown(()->csvHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
 		assertThrown(()->csvHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
 		assertThrown(()->csvHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");

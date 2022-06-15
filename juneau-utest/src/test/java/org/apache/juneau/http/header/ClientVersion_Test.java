@@ -51,15 +51,15 @@ public class ClientVersion_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(clientVersion(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(clientVersion(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(clientVersion(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(clientVersion(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(clientVersion(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(clientVersion(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(clientVersion(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(clientVersion(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(clientVersion((String)null)).run().assertBody().isEmpty();
-		c.get().header(clientVersion((Supplier<Version>)null)).run().assertBody().isEmpty();
-		c.get().header(clientVersion(()->null)).run().assertBody().isEmpty();
+		c.get().header(clientVersion((String)null)).run().assertContent().isEmpty();
+		c.get().header(clientVersion((Supplier<Version>)null)).run().assertContent().isEmpty();
+		c.get().header(clientVersion(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -147,24 +147,24 @@ public class Restx_ReqAttrs_Test {
 	public void a01_basic() throws Exception {
 		RestClient a = MockRestClient.build(A2.class);
 
-		a.get("/a1").run().assertBody().is("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}");
-		a.get("/a2").run().assertBody().is("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'}");
-		a.get("/a2?override").run().assertBody().is("{p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'}");
+		a.get("/a1").run().assertContent().is("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}");
+		a.get("/a2").run().assertContent().is("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'}");
+		a.get("/a2?override").run().assertContent().is("{p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'}");
 
-		a.get("/b1").run().assertBody().is("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}");
-		a.get("/b2").run().assertBody().is("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'}");
-		a.get("/b2?override").run().assertBody().is("{p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'}");
+		a.get("/b1").run().assertContent().is("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}");
+		a.get("/b2").run().assertContent().is("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'}");
+		a.get("/b2?override").run().assertContent().is("{p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'}");
 
-		a.put("/c1").run().assertBody().is("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}");
-		a.put("/c2").run().assertBody().is("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'}");
-		a.put("/c2?override").run().assertBody().is("{p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'}");
+		a.put("/c1").run().assertContent().is("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}");
+		a.put("/c2").run().assertContent().is("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'}");
+		a.put("/c2?override").run().assertContent().is("{p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'}");
 
-		a.post("/d1").run().assertBody().is("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}");
-		a.post("/d2").run().assertBody().is("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'}");
-		a.post("/d2?override").run().assertBody().is("{p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'}");
+		a.post("/d1").run().assertContent().is("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}");
+		a.post("/d2").run().assertContent().is("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'}");
+		a.post("/d2?override").run().assertContent().is("{p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'}");
 
-		a.delete("/e1").run().assertBody().is("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}");
-		a.delete("/e2").run().assertBody().is("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'}");
-		a.delete("/e2?override").run().assertBody().is("{p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'}");
+		a.delete("/e1").run().assertContent().is("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4'}");
+		a.delete("/e2").run().assertContent().is("{p1:'v1',p2:'v2a',p3:'v3',p4:'v4a',p5:'v5'}");
+		a.delete("/e2?override").run().assertContent().is("{p1:'x',p2:'x',p3:'x',p4:'x',p5:'x'}");
 	}
 }

@@ -13,11 +13,11 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'org.apache.juneau.http.entity', created:'9.0.0', flags:'todo'}
+{title:'org.apache.juneau.http.entity', created:'9.0.0'}
 
 <div class='topic'>
 	<p>
-		TODO
+		The {@link oaj.http.entity} package contains implementations of <c>org.apache.http.HttpEntity</c>.
 	</p>
 	<ul class='javatree'>
 		<li class='jic'>{@code org.apache.http.HttpEntity}
@@ -36,11 +36,32 @@
 	
 	<h5 class='topic'>HttpEntityBuilder</h5>
 	<p>
-		TODO
+		HTTP entities are created through builders created in the {@link oaj.http.HttpEnties} class or individual <c>create()</c> methods
+		defined in the subclasses above.  The builder contains the following methods:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.http.entity.HttpEntityBuilder}
+		<ul>
+			<li class='jm'>{@link oaj.http.entity.HttpEntityBuilder#cached() cached()}
+			<li class='jm'>{@link oaj.http.entity.HttpEntityBuilder#chunked() chunked()}
+			<li class='jm'>{@link oaj.http.entity.HttpEntityBuilder#chunked(boolean) chunked(boolean)}
+			<li class='jm'>{@link oaj.http.entity.HttpEntityBuilder#content(Object) content(Object)}
+			<li class='jm'>{@link oaj.http.entity.HttpEntityBuilder#contentEncoding(ContentEncoding) contentEncoding(ContentEncoding)}
+			<li class='jm'>{@link oaj.http.entity.HttpEntityBuilder#contentEncoding(String) contentEncoding(String)}
+			<li class='jm'>{@link oaj.http.entity.HttpEntityBuilder#contentLength(long) contentLength(long)}
+			<li class='jm'>{@link oaj.http.entity.HttpEntityBuilder#contentSupplier(Supplier) contentSupplier(Supplier)}
+			<li class='jm'>{@link oaj.http.entity.HttpEntityBuilder#contentType(ContentType) contentType(ContentType)}
+			<li class='jm'>{@link oaj.http.entity.HttpEntityBuilder#contentType(String) contentType(String)}
+		</ul>
+	</ul>
+	
+	<h5 class='figure'>Example</h5>
+	<p class='bjava'>
+	|	HttpEntity <jv>entity</jv> = ByteArrayEntity
+	|		.<jsm>create</jsm>()
+	|		.content(MyPart.<jsm>of</jsm>(<js>"foo"</js>))
+	|		.append(<js>"Bar"</js>, ()-&gt;<jsm>getDynamicValueFromSomewhere</jsm>())
+	|		.build();
 	</p>
 	
-	<h5 class='topic'>SerializedEntityBuilder</h5>
-	<p>
-		TODO
-	</p>
 </div>

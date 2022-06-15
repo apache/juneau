@@ -126,6 +126,19 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Returns access to the underlying builder for the HTTP entity.
+	 *
+	 * @return The underlying builder for the HTTP entity.
+	 */
+	public HttpEntityBuilder<?> getEntity() {
+		if (entityBuilder == null) {
+			entityBuilder = entity == null ? BasicHttpEntity.create(entityImplClass) : entity.copy();
+			entity = null;
+		}
+		return entityBuilder;
+	}
+
+	/**
 	 * Sets the content on this entity bean.
 	 *
 	 * @param value The entity content, can be <jk>null</jk>.
@@ -133,7 +146,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 */
 	@FluentSetter
 	public HttpResourceBuilder<T> content(Object value) {
-		entityBuilder().content(value);
+		getEntity().content(value);
 		return this;
 	}
 
@@ -148,8 +161,8 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * @return This object.
 	 */
 	@FluentSetter
-	public HttpResourceBuilder<T> contentSupplier(Supplier<?> value) {
-		entityBuilder().contentSupplier(value);
+	public HttpResourceBuilder<T> content(Supplier<?> value) {
+		getEntity().content(value);
 		return this;
 	}
 
@@ -161,7 +174,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 */
 	@FluentSetter
 	public HttpResourceBuilder<T> contentType(String value) {
-		entityBuilder().contentType(value);
+		getEntity().contentType(value);
 		return this;
 	}
 
@@ -173,7 +186,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 */
 	@FluentSetter
 	public HttpResourceBuilder<T> contentType(ContentType value) {
-		entityBuilder().contentType(value);
+		getEntity().contentType(value);
 		return this;
 	}
 
@@ -185,7 +198,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 */
 	@FluentSetter
 	public HttpResourceBuilder<T> contentLength(long value) {
-		entityBuilder().contentLength(value);
+		getEntity().contentLength(value);
 		return this;
 	}
 
@@ -197,7 +210,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 */
 	@FluentSetter
 	public HttpResourceBuilder<T> contentEncoding(String value) {
-		entityBuilder().contentEncoding(value);
+		getEntity().contentEncoding(value);
 		return this;
 	}
 
@@ -209,7 +222,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 */
 	@FluentSetter
 	public HttpResourceBuilder<T> contentEncoding(ContentEncoding value) {
-		entityBuilder().contentEncoding(value);
+		getEntity().contentEncoding(value);
 		return this;
 	}
 
@@ -225,7 +238,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 */
 	@FluentSetter
 	public HttpResourceBuilder<T> chunked() {
-		entityBuilder().chunked();
+		getEntity().chunked();
 		return this;
 	}
 
@@ -242,7 +255,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 */
 	@FluentSetter
 	public HttpResourceBuilder<T> chunked(boolean value) {
-		entityBuilder().chunked(value);
+		getEntity().chunked(value);
 		return this;
 	}
 
@@ -255,7 +268,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 */
 	@FluentSetter
 	public HttpResourceBuilder<T> cached() throws IOException {
-		entityBuilder().cached();
+		getEntity().cached();
 		return this;
 	}
 
@@ -264,10 +277,20 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Sets the protocol version on the status line.
+	 * Returns access to the underlying builder for the headers.
 	 *
-	 * <p>
-	 * If not specified, <js>"HTTP/1.1"</js> will be used.
+	 * @return The underlying builder for the headers.
+	 */
+	public HeaderList.Builder getHeaders() {
+		if (headersBuilder == null) {
+			headersBuilder = headers == null ? HeaderList.create() : headers.copy();
+			headers = null;
+		}
+		return headersBuilder;
+	}
+
+	/**
+	 * Sets the specified headers in this builder.
 	 *
 	 * @param value The new value.
 	 * @return This object.
@@ -280,16 +303,6 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	}
 
 	/**
-	 * Removes any headers already in this builder.
-	 *
-	 * @return This object.
-	 */
-	public HttpResourceBuilder<T> clearHeaders() {
-		headersBuilder().clear();
-		return this;
-	}
-
-	/**
 	 * Adds the specified header to the end of the headers in this builder.
 	 *
 	 * @param value The header to add.  <jk>null</jk> values are ignored.
@@ -297,7 +310,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 */
 	public HttpResourceBuilder<T> header(Header value) {
 		if (value != null)
-			headersBuilder().append(value);
+			getHeaders().append(value);
 		return this;
 	}
 
@@ -313,7 +326,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 */
 	public HttpResourceBuilder<T> header(String name, String value) {
 		if (name != null && value != null)
-			headersBuilder().append(name, value);
+			getHeaders().append(name, value);
 		return this;
 	}
 
@@ -336,7 +349,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 					else if (n.equalsIgnoreCase("content-length"))
 						contentLength(Long.parseLong(v));
 					else
-						headersBuilder().append(h);
+						getHeaders().append(h);
 				}
 			}
 		}
@@ -350,132 +363,13 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * @return This object.
 	 */
 	public HttpResourceBuilder<T> headers(List<Header> values) {
-		headersBuilder().append(values);
-		return this;
-	}
-
-	/**
-	 * Removes the specified header from this builder.
-	 *
-	 * @param value The header to remove.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public HttpResourceBuilder<T> removeHeader(Header value) {
-		headersBuilder().remove(value);
-		return this;
-	}
-
-	/**
-	 * Removes the specified headers from this builder.
-	 *
-	 * @param values The headers to remove.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public HttpResourceBuilder<T> removeHeaders(Header...values) {
-		headersBuilder().remove(values);
-		return this;
-	}
-
-	/**
-	 * Removes the specified headers from this builder.
-	 *
-	 * @param values The headers to remove.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public HttpResourceBuilder<T> removeHeaders(List<Header> values) {
-		headersBuilder().remove(values);
-		return this;
-	}
-
-	/**
-	 * Replaces the first occurrence of the header with the same name.
-	 *
-	 * <p>
-	 * If no header with the same name is found the given header is added to the end of the list.
-	 *
-	 * @param value The headers to replace.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public HttpResourceBuilder<T> updateHeader(Header value) {
-		headersBuilder().set(value);
-		return this;
-	}
-
-	/**
-	 * Replaces the first occurrence of the headers with the same name.
-	 *
-	 * <p>
-	 * If no header with the same name is found the given header is added to the end of the list.
-	 *
-	 * @param values The headers to replace.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public HttpResourceBuilder<T> updateHeaders(Header...values) {
-		headersBuilder().set(values);
-		return this;
-	}
-
-	/**
-	 * Replaces the first occurrence of the headers with the same name.
-	 *
-	 * <p>
-	 * If no header with the same name is found the given header is added to the end of the list.
-	 *
-	 * @param values The headers to replace.  <jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public HttpResourceBuilder<T> updateHeaders(List<Header> values) {
-		headersBuilder().set(values);
-		return this;
-	}
-
-	/**
-	 * Sets all of the headers contained within this group overriding any existing headers.
-	 *
-	 * <p>
-	 * The headers are added in the order in which they appear in the array.
-	 *
-	 * @param values The headers to set
-	 * @return This object.
-	 */
-	public HttpResourceBuilder<T> setHeaders(Header...values) {
-		headersBuilder().clear().append(values);
-		return this;
-	}
-
-	/**
-	 * Sets all of the headers contained within this group overriding any existing headers.
-	 *
-	 * <p>
-	 * The headers are added in the order in which they appear in the list.
-	 *
-	 * @param values The headers to set
-	 * @return This object.
-	 */
-	public HttpResourceBuilder<T> setHeaders(List<Header> values) {
-		headersBuilder().clear().append(values);
+		getHeaders().append(values);
 		return this;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
-
-	private HeaderList.Builder headersBuilder() {
-		if (headersBuilder == null) {
-			headersBuilder = headers == null ? HeaderList.create() : headers.copy();
-			headers = null;
-		}
-		return headersBuilder;
-	}
-
-	private HttpEntityBuilder<?> entityBuilder() {
-		if (entityBuilder == null) {
-			entityBuilder = entity == null ? BasicHttpEntity.create(entityImplClass) : entity.copy();
-			entity = null;
-		}
-		return entityBuilder;
-	}
 
 	// <FluentSetters>
 

@@ -50,15 +50,15 @@ public class MaxForwards_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(maxForwards(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(maxForwards(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(maxForwards(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(maxForwards(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(maxForwards(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(maxForwards(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(maxForwards(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(maxForwards(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(maxForwards((String)null)).run().assertBody().isEmpty();
-		c.get().header(maxForwards((Supplier<Integer>)null)).run().assertBody().isEmpty();
-		c.get().header(maxForwards(()->null)).run().assertBody().isEmpty();
+		c.get().header(maxForwards((String)null)).run().assertContent().isEmpty();
+		c.get().header(maxForwards((Supplier<Integer>)null)).run().assertContent().isEmpty();
+		c.get().header(maxForwards(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

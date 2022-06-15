@@ -50,15 +50,15 @@ public class Via_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(via(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(via(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(via(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(via(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(via(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(via(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(via(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(via(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(via((String)null)).run().assertBody().isEmpty();
-		c.get().header(via((Supplier<String[]>)null)).run().assertBody().isEmpty();
-		c.get().header(via(()->null)).run().assertBody().isEmpty();
+		c.get().header(via((String)null)).run().assertContent().isEmpty();
+		c.get().header(via((Supplier<String[]>)null)).run().assertContent().isEmpty();
+		c.get().header(via(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -53,15 +53,15 @@ public class IfModifiedSince_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(ifModifiedSince(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(ifModifiedSince(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(ifModifiedSince(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(ifModifiedSince(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(ifModifiedSince(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(ifModifiedSince(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(ifModifiedSince(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(ifModifiedSince(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(ifModifiedSince((String)null)).run().assertBody().is("");
-		c.get().header(ifModifiedSince((Supplier<ZonedDateTime>)null)).run().assertBody().is("");
-		c.get().header(ifModifiedSince(()->null)).run().assertBody().isEmpty();
+		c.get().header(ifModifiedSince((String)null)).run().assertContent().is("");
+		c.get().header(ifModifiedSince((Supplier<ZonedDateTime>)null)).run().assertContent().is("");
+		c.get().header(ifModifiedSince(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -129,225 +129,225 @@ public class Body_Test {
 		a.put("/String", "foo")
 			.json()
 			.run()
-			.assertBody().is("'foo'");
+			.assertContent().is("'foo'");
 		// If no Content-Type specified, should be treated as plain-text.
 		a.put("/String", "'foo'")
 			.run()
-			.assertBody().is("'\\'foo\\''");
+			.assertContent().is("'\\'foo\\''");
 		// If Content-Type not matched, should be treated as plain-text.
 		a.put("/String", "'foo'").contentType("")
 			.run()
-			.assertBody().is("'\\'foo\\''");
+			.assertContent().is("'\\'foo\\''");
 		a.put("/String", "'foo'").contentType("text/plain")
 			.run()
-			.assertBody().is("'\\'foo\\''");
+			.assertContent().is("'\\'foo\\''");
 		a.put("/String?body=foo", null)
 			.run()
-			.assertBody().is("'foo'");
+			.assertContent().is("'foo'");
 		a.put("/String?body=null", null)
 			.run()
-			.assertBody().is("null");
+			.assertContent().is("null");
 		a.put("/String?body=", null)
 			.run()
-			.assertBody().is("''");
+			.assertContent().is("''");
 
 		a.put("/Integer", "123").json()
 			.run()
-			.assertBody().is("123");
+			.assertContent().is("123");
 		// Integer takes in a String arg, so it can be parsed without Content-Type.
 		a.put("/Integer", "123")
 			.run()
-			.assertBody().is("123");
+			.assertContent().is("123");
 		a.put("/Integer?body=123", null)
 			.run()
-			.assertBody().is("123");
+			.assertContent().is("123");
 		a.put("/Integer?body=-123", null)
 			.run()
-			.assertBody().is("-123");
+			.assertContent().is("-123");
 		a.put("/Integer?body=null", null)
 			.run()
-			.assertBody().is("null");
+			.assertContent().is("null");
 		a.put("/Integer?body=", null)
 			.run()
-			.assertBody().is("null");
+			.assertContent().is("null");
 		a.put("/Integer?body=bad&noTrace=true", null)
 			.run()
 			.assertCode().is(400);
 
 		a.put("/int", "123").json()
 			.run()
-			.assertBody().is("123");
+			.assertContent().is("123");
 		a.put("/int", "123")
 			.run()
-			.assertBody().is("123"); // Uses part parser.
+			.assertContent().is("123"); // Uses part parser.
 		a.put("/int?body=123", null)
 			.run()
-			.assertBody().is("123");
+			.assertContent().is("123");
 		a.put("/int?body=-123", null)
 			.run()
-			.assertBody().is("-123");
+			.assertContent().is("-123");
 		a.put("/int?body=null", null)
 			.run()
-			.assertBody().is("0");
+			.assertContent().is("0");
 		a.put("/int?body=", null)
 			.run()
-			.assertBody().is("0");
+			.assertContent().is("0");
 		a.put("/int?body=bad&noTrace=true", null)
 			.run()
 			.assertCode().is(400);
 
 		a.put("/Boolean", "true").json()
 			.run()
-			.assertBody().is("true");
+			.assertContent().is("true");
 		// Boolean takes in a String arg, so it can be parsed without Content-Type.
 		a.put("/Boolean", "true")
 			.run()
-			.assertBody().is("true");
+			.assertContent().is("true");
 		a.put("/Boolean?body=true", null)
 			.run()
-			.assertBody().is("true");
+			.assertContent().is("true");
 		a.put("/Boolean?body=false", null)
 			.run()
-			.assertBody().is("false");
+			.assertContent().is("false");
 		a.put("/Boolean?body=null", null)
 			.run()
-			.assertBody().is("null");
+			.assertContent().is("null");
 		a.put("/Boolean?body=", null)
 			.run()
-			.assertBody().is("null");
+			.assertContent().is("null");
 		a.put("/Boolean?body=bad&noTrace=true", null)
 			.run()
 			.assertCode().is(400);
 
 		a.put("/boolean", "true").json()
 			.run()
-			.assertBody().is("true");
+			.assertContent().is("true");
 		a.put("/boolean", "true")
 			.run()
-			.assertBody().is("true"); // Uses part parser.
+			.assertContent().is("true"); // Uses part parser.
 		a.put("/boolean?body=true", null)
 			.run()
-			.assertBody().is("true");
+			.assertContent().is("true");
 		a.put("/boolean?body=false", null)
 			.run()
-			.assertBody().is("false");
+			.assertContent().is("false");
 		a.put("/boolean?body=null", null)
 			.run()
-			.assertBody().is("false");
+			.assertContent().is("false");
 		a.put("/boolean?body=", null)
 			.run()
-			.assertBody().is("false");
+			.assertContent().is("false");
 		a.put("/boolean?body=bad&noTrace=true", null)
 			.run()
 			.assertCode().is(400);
 
 		a.put("/float", "1.23").json()
 			.run()
-			.assertBody().is("1.23");
+			.assertContent().is("1.23");
 		a.put("/float", "1.23")
 			.run()
-			.assertBody().is("1.23");  // Uses part parser.
+			.assertContent().is("1.23");  // Uses part parser.
 		a.put("/float?body=1.23", null)
 			.run()
-			.assertBody().is("1.23");
+			.assertContent().is("1.23");
 		a.put("/float?body=-1.23", null)
 			.run()
-			.assertBody().is("-1.23");
+			.assertContent().is("-1.23");
 		a.put("/float?body=null", null)
 			.run()
-			.assertBody().is("0.0");
+			.assertContent().is("0.0");
 		a.put("/float?body=", null)
 			.run()
-			.assertBody().is("0.0");
+			.assertContent().is("0.0");
 		a.put("/float?body=bad&noTrace=true", null)
 			.run()
 			.assertCode().is(400);
 
 		a.put("/Float", "1.23").json()
 			.run()
-			.assertBody().is("1.23");
+			.assertContent().is("1.23");
 		// Float takes in a String arg, so it can be parsed without Content-Type.
 		a.put("/Float", "1.23")
 			.run()
-			.assertBody().is("1.23");
+			.assertContent().is("1.23");
 		a.put("/Float?body=1.23", null)
 			.run()
-			.assertBody().is("1.23");
+			.assertContent().is("1.23");
 		a.put("/Float?body=-1.23", null)
 			.run()
-			.assertBody().is("-1.23");
+			.assertContent().is("-1.23");
 		a.put("/Float?body=null", null)
 			.run()
-			.assertBody().is("null");
+			.assertContent().is("null");
 		a.put("/Float?body=", null)
 			.run()
-			.assertBody().is("null");
+			.assertContent().is("null");
 		a.put("/Float?body=bad&noTrace=true", null)
 			.run()
 			.assertCode().is(400);
 
 		a.put("/Map", "{foo:123}", APPLICATION_JSON)
 			.run()
-			.assertBody().is("{foo:123}");
+			.assertContent().is("{foo:123}");
 		a.put("/Map", "(foo=123)", TEXT_OPENAPI)
 			.run()
 			.assertCode().is(415);
 		a.put("/Map?body=(foo=123)", null)
 			.run()
-			.assertBody().is("{foo:123}");
+			.assertContent().is("{foo:123}");
 		a.put("/Map?body=()", null)
 			.run()
-			.assertBody().is("{}");
+			.assertContent().is("{}");
 		a.put("/Map?body=null", null)
 			.run()
-			.assertBody().is("null");
+			.assertContent().is("null");
 		a.put("/Map?body=", null)
 			.run()
-			.assertBody().is("null");
+			.assertContent().is("null");
 		a.put("/Map?body=bad&noTrace=true", null)
 			.run()
 			.assertCode().is(400);
 
 		a.put("/enum", "'ONE'", APPLICATION_JSON)
 			.run()
-			.assertBody().is("'ONE'");
+			.assertContent().is("'ONE'");
 		a.put("/enum", "ONE")
 			.run()
-			.assertBody().is("'ONE'");
+			.assertContent().is("'ONE'");
 		a.put("/enum?body=ONE", null)
 			.run()
-			.assertBody().is("'ONE'");
+			.assertContent().is("'ONE'");
 		a.put("/enum?body=TWO", null)
 			.run()
-			.assertBody().is("'TWO'");
+			.assertContent().is("'TWO'");
 		a.put("/enum?body=null", null)
 			.run()
-			.assertBody().is("null");
+			.assertContent().is("null");
 		a.put("/enum?body=", null)
 			.run()
-			.assertBody().is("null");
+			.assertContent().is("null");
 		a.put("/enum?body=bad&noTrace=true", null)
 			.run()
 			.assertCode().is(400);
 
 		a.put("/Bean", "{f1:'a'}", APPLICATION_JSON)
 			.run()
-			.assertBody().is("{f1:'a'}");
+			.assertContent().is("{f1:'a'}");
 		a.put("/Bean", "(f1=a)", TEXT_OPENAPI)
 			.run()
 			.assertCode().is(415);
 		a.put("/Bean?body=(f1=a)", null)
 			.run()
-			.assertBody().is("{f1:'a'}");
+			.assertContent().is("{f1:'a'}");
 		a.put("/Bean?body=()", null)
 			.run()
-			.assertBody().is("{}");
+			.assertContent().is("{}");
 		a.put("/Bean?body=null", null)
 			.run()
-			.assertBody().is("null");
+			.assertContent().is("null");
 		a.put("/Bean?body=", null)
 			.run()
-			.assertBody().is("null");
+			.assertContent().is("null");
 		a.put("/Bean?body=bad&noTrace=true", null)
 			.run()
 			.assertCode().is(400);
@@ -355,63 +355,63 @@ public class Body_Test {
 		// Content-Type should always be ignored.
 		a.put("/InputStream", "'a'", APPLICATION_JSON)
 			.run()
-			.assertBody().is("'\\'a\\''");
+			.assertContent().is("'\\'a\\''");
 		a.put("/InputStream", "'a'")
 			.run()
-			.assertBody().is("'\\'a\\''");
+			.assertContent().is("'\\'a\\''");
 		a.put("/InputStream?body=a", null)
 			.run()
-			.assertBody().is("'a'");
+			.assertContent().is("'a'");
 		a.put("/InputStream?body=null", null)
 			.run()
-			.assertBody().is("'null'");
+			.assertContent().is("'null'");
 		a.put("/InputStream?body=", null)
 			.run()
-			.assertBody().is("''");
+			.assertContent().is("''");
 
 		// Content-Type should always be ignored.
 		a.put("/Reader", "'a'", APPLICATION_JSON)
 			.run()
-			.assertBody().is("'\\'a\\''");
+			.assertContent().is("'\\'a\\''");
 		a.put("/Reader", "'a'")
 			.run()
-			.assertBody().is("'\\'a\\''");
+			.assertContent().is("'\\'a\\''");
 		a.put("/Reader?body=a", null)
 			.run()
-			.assertBody().is("'a'");
+			.assertContent().is("'a'");
 		a.put("/Reader?body=null", null)
 			.run()
-			.assertBody().is("'null'");
+			.assertContent().is("'null'");
 		a.put("/Reader?body=", null)
 			.run()
-			.assertBody().is("''");
+			.assertContent().is("''");
 
 		// It's not currently possible to pass in a &body parameter for InputStream/Reader transforms.
 
 		// Input stream transform requests must not specify Content-Type or else gets resolved as POJO.
 		a.put("/InputStreamTransform?noTrace=true", "'a'", APPLICATION_JSON)
 			.run()
-			.assertBody().isContains("Bad Request");
+			.assertContent().isContains("Bad Request");
 		a.put("/InputStreamTransform", "'a'")
 			.run()
-			.assertBody().is("'\\'a\\''");
+			.assertContent().is("'\\'a\\''");
 
 		// Reader transform requests must not specify Content-Type or else gets resolved as POJO.
 		a.put("/ReaderTransform?noTrace=true", "'a'", APPLICATION_JSON)
 			.run()
-			.assertBody().isContains("Bad Request");
+			.assertContent().isContains("Bad Request");
 		a.put("/ReaderTransform", "'a'")
 			.run()
-			.assertBody().is("'\\'a\\''");
+			.assertContent().is("'\\'a\\''");
 
 		// When Content-Type specified and matched, treated as a parsed POJO.
 		a.put("/StringTransform", "'a'", APPLICATION_JSON)
 			.run()
-			.assertBody().is("'a'");
+			.assertContent().is("'a'");
 		// When Content-Type not matched, treated as plain text.
 		a.put("/StringTransform", "'a'")
 			.run()
-			.assertBody().is("'\\'a\\''");
+			.assertContent().is("'\\'a\\''");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -472,37 +472,37 @@ public class Body_Test {
 		RestClient b = MockRestClient.buildLax(B.class);
 		b.put("/StringTransform", "'foo'", APPLICATION_JSON)
 			.run()
-			.assertBody().is("'foo'");
+			.assertContent().is("'foo'");
 		// When Content-Type not matched, treated as plain text.
 		b.put("/StringTransform", "'foo'")
 			.run()
-			.assertBody().is("'\\'foo\\''");
+			.assertContent().is("'\\'foo\\''");
 		b.put("/Bean", "{f1:'a'}", APPLICATION_JSON)
 			.run()
-			.assertBody().is("{f1:'a'}");
+			.assertContent().is("{f1:'a'}");
 		b.put("/Bean", "(f1=a)", TEXT_OPENAPI)
 			.run()
 			.assertCode().is(415);
 		b.put("/BeanList", "[{f1:'a'}]", APPLICATION_JSON)
 			.run()
-			.assertBody().is("[{f1:'a'}]");
+			.assertContent().is("[{f1:'a'}]");
 		b.put("/BeanList", "(f1=a)", TEXT_OPENAPI)
 			.run()
 			.assertCode().is(415);
 		b.put("/InputStreamTransform", "a")
 			.run()
-			.assertBody().is("'a'");
+			.assertContent().is("'a'");
 		// When Content-Type matched, treated as parsed POJO.
 		b.put("/InputStreamTransform?noTrace=true", "a", APPLICATION_JSON)
 			.run()
-			.assertBody().isContains("Bad Request");
+			.assertContent().isContains("Bad Request");
 		b.put("/ReaderTransform", "a")
 			.run()
-			.assertBody().is("'a'");
+			.assertContent().is("'a'");
 		// When Content-Type matched, treated as parsed POJO.
 		b.put("/ReaderTransform?noTrace=true", "a", APPLICATION_JSON)
 			.run()
-			.assertBody().isContains("Bad Request");
+			.assertContent().isContains("Bad Request");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -588,58 +588,58 @@ public class Body_Test {
 		RestClient d = MockRestClient.buildLax(D.class);
 		d.put("/String", "a")
 			.run()
-			.assertBody().is("a");
+			.assertContent().is("a");
 		d.put("/String", "a", APPLICATION_JSON)
 			.run()
-			.assertBody().is("a");
+			.assertContent().is("a");
 		d.put("/InputStream", "a")
 			.run()
-			.assertBody().is("a");
+			.assertContent().is("a");
 		d.put("/InputStream", "a", APPLICATION_JSON)
 			.run()
-			.assertBody().is("a");
+			.assertContent().is("a");
 		d.put("/Reader", "a")
 			.run()
-			.assertBody().is("a");
+			.assertContent().is("a");
 		d.put("/Reader", "a", APPLICATION_JSON)
 			.run()
-			.assertBody().is("a");
+			.assertContent().is("a");
 		d.put("/StringTransform", "a")
 			.run()
-			.assertBody().is("a");
+			.assertContent().is("a");
 		d.put("/StringTransform?noTrace=true", "a", APPLICATION_JSON)
 			.run()
 			.assertCode().is(415);
 		d.put("/InputStreamTransform", "a")
 			.run()
-			.assertBody().is("a");
+			.assertContent().is("a");
 		d.put("/InputStreamTransform", "a", APPLICATION_JSON)
 			.run()
-			.assertBody().is("a");
+			.assertContent().is("a");
 		d.put("/ReaderTransform", "a")
 			.run()
-			.assertBody().is("a");
+			.assertContent().is("a");
 		d.put("/ReaderTransform", "a", APPLICATION_JSON)
 			.run()
-			.assertBody().is("a");
+			.assertContent().is("a");
 		d.put("/StringTransformBodyOnPojo", "a")
 			.run()
-			.assertBody().is("a");
+			.assertContent().is("a");
 		d.put("/StringTransformBodyOnPojo?noTrace=true", "a", APPLICATION_JSON)
 			.run()
 			.assertCode().is(415);
 		d.put("/InputStreamTransformBodyOnPojo", "a")
 			.run()
-			.assertBody().is("a");
+			.assertContent().is("a");
 		d.put("/InputStreamTransformBodyOnPojo", "a", APPLICATION_JSON)
 			.run()
-			.assertBody().is("a");
+			.assertContent().is("a");
 		d.put("/ReaderTransformBodyOnPojo", "a")
 			.run()
-			.assertBody().is("a");
+			.assertContent().is("a");
 		d.put("/ReaderTransformBodyOnPojo", "a", APPLICATION_JSON)
 			.run()
-			.assertBody().is("a");
+			.assertContent().is("a");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -666,22 +666,22 @@ public class Body_Test {
 		expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
 		e.put("/B", SimpleJsonSerializer.DEFAULT.toString(XBeans.XB.INSTANCE), APPLICATION_JSON)
 			.run()
-			.assertBody().is(expected);
+			.assertContent().is(expected);
 
 		expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
 		e.put("/B?body=" + UonSerializer.DEFAULT.serialize(XBeans.XB.INSTANCE), "a")
 			.run()
-			.assertBody().is(expected);
+			.assertContent().is(expected);
 
 		expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
 		e.put("/C", SimpleJsonSerializer.DEFAULT.toString(XBeans.XB.INSTANCE), APPLICATION_JSON)
 			.run()
-			.assertBody().is(expected);
+			.assertContent().is(expected);
 
 		expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
 		e.put("/C?body=" + UonSerializer.DEFAULT.serialize(XBeans.XB.INSTANCE), "a")
 			.run()
-			.assertBody().is(expected);
+			.assertContent().is(expected);
 	}
 
 	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="application/json")
@@ -706,22 +706,22 @@ public class Body_Test {
 		expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
 		e2.put("/B", SimpleJsonSerializer.DEFAULT.copy().applyAnnotations(XBeans.Annotations.class).build().toString(XBeans.XE.INSTANCE), APPLICATION_JSON)
 			.run()
-			.assertBody().is(expected);
+			.assertContent().is(expected);
 
 		expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
 		e2.put("/B?body=" + UonSerializer.DEFAULT.copy().applyAnnotations(XBeans.Annotations.class).build().serialize(XBeans.XE.INSTANCE), "a")
 			.run()
-			.assertBody().is(expected);
+			.assertContent().is(expected);
 
 		expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
 		e2.put("/C", SimpleJsonSerializer.DEFAULT.copy().applyAnnotations(XBeans.Annotations.class).build().toString(XBeans.XE.INSTANCE), APPLICATION_JSON)
 			.run()
-			.assertBody().is(expected);
+			.assertContent().is(expected);
 
 		expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
 		e2.put("/C?body=" + UonSerializer.DEFAULT.copy().applyAnnotations(XBeans.Annotations.class).build().serialize(XBeans.XE.INSTANCE), "a")
 			.run()
-			.assertBody().is(expected);
+			.assertContent().is(expected);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -748,16 +748,16 @@ public class Body_Test {
 		RestClient f = MockRestClient.build(F.class);
 		f.post("/", "{p1:'p1',p2:2}", APPLICATION_JSON)
 			.run()
-			.assertBody().is("bean=[{p1:'p1',p2:2}],qp1=[null],qp2=[0],hqp1=[false],hqp2=[false]");
+			.assertContent().is("bean=[{p1:'p1',p2:2}],qp1=[null],qp2=[0],hqp1=[false],hqp2=[false]");
 		f.post("/", "{}", APPLICATION_JSON)
 			.run()
-			.assertBody().is("bean=[{p2:0}],qp1=[null],qp2=[0],hqp1=[false],hqp2=[false]");
+			.assertContent().is("bean=[{p2:0}],qp1=[null],qp2=[0],hqp1=[false],hqp2=[false]");
 		f.post("?p1=p3&p2=4", "{p1:'p1',p2:2}", APPLICATION_JSON)
 			.run()
-			.assertBody().is("bean=[{p1:'p1',p2:2}],qp1=[p3],qp2=[4],hqp1=[true],hqp2=[true]");
+			.assertContent().is("bean=[{p1:'p1',p2:2}],qp1=[p3],qp2=[4],hqp1=[true],hqp2=[true]");
 		f.post("?p1=p3&p2=4", "{}", APPLICATION_JSON)
 			.run()
-			.assertBody().is("bean=[{p2:0}],qp1=[p3],qp2=[4],hqp1=[true],hqp2=[true]");
+			.assertContent().is("bean=[{p2:0}],qp1=[p3],qp2=[4],hqp1=[true],hqp2=[true]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -800,7 +800,7 @@ public class Body_Test {
 			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
 		g.post("/", in, APPLICATION_FORM_URLENCODED)
 			.run()
-			.assertBody().is(in);
+			.assertContent().is(in);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -844,7 +844,7 @@ public class Body_Test {
 			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
 		h.post("/", in, APPLICATION_FORM_URLENCODED)
 			.run()
-			.assertBody().is(in);
+			.assertContent().is(in);
 	}
 
 	@Rest(serializers=UrlEncodingSerializer.class,parsers=UrlEncodingParser.class)
@@ -884,7 +884,7 @@ public class Body_Test {
 			+ "&f20=@((a=a,b=1,c=true))&f20=@((a=b,b=2,c=false))";
 		h2.post("/", in, APPLICATION_FORM_URLENCODED)
 			.run()
-			.assertBody().is(in);
+			.assertContent().is(in);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -912,7 +912,7 @@ public class Body_Test {
 		i.post("/a", "", APPLICATION_JSON)
 			.run()
 			.assertCode().is(400)
-			.assertBody().isContains("Required value not provided.");
+			.assertContent().isContains("Required value not provided.");
 		i.post("/a", "{}", APPLICATION_JSON)
 			.run()
 			.assertCode().is(200);
@@ -920,7 +920,7 @@ public class Body_Test {
 		i.post("/b", "", APPLICATION_JSON)
 			.run()
 			.assertCode().is(400)
-			.assertBody().isContains("Required value not provided.");
+			.assertContent().isContains("Required value not provided.");
 		i.post("/b", "{}", APPLICATION_JSON)
 			.run()
 			.assertCode().is(200);
@@ -959,39 +959,39 @@ public class Body_Test {
 		j.post("/a", 123)
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("123");
+			.assertContent().is("123");
 		j.post("/a", null)
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("null");
+			.assertContent().is("null");
 
 		j.post("/b", ABean.get())
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("{a:1,b:'foo'}");
+			.assertContent().is("{a:1,b:'foo'}");
 		j.post("/b", null)
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("null");
+			.assertContent().is("null");
 
 		String body1 = SimpleJson.DEFAULT.toString(list(ABean.get()));
 		j.post("/c", body1, APPLICATION_JSON)
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("[{a:1,b:'foo'}]");
+			.assertContent().is("[{a:1,b:'foo'}]");
 		j.post("/c", null)
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("null");
+			.assertContent().is("null");
 
 		String body2 = SimpleJson.DEFAULT.toString(list(optional(ABean.get())));
 		j.post("/d", body2, APPLICATION_JSON)
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("[{a:1,b:'foo'}]");
+			.assertContent().is("[{a:1,b:'foo'}]");
 		j.post("/d", null)
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("null");
+			.assertContent().is("null");
 	}
 }

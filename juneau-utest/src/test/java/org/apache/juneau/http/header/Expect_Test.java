@@ -50,15 +50,15 @@ public class Expect_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(expect(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(expect(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(expect(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(expect(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(expect(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(expect(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(expect(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(expect(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(expect((String)null)).run().assertBody().isEmpty();
-		c.get().header(expect((Supplier<String>)null)).run().assertBody().isEmpty();
-		c.get().header(expect(()->null)).run().assertBody().isEmpty();
+		c.get().header(expect((String)null)).run().assertContent().isEmpty();
+		c.get().header(expect((Supplier<String>)null)).run().assertContent().isEmpty();
+		c.get().header(expect(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

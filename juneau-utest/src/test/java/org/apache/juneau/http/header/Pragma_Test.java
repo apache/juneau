@@ -50,15 +50,15 @@ public class Pragma_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(pragma(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(pragma(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(pragma(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(pragma(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(pragma(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(pragma(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(pragma(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(pragma(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(pragma((String)null)).run().assertBody().isEmpty();
-		c.get().header(pragma((Supplier<String>)null)).run().assertBody().isEmpty();
-		c.get().header(pragma(()->null)).run().assertBody().isEmpty();
+		c.get().header(pragma((String)null)).run().assertContent().isEmpty();
+		c.get().header(pragma((Supplier<String>)null)).run().assertContent().isEmpty();
+		c.get().header(pragma(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

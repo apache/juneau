@@ -55,14 +55,14 @@ public class BasicUriHeader_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(uriHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(uriHeader(HEADER,VALUE)).run().assertBody().is(VALUE);
-		c.get().header(uriHeader(HEADER,PARSED)).run().assertBody().is(VALUE);
-		c.get().header(uriHeader(HEADER,()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(uriHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
+		c.get().header(uriHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
+		c.get().header(uriHeader(HEADER,PARSED)).run().assertContent().is(VALUE);
+		c.get().header(uriHeader(HEADER,()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(uriHeader(HEADER,(Supplier<URI>)null)).run().assertBody().isEmpty();
-		c.get().header(uriHeader(HEADER,()->null)).run().assertBody().isEmpty();
+		c.get().header(uriHeader(HEADER,(Supplier<URI>)null)).run().assertContent().isEmpty();
+		c.get().header(uriHeader(HEADER,()->null)).run().assertContent().isEmpty();
 		assertThrown(()->uriHeader("", VALUE)).asMessage().is("Name cannot be empty on header.");
 		assertThrown(()->uriHeader(null, VALUE)).asMessage().is("Name cannot be empty on header.");
 		assertThrown(()->uriHeader("", PARSED)).asMessage().is("Name cannot be empty on header.");

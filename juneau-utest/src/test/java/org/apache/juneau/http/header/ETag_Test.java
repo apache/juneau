@@ -51,15 +51,15 @@ public class ETag_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(eTag(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(eTag(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(eTag(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(eTag(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(eTag(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(eTag(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(eTag(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(eTag(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(eTag((String)null)).run().assertBody().isEmpty();
-		c.get().header(eTag((Supplier<EntityTag>)null)).run().assertBody().isEmpty();
-		c.get().header(eTag(()->null)).run().assertBody().isEmpty();
+		c.get().header(eTag((String)null)).run().assertContent().isEmpty();
+		c.get().header(eTag((Supplier<EntityTag>)null)).run().assertContent().isEmpty();
+		c.get().header(eTag(()->null)).run().assertContent().isEmpty();
 	}
 
 	@Test

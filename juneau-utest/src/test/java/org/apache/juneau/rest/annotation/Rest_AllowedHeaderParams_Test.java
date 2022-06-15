@@ -64,43 +64,43 @@ public class Rest_AllowedHeaderParams_Test {
 	@Test
 	public void a01_basic() throws Exception {
 		RestClient a1 = MockRestClient.build(A1.class);
-		a1.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
-		a1.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=foo3");
-		a1.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=foo3");
+		a1.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		a1.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent().is("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=foo3");
+		a1.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent().is("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=foo3");
 
 		RestClient a2 = MockRestClient.build(A2.class);
-		a2.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
-		a2.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=foo3");
-		a2.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=foo3");
+		a2.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		a2.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent().is("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=foo3");
+		a2.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent().is("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=foo3");
 
 		RestClient a3 = MockRestClient.build(A3.class);
-		a3.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
-		a3.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=foo3");
-		a3.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=foo3");
+		a3.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		a3.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent().is("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=foo3");
+		a3.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent().is("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=foo3");
 
 		RestClient a4 = MockRestClient.build(A4.class);
-		a4.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
-		a4.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=bar3");
-		a4.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=bar3");
+		a4.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		a4.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=bar3");
+		a4.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=bar3");
 
 		RestClient a5 = MockRestClient.build(A5.class);
-		a5.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
-		a5.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=bar3");
-		a5.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=bar3");
+		a5.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		a5.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent().is("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=bar3");
+		a5.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent().is("Accept=text/plain+bar1,Content-Type=text/plain+bar2,Custom=bar3");
 
 		RestClient a6 = MockRestClient.build(A6.class);
-		a6.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
-		a6.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
-		a6.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		a6.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		a6.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		a6.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
 
 		RestClient a7 = MockRestClient.build(A7.class);
-		a7.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
-		a7.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
-		a7.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		a7.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		a7.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		a7.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
 
 		RestClient a8 = MockRestClient.build(A8.class);
-		a8.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
-		a8.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
-		a8.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertBody().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		a8.put("/", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		a8.put("/?Accept=text/plain%2Bbar1&Content-Type=text/plain%2Bbar2&Custom=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
+		a8.put("/?ACCEPT=text/plain%2Bbar1&CONTENT-TYPE=text/plain%2Bbar2&CUSTOM=bar3", "").accept("text/plain+foo1").contentType("text/plain+foo2").header("Custom", "foo3").run().assertContent().is("Accept=text/plain+foo1,Content-Type=text/plain+foo2,Custom=foo3");
 	}
 }

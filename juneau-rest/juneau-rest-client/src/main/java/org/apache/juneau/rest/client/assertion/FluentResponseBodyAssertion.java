@@ -24,7 +24,7 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.serializer.*;
 
 /**
- * Used for fluent assertion calls against {@link ResponseBody} objects.
+ * Used for fluent assertion calls against {@link ResponseContent} objects.
  *
  * <h5 class='topic'>Test Methods</h5>
  * <p>
@@ -101,7 +101,7 @@ import org.apache.juneau.serializer.*;
  * @param <R> The return type.
  */
 @FluentSetters(returns="FluentResponseBodyAssertion<R>")
-public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<ResponseBody,R> {
+public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<ResponseContent,R> {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Constructors
@@ -118,7 +118,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
 	 * used on the same assertion.
 	 */
-	public FluentResponseBodyAssertion(ResponseBody value, R returns) {
+	public FluentResponseBodyAssertion(ResponseContent value, R returns) {
 		this(null, value, returns);
 	}
 
@@ -139,7 +139,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
 	 * used on the same assertion.
 	 */
-	public FluentResponseBodyAssertion(Assertion creator, ResponseBody value, R returns) {
+	public FluentResponseBodyAssertion(Assertion creator, ResponseContent value, R returns) {
 		super(creator, value, returns);
 		setThrowable(BadRequest.class);
 	}
@@ -207,7 +207,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li class='note'>
-	 *		When using this method, the body is automatically cached by calling the {@link ResponseBody#cache()}.
+	 *		When using this method, the body is automatically cached by calling the {@link ResponseContent#cache()}.
 	 * 	<li class='note'>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
@@ -235,7 +235,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li class='note'>
-	 *		When using this method, the body is automatically cached by calling the {@link ResponseBody#cache()}.
+	 *		When using this method, the body is automatically cached by calling the {@link ResponseContent#cache()}.
 	 * 	<li class='note'>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
@@ -248,7 +248,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	}
 
 	/**
-	 * Converts the body to a type using {@link ResponseBody#as(Class)} and then returns the value as an object assertion.
+	 * Converts the body to a type using {@link ResponseContent#as(Class)} and then returns the value as an object assertion.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
@@ -268,7 +268,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	}
 
 	/**
-	 * Converts the body to a type using {@link ResponseBody#as(Type,Type...)} and then returns the value as an object assertion.
+	 * Converts the body to a type using {@link ResponseContent#as(Type,Type...)} and then returns the value as an object assertion.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>

@@ -53,15 +53,15 @@ public class Date_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(date(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(date(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(date(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(date(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(date(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(date(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(date(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(date(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(date((String)null)).run().assertBody().isEmpty();
-		c.get().header(date((Supplier<ZonedDateTime>)null)).run().assertBody().isEmpty();
-		c.get().header(date(()->null)).run().assertBody().isEmpty();
+		c.get().header(date((String)null)).run().assertContent().isEmpty();
+		c.get().header(date((Supplier<ZonedDateTime>)null)).run().assertContent().isEmpty();
+		c.get().header(date(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -824,7 +824,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * <br>These converters get called immediately after execution of the REST method in the same order specified in the
 		 * annotation.
 		 * <br>The object passed into this converter is the object returned from the Java method or passed into
-		 * the {@link RestResponse#setOutput(Object)} method.
+		 * the {@link RestResponse#setContent(Object)} method.
 		 *
 		 * <p>
 		 * Can be used for performing post-processing on the response object before serialization.

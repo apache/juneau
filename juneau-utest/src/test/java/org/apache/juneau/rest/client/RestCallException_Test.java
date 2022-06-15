@@ -61,7 +61,7 @@ public class RestCallException_Test {
 		}
 
 		try {
-			client().build().post("/echo",new StringEntity("{f:")).run().getBody().as(ABean.class);
+			client().build().post("/echo",new StringEntity("{f:")).run().getContent().as(ABean.class);
 			fail();
 		} catch (RestCallException e) {
 			assertThrowable(e.getCause(ParseException.class)).asMessage().isContains("Could not find '}'");

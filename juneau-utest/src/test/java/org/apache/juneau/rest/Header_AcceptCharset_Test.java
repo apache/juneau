@@ -81,12 +81,12 @@ public class Header_AcceptCharset_Test {
 	@Test
 	public void b01_charsetOnResponse() throws Exception {
 		RestClient b = MockRestClient.buildLax(B.class);
-		b.put("/a", null).plainText().run().assertBody().is("UTF-8/UTF-8");
-		b.put("/a", null).plainText().acceptCharset("Shift_JIS").run().assertBody().is("UTF-8/Shift_JIS");
-		b.put("/a?noTrace=true", null).plainText().acceptCharset("BAD").run().assertCode().is(406).assertBody().isContains("No supported charsets in header 'Accept-Charset': 'BAD'");
-		b.put("/a", null).plainText().acceptCharset("UTF-8").run().assertBody().is("UTF-8/UTF-8");
-		b.put("/a", null).plainText().acceptCharset("bad,iso-8859-1").run().assertBody().is("UTF-8/ISO-8859-1");
-		b.put("/a", null).plainText().acceptCharset("bad;q=0.9,iso-8859-1;q=0.1").run().assertBody().is("UTF-8/ISO-8859-1");
-		b.put("/a", null).plainText().acceptCharset("bad;q=0.1,iso-8859-1;q=0.9").run().assertBody().is("UTF-8/ISO-8859-1");
+		b.put("/a", null).plainText().run().assertContent().is("UTF-8/UTF-8");
+		b.put("/a", null).plainText().acceptCharset("Shift_JIS").run().assertContent().is("UTF-8/Shift_JIS");
+		b.put("/a?noTrace=true", null).plainText().acceptCharset("BAD").run().assertCode().is(406).assertContent().isContains("No supported charsets in header 'Accept-Charset': 'BAD'");
+		b.put("/a", null).plainText().acceptCharset("UTF-8").run().assertContent().is("UTF-8/UTF-8");
+		b.put("/a", null).plainText().acceptCharset("bad,iso-8859-1").run().assertContent().is("UTF-8/ISO-8859-1");
+		b.put("/a", null).plainText().acceptCharset("bad;q=0.9,iso-8859-1;q=0.1").run().assertContent().is("UTF-8/ISO-8859-1");
+		b.put("/a", null).plainText().acceptCharset("bad;q=0.1,iso-8859-1;q=0.9").run().assertContent().is("UTF-8/ISO-8859-1");
 	}
 }

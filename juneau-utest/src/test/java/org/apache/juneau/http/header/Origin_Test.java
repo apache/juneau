@@ -50,15 +50,15 @@ public class Origin_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(origin(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(origin(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(origin(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(origin(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(origin(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(origin(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(origin(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(origin(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(origin((String)null)).run().assertBody().isEmpty();
-		c.get().header(origin((Supplier<String>)null)).run().assertBody().isEmpty();
-		c.get().header(origin(()->null)).run().assertBody().isEmpty();
+		c.get().header(origin((String)null)).run().assertContent().isEmpty();
+		c.get().header(origin((Supplier<String>)null)).run().assertContent().isEmpty();
+		c.get().header(origin(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

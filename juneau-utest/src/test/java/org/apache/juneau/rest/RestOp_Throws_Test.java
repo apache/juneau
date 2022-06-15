@@ -78,135 +78,135 @@ public class RestOp_Throws_Test {
 		a.get("/badRequest")
 			.run()
 			.assertCode().is(400)
-			.assertBody().is("Bad Request");
+			.assertContent().is("Bad Request");
 		a.get("/conflict")
 			.run()
 			.assertCode().is(409)
-			.assertBody().is("Conflict");
+			.assertContent().is("Conflict");
 		a.get("/expectationFailed")
 			.run()
 			.assertCode().is(417)
-			.assertBody().is("Expectation Failed");
+			.assertContent().is("Expectation Failed");
 		a.get("/failedDependency")
 			.run()
 			.assertCode().is(424)
-			.assertBody().is("Failed Dependency");
+			.assertContent().is("Failed Dependency");
 		a.get("/forbidden")
 			.run()
 			.assertCode().is(403)
-			.assertBody().is("Forbidden");
+			.assertContent().is("Forbidden");
 		a.get("/gone")
 			.run()
 			.assertCode().is(410)
-			.assertBody().is("Gone");
+			.assertContent().is("Gone");
 		a.get("/httpVersionNotSupported")
 			.run()
 			.assertCode().is(505)
-			.assertBody().is("HTTP Version Not Supported");
+			.assertContent().is("HTTP Version Not Supported");
 		a.get("/insufficientStorage")
 			.run()
 			.assertCode().is(507)
-			.assertBody().is("Insufficient Storage");
+			.assertContent().is("Insufficient Storage");
 		a.get("/internalServerError")
 			.run()
 			.assertCode().is(500)
-			.assertBody().is("Internal Server Error");
+			.assertContent().is("Internal Server Error");
 		a.get("/lengthRequired")
 			.run()
 			.assertCode().is(411)
-			.assertBody().is("Length Required");
+			.assertContent().is("Length Required");
 		a.get("/locked")
 			.run()
 			.assertCode().is(423)
-			.assertBody().is("Locked");
+			.assertContent().is("Locked");
 		a.get("/loopDetected")
 			.run()
 			.assertCode().is(508)
-			.assertBody().is("Loop Detected");
+			.assertContent().is("Loop Detected");
 		a.get("/methodNotAllowed")
 			.run()
 			.assertCode().is(405)
-			.assertBody().is("Method Not Allowed");
+			.assertContent().is("Method Not Allowed");
 		a.get("/misdirectedRequest")
 			.run()
 			.assertCode().is(421)
-			.assertBody().is("Misdirected Request");
+			.assertContent().is("Misdirected Request");
 		a.get("/networkAuthenticationRequired")
 			.run()
 			.assertCode().is(511)
-			.assertBody().is("Network Authentication Required");
+			.assertContent().is("Network Authentication Required");
 		a.get("/notAcceptable")
 			.run()
 			.assertCode().is(406)
-			.assertBody().is("Not Acceptable");
+			.assertContent().is("Not Acceptable");
 		a.get("/notExtended")
 			.run()
 			.assertCode().is(510)
-			.assertBody().is("Not Extended");
+			.assertContent().is("Not Extended");
 		a.get("/notFound")
 			.run()
 			.assertCode().is(404)
-			.assertBody().is("Not Found");
+			.assertContent().is("Not Found");
 		a.get("/notImplemented")
 			.run()
 			.assertCode().is(501)
-			.assertBody().is("Not Implemented");
+			.assertContent().is("Not Implemented");
 		a.get("/payloadTooLarge")
 			.run()
 			.assertCode().is(413)
-			.assertBody().is("Payload Too Large");
+			.assertContent().is("Payload Too Large");
 		a.get("/preconditionFailed")
 			.run()
 			.assertCode().is(412)
-			.assertBody().is("Precondition Failed");
+			.assertContent().is("Precondition Failed");
 		a.get("/preconditionRequired")
 			.run()
 			.assertCode().is(428)
-			.assertBody().is("Precondition Required");
+			.assertContent().is("Precondition Required");
 		a.get("/rangeNotSatisfiable")
 			.run()
 			.assertCode().is(416)
-			.assertBody().is("Range Not Satisfiable");
+			.assertContent().is("Range Not Satisfiable");
 		a.get("/requestHeaderFieldsTooLarge")
 			.run()
 			.assertCode().is(431)
-			.assertBody().is("Request Header Fields Too Large");
+			.assertContent().is("Request Header Fields Too Large");
 		a.get("/serviceUnavailable")
 			.run()
 			.assertCode().is(503)
-			.assertBody().is("Service Unavailable");
+			.assertContent().is("Service Unavailable");
 		a.get("/tooManyRequests")
 			.run()
 			.assertCode().is(429)
-			.assertBody().is("Too Many Requests");
+			.assertContent().is("Too Many Requests");
 		a.get("/unauthorized")
 			.run()
 			.assertCode().is(401)
-			.assertBody().is("Unauthorized");
+			.assertContent().is("Unauthorized");
 		a.get("/unavailableForLegalReasons")
 			.run()
 			.assertCode().is(451)
-			.assertBody().is("Unavailable For Legal Reasons");
+			.assertContent().is("Unavailable For Legal Reasons");
 		a.get("/unprocessableEntity")
 			.run()
 			.assertCode().is(422)
-			.assertBody().is("Unprocessable Entity");
+			.assertContent().is("Unprocessable Entity");
 		a.get("/unsupportedMediaType")
 			.run()
 			.assertCode().is(415)
-			.assertBody().is("Unsupported Media Type");
+			.assertContent().is("Unsupported Media Type");
 		a.get("/upgradeRequired")
 			.run()
 			.assertCode().is(426)
-			.assertBody().is("Upgrade Required");
+			.assertContent().is("Upgrade Required");
 		a.get("/uriTooLong")
 			.run()
 			.assertCode().is(414)
-			.assertBody().is("URI Too Long");
+			.assertContent().is("URI Too Long");
 		a.get("/variantAlsoNegotiates")
 			.run()
 			.assertCode().is(506)
-			.assertBody().is("Variant Also Negotiates");
+			.assertContent().is("Variant Also Negotiates");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -257,135 +257,135 @@ public class RestOp_Throws_Test {
 		b.get("/badRequest")
 			.run()
 			.assertCode().is(400)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/conflict")
 			.run()
 			.assertCode().is(409)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/expectationFailed")
 			.run()
 			.assertCode().is(417)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/failedDependency")
 			.run()
 			.assertCode().is(424)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/forbidden")
 			.run()
 			.assertCode().is(403)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/gone")
 			.run()
 			.assertCode().is(410)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/httpVersionNotSupported")
 			.run()
 			.assertCode().is(505)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/insufficientStorage")
 			.run()
 			.assertCode().is(507)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/internalServerError")
 			.run()
 			.assertCode().is(500)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/lengthRequired")
 			.run()
 			.assertCode().is(411)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/locked")
 			.run()
 			.assertCode().is(423)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/loopDetected")
 			.run()
 			.assertCode().is(508)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/methodNotAllowed")
 			.run()
 			.assertCode().is(405)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/misdirectedRequest")
 			.run()
 			.assertCode().is(421)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/networkAuthenticationRequired")
 			.run()
 			.assertCode().is(511)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/notAcceptable")
 			.run()
 			.assertCode().is(406)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/notExtended")
 			.run()
 			.assertCode().is(510)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/notFound")
 			.run()
 			.assertCode().is(404)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/notImplemented")
 			.run()
 			.assertCode().is(501)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/payloadTooLarge")
 			.run()
 			.assertCode().is(413)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/preconditionFailed")
 			.run()
 			.assertCode().is(412)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/preconditionRequired")
 			.run()
 			.assertCode().is(428)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/rangeNotSatisfiable")
 			.run()
 			.assertCode().is(416)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/requestHeaderFieldsTooLarge")
 			.run()
 			.assertCode().is(431)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/serviceUnavailable")
 			.run()
 			.assertCode().is(503)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/tooManyRequests")
 			.run()
 			.assertCode().is(429)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/unauthorized")
 			.run()
 			.assertCode().is(401)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/unavailableForLegalReasons")
 			.run()
 			.assertCode().is(451)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/unprocessableEntity")
 			.run()
 			.assertCode().is(422)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/unsupportedMediaType")
 			.run()
 			.assertCode().is(415)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/upgradeRequired")
 			.run()
 			.assertCode().is(426)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/uriTooLong")
 			.run()
 			.assertCode().is(414)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		b.get("/variantAlsoNegotiates")
 			.run()
 			.assertCode().is(506)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -437,135 +437,135 @@ public class RestOp_Throws_Test {
 		c.get("/badRequest")
 			.run()
 			.assertCode().is(400)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/conflict")
 			.run()
 			.assertCode().is(409)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/expectationFailed")
 			.run()
 			.assertCode().is(417)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/failedDependency")
 			.run()
 			.assertCode().is(424)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/forbidden")
 			.run()
 			.assertCode().is(403)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/gone")
 			.run()
 			.assertCode().is(410)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/httpVersionNotSupported")
 			.run()
 			.assertCode().is(505)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/insufficientStorage")
 			.run()
 			.assertCode().is(507)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/internalServerError")
 			.run()
 			.assertCode().is(500)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/lengthRequired")
 			.run()
 			.assertCode().is(411)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/locked")
 			.run()
 			.assertCode().is(423)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/loopDetected")
 			.run()
 			.assertCode().is(508)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/methodNotAllowed")
 			.run()
 			.assertCode().is(405)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/misdirectedRequest")
 			.run()
 			.assertCode().is(421)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/networkAuthenticationRequired")
 			.run()
 			.assertCode().is(511)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/notAcceptable")
 			.run()
 			.assertCode().is(406)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/notExtended")
 			.run()
 			.assertCode().is(510)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/notFound")
 			.run()
 			.assertCode().is(404)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/notImplemented")
 			.run()
 			.assertCode().is(501)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/payloadTooLarge")
 			.run()
 			.assertCode().is(413)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/preconditionFailed").
 			run()
 			.assertCode().is(412)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/preconditionRequired")
 			.run()
 			.assertCode().is(428)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/rangeNotSatisfiable")
 			.run()
 			.assertCode().is(416)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/requestHeaderFieldsTooLarge")
 			.run()
 			.assertCode().is(431)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/serviceUnavailable")
 			.run()
 			.assertCode().is(503)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/tooManyRequests")
 			.run()
 			.assertCode().is(429)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/unauthorized")
 			.run()
 			.assertCode().is(401)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/unavailableForLegalReasons")
 			.run()
 			.assertCode().is(451)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/unprocessableEntity")
 			.run()
 			.assertCode().is(422)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/unsupportedMediaType")
 			.run()
 			.assertCode().is(415)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/upgradeRequired")
 			.run()
 			.assertCode().is(426)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/uriTooLong")
 			.run()
 			.assertCode().is(414)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		c.get("/variantAlsoNegotiates")
 			.run()
 			.assertCode().is(506)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -615,135 +615,135 @@ public class RestOp_Throws_Test {
 		d.get("/badRequest")
 			.run()
 			.assertCode().is(400)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/conflict")
 			.run()
 			.assertCode().is(409)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/expectationFailed")
 			.run()
 			.assertCode().is(417)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/failedDependency")
 			.run()
 			.assertCode().is(424)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/forbidden")
 			.run()
 			.assertCode().is(403)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/gone")
 			.run()
 			.assertCode().is(410)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/httpVersionNotSupported")
 			.run()
 			.assertCode().is(505)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/insufficientStorage")
 			.run()
 			.assertCode().is(507)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/internalServerError")
 			.run()
 			.assertCode().is(500)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/lengthRequired")
 			.run()
 			.assertCode().is(411)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/locked")
 			.run()
 			.assertCode().is(423)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/loopDetected")
 			.run()
 			.assertCode().is(508)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/methodNotAllowed")
 			.run()
 			.assertCode().is(405)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/misdirectedRequest")
 			.run()
 			.assertCode().is(421)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/networkAuthenticationRequired")
 			.run()
 			.assertCode().is(511)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/notAcceptable")
 			.run()
 			.assertCode().is(406)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/notExtended")
 			.run()
 			.assertCode().is(510)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/notFound")
 			.run()
 			.assertCode().is(404)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/notImplemented")
 			.run()
 			.assertCode().is(501)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/payloadTooLarge")
 			.run()
 			.assertCode().is(413)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/preconditionFailed")
 			.run()
 			.assertCode().is(412)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/preconditionRequired")
 			.run()
 			.assertCode().is(428)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/rangeNotSatisfiable")
 			.run()
 			.assertCode().is(416)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/requestHeaderFieldsTooLarge")
 			.run()
 			.assertCode().is(431)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/serviceUnavailable")
 			.run()
 			.assertCode().is(503)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/tooManyRequests")
 			.run()
 			.assertCode().is(429)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/unauthorized")
 			.run()
 			.assertCode().is(401)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/unavailableForLegalReasons")
 			.run()
 			.assertCode().is(451)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/unprocessableEntity")
 			.run()
 			.assertCode().is(422)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/unsupportedMediaType")
 			.run()
 			.assertCode().is(415)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/upgradeRequired")
 			.run()
 			.assertCode().is(426)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/uriTooLong")
 			.run()
 			.assertCode().is(414)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 		d.get("/variantAlsoNegotiates")
 			.run()
 			.assertCode().is(506)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -762,7 +762,7 @@ public class RestOp_Throws_Test {
 			.json()
 			.run()
 			.assertCode().is(400)
-			.assertBody().is("foo bar");
+			.assertContent().is("foo bar");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

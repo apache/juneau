@@ -107,10 +107,10 @@ public class RrpcRestOpSession extends RestOpSession {
 		RestResponse res = getResponse();
 		RestSession session = getRestSession();
 
-		final Object o = res.hasOutput() ? res.getOutput(Object.class) : null;
+		final Object o = res.hasContent() ? res.getContent(Object.class) : null;
 
 		if ("GET".equals(session.getMethod())) {
-			res.setOutput(ctx.getMeta().getMethodsByPath().keySet());
+			res.setContent(ctx.getMeta().getMethodsByPath().keySet());
 			return;
 
 		} else if ("POST".equals(session.getMethod())) {
@@ -132,7 +132,7 @@ public class RrpcRestOpSession extends RestOpSession {
 							args = p.parseArgs(in, m.getGenericParameterTypes());
 						}
 					}
-					res.setOutput(m.invoke(o, args));
+					res.setContent(m.invoke(o, args));
 					return;
 				} catch (Exception e) {
 					throw toHttpException(e, InternalServerError.class);

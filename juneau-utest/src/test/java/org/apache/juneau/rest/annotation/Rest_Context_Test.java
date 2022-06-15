@@ -39,7 +39,7 @@ public class Rest_Context_Test {
 	@Test
 	public void a01_default() throws Exception {
 		MockRestClient a1 = client(A1.class);
-		a1.get().run().assertBody().is("RestContext");
+		a1.get().run().assertContent().is("RestContext");
 	}
 
 	@Rest(contextClass=X1.class)
@@ -48,7 +48,7 @@ public class Rest_Context_Test {
 	@Test
 	public void a02_custom() throws Exception {
 		MockRestClient a2 = client(A2.class);
-		a2.get().run().assertBody().is("X1");
+		a2.get().run().assertContent().is("X1");
 	}
 
 	@Rest
@@ -57,7 +57,7 @@ public class Rest_Context_Test {
 	@Test
 	public void a03_notOverriddenByChild() throws Exception {
 		MockRestClient a3 = client(A3.class);
-		a3.get().run().assertBody().is("X1");
+		a3.get().run().assertContent().is("X1");
 	}
 
 	@Rest
@@ -71,7 +71,7 @@ public class Rest_Context_Test {
 	@Test
 	public void a04_definedInBuilder() throws Exception {
 		MockRestClient a4 = client(A4.class);
-		a4.get().run().assertBody().is("X1");
+		a4.get().run().assertContent().is("X1");
 	}
 
 

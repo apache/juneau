@@ -98,10 +98,10 @@ public class RestHook_Test {
 	@Test
 	public void a01_preCall() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
-		a.put("/a", null).contentType("text/a1").run().assertBody().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
-		a.put("/a", null).contentType("text/a1").header("Override-Content-Type", "text/a2").run().assertBody().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
-		a.put("/b", null).contentType("text/a1").run().assertBody().is("p1=sp1,p2=xp2,p3=pp3,p4=pp4,p5=xp5");
-		a.put("/b", null).contentType("text/a1").header("Override-Content-Type", "text/a2").run().assertBody().is("p1=sp1,p2=xp2,p3=pp3,p4=pp4,p5=xp5");
+		a.put("/a", null).contentType("text/a1").run().assertContent().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		a.put("/a", null).contentType("text/a1").header("Override-Content-Type", "text/a2").run().assertContent().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		a.put("/b", null).contentType("text/a1").run().assertContent().is("p1=sp1,p2=xp2,p3=pp3,p4=pp4,p5=xp5");
+		a.put("/b", null).contentType("text/a1").header("Override-Content-Type", "text/a2").run().assertContent().is("p1=sp1,p2=xp2,p3=pp3,p4=pp4,p5=xp5");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -174,18 +174,18 @@ public class RestHook_Test {
 	@Test
 	public void b01_postCall() throws Exception {
 		RestClient b = MockRestClient.build(B.class);
-		b.put("/a", null).accept("text/s1").run().assertBody().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
-		b.put("/a", null).accept("text/s1").header("Override-Accept", "text/s2").run().assertBody().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
-		b.put("/a", null).accept("text/s1").header("Override-Content-Type", "text/s3").run().assertBody().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
-		b.put("/a", null).run().assertBody().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
-		b.put("/a", null).header("Override-Accept", "text/s3").run().assertBody().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
-		b.put("/a", null).header("Override-Content-Type", "text/s3").run().assertBody().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
-		b.put("/b", null).accept("text/s1").run().assertBody().is("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
-		b.put("/b", null).accept("text/s1").header("Override-Accept", "text/s2").run().assertBody().is("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
-		b.put("/b", null).accept("text/s1").header("Override-Content-Type", "text/s3").run().assertBody().is("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
-		b.put("/b", null).run().assertBody().is("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
-		b.put("/b", null).header("Override-Accept", "text/s3").run().assertBody().is("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
-		b.put("/b", null).header("Override-Content-Type", "text/s3").run().assertBody().is("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
+		b.put("/a", null).accept("text/s1").run().assertContent().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		b.put("/a", null).accept("text/s1").header("Override-Accept", "text/s2").run().assertContent().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		b.put("/a", null).accept("text/s1").header("Override-Content-Type", "text/s3").run().assertContent().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		b.put("/a", null).run().assertContent().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		b.put("/a", null).header("Override-Accept", "text/s3").run().assertContent().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		b.put("/a", null).header("Override-Content-Type", "text/s3").run().assertContent().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		b.put("/b", null).accept("text/s1").run().assertContent().is("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
+		b.put("/b", null).accept("text/s1").header("Override-Accept", "text/s2").run().assertContent().is("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
+		b.put("/b", null).accept("text/s1").header("Override-Content-Type", "text/s3").run().assertContent().is("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
+		b.put("/b", null).run().assertContent().is("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
+		b.put("/b", null).header("Override-Accept", "text/s3").run().assertContent().is("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
+		b.put("/b", null).header("Override-Content-Type", "text/s3").run().assertContent().is("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -259,9 +259,9 @@ public class RestHook_Test {
 	@Test
 	public void c01_init() throws Exception {
 		RestClient c = MockRestClient.build(C.class);
-		c.get("/super/events").run().assertBody().is("['super-1a','super-1b','super-1c','super-2a']");
-		c.get("/sub/events").run().assertBody().is("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
-		c.get("/sub/child/events").run().assertBody().is("['super-1a','super-1b','child-1c','super-2a','child-2b']");
+		c.get("/super/events").run().assertContent().is("['super-1a','super-1b','super-1c','super-2a']");
+		c.get("/sub/events").run().assertContent().is("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
+		c.get("/sub/child/events").run().assertContent().is("['super-1a','super-1b','child-1c','super-2a','child-2b']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -347,10 +347,10 @@ public class RestHook_Test {
 	@Test
 	public void d01_postInit() throws Exception {
 		RestClient d = MockRestClient.build(D.class);
-		d.get("/super/events").run().assertBody().is("['super-1a','super-1b','super-1c','super-2a']");
-		d.get("/sub/events").run().assertBody().is("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
-		d.get("/sub/child/events").run().assertBody().is("['super-1a','super-1b','child-1c','super-2a','child-2b']");
-		d.get("/sub/lastCalled").run().assertBody().is("CHILD");
+		d.get("/super/events").run().assertContent().is("['super-1a','super-1b','super-1c','super-2a']");
+		d.get("/sub/events").run().assertContent().is("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
+		d.get("/sub/child/events").run().assertContent().is("['super-1a','super-1b','child-1c','super-2a','child-2b']");
+		d.get("/sub/lastCalled").run().assertContent().is("CHILD");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -442,10 +442,10 @@ public class RestHook_Test {
 	@Test
 	public void e01_postInitChildFirst() throws Exception {
 		RestClient e = MockRestClient.build(E.class);
-		e.get("/super/postInitChildFirstEvents").run().assertBody().is("['super-1a','super-1b','super-1c','super-2a']");
-		e.get("/sub/postInitChildFirstEvents").run().assertBody().is("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
-		e.get("/sub/child/postInitChildFirstEvents").run().assertBody().is("['super-1a','super-1b','child-1c','super-2a','child-2b']");
-		e.get("/sub/lastCalled").run().assertBody().is("PARENT");
+		e.get("/super/postInitChildFirstEvents").run().assertContent().is("['super-1a','super-1b','super-1c','super-2a']");
+		e.get("/sub/postInitChildFirstEvents").run().assertContent().is("['sub-1a','sub-1b','sub-1c','super-2a','sub-2b']");
+		e.get("/sub/child/postInitChildFirstEvents").run().assertContent().is("['super-1a','super-1b','child-1c','super-2a','child-2b']");
+		e.get("/sub/lastCalled").run().assertContent().is("PARENT");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -496,7 +496,7 @@ public class RestHook_Test {
 	@Test
 	public void f01_startCall() throws Exception {
 		RestClient f = MockRestClient.build(F.class);
-		f.get("/").run().assertBody().is("{'1':'true','2':'true','3':'true','4':'true'}");
+		f.get("/").run().assertContent().is("{'1':'true','2':'true','3':'true','4':'true'}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -547,7 +547,7 @@ public class RestHook_Test {
 	@Test
 	public void g01_preCall() throws Exception {
 		RestClient g = MockRestClient.build(G.class);
-		g.get("/").run().assertBody().is("{'1':'true','2':'true','3':'true','4':'true'}");
+		g.get("/").run().assertContent().is("{'1':'true','2':'true','3':'true','4':'true'}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

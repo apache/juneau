@@ -1598,7 +1598,7 @@ public class RestContext extends Context {
 		 *
 		 * <p>
 		 * Specifies a list of {@link ResponseProcessor} classes that know how to convert POJOs returned by REST methods or
-		 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
+		 * set via {@link RestResponse#setContent(Object)} into appropriate HTTP responses.
 		 *
 		 * <p>
 		 * By default, the following response handlers are provided in the specified order:
@@ -6786,7 +6786,7 @@ public class RestContext extends Context {
 	}
 
 	/**
-	 * The main method for serializing POJOs passed in through the {@link RestResponse#setOutput(Object)} method or
+	 * The main method for serializing POJOs passed in through the {@link RestResponse#setContent(Object)} method or
 	 * returned by the Java method.
 	 *
 	 * <p>
@@ -6818,7 +6818,7 @@ public class RestContext extends Context {
 			}
 		}
 
-		Object output = opSession.getResponse().getOutput().orElse(null);
+		Object output = opSession.getResponse().getContent().orElse(null);
 		throw new NotImplemented("No response processors found to process output of type ''{0}''", className(output));
 	}
 

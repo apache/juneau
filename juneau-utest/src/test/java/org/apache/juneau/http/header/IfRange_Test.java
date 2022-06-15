@@ -58,25 +58,25 @@ public class IfRange_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(ifRange(VALUE1)).run().assertBody().is(VALUE1);
-		c.get().header(ifRange(VALUE1)).run().assertBody().is(VALUE1);
-		c.get().header(ifRange(PARSED1)).run().assertBody().is(VALUE1);
-		c.get().header(ifRange(()->PARSED1)).run().assertBody().is(VALUE1);
+		c.get().header(ifRange(VALUE1)).run().assertContent().is(VALUE1);
+		c.get().header(ifRange(VALUE1)).run().assertContent().is(VALUE1);
+		c.get().header(ifRange(PARSED1)).run().assertContent().is(VALUE1);
+		c.get().header(ifRange(()->PARSED1)).run().assertContent().is(VALUE1);
 
-		c.get().header(ifRange(VALUE2)).run().assertBody().is(VALUE2);
-		c.get().header(ifRange(VALUE2)).run().assertBody().is(VALUE2);
-		c.get().header(ifRange(PARSED2)).run().assertBody().is(VALUE2);
-		c.get().header(ifRange(()->PARSED2)).run().assertBody().is(VALUE2);
+		c.get().header(ifRange(VALUE2)).run().assertContent().is(VALUE2);
+		c.get().header(ifRange(VALUE2)).run().assertContent().is(VALUE2);
+		c.get().header(ifRange(PARSED2)).run().assertContent().is(VALUE2);
+		c.get().header(ifRange(()->PARSED2)).run().assertContent().is(VALUE2);
 
-		c.get().header(ifRange(VALUE3)).run().assertBody().is(VALUE3);
-		c.get().header(ifRange(VALUE3)).run().assertBody().is(VALUE3);
-		c.get().header(ifRange(PARSED3)).run().assertBody().is(VALUE3);
-		c.get().header(ifRange(()->PARSED3)).run().assertBody().is(VALUE3);
+		c.get().header(ifRange(VALUE3)).run().assertContent().is(VALUE3);
+		c.get().header(ifRange(VALUE3)).run().assertContent().is(VALUE3);
+		c.get().header(ifRange(PARSED3)).run().assertContent().is(VALUE3);
+		c.get().header(ifRange(()->PARSED3)).run().assertContent().is(VALUE3);
 
 		// Invalid usage.
-		c.get().header(ifRange((String)null)).run().assertBody().isEmpty();
-		c.get().header(ifRange((Supplier<ZonedDateTime>)null)).run().assertBody().isEmpty();
-		c.get().header(ifRange(()->null)).run().assertBody().isEmpty();
+		c.get().header(ifRange((String)null)).run().assertContent().isEmpty();
+		c.get().header(ifRange((Supplier<ZonedDateTime>)null)).run().assertContent().isEmpty();
+		c.get().header(ifRange(()->null)).run().assertContent().isEmpty();
 	}
 
 	@Test

@@ -50,15 +50,15 @@ public class ContentDisposition_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(contentDisposition(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(contentDisposition(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(contentDisposition(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(contentDisposition(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(contentDisposition(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(contentDisposition(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(contentDisposition(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(contentDisposition(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(contentDisposition((String)null)).run().assertBody().isEmpty();
-		c.get().header(contentDisposition((Supplier<StringRanges>)null)).run().assertBody().isEmpty();
-		c.get().header(contentDisposition(()->null)).run().assertBody().isEmpty();
+		c.get().header(contentDisposition((String)null)).run().assertContent().isEmpty();
+		c.get().header(contentDisposition((Supplier<StringRanges>)null)).run().assertContent().isEmpty();
+		c.get().header(contentDisposition(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

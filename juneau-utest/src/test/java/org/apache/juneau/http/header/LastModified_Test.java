@@ -53,15 +53,15 @@ public class LastModified_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(lastModified(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(lastModified(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(lastModified(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(lastModified(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(lastModified(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(lastModified(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(lastModified(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(lastModified(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(lastModified((String)null)).run().assertBody().isEmpty();
-		c.get().header(lastModified((Supplier<ZonedDateTime>)null)).run().assertBody().isEmpty();
-		c.get().header(lastModified(()->null)).run().assertBody().isEmpty();
+		c.get().header(lastModified((String)null)).run().assertContent().isEmpty();
+		c.get().header(lastModified((Supplier<ZonedDateTime>)null)).run().assertContent().isEmpty();
+		c.get().header(lastModified(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

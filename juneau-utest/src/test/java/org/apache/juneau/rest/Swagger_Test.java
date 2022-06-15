@@ -2115,7 +2115,7 @@ public class Swagger_Test {
 	@Test
 	public void t01_bodyWithReadOnlyProperty() throws Exception {
 		MockRestClient p = MockRestClient.build(T1.class);
-		org.apache.juneau.dto.swagger.Swagger s = JsonParser.DEFAULT.parse(p.get("/api").accept("application/json").run().getBody().asString(), org.apache.juneau.dto.swagger.Swagger.class);
+		org.apache.juneau.dto.swagger.Swagger s = JsonParser.DEFAULT.parse(p.get("/api").accept("application/json").run().getContent().asString(), org.apache.juneau.dto.swagger.Swagger.class);
 		Operation o = s.getOperation("/", "get");
 
 		ResponseInfo ri = o.getResponse("200");

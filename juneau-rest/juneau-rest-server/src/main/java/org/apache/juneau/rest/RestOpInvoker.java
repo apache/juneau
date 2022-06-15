@@ -80,7 +80,7 @@ public class RestOpInvoker extends MethodInvoker {
 
 			if (! inner().hasReturnType(Void.TYPE))
 				if (output != null || ! res.getOutputStreamCalled())
-					res.setOutput(output);
+					res.setContent(output);
 
 		} catch (IllegalAccessException|IllegalArgumentException e) {
 			throw InternalServerError.create().message("Error occurred invoking method ''{0}''.", inner().getFullName()).causedBy(e).build();
@@ -90,7 +90,7 @@ public class RestOpInvoker extends MethodInvoker {
 			res.setStatus(500);  // May be overridden later.
 			Class<?> c = e2.getClass();
 			if (e2 instanceof HttpResponse || c.getAnnotation(Response.class) != null || c.getAnnotation(Body.class) != null) {
-				res.setOutput(e2);
+				res.setContent(e2);
 			} else {
 				throw toHttpException(e2, InternalServerError.class, "Method ''{0}'' threw an unexpected exception.", getFullName());
 			}

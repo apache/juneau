@@ -98,10 +98,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 	private boolean ignoreErrors, suppressLogging;
 
-	private Object input;
+	private Object content;
 	private Serializer serializer;
 	private Parser parser;
-	private HttpPartSchema requestBodySchema;
+	private HttpPartSchema contentSchema;
 	private URIBuilder uriBuilder;
 	private Predicate<Integer> errorCodes;
 	private HttpHost target;
@@ -498,7 +498,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	<ul>
 	 * 		<li>The serializer can be configured using any of the serializer property setters (e.g. {@link RestClient.Builder#sortCollections()}) or
 	 * 			bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.
-	 * 		<li>Typically the {@link RestRequest#body(Object, HttpPartSchema)} method will be used to specify the body of the request with the
+	 * 		<li>Typically the {@link RestRequest#content(Object, HttpPartSchema)} method will be used to specify the body of the request with the
 	 * 			schema describing it's structure.
 	 * 	</ul>
 	 * <p>
@@ -506,7 +506,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	<ul>
 	 * 		<li>The parser can be configured using any of the parser property setters (e.g. {@link RestClient.Builder#strict()}) or
 	 * 			bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.
-	 * 		<li>Typically the {@link ResponseBody#schema(HttpPartSchema)} method will be used to specify the structure of the response body.
+	 * 		<li>Typically the {@link ResponseContent#schema(HttpPartSchema)} method will be used to specify the structure of the response body.
 	 * 	</ul>
 	 * <p>
 	 * 	<c>Accept</c> request header will be set to <js>"text/openapi"</js> unless overridden
@@ -1606,7 +1606,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest formDataCustom(Object value) {
 		header(ContentType.APPLICATION_FORM_URLENCODED);
-		body(value instanceof CharSequence ? new StringReader(value.toString()) : value);
+		content(value instanceof CharSequence ? new StringReader(value.toString()) : value);
 		return this;
 	}
 
@@ -1761,7 +1761,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	/**
 	 * Sets the body of this request.
 	 *
-	 * @param input
+	 * @param value
 	 * 	The input to be sent to the REST resource (only valid for PUT/POST/PATCH) requests.
 	 * 	<br>Can be of the following types:
 	 * 	<ul class='spaced-list'>
@@ -1783,8 +1783,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	</ul>
 	 * @return This object.
 	 */
-	public RestRequest body(Object input) {
-		this.input = input;
+	public RestRequest content(Object value) {
+		this.content = value;
 		return this;
 	}
 
@@ -1819,8 +1819,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 * @throws RestCallException If a retry was attempted, but the entity was not repeatable.
 	 */
-	public RestRequest bodyString(Object input) throws RestCallException {
-		return body(input == null ? null : new StringReader(stringify(input)));
+	public RestRequest contentString(Object input) throws RestCallException {
+		return content(input == null ? null : new StringReader(stringify(input)));
 	}
 
 	/**
@@ -1853,9 +1853,9 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	</ul>
 	 * @return This object.
 	 */
-	public RestRequest body(Object input, HttpPartSchema schema) {
-		this.input = input;
-		this.requestBodySchema = schema;
+	public RestRequest content(Object input, HttpPartSchema schema) {
+		this.content = input;
+		this.contentSchema = schema;
 		return this;
 	}
 
@@ -2413,14 +2413,14 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 			getHeaderData().stream().map(SimpleHeader::new).filter(SimplePart::isValid).forEach(x -> request.addHeader(x));
 
-			if (request2 == null && input != NO_BODY)
+			if (request2 == null && content != NO_BODY)
 				throw new RestCallException(null, null, "Method does not support content entity.  Method={0}, URI={1}", getMethod(), getURI());
 
 			if (request2 != null) {
 
 				Object input2 = null;
-				if (input != NO_BODY) {
-					input2 = input;
+				if (content != NO_BODY) {
+					input2 = content;
 				} else {
 					input2 = new UrlEncodedFormEntity(getFormData().stream().map(SimpleFormData::new).filter(SimplePart::isValid).collect(toList()));
 				}
@@ -2438,7 +2438,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				}
 				else if (input2 instanceof HttpEntity) {
 					if (input2 instanceof SerializedEntity) {
-						entity = ((SerializedEntity)input2).copyWith(serializer, requestBodySchema);
+						entity = ((SerializedEntity)input2).copyWith(serializer, contentSchema);
 					} else {
 						entity = (HttpEntity)input2;
 					}
@@ -2448,7 +2448,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				else if (input2 instanceof InputStream)
 					entity = streamEntity((InputStream)input2, -1, getRequestContentType(ContentType.APPLICATION_OCTET_STREAM)).build();
 				else if (serializer != null)
-					entity = serializedEntity(input2, serializer, requestBodySchema).contentType(contentType).build();
+					entity = serializedEntity(input2, serializer, contentSchema).contentType(contentType).build();
 				else {
 					if (client.hasSerializers()) {
 						if (contentType == null)
@@ -2468,7 +2468,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			}
 
 			if (isDebug() || client.logRequests == DetailLevel.FULL)
-				response.cacheBody();
+				response.cacheContent();
 
 			for (RestCallInterceptor rci : interceptors)
 				rci.onConnect(this, response);
@@ -2491,10 +2491,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 							throw c.<Throwable>invoke(response);
 						c = ci.getPublicConstructor(x -> x.hasParamTypes(String.class));
 						if (c != null)
-							throw c.<Throwable>invoke(message != null ? message : response.getBody().asString());
+							throw c.<Throwable>invoke(message != null ? message : response.getContent().asString());
 						c = ci.getPublicConstructor(x -> x.hasParamTypes(String.class,Throwable.class));
 						if (c != null)
-							throw c.<Throwable>invoke(message != null ? message : response.getBody().asString(), null);
+							throw c.<Throwable>invoke(message != null ? message : response.getContent().asString(), null);
 						c = ci.getPublicConstructor(x -> x.hasNoParams());
 						if (c != null)
 							throw c.<Throwable>invoke();
@@ -2504,7 +2504,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 			if (errorCodes.test(sc) && ! ignoreErrors) {
 				throw new RestCallException(response, null, "HTTP method ''{0}'' call to ''{1}'' caused response code ''{2}, {3}''.\nResponse: \n{4}",
-					method, getURI(), sc, response.getReasonPhrase(), response.getBody().asAbbreviatedString(1000));
+					method, getURI(), sc, response.getReasonPhrase(), response.getContent().asAbbreviatedString(1000));
 			}
 
 		} catch (RuntimeException | RestCallException e) {
@@ -2561,7 +2561,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * <p>
 	 * Use this method if you're only interested in the status line of the response and not the response entity.
-	 * Attempts to call any of the methods on the response object that retrieve the body (e.g. {@link ResponseBody#asReader()}
+	 * Attempts to call any of the methods on the response object that retrieve the body (e.g. {@link ResponseContent#asReader()}
 	 * will cause a {@link RestCallException} to be thrown.
 	 *
 	 * <ul class='notes'>
@@ -3166,7 +3166,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			.append("client", client.properties())
 			.append("ignoreErrors", ignoreErrors)
 			.append("interceptors", interceptors)
-			.append("requestBodySchema", requestBodySchema)
+			.append("requestBodySchema", contentSchema)
 			.append("response", response)
 			.append("serializer", serializer);
 	}

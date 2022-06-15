@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'org.apache.juneau.http.header', created:'9.0.0', flags:'todo'}
+{title:'org.apache.juneau.http.header', created:'9.0.0'}
 
 <div class='topic'>
 	<p>
@@ -79,9 +79,6 @@
 		<li class='jc'>{@link oaj.http.header.WwwAuthenticate}
 	</ul>
 	<p>
-		TODO - Examples
-	</p>
-	<p>
 		These headers extend from the following classes that provide data-type specific functionality:
 	</p>
 	<ul class='javatree'>
@@ -121,7 +118,7 @@
 	
 	<h5 class='topic'>HeaderList</h5>
 	<p>
-		The {@link oaj.http.header.HeaderList} class is an thread-safe immutable list of HTTP headers.
+		The {@link oaj.http.header.HeaderList} class is a thread-safe immutable list of HTTP headers.
 	</p>
 
 	<h5 class='figure'>Example</h5>
@@ -191,7 +188,7 @@
 		a single comma-delimited list (see <a href='https://tools.ietf.org/html/rfc2616#section-4.2'>RFC 2616 Section 4.2</a> for rules).
 	</p>
 	<p>
-		The {@link oaj.http.header.HeaderList#get(Class) get(Class)} and {@link oaj.http.header.HeaderList#get(String,Class) get(String,Class)} methods are provided for working with {@link org.apache.juneau.http.annotation.Header}-annotated
+		The {@link oaj.http.header.HeaderList#get(Class) get(Class)} and {@link oaj.http.header.HeaderList#get(String,Class) get(String,Class)} methods are provided for working with {@link oaj.http.annotation.Header}-annotated
 		beans.
 	</p>
 	<h5 class='figure'>Example</h5>

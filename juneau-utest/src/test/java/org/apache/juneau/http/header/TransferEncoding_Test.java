@@ -50,15 +50,15 @@ public class TransferEncoding_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(transferEncoding(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(transferEncoding(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(transferEncoding(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(transferEncoding(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(transferEncoding(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(transferEncoding(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(transferEncoding(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(transferEncoding(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(transferEncoding((String)null)).run().assertBody().isEmpty();
-		c.get().header(transferEncoding((Supplier<String>)null)).run().assertBody().isEmpty();
-		c.get().header(transferEncoding(()->null)).run().assertBody().isEmpty();
+		c.get().header(transferEncoding((String)null)).run().assertContent().isEmpty();
+		c.get().header(transferEncoding((Supplier<String>)null)).run().assertContent().isEmpty();
+		c.get().header(transferEncoding(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

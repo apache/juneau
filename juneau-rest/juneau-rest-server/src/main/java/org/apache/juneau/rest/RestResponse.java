@@ -83,8 +83,8 @@ import org.apache.juneau.serializer.*;
  * 			<li class='jm'>{@link RestResponse#getWriter() getWriter()}
  * 			<li class='jm'>{@link RestResponse#sendPlainText(String) sendPlainText(String)}
  * 			<li class='jm'>{@link RestResponse#sendRedirect(String) sendRedirect(String)}
- * 			<li class='jm'>{@link RestResponse#setBodySchema(HttpPartSchema) setBodySchema(HttpPartSchema)}
- * 			<li class='jm'>{@link RestResponse#setOutput(Object) setOutput(Object)}
+ * 			<li class='jm'>{@link RestResponse#setContentSchema(HttpPartSchema) setBodySchema(HttpPartSchema)}
+ * 			<li class='jm'>{@link RestResponse#setContent(Object) setOutput(Object)}
  * 			<li class='jm'>{@link RestResponse#setResponseBeanMeta(ResponseBeanMeta) setResponseBeanMeta(ResponseBeanMeta)}
  * 			<li class='jm'>{@link RestResponse#setException(Throwable) setException(Throwable)}
  * 		</ul>
@@ -111,13 +111,13 @@ public final class RestResponse {
 	private HttpServletResponse inner;
 	private final RestRequest request;
 
-	private Optional<Object> output;  // The POJO being sent to the output.
+	private Optional<Object> content;  // The POJO being sent to the output.
 	private ServletOutputStream sos;
 	private FinishableServletOutputStream os;
 	private FinishablePrintWriter w;
 	private ResponseBeanMeta responseBeanMeta;
 	private RestOpContext opContext;
-	private Optional<HttpPartSchema> bodySchema;
+	private Optional<HttpPartSchema> contentSchema;
 	private Serializer serializer;
 	private Optional<SerializerMatch> serializerMatch;
 	private boolean safeHeaders;
@@ -224,8 +224,8 @@ public final class RestResponse {
 	 * @param output The output to serialize to the connection.
 	 * @return This object.
 	 */
-	public RestResponse setOutput(Object output) {
-		this.output = optional(output);
+	public RestResponse setContent(Object output) {
+		this.content = optional(output);
 		return this;
 	}
 
@@ -251,33 +251,33 @@ public final class RestResponse {
 	}
 
 	/**
-	 * Returns the output that was set by calling {@link #setOutput(Object)}.
+	 * Returns the output that was set by calling {@link #setContent(Object)}.
 	 *
 	 * <p>
-	 * If it's null, then {@link #setOutput(Object)} wasn't called.
+	 * If it's null, then {@link #setContent(Object)} wasn't called.
 	 * <br>If it contains an empty, then <c>setObject(<jk>null</jk>)</c> was called.
-	 * <br>Otherwise, {@link #setOutput(Object)} was called with a non-null value.
+	 * <br>Otherwise, {@link #setContent(Object)} was called with a non-null value.
 	 *
-	 * @return The output object, or <jk>null</jk> if {@link #setOutput(Object)} was never called.
+	 * @return The output object, or <jk>null</jk> if {@link #setContent(Object)} was never called.
 	 */
-	public Optional<Object> getOutput() {
-		return output;
+	public Optional<Object> getContent() {
+		return content;
 	}
 
 	/**
 	 * Returns <jk>true</jk> if the response contains output.
 	 *
 	 * <p>
-	 * This implies {@link #setOutput(Object)} has been called on this object.
+	 * This implies {@link #setContent(Object)} has been called on this object.
 	 *
 	 * <p>
-	 * Note that this also returns <jk>true</jk> even if {@link #setOutput(Object)} was called with a <jk>null</jk>
+	 * Note that this also returns <jk>true</jk> even if {@link #setContent(Object)} was called with a <jk>null</jk>
 	 * value as this means the response contains an output value of <jk>null</jk> as opposed to no value at all.
 	 *
 	 * @return <jk>true</jk> if the response contains output.
 	 */
-	public boolean hasOutput() {
-		return output != null;
+	public boolean hasContent() {
+		return content != null;
 	}
 
 	/**
@@ -625,8 +625,8 @@ public final class RestResponse {
 	 * @param schema The body schema
 	 * @return This object.
 	 */
-	public RestResponse setBodySchema(HttpPartSchema schema) {
-		this.bodySchema = optional(schema);
+	public RestResponse setContentSchema(HttpPartSchema schema) {
+		this.contentSchema = optional(schema);
 		return this;
 	}
 
@@ -722,7 +722,7 @@ public final class RestResponse {
 	 * @param c The type to check against.
 	 * @return <jk>true</jk> if this response object is of the specified type.
 	 */
-	public boolean isOutputType(Class<?> c) {
+	public boolean isContentOfType(Class<?> c) {
 		return c.isInstance(getRawOutput());
 	}
 
@@ -734,8 +734,8 @@ public final class RestResponse {
 	 * @return This value cast to the specified class, or <jk>null</jk> if the object doesn't exist or isn't the specified type.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> T getOutput(Class<T> c) {
-		if (isOutputType(c))
+	public <T> T getContent(Class<T> c) {
+		if (isContentOfType(c))
 			return (T)getRawOutput();
 		return null;
 	}
@@ -766,7 +766,7 @@ public final class RestResponse {
 	}
 
 	private Object getRawOutput() {
-		return output == null ? null : output.orElse(null);
+		return content == null ? null : content.orElse(null);
 	}
 
 	/**
@@ -968,18 +968,18 @@ public final class RestResponse {
 	 *
 	 * @return The schema of the response body, never <jk>null</jk>.
 	 */
-	public Optional<HttpPartSchema> getBodySchema() {
-		if (bodySchema != null)
-			return bodySchema;
+	public Optional<HttpPartSchema> getContentSchema() {
+		if (contentSchema != null)
+			return contentSchema;
 		if (responseBeanMeta != null)
-			bodySchema = optional(responseBeanMeta.getSchema());
+			contentSchema = optional(responseBeanMeta.getSchema());
 		else {
-			ResponseBeanMeta rbm = opContext.getResponseBeanMeta(getOutput(Object.class));
+			ResponseBeanMeta rbm = opContext.getResponseBeanMeta(getContent(Object.class));
 			if (rbm != null)
-				bodySchema = optional(rbm.getSchema());
+				contentSchema = optional(rbm.getSchema());
 			else
-				bodySchema = empty();
+				contentSchema = empty();
 		}
-		return bodySchema;
+		return contentSchema;
 	}
 }

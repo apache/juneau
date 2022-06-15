@@ -25,7 +25,7 @@ import org.apache.juneau.rest.annotation.*;
  *
  * <p>
  * The REST Server API uses the concept of registered response processors for converting objects returned by REST
- * methods or set through {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
+ * methods or set through {@link RestResponse#setContent(Object)} into appropriate HTTP responses.
  *
  * <p>
  * Response processors can be associated with REST resources via the following:

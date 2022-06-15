@@ -1098,7 +1098,7 @@ public @interface Rest {
 	 *
 	 * <p>
 	 * Specifies a list of {@link ResponseProcessor} classes that know how to convert POJOs returned by REST methods or
-	 * set via {@link RestResponse#setOutput(Object)} into appropriate HTTP responses.
+	 * set via {@link RestResponse#setContent(Object)} into appropriate HTTP responses.
 	 *
 	 * <ul class='seealso'>
 	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#responseProcessors()}

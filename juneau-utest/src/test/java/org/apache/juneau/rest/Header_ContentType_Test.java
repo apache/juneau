@@ -45,17 +45,17 @@ public class Header_ContentType_Test {
 		RestClient a = MockRestClient.buildLax(A.class);
 		a.put("/a", null, ContentType.of(""))
 			.run()
-			.assertBody().is("p2");
+			.assertContent().is("p2");
 		a.put("/a", null, ContentType.of("text/p1"))
 			.run()
-			.assertBody().is("p1");
+			.assertContent().is("p1");
 		a.put("/a", null, ContentType.of("text/p2"))
 			.run()
-			.assertBody().is("p2");
+			.assertContent().is("p2");
 		a.put("/a?noTrace=true", null, ContentType.of("text/p3"))
 			.run()
 			.assertCode().is(415)
-			.assertBody().isContains("Unsupported media-type in request header 'Content-Type': 'text/p3'");
+			.assertContent().isContains("Unsupported media-type in request header 'Content-Type': 'text/p3'");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -77,25 +77,25 @@ public class Header_ContentType_Test {
 	@Test
 	public void b01_restMethodWithParsersSerializers() throws Exception {
 		RestClient b = MockRestClient.buildLax(B.class);
-		b.put("/a", null).contentType("text/p3").run().assertBody().is("p3");
+		b.put("/a", null).contentType("text/p3").run().assertContent().is("p3");
 		b.put("/a?noTrace=true", null, ContentType.of(""))
 			.run()
 			.assertCode().is(415)
-			.assertBody().isContains(
+			.assertContent().isContains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p2'",
 				"Supported media-types: ['text/p3']"
 			);
 		b.put("/a?noTrace=true", null, ContentType.of("text/p1"))
 			.run()
 			.assertCode().is(415)
-			.assertBody().isContains(
+			.assertContent().isContains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p1'",
 				"Supported media-types: ['text/p3']"
 			);
 		b.put("/a?noTrace=true", null, ContentType.of("text/p2"))
 			.run()
 			.assertCode().is(415)
-			.assertBody().isContains(
+			.assertContent().isContains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p2'",
 				"Supported media-types: ['text/p3']"
 			);
@@ -120,14 +120,14 @@ public class Header_ContentType_Test {
 	@Test
 	public void c01_restMethodAddParsersSerializersInherit() throws Exception {
 		RestClient c = MockRestClient.buildLax(C.class);
-		c.put("/a", null, ContentType.of("")).run().assertBody().is("p2");
-		c.put("/a", null, ContentType.of("text/p1")).run().assertBody().is("p1");
-		c.put("/a", null, ContentType.of("text/p2")).run().assertBody().is("p2");
-		c.put("/a", null, ContentType.of("text/p3")).run().assertBody().is("p3");
+		c.put("/a", null, ContentType.of("")).run().assertContent().is("p2");
+		c.put("/a", null, ContentType.of("text/p1")).run().assertContent().is("p1");
+		c.put("/a", null, ContentType.of("text/p2")).run().assertContent().is("p2");
+		c.put("/a", null, ContentType.of("text/p3")).run().assertContent().is("p3");
 		c.put("/a?noTrace=true", null).contentType("text/p4")
 			.run()
 			.assertCode().is(415)
-			.assertBody().isContains(
+			.assertContent().isContains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p4'",
 				"Supported media-types: ['text/p3','text/p1','text/p2']"
 			);
@@ -154,21 +154,21 @@ public class Header_ContentType_Test {
 		RestClient d = MockRestClient.buildLax(D.class);
 		d.put("/a", null, ContentType.of(""))
 			.run()
-			.assertBody().is("p3");
+			.assertContent().is("p3");
 		d.put("/a", null, ContentType.of("text/p3"))
 			.run()
-			.assertBody().is("p3");
+			.assertContent().is("p3");
 		d.put("/a?noTrace=true", null, ContentType.of("text/p1"))
 			.run()
 			.assertCode().is(415)
-			.assertBody().isContains(
+			.assertContent().isContains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p1'",
 				"Supported media-types: ['text/p3']"
 			);
 		d.put("/a?noTrace=true", null, ContentType.of("text/p2"))
 			.run()
 			.assertCode().is(415)
-			.assertBody().isContains(
+			.assertContent().isContains(
 				"Unsupported media-type in request header 'Content-Type': 'text/p2'",
 				"Supported media-types: ['text/p3']"
 			);
@@ -195,16 +195,16 @@ public class Header_ContentType_Test {
 		RestClient e = MockRestClient.build(E.class);
 		e.put("/a", null, ContentType.of(""))
 			.run()
-			.assertBody().is("p3");
+			.assertContent().is("p3");
 		e.put("/a", null, ContentType.of("text/p1"))
 			.run()
-			.assertBody().is("p1");
+			.assertContent().is("p1");
 		e.put("/a", null, ContentType.of("text/p2"))
 			.run()
-			.assertBody().is("p2");
+			.assertContent().is("p2");
 		e.put("/a", null, ContentType.of("text/p3"))
 			.run()
-			.assertBody().is("p3");
+			.assertContent().is("p3");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

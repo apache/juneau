@@ -35,7 +35,7 @@ public final class ReaderProcessor implements ResponseProcessor {
 	public int process(RestOpSession opSession) throws IOException {
 
 		RestResponse res = opSession.getResponse();
-		Reader r = res.getOutput(Reader.class);
+		Reader r = res.getContent(Reader.class);
 
 		if (r == null)
 			return NEXT;

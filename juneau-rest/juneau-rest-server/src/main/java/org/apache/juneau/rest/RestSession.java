@@ -562,7 +562,7 @@ public class RestSession extends ContextSession {
 			context.postCall(opSession);
 			if (res.getStatus() == 0)
 				res.setStatus(200);
-			if (opSession.getResponse().hasOutput()) {
+			if (opSession.getResponse().hasContent()) {
 				// Now serialize the output if there was any.
 				// Some subclasses may write to the OutputStream or Writer directly.
 				context.processResponse(opSession);

@@ -25,7 +25,7 @@ public class SeeOther_Test {
 	@Rest
 	public static class A {
 		@RestGet public SeeOther a1() { return SEE_OTHER; }
-		@RestGet public SeeOther a2() { return seeOther("servlet:/foo").body("foo").build(); }
+		@RestGet public SeeOther a2() { return seeOther("servlet:/foo").content("foo").build(); }
 		@RestGet public SeeOther a3() { return seeOther("servlet:/foo").build(); }
 		@RestGet public SeeOther a4() { return seeOther("servlet:/foo").header("Foo","bar").build(); }
 	}
@@ -37,11 +37,11 @@ public class SeeOther_Test {
 		client.get("/a1")
 			.run()
 			.assertCode().is(303)
-			.assertBody().is("See Other");
+			.assertContent().is("See Other");
 		client.get("/a2")
 			.run()
 			.assertCode().is(303)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		client.get("/a3")
 			.run()
 			.assertCode().is(303)

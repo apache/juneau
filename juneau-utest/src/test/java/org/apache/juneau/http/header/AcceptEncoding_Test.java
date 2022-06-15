@@ -50,15 +50,15 @@ public class AcceptEncoding_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(acceptEncoding(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(acceptEncoding(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(acceptEncoding(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(acceptEncoding(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(acceptEncoding(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(acceptEncoding(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(acceptEncoding(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(acceptEncoding(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(acceptEncoding((String)null)).run().assertBody().is("gzip,deflate");
-		c.get().header(acceptEncoding((Supplier<StringRanges>)null)).run().assertBody().is("gzip,deflate");
-		c.get().header(acceptEncoding(()->null)).run().assertBody().is("gzip,deflate");
+		c.get().header(acceptEncoding((String)null)).run().assertContent().is("gzip,deflate");
+		c.get().header(acceptEncoding((Supplier<StringRanges>)null)).run().assertContent().is("gzip,deflate");
+		c.get().header(acceptEncoding(()->null)).run().assertContent().is("gzip,deflate");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -51,7 +51,7 @@ public class BasicHttpResponse implements HttpResponse {
 	BasicStatusLine statusLine;
 	HeaderList.Builder headersBuilder;
 	BasicStatusLine.Builder statusLineBuilder;
-	HttpEntity body;
+	HttpEntity content;
 	final boolean unmodifiable;
 
 	/**
@@ -71,9 +71,9 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param builder The builder containing the arguments for this bean.
 	 */
 	public BasicHttpResponse(HttpResponseBuilder<?> builder) {
-		headers = builder.headers();
-		statusLine = builder.statusLine();
-		body = builder.body;
+		headers = builder.buildHeaders();
+		statusLine = builder.buildStatusLine();
+		content = builder.content;
 		unmodifiable = builder.unmodifiable;
 	}
 
@@ -114,8 +114,8 @@ public class BasicHttpResponse implements HttpResponse {
 	@Override /* Object */
 	public String toString() {
 		StringBuilder sb = new StringBuilder().append(statusLine()).append(' ').append(headers());
-		if (body != null)
-			sb.append(' ').append(body);
+		if (content != null)
+			sb.append(' ').append(content);
 		return sb.toString();
 	}
 
@@ -238,15 +238,15 @@ public class BasicHttpResponse implements HttpResponse {
 	@Override /* HttpMessage */
 	public HttpEntity getEntity() {
 		// Constructing a StringEntity is somewhat expensive, so don't create it unless it's needed.
-		if (body == null)
-			body = stringEntity(getStatusLine().getReasonPhrase()).build();
-		return body;
+		if (content == null)
+			content = stringEntity(getStatusLine().getReasonPhrase()).build();
+		return content;
 	}
 
 	@Override /* HttpMessage */
 	public void setEntity(HttpEntity entity) {
 		assertModifiable();
-		this.body = entity;
+		this.content = entity;
 	}
 
 	@Override /* HttpMessage */

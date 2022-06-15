@@ -224,12 +224,12 @@
 		<li><p><a class='doclink' href='#juneau-marshall.jm.Encoders'>Encoders</a><span class='update'>created: <b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#juneau-marshall.jm.HttpParts'>HTTP Parts</a><span class='update'>created: <b>9.0.0</b></span></p>
 		<ol>
-			<li><p><a class='doclink' href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http'>org.apache.juneau.http</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></p>
-			<li><p><a class='doclink' href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.annotation'>org.apache.juneau.http.annotation</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></p>
-			<li><p><a class='doclink' href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.header'>org.apache.juneau.http.header</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></p>
-			<li><p><a class='doclink' href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.part'>org.apache.juneau.http.part</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></p>
-			<li><p><a class='doclink' href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.entity'>org.apache.juneau.http.entity</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></p>
-			<li><p><a class='doclink' href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.resource'>org.apache.juneau.http.resource</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></p>
+			<li><p><a class='doclink' href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http'>org.apache.juneau.http</a><span class='update'>created: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.annotation'>org.apache.juneau.http.annotation</a><span class='update'>created: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.header'>org.apache.juneau.http.header</a><span class='update'>created: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.part'>org.apache.juneau.http.part</a><span class='update'>created: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.entity'>org.apache.juneau.http.entity</a><span class='update'>created: <b>9.0.0</b></span></p>
+			<li><p><a class='doclink' href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.resource'>org.apache.juneau.http.resource</a><span class='update'>created: <b>9.0.0</b></span></p>
 			<li><p><a class='doclink' href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.response'>org.apache.juneau.http.response</a><span class='update'>created: <b>9.0.0</b></span></p>
 			<li><p><a class='doclink' href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.remote'>org.apache.juneau.http.remote</a><span class='update'>created: <b>9.0.0</b></span></p>
 		</ol>
@@ -6286,14 +6286,14 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http' id='juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http'>2.24.1 - org.apache.juneau.http</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http' id='juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http'>2.24.1 - org.apache.juneau.http</a><span class='update'>created: <b>9.0.0</b></span></h4>
 <div class='topic'><!-- START: 2.24.1 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.http.header} package contains various convenience classes for creating
 		standard HTTP components using static imports.
 	</p>
-	<ul class='javatreec'>
+	<ul class='javatree'>
 		<li class='jc'>{@link org.apache.juneau.http.HttpHeaders} - Utility class for standard HTTP headers.
 		<li class='jc'>{@link org.apache.juneau.http.HttpParts} - Utility class for standard HTTP parts.
 		<li class='jc'>{@link org.apache.juneau.http.HttpEntities} - Utility class for standard HTTP entities.
@@ -6303,35 +6303,276 @@
 	
 	<h5 class='topic'>HttpHeaders</h5>
 	<p>
-		TODO
+		The {@link org.apache.juneau.http.HttpHeaders} class contains many convenience static methods and fields for working with standard HTTP request and response headers
+		and header lists.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+	<jk>import static</jk> org.apache.juneau.http.HttpHeaders.*;
+
+	HeaderList <jv>headers</jv> = 
+		<jsm>headerList</jsm>(  <jc>// Arbitrary list of headers</jc>
+	
+			<jsf>CONTENTTYPE_TEXT_XML</jsf>,   <jc>// Static constants</jc>
+		
+			<jsm>contentType</jsm>(<js>"text/xml"</js>)   <jc>// Predefined headers</jc>
+		
+			<jsm>contentType</jsm>(() -&gt; <js>"text/xml"</js>)   <jc>// Predefined headers with supplied values</jc>
+		
+			<jsm>stringHeader</jsm>(<js>"Content-Type"</js>, <js>"text/xml"</js>)   <jc>// Freeform headers</jc>
+		
+			<jsm>stringHeader</jsm>(<js>"Content-Type"</js>, () -&gt; <js>"text/xml"</js>)   <jc>// Freeform headers with supplied values</jc>
+		);
+	</p>
+	<p>
+		This class is vast in scope and covers all request and response headers defined in RFC2616.
+	</p>
+	<p>
+		In addition to the predefined headers, various methods are provided for free-form headers.  Each accepts
+		either static values or values from {@link java.util.function.Supplier Suppliers}:
+	</p>
+	<ul class='javatreec'>
+		<li class='jm'>{@link org.apache.juneau.http.HttpHeaders#basicHeader(String,Object) basicHeader}
+		<li class='jm'>{@link org.apache.juneau.http.HttpHeaders#booleanHeader(String,String) booleanHeader}
+		<li class='jm'>{@link org.apache.juneau.http.HttpHeaders#csvHeader(String,String) csvHeader}
+		<li class='jm'>{@link org.apache.juneau.http.HttpHeaders#dateHeader(String,String) dateHeader}
+		<li class='jm'>{@link org.apache.juneau.http.HttpHeaders#entityTagsHeader(String,String) entityTagsHeader}
+		<li class='jm'>{@link org.apache.juneau.http.HttpHeaders#entityTagHeader(String,String) entityTagHeader}
+		<li class='jm'>{@link org.apache.juneau.http.HttpHeaders#integerHeader(String,String) integerHeader}
+		<li class='jm'>{@link org.apache.juneau.http.HttpHeaders#longHeader(String,String) longHeader}
+		<li class='jm'>{@link org.apache.juneau.http.HttpHeaders#mediaRangesHeader(String,String) mediaRangesHeader}
+		<li class='jm'>{@link org.apache.juneau.http.HttpHeaders#mediaTypeHeader(String,String) mediaTypeHeader}
+		<li class='jm'>{@link org.apache.juneau.http.HttpHeaders#stringHeader(String,String) stringHeader}
+		<li class='jm'>{@link org.apache.juneau.http.HttpHeaders#serializedHeader(String,Object) serializedHeader}
+		<li class='jm'>{@link org.apache.juneau.http.HttpHeaders#stringRangesHeader(String,String) stringRangesHeader}
+		<li class='jm'>{@link org.apache.juneau.http.HttpHeaders#uriHeader(String,String) uriHeader}
+	</ul>
+	<p>
+		The {@link org.apache.juneau.http.HttpHeaders#serializedHeader(String,Object) serializedHeader} methods allows for headers 
+		serialized using schema-based serializers such as the OpenAPI serializer. 
 	</p>
 	
+	<p>
+		Static methods are also provided for instantiating {@link org.apache.juneau.http.annotation.Header}-annotated or
+		other HttpComponent-defined header classes:
+	</p>
+	<ul class='javatree'>
+		<li class='jm'>{@link org.apache.juneau.http.HttpHeaders#header(Class,String,Object) header(Class,String,Object)}
+		<li class='jm'>{@link org.apache.juneau.http.HttpHeaders#header(Class,Object) header(Class,String,Object)}
+	</ul>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+	<jk>import static</jk> org.apache.juneau.http.HttpHeaders.*;
+
+	ContentType <jv>contentType</jv> = <jsm>header</jsm>(ContentType.<jk>class</jk>, <js>"text/xml"</js>);
+	</p>
+	<p>
+		Lists of headers can be produced with the following methods:
+	</p>
+	<ul class='javatree'>
+		<li class='jm'>{@link org.apache.juneau.http.HttpHeaders#headerList() headerList()}
+		<li class='jm'>{@link org.apache.juneau.http.HttpHeaders#headerList(Header...) headerList(Header...)}
+		<li class='jm'>{@link org.apache.juneau.http.HttpHeaders#headerList(List) headerList(List&lt;Header&gt;)}
+		<li class='jm'>{@link org.apache.juneau.http.HttpHeaders#headerList(String...) headerList(String...)}
+	</ul>
+	<p>
+		The capabilities of the {@link org.apache.juneau.http.header.HeaderList} class is described later.
+	</p>
+		
 	<h5 class='topic'>HttpParts</h5>
 	<p>
-		TODO
+		The {@link org.apache.juneau.http.HttpParts} class contains convenience static methods for generating query/form-data/path parts and part lists.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
+
+	PartList <jv>formData</jv> = 
+		<jsm>partList</jsm>(  <jc>// Arbitrary list of parts</jc>
+			<jsm>stringPart</jsm>(<js>"Name"</js>, <js>"Bill"</js>)   <jc>// Freeform part</jc>
+			<jsm>integerPart</jsm>(<js>"Age"</js>, () -> <jsm>calculateAge</jsm>())   <jc>// Freeform part with supplied value</jc>
+		);
+	</p>
+	<p>
+		The following methods are provided for creating parts.  Each accepts
+		either static values or values from {@link java.util.function.Supplier Suppliers}:
+	</p>
+	<ul class='javatreec'>
+		<li class='jm'>{@link org.apache.juneau.http.HttpParts#basicPart(String,Object) basicPart}
+		<li class='jm'>{@link org.apache.juneau.http.HttpParts#booleanPart(String,Boolean) booleanPart}
+		<li class='jm'>{@link org.apache.juneau.http.HttpParts#csvArrayPart(String,String...) csvArrayPart}
+		<li class='jm'>{@link org.apache.juneau.http.HttpParts#datePart(String,ZonedDateTime) datePart}
+		<li class='jm'>{@link org.apache.juneau.http.HttpParts#integerPart(String,Integer) integerPart}
+		<li class='jm'>{@link org.apache.juneau.http.HttpParts#longPart(String,Long) longPart}
+		<li class='jm'>{@link org.apache.juneau.http.HttpParts#serializedPart(String,Object) serializedPart}
+		<li class='jm'>{@link org.apache.juneau.http.HttpParts#stringPart(String,String) stringPart}
+		<li class='jm'>{@link org.apache.juneau.http.HttpParts#uriPart(String,URI) uriPart}
+	</ul>
+	<p>
+		The {@link org.apache.juneau.http.HttpParts#serializedPart(String,Object) serializedPart} methods allows for parts 
+		serialized using schema-based serializers such as the OpenAPI serializer. 
+	</p>
+	<p>
+		Lists of parts can be produced with the following methods:
+	</p>
+	<ul class='javatree'>
+		<li class='jm'>{@link org.apache.juneau.http.HttpParts#partList() partList()}
+		<li class='jm'>{@link org.apache.juneau.http.HttpParts#partList(List) partList(List&lt;NameValuePair&gt;)}
+		<li class='jm'>{@link org.apache.juneau.http.HttpParts#partList(NameValuePair...) partList(NameValuePair...)}
+		<li class='jm'>{@link org.apache.juneau.http.HttpParts#partList(Object...) partList(Object...)}
+	</ul>
+	<p>
+		The capabilities of the {@link org.apache.juneau.http.part.PartList} class is described later.
 	</p>
 	
 	<h5 class='topic'>HttpEntities</h5>
 	<p>
-		TODO
+		The {@link org.apache.juneau.http.HttpEntities} class contains convenience static methods for generating HTTP message entities.
+		Returned objects extend from  {@code org.apache.http.HttpEntity} but provides the following additional features:
+	</p>
+	<ul class='spaced-list'>
+		<li>
+			Caching.
+		<li>
+			Fluent setters.
+		<li>
+			Fluent assertions.
+		<li>
+			Externally-supplied/dynamic content.
+	</ul>
+	<p>
+		The following methods are provided for creating entities.  Each accepts
+		either static values or values from {@link java.util.function.Supplier Suppliers} and returns builders:
+	</p>
+	<ul class='javatreec'>
+		<li class='jm'>{@link org.apache.juneau.http.HttpEntities#byteArrayEntity(byte[]) byteArrayEntity}
+		<li class='jm'>{@link org.apache.juneau.http.HttpEntities#fileEntity(File) fileEntity}
+		<li class='jm'>{@link org.apache.juneau.http.HttpEntities#readerEntity(Reader) readerEntity}
+		<li class='jm'>{@link org.apache.juneau.http.HttpEntities#serializedEntity(Object, Serializer) serializedEntity}
+		<li class='jm'>{@link org.apache.juneau.http.HttpEntities#streamEntity(InputStream) streamEntity}
+		<li class='jm'>{@link org.apache.juneau.http.HttpEntities#stringEntity(String) stringEntity}
+	</ul>
+	<p>
+		HTTP entities are automatically supported in both the server and client REST APIs for requests and responses.
 	</p>
 	
 	<h5 class='topic'>HttpResources</h5>
 	<p>
-		TODO
+		The {@link org.apache.juneau.http.HttpResources} class contains convenience static methods for generating HTTP message resources.
+		Returned objects extend from {@link org.apache.juneau.http.resource.HttpResource} which extends from {@link org.apache.juneau.http.HttpEntity} but with
+		additional arbitrary headers.
 	</p>
+	<p>
+		The following methods are provided for creating entities.  Each accepts
+		either static values or values from {@link java.util.function.Supplier Suppliers} and are in the form of builders.
+	</p>
+	<ul class='javatreec'>
+		<li class='jm'>{@link org.apache.juneau.http.HttpResources#byteArrayResource(byte[]) byteArrayResource}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResources#fileResource(File) fileResource}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResources#readerResource(Reader) readerResource}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResources#streamResource(InputStream) streamResource}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResources#stringResource(String) stringResource}
+	</ul>
+	<p>
+		The most common location where resources are used are as returned types of REST operation methods described later.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+	<jk>import static</jk> org.apache.juneau.http.HttpResources.*;
+	
+	<ja>@RestDelete</ja>(path=<js>"/{id}"</js>)
+	<jk>public</jk> HttpResource helloWold(...) {
+		<jk>return</jk> <jsm>stringResource</jsm>(<js>"Hello!"</js>).contentType(<js>"text/plain"</js>).build();
+	}
+	</p>
+	
 	
 	<h5 class='topic'>HttpResponses</h5>
 	<p>
-		TODO
+		The {@link org.apache.juneau.http.HttpResponses} class contains convenience static methods for standard HTTP responses.
+		Returned objects extend from {@code org.apache.http.HttpResponse} and are in the form of builders.
 	</p>
-	
+	<p>
+		The following methods are provided for creating entities:
+	</p>
+	<ul class='javatreec'>
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#_continue() _continue}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#accepted() accepted}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#alreadyReported() alreadyReported}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#badRequest() badRequest}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#conflict() conflict}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#created() created}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#earlyHints() earlyHints}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#expectationFailed() expectationFailed}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#failedDependency() failedDependency}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#forbidden() forbidden}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#found(String) found}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#gone() gone}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#httpVersionNotSupported() httpVersionNotSupported}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#imUsed() imUsed}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#insufficientStorage() insufficientStorage}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#internalServerError() internalServerError}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#lengthRequired() lengthRequired}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#locked() locked}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#loopDetected() loopDetected}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#methodNotAllowed() methodNotAllowed}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#misdirectedRequest() misdirectedRequest}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#movedPermanently(String) movedPermanently}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#multipleChoices() multipleChoices}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#multiStatus() multiStatus}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#networkAuthenticationRequired() networkAuthenticationRequired}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#noContent() noContent}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#nonAuthoritiveInformation() nonAuthoritiveInformation}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#notAcceptable() notAcceptable}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#notExtended() notExtended}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#notFound() notFound}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#notImplemented() notImplemented}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#notModified() notModified}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#ok() ok}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#partialContent() partialContent}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#payloadTooLarge() payloadTooLarge}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#permanentRedirect(String) permanentRedirect}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#preconditionFailed() preconditionFailed}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#preconditionRequired() preconditionRequired}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#processing() processing}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#rangeNotSatisfiable() rangeNotSatisfiable}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#requestHeaderFieldsTooLarge() requestHeaderFieldsTooLarge}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#resetContent() resetContent}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#seeOther(String) seeOther}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#serviceUnavailable() serviceUnavailable}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#switchingProtocols() switchingProtocols}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#temporaryRedirect(String) temporaryRedirect}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#tooManyRequests() tooManyRequests}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#unauthorized() unauthorized}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#unavailableForLegalReasons() unavailableForLegalReasons}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#unprocessableEntity() unprocessableEntity}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#unsupportedMediaType() unsupportedMediaType}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#upgradeRequired() upgradeRequired}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#uriTooLong() uriTooLong}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#useProxy() useProxy}
+		<li class='jm'>{@link org.apache.juneau.http.HttpResponses#variantAlsoNegotiates() variantAlsoNegotiates}
+	</ul>
+	<p>
+		The most common location where these responses are used are in REST operation methods described later.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+	<jk>import static</jk> org.apache.juneau.http.HttpResponses.*;
+	<jk>import static</jk> org.apache.juneau.http.HttpHeaders.*;
+ 
+	<ja>@RestDelete</ja>(path=<js>"/{id}"</js>)
+	<jk>public</jk> Ok doDelete(...) <jk>throws</jk> Unauthorized {
+		<jk>if</jk> (<jc>/* user not authorized*/</jc>)
+			<jk>throw</jk> <jsm>unauthorized</jsm>().build();
+		<jk>return</jk> <jsm>ok</jsm>().body(<js>"OK"</js>).header(<jsm>contentType</jsm>(<js>"text/plain"</js>)).build();
+	}
+	</p>
 </div>
 </div><!-- END: 2.24.1 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.annotation' id='juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.annotation'>2.24.2 - org.apache.juneau.http.annotation</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.annotation' id='juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.annotation'>2.24.2 - org.apache.juneau.http.annotation</a><span class='update'>created: <b>9.0.0</b></span></h4>
 <div class='topic'><!-- START: 2.24.2 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.annotation -->
 <div class='topic'>
 	<p>
@@ -6359,14 +6600,15 @@
 		<li class='ja'>{@link org.apache.juneau.http.annotation.Tag}
 	</ul>
 	<p>
-		TODO - Examples
+		These annotations are used in a variety of places in the server and client side REST interfaces, especially for
+		remote proxies.
 	</p>
 </div>
 </div><!-- END: 2.24.2 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.annotation -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.header' id='juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.header'>2.24.3 - org.apache.juneau.http.header</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.header' id='juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.header'>2.24.3 - org.apache.juneau.http.header</a><span class='update'>created: <b>9.0.0</b></span></h4>
 <div class='topic'><!-- START: 2.24.3 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.header -->
 <div class='topic'>
 	<p>
@@ -6432,9 +6674,6 @@
 		<li class='jc'>{@link org.apache.juneau.http.header.WwwAuthenticate}
 	</ul>
 	<p>
-		TODO - Examples
-	</p>
-	<p>
 		These headers extend from the following classes that provide data-type specific functionality:
 	</p>
 	<ul class='javatree'>
@@ -6474,7 +6713,7 @@
 	
 	<h5 class='topic'>HeaderList</h5>
 	<p>
-		The {@link org.apache.juneau.http.header.HeaderList} class is an thread-safe immutable list of HTTP headers.
+		The {@link org.apache.juneau.http.header.HeaderList} class is a thread-safe immutable list of HTTP headers.
 	</p>
 
 	<h5 class='figure'>Example</h5>
@@ -6608,13 +6847,14 @@
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.part' id='juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.part'>2.24.4 - org.apache.juneau.http.part</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.part' id='juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.part'>2.24.4 - org.apache.juneau.http.part</a><span class='update'>created: <b>9.0.0</b></span></h4>
 <div class='topic'><!-- START: 2.24.4 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.part -->
 <div class='topic'>
 	<p>
-		TODO
+		The {@link org.apache.juneau.http.part} package contains implementations of <c>org.apache.http.NameValuePair</c> to 
+		be used for query/form-data/path parts and part lists.
 	</p>
-	<ul class='javatreec'>
+	<ul class='javatree'>
 		<li class='jic'>{@code org.apache.http.NameValuePair}
 		<ul>
 			<li class='jc'>{@link org.apache.juneau.http.part.BasicPart}
@@ -6627,22 +6867,144 @@
 				<li class='jc'>{@link org.apache.juneau.http.part.BasicPartIterator}
 				<li class='jc'>{@link org.apache.juneau.http.part.BasicStringPart}
 				<li class='jc'>{@link org.apache.juneau.http.part.BasicUriPart}
-			</li>
+			</ul>
 		</ul>
 	</ul>
 
 	<h5 class='topic'>PartList</h5>
+	<p>
+		The {@link org.apache.juneau.http.part.PartList} class is a thread-safe immutable list of HTTP parts (form-data, query-parameters, path-parameters).
+	</p>
+	<h5 class='figure'>Example</h5>
+	<p class='bjava'>
+	PartList <jv>parts</jv> = PartList
+		.<jsm>create</jsm>()
+		.append(MyPart.<jsm>of</jsm>(<js>"foo"</js>))
+		.append(<js>"Bar"</js>, ()-&gt;<jsm>getDynamicValueFromSomewhere</jsm>())
+		.build();
+	</p>
 
+	<p>
+		Convenience creators are provided for creating lists with minimal code:
+	</p>
+	<p class='bjava'>
+		PartList <jv>parts</jv> = PartList.<jsm>of</jsm>(BasicIntegerPart.<jsm>of</jsm>(<js>"foo"</js>, 1));
+	</p>
+
+	<p>
+		Part lists are immutable, but can be appended to using the {@link org.apache.juneau.http.part.PartList#copy() copy()} method:
+	</p>
+	<p class='bjava'>
+	<jv>parts</jv> = <jv>parts</jv>
+		.copy()
+		.append(BasicIntegerPart.<jsm>of</jsm>(<js>"foo"</js>, 1))
+		.build();
+	</p>
+
+	<p>
+		Static methods are provided on {@link org.apache.juneau.http.HttpParts} to further simplify creation of part lists.
+	</p>
+	<p class='bjava'>
+	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
+
+	PartList <jv>parts</jv> = <jsm>partList</jsm>(<jsm>integerPart</jsm>(<js>"foo"</js>, 1), <jsm>booleanPart</jsm>(<js>"bar"</js>, <jk>false</jk>));
+	</p>
+
+	<p>
+		The builder class supports setting default part values (i.e. add a part to the list if it isn't otherwise in the list).
+		Note that this is different from simply setting a value twice as using default values will not overwrite existing
+		parts.
+		<br>The following example notes the distinction:
+	</p>
+
+	<p class='bjava'>
+	<jv>parts</jv> = PartList
+		.<jsm>create</jsm>()
+		.set(<js>"Foo"</js>, <js>"bar"</js>)
+		.set(<js>"Foo"</js>, <js>"baz"</js>)
+		.build();
+	<jsm>assertObject</jsm>(<jv>parts</jv>).isString(<js>"foo=baz"</js>);
+
+	<jv>parts</jv> = PartList
+		.create()
+		.set(<js>"Foo"</js>, <js>"bar"</js>)
+		.setDefault(<js>"Foo"</js>, <js>"baz"</js>)
+		.build();
+	<jsm>assertObject</jsm>(<jv>parts</jv>).isString(<js>"foo=bar"</js>);
+	</p>
+
+	<p>
+		Various methods are provided for iterating over the parts in this list to avoid array copies.
+	</p>
+	<ul class='javatree'>
+		<li class='jm'>{@link org.apache.juneau.http.part.PartList#forEach(Consumer) forEach(Consumer)} / {@link org.apache.juneau.http.part.PartList#forEach(String,Consumer) forEach(String,Consumer)} / {@link org.apache.juneau.http.part.PartList#forEach(Predicate,Consumer) forEach(Predicate,Consumer)} - Use consumers to process parts.
+		<li class='jm'>{@link org.apache.juneau.http.part.PartList#iterator() iterator()} / {@link org.apache.juneau.http.part.PartList#iterator(String) iterator(String)} - Use an {@link PartIterator} to process parts.
+		<li class='jm'>{@link org.apache.juneau.http.part.PartList#stream() stream()} / {@link org.apache.juneau.http.part.PartList#stream(String) stream(String)} - Use a stream.
+	</ul>
+	<p>
+		In general, try to use these over the {@link org.apache.juneau.http.part.PartList#getAll() getAll()} / {@link org.apache.juneau.http.part.PartList#getAll(String) getAll(String)} methods that require array copies.
+	</p>
+
+	<p>
+		Similar to the way multiple headers can be collapsed into a single value, the {@link org.apache.juneau.http.part.PartList#get(String) get(String)} method is special in that it will collapse multiple parts with the same name into
+		a single comma-delimited list.
+	</p>
+
+	<p>
+		The {@link org.apache.juneau.http.part.PartList#get(Class) get(Class)} and {@link org.apache.juneau.http.part.PartList#get(String,Class) get(String,Class)} methods are provided for working with {@link org.apache.juneau.http.annotation.FormData} / {@link org.apache.juneau.http.annotation.Query} / {@link org.apache.juneau.http.annotation.Path}-annotated
+		beans.
+	</p>
+
+	<h5 class='figure'>Example</h5>
+	<p class='bjava'>
+	MyQueryBean <jv>foo</jv> = <jv>parts</jv>.get(MyQueryBean.<jk>class</jk>);
+	</p>
+
+	<p>
+		A {@link org.apache.juneau.svl.VarResolver} can be associated with this builder to create part values with embedded variables that
+		are resolved at runtime.
+	</p>
+
+	<h5 class='figure'>Example</h5>
+	<p class='bjava'>
+	<jc>// Create a part list with dynamically-resolving values pulled from a system property.</jc>
+
+	System.<jsm>setProperty</jsm>(<js>"foo"</js>, <js>"bar"</js>);
+
+	PartList <jv>parts</jv> = PartList
+		.<jsm>create</jsm>()
+		.resolving()
+		.append(<js>"X1"</js>, <js>"$S{foo}"</js>)
+		.append(<js>"X2"</js>, ()-&gt;<js>"$S{foo}"</js>)
+		.build();
+
+	<jsm>assertObject</jsm>(<jv>parts</jv>).isString(<js>"X1=bar&amp;X2=bar"</js>);
+	</p>
+
+	<p>
+		The {@link org.apache.juneau.http.part.PartList} object can be extended to defined pre-packaged lists of parts which can be used in various
+		annotations throughout the framework.
+	</p>
+
+	<h5 class='figure'>Example</h5>
+	<p class='bjava'>
+	<jc>// A predefined list of parts.</jc>
+	<jk>public class</jk> MyPartList <jk>extends</jk> PartList {
+		<jk>public</jk> MyPartList() {
+			<jk>super</jk>(BasicIntegerPart.<jsm>of</jsm>(<js>"foo"</js>,1), BasicBooleanPart.<jsm>of</jsm>(<js>"bar"</js>,<jk>false</jk>));
+		}
+	}
+	</p>
 </div>
 </div><!-- END: 2.24.4 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.part -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.entity' id='juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.entity'>2.24.5 - org.apache.juneau.http.entity</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.entity' id='juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.entity'>2.24.5 - org.apache.juneau.http.entity</a><span class='update'>created: <b>9.0.0</b></span></h4>
 <div class='topic'><!-- START: 2.24.5 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.entity -->
 <div class='topic'>
 	<p>
-		TODO
+		The {@link org.apache.juneau.http.entity} package contains implementations of <c>org.apache.http.HttpEntity</c>.
 	</p>
 	<ul class='javatree'>
 		<li class='jic'>{@code org.apache.http.HttpEntity}
@@ -6661,23 +7023,35 @@
 	
 	<h5 class='topic'>HttpEntityBuilder</h5>
 	<p>
-		TODO
+		HTTP entities are created through builders created in the {@link org.apache.juneau.http.HttpEnties} class or individual <c>create()</c> methods
+		defined in the subclasses above.  The builder contains the following methods:
 	</p>
-	
-	<h5 class='topic'>SerializedEntityBuilder</h5>
-	<p>
-		TODO
-	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link org.apache.juneau.http.entity.HttpEntityBuilder}
+		<ul>
+			<li class='jm'>{@link org.apache.juneau.http.entity.HttpEntityBuilder#cached() cached()}
+			<li class='jm'>{@link org.apache.juneau.http.entity.HttpEntityBuilder#chunked() chunked()}
+			<li class='jm'>{@link org.apache.juneau.http.entity.HttpEntityBuilder#chunked(boolean) chunked(boolean)}
+			<li class='jm'>{@link org.apache.juneau.http.entity.HttpEntityBuilder#content(Object) content(Object)}
+			<li class='jm'>{@link org.apache.juneau.http.entity.HttpEntityBuilder#contentEncoding(ContentEncoding) contentEncoding(ContentEncoding)}
+			<li class='jm'>{@link org.apache.juneau.http.entity.HttpEntityBuilder#contentEncoding(String) contentEncoding(String)}
+			<li class='jm'>{@link org.apache.juneau.http.entity.HttpEntityBuilder#contentLength(long) contentLength(long)}
+			<li class='jm'>{@link org.apache.juneau.http.entity.HttpEntityBuilder#contentSupplier(Supplier) contentSupplier(Supplier)}
+			<li class='jm'>{@link org.apache.juneau.http.entity.HttpEntityBuilder#contentType(ContentType) contentType(ContentType)}
+			<li class='jm'>{@link org.apache.juneau.http.entity.HttpEntityBuilder#contentType(String) contentType(String)}
+		</ul>
+	</ul>
 </div>
 </div><!-- END: 2.24.5 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.entity -->
 
 <!-- ==================================================================================================== -->
 
-<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.resource' id='juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.resource'>2.24.6 - org.apache.juneau.http.resource</a><span class='update'>created: <b>9.0.0</b>, <b><red>todo</red></b></span></h4>
+<h5 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.resource' id='juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.resource'>2.24.6 - org.apache.juneau.http.resource</a><span class='update'>created: <b>9.0.0</b></span></h4>
 <div class='topic'><!-- START: 2.24.6 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.resource -->
 <div class='topic'>
 	<p>
-		TODO
+		The {@link org.apache.juneau.http.resource} package contains implementations of {@link org.apache.juneau.http.resource.HttpResource} which are extensions of <c>org.apache.http.HttpEntity</c> with 
+		arbitrary headers added.
 	</p>
 	<ul class='javatree'>
 		<li class='jic'>{@code org.apache.http.HttpEntity}
@@ -6698,9 +7072,31 @@
 	
 	<h5 class='topic'>HttpResourceBuilder</h5>
 	<p>
-		TODO
+		HTTP entities are created through builders created in the {@link org.apache.juneau.http.HttpResources} class or individual <c>create()</c> methods
+		defined in the subclasses above.  The builder contains the following methods:
 	</p>
-	
+	<ul class='javatree'>
+		<li class='jc'>{@link org.apache.juneau.http.resource.HttpResourceBuilder}
+		<ul>
+			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#cached() cached()}
+			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#chunked() chunked()}
+			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#chunked(boolean) chunked(boolean)}
+			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#content(Object) content(Object)}
+			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#contentEncoding(ContentEncoding) contentEncoding(ContentEncoding)}
+			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#contentEncoding(String) contentEncoding(String)}
+			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#contentLength(long) contentLength(long)}
+			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#contentSupplier(Supplier) contentSupplier(Supplier)}
+			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#contentType(ContentType) contentType(ContentType)}
+			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#contentType(String) contentType(String)}
+			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#copyFrom(HttpResponse) copyFrom(HttpResponse)}
+			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#getEntity() getEntity()}
+			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#getHeaders() getHeaders()}
+			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#header(Header) header(Header)}
+			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#header(String,String) header(String,String)}
+			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#headers(Header...) headers(Header...)}
+			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#headers(HeaderList) headers(HeaderList)}
+			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#headers(List) headers(List&lt;Header&gt;)}
+			<li class='jm'>{@link org.apache.juneau.http.resource.HttpResourceBuilder#getHeaders() getHeaders()}
 </div>
 </div><!-- END: 2.24.6 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.resource -->
 
@@ -6804,6 +7200,36 @@
 		<li class='jc'>{@link org.apache.juneau.http.response.BasicHttpResponse}
 		<li class='jc'>{@link org.apache.juneau.http.response.HttpExceptionBuilder}
 		<li class='jc'>{@link org.apache.juneau.http.response.HttpResponseBuilder}
+	</ul>
+	
+	<h5 class='topic'>HttpResponseBuilder / HttpExceptionBuilder</h5>
+	<p>
+		HTTP responses are created through builders created in the {@link org.apache.juneau.http.HttpResponses} class or individual <c>create()</c> methods
+		defined in the basic classes above.  The builder contains the following methods:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link org.apache.juneau.http.response.HttpResponseBuilder}
+		<ul>
+			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#body(HttpEntity) body(HttpEntity)}
+			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#body(String) body(String)}
+			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#copyFrom(HttpResponse) copyFrom(HttpResponse)}
+			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#getHeaders() getHeaders()}
+			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#getStatusLine() getStatusLine()}
+			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#header(Header) header(Header)}
+			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#header(String,String) header(String,String)}
+			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#headers(Header...) headers(Header...)}
+			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#headers(HeaderList) headers(HeaderList)}
+			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#headers(List) headers(List&lt;Header&gt;)}
+			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#locale(Locale) locale(Locale)}
+			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#location(String) location(String)}
+			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#location(URI) location(URI)}
+			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#protocolVersion(ProtocolVersion) protocolVersion(ProtocolVersion)}
+			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#reasonPhrase(String) reasonPhrase(String)}
+			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#reasonPhraseCatalog(ReasonPhraseCatalog) reasonPhraseCatalog(ReasonPhraseCatalog)}
+			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#statusCode(int) statusCode(int)}
+			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#statusLine(BasicStatusLine) statusLine(BasicStatusLine)}
+			<li class='jm'>{@link org.apache.juneau.http.response.HttpResponseBuilder#unmodifiable() unmodifiable()}
+		</ul>
 	</ul>
 </div>
 </div><!-- END: 2.24.7 - juneau-marshall.jm.HttpParts.jm.org.apache.juneau.http.response -->

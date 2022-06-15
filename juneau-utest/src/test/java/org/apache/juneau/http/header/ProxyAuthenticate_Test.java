@@ -50,15 +50,15 @@ public class ProxyAuthenticate_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(proxyAuthenticate(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(proxyAuthenticate(VALUE)).run().assertBody().is(VALUE);
-		c.get().header(proxyAuthenticate(PARSED)).run().assertBody().is(VALUE);
-		c.get().header(proxyAuthenticate(()->PARSED)).run().assertBody().is(VALUE);
+		c.get().header(proxyAuthenticate(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(proxyAuthenticate(VALUE)).run().assertContent().is(VALUE);
+		c.get().header(proxyAuthenticate(PARSED)).run().assertContent().is(VALUE);
+		c.get().header(proxyAuthenticate(()->PARSED)).run().assertContent().is(VALUE);
 
 		// Invalid usage.
-		c.get().header(proxyAuthenticate((String)null)).run().assertBody().isEmpty();
-		c.get().header(proxyAuthenticate((Supplier<String>)null)).run().assertBody().isEmpty();
-		c.get().header(proxyAuthenticate(()->null)).run().assertBody().isEmpty();
+		c.get().header(proxyAuthenticate((String)null)).run().assertContent().isEmpty();
+		c.get().header(proxyAuthenticate((Supplier<String>)null)).run().assertContent().isEmpty();
+		c.get().header(proxyAuthenticate(()->null)).run().assertContent().isEmpty();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

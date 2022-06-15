@@ -112,4 +112,34 @@
 		<li class='jc'>{@link oaj.http.response.HttpExceptionBuilder}
 		<li class='jc'>{@link oaj.http.response.HttpResponseBuilder}
 	</ul>
+	
+	<h5 class='topic'>HttpResponseBuilder / HttpExceptionBuilder</h5>
+	<p>
+		HTTP responses are created through builders created in the {@link oaj.http.HttpResponses} class or individual <c>create()</c> methods
+		defined in the basic classes above.  The builder contains the following methods:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.http.response.HttpResponseBuilder}
+		<ul>
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#body(HttpEntity) body(HttpEntity)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#body(String) body(String)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#copyFrom(HttpResponse) copyFrom(HttpResponse)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#getHeaders() getHeaders()}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#getStatusLine() getStatusLine()}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#header(Header) header(Header)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#header(String,String) header(String,String)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#headers(Header...) headers(Header...)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#headers(HeaderList) headers(HeaderList)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#headers(List) headers(List&lt;Header&gt;)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#locale(Locale) locale(Locale)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#location(String) location(String)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#location(URI) location(URI)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#protocolVersion(ProtocolVersion) protocolVersion(ProtocolVersion)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#reasonPhrase(String) reasonPhrase(String)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#reasonPhraseCatalog(ReasonPhraseCatalog) reasonPhraseCatalog(ReasonPhraseCatalog)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#statusCode(int) statusCode(int)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#statusLine(BasicStatusLine) statusLine(BasicStatusLine)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#unmodifiable() unmodifiable()}
+		</ul>
+	</ul>
 </div>

@@ -25,7 +25,7 @@ public class MovedPermanently_Test {
 	@Rest
 	public static class A {
 		@RestGet public MovedPermanently a1() { return MOVED_PERMANENTLY; }
-		@RestGet public MovedPermanently a2() { return movedPermanently("servlet:/foo").body("foo").build(); }
+		@RestGet public MovedPermanently a2() { return movedPermanently("servlet:/foo").content("foo").build(); }
 		@RestGet public MovedPermanently a3() { return movedPermanently("servlet:/foo").location("servlet:/foo").build(); }
 		@RestGet public MovedPermanently a4() { return movedPermanently("servlet:/foo").header("Foo","bar").build(); }
 	}
@@ -37,11 +37,11 @@ public class MovedPermanently_Test {
 		client.get("/a1")
 			.run()
 			.assertCode().is(301)
-			.assertBody().is("Moved Permanently");
+			.assertContent().is("Moved Permanently");
 		client.get("/a2")
 			.run()
 			.assertCode().is(301)
-			.assertBody().is("foo");
+			.assertContent().is("foo");
 		client.get("/a3")
 			.run()
 			.assertCode().is(301)

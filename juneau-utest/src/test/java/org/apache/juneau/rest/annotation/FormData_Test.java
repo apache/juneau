@@ -47,18 +47,18 @@ public class FormData_Test {
 	@Test
 	public void a01_basic() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
-		a.post("/a", "p1=p1&p2=2").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[p1,p1,p1],p2=[2,2,2]");
-		a.post("/a", "p1&p2").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[null,null,null],p2=[0,null,0]");
-		a.post("/a", "p1=&p2=").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[,,],p2=[0,,0]");
-		a.post("/a", "").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[null,null,null],p2=[0,null,0]");
-		a.post("/a", "p1").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[null,null,null],p2=[0,null,0]");
-		a.post("/a", "p1=").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[,,],p2=[0,null,0]");
-		a.post("/a", "p2").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[null,null,null],p2=[0,null,0]");
-		a.post("/a", "p2=").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[null,null,null],p2=[0,,0]");
-		a.post("/a", "p1=foo&p2").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[foo,foo,foo],p2=[0,null,0]");
-		a.post("/a", "p1&p2=1").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[null,null,null],p2=[1,1,1]");
+		a.post("/a", "p1=p1&p2=2").contentType("application/x-www-form-urlencoded").run().assertContent().is("p1=[p1,p1,p1],p2=[2,2,2]");
+		a.post("/a", "p1&p2").contentType("application/x-www-form-urlencoded").run().assertContent().is("p1=[null,null,null],p2=[0,null,0]");
+		a.post("/a", "p1=&p2=").contentType("application/x-www-form-urlencoded").run().assertContent().is("p1=[,,],p2=[0,,0]");
+		a.post("/a", "").contentType("application/x-www-form-urlencoded").run().assertContent().is("p1=[null,null,null],p2=[0,null,0]");
+		a.post("/a", "p1").contentType("application/x-www-form-urlencoded").run().assertContent().is("p1=[null,null,null],p2=[0,null,0]");
+		a.post("/a", "p1=").contentType("application/x-www-form-urlencoded").run().assertContent().is("p1=[,,],p2=[0,null,0]");
+		a.post("/a", "p2").contentType("application/x-www-form-urlencoded").run().assertContent().is("p1=[null,null,null],p2=[0,null,0]");
+		a.post("/a", "p2=").contentType("application/x-www-form-urlencoded").run().assertContent().is("p1=[null,null,null],p2=[0,,0]");
+		a.post("/a", "p1=foo&p2").contentType("application/x-www-form-urlencoded").run().assertContent().is("p1=[foo,foo,foo],p2=[0,null,0]");
+		a.post("/a", "p1&p2=1").contentType("application/x-www-form-urlencoded").run().assertContent().is("p1=[null,null,null],p2=[1,1,1]");
 		String x = "a%2Fb%25c%3Dd+e"; // [x/y%z=a+b]
-		a.post("/a", "p1="+x+"&p2=1").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[a/b%c=d e,a/b%c=d e,a/b%c=d e],p2=[1,1,1]");
+		a.post("/a", "p1="+x+"&p2=1").contentType("application/x-www-form-urlencoded").run().assertContent().is("p1=[a/b%c=d e,a/b%c=d e,a/b%c=d e],p2=[1,1,1]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -83,11 +83,11 @@ public class FormData_Test {
 	public void b01_uonParameters() throws Exception {
 		RestClient b = MockRestClient.build(B.class);
 
-		b.post("/a", "p1=p1").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[p1,p1,p1]");
-		b.post("/a", "p1='p1'").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=['p1','p1','p1']");
+		b.post("/a", "p1=p1").contentType("application/x-www-form-urlencoded").run().assertContent().is("p1=[p1,p1,p1]");
+		b.post("/a", "p1='p1'").contentType("application/x-www-form-urlencoded").run().assertContent().is("p1=['p1','p1','p1']");
 
-		b.post("/b", "p1=p1").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[p1,p1,p1]");
-		b.post("/b", "p1='p1'").contentType("application/x-www-form-urlencoded").run().assertBody().is("p1=[p1,'p1','p1']");
+		b.post("/b", "p1=p1").contentType("application/x-www-form-urlencoded").run().assertContent().is("p1=[p1,p1,p1]");
+		b.post("/b", "p1='p1'").contentType("application/x-www-form-urlencoded").run().assertContent().is("p1=[p1,'p1','p1']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -130,17 +130,17 @@ public class FormData_Test {
 	public void c01_defaultFormData() throws Exception {
 		RestClient c = MockRestClient.build(C.class);
 
-		c.post("/a").contentType("application/x-www-form-urlencoded").run().assertBody().is("{f1:'1',f2:'2',f3:'3'}");
-		c.post("/a").contentType("application/x-www-form-urlencoded").formData("f1",4).formData("f2",5).formData("f3",6).run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
+		c.post("/a").contentType("application/x-www-form-urlencoded").run().assertContent().is("{f1:'1',f2:'2',f3:'3'}");
+		c.post("/a").contentType("application/x-www-form-urlencoded").formData("f1",4).formData("f2",5).formData("f3",6).run().assertContent().is("{f1:'4',f2:'5',f3:'6'}");
 
-		c.post("/b").contentType("application/x-www-form-urlencoded").run().assertBody().is("{f1:null,f2:null,f3:null}");
-		c.post("/b").contentType("application/x-www-form-urlencoded").formData("f1",4).formData("f2",5).formData("f3",6).run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
+		c.post("/b").contentType("application/x-www-form-urlencoded").run().assertContent().is("{f1:null,f2:null,f3:null}");
+		c.post("/b").contentType("application/x-www-form-urlencoded").formData("f1",4).formData("f2",5).formData("f3",6).run().assertContent().is("{f1:'4',f2:'5',f3:'6'}");
 
-		c.post("/c").contentType("application/x-www-form-urlencoded").run().assertBody().is("{f1:'1',f2:'2',f3:'3'}");
-		c.post("/c").contentType("application/x-www-form-urlencoded").formData("f1",4).formData("f2",5).formData("f3",6).run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
+		c.post("/c").contentType("application/x-www-form-urlencoded").run().assertContent().is("{f1:'1',f2:'2',f3:'3'}");
+		c.post("/c").contentType("application/x-www-form-urlencoded").formData("f1",4).formData("f2",5).formData("f3",6).run().assertContent().is("{f1:'4',f2:'5',f3:'6'}");
 
-		c.post("/d").contentType("application/x-www-form-urlencoded").run().assertBody().is("{f1:'4',f2:'5',f3:'6'}");
-		c.post("/d").contentType("application/x-www-form-urlencoded").formData("f1",7).formData("f2",8).formData("f3",9).run().assertBody().is("{f1:'7',f2:'8',f3:'9'}");
+		c.post("/d").contentType("application/x-www-form-urlencoded").run().assertContent().is("{f1:'4',f2:'5',f3:'6'}");
+		c.post("/d").contentType("application/x-www-form-urlencoded").formData("f1",7).formData("f2",8).formData("f3",9).run().assertContent().is("{f1:'7',f2:'8',f3:'9'}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -177,37 +177,37 @@ public class FormData_Test {
 		d.post("/a", "f1=123")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("123");
+			.assertContent().is("123");
 		d.post("/a", "null")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("null");
+			.assertContent().is("null");
 
 		d.post("/b", "f1=a=1,b=foo")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("{a:1,b:'foo'}");
+			.assertContent().is("{a:1,b:'foo'}");
 		d.post("/b", "null")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("null");
+			.assertContent().is("null");
 
 		d.post("/c", "f1=@((a=1,b=foo))")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("[{a:1,b:'foo'}]");
+			.assertContent().is("[{a:1,b:'foo'}]");
 		d.post("/c", "null")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("null");
+			.assertContent().is("null");
 
 		d.post("/d", "f1=@((a=1,b=foo))")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("[{a:1,b:'foo'}]");
+			.assertContent().is("[{a:1,b:'foo'}]");
 		d.post("/d", "null")
 			.run()
 			.assertCode().is(200)
-			.assertBody().is("null");
+			.assertContent().is("null");
 	}
 }

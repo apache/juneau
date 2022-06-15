@@ -51,7 +51,7 @@ import org.apache.juneau.rest.client.assertion.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class ResponseBody implements HttpEntity {
+public class ResponseContent implements HttpEntity {
 
 	private static final HttpEntity NULL_ENTITY = new HttpEntity() {
 
@@ -115,7 +115,7 @@ public class ResponseBody implements HttpEntity {
 	 * @param response The response object.
 	 * @param parser The parser to use to consume the body.  Can be <jk>null</jk>.
 	 */
-	public ResponseBody(RestClient client, RestRequest request, RestResponse response, Parser parser) {
+	public ResponseContent(RestClient client, RestRequest request, RestResponse response, Parser parser) {
 		this.client = client;
 		this.request = request;
 		this.response = response;
@@ -137,7 +137,7 @@ public class ResponseBody implements HttpEntity {
 	 * 	The new part parser to use for this body.
 	 * @return This object.
 	 */
-	public ResponseBody parser(Parser value) {
+	public ResponseContent parser(Parser value) {
 		this.parser = value;
 		return this;
 	}
@@ -151,7 +151,7 @@ public class ResponseBody implements HttpEntity {
 	 * @param value The schema.
 	 * @return This object.
 	 */
-	public ResponseBody schema(HttpPartSchema value) {
+	public ResponseContent schema(HttpPartSchema value) {
 		this.schema = value;
 		return this;
 	}
@@ -169,7 +169,7 @@ public class ResponseBody implements HttpEntity {
 	 *
 	 * @return This object.
 	 */
-	public ResponseBody cache() {
+	public ResponseContent cache() {
 		this.cached = true;
 		return this;
 	}
@@ -522,14 +522,14 @@ public class ResponseBody implements HttpEntity {
 	 * 	<li class='note'>
 	 * 		You can also specify any of the following types:
 	 * 		<ul class='compact'>
-	 * 			<li>{@link ResponseBody}/{@link HttpEntity} - Returns access to this object.
+	 * 			<li>{@link ResponseContent}/{@link HttpEntity} - Returns access to this object.
 	 * 			<li>{@link Reader} - Returns access to the raw reader of the response.
 	 * 			<li>{@link InputStream} - Returns access to the raw input stream of the response.
 	 * 			<li>{@link HttpResource} - Response will be converted to an {@link BasicResource}.
 	 * 			<li>Any type that takes in an {@link HttpResponse} object.
 	 * 		</ul>
 	 * 	<li class='note'>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheContent()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li class='note'>
@@ -584,14 +584,14 @@ public class ResponseBody implements HttpEntity {
 	 * 	<li class='note'>
 	 * 		You can also specify any of the following types:
 	 * 		<ul class='compact'>
-	 * 			<li>{@link ResponseBody}/{@link HttpEntity} - Returns access to this object.
+	 * 			<li>{@link ResponseContent}/{@link HttpEntity} - Returns access to this object.
 	 * 			<li>{@link Reader} - Returns access to the raw reader of the response.
 	 * 			<li>{@link InputStream} - Returns access to the raw input stream of the response.
 	 * 			<li>{@link HttpResource} - Response will be converted to an {@link BasicResource}.
 	 * 			<li>Any type that takes in an {@link HttpResponse} object.
 	 * 		</ul>
 	 * 	<li class='note'>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheContent()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li class='note'>
@@ -641,7 +641,7 @@ public class ResponseBody implements HttpEntity {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheContent()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li class='note'>
@@ -661,7 +661,7 @@ public class ResponseBody implements HttpEntity {
 	@SuppressWarnings("unchecked")
 	public <T> T as(ClassMeta<T> type) throws RestCallException {
 		try {
-			if (type.is(ResponseBody.class) || type.is(HttpEntity.class))
+			if (type.is(ResponseContent.class) || type.is(HttpEntity.class))
 				return (T)this;
 
 			if (type.is(Reader.class))
@@ -749,7 +749,7 @@ public class ResponseBody implements HttpEntity {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheContent()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li class='note'>
@@ -780,7 +780,7 @@ public class ResponseBody implements HttpEntity {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheContent()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li class='note'>
@@ -813,7 +813,7 @@ public class ResponseBody implements HttpEntity {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheContent()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li class='note'>
@@ -1038,7 +1038,7 @@ public class ResponseBody implements HttpEntity {
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li class='note'>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheContent()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li class='note'>
@@ -1074,7 +1074,7 @@ public class ResponseBody implements HttpEntity {
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> response header, <js>"UTF-8"</js> is assumed.
 	 *  <li class='note'>
-	 *		If {@link #cache()} or {@link RestResponse#cacheBody()} has been called, this method can be can be called multiple times and/or combined with
+	 *		If {@link #cache()} or {@link RestResponse#cacheContent()} has been called, this method can be can be called multiple times and/or combined with
 	 *		other methods that retrieve the content of the response.  Otherwise a {@link RestCallException}
 	 *		with an inner {@link IllegalStateException} will be thrown.
 	 * 	<li class='note'>
@@ -1098,7 +1098,7 @@ public class ResponseBody implements HttpEntity {
 	 * Provides the ability to perform fluent-style assertions on this response body.
 	 *
 	 * <p>
-	 * This method is called directly from the {@link RestResponse#assertBody()} method to instantiate a fluent assertions object.
+	 * This method is called directly from the {@link RestResponse#assertContent()} method to instantiate a fluent assertions object.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
@@ -1163,7 +1163,7 @@ public class ResponseBody implements HttpEntity {
 	 *
 	 * @return A new fluent assertion object.
 	 */
-	public FluentResponseBodyAssertion<ResponseBody> assertValue() {
+	public FluentResponseBodyAssertion<ResponseContent> assertValue() {
 		return new FluentResponseBodyAssertion<>(this, this);
 	}
 
