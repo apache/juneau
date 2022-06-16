@@ -447,11 +447,12 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	/**
 	 * Appends all the entries in the specified map to this map.
 	 *
-	 * @param values The map to copy.
+	 * @param values The map to copy.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
 	public JsonMap append(Map<String,Object> values) {
-		super.putAll(values);
+		if (values != null)
+			super.putAll(values);
 		return this;
 	}
 
