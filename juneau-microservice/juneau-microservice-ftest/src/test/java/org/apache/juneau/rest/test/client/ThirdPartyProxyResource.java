@@ -45,6 +45,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet implements BasicUn
 	public static FileWriter logFile;
 	static {
 		try {
+			new File("./target/logs").mkdirs();
 			logFile = new FileWriter("./target/logs/third-party-proxy-resource.txt", false);
 		} catch (IOException e) {
 			e.printStackTrace();

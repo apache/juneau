@@ -30,7 +30,7 @@ import org.apache.juneau.rest.servlet.*;
 	path="/",
 	title="Sample Root Resource",
 	description="This is a sample router page",
-	children={ConfigResource.class,LogsResource.class}
+	children={ConfigResource.class}
 )
 public class SampleRootResource extends BasicRestServletGroup implements BasicUniversalConfig {
 	private static final long serialVersionUID = 1L;

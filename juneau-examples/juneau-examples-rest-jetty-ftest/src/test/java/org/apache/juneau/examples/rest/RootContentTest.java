@@ -95,7 +95,7 @@ public class RootContentTest extends ContentComboTestBase {
 			},
 			{ 	/* 10 */
 				new ComboInput("HTML-content-octal/msgpack", "/", MediaType.MSGPACK,
-					"95 82 A4"
+					"94 82 A4"
 				)
 			},
 			{ 	/* 11 */

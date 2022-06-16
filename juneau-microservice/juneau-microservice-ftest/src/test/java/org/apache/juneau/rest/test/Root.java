@@ -27,7 +27,6 @@ import org.apache.juneau.rest.test.client.*;
 	path="/*",
 	children={
 		DebugResource.class,
-		LogsResource.class,
 		ConfigResource.class,
 		LargePojosResource.class,
 		ThirdPartyProxyResource.class,

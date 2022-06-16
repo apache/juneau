@@ -4202,12 +4202,12 @@ public class RestContext extends Context {
 
 				RestContext cc = cb.init(so).build();
 
-				MethodInfo mi = ClassInfo.of(o).getPublicMethod(
+				MethodInfo mi = ClassInfo.of(so.get()).getMethod(
 					x -> x.hasName("setContext")
 					&& x.hasParamTypes(RestContext.class)
 				);
 				if (mi != null)
-					mi.accessible().invoke(o, cc);
+					mi.accessible().invoke(so.get(), cc);
 
 				v.get().add(cc);
 			}

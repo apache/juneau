@@ -120,7 +120,7 @@ public final class ClassInfo {
 	 * @return The constructed class info, or <jk>null</jk> if the object was <jk>null</jk>.
 	 */
 	public static ClassInfo of(Object o) {
-		return of(o == null ? null : o.getClass());
+		return of(o == null ? null : o instanceof Class ? (Class<?>)o : o.getClass());
 	}
 
 	/**

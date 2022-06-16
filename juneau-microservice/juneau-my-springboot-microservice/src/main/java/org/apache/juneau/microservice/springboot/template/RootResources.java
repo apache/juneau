@@ -36,8 +36,7 @@ import org.apache.juneau.serializer.annotation.*;
 	description="Example of a router resource page.",
 	children={
 		HelloWorldResource.class,
-		ConfigResource.class,
-		LogsResource.class
+		ConfigResource.class
 	}
 )
 @HtmlDocConfig(

@@ -372,12 +372,6 @@ public class JettyMicroservice extends Microservice {
 		}
 
 		@Override /* MicroserviceBuilder */
-		public Builder logConfig(LogConfig logConfig) {
-			super.logConfig(logConfig);
-			return this;
-		}
-
-		@Override /* MicroserviceBuilder */
 		public Builder config(Config config) {
 			super.config(config);
 			return this;
