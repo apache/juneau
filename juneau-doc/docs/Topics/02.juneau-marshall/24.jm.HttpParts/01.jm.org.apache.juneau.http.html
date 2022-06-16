@@ -35,21 +35,21 @@
 	</p>
 	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
-	|	<jk>import static</jk> org.apache.juneau.http.HttpHeaders.*;
-	|
-	|	HeaderList <jv>headers</jv> = 
-	|		<jsm>headerList</jsm>(  <jc>// Arbitrary list of headers</jc>
-	|	
-	|			<jsf>CONTENTTYPE_TEXT_XML</jsf>,   <jc>// Static constants</jc>
-	|		
-	|			<jsm>contentType</jsm>(<js>"text/xml"</js>)   <jc>// Predefined headers</jc>
-	|		
-	|			<jsm>contentType</jsm>(() -&gt; <js>"text/xml"</js>)   <jc>// Predefined headers with supplied values</jc>
-	|		
-	|			<jsm>stringHeader</jsm>(<js>"Content-Type"</js>, <js>"text/xml"</js>)   <jc>// Freeform headers</jc>
-	|		
-	|			<jsm>stringHeader</jsm>(<js>"Content-Type"</js>, () -&gt; <js>"text/xml"</js>)   <jc>// Freeform headers with supplied values</jc>
-	|		);
+		|	<jk>import static</jk> org.apache.juneau.http.HttpHeaders.*;
+		|
+		|	HeaderList <jv>headers</jv> = 
+		|		<jsm>headerList</jsm>(  <jc>// Arbitrary list of headers</jc>
+		|	
+		|			<jsf>CONTENTTYPE_TEXT_XML</jsf>,   <jc>// Static constants</jc>
+		|		
+		|			<jsm>contentType</jsm>(<js>"text/xml"</js>)   <jc>// Predefined headers</jc>
+		|		
+		|			<jsm>contentType</jsm>(() -&gt; <js>"text/xml"</js>)   <jc>// Predefined headers with supplied values</jc>
+		|		
+		|			<jsm>stringHeader</jsm>(<js>"Content-Type"</js>, <js>"text/xml"</js>)   <jc>// Freeform headers</jc>
+		|		
+		|			<jsm>stringHeader</jsm>(<js>"Content-Type"</js>, () -&gt; <js>"text/xml"</js>)   <jc>// Freeform headers with supplied values</jc>
+		|		);
 	</p>
 	<p>
 		This class is vast in scope and covers all request and response headers defined in RFC2616.
@@ -89,9 +89,9 @@
 	</ul>
 	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
-	|	<jk>import static</jk> org.apache.juneau.http.HttpHeaders.*;
-	|
-	|	ContentType <jv>contentType</jv> = <jsm>header</jsm>(ContentType.<jk>class</jk>, <js>"text/xml"</js>);
+		|	<jk>import static</jk> org.apache.juneau.http.HttpHeaders.*;
+		|
+		|	ContentType <jv>contentType</jv> = <jsm>header</jsm>(ContentType.<jk>class</jk>, <js>"text/xml"</js>);
 	</p>
 	<p>
 		Lists of headers can be produced with the following methods:
@@ -112,13 +112,13 @@
 	</p>
 	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
-	|	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
-	|
-	|	PartList <jv>formData</jv> = 
-	|		<jsm>partList</jsm>(  <jc>// Arbitrary list of parts</jc>
-	|			<jsm>stringPart</jsm>(<js>"Name"</js>, <js>"Bill"</js>)   <jc>// Freeform part</jc>
-	|			<jsm>integerPart</jsm>(<js>"Age"</js>, () -> <jsm>calculateAge</jsm>())   <jc>// Freeform part with supplied value</jc>
-	|		);
+		|	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
+		|
+		|	PartList <jv>formData</jv> = 
+		|		<jsm>partList</jsm>(  <jc>// Arbitrary list of parts</jc>
+		|			<jsm>stringPart</jsm>(<js>"Name"</js>, <js>"Bill"</js>)   <jc>// Freeform part</jc>
+		|			<jsm>integerPart</jsm>(<js>"Age"</js>, () -> <jsm>calculateAge</jsm>())   <jc>// Freeform part with supplied value</jc>
+		|		);
 	</p>
 	<p>
 		The following methods are provided for creating parts.  Each accepts
@@ -205,12 +205,12 @@
 	</p>
 	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
-	|	<jk>import static</jk> org.apache.juneau.http.HttpResources.*;
-	|	
-	|	<ja>@RestDelete</ja>(path=<js>"/{id}"</js>)
-	|	<jk>public</jk> HttpResource helloWold(...) {
-	|		<jk>return</jk> <jsm>stringResource</jsm>(<js>"Hello!"</js>).contentType(<js>"text/plain"</js>).build();
-	|	}
+		|	<jk>import static</jk> org.apache.juneau.http.HttpResources.*;
+		|	
+		|	<ja>@RestDelete</ja>(path=<js>"/{id}"</js>)
+		|	<jk>public</jk> HttpResource helloWold(...) {
+		|		<jk>return</jk> <jsm>stringResource</jsm>(<js>"Hello!"</js>).contentType(<js>"text/plain"</js>).build();
+		|	}
 	</p>
 	
 	
@@ -284,14 +284,14 @@
 	</p>
 	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
-	|	<jk>import static</jk> org.apache.juneau.http.HttpResponses.*;
-	|	<jk>import static</jk> org.apache.juneau.http.HttpHeaders.*;
-	| 
-	|	<ja>@RestDelete</ja>(path=<js>"/{id}"</js>)
-	|	<jk>public</jk> Ok doDelete(...) <jk>throws</jk> Unauthorized {
-	|		<jk>if</jk> (<jc>/* user not authorized*/</jc>)
-	|			<jk>throw</jk> <jsm>unauthorized</jsm>().build();
-	|		<jk>return</jk> <jsm>ok</jsm>().body(<js>"OK"</js>).header(<jsm>contentType</jsm>(<js>"text/plain"</js>)).build();
-	|	}
+		|	<jk>import static</jk> org.apache.juneau.http.HttpResponses.*;
+		|	<jk>import static</jk> org.apache.juneau.http.HttpHeaders.*;
+		| 
+		|	<ja>@RestDelete</ja>(path=<js>"/{id}"</js>)
+		|	<jk>public</jk> Ok doDelete(...) <jk>throws</jk> Unauthorized {
+		|		<jk>if</jk> (<jc>/* user not authorized*/</jc>)
+		|			<jk>throw</jk> <jsm>unauthorized</jsm>().build();
+		|		<jk>return</jk> <jsm>ok</jsm>().body(<js>"OK"</js>).header(<jsm>contentType</jsm>(<js>"text/plain"</js>)).build();
+		|	}
 	</p>
 </div>

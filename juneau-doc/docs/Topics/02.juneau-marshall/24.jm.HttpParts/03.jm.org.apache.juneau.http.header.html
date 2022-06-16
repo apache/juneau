@@ -109,11 +109,11 @@
 	</p>
 	<h5 class='figure'>Examples</h5>
 	<p class='bjava'>
-	|	<jc>// Validates the response body content is not expired.</jc>
-	|	<jv>restClient</jv>
-	|		.get(<jsf>URL</jsf>)
-	|		.run()
-	|		.getHeader(<js>"Expires"</js>).asDateHeader().assertZonedDateTime().isLessThan(<jk>new</jk> Date());
+		|	<jc>// Validates the response body content is not expired.</jc>
+		|	<jv>restClient</jv>
+		|		.get(<jsf>URL</jsf>)
+		|		.run()
+		|		.getHeader(<js>"Expires"</js>).asDateHeader().assertZonedDateTime().isLessThan(<jk>new</jk> Date());
 	</p>
 	
 	<h5 class='topic'>HeaderList</h5>
@@ -123,32 +123,32 @@
 
 	<h5 class='figure'>Example</h5>
 	<p class='bjava'>
-	|	<jc>// Construct using builder.</jc>
-	|	HeaderList <jv>headers</jv> = HeaderList
-	|		.<jsm>create</jsm>()
-	|		.append(Accept.<jsm>of</jsm>(<js>"text/xml"</js>))
-	|		.append(<js>"Content-Type"</js>, ()-&gt;<jsm>getDynamicContentTypeFromSomewhere</jsm>())
-	|		.build();
-	|	
-	|	<jc>// Construct using convenience creator.</jc>
-	|	HeaderList <jv>headers</jv> = HeaderList.<jsm>of</jsm>(Accept.<jsf>TEXT_XML</jsf>, ContentType.<jsf>TEXT_XML</jsf>);
+		|	<jc>// Construct using builder.</jc>
+		|	HeaderList <jv>headers</jv> = HeaderList
+		|		.<jsm>create</jsm>()
+		|		.append(Accept.<jsm>of</jsm>(<js>"text/xml"</js>))
+		|		.append(<js>"Content-Type"</js>, ()-&gt;<jsm>getDynamicContentTypeFromSomewhere</jsm>())
+		|		.build();
+		|	
+		|	<jc>// Construct using convenience creator.</jc>
+		|	HeaderList <jv>headers</jv> = HeaderList.<jsm>of</jsm>(Accept.<jsf>TEXT_XML</jsf>, ContentType.<jsf>TEXT_XML</jsf>);
 	</p>
 	<p>
 		Header lists are immutable, but can be appended to using the {@link oaj.http.header.HeaderList#copy() copy()} method:	
 	</p>
 	<p class='bjava'>
-	|	<jv>headers</jv> = <jv>headers</jv>
-	|		.copy()
-	|		.append(AcceptEncoding.<jsm>of</jsm>(<js>"identity"</js>))
-	|		.build();
+		|	<jv>headers</jv> = <jv>headers</jv>
+		|		.copy()
+		|		.append(AcceptEncoding.<jsm>of</jsm>(<js>"identity"</js>))
+		|		.build();
 	</p>
 	<p>
 		Static methods are provided on {@link oaj.http.HttpHeaders} to further simplify creation of header lists.
 	</p>
 	<p class='bjava'>
-	|	<jk>import static</jk> org.apache.juneau.http.HttpHeaders.*;
-	|
-	|	HeaderList <jv>headers</jv> = <jsm>headerList</jsm>(<jsm>accept</jsm>(<js>"text/xml"</js>), <jsm>contentType</jsm>(<js>"text/xml"</js>));
+		|	<jk>import static</jk> org.apache.juneau.http.HttpHeaders.*;
+		|
+		|	HeaderList <jv>headers</jv> = <jsm>headerList</jsm>(<jsm>accept</jsm>(<js>"text/xml"</js>), <jsm>contentType</jsm>(<js>"text/xml"</js>));
 	</p>
 	<p>
 		The builder class supports setting default header values (i.e. add a header to the list if it isn't otherwise in the list).
@@ -157,19 +157,19 @@
 		<br>The following example notes the distinction:
 	</p>
 	<p class='bjava'>
-	|	<jv>headers</jv> = HeaderList
-	|		.<jsm>create</jsm>()
-	|		.set(Accept.<jsf>TEXT_PLAIN</jsf>)
-	|		.set(Accept.<jsf>TEXT_XML</jsf>)
-	|		.build();
-	|	<jsm>assertObject</jsm>(<jv>headers</jv>).isString(<js>"[Accept: text/xml]"</js>);
-	|
-	|	<jv>headers</jv> = HeaderList
-	|		.create()
-	|		.set(Accept.<jsf>TEXT_PLAIN</jsf>)
-	|		.setDefault(Accept.<jsf>TEXT_XML</jsf>)
-	|		.build();
-	|	<jsm>assertObject</jsm>(<jv>headers</jv>).isString(<js>"[Accept: text/plain]"</js>);
+		|	<jv>headers</jv> = HeaderList
+		|		.<jsm>create</jsm>()
+		|		.set(Accept.<jsf>TEXT_PLAIN</jsf>)
+		|		.set(Accept.<jsf>TEXT_XML</jsf>)
+		|		.build();
+		|	<jsm>assertObject</jsm>(<jv>headers</jv>).isString(<js>"[Accept: text/xml]"</js>);
+		|
+		|	<jv>headers</jv> = HeaderList
+		|		.create()
+		|		.set(Accept.<jsf>TEXT_PLAIN</jsf>)
+		|		.setDefault(Accept.<jsf>TEXT_XML</jsf>)
+		|		.build();
+		|	<jsm>assertObject</jsm>(<jv>headers</jv>).isString(<js>"[Accept: text/plain]"</js>);
 	</p>
 
 	<p>
@@ -193,7 +193,7 @@
 	</p>
 	<h5 class='figure'>Example</h5>
 	<p class='bjava'>
-	|	ContentType <jv>contentType</jv> = <jv>headers</jv>.get(ContentType.<jk>class</jk>);
+		|	ContentType <jv>contentType</jv> = <jv>headers</jv>.get(ContentType.<jk>class</jk>);
 	</p>
 
 	<p>
@@ -208,18 +208,18 @@
 
 	<h5 class='figure'>Example</h5>
 	<p class='bjava'>
-	|	<jc>// Create a header list with dynamically-resolving values pulled from a system property.</jc>
-	|
-	|	System.<jsm>setProperty</jsm>(<js>"foo"</js>, <js>"bar"</js>);
-	|
-	|	HeaderList <jv>headers</jv> = HeaderList
-	|		.<jsm>create</jsm>()
-	|		.resolving()
-	|		.append(<js>"X1"</js>, <js>"$S{foo}"</js>)
-	|		.append(<js>"X2"</js>, ()-&gt;<js>"$S{foo}"</js>)
-	|		.build();
-	|
-	|	<jsm>assertObject</jsm>(<jv>headers</jv>).isString(<js>"[X1: bar, X2: bar]"</js>);
+		|	<jc>// Create a header list with dynamically-resolving values pulled from a system property.</jc>
+		|
+		|	System.<jsm>setProperty</jsm>(<js>"foo"</js>, <js>"bar"</js>);
+		|
+		|	HeaderList <jv>headers</jv> = HeaderList
+		|		.<jsm>create</jsm>()
+		|		.resolving()
+		|		.append(<js>"X1"</js>, <js>"$S{foo}"</js>)
+		|		.append(<js>"X2"</js>, ()-&gt;<js>"$S{foo}"</js>)
+		|		.build();
+		|
+		|	<jsm>assertObject</jsm>(<jv>headers</jv>).isString(<js>"[X1: bar, X2: bar]"</js>);
 	</p>
 
 	<p>
@@ -228,23 +228,23 @@
 	</p>
 	<h5 class='figure'>Example</h5>
 	<p class='bjava'>
-	|	<jc>// A predefined list of headers.</jc>
-	|	<jk>public class</jk> MyHeaderList <jk>extends</jk> HeaderList {
-	|		<jk>public</jk> MyHeaderList() {
-	|			<jk>super</jk>(Accept.<jsf>TEXT_XML</jsf>, ContentType.<jsf>TEXT_XML</jsf>);
-	|		}
-	|	}
-	|
-	|	<jc>// Use it on a remote proxy to add headers on all requests.</jc>
-	|	<ja>@Remote</ja>(path=<js>"/petstore"</js>, headerList=MyHeaderList.<jk>class</jk>)
-	|	<jk>public interface</jk> PetStore {
-	|
-	|		<ja>@RemotePost</ja>(<js>"/pets"</js>)
-	|		Pet addPet(
-	|			<ja>@Body</ja> CreatePet <jv>createPet</jv>,
-	|			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>,
-	|			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> <jv>debug</jv>
-	|		);
-	|	}
+		|	<jc>// A predefined list of headers.</jc>
+		|	<jk>public class</jk> MyHeaderList <jk>extends</jk> HeaderList {
+		|		<jk>public</jk> MyHeaderList() {
+		|			<jk>super</jk>(Accept.<jsf>TEXT_XML</jsf>, ContentType.<jsf>TEXT_XML</jsf>);
+		|		}
+		|	}
+		|
+		|	<jc>// Use it on a remote proxy to add headers on all requests.</jc>
+		|	<ja>@Remote</ja>(path=<js>"/petstore"</js>, headerList=MyHeaderList.<jk>class</jk>)
+		|	<jk>public interface</jk> PetStore {
+		|
+		|		<ja>@RemotePost</ja>(<js>"/pets"</js>)
+		|		Pet addPet(
+		|			<ja>@Body</ja> CreatePet <jv>createPet</jv>,
+		|			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>,
+		|			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> <jv>debug</jv>
+		|		);
+		|	}
 	</p>
 </div>

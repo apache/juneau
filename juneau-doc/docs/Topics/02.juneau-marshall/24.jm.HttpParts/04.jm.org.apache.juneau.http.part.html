@@ -43,11 +43,11 @@
 	</p>
 	<h5 class='figure'>Example</h5>
 	<p class='bjava'>
-	|	PartList <jv>parts</jv> = PartList
-	|		.<jsm>create</jsm>()
-	|		.append(MyPart.<jsm>of</jsm>(<js>"foo"</js>))
-	|		.append(<js>"Bar"</js>, ()-&gt;<jsm>getDynamicValueFromSomewhere</jsm>())
-	|		.build();
+		|	PartList <jv>parts</jv> = PartList
+		|		.<jsm>create</jsm>()
+		|		.append(MyPart.<jsm>of</jsm>(<js>"foo"</js>))
+		|		.append(<js>"Bar"</js>, ()-&gt;<jsm>getDynamicValueFromSomewhere</jsm>())
+		|		.build();
 	</p>
 
 	<p>
@@ -61,19 +61,19 @@
 		Part lists are immutable, but can be appended to using the {@link oaj.http.part.PartList#copy() copy()} method:
 	</p>
 	<p class='bjava'>
-	|	<jv>parts</jv> = <jv>parts</jv>
-	|		.copy()
-	|		.append(BasicIntegerPart.<jsm>of</jsm>(<js>"foo"</js>, 1))
-	|		.build();
+		|	<jv>parts</jv> = <jv>parts</jv>
+		|		.copy()
+		|		.append(BasicIntegerPart.<jsm>of</jsm>(<js>"foo"</js>, 1))
+		|		.build();
 	</p>
 
 	<p>
 		Static methods are provided on {@link oaj.http.HttpParts} to further simplify creation of part lists.
 	</p>
 	<p class='bjava'>
-	|	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
-	|
-	|	PartList <jv>parts</jv> = <jsm>partList</jsm>(<jsm>integerPart</jsm>(<js>"foo"</js>, 1), <jsm>booleanPart</jsm>(<js>"bar"</js>, <jk>false</jk>));
+		|	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
+		|
+		|	PartList <jv>parts</jv> = <jsm>partList</jsm>(<jsm>integerPart</jsm>(<js>"foo"</js>, 1), <jsm>booleanPart</jsm>(<js>"bar"</js>, <jk>false</jk>));
 	</p>
 
 	<p>
@@ -84,19 +84,19 @@
 	</p>
 
 	<p class='bjava'>
-	|	<jv>parts</jv> = PartList
-	|		.<jsm>create</jsm>()
-	|		.set(<js>"Foo"</js>, <js>"bar"</js>)
-	|		.set(<js>"Foo"</js>, <js>"baz"</js>)
-	|		.build();
-	|	<jsm>assertObject</jsm>(<jv>parts</jv>).isString(<js>"foo=baz"</js>);
-	|
-	|	<jv>parts</jv> = PartList
-	|		.create()
-	|		.set(<js>"Foo"</js>, <js>"bar"</js>)
-	|		.setDefault(<js>"Foo"</js>, <js>"baz"</js>)
-	|		.build();
-	|	<jsm>assertObject</jsm>(<jv>parts</jv>).isString(<js>"foo=bar"</js>);
+		|	<jv>parts</jv> = PartList
+		|		.<jsm>create</jsm>()
+		|		.set(<js>"Foo"</js>, <js>"bar"</js>)
+		|		.set(<js>"Foo"</js>, <js>"baz"</js>)
+		|		.build();
+		|	<jsm>assertObject</jsm>(<jv>parts</jv>).isString(<js>"foo=baz"</js>);
+		|
+		|	<jv>parts</jv> = PartList
+		|		.create()
+		|		.set(<js>"Foo"</js>, <js>"bar"</js>)
+		|		.setDefault(<js>"Foo"</js>, <js>"baz"</js>)
+		|		.build();
+		|	<jsm>assertObject</jsm>(<jv>parts</jv>).isString(<js>"foo=bar"</js>);
 	</p>
 
 	<p>
@@ -123,7 +123,7 @@
 
 	<h5 class='figure'>Example</h5>
 	<p class='bjava'>
-	|	MyQueryBean <jv>foo</jv> = <jv>parts</jv>.get(MyQueryBean.<jk>class</jk>);
+		|	MyQueryBean <jv>foo</jv> = <jv>parts</jv>.get(MyQueryBean.<jk>class</jk>);
 	</p>
 
 	<p>
@@ -133,18 +133,18 @@
 
 	<h5 class='figure'>Example</h5>
 	<p class='bjava'>
-	|	<jc>// Create a part list with dynamically-resolving values pulled from a system property.</jc>
-	|
-	|	System.<jsm>setProperty</jsm>(<js>"foo"</js>, <js>"bar"</js>);
-	|
-	|	PartList <jv>parts</jv> = PartList
-	|		.<jsm>create</jsm>()
-	|		.resolving()
-	|		.append(<js>"X1"</js>, <js>"$S{foo}"</js>)
-	|		.append(<js>"X2"</js>, ()-&gt;<js>"$S{foo}"</js>)
-	|		.build();
-	|
-	|	<jsm>assertObject</jsm>(<jv>parts</jv>).isString(<js>"X1=bar&amp;X2=bar"</js>);
+		|	<jc>// Create a part list with dynamically-resolving values pulled from a system property.</jc>
+		|
+		|	System.<jsm>setProperty</jsm>(<js>"foo"</js>, <js>"bar"</js>);
+		|
+		|	PartList <jv>parts</jv> = PartList
+		|		.<jsm>create</jsm>()
+		|		.resolving()
+		|		.append(<js>"X1"</js>, <js>"$S{foo}"</js>)
+		|		.append(<js>"X2"</js>, ()-&gt;<js>"$S{foo}"</js>)
+		|		.build();
+		|
+		|	<jsm>assertObject</jsm>(<jv>parts</jv>).isString(<js>"X1=bar&amp;X2=bar"</js>);
 	</p>
 
 	<p>
@@ -154,11 +154,11 @@
 
 	<h5 class='figure'>Example</h5>
 	<p class='bjava'>
-	|	<jc>// A predefined list of parts.</jc>
-	|	<jk>public class</jk> MyPartList <jk>extends</jk> PartList {
-	|		<jk>public</jk> MyPartList() {
-	|			<jk>super</jk>(BasicIntegerPart.<jsm>of</jsm>(<js>"foo"</js>,1), BasicBooleanPart.<jsm>of</jsm>(<js>"bar"</js>,<jk>false</jk>));
-	|		}
-	|	}
+		|	<jc>// A predefined list of parts.</jc>
+		|	<jk>public class</jk> MyPartList <jk>extends</jk> PartList {
+		|		<jk>public</jk> MyPartList() {
+		|			<jk>super</jk>(BasicIntegerPart.<jsm>of</jsm>(<js>"foo"</js>,1), BasicBooleanPart.<jsm>of</jsm>(<js>"bar"</js>,<jk>false</jk>));
+		|		}
+		|	}
 	</p>
 </div>

@@ -18,7 +18,6 @@ import org.apache.juneau.*;
  * Interface for providing access to {@link CsvClassMeta} and {@link CsvBeanPropertyMeta} objects.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.CsvDetails}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

@@ -21,7 +21,6 @@ import org.apache.juneau.svl.*;
  * Utility classes and methods for the {@link PlainTextConfig @PlainTextConfig} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.PlainTextDetails}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

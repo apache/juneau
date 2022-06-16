@@ -28,7 +28,6 @@ import org.apache.juneau.svl.*;
  * Utility classes and methods for the {@link SoapXml @SoapXml} annotation.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.SoapXmlDetails}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

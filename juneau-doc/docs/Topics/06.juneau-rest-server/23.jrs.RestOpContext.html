@@ -1,0 +1,91 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'RestOpContext', created:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The {@link oajr.RestOpContext} object is the workhorse class for an individual {@link oajr.annotation.RestOp}-annotated method.
+	</p>
+	<p>
+		Every class annotated with <l>@RestOp</l> ends up with an instance of this object.  Similar to {@link oajr.RestContext}, the object is read-only and unchangeable and is
+		initialized with all of the various annotations pulled from the method.  All functionality available through annotations
+		have programmatic equivalents through the builder of this class.
+	</p>
+	<p>
+		To access the builder for these objects, simply implement the following init method that will be called for each {@link oajr.annotation.RestOp}-annotated method.
+	</p>
+	<p class='bjava'>
+		|	<jc>// Use an INIT hook with RestOpContext.Builder as a parameter.</jc>
+		|	<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		|	<jk>public void</jk> init(RestOpContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
+		|			<jv>builder</jv>
+		|				.beanContext(<jv>x</jv> -&gt; <jv>x</jv>.swaps(TemporalCalendarSwap.Rfc1123DateTime.<jk>class</jk>))
+		|				.debugEnablement(<jsf>CONDITIONAL</jsf>);
+		|	}
+	</p>
+	<p>
+		There are multiple ways to programmatically alter how RestOpContext behaves.  The most straightforward are the following
+		builder methods which are direct equivalents to values defined on the {@link oaj.rest.annotation.RestOp} annotation:
+	</p>
+
+
+
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.rest.RestOpContext.Builder}
+		<ul class='javatreec'>
+			<li class='jm'>{@link oaj.rest.RestOpContext.Builder#clientVersion(String) clientVersion}
+			<li class='jm'>{@link oaj.rest.RestOpContext.Builder#consumes(MediaType...) consumes}
+			<li class='jm'>{@link oaj.rest.RestOpContext.Builder#debug(Enablement) debug}
+			<li class='jm'>{@link oaj.rest.RestOpContext.Builder#defaultCharset(Charset) defaultCharset}
+			<li class='jm'>{@link oaj.rest.RestOpContext.Builder#dotAll() dotAll}
+			<li class='jm'>{@link oaj.rest.RestOpContext.Builder#httpMethod(String) httpMethod}
+			<li class='jm'>{@link oaj.rest.RestOpContext.Builder#maxInput(String) maxInput}
+			<li class='jm'>{@link oaj.rest.RestOpContext.Builder#path(String...) path}
+			<li class='jm'>{@link oaj.rest.RestOpContext.Builder#produces(MediaType...) produces}
+			<li class='jm'>{@link oaj.rest.RestOpContext.Builder#roleGuard(String) roleGuard}
+			<li class='jm'>{@link oaj.rest.RestOpContext.Builder#rolesDeclared(String...) rolesDeclared}
+		</ul>
+	</ul>
+	<p>
+		For more complex configurations, access to sub-builders is provided via the following methods:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.rest.RestOpContext.Builder}
+		<ul class='javatreec'>
+			<li class='jm'>{@link oaj.rest.RestOpContext.Builder#converters() converters}
+			<li class='jm'>{@link oaj.rest.RestOpContext.Builder#defaultClasses() defaultClasses}
+			<li class='jm'>{@link oaj.rest.RestOpContext.Builder#defaultRequestAttributes() defaultRequestAttributes}
+			<li class='jm'>{@link oaj.rest.RestOpContext.Builder#defaultRequestFormData() defaultRequestFormData}
+			<li class='jm'>{@link oaj.rest.RestOpContext.Builder#defaultRequestHeaders() defaultRequestHeaders}
+			<li class='jm'>{@link oaj.rest.RestOpContext.Builder#defaultRequestQueryData() defaultRequestQueryData}
+			<li class='jm'>{@link oaj.rest.RestOpContext.Builder#defaultResponseHeaders() defaultResponseHeaders}
+			<li class='jm'>{@link oaj.rest.RestOpContext.Builder#encoders() encoders}
+			<li class='jm'>{@link oaj.rest.RestOpContext.Builder#guards() guards}
+			<li class='jm'>{@link oaj.rest.RestOpContext.Builder#jsonSchemaGenerator() jsonSchemaGenerator}
+			<li class='jm'>{@link oaj.rest.RestOpContext.Builder#matchers() matchers}
+			<li class='jm'>{@link oaj.rest.RestOpContext.Builder#parsers() parsers}
+			<li class='jm'>{@link oaj.rest.RestOpContext.Builder#partParser() partParser}
+			<li class='jm'>{@link oaj.rest.RestOpContext.Builder#partSerializer() partSerializer}
+			<li class='jm'>{@link oaj.rest.RestOpContext.Builder#serializers() serializers}
+		</ul>
+	</ul>
+	<ul>
+		<li class='note'>
+			It is also possible to override methods on the {@link oajr.RestOpContext} class itself by providing your own specialized subclass via the 
+			{@link oaj.rest.RestOpContext.Builder#type(Class)} method.
+	</ul>
+
+</div>

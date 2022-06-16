@@ -27,7 +27,6 @@ import org.apache.juneau.csv.*;
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.CsvDetails}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

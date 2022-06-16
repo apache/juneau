@@ -48,7 +48,7 @@ public abstract class BasicRestServletGroup extends BasicRestServlet implements 
 
 	@Override /* BasicGroupOperations */
 	public ChildResourceDescriptions getChildren(RestRequest req) {
-		return new ChildResourceDescriptions(req);
+		return ChildResourceDescriptions.of(req);
 	}
 }
 

@@ -27,7 +27,6 @@ import org.apache.juneau.plaintext.*;
  * Used primarily for specifying bean configuration properties on REST classes and methods.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.PlainTextDetails}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

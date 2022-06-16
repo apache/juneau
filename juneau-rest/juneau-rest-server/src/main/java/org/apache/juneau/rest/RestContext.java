@@ -369,7 +369,7 @@ public class RestContext extends Context {
 
 			Map<String,MethodInfo> map = map();
 			ClassInfo.ofProxy(r).forEachAllMethodParentFirst(
-				y -> y.hasAnnotation(RestHook.class) && y.getAnnotation(RestHook.class).value() == HookEvent.INIT,
+				y -> y.hasAnnotation(RestHook.class) && y.getAnnotation(RestHook.class).value() == HookEvent.INIT && ! y.hasArg(RestOpContext.Builder.class),
 				y -> {
 					String sig = y.getSignature();
 					if (! map.containsKey(sig))
@@ -393,7 +393,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The REST servlet/bean instance that this context is defined against.
 		 */
-		public final Supplier<?> resource() {
+		public Supplier<?> resource() {
 			if (resource == null)
 				throw runtimeException("Resource not available.  init(Object) has not been called.");
 			return resource;
@@ -406,7 +406,7 @@ public class RestContext extends Context {
 		 * @param type The expected type of the resource bean.
 		 * @return The bean cast to that instance, or {@link Optional#empty()} if it's not the specified type.
 		 */
-		public final <T> Optional<T> resourceAs(Class<T> type) {
+		public <T> Optional<T> resourceAs(Class<T> type) {
 			Object r = resource().get();
 			return optional(type.isInstance(r) ? type.cast(r) : null);
 		}
@@ -431,7 +431,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The default implementation class list.
 		 */
-		public final DefaultClassList defaultClasses() {
+		public DefaultClassList defaultClasses() {
 			return defaultClasses;
 		}
 
@@ -449,7 +449,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 * @see #defaultClasses()
 		 */
-		public final Builder defaultClasses(Class<?>...values) {
+		public Builder defaultClasses(Class<?>...values) {
 			defaultClasses().add(values);
 			return this;
 		}
@@ -471,7 +471,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The default settings map.
 		 */
-		public final DefaultSettingsMap defaultSettings() {
+		public DefaultSettingsMap defaultSettings() {
 			return defaultSettings;
 		}
 
@@ -490,7 +490,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 * @see #defaultSettings()
 		 */
-		public final Builder defaultSetting(String key, Object value) {
+		public Builder defaultSetting(String key, Object value) {
 			defaultSettings().set(key, value);
 			return this;
 		}
@@ -517,7 +517,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The bean store in this builder.
 		 */
-		public final BeanStore beanStore() {
+		public BeanStore beanStore() {
 			return beanStore;
 		}
 
@@ -538,7 +538,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder beanStore(Consumer<BeanStore> operation) {
+		public Builder beanStore(Consumer<BeanStore> operation) {
 			operation.accept(beanStore());
 			return this;
 		}
@@ -548,7 +548,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The root bean store.
 		 */
-		public final BeanStore rootBeanStore() {
+		public BeanStore rootBeanStore() {
 			return rootBeanStore;
 		}
 
@@ -636,7 +636,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The variable resolver sub-builder.
 		 */
-		public final VarResolver.Builder varResolver() {
+		public VarResolver.Builder varResolver() {
 			return varResolver;
 		}
 
@@ -657,7 +657,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder varResolver(Consumer<VarResolver.Builder> operation) {
+		public Builder varResolver(Consumer<VarResolver.Builder> operation) {
 			operation.accept(varResolver());
 			return this;
 		}
@@ -806,7 +806,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The external configuration file for this resource.
 		 */
-		public final Config config() {
+		public Config config() {
 			return config;
 		}
 
@@ -827,7 +827,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder config(Consumer<Config> operation) {
+		public Builder config(Consumer<Config> operation) {
 			operation.accept(config());
 			return this;
 		}
@@ -844,7 +844,7 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		@FluentSetter
-		public final Builder config(Config config) {
+		public Builder config(Config config) {
 			this.config = config;
 			return this;
 		}
@@ -904,7 +904,7 @@ public class RestContext extends Context {
 		 * @return The logger for this resource.
 		 * @throws RuntimeException If {@link #init(Supplier)} has not been called.
 		 */
-		public final Logger logger() {
+		public Logger logger() {
 			if (logger == null)
 				logger = createLogger(beanStore(), resourceClass);
 			return logger;
@@ -927,7 +927,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder logger(Consumer<Logger> operation) {
+		public Builder logger(Consumer<Logger> operation) {
 			operation.accept(logger());
 			return this;
 		}
@@ -941,7 +941,7 @@ public class RestContext extends Context {
 		 * @param value The logger to use for the REST resource.
 		 * @return This object.
 		 */
-		public final Builder logger(Logger value) {
+		public Builder logger(Logger value) {
 			logger = value;
 			return this;
 		}
@@ -957,7 +957,7 @@ public class RestContext extends Context {
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc jrs.Injection injected beans}.
+		 * 			<li>Any {@doc juneau-rest-server-springboot injected beans}.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates via <c>Logger.<jsm>getLogger</jsm>(<jv>resource</jv>.getClass().getName())</c>.
@@ -1001,7 +1001,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The builder for the {@link ThrownStore} object in the REST context.
 		 */
-		public final ThrownStore.Builder thrownStore() {
+		public ThrownStore.Builder thrownStore() {
 			if (thrownStore == null)
 				thrownStore = createThrownStore(beanStore(), resource(), parentContext);
 			return thrownStore;
@@ -1024,7 +1024,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder thrownStore(Consumer<ThrownStore.Builder> operation) {
+		public Builder thrownStore(Consumer<ThrownStore.Builder> operation) {
 			operation.accept(thrownStore());
 			return this;
 		}
@@ -1040,7 +1040,7 @@ public class RestContext extends Context {
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc jrs.Injection injected beans}.
+		 * 			<li>Any {@doc juneau-rest-server-springboot injected beans}.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Returns {@link ThrownStore#GLOBAL}.
@@ -1101,7 +1101,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The builder for the {@link EncoderSet} object in the REST context.
 		 */
-		public final EncoderSet.Builder encoders() {
+		public EncoderSet.Builder encoders() {
 			if (encoders == null)
 				encoders = createEncoders(beanStore(), resource());
 			return encoders;
@@ -1124,7 +1124,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder encoders(Consumer<EncoderSet.Builder> operation) {
+		public Builder encoders(Consumer<EncoderSet.Builder> operation) {
 			operation.accept(encoders());
 			return this;
 		}
@@ -1147,7 +1147,7 @@ public class RestContext extends Context {
 		 * 			<li>{@link Method} - The Java method this context belongs to.
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc jrs.Injection injected beans}.
+		 * 			<li>Any {@doc juneau-rest-server-springboot injected beans}.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates a <c>Encoder[0]</c>.
@@ -1205,7 +1205,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The serializer group sub-builder.
 		 */
-		public final SerializerSet.Builder serializers() {
+		public SerializerSet.Builder serializers() {
 			if (serializers == null)
 				serializers = createSerializers(beanStore(), resource());
 			return serializers;
@@ -1228,7 +1228,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder serializers(Consumer<SerializerSet.Builder> operation) {
+		public Builder serializers(Consumer<SerializerSet.Builder> operation) {
 			operation.accept(serializers());
 			return this;
 		}
@@ -1287,7 +1287,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The parser group sub-builder.
 		 */
-		public final ParserSet.Builder parsers() {
+		public ParserSet.Builder parsers() {
 			if (parsers == null)
 				parsers = createParsers(beanStore(), resource());
 			return parsers;
@@ -1310,7 +1310,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder parsers(Consumer<ParserSet.Builder> operation) {
+		public Builder parsers(Consumer<ParserSet.Builder> operation) {
 			operation.accept(parsers());
 			return this;
 		}
@@ -1369,7 +1369,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The method execution statistics store sub-builder.
 		 */
-		public final MethodExecStore.Builder methodExecStore() {
+		public MethodExecStore.Builder methodExecStore() {
 			if (methodExecStore == null)
 				methodExecStore = createMethodExecStore(beanStore(), resource());
 			return methodExecStore;
@@ -1392,7 +1392,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder methodExecStore(Consumer<MethodExecStore.Builder> operation) {
+		public Builder methodExecStore(Consumer<MethodExecStore.Builder> operation) {
 			operation.accept(methodExecStore());
 			return this;
 		}
@@ -1450,7 +1450,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The messages sub-builder.
 		 */
-		public final Messages.Builder messages() {
+		public Messages.Builder messages() {
 			if (messages == null)
 				messages = createMessages(beanStore(), resource());
 			return messages;
@@ -1473,7 +1473,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder messages(Consumer<Messages.Builder> operation) {
+		public Builder messages(Consumer<Messages.Builder> operation) {
 			operation.accept(messages());
 			return this;
 		}
@@ -1679,7 +1679,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The response processor list sub-builder.
 		 */
-		public final ResponseProcessorList.Builder responseProcessors() {
+		public ResponseProcessorList.Builder responseProcessors() {
 			if (responseProcessors == null)
 				responseProcessors = createResponseProcessors(beanStore(), resource());
 			return responseProcessors;
@@ -1702,7 +1702,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder responseProcessors(Consumer<ResponseProcessorList.Builder> operation) {
+		public Builder responseProcessors(Consumer<ResponseProcessorList.Builder> operation) {
 			operation.accept(responseProcessors());
 			return this;
 		}
@@ -1723,7 +1723,7 @@ public class RestContext extends Context {
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc jrs.Injection injected beans}.
+		 * 			<li>Any {@doc juneau-rest-server-springboot injected beans}.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates a <c>ResponseProcessor[0]</c>.
@@ -1842,7 +1842,7 @@ public class RestContext extends Context {
 		 * @return The call logger sub-builder.
 		 * @throws RuntimeException If {@link #init(Supplier)} has not been called.
 		 */
-		public final RestLogger.Builder callLogger() {
+		public RestLogger.Builder callLogger() {
 			if (callLogger == null)
 				callLogger = createCallLogger(beanStore(), resource());
 			return callLogger;
@@ -1865,7 +1865,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder callLogger(Consumer<RestLogger.Builder> operation) {
+		public Builder callLogger(Consumer<RestLogger.Builder> operation) {
 			operation.accept(callLogger());
 			return this;
 		}
@@ -1888,7 +1888,7 @@ public class RestContext extends Context {
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
 		 * 			<li>{@link BasicFileFinder}
-		 * 			<li>Any {@doc jrs.Injection injected beans}.
+		 * 			<li>Any {@doc juneau-rest-server-springboot injected beans}.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates a {@link BasicFileFinder}.
@@ -1973,7 +1973,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The bean context sub-builder.
 		 */
-		public final BeanContext.Builder beanContext() {
+		public BeanContext.Builder beanContext() {
 			if (beanContext == null)
 				beanContext = createBeanContext(beanStore(), resource());
 			return beanContext;
@@ -1996,7 +1996,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder beanContext(Consumer<BeanContext.Builder> operation) {
+		public Builder beanContext(Consumer<BeanContext.Builder> operation) {
 			operation.accept(beanContext());
 			return this;
 		}
@@ -2018,7 +2018,7 @@ public class RestContext extends Context {
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc jrs.Injection injected beans}.
+		 * 			<li>Any {@doc juneau-rest-server-springboot injected beans}.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates an {@link OpenApiSerializer}.
@@ -2074,7 +2074,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The part serializer sub-builder.
 		 */
-		public final HttpPartSerializer.Creator partSerializer() {
+		public HttpPartSerializer.Creator partSerializer() {
 			if (partSerializer == null)
 				partSerializer = createPartSerializer(beanStore(), resource());
 			return partSerializer;
@@ -2097,7 +2097,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder partSerializer(Consumer<HttpPartSerializer.Creator> operation) {
+		public Builder partSerializer(Consumer<HttpPartSerializer.Creator> operation) {
 			operation.accept(partSerializer());
 			return this;
 		}
@@ -2119,7 +2119,7 @@ public class RestContext extends Context {
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc jrs.Injection injected beans}.
+		 * 			<li>Any {@doc juneau-rest-server-springboot injected beans}.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates an {@link OpenApiSerializer}.
@@ -2186,7 +2186,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The part parser sub-builder.
 		 */
-		public final HttpPartParser.Creator partParser() {
+		public HttpPartParser.Creator partParser() {
 			if (partParser == null)
 				partParser = createPartParser(beanStore(), resource());
 			return partParser;
@@ -2209,7 +2209,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder partParser(Consumer<HttpPartParser.Creator> operation) {
+		public Builder partParser(Consumer<HttpPartParser.Creator> operation) {
 			operation.accept(partParser());
 			return this;
 		}
@@ -2231,7 +2231,7 @@ public class RestContext extends Context {
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc jrs.Injection injected beans}.
+		 * 			<li>Any {@doc juneau-rest-server-springboot injected beans}.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates an {@link OpenApiParser}.
@@ -2298,7 +2298,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The JSON schema generator sub-builder.
 		 */
-		public final JsonSchemaGenerator.Builder jsonSchemaGenerator() {
+		public JsonSchemaGenerator.Builder jsonSchemaGenerator() {
 			if (jsonSchemaGenerator == null)
 				jsonSchemaGenerator = createJsonSchemaGenerator(beanStore(), resource());
 			return jsonSchemaGenerator;
@@ -2321,7 +2321,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder jsonSchemaGenerator(Consumer<JsonSchemaGenerator.Builder> operation) {
+		public Builder jsonSchemaGenerator(Consumer<JsonSchemaGenerator.Builder> operation) {
 			operation.accept(jsonSchemaGenerator());
 			return this;
 		}
@@ -2337,7 +2337,7 @@ public class RestContext extends Context {
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc jrs.Injection injected beans}.
+		 * 			<li>Any {@doc juneau-rest-server-springboot injected beans}.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates a new {@link JsonSchemaGenerator} using the property store of this context..
@@ -2416,7 +2416,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder fileFinder(Consumer<FileFinder.Builder> operation) {
+		public Builder fileFinder(Consumer<FileFinder.Builder> operation) {
 			operation.accept(fileFinder());
 			return this;
 		}
@@ -2625,7 +2625,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder staticFiles(Consumer<StaticFiles.Builder> operation) {
+		public Builder staticFiles(Consumer<StaticFiles.Builder> operation) {
 			operation.accept(staticFiles());
 			return this;
 		}
@@ -2784,7 +2784,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The default request headers sub-builder.
 		 */
-		public final HeaderList.Builder defaultRequestHeaders() {
+		public HeaderList.Builder defaultRequestHeaders() {
 			if (defaultRequestHeaders == null)
 				defaultRequestHeaders = createDefaultRequestHeaders(beanStore(), resource());
 			return defaultRequestHeaders;
@@ -2807,7 +2807,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder defaultRequestHeaders(Consumer<HeaderList.Builder> operation) {
+		public Builder defaultRequestHeaders(Consumer<HeaderList.Builder> operation) {
 			operation.accept(defaultRequestHeaders());
 			return this;
 		}
@@ -2950,7 +2950,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The default response headers sub-builder.
 		 */
-		public final HeaderList.Builder defaultResponseHeaders() {
+		public HeaderList.Builder defaultResponseHeaders() {
 			if (defaultResponseHeaders == null)
 				defaultResponseHeaders = createDefaultResponseHeaders(beanStore(), resource());
 			return defaultResponseHeaders;
@@ -2973,7 +2973,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder defaultResponseHeaders(Consumer<HeaderList.Builder> operation) {
+		public Builder defaultResponseHeaders(Consumer<HeaderList.Builder> operation) {
 			operation.accept(defaultResponseHeaders());
 			return this;
 		}
@@ -3082,7 +3082,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The default request attributes sub-builder.
 		 */
-		public final NamedAttributeList.Builder defaultRequestAttributes() {
+		public NamedAttributeList.Builder defaultRequestAttributes() {
 			if (defaultRequestAttributes == null)
 				defaultRequestAttributes = createDefaultRequestAttributes(beanStore(), resource());
 			return defaultRequestAttributes;
@@ -3105,7 +3105,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder defaultRequestAttributes(Consumer<NamedAttributeList.Builder> operation) {
+		public Builder defaultRequestAttributes(Consumer<NamedAttributeList.Builder> operation) {
 			operation.accept(defaultRequestAttributes());
 			return this;
 		}
@@ -3210,7 +3210,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The REST operation args sub-builder.
 		 */
-		public final RestOpArgList.Builder restOpArgs() {
+		public RestOpArgList.Builder restOpArgs() {
 			if (restOpArgs == null)
 				restOpArgs = createRestOpArgs(beanStore(), resource());
 			return restOpArgs;
@@ -3233,7 +3233,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder restOpArgs(Consumer<RestOpArgList.Builder> operation) {
+		public Builder restOpArgs(Consumer<RestOpArgList.Builder> operation) {
 			operation.accept(restOpArgs());
 			return this;
 		}
@@ -3411,7 +3411,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The debug enablement sub-builder.
 		 */
-		public final DebugEnablement.Builder debugEnablement() {
+		public DebugEnablement.Builder debugEnablement() {
 			if (debugEnablement == null)
 				debugEnablement = createDebugEnablement(beanStore(), resource());
 			return debugEnablement;
@@ -3434,7 +3434,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder debugEnablement(Consumer<DebugEnablement.Builder> operation) {
+		public Builder debugEnablement(Consumer<DebugEnablement.Builder> operation) {
 			operation.accept(debugEnablement());
 			return this;
 		}
@@ -3565,7 +3565,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The start call method list.
 		 */
-		public final MethodList startCallMethods() {
+		public MethodList startCallMethods() {
 			if (startCallMethods == null)
 				startCallMethods = createStartCallMethods(beanStore(), resource());
 			return startCallMethods;
@@ -3588,7 +3588,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder startCallMethods(Consumer<MethodList> operation) {
+		public Builder startCallMethods(Consumer<MethodList> operation) {
 			operation.accept(startCallMethods());
 			return this;
 		}
@@ -3628,7 +3628,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The end call method list.
 		 */
-		public final MethodList endCallMethods() {
+		public MethodList endCallMethods() {
 			if (endCallMethods == null)
 				endCallMethods = createEndCallMethods(beanStore(), resource());
 			return endCallMethods;
@@ -3651,7 +3651,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder endCallMethods(Consumer<MethodList> operation) {
+		public Builder endCallMethods(Consumer<MethodList> operation) {
 			operation.accept(endCallMethods());
 			return this;
 		}
@@ -3691,7 +3691,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The post-init method list.
 		 */
-		public final MethodList postInitMethods() {
+		public MethodList postInitMethods() {
 			if (postInitMethods == null)
 				postInitMethods = createPostInitMethods(beanStore(), resource());
 			return postInitMethods;
@@ -3714,7 +3714,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder postInitMethods(Consumer<MethodList> operation) {
+		public Builder postInitMethods(Consumer<MethodList> operation) {
 			operation.accept(postInitMethods());
 			return this;
 		}
@@ -3754,7 +3754,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The post-init-child-first method list.
 		 */
-		public final MethodList postInitChildFirstMethods() {
+		public MethodList postInitChildFirstMethods() {
 			if (postInitChildFirstMethods == null)
 				postInitChildFirstMethods = createPostInitChildFirstMethods(beanStore(), resource());
 			return postInitChildFirstMethods;
@@ -3777,7 +3777,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder postInitChildFirstMethods(Consumer<MethodList> operation) {
+		public Builder postInitChildFirstMethods(Consumer<MethodList> operation) {
 			operation.accept(postInitChildFirstMethods());
 			return this;
 		}
@@ -3817,7 +3817,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The destroy method list.
 		 */
-		public final MethodList destroyMethods() {
+		public MethodList destroyMethods() {
 			if (destroyMethods == null)
 				destroyMethods = createDestroyMethods(beanStore(), resource());
 			return destroyMethods;
@@ -3840,7 +3840,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder destroyMethods(Consumer<MethodList> operation) {
+		public Builder destroyMethods(Consumer<MethodList> operation) {
 			operation.accept(destroyMethods());
 			return this;
 		}
@@ -3883,7 +3883,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The pre-call method list.
 		 */
-		public final MethodList preCallMethods() {
+		public MethodList preCallMethods() {
 			if (preCallMethods == null)
 				preCallMethods = createPreCallMethods(beanStore(), resource());
 			return preCallMethods;
@@ -3906,7 +3906,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder preCallMethods(Consumer<MethodList> operation) {
+		public Builder preCallMethods(Consumer<MethodList> operation) {
 			operation.accept(preCallMethods());
 			return this;
 		}
@@ -3949,7 +3949,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The list of methods that gets called immediately after the <ja>@RestOp</ja> annotated method gets called..
 		 */
-		public final MethodList postCallMethods() {
+		public MethodList postCallMethods() {
 			if (postCallMethods == null)
 				postCallMethods = createPostCallMethods(beanStore(), resource());
 			return postCallMethods;
@@ -3972,7 +3972,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder postCallMethods(Consumer<MethodList> operation) {
+		public Builder postCallMethods(Consumer<MethodList> operation) {
 			operation.accept(postCallMethods());
 			return this;
 		}
@@ -4014,7 +4014,7 @@ public class RestContext extends Context {
 		 * @return The REST operations list.
 		 * @throws ServletException If a problem occurred instantiating one of the child rest contexts.
 		 */
-		public final RestOperations.Builder restOperations(RestContext restContext) throws ServletException {
+		public RestOperations.Builder restOperations(RestContext restContext) throws ServletException {
 			if (restOperations == null)
 				restOperations = createRestOperations(beanStore(), resource(), restContext);
 			return restOperations;
@@ -4043,6 +4043,16 @@ public class RestContext extends Context {
 
 			ClassInfo rci = ClassInfo.of(resource.get());
 
+			Map<String,MethodInfo> initMap = map();
+			ClassInfo.ofProxy(resource.get()).forEachAllMethodParentFirst(
+				y -> y.hasAnnotation(RestHook.class) && y.getAnnotation(RestHook.class).value() == HookEvent.INIT && y.hasArg(RestOpContext.Builder.class),
+				y -> {
+					String sig = y.getSignature();
+					if (! initMap.containsKey(sig))
+						initMap.put(sig, y.accessible());
+				}
+			);
+
 			for (MethodInfo mi : rci.getPublicMethods()) {
 				AnnotationList al = mi.getAnnotationList(REST_OP_GROUP);
 
@@ -4057,11 +4067,24 @@ public class RestContext extends Context {
 						if (mi.isNotPublic())
 							throw servletException("@RestOp method {0}.{1} must be defined as public.", rci.inner().getName(), mi.getSimpleName());
 
-						RestOpContext roc = RestOpContext
+						RestOpContext.Builder rocb = RestOpContext
 							.create(mi.inner(), restContext)
 							.beanStore(beanStore)
-							.type(opContextClass)
-							.build();
+							.type(opContextClass);
+
+						beanStore = BeanStore.of(beanStore, resource.get()).addBean(RestOpContext.Builder.class, rocb);
+						for (MethodInfo m : initMap.values()) {
+							if (! beanStore.hasAllParams(m)) {
+								throw servletException("Could not call @RestHook(INIT) method {0}.{1}.  Could not find prerequisites: {2}.", m.getDeclaringClass().getSimpleName(), m.getSignature(), beanStore.getMissingParams(m));
+							}
+							try {
+								m.invoke(resource.get(), beanStore.getParams(m));
+							} catch (Exception e) {
+								throw servletException(e, "Exception thrown from @RestHook(INIT) method {0}.{1}.", m.getDeclaringClass().getSimpleName(), m.getSignature());
+							}
+						}
+
+						RestOpContext roc = rocb.build();
 
 						String httpMethod = roc.getHttpMethod();
 
@@ -4117,7 +4140,7 @@ public class RestContext extends Context {
 		 * @return The REST children list.
 		 * @throws Exception If a problem occurred instantiating one of the child rest contexts.
 		 */
-		public final RestChildren.Builder restChildren(RestContext restContext) throws Exception {
+		public RestChildren.Builder restChildren(RestContext restContext) throws Exception {
 			if (restChildren == null)
 				restChildren = createRestChildren(beanStore(), resource(), restContext);
 			return restChildren;
@@ -4215,7 +4238,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The swagger provider sub-builder.
 		 */
-		public final SwaggerProvider.Builder swaggerProvider() {
+		public SwaggerProvider.Builder swaggerProvider() {
 			if (swaggerProvider == null)
 				swaggerProvider = createSwaggerProvider(beanStore(), resource());
 			return swaggerProvider;
@@ -4238,7 +4261,7 @@ public class RestContext extends Context {
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder swaggerProvider(Consumer<SwaggerProvider.Builder> operation) {
+		public Builder swaggerProvider(Consumer<SwaggerProvider.Builder> operation) {
 			operation.accept(swaggerProvider());
 			return this;
 		}
@@ -4260,7 +4283,7 @@ public class RestContext extends Context {
 		 * 		<ul>
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc jrs.Injection injected beans}.
+		 * 			<li>Any {@doc juneau-rest-server-springboot injected beans}.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates a default {@link BasicSwaggerProvider}.

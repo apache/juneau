@@ -51,7 +51,6 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.PlainTextDetails}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

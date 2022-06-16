@@ -702,6 +702,19 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	}
 
 	/**
+	 * Returns <jk>true</jk> if this method has the specified parameter.
+	 *
+	 * <p>
+	 * Method may or may not have additional parameters besides the one specified.
+	 *
+	 * @param requiredParam The parameter type to check for.
+	 * @return <jk>true</jk> if this method has at least the specified parameter.
+	 */
+	public boolean hasArg(Class<?> requiredParam) {
+		return hasAllArgs(requiredParam);
+	}
+
+	/**
 	 * Returns <jk>true</jk> if this method is a bridge method.
 	 *
 	 * @return <jk>true</jk> if this method is a bridge method.

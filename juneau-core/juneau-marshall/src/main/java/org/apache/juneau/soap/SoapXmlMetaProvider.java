@@ -18,7 +18,6 @@ import org.apache.juneau.*;
  * Interface for providing access to {@link SoapXmlClassMeta} and {@link SoapXmlBeanPropertyMeta} objects.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.SoapXmlDetails}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

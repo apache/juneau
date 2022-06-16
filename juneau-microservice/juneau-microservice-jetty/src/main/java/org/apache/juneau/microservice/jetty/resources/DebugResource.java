@@ -56,7 +56,8 @@ public class DebugResource extends BasicRestServlet {
 	 */
 	@RestGet(path="/", description="Show contents of config file.")
 	public ResourceDescriptions getChildren() {
-		return new ResourceDescriptions()
+		return ResourceDescriptions
+			.create()
 			.append("jetty/dump", "Jetty thread dump")
 		;
 	}

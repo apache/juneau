@@ -34,7 +34,25 @@ import org.apache.juneau.rest.servlet.*;
  */
 public class ChildResourceDescriptions extends ResourceDescriptions {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Static creator.
+	 *
+	 * @param req The HTTP servlet request.
+	 * @return A new {@link ChildResourceDescriptions} bean.
+	 */
+	public static ChildResourceDescriptions of(RestRequest req) {
+		return new ChildResourceDescriptions(req);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

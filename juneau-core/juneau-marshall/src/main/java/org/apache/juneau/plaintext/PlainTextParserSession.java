@@ -34,7 +34,6 @@ import org.apache.juneau.parser.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.PlainTextDetails}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

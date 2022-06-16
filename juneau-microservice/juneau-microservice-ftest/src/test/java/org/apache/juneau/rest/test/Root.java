@@ -39,6 +39,6 @@ public class Root extends BasicRestServlet implements BasicUniversalConfig {
 
 	@RestOp(method=GET, path="/")
 	public ChildResourceDescriptions doGet(RestRequest req) throws Exception {
-		return new ChildResourceDescriptions(req);
+		return ChildResourceDescriptions.of(req);
 	}
 }

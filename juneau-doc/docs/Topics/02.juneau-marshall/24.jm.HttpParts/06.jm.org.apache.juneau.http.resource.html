@@ -69,19 +69,19 @@
 	
 	<h5 class='figure'>Example</h5>
 	<p class='bjava'>
-	|	<jk>import static</jk> org.apache.juneau.http.HttpResources.*;
-	|
-	|	<jk>byte</jk>[] <jv>payload</jv> = {...};
-	|
-	|	<jc>// Create via type builder.</jc>
-	|	HttpResource <jv>resource</jv> = ByteArrayResource
-	|		.<jsm>create</jsm>()
-	|		.content(<jv>payload</jv>)
-	|		.contentType(ContentType.<jsf>APPLICATION_OCTET_STREAM</jsf>)
-	|		.build();
-	|
-	|	<jc>// Create via HttpResources.</jc>
-	|	HttpResource <jv>resource</jv> = <jsm>byteArrayResource</jsm>(<jv>payload</jv>, ContentType.<jsf>APPLICATION_OCTET_STREAM</jsf>).build();
+		|	<jk>import static</jk> org.apache.juneau.http.HttpResources.*;
+		|
+		|	<jk>byte</jk>[] <jv>payload</jv> = {...};
+		|
+		|	<jc>// Create via type builder.</jc>
+		|	HttpResource <jv>resource</jv> = ByteArrayResource
+		|		.<jsm>create</jsm>()
+		|		.content(<jv>payload</jv>)
+		|		.contentType(ContentType.<jsf>APPLICATION_OCTET_STREAM</jsf>)
+		|		.build();
+		|
+		|	<jc>// Create via HttpResources.</jc>
+		|	HttpResource <jv>resource</jv> = <jsm>byteArrayResource</jsm>(<jv>payload</jv>, ContentType.<jsf>APPLICATION_OCTET_STREAM</jsf>).build();
 	</p>
 	
 </div>

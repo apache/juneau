@@ -35,6 +35,24 @@ import org.apache.juneau.annotation.*;
 @Bean(properties="type,properties")
 public final class BeanDescription {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Static creator.
+	 *
+	 * @param c The bean being described.
+	 * @return A new bean description.
+	 */
+	public static BeanDescription of(Class<?> c) {
+		return new BeanDescription(c);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/** The bean class type. */
 	public String type;
 

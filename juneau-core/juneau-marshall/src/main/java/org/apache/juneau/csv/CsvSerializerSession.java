@@ -35,7 +35,6 @@ import org.apache.juneau.svl.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.CsvDetails}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

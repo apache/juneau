@@ -239,7 +239,7 @@ public class LogEntryFormatter extends Formatter {
 			hash = hashCode(t);
 			hashes.putIfAbsent(hash, new AtomicInteger(0));
 			c = hashes.get(hash).incrementAndGet();
-			if (c == 1) {
+			if (c <= 5) {
 				msg = '[' + hash + '.' + c + "] " + msg;
 			} else {
 				msg = '[' + hash + '.' + c + "] " + msg + ", " + t.getLocalizedMessage();
@@ -256,7 +256,7 @@ public class LogEntryFormatter extends Formatter {
 			r.getThreadID(),
 			r.getThrown() == null ? "" : r.getThrown().getMessage());
 		if (t != null)
-			s += String.format("%n%s", getStackTrace(r.getThrown()));
+			s += String.format("%s", getStackTrace(r.getThrown()));
 		return s;
 	}
 

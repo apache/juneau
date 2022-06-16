@@ -20,7 +20,6 @@ import org.apache.juneau.soap.annotation.*;
  * annotation on the bean property.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.SoapXmlDetails}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

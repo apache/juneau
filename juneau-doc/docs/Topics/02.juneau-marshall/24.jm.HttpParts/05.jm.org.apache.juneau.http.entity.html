@@ -57,18 +57,18 @@
 	
 	<h5 class='figure'>Example</h5>
 	<p class='bjava'>
-	|	<jk>import static</jk> org.apache.juneau.http.HttpEntities.*;
-	|
-	|	<jk>byte</jk>[] <jv>payload</jv> = {...};
-	|
-	|	<jc>// Create via type builder.</jc>
-	|	HttpEntity <jv>entity</jv> = ByteArrayEntity
-	|		.<jsm>create</jsm>()
-	|		.content(<jv>payload</jv>)
-	|		.contentType(ContentType.<jsf>APPLICATION_OCTET_STREAM</jsf>)
-	|		.build();
-	|
-	|	<jc>// Create via HttpEntities.</jc>
-	|	HttpEntity <jv>entity</jv> = <jsm>byteArrayEntity</jsm>(<jv>payload</jv>, ContentType.<jsf>APPLICATION_OCTET_STREAM</jsf>).build();
+		|	<jk>import static</jk> org.apache.juneau.http.HttpEntities.*;
+		|
+		|	<jk>byte</jk>[] <jv>payload</jv> = {...};
+		|
+		|	<jc>// Create via type builder.</jc>
+		|	HttpEntity <jv>entity</jv> = ByteArrayEntity
+		|		.<jsm>create</jsm>()
+		|		.content(<jv>payload</jv>)
+		|		.contentType(ContentType.<jsf>APPLICATION_OCTET_STREAM</jsf>)
+		|		.build();
+		|
+		|	<jc>// Create via HttpEntities.</jc>
+		|	HttpEntity <jv>entity</jv> = <jsm>byteArrayEntity</jsm>(<jv>payload</jv>, ContentType.<jsf>APPLICATION_OCTET_STREAM</jsf>).build();
 	</p>
 </div>
