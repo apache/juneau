@@ -48,6 +48,26 @@ import org.apache.juneau.dto.html5.*;
  * </ul>
  */
 public class Hyperlink extends A {
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Static creator.
+	 *
+	 * @param href The {@link A#href(Object)} attribute.
+	 * @param children The {@link A#children(Object[])} nodes.
+	 * @return A new {@link Hyperlink} object.
+	 */
+	public static Hyperlink create(Object href, Object...children) {
+		return new Hyperlink(href, children);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Implementation
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Creates an empty {@link A} element.
 	 */

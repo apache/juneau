@@ -49,16 +49,13 @@ import org.apache.juneau.swaps.*;
 )
 @HtmlDocConfig(
 	widgets={
-		ContentTypeMenuItem.class,
-		ThemeMenuItem.class
+		ContentTypeMenuItem.class
 	},
 	navlinks={
 		"up: request:/..",
 		"api: servlet:/api",
-		"stats: servlet:/stats",
 		"$W{ContentTypeMenuItem}",
-		"$W{ThemeMenuItem}",
-		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
+		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/RequestEchoResource.java"
 	},
 	aside={
 		"<div style='max-width:400px;min-width:200px' class='text'>",
@@ -85,6 +82,7 @@ import org.apache.juneau.swaps.*;
 public class RequestEchoResource extends BasicRestObject implements BasicUniversalConfig {
 
 	/**
+	 * [HTTP GET /echo/*]
 	 * GET request handler.
 	 *
 	 * @param req The HTTP servlet request.

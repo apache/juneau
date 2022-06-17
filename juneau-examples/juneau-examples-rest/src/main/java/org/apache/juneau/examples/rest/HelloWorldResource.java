@@ -41,7 +41,8 @@ import org.apache.juneau.rest.servlet.*;
 public class HelloWorldResource extends BasicRestObject implements BasicUniversalConfig {
 
 	/**
-	 * GET request handler.
+	 * [HTTP GET /helloworld]
+	 * Returns a simple string message.
 	 *
 	 * @return A simple Hello-World message.
 	 */

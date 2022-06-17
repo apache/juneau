@@ -22,6 +22,7 @@ import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.widget.*;
 
 import java.awt.image.*;
 import java.net.*;
@@ -43,7 +44,21 @@ import java.net.*;
 	description="Use a tool like Poster to upload and retrieve jpeg and png images."
 )
 @HtmlDocConfig(
-	navlinks="options: ?method=OPTIONS"
+	widgets={
+		ContentTypeMenuItem.class
+	},
+	navlinks={
+		"api: servlet:/api",
+		"stats: servlet:/stats",
+		"$W{ContentTypeMenuItem}",
+		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/PhotosResource.java"
+	},
+	aside={
+		"<div class='text'>",
+		"	<p>Examples of serialized beans in the org.apache.juneau.rest.utilitybeans package.</p>",
+		"</div>"
+	},
+	asideFloat="RIGHT"
 )
 public class PhotosResource extends BasicRestServlet implements BasicUniversalConfig {
 
@@ -86,6 +101,7 @@ public class PhotosResource extends BasicRestServlet implements BasicUniversalCo
 	}
 
 	/**
+	 * [HTTP GET /photos]
 	 * GET request handler for list of all photos.
 	 *
 	 * @return A list of photo beans.
@@ -96,6 +112,7 @@ public class PhotosResource extends BasicRestServlet implements BasicUniversalCo
 	}
 
 	/**
+	 * [HTTP GET /photos/{id}]
 	 * GET request handler for single photo.
 	 *
 	 * @param id The photo ID.
@@ -111,6 +128,7 @@ public class PhotosResource extends BasicRestServlet implements BasicUniversalCo
 	}
 
 	/**
+	 * [HTTP PUT /photos/{id}]
 	 * PUT request handler.
 	 *
 	 * @param id The photo ID.
@@ -124,6 +142,7 @@ public class PhotosResource extends BasicRestServlet implements BasicUniversalCo
 	}
 
 	/**
+	 * [HTTP POST /photos]
 	 * POST request handler.
 	 *
 	 * @param image The photo image.
@@ -138,6 +157,7 @@ public class PhotosResource extends BasicRestServlet implements BasicUniversalCo
 	}
 
 	/**
+	 * [HTTP DELETE /photos/{id}]
 	 * DELETE request handler
 	 *
 	 * @param id The photo ID.

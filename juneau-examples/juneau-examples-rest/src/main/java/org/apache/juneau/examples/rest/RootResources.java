@@ -38,21 +38,20 @@ import org.apache.juneau.serializer.annotation.*;
 	children={
 		HelloWorldResource.class,
 		DtoExamples.class,
+		UtilityBeansResource.class,
 		ConfigResource.class,
 		ShutdownResource.class
 	}
 )
 @HtmlDocConfig(
 	widgets={
-		ContentTypeMenuItem.class,
-		ThemeMenuItem.class
+		ContentTypeMenuItem.class
 	},
 	navlinks={
 		"api: servlet:/api",
 		"stats: servlet:/stats",
 		"$W{ContentTypeMenuItem}",
-		"$W{ThemeMenuItem}",
-		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
+		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/RootResources.java"
 	},
 	aside={
 		"<div class='text'>",
@@ -73,7 +72,7 @@ import org.apache.juneau.serializer.annotation.*;
 	quoteChar="'"
 )
 public class RootResources extends BasicRestServletGroup implements BasicUniversalJenaConfig {
-	// IMPORTANT!  If you don't need RDF support, change the parent class to ResourceGroup.
+	// IMPORTANT!  If you don't need RDF support, change the parent interface to BasicUniversalConfig.
 	// It allows you to remove the Jena prerequisite.
 
 	private static final long serialVersionUID = 1L;

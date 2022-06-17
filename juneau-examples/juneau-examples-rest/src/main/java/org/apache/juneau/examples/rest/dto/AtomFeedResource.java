@@ -16,7 +16,6 @@ import static org.apache.juneau.dto.atom.AtomBuilder.*;
 
 import java.net.URI;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.dto.atom.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.annotation.*;
@@ -53,16 +52,14 @@ import org.apache.juneau.serializer.annotation.*;
 )
 @HtmlDocConfig(
 	widgets={
-		ContentTypeMenuItem.class,
-		ThemeMenuItem.class
+		ContentTypeMenuItem.class
 	},
 	navlinks={
 		"up: request:/..",
 		"api: servlet:/api",
 		"stats: servlet:/stats",
 		"$W{ContentTypeMenuItem}",
-		"$W{ThemeMenuItem}",
-		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/dto/$R{servletClassSimple}.java"
+		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/dto/AtomFeedResource.java"
 	}
 )
 @SerializerConfig(
@@ -72,7 +69,6 @@ import org.apache.juneau.serializer.annotation.*;
 	rdfxml_tab="5",
 	addRootProperty="true"
 )
-@Marshalled(onClass=Feed.class,example="$F{AtomFeedResource_example.json}")
 public class AtomFeedResource extends BasicRestServlet implements BasicUniversalJenaConfig {
 	private static final long serialVersionUID = 1L;
 
@@ -117,6 +113,7 @@ public class AtomFeedResource extends BasicRestServlet implements BasicUniversal
 	}
 
 	/**
+	 * [HTTP GET /dto/atom]
 	 * Get the sample ATOM feed
 	 *
 	 * @return The sample ATOM feed.
@@ -129,6 +126,7 @@ public class AtomFeedResource extends BasicRestServlet implements BasicUniversal
 	}
 
 	/**
+	 * [HTTP PUT /dto/atom]
 	 * Overwrite the sample ATOM feed
 	 *
 	 * @param feed The new ATOM feed.

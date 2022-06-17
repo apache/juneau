@@ -46,8 +46,7 @@ import org.apache.juneau.rest.widget.*;
 )
 @HtmlDocConfig(
 	widgets={
-		ContentTypeMenuItem.class,
-		ThemeMenuItem.class
+		ContentTypeMenuItem.class
 	},
 	navlinks={
 		"up: request:/..",
@@ -55,7 +54,7 @@ import org.apache.juneau.rest.widget.*;
 		"stats: servlet:/stats",
 		"$W{ContentTypeMenuItem}",
 		"$W{ThemeMenuItem}",
-		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/dto/$R{servletClassSimple}.java"
+		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/dto/JsonSchemaResource.java"
 	},
 	aside={
 		"<div style='min-width:200px' class='text'>",
@@ -92,6 +91,7 @@ public class JsonSchemaResource extends BasicRestServlet implements BasicUnivers
 	}
 
 	/**
+	 * [HTTP GET /dto/jsonSchema]
 	 * Get the JSON-Schema document.
 	 *
 	 * @return The JSON-Schema document.
@@ -104,6 +104,7 @@ public class JsonSchemaResource extends BasicRestServlet implements BasicUnivers
 	}
 
 	/**
+	 * [HTTP PUT /dto/jsonSchema]
 	 * Overwrite the JSON-Schema document
 	 *
 	 * @param schema The new schema document.

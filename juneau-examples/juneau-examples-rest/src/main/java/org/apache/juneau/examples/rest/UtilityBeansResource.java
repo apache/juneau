@@ -12,21 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import java.util.*;
-
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.examples.parser.*;
 import org.apache.juneau.examples.serializer.*;
 import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.servlet.*;
-
-import java.awt.image.*;
-import java.net.*;
+import org.apache.juneau.rest.widget.*;
 
 /**
  * Sample resource that allows images to be uploaded and retrieved.
@@ -44,35 +38,56 @@ import java.net.*;
 	description="Examples of utility bean usage."
 )
 @HtmlDocConfig(
-	navlinks="options: ?method=OPTIONS"
+	widgets={
+		ContentTypeMenuItem.class
+	},
+	navlinks={
+		"up: request:/..",
+		"api: servlet:/api",
+		"stats: servlet:/stats",
+		"$W{ContentTypeMenuItem}",
+		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/UtilityBeansResource.java"
+	},
+	aside={
+		"<div class='text'>",
+		"	<p>Examples of serialized beans in the org.apache.juneau.rest.utilitybeans package.</p>",
+		"</div>"
+	},
+	asideFloat="RIGHT"
 )
-public class UtilityBeansResource extends BasicRestServlet implements BasicUniversalConfig {
+@SuppressWarnings("javadoc")
+public class UtilityBeansResource extends BasicRestObject implements BasicUniversalConfig {
 
+	@SuppressWarnings("unused")
 	private static final long serialVersionUID = 1L;
 
+	/**
+	 * [HTTP GET /utilitybeans]
+	 * Returns descriptive links to the child endpoints.
+	 */
 	@RestGet("/")
-	public ResourceDescriptions getDescriptions() {
+	public ResourceDescriptions getChildDescriptions() {
 		return ResourceDescriptions
 			.create()
-			.append("BeanDescription", "Example of BeanDescription bean");
+			.append("BeanDescription", "Example of BeanDescription bean")
+			.append("Hyperlink", "Example of Hyperlink bean")
+			.append("SeeOtherRoot", "Example of SeeOtherRoot bean");
 	}
 
-
+	/**
+	 * [HTTP GET /utilitybeans/BeanDescription]
+	 * Example of serialized org.apache.juneau.rest.utilitybeans.ResourceDescriptions bean.
+	 */
 	@RestGet("/BeanDescription")
-	public BeanDescription aBeanDescription() {
-		return BeanDescription.of(AddressBook.class);
-	}
-
-	public static class AddressBook extends LinkedList<Person> {
-
-		public AddressBook init() {
-			add(
-				new Person("Bill Clinton", 65,
-					new Address("55W. 125th Street", "New York", "NY", 10027, true)
-				)
-			);
-			return this;
+	@HtmlDocConfig(
+		aside={
+			"<div class='text'>",
+			"	<p>Example of serialized org.apache.juneau.rest.utilitybeans.ResourceDescriptions bean.</p>",
+			"</div>"
 		}
+	)
+	public BeanDescription aBeanDescription() {
+		return BeanDescription.of(Address.class);
 	}
 
 	@Bean(p="street,city,state,zip,isCurrent")
@@ -84,40 +99,38 @@ public class UtilityBeansResource extends BasicRestServlet implements BasicUnive
 		public boolean isCurrent;
 
 		public Address() {}
-
-		public Address(String street, String city, String state, int zip, boolean isCurrent) {
-			this.street = street;
-			this.city = city;
-			this.state = state;
-			this.zip = zip;
-			this.isCurrent = isCurrent;
-		}
-		@Override /* Object */
-		public String toString() {
-			return "Address(street="+street+",city="+city+",state="+state+",zip="+zip+",isCurrent="+isCurrent+")";
-		}
 	}
 
-	@Bean(typeName="Person",p="name,age,addresses")
-	public static class Person {
-		public String name;
-		public int age;
-		public Address[] addresses;
-
-		public Person() {}
-
-		public Person(String name, int age, Address...addresses) {
-			this.name = name;
-			this.age = age;
-			this.addresses = addresses;
+	/**
+	 * [HTTP GET /utilitybeans/Hyperlink]
+	 * Example of serialized org.apache.juneau.rest.utilitybeans.Hyperlink bean.
+	 */
+	@RestGet("/Hyperlink")
+	@HtmlDocConfig(
+		aside={
+			"<div class='text'>",
+			"	<p>Example of serialized org.apache.juneau.rest.utilitybeans.Hyperlink bean.</p>",
+			"</div>"
 		}
-
-		@Override /* Object */
-		public String toString() {
-			return "Person(name="+name+",age="+age+")";
-		}
+	)
+	public Hyperlink aHyperlink() {
+		return Hyperlink.create("/utilitybeans", "Back to /utilitybeans");
 	}
 
-
-
+	/**
+	 * [HTTP GET /utilitybeans/SeeOtherRoot]
+	 * Example of serialized org.apache.juneau.rest.utilitybeans.SeeOtherRoot bean.
+	 * This just redirects back to the servlet root.
+	 */
+	@RestGet("/SeeOtherRoot")
+	@HtmlDocConfig(
+		aside={
+			"<div class='text'>",
+			"	<p>Example of serialized org.apache.juneau.rest.utilitybeans.SeeOtherRoot bean.</p>",
+			"</div>"
+		}
+	)
+	public SeeOtherRoot aSeeOtherRoot() {
+		return SeeOtherRoot.INSTANCE;
+	}
 }

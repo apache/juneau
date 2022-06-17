@@ -28,7 +28,7 @@ public class RootContentTest extends ContentComboTestBase {
 		return alist(new Object[][] {
 			{ 	/* 0 */
 				new ComboInput("HTML-stylesheet", "/", MediaType.HTML,
-					"@import '/htdocs/themes/devops.css';",
+					"@import '/htdocs/themes/dark.css';",
 					".menu-item {"
 				)
 			},
@@ -50,7 +50,6 @@ public class RootContentTest extends ContentComboTestBase {
 					"<nav>",
 					"<a href='/api'>api</a>",
 					"<a onclick='menuClick(this);'>content-type</a>",
-					"<a onclick='menuClick(this);'>themes</a>",
 					"<a href='https://github.com/apache/juneau/blob/master/juneau-examples/juneau-examples-rest/src/main/java/org/apache/juneau/examples/rest/RootResources.java'>source</a>"
 				)
 			},
@@ -61,84 +60,75 @@ public class RootContentTest extends ContentComboTestBase {
 				)
 			},
 			{ 	/* 5 */
-				new ComboInput("HTML-nav-popup-styles", "/", MediaType.HTML,
-					"/?stylesheet=htdocs%2Fthemes%2Fdevops.css",
-					"/?stylesheet=htdocs%2Fthemes%2Flight.css",
-					"/?stylesheet=htdocs%2Fthemes%2Foriginal.css",
-					"/?stylesheet=htdocs%2Fthemes%2Fdark.css"
-				)
-			},
-			{ 	/* 6 */
 				new ComboInput("HTML-aside", "/", MediaType.HTML,
 					"<aside>",
 					"<p>This is an example of a 'router' page that serves as a jumping-off point to child resources.</p>",
 					"<p>Other features (such as this aside) are added through annotations.</p>"
 				)
 			},
-			{ 	/* 7 */
+			{ 	/* 6 */
 				new ComboInput("HTML-footer", "/", MediaType.HTML,
 					"<footer>",
 					"<img style='float:right;padding-right:20px;height:32px' src='/htdocs/images/asf.png'>"
 				)
 			},
-			{ 	/* 8 */
+			{ 	/* 7 */
 				new ComboInput("HTML-content-text/html", "/", MediaType.HTML,
 					"<a href='/helloWorld'>helloWorld</a>",
 					"<td>Hello World</td>"
 				)
 			},
-			{ 	/* 9 */
+			{ 	/* 8 */
 				new ComboInput("HTML-content-application/json", "/", MediaType.JSON,
 					"'name':'helloWorld',",
 					"'description':'Hello World'"
 				)
 			},
-			{ 	/* 10 */
+			{ 	/* 9 */
 				new ComboInput("HTML-content-octal/msgpack", "/", MediaType.MSGPACK,
-					"94 82 A4"
+					"82 A4 6E"
 				)
 			},
-			{ 	/* 11 */
+			{ 	/* 10 */
 				new ComboInput("HTML-content-text/plain", "/", MediaType.PLAIN,
 					"Hello World"
 				)
 			},
-			{ 	/* 12 */
+			{ 	/* 11 */
 				new ComboInput("HTML-content-text/uon", "/", MediaType.UON,
 					"(name=helloWorld,description='Hello World')"
 				)
 			},
-			{ 	/* 13 */
+			{ 	/* 12 */
 				new ComboInput("HTML-content-application/x-www-form-urlencoded", "/", MediaType.URLENCODING,
 					"0=(name=helloWorld,description='Hello+World')"
 				)
 			},
-			{ 	/* 14 */
+			{ 	/* 13 */
 				new ComboInput("HTML-content-text/xml", "/", MediaType.XML,
 					"<name>helloWorld</name><description>Hello World</description>"
 				)
 			},
-			{ 	/* 15 */
+			{ 	/* 14 */
 				new ComboInput("HTML-content-text/xml+rdf", "/", MediaType.RDF,
 					"<jp:name>helloWorld</jp:name>"
 				)
 			},
-			{ 	/* 16 */
+			{ 	/* 15 */
 				new ComboInput("HTML-content-text/n-triple", "/", MediaType.NTRIPLE,
 					"\"helloWorld\"^^<"
 				)
 			},
-			{ 	/* 17 */
+			{ 	/* 16 */
 				new ComboInput("HTML-content-text/turtle", "/", MediaType.TURTLE,
 					"jp:description \"Hello World\""
 				)
 			},
-			{ 	/* 18 */
+			{ 	/* 17 */
 				new ComboInput("HTML-content-text/n3", "/", MediaType.N3,
 					"jp:description \"Hello World\""
 				)
 			}
-
 		});
 	}
 
