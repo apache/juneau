@@ -1,0 +1,126 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Using with HTML Beans', created:'9.0.0'} 
+
+<div class='topic'>
+	<p>
+		The {@link oaj.examples.rest.HtmlBeansResource} class shows how {@link oaj.dto.html5 HTML5 beans} can be
+		used to generate arbitrary HTML on REST endpoints.
+	</p>
+	<img class='bordered w800' src='doc-files/jrs.HtmlBeans.png'>
+	
+	<h5 class='topic'>table</h5>
+	<p>
+		The {@link oaj.examples.rest.HtmlBeansResource#aTable() aTable()} method shows an example
+		of rendering an HTML table.
+	</p>
+		
+	<p class='bjava'>
+	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+	
+	<ja>@RestGet</ja>(<js>"/table"</js>)
+	<ja>@HtmlDocConfig</ja>(
+		aside={
+			<js>"&lt;div class='text'&gt;"</js>,
+			<js>"	&lt;p&gt;Example of serialized table.&lt;/p&gt;"</js>,
+			<js>"&lt;/div&gt;"</js>
+		}
+	)
+	<jk>public</jk> Table aTable() {
+		<jk>return</jk> <jsm>table</jsm>(
+			<jsm>tr</jsm>(
+				<jsm>th</jsm>(<js>"c1"</js>),
+				<jsm>th</jsm>(<js>"c2"</js>)
+			),
+			<jsm>tr</jsm>(
+				<jsm>td</jsm>(<js>"v1"</js>),
+				<jsm>td</jsm>(<js>"v2"</js>)
+			)
+		);
+	}
+	</p>
+	
+	<h5 class='figure'>HTML representation</h5>
+	<img class='bordered w800' src='doc-files/jrs.HtmlBeans.table.png'>
+	
+	<h5 class='figure'>JSON representation</h5>
+	<img class='bordered w800' src='doc-files/jrs.HtmlBeans.table.json.png'>
+	
+	<h5 class='topic'>div</h5>
+	<p>
+		The {@link oaj.examples.rest.HtmlBeansResource#aDiv() aDiv()} method shows an example
+		of rendering a div tag with mixed content.
+	</p>
+	<p class='bjava'>
+	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+	
+	<ja>@RestGet</ja>(<js>"/div"</js>)
+	<ja>@HtmlDocConfig</ja>(
+		aside={
+			<js>"&lt;div class='text'&gt;"</js>,
+			<js>"	&lt;p&gt;Example of serialized div tag.&lt;/p&gt;"</js>,
+			<js>"&lt;/div&gt;"</js>
+		}
+	)
+	<jk>public</jk> HtmlElement aDiv() {
+		<jk>return</jk> <jsm>div</jsm>()
+			.children(
+				<jsm>p</jsm>(<js>"Juneau supports "</js>, <jsm>b</jsm>(<jsm>i</jsm>(<js>"mixed"</js>)), <js>" content!"</js>)
+			)
+			.onmouseover(<js>"alert(\"boo!\");"</js>);
+	}
+	</p>
+	
+	<h5 class='figure'>HTML representation</h5>
+	<img class='bordered w800' src='doc-files/jrs.HtmlBeans.div.png'>
+	
+	<h5 class='figure'>JSON representation</h5>
+	<img class='bordered w800' src='doc-files/jrs.HtmlBeans.div.json.png'>
+	
+	<h5 class='topic'>form</h5>
+	<p>
+		The {@link oaj.examples.rest.HtmlBeansResource#aForm() aForm()} method shows an example
+		of rendering an HTML form.
+	</p>
+	<p class='bjava'>
+	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+	
+	<ja>@RestGet</ja>(<js>"/form"</js>)
+	<ja>@HtmlDocConfig</ja>(
+		aside={
+			<js>"&lt;div class='text'&gt;"</js>,
+			<js>"	&lt;p&gt;Example of serialized HTML form.&lt;/p&gt;"</js>,
+			<js>"&lt;/div&gt;"</js>
+		}
+	)
+	<jk>public Form</jk> aForm() {
+		<jk>return</jk> <jsm>form</jsm>().action(<js>"/submit"</js>).method(<js>"POST"</js>)
+			.children(
+				<js>"Position (1-10000): "</js>, <jsm>input</jsm>(<js>"number"</js>).name(<js>"pos"</js>).value(1), <jsm>br</jsm>(),
+				<js>"Limit (1-10000): "</js>, <jsm>input</jsm>(<js>"number"</js>).name(<js>"limit"</js>).value(100), <jsm>br</jsm>(),
+				<jsm>button</jsm>(<js>"submit"</js>, <js>"Submit"</js>),
+				<jsm>button</jsm>(<js>"reset"</js>, <js>"Reset"</js>)
+			);
+	}
+	</p>
+	
+	<h5 class='figure'>HTML representation</h5>
+	<img class='bordered w800' src='doc-files/jrs.HtmlBeans.form.png'>
+	
+	<h5 class='figure'>JSON representation</h5>
+	<img class='bordered w800' src='doc-files/jrs.HtmlBeans.form.json.png'>
+	
+</div>

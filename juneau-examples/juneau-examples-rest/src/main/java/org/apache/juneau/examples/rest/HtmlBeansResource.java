@@ -12,7 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest;
 
-import org.apache.juneau.annotation.*;
+import static org.apache.juneau.dto.html5.HtmlBuilder.*;
+
+import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
@@ -25,14 +27,14 @@ import org.apache.juneau.rest.widget.*;
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.Marshalling REST Marshalling}
- * 	<li class='link'>{@doc jrs.UtilityBeans Utility Beans}
+ * 	<li class='link'>{@doc jrs.HtmlBeans HtmlBeans}
  * 	<li class='extlink'>{@source}
  * </ul>
  */
 @Rest(
-	path="/utilitybeans",
-	title="Utility beans examples",
-	description="Examples of utility bean usage."
+	path="/htmlbeans",
+	title="HTML bean examples",
+	description="Examples of serialized HTML beans."
 )
 @HtmlDocConfig(
 	widgets={
@@ -43,91 +45,95 @@ import org.apache.juneau.rest.widget.*;
 		"api: servlet:/api",
 		"stats: servlet:/stats",
 		"$W{ContentTypeMenuItem}",
-		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/UtilityBeansResource.java"
+		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/HtmlBeansResource.java"
 	},
 	aside={
 		"<div class='text'>",
-		"	<p>Examples of serialized beans in the org.apache.juneau.rest.utilitybeans package.</p>",
+		"	<p>Examples of serialized HTML beans.</p>",
 		"</div>"
 	},
 	asideFloat="RIGHT"
 )
 @SuppressWarnings("javadoc")
-public class UtilityBeansResource extends BasicRestObject implements BasicUniversalConfig {
+public class HtmlBeansResource extends BasicRestObject implements BasicUniversalConfig {
 
 	@SuppressWarnings("unused")
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * [HTTP GET /utilitybeans]
+	 * [HTTP GET /htmlbeans]
 	 * Returns descriptive links to the child endpoints.
 	 */
 	@RestGet("/")
 	public ResourceDescriptions getChildDescriptions() {
 		return ResourceDescriptions
 			.create()
-			.append("BeanDescription", "Example of BeanDescription bean")
-			.append("Hyperlink", "Example of Hyperlink bean")
-			.append("SeeOtherRoot", "Example of SeeOtherRoot bean");
+			.append("table", "Example of a serialized table")
+			.append("div", "Example of a serialized div tag")
+			.append("form", "Example of a serialized form");
 	}
 
 	/**
-	 * [HTTP GET /utilitybeans/BeanDescription]
-	 * Example of serialized org.apache.juneau.rest.utilitybeans.ResourceDescriptions bean.
+	 * [HTTP GET /htmlbeans/table]
 	 */
-	@RestGet("/BeanDescription")
+	@RestGet("/table")
 	@HtmlDocConfig(
 		aside={
 			"<div class='text'>",
-			"	<p>Example of serialized ResourceDescriptions bean.</p>",
+			"	<p>Example of serialized table.</p>",
 			"</div>"
 		}
 	)
-	public BeanDescription aBeanDescription() {
-		return BeanDescription.of(Address.class);
-	}
-
-	@Bean(p="street,city,state,zip,isCurrent")
-	public static class Address {
-		public String street;
-		public String city;
-		public String state;
-		public int zip;
-		public boolean isCurrent;
-
-		public Address() {}
+	public Table aTable() {
+		return table(
+			tr(
+				th("c1"),
+				th("c2")
+			),
+			tr(
+				td("v1"),
+				td("v2")
+			)
+		);
 	}
 
 	/**
-	 * [HTTP GET /utilitybeans/Hyperlink]
-	 * Example of serialized org.apache.juneau.rest.utilitybeans.Hyperlink bean.
+	 * [HTTP GET /htmlbeans/div]
 	 */
-	@RestGet("/Hyperlink")
+	@RestGet("/div")
 	@HtmlDocConfig(
 		aside={
 			"<div class='text'>",
-			"	<p>Example of serialized Hyperlink bean.</p>",
+			"	<p>Example of serialized div tag.</p>",
 			"</div>"
 		}
 	)
-	public Hyperlink aHyperlink() {
-		return Hyperlink.create("/utilitybeans", "Back to /utilitybeans");
+	public HtmlElement aDiv() {
+		return div()
+			.children(
+				p("Juneau supports ", b(i("mixed")), " content!")
+			)
+			.onmouseover("alert(\"boo!\");");
 	}
 
 	/**
-	 * [HTTP GET /utilitybeans/SeeOtherRoot]
-	 * Example of serialized SeeOtherRoot bean.
-	 * This just redirects back to the servlet root.
+	 * [HTTP GET /htmlbeans/form]
 	 */
-	@RestGet("/SeeOtherRoot")
+	@RestGet("/form")
 	@HtmlDocConfig(
 		aside={
 			"<div class='text'>",
-			"	<p>Example of serialized org.apache.juneau.rest.utilitybeans.SeeOtherRoot bean.</p>",
+			"	<p>Example of serialized HTML form.</p>",
 			"</div>"
 		}
 	)
-	public SeeOtherRoot aSeeOtherRoot() {
-		return SeeOtherRoot.INSTANCE;
+	public Form aForm() {
+		return form().action("/submit").method("POST")
+			.children(
+				"Position (1-10000): ", input("number").name("pos").value(1), br(),
+				"Limit (1-10000): ", input("number").name("limit").value(100), br(),
+				button("submit", "Submit"),
+				button("reset", "Reset")
+			);
 	}
 }

@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'URIs', flags:'todo'}
+{title:'Serializing URIs', updated:'9.0.0'}
 
 <div class='topic'>
 	<p>
@@ -83,12 +83,12 @@
 		URI resolution is controlled by the following settings:
 	</p>
 	<ul class='javatree'>
-		<li class='jc'>{@link oajr.RestContext}
+		<li class='jc'>{@link oajr.RestContext.Builder}
 			<ul class='javatreec'>
-				<li class='jf'>{@del oajr.RestContext#REST_uriAuthority REST_uriAuthority}
-				<li class='jf'>{@del oajr.RestContext#REST_uriContext REST_uriContext}
-				<li class='jf'>{@del oajr.RestContext#REST_uriRelativity REST_uriRelativity}
-				<li class='jf'>{@del oajr.RestContext#REST_uriResolution REST_uriResolution}
+				<li class='jm'>{@link oajr.RestContext.Builder#uriAuthority(String) uriAuthority(String)}
+				<li class='jm'>{@link oajr.RestContext.Builder#uriContext(String) uriContext(String)}
+				<li class='jm'>{@link oajr.RestContext.Builder#uriRelativity(UriRelativity) uriRelativity(UriRelativity)}
+				<li class='jm'>{@link oajr.RestContext.Builder#uriResolution(UriResolution) uriResolution(UriResolution)}
 			</ul>
 		</li>	
 	</ul>

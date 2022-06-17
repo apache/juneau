@@ -39,6 +39,7 @@ import org.apache.juneau.serializer.annotation.*;
 		HelloWorldResource.class,
 		DtoExamples.class,
 		UtilityBeansResource.class,
+		HtmlBeansResource.class,
 		ConfigResource.class,
 		ShutdownResource.class
 	}
