@@ -431,8 +431,7 @@
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#juneau-rest-server-springboot'>juneau-rest-server-springboot</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></p>
 	<ol>
-		<li><p><a class='doclink' href='#juneau-rest-server-springboot.jrss.Overview'>Overview</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></p>
-		<li><p><a class='doclink' href='#juneau-rest-server-springboot.jrss.ChildResources'>Child Resources</a><span class='update'>created: 8.1.0, <b><red>todo</red></b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-server-springboot.jrss.Overview'>Overview</a><span class='update'>created: 8.0.0, updated: <b>9.0.0</b></span></p>
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#juneau-rest-client'>juneau-rest-client</a><span class='update'>updated: 8.2.0, <b><red>todo</red></b></span></p>
 	<ol>
@@ -22558,144 +22557,157 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server-springboot.jrss.Overview' id='juneau-rest-server-springboot.jrss.Overview'>9.1 - Overview</a><span class='update'>created: 8.0.0, <b><red>todo</red></b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server-springboot.jrss.Overview' id='juneau-rest-server-springboot.jrss.Overview'>9.1 - Overview</a><span class='update'>created: 8.0.0, updated: <b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 9.1 - juneau-rest-server-springboot.jrss.Overview -->
 <div class='topic'>
 	<p>
-		The Juneau integration component for Spring Boot consists of the following classes:
+		The Juneau REST servlet APIs are designed to work seemlessly with the Spring Boot framework.
+		The only restriction is that your top-level REST resource must extend from one of the following classes:
 	</p>
 	<ul class='javatree'>
-		<li class='ja'>{@del org.apache.juneau.rest.springboot.annotation.JuneauRestRoot}
-		<li class='jc'>{@del org.apache.juneau.rest.springboot.JuneauRestInitializer}
-		<li class='jc'>{@del org.apache.juneau.rest.springboot.SpringRestResourceResolver}
+		<li class='jp'>{@link org.apache.juneau.rest.springboot}
+		<ul class='javatree'>
+			<li class='jc'>{@link org.apache.juneau.rest.springboot.BasicSpringRestServlet} - Basic servlet
+			<li class='jc'>{@link org.apache.juneau.rest.springboot.BasicSpringRestServletGroup} - Basic servlet group
+		</ul>
 	</ul>
 	<p>
-		A typical Spring Boot application can use the {@del org.apache.juneau.rest.springboot.JuneauRestInitializer} to find
-		and register Juneau REST servlets via the {@del org.apache.juneau.rest.springboot.annotation.JuneauRestRoot} annotation.
+		These classes are the equivalent to the {@link org.apache.juneau.rest.servlet.BasicRestServlet} and {@link org.apache.juneau.rest.servlet.BasicRestServletGroup}
+		except they hook into the injection framework of Spring Boot to provide resolution of beans (e.g. child resources, various
+		configuration classes).
 	</p>
-	<h5 class='figure'>Example:</h5>
+	<p>
+		The {@link org.apache.juneau.examples.rest.springboot} package and {@link org.apache.juneau.examples.rest.springboot.App} 
+		application are a basic Spring Boot application that shows off simple Juneau examples including injection beans.
+	</p>	
 	<p class='bjava'>
 	<ja>@SpringBootApplication</ja>
 	<ja>@Controller</ja>
 	<jk>public class</jk> App {
 	
-		<jk>public static void</jk> main(String[] args) {
-			<jk>new</jk> SpringApplicationBuilder(App.<jk>class</jk>)
-				.initializers(<jk>new</jk> JuneauRestInitializer(App.<jk>class</jk>))
-				.run(args);
+		<jc>//Entry point method.</jc>
+		<jk>public static void</jk> main(String[] <jv>args</jv>) {
+			<jk>new</jk> SpringApplicationBuilder(App.<jk>class</jk>).run(<jv>args</jv>);
 		}
 	
-		<jd>/** Our root resource */</jd>
-		<ja>@Bean @JuneauRestRoot</ja>
-		<jk>public</jk> RootResource getRootResource() {
-			<jk>return new</jk> RootResource();  <jc>// A subclass of RestServlet.</jc>
+		<jc>// Our root REST bean.
+		// Note that this must extend from {@link SpringRestServlet} to allow use of injection.
+		// All REST objects are attached to this bean using the {@link Rest#children()} annotation.</jc>
+		<ja>@Bean</ja>
+		<jk>public</jk> RootResources getRootResources() {
+			<jk>return new</jk> RootResources();
+		}
+	
+		<jc>// Registers our REST bean at the URI root.</jc>
+		<ja>@Bean</ja>
+		<jk>public</jk> ServletRegistrationBean&lt;Servlet&gt; getRootServlet(RootResources <jv>rootResources</jv>) {
+			<jk>return new</jk> ServletRegistrationBean&lt;&gt;(<jv>rootResources</jv>, <js>"/*"</js>);
+		}
+	
+		<jc>// Injected child resource.</jc>
+		<ja>@Bean</ja>
+		<jk>public</jk> HelloWorldResource getHelloWorldResource() {
+			<jk>return new</jk> HelloWorldResource();
+		}
+	
+		<jc>// Injected child bean used in injected child resource.</jc>
+		<ja>@Bean</ja>
+		<jk>public</jk> HelloWorldMessageProvider getHelloWorldMessageProvider() {
+			<jk>return new</jk> HelloWorldMessageProvider(<js>"Hello Spring injection user!"</js>);
 		}
 	}
-	</p>
+	</p>	
 	<p>
-		The initializer will search for Spring beans annotated with the <ja>@JuneauRestRoot</ja> annotation identifying it
-		as a top-level servlet to be deployed in the Spring Boot web container.
-	</p>
-	<p>
-		Another option is to use the <ja>@JuneauRestRoot</ja> annotation on your Spring Boot source class like so:  
+		Our root resource servlet serves as a router page.  It is defined as follows:
 	</p>
 	<p class='bjava'>
-	<ja>@SpringBootApplication</ja>
-	<ja>@Controller</ja>
-	<ja>@JuneauRestRoot</ja>(servlets=RootResource.<jk>class</jk>)
-	<jk>public class</jk> App {
+	<ja>@Rest</ja>(
+		title=<js>"Root resources"</js>,
+		description=<js>"Example of a router resource page."</js>,
+		children={
+			HelloWorldResource.<jk>class</jk>,
+			DtoExamples.<jk>class</jk>,
+			UtilityBeansResource.<jk>class</jk>,
+			HtmlBeansResource.<jk>class</jk>,
+			ConfigResource.<jk>class</jk>,
+			ShutdownResource.<jk>class</jk>
+		}
+	)
+	<ja>@HtmlDocConfig</ja>(
+		widgets={
+			ContentTypeMenuItem.<jk>class</jk>
+		},
+		navlinks={
+			<js>"api: servlet:/api"</js>,
+			<js>"stats: servlet:/stats"</js>,
+			<js>"$W{ContentTypeMenuItem}"</js>,
+			<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
+		},
+		aside={
+			<js>"&lt;div class='text'&gt;"</js>,
+			<js>"	&lt;p&gt;This is an example of a 'router' page that serves as a jumping-off point to child resources.&lt;/p&gt;"</js>,
+			<js>"	&lt;p&gt;Resources can be nested arbitrarily deep through router pages.&lt;/p&gt;"</js>,
+			<js>"	&lt;p&gt;Note the &lt;span class='link'&gt;API&lt;/span&gt; link provided that lets you see the generated swagger doc for this page.&lt;/p&gt;"</js>,
+			<js>"	&lt;p&gt;Also note the &lt;span class='link'&gt;STATS&lt;/span&gt; link that provides basic usage statistics.&lt;/p&gt;"</js>,
+			<js>"	&lt;p&gt;Also note the &lt;span class='link'&gt;SOURCE&lt;/span&gt; link on these pages to view the source code for the page.&lt;/p&gt;"</js>,
+			<js>"	&lt;p&gt;All content on pages in the UI are serialized POJOs.  In this case, it's a serialized array of beans with 2 properties, 'name' and 'description'.&lt;/p&gt;"</js>,
+			<js>"	&lt;p&gt;Other features (such as this aside) are added through annotations.&lt;/p&gt;"</js>,
+			<js>"&lt;/div&gt;"</js>
+		},
+		asideFloat="RIGHT"
+	)
+	<ja>@SerializerConfig</ja>(
+		quoteChar=<js>"'"</js>
+	)
+	<jk>public class</jk> RootResources <jk>extends</jk> BasicSpringRestServletGroup <jk>implements</jk> BasicUniversalConfig {
+		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L;
+	}
+	</p>	
 	
-		<jk>public static void</jk> main(String[] args) {
-			<jk>new</jk> SpringApplicationBuilder(App.<jk>class</jk>)
-				.initializers(<jk>new</jk> JuneauRestInitializer(App.<jk>class</jk>))
-				.run(args);
+	<h5 class='figure'>HTML representation</h5>
+	<img class='bordered w800' src='doc-files/jrss.Overview.RootResources.png'>
+	
+	<h5 class='figure'>JSON representation</h5>
+	<img class='bordered w800' src='doc-files/jrss.Overview.RootResources.json.png'>
+	
+	<p>
+		The {@link org.apache.juneau.examples.rest.springboot.HelloWorldResource} class shows an example of a child resource
+		defined as an injected bean.
+	</p>
+	<p class='bjava'>
+	<ja>@Rest</ja>(
+		title=<js>"Hello World"</js>,
+		description=<js>"An example of the simplest-possible resource"</js>,
+		path=<js>"/helloWorld"</js>
+	)
+	<ja>@HtmlDocConfig</ja>(
+		aside={
+			<js>"&lt;div style='max-width:400px' class='text'&gt;"</js>,
+			<js>"	&lt;p&gt;This page shows a resource that simply response with a 'Hello world!' message&lt;/p&gt;"</js>,
+			<js>"	&lt;p&gt;The POJO serialized is a simple String.&lt;/p&gt;"</js>,
+			<js>"&lt;/div&gt;"</js>
+		}
+	)
+	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestObject <jk>implements</jk> BasicUniversalConfig {
+	
+		<ja>@Inject</ja>
+		<jk>private</jk> HelloWorldMessageProvider <jf>messageProvider</jf>;
+	
+		<ja>@RestGet</ja>(path=<js>"/*"</js>, summary=<js>"Responds with injected message"</js>)
+		<jk>public</jk> String sayHello() {
+			<jk>return</jk> <jf>messageProvider</jf>.get();
 		}
 	}
 	</p>
+	
 	<p>
-		The root servlets are given an instance of {@del org.apache.juneau.rest.springboot.SpringRestResourceResolver} which allows
-		for child resources to be defined as injectable Spring beans.  
+		Note that the message rendered is coming from our injected message provider:
 	</p>
-	<p>
-		 The {@doc juneau-examples-rest-springboot} section describes how the Examples REST application is deployed
-		 using Spring Boot and quickly deployable as an online application using Heroku.
-	</p>
+	<h5 class='figure'>HTML representation</h5>
+	<img class='bordered w800' src='doc-files/jrss.Overview.HelloWorldResource.png'>
+	
 </div>
 </div><!-- END: 9.1 - juneau-rest-server-springboot.jrss.Overview -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server-springboot.jrss.ChildResources' id='juneau-rest-server-springboot.jrss.ChildResources'>9.2 - Child Resources</a><span class='update'>created: 8.1.0, <b><red>todo</red></b></span></h3>
-<div class='topic'><!-- START: 9.2 - juneau-rest-server-springboot.jrss.ChildResources -->
-<div class='topic'>
-	<p>
-		When using the <ja>@JuneauRestRoot</ja> annotation, servlet are given an instance of {@del org.apache.juneau.rest.springboot.SpringRestResourceResolver}.  
-		The resource resolver gets passed down through the children hierarchy, allowing child resources to be defined as injectable Spring beans.
-	</p>
-	<h5 class='figure'>Example:</h5>
-	<p class='bjava'>
-	<ja>@Configuration</ja>
-	<jk>public class</jk> AppConfiguration {
-	
-		<ja>@Bean @JuneauRestRoot</ja>
-		<jk>public</jk> RootResource getRootResource() {
-			<jk>return new</jk> RootResource();
-		}
-
-		<ja>@Bean</ja>
-		<jk>public</jk> ChildResource getChildResource() {
-			<jk>return new</jk> ChildResource();
-		}
-
-		<ja>@Bean</ja>
-		<jk>public</jk> GrandChildResource getGrandChildResource() {
-			<jk>return new</jk> GrandChildResource(); 
-		}
-	}
-	</p>
-	<p>
-		The root resource class must extend from <c>HttpServlet</c> so that it can be registered as a normal
-		servlet using the Spring Boot architecture.  The {@link org.apache.juneau.rest.servlet.BasicRestServletGroup} class is our router class
-		that extends from <c>HttpServlet</c>:
-	</p>
-	<p class='bjava'>
-	<ja>@Rest</ja>(
-		path=<js>"/root"</js>,
-		children={
-			ChildResource.<jk>class</jk>
-		}
-	)
-	<jk>public class</jk> RootResource <jk>extends</jk> BasicRestServletGroup <jk>implements</jk> BasicUniversalConfig {
-		<jc>// No code needed.</jc>
-	}
-	</p>
-	<p>
-		Because Spring Boot will automatically register any beans that extend from <c>HttpServlet</c>, we
-		DON'T want the child classes to extend from <c>HttpServlet</c>.  Instead, we extend from
-		{@del org.apache.juneau.rest.BasicRestGroup} and {@del org.apache.juneau.rest.BasicRest} instead:
-	</p>
-	
-	<p class='bjava'>
-	<ja>@Rest</ja>(
-		path=<js>"/child"</js>,
-		children={
-			GrandChildResource.<jk>class</jk>
-		}
-	)
-	<jk>public class</jk> ChildResource <jk>extends</jk> BasicRestGroup <jk>implements</jk> BasicUniversalConfig {
-		<jc>// No code needed.</jc>
-	}
-	</p>
-	<p class='bjava'>
-	<ja>@Rest</ja>(
-		path=<js>"/grandchild"</js>
-	)
-	<jk>public class</jk> GrandChildResource <jk>extends</jk> BasicRestObject <jk>implements</jk> BasicUniversalConfig {
-		<jc>// Injectable bean</jc>
-	}
-	</p>
-</div>
-</div><!-- END: 9.2 - juneau-rest-server-springboot.jrss.ChildResources -->
 </div><!-- END: 9 - juneau-rest-server-springboot -->
 
 <!-- ==================================================================================================== -->

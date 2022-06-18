@@ -313,7 +313,6 @@ jrs.SwaggerTags = #juneau-rest-server.jrs.Swagger.jrs.SwaggerTags, Overview > ju
 jrs.UsingWithOsgi = #juneau-rest-server.jrs.UsingWithOsgi, Overview > juneau-rest-server > Using with OSGi
 jrs.UtilityBeans = #juneau-rest-server.jrs.UtilityBeans, Overview > juneau-rest-server > Utility Beans
 jrsj.BaseProvider = #juneau-rest-server-jaxrs.jrsj.BaseProvider, Overview > juneau-rest-server-jaxrs > Juneau JAX-RS Provider
-jrss.ChildResources = #juneau-rest-server-springboot.jrss.ChildResources, Overview > juneau-rest-server-springboot > Child Resources
 jrss.Overview = #juneau-rest-server-springboot.jrss.Overview, Overview > juneau-rest-server-springboot > Overview
 juneau-config = #juneau-config, Overview > juneau-config
 juneau-dto = #juneau-dto, Overview > juneau-dto
