@@ -23,7 +23,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.annotation.Body;
+import org.apache.juneau.http.annotation.Content;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
@@ -71,7 +71,7 @@ public class RestHook_Test {
 				"p4:mp4"
 			}
 		)
-		public String a(@Body String in) {
+		public String a(@Content String in) {
 			return in;
 		}
 
@@ -79,7 +79,7 @@ public class RestHook_Test {
 		public String b(RestRequest req, RequestAttributes attrs) throws Exception {
 			attrs.set("p3", "pp3");
 			attrs.set("p4", "pp4");
-			return req.getBody().as(String.class);
+			return req.getContent().as(String.class);
 		}
 	}
 

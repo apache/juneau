@@ -82,7 +82,7 @@ import java.lang.annotation.*;
  *
  * <h5 class='topic'>Important note concerning FORM posts</h5>
  * <p>
- * 	This annotation should not be combined with the {@link Body @Body} annotation or {@code RestRequest.getBody()} method
+ * 	This annotation should not be combined with the {@link Content @Content} annotation or {@code RestRequest.getContent()} method
  * 	for <c>application/x-www-form-urlencoded POST</c> posts, since it will trigger the underlying servlet API to
  * 	parse the body content as key-value pairs, resulting in empty content.
  * </p>

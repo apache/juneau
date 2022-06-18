@@ -64,15 +64,15 @@ public class RestClient_BasicCalls_Test {
 			return bean;
 		}
 		@RestOp(path="/bean")
-		public ABean postBean(@Body ABean b) {
+		public ABean postBean(@Content ABean b) {
 			return b;
 		}
 		@RestOp(path="/bean")
-		public ABean putBean(@Body ABean b) {
+		public ABean putBean(@Content ABean b) {
 			return b;
 		}
 		@RestOp(path="/bean")
-		public ABean patchBean(@Body ABean b) {
+		public ABean patchBean(@Content ABean b) {
 			return b;
 		}
 		@RestOp(path="/bean")

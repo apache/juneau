@@ -182,7 +182,7 @@ public class Remote_FormDataAnnotation_Test {
 			return m.toString();
 		}
 		@RestPost
-		public Reader b(@Body Reader b) {
+		public Reader b(@Content Reader b) {
 			return b;
 		}
 	}

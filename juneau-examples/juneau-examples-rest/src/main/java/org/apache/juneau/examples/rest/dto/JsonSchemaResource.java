@@ -114,7 +114,7 @@ public class JsonSchemaResource extends BasicRestServlet implements BasicUnivers
 		summary="Overwrite the JSON-Schema document",
 		description="Replaces the schema document with the specified content, and then mirrors it as the response."
 	)
-	public JsonSchema put(@Body JsonSchema schema) {
+	public JsonSchema put(@Content JsonSchema schema) {
 		this.schema = schema;
 		return schema;
 	}

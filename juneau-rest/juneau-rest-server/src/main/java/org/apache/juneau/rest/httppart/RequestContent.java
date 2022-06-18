@@ -34,23 +34,23 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.util.*;
 
 /**
- * Contains the body of the HTTP request.
+ * Contains the content of the HTTP request.
  *
  * <p>
- * 	The {@link RequestBody} object is the API for accessing the body of an HTTP request.
+ * 	The {@link RequestContent} object is the API for accessing the content of an HTTP request.
  * 	It can be accessed by passing it as a parameter on your REST Java method:
  * </p>
  * <p class='bjava'>
  * 	<ja>@RestPost</ja>(...)
- * 	<jk>public</jk> Object myMethod(RequestBody <jv>body</jv>) {...}
+ * 	<jk>public</jk> Object myMethod(RequestContent <jv>content</jv>) {...}
  * </p>
  *
  * <h5 class='figure'>Example:</h5>
  * <p class='bjava'>
  * 	<ja>@RestPost</ja>(...)
- * 	<jk>public void</jk> doPost(RequestBody <jv>body</jv>) {
- * 		<jc>// Convert body to a linked list of Person objects.</jc>
- * 		List&lt;Person&gt; <jv>list</jv> = <jv>body</jv>.as(LinkedList.<jk>class</jk>, Person.<jk>class</jk>);
+ * 	<jk>public void</jk> doPost(RequestContent <jv>content</jv>) {
+ * 		<jc>// Convert content to a linked list of Person objects.</jc>
+ * 		List&lt;Person&gt; <jv>list</jv> = <jv>content</jv>.as(LinkedList.<jk>class</jk>, Person.<jk>class</jk>);
  * 		...
  * 	}
  * </p>
@@ -59,27 +59,27 @@ import org.apache.juneau.rest.util.*;
  * 	Some important methods on this class are:
  * </p>
  * <ul class='javatree'>
- * 	<li class='jc'>{@link RequestBody}
+ * 	<li class='jc'>{@link RequestContent}
  * 	<ul class='spaced-list'>
- * 		<li>Methods for accessing the raw contents of the request body:
+ * 		<li>Methods for accessing the raw contents of the request content:
  * 		<ul class='javatreec'>
- * 			<li class='jm'>{@link RequestBody#asBytes() asBytes()}
- * 			<li class='jm'>{@link RequestBody#asHex() asHex()}
- * 			<li class='jm'>{@link RequestBody#asSpacedHex() asSpacedHex()}
- * 			<li class='jm'>{@link RequestBody#asString() asString()}
- * 			<li class='jm'>{@link RequestBody#getInputStream() getInputStream()}
- * 			<li class='jm'>{@link RequestBody#getReader() getReader()}
+ * 			<li class='jm'>{@link RequestContent#asBytes() asBytes()}
+ * 			<li class='jm'>{@link RequestContent#asHex() asHex()}
+ * 			<li class='jm'>{@link RequestContent#asSpacedHex() asSpacedHex()}
+ * 			<li class='jm'>{@link RequestContent#asString() asString()}
+ * 			<li class='jm'>{@link RequestContent#getInputStream() getInputStream()}
+ * 			<li class='jm'>{@link RequestContent#getReader() getReader()}
  * 		</ul>
- * 		<li>Methods for parsing the contents of the request body:
+ * 		<li>Methods for parsing the contents of the request content:
  * 		<ul class='javatreec'>
- * 			<li class='jm'>{@link RequestBody#as(Class) as(Class)}
- * 			<li class='jm'>{@link RequestBody#as(Type, Type...) as(Type, Type...)}
- * 			<li class='jm'>{@link RequestBody#setSchema(HttpPartSchema) setSchema(HttpPartSchema)}
+ * 			<li class='jm'>{@link RequestContent#as(Class) as(Class)}
+ * 			<li class='jm'>{@link RequestContent#as(Type, Type...) as(Type, Type...)}
+ * 			<li class='jm'>{@link RequestContent#setSchema(HttpPartSchema) setSchema(HttpPartSchema)}
  * 		</ul>
  * 		<li>Other methods:
  * 		<ul class='javatreec'>
- * 			<li class='jm'>{@link RequestBody#cache() cache()}
- * 			<li class='jm'>{@link RequestBody#getParserMatch() getParserMatch()}
+ * 			<li class='jm'>{@link RequestContent#cache() cache()}
+ * 			<li class='jm'>{@link RequestContent#getParserMatch() getParserMatch()}
  * 		</ul>
  * 	</ul>
  * </ul>
@@ -90,9 +90,9 @@ import org.apache.juneau.rest.util.*;
  * </ul>
  */
 @SuppressWarnings("unchecked")
-public class RequestBody {
+public class RequestContent {
 
-	private byte[] body;
+	private byte[] content;
 	private final RestRequest req;
 	private EncoderSet encoders;
 	private Encoder encoder;
@@ -108,89 +108,89 @@ public class RequestBody {
 	 *
 	 * @param req The request creating this bean.
 	 */
-	public RequestBody(RestRequest req) {
+	public RequestContent(RestRequest req) {
 		this.req = req;
 	}
 
 	/**
-	 * Sets the encoders to use for decoding this body.
+	 * Sets the encoders to use for decoding this content.
 	 *
 	 * @param value The new value for this setting.
 	 * @return This object.
 	 */
-	public RequestBody encoders(EncoderSet value) {
+	public RequestContent encoders(EncoderSet value) {
 		this.encoders = value;
 		return this;
 	}
 
 	/**
-	 * Sets the parsers to use for parsing this body.
+	 * Sets the parsers to use for parsing this content.
 	 *
 	 * @param value The new value for this setting.
 	 * @return This object.
 	 */
-	public RequestBody parsers(ParserSet value) {
+	public RequestContent parsers(ParserSet value) {
 		this.parsers = value;
 		return this;
 	}
 
 	/**
-	 * Sets the schema for this body.
+	 * Sets the schema for this content.
 	 *
-	 * @param schema The new schema for this body.
+	 * @param schema The new schema for this content.
 	 * @return This object.
 	 */
-	public RequestBody setSchema(HttpPartSchema schema) {
+	public RequestContent setSchema(HttpPartSchema schema) {
 		this.schema = schema;
 		return this;
 	}
 
 	/**
-	 * Sets the max input value for this body.
+	 * Sets the max input value for this content.
 	 *
 	 * @param value The new value for this setting.
 	 * @return This object.
 	 */
-	public RequestBody maxInput(long value) {
+	public RequestContent maxInput(long value) {
 		this.maxInput = value;
 		return this;
 	}
 
 	/**
-	 * Sets the media type of this body.
+	 * Sets the media type of this content.
 	 *
 	 * @param value The new value for this setting.
 	 * @return This object.
 	 */
-	public RequestBody mediaType(MediaType value) {
+	public RequestContent mediaType(MediaType value) {
 		this.mediaType = value;
 		return this;
 	}
 
 	/**
-	 * Sets the parser to use for this body.
+	 * Sets the parser to use for this content.
 	 *
 	 * @param value The new value for this setting.
 	 * @return This object.
 	 */
-	public RequestBody parser(Parser value) {
+	public RequestContent parser(Parser value) {
 		this.parser = value;
 		return this;
 	}
 
 	/**
-	 * Sets the contents of this body.
+	 * Sets the contents of this content.
 	 *
 	 * @param value The new value for this setting.
 	 * @return This object.
 	 */
-	public RequestBody body(byte[] value) {
-		this.body = value;
+	public RequestContent content(byte[] value) {
+		this.content = value;
 		return this;
 	}
 
 	boolean isLoaded() {
-		return body != null;
+		return content != null;
 	}
 
 	/**
@@ -248,24 +248,24 @@ public class RequestBody {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Parse into an integer.</jc>
-	 * 	<jk>int</jk> <jv>body1</jv> = <jv>req</jv>.getBody().as(<jk>int</jk>.<jk>class</jk>);
+	 * 	<jk>int</jk> <jv>content1</jv> = <jv>req</jv>.getContent().as(<jk>int</jk>.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into an int array.</jc>
-	 * 	<jk>int</jk>[] <jv>body2</jv> = <jv>req</jv>.getBody().as(<jk>int</jk>[].<jk>class</jk>);
+	 * 	<jk>int</jk>[] <jv>content2</jv> = <jv>req</jv>.getContent().as(<jk>int</jk>[].<jk>class</jk>);
 
 	 * 	<jc>// Parse into a bean.</jc>
-	 * 	MyBean <jv>body3</jv> = <jv>req</jv>.getBody().as(MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>content3</jv> = <jv>req</jv>.getContent().as(MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
-	 * 	List <jv>body4</jv> = <jv>req</jv>.getBody().as(LinkedList.<jk>class</jk>);
+	 * 	List <jv>content4</jv> = <jv>req</jv>.getContent().as(LinkedList.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
-	 * 	Map <jv>body5</jv> = <jv>req</jv>.getBody().as(TreeMap.<jk>class</jk>);
+	 * 	Map <jv>content5</jv> = <jv>req</jv>.getContent().as(TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
+	 * 		If {@code allowContentParam} init parameter is true, then first looks for {@code &content=xxx} in the URL query string.
 	 * </ul>
 	 *
 	 * @param type The class type to instantiate.
@@ -288,16 +288,16 @@ public class RequestBody {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
-	 * 	List&lt;String&gt; <jv>body1</jv> = <jv>req</jv>.getBody().as(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;String&gt; <jv>content1</jv> = <jv>req</jv>.getContent().as(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
-	 * 	List&lt;List&lt;String&gt;&gt; <jv>body2</jv> = <jv>req</jv>.getBody().as(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;List&lt;String&gt;&gt; <jv>content2</jv> = <jv>req</jv>.getContent().as(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
-	 * 	Map&lt;String,String&gt; <jv>body3</jv> = <jv>req</jv>.getBody().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	Map&lt;String,String&gt; <jv>content3</jv> = <jv>req</jv>.getContent().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
-	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>body4</jv> = <jv>req</jv>.getBody().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>content4</jv> = <jv>req</jv>.getContent().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -306,7 +306,7 @@ public class RequestBody {
 	 * 	<li class='note'>
 	 * 		<c>Maps</c> must be followed by zero or two parameters representing the key and value types.
 	 * 	<li class='note'>
-	 * 		If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
+	 * 		If {@code allowContentParam} init parameter is true, then first looks for {@code &content=xxx} in the URL query string.
 	 * </ul>
 	 *
 	 * @param type
@@ -327,11 +327,11 @@ public class RequestBody {
 	}
 
 	/**
-	 * Returns the HTTP body content as a plain string.
+	 * Returns the HTTP content content as a plain string.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
+	 * 		If {@code allowContentParam} init parameter is true, then first looks for {@code &content=xxx} in the URL query string.
 	 * </ul>
 	 *
 	 * @return The incoming input from the connection as a plain string.
@@ -339,15 +339,15 @@ public class RequestBody {
 	 */
 	public String asString() throws IOException {
 		cache();
-		return new String(body, UTF8);
+		return new String(content, UTF8);
 	}
 
 	/**
-	 * Returns the HTTP body content as a plain string.
+	 * Returns the HTTP content content as a plain string.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
+	 * 		If {@code allowContentParam} init parameter is true, then first looks for {@code &content=xxx} in the URL query string.
 	 * </ul>
 	 *
 	 * @return The incoming input from the connection as a plain string.
@@ -355,11 +355,11 @@ public class RequestBody {
 	 */
 	public byte[] asBytes() throws IOException {
 		cache();
-		return body;
+		return content;
 	}
 
 	/**
-	 * Returns the HTTP body content as a simple hexadecimal character string.
+	 * Returns the HTTP content content as a simple hexadecimal character string.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -371,11 +371,11 @@ public class RequestBody {
 	 */
 	public String asHex() throws IOException {
 		cache();
-		return toHex(body);
+		return toHex(content);
 	}
 
 	/**
-	 * Returns the HTTP body content as a simple space-delimited hexadecimal character string.
+	 * Returns the HTTP content content as a simple space-delimited hexadecimal character string.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bcode'>
@@ -387,20 +387,20 @@ public class RequestBody {
 	 */
 	public String asSpacedHex() throws IOException {
 		cache();
-		return toSpacedHex(body);
+		return toSpacedHex(content);
 	}
 
 	/**
-	 * Returns the HTTP body content as a {@link Reader}.
+	 * Returns the HTTP content content as a {@link Reader}.
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query string.
+	 * 		If {@code allowContentParam} init parameter is true, then first looks for {@code &content=xxx} in the URL query string.
 	 * 	<li class='note'>
 	 * 		Automatically handles GZipped input streams.
 	 * </ul>
 	 *
-	 * @return The body contents as a reader.
+	 * @return The content contents as a reader.
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public BufferedReader getReader() throws IOException {
@@ -419,21 +419,21 @@ public class RequestBody {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	protected Reader getUnbufferedReader() throws IOException {
-		if (body != null)
-			return new CharSequenceReader(new String(body, UTF8));
+		if (content != null)
+			return new CharSequenceReader(new String(content, UTF8));
 		return new InputStreamReader(getInputStream(), req.getCharset());
 	}
 
 	/**
-	 * Returns the HTTP body content as an {@link InputStream}.
+	 * Returns the HTTP content content as an {@link InputStream}.
 	 *
 	 * @return The negotiated input stream.
 	 * @throws IOException If any error occurred while trying to get the input stream or wrap it in the GZIP wrapper.
 	 */
 	public ServletInputStream getInputStream() throws IOException {
 
-		if (body != null)
-			return new BoundedServletInputStream(body);
+		if (content != null)
+			return new BoundedServletInputStream(content);
 
 		Encoder enc = getEncoder();
 
@@ -464,7 +464,7 @@ public class RequestBody {
 		if (mediaType != null)
 			return mediaType;
 		Optional<ContentType> ct = req.getHeader(ContentType.class);
-		if (!ct.isPresent() && body != null)
+		if (!ct.isPresent() && content != null)
 			return MediaType.UON;
 		return ct.isPresent() ? ct.get().asMediaType().orElse(null) : null;
 	}
@@ -475,13 +475,13 @@ public class RequestBody {
 		} catch (UnsupportedMediaType e) {
 			throw e;
 		} catch (SchemaValidationException e) {
-			throw new BadRequest("Validation failed on request body. " + e.getLocalizedMessage());
+			throw new BadRequest("Validation failed on request content. " + e.getLocalizedMessage());
 		} catch (ParseException e) {
-			throw new BadRequest(e, "Could not convert request body content to class type ''{0}''.", cm);
+			throw new BadRequest(e, "Could not convert request content content to class type ''{0}''.", cm);
 		} catch (IOException e) {
-			throw new InternalServerError(e, "I/O exception occurred while parsing request body.");
+			throw new InternalServerError(e, "I/O exception occurred while parsing request content.");
 		} catch (Exception e) {
-			throw new InternalServerError(e, "Exception occurred while parsing request body.");
+			throw new InternalServerError(e, "Exception occurred while parsing request content.");
 		}
 	}
 
@@ -567,23 +567,23 @@ public class RequestBody {
 	}
 
 	/**
-	 * Returns the content length of the body.
+	 * Returns the content length of the content.
 	 *
-	 * @return The content length of the body in bytes.
+	 * @return The content length of the content in bytes.
 	 */
 	public int getContentLength() {
 		return contentLength == 0 ? req.getHttpServletRequest().getContentLength() : contentLength;
 	}
 
 	/**
-	 * Caches the body in memory for reuse.
+	 * Caches the content in memory for reuse.
 	 *
 	 * @return This object.
 	 * @throws IOException If error occurs while reading stream.
 	 */
-	public RequestBody cache() throws IOException {
-		if (body == null)
-			body = readBytes(getInputStream());
+	public RequestContent cache() throws IOException {
+		if (content == null)
+			content = readBytes(getInputStream());
 		return this;
 	}
 

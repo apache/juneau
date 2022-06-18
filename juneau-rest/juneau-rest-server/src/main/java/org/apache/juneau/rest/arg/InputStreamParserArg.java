@@ -26,8 +26,8 @@ import org.apache.juneau.rest.httppart.*;
  * <p class='bjava'>
  * 	<jv>opSession</jv>
  * 		.{@link RestOpSession#getRequest() getRequest}()
- * 		.{@link RestRequest#getBody() getBody}()
- * 		.{@link RequestBody#getParserMatch() getParserMatch}()
+ * 		.{@link RestRequest#getContent() getContent}()
+ * 		.{@link RequestContent#getParserMatch() getParserMatch}()
  * 		.{@link ParserMatch#getParser() getParser}();
  * </p>
  *
@@ -54,6 +54,6 @@ public class InputStreamParserArg extends SimpleRestOperationArg {
 	 * Constructor.
 	 */
 	protected InputStreamParserArg() {
-		super((opSession)->opSession.getRequest().getBody().getParserMatch().map(ParserMatch::getParser).filter(InputStreamParser.class::isInstance).orElse(null));
+		super((opSession)->opSession.getRequest().getContent().getParserMatch().map(ParserMatch::getParser).filter(InputStreamParser.class::isInstance).orElse(null));
 	}
 }

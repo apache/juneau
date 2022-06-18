@@ -153,7 +153,7 @@ import org.apache.juneau.svl.*;
  *
  * 		<ja>@RemotePost</ja>(<js>"/pets"</js>)
  * 		Pet addPet(
- * 			<ja>@Body</ja> CreatePet <jv>createPet</jv>,
+ * 			<ja>@Content</ja> CreatePet <jv>createPet</jv>,
  * 			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>,
  * 			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> <jv>debug</jv>
  * 		);

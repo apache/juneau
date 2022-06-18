@@ -442,7 +442,7 @@
 		 * Replaces the schema document with the specified content, and then mirrors it as the response. 
 		 */</jd>
 		<ja>@RestPut</ja>(<js>"/"</js>)
-		<jk>public</jk> JsonSchema setSchema(<ja>@Body</ja> JsonSchema <jv>schema</jv>) <jk>throws</jk> Exception {
+		<jk>public</jk> JsonSchema setSchema(<ja>@Content</ja> JsonSchema <jv>schema</jv>) <jk>throws</jk> Exception {
 			<jk>this</jk>.<jf>schema</jf> = <jv>schema</jv>;
 			<jk>return</jk> <jk>this</jk>.<jf>schema</jf>;
 		}

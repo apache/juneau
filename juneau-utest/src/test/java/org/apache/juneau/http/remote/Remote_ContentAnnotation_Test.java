@@ -24,7 +24,7 @@ import java.util.*;
 
 import org.apache.http.*;
 import org.apache.http.entity.*;
-import org.apache.juneau.http.annotation.Body;
+import org.apache.juneau.http.annotation.Content;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.json.*;
@@ -38,7 +38,7 @@ import org.junit.*;
  * Tests the @Body annotation.
  */
 @FixMethodOrder(NAME_ASCENDING)
-public class Remote_BodyAnnotation_Test {
+public class Remote_ContentAnnotation_Test {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Helpers
@@ -66,61 +66,61 @@ public class Remote_BodyAnnotation_Test {
 	@Rest(parsers=JsonParser.class)
 	public static class A {
 		@RestPost
-		public String x1(@Body int b, @Header("Content-Type") String ct) {
+		public String x1(@Content int b, @Header("Content-Type") String ct) {
 			assertEquals("application/json",ct);
 			return String.valueOf(b);
 		}
 
 		@RestPost
-		public String x2(@Body float b, @Header("Content-Type") String ct) {
+		public String x2(@Content float b, @Header("Content-Type") String ct) {
 			assertEquals("application/json",ct);
 			return String.valueOf(b);
 		}
 
 		@RestPost
-		public String x3(@Body Bean b, @Header("Content-Type") String ct) {
+		public String x3(@Content Bean b, @Header("Content-Type") String ct) {
 			assertEquals("application/json",ct);
 			return SimpleJsonSerializer.DEFAULT.toString(b);
 		}
 
 		@RestPost
-		public String x4(@Body Bean[] b, @Header("Content-Type") String ct) {
+		public String x4(@Content Bean[] b, @Header("Content-Type") String ct) {
 			assertEquals("application/json",ct);
 			return SimpleJsonSerializer.DEFAULT.toString(b);
 		}
 
 		@RestPost
-		public String x5(@Body List<Bean> b, @Header("Content-Type") String ct) {
+		public String x5(@Content List<Bean> b, @Header("Content-Type") String ct) {
 			assertEquals("application/json",ct);
 			return SimpleJsonSerializer.DEFAULT.toString(b);
 		}
 
 		@RestPost
-		public String x6(@Body Map<String,Bean> b, @Header("Content-Type") String ct) {
+		public String x6(@Content Map<String,Bean> b, @Header("Content-Type") String ct) {
 			assertEquals("application/json",ct);
 			return SimpleJsonSerializer.DEFAULT.toString(b);
 		}
 
 		@RestPost
-		public String x7(@Body Reader b, @Header("Content-Type") String ct) throws Exception {
+		public String x7(@Content Reader b, @Header("Content-Type") String ct) throws Exception {
 			assertEquals("text/plain",ct);
 			return read(b);
 		}
 
 		@RestPost
-		public String x8(@Body InputStream b, @Header("Content-Type") String ct) throws Exception {
+		public String x8(@Content InputStream b, @Header("Content-Type") String ct) throws Exception {
 			assertEquals("application/octet-stream",ct);
 			return read(b);
 		}
 
 		@RestPost
-		public String x9(@Body Reader b, @Header("Content-Type") String ct) throws Exception {
+		public String x9(@Content Reader b, @Header("Content-Type") String ct) throws Exception {
 			assertTrue(ct.startsWith("text/plain"));
 			return read(b);
 		}
 
 		@RestPost
-		public String x10(@Body Reader b, @Header("Content-Type") String ct) throws IOException {
+		public String x10(@Content Reader b, @Header("Content-Type") String ct) throws IOException {
 			assertEquals("application/x-www-form-urlencoded",ct);
 			return read(b);
 		}
@@ -128,16 +128,16 @@ public class Remote_BodyAnnotation_Test {
 
 	@Remote
 	public static interface A1 {
-		String postX1(@Body int b);
-		String postX2(@Body float b);
-		String postX3(@Body Bean b);
-		String postX4(@Body Bean[] b);
-		String postX5(@Body List<Bean> b);
-		String postX6(@Body Map<String,Bean> b);
-		String postX7(@Body Reader b);
-		String postX8(@Body InputStream b);
-		String postX9(@Body HttpEntity b);
-		String postX10(@Body PartList b);
+		String postX1(@Content int b);
+		String postX2(@Content float b);
+		String postX3(@Content Bean b);
+		String postX4(@Content Bean[] b);
+		String postX5(@Content List<Bean> b);
+		String postX6(@Content Map<String,Bean> b);
+		String postX7(@Content Reader b);
+		String postX8(@Content InputStream b);
+		String postX9(@Content HttpEntity b);
+		String postX10(@Content PartList b);
 	}
 
 	@Test
@@ -162,77 +162,77 @@ public class Remote_BodyAnnotation_Test {
 	@Rest
 	public static class B implements BasicOpenApiConfig {
 		@RestPost
-		public Object x1(@Body int b, @Header("Content-Type") String ct) {
+		public Object x1(@Content int b, @Header("Content-Type") String ct) {
 			assertEquals("text/openapi",ct);
 			return b;
 		}
 
 		@RestPost
-		public Object x2(@Body float b, @Header("Content-Type") String ct) {
+		public Object x2(@Content float b, @Header("Content-Type") String ct) {
 			assertEquals("text/openapi",ct);
 			return b;
 		}
 
 		@RestPost
-		public String x3(@Body Bean b, @Header("Content-Type") String ct) {
+		public String x3(@Content Bean b, @Header("Content-Type") String ct) {
 			assertEquals("text/openapi",ct);
 			return SimpleJson.DEFAULT.toString(b);
 		}
 
 		@RestPost
-		public Object x4(@Body Bean[] b, @Header("Content-Type") String ct) {
+		public Object x4(@Content Bean[] b, @Header("Content-Type") String ct) {
 			assertEquals("text/openapi",ct);
 			return SimpleJson.DEFAULT.toString(b);
 		}
 
 		@RestPost
-		public Object x5(@Body List<Bean> b, @Header("Content-Type") String ct) {
+		public Object x5(@Content List<Bean> b, @Header("Content-Type") String ct) {
 			assertEquals("text/openapi",ct);
 			return SimpleJson.DEFAULT.toString(b);
 		}
 
 		@RestPost
-		public Object x6(@Body Map<String,Bean> b, @Header("Content-Type") String ct) {
+		public Object x6(@Content Map<String,Bean> b, @Header("Content-Type") String ct) {
 			assertEquals("text/openapi",ct);
 			return SimpleJson.DEFAULT.toString(b);
 		}
 
 		@RestPost
-		public Object x7(@Body Reader b, @Header("Content-Type") String ct) {
+		public Object x7(@Content Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/plain",ct);
 			return b;
 		}
 
 		@RestPost
-		public Object x8(@Body InputStream b, @Header("Content-Type") String ct) {
+		public Object x8(@Content InputStream b, @Header("Content-Type") String ct) {
 			assertEquals("application/octet-stream",ct);
 			return b;
 		}
 
 		@RestPost
-		public Object x9(@Body Reader b, @Header("Content-Type") String ct) {
+		public Object x9(@Content Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/plain",ct);
 			return b;
 		}
 
 		@RestPost
-		public Object x10(@Body Reader b, @Header("Content-Type") String ct) {
+		public Object x10(@Content Reader b, @Header("Content-Type") String ct) {
 			assertEquals("application/x-www-form-urlencoded",ct);
 			return b;
 		}
 	}
 	@Remote
 	public static interface B1 {
-		String postX1(@Body int b);
-		String postX2(@Body float b);
-		String postX3(@Body Bean b);
-		String postX4(@Body Bean[] b);
-		String postX5(@Body List<Bean> b);
-		String postX6(@Body Map<String,Bean> b);
-		String postX7(@Body Reader b);
-		String postX8(@Body InputStream b);
-		String postX9(@Body HttpEntity b);
-		String postX10(@Body PartList b);
+		String postX1(@Content int b);
+		String postX2(@Content float b);
+		String postX3(@Content Bean b);
+		String postX4(@Content Bean[] b);
+		String postX5(@Content List<Bean> b);
+		String postX6(@Content Map<String,Bean> b);
+		String postX7(@Content Reader b);
+		String postX8(@Content InputStream b);
+		String postX9(@Content HttpEntity b);
+		String postX10(@Content PartList b);
 	}
 
 	@Test
@@ -257,63 +257,63 @@ public class Remote_BodyAnnotation_Test {
 	@Rest
 	public static class C {
 		@RestPost
-		public Reader x1(@Body Reader b, @Header("Content-Type") String ct) {
+		public Reader x1(@Content Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo",ct);
 			return b;
 		}
 		@RestPost
-		public Reader x2(@Body Reader b, @Header("Content-Type") String ct) {
+		public Reader x2(@Content Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo",ct);
 			return b;
 		}
 		@RestPost
-		public Reader x3(@Body Reader b, @Header("Content-Type") String ct) {
+		public Reader x3(@Content Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo",ct);
 			return b;
 		}
 		@RestPost
-		public Reader x5(@Body Reader b, @Header("Content-Type") String ct) {
+		public Reader x5(@Content Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo",ct);
 			return b;
 		}
 		@RestPost
-		public Reader x6(@Body Reader b, @Header("Content-Type") String ct) {
+		public Reader x6(@Content Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo",ct);
 			return b;
 		}
 		@RestPost
-		public Reader x7(@Body Reader b, @Header("Content-Type") String ct) {
+		public Reader x7(@Content Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo",ct);
 			return b;
 		}
 		@RestPost
-		public Reader x8(@Body Reader b, @Header("Content-Type") String ct) {
+		public Reader x8(@Content Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo",ct);
 			return b;
 		}
 		@RestPost
-		public Reader x9(@Body Reader b, @Header("Content-Type") String ct) {
+		public Reader x9(@Content Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo",ct);
 			return b;
 		}
 		@RestPost
-		public Reader x10(@Body Reader b, @Header("Content-Type") String ct) {
+		public Reader x10(@Content Reader b, @Header("Content-Type") String ct) {
 			assertEquals("text/foo",ct);
 			return b;
 		}
 	}
 	@Remote
 	public static interface C1 {
-		String postX1(@Body int b);
-		String postX2(@Body float b);
-		String postX3(@Body Bean b);
-		String postX4(@Body Bean[] b);
-		String postX5(@Body List<Bean> b);
-		String postX6(@Body Map<String,Bean> b);
-		String postX7(@Body Reader b);
-		String postX8(@Body InputStream b);
-		String postX9(@Body HttpEntity b);
-		String postX10(@Body PartList b);
+		String postX1(@Content int b);
+		String postX2(@Content float b);
+		String postX3(@Content Bean b);
+		String postX4(@Content Bean[] b);
+		String postX5(@Content List<Bean> b);
+		String postX6(@Content Map<String,Bean> b);
+		String postX7(@Content Reader b);
+		String postX8(@Content InputStream b);
+		String postX9(@Content HttpEntity b);
+		String postX10(@Content PartList b);
 	}
 
 	@Test

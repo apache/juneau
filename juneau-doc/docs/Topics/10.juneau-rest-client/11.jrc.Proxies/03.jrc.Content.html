@@ -13,17 +13,17 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'@Body', updated:'8.2.0', flags:'todo'}
+{title:'@Content', updated:'8.2.0', flags:'todo'}
 
 <div class='topic'>
 	<p>
-		The {@link oaj.http.annotation.Body @Body} annotation can be applied to arguments of <ja>@RemoteOp</ja>-annotated methods
+		The {@link oaj.http.annotation.Content @Content} annotation can be applied to arguments of <ja>@RemoteOp</ja>-annotated methods
 		to denote that they are the HTTP body of the request.
 	</p>
 	<ul class='javatree'>
-		<li class='ja'>{@link oaj.http.annotation.Body}
+		<li class='ja'>{@link oaj.http.annotation.Content}
 			<ul class='javatreec'>
-				<li class='jma'>{@link oaj.http.annotation.Body#schema() schema}
+				<li class='jma'>{@link oaj.http.annotation.Content#schema() schema}
 			</ul>
 		</li>
 	</ul>
@@ -35,7 +35,7 @@
 		|	<jk>public interface</jk> PetStore {
 		|
 		|		<ja>@RemotePost</ja>(<js>"/pets"</js>)
-		|		String addPet(<ja>@Body</ja> Pet <jv>pet</jv>);
+		|		String addPet(<ja>@Content</ja> Pet <jv>pet</jv>);
 		|	}
 	</p>
 	<p class='bjava'>
@@ -47,7 +47,7 @@
 		|		String addPet(Pet <jv>pet</jv>);
 		|	}
 		|
-		|	<ja>@Body</ja>
+		|	<ja>@Content</ja>
 		|	<jk>public class</jk> Pet {...}
 	</p>
 	
@@ -78,7 +78,7 @@
 	<p class='bjava'>
 		|	<ja>@RemotePost</ja>(<js>"/comma-delimited-pipe-delimited-ints"</js>)
 		|	String addCommaDelimitedPipeDelimitedInts(
-		|		<ja>@Body</ja>(
+		|		<ja>@Content</ja>(
 		|			serializer=OpenApiSerializer.<jk>class</jk>,
 		|			schema=<ja>@Schema</ja>(
 		|				type=<js>"array"</js>,
@@ -102,7 +102,7 @@
 		|	<jc>// Format is simplified-JSON (outer {} brackets are optional).</jc>
 		|	<ja>@RemotePost</ja>(<js>"/comma-delimited-pipe-delimited-ints"</js>)
 		|	String addCommaDelimitedPipeDelimitedInts(
-		|		<ja>@Body</ja>(
+		|		<ja>@Content</ja>(
 		|			serializer=OpenApiSerializer.<jk>class</jk>,
 		|			schema=<ja>@Schema</ja>(
 		|				<js>"type:'array',collectionFormat:'pipes',items:[type:'array',items:[type:'int32',minimum:0,maximum:64]]"</js>

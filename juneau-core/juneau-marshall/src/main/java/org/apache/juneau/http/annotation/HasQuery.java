@@ -35,8 +35,8 @@ import java.lang.annotation.*;
  * <p>
  * 	Unlike {@link HasFormData @HasFormData}, using this annotation does not result in the servlet reading the contents
  * 	of URL-encoded form posts.
- * 	Therefore, this annotation can be used in conjunction with the {@link Body @Body} annotation or
- * 	{@code RestRequestgetBody()} method for <c>application/x-www-form-urlencoded POST</c> calls.
+ * 	Therefore, this annotation can be used in conjunction with the {@link Content @Cpmtemt} annotation or
+ * 	{@code RestRequest.getContent()} method for <c>application/x-www-form-urlencoded POST</c> calls.
  *  </p>
  * <h5 class='figure'>Example:</h5>
  * <p class='bjava'>

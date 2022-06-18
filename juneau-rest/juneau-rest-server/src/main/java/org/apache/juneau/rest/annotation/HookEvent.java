@@ -165,7 +165,7 @@ public enum HookEvent {
 	 * 			<li>{@link org.apache.juneau.parser.Parser}
 	 * 			<li>{@link Locale}
 	 * 			<li>{@link Swagger}
-	 * 			<li>{@link RequestBody}
+	 * 			<li>{@link RequestContent}
 	 * 			<li>{@link Config}
 	 * 			<li>{@link UriContext}
 	 * 			<li>{@link UriResolver}
@@ -205,7 +205,7 @@ public enum HookEvent {
 	 * 		<br>The method is still considered part of the parent class for ordering purposes even though it's
 	 * 		overridden by the child class.
 	 * 	<li class='note'>
-	 * 		It's advisable not to mess around with the HTTP body itself since you may end up consuming the body
+	 * 		It's advisable not to mess around with the HTTP content itself since you may end up consuming the content
 	 * 		before the actual REST method has a chance to use it.
 	 * </ul>
 	 */

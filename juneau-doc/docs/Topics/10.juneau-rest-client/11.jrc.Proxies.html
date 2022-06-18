@@ -26,11 +26,11 @@
 	</p>
 	
 	<ul class='javatree'>
-		<li class='jc'>{@del oajr.client2.RestClient}
+		<li class='jc'>{@link oajrc.RestClient}
 		<ul>
-			<li class='jm'><c>{@del oajr.client2.RestClient#getRemote(Class) getRemote(Class&lt;T&gt;)} <jk>returns</jk> T</c>
-			<li class='jm'><c>{@del oajr.client2.RestClient#getRemote(Class,Object) getRemote(Class&lt;T&gt;,Object)} <jk>returns</jk> T</c>
-			<li class='jm'><c>{@del oajr.client2.RestClient#getRemote(Class,Object,Serializer,Parser) getRemote(Class&lt;T&gt;,Object,Serializer,Parser)} <jk>returns</jk> T</c>
+			<li class='jm'><c>{@link oajrc.RestClient#getRemote(Class) getRemote(Class&lt;T&gt;)} <jk>returns</jk> T</c>
+			<li class='jm'><c>{@link oajrc.RestClient#getRemote(Class,Object) getRemote(Class&lt;T&gt;,Object)} <jk>returns</jk> T</c>
+			<li class='jm'><c>{@link oajrc.RestClient#getRemote(Class,Object,Serializer,Parser) getRemote(Class&lt;T&gt;,Object,Serializer,Parser)} <jk>returns</jk> T</c>
 		</ul>
 	</ul>
 	
@@ -46,7 +46,7 @@
 		</ul>
 		<li class='jp'>{@link oaj.http.annotation}
 		<ul>
-			<li class='ja'>{@link oaj.http.annotation.Body}
+			<li class='ja'>{@link oaj.http.annotation.Content}
 			<li class='ja'>{@link oaj.http.annotation.Header}
 			<li class='ja'>{@link oaj.http.annotation.FormData}
 			<li class='ja'>{@link oaj.http.annotation.Query}
@@ -63,7 +63,7 @@
 		|		
 		|		<ja>@RemotePost</ja>(<js>"/pets"</js>)
 		|		Pet addPet(
-		|			<ja>@Body</ja> CreatePet <jv>createPet</jv>, 
+		|			<ja>@Content</ja> CreatePet <jv>createPet</jv>, 
 		|			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>, 
 		|			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> <jv>debug</jv>
 		|		);
@@ -109,7 +109,7 @@
 		|	<jk>public interface</jk> PetStore {
 		|		
 		|		<jc>// @RemoteOp optional since method and path is inferred from method name.</jc> 
-		|		String postPets(<ja>@Body</ja> CreatePet pet);
+		|		String postPets(<ja>@Content</ja> CreatePet pet);
 		|	}
 	</p>
 </div>

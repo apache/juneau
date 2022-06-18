@@ -33,7 +33,7 @@ import org.apache.juneau.serializer.*;
  * 	<jv>client</jv>
  * 		.get(<jsf>URL</jsf>)
  * 		.run()
- * 		.assertBody().is(<js>"OK"</js>);
+ * 		.assertContent().is(<js>"OK"</js>);
  * </p>
  *
  *
@@ -327,7 +327,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.assertBody().isEqualTo(<js>"OK"</js>);
+	 * 		.assertContent().isEqualTo(<js>"OK"</js>);
 	 * </p>
 	 *
 	 * @param value
@@ -368,7 +368,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.assertBody().isLines(
+	 * 		.assertContent().isLines(
 	 * 			<js>"Line 1"</js>,
 	 * 			<js>"Line 2"</js>,
 	 * 			<js>"Line 3"</js>
@@ -399,7 +399,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.assertBody().isSortedLines(
+	 * 		.assertContent().isSortedLines(
 	 * 			<js>"Line 1"</js>,
 	 * 			<js>"Line 2"</js>,
 	 * 			<js>"Line 3"</js>

@@ -38,7 +38,7 @@ public class LargePojosResource extends BasicRestServlet implements BasicUnivers
 	}
 
 	@RestOp(method=PUT, path="/")
-	public String testPut(@Body LargePojo in) {
+	public String testPut(@Content LargePojo in) {
 		return "ok";
 	}
 }

@@ -15,7 +15,7 @@ package org.apache.juneau.rest.httppart;
 import org.apache.juneau.httppart.*;
 
 /**
- * Represents the information needed to serialize a response part such as a response header or body.
+ * Represents the information needed to serialize a response part such as a response header or content.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.HttpParts}

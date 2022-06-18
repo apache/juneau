@@ -43,14 +43,14 @@ import org.apache.juneau.json.*;
  * <p class='bjava'>
  * 	<jc>// Used on parameter</jc>
  * 	<ja>@RestPost</ja>(<js>"/pets"</js>)
- * 	<jk>public void</jk> addPet(<ja>@Body</ja> Pet <jv>pet</jv>) {...}
+ * 	<jk>public void</jk> addPet(<ja>@Content</ja> Pet <jv>pet</jv>) {...}
  * </p>
  * <p class='bjava'>
  * 	<jc>// Used on class</jc>
  * 	<ja>@RestPost</ja>(<js>"/pets"</js>)
  * 	<jk>public void</jk> addPet(Pet <jv>pet</jv>) {...}
  *
- * 	<ja>@Body</ja>
+ * 	<ja>@Content</ja>
  * 	<jk>public class</jk> Pet {...}
  * </p>
  *
@@ -59,7 +59,7 @@ import org.apache.juneau.json.*;
  * <p class='bjava'>
  * 	<ja>@RestPost</ja>(<js>"/pets"</js>)
  * 	<jk>public void</jk> addPet(RestRequest <jv>req</jv>) {
- * 		Pet <jv>pet</jv> = <jv>req</jv>.getBody().as(Pet.<jk>class</jk>);
+ * 		Pet <jv>pet</jv> = <jv>req</jv>.getContent().as(Pet.<jk>class</jk>);
  * 		...
  * 	}
  * </p>
@@ -67,7 +67,7 @@ import org.apache.juneau.json.*;
  * <h5 class='topic'>Arguments and argument-types of client-side @RemoteResource-annotated interfaces</h5>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrc.Body}
+ * 	<li class='link'>{@doc jrc.Content}
  * </ul>
  *
  * <h5 class='topic'>Methods and return types of server-side and client-side @Request-annotated interfaces</h5>
@@ -102,9 +102,9 @@ import org.apache.juneau.json.*;
 @Target({PARAMETER,METHOD,TYPE})
 @Retention(RUNTIME)
 @Inherited
-@Repeatable(BodyAnnotation.Array.class)
-@ContextApply(BodyAnnotation.Applier.class)
-public @interface Body {
+@Repeatable(ContentAnnotation.Array.class)
+@ContextApply(ContentAnnotation.Applier.class)
+public @interface Content {
 
 	/**
 	 * Dynamically apply this annotation to the specified classes.

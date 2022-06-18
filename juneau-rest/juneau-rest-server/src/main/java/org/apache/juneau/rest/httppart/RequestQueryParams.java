@@ -59,10 +59,10 @@ import org.apache.juneau.http.part.*;
  *
  * <p>
  * 	An important distinction between the behavior of this object and <l>HttpServletRequest.getParameter(String)</l> is
- * 	that the former will NOT load the body of the request on FORM POSTS and will only look at parameters
+ * 	that the former will NOT load the content of the request on FORM POSTS and will only look at parameters
  * 	found in the query string.
  * 	This can be useful in cases where you're mixing GET parameters and FORM POSTS and you don't want to
- * 	inadvertently read the body of the request to get a query parameter.
+ * 	inadvertently read the content of the request to get a query parameter.
  * </p>
  *
  * <p>

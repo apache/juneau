@@ -116,10 +116,10 @@ public class RequestBeanMeta {
 					assertNoArgs(x, Path.class);
 					assertReturnNotVoid(x, Path.class);
 					properties.put(n, RequestBeanPropertyMeta.create(PATH, Path.class, x));
-				} else if (x.hasAnnotation(Body.class)) {
-					assertNoArgs(x, Body.class);
-					assertReturnNotVoid(x, Body.class);
-					properties.put(n, RequestBeanPropertyMeta.create(BODY, Body.class, x));
+				} else if (x.hasAnnotation(Content.class)) {
+					assertNoArgs(x, Content.class);
+					assertReturnNotVoid(x, Content.class);
+					properties.put(n, RequestBeanPropertyMeta.create(BODY, Content.class, x));
 				}
 			});
 			return this;

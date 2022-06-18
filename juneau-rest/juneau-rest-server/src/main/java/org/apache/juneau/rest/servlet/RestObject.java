@@ -353,7 +353,7 @@ public abstract class RestObject {
 	 * 		<br>{@link BasicHttpException HttpExceptions} can be thrown to cause a particular HTTP error status code.
 	 * 		<br>All other exceptions cause an HTTP 500 error status code.
 	 * 	<li class='note'>
-	 * 		It's advisable not to mess around with the HTTP body itself since you may end up consuming the body
+	 * 		It's advisable not to mess around with the HTTP content itself since you may end up consuming the content
 	 * 		before the actual REST method has a chance to use it.
 	 * </ul>
 	 *

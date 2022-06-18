@@ -30,8 +30,8 @@
 		|		.run()
 		|		.assertStatus().code().is(200)
 		|		.assertHeader(<js>"Content-Type"</js>).isMatches(<js>"application/json*"</js>)
-		|		.getBody().assertValue().asString().isContains(<js>"OK"</js>)
-		|		.getBody().as(MyBean.<jk>class</jk>);
+		|		.getContent().assertValue().asString().isContains(<js>"OK"</js>)
+		|		.getContent().as(MyBean.<jk>class</jk>);
 	</p>
 	<ul class='notes'>
 		<li class='note'>The REST API is described later in the documentation.</i>

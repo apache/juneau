@@ -21,30 +21,30 @@ import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class Rest_AllowBodyParam_Test {
+public class Rest_AllowContentParam_Test {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @Rest(disableBodyParam)
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Rest(disableBodyParam="false")
+	@Rest(disableContentParam="false")
 	public static class A1 {
 		@RestOp
-		public JsonMap put(@Body JsonMap body) {
+		public JsonMap put(@Content JsonMap body) {
 			return body;
 		}
 	}
-	@Rest(disableBodyParam="true")
+	@Rest(disableContentParam="true")
 	public static class A2 {
 		@RestOp
-		public JsonMap put(@Body JsonMap body) {
+		public JsonMap put(@Content JsonMap body) {
 			return body;
 		}
 	}
-	@Rest(disableBodyParam="true")
+	@Rest(disableContentParam="true")
 	public static class A3 extends A1 {}
 
-	@Rest(disableBodyParam="false")
+	@Rest(disableContentParam="false")
 	public static class A4 extends A2 {}
 
 
@@ -52,18 +52,18 @@ public class Rest_AllowBodyParam_Test {
 	public void a01_basic() throws Exception {
 		RestClient a1 = MockRestClient.build(A1.class);
 		a1.put("/", "{a:'b'}").run().assertContent().is("{a:'b'}");
-		a1.put("/?body=(c=d)", "{a:'b'}").run().assertContent().is("{c:'d'}");
+		a1.put("/?content=(c=d)", "{a:'b'}").run().assertContent().is("{c:'d'}");
 
 		RestClient a2 = MockRestClient.build(A2.class);
 		a2.put("/", "{a:'b'}").run().assertContent().is("{a:'b'}");
-		a2.put("/?body=(c=d)", "{a:'b'}").run().assertContent().is("{a:'b'}");
+		a2.put("/?content=(c=d)", "{a:'b'}").run().assertContent().is("{a:'b'}");
 
 		RestClient a3 = MockRestClient.build(A3.class);
 		a3.put("/", "{a:'b'}").run().assertContent().is("{a:'b'}");
-		a3.put("/?body=(c=d)", "{a:'b'}").run().assertContent().is("{a:'b'}");
+		a3.put("/?content=(c=d)", "{a:'b'}").run().assertContent().is("{a:'b'}");
 
 		RestClient a4 = MockRestClient.build(A4.class);
 		a4.put("/", "{a:'b'}").run().assertContent().is("{a:'b'}");
-		a4.put("/?body=(c=d)", "{a:'b'}").run().assertContent().is("{c:'d'}");
+		a4.put("/?content=(c=d)", "{a:'b'}").run().assertContent().is("{c:'d'}");
 	}
 }

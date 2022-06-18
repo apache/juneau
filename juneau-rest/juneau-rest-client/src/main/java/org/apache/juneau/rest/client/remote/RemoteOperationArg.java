@@ -108,8 +108,8 @@ public final class RemoteOperationArg {
 			return new RemoteOperationArg(i, FORMDATA, HttpPartSchema.create(FormData.class, mpi));
 		} else if (mpi.hasAnnotation(Path.class)) {
 			return new RemoteOperationArg(i, PATH, HttpPartSchema.create(Path.class, mpi));
-		} else if (mpi.hasAnnotation(Body.class)) {
-			return new RemoteOperationArg(i, BODY, HttpPartSchema.create(Body.class, mpi));
+		} else if (mpi.hasAnnotation(Content.class)) {
+			return new RemoteOperationArg(i, BODY, HttpPartSchema.create(Content.class, mpi));
 		}
 		return null;
 	}

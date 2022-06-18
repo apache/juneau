@@ -21,7 +21,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.annotation.Body;
+import org.apache.juneau.http.annotation.Content;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
@@ -151,7 +151,7 @@ public class ConfigResource extends BasicRestServlet implements BasicUniversalCo
 		)
 	)
 	public JsonMap setConfigContents(
-			@Body @Schema(d="New contents in INI file format.") Reader contents
+			@Content @Schema(d="New contents in INI file format.") Reader contents
 		) throws Exception {
 
 		return getContext().getConfig().load(contents, true).toMap();
@@ -169,7 +169,7 @@ public class ConfigResource extends BasicRestServlet implements BasicUniversalCo
 	)
 	public JsonMap setConfigSection(
 			@Path("section") @Schema(d="Section name in config file.") String section,
-			@Body @Schema(d="New contents of config section as a simple map of key/value pairs.")
+			@Content @Schema(d="New contents of config section as a simple map of key/value pairs.")
 			Map<String,Object> contents
 		) throws Exception {
 
@@ -190,7 +190,7 @@ public class ConfigResource extends BasicRestServlet implements BasicUniversalCo
 	public String setConfigValue(
 			@Path("section") @Schema(d="Section name in config file.") String section,
 			@Path("key") @Schema(d="Key name in section.") String key,
-			@Body @Schema(d="New value for entry.") String value
+			@Content @Schema(d="New value for entry.") String value
 		) throws SectionNotFound {
 
 		getContext().getConfig().set(section + '/' + key, value);

@@ -60,7 +60,7 @@
 	<p class='bjava'>
 		|	<ja>@RestPost</ja>(<js>"/2dLongArray"</js>)	
 		|	<jk>public void</jk> post2dLongArray(
-		|		<ja>@Body</ja>(
+		|		<ja>@Content</ja>(
 		|			schema=<ja>@Schema</ja>(
 		|				type=<js>"array"</js>,
 		|				collectionFormat=<js>"pipes"</js>,
@@ -86,7 +86,7 @@
 		|	<jc>// Alternate shortened format.</jc>
 		|	<ja>@RestPost</ja>(<js>"/2dLongArray"</js>)	
 		|	<jk>public void</jk> post2dLongArray(
-		|		<ja>@Body</ja>(
+		|		<ja>@Content</ja>(
 		|			schema=<ja>@Schema</ja>(
 		|				t=<js>"array"</js>,
 		|				cf=<js>"pipes"</js>,

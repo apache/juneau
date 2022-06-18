@@ -83,7 +83,7 @@ import org.apache.juneau.serializer.*;
  * 			<li class='jm'>{@link RestResponse#getWriter() getWriter()}
  * 			<li class='jm'>{@link RestResponse#sendPlainText(String) sendPlainText(String)}
  * 			<li class='jm'>{@link RestResponse#sendRedirect(String) sendRedirect(String)}
- * 			<li class='jm'>{@link RestResponse#setContentSchema(HttpPartSchema) setBodySchema(HttpPartSchema)}
+ * 			<li class='jm'>{@link RestResponse#setContentSchema(HttpPartSchema) setContentSchema(HttpPartSchema)}
  * 			<li class='jm'>{@link RestResponse#setContent(Object) setOutput(Object)}
  * 			<li class='jm'>{@link RestResponse#setResponseBeanMeta(ResponseBeanMeta) setResponseBeanMeta(ResponseBeanMeta)}
  * 			<li class='jm'>{@link RestResponse#setException(Throwable) setException(Throwable)}
@@ -359,7 +359,7 @@ public final class RestResponse {
 	 *
 	 * <p>
 	 * Calling <c>flush()</c> on the ServletOutputStream commits the response.
-	 * Either this method or <c>getWriter</c> may be called to write the body, not both, except when reset has been called.
+	 * Either this method or <c>getWriter</c> may be called to write the content, not both, except when reset has been called.
 	 *
 	 * @return The stream.
 	 * @throws IOException If stream could not be accessed.
@@ -380,7 +380,7 @@ public final class RestResponse {
 	}
 
 	/**
-	 * Returns the writer to the response body.
+	 * Returns the writer to the response content.
 	 *
 	 * <p>
 	 * This methods bypasses any specified encoders and returns a regular unbuffered writer.
@@ -468,7 +468,7 @@ public final class RestResponse {
 	}
 
 	/**
-	 * Returns the name of the character encoding (MIME charset) used for the body sent in this response.
+	 * Returns the name of the character encoding (MIME charset) used for the content sent in this response.
 	 *
 	 * <p>
 	 * The character encoding may have been specified explicitly using the <c>setCharacterEncoding</c> or <c>setContentType</c> methods,
@@ -494,7 +494,7 @@ public final class RestResponse {
 	}
 
 	/**
-	 * Returns the content type used for the MIME body sent in this response.
+	 * Returns the content type used for the MIME content sent in this response.
 	 *
 	 *
 	 * <p>
@@ -616,12 +616,12 @@ public final class RestResponse {
 	}
 
 	/**
-	 * Specifies the schema for the response body.
+	 * Specifies the schema for the response content.
 	 *
 	 * <p>
 	 * Used by schema-aware serializers such as {@link OpenApiSerializer}.  Ignored by other serializers.
 	 *
-	 * @param schema The body schema
+	 * @param schema The content schema
 	 * @return This object.
 	 */
 	public RestResponse setContentSchema(HttpPartSchema schema) {
@@ -963,9 +963,9 @@ public final class RestResponse {
 	}
 
 	/**
-	 * Returns the schema of the response body.
+	 * Returns the schema of the response content.
 	 *
-	 * @return The schema of the response body, never <jk>null</jk>.
+	 * @return The schema of the response content, never <jk>null</jk>.
 	 */
 	public Optional<HttpPartSchema> getContentSchema() {
 		if (contentSchema != null)

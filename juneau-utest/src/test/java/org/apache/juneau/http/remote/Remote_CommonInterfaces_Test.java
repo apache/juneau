@@ -22,7 +22,7 @@ import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 
-import org.apache.juneau.http.annotation.Body;
+import org.apache.juneau.http.annotation.Content;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.annotation.Query;
 import org.apache.juneau.http.resource.*;
@@ -43,7 +43,7 @@ public class Remote_CommonInterfaces_Test {
 
 	@Remote
 	public static interface A {
-		public String putX1(@Body String b);
+		public String putX1(@Content String b);
 		public String getX2(@Query("foo") String b);
 		public String getX3(@Header("foo") String b);
 	}
@@ -82,7 +82,7 @@ public class Remote_CommonInterfaces_Test {
 	@Remote
 	@Rest
 	public static interface B extends BasicSimpleJsonConfig {
-		String putX1(@Body String b);
+		String putX1(@Content String b);
 		String getX2(@Query("foo") String b);
 		String getX3(@Header("foo") String b);
 	}

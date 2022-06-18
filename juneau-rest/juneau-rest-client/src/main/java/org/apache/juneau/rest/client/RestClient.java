@@ -110,7 +110,7 @@ import org.apache.juneau.xml.*;
  * 		.run()
  * 		.assertStatus().code().is(200)
  * 		.assertHeader(<js>"Content-Type"</js>).matchesSimple(<js>"application/json*"</js>)
- * 		.getBody().as(MyBean.<jk>class</jk>);
+ * 		.getContent().as(MyBean.<jk>class</jk>);
  * </p>
  *
  * <p class='w900'>
@@ -125,8 +125,8 @@ import org.apache.juneau.xml.*;
  * 	<jv>res</jv> = <jv>codeAssertion</jv>.is(200);
  * 	FluentStringAssertion&lt;RestResponse&gt; <jv>headerAssertion</jv> = <jv>res</jv>.assertHeader(<js>"Content-Type"</js>);
  * 	<jv>res</jv> = <jv>headerAssertion</jv>.matchesSimple(<js>"application/json*"</js>);
- * 	RestResponseBody <jv>body</jv> = <jv>res</jv>.getBody();
- * 	MyBean <jv>bean</jv> = <jv>body</jv>.as(MyBean.<jk>class</jk>);
+ * 	RestResponseBody <jv>content</jv> = <jv>res</jv>.getContent();
+ * 	MyBean <jv>bean</jv> = <jv>content</jv>.as(MyBean.<jk>class</jk>);
  * </p>
  *
  * <p class='w900'>
@@ -140,7 +140,7 @@ import org.apache.juneau.xml.*;
  *
  * 		<ja>@RemotePost</ja>(<js>"/pets"</js>)
  * 		Pet addPet(
- * 			<ja>@Body</ja> CreatePet <jv>pet</jv>,
+ * 			<ja>@Content</ja> CreatePet <jv>pet</jv>,
  * 			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>,
  * 			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> <jv>debug</jv>
  * 		);
@@ -179,7 +179,7 @@ import org.apache.juneau.xml.*;
  * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().rootUri(<js>"http://localhost:5000"</js>).build();
  *
  * 	<jc>// Use relative paths.</jc>
- * 	String <jv>body</jv> = <jv>client</jv>.get(<js>"/subpath"</js>).run().getBody().asString();
+ * 	String <jv>body</jv> = <jv>client</jv>.get(<js>"/subpath"</js>).run().getContent().asString();
  * </p>
  *
  * <p class='w900'>
@@ -223,7 +223,7 @@ import org.apache.juneau.xml.*;
  *
  * <p class='bjava'>
  * 	<jc>// Consuming the response, so use run().</jc>
- * 	String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().asString();
+ * 	String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getContent().asString();
  *
  * 	<jc>// Only interested in response status code, so use complete().</jc>
  * 	<jk>int</jk> <jv>status</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).complete().getStatusCode();
@@ -419,7 +419,7 @@ import org.apache.juneau.xml.*;
  * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().query(<js>"foo"</js>, <js>"bar"</js>).build();
  *
  * 	<jc>// Or do it on every request.</jc>
- * 	String <jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).query(<js>"foo"</js>, <js>"bar"</js>).run().getBody().asString();
+ * 	String <jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).query(<js>"foo"</js>, <js>"bar"</js>).run().getContent().asString();
  * </p>
  *
  * <ul class='notes'>
@@ -550,13 +550,13 @@ import org.apache.juneau.xml.*;
  * 	String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
  * 		.run()
  * 		.assertStatus().code().isBetween(200,399)
- * 		.getBody().asString();
+ * 		.getContent().asString();
  *
  * 	<jc>// Status assertion using a predicate.</jc>
  * 	String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
  * 		.run()
  * 		.assertStatus().code().passes(<jv>x</jv> -&gt; <jv>x</jv>&lt;400)
- * 		.getBody().asString();
+ * 		.getContent().asString();
  * </p>
  *
  *
@@ -645,7 +645,7 @@ import org.apache.juneau.xml.*;
  * 	String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
  * 		.run()
  * 		.getHeader(<js>"Content-Type"</js>).assertValue().matchesSimple(<js>"application/json*"</js>)
- * 		.getBody().asString();
+ * 		.getContent().asString();
  * </p>
  *
  *
@@ -657,7 +657,7 @@ import org.apache.juneau.xml.*;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestResponse}
  * 	<ul>
- * 		<li class='jm'><c>{@link RestResponse#getContent() getBody()} <jk>returns</jk> {@link ResponseContent}</c>
+ * 		<li class='jm'><c>{@link RestResponse#getContent() getContent()} <jk>returns</jk> {@link ResponseContent}</c>
  * 	</ul>
  * </ul>
  *
@@ -695,31 +695,31 @@ import org.apache.juneau.xml.*;
  * 	List&lt;String&gt; <jv>list1</jv> = <jv>client</jv>
  * 		.get(<jsf>URI</jsf>)
  * 		.run()
- * 		.getBody().as(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+ * 		.getContent().as(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
  *
  * 	<jc>// Parse into a linked-list of beans.</jc>
  * 	List&lt;MyBean&gt; <jv>list2</jv> = <jv>client</jv>
  * 		.get(<jsf>URI</jsf>)
  * 		.run()
- * 		.getBody().as(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+ * 		.getContent().as(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
  *
  * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
  * 	List&lt;List&lt;String&gt;&gt; <jv>list3</jv> = <jv>client</jv>
  * 		.get(<jsf>URI</jsf>)
  * 		.run()
- * 		.getBody().as(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+ * 		.getContent().as(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
  *
  * 	<jc>// Parse into a map of string keys/values.</jc>
  * 	Map&lt;String,String&gt; <jv>map1</jv> = <jv>client</jv>
  * 		.get(<jsf>URI</jsf>)
  * 		.run()
- * 		.getBody().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+ * 		.getContent().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
  *
  * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
  * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>map2</jv> = <jv>client</jv>
  * 		.get(<jsf>URI</jsf>)
  * 		.run()
- * 		.getBody().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+ * 		.getContent().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
  * </p>
  *
  * <p class='w900'>
@@ -735,8 +735,8 @@ import org.apache.juneau.xml.*;
  * 		.get(<jsf>URI</jsf>)
  * 		.run()
  * 		.cacheBody()
- * 		.getBody().pipeTo(<jv>someOtherStream</jv>)
- * 		.getBody().asInputStream();
+ * 		.getContent().pipeTo(<jv>someOtherStream</jv>)
+ * 		.getContent().asInputStream();
  * </p>
  *
  * <p>
@@ -757,8 +757,8 @@ import org.apache.juneau.xml.*;
  * 	String <jv>body</jv> = <jv>client</jv>
  * 		.get(<jsf>URI</jsf>)
  * 		.run()
- * 		.getBody().assertString().contains(<js>"Success"</js>)
- * 		.getBody().asString();
+ * 		.getContent().assertString().contains(<js>"Success"</js>)
+ * 		.getContent().asString();
  * </p>
  *
  * <p>
@@ -770,8 +770,8 @@ import org.apache.juneau.xml.*;
  * 	<jc>// Parse bean into POJO and then validate that it was parsed correctly.</jc>
  * 	MyBean <jv>bean</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
  * 		.run()
- * 		.getBody().assertObject(MyBean.<jk>class</jk>).asJson().is(<js>"{foo:'bar'}"</js>)
- * 		.getBody().as(MyBean.<jk>class</jk>);
+ * 		.getContent().assertObject(MyBean.<jk>class</jk>).asJson().is(<js>"{foo:'bar'}"</js>)
+ * 		.getContent().as(MyBean.<jk>class</jk>);
  * </p>
  *
  *
@@ -848,7 +848,7 @@ import org.apache.juneau.xml.*;
  * 		.build()
  * 		.post(<js>"http://localhost/bean"</js>, <jv>anotherBean</jv>)
  * 		.run()
- * 		.getBody().as(MyBean.<jk>class</jk>);
+ * 		.getContent().as(MyBean.<jk>class</jk>);
  * </p>
  *
  * <p>
@@ -911,7 +911,7 @@ import org.apache.juneau.xml.*;
  *
  * 		<ja>@RemotePost</ja>(<js>"/pets"</js>)
  * 		Pet addPet(
- * 			<ja>@Body</ja> CreatePet <jv>pet</jv>,
+ * 			<ja>@Content</ja> CreatePet <jv>pet</jv>,
  * 			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>,
  * 			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> <jv>debug</jv>
  * 		);
@@ -3937,13 +3937,13 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<jc>// Do some other stuff.</jc>
 		 *
 		 * 	<jc>// Now read the response.</jc>
-		 * 	String <jv>body</jv> = <jv>responseFuture</jv>.get().getBody().asString();
+		 * 	String <jv>body</jv> = <jv>responseFuture</jv>.get().getContent().asString();
 		 *
 		 * 	<jc>// Use it to asynchronously retrieve a response.</jc>
 		 * 	Future&lt;MyBean&gt; <jv>myBeanFuture</jv> = <jv>client</jv>
 		 * 		.get(<jsf>URI</jsf>)
 		 * 		.run()
-		 * 		.getBody().asFuture(MyBean.<jk>class</jk>);
+		 * 		.getContent().asFuture(MyBean.<jk>class</jk>);
 		 *
 		 * 	<jc>// Do some other stuff.</jc>
 		 *
@@ -4269,7 +4269,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	Bar <jv>bar</jv> = <jv>client</jv>
 		 * 		.get(<js>"/bar"</js>)  <jc>// Relative to http://localhost:10000/foo</jc>
 		 * 		.run()
-		 * 		.getBody().as(Bar.<jk>class</jk>);
+		 * 		.getContent().as(Bar.<jk>class</jk>);
 		 * </p>
 		 *
 		 * @param value
@@ -5328,7 +5328,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 		<jv>client</jv>
 		 * 			.get(<js>"/pathToBadJson"</js>)
 		 * 			.run()
-		 * 			.getBody().as(Object.<jk>class</jk>);  <jc>// Try to parse it.</jc>
+		 * 			.getContent().as(Object.<jk>class</jk>);  <jc>// Try to parse it.</jc>
 		 * 	} <jk>catch</jk> (RestCallException <jv>e</jv>) {
 		 * 		System.<jsf>err</jsf>.println(<jv>e</jv>.getMessage());  <jc>// Will display 200 lines of the output.</jc>
 		 * 	}
@@ -5397,7 +5397,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 		<jv>client</jv>
 		 * 			.get(<js>"/pathToBadJson"</js>)
 		 * 			.run()
-		 * 			.getBody().as(Object.<jk>class</jk>);  <jc>// Try to parse it.</jc>
+		 * 			.getContent().as(Object.<jk>class</jk>);  <jc>// Try to parse it.</jc>
 		 * 	} <jk>catch</jk> (RestCallException <jv>e</jv>) {
 		 * 		<jc>// Handle exception.</jc>
 		 * 	}
@@ -5435,7 +5435,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	Map&lt;String,String&gt; <jv>map</jv> = <jv>client</jv>
 		 * 		.get(<js>"/pathToJson"</js>)
 		 * 		.run()
-		 * 		.getBody().as(HashMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+		 * 		.getContent().as(HashMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
 		 *
 		 * 	<jc>// Make sure strings are trimmed.</jc>
 		 * 	<jsm>assertEquals</jsm>(<js>"bar"</js>, <jv>map</jv>.get(<js>"foo"</js>));
@@ -7531,7 +7531,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
 	public RestRequest request(String method, Object uri, boolean hasBody) throws RestCallException {
-		return request(op(method, uri, NO_BODY).hasBody(hasBody));
+		return request(op(method, uri, NO_BODY).hasContent(hasBody));
 	}
 
 	/**
@@ -7554,11 +7554,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			throw new RestCallException(null, null, "RestClient.close() has already been called.  This client cannot be reused.  Closed location stack trace can be displayed by setting the system property 'org.apache.juneau.rest.client2.RestClient.trackCreation' to true.");
 		}
 
-		RestRequest req = createRequest(toURI(op.getUri(), rootUri), op.getMethod(), op.hasBody());
+		RestRequest req = createRequest(toURI(op.getUri(), rootUri), op.getMethod(), op.hasContent());
 
 		onInit(req);
 
-		req.content(op.getBody());
+		req.content(op.getContent());
 
 		return req;
 	}
@@ -7737,7 +7737,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 					rom.forEachFormDataArg(a -> rc.formDataArg(a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty()));
 					rom.forEachHeaderArg(a -> rc.headerArg(a.getName(), args[a.getIndex()], a.getSchema(), a.getSerializer().orElse(partSerializer), a.isSkipIfEmpty()));
 
-					RemoteOperationArg ba = rom.getBodyArg();
+					RemoteOperationArg ba = rom.getContentArg();
 					if (ba != null)
 						rc.content(args[ba.getIndex()], ba.getSchema());
 

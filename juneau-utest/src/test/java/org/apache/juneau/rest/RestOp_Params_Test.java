@@ -115,7 +115,7 @@ public class RestOp_Params_Test {
 			return t != null;
 		}
 		@RestGet
-		public boolean s(RequestBody t) {
+		public boolean s(RequestContent t) {
 			return t != null;
 		}
 		@RestGet

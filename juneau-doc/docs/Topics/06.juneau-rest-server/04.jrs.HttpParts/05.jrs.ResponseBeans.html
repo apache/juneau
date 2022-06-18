@@ -23,7 +23,7 @@
 	<ul class='javatreec'>
 		<li class='ja'>{@link oaj.http.annotation.StatusCode} 
 		<li class='ja'>{@link oaj.http.annotation.Header} 
-		<li class='ja'>{@link oaj.http.annotation.Body} 
+		<li class='ja'>{@link oaj.http.annotation.Content} 
 		<li class='ja'>{@link oaj.http.annotation.Schema} 
 	</ul>
 	
@@ -51,8 +51,8 @@
 		|		}
 		|		
 		|		<jc>// Response bean converted to output based on Accept header.</jc>
-		|		<ja>@Body</ja>
-		|		<jk>public</jk> WelcomeMessageBean getBody() {
+		|		<ja>@Content</ja>
+		|		<jk>public</jk> WelcomeMessageBean getContent() {
 		|			<jk>return new</jk> WelcomeMessageBean();
 		|		}
 		|	}

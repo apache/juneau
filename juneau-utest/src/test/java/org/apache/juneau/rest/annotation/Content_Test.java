@@ -36,7 +36,7 @@ import org.apache.juneau.urlencoding.annotation.UrlEncoding;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class Body_Test {
+public class Content_Test {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// @Body on parameter
@@ -45,58 +45,58 @@ public class Body_Test {
 	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="text/json")
 	public static class A {
 		@RestPut(path="/String")
-		public String a(@Body String b) {
+		public String a(@Content String b) {
 			return b;
 		}
 		@RestPut(path="/Integer")
-		public Integer b(@Body Integer b) {
+		public Integer b(@Content Integer b) {
 			return b;
 		}
 		@RestPut(path="/int")
-		public Integer c(@Body int b) {
+		public Integer c(@Content int b) {
 			return b;
 		}
 		@RestPut(path="/Boolean")
-		public Boolean d(@Body Boolean b) {
+		public Boolean d(@Content Boolean b) {
 			return b;
 		}
 		@RestPut(path="/boolean")
-		public Boolean e(@Body boolean b) {
+		public Boolean e(@Content boolean b) {
 			return b;
 		}
 		@RestPut(path="/float")
-		public float f(@Body float f) {
+		public float f(@Content float f) {
 			return f;
 		}
 		@RestPut(path="/Float")
-		public Float g(@Body Float f) {
+		public Float g(@Content Float f) {
 			return f;
 		}
 		@RestPut(path="/Map")
-		public TreeMap<String,Integer> h(@Body TreeMap<String,Integer> m) {
+		public TreeMap<String,Integer> h(@Content TreeMap<String,Integer> m) {
 			return m;
 		}
 		@RestPut(path="/enum")
-		public TestEnum i(@Body TestEnum e) {
+		public TestEnum i(@Content TestEnum e) {
 			return e;
 		}
 		public static class A11 {
 			public String f1;
 		}
 		@RestPut(path="/Bean")
-		public A11 j(@Body A11 b) {
+		public A11 j(@Content A11 b) {
 			return b;
 		}
 		@RestPut(path="/InputStream")
-		public String k(@Body InputStream b) throws Exception {
+		public String k(@Content InputStream b) throws Exception {
 			return read(b);
 		}
 		@RestPut(path="/Reader")
-		public String l(@Body Reader b) throws Exception {
+		public String l(@Content Reader b) throws Exception {
 			return read(b);
 		}
 		@RestPut(path="/InputStreamTransform")
-		public A14 m(@Body A14 b) throws Exception {
+		public A14 m(@Content A14 b) throws Exception {
 			return b;
 		}
 		public static class A14 {
@@ -105,7 +105,7 @@ public class Body_Test {
 			@Override public String toString() { return s; }
 		}
 		@RestPut(path="/ReaderTransform")
-		public A15 n(@Body A15 b) throws Exception {
+		public A15 n(@Content A15 b) throws Exception {
 			return b;
 		}
 		public static class A15 {
@@ -114,7 +114,7 @@ public class Body_Test {
 			@Override public String toString() { return s; }
 		}
 		@RestPut(path="/StringTransform")
-		public A16 o(@Body A16 b) throws Exception { return b; }
+		public A16 o(@Content A16 b) throws Exception { return b; }
 		public static class A16 {
 			private String s;
 			public A16(String s) throws Exception { this.s = s; }
@@ -141,13 +141,13 @@ public class Body_Test {
 		a.put("/String", "'foo'").contentType("text/plain")
 			.run()
 			.assertContent().is("'\\'foo\\''");
-		a.put("/String?body=foo", null)
+		a.put("/String?content=foo", null)
 			.run()
 			.assertContent().is("'foo'");
-		a.put("/String?body=null", null)
+		a.put("/String?content=null", null)
 			.run()
 			.assertContent().is("null");
-		a.put("/String?body=", null)
+		a.put("/String?content=", null)
 			.run()
 			.assertContent().is("''");
 
@@ -158,19 +158,19 @@ public class Body_Test {
 		a.put("/Integer", "123")
 			.run()
 			.assertContent().is("123");
-		a.put("/Integer?body=123", null)
+		a.put("/Integer?content=123", null)
 			.run()
 			.assertContent().is("123");
-		a.put("/Integer?body=-123", null)
+		a.put("/Integer?content=-123", null)
 			.run()
 			.assertContent().is("-123");
-		a.put("/Integer?body=null", null)
+		a.put("/Integer?content=null", null)
 			.run()
 			.assertContent().is("null");
-		a.put("/Integer?body=", null)
+		a.put("/Integer?content=", null)
 			.run()
 			.assertContent().is("null");
-		a.put("/Integer?body=bad&noTrace=true", null)
+		a.put("/Integer?content=bad&noTrace=true", null)
 			.run()
 			.assertCode().is(400);
 
@@ -180,19 +180,19 @@ public class Body_Test {
 		a.put("/int", "123")
 			.run()
 			.assertContent().is("123"); // Uses part parser.
-		a.put("/int?body=123", null)
+		a.put("/int?content=123", null)
 			.run()
 			.assertContent().is("123");
-		a.put("/int?body=-123", null)
+		a.put("/int?content=-123", null)
 			.run()
 			.assertContent().is("-123");
-		a.put("/int?body=null", null)
+		a.put("/int?content=null", null)
 			.run()
 			.assertContent().is("0");
-		a.put("/int?body=", null)
+		a.put("/int?content=", null)
 			.run()
 			.assertContent().is("0");
-		a.put("/int?body=bad&noTrace=true", null)
+		a.put("/int?content=bad&noTrace=true", null)
 			.run()
 			.assertCode().is(400);
 
@@ -203,19 +203,19 @@ public class Body_Test {
 		a.put("/Boolean", "true")
 			.run()
 			.assertContent().is("true");
-		a.put("/Boolean?body=true", null)
+		a.put("/Boolean?content=true", null)
 			.run()
 			.assertContent().is("true");
-		a.put("/Boolean?body=false", null)
+		a.put("/Boolean?content=false", null)
 			.run()
 			.assertContent().is("false");
-		a.put("/Boolean?body=null", null)
+		a.put("/Boolean?content=null", null)
 			.run()
 			.assertContent().is("null");
-		a.put("/Boolean?body=", null)
+		a.put("/Boolean?content=", null)
 			.run()
 			.assertContent().is("null");
-		a.put("/Boolean?body=bad&noTrace=true", null)
+		a.put("/Boolean?content=bad&noTrace=true", null)
 			.run()
 			.assertCode().is(400);
 
@@ -225,19 +225,19 @@ public class Body_Test {
 		a.put("/boolean", "true")
 			.run()
 			.assertContent().is("true"); // Uses part parser.
-		a.put("/boolean?body=true", null)
+		a.put("/boolean?content=true", null)
 			.run()
 			.assertContent().is("true");
-		a.put("/boolean?body=false", null)
+		a.put("/boolean?content=false", null)
 			.run()
 			.assertContent().is("false");
-		a.put("/boolean?body=null", null)
+		a.put("/boolean?content=null", null)
 			.run()
 			.assertContent().is("false");
-		a.put("/boolean?body=", null)
+		a.put("/boolean?content=", null)
 			.run()
 			.assertContent().is("false");
-		a.put("/boolean?body=bad&noTrace=true", null)
+		a.put("/boolean?content=bad&noTrace=true", null)
 			.run()
 			.assertCode().is(400);
 
@@ -247,19 +247,19 @@ public class Body_Test {
 		a.put("/float", "1.23")
 			.run()
 			.assertContent().is("1.23");  // Uses part parser.
-		a.put("/float?body=1.23", null)
+		a.put("/float?content=1.23", null)
 			.run()
 			.assertContent().is("1.23");
-		a.put("/float?body=-1.23", null)
+		a.put("/float?content=-1.23", null)
 			.run()
 			.assertContent().is("-1.23");
-		a.put("/float?body=null", null)
+		a.put("/float?content=null", null)
 			.run()
 			.assertContent().is("0.0");
-		a.put("/float?body=", null)
+		a.put("/float?content=", null)
 			.run()
 			.assertContent().is("0.0");
-		a.put("/float?body=bad&noTrace=true", null)
+		a.put("/float?content=bad&noTrace=true", null)
 			.run()
 			.assertCode().is(400);
 
@@ -270,19 +270,19 @@ public class Body_Test {
 		a.put("/Float", "1.23")
 			.run()
 			.assertContent().is("1.23");
-		a.put("/Float?body=1.23", null)
+		a.put("/Float?content=1.23", null)
 			.run()
 			.assertContent().is("1.23");
-		a.put("/Float?body=-1.23", null)
+		a.put("/Float?content=-1.23", null)
 			.run()
 			.assertContent().is("-1.23");
-		a.put("/Float?body=null", null)
+		a.put("/Float?content=null", null)
 			.run()
 			.assertContent().is("null");
-		a.put("/Float?body=", null)
+		a.put("/Float?content=", null)
 			.run()
 			.assertContent().is("null");
-		a.put("/Float?body=bad&noTrace=true", null)
+		a.put("/Float?content=bad&noTrace=true", null)
 			.run()
 			.assertCode().is(400);
 
@@ -292,19 +292,19 @@ public class Body_Test {
 		a.put("/Map", "(foo=123)", TEXT_OPENAPI)
 			.run()
 			.assertCode().is(415);
-		a.put("/Map?body=(foo=123)", null)
+		a.put("/Map?content=(foo=123)", null)
 			.run()
 			.assertContent().is("{foo:123}");
-		a.put("/Map?body=()", null)
+		a.put("/Map?content=()", null)
 			.run()
 			.assertContent().is("{}");
-		a.put("/Map?body=null", null)
+		a.put("/Map?content=null", null)
 			.run()
 			.assertContent().is("null");
-		a.put("/Map?body=", null)
+		a.put("/Map?content=", null)
 			.run()
 			.assertContent().is("null");
-		a.put("/Map?body=bad&noTrace=true", null)
+		a.put("/Map?content=bad&noTrace=true", null)
 			.run()
 			.assertCode().is(400);
 
@@ -314,19 +314,19 @@ public class Body_Test {
 		a.put("/enum", "ONE")
 			.run()
 			.assertContent().is("'ONE'");
-		a.put("/enum?body=ONE", null)
+		a.put("/enum?content=ONE", null)
 			.run()
 			.assertContent().is("'ONE'");
-		a.put("/enum?body=TWO", null)
+		a.put("/enum?content=TWO", null)
 			.run()
 			.assertContent().is("'TWO'");
-		a.put("/enum?body=null", null)
+		a.put("/enum?content=null", null)
 			.run()
 			.assertContent().is("null");
-		a.put("/enum?body=", null)
+		a.put("/enum?content=", null)
 			.run()
 			.assertContent().is("null");
-		a.put("/enum?body=bad&noTrace=true", null)
+		a.put("/enum?content=bad&noTrace=true", null)
 			.run()
 			.assertCode().is(400);
 
@@ -336,19 +336,19 @@ public class Body_Test {
 		a.put("/Bean", "(f1=a)", TEXT_OPENAPI)
 			.run()
 			.assertCode().is(415);
-		a.put("/Bean?body=(f1=a)", null)
+		a.put("/Bean?content=(f1=a)", null)
 			.run()
 			.assertContent().is("{f1:'a'}");
-		a.put("/Bean?body=()", null)
+		a.put("/Bean?content=()", null)
 			.run()
 			.assertContent().is("{}");
-		a.put("/Bean?body=null", null)
+		a.put("/Bean?content=null", null)
 			.run()
 			.assertContent().is("null");
-		a.put("/Bean?body=", null)
+		a.put("/Bean?content=", null)
 			.run()
 			.assertContent().is("null");
-		a.put("/Bean?body=bad&noTrace=true", null)
+		a.put("/Bean?content=bad&noTrace=true", null)
 			.run()
 			.assertCode().is(400);
 
@@ -359,13 +359,13 @@ public class Body_Test {
 		a.put("/InputStream", "'a'")
 			.run()
 			.assertContent().is("'\\'a\\''");
-		a.put("/InputStream?body=a", null)
+		a.put("/InputStream?content=a", null)
 			.run()
 			.assertContent().is("'a'");
-		a.put("/InputStream?body=null", null)
+		a.put("/InputStream?content=null", null)
 			.run()
 			.assertContent().is("'null'");
-		a.put("/InputStream?body=", null)
+		a.put("/InputStream?content=", null)
 			.run()
 			.assertContent().is("''");
 
@@ -376,13 +376,13 @@ public class Body_Test {
 		a.put("/Reader", "'a'")
 			.run()
 			.assertContent().is("'\\'a\\''");
-		a.put("/Reader?body=a", null)
+		a.put("/Reader?content=a", null)
 			.run()
 			.assertContent().is("'a'");
-		a.put("/Reader?body=null", null)
+		a.put("/Reader?content=null", null)
 			.run()
 			.assertContent().is("'null'");
-		a.put("/Reader?body=", null)
+		a.put("/Reader?content=", null)
 			.run()
 			.assertContent().is("''");
 
@@ -424,7 +424,7 @@ public class Body_Test {
 		public B1 a(B1 b) {
 			return b;
 		}
-		@Body
+		@Content
 		public static class B1 {
 			private String val;
 			public B1(String val) { this.val = val; }
@@ -434,7 +434,7 @@ public class Body_Test {
 		public B2 b(B2 b) {
 			return b;
 		}
-		@Body
+		@Content
 		public static class B2 {
 			public String f1;
 		}
@@ -443,13 +443,13 @@ public class Body_Test {
 			return b;
 		}
 		@SuppressWarnings("serial")
-		@Body
+		@Content
 		public static class B3 extends LinkedList<B2> {}
 		@RestPut(path="/InputStreamTransform")
 		public B4 d(B4 b) throws Exception {
 			return b;
 		}
-		@Body
+		@Content
 		public static class B4 {
 			String s;
 			public B4(InputStream in) throws Exception { this.s = read(in); }
@@ -459,7 +459,7 @@ public class Body_Test {
 		public B5 e(B5 b) throws Exception {
 			return b;
 		}
-		@Body
+		@Content
 		public static class B5 {
 			private String s;
 			public B5(Reader in) throws Exception { this.s = read(in); }
@@ -512,19 +512,19 @@ public class Body_Test {
 	@Rest
 	public static class D {
 		@RestPut(path="/String")
-		public Reader a(@Body Reader b) throws Exception {
+		public Reader a(@Content Reader b) throws Exception {
 			return b;
 		}
 		@RestPut(path="/InputStream")
-		public InputStream b(@Body InputStream b) throws Exception {
+		public InputStream b(@Content InputStream b) throws Exception {
 			return b;
 		}
 		@RestPut(path="/Reader")
-		public Reader c(@Body Reader b) throws Exception {
+		public Reader c(@Content Reader b) throws Exception {
 			return b;
 		}
 		@RestPut(path="/StringTransform")
-		public Reader d(@Body D1 b) throws Exception {
+		public Reader d(@Content D1 b) throws Exception {
 			return reader(b.toString());
 		}
 		public static class D1 {
@@ -533,7 +533,7 @@ public class Body_Test {
 			@Override public String toString() { return s; }
 		}
 		@RestPut(path="/InputStreamTransform")
-		public Reader e(@Body D2 b) throws Exception {
+		public Reader e(@Content D2 b) throws Exception {
 			return reader(b.toString());
 		}
 		public static class D2 {
@@ -542,7 +542,7 @@ public class Body_Test {
 			@Override public String toString() { return s; }
 		}
 		@RestPut(path="/ReaderTransform")
-		public Reader f(@Body D3 b) throws Exception {
+		public Reader f(@Content D3 b) throws Exception {
 			return reader(b.toString());
 		}
 		public static class D3 {
@@ -554,7 +554,7 @@ public class Body_Test {
 		public Reader g(D4 b) throws Exception {
 			return reader(b.toString());
 		}
-		@Body
+		@Content
 		public static class D4 {
 			private String s;
 			public D4(String in) throws Exception { this.s = in; }
@@ -564,7 +564,7 @@ public class Body_Test {
 		public Reader h(D5 b) throws Exception {
 			return reader(b.toString());
 		}
-		@Body
+		@Content
 		public static class D5 {
 			String s;
 			public D5(InputStream in) throws Exception { this.s = read(in); }
@@ -575,7 +575,7 @@ public class Body_Test {
 		public Reader i(D6 b) throws Exception {
 			return reader(b.toString());
 		}
-		@Body
+		@Content
 		public static class D6 {
 			private String s;
 			public D6(Reader in) throws Exception{ this.s = read(in); }
@@ -649,11 +649,11 @@ public class Body_Test {
 	@Rest(serializers=SimpleJsonSerializer.class, parsers=JsonParser.class, defaultAccept="application/json")
 	public static class E {
 		@RestPut(path="/B")
-		public XBeans.XB a(@Body XBeans.XB b) {
+		public XBeans.XB a(@Content XBeans.XB b) {
 			return b;
 		}
 		@RestPut(path="/C")
-		public XBeans.XC b(@Body XBeans.XC c) {
+		public XBeans.XC b(@Content XBeans.XC c) {
 			return c;
 		}
 	}
@@ -669,7 +669,7 @@ public class Body_Test {
 			.assertContent().is(expected);
 
 		expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e.put("/B?body=" + UonSerializer.DEFAULT.serialize(XBeans.XB.INSTANCE), "a")
+		e.put("/B?content=" + UonSerializer.DEFAULT.serialize(XBeans.XB.INSTANCE), "a")
 			.run()
 			.assertContent().is(expected);
 
@@ -679,7 +679,7 @@ public class Body_Test {
 			.assertContent().is(expected);
 
 		expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e.put("/C?body=" + UonSerializer.DEFAULT.serialize(XBeans.XB.INSTANCE), "a")
+		e.put("/C?content=" + UonSerializer.DEFAULT.serialize(XBeans.XB.INSTANCE), "a")
 			.run()
 			.assertContent().is(expected);
 	}
@@ -689,11 +689,11 @@ public class Body_Test {
 	@UrlEncoding(on="C",expandedParams=true)
 	public static class E2 {
 		@RestPut(path="/B")
-		public XBeans.XE a(@Body XBeans.XE b) {
+		public XBeans.XE a(@Content XBeans.XE b) {
 			return b;
 		}
 		@RestPut(path="/C")
-		public XBeans.XF b(@Body XBeans.XF c) {
+		public XBeans.XF b(@Content XBeans.XF c) {
 			return c;
 		}
 	}
@@ -709,7 +709,7 @@ public class Body_Test {
 			.assertContent().is(expected);
 
 		expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e2.put("/B?body=" + UonSerializer.DEFAULT.copy().applyAnnotations(XBeans.Annotations.class).build().serialize(XBeans.XE.INSTANCE), "a")
+		e2.put("/B?content=" + UonSerializer.DEFAULT.copy().applyAnnotations(XBeans.Annotations.class).build().serialize(XBeans.XE.INSTANCE), "a")
 			.run()
 			.assertContent().is(expected);
 
@@ -719,7 +719,7 @@ public class Body_Test {
 			.assertContent().is(expected);
 
 		expected = "{f01:['a','b'],f02:['c','d'],f03:[1,2],f04:[3,4],f05:[['e','f'],['g','h']],f06:[['i','j'],['k','l']],f07:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f08:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f09:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f10:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f11:['a','b'],f12:['c','d'],f13:[1,2],f14:[3,4],f15:[['e','f'],['g','h']],f16:[['i','j'],['k','l']],f17:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f18:[{a:'a',b:1,c:true},{a:'a',b:1,c:true}],f19:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]],f20:[[{a:'a',b:1,c:true}],[{a:'a',b:1,c:true}]]}";
-		e2.put("/C?body=" + UonSerializer.DEFAULT.copy().applyAnnotations(XBeans.Annotations.class).build().serialize(XBeans.XE.INSTANCE), "a")
+		e2.put("/C?content=" + UonSerializer.DEFAULT.copy().applyAnnotations(XBeans.Annotations.class).build().serialize(XBeans.XE.INSTANCE), "a")
 			.run()
 			.assertContent().is(expected);
 	}
@@ -732,7 +732,7 @@ public class Body_Test {
 	public static class F {
 		@RestPost(path="/*")
 		public Reader a(
-				@Body F1 bean,
+				@Content F1 bean,
 				@HasQuery("p1") boolean hqp1, @HasQuery("p2") boolean hqp2,
 				@Query("p1") String qp1, @Query("p2") int qp2) throws Exception {
 			return reader("bean=["+SimpleJsonSerializer.DEFAULT.toString(bean)+"],qp1=["+qp1+"],qp2=["+qp2+"],hqp1=["+hqp1+"],hqp2=["+hqp2+"]");
@@ -769,7 +769,7 @@ public class Body_Test {
 	@Rest(serializers=UrlEncodingSerializer.class,parsers=UrlEncodingParser.class)
 	public static class G {
 		@RestPost(path="/")
-		public XBeans.XC a(@Body XBeans.XC content) throws Exception {
+		public XBeans.XC a(@Content XBeans.XC content) throws Exception {
 			return content;
 		}
 	}
@@ -813,7 +813,7 @@ public class Body_Test {
 	public static class H {
 		@RestPost(path="/")
 		@UrlEncodingConfig(expandedParams="true")
-		public XBeans.XB a(@Body XBeans.XB content) throws Exception {
+		public XBeans.XB a(@Content XBeans.XB content) throws Exception {
 			return content;
 		}
 	}
@@ -853,7 +853,7 @@ public class Body_Test {
 	public static class H2 {
 		@RestPost(path="/")
 		@UrlEncodingConfig(expandedParams="true")
-		public XBeans.XE a(@Body XBeans.XE content) throws Exception {
+		public XBeans.XE a(@Content XBeans.XE content) throws Exception {
 			return content;
 		}
 	}
@@ -894,13 +894,13 @@ public class Body_Test {
 	@Rest(serializers=JsonSerializer.class,parsers=JsonParser.class)
 	public static class I {
 		@RestPost
-		public XBeans.XB a(@Body @Schema(r=true) XBeans.XB content) throws Exception {
+		public XBeans.XB a(@Content @Schema(r=true) XBeans.XB content) throws Exception {
 			return content;
 		}
 		@RestPost
 		@Bean(on="A,B,C",sort=true)
 		@UrlEncoding(on="C",expandedParams=true)
-		public XBeans.XE b(@Body @Schema(r=true) XBeans.XE content) throws Exception {
+		public XBeans.XE b(@Content @Schema(r=true) XBeans.XE content) throws Exception {
 			return content;
 		}
 	}
@@ -933,22 +933,22 @@ public class Body_Test {
 	@Rest(serializers=SimpleJsonSerializer.class,parsers=JsonParser.class)
 	public static class J {
 		@RestPost
-		public Object a(@Body Optional<Integer> body) throws Exception {
+		public Object a(@Content Optional<Integer> body) throws Exception {
 			assertNotNull(body);
 			return body;
 		}
 		@RestPost
-		public Object b(@Body Optional<ABean> body) throws Exception {
+		public Object b(@Content Optional<ABean> body) throws Exception {
 			assertNotNull(body);
 			return body;
 		}
 		@RestPost
-		public Object c(@Body Optional<List<ABean>> body) throws Exception {
+		public Object c(@Content Optional<List<ABean>> body) throws Exception {
 			assertNotNull(body);
 			return body;
 		}
 		@RestPost
-		public Object d(@Body List<Optional<ABean>> body) throws Exception {
+		public Object d(@Content List<Optional<ABean>> body) throws Exception {
 			return body;
 		}
 	}

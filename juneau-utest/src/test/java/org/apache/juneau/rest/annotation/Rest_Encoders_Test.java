@@ -15,7 +15,7 @@ package org.apache.juneau.rest.annotation;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.encoders.*;
-import org.apache.juneau.http.annotation.Body;
+import org.apache.juneau.http.annotation.Content;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
@@ -42,7 +42,7 @@ public class Rest_Encoders_Test {
 	@Rest
 	public static class A {
 		@RestOp
-		public String put(@Body String in) {
+		public String put(@Content String in) {
 			return in;
 		}
 	}
@@ -68,7 +68,7 @@ public class Rest_Encoders_Test {
 	@Rest(encoders=MyEncoder.class)
 	public static class B {
 		@RestOp
-		public String put(@Body String in) {
+		public String put(@Content String in) {
 			return in;
 		}
 	}

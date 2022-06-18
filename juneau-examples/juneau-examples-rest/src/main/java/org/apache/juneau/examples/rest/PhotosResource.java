@@ -136,7 +136,7 @@ public class PhotosResource extends BasicRestServlet implements BasicUniversalCo
 	 * @return OK.
 	 */
 	@RestPut(path="/{id}", parsers=ImageParser.class)
-	public Ok addPhoto(@Path("id") int id, @Body BufferedImage image) {
+	public Ok addPhoto(@Path("id") int id, @Content BufferedImage image) {
 		photos.put(id, new Photo(id, image));
 		return Ok.OK;
 	}
@@ -149,7 +149,7 @@ public class PhotosResource extends BasicRestServlet implements BasicUniversalCo
 	 * @return The created photo bean.
 	 */
 	@RestPost(path="/", parsers=ImageParser.class)
-	public Photo setPhoto(@Body BufferedImage image) {
+	public Photo setPhoto(@Content BufferedImage image) {
 		int id = photos.size();
 		Photo p = new Photo(id, image);
 		photos.put(id, p);

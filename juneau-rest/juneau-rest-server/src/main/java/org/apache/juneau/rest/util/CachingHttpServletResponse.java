@@ -36,7 +36,7 @@ public class CachingHttpServletResponse extends HttpServletResponseWrapper {
 	 *
 	 * @param res The response to wrap.
 	 * @return The wrapped request.
-	 * @throws IOException Thrown by underlying body stream.
+	 * @throws IOException Thrown by underlying content stream.
 	 */
 	public static CachingHttpServletResponse wrap(HttpServletResponse res) throws IOException {
 		if (res instanceof CachingHttpServletResponse)
@@ -88,11 +88,11 @@ public class CachingHttpServletResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * Returns the body of the servlet response without consuming the stream.
+	 * Returns the content of the servlet response without consuming the stream.
 	 *
-	 * @return The body of the response.
+	 * @return The content of the response.
 	 */
-	public byte[] getBody() {
+	public byte[] getContent() {
 		return baos.toByteArray();
 	}
 }

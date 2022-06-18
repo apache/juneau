@@ -42,8 +42,8 @@ import org.apache.juneau.oapi.*;
  * <p class='w800'>
  * Unlike {@link FormData @FormData}, using this annotation does not result in the servlet reading the contents of
  * URL-encoded form posts.
- * Therefore, this annotation can be used in conjunction with the {@link Body @Body} annotation or
- * <c>RestRequest.getBody()</c> method for <c>application/x-www-form-urlencoded POST</c> calls.
+ * Therefore, this annotation can be used in conjunction with the {@link Content @Content} annotation or
+ * <c>RestRequest.getContent()</c> method for <c>application/x-www-form-urlencoded POST</c> calls.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>

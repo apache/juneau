@@ -14,7 +14,7 @@ package org.apache.juneau.rest;
 
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.http.annotation.Body;
+import org.apache.juneau.http.annotation.Content;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
@@ -35,7 +35,7 @@ public class Header_ContentType_Test {
 	)
 	public static class A {
 		@RestPut
-		public String a(@Body String in) {
+		public String a(@Content String in) {
 			return in;
 		}
 	}
@@ -69,7 +69,7 @@ public class Header_ContentType_Test {
 	)
 	public static class B {
 		@RestPut(parsers=P3.class)
-		public String a(@Body String in) {
+		public String a(@Content String in) {
 			return in;
 		}
 	}
@@ -112,7 +112,7 @@ public class Header_ContentType_Test {
 	)
 	public static class C {
 		@RestPut(parsers={P3.class,Inherit.class})
-		public String a(@Body String in) {
+		public String a(@Content String in) {
 			return in;
 		}
 	}
@@ -144,7 +144,7 @@ public class Header_ContentType_Test {
 	)
 	public static class D {
 		@RestPut(defaultRequestHeaders={"Content-Type: text/p3"}, parsers=P3.class)
-		public String a(@Body String in) {
+		public String a(@Content String in) {
 			return in;
 		}
 	}
@@ -185,7 +185,7 @@ public class Header_ContentType_Test {
 	)
 	public static class E {
 		@RestPut(defaultRequestHeaders={"Content-Type: text/p3"}, parsers={Inherit.class,P3.class})
-		public String a(@Body String in) {
+		public String a(@Content String in) {
 			return in;
 		}
 	}

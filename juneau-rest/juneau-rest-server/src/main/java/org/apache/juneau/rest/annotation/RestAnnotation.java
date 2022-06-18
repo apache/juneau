@@ -118,7 +118,7 @@ public class RestAnnotation {
 		Class<? extends Serializer>[] serializers = new Class[0];
 		Class<?>[] children={}, parsers={};
 		Swagger swagger = SwaggerAnnotation.DEFAULT;
-		String disableBodyParam="", allowedHeaderParams="", allowedMethodHeaders="", allowedMethodParams="", clientVersionHeader="", config="", debug="", debugOn="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", messages="", path="", renderResponseStackTraces="", roleGuard="", rolesDeclared="", siteName="", uriAuthority="", uriContext="", uriRelativity="", uriResolution="";
+		String disableContentParam="", allowedHeaderParams="", allowedMethodHeaders="", allowedMethodParams="", clientVersionHeader="", config="", debug="", debugOn="", defaultAccept="", defaultCharset="", defaultContentType="", maxInput="", messages="", path="", renderResponseStackTraces="", roleGuard="", rolesDeclared="", siteName="", uriAuthority="", uriContext="", uriRelativity="", uriResolution="";
 		String[] consumes={}, defaultRequestAttributes={}, defaultRequestHeaders={}, defaultResponseHeaders={}, description={}, produces={}, title={};
 
 		/**
@@ -138,13 +138,13 @@ public class RestAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Rest#disableBodyParam()} property on this annotation.
+		 * Sets the {@link Rest#disableContentParam()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder disableBodyParam(String value) {
-			this.disableBodyParam = value;
+		public Builder disableContentParam(String value) {
+			this.disableContentParam = value;
 			return this;
 		}
 
@@ -737,13 +737,13 @@ public class RestAnnotation {
 		private final Class<? extends Serializer>[] serializers;
 		private final Class<?>[] children, parsers;
 		private final Swagger swagger;
-		private final String disableBodyParam, allowedHeaderParams, allowedMethodHeaders, allowedMethodParams, clientVersionHeader, config, debug, debugOn, defaultAccept, defaultCharset, defaultContentType, maxInput, messages, path, renderResponseStackTraces, roleGuard, rolesDeclared, siteName, uriAuthority, uriContext, uriRelativity, uriResolution;
+		private final String disableContentParam, allowedHeaderParams, allowedMethodHeaders, allowedMethodParams, clientVersionHeader, config, debug, debugOn, defaultAccept, defaultCharset, defaultContentType, maxInput, messages, path, renderResponseStackTraces, roleGuard, rolesDeclared, siteName, uriAuthority, uriContext, uriRelativity, uriResolution;
 		private final String[] consumes, description, produces, defaultRequestAttributes, defaultRequestHeaders, defaultResponserHeaders, title;
 
 		Impl(Builder b) {
 			super(b);
 			this.builder = b.builder;
-			this.disableBodyParam = b.disableBodyParam;
+			this.disableContentParam = b.disableContentParam;
 			this.allowedHeaderParams = b.allowedHeaderParams;
 			this.allowedMethodHeaders = b.allowedMethodHeaders;
 			this.allowedMethodParams = b.allowedMethodParams;
@@ -802,8 +802,8 @@ public class RestAnnotation {
 		}
 
 		@Override /* Rest */
-		public String disableBodyParam() {
-			return disableBodyParam;
+		public String disableContentParam() {
+			return disableContentParam;
 		}
 
 		@Override /* Rest */
@@ -1105,7 +1105,7 @@ public class RestAnnotation {
 			type(a.restChildrenClass()).ifPresent(x -> b.restChildrenClass(x));
 			type(a.restOperationsClass()).ifPresent(x -> b.restOperationsClass(x));
 			type(a.debugEnablement()).ifPresent(x -> b.debugEnablement().type(x));
-			string(a.disableBodyParam()).map(Boolean::parseBoolean).ifPresent(x -> b.disableBodyParam(x));
+			string(a.disableContentParam()).map(Boolean::parseBoolean).ifPresent(x -> b.disableContentParam(x));
 			string(a.allowedHeaderParams()).ifPresent(x -> b.allowedHeaderParams(x));
 			string(a.allowedMethodHeaders()).ifPresent(x -> b.allowedMethodHeaders(x));
 			string(a.allowedMethodParams()).ifPresent(x -> b.allowedMethodParams(x));

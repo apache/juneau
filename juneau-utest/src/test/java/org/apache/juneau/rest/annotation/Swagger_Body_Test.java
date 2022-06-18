@@ -33,7 +33,7 @@ public class Swagger_Body_Test {
 	@Rest
 	public static class A {
 
-		@Body
+		@Content
 		@Schema(
 			d={"a","b"},
 			type="string",
@@ -45,7 +45,7 @@ public class Swagger_Body_Test {
 		@RestGet
 		public void a(A1 h) {}
 
-		@Body
+		@Content
 		@Schema(
 			description="a\nb",
 			required=true,
@@ -57,7 +57,7 @@ public class Swagger_Body_Test {
 		@RestPut
 		public void b(A2 h) {}
 
-		@Body
+		@Content
 		@Schema(
 			description="a\nb",
 			required=true,
@@ -94,27 +94,27 @@ public class Swagger_Body_Test {
 	@Rest
 	public static class B {
 
-		@Body
+		@Content
 		@Schema(type="object")
 		public static class B1 {}
 		@RestGet
 		public void a(B1 h) {}
 
-		@Body
+		@Content
 		public static class B2 {
 			public String f1;
 		}
 		@RestPut
 		public void b(B2 b) {}
 
-		@Body
+		@Content
 		public static class B3 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
 		@RestPost
 		public void c(B3 b) {}
 
-		@Body
+		@Content
 		public static class B4 {}
 		@RestDelete
 		public void d(B4 b) {}
@@ -147,7 +147,7 @@ public class Swagger_Body_Test {
 
 		@RestGet
 		public void a(
-			@Body
+			@Content
 			@Schema(
 				d= {"a","b"},
 				r=true,
@@ -161,7 +161,7 @@ public class Swagger_Body_Test {
 
 		@RestPut
 		public void b(
-			@Body
+			@Content
 			@Schema(
 				description="a\nb",
 				required=true,
@@ -175,7 +175,7 @@ public class Swagger_Body_Test {
 
 		@RestPost
 		public void c(
-			@Body
+			@Content
 			@Schema(
 				d= {"b","c"},
 				required=true,
@@ -210,29 +210,29 @@ public class Swagger_Body_Test {
 
 		public static class E1 {}
 		@RestGet
-		public void a(@Body @Schema(type="object") E1 b) {}
+		public void a(@Content @Schema(type="object") E1 b) {}
 
 		public static class E2 {
 			public String f1;
 		}
 		@RestPut
-		public void b(@Body E2 b) {}
+		public void b(@Content E2 b) {}
 
 		public static class E3 extends LinkedList<String> {
 			private static final long serialVersionUID = 1L;
 		}
 		@RestPost
-		public void c(@Body E3 b) {}
+		public void c(@Content E3 b) {}
 
 		public static class E4 {}
 		@RestDelete
-		public void d(@Body E4 b) {}
+		public void d(@Content E4 b) {}
 
 		@RestOp
-		public void e(@Body Integer b) {}
+		public void e(@Content Integer b) {}
 
 		@RestGet
-		public void f(@Body Boolean b) {}
+		public void f(@Content Boolean b) {}
 	}
 
 	@Test

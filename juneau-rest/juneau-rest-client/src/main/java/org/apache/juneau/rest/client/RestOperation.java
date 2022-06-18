@@ -37,8 +37,8 @@ public class RestOperation {
 
 	private final Object url;
 	private final String method;
-	private final Object body;
-	private boolean hasBody;
+	private final Object content;
+	private boolean hasContent;
 
 	/**
 	 * Creator.
@@ -100,8 +100,8 @@ public class RestOperation {
 	public RestOperation(String method, Object url, Object body) {
 		this.url = url;
 		this.method = method.toUpperCase(Locale.ENGLISH);
-		this.body = body;
-		this.hasBody = HttpMethod.hasContent(method);
+		this.content = body;
+		this.hasContent = HttpMethod.hasContent(method);
 	}
 
 	/**
@@ -123,34 +123,34 @@ public class RestOperation {
 	}
 
 	/**
-	 * Bean property getter:  <property>body</property>.
+	 * Bean property getter:  <property>content</property>.
 	 *
 	 * @return
-	 * 	The value of the <property>body</property> property on this bean.
+	 * 	The value of the <property>content</property> property on this bean.
 	 * 	<br>Returns {@link #NO_BODY} if the request does not have a body set.
 	 * 	<br>A <jk>null</jk> value means <jk>null</jk> should be the serialized response.
 	 */
-	public Object getBody() {
-		return body;
+	public Object getContent() {
+		return content;
 	}
 
 	/**
-	 * Identifies whether this HTTP method typically has a body.
+	 * Identifies whether this HTTP method typically has content.
 	 *
-	 * @return <jk>true</jk> if this HTTP method typically has a body.
+	 * @return <jk>true</jk> if this HTTP method typically has content.
 	 */
-	public boolean hasBody() {
-		return hasBody;
+	public boolean hasContent() {
+		return hasContent;
 	}
 
 	/**
-	 * Overrides the default value for the {@link #hasBody()} method.
+	 * Overrides the default value for the {@link #hasContent()} method.
 	 *
 	 * @param value The new value.
 	 * @return This object.
 	 */
-	public RestOperation hasBody(boolean value) {
-		this.hasBody = value;
+	public RestOperation hasContent(boolean value) {
+		this.hasContent = value;
 		return this;
 	}
 }

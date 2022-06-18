@@ -40,7 +40,7 @@
 		</li>
 	</ul>
 	<p>
-		Request bodies are parsed and passed in via {@link oaj.http.annotation.Body @Body}-annotated parameters,
+		Request bodies are parsed and passed in via {@link oaj.http.annotation.Content @Content}-annotated parameters,
 		and response bodies are returned or thrown by {@link oajr.annotation.RestOp @RestOp}-annotated methods
 		and serialized.
 	</p>
@@ -54,7 +54,7 @@
 		|
 		|		<jc>// Override at the method level.</jc>
 		|		<ja>@RestPost</ja>(parsers={XmlParser.<jk>class</jk>})
-		|		<jk>public</jk> MyPojo myMethod(<ja>@Body</ja> MyPojo <jv>myPojo</jv>) {
+		|		<jk>public</jk> MyPojo myMethod(<ja>@Content</ja> MyPojo <jv>myPojo</jv>) {
 		|			<jc>// Do something with your parsed POJO.</jc>
 		|			<jc>// Then return it and serialize the POJO.</jc>
 		|		}
@@ -118,7 +118,7 @@
 		|		<ja>@RestPost</ja>
 		|		<ja>@BeanConfig</ja>(sortProperties=<js>"false"</js>)
 		|		<ja>@SerializerConfig</ja>(trimNulls=<js>"false"</js>)
-		|		<jk>public</jk> MyPojo myMethod(<ja>@Body</ja> MyPojo <jv>myPojo</jv>) {
+		|		<jk>public</jk> MyPojo myMethod(<ja>@Content</ja> MyPojo <jv>myPojo</jv>) {
 		|			...
 		|		}
 		|	}

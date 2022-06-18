@@ -71,7 +71,7 @@ public class RestClient_Config_RestClient_Test {
 			return bean;
 		}
 		@RestOp(path="/bean")
-		public ABean postBean(@Body ABean b) {
+		public ABean postBean(@Content ABean b) {
 			return b;
 		}
 		@RestOp(path="/echo/*")
@@ -80,7 +80,7 @@ public class RestClient_Config_RestClient_Test {
 		}
 		@RestOp(path="/echoBody")
 		public Reader postEchoBody(org.apache.juneau.rest.RestRequest req) throws IOException {
-			return req.getBody().getReader();
+			return req.getContent().getReader();
 		}
 		@RestOp(path="/ok")
 		public Ok getOk() {

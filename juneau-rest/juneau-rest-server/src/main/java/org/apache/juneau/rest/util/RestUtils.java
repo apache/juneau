@@ -268,7 +268,7 @@ public final class RestUtils {
 	}
 
 	/**
-	 * Parses a URL query string or form-data body.
+	 * Parses a URL query string or form-data content.
 	 *
 	 * @param qs A reader or string containing the query string to parse.
 	 * @return A new map containing the parsed query.

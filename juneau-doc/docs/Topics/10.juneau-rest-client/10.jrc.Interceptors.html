@@ -17,24 +17,24 @@ specific language governing permissions and limitations under the License.
 
 <div class='topic'>
 	<p>
-		The {@del oajr.client2.RestCallInterceptor} API provides a quick way of intercepting and manipulating requests and responses beyond
+		The {@link oajrc.RestCallInterceptor} API provides a quick way of intercepting and manipulating requests and responses beyond
 		the existing {@link org.apache.http.protocol.HttpRequestInterceptor} and {@link org.apache.http.protocol.HttpResponseInterceptor} APIs.
 	</p>
 	
 	<ul class='javatree'>
-		<li class='jc'>{@del oajr.client2.RestClient.Builder}
+		<li class='jc'>{@link oajrc.RestClient.Builder}
 		<ul>
-			<li class='jm'>{@del oajr.client2.RestClient.Builder#interceptors(Object...) interceptors(Object...)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#interceptors(Object...) interceptors(Object...)}
 		</ul>
-		<li class='jc'>{@del oajr.client2.RestRequest}
+		<li class='jc'>{@link oajrc.RestRequest}
 		<ul>
-			<li class='jm'>{@del oajr.client2.RestRequest#interceptors(RestCallInterceptor...) interceptors(RestCallInterceptor...)}
+			<li class='jm'>{@link oajrc.RestRequest#interceptors(RestCallInterceptor...) interceptors(RestCallInterceptor...)}
 		</ul>
-		<li class='jic'>{@del oajr.client2.RestCallInterceptor}
+		<li class='jic'>{@link oajrc.RestCallInterceptor}
 		<ul>
-			<li class='jm'>{@del oajr.client2.RestCallInterceptor#onInit(RestRequest) onInit(RestRequest)}
-			<li class='jm'>{@del oajr.client2.RestCallInterceptor#onConnect(RestRequest,RestResponse) onConnect(RestRequest,RestResponse)}
-			<li class='jm'>{@del oajr.client2.RestCallInterceptor#onClose(RestRequest,RestResponse) onClose(RestRequest,RestResponse)}
+			<li class='jm'>{@link oajrc.RestCallInterceptor#onInit(RestRequest) onInit(RestRequest)}
+			<li class='jm'>{@link oajrc.RestCallInterceptor#onConnect(RestRequest,RestResponse) onConnect(RestRequest,RestResponse)}
+			<li class='jm'>{@link oajrc.RestCallInterceptor#onClose(RestRequest,RestResponse) onClose(RestRequest,RestResponse)}
 		</ul>
 	</ul>
 	

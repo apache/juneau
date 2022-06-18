@@ -25,7 +25,7 @@
 		<li class='ja'>{@link oaj.http.annotation.Query}
 		<li class='ja'>{@link oaj.http.annotation.FormData}
 		<li class='ja'>{@link oaj.http.annotation.Path}
-		<li class='ja'>{@link oaj.http.annotation.Body}
+		<li class='ja'>{@link oaj.http.annotation.Content}
 		<li class='ja'>{@link oaj.http.annotation.Schema}
 	</ul>
 	
@@ -46,7 +46,7 @@
 		|		<ja>@Header</ja>(<js>"*"</js>)
 		|		Map&lt;String,Object&gt; getAllHeaders();
 		|
-		|		<ja>@Body</ja>
+		|		<ja>@Content</ja>
 		|		Pet getPet();
 		|	}
 	</p>
@@ -59,7 +59,7 @@
 		|		<ja>@Path</ja>(<js>"petId"</js>) <jk>int</jk> <jv>petId</jv>,
 		|		<ja>@Query</ja>(<js>"verbose"</js>) <jk>boolean</jk> <jv>debug</jv>,
 		|		<ja>@Header</ja>(<js>"*"</js>) Map&lt;String,Object&gt; <jv>allHeaders</jv>,
-		|		<ja>@Body</ja> UpdatePetBean <jv>pet</jv>
+		|		<ja>@Content</ja> UpdatePetBean <jv>pet</jv>
 		|	) 
 		|	{...}
 	</p>

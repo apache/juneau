@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
 /**
- * Wraps an {@link HttpServletRequest} and preloads the body into memory for debugging purposes.
+ * Wraps an {@link HttpServletRequest} and preloads the content into memory for debugging purposes.
  *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
@@ -29,14 +29,14 @@ import javax.servlet.http.HttpServletRequestWrapper;
  */
 public class CachingHttpServletRequest extends HttpServletRequestWrapper {
 
-	private final byte[] body;
+	private final byte[] content;
 
 	/**
 	 * Wraps the specified request inside a {@link CachingHttpServletRequest} if it isn't already.
 	 *
 	 * @param req The request to wrap.
 	 * @return The wrapped request.
-	 * @throws IOException Thrown by underlying body stream.
+	 * @throws IOException Thrown by underlying content stream.
 	 */
 	public static CachingHttpServletRequest wrap(HttpServletRequest req) throws IOException {
 		if (req instanceof CachingHttpServletRequest)
@@ -48,24 +48,24 @@ public class CachingHttpServletRequest extends HttpServletRequestWrapper {
 	 * Constructor.
 	 *
 	 * @param req The request being wrapped.
-	 * @throws IOException If body could not be loaded into memory.
+	 * @throws IOException If content could not be loaded into memory.
 	 */
 	protected CachingHttpServletRequest(HttpServletRequest req) throws IOException {
 		super(req);
-		this.body = readBytes(req.getInputStream());
+		this.content = readBytes(req.getInputStream());
 	}
 
 	@Override
 	public ServletInputStream getInputStream() {
-		return new BoundedServletInputStream(body);
+		return new BoundedServletInputStream(content);
 	}
 
 	/**
-	 * Returns the body of the servlet request without consuming the stream.
+	 * Returns the content of the servlet request without consuming the stream.
 	 *
-	 * @return The body of the request.
+	 * @return The content of the request.
 	 */
-	public byte[] getBody() {
-		return body;
+	public byte[] getContent() {
+		return content;
 	}
 }

@@ -43,9 +43,9 @@ public class SeeOtherRoot extends SeeOther {
 	 * <p>
 	 * Used for end-to-end interfaces.
 	 *
-	 * @param body Message to send as the response.
+	 * @param content Message to send as the response.
 	 */
-	public SeeOtherRoot(String body) {
-		super(create().location("servlet:/").content(body));
+	public SeeOtherRoot(String content) {
+		super(create().location("servlet:/").content(content));
 	}
 }

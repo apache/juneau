@@ -22,27 +22,27 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.httppart.*;
 
 /**
- * Resolves method parameters and parameter types annotated with {@link Body} on {@link RestOp}-annotated Java methods.
+ * Resolves method parameters and parameter types annotated with {@link Content} on {@link RestOp}-annotated Java methods.
  *
  * <p>
  * The parameter value is resolved using:
  * <p class='bjava'>
  * 	<jv>opSession</jv>
  * 		.{@link RestOpSession#getRequest() getRequest}()
- * 		.{@link RestRequest#getBody() getBody}()
- * 		.{@link RequestBody#setSchema(HttpPartSchema) setSchema}(<jv>schema</jv>)
- * 		.{@link RequestBody#as(Type,Type...) as}(<jv>type</jv>);
+ * 		.{@link RestRequest#getContent() getContent}()
+ * 		.{@link RequestContent#setSchema(HttpPartSchema) setSchema}(<jv>schema</jv>)
+ * 		.{@link RequestContent#as(Type,Type...) as}(<jv>type</jv>);
  * </p>
  *
  * <p>
- * {@link HttpPartSchema schema} is derived from the {@link Body} annotation.
+ * {@link HttpPartSchema schema} is derived from the {@link Content} annotation.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.JavaMethodParameters}
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class BodyArg implements RestOpArg {
+public class ContentArg implements RestOpArg {
 
 	private final HttpPartSchema schema;
 	private final Type type;
@@ -51,11 +51,11 @@ public class BodyArg implements RestOpArg {
 	 * Static creator.
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
-	 * @return A new {@link BodyArg}, or <jk>null</jk> if the parameter is not annotated with {@link Body}.
+	 * @return A new {@link ContentArg}, or <jk>null</jk> if the parameter is not annotated with {@link Content}.
 	 */
-	public static BodyArg create(ParamInfo paramInfo) {
-		if (paramInfo.hasAnnotation(Body.class) || paramInfo.getParameterType().hasAnnotation(Body.class))
-			return new BodyArg(paramInfo);
+	public static ContentArg create(ParamInfo paramInfo) {
+		if (paramInfo.hasAnnotation(Content.class) || paramInfo.getParameterType().hasAnnotation(Content.class))
+			return new ContentArg(paramInfo);
 		return null;
 	}
 
@@ -64,13 +64,13 @@ public class BodyArg implements RestOpArg {
 	 *
 	 * @param paramInfo The Java method parameter being resolved.
 	 */
-	protected BodyArg(ParamInfo paramInfo) {
+	protected ContentArg(ParamInfo paramInfo) {
 		this.type = paramInfo.getParameterType().innerType();
-		this.schema = HttpPartSchema.create(Body.class, paramInfo);
+		this.schema = HttpPartSchema.create(Content.class, paramInfo);
 	}
 
 	@Override /* RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
-		return opSession.getRequest().getBody().setSchema(schema).as(type);
+		return opSession.getRequest().getContent().setSchema(schema).as(type);
 	}
 }

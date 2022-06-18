@@ -61,9 +61,9 @@
 						<li class='jma'>{@link oaj.http.annotation.Path#value() value}
 					</ul>
 				</li>
-				<li class='ja'>{@link oaj.http.annotation.Body}
+				<li class='ja'>{@link oaj.http.annotation.Content}
 					<ul class='javatreec'>
-						<li class='jma'>{@link oaj.http.annotation.Body#schema() schema}
+						<li class='jma'>{@link oaj.http.annotation.Content#schema() schema}
 					</ul>
 				</li>
 			</ul>
@@ -88,9 +88,9 @@
 						<li class='jma'>{@link oaj.http.annotation.Header#value() value}
 					</ul>
 				</li>
-				<li class='ja'>{@link oaj.http.annotation.Body}
+				<li class='ja'>{@link oaj.http.annotation.Content}
 					<ul class='javatreec'>
-						<li class='jma'>{@link oaj.http.annotation.Body#schema() schema}
+						<li class='jma'>{@link oaj.http.annotation.Content#schema() schema}
 					</ul>
 				</li>
 				<li class='ja'>{@link oaj.http.annotation.StatusCode}
@@ -217,20 +217,20 @@
 		|	<jk>public void</jk> doGet(<ja>@Query</ja> MyQueryBean <jv>bean</jv>) {...}
 	</p>
 	<p>
-		The {@link oaj.http.annotation.Body @Body} annotation is used to identify POJOs to be used as the body of an HTTP request.
+		The {@link oaj.http.annotation.Content @Content} annotation is used to identify POJOs to be used as the body of an HTTP request.
 	</p>
 	<h5 class='figure'>Examples:</h5>
 	<p class='bjava'>
 		|	<jc>// Defined on parameter</jc>
 		|	<ja>@RestPost</ja>
-		|	<jk>public void</jk> addPet(<ja>@Body</ja> Pet <jv>pet</jv>) {...}
+		|	<jk>public void</jk> addPet(<ja>@Content</ja> Pet <jv>pet</jv>) {...}
 	</p>
 	<p class='bjava'>
 		|	<jc>// Defined on POJO class</jc>
 		|	<ja>@RestPost</ja>
 		|	<jk>public void</jk> addPet(Pet <jv>pet</jv>) {...}
 		|	
-		|	<ja>@Body</ja>
+		|	<ja>@Content</ja>
 		|	<jk>public class</jk> Pet {...}
 	</p>
 	<p>
@@ -239,22 +239,22 @@
 	<p class='bjava'>
 		|	<ja>@RestPost</ja>
 		|	<jk>public void</jk> addPet(RestRequest <jv>req</jv>) {
-		|		Pet <jv>pet</jv> = <jv>req</jv>.getBody().as(Pet.<jk>class</jk>);
+		|		Pet <jv>pet</jv> = <jv>req</jv>.getContent().as(Pet.<jk>class</jk>);
 		|		...
 		|	}
 	</p>
 	<p>
-		In addition to {@link oaj.http.annotation.Body @Body}-annotated parameters/types, the body of an HTTP request
+		In addition to {@link oaj.http.annotation.Content @Content}-annotated parameters/types, the body of an HTTP request
 		can be retrieved by passing in parameters of the following types (matched in the specified order):
 	</p>
 	<ol class='spaced-list'>
 		<li>
 			{@link java.io.Reader}
-			<br><ja>@Body</ja> annotation is optional.
+			<br><ja>@Content</ja> annotation is optional.
 			<br><c>Content-Type</c> is ignored.
 		<li>
 			{@link java.io.InputStream}
-			<br><ja>@Body</ja> annotation is optional.
+			<br><ja>@Content</ja> annotation is optional.
 			<br><c>Content-Type</c> is ignored.
 		<li>
 			Any {@doc jm.PojoCategories Parsable POJO} type.
@@ -398,16 +398,16 @@
 		|	)
 	</p>
 	<p>
-		The {@link oaj.http.annotation.Body @Body} annotation can also be used to parse HTTP request bodies using OpenAPI schemas 
+		The {@link oaj.http.annotation.Content @Content} annotation can also be used to parse HTTP request bodies using OpenAPI schemas 
 		when the body content type matches the {@link oaj.oapi.OpenApiParser} parser via the header <c>Content-Type: text/openapi</c>.
 	</p>
 	<p>
 		The following shows the same for a request body:
 	</p>
 	<p class='bjava'>
-		|	<ja>@RestPost</ja>(<js>"/testBody"</js>)	
-		|	<jk>public void</jk> testBody(
-		|		<ja>@Body</ja>
+		|	<ja>@RestPost</ja>(<js>"/testContent"</js>)	
+		|	<jk>public void</jk> testContent(
+		|		<ja>@Content</ja>
 		|		<ja>@Schema</ja>(
 		|			items=<ja>@Items</ja>(
 		|				collectionFormat=<js>"pipes"</js>,
@@ -432,27 +432,27 @@
 		For example, instead of <c>Longs</c> in the example above, we could also define a 2-dimensional array of POJOs convertible from <c>Longs</c>:
 	</p>
 	<p class='bjava'>
-		|	<jc>// Body is a 2-dimensional array of POJOs convertible from Longs:</jc>
+		|	<jc>// Content is a 2-dimensional array of POJOs convertible from Longs:</jc>
 		|	<ja>@RestPost</ja>(<js>"/example1"</js>)	
-		|	<jk>public void</jk> testBody(<ja>@Body</ja>(...) MyPojo1[][] <jv>body</jv>) {...}
+		|	<jk>public void</jk> testContent(<ja>@Content</ja>(...) MyPojo1[][] <jv>body</jv>) {...}
 		|	
 		|	<jk>public class</jk> MyPojo1 {
 		|		<jk>public</jk> MyPojo1(Long <jv>input</jv>) {...}
 		|	}
 	</p>
 	<p class='bjava'>
-		|	<jc>// Body is a POJO that takes in a Long array:</jc>
+		|	<jc>// Content is a POJO that takes in a Long array:</jc>
 		|	<ja>@RestPost</ja>(<js>"/example2"</js>)	
-		|	<jk>public void</jk> testBody(<ja>@Body</ja>(...) MyPojo2[] <jv>body</jv>) {...}
+		|	<jk>public void</jk> testContent(<ja>@Content</ja>(...) MyPojo2[] <jv>body</jv>) {...}
 		|	
 		|	<jk>public class</jk> MyPojo2 {
 		|		<jk>public</jk> MyPojo2(Long[] <jv>input</jv>) {...}
 		|	}
 	</p>
 	<p class='bjava'>
-		|	<jc>// Body is a POJO that takes in the whole 2-dimensional array:</jc>
+		|	<jc>// Content is a POJO that takes in the whole 2-dimensional array:</jc>
 		|	<ja>@RestPost</ja>(<js>"/example3"</js>)	
-		|	<jk>public void</jk> testBody(<ja>@Body</ja>(...) MyPojo3 <jv>body</jv>) {...}
+		|	<jk>public void</jk>testContent<ja>@Content</ja>(...) MyPojo3 <jv>body</jv>) {...}
 		|	
 		|	<jk>public class</jk> MyPojo3 {
 		|		<jk>public</jk> MyPojo3(Long[][] <jv>input</jv>) {...}

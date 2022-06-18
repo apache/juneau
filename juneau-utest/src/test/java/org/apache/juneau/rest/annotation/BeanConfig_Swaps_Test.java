@@ -17,7 +17,7 @@ import static org.apache.juneau.http.header.ContentType.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.http.annotation.Body;
+import org.apache.juneau.http.annotation.Content;
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
@@ -96,7 +96,7 @@ public class BeanConfig_Swaps_Test {
 			return new A(); // Should return "A2-1".
 		}
 		@RestPut
-		public A b(@Body A a) {
+		public A b(@Content A a) {
 			return a; // Should return "A2-1".
 		}
 		@RestPut(path="/c/{a}")
@@ -110,7 +110,7 @@ public class BeanConfig_Swaps_Test {
 		}
 		@RestPut
 		@BeanConfig(swaps={SwapA3.class})
-		public A e(@Body A a) {
+		public A e(@Content A a) {
 			return a; // Should return "A3-1".
 		}
 		@RestPut(path="/f/{a}")

@@ -106,7 +106,7 @@ import org.apache.juneau.utils.*;
  * 			<ja>@RestPut</ja>(
  * 				path=<js>"/echo"</js>
  * 			)
- * 			<jk>public</jk> MyBean echo(<ja>@Body</ja> MyBean <jv>bean</jv>) {
+ * 			<jk>public</jk> MyBean echo(<ja>@Content</ja> MyBean <jv>bean</jv>) {
  * 				<jk>return</jk> <jv>bean</jv>;
  * 			}
  * 		}
@@ -125,8 +125,8 @@ import org.apache.juneau.utils.*;
  * 				.put(<js>"/echo"</js>, <jv>myBean</jv>)
  * 				.run()
  * 				.assertStatus().is(200)
- * 				.assertBody().is(<js>"{foo:1}"</js>)
- * 				.getBody().as(MyBean.<jk>class</jk>);
+ * 				.assertContent().is(<js>"{foo:1}"</js>)
+ * 				.getContent().as(MyBean.<jk>class</jk>);
  *
  * 			<jsm>assertEquals</jsm>(1, <jv>myBean</jv>.<jf>foo</jf>);
  * 		}
@@ -153,10 +153,10 @@ import org.apache.juneau.utils.*;
  *
  * 		<jc>// Run assertion tests on the results.</jc>
  * 		<jv>res</jv>.assertStatus().is(200);
- * 		<jv>res</jv>.assertBody().is(<js>"'foo'"</js>);
+ * 		<jv>res</jv>.assertContent().is(<js>"'foo'"</js>);
  *
- * 		<jc>// Convert the body of the response to a bean.</jc>
- * 		<jv>bean</jv> = <jv>res</jv>.getBody().as(MyBean.<jk>class</jk>);
+ * 		<jc>// Convert the content of the response to a bean.</jc>
+ * 		<jv>bean</jv> = <jv>res</jv>.getContent().as(MyBean.<jk>class</jk>);
  * 	}
  * </p>
  *
@@ -539,7 +539,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		 * 		.get(<js>"/"</js>)
 		 * 		.run()
 		 * 		.assertStatus().code().is(200)
-		 * 		.assertBody().is(<js>"bar"</js>);
+		 * 		.assertContent().is(<js>"bar"</js>);
 		 * </p>
 		 *
 		 * <review>Needs review</review>
@@ -2299,7 +2299,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 
 	@Override /* HttpClientConnection */
 	public void receiveResponseEntity(HttpResponse response) throws HttpException, IOException {
-		InputStream is = new ByteArrayInputStream(sres.get().getBody());
+		InputStream is = new ByteArrayInputStream(sres.get().getContent());
 		Header contentEncoding = response.getLastHeader("Content-Encoding");
 		if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip"))
 			is = new GZIPInputStream(is);

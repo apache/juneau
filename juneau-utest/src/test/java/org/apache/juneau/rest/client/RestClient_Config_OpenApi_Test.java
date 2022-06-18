@@ -34,7 +34,7 @@ public class RestClient_Config_OpenApi_Test {
 	public static class A extends BasicRestObject implements BasicUniversalConfig {
 		@RestPost
 		public Reader echoBody(org.apache.juneau.rest.RestRequest req) throws IOException {
-			return req.getBody().getReader();
+			return req.getContent().getReader();
 		}
 		@RestGet
 		public String[] checkHeader(org.apache.juneau.rest.RestRequest req) {

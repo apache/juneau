@@ -154,7 +154,7 @@
 	<p class='bjava'>
 		|	<ja>@RestPost</ja>(path=<js>"/pets"</js>, guards=AdminGuard.<jk>class</jk>)
 		|	<jk>public</jk> Ok addPet(
-		|		<ja>@Body</ja> CreatePet <jv>createPetBean</jv>, 
+		|		<ja>@Content</ja> CreatePet <jv>createPetBean</jv>, 
 		|		<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>, 
 		|		<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> <jv>debug</jv>
 		|	) <jk>throws</jk> BadRequest, Unauthorized, InternalServerError {
@@ -197,7 +197,7 @@
 			<li>Standard {@link javax.servlet.http.HttpServletRequest} / {@link javax.servlet.http.HttpServletResponse} objects.
 			<li>Extended {@link oajr.RestRequest} / {@link oajr.RestResponse} objects.
 			<li>Parsed HTTP parts with either the arguments or beans annotated with {@link oaj.http.annotation.Path @Path} / {@link oaj.http.annotation.Header @Header} / {@link oaj.http.annotation.Query @Query} / {@link oaj.http.annotation.FormData @FormData}.
-			<li>Parsed HTTP body with either the argument or bean annotated with {@link oaj.http.annotation.Body @Body}.
+			<li>Parsed HTTP body with either the argument or bean annotated with {@link oaj.http.annotation.Content @Content}.
 			<li>Raw HTTP request body with <c>InputStream</c> or <c>Reader</c>.
 			<li>Raw HTTP response body with <c>OutputStream</c> or <c>Writer</c>.
 			<li>Request beans annotated with {@link oaj.http.annotation.Request @Request}.

@@ -20,7 +20,7 @@ import java.io.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.annotation.Body;
+import org.apache.juneau.http.annotation.Content;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.http.annotation.Query;
@@ -39,7 +39,7 @@ public class Remote_RequestAnnotation_Test {
 	@Rest
 	public static class A {
 		@RestOp(path="/{x}")
-		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
+		public String post(@Content Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
 			return JsonMap.of(
 				"body",read(r),
 				"header",h,
@@ -51,7 +51,7 @@ public class Remote_RequestAnnotation_Test {
 
 	@Request
 	public static class A1 {
-		@Body
+		@Content
 		public String getBody() {
 			return "foo";
 		}
@@ -88,7 +88,7 @@ public class Remote_RequestAnnotation_Test {
 	@Rest
 	public static class B {
 		@RestOp(path="/{x}")
-		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
+		public String post(@Content Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
 			return JsonMap.of(
 				"body",read(r),
 				"header",h,
@@ -100,7 +100,7 @@ public class Remote_RequestAnnotation_Test {
 
 	@Request
 	public abstract static class B1 {
-		@Body public abstract String getBody();
+		@Content public abstract String getBody();
 		@Header("X") public abstract String getHeader();
 		@Query("x") public abstract String getQuery();
 		@Path("x") public abstract String getPath();
@@ -144,7 +144,7 @@ public class Remote_RequestAnnotation_Test {
 	@Rest
 	public static class C {
 		@RestOp(path="/{x}")
-		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
+		public String post(@Content Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
 			return JsonMap.of(
 				"body",read(r),
 				"header",h,
@@ -156,7 +156,7 @@ public class Remote_RequestAnnotation_Test {
 
 	@Request
 	public interface C1 {
-		@Body String getBody();
+		@Content String getBody();
 		@Header("X") String getHeader();
 		@Query("x") String getQuery();
 		@Path("x") String getPath();
@@ -200,7 +200,7 @@ public class Remote_RequestAnnotation_Test {
 	@Rest
 	public static class D {
 		@RestOp(path="/{x}")
-		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
+		public String post(@Content Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
 			return JsonMap.of(
 				"body",read(r),
 				"header",h,
@@ -211,7 +211,7 @@ public class Remote_RequestAnnotation_Test {
 	}
 
 	public static class D1 {
-		@Body
+		@Content
 		public String getBody() {
 			return "foo";
 		}
@@ -248,7 +248,7 @@ public class Remote_RequestAnnotation_Test {
 	@Rest
 	public static class E {
 		@RestOp(path="/{x}")
-		public String post(@Body Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
+		public String post(@Content Reader r, @Header("X") String h, @Query("x") String q, @Path("x") String p) throws Exception {
 			return JsonMap.of(
 				"body",read(r),
 				"header",h,
@@ -260,7 +260,7 @@ public class Remote_RequestAnnotation_Test {
 
 	@Request(serializer=MockWriterSerializer.X.class)
 	public static class E1 {
-		@Body
+		@Content
 		public String getBody() {
 			return "foo";
 		}

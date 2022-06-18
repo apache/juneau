@@ -43,7 +43,7 @@
 		|	
 		|		<jc>// Our form input endpoint.</jc>
 		|		<ja>@RestPost</ja>(<js>"/"</js>)
-		|		<jk>public</jk> Object doPost(<ja>@Body</ja> FormInputBean <jv>input</jv>) {
+		|		<jk>public</jk> Object doPost(<ja>@Content</ja> FormInputBean <jv>input</jv>) {
 		|			<jc>// Just mirror back the request</jc>
 		|			<jk>return</jk> <jv>input</jv>;
 		|		}
@@ -72,7 +72,7 @@
 		underlying JEE servlet to parse the HTTP body as a form post.
 		<br>Your input bean will end up being null since there won't be any content left after the servlet 
 		has parsed the body of the request.
-		<br>This applies to WHENEVER you use <l>@Body</l> or {@link oajr.RestRequest#getBody()}
+		<br>This applies to WHENEVER you use <l>@Content</l> or {@link oajr.RestRequest#getContent()}
 	</div>
 	<div class='warn'>
 		If you want to be able to consume url-encoded form post bodies as POJOs in Spring Boot, you'll need to 

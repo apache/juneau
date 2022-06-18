@@ -20,23 +20,23 @@
 		Per-client or per-request query parameters can be specified using the following methods:
 	</p>
 	<ul class='javatree'>
-		<li class='jc'>{@del oajr.client2.RestClient.Builder}
+		<li class='jc'>{@link oajrc.RestClient.Builder}
 		<ul>
-			<li class='jm'>{@del oajr.client2.RestClient.Builder#query(String,Object) query(String,Object)}
-			<li class='jm'>{@del oajr.client2.RestClient.Builder#query(String,Object,HttpPartSchema) query(String,Object,HttpPartSchema)}
-			<li class='jm'>{@del oajr.client2.RestClient.Builder#query(String,Supplier) query(String,Supplier&lt;?&gt;)}
-			<li class='jm'>{@del oajr.client2.RestClient.Builder#query(String,Supplier,HttpPartSchema) query(String,Supplier&lt;?&gt;,HttpPartSchema)}
-			<li class='jm'>{@del oajr.client2.RestClient.Builder#queries(Object...) queries(Object...)}
-			<li class='jm'>{@del oajr.client2.RestClient.Builder#queryPairs(Object...) queryPairs(Object...)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#query(String,Object) query(String,Object)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#query(String,Object,HttpPartSchema) query(String,Object,HttpPartSchema)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#query(String,Supplier) query(String,Supplier&lt;?&gt;)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#query(String,Supplier,HttpPartSchema) query(String,Supplier&lt;?&gt;,HttpPartSchema)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#queries(Object...) queries(Object...)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#queryPairs(Object...) queryPairs(Object...)}
 		</ul>
-		<li class='jc'>{@del oajr.client2.RestRequest}
+		<li class='jc'>{@link oajrc.RestRequest}
 		<ul>
-			<li class='jm'>{@del oajr.client2.RestRequest#query(String,Object) query(String,Object)}
-			<li class='jm'>{@del oajr.client2.RestRequest#query(AddFlag,String,Object) query(AddFlag,String,Object)}
-			<li class='jm'>{@del oajr.client2.RestRequest#queries(Object...) queries(Object...)}
-			<li class='jm'>{@del oajr.client2.RestRequest#queries(AddFlag,Object...) queries(AddFlag,Object...)}
-			<li class='jm'>{@del oajr.client2.RestRequest#queryPairs(Object...) queryPairs(Object...)}
-			<li class='jm'>{@del oajr.client2.RestRequest#queryCustom(Object) queryCustom(Object)}
+			<li class='jm'>{@link oajrc.RestRequest#query(String,Object) query(String,Object)}
+			<li class='jm'>{@link oajrc.RestRequest#query(AddFlag,String,Object) query(AddFlag,String,Object)}
+			<li class='jm'>{@link oajrc.RestRequest#queries(Object...) queries(Object...)}
+			<li class='jm'>{@link oajrc.RestRequest#queries(AddFlag,Object...) queries(AddFlag,Object...)}
+			<li class='jm'>{@link oajrc.RestRequest#queryPairs(Object...) queryPairs(Object...)}
+			<li class='jm'>{@link oajrc.RestRequest#queryCustom(Object) queryCustom(Object)}
 		</ul>
 	</ul>
 	
@@ -46,12 +46,12 @@
 		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().query(<js>"foo"</js>,<js>"bar"</js>).build();
 		|
 		|	<jc>// Or do it on every request.</jc>
-		|	String <jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).query(<js>"foo"</js>,<js>"bar"</js>).run().getBody().asString();
+		|	String <jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).query(<js>"foo"</js>,<js>"bar"</js>).run().getContent().asString();
 	</p>
 	
 	<p>
-		{@del oajr.client2.RestClient.Builder#queries(Object...) queries(Object...)} allows you to pass in a variety
-		of query parameter objects, and {@del oajr.client2.RestClient.Builder#queryPairs(Object...) queryPairs(Object...)} allows
+		{@link oajrc.RestClient.Builder#queries(Object...) queries(Object...)} allows you to pass in a variety
+		of query parameter objects, and {@link oajrc.RestClient.Builder#queryPairs(Object...) queryPairs(Object...)} allows
 		you to specify several query parameters in a compact fashion.
 	</p>
 	

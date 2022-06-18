@@ -103,7 +103,7 @@ public final class ResponseBeanProcessor implements ResponseProcessor {
 			}
 		}
 
-		ResponseBeanPropertyMeta bm = rm.getBodyMethod();
+		ResponseBeanPropertyMeta bm = rm.getContentMethod();
 
 		if (bm != null) {
 			Method m = bm.getGetter();
@@ -119,7 +119,7 @@ public final class ResponseBeanProcessor implements ResponseProcessor {
 				}
 				res.setContent(m.invoke(output));
 			} catch (Exception e) {
-				throw new InternalServerError(e, "Could not get body.");
+				throw new InternalServerError(e, "Could not get content.");
 			}
 		}
 

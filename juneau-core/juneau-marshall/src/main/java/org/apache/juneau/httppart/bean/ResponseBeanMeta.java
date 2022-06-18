@@ -103,7 +103,7 @@ public class ResponseBeanMeta {
 	private final Map<String,ResponseBeanPropertyMeta> properties;
 	private final int code;
 	private final Map<String,ResponseBeanPropertyMeta> headerMethods;
-	private final ResponseBeanPropertyMeta statusMethod, bodyMethod;
+	private final ResponseBeanPropertyMeta statusMethod, contentMethod;
 	private final Optional<HttpPartSerializer> partSerializer;
 	private final Optional<HttpPartParser> partParser;
 	private final HttpPartSchema schema;
@@ -125,11 +125,11 @@ public class ResponseBeanMeta {
 		});
 		this.headerMethods = unmodifiable(hm);
 
-		this.bodyMethod = b.bodyMethod == null ? null : b.bodyMethod.schema(schema).build(partSerializer, partParser);
+		this.contentMethod = b.contentMethod == null ? null : b.contentMethod.schema(schema).build(partSerializer, partParser);
 		this.statusMethod = b.statusMethod == null ? null : b.statusMethod.build(empty(), empty());
 
-		if (bodyMethod != null)
-			properties.put(bodyMethod.getGetter().getName(), bodyMethod);
+		if (contentMethod != null)
+			properties.put(contentMethod.getGetter().getName(), contentMethod);
 		if (statusMethod != null)
 			properties.put(statusMethod.getGetter().getName(), statusMethod);
 
@@ -145,7 +145,7 @@ public class ResponseBeanMeta {
 		HttpPartSchema.Builder schema = HttpPartSchema.create();
 
 		Map<String,ResponseBeanPropertyMeta.Builder> headerMethods = map();
-		ResponseBeanPropertyMeta.Builder bodyMethod;
+		ResponseBeanPropertyMeta.Builder contentMethod;
 		ResponseBeanPropertyMeta.Builder statusMethod;
 
 		Builder(AnnotationWorkList annotations) {
@@ -167,12 +167,12 @@ public class ResponseBeanMeta {
 					assertNoArgs(x, Header.class);
 					assertReturnType(x, Header.class, int.class, Integer.class);
 					statusMethod = ResponseBeanPropertyMeta.create(RESPONSE_STATUS, x);
-				} else if (x.hasAnnotation(Body.class)) {
+				} else if (x.hasAnnotation(Content.class)) {
 					if (x.hasNoParams())
 						assertReturnNotVoid(x, Header.class);
 					else
 						assertArgType(x, Header.class, OutputStream.class, Writer.class);
-					bodyMethod = ResponseBeanPropertyMeta.create(RESPONSE_BODY, x);
+					contentMethod = ResponseBeanPropertyMeta.create(RESPONSE_BODY, x);
 				}
 			});
 			return this;
@@ -230,12 +230,12 @@ public class ResponseBeanMeta {
 	}
 
 	/**
-	 * Returns the <ja>@Body</ja>-annotated method.
+	 * Returns the <ja>@Content</ja>-annotated method.
 	 *
-	 * @return The <ja>@Body</ja>-annotated method, or <jk>null</jk> if it doesn't exist.
+	 * @return The <ja>@Content</ja>-annotated method, or <jk>null</jk> if it doesn't exist.
 	 */
-	public ResponseBeanPropertyMeta getBodyMethod() {
-		return bodyMethod;
+	public ResponseBeanPropertyMeta getContentMethod() {
+		return contentMethod;
 	}
 
 	/**

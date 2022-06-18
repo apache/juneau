@@ -62,7 +62,7 @@ public class Remote_ResponseAnnotation_Test {
 
 	@Response
 	public interface A1a {
-		@Body Reader getBody();
+		@Content Reader getContent();
 		@Header("X") String getHeader();
 		@StatusCode int getStatus();
 	}
@@ -75,14 +75,14 @@ public class Remote_ResponseAnnotation_Test {
 	@Test
 	public void a01_basic() throws Exception {
 		A1a x = remote(A.class,A1b.class).get();
-		assertEquals("foo",read(x.getBody()));
+		assertEquals("foo",read(x.getContent()));
 		assertEquals("x",x.getHeader());
 		assertEquals(201,x.getStatus());
 	}
 
 	@Response
 	public interface A2a {
-		@Body Reader getBody();
+		@Content Reader getContent();
 	}
 
 	@Remote
@@ -93,7 +93,7 @@ public class Remote_ResponseAnnotation_Test {
 	@Test
 	public void a02_unannotatedMethod() throws Exception {
 		A2a x = remote(A.class,A2b.class).get();
-		assertEquals("foo",read(x.getBody()));
+		assertEquals("foo",read(x.getContent()));
 	}
 
 	@Rest
@@ -106,7 +106,7 @@ public class Remote_ResponseAnnotation_Test {
 
 	@Response
 	public interface A3a {
-		@Body ABean getBody();
+		@Content ABean getContent();
 	}
 
 	@Remote
@@ -117,10 +117,10 @@ public class Remote_ResponseAnnotation_Test {
 	@Test
 	public void a03_beanBody() throws Exception {
 		A3a x = client(A3.class).json().build().getRemote(A3b.class).get();
-		assertEquals("{f:1}",x.getBody().toString());
+		assertEquals("{f:1}",x.getContent().toString());
 
 		A3a x2 = client(A3.class).build().getRemote(A3b.class).get();
-		assertThrown(()->x2.getBody()).asMessages().isContains("Unsupported media-type in request header 'Content-Type': 'application/json'");
+		assertThrown(()->x2.getContent()).asMessages().isContains("Unsupported media-type in request header 'Content-Type': 'application/json'");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

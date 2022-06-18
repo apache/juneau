@@ -340,7 +340,7 @@ public @interface OpSwagger {
 	 * <p>
 	 * 	The reasons why you may want to use this field include:
 	 * <ul>
-	 * 	<li>You want to pull in the entire Swagger JSON definition for this body from an external source such as a properties file.
+	 * 	<li>You want to pull in the entire Swagger JSON definition for this content from an external source such as a properties file.
 	 * 	<li>You want to add extra fields to the Swagger documentation that are not officially part of the Swagger specification.
 	 * </ul>
 	 *

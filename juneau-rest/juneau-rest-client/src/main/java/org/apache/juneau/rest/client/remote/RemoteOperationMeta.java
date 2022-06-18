@@ -46,7 +46,7 @@ public class RemoteOperationMeta {
 	private final String fullPath;
 	private final RemoteOperationArg[] pathArgs, queryArgs, headerArgs, formDataArgs;
 	private final RemoteOperationBeanArg[] requestArgs;
-	private final RemoteOperationArg bodyArg;
+	private final RemoteOperationArg contentArg;
 	private final RemoteOperationReturn methodReturn;
 	private final Class<?>[] exceptions;
 
@@ -66,7 +66,7 @@ public class RemoteOperationMeta {
 		this.formDataArgs = b.formDataArgs.toArray(new RemoteOperationArg[b.formDataArgs.size()]);
 		this.headerArgs = b.headerArgs.toArray(new RemoteOperationArg[b.headerArgs.size()]);
 		this.requestArgs = b.requestArgs.toArray(new RemoteOperationBeanArg[b.requestArgs.size()]);
-		this.bodyArg = b.bodyArg;
+		this.contentArg = b.bodyArg;
 		this.methodReturn = b.methodReturn;
 		this.exceptions = m.getExceptionTypes();
 	}
@@ -233,12 +233,12 @@ public class RemoteOperationMeta {
 	}
 
 	/**
-	 * Returns the argument annotated with {@link Body @Body}.
+	 * Returns the argument annotated with {@link Content @Content}.
 	 *
-	 * @return A index of the argument with the {@link Body @Body} annotation, or <jk>null</jk> if no argument exists.
+	 * @return A index of the argument with the {@link Content @Content} annotation, or <jk>null</jk> if no argument exists.
 	 */
-	public RemoteOperationArg getBodyArg() {
-		return bodyArg;
+	public RemoteOperationArg getContentArg() {
+		return contentArg;
 	}
 
 	/**

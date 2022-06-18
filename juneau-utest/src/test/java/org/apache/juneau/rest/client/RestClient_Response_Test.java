@@ -224,7 +224,7 @@ public class RestClient_Response_Test {
 	@Rest
 	public static class D extends BasicRestObject {
 		@RestPost
-		public ABean bean(@Body ABean bean) {
+		public ABean bean(@Content ABean bean) {
 			return bean;
 		}
 	}

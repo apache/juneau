@@ -173,7 +173,7 @@ public class RestResponse implements HttpResponse {
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertStatus().code().is(200)
-	 * 		.getBody().as(MyBean.<jk>class</jk>);
+	 * 		.getContent().as(MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
@@ -191,7 +191,7 @@ public class RestResponse implements HttpResponse {
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
 	 * 		.assertCode().is(200)
-	 * 		.getBody().as(MyBean.<jk>class</jk>);
+	 * 		.getContent().as(MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.
@@ -345,38 +345,38 @@ public class RestResponse implements HttpResponse {
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().equals(<js>"OK"</js>);
+	 * 		.assertContent().equals(<js>"OK"</js>);
 	 *
 	 * 	<jc>// Validates the response body contains the text "OK".</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().contains(<js>"OK"</js>);
+	 * 		.assertContent().contains(<js>"OK"</js>);
 	 *
 	 * 	<jc>// Validates the response body passes a predicate test.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().passes(<jv>x</jv> -&gt; <jv>x</jv>.contains(<js>"OK"</js>));
+	 * 		.assertContent().passes(<jv>x</jv> -&gt; <jv>x</jv>.contains(<js>"OK"</js>));
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().matches(<js>".*OK.*"</js>);
+	 * 		.assertContent().matches(<js>".*OK.*"</js>);
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression using regex flags.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().matches(<js>".*OK.*"</js>, <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>);
+	 * 		.assertContent().matches(<js>".*OK.*"</js>, <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>);
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression in the form of an existing Pattern.</jc>
 	 * 	Pattern <jv>pattern</jv> = Pattern.<jsm>compile</jsm>(<js>".*OK.*"</js>);
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().matches(<jv>pattern</jv>);
+	 * 		.assertContent().matches(<jv>pattern</jv>);
 	 * </p>
 	 *
 	 * <p>
@@ -386,9 +386,9 @@ public class RestResponse implements HttpResponse {
 	 * 	MyBean <jv>bean</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().matches(<js>".*OK.*"</js>);
-	 * 		.assertBody().doesNotMatch(<js>".*ERROR.*"</js>)
-	 * 		.getBody().as(MyBean.<jk>class</jk>);
+	 * 		.assertContent().matches(<js>".*OK.*"</js>);
+	 * 		.assertContent().doesNotMatch(<js>".*ERROR.*"</js>)
+	 * 		.getContent().as(MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -411,7 +411,7 @@ public class RestResponse implements HttpResponse {
 	 *
 	 * This is equivalent to calling the following:
 	 * <p class='bjava'>
-	 * 	getBody().cache();
+	 * 	getContent().cache();
 	 * </p>
 	 *
 	 * @return The body of the response.
@@ -555,7 +555,7 @@ public class RestResponse implements HttpResponse {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>Unlike the {@link HttpResponse#getEntity()} method, this method never returns a <jk>null</jk> response.
-	 * 		Instead, <c>getBody().isPresent()</c> can be used to determine whether the response has a body.
+	 * 		Instead, <c>getContent().isPresent()</c> can be used to determine whether the response has a body.
 	 * </ul>
 	 *
 	 * @return The response entity.  Never <jk>null</jk>.

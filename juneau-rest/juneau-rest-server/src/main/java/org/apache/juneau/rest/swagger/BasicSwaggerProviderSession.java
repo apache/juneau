@@ -332,11 +332,11 @@ public class BasicSwaggerProviderSession {
 				ClassInfo pt = mpi.getParameterType();
 				Type type = pt.innerType();
 
-				if (mpi.hasAnnotation(Body.class) || pt.hasAnnotation(Body.class)) {
+				if (mpi.hasAnnotation(Content.class) || pt.hasAnnotation(Content.class)) {
 					JsonMap param = paramMap.getMap(BODY + ".body", true).append("in", BODY);
 					JsonMap schema = getSchema(param.getMap("schema"), type, bs);
 					mpi.forEachAnnotation(Schema.class, x -> true, x -> merge(schema, x));
-					mpi.forEachAnnotation(Body.class, x -> true, x -> merge(schema, x.schema()));
+					mpi.forEachAnnotation(Content.class, x -> true, x -> merge(schema, x.schema()));
 					pushupSchemaFields(BODY, param, schema);
 					param.appendIf(nem, "schema", schema);
 					param.putIfAbsent("required", true);

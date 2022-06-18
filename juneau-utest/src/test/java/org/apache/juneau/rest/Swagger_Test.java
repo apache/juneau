@@ -1608,7 +1608,7 @@ public class Swagger_Test {
 	@Rest
 	public static class M1 {
 		@RestGet(path="/path/{foo}/body")
-		public X a(@Body X foo) {
+		public X a(@Content X foo) {
 			return null;
 		}
 	}
@@ -2084,7 +2084,7 @@ public class Swagger_Test {
 		private static final long serialVersionUID = 1L;
 
 		@RestGet(path="/")
-		public T2 a(@Body T2 body) {
+		public T2 a(@Content T2 body) {
 			return null;
 		}
 	}

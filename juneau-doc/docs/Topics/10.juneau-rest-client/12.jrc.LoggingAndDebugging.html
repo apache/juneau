@@ -21,11 +21,11 @@
 	</p>
 	
 	<ul class='javatree'>
-		<li class='jc'>{@del oajr.client2.RestClient.Builder}
+		<li class='jc'>{@link oajrc.RestClient.Builder}
 		<ul>
-			<li class='jm'>{@del oajr.client2.RestClient.Builder#logger(Logger) logger(Logger)}
-			<li class='jm'>{@del oajr.client2.RestClient.Builder#logToConsole() logToConsole()}
-			<li class='jm'>{@del oajr.client2.RestClient.Builder#logRequests(DetailLevel,Level,BiPredicate) logRequests(DetailLevel,Level,BiPredicate)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#logger(Logger) logger(Logger)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#logToConsole() logToConsole()}
+			<li class='jm'>{@link oajrc.RestClient.Builder#logRequests(DetailLevel,Level,BiPredicate) logRequests(DetailLevel,Level,BiPredicate)}
 		</ul>
 	</ul>
 	
@@ -46,7 +46,7 @@
 		|		.build()
 		|		.post(<js>"http://localhost/bean"</js>, <jv>bean</jv>)
 		|		.run()
-		|		.getBody().as(MyBean.<jk>class</jk>);
+		|		.getContent().as(MyBean.<jk>class</jk>);
 	</p>
 	
 	<p>
@@ -82,9 +82,9 @@
 	</p>
 	
 	<ul class='javatree'>
-		<li class='jc'>{@del oajr.client2.RestClient.Builder}
+		<li class='jc'>{@link oajrc.RestClient.Builder}
 		<ul>
-			<li class='jm'>{@del oajr.client2.RestClient.Builder#debug() debug()}
+			<li class='jm'>{@link oajrc.RestClient.Builder#debug() debug()}
 		</ul>
 	</ul>
 	
@@ -94,7 +94,7 @@
 	
 	<ul>
 		<li>{@del oaj.Context#CONTEXT_debug} is enabled.
-		<li>{@del oajr.client2.RestClient#RESTCLIENT_leakDetection} is enabled.
-		<li>{@del oajr.client2.RestClient.Builder#logToConsole()} is called.
+		<li>{@link oajrc.RestClient#RESTCLIENT_leakDetection} is enabled.
+		<li>{@link oajrc.RestClient.Builder#logToConsole()} is called.
 	</ul>
 </div>

@@ -495,8 +495,8 @@
 		|		.run()
 		|		.assertStatus().code().is(200)
 		|		.assertHeader(<js>"Content-Type"</js>).matches(<js>"application/json*"</js>)
-		|		.getBody().assertValue().asString().contains(<js>"OK"</js>)
-		|		.getBody().as(MyBean.<jk>class</jk>);
+		|		.getContent().assertValue().asString().contains(<js>"OK"</js>)
+		|		.getContent().as(MyBean.<jk>class</jk>);
 	</p>
 	<ul class='seealso'>
 		<li class='link'>{@doc jm.FluentAssertions Fluent Assertions} for more information.

@@ -282,7 +282,7 @@ public class MockServletResponse implements HttpServletResponse {
 		return headerMap.keySet();
 	}
 
-	byte[] getBody() throws IOException {
+	byte[] getContent() throws IOException {
 		baos.flush();
 		return baos.toByteArray();
 	}

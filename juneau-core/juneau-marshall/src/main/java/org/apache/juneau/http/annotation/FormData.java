@@ -68,7 +68,7 @@ import org.apache.juneau.oapi.*;
  *
  * <h5 class='topic'>Important note concerning FORM posts</h5>
  * <p>
- * This annotation should not be combined with the {@link Body @Body} annotation or <c>RestRequest.getBody()</c> method
+ * This annotation should not be combined with the {@link Content @Content} annotation or <c>RestRequest.getContent()</c> method
  * for <c>application/x-www-form-urlencoded POST</c> posts, since it will trigger the underlying servlet
  * API to parse the body content as key-value pairs resulting in empty content.
  *
@@ -93,7 +93,7 @@ import org.apache.juneau.oapi.*;
  * </ul>
  *
  * <div class='warn'>
- * 	This annotation should not be combined with the {@link Body @Body} annotation or <c>RestRequest#getBody()</c> method
+ * 	This annotation should not be combined with the {@link Content @Content} annotation or <c>RestRequest#getContent()</c> method
  * 	for <c>application/x-www-form-urlencoded POST</c> posts, since it will trigger the underlying servlet
  * 	API to parse the body content as key-value pairs resulting in empty content.
  * 	<br>The {@link Query @Query} annotation can be used to retrieve a URL parameter in the URL string without triggering the

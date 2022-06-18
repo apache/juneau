@@ -1846,7 +1846,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 		<c>RestClient.getRemoteInterface(Class&lt;T&gt; interfaceClass, String url)</c>.
 		 * 		<br>This allows you to construct client-side interface proxies using REST as a transport medium.
 		 * 		<br>Conceptually, this is simply a fancy <c>POST</c> against the url <js>"/{path}/{javaMethodName}"</js>
-		 * 		where the arguments are marshalled from the client to the server as an HTTP body containing an array of
+		 * 		where the arguments are marshalled from the client to the server as an HTTP content containing an array of
 		 * 		objects, passed to the method as arguments, and then the resulting object is marshalled back to the client.
 		 * 	<li>
 		 * 		Anything else
@@ -2526,9 +2526,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	}
 
 	/**
-	 * Returns the max number of bytes to process in the input body.
+	 * Returns the max number of bytes to process in the input content.
 	 *
-	 * @return The max number of bytes to process in the input body.
+	 * @return The max number of bytes to process in the input content.
 	 */
 	public long getMaxInput() {
 		return maxInput;

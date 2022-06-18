@@ -32,7 +32,7 @@
 		|		.run()
 		|		.assertStatus().code().is(200)
 		|		.assertHeader(<js>"Content-Type"</js>).matchesSimple(<js>"application/json*"</js>)
-		|		.getBody().as(MyBean.<jk>class</jk>);
+		|		.getContent().as(MyBean.<jk>class</jk>);
 	</p>
 </div>
 
@@ -57,7 +57,7 @@
 		|		<jk>public static class</jk> EchoRest <jk>implements</jk> BasicRestServlet {
 		|
 		|			<ja>@RestPut</ja>
-		|			<jk>public</jk> MyBean echo(<ja>@Body</ja> MyBean <jv>bean</jv>) {
+		|			<jk>public</jk> MyBean echo(<ja>@Content</ja> MyBean <jv>bean</jv>) {
 		|				<jk>return</jk> <jv>bean</jv>;
 		|			}
 		|		}
@@ -76,8 +76,8 @@
 		|				.put(<js>"/echo"</js>, <jv>myBean</jv>)
 		|				.run()
 		|				.assertStatus().is(200)
-		|				.assertBody().is(<js>"{foo:1}"</js>)
-		|				.getBody().as(MyBean.<jk>class</jk>);
+		|				.assertContent().is(<js>"{foo:1}"</js>)
+		|				.getContent().as(MyBean.<jk>class</jk>);
 		|
 		|			<jsm>assertEquals</jsm>(1, <jv>myBean</jv>.<jf>foo</jf>);
 		|		}

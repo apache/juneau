@@ -25,20 +25,20 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 
 /**
- * Utility classes and methods for the {@link Body @Body} annotation.
+ * Utility classes and methods for the {@link Content @Content} annotation.
  *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class BodyAnnotation {
+public class ContentAnnotation {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/** Default value */
-	public static final Body DEFAULT = create().build();
+	public static final Content DEFAULT = create().build();
 
 	/**
 	 * Instantiates a new builder for this class.
@@ -75,7 +75,7 @@ public class BodyAnnotation {
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
-	public static boolean empty(Body a) {
+	public static boolean empty(Content a) {
 		return a == null || DEFAULT.equals(a);
 	}
 
@@ -98,20 +98,20 @@ public class BodyAnnotation {
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(Body.class);
+			super(Content.class);
 		}
 
 		/**
-		 * Instantiates a new {@link Body @Body} object initialized with this builder.
+		 * Instantiates a new {@link Content @Content} object initialized with this builder.
 		 *
-		 * @return A new {@link Body @Body} object.
+		 * @return A new {@link Content @Content} object.
 		 */
-		public Body build() {
+		public Content build() {
 			return new Impl(this);
 		}
 
 		/**
-		 * Sets the {@link Body#schema} property on this annotation.
+		 * Sets the {@link Content#schema} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -154,7 +154,7 @@ public class BodyAnnotation {
 	// Implementation
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static class Impl extends TargetedAnnotationTImpl implements Body {
+	private static class Impl extends TargetedAnnotationTImpl implements Content {
 
 		private final Schema schema;
 
@@ -175,9 +175,9 @@ public class BodyAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Applies targeted {@link Body} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
+	 * Applies targeted {@link Content} annotations to a {@link org.apache.juneau.BeanContext.Builder}.
 	 */
-	public static class Applier extends AnnotationApplier<Body,BeanContext.Builder> {
+	public static class Applier extends AnnotationApplier<Content,BeanContext.Builder> {
 
 		/**
 		 * Constructor.
@@ -185,12 +185,12 @@ public class BodyAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Applier(VarResolverSession vr) {
-			super(Body.class, BeanContext.Builder.class, vr);
+			super(Content.class, BeanContext.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<Body> ai, BeanContext.Builder b) {
-			Body a = ai.inner();
+		public void apply(AnnotationInfo<Content> ai, BeanContext.Builder b) {
+			Content a = ai.inner();
 			if (isEmptyArray(a.on(), a.onClass()))
 				return;
 			b.annotations(a);
@@ -202,7 +202,7 @@ public class BodyAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * A collection of {@link Body @Body annotations}.
+	 * A collection of {@link Content @Content annotations}.
 	 */
 	@Documented
 	@Target({METHOD,TYPE})
@@ -215,6 +215,6 @@ public class BodyAnnotation {
 		 *
 		 * @return The annotation value.
 		 */
-		Body[] value();
+		Content[] value();
 	}
 }

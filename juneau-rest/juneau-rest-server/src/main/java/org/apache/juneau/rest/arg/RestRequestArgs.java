@@ -41,7 +41,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='jc'>{@link Messages}
  * 	<li class='jc'>{@link Reader}
  * 	<li class='jc'>{@link RequestAttributes}
- * 	<li class='jc'>{@link RequestBody}
+ * 	<li class='jc'>{@link RequestContent}
  * 	<li class='jc'>{@link RequestFormParams}
  * 	<li class='jc'>{@link RequestHeaders}
  * 	<li class='jc'>{@link RequestPathParams}
@@ -84,8 +84,8 @@ public class RestRequestArgs extends SimpleRestOperationArg {
 			return new RestRequestArgs(x->x.getReader());
 		if (paramInfo.isType(RequestAttributes.class))
 			return new RestRequestArgs(x->x.getAttributes());
-		if (paramInfo.isType(RequestBody.class))
-			return new RestRequestArgs(x->x.getBody());
+		if (paramInfo.isType(RequestContent.class))
+			return new RestRequestArgs(x->x.getContent());
 		if (paramInfo.isType(RequestFormParams.class))
 			return new RestRequestArgs(x->x.getFormParams());
 		if (paramInfo.isType(RequestHeaders.class))

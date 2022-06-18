@@ -20,9 +20,9 @@ import org.apache.juneau.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class BodyAnnotation_Test {
+public class ContentAnnotation_Test {
 
-	private static final String CNAME = BodyAnnotation_Test.class.getName();
+	private static final String CNAME = ContentAnnotation_Test.class.getName();
 
 	public static class X1 {}
 
@@ -30,12 +30,12 @@ public class BodyAnnotation_Test {
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	Body a1 = BodyAnnotation.create()
+	Content a1 = ContentAnnotation.create()
 		.on("on")
 		.onClass(X1.class)
 		.build();
 
-	Body a2 = BodyAnnotation.create()
+	Content a2 = ContentAnnotation.create()
 		.on("on")
 		.onClass(X1.class)
 		.build();
@@ -83,9 +83,9 @@ public class BodyAnnotation_Test {
 
 	@Test
 	public void c01_otherMethods() throws Exception {
-		Body c1 = BodyAnnotation.create(C1.class).on(C2.class).build();
-		Body c2 = BodyAnnotation.create("a").on("b").build();
-		Body c4 = BodyAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
+		Content c1 = ContentAnnotation.create(C1.class).on(C2.class).build();
+		Content c2 = ContentAnnotation.create("a").on("b").build();
+		Content c4 = ContentAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
 		assertObject(c1).asJson().isContains("on:['"+CNAME+"$C1','"+CNAME+"$C2']");
 		assertObject(c2).asJson().isContains("on:['a','b']");
@@ -96,19 +96,19 @@ public class BodyAnnotation_Test {
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Body(
+	@Content(
 		on="on",
 		onClass=X1.class
 	)
 	public static class D1 {}
-	Body d1 = D1.class.getAnnotationsByType(Body.class)[0];
+	Content d1 = D1.class.getAnnotationsByType(Content.class)[0];
 
-	@Body(
+	@Content(
 		on="on",
 		onClass=X1.class
 	)
 	public static class D2 {}
-	Body d2 = D2.class.getAnnotationsByType(Body.class)[0];
+	Content d2 = D2.class.getAnnotationsByType(Content.class)[0];
 
 	@Test
 	public void d01_comparisonWithDeclarativeAnnotations() {

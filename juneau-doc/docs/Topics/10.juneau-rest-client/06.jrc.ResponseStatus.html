@@ -17,16 +17,16 @@
 
 <div class='topic'>
 	<p>
-		After execution using {@del oajr.client2.RestRequest#run()} or {@del oajr.client2.RestRequest#complete()}, the following methods can be used
+		After execution using {@link oajrc.RestRequest#run()} or {@link oajrc.RestRequest#complete()}, the following methods can be used
 		to get the response status:
 	</p>
 	<ul class='javatree'>
-		<li class='jc'>{@del oajr.client2.RestResponse}
+		<li class='jc'>{@link oajrc.RestResponse}
 		<ul>
-			<li class='jm'><c>{@del oajr.client2.RestResponse#getStatusLine() getStatusLine()} <jk>returns</jk> {@link org.apache.http.StatusLine}</c>
-			<li class='jm'><c>{@del oajr.client2.RestResponse#getStatusCode() getStatusCode()} <jk>returns</jk> <jk>int</jk></c>
-			<li class='jm'><c>{@del oajr.client2.RestResponse#getReasonPhrase() getReasonPhrase()} <jk>returns</jk> String</c>
-			<li class='jm'><c>{@del oajr.client2.RestResponse#assertStatus() assertStatus()} <jk>returns</jk> {@del oajr.client2.RestResponseStatusLineAssertion}</c>
+			<li class='jm'><c>{@link oajrc.RestResponse#getStatusLine() getStatusLine()} <jk>returns</jk> {@link org.apache.http.StatusLine}</c>
+			<li class='jm'><c>{@link oajrc.RestResponse#getStatusCode() getStatusCode()} <jk>returns</jk> <jk>int</jk></c>
+			<li class='jm'><c>{@link oajrc.RestResponse#getReasonPhrase() getReasonPhrase()} <jk>returns</jk> String</c>
+			<li class='jm'><c>{@link oajrc.RestResponse#assertStatus() assertStatus()} <jk>returns</jk> {@link oajrc.RestResponseStatusLineAssertion}</c>
 		</ul>
 	</ul>
 	
@@ -51,8 +51,8 @@
 	</p>
 	
 	<ul class='notes'>
-		<li class='note'>If you are only interested in the response status and not the response body, be sure to use {@del oajr.client2.RestRequest#complete()} instead
-			of {@del oajr.client2.RestRequest#run()} to make sure the response body gets automatically cleaned up.  Otherwise you must
+		<li class='note'>If you are only interested in the response status and not the response body, be sure to use {@link oajrc.RestRequest#complete()} instead
+			of {@link oajrc.RestRequest#run()} to make sure the response body gets automatically cleaned up.  Otherwise you must
 			consume the response yourself.
 	</ul>
 	
@@ -66,12 +66,12 @@
 		|	String <jv>body1</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
 		|		.run()
 		|		.assertStatus().code().isBetween(200,399)
-		|		.getBody().asString();
+		|		.getContent().asString();
 		|
 		|	<jc>// Status assertion using a predicate.</jc>
 		|	String <jv>body2</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
 		|		.run()
 		|		.assertStatus().code().passes(<jv>x</jv> -> <jv>x</jv>&lt;400)
-		|		.getBody().asString();
+		|		.getContent().asString();
 	</p>
 </div>

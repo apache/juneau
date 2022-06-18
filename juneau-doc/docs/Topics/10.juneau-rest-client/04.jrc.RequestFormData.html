@@ -20,23 +20,23 @@
 		Per-client or per-request form-data parameters can be specified using the following methods:
 	</p>
 	<ul class='javatree'>
-		<li class='jc'>{@del oajr.client2.RestClient.Builder}
+		<li class='jc'>{@link oajrc.RestClient.Builder}
 		<ul>
-			<li class='jm'>{@del oajr.client2.RestClient.Builder#formData(String,Object) formData(String,Object)}
-			<li class='jm'>{@del oajr.client2.RestClient.Builder#formData(String,Object,HttpPartSchema) formData(String,Object,HttpPartSchema)}
-			<li class='jm'>{@del oajr.client2.RestClient.Builder#formData(String,Supplier) formData(String,Supplier&lt;?&gt;)}
-			<li class='jm'>{@del oajr.client2.RestClient.Builder#formData(String,Supplier,HttpPartSchema) formData(String,Supplier&lt;?&gt;,HttpPartSchema)}
-			<li class='jm'>{@del oajr.client2.RestClient.Builder#formDatas(Object...) formDatas(Object...)}
-			<li class='jm'>{@del oajr.client2.RestClient.Builder#formDataPairs(Object...) formDataPairs(Object...)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#formData(String,Object) formData(String,Object)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#formData(String,Object,HttpPartSchema) formData(String,Object,HttpPartSchema)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#formData(String,Supplier) formData(String,Supplier&lt;?&gt;)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#formData(String,Supplier,HttpPartSchema) formData(String,Supplier&lt;?&gt;,HttpPartSchema)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#formDatas(Object...) formDatas(Object...)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#formDataPairs(Object...) formDataPairs(Object...)}
 		</ul>
-		<li class='jc'>{@del oajr.client2.RestRequest}
+		<li class='jc'>{@link oajrc.RestRequest}
 		<ul>
-			<li class='jm'>{@del oajr.client2.RestRequest#formData(String,Object) formData(String,Object)}
-			<li class='jm'>{@del oajr.client2.RestRequest#formData(AddFlag,String,Object) formData(AddFlag,String,Object)}
-			<li class='jm'>{@del oajr.client2.RestRequest#formDatas(Object...) formDatas(Object...)}
-			<li class='jm'>{@del oajr.client2.RestRequest#formDatas(AddFlag,Object...) formDatas(AddFlag,Object...)}
-			<li class='jm'>{@del oajr.client2.RestRequest#formDataPairs(Object...) formDataPairs(Object...)}
-			<li class='jm'>{@del oajr.client2.RestRequest#formDataCustom(Object) formDataCustom(Object)}
+			<li class='jm'>{@link oajrc.RestRequest#formData(String,Object) formData(String,Object)}
+			<li class='jm'>{@link oajrc.RestRequest#formData(AddFlag,String,Object) formData(AddFlag,String,Object)}
+			<li class='jm'>{@link oajrc.RestRequest#formDatas(Object...) formDatas(Object...)}
+			<li class='jm'>{@link oajrc.RestRequest#formDatas(AddFlag,Object...) formDatas(AddFlag,Object...)}
+			<li class='jm'>{@link oajrc.RestRequest#formDataPairs(Object...) formDataPairs(Object...)}
+			<li class='jm'>{@link oajrc.RestRequest#formDataCustom(Object) formDataCustom(Object)}
 		</ul>
 	</ul>
 	
@@ -46,12 +46,12 @@
 		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().formData(<js>"foo"</js>,<js>"bar"</js>).build();
 		|
 		|	<jc>// Or do it on every request.</jc>
-		|	String <jv>response</jv> = <jv>client</jv>.formPost(<jsf>URI</jsf>).formData(<js>"foo"</js>,<js>"bar"</js>).run().getBody().asString();
+		|	String <jv>response</jv> = <jv>client</jv>.formPost(<jsf>URI</jsf>).formData(<js>"foo"</js>,<js>"bar"</js>).run().getContent().asString();
 	</p>
 	
 	<p>
-		{@del oajr.client2.RestClient.Builder#formDatas(Object...) formDatas(Object...)} allows you to pass in a variety
-		of form-data parameter objects, and {@del oajr.client2.RestClient.Builder#formDataPairs(Object...) formDataPairs(Object...)} allows
+		{@link oajrc.RestClient.Builder#formDatas(Object...) formDatas(Object...)} allows you to pass in a variety
+		of form-data parameter objects, and {@link oajrc.RestClient.Builder#formDataPairs(Object...) formDataPairs(Object...)} allows
 		you to specify several form-data parameters in a compact fashion.
 	</p>
 	

@@ -42,7 +42,7 @@ public class AnnotationUtils_Test {
 		Items items() default @Items;
 	}
 
-	@Body
+	@Content
 	@Response
 	@Header
 	@X1
@@ -57,12 +57,12 @@ public class AnnotationUtils_Test {
 
 	@Test
 	public void a01_Body() throws Exception {
-		assertObject(body().build().annotationType()).asJson().isContains("Body");
+		assertObject(body().build().annotationType()).asJson().isContains("Content");
 
-		assertTrue(BodyAnnotation.empty(A1.class.getAnnotation(Body.class)));
-		assertTrue(BodyAnnotation.empty(A2.class.getAnnotation(Body.class)));
-		assertTrue(BodyAnnotation.empty(body().build()));
-		assertTrue(BodyAnnotation.empty((Body)null));
+		assertTrue(ContentAnnotation.empty(A1.class.getAnnotation(Content.class)));
+		assertTrue(ContentAnnotation.empty(A2.class.getAnnotation(Content.class)));
+		assertTrue(ContentAnnotation.empty(body().build()));
+		assertTrue(ContentAnnotation.empty((Content)null));
 	}
 
 	@Test
@@ -389,8 +389,8 @@ public class AnnotationUtils_Test {
 	// Helper methods.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static BodyAnnotation.Builder body() {
-		return BodyAnnotation.create();
+	private static ContentAnnotation.Builder body() {
+		return ContentAnnotation.create();
 	}
 
 	private static ContactAnnotation.Builder contact() {

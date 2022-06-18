@@ -33,7 +33,7 @@ public class RestClient_Config_Context_Test {
 	public static class A extends BasicRestObject {
 		@RestPost
 		public Reader echoBody(org.apache.juneau.rest.RestRequest req) throws IOException {
-			return req.getBody().getReader();
+			return req.getContent().getReader();
 		}
 	}
 

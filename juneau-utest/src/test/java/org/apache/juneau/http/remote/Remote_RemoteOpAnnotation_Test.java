@@ -20,7 +20,7 @@ import java.io.*;
 import java.util.concurrent.*;
 
 import org.apache.http.*;
-import org.apache.juneau.http.annotation.Body;
+import org.apache.juneau.http.annotation.Content;
 import org.apache.juneau.http.annotation.Response;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
@@ -169,25 +169,25 @@ public class Remote_RemoteOpAnnotation_Test {
 	@Rest
 	public static class C implements BasicSimpleJsonConfig {
 		@RestOp(path="/*")
-		public String post(@Body String body) {
+		public String post(@Content String body) {
 			return body;
 		}
 	}
 
 	@Remote
 	public static interface C1 {
-		String postX1(@Body String foo);
-		HttpResponse postX2(@Body String foo);
-		Reader postX3(@Body String foo);
-		InputStream postX4(@Body String foo);
-		Future<String> postX5(@Body String foo);
-		Future<HttpResponse> postX6(@Body String foo);
-		Future<Reader> postX7(@Body String foo);
-		Future<InputStream> postX8(@Body String foo);
-		CompletableFuture<String> postX9(@Body String foo);
-		CompletableFuture<HttpResponse> postX10(@Body String foo);
-		CompletableFuture<Reader> postX11(@Body String foo);
-		CompletableFuture<InputStream> postX12(@Body String foo);
+		String postX1(@Content String foo);
+		HttpResponse postX2(@Content String foo);
+		Reader postX3(@Content String foo);
+		InputStream postX4(@Content String foo);
+		Future<String> postX5(@Content String foo);
+		Future<HttpResponse> postX6(@Content String foo);
+		Future<Reader> postX7(@Content String foo);
+		Future<InputStream> postX8(@Content String foo);
+		CompletableFuture<String> postX9(@Content String foo);
+		CompletableFuture<HttpResponse> postX10(@Content String foo);
+		CompletableFuture<Reader> postX11(@Content String foo);
+		CompletableFuture<InputStream> postX12(@Content String foo);
 	}
 
 	@Test
@@ -214,25 +214,25 @@ public class Remote_RemoteOpAnnotation_Test {
 	@Rest
 	public static class D implements BasicOpenApiConfig {
 		@RestPost(path="/*") @Response
-		public String x1(@Body String body) {
+		public String x1(@Content String body) {
 			return body;
 		}
 	}
 
 	@Remote
 	public static interface D1 {
-		String postX1(@Body String foo);
-		HttpResponse postX2(@Body String foo);
-		Reader postX3(@Body String foo);
-		InputStream postX4(@Body String foo);
-		Future<String> postX5(@Body String foo);
-		Future<HttpResponse> postX6(@Body String foo);
-		Future<Reader> postX7(@Body String foo);
-		Future<InputStream> postX8(@Body String foo);
-		CompletableFuture<String> postX9(@Body String foo);
-		CompletableFuture<HttpResponse> postX10(@Body String foo);
-		CompletableFuture<Reader> postX11(@Body String foo);
-		CompletableFuture<InputStream> postX12(@Body String foo);
+		String postX1(@Content String foo);
+		HttpResponse postX2(@Content String foo);
+		Reader postX3(@Content String foo);
+		InputStream postX4(@Content String foo);
+		Future<String> postX5(@Content String foo);
+		Future<HttpResponse> postX6(@Content String foo);
+		Future<Reader> postX7(@Content String foo);
+		Future<InputStream> postX8(@Content String foo);
+		CompletableFuture<String> postX9(@Content String foo);
+		CompletableFuture<HttpResponse> postX10(@Content String foo);
+		CompletableFuture<Reader> postX11(@Content String foo);
+		CompletableFuture<InputStream> postX12(@Content String foo);
 	}
 
 	@Test

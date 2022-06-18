@@ -63,7 +63,7 @@ import org.apache.juneau.rest.annotation.*;
  * 				<jk>if</jk> (<jv>foo</jv> == <jk>null</jk>)
  * 					<jk>return</jk> <jsf>NEXT</jsf>;  <jc>// Let the next processor handle it.</jc>
  *
- * 				<jc>// Set some headers and body content.</jc>
+ * 				<jc>// Set some headers and content.</jc>
  * 				<jv>res</jv>.setHeader(<js>"Foo-ID"</js>, <jv>foo</jv>.getId());
  * 				<jv>res</jv>.getWriter().write(<js>"foo.id="</js> + <jv>foo</jv>.getId());
  *
@@ -79,8 +79,6 @@ import org.apache.juneau.rest.annotation.*;
  * </ul>
  */
 public interface ResponseProcessor {
-
-	public static final String TODO = "Convert to filter-based design";
 
 	/**
 	 * Return code indicating to proceed to the next response processor in the chain.

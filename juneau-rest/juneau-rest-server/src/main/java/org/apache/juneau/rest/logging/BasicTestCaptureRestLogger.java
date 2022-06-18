@@ -59,7 +59,7 @@ import org.apache.juneau.cp.*;
  * 			<jc>// Create client that won't throw exceptions.</jc>
  * 			RestClient <jv>client</jv> = MockRestClient.<jsm>create</jsm>(TestRest.<jk>class</jk>).ignoreErrors().build();
  * 			<jc>// Make the REST call.</jc>
- * 			<jv>client</jv>.get(<js>"/bad"</js>).run().assertStatusCode(500).assertBody().contains(<js>"foo"</js>);
+ * 			<jv>client</jv>.get(<js>"/bad"</js>).run().assertStatusCode(500).assertContent().contains(<js>"foo"</js>);
  * 			<jc>// Make sure the message was logged in our expected format.</jc>
  * 			<jsf>LOGGER</jsf>.assertMessageAndReset().contains(<js>"[500] HTTP GET /bad"</js>);
  * 		}

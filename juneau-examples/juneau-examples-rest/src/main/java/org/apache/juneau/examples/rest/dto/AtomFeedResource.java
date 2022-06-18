@@ -20,6 +20,7 @@ import org.apache.juneau.dto.atom.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.annotation.Content;
 import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
@@ -136,7 +137,7 @@ public class AtomFeedResource extends BasicRestServlet implements BasicUniversal
 		summary="Overwrite the sample ATOM feed",
 		description="Replaces the feed with the specified content, and then mirrors it as the response."
 	)
-	public Feed put(@Body Feed feed) {
+	public Feed put(@Content Feed feed) {
 		this.feed = feed;
 		return feed;
 	}

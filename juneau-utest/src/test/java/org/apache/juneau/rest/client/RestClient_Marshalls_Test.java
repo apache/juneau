@@ -16,7 +16,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.http.annotation.Body;
+import org.apache.juneau.http.annotation.Content;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.marshall.*;
@@ -53,7 +53,7 @@ public class RestClient_Marshalls_Test {
 	@Rest
 	public static class A extends BasicRestObject implements BasicUniversalConfig {
 		@RestPost
-		public Bean a01(@Body Bean b, @Header("Accept") String accept, @Header("Content-Type") String ct, @Header("X-Accept") String xaccept, @Header("X-Content-Type") String xct) {
+		public Bean a01(@Content Bean b, @Header("Accept") String accept, @Header("Content-Type") String ct, @Header("X-Accept") String xaccept, @Header("X-Content-Type") String xct) {
 			assertEquals("Accept doesn't match",nn(xaccept),nn(accept));
 			assertEquals("Content-Type doesn't match",nn(xct),nn(ct));
 			return b;

@@ -24,18 +24,18 @@ import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.serializer.*;
 
 /**
- * Used for fluent assertion calls against {@link RequestBody} objects.
+ * Used for fluent assertion calls against {@link RequestContent} objects.
  *
  * <h5 class='topic'>Test Methods</h5>
  * <p>
  * <ul class='javatree'>
- * 	<li class='jc'>{@link FluentRequestBodyAssertion}
+ * 	<li class='jc'>{@link FluentRequestContentAssertion}
  * 	<ul class='javatreec'>
- * 		<li class='jm'>{@link FluentRequestBodyAssertion#is(String) is(String)}
- * 		<li class='jm'>{@link FluentRequestBodyAssertion#isContains(String...) isContains(String...)}
- * 		<li class='jm'>{@link FluentRequestBodyAssertion#isNotContains(String...) isNotContains(String...)}
- * 		<li class='jm'>{@link FluentRequestBodyAssertion#isEmpty() isEmpty()}
- * 		<li class='jm'>{@link FluentRequestBodyAssertion#isNotEmpty() isNotEmpty()}
+ * 		<li class='jm'>{@link FluentRequestContentAssertion#is(String) is(String)}
+ * 		<li class='jm'>{@link FluentRequestContentAssertion#isContains(String...) isContains(String...)}
+ * 		<li class='jm'>{@link FluentRequestContentAssertion#isNotContains(String...) isNotContains(String...)}
+ * 		<li class='jm'>{@link FluentRequestContentAssertion#isEmpty() isEmpty()}
+ * 		<li class='jm'>{@link FluentRequestContentAssertion#isNotEmpty() isNotEmpty()}
  * 	</ul>
  * 	<li class='jc'>{@link FluentObjectAssertion}
  * 	<ul class='javatreec'>
@@ -61,11 +61,11 @@ import org.apache.juneau.serializer.*;
  * <h5 class='topic'>Transform Methods</h5>
  * <p>
  * <ul class='javatree'>
- * 	<li class='jc'>{@link FluentRequestBodyAssertion}
+ * 	<li class='jc'>{@link FluentRequestContentAssertion}
  * 	<ul class='javatreec'>
- * 		<li class='jm'>{@link FluentRequestBodyAssertion#asBytes() asBytes()}
- * 		<li class='jm'>{@link FluentRequestBodyAssertion#as(Class) as(Class)}
- * 		<li class='jm'>{@link FluentRequestBodyAssertion#as(Type,Type...) as(Type,Type...)}
+ * 		<li class='jm'>{@link FluentRequestContentAssertion#asBytes() asBytes()}
+ * 		<li class='jm'>{@link FluentRequestContentAssertion#as(Class) as(Class)}
+ * 		<li class='jm'>{@link FluentRequestContentAssertion#as(Type,Type...) as(Type,Type...)}
  * 	</ul>
  * 	<li class='jc'>{@link FluentObjectAssertion}
  * 	<ul class='javatreec'>
@@ -99,8 +99,8 @@ import org.apache.juneau.serializer.*;
  *
  * @param <R> The return type.
  */
-@FluentSetters(returns="FluentRequestBodyAssertion<R>")
-public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<RequestBody,R> {
+@FluentSetters(returns="FluentRequestContentAssertion<R>")
+public class FluentRequestContentAssertion<R> extends FluentObjectAssertion<RequestContent,R> {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Constructors
@@ -117,7 +117,7 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
 	 * used on the same assertion.
 	 */
-	public FluentRequestBodyAssertion(RequestBody value, R returns) {
+	public FluentRequestContentAssertion(RequestContent value, R returns) {
 		this(null, value, returns);
 	}
 
@@ -138,7 +138,7 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	 * 	<br>If <jk>null</jk>, the test method returns this object allowing multiple test method calls to be
 	 * used on the same assertion.
 	 */
-	public FluentRequestBodyAssertion(Assertion creator, RequestBody value, R returns) {
+	public FluentRequestContentAssertion(Assertion creator, RequestContent value, R returns) {
 		super(creator, value, returns);
 		setThrowable(BadRequest.class);
 	}
@@ -148,20 +148,20 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Provides the ability to perform fluent-style assertions on the bytes of the request body.
+	 * Provides the ability to perform fluent-style assertions on the bytes of the request content.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Validates the request body equals the text "foo".</jc>
+	 * 	<jc>// Validates the request content equals the text "foo".</jc>
 	 * 	<jv>request</jv>
-	 * 		.assertBody().asBytes().asHex().is(<js>"666F6F"</js>);
+	 * 		.assertContent().asBytes().asHex().is(<js>"666F6F"</js>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> request header, <js>"UTF-8"</js> is assumed.
 	 *  <li class='note'>
-	 *		When using this method, the body is automatically cached by calling the {@link RequestBody#cache()}.
+	 *		When using this method, the content is automatically cached by calling the {@link RequestContent#cache()}.
 	 * 	<li class='note'>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
@@ -173,13 +173,13 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	}
 
 	/**
-	 * Converts the body to a type using {@link RequestBody#as(Class)} and then returns the value as an object assertion.
+	 * Converts the content to a type using {@link RequestContent#as(Class)} and then returns the value as an object assertion.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Validates the request body bean is the expected value.</jc>
+	 * 	<jc>// Validates the request content bean is the expected value.</jc>
 	 * 	<jv>request</jv>
-	 * 		.assertBody()
+	 * 		.assertContent()
 	 * 		.as(MyBean.<jk>class</jk>)
 	 * 			.asJson().is(<js>"{foo:'bar'}"</js>);
 	 * </p>
@@ -188,7 +188,7 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> request header, <js>"UTF-8"</js> is assumed.
 	 *  <li class='note'>
-	 *		When using this method, the body is automatically cached by calling the {@link RequestBody#cache()}.
+	 *		When using this method, the content is automatically cached by calling the {@link RequestContent#cache()}.
 	 * 	<li class='note'>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
@@ -205,13 +205,13 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	}
 
 	/**
-	 * Converts the body to a type using {@link RequestBody#as(Type,Type...)} and then returns the value as an object assertion.
+	 * Converts the content to a type using {@link RequestContent#as(Type,Type...)} and then returns the value as an object assertion.
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Validates the request body bean is the expected value.</jc>
+	 * 	<jc>// Validates the request content bean is the expected value.</jc>
 	 * 	<jv>request</jv>
-	 * 		.assertBody()
+	 * 		.assertContent()
 	 * 		.as(Map.<jk>class</jk>,String.<jk>class</jk>,Integer.<jk>class</jk>)
 	 * 			.asJson().is(<js>"{foo:123}"</js>);
 	 * </p>
@@ -220,7 +220,7 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	 * 	<li class='note'>
 	 * 		If no charset was found on the <code>Content-Type</code> request header, <js>"UTF-8"</js> is assumed.
 	 *  <li class='note'>
-	 *		When using this method, the body is automatically cached by calling the {@link RequestBody#cache()}.
+	 *		When using this method, the content is automatically cached by calling the {@link RequestContent#cache()}.
 	 * 	<li class='note'>
 	 * 		The input stream is automatically closed after this call.
 	 * </ul>
@@ -242,7 +242,7 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Asserts that the body contains the specified value.
+	 * Asserts that the content contains the specified value.
 	 *
 	 * @param values The value to check against.
 	 * @return This object.
@@ -264,7 +264,7 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	}
 
 	/**
-	 * Asserts that the body doesn't contain any of the specified substrings.
+	 * Asserts that the content doesn't contain any of the specified substrings.
 	 *
 	 * @param values The values to check against.
 	 * @return This object.
@@ -275,7 +275,7 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	}
 
 	/**
-	 * Asserts that the body is empty.
+	 * Asserts that the content is empty.
 	 *
 	 * @return This object.
 	 * @throws AssertionError If assertion failed.
@@ -285,7 +285,7 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	}
 
 	/**
-	 * Asserts that the body is not empty.
+	 * Asserts that the content is not empty.
 	 *
 	 * @return This object.
 	 * @throws AssertionError If assertion failed.
@@ -338,31 +338,31 @@ public class FluentRequestBodyAssertion<R> extends FluentObjectAssertion<Request
 	// <FluentSetters>
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentRequestBodyAssertion<R> setMsg(String msg, Object...args) {
+	public FluentRequestContentAssertion<R> setMsg(String msg, Object...args) {
 		super.setMsg(msg, args);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentRequestBodyAssertion<R> setOut(PrintStream value) {
+	public FluentRequestContentAssertion<R> setOut(PrintStream value) {
 		super.setOut(value);
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentRequestBodyAssertion<R> setSilent() {
+	public FluentRequestContentAssertion<R> setSilent() {
 		super.setSilent();
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentRequestBodyAssertion<R> setStdOut() {
+	public FluentRequestContentAssertion<R> setStdOut() {
 		super.setStdOut();
 		return this;
 	}
 
 	@Override /* GENERATED - org.apache.juneau.assertions.Assertion */
-	public FluentRequestBodyAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentRequestContentAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

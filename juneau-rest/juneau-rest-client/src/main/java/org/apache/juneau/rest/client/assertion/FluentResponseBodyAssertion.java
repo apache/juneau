@@ -157,38 +157,38 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().is(<js>"OK"</js>);
+	 * 		.assertContent().is(<js>"OK"</js>);
 	 *
 	 * 	<jc>// Validates the response body contains the text "OK".</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().isContains(<js>"OK"</js>);
+	 * 		.assertContent().isContains(<js>"OK"</js>);
 	 *
 	 * 	<jc>// Validates the response body passes a predicate test.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().isPasses(<jv>x</jv> -&gt; <jv>x</jv>.contains(<js>"OK"</js>));
+	 * 		.assertContent().isPasses(<jv>x</jv> -&gt; <jv>x</jv>.contains(<js>"OK"</js>));
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().isPattern(<js>".*OK.*"</js>);
+	 * 		.assertContent().isPattern(<js>".*OK.*"</js>);
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression using regex flags.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().isPattern(<js>".*OK.*"</js>, <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>);
+	 * 		.assertContent().isPattern(<js>".*OK.*"</js>, <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>);
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression in the form of an existing Pattern.</jc>
 	 * 	Pattern <jv>pattern</jv> = Pattern.<jsm>compile</jsm>(<js>".*OK.*"</js>);
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().isPattern(<jv>pattern</jv>);
+	 * 		.assertContent().isPattern(<jv>pattern</jv>);
 	 * </p>
 	 *
 	 * <p>
@@ -198,9 +198,9 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * 	MyBean <jv>bean</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().isPattern(<js>".*OK.*"</js>);
-	 * 		.assertBody().isNotPattern(<js>".*ERROR.*"</js>)
-	 * 		.getBody().as(MyBean.<jk>class</jk>);
+	 * 		.assertContent().isPattern(<js>".*OK.*"</js>);
+	 * 		.assertContent().isNotPattern(<js>".*ERROR.*"</js>)
+	 * 		.getContent().as(MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -228,7 +228,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertBody().asBytes().asHex().is(<js>"666F6F"</js>);
+	 * 		.assertContent().asBytes().asHex().is(<js>"666F6F"</js>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -256,7 +256,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * 	<jv>client</jv>
 	 * 		.get(<js>"/myBean"</js>)
 	 * 		.run()
-	 * 		.assertBody().as(List.<jk>class</jk>, String.<jk>class</jk>).isPasses(<jv>x</jv> -&gt; <jv>x</jv>.size() &gt; 0);
+	 * 		.assertContent().as(List.<jk>class</jk>, String.<jk>class</jk>).isPasses(<jv>x</jv> -&gt; <jv>x</jv>.size() &gt; 0);
 	 * </p>
 	 *
 	 * @param <T> The object type to create.
@@ -276,7 +276,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * 	<jv>client</jv>
 	 * 		.get(<js>"/myBean"</js>)
 	 * 		.run()
-	 * 		.assertBody().as(List.<jk>class</jk>, String.<jk>class</jk>).isPasses(<jv>x</jv> -&gt; <jv>x</jv>.size() &gt; 0);
+	 * 		.assertContent().as(List.<jk>class</jk>, String.<jk>class</jk>).isPasses(<jv>x</jv> -&gt; <jv>x</jv>.size() &gt; 0);
 	 * </p>
 	 *
 	 * <p>

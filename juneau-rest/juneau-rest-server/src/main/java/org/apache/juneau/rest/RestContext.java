@@ -264,7 +264,7 @@ public class RestContext extends Context {
 		Charset defaultCharset = env("RestContext.defaultCharset", IOUtils.UTF8);
 		long maxInput = parseLongWithSuffix(env("RestContext.maxInput", "100M"));
 		List<MediaType> consumes, produces;
-		boolean disableBodyParam = env("RestContext.disableBodyParam", false);
+		boolean disableContentParam = env("RestContext.disableContentParam", false);
 		boolean renderResponseStackTraces = env("RestContext.renderResponseStackTraces", false);
 
 		Class<? extends RestChildren> childrenClass = RestChildren.class;
@@ -3343,7 +3343,7 @@ public class RestContext extends Context {
 					.create(beanStore)
 					.add(
 						AttributeArg.class,
-						BodyArg.class,
+						ContentArg.class,
 						FormDataArg.class,
 						HasFormDataArg.class,
 						HasQueryArg.class,
@@ -4647,41 +4647,41 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Disable body URL parameter.
+		 * Disable content URL parameter.
 		 *
 		 * <p>
-		 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
+		 * When enabled, the HTTP content content on PUT and POST requests can be passed in as text using the <js>"content"</js>
 		 * URL parameter.
 		 * <br>
 		 * For example:
 		 * <p class='burlenc'>
-		 *  ?body=(name='John%20Smith',age=45)
+		 *  ?content=(name='John%20Smith',age=45)
 		 * </p>
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
-		 * 	<ja>@Rest</ja>(disableBodyParam=<js>"$C{REST/disableBodyParam,true}"</js>)
+		 * 	<ja>@Rest</ja>(disableContentParam=<js>"$C{REST/disableContentParam,true}"</js>)
 		 * 	<jk>public class</jk> MyResource {
 		 *
 		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
 		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 *
 		 * 			<jc>// Using method on builder.</jc>
-		 * 			<jv>builder</jv>.disableBodyParam();
+		 * 			<jv>builder</jv>.disableContentParam();
 		 * 		}
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
 		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.disableBodyParam();
+		 * 			<jv>builder</jv>.disableContentParam();
 		 * 		}
 		 * 	}
 		 * </p>
 		 *
 		 * <ul class='notes'>
 		 * 	<li class='note'>
-		 * 		<js>'body'</js> parameter name is case-insensitive.
+		 * 		<js>'content'</js> parameter name is case-insensitive.
 		 * 	<li class='note'>
 		 * 		Useful for debugging PUT and POST methods using only a browser.
 		 * </ul>
@@ -4689,22 +4689,22 @@ public class RestContext extends Context {
 		 * @return This object.
 		 */
 		@FluentSetter
-		public Builder disableBodyParam() {
-			return disableBodyParam(true);
+		public Builder disableContentParam() {
+			return disableContentParam(true);
 		}
 
 		/**
-		 * Disable body URL parameter.
+		 * Disable content URL parameter.
 		 *
 		 * <p>
-		 * Same as {@link #disableBodyParam()} but allows you to set it as a boolean value.
+		 * Same as {@link #disableContentParam()} but allows you to set it as a boolean value.
 		 *
 		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
 		@FluentSetter
-		public Builder disableBodyParam(boolean value) {
-			disableBodyParam = value;
+		public Builder disableContentParam(boolean value) {
+			disableContentParam = value;
 			return this;
 		}
 
@@ -5088,7 +5088,7 @@ public class RestContext extends Context {
 		 * Returns the parser group builder containing the parsers for converting HTTP request bodies into POJOs.
 		 *
 		 * <p>
-		 * Parsers are used to convert the body of HTTP requests into POJOs.
+		 * Parsers are used to convert the content of HTTP requests into POJOs.
 		 * <br>Any of the Juneau framework parsers can be used in this setting.
 		 * <br>The parser selected is based on the request <c>Content-Type</c> header matched against the values returned by the following method
 		 * using a best-match algorithm:
@@ -5805,7 +5805,7 @@ public class RestContext extends Context {
 
 	final Builder builder;
 	private final boolean
-		allowBodyParam,
+		allowContentParam,
 		renderResponseStackTraces;
 	private final String
 		clientVersionHeader,
@@ -5914,7 +5914,7 @@ public class RestContext extends Context {
 				p += "/*";
 			pathMatcher = UrlPathMatcher.of(p);
 
-			allowBodyParam = ! builder.disableBodyParam;
+			allowContentParam = ! builder.disableContentParam;
 			allowedHeaderParams = newCaseInsensitiveSet(ofNullable(builder.allowedHeaderParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
 			allowedMethodParams = newCaseInsensitiveSet(ofNullable(builder.allowedMethodParams).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
 			allowedMethodHeaders = newCaseInsensitiveSet(ofNullable(builder.allowedMethodHeaders).map(x -> "NONE".equals(x) ? "" : x).orElse(""));
@@ -6263,16 +6263,16 @@ public class RestContext extends Context {
 	}
 
 	/**
-	 * Returns whether it's safe to pass the HTTP body as a <js>"body"</js> GET parameter.
+	 * Returns whether it's safe to pass the HTTP content as a <js>"content"</js> GET parameter.
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link RestContext.Builder#disableBodyParam()}
+	 * 	<li class='jm'>{@link RestContext.Builder#disableContentParam()}
 	 * </ul>
 	 *
 	 * @return <jk>true</jk> if setting is enabled.
 	 */
-	public boolean isAllowBodyParam() {
-		return allowBodyParam;
+	public boolean isAllowContentParam() {
+		return allowContentParam;
 	}
 
 	/**
@@ -7203,7 +7203,7 @@ public class RestContext extends Context {
 	@Override /* Context */
 	protected JsonMap properties() {
 		return filteredMap()
-			.append("allowBodyParam", allowBodyParam)
+			.append("allowContentParam", allowContentParam)
 			.append("allowedMethodHeader", allowedMethodHeaders)
 			.append("allowedMethodParams", allowedMethodParams)
 			.append("allowedHeaderParams", allowedHeaderParams)

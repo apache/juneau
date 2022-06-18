@@ -143,8 +143,8 @@ public class BasicRestLogger implements RestLogger {
 		String method = req.getMethod();
 		int status = res.getStatus();
 		String uri = req.getRequestURI();
-		byte[] reqBody = getRequestBody(req);
-		byte[] resBody = getResponseBody(req, res);
+		byte[] reqContent = getRequestContent(req);
+		byte[] resContent = getResponseContent(req, res);
 
 		StringBuilder sb = new StringBuilder();
 
@@ -174,14 +174,14 @@ public class BasicRestLogger implements RestLogger {
 					sb.append('?').append(qs);
 			}
 
-			if (reqBody != null && reqd.isOneOf(HEADER ,ENTITY))
-				sb.append("\n\tRequest length: ").append(reqBody.length).append(" bytes");
+			if (reqContent != null && reqd.isOneOf(HEADER ,ENTITY))
+				sb.append("\n\tRequest length: ").append(reqContent.length).append(" bytes");
 
 			if (resd.isOneOf(HEADER, ENTITY))
 				sb.append("\n\tResponse code: ").append(status);
 
-			if (resBody != null && resd.isOneOf(HEADER, ENTITY))
-				sb.append("\n\tResponse length: ").append(resBody.length).append(" bytes");
+			if (resContent != null && resd.isOneOf(HEADER, ENTITY))
+				sb.append("\n\tResponse length: ").append(resContent.length).append(" bytes");
 
 			if (execTime != null && resd.isOneOf(HEADER, ENTITY))
 				sb.append("\n\tExec time: ").append(execTime).append("ms");
@@ -207,23 +207,23 @@ public class BasicRestLogger implements RestLogger {
 				}
 			}
 
-			if (reqBody != null && reqBody.length > 0 && reqd == ENTITY) {
+			if (reqContent != null && reqContent.length > 0 && reqd == ENTITY) {
 				try {
-					sb.append("\n---Request Body UTF-8---");
-					sb.append("\n").append(new String(reqBody, IOUtils.UTF8));
-					sb.append("\n---Request Body Hex---");
-					sb.append("\n").append(toSpacedHex(reqBody));
+					sb.append("\n---Request Content UTF-8---");
+					sb.append("\n").append(new String(reqContent, IOUtils.UTF8));
+					sb.append("\n---Request Content Hex---");
+					sb.append("\n").append(toSpacedHex(reqContent));
 				} catch (Exception e1) {
 					sb.append("\n").append(e1.getLocalizedMessage());
 				}
 			}
 
-			if (resBody != null && resBody.length > 0 && resd == ENTITY) {
+			if (resContent != null && resContent.length > 0 && resd == ENTITY) {
 				try {
-					sb.append("\n---Response Body UTF-8---");
-					sb.append("\n").append(new String(resBody, IOUtils.UTF8));
-					sb.append("\n---Response Body Hex---");
-					sb.append("\n").append(toSpacedHex(resBody));
+					sb.append("\n---Response Content UTF-8---");
+					sb.append("\n").append(new String(resContent, IOUtils.UTF8));
+					sb.append("\n---Response Content Hex---");
+					sb.append("\n").append(toSpacedHex(resContent));
 				} catch (Exception e1) {
 					sb.append(e1.getLocalizedMessage());
 				}
@@ -329,16 +329,16 @@ public class BasicRestLogger implements RestLogger {
 		getLogger().log(level, msg, e);
 	}
 
-	private byte[] getRequestBody(HttpServletRequest req) {
+	private byte[] getRequestContent(HttpServletRequest req) {
 		if (req instanceof CachingHttpServletRequest)
-			return ((CachingHttpServletRequest)req).getBody();
-		return castOrNull(req.getAttribute("RequestBody"), byte[].class);
+			return ((CachingHttpServletRequest)req).getContent();
+		return castOrNull(req.getAttribute("RequestContent"), byte[].class);
 	}
 
-	private byte[] getResponseBody(HttpServletRequest req, HttpServletResponse res) {
+	private byte[] getResponseContent(HttpServletRequest req, HttpServletResponse res) {
 		if (res instanceof CachingHttpServletResponse)
-			return ((CachingHttpServletResponse)res).getBody();
-		return castOrNull(req.getAttribute("ResponseBody"), byte[].class);
+			return ((CachingHttpServletResponse)res).getContent();
+		return castOrNull(req.getAttribute("ResponseContent"), byte[].class);
 	}
 
 	private ThrownStats getThrownStats(Throwable e) {

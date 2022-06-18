@@ -15,7 +15,7 @@ package org.apache.juneau.rest.annotation;
 import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.annotation.Body;
+import org.apache.juneau.http.annotation.Content;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
@@ -60,23 +60,23 @@ public class Restx_Parsers_Test {
 	@Rest(parsers=PA.class)
 	public static class A {
 		@RestPut
-		public String a(@Body String in) {
+		public String a(@Content String in) {
 			return in;
 		}
 		@RestPut(parsers=PB.class)
-		public String b(@Body String in) {
+		public String b(@Content String in) {
 			return in;
 		}
 		@RestPut(parsers={Inherit.class, PB.class,PC.class})
-		public String c(@Body String in) {
+		public String c(@Content String in) {
 			return in;
 		}
 		@RestPut(parsers={Inherit.class, PD.class})
-		public String d(@Body String in) {
+		public String d(@Content String in) {
 			return in;
 		}
 		@RestPut
-		public String e(@Body String in) {
+		public String e(@Content String in) {
 			return in;
 		}
 	}

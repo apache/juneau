@@ -40,7 +40,7 @@ public class RestClient_Config_BeanContext_Test {
 	public static class A extends BasicRestObject {
 		@RestPost
 		public Reader echoBody(org.apache.juneau.rest.RestRequest req) throws IOException {
-			return req.getBody().getReader();
+			return req.getContent().getReader();
 		}
 		@RestGet
 		public String[] checkHeader(org.apache.juneau.rest.RestRequest req) {
@@ -94,7 +94,7 @@ public class RestClient_Config_BeanContext_Test {
 		@RestPost
 		public Reader test(org.apache.juneau.rest.RestRequest req,org.apache.juneau.rest.RestResponse res) throws IOException {
 			res.setHeader("X",req.getHeader("X").orElse(null));
-			return req.getBody().getReader();
+			return req.getContent().getReader();
 		}
 	}
 

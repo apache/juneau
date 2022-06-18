@@ -20,26 +20,26 @@
 		Per-client or per-request headers can be specified using the following methods:
 	</p>
 	<ul class='javatree'>
-		<li class='jc'>{@del oajr.client2.RestClient.Builder}
+		<li class='jc'>{@link oajrc.RestClient.Builder}
 		<ul>
-			<li class='jm'>{@del oajr.client2.RestClient.Builder#header(String,Object) header(String,Object)}
-			<li class='jm'>{@del oajr.client2.RestClient.Builder#header(String,Object,HttpPartSchema) header(String,Object,HttpPartSchema)}
-			<li class='jm'>{@del oajr.client2.RestClient.Builder#header(String,Supplier) header(String,Supplier&lt;?&gt;)}
-			<li class='jm'>{@del oajr.client2.RestClient.Builder#header(String,Supplier,HttpPartSchema) header(String,Supplier&lt;?&gt;,HttpPartSchema)}
-			<li class='jm'>{@del oajr.client2.RestClient.Builder#header(Header) header(Header)}
-			<li class='jm'>{@del oajr.client2.RestClient.Builder#headers(Object...) headers(Object...)}
-			<li class='jm'>{@del oajr.client2.RestClient.Builder#headerPairs(Object...) headerPairs(Object...)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#header(String,Object) header(String,Object)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#header(String,Object,HttpPartSchema) header(String,Object,HttpPartSchema)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#header(String,Supplier) header(String,Supplier&lt;?&gt;)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#header(String,Supplier,HttpPartSchema) header(String,Supplier&lt;?&gt;,HttpPartSchema)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#header(Header) header(Header)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#headers(Object...) headers(Object...)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#headerPairs(Object...) headerPairs(Object...)}
 		</ul>
-		<li class='jc'>{@del oajr.client2.RestRequest}
+		<li class='jc'>{@link oajrc.RestRequest}
 		<ul>
-			<li class='jm'>{@del oajr.client2.RestRequest#header(String,Object) header(String,Object)}
-			<li class='jm'>{@del oajr.client2.RestRequest#header(String,Object,HttpPartSchema) header(String,Object,HttpPartSchema)}
-			<li class='jm'>{@del oajr.client2.RestRequest#header(AddFlag,String,Object) header(AddFlag,String,Object)}
-			<li class='jm'>{@del oajr.client2.RestRequest#header(AddFlag,String,Object,HttpPartSchema) header(AddFlag,String,Object,HttpPartSchema)}
-			<li class='jm'>{@del oajr.client2.RestRequest#header(Header) header(Header)}
-			<li class='jm'>{@del oajr.client2.RestRequest#headers(Object...) headers(Object...)}
-			<li class='jm'>{@del oajr.client2.RestRequest#headers(AddFlag,Object...) headers(AddFlag,Object...)}
-			<li class='jm'>{@del oajr.client2.RestRequest#headerPairs(Object...) headers(Object...)}
+			<li class='jm'>{@link oajrc.RestRequest#header(String,Object) header(String,Object)}
+			<li class='jm'>{@link oajrc.RestRequest#header(String,Object,HttpPartSchema) header(String,Object,HttpPartSchema)}
+			<li class='jm'>{@link oajrc.RestRequest#header(AddFlag,String,Object) header(AddFlag,String,Object)}
+			<li class='jm'>{@link oajrc.RestRequest#header(AddFlag,String,Object,HttpPartSchema) header(AddFlag,String,Object,HttpPartSchema)}
+			<li class='jm'>{@link oajrc.RestRequest#header(Header) header(Header)}
+			<li class='jm'>{@link oajrc.RestRequest#headers(Object...) headers(Object...)}
+			<li class='jm'>{@link oajrc.RestRequest#headers(AddFlag,Object...) headers(AddFlag,Object...)}
+			<li class='jm'>{@link oajrc.RestRequest#headerPairs(Object...) headers(Object...)}
 		</ul>
 	</ul>
 	
@@ -49,12 +49,12 @@
 		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().header(<js>"Foo"</js>,<js>"bar"</js>).build();
 		|
 		|	<jc>// Or do it on every request.</jc>
-		|	String <jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).header(<js>"Foo"</js>,<js>"bar"</js>).run().getBody().asString();
+		|	String <jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).header(<js>"Foo"</js>,<js>"bar"</js>).run().getContent().asString();
 	</p>
 	
 	<p>
-		{@del oajr.client2.RestClient.Builder#headers(Object...) headers(Object...)} allows you to pass in a variety
-		of header objects, and {@del oajr.client2.RestClient.Builder#headerPairs(Object...) headerPairs(Object...)} allows
+		{@link oajrc.RestClient.Builder#headers(Object...) headers(Object...)} allows you to pass in a variety
+		of header objects, and {@link oajrc.RestClient.Builder#headerPairs(Object...) headerPairs(Object...)} allows
 		you to specify several headers in a compact fashion.
 	</p>
 	
@@ -77,7 +77,7 @@
 	
 	<p>
 		Additionally, methods are provided on the client builder and per request for all standard HTTP headers
-		such as {@del oajr.client2.RestClient.Builder#authorization(Object) authorization(Object)}.
+		such as {@link oajrc.RestClient.Builder#authorization(Object) authorization(Object)}.
 	</p>
 	
 	<h5 class='figure'>Example:</h5>
@@ -86,10 +86,10 @@
 		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().authorization(<js>"Foo"</js>).build();
 		|
 		|	<jc>// Or do it per-request.</jc>
-		|	String <jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).authorization(<js>"Foo"</js>).run().getBody().asString();
+		|	String <jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).authorization(<js>"Foo"</js>).run().getContent().asString();
 		|
 		|	<jc>// Or use an HttpHeader.</jc>
-		|	<jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).headers(Authorization.<jsm>of</jsm>(<js>"Foo"</js>)).run().getBody().asString();
+		|	<jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).headers(Authorization.<jsm>of</jsm>(<js>"Foo"</js>)).run().getContent().asString();
 	</p>
 	
 	<p>

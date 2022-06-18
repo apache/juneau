@@ -20,7 +20,7 @@ import java.io.*;
 
 import javax.servlet.http.*;
 
-import org.apache.juneau.http.annotation.Body;
+import org.apache.juneau.http.annotation.Content;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.http.annotation.Query;
@@ -40,7 +40,7 @@ public class Rest_PredefinedStatusCodes_Test {
 	@Rest
 	public static class A {
 		@RestPut
-		public Reader a(@Body String b) {
+		public Reader a(@Content String b) {
 			return reader(b);
 		}
 	}
@@ -60,21 +60,21 @@ public class Rest_PredefinedStatusCodes_Test {
 	@Rest(parsers=JsonParser.class)
 	public static class B {
 		@RestPut
-		public String a(@Body B1 in) {
+		public String a(@Content B1 in) {
 			return "OK";
 		}
 		public static class B1 {
 			public String f1;
 		}
 		@RestPut
-		public String b(@Body B2 in) {
+		public String b(@Content B2 in) {
 			return "OK";
 		}
 		public static class B2 {
 			public int f1;
 		}
 		@RestPut
-		public String c(@Body B3 in) {
+		public String c(@Content B3 in) {
 			return "OK";
 		}
 		public static class B3 {
@@ -82,21 +82,21 @@ public class Rest_PredefinedStatusCodes_Test {
 			private B3(){}
 		}
 		@RestPut
-		public String d(@Body B4 in) {
+		public String d(@Content B4 in) {
 			return "OK";
 		}
 		public class B4 {
 			public B4(){}
 		}
 		@RestPut
-		public String e(@Body B5 in) {
+		public String e(@Content B5 in) {
 			return "OK";
 		}
 		static class B5 {
 			public B5(){}
 		}
 		@RestPut
-		public String f(@Body B6 in) {
+		public String f(@Content B6 in) {
 			return "OK";
 		}
 		public static class B6 {

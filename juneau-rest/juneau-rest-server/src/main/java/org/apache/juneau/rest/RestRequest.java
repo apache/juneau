@@ -52,7 +52,7 @@ import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.annotation.Body;
+import org.apache.juneau.http.annotation.Content;
 import org.apache.juneau.http.annotation.FormData;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.annotation.Path;
@@ -107,9 +107,9 @@ import org.apache.juneau.utils.*;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestRequest}
  * 	<ul class='spaced-list'>
- * 		<li>Methods for accessing the request body:
+ * 		<li>Methods for accessing the request content:
  * 		<ul class='javatreec'>
- * 			<li class='jm'>{@link RestRequest#getBody() getBody()}
+ * 			<li class='jm'>{@link RestRequest#getContent() getContent()}
  * 			<li class='jm'>{@link RestRequest#getInputStream() getInputStream()}
  * 			<li class='jm'>{@link RestRequest#getReader() getReader()}
  * 		</ul>
@@ -148,7 +148,7 @@ import org.apache.juneau.utils.*;
  * 		</ul>
  * 		<li>Methods for assertions:
  * 		<ul class='javatreec'>
- * 			<li class='jm'>{@link RestRequest#assertBody() assertBody()}
+ * 			<li class='jm'>{@link RestRequest#assertContent() assertContent()}
  * 			<li class='jm'>{@link RestRequest#assertCharset() assertCharset()}
  * 			<li class='jm'>{@link RestRequest#assertFormParam(String) assertFormParam(String)}
  * 			<li class='jm'>{@link RestRequest#assertHeader(String) assertHeader(String)}
@@ -205,7 +205,7 @@ public final class RestRequest {
 	private HttpServletRequest inner;
 	private final RestContext context;
 	private final RestOpContext opContext;
-	private final RequestBody body;
+	private final RequestContent content;
 	private final BeanSession beanSession;
 	private final RequestQueryParams queryParams;
 	private final RequestPathParams pathParams;
@@ -239,13 +239,13 @@ public final class RestRequest {
 
 		headers = new RequestHeaders(this, queryParams, false);
 
-		body = new RequestBody(this);
+		content = new RequestContent(this);
 
-		if (context.isAllowBodyParam()) {
-			String b = queryParams.get("body").asString().orElse(null);
+		if (context.isAllowContentParam()) {
+			String b = queryParams.get("content").asString().orElse(null);
 			if (b != null) {
 				headers.set("Content-Type", UonSerializer.DEFAULT.getResponseContentType());
-				body.mediaType(MediaType.UON).parser(UonParser.DEFAULT).body(b.getBytes(UTF8));
+				content.mediaType(MediaType.UON).parser(UonParser.DEFAULT).content(b.getBytes(UTF8));
 			}
 		}
 
@@ -266,7 +266,7 @@ public final class RestRequest {
 			.addDefault(context.getDefaultRequestHeaders().getAll())
 			.parser(partParserSession);
 
-		body
+		content
 			.encoders(opContext.getEncoders())
 			.parsers(opContext.getParsers())
 			.maxInput(opContext.getMaxInput());
@@ -314,7 +314,7 @@ public final class RestRequest {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Validates the request body contains "foo".</jc>
+	 * 	<jc>// Validates the request content contains "foo".</jc>
 	 * 	<jv>request</jv>
 	 * 		.assertRequestLine().protocol().minor().is(1);
 	 * </p>
@@ -326,19 +326,19 @@ public final class RestRequest {
 	}
 
 	/**
-	 * Returns a fluent assertion for the request body.
+	 * Returns a fluent assertion for the request content.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Validates the request body contains "foo".</jc>
+	 * 	<jc>// Validates the request content contains "foo".</jc>
 	 * 	<jv>request</jv>
-	 * 		.assertBody().asString().is(<js>"foo"</js>);
+	 * 		.assertContent().asString().is(<js>"foo"</js>);
 	 * </p>
 	 *
-	 * @return A new fluent assertion on the body, never <jk>null</jk>.
+	 * @return A new fluent assertion on the content, never <jk>null</jk>.
 	 */
-	public FluentRequestBodyAssertion<RestRequest> assertBody() {
-		return new FluentRequestBodyAssertion<>(getBody(), this);
+	public FluentRequestContentAssertion<RestRequest> assertContent() {
+		return new FluentRequestContentAssertion<>(getContent(), this);
 	}
 
 	/**
@@ -496,9 +496,9 @@ public final class RestRequest {
 	}
 
 	/**
-	 * Sets the charset to expect on the request body.
+	 * Sets the charset to expect on the request content.
 	 *
-	 * @param value The new value to use for the request body.
+	 * @param value The new value to use for the request content.
 	 */
 	public void setCharset(Charset value) {
 		this.charset = value;
@@ -507,7 +507,7 @@ public final class RestRequest {
 	/**
 	 * Returns the charset specified on the <c>Content-Type</c> header, or <js>"UTF-8"</js> if not specified.
 	 *
-	 * @return The charset to use to decode the request body.
+	 * @return The charset to use to decode the request content.
 	 */
 	public Charset getCharset() {
 		if (charset == null) {
@@ -785,7 +785,7 @@ public final class RestRequest {
 	 * Returns a {@link RequestFormParams} object that encapsulates access to form post parameters.
 	 *
 	 * <p>
-	 * Similar to {@link HttpServletRequest#getParameterMap()}, but only looks for form data in the HTTP body.
+	 * Similar to {@link HttpServletRequest#getParameterMap()}, but only looks for form data in the HTTP content.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -944,31 +944,31 @@ public final class RestRequest {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Body methods
+	// Content methods
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Request body.
+	 * Request content.
 	 *
 	 * <p>
-	 * Returns a {@link RequestBody} object that encapsulates access to the HTTP request body.
+	 * Returns a {@link RequestContent} object that encapsulates access to the HTTP request content.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<ja>@RestPost</ja>(...)
 	 * 	<jk>public void</jk> doPost(RestRequest <jv>req</jv>) {
 	 *
-	 * 		<jc>// Convert body to a linked list of Person objects.</jc>
-	 * 		List&lt;Person&gt; <jv>list</jv> = <jv>req</jv>.getBody().as(LinkedList.<jk>class</jk>, Person.<jk>class</jk>);
+	 * 		<jc>// Convert content to a linked list of Person objects.</jc>
+	 * 		List&lt;Person&gt; <jv>list</jv> = <jv>req</jv>.getContent().as(LinkedList.<jk>class</jk>, Person.<jk>class</jk>);
 	 * 		..
 	 * 	}
 	 * </p>
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The {@link RequestBody} object can also be passed as a parameter on the method.
+	 * 		The {@link RequestContent} object can also be passed as a parameter on the method.
 	 * 	<li class='note'>
-	 * 		The {@link Body @Body} annotation can be used to access the body as well.
+	 * 		The {@link Content @Content} annotation can be used to access the content as well.
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
@@ -976,47 +976,47 @@ public final class RestRequest {
 	 * </ul>
 	 *
 	 * @return
-	 * 	The body of this HTTP request.
+	 * 	The content of this HTTP request.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public RequestBody getBody() {
-		return body;
+	public RequestContent getContent() {
+		return content;
 	}
 
 	/**
-	 * Returns the HTTP body content as a {@link Reader}.
+	 * Returns the HTTP content content as a {@link Reader}.
 	 *
 	 * <p>
-	 * If {@code allowHeaderParams} init parameter is true, then first looks for {@code &body=xxx} in the URL query
+	 * If {@code allowHeaderParams} init parameter is true, then first looks for {@code &content=xxx} in the URL query
 	 * string.
 	 *
 	 * <p>
 	 * Automatically handles GZipped input streams.
 	 *
 	 * <p>
-	 * This method is equivalent to calling <c>getBody().getReader()</c>.
+	 * This method is equivalent to calling <c>getContent().getReader()</c>.
 	 *
-	 * @return The HTTP body content as a {@link Reader}.
-	 * @throws IOException If body could not be read.
+	 * @return The HTTP content content as a {@link Reader}.
+	 * @throws IOException If content could not be read.
 	 */
 	public BufferedReader getReader() throws IOException {
-		return getBody().getReader();
+		return getContent().getReader();
 	}
 
 	/**
-	 * Returns the HTTP body content as an {@link InputStream}.
+	 * Returns the HTTP content content as an {@link InputStream}.
 	 *
 	 * <p>
 	 * Automatically handles GZipped input streams.
 	 *
 	 * <p>
-	 * This method is equivalent to calling <c>getBody().getInputStream()</c>.
+	 * This method is equivalent to calling <c>getContent().getInputStream()</c>.
 	 *
 	 * @return The negotiated input stream.
 	 * @throws IOException If any error occurred while trying to get the input stream or wrap it in the GZIP wrapper.
 	 */
 	public ServletInputStream getInputStream() throws IOException {
-		return getBody().getInputStream();
+		return getContent().getInputStream();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1416,7 +1416,7 @@ public final class RestRequest {
 	 *
 	 * @param b The attribute value.
 	 * @return This object.
-	 * @throws IOException If body could not be cached.
+	 * @throws IOException If content could not be cached.
 	 */
 	public RestRequest setDebug(Boolean b) throws IOException {
 		setAttribute("Debug", b);
@@ -1429,7 +1429,7 @@ public final class RestRequest {
 	 * Shortcut for calling <c>setDebug(<jk>true</jk>)</c>.
 	 *
 	 * @return This object.
-	 * @throws IOException If body could not be cached.
+	 * @throws IOException If content could not be cached.
 	 */
 	public RestRequest setDebug() throws IOException {
 		return setDebug(true);
@@ -1619,7 +1619,7 @@ public final class RestRequest {
 							ClassMeta<?> type = bs.getClassMeta(method.getGenericReturnType());
 							HttpPartType pt = pm.getPartType();
 							if (pt == HttpPartType.BODY)
-								return getBody().setSchema(schema).as(type);
+								return getContent().setSchema(schema).as(type);
 							if (pt == QUERY)
 								return getQueryParam(name).parser(pp).schema(schema).as(type).orElse(null);
 							if (pt == FORMDATA)
@@ -1702,10 +1702,10 @@ public final class RestRequest {
 		String m = getMethod();
 		if (m.equals("PUT") || m.equals("POST")) {
 			try {
-				sb.append("---Body UTF-8---\n");
-				sb.append(body.asString()).append("\n");
-				sb.append("---Body Hex---\n");
-				sb.append(body.asSpacedHex()).append("\n");
+				sb.append("---Content UTF-8---\n");
+				sb.append(content.asString()).append("\n");
+				sb.append("---Content Hex---\n");
+				sb.append(content.asSpacedHex()).append("\n");
 			} catch (Exception e1) {
 				sb.append(e1.getLocalizedMessage());
 			}

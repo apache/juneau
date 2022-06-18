@@ -32,7 +32,7 @@ import org.apache.juneau.assertions.*;
  * 	<ja>@Rest</ja>
  * 	<jk>public class</jk> MyRest <jk>extends</jk> BasicRestObject <jk>implements</jk> BasicUniversalConfig {
  * 		<ja>@RestPost</ja>(<js>"/bean"</js>)
- * 		<jk>public</jk> Bean postBean(<ja>@Body</ja> Bean <jv>bean</jv>) {
+ * 		<jk>public</jk> Bean postBean(<ja>@Content</ja> Bean <jv>bean</jv>) {
  * 			<jk>return</jk> <jv>bean</jv>;
  * 		}
  * 	}

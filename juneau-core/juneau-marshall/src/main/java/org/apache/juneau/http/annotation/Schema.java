@@ -49,7 +49,7 @@ import org.apache.juneau.oapi.*;
  * <p class='bjava'>
  * 	<jc>// A request body consisting of an array of arrays, the internal
  * 	// array being of type integer, numbers must be between 0 and 63 (inclusive)</jc>
- * 	<ja>@Body</ja>(
+ * 	<ja>@Content</ja>(
  * 		schema=<ja>@Schema</ja>(
  * 			items=<ja>@Items</ja>(
  * 				type=<js>"array"</js>,
@@ -300,7 +300,7 @@ public @interface Schema {
 	 * 	<jc>// Used on parameter</jc>
 	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(
-	 * 		<ja>@Body</ja> <ja>@Schema</ja>(description=<js>"Pet object to add to the store"</js>) Pet <jv>input</jv>
+	 * 		<ja>@Content</ja> <ja>@Schema</ja>(description=<js>"Pet object to add to the store"</js>) Pet <jv>input</jv>
 	 * 	) {...}
 	 * </p>
 	 * <p class='bjava'>
@@ -308,7 +308,7 @@ public @interface Schema {
 	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(Pet <jv>input</jv>) {...}
 	 *
-	 * 	<ja>@Body</ja> <ja>@Schema</ja>(description=<js>"Pet object to add to the store"</js>)
+	 * 	<ja>@Content</ja> <ja>@Schema</ja>(description=<js>"Pet object to add to the store"</js>)
 	 * 	<jk>public class</jk> Pet {...}
 	 * </p>
 	 *
@@ -457,7 +457,7 @@ public @interface Schema {
 	 * 	<jc>// Used on parameter</jc>
 	 * 	<ja>@RestPut</ja>
 	 * 	<jk>public void</jk> setAge(
-	 * 		<ja>@Body</ja> <ja>@Schema</ja>(type=<js>"integer"</js>, format=<js>"int32"</js>) String <jv>input</jv>
+	 * 		<ja>@Content</ja> <ja>@Schema</ja>(type=<js>"integer"</js>, format=<js>"int32"</js>) String <jv>input</jv>
 	 * 	) {...}
 	 * </p>
 	 *
@@ -965,7 +965,7 @@ public @interface Schema {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<ja>@RestPut</ja>
-	 * 	<jk>public void</jk> doPut(<ja>@Body</ja> <ja>@Schema</ja>(pattern=<js>"/\\w+\\.\\d+/"</js>) String <jv>input</jv>) {...}
+	 * 	<jk>public void</jk> doPut(<ja>@Content</ja> <ja>@Schema</ja>(pattern=<js>"/\\w+\\.\\d+/"</js>) String <jv>input</jv>) {...}
 	 * </p>
 	 *
 	 * <p>
@@ -1034,7 +1034,7 @@ public @interface Schema {
 	 * 	<jc>// Used on parameter</jc>
 	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(
-	 * 		<ja>@Body</ja> <ja>@Schema</ja>(required=<jk>true</jk>) Pet <jv>input</jv>
+	 * 		<ja>@Content</ja> <ja>@Schema</ja>(required=<jk>true</jk>) Pet <jv>input</jv>
 	 * 	) {...}
 	 * </p>
 	 * <p class='bjava'>
@@ -1042,7 +1042,7 @@ public @interface Schema {
 	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(Pet <jv>input</jv>) {...}
 	 *
-	 * 	<ja>@Body</ja>(required=<jk>true</jk>)
+	 * 	<ja>@Content</ja>(required=<jk>true</jk>)
 	 * 	<jk>public class</jk> Pet {...}
 	 * </p>
 	 *
@@ -1120,7 +1120,7 @@ public @interface Schema {
 	 * 	<jc>// Used on parameter</jc>
 	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(
-	 * 		<ja>@Body</ja> <ja>@Schema</ja>(type=<js>"object"</js>) Pet <jv>input</jv>
+	 * 		<ja>@Content</ja> <ja>@Schema</ja>(type=<js>"object"</js>) Pet <jv>input</jv>
 	 * 	) {...}
 	 * </p>
 	 * <p class='bjava'>
@@ -1128,7 +1128,7 @@ public @interface Schema {
 	 * 	<ja>@RestPost</ja>
 	 * 	<jk>public void</jk> addPet(Pet <jv>input</jv>) {...}
 	 *
-	 * 	<ja>@Body</ja> <ja>@Schema</ja>(type=<js>"object"</js>)
+	 * 	<ja>@Content</ja> <ja>@Schema</ja>(type=<js>"object"</js>)
 	 * 	<jk>public class</jk> Pet {...}
 	 * </p>
 	 *

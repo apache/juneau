@@ -2345,155 +2345,155 @@ public class ThirdPartyProxyTest extends RestTestcase {
 		// Various primitives
 
 		@RemoteOp(method="POST", path="/setInt")
-		void setInt(@Body int x) throws AssertionError;
+		void setInt(@Content int x) throws AssertionError;
 
 		@RemoteOp(method="POST", path="/setInteger")
-		void setInteger(@Body Integer x);
+		void setInteger(@Content Integer x);
 
 		@RemoteOp(method="POST", path="/setBoolean")
-		void setBoolean(@Body boolean x);
+		void setBoolean(@Content boolean x);
 
 		@RemoteOp(method="POST", path="/setFloat")
-		void setFloat(@Body float x);
+		void setFloat(@Content float x);
 
 		@RemoteOp(method="POST", path="/setFloatObject")
-		void setFloatObject(@Body Float x);
+		void setFloatObject(@Content Float x);
 
 		@RemoteOp(method="POST", path="/setString")
-		void setString(@Body String x);
+		void setString(@Content String x);
 
 		@RemoteOp(method="POST", path="/setNullString")
-		void setNullString(@Body String x) throws AssertionError;
+		void setNullString(@Content String x) throws AssertionError;
 
 		@RemoteOp(method="POST", path="/setInt3dArray")
-		String setInt3dArray(@Body int[][][] x, @org.apache.juneau.http.annotation.Query("I") int i);
+		String setInt3dArray(@Content int[][][] x, @org.apache.juneau.http.annotation.Query("I") int i);
 
 		@RemoteOp(method="POST", path="/setInteger3dArray")
-		void setInteger3dArray(@Body Integer[][][] x);
+		void setInteger3dArray(@Content Integer[][][] x);
 
 		@RemoteOp(method="POST", path="/setString3dArray")
-		void setString3dArray(@Body String[][][] x);
+		void setString3dArray(@Content String[][][] x);
 
 		@RemoteOp(method="POST", path="/setIntegerList")
-		void setIntegerList(@Body List<Integer> x);
+		void setIntegerList(@Content List<Integer> x);
 
 		@RemoteOp(method="POST", path="/setInteger3dList")
-		void setInteger3dList(@Body List<List<List<Integer>>> x);
+		void setInteger3dList(@Content List<List<List<Integer>>> x);
 
 		@RemoteOp(method="POST", path="/setInteger1d3dList")
-		void setInteger1d3dList(@Body List<Integer[][][]> x);
+		void setInteger1d3dList(@Content List<Integer[][][]> x);
 
 		@RemoteOp(method="POST", path="/setInt1d3dList")
-		void setInt1d3dList(@Body List<int[][][]> x);
+		void setInt1d3dList(@Content List<int[][][]> x);
 
 		@RemoteOp(method="POST", path="/setStringList")
-		void setStringList(@Body List<String> x);
+		void setStringList(@Content List<String> x);
 
 		// Beans
 
 		@RemoteOp(method="POST", path="/setBean")
-		void setBean(@Body ABean x);
+		void setBean(@Content ABean x);
 
 		@RemoteOp(method="POST", path="/setBean3dArray")
-		void setBean3dArray(@Body ABean[][][] x);
+		void setBean3dArray(@Content ABean[][][] x);
 
 		@RemoteOp(method="POST", path="/setBeanList")
-		void setBeanList(@Body List<ABean> x);
+		void setBeanList(@Content List<ABean> x);
 
 		@RemoteOp(method="POST", path="/setBean1d3dList")
-		void setBean1d3dList(@Body List<ABean[][][]> x);
+		void setBean1d3dList(@Content List<ABean[][][]> x);
 
 		@RemoteOp(method="POST", path="/setBeanMap")
-		void setBeanMap(@Body Map<String,ABean> x);
+		void setBeanMap(@Content Map<String,ABean> x);
 
 		@RemoteOp(method="POST", path="/setBeanListMap")
-		void setBeanListMap(@Body Map<String,List<ABean>> x);
+		void setBeanListMap(@Content Map<String,List<ABean>> x);
 
 		@RemoteOp(method="POST", path="/setBean1d3dListMap")
-		void setBean1d3dListMap(@Body Map<String,List<ABean[][][]>> x);
+		void setBean1d3dListMap(@Content Map<String,List<ABean[][][]>> x);
 
 		@RemoteOp(method="POST", path="/setBeanListMapIntegerKeys")
-		void setBeanListMapIntegerKeys(@Body Map<Integer,List<ABean>> x);
+		void setBeanListMapIntegerKeys(@Content Map<Integer,List<ABean>> x);
 
 		// Typed beans
 
 		@RemoteOp(method="POST", path="/setTypedBean")
-		void setTypedBean(@Body TypedBean x);
+		void setTypedBean(@Content TypedBean x);
 
 		@RemoteOp(method="POST", path="/setTypedBean3dArray")
-		void setTypedBean3dArray(@Body TypedBean[][][] x);
+		void setTypedBean3dArray(@Content TypedBean[][][] x);
 
 		@RemoteOp(method="POST", path="/setTypedBeanList")
-		void setTypedBeanList(@Body List<TypedBean> x);
+		void setTypedBeanList(@Content List<TypedBean> x);
 
 		@RemoteOp(method="POST", path="/setTypedBean1d3dList")
-		void setTypedBean1d3dList(@Body List<TypedBean[][][]> x);
+		void setTypedBean1d3dList(@Content List<TypedBean[][][]> x);
 
 		@RemoteOp(method="POST", path="/setTypedBeanMap")
-		void setTypedBeanMap(@Body Map<String,TypedBean> x);
+		void setTypedBeanMap(@Content Map<String,TypedBean> x);
 
 		@RemoteOp(method="POST", path="/setTypedBeanListMap")
-		void setTypedBeanListMap(@Body Map<String,List<TypedBean>> x);
+		void setTypedBeanListMap(@Content Map<String,List<TypedBean>> x);
 
 		@RemoteOp(method="POST", path="/setTypedBean1d3dListMap")
-		void setTypedBean1d3dListMap(@Body Map<String,List<TypedBean[][][]>> x);
+		void setTypedBean1d3dListMap(@Content Map<String,List<TypedBean[][][]>> x);
 
 		@RemoteOp(method="POST", path="/setTypedBeanListMapIntegerKeys")
-		void setTypedBeanListMapIntegerKeys(@Body Map<Integer,List<TypedBean>> x);
+		void setTypedBeanListMapIntegerKeys(@Content Map<Integer,List<TypedBean>> x);
 
 		// Swapped POJOs
 
 		@RemoteOp(method="POST", path="/setSwappedObject")
-		void setSwappedObject(@Body SwappedObject x);
+		void setSwappedObject(@Content SwappedObject x);
 
 		@RemoteOp(method="POST", path="/setSwappedObject3dArray")
-		void setSwappedObject3dArray(@Body SwappedObject[][][] x);
+		void setSwappedObject3dArray(@Content SwappedObject[][][] x);
 
 		@RemoteOp(method="POST", path="/setSwappedObjectMap")
-		void setSwappedObjectMap(@Body Map<SwappedObject,SwappedObject> x);
+		void setSwappedObjectMap(@Content Map<SwappedObject,SwappedObject> x);
 
 		@RemoteOp(method="POST", path="/setSwappedObject3dMap")
-		void setSwappedObject3dMap(@Body Map<SwappedObject,SwappedObject[][][]> x);
+		void setSwappedObject3dMap(@Content Map<SwappedObject,SwappedObject[][][]> x);
 
 		// Implicit swapped POJOs
 
 		@RemoteOp(method="POST", path="/setImplicitSwappedObject")
-		void setImplicitSwappedObject(@Body ImplicitSwappedObject x);
+		void setImplicitSwappedObject(@Content ImplicitSwappedObject x);
 
 		@RemoteOp(method="POST", path="/setImplicitSwappedObject3dArray")
-		void setImplicitSwappedObject3dArray(@Body ImplicitSwappedObject[][][] x);
+		void setImplicitSwappedObject3dArray(@Content ImplicitSwappedObject[][][] x);
 
 		@RemoteOp(method="POST", path="/setImplicitSwappedObjectMap")
-		void setImplicitSwappedObjectMap(@Body Map<ImplicitSwappedObject,ImplicitSwappedObject> x);
+		void setImplicitSwappedObjectMap(@Content Map<ImplicitSwappedObject,ImplicitSwappedObject> x);
 
 		@RemoteOp(method="POST", path="/setImplicitSwappedObject3dMap")
-		void setImplicitSwappedObject3dMap(@Body Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> x);
+		void setImplicitSwappedObject3dMap(@Content Map<ImplicitSwappedObject,ImplicitSwappedObject[][][]> x);
 
 		// Enums
 
 		@RemoteOp(method="POST", path="/setEnum")
-		void setEnum(@Body TestEnum x);
+		void setEnum(@Content TestEnum x);
 
 		@RemoteOp(method="POST", path="/setEnum3d")
-		void setEnum3d(@Body TestEnum[][][] x);
+		void setEnum3d(@Content TestEnum[][][] x);
 
 		@RemoteOp(method="POST", path="/setEnumList")
-		void setEnumList(@Body List<TestEnum> x);
+		void setEnumList(@Content List<TestEnum> x);
 
 		@RemoteOp(method="POST", path="/setEnum3dList")
-		void setEnum3dList(@Body List<List<List<TestEnum>>> x);
+		void setEnum3dList(@Content List<List<List<TestEnum>>> x);
 
 		@RemoteOp(method="POST", path="/setEnum1d3dList")
-		void setEnum1d3dList(@Body List<TestEnum[][][]> x);
+		void setEnum1d3dList(@Content List<TestEnum[][][]> x);
 
 		@RemoteOp(method="POST", path="/setEnumMap")
-		void setEnumMap(@Body Map<TestEnum,TestEnum> x);
+		void setEnumMap(@Content Map<TestEnum,TestEnum> x);
 
 		@RemoteOp(method="POST", path="/setEnum3dArrayMap")
-		void setEnum3dArrayMap(@Body Map<TestEnum,TestEnum[][][]> x);
+		void setEnum3dArrayMap(@Content Map<TestEnum,TestEnum[][][]> x);
 
 		@RemoteOp(method="POST", path="/setEnum1d3dListMap")
-		void setEnum1d3dListMap(@Body Map<TestEnum,List<TestEnum[][][]>> x);
+		void setEnum1d3dListMap(@Content Map<TestEnum,List<TestEnum[][][]>> x);
 
 		// Method returns status code
 

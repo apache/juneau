@@ -41,7 +41,7 @@ import org.apache.juneau.annotation.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<ja>@RestPost</ja>
- * 	<jk>public void</jk> addPet(<ja>@Body</ja> Pet <jv>pet</jv>, <ja>@StatusCode</ja> Value&lt;Integer&gt; <jv>status</jv>) {
+ * 	<jk>public void</jk> addPet(<ja>@Content</ja> Pet <jv>pet</jv>, <ja>@StatusCode</ja> Value&lt;Integer&gt; <jv>status</jv>) {
  * 		<jsm>addPet</jsm>(<jv>pet</jv>);
  * 		<jv>status</jv>.set(200);
  * 	}

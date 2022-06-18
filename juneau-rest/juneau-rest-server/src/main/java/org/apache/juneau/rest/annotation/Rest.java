@@ -82,15 +82,15 @@ public @interface Rest {
 	Class<? extends RestContext.Builder> builder() default RestContext.Builder.Void.class;
 
 	/**
-	 * Disable body URL parameter.
+	 * Disable content URL parameter.
 	 *
 	 * <p>
-	 * When enabled, the HTTP body content on PUT and POST requests can be passed in as text using the <js>"body"</js>
+	 * When enabled, the HTTP content content on PUT and POST requests can be passed in as text using the <js>"content"</js>
 	 * URL parameter.
 	 * <br>
 	 * For example:
 	 * <p class='burlenc'>
-	 *  ?body=(name='John%20Smith',age=45)
+	 *  ?content=(name='John%20Smith',age=45)
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -100,12 +100,12 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#disableBodyParam()}
+	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#disableContentParam()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
 	 */
-	String disableBodyParam() default "";
+	String disableContentParam() default "";
 
 	/**
 	 * Allowed header URL parameters.
@@ -881,7 +881,7 @@ public @interface Rest {
 	 * Specifies the parsers for converting HTTP request bodies into POJOs.
 	 *
 	 * <p>
-	 * Parsers are used to convert the body of HTTP requests into POJOs.
+	 * Parsers are used to convert the content of HTTP requests into POJOs.
 	 * <br>Any of the Juneau framework parsers can be used in this setting.
 	 * <br>The parser selected is based on the request <c>Content-Type</c> header matched against the values returned by the following method
 	 * using a best-match algorithm:

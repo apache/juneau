@@ -568,7 +568,7 @@ public @interface RestOp {
 	 * 		<c>RestClient.getRemoteInterface(Class&lt;T&gt; interfaceClass, String url)</c>.
 	 * 		<br>This allows you to construct client-side interface proxies using REST as a transport medium.
 	 * 		<br>Conceptually, this is simply a fancy <c>POST</c> against the url <js>"/{path}/{javaMethodName}"</js>
-	 * 		where the arguments are marshalled from the client to the server as an HTTP body containing an array of
+	 * 		where the arguments are marshalled from the client to the server as an HTTP content containing an array of
 	 * 		objects, passed to the method as arguments, and then the resulting object is marshalled back to the client.
 	 * 	<li>
 	 * 		Anything else
@@ -595,7 +595,7 @@ public @interface RestOp {
 	 * Specifies the parsers for converting HTTP request bodies into POJOs for this method.
 	 *
 	 * <p>
-	 * Parsers are used to convert the body of HTTP requests into POJOs.
+	 * Parsers are used to convert the content of HTTP requests into POJOs.
 	 * <br>Any of the Juneau framework parsers can be used in this setting.
 	 * <br>The parser selected is based on the request <c>Content-Type</c> header matched against the values returned by the following method
 	 * using a best-match algorithm:

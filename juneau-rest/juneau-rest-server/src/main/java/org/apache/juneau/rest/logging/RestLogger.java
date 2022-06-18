@@ -95,7 +95,7 @@ public interface RestLogger {
 	 * <ul class='values'>
 	 * 	<li>{@link RestLoggingDetail#STATUS_LINE "STATUS_LINE"} (default) - Log only the status line.
 	 * 	<li>{@link RestLoggingDetail#HEADER "HEADER"} - Log the status line and headers.
-	 * 	<li>{@link RestLoggingDetail#ENTITY "ENTITY"} - Log the status line and headers and body if available.
+	 * 	<li>{@link RestLoggingDetail#ENTITY "ENTITY"} - Log the status line and headers and content if available.
 	 * </ul>
 	 */
 	public static final String SP_requestDetail = "juneau.restLogger.requestDetail";
@@ -108,7 +108,7 @@ public interface RestLogger {
 	 * <ul class='values'>
 	 * 	<li>{@link RestLoggingDetail#STATUS_LINE "STATUS_LINE"} (default) - Log only the status line.
 	 * 	<li>{@link RestLoggingDetail#HEADER "HEADER"} - Log the status line and headers.
-	 * 	<li>{@link RestLoggingDetail#ENTITY "ENTITY"} - Log the status line and headers and body if available.
+	 * 	<li>{@link RestLoggingDetail#ENTITY "ENTITY"} - Log the status line and headers and content if available.
 	 * </ul>
 	 */
 	public static final String SP_responseDetail = "juneau.restLogger.responseDetail";
@@ -352,7 +352,7 @@ public interface RestLogger {
 		 * <ul class='values'>
 		 * 	<li>{@link RestLoggingDetail#STATUS_LINE STATUS_LINE} - Log only the status line.
 		 * 	<li>{@link RestLoggingDetail#HEADER HEADER} - Log the status line and headers.
-		 * 	<li>{@link RestLoggingDetail#ENTITY ENTITY} - Log the status line and headers and body if available.
+		 * 	<li>{@link RestLoggingDetail#ENTITY ENTITY} - Log the status line and headers and content if available.
 		 * </ul>
 		 *
 		 * @param value
@@ -381,7 +381,7 @@ public interface RestLogger {
 		 * <ul class='values'>
 		 * 	<li>{@link RestLoggingDetail#STATUS_LINE STATUS_LINE} - Log only the status line.
 		 * 	<li>{@link RestLoggingDetail#HEADER HEADER} - Log the status line and headers.
-		 * 	<li>{@link RestLoggingDetail#ENTITY ENTITY} - Log the status line and headers and body if available.
+		 * 	<li>{@link RestLoggingDetail#ENTITY ENTITY} - Log the status line and headers and content if available.
 		 * </ul>
 		 *
 		 * @param value

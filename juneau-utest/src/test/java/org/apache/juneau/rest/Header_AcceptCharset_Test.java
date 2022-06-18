@@ -14,7 +14,7 @@ package org.apache.juneau.rest;
 
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.http.annotation.Body;
+import org.apache.juneau.http.annotation.Content;
 import org.apache.juneau.plaintext.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
@@ -61,7 +61,7 @@ public class Header_AcceptCharset_Test {
 	public static class B {
 
 		@RestPut(parsers=TestParser.class, serializers=TestSerializer.class)
-		public String a(@Body String in) {
+		public String a(@Content String in) {
 			return in;
 		}
 

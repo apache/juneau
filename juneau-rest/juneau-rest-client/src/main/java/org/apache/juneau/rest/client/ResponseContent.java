@@ -480,31 +480,31 @@ public class ResponseContent implements HttpEntity {
 	 * 	List&lt;String&gt; <jv>list1</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getBody().as(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 		.getContent().as(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of beans.</jc>
 	 * 	List&lt;MyBean&gt; <jv>list2</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getBody().as(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 		.getContent().as(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
 	 * 	List&lt;List&lt;String&gt;&gt; <jv>list3</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getBody().as(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 		.getContent().as(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
 	 * 	Map&lt;String,String&gt; <jv>map1</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getBody().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 * 		.getContent().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
 	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>map2</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getBody().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 		.getContent().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <p>
@@ -565,19 +565,19 @@ public class ResponseContent implements HttpEntity {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Parse into a string.</jc>
-	 * 	String <jv>string</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().as(String.<jk>class</jk>);
+	 * 	String <jv>string</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getContent().as(String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a bean.</jc>
-	 * 	MyBean <jv>bean</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().as(MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>bean</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getContent().as(MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a bean array.</jc>
-	 * 	MyBean[] <jv>beanArray</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().as(MyBean[].<jk>class</jk>);
+	 * 	MyBean[] <jv>beanArray</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getContent().as(MyBean[].<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
-	 * 	List <jv>list</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().as(LinkedList.<jk>class</jk>);
+	 * 	List <jv>list</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getContent().as(LinkedList.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
-	 * 	Map <jv>map</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().as(TreeMap.<jk>class</jk>);
+	 * 	Map <jv>map</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getContent().as(TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -620,23 +620,23 @@ public class ResponseContent implements HttpEntity {
 	 *
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
 	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm1</jv> = <jv>beanContext</jv>.getClassMeta(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 * 	List&lt;String&gt; <jv>list1</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().as(<jv>cm1</jv>);
+	 * 	List&lt;String&gt; <jv>list1</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getContent().as(<jv>cm1</jv>);
 	 *
 	 * 	<jc>// Parse into a linked-list of beans.</jc>
 	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm2</jv> = <jv>beanContext</jv>.getClassMeta(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 * 	List&lt;MyBean&gt; <jv>list2</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().as(<jv>cm2</jv>);
+	 * 	List&lt;MyBean&gt; <jv>list2</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getContent().as(<jv>cm2</jv>);
 	 *
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
 	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm3</jv> = <jv>beanContext</jv>.getClassMeta(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
-	 * 	List&lt;List&lt;String&gt;&gt; <jv>list3</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().as(<jv>cm3</jv>);
+	 * 	List&lt;List&lt;String&gt;&gt; <jv>list3</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getContent().as(<jv>cm3</jv>);
 	 *
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
 	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm4</jv> = <jv>beanContext</jv>.getClassMeta(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
-	 * 	Map&lt;String,String&gt; <jv>map4</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().as(<jv>cm4</jv>);
+	 * 	Map&lt;String,String&gt; <jv>map4</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getContent().as(<jv>cm4</jv>);
 	 *
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
 	 *	ClassMeta&lt;List&lt;String&gt;&gt; <jv>cm5</jv> = <jv>beanContext</jv>.getClassMeta(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
-	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>map5</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getBody().as(<jv>cm5</jv>);
+	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>map5</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).run().getContent().as(<jv>cm5</jv>);
 	 * </p>
 	 *
 	 * <ul class='notes'>
@@ -993,7 +993,7 @@ public class ResponseContent implements HttpEntity {
 	 * 	Matcher <jv>matcher</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getBody().asMatcher(Pattern.<jsm>compile</jsm>(<js>"foo=(.*)"</js>));
+	 * 		.getContent().asMatcher(Pattern.<jsm>compile</jsm>(<js>"foo=(.*)"</js>));
 	 *
 	 * 	<jk>if</jk> (<jv>matcher</jv>.matches()) {
 	 * 		String <jv>foo</jv> = <jv>matcher</jv>.group(1);
@@ -1026,7 +1026,7 @@ public class ResponseContent implements HttpEntity {
 	 * 	Matcher <jv>matcher</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getBody().asMatcher(<js>"foo=(.*)"</js>);
+	 * 		.getContent().asMatcher(<js>"foo=(.*)"</js>);
 	 *
 	 * 	<jk>if</jk> (<jv>matcher</jv>.matches()) {
 	 * 		String <jv>foo</jv> = <jv>matcher</jv>.group(1);
@@ -1062,7 +1062,7 @@ public class ResponseContent implements HttpEntity {
 	 * 	Matcher <jv>matcher</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getBody().asMatcher(<js>"foo=(.*)"</js>, <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>);
+	 * 		.getContent().asMatcher(<js>"foo=(.*)"</js>, <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>);
 	 *
 	 * 	<jk>if</jk> (<jv>matcher</jv>.matches()) {
 	 * 		String <jv>foo</jv> = <jv>matcher</jv>.group(1);
@@ -1106,38 +1106,38 @@ public class ResponseContent implements HttpEntity {
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getBody().assertValue().equals(<js>"OK"</js>);
+	 * 		.getContent().assertValue().equals(<js>"OK"</js>);
 	 *
 	 * 	<jc>// Validates the response body contains the text "OK".</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getBody().assertValue().contains(<js>"OK"</js>);
+	 * 		.getContent().assertValue().contains(<js>"OK"</js>);
 	 *
 	 * 	<jc>// Validates the response body passes a predicate test.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getBody().assertValue().passes(<jv>x</jv> -&gt; <jv>x</jv>.contains(<js>"OK"</js>));
+	 * 		.getContent().assertValue().passes(<jv>x</jv> -&gt; <jv>x</jv>.contains(<js>"OK"</js>));
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getBody().assertValue().matches(<js>".*OK.*"</js>);
+	 * 		.getContent().assertValue().matches(<js>".*OK.*"</js>);
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression using regex flags.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getBody().assertValue().matches(<js>".*OK.*"</js>,  <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>);
+	 * 		.getContent().assertValue().matches(<js>".*OK.*"</js>,  <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>);
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression in the form of an existing Pattern.</jc>
 	 * 	Pattern <jv>pattern</jv> = Pattern.<jsm>compile</jsm>(<js>".*OK.*"</js>);
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getBody().assertValue().matches(<jv>pattern</jv>);
+	 * 		.getContent().assertValue().matches(<jv>pattern</jv>);
 	 * </p>
 	 *
 	 * <p>
@@ -1147,9 +1147,9 @@ public class ResponseContent implements HttpEntity {
 	 * 	MyBean <jv>bean</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getBody().assertValue().matches(<js>".*OK.*"</js>);
-	 * 		.getBody().assertValue().doesNotMatch(<js>".*ERROR.*"</js>)
-	 * 		.getBody().as(MyBean.<jk>class</jk>);
+	 * 		.getContent().assertValue().matches(<js>".*OK.*"</js>);
+	 * 		.getContent().assertValue().doesNotMatch(<js>".*ERROR.*"</js>)
+	 * 		.getContent().as(MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <ul class='notes'>

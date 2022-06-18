@@ -94,7 +94,7 @@ public class RestOpSession extends ContextSession {
 		 *
 		 * @param value The new value for this setting.
 		 * @return This object.
-		 * @throws IOException Occurs if request body could not be cached into memory.
+		 * @throws IOException Occurs if request content could not be cached into memory.
 		 */
 		public Builder debug(boolean value) throws IOException {
 			session.debug(value);

@@ -505,7 +505,7 @@ public class HttpPartSchema {
 	 * 	The annotation to look for.
 	 * 	<br>Valid values:
 	 * 	<ul>
-	 * 		<li>{@link Body}
+	 * 		<li>{@link Content}
 	 * 		<li>{@link Header}
 	 * 		<li>{@link Query}
 	 * 		<li>{@link FormData}
@@ -536,7 +536,7 @@ public class HttpPartSchema {
 	 * 	The annotation to look for.
 	 * 	<br>Valid values:
 	 * 	<ul>
-	 * 		<li>{@link Body}
+	 * 		<li>{@link Content}
 	 * 		<li>{@link Header}
 	 * 		<li>{@link Query}
 	 * 		<li>{@link FormData}
@@ -563,7 +563,7 @@ public class HttpPartSchema {
 	 * 	The annotation to look for.
 	 * 	<br>Valid values:
 	 * 	<ul>
-	 * 		<li>{@link Body}
+	 * 		<li>{@link Content}
 	 * 		<li>{@link Header}
 	 * 		<li>{@link Query}
 	 * 		<li>{@link FormData}
@@ -704,8 +704,8 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder apply(Annotation a) {
-			if (a instanceof Body)
-				apply((Body)a);
+			if (a instanceof Content)
+				apply((Content)a);
 			else if (a instanceof Header)
 				apply((Header)a);
 			else if (a instanceof FormData)
@@ -729,7 +729,7 @@ public class HttpPartSchema {
 			return this;
 		}
 
-		Builder apply(Body a) {
+		Builder apply(Content a) {
 			if (! SchemaAnnotation.empty(a.schema()))
 				apply(a.schema());
 			return this;

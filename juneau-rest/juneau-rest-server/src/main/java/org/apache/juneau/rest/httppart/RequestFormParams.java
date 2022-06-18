@@ -39,7 +39,7 @@ import org.apache.juneau.svl.*;
  * Represents the parsed form-data parameters in an HTTP request.
  *
  * <p>
- * 	The {@link RequestFormParams} object is the API for accessing the HTTP request body as form data.
+ * 	The {@link RequestFormParams} object is the API for accessing the HTTP request content as form data.
  * 	It can be accessed by passing it as a parameter on your REST Java method:
  * </p>
  * <p class='bjava'>
@@ -60,7 +60,7 @@ import org.apache.juneau.svl.*;
  * </p>
  *
  * <p>
- * 	Note that this object does NOT take GET parameters into account and only returns values found in the body of the request.
+ * 	Note that this object does NOT take GET parameters into account and only returns values found in the content of the request.
  * </p>
  *
  * <p>
@@ -135,9 +135,9 @@ public class RequestFormParams {
 		Map<String,String[]> m = null;
 		Collection<Part> c = null;
 
-		RequestBody body = req.getBody();
-		if (body.isLoaded() || ! req.getHeader(ContentType.class).orElse(ContentType.NULL).equalsIgnoreCase("multipart/form-data"))
-			m = RestUtils.parseQuery(body.getReader());
+		RequestContent content = req.getContent();
+		if (content.isLoaded() || ! req.getHeader(ContentType.class).orElse(ContentType.NULL).equalsIgnoreCase("multipart/form-data"))
+			m = RestUtils.parseQuery(content.getReader());
 		else {
 			c = req.getHttpServletRequest().getParts();
 			if (c == null || c.isEmpty())

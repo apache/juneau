@@ -2530,7 +2530,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	<jc>// Do some other stuff</jc>
 	 *
 	 * 	<jk>try</jk> {
-	 * 		String <jv>body</jv> = <jv>future</jv>.get().getBody().asString();
+	 * 		String <jv>body</jv> = <jv>future</jv>.get().getContent().asString();
 	 * 		<jc>// Succeeded!</jc>
 	 * 	} <jk>catch</jk> (RestCallException <jv>e</jv>) {
 	 * 		<jc>// Failed!</jc>

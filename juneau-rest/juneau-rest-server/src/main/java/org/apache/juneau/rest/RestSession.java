@@ -255,7 +255,7 @@ public class RestSession extends ContextSession {
 	 *
 	 * @param value The new value for this setting.
 	 * @return This object.
-	 * @throws IOException Occurs if request body could not be cached into memory.
+	 * @throws IOException Occurs if request content could not be cached into memory.
 	 */
 	public RestSession debug(boolean value) throws IOException {
 		if (value) {
@@ -448,7 +448,7 @@ public class RestSession extends ContextSession {
 	 * Returns the query parameters on the request.
 	 *
 	 * <p>
-	 * Unlike {@link HttpServletRequest#getParameterMap()}, this doesn't parse the content body if it's a POST.
+	 * Unlike {@link HttpServletRequest#getParameterMap()}, this doesn't parse the content if it's a POST.
 	 *
 	 * @return The query parameters on the request.
 	 */

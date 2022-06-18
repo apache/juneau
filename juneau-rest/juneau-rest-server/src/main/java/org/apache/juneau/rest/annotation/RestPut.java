@@ -545,7 +545,7 @@ public @interface RestPut {
 	 * Specifies the parsers for converting HTTP request bodies into POJOs for this method.
 	 *
 	 * <p>
-	 * Parsers are used to convert the body of HTTP requests into POJOs.
+	 * Parsers are used to convert the content of HTTP requests into POJOs.
 	 * <br>Any of the Juneau framework parsers can be used in this setting.
 	 * <br>The parser selected is based on the request <c>Content-Type</c> header matched against the values returned by the following method
 	 * using a best-match algorithm:

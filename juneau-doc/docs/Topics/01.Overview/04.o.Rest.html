@@ -32,7 +32,7 @@
 		|		
 		|		<ja>@RestPost</ja>(path=<js>"/pets"</js>, guards=AdminGuard.<jk>class</jk>)
 		|		<jk>public</jk> Ok addPet(
-		|			<ja>@Body</ja> CreatePet <jv>createPetBean</jv>, 
+		|			<ja>@Content</ja> CreatePet <jv>createPetBean</jv>, 
 		|			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>, 
 		|			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> <jv>debug</jv>
 		|		) <jk>throws</jk> BadRequest, Unauthorized, InternalServerError {
@@ -50,7 +50,7 @@
 		|		
 		|		<ja>@RemotePost</ja>(<js>"/pets"</js>)
 		|		Ok addPet(
-		|			<ja>@Body</ja> CreatePet <jv>createPet</jv>, 
+		|			<ja>@Content</ja> CreatePet <jv>createPet</jv>, 
 		|			<ja>@Header</ja>(<js>"E-Tag"</js>) UUID <jv>etag</jv>, 
 		|			<ja>@Query</ja>(<js>"debug"</js>) <jk>boolean</jk> <jv>debug</jv>
 		|		) <jk>throws</jk> BadRequest, Unauthorized, InternalServerError;

@@ -48,8 +48,8 @@
 		|			<jk>this</jk>.<jf>pet</jf> = <jk>new</jk> CreatePet(<jv>name</jv>, <jv>price</jv>);
 		|		}
 		|		
-		|		<ja>@Body</ja>
-		|		<jk>public</jk> CreatePet getBody() {
+		|		<ja>@Content</ja>
+		|		<jk>public</jk> CreatePet getContent() {
 		|			<jk>return</jk> <jk>this</jk>.<jf>pet</jf>;
 		|		}
 		|	
@@ -81,7 +81,7 @@
 		Any of the following annotations can be used on the methods:
 	</p>
 	<ul class='javatree'>
-		<li class='ja'>{@link oaj.http.annotation.Body}
+		<li class='ja'>{@link oaj.http.annotation.Content}
 		<li class='ja'>{@link oaj.http.annotation.Header}
 		<li class='ja'>{@link oaj.http.annotation.FormData}
 		<li class='ja'>{@link oaj.http.annotation.Query}
@@ -99,8 +99,8 @@
 		|	<ja>@Request</ja> 
 		|	<jk>public interface</jk> CreatePetRequest {
 		|	
-		|		<ja>@Body</ja>
-		|		CreatePet getBody();
+		|		<ja>@Content</ja>
+		|		CreatePet getContent();
 		|	
 		|		<ja>@Query</ja>
 		|	Map&lt;String,Object&gt; getQueryParams();
@@ -115,7 +115,7 @@
 		|		<jk>public</jk> CreatePetRequestImpl(String <jv>name</jv>, <jk>float</jk> <jv>price</jv>) {...}
 		|
 		|		<ja>@Override</ja>
-		|		<jk>public</jk> CreatePet getBody() {
+		|		<jk>public</jk> CreatePet getContent() {
 		|			<jk>return</jk> <jk>this</jk>.<jf>pet</jf>;
 		|		}
 		|	
