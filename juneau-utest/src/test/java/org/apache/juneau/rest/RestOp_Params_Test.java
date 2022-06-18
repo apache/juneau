@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.IOUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
-import java.time.*;
 import java.util.*;
 
 import javax.servlet.*;
@@ -127,10 +126,6 @@ public class RestOp_Params_Test {
 	@Test
 	public void a01_params() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
-		a.get("/a").acceptLanguage("en-US").run().assertContent().is("bar");
-		a.get("/a").acceptLanguage("ja-JP").run().assertContent().is("baz");
-		a.get("/b").acceptLanguage("en-US").run().assertContent().is("bar");
-		a.get("/b").acceptLanguage("ja-JP").run().assertContent().is("baz");
 		a.post("/c", "foo").run().assertContent().is("foo");
 		a.post("/d", "foo").run().assertContent().is("foo");
 		a.post("/e", "foo").run().assertContent().is("foo");
@@ -143,8 +138,6 @@ public class RestOp_Params_Test {
 		a.get("/l").run().assertContent().is("GET");
 		a.get("/n").run().assertContent().is("true");
 		a.get("/o").contentType("application/json").run().assertContent().is("org.apache.juneau.json.JsonParser");
-		a.get("/p").acceptLanguage("en-US").run().assertContent().is("en_US");
-		a.get("/p").acceptLanguage("ja-JP").run().assertContent().is("ja_JP");
 		a.get("/q").run().assertContent().is("true");
 		a.get("/r").run().assertContent().is("true");
 		a.get("/s").run().assertContent().is("true");
@@ -295,7 +288,6 @@ public class RestOp_Params_Test {
 	@Test
 	public void b01_headers() throws Exception {
 		RestClient b = MockRestClient.build(B1.class);
-		ZonedDateTime zdt = ZonedDateTime.parse("2007-12-03T10:15:30Z");
 
 		b.get("/accept").accept("text/foo").run().assertContent().is("text/foo");
 		b.get("/accept").accept("text/foo+bar").run().assertContent().is("text/foo+bar");
@@ -307,60 +299,31 @@ public class RestOp_Params_Test {
 		b.get("/accept?Accept=text/foo").run().assertContent().is("text/foo");
 		b.get("/acceptCharset").acceptCharset("UTF-8").run().assertContent().is("UTF-8");
 		b.get("/acceptCharset?Accept-Charset=UTF-8").run().assertContent().is("UTF-8");
-		b.get("/acceptEncoding").acceptEncoding("foo").run().assertContent().is("foo");
-		b.get("/acceptEncoding").acceptEncoding("*").run().assertContent().is("*");
 		b.get("/acceptEncoding?Accept-Encoding=*").run().assertContent().is("*");
-		b.get("/acceptLanguage").acceptLanguage("foo").run().assertContent().is("foo");
-		b.get("/acceptLanguage?Accept-Language=foo").acceptLanguage("foo").run().assertContent().is("foo");
-		b.get("/authorization").authorization("foo").run().assertContent().is("foo");
 		b.get("/authorization?Authorization=foo").run().assertContent().is("foo");
-		b.get("/cacheControl").cacheControl("foo").run().assertContent().is("foo");
 		b.get("/cacheControl?Cache-Control=foo").run().assertContent().is("foo");
-		b.get("/connection").connection("foo").run().assertContent().is("foo");
 		b.get("/connection?Connection=foo").run().assertContent().is("foo");
-		b.get("/contentLength").contentLength(0l).run().assertContent().is("0");
 		b.get("/contentLength?Content-Length=0").run().assertContent().is("0");
 		b.get("/contentType").contentType("text/foo").run().assertContent().is("text/foo");
 		b.get("/contentType?Content-Type=text/foo").run().assertContent().is("text/foo");
-		b.get("/date").date(zdt).run().assertContent().is("Mon, 3 Dec 2007 10:15:30 GMT");
 		b.get("/date?Date=Mon, 3 Dec 2007 10:15:30 GMT").run().assertContent().is("Mon, 3 Dec 2007 10:15:30 GMT");
-		b.get("/expect").expect("100-continue").run().assertContent().is("100-continue");
 		b.get("/expect?Expect=100-continue").run().assertContent().is("100-continue");
-		b.get("/from").from("foo").run().assertContent().is("foo");
 		b.get("/from?From=foo").run().assertContent().is("foo");
 		b.get("/host").uriHost("localhost").run().assertContent().is("localhost");
 		b.get("/host?Host=localhost").run().assertContent().is("localhost");
-		b.get("/ifMatch").ifMatch("\"foo\"").run().assertContent().is("\"foo\"");
-		b.get("/ifMatch").ifMatch("W/\"foo\"").run().assertContent().is("W/\"foo\"");
-		b.get("/ifMatch").ifMatch("W/\"foo\",\"bar\"").run().assertContent().is("W/\"foo\",\"bar\"");
 		b.get("/ifMatch?If-Match=\"foo\"").run().assertContent().is("\"foo\"");
-		b.get("/ifModifiedSince").ifModifiedSince(zdt).run().assertContent().is("Mon, 3 Dec 2007 10:15:30 GMT");
 		b.get("/ifModifiedSince?If-Modified-Since=Mon, 3 Dec 2007 10:15:30 GMT").run().assertContent().is("Mon, 3 Dec 2007 10:15:30 GMT");
-		b.get("/ifNoneMatch").ifNoneMatch("\"foo\"").run().assertContent().is("\"foo\"");
-		b.get("/ifNoneMatch").ifNoneMatch("W/\"foo\"").run().assertContent().is("W/\"foo\"");
-		b.get("/ifNoneMatch").ifNoneMatch("W/\"foo\",\"bar\"").run().assertContent().is("W/\"foo\",\"bar\"");
 		b.get("/ifNoneMatch?If-None-Match=\"foo\"").run().assertContent().is("\"foo\"");
-		b.get("/ifRange").ifRange("\"foo\"").run().assertContent().is("\"foo\"");
 		b.get("/ifRange?If-Range=\"foo\"").run().assertContent().is("\"foo\"");
-		b.get("/ifUnmodifiedSince").ifUnmodifiedSince(zdt).run().assertContent().is("Mon, 3 Dec 2007 10:15:30 GMT");
 		b.get("/ifUnmodifiedSince?If-Unmodified-Since=Mon, 3 Dec 2007 10:15:30 GMT").run().assertContent().is("Mon, 3 Dec 2007 10:15:30 GMT");
-		b.get("/maxForwards").maxForwards(123).run().assertContent().is("123");
 		b.get("/maxForwards?Max-Forwards=123").run().assertContent().is("123");
-		b.get("/pragma").pragma("foo").run().assertContent().is("foo");
 		b.get("/pragma?Pragma=foo").run().assertContent().is("foo");
-		b.get("/proxyAuthorization").proxyAuthorization("foo").run().assertContent().is("foo");
 		b.get("/proxyAuthorization?Proxy-Authorization=foo").run().assertContent().is("foo");
-		b.get("/range").range("foo").run().assertContent().is("foo");
 		b.get("/range?Range=foo").run().assertContent().is("foo");
-		b.get("/referer").referer("foo").run().assertContent().is("foo");
 		b.get("/referer?Referer=foo").run().assertContent().is("foo");
-		b.get("/te").te("foo").run().assertContent().is("foo");
 		b.get("/te?TE=foo").run().assertContent().is("foo");
-		b.get("/upgrade").upgrade("foo").run().assertContent().is("foo");
 		b.get("/upgrade?Upgrade=foo").run().assertContent().is("foo");
-		b.get("/userAgent").userAgent("foo").run().assertContent().is("foo");
 		b.get("/userAgent?User-Agent=foo").run().assertContent().is("foo");
-		b.get("/warning").warning("foo").run().assertContent().is("foo");
 		b.get("/warning?Warning=foo").run().assertContent().is("foo");
 	}
 

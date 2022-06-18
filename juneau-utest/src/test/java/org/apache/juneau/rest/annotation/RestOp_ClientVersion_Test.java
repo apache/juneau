@@ -15,6 +15,7 @@ package org.apache.juneau.rest.annotation;
 import static org.apache.juneau.http.HttpMethod.*;
 import static org.junit.runners.MethodSorters.*;
 
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
@@ -55,13 +56,13 @@ public class RestOp_ClientVersion_Test {
 		RestClient a = MockRestClient.build(A1.class);
 		a.get("/").run().assertContent().is("no-version");
 		for (String s : "1, 1.0, 1.0.0, 1.0.1".split("\\s*,\\s*")) {
-			a.get("/").clientVersion(s).run().assertContent().setMsg("s=[{0}]",s).is("[1.0,1.0]");
+			a.get("/").header(ClientVersion.of(s)).run().assertContent().setMsg("s=[{0}]",s).is("[1.0,1.0]");
 		}
 		for (String s : "1.1, 1.1.1, 1.2, 1.9.9".split("\\s*,\\s*")) {
-			a.get("/").clientVersion(s).run().assertContent().setMsg("s=[{0}]").is("[1.1,2)");
+			a.get("/").header(ClientVersion.of(s)).run().assertContent().setMsg("s=[{0}]").is("[1.1,2)");
 		}
 		for (String s : "2, 2.0, 2.1, 9, 9.9".split("\\s*,\\s*")) {
-			a.get("/").clientVersion(s).run().assertContent().setMsg("s=[{0}]").is("2");
+			a.get("/").header(ClientVersion.of(s)).run().assertContent().setMsg("s=[{0}]").is("2");
 		}
 	}
 
@@ -94,13 +95,13 @@ public class RestOp_ClientVersion_Test {
 		RestClient a = MockRestClient.build(A2.class);
 		a.get("/").run().assertContent().is("no-version");
 		for (String s : "1, 1.0, 1.0.0, 1.0.1".split("\\s*,\\s*")) {
-			a.get("/").clientVersion(s).run().assertContent().setMsg("s=[{0}]",s).is("[1.0,1.0]");
+			a.get("/").header(ClientVersion.of(s)).run().assertContent().setMsg("s=[{0}]",s).is("[1.0,1.0]");
 		}
 		for (String s : "1.1, 1.1.1, 1.2, 1.9.9".split("\\s*,\\s*")) {
-			a.get("/").clientVersion(s).run().assertContent().setMsg("s=[{0}]").is("[1.1,2)");
+			a.get("/").header(ClientVersion.of(s)).run().assertContent().setMsg("s=[{0}]").is("[1.1,2)");
 		}
 		for (String s : "2, 2.0, 2.1, 9, 9.9".split("\\s*,\\s*")) {
-			a.get("/").clientVersion(s).run().assertContent().setMsg("s=[{0}]").is("2");
+			a.get("/").header(ClientVersion.of(s)).run().assertContent().setMsg("s=[{0}]").is("2");
 		}
 	}
 

@@ -28,7 +28,6 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.net.*;
 import java.text.*;
-import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
@@ -51,7 +50,6 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.HttpHeaders;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.http.header.Date;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.httppart.*;
@@ -696,7 +694,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override
 	public boolean isDebug() {
-		return getHeaderData().get("Debug", Boolean.class).orElse(false);
+		return getHeaderList().get("Debug", Boolean.class).orElse(false);
 	}
 
 	/**
@@ -753,7 +751,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return The header data builder.
 	 */
-	public HeaderList.Builder getHeaderDataBuilder() {
+	public HeaderList.Builder headers() {
 		headerData = null;
 		return headerDataBuilder;
 	}
@@ -763,7 +761,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return An immutable list of headers to send on the request.
 	 */
-	public HeaderList getHeaderData() {
+	public HeaderList getHeaderList() {
 		if (headerData == null)
 			headerData = headerDataBuilder.build();
 		return headerData;
@@ -778,7 +776,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return The query data builder.
 	 */
-	public PartList.Builder getQueryDataBuilder() {
+	public PartList.Builder queryData() {
 		queryData = null;
 		return queryDataBuilder;
 	}
@@ -788,7 +786,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return An immutable list of query data to send on the request.
 	 */
-	public PartList getQueryData() {
+	public PartList getQueryDataList() {
 		if (queryData == null)
 			queryData = queryDataBuilder.build();
 		return queryData;
@@ -803,7 +801,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return The form data builder.
 	 */
-	public PartList.Builder getFormDataBuilder() {
+	public PartList.Builder formData() {
 		formData = null;
 		return formDataBuilder;
 	}
@@ -813,7 +811,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return An immutable list of form data to send on the request.
 	 */
-	public PartList getFormData() {
+	public PartList getFormDataList() {
 		if (formData == null)
 			formData = formDataBuilder.build();
 		return formData;
@@ -828,7 +826,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return The path data builder.
 	 */
-	public PartList.Builder getPathDataBuilder() {
+	public PartList.Builder pathData() {
 		pathData = null;
 		return pathDataBuilder;
 	}
@@ -838,7 +836,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return An immutable list of path data to send on the request.
 	 */
-	public PartList getPathData() {
+	public PartList getPathDataList() {
 		if (pathData == null)
 			pathData = pathDataBuilder.build();
 		return pathData;
@@ -890,7 +888,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 */
 	public RestRequest headers(Header...parts) {
-		getHeaderDataBuilder().append(parts);
+		headers().append(parts);
 		return this;
 	}
 
@@ -915,7 +913,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 */
 	public RestRequest queryData(NameValuePair...parts) {
-		getQueryDataBuilder().append(parts);
+		queryData().append(parts);
 		return this;
 	}
 
@@ -940,7 +938,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 */
 	public RestRequest formData(NameValuePair...parts) {
-		getFormDataBuilder().append(parts);
+		formData().append(parts);
 		return this;
 	}
 
@@ -965,112 +963,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 */
 	public RestRequest pathData(NameValuePair...parts) {
-		getPathDataBuilder().set(parts);
-		return this;
-	}
-
-	/**
-	 * Adds multiple headers to the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Replaces headers "Foo: bar" and "Accept: text/xml".</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.headers(
-	 * 			<jsf>REPLACE</jsf>,
-	 * 			BasicHeader.<jsm>of</jsm>(<js>"Foo"</js>, <js>"bar"</js>),
-	 * 			Accept.<jsf>TEXT_XML</jsf>
-	 * 		)
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param flag
-	 * 	The operation to perform.
-	 * 	<br>Possible operations:
-	 * 	<ul>
-	 * 		<li><c>APPEND</c> - Add to the end of the list.
-	 * 		<li><c>PREPEND</c> - Add to the beginning of the list.
-	 * 		<li><c>REPLACE</c> - Replace inline or append to the end of the list if not present.
-	 * 		<li><c>DEFAULT</c> - Add as a default value if not otherwise set.
-	 * 	</ul>
-	 * @param parts
-	 * 	The parameters to set.
-	 * 	<jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public RestRequest headers(ListOperation flag, Header...parts) {
-		getHeaderDataBuilder().add(flag, parts);
-		return this;
-	}
-
-	/**
-	 * Adds multiple query parameters to the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Sets query parameters "foo=bar" and "baz=true".</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.queryData(
-	 * 			<jsf>REPLACE</jsf>,
-	 * 			BasicStringPart.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>),
-	 * 			BasicBooleanPart.<jsm>of</jsm>(<js>"baz"</js>, <jk>true</jk>)
-	 * 		)
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param flag
-	 * 	The operation to perform.
-	 * 	<br>Possible operations:
-	 * 	<ul>
-	 * 		<li><c>APPEND</c> - Add to the end of the list.
-	 * 		<li><c>PREPEND</c> - Add to the beginning of the list.
-	 * 		<li><c>REPLACE</c> - Replace inline or append to the end of the list if not present.
-	 * 		<li><c>DEFAULT</c> - Add as a default value if not otherwise set.
-	 * 	</ul>
-	 * @param parts
-	 * 	The parameters to set.
-	 * 	<jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public RestRequest queryData(ListOperation flag, NameValuePair...parts) {
-		getQueryDataBuilder().add(flag, parts);
-		return this;
-	}
-
-	/**
-	 * Adds multiple form-data parameters to the request.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Sets form-data parameters "foo=bar" and "baz=true".</jc>
-	 * 	<jv>client</jv>
-	 * 		.get(<jsf>URI</jsf>)
-	 * 		.formData(
-	 * 			<jsf>REPLACE</jsf>,
-	 * 			BasicStringPart.<jsm>of</jsm>(<js>"foo"</js>, <js>"bar"</js>),
-	 * 			BasicBooleanPart.<jsm>of</jsm>(<js>"baz"</js>, <jk>true</jk>)
-	 * 		)
-	 * 		.run();
-	 * </p>
-	 *
-	 * @param flag
-	 * 	The operation to perform.
-	 * 	<br>Possible operations:
-	 * 	<ul>
-	 * 		<li><c>APPEND</c> - Add to the end of the list.
-	 * 		<li><c>PREPEND</c> - Add to the beginning of the list.
-	 * 		<li><c>REPLACE</c> - Replace inline or append to the end of the list if not present.
-	 * 		<li><c>DEFAULT</c> - Add as a default value if not otherwise set.
-	 * 	</ul>
-	 * @param parts
-	 * 	The parameters to set.
-	 * 	<jk>null</jk> values are ignored.
-	 * @return This object.
-	 */
-	public RestRequest formData(ListOperation flag, NameValuePair...parts) {
-		getFormDataBuilder().add(flag, parts);
+		pathData().set(parts);
 		return this;
 	}
 
@@ -1094,7 +987,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 */
 	public RestRequest header(String name, Object value) {
-		getHeaderDataBuilder().append(createHeader(name, value));
+		headers().append(createHeader(name, value));
 		return this;
 	}
 
@@ -1118,7 +1011,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 */
 	public RestRequest queryData(String name, Object value) {
-		getQueryDataBuilder().append(createPart(QUERY, name, value));
+		queryData().append(createPart(QUERY, name, value));
 		return this;
 	}
 
@@ -1142,7 +1035,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 */
 	public RestRequest formData(String name, Object value) {
-		getFormDataBuilder().append(createPart(FORMDATA, name, value));
+		formData().append(createPart(FORMDATA, name, value));
 		return this;
 	}
 
@@ -1166,7 +1059,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 */
 	public RestRequest pathData(String name, Object value) {
-		getPathDataBuilder().set(createPart(PATH, name, value));
+		pathData().set(createPart(PATH, name, value));
 		return this;
 	}
 
@@ -1188,7 +1081,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest headerPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
 			throw runtimeException("Odd number of parameters passed into headerPairs(String...)");
-		HeaderList.Builder b = getHeaderDataBuilder();
+		HeaderList.Builder b = headers();
 		for (int i = 0; i < pairs.length; i+=2)
 			b.append(pairs[i], pairs[i+1]);
 		return this;
@@ -1217,7 +1110,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest queryDataPairs(String...pairs) throws RestCallException {
 		if (pairs.length % 2 != 0)
 			throw runtimeException("Odd number of parameters passed into queryDataPairs(String...)");
-		PartList.Builder b = getQueryDataBuilder();
+		PartList.Builder b = queryData();
 		for (int i = 0; i < pairs.length; i+=2)
 			b.append(pairs[i], pairs[i+1]);
 		return this;
@@ -1246,7 +1139,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest formDataPairs(String...pairs) throws RestCallException {
 		if (pairs.length % 2 != 0)
 			throw runtimeException("Odd number of parameters passed into formDataPairs(String...)");
-		PartList.Builder b = getFormDataBuilder();
+		PartList.Builder b = formData();
 		for (int i = 0; i < pairs.length; i+=2)
 			b.append(pairs[i], pairs[i+1]);
 		return this;
@@ -1277,7 +1170,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest pathDataPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
 			throw runtimeException("Odd number of parameters passed into pathDataPairs(String...)");
-		PartList.Builder b = getPathDataBuilder();
+		PartList.Builder b = pathData();
 		for (int i = 0; i < pairs.length; i+=2)
 			b.set(pairs[i], pairs[i+1]);
 		return this;
@@ -1310,7 +1203,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest headersBean(Object value) {
 		if (! isBean(value))
 			throw runtimeException("Object passed into headersBean(Object) is not a bean.");
-		HeaderList.Builder b = getHeaderDataBuilder();
+		HeaderList.Builder b = headers();
 		toBeanMap(value, PropertyNamerDUCS.INSTANCE).forEach((k,v) -> b.append(createHeader(k, v)));
 		return this;
 	}
@@ -1338,7 +1231,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest queryDataBean(Object value) {
 		if (! isBean(value))
 			throw runtimeException("Object passed into queryDataBean(Object) is not a bean.");
-		PartList.Builder b = getQueryDataBuilder();
+		PartList.Builder b = queryData();
 		toBeanMap(value).forEach((k,v) -> b.append(createPart(QUERY, k, v)));
 		return this;
 	}
@@ -1366,7 +1259,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest formDataBean(Object value) {
 		if (! isBean(value))
 			throw runtimeException("Object passed into formDataBean(Object) is not a bean.");
-		PartList.Builder b = getFormDataBuilder();
+		PartList.Builder b = formData();
 		toBeanMap(value).forEach((k,v) -> b.append(createPart(FORMDATA, k, v)));
 		return this;
 	}
@@ -1394,7 +1287,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest pathDataBean(Object value) {
 		if (! isBean(value))
 			throw runtimeException("Object passed into pathDataBean(Object) is not a bean.");
-		PartList.Builder b = getPathDataBuilder();
+		PartList.Builder b = pathData();
 		toBeanMap(value).forEach((k,v) -> b.set(createPart(PATH, k, v)));
 		return this;
 	}
@@ -1645,7 +1538,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (skipIfEmpty)
 			l.removeIf(x -> isEmpty(x.getValue()));
 
-		getHeaderDataBuilder().append(l);
+		headers().append(l);
 
 		return this;
 	}
@@ -1682,7 +1575,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (skipIfEmpty)
 			l.removeIf(x -> isEmpty(x.getValue()));
 
-		getQueryDataBuilder().append(l);
+		queryData().append(l);
 
 		return this;
 	}
@@ -1719,7 +1612,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (skipIfEmpty)
 			l.removeIf(x -> isEmpty(x.getValue()));
 
-		getFormDataBuilder().append(l);
+		formData().append(l);
 
 		return this;
 	}
@@ -1749,7 +1642,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			throw runtimeException("Invalid value type for path arg ''{0}'': {1}", name, className(value));
 		}
 
-		getPathDataBuilder().append(l);
+		pathData().append(l);
 
 		return this;
 	}
@@ -1893,101 +1786,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	/**
-	 * Sets the value for the <c>Accept-Encoding</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"Accept-Encoding"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest acceptEncoding(String value) throws RestCallException {
-		return header(AcceptEncoding.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Accept-Language</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"Accept-Language"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest acceptLanguage(String value) throws RestCallException {
-		return header(AcceptLanguage.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Authorization</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"Authorization"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest authorization(String value) throws RestCallException {
-		return header(Authorization.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Cache-Control</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"Cache-Control"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest cacheControl(String value) throws RestCallException {
-		return header(CacheControl.of(value));
-	}
-
-	/**
-	 * Sets the client version by setting the value for the <js>"Client-Version"</js> header.
-	 *
-	 * @param value The version string (e.g. <js>"1.2.3"</js>)
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest clientVersion(String value) throws RestCallException {
-		return header(ClientVersion.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Connection</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"Connection"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest connection(String value) throws RestCallException {
-		return header(Connection.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Content-Length</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"Content-Length"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest contentLength(Long value) throws RestCallException {
-		return header(ContentLength.of(value));
-	}
-
-	/**
 	 * Sets the value for the <c>Content-Type</c> request header.
 	 *
 	 * <p>
@@ -2014,174 +1812,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	}
 
 	/**
-	 * Sets the value for the <c>Content-Encoding</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"Content-Encoding"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest contentEncoding(String value) throws RestCallException {
-		return header(ContentEncoding.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Date</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"Date"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest date(ZonedDateTime value) throws RestCallException {
-		return header(Date.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Expect</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"Expect"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest expect(String value) throws RestCallException {
-		return header(Expect.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Forwarded</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"Forwarded"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest forwarded(String value) throws RestCallException {
-		return header(Forwarded.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>From</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"From"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest from(String value) throws RestCallException {
-		return header(From.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Host</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"Host"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest hostHeader(String value) throws RestCallException {
-		return header(Host.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>If-Match</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"If-Match"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest ifMatch(String value) throws RestCallException {
-		return header(IfMatch.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>If-Modified-Since</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"If-Modified-Since"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest ifModifiedSince(ZonedDateTime value) throws RestCallException {
-		return header(IfModifiedSince.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>If-None-Match</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"If-None-Match"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest ifNoneMatch(String value) throws RestCallException {
-		return header(IfNoneMatch.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>If-Range</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"If-Range"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest ifRange(String value) throws RestCallException {
-		return header(IfRange.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>If-Unmodified-Since</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"If-Unmodified-Since"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest ifUnmodifiedSince(ZonedDateTime value) throws RestCallException {
-		return header(IfUnmodifiedSince.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Max-Forwards</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"Max-Forwards"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest maxForwards(Integer value) throws RestCallException {
-		return header(MaxForwards.of(value));
-	}
-
-	/**
 	 * When called, <c>No-Trace: true</c> is added to requests.
 	 *
 	 * <p>
@@ -2194,146 +1824,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest noTrace() throws RestCallException {
 		return header(NoTrace.TRUE);
-	}
-
-	/**
-	 * Sets the value for the <c>Origin</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"Origin"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest origin(String value) throws RestCallException {
-		return header(Origin.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Pragma</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"Pragma"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest pragma(String value) throws RestCallException {
-		return header(Pragma.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Proxy-Authorization</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"Proxy-Authorization"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest proxyAuthorization(String value) throws RestCallException {
-		return header(ProxyAuthorization.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Range</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"Range"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest range(String value) throws RestCallException {
-		return header(Range.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Referer</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"Referer"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest referer(String value) throws RestCallException {
-		return header(Referer.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>TE</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"TE"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest te(String value) throws RestCallException {
-		return header(TE.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>User-Agent</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"User-Agent"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest userAgent(String value) throws RestCallException {
-		return header(UserAgent.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Upgrade</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"Upgrade"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest upgrade(String value) throws RestCallException {
-		return header(Upgrade.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Via</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"Via"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest via(String value) throws RestCallException {
-		return header(Via.of(value));
-	}
-
-	/**
-	 * Sets the value for the <c>Warning</c> request header.
-	 *
-	 * <p>
-	 * This is a shortcut for calling <code>header(<js>"Warning"</js>, value);</code>
-	 *
-	 * @param value The new header value.
-	 * @return This object.
-	 * @throws RestCallException Invalid input.
-	 */
-	public RestRequest warning(String value) throws RestCallException {
-		return header(Warning.of(value));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -2370,11 +1860,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 		try {
 
-			getQueryData().stream().map(SimpleQuery::new).filter(SimplePart::isValid).forEach(
+			getQueryDataList().stream().map(SimpleQuery::new).filter(SimplePart::isValid).forEach(
 				x -> uriBuilder.addParameter(x.name, x.value)
 			);
 
-			getPathData().stream().map(SimplePath::new).forEach(x ->
+			getPathDataList().stream().map(SimplePath::new).forEach(x ->
 				{
 					String path = uriBuilder.getPath();
 					String name = x.name, value = x.value;
@@ -2393,7 +1883,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			request.setURI(uriBuilder.build());
 
 			// Pick the serializer if it hasn't been overridden.
-			HeaderList.Builder hl = getHeaderDataBuilder();
+			HeaderList.Builder hl = headers();
 			Optional<Header> h = hl.getLast("Content-Type");
 			String contentType = h.isPresent() ? h.get().getValue() : null;
 			Serializer serializer = this.serializer;
@@ -2411,7 +1901,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			if (accept == null && parser != null)
 				hl.set(Accept.of( parser.getPrimaryMediaType()));
 
-			getHeaderData().stream().map(SimpleHeader::new).filter(SimplePart::isValid).forEach(x -> request.addHeader(x));
+			getHeaderList().stream().map(SimpleHeader::new).filter(SimplePart::isValid).forEach(x -> request.addHeader(x));
 
 			if (request2 == null && content != NO_BODY)
 				throw new RestCallException(null, null, "Method does not support content entity.  Method={0}, URI={1}", getMethod(), getURI());
@@ -2422,7 +1912,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				if (content != NO_BODY) {
 					input2 = content;
 				} else {
-					input2 = new UrlEncodedFormEntity(getFormData().stream().map(SimpleFormData::new).filter(SimplePart::isValid).collect(toList()));
+					input2 = new UrlEncodedFormEntity(getFormDataList().stream().map(SimpleFormData::new).filter(SimplePart::isValid).collect(toList()));
 				}
 
 				if (input2 instanceof Supplier)
@@ -2780,7 +2270,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public boolean containsHeader(String name) {
-		return getHeaderData().contains(name);
+		return getHeaderList().contains(name);
 	}
 
 	/**
@@ -2794,7 +2284,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public Header[] getHeaders(String name) {
-		return getHeaderData().getAll(name);
+		return getHeaderList().getAll(name);
 	}
 
 	/**
@@ -2809,7 +2299,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public Header getFirstHeader(String name) {
-		return getHeaderData().getFirst(name).orElse(null);
+		return getHeaderList().getFirst(name).orElse(null);
 	}
 
 	/**
@@ -2824,7 +2314,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public Header getLastHeader(String name) {
-		return getHeaderData().getLast(name).orElse(null);
+		return getHeaderList().getLast(name).orElse(null);
 	}
 
 	/**
@@ -2836,7 +2326,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public Header[] getAllHeaders() {
-		return getHeaderData().getAll();
+		return getHeaderList().getAll();
 	}
 
 	/**
@@ -2852,7 +2342,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public void addHeader(Header header) {
-		getHeaderDataBuilder().append(header);
+		headers().append(header);
 	}
 
 	/**
@@ -2869,7 +2359,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public void addHeader(String name, String value) {
-		getHeaderDataBuilder().append(stringHeader(name, value));
+		headers().append(stringHeader(name, value));
 	}
 
 	/**
@@ -2881,7 +2371,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public void setHeader(Header header) {
-		getHeaderDataBuilder().set(header);
+		headers().set(header);
 	}
 
 	/**
@@ -2894,7 +2384,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public void setHeader(String name, String value) {
-		getHeaderDataBuilder().set(stringHeader(name, value));
+		headers().set(stringHeader(name, value));
 	}
 
 	/**
@@ -2904,7 +2394,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public void setHeaders(Header[] headers) {
-		getHeaderDataBuilder().set(headers);
+		headers().set(headers);
 	}
 
 	/**
@@ -2914,7 +2404,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public void removeHeader(Header header) {
-		getHeaderDataBuilder().remove(header);
+		headers().remove(header);
 	}
 
 	/**
@@ -2924,7 +2414,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public void removeHeaders(String name) {
-		getHeaderDataBuilder().remove(name);
+		headers().remove(name);
 	}
 
 	/**
@@ -2934,7 +2424,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public HeaderIterator headerIterator() {
-		return getHeaderData().iterator();
+		return getHeaderList().iterator();
 	}
 
 	/**
@@ -2945,7 +2435,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public HeaderIterator headerIterator(String name) {
-		return getHeaderData().iterator(name);
+		return getHeaderList().iterator(name);
 	}
 
 	/**

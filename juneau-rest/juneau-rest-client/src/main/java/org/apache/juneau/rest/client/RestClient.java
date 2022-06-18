@@ -341,7 +341,7 @@ import org.apache.juneau.xml.*;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Builder}
  * 	<ul>
- * 		<li class='jm'>{@link Builder#headerData() headerData()}
+ * 		<li class='jm'>{@link Builder#headers() headerData()}
  * 		<li class='jm'>{@link Builder#header(String,String) header(String,Object)}
  * 		<li class='jm'>{@link Builder#header(String,Supplier) header(String,Supplier&lt;?&gt;)}
  * 		<li class='jm'>{@link Builder#headers(Header...) headers(Header...)}
@@ -351,7 +351,6 @@ import org.apache.juneau.xml.*;
  * 	<ul>
  * 		<li class='jm'>{@link RestRequest#header(String,Object) header(String,Object)}
  * 		<li class='jm'>{@link RestRequest#headers(Header...) headers(Header...)}
- * 		<li class='jm'>{@link RestRequest#headers(ListOperation,Header...) headers(ListOperation,Header...)}
  * 		<li class='jm'>{@link RestRequest#headersBean(Object) headersBean(Object)}
  * 		<li class='jm'>{@link RestRequest#headerPairs(String...) headerPairs(String...)}
  * 	</ul>
@@ -406,7 +405,6 @@ import org.apache.juneau.xml.*;
  * 	<ul>
  * 		<li class='jm'>{@link RestRequest#queryData(String,Object) queryData(String,Object)}
  * 		<li class='jm'>{@link RestRequest#queryData(NameValuePair...) queryData(NameValuePair...)}
- * 		<li class='jm'>{@link RestRequest#queryData(ListOperation,NameValuePair...) queryData(ListOperation,NameValuePair...)}
  * 		<li class='jm'>{@link RestRequest#queryDataBean(Object) queryDataBean(Object)}
  * 		<li class='jm'>{@link RestRequest#queryCustom(Object) queryCustom(Object)}
  * 		<li class='jm'>{@link RestRequest#queryDataPairs(String...) queryDataPairs(String...)}
@@ -446,7 +444,6 @@ import org.apache.juneau.xml.*;
  * 	<ul>
  * 		<li class='jm'>{@link RestRequest#formData(String,Object) formData(String,Object)}
  * 		<li class='jm'>{@link RestRequest#formData(NameValuePair...) formData(NameValuePair...)}
- * 		<li class='jm'>{@link RestRequest#formData(ListOperation,NameValuePair...) formData(ListOperation,NameValuePair...)}
  * 		<li class='jm'>{@link RestRequest#formDataBean(Object) formDataBean(Object)}
  * 		<li class='jm'>{@link RestRequest#formDataCustom(Object) formDataCustom(Object)}
  * 		<li class='jm'>{@link RestRequest#formDataPairs(String...) formDataPairs(String...)}
@@ -1122,10 +1119,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	</ul>
 		 * <p>
 		 * 	<c>Accept</c> request header will be set to <js>"application/json"</js> unless overridden
-		 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}}.
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}}.
 		 * <p>
 		 * 	<c>Content-Type</c> request header will be set to <js>"application/json"</js> unless overridden
-		 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
 		 * 	Can be combined with other marshaller setters such as {@link #xml()} to provide support for multiple languages.
 		 * 	<ul>
@@ -1169,10 +1166,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	</ul>
 		 * <p>
 		 * 	<c>Accept</c> request header will be set to <js>"application/json"</js> unless overridden
-		 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
 		 * 	<c>Content-Type</c> request header will be set to <js>"application/json+simple"</js> unless overridden
-		 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
 		 * 	Can be combined with other marshaller setters such as {@link #xml()} to provide support for multiple languages.
 		 * 	<ul>
@@ -1212,10 +1209,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	</ul>
 		 * <p>
 		 * 	<c>Accept</c> request header will be set to <js>"text/xml"</js> unless overridden
-		 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
 		 * 	<c>Content-Type</c> request header will be set to <js>"text/xml"</js> unless overridden
-		 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
 		 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 		 * 	<ul>
@@ -1258,10 +1255,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	</ul>
 		 * <p>
 		 * 	<c>Accept</c> request header will be set to <js>"text/html"</js> unless overridden
-		 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
 		 * 	<c>Content-Type</c> request header will be set to <js>"text/html"</js> unless overridden
-		 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
 		 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 		 * 	<ul>
@@ -1304,10 +1301,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	</ul>
 		 * <p>
 		 * 	<c>Accept</c> request header will be set to <js>"text/html"</js> unless overridden
-		 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
 		 * 	<c>Content-Type</c> request header will be set to <js>"text/html"</js> unless overridden
-		 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
 		 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 		 * 	<ul>
@@ -1350,10 +1347,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	</ul>
 		 * <p>
 		 * 	<c>Accept</c> request header will be set to <js>"text/html+stripped"</js> unless overridden
-		 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
 		 * 	<c>Content-Type</c> request header will be set to <js>"text/html+stripped"</js> unless overridden
-		 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
 		 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 		 * 	<ul>
@@ -1397,10 +1394,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	</ul>
 		 * <p>
 		 * 	<c>Accept</c> request header will be set to <js>"text/plain"</js> unless overridden
-		 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
 		 * 	<c>Content-Type</c> request header will be set to <js>"text/plain"</js> unless overridden
-		 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
 		 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 		 * 	<ul>
@@ -1443,10 +1440,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	</ul>
 		 * <p>
 		 * 	<c>Accept</c> request header will be set to <js>"octal/msgpack"</js> unless overridden
-		 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
 		 * 	<c>Content-Type</c> request header will be set to <js>"octal/msgpack"</js> unless overridden
-		 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
 		 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 		 * 	<ul>
@@ -1490,10 +1487,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	</ul>
 		 * <p>
 		 * 	<c>Accept</c> request header will be set to <js>"text/uon"</js> unless overridden
-		 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
 		 * 	<c>Content-Type</c> request header will be set to <js>"text/uon"</js> unless overridden
-		 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
 		 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 		 * 	<ul>
@@ -1535,10 +1532,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	</ul>
 		 * <p>
 		 * 	<c>Accept</c> request header will be set to <js>"application/x-www-form-urlencoded"</js> unless overridden
-		 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
 		 * 	<c>Content-Type</c> request header will be set to <js>"application/x-www-form-urlencoded"</js> unless overridden
-		 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
 		 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 		 * 	<ul>
@@ -1584,10 +1581,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	</ul>
 		 * <p>
 		 * 	<c>Accept</c> request header will be set to <js>"text/openapi"</js> unless overridden
-		 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
 		 * 	<c>Content-Type</c> request header will be set to <js>"text/openapi"</js> unless overridden
-		 * 		via {@link #headerData()}, or per-request via {@link RestRequest#header(Header)}.
+		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
 		 * 	Can be combined with other marshaller setters such as {@link #json()} to provide support for multiple languages.
 		 * 	<ul>
@@ -1626,10 +1623,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * 	</ul>
 		 * <p>
-		 * 	<c>Accept</c> request header must be set via {@link #headerData()}, or per-request
+		 * 	<c>Accept</c> request header must be set via {@link #headers()}, or per-request
 		 * 		via {@link RestRequest#header(Header)} in order for the correct parser to be selected.
 		 * <p>
-		 * 	<c>Content-Type</c> request header must be set via {@link #headerData()},
+		 * 	<c>Content-Type</c> request header must be set via {@link #headers()},
 		 * 		or per-request via {@link RestRequest#header(Header)} in order for the correct serializer to be selected.
 		 * <p>
 		 * 	Similar to calling <c>json().simpleJson().html().xml().uon().urlEnc().openApi().msgPack().plainText()</c>.
@@ -2459,31 +2456,18 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='jm'>{@link #mediaType(MediaType)}
 		 * 	<li class='jm'>{@link #accept(String)}
 		 * 	<li class='jm'>{@link #acceptCharset(String)}
-		 * 	<li class='jm'>{@link #acceptEncoding(String)}
-		 * 	<li class='jm'>{@link #acceptLanguage(String)}
-		 * 	<li class='jm'>{@link #authorization(String)}
-		 * 	<li class='jm'>{@link #cacheControl(String)}
 		 * 	<li class='jm'>{@link #clientVersion(String)}
-		 * 	<li class='jm'>{@link #connection(String)}
 		 * 	<li class='jm'>{@link #contentType(String)}
-		 * 	<li class='jm'>{@link #contentEncoding(String)}
 		 * 	<li class='jm'>{@link #debug()}
-		 * 	<li class='jm'>{@link #from(String)}
-		 * 	<li class='jm'>{@link #host(String)}
-		 * 	<li class='jm'>{@link #maxForwards(Integer)}
 		 * 	<li class='jm'>{@link #noTrace()}
-		 * 	<li class='jm'>{@link #origin(String)}
-		 * 	<li class='jm'>{@link #pragma(String)}
-		 * 	<li class='jm'>{@link #proxyAuthorization(String)}
-		 * 	<li class='jm'>{@link #userAgent(String)}
 		 * </ul>
 		 *
 		 * <p>
-		 * Note that the {@link #headerData(Consumer)} method can be used to call this method without breaking fluent call chains.
+		 * Note that the {@link #headers(Consumer)} method can be used to call this method without breaking fluent call chains.
 		 *
 		 * @return The header list builder.
 		 */
-		public final HeaderList.Builder headerData() {
+		public final HeaderList.Builder headers() {
 			if (headerData == null)
 				headerData = createHeaderData();
 			return headerData;
@@ -2506,8 +2490,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param operation The operation to apply.
 		 * @return This object.
 		 */
-		public final Builder headerData(Consumer<HeaderList.Builder> operation) {
-			operation.accept(headerData());
+		public final Builder headers(Consumer<HeaderList.Builder> operation) {
+			operation.accept(headers());
 			return this;
 		}
 
@@ -2521,7 +2505,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * The default behavior creates an empty builder.
 		 *
 		 * @return The header list builder.
-		 * @see #headerData()
+		 * @see #headers()
 		 */
 		protected HeaderList.Builder createHeaderData() {
 			return HeaderList.create();
@@ -2549,11 +2533,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param parts
 		 * 	The header to set.
 		 * @return This object.
-		 * @see #headerData()
+		 * @see #headers()
 		 */
 		@FluentSetter
 		public Builder headers(Header...parts) {
-			headerData().append(parts);
+			headers().append(parts);
 			return this;
 		}
 
@@ -2576,10 +2560,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param parts The header values.
 		 * @return This object.
-		 * @see #headerData()
+		 * @see #headers()
 		 */
 		public Builder headersDefault(Header...parts) {
-			headerData().setDefault(parts);
+			headers().setDefault(parts);
 			return this;
 		}
 
@@ -2600,11 +2584,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param name The header name.
 		 * @param value The header value.
 		 * @return This object.
-		 * @see #headerData()
+		 * @see #headers()
 		 */
 		@FluentSetter
 		public Builder header(String name, String value) {
-			headerData().append(name, value);
+			headers().append(name, value);
 			return this;
 		}
 
@@ -2625,11 +2609,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param name The header name.
 		 * @param value The header value supplier.
 		 * @return This object.
-		 * @see #headerData()
+		 * @see #headers()
 		 */
 		@FluentSetter
 		public Builder header(String name, Supplier<String> value) {
-			headerData().append(name, value);
+			headers().append(name, value);
 			return this;
 		}
 
@@ -2644,7 +2628,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param value The new header values.
 		 * @return This object.
-		 * @see #headerData()
+		 * @see #headers()
 		 */
 		@FluentSetter
 		public Builder mediaType(String value) {
@@ -2663,7 +2647,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param value The new header values.
 		 * @return This object.
-		 * @see #headerData()
+		 * @see #headers()
 		 */
 		@Override
 		@FluentSetter
@@ -2681,7 +2665,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @param value
 		 * 	The new header value.
 		 * @return This object.
-		 * @see #headerData()
+		 * @see #headers()
 		 */
 		@FluentSetter
 		public Builder accept(String value) {
@@ -2696,71 +2680,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param value The new header value.
 		 * @return This object.
-		 * @see #headerData()
+		 * @see #headers()
 		 */
 		@FluentSetter
 		public Builder acceptCharset(String value) {
 			return headers(AcceptCharset.of(value));
-		}
-
-		/**
-		 * Sets the value for the <c>Accept-Encoding</c> request header on all requests.
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>headerData().append(AcceptEncoding.<jsm>of</jsm>(<jv>value</jv>))</c>.
-		 *
-		 * @param value The new header value.
-		 * @return This object.
-		 * @see #headerData()
-		 */
-		@FluentSetter
-		public Builder acceptEncoding(String value) {
-			return headers(AcceptEncoding.of(value));
-		}
-
-		/**
-		 * Sets the value for the <c>Accept-Language</c> request header on all requests.
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>headerData().append(AcceptLanguage.<jsm>of</jsm>(<jv>value</jv>))</c>.
-		 *
-		 * @param value The new header value.
-		 * @return This object.
-		 * @see #headerData()
-		 */
-		@FluentSetter
-		public Builder acceptLanguage(String value) {
-			return headers(AcceptLanguage.of(value));
-		}
-
-		/**
-		 * Sets the value for the <c>Authorization</c> request header on all requests.
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>headerData().append(Authorization.<jsm>of</jsm>(<jv>value</jv>))</c>.
-		 *
-		 * @param value The new header value.
-		 * @return This object.
-		 * @see #headerData()
-		 */
-		@FluentSetter
-		public Builder authorization(String value) {
-			return headers(Authorization.of(value));
-		}
-
-		/**
-		 * Sets the value for the <c>Cache-Control</c> request header on all requests.
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>headerData().append(CacheControl.<jsm>of</jsm>(<jv>value</jv>))</c>.
-		 *
-		 * @param value The new header value.
-		 * @return This object.
-		 * @see #headerData()
-		 */
-		@FluentSetter
-		public Builder cacheControl(String value) {
-			return headers(CacheControl.of(value));
 		}
 
 		/**
@@ -2771,26 +2695,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param value The version string (e.g. <js>"1.2.3"</js>)
 		 * @return This object.
-		 * @see #headerData()
+		 * @see #headers()
 		 */
 		@FluentSetter
 		public Builder clientVersion(String value) {
 			return headers(ClientVersion.of(value));
-		}
-
-		/**
-		 * Sets the value for the <c>Connection</c> request header on all requests.
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>headerData().append(Connection.<jsm>of</jsm>(<jv>value</jv>))</c>.
-		 *
-		 * @param value The new header value.
-		 * @return This object.
-		 * @see #headerData()
-		 */
-		@FluentSetter
-		public Builder connection(String value) {
-			return headers(Connection.of(value));
 		}
 
 		/**
@@ -2804,26 +2713,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @param value The new header value.
 		 * @return This object.
-		 * @see #headerData()
+		 * @see #headers()
 		 */
 		@FluentSetter
 		public Builder contentType(String value) {
 			return headers(ContentType.of(value));
-		}
-
-		/**
-		 * Sets the value for the <c>Content-Encoding</c> request header on all requests.
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>headerData().append(ContentEncoding.<jsm>of</jsm>(<jv>value</jv>))</c>.
-		 *
-		 * @param value The new header value.
-		 * @return This object.
-		 * @see #headerData()
-		 */
-		@FluentSetter
-		public Builder contentEncoding(String value) {
-			return headers(ContentEncoding.of(value));
 		}
 
 		/**
@@ -2833,7 +2727,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * This is a shortcut for calling <c>headerData().append(Debug.<jsm>of</jsm>(<jv>value</jv>))</c>.
 		 *
 		 * @return This object.
-		 * @see #headerData()
+		 * @see #headers()
 		 */
 		@Override
 		@FluentSetter
@@ -2841,51 +2735,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			super.debug();
 			serializers().forEach(x -> x.debug());
 			return headers(Debug.TRUE);
-		}
-
-		/**
-		 * Sets the value for the <c>From</c> request header on all requests.
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>headerData().append(From.<jsm>of</jsm>(<jv>value</jv>))</c>.
-		 *
-		 * @param value The new header value.
-		 * @return This object.
-		 * @see #headerData()
-		 */
-		@FluentSetter
-		public Builder from(String value) {
-			return headers(From.of(value));
-		}
-
-		/**
-		 * Sets the value for the <c>Host</c> request header on all requests.
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>headerData().append(Host.<jsm>of</jsm>(<jv>value</jv>))</c>.
-		 *
-		 * @param value The new header value.
-		 * @return This object.
-		 * @see #headerData()
-		 */
-		@FluentSetter
-		public Builder host(String value) {
-			return headers(Host.of(value));
-		}
-
-		/**
-		 * Sets the value for the <c>Max-Forwards</c> request header on all requests.
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>headerData().append(MaxForwards.<jsm>of</jsm>(<jv>value</jv>))</c>.
-		 *
-		 * @param value The new header value.
-		 * @return This object.
-		 * @see #headerData()
-		 */
-		@FluentSetter
-		public Builder maxForwards(Integer value) {
-			return headers(MaxForwards.of(value));
 		}
 
 		/**
@@ -2902,71 +2751,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * prevent needless logging of test scenarios.
 		 *
 		 * @return This object.
-		 * @see #headerData()
+		 * @see #headers()
 		 */
 		@FluentSetter
 		public Builder noTrace() {
 			return headers(NoTrace.of(true));
-		}
-
-		/**
-		 * Sets the value for the <c>Origin</c> request header on all requests.
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>headerData().append(Origin.<jsm>of</jsm>(<jv>value</jv>))</c>.
-		 *
-		 * @param value The new header value.
-		 * @return This object.
-		 * @see #headerData()
-		 */
-		@FluentSetter
-		public Builder origin(String value) {
-			return headers(Origin.of(value));
-		}
-
-		/**
-		 * Sets the value for the <c>Pragma</c> request header on all requests.
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>headerData().append(Pragma.<jsm>of</jsm>(<jv>value</jv>))</c>.
-		 *
-		 * @param value The new header value.
-		 * @return This object.
-		 * @see #headerData()
-		 */
-		@FluentSetter
-		public Builder pragma(String value) {
-			return headers(Pragma.of(value));
-		}
-
-		/**
-		 * Sets the value for the <c>Proxy-Authorization</c> request header on all requests.
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>headerData().append(ProxyAuthorization.<jsm>of</jsm>(<jv>value</jv>))</c>.
-		 *
-		 * @param value The new header value.
-		 * @return This object.
-		 * @see #headerData()
-		 */
-		@FluentSetter
-		public Builder proxyAuthorization(String value) {
-			return headers(ProxyAuthorization.of(value));
-		}
-
-		/**
-		 * Sets the value for the <c>User-Agent</c> request header on all requests.
-		 *
-		 * <p>
-		 * This is a shortcut for calling <c>headerData().append(UserAgent.<jsm>of</jsm>(<jv>value</jv>))</c>.
-		 *
-		 * @param value The new header value.
-		 * @return This object.
-		 * @see #headerData()
-		 */
-		@FluentSetter
-		public Builder userAgent(String value) {
-			return headers(UserAgent.of(value));
 		}
 
 		//------------------------------------------------------------------------------------------------------------------
@@ -6758,7 +6547,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			.addBean(RestClient.class, this);
 
 		httpClient = builder.getHttpClient();
-		headerData = builder.headerData().build().copy();
+		headerData = builder.headers().build().copy();
 		queryData = builder.queryData().build().copy();
 		formData = builder.formData().build().copy();
 		pathData = builder.pathData().build().copy();

@@ -16,6 +16,7 @@ import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.annotation.Content;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
@@ -51,9 +52,9 @@ public class Rest_Encoders_Test {
 	public void a01_noCompression() throws Exception {
 		RestClient a = MockRestClient.buildLax(A.class);
 		a.put("/", "foo").run().assertContent().is("foo");
-		a.put("/", "foo").contentEncoding("").run().assertContent().is("foo");
-		a.put("/", "foo").contentEncoding("identity").run().assertContent().is("foo");
-		a.put("?noTrace=true", StringUtils.compress("foo")).contentEncoding("mycoding").run()
+		a.put("/", "foo").header(ContentEncoding.of("")).run().assertContent().is("foo");
+		a.put("/", "foo").header(ContentEncoding.of("identity")).run().assertContent().is("foo");
+		a.put("?noTrace=true", StringUtils.compress("foo")).header(ContentEncoding.of("mycoding")).run()
 			.assertCode().is(415)
 			.assertContent().isContains(
 				"Unsupported encoding in request header 'Content-Encoding': 'mycoding'",
@@ -80,11 +81,11 @@ public class Rest_Encoders_Test {
 			.run()
 			.assertContent().is("foo");
 		b.put("/", "foo")
-			.contentEncoding("")
+			.header(ContentEncoding.of(""))
 			.run()
 			.assertContent().is("foo");
 		b.put("/", "foo")
-			.contentEncoding("identity")
+			.header(ContentEncoding.of("identity"))
 			.run()
 			.assertContent().is("foo");
 //		b.put("/", StringUtils.compress("foo"))

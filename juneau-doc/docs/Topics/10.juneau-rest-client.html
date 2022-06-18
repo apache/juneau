@@ -67,8 +67,8 @@ specific language governing permissions and limitations under the License.
 		|	<jv>res</jv> = <jv>codeAssertion</jv>.is(200);
 		|	FluentStringAssertion&lt;RestResponse&gt; <jv>headerAssertion</jv> = <jv>res</jv>.assertHeader(<js>"Content-Type"</js>);
 		|	<jv>res</jv> = <jv>headerAssertion</jv>.matchesSimple(<js>"application/json*"</js>);
-		|	ResponseContent <jv>body</jv> = <jv>res</jv>.getContent();
-		|	MyBean <jv>bean</jv> = <jv>body</jv>.as(MyBean.<jk>class</jk>);
+		|	ResponseContent <jv>content</jv> = <jv>res</jv>.getContent();
+		|	MyBean <jv>bean</jv> = <jv>content</jv>.as(MyBean.<jk>class</jk>);
 	</p>
 	
 	<p>
@@ -89,10 +89,11 @@ specific language governing permissions and limitations under the License.
 		|		);
 		|	}
 		|
-		|	<jc>// Use a RestClient with default Simple JSON support.</jc>
-		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
-		|	
-		|	PetStore <jv>store</jv> = <jv>client</jv>.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
+		|	PetStore <jv>store</jv> = RestClient
+		|		.<jsm>create</jsm>()
+		|		.simpleJson()
+		|		.build()
+		|		.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
 		|	CreatePet <jv>createPet</jv> = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
 		|	Pet <jv>pet</jv> = <jv>store</jv>.addPet(<jv>createPet</jv>, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
 	</p>

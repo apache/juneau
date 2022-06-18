@@ -16,7 +16,6 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.ListOperation.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
 
@@ -61,14 +60,6 @@ public class RestClient_FormData_Test {
 	}
 
 	@Test
-	public void a02_formData_AddFlag_String_Object() throws Exception {
-		client().formData(part("foo","bar")).build().post("/formData").formData(APPEND,part("foo","baz")).run().assertContent().is("foo=bar&foo=baz");
-		client().formData(part("foo","bar")).build().post("/formData").formData(PREPEND,part("foo","baz")).run().assertContent().is("foo=baz&foo=bar");
-		client().formData(part("foo","bar")).build().post("/formData").formData(SET,part("foo","baz")).run().assertContent().is("foo=baz");
-		client().formData(part("foo","bar")).build().post("/formData").formData(SET,part("bar","baz")).run().assertContent().is("foo=bar&bar=baz");
-	}
-
-	@Test
 	public void a03_formData_NameValuePair() throws Exception {
 		client().formData(part("foo","bar")).build().post("/formData").formData(part("foo","baz")).run().assertContent().is("foo=bar&foo=baz");
 	}
@@ -107,14 +98,6 @@ public class RestClient_FormData_Test {
 	public void a07_formData_String_Object_Schema_Serializer() throws Exception {
 		List<String> l = list("bar","baz");
 		client().formData(part("foo",l,T_ARRAY_PIPES).serializer(UonSerializer.DEFAULT)).build().post("/formData").run().assertContent().asString().asUrlDecode().is("foo=@(bar,baz)");
-	}
-
-	@Test
-	public void a08_formData_AddFlag_String_Object_Schema() throws Exception {
-		List<String> l = list("qux","quux");
-		client().formData("foo","bar").build().post("/formData").formData(APPEND,part("foo",l,T_ARRAY_PIPES)).run().assertContent().asString().asUrlDecode().is("foo=bar&foo=qux|quux");
-		client().formData("foo","bar").build().post("/formData").formData(PREPEND,part("foo",l,T_ARRAY_PIPES)).run().assertContent().asString().asUrlDecode().is("foo=qux|quux&foo=bar");
-		client().formData("foo","bar").build().post("/formData").formData(SET,part("foo",l,T_ARRAY_PIPES)).run().assertContent().asString().asUrlDecode().is("foo=qux|quux");
 	}
 
 	@Test

@@ -16,7 +16,6 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.runners.MethodSorters.*;
-import static org.apache.juneau.ListOperation.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
 
@@ -64,23 +63,6 @@ public class RestClient_Query_Test {
 	public void a03_query_String_Object_Schema_Serializer() throws Exception {
 		List<String> l = list("bar","baz");
 		client().queryData(part("foo",l,T_ARRAY_PIPES).serializer(UonSerializer.DEFAULT)).build().get("/query").run().assertContent().asString().asUrlDecode().is("foo=@(bar,baz)");
-	}
-
-	@Test
-	public void a04_query_AddFlag_String_Object() throws Exception {
-		client().queryData("foo","bar").build().get("/query").queryData(PREPEND,part("foo","baz")).run().assertContent().is("foo=baz&foo=bar");
-		client().queryData("foo","bar").build().get("/query").queryData(PREPEND,part("foo","")).run().assertContent().is("foo=&foo=bar");
-		client().queryData("foo","bar").build().get("/query").queryData(PREPEND,part("foo",null)).run().assertContent().is("foo=bar");
-		client().queryData("foo","bar").build().get("/query").queryData(SET,part("foo","baz")).run().assertContent().is("foo=baz");
-		client().queryData("foo","bar").build().get("/query").queryData(SET,part("foo",null)).run().assertContent().is("");
-		client().queryData("foo","bar").build().get("/query").queryData(SET,part("foo","")).run().assertContent().is("foo=");
-		client().queryData("bar","baz").build().get("/query").queryData(SET,part("foo","bar")).run().assertContent().is("bar=baz&foo=bar");
-	}
-
-	@Test
-	public void a05_query_AddFlag_String_Object_Schema() throws Exception {
-		List<String> l = list("baz","qux");
-		client().queryData("foo","bar").build().get("/query").queryData(PREPEND,part("foo",l,T_ARRAY_PIPES)).run().assertContent().asString().asUrlDecode().is("foo=baz|qux&foo=bar");
 	}
 
 	@Test

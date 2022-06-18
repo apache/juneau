@@ -992,18 +992,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
-		public Builder acceptEncoding(String value) {
-			super.acceptEncoding(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
-		public Builder acceptLanguage(String value) {
-			super.acceptLanguage(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
 		public Builder addBeanTypes() {
 			super.addBeanTypes();
 			return this;
@@ -1040,12 +1028,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
-		public Builder authorization(String value) {
-			super.authorization(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
 		public Builder backoffManager(BackoffManager backoffManager) {
 			super.backoffManager(backoffManager);
 			return this;
@@ -1058,12 +1040,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
-		public Builder cacheControl(String value) {
-			super.cacheControl(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
 		public Builder callHandler(Class<? extends org.apache.juneau.rest.client.RestCallHandler> value) {
 			super.callHandler(value);
 			return this;
@@ -1072,12 +1048,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
 		public Builder clientVersion(String value) {
 			super.clientVersion(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
-		public Builder connection(String value) {
-			super.connection(value);
 			return this;
 		}
 
@@ -1120,12 +1090,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
 		public Builder contentDecoderRegistry(Map<String,InputStreamFactory> contentDecoderMap) {
 			super.contentDecoderRegistry(contentDecoderMap);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
-		public Builder contentEncoding(String value) {
-			super.contentEncoding(value);
 			return this;
 		}
 
@@ -1274,12 +1238,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
-		public Builder from(String value) {
-			super.from(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
 		public Builder header(String name, String value) {
 			super.header(name, value);
 			return this;
@@ -1294,12 +1252,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
 		public Builder headers(Header...parts) {
 			super.headers(parts);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
-		public Builder host(String value) {
-			super.host(value);
 			return this;
 		}
 
@@ -1442,12 +1394,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
-		public Builder maxForwards(Integer value) {
-			super.maxForwards(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
 		public Builder maxIndent(int value) {
 			super.maxIndent(value);
 			return this;
@@ -1486,12 +1432,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
 		public Builder openApi() {
 			super.openApi();
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
-		public Builder origin(String value) {
-			super.origin(value);
 			return this;
 		}
 
@@ -1587,26 +1527,8 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
-		public Builder pragma(String value) {
-			super.pragma(value);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
 		public Builder proxy(HttpHost proxy) {
 			super.proxy(proxy);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
-		public Builder proxyAuthenticationStrategy(AuthenticationStrategy proxyAuthStrategy) {
-			super.proxyAuthenticationStrategy(proxyAuthStrategy);
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
-		public Builder proxyAuthorization(String value) {
-			super.proxyAuthorization(value);
 			return this;
 		}
 
@@ -1860,12 +1782,6 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
 		public Builder useWhitespace() {
 			super.useWhitespace();
-			return this;
-		}
-
-		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
-		public Builder userAgent(String value) {
-			super.userAgent(value);
 			return this;
 		}
 

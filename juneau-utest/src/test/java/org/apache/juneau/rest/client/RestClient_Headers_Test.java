@@ -19,16 +19,12 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.runners.MethodSorters.*;
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
-import static org.apache.juneau.ListOperation.*;
-
 import java.time.*;
 import java.util.*;
 
-import org.apache.http.Header;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.oapi.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.logging.*;
@@ -102,39 +98,6 @@ public class RestClient_Headers_Test {
 	}
 
 	@Test
-	public void a06_headers_Objects() throws Exception {
-		checkFooClient().headers((Header)null).build().get("/headers").headers((Header)null).run().assertContent().is("[]");
-		checkFooClient().headers(header("Foo","bar"),header("Baz","baz")).build().get("/headers").headers(APPEND,header("Foo","baz"),header("Baz","quux")).run().assertContent().is("['bar','baz']");
-		checkFooClient().headers(header("Foo","Bar",null).serializer(OpenApiSerializer.DEFAULT)).build().get("/headers").headers(APPEND,serializedHeader("Foo","Baz").serializer(OpenApiSerializer.DEFAULT)).run().assertContent().is("['Bar','Baz']");
-		checkFooClient().headers(serializedHeader("Foo",()->"Bar").serializer(OpenApiSerializer.DEFAULT)).build().get("/headers").headers(APPEND,serializedHeader("Foo",()->"Baz").serializer(OpenApiSerializer.DEFAULT)).run().assertContent().is("['Bar','Baz']");
-		checkClient("f").build().get("/headers").headersBean(bean).run().assertContent().is("['1']");
-
-		checkFooClient().headers(header("Foo",null,null).skipIfEmpty().schema(HttpPartSchema.create()._default("bar").build())).build().get("/headers").run().assertContent().is("['bar']");
-	}
-
-	@Test
-	public void a07_header_AddFlag_String_Object() throws Exception {
-		checkFooClient().header("Foo","bar").build().get("/headers").headers(APPEND,header("Foo","baz")).run().assertContent().is("['bar','baz']");
-		checkFooClient().header("Foo","bar").build().get("/headers").headers(SET,header("Foo","baz")).run().assertContent().is("['baz']");
-		checkFooClient().header("Foo","bar").build().get("/headers").headers(PREPEND,header("Foo","baz")).run().assertContent().is("['baz','bar']");
-	}
-
-	@Test
-	public void a07_header_AddFlag_String_Object_Schema() throws Exception {
-		List<String> l = list("baz","qux");
-		checkFooClient().header("Foo","bar").build().get("/headers").headers(APPEND,header("Foo",l,T_ARRAY_PIPES)).run().assertContent().is("['bar','baz|qux']");
-		checkFooClient().header("Foo","bar").build().get("/headers").headers(SET,header("Foo",l,T_ARRAY_PIPES)).run().assertContent().is("['baz|qux']");
-		checkFooClient().header("Foo","bar").build().get("/headers").headers(PREPEND,header("Foo",l,T_ARRAY_PIPES)).run().assertContent().is("['baz|qux','bar']");
-	}
-
-	@Test
-	public void a07_headers_AddFlag_Objects() throws Exception {
-		checkFooClient().header("Foo","bar").build().get("/headers").headers(APPEND,header("Foo","baz")).run().assertContent().is("['bar','baz']");
-		checkFooClient().header("Foo","bar").build().get("/headers").headers(SET,header("Foo","baz")).run().assertContent().is("['baz']");
-		checkFooClient().header("Foo","bar").build().get("/headers").headers(PREPEND,header("Foo","baz")).run().assertContent().is("['baz','bar']");
-	}
-
-	@Test
 	public void a08_header_String_Supplier() throws Exception {
 		TestSupplier s = TestSupplier.of("foo");
 		RestClient x = checkFooClient().headers(header("Foo",s,null)).build();
@@ -188,56 +151,14 @@ public class RestClient_Headers_Test {
 	public void b01_standardHeaders() throws Exception {
 		checkClient("Accept").accept("text/plain").build().get("/headers").run().assertContent().is("['text/plain']");
 		checkClient("Accept-Charset").acceptCharset("UTF-8").build().get("/headers").run().assertContent().is("['UTF-8']");
-		checkClient("Accept-Encoding").acceptEncoding("identity").build().get("/headers").run().assertContent().is("['identity']");
-		checkClient("Accept-Language").acceptLanguage("en").build().get("/headers").run().assertContent().is("['en']");
-		checkClient("Authorization").authorization("foo").build().get("/headers").run().assertContent().is("['foo']");
-		checkClient("Cache-Control").cacheControl("none").build().get("/headers").run().assertContent().is("['none']");
 		checkClient("Client-Version").clientVersion("1").build().get("/headers").run().assertContent().is("['1']");
-		checkClient("Connection").connection("foo").build().get("/headers").run().assertContent().is("['foo']");
 		checkClient("Content-Type").contentType("foo").build().get("/headers").run().assertContent().is("['foo']");
-		checkClient("Content-Encoding").contentEncoding("identity").build().get("/headers").run().assertContent().is("['identity']");
-		checkClient("From").from("foo").build().get("/headers").run().assertContent().is("['foo']");
-		checkClient("Host").host("foo").build().get("/headers").run().assertContent().is("['foo']");
-		checkClient("Max-Forwards").maxForwards(10).build().get("/headers").run().assertContent().is("['10']");
 		checkClient("No-Trace").noTrace().build().get("/headers").run().assertContent().is("['true','true']");
-		checkClient("Origin").origin("foo").build().get("/headers").run().assertContent().is("['foo']");
-		checkClient("Pragma").pragma("foo").build().get("/headers").run().assertContent().is("['foo']");
-		checkClient("Proxy-Authorization").proxyAuthorization("foo").build().get("/headers").run().assertContent().is("['foo']");
-		checkClient("User-Agent").userAgent("foo").build().get("/headers").run().assertContent().is("['foo']");
 
 		checkClient("Accept").build().get("/headers").accept("text/plain").run().assertContent().is("['text/plain']");
 		checkClient("Accept-Charset").build().get("/headers").acceptCharset("UTF-8").run().assertContent().is("['UTF-8']");
-		checkClient("Accept-Encoding").build().get("/headers").acceptEncoding("identity").run().assertContent().is("['identity']");
-		checkClient("Accept-Language").build().get("/headers").acceptLanguage("en").run().assertContent().is("['en']");
-		checkClient("Authorization").build().get("/headers").authorization("foo").run().assertContent().is("['foo']");
-		checkClient("Cache-Control").build().get("/headers").cacheControl("none").run().assertContent().is("['none']");
-		checkClient("Client-Version").build().get("/headers").clientVersion("1").run().assertContent().is("['1']");
-		checkClient("Connection").build().get("/headers").connection("foo").run().assertContent().is("['foo']");
-		checkClient("Content-Length").build().get("/headers").contentLength(123l).run().assertContent().is("['123']");
 		checkClient("Content-Type").build().get("/headers").contentType("foo").run().assertContent().is("['foo']");
-		checkClient("Content-Encoding").build().get("/headers").contentEncoding("identity").run().assertContent().is("['identity']");
-		checkClient("Date").build().get("/headers").date(ZONEDDATETIME).run().assertContent().is("['"+PARSEDZONEDDATETIME+"']");
-		checkClient("Expect").build().get("/headers").expect("foo").run().assertContent().is("['foo']");
-		checkClient("Forwarded").build().get("/headers").forwarded("foo").run().assertContent().is("['foo']");
-		checkClient("From").build().get("/headers").from("foo").run().assertContent().is("['foo']");
-		checkClient("Host").build().get("/headers").hostHeader("foo").run().assertContent().is("['foo']");
-		checkClient("If-Match").build().get("/headers").ifMatch("\"foo\"").run().assertContent().is("['\"foo\"']");
-		checkClient("If-Modified-Since").build().get("/headers").ifModifiedSince(ZONEDDATETIME).run().assertContent().is("['"+PARSEDZONEDDATETIME+"']");
-		checkClient("If-None-Match").build().get("/headers").ifNoneMatch("\"foo\"").run().assertContent().is("['\"foo\"']");
-		checkClient("If-Range").build().get("/headers").ifRange("\"foo\"").run().assertContent().is("['\"foo\"']");
-		checkClient("If-Unmodified-Since").build().get("/headers").ifUnmodifiedSince(ZONEDDATETIME).run().assertContent().is("['"+PARSEDZONEDDATETIME+"']");
-		checkClient("Max-Forwards").build().get("/headers").maxForwards(10).run().assertContent().is("['10']");
 		checkClient("No-Trace").build().get("/headers").noTrace().run().assertContent().is("['true','true']");
-		checkClient("Origin").build().get("/headers").origin("foo").run().assertContent().is("['foo']");
-		checkClient("Pragma").build().get("/headers").pragma("foo").run().assertContent().is("['foo']");
-		checkClient("Proxy-Authorization").build().get("/headers").proxyAuthorization("foo").run().assertContent().is("['foo']");
-		checkClient("Range").build().get("/headers").range("foo").run().assertContent().is("['foo']");
-		checkClient("Referer").build().get("/headers").referer("foo").run().assertContent().is("['foo']");
-		checkClient("TE").build().get("/headers").te("foo").run().assertContent().is("['foo']");
-		checkClient("User-Agent").build().get("/headers").userAgent("foo").run().assertContent().is("['foo']");
-		checkClient("Upgrade").build().get("/headers").upgrade("foo").run().assertContent().is("['foo']");
-		checkClient("Via").build().get("/headers").via("foo").run().assertContent().is("['foo']");
-		checkClient("Warning").build().get("/headers").warning("foo").run().assertContent().is("['foo']");
 	}
 
 	@Test

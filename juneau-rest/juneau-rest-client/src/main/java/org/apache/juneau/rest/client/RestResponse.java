@@ -841,7 +841,7 @@ public class RestResponse implements HttpResponse {
 				sb.append("\n=== REQUEST ===\n");
 				sb.append(request.getMethod()).append(" ").append(request.getURI());
 				sb.append("\n---request headers---");
-				request.getHeaderData().forEach(x -> sb.append("\n\t").append(x));
+				request.getHeaderList().forEach(x -> sb.append("\n\t").append(x));
 				if (request.hasHttpEntity()) {
 					sb.append("\n---request entity---");
 					HttpEntity e = request.getHttpEntity();
