@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.springboot;
 
-import java.util.*;
-
 import javax.inject.*;
 
 import org.apache.juneau.html.annotation.*;
@@ -44,42 +42,16 @@ import org.apache.juneau.rest.servlet.*;
 )
 public class HelloWorldResource extends BasicRestObject implements BasicUniversalConfig {
 
-	private final String message;
-
-	/**
-	 * Optional message provider that can be injected into this object.
-	 */
 	@Inject
-	private Optional<HelloWorldMessageProvider> messageProvider;
-
-	/**
-	 * Default constructor.
-	 * <p>
-	 * Used by default if bean cannot be found in the Spring application context.
-	 */
-	public HelloWorldResource() {
-		this("Hello world!");
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param message The message to display.
-	 */
-	public HelloWorldResource(String message) {
-		this.message = message;
-	}
+	private HelloWorldMessageProvider messageProvider;
 
 	/**
 	 * GET request handler.
 	 *
 	 * @return A simple Hello-World message.
 	 */
-	@RestGet(path="/*", summary="Responds with \"Hello world!\"")
+	@RestGet(path="/*", summary="Responds with injected message")
 	public String sayHello() {
-		String message = this.message;
-		if (messageProvider != null && messageProvider.isPresent())
-			message = messageProvider.get().get();
-		return message;
+		return messageProvider.get();
 	}
 }

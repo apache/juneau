@@ -70,7 +70,7 @@ public class App {
 	 */
 	@Bean
 	public HelloWorldResource getHelloWorldResource() {
-		return new HelloWorldResource("Hello Spring user!");
+		return new HelloWorldResource();
 	}
 
 	/**
