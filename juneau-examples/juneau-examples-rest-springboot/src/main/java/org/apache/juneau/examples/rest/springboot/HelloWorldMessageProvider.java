@@ -18,7 +18,7 @@ import java.util.function.*;
  * An example of a Spring bean that can be used for injecting messages into {@link HelloWorldResource}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-examples-rest-springboot}
+ * 	<li class='link'>{@doc jrss.Overview}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

@@ -27,7 +27,6 @@ import org.apache.juneau.microservice.jetty.*;
  * the resources and commands defined in that file.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-examples-rest-jetty}
  * 	<li class='extlink'>{@source}
  * </ul>
  */
