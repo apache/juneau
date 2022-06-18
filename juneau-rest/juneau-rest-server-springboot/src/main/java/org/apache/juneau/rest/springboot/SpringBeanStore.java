@@ -45,14 +45,30 @@ public class SpringBeanStore extends BeanStore {
 	}
 
 	@Override
+	public <T> Optional<T> getBean(Class<T> c) {
+		try {
+			Optional<T> o = super.getBean(c);
+			if (o.isPresent())
+				return o;
+			if (appContext.isPresent()) {
+				return optional(appContext.get().getBeanProvider(c).getIfAvailable());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return empty();
+	}
+
+	@Override
 	public <T> Optional<T> getBean(Class<T> c, String name) {
 		try {
 			Optional<T> o = super.getBean(c, name);
 			if (o.isPresent())
 				return o;
 			if (appContext.isPresent()) {
+				ApplicationContext ctx = appContext.get();
 				if (name != null)
-					return optional(appContext.get().getBean(name, c));
+					return optional(ctx.containsBean(name) ? appContext.get().getBean(name, c) : null);
 				return optional(appContext.get().getBean(c));
 			}
 		} catch (Exception e) {

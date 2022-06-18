@@ -21,7 +21,6 @@ import org.springframework.boot.builder.*;
 import org.springframework.boot.web.servlet.*;
 import org.springframework.context.annotation.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.filter.*;
 
 /**
  * Entry point for Examples REST application when deployed as a Spring Boot application.
@@ -41,7 +40,12 @@ public class App {
 	 */
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
-		new SpringApplicationBuilder(App.class).run(args);
+		try {
+			new SpringApplicationBuilder(App.class).run(args);
+			System.out.println("Initialized.  App available on http://localhost:5000");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -86,19 +90,5 @@ public class App {
 	@Bean
 	public ServletRegistrationBean<Servlet> getRootServlet(RootResources rootResources) {
 		return new ServletRegistrationBean<>(rootResources, "/*");
-	}
-
-	/**
-	 * We want to be able to consume url-encoded-form-post bodies, but HiddenHttpMethodFilter triggers the HTTP
-	 * body to be consumed.  So disable it.
-	 *
-	 * @param filter The filter.
-	 * @return Filter registration bean.
-	 */
-	@Bean
-	public FilterRegistrationBean<HiddenHttpMethodFilter> registration(HiddenHttpMethodFilter filter) {
-		FilterRegistrationBean<HiddenHttpMethodFilter> registration = new FilterRegistrationBean<>(filter);
-		registration.setEnabled(false);
-		return registration;
 	}
 }
