@@ -44,14 +44,12 @@ import org.apache.juneau.serializer.annotation.*;
 )
 @HtmlDocConfig(
 	widgets={
-		ContentTypeMenuItem.class,
-		ThemeMenuItem.class
+		ContentTypeMenuItem.class
 	},
 	navlinks={
 		"api: servlet:/api",
 		"stats: servlet:/stats",
 		"$W{ContentTypeMenuItem}",
-		"$W{ThemeMenuItem}",
 		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"
 	},
 	aside={

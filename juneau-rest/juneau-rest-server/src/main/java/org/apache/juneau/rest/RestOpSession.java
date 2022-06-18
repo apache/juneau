@@ -33,7 +33,6 @@ import org.apache.juneau.rest.logging.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.Overview}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

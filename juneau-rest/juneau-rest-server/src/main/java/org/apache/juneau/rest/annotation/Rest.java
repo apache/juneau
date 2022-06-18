@@ -238,10 +238,6 @@ public @interface Rest {
 	 * Note that the <c>SpringRestServlet</c> classes uses the <c>SpringBeanStore</c> class to allow for any
 	 * Spring beans to be injected into your REST resources.
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='link'>{@doc jrs.Injection}
-	 * </ul>
-	 *
 	 * @return The annotation value.
 	 */
 	Class<? extends BeanStore> beanStore() default BeanStore.Void.class;

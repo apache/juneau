@@ -2539,7 +2539,7 @@ public class RestContext extends Context {
 		 * 	<li>{@link FileFinder} - The file finder that would have been returned by this method.
 		 * 	<li>{@link RestContext} - This REST context.
 		 * 	<li>{@link BeanStore} - The bean store of this REST context.
-		 * 	<li>Any {@doc jrs.Injection injected bean} types.  Use {@link Optional} arguments for beans that may not exist.
+		 * 	<li>Any {@doc juneau-rest-server-springboot injected bean} types.  Use {@link Optional} arguments for beans that may not exist.
 		 * </ul>
 		 *
 		 * @param beanStore

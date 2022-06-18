@@ -102,7 +102,6 @@ import org.apache.juneau.serializer.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.Overview}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

@@ -35,7 +35,6 @@ import org.apache.juneau.rest.util.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.Overview}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

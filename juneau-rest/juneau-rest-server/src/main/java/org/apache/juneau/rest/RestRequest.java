@@ -195,7 +195,6 @@ import org.apache.juneau.utils.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.Overview}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

@@ -417,10 +417,9 @@
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.UsingWithOsgi'>Using with OSGi</a></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.RestContext'>RestContext</a><span class='update'>created: <b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.RestOpContext'>RestOpContext</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#juneau-rest-server.jrs.ResponseProcessors'>Response Processors</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></p>
+		<li><p><a class='doclink' href='#juneau-rest-server.jrs.ResponseProcessors'>Response Processors</a><span class='update'>created: <b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.RestRpc'>REST/RPC</a><span class='update'>updated: 8.0.0,<b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.SerializingUris'>Serializing URIs</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#juneau-rest-server.jrs.FluentAssertions'>Fluent Assertions</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.UtilityBeans'>Utility Beans</a><span class='update'>created: <b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.HtmlBeans'>Using with HTML Beans</a><span class='update'>created: <b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#juneau-rest-server.jrs.OtherNotes'>Other Notes</a></p>
@@ -484,7 +483,6 @@
 		<li><p><a class='doclink' href='#juneau-microservice-core.jmc.SystemProperties'>System properties</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></p>
 		<li><p><a class='doclink' href='#juneau-microservice-core.jmc.VarResolver'>VarResolver</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></p>
 		<li><p><a class='doclink' href='#juneau-microservice-core.jmc.ConsoleCommands'>Console Commands</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></p>
-		<li><p><a class='doclink' href='#juneau-microservice-core.jmc.Logging'>Logging</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></p>
 		<li><p><a class='doclink' href='#juneau-microservice-core.jmc.Listeners'>Listeners</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></p>
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#juneau-microservice-jetty'>juneau-microservice-jetty</a><span class='update'>created: 8.1.0, deprecated: 8.1.2</span></p>
@@ -18381,7 +18379,7 @@
 	}
 	</p>
 	<p>
-		They can also be defined through {@doc jrs.CustomRestContextsAndBuilders custom REST context and builders}.
+		They can also be defined through {@doc jrs.RestContext custom REST context and builders}.
 	</p>
 	
 	<p>
@@ -21651,11 +21649,73 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.ResponseProcessors' id='juneau-rest-server.jrs.ResponseProcessors'>6.24 - Response Processors</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.ResponseProcessors' id='juneau-rest-server.jrs.ResponseProcessors'>6.24 - Response Processors</a><span class='update'>created: <b>9.0.0</b></span></h3>
 <div class='topic'><!-- START: 6.24 - juneau-rest-server.jrs.ResponseProcessors -->
 <div class='topic'>
 	<p>
-		TODO
+		The REST Server API uses the concept of registered response processors for converting objects returned by REST
+		methods or set through {@link org.apache.juneau.rest.RestResponse#setContent(Object)} into appropriate HTTP responses.
+	</p>
+	<p>
+		By default, REST resource classes are registered with the following response processors:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link org.apache.juneau.rest.processor.HttpEntityProcessor} 
+		<li class='jc'>{@link org.apache.juneau.rest.processor.HttpResourceProcessor}
+		<li class='jc'>{@link org.apache.juneau.rest.processor.HttpResponseProcessor}
+		<li class='jc'>{@link org.apache.juneau.rest.processor.InputStreamProcessor}
+		<li class='jc'>{@link org.apache.juneau.rest.processor.PlainTextPojoProcessor}
+		<li class='jc'>{@link org.apache.juneau.rest.processor.ReaderProcessor}
+		<li class='jc'>{@link org.apache.juneau.rest.processor.ResponseBeanProcessor}
+		<li class='jc'>{@link org.apache.juneau.rest.processor.SerializedPojoProcessor}
+		<li class='jc'>{@link org.apache.juneau.rest.processor.ThrowableProcessor}	
+	</ul>	
+	<p>
+		Custom response processors can be associated with REST resources via the following:
+	</p>
+	<ul>
+		<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#responseProcessors}
+		<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#responseProcessors()}
+	</ul>
+	
+	<p>
+		Response processors can be used to process POJOs that cannot normally be handled through Juneau serializers, or
+		because it's simply easier to define response processors for special cases.
+	</p>
+	<p>
+		The following example shows how to create a response processor to handle special <c>Foo</c> objects outside the
+		normal Juneau architecture.
+	</p>
+	<p class='bjava'>
+		<ja>@Rest</ja>(
+			path=<js>"/example"</js>,
+			responseProcessors=FooProcessor.<jk>class</jk>
+		)
+		<jk>public class</jk> Example <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
+
+			<ja>@RestGet</ja>(<js>"/"</js>)
+			<jk>public</jk> Foo test1() {
+				<jk>return new</jk> Foo(<js>"123"</js>);
+			}
+
+			<jk>public static class</jk> FooProcessor <jk>implements</jk> ResponseProcessor {
+				<ja>@Override</ja>
+				<jk>public int</jk> process(RestOpSession <jv>opSession</jv>) {
+
+					RestResponse <jv>res</jv> = <jv>opSession</jv>.getRestResponse();
+					Foo <jv>foo</jv> = <jv>res</jv>.getOutput(Foo.<jk>class</jk>);
+
+					<jk>if</jk> (<jv>foo</jv> == <jk>null</jk>)
+						<jk>return</jk> <jsf>NEXT</jsf>;  <jc>// Let the next processor handle it.</jc>
+
+					<jc>// Set some headers and body content.</jc>
+					<jv>res</jv>.setHeader(<js>"Foo-ID"</js>, <jv>foo</jv>.getId());
+					<jv>res</jv>.getWriter().write(<js>"foo.id="</js> + <jv>foo</jv>.getId());
+
+					<jk>return</jk> <jsf>FINISHED</jsf>;  <jc>// We handled it.</jc>
+				}
+			}
+		}
 	</p>
 </div>
 </div><!-- END: 6.24 - juneau-rest-server.jrs.ResponseProcessors -->
@@ -21670,7 +21730,7 @@
 	</p>
 	<ul>
 		<li class='note'>
-			This is not to be confused with {@doc jrs.Proxies REST Proxies} which are entirely client-side driven Java interfaces
+			This is not to be confused with {@doc juneau-rest-server-springboot REST Proxies} which are entirely client-side driven Java interfaces
 			against arbitrary backend REST interfaces.
 	</ul>
 	
@@ -22082,19 +22142,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.FluentAssertions' id='juneau-rest-server.jrs.FluentAssertions'>6.27 - Fluent Assertions</a><span class='update'>created: <b>9.0.0</b>, <b><red>TODO</red></b></span></h3>
-<div class='topic'><!-- START: 6.27 - juneau-rest-server.jrs.FluentAssertions -->
-<div class='topic'>
-	<p>
-		TODO
-	</p>
-</div>
-</div><!-- END: 6.27 - juneau-rest-server.jrs.FluentAssertions -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.UtilityBeans' id='juneau-rest-server.jrs.UtilityBeans'>6.28 - Utility Beans</a><span class='update'>created: <b>9.0.0</b></span></h3>
-<div class='topic'><!-- START: 6.28 - juneau-rest-server.jrs.UtilityBeans -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.UtilityBeans' id='juneau-rest-server.jrs.UtilityBeans'>6.27 - Utility Beans</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<div class='topic'><!-- START: 6.27 - juneau-rest-server.jrs.UtilityBeans -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.rest.beans} package contains a set of reusable utility beans meant to help with putting together
@@ -22208,12 +22257,12 @@
 	</p>
 	
 </div>
-</div><!-- END: 6.28 - juneau-rest-server.jrs.UtilityBeans -->
+</div><!-- END: 6.27 - juneau-rest-server.jrs.UtilityBeans -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.HtmlBeans' id='juneau-rest-server.jrs.HtmlBeans'>6.29 - Using with HTML Beans</a><span class='update'>created: <b>9.0.0</b></span></h3>
-<div class='topic'><!-- START: 6.29 - juneau-rest-server.jrs.HtmlBeans -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.HtmlBeans' id='juneau-rest-server.jrs.HtmlBeans'>6.28 - Using with HTML Beans</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<div class='topic'><!-- START: 6.28 - juneau-rest-server.jrs.HtmlBeans -->
 <div class='topic'>
 	<p>
 		The {@link org.apache.juneau.examples.rest.HtmlBeansResource} class shows how {@link org.apache.juneau.dto.html5 HTML5 beans} can be
@@ -22323,12 +22372,12 @@
 	<img class='bordered w800' src='doc-files/jrs.HtmlBeans.form.json.png'>
 	
 </div>
-</div><!-- END: 6.29 - juneau-rest-server.jrs.HtmlBeans -->
+</div><!-- END: 6.28 - juneau-rest-server.jrs.HtmlBeans -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.OtherNotes' id='juneau-rest-server.jrs.OtherNotes'>6.30 - Other Notes</a></h3>
-<div class='topic'><!-- START: 6.30 - juneau-rest-server.jrs.OtherNotes -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-rest-server.jrs.OtherNotes' id='juneau-rest-server.jrs.OtherNotes'>6.29 - Other Notes</a></h3>
+<div class='topic'><!-- START: 6.29 - juneau-rest-server.jrs.OtherNotes -->
 <div class='topic'>
 	<ul class='notes'>
 		<li class='note'>
@@ -22341,7 +22390,7 @@
 			parameter can be specified:  <l>"/sample?X-Response-Headers={Refresh=1}"</l>
 	</ul>
 </div>
-</div><!-- END: 6.30 - juneau-rest-server.jrs.OtherNotes -->
+</div><!-- END: 6.29 - juneau-rest-server.jrs.OtherNotes -->
 </div><!-- END: 6 - juneau-rest-server -->
 
 <!-- ==================================================================================================== -->
@@ -26216,159 +26265,8 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-core.jmc.Logging' id='juneau-microservice-core.jmc.Logging'>12.9 - Logging</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
-<div class='topic'><!-- START: 12.9 - juneau-microservice-core.jmc.Logging -->
-<div class='topic'>
-	<p>
-		The Microservice API provides build-in but configurable and overridable support for logging.
-	</p>
-	<p>
-		The method for configuring logging is as follows:
-	</p>
-	<ul class='javatree'>
-		<li class='jc'>{@link org.apache.juneau.microservice.Microservice.Builder}
-			<ul class='javatreec'>
-				<li class='jm'>{@link org.apache.juneau.microservice.Microservice.Builder#logConfig(LogConfig) logConfig(LogConfig)} 
-				<li class='jm'>{@link org.apache.juneau.microservice.Microservice.Builder#logger(Logger) logger(Logger)} 
-			</ul>
-		</li>
-	</ul>
-	<p>
-		If not specified, the logging configuration is pulled in from the configuration file:
-	</p>
-	<p class='bini'>
-	<jc>#=======================================================================================================================
-	# Logger settings
-	#-----------------------------------------------------------------------------------------------------------------------
-	# See FileHandler Java class for details.
-	#=======================================================================================================================</jc>
-	<cs>[Logging]</cs>
-	
-	<jc># The directory where to create the log file.
-	# Default is "."</jc>
-	<ck>logDir</ck> = <cv>logs</cv>
-	
-	<jc># The name of the log file to create for the main logger.
-	# The logDir and logFile make up the pattern that's passed to the FileHandler
-	# constructor.
-	# If value is not specified, then logging to a file will not be set up.</jc>
-	<ck>logFile</ck> = <cv>microservice.%g.log</cv>
-	
-	<jc># Whether to append to the existing log file or create a new one.</jc>
-	<ck>append</ck> = <cv>false</cv>
-	
-	<jc># The SimpleDateFormat format to use for dates.</jc>
-	<ck>dateFormat</ck> = <cv>yyyy.MM.dd hh:mm:ss</cv>
-	
-	<jc># The log message format.
-	# The value can contain any of the following variables:
-	# 	{date} - The date, formatted per dateFormat.
-	#	{class} - The class name.
-	#	{method} - The method name.
-	#	{logger} - The logger name.
-	#	{level} - The log level name.
-	#	{msg} - The log message.
-	#	{threadid} - The thread ID.
-	#	{exception} - The localized exception message.</jc>
-	<ck>format</ck> = <cv>[{date} {level}] {msg}%n</cv>
-	
-	<jc># The maximum log file size.
-	# Suffixes available for numbers.
-	# See Config.getInt(String,int) for details.</jc>
-	<ck>limit</ck> = <cv>1M</cv>
-	
-	<jc># Max number of log files.</jc>
-	<ck>count</ck> = <cv>5</cv>
-	
-	<jc># Default log levels.
-	# Format is lax-JSON.
-	# Keys are logger names.
-	# Values are serialized Level POJOs (SEVERE, WARNING, INFO, CONFIG, FINE, FINER, FINEST)</jc>
-	<ck>levels</ck> = 
-		<cv>{ 
-			'': 'WARNING', 
-			org.apache.juneau: 'WARNING', 
-			org.eclipse.jetty: 'WARNING' 
-		}</cv>
-	
-	<jc># Only print unique stack traces once and then refer to them by a simple 8 character hash identifier.
-	# Useful for preventing log files from filling up with duplicate stack traces.</jc>
-	<ck>useStackTraceHashes</ck> = <cv>true</cv>
-	
-	<jc># The default level for the console logger.
-	# Values are serialized Level POJOs (SEVERE, WARNING, INFO, CONFIG, FINE, FINER, FINEST)</jc>
-	<ck>consoleLevel</ck> = <cv>WARNING</cv>
-	
-	<jc># The default level for the file logger.
-	# Values are serialized Level POJOs (SEVERE, WARNING, INFO, CONFIG, FINE, FINER, FINEST)</jc>
-	<ck>fileLevel</ck> = <cv>INFO</cv>
-	</p>
-	<p>
-		The logging configuration can also be defined programmatically through the following API:
-	</p>
-	<ul class='javatree'>
-		<li class='jc'>{@link org.apache.juneau.microservice.LogConfig}
-			<ul class='javatreec'>
-				<li class='jm'>{@link org.apache.juneau.microservice.LogConfig#create() create()} 
-				<li class='jm'>{@link org.apache.juneau.microservice.LogConfig#append() append()} 
-				<li class='jm'>{@link org.apache.juneau.microservice.LogConfig#consoleLevel(Level) consoleLevel(Level)} 
-				<li class='jm'>{@link org.apache.juneau.microservice.LogConfig#count(int) count(int)} 
-				<li class='jm'>{@link org.apache.juneau.microservice.LogConfig#fileLevel(Level) fileLevel(Level)} 
-				<li class='jm'>{@link org.apache.juneau.microservice.LogConfig#formatter(Formatter) formatter(Formatter)} 
-				<li class='jm'>{@link org.apache.juneau.microservice.LogConfig#level(String,Level) level(String,Level)} 
-				<li class='jm'>{@link org.apache.juneau.microservice.LogConfig#levels(Map) levels(Map)} 
-				<li class='jm'>{@link org.apache.juneau.microservice.LogConfig#limit(int) limit(int)} 
-				<li class='jm'>{@link org.apache.juneau.microservice.LogConfig#logDir(String) logDir(String)} 
-				<li class='jm'>{@link org.apache.juneau.microservice.LogConfig#logFile(String) logFile(String)} 
-			</ul>
-		</li>
-	</ul>
-	<h5 class='figure'>Example:</h5>
-	<p class='bjava'>
-	<jk>public static void</jk> main(String[] <jv>args</jv>) {
-		
-		LogConfig <jv>logConfig</jv> = LogConfig
-			.<jsm>create</jsm>()
-			.append(<jk>true</jk>)
-			.consoleLevel(<jsf>FINE</jsf>)
-			.level(<js>"org.mylogger"</js>, <jsf>FINER</jsf>)
-			.logDir(<js>"my-log-files"</js>);
-		
-		Microservice
-			.<jsm>create</jsm>() 
-			.args(<jv>args</jv>)
-			.logConfig(<jv>logConfig</jv>)
-			.build()
-			.start()
-			.join()
-		;
-	}
-	</p>
-	<p>
-		If you wish to bypass the default logging configuration entirely, you can pass in your own logger via
-		the {@link org.apache.juneau.microservice.Microservice.Builder#logger(Logger)} method. 
-	</p>
-	<p>
-		In addition to configuring the built-in Java logging framework, the following convenience methods are also
-		provided on the {@link org.apache.juneau.microservice.Microservice} class for logging.
-	</p>
-	
-	<ul class='javatree'>
-		<li class='jc'>{@link org.apache.juneau.microservice.Microservice}
-			<ul class='javatreec'>
-				<li class='jm'>{@link org.apache.juneau.microservice.Microservice#getLogger() getLogger()} 
-				<li class='jm'>{@link org.apache.juneau.microservice.Microservice#out(Messages,String,Object...) out(Messages,String,Object...)} 
-				<li class='jm'>{@link org.apache.juneau.microservice.Microservice#err(Messages,String,Object...) err(Messages,String,Object...)} 
-			</ul>
-		</li>
-	</ul>
-</div>
-</div><!-- END: 12.9 - juneau-microservice-core.jmc.Logging -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-core.jmc.Listeners' id='juneau-microservice-core.jmc.Listeners'>12.10 - Listeners</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
-<div class='topic'><!-- START: 12.10 - juneau-microservice-core.jmc.Listeners -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-microservice-core.jmc.Listeners' id='juneau-microservice-core.jmc.Listeners'>12.9 - Listeners</a><span class='update'>created: 8.0.0, deprecated: 8.1.2</span></h3>
+<div class='topic'><!-- START: 12.9 - juneau-microservice-core.jmc.Listeners -->
 <div class='topic'>
 	<p>
 		As mentioned previously, the lifecycle methods for the {@link org.apache.juneau.microservice.Microservice} class are explicitly
@@ -26424,7 +26322,7 @@
 	}
 	</p>
 </div>
-</div><!-- END: 12.10 - juneau-microservice-core.jmc.Listeners -->
+</div><!-- END: 12.9 - juneau-microservice-core.jmc.Listeners -->
 </div><!-- END: 12 - juneau-microservice-core -->
 
 <!-- ==================================================================================================== -->

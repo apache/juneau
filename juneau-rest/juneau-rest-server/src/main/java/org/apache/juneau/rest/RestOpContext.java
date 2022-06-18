@@ -71,7 +71,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jrs.Overview}
+ * 	<li class='link'>{@doc jrs.RestOpContext}
  * 	<li class='extlink'>{@source}
  * </ul>
  */
@@ -983,7 +983,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 			<li>{@link Method} - The Java method this context belongs to.
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc jrs.Injection injected beans}.
+		 * 			<li>Any {@doc juneau-rest-server-springboot injected beans}.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates a <c>RestGuard[0]</c>.
@@ -1126,7 +1126,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 			<li>{@link java.lang.reflect.Method} - The Java method this context belongs to.
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc jrs.Injection injected beans}.
+		 * 			<li>Any {@doc juneau-rest-server-springboot injected beans}.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
 		 * 	<li>Instantiates a <c>RestMatcher[0]</c>.

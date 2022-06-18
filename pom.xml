@@ -223,7 +223,7 @@
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<version>3.0.1</version>
 					<configuration>
-						<doclint>missing,reference,syntax</doclint>
+						<doclint>reference,syntax</doclint>
 						<sourcetab>3</sourcetab>
 						<notimestamp>true</notimestamp>
 						<verbose>true</verbose>
