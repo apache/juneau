@@ -819,7 +819,7 @@ public class BeanMeta<T> {
 	 */
 	public void forEachProperty(Predicate<BeanPropertyMeta> filter, Consumer<BeanPropertyMeta> action) {
 		for (BeanPropertyMeta x : propertyArray)
-			if (passes(filter, x))
+			if (test(filter, x))
 				action.accept(x);
 	}
 
@@ -833,7 +833,7 @@ public class BeanMeta<T> {
 	 */
 	public <T2> Optional<T2> firstProperty(Predicate<BeanPropertyMeta> filter, Function<BeanPropertyMeta,T2> function) {
 		for (BeanPropertyMeta x : propertyArray)
-			if (passes(filter, x))
+			if (test(filter, x))
 				return Optional.ofNullable(function.apply(x));
 		return Optional.empty();
 	}

@@ -480,7 +480,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 * @return This object.
 	 */
 	public <T> JsonMap appendIf(Predicate<T> test, String key, T value) {
-		return appendIf(passes(test, value), key, value);
+		return appendIf(test(test, value), key, value);
 	}
 
 	/**
@@ -495,7 +495,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	@SafeVarargs
 	public final <T> JsonMap appendFirst(Predicate<T> test, String key, T...values) {
 		for (T v : values)
-			if (passes(test, v))
+			if (test(test, v))
 				return append(key, v);
 		return this;
 	}

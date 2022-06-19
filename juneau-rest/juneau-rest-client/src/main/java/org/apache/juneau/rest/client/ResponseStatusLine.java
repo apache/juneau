@@ -67,7 +67,7 @@ public class ResponseStatusLine implements StatusLine {
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getStatusLine().assertValue().code().is(200);
+	 * 		.getStatusLine().assertValue().asCode().is(200);
 	 * </p>
 	 *
 	 * @return A new fluent assertion object.

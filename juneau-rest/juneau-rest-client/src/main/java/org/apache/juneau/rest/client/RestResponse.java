@@ -172,7 +172,7 @@ public class RestResponse implements HttpResponse {
 	 * 	MyBean <jv>bean</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertStatus().code().is(200)
+	 * 		.assertStatus().asCode().is(200)
 	 * 		.getContent().as(MyBean.<jk>class</jk>);
 	 * </p>
 	 *
@@ -281,7 +281,7 @@ public class RestResponse implements HttpResponse {
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).passes(<jv>x</jv> -&gt; <jv>x</jv>.equals(<js>"application/json"</js>));
+	 * 		.assertHeader(<js>"Content-Type"</js>).is(<jv>x</jv> -&gt; <jv>x</jv>.equals(<js>"application/json"</js>));
 	 *
 	 * 	<jc>// Validates the content type is JSON by just checking for substring.</jc>
 	 * 	<jv>client</jv>
@@ -293,13 +293,13 @@ public class RestResponse implements HttpResponse {
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>);
+	 * 		.assertHeader(<js>"Content-Type"</js>).isPattern(<js>".*json.*"</js>);
 	 *
 	 * 	<jc>// Validates the content type is JSON using case-insensitive regular expression.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>, <jsf>CASE_INSENSITIVE</jsf>);
+	 * 		.assertHeader(<js>"Content-Type"</js>).isPattern(<js>".*json.*"</js>, <jsf>CASE_INSENSITIVE</jsf>);
 	 * </p>
 	 *
 	 * <p>
@@ -309,8 +309,8 @@ public class RestResponse implements HttpResponse {
 	 * 	MediaType <jv>mediaType</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertHeader(<js>"Content-Type"</js>).exists()
-	 * 		.assertHeader(<js>"Content-Type"</js>).matches(<js>".*json.*"</js>)
+	 * 		.assertHeader(<js>"Content-Type"</js>).isNotEmpty()
+	 * 		.assertHeader(<js>"Content-Type"</js>).isPattern(<js>".*json.*"</js>)
 	 * 		.getHeader(<js>"Content-Type"</js>).as(MediaType.<jk>class</jk>);
 	 * </p>
 	 *
@@ -345,38 +345,38 @@ public class RestResponse implements HttpResponse {
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertContent().equals(<js>"OK"</js>);
+	 * 		.assertContent().is(<js>"OK"</js>);
 	 *
 	 * 	<jc>// Validates the response body contains the text "OK".</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertContent().contains(<js>"OK"</js>);
+	 * 		.assertContent().isContains(<js>"OK"</js>);
 	 *
 	 * 	<jc>// Validates the response body passes a predicate test.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertContent().passes(<jv>x</jv> -&gt; <jv>x</jv>.contains(<js>"OK"</js>));
+	 * 		.assertContent().is(<jv>x</jv> -&gt; <jv>x</jv>.contains(<js>"OK"</js>));
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertContent().matches(<js>".*OK.*"</js>);
+	 * 		.assertContent().isPattern(<js>".*OK.*"</js>);
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression using regex flags.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertContent().matches(<js>".*OK.*"</js>, <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>);
+	 * 		.assertContent().isPattern(<js>".*OK.*"</js>, <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>);
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression in the form of an existing Pattern.</jc>
 	 * 	Pattern <jv>pattern</jv> = Pattern.<jsm>compile</jsm>(<js>".*OK.*"</js>);
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertContent().matches(<jv>pattern</jv>);
+	 * 		.assertContent().isPattern(<jv>pattern</jv>);
 	 * </p>
 	 *
 	 * <p>
@@ -386,8 +386,8 @@ public class RestResponse implements HttpResponse {
 	 * 	MyBean <jv>bean</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertContent().matches(<js>".*OK.*"</js>);
-	 * 		.assertContent().doesNotMatch(<js>".*ERROR.*"</js>)
+	 * 		.assertContent().isPattern(<js>".*OK.*"</js>);
+	 * 		.assertContent().isNotPattern(<js>".*ERROR.*"</js>)
 	 * 		.getContent().as(MyBean.<jk>class</jk>);
 	 * </p>
 	 *

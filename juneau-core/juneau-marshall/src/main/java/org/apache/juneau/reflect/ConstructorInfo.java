@@ -163,7 +163,7 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 	 * @return <jk>true</jk> if this object passes the specified predicate test.
 	 */
 	public boolean matches(Predicate<ConstructorInfo> test) {
-		return passes(test, this);
+		return test(test, this);
 	}
 
 	/**

@@ -153,7 +153,7 @@ public abstract class ExecutableInfo {
 	 */
 	public ExecutableInfo forEachParam(Predicate<ParamInfo> filter, Consumer<ParamInfo> action) {
 		for (ParamInfo pi : _getParams())
-			if (passes(filter, pi))
+			if (test(filter, pi))
 				action.accept(pi);
 		return this;
 	}

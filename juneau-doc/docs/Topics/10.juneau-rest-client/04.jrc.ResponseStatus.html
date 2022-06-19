@@ -65,13 +65,13 @@
 		|	<jc>// Status assertion using a static value.</jc>
 		|	String <jv>body1</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
 		|		.run()
-		|		.assertStatus().code().isBetween(200,399)
+		|		.assertStatus().asCode().isBetween(200,399)
 		|		.getContent().asString();
 		|
 		|	<jc>// Status assertion using a predicate.</jc>
 		|	String <jv>body2</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
 		|		.run()
-		|		.assertStatus().code().passes(<jv>x</jv> -> <jv>x</jv>&lt;400)
+		|		.assertStatus().asCode().is(<jv>x</jv> -> <jv>x</jv>&lt;400)
 		|		.getContent().asString();
 	</p>
 </div>

@@ -75,7 +75,7 @@
 		|
 		|			<jc>// The form auth request should always respond with a 200 ok or 302 redirect code</jc>
 		|			<jk>if</jk> (<jv>rc</jv> == <jsf>SC_MOVED_TEMPORARILY</jsf>) {
-		|				<jk>if</jk> (<jv>response</jv>.getFirstHeader(<js>"Location"</js>).getValue().matches(<js>"^.*/auth/authfailed.*$"</js>))
+		|				<jk>if</jk> (<jv>response</jv>.getFirstHeader(<js>"Location"</js>).getValue().isPattern(<js>"^.*/auth/authfailed.*$"</js>))
 		|					<jk>throw new</jk> IOException(<js>"Invalid credentials."</js>);
 		|			} <jk>else if</jk> (<jv>rc</jv> != <jsf>SC_OK</jsf>) {
 		|				<jk>throw new</jk> IOException(<js>"Unexpected HTTP status: "</js> + <jv>rc</jv>);

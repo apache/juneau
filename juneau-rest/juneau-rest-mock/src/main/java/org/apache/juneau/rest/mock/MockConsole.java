@@ -124,7 +124,7 @@ public class MockConsole extends PrintStream {
 	 * 		.get(<js>"/url"</js>)
 	 * 		.run();
 	 *
-	 * 	<jv>console</jv>.assertContents().contains(<js>"HTTP GET /url"</js>);
+	 * 	<jv>console</jv>.assertContents().isContains(<js>"HTTP GET /url"</js>);
 	 * </p>
 	 *
 	 * @return A new fluent-style assertion object.

@@ -327,7 +327,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URL</jsf>)
 	 * 		.run()
-	 * 		.assertContent().isEqualTo(<js>"OK"</js>);
+	 * 		.assertContent().is(<js>"OK"</js>);
 	 * </p>
 	 *
 	 * @param value

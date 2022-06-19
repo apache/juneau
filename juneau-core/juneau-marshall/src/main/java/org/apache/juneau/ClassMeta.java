@@ -2140,7 +2140,7 @@ public final class ClassMeta<T> implements Type {
 			return Optional.empty();
 		}
 		for (A a : array)
-			if (passes(filter, a))
+			if (test(filter, a))
 				return Optional.of(a);
 		return Optional.empty();
 	}
@@ -2161,7 +2161,7 @@ public final class ClassMeta<T> implements Type {
 			return Optional.empty();
 		}
 		for (int i = array.length-1; i >= 0; i--)
-			if (passes(filter, array[i]))
+			if (test(filter, array[i]))
 				return Optional.of(array[i]);
 		return Optional.empty();
 	}

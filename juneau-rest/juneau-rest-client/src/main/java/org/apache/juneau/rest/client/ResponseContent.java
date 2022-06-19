@@ -1118,26 +1118,26 @@ public class ResponseContent implements HttpEntity {
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getContent().assertValue().passes(<jv>x</jv> -&gt; <jv>x</jv>.contains(<js>"OK"</js>));
+	 * 		.getContent().assertValue().is(<jv>x</jv> -&gt; <jv>x</jv>.contains(<js>"OK"</js>));
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getContent().assertValue().matches(<js>".*OK.*"</js>);
+	 * 		.getContent().assertValue().isPattern(<js>".*OK.*"</js>);
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression using regex flags.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getContent().assertValue().matches(<js>".*OK.*"</js>,  <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>);
+	 * 		.getContent().assertValue().isPattern(<js>".*OK.*"</js>,  <jsf>MULTILINE</jsf> &amp; <jsf>CASE_INSENSITIVE</jsf>);
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression in the form of an existing Pattern.</jc>
 	 * 	Pattern <jv>pattern</jv> = Pattern.<jsm>compile</jsm>(<js>".*OK.*"</js>);
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getContent().assertValue().matches(<jv>pattern</jv>);
+	 * 		.getContent().assertValue().isPattern(<jv>pattern</jv>);
 	 * </p>
 	 *
 	 * <p>
@@ -1147,8 +1147,8 @@ public class ResponseContent implements HttpEntity {
 	 * 	MyBean <jv>bean</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getContent().assertValue().matches(<js>".*OK.*"</js>);
-	 * 		.getContent().assertValue().doesNotMatch(<js>".*ERROR.*"</js>)
+	 * 		.getContent().assertValue().isPattern(<js>".*OK.*"</js>);
+	 * 		.getContent().assertValue().isNotPattern(<js>".*ERROR.*"</js>)
 	 * 		.getContent().as(MyBean.<jk>class</jk>);
 	 * </p>
 	 *

@@ -108,7 +108,7 @@ import org.apache.juneau.xml.*;
  * 		.build()
  * 		.get(<jsf>URI</jsf>)
  * 		.run()
- * 		.assertStatus().code().is(200)
+ * 		.assertStatus().asCode().is(200)
  * 		.assertHeader(<js>"Content-Type"</js>).matchesSimple(<js>"application/json*"</js>)
  * 		.getContent().as(MyBean.<jk>class</jk>);
  * </p>
@@ -121,7 +121,7 @@ import org.apache.juneau.xml.*;
  * 	RestRequest <jv>req</jv> = <jv>client</jv>.get(<jsf>URI</jsf>);
  * 	RestResponse <jv>res</jv> = <jv>req</jv>.run();
  * 	RestResponseStatusLineAssertion <jv>statusLineAssertion</jv> = <jv>res</jv>.assertStatus();
- * 	FluentIntegerAssertion&lt;RestResponse&gt; <jv>codeAssertion</jv> = <jv>statusLineAssertion</jv>.code();
+ * 	FluentIntegerAssertion&lt;RestResponse&gt; <jv>codeAssertion</jv> = <jv>statusLineAssertion</jv>.asCode();
  * 	<jv>res</jv> = <jv>codeAssertion</jv>.is(200);
  * 	FluentStringAssertion&lt;RestResponse&gt; <jv>headerAssertion</jv> = <jv>res</jv>.assertHeader(<js>"Content-Type"</js>);
  * 	<jv>res</jv> = <jv>headerAssertion</jv>.matchesSimple(<js>"application/json*"</js>);
@@ -546,13 +546,13 @@ import org.apache.juneau.xml.*;
  * 	<jc>// Status assertion using a static value.</jc>
  * 	String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
  * 		.run()
- * 		.assertStatus().code().isBetween(200,399)
+ * 		.assertStatus().asCode().isBetween(200,399)
  * 		.getContent().asString();
  *
  * 	<jc>// Status assertion using a predicate.</jc>
  * 	String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
  * 		.run()
- * 		.assertStatus().code().passes(<jv>x</jv> -&gt; <jv>x</jv>&lt;400)
+ * 		.assertStatus().asCode().is(<jv>x</jv> -&gt; <jv>x</jv>&lt;400)
  * 		.getContent().asString();
  * </p>
  *

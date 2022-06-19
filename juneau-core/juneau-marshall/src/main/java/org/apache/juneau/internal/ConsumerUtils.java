@@ -27,7 +27,7 @@ public final class ConsumerUtils {
 	 * @param value The value to test.
 	 * @return <jk>true</jk> if the specified predicate is <jk>null</jk> or matches the specified value.
 	 */
-	public static <T> boolean passes(Predicate<T> predicate, T value) {
+	public static <T> boolean test(Predicate<T> predicate, T value) {
 		return (predicate == null || predicate.test(value));
 	}
 
@@ -40,7 +40,7 @@ public final class ConsumerUtils {
 	 * @param value The value.
 	 * @return <jk>true</jk> if the specified predicate is <jk>null</jk> or matches the specified value.
 	 */
-	public static <T> boolean passes(Class<T> type, Predicate<T> predicate, Object value) {
+	public static <T> boolean test(Class<T> type, Predicate<T> predicate, Object value) {
 		return type.isInstance(value) && (predicate == null || predicate.test(type.cast(value)));
 	}
 
@@ -53,7 +53,7 @@ public final class ConsumerUtils {
 	 * @param value The value.
 	 */
 	public static <T> void consume(Predicate<T> predicate, Consumer<T> consumer, T value) {
-		if (passes(predicate, value))
+		if (test(predicate, value))
 			consumer.accept(value);
 	}
 
@@ -67,7 +67,7 @@ public final class ConsumerUtils {
 	 * @param value The value.
 	 */
 	public static <T> void consume(Class<T> type, Predicate<T> predicate, Consumer<T> consumer, Object value) {
-		if (passes(type, predicate, value))
+		if (test(type, predicate, value))
 			consumer.accept(type.cast(value));
 	}
 }

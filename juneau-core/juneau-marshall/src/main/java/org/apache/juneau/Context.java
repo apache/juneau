@@ -946,7 +946,7 @@ public abstract class Context implements AnnotationProvider {
 	public <A extends Annotation> A firstAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 		if (type != null && onClass != null)
 			for (A a : annotations(type, onClass))
-				if (passes(filter, a))
+				if (test(filter, a))
 					return a;
 		return null;
 	}
@@ -956,7 +956,7 @@ public abstract class Context implements AnnotationProvider {
 		A x = null;
 		if (type != null && onClass != null)
 			for (A a : annotations(type, onClass))
-				if (passes(filter, a))
+				if (test(filter, a))
 					x = a;
 		return x;
 	}
@@ -972,7 +972,7 @@ public abstract class Context implements AnnotationProvider {
 	public <A extends Annotation> A firstDeclaredAnnotation(Class<A> type, Class<?> onClass, Predicate<A> filter) {
 		if (type != null && onClass != null)
 			for (A a : declaredAnnotations(type, onClass))
-				if (passes(filter, a))
+				if (test(filter, a))
 					return a;
 		return null;
 	}
@@ -982,7 +982,7 @@ public abstract class Context implements AnnotationProvider {
 		A x = null;
 		if (type != null && onClass != null)
 			for (A a : declaredAnnotations(type, onClass))
-				if (passes(filter, a))
+				if (test(filter, a))
 					x = a;
 		return x;
 	}
@@ -998,7 +998,7 @@ public abstract class Context implements AnnotationProvider {
 	public <A extends Annotation> A firstAnnotation(Class<A> type, Method onMethod, Predicate<A> filter) {
 		if (type != null && onMethod != null)
 			for (A a : annotations(type, onMethod))
-				if (passes(filter, a))
+				if (test(filter, a))
 					return a;
 		return null;
 	}
@@ -1008,7 +1008,7 @@ public abstract class Context implements AnnotationProvider {
 		A x = null;
 		if (type != null && onMethod != null)
 			for (A a : annotations(type, onMethod))
-				if (passes(filter, a))
+				if (test(filter, a))
 					x = a;
 		return x;
 	}
@@ -1024,7 +1024,7 @@ public abstract class Context implements AnnotationProvider {
 	public <A extends Annotation> A firstAnnotation(Class<A> type, Field onField, Predicate<A> filter) {
 		if (type != null && onField != null)
 			for (A a : annotations(type, onField))
-				if (passes(filter, a))
+				if (test(filter, a))
 					return a;
 		return null;
 	}
@@ -1034,7 +1034,7 @@ public abstract class Context implements AnnotationProvider {
 		A x = null;
 		if (type != null && onField != null)
 			for (A a : annotations(type, onField))
-				if (passes(filter, a))
+				if (test(filter, a))
 					x = a;
 		return x;
 	}
@@ -1050,7 +1050,7 @@ public abstract class Context implements AnnotationProvider {
 	public <A extends Annotation> A firstAnnotation(Class<A> type, Constructor<?> onConstructor, Predicate<A> filter) {
 		if (type != null && onConstructor != null)
 			for (A a : annotations(type, onConstructor))
-				if (passes(filter, a))
+				if (test(filter, a))
 					return a;
 		return null;
 	}
@@ -1060,7 +1060,7 @@ public abstract class Context implements AnnotationProvider {
 		A x = null;
 		if (type != null && onConstructor != null)
 			for (A a : annotations(type, onConstructor))
-				if (passes(filter, a))
+				if (test(filter, a))
 					x = a;
 		return x;
 	}

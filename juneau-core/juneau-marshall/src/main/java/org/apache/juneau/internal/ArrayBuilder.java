@@ -97,7 +97,7 @@ public final class ArrayBuilder<E> {
 	 * @throws ArrayIndexOutOfBoundsException if size is exceeded.
 	 */
 	public ArrayBuilder<E> add(E t) {
-		if (passes(filter, t)) {
+		if (test(filter, t)) {
 			if (list == null)
 				list = size < 0 ? new ArrayList<>() : new ArrayList<>(size);
 			list.add(t);

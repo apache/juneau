@@ -43,7 +43,7 @@ import org.apache.juneau.cp.*;
  * 		<js>"Foo did not equal bar.  Bean was=''{0}''"</js>,
  * 		<jsf>VALUE</jsf>
  * 	);
- * 	<jsm>assertObject</jsm>(<jv>myBean</jv>).passes(<jv>predicate</jv>);
+ * 	<jsm>assertObject</jsm>(<jv>myBean</jv>).is(<jv>predicate</jv>);
  * </p>
  *
  * <ul class='seealso'>

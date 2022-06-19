@@ -357,7 +357,7 @@ public final class ClassInfo {
 	 */
 	public ClassInfo getAnyParent(Predicate<ClassInfo> filter) {
 		for (ClassInfo ci : _getAllParents())
-			if (passes(filter, ci))
+			if (test(filter, ci))
 				return ci;
 		return null;
 	}
@@ -464,7 +464,7 @@ public final class ClassInfo {
 	 */
 	public final MethodInfo getPublicMethod(Predicate<MethodInfo> filter) {
 		for (MethodInfo mi : _getPublicMethods())
-			if (passes(filter, mi))
+			if (test(filter, mi))
 				return mi;
 		return null;
 	}
@@ -502,7 +502,7 @@ public final class ClassInfo {
 	 */
 	public MethodInfo getDeclaredMethod(Predicate<MethodInfo> filter) {
 		for (MethodInfo mi : _getDeclaredMethods())
-			if (passes(filter, mi))
+			if (test(filter, mi))
 				return mi;
 		return null;
 	}
@@ -540,7 +540,7 @@ public final class ClassInfo {
 	 */
 	public MethodInfo getMethod(Predicate<MethodInfo> filter) {
 		for (MethodInfo mi : _getAllMethods())
-			if (passes(filter, mi))
+			if (test(filter, mi))
 				return mi;
 		return null;
 	}
@@ -665,7 +665,7 @@ public final class ClassInfo {
 	 */
 	public ConstructorInfo getPublicConstructor(Predicate<ConstructorInfo> filter) {
 		for (ConstructorInfo ci : _getPublicConstructors())
-			if (passes(filter, ci))
+			if (test(filter, ci))
 				return ci;
 		return null;
 	}
@@ -702,7 +702,7 @@ public final class ClassInfo {
 	 */
 	public ConstructorInfo getDeclaredConstructor(Predicate<ConstructorInfo> filter) {
 		for (ConstructorInfo ci : _getDeclaredConstructors())
-			if (passes(filter, ci))
+			if (test(filter, ci))
 				return ci;
 		return null;
 	}
@@ -800,7 +800,7 @@ public final class ClassInfo {
 	 */
 	public FieldInfo getPublicField(Predicate<FieldInfo> filter) {
 		for (FieldInfo f : _getPublicFields())
-			if (passes(filter, f))
+			if (test(filter, f))
 				return f;
 		return null;
 	}
@@ -838,7 +838,7 @@ public final class ClassInfo {
 	 */
 	public FieldInfo getDeclaredField(Predicate<FieldInfo> filter) {
 		for (FieldInfo f : _getDeclaredFields())
-			if (passes(filter, f))
+			if (test(filter, f))
 				return f;
 		return null;
 	}
@@ -1044,7 +1044,7 @@ public final class ClassInfo {
 			annotationProvider = AnnotationProvider.DEFAULT;
 		A x = null;
 		x = getPackageAnnotation(type);
-		if (x != null && passes(filter, x))
+		if (x != null && test(filter, x))
 			return x;
 		ClassInfo[] interfaces = _getInterfaces();
 		for (int i = interfaces.length-1; i >= 0; i--) {
@@ -1117,7 +1117,7 @@ public final class ClassInfo {
 				return x;
 		}
 		x = getPackageAnnotation(type);
-		if (x != null && passes(filter, x))
+		if (x != null && test(filter, x))
 			return x;
 		return null;
 	}
@@ -2446,7 +2446,7 @@ public final class ClassInfo {
 	 * @return <jk>true</jk> if this object passes the specified predicate test.
 	 */
 	public boolean matches(Predicate<ClassInfo> test) {
-		return passes(test, this);
+		return test(test, this);
 	}
 
 	/**

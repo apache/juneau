@@ -485,7 +485,7 @@ public class ResponseHeader extends BasicHeader {
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).assertValue().passes(<jv>x</jv> -&gt; <jv>x</jv>.equals(<js>"application/json"</js>));
+	 * 		.getHeader(<js>"Content-Type"</js>).assertValue().is(<jv>x</jv> -&gt; <jv>x</jv>.equals(<js>"application/json"</js>));
 	 *
 	 * 	<jc>// Validates the content type is JSON by just checking for substring.</jc>
 	 * 	<jv>client</jv>
@@ -497,13 +497,13 @@ public class ResponseHeader extends BasicHeader {
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).assertValue().matches(<js>".*json.*"</js>);
+	 * 		.getHeader(<js>"Content-Type"</js>).assertValue().isPattern(<js>".*json.*"</js>);
 	 *
 	 * 	<jc>// Validates the content type is JSON using case-insensitive regular expression.</jc>
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).assertValue().matches(<js>".*json.*"</js>, <jsf>CASE_INSENSITIVE</jsf>);
+	 * 		.getHeader(<js>"Content-Type"</js>).assertValue().isPattern(<js>".*json.*"</js>, <jsf>CASE_INSENSITIVE</jsf>);
 	 * </p>
 	 *
 	 * <p>
@@ -513,8 +513,8 @@ public class ResponseHeader extends BasicHeader {
 	 * 	MediaType <jv>mediaType</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.getHeader(<js>"Content-Type"</js>).assertValue().exists()
-	 * 		.getHeader(<js>"Content-Type"</js>).assertValue().matches(<js>".*json.*"</js>)
+	 * 		.getHeader(<js>"Content-Type"</js>).assertValue().isNotEmpty()
+	 * 		.getHeader(<js>"Content-Type"</js>).assertValue().isPattern(<js>".*json.*"</js>)
 	 * 		.getHeader(<js>"Content-Type"</js>).as(MediaType.<jk>class</jk>);
 	 * </p>
 	 *

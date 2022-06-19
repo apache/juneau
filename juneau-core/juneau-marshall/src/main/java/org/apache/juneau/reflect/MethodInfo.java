@@ -546,7 +546,7 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @return <jk>true</jk> if this object passes the specified predicate test.
 	 */
 	public boolean matches(Predicate<MethodInfo> test) {
-		return passes(test, this);
+		return test(test, this);
 	}
 
 	/**

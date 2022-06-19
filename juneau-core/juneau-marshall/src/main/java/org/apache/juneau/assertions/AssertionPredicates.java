@@ -41,7 +41,7 @@ import org.apache.juneau.internal.*;
  * 	<jc>// Asserts that a list contains te specified values.</jc>
  * 	List&lt;Object&gt; <jv>myList</jv> = AList.<jsm>of</jsm>(...);
  * 	<jsm>assertList</jsm>(<jv>myList</jv>)
- * 		.passes(<jsm>eq</jsm>(<js>"foo"</js>), <jsm>any</jsm>(), <jsm>match</jsm>(<js>"bar*"</js>));
+ * 		.is(<jsm>eq</jsm>(<js>"foo"</js>), <jsm>any</jsm>(), <jsm>match</jsm>(<js>"bar*"</js>));
  * </p>
  *
  * <ul class='seealso'>

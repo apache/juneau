@@ -1262,9 +1262,9 @@
 		.build()
 		.get(<jsf>URI</jsf>)
 		.run()
-		.assertStatus().code().is(200)
-		.assertHeader(<js>"Content-Type"</js>).matches(<js>"application/json*"</js>)
-		.getContent().assertValue().asString().contains(<js>"OK"</js>)
+		.assertStatus().asCode().is(200)
+		.assertHeader(<js>"Content-Type"</js>).isMatches(<js>"application/json*"</js>)
+		.getContent().assertValue().asString().isContains(<js>"OK"</js>)
 		.getContent().as(MyBean.<jk>class</jk>);
 	</p>
 	<ul class='seealso'>
@@ -1919,7 +1919,7 @@
 		.build()
 		.get(<jsf>URI</jsf>)
 		.run()
-		.assertStatus().code().is(200)
+		.assertStatus().asCode().is(200)
 		.assertHeader(<js>"Content-Type"</js>).matchesSimple(<js>"application/json*"</js>)
 		.getContent().as(MyBean.<jk>class</jk>);
 	</p>
@@ -5612,7 +5612,7 @@
 		.build()
 		.get(<jsf>URI</jsf>)
 		.run()
-		.assertStatus().code().is(200)
+		.assertStatus().asCode().is(200)
 		.assertHeader(<js>"Content-Type"</js>).isMatches(<js>"application/json*"</js>)
 		.getContent().assertValue().asString().isContains(<js>"OK"</js>)
 		.getContent().as(MyBean.<jk>class</jk>);
@@ -22789,7 +22789,7 @@
 		.build()
 		.get(<jsf>URI</jsf>)
 		.run()
-		.assertStatus().code().is(200)
+		.assertStatus().asCode().is(200)
 		.assertHeader(<js>"Content-Type"</js>).matchesSimple(<js>"application/json*"</js>)
 		.getContent().as(MyBean.<jk>class</jk>);
 	</p>
@@ -22804,7 +22804,7 @@
 	RestRequest <jv>req</jv> = <jv>client</jv>.get(<jsf>URI</jsf>);
 	RestResponse <jv>res</jv> = <jv>req</jv>.run();
 	RestResponseStatusLineAssertion <jv>statusLineAssertion</jv> = <jv>res</jv>.assertStatus();
-	FluentIntegerAssertion&lt;RestResponse&gt; <jv>codeAssertion</jv> = <jv>statusLineAssertion</jv>.code();
+	FluentIntegerAssertion&lt;RestResponse&gt; <jv>codeAssertion</jv> = <jv>statusLineAssertion</jv>.asCode();
 	<jv>res</jv> = <jv>codeAssertion</jv>.is(200);
 	FluentStringAssertion&lt;RestResponse&gt; <jv>headerAssertion</jv> = <jv>res</jv>.assertHeader(<js>"Content-Type"</js>);
 	<jv>res</jv> = <jv>headerAssertion</jv>.matchesSimple(<js>"application/json*"</js>);
@@ -22975,7 +22975,7 @@
 	<jv>client</jv>.post(<jsf>URI</jsf>, myBean)
 		.contentType(<js>"application/json"</js>)
 		.complete()
-		.assertStatus().code().is(200);
+		.assertStatus().asCode().is(200);
 	</p>
 	
 	<p>
@@ -22989,7 +22989,7 @@
 	<jv>client</jv>.post(<jsf>URI</jsf>, myBean)
 		.json()
 		.complete()
-		.assertStatus().code().is(200);
+		.assertStatus().asCode().is(200);
 	</p>
 	
 	<p>
@@ -23139,8 +23139,8 @@
 	<ul class='javatree'>
 		<li class='jc'>{@link org.apache.juneau.rest.client.RestRequest}
 		<ul>
-			<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#body(Object) body(Object)}
-			<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#body(Object,HttpPartSchema) body(Object,HttpPartSchema)}
+			<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#content(Object) content(Object)}
+			<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#content(Object,HttpPartSchema) content(Object,HttpPartSchema)}
 		</ul>
 	</ul>
 	
@@ -23172,21 +23172,21 @@
 		.post(<jsf>URI</jsf>)
 		.body(<jv>bean</jv>)
 		.complete()
-		.assertStatus().code().is(200);
+		.assertStatus().asCode().is(200);
 	
 	<jc>// Post contents from a reader.</jc>
 	<jv>client</jv>
 		.post(<jsf>URI</jsf>)
 		.body(<jk>new</jk> FileReader(<js>"/tmp/foo.json"</js>))
 		.complete()
-		.assertStatus().code().is(200);
+		.assertStatus().asCode().is(200);
 	
 	<jc>// Post contents from an Apache HttpEntity object.</jc>
 	<jv>client</jv>
 		.post(<jsf>URI</jsf>)
 		.body(<jk>new</jk> StringEntity(<jv>jsonString</jv>, ContentType.<jsf>APPLICATION_JSON</jsf>))
 		.complete()
-		.assertStatus().code().is(200);
+		.assertStatus().asCode().is(200);
 	</p>
 	
 	<ul class='notes'>
@@ -23251,13 +23251,13 @@
 	<jc>// Status assertion using a static value.</jc>
 	String <jv>body1</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
 		.run()
-		.assertStatus().code().isBetween(200,399)
+		.assertStatus().asCode().isBetween(200,399)
 		.getContent().asString();
 
 	<jc>// Status assertion using a predicate.</jc>
 	String <jv>body2</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
 		.run()
-		.assertStatus().code().passes(<jv>x</jv> -> <jv>x</jv>&lt;400)
+		.assertStatus().asCode().is(<jv>x</jv> -> <jv>x</jv>&lt;400)
 		.getContent().asString();
 	</p>
 </div>
@@ -25069,7 +25069,7 @@
 
 			<jc>// The form auth request should always respond with a 200 ok or 302 redirect code</jc>
 			<jk>if</jk> (<jv>rc</jv> == <jsf>SC_MOVED_TEMPORARILY</jsf>) {
-				<jk>if</jk> (<jv>response</jv>.getFirstHeader(<js>"Location"</js>).getValue().matches(<js>"^.*/auth/authfailed.*$"</js>))
+				<jk>if</jk> (<jv>response</jv>.getFirstHeader(<js>"Location"</js>).getValue().isPattern(<js>"^.*/auth/authfailed.*$"</js>))
 					<jk>throw new</jk> IOException(<js>"Invalid credentials."</js>);
 			} <jk>else if</jk> (<jv>rc</jv> != <jsf>SC_OK</jsf>) {
 				<jk>throw new</jk> IOException(<js>"Unexpected HTTP status: "</js> + <jv>rc</jv>);

@@ -23,8 +23,8 @@
 	<ul class='javatree'>
 		<li class='jc'>{@link oajrc.RestRequest}
 		<ul>
-			<li class='jm'>{@link oajrc.RestRequest#body(Object) body(Object)}
-			<li class='jm'>{@link oajrc.RestRequest#body(Object,HttpPartSchema) body(Object,HttpPartSchema)}
+			<li class='jm'>{@link oajrc.RestRequest#content(Object) content(Object)}
+			<li class='jm'>{@link oajrc.RestRequest#content(Object,HttpPartSchema) content(Object,HttpPartSchema)}
 		</ul>
 	</ul>
 	
@@ -56,21 +56,21 @@
 		|		.post(<jsf>URI</jsf>)
 		|		.body(<jv>bean</jv>)
 		|		.complete()
-		|		.assertStatus().code().is(200);
+		|		.assertStatus().asCode().is(200);
 		|	
 		|	<jc>// Post contents from a reader.</jc>
 		|	<jv>client</jv>
 		|		.post(<jsf>URI</jsf>)
 		|		.body(<jk>new</jk> FileReader(<js>"/tmp/foo.json"</js>))
 		|		.complete()
-		|		.assertStatus().code().is(200);
+		|		.assertStatus().asCode().is(200);
 		|	
 		|	<jc>// Post contents from an Apache HttpEntity object.</jc>
 		|	<jv>client</jv>
 		|		.post(<jsf>URI</jsf>)
 		|		.body(<jk>new</jk> StringEntity(<jv>jsonString</jv>, ContentType.<jsf>APPLICATION_JSON</jsf>))
 		|		.complete()
-		|		.assertStatus().code().is(200);
+		|		.assertStatus().asCode().is(200);
 	</p>
 	
 	<ul class='notes'>

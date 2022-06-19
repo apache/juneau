@@ -472,7 +472,7 @@ public class JsonList extends LinkedList<Object> {
 	 * @return This object.
 	 */
 	public  <T> JsonList appendIf(Predicate<T> test, T value) {
-		return appendIf(passes(test, value), value);
+		return appendIf(test(test, value), value);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

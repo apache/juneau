@@ -538,7 +538,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		 * 		.build()
 		 * 		.get(<js>"/"</js>)
 		 * 		.run()
-		 * 		.assertStatus().code().is(200)
+		 * 		.assertStatus().asCode().is(200)
 		 * 		.assertContent().is(<js>"bar"</js>);
 		 * </p>
 		 *

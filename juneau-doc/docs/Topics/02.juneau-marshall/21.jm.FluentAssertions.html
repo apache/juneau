@@ -28,7 +28,7 @@
 		|		.build()
 		|		.get(<jsf>URI</jsf>)
 		|		.run()
-		|		.assertStatus().code().is(200)
+		|		.assertStatus().asCode().is(200)
 		|		.assertHeader(<js>"Content-Type"</js>).isMatches(<js>"application/json*"</js>)
 		|		.getContent().assertValue().asString().isContains(<js>"OK"</js>)
 		|		.getContent().as(MyBean.<jk>class</jk>);

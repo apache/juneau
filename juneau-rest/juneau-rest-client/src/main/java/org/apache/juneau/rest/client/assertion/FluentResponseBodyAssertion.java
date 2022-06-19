@@ -169,7 +169,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * 	<jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertContent().isPasses(<jv>x</jv> -&gt; <jv>x</jv>.contains(<js>"OK"</js>));
+	 * 		.assertContent().is(<jv>x</jv> -&gt; <jv>x</jv>.contains(<js>"OK"</js>));
 	 *
 	 * 	<jc>// Validates the response body matches a regular expression.</jc>
 	 * 	<jv>client</jv>
@@ -256,7 +256,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * 	<jv>client</jv>
 	 * 		.get(<js>"/myBean"</js>)
 	 * 		.run()
-	 * 		.assertContent().as(List.<jk>class</jk>, String.<jk>class</jk>).isPasses(<jv>x</jv> -&gt; <jv>x</jv>.size() &gt; 0);
+	 * 		.assertContent().as(List.<jk>class</jk>, String.<jk>class</jk>).is(<jv>x</jv> -&gt; <jv>x</jv>.size() &gt; 0);
 	 * </p>
 	 *
 	 * @param <T> The object type to create.
@@ -276,7 +276,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * 	<jv>client</jv>
 	 * 		.get(<js>"/myBean"</js>)
 	 * 		.run()
-	 * 		.assertContent().as(List.<jk>class</jk>, String.<jk>class</jk>).isPasses(<jv>x</jv> -&gt; <jv>x</jv>.size() &gt; 0);
+	 * 		.assertContent().as(List.<jk>class</jk>, String.<jk>class</jk>).is(<jv>x</jv> -&gt; <jv>x</jv>.size() &gt; 0);
 	 * </p>
 	 *
 	 * <p>

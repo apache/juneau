@@ -265,7 +265,7 @@ public final class AnnotationInfo<T extends Annotation> {
 	 * @return <jk>true</jk> if this object passes the specified predicate test.
 	 */
 	public boolean matches(Predicate<AnnotationInfo<?>> test) {
-		return passes(test, this);
+		return test(test, this);
 	}
 
 	/**
@@ -319,7 +319,7 @@ public final class AnnotationInfo<T extends Annotation> {
 			if (m.getName().equals(name) && m.getReturnType().equals(type)) {
 				try {
 					V v = (V)m.invoke(a);
-					if (passes(test, v))
+					if (test(test, v))
 						return optional(v);
 				} catch (Exception e) {
 					e.printStackTrace(); // Shouldn't happen.
