@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Response Status', created:'8.1.0', flags:'todo'}
+{title:'Response Status', created:'8.1.0', updated:'9.0.0'}
 
 <div class='topic'>
 	<p>
@@ -63,13 +63,13 @@
 	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
 		|	<jc>// Status assertion using a static value.</jc>
-		|	String <jv>body1</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
+		|	String <jv>content1</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
 		|		.run()
 		|		.assertStatus().asCode().isBetween(200,399)
 		|		.getContent().asString();
 		|
 		|	<jc>// Status assertion using a predicate.</jc>
-		|	String <jv>body2</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
+		|	String <jv>content2</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
 		|		.run()
 		|		.assertStatus().asCode().is(<jv>x</jv> -> <jv>x</jv>&lt;400)
 		|		.getContent().asString();

@@ -241,9 +241,8 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	 * </ul>
 	 *
 	 * @return A new fluent assertion object.
-	 * @throws RestCallException If REST call failed.
 	 */
-	public FluentByteArrayAssertion<R> asBytes() throws RestCallException {
+	public FluentByteArrayAssertion<R> asBytes() {
 		return new FluentByteArrayAssertion<>(valueAsBytes(), returns());
 	}
 

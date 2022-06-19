@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Request Content', created:'8.2.0', flags:'todo'}
+{title:'Request Content', created:'8.2.0', updated:'9.0.0'}
 
 <div class='topic'>
 	<p>
@@ -41,7 +41,7 @@
 		<li class='jc'>
 			{@link org.apache.http.HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
 		<li class='jc'>
-			{@link oaj.http.NameValuePairSupplier} - Converted to a URL-encoded FORM post.
+			{@link oaj.http.part.PartList} - Converted to a URL-encoded FORM post.
 		<li class='jc'>
 			{@link java.util.function.Supplier} - A supplier of anything on this list.
 	</ul>
@@ -54,21 +54,21 @@
 		|	<jc>// Post a JSON-serialized bean.</jc>
 		|	<jv>client</jv>
 		|		.post(<jsf>URI</jsf>)
-		|		.body(<jv>bean</jv>)
+		|		.content(<jv>bean</jv>)
 		|		.complete()
 		|		.assertStatus().asCode().is(200);
 		|	
 		|	<jc>// Post contents from a reader.</jc>
 		|	<jv>client</jv>
 		|		.post(<jsf>URI</jsf>)
-		|		.body(<jk>new</jk> FileReader(<js>"/tmp/foo.json"</js>))
+		|		.content(<jk>new</jk> FileReader(<js>"/tmp/foo.json"</js>))
 		|		.complete()
 		|		.assertStatus().asCode().is(200);
 		|	
 		|	<jc>// Post contents from an Apache HttpEntity object.</jc>
 		|	<jv>client</jv>
 		|		.post(<jsf>URI</jsf>)
-		|		.body(<jk>new</jk> StringEntity(<jv>jsonString</jv>, ContentType.<jsf>APPLICATION_JSON</jsf>))
+		|		.content(<jk>new</jk> StringEntity(<jv>jsonString</jv>, ContentType.<jsf>APPLICATION_JSON</jsf>))
 		|		.complete()
 		|		.assertStatus().asCode().is(200);
 	</p>

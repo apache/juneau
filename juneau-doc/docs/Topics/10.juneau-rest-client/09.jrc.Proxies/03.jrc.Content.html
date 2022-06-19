@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'@Content', updated:'8.2.0', flags:'todo'}
+{title:'@Content', updated:'8.2.0', updated:'9.0.0'}
 
 <div class='topic'>
 	<p>
@@ -65,7 +65,7 @@
 			{@link java.io.InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
 			<br><c>Content-Type</c> is set to <js>"application/octet-stream"</js>.
 		<li>
-			{@link oaj.http.NameValuePairSupplier} - Converted to a URL-encoded FORM post.
+			{@link oaj.http.part.PartList} - Converted to a URL-encoded FORM post.
 			<br><c>Content-Type</c> is set to <js>"aplication/x-www-form-urlencoded"</js>.
 		<li>
 			<c>HttpEntity</c> - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.

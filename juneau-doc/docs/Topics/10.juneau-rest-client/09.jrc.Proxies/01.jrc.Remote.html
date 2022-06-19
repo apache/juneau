@@ -13,7 +13,7 @@ specific language governing permissions and limitations under the License.
  ***************************************************************************************************************************/
  -->
 
-{title:'@Remote', updated:'8.1.2,8.2.0', flags:'todo'}
+{title:'@Remote', updated:'8.1.2,8.2.0', updated:'9.0.0'}
 
 <div class='topic'>
 	<p>
@@ -105,9 +105,9 @@ specific language governing permissions and limitations under the License.
 	</p>
 	
 	
-	<h5 class='topic'>@Remote(headers/headerSupplier)</h5>
+	<h5 class='topic'>@Remote(headers/headerList)</h5>
 	<p>
-		The {@link oaj.http.remote.Remote#headers @Remote(headers)} and {@del @Remote(headerSupplier)} 
+		The {@link oaj.http.remote.Remote#headers @Remote(headers)} and {@link oaj.http.remote.Remote#headerList @Remote(headerList)} 
 		annotations are used to add headers on all requests.  
 	</p>
 	
@@ -119,21 +119,14 @@ specific language governing permissions and limitations under the License.
 		|			<js>"Foo: bar"</js>,
 		|			<js>"Baz: $S{bazProperty}"</js>
 		|		},
-		|		headerSupplier=MyDynamicHeaderSupplier.<jk>class</jk>
+		|		headerList=MyHeaderList.<jk>class</jk>
 		|	)
 		|	<jk>public interface</jk> PetStore {...}
 	</p>
 	<p class='bjava'>
 		|	<jc>// Our dynamic supplier.</jc>
-		|	<jk>public class</jk> MyHeaderSupplier <jk>extends</jk> HeaderSupplier {
-		|	
-		|		<jc>// Headers can be added here at runtime.</jc>
-		|		<jk>public static</jk> HeaderSupplier <jsf>DYNAMIC_HEADERS</jsf> = <jk>new</jk> HeaderSupplier();
-		|	
-		|		<jk>public</jk> MyHeaderSupplier() {
-		|			add(<js>"Qux"</js>,<js>"q2x"</js>);  
-		|			add(<jsf>DYNAMIC_HEADERS</jsf>);
-		|		}
+		|	<jk>public class</jk> MyHeaderList <jk>extends</jk> HeaderList {
+		|		...
 		|	}
 	</p>
 	

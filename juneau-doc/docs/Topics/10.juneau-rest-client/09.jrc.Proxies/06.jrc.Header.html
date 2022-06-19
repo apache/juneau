@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'@Header', updated:'8.2.0', flags:'todo'}
+{title:'@Header', updated:'8.2.0', updated:'9.0.0'}
 
 <div class='topic'>
 	<p>
@@ -23,7 +23,7 @@
 	<ul class='javatree'>
 		<li class='ja'>{@link oaj.http.annotation.Header}
 		<ul>
-			<li class='jf'>{@link oaj.http.annotation.Header#name() name}, {@del oaj.http.annotation.Header#n() n} - Header name.
+			<li class='jf'>{@link oaj.http.annotation.Header#name() name} - Header name.
 			<li class='jf'>{@link oaj.http.annotation.Header#serializer() serializer} - Override the part serializer.
 		</ul>
 	</ul>
@@ -39,10 +39,10 @@
 		|		String myProxyMethod1(<ja>@Header</ja>(<js>"Foo"</js>)</ja> String <jv>foo</jv>,
 		|			<ja>@Header</ja>(<js>"Bar"</js>)</ja> MyPojo <jv>pojo</jv>);
 		|
-		|		<jc>// Multiple values pulled from a HeaderSupplier object.</jc>
+		|		<jc>// Multiple values pulled from a HeaderList object.</jc>
 		|		<jc>// Same as @Header("*").</jc>
 		|		<ja>@RemoteGet</ja>(<js>"/mymethod2"</js>)
-		|		String myProxyMethod2(<ja>@Header</ja> HeaderSupplier <jv>headerSupplier</jv>);
+		|		String myProxyMethod2(<ja>@Header</ja> HeaderList <jv>headerList</jv>);
 		|
 		|		<jc>// Multiple values pulled from a Map.</jc>
 		|		<jc>// Same as @Header("*").</jc>
@@ -70,7 +70,7 @@
 	</p>
 	<ul class='spaced-list'>
 		<li>
-			{@link oaj.http.HeaderSupplier} - Serialized as individual headers.
+			{@link oaj.http.HeaderList} - Serialized as individual headers.
 		<li>
 			<c>Map</c> - Converted to key-value pairs.
 				<br>Values serialized using the registered {@link oaj.httppart.HttpPartSerializer} ({@link oaj.oapi.OpenApiSerializer} by default).

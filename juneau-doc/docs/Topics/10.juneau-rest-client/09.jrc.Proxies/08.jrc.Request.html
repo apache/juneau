@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'@Request', flags:'todo'}
+{title:'@Request', updated:'9.0.0'}
 
 <div class='topic'>
 	<p>
@@ -54,14 +54,14 @@
 		|		}
 		|	
 		|		<ja>@Query</ja>
-		|	<jk>public</jk> Map&lt;String,Object&gt; getQueryParams() {
-		|		<jk>return</jk> AMap.<jsm>of</jsm>(<js>"debug"</js>, <jk>true</jk>);
-		|	}
+		|		<jk>public</jk> Map&lt;String,Object&gt; getQueryParams() {
+		|			<jk>return</jk> AMap.<jsm>of</jsm>(<js>"debug"</js>, <jk>true</jk>);
+		|		}
 		|	
-		|	<ja>@Header</ja>(<js>"E-Tag"</js>)
-		|	<jk>public static</jk> UUID <jsm>getUUID</jsm>() {
-		|		<jk>return</jk> UUID.<jsm>generatedUUID</jsm>();
-		|	}
+		|		<ja>@Header</ja>(<js>"E-Tag"</js>)
+		|		<jk>public static</jk> UUID <jsm>getUUID</jsm>() {
+		|			<jk>return</jk> UUID.<jsm>generatedUUID</jsm>();
+		|		}
 		|	}
 	</p>
 	<p class='bjava'>
@@ -80,7 +80,7 @@
 	<p>
 		Any of the following annotations can be used on the methods:
 	</p>
-	<ul class='javatree'>
+	<ul class='javatreec'>
 		<li class='ja'>{@link oaj.http.annotation.Content}
 		<li class='ja'>{@link oaj.http.annotation.Header}
 		<li class='ja'>{@link oaj.http.annotation.FormData}
@@ -103,10 +103,10 @@
 		|		CreatePet getContent();
 		|	
 		|		<ja>@Query</ja>
-		|	Map&lt;String,Object&gt; getQueryParams();
+		|		Map&lt;String,Object&gt; getQueryParams();
 		|	
-		|	<ja>@Header</ja>(<js>"E-Tag"</js>)
-		|	UUID getUUID();
+		|		<ja>@Header</ja>(<js>"E-Tag"</js>)
+		|		UUID getUUID();
 		|	}
 	</p>
 	<p class='bjava'>
@@ -120,14 +120,14 @@
 		|		}
 		|	
 		|		<ja>@Override</ja>
-		|	<jk>public</jk> Map&lt;String,Object&gt; getQueryParams() {
-		|		<jk>return</jk> JsonMap.<jsm>of</jsm>(<js>"debug"</js>, <jk>true</jk>);
-		|	}
+		|		<jk>public</jk> Map&lt;String,Object&gt; getQueryParams() {
+		|			<jk>return</jk> JsonMap.<jsm>of</jsm>(<js>"debug"</js>, <jk>true</jk>);
+		|		}
 		|	
 		|		<ja>@Override</ja>
-		|	<jk>public</jk> UUID getUUID() {
-		|		<jk>return</jk> UUID.<jsm>generateUUID</jsm>();
-		|	}
+		|		<jk>public</jk> UUID getUUID() {
+		|			<jk>return</jk> UUID.<jsm>generateUUID</jsm>();
+		|		}
 		|	}
 	</p>
 </div>

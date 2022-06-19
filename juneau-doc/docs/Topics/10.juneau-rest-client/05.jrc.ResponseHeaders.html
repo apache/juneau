@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Response Headers', created:'8.2.0', flags:'todo'}
+{title:'Response Headers', created:'8.2.0', updated:'9.0.0'}
 
 <div class='topic'>
 	<p>
@@ -22,11 +22,11 @@
 	<ul class='javatree'>
 		<li class='jc'>{@link oajrc.RestResponse}
 		<ul>
-			<li class='jm'><c>{@link oajrc.RestResponse#getHeader(String) getHeader(String)} <jk>returns</jk> {@link oajrc.RestResponseHeader}</c>
-			<li class='jm'><c>{@link oajrc.RestResponse#getHeaders(String) getHeaders(String)} <jk>returns</jk> {@link oajrc.RestResponseHeader}[]</c>
-			<li class='jm'><c>{@link oajrc.RestResponse#getFirstHeader(String) getFirstHeader(String)} <jk>returns</jk> {@link oajrc.RestResponseHeader}</c>
-			<li class='jm'><c>{@link oajrc.RestResponse#getLastHeader(String) getLastHeader(String)} <jk>returns</jk> {@link oajrc.RestResponseHeader}</c>
-			<li class='jm'><c>{@link oajrc.RestResponse#getAllHeaders() getAllHeaders()} <jk>returns</jk> {@del oaj.client2.RestResponseHeader}[]</c>
+			<li class='jm'><c>{@link oajrc.RestResponse#getHeader(String) getHeader(String)} <jk>returns</jk> {@link oajrc.ResponseHeader}</c>
+			<li class='jm'><c>{@link oajrc.RestResponse#getHeaders(String) getHeaders(String)} <jk>returns</jk> {@link oajrc.ResponseHeader}[]</c>
+			<li class='jm'><c>{@link oajrc.RestResponse#getFirstHeader(String) getFirstHeader(String)} <jk>returns</jk> {@link oajrc.ResponseHeader}</c>
+			<li class='jm'><c>{@link oajrc.RestResponse#getLastHeader(String) getLastHeader(String)} <jk>returns</jk> {@link oajrc.ResponseHeader}</c>
+			<li class='jm'><c>{@link oajrc.RestResponse#getAllHeaders() getAllHeaders()} <jk>returns</jk> {@link oajrc.ResponseHeader}[]</c>
 			<li class='jm'><c>{@link oajrc.RestResponse#getStringHeader(String) getStringHeader(String)} <jk>returns</jk> String</c>
 			<li class='jm'><c>{@link oajrc.RestResponse#containsHeader(String) containsHeader(String)} <jk>returns</jk> <jk>boolean</jk></c>
 		</ul>
@@ -34,48 +34,53 @@
 	
 	<p>
 		Unlike {@link oajrc.RestResponse#getFirstHeader(String)} and {@link oajrc.RestResponse#getLastHeader(String)}, the {@link oajrc.RestResponse#getHeader(String)}
-		method returns an empty {@link oajrc.RestResponseHeader} object instead of returning <jk>null</jk>.
+		method returns an empty {@link oajrc.ResponseHeader} object instead of returning <jk>null</jk>.
 		This allows it to be used more easily in fluent calls.
 	</p>
 	
 	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
+		|	RestResponse <jv>res</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).complete();
+		|	ResponseHeader <jv>header</jv> = <jv>res</jv>.getHeader(<js>"Location"</js>);
+		|
 		|	<jc>// See if response contains Location header.</jc>
-		|	<jk>boolean</jk> <jv>hasLocationHeader</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).complete().getHeader(<js>"Location"</js>).exists();
+		|	<jk>boolean</jk> <jv>hasLocationHeader</jv> = <jv>header</jv>.isPresent();
+		|
+		|	<jc>// Get actual value if it exists.</jc>
+		|	<jk>String</jk> <jv>locationHeader1</jv> = <jv>header</jv>.orElse(<js>"http://localhost"</js>);
+		|
+		|	<jc>// Converted to object.</jc>
+		|	<jk>URI</jk> <jv>locationHeader2</jv> = <jv>header</jv>.as(URI.<jk>class</jk>).orElse(<jk>null</jk>);
 	</p>
 	
 	<p>
-		The {@link oajrc.RestResponseHeader} class extends from the HttpClient {@link org.apache.http.Header} class and provides several convenience
+		The {@link oajrc.ResponseHeader} class extends from the HttpClient {@link org.apache.http.Header} class and provides several convenience
 		methods:
 	</p>
 	
 	<ul class='javatree'>
-		<li class='jc'>{@link oajrc.RestResponseHeader}
+		<li class='jc'>{@link oajrc.ResponseHeader}
 		<ul>
-			<li class='jm'><c>{@link oajrc.RestResponseHeader#exists() exists()} <jk>returns</jk> <jk>boolean</jk></c>
-			<li class='jm'><c>{@link oajrc.RestResponseHeader#asString() asString()} <jk>returns</jk> String</c>
-			<li class='jm'><c>{@link oajrc.RestResponseHeader#asOptionalString() asOptionalString()} <jk>returns</jk> Optional&lt;String&gt;</c>
-			<li class='jm'><c>{@link oajrc.RestResponseHeader#asStringOrElse(String) asStringOrElse(String)} <jk>returns</jk> String</c>
-			<li class='jm'><c>{@link oajrc.RestResponseHeader#as(Type,Type...) as(Type,Type...)} <jk>returns</jk> T</c>
-			<li class='jm'><c>{@link oajrc.RestResponseHeader#as(Class) as(Class&lt;T&gt;)} <jk>returns</jk> T</c>
-			<li class='jm'><c>{@link oajrc.RestResponseHeader#asOptional(Type,Type...) asOptional(Type,Type...)} <jk>returns</jk> Optional&lt;T&gt;</c>
-			<li class='jm'><c>{@link oajrc.RestResponseHeader#asOptional(Class) asOptional(Class&lt;T&gt;)} <jk>returns</jk> Optional&lt;T&gt;</c>
-			<li class='jm'><c>{@link oajrc.RestResponseHeader#asMatcher(Pattern) asMatcher(Pattern)} <jk>returns</jk> {@link java.util.regex.Matcher}</c>
-			<li class='jm'><c>{@link oajrc.RestResponseHeader#asMatcher(String) asMatcher(String)} <jk>returns</jk> {@link java.util.regex.Matcher}</c>
-			<li class='jm'><c>{@link oajrc.RestResponseHeader#asHeader(Class) asHeader(Class&lt;T <jk>extends</jk> BasicHeader&gt; c)} <jk>returns</jk> {@link oaj.http.BasicHeader}</c>
-			<li class='jm'><c>{@link oajrc.RestResponseHeader#asStringHeader() asStringHeader()} <jk>returns</jk> {@link oaj.http.header.BasicIntegerHeader}</c>
-			<li class='jm'><c>{@link oajrc.RestResponseHeader#asIntegerHeader() asIntegerHeader()} <jk>returns</jk> {@link oaj.http.header.BasicStringHeader}</c>
-			<li class='jm'><c>{@link oajrc.RestResponseHeader#asLongHeader() asLongHeader()} <jk>returns</jk> {@link oaj.http.header.BasicLongHeader}</c>
-			<li class='jm'><c>{@link oajrc.RestResponseHeader#asDateHeader() asDateHeader()} <jk>returns</jk> {@link oaj.http.header.BasicDateHeader}</c>
-			<li class='jm'><c>{@link oajrc.RestResponseHeader#asCsvArrayHeader() asCsvArrayHeader()} <jk>returns</jk> {@link oaj.http.header.BasicCsvArrayHeader}</c>
-			<li class='jm'><c>{@link oajrc.RestResponseHeader#asEntityTagArrayHeader() asEntityTagArrayHeader()} <jk>returns</jk> {@link oaj.http.header.BasicEntityTagArrayHeader}</c>
-			<li class='jm'><c>{@link oajrc.RestResponseHeader#asStringRangeArrayHeader() asStringRangeArrayHeader()} <jk>returns</jk> {@link oaj.http.header.BasicStringRangeArrayHeader}</c>
-			<li class='jm'><c>{@link oajrc.RestResponseHeader#asUriHeader() asUriHeader()} <jk>returns</jk> {@link oaj.http.header.BasicUriHeader}</c>
+			<li class='jm'><c>{@link oajrc.ResponseHeader#isPresent() isPresent()} <jk>returns</jk> <jk>boolean</jk></c>
+			<li class='jm'><c>{@link oajrc.ResponseHeader#asString() asString()} <jk>returns</jk> String</c>
+			<li class='jm'><c>{@link oajrc.ResponseHeader#as(Type,Type...) as(Type,Type...)} <jk>returns</jk> T</c>
+			<li class='jm'><c>{@link oajrc.ResponseHeader#as(Class) as(Class&lt;T&gt;)} <jk>returns</jk> T</c>
+			<li class='jm'><c>{@link oajrc.ResponseHeader#asMatcher(Pattern) asMatcher(Pattern)} <jk>returns</jk> {@link java.util.regex.Matcher}</c>
+			<li class='jm'><c>{@link oajrc.ResponseHeader#asMatcher(String) asMatcher(String)} <jk>returns</jk> {@link java.util.regex.Matcher}</c>
+			<li class='jm'><c>{@link oajrc.ResponseHeader#asHeader(Class) asHeader(Class&lt;T <jk>extends</jk> BasicHeader&gt; c)} <jk>returns</jk> {@link oaj.http.BasicHeader}</c>
+			<li class='jm'><c>{@link oajrc.ResponseHeader#asStringHeader() asStringHeader()} <jk>returns</jk> {@link oaj.http.header.BasicIntegerHeader}</c>
+			<li class='jm'><c>{@link oajrc.ResponseHeader#asIntegerHeader() asIntegerHeader()} <jk>returns</jk> {@link oaj.http.header.BasicStringHeader}</c>
+			<li class='jm'><c>{@link oajrc.ResponseHeader#asLongHeader() asLongHeader()} <jk>returns</jk> {@link oaj.http.header.BasicLongHeader}</c>
+			<li class='jm'><c>{@link oajrc.ResponseHeader#asDateHeader() asDateHeader()} <jk>returns</jk> {@link oaj.http.header.BasicDateHeader}</c>
+			<li class='jm'><c>{@link oajrc.ResponseHeader#asCsvHeader() asCsvHeader()} <jk>returns</jk> {@link oaj.http.header.BasicCsvHeader}</c>
+			<li class='jm'><c>{@link oajrc.ResponseHeader#asEntityTagsHeader() asEntityTagsHeader()} <jk>returns</jk> {@link oaj.http.header.BasicEntityTagsHeader}</c>
+			<li class='jm'><c>{@link oajrc.ResponseHeader#asStringRangesHeader() asStringRangesHeader()} <jk>returns</jk> {@link oaj.http.header.BasicStringRangesHeader}</c>
+			<li class='jm'><c>{@link oajrc.ResponseHeader#asUriHeader() asUriHeader()} <jk>returns</jk> {@link oaj.http.header.BasicUriHeader}</c>
 		</ul>
 	</ul>
 	
 	<p>
-		The {@link oajrc.RestResponseHeader#schema(HttpPartSchema)} method allows you to perform parsing of OpenAPI formats for
+		The {@link oajrc.ResponseHeader#schema(HttpPartSchema)} method allows you to perform parsing of OpenAPI formats for
 		header parts.
 	</p>
 		
@@ -93,12 +98,12 @@
 	</p>
 	
 	<ul class='javatree'>
-		<li class='jc'>{@link oajrc.RestResponseHeader}
+		<li class='jc'>{@link oajrc.ResponseHeader}
 		<ul>
-			<li class='jm'><c>{@link oajrc.RestResponseHeader#assertString() assertString()} <jk>returns</jk> {@link oaj.assertions.FluentStringAssertion}</c>
-			<li class='jm'><c>{@link oajrc.RestResponseHeader#assertInteger() assertInteger()} <jk>returns</jk> {@link oaj.assertions.FluentIntegerAssertion}</c>
-			<li class='jm'><c>{@link oajrc.RestResponseHeader#assertLong() assertLong()} <jk>returns</jk> {@link oaj.assertions.FluentLongAssertion}</c>
-			<li class='jm'><c>{@link oajrc.RestResponseHeader#assertDate() assertDate()} <jk>returns</jk> {@link oaj.assertions.FluentDateAssertion}</c>
+			<li class='jm'><c>{@link oajrc.ResponseHeader#assertString() assertString()} <jk>returns</jk> {@link oaj.assertions.FluentStringAssertion}</c>
+			<li class='jm'><c>{@link oajrc.ResponseHeader#assertInteger() assertInteger()} <jk>returns</jk> {@link oaj.assertions.FluentIntegerAssertion}</c>
+			<li class='jm'><c>{@link oajrc.ResponseHeader#assertLong() assertLong()} <jk>returns</jk> {@link oaj.assertions.FluentLongAssertion}</c>
+			<li class='jm'><c>{@link oajrc.ResponseHeader#assertZonedDateTime() assertZonedDateTime()} <jk>returns</jk> {@link oaj.assertions.FluentZonedDateTimeAssertion}</c>
 		</ul>
 	</ul>
 	
@@ -110,7 +115,7 @@
 	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
 		|	<jc>// Assert the response content type is any sort of JSON.</jc>
-		|	String <jv>body</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
+		|	String <jv>content</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
 		|		.run()
 		|		.getHeader(<js>"Content-Type"</js>).assertString().matchesSimple(<js>"application/json*"</js>)
 		|		.getContent().asString();

@@ -26,6 +26,7 @@ import java.util.regex.Matcher;
 import org.apache.http.*;
 import org.apache.http.conn.*;
 import org.apache.juneau.*;
+import org.apache.juneau.assertions.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
@@ -1165,6 +1166,47 @@ public class ResponseContent implements HttpEntity {
 	 */
 	public FluentResponseBodyAssertion<ResponseContent> assertValue() {
 		return new FluentResponseBodyAssertion<>(this, this);
+	}
+
+	/**
+	 * Shortcut for calling <c>assertValue().asString()</c>.
+	 *
+	 * @return A new fluent assertion.
+	 */
+	public FluentStringAssertion<ResponseContent> assertString() {
+		return new FluentResponseBodyAssertion<>(this, this).asString();
+	}
+
+	/**
+	 * Shortcut for calling <c>assertValue().asBytes()</c>.
+	 *
+	 * @return A new fluent assertion.
+	 */
+	public FluentByteArrayAssertion<ResponseContent> assertBytes() {
+		return new FluentResponseBodyAssertion<>(this, this).asBytes();
+	}
+
+	/**
+	 * Shortcut for calling <c>assertValue().as(<jv>type</jv>)</c>.
+	 *
+	 * @param <T> The object type to create.
+	 * @param type The object type to create.
+	 * @return A new fluent assertion.
+	 */
+	public <T> FluentAnyAssertion<T,ResponseContent> assertObject(Class<T> type) {
+		return new FluentResponseBodyAssertion<>(this, this).as(type);
+	}
+
+	/**
+	 * Shortcut for calling <c>assertValue().as(<jv>type</jv>, <jv>args</jv>)</c>.
+	 *
+	 * @param <T> The object type to create.
+	 * @param type The object type to create.
+	 * @param args Optional type arguments.
+	 * @return A new fluent assertion.
+	 */
+	public <T> FluentAnyAssertion<Object,ResponseContent> assertObject(Type type, Type...args) {
+		return new FluentResponseBodyAssertion<>(this, this).as(type, args);
 	}
 
 	/**

@@ -27,7 +27,7 @@ import org.apache.juneau.internal.*;
  *
  * @serial exclude
  */
-public abstract class BasicRuntimeException extends RuntimeException {
+public class BasicRuntimeException extends RuntimeException {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -109,6 +109,15 @@ public abstract class BasicRuntimeException extends RuntimeException {
 		public Builder unmodifiable() {
 			unmodifiable = true;
 			return this;
+		}
+
+		/**
+		 * Instantiates the exception.
+		 *
+		 * @return A new exception.
+		 */
+		public BasicRuntimeException build() {
+			return new BasicRuntimeException(this);
 		}
 
 		// <FluentSetters>

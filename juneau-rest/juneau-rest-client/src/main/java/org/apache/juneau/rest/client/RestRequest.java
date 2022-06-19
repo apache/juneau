@@ -1472,7 +1472,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	<jc>// Creates form data "foo=bar&amp;baz=qux" using StringEntity and body().</jc>
 	 * 	<jv>client</jv>
 	 * 		.formPost(<jsf>URI</jsf>)
-	 * 		.body(<jk>new</jk> StringEntity(<js>"foo=bar&amp;baz=qux"</js>,<js>"application/x-www-form-urlencoded"</js>))
+	 * 		.content(<jk>new</jk> StringEntity(<js>"foo=bar&amp;baz=qux"</js>,<js>"application/x-www-form-urlencoded"</js>))
 	 * 		.run();
 	 * </p>
 	 *
@@ -1687,7 +1687,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * <p class='bjava'>
 	 * 	<jv>client</jv>
 	 * 		.put(<js>"/foo"</js>)
-	 * 		.body(<jk>new</jk> StringReader(<js>"foo"</js>))
+	 * 		.content(<jk>new</jk> StringReader(<js>"foo"</js>))
 	 * 		.contentType(<js>"text/foo"</js>)
 	 * 		.run();
 	 *
@@ -1703,7 +1703,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	<jv>client</jv>
 	 * 		.put(<js>"/foo"</js>)
 	 * 		.json()
-	 * 		.body(<js>"foo"</js>)
+	 * 		.content(<js>"foo"</js>)
 	 * 		.run();
 	 * </p>
 	 *

@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'@Path', updated:'8.2.0', flags:'todo'}
+{title:'@Path', updated:'8.2.0', updated:'9.0.0'}
 
 <div class='topic'>
 	<p>
@@ -23,7 +23,7 @@
 	<ul class='javatree'>
 		<li class='ja'>{@link oaj.http.annotation.Path}
 		<ul>
-			<li class='jf'>{@link oaj.http.annotation.Path#name() name}, {@del oaj.http.annotation.Path#n() n} - Path variable name.
+			<li class='jf'>{@link oaj.http.annotation.Path#name() name} - Path variable name.
 			<li class='jf'>{@link oaj.http.annotation.Path#serializer() serializer} - Override the part serializer.
 		</ul>
 	</ul>
@@ -38,10 +38,10 @@
 		|		<ja>@RemoteGet</ja>(<js>"/mymethod1/{foo}/{bar}"</js>)
 		|		String myProxyMethod1(<ja>@Path</ja>(<js>"foo"</js>)</ja> String <jv>foo</jv>, <ja>@Path</ja>(<js>"bar"</js>)</ja> MyPojo <jv>pojo</jv>);
 		|
-		|		<jc>// Multiple values pulled from a NameValuePairSupplier object.</jc>
+		|		<jc>// Multiple values pulled from a PartList object.</jc>
 		|		<jc>// Same as @Path("*").</jc>
 		|		<ja>@RemoteGet</ja>(<js>"/mymethod2/{foo}/{bar}/{baz}"</js>)
-		|		String myProxyMethod2(<ja>@Path</ja> NameValuePairSupplier <jv>nameValuePairSupplier</jv>);
+		|		String myProxyMethod2(<ja>@Path</ja> PartList <jv>partList</jv>);
 		|
 		|		<jc>// Multiple values pulled from a Map.</jc>
 		|		<jc>// Same as @Path("*").</jc>
@@ -69,7 +69,7 @@
 	</p>
 	<ul class='spaced-list'>
 		<li>
-			{@link oaj.http.NameValuePairSupplier} - Serialized as individual path parameters.
+			{@link oaj.http.part.PartList} - Serialized as individual path parameters.
 		<li>
 			<c>Map</c> - Converted to key-value pairs.
 				<br>Values serialized using the registered {@link oaj.httppart.HttpPartSerializer} ({@link oaj.oapi.OpenApiSerializer} by default).

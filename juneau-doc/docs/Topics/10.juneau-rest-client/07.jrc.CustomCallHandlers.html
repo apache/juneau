@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Custom Call Handlers', created:'8.2.0', flags:'todo'}
+{title:'Custom Call Handlers', created:'8.2.0', updated:'9.0.0'}
 
 <div class='topic'>
 	<p>
@@ -24,7 +24,6 @@
 		<li class='jc'>{@link oajrc.RestClient.Builder}
 		<ul>
 			<li class='jm'>{@link oajrc.RestClient.Builder#callHandler(Class) callHandler(Class&lt;? extends RestCallHandler&gt;)}
-			<li class='jm'>{@link oajrc.RestClient.Builder#callHandler(RestCallHandler) callHandler(RestCallHandler)}
 		</ul>
 		<li class='jic'>{@link oajrc.RestCallHandler}
 		<ul>
@@ -63,7 +62,7 @@
 	 
 	<p>
 		Note that there are other ways of accomplishing this such as extending the {@link oajrc.RestClient} class and overriding
-		the {@del oaj.rest.client2.RestClient#run(HttpHost,HttpRequest,HttpContext)} method
+		the {@link oajrc.RestClient#run(HttpHost,HttpRequest,HttpContext)} method
 		or by defining your own {@link org.apache.http.protocol.HttpRequestExecutor}.  Using this interface is often simpler though.
 	</p>
 </div>

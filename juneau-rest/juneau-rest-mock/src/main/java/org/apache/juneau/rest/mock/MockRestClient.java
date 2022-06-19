@@ -2181,7 +2181,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			baos.flush();
 			body = baos.toByteArray();
 		}
-		sreq.get().body(body);
+		sreq.get().content(body);
 	}
 
 	@Override /* HttpClientConnection */

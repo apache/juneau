@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Response Content', created:'8.2.0', flags:'todo'}
+{title:'Response Content', created:'8.2.0', updated:'9.0.0'}
 
 <div class='topic'>
 	<p>
@@ -47,8 +47,6 @@
 			<li class='jm'><c>{@link oajrc.ResponseContent#asString() asString()} <jk>returns</jk> String</c>
 			<li class='jm'><c>{@link oajrc.ResponseContent#asStringFuture() asStringFuture()} <jk>returns</jk> Future&lt;String&gt;</c>
 			<li class='jm'><c>{@link oajrc.ResponseContent#asAbbreviatedString(int) asAbbreviatedString(int)} <jk>returns</jk> String</c>
-			<li class='jm'><c>{@link oajrc.ResponseContent#asPojoRest(Class) asPojoRest(Class&lt;?&gt;)} <jk>returns</jk> {@link oaj.utils.PojoRest}</c>
-			<li class='jm'><c>{@link oajrc.ResponseContent#asPojoRest() asPojoRest()} <jk>returns</jk> {@link oaj.utils.PojoRest}</c>
 			<li class='jm'><c>{@link oajrc.ResponseContent#asMatcher(Pattern) asMatcher(Pattern)} <jk>returns</jk> {@link java.util.regex.Matcher}</c>
 			<li class='jm'><c>{@link oajrc.ResponseContent#asMatcher(String) asMatcher(String)} <jk>returns</jk> {@link java.util.regex.Matcher}</c>
 		</ul>
@@ -119,15 +117,16 @@
 		<li class='jc'>{@link oajrc.ResponseContent}
 		<ul>
 			<li class='jm'><c>{@link oajrc.ResponseContent#assertString() assertString()} <jk>returns</jk> {@link oaj.assertions.FluentStringAssertion}</c>
-			<li class='jm'><c>{@link oajrc.ResponseContent#assertObject(Class) assertObject(Class&lt;?&gt;)} <jk>returns</jk> {@link oaj.assertions.FluentObjectAssertion}</c>
 			<li class='jm'><c>{@link oajrc.ResponseContent#assertBytes() assertBytes()} <jk>returns</jk> {@link oaj.assertions.FluentByteArrayAssertion}</c>
+			<li class='jm'><c>{@link oajrc.ResponseContent#assertObject(Class) assertObject(Class)} <jk>returns</jk> {@link oaj.assertions.FluentObjectAssertion}</c>
+			<li class='jm'><c>{@link oajrc.ResponseContent#assertObject(Type,Type...) assertObject(Type,Type...)} <jk>returns</jk> {@link oaj.assertions.FluentObjectAssertion}</c>
 		</ul>
 	</ul>
 	
 	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
 		|	<jc>// Assert that the body contains the string "Success".</jc>
-		|	String <jv>body</jv> = <jv>client</jv>
+		|	String <jv>content</jv> = <jv>client</jv>
 		|		.get(<jsf>URI</jsf>)
 		|		.run()
 		|		.getContent().assertString().contains(<js>"Success"</js>)

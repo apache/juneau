@@ -24,6 +24,7 @@ import java.util.regex.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
+import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
@@ -306,9 +307,8 @@ public class ResponseHeader extends BasicHeader {
 	 * @param type The type to convert to.
 	 * @param args The type parameters.
 	 * @return The converted type, or <jk>null</jk> if header is not present.
-	 * @throws RestCallException If value could not be parsed.
 	 */
-	public <T> Optional<T> as(Type type, Type...args) throws RestCallException {
+	public <T> Optional<T> as(Type type, Type...args) {
 		return as(request.getClassMeta(type, args));
 	}
 
@@ -323,10 +323,9 @@ public class ResponseHeader extends BasicHeader {
 	 * @param type The type to convert to.
 	 * @param args The type parameters.
 	 * @return This object.
-	 * @throws RestCallException If value could not be parsed.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> RestResponse as(Value<T> value, Type type, Type...args) throws RestCallException {
+	public <T> RestResponse as(Value<T> value, Type type, Type...args) {
 		value.set((T)as(type, args).orElse(null));
 		return response;
 	}
@@ -337,9 +336,8 @@ public class ResponseHeader extends BasicHeader {
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @return The converted type, or <jk>null</jk> if header is not present.
-	 * @throws RestCallException If value could not be parsed.
 	 */
-	public <T> Optional<T> as(Class<T> type) throws RestCallException {
+	public <T> Optional<T> as(Class<T> type) {
 		return as(request.getClassMeta(type));
 	}
 
@@ -350,9 +348,8 @@ public class ResponseHeader extends BasicHeader {
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @return This object.
-	 * @throws RestCallException If value could not be parsed.
 	 */
-	public <T> RestResponse as(Value<T> value, Class<T> type) throws RestCallException {
+	public <T> RestResponse as(Value<T> value, Class<T> type) {
 		value.set(as(type).orElse(null));
 		return response;
 	}
@@ -363,13 +360,12 @@ public class ResponseHeader extends BasicHeader {
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @return The converted type, or <jk>null</jk> if header is not present.
-	 * @throws RestCallException If value could not be parsed.
 	 */
-	public <T> Optional<T> as(ClassMeta<T> type) throws RestCallException {
+	public <T> Optional<T> as(ClassMeta<T> type) {
 		try {
 			return optional(parser.parse(HEADER, schema, getValue(), type));
 		} catch (ParseException e) {
-			throw new RestCallException(response, e, "Could not parse response header {0}.", getName());
+			throw BasicRuntimeException.create().causedBy(e).message("Could not parse response header {0}.", getName()).build();
 		}
 	}
 
@@ -380,9 +376,8 @@ public class ResponseHeader extends BasicHeader {
 	 * @param <T> The type to convert to.
 	 * @param type The type to convert to.
 	 * @return This object.
-	 * @throws RestCallException If value could not be parsed.
 	 */
-	public <T> RestResponse as(Value<T> value, ClassMeta<T> type) throws RestCallException {
+	public <T> RestResponse as(Value<T> value, ClassMeta<T> type) {
 		value.set(as(type).orElse(null));
 		return response;
 	}
@@ -405,9 +400,8 @@ public class ResponseHeader extends BasicHeader {
 	 *
 	 * @param pattern The regular expression pattern to match.
 	 * @return The matcher.
-	 * @throws RestCallException If a connection error occurred.
 	 */
-	public Matcher asMatcher(Pattern pattern) throws RestCallException {
+	public Matcher asMatcher(Pattern pattern) {
 		return pattern.matcher(orElse(""));
 	}
 
@@ -429,9 +423,8 @@ public class ResponseHeader extends BasicHeader {
 	 *
 	 * @param regex The regular expression pattern to match.
 	 * @return The matcher.
-	 * @throws RestCallException If a connection error occurred.
 	 */
-	public Matcher asMatcher(String regex) throws RestCallException {
+	public Matcher asMatcher(String regex) {
 		return asMatcher(regex, 0);
 	}
 
@@ -454,9 +447,8 @@ public class ResponseHeader extends BasicHeader {
 	 * @param regex The regular expression pattern to match.
 	 * @param flags Pattern match flags.  See {@link Pattern#compile(String, int)}.
 	 * @return The matcher.
-	 * @throws RestCallException If a connection error occurred.
 	 */
-	public Matcher asMatcher(String regex, int flags) throws RestCallException {
+	public Matcher asMatcher(String regex, int flags) {
 		return asMatcher(Pattern.compile(regex, flags));
 	}
 
@@ -522,6 +514,42 @@ public class ResponseHeader extends BasicHeader {
 	 */
 	public FluentResponseHeaderAssertion<ResponseHeader> assertValue() {
 		return new FluentResponseHeaderAssertion<>(this, this);
+	}
+
+	/**
+	 * Shortcut for calling <c>assertValue().asString()</c>.
+	 *
+	 * @return A new fluent assertion.
+	 */
+	public FluentStringAssertion<ResponseHeader> assertString() {
+		return new FluentResponseHeaderAssertion<>(this, this).asString();
+	}
+
+	/**
+	 * Shortcut for calling <c>assertValue().asInteger()</c>.
+	 *
+	 * @return A new fluent assertion.
+	 */
+	public FluentIntegerAssertion<ResponseHeader> assertInteger() {
+		return new FluentResponseHeaderAssertion<>(this, this).asInteger();
+	}
+
+	/**
+	 * Shortcut for calling <c>assertValue().asLong()</c>.
+	 *
+	 * @return A new fluent assertion.
+	 */
+	public FluentLongAssertion<ResponseHeader> assertLong() {
+		return new FluentResponseHeaderAssertion<>(this, this).asLong();
+	}
+
+	/**
+	 * Shortcut for calling <c>assertValue().asZonedDateTime()</c>.
+	 *
+	 * @return A new fluent assertion.
+	 */
+	public FluentZonedDateTimeAssertion<ResponseHeader> assertZonedDateTime() {
+		return new FluentResponseHeaderAssertion<>(this, this).asZonedDateTime();
 	}
 
 	/**

@@ -424,7 +424,7 @@
 		|			minLength=1,
 		|			maxLength=10
 		|		)
-		|		Long[][] <jv>body</jv>
+		|		Long[][] <jv>content</jv>
 		|	) {...}
 	</p>
 	<p>
@@ -434,7 +434,7 @@
 	<p class='bjava'>
 		|	<jc>// Content is a 2-dimensional array of POJOs convertible from Longs:</jc>
 		|	<ja>@RestPost</ja>(<js>"/example1"</js>)	
-		|	<jk>public void</jk> testContent(<ja>@Content</ja>(...) MyPojo1[][] <jv>body</jv>) {...}
+		|	<jk>public void</jk> testContent(<ja>@Content</ja>(...) MyPojo1[][] <jv>content</jv>) {...}
 		|	
 		|	<jk>public class</jk> MyPojo1 {
 		|		<jk>public</jk> MyPojo1(Long <jv>input</jv>) {...}
@@ -443,7 +443,7 @@
 	<p class='bjava'>
 		|	<jc>// Content is a POJO that takes in a Long array:</jc>
 		|	<ja>@RestPost</ja>(<js>"/example2"</js>)	
-		|	<jk>public void</jk> testContent(<ja>@Content</ja>(...) MyPojo2[] <jv>body</jv>) {...}
+		|	<jk>public void</jk> testContent(<ja>@Content</ja>(...) MyPojo2[] <jv>content</jv>) {...}
 		|	
 		|	<jk>public class</jk> MyPojo2 {
 		|		<jk>public</jk> MyPojo2(Long[] <jv>input</jv>) {...}
@@ -452,7 +452,7 @@
 	<p class='bjava'>
 		|	<jc>// Content is a POJO that takes in the whole 2-dimensional array:</jc>
 		|	<ja>@RestPost</ja>(<js>"/example3"</js>)	
-		|	<jk>public void</jk>testContent<ja>@Content</ja>(...) MyPojo3 <jv>body</jv>) {...}
+		|	<jk>public void</jk>testContent<ja>@Content</ja>(...) MyPojo3 <jv>content</jv>) {...}
 		|	
 		|	<jk>public class</jk> MyPojo3 {
 		|		<jk>public</jk> MyPojo3(Long[][] <jv>input</jv>) {...}

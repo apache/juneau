@@ -48,7 +48,7 @@ public class MockServletRequest implements HttpServletRequest {
 	private Map<String,String[]> headerMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 	private Map<String,Object> attributeMap = map();
 	private String characterEncoding = "UTF-8";
-	private byte[] body = new byte[0];
+	private byte[] content = new byte[0];
 	private String protocol = "HTTP/1.1";
 	private String scheme = "http";
 	private String serverName = "localhost";
@@ -518,12 +518,12 @@ public class MockServletRequest implements HttpServletRequest {
 
 	@Override /* HttpServletRequest */
 	public int getContentLength() {
-		return body == null ? 0 : body.length;
+		return content == null ? 0 : content.length;
 	}
 
 	@Override /* HttpServletRequest */
 	public long getContentLengthLong() {
-		return body == null ? 0 : body.length;
+		return content == null ? 0 : content.length;
 	}
 
 	@Override /* HttpServletRequest */
@@ -534,8 +534,8 @@ public class MockServletRequest implements HttpServletRequest {
 	@Override /* HttpServletRequest */
 	public ServletInputStream getInputStream() throws IOException {
 		if (formDataMap != null)
-			body = UrlEncodingSerializer.DEFAULT.toString(formDataMap).getBytes();
-		return new BoundedServletInputStream(new ByteArrayInputStream(body), Integer.MAX_VALUE);
+			content = UrlEncodingSerializer.DEFAULT.toString(formDataMap).getBytes();
+		return new BoundedServletInputStream(new ByteArrayInputStream(content), Integer.MAX_VALUE);
 	}
 
 	@Override /* HttpServletRequest */
@@ -558,7 +558,7 @@ public class MockServletRequest implements HttpServletRequest {
 	public Map<String,String[]> getParameterMap() {
 		if ("POST".equalsIgnoreCase(method)) {
 			if (formDataMap == null)
-				formDataMap = RestUtils.parseQuery(read(body));
+				formDataMap = RestUtils.parseQuery(read(content));
 			return formDataMap;
 		}
 		return queryDataMap;
@@ -928,18 +928,18 @@ public class MockServletRequest implements HttpServletRequest {
 	 * 	Any other types are converted to a string using the <c>toString()</c> method.
 	 * @return This object.
 	 */
-	public MockServletRequest body(Object value) {
+	public MockServletRequest content(Object value) {
 		try {
 			if (value instanceof byte[])
-				this.body = (byte[])value;
+				this.content = (byte[])value;
 			else if (value instanceof Reader)
-				this.body = readBytes((Reader)value);
+				this.content = readBytes((Reader)value);
 			else if (value instanceof InputStream)
-				this.body = readBytes((InputStream)value);
+				this.content = readBytes((InputStream)value);
 			else if (value instanceof CharSequence)
-				this.body = ((CharSequence)value).toString().getBytes();
+				this.content = ((CharSequence)value).toString().getBytes();
 			else if (value != null)
-				this.body = value.toString().getBytes();
+				this.content = value.toString().getBytes();
 		} catch (IOException e) {
 			throw runtimeException(e);
 		}
