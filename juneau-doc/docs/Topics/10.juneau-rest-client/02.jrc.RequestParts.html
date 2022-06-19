@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Request Headers', created:'8.2.0', updated:'9.0.0'}
+{title:'Request Parts', created:'8.2.0', updated:'9.0.0'}
 
 <div class='topic'>
 	<p>
@@ -22,14 +22,14 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jc'>{@link oajrc.RestClient.Builder}
-		<ul>
+		<ul class='javatreec'>
 			<li class='jm'>{@link oajrc.RestClient.Builder#headers() headers()}
 			<li class='jm'>{@link oajrc.RestClient.Builder#formData() formData()}
 			<li class='jm'>{@link oajrc.RestClient.Builder#queryData() queryData()}
 			<li class='jm'>{@link oajrc.RestClient.Builder#pathData() pathData()}
 		</ul>
 		<li class='jc'>{@link oajrc.RestRequest}
-		<ul>
+		<ul class='javatreec'>
 			<li class='jm'>{@link oajrc.RestRequest#headers() headers()}
 			<li class='jm'>{@link oajrc.RestRequest#formData() formData()}
 			<li class='jm'>{@link oajrc.RestRequest#queryData() queryData()}
@@ -41,7 +41,7 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jc'>{@link oajrc.RestClient.Builder}
-		<ul>
+		<ul class='javatreec'>
 			<li class='jm'>{@link oajrc.RestClient.Builder#header(String,String) header(String,String)}
 			<li class='jm'>{@link oajrc.RestClient.Builder#header(String,Supplier) header(String,Supplier&lt;String&gt;)}
 			<li class='jm'>{@link oajrc.RestClient.Builder#headers(Header...) headers(Header...)}
@@ -60,7 +60,7 @@
 			<li class='jm'>{@link oajrc.RestClient.Builder#pathDataDefault(NameValuePair...) pathDataDefault(NameValuePair...)}
 		</ul>
 		<li class='jc'>{@link oajrc.RestRequest}
-		<ul>
+		<ul class='javatreec'>
 			<li class='jm'>{@link oajrc.RestRequest#header(Header) header(Header)}
 			<li class='jm'>{@link oajrc.RestRequest#header(String,Object) header(String,Object)}
 			<li class='jm'>{@link oajrc.RestRequest#headerPairs(String...) headerPairs(String...)}
@@ -92,46 +92,6 @@
 	</p>
 	
 	<p>
-		{@link oajrc.RestClient.Builder#headers(Object...) headers(Object...)} allows you to pass in a variety
-		of header objects, and {@link oajrc.RestClient.Builder#headerPairs(Object...) headerPairs(Object...)} allows
-		you to specify several headers in a compact fashion.
-	</p>
-	
-	<h5 class='figure'>Example:</h5>
-	<p class='bjava'>
-		|	<jc>// Create a client that adds a bunch of headers to every request.</jc>
-		|	RestClient <jv>client</jv> = RestClient
-		|		.<jsm>create</jsm>()
-		|		.headers(
-		|			AMap.<jsm>of</jsm>(<js>"Foo"</js>,<js>"bar"</js>,<js>"Baz"</js>,<js>"qux"</js>),  <jc>// Arbitrary key/value pairs.</jc>
-		|			BasicStringHeader.<jsm>of</jsm>(<js>"Foo"</js>,<js>"bar"</js>),  <jc>// A Header object.</jc>
-		|			BasicStringHeader.<jsm>of</jsm>(<js>"Foo"</js>,()->getBar()),  <jc>// A dynamic Header object.</jc>
-		|			Accept.<jsm>of</jsm>(<js>"application/json"</js>),  <jc>// Predefined Header objects.</jc>
-		|			HeaderSupplier.<jsm>ofPairs</jsm>(<js>"Foo"</js>,<js>"bar"</js>),  <jc>// A dynamically changing list of Header objects.</jc>
-		|			AList.<jsm>of</jsm>(ContentType.<jsm>of</jsm>(<js>"application/json"</js>))  <jc>// A list of anything else on this list.</jc>
-		|		)
-		|		.headerPairs(<js>"Foo"</js>,<js>"bar"</js>,<js>"Baz"</js>,<js>"qux"</js>)  <jc>// Arbitrary key/value pairs.</jc>
-		|		.build();
-	</p>
-	
-	<p>
-		Additionally, methods are provided on the client builder and per request for all standard HTTP headers
-		such as {@link oajrc.RestClient.Builder#authorization(Object) authorization(Object)}.
-	</p>
-	
-	<h5 class='figure'>Example:</h5>
-	<p class='bjava'>
-		|	<jc>// Create a client that adds an Authorization header to every request.</jc>
-		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().authorization(<js>"Foo"</js>).build();
-		|
-		|	<jc>// Or do it per-request.</jc>
-		|	String <jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).authorization(<js>"Foo"</js>).run().getContent().asString();
-		|
-		|	<jc>// Or use an HttpHeader.</jc>
-		|	<jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).headers(Authorization.<jsm>of</jsm>(<js>"Foo"</js>)).run().getContent().asString();
-	</p>
-	
-	<p>
 		The supplier methods are particularly useful for header values whose values may change over time (such as <c>Authorization</c> headers
 		which may need to change every few minutes).
 	</p>
@@ -142,28 +102,6 @@
 		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().header(<js>"Authorization"</js>, ()->getMyAuthToken()).build();
 	</p>
 	
-	<p>
-		The {@link oaj.httppart.HttpPartSchema} API allows you to define OpenAPI schemas to POJO data structures on request headers.
-	</p>
-	
-	<h5 class='figure'>Example:</h5>
-	<p class='bjava'>
-		|	<jc>// Create a client that adds a header "Foo: bar|baz" to every request.</jc>
-		|	RestClient <jv>client</jv> = RestClient
-		|		.<jsm>create</jsm>()
-		|		.header(<js>"Foo"</js>, AList.<jsm>of</jsm>(<js>"bar"</js>,<js>"baz"</js>), <jsf>T_ARRAY_PIPES</jsf>)
-		|		.build();
-	</p>
-	
-	<p>
-		The methods with {@del oaj.AddFlag} parameters allow you to control whether new headers get appended, prepended, or
-		replace existing headers with the same name.
-	</p>
-	
-	<ul class='notes'>
-		<li class='note'>Methods that pass in POJOs convert values to strings using the part serializers.  Methods that pass in <c>Header</c> or
-			<c>NameValuePair</c> objects use the values returned by that bean directly.
-	</ul>
 	<ul class='seealso'>
 		<li class='jp'>{@link oaj.http.header} - Predefined {@link org.apache.http.Header} beans.
 	</ul>
