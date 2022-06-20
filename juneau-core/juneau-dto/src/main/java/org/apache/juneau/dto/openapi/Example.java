@@ -12,19 +12,13 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.openapi;
 
-import org.apache.juneau.UriResolver;
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.*;
+
 import org.apache.juneau.annotation.Bean;
 import org.apache.juneau.internal.MultiSet;
-import org.apache.juneau.internal.StringUtils;
-import org.apache.juneau.utils.ASet;
-
-import java.net.URI;
-import java.net.URL;
 import java.util.Set;
-
-import static org.apache.juneau.internal.BeanPropertyUtils.toStringVal;
-import static org.apache.juneau.internal.BeanPropertyUtils.toType;
-import static org.apache.juneau.internal.StringUtils.isNotEmpty;
 
 /**
  * information for Examples object.
@@ -128,7 +122,7 @@ public class Example extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Example summary(Object value) {
-		return setSummary(toStringVal(value));
+		return setSummary(stringify(value));
 	}
 
 	/**
@@ -165,7 +159,7 @@ public class Example extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Example description(Object value) {
-		return setDescription(toStringVal(value));
+		return setDescription(stringify(value));
 	}
 
 	/**
@@ -208,7 +202,7 @@ public class Example extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Example externalValue(Object value) {
-		return setExternalValue(toStringVal(value));
+		return setExternalValue(stringify(value));
 	}
 
 	/**
@@ -295,11 +289,12 @@ public class Example extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
-		ASet<String> s = new ASet<String>()
-			.appendIf(description != null, "description")
-				.appendIf(summary != null, "summary")
-				.appendIf(externalValue != null, "externalValue")
-			.appendIf(value != null, "value");
+		Set<String> s = setBuilder(String.class)
+			.addIf(description != null, "description")
+				.addIf(summary != null, "summary")
+				.addIf(externalValue != null, "externalValue")
+			.addIf(value != null, "value")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 }

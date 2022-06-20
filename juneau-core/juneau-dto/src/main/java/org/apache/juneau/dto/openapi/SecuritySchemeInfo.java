@@ -12,18 +12,19 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.openapi;
 
-import org.apache.juneau.FormattedRuntimeException;
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.*;
+
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.Bean;
 import org.apache.juneau.dto.swagger.Items;
 import org.apache.juneau.dto.swagger.SchemaInfo;
-import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.internal.MultiSet;
-import org.apache.juneau.utils.ASet;
 
 import java.util.*;
 
 import static org.apache.juneau.internal.ArrayUtils.contains;
-import static org.apache.juneau.internal.BeanPropertyUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 /**
  * Describes a single operation parameter.
@@ -219,7 +220,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SecuritySchemeInfo name(Object value) {
-		return setName(toStringVal(value));
+		return setName(stringify(value));
 	}
 
 	/**
@@ -255,10 +256,10 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 */
 	public SecuritySchemeInfo setIn(String value) {
 		if (isStrict() && ! contains(value, VALID_IN))
-			throw new FormattedRuntimeException(
+			throw BasicRuntimeException.create().message(
 				"Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}",
 				value, VALID_IN
-			);
+			).build();
 		in = value;
 		return this;
 	}
@@ -281,7 +282,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SecuritySchemeInfo in(Object value) {
-		return setIn(toStringVal(value));
+		return setIn(stringify(value));
 	}
 
 	/**
@@ -326,7 +327,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SecuritySchemeInfo description(Object value) {
-		return setDescription(toStringVal(value));
+		return setDescription(stringify(value));
 	}
 
 	/**
@@ -375,7 +376,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SecuritySchemeInfo scheme(Object value) {
-		return setScheme(toStringVal(value));
+		return setScheme(stringify(value));
 	}
 
 	/**
@@ -419,10 +420,10 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 */
 	public SecuritySchemeInfo setType(String value) {
 		if (isStrict() && ! contains(value, VALID_TYPES))
-			throw new FormattedRuntimeException(
+			throw BasicRuntimeException.create().message(
 				"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}",
 				value, VALID_TYPES
-			);
+			).build();
 		type = value;
 		return this;
 	}
@@ -448,7 +449,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SecuritySchemeInfo type(Object value) {
-		return setType(toStringVal(value));
+		return setType(stringify(value));
 	}
 
 	/**
@@ -497,7 +498,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SecuritySchemeInfo bearerFormat(Object value) {
-		return setBearerFormat(toStringVal(value));
+		return setBearerFormat(stringify(value));
 	}
 
 	/**
@@ -588,7 +589,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SecuritySchemeInfo openIdConnectUrl(Object value) {
-		return setOpenIdConnectUrl(toStringVal(value));
+		return setOpenIdConnectUrl(stringify(value));
 	}
 
 	@Override /* SwaggerElement */
@@ -629,15 +630,16 @@ public class SecuritySchemeInfo extends OpenApiElement {
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		ASet<String> s = new ASet<String>()
-			.appendIf(name != null, "name")
-			.appendIf(in != null, "in")
-			.appendIf(description != null, "description")
-			.appendIf(scheme != null, "scheme")
-			.appendIf(bearerFormat != null, "bearerFormat")
-			.appendIf(type != null, "type")
-			.appendIf(flows != null, "flows")
-			.appendIf(openIdConnectUrl != null, "openIdConnectUrl");
+		Set<String> s = setBuilder(String.class)
+			.addIf(name != null, "name")
+			.addIf(in != null, "in")
+			.addIf(description != null, "description")
+			.addIf(scheme != null, "scheme")
+			.addIf(bearerFormat != null, "bearerFormat")
+			.addIf(type != null, "type")
+			.addIf(flows != null, "flows")
+			.addIf(openIdConnectUrl != null, "openIdConnectUrl")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 

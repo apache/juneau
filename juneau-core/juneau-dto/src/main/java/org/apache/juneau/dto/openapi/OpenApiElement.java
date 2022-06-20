@@ -12,18 +12,17 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.openapi;
 
-import org.apache.juneau.ObjectMap;
-import org.apache.juneau.annotation.BeanProperty;
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.*;
+
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.json.JsonSerializer;
-import org.apache.juneau.utils.ASet;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
-
-import static org.apache.juneau.internal.BeanPropertyUtils.toBoolean;
-import static org.apache.juneau.internal.BeanPropertyUtils.toType;
 
 /**
  * Root class for all Swagger beans.
@@ -106,7 +105,7 @@ public abstract class OpenApiElement {
 	 * @param property The property name to retrieve.
 	 * @return The property value, or <jk>null</jk> if the property does not exist or is not set.
 	 */
-	@BeanProperty("*")
+	@Beanp("*")
 	public Object get(String property) {
 		if (property == null || extra == null)
 			return null;
@@ -123,7 +122,7 @@ public abstract class OpenApiElement {
 	 * @param value The new value for the property.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("*")
+	@Beanp("*")
 	public OpenApiElement set(String property, Object value) {
 		if (property == null)
 			return this;
@@ -144,9 +143,9 @@ public abstract class OpenApiElement {
 	 * 	All the non-standard keys on this element.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	@BeanProperty("*")
+	@Beanp("*")
 	public Set<String> extraKeys() {
-		return extra == null ? Collections.EMPTY_SET : extra.keySet();
+		return extra == null ? Collections.emptySet() : extra.keySet();
 	}
 
 	/**
@@ -157,8 +156,9 @@ public abstract class OpenApiElement {
 	 * 	<br>Never <jk>null</jk>.
 	 */
 	public Set<String> keySet() {
-		ASet<String> s = new ASet<String>()
-			.appendIf(strict, "strict");
+		Set<String> s = setBuilder(String.class)
+			.addIf(strict, "strict")
+			.build();
 		s.addAll(extraKeys());
 		return s;
 	}
@@ -171,8 +171,8 @@ public abstract class OpenApiElement {
 	 *
 	 * @return A map containing all the values in this swagger element.
 	 */
-	public ObjectMap asMap() {
-		ObjectMap m = new ObjectMap();
+	public JsonMap asMap() {
+		JsonMap m = new JsonMap();
 		for (String s : keySet())
 			m.put(s, get(s, Object.class));
 		return m;

@@ -12,18 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.openapi;
 
-import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.annotation.BeanProperty;
-import org.apache.juneau.dto.swagger.ResponseInfo;
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.*;
+
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.internal.MultiSet;
-import org.apache.juneau.internal.StringUtils;
-import org.apache.juneau.utils.ASet;
-
 import java.util.*;
-
-import static org.apache.juneau.internal.ArrayUtils.contains;
-import static org.apache.juneau.internal.BeanPropertyUtils.*;
 
 /**
  * Describes a single HTTP header.
@@ -55,9 +51,6 @@ import static org.apache.juneau.internal.BeanPropertyUtils.*;
 @Bean(properties="description,explode,deprecated,allowEmptyValue,allowReserved,schema,example,examples,$ref,*")
 @SuppressWarnings({"unchecked"})
 public class HeaderInfo extends OpenApiElement {
-
-	private static final String[] VALID_TYPES = {"string", "number", "integer", "boolean", "array"};
-	private static final String[] VALID_COLLECTION_FORMATS = {"csv","ssv","tsv","pipes","multi"};
 
 	private String
 		description,
@@ -156,7 +149,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderInfo description(Object value) {
-		return setDescription(toStringVal(value));
+		return setDescription(stringify(value));
 	}
 
 	/**
@@ -434,7 +427,7 @@ public class HeaderInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@BeanProperty("$ref")
+	@Beanp("$ref")
 	public String getRef() {
 		return ref;
 	}
@@ -456,9 +449,9 @@ public class HeaderInfo extends OpenApiElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("$ref")
+	@Beanp("$ref")
 	public HeaderInfo setRef(Object value) {
-		ref = StringUtils.asString(value);
+		ref = stringify(value);
 		return this;
 	}
 
@@ -479,7 +472,7 @@ public class HeaderInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@BeanProperty("x-example")
+	@Beanp("x-example")
 	public Object getExample() {
 		return example;
 	}
@@ -492,7 +485,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("x-example")
+	@Beanp("x-example")
 	public HeaderInfo setExample(Object value) {
 		example = value;
 		return this;
@@ -536,7 +529,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderInfo setExamples(Map<String,Example> value) {
-		examples = newMap(value);
+		examples = copyOf(value);
 		return this;
 	}
 
@@ -549,7 +542,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public HeaderInfo addExamples(Map<String,Example> values) {
-		examples = addToMap(examples, values);
+		examples = mapBuilder(examples).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -564,28 +557,6 @@ public class HeaderInfo extends OpenApiElement {
 		addExamples(Collections.singletonMap(name, example));
 		return this;
 	}
-	/**
-	 * Adds one or more values to the <property>examples</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li><code>Map&lt;String,{@link org.apache.juneau.dto.swagger.HeaderInfo}|String&gt;</code>
-	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,{@link org.apache.juneau.dto.swagger.HeaderInfo}&gt;</code>
-	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
-	 * 	headers(<js>"{headerName:{description:'description',...}}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public HeaderInfo examples(Object...values) {
-		examples = addToMap(examples,values, String.class, Example.class);
-		return this;
-	}
-
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
@@ -619,7 +590,7 @@ public class HeaderInfo extends OpenApiElement {
 			case "$ref": return ref(value);
 			case "schema": return schema(value);
 			case "x-example": return example(value);
-			case "examples": return setExamples(null).examples(value);
+			case "examples": return setExamples(mapBuilder(String.class,Example.class).sparse().addAny(value).build());
 			default:
 				super.set(property, value);
 				return this;
@@ -628,17 +599,18 @@ public class HeaderInfo extends OpenApiElement {
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		ASet<String> s = new ASet<String>()
-			.appendIf(description != null, "description")
-			.appendIf(required != null, "required")
-			.appendIf(explode != null, "explode")
-			.appendIf(deprecated != null, "deprecated")
-			.appendIf(allowEmptyValue != null, "allowEmptyValue")
-			.appendIf(ref != null, "$ref")
-			.appendIf(allowReserved != null, "allowReserved")
-			.appendIf(schema != null, "schema")
-			.appendIf(example != null, "example")
-			.appendIf(examples != null, "examples");
+		Set<String> s = setBuilder(String.class)
+			.addIf(description != null, "description")
+			.addIf(required != null, "required")
+			.addIf(explode != null, "explode")
+			.addIf(deprecated != null, "deprecated")
+			.addIf(allowEmptyValue != null, "allowEmptyValue")
+			.addIf(ref != null, "$ref")
+			.addIf(allowReserved != null, "allowReserved")
+			.addIf(schema != null, "schema")
+			.addIf(example != null, "example")
+			.addIf(examples != null, "examples")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 
 	}

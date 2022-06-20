@@ -48,6 +48,17 @@ public final class CollectionUtils {
 	}
 
 	/**
+	 * Creates a new collection from the specified collection.
+	 *
+	 * @param <E> The element type.
+	 * @param val The value to copy from.
+	 * @return A new {@link LinkedHashSet}, or <jk>null</jk> if the input was null.
+	 */
+	public static <E> Collection<E> copyOf(Collection<E> val) {
+		return val == null ? null : new LinkedHashSet<>(val);
+	}
+
+	/**
 	 * Creates a new map from the specified map.
 	 *
 	 * @param <K> The key type.

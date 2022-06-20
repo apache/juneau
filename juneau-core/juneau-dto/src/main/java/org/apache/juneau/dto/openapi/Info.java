@@ -12,18 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.openapi;
 
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.*;
+
 import org.apache.juneau.annotation.Bean;
 import org.apache.juneau.dto.swagger.Contact;
 import org.apache.juneau.dto.swagger.License;
-import org.apache.juneau.dto.swagger.SwaggerElement;
 import org.apache.juneau.internal.MultiSet;
-import org.apache.juneau.utils.ASet;
-
 import java.util.Set;
-
-import static org.apache.juneau.internal.BeanPropertyUtils.toStringVal;
-import static org.apache.juneau.internal.BeanPropertyUtils.toType;
-import static org.apache.juneau.internal.StringUtils.isNotEmpty;
 
 /**
  * The object provides metadata about the API.
@@ -154,7 +151,7 @@ public class Info extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Info title(Object value) {
-		return setTitle(toStringVal(value));
+		return setTitle(stringify(value));
 	}
 
 	/**
@@ -197,7 +194,7 @@ public class Info extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Info description(Object value) {
-		return setDescription(toStringVal(value));
+		return setDescription(stringify(value));
 	}
 
 	/**
@@ -238,7 +235,7 @@ public class Info extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Info termsOfService(Object value) {
-		return setTermsOfService(toStringVal(value));
+		return setTermsOfService(stringify(value));
 	}
 
 	/**
@@ -377,7 +374,7 @@ public class Info extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Info version(Object value) {
-		return setVersion(toStringVal(value));
+		return setVersion(stringify(value));
 	}
 
 
@@ -451,13 +448,14 @@ public class Info extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
-		ASet<String> s = new ASet<String>()
-			.appendIf(title != null, "title")
-			.appendIf(description != null, "description")
-			.appendIf(termsOfService != null, "termsOfService")
-			.appendIf(contact != null, "contact")
-			.appendIf(license != null, "license")
-			.appendIf(version != null, "version");
+		Set<String> s = setBuilder(String.class)
+			.addIf(title != null, "title")
+			.addIf(description != null, "description")
+			.addIf(termsOfService != null, "termsOfService")
+			.addIf(contact != null, "contact")
+			.addIf(license != null, "license")
+			.addIf(version != null, "version")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 }

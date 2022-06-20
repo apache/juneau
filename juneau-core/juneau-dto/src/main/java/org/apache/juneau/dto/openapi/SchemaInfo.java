@@ -12,18 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.openapi;
 
-import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.annotation.BeanProperty;
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.*;
+
 import org.apache.juneau.dto.swagger.ExternalDocumentation;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.dto.swagger.Xml;
 import org.apache.juneau.internal.MultiSet;
-import org.apache.juneau.internal.StringUtils;
-import org.apache.juneau.utils.ASet;
-
 import java.util.*;
-
-import static org.apache.juneau.internal.BeanPropertyUtils.*;
 
 /**
  * The Schema Object allows the definition of input and output data types.
@@ -151,11 +149,11 @@ public class SchemaInfo extends OpenApiElement {
 		this.items = copyFrom.items == null ? null : copyFrom.items.copy();
 		this.xml = copyFrom.xml == null ? null : copyFrom.xml.copy();
 		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
-		this._enum = newList(copyFrom._enum);
-		this.allOf = newList(copyFrom.allOf);
-		this.required = newList(copyFrom.required);
-		this.anyOf = newList(copyFrom.anyOf);
-		this.oneOf = newList(copyFrom.oneOf);
+		this._enum = copyOf(copyFrom._enum);
+		this.allOf = copyOf(copyFrom.allOf);
+		this.required = copyOf(copyFrom.required);
+		this.anyOf = copyOf(copyFrom.anyOf);
+		this.oneOf = copyOf(copyFrom.oneOf);
 
 		if (copyFrom.properties == null) {
 			this.properties = null;
@@ -232,7 +230,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo format(Object value) {
-		return setFormat(toStringVal(value));
+		return setFormat(stringify(value));
 	}
 
 	/**
@@ -267,7 +265,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo title(Object value) {
-		return setTitle(toStringVal(value));
+		return setTitle(stringify(value));
 	}
 
 	/**
@@ -303,7 +301,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo description(Object value) {
-		return setDescription(toStringVal(value));
+		return setDescription(stringify(value));
 	}
 
 	/**
@@ -624,7 +622,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo pattern(Object value) {
-		return setPattern(toStringVal(value));
+		return setPattern(stringify(value));
 	}
 
 	/**
@@ -866,7 +864,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo setRequired(Collection<String> value) {
-		required = newList(value);
+		required = listFrom(value);
 		return this;
 	}
 
@@ -882,7 +880,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo addRequired(Collection<String> value) {
-		required = addToList(required, value);
+		required = listBuilder(required).sparse().addAny(value).build();
 		return this;
 	}
 
@@ -907,8 +905,8 @@ public class SchemaInfo extends OpenApiElement {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	public SchemaInfo required(Object...values) {
-		required = addToList(required, values, String.class);
+	public SchemaInfo required(String...values) {
+		required = listBuilder(String.class).sparse().add(values).build();
 		return this;
 	}
 
@@ -935,7 +933,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo setEnum(Collection<Object> value) {
-		_enum = newList(value);
+		_enum = listFrom(value);
 		return this;
 	}
 
@@ -948,7 +946,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo addEnum(Collection<Object> value) {
-		_enum = addToList(_enum, value);
+		_enum = listBuilder(_enum).sparse().addAny(value).build();
 		return this;
 	}
 
@@ -976,7 +974,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo _enum(Object...values) {
-		_enum = addToList(_enum, values, Object.class);
+		setEnum(setBuilder(Object.class).sparse().addAny(values).build());
 		return this;
 	}
 
@@ -1027,7 +1025,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo type(Object value) {
-		return setType(toStringVal(value));
+		return setType(stringify(value));
 	}
 
 	/**
@@ -1091,7 +1089,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo setAllOf(Collection<Object> value) {
-		allOf = newList(value);
+		allOf = listFrom(value);
 		return this;
 	}
 
@@ -1104,7 +1102,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo addAllOf(Collection<Object> values) {
-		allOf = addToList(allOf, values);
+		allOf = listBuilder(allOf).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -1132,7 +1130,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo allOf(Object...values) {
-		allOf = addToList(allOf, values, Object.class);
+		allOf = listBuilder(allOf).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -1154,7 +1152,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo setAnyOf(Collection<Object> value) {
-		anyOf = newList(value);
+		anyOf = listFrom(value);
 		return this;
 	}
 
@@ -1167,7 +1165,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo addAnyOf(Collection<Object> values) {
-		anyOf = addToList(anyOf, values);
+		anyOf = listBuilder(anyOf).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -1195,7 +1193,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo anyOf(Object...values) {
-		anyOf = addToList(anyOf, values, Object.class);
+		anyOf = listBuilder(anyOf).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -1215,7 +1213,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo setOneOf(Collection<Object> value) {
-		oneOf = newList(value);
+		oneOf = listFrom(value);
 		return this;
 	}
 
@@ -1228,7 +1226,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo addOneOf(Collection<Object> values) {
-		oneOf = addToList(oneOf, values);
+		oneOf = listBuilder(oneOf).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -1256,7 +1254,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo oneOf(Object...values) {
-		oneOf = addToList(oneOf, values, Object.class);
+		oneOf = listBuilder(oneOf).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -1278,7 +1276,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo setProperties(Map<String, SchemaInfo> value) {
-		properties = newMap(value);
+		properties = copyOf(value);
 		return this;
 	}
 
@@ -1291,29 +1289,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public SchemaInfo addProperties(Map<String, SchemaInfo> values) {
-		properties = addToMap(properties, values);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>properties</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li><code>Map&lt;String,Map&lt;String,Object&gt;&gt;</code>
-	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,Map&lt;String,Object&gt;&gt;</code>
-	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
-	 * 	properties(<js>"{name:{foo:'bar'}}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo properties(Object...values) {
-		properties = addToMap(properties, values, String.class, SchemaInfo.class);
+		properties = mapBuilder(properties).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -1653,7 +1629,7 @@ public class SchemaInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@BeanProperty("$ref")
+	@Beanp("$ref")
 	public String getRef() {
 		return ref;
 	}
@@ -1675,9 +1651,9 @@ public class SchemaInfo extends OpenApiElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("$ref")
+	@Beanp("$ref")
 	public SchemaInfo setRef(Object value) {
-		ref = StringUtils.asString(value);
+		ref = stringify(value);
 		return this;
 	}
 
@@ -1760,14 +1736,14 @@ public class SchemaInfo extends OpenApiElement {
 			case "uniqueItems": return uniqueItems(value);
 			case "maxProperties": return maxProperties(value);
 			case "minProperties": return minProperties(value);
-			case "required": return setRequired(null).required(value);
+			case "required": return setRequired(null).required(stringify(value));
 			case "enum": return setEnum(null)._enum(value);
 			case "type": return type(value);
 			case "items": return items(value);
 			case "allOf": return setAllOf(null).allOf(value);
 			case "anyOf": return setAnyOf(null).anyOf(value);
 			case "oneOf": return setOneOf(null).oneOf(value);
-			case "properties": return setProperties(null).properties(value);
+			case "properties": return setProperties(mapBuilder(String.class,SchemaInfo.class).sparse().addAny(value).build());
 			case "additionalProperties": return additionalProperties(value);
 			case "not": return not(value);
 			case "nullable": return nullable(value);
@@ -1787,43 +1763,44 @@ public class SchemaInfo extends OpenApiElement {
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		ASet<String> s = new ASet<String>()
-			.appendIf(format != null, "format")
-			.appendIf(title != null, "title")
-			.appendIf(description != null, "description")
-			.appendIf(_default != null, "default")
-			.appendIf(multipleOf != null, "multipleOf")
-			.appendIf(maximum != null, "maximum")
-			.appendIf(exclusiveMaximum != null, "exclusiveMaximum")
-			.appendIf(minimum != null, "minimum")
-			.appendIf(exclusiveMinimum != null, "exclusiveMinimum")
-			.appendIf(maxLength != null, "maxLength")
-			.appendIf(minLength != null, "minLength")
-			.appendIf(pattern != null, "pattern")
-			.appendIf(maxItems != null, "maxItems")
-			.appendIf(minItems != null, "minItems")
-			.appendIf(uniqueItems != null, "uniqueItems")
-			.appendIf(maxProperties != null, "maxProperties")
-			.appendIf(minProperties != null, "minProperties")
-			.appendIf(required != null, "required")
-			.appendIf(_enum != null, "enum")
-			.appendIf(type != null, "type")
-			.appendIf(items != null, "items")
-			.appendIf(allOf != null, "allOf")
-			.appendIf(anyOf != null, "anyOf")
-			.appendIf(oneOf != null, "oneOf")
-			.appendIf(properties != null, "properties")
-			.appendIf(additionalProperties != null, "additionalProperties")
-			.appendIf(nullable != null, "nullable")
-			.appendIf(deprecated != null, "deprecated")
-			.appendIf(not != null, "not")
-			.appendIf(discriminator != null, "discriminator")
-			.appendIf(readOnly != null, "readOnly")
-			.appendIf(writeOnly != null, "writeOnly")
-			.appendIf(xml != null, "xml")
-			.appendIf(externalDocs != null, "externalDocs")
-			.appendIf(example != null, "example")
-			.appendIf(ref != null, "$ref");
+		Set<String> s = setBuilder(String.class)
+			.addIf(format != null, "format")
+			.addIf(title != null, "title")
+			.addIf(description != null, "description")
+			.addIf(_default != null, "default")
+			.addIf(multipleOf != null, "multipleOf")
+			.addIf(maximum != null, "maximum")
+			.addIf(exclusiveMaximum != null, "exclusiveMaximum")
+			.addIf(minimum != null, "minimum")
+			.addIf(exclusiveMinimum != null, "exclusiveMinimum")
+			.addIf(maxLength != null, "maxLength")
+			.addIf(minLength != null, "minLength")
+			.addIf(pattern != null, "pattern")
+			.addIf(maxItems != null, "maxItems")
+			.addIf(minItems != null, "minItems")
+			.addIf(uniqueItems != null, "uniqueItems")
+			.addIf(maxProperties != null, "maxProperties")
+			.addIf(minProperties != null, "minProperties")
+			.addIf(required != null, "required")
+			.addIf(_enum != null, "enum")
+			.addIf(type != null, "type")
+			.addIf(items != null, "items")
+			.addIf(allOf != null, "allOf")
+			.addIf(anyOf != null, "anyOf")
+			.addIf(oneOf != null, "oneOf")
+			.addIf(properties != null, "properties")
+			.addIf(additionalProperties != null, "additionalProperties")
+			.addIf(nullable != null, "nullable")
+			.addIf(deprecated != null, "deprecated")
+			.addIf(not != null, "not")
+			.addIf(discriminator != null, "discriminator")
+			.addIf(readOnly != null, "readOnly")
+			.addIf(writeOnly != null, "writeOnly")
+			.addIf(xml != null, "xml")
+			.addIf(externalDocs != null, "externalDocs")
+			.addIf(example != null, "example")
+			.addIf(ref != null, "$ref")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 

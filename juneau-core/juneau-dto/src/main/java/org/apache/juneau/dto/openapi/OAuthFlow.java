@@ -12,15 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.openapi;
 
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.*;
+
 import org.apache.juneau.annotation.Bean;
 import org.apache.juneau.internal.MultiSet;
-import org.apache.juneau.utils.ASet;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
-
-import static org.apache.juneau.internal.BeanPropertyUtils.*;
 
 /**
  * information for Link object.
@@ -129,7 +130,7 @@ public class OAuthFlow extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public OAuthFlow authorizationUrl(Object value) {
-		return setAuthorizationUrl(toStringVal(value));
+		return setAuthorizationUrl(stringify(value));
 	}
 
 	/**
@@ -166,7 +167,7 @@ public class OAuthFlow extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public OAuthFlow tokenUrl(Object value) {
-		return setTokenUrl(toStringVal(value));
+		return setTokenUrl(stringify(value));
 	}
 
 	/**
@@ -209,7 +210,7 @@ public class OAuthFlow extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public OAuthFlow refreshUrl(Object value) {
-		return setRefreshUrl(toStringVal(value));
+		return setRefreshUrl(stringify(value));
 	}
 
 	/**
@@ -237,7 +238,7 @@ public class OAuthFlow extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public OAuthFlow setScopes(Map<String,String> value) {
-		scopes = newMap(value);
+		scopes = copyOf(value);
 		return this;
 	}
 
@@ -250,7 +251,7 @@ public class OAuthFlow extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public OAuthFlow addScopes(Map<String,String> values) {
-		scopes = addToMap(scopes, values);
+		scopes = mapBuilder(scopes).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -258,36 +259,13 @@ public class OAuthFlow extends OpenApiElement {
 	 * Adds a single value to the <property>examples</property> property.
 	 *
 	 * @param name The mime-type string.
-	 * @param descriptiom The example.
+	 * @param description The example.
 	 * @return This object (for method chaining).
 	 */
-	public OAuthFlow scopes(String name, String descriptiom) {
-		scopes = addToMap(scopes, name, descriptiom);
+	public OAuthFlow scopes(String name, String description) {
+		scopes = mapBuilder(scopes).sparse().add(name, description).build();
 		return this;
 	}
-
-	/**
-	 * Adds one or more values to the <property>examples</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li><code>Map&lt;String,Object&gt;</code>
-	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,Object&gt;</code>
-	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
-	 * 	examples(<js>"{'text/json':{foo:'bar'}}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public OAuthFlow scopes(Object...values) {
-		scopes = addToMap(scopes, values, String.class, String.class);
-		return this;
-	}
-
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
@@ -310,7 +288,7 @@ public class OAuthFlow extends OpenApiElement {
 			case "authorizationUrl": return authorizationUrl(value);
 			case "tokenUrl": return tokenUrl(value);
 			case "refreshUrl": return refreshUrl(value);
-			case "scopes": return scopes(value);
+			case "scopes": return setScopes(mapBuilder(String.class,String.class).sparse().addAny(value).build());
 			default:
 				super.set(property, value);
 				return this;
@@ -319,11 +297,12 @@ public class OAuthFlow extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
-		ASet<String> s = new ASet<String>()
-			.appendIf(authorizationUrl != null, "authorizationUrl")
-			.appendIf(tokenUrl != null, "tokenUrl")
-			.appendIf(refreshUrl != null, "refreshUrl")
-			.appendIf(scopes != null, "scopes");
+		Set<String> s = setBuilder(String.class)
+			.addIf(authorizationUrl != null, "authorizationUrl")
+			.addIf(tokenUrl != null, "tokenUrl")
+			.addIf(refreshUrl != null, "refreshUrl")
+			.addIf(scopes != null, "scopes")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 }

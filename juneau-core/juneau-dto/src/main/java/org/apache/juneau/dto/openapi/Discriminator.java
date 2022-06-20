@@ -12,17 +12,17 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.openapi;
 
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.*;
+
 import org.apache.juneau.UriResolver;
 import org.apache.juneau.annotation.Bean;
 import org.apache.juneau.internal.MultiSet;
-import org.apache.juneau.utils.ASet;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
-
-import static org.apache.juneau.internal.BeanPropertyUtils.*;
-import static org.apache.juneau.internal.StringUtils.isNotEmpty;
 
 /**
  * Used to aid in serialization, deserialization, and validation.
@@ -101,7 +101,7 @@ public class Discriminator extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Discriminator propertyName(Object value) {
-		return setPropertyName(toStringVal(value));
+		return setPropertyName(stringify(value));
 	}
 
 	/**
@@ -129,7 +129,7 @@ public class Discriminator extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Discriminator setMapping(Map<String,String> value) {
-		mapping = newMap(value);
+		mapping = copyOf(value);
 		return this;
 	}
 
@@ -142,18 +142,7 @@ public class Discriminator extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Discriminator addMapping(Map<String,String> values) {
-		mapping = addToMap(mapping, values);
-		return this;
-	}
-
-	/**
-	 * Same as {@link #setMapping(Map<String,String>)}.
-	 *
-	 * @param values
-	 * @return This object (for method chaining).
-	 */
-	public Discriminator mapping(Object...values) {
-		mapping = addToMap(mapping, values, String.class, String.class);
+		mapping = mapBuilder(mapping).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -183,7 +172,7 @@ public class Discriminator extends OpenApiElement {
 			return this;
 		switch (property) {
 			case "propertyName": return propertyName(value);
-			case "mapping": return mapping(value);
+			case "mapping": return setMapping(mapBuilder(String.class,String.class).sparse().addAny(value).build());
 			default:
 				super.set(property, value);
 				return this;
@@ -192,9 +181,10 @@ public class Discriminator extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
-		ASet<String> s = new ASet<String>()
-			.appendIf(propertyName != null, "propertyName")
-			.appendIf(mapping != null, "mapping");
+		Set<String> s = setBuilder(String.class)
+			.addIf(propertyName != null, "propertyName")
+			.addIf(mapping != null, "mapping")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 }

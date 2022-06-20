@@ -12,20 +12,18 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.openapi;
 
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.*;
+
 import org.apache.juneau.UriResolver;
 import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.dto.swagger.SwaggerElement;
 import org.apache.juneau.internal.MultiSet;
 import org.apache.juneau.internal.StringUtils;
-import org.apache.juneau.utils.ASet;
 
 import java.net.URI;
 import java.net.URL;
 import java.util.Set;
-
-import static org.apache.juneau.internal.BeanPropertyUtils.toStringVal;
-import static org.apache.juneau.internal.BeanPropertyUtils.toType;
-import static org.apache.juneau.internal.StringUtils.isNotEmpty;
 
 /**
  * Contact information for the exposed API.
@@ -127,7 +125,7 @@ public class Contact extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Contact name(Object value) {
-		return setName(toStringVal(value));
+		return setName(stringify(value));
 	}
 
 	/**
@@ -215,7 +213,7 @@ public class Contact extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Contact email(Object value) {
-		return setEmail(toStringVal(value));
+		return setEmail(stringify(value));
 	}
 
 	/**
@@ -273,10 +271,11 @@ public class Contact extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
-		ASet<String> s = new ASet<String>()
-			.appendIf(name != null, "name")
-			.appendIf(url != null, "url")
-			.appendIf(email != null, "email");
+		Set<String> s = setBuilder(String.class)
+			.addIf(name != null, "name")
+			.addIf(url != null, "url")
+			.addIf(email != null, "email")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 }

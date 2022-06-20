@@ -12,16 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.openapi;
 
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.*;
+
 import org.apache.juneau.annotation.Bean;
 import org.apache.juneau.dto.swagger.ExternalDocumentation;
-import org.apache.juneau.dto.swagger.SwaggerElement;
 import org.apache.juneau.internal.MultiSet;
-import org.apache.juneau.utils.ASet;
 
 import java.util.Set;
-
-import static org.apache.juneau.internal.BeanPropertyUtils.toStringVal;
-import static org.apache.juneau.internal.BeanPropertyUtils.toType;
 
 /**
  * Allows adding meta data to a single tag that is used by the {@doc SwaggerOperationObject Operation Object}.
@@ -128,7 +127,7 @@ public class Tag extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Tag name(Object value) {
-		return setName(toStringVal(value));
+		return setName(stringify(value));
 	}
 
 	/**
@@ -170,7 +169,7 @@ public class Tag extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Tag description(Object value) {
-		return setDescription(toStringVal(value));
+		return setDescription(stringify(value));
 	}
 
 	/**
@@ -250,10 +249,11 @@ public class Tag extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
-		ASet<String> s = new ASet<String>()
-			.appendIf(name != null, "name")
-			.appendIf(description != null, "description")
-			.appendIf(externalDocs != null, "externalDocs");
+		Set<String> s = setBuilder(String.class)
+			.addIf(name != null, "name")
+			.addIf(description != null, "description")
+			.addIf(externalDocs != null, "externalDocs")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 }

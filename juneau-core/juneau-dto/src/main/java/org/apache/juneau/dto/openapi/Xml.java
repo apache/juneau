@@ -12,14 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.openapi;
 
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.*;
+
 import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.dto.swagger.SwaggerElement;
 import org.apache.juneau.internal.MultiSet;
-import org.apache.juneau.utils.ASet;
 
 import java.util.Set;
-
-import static org.apache.juneau.internal.BeanPropertyUtils.*;
 
 /**
  * A metadata object that allows for more fine-tuned XML model definitions.
@@ -119,7 +119,7 @@ public class Xml extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Xml name(Object value) {
-		return setName(toStringVal(value));
+		return setName(stringify(value));
 	}
 
 	/**
@@ -160,7 +160,7 @@ public class Xml extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Xml namespace(Object value) {
-		return setNamespace(toStringVal(value));
+		return setNamespace(stringify(value));
 	}
 
 	/**
@@ -201,7 +201,7 @@ public class Xml extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Xml prefix(Object value) {
-		return setPrefix(toStringVal(value));
+		return setPrefix(stringify(value));
 	}
 
 	/**
@@ -334,12 +334,13 @@ public class Xml extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
-		ASet<String> s = new ASet<String>()
-			.appendIf(name != null, "name")
-			.appendIf(namespace != null, "namespace")
-			.appendIf(prefix != null, "prefix")
-			.appendIf(attribute != null, "attribute")
-			.appendIf(wrapped != null, "wrapped");
+		Set<String> s = setBuilder(String.class)
+			.addIf(name != null, "name")
+			.addIf(namespace != null, "namespace")
+			.addIf(prefix != null, "prefix")
+			.addIf(attribute != null, "attribute")
+			.addIf(wrapped != null, "wrapped")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 }

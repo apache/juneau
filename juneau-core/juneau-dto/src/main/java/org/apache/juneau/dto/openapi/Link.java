@@ -12,15 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.openapi;
 
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.*;
+
 import org.apache.juneau.annotation.Bean;
 import org.apache.juneau.internal.MultiSet;
-import org.apache.juneau.utils.ASet;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
-
-import static org.apache.juneau.internal.BeanPropertyUtils.*;
 
 /**
  * information for Link object.
@@ -133,7 +134,7 @@ public class Link extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Link operationRef(Object value) {
-		return setOperationRef(toStringVal(value));
+		return setOperationRef(stringify(value));
 	}
 
 	/**
@@ -170,7 +171,7 @@ public class Link extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Link description(Object value) {
-		return setDescription(toStringVal(value));
+		return setDescription(stringify(value));
 	}
 
 	/**
@@ -213,7 +214,7 @@ public class Link extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Link operationId(Object value) {
-		return setOperationId(toStringVal(value));
+		return setOperationId(stringify(value));
 	}
 
 	/**
@@ -330,7 +331,7 @@ public class Link extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Link setParameters(Map<String,Object> value) {
-		parameters = newMap(value);
+		parameters = copyOf(value);
 		return this;
 	}
 
@@ -343,7 +344,7 @@ public class Link extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Link addParameters(Map<String,Object> values) {
-		parameters = addToMap(parameters, values);
+		parameters = mapBuilder(parameters).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -355,32 +356,9 @@ public class Link extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Link parameter(String mimeType, Object parameter) {
-		parameters = addToMap(parameters, mimeType, parameter);
+		parameters = mapBuilder(parameters).sparse().add(mimeType, parameters).build();
 		return this;
 	}
-
-	/**
-	 * Adds one or more values to the <property>examples</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li><code>Map&lt;String,Object&gt;</code>
-	 * 		<li><code>String</code> - JSON object representation of <code>Map&lt;String,Object&gt;</code>
-	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
-	 * 	examples(<js>"{'text/json':{foo:'bar'}}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public Link parameters(Object...values) {
-		parameters = addToMap(parameters, values, String.class, Object.class);
-		return this;
-	}
-
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
@@ -407,7 +385,7 @@ public class Link extends OpenApiElement {
 			case "operationRef": return operationRef(value);
 			case "requestBody": return requestBody(value);
 			case "server": return server(value);
-			case "parameters": return parameters(value);
+			case "parameters": return setParameters(mapBuilder(String.class,Object.class).sparse().addAny(value).build());
 			default:
 				super.set(property, value);
 				return this;
@@ -416,13 +394,14 @@ public class Link extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
-		ASet<String> s = new ASet<String>()
-			.appendIf(description != null, "description")
-			.appendIf(operationId != null, "operationId")
-			.appendIf(operationRef != null, "operationRef")
-			.appendIf(requestBody != null, "requestBody")
-			.appendIf(parameters != null, "parameters")
-			.appendIf(server != null, "server");
+		Set<String> s = setBuilder(String.class)
+			.addIf(description != null, "description")
+			.addIf(operationId != null, "operationId")
+			.addIf(operationRef != null, "operationRef")
+			.addIf(requestBody != null, "requestBody")
+			.addIf(parameters != null, "parameters")
+			.addIf(server != null, "server")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 }

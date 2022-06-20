@@ -12,22 +12,20 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.openapi;
 
-import org.apache.juneau.FormattedRuntimeException;
-import org.apache.juneau.ObjectList;
-import org.apache.juneau.ObjectMap;
-import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.annotation.BeanProperty;
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.dto.swagger.Swagger;
-import org.apache.juneau.dto.swagger.SwaggerElement;
 import org.apache.juneau.internal.MultiSet;
-import org.apache.juneau.internal.StringUtils;
 import org.apache.juneau.json.SimpleJsonSerializer;
-import org.apache.juneau.utils.ASet;
 
 import java.util.*;
 
 import static org.apache.juneau.internal.ArrayUtils.contains;
-import static org.apache.juneau.internal.BeanPropertyUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 /**
  * A limited subset of JSON-Schema's items object.
@@ -117,7 +115,7 @@ public class Items extends OpenApiElement {
 		this.uniqueItems = copyFrom.uniqueItems;
 		this.items = copyFrom.items == null ? null : copyFrom.items.copy();
 		this._default = copyFrom._default;
-		this._enum = newList(copyFrom._enum);
+		this._enum = copyOf(copyFrom._enum);
 		this.ref = copyFrom.ref;
 	}
 
@@ -200,7 +198,7 @@ public class Items extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Items type(Object value) {
-		return setType(toStringVal(value));
+		return setType(stringify(value));
 	}
 
 	/**
@@ -251,7 +249,7 @@ public class Items extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Items format(Object value) {
-		return setFormat(toStringVal(value));
+		return setFormat(stringify(value));
 	}
 
 	/**
@@ -337,10 +335,10 @@ public class Items extends OpenApiElement {
 	 */
 	public Items setCollectionFormat(String value) {
 		if (isStrict() && ! contains(value, VALID_COLLECTION_FORMATS))
-			throw new FormattedRuntimeException(
+			throw BasicRuntimeException.create().message(
 				"Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}",
 				value, VALID_COLLECTION_FORMATS
-			);
+			).build();
 		collectionFormat = value;
 		return this;
 	}
@@ -362,7 +360,7 @@ public class Items extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Items collectionFormat(Object value) {
-		return setCollectionFormat(toStringVal(value));
+		return setCollectionFormat(stringify(value));
 	}
 
 	/**
@@ -746,7 +744,7 @@ public class Items extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Items pattern(Object value) {
-		return setPattern(toStringVal(value));
+		return setPattern(stringify(value));
 	}
 
 	/**
@@ -912,7 +910,7 @@ public class Items extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Items setEnum(Collection<Object> value) {
-		_enum = newList(value);
+		_enum = listFrom(value);
 		return this;
 	}
 
@@ -925,7 +923,7 @@ public class Items extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Items addEnum(Collection<Object> values) {
-		_enum = addToList(_enum, values);
+		_enum = listBuilder(_enum).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -953,7 +951,7 @@ public class Items extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public Items _enum(Object...values) {
-		_enum = addToList(_enum, values, Object.class);
+		_enum = listBuilder(_enum).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -1007,7 +1005,7 @@ public class Items extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	@BeanProperty("$ref")
+	@Beanp("$ref")
 	public String getRef() {
 		return ref;
 	}
@@ -1029,9 +1027,9 @@ public class Items extends OpenApiElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object (for method chaining).
 	 */
-	@BeanProperty("$ref")
+	@Beanp("$ref")
 	public Items setRef(Object value) {
-		ref = StringUtils.asString(value);
+		ref = stringify(value);
 		return this;
 	}
 
@@ -1105,25 +1103,26 @@ public class Items extends OpenApiElement {
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		ASet<String> s = new ASet<String>()
-			.appendIf(type != null, "type")
-			.appendIf(format != null, "format")
-			.appendIf(items != null, "items")
-			.appendIf(collectionFormat != null, "collectionFormat")
-			.appendIf(_default != null, "default")
-			.appendIf(maximum != null, "maximum")
-			.appendIf(exclusiveMaximum != null, "exclusiveMaximum")
-			.appendIf(minimum != null, "minimum")
-			.appendIf(exclusiveMinimum != null, "exclusiveMinimum")
-			.appendIf(maxLength != null, "maxLength")
-			.appendIf(minLength != null, "minLength")
-			.appendIf(pattern != null, "pattern")
-			.appendIf(maxItems != null, "maxItems")
-			.appendIf(minItems != null, "minItems")
-			.appendIf(uniqueItems != null, "uniqueItems")
-			.appendIf(_enum != null, "enum")
-			.appendIf(multipleOf != null, "multipleOf")
-			.appendIf(ref != null, "$ref");
+		Set<String> s = setBuilder(String.class)
+			.addIf(type != null, "type")
+			.addIf(format != null, "format")
+			.addIf(items != null, "items")
+			.addIf(collectionFormat != null, "collectionFormat")
+			.addIf(_default != null, "default")
+			.addIf(maximum != null, "maximum")
+			.addIf(exclusiveMaximum != null, "exclusiveMaximum")
+			.addIf(minimum != null, "minimum")
+			.addIf(exclusiveMinimum != null, "exclusiveMinimum")
+			.addIf(maxLength != null, "maxLength")
+			.addIf(minLength != null, "minLength")
+			.addIf(pattern != null, "pattern")
+			.addIf(maxItems != null, "maxItems")
+			.addIf(minItems != null, "minItems")
+			.addIf(uniqueItems != null, "uniqueItems")
+			.addIf(_enum != null, "enum")
+			.addIf(multipleOf != null, "multipleOf")
+			.addIf(ref != null, "$ref")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 
@@ -1163,8 +1162,8 @@ public class Items extends OpenApiElement {
 
 	/* Resolve references in extra attributes */
 	private Object resolveRefs(Object o, Swagger swagger, Deque<String> refStack, int maxDepth) {
-		if (o instanceof ObjectMap) {
-			ObjectMap om = (ObjectMap)o;
+		if (o instanceof JsonMap) {
+			JsonMap om = (JsonMap)o;
 			Object ref = om.get("$ref");
 			if (ref instanceof CharSequence) {
 				String sref = ref.toString();
@@ -1179,8 +1178,8 @@ public class Items extends OpenApiElement {
 			for (Map.Entry<String,Object> e : om.entrySet())
 				e.setValue(resolveRefs(e.getValue(), swagger, refStack, maxDepth));
 		}
-		if (o instanceof ObjectList)
-			for (ListIterator<Object> li = ((ObjectList)o).listIterator(); li.hasNext();)
+		if (o instanceof JsonList)
+			for (ListIterator<Object> li = ((JsonList)o).listIterator(); li.hasNext();)
 				li.set(resolveRefs(li.next(), swagger, refStack, maxDepth));
 		return o;
 	}

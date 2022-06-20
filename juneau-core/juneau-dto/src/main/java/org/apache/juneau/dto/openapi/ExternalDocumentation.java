@@ -12,20 +12,18 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.openapi;
 
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.ConverterUtils.*;
+
 import org.apache.juneau.UriResolver;
 import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.dto.swagger.SwaggerElement;
 import org.apache.juneau.internal.MultiSet;
 import org.apache.juneau.internal.StringUtils;
-import org.apache.juneau.utils.ASet;
 
 import java.net.URI;
 import java.net.URL;
 import java.util.Set;
-
-import static org.apache.juneau.internal.BeanPropertyUtils.toStringVal;
-import static org.apache.juneau.internal.BeanPropertyUtils.toType;
-import static org.apache.juneau.internal.StringUtils.isNotEmpty;
 
 /**
  * Allows referencing an external resource for extended documentation.
@@ -101,7 +99,7 @@ public class ExternalDocumentation extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	public ExternalDocumentation description(Object value) {
-		return setDescription(toStringVal(value));
+		return setDescription(stringify(value));
 	}
 
 	/**
@@ -198,9 +196,10 @@ public class ExternalDocumentation extends OpenApiElement {
 
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
-		ASet<String> s = new ASet<String>()
-			.appendIf(description != null, "description")
-			.appendIf(url != null, "url");
+		Set<String> s = setBuilder(String.class)
+			.addIf(description != null, "description")
+			.addIf(url != null, "url")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 }

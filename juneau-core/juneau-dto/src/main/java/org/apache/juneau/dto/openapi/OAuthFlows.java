@@ -12,18 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.openapi;
 
-import org.apache.juneau.FormattedRuntimeException;
+import static org.apache.juneau.internal.ConverterUtils.*;
+
 import org.apache.juneau.annotation.Bean;
 import org.apache.juneau.dto.swagger.Items;
-import org.apache.juneau.dto.swagger.SchemaInfo;
 import org.apache.juneau.internal.MultiSet;
-import org.apache.juneau.utils.ASet;
 
 import java.util.Set;
 
-import static org.apache.juneau.internal.ArrayUtils.contains;
-import static org.apache.juneau.internal.BeanPropertyUtils.toStringVal;
-import static org.apache.juneau.internal.BeanPropertyUtils.toType;
+import static org.apache.juneau.internal.CollectionUtils.*;
 
 /**
  * Describes a single operation parameter.
@@ -370,11 +367,12 @@ public class OAuthFlows extends OpenApiElement {
 
 	@Override /* SwaggerElement */
 	public Set<String> keySet() {
-		ASet<String> s = new ASet<String>()
-			.appendIf(implicit != null, "implicit")
-			.appendIf(password != null, "password")
-			.appendIf(clientCredentials != null, "clientCredentials")
-			.appendIf(authorizationCode != null, "authorizationCode");
+		Set<String> s = setBuilder(String.class)
+			.addIf(implicit != null, "implicit")
+			.addIf(password != null, "password")
+			.addIf(clientCredentials != null, "clientCredentials")
+			.addIf(authorizationCode != null, "authorizationCode")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 
