@@ -12,12 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.net.*;
-import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
@@ -56,7 +54,7 @@ public class Category extends Common {
 	 * @param term The category term.
 	 */
 	public Category(String term) {
-		term(term);
+		setTerm(term);
 	}
 
 	/** Bean constructor. */
@@ -89,37 +87,11 @@ public class Category extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
 	@Xml(format=ATTR)
-	public void setTerm(String value) {
+	public Category setTerm(String value) {
 		this.term = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>term</property>.
-	 *
-	 * <p>
-	 * The category term.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> term() {
-		return optional(term);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>term</property>.
-	 *
-	 * <p>
-	 * The category term.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Category term(String value) {
-		setTerm(value);
 		return this;
 	}
 
@@ -149,36 +121,10 @@ public class Category extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setScheme(Object value) {
+	public Category setScheme(Object value) {
 		this.scheme = toURI(value);
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>scheme</property>.
-	 *
-	 * <p>
-	 * The category scheme.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<URI> scheme() {
-		return optional(scheme);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>scheme</property>.
-	 *
-	 * <p>
-	 * The category scheme.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Category scheme(Object value) {
-		setScheme(value);
 		return this;
 	}
 
@@ -204,53 +150,26 @@ public class Category extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setLabel(String value) {
+	public Category setLabel(String value) {
 		this.label = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>label</property>.
-	 *
-	 * <p>
-	 * The category label.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> label() {
-		return optional(label);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>label</property>.
-	 *
-	 * <p>
-	 * The category label.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Category label(String value) {
-		setLabel(value);
 		return this;
 	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden setters (to simplify method chaining)
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Common */
-	public Category base(Object base) {
-		super.base(base);
+	public Category setBase(Object base) {
+		super.setBase(base);
 		return this;
 	}
 
 	@Override /* Common */
-	public Category lang(String lang) {
-		super.lang(lang);
+	public Category setLang(String lang) {
+		super.setLang(lang);
 		return this;
 	}
 }

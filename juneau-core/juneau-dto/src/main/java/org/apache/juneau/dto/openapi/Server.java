@@ -19,7 +19,6 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 import org.apache.juneau.UriResolver;
 import org.apache.juneau.annotation.Bean;
 import org.apache.juneau.internal.MultiSet;
-import org.apache.juneau.internal.StringUtils;
 
 import java.net.URI;
 import java.net.URL;
@@ -106,19 +105,6 @@ public class Server extends OpenApiElement{
 	}
 
 	/**
-	 * Same as {@link #setUrl(URI)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-URI values will be converted to URI using <code><jk>new</jk> URI(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Server url(Object value) {
-		return setUrl(StringUtils.toURI(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>description</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -137,17 +123,6 @@ public class Server extends OpenApiElement{
 	public Server setDescription(String value) {
 		description = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setDescription(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public Server description(Object value) {
-		return setDescription(stringify(value));
 	}
 
 	/**
@@ -193,20 +168,8 @@ public class Server extends OpenApiElement{
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public Server addVariables(String key, ServerVariable value) {
+	public Server addVariable(String key, ServerVariable value) {
 		variables = mapBuilder(variables).sparse().add(key, value).build();
-		return this;
-	}
-
-	/**
-	 * Adds a single value to the <property>headers</property> property.
-	 *
-	 * @param name variable name.
-	 * @param value The server variable instance.
-	 * @return This object (for method chaining).
-	 */
-	public Server variable(String name, ServerVariable value) {
-		addVariables(Collections.singletonMap(name, value));
 		return this;
 	}
 
@@ -227,8 +190,8 @@ public class Server extends OpenApiElement{
 		if (property == null)
 			return this;
 		switch (property) {
-			case "url": return url(value);
-			case "description": return description(value);
+			case "url": return setUrl(toURI(value));
+			case "description": return setDescription(stringify(value));
 			case "variables": return setVariables(mapBuilder(String.class,ServerVariable.class).sparse().addAny(value).build());
 			default:
 				super.set(property, value);

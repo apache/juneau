@@ -12,12 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.net.*;
-import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
@@ -92,36 +90,10 @@ public class Generator extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setUri(Object value) {
+	public Generator setUri(Object value) {
 		this.uri = toURI(value);
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>uri</property>.
-	 *
-	 * <p>
-	 * The URI of this generator statement.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<URI> uri() {
-		return optional(uri);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>uri</property>.
-	 *
-	 * <p>
-	 * The URI of this generator statement.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Generator uri(Object value) {
-		setUri(value);
 		return this;
 	}
 
@@ -147,36 +119,10 @@ public class Generator extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setVersion(String value) {
+	public Generator setVersion(String value) {
 		this.version = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>version</property>.
-	 *
-	 * <p>
-	 * The version of this generator statement.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> version() {
-		return optional(version);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>version</property>.
-	 *
-	 * <p>
-	 * The version of this generator statement.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Generator version(String value) {
-		setVersion(value);
 		return this;
 	}
 
@@ -202,53 +148,26 @@ public class Generator extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setText(String value) {
+	public Generator setText(String value) {
 		this.text = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>text</property>.
-	 *
-	 * <p>
-	 * The content of this generator statement.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> text() {
-		return optional(text);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>text</property>.
-	 *
-	 * <p>
-	 * The content of this generator statement.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Generator text(String value) {
-		setText(value);
 		return this;
 	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden setters (to simplify method chaining)
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Common */
-	public Generator base(Object base) {
-		super.base(base);
+	public Generator setBase(Object base) {
+		super.setBase(base);
 		return this;
 	}
 
 	@Override /* Common */
-	public Generator lang(String lang) {
-		super.lang(lang);
+	public Generator setLang(String lang) {
+		super.setLang(lang);
 		return this;
 	}
 }

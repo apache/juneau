@@ -12,10 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
-
-import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
@@ -63,7 +60,7 @@ public class Link extends Common {
 	 * @param href The URI of the link.
 	 */
 	public Link(String rel, String type, String href) {
-		rel(rel).type(type).href(href);
+		setRel(rel).setType(type).setHref(href);
 	}
 
 	/** Bean constructor. */
@@ -96,36 +93,10 @@ public class Link extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setHref(String value) {
+	public Link setHref(String value) {
 		this.href = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>href</property>.
-	 *
-	 * <p>
-	 * The href of the target of this link.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> href() {
-		return optional(href);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>href</property>.
-	 *
-	 * <p>
-	 * The href of the target of this link.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Link href(String value) {
-		setHref(value);
 		return this;
 	}
 
@@ -151,36 +122,10 @@ public class Link extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setRel(String value) {
+	public Link setRel(String value) {
 		this.rel = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>rel</property>.
-	 *
-	 * <p>
-	 * The rel of this link.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> rel() {
-		return optional(rel);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>rel</property>.
-	 *
-	 * <p>
-	 * The rel of this link.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Link rel(String value) {
-		setRel(value);
 		return this;
 	}
 
@@ -215,36 +160,10 @@ public class Link extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setType(String value) {
+	public Link setType(String value) {
 		this.type = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>type</property>.
-	 *
-	 * <p>
-	 * The content type of the target of this link.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> type() {
-		return optional(type);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>type</property>.
-	 *
-	 * <p>
-	 * The content type of the target of this link.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Link type(String value) {
-		setType(value);
 		return this;
 	}
 
@@ -270,36 +189,10 @@ public class Link extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setHreflang(String value) {
+	public Link setHreflang(String value) {
 		this.hreflang = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>hreflang</property>.
-	 *
-	 * <p>
-	 * The language of the target of this link.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> hreflang() {
-		return optional(hreflang);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>hreflang</property>.
-	 *
-	 * <p>
-	 * The language of the target of this link.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Link hreflang(String value) {
-		setHreflang(value);
 		return this;
 	}
 
@@ -325,36 +218,10 @@ public class Link extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setTitle(String value) {
+	public Link setTitle(String value) {
 		this.title = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>title</property>.
-	 *
-	 * <p>
-	 * The title of the target of this link.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> title() {
-		return optional(title);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>title</property>.
-	 *
-	 * <p>
-	 * The title of the target of this link.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Link title(String value) {
-		setTitle(value);
 		return this;
 	}
 
@@ -380,53 +247,26 @@ public class Link extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setLength(Integer value) {
+	public Link setLength(Integer value) {
 		this.length = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>length</property>.
-	 *
-	 * <p>
-	 * The length of the contents of the target of this link.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Integer> length() {
-		return optional(length);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>length</property>.
-	 *
-	 * <p>
-	 * The length of the contents of the target of this link.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Link length(Integer value) {
-		setLength(value);
 		return this;
 	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden setters (to simplify method chaining)
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Common */
-	public Link base(Object base) {
-		super.base(base);
+	public Link setBase(Object base) {
+		super.setBase(base);
 		return this;
 	}
 
 	@Override /* Common */
-	public Link lang(String lang) {
-		super.lang(lang);
+	public Link setLang(String lang) {
+		super.setLang(lang);
 		return this;
 	}
 }

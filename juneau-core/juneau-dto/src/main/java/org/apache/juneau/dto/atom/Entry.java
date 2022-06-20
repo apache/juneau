@@ -13,7 +13,6 @@
 package org.apache.juneau.dto.atom;
 
 import static org.apache.juneau.dto.atom.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 
 import java.util.*;
 
@@ -108,36 +107,10 @@ public class Entry extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setContent(Content value) {
+	public Entry setContent(Content value) {
 		this.content = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>content</property>.
-	 *
-	 * <p>
-	 * The content of this entry.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Content> content() {
-		return optional(content);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>content</property>.
-	 *
-	 * <p>
-	 * The content of this entry.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Entry content(Content value) {
-		setContent(value);
 		return this;
 	}
 
@@ -162,36 +135,10 @@ public class Entry extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setPublished(Calendar value) {
+	public Entry setPublished(Calendar value) {
 		this.published = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>published</property>.
-	 *
-	 * <p>
-	 * The publish timestamp of this entry.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Calendar> published() {
-		return optional(published);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>published</property>.
-	 *
-	 * <p>
-	 * The publish timestamp of this entry.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Entry published(Calendar value) {
-		setPublished(value);
 		return this;
 	}
 
@@ -206,7 +153,7 @@ public class Entry extends CommonEntry {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public Entry published(String value) {
+	public Entry setPublished(String value) {
 		setPublished(parseDateTime(value));
 		return this;
 	}
@@ -232,36 +179,10 @@ public class Entry extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setSource(Source value) {
+	public Entry setSource(Source value) {
 		this.source = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>source</property>.
-	 *
-	 * <p>
-	 * The source of this entry.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Source> source() {
-		return optional(source);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>source</property>.
-	 *
-	 * <p>
-	 * The source of this entry.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Entry source(Source value) {
-		setSource(value);
 		return this;
 	}
 
@@ -286,36 +207,10 @@ public class Entry extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setSummary(Text value) {
+	public Entry setSummary(Text value) {
 		this.summary = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>summary</property>.
-	 *
-	 * <p>
-	 * The summary of this entry.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Text> summary() {
-		return optional(summary);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>summary</property>.
-	 *
-	 * <p>
-	 * The summary of this entry.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Entry summary(Text value) {
-		setSummary(value);
 		return this;
 	}
 
@@ -330,7 +225,7 @@ public class Entry extends CommonEntry {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public Entry summary(String value) {
+	public Entry setSummary(String value) {
 		setSummary(new Text(value));
 		return this;
 	}
@@ -341,80 +236,80 @@ public class Entry extends CommonEntry {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* CommonEntry */
-	public Entry authors(Person...authors) {
-		super.authors(authors);
+	public Entry setAuthors(Person...authors) {
+		super.setAuthors(authors);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Entry categories(Category...categories) {
-		super.categories(categories);
+	public Entry setCategories(Category...categories) {
+		super.setCategories(categories);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Entry contributors(Person...contributors) {
-		super.contributors(contributors);
+	public Entry setContributors(Person...contributors) {
+		super.setContributors(contributors);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Entry id(Id id) {
-		super.id(id);
+	public Entry setId(Id id) {
+		super.setId(id);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Entry links(Link...links) {
-		super.links(links);
+	public Entry setLinks(Link...links) {
+		super.setLinks(links);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Entry rights(Text rights) {
-		super.rights(rights);
+	public Entry setRights(Text rights) {
+		super.setRights(rights);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Entry rights(String rights) {
-		super.rights(rights);
+	public Entry setRights(String rights) {
+		super.setRights(rights);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Entry title(Text title) {
-		super.title(title);
+	public Entry setTitle(Text title) {
+		super.setTitle(title);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Entry title(String title) {
-		super.title(title);
+	public Entry setTitle(String title) {
+		super.setTitle(title);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Entry updated(Calendar updated) {
-		super.updated(updated);
+	public Entry setUpdated(Calendar updated) {
+		super.setUpdated(updated);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Entry updated(String updated) {
-		super.updated(updated);
+	public Entry setUpdated(String updated) {
+		super.setUpdated(updated);
 		return this;
 	}
 
 	@Override /* Common */
-	public Entry base(Object base) {
-		super.base(base);
+	public Entry setBase(Object base) {
+		super.setBase(base);
 		return this;
 	}
 
 	@Override /* Common */
-	public Entry lang(String lang) {
-		super.lang(lang);
+	public Entry setLang(String lang) {
+		super.setLang(lang);
 		return this;
 	}
 }

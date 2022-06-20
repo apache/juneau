@@ -15,8 +15,8 @@ package org.apache.juneau.examples.core.dto.atom;
 import org.apache.juneau.dto.atom.Feed;
 
 import static org.apache.juneau.dto.atom.AtomBuilder.*;
-import static org.apache.juneau.dto.atom.AtomBuilder.content;
-import static org.apache.juneau.dto.atom.AtomBuilder.person;
+
+import java.net.*;
 
 /**
  * Atom feed example.
@@ -30,40 +30,39 @@ public class AtomFeed {
 
 	/**
 	 * @return A sample Atom feed.
+	 * @throws URISyntaxException Won't happen
 	 */
-	public static Feed getAtomFeed(){
+	public static Feed getAtomFeed() throws URISyntaxException{
 
 		Feed feed =
-			feed("tag:juneau.apache.org", "Juneau ATOM specification", "2016-01-02T03:04:05Z")
-			.subtitle(text("html").text("Describes <em>stuff</em> about Juneau"))
-			.links(
-				link("alternate", "text/html", "http://juneau.apache.org").hreflang("en"),
-				link("self", "application/atom+xml", "http://juneau.apache.org/feed.atom")
+			feed("tag:foo.org", "Title", "2016-12-31T05:02:03Z")
+			.setSubtitle(text("html").setText("Subtitle"))
+			.setLinks(
+				link("alternate", "text/html", "http://foo.org/").setHreflang("en"),
+				link("self", "application/atom+xml", "http://foo.org/feed.atom")
 			)
-			.generator(
-				generator("Juneau").uri("http://juneau.apache.org").version("1.0")
+			.setGenerator(
+				generator("Example Toolkit").setUri("http://www.foo.org/").setVersion("1.0")
 			)
-			.entries(
-				entry("tag:juneau.sample.com,2013:1.2345", "Juneau ATOM specification snapshot", "2016-01-02T03:04:05Z")
-				.links(
-					link("alternate", "text/html", "http://juneau.apache.org/juneau.atom"),
-					link("enclosure", "audio/mpeg", "http://juneau.apache.org/audio/juneau_podcast.mp3").
-					length(1337)
+			.setEntries(
+				entry("tag:foo.org", "Title", "2016-12-31T05:02:03Z")
+				.setLinks(
+					link("alternate", "text/html", "http://foo.org/2005/04/02/atom"),
+					link("enclosure", "audio/mpeg", "http://foo.org/audio/foobar.mp3").setLength(1337)
 				)
-				.published("2016-01-02T03:04:05Z")
-				.authors(
-					person("Jane Smith").
-					uri("http://juneau.apache.org").
-					email("janesmith@apache.org")
+				.setPublished("2016-12-31T05:02:03Z")
+				.setAuthors(
+					person("John Smith").setUri(new URI("http://foo.org/")).setEmail("foo@foo.org")
 				)
-				.contributors(
-					person("John Smith")
+				.setContributors(
+					person("John Smith"),
+					person("Jane Smith")
 				)
-				.content(
+				.setContent(
 					content("xhtml")
-					.lang("en")
-					.base("http://www.apache.org/")
-					.text("<div><p><i>[Update: Juneau supports ATOM.]</i></p></div>")
+					.setLang("en")
+					.setBase("http://foo.org/")
+					.setText("<div><p><i>[Sample content]</i></p></div>")
 				)
 			);
 

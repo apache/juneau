@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
-
 import java.util.*;
 
 /**
@@ -79,36 +77,10 @@ public class Source extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setGenerator(Generator value) {
+	public Source setGenerator(Generator value) {
 		this.generator = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>generator</property>.
-	 *
-	 * <p>
-	 * The generator info of this source.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Generator> generator() {
-		return optional(generator);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>generator</property>.
-	 *
-	 * <p>
-	 * The generator info of this source.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Source generator(Generator value) {
-		setGenerator(value);
 		return this;
 	}
 
@@ -133,36 +105,10 @@ public class Source extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setIcon(Icon value) {
+	public Source setIcon(Icon value) {
 		this.icon = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>icon</property>.
-	 *
-	 * <p>
-	 * The icon of this source.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Icon> icon() {
-		return optional(icon);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>icon</property>.
-	 *
-	 * <p>
-	 * The icon of this source.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Source icon(Icon value) {
-		setIcon(value);
 		return this;
 	}
 
@@ -187,36 +133,10 @@ public class Source extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setLogo(Logo value) {
+	public Source setLogo(Logo value) {
 		this.logo = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>logo</property>.
-	 *
-	 * <p>
-	 * The logo of this source.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Logo> logo() {
-		return optional(logo);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>logo</property>.
-	 *
-	 * <p>
-	 * The logo of this source.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Source logo(Logo value) {
-		setLogo(value);
 		return this;
 	}
 
@@ -241,36 +161,10 @@ public class Source extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setSubtitle(Text value) {
+	public Source setSubtitle(Text value) {
 		this.subtitle = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>subtitle</property>.
-	 *
-	 * <p>
-	 * The subtitle of this source.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Text> subtitle() {
-		return optional(subtitle);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>subtitle</property>.
-	 *
-	 * <p>
-	 * The subtitle of this source.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Source subtitle(Text value) {
-		setSubtitle(value);
 		return this;
 	}
 
@@ -285,7 +179,7 @@ public class Source extends CommonEntry {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public Source subtitle(String value) {
+	public Source setSubtitle(String value) {
 		setSubtitle(new Text(value));
 		return this;
 	}
@@ -296,80 +190,80 @@ public class Source extends CommonEntry {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* CommonEntry */
-	public Source authors(Person...authors) {
-		super.authors(authors);
+	public Source setAuthors(Person...authors) {
+		super.setAuthors(authors);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Source categories(Category...categories) {
-		super.categories(categories);
+	public Source setCategories(Category...categories) {
+		super.setCategories(categories);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Source contributors(Person...contributors) {
-		super.contributors(contributors);
+	public Source setContributors(Person...contributors) {
+		super.setContributors(contributors);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Source id(Id id) {
-		super.id(id);
+	public Source setId(Id id) {
+		super.setId(id);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Source links(Link...links) {
-		super.links(links);
+	public Source setLinks(Link...links) {
+		super.setLinks(links);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Source rights(Text rights) {
-		super.rights(rights);
+	public Source setRights(Text rights) {
+		super.setRights(rights);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Source rights(String rights) {
-		super.rights(rights);
+	public Source setRights(String rights) {
+		super.setRights(rights);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Source title(Text title) {
-		super.title(title);
+	public Source setTitle(Text title) {
+		super.setTitle(title);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Source title(String title) {
-		super.title(title);
+	public Source setTitle(String title) {
+		super.setTitle(title);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Source updated(Calendar updated) {
-		super.updated(updated);
+	public Source setUpdated(Calendar updated) {
+		super.setUpdated(updated);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Source updated(String updated) {
-		super.updated(updated);
+	public Source setUpdated(String updated) {
+		super.setUpdated(updated);
 		return this;
 	}
 
 	@Override /* Common */
-	public Source base(Object base) {
-		super.base(base);
+	public Source setBase(Object base) {
+		super.setBase(base);
 		return this;
 	}
 
 	@Override /* Common */
-	public Source lang(String lang) {
-		super.lang(lang);
+	public Source setLang(String lang) {
+		super.setLang(lang);
 		return this;
 	}
 }

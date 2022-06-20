@@ -113,19 +113,6 @@ public class Example extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setSummary(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Example summary(Object value) {
-		return setSummary(stringify(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>description</property>.
 	 *
 	 * <p>
@@ -147,19 +134,6 @@ public class Example extends OpenApiElement {
 	public Example setDescription(String value) {
 		description = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setDescription(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-URI values will be converted to URI using <code><jk>new</jk> URI(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Example description(Object value) {
-		return setDescription(stringify(value));
 	}
 
 	/**
@@ -189,20 +163,6 @@ public class Example extends OpenApiElement {
 	public Example setExternalValue(String value) {
 		externalValue = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setExternalValue(String)} (String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>MUST be in the format of an email address.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Example externalValue(Object value) {
-		return setExternalValue(stringify(value));
 	}
 
 	/**
@@ -248,17 +208,6 @@ public class Example extends OpenApiElement {
 		return this;
 	}
 
-	/**
-	 * Same as {@link #setValue(Object)}.
-	 *
-	 * @param val The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public Example value(Object val) {
-		return setValue(val);
-	}
-
-
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
@@ -277,10 +226,10 @@ public class Example extends OpenApiElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "description": return description(value);
-			case "externalValue": return externalValue(value);
-			case "summary": return summary(value);
-			case "value": return value(value);
+			case "description": return setDescription(stringify(value));
+			case "externalValue": return setExternalValue(stringify(value));
+			case "summary": return setSummary(stringify(value));
+			case "value": return setValue(value);
 			default:
 				super.set(property, value);
 				return this;

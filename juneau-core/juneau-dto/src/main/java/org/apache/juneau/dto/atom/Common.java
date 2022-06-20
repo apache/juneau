@@ -12,13 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.net.*;
-import java.util.*;
 
+import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.*;
 import org.apache.juneau.xml.annotation.*;
 
@@ -75,36 +74,11 @@ public abstract class Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setBase(Object value) {
+	@FluentSetter
+	public Common setBase(Object value) {
 		this.base = toURI(value);
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>base</property>.
-	 *
-	 * <p>
-	 * The URI base of this object.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<URI> base() {
-		return optional(base);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>base</property>.
-	 *
-	 * <p>
-	 * The URI base of this object.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Common base(Object value) {
-		setBase(value);
 		return this;
 	}
 
@@ -130,36 +104,11 @@ public abstract class Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setLang(String value) {
+	@FluentSetter
+	public Common setLang(String value) {
 		this.lang = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>lang</property>.
-	 *
-	 * <p>
-	 * The language of this object.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> lang() {
-		return optional(lang);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>lang</property>.
-	 *
-	 * <p>
-	 * The language of this object.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Common lang(String value) {
-		setLang(value);
 		return this;
 	}
 

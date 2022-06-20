@@ -122,19 +122,6 @@ public class Response extends OpenApiElement{
 	}
 
 	/**
-	 * Same as {@link #setDescription(String)} (String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-URI values will be converted to URI using <code><jk>new</jk> URI(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Response description(Object value) {
-		return setDescription(stringify(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>headers</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -163,7 +150,7 @@ public class Response extends OpenApiElement{
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public Response addHeader(Map<String, HeaderInfo> values) {
+	public Response addHeaders(Map<String, HeaderInfo> values) {
 		headers = mapBuilder(headers).sparse().addAll(values).build();
 		return this;
 	}
@@ -177,20 +164,8 @@ public class Response extends OpenApiElement{
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public Response addHeaders(String key, HeaderInfo value) {
+	public Response addHeader(String key, HeaderInfo value) {
 		headers = mapBuilder(headers).sparse().add(key, value).build();
-		return this;
-	}
-
-	/**
-	 * Adds a single value to the <property>headers</property> property.
-	 *
-	 * @param name variable name.
-	 * @param value The server variable instance.
-	 * @return This object (for method chaining).
-	 */
-	public Response header(String name, HeaderInfo value) {
-		addHeader(Collections.singletonMap(name, value));
 		return this;
 	}
 
@@ -243,18 +218,6 @@ public class Response extends OpenApiElement{
 	}
 
 	/**
-	 * Adds a single value to the <property>headers</property> property.
-	 *
-	 * @param name variable name.
-	 * @param value The server variable instance.
-	 * @return This object (for method chaining).
-	 */
-	public Response content(String name, MediaType value) {
-		addContent(Collections.singletonMap(name, value));
-		return this;
-	}
-
-	/**
 	 * Bean property getter:  <property>link</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -283,7 +246,7 @@ public class Response extends OpenApiElement{
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public Response addLink(Map<String, Link> values) {
+	public Response addLinks(Map<String, Link> values) {
 		links = mapBuilder(links).sparse().addAll(values).build();
 		return this;
 	}
@@ -299,18 +262,6 @@ public class Response extends OpenApiElement{
 	 */
 	public Response addLink(String key, Link value) {
 		links = mapBuilder(links).sparse().add(key, value).build();
-		return this;
-	}
-
-	/**
-	 * Adds a single value to the <property>headers</property> property.
-	 *
-	 * @param name variable name.
-	 * @param value The server variable instance.
-	 * @return This object (for method chaining).
-	 */
-	public Response links(String name, Link value) {
-		addLink(Collections.singletonMap(name, value));
 		return this;
 	}
 
@@ -332,7 +283,7 @@ public class Response extends OpenApiElement{
 		if (property == null)
 			return this;
 		switch (property) {
-			case "description": return description(value);
+			case "description": return setDescription(stringify(value));
 			case "headers": return setHeaders(mapBuilder(String.class,HeaderInfo.class).sparse().addAny(value).build());
 			case "content": return setContent(mapBuilder(String.class,MediaType.class).sparse().addAny(value).build());
 			case "links": return setLinks(mapBuilder(String.class,Link.class).sparse().addAny(value).build());

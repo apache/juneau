@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.util.*;
@@ -114,36 +113,10 @@ public class Feed extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setGenerator(Generator value) {
+	public Feed setGenerator(Generator value) {
 		this.generator = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>generator</property>.
-	 *
-	 * <p>
-	 * The generator information on this feed.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Generator> generator() {
-		return optional(generator);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>generator</property>.
-	 *
-	 * <p>
-	 * The generator information on this feed.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Feed generator(Generator value) {
-		setGenerator(value);
 		return this;
 	}
 
@@ -168,36 +141,10 @@ public class Feed extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setIcon(Icon value) {
+	public Feed setIcon(Icon value) {
 		this.icon = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>icon</property>.
-	 *
-	 * <p>
-	 * The feed icon.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Icon> icon() {
-		return optional(icon);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>icon</property>.
-	 *
-	 * <p>
-	 * The feed icon.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Feed icon(Icon value) {
-		setIcon(value);
 		return this;
 	}
 
@@ -222,36 +169,10 @@ public class Feed extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setLogo(Logo value) {
+	public Feed setLogo(Logo value) {
 		this.logo = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>logo</property>.
-	 *
-	 * <p>
-	 * The feed logo.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Logo> logo() {
-		return optional(logo);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>logo</property>.
-	 *
-	 * <p>
-	 * The feed logo.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Feed logo(Logo value) {
-		setLogo(value);
 		return this;
 	}
 
@@ -276,36 +197,10 @@ public class Feed extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setSubtitle(Text value) {
+	public Feed setSubtitle(Text value) {
 		this.subtitle = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>subtitle</property>.
-	 *
-	 * <p>
-	 * The feed subtitle.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Text> subtitle() {
-		return optional(subtitle);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>subtitle</property>.
-	 *
-	 * <p>
-	 * The feed subtitle.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Feed subtitle(Text value) {
-		setSubtitle(value);
 		return this;
 	}
 
@@ -320,7 +215,7 @@ public class Feed extends CommonEntry {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public Feed subtitle(String value) {
+	public Feed setSubtitle(String value) {
 		setSubtitle(new Text(value));
 		return this;
 	}
@@ -347,119 +242,92 @@ public class Feed extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setEntries(Entry[] value) {
+	public Feed setEntries(Entry...value) {
 		this.entries = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>entries</property>.
-	 *
-	 * <p>
-	 * The entries in the feed.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Entry[]> entries() {
-		return optional(entries);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>entries</property>.
-	 *
-	 * <p>
-	 * The entries in the feed.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Feed entries(Entry...value) {
-		setEntries(value);
 		return this;
 	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden setters (to simplify method chaining)
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* CommonEntry */
-	public Feed authors(Person...authors) {
-		super.authors(authors);
+	public Feed setAuthors(Person...authors) {
+		super.setAuthors(authors);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Feed categories(Category...categories) {
-		super.categories(categories);
+	public Feed setCategories(Category...categories) {
+		super.setCategories(categories);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Feed contributors(Person...contributors) {
-		super.contributors(contributors);
+	public Feed setContributors(Person...contributors) {
+		super.setContributors(contributors);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Feed id(Id id) {
-		super.id(id);
+	public Feed setId(Id id) {
+		super.setId(id);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Feed links(Link...links) {
-		super.links(links);
+	public Feed setLinks(Link...links) {
+		super.setLinks(links);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Feed rights(Text rights) {
-		super.rights(rights);
+	public Feed setRights(Text rights) {
+		super.setRights(rights);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Feed rights(String rights) {
-		super.rights(rights);
+	public Feed setRights(String rights) {
+		super.setRights(rights);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Feed title(Text title) {
-		super.title(title);
+	public Feed setTitle(Text title) {
+		super.setTitle(title);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Feed title(String title) {
-		super.title(title);
+	public Feed setTitle(String title) {
+		super.setTitle(title);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Feed updated(Calendar updated) {
-		super.updated(updated);
+	public Feed setUpdated(Calendar updated) {
+		super.setUpdated(updated);
 		return this;
 	}
 
 	@Override /* CommonEntry */
-	public Feed updated(String updated) {
-		super.updated(updated);
+	public Feed setUpdated(String updated) {
+		super.setUpdated(updated);
 		return this;
 	}
 
 	@Override /* Common */
-	public Feed base(Object base) {
-		super.base(base);
+	public Feed setBase(Object base) {
+		super.setBase(base);
 		return this;
 	}
 
 	@Override /* Common */
-	public Feed lang(String lang) {
-		super.lang(lang);
+	public Feed setLang(String lang) {
+		super.setLang(lang);
 		return this;
 	}
 }

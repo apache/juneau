@@ -79,33 +79,34 @@ public class AtomFeedResource extends BasicRestServlet implements BasicUniversal
 	public void init() {
 		try {
 			feed =
-				feed("tag:juneau.sample.com,2013:1", "Juneau ATOM specification", "2013-05-08T12:29:29Z")
-				.subtitle(text("html").text("A <em>lot</em> of effort went into making this effortless"))
-				.links(
-					link("alternate", "text/html", "http://www.sample.com/").hreflang("en"),
-					link("self", "application/atom+xml", "http://www.sample.com/feed.atom")
+				feed("tag:foo.org", "Title", "2016-12-31T05:02:03Z")
+				.setSubtitle(text("html").setText("Subtitle"))
+				.setLinks(
+					link("alternate", "text/html", "http://foo.org/").setHreflang("en"),
+					link("self", "application/atom+xml", "http://foo.org/feed.atom")
 				)
-				.generator(
-					generator("Juneau").uri("http://juneau.apache.org/").version("1.0")
+				.setGenerator(
+					generator("Example Toolkit").setUri("http://www.foo.org/").setVersion("1.0")
 				)
-				.entries(
-					entry("tag:juneau.sample.com,2013:1.2345", "Juneau ATOM specification snapshot", "2013-05-08T12:29:29Z")
-					.links(
-						link("alternate", "text/html", "http://www.sample.com/2012/05/08/juneau.atom"),
-						link("enclosure", "audio/mpeg", "http://www.sample.com/audio/juneau_podcast.mp3").length(1337)
+				.setEntries(
+					entry("tag:foo.org", "Title", "2016-12-31T05:02:03Z")
+					.setLinks(
+						link("alternate", "text/html", "http://foo.org/2005/04/02/atom"),
+						link("enclosure", "audio/mpeg", "http://foo.org/audio/foobar.mp3").setLength(1337)
 					)
-					.published("2013-05-08T12:29:29Z")
-					.authors(
-						person("James Bognar").uri(new URI("http://www.sample.com/")).email("jamesbognar@apache.org")
+					.setPublished("2016-12-31T05:02:03Z")
+					.setAuthors(
+						person("John Smith").setUri(new URI("http://foo.org/")).setEmail("foo@foo.org")
 					)
-					.contributors(
-						person("Barry M. Caceres")
+					.setContributors(
+						person("John Smith"),
+						person("Jane Smith")
 					)
-					.content(
+					.setContent(
 						content("xhtml")
-						.lang("en")
-						.base("http://www.apache.org/")
-						.text("<div><p>[Update: Juneau supports ATOM.]</p></div>")
+						.setLang("en")
+						.setBase("http://foo.org/")
+						.setText("<div><p><i>[Sample content]</i></p></div>")
 					)
 				);
 		} catch (Exception e) {

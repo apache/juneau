@@ -46,9 +46,9 @@ import org.apache.juneau.*;
 public class AtomBuilder {
 
 	/**
-	 * Creates a {@link Category} element with the specified {@link Category#term(String)} attribute.
+	 * Creates a {@link Category} element with the specified {@link Category#setTerm(String)} attribute.
 	 *
-	 * @param term The {@link Category#term(String)} attribute.
+	 * @param term The {@link Category#setTerm(String)} attribute.
 	 * @return The new element.
 	 */
 	public static final Category category(String term) {
@@ -56,7 +56,7 @@ public class AtomBuilder {
 	}
 
 	/**
-	 * Creates a {@link Content} element with the specified {@link Content#type(String)} attribute.
+	 * Creates a {@link Content} element with the specified {@link Content#setType(String)} attribute.
 	 *
 	 * @return The new element.
 	 */
@@ -67,7 +67,7 @@ public class AtomBuilder {
 	/**
 	 * Creates a {@link Content} element.
 	 *
-	 * @param type The {@link Content#type(String)} attribute.
+	 * @param type The {@link Content#setType(String)} attribute.
 	 * @return The new element.
 	 */
 	public static final Content content(String type) {
@@ -75,12 +75,12 @@ public class AtomBuilder {
 	}
 
 	/**
-	 * Creates an {@link Entry} element with the specified {@link Entry#id(Id)}, {@link Entry#title(Text)}, and
-	 * {@link Entry#updated(Calendar)} attributes.
+	 * Creates an {@link Entry} element with the specified {@link Entry#setId(Id)}, {@link Entry#setTitle(Text)}, and
+	 * {@link Entry#setUpdated(Calendar)} attributes.
 	 *
-	 * @param id The {@link Entry#id(Id)} attribute.
-	 * @param title The {@link Entry#title(Text)} attribute.
-	 * @param updated The {@link Entry#updated(Calendar)} attribute.
+	 * @param id The {@link Entry#setId(Id)} attribute.
+	 * @param title The {@link Entry#setTitle(Text)} attribute.
+	 * @param updated The {@link Entry#setUpdated(Calendar)} attribute.
 	 * @return The new element.
 	 */
 	public static final Entry entry(Id id, Text title, Calendar updated) {
@@ -88,12 +88,12 @@ public class AtomBuilder {
 	}
 
 	/**
-	 * Creates an {@link Entry} element with the specified {@link Entry#id(Id)}, {@link Entry#title(Text)}, and
-	 * {@link Entry#updated(Calendar)} attributes.
+	 * Creates an {@link Entry} element with the specified {@link Entry#setId(Id)}, {@link Entry#setTitle(Text)}, and
+	 * {@link Entry#setUpdated(Calendar)} attributes.
 	 *
-	 * @param id The {@link Entry#id(Id)} attribute.
-	 * @param title The {@link Entry#title(Text)} attribute.
-	 * @param updated The {@link Entry#updated(Calendar)} attribute.
+	 * @param id The {@link Entry#setId(Id)} attribute.
+	 * @param title The {@link Entry#setTitle(Text)} attribute.
+	 * @param updated The {@link Entry#setUpdated(Calendar)} attribute.
 	 * @return The new element.
 	 */
 	public static final Entry entry(String id, String title, String updated) {
@@ -101,12 +101,12 @@ public class AtomBuilder {
 	}
 
 	/**
-	 * Creates a {@link Feed} element with the specified {@link Feed#id(Id)}, {@link Entry#title(Text)}, and
-	 * {@link Feed#updated(Calendar)} attributes.
+	 * Creates a {@link Feed} element with the specified {@link Feed#setId(Id)}, {@link Entry#setTitle(Text)}, and
+	 * {@link Feed#setUpdated(Calendar)} attributes.
 	 *
-	 * @param id The {@link Feed#id(Id)} attribute.
-	 * @param title The {@link Feed#title(Text)} attribute.
-	 * @param updated The {@link Feed#updated(Calendar)} attribute.
+	 * @param id The {@link Feed#setId(Id)} attribute.
+	 * @param title The {@link Feed#setTitle(Text)} attribute.
+	 * @param updated The {@link Feed#setUpdated(Calendar)} attribute.
 	 * @return The new element.
 	 */
 	public static final Feed feed(Id id, Text title, Calendar updated) {
@@ -114,12 +114,12 @@ public class AtomBuilder {
 	}
 
 	/**
-	 * Creates a {@link Feed} element with the specified {@link Feed#id(Id)}, {@link Entry#title(Text)}, and
-	 * {@link Feed#updated(Calendar)} attributes.
+	 * Creates a {@link Feed} element with the specified {@link Feed#setId(Id)}, {@link Entry#setTitle(Text)}, and
+	 * {@link Feed#setUpdated(Calendar)} attributes.
 	 *
-	 * @param id The {@link Feed#id(Id)} attribute.
-	 * @param title The {@link Feed#title(Text)} attribute.
-	 * @param updated The {@link Feed#updated(Calendar)} attribute.
+	 * @param id The {@link Feed#setId(Id)} attribute.
+	 * @param title The {@link Feed#setTitle(Text)} attribute.
+	 * @param updated The {@link Feed#setUpdated(Calendar)} attribute.
 	 * @return The new element.
 	 */
 	public static final Feed feed(String id, String title, String updated) {
@@ -127,9 +127,9 @@ public class AtomBuilder {
 	}
 
 	/**
-	 * Creates a {@link Generator} element with the specified {@link Generator#text(String)} child node.
+	 * Creates a {@link Generator} element with the specified {@link Generator#setText(String)} child node.
 	 *
-	 * @param text The {@link Generator#text(String)} child node.
+	 * @param text The {@link Generator#setText(String)} child node.
 	 * @return The new element.
 	 */
 	public static final Generator generator(String text) {
@@ -137,7 +137,7 @@ public class AtomBuilder {
 	}
 
 	/**
-	 * Creates an {@link Icon} element with the specified {@link Icon#uri(Object)} attribute.
+	 * Creates an {@link Icon} element with the specified {@link Icon#setUri(Object)} attribute.
 	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
@@ -146,7 +146,7 @@ public class AtomBuilder {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param uri The {@link Icon#uri(Object)} attribute.
+	 * @param uri The {@link Icon#setUri(Object)} attribute.
 	 * @return The new element.
 	 */
 	public static final Icon icon(Object uri) {
@@ -154,9 +154,9 @@ public class AtomBuilder {
 	}
 
 	/**
-	 * Creates an {@link Id} element with the specified {@link Id#text(String)} child node.
+	 * Creates an {@link Id} element with the specified {@link Id#setText(String)} child node.
 	 *
-	 * @param text The {@link Id#text(String)} child node.
+	 * @param text The {@link Id#setText(String)} child node.
 	 * @return The new element.
 	 */
 	public static final Id id(String text) {
@@ -164,12 +164,12 @@ public class AtomBuilder {
 	}
 
 	/**
-	 * Creates a {@link Link} element with the specified {@link Link#rel(String)}, {@link Link#type(String)}, and
-	 * {@link Link#href(String)} attributes.
+	 * Creates a {@link Link} element with the specified {@link Link#setRel(String)}, {@link Link#setType(String)}, and
+	 * {@link Link#setHref(String)} attributes.
 	 *
-	 * @param rel The {@link Link#rel(String)} attribute.
-	 * @param type The {@link Link#type(String)} attribute.
-	 * @param href The {@link Link#href(String)} attribute.
+	 * @param rel The {@link Link#setRel(String)} attribute.
+	 * @param type The {@link Link#setType(String)} attribute.
+	 * @param href The {@link Link#setHref(String)} attribute.
 	 * @return The new element.
 	 */
 	public static final Link link(String rel, String type, String href) {
@@ -177,7 +177,7 @@ public class AtomBuilder {
 	}
 
 	/**
-	 * Creates a {@link Logo} element with the specified {@link Logo#uri(Object)} attribute.
+	 * Creates a {@link Logo} element with the specified {@link Logo#setUri(Object)} attribute.
 	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
@@ -186,7 +186,7 @@ public class AtomBuilder {
 	 * <p>
 	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
-	 * @param uri The {@link Logo#uri(Object)} attribute.
+	 * @param uri The {@link Logo#setUri(Object)} attribute.
 	 * @return The new element.
 	 */
 	public static final Logo logo(Object uri) {
@@ -194,9 +194,9 @@ public class AtomBuilder {
 	}
 
 	/**
-	 * Creates a {@link Person} element with the specified {@link Person#name(String)} attribute.
+	 * Creates a {@link Person} element with the specified {@link Person#setName(String)} attribute.
 	 *
-	 * @param name The {@link Person#name(String)} attribute.
+	 * @param name The {@link Person#setName(String)} attribute.
 	 * @return The new element.
 	 */
 	public static final Person person(String name) {
@@ -222,9 +222,9 @@ public class AtomBuilder {
 	}
 
 	/**
-	 * Creates a {@link Text} element with the specified {@link Text#type(String)} attribute.
+	 * Creates a {@link Text} element with the specified {@link Text#setType(String)} attribute.
 	 *
-	 * @param type The {@link Text#type(String)} attribute.
+	 * @param type The {@link Text#setType(String)} attribute.
 	 * @return The new element.
 	 */
 	public static final Text text(String type) {

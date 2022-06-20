@@ -12,10 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
-
-import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.xml.annotation.*;
@@ -48,7 +45,7 @@ public class Id extends Common {
 	 * @param text The id element contents.
 	 */
 	public Id(String text) {
-		text(text);
+		setText(text);
 	}
 
 	/** Bean constructor. */
@@ -81,53 +78,26 @@ public class Id extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setText(String value) {
+	public Id setText(String value) {
 		this.text = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>text</property>.
-	 *
-	 * <p>
-	 * The content of this identifier.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> text() {
-		return optional(text);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>text</property>.
-	 *
-	 * <p>
-	 * The content of this identifier.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Id text(String value) {
-		setText(value);
 		return this;
 	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden setters (to simplify method chaining)
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Common */
-	public Id base(Object base) {
-		super.base(base);
+	public Id setBase(Object base) {
+		super.setBase(base);
 		return this;
 	}
 
 	@Override /* Common */
-	public Id lang(String lang) {
-		super.lang(lang);
+	public Id setLang(String lang) {
+		super.setLang(lang);
 		return this;
 	}
 }

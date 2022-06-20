@@ -125,19 +125,6 @@ public class Link extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setOperationRef(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Link operationRef(Object value) {
-		return setOperationRef(stringify(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>description</property>.
 	 *
 	 * <p>
@@ -159,19 +146,6 @@ public class Link extends OpenApiElement {
 	public Link setDescription(String value) {
 		description = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setDescription(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-URI values will be converted to URI using <code><jk>new</jk> URI(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Link description(Object value) {
-		return setDescription(stringify(value));
 	}
 
 	/**
@@ -201,20 +175,6 @@ public class Link extends OpenApiElement {
 	public Link setOperationId(String value) {
 		operationId = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setOperationId(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>MUST be in the format of an email address.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Link operationId(Object value) {
-		return setOperationId(stringify(value));
 	}
 
 	/**
@@ -261,17 +221,6 @@ public class Link extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setRequestBody(Object)}.
-	 *
-	 * @param val The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public Link requestBody(Object val) {
-		return setRequestBody(val);
-	}
-
-
-	/**
 	 * Bean property getter:  <property>additionalProperties</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -290,19 +239,6 @@ public class Link extends OpenApiElement {
 	 */
 	public Link setServer(Server value) {
 		server = value;
-		return this;
-	}
-
-	/**
-	 * Bean property setter:  <property>additionalProperties</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Link server(Object value) {
-		server = toType(value, Server.class);
 		return this;
 	}
 
@@ -355,7 +291,7 @@ public class Link extends OpenApiElement {
 	 * @param parameter The example.
 	 * @return This object (for method chaining).
 	 */
-	public Link parameter(String mimeType, Object parameter) {
+	public Link addParameter(String mimeType, Object parameter) {
 		parameters = mapBuilder(parameters).sparse().add(mimeType, parameters).build();
 		return this;
 	}
@@ -380,11 +316,11 @@ public class Link extends OpenApiElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "description": return description(value);
-			case "operationId": return operationId(value);
-			case "operationRef": return operationRef(value);
-			case "requestBody": return requestBody(value);
-			case "server": return server(value);
+			case "description": return setDescription(stringify(value));
+			case "operationId": return setOperationId(stringify(value));
+			case "operationRef": return setOperationRef(stringify(value));
+			case "requestBody": return setRequestBody(value);
+			case "server": return setServer(toType(value, Server.class));
 			case "parameters": return setParameters(mapBuilder(String.class,Object.class).sparse().addAny(value).build());
 			default:
 				super.set(property, value);

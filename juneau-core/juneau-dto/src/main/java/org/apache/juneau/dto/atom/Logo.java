@@ -12,12 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.net.*;
-import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -59,7 +57,7 @@ public class Logo extends Common {
 	 * @param uri The URI of the logo.
 	 */
 	public Logo(Object uri) {
-		uri(uri);
+		setUri(uri);
 	}
 
 	/** Bean constructor. */
@@ -99,53 +97,26 @@ public class Logo extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setUri(Object value) {
+	public Logo setUri(Object value) {
 		this.uri = toURI(value);
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>uri</property>.
-	 *
-	 * <p>
-	 * The URI of the logo.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<URI> uri() {
-		return optional(uri);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>uri</property>.
-	 *
-	 * <p>
-	 * The URI of the logo.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Logo uri(Object value) {
-		setUri(value);
 		return this;
 	}
-
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Overridden setters (to simplify method chaining)
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Common */
-	public Logo base(Object base) {
-		super.base(base);
+	public Logo setBase(Object base) {
+		super.setBase(base);
 		return this;
 	}
 
 	@Override /* Common */
-	public Logo lang(String lang) {
-		super.lang(lang);
+	public Logo setLang(String lang) {
+		super.setLang(lang);
 		return this;
 	}
 }

@@ -142,19 +142,6 @@ public class Info extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setTitle(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Info title(Object value) {
-		return setTitle(stringify(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>description</property>.
 	 *
 	 * <p>
@@ -181,20 +168,6 @@ public class Info extends OpenApiElement {
 	public Info setDescription(String value) {
 		description = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setDescription(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>{@doc GFM} can be used for rich text representation.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Info description(Object value) {
-		return setDescription(stringify(value));
 	}
 
 	/**
@@ -226,19 +199,6 @@ public class Info extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setTermsOfService(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Info termsOfService(Object value) {
-		return setTermsOfService(stringify(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>contact</property>.
 	 *
 	 * <p>
@@ -264,27 +224,6 @@ public class Info extends OpenApiElement {
 	public Info setContact(Contact value) {
 		contact = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setContact(Contact)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li>{@link Contact}
-	 * 		<li><code>String</code> - JSON object representation of {@link Contact}
-	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
-	 * 	contact(<js>"{name:'name',url:'url',...}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Info contact(Object value) {
-		return setContact(toType(value, Contact.class));
 	}
 
 	/**
@@ -316,27 +255,6 @@ public class Info extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setLicense(License)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li>{@link License}
-	 * 		<li><code>String</code> - JSON object representation of {@link License}
-	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
-	 * 	license(<js>"{name:'name',url:'url',...}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Info license(Object value) {
-		return setLicense(toType(value, License.class));
-	}
-
-	/**
 	 * Bean property getter:  <property>version</property>.
 	 *
 	 * <p>
@@ -363,20 +281,6 @@ public class Info extends OpenApiElement {
 		version = value;
 		return this;
 	}
-
-	/**
-	 * Same as {@link #setVersion(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Info version(Object value) {
-		return setVersion(stringify(value));
-	}
-
 
 	/**
 	 * Returns <jk>true</jk> if the title property is not null or empty.
@@ -434,12 +338,12 @@ public class Info extends OpenApiElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "title": return title(value);
-			case "description": return description(value);
-			case "termsOfService": return termsOfService(value);
-			case "contact": return contact(value);
-			case "license": return license(value);
-			case "version": return version(value);
+			case "title": return setTitle(stringify(value));
+			case "description": return setDescription(stringify(value));
+			case "termsOfService": return setTermsOfService(stringify(value));
+			case "contact": return setContact(toType(value, Contact.class));
+			case "license": return setLicense(toType(value, License.class));
+			case "version": return setVersion(stringify(value));
 			default:
 				super.set(property, value);
 				return this;

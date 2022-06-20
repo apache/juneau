@@ -121,19 +121,6 @@ public class OAuthFlow extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setAuthorizationUrl(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public OAuthFlow authorizationUrl(Object value) {
-		return setAuthorizationUrl(stringify(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>description</property>.
 	 *
 	 * <p>
@@ -155,19 +142,6 @@ public class OAuthFlow extends OpenApiElement {
 	public OAuthFlow setTokenUrl(String value) {
 		tokenUrl = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setTokenUrl(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-URI values will be converted to URI using <code><jk>new</jk> URI(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public OAuthFlow tokenUrl(Object value) {
-		return setTokenUrl(stringify(value));
 	}
 
 	/**
@@ -197,20 +171,6 @@ public class OAuthFlow extends OpenApiElement {
 	public OAuthFlow setRefreshUrl(String value) {
 		refreshUrl = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setRefreshUrl(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>MUST be in the format of an email address.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public OAuthFlow refreshUrl(Object value) {
-		return setRefreshUrl(stringify(value));
 	}
 
 	/**
@@ -262,7 +222,7 @@ public class OAuthFlow extends OpenApiElement {
 	 * @param description The example.
 	 * @return This object (for method chaining).
 	 */
-	public OAuthFlow scopes(String name, String description) {
+	public OAuthFlow addScope(String name, String description) {
 		scopes = mapBuilder(scopes).sparse().add(name, description).build();
 		return this;
 	}
@@ -285,9 +245,9 @@ public class OAuthFlow extends OpenApiElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "authorizationUrl": return authorizationUrl(value);
-			case "tokenUrl": return tokenUrl(value);
-			case "refreshUrl": return refreshUrl(value);
+			case "authorizationUrl": return setAuthorizationUrl(stringify(value));
+			case "tokenUrl": return setTokenUrl(stringify(value));
+			case "refreshUrl": return setRefreshUrl(stringify(value));
 			case "scopes": return setScopes(mapBuilder(String.class,String.class).sparse().addAny(value).build());
 			default:
 				super.set(property, value);

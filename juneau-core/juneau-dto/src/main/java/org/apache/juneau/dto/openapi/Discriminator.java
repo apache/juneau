@@ -92,19 +92,6 @@ public class Discriminator extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setPropertyName(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Discriminator propertyName(Object value) {
-		return setPropertyName(stringify(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>mapping</property>.
 	 *
 	 * <p>
@@ -171,7 +158,7 @@ public class Discriminator extends OpenApiElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "propertyName": return propertyName(value);
+			case "propertyName": return setPropertyName(stringify(value));
 			case "mapping": return setMapping(mapBuilder(String.class,String.class).sparse().addAny(value).build());
 			default:
 				super.set(property, value);

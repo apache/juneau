@@ -140,19 +140,6 @@ public class HeaderInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setDescription(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public HeaderInfo description(Object value) {
-		return setDescription(stringify(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>required</property>.
 	 *
 	 * <p>
@@ -194,20 +181,6 @@ public class HeaderInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setRequired(Boolean)}
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toBoolean()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public HeaderInfo required(Object value) {
-		return setRequired(toBoolean(value));
-	}
-
-
-	/**
 	 * Bean property getter:  <property>required</property>.
 	 *
 	 * <p>
@@ -242,19 +215,6 @@ public class HeaderInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setExplode(Boolean)}
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toBoolean()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public HeaderInfo explode(Object value) {
-		return setExplode(toBoolean(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>deprecated</property>.
 	 *
 	 * <p>
@@ -283,19 +243,6 @@ public class HeaderInfo extends OpenApiElement {
 	public HeaderInfo setDeprecated(Boolean value) {
 		deprecated = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setDeprecated(Boolean)}
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toBoolean()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public HeaderInfo deprecated(Object value) {
-		return setDeprecated(toBoolean(value));
 	}
 
 	/**
@@ -330,19 +277,6 @@ public class HeaderInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setDeprecated(Boolean)}
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toBoolean()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public HeaderInfo allowEmptyValue(Object value) {
-		return setAllowEmptyValue(toBoolean(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>allowReserved</property>.
 	 *
 	 * <p>
@@ -374,19 +308,6 @@ public class HeaderInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setDeprecated(Boolean)}
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toBoolean()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public HeaderInfo allowReserved(Object value) {
-		return setAllowReserved(toBoolean(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>schema</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -407,20 +328,6 @@ public class HeaderInfo extends OpenApiElement {
 		schema = value;
 		return this;
 	}
-
-	/**
-	 * Same as {@link #setSchema(SchemaInfo)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Valid types:
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public HeaderInfo schema(Object value) {
-		return setSchema(toType(value, SchemaInfo.class));
-	}
-
 
 	/**
 	 * Bean property getter:  <property>$ref</property>.
@@ -450,21 +357,9 @@ public class HeaderInfo extends OpenApiElement {
 	 * @return This object (for method chaining).
 	 */
 	@Beanp("$ref")
-	public HeaderInfo setRef(Object value) {
-		ref = stringify(value);
+	public HeaderInfo setRef(String value) {
+		ref = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setRef(Object)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public HeaderInfo ref(Object value) {
-		return setRef(value);
 	}
 
 	/**
@@ -490,20 +385,6 @@ public class HeaderInfo extends OpenApiElement {
 		example = value;
 		return this;
 	}
-
-	/**
-	 * Bean property setter:  <property>examples</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public HeaderInfo example(Object value) {
-		example = value;
-		return this;
-	}
-
 
 	/**
 	 * Bean property getter:  <property>examples</property>.
@@ -553,7 +434,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * @param example The example.
 	 * @return This object (for method chaining).
 	 */
-	public HeaderInfo example(String name, Example example) {
+	public HeaderInfo addExample(String name, Example example) {
 		addExamples(Collections.singletonMap(name, example));
 		return this;
 	}
@@ -582,14 +463,14 @@ public class HeaderInfo extends OpenApiElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "description": return description(value);
-			case "required": return required(value);
-			case "explode": return explode(value);
-			case "deprecated": return deprecated(value);
-			case "allowEmptyValue": return allowEmptyValue(value);
-			case "$ref": return ref(value);
-			case "schema": return schema(value);
-			case "x-example": return example(value);
+			case "description": return setDescription(stringify(value));
+			case "required": return setRequired(toBoolean(value));
+			case "explode": return setExplode(toBoolean(value));
+			case "deprecated": return setDeprecated(toBoolean(value));
+			case "allowEmptyValue": return setAllowEmptyValue(toBoolean(value));
+			case "$ref": return setRef(stringify(value));
+			case "schema": return setSchema(toType(value, SchemaInfo.class));
+			case "x-example": return setExample(stringify(value));
 			case "examples": return setExamples(mapBuilder(String.class,Example.class).sparse().addAny(value).build());
 			default:
 				super.set(property, value);

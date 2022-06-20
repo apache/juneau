@@ -19,7 +19,6 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 import org.apache.juneau.UriResolver;
 import org.apache.juneau.annotation.Bean;
 import org.apache.juneau.internal.MultiSet;
-import org.apache.juneau.internal.StringUtils;
 
 import java.net.URI;
 import java.net.URL;
@@ -116,19 +115,6 @@ public class Contact extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setName(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Contact name(Object value) {
-		return setName(stringify(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>url</property>.
 	 *
 	 * <p>
@@ -161,19 +147,6 @@ public class Contact extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setUrl(URI)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-URI values will be converted to URI using <code><jk>new</jk> URI(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Contact url(Object value) {
-		return setUrl(StringUtils.toURI(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>email</property>.
 	 *
 	 * <p>
@@ -200,20 +173,6 @@ public class Contact extends OpenApiElement {
 	public Contact setEmail(String value) {
 		email = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setEmail(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>MUST be in the format of an email address.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Contact email(Object value) {
-		return setEmail(stringify(value));
 	}
 
 	/**
@@ -260,9 +219,9 @@ public class Contact extends OpenApiElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "name": return name(value);
-			case "url": return url(value);
-			case "email": return email(value);
+			case "name": return setName(stringify(value));
+			case "url": return setUrl(toURI(value));
+			case "email": return setEmail(stringify(value));
 			default:
 				super.set(property, value);
 				return this;

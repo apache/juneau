@@ -17,8 +17,6 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.dto.swagger.Items;
-import org.apache.juneau.dto.swagger.SchemaInfo;
 import org.apache.juneau.internal.MultiSet;
 
 import java.util.*;
@@ -211,19 +209,6 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setName(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SecuritySchemeInfo name(Object value) {
-		return setName(stringify(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>in</property>.
 	 *
 	 * <p>
@@ -265,27 +250,6 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setIn(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Valid values:
-	 * 	<ul>
-	 * 		<li><js>"query"</js>
-	 * 		<li><js>"header"</js>
-	 * 		<li><js>"path"</js>
-	 * 		<li><js>"formData"</js>
-	 * 		<li><js>"body"</js>
-	 * 	</ul>
-	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
-	 */
-	public SecuritySchemeInfo in(Object value) {
-		return setIn(stringify(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>description</property>.
 	 *
 	 * <p>
@@ -317,20 +281,6 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setDescription(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>{@doc GFM} can be used for rich text representation.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SecuritySchemeInfo description(Object value) {
-		return setDescription(stringify(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>schema</property>.
 	 *
 	 * <p>
@@ -356,27 +306,6 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	public SecuritySchemeInfo setScheme(String value) {
 		scheme = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setScheme(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li>{@link SchemaInfo}
-	 * 		<li><code>String</code> - JSON object representation of {@link SchemaInfo}
-	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
-	 * 	schema(<js>"{type:'type',description:'description',...}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
-	 */
-	public SecuritySchemeInfo scheme(Object value) {
-		return setScheme(stringify(value));
 	}
 
 	/**
@@ -429,30 +358,6 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setType(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Valid values:
-	 * 	<ul>
-	 * 		<li><js>"string"</js>
-	 * 		<li><js>"number"</js>
-	 * 		<li><js>"integer"</js>
-	 * 		<li><js>"boolean"</js>
-	 * 		<li><js>"array"</js>
-	 * 		<li><js>"file"</js>
-	 * 	</ul>
-	 * 	<br>If type is <js>"file"</js>, the <code>consumes</code> MUST be either <js>"multipart/form-data"</js>, <js>"application/x-www-form-urlencoded"</js>
-	 * 		or both and the parameter MUST be <code>in</code> <js>"formData"</js>.
-	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
-	 */
-	public SecuritySchemeInfo type(Object value) {
-		return setType(stringify(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>format</property>.
 	 *
 	 * <p>
@@ -489,19 +394,6 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setBearerFormat(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SecuritySchemeInfo bearerFormat(Object value) {
-		return setBearerFormat(stringify(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>items</property>.
 	 *
 	 * <p>
@@ -531,28 +423,6 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setFlows(OAuthFlow)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li>{@link Items}
-	 * 		<li><code>String</code> - JSON object representation of {@link Items}
-	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
-	 * 	items(<js>"{type:'type',format:'format',...}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SecuritySchemeInfo flows(Object value) {
-		return setFlows(toType(value, OAuthFlow.class));
-	}
-
-	/**
 	 * Bean property getter:  <property>collectionFormat</property>.
 	 *
 	 * <p>
@@ -578,20 +448,6 @@ public class SecuritySchemeInfo extends OpenApiElement {
 		return this;
 	}
 
-	/**
-	 * Same as {@link #setOpenIdConnectUrl(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Valid values:
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SecuritySchemeInfo openIdConnectUrl(Object value) {
-		return setOpenIdConnectUrl(stringify(value));
-	}
-
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
@@ -614,14 +470,14 @@ public class SecuritySchemeInfo extends OpenApiElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "name": return name(value);
-			case "in": return in(value);
-			case "description": return description(value);
-			case "scheme": return scheme(value);
-			case "bearerFormat": return bearerFormat(value);
-			case "type": return type(value);
-			case "flows": return flows(value);
-			case "openIdConnectUrl": return openIdConnectUrl(value);
+			case "name": return setName(stringify(value));
+			case "in": return setIn(stringify(value));
+			case "description": return setDescription(stringify(value));
+			case "scheme": return setScheme(stringify(value));
+			case "bearerFormat": return setBearerFormat(stringify(value));
+			case "type": return setType(stringify(value));
+			case "flows": return setFlows(toType(value, OAuthFlow.class));
+			case "openIdConnectUrl": return setOpenIdConnectUrl(stringify(value));
 			default:
 				super.set(property, value);
 				return this;

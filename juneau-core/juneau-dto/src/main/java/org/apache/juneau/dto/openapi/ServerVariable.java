@@ -133,7 +133,7 @@ public class ServerVariable extends OpenApiElement {
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public ServerVariable _enum(Object...values) {
+	public ServerVariable addEnum(Object...values) {
 		_enum = listBuilder(_enum).sparse().addAny(values).build();
 		return this;
 	}
@@ -190,18 +190,6 @@ public class ServerVariable extends OpenApiElement {
 	public ServerVariable setDefault(String value) {
 		_default = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setDefault(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public ServerVariable _default(Object value) {
-		return setDefault(stringify(value));
 	}
 
 	/**
@@ -266,17 +254,6 @@ public class ServerVariable extends OpenApiElement {
 		return this;
 	}
 
-	/**
-	 * Same as {@link #setDescription(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public ServerVariable description(Object value) {
-		return setDefault(stringify(value));
-	}
-
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
@@ -294,9 +271,9 @@ public class ServerVariable extends OpenApiElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "default": return _default(value);
-			case "enum": return setEnum(null)._enum(value);
-			case "description": return description(value);
+			case "default": return setDefault(stringify(value));
+			case "enum": return setEnum(listBuilder(Object.class).sparse().addAny(value).build());
+			case "description": return setDescription(stringify(value));
 			default:
 				super.set(property, value);
 				return this;

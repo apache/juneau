@@ -12,13 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.eq;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.text.*;
-import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
@@ -62,17 +60,13 @@ public class LinkString implements Comparable<LinkString> {
 	 * @param uriArgs Optional arguments for {@link MessageFormat} style arguments in the href.
 	 */
 	public LinkString(String name, String uri, Object...uriArgs) {
-		name(name);
-		uri(uri, uriArgs);
+		setName(name);
+		setUri(uri, uriArgs);
 	}
 
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Bean properties
-	//-----------------------------------------------------------------------------------------------------------------
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// name
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -96,36 +90,10 @@ public class LinkString implements Comparable<LinkString> {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setName(String value) {
+	public LinkString setName(String value) {
 		this.name = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>name</property>.
-	 *
-	 * <p>
-	 * Corresponds to the text inside of the <xt>&lt;A&gt;</xt> element.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> name() {
-		return optional(name);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>name</property>.
-	 *
-	 * <p>
-	 * Corresponds to the text inside of the <xt>&lt;A&gt;</xt> element.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public LinkString name(String value) {
-		setName(value);
 		return this;
 	}
 
@@ -154,39 +122,12 @@ public class LinkString implements Comparable<LinkString> {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setUri(java.net.URI value) {
+	public LinkString setUri(java.net.URI value) {
 		this.uri = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>uri</property>.
-	 *
-	 * <p>
-	 * Corresponds to the value of the <xa>href</xa> attribute of the <xt>&lt;A&gt;</xt> element.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<java.net.URI> uri() {
-		return optional(uri);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>uri</property>.
-	 *
-	 * <p>
-	 * Corresponds to the value of the <xa>href</xa> attribute of the <xt>&lt;A&gt;</xt> element.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public LinkString uri(java.net.URI value) {
-		setUri(value);
 		return this;
 	}
-
 	/**
 	 * Bean property fluent setter:  <property>uri</property>.
 	 *
@@ -198,8 +139,8 @@ public class LinkString implements Comparable<LinkString> {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public LinkString uri(String value) {
-		uri(value, new Object[0]);
+	public LinkString setUri(String value) {
+		setUri(value, new Object[0]);
 		return this;
 	}
 
@@ -215,7 +156,7 @@ public class LinkString implements Comparable<LinkString> {
 	 * @param args {@link MessageFormat}-style arguments in the URL.
 	 * @return This object.
 	 */
-	public LinkString uri(String value, Object...args) {
+	public LinkString setUri(String value, Object...args) {
 		for (int i = 0; i < args.length; i++)
 			try {
 				args[i] = OpenApiSerializer.DEFAULT.getSession().serialize(HttpPartType.PATH, null, args[i]);

@@ -13,15 +13,17 @@
 package org.apache.juneau.examples.core.dto;
 
 import org.apache.juneau.dto.atom.Feed;
-import org.apache.juneau.dto.atom.Person;
 import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.html.HtmlSerializer;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.json.*;
 
 import static org.apache.juneau.dto.atom.AtomBuilder.*;
+import static org.apache.juneau.dto.atom.AtomBuilder.link;
 import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import static org.apache.juneau.dto.swagger.SwaggerBuilder.*;
+
+import java.net.*;
 
 /**
  * Sample class which shows the usage of DTO module which is a
@@ -106,24 +108,34 @@ public class DtoExample {
 		html =  SimpleJsonSerializer.DEFAULT.serialize(mainJsp);
 
 		Feed feed =
-			feed("tag:juneau.apache.org", "Juneau ATOM specification", "2018-12-15T08:52:05Z")
-			.title("Example apache Juneau feed")
-			.subtitle(text("html").text("Describes <em>stuff</em> about Juneau"))
-			.links(
-				link("alternate", "text/html", "http://juneau.apache.org/").hreflang("en"),
-				link("self", "application/atom+xml", "http://juneau.apache.org/feed.atom")
+			feed("tag:foo.org", "Title", "2016-12-31T05:02:03Z")
+			.setSubtitle(text("html").setText("Subtitle"))
+			.setLinks(
+				link("alternate", "text/html", "http://foo.org/").setHreflang("en"),
+				link("self", "application/atom+xml", "http://foo.org/feed.atom")
 			)
-			.rights("Copyright (c) 2016, Apache Foundation")
-			.authors(new Person("Juneau_Commiter"))
-			.updated("2018-12-15T08:52:05Z")
-			.entries(
-				entry("tag:juneau.sample.com,2013:1.2345", "Juneau ATOM specification snapshot", "2016-01-02T03:04:05Z")
-				.published("2016-01-02T03:04:05Z")
-				.content(
+			.setGenerator(
+				generator("Example Toolkit").setUri("http://www.foo.org/").setVersion("1.0")
+			)
+			.setEntries(
+				entry("tag:foo.org", "Title", "2016-12-31T05:02:03Z")
+				.setLinks(
+					link("alternate", "text/html", "http://foo.org/2005/04/02/atom"),
+					link("enclosure", "audio/mpeg", "http://foo.org/audio/foobar.mp3").setLength(1337)
+				)
+				.setPublished("2016-12-31T05:02:03Z")
+				.setAuthors(
+					person("John Smith").setUri(new URI("http://foo.org/")).setEmail("foo@foo.org")
+				)
+				.setContributors(
+					person("John Smith"),
+					person("Jane Smith")
+				)
+				.setContent(
 					content("xhtml")
-					.lang("en")
-					.base("http://www.apache.org/")
-					.text("<div><p><i>[Update: Juneau supports ATOM.]</i></p></div>")
+					.setLang("en")
+					.setBase("http://foo.org/")
+					.setText("<div><p><i>[Sample content]</i></p></div>")
 				)
 			);
 

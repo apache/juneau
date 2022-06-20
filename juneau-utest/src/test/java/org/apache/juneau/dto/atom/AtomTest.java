@@ -28,33 +28,33 @@ public class AtomTest {
 	public Feed createFeed() throws Exception {
 		return
 			feed("tag:foo.org", "Title", "2016-12-31T05:02:03Z")
-			.subtitle(text("html").text("Subtitle"))
-			.links(
-				link("alternate", "text/html", "http://foo.org/").hreflang("en"),
+			.setSubtitle(text("html").setText("Subtitle"))
+			.setLinks(
+				link("alternate", "text/html", "http://foo.org/").setHreflang("en"),
 				link("self", "application/atom+xml", "http://foo.org/feed.atom")
 			)
-			.generator(
-				generator("Example Toolkit").uri("http://www.foo.org/").version("1.0")
+			.setGenerator(
+				generator("Example Toolkit").setUri("http://www.foo.org/").setVersion("1.0")
 			)
-			.entries(
+			.setEntries(
 				entry("tag:foo.org", "Title", "2016-12-31T05:02:03Z")
-				.links(
+				.setLinks(
 					link("alternate", "text/html", "http://foo.org/2005/04/02/atom"),
-					link("enclosure", "audio/mpeg", "http://foo.org/audio/foobar.mp3").length(1337)
+					link("enclosure", "audio/mpeg", "http://foo.org/audio/foobar.mp3").setLength(1337)
 				)
-				.published("2016-12-31T05:02:03Z")
-				.authors(
-					person("John Smith").uri(new URI("http://foo.org/")).email("foo@foo.org")
+				.setPublished("2016-12-31T05:02:03Z")
+				.setAuthors(
+					person("John Smith").setUri(new URI("http://foo.org/")).setEmail("foo@foo.org")
 				)
-				.contributors(
+				.setContributors(
 					person("John Smith"),
 					person("Jane Smith")
 				)
-				.content(
+				.setContent(
 					content("xhtml")
-					.lang("en")
-					.base("http://foo.org/")
-					.text("<div><p><i>[Sample content]</i></p></div>")
+					.setLang("en")
+					.setBase("http://foo.org/")
+					.setText("<div><p><i>[Sample content]</i></p></div>")
 				)
 			);
 	}

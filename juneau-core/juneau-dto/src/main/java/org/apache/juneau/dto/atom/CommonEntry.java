@@ -13,7 +13,6 @@
 package org.apache.juneau.dto.atom;
 
 import static org.apache.juneau.dto.atom.Utils.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.util.*;
@@ -49,7 +48,7 @@ public class CommonEntry extends Common {
 	 * @param updated The updated timestamp of this object.
 	 */
 	public CommonEntry(Id id, Text title, Calendar updated) {
-		id(id).title(title).updated(updated);
+		setId(id).setTitle(title).setUpdated(updated);
 	}
 
 	/**
@@ -60,7 +59,7 @@ public class CommonEntry extends Common {
 	 * @param updated The updated timestamp of this object.
 	 */
 	public CommonEntry(String id, String title, String updated) {
-		id(id).title(title).updated(updated);
+		setId(id).setTitle(title).setUpdated(updated);
 	}
 
 	/** Bean constructor. */
@@ -93,36 +92,10 @@ public class CommonEntry extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setAuthors(Person[] value) {
+	public CommonEntry setAuthors(Person...value) {
 		this.authors = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>authors</property>.
-	 *
-	 * <p>
-	 * The list of authors for this object.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Person[]> authors() {
-		return optional(authors);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>authors</property>.
-	 *
-	 * <p>
-	 * The list of authors for this object.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public CommonEntry authors(Person...value) {
-		setAuthors(value);
 		return this;
 	}
 
@@ -148,36 +121,10 @@ public class CommonEntry extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setCategories(Category[] value) {
+	public CommonEntry setCategories(Category...value) {
 		this.categories = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>categories</property>.
-	 *
-	 * <p>
-	 * The list of categories of this object.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Category[]> categories() {
-		return optional(categories);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>categories</property>.
-	 *
-	 * <p>
-	 * The list of categories of this object.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public CommonEntry categories(Category...value) {
-		setCategories(value);
 		return this;
 	}
 
@@ -203,36 +150,10 @@ public class CommonEntry extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setContributors(Person[] value) {
+	public CommonEntry setContributors(Person...value) {
 		this.contributors = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>contributors</property>.
-	 *
-	 * <p>
-	 * The list of contributors of this object.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Person[]> contributors() {
-		return optional(contributors);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>contributors</property>.
-	 *
-	 * <p>
-	 * The list of contributors of this object.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public CommonEntry contributors(Person...value) {
-		setContributors(value);
 		return this;
 	}
 
@@ -257,36 +178,10 @@ public class CommonEntry extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setId(Id value) {
+	public CommonEntry setId(Id value) {
 		this.id = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>id</property>.
-	 *
-	 * <p>
-	 * The ID of this object.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Id> id() {
-		return optional(id);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>id</property>.
-	 *
-	 * <p>
-	 * The ID of this object.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public CommonEntry id(Id value) {
-		setId(value);
 		return this;
 	}
 
@@ -301,7 +196,7 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public CommonEntry id(String value) {
+	public CommonEntry setId(String value) {
 		setId(new Id(value));
 		return this;
 	}
@@ -328,36 +223,10 @@ public class CommonEntry extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setLinks(Link[] value) {
+	public CommonEntry setLinks(Link...value) {
 		this.links = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>links</property>.
-	 *
-	 * <p>
-	 * The list of links of this object.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Link[]> links() {
-		return optional(links);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>links</property>.
-	 *
-	 * <p>
-	 * The list of links of this object.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public CommonEntry links(Link...value) {
-		setLinks(value);
 		return this;
 	}
 
@@ -382,36 +251,10 @@ public class CommonEntry extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setRights(Text value) {
+	public CommonEntry setRights(Text value) {
 		this.rights = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>rights</property>.
-	 *
-	 * <p>
-	 * The rights statement of this object.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Text> rights() {
-		return optional(rights);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>rights</property>.
-	 *
-	 * <p>
-	 * The rights statement of this object.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public CommonEntry rights(Text value) {
-		setRights(value);
 		return this;
 	}
 
@@ -426,8 +269,8 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public CommonEntry rights(String value) {
-		setRights(new Text().text(value));
+	public CommonEntry setRights(String value) {
+		setRights(new Text().setText(value));
 		return this;
 	}
 
@@ -452,36 +295,10 @@ public class CommonEntry extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setTitle(Text value) {
+	public CommonEntry setTitle(Text value) {
 		this.title = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>title</property>.
-	 *
-	 * <p>
-	 * The title of this object.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Text> title() {
-		return optional(title);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>title</property>.
-	 *
-	 * <p>
-	 * The title of this object.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public CommonEntry title(Text value) {
-		setTitle(value);
 		return this;
 	}
 
@@ -496,8 +313,8 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public CommonEntry title(String value) {
-		setTitle(new Text().text(value));
+	public CommonEntry setTitle(String value) {
+		setTitle(new Text().setText(value));
 		return this;
 	}
 
@@ -522,38 +339,13 @@ public class CommonEntry extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setUpdated(Calendar value) {
+	public CommonEntry setUpdated(Calendar value) {
 		this.updated = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>updated</property>.
-	 *
-	 * <p>
-	 * The update timestamp of this object.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Calendar> updated() {
-		return optional(updated);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>updated</property>.
-	 *
-	 * <p>
-	 * The update timestamp of this object.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public CommonEntry updated(Calendar value) {
-		setUpdated(value);
 		return this;
 	}
+
 	/**
 	 * Bean property fluent setter:  <property>updated</property>.
 	 *
@@ -565,7 +357,7 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public CommonEntry updated(String value) {
+	public CommonEntry setUpdated(String value) {
 		setUpdated(parseDateTime(value));
 		return this;
 	}

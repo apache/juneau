@@ -109,19 +109,6 @@ public class Encoding extends OpenApiElement{
 	}
 
 	/**
-	 * Same as {@link #setContentType(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-URI values will be converted to URI using <code><jk>new</jk> URI(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Encoding contentType(Object value) {
-		return setContentType(stringify(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>style</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -140,17 +127,6 @@ public class Encoding extends OpenApiElement{
 	public Encoding setStyle(String value) {
 		style = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setStyle(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public Encoding style(Object value) {
-		return setStyle(stringify(value));
 	}
 
 	/**
@@ -182,13 +158,13 @@ public class Encoding extends OpenApiElement{
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public Encoding addHeader(Map<String, HeaderInfo> values) {
+	public Encoding addHeaders(Map<String, HeaderInfo> values) {
 		headers = mapBuilder(headers).sparse().addAll(values).build();
 		return this;
 	}
 
 	/**
-	 * Adds one or more values to the <property>variables</property> property.
+	 * Adds one or more values to the <property>headers</property> property.
 	 *
 	 * @param key The mapping key.
 	 * @param value
@@ -196,20 +172,8 @@ public class Encoding extends OpenApiElement{
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public Encoding addHeaders(String key, HeaderInfo value) {
+	public Encoding addHeader(String key, HeaderInfo value) {
 		headers = mapBuilder(headers).sparse().add(key, value).build();
-		return this;
-	}
-
-	/**
-	 * Adds a single value to the <property>headers</property> property.
-	 *
-	 * @param name variable name.
-	 * @param value The server variable instance.
-	 * @return This object (for method chaining).
-	 */
-	public Encoding header(String name, HeaderInfo value) {
-		addHeader(Collections.singletonMap(name, value));
 		return this;
 	}
 
@@ -248,20 +212,6 @@ public class Encoding extends OpenApiElement{
 	}
 
 	/**
-	 * Same as {@link #setExplode(Boolean)}
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toBoolean()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Encoding explode(Object value) {
-		return setExplode(toBoolean(value));
-	}
-
-
-	/**
 	 * Bean property getter:  <property>required</property>.
 	 *
 	 * <p>
@@ -295,20 +245,6 @@ public class Encoding extends OpenApiElement{
 		return this;
 	}
 
-	/**
-	 * Same as {@link #setExplode(Boolean)}
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toBoolean()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Encoding allowReserved(Object value) {
-		return setAllowReserved(toBoolean(value));
-	}
-
-
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
@@ -328,11 +264,11 @@ public class Encoding extends OpenApiElement{
 		if (property == null)
 			return this;
 		switch (property) {
-			case "contentType": return contentType(value);
-			case "style": return style(value);
+			case "contentType": return setContentType(stringify(value));
+			case "style": return setStyle(stringify(value));
 			case "headers": return setHeaders(mapBuilder(String.class,HeaderInfo.class).sparse().addAny(value).build());
-			case "explode": return explode(value);
-			case "allowReserved": return allowReserved(value);
+			case "explode": return setExplode(toBoolean(value));
+			case "allowReserved": return setAllowReserved(toBoolean(value));
 			default:
 				super.set(property, value);
 				return this;

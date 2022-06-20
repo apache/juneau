@@ -97,20 +97,6 @@ public class MediaType extends OpenApiElement{
 	}
 
 	/**
-	 * Same as {@link #setSchema(SchemaInfo)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Valid types:
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public MediaType schema(Object value) {
-		return setSchema(toType(value, SchemaInfo.class));
-	}
-
-
-	/**
 	 * Bean property getter:  <property>x-example</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -130,19 +116,6 @@ public class MediaType extends OpenApiElement{
 	 */
 	@Beanp("x-example")
 	public MediaType setExample(Object value) {
-		example = value;
-		return this;
-	}
-
-	/**
-	 * Bean property setter:  <property>examples</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public MediaType example(Object value) {
 		example = value;
 		return this;
 	}
@@ -176,7 +149,7 @@ public class MediaType extends OpenApiElement{
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public MediaType addEncoding(Map<String, Encoding> values) {
+	public MediaType addEncodings(Map<String, Encoding> values) {
 		encoding = mapBuilder(encoding).sparse().addAll(values).build();
 		return this;
 	}
@@ -192,18 +165,6 @@ public class MediaType extends OpenApiElement{
 	 */
 	public MediaType addEncoding(String key, Encoding value) {
 		encoding = mapBuilder(encoding).sparse().add(key, value).build();
-		return this;
-	}
-
-	/**
-	 * Adds a single value to the <property>headers</property> property.
-	 *
-	 * @param name variable name.
-	 * @param value The server variable instance.
-	 * @return This object (for method chaining).
-	 */
-	public MediaType encoding(String name, Encoding value) {
-		addEncoding(Collections.singletonMap(name, value));
 		return this;
 	}
 
@@ -255,7 +216,7 @@ public class MediaType extends OpenApiElement{
 	 * @param example The example.
 	 * @return This object (for method chaining).
 	 */
-	public MediaType example(String name, Example example) {
+	public MediaType addExample(String name, Example example) {
 		addExamples(Collections.singletonMap(name, example));
 		return this;
 	}
@@ -278,8 +239,8 @@ public class MediaType extends OpenApiElement{
 		if (property == null)
 			return this;
 		switch (property) {
-			case "schema": return schema(value);
-			case "example": return example(value);
+			case "schema": return setSchema(toType(value, SchemaInfo.class));
+			case "example": return setExample(value);
 			case "examples": return setExamples(mapBuilder(String.class,Example.class).sparse().addAny(value).build());
 			case "encoding": return setEncoding(mapBuilder(String.class,Encoding.class).sparse().addAny(value).build());
 			default:

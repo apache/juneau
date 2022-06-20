@@ -12,10 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
-
-import java.util.*;
 
 import org.apache.juneau.xml.annotation.*;
 
@@ -60,7 +57,7 @@ public class Text extends Common {
 	 * @param type The content type of this content.
 	 */
 	public Text(String type) {
-		type(type);
+		setType(type);
 	}
 
 	/** Bean constructor. */
@@ -102,39 +99,10 @@ public class Text extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	/**
-	 * @param value The content type of this content.
-	 */
-	public void setType(String value) {
+	public Text setType(String value) {
 		this.type = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>type</property>.
-	 *
-	 * <p>
-	 * The content type of this content.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> type() {
-		return optional(type);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>type</property>.
-	 *
-	 * <p>
-	 * The content type of this content.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Text type(String value) {
-		setType(value);
 		return this;
 	}
 
@@ -160,36 +128,10 @@ public class Text extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setText(String value) {
+	public Text setText(String value) {
 		this.text = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>text</property>.
-	 *
-	 * <p>
-	 * The content of this content.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> text() {
-		return optional(text);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>text</property>.
-	 *
-	 * <p>
-	 * The content of this content.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Text text(String value) {
-		setText(value);
 		return this;
 	}
 
@@ -199,14 +141,14 @@ public class Text extends Common {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Common */
-	public Text base(Object base) {
-		super.base(base);
+	public Text setBase(Object base) {
+		super.setBase(base);
 		return this;
 	}
 
 	@Override /* Common */
-	public Text lang(String lang) {
-		super.lang(lang);
+	public Text setLang(String lang) {
+		super.setLang(lang);
 		return this;
 	}
 }

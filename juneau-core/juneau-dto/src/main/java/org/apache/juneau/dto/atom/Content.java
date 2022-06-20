@@ -12,12 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.dto.atom;
 
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.net.*;
-import java.util.*;
 
 import org.apache.juneau.xml.annotation.*;
 
@@ -119,36 +117,10 @@ public class Content extends Text {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object (for method chaining).
 	 */
-	public void setSrc(Object value) {
+	public Content setSrc(Object value) {
 		this.src = toURI(value);
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>src</property>.
-	 *
-	 * <p>
-	 * The source URI.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<URI> src() {
-		return optional(src);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>src</property>.
-	 *
-	 * <p>
-	 * The source URI.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Content src(Object value) {
-		setSrc(value);
 		return this;
 	}
 
@@ -158,25 +130,26 @@ public class Content extends Text {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Override /* Text */
-	public Content text(String text) {
-		super.text(text);
+	public Content setText(String text) {
+		super.setText(text);
 		return this;
 	}
 
 	@Override /* Text */
-	public Content type(String type) {
-		super.type(type);
+	public Content setType(String type) {
+		super.setType(type);
 		return this;
 	}
 
 	@Override /* Common */
-	public Content base(Object base) {
-		super.base(base);
+	public Content setBase(Object base) {
+		super.setBase(base);
 		return this;
 	}
+
 	@Override /* Common */
-	public Content lang(String lang) {
-		super.lang(lang);
+	public Content setLang(String lang) {
+		super.setLang(lang);
 		return this;
 	}
 }

@@ -221,19 +221,6 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setFormat(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo format(Object value) {
-		return setFormat(stringify(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>title</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -253,19 +240,6 @@ public class SchemaInfo extends OpenApiElement {
 	public SchemaInfo setTitle(String value) {
 		title = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setTitle(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo title(Object value) {
-		return setTitle(stringify(value));
 	}
 
 	/**
@@ -289,19 +263,6 @@ public class SchemaInfo extends OpenApiElement {
 	public SchemaInfo setDescription(String value) {
 		description = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setDescription(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo description(Object value) {
-		return setDescription(stringify(value));
 	}
 
 	/**
@@ -333,16 +294,6 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setDefault(Object)}.
-	 *
-	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo _default(Object value) {
-		return setDefault(value);
-	}
-
-	/**
 	 * Bean property getter:  <property>multipleOf</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -362,19 +313,6 @@ public class SchemaInfo extends OpenApiElement {
 	public SchemaInfo setMultipleOf(Number value) {
 		multipleOf = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setMultipleOf(Number)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-Number values will be converted to Number using <code>toString()</code> then best number match.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo multipleOf(Object value) {
-		return setMultipleOf(toNumber(value));
 	}
 
 	/**
@@ -400,19 +338,6 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setMaximum(Number)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-Number values will be converted to Number using <code>toString()</code> then best number match.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo maximum(Object value) {
-		return setMaximum(toNumber(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -432,19 +357,6 @@ public class SchemaInfo extends OpenApiElement {
 	public SchemaInfo setExclusiveMaximum(Boolean value) {
 		exclusiveMaximum = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setExclusiveMaximum(Boolean)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo exclusiveMaximum(Object value) {
-		return setExclusiveMaximum(toBoolean(value));
 	}
 
 	/**
@@ -470,19 +382,6 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setMinimum(Number)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-Number values will be converted to Number using <code>toString()</code> then best number match.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo minimum(Object value) {
-		return setMinimum(toNumber(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>exclusiveMinimum</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -502,19 +401,6 @@ public class SchemaInfo extends OpenApiElement {
 	public SchemaInfo setExclusiveMinimum(Boolean value) {
 		exclusiveMinimum = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setExclusiveMinimum(Boolean)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo exclusiveMinimum(Object value) {
-		return setExclusiveMinimum(toBoolean(value));
 	}
 
 	/**
@@ -540,19 +426,6 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setMaxLength(Integer)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo maxLength(Object value) {
-		return setMaxLength(toInteger(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>minLength</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -572,19 +445,6 @@ public class SchemaInfo extends OpenApiElement {
 	public SchemaInfo setMinLength(Integer value) {
 		minLength = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setMinLength(Integer)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo minLength(Object value) {
-		return setMinLength(toInteger(value));
 	}
 
 	/**
@@ -613,19 +473,6 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setPattern(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo pattern(Object value) {
-		return setPattern(stringify(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>maxItems</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -645,19 +492,6 @@ public class SchemaInfo extends OpenApiElement {
 	public SchemaInfo setMaxItems(Integer value) {
 		maxItems = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setMaxItems(Integer)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo maxItems(Object value) {
-		return setMaxItems(toInteger(value));
 	}
 
 	/**
@@ -683,19 +517,6 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setMinItems(Integer)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo minItems(Object value) {
-		return setMinItems(toInteger(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -717,19 +538,6 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setUniqueItems(Boolean)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo uniqueItems(Object value) {
-		return setUniqueItems(toBoolean(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -748,19 +556,6 @@ public class SchemaInfo extends OpenApiElement {
 	public SchemaInfo setNullable(Boolean value) {
 		nullable = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setNullable(Boolean)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo nullable(Object value) {
-		return setNullable(toBoolean(value));
 	}
 
 	/**
@@ -786,19 +581,6 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setMaxProperties(Integer)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo maxProperties(Object value) {
-		return setMaxProperties(toInteger(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>minProperties</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -818,19 +600,6 @@ public class SchemaInfo extends OpenApiElement {
 	public SchemaInfo setMinProperties(Integer value) {
 		minProperties = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setMinProperties(Integer)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo minProperties(Object value) {
-		return setMinProperties(toInteger(value));
 	}
 
 	/**
@@ -905,7 +674,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * 	</ul>
 	 * @return This object (for method chaining).
 	 */
-	public SchemaInfo required(String...values) {
+	public SchemaInfo addRequired(String...values) {
 		required = listBuilder(String.class).sparse().add(values).build();
 		return this;
 	}
@@ -973,7 +742,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public SchemaInfo _enum(Object...values) {
+	public SchemaInfo addEnum(Object...values) {
 		setEnum(setBuilder(Object.class).sparse().addAny(values).build());
 		return this;
 	}
@@ -1016,19 +785,6 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setType(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo type(Object value) {
-		return setType(stringify(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>items</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -1048,27 +804,6 @@ public class SchemaInfo extends OpenApiElement {
 	public SchemaInfo setItems(Items value) {
 		items = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setItems(Items)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li>{@link Items}
-	 * 		<li><code>String</code> - JSON object representation of {@link Items}
-	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
-	 * 	items(<js>"{type:'type',format:'format',...}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo items(Object value) {
-		return setItems(toType(value, Items.class));
 	}
 
 	/**
@@ -1129,7 +864,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public SchemaInfo allOf(Object...values) {
+	public SchemaInfo addAllOf(Object...values) {
 		allOf = listBuilder(allOf).sparse().addAny(values).build();
 		return this;
 	}
@@ -1192,7 +927,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public SchemaInfo anyOf(Object...values) {
+	public SchemaInfo addAnyOf(Object...values) {
 		anyOf = listBuilder(anyOf).sparse().addAny(values).build();
 		return this;
 	}
@@ -1202,7 +937,9 @@ public class SchemaInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getOneOf() { return oneOf; }
+	public List<Object> getOneOf() {
+		return oneOf;
+	}
 
 	/**
 	 * Bean property setter:  <property>allOf</property>.
@@ -1253,7 +990,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public SchemaInfo oneOf(Object...values) {
+	public SchemaInfo addOneOf(Object...values) {
 		oneOf = listBuilder(oneOf).sparse().addAny(values).build();
 		return this;
 	}
@@ -1316,19 +1053,6 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>additionalProperties</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo additionalProperties(Object value) {
-		additionalProperties = toType(value, SchemaInfo.class);
-		return this;
-	}
-
-	/**
 	 * Bean property getter:  <property>not</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -1351,18 +1075,6 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Bean property setter:  <property>not</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo not(Object value) {
-		not = toType(value, SchemaInfo.class);
-		return this;
-	}
-	/**
 	 * Bean property getter:  <property>discriminator</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -1382,19 +1094,6 @@ public class SchemaInfo extends OpenApiElement {
 	public SchemaInfo setDiscriminator(Discriminator value) {
 		discriminator = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setDiscriminator(Discriminator)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo discriminator(Object value) {
-		return setDiscriminator(toType(value,Discriminator.class));
 	}
 
 	/**
@@ -1420,19 +1119,6 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setReadOnly(Boolean)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo readOnly(Object value) {
-		return setReadOnly(toBoolean(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>WriteOnly</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -1453,20 +1139,6 @@ public class SchemaInfo extends OpenApiElement {
 		writeOnly = value;
 		return this;
 	}
-
-	/**
-	 * Same as {@link #setWriteOnly(Boolean)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo writeOnly(Object value) {
-		return setWriteOnly(toBoolean(value));
-	}
-
 
 	/**
 	 * Bean property getter:  <property>deprecated</property>.
@@ -1491,20 +1163,6 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setDeprecated(Boolean)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo deprecated(Object value) {
-		return setDeprecated(toBoolean(value));
-	}
-
-
-	/**
 	 * Bean property getter:  <property>xml</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -1524,27 +1182,6 @@ public class SchemaInfo extends OpenApiElement {
 	public SchemaInfo setXml(Xml value) {
 		xml = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setXml(Xml)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li>{@link Xml}
-	 * 		<li><code>String</code> - JSON object representation of {@link Xml}
-	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
-	 * 	xml(<js>"{name:'name',namespace:'namespace',...}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo xml(Object value) {
-		return setXml(toType(value, Xml.class));
 	}
 
 	/**
@@ -1570,27 +1207,6 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setExternalDocs(ExternalDocumentation)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li>{@link ExternalDocumentation}
-	 * 		<li><code>String</code> - JSON object representation of {@link ExternalDocumentation}
-	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
-	 * 	externalDocs(<js>"{description:'description',url:'url'}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo externalDocs(Object value) {
-		return setExternalDocs(toType(value, ExternalDocumentation.class));
-	}
-
-	/**
 	 * Bean property getter:  <property>example</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -1610,18 +1226,6 @@ public class SchemaInfo extends OpenApiElement {
 	public SchemaInfo setExample(Object value) {
 		example = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setExample(Object)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo example(Object value) {
-		return setExample(value);
 	}
 
 	/**
@@ -1655,18 +1259,6 @@ public class SchemaInfo extends OpenApiElement {
 	public SchemaInfo setRef(Object value) {
 		ref = stringify(value);
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setRef(Object)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo ref(Object value) {
-		return setRef(value);
 	}
 
 	@Override /* SwaggerElement */
@@ -1719,42 +1311,42 @@ public class SchemaInfo extends OpenApiElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "format": return format(value);
-			case "title": return title(value);
-			case "description": return description(value);
-			case "default": return _default(value);
-			case "multipleOf": return multipleOf(value);
-			case "maximum": return maximum(value);
-			case "exclusiveMaximum": return exclusiveMaximum(value);
-			case "minimum": return minimum(value);
-			case "exclusiveMinimum": return exclusiveMinimum(value);
-			case "maxLength": return maxLength(value);
-			case "minLength": return minLength(value);
-			case "pattern": return pattern(value);
-			case "maxItems": return maxItems(value);
-			case "minItems": return minItems(value);
-			case "uniqueItems": return uniqueItems(value);
-			case "maxProperties": return maxProperties(value);
-			case "minProperties": return minProperties(value);
-			case "required": return setRequired(null).required(stringify(value));
-			case "enum": return setEnum(null)._enum(value);
-			case "type": return type(value);
-			case "items": return items(value);
-			case "allOf": return setAllOf(null).allOf(value);
-			case "anyOf": return setAnyOf(null).anyOf(value);
-			case "oneOf": return setOneOf(null).oneOf(value);
+			case "format": return setFormat(stringify(value));
+			case "title": return setTitle(stringify(value));
+			case "description": return setDescription(stringify(value));
+			case "default": return setDefault(value);
+			case "multipleOf": return setMultipleOf(toNumber(value));
+			case "maximum": return setMaximum(toNumber(value));
+			case "exclusiveMaximum": return setExclusiveMaximum(toBoolean(value));
+			case "minimum": return setMinimum(toNumber(value));
+			case "exclusiveMinimum": return setExclusiveMinimum(toBoolean(value));
+			case "maxLength": return setMaxLength(toInteger(value));
+			case "minLength": return setMinLength(toInteger(value));
+			case "pattern": return setPattern(stringify(value));
+			case "maxItems": return setMaxItems(toInteger(value));
+			case "minItems": return setMinItems(toInteger(value));
+			case "uniqueItems": return setUniqueItems(toBoolean(value));
+			case "maxProperties": return setMaxProperties(toInteger(value));
+			case "minProperties": return setMinProperties(toInteger(value));
+			case "required": return addRequired(stringify(value));
+			case "enum": return addEnum(value);
+			case "type": return setType(stringify(value));
+			case "items": return setItems(toType(value, Items.class));
+			case "allOf": return addAllOf(value);
+			case "anyOf": return addAnyOf(value);
+			case "oneOf": return addOneOf(value);
 			case "properties": return setProperties(mapBuilder(String.class,SchemaInfo.class).sparse().addAny(value).build());
-			case "additionalProperties": return additionalProperties(value);
-			case "not": return not(value);
-			case "nullable": return nullable(value);
-			case "deprecated": return deprecated(value);
-			case "discriminator": return discriminator(value);
-			case "readOnly": return readOnly(value);
-			case "writeOnly": return writeOnly(value);
-			case "xml": return xml(value);
-			case "externalDocs": return externalDocs(value);
-			case "example": return example(value);
-			case "$ref": return ref(value);
+			case "additionalProperties": return setAdditionalProperties(toType(value, SchemaInfo.class));
+			case "not": return setNot(toType(value, SchemaInfo.class));
+			case "nullable": return setNullable(toBoolean(value));
+			case "deprecated": return setDeprecated(toBoolean(value));
+			case "discriminator": return setDiscriminator(toType(value, Discriminator.class));
+			case "readOnly": return setReadOnly(toBoolean(value));
+			case "writeOnly": return setWriteOnly(toBoolean(value));
+			case "xml": return setXml(toType(value, Xml.class));
+			case "externalDocs": return setExternalDocs(toType(value, ExternalDocumentation.class));
+			case "example": return setExample(value);
+			case "$ref": return setRef(value);
 			default:
 				super.set(property, value);
 				return this;

@@ -106,19 +106,6 @@ public class RequestBodyInfo extends OpenApiElement{
 	}
 
 	/**
-	 * Same as {@link #setDescription(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-URI values will be converted to URI using <code><jk>new</jk> URI(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public RequestBodyInfo description(Object value) {
-		return setDescription(stringify(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>content</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
@@ -167,18 +154,6 @@ public class RequestBodyInfo extends OpenApiElement{
 	}
 
 	/**
-	 * Adds a single value to the <property>content</property> property.
-	 *
-	 * @param name variable name.
-	 * @param value The server variable instance.
-	 * @return This object (for method chaining).
-	 */
-	public RequestBodyInfo content(String name, MediaType value) {
-		addContent(Collections.singletonMap(name, value));
-		return this;
-	}
-
-	/**
 	 * Bean property getter:  <property>required</property>.
 	 *
 	 * <p>
@@ -212,19 +187,6 @@ public class RequestBodyInfo extends OpenApiElement{
 		return this;
 	}
 
-	/**
-	 * Same as {@link #setRequired(Boolean)}
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toBoolean()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public RequestBodyInfo required(Object value) {
-		return setRequired(toBoolean(value));
-	}
-
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
@@ -242,9 +204,9 @@ public class RequestBodyInfo extends OpenApiElement{
 		if (property == null)
 			return this;
 		switch (property) {
-			case "description": return description(value);
+			case "description": return setDescription(stringify(value));
 			case "content": return setContent(mapBuilder(String.class,MediaType.class).sparse().addAny(value).build());
-			case "required": return required(value);
+			case "required": return setRequired(toBoolean(value));
 			default:
 				super.set(property, value);
 				return this;

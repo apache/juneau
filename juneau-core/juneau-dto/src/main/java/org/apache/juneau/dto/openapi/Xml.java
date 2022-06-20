@@ -110,19 +110,6 @@ public class Xml extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setName(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Xml name(Object value) {
-		return setName(stringify(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>namespace</property>.
 	 *
 	 * <p>
@@ -148,19 +135,6 @@ public class Xml extends OpenApiElement {
 	public Xml setNamespace(String value) {
 		namespace = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setNamespace(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Xml namespace(Object value) {
-		return setNamespace(stringify(value));
 	}
 
 	/**
@@ -192,19 +166,6 @@ public class Xml extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setPrefix(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Xml prefix(Object value) {
-		return setPrefix(stringify(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>attribute</property>.
 	 *
 	 * <p>
@@ -231,20 +192,6 @@ public class Xml extends OpenApiElement {
 	public Xml setAttribute(Boolean value) {
 		attribute = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setAttribute(Boolean)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Default value is <jk>false</jk>.
-	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Xml attribute(Object value) {
-		return setAttribute(toBoolean(value));
 	}
 
 	/**
@@ -289,19 +236,6 @@ public class Xml extends OpenApiElement {
 		return this;
 	}
 
-	/**
-	 * Same as {@link #setWrapped(Boolean)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Xml wrapped(Object value) {
-		return setWrapped(toBoolean(value));
-	}
-
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
@@ -321,11 +255,11 @@ public class Xml extends OpenApiElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "name": return name(value);
-			case "namespace": return namespace(value);
-			case "prefix": return prefix(value);
-			case "attribute": return attribute(value);
-			case "wrapped": return wrapped(value);
+			case "name": return setName(stringify(value));
+			case "namespace": return setNamespace(stringify(value));
+			case "prefix": return setPrefix(stringify(value));
+			case "attribute": return setAttribute(toBoolean(value));
+			case "wrapped": return setWrapped(toBoolean(value));
 			default:
 				super.set(property, value);
 				return this;

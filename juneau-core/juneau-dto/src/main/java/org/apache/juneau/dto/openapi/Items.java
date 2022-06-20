@@ -181,27 +181,6 @@ public class Items extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setType(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Valid values:
-	 * 	<ul>
-	 * 		<li><js>"string"</js>
-	 * 		<li><js>"number"</js>
-	 * 		<li><js>"integer"</js>
-	 * 		<li><js>"boolean"</js>
-	 * 		<li><js>"array"</js>
-	 * 	</ul>
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items type(Object value) {
-		return setType(stringify(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>format</property>.
 	 *
 	 * <p>
@@ -240,19 +219,6 @@ public class Items extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setFormat(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items format(Object value) {
-		return setFormat(stringify(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>items</property>.
 	 *
 	 * <p>
@@ -279,28 +245,6 @@ public class Items extends OpenApiElement {
 	public Items setItems(Items value) {
 		items = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setItems(Items)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li>{@link Items}
-	 * 		<li><code>String</code> - JSON object representation of {@link Items}
-	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
-	 * 	items(<js>"{type:'type',format:'format',...}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items items(Object value) {
-		return setItems(toType(value, Items.class));
 	}
 
 	/**
@@ -341,26 +285,6 @@ public class Items extends OpenApiElement {
 			).build();
 		collectionFormat = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setCollectionFormat(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Valid values:
-	 * 	<ul>
-	 * 		<li><js>"csv"</js> (default) - comma separated values <code>foo,bar</code>.
-	 * 		<li><js>"ssv"</js> - space separated values <code>foo bar</code>.
-	 * 		<li><js>"tsv"</js> - tab separated values <code>foo\tbar</code>.
-	 * 		<li><js>"pipes"</js> - pipe separated values <code>foo|bar</code>.
-	 * 	</ul>
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items collectionFormat(Object value) {
-		return setCollectionFormat(stringify(value));
 	}
 
 	/**
@@ -418,18 +342,6 @@ public class Items extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setDefault(Object)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items _default(Object value) {
-		return setDefault(value);
-	}
-
-	/**
 	 * Bean property getter:  <property>maximum</property>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -459,19 +371,6 @@ public class Items extends OpenApiElement {
 	public Items setMaximum(Number value) {
 		maximum = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setMaximum(Number)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-Number values will be converted to Number using <code>toString()</code> then best number match.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items maximum(Object value) {
-		return setMaximum(toNumber(value));
 	}
 
 	/**
@@ -507,19 +406,6 @@ public class Items extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setExclusiveMaximum(Boolean)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items exclusiveMaximum(Object value) {
-		return setExclusiveMaximum(toBoolean(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>minimum</property>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -549,19 +435,6 @@ public class Items extends OpenApiElement {
 	public Items setMinimum(Number value) {
 		minimum = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setMinimum(Number)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-Number values will be converted to Number using <code>toString()</code> then best number match.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items minimum(Object value) {
-		return setMinimum(toNumber(value));
 	}
 
 	/**
@@ -597,19 +470,6 @@ public class Items extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setExclusiveMinimum(Boolean)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items exclusiveMinimum(Object value) {
-		return setExclusiveMinimum(toBoolean(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>maxLength</property>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -642,19 +502,6 @@ public class Items extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setMaxLength(Integer)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items maxLength(Object value) {
-		return setMaxLength(toInteger(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>minLength</property>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -684,19 +531,6 @@ public class Items extends OpenApiElement {
 	public Items setMinLength(Integer value) {
 		minLength = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setMinLength(Integer)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items minLength(Object value) {
-		return setMinLength(toInteger(value));
 	}
 
 	/**
@@ -735,19 +569,6 @@ public class Items extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setPattern(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items pattern(Object value) {
-		return setPattern(stringify(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>maxItems</property>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -777,19 +598,6 @@ public class Items extends OpenApiElement {
 	public Items setMaxItems(Integer value) {
 		maxItems = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setMaxItems(Integer)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items maxItems(Object value) {
-		return setMaxItems(toInteger(value));
 	}
 
 	/**
@@ -825,19 +633,6 @@ public class Items extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setMinItems(Integer)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-Integer values will be converted to Integer using <code>Integer.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items minItems(Object value) {
-		return setMinItems(toInteger(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
 	 *
 	 * <h5 class='section'>See Also:</h5>
@@ -867,19 +662,6 @@ public class Items extends OpenApiElement {
 	public Items setUniqueItems(Boolean value) {
 		uniqueItems = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setUniqueItems(Boolean)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items uniqueItems(Object value) {
-		return setUniqueItems(toBoolean(value));
 	}
 
 	/**
@@ -950,7 +732,7 @@ public class Items extends OpenApiElement {
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object (for method chaining).
 	 */
-	public Items _enum(Object...values) {
+	public Items setEnum(Object...values) {
 		_enum = listBuilder(_enum).sparse().addAny(values).build();
 		return this;
 	}
@@ -985,19 +767,6 @@ public class Items extends OpenApiElement {
 	public Items setMultipleOf(Number value) {
 		multipleOf = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setMultipleOf(Number)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-Number values will be converted to Number using <code>toString()</code> then best number match.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Items multipleOf(Object value) {
-		return setMultipleOf(toNumber(value));
 	}
 
 	/**
@@ -1077,23 +846,23 @@ public class Items extends OpenApiElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "type": return type(value);
-			case "format": return format(value);
-			case "items": return items(value);
-			case "collectionFormat": return collectionFormat(value);
-			case "default": return _default(value);
-			case "maximum": return maximum(value);
-			case "exclusiveMaximum": return exclusiveMaximum(value);
-			case "minimum": return minimum(value);
-			case "exclusiveMinimum": return exclusiveMinimum(value);
-			case "maxLength": return maxLength(value);
-			case "minLength": return minLength(value);
-			case "pattern": return pattern(value);
-			case "maxItems": return maxItems(value);
-			case "minItems": return minItems(value);
-			case "uniqueItems": return uniqueItems(value);
-			case "enum": return setEnum(null)._enum(value);
-			case "multipleOf": return multipleOf(value);
+			case "type": return setType(stringify(value));
+			case "format": return setFormat(stringify(value));
+			case "items": return setItems(toType(value,Items.class));
+			case "collectionFormat": return setCollectionFormat(stringify(value));
+			case "default": return setDefault(value);
+			case "maximum": return setMaximum(toNumber(value));
+			case "exclusiveMaximum": return setExclusiveMaximum(toBoolean(value));
+			case "minimum": return setMinimum(toNumber(value));
+			case "exclusiveMinimum": return setExclusiveMinimum(toBoolean(value));
+			case "maxLength": return setMaxLength(toInteger(value));
+			case "minLength": return setMinLength(toInteger(value));
+			case "pattern": return setPattern(stringify(value));
+			case "maxItems": return setMaxItems(toInteger(value));
+			case "minItems": return setMinItems(toInteger(value));
+			case "uniqueItems": return setUniqueItems(toBoolean(value));
+			case "enum": return setEnum(value);
+			case "multipleOf": return setMultipleOf(toNumber(value));
 			case "$ref": return ref(value);
 			default:
 				super.set(property, value);

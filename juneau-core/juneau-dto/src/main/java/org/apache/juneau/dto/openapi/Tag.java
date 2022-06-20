@@ -118,19 +118,6 @@ public class Tag extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setName(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Tag name(Object value) {
-		return setName(stringify(value));
-	}
-
-	/**
 	 * Bean property getter:  <property>description</property>.
 	 *
 	 * <p>
@@ -157,19 +144,6 @@ public class Tag extends OpenApiElement {
 	public Tag setDescription(String value) {
 		description = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setDescription(String)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Non-String values will be converted to String using <code>toString()</code>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Tag description(Object value) {
-		return setDescription(stringify(value));
 	}
 
 	/**
@@ -200,27 +174,6 @@ public class Tag extends OpenApiElement {
 		return this;
 	}
 
-	/**
-	 * Same as {@link #setExternalDocs(ExternalDocumentation)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li>{@link ExternalDocumentation}
-	 * 		<li><code>String</code> - JSON object representation of {@link ExternalDocumentation}
-	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
-	 * 	externalDocs(<js>"{description:'description',url:'url'}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public Tag externalDocs(Object value) {
-		return setExternalDocs(toType(value, ExternalDocumentation.class));
-	}
-
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
@@ -238,9 +191,9 @@ public class Tag extends OpenApiElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "name": return name(value);
-			case "description": return description(value);
-			case "externalDocs": return externalDocs(value);
+			case "name": return setName(stringify(value));
+			case "description": return setDescription(stringify(value));
+			case "externalDocs": return setExternalDocs(toType(value, ExternalDocumentation.class));
 			default:
 				super.set(property, value);
 				return this;

@@ -15,7 +15,6 @@ package org.apache.juneau.dto.openapi;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.dto.swagger.Items;
 import org.apache.juneau.internal.MultiSet;
 
 import java.util.Set;
@@ -162,28 +161,6 @@ public class OAuthFlows extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setImplicit(OAuthFlow)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li>{@link Items}
-	 * 		<li><code>String</code> - JSON object representation of {@link Items}
-	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
-	 * 	items(<js>"{type:'type',format:'format',...}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public OAuthFlows implicit(Object value) {
-		return setImplicit(toType(value, OAuthFlow.class));
-	}
-
-	/**
 	 * Bean property getter:  <property>password</property>.
 	 *
 	 * <p>
@@ -210,28 +187,6 @@ public class OAuthFlows extends OpenApiElement {
 	public OAuthFlows setPassword(OAuthFlow value) {
 		password = value;
 		return this;
-	}
-
-	/**
-	 * Same as {@link #setPassword(OAuthFlow)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li>{@link Items}
-	 * 		<li><code>String</code> - JSON object representation of {@link Items}
-	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
-	 * 	items(<js>"{type:'type',format:'format',...}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public OAuthFlows password(Object value) {
-		return setPassword(toType(value, OAuthFlow.class));
 	}
 
 	/**
@@ -264,28 +219,6 @@ public class OAuthFlows extends OpenApiElement {
 	}
 
 	/**
-	 * Same as {@link #setClientCredentials(OAuthFlow)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li>{@link Items}
-	 * 		<li><code>String</code> - JSON object representation of {@link Items}
-	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
-	 * 	items(<js>"{type:'type',format:'format',...}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public OAuthFlows clientCredentials(Object value) {
-		return setClientCredentials(toType(value, OAuthFlow.class));
-	}
-
-	/**
 	 * Bean property getter:  <property>authorizationCode</property>.
 	 *
 	 * <p>
@@ -314,29 +247,6 @@ public class OAuthFlows extends OpenApiElement {
 		return this;
 	}
 
-	/**
-	 * Same as {@link #setAuthorizationCode(OAuthFlow)}.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
-	 * 	<br>Valid types:
-	 * 	<ul>
-	 * 		<li>{@link Items}
-	 * 		<li><code>String</code> - JSON object representation of {@link Items}
-	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
-	 * 	items(<js>"{type:'type',format:'format',...}"</js>);
-	 * 			</p>
-	 * 	</ul>
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
-	 */
-	public OAuthFlows authorizationCode(Object value) {
-		return setAuthorizationCode(toType(value, OAuthFlow.class));
-	}
-
-
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
 		if (property == null)
@@ -355,10 +265,10 @@ public class OAuthFlows extends OpenApiElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "implicit": return implicit(value);
-			case "password": return password(value);
-			case "clientCredentials": return clientCredentials(value);
-			case "authorizationCode": return authorizationCode(value);
+			case "implicit": return setImplicit(toType(value, OAuthFlow.class));
+			case "password": return setPassword(toType(value, OAuthFlow.class));
+			case "clientCredentials": return setClientCredentials(toType(value, OAuthFlow.class));
+			case "authorizationCode": return setAuthorizationCode(toType(value, OAuthFlow.class));
 			default:
 				super.set(property, value);
 				return this;
