@@ -24,6 +24,7 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.http.*;
+import org.apache.http.client.config.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.part.*;
@@ -780,10 +781,10 @@ public class Remote_PathAnnotation_Test {
 	}
 
 	private static RestClient.Builder client(Class<?> c) {
-		return MockRestClient.create(c);
+		return MockRestClient.create(c).defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build());
 	}
 
 	private static <T> T remote(Class<?> rest, Class<T> t) {
-		return MockRestClient.build(rest).getRemote(t);
+		return MockRestClient.create(rest).defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build().getRemote(t);
 	}
 }

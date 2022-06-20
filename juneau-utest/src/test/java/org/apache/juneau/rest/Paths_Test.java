@@ -14,6 +14,7 @@ package org.apache.juneau.rest;
 
 import static org.junit.runners.MethodSorters.*;
 
+import org.apache.http.client.config.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.Path;
 import org.apache.juneau.rest.annotation.*;
@@ -51,7 +52,7 @@ public class Paths_Test {
 			return getPaths(req).append("pathRemainder2", r).append("method",1);
 		}
 	}
-	static MockRestClient a = MockRestClient.create(A.class).contextPath("/cp").servletPath("/sp").build();
+	static MockRestClient a = MockRestClient.create(A.class).contextPath("/cp").servletPath("/sp").defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
 
 	@Test
 	public void a01() throws Exception {
@@ -199,7 +200,7 @@ public class Paths_Test {
 			return getPaths(req).append("pathRemainder2", r).append("method",2);
 		}
 	}
-	static MockRestClient b = MockRestClient.create(B.class).contextPath("/cp").servletPath("/sp").build();
+	static MockRestClient b = MockRestClient.create(B.class).contextPath("/cp").servletPath("/sp").defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
 
 	@Test
 	public void b01() throws Exception {
@@ -351,7 +352,7 @@ public class Paths_Test {
 			return getPaths(req).append("pathRemainder2", r).append("method",3);
 		}
 	}
-	static MockRestClient c = MockRestClient.create(C.class).contextPath("/cp").servletPath("/sp").build();
+	static MockRestClient c = MockRestClient.create(C.class).contextPath("/cp").servletPath("/sp").defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
 
 	@Test
 	public void c01() throws Exception {
@@ -503,7 +504,7 @@ public class Paths_Test {
 			return getPaths(req).append("pathRemainder2", r).append("method",4);
 		}
 	}
-	static MockRestClient d = MockRestClient.create(D.class).contextPath("/cp").servletPath("/sp").build();
+	static MockRestClient d = MockRestClient.create(D.class).contextPath("/cp").servletPath("/sp").defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
 
 	@Test
 	public void d01() throws Exception {

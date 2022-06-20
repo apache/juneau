@@ -18,6 +18,7 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
+import org.apache.http.client.config.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
@@ -413,7 +414,7 @@ public class Path_Test {
 
 	@Test
 	public void f01_pathVariablesOnClass() throws Exception {
-		RestClient f = MockRestClient.createLax(F.class).servletPath("/f").build();
+		RestClient f = MockRestClient.createLax(F.class).servletPath("/f").defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
 		f.get("http://localhost/f/x1/x2")
 			.run()
 			.assertContent().is("a: {a:'x1',b:'x2'}");
@@ -498,7 +499,7 @@ public class Path_Test {
 
 	@Test
 	public void g01_pathVariablesOnChildClass() throws Exception {
-		RestClient g = MockRestClient.buildLax(G.class);
+		RestClient g = MockRestClient.createLax(G.class).defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
 		g.get("http://localhost/f/x1/x2")
 			.run()
 			.assertContent().is("a: {a:'x1',b:'x2'}");
@@ -570,7 +571,7 @@ public class Path_Test {
 
 	@Test
 	public void h01_pathVariablesOnParentAndChildClass() throws Exception {
-		RestClient h = MockRestClient.createLax(H.class).servletPath("/h").build();
+		RestClient h = MockRestClient.createLax(H.class).servletPath("/h").defaultRequestConfig(RequestConfig.custom().setNormalizeUri(false).build()).build();
 		h.get("http://localhost/h/ha1/hb1/f/x1/x2")
 			.run()
 			.assertContent().is("a: {a:'x1',b:'x2',ha:'ha1',hb:'hb1'}");
