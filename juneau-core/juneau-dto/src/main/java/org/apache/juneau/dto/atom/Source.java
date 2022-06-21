@@ -14,6 +14,8 @@ package org.apache.juneau.dto.atom;
 
 import java.util.*;
 
+import org.apache.juneau.internal.*;
+
 /**
  * Represents an <c>atomSource</c> construct in the RFC4287 specification.
  *
@@ -44,6 +46,7 @@ import java.util.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
+@FluentSetters
 public class Source extends CommonEntry {
 
 	private Generator generator;
@@ -189,81 +192,91 @@ public class Source extends CommonEntry {
 	// Overridden setters (to simplify method chaining)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* CommonEntry */
-	public Source setAuthors(Person...authors) {
-		super.setAuthors(authors);
+	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	public Source setBase(Object value) {
+		super.setBase(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Source setCategories(Category...categories) {
-		super.setCategories(categories);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	public Source setLang(String value) {
+		super.setLang(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Source setContributors(Person...contributors) {
-		super.setContributors(contributors);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Source setAuthors(Person...value) {
+		super.setAuthors(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Source setId(Id id) {
-		super.setId(id);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Source setCategories(Category...value) {
+		super.setCategories(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Source setLinks(Link...links) {
-		super.setLinks(links);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Source setContributors(Person...value) {
+		super.setContributors(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Source setRights(Text rights) {
-		super.setRights(rights);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Source setId(String value) {
+		super.setId(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Source setRights(String rights) {
-		super.setRights(rights);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Source setId(Id value) {
+		super.setId(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Source setTitle(Text title) {
-		super.setTitle(title);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Source setLinks(Link...value) {
+		super.setLinks(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Source setTitle(String title) {
-		super.setTitle(title);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Source setRights(String value) {
+		super.setRights(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Source setUpdated(Calendar updated) {
-		super.setUpdated(updated);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Source setRights(Text value) {
+		super.setRights(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Source setUpdated(String updated) {
-		super.setUpdated(updated);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Source setTitle(String value) {
+		super.setTitle(value);
 		return this;
 	}
 
-	@Override /* Common */
-	public Source setBase(Object base) {
-		super.setBase(base);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Source setTitle(Text value) {
+		super.setTitle(value);
 		return this;
 	}
 
-	@Override /* Common */
-	public Source setLang(String lang) {
-		super.setLang(lang);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Source setUpdated(String value) {
+		super.setUpdated(value);
 		return this;
 	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Source setUpdated(Calendar value) {
+		super.setUpdated(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

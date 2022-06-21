@@ -16,13 +16,15 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.internal.MultiSet;
+import org.apache.juneau.internal.*;
+
 import java.util.*;
 
 /**
  * TODO
  */
 @Bean(properties="schema,example,examples,encoding,*")
+@FluentSetters
 public class MediaType extends OpenApiElement{
 	private SchemaInfo schema;
 	private Object example;
@@ -194,6 +196,10 @@ public class MediaType extends OpenApiElement{
 		examples = mapBuilder(examples).add(name, example).build();
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {

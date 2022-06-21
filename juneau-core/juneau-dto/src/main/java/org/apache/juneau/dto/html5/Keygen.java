@@ -13,6 +13,7 @@
 package org.apache.juneau.dto.html5;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * DTO for an HTML {@doc ext.HTML5.forms#the-keygen-element <keygen>}
@@ -24,6 +25,7 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 @Bean(typeName="keygen")
+@FluentSetters
 public class Keygen extends HtmlElementVoid {
 
 	/**
@@ -124,25 +126,379 @@ public class Keygen extends HtmlElementVoid {
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* HtmlElement */
-	public final Keygen _class(String _class) {
+	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen _class(String _class) {
 		super._class(_class);
 		return this;
 	}
 
-	@Override /* HtmlElement */
-	public final Keygen id(String id) {
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen accesskey(String accesskey) {
+		super.accesskey(accesskey);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen contenteditable(Object contenteditable) {
+		super.contenteditable(contenteditable);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen dir(String dir) {
+		super.dir(dir);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen hidden(Object hidden) {
+		super.hidden(hidden);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen id(String id) {
 		super.id(id);
 		return this;
 	}
 
-	@Override /* HtmlElement */
-	public final Keygen style(String style) {
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen lang(String lang) {
+		super.lang(lang);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onabort(String onabort) {
+		super.onabort(onabort);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onblur(String onblur) {
+		super.onblur(onblur);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen oncancel(String oncancel) {
+		super.oncancel(oncancel);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen oncanplay(String oncanplay) {
+		super.oncanplay(oncanplay);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen oncanplaythrough(String oncanplaythrough) {
+		super.oncanplaythrough(oncanplaythrough);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onchange(String onchange) {
+		super.onchange(onchange);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onclick(String onclick) {
+		super.onclick(onclick);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen oncuechange(String oncuechange) {
+		super.oncuechange(oncuechange);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen ondblclick(String ondblclick) {
+		super.ondblclick(ondblclick);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen ondurationchange(String ondurationchange) {
+		super.ondurationchange(ondurationchange);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onemptied(String onemptied) {
+		super.onemptied(onemptied);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onended(String onended) {
+		super.onended(onended);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onerror(String onerror) {
+		super.onerror(onerror);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onfocus(String onfocus) {
+		super.onfocus(onfocus);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen oninput(String oninput) {
+		super.oninput(oninput);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen oninvalid(String oninvalid) {
+		super.oninvalid(oninvalid);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onkeydown(String onkeydown) {
+		super.onkeydown(onkeydown);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onkeypress(String onkeypress) {
+		super.onkeypress(onkeypress);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onkeyup(String onkeyup) {
+		super.onkeyup(onkeyup);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onload(String onload) {
+		super.onload(onload);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onloadeddata(String onloadeddata) {
+		super.onloadeddata(onloadeddata);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onloadedmetadata(String onloadedmetadata) {
+		super.onloadedmetadata(onloadedmetadata);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onloadstart(String onloadstart) {
+		super.onloadstart(onloadstart);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onmousedown(String onmousedown) {
+		super.onmousedown(onmousedown);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onmouseenter(String onmouseenter) {
+		super.onmouseenter(onmouseenter);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onmouseleave(String onmouseleave) {
+		super.onmouseleave(onmouseleave);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onmousemove(String onmousemove) {
+		super.onmousemove(onmousemove);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onmouseout(String onmouseout) {
+		super.onmouseout(onmouseout);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onmouseover(String onmouseover) {
+		super.onmouseover(onmouseover);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onmouseup(String onmouseup) {
+		super.onmouseup(onmouseup);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onmousewheel(String onmousewheel) {
+		super.onmousewheel(onmousewheel);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onpause(String onpause) {
+		super.onpause(onpause);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onplay(String onplay) {
+		super.onplay(onplay);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onplaying(String onplaying) {
+		super.onplaying(onplaying);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onprogress(String onprogress) {
+		super.onprogress(onprogress);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onratechange(String onratechange) {
+		super.onratechange(onratechange);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onreset(String onreset) {
+		super.onreset(onreset);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onresize(String onresize) {
+		super.onresize(onresize);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onscroll(String onscroll) {
+		super.onscroll(onscroll);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onseeked(String onseeked) {
+		super.onseeked(onseeked);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onseeking(String onseeking) {
+		super.onseeking(onseeking);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onselect(String onselect) {
+		super.onselect(onselect);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onshow(String onshow) {
+		super.onshow(onshow);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onstalled(String onstalled) {
+		super.onstalled(onstalled);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onsubmit(String onsubmit) {
+		super.onsubmit(onsubmit);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onsuspend(String onsuspend) {
+		super.onsuspend(onsuspend);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen ontimeupdate(String ontimeupdate) {
+		super.ontimeupdate(ontimeupdate);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen ontoggle(String ontoggle) {
+		super.ontoggle(ontoggle);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onvolumechange(String onvolumechange) {
+		super.onvolumechange(onvolumechange);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen onwaiting(String onwaiting) {
+		super.onwaiting(onwaiting);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen spellcheck(Object spellcheck) {
+		super.spellcheck(spellcheck);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen style(String style) {
 		super.style(style);
 		return this;
 	}
 
-	// <FluentSetters>
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen tabindex(Object tabindex) {
+		super.tabindex(tabindex);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen title(String title) {
+		super.title(title);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Keygen translate(Object translate) {
+		super.translate(translate);
+		return this;
+	}
 
 	// </FluentSetters>
 }

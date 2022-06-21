@@ -18,6 +18,7 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import java.net.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -40,6 +41,7 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  */
 @Bean(typeName="generator")
+@FluentSetters
 public class Generator extends Common {
 
 	private URI uri;
@@ -159,15 +161,19 @@ public class Generator extends Common {
 	// Overridden setters (to simplify method chaining)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Common */
-	public Generator setBase(Object base) {
-		super.setBase(base);
+	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	public Generator setBase(Object value) {
+		super.setBase(value);
 		return this;
 	}
 
-	@Override /* Common */
-	public Generator setLang(String lang) {
-		super.setLang(lang);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	public Generator setLang(String value) {
+		super.setLang(value);
 		return this;
 	}
+
+	// </FluentSetters>
 }

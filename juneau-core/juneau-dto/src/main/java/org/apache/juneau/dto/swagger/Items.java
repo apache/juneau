@@ -54,6 +54,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Bean(properties="type,format,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,$ref,*")
+@FluentSetters
 public class Items extends SwaggerElement {
 
 	private static final String[] VALID_TYPES = {"string", "number", "integer", "boolean", "array"};
@@ -628,6 +629,10 @@ public class Items extends SwaggerElement {
 		uniqueItems = value;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {

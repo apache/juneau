@@ -17,6 +17,7 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.net.*;
 
+import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -65,6 +66,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
+@FluentSetters
 public class Content extends Text {
 
 	private URI src;
@@ -141,15 +143,19 @@ public class Content extends Text {
 		return this;
 	}
 
-	@Override /* Common */
-	public Content setBase(Object base) {
-		super.setBase(base);
+	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	public Content setBase(Object value) {
+		super.setBase(value);
 		return this;
 	}
 
-	@Override /* Common */
-	public Content setLang(String lang) {
-		super.setLang(lang);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	public Content setLang(String value) {
+		super.setLang(value);
 		return this;
 	}
+
+	// </FluentSetters>
 }

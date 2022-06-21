@@ -52,6 +52,7 @@ public class BasicStatusLine implements StatusLine {
 	/**
 	 * Builder class.
 	 */
+	@FluentSetters
 	public static class Builder {
 
 		ProtocolVersion protocolVersion;
@@ -161,6 +162,10 @@ public class BasicStatusLine implements StatusLine {
 			this.locale = value;
 			return this;
 		}
+
+		// <FluentSetters>
+
+		// </FluentSetters>
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

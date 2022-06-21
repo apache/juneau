@@ -59,7 +59,8 @@ public class ConfigurablePropertyCodeGenerator {
 			}
 		}
 
-		System.out.println("Found " + classMap.size() + " classes with fluent setters.");
+		System.out.println("Found " + classMap.size() + " classes with fluent setters:");
+		classMap.keySet().forEach(x -> System.out.println("\t" + x));
 
 		for (Class<?> c : classMap.keySet()) {
 			System.out.println("Seaching " + c.getName());
@@ -192,7 +193,7 @@ public class ConfigurablePropertyCodeGenerator {
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f)))) {
 			String line;
 			while ((line = br.readLine()) != null)
-				if (line.contains("@FluentSetters"))
+				if (line.contains("@FluentSetter") || line.contains("<FluentSetter>"))
 					return true;
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -19,7 +19,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.dto.swagger.Swagger;
-import org.apache.juneau.internal.MultiSet;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.SimpleJsonSerializer;
 
 import java.util.*;
@@ -58,6 +58,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
  * </ul>
  */
 @Bean(properties="type,format,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,$ref,*")
+@FluentSetters
 public class Items extends OpenApiElement {
 
 	private static final String[] VALID_TYPES = {"string", "number", "integer", "boolean", "array"};
@@ -804,6 +805,10 @@ public class Items extends OpenApiElement {
 	public Items ref(Object value) {
 		return setRef(value);
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {

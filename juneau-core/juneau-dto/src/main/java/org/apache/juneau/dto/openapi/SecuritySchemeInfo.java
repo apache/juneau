@@ -17,7 +17,7 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.internal.MultiSet;
+import org.apache.juneau.internal.*;
 
 import java.util.*;
 
@@ -93,6 +93,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
  * </ul>
  */
 @Bean(properties="in,name,type,description,scheme,bearerFormat,flows,*")
+@FluentSetters
 public class SecuritySchemeInfo extends OpenApiElement {
 
 	private static final String[] VALID_IN = {"query", "header", "cookie"};
@@ -447,6 +448,10 @@ public class SecuritySchemeInfo extends OpenApiElement {
 		openIdConnectUrl = value;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {

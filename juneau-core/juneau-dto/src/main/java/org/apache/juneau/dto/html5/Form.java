@@ -16,6 +16,7 @@ import java.net.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * DTO for an HTML {@doc ext.HTML5.forms#the-form-element <form>}
@@ -27,6 +28,7 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 @Bean(typeName="form")
+@FluentSetters
 public class Form extends HtmlElementMixed {
 
 	/**
@@ -180,38 +182,391 @@ public class Form extends HtmlElementMixed {
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------
 
+	// <FluentSetters>
 
-	@Override /* HtmlElement */
-	public final Form _class(String _class) {
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form _class(String _class) {
 		super._class(_class);
 		return this;
 	}
 
-	@Override /* HtmlElement */
-	public final Form id(String id) {
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form accesskey(String accesskey) {
+		super.accesskey(accesskey);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form contenteditable(Object contenteditable) {
+		super.contenteditable(contenteditable);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form dir(String dir) {
+		super.dir(dir);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form hidden(Object hidden) {
+		super.hidden(hidden);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form id(String id) {
 		super.id(id);
 		return this;
 	}
 
-	@Override /* HtmlElement */
-	public final Form style(String style) {
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form lang(String lang) {
+		super.lang(lang);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onabort(String onabort) {
+		super.onabort(onabort);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onblur(String onblur) {
+		super.onblur(onblur);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form oncancel(String oncancel) {
+		super.oncancel(oncancel);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form oncanplay(String oncanplay) {
+		super.oncanplay(oncanplay);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form oncanplaythrough(String oncanplaythrough) {
+		super.oncanplaythrough(oncanplaythrough);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onchange(String onchange) {
+		super.onchange(onchange);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onclick(String onclick) {
+		super.onclick(onclick);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form oncuechange(String oncuechange) {
+		super.oncuechange(oncuechange);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form ondblclick(String ondblclick) {
+		super.ondblclick(ondblclick);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form ondurationchange(String ondurationchange) {
+		super.ondurationchange(ondurationchange);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onemptied(String onemptied) {
+		super.onemptied(onemptied);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onended(String onended) {
+		super.onended(onended);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onerror(String onerror) {
+		super.onerror(onerror);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onfocus(String onfocus) {
+		super.onfocus(onfocus);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form oninput(String oninput) {
+		super.oninput(oninput);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form oninvalid(String oninvalid) {
+		super.oninvalid(oninvalid);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onkeydown(String onkeydown) {
+		super.onkeydown(onkeydown);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onkeypress(String onkeypress) {
+		super.onkeypress(onkeypress);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onkeyup(String onkeyup) {
+		super.onkeyup(onkeyup);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onload(String onload) {
+		super.onload(onload);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onloadeddata(String onloadeddata) {
+		super.onloadeddata(onloadeddata);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onloadedmetadata(String onloadedmetadata) {
+		super.onloadedmetadata(onloadedmetadata);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onloadstart(String onloadstart) {
+		super.onloadstart(onloadstart);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onmousedown(String onmousedown) {
+		super.onmousedown(onmousedown);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onmouseenter(String onmouseenter) {
+		super.onmouseenter(onmouseenter);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onmouseleave(String onmouseleave) {
+		super.onmouseleave(onmouseleave);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onmousemove(String onmousemove) {
+		super.onmousemove(onmousemove);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onmouseout(String onmouseout) {
+		super.onmouseout(onmouseout);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onmouseover(String onmouseover) {
+		super.onmouseover(onmouseover);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onmouseup(String onmouseup) {
+		super.onmouseup(onmouseup);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onmousewheel(String onmousewheel) {
+		super.onmousewheel(onmousewheel);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onpause(String onpause) {
+		super.onpause(onpause);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onplay(String onplay) {
+		super.onplay(onplay);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onplaying(String onplaying) {
+		super.onplaying(onplaying);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onprogress(String onprogress) {
+		super.onprogress(onprogress);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onratechange(String onratechange) {
+		super.onratechange(onratechange);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onreset(String onreset) {
+		super.onreset(onreset);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onresize(String onresize) {
+		super.onresize(onresize);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onscroll(String onscroll) {
+		super.onscroll(onscroll);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onseeked(String onseeked) {
+		super.onseeked(onseeked);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onseeking(String onseeking) {
+		super.onseeking(onseeking);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onselect(String onselect) {
+		super.onselect(onselect);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onshow(String onshow) {
+		super.onshow(onshow);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onstalled(String onstalled) {
+		super.onstalled(onstalled);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onsubmit(String onsubmit) {
+		super.onsubmit(onsubmit);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onsuspend(String onsuspend) {
+		super.onsuspend(onsuspend);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form ontimeupdate(String ontimeupdate) {
+		super.ontimeupdate(ontimeupdate);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form ontoggle(String ontoggle) {
+		super.ontoggle(ontoggle);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onvolumechange(String onvolumechange) {
+		super.onvolumechange(onvolumechange);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form onwaiting(String onwaiting) {
+		super.onwaiting(onwaiting);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form spellcheck(Object spellcheck) {
+		super.spellcheck(spellcheck);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form style(String style) {
 		super.style(style);
 		return this;
 	}
 
-	@Override /* HtmlElementMixed */
-	public Form children(Object...children) {
-		super.children(children);
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form tabindex(Object tabindex) {
+		super.tabindex(tabindex);
 		return this;
 	}
 
-	@Override /* HtmlElementMixed */
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form title(String title) {
+		super.title(title);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Form translate(Object translate) {
+		super.translate(translate);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElementMixed */
 	public Form child(Object child) {
 		super.child(child);
 		return this;
 	}
 
-	// <FluentSetters>
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElementMixed */
+	public Form children(Object...children) {
+		super.children(children);
+		return this;
+	}
 
 	// </FluentSetters>
 }

@@ -18,7 +18,8 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.dto.swagger.Swagger;
-import org.apache.juneau.internal.MultiSet;
+import org.apache.juneau.internal.*;
+
 import java.util.*;
 
 /**
@@ -50,6 +51,7 @@ import java.util.*;
  */
 @Bean(properties="description,explode,deprecated,allowEmptyValue,allowReserved,schema,example,examples,$ref,*")
 @SuppressWarnings({"unchecked"})
+@FluentSetters
 public class HeaderInfo extends OpenApiElement {
 
 	private String
@@ -416,6 +418,10 @@ public class HeaderInfo extends OpenApiElement {
 		examples = mapBuilder(examples).sparse().add(name, example).build();
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {

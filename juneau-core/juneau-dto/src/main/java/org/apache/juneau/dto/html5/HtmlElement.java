@@ -37,6 +37,7 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  */
 @org.apache.juneau.html.annotation.Html(format=XML)
+@FluentSetters
 public abstract class HtmlElement {
 
 	private LinkedHashMap<String,Object> attrs;

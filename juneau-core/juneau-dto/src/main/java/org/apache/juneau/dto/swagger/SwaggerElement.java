@@ -19,6 +19,7 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 
 /**
@@ -29,6 +30,7 @@ import org.apache.juneau.json.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
+@FluentSetters
 public abstract class SwaggerElement {
 
 	private boolean strict;
@@ -174,6 +176,10 @@ public abstract class SwaggerElement {
 		keySet().forEach(x -> m.put(x, get(x, Object.class)));
 		return m;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* Object */
 	public String toString() {

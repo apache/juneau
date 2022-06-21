@@ -18,7 +18,7 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 
 import org.apache.juneau.UriResolver;
 import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.internal.MultiSet;
+import org.apache.juneau.internal.*;
 
 import java.net.URI;
 import java.net.URL;
@@ -53,6 +53,7 @@ import java.util.Set;
  * </ul>
  */
 @Bean(properties="name,url,email,*")
+@FluentSetters
 public class Contact extends OpenApiElement {
 
 	private String name;
@@ -174,6 +175,10 @@ public class Contact extends OpenApiElement {
 		email = value;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {

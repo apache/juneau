@@ -55,6 +55,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Bean(properties="name,namespace,prefix,attribute,wrapped,*")
+@FluentSetters
 public class Xml extends SwaggerElement {
 
 	private String
@@ -247,6 +248,10 @@ public class Xml extends SwaggerElement {
 		this.wrapped = value;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {

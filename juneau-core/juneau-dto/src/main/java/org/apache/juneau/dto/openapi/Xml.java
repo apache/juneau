@@ -17,7 +17,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.internal.MultiSet;
+import org.apache.juneau.internal.*;
 
 import java.util.Set;
 
@@ -28,6 +28,7 @@ import java.util.Set;
  * used to add that information.
  */
 @Bean(properties="name,namespace,prefix,attribute,wrapped,*")
+@FluentSetters
 public class Xml extends OpenApiElement {
 
 	private String
@@ -235,6 +236,10 @@ public class Xml extends OpenApiElement {
 		this.wrapped = value;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {

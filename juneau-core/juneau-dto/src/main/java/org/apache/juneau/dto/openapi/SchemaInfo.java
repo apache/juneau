@@ -20,7 +20,8 @@ import org.apache.juneau.dto.swagger.ExternalDocumentation;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.dto.swagger.Xml;
-import org.apache.juneau.internal.MultiSet;
+import org.apache.juneau.internal.*;
+
 import java.util.*;
 
 /**
@@ -62,6 +63,7 @@ import java.util.*;
  * </ul>
  */
 @Bean(properties="format,title,description,default,multipleOf,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,maxProperties,minProperties,required,enum,type,items,allOf,anyOf,oneOf,properties,additionalProperties,not,discriminator,readOnly,writeOnly,nullable,deprecated,xml,externalDocs,example,$ref,*")
+@FluentSetters
 public class SchemaInfo extends OpenApiElement {
 
 	private String
@@ -1170,6 +1172,10 @@ public class SchemaInfo extends OpenApiElement {
 		ref = stringify(value);
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {

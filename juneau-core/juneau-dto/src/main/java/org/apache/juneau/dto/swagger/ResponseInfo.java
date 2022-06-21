@@ -62,6 +62,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Bean(properties="description,schema,headers,examples,*")
+@FluentSetters
 public class ResponseInfo extends SwaggerElement {
 
 	private String description;
@@ -282,6 +283,10 @@ public class ResponseInfo extends SwaggerElement {
 		schema = value;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {

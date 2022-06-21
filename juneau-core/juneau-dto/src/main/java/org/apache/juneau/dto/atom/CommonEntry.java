@@ -17,6 +17,7 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.util.*;
 
+import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -28,6 +29,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
+@FluentSetters
 public class CommonEntry extends Common {
 
 	private Person[] authors;
@@ -94,6 +96,7 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
+	@FluentSetter
 	public CommonEntry setAuthors(Person...value) {
 		this.authors = value;
 		return this;
@@ -123,6 +126,7 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
+	@FluentSetter
 	public CommonEntry setCategories(Category...value) {
 		this.categories = value;
 		return this;
@@ -152,6 +156,7 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
+	@FluentSetter
 	public CommonEntry setContributors(Person...value) {
 		this.contributors = value;
 		return this;
@@ -180,6 +185,7 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
+	@FluentSetter
 	public CommonEntry setId(Id value) {
 		this.id = value;
 		return this;
@@ -196,6 +202,7 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public CommonEntry setId(String value) {
 		setId(new Id(value));
 		return this;
@@ -225,6 +232,7 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
+	@FluentSetter
 	public CommonEntry setLinks(Link...value) {
 		this.links = value;
 		return this;
@@ -253,6 +261,7 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
+	@FluentSetter
 	public CommonEntry setRights(Text value) {
 		this.rights = value;
 		return this;
@@ -269,6 +278,7 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public CommonEntry setRights(String value) {
 		setRights(new Text().setText(value));
 		return this;
@@ -297,6 +307,7 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
+	@FluentSetter
 	public CommonEntry setTitle(Text value) {
 		this.title = value;
 		return this;
@@ -313,6 +324,7 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public CommonEntry setTitle(String value) {
 		setTitle(new Text().setText(value));
 		return this;
@@ -341,6 +353,7 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
+	@FluentSetter
 	public CommonEntry setUpdated(Calendar value) {
 		this.updated = value;
 		return this;
@@ -357,8 +370,25 @@ public class CommonEntry extends Common {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public CommonEntry setUpdated(String value) {
 		setUpdated(parseDateTime(value));
 		return this;
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	public CommonEntry setBase(Object value) {
+		super.setBase(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	public CommonEntry setLang(String value) {
+		super.setLang(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

@@ -13,6 +13,7 @@
 package org.apache.juneau.dto.html5;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * DTO for an HTML {@doc ext.HTML5.sections#the-header-element <header>}
@@ -24,6 +25,7 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 @Bean(typeName="header")
+@FluentSetters
 public class Header extends HtmlElementMixed {
 
 	/**
@@ -44,37 +46,391 @@ public class Header extends HtmlElementMixed {
 	// Overridden methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* HtmlElement */
-	public final Header _class(String _class) {
+	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header _class(String _class) {
 		super._class(_class);
 		return this;
 	}
 
-	@Override /* HtmlElement */
-	public final Header id(String id) {
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header accesskey(String accesskey) {
+		super.accesskey(accesskey);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header contenteditable(Object contenteditable) {
+		super.contenteditable(contenteditable);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header dir(String dir) {
+		super.dir(dir);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header hidden(Object hidden) {
+		super.hidden(hidden);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header id(String id) {
 		super.id(id);
 		return this;
 	}
 
-	@Override /* HtmlElement */
-	public final Header style(String style) {
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header lang(String lang) {
+		super.lang(lang);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onabort(String onabort) {
+		super.onabort(onabort);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onblur(String onblur) {
+		super.onblur(onblur);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header oncancel(String oncancel) {
+		super.oncancel(oncancel);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header oncanplay(String oncanplay) {
+		super.oncanplay(oncanplay);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header oncanplaythrough(String oncanplaythrough) {
+		super.oncanplaythrough(oncanplaythrough);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onchange(String onchange) {
+		super.onchange(onchange);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onclick(String onclick) {
+		super.onclick(onclick);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header oncuechange(String oncuechange) {
+		super.oncuechange(oncuechange);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header ondblclick(String ondblclick) {
+		super.ondblclick(ondblclick);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header ondurationchange(String ondurationchange) {
+		super.ondurationchange(ondurationchange);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onemptied(String onemptied) {
+		super.onemptied(onemptied);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onended(String onended) {
+		super.onended(onended);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onerror(String onerror) {
+		super.onerror(onerror);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onfocus(String onfocus) {
+		super.onfocus(onfocus);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header oninput(String oninput) {
+		super.oninput(oninput);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header oninvalid(String oninvalid) {
+		super.oninvalid(oninvalid);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onkeydown(String onkeydown) {
+		super.onkeydown(onkeydown);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onkeypress(String onkeypress) {
+		super.onkeypress(onkeypress);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onkeyup(String onkeyup) {
+		super.onkeyup(onkeyup);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onload(String onload) {
+		super.onload(onload);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onloadeddata(String onloadeddata) {
+		super.onloadeddata(onloadeddata);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onloadedmetadata(String onloadedmetadata) {
+		super.onloadedmetadata(onloadedmetadata);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onloadstart(String onloadstart) {
+		super.onloadstart(onloadstart);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onmousedown(String onmousedown) {
+		super.onmousedown(onmousedown);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onmouseenter(String onmouseenter) {
+		super.onmouseenter(onmouseenter);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onmouseleave(String onmouseleave) {
+		super.onmouseleave(onmouseleave);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onmousemove(String onmousemove) {
+		super.onmousemove(onmousemove);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onmouseout(String onmouseout) {
+		super.onmouseout(onmouseout);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onmouseover(String onmouseover) {
+		super.onmouseover(onmouseover);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onmouseup(String onmouseup) {
+		super.onmouseup(onmouseup);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onmousewheel(String onmousewheel) {
+		super.onmousewheel(onmousewheel);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onpause(String onpause) {
+		super.onpause(onpause);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onplay(String onplay) {
+		super.onplay(onplay);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onplaying(String onplaying) {
+		super.onplaying(onplaying);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onprogress(String onprogress) {
+		super.onprogress(onprogress);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onratechange(String onratechange) {
+		super.onratechange(onratechange);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onreset(String onreset) {
+		super.onreset(onreset);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onresize(String onresize) {
+		super.onresize(onresize);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onscroll(String onscroll) {
+		super.onscroll(onscroll);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onseeked(String onseeked) {
+		super.onseeked(onseeked);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onseeking(String onseeking) {
+		super.onseeking(onseeking);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onselect(String onselect) {
+		super.onselect(onselect);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onshow(String onshow) {
+		super.onshow(onshow);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onstalled(String onstalled) {
+		super.onstalled(onstalled);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onsubmit(String onsubmit) {
+		super.onsubmit(onsubmit);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onsuspend(String onsuspend) {
+		super.onsuspend(onsuspend);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header ontimeupdate(String ontimeupdate) {
+		super.ontimeupdate(ontimeupdate);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header ontoggle(String ontoggle) {
+		super.ontoggle(ontoggle);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onvolumechange(String onvolumechange) {
+		super.onvolumechange(onvolumechange);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header onwaiting(String onwaiting) {
+		super.onwaiting(onwaiting);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header spellcheck(Object spellcheck) {
+		super.spellcheck(spellcheck);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header style(String style) {
 		super.style(style);
 		return this;
 	}
 
-	@Override /* HtmlElementMixed */
-	public Header children(Object...children) {
-		super.children(children);
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header tabindex(Object tabindex) {
+		super.tabindex(tabindex);
 		return this;
 	}
 
-	@Override /* HtmlElementMixed */
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header title(String title) {
+		super.title(title);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElement */
+	public Header translate(Object translate) {
+		super.translate(translate);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElementMixed */
 	public Header child(Object child) {
 		super.child(child);
 		return this;
 	}
 
-	// <FluentSetters>
+	@Override /* GENERATED - org.apache.juneau.dto.html5.HtmlElementMixed */
+	public Header children(Object...children) {
+		super.children(children);
+		return this;
+	}
 
 	// </FluentSetters>
 }

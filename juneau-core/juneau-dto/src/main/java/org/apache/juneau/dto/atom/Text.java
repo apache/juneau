@@ -14,6 +14,7 @@ package org.apache.juneau.dto.atom;
 
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
+import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -46,6 +47,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
+@FluentSetters
 public class Text extends Common {
 
 	private String type;
@@ -140,15 +142,19 @@ public class Text extends Common {
 	// Overridden setters (to simplify method chaining)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Common */
-	public Text setBase(Object base) {
-		super.setBase(base);
+	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	public Text setBase(Object value) {
+		super.setBase(value);
 		return this;
 	}
 
-	@Override /* Common */
-	public Text setLang(String lang) {
-		super.setLang(lang);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	public Text setLang(String value) {
+		super.setLang(value);
 		return this;
 	}
+
+	// </FluentSetters>
 }

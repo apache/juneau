@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.JsonSerializer;
 
 import java.util.Collections;
@@ -32,6 +33,7 @@ import java.util.Set;
  * 	<li class='link'>{@doc juneau-dto.Swagger}
  * </ul>
  */
+@FluentSetters
 public abstract class OpenApiElement {
 
 	private boolean strict;
@@ -177,6 +179,10 @@ public abstract class OpenApiElement {
 			m.put(s, get(s, Object.class));
 		return m;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* Object */
 	public String toString() {

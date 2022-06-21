@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.net.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents an <c>atomPersonConstruct</c> construct in the RFC4287 specification.
@@ -37,6 +38,7 @@ import org.apache.juneau.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
+@FluentSetters
 public class Person extends Common {
 
 	private String name;
@@ -156,15 +158,19 @@ public class Person extends Common {
 	// Overridden setters (to simplify method chaining)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Common */
-	public Person setBase(Object base) {
-		super.setBase(base);
+	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	public Person setBase(Object value) {
+		super.setBase(value);
 		return this;
 	}
 
-	@Override /* Common */
-	public Person setLang(String lang) {
-		super.setLang(lang);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	public Person setLang(String value) {
+		super.setLang(value);
 		return this;
 	}
+
+	// </FluentSetters>
 }

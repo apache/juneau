@@ -62,6 +62,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Bean(properties="type,description,name,in,flow,authorizationUrl,tokenUrl,scopes,*")
+@FluentSetters
 public class SecurityScheme extends SwaggerElement {
 
 	private static final String[] VALID_TYPES = {"basic", "apiKey", "oauth2"};
@@ -382,6 +383,10 @@ public class SecurityScheme extends SwaggerElement {
 		type = value;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {

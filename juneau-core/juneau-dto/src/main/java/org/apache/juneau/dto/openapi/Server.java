@@ -18,7 +18,7 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 
 import org.apache.juneau.UriResolver;
 import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.internal.MultiSet;
+import org.apache.juneau.internal.*;
 
 import java.net.URI;
 import java.net.URL;
@@ -28,6 +28,7 @@ import java.util.*;
  * TODO
  */
 @Bean(properties="url,description,variables,*")
+@FluentSetters
 public class Server extends OpenApiElement{
 	private URI url;
 	private String description;
@@ -159,6 +160,10 @@ public class Server extends OpenApiElement{
 		variables = mapBuilder(variables).sparse().add(key, value).build();
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {

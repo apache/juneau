@@ -54,6 +54,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Bean(properties="name,description,externalDocs,*")
+@FluentSetters
 public class Tag extends SwaggerElement {
 
 	private String
@@ -177,6 +178,9 @@ public class Tag extends SwaggerElement {
 		return this;
 	}
 
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {

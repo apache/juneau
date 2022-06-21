@@ -17,6 +17,7 @@ import static org.apache.juneau.dto.atom.Utils.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents an <c>atomEntry</c> construct in the RFC4287 specification.
@@ -49,6 +50,7 @@ import org.apache.juneau.annotation.*;
  * </ul>
  */
 @Bean(typeName="entry")
+@FluentSetters
 public class Entry extends CommonEntry {
 
 	private Content content;
@@ -235,81 +237,91 @@ public class Entry extends CommonEntry {
 	// Overridden setters (to simplify method chaining)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* CommonEntry */
-	public Entry setAuthors(Person...authors) {
-		super.setAuthors(authors);
+	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	public Entry setBase(Object value) {
+		super.setBase(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Entry setCategories(Category...categories) {
-		super.setCategories(categories);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	public Entry setLang(String value) {
+		super.setLang(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Entry setContributors(Person...contributors) {
-		super.setContributors(contributors);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Entry setAuthors(Person...value) {
+		super.setAuthors(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Entry setId(Id id) {
-		super.setId(id);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Entry setCategories(Category...value) {
+		super.setCategories(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Entry setLinks(Link...links) {
-		super.setLinks(links);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Entry setContributors(Person...value) {
+		super.setContributors(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Entry setRights(Text rights) {
-		super.setRights(rights);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Entry setId(String value) {
+		super.setId(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Entry setRights(String rights) {
-		super.setRights(rights);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Entry setId(Id value) {
+		super.setId(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Entry setTitle(Text title) {
-		super.setTitle(title);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Entry setLinks(Link...value) {
+		super.setLinks(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Entry setTitle(String title) {
-		super.setTitle(title);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Entry setRights(String value) {
+		super.setRights(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Entry setUpdated(Calendar updated) {
-		super.setUpdated(updated);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Entry setRights(Text value) {
+		super.setRights(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Entry setUpdated(String updated) {
-		super.setUpdated(updated);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Entry setTitle(String value) {
+		super.setTitle(value);
 		return this;
 	}
 
-	@Override /* Common */
-	public Entry setBase(Object base) {
-		super.setBase(base);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Entry setTitle(Text value) {
+		super.setTitle(value);
 		return this;
 	}
 
-	@Override /* Common */
-	public Entry setLang(String lang) {
-		super.setLang(lang);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Entry setUpdated(String value) {
+		super.setUpdated(value);
 		return this;
 	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Entry setUpdated(Calendar value) {
+		super.setUpdated(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

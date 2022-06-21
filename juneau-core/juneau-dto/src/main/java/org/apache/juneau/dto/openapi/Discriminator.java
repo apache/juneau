@@ -18,7 +18,7 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 
 import org.apache.juneau.UriResolver;
 import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.internal.MultiSet;
+import org.apache.juneau.internal.*;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -28,6 +28,7 @@ import java.util.Set;
  * Used to aid in serialization, deserialization, and validation.
  */
 @Bean(properties="propertyName,mapping,*")
+@FluentSetters
 public class Discriminator extends OpenApiElement {
 
 	private String propertyName;
@@ -131,6 +132,10 @@ public class Discriminator extends OpenApiElement {
 		mapping = mapBuilder(mapping).sparse().add(key, value).build();
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {

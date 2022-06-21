@@ -38,6 +38,7 @@ import org.apache.juneau.xml.annotation.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
+@FluentSetters
 public abstract class Common {
 
 	private URI base;
@@ -111,6 +112,10 @@ public abstract class Common {
 		this.lang = value;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* Object */
 	public String toString() {

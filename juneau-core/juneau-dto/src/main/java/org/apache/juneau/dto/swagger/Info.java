@@ -72,6 +72,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Bean(properties="siteName,title,description,version,contact,license,termsOfService,*")
+@FluentSetters
 public class Info extends SwaggerElement {
 
 	private String
@@ -312,6 +313,10 @@ public class Info extends SwaggerElement {
 		version = value;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {

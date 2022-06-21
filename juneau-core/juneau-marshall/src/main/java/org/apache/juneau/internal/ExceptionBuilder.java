@@ -24,6 +24,7 @@ import static org.apache.juneau.internal.StringUtils.*;
  *
  * @param <T> The exception class.
  */
+@FluentSetters
 public class ExceptionBuilder<T extends Throwable> {
 
 	private final Class<T> type;
@@ -63,6 +64,10 @@ public class ExceptionBuilder<T extends Throwable> {
 		causedBy = value;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	/**
 	 * Creates the exception.

@@ -18,7 +18,7 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 
 import org.apache.juneau.annotation.Bean;
 import org.apache.juneau.dto.swagger.ExternalDocumentation;
-import org.apache.juneau.internal.MultiSet;
+import org.apache.juneau.internal.*;
 
 import java.util.Set;
 
@@ -55,6 +55,7 @@ import java.util.Set;
  * </ul>
  */
 @Bean(properties="name,description,externalDocs,*")
+@FluentSetters
 public class Tag extends OpenApiElement {
 
 	private String
@@ -173,6 +174,10 @@ public class Tag extends OpenApiElement {
 		externalDocs = value;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {

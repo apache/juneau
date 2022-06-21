@@ -680,7 +680,7 @@ public class BeanStore {
 
 	// <FluentSetters>
 
-	// </FluentSetters>
+		// </FluentSetters>
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper methods

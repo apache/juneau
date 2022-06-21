@@ -17,7 +17,8 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.internal.MultiSet;
+import org.apache.juneau.internal.*;
+
 import java.util.Set;
 
 /**
@@ -49,6 +50,7 @@ import java.util.Set;
  * </ul>
  */
 @Bean(properties="summary,description,externalValue,value,*")
+@FluentSetters
 public class Example extends OpenApiElement {
 
 	private String summary;
@@ -207,6 +209,10 @@ public class Example extends OpenApiElement {
 		value = val;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {

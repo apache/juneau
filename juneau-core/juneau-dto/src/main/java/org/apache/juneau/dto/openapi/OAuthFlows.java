@@ -15,7 +15,7 @@ package org.apache.juneau.dto.openapi;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.internal.MultiSet;
+import org.apache.juneau.internal.*;
 
 import java.util.Set;
 
@@ -90,6 +90,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
  * </ul>
  */
 @Bean(properties="implicit,password,clientCredentials,authorizationCode,*")
+@FluentSetters
 public class OAuthFlows extends OpenApiElement {
 
 	private OAuthFlow implicit,
@@ -246,6 +247,10 @@ public class OAuthFlows extends OpenApiElement {
 		authorizationCode = value;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {

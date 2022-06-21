@@ -37,6 +37,7 @@ import org.apache.juneau.objecttools.*;
  * </ul>
  */
 @Bean(properties="swagger,info,tags,externalDocs,basePath,schemes,consumes,produces,paths,definitions,parameters,responses,securityDefinitions,security,*")
+@FluentSetters
 public class Swagger extends SwaggerElement {
 
 	/** Represents a null swagger */
@@ -902,6 +903,10 @@ public class Swagger extends SwaggerElement {
 		}
 		return null;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {

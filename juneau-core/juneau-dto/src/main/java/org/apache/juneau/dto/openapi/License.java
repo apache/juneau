@@ -18,7 +18,7 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 
 import org.apache.juneau.UriResolver;
 import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.internal.MultiSet;
+import org.apache.juneau.internal.*;
 
 import java.net.URI;
 import java.util.Set;
@@ -51,6 +51,7 @@ import java.util.Set;
  * </ul>
  */
 @Bean(properties="name,url,*")
+@FluentSetters
 public class License extends OpenApiElement {
 
 	private String name;
@@ -138,6 +139,10 @@ public class License extends OpenApiElement {
 		url = value;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {

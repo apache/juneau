@@ -15,6 +15,7 @@ package org.apache.juneau.dto.atom;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -42,6 +43,7 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  */
 @Bean(typeName="link")
+@FluentSetters
 public class Link extends Common {
 
 	private String href;
@@ -258,15 +260,19 @@ public class Link extends Common {
 	// Overridden setters (to simplify method chaining)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Common */
-	public Link setBase(Object base) {
-		super.setBase(base);
+	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	public Link setBase(Object value) {
+		super.setBase(value);
 		return this;
 	}
 
-	@Override /* Common */
-	public Link setLang(String lang) {
-		super.setLang(lang);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	public Link setLang(String value) {
+		super.setLang(value);
 		return this;
 	}
+
+	// </FluentSetters>
 }

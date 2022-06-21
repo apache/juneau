@@ -18,7 +18,7 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 
 import org.apache.juneau.UriResolver;
 import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.internal.MultiSet;
+import org.apache.juneau.internal.*;
 
 import java.net.URI;
 import java.util.Set;
@@ -27,6 +27,7 @@ import java.util.Set;
  * Allows referencing an external resource for extended documentation.
  */
 @Bean(properties="description,url,*")
+@FluentSetters
 public class ExternalDocumentation extends OpenApiElement {
 
 	private String description;
@@ -115,6 +116,10 @@ public class ExternalDocumentation extends OpenApiElement {
 		url = value;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {

@@ -129,6 +129,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Bean(properties="operationId,summary,description,tags,externalDocs,consumes,produces,parameters,responses,schemes,deprecated,security,*")
+@FluentSetters
 public class Operation extends SwaggerElement {
 
 	private String
@@ -792,6 +793,10 @@ public class Operation extends SwaggerElement {
 		setTags(setBuilder(tags).sparse().add(value).build());
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {

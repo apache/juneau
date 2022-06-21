@@ -15,6 +15,7 @@ package org.apache.juneau.dto.atom;
 import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -35,6 +36,7 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  */
 @Bean(typeName="id")
+@FluentSetters
 public class Id extends Common {
 
 	private String text;
@@ -89,15 +91,19 @@ public class Id extends Common {
 	// Overridden setters (to simplify method chaining)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* Common */
-	public Id setBase(Object base) {
-		super.setBase(base);
+	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	public Id setBase(Object value) {
+		super.setBase(value);
 		return this;
 	}
 
-	@Override /* Common */
-	public Id setLang(String lang) {
-		super.setLang(lang);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	public Id setLang(String value) {
+		super.setLang(value);
 		return this;
 	}
+
+	// </FluentSetters>
 }

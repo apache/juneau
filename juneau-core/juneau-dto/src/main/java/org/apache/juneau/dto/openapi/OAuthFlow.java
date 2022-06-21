@@ -17,7 +17,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.internal.MultiSet;
+import org.apache.juneau.internal.*;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -52,6 +52,7 @@ import java.util.Set;
  * </ul>
  */
 @Bean(properties="authorizationUrl,tokenUrl,refreshUrl,scopes,*")
+@FluentSetters
 public class OAuthFlow extends OpenApiElement {
 
 	private String authorizationUrl;
@@ -213,6 +214,10 @@ public class OAuthFlow extends OpenApiElement {
 		scopes = mapBuilder(scopes).sparse().add(name, description).build();
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {

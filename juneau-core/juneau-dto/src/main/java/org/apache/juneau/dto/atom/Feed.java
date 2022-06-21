@@ -17,6 +17,7 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -54,6 +55,7 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  */
 @Bean(typeName="feed")
+@FluentSetters
 public class Feed extends CommonEntry {
 
 	private Generator generator;  // atomGenerator?
@@ -253,81 +255,91 @@ public class Feed extends CommonEntry {
 	// Overridden setters (to simplify method chaining)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Override /* CommonEntry */
-	public Feed setAuthors(Person...authors) {
-		super.setAuthors(authors);
+	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	public Feed setBase(Object value) {
+		super.setBase(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Feed setCategories(Category...categories) {
-		super.setCategories(categories);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.Common */
+	public Feed setLang(String value) {
+		super.setLang(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Feed setContributors(Person...contributors) {
-		super.setContributors(contributors);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Feed setAuthors(Person...value) {
+		super.setAuthors(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Feed setId(Id id) {
-		super.setId(id);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Feed setCategories(Category...value) {
+		super.setCategories(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Feed setLinks(Link...links) {
-		super.setLinks(links);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Feed setContributors(Person...value) {
+		super.setContributors(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Feed setRights(Text rights) {
-		super.setRights(rights);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Feed setId(String value) {
+		super.setId(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Feed setRights(String rights) {
-		super.setRights(rights);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Feed setId(Id value) {
+		super.setId(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Feed setTitle(Text title) {
-		super.setTitle(title);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Feed setLinks(Link...value) {
+		super.setLinks(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Feed setTitle(String title) {
-		super.setTitle(title);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Feed setRights(String value) {
+		super.setRights(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Feed setUpdated(Calendar updated) {
-		super.setUpdated(updated);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Feed setRights(Text value) {
+		super.setRights(value);
 		return this;
 	}
 
-	@Override /* CommonEntry */
-	public Feed setUpdated(String updated) {
-		super.setUpdated(updated);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Feed setTitle(String value) {
+		super.setTitle(value);
 		return this;
 	}
 
-	@Override /* Common */
-	public Feed setBase(Object base) {
-		super.setBase(base);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Feed setTitle(Text value) {
+		super.setTitle(value);
 		return this;
 	}
 
-	@Override /* Common */
-	public Feed setLang(String lang) {
-		super.setLang(lang);
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Feed setUpdated(String value) {
+		super.setUpdated(value);
 		return this;
 	}
+
+	@Override /* GENERATED - org.apache.juneau.dto.atom.CommonEntry */
+	public Feed setUpdated(Calendar value) {
+		super.setUpdated(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

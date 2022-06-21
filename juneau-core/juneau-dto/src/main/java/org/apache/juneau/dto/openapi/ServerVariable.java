@@ -17,7 +17,7 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.internal.MultiSet;
+import org.apache.juneau.internal.*;
 
 import java.util.Collection;
 import java.util.List;
@@ -27,6 +27,7 @@ import java.util.Set;
  * TODO
  */
 @Bean(properties="enum,default,description,*")
+@FluentSetters
 public class ServerVariable extends OpenApiElement {
 
 	private List<Object> _enum;
@@ -231,6 +232,10 @@ public class ServerVariable extends OpenApiElement {
 		description = value;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* OpenApiElement */
 	public <T> T get(String property, Class<T> type) {

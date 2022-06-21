@@ -60,6 +60,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @Bean(properties="format,title,description,default,multipleOf,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,maxProperties,minProperties,required,requiredProperties,enum,type,items,allOf,properties,additionalProperties,discriminator,readOnly,xml,externalDocs,example,$ref,*")
+@FluentSetters
 public class SchemaInfo extends SwaggerElement {
 
 	private String
@@ -985,6 +986,10 @@ public class SchemaInfo extends SwaggerElement {
 		xml = value;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
