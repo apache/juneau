@@ -52,4 +52,8 @@ public class Hr extends HtmlElementVoid {
 		super.style(style);
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

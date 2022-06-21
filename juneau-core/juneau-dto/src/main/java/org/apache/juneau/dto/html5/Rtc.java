@@ -73,4 +73,8 @@ public class Rtc extends HtmlElementMixed {
 		super.child(child);
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

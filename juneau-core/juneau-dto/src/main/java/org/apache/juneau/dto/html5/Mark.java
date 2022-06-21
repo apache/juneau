@@ -73,4 +73,8 @@ public class Mark extends HtmlElementMixed {
 		super.child(child);
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

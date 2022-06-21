@@ -92,4 +92,8 @@ public class Data extends HtmlElementMixed {
 		super.child(child);
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

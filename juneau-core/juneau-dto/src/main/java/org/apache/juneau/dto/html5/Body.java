@@ -146,4 +146,8 @@ public class Body extends HtmlElementMixed {
 		super.child(child);
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

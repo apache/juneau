@@ -73,4 +73,8 @@ public class I extends HtmlElementMixed {
 		super.child(child);
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

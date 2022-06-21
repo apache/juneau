@@ -117,6 +117,7 @@ public class HtmlElementContainer extends HtmlElement {
 	 * @param children The children to add as child elements.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement children(Object...children) {
 		if (children.length > 0) {
 			if (this.children == null)
@@ -133,10 +134,15 @@ public class HtmlElementContainer extends HtmlElement {
 	 * @param child The child to add as a child element.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement child(Object child) {
 		if (this.children == null)
 			this.children = new LinkedList<>();
 		this.children.add(child);
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

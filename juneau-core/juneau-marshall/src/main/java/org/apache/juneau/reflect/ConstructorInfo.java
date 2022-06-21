@@ -267,5 +267,6 @@ public final class ConstructorInfo extends ExecutableInfo implements Comparable<
 		super.accessible();
 		return this;
 	}
+
 	// </FluentSetters>
 }

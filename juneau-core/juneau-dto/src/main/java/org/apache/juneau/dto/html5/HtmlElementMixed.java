@@ -121,6 +121,7 @@ public class HtmlElementMixed extends HtmlElement {
 	 * 	Can also be containers of strings and elements.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement children(Object...children) {
 		if (children.length != 0)
 			for (Object c : children)
@@ -137,6 +138,7 @@ public class HtmlElementMixed extends HtmlElement {
 	 * 	Can also be a container of strings and elements.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement child(Object child) {
 		if (this.children == null)
 			this.children = new LinkedList<>();
@@ -146,4 +148,8 @@ public class HtmlElementMixed extends HtmlElement {
 			this.children.add(child);
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

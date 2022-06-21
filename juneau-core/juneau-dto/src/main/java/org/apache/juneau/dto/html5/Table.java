@@ -87,4 +87,8 @@ public class Table extends HtmlElementContainer {
 		super.child(child);
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

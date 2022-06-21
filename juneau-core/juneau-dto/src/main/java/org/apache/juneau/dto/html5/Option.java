@@ -141,4 +141,8 @@ public class Option extends HtmlElementText {
 		super.text(text);
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

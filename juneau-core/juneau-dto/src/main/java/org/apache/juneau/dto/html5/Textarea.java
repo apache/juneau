@@ -297,4 +297,8 @@ public class Textarea extends HtmlElementRawText {
 		super.text(text);
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

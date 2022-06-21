@@ -141,4 +141,8 @@ public class Keygen extends HtmlElementVoid {
 		super.style(style);
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

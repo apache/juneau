@@ -206,4 +206,8 @@ public class Area extends HtmlElementVoid {
 		super.style(style);
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

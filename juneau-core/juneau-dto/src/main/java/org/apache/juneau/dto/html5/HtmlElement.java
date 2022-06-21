@@ -147,6 +147,7 @@ public abstract class HtmlElement {
 	 * @param accesskey The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement accesskey(String accesskey) {
 		attr("accesskey", accesskey);
 		return this;
@@ -158,6 +159,7 @@ public abstract class HtmlElement {
 	 * @param _class The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement _class(String _class) {
 		attr("class", _class);
 		return this;
@@ -171,6 +173,7 @@ public abstract class HtmlElement {
 	 * Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement contenteditable(Object contenteditable) {
 		attr("contenteditable", contenteditable);
 		return this;
@@ -182,6 +185,7 @@ public abstract class HtmlElement {
 	 * @param dir The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement dir(String dir) {
 		attr("dir", dir);
 		return this;
@@ -195,6 +199,7 @@ public abstract class HtmlElement {
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement hidden(Object hidden) {
 		attr("hidden", deminimize(hidden, "hidden"));
 		return this;
@@ -206,6 +211,7 @@ public abstract class HtmlElement {
 	 * @param id The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement id(String id) {
 		attr("id", id);
 		return this;
@@ -217,6 +223,7 @@ public abstract class HtmlElement {
 	 * @param lang The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement lang(String lang) {
 		attr("lang", lang);
 		return this;
@@ -228,6 +235,7 @@ public abstract class HtmlElement {
 	 * @param onabort The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onabort(String onabort) {
 		attr("onabort", onabort);
 		return this;
@@ -239,6 +247,7 @@ public abstract class HtmlElement {
 	 * @param onblur The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onblur(String onblur) {
 		attr("onblur", onblur);
 		return this;
@@ -250,6 +259,7 @@ public abstract class HtmlElement {
 	 * @param oncancel The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement oncancel(String oncancel) {
 		attr("oncancel", oncancel);
 		return this;
@@ -261,6 +271,7 @@ public abstract class HtmlElement {
 	 * @param oncanplay The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement oncanplay(String oncanplay) {
 		attr("oncanplay", oncanplay);
 		return this;
@@ -273,6 +284,7 @@ public abstract class HtmlElement {
 	 * @param oncanplaythrough The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement oncanplaythrough(String oncanplaythrough) {
 		attr("oncanplaythrough", oncanplaythrough);
 		return this;
@@ -284,6 +296,7 @@ public abstract class HtmlElement {
 	 * @param onchange The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onchange(String onchange) {
 		attr("onchange", onchange);
 		return this;
@@ -295,6 +308,7 @@ public abstract class HtmlElement {
 	 * @param onclick The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onclick(String onclick) {
 		attr("onclick", onclick);
 		return this;
@@ -307,6 +321,7 @@ public abstract class HtmlElement {
 	 * @param oncuechange The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement oncuechange(String oncuechange) {
 		attr("oncuechange", oncuechange);
 		return this;
@@ -318,6 +333,7 @@ public abstract class HtmlElement {
 	 * @param ondblclick The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement ondblclick(String ondblclick) {
 		attr("ondblclick", ondblclick);
 		return this;
@@ -330,6 +346,7 @@ public abstract class HtmlElement {
 	 * @param ondurationchange The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement ondurationchange(String ondurationchange) {
 		attr("ondurationchange", ondurationchange);
 		return this;
@@ -341,6 +358,7 @@ public abstract class HtmlElement {
 	 * @param onemptied The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onemptied(String onemptied) {
 		attr("onemptied", onemptied);
 		return this;
@@ -352,6 +370,7 @@ public abstract class HtmlElement {
 	 * @param onended The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onended(String onended) {
 		attr("onended", onended);
 		return this;
@@ -363,6 +382,7 @@ public abstract class HtmlElement {
 	 * @param onerror The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onerror(String onerror) {
 		attr("onerror", onerror);
 		return this;
@@ -374,6 +394,7 @@ public abstract class HtmlElement {
 	 * @param onfocus The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onfocus(String onfocus) {
 		attr("onfocus", onfocus);
 		return this;
@@ -385,6 +406,7 @@ public abstract class HtmlElement {
 	 * @param oninput The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement oninput(String oninput) {
 		attr("oninput", oninput);
 		return this;
@@ -396,6 +418,7 @@ public abstract class HtmlElement {
 	 * @param oninvalid The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement oninvalid(String oninvalid) {
 		attr("oninvalid", oninvalid);
 		return this;
@@ -407,6 +430,7 @@ public abstract class HtmlElement {
 	 * @param onkeydown The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onkeydown(String onkeydown) {
 		attr("onkeydown", onkeydown);
 		return this;
@@ -418,6 +442,7 @@ public abstract class HtmlElement {
 	 * @param onkeypress The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onkeypress(String onkeypress) {
 		attr("onkeypress", onkeypress);
 		return this;
@@ -429,6 +454,7 @@ public abstract class HtmlElement {
 	 * @param onkeyup The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onkeyup(String onkeyup) {
 		attr("onkeyup", onkeyup);
 		return this;
@@ -440,6 +466,7 @@ public abstract class HtmlElement {
 	 * @param onload The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onload(String onload) {
 		attr("onload", onload);
 		return this;
@@ -452,6 +479,7 @@ public abstract class HtmlElement {
 	 * @param onloadeddata The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onloadeddata(String onloadeddata) {
 		attr("onloadeddata", onloadeddata);
 		return this;
@@ -464,6 +492,7 @@ public abstract class HtmlElement {
 	 * @param onloadedmetadata The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onloadedmetadata(String onloadedmetadata) {
 		attr("onloadedmetadata", onloadedmetadata);
 		return this;
@@ -476,6 +505,7 @@ public abstract class HtmlElement {
 	 * @param onloadstart The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onloadstart(String onloadstart) {
 		attr("onloadstart", onloadstart);
 		return this;
@@ -488,6 +518,7 @@ public abstract class HtmlElement {
 	 * @param onmousedown The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onmousedown(String onmousedown) {
 		attr("onmousedown", onmousedown);
 		return this;
@@ -499,6 +530,7 @@ public abstract class HtmlElement {
 	 * @param onmouseenter The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onmouseenter(String onmouseenter) {
 		attr("onmouseenter", onmouseenter);
 		return this;
@@ -511,6 +543,7 @@ public abstract class HtmlElement {
 	 * @param onmouseleave The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onmouseleave(String onmouseleave) {
 		attr("onmouseleave", onmouseleave);
 		return this;
@@ -523,6 +556,7 @@ public abstract class HtmlElement {
 	 * @param onmousemove The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onmousemove(String onmousemove) {
 		attr("onmousemove", onmousemove);
 		return this;
@@ -534,6 +568,7 @@ public abstract class HtmlElement {
 	 * @param onmouseout The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onmouseout(String onmouseout) {
 		attr("onmouseout", onmouseout);
 		return this;
@@ -546,6 +581,7 @@ public abstract class HtmlElement {
 	 * @param onmouseover The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onmouseover(String onmouseover) {
 		attr("onmouseover", onmouseover);
 		return this;
@@ -557,6 +593,7 @@ public abstract class HtmlElement {
 	 * @param onmouseup The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onmouseup(String onmouseup) {
 		attr("onmouseup", onmouseup);
 		return this;
@@ -569,6 +606,7 @@ public abstract class HtmlElement {
 	 * @param onmousewheel The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onmousewheel(String onmousewheel) {
 		attr("onmousewheel", onmousewheel);
 		return this;
@@ -580,6 +618,7 @@ public abstract class HtmlElement {
 	 * @param onpause The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onpause(String onpause) {
 		attr("onpause", onpause);
 		return this;
@@ -591,6 +630,7 @@ public abstract class HtmlElement {
 	 * @param onplay The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onplay(String onplay) {
 		attr("onplay", onplay);
 		return this;
@@ -602,6 +642,7 @@ public abstract class HtmlElement {
 	 * @param onplaying The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onplaying(String onplaying) {
 		attr("onplaying", onplaying);
 		return this;
@@ -613,6 +654,7 @@ public abstract class HtmlElement {
 	 * @param onprogress The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onprogress(String onprogress) {
 		attr("onprogress", onprogress);
 		return this;
@@ -625,6 +667,7 @@ public abstract class HtmlElement {
 	 * @param onratechange The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onratechange(String onratechange) {
 		attr("onratechange", onratechange);
 		return this;
@@ -636,6 +679,7 @@ public abstract class HtmlElement {
 	 * @param onreset The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onreset(String onreset) {
 		attr("onreset", onreset);
 		return this;
@@ -647,6 +691,7 @@ public abstract class HtmlElement {
 	 * @param onresize The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onresize(String onresize) {
 		attr("onresize", onresize);
 		return this;
@@ -658,6 +703,7 @@ public abstract class HtmlElement {
 	 * @param onscroll The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onscroll(String onscroll) {
 		attr("onscroll", onscroll);
 		return this;
@@ -669,6 +715,7 @@ public abstract class HtmlElement {
 	 * @param onseeked The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onseeked(String onseeked) {
 		attr("onseeked", onseeked);
 		return this;
@@ -680,6 +727,7 @@ public abstract class HtmlElement {
 	 * @param onseeking The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onseeking(String onseeking) {
 		attr("onseeking", onseeking);
 		return this;
@@ -691,6 +739,7 @@ public abstract class HtmlElement {
 	 * @param onselect The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onselect(String onselect) {
 		attr("onselect", onselect);
 		return this;
@@ -702,6 +751,7 @@ public abstract class HtmlElement {
 	 * @param onshow The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onshow(String onshow) {
 		attr("onshow", onshow);
 		return this;
@@ -713,6 +763,7 @@ public abstract class HtmlElement {
 	 * @param onstalled The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onstalled(String onstalled) {
 		attr("onstalled", onstalled);
 		return this;
@@ -724,6 +775,7 @@ public abstract class HtmlElement {
 	 * @param onsubmit The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onsubmit(String onsubmit) {
 		attr("onsubmit", onsubmit);
 		return this;
@@ -735,6 +787,7 @@ public abstract class HtmlElement {
 	 * @param onsuspend The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onsuspend(String onsuspend) {
 		attr("onsuspend", onsuspend);
 		return this;
@@ -747,6 +800,7 @@ public abstract class HtmlElement {
 	 * @param ontimeupdate The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement ontimeupdate(String ontimeupdate) {
 		attr("ontimeupdate", ontimeupdate);
 		return this;
@@ -758,6 +812,7 @@ public abstract class HtmlElement {
 	 * @param ontoggle The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement ontoggle(String ontoggle) {
 		attr("ontoggle", ontoggle);
 		return this;
@@ -770,6 +825,7 @@ public abstract class HtmlElement {
 	 * @param onvolumechange The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onvolumechange(String onvolumechange) {
 		attr("onvolumechange", onvolumechange);
 		return this;
@@ -781,6 +837,7 @@ public abstract class HtmlElement {
 	 * @param onwaiting The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement onwaiting(String onwaiting) {
 		attr("onwaiting", onwaiting);
 		return this;
@@ -794,6 +851,7 @@ public abstract class HtmlElement {
 	 * 	Typically a {@link Boolean} or {@link String}.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement spellcheck(Object spellcheck) {
 		attr("spellcheck", spellcheck);
 		return this;
@@ -805,6 +863,7 @@ public abstract class HtmlElement {
 	 * @param style The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement style(String style) {
 		attr("style", style);
 		return this;
@@ -818,6 +877,7 @@ public abstract class HtmlElement {
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement tabindex(Object tabindex) {
 		attr("tabindex", tabindex);
 		return this;
@@ -829,6 +889,7 @@ public abstract class HtmlElement {
 	 * @param title The new value for this attribute.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement title(String title) {
 		attr("title", title);
 		return this;
@@ -842,6 +903,7 @@ public abstract class HtmlElement {
 	 * 	Typically a {@link Number} or {@link String}.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement translate(Object translate) {
 		attr("translate", translate);
 		return this;
@@ -862,6 +924,10 @@ public abstract class HtmlElement {
 		}
 		return value;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	@Override /* Object */
 	public String toString() {

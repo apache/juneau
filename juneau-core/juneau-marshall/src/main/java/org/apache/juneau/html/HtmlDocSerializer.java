@@ -833,7 +833,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder cache(Cache<HashKey,? extends Context> value) {
+		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
 			super.cache(value);
 			return this;
 		}
@@ -857,7 +857,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<? extends Context> value) {
+		public Builder type(Class<? extends org.apache.juneau.Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -1081,6 +1081,12 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
 		public Builder ignoreUnknownBeanProperties() {
 			super.ignoreUnknownBeanProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		public Builder ignoreUnknownEnumValues() {
+			super.ignoreUnknownEnumValues();
 			return this;
 		}
 

@@ -426,6 +426,12 @@ public class WriterSerializer extends Serializer {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -444,7 +450,7 @@ public class WriterSerializer extends Serializer {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<? extends Context> value) {
+		public Builder type(Class<? extends org.apache.juneau.Context> value) {
 			super.type(value);
 			return this;
 		}
@@ -668,6 +674,12 @@ public class WriterSerializer extends Serializer {
 		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
 		public Builder ignoreUnknownBeanProperties() {
 			super.ignoreUnknownBeanProperties();
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.BeanContextable.Builder */
+		public Builder ignoreUnknownEnumValues() {
+			super.ignoreUnknownEnumValues();
 			return this;
 		}
 

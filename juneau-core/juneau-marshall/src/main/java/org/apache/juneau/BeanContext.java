@@ -3466,6 +3466,12 @@ public class BeanContext extends Context {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -3484,7 +3490,7 @@ public class BeanContext extends Context {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<? extends Context> value) {
+		public Builder type(Class<? extends org.apache.juneau.Context> value) {
 			super.type(value);
 			return this;
 		}

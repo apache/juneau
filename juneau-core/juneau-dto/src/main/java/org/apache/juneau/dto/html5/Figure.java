@@ -73,4 +73,8 @@ public class Figure extends HtmlElementContainer {
 		super.child(child);
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

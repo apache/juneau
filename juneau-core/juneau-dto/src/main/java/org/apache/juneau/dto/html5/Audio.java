@@ -212,4 +212,8 @@ public class Audio extends HtmlElementContainer {
 		super.child(child);
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

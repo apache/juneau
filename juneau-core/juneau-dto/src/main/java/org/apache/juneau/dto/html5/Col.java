@@ -78,4 +78,8 @@ public class Col extends HtmlElementVoid {
 		super.style(style);
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

@@ -135,4 +135,8 @@ public class Embed extends HtmlElementVoid {
 		super.style(style);
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

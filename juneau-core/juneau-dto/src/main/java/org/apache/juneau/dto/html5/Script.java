@@ -167,4 +167,8 @@ public class Script extends HtmlElementRawText {
 		super.text(text);
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

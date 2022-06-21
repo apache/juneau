@@ -23,6 +23,7 @@ import java.util.concurrent.*;
 import org.apache.juneau.*;
 import org.apache.juneau.config.internal.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Represents a storage location for configuration files.
@@ -113,6 +114,12 @@ public abstract class ConfigStore extends Context implements Closeable {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
+		public Builder cache(Cache<HashKey,? extends org.apache.juneau.Context> value) {
+			super.cache(value);
+			return this;
+		}
+
+		@Override /* GENERATED - org.apache.juneau.Context.Builder */
 		public Builder debug() {
 			super.debug();
 			return this;
@@ -131,7 +138,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
-		public Builder type(Class<? extends Context> value) {
+		public Builder type(Class<? extends org.apache.juneau.Context> value) {
 			super.type(value);
 			return this;
 		}

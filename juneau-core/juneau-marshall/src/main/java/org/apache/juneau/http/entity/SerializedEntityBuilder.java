@@ -133,6 +133,12 @@ public class SerializedEntityBuilder<T extends SerializedEntity> extends HttpEnt
 	}
 
 	@Override /* GENERATED - org.apache.juneau.http.entity.HttpEntityBuilder */
+	public SerializedEntityBuilder<T> content(Supplier<?> value) {
+		super.content(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.HttpEntityBuilder */
 	public SerializedEntityBuilder<T> contentEncoding(String value) {
 		super.contentEncoding(value);
 		return this;
@@ -147,12 +153,6 @@ public class SerializedEntityBuilder<T extends SerializedEntity> extends HttpEnt
 	@Override /* GENERATED - org.apache.juneau.http.entity.HttpEntityBuilder */
 	public SerializedEntityBuilder<T> contentLength(long value) {
 		super.contentLength(value);
-		return this;
-	}
-
-	@Override /* GENERATED - org.apache.juneau.http.entity.HttpEntityBuilder */
-	public SerializedEntityBuilder<T> content(Supplier<?> value) {
-		super.content(value);
 		return this;
 	}
 

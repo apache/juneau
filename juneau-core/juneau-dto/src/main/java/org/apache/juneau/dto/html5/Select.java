@@ -203,4 +203,8 @@ public class Select extends HtmlElementContainer {
 		super.child(child);
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

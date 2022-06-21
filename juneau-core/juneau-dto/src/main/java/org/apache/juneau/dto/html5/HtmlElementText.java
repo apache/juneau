@@ -13,6 +13,7 @@
 package org.apache.juneau.dto.html5;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.xml.annotation.*;
 
 /**
@@ -56,8 +57,13 @@ public class HtmlElementText extends HtmlElement {
 	 * @param text The text node to add to this element.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public HtmlElement text(Object text) {
 		this.text = text;
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

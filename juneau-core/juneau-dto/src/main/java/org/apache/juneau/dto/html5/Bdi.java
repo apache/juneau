@@ -67,4 +67,8 @@ public class Bdi extends HtmlElementText {
 		super.text(text);
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

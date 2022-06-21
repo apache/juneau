@@ -29,4 +29,8 @@ import org.apache.juneau.xml.annotation.*;
  */
 @Xml(format=VOID)
 public class HtmlElementVoid extends HtmlElement {
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

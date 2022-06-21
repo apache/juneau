@@ -67,4 +67,8 @@ public class Title extends HtmlElementRawText {
 		super.text(text);
 		return this;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }
