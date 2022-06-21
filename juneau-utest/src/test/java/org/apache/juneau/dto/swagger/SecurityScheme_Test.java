@@ -29,127 +29,28 @@ import org.junit.*;
 public class SecurityScheme_Test {
 
 	/**
-	 * Test method for {@link SecurityScheme#type(java.lang.Object)}.
+	 * Test method for getters and setters.
 	 */
 	@Test
-	public void a01_type() {
+	public void a01_gettersAndSetters() {
 		SecurityScheme t = new SecurityScheme();
-
-		t.type("foo");
-		assertString(t.type()).is("foo");
-
-		t.type(null);
-		assertString(t.type()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SecurityScheme#description(java.lang.Object)}.
-	 */
-	@Test
-	public void a02_description() {
-		SecurityScheme t = new SecurityScheme();
-
-		t.description("foo");
-		assertString(t.description()).is("foo");
-
-		t.description(null);
-		assertString(t.description()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SecurityScheme#name(java.lang.Object)}.
-	 */
-	@Test
-	public void a03_name() {
-		SecurityScheme t = new SecurityScheme();
-
-		t.name("foo");
-		assertString(t.name()).is("foo");
-
-		t.name(null);
-		assertString(t.name()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SecurityScheme#in(java.lang.Object)}.
-	 */
-	@Test
-	public void a04_in() {
-		SecurityScheme t = new SecurityScheme();
-
-		t.in("foo");
-		assertString(t.in()).is("foo");
-
-		t.in(null);
-		assertString(t.in()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SecurityScheme#flow(java.lang.Object)}.
-	 */
-	@Test
-	public void a05_flow() {
-		SecurityScheme t = new SecurityScheme();
-
-		t.flow("foo");
-		assertString(t.flow()).is("foo");
-
-		t.flow(null);
-		assertString(t.flow()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SecurityScheme#authorizationUrl(java.lang.Object)}.
-	 */
-	@Test
-	public void a06_authorizationUrl() {
-		SecurityScheme t = new SecurityScheme();
-
-		t.authorizationUrl("foo");
-		assertString(t.authorizationUrl()).is("foo");
-
-		t.authorizationUrl(null);
-		assertString(t.authorizationUrl()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SecurityScheme#tokenUrl(java.lang.Object)}.
-	 */
-	@Test
-	public void a07_tokenUrl() {
-		SecurityScheme t = new SecurityScheme();
-
-		t.tokenUrl("foo");
-		assertString(t.tokenUrl()).is("foo");
-
-		t.tokenUrl(null);
-		assertString(t.tokenUrl()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SecurityScheme#setScopes(java.util.Map)}.
-	 */
-	@Test
-	public void a08_scopes() {
-		SecurityScheme t = new SecurityScheme();
-
-		t.scopes(map("foo","bar"));
-		assertOptional(t.scopes()).isType(Map.class).asJson().is("{foo:'bar'}");
-
-		t.scopes(map());
-		assertOptional(t.scopes()).isType(Map.class).asJson().is("{}");
-
-		t.scopes((Map<String,String>)null);
-		assertOptional(t.scopes()).isNull();
-
-		t.addScopes(map("foo","bar"));
-		assertOptional(t.scopes()).isType(Map.class).asJson().is("{foo:'bar'}");
-
-		t.addScopes(map());
-		assertOptional(t.scopes()).isType(Map.class).asJson().is("{foo:'bar'}");
-
-		t.addScopes(null);
-		assertOptional(t.scopes()).isType(Map.class).asJson().is("{foo:'bar'}");
+		assertString(t.setType("foo").getType()).is("foo");
+		assertString(t.setType(null).getType()).isNull();
+		assertString(t.setDescription("foo").getDescription()).is("foo");
+		assertString(t.setDescription(null).getDescription()).isNull();
+		assertString(t.setName("foo").getName()).is("foo");
+		assertString(t.setName(null).getName()).isNull();
+		assertString(t.setIn("foo").getIn()).is("foo");
+		assertString(t.setIn(null).getIn()).isNull();
+		assertString(t.setFlow("foo").getFlow()).is("foo");
+		assertString(t.setFlow(null).getFlow()).isNull();
+		assertString(t.setAuthorizationUrl("foo").getAuthorizationUrl()).is("foo");
+		assertString(t.setAuthorizationUrl(null).getAuthorizationUrl()).isNull();
+		assertString(t.setTokenUrl("foo").getTokenUrl()).is("foo");
+		assertString(t.setTokenUrl(null).getTokenUrl()).isNull();
+		assertObject(t.setScopes(map("foo","bar")).getScopes()).isType(Map.class).asJson().is("{foo:'bar'}");
+		assertObject(t.setScopes(map()).getScopes()).isType(Map.class).asJson().is("{}");
+		assertObject(t.setScopes((Map<String,String>)null).getScopes()).isNull();
 	}
 
 	/**

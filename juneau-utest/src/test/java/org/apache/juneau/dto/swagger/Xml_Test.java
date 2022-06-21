@@ -26,79 +26,19 @@ import org.junit.*;
 public class Xml_Test {
 
 	/**
-	 * Test method for {@link Xml#name(java.lang.Object)}.
+	 * Test method for getters and setters.
 	 */
 	@Test
-	public void a01_name() {
+	public void a01_gettersAndSetters() {
 		Xml t = new Xml();
-
-		t.name("foo");
-		assertString(t.name()).is("foo");
-
-		t.name(null);
-		assertString(t.name()).isNull();
-	}
-
-	/**
-	 * Test method for {@link Xml#namespace(java.lang.Object)}.
-	 */
-	@Test
-	public void a02_namespace() {
-		Xml t = new Xml();
-
-		t.namespace("foo");
-		assertString(t.namespace()).is("foo");
-
-		t.namespace(null);
-		assertString(t.namespace()).isNull();
-	}
-
-	/**
-	 * Test method for {@link Xml#prefix(java.lang.Object)}.
-	 */
-	@Test
-	public void a03_prefix() {
-		Xml t = new Xml();
-
-		t.prefix("foo");
-		assertString(t.prefix()).is("foo");
-
-		t.prefix(null);
-		assertString(t.prefix()).isNull();
-	}
-
-	/**
-	 * Test method for {@link Xml#attribute(java.lang.Object)}.
-	 */
-	@Test
-	public void a04_attribute() {
-		Xml t = new Xml();
-
-		t.attribute(true);
-		assertOptional(t.attribute()).isType(Boolean.class).is(true);
-
-		t.attribute("true");
-		assertOptional(t.attribute()).isType(Boolean.class).is(true);
-
-		t.attribute((String)null);
-		assertOptional(t.attribute()).isNull();
-	}
-
-	/**
-	 * Test method for {@link Xml#wrapped(java.lang.Object)}.
-	 */
-	@Test
-	public void a05_wrapped() {
-		Xml t = new Xml();
-
-		t.wrapped(true);
-		assertOptional(t.wrapped()).isType(Boolean.class).is(true);
-
-		t.wrapped("true");
-		assertOptional(t.wrapped()).isType(Boolean.class).is(true);
-
-		t.wrapped((String)null);
-		assertOptional(t.wrapped()).isNull();
+		assertString(t.setName("foo").getName()).is("foo");
+		assertString(t.setName(null).getName()).isNull();
+		assertString(t.setNamespace("foo").getNamespace()).is("foo");
+		assertString(t.setNamespace(null).getNamespace()).isNull();
+		assertString(t.setPrefix("foo").getPrefix()).is("foo");
+		assertString(t.setPrefix(null).getPrefix()).isNull();
+		assertObject(t.setAttribute(true).getAttribute()).isType(Boolean.class).is(true);
+		assertObject(t.setWrapped(true).getWrapped()).isType(Boolean.class).is(true);
 	}
 
 	/**

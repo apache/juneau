@@ -201,7 +201,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SecuritySchemeInfo setName(String value) {
 		name = value;
@@ -237,7 +237,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * 		<li><js>"body"</js>
 	 * 	</ul>
 	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SecuritySchemeInfo setIn(String value) {
 		if (isStrict() && ! contains(value, VALID_IN))
@@ -273,7 +273,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * 	The new value for this property.
 	 * 	<br>{@doc GFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SecuritySchemeInfo setDescription(String value) {
 		description = value;
@@ -301,7 +301,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SecuritySchemeInfo setScheme(String value) {
 		scheme = value;
@@ -345,7 +345,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * 	<br>If type is <js>"file"</js>, the <code>consumes</code> MUST be either <js>"multipart/form-data"</js>, <js>"application/x-www-form-urlencoded"</js>
 	 * 		or both and the parameter MUST be <code>in</code> <js>"formData"</js>.
 	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SecuritySchemeInfo setType(String value) {
 		if (isStrict() && ! contains(value, VALID_TYPES))
@@ -386,7 +386,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * </ul>
 	 *
 	 * @param value The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SecuritySchemeInfo setBearerFormat(String value) {
 		bearerFormat = value;
@@ -415,7 +415,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * 	The new value for this property.
 	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SecuritySchemeInfo setFlows(OAuthFlow value) {
 		flows = value;
@@ -441,7 +441,7 @@ public class SecuritySchemeInfo extends OpenApiElement {
 	 * Determines the format of the array if type array is used.
 	 *
 	 * @param value
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SecuritySchemeInfo setOpenIdConnectUrl(String value) {
 		openIdConnectUrl = value;

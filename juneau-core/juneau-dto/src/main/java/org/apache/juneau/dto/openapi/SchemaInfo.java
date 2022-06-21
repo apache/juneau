@@ -213,7 +213,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * 		<li><js>"date-time"</js>
 	 * 		<li><js>"password"</js>
 	 * 	</ul>
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setFormat(String value) {
 		format = value;
@@ -235,7 +235,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setTitle(String value) {
 		title = value;
@@ -258,7 +258,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * 	The new value for this property.
 	 * 	<br>{@doc GFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setDescription(String value) {
 		description = value;
@@ -286,7 +286,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setDefault(Object value) {
 		_default = value;
@@ -308,7 +308,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setMultipleOf(Number value) {
 		multipleOf = value;
@@ -330,7 +330,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setMaximum(Number value) {
 		maximum = value;
@@ -352,7 +352,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setExclusiveMaximum(Boolean value) {
 		exclusiveMaximum = value;
@@ -374,7 +374,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setMinimum(Number value) {
 		minimum = value;
@@ -396,7 +396,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setExclusiveMinimum(Boolean value) {
 		exclusiveMinimum = value;
@@ -418,7 +418,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setMaxLength(Integer value) {
 		maxLength = value;
@@ -440,7 +440,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setMinLength(Integer value) {
 		minLength = value;
@@ -465,7 +465,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setPattern(String value) {
 		pattern = value;
@@ -487,7 +487,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setMaxItems(Integer value) {
 		maxItems = value;
@@ -509,7 +509,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setMinItems(Integer value) {
 		minItems = value;
@@ -530,7 +530,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setUniqueItems(Boolean value) {
 		uniqueItems = value;
@@ -551,7 +551,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setNullable(Boolean value) {
 		nullable = value;
@@ -573,7 +573,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setMaxProperties(Integer value) {
 		maxProperties = value;
@@ -595,7 +595,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setMinProperties(Integer value) {
 		minProperties = value;
@@ -630,7 +630,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * 		<li><js>"wss"</js>
 	 * 	</ul>
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setRequired(Collection<String> value) {
 		required = listFrom(value);
@@ -638,23 +638,7 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Adds one or more values to the <property>required</property> property.
-	 *
-	 * <p>
-	 * The list of required properties.
-	 *
-	 * @param value
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo addRequired(Collection<String> value) {
-		required = listBuilder(required).sparse().addAny(value).build();
-		return this;
-	}
-
-	/**
-	 * Same as {@link #addRequired(Collection)}.
+	 * Same as {@link #addRequired(String...)}.
 	 *
 	 * @param values
 	 * 	The new value for this property.
@@ -672,7 +656,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * 	schemes(<js>"scheme1</js>, <js>"scheme2"</js>);
 	 * 			</p>
 	 * 	</ul>
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo addRequired(String...values) {
 		required = listBuilder(String.class).sparse().add(values).build();
@@ -699,23 +683,10 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setEnum(Collection<Object> value) {
 		_enum = listFrom(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>enum</property> property.
-	 *
-	 * @param value
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo addEnum(Collection<Object> value) {
-		_enum = listBuilder(_enum).sparse().addAny(value).build();
 		return this;
 	}
 
@@ -740,7 +711,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * 			</p>
 	 * 	</ul>
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo addEnum(Object...values) {
 		setEnum(setBuilder(Object.class).sparse().addAny(values).build());
@@ -777,7 +748,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * 		<li><js>"array"</js>
 	 * 		<li><js>"file"</js>
 	 * 	</ul>
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setType(String value) {
 		type = value;
@@ -799,7 +770,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setItems(Items value) {
 		items = value;
@@ -821,23 +792,10 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setAllOf(Collection<Object> value) {
 		allOf = listFrom(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>allOf</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo addAllOf(Collection<Object> values) {
-		allOf = listBuilder(allOf).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -862,7 +820,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * 			</p>
 	 * 	</ul>
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo addAllOf(Object...values) {
 		allOf = listBuilder(allOf).sparse().addAny(values).build();
@@ -884,23 +842,10 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setAnyOf(Collection<Object> value) {
 		anyOf = listFrom(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>allOf</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo addAnyOf(Collection<Object> values) {
-		anyOf = listBuilder(anyOf).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -925,7 +870,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * 			</p>
 	 * 	</ul>
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo addAnyOf(Object...values) {
 		anyOf = listBuilder(anyOf).sparse().addAny(values).build();
@@ -947,23 +892,10 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setOneOf(Collection<Object> value) {
 		oneOf = listFrom(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>allOf</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo addOneOf(Collection<Object> values) {
-		oneOf = listBuilder(oneOf).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -988,7 +920,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * 			</p>
 	 * 	</ul>
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo addOneOf(Object...values) {
 		oneOf = listBuilder(oneOf).sparse().addAny(values).build();
@@ -1010,23 +942,10 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setProperties(Map<String, SchemaInfo> value) {
 		properties = copyOf(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>properties</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public SchemaInfo addProperties(Map<String, SchemaInfo> values) {
-		properties = mapBuilder(properties).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -1045,7 +964,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setAdditionalProperties(SchemaInfo value) {
 		additionalProperties = value;
@@ -1067,7 +986,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setNot(SchemaInfo value) {
 		not = value;
@@ -1089,7 +1008,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setDiscriminator(Discriminator value) {
 		discriminator = value;
@@ -1111,7 +1030,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setReadOnly(Boolean value) {
 		readOnly = value;
@@ -1133,7 +1052,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setWriteOnly(Boolean value) {
 		writeOnly = value;
@@ -1155,7 +1074,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setDeprecated(Boolean value) {
 		deprecated = value;
@@ -1177,7 +1096,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setXml(Xml value) {
 		xml = value;
@@ -1199,7 +1118,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setExternalDocs(ExternalDocumentation value) {
 		externalDocs = value;
@@ -1221,7 +1140,7 @@ public class SchemaInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public SchemaInfo setExample(Object value) {
 		example = value;
@@ -1239,21 +1158,12 @@ public class SchemaInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this object has a <js>"$ref"</js> attribute.
-	 *
-	 * @return <jk>true</jk> if this object has a <js>"$ref"</js> attribute.
-	 */
-	public boolean hasRef() {
-		return ref != null;
-	}
-
-	/**
 	 * Bean property setter:  <property>$ref</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	@Beanp("$ref")
 	public SchemaInfo setRef(Object value) {
@@ -1394,17 +1304,6 @@ public class SchemaInfo extends OpenApiElement {
 			.addIf(ref != null, "$ref")
 			.build();
 		return new MultiSet<>(s, super.keySet());
-	}
-
-
-
-	/**
-	 * Returns <jk>true</jk> if this schema info has one or more properties defined on it.
-	 *
-	 * @return <jk>true</jk> if this schema info has one or more properties defined on it.
-	 */
-	public boolean hasProperties() {
-		return properties != null && ! properties.isEmpty();
 	}
 
 	/**

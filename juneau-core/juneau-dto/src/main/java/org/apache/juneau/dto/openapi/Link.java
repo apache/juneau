@@ -117,7 +117,7 @@ public class Link extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Link setOperationRef(String value) {
 		operationRef = value;
@@ -141,7 +141,7 @@ public class Link extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Link setDescription(String value) {
 		description = value;
@@ -170,7 +170,7 @@ public class Link extends OpenApiElement {
 	 * 	The new value for this property.
 	 * 	<br>MUST be in the format of an email address.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Link setOperationId(String value) {
 		operationId = value;
@@ -213,7 +213,7 @@ public class Link extends OpenApiElement {
 	 * </ul>
 	 *
 	 * @param val The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Link setRequestBody(Object val) {
 		requestBody = val;
@@ -235,7 +235,7 @@ public class Link extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Link setServer(Server value) {
 		server = value;
@@ -264,23 +264,10 @@ public class Link extends OpenApiElement {
 	 * 	The new value for this property.
 	 * 	<br>Keys must be MIME-type strings.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Link setParameters(Map<String,Object> value) {
 		parameters = copyOf(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>examples</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public Link addParameters(Map<String,Object> values) {
-		parameters = mapBuilder(parameters).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -289,7 +276,7 @@ public class Link extends OpenApiElement {
 	 *
 	 * @param mimeType The mime-type string.
 	 * @param parameter The example.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Link addParameter(String mimeType, Object parameter) {
 		parameters = mapBuilder(parameters).sparse().add(mimeType, parameters).build();

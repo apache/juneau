@@ -83,7 +83,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		// Operations without tags are rendered first.
 		outer.child(div()._class("tag-block tag-block-open").children(tagBlockContents(s, null)));
 
-		if (s.swagger.tags().isPresent()) {
+		if (s.swagger.getTags() != null) {
 			s.swagger.getTags().forEach(x -> {
 				Div tagBlock = div()._class("tag-block tag-block-open").children(
 					tagBlockSummary(x),
@@ -93,7 +93,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 			});
 		}
 
-		if (s.swagger.definitions().isPresent()) {
+		if (s.swagger.getDefinitions() != null) {
 			Div modelBlock = div()._class("tag-block").children(
 				modelsBlockSummary(),
 				modelsBlockContents(s)
@@ -111,21 +111,21 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		Info info = s.swagger.getInfo();
 		if (info != null) {
 
-			if (info.description().isPresent())
+			if (info.getDescription() != null)
 				table.child(tr(th("Description:"),td(toBRL(info.getDescription()))));
 
-			if (info.version().isPresent())
+			if (info.getVersion() != null)
 				table.child(tr(th("Version:"),td(info.getVersion())));
 
 			Contact c = info.getContact();
 			if (c != null) {
 				Table t2 = table();
 
-				if (c.name().isPresent())
+				if (c.getName() != null)
 					t2.child(tr(th("Name:"),td(c.getName())));
-				if (c.url().isPresent())
+				if (c.getUrl() != null)
 					t2.child(tr(th("URL:"),td(a(c.getUrl(), c.getUrl()))));
-				if (c.email().isPresent())
+				if (c.getEmail() != null)
 					t2.child(tr(th("Email:"),td(a("mailto:"+ c.getEmail(), c.getEmail()))));
 
 				table.child(tr(th("Contact:"),td(t2)));
@@ -133,17 +133,17 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 
 			License l = info.getLicense();
 			if (l != null) {
-				Object child = l.url().isPresent() ? a(l.getUrl(), l.name().isPresent() ? l.getName() : l.getUrl()) : l.getName();
+				Object child = l.getUrl() != null ? a(l.getUrl(), l.getName() != null ? l.getName() : l.getUrl()) : l.getName();
 				table.child(tr(th("License:"),td(child)));
 			}
 
 			ExternalDocumentation ed = s.swagger.getExternalDocs();
 			if (ed != null) {
-				Object child = ed.url().isPresent() ? a(ed.getUrl(), ed.description().isPresent() ? ed.getDescription() : ed.getUrl()) : ed.getDescription();
+				Object child = ed.getUrl() != null ? a(ed.getUrl(), ed.getDescription() != null ? ed.getDescription() : ed.getUrl()) : ed.getDescription();
 				table.child(tr(th("Docs:"),td(child)));
 			}
 
-			if (info.termsOfService().isPresent()) {
+			if (info.getTermsOfService() != null) {
 				String tos = info.getTermsOfService();
 				Object child = StringUtils.isUri(tos) ? a(tos, tos) : tos;
 				table.child(tr(th("Terms of Service:"),td(child)));
@@ -160,7 +160,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		return div()._class("tag-block-summary").children(
 			span(t.getName())._class("name"),
 			span(toBRL(t.getDescription()))._class("description"),
-			ed == null ? null : span(a(ed.getUrl(), ed.description().isPresent() ? ed.getDescription() : ed.getUrl()))._class("extdocs")
+			ed == null ? null : span(a(ed.getUrl(), ed.getDescription() != null ? ed.getDescription() : ed.getUrl()))._class("extdocs")
 		).onclick("toggleTagBlock(this)");
 	}
 
@@ -170,7 +170,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 
 		s.swagger.getPaths().forEach((path,v) -> {
 			v.forEach((opName,op) -> {
-				if ((t == null && ! op.tags().isPresent()) || (t != null && op.hasTag(t.getName())))
+				if ((t == null && op.getTags() == null) || (t != null && op.getTags() != null && op.getTags() != null && op.getTags().contains(t.getName())))
 					tagBlockContents.child(opBlock(s, path, opName, op));
 			});
 		});
@@ -194,17 +194,17 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 		return div()._class("op-block-summary").children(
 			span(opName.toUpperCase())._class("method-button"),
 			span(path)._class("path"),
-			op.summary().isPresent() ? span(op.getSummary())._class("summary") : null
+			op.getSummary() != null ? span(op.getSummary())._class("summary") : null
 		).onclick("toggleOpBlock(this)");
 	}
 
 	private Div tableContainer(Session s, Operation op) {
 		Div tableContainer = div()._class("table-container");
 
-		if (op.description().isPresent())
+		if (op.getDescription() != null)
 			tableContainer.child(div(toBRL(op.getDescription()))._class("op-block-description"));
 
-		if (op.parameters().isPresent()) {
+		if (op.getParameters() != null) {
 			tableContainer.child(div(h4("Parameters")._class("title"))._class("op-block-section-header"));
 
 			Table parameters = table(tr(th("Name")._class("parameter-key"), th("Description")._class("parameter-key")))._class("parameters");
@@ -231,7 +231,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 			tableContainer.child(parameters);
 		}
 
-		if (op.responses().isPresent()) {
+		if (op.getResponses() != null) {
 			tableContainer.child(div(h4("Responses")._class("title"))._class("op-block-section-header"));
 
 			Table responses = table(tr(th("Code")._class("response-key"), th("Description")._class("response-key")))._class("responses");
@@ -254,7 +254,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	}
 
 	private Div headers(Session s, ResponseInfo ri) {
-		if (! ri.headers().isPresent())
+		if (ri.getHeaders() == null)
 			return null;
 
 		Table sectionTable = table(tr(th("Name"),th("Description"),th("Schema")))._class("section-table");

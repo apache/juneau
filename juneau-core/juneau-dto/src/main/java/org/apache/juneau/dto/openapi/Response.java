@@ -114,7 +114,7 @@ public class Response extends OpenApiElement{
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Response setDescription(String value) {
 		description = value;
@@ -135,23 +135,10 @@ public class Response extends OpenApiElement{
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Response setHeaders(Map<String, HeaderInfo> value) {
 		headers = copyOf(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>headers</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public Response addHeaders(Map<String, HeaderInfo> values) {
-		headers = mapBuilder(headers).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -162,7 +149,7 @@ public class Response extends OpenApiElement{
 	 * @param value
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Response addHeader(String key, HeaderInfo value) {
 		headers = mapBuilder(headers).sparse().add(key, value).build();
@@ -183,23 +170,10 @@ public class Response extends OpenApiElement{
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Response setContent(Map<String, MediaType> value) {
 		content = copyOf(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>content</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public Response addContent(Map<String, MediaType> values) {
-		content = mapBuilder(content).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -210,7 +184,7 @@ public class Response extends OpenApiElement{
 	 * @param value
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Response addContent(String key, MediaType value) {
 		content = mapBuilder(content).sparse().add(key, value).build();
@@ -231,23 +205,10 @@ public class Response extends OpenApiElement{
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Response setLinks(Map<String, Link> value) {
 		links = copyOf(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>headers</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public Response addLinks(Map<String, Link> values) {
-		links = mapBuilder(links).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -258,7 +219,7 @@ public class Response extends OpenApiElement{
 	 * @param value
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Response addLink(String key, Link value) {
 		links = mapBuilder(links).sparse().add(key, value).build();

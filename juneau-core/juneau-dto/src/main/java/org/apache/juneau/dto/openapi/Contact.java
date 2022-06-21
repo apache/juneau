@@ -107,7 +107,7 @@ public class Contact extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Contact setName(String value) {
 		name = value;
@@ -139,7 +139,7 @@ public class Contact extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Contact setUrl(URI value) {
 		url = value;
@@ -168,38 +168,11 @@ public class Contact extends OpenApiElement {
 	 * 	The new value for this property.
 	 * 	<br>MUST be in the format of an email address.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Contact setEmail(String value) {
 		email = value;
 		return this;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the name property is not null or empty.
-	 *
-	 * @return <jk>true</jk> if the name property is not null or empty.
-	 */
-	public boolean hasName() {
-		return isNotEmpty(name);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the URL property is not null.
-	 *
-	 * @return <jk>true</jk> if the URL property is not null.
-	 */
-	public boolean hasUrl() {
-		return url != null;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the email property is not null or empty.
-	 *
-	 * @return <jk>true</jk> if the email property is not null or empty.
-	 */
-	public boolean hasEmail() {
-		return isNotEmpty(email);
 	}
 
 	@Override /* OpenApiElement */

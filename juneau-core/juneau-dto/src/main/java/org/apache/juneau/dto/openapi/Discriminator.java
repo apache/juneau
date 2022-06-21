@@ -84,7 +84,7 @@ public class Discriminator extends OpenApiElement {
 	 * 	The new value for this property.
 	 * 	<br>{@doc GFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Discriminator setPropertyName(String value) {
 		propertyName = value;
@@ -99,7 +99,7 @@ public class Discriminator extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String, String> getMapping() {
+	public Map<String,String> getMapping() {
 		return mapping;
 	}
 
@@ -113,7 +113,7 @@ public class Discriminator extends OpenApiElement {
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
 	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Discriminator setMapping(Map<String,String> value) {
 		mapping = copyOf(value);
@@ -123,23 +123,13 @@ public class Discriminator extends OpenApiElement {
 	/**
 	 * Adds one or more values to the <property>mapping</property> property.
 	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @param key The key.
+	 * @param value The value.
+	 * @return This object
 	 */
-	public Discriminator addMapping(Map<String,String> values) {
-		mapping = mapBuilder(mapping).sparse().addAll(values).build();
+	public Discriminator addMapping(String key, String value) {
+		mapping = mapBuilder(mapping).sparse().add(key, value).build();
 		return this;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the property is not null.
-	 *
-	 * @return <jk>true</jk> if the property is not null.
-	 */
-	public boolean hasPropertyName() {
-		return ! propertyName.isEmpty();
 	}
 
 	@Override /* OpenApiElement */

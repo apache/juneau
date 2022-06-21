@@ -140,32 +140,32 @@ public class DtoExample {
 			);
 
 		Swagger swagger = swagger()
-			.swagger("2.0")
-			.info(
+			.setSwagger("2.0")
+			.setInfo(
 				info("Swagger Petstore", "1.0.0")
-				.description("This is a sample server Petstore server.")
-				.termsOfService("http://swagger.io/terms/")
-				.contact(
-					contact().email("apiteam@swagger.io")
+				.setDescription("This is a sample server Petstore server.")
+				.setTermsOfService("http://swagger.io/terms/")
+				.setContact(
+					contact().setEmail("apiteam@swagger.io")
 				)
-				.license(
-					license("Apache 2.0").url("http://www.apache.org/licenses/LICENSE-2.0.html")
+				.setLicense(
+					license("Apache 2.0").setUrl(URI.create("http://www.apache.org/licenses/LICENSE-2.0.html"))
 				)
 			)
-			.path("/pet", "post",
+			.addPath("/pet", "post",
 				operation()
-				.tags("pet")
-				.summary("Add a new pet to the store")
-				.description("")
-				.operationId("addPet")
-				.consumes(MediaType.JSON, MediaType.XML)
-				.produces(MediaType.JSON, MediaType.XML)
-				.parameters(
+				.setTags("pet")
+				.setSummary("Add a new pet to the store")
+				.setDescription("")
+				.setOperationId("addPet")
+				.setConsumes(MediaType.JSON, MediaType.XML)
+				.setProduces(MediaType.JSON, MediaType.XML)
+				.setParameters(
 					parameterInfo("body", "body")
-					.description("Pet object that needs to be added to the store")
-					.required(true)
+					.setDescription("Pet object that needs to be added to the store")
+					.setRequired(true)
 				)
-				.response("405", responseInfo("Invalid input"))
+				.addResponse("405", responseInfo("Invalid input"))
 			);
 
 		// Serialize to Swagger/JSON

@@ -30,391 +30,50 @@ import org.junit.*;
 public class ParameterInfo_Test {
 
 	/**
-	 * Test method for {@link ParameterInfo#name(java.lang.Object)}.
+	 * Test method for getters and setters.
 	 */
 	@Test
-	public void a01_name() {
+	public void a01_gettersAndSetters() {
 		ParameterInfo t = new ParameterInfo();
-
-		t.name("foo");
-		assertString(t.name()).is("foo");
-
-		t.name(null);
-		assertOptional(t.name()).isNull();
-	}
-
-	/**
-	 * Test method for {@link ParameterInfo#in(java.lang.Object)}.
-	 */
-	@Test
-	public void a02_in() {
-		ParameterInfo t = new ParameterInfo();
-
-		t.in("foo");
-		assertString(t.in()).is("foo");
-
-		t.in(null);
-		assertString(t.in()).isNull();
-	}
-
-	/**
-	 * Test method for {@link ParameterInfo#description(java.lang.Object)}.
-	 */
-	@Test
-	public void a03_description() {
-		ParameterInfo t = new ParameterInfo();
-
-		t.description("foo");
-		assertString(t.description()).is("foo");
-
-		t.description(null);
-		assertString(t.description()).isNull();
-	}
-
-	/**
-	 * Test method for {@link ParameterInfo#required(java.lang.Object)}.
-	 */
-	@Test
-	public void a04_required() {
-		ParameterInfo t = new ParameterInfo();
-
-		t.required(true);
-		assertOptional(t.required()).isType(Boolean.class).is(true);
-
-		t.required("true");
-		assertOptional(t.required()).isType(Boolean.class).is(true);
-
-		t.required((String)null);
-		assertOptional(t.required()).isNull();
-	}
-
-	/**
-	 * Test method for {@link ParameterInfo#schema(java.lang.Object)}.
-	 */
-	@Test
-	public void a05_schema() {
-		ParameterInfo t = new ParameterInfo();
-
-		t.schema(schemaInfo().title("foo"));
-		assertOptional(t.schema()).asJson().is("{title:'foo'}");
-
-		t.schema("{title:'foo'}");
-		assertOptional(t.schema()).isType(SchemaInfo.class).asJson().is("{title:'foo'}");
-
-		t.schema((String)null);
-		assertOptional(t.schema()).isNull();
-	}
-
-	/**
-	 * Test method for {@link ParameterInfo#type(java.lang.Object)}.
-	 */
-	@Test
-	public void a06_type() {
-		ParameterInfo t = new ParameterInfo();
-
-		t.type("foo");
-		assertString(t.type()).is("foo");
-
-		t.type(null);
-		assertString(t.type()).isNull();
-	}
-
-	/**
-	 * Test method for {@link ParameterInfo#format(java.lang.Object)}.
-	 */
-	@Test
-	public void a07_format() {
-		ParameterInfo t = new ParameterInfo();
-
-		t.format("foo");
-		assertString(t.format()).is("foo");
-
-		t.format(null);
-		assertString(t.format()).isNull();
-	}
-
-	/**
-	 * Test method for {@link ParameterInfo#allowEmptyValue(java.lang.Object)}.
-	 */
-	@Test
-	public void a08_allowEmptyValue() {
-		ParameterInfo t = new ParameterInfo();
-
-		t.allowEmptyValue(true);
-		assertOptional(t.allowEmptyValue()).isType(Boolean.class).is(true);
-
-		t.allowEmptyValue("true");
-		assertOptional(t.allowEmptyValue()).isType(Boolean.class).is(true);
-
-		t.allowEmptyValue((String)null);
-		assertOptional(t.allowEmptyValue()).isNull();
-	}
-
-	/**
-	 * Test method for {@link ParameterInfo#items(java.lang.Object)}.
-	 */
-	@Test
-	public void a09_items() {
-		ParameterInfo t = new ParameterInfo();
-
-		t.items(items("foo"));
-		assertOptional(t.items()).asJson().is("{type:'foo'}");
-
-		t.items("{type:'foo'}");
-		assertOptional(t.items()).isType(Items.class).asJson().is("{type:'foo'}");
-
-		t.items((String)null);
-		assertOptional(t.items()).isNull();
-	}
-
-	/**
-	 * Test method for {@link ParameterInfo#collectionFormat(java.lang.Object)}.
-	 */
-	@Test
-	public void a10_collectionFormat() {
-		ParameterInfo t = new ParameterInfo();
-
-		t.collectionFormat("foo");
-		assertString(t.collectionFormat()).is("foo");
-
-		t.collectionFormat(null);
-		assertString(t.collectionFormat()).isNull();
-	}
-
-	/**
-	 * Test method for {@link ParameterInfo#_default(java.lang.Object)}.
-	 */
-	@Test
-	public void a11_default() {
-		ParameterInfo t = new ParameterInfo();
-
-		t._default("foo");
-		assertString(t._default()).is("foo");
-
-		t._default(new StringBuilder("foo"));
-		assertOptional(t._default()).isType(StringBuilder.class).asString().is("foo");
-
-		t._default(null);
-		assertOptional(t._default()).isNull();
-	}
-
-	/**
-	 * Test method for {@link ParameterInfo#maximum(java.lang.Object)}.
-	 */
-	@Test
-	public void a12_maximum() {
-		ParameterInfo t = new ParameterInfo();
-
-		t.maximum(123);
-		assertOptional(t.maximum()).isType(Integer.class).is(123);
-
-		t.maximum(123f);
-		assertOptional(t.maximum()).isType(Float.class).is(123f);
-
-		t.maximum("123");
-		assertOptional(t.maximum()).isType(Integer.class).is(123);
-
-		t.maximum((String)null);
-		assertOptional(t.maximum()).isNull();
-	}
-
-	/**
-	 * Test method for {@link ParameterInfo#exclusiveMaximum(java.lang.Object)}.
-	 */
-	@Test
-	public void a13_exclusiveMaximum() {
-		ParameterInfo t = new ParameterInfo();
-
-		t.exclusiveMaximum(true);
-		assertOptional(t.exclusiveMaximum()).isType(Boolean.class).is(true);
-
-		t.exclusiveMaximum("true");
-		assertOptional(t.exclusiveMaximum()).isType(Boolean.class).is(true);
-
-		t.exclusiveMaximum((String)null);
-		assertOptional(t.exclusiveMaximum()).isNull();
-	}
-
-	/**
-	 * Test method for {@link ParameterInfo#minimum(java.lang.Object)}.
-	 */
-	@Test
-	public void a14_minimum() {
-		ParameterInfo t = new ParameterInfo();
-
-		t.minimum(123);
-		assertOptional(t.minimum()).isType(Integer.class).is(123);
-
-		t.minimum(123f);
-		assertOptional(t.minimum()).isType(Float.class).is(123f);
-
-		t.minimum("123");
-		assertOptional(t.minimum()).isType(Integer.class).is(123);
-
-		t.minimum((String)null);
-		assertOptional(t.minimum()).isNull();
-	}
-
-	/**
-	 * Test method for {@link ParameterInfo#exclusiveMinimum(java.lang.Object)}.
-	 */
-	@Test
-	public void a15_exclusiveMinimum() {
-		ParameterInfo t = new ParameterInfo();
-
-		t.exclusiveMinimum(true);
-		assertOptional(t.exclusiveMinimum()).isType(Boolean.class).is(true);
-
-		t.exclusiveMinimum("true");
-		assertOptional(t.exclusiveMinimum()).isType(Boolean.class).is(true);
-
-		t.exclusiveMinimum((String)null);
-		assertOptional(t.exclusiveMinimum()).isNull();
-	}
-
-	/**
-	 * Test method for {@link ParameterInfo#maxLength(java.lang.Object)}.
-	 */
-	@Test
-	public void a16_maxLength() {
-		ParameterInfo t = new ParameterInfo();
-
-		t.maxLength(123);
-		assertOptional(t.maxLength()).isType(Integer.class).is(123);
-
-		t.maxLength("123");
-		assertOptional(t.maxLength()).isType(Integer.class).is(123);
-
-		t.maxLength((String)null);
-		assertOptional(t.maxLength()).isNull();
-	}
-
-	/**
-	 * Test method for {@link ParameterInfo#minLength(java.lang.Object)}.
-	 */
-	@Test
-	public void a17_minLength() {
-		ParameterInfo t = new ParameterInfo();
-
-		t.minLength(123);
-		assertOptional(t.minLength()).isType(Integer.class).is(123);
-
-		t.minLength("123");
-		assertOptional(t.minLength()).isType(Integer.class).is(123);
-
-		t.minLength((String)null);
-		assertOptional(t.minLength()).isNull();
-	}
-
-	/**
-	 * Test method for {@link ParameterInfo#pattern(java.lang.Object)}.
-	 */
-	@Test
-	public void a18_pattern() {
-		ParameterInfo t = new ParameterInfo();
-
-		t.pattern("foo");
-		assertString(t.pattern()).is("foo");
-
-		t.pattern(null);
-		assertString(t.pattern()).isNull();
-	}
-
-	/**
-	 * Test method for {@link ParameterInfo#maxItems(java.lang.Object)}.
-	 */
-	@Test
-	public void a19_maxItems() {
-		ParameterInfo t = new ParameterInfo();
-
-		t.maxItems(123);
-		assertOptional(t.maxItems()).isType(Integer.class).is(123);
-
-		t.maxItems("123");
-		assertOptional(t.maxItems()).isType(Integer.class).is(123);
-
-		t.maxItems((String)null);
-		assertOptional(t.maxItems()).isNull();
-	}
-
-	/**
-	 * Test method for {@link ParameterInfo#minItems(java.lang.Object)}.
-	 */
-	@Test
-	public void a20_minItems() {
-		ParameterInfo t = new ParameterInfo();
-
-		t.minItems(123);
-		assertOptional(t.minItems()).isType(Integer.class).is(123);
-
-		t.minItems("123");
-		assertOptional(t.minItems()).isType(Integer.class).is(123);
-
-		t.minItems((String)null);
-		assertOptional(t.minItems()).isNull();
-	}
-
-	/**
-	 * Test method for {@link ParameterInfo#uniqueItems(java.lang.Object)}.
-	 */
-	@Test
-	public void a21_uniqueItems() {
-		ParameterInfo t = new ParameterInfo();
-
-		t.uniqueItems(true);
-		assertOptional(t.uniqueItems()).isType(Boolean.class).is(true);
-
-		t.uniqueItems("true");
-		assertOptional(t.uniqueItems()).isType(Boolean.class).is(true);
-
-		t.uniqueItems((String)null);
-		assertOptional(t.uniqueItems()).isNull();
-	}
-
-	/**
-	 * Test method for {@link ParameterInfo#setEnum(java.util.Collection)}.
-	 */
-	@Test
-	public void a22_enum() {
-		ParameterInfo t = new ParameterInfo();
-
-		t._enum(set("foo","bar"));
-		assertOptional(t._enum()).isType(Set.class).asJson().is("['foo','bar']");
-
-		t._enum(set());
-		assertOptional(t._enum()).isType(Set.class).asJson().is("[]");
-
-		t._enum((Collection<Object>)null);
-		assertOptional(t._enum()).isNull();
-
-		t.addEnum(set("foo","bar"));
-		assertOptional(t._enum()).isType(Set.class).asJson().is("['foo','bar']");
-
-		t.addEnum(set("baz"));
-		assertOptional(t._enum()).isType(Set.class).asJson().is("['foo','bar','baz']");
-
-		t.addEnum(null);
-		assertOptional(t._enum()).isType(Set.class).asJson().is("['foo','bar','baz']");
-	}
-
-	/**
-	 * Test method for {@link ParameterInfo#multipleOf(java.lang.Object)}.
-	 */
-	@Test
-	public void a23_multipleOf() {
-		ParameterInfo t = new ParameterInfo();
-
-		t.multipleOf(123);
-		assertOptional(t.multipleOf()).isType(Integer.class).is(123);
-
-		t.multipleOf(123f);
-		assertOptional(t.multipleOf()).isType(Float.class).is(123f);
-
-		t.multipleOf("123");
-		assertOptional(t.multipleOf()).isType(Integer.class).is(123);
-
-		t.multipleOf((String)null);
-		assertOptional(t.multipleOf()).isNull();
+		assertString(t.setName("foo").getName()).is("foo");
+		assertObject(t.setName(null).getName()).isNull();
+		assertString(t.setIn("foo").getIn()).is("foo");
+		assertString(t.setIn(null).getIn()).isNull();
+		assertString(t.setDescription("foo").getDescription()).is("foo");
+		assertString(t.setDescription(null).getDescription()).isNull();
+		assertObject(t.setRequired(true).getRequired()).isType(Boolean.class).is(true);
+		assertObject(t.setSchema(schemaInfo().setTitle("foo")).getSchema()).asJson().is("{title:'foo'}");
+		assertString(t.setType("foo").getType()).is("foo");
+		assertString(t.setType(null).getType()).isNull();
+		assertString(t.setFormat("foo").getFormat()).is("foo");
+		assertString(t.setFormat(null).getFormat()).isNull();
+		assertObject(t.setAllowEmptyValue(true).getAllowEmptyValue()).isType(Boolean.class).is(true);
+		assertObject(t.setItems(items("foo")).getItems()).asJson().is("{type:'foo'}");
+		assertString(t.setCollectionFormat("foo").getCollectionFormat()).is("foo");
+		assertString(t.setCollectionFormat(null).getCollectionFormat()).isNull();
+		assertString(t.setDefault("foo").getDefault()).is("foo");
+		assertObject(t.setDefault(new StringBuilder("foo")).getDefault()).isType(StringBuilder.class).asString().is("foo");
+		assertObject(t.setDefault(null).getDefault()).isNull();
+		assertObject(t.setMaximum(123).getMaximum()).isType(Integer.class).is(123);
+		assertObject(t.setMaximum(123f).getMaximum()).isType(Float.class).is(123f);
+		assertObject(t.setExclusiveMaximum(true).getExclusiveMaximum()).isType(Boolean.class).is(true);
+		assertObject(t.setMinimum(123).getMinimum()).isType(Integer.class).is(123);
+		assertObject(t.setMinimum(123f).getMinimum()).isType(Float.class).is(123f);
+		assertObject(t.setExclusiveMinimum(true).getExclusiveMinimum()).isType(Boolean.class).is(true);
+		assertObject(t.setMaxLength(123).getMaxLength()).isType(Integer.class).is(123);
+		assertObject(t.setMinLength(123).getMinLength()).isType(Integer.class).is(123);
+		assertString(t.setPattern("foo").getPattern()).is("foo");
+		assertString(t.setPattern(null).getPattern()).isNull();
+		assertObject(t.setMaxItems(123).getMaxItems()).isType(Integer.class).is(123);
+		assertObject(t.setMinItems(123).getMinItems()).isType(Integer.class).is(123);
+		assertObject(t.setUniqueItems(true).getUniqueItems()).isType(Boolean.class).is(true);
+		assertObject(t.setEnum(set("foo","bar")).getEnum()).isType(Set.class).asJson().is("['foo','bar']");
+		assertObject(t.setEnum(set()).getEnum()).isType(Set.class).asJson().is("[]");
+		assertObject(t.setEnum((Collection<Object>)null).getEnum()).isNull();
+		assertObject(t.addEnum("foo","bar").getEnum()).isType(Set.class).asJson().is("['foo','bar']");
+		assertObject(t.addEnum("baz").getEnum()).isType(Set.class).asJson().is("['foo','bar','baz']");
+		assertObject(t.setMultipleOf(123).getMultipleOf()).isType(Integer.class).is(123);
+		assertObject(t.setMultipleOf(123f).getMultipleOf()).isType(Float.class).is(123f);
 	}
 
 	/**
@@ -445,7 +104,7 @@ public class ParameterInfo_Test {
 			.set("name", "h")
 			.set("pattern", "i")
 			.set("required", true)
-			.set("schema", schemaInfo().title("j"))
+			.set("schema", schemaInfo().setTitle("j"))
 			.set("type", "k")
 			.set("uniqueItems", true)
 			.set("$ref", "ref");
@@ -596,7 +255,7 @@ public class ParameterInfo_Test {
 			.set("name", "h")
 			.set("pattern", "i")
 			.set("required", true)
-			.set("schema", schemaInfo().title("j"))
+			.set("schema", schemaInfo().setTitle("j"))
 			.set("type", "k")
 			.set("uniqueItems", true)
 			.set("$ref", "ref")
@@ -632,7 +291,7 @@ public class ParameterInfo_Test {
 			.set("name", "h")
 			.set("pattern", "i")
 			.set("required", true)
-			.set("schema", schemaInfo().title("j"))
+			.set("schema", schemaInfo().setTitle("j"))
 			.set("type", "k")
 			.set("uniqueItems", true)
 			.set("$ref", "ref");

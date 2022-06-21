@@ -87,7 +87,7 @@ public class Category extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	@Xml(format=ATTR)
 	public Category setTerm(String value) {
@@ -121,7 +121,7 @@ public class Category extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Category setScheme(Object value) {
 		this.scheme = toURI(value);
@@ -150,7 +150,7 @@ public class Category extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Category setLabel(String value) {
 		this.label = value;

@@ -83,7 +83,7 @@ public class License extends SwaggerElement {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// name
+	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -107,42 +107,12 @@ public class License extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
-	 */
-	public void setName(String value) {
-		name = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>name</property>.
-	 *
-	 * <p>
-	 * The license name used for the API.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> name() {
-		return optional(getName());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>name</property>.
-	 *
-	 * <p>
-	 * The license name used for the API.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public License name(String value) {
-		setName(value);
+	public License setName(String value) {
+		name = value;
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// url
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>url</property>.
@@ -166,68 +136,10 @@ public class License extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	public void setUrl(URI value) {
+	public License setUrl(URI value) {
 		url = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>url</property>.
-	 *
-	 * <p>
-	 * A URL to the license used for the API.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<URI> url() {
-		return optional(getUrl());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>url</property>.
-	 *
-	 * <p>
-	 * A URL to the license used for the API.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public License url(URI value) {
-		setUrl(value);
-		return this;
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>url</property>.
-	 *
-	 * <p>
-	 * A URL to the license used for the API.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public License url(URL value) {
-		setUrl(StringUtils.toURI(value));
-		return this;
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>url</property>.
-	 *
-	 * <p>
-	 * A URL to the license used for the API.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public License url(String value) {
-		setUrl(StringUtils.toURI(value));
 		return this;
 	}
 
@@ -247,8 +159,8 @@ public class License extends SwaggerElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "name": return name(stringify(value));
-			case "url": return url(StringUtils.toURI(value));
+			case "name": return setName(stringify(value));
+			case "url": return setUrl(StringUtils.toURI(value));
 			default:
 				super.set(property, value);
 				return this;

@@ -27,48 +27,16 @@ import org.junit.*;
 public class Tag_Test {
 
 	/**
-	 * Test method for {@link Tag#name(java.lang.Object)}.
+	 * Test method for getters and setters.
 	 */
 	@Test
-	public void a01_name() {
+	public void a01_gettersAndSetters() {
 		Tag t = new Tag();
-
-		t.name("foo");
-		assertString(t.name()).is("foo");
-
-		t.name(null);
-		assertString(t.name()).isNull();
-	}
-
-	/**
-	 * Test method for {@link Tag#description(java.lang.Object)}.
-	 */
-	@Test
-	public void a02_description() {
-		Tag t = new Tag();
-
-		t.description("foo");
-		assertString(t.description()).is("foo");
-
-		t.description(null);
-		assertString(t.description()).isNull();
-	}
-
-	/**
-	 * Test method for {@link Tag#externalDocs(java.lang.Object)}.
-	 */
-	@Test
-	public void a03_externalDocs() {
-		Tag t = new Tag();
-
-		t.externalDocs(externalDocumentation("foo"));
-		assertOptional(t.externalDocs()).asJson().is("{url:'foo'}");
-
-		t.externalDocs("{url:'foo'}");
-		assertOptional(t.externalDocs()).isType(ExternalDocumentation.class).asJson().is("{url:'foo'}");;
-
-		t.externalDocs((String)null);
-		assertOptional(t.externalDocs()).isNull();
+		assertString(t.setName("foo").getName()).is("foo");
+		assertString(t.setName(null).getName()).isNull();
+		assertString(t.setDescription("foo").getDescription()).is("foo");
+		assertString(t.setDescription(null).getDescription()).isNull();
+		assertObject(t.setExternalDocs(externalDocumentation("foo")).getExternalDocs()).asJson().is("{url:'foo'}");
 	}
 
 	/**

@@ -90,7 +90,7 @@ public class Generator extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Generator setUri(Object value) {
 		this.uri = toURI(value);
@@ -119,7 +119,7 @@ public class Generator extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Generator setVersion(String value) {
 		this.version = value;
@@ -148,7 +148,7 @@ public class Generator extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Generator setText(String value) {
 		this.text = value;

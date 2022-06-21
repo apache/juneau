@@ -14,7 +14,6 @@ package org.apache.juneau.rest.beans;
 
 import java.util.*;
 
-import org.apache.juneau.dto.swagger.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.servlet.*;
 
@@ -86,7 +85,7 @@ public class ChildResourceDescriptions extends ResourceDescriptions {
 		for (Map.Entry<String,RestContext> e : context.getRestChildren().asMap().entrySet()) {
 			String title = null;
 			try {
-				title = e.getValue().getSwagger(req.getLocale()).flatMap(Swagger::info).flatMap(Info::title).orElse(null);
+				title = e.getValue().getSwagger(req.getLocale()).map(x -> x == null ? null : x.getInfo()).map(x -> x == null ? null : x.getTitle()).orElse(null);
 			} catch (Exception e1) {
 				title = e1.getLocalizedMessage();
 			}

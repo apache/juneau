@@ -89,7 +89,7 @@ public class Tag extends SwaggerElement {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// description
+	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -114,39 +114,12 @@ public class Tag extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>{@doc ext.GFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 */
-	public void setDescription(String value) {
-		description = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>description</property>.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> description() {
-		return optional(getDescription());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>description</property>.
-	 *
-	 * <p>
-	 * A short description for the tag.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public Tag description(String value) {
-		setDescription(value);
+	public Tag setDescription(String value) {
+		description = value;
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// externalDocs
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>externalDocs</property>.
@@ -169,63 +142,12 @@ public class Tag extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	public void setExternalDocs(ExternalDocumentation value) {
+	public Tag setExternalDocs(ExternalDocumentation value) {
 		externalDocs = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>externalDocs</property>.
-	 *
-	 * <p>
-	 * Additional external documentation for this tag.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<ExternalDocumentation> externalDocs() {
-		return optional(getExternalDocs());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>externalDocs</property>.
-	 *
-	 * <p>
-	 * Additional external documentation for this tag.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Tag externalDocs(ExternalDocumentation value) {
-		setExternalDocs(value);
 		return this;
 	}
-
-	/**
-	 * Bean property fluent setter:  <property>externalDocs</property>.
-	 *
-	 * <p>
-	 * Additional external documentation for this tag as raw JSON.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	externalDocs(<js>"{description:'description',url:'url'}"</js>);
-	 * </p>
-	 *
-	 * @param json
-	 * 	The new value for this property as JSON.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Tag externalDocs(String json) {
-		setExternalDocs(toType(json, ExternalDocumentation.class));
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// name
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>name</property>.
@@ -248,36 +170,10 @@ public class Tag extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
-	 */
-	public void setName(String value) {
-		name = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>name</property>.
-	 *
-	 * <p>
-	 * The name of the tag.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> name() {
-		return optional(getName());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>name</property>.
-	 *
-	 * <p>
-	 * The name of the tag.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public Tag name(String value) {
-		setName(value);
+	public Tag setName(String value) {
+		name = value;
 		return this;
 	}
 
@@ -299,9 +195,9 @@ public class Tag extends SwaggerElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "description": return description(stringify(value));
-			case "externalDocs": return externalDocs(toType(value, ExternalDocumentation.class));
-			case "name": return name(stringify(value));
+			case "description": return setDescription(stringify(value));
+			case "externalDocs": return setExternalDocs(toType(value, ExternalDocumentation.class));
+			case "name": return setName(stringify(value));
 			default:
 				super.set(property, value);
 				return this;

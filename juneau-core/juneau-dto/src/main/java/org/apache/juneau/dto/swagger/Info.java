@@ -115,7 +115,7 @@ public class Info extends SwaggerElement {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// contact
+	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -139,63 +139,12 @@ public class Info extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	public void setContact(Contact value) {
+	public Info setContact(Contact value) {
 		contact = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>contact</property>.
-	 *
-	 * <p>
-	 * The contact information for the exposed API.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Contact> contact() {
-		return optional(getContact());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>contact</property>.
-	 *
-	 * <p>
-	 * The contact information for the exposed API.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Info contact(Contact value) {
-		setContact(value);
 		return this;
 	}
-
-	/**
-	 * Bean property fluent setter:  <property>contact</property>.
-	 *
-	 * <p>
-	 * The contact information for the exposed API as raw JSON.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	contact(<js>"{name:'name',url:'url',...}"</js>);
-	 * </p>
-	 *
-	 * @param json
-	 * 	The new value for this property as JSON.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Info contact(String json) {
-		setContact(toType(json, Contact.class));
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// description
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>description</property>.
@@ -219,43 +168,12 @@ public class Info extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>{@doc ext.GFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 */
-	public void setDescription(String value) {
-		description = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>description</property>.
-	 *
-	 * <p>
-	 * A short description of the application.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> description() {
-		return optional(getDescription());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>description</property>.
-	 *
-	 * <p>
-	 * A short description of the application.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>{@doc ext.GFM} can be used for rich text representation.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public Info description(String value) {
-		setDescription(value);
+	public Info setDescription(String value) {
+		description = value;
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// license
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>license</property>.
@@ -278,63 +196,12 @@ public class Info extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	public void setLicense(License value) {
+	public Info setLicense(License value) {
 		license = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>license</property>.
-	 *
-	 * <p>
-	 * The license information for the exposed API.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<License> license() {
-		return optional(getLicense());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>license</property>.
-	 *
-	 * <p>
-	 * The license information for the exposed API.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Info license(License value) {
-		setLicense(value);
 		return this;
 	}
-
-	/**
-	 * Bean property fluent setter:  <property>license</property>.
-	 *
-	 * <p>
-	 * The license information for the exposed API as raw JSON.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	license(<js>"{name:'name',url:'url',...}"</js>);
-	 * </p>
-	 *
-	 * @param json
-	 * 	The new value for this property as JSON.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Info license(String json) {
-		setLicense(toType(json, License.class));
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// siteName
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>siteName</property>.
@@ -356,41 +223,12 @@ public class Info extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 */
-	public void setSiteName(String value) {
-		siteName = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>siteName</property>.
-	 *
-	 * <p>
-	 * The site name of the application.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> siteName() {
-		return optional(getSiteName());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>siteName</property>.
-	 *
-	 * <p>
-	 * The site name of the application.
-	 *
-	 * @param value
-	 * 	The new value for this property.
 	 * @return This object.
 	 */
-	public Info siteName(String value) {
-		setSiteName(value);
+	public Info setSiteName(String value) {
+		siteName = value;
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// termsOfService
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>termsOfService</property>.
@@ -413,42 +251,12 @@ public class Info extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 */
-	public void setTermsOfService(String value) {
-		termsOfService = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>termsOfService</property>.
-	 *
-	 * <p>
-	 * The Terms of Service for the API.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> termsOfService() {
-		return optional(getTermsOfService());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>termsOfService</property>.
-	 *
-	 * <p>
-	 * The Terms of Service for the API.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public Info termsOfService(String value) {
-		setTermsOfService(value);
+	public Info setTermsOfService(String value) {
+		termsOfService = value;
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// title
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>title</property>.
@@ -470,42 +278,12 @@ public class Info extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 */
-	public void setTitle(String value) {
-		title = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>title</property>.
-	 *
-	 * <p>
-	 * The title of the application.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> title() {
-		return optional(getTitle());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>title</property>.
-	 *
-	 * <p>
-	 * The title of the application.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public Info title(String value) {
-		setTitle(value);
+	public Info setTitle(String value) {
+		title = value;
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// version
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>version</property>.
@@ -528,39 +306,12 @@ public class Info extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
-	 */
-	public void setVersion(String value) {
-		version = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>version</property>.
-	 *
-	 * <p>
-	 * The version of the application API (not to be confused with the specification version).
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> version() {
-		return optional(getVersion());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>version</property>.
-	 *
-	 * <p>
-	 * The version of the application API (not to be confused with the specification version).
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public Info version(String value) {
-		setVersion(value);
+	public Info setVersion(String value) {
+		version = value;
 		return this;
 	}
-
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
@@ -583,13 +334,13 @@ public class Info extends SwaggerElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "contact": return contact(toType(value, Contact.class));
-			case "description": return description(stringify(value));
-			case "license": return license(toType(value, License.class));
-			case "siteName": return siteName(stringify(value));
-			case "termsOfService": return termsOfService(stringify(value));
-			case "title": return title(stringify(value));
-			case "version": return version(stringify(value));
+			case "contact": return setContact(toType(value, Contact.class));
+			case "description": return setDescription(stringify(value));
+			case "license": return setLicense(toType(value, License.class));
+			case "siteName": return setSiteName(stringify(value));
+			case "termsOfService": return setTermsOfService(stringify(value));
+			case "title": return setTitle(stringify(value));
+			case "version": return setVersion(stringify(value));
 			default:
 				super.set(property, value);
 				return this;

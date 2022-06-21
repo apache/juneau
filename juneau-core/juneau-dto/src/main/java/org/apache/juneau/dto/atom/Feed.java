@@ -113,7 +113,7 @@ public class Feed extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Feed setGenerator(Generator value) {
 		this.generator = value;
@@ -141,7 +141,7 @@ public class Feed extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Feed setIcon(Icon value) {
 		this.icon = value;
@@ -169,7 +169,7 @@ public class Feed extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Feed setLogo(Logo value) {
 		this.logo = value;
@@ -197,7 +197,7 @@ public class Feed extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Feed setSubtitle(Text value) {
 		this.subtitle = value;
@@ -242,7 +242,7 @@ public class Feed extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Feed setEntries(Entry...value) {
 		this.entries = value;

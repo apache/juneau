@@ -113,7 +113,7 @@ public class OAuthFlow extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public OAuthFlow setAuthorizationUrl(String value) {
 		authorizationUrl = value;
@@ -137,7 +137,7 @@ public class OAuthFlow extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public OAuthFlow setTokenUrl(String value) {
 		tokenUrl = value;
@@ -166,7 +166,7 @@ public class OAuthFlow extends OpenApiElement {
 	 * 	The new value for this property.
 	 * 	<br>MUST be in the format of an email address.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public OAuthFlow setRefreshUrl(String value) {
 		refreshUrl = value;
@@ -195,23 +195,10 @@ public class OAuthFlow extends OpenApiElement {
 	 * 	The new value for this property.
 	 * 	<br>Keys must be MIME-type strings.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public OAuthFlow setScopes(Map<String,String> value) {
 		scopes = copyOf(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>examples</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public OAuthFlow addScopes(Map<String,String> values) {
-		scopes = mapBuilder(scopes).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -220,7 +207,7 @@ public class OAuthFlow extends OpenApiElement {
 	 *
 	 * @param name The mime-type string.
 	 * @param description The example.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public OAuthFlow addScope(String name, String description) {
 		scopes = mapBuilder(scopes).sparse().add(name, description).build();

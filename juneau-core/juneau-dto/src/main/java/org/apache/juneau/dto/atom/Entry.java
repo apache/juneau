@@ -107,7 +107,7 @@ public class Entry extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Entry setContent(Content value) {
 		this.content = value;
@@ -135,7 +135,7 @@ public class Entry extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Entry setPublished(Calendar value) {
 		this.published = value;
@@ -179,7 +179,7 @@ public class Entry extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Entry setSource(Source value) {
 		this.source = value;
@@ -207,7 +207,7 @@ public class Entry extends CommonEntry {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Entry setSummary(Text value) {
 		this.summary = value;

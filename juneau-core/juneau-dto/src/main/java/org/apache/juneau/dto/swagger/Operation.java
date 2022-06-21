@@ -206,7 +206,7 @@ public class Operation extends SwaggerElement {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// consumes
+	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -231,36 +231,26 @@ public class Operation extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>Values MUST be as described under {@doc ext.SwaggerMimeTypes}.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	public void setConsumes(Collection<MediaType> value) {
+	public Operation setConsumes(Collection<MediaType> value) {
 		consumes = setFrom(value);
+		return this;
 	}
 
 	/**
-	 * Bean property adder:  <property>consumes</property>.
+	 * Bean property setter:  <property>consumes</property>.
 	 *
 	 * <p>
 	 * A list of MIME types the operation can consume.
 	 *
 	 * @param value
-	 * 	The values to add to this property.
+	 * 	The new value for this property.
 	 * 	<br>Values MUST be as described under {@doc ext.SwaggerMimeTypes}.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	public void addConsumes(Collection<MediaType> value) {
-		consumes = setBuilder(consumes).sparse().addAll(value).build();
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>consumes</property>.
-	 *
-	 * <p>
-	 * A list of MIME types the operation can consume.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Set<MediaType>> consumes() {
-		return optional(getConsumes());
+	public Operation setConsumes(MediaType...value) {
+		return setConsumes(Arrays.asList(value));
 	}
 
 	/**
@@ -273,45 +263,10 @@ public class Operation extends SwaggerElement {
 	 * 	The new value for this property.
 	 * @return This object.
 	 */
-	public Operation consumes(MediaType...value) {
+	public Operation addConsumes(MediaType...value) {
 		setConsumes(setBuilder(MediaType.class).sparse().add(value).build());
 		return this;
 	}
-
-	/**
-	 * Bean property fluent setter:  <property>consumes</property>.
-	 *
-	 * <p>
-	 * A list of MIME types the operation can consume.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object.
-	 */
-	public Operation consumes(Collection<MediaType> value) {
-		setConsumes(value);
-		return this;
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>consumes</property>.
-	 *
-	 * <p>
-	 * A list of MIME types the operation can consume.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * <br>Values can also be JSON arrays.
-	 * @return This object.
-	 */
-	public Operation consumes(String...value) {
-		setConsumes(setBuilder(MediaType.class).sparse().addJson(value).build());
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// deprecated
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>deprecated</property>.
@@ -344,58 +299,12 @@ public class Operation extends SwaggerElement {
 	 * Declares this operation to be deprecated.
 	 *
 	 * @param value The new value for this property.
+	 * @return This object.
 	 */
-	public void setDeprecated(Boolean value) {
+	public Operation setDeprecated(Boolean value) {
 		deprecated = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>deprecated</property>.
-	 *
-	 * <p>
-	 * Declares this operation to be deprecated.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Boolean> deprecated() {
-		return optional(getDeprecated());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>deprecated</property>.
-	 *
-	 * <p>
-	 * Declares this operation to be deprecated.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Operation deprecated(Boolean value) {
-		setDeprecated(value);
 		return this;
 	}
-
-	/**
-	 * Bean property fluent setter:  <property>deprecated</property>.
-	 *
-	 * <p>
-	 * Declares this operation to be deprecated.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Operation deprecated(String value) {
-		setDeprecated(toBoolean(value));
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// description
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>description</property>.
@@ -419,43 +328,12 @@ public class Operation extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>{@doc ext.GFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 */
-	public void setDescription(String value) {
-		description = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>description</property>.
-	 *
-	 * <p>
-	 * A verbose explanation of the operation behavior.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> description() {
-		return optional(getDescription());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>description</property>.
-	 *
-	 * <p>
-	 * A verbose explanation of the operation behavior.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>{@doc ext.GFM} can be used for rich text representation.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public Operation description(String value) {
-		setDescription(value);
+	public Operation setDescription(String value) {
+		description = value;
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// externalDocs
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>externalDocs</property>.
@@ -478,63 +356,12 @@ public class Operation extends SwaggerElement {
 	 * @param value
 	 * 	The values to add to this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	public void setExternalDocs(ExternalDocumentation value) {
+	public Operation setExternalDocs(ExternalDocumentation value) {
 		externalDocs = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>externalDocs</property>.
-	 *
-	 * <p>
-	 * Additional external documentation for this operation.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<ExternalDocumentation> externalDocs() {
-		return optional(getExternalDocs());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>externalDocs</property>.
-	 *
-	 * <p>
-	 * Additional external documentation for this operation.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Operation externalDocs(ExternalDocumentation value) {
-		setExternalDocs(value);
 		return this;
 	}
-
-	/**
-	 * Bean property fluent setter:  <property>externalDocs</property>.
-	 *
-	 * <p>
-	 * Additional external documentation for this operation as raw JSON.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	externalDocs(<js>"{description:'description',url:'url'}"</js>);
-	 * </p>
-	 *
-	 * @param json
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Operation externalDocs(String json) {
-		setExternalDocs(toType(json, ExternalDocumentation.class));
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// operationId
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>operationId</property>.
@@ -560,45 +387,12 @@ public class Operation extends SwaggerElement {
 	 * 	<br>Tools and libraries MAY use the operationId to uniquely identify an operation, therefore, it is recommended to
 	 * 	follow common programming naming conventions.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 */
-	public void setOperationId(String value) {
-		operationId = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>operationId</property>.
-	 *
-	 * <p>
-	 * Unique string used to identify the operation.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> operationId() {
-		return optional(getOperationId());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>operationId</property>.
-	 *
-	 * <p>
-	 * Unique string used to identify the operation.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>The id MUST be unique among all operations described in the API.
-	 * 	<br>Tools and libraries MAY use the operationId to uniquely identify an operation, therefore, it is recommended to
-	 * 	follow common programming naming conventions.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public Operation operationId(String value) {
-		setOperationId(value);
+	public Operation setOperationId(String value) {
+		operationId = value;
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// parameters
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>parameters</property>.
@@ -644,14 +438,19 @@ public class Operation extends SwaggerElement {
 	}
 
 	/**
-	 * Returns the parameter with the specified type and name.
+	 * Bean property setter:  <property>parameters</property>.
 	 *
-	 * @param in The parameter in.
-	 * @param name The parameter name.  Can be <jk>null</jk> for parameter type <c>body</c>.
-	 * @return The matching parameter info, or <jk>null</jk> if not found.
+	 * <p>
+	 * A list of parameters that are applicable for this operation.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	public Optional<ParameterInfo> parameter(String in, String name) {
-		return optional(getParameter(in, name));
+	public Operation setParameters(Collection<ParameterInfo> value) {
+		parameters = listFrom(value);
+		return this;
 	}
 
 	/**
@@ -662,36 +461,10 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	public void setParameters(Collection<ParameterInfo> value) {
-		parameters = listFrom(value);
-	}
-
-	/**
-	 * Adds one or more values to the <property>parameters</property> property.
-	 *
-	 * <p>
-	 * A list of parameters that are applicable for this operation.
-	 *
-	 * @param value
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 */
-	public void addParameters(Collection<ParameterInfo> value) {
-		parameters = listBuilder(parameters).sparse().addAll(value).build();
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>parameters</property>.
-	 *
-	 * <p>
-	 * A list of parameters that are applicable for this operation.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<List<ParameterInfo>> parameters() {
-		return optional(getParameters());
+	public Operation setParameters(ParameterInfo...value) {
+		return setParameters(Arrays.asList(value));
 	}
 
 	/**
@@ -704,39 +477,8 @@ public class Operation extends SwaggerElement {
 	 * 	The new value for this property.
 	 * @return This object.
 	 */
-	public Operation parameters(ParameterInfo...value) {
+	public Operation addParameters(ParameterInfo...value) {
 		setParameters(listBuilder(ParameterInfo.class).sparse().add(value).build());
-		return this;
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>parameters</property>.
-	 *
-	 * <p>
-	 * A list of parameters that are applicable for this operation.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object.
-	 */
-	public Operation parameters(Collection<ParameterInfo> value) {
-		setParameters(value);
-		return this;
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>parameters</property>.
-	 *
-	 * <p>
-	 * A list of parameters that are applicable for this operation.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<bf>Strings can be JSON arrays of objects.
-	 * @return This object.
-	 */
-	public Operation parameters(String...value) {
-		setParameters(listBuilder(ParameterInfo.class).sparse().addJson(value).build());
 		return this;
 	}
 
@@ -766,35 +508,26 @@ public class Operation extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>Value MUST be as described under {@doc ext.SwaggerMimeTypes}.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	public void setProduces(Collection<MediaType> value) {
+	public Operation setProduces(Collection<MediaType> value) {
 		produces = setFrom(value);
+		return this;
 	}
 
 	/**
-	 * Bean property adder:  <property>produces</property>.
+	 * Bean property setter:  <property>produces</property>.
 	 *
 	 * <p>
 	 * A list of MIME types the operation can produce.
 	 *
 	 * @param value
-	 * 	The values to add to this property.
+	 * 	The new value for this property.
 	 * 	<br>Value MUST be as described under {@doc ext.SwaggerMimeTypes}.
+	 * @return This object.
 	 */
-	public void addProduces(Collection<MediaType> value) {
-		produces = setBuilder(produces).sparse().addAll(value).build();
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>produces</property>.
-	 *
-	 * <p>
-	 * A list of MIME types the operation can produce.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Set<MediaType>> produces() {
-		return optional(getProduces());
+	public Operation setProduces(MediaType...value) {
+		return setProduces(Arrays.asList(value));
 	}
 
 	/**
@@ -807,45 +540,10 @@ public class Operation extends SwaggerElement {
 	 * 	The new value for this property.
 	 * @return This object.
 	 */
-	public Operation produces(MediaType...value) {
+	public Operation addProduces(MediaType...value) {
 		setProduces(setBuilder(MediaType.class).sparse().add(value).build());
 		return this;
 	}
-
-	/**
-	 * Bean property fluent setter:  <property>produces</property>.
-	 *
-	 * <p>
-	 * A list of MIME types the operation can produce.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object.
-	 */
-	public Operation produces(Collection<MediaType> value) {
-		setProduces(value);
-		return this;
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>produces</property>.
-	 *
-	 * <p>
-	 * A list of MIME types the operation can produce.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Strings can also be JSON arrays.
-	 * @return This object.
-	 */
-	public Operation produces(String...value) {
-		setProduces(setBuilder(MediaType.class).sparse().addJson(value).build());
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// responses
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>responses</property>.
@@ -882,16 +580,6 @@ public class Operation extends SwaggerElement {
 	}
 
 	/**
-	 * Returns the response info with the given status code.
-	 *
-	 * @param status The HTTP status code.
-	 * @return The response info as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<ResponseInfo> response(String status) {
-		return optional(getResponse(status));
-	}
-
-	/**
 	 * Bean property setter:  <property>responses</property>.
 	 *
 	 * <p>
@@ -900,23 +588,11 @@ public class Operation extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
+	 * @return This object.
 	 */
-	public void setResponses(Map<String,ResponseInfo> value) {
+	public Operation setResponses(Map<String,ResponseInfo> value) {
 		responses = copyOf(value);
-	}
-
-	/**
-	 * Bean property appender:  <property>responses</property>.
-	 *
-	 * <p>
-	 * The list of possible responses as they are returned from executing this operation.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 */
-	public void addResponses(Map<String,ResponseInfo> values) {
-		responses = mapBuilder(responses).sparse().addAll(values).build();
+		return this;
 	}
 
 	/**
@@ -926,61 +602,10 @@ public class Operation extends SwaggerElement {
 	 * @param response The response description.
 	 * @return This object.
 	 */
-	public Operation response(String statusCode, ResponseInfo response) {
-		addResponses(Collections.singletonMap(statusCode, response));
+	public Operation addResponse(String statusCode, ResponseInfo response) {
+		responses = mapBuilder(responses).add(statusCode, response).build();
 		return this;
 	}
-
-	/**
-	 * Bean property fluent getter:  <property>responses</property>.
-	 *
-	 * <p>
-	 * The list of possible responses as they are returned from executing this operation.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Map<String,ResponseInfo>> responses() {
-		return optional(getResponses());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>responses</property>.
-	 *
-	 * <p>
-	 * The list of possible responses as they are returned from executing this operation.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object.
-	 */
-	public Operation responses(Map<String,ResponseInfo> value) {
-		setResponses(value);
-		return this;
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>responses</property>.
-	 *
-	 * <p>
-	 * The list of possible responses as they are returned from executing this operation as raw JSON.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	responses(<js>"{'404':{description:'description',...}}"</js>);
-	 * </p>
-	 *
-	 * @param json
-	 * 	The new value for this property.
-	 * @return This object.
-	 */
-	public Operation responses(String json) {
-		setResponses(mapBuilder(String.class,ResponseInfo.class).sparse().addJson(json).build());
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// schemes
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>schemes</property>.
@@ -1010,35 +635,11 @@ public class Operation extends SwaggerElement {
 	 * 		<li><js>"wss"</js>
 	 * 	</ul>
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	public void setSchemes(Collection<String> value) {
+	public Operation setSchemes(Collection<String> value) {
 		schemes = setFrom(value);
-	}
-
-	/**
-	 * Bean property appender:  <property>schemes</property>.
-	 *
-	 * <p>
-	 * The transfer protocol for the operation.
-	 *
-	 * @param value
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 */
-	public void addSchemes(Collection<String> value) {
-		schemes = setBuilder(schemes).sparse().addAll(value).build();
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>schemes</property>.
-	 *
-	 * <p>
-	 * The transfer protocol for the operation.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Set<String>> schemes() {
-		return optional(getSchemes());
+		return this;
 	}
 
 	/**
@@ -1052,30 +653,10 @@ public class Operation extends SwaggerElement {
 	 * 	<br>String values can also be JSON arrays.
 	 * @return This object.
 	 */
-	public Operation schemes(String...value) {
+	public Operation addSchemes(String...value) {
 		setSchemes(setBuilder(String.class).sparse().addJson(value).build());
 		return this;
 	}
-
-	/**
-	 * Bean property fluent setter:  <property>schemes</property>.
-	 *
-	 * <p>
-	 * The transfer protocol for the operation.
-	 * <br>The value overrides the Swagger Object <c>schemes</c> definition.
-	 *
-	 * @param values
-	 * 	The new value for this property.
-	 * @return This object.
-	 */
-	public Operation schemes(Collection<String> values) {
-		setSchemes(values);
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// security
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>security</property>.
@@ -1098,28 +679,15 @@ public class Operation extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	public void setSecurity(Collection<Map<String,List<String>>> value) {
+	public Operation setSecurity(Collection<Map<String,List<String>>> value) {
 		security = listFrom(value);
+		return this;
 	}
 
 	/**
-	 * Adds one or more values to the <property>security</property> property.
-	 *
-	 * <p>
-	 * A declaration of which security schemes are applied for this operation.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * The new value for this property.
-	 */
-	public void addSecurity(Collection<Map<String,List<String>>> values) {
-		security = listBuilder(security).sparse().addAll(values).build();
-	}
-
-	/**
-	 * Same as {@link #addSecurity(Collection)}.
+	 * Same as {@link #addSecurity(String, String...)}.
 	 *
 	 * @param scheme
 	 * 	The scheme name.
@@ -1128,67 +696,12 @@ public class Operation extends SwaggerElement {
 	 * 	between the security requirements).
 	 * @return This object.
 	 */
-	public Operation security(String scheme, String...alternatives) {
+	public Operation addSecurity(String scheme, String...alternatives) {
 		Map<String,List<String>> m = map();
 		m.put(scheme, alist(alternatives));
-		addSecurity(Collections.singletonList(m));
+		security = listBuilder(security).add(m).build();
 		return this;
 	}
-
-	/**
-	 * Bean property fluent getter:  <property>security</property>.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<List<Map<String,List<String>>>> security() {
-		return optional(getSecurity());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>security</property>.
-	 *
-	 * <p>
-	 * A declaration of which security schemes are applied for this operation.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object.
-	 */
-	public Operation security(List<Map<String,List<String>>> value) {
-		setSecurity(value);
-		return this;
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>security</property>.
-	 *
-	 * <p>
-	 * A declaration of which security schemes are applied for this operation.
-	 * <br>The list of values describes alternative security schemes that can be used (that is, there is a logical OR
-	 * between the security requirements).
-	 *
-	 * <p>
-	 * This definition overrides any declared top-level security.
-	 * <br>To remove a top-level <c>security</c> declaration, an empty array can be used.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	security(<js>"[{key:['val1','val2']}]"</js>);
-	 * </p>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object.
-	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Operation security(String value) {
-		setSecurity((Collection)listBuilder(Map.class,String.class,List.class,String.class).sparse().addJson(value).build());
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// summary
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>summary</property>.
@@ -1211,42 +724,12 @@ public class Operation extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 */
-	public void setSummary(String value) {
-		summary = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>summary</property>.
-	 *
-	 * <p>
-	 * A short summary of what the operation does.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> summary() {
-		return optional(getSummary());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>summary</property>.
-	 *
-	 * <p>
-	 * A short summary of what the operation does.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public Operation summary(String value) {
-		setSummary(value);
+	public Operation setSummary(String value) {
+		summary = value;
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// tags
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>tags</property>.
@@ -1271,13 +754,31 @@ public class Operation extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	public void setTags(Collection<String> value) {
+	public Operation setTags(Collection<String> value) {
 		tags = setFrom(value);
+		return this;
 	}
 
 	/**
-	 * Bean property adder:  <property>tags</property>.
+	 * Bean property fluent setter:  <property>tags</property>.
+	 *
+	 * <p>
+	 * A list of tags for API documentation control.
+	 * <br>Tags can be used for logical grouping of operations by resources or any other qualifier.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object.
+	 */
+	public Operation setTags(String...value) {
+		setTags(setBuilder(String.class).sparse().add(value).build());
+		return this;
+	}
+
+	/**
+	 * Bean property fluent adder:  <property>tags</property>.
 	 *
 	 * <p>
 	 * A list of tags for API documentation control.
@@ -1285,63 +786,12 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @param value
 	 * 	The values to add to this property.
-	 */
-	public void addTags(Collection<String> value) {
-		tags = setBuilder(tags).sparse().addAll(value).build();
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>tags</property>.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Set<String>> tags() {
-		return optional(getTags());
-	}
-
-	/**
-	 * Convenience method for checking whether the tags property contains the specified tag.
-	 *
-	 * @param name The tag name to check for.
-	 * @return <jk>true</jk> if tag exists in the tags property.
-	 */
-	public boolean hasTag(String name) {
-		return getTags().contains(name);
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>tags</property>.
-	 *
-	 * <p>
-	 * A list of tags for API documentation control.
-	 * <br>Tags can be used for logical grouping of operations by resources or any other qualifier.
-	 *
-	 * @param value
-	 * 	The new value for this property.
 	 * @return This object.
 	 */
-	public Operation tags(Collection<String> value) {
-		setTags(value);
+	public Operation addTags(String...value) {
+		setTags(setBuilder(tags).sparse().add(value).build());
 		return this;
 	}
-
-	/**
-	 * Bean property fluent setter:  <property>tags</property>.
-	 *
-	 * <p>
-	 * A list of tags for API documentation control.
-	 * <br>Tags can be used for logical grouping of operations by resources or any other qualifier.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 *  <br>Strings can also be JSON arrays.
-	 * @return This object.
-	 */
-	public Operation tags(String...value) {
-		setTags(setBuilder(String.class).sparse().addJson(value).build());
-		return this;
-	}
-
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
@@ -1370,18 +820,18 @@ public class Operation extends SwaggerElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "consumes": return consumes(listBuilder(MediaType.class).sparse().addAny(value).build());
-			case "deprecated": return deprecated(toBoolean(value));
-			case "description": return description(stringify(value));
-			case "externalDocs": return externalDocs(toType(value, ExternalDocumentation.class));
-			case "operationId": return operationId(stringify(value));
-			case "parameters": return parameters(listBuilder(ParameterInfo.class).sparse().addAny(value).build());
-			case "produces": return produces(listBuilder(MediaType.class).sparse().addAny(value).build());
-			case "responses": return responses(mapBuilder(String.class,ResponseInfo.class).sparse().addAny(value).build());
-			case "schemes": return schemes(listBuilder(String.class).sparse().addAny(value).build());
-			case "security": return security((List)listBuilder(Map.class,String.class,List.class,String.class).sparse().addAny(value).build());
-			case "summary": return summary(stringify(value));
-			case "tags": return tags(listBuilder(String.class).sparse().addAny(value).build());
+			case "consumes": return setConsumes(listBuilder(MediaType.class).sparse().addAny(value).build());
+			case "deprecated": return setDeprecated(toBoolean(value));
+			case "description": return setDescription(stringify(value));
+			case "externalDocs": return setExternalDocs(toType(value, ExternalDocumentation.class));
+			case "operationId": return setOperationId(stringify(value));
+			case "parameters": return setParameters(listBuilder(ParameterInfo.class).sparse().addAny(value).build());
+			case "produces": return setProduces(listBuilder(MediaType.class).sparse().addAny(value).build());
+			case "responses": return setResponses(mapBuilder(String.class,ResponseInfo.class).sparse().addAny(value).build());
+			case "schemes": return setSchemes(listBuilder(String.class).sparse().addAny(value).build());
+			case "security": return setSecurity((List)listBuilder(Map.class,String.class,List.class,String.class).sparse().addAny(value).build());
+			case "summary": return setSummary(stringify(value));
+			case "tags": return setTags(listBuilder(String.class).sparse().addAny(value).build());
 			default:
 				super.set(property, value);
 				return this;

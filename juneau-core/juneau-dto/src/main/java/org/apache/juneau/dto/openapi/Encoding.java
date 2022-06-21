@@ -101,7 +101,7 @@ public class Encoding extends OpenApiElement{
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Encoding setContentType(String value) {
 		contentType = value;
@@ -122,7 +122,7 @@ public class Encoding extends OpenApiElement{
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Encoding setStyle(String value) {
 		style = value;
@@ -143,23 +143,10 @@ public class Encoding extends OpenApiElement{
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Encoding setHeaders(Map<String, HeaderInfo> value) {
 		headers = copyOf(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>headers</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public Encoding addHeaders(Map<String, HeaderInfo> values) {
-		headers = mapBuilder(headers).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -170,7 +157,7 @@ public class Encoding extends OpenApiElement{
 	 * @param value
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Encoding addHeader(String key, HeaderInfo value) {
 		headers = mapBuilder(headers).sparse().add(key, value).build();
@@ -204,7 +191,7 @@ public class Encoding extends OpenApiElement{
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
 	 * 	</ul>
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Encoding setExplode(Boolean value) {
 		explode = value;
@@ -238,7 +225,7 @@ public class Encoding extends OpenApiElement{
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
 	 * 	</ul>
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Encoding setAllowReserved(Boolean value) {
 		allowReserved = value;

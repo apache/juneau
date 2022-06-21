@@ -80,7 +80,7 @@ public class ExternalDocumentation extends OpenApiElement {
 	 * 	The new value for this property.
 	 * 	<br>{@doc GFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public ExternalDocumentation setDescription(String value) {
 		description = value;
@@ -109,29 +109,11 @@ public class ExternalDocumentation extends OpenApiElement {
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
 	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public ExternalDocumentation setUrl(URI value) {
 		url = value;
 		return this;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the url property is not null.
-	 *
-	 * @return <jk>true</jk> if the url property is not null.
-	 */
-	public boolean hasUrl() {
-		return url != null;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the description property is not null or empty.
-	 *
-	 * @return <jk>true</jk> if the description property is not null or empty.
-	 */
-	public boolean hasDescription() {
-		return isNotEmpty(description);
 	}
 
 	@Override /* OpenApiElement */

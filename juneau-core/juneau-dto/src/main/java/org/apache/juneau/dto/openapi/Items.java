@@ -169,7 +169,7 @@ public class Items extends OpenApiElement {
 	 * 		<li><js>"array"</js>
 	 * 	</ul>
 	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Items setType(String value) {
 		if (isStrict() && ! contains(value, VALID_TYPES))
@@ -211,7 +211,7 @@ public class Items extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Items setFormat(String value) {
 		format = value;
@@ -240,7 +240,7 @@ public class Items extends OpenApiElement {
 	 * 	The new value for this property.
 	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Items setItems(Items value) {
 		items = value;
@@ -275,7 +275,7 @@ public class Items extends OpenApiElement {
 	 * 		<li><js>"pipes"</js> - pipe separated values <code>foo|bar</code>.
 	 * 	</ul>
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Items setCollectionFormat(String value) {
 		if (isStrict() && ! contains(value, VALID_COLLECTION_FORMATS))
@@ -334,7 +334,7 @@ public class Items extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Items setDefault(Object value) {
 		_default = value;
@@ -366,7 +366,7 @@ public class Items extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Items setMaximum(Number value) {
 		maximum = value;
@@ -398,7 +398,7 @@ public class Items extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Items setExclusiveMaximum(Boolean value) {
 		exclusiveMaximum = value;
@@ -430,7 +430,7 @@ public class Items extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Items setMinimum(Number value) {
 		minimum = value;
@@ -462,7 +462,7 @@ public class Items extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Items setExclusiveMinimum(Boolean value) {
 		exclusiveMinimum = value;
@@ -494,7 +494,7 @@ public class Items extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Items setMaxLength(Integer value) {
 		maxLength = value;
@@ -526,7 +526,7 @@ public class Items extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Items setMinLength(Integer value) {
 		minLength = value;
@@ -561,7 +561,7 @@ public class Items extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Items setPattern(String value) {
 		pattern = value;
@@ -593,7 +593,7 @@ public class Items extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Items setMaxItems(Integer value) {
 		maxItems = value;
@@ -625,7 +625,7 @@ public class Items extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Items setMinItems(Integer value) {
 		minItems = value;
@@ -657,7 +657,7 @@ public class Items extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Items setUniqueItems(Boolean value) {
 		uniqueItems = value;
@@ -689,7 +689,7 @@ public class Items extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Items setEnum(Collection<Object> value) {
 		_enum = listFrom(value);
@@ -702,9 +702,9 @@ public class Items extends OpenApiElement {
 	 * @param values
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
-	public Items addEnum(Collection<Object> values) {
+	public Items addEnum(Object...values) {
 		_enum = listBuilder(_enum).sparse().addAny(values).build();
 		return this;
 	}
@@ -730,7 +730,7 @@ public class Items extends OpenApiElement {
 	 * 			</p>
 	 * 	</ul>
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Items setEnum(Object...values) {
 		_enum = listBuilder(_enum).sparse().addAny(values).build();
@@ -762,7 +762,7 @@ public class Items extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Items setMultipleOf(Number value) {
 		multipleOf = value;
@@ -780,21 +780,12 @@ public class Items extends OpenApiElement {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this object has a <js>"$ref"</js> attribute.
-	 *
-	 * @return <jk>true</jk> if this object has a <js>"$ref"</js> attribute.
-	 */
-	public boolean hasRef() {
-		return ref != null;
-	}
-
-	/**
 	 * Bean property setter:  <property>$ref</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	@Beanp("$ref")
 	public Items setRef(Object value) {
@@ -808,7 +799,7 @@ public class Items extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Items ref(Object value) {
 		return setRef(value);

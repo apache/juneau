@@ -92,7 +92,7 @@ public class CommonEntry extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public CommonEntry setAuthors(Person...value) {
 		this.authors = value;
@@ -121,7 +121,7 @@ public class CommonEntry extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public CommonEntry setCategories(Category...value) {
 		this.categories = value;
@@ -150,7 +150,7 @@ public class CommonEntry extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public CommonEntry setContributors(Person...value) {
 		this.contributors = value;
@@ -178,7 +178,7 @@ public class CommonEntry extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public CommonEntry setId(Id value) {
 		this.id = value;
@@ -223,7 +223,7 @@ public class CommonEntry extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public CommonEntry setLinks(Link...value) {
 		this.links = value;
@@ -251,7 +251,7 @@ public class CommonEntry extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public CommonEntry setRights(Text value) {
 		this.rights = value;
@@ -295,7 +295,7 @@ public class CommonEntry extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public CommonEntry setTitle(Text value) {
 		this.title = value;
@@ -339,7 +339,7 @@ public class CommonEntry extends Common {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public CommonEntry setUpdated(Calendar value) {
 		this.updated = value;

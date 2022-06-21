@@ -103,7 +103,7 @@ public class License extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public License setName(String value) {
 		name = value;
@@ -132,29 +132,11 @@ public class License extends OpenApiElement {
 	 * 	The new value for this property.
 	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public License setUrl(URI value) {
 		url = value;
 		return this;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the name property is not null or empty.
-	 *
-	 * @return <jk>true</jk> if the name property is not null or empty.
-	 */
-	public boolean hasName() {
-		return isNotEmpty(name);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the url property is not null.
-	 *
-	 * @return <jk>true</jk> if the url property is not null.
-	 */
-	public boolean hasUrl() {
-		return url != null;
 	}
 
 	@Override /* OpenApiElement */

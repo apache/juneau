@@ -85,7 +85,7 @@ public class Contact extends SwaggerElement {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// email
+	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -110,43 +110,12 @@ public class Contact extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>MUST be in the format of an email address.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 */
-	public void setEmail(String value) {
-		email = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>email</property>.
-	 *
-	 * <p>
-	 * The email address of the contact person/organization.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> email() {
-		return optional(getEmail());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>email</property>.
-	 *
-	 * <p>
-	 * The email address of the contact person/organization.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>MUST be in the format of an email address.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public Contact email(String value) {
-		setEmail(value);
+	public Contact setEmail(String value) {
+		email = value;
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// name
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>name</property>.
@@ -169,42 +138,12 @@ public class Contact extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 */
-	public void setName(String value) {
-		name = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>name</property>.
-	 *
-	 * <p>
-	 * The identifying name of the contact person/organization.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> name() {
-		return optional(getName());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>name</property>.
-	 *
-	 * <p>
-	 * The identifying name of the contact person/organization.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public Contact name(String value) {
-		setName(value);
+	public Contact setName(String value) {
+		name = value;
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// url
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>url</property>.
@@ -227,68 +166,10 @@ public class Contact extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	public void setUrl(URI value) {
+	public Contact setUrl(URI value) {
 		url = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>url</property>.
-	 *
-	 * <p>
-	 * The URL pointing to the contact information.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<URI> url() {
-		return optional(getUrl());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>url</property>.
-	 *
-	 * <p>
-	 * The URL pointing to the contact information.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Contact url(URI value) {
-		setUrl(value);
-		return this;
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>url</property>.
-	 *
-	 * <p>
-	 * The URL pointing to the contact information.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Contact url(URL value) {
-		setUrl(StringUtils.toURI(value));
-		return this;
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>url</property>.
-	 *
-	 * <p>
-	 * The URL pointing to the contact information.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Contact url(String value) {
-		setUrl(StringUtils.toURI(value));
 		return this;
 	}
 
@@ -309,9 +190,9 @@ public class Contact extends SwaggerElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "email": return email(stringify(value));
-			case "name": return name(stringify(value));
-			case "url": return url(StringUtils.toURI(value));
+			case "email": return setEmail(stringify(value));
+			case "name": return setName(stringify(value));
+			case "url": return setUrl(toURI(value));
 			default:
 				super.set(property, value);
 				return this;

@@ -128,7 +128,7 @@ public class ResponseInfo extends SwaggerElement {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// description
+	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -153,42 +153,12 @@ public class ResponseInfo extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>{@doc ext.GFM} can be used for rich text representation.
 	 * 	<br>Property value is required.
-	 */
-	public void setDescription(String value) {
-		description = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>description</property>.
-	 *
-	 * <p>
-	 * A short description of the response.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> description() {
-		return optional(getDescription());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>description</property>.
-	 *
-	 * <p>
-	 * A short description of the response.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public ResponseInfo description(String value) {
-		setDescription(value);
+	public ResponseInfo setDescription(String value) {
+		description = value;
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// examples
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>examples</property>.
@@ -212,20 +182,10 @@ public class ResponseInfo extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>Keys must be MIME-type strings.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 */
-	public void setExamples(Map<String,Object> value) {
-		examples = copyOf(value);
-	}
-
-	/**
-	 * Bean property appender:  <property>examples</property>.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
 	 * @return This object.
 	 */
-	public ResponseInfo addExamples(Map<String,Object> values) {
-		examples = mapBuilder(examples).sparse().addAll(values).build();
+	public ResponseInfo setExamples(Map<String,Object> value) {
+		examples = copyOf(value);
 		return this;
 	}
 
@@ -239,52 +199,10 @@ public class ResponseInfo extends SwaggerElement {
 	 * @param example The example.
 	 * @return This object.
 	 */
-	public ResponseInfo example(String mimeType, Object example) {
+	public ResponseInfo addExample(String mimeType, Object example) {
 		examples =  mapBuilder(examples).sparse().add(mimeType, example).build();
 		return this;
 	}
-
-	/**
-	 * Bean property fluent getter:  <property>examples</property>.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Map<String,Object>> examples() {
-		return optional(getExamples());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>examples</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object.
-	 */
-	public ResponseInfo examples(Map<String,Object> value) {
-		setExamples(value);
-		return this;
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>examples</property>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	examples(<js>"{'text/json':{foo:'bar'}}"</js>);
-	 * </p>
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object.
-	 */
-	public ResponseInfo examples(String value) {
-		setExamples(mapBuilder(String.class,Object.class).sparse().addJson(value).build());
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// headers
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>headers</property>.
@@ -307,21 +225,10 @@ public class ResponseInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 */
-	public void setHeaders(Map<String,HeaderInfo> value) {
-		headers = copyOf(value);
-	}
-
-	/**
-	 * Bean property appender:  <property>headers</property>.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object.
 	 */
-	public ResponseInfo addHeaders(Map<String,HeaderInfo> values) {
-		headers = mapBuilder(headers).sparse().addAll(values).build();
+	public ResponseInfo setHeaders(Map<String,HeaderInfo> value) {
+		headers = copyOf(value);
 		return this;
 	}
 
@@ -332,55 +239,8 @@ public class ResponseInfo extends SwaggerElement {
 	 * @param header The header descriptions
 	 * @return This object.
 	 */
-	public ResponseInfo header(String name, HeaderInfo header) {
-		addHeaders(Collections.singletonMap(name, header));
-		return this;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>headers</property>.
-	 *
-	 * <p>
-	 * A list of headers that are sent with the response.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Map<String,HeaderInfo>> headers() {
-		return optional(getHeaders());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>headers</property>.
-	 *
-	 * <p>
-	 * A list of headers that are sent with the response.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object.
-	 */
-	public ResponseInfo headers(Map<String,HeaderInfo> value) {
-		setHeaders(value);
-		return this;
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>headers</property>.
-	 *
-	 * <p>
-	 * A list of headers that are sent with the response as raw JSON.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	headers(<js>"{headerName:{description:'description',...}}"</js>);
-	 * </p>
-	 *
-	 * @param json
-	 * 	The new value for this property as JSON
-	 * @return This object.
-	 */
-	public ResponseInfo headers(String json) {
-		setHeaders(mapBuilder(String.class,HeaderInfo.class).sparse().addJson(json).build());
+	public ResponseInfo addHeader(String name, HeaderInfo header) {
+		headers = mapBuilder(headers).add(name, header).build();
 		return this;
 	}
 
@@ -393,20 +253,6 @@ public class ResponseInfo extends SwaggerElement {
 	public HeaderInfo getHeader(String name) {
 		return getHeaders().get(name);
 	}
-
-	/**
-	 * Returns the header information with the specified name.
-	 *
-	 * @param name The header name.
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<HeaderInfo> header(String name) {
-		return optional(getHeader(name));
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// schema
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>schema</property>.
@@ -430,60 +276,12 @@ public class ResponseInfo extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>It can be a primitive, an array or an object.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	public void setSchema(SchemaInfo value) {
+	public ResponseInfo setSchema(SchemaInfo value) {
 		schema = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>schema</property>.
-	 *
-	 * <p>
-	 * A definition of the response structure.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<SchemaInfo> schema() {
-		return optional(getSchema());
-	}
-
-	/**
-	 * Bean property setter:  <property>schema</property>.
-	 *
-	 * <p>
-	 * A definition of the response structure.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ResponseInfo schema(SchemaInfo value) {
-		setSchema(value);
 		return this;
 	}
-
-	/**
-	 * Bean property setter:  <property>schema</property>.
-	 *
-	 * <p>
-	 * A definition of the response structure as raw JSON.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	schema(<js>"{type:'type',description:'description',...}"</js>);
-	 * </p>
-	 *
-	 * @param json
-	 * 	The new value for this property as JSON.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ResponseInfo schema(String json) {
-		setSchema(toType(json, SchemaInfo.class));
-		return this;
-	}
-
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
@@ -503,10 +301,10 @@ public class ResponseInfo extends SwaggerElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "description": return description(stringify(value));
-			case "examples": return examples(mapBuilder(String.class,Object.class).sparse().addAny(value).build());
-			case "headers": return headers(mapBuilder(String.class,HeaderInfo.class).sparse().addAny(value).build());
-			case "schema": return schema(stringify(value));
+			case "description": return setDescription(stringify(value));
+			case "examples": return setExamples(mapBuilder(String.class,Object.class).sparse().addAny(value).build());
+			case "headers": return setHeaders(mapBuilder(String.class,HeaderInfo.class).sparse().addAny(value).build());
+			case "schema": return setSchema(toType(value, SchemaInfo.class));
 			default:
 				super.set(property, value);
 				return this;

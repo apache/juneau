@@ -24,6 +24,7 @@ import static org.apache.juneau.serializer.Serializer.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static java.lang.Integer.*;
 import static java.util.Collections.*;
+import static java.util.Optional.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -624,7 +625,7 @@ public final class RestRequest {
 		String tz = headers.get("Time-Zone").asString().orElse(null);
 		if (tz != null)
 			return optional(TimeZone.getTimeZone(tz));
-		return empty();
+		return Optional.empty();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1240,9 +1241,9 @@ public final class RestRequest {
 
 		Optional<Swagger> swagger = getSwagger();
 		if (! swagger.isPresent())
-			return empty();
+			return Optional.empty();
 
-		return swagger.get().operation(opContext.getPathPattern(), getMethod().toLowerCase());
+		return ofNullable(swagger.get().getOperation(opContext.getPathPattern(), getMethod().toLowerCase()));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -27,37 +27,14 @@ import org.junit.*;
 public class ExternalDocumentation_Test {
 
 	/**
-	 * Test method for {@link ExternalDocumentation#description(java.lang.Object)}.
+	 * Test method for getters and setters.
 	 */
 	@Test
-	public void a01_description() {
+	public void a01_gettersAndSetters() {
 		ExternalDocumentation t = new ExternalDocumentation();
-
-		t.description("foo");
-		assertString(t.description()).is("foo");
-
-		t.description(null);
-		assertString(t.description()).isNull();
-	}
-
-	/**
-	 * Test method for {@link ExternalDocumentation#url(java.lang.Object)}.
-	 */
-	@Test
-	public void a02_url() throws Exception {
-		ExternalDocumentation t = new ExternalDocumentation();
-
-		t.url("foo");
-		assertString(t.url()).is("foo");
-
-		t.url(URI.create("http://bar"));
-		assertString(t.url()).is("http://bar");
-
-		t.url(new URL("http://baz"));
-		assertString(t.url()).is("http://baz");
-
-		t.url((String)null);
-		assertString(t.url()).isNull();
+		assertString(t.setDescription("foo").getDescription()).is("foo");
+		assertString(t.setDescription(null).getDescription()).isNull();
+		assertString(t.setUrl(URI.create("http://bar")).getUrl()).is("http://bar");
 	}
 
 	/**

@@ -98,7 +98,7 @@ public class RequestBodyInfo extends OpenApiElement{
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public RequestBodyInfo setDescription(String value) {
 		description = value;
@@ -119,23 +119,10 @@ public class RequestBodyInfo extends OpenApiElement{
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public RequestBodyInfo setContent(Map<String, MediaType> value) {
 		content = copyOf(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>content</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public RequestBodyInfo addContent(Map<String, MediaType> values) {
-		content = mapBuilder(content).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -146,7 +133,7 @@ public class RequestBodyInfo extends OpenApiElement{
 	 * @param value
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public RequestBodyInfo addContent(String key, MediaType value) {
 		content = mapBuilder(content).sparse().add(key, value).build();
@@ -180,7 +167,7 @@ public class RequestBodyInfo extends OpenApiElement{
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
 	 * 	</ul>
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public RequestBodyInfo setRequired(Boolean value) {
 		required = value;

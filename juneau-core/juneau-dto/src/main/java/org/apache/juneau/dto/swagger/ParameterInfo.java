@@ -249,7 +249,7 @@ public class ParameterInfo extends SwaggerElement {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// allowEmptyValue
+	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -278,60 +278,12 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * 	<br>Default is <jk>false</jk>.
+	 * @return This object.
 	 */
-	public void setAllowEmptyValue(Boolean value) {
+	public ParameterInfo setAllowEmptyValue(Boolean value) {
 		allowEmptyValue = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>allowEmptyValue</property>.
-	 *
-	 * <p>
-	 * Sets the ability to pass empty-valued parameters.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Boolean> allowEmptyValue() {
-		return optional(getAllowEmptyValue());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>allowEmptyValue</property>.
-	 *
-	 * <p>
-	 * Sets the ability to pass empty-valued parameters.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * 	<br>Default is <jk>false</jk>.
-	 * @return This object.
-	 */
-	public ParameterInfo allowEmptyValue(Boolean value) {
-		setAllowEmptyValue(value);
 		return this;
 	}
-
-	/**
-	 * Bean property fluent setter:  <property>allowEmptyValue</property>.
-	 *
-	 * <p>
-	 * Sets the ability to pass empty-valued parameters.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * 	<br>Default is <jk>false</jk>.
-	 * @return This object.
-	 */
-	public ParameterInfo allowEmptyValue(String value) {
-		setAllowEmptyValue(toBoolean(value));
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// collectionFormat
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>collectionFormat</property>.
@@ -364,57 +316,17 @@ public class ParameterInfo extends SwaggerElement {
 	 * 			<br>This is valid only for parameters <c>in</c> <js>"query"</js> or <js>"formData"</js>.
 	 * 	</ul>
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	public void setCollectionFormat(String value) {
+	public ParameterInfo setCollectionFormat(String value) {
 		if (isStrict() && ! contains(value, VALID_COLLECTION_FORMATS))
 			throw runtimeException(
 				"Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}",
 				value, json(VALID_COLLECTION_FORMATS)
 			);
 		collectionFormat = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>collectionFormat</property>.
-	 *
-	 * <p>
-	 * Determines the format of the array if type array is used.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> collectionFormat() {
-		return optional(getCollectionFormat());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>collectionFormat</property>.
-	 *
-	 * <p>
-	 * Determines the format of the array if type array is used.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Valid values:
-	 * 	<ul>
-	 * 		<li><js>"csv"</js> (default) - comma separated values <c>foo,bar</c>.
-	 * 		<li><js>"ssv"</js> - space separated values <c>foo bar</c>.
-	 * 		<li><js>"tsv"</js> - tab separated values <c>foo\tbar</c>.
-	 * 		<li><js>"pipes"</js> - pipe separated values <c>foo|bar</c>.
-	 * 		<li><js>"multi"</js> - corresponds to multiple parameter instances instead of multiple values for a single
-	 * 			instance <c>foo=bar&amp;foo=baz</c>.
-	 * 			<br>This is valid only for parameters <c>in</c> <js>"query"</js> or <js>"formData"</js>.
-	 * 	</ul>
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo collectionFormat(String value) {
-		setCollectionFormat(value);
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// default
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>default</property>.
@@ -442,46 +354,12 @@ public class ParameterInfo extends SwaggerElement {
 	 * Unlike JSON Schema this value MUST conform to the defined <c>type</c> for this parameter.
 	 *
 	 * @param value The new value for this property.
-	 */
-	public void setDefault(Object value) {
-		_default = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>default</property>.
-	 *
-	 * <p>
-	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js>
-	 * to control the number of results per page might default to 100 if not supplied by the client in the request.
-	 * (Note: <js>"default"</js> has no meaning for required parameters.)
-	 * Unlike JSON Schema this value MUST conform to the defined <c>type</c> for this parameter.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Object> _default() {
-		return optional(getDefault());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>default</property>.
-	 *
-	 * <p>
-	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js>
-	 * to control the number of results per page might default to 100 if not supplied by the client in the request.
-	 * (Note: <js>"default"</js> has no meaning for required parameters.)
-	 * Unlike JSON Schema this value MUST conform to the defined <c>type</c> for this parameter.
-	 *
-	 * @param value The new value for this property.
 	 * @return This object.
 	 */
-	public ParameterInfo _default(Object value) {
-		setDefault(value);
+	public ParameterInfo setDefault(Object value) {
+		_default = value;
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// description
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>description</property>.
@@ -505,43 +383,12 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>{@doc ext.GFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 */
-	public void setDescription(String value) {
-		description = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>description</property>.
-	 *
-	 * <p>
-	 * A brief description of the parameter.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> description() {
-		return optional(getDescription());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>description</property>.
-	 *
-	 * <p>
-	 * A brief description of the parameter.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>{@doc ext.GFM} can be used for rich text representation.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public ParameterInfo description(String value) {
-		setDescription(value);
+	public ParameterInfo setDescription(String value) {
+		description = value;
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// enum
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>enum</property>.
@@ -558,9 +405,11 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	public void setEnum(Collection<Object> value) {
+	public ParameterInfo setEnum(Collection<Object> value) {
 		_enum = setFrom(value);
+		return this;
 	}
 
 	/**
@@ -571,29 +420,8 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object.
 	 */
-	public ParameterInfo addEnum(Collection<Object> value) {
-		_enum = setBuilder(_enum).sparse().addAll(value).build();
-		return this;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>enum</property>.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Set<Object>> _enum() {
-		return optional(getEnum());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>enum</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object.
-	 */
-	public ParameterInfo _enum(Collection<Object> value) {
-		setEnum(value);
+	public ParameterInfo addEnum(Object...value) {
+		_enum = setBuilder(_enum).sparse().add(value).build();
 		return this;
 	}
 
@@ -605,14 +433,10 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	<br>Strings can be JSON arrays.
 	 * @return This object.
 	 */
-	public ParameterInfo _enum(Object...value) {
+	public ParameterInfo setEnum(Object...value) {
 		setEnum(setBuilder(Object.class).sparse().addAny(value).build());
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// exclusiveMaximum
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
@@ -627,49 +451,12 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>exclusiveMaximum</property>.
 	 *
 	 * @param value The new value for this property.
+	 * @return This object.
 	 */
-	public void setExclusiveMaximum(Boolean value) {
+	public ParameterInfo setExclusiveMaximum(Boolean value) {
 		exclusiveMaximum = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>exclusiveMaximum</property>.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Boolean> exclusiveMaximum() {
-		return optional(getExclusiveMaximum());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>exclusiveMaximum</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo exclusiveMaximum(Boolean value) {
-		setExclusiveMaximum(value);
 		return this;
 	}
-
-	/**
-	 * Bean property fluent setter:  <property>exclusiveMaximum</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo exclusiveMaximum(String value) {
-		setExclusiveMaximum(toBoolean(value));
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// exclusiveMinimum
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>exclusiveMinimum</property>.
@@ -684,49 +471,12 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>exclusiveMinimum</property>.
 	 *
 	 * @param value The new value for this property.
+	 * @return This object.
 	 */
-	public void setExclusiveMinimum(Boolean value) {
+	public ParameterInfo setExclusiveMinimum(Boolean value) {
 		exclusiveMinimum = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>exclusiveMinimum</property>.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Boolean> exclusiveMinimum() {
-		return optional(getExclusiveMinimum());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>exclusiveMinimum</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo exclusiveMinimum(Boolean value) {
-		setExclusiveMinimum(value);
 		return this;
 	}
-
-	/**
-	 * Bean property fluent setter:  <property>exclusiveMinimum</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo exclusiveMinimum(String value) {
-		setExclusiveMinimum(toBoolean(value));
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// format
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>format</property>.
@@ -747,42 +497,12 @@ public class ParameterInfo extends SwaggerElement {
 	 * The extending format for the previously mentioned type.
 	 *
 	 * @param value The new value for this property.
-	 */
-	public void setFormat(String value) {
-		format = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>format</property>.
-	 *
-	 * <p>
-	 * The extending format for the previously mentioned type.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> format() {
-		return optional(getFormat());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>format</property>.
-	 *
-	 * <p>
-	 * The extending format for the previously mentioned type.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public ParameterInfo format(String value) {
-		setFormat(value);
+	public ParameterInfo setFormat(String value) {
+		format = value;
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// in
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>in</property>.
@@ -813,8 +533,9 @@ public class ParameterInfo extends SwaggerElement {
 	 * 		<li><js>"body"</js>
 	 * 	</ul>
 	 * 	<br>Property value is required.
+	 * @return This object.
 	 */
-	public void setIn(String value) {
+	public ParameterInfo setIn(String value) {
 		if (isStrict() && ! contains(value, VALID_IN))
 			throw runtimeException(
 				"Invalid value passed in to setIn(String).  Value=''{0}'', valid values={1}",
@@ -823,47 +544,8 @@ public class ParameterInfo extends SwaggerElement {
 		in = value;
 		if ("path".equals(value))
 			required = true;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>in</property>.
-	 *
-	 * <p>
-	 * The location of the parameter.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> in() {
-		return optional(getIn());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>in</property>.
-	 *
-	 * <p>
-	 * The location of the parameter.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Valid values:
-	 * 	<ul>
-	 * 		<li><js>"query"</js>
-	 * 		<li><js>"header"</js>
-	 * 		<li><js>"path"</js>
-	 * 		<li><js>"formData"</js>
-	 * 		<li><js>"body"</js>
-	 * 	</ul>
-	 * 	<br>Property value is required.
-	 * @return This object.
-	 */
-	public ParameterInfo in(String value) {
-		setIn(value);
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// items
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>items</property>.
@@ -887,65 +569,12 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>Property value is required if <c>type</c> is <js>"array"</js>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	public void setItems(Items value) {
+	public ParameterInfo setItems(Items value) {
 		items = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>items</property>.
-	 *
-	 * <p>
-	 * Describes the type of items in the array.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Items> items() {
-		return optional(getItems());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>items</property>.
-	 *
-	 * <p>
-	 * Describes the type of items in the array.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Property value is required if <c>type</c> is <js>"array"</js>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo items(Items value) {
-		setItems(value);
 		return this;
 	}
-
-	/**
-	 * Bean property fluent setter:  <property>items</property>.
-	 *
-	 * <p>
-	 * Describes the type of items in the array as raw JSON.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	items(<js>"{type:'type',format:'format',...}"</js>);
-	 * </p>
-	 *
-	 * @param json
-	 * 	The new value for this property as JSON.
-	 * 	<br>Property value is required if <c>type</c> is <js>"array"</js>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo items(String json) {
-		setItems(toType(json, Items.class));
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// maximum
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>maximum</property>.
@@ -960,49 +589,12 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>maximum</property>.
 	 *
 	 * @param value The new value for this property.
+	 * @return This object.
 	 */
-	public void setMaximum(Number value) {
+	public ParameterInfo setMaximum(Number value) {
 		maximum = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>maximum</property>.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Number> maximum() {
-		return optional(getMaximum());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>maximum</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo maximum(Number value) {
-		setMaximum(value);
 		return this;
 	}
-
-	/**
-	 * Bean property fluent setter:  <property>maximum</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo maximum(String value) {
-		setMaximum(toNumber(value));
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// maxItems
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>maxItems</property>.
@@ -1017,49 +609,13 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>maxItems</property>.
 	 *
 	 * @param value The new value for this property.
+	 * @return This object.
 	 */
-	public void setMaxItems(Integer value) {
+	public ParameterInfo setMaxItems(Integer value) {
 		maxItems = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>maxItems</property>.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Integer> maxItems() {
-		return optional(getMaxItems());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>maxItems</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo maxItems(Integer value) {
-		setMaxItems(value);
 		return this;
 	}
 
-	/**
-	 * Bean property fluent setter:  <property>maxItems</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo maxItems(String value) {
-		setMaxItems(toInteger(value));
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// maxLength
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>maxLength</property>.
@@ -1074,49 +630,12 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>maxLength</property>.
 	 *
 	 * @param value The new value for this property.
+	 * @return This object.
 	 */
-	public void setMaxLength(Integer value) {
+	public ParameterInfo setMaxLength(Integer value) {
 		maxLength = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>maxLength</property>.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Integer> maxLength() {
-		return optional(getMaxLength());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>maxLength</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo maxLength(Integer value) {
-		setMaxLength(value);
 		return this;
 	}
-
-	/**
-	 * Bean property fluent setter:  <property>maxLength</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo maxLength(String value) {
-		setMaxLength(toInteger(value));
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// minimum
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>minimum</property>.
@@ -1131,49 +650,12 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>minimum</property>.
 	 *
 	 * @param value The new value for this property.
+	 * @return This object.
 	 */
-	public void setMinimum(Number value) {
+	public ParameterInfo setMinimum(Number value) {
 		minimum = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>minimum</property>.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Number> minimum() {
-		return optional(getMinimum());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>minimum</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo minimum(Number value) {
-		setMinimum(value);
 		return this;
 	}
-
-	/**
-	 * Bean property fluent setter:  <property>minimum</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo minimum(String value) {
-		setMinimum(toNumber(value));
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// minItems
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>minItems</property>.
@@ -1188,49 +670,12 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>minItems</property>.
 	 *
 	 * @param value The new value for this property.
+	 * @return This object.
 	 */
-	public void setMinItems(Integer value) {
+	public ParameterInfo setMinItems(Integer value) {
 		minItems = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>minItems</property>.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Integer> minItems() {
-		return optional(getMinItems());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>minItems</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo minItems(Integer value) {
-		setMinItems(value);
 		return this;
 	}
-
-	/**
-	 * Bean property fluent setter:  <property>minItems</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo minItems(String value) {
-		setMinItems(toInteger(value));
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// minLength
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>minLength</property>.
@@ -1245,49 +690,12 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>minLength</property>.
 	 *
 	 * @param value The new value for this property.
+	 * @return This object.
 	 */
-	public void setMinLength(Integer value) {
+	public ParameterInfo setMinLength(Integer value) {
 		minLength = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>minLength</property>.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Integer> minLength() {
-		return optional(getMinLength());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>minLength</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo minLength(Integer value) {
-		setMinLength(value);
 		return this;
 	}
-
-	/**
-	 * Bean property fluent setter:  <property>minLength</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo minLength(String value) {
-		setMinLength(toInteger(value));
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// multipleOf
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>multipleOf</property>.
@@ -1304,49 +712,12 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	public void setMultipleOf(Number value) {
+	public ParameterInfo setMultipleOf(Number value) {
 		multipleOf = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>multipleOf</property>.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Number> multipleOf() {
-		return optional(getMultipleOf());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>multipleOf</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo multipleOf(Number value) {
-		setMultipleOf(value);
 		return this;
 	}
-
-	/**
-	 * Bean property fluent setter:  <property>multipleOf</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo multipleOf(String value) {
-		setMultipleOf(toNumber(value));
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// name
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>name</property>.
@@ -1379,43 +750,13 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
-	 */
-	public void setName(String value) {
-		if (! "body".equals(in))
-			name = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>name</property>.
-	 *
-	 * <p>
-	 * The name of the parameter.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> name() {
-		return optional(getName());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>name</property>.
-	 *
-	 * <p>
-	 * The name of the parameter.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public ParameterInfo name(String value) {
-		setName(value);
+	public ParameterInfo setName(String value) {
+		if (! "body".equals(in))
+			name = value;
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// pattern
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>pattern</property>.
@@ -1432,37 +773,12 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>This string SHOULD be a valid regular expression.
-	 */
-	public void setPattern(String value) {
-		pattern = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>pattern</property>.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> pattern() {
-		return optional(getPattern());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>pattern</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>This string SHOULD be a valid regular expression.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public ParameterInfo pattern(String value) {
-		setPattern(value);
+	public ParameterInfo setPattern(String value) {
+		pattern = value;
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// required
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>required</property>.
@@ -1487,62 +803,12 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	<br>If the parameter is <c>in</c> <js>"path"</js>, this property is required and its value MUST be <jk>true</jk>.
 	 * 	<br>Otherwise, the property MAY be included and its default value is <jk>false</jk>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	public void setRequired(Boolean value) {
+	public ParameterInfo setRequired(Boolean value) {
 		required = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>required</property>.
-	 *
-	 * <p>
-	 * Determines whether this parameter is mandatory.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Boolean> required() {
-		return optional(getRequired());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>required</property>.
-	 *
-	 * <p>
-	 * Determines whether this parameter is mandatory.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>If the parameter is <c>in</c> <js>"path"</js>, this property is required and its value MUST be <jk>true</jk>.
-	 * 	<br>Otherwise, the property MAY be included and its default value is <jk>false</jk>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo required(Boolean value) {
-		setRequired(value);
 		return this;
 	}
-
-	/**
-	 * Bean property fluent setter:  <property>required</property>.
-	 *
-	 * <p>
-	 * Determines whether this parameter is mandatory.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>If the parameter is <c>in</c> <js>"path"</js>, this property is required and its value MUST be <jk>true</jk>.
-	 * 	<br>Otherwise, the property MAY be included and its default value is <jk>false</jk>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo required(String value) {
-		setRequired(toBoolean(value));
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// schema
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>schema</property>.
@@ -1565,63 +831,12 @@ public class ParameterInfo extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
+	 * @return This object.
 	 */
-	public void setSchema(SchemaInfo value) {
+	public ParameterInfo setSchema(SchemaInfo value) {
 		schema = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>schema</property>.
-	 *
-	 * <p>
-	 * The schema defining the type used for the body parameter.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<SchemaInfo> schema() {
-		return optional(getSchema());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>schema</property>.
-	 *
-	 * <p>
-	 * The schema defining the type used for the body parameter.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Property value is required.
-	 * @return This object.
-	 */
-	public ParameterInfo schema(SchemaInfo value) {
-		setSchema(value);
 		return this;
 	}
-
-	/**
-	 * Bean property fluent setter:  <property>schema</property>.
-	 *
-	 * <p>
-	 * The schema defining the type used for the body parameter as raw JSON.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	schema(<js>"{type:'type',description:'description',...}"</js>);
-	 * </p>
-	 *
-	 * @param json
-	 * 	The new value for this property.
-	 * 	<br>Property value is required.
-	 * @return This object.
-	 */
-	public ParameterInfo schema(String json) {
-		setSchema(toType(json, SchemaInfo.class));
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// type
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>type</property>.
@@ -1655,58 +870,17 @@ public class ParameterInfo extends SwaggerElement {
 	 * 	<br>If type is <js>"file"</js>, the <c>consumes</c> MUST be either <js>"multipart/form-data"</js>, <js>"application/x-www-form-urlencoded"</js>
 	 * 		or both and the parameter MUST be <c>in</c> <js>"formData"</js>.
 	 * 	<br>Property value is required.
+	 * @return This object.
 	 */
-	public void setType(String value) {
+	public ParameterInfo setType(String value) {
 		if (isStrict() && ! contains(value, VALID_TYPES))
 			throw runtimeException(
 				"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}",
 				value, json(VALID_TYPES)
 			);
 		type = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>type</property>.
-	 *
-	 * <p>
-	 * The type of the parameter.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> type() {
-		return optional(getType());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>type</property>.
-	 *
-	 * <p>
-	 * The type of the parameter.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Valid values:
-	 * 	<ul>
-	 * 		<li><js>"string"</js>
-	 * 		<li><js>"number"</js>
-	 * 		<li><js>"integer"</js>
-	 * 		<li><js>"boolean"</js>
-	 * 		<li><js>"array"</js>
-	 * 		<li><js>"file"</js>
-	 * 	</ul>
-	 * 	<br>If type is <js>"file"</js>, the <c>consumes</c> MUST be either <js>"multipart/form-data"</js>, <js>"application/x-www-form-urlencoded"</js>
-	 * 		or both and the parameter MUST be <c>in</c> <js>"formData"</js>.
-	 * 	<br>Property value is required.
-	 * @return This object.
-	 */
-	public ParameterInfo type(String value) {
-		setType(value);
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// uniqueItems
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
@@ -1721,46 +895,12 @@ public class ParameterInfo extends SwaggerElement {
 	 * Bean property setter:  <property>uniqueItems</property>.
 	 *
 	 * @param value The new value for this property.
+	 * @return This object.
 	 */
-	public void setUniqueItems(Boolean value) {
+	public ParameterInfo setUniqueItems(Boolean value) {
 		uniqueItems = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>uniqueItems</property>.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Boolean> uniqueItems() {
-		return optional(getUniqueItems());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>uniqueItems</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo uniqueItems(Boolean value) {
-		setUniqueItems(value);
 		return this;
 	}
-
-	/**
-	 * Bean property fluent setter:  <property>uniqueItems</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ParameterInfo uniqueItems(String value) {
-		setUniqueItems(toBoolean(value));
-		return this;
-	}
-
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
@@ -1799,29 +939,29 @@ public class ParameterInfo extends SwaggerElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "allowEmptyValue": return allowEmptyValue(toBoolean(value));
-			case "collectionFormat": return collectionFormat(stringify(value));
-			case "default": return _default(value);
-			case "description": return description(stringify(value));
-			case "enum": return _enum(value);
-			case "exclusiveMaximum": return exclusiveMaximum(toBoolean(value));
-			case "exclusiveMinimum": return exclusiveMinimum(toBoolean(value));
-			case "format": return format(stringify(value));
-			case "in": return in(stringify(value));
-			case "items": return items(toType(value, Items.class));
-			case "maximum": return maximum(toNumber(value));
-			case "maxItems": return maxItems(toInteger(value));
-			case "maxLength": return maxLength(toInteger(value));
-			case "minimum": return minimum(toNumber(value));
-			case "minItems": return minItems(toInteger(value));
-			case "minLength": return minLength(toInteger(value));
-			case "multipleOf": return multipleOf(toNumber(value));
-			case "name": return name(stringify(value));
-			case "pattern": return pattern(stringify(value));
-			case "required": return required(toBoolean(value));
-			case "schema": return schema(toType(value, SchemaInfo.class));
-			case "type": return type(stringify(value));
-			case "uniqueItems": return uniqueItems(toBoolean(value));
+			case "allowEmptyValue": return setAllowEmptyValue(toBoolean(value));
+			case "collectionFormat": return setCollectionFormat(stringify(value));
+			case "default": return setDefault(value);
+			case "description": return setDescription(stringify(value));
+			case "enum": return setEnum(value);
+			case "exclusiveMaximum": return setExclusiveMaximum(toBoolean(value));
+			case "exclusiveMinimum": return setExclusiveMinimum(toBoolean(value));
+			case "format": return setFormat(stringify(value));
+			case "in": return setIn(stringify(value));
+			case "items": return setItems(toType(value, Items.class));
+			case "maximum": return setMaximum(toNumber(value));
+			case "maxItems": return setMaxItems(toInteger(value));
+			case "maxLength": return setMaxLength(toInteger(value));
+			case "minimum": return setMinimum(toNumber(value));
+			case "minItems": return setMinItems(toInteger(value));
+			case "minLength": return setMinLength(toInteger(value));
+			case "multipleOf": return setMultipleOf(toNumber(value));
+			case "name": return setName(stringify(value));
+			case "pattern": return setPattern(stringify(value));
+			case "required": return setRequired(toBoolean(value));
+			case "schema": return setSchema(toType(value, SchemaInfo.class));
+			case "type": return setType(stringify(value));
+			case "uniqueItems": return setUniqueItems(toBoolean(value));
 			default:
 				super.set(property, value);
 				return this;

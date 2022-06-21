@@ -83,7 +83,7 @@ public class ExternalDocumentation extends SwaggerElement {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// description
+	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -108,42 +108,12 @@ public class ExternalDocumentation extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>{@doc ext.GFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 */
-	public void setDescription(String value) {
-		description = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>description</property>.
-	 *
-	 * <p>
-	 * A short description of the target documentation.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> description() {
-		return optional(getDescription());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>description</property>.
-	 *
-	 * <p>
-	 * A short description of the target documentation.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public ExternalDocumentation description(String value) {
-		setDescription(value);
+	public ExternalDocumentation setDescription(String value) {
+		description = value;
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// url
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>url</property>.
@@ -167,71 +137,10 @@ public class ExternalDocumentation extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
 	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
+	 * @return This object.
 	 */
-	public void setUrl(URI value) {
+	public ExternalDocumentation setUrl(URI value) {
 		url = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>url</property>.
-	 *
-	 * <p>
-	 * The URL for the target documentation.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<URI> url() {
-		return optional(getUrl());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>url</property>.
-	 *
-	 * <p>
-	 * The URL for the target documentation.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ExternalDocumentation url(URI value) {
-		setUrl(value);
-		return this;
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>url</property>.
-	 *
-	 * <p>
-	 * The URL for the target documentation.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ExternalDocumentation url(URL value) {
-		setUrl(StringUtils.toURI(value));
-		return this;
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>url</property>.
-	 *
-	 * <p>
-	 * The URL for the target documentation.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public ExternalDocumentation url(String value) {
-		setUrl(StringUtils.toURI(value));
 		return this;
 	}
 
@@ -251,8 +160,8 @@ public class ExternalDocumentation extends SwaggerElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "description": return description(stringify(value));
-			case "url": return url(StringUtils.toURI(value));
+			case "description": return setDescription(stringify(value));
+			case "url": return setUrl(StringUtils.toURI(value));
 			default:
 				super.set(property, value);
 				return this;

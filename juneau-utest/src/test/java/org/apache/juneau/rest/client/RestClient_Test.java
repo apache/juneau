@@ -369,6 +369,7 @@ public class RestClient_Test {
 		assertEquals(2,x.getMajor());
 	}
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void e04_httpRequestBase_completed() throws Exception {
 		client().build().get("/bean").completed().run().assertCode().is(200);

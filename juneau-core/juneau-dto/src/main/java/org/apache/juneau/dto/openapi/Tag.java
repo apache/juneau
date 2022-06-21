@@ -110,7 +110,7 @@ public class Tag extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Tag setName(String value) {
 		name = value;
@@ -139,7 +139,7 @@ public class Tag extends OpenApiElement {
 	 * 	The new value for this property.
 	 * 	<br>{@doc GFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Tag setDescription(String value) {
 		description = value;
@@ -167,7 +167,7 @@ public class Tag extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Tag setExternalDocs(ExternalDocumentation value) {
 		externalDocs = value;

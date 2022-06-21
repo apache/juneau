@@ -43,7 +43,7 @@ public class SwaggerBuilder {
 	 * @return The new element.
 	 */
 	public static final Contact contact(String name) {
-		return contact().name(name);
+		return contact().setName(name);
 	}
 
 	/**
@@ -60,7 +60,7 @@ public class SwaggerBuilder {
 	 * @return The new element.
 	 */
 	public static final Contact contact(String name, Object url, String email) {
-		return contact().name(name).url(StringUtils.toURI(url)).email(email);
+		return contact().setName(name).setUrl(StringUtils.toURI(url)).setEmail(email);
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class SwaggerBuilder {
 	 * @return The new element.
 	 */
 	public static final ExternalDocumentation externalDocumentation(Object url) {
-		return externalDocumentation().url(StringUtils.toURI(url));
+		return externalDocumentation().setUrl(StringUtils.toURI(url));
 	}
 
 	/**
@@ -100,7 +100,7 @@ public class SwaggerBuilder {
 	 * @return The new element.
 	 */
 	public static final ExternalDocumentation externalDocumentation(Object url, String description) {
-		return externalDocumentation().url(StringUtils.toURI(url)).description(description);
+		return externalDocumentation().setUrl(StringUtils.toURI(url)).setDescription(description);
 	}
 
 	/**
@@ -119,7 +119,7 @@ public class SwaggerBuilder {
 	 * @return The new element.
 	 */
 	public static final HeaderInfo headerInfo(String type) {
-		return headerInfo().type(type);
+		return headerInfo().setType(type);
 	}
 
 	/**
@@ -141,7 +141,7 @@ public class SwaggerBuilder {
 	 * @return The new element.
 	 */
 	public static final HeaderInfo headerInfoStrict(String type) {
-		return headerInfo().strict().type(type);
+		return headerInfo().strict().setType(type);
 	}
 
 	/**
@@ -162,7 +162,7 @@ public class SwaggerBuilder {
 	 * @return The new element.
 	 */
 	public static final Info info(String title, String version) {
-		return info().title(title).version(version);
+		return info().setTitle(title).setVersion(version);
 	}
 
 	/**
@@ -181,7 +181,7 @@ public class SwaggerBuilder {
 	 * @return The new element.
 	 */
 	public static final Items items(String type) {
-		return items().type(type);
+		return items().setType(type);
 	}
 
 	/**
@@ -203,7 +203,7 @@ public class SwaggerBuilder {
 	 * @return The new element.
 	 */
 	public static final Items itemsStrict(String type) {
-		return items().strict().type(type);
+		return items().strict().setType(type);
 	}
 
 	/**
@@ -222,7 +222,7 @@ public class SwaggerBuilder {
 	 * @return The new element.
 	 */
 	public static final License license(String name) {
-		return license().name(name);
+		return license().setName(name);
 	}
 
 	/**
@@ -233,7 +233,7 @@ public class SwaggerBuilder {
 	 * @return The new element.
 	 */
 	public static final License license(String name, URI url) {
-		return license().name(name).url(url);
+		return license().setName(name).setUrl(url);
 	}
 
 	/**
@@ -263,7 +263,7 @@ public class SwaggerBuilder {
 	 * @return The new element.
 	 */
 	public static final ParameterInfo parameterInfo(String in, String name) {
-		return parameterInfo().in(in).name(name);
+		return parameterInfo().setIn(in).setName(name);
 	}
 
 	/**
@@ -287,7 +287,7 @@ public class SwaggerBuilder {
 	 * @return The new element.
 	 */
 	public static final ParameterInfo parameterInfoStrict(String in, String name) {
-		return parameterInfo().strict().in(in).name(name);
+		return parameterInfo().strict().setIn(in).setName(name);
 	}
 
 	/**
@@ -306,7 +306,7 @@ public class SwaggerBuilder {
 	 * @return The new element.
 	 */
 	public static final ResponseInfo responseInfo(String description) {
-		return responseInfo().description(description);
+		return responseInfo().setDescription(description);
 	}
 
 	/**
@@ -334,7 +334,7 @@ public class SwaggerBuilder {
 	 * @return The new element.
 	 */
 	public static final SecurityScheme securityScheme(String type) {
-		return securityScheme().type(type);
+		return securityScheme().setType(type);
 	}
 
 	/**
@@ -354,7 +354,7 @@ public class SwaggerBuilder {
 	 * @return The new element.
 	 */
 	public static final SecurityScheme securitySchemeStrict(String type) {
-		return securityScheme().strict().type(type);
+		return securityScheme().strict().setType(type);
 	}
 
 	/**
@@ -373,7 +373,7 @@ public class SwaggerBuilder {
 	 * @return The new element.
 	 */
 	public static final Swagger swagger(Info info) {
-		return swagger().info(info);
+		return swagger().setInfo(info);
 	}
 
 	/**
@@ -392,7 +392,7 @@ public class SwaggerBuilder {
 	 * @return The new element.
 	 */
 	public static final Tag tag(String name) {
-		return tag().name(name);
+		return tag().setName(name);
 	}
 
 	/**

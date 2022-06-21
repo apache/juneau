@@ -32,380 +32,55 @@ import org.junit.*;
 public class Swagger_Test {
 
 	/**
-	 * Test method for {@link Swagger#swagger(java.lang.Object)}.
+	 * Test method for getters and setters.
 	 */
 	@Test
-	public void a01_swagger() {
+	public void a01_gettersAndSetters() {
 		Swagger t = new Swagger();
-
-		t.swagger("foo");
-		assertString(t.swagger()).is("foo");
-
-		t.swagger(null);
-		assertString(t.swagger()).isNull();
-	}
-
-	/**
-	 * Test method for {@link Swagger#info(java.lang.Object)}.
-	 */
-	@Test
-	public void a02_info() {
-		Swagger t = new Swagger();
-
-		t.info(info("foo", "bar"));
-		assertOptional(t.info()).asJson().is("{title:'foo',version:'bar'}");
-
-		t.info("{title:'foo',version:'bar'}");
-		assertOptional(t.info()).isType(Info.class).asJson().is("{title:'foo',version:'bar'}");
-
-		t.info((String)null);
-		assertOptional(t.info()).isNull();
-	}
-
-	/**
-	 * Test method for {@link Swagger#host(java.lang.Object)}.
-	 */
-	@Test
-	public void a03_host() {
-		Swagger t = new Swagger();
-
-		t.host("foo");
-		assertString(t.host()).is("foo");
-
-		t.host(null);
-		assertString(t.host()).isNull();
-	}
-
-	/**
-	 * Test method for {@link Swagger#basePath(java.lang.Object)}.
-	 */
-	@Test
-	public void a04_basePath() {
-		Swagger t = new Swagger();
-
-		t.basePath("foo");
-		assertString(t.basePath()).is("foo");
-
-		t.basePath(null);
-		assertString(t.basePath()).isNull();
-	}
-
-	/**
-	 * Test method for {@link Swagger#setSchemes(java.util.Collection)}.
-	 */
-	@Test
-	public void a05_schemes() {
-		Swagger t = new Swagger();
-
-		t.schemes(set("foo","bar"));
-		assertOptional(t.schemes()).isType(Set.class).asJson().is("['foo','bar']");
-
-		t.schemes(set());
-		assertOptional(t.schemes()).isType(Set.class).asJson().is("[]");
-
-		t.schemes((Collection<String>)null);
-		assertOptional(t.schemes()).isNull();
-
-		t.addSchemes(set("foo","bar"));
-		assertOptional(t.schemes()).isType(Set.class).asJson().is("['foo','bar']");
-
-		t.addSchemes(set());
-		assertOptional(t.schemes()).isType(Set.class).asJson().is("['foo','bar']");
-
-		t.addSchemes(null);
-		assertOptional(t.schemes()).isType(Set.class).asJson().is("['foo','bar']");
-	}
-
-	/**
-	 * Test method for {@link Swagger#setConsumes(java.util.Collection)}.
-	 */
-	@Test
-	public void a06_consumes() {
-		Swagger t = new Swagger();
-
-		t.consumes(set(MediaType.of("text/foo")));
-		assertOptional(t.consumes()).isType(Set.class).asJson().is("['text/foo']");
-
-		t.consumes(set());
-		assertOptional(t.consumes()).isType(Set.class).asJson().is("[]");
-
-		t.consumes((Collection<MediaType>)null);
-		assertOptional(t.consumes()).isNull();
-
-		t.addConsumes(set(MediaType.of("text/foo")));
-		assertOptional(t.consumes()).isType(Set.class).asJson().is("['text/foo']");
-
-		t.addConsumes(set());
-		assertOptional(t.consumes()).isType(Set.class).asJson().is("['text/foo']");
-
-		t.addConsumes(null);
-		assertOptional(t.consumes()).isType(Set.class).asJson().is("['text/foo']");
-	}
-
-	/**
-	 * Test method for {@link Swagger#setProduces(java.util.Collection)}.
-	 */
-	@Test
-	public void a07_produces() {
-		Swagger t = new Swagger();
-
-		t.produces(set(MediaType.of("text/foo")));
-		assertOptional(t.produces()).isType(Set.class).asJson().is("['text/foo']");
-
-		t.produces(set());
-		assertOptional(t.produces()).isType(Set.class).asJson().is("[]");
-
-		t.produces((Collection<MediaType>)null);
-		assertOptional(t.produces()).isNull();
-
-		t.addProduces(set(MediaType.of("text/foo")));
-		assertOptional(t.produces()).isType(Set.class).asJson().is("['text/foo']");
-
-		t.addProduces(set());
-		assertOptional(t.produces()).isType(Set.class).asJson().is("['text/foo']");
-
-		t.addProduces(null);
-		assertOptional(t.produces()).isType(Set.class).asJson().is("['text/foo']");
-	}
-
-	/**
-	 * Test method for {@link Swagger#setPaths(java.util.Map)}.
-	 */
-	@Test
-	public void a08_paths() {
-		Swagger t = new Swagger();
-
-		t.paths(map("foo", new OperationMap().append("bar",operation().summary("baz"))));
-		assertOptional(t.paths()).isType(Map.class).asJson().is("{foo:{bar:{summary:'baz'}}}");
-
-		t.paths(map());
-		assertOptional(t.paths()).isNull();
-
-		t.paths((Map<String,OperationMap>)null);
-		assertOptional(t.paths()).isNull();
-
-		t.addPaths(map("foo",new OperationMap().append("bar",operation().summary("baz"))));
-		assertOptional(t.paths()).isType(Map.class).asJson().is("{foo:{bar:{summary:'baz'}}}");
-
-		t.addPaths(map());
-		assertOptional(t.paths()).isType(Map.class).asJson().is("{foo:{bar:{summary:'baz'}}}");
-
-		t.addPaths(null);
-		assertOptional(t.paths()).isType(Map.class).asJson().is("{foo:{bar:{summary:'baz'}}}");
-
-		t.setPaths(null);
-		t.path("a", "a1", operation().description("a2"));
-		t.path("b", null, null);
-
-		assertOptional(t.paths()).asJson().is("{a:{a1:{description:'a2'}},b:{null:null}}");
-	}
-
-	/**
-	 * Test method for {@link Swagger#setDefinitions(java.util.Map)}.
-	 */
-	@Test
-	public void a09_definitions() {
-		Swagger t = new Swagger();
-
-		t.definitions(map("foo",JsonMap.of("type","bar")));
-		assertOptional(t.definitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
-
-		t.definitions(map());
-		assertOptional(t.definitions()).isType(Map.class).asJson().is("{}");
-
-		t.definitions((Map<String,JsonMap>)null);
-		assertOptional(t.definitions()).isNull();
-
-		t.addDefinitions(map("foo",JsonMap.of("type", "bar")));
-		assertOptional(t.definitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
-
-		t.addDefinitions(map());
-		assertOptional(t.definitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
-
-		t.addDefinitions(null);
-		assertOptional(t.definitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
-
-		t.setDefinitions(null);
-		t.definition("a", JsonMap.of("type","a1"));
-		t.definition("b", (JsonMap)null);
-		t.definition(null, JsonMap.of("type", "c1"));
-
-		assertOptional(t.definitions()).asJson().is("{a:{type:'a1'},b:null,null:{type:'c1'}}");
-	}
-
-	/**
-	 * Test method for {@link Swagger#setParameters(java.util.Map)}.
-	 */
-	@Test
-	public void a10_parameters() {
-		Swagger t = new Swagger();
-
-		t.parameters(map("foo",parameterInfo().name("bar")));
-		assertOptional(t.parameters()).isType(Map.class).asJson().is("{foo:{name:'bar'}}");
-
-		t.parameters(map());
-		assertOptional(t.parameters()).isType(Map.class).asJson().is("{}");
-
-		t.parameters((Map<String,ParameterInfo>)null);
-		assertOptional(t.parameters()).isNull();
-
-		t.addParameters(map("foo",parameterInfo().name("bar")));
-		assertOptional(t.parameters()).isType(Map.class).asJson().is("{foo:{name:'bar'}}");
-
-		t.addParameters(map());
-		assertOptional(t.parameters()).isType(Map.class).asJson().is("{foo:{name:'bar'}}");
-
-		t.addParameters(null);
-		assertOptional(t.parameters()).isType(Map.class).asJson().is("{foo:{name:'bar'}}");
-
-		t.setParameters(null);
-		t.parameter("a", parameterInfo().in("a1"));
-		t.parameter("b", null);
-		t.parameter(null, parameterInfo().in("c1"));
-
-		assertOptional(t.parameters()).asJson().is("{a:{'in':'a1'},b:null,null:{'in':'c1'}}");
-	}
-
-	/**
-	 * Test method for {@link Swagger#setResponses(java.util.Map)}.
-	 */
-	@Test
-	public void a11_responses() {
-		Swagger t = new Swagger();
-
-		t.responses(map("123",responseInfo("bar")));
-		assertOptional(t.responses()).isType(Map.class).asJson().is("{'123':{description:'bar'}}");
-
-		t.responses(map());
-		assertOptional(t.responses()).isType(Map.class).asJson().is("{}");
-
-		t.responses((Map<String,ResponseInfo>)null);
-		assertOptional(t.responses()).isNull();
-
-		t.addResponses(map("123",responseInfo("bar")));
-		assertOptional(t.responses()).isType(Map.class).asJson().is("{'123':{description:'bar'}}");
-
-		t.addResponses(map());
-		assertOptional(t.responses()).isType(Map.class).asJson().is("{'123':{description:'bar'}}");
-
-		t.addResponses(null);
-		assertOptional(t.responses()).isType(Map.class).asJson().is("{'123':{description:'bar'}}");
-
-		t.setResponses(null);
-		t.response("a", responseInfo("a1"));
-		t.response(null, responseInfo("b1"));
-		t.response("c", null);
-
-		assertOptional(t.responses()).asJson().is("{a:{description:'a1'},null:{description:'b1'},c:null}");
-	}
-
-	/**
-	 * Test method for {@link Swagger#setSecurityDefinitions(java.util.Map)}.
-	 */
-	@Test
-	public void a12_securityDefinitions() {
-		Swagger t = new Swagger();
-
-		t.securityDefinitions(map("foo",securityScheme("bar")));
-		assertOptional(t.securityDefinitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
-
-		t.securityDefinitions(map());
-		assertOptional(t.securityDefinitions()).isType(Map.class).asJson().is("{}");
-
-		t.securityDefinitions((Map<String,SecurityScheme>)null);
-		assertOptional(t.securityDefinitions()).isNull();
-
-		t.addSecurityDefinitions(map("foo",securityScheme("bar")));
-		assertOptional(t.securityDefinitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
-
-		t.addSecurityDefinitions(map());
-		assertOptional(t.securityDefinitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
-
-		t.addSecurityDefinitions(null);
-		assertOptional(t.securityDefinitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
-
-		t.setSecurityDefinitions(null);
-		t.securityDefinition("a", securityScheme("a1"));
-		t.securityDefinition("b", null);
-		t.securityDefinition(null, securityScheme("c1"));
-
-		assertOptional(t.securityDefinitions()).asJson().is("{a:{type:'a1'},b:null,null:{type:'c1'}}");
-	}
-
-	/**
-	 * Test method for {@link Swagger#setSecurity(java.util.Collection)}.
-	 */
-	@Test
-	public void a13_security() {
-		Swagger t = new Swagger();
-
-		t.security(set(map("foo",alist("bar"))));
-		assertOptional(t.security()).isType(List.class).asJson().is("[{foo:['bar']}]");
-
-		t.security(set());
-		assertOptional(t.security()).isType(List.class).asJson().is("[]");
-
-		t.security((Collection<Map<String, List<String>>>)null);
-		assertOptional(t.security()).isNull();
-
-		t.addSecurity(set(map("foo",alist("bar"))));
-		assertOptional(t.security()).isType(List.class).asJson().is("[{foo:['bar']}]");
-
-		t.addSecurity(set());
-		assertOptional(t.security()).isType(List.class).asJson().is("[{foo:['bar']}]");
-
-		t.addSecurity(null);
-		assertOptional(t.security()).isType(List.class).asJson().is("[{foo:['bar']}]");
-
-		t.setSecurity(null);
-		t.security("a", "a1", "a2");
-		t.security("b", (String)null);
-		t.security(null, "d1", "d2");
-
-		assertOptional(t.security()).asJson().is("[{a:['a1','a2']},{b:[null]},{null:['d1','d2']}]");
-	}
-
-	/**
-	 * Test method for {@link Swagger#setTags(java.util.Collection)}.
-	 */
-	@Test
-	public void a14_tags() {
-		Swagger t = new Swagger();
-
-		t.tags(set(tag("foo")));
-		assertOptional(t.tags()).isType(Set.class).asJson().is("[{name:'foo'}]");
-
-		t.tags(set());
-		assertOptional(t.tags()).isType(Set.class).asJson().is("[]");
-
-		t.tags((Collection<Tag>)null);
-		assertOptional(t.tags()).isNull();
-
-		t.addTags(set(tag("foo")));
-		assertOptional(t.tags()).isType(Set.class).asJson().is("[{name:'foo'}]");
-
-		t.addTags(set());
-		assertOptional(t.tags()).isType(Set.class).asJson().is("[{name:'foo'}]");
-
-		t.addTags(null);
-		assertOptional(t.tags()).isType(Set.class).asJson().is("[{name:'foo'}]");
-	}
-
-	/**
-	 * Test method for {@link Swagger#externalDocs(java.lang.Object)}.
-	 */
-	@Test
-	public void a15_externalDocs() {
-		Swagger t = new Swagger();
-
-		t.externalDocs(externalDocumentation("foo"));
-		assertOptional(t.externalDocs()).asJson().is("{url:'foo'}");
-
-		t.externalDocs("{url:'foo'}");
-		assertOptional(t.externalDocs()).isType(ExternalDocumentation.class).asJson().is("{url:'foo'}");
-
-		t.externalDocs((String)null);
-		assertOptional(t.externalDocs()).isNull();
+		assertString(t.setSwagger("foo").getSwagger()).is("foo");
+		assertString(t.setSwagger(null).getSwagger()).isNull();
+		assertObject(t.setInfo(info("foo", "bar")).getInfo()).asJson().is("{title:'foo',version:'bar'}");
+		assertString(t.setHost("foo").getHost()).is("foo");
+		assertString(t.setHost(null).getHost()).isNull();
+		assertString(t.setBasePath("foo").getBasePath()).is("foo");
+		assertString(t.setBasePath(null).getBasePath()).isNull();
+		assertObject(t.setSchemes(set("foo","bar")).getSchemes()).isType(Set.class).asJson().is("['foo','bar']");
+		assertObject(t.setSchemes(set()).getSchemes()).isType(Set.class).asJson().is("[]");
+		assertObject(t.setSchemes((Collection<String>)null).getSchemes()).isNull();
+		assertObject(t.setConsumes(set(MediaType.of("text/foo"))).getConsumes()).isType(Set.class).asJson().is("['text/foo']");
+		assertObject(t.setConsumes(set()).getConsumes()).isType(Set.class).asJson().is("[]");
+		assertObject(t.setConsumes((Collection<MediaType>)null).getConsumes()).isNull();
+		assertObject(t.setProduces(set(MediaType.of("text/foo"))).getProduces()).isType(Set.class).asJson().is("['text/foo']");
+		assertObject(t.setProduces(set()).getProduces()).isType(Set.class).asJson().is("[]");
+		assertObject(t.setProduces((Collection<MediaType>)null).getProduces()).isNull();
+		assertObject(t.setPaths(map("foo", new OperationMap().append("bar",operation().setSummary("baz")))).getPaths()).isType(Map.class).asJson().is("{foo:{bar:{summary:'baz'}}}");
+		assertObject(t.setPaths(map()).getPaths()).isNull();
+		assertObject(t.setPaths((Map<String,OperationMap>)null).getPaths()).isNull();
+		assertObject(t.setPaths(null).addPath("a", "a1", operation().setDescription("a2")).addPath("b", null, null).getPaths()).asJson().is("{a:{a1:{description:'a2'}},b:{null:null}}");
+		assertObject(t.setDefinitions(map("foo",JsonMap.of("type","bar"))).getDefinitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
+		assertObject(t.setDefinitions(map()).getDefinitions()).isType(Map.class).asJson().is("{}");
+		assertObject(t.setDefinitions((Map<String,JsonMap>)null).getDefinitions()).isNull();
+		assertObject(t.setDefinitions(null).addDefinition("a", JsonMap.of("type","a1")).addDefinition("b", (JsonMap)null).addDefinition(null, JsonMap.of("type", "c1")).getDefinitions()).asJson().is("{a:{type:'a1'},b:null,null:{type:'c1'}}");
+		assertObject(t.setParameters(map("foo",parameterInfo().setName("bar"))).getParameters()).isType(Map.class).asJson().is("{foo:{name:'bar'}}");
+		assertObject(t.setParameters(map()).getParameters()).isType(Map.class).asJson().is("{}");
+		assertObject(t.setParameters((Map<String,ParameterInfo>)null).getParameters()).isNull();
+		assertObject(t.setParameters(null).addParameter("a", parameterInfo().setIn("a1")).addParameter("b", null).addParameter(null, parameterInfo().setIn("c1")).getParameters()).asJson().is("{a:{'in':'a1'},b:null,null:{'in':'c1'}}");
+		assertObject(t.setResponses(map("123",responseInfo("bar"))).getResponses()).isType(Map.class).asJson().is("{'123':{description:'bar'}}");
+		assertObject(t.setResponses(map()).getResponses()).isType(Map.class).asJson().is("{}");
+		assertObject(t.setResponses((Map<String,ResponseInfo>)null).getResponses()).isNull();
+		assertObject(t.setResponses(null).addResponse("a", responseInfo("a1")).addResponse(null, responseInfo("b1")).addResponse("c", null).getResponses()).asJson().is("{a:{description:'a1'},null:{description:'b1'},c:null}");
+		assertObject(t.setSecurityDefinitions(map("foo",securityScheme("bar"))).getSecurityDefinitions()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
+		assertObject(t.setSecurityDefinitions(map()).getSecurityDefinitions()).isType(Map.class).asJson().is("{}");
+		assertObject(t.setSecurityDefinitions((Map<String,SecurityScheme>)null).getSecurityDefinitions()).isNull();
+		assertObject(t.setSecurityDefinitions(null).addSecurityDefinition("a", securityScheme("a1")).addSecurityDefinition("b", null).addSecurityDefinition(null, securityScheme("c1")).getSecurityDefinitions()).asJson().is("{a:{type:'a1'},b:null,null:{type:'c1'}}");
+		assertObject(t.setSecurity(set(map("foo",alist("bar")))).getSecurity()).isType(List.class).asJson().is("[{foo:['bar']}]");
+		assertObject(t.setSecurity(set()).getSecurity()).isType(List.class).asJson().is("[]");
+		assertObject(t.setSecurity((Collection<Map<String, List<String>>>)null).getSecurity()).isNull();
+		assertObject(t.setSecurity(null).addSecurity("a", "a1", "a2").addSecurity("b", (String)null).addSecurity(null, "d1", "d2").getSecurity()).asJson().is("[{a:['a1','a2']},{b:[null]},{null:['d1','d2']}]");
+		assertObject(t.setTags(set(tag("foo"))).getTags()).isType(Set.class).asJson().is("[{name:'foo'}]");
+		assertObject(t.setTags(set()).getTags()).isType(Set.class).asJson().is("[]");
+		assertObject(t.setTags((Collection<Tag>)null).getTags()).isNull();
+		assertObject(t.setExternalDocs(externalDocumentation("foo")).getExternalDocs()).asJson().is("{url:'foo'}");
 	}
 
 	/**
@@ -418,12 +93,12 @@ public class Swagger_Test {
 		t
 			.set("basePath", "a")
 			.set("consumes", set(MediaType.of("text/b")))
-			.set("definitions", map("c",schemaInfo().type("c1")))
+			.set("definitions", map("c",schemaInfo().setType("c1")))
 			.set("externalDocs", externalDocumentation("d"))
 			.set("host", "e")
 			.set("info", info("f1", "f2"))
 			.set("parameters", map("g",parameterInfo("g1", "g2")))
-			.set("paths", map("h",map("h1",operation().operationId("h2"))))
+			.set("paths", map("h",map("h1",operation().setOperationId("h2"))))
 			.set("produces", set(MediaType.of("text/i")))
 			.set("responses", map("j",responseInfo("j1")))
 			.set("schemes", set("k1"))
@@ -536,12 +211,12 @@ public class Swagger_Test {
 		t
 			.set("basePath", "a")
 			.set("consumes", set(MediaType.of("text/b")))
-			.set("definitions", map("c",schemaInfo().type("c1")))
+			.set("definitions", map("c",schemaInfo().setType("c1")))
 			.set("externalDocs", externalDocumentation("d"))
 			.set("host", "e")
 			.set("info", info("f1", "f2"))
 			.set("parameters", map("g",parameterInfo("g1", "g2")))
-			.set("paths", map("h",map("h1",operation().operationId("h2"))))
+			.set("paths", map("h",map("h1",operation().setOperationId("h2"))))
 			.set("produces", set(MediaType.of("text/i")))
 			.set("responses", map("j",responseInfo("j1")))
 			.set("schemes", set("k1"))
@@ -564,12 +239,12 @@ public class Swagger_Test {
 		t
 			.set("basePath", "a")
 			.set("consumes", set(MediaType.of("text/b")))
-			.set("definitions", map("c",schemaInfo().type("c1")))
+			.set("definitions", map("c",schemaInfo().setType("c1")))
 			.set("externalDocs", externalDocumentation("d"))
 			.set("host", "e")
 			.set("info", info("f1", "f2"))
 			.set("parameters", map("g",parameterInfo("g1", "g2")))
-			.set("paths", map("h",map("h1",operation().operationId("h2"))))
+			.set("paths", map("h",map("h1",operation().setOperationId("h2"))))
 			.set("produces", set(MediaType.of("text/i")))
 			.set("responses", map("j",responseInfo("j1")))
 			.set("schemes", set("k1"))

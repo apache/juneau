@@ -132,7 +132,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public HeaderInfo setDescription(String value) {
 		description = value;
@@ -173,7 +173,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * 		<li><js>"boolean"</js>
 	 * 		<li><js>"array"</js>
 	 * 	</ul>
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public HeaderInfo setRequired(Boolean value) {
 		required = value;
@@ -207,7 +207,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
 	 * 	</ul>
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public HeaderInfo setExplode(Boolean value) {
 		explode = value;
@@ -238,7 +238,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * </ul>
 	 *
 	 * @param value
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public HeaderInfo setDeprecated(Boolean value) {
 		deprecated = value;
@@ -269,7 +269,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * </ul>
 	 *
 	 * @param value
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public HeaderInfo setAllowEmptyValue(Boolean value) {
 		allowEmptyValue = value;
@@ -300,7 +300,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * </ul>
 	 *
 	 * @param value
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public HeaderInfo setAllowReserved(Boolean value) {
 		allowReserved = value;
@@ -322,7 +322,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public HeaderInfo setSchema(SchemaInfo value) {
 		schema = value;
@@ -340,21 +340,12 @@ public class HeaderInfo extends OpenApiElement {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if this object has a <js>"$ref"</js> attribute.
-	 *
-	 * @return <jk>true</jk> if this object has a <js>"$ref"</js> attribute.
-	 */
-	public boolean hasRef() {
-		return ref != null;
-	}
-
-	/**
 	 * Bean property setter:  <property>$ref</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	@Beanp("$ref")
 	public HeaderInfo setRef(String value) {
@@ -378,7 +369,7 @@ public class HeaderInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	@Beanp("x-example")
 	public HeaderInfo setExample(Object value) {
@@ -407,23 +398,10 @@ public class HeaderInfo extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public HeaderInfo setExamples(Map<String,Example> value) {
 		examples = copyOf(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>headers</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public HeaderInfo addExamples(Map<String,Example> values) {
-		examples = mapBuilder(examples).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -432,10 +410,10 @@ public class HeaderInfo extends OpenApiElement {
 	 *
 	 * @param name The example name.
 	 * @param example The example.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public HeaderInfo addExample(String name, Example example) {
-		addExamples(Collections.singletonMap(name, example));
+		examples = mapBuilder(examples).sparse().add(name, example).build();
 		return this;
 	}
 

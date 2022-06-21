@@ -90,23 +90,10 @@ public class ServerVariable extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public ServerVariable setEnum(Collection<Object> value) {
 		_enum = listFrom(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>enum</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public ServerVariable addEnum(Collection<Object> values) {
-		_enum = listBuilder(_enum).sparse().addAny(values).build();
 		return this;
 	}
 
@@ -131,7 +118,7 @@ public class ServerVariable extends OpenApiElement {
 	 * 			</p>
 	 * 	</ul>
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public ServerVariable addEnum(Object...values) {
 		_enum = listBuilder(_enum).sparse().addAny(values).build();
@@ -185,20 +172,11 @@ public class ServerVariable extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public ServerVariable setDefault(String value) {
 		_default = value;
 		return this;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the defualt property is not null or empty.
-	 *
-	 * @return <jk>true</jk> if the defualt property is not null or empty.
-	 */
-	public boolean hasDefault() {
-		return ! _default.isEmpty();
 	}
 
 	/**
@@ -247,7 +225,7 @@ public class ServerVariable extends OpenApiElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public ServerVariable setDescription(String value) {
 		description = value;

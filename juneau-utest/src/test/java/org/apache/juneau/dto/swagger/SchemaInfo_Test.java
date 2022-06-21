@@ -30,511 +30,65 @@ import org.junit.*;
 public class SchemaInfo_Test {
 
 	/**
-	 * Test method for {@link SchemaInfo#format(java.lang.Object)}.
+	 * Test method for getters and setters.
 	 */
 	@Test
-	public void a01_format() {
+	public void a01_gettersAndSetters() {
 		SchemaInfo t = new SchemaInfo();
-
-		t.format("foo");
-		assertString(t.format()).is("foo");
-
-		t.format(null);
-		assertString(t.format()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#title(java.lang.Object)}.
-	 */
-	@Test
-	public void a02_title() {
-		SchemaInfo t = new SchemaInfo();
-
-		t.title("foo");
-		assertString(t.title()).is("foo");
-
-		t.title(null);
-		assertString(t.title()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#description(java.lang.Object)}.
-	 */
-	@Test
-	public void a03_description() {
-		SchemaInfo t = new SchemaInfo();
-
-		t.description("foo");
-		assertString(t.description()).is("foo");
-
-		t.description(null);
-		assertString(t.description()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#_default(java.lang.Object)}.
-	 */
-	@Test
-	public void a04_default() {
-		SchemaInfo t = new SchemaInfo();
-
-		t._default("foo");
-		assertString(t._default()).is("foo");
-
-		t._default(new StringBuilder("foo"));
-		assertOptional(t._default()).isType(StringBuilder.class).asString().is("foo");
-
-		t._default(null);
-		assertOptional(t._default()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#multipleOf(java.lang.Object)}.
-	 */
-	@Test
-	public void a05_multipleOf() {
-		SchemaInfo t = new SchemaInfo();
-
-		t.multipleOf(123);
-		assertOptional(t.multipleOf()).isType(Integer.class).is(123);
-
-		t.multipleOf(123f);
-		assertOptional(t.multipleOf()).isType(Float.class).is(123f);
-
-		t.multipleOf("123");
-		assertOptional(t.multipleOf()).isType(Integer.class).is(123);
-
-		t.multipleOf((String)null);
-		assertOptional(t.multipleOf()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#maximum(java.lang.Object)}.
-	 */
-	@Test
-	public void a06_maximum() {
-		SchemaInfo t = new SchemaInfo();
-
-		t.maximum(123);
-		assertOptional(t.maximum()).isType(Integer.class).is(123);
-
-		t.maximum(123f);
-		assertOptional(t.maximum()).isType(Float.class).is(123f);
-
-		t.maximum("123");
-		assertOptional(t.maximum()).isType(Integer.class).is(123);
-
-		t.maximum((String)null);
-		assertOptional(t.maximum()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#exclusiveMaximum(java.lang.Object)}.
-	 */
-	@Test
-	public void a07_exclusiveMaximum() {
-		SchemaInfo t = new SchemaInfo();
-
-		t.exclusiveMaximum(true);
-		assertOptional(t.exclusiveMaximum()).isType(Boolean.class).is(true);
-
-		t.exclusiveMaximum("true");
-		assertOptional(t.exclusiveMaximum()).isType(Boolean.class).is(true);
-
-		t.exclusiveMaximum((String)null);
-		assertOptional(t.exclusiveMaximum()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#minimum(java.lang.Object)}.
-	 */
-	@Test
-	public void a08_minimum() {
-		SchemaInfo t = new SchemaInfo();
-
-		t.minimum(123);
-		assertOptional(t.minimum()).isType(Integer.class).is(123);
-
-		t.minimum(123f);
-		assertOptional(t.minimum()).isType(Float.class).is(123f);
-
-		t.minimum("123");
-		assertOptional(t.minimum()).isType(Integer.class).is(123);
-
-		t.minimum((String)null);
-		assertOptional(t.minimum()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#exclusiveMinimum(java.lang.Object)}.
-	 */
-	@Test
-	public void a09_exclusiveMinimum() {
-		SchemaInfo t = new SchemaInfo();
-
-		t.exclusiveMinimum(true);
-		assertOptional(t.exclusiveMinimum()).isType(Boolean.class).is(true);
-
-		t.exclusiveMinimum("true");
-		assertOptional(t.exclusiveMinimum()).isType(Boolean.class).is(true);
-
-		t.exclusiveMinimum((String)null);
-		assertOptional(t.exclusiveMinimum()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#maxLength(java.lang.Object)}.
-	 */
-	@Test
-	public void a10_maxLength() {
-		SchemaInfo t = new SchemaInfo();
-
-		t.maxLength(123);
-		assertOptional(t.maxLength()).isType(Integer.class).is(123);
-
-		t.maxLength("123");
-		assertOptional(t.maxLength()).isType(Integer.class).is(123);
-
-		t.maxLength((String)null);
-		assertOptional(t.maxLength()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#minLength(java.lang.Object)}.
-	 */
-	@Test
-	public void a11_minLength() {
-		SchemaInfo t = new SchemaInfo();
-
-		t.minLength(123);
-		assertOptional(t.minLength()).isType(Integer.class).is(123);
-
-		t.minLength("123");
-		assertOptional(t.minLength()).isType(Integer.class).is(123);
-
-		t.minLength((String)null);
-		assertOptional(t.minLength()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#pattern(java.lang.Object)}.
-	 */
-	@Test
-	public void a12_pattern() {
-		SchemaInfo t = new SchemaInfo();
-
-		t.pattern("foo");
-		assertString(t.pattern()).is("foo");
-
-		t.pattern(null);
-		assertString(t.pattern()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#maxItems(java.lang.Object)}.
-	 */
-	@Test
-	public void a13_maxItems() {
-		SchemaInfo t = new SchemaInfo();
-
-		t.maxItems(123);
-		assertOptional(t.maxItems()).isType(Integer.class).is(123);
-
-		t.maxItems("123");
-		assertOptional(t.maxItems()).isType(Integer.class).is(123);
-
-		t.maxItems((String)null);
-		assertOptional(t.maxItems()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#minItems(java.lang.Object)}.
-	 */
-	@Test
-	public void a14_minItems() {
-		SchemaInfo t = new SchemaInfo();
-
-		t.minItems(123);
-		assertOptional(t.minItems()).isType(Integer.class).is(123);
-
-		t.minItems("123");
-		assertOptional(t.minItems()).isType(Integer.class).is(123);
-
-		t.minItems((String)null);
-		assertOptional(t.minItems()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#uniqueItems(java.lang.Object)}.
-	 */
-	@Test
-	public void a15_uniqueItems() {
-		SchemaInfo t = new SchemaInfo();
-
-		t.uniqueItems(true);
-		assertOptional(t.uniqueItems()).isType(Boolean.class).is(true);
-
-		t.uniqueItems("true");
-		assertOptional(t.uniqueItems()).isType(Boolean.class).is(true);
-
-		t.uniqueItems((String)null);
-		assertOptional(t.uniqueItems()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#maxProperties(java.lang.Object)}.
-	 */
-	@Test
-	public void a16_maxProperties() {
-		SchemaInfo t = new SchemaInfo();
-
-		t.maxProperties(123);
-		assertOptional(t.maxProperties()).isType(Integer.class).is(123);
-
-		t.maxProperties("123");
-		assertOptional(t.maxProperties()).isType(Integer.class).is(123);
-
-		t.maxProperties((String)null);
-		assertOptional(t.maxProperties()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#minProperties(java.lang.Object)}.
-	 */
-	@Test
-	public void a17_minProperties() {
-		SchemaInfo t = new SchemaInfo();
-
-		t.minProperties(123);
-		assertOptional(t.minProperties()).isType(Integer.class).is(123);
-
-		t.minProperties("123");
-		assertOptional(t.minProperties()).isType(Integer.class).is(123);
-
-		t.minProperties((String)null);
-		assertOptional(t.minProperties()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#required(java.lang.Object)}.
-	 */
-	@Test
-	public void a18_required() {
-		SchemaInfo t = new SchemaInfo();
-
-		t.requiredProperties("['x']");
-		assertOptional(t.requiredProperties()).isType(Set.class).asJson().is("['x']");
-
-		t.setRequiredProperties(null);
-		assertOptional(t.requiredProperties()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#setEnum(java.util.Collection)}.
-	 */
-	@Test
-	public void a19_enum() {
-		SchemaInfo t = new SchemaInfo();
-
-		t._enum(set("foo","bar"));
-		assertOptional(t._enum()).isType(Set.class).asJson().is("['foo','bar']");
-
-		t._enum(set());
-		assertOptional(t._enum()).isType(Set.class).asJson().is("[]");
-
-		t._enum((Collection<Object>)null);
-		assertOptional(t._enum()).isNull();
-
-		t.addEnum(set("foo","bar"));
-		assertOptional(t._enum()).isType(Set.class).asJson().is("['foo','bar']");
-
-		t.addEnum(set("baz"));
-		assertOptional(t._enum()).isType(Set.class).asJson().is("['foo','bar','baz']");
-
-		t.addEnum(null);
-		assertOptional(t._enum()).isType(Set.class).asJson().is("['foo','bar','baz']");
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#type(java.lang.Object)}.
-	 */
-	@Test
-	public void a20_type() {
-		SchemaInfo t = new SchemaInfo();
-
-		t.type("foo");
-		assertString(t.type()).is("foo");
-
-		t.type(null);
-		assertString(t.type()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#items(java.lang.Object)}.
-	 */
-	@Test
-	public void a21_items() {
-		SchemaInfo t = new SchemaInfo();
-
-		t.items(items("foo"));
-		assertOptional(t.items()).asJson().is("{type:'foo'}");
-
-		t.items("{type:'foo'}");
-		assertOptional(t.items()).isType(Items.class).asJson().is("{type:'foo'}");
-
-		t.items((String)null);
-		assertOptional(t.items()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#setAllOf(java.util.Collection)}.
-	 */
-	@Test
-	public void a22_allOf() {
-		SchemaInfo t = new SchemaInfo();
-
-		t.allOf(set("foo","bar"));
-		assertOptional(t.allOf()).isType(Set.class).asJson().is("['foo','bar']");
-
-		t.allOf(set());
-		assertOptional(t.allOf()).isType(Set.class).asJson().is("[]");
-
-		t.allOf((Collection<Object>)null);
-		assertOptional(t.allOf()).isNull();
-
-		t.addAllOf(set("foo","bar"));
-		assertOptional(t.allOf()).isType(Set.class).asJson().is("['foo','bar']");
-
-		t.addAllOf(set());
-		assertOptional(t.allOf()).isType(Set.class).asJson().is("['foo','bar']");
-
-		t.addAllOf(null);
-		assertOptional(t.allOf()).isType(Set.class).asJson().is("['foo','bar']");
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#setProperties(java.util.Map)}.
-	 */
-	@Test
-	public void a23_properties() {
-		SchemaInfo t = new SchemaInfo();
-
-		t.properties(map("foo",new SchemaInfo().type("foo")));
-		assertOptional(t.properties()).isType(Map.class).asJson().is("{foo:{type:'foo'}}");
-
-		t.properties(map());
-		assertOptional(t.properties()).isType(Map.class).asJson().is("{}");
-
-		t.properties((Map<String,SchemaInfo>)null);
-		assertOptional(t.properties()).isNull();
-
-		t.addProperties(map("foo", new SchemaInfo().type("foo")));
-		assertOptional(t.properties()).isType(Map.class).asJson().is("{foo:{type:'foo'}}");
-
-		t.addProperties(map());
-		assertOptional(t.properties()).isType(Map.class).asJson().is("{foo:{type:'foo'}}");
-
-		t.addProperties(null);
-		assertOptional(t.properties()).isType(Map.class).asJson().is("{foo:{type:'foo'}}");
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#setAdditionalProperties(java.util.Map)}.
-	 */
-	@Test
-	public void a24_additionalProperties() {
-		SchemaInfo t = new SchemaInfo();
-
-		t.additionalProperties(new SchemaInfo().type("foo"));
-		assertOptional(t.additionalProperties()).isType(SchemaInfo.class).asJson().is("{type:'foo'}");
-
-		t.additionalProperties(new SchemaInfo());
-		assertOptional(t.additionalProperties()).isType(SchemaInfo.class).asJson().is("{}");
-
-		t.additionalProperties((SchemaInfo)null);
-		assertOptional(t.additionalProperties()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#discriminator(java.lang.Object)}.
-	 */
-	@Test
-	public void a25_discriminator() {
-		SchemaInfo t = new SchemaInfo();
-
-		t.discriminator("foo");
-		assertString(t.discriminator()).is("foo");
-
-		t.discriminator(null);
-		assertString(t.discriminator()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#readOnly(java.lang.Object)}.
-	 */
-	@Test
-	public void a26_readOnly() {
-		SchemaInfo t = new SchemaInfo();
-
-		t.readOnly(true);
-		assertOptional(t.readOnly()).isType(Boolean.class).is(true);
-
-		t.readOnly("true");
-		assertOptional(t.readOnly()).isType(Boolean.class).is(true);
-
-		t.readOnly((String)null);
-		assertOptional(t.readOnly()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#xml(java.lang.Object)}.
-	 */
-	@Test
-	public void a27_xml() {
-		SchemaInfo t = new SchemaInfo();
-
-		t.xml(xml().name("foo"));
-		assertOptional(t.xml()).asJson().is("{name:'foo'}");
-
-		t.xml("{name:'foo'}");
-		assertOptional(t.xml()).isType(Xml.class).asJson().is("{name:'foo'}");
-
-		t.xml((String)null);
-		assertOptional(t.xml()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#externalDocs(java.lang.Object)}.
-	 */
-	@Test
-	public void a28_xternalDocs() {
-		SchemaInfo t = new SchemaInfo();
-
-		t.externalDocs(externalDocumentation("foo"));
-		assertOptional(t.externalDocs()).asJson().is("{url:'foo'}");
-
-		t.externalDocs("{url:'foo'}");
-		assertOptional(t.externalDocs()).isType(ExternalDocumentation.class).asJson().is("{url:'foo'}");
-
-		t.externalDocs((String)null);
-		assertOptional(t.externalDocs()).isNull();
-	}
-
-	/**
-	 * Test method for {@link SchemaInfo#example(java.lang.Object)}.
-	 */
-	@Test
-	public void a29_example() {
-		SchemaInfo t = new SchemaInfo();
-
-		t.example("foo");
-		assertObject(t.getExample()).is("foo");
-
-		t.example(123);
-		assertObject(t.getExample()).is(123);
-
-		t.example(null);
-		assertObject(t.getExample()).isNull();
+		assertString(t.setFormat("foo").getFormat()).is("foo");
+		assertString(t.setFormat(null).getFormat()).isNull();
+		assertString(t.setTitle("foo").getTitle()).is("foo");
+		assertString(t.setTitle(null).getTitle()).isNull();
+		assertString(t.setDescription("foo").getDescription()).is("foo");
+		assertString(t.setDescription(null).getDescription()).isNull();
+		assertString(t.setDefault("foo").getDefault()).is("foo");
+		assertObject(t.setDefault(new StringBuilder("foo")).getDefault()).isType(StringBuilder.class).asString().is("foo");
+		assertObject(t.setDefault(null).getDefault()).isNull();
+		assertObject(t.setMultipleOf(123).getMultipleOf()).isType(Integer.class).is(123);
+		assertObject(t.setMultipleOf(123f).getMultipleOf()).isType(Float.class).is(123f);
+		assertObject(t.setMaximum(123).getMaximum()).isType(Integer.class).is(123);
+		assertObject(t.setMaximum(123f).getMaximum()).isType(Float.class).is(123f);
+		assertObject(t.setExclusiveMaximum(true).getExclusiveMaximum()).isType(Boolean.class).is(true);
+		assertObject(t.setMinimum(123).getMinimum()).isType(Integer.class).is(123);
+		assertObject(t.setMinimum(123f).getMinimum()).isType(Float.class).is(123f);
+		assertObject(t.setExclusiveMinimum(true).getExclusiveMinimum()).isType(Boolean.class).is(true);
+		assertObject(t.setMaxLength(123).getMaxLength()).isType(Integer.class).is(123);
+		assertObject(t.setMinLength(123).getMinLength()).isType(Integer.class).is(123);
+		assertString(t.setPattern("foo").getPattern()).is("foo");
+		assertString(t.setPattern(null).getPattern()).isNull();
+		assertObject(t.setMaxItems(123).getMaxItems()).isType(Integer.class).is(123);
+		assertObject(t.setMinItems(123).getMinItems()).isType(Integer.class).is(123);
+		assertObject(t.setUniqueItems(true).getUniqueItems()).isType(Boolean.class).is(true);
+		assertObject(t.setMaxProperties(123).getMaxProperties()).isType(Integer.class).is(123);
+		assertObject(t.setMinProperties(123).getMinProperties()).isType(Integer.class).is(123);
+		assertObject(t.setRequiredProperties("x").getRequiredProperties()).isType(Set.class).asJson().is("['x']");
+		assertObject(t.setRequiredProperties((Collection<String>)null).getRequiredProperties()).isNull();
+		assertObject(t.setEnum(set("foo","bar")).getEnum()).isType(Set.class).asJson().is("['foo','bar']");
+		assertObject(t.setEnum(set()).getEnum()).isType(Set.class).asJson().is("[]");
+		assertObject(t.setEnum((Collection<Object>)null).getEnum()).isNull();
+		assertObject(t.addEnum("foo","bar").getEnum()).isType(Set.class).asJson().is("['foo','bar']");
+		assertObject(t.addEnum("baz").getEnum()).isType(Set.class).asJson().is("['foo','bar','baz']");
+		assertString(t.setType("foo").getType()).is("foo");
+		assertString(t.setType(null).getType()).isNull();
+		assertObject(t.setItems(items("foo")).getItems()).asJson().is("{type:'foo'}");
+		assertObject(t.setAllOf(set("foo","bar")).getAllOf()).isType(Set.class).asJson().is("['foo','bar']");
+		assertObject(t.setAllOf(set()).getAllOf()).isType(Set.class).asJson().is("[]");
+		assertObject(t.setAllOf((Collection<Object>)null).getAllOf()).isNull();
+		assertObject(t.addAllOf("foo","bar").getAllOf()).isType(Set.class).asJson().is("['foo','bar']");
+		assertObject(t.setProperties(map("foo",new SchemaInfo().setType("foo"))).getProperties()).isType(Map.class).asJson().is("{foo:{type:'foo'}}");
+		assertObject(t.setProperties(map()).getProperties()).isType(Map.class).asJson().is("{}");
+		assertObject(t.setProperties((Map<String,SchemaInfo>)null).getProperties()).isNull();
+		assertObject(t.setAdditionalProperties(new SchemaInfo().setType("foo")).getAdditionalProperties()).isType(SchemaInfo.class).asJson().is("{type:'foo'}");
+		assertObject(t.setAdditionalProperties(new SchemaInfo()).getAdditionalProperties()).isType(SchemaInfo.class).asJson().is("{}");
+		assertObject(t.setAdditionalProperties((SchemaInfo)null).getAdditionalProperties()).isNull();
+		assertString(t.setDiscriminator("foo").getDiscriminator()).is("foo");
+		assertString(t.setDiscriminator(null).getDiscriminator()).isNull();
+		assertObject(t.setReadOnly(true).getReadOnly()).isType(Boolean.class).is(true);
+		assertObject(t.setXml(xml().setName("foo")).getXml()).asJson().is("{name:'foo'}");
+		assertObject(t.setExternalDocs(externalDocumentation("foo")).getExternalDocs()).asJson().is("{url:'foo'}");
+		assertObject(t.setExample("foo").getExample()).is("foo");
+		assertObject(t.setExample(123).getExample()).is(123);
+		assertObject(t.setExample(null).getExample()).isNull();
 	}
 
 	/**
@@ -573,7 +127,7 @@ public class SchemaInfo_Test {
 			.set("title", "m")
 			.set("type", "n")
 			.set("uniqueItems", true)
-			.set("xml", xml().name("o"))
+			.set("xml", xml().setName("o"))
 			.set("$ref", "ref");
 
 		assertObject(t).asJson().is("{format:'i',title:'m',description:'e','default':'a',multipleOf:123.0,maximum:123.0,exclusiveMaximum:true,minimum:123.0,exclusiveMinimum:true,maxLength:123,minLength:123,pattern:'k',maxItems:123,minItems:123,uniqueItems:true,maxProperties:123,minProperties:123,requiredProperties:['x'],'enum':['b'],type:'n',items:{type:'j'},allOf:['d'],properties:{l:{l1:1}},additionalProperties:{c:['c1']},discriminator:'f',readOnly:true,xml:{name:'o'},externalDocs:{url:'h'},example:'g','$ref':'ref'}");
@@ -754,7 +308,7 @@ public class SchemaInfo_Test {
 			.set("title", "m")
 			.set("type", "n")
 			.set("uniqueItems", true)
-			.set("xml", xml().name("o"))
+			.set("xml", xml().setName("o"))
 			.set("$ref", "ref")
 			.copy();
 
@@ -797,7 +351,7 @@ public class SchemaInfo_Test {
 			.set("title", "m")
 			.set("type", "n")
 			.set("uniqueItems", true)
-			.set("xml", xml().name("o"));
+			.set("xml", xml().setName("o"));
 
 		assertObject(t.keySet()).asJson().is(
 			"['additionalProperties','allOf','default','description','discriminator','enum','example','exclusiveMaximum','exclusiveMinimum',"

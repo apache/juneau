@@ -97,7 +97,7 @@ public class Server extends OpenApiElement{
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Server setUrl(URI value) {
 		url = value;
@@ -118,7 +118,7 @@ public class Server extends OpenApiElement{
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Server setDescription(String value) {
 		description = value;
@@ -139,23 +139,10 @@ public class Server extends OpenApiElement{
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Server setVariables(Map<String, ServerVariable> value) {
 		variables = copyOf(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>variables</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public Server addVariables(Map<String, ServerVariable> values) {
-		variables = mapBuilder(variables).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -166,7 +153,7 @@ public class Server extends OpenApiElement{
 	 * @param value
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Server addVariable(String key, ServerVariable value) {
 		variables = mapBuilder(variables).sparse().add(key, value).build();

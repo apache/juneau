@@ -56,7 +56,7 @@ public abstract class OpenApiElement {
 	/**
 	 * Sets strict mode on this bean.
 	 *
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	protected OpenApiElement strict() {
 		strict = true;
@@ -70,7 +70,7 @@ public abstract class OpenApiElement {
 	 * 	The new value for this property.
 	 * 	<br>Non-boolean values will be converted to boolean using <code>Boolean.<jsm>valueOf</jsm>(value.toString())</code>.
 	 * 	<br>Can be <jk>null</jk> (interpreted as <jk>false</jk>).
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	protected OpenApiElement strict(Object value) {
 		strict = value == null ? false : toBoolean(value);
@@ -120,7 +120,7 @@ public abstract class OpenApiElement {
 	 *
 	 * @param property The property name to set.
 	 * @param value The new value for the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	@Beanp("*")
 	public OpenApiElement set(String property, Object value) {

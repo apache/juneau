@@ -134,7 +134,7 @@ public class Info extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Info setTitle(String value) {
 		title = value;
@@ -163,7 +163,7 @@ public class Info extends OpenApiElement {
 	 * 	The new value for this property.
 	 * 	<br>{@doc GFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Info setDescription(String value) {
 		description = value;
@@ -191,7 +191,7 @@ public class Info extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Info setTermsOfService(String value) {
 		termsOfService = value;
@@ -219,7 +219,7 @@ public class Info extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Info setContact(Contact value) {
 		contact = value;
@@ -247,7 +247,7 @@ public class Info extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Info setLicense(License value) {
 		license = value;
@@ -275,47 +275,11 @@ public class Info extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Info setVersion(String value) {
 		version = value;
 		return this;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the title property is not null or empty.
-	 *
-	 * @return <jk>true</jk> if the title property is not null or empty.
-	 */
-	public boolean hasTitle() {
-		return isNotEmpty(title);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the description property is not null or empty.
-	 *
-	 * @return <jk>true</jk> if the description property is not null or empty.
-	 */
-	public boolean hasDescription() {
-		return isNotEmpty(description);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the version property is not null or empty.
-	 *
-	 * @return <jk>true</jk> if the version property is not null or empty.
-	 */
-	public boolean hasVersion() {
-		return isNotEmpty(version);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the termsOfService property is not null or empty.
-	 *
-	 * @return <jk>true</jk> if the termsOfService property is not null or empty.
-	 */
-	public boolean hasTermsOfService() {
-		return isNotEmpty(termsOfService);
 	}
 
 	@Override /* OpenApiElement */

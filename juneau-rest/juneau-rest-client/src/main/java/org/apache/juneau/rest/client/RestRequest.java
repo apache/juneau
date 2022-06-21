@@ -2191,6 +2191,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return This object.
 	 */
+	@Deprecated
 	public RestRequest completed() {
 		request.completed();
 		return this;

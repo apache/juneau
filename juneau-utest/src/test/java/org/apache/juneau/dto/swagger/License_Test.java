@@ -28,37 +28,14 @@ import org.junit.*;
 public class License_Test {
 
 	/**
-	 * Test method for {@link License#name(java.lang.Object)}.
+	 * Test method for getters and setters.
 	 */
 	@Test
-	public void a01_name() {
+	public void a01_gettersAndSetters() {
 		License t = new License();
-
-		t.name("foo");
-		assertString(t.name()).is("foo");
-
-		t.name(null);
-		assertString(t.name()).isNull();
-	}
-
-	/**
-	 * Test method for {@link License#url(java.lang.Object)}.
-	 */
-	@Test
-	public void a02_url() throws Exception {
-		License t = new License();
-
-		t.url(URI.create("foo"));
-		assertOptional(t.url()).isType(URI.class).asString().is("foo");
-
-		t.url("bar");
-		assertOptional(t.url()).isType(URI.class).asString().is("bar");
-
-		t.url(new URL("http://baz"));
-		assertOptional(t.url()).isType(URI.class).asString().is("http://baz");
-
-		t.url((String)null);
-		assertOptional(t.url()).isNull();
+		assertString(t.setName("foo").getName()).is("foo");
+		assertString(t.setName(null).getName()).isNull();
+		assertObject(t.setUrl(URI.create("foo")).getUrl()).isType(URI.class).asString().is("foo");
 	}
 
 	/**

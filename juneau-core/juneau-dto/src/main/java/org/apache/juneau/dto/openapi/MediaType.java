@@ -89,7 +89,7 @@ public class MediaType extends OpenApiElement{
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public MediaType setSchema(SchemaInfo value) {
 		schema = value;
@@ -112,7 +112,7 @@ public class MediaType extends OpenApiElement{
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	@Beanp("x-example")
 	public MediaType setExample(Object value) {
@@ -134,23 +134,10 @@ public class MediaType extends OpenApiElement{
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public MediaType setEncoding(Map<String, Encoding> value) {
 		encoding = copyOf(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>encoding</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public MediaType addEncodings(Map<String, Encoding> values) {
-		encoding = mapBuilder(encoding).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -161,7 +148,7 @@ public class MediaType extends OpenApiElement{
 	 * @param value
 	 * 	The values to add to this property.
 	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public MediaType addEncoding(String key, Encoding value) {
 		encoding = mapBuilder(encoding).sparse().add(key, value).build();
@@ -189,23 +176,10 @@ public class MediaType extends OpenApiElement{
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public MediaType setExamples(Map<String,Example> value) {
 		examples = copyOf(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>headers</property> property.
-	 *
-	 * @param values
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object (for method chaining).
-	 */
-	public MediaType addExamples(Map<String,Example> values) {
-		examples = mapBuilder(examples).sparse().addAll(values).build();
 		return this;
 	}
 
@@ -214,10 +188,10 @@ public class MediaType extends OpenApiElement{
 	 *
 	 * @param name The example name.
 	 * @param example The example.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public MediaType addExample(String name, Example example) {
-		addExamples(Collections.singletonMap(name, example));
+		examples = mapBuilder(examples).add(name, example).build();
 		return this;
 	}
 

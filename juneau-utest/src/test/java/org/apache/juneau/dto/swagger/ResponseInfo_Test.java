@@ -30,97 +30,23 @@ import org.junit.*;
 public class ResponseInfo_Test {
 
 	/**
-	 * Test method for {@link ResponseInfo#description(java.lang.Object)}.
+	 * Test method for getters and setters.
 	 */
 	@Test
-	public void a01_description() {
+	public void a01_gettersAndSetters() {
 		ResponseInfo t = new ResponseInfo();
-
-		t.description("foo");
-		assertString(t.description()).is("foo");
-
-		t.description(null);
-		assertString(t.description()).isNull();
-	}
-
-	/**
-	 * Test method for {@link ResponseInfo#schema(java.lang.Object)}.
-	 */
-	@Test
-	public void a02_schema() {
-		ResponseInfo t = new ResponseInfo();
-
-		t.schema(schemaInfo().title("foo"));
-		assertOptional(t.schema()).isType(SchemaInfo.class).asJson().is("{title:'foo'}");
-
-		t.schema("{title:'foo'}");
-		assertOptional(t.schema()).isType(SchemaInfo.class).asJson().is("{title:'foo'}");
-
-		t.schema((String)null);
-		assertOptional(t.schema()).isNull();
-	}
-
-	/**
-	 * Test method for {@link ResponseInfo#setHeaders(java.util.Map)}.
-	 */
-	@Test
-	public void a03_headers() {
-		ResponseInfo t = new ResponseInfo();
-
-		t.headers(map("foo",headerInfo("bar")));
-		assertOptional(t.headers()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
-		assertObject(t.headers().get().get("foo")).isType(HeaderInfo.class);
-
-		t.headers(map());
-		assertOptional(t.headers()).isType(Map.class).asJson().is("{}");
-
-		t.headers((Map<String,HeaderInfo>)null);
-		assertOptional(t.headers()).isNull();
-
-		t.addHeaders(map("foo",headerInfo("bar")));
-		assertOptional(t.headers()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
-		assertObject(t.headers().get().get("foo")).isType(HeaderInfo.class);
-
-		t.addHeaders(map());
-		assertOptional(t.headers()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
-		assertObject(t.headers().get().get("foo")).isType(HeaderInfo.class);
-
-		t.addHeaders(null);
-		assertOptional(t.headers()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
-		assertObject(t.headers().get().get("foo")).isType(HeaderInfo.class);
-	}
-
-	/**
-	 * Test method for {@link ResponseInfo#setExamples(java.util.Map)}.
-	 */
-	@Test
-	public void a04_examples() {
-		ResponseInfo t = new ResponseInfo();
-
-		t.examples(map("foo","bar","baz",alist("qux")));
-		assertOptional(t.examples()).isType(Map.class).asJson().is("{foo:'bar',baz:['qux']}");
-
-		t.examples(map());
-		assertOptional(t.examples()).isType(Map.class).asJson().is("{}");
-
-		t.examples((Map<String,Object>)null);
-		assertOptional(t.examples()).isNull();
-
-		t.addExamples(map("foo","bar","baz",alist("qux")));
-		assertOptional(t.examples()).isType(Map.class).asJson().is("{foo:'bar',baz:['qux']}");
-
-		t.addExamples(map());
-		assertOptional(t.examples()).isType(Map.class).asJson().is("{foo:'bar',baz:['qux']}");
-
-		t.addExamples(null);
-		assertOptional(t.examples()).isType(Map.class).asJson().is("{foo:'bar',baz:['qux']}");
-
-		t.examples(map());
-		t.example("text/a", "a");
-		t.example("text/b", null);
-		t.example(null, "c");
-
-		assertOptional(t.examples()).asJson().is("{'text/a':'a','text/b':null,null:'c'}");
+		assertString(t.setDescription("foo").getDescription()).is("foo");
+		assertString(t.setDescription(null).getDescription()).isNull();
+		assertObject(t.setSchema(schemaInfo().setTitle("foo")).getSchema()).isType(SchemaInfo.class).asJson().is("{title:'foo'}");
+		assertObject(t.setHeaders(map("foo",headerInfo("bar"))).getHeaders()).isType(Map.class).asJson().is("{foo:{type:'bar'}}");
+		assertObject(t.setHeaders(map("foo",headerInfo("bar"))).getHeaders().get("foo")).isType(HeaderInfo.class);
+		assertObject(t.setHeaders(map()).getHeaders()).isType(Map.class).asJson().is("{}");
+		assertObject(t.setHeaders((Map<String,HeaderInfo>)null).getHeaders()).isNull();
+		assertObject(t.setExamples(map("foo","bar","baz",alist("qux"))).getExamples()).isType(Map.class).asJson().is("{foo:'bar',baz:['qux']}");
+		assertObject(t.setExamples(map()).getExamples()).isType(Map.class).asJson().is("{}");
+		assertObject(t.setExamples((Map<String,Object>)null).getExamples()).isNull();
+		assertObject(t.setExamples(map("foo","bar","baz",alist("qux"))).getExamples()).isType(Map.class).asJson().is("{foo:'bar',baz:['qux']}");
+		assertObject(t.setExamples(map()).addExample("text/a", "a").addExample("text/b", null).addExample(null, "c").getExamples()).asJson().is("{'text/a':'a','text/b':null,null:'c'}");
 	}
 
 	/**
@@ -134,7 +60,7 @@ public class ResponseInfo_Test {
 			.set("description", "a")
 			.set("examples", map("foo","bar","baz",alist("qux")))
 			.set("headers", map("a", headerInfo("a1")))
-			.set("schema", schemaInfo().type("d"))
+			.set("schema", schemaInfo().setType("d"))
 			.set("$ref", "ref");
 
 		assertObject(t).asJson().is("{description:'a',schema:{type:'d'},headers:{a:{type:'a1'}},examples:{foo:'bar',baz:['qux']},'$ref':'ref'}");
@@ -191,7 +117,7 @@ public class ResponseInfo_Test {
 			.set("description", "a")
 			.set("examples", map("foo","bar","baz",alist("qux")))
 			.set("headers", map("a", headerInfo("a1")))
-			.set("schema", schemaInfo().type("d"))
+			.set("schema", schemaInfo().setType("d"))
 			.set("$ref", "ref")
 			.copy();
 
@@ -208,7 +134,7 @@ public class ResponseInfo_Test {
 			.set("description", "a")
 			.set("examples", map("foo","bar","baz",alist("qux")))
 			.set("headers", map("a", headerInfo("a1")))
-			.set("schema", schemaInfo().type("d"))
+			.set("schema", schemaInfo().setType("d"))
 			.set("$ref", "ref");
 
 		assertObject(t.keySet()).asJson().is("['description','examples','headers','schema','$ref']");

@@ -102,7 +102,7 @@ public class Xml extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Xml setName(String value) {
 		name = value;
@@ -130,7 +130,7 @@ public class Xml extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Xml setNamespace(String value) {
 		namespace = value;
@@ -158,7 +158,7 @@ public class Xml extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Xml setPrefix(String value) {
 		prefix = value;
@@ -187,7 +187,7 @@ public class Xml extends OpenApiElement {
 	 * 	The new value for this property.
 	 * 	<br>Default value is <jk>false</jk>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Xml setAttribute(Boolean value) {
 		attribute = value;
@@ -229,7 +229,7 @@ public class Xml extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Xml setWrapped(Boolean value) {
 		this.wrapped = value;

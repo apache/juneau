@@ -100,34 +100,34 @@ public class RequestSwaggerVar extends MultipartResolvingVar {
 			char c = StringUtils.charAt(key, 0);
 			if (c == 'c') {
 				if ("contact".equals(key))
-					return swagger.flatMap(Swagger::info).flatMap(Info::contact).map(Contact::toString).orElse(null);
+					return swagger.map(Swagger::getInfo).map(x -> x == null ? null : x.getContact()).map(StringUtils::stringify).orElse(null);
 			} else if (c == 'd') {
 				if ("description".equals(key))
-					return swagger.flatMap(Swagger::info).flatMap(Info::description).orElse(null);
+					return swagger.map(Swagger::getInfo).map(x -> x == null ? null : x.getDescription()).orElse(null);
 			} else if (c == 'e') {
 				if ("externalDocs".equals(key))
-					return swagger.flatMap(Swagger::externalDocs).map(ExternalDocumentation::toString).orElse(null);
+					return swagger.map(Swagger::getExternalDocs).map(ExternalDocumentation::toString).orElse(null);
 			} else if (c == 'l') {
 				if ("license".equals(key))
-					return swagger.flatMap(Swagger::info).flatMap(Info::license).map(License::toString).orElse(null);
+					return swagger.map(Swagger::getInfo).map(x -> x == null ? null : x.getLicense()).map(StringUtils::stringify).orElse(null);
 			} else if (c == 'o') {
 				if ("operationDescription".equals(key))
-					return methodSwagger.flatMap(Operation::description).orElse(null);
+					return methodSwagger.map(Operation::getDescription).orElse(null);
 				if ("operationSummary".equals(key))
-					return methodSwagger.flatMap(Operation::summary).orElse(null);
+					return methodSwagger.map(Operation::getSummary).orElse(null);
 			} else if (c == 'r') {
 				if ("siteName".equals(key))
-					return swagger.flatMap(Swagger::info).flatMap(Info::siteName).orElse(null);
+					return swagger.map(Swagger::getInfo).map(x -> x == null ? null : x.getSiteName()).orElse(null);
 			} else if (c == 't') {
 				if ("tags".equals(key))
-					return swagger.flatMap(Swagger::tags).map(x -> s.toString(x)).orElse(null);
+					return swagger.map(Swagger::getTags).map(x -> s.toString(x)).orElse(null);
 				if ("termsOfService".equals(key))
-					return swagger.flatMap(Swagger::info).flatMap(Info::termsOfService).orElse(null);
+					return swagger.map(Swagger::getInfo).map(x -> x == null ? null : x.getTermsOfService()).orElse(null);
 				if ("title".equals(key))
-					return swagger.flatMap(Swagger::info).flatMap(Info::title).orElse(null);
+					return swagger.map(Swagger::getInfo).map(x -> x == null ? null : x.getTitle()).orElse(null);
 			} else if (c == 'v') {
 				if ("version".equals(key))
-					return swagger.flatMap(Swagger::info).flatMap(Info::version).orElse(null);
+					return swagger.map(Swagger::getInfo).map(x -> x == null ? null : x.getVersion()).orElse(null);
 			}
 			return null;
 		} catch (Exception e) {

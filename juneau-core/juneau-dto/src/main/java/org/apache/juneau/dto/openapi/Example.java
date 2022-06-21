@@ -105,7 +105,7 @@ public class Example extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Example setSummary(String value) {
 		summary = value;
@@ -129,7 +129,7 @@ public class Example extends OpenApiElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Example setDescription(String value) {
 		description = value;
@@ -158,7 +158,7 @@ public class Example extends OpenApiElement {
 	 * 	The new value for this property.
 	 * 	<br>MUST be in the format of an email address.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Example setExternalValue(String value) {
 		externalValue = value;
@@ -201,7 +201,7 @@ public class Example extends OpenApiElement {
 	 * </ul>
 	 *
 	 * @param val The new value for this property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public Example setValue(Object val) {
 		value = val;

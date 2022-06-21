@@ -75,6 +75,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 *
 	 * @return A new {@link BasicHttpException} bean.
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public T build() {
 		try {

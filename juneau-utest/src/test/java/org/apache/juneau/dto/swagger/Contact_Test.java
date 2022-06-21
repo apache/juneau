@@ -27,51 +27,16 @@ import org.junit.*;
 public class Contact_Test {
 
 	/**
-	 * Test method for {@link Contact#name(java.lang.Object)}.
+	 * Test method for getters and setters.
 	 */
 	@Test
-	public void a01_name() {
+	public void a01_gettersAndSetters() {
 		Contact t = new Contact();
-
-		t.name("foo");
-		assertString(t.name()).is("foo");
-
-		t.name(null);
-		assertString(t.name()).isNull();
-	}
-
-	/**
-	 * Test method for {@link Contact#url(java.lang.Object)}.
-	 */
-	@Test
-	public void a02_url() throws Exception {
-		Contact t = new Contact();
-
-		t.url("foo");
-		assertString(t.url()).is("foo");
-
-		t.url(URI.create("http://bar"));
-		assertString(t.url()).is("http://bar");
-
-		t.url(new URL("http://baz"));
-		assertString(t.url()).is("http://baz");
-
-		t.url((String)null);
-		assertString(t.url()).isNull();
-	}
-
-	/**
-	 * Test method for {@link Contact#email(java.lang.Object)}.
-	 */
-	@Test
-	public void a03_email() {
-		Contact t = new Contact();
-
-		t.email("foo");
-		assertString(t.email()).is("foo");
-
-		t.email(null);
-		assertString(t.email()).isNull();
+		assertString(t.setName("foo").getName()).is("foo");
+		assertString(t.setName(null).getName()).isNull();
+		assertString(t.setUrl(URI.create("http://bar")).getUrl()).is("http://bar");
+		assertString(t.setEmail("foo").getEmail()).is("foo");
+		assertString(t.setEmail(null).getEmail()).isNull();
 	}
 
 	/**

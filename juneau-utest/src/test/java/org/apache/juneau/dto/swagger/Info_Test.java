@@ -26,93 +26,21 @@ import org.junit.*;
 public class Info_Test {
 
 	/**
-	 * Test method for {@link Info#title(java.lang.Object)}.
+	 * Test method for getters and setters.
 	 */
 	@Test
-	public void a01_title() {
+	public void a01_gettersAndSetters() {
 		Info t = new Info();
-
-		t.title("foo");
-		assertString(t.title()).is("foo");
-
-		t.title(null);
-		assertString(t.title()).isNull();
-	}
-
-	/**
-	 * Test method for {@link Info#description(java.lang.Object)}.
-	 */
-	@Test
-	public void a02_description() {
-		Info t = new Info();
-
-		t.description("foo");
-		assertString(t.description()).is("foo");
-
-		t.description(null);
-		assertString(t.description()).isNull();
-	}
-
-	/**
-	 * Test method for {@link Info#termsOfService(java.lang.Object)}.
-	 */
-	@Test
-	public void a03_termsOfService() {
-		Info t = new Info();
-
-		t.termsOfService("foo");
-		assertString(t.termsOfService()).is("foo");
-
-		t.termsOfService(null);
-		assertString(t.termsOfService()).isNull();
-	}
-
-	/**
-	 * Test method for {@link Info#contact(java.lang.Object)}.
-	 */
-	@Test
-	public void a04_contact() {
-		Info t = new Info();
-
-		t.contact(contact("foo"));
-		assertOptional(t.contact()).asJson().is("{name:'foo'}");
-
-		t.contact("{name:'foo'}");
-		assertOptional(t.contact()).isType(Contact.class).asJson().is("{name:'foo'}");
-
-		t.contact((String)null);
-		assertOptional(t.contact()).isNull();
-	}
-
-	/**
-	 * Test method for {@link Info#license(java.lang.Object)}.
-	 */
-	@Test
-	public void a05_license() {
-		Info t = new Info();
-
-		t.license(license("foo"));
-		assertOptional(t.license()).isType(License.class).asJson().is("{name:'foo'}");
-
-		t.license("{name:'foo'}");
-		assertOptional(t.license()).isType(License.class).asJson().is("{name:'foo'}");
-
-		t.license((String)null);
-		assertOptional(t.license()).isNull();
-	}
-
-	/**
-	 * Test method for {@link Info#version(java.lang.Object)}.
-	 */
-	@Test
-	public void a06_version() {
-		Info t = new Info();
-
-		t.version("foo");
-		assertString(t.version()).is("foo");
-
-		t.version(null);
-		assertString(t.version()).isNull();
+		assertString(t.setTitle("foo").getTitle()).is("foo");
+		assertString(t.setTitle(null).getTitle()).isNull();
+		assertString(t.setDescription("foo").getDescription()).is("foo");
+		assertString(t.setDescription(null).getDescription()).isNull();
+		assertString(t.setTermsOfService("foo").getTermsOfService()).is("foo");
+		assertString(t.setTermsOfService(null).getTermsOfService()).isNull();
+		assertObject(t.setContact(contact("foo")).getContact()).asJson().is("{name:'foo'}");
+		assertObject(t.setLicense(license("foo")).getLicense()).isType(License.class).asJson().is("{name:'foo'}");
+		assertString(t.setVersion("foo").getVersion()).is("foo");
+		assertString(t.setVersion(null).getVersion()).isNull();
 	}
 
 	/**

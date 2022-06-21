@@ -95,7 +95,7 @@ public class Xml extends SwaggerElement {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// attribute
+	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -120,60 +120,12 @@ public class Xml extends SwaggerElement {
 	 * 	The new value for this property.
 	 * 	<br>Default value is <jk>false</jk>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	public void setAttribute(Boolean value) {
+	public Xml setAttribute(Boolean value) {
 		attribute = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>attribute</property>.
-	 *
-	 * <p>
-	 * Declares whether the property definition translates to an attribute instead of an element.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Boolean> attribute() {
-		return optional(getAttribute());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>attribute</property>.
-	 *
-	 * <p>
-	 * Declares whether the property definition translates to an attribute instead of an element.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Default value is <jk>false</jk>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Xml attribute(Boolean value) {
-		setAttribute(value);
 		return this;
 	}
-
-	/**
-	 * Bean property fluent setter:  <property>attribute</property>.
-	 *
-	 * <p>
-	 * Declares whether the property definition translates to an attribute instead of an element.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Default value is <jk>false</jk>.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Xml attribute(String value) {
-		setAttribute(toBoolean(value));
-		return this;
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// name
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>name</property>.
@@ -196,42 +148,12 @@ public class Xml extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 */
-	public void setName(String value) {
-		name = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>name</property>.
-	 *
-	 * <p>
-	 * The name of the element/attribute used for the described schema property.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> name() {
-		return optional(getName());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>name</property>.
-	 *
-	 * <p>
-	 * The name of the element/attribute used for the described schema property.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public Xml name(String value) {
-		setName(value);
+	public Xml setName(String value) {
+		name = value;
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// namespace
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>namespace</property>.
@@ -254,42 +176,12 @@ public class Xml extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 */
-	public void setNamespace(String value) {
-		namespace = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>namespace</property>.
-	 *
-	 * <p>
-	 * The URL of the namespace definition.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> namespace() {
-		return optional(getNamespace());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>namespace</property>.
-	 *
-	 * <p>
-	 * The URL of the namespace definition.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public Xml namespace(String value) {
-		setNamespace(value);
+	public Xml setNamespace(String value) {
+		namespace = value;
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// prefix
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>prefix</property>.
@@ -312,42 +204,12 @@ public class Xml extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 */
-	public void setPrefix(String value) {
-		prefix = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>prefix</property>.
-	 *
-	 * <p>
-	 * The prefix to be used for the name.
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<String> prefix() {
-		return optional(getPrefix());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>prefix</property>.
-	 *
-	 * <p>
-	 * The prefix to be used for the name.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
-	public Xml prefix(String value) {
-		setPrefix(value);
+	public Xml setPrefix(String value) {
+		prefix = value;
 		return this;
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// wrapped
-	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Bean property getter:  <property>wrapped</property>.
@@ -379,68 +241,12 @@ public class Xml extends SwaggerElement {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object.
 	 */
-	public void setWrapped(Boolean value) {
+	public Xml setWrapped(Boolean value) {
 		this.wrapped = value;
-	}
-
-	/**
-	 * Bean property fluent getter:  <property>wrapped</property>.
-	 *
-	 * <p>
-	 * Signifies whether the array is wrapped (for example,
-	 * <c>&lt;books&gt;&lt;book/&gt;&lt;book/&gt;&lt;books&gt;</c>) or unwrapped
-	 * (<c>&lt;book/&gt;&lt;book/&gt;</c>).
-	 * <br>The definition takes effect only when defined alongside <c>type</c> being <c>array</c>
-	 * (outside the <c>items</c>).
-	 *
-	 * @return The property value as an {@link Optional}.  Never <jk>null</jk>.
-	 */
-	public Optional<Boolean> wrapped() {
-		return optional(getWrapped());
-	}
-
-	/**
-	 * Bean property fluent setter:  <property>wrapped</property>.
-	 *
-	 *
-	 * <p>
-	 * Signifies whether the array is wrapped (for example,
-	 * <c>&lt;books&gt;&lt;book/&gt;&lt;book/&gt;&lt;books&gt;</c>) or unwrapped
-	 * (<c>&lt;book/&gt;&lt;book/&gt;</c>).
-	 * <br>The definition takes effect only when defined alongside <c>type</c> being <c>array</c>
-	 * (outside the <c>items</c>).
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Xml wrapped(Boolean value) {
-		setWrapped(value);
 		return this;
 	}
-
-	/**
-	 * Bean property fluent setter:  <property>wrapped</property>.
-	 *
-	 * <p>
-	 * Signifies whether the array is wrapped (for example,
-	 * <c>&lt;books&gt;&lt;book/&gt;&lt;book/&gt;&lt;books&gt;</c>) or unwrapped
-	 * (<c>&lt;book/&gt;&lt;book/&gt;</c>).
-	 * <br>The definition takes effect only when defined alongside <c>type</c> being <c>array</c>
-	 * (outside the <c>items</c>).
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object.
-	 */
-	public Xml wrapped(String value) {
-		setWrapped(toBoolean(value));
-		return this;
-	}
-
 
 	@Override /* SwaggerElement */
 	public <T> T get(String property, Class<T> type) {
@@ -461,11 +267,11 @@ public class Xml extends SwaggerElement {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "attribute": return attribute(toBoolean(value));
-			case "name": return name(stringify(value));
-			case "namespace": return namespace(stringify(value));
-			case "prefix": return prefix(stringify(value));
-			case "wrapped": return wrapped(toBoolean(value));
+			case "attribute": return setAttribute(toBoolean(value));
+			case "name": return setName(stringify(value));
+			case "namespace": return setNamespace(stringify(value));
+			case "prefix": return setPrefix(stringify(value));
+			case "wrapped": return setWrapped(toBoolean(value));
 			default:
 				super.set(property, value);
 				return this;

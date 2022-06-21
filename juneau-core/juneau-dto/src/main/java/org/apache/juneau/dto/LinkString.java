@@ -90,7 +90,7 @@ public class LinkString implements Comparable<LinkString> {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public LinkString setName(String value) {
 		this.name = value;
@@ -122,7 +122,7 @@ public class LinkString implements Comparable<LinkString> {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public LinkString setUri(java.net.URI value) {
 		this.uri = value;

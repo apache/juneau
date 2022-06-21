@@ -153,7 +153,7 @@ public class OAuthFlows extends OpenApiElement {
 	 * 	The new value for this property.
 	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public OAuthFlows setImplicit(OAuthFlow value) {
 		implicit = value;
@@ -182,7 +182,7 @@ public class OAuthFlows extends OpenApiElement {
 	 * 	The new value for this property.
 	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public OAuthFlows setPassword(OAuthFlow value) {
 		password = value;
@@ -211,7 +211,7 @@ public class OAuthFlows extends OpenApiElement {
 	 * 	The new value for this property.
 	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public OAuthFlows setClientCredentials(OAuthFlow value) {
 		clientCredentials = value;
@@ -240,7 +240,7 @@ public class OAuthFlows extends OpenApiElement {
 	 * 	The new value for this property.
 	 * 	<br>Property value is required if <code>type</code> is <js>"array"</js>.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object (for method chaining).
+	 * @return This object
 	 */
 	public OAuthFlows setAuthorizationCode(OAuthFlow value) {
 		authorizationCode = value;
