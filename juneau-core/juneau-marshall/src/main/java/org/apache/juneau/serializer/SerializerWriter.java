@@ -431,4 +431,8 @@ public class SerializerWriter extends Writer {
 	public void close() throws IOException {
 		out.close();
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }
