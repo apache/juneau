@@ -25,7 +25,6 @@ import java.util.List;
  * Sample class which shows the complex usage of RdfXmlSerializer.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-examples-core}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

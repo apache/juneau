@@ -10,22 +10,19 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.dto.openapi;
+package org.apache.juneau.dto.openapi3;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
-import org.apache.juneau.UriResolver;
 import org.apache.juneau.annotation.Bean;
 import org.apache.juneau.internal.*;
 
-import java.net.URI;
-import java.net.URL;
 import java.util.Set;
 
 /**
- * Contact information for the exposed API.
+ * information for Examples object.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
@@ -46,36 +43,33 @@ import java.util.Set;
  * 		<js>"email"</js>: <js>"support@swagger.io"</js>
  * 	}
  * </p>
- *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
- * 	<li class='link'>{@doc juneau-dto.Swagger}
- * </ul>
  */
-@Bean(properties="name,url,email,*")
+@Bean(properties="summary,description,externalValue,value,*")
 @FluentSetters
-public class Contact extends OpenApiElement {
+public class Example extends OpenApiElement {
 
-	private String name;
-	private URI url;
-	private String email;
+	private String summary;
+	private String description;
+	private String externalValue;
+	private Object value;
 
 	/**
 	 * Default constructor.
 	 */
-	public Contact() {}
+	public Example() {}
 
 	/**
 	 * Copy constructor.
 	 *
 	 * @param copyFrom The object to copy.
 	 */
-	public Contact(Contact copyFrom) {
+	public Example(Example copyFrom) {
 		super(copyFrom);
 
-		this.name = copyFrom.name;
-		this.url = copyFrom.url;
-		this.email = copyFrom.email;
+		this.summary = copyFrom.summary;
+		this.description = copyFrom.description;
+		this.externalValue = copyFrom.externalValue;
+		this.value = copyFrom.value;
 	}
 
 	/**
@@ -83,24 +77,24 @@ public class Contact extends OpenApiElement {
 	 *
 	 * @return A deep copy of this object.
 	 */
-	public Contact copy() {
-		return new Contact(this);
+	public Example copy() {
+		return new Example(this);
 	}
 
 	/**
-	 * Bean property getter:  <property>name</property>.
+	 * Bean property getter:  <property>summary</property>.
 	 *
 	 * <p>
 	 * The identifying name of the contact person/organization.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getName() {
-		return name;
+	public String getSummary() {
+		return summary;
 	}
 
 	/**
-	 * Bean property setter:  <property>name</property>.
+	 * Bean property setter:  <property>summary</property>.
 	 *
 	 * <p>
 	 * The identifying name of the contact person/organization.
@@ -110,57 +104,49 @@ public class Contact extends OpenApiElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public Contact setName(String value) {
-		name = value;
+	public Example setSummary(String value) {
+		summary = value;
 		return this;
 	}
 
 	/**
-	 * Bean property getter:  <property>url</property>.
+	 * Bean property getter:  <property>description</property>.
 	 *
 	 * <p>
 	 * The URL pointing to the contact information.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public URI getUrl() {
-		return url;
+	public String getDescription() {
+		return description;
 	}
 
 	/**
-	 * Bean property setter:  <property>url</property>.
-	 *
-	 * <p>
-	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
-	 * <br>Strings must be valid URIs.
-	 *
-	 * <p>
-	 * URIs defined by {@link UriResolver} can be used for values.
-	 *
+	 * Bean property setter:  <property>description</property>.
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public Contact setUrl(URI value) {
-		url = value;
+	public Example setDescription(String value) {
+		description = value;
 		return this;
 	}
 
 	/**
-	 * Bean property getter:  <property>email</property>.
+	 * Bean property getter:  <property>externalValue</property>.
 	 *
 	 * <p>
 	 * The email address of the contact person/organization.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getEmail() {
-		return email;
+	public String getExternalValue() {
+		return externalValue;
 	}
 
 	/**
-	 * Bean property setter:  <property>email</property>.
+	 * Bean property setter:  <property>externalValue</property>.
 	 *
 	 * <p>
 	 * The email address of the contact person/organization.
@@ -171,8 +157,41 @@ public class Contact extends OpenApiElement {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public Contact setEmail(String value) {
-		email = value;
+	public Example setExternalValue(String value) {
+		externalValue = value;
+		return this;
+	}
+
+	/**
+	 * Bean property getter:  <property>default</property>.
+	 *
+	 * <p>
+	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js>
+	 * to control the number of results per page might default to 100 if not supplied by the client in the request.
+	 *
+	 * (Note: <js>"value"</js> has no meaning for required parameters.)
+	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for this parameter.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Object getValue() {
+		return value;
+	}
+
+	/**
+	 * Bean property setter:  <property>value</property>.
+	 *
+	 * <p>
+	 * Declares the value of the parameter that the server will use if none is provided, for example a <js>"count"</js>
+	 * to control the number of results per page might default to 100 if not supplied by the client in the request.
+	 * (Note: <js>"default"</js> has no meaning for required parameters.)
+	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for this parameter.
+	 *
+	 * @param val The new value for this property.
+	 * @return This object
+	 */
+	public Example setValue(Object val) {
+		value = val;
 		return this;
 	}
 
@@ -185,21 +204,23 @@ public class Contact extends OpenApiElement {
 		if (property == null)
 			return null;
 		switch (property) {
-			case "name": return toType(getName(), type);
-			case "url": return toType(getUrl(), type);
-			case "email": return toType(getEmail(), type);
+			case "description": return toType(getDescription(), type);
+			case "externalValue": return toType(getExternalValue(), type);
+			case "summary": return toType(getSummary(), type);
+			case "value": return toType(getValue(), type);
 			default: return super.get(property, type);
 		}
 	}
 
 	@Override /* OpenApiElement */
-	public Contact set(String property, Object value) {
+	public Example set(String property, Object value) {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "name": return setName(stringify(value));
-			case "url": return setUrl(toURI(value));
-			case "email": return setEmail(stringify(value));
+			case "description": return setDescription(stringify(value));
+			case "externalValue": return setExternalValue(stringify(value));
+			case "summary": return setSummary(stringify(value));
+			case "value": return setValue(value);
 			default:
 				super.set(property, value);
 				return this;
@@ -209,9 +230,10 @@ public class Contact extends OpenApiElement {
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
 		Set<String> s = setBuilder(String.class)
-			.addIf(name != null, "name")
-			.addIf(url != null, "url")
-			.addIf(email != null, "email")
+			.addIf(description != null, "description")
+				.addIf(summary != null, "summary")
+				.addIf(externalValue != null, "externalValue")
+			.addIf(value != null, "value")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}

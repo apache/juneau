@@ -11,9 +11,25 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 
-. launches/juneau-env.sh
+. juneau-env.sh
 
-open target/site/apidocs/overview-summary.html
+cd juneau-doc
+mvn install
+export cp=target/juneau-doc-${JUNEAU_VERSION}-SNAPSHOT.jar:../juneau-all/target/juneau-all-${JUNEAU_VERSION}-SNAPSHOT.jar
+java -DjuneauVersion=$JUNEAU_VERSION -cp $cp org.apache.juneau.doc.internal.DocGenerator 
+cd .. 
+
+mvn javadoc:aggregate
+tput bel
+
+cd juneau-doc
+java -cp $cp org.apache.juneau.doc.internal.DocLinkTester
+cd .. 
+
+rm -rf ../juneau-website/content/site/apidocs-$JUNEAU_VERSION
+mkdir ../juneau-website/content/site/apidocs-$JUNEAU_VERSION
+cp -r ./target/site/apidocs/* ../juneau-website/content/site/apidocs-$JUNEAU_VERSION
+find ../juneau-website/content/site/apidocs-$JUNEAU_VERSION -type f -name '*.html' -exec sed -i '' s/-SNAPSHOT// {} +
 
 echo '*******************************************************************************'
 echo '***** SUCCESS *****************************************************************'

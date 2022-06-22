@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.dto.openapi;
+package org.apache.juneau.dto.openapi3;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -20,38 +20,53 @@ import org.apache.juneau.UriResolver;
 import org.apache.juneau.annotation.Bean;
 import org.apache.juneau.internal.*;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.net.URI;
 import java.util.Set;
 
 /**
- * Used to aid in serialization, deserialization, and validation.
+ * License information for the exposed API.
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bcode w800'>
+ * 	<jc>// Construct using SwaggerBuilder.</jc>
+ * 	License x = <jsm>license</jsm>(<js>"Apache 2.0"</js>, <js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>);
+ *
+ * 	<jc>// Serialize using JsonSerializer.</jc>
+ * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
+ *
+ * 	<jc>// Or just use toString() which does the same as above.</jc>
+ * 	String json = x.toString();
+ * </p>
+ * <p class='bcode w800'>
+ * 	<jc>// Output</jc>
+ * 	{
+ * 		<js>"name"</js>: <js>"Apache 2.0"</js>,
+ * 		<js>"url"</js>: <js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>
+ * 	}
+ * </p>
  */
-@Bean(properties="propertyName,mapping,*")
+@Bean(properties="name,url,*")
 @FluentSetters
-public class Discriminator extends OpenApiElement {
+public class License extends OpenApiElement {
 
-	private String propertyName;
-	private Map<String,String> mapping;
+	private String name;
+	private URI url;
 
 	/**
 	 * Default constructor.
 	 */
-	public Discriminator() {}
+	public License() {}
 
 	/**
 	 * Copy constructor.
 	 *
 	 * @param copyFrom The object to copy.
 	 */
-	public Discriminator(Discriminator copyFrom) {
+	public License(License copyFrom) {
 		super(copyFrom);
 
-		this.propertyName = copyFrom.propertyName;
-		if (copyFrom.mapping == null)
-			this.mapping = null;
-		else
-			this.mapping = new LinkedHashMap<>(copyFrom.mapping);
+		this.name = copyFrom.name;
+		this.url = copyFrom.url;
 	}
 
 	/**
@@ -59,77 +74,64 @@ public class Discriminator extends OpenApiElement {
 	 *
 	 * @return A deep copy of this object.
 	 */
-	public Discriminator copy() {
-		return new Discriminator(this);
+	public License copy() {
+		return new License(this);
 	}
 
 	/**
-	 * Bean property getter:  <property>propertyName</property>.
+	 * Bean property getter:  <property>name</property>.
 	 *
 	 * <p>
-	 * A short description of the target documentation.
+	 * The license name used for the API.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getPropertyName() {
-		return propertyName;
+	public String getName() {
+		return name;
 	}
 
 	/**
-	 * Bean property setter:  <property>propertyName</property>.
+	 * Bean property setter:  <property>name</property>.
 	 *
 	 * <p>
-	 * A short description of the target documentation.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>{@doc GFM} can be used for rich text representation.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public Discriminator setPropertyName(String value) {
-		propertyName = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>mapping</property>.
-	 *
-	 * <p>
-	 * The URL for the target documentation.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Map<String,String> getMapping() {
-		return mapping;
-	}
-
-	/**
-	 * Bean property setter:  <property>mapping</property>.
-	 *
-	 * <p>
-	 * The URL for the target documentation.
+	 * The license name used for the API.
 	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
-	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
 	 * @return This object
 	 */
-	public Discriminator setMapping(Map<String,String> value) {
-		mapping = copyOf(value);
+	public License setName(String value) {
+		name = value;
 		return this;
 	}
 
 	/**
-	 * Adds one or more values to the <property>mapping</property> property.
+	 * Bean property getter:  <property>url</property>.
 	 *
-	 * @param key The key.
-	 * @param value The value.
+	 * <p>
+	 * A URL to the license used for the API.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public URI getUrl() {
+		return url;
+	}
+
+	/**
+	 * Bean property setter:  <property>url</property>.
+	 *
+	 * <p>
+	 * A URL to the license used for the API.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public Discriminator addMapping(String key, String value) {
-		mapping = mapBuilder(mapping).sparse().add(key, value).build();
+	public License setUrl(URI value) {
+		url = value;
 		return this;
 	}
 
@@ -142,19 +144,19 @@ public class Discriminator extends OpenApiElement {
 		if (property == null)
 			return null;
 		switch (property) {
-			case "propertyName": return toType(getPropertyName(), type);
-			case "mapping": return toType(getMapping(), type);
+			case "name": return toType(getName(), type);
+			case "url": return toType(getUrl(), type);
 			default: return super.get(property, type);
 		}
 	}
 
 	@Override /* OpenApiElement */
-	public Discriminator set(String property, Object value) {
+	public License set(String property, Object value) {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "propertyName": return setPropertyName(stringify(value));
-			case "mapping": return setMapping(mapBuilder(String.class,String.class).sparse().addAny(value).build());
+			case "name": return setName(stringify(value));
+			case "url": return setUrl(toURI(value));
 			default:
 				super.set(property, value);
 				return this;
@@ -164,8 +166,8 @@ public class Discriminator extends OpenApiElement {
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
 		Set<String> s = setBuilder(String.class)
-			.addIf(propertyName != null, "propertyName")
-			.addIf(mapping != null, "mapping")
+			.addIf(name != null, "name")
+			.addIf(url != null, "url")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}

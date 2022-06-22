@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.dto.openapi;
+package org.apache.juneau.dto.openapi3;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -27,34 +27,39 @@ import java.util.*;
 /**
  * TODO
  */
-@Bean(properties="url,description,variables,*")
+@Bean(properties="contentType,style,explode,headers,allowReserved,*")
 @FluentSetters
-public class Server extends OpenApiElement{
-	private URI url;
-	private String description;
-	private Map<String,ServerVariable> variables;
+public class Encoding extends OpenApiElement{
+
+	private String contentType,
+			style;
+	private Map<String,HeaderInfo> headers;
+	private Boolean explode,
+			allowReserved;
 
 	/**
 	 * Default constructor.
 	 */
-	public Server() { }
+	public Encoding() { }
 
 	/**
 	 * Copy constructor.
 	 *
 	 * @param copyFrom The object to copy.
 	 */
-	public Server(Server copyFrom) {
+	public Encoding(Encoding copyFrom) {
 		super(copyFrom);
 
-		this.url = copyFrom.url;
-		this.description = copyFrom.description;
-		if (copyFrom.variables == null) {
-			this.variables = null;
+		this.contentType = copyFrom.contentType;
+		this.style = copyFrom.style;
+		this.explode = copyFrom.explode;
+		this.allowReserved = copyFrom.allowReserved;
+		if (copyFrom.headers == null) {
+			this.headers = null;
 		} else {
-			this.variables = new LinkedHashMap<>();
-			for (Map.Entry<String,ServerVariable> e : copyFrom.variables.entrySet())
-				this.variables.put(e.getKey(),	e.getValue().copy());
+			this.headers = new LinkedHashMap<>();
+			for (Map.Entry<String,HeaderInfo> e : copyFrom.headers.entrySet())
+				this.headers.put(e.getKey(),	e.getValue().copy());
 		}
 	}
 
@@ -63,26 +68,26 @@ public class Server extends OpenApiElement{
 	 *
 	 * @return A deep copy of this object.
 	 */
-	public Server copy() {
-		return new Server(this);
+	public Encoding copy() {
+		return new Encoding(this);
 	}
 
 	@Override /* OpenApiElement */
-	protected Server strict() {
+	protected Encoding strict() {
 		super.strict();
 		return this;
 	}
 
 	/**
-	 * Bean property getter:  <property>url</property>.
+	 * Bean property getter:  <property>contentType</property>.
 	 *
 	 * <p>
 	 * The URL pointing to the contact information.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public URI getUrl() {
-		return url;
+	public String getContentType() {
+		return contentType;
 	}
 
 	/**
@@ -100,18 +105,18 @@ public class Server extends OpenApiElement{
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public Server setUrl(URI value) {
-		url = value;
+	public Encoding setContentType(String value) {
+		contentType = value;
 		return this;
 	}
 
 	/**
-	 * Bean property getter:  <property>description</property>.
+	 * Bean property getter:  <property>style</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getDescription() {
-		return description;
+	public String getStyle() {
+		return style;
 	}
 
 	/**
@@ -121,8 +126,8 @@ public class Server extends OpenApiElement{
 	 * 	The new value for this property.
 	 * @return This object
 	 */
-	public Server setDescription(String value) {
-		description = value;
+	public Encoding setStyle(String value) {
+		style = value;
 		return this;
 	}
 
@@ -131,8 +136,8 @@ public class Server extends OpenApiElement{
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String, ServerVariable> getVariables() {
-		return variables;
+	public Map<String, HeaderInfo> getHeaders() {
+		return headers;
 	}
 
 	/**
@@ -142,13 +147,13 @@ public class Server extends OpenApiElement{
 	 * 	The new value for this property.
 	 * @return This object
 	 */
-	public Server setVariables(Map<String, ServerVariable> value) {
-		variables = copyOf(value);
+	public Encoding setHeaders(Map<String, HeaderInfo> value) {
+		headers = copyOf(value);
 		return this;
 	}
 
 	/**
-	 * Adds one or more values to the <property>variables</property> property.
+	 * Adds one or more values to the <property>headers</property> property.
 	 *
 	 * @param key The mapping key.
 	 * @param value
@@ -156,8 +161,66 @@ public class Server extends OpenApiElement{
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object
 	 */
-	public Server addVariable(String key, ServerVariable value) {
-		variables = mapBuilder(variables).sparse().add(key, value).build();
+	public Encoding addHeader(String key, HeaderInfo value) {
+		headers = mapBuilder(headers).sparse().add(key, value).build();
+		return this;
+	}
+
+	/**
+	 * Bean property getter:  <property>required</property>.
+	 *
+	 * <p>
+	 * The type of the object.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getExplode() {
+		return explode;
+	}
+
+	/**
+	 * Bean property setter:  <property>explode</property>.
+	 *
+	 * <p>
+	 * The type of the object.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Property value is required.
+	 * 	</ul>
+	 * @return This object
+	 */
+	public Encoding setExplode(Boolean value) {
+		explode = value;
+		return this;
+	}
+
+	/**
+	 * Bean property getter:  <property>required</property>.
+	 *
+	 * <p>
+	 * The type of the object.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Boolean getAllowReserved() {
+		return allowReserved;
+	}
+
+	/**
+	 * Bean property setter:  <property>explode</property>.
+	 *
+	 * <p>
+	 * The type of the object.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Property value is required.
+	 * 	</ul>
+	 * @return This object
+	 */
+	public Encoding setAllowReserved(Boolean value) {
+		allowReserved = value;
 		return this;
 	}
 
@@ -170,21 +233,25 @@ public class Server extends OpenApiElement{
 		if (property == null)
 			return null;
 		switch (property) {
-			case "url": return toType(getUrl(), type);
-			case "description": return toType(getDescription(), type);
-			case "variables": return toType(getVariables(), type);
+			case "contentType": return toType(getContentType(), type);
+			case "style": return toType(getStyle(), type);
+			case "headers": return toType(getHeaders(), type);
+			case "explode": return toType(getExplode(), type);
+			case "allowReserved": return toType(getAllowReserved(), type);
 			default: return super.get(property, type);
 		}
 	}
 
 	@Override /* OpenApiElement */
-	public Server set(String property, Object value) {
+	public Encoding set(String property, Object value) {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "url": return setUrl(toURI(value));
-			case "description": return setDescription(stringify(value));
-			case "variables": return setVariables(mapBuilder(String.class,ServerVariable.class).sparse().addAny(value).build());
+			case "contentType": return setContentType(stringify(value));
+			case "style": return setStyle(stringify(value));
+			case "headers": return setHeaders(mapBuilder(String.class,HeaderInfo.class).sparse().addAny(value).build());
+			case "explode": return setExplode(toBoolean(value));
+			case "allowReserved": return setAllowReserved(toBoolean(value));
 			default:
 				super.set(property, value);
 				return this;
@@ -194,9 +261,11 @@ public class Server extends OpenApiElement{
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
 		Set<String> s = setBuilder(String.class)
-				.addIf(url != null, "url")
-				.addIf(description != null, "description")
-				.addIf(variables != null, "variables")
+				.addIf(contentType != null, "contentType")
+				.addIf(style != null, "style")
+				.addIf(headers != null, "headers")
+				.addIf(explode != null, "explode")
+				.addIf(allowReserved != null, "allowReserved")
 				.build();
 		return new MultiSet<>(s, super.keySet());
 	}

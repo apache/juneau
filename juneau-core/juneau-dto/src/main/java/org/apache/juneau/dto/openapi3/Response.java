@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.dto.openapi;
+package org.apache.juneau.dto.openapi3;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -29,37 +29,49 @@ import java.util.*;
  */
 @Bean(properties="contentType,style,explode,headers,allowReserved,*")
 @FluentSetters
-public class Encoding extends OpenApiElement{
+public class Response extends OpenApiElement{
 
-	private String contentType,
-			style;
+	private String description;
 	private Map<String,HeaderInfo> headers;
-	private Boolean explode,
-			allowReserved;
+	private Map<String,MediaType> content;
+	private Map<String,Link> links;
 
 	/**
 	 * Default constructor.
 	 */
-	public Encoding() { }
+	public Response() { }
 
 	/**
 	 * Copy constructor.
 	 *
 	 * @param copyFrom The object to copy.
 	 */
-	public Encoding(Encoding copyFrom) {
+	public Response(Response copyFrom) {
 		super(copyFrom);
 
-		this.contentType = copyFrom.contentType;
-		this.style = copyFrom.style;
-		this.explode = copyFrom.explode;
-		this.allowReserved = copyFrom.allowReserved;
+		this.description = copyFrom.description;
 		if (copyFrom.headers == null) {
 			this.headers = null;
 		} else {
 			this.headers = new LinkedHashMap<>();
 			for (Map.Entry<String,HeaderInfo> e : copyFrom.headers.entrySet())
 				this.headers.put(e.getKey(),	e.getValue().copy());
+		}
+
+		if (copyFrom.content == null) {
+			this.content = null;
+		} else {
+			this.content = new LinkedHashMap<>();
+			for (Map.Entry<String,MediaType> e : copyFrom.content.entrySet())
+				this.content.put(e.getKey(),	e.getValue().copy());
+		}
+
+		if (copyFrom.links == null) {
+			this.links = null;
+		} else {
+			this.links = new LinkedHashMap<>();
+			for (Map.Entry<String,Link> e : copyFrom.links.entrySet())
+				this.links.put(e.getKey(),	e.getValue().copy());
 		}
 	}
 
@@ -68,30 +80,30 @@ public class Encoding extends OpenApiElement{
 	 *
 	 * @return A deep copy of this object.
 	 */
-	public Encoding copy() {
-		return new Encoding(this);
+	public Response copy() {
+		return new Response(this);
 	}
 
 	@Override /* OpenApiElement */
-	protected Encoding strict() {
+	protected Response strict() {
 		super.strict();
 		return this;
 	}
 
 	/**
-	 * Bean property getter:  <property>contentType</property>.
+	 * Bean property getter:  <property>Description</property>.
 	 *
 	 * <p>
 	 * The URL pointing to the contact information.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getContentType() {
-		return contentType;
+	public String getDescription() {
+		return description;
 	}
 
 	/**
-	 * Bean property setter:  <property>url</property>.
+	 * Bean property setter:  <property>Description</property>.
 	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
@@ -105,34 +117,13 @@ public class Encoding extends OpenApiElement{
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public Encoding setContentType(String value) {
-		contentType = value;
+	public Response setDescription(String value) {
+		description = value;
 		return this;
 	}
 
 	/**
-	 * Bean property getter:  <property>style</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getStyle() {
-		return style;
-	}
-
-	/**
-	 * Bean property setter:  <property>description</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object
-	 */
-	public Encoding setStyle(String value) {
-		style = value;
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>variables</property>.
+	 * Bean property getter:  <property>headers</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -141,19 +132,19 @@ public class Encoding extends OpenApiElement{
 	}
 
 	/**
-	 * Bean property setter:  <property>variables</property>.
+	 * Bean property setter:  <property>headers</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * @return This object
 	 */
-	public Encoding setHeaders(Map<String, HeaderInfo> value) {
+	public Response setHeaders(Map<String, HeaderInfo> value) {
 		headers = copyOf(value);
 		return this;
 	}
 
 	/**
-	 * Adds one or more values to the <property>headers</property> property.
+	 * Adds one or more values to the <property>variables</property> property.
 	 *
 	 * @param key The mapping key.
 	 * @param value
@@ -161,76 +152,78 @@ public class Encoding extends OpenApiElement{
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object
 	 */
-	public Encoding addHeader(String key, HeaderInfo value) {
+	public Response addHeader(String key, HeaderInfo value) {
 		headers = mapBuilder(headers).sparse().add(key, value).build();
 		return this;
 	}
 
 	/**
-	 * Bean property getter:  <property>required</property>.
-	 *
-	 * <p>
-	 * The type of the object.
+	 * Bean property getter:  <property>headers</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Boolean getExplode() {
-		return explode;
+	public Map<String, MediaType> getContent() {
+		return content;
 	}
 
 	/**
-	 * Bean property setter:  <property>explode</property>.
-	 *
-	 * <p>
-	 * The type of the object.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
-	 * </ul>
+	 * Bean property setter:  <property>content</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Property value is required.
-	 * 	</ul>
 	 * @return This object
 	 */
-	public Encoding setExplode(Boolean value) {
-		explode = value;
+	public Response setContent(Map<String, MediaType> value) {
+		content = copyOf(value);
 		return this;
 	}
 
 	/**
-	 * Bean property getter:  <property>required</property>.
+	 * Adds one or more values to the <property>variables</property> property.
 	 *
-	 * <p>
-	 * The type of the object.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
+	 * @param key The mapping key.
+	 * @param value
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object
 	 */
-	public Boolean getAllowReserved() {
-		return allowReserved;
+	public Response addContent(String key, MediaType value) {
+		content = mapBuilder(content).sparse().add(key, value).build();
+		return this;
 	}
 
 	/**
-	 * Bean property setter:  <property>explode</property>.
+	 * Bean property getter:  <property>link</property>.
 	 *
-	 * <p>
-	 * The type of the object.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
-	 * </ul>
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Map<String, Link> getLinks() {
+		return links;
+	}
+
+	/**
+	 * Bean property setter:  <property>Link</property>.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Property value is required.
-	 * 	</ul>
 	 * @return This object
 	 */
-	public Encoding setAllowReserved(Boolean value) {
-		allowReserved = value;
+	public Response setLinks(Map<String, Link> value) {
+		links = copyOf(value);
+		return this;
+	}
+
+	/**
+	 * Adds one or more values to the <property>variables</property> property.
+	 *
+	 * @param key The mapping key.
+	 * @param value
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object
+	 */
+	public Response addLink(String key, Link value) {
+		links = mapBuilder(links).sparse().add(key, value).build();
 		return this;
 	}
 
@@ -243,25 +236,23 @@ public class Encoding extends OpenApiElement{
 		if (property == null)
 			return null;
 		switch (property) {
-			case "contentType": return toType(getContentType(), type);
-			case "style": return toType(getStyle(), type);
+			case "description": return toType(getDescription(), type);
+			case "content": return toType(getContent(), type);
 			case "headers": return toType(getHeaders(), type);
-			case "explode": return toType(getExplode(), type);
-			case "allowReserved": return toType(getAllowReserved(), type);
+			case "links": return toType(getLinks(), type);
 			default: return super.get(property, type);
 		}
 	}
 
 	@Override /* OpenApiElement */
-	public Encoding set(String property, Object value) {
+	public Response set(String property, Object value) {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "contentType": return setContentType(stringify(value));
-			case "style": return setStyle(stringify(value));
+			case "description": return setDescription(stringify(value));
 			case "headers": return setHeaders(mapBuilder(String.class,HeaderInfo.class).sparse().addAny(value).build());
-			case "explode": return setExplode(toBoolean(value));
-			case "allowReserved": return setAllowReserved(toBoolean(value));
+			case "content": return setContent(mapBuilder(String.class,MediaType.class).sparse().addAny(value).build());
+			case "links": return setLinks(mapBuilder(String.class,Link.class).sparse().addAny(value).build());
 			default:
 				super.set(property, value);
 				return this;
@@ -271,11 +262,10 @@ public class Encoding extends OpenApiElement{
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
 		Set<String> s = setBuilder(String.class)
-				.addIf(contentType != null, "contentType")
-				.addIf(style != null, "style")
+				.addIf(description != null, "description")
 				.addIf(headers != null, "headers")
-				.addIf(explode != null, "explode")
-				.addIf(allowReserved != null, "allowReserved")
+				.addIf(content != null, "content")
+				.addIf(links != null, "links")
 				.build();
 		return new MultiSet<>(s, super.keySet());
 	}

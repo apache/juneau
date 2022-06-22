@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.dto.openapi;
+package org.apache.juneau.dto.openapi3;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -21,42 +21,33 @@ import org.apache.juneau.annotation.Bean;
 import org.apache.juneau.internal.*;
 
 import java.net.URI;
-import java.net.URL;
-import java.util.*;
+import java.util.Set;
 
 /**
- * TODO
+ * Allows referencing an external resource for extended documentation.
  */
-@Bean(properties="description,content,required,*")
+@Bean(properties="description,url,*")
 @FluentSetters
-public class RequestBodyInfo extends OpenApiElement{
+public class ExternalDocumentation extends OpenApiElement {
 
 	private String description;
-	private Map<String,MediaType> content;
-	private Boolean required;
+	private URI url;
 
 	/**
 	 * Default constructor.
 	 */
-	public RequestBodyInfo() { }
+	public ExternalDocumentation() {}
 
 	/**
 	 * Copy constructor.
 	 *
 	 * @param copyFrom The object to copy.
 	 */
-	public RequestBodyInfo(RequestBodyInfo copyFrom) {
+	public ExternalDocumentation(ExternalDocumentation copyFrom) {
 		super(copyFrom);
 
 		this.description = copyFrom.description;
-		this.required = copyFrom.required;
-		if (copyFrom.content == null) {
-			this.content = null;
-		} else {
-			this.content = new LinkedHashMap<>();
-			for (Map.Entry<String,MediaType> e : copyFrom.content.entrySet())
-				this.content.put(e.getKey(),	e.getValue().copy());
-		}
+		this.url = copyFrom.url;
 	}
 
 	/**
@@ -64,21 +55,15 @@ public class RequestBodyInfo extends OpenApiElement{
 	 *
 	 * @return A deep copy of this object.
 	 */
-	public RequestBodyInfo copy() {
-		return new RequestBodyInfo(this);
-	}
-
-	@Override /* OpenApiElement */
-	protected RequestBodyInfo strict() {
-		super.strict();
-		return this;
+	public ExternalDocumentation copy() {
+		return new ExternalDocumentation(this);
 	}
 
 	/**
-	 * Bean property getter:  <property>contentType</property>.
+	 * Bean property getter:  <property>description</property>.
 	 *
 	 * <p>
-	 * The URL pointing to the contact information.
+	 * A short description of the target documentation.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -87,91 +72,47 @@ public class RequestBodyInfo extends OpenApiElement{
 	}
 
 	/**
-	 * Bean property setter:  <property>url</property>.
+	 * Bean property setter:  <property>description</property>.
 	 *
 	 * <p>
-	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
-	 * <br>Strings must be valid URIs.
-	 *
-	 * <p>
-	 * URIs defined by {@link UriResolver} can be used for values.
+	 * A short description of the target documentation.
 	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public RequestBodyInfo setDescription(String value) {
+	public ExternalDocumentation setDescription(String value) {
 		description = value;
 		return this;
 	}
 
 	/**
-	 * Bean property getter:  <property>content</property>.
+	 * Bean property getter:  <property>url</property>.
+	 *
+	 * <p>
+	 * The URL for the target documentation.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String, MediaType> getContent() {
-		return content;
+	public URI getUrl() {
+		return url;
 	}
 
 	/**
-	 * Bean property setter:  <property>content</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object
-	 */
-	public RequestBodyInfo setContent(Map<String, MediaType> value) {
-		content = copyOf(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>content</property> property.
-	 *
-	 * @param key The mapping key.
-	 * @param value
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object
-	 */
-	public RequestBodyInfo addContent(String key, MediaType value) {
-		content = mapBuilder(content).sparse().add(key, value).build();
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>required</property>.
+	 * Bean property setter:  <property>url</property>.
 	 *
 	 * <p>
-	 * The type of the object.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Boolean getRequired() {
-		return required;
-	}
-
-	/**
-	 * Bean property setter:  <property>explode</property>.
-	 *
-	 * <p>
-	 * The type of the object.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
-	 * </ul>
+	 * The URL for the target documentation.
 	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
-	 * 	</ul>
+	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
 	 * @return This object
 	 */
-	public RequestBodyInfo setRequired(Boolean value) {
-		required = value;
+	public ExternalDocumentation setUrl(URI value) {
+		url = value;
 		return this;
 	}
 
@@ -185,20 +126,18 @@ public class RequestBodyInfo extends OpenApiElement{
 			return null;
 		switch (property) {
 			case "description": return toType(getDescription(), type);
-			case "content": return toType(getContent(), type);
-			case "required": return toType(getRequired(), type);
+			case "url": return toType(getUrl(), type);
 			default: return super.get(property, type);
 		}
 	}
 
 	@Override /* OpenApiElement */
-	public RequestBodyInfo set(String property, Object value) {
+	public ExternalDocumentation set(String property, Object value) {
 		if (property == null)
 			return this;
 		switch (property) {
 			case "description": return setDescription(stringify(value));
-			case "content": return setContent(mapBuilder(String.class,MediaType.class).sparse().addAny(value).build());
-			case "required": return setRequired(toBoolean(value));
+			case "url": return setUrl(toURI(value));
 			default:
 				super.set(property, value);
 				return this;
@@ -208,10 +147,9 @@ public class RequestBodyInfo extends OpenApiElement{
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
 		Set<String> s = setBuilder(String.class)
-				.addIf(description != null, "description")
-				.addIf(content != null, "content")
-				.addIf(required != null, "required")
-				.build();
+			.addIf(description != null, "description")
+			.addIf(url != null, "url")
+			.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 }

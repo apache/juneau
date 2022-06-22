@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.dto.openapi;
+package org.apache.juneau.dto.openapi3;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -45,11 +45,6 @@ import java.util.Set;
  * 		<js>"email"</js>: <js>"support@swagger.io"</js>
  * 	}
  * </p>
- *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
- * 	<li class='link'>{@doc juneau-dto.Swagger}
- * </ul>
  */
 @Bean(properties="operationRef,operationId,description,requestBody,server,parameters,*")
 @FluentSetters
@@ -188,11 +183,6 @@ public class Link extends OpenApiElement {
 	 * (Note: <js>"value"</js> has no meaning for required parameters.)
 	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for this parameter.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
-	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Object getRequestBody() {
@@ -207,11 +197,6 @@ public class Link extends OpenApiElement {
 	 * to control the number of results per page might default to 100 if not supplied by the client in the request.
 	 * (Note: <js>"default"</js> has no meaning for required parameters.)
 	 * Unlike JSON Schema this value MUST conform to the defined <code>type</code> for this parameter.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
 	 *
 	 * @param val The new value for this property.
 	 * @return This object

@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.dto.openapi;
+package org.apache.juneau.dto.openapi3;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -43,11 +43,6 @@ import java.util.*;
  * 		<js>"type"</js>: <js>"integer"</js>
  * 	}
  * </p>
- *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
- * 	<li class='link'>{@doc juneau-dto.Swagger}
- * </ul>
  */
 @Bean(properties="description,explode,deprecated,allowEmptyValue,allowReserved,schema,example,examples,$ref,*")
 @SuppressWarnings({"unchecked"})
@@ -159,11 +154,6 @@ public class HeaderInfo extends OpenApiElement {
 	 * <p>
 	 * The type of the object.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Property value is required.
@@ -200,15 +190,8 @@ public class HeaderInfo extends OpenApiElement {
 	 * <p>
 	 * The type of the object.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Property value is required.
-	 * 	</ul>
 	 * @return This object
 	 */
 	public HeaderInfo setExplode(Boolean value) {
@@ -234,12 +217,8 @@ public class HeaderInfo extends OpenApiElement {
 	 * <p>
 	 * The type of the object.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
-	 * </ul>
-	 *
 	 * @param value
+	 * 	The new value for this property.
 	 * @return This object
 	 */
 	public HeaderInfo setDeprecated(Boolean value) {
@@ -265,12 +244,8 @@ public class HeaderInfo extends OpenApiElement {
 	 * <p>
 	 * The type of the object.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
-	 * </ul>
-	 *
 	 * @param value
+	 * 	The new value for this property.
 	 * @return This object
 	 */
 	public HeaderInfo setAllowEmptyValue(Boolean value) {
@@ -296,12 +271,8 @@ public class HeaderInfo extends OpenApiElement {
 	 * <p>
 	 * The type of the object.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
-	 * </ul>
-	 *
 	 * @param value
+	 * 	The new value for this property.
 	 * @return This object
 	 */
 	public HeaderInfo setAllowReserved(Boolean value) {

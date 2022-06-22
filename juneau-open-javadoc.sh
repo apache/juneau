@@ -11,8 +11,9 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 
-. launches/juneau-env.sh
-mvn clean install
+. juneau-env.sh
+
+open target/site/apidocs/overview-summary.html
 
 echo '*******************************************************************************'
 echo '***** SUCCESS *****************************************************************'

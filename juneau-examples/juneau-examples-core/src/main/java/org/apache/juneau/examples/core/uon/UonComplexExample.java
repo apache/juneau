@@ -25,7 +25,6 @@ import java.util.List;
  * UON complex example.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-examples-core}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

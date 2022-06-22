@@ -20,7 +20,6 @@ import org.apache.juneau.json.SimpleJsonSerializer;
  * Atom feed JSON example.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-examples-core}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

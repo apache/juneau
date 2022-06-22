@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.dto.openapi;
+package org.apache.juneau.dto.openapi3;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -27,51 +27,35 @@ import java.util.*;
 /**
  * TODO
  */
-@Bean(properties="contentType,style,explode,headers,allowReserved,*")
+@Bean(properties="description,content,required,*")
 @FluentSetters
-public class Response extends OpenApiElement{
+public class RequestBodyInfo extends OpenApiElement{
 
 	private String description;
-	private Map<String,HeaderInfo> headers;
 	private Map<String,MediaType> content;
-	private Map<String,Link> links;
+	private Boolean required;
 
 	/**
 	 * Default constructor.
 	 */
-	public Response() { }
+	public RequestBodyInfo() { }
 
 	/**
 	 * Copy constructor.
 	 *
 	 * @param copyFrom The object to copy.
 	 */
-	public Response(Response copyFrom) {
+	public RequestBodyInfo(RequestBodyInfo copyFrom) {
 		super(copyFrom);
 
 		this.description = copyFrom.description;
-		if (copyFrom.headers == null) {
-			this.headers = null;
-		} else {
-			this.headers = new LinkedHashMap<>();
-			for (Map.Entry<String,HeaderInfo> e : copyFrom.headers.entrySet())
-				this.headers.put(e.getKey(),	e.getValue().copy());
-		}
-
+		this.required = copyFrom.required;
 		if (copyFrom.content == null) {
 			this.content = null;
 		} else {
 			this.content = new LinkedHashMap<>();
 			for (Map.Entry<String,MediaType> e : copyFrom.content.entrySet())
 				this.content.put(e.getKey(),	e.getValue().copy());
-		}
-
-		if (copyFrom.links == null) {
-			this.links = null;
-		} else {
-			this.links = new LinkedHashMap<>();
-			for (Map.Entry<String,Link> e : copyFrom.links.entrySet())
-				this.links.put(e.getKey(),	e.getValue().copy());
 		}
 	}
 
@@ -80,18 +64,18 @@ public class Response extends OpenApiElement{
 	 *
 	 * @return A deep copy of this object.
 	 */
-	public Response copy() {
-		return new Response(this);
+	public RequestBodyInfo copy() {
+		return new RequestBodyInfo(this);
 	}
 
 	@Override /* OpenApiElement */
-	protected Response strict() {
+	protected RequestBodyInfo strict() {
 		super.strict();
 		return this;
 	}
 
 	/**
-	 * Bean property getter:  <property>Description</property>.
+	 * Bean property getter:  <property>contentType</property>.
 	 *
 	 * <p>
 	 * The URL pointing to the contact information.
@@ -103,7 +87,7 @@ public class Response extends OpenApiElement{
 	}
 
 	/**
-	 * Bean property setter:  <property>Description</property>.
+	 * Bean property setter:  <property>url</property>.
 	 *
 	 * <p>
 	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
@@ -117,48 +101,13 @@ public class Response extends OpenApiElement{
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public Response setDescription(String value) {
+	public RequestBodyInfo setDescription(String value) {
 		description = value;
 		return this;
 	}
 
 	/**
-	 * Bean property getter:  <property>headers</property>.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public Map<String, HeaderInfo> getHeaders() {
-		return headers;
-	}
-
-	/**
-	 * Bean property setter:  <property>headers</property>.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * @return This object
-	 */
-	public Response setHeaders(Map<String, HeaderInfo> value) {
-		headers = copyOf(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>variables</property> property.
-	 *
-	 * @param key The mapping key.
-	 * @param value
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object
-	 */
-	public Response addHeader(String key, HeaderInfo value) {
-		headers = mapBuilder(headers).sparse().add(key, value).build();
-		return this;
-	}
-
-	/**
-	 * Bean property getter:  <property>headers</property>.
+	 * Bean property getter:  <property>content</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -173,13 +122,13 @@ public class Response extends OpenApiElement{
 	 * 	The new value for this property.
 	 * @return This object
 	 */
-	public Response setContent(Map<String, MediaType> value) {
+	public RequestBodyInfo setContent(Map<String, MediaType> value) {
 		content = copyOf(value);
 		return this;
 	}
 
 	/**
-	 * Adds one or more values to the <property>variables</property> property.
+	 * Adds one or more values to the <property>content</property> property.
 	 *
 	 * @param key The mapping key.
 	 * @param value
@@ -187,43 +136,37 @@ public class Response extends OpenApiElement{
 	 * 	<br>Ignored if <jk>null</jk>.
 	 * @return This object
 	 */
-	public Response addContent(String key, MediaType value) {
+	public RequestBodyInfo addContent(String key, MediaType value) {
 		content = mapBuilder(content).sparse().add(key, value).build();
 		return this;
 	}
 
 	/**
-	 * Bean property getter:  <property>link</property>.
+	 * Bean property getter:  <property>required</property>.
+	 *
+	 * <p>
+	 * The type of the object.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String, Link> getLinks() {
-		return links;
+	public Boolean getRequired() {
+		return required;
 	}
 
 	/**
-	 * Bean property setter:  <property>Link</property>.
+	 * Bean property setter:  <property>explode</property>.
+	 *
+	 * <p>
+	 * The type of the object.
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * 	<br>Property value is required.
+	 * 	</ul>
 	 * @return This object
 	 */
-	public Response setLinks(Map<String, Link> value) {
-		links = copyOf(value);
-		return this;
-	}
-
-	/**
-	 * Adds one or more values to the <property>variables</property> property.
-	 *
-	 * @param key The mapping key.
-	 * @param value
-	 * 	The values to add to this property.
-	 * 	<br>Ignored if <jk>null</jk>.
-	 * @return This object
-	 */
-	public Response addLink(String key, Link value) {
-		links = mapBuilder(links).sparse().add(key, value).build();
+	public RequestBodyInfo setRequired(Boolean value) {
+		required = value;
 		return this;
 	}
 
@@ -238,21 +181,19 @@ public class Response extends OpenApiElement{
 		switch (property) {
 			case "description": return toType(getDescription(), type);
 			case "content": return toType(getContent(), type);
-			case "headers": return toType(getHeaders(), type);
-			case "links": return toType(getLinks(), type);
+			case "required": return toType(getRequired(), type);
 			default: return super.get(property, type);
 		}
 	}
 
 	@Override /* OpenApiElement */
-	public Response set(String property, Object value) {
+	public RequestBodyInfo set(String property, Object value) {
 		if (property == null)
 			return this;
 		switch (property) {
 			case "description": return setDescription(stringify(value));
-			case "headers": return setHeaders(mapBuilder(String.class,HeaderInfo.class).sparse().addAny(value).build());
 			case "content": return setContent(mapBuilder(String.class,MediaType.class).sparse().addAny(value).build());
-			case "links": return setLinks(mapBuilder(String.class,Link.class).sparse().addAny(value).build());
+			case "required": return setRequired(toBoolean(value));
 			default:
 				super.set(property, value);
 				return this;
@@ -263,9 +204,8 @@ public class Response extends OpenApiElement{
 	public Set<String> keySet() {
 		Set<String> s = setBuilder(String.class)
 				.addIf(description != null, "description")
-				.addIf(headers != null, "headers")
 				.addIf(content != null, "content")
-				.addIf(links != null, "links")
+				.addIf(required != null, "required")
 				.build();
 		return new MultiSet<>(s, super.keySet());
 	}

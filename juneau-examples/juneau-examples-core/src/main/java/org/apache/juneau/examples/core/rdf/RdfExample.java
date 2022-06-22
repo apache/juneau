@@ -19,7 +19,6 @@ import org.apache.juneau.jena.*;
  *	Sample class which shows the simple usage of RdfXmlSerializer.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-examples-core}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

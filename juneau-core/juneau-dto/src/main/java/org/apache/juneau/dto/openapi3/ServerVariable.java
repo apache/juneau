@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.dto.openapi;
+package org.apache.juneau.dto.openapi3;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -69,11 +69,6 @@ public class ServerVariable extends OpenApiElement {
 	/**
 	 * Bean property getter:  <property>enum</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
-	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public List<Object> getEnum() {
@@ -82,11 +77,6 @@ public class ServerVariable extends OpenApiElement {
 
 	/**
 	 * Bean property setter:  <property>enum</property>.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -140,11 +130,6 @@ public class ServerVariable extends OpenApiElement {
 	 * 		Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the data type.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
-	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getDefault() {
@@ -163,11 +148,6 @@ public class ServerVariable extends OpenApiElement {
 	 * 		<js>"default"</js> has no meaning for required items.
 	 * 	<li>
 	 * 		Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the data type.
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value
@@ -194,11 +174,6 @@ public class ServerVariable extends OpenApiElement {
 	 * 		Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the data type.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
-	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getDescription() {
@@ -217,11 +192,6 @@ public class ServerVariable extends OpenApiElement {
 	 * 		<js>"description"</js> has no meaning for required items.
 	 * 	<li>
 	 * 		Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the data type.
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
 	 * </ul>
 	 *
 	 * @param value

@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.dto.openapi;
+package org.apache.juneau.dto.openapi3;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -21,33 +21,41 @@ import org.apache.juneau.annotation.Bean;
 import org.apache.juneau.internal.*;
 
 import java.net.URI;
-import java.util.Set;
+import java.net.URL;
+import java.util.*;
 
 /**
- * Allows referencing an external resource for extended documentation.
+ * TODO
  */
-@Bean(properties="description,url,*")
+@Bean(properties="url,description,variables,*")
 @FluentSetters
-public class ExternalDocumentation extends OpenApiElement {
-
-	private String description;
+public class Server extends OpenApiElement{
 	private URI url;
+	private String description;
+	private Map<String,ServerVariable> variables;
 
 	/**
 	 * Default constructor.
 	 */
-	public ExternalDocumentation() {}
+	public Server() { }
 
 	/**
 	 * Copy constructor.
 	 *
 	 * @param copyFrom The object to copy.
 	 */
-	public ExternalDocumentation(ExternalDocumentation copyFrom) {
+	public Server(Server copyFrom) {
 		super(copyFrom);
 
-		this.description = copyFrom.description;
 		this.url = copyFrom.url;
+		this.description = copyFrom.description;
+		if (copyFrom.variables == null) {
+			this.variables = null;
+		} else {
+			this.variables = new LinkedHashMap<>();
+			for (Map.Entry<String,ServerVariable> e : copyFrom.variables.entrySet())
+				this.variables.put(e.getKey(),	e.getValue().copy());
+		}
 	}
 
 	/**
@@ -55,36 +63,13 @@ public class ExternalDocumentation extends OpenApiElement {
 	 *
 	 * @return A deep copy of this object.
 	 */
-	public ExternalDocumentation copy() {
-		return new ExternalDocumentation(this);
+	public Server copy() {
+		return new Server(this);
 	}
 
-	/**
-	 * Bean property getter:  <property>description</property>.
-	 *
-	 * <p>
-	 * A short description of the target documentation.
-	 *
-	 * @return The property value, or <jk>null</jk> if it is not set.
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * Bean property setter:  <property>description</property>.
-	 *
-	 * <p>
-	 * A short description of the target documentation.
-	 *
-	 * @param value
-	 * 	The new value for this property.
-	 * 	<br>{@doc GFM} can be used for rich text representation.
-	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @return This object
-	 */
-	public ExternalDocumentation setDescription(String value) {
-		description = value;
+	@Override /* OpenApiElement */
+	protected Server strict() {
+		super.strict();
 		return this;
 	}
 
@@ -92,7 +77,7 @@ public class ExternalDocumentation extends OpenApiElement {
 	 * Bean property getter:  <property>url</property>.
 	 *
 	 * <p>
-	 * The URL for the target documentation.
+	 * The URL pointing to the contact information.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
@@ -104,16 +89,75 @@ public class ExternalDocumentation extends OpenApiElement {
 	 * Bean property setter:  <property>url</property>.
 	 *
 	 * <p>
-	 * The URL for the target documentation.
+	 * The value can be of any of the following types: {@link URI}, {@link URL}, {@link String}.
+	 * <br>Strings must be valid URIs.
+	 *
+	 * <p>
+	 * URIs defined by {@link UriResolver} can be used for values.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Property value is required.
-	 * 	<br>URIs defined by {@link UriResolver} can be used for values.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public ExternalDocumentation setUrl(URI value) {
+	public Server setUrl(URI value) {
 		url = value;
+		return this;
+	}
+
+	/**
+	 * Bean property getter:  <property>description</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * Bean property setter:  <property>description</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object
+	 */
+	public Server setDescription(String value) {
+		description = value;
+		return this;
+	}
+
+	/**
+	 * Bean property getter:  <property>variables</property>.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Map<String, ServerVariable> getVariables() {
+		return variables;
+	}
+
+	/**
+	 * Bean property setter:  <property>variables</property>.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * @return This object
+	 */
+	public Server setVariables(Map<String, ServerVariable> value) {
+		variables = copyOf(value);
+		return this;
+	}
+
+	/**
+	 * Adds one or more values to the <property>variables</property> property.
+	 *
+	 * @param key The mapping key.
+	 * @param value
+	 * 	The values to add to this property.
+	 * 	<br>Ignored if <jk>null</jk>.
+	 * @return This object
+	 */
+	public Server addVariable(String key, ServerVariable value) {
+		variables = mapBuilder(variables).sparse().add(key, value).build();
 		return this;
 	}
 
@@ -126,19 +170,21 @@ public class ExternalDocumentation extends OpenApiElement {
 		if (property == null)
 			return null;
 		switch (property) {
-			case "description": return toType(getDescription(), type);
 			case "url": return toType(getUrl(), type);
+			case "description": return toType(getDescription(), type);
+			case "variables": return toType(getVariables(), type);
 			default: return super.get(property, type);
 		}
 	}
 
 	@Override /* OpenApiElement */
-	public ExternalDocumentation set(String property, Object value) {
+	public Server set(String property, Object value) {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "description": return setDescription(stringify(value));
 			case "url": return setUrl(toURI(value));
+			case "description": return setDescription(stringify(value));
+			case "variables": return setVariables(mapBuilder(String.class,ServerVariable.class).sparse().addAny(value).build());
 			default:
 				super.set(property, value);
 				return this;
@@ -148,9 +194,10 @@ public class ExternalDocumentation extends OpenApiElement {
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
 		Set<String> s = setBuilder(String.class)
-			.addIf(description != null, "description")
-			.addIf(url != null, "url")
-			.build();
+				.addIf(url != null, "url")
+				.addIf(description != null, "description")
+				.addIf(variables != null, "variables")
+				.build();
 		return new MultiSet<>(s, super.keySet());
 	}
 }

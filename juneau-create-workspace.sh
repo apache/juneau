@@ -11,25 +11,17 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 
-. launches/juneau-env.sh
+. juneau-env.sh
 
-cd juneau-doc
-mvn install
-export cp=target/juneau-doc-${JUNEAU_VERSION}-SNAPSHOT.jar:../juneau-all/target/juneau-all-${JUNEAU_VERSION}-SNAPSHOT.jar
-java -DjuneauVersion=$JUNEAU_VERSION -cp $cp org.apache.juneau.doc.internal.DocGenerator 
-cd .. 
+export WORKSPACE=target/workspace
 
-mvn javadoc:aggregate
-tput bel
-
-cd juneau-doc
-java -cp $cp org.apache.juneau.doc.internal.DocLinkTester
-cd .. 
-
-rm -rf ../juneau-website/content/site/apidocs-$JUNEAU_VERSION
-mkdir ../juneau-website/content/site/apidocs-$JUNEAU_VERSION
-cp -r ./target/site/apidocs/* ../juneau-website/content/site/apidocs-$JUNEAU_VERSION
-find ../juneau-website/content/site/apidocs-$JUNEAU_VERSION -type f -name '*.html' -exec sed -i '' s/-SNAPSHOT// {} +
+rm -Rf $WORKSPACE
+mkdir -p $WORKSPACE
+unzip -o juneau-microservice/juneau-my-jetty-microservice/target/my-jetty-microservice-$X_VERSION-bin.zip -d $WORKSPACE/my-jetty-microservice
+unzip -o juneau-microservice/juneau-my-springboot-microservice/target/my-springboot-microservice-$X_VERSION-bin.zip -d $WORKSPACE/my-springboot-microservice
+unzip -o juneau-examples/juneau-examples-core/target/juneau-examples-core-$X_VERSION-bin.zip -d $WORKSPACE/juneau-examples-core
+unzip -o juneau-examples/juneau-examples-rest-jetty/target/juneau-examples-rest-jetty-$X_VERSION-bin.zip -d $WORKSPACE/juneau-examples-rest-jetty
+unzip -o juneau-examples/juneau-examples-rest-springboot/target/juneau-examples-rest-springboot-$X_VERSION-bin.zip -d $WORKSPACE/juneau-examples-rest-springboot
 
 echo '*******************************************************************************'
 echo '***** SUCCESS *****************************************************************'

@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.dto.openapi;
+package org.apache.juneau.dto.openapi3;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -56,11 +56,6 @@ import java.util.*;
  * 		<js>"title"</js>: <js>"foo"</js>
  * 	}
  * </p>
- *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
- * 	<li class='link'>{@doc juneau-dto.Swagger}
- * </ul>
  */
 @Bean(properties="format,title,description,default,multipleOf,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,maxProperties,minProperties,required,enum,type,items,allOf,anyOf,oneOf,properties,additionalProperties,not,discriminator,readOnly,writeOnly,nullable,deprecated,xml,externalDocs,example,$ref,*")
 @FluentSetters
@@ -181,11 +176,6 @@ public class SchemaInfo extends OpenApiElement {
 	/**
 	 * Bean property getter:  <property>format</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypeFormats}
-	 * </ul>
-	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getFormat() {
@@ -194,11 +184,6 @@ public class SchemaInfo extends OpenApiElement {
 
 	/**
 	 * Bean property setter:  <property>format</property>.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
-	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -258,7 +243,6 @@ public class SchemaInfo extends OpenApiElement {
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>{@doc GFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
@@ -677,11 +661,6 @@ public class SchemaInfo extends OpenApiElement {
 	/**
 	 * Bean property setter:  <property>enum</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -731,11 +710,6 @@ public class SchemaInfo extends OpenApiElement {
 
 	/**
 	 * Bean property setter:  <property>type</property>.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
-	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this property.

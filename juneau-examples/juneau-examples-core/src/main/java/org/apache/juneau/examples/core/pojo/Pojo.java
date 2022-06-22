@@ -18,7 +18,6 @@ import org.apache.juneau.annotation.*;
  * Sample pojo class.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-examples-core}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

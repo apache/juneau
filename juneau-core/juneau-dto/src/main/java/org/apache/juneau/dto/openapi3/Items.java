@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.dto.openapi;
+package org.apache.juneau.dto.openapi3;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
@@ -51,11 +51,6 @@ import static org.apache.juneau.internal.CollectionUtils.*;
  * 		<js>"minLength"</js>: 2
  * 	}
  * </p>
- *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
- * 	<li class='link'>{@doc juneau-dto.Swagger}
- * </ul>
  */
 @Bean(properties="type,format,items,collectionFormat,default,maximum,exclusiveMaximum,minimum,exclusiveMinimum,maxLength,minLength,pattern,maxItems,minItems,uniqueItems,enum,multipleOf,$ref,*")
 @FluentSetters
@@ -154,11 +149,6 @@ public class Items extends OpenApiElement {
 	 * <p>
 	 * The internal type of the array.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul class='doctree'>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypes}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Valid values:
@@ -187,11 +177,6 @@ public class Items extends OpenApiElement {
 	 * <p>
 	 * The extending format for the previously mentioned <code>type</code>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypeFormats}
-	 * </ul>
-	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getFormat() {
@@ -203,11 +188,6 @@ public class Items extends OpenApiElement {
 	 *
 	 * <p>
 	 * The extending format for the previously mentioned <code>type</code>.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc SwaggerDataTypeFormats}
-	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -302,11 +282,6 @@ public class Items extends OpenApiElement {
 	 * 		Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the data type.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
-	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Object getDefault() {
@@ -327,11 +302,6 @@ public class Items extends OpenApiElement {
 	 * 		Unlike JSON Schema this value MUST conform to the defined <code>type</code> for the data type.
 	 * </ul>
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
-	 *
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
@@ -345,11 +315,6 @@ public class Items extends OpenApiElement {
 	/**
 	 * Bean property getter:  <property>maximum</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
-	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Number getMaximum() {
@@ -358,11 +323,6 @@ public class Items extends OpenApiElement {
 
 	/**
 	 * Bean property setter:  <property>maximum</property>.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -377,11 +337,6 @@ public class Items extends OpenApiElement {
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
-	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Boolean getExclusiveMaximum() {
@@ -390,11 +345,6 @@ public class Items extends OpenApiElement {
 
 	/**
 	 * Bean property setter:  <property>exclusiveMaximum</property>.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -409,11 +359,6 @@ public class Items extends OpenApiElement {
 	/**
 	 * Bean property getter:  <property>minimum</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
-	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Number getMinimum() {
@@ -422,11 +367,6 @@ public class Items extends OpenApiElement {
 
 	/**
 	 * Bean property setter:  <property>minimum</property>.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -441,11 +381,6 @@ public class Items extends OpenApiElement {
 	/**
 	 * Bean property getter:  <property>exclusiveMinimum</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
-	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Boolean getExclusiveMinimum() {
@@ -454,11 +389,6 @@ public class Items extends OpenApiElement {
 
 	/**
 	 * Bean property setter:  <property>exclusiveMinimum</property>.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -473,11 +403,6 @@ public class Items extends OpenApiElement {
 	/**
 	 * Bean property getter:  <property>maxLength</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
-	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Integer getMaxLength() {
@@ -486,11 +411,6 @@ public class Items extends OpenApiElement {
 
 	/**
 	 * Bean property setter:  <property>maxLength</property>.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -505,11 +425,6 @@ public class Items extends OpenApiElement {
 	/**
 	 * Bean property getter:  <property>minLength</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
-	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Integer getMinLength() {
@@ -518,11 +433,6 @@ public class Items extends OpenApiElement {
 
 	/**
 	 * Bean property setter:  <property>minLength</property>.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -537,11 +447,6 @@ public class Items extends OpenApiElement {
 	/**
 	 * Bean property getter:  <property>pattern</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
-	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public String getPattern() {
@@ -553,11 +458,6 @@ public class Items extends OpenApiElement {
 	 *
 	 * <p>
 	 * This string SHOULD be a valid regular expression.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -572,11 +472,6 @@ public class Items extends OpenApiElement {
 	/**
 	 * Bean property getter:  <property>maxItems</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
-	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Integer getMaxItems() {
@@ -585,11 +480,6 @@ public class Items extends OpenApiElement {
 
 	/**
 	 * Bean property setter:  <property>maxItems</property>.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -604,11 +494,6 @@ public class Items extends OpenApiElement {
 	/**
 	 * Bean property getter:  <property>minItems</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
-	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Integer getMinItems() {
@@ -617,11 +502,6 @@ public class Items extends OpenApiElement {
 
 	/**
 	 * Bean property setter:  <property>minItems</property>.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -636,11 +516,6 @@ public class Items extends OpenApiElement {
 	/**
 	 * Bean property getter:  <property>uniqueItems</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
-	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Boolean getUniqueItems() {
@@ -649,11 +524,6 @@ public class Items extends OpenApiElement {
 
 	/**
 	 * Bean property setter:  <property>uniqueItems</property>.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -668,11 +538,6 @@ public class Items extends OpenApiElement {
 	/**
 	 * Bean property getter:  <property>enum</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
-	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public List<Object> getEnum() {
@@ -681,11 +546,6 @@ public class Items extends OpenApiElement {
 
 	/**
 	 * Bean property setter:  <property>enum</property>.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this property.
@@ -741,11 +601,6 @@ public class Items extends OpenApiElement {
 	/**
 	 * Bean property getter:  <property>multipleOf</property>.
 	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
-	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
 	public Number getMultipleOf() {
@@ -754,11 +609,6 @@ public class Items extends OpenApiElement {
 
 	/**
 	 * Bean property setter:  <property>multipleOf</property>.
-	 *
-	 * <h5 class='section'>See Also:</h5>
-	 * <ul>
-	 * 	<li class='extlink'>{@doc JsonSchemaValidation}
-	 * </ul>
 	 *
 	 * @param value
 	 * 	The new value for this property.

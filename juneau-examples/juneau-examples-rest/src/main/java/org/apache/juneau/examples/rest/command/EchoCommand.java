@@ -22,7 +22,6 @@ import org.apache.juneau.microservice.console.*;
  * Implements an 'echo' console command that simply returns the command arguments as a comma-delimited list.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-examples-rest}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

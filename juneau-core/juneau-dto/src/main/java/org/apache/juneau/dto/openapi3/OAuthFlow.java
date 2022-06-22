@@ -10,30 +10,26 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.dto.openapi;
+package org.apache.juneau.dto.openapi3;
 
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 
 import org.apache.juneau.annotation.Bean;
-import org.apache.juneau.dto.swagger.ExternalDocumentation;
 import org.apache.juneau.internal.*;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 
 /**
- * Allows adding meta data to a single tag that is used by the {@doc SwaggerOperationObject Operation Object}.
- *
- * <p>
- * It is not mandatory to have a Tag Object per tag used there.
+ * information for Link object.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode w800'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
- * 	Tag x = <jsm>tag</jsm>()
- * 		.name(<js>"pet"</js>)
- * 		.description(<js>"Pets operations"</js>)
+ * 	Contact x = <jsm>contact</jsm>(<js>"API Support"</js>, <js>"http://www.swagger.io/support"</js>, <js>"support@swagger.io"</js>);
  *
  * 	<jc>// Serialize using JsonSerializer.</jc>
  * 	String json = JsonSerializer.<jsf>DEFAULT</jsf>.toString(x);
@@ -44,41 +40,43 @@ import java.util.Set;
  * <p class='bcode w800'>
  * 	<jc>// Output</jc>
  * 	{
- * 		<js>"name"</js>: <js>"pet"</js>,
- * 		<js>"description"</js>: <js>"Pets operations"</js>
+ * 		<js>"name"</js>: <js>"API Support"</js>,
+ * 		<js>"url"</js>: <js>"http://www.swagger.io/support"</js>,
+ * 		<js>"email"</js>: <js>"support@swagger.io"</js>
  * 	}
  * </p>
- *
- * <h5 class='section'>See Also:</h5>
- * <ul class='doctree'>
- * 	<li class='link'>{@doc juneau-dto.Swagger}
- * </ul>
  */
-@Bean(properties="name,description,externalDocs,*")
+@Bean(properties="authorizationUrl,tokenUrl,refreshUrl,scopes,*")
 @FluentSetters
-public class Tag extends OpenApiElement {
+public class OAuthFlow extends OpenApiElement {
 
-	private String
-		name,
-		description;
-	private ExternalDocumentation externalDocs;
+	private String authorizationUrl;
+	private String tokenUrl;
+	private String refreshUrl;
+	private Map<String,String> scopes;
+
 
 	/**
 	 * Default constructor.
 	 */
-	public Tag() {}
+	public OAuthFlow() {}
 
 	/**
 	 * Copy constructor.
 	 *
 	 * @param copyFrom The object to copy.
 	 */
-	public Tag(Tag copyFrom) {
+	public OAuthFlow(OAuthFlow copyFrom) {
 		super(copyFrom);
 
-		this.name = copyFrom.name;
-		this.description = copyFrom.description;
-		this.externalDocs = copyFrom.externalDocs == null ? null : copyFrom.externalDocs.copy();
+		this.authorizationUrl = copyFrom.authorizationUrl;
+		this.tokenUrl = copyFrom.tokenUrl;
+		this.refreshUrl = copyFrom.refreshUrl;
+
+		if (copyFrom.scopes == null)
+			this.scopes = null;
+		else
+			this.scopes = new LinkedHashMap<>(copyFrom.scopes);
 	}
 
 	/**
@@ -86,35 +84,35 @@ public class Tag extends OpenApiElement {
 	 *
 	 * @return A deep copy of this object.
 	 */
-	public Tag copy() {
-		return new Tag(this);
+	public OAuthFlow copy() {
+		return new OAuthFlow(this);
 	}
 
 	/**
-	 * Bean property getter:  <property>name</property>.
+	 * Bean property getter:  <property>operationRef</property>.
 	 *
 	 * <p>
-	 * The name of the tag.
+	 * The identifying name of the contact person/organization.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getName() {
-		return name;
+	public String getAuthorizationUrl() {
+		return authorizationUrl;
 	}
 
 	/**
-	 * Bean property setter:  <property>name</property>.
+	 * Bean property setter:  <property>operationRef</property>.
 	 *
 	 * <p>
-	 * The name of the tag.
+	 * The identifying name of the contact person/organization.
 	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>Property value is required.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public Tag setName(String value) {
-		name = value;
+	public OAuthFlow setAuthorizationUrl(String value) {
+		authorizationUrl = value;
 		return this;
 	}
 
@@ -122,56 +120,93 @@ public class Tag extends OpenApiElement {
 	 * Bean property getter:  <property>description</property>.
 	 *
 	 * <p>
-	 * A short description for the tag.
+	 * The URL pointing to the contact information.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public String getDescription() {
-		return description;
+	public String getTokenUrl() {
+		return tokenUrl;
 	}
 
 	/**
 	 * Bean property setter:  <property>description</property>.
-	 *
-	 * <p>
-	 * A short description for the tag.
-	 *
 	 * @param value
 	 * 	The new value for this property.
-	 * 	<br>{@doc GFM} can be used for rich text representation.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public Tag setDescription(String value) {
-		description = value;
+	public OAuthFlow setTokenUrl(String value) {
+		tokenUrl = value;
 		return this;
 	}
 
 	/**
-	 * Bean property getter:  <property>externalDocs</property>.
+	 * Bean property getter:  <property>externalValue</property>.
 	 *
 	 * <p>
-	 * Additional external documentation for this tag.
+	 * The email address of the contact person/organization.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public ExternalDocumentation getExternalDocs() {
-		return externalDocs;
+	public String getRefreshUrl() {
+		return refreshUrl;
 	}
 
 	/**
-	 * Bean property setter:  <property>externalDocs</property>.
+	 * Bean property setter:  <property>externalValue</property>.
 	 *
 	 * <p>
-	 * Additional external documentation for this tag.
+	 * The email address of the contact person/organization.
 	 *
 	 * @param value
 	 * 	The new value for this property.
+	 * 	<br>MUST be in the format of an email address.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object
 	 */
-	public Tag setExternalDocs(ExternalDocumentation value) {
-		externalDocs = value;
+	public OAuthFlow setRefreshUrl(String value) {
+		refreshUrl = value;
+		return this;
+	}
+
+	/**
+	 * Bean property getter:  <property>examples</property>.
+	 *
+	 * <p>
+	 * An example of the response message.
+	 *
+	 * @return The property value, or <jk>null</jk> if it is not set.
+	 */
+	public Map<String,String> getScopes() {
+		return scopes;
+	}
+
+	/**
+	 * Bean property setter:  <property>examples</property>.
+	 *
+	 * <p>
+	 * An example of the response message.
+	 *
+	 * @param value
+	 * 	The new value for this property.
+	 * 	<br>Keys must be MIME-type strings.
+	 * 	<br>Can be <jk>null</jk> to unset the property.
+	 * @return This object
+	 */
+	public OAuthFlow setScopes(Map<String,String> value) {
+		scopes = copyOf(value);
+		return this;
+	}
+
+	/**
+	 * Adds a single value to the <property>examples</property> property.
+	 *
+	 * @param name The mime-type string.
+	 * @param description The example.
+	 * @return This object
+	 */
+	public OAuthFlow addScope(String name, String description) {
+		scopes = mapBuilder(scopes).sparse().add(name, description).build();
 		return this;
 	}
 
@@ -184,21 +219,23 @@ public class Tag extends OpenApiElement {
 		if (property == null)
 			return null;
 		switch (property) {
-			case "name": return toType(getName(), type);
-			case "description": return toType(getDescription(), type);
-			case "externalDocs": return toType(getExternalDocs(), type);
+			case "refreshUrl": return toType(getRefreshUrl(), type);
+			case "tokenUrl": return toType(getTokenUrl(), type);
+			case "authorizationUrl": return toType(getAuthorizationUrl(), type);
+			case "scopes": return toType(getScopes(), type);
 			default: return super.get(property, type);
 		}
 	}
 
 	@Override /* OpenApiElement */
-	public Tag set(String property, Object value) {
+	public OAuthFlow set(String property, Object value) {
 		if (property == null)
 			return this;
 		switch (property) {
-			case "name": return setName(stringify(value));
-			case "description": return setDescription(stringify(value));
-			case "externalDocs": return setExternalDocs(toType(value, ExternalDocumentation.class));
+			case "authorizationUrl": return setAuthorizationUrl(stringify(value));
+			case "tokenUrl": return setTokenUrl(stringify(value));
+			case "refreshUrl": return setRefreshUrl(stringify(value));
+			case "scopes": return setScopes(mapBuilder(String.class,String.class).sparse().addAny(value).build());
 			default:
 				super.set(property, value);
 				return this;
@@ -208,9 +245,10 @@ public class Tag extends OpenApiElement {
 	@Override /* OpenApiElement */
 	public Set<String> keySet() {
 		Set<String> s = setBuilder(String.class)
-			.addIf(name != null, "name")
-			.addIf(description != null, "description")
-			.addIf(externalDocs != null, "externalDocs")
+			.addIf(authorizationUrl != null, "authorizationUrl")
+			.addIf(tokenUrl != null, "tokenUrl")
+			.addIf(refreshUrl != null, "refreshUrl")
+			.addIf(scopes != null, "scopes")
 			.build();
 		return new MultiSet<>(s, super.keySet());
 	}

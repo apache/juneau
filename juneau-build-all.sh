@@ -11,17 +11,9 @@
 # * specific language governing permissions and limitations under the License.                                              *
 # ***************************************************************************************************************************
 
-. launches/juneau-env.sh
-
-export WORKSPACE=target/workspace
-
-rm -Rf $WORKSPACE
-mkdir -p $WORKSPACE
-unzip -o juneau-microservice/juneau-my-jetty-microservice/target/my-jetty-microservice-$X_VERSION-bin.zip -d $WORKSPACE/my-jetty-microservice
-unzip -o juneau-microservice/juneau-my-springboot-microservice/target/my-springboot-microservice-$X_VERSION-bin.zip -d $WORKSPACE/my-springboot-microservice
-unzip -o juneau-examples/juneau-examples-core/target/juneau-examples-core-$X_VERSION-bin.zip -d $WORKSPACE/juneau-examples-core
-unzip -o juneau-examples/juneau-examples-rest-jetty/target/juneau-examples-rest-jetty-$X_VERSION-bin.zip -d $WORKSPACE/juneau-examples-rest-jetty
-unzip -o juneau-examples/juneau-examples-rest-springboot/target/juneau-examples-rest-springboot-$X_VERSION-bin.zip -d $WORKSPACE/juneau-examples-rest-springboot
+. juneau-env.sh
+mvn clean install
+. juneau-build-javadoc.sh
 
 echo '*******************************************************************************'
 echo '***** SUCCESS *****************************************************************'
