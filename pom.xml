@@ -19,7 +19,7 @@
 
 	<groupId>org.apache.juneau</groupId>
 	<artifactId>juneau</artifactId>
-	<version>9.0.0-SNAPSHOT</version>
+	<version>9.0-B1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>juneau</name>
 	<description>Apache Juneau</description>
@@ -44,8 +44,8 @@
 		<httpclient.version>4.5.13</httpclient.version>
 		<jetty.version>9.4.13.v20181111</jetty.version>
 		<juneau.compare.version>8.0.0</juneau.compare.version>
-		<javadoc.juneau.version>9.0.0</javadoc.juneau.version>
-		<juneauVersion>9.0.0</juneauVersion>
+		<javadoc.juneau.version>9.0-B1</javadoc.juneau.version>
+		<juneauVersion>9.0-B1</juneauVersion>
 		<juneauVersionNext>9.0.1</juneauVersionNext>
 		<derby.version>10.10.2.0</derby.version>
 		<hibernate.version>5.0.9.Final</hibernate.version>

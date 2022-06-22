@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau-microservice</artifactId>
-		<version>9.0.0-SNAPSHOT</version>
+		<version>9.0-B1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>juneau-microservice-ftest</artifactId>
@@ -44,11 +44,6 @@
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server-jaxrs</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-mock-utest</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
