@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau-rest</artifactId>
-		<version>9.0.0-SNAPSHOT</version>
+		<version>9.0-B1-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>juneau-rest-server-jaxrs</artifactId>
