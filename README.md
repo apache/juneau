@@ -15,4 +15,4 @@
 
 # Juneau
 
-Please visit the [wiki]([http://juneau.apache.org](https://github.com/apache/juneau/wiki) and [homepage](https://juneau.apache.org/) for information on this project.
+Please visit the [wiki](https://github.com/apache/juneau/wiki) and [homepage](https://juneau.apache.org/) for information on this project.
