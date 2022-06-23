@@ -1,0 +1,21 @@
+notifications:
+  commits:      commits@juneau.apache.org
+  issues:       dev@juneau.apache.org
+  pullrequests: dev@juneau.apache.org
+  jira_options: link label worklog
+  jobs:         dev@juneau.apache.org
+  discussions:  dev@juneau.apache.org
+  
+github:
+  description: "Apache Juneau"
+  homepage: https://juneau.apache.org/
+  labels:
+    - json
+    - juneau
+    - http
+    - rest
+    - apache
+  features:
+    wiki: true
+    issues: true
+    projects: true
