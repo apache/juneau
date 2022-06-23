@@ -25,13 +25,13 @@
 
 Apache Juneau™ is a single cohesive Java ecosystem consisting of the following parts:
 
-* _juneau-marshall_	- A universal toolkit for marshalling POJOs to a variety of content types using a common framework with no external library dependencies.
-* *juneau-marshall-rdf*	- Additional support for various RDF languages.
-* *juneau-dto*	- A variety of predefined DTOs for serializing and parsing languages such as HTML5, Swagger and ATOM.
-* *juneau-config*	- A sophisticated configuration file API.
-* *juneau-rest-server*	- A universal REST server API for creating Swagger-based self-documenting REST interfaces using POJOs, simply deployed as one or more top-level servlets in any Servlet 3.1.0+ container. Includes Spring Boot and JAX-RS integration support.
-* *juneau-rest-client* - A universal REST client API for interacting with Juneau or 3rd-party REST interfaces using POJOs and proxy interfaces.
-* *juneau-rest-springboot* - Spring boot integration for juneau-rest-servlet. 
+* **juneau-marshall**	- A universal toolkit for marshalling POJOs to a variety of content types using a common framework with no external library dependencies.
+* **juneau-marshall-rdf**	- Additional support for various RDF languages.
+* **juneau-dto**	- A variety of predefined DTOs for serializing and parsing languages such as HTML5, Swagger and ATOM.
+* **juneau-config**	- A sophisticated configuration file API.
+* **juneau-rest-server**	- A universal REST server API for creating Swagger-based self-documenting REST interfaces using POJOs, simply deployed as one or more top-level servlets in any Servlet 3.1.0+ container. Includes Spring Boot and JAX-RS integration support.
+* **juneau-rest-client** - A universal REST client API for interacting with Juneau or 3rd-party REST interfaces using POJOs and proxy interfaces.
+* **juneau-rest-springboot** - Spring boot integration for juneau-rest-servlet. 
 
 Questions via email to dev@juneau.apache.org are always welcome.
 
