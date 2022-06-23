@@ -19,6 +19,7 @@
 * [Wiki](https://github.com/apache/juneau/wiki)
 * [Javadocs](https://juneau.apache.org/site/apidocs-9.0-B1/index.html)
 * [Documentation](https://juneau.apache.org/site/apidocs-9.0-B1/overview-summary.html#overview.description)
+* [Pet Store App]([https://juneau.apache.org/site/apidocs-9.0-B1/overview-summary.html#overview.description](https://github.com/apache/juneau-petstore))
 
 ## Description
 
