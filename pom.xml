@@ -19,7 +19,7 @@
 
 	<groupId>org.apache.juneau</groupId>
 	<artifactId>juneau</artifactId>
-	<version>9.0-B1-SNAPSHOT</version>
+	<version>9.0-B1</version>
 	<packaging>pom</packaging>
 	<name>juneau</name>
 	<description>Apache Juneau</description>
@@ -52,7 +52,7 @@
 		<javax.inject.version>1</javax.inject.version>
 		<springboot.version>2.7.0</springboot.version>
 		<xml.apis.version>1.4.01</xml.apis.version>
-		<javadoc.executable></javadoc.executable>
+		<javadoc.executable />
 	</properties>
 
 	<dependencyManagement>
@@ -391,7 +391,7 @@
 		<connection>scm:git:https://gitbox.apache.org/repos/asf/juneau.git</connection>
 		<developerConnection>scm:git:https://gitbox.apache.org/repos/asf/juneau.git</developerConnection>
 		<url>https://github.com/apache/juneau</url>
-		<tag>HEAD</tag>
+		<tag>juneau-9.0-B1-RC1</tag>
 	</scm>
 	<issueManagement>
 		<system>Jira</system>
