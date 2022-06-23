@@ -19,13 +19,13 @@
 * [Wiki](https://github.com/apache/juneau/wiki)
 * [Javadocs](https://juneau.apache.org/site/apidocs-9.0-B1/index.html)
 * [Documentation](https://juneau.apache.org/site/apidocs-9.0-B1/overview-summary.html#overview.description)
-* [Pet Store App]([https://juneau.apache.org/site/apidocs-9.0-B1/overview-summary.html#overview.description](https://github.com/apache/juneau-petstore))
+* [Pet Store App](https://github.com/apache/juneau-petstore)
 
 ## Description
 
 Apache Juneau™ is a single cohesive Java ecosystem consisting of the following parts:
 
-* *juneau-marshall*	- A universal toolkit for marshalling POJOs to a variety of content types using a common framework with no external library dependencies.
+* _juneau-marshall_	- A universal toolkit for marshalling POJOs to a variety of content types using a common framework with no external library dependencies.
 * *juneau-marshall-rdf*	- Additional support for various RDF languages.
 * *juneau-dto*	- A variety of predefined DTOs for serializing and parsing languages such as HTML5, Swagger and ATOM.
 * *juneau-config*	- A sophisticated configuration file API.
