@@ -50,7 +50,11 @@
 		|	MyPojo <jv>myPojo</jv> = Json.<jsf>DEFAULT</jsf>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
 		|	String <jv>string</jv> = Json.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
 	</p>
-	
+	<p class='bjava'>
+		|	<jc>// Using shortcut methods.</jc>
+		|	MyPojo <jv>myPojo</jv> = Json.<jsf>from</jsf>(<jv>string</jv>, MyPojo.<jk>class</jk>);
+		|	String <jv>string</jv> = Json.<jsf>to</jsf>(<jv>myPojo</jv>);
+	</p>
 	<ul class='seealso'>
 		<li class='doclink'>{@doc g.LanguageSupport Language Support} - Glossary of all supported languages.
 	</ul>

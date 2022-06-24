@@ -89,15 +89,15 @@ public abstract class Marshall {
 	/**
 	 * Serializes a POJO directly to either a <c>String</c> or <code><jk>byte</jk>[]</code> depending on the serializer type.
 	 *
-	 * @param o The object to serialize.
+	 * @param object The object to serialize.
 	 * @return
 	 * 	The serialized object.
 	 * 	<br>Character-based serializers will return a <c>String</c>
 	 * 	<br>Stream-based serializers will return a <code><jk>byte</jk>[]</code>
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	public Object write(Object o) throws SerializeException {
-		return s.serialize(o);
+	public Object write(Object object) throws SerializeException {
+		return s.serialize(object);
 	}
 
 	/**
@@ -106,7 +106,7 @@ public abstract class Marshall {
 	 * <p>
 	 * Equivalent to calling <c>serializer.createSession().serialize(o, output);</c>
 	 *
-	 * @param o The object to serialize.
+	 * @param object The object to serialize.
 	 * @param output
 	 * 	The output object.
 	 * 	<br>Character-based serializers can handle the following output class types:
@@ -124,8 +124,8 @@ public abstract class Marshall {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public final void write(Object o, Object output) throws SerializeException, IOException {
-		s.serialize(o, output);
+	public final void write(Object object, Object output) throws SerializeException, IOException {
+		s.serialize(object, output);
 	}
 
 	/**
@@ -136,12 +136,12 @@ public abstract class Marshall {
 	 * <br>For stream-based serializers, this converts the returned byte array to a string based on
 	 * the {@link org.apache.juneau.serializer.OutputStreamSerializer.Builder#binaryFormat(BinaryFormat)} setting.
 	 *
-	 * @param o The object to serialize.
+	 * @param object The object to serialize.
 	 * @return The output serialized to a string.
 	 */
-	public final String toString(Object o) {
+	public final String toString(Object object) {
 		try {
-			return s.serializeToString(o);
+			return s.serializeToString(object);
 		} catch (Exception e) {
 			throw runtimeException(e);
 		}
@@ -151,11 +151,11 @@ public abstract class Marshall {
 	/**
 	 * Convenience method for calling <c>System.out.println(...)</c> on the specified object after calling {@link #toString(Object)}.
 	 *
-	 * @param o The object to serialize and then send to the console.
+	 * @param object The object to serialize and then send to the console.
 	 * @return This object.
 	 */
-	public final Marshall println(Object o) {
-		System.out.println(toString(o));
+	public final Marshall println(Object object) {
+		System.out.println(toString(object));
 		return this;
 	}
 
@@ -309,47 +309,6 @@ public abstract class Marshall {
 	}
 
 	/**
-	 * Same as {@link #read(Object,Type,Type...)} but reads from a string and thus doesn't throw an <c>IOException</c>.
-	 *
-	 * @param <T> The class type of the object to create.
-	 * @param input
-	 * 	The input.
-	 * 	<br>Character-based parsers can handle the following input class types:
-	 * 	<ul>
-	 * 		<li><jk>null</jk>
-	 * 		<li>{@link Reader}
-	 * 		<li>{@link CharSequence}
-	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
-	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).
-	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
-	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).
-	 * 		<li>{@link File} containing system encoded text (or charset defined by
-	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#fileCharset(Charset)} property value).
-	 * 	</ul>
-	 * 	<br>Stream-based parsers can handle the following input class types:
-	 * 	<ul>
-	 * 		<li><jk>null</jk>
-	 * 		<li>{@link InputStream}
-	 * 		<li><code><jk>byte</jk>[]</code>
-	 * 		<li>{@link File}
-	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link org.apache.juneau.parser.InputStreamParser.Builder#binaryFormat(BinaryFormat)} setting.
-	 * 	</ul>
-	 * @param type
-	 * 	The object type to create.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * @param args
-	 * 	The type arguments of the class if it's a collection or map.
-	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
-	 * 	<br>Ignored if the main type is not a map or collection.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
-	 */
-	public final <T> T read(String input, Type type, Type...args) throws ParseException {
-		return p.parse(input, type, args);
-	}
-
-	/**
 	 * Same as {@link #read(Object, Type, Type...)} except optimized for a non-parameterized class.
 	 *
 	 * <p>
@@ -378,51 +337,32 @@ public abstract class Marshall {
 	 * @param <T> The class type of the object being created.
 	 * @param input
 	 * 	The input.
-	 * 	See {@link #read(Object, Type, Type...)} for details.
+	 * 	<br>Character-based parsers can handle the following input class types:
+	 * 	<ul>
+	 * 		<li><jk>null</jk>
+	 * 		<li>{@link Reader}
+	 * 		<li>{@link CharSequence}
+	 * 		<li>{@link InputStream} containing UTF-8 encoded text (or charset defined by
+	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).
+	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
+	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#streamCharset(Charset)} property value).
+	 * 		<li>{@link File} containing system encoded text (or charset defined by
+	 * 			{@link org.apache.juneau.parser.ReaderParser.Builder#fileCharset(Charset)} property value).
+	 * 	</ul>
+	 * 	<br>Stream-based parsers can handle the following input class types:
+	 * 	<ul>
+	 * 		<li><jk>null</jk>
+	 * 		<li>{@link InputStream}
+	 * 		<li><code><jk>byte</jk>[]</code>
+	 * 		<li>{@link File}
+	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link org.apache.juneau.parser.InputStreamParser.Builder#binaryFormat(BinaryFormat)} setting.
+	 * 	</ul>
 	 * @param type The object type to create.
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public final <T> T read(Object input, Class<T> type) throws ParseException, IOException {
-		return p.parse(input, type);
-	}
-
-	/**
-	 * Same as {@link #read(Object,Class)} but reads from a string and thus doesn't throw an <c>IOException</c>.
-	 *
-	 * <p>
-	 * This is the preferred parse method for simple types since you don't need to cast the results.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	Marshall <jv>marshall</jv> = Json.<jsf>DEFAULT</jsf>;
-	 *
-	 * 	<jc>// Parse into a string.</jc>
-	 * 	String <jv>string</jv> = <jv>marshall</jv>.read(<jv>json</jv>, String.<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse into a bean.</jc>
-	 * 	MyBean <jv>bean</jv> = <jv>marshall</jv>.read(<jv>json</jv>, MyBean.<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse into a bean array.</jc>
-	 * 	MyBean[] <jv>beanArray</jv> = <jv>marshall</jv>.read(<jv>json</jv>, MyBean[].<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse into a linked-list of objects.</jc>
-	 * 	List <jv>list</jv> = <jv>marshall</jv>.read(<jv>json</jv>, LinkedList.<jk>class</jk>);
-	 *
-	 * 	<jc>// Parse into a map of object keys/values.</jc>
-	 * 	Map <jv>map</jv> = <jv>marshall</jv>.read(<jv>json</jv>, TreeMap.<jk>class</jk>);
-	 * </p>
-	 *
-	 * @param <T> The class type of the object being created.
-	 * @param input
-	 * 	The input.
-	 * 	See {@link #read(Object, Type, Type...)} for details.
-	 * @param type The object type to create.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public final <T> T read(String input, Class<T> type) throws ParseException {
 		return p.parse(input, type);
 	}
 }
