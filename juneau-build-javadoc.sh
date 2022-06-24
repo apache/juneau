@@ -13,8 +13,21 @@
 
 . juneau-env.sh
 
+function fail_with_message {
+	X_DATE=$(date +'%H:%M:%S') 
+	echo ' '
+	echo "-------------------------------------------------------------------------------"
+	echo "[$X_DATE] $1"
+	echo '-------------------------------------------------------------------------------'
+	fail; 
+}
+
 cd juneau-doc
+
 mvn install
+test -f target/juneau-doc-${JUNEAU_VERSION}-SNAPSHOT.jar || fail_with_message "target/juneau-doc-${JUNEAU_VERSION}-SNAPSHOT.jar not found."
+test -f ../juneau-all/target/juneau-all-${JUNEAU_VERSION}-SNAPSHOT.jar || fail_with_message "../juneau-all/target/juneau-all-${JUNEAU_VERSION}-SNAPSHOT.jar.not found"
+
 export cp=target/juneau-doc-${JUNEAU_VERSION}-SNAPSHOT.jar:../juneau-all/target/juneau-all-${JUNEAU_VERSION}-SNAPSHOT.jar
 java -DjuneauVersion=$JUNEAU_VERSION -cp $cp org.apache.juneau.doc.internal.DocGenerator 
 cd .. 

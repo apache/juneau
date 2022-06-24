@@ -13,9 +13,10 @@
 
 . ~/.profile
 set -e
-export JUNEAU_VERSION=9.0.B1
+export JUNEAU_VERSION=9.0-B1
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_162.jdk/Contents/Home
 export PATH=$JAVA_HOME/bin:$PATH
 export PATH=/opt/homebrew/bin:$PATH
 export GPG_TTY=$(tty)
 [ -z "$X_VERSION" ] && export X_VERSION="${JUNEAU_VERSION}-SNAPSHOT"
+echo JUNEAU_VERSION=$JUNEAU_VERSION

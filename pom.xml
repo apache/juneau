@@ -198,7 +198,9 @@
 						
 						<!-- Files needed by Heroku as-is -->
 						<exclude>**/app.json</exclude>						
-						<exclude>**/Procfile</exclude>						
+						<exclude>**/Procfile</exclude>	
+											
+						<exclude>**/.asf.yaml</exclude>
 					</excludes>
 					<consoleOutput>true</consoleOutput>
 					<!-- Note:  useEclipseDefaultExcludes does not work for subprojects.  See RAT-107 -->
