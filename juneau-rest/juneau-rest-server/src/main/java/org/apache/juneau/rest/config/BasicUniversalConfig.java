@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.config;
 
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.json.*;
@@ -138,7 +139,8 @@ import org.apache.juneau.xml.*;
 		OpenApiSerializer.class,
 		MsgPackSerializer.class,
 		SoapXmlSerializer.class,
-		PlainTextSerializer.class
+		PlainTextSerializer.class,
+		CsvSerializer.class
 	},
 
 	// Default parsers for all Java methods in the class.
@@ -151,7 +153,8 @@ import org.apache.juneau.xml.*;
 		UrlEncodingParser.class,
 		OpenApiParser.class,
 		MsgPackParser.class,
-		PlainTextParser.class
+		PlainTextParser.class,
+		CsvParser.class
 	},
 
 	// Optional external configuration file.
