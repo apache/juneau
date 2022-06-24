@@ -13,27 +13,33 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'juneau-petstore', created:'8.2.0', updated:'9.0.0'}
+{title:'Running the Pet Store App', created:'9.0.0'}
 
 <div class='topic'>
 	<p>
-		The <c>PetStore</c> application is an functional application meant to demonstrate using Juneau with Spring Boot
-		to create an end-to-end client/server REST API. 
-	</p>
-	<p>
-		What makes Juneau unique is the ability to create Java interfaces that behave just like RPC, but using REST
-		as the underlying protocol.  And the technology it not tied to any platform so it can be used in any environment
-		by simply pulling in Maven dependencies.  The server-side need only provide the ability to host a servlet.
-	</p>
-	<p>
-		Visit the <a class='doclink' href='https://github.com/apache/juneau-petstore'>GitHub project</a> hosting the application.
-	</p>
-	<p>
-		The project is broken down into the following subprojects:
+		The Pet Store app is a Spring Boot application that can be started up by running the <c>App</c> class.
+		This starts the application on port 5000.  It can also be started in a docker container using the following
+		instructions:
 	</p>
 	<ul class='spaced-list'>
-		<li><c>juneau-petstore-api</c> - Contains the Java interface and DTOs for the petstore application.
-		<li><c>juneau-petstore-server</c> - Contains the server-side Java implementation of the petstore Java interface as a REST resource.
-		<li><c>juneau-petstore-client</c> - Contains the client-side Java proxy of the petstore Java interface.
+		<li>
+			Install <a class='doclink' href='https://docs.docker.com/install/'>docker</a> on your machine.
+		</li>
+		<li>
+			<p>
+				Clone the Petstore project on your machine.
+			</p>
+			<p class='bcode w800'>
+				|	git clone https://github.com/apache/juneau-petstore.git
+			</p>
+		</li>
+		<li>
+			<p>
+				Open terminal inside the project directory and run the below command to start the app.
+			</p>
+			<p class='bcode w800'>
+				|	docker build . -t petstore &amp;&amp; docker run -p 5000:5000 petstore
+			</p>
+		</li>
 	</ul>
 </div>
