@@ -19,6 +19,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
+import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 
 /**

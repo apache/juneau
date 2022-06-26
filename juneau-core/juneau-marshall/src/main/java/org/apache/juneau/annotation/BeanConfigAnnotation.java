@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 

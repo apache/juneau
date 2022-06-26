@@ -12,10 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.core.dto;
 
+import org.apache.juneau.*;
 import org.apache.juneau.dto.atom.Feed;
 import org.apache.juneau.dto.swagger.Swagger;
 import org.apache.juneau.html.HtmlSerializer;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.json.*;
 
 import static org.apache.juneau.dto.atom.AtomBuilder.*;

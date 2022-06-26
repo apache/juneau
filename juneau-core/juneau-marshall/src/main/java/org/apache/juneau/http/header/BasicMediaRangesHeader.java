@@ -18,6 +18,8 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.*;
+
 /**
  * Category of headers that consist of multiple parameterized string values.
  *

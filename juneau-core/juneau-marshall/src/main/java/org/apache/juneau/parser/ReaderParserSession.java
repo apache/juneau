@@ -20,8 +20,8 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 

@@ -21,9 +21,9 @@ import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;

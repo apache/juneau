@@ -17,7 +17,7 @@ import java.io.*;
 
 import javax.imageio.*;
 
-import org.apache.juneau.http.header.*;
+import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
 
 /**

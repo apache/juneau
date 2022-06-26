@@ -60,7 +60,6 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.RestRequest;
 import org.apache.juneau.rest.client.RestResponse;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.header.ContentType;
 import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.serializer.*;

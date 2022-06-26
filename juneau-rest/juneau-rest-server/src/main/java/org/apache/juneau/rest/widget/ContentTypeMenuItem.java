@@ -17,8 +17,8 @@ import static org.apache.juneau.dto.html5.HtmlBuilder.*;
 import java.net.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.dto.html5.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.serializer.*;

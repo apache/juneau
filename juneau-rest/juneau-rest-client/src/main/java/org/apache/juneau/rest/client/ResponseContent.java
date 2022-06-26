@@ -29,7 +29,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.entity.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
