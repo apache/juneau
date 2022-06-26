@@ -19,6 +19,7 @@ import static org.apache.juneau.testutils.StreamUtils.*;
 import java.io.*;
 import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;

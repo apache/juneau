@@ -26,8 +26,8 @@ import javax.ws.rs.core.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 

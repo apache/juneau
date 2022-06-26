@@ -16,9 +16,9 @@ import static org.junit.runners.MethodSorters.*;
 
 import java.util.*;
 
-import org.apache.juneau.http.header.*;
+import org.apache.juneau.*;
+import static org.apache.juneau.StringRanges.*;
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.apache.juneau.http.header.StringRanges.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 
 import org.junit.*;
