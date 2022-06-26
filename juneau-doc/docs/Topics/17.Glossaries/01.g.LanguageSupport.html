@@ -31,7 +31,7 @@
 			<td><c>text/html</c></td>
 			<td><ul><li class='jc'>{@link oaj.html.HtmlSerializer}<li class='jc'>{@link oaj.html.HtmlStrippedDocSerializer}<li class='jc'>{@link oaj.html.HtmlDocSerializer}</ul></td>
 			<td><ul><li class='jc'>{@link oaj.html.HtmlParser}</ul></td>
-			<td><ul><li class='jc'>{@link oaj.marshall.Html}</ul></td>
+			<td><ul><li class='jc'>{@link oaj.marshaller.Html}</ul></td>
 			<td>{@doc jm.HtmlDetails HTML Details}</td>
 		</tr>
 		<tr>
@@ -45,14 +45,14 @@
 			<td><c>application/json</c><br><c>text/json</c></td>
 			<td><ul><li class='jc'>{@link oaj.json.JsonSerializer}<li class='jc'>{@link oaj.json.JsonSerializer.Readable}<li class='jc'>{@link oaj.json.JsonSerializer.ReadableSafe}</ul></td>
 			<td><ul><li class='jc'>{@link oaj.json.JsonParser}</ul></td>
-			<td><ul><li class='jc'>{@link oaj.marshall.Json}</ul></td>
+			<td><ul><li class='jc'>{@link oaj.marshaller.Json}</ul></td>
 			<td>{@doc jm.JsonDetails JSON Details}</td>
 		</tr>
 		<tr>
 			<td><c>application/json+simple</c><br><c>text/json+simple</c></td>
 			<td><ul><li class='jc'>{@link oaj.json.SimpleJsonSerializer}</ul></td>
 			<td><ul><li class='jc'>{@link oaj.json.JsonParser}</ul></td>
-			<td><ul><li class='jc'>{@link oaj.marshall.SimpleJson}</ul></td>
+			<td><ul><li class='jc'>{@link oaj.marshaller.SimpleJson}</ul></td>
 			<td>{@doc jm.SimplifiedJson Simplified JSON}</td>
 		</tr>
 		<tr>
@@ -66,28 +66,28 @@
 			<td><c>octal/msgpack</c></td>
 			<td><ul><li class='jc'>{@link oaj.msgpack.MsgPackSerializer}</ul></td>
 			<td><ul><li class='jc'>{@link oaj.msgpack.MsgPackParser}</ul></td>
-			<td><ul><li class='jc'>{@link oaj.marshall.MsgPack}</ul></td>
+			<td><ul><li class='jc'>{@link oaj.marshaller.MsgPack}</ul></td>
 			<td>{@doc jm.MsgPackDetails MessagePack Details}</td>
 		</tr>
 		<tr>
 			<td><c>text/n3</c></td>
 			<td><ul><li class='jc'>{@link oaj.jena.N3Serializer}</ul></td>
 			<td><ul><li class='jc'>{@link oaj.jena.N3Parser}</ul></td>
-			<td><ul><li class='jc'>{@link oaj.marshall.N3}</ul></td>
+			<td><ul><li class='jc'>{@link oaj.marshaller.N3}</ul></td>
 			<td>{@doc juneau-marshall-rdf juneau-marshall-rdf}</td>
 		</tr>
 		<tr>
 			<td><c>text/n-triple</c></td>
 			<td><ul><li class='jc'>{@link oaj.jena.NTripleSerializer}</ul></td>
 			<td><ul><li class='jc'>{@link oaj.jena.NTripleParser}</ul></td>
-			<td><ul><li class='jc'>{@link oaj.marshall.NTriple}</ul></td>
+			<td><ul><li class='jc'>{@link oaj.marshaller.NTriple}</ul></td>
 			<td>{@doc juneau-marshall-rdf juneau-marshall-rdf}</td>
 		</tr>
 		<tr>
 			<td><c>text/openapi</c></td>
 			<td><ul><li class='jc'>{@link oaj.oapi.OpenApiSerializer}</ul></td>
 			<td><ul><li class='jc'>{@link oaj.oapi.OpenApiParser}</ul></td>
-			<td><ul><li class='jc'>{@link oaj.marshall.OpenApi}</ul></td>
+			<td><ul><li class='jc'>{@link oaj.marshaller.OpenApi}</ul></td>
 			<td>{@doc jm.OpenApiDetails OpenAPI Details}</td>
 		</tr>
 		<tr>
@@ -101,14 +101,14 @@
 			<td><c>text/xml+rdf<c></td>
 			<td><ul><li class='jc'>{@link oaj.jena.RdfXmlSerializer}</ul></td>
 			<td><ul><li class='jc'>{@link oaj.jena.RdfXmlParser}</ul></td>
-			<td><ul><li class='jc'>{@link oaj.marshall.RdfXml}</ul></td>
+			<td><ul><li class='jc'>{@link oaj.marshaller.RdfXml}</ul></td>
 			<td>{@doc juneau-marshall-rdf juneau-marshall-rdf}</td>
 		</tr>
 		<tr>
 			<td><c>text/xml+rdf+abbrev</c></td>
 			<td><ul><li class='jc'>{@link oaj.jena.RdfXmlAbbrevSerializer}</ul></td>
 			<td><ul><li class='jc'>{@link oaj.jena.RdfXmlParser}</ul></td>
-			<td><ul><li class='jc'>{@link oaj.marshall.RdfXmlAbbrev}</ul></td>
+			<td><ul><li class='jc'>{@link oaj.marshaller.RdfXmlAbbrev}</ul></td>
 			<td>{@doc juneau-marshall-rdf juneau-marshall-rdf}</td>
 		</tr>
 		<tr>
@@ -122,28 +122,28 @@
 			<td><c>text/turtle</c></td>
 			<td><ul><li class='jc'>{@link oaj.jena.TurtleSerializer}</ul></td>
 			<td><ul><li class='jc'>{@link oaj.jena.TurtleParser}</ul></td>
-			<td><ul><li class='jc'>{@link oaj.marshall.Turtle}</ul></td>
+			<td><ul><li class='jc'>{@link oaj.marshaller.Turtle}</ul></td>
 			<td>{@doc juneau-marshall-rdf juneau-marshall-rdf}</td>
 		</tr>
 		<tr>
 			<td><c>text/uon</c></td>
 			<td><ul><li class='jc'>{@link oaj.uon.UonSerializer}</ul></td>
 			<td><ul><li class='jc'>{@link oaj.uon.UonParser}</ul></td>
-			<td><ul><li class='jc'>{@link oaj.marshall.Uon}</ul></td>
+			<td><ul><li class='jc'>{@link oaj.marshaller.Uon}</ul></td>
 			<td>{@doc jm.UonDetails UON Details}</td>
 		</tr>
 		<tr>
 			<td><c>application/x-www-form-urlencoded</c></td>
 			<td><ul><li class='jc'>{@link oaj.urlencoding.UrlEncodingSerializer}</ul></td>
 			<td><ul><li class='jc'>{@link oaj.urlencoding.UrlEncodingParser}</ul></td>
-			<td><ul><li class='jc'>{@link oaj.marshall.UrlEncoding}</ul></td>
+			<td><ul><li class='jc'>{@link oaj.marshaller.UrlEncoding}</ul></td>
 			<td>{@doc jm.UrlEncodingDetails URL-Encoding Details}</td>
 		</tr>
 		<tr>
 			<td><c>text/xml</c></td>
 			<td><ul><li class='jc'>{@link oaj.xml.XmlSerializer}<li class='jc'>{@link oaj.xml.XmlDocSerializer}</ul></td>
 			<td><ul><li class='jc'>{@link oaj.xml.XmlParser}</ul></td>
-			<td><ul><li class='jc'>{@link oaj.marshall.Xml}</ul></td>
+			<td><ul><li class='jc'>{@link oaj.marshaller.Xml}</ul></td>
 			<td>{@doc jm.XmlDetails XML Details}</td>
 		</tr>
 	</table>

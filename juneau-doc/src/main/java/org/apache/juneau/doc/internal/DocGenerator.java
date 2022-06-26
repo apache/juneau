@@ -20,7 +20,7 @@ import java.nio.file.*;
 import java.util.*;
 
 import org.apache.juneau.internal.*;
-import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshaller.*;
 
 /**
  * Utility for generating the overview.html page.

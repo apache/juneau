@@ -23,7 +23,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshaller.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.swap.*;

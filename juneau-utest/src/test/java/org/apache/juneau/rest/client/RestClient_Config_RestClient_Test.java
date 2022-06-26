@@ -37,7 +37,7 @@ import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.*;
@@ -354,15 +354,15 @@ public class RestClient_Config_RestClient_Test {
 	}
 
 	@Test
-	public void a08_marshall() throws Exception {
-		RestClient rc = MockRestClient.create(A.class).marshall(Xml.DEFAULT).build();
+	public void a08_marshaller() throws Exception {
+		RestClient rc = MockRestClient.create(A.class).marshaller(Xml.DEFAULT).build();
 		ABean b = rc.post("/echoBody",bean).run().cacheContent().assertContent().is("<object><f>1</f></object>").getContent().as(ABean.class);
 		assertObject(b).isSameJsonAs(bean);
 	}
 
 	@Test
 	public void a09_marshalls() throws Exception {
-		final RestClient x = MockRestClient.create(A.class).marshalls(Xml.DEFAULT,Json.DEFAULT).build();
+		final RestClient x = MockRestClient.create(A.class).marshallers(Xml.DEFAULT,Json.DEFAULT).build();
 
 		assertThrown(()->x.post("/echoBody",bean).run()).asMessage().is("Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.");
 

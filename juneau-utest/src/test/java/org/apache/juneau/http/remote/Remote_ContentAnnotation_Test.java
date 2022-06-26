@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.Content;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;

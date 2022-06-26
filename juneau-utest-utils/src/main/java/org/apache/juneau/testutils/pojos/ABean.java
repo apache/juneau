@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.testutils.pojos;
 
-import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshaller.*;
 
 public class ABean {
 	public int a;

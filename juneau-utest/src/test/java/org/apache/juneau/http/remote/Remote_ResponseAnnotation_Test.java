@@ -21,7 +21,7 @@ import java.io.*;
 
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Response;
-import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.RestResponse;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;

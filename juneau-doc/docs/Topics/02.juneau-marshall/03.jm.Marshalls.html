@@ -13,22 +13,19 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Marshalls'}
+{title:'Marshallers'}
 
 <div class='topic'>
 	<p>
-		{@link oaj.marshall.Marshall Marshalls} are simple pairings of a {@link oaj.serializer.Serializer}
+		{@link oaj.marshaller.Marshaller Marshallers} are simple pairings of a {@link oaj.serializer.Serializer}
 		and {@link oaj.parser.Parser} with convenience methods for serializing and parsing POJOs.
 	</p>
 	<ul class='javatree'>
-		<li class='jac'>{@link oaj.marshall.Marshall}
+		<li class='jac'>{@link oaj.marshaller.Marshaller}
 			<ul class='javatreec'>
-				<li class='jm'>{@link oaj.marshall.Marshall#read(Object,Class) read(Object,Class)}
-				<li class='jm'>{@link oaj.marshall.Marshall#read(Object,Type,Type...) read(Object,Type,Type...)}
-				<li class='jm'>{@link oaj.marshall.Marshall#write(Object) write(Object)} 
-				<li class='jm'>{@link oaj.marshall.Marshall#write(Object,Object) write(Object,Object)}
-				<li class='jm'>{@link oaj.marshall.Marshall#toString(Object) toString(Object)}
-				<li class='jm'>{@link oaj.marshall.Marshall#println(Object) println(Object)}
+				<li class='jm'>{@link oaj.marshaller.Marshaller#read(Object,Class) read(Object,Class)}
+				<li class='jm'>{@link oaj.marshaller.Marshaller#read(Object,Type,Type...) read(Object,Type,Type...)}
+				<li class='jm'>{@link oaj.marshaller.Marshaller#write(Object,Object) write(Object,Object)}
 			</ul>
 		</li>
 	</ul>
@@ -36,7 +33,7 @@
 		Marshalls are often cleaner to use on-the-fly since they have simplified names.
 	</p>
 	<p>
-		The following shows the {@link oaj.marshall.Json} marshall in action:
+		The following shows the {@link oaj.marshaller.Json} marshaller in action:
 	</p>
 	<h5 class='figure'>Examples:</h5>
 	<p class='bjava'>

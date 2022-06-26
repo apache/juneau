@@ -15,7 +15,7 @@ package org.apache.juneau.transforms;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshaller.*;
 import org.junit.*;
 
 /**

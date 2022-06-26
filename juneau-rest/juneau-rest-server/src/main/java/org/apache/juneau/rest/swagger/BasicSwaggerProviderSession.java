@@ -36,7 +36,7 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
-import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshaller.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;

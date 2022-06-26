@@ -14,11 +14,11 @@ package org.apache.juneau.utils;
 
 import java.text.*;
 
-import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshaller.*;
 
 /**
  * A utility for logging formatted messages to the console.
- * Uses the {@link SimpleJson} marshall for serializing objects so any
+ * Uses the {@link SimpleJson} marshaller for serializing objects so any
  * POJOs can be used as format arguments.
  */
 public class Console {
@@ -27,7 +27,7 @@ public class Console {
 	 * Prints a message with arguments to {@link System#out}.
 	 *
 	 * <p>
-	 * Arguments are automatically converted to strings using the {@link SimpleJson} marshall.
+	 * Arguments are automatically converted to strings using the {@link SimpleJson} marshaller.
 	 *
 	 * <p>
 	 * Useful for debug messages.
@@ -38,7 +38,7 @@ public class Console {
 	 * </p>
 	 *
 	 * @param msg The {@link MessageFormat}-styled message.
-	 * @param args The arguments sent to the the formatter after running them through the {@link SimpleJson} marshall.
+	 * @param args The arguments sent to the the formatter after running them through the {@link SimpleJson} marshaller.
 	 */
 	public static final void out(String msg, Object...args) {
 		System.out.println(format(msg, args));
@@ -48,7 +48,7 @@ public class Console {
 	 * Prints a message with arguments to {@link System#err}.
 	 *
 	 * <p>
-	 * Arguments are automatically converted to strings using the {@link SimpleJson} marshall.
+	 * Arguments are automatically converted to strings using the {@link SimpleJson} marshaller.
 	 *
 	 * <p>
 	 * Useful for debug messages.
@@ -59,7 +59,7 @@ public class Console {
 	 * </p>
 	 *
 	 * @param msg The {@link MessageFormat}-styled message.
-	 * @param args The arguments sent to the the formatter after running them through the {@link SimpleJson} marshall.
+	 * @param args The arguments sent to the the formatter after running them through the {@link SimpleJson} marshaller.
 	 */
 	public static final void err(String msg, Object...args) {
 		System.err.println(format(msg, args));  // NOT DEBUG
@@ -69,7 +69,7 @@ public class Console {
 	 * Formats a message with arguments.
 	 *
 	 * <p>
-	 * Arguments are automatically converted to strings using the {@link SimpleJson} marshall.
+	 * Arguments are automatically converted to strings using the {@link SimpleJson} marshaller.
 	 *
 	 * <p>
 	 * Useful for debug messages.
@@ -80,7 +80,7 @@ public class Console {
 	 * </p>
 	 *
 	 * @param msg The {@link MessageFormat}-styled message.
-	 * @param args The arguments sent to the the formatter after running them through the {@link SimpleJson} marshall.
+	 * @param args The arguments sent to the the formatter after running them through the {@link SimpleJson} marshaller.
 	 * @return This object.
 	 */
 	public static final String format(String msg, Object...args) {

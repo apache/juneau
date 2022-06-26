@@ -53,7 +53,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshaller.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
@@ -1376,14 +1376,14 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
-		public Builder marshall(Marshall value) {
-			super.marshall(value);
+		public Builder marshaller(Marshaller value) {
+			super.marshaller(value);
 			return this;
 		}
 
 		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
-		public Builder marshalls(Marshall...value) {
-			super.marshalls(value);
+		public Builder marshallers(Marshaller...value) {
+			super.marshallers(value);
 			return this;
 		}
 

@@ -28,7 +28,7 @@ import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshaller.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

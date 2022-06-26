@@ -25,7 +25,7 @@ import java.util.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.testutils.pojos.*;

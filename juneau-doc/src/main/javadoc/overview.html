@@ -173,7 +173,7 @@
 	<ol>
 		<li><p><a class='doclink' href='#juneau-marshall.jm.BeanContexts'>Bean Contexts</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#juneau-marshall.jm.SerializersAndParsers'>Serializers and Parsers</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#juneau-marshall.jm.Marshalls'>Marshalls</a></p>
+		<li><p><a class='doclink' href='#juneau-marshall.jm.Marshalls'>Marshallers</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.jm.JavaBeansSupport'>Java Beans Support</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
 		<ol>
 			<li><p><a class='doclink' href='#juneau-marshall.jm.JavaBeansSupport.jm.BeanAnnotation'>@Bean Annotation</a><span class='update'>updated: 8.2.0,<b>9.0.0</b></span></p>
@@ -550,7 +550,7 @@
 				<ul>
 					<li>Serializers and parsers for various languages.
 					<li>Marshalling support for HTTP headers/parts/requests/responses.
-					<li>Marshall-based assertions for simplified unit testing.
+					<li>Marshaller-based assertions for simplified unit testing.
 				</ul>
 			</td>
 			<td>
@@ -2297,22 +2297,19 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.Marshalls' id='juneau-marshall.jm.Marshalls'>2.3 - Marshalls</a></h3>
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.Marshalls' id='juneau-marshall.jm.Marshalls'>2.3 - Marshallers</a></h3>
 <div class='topic'><!-- START: 2.3 - juneau-marshall.jm.Marshalls -->
 <div class='topic'>
 	<p>
-		{@link org.apache.juneau.marshall.Marshall Marshalls} are simple pairings of a {@link org.apache.juneau.serializer.Serializer}
+		{@link org.apache.juneau.marshaller.Marshaller Marshallers} are simple pairings of a {@link org.apache.juneau.serializer.Serializer}
 		and {@link org.apache.juneau.parser.Parser} with convenience methods for serializing and parsing POJOs.
 	</p>
 	<ul class='javatree'>
-		<li class='jac'>{@link org.apache.juneau.marshall.Marshall}
+		<li class='jac'>{@link org.apache.juneau.marshaller.Marshaller}
 			<ul class='javatreec'>
-				<li class='jm'>{@link org.apache.juneau.marshall.Marshall#read(Object,Class) read(Object,Class)}
-				<li class='jm'>{@link org.apache.juneau.marshall.Marshall#read(Object,Type,Type...) read(Object,Type,Type...)}
-				<li class='jm'>{@link org.apache.juneau.marshall.Marshall#write(Object) write(Object)} 
-				<li class='jm'>{@link org.apache.juneau.marshall.Marshall#write(Object,Object) write(Object,Object)}
-				<li class='jm'>{@link org.apache.juneau.marshall.Marshall#toString(Object) toString(Object)}
-				<li class='jm'>{@link org.apache.juneau.marshall.Marshall#println(Object) println(Object)}
+				<li class='jm'>{@link org.apache.juneau.marshaller.Marshaller#read(Object,Class) read(Object,Class)}
+				<li class='jm'>{@link org.apache.juneau.marshaller.Marshaller#read(Object,Type,Type...) read(Object,Type,Type...)}
+				<li class='jm'>{@link org.apache.juneau.marshaller.Marshaller#write(Object,Object) write(Object,Object)}
 			</ul>
 		</li>
 	</ul>
@@ -2320,7 +2317,7 @@
 		Marshalls are often cleaner to use on-the-fly since they have simplified names.
 	</p>
 	<p>
-		The following shows the {@link org.apache.juneau.marshall.Json} marshall in action:
+		The following shows the {@link org.apache.juneau.marshaller.Json} marshaller in action:
 	</p>
 	<h5 class='figure'>Examples:</h5>
 	<p class='bjava'>
@@ -13036,7 +13033,7 @@
 	</p>	
 	<h5 class='figure'>OSGi Module</h5>
 	<p class='bcode w500'>
-	org.apache.juneau.marshall.rdf_{@property juneauVersion}.jar 
+	org.apache.juneau.marshaller.rdf_{@property juneauVersion}.jar 
 	</p>	
 	<p>
 		The <c>juneau-marshall-rdf</c> library provides additional serializers and parsers for RDF.
@@ -17476,7 +17473,7 @@
 <div class='topic'><!-- START: 6.4.1 - juneau-rest-server.jrs.HttpParts.jrs.PartMarshallers -->
 <div class='topic'>
 	<p>
-		Juneau comes with three basic marshall types for serializing and parsing Header, Query, Form, and Path parts:
+		Juneau comes with three basic marshaller types for serializing and parsing Header, Query, Form, and Path parts:
 	</p>
 	<ul class='javatree'>
 		<li class='jic'>{@link org.apache.juneau.httppart.HttpPartSerializer}
@@ -23012,7 +23009,7 @@
 		<ul>
 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClient.Builder#serializer(Serializer) serializer(Serializer)}
 			<li class='jm'>{@link org.apache.juneau.rest.client.RestClient.Builder#parser(Parser) parser(Parser)}
-			<li class='jm'>{@link org.apache.juneau.rest.client.RestClient.Builder#marshall(Marshall) marshall(Marshall)}
+			<li class='jm'>{@link org.apache.juneau.rest.client.RestClient.Builder#marshaller(Marshaller) marshaller(Marshaller)}
 		</ul>
 	</ul>
 	
@@ -28333,7 +28330,7 @@
 			<td><c>text/html</c></td>
 			<td><ul><li class='jc'>{@link org.apache.juneau.html.HtmlSerializer}<li class='jc'>{@link org.apache.juneau.html.HtmlStrippedDocSerializer}<li class='jc'>{@link org.apache.juneau.html.HtmlDocSerializer}</ul></td>
 			<td><ul><li class='jc'>{@link org.apache.juneau.html.HtmlParser}</ul></td>
-			<td><ul><li class='jc'>{@link org.apache.juneau.marshall.Html}</ul></td>
+			<td><ul><li class='jc'>{@link org.apache.juneau.marshaller.Html}</ul></td>
 			<td>{@doc jm.HtmlDetails HTML Details}</td>
 		</tr>
 		<tr>
@@ -28347,14 +28344,14 @@
 			<td><c>application/json</c><br><c>text/json</c></td>
 			<td><ul><li class='jc'>{@link org.apache.juneau.json.JsonSerializer}<li class='jc'>{@link org.apache.juneau.json.JsonSerializer.Readable}<li class='jc'>{@link org.apache.juneau.json.JsonSerializer.ReadableSafe}</ul></td>
 			<td><ul><li class='jc'>{@link org.apache.juneau.json.JsonParser}</ul></td>
-			<td><ul><li class='jc'>{@link org.apache.juneau.marshall.Json}</ul></td>
+			<td><ul><li class='jc'>{@link org.apache.juneau.marshaller.Json}</ul></td>
 			<td>{@doc jm.JsonDetails JSON Details}</td>
 		</tr>
 		<tr>
 			<td><c>application/json+simple</c><br><c>text/json+simple</c></td>
 			<td><ul><li class='jc'>{@link org.apache.juneau.json.SimpleJsonSerializer}</ul></td>
 			<td><ul><li class='jc'>{@link org.apache.juneau.json.JsonParser}</ul></td>
-			<td><ul><li class='jc'>{@link org.apache.juneau.marshall.SimpleJson}</ul></td>
+			<td><ul><li class='jc'>{@link org.apache.juneau.marshaller.SimpleJson}</ul></td>
 			<td>{@doc jm.SimplifiedJson Simplified JSON}</td>
 		</tr>
 		<tr>
@@ -28368,28 +28365,28 @@
 			<td><c>octal/msgpack</c></td>
 			<td><ul><li class='jc'>{@link org.apache.juneau.msgpack.MsgPackSerializer}</ul></td>
 			<td><ul><li class='jc'>{@link org.apache.juneau.msgpack.MsgPackParser}</ul></td>
-			<td><ul><li class='jc'>{@link org.apache.juneau.marshall.MsgPack}</ul></td>
+			<td><ul><li class='jc'>{@link org.apache.juneau.marshaller.MsgPack}</ul></td>
 			<td>{@doc jm.MsgPackDetails MessagePack Details}</td>
 		</tr>
 		<tr>
 			<td><c>text/n3</c></td>
 			<td><ul><li class='jc'>{@link org.apache.juneau.jena.N3Serializer}</ul></td>
 			<td><ul><li class='jc'>{@link org.apache.juneau.jena.N3Parser}</ul></td>
-			<td><ul><li class='jc'>{@link org.apache.juneau.marshall.N3}</ul></td>
+			<td><ul><li class='jc'>{@link org.apache.juneau.marshaller.N3}</ul></td>
 			<td>{@doc juneau-marshall-rdf juneau-marshall-rdf}</td>
 		</tr>
 		<tr>
 			<td><c>text/n-triple</c></td>
 			<td><ul><li class='jc'>{@link org.apache.juneau.jena.NTripleSerializer}</ul></td>
 			<td><ul><li class='jc'>{@link org.apache.juneau.jena.NTripleParser}</ul></td>
-			<td><ul><li class='jc'>{@link org.apache.juneau.marshall.NTriple}</ul></td>
+			<td><ul><li class='jc'>{@link org.apache.juneau.marshaller.NTriple}</ul></td>
 			<td>{@doc juneau-marshall-rdf juneau-marshall-rdf}</td>
 		</tr>
 		<tr>
 			<td><c>text/openapi</c></td>
 			<td><ul><li class='jc'>{@link org.apache.juneau.oapi.OpenApiSerializer}</ul></td>
 			<td><ul><li class='jc'>{@link org.apache.juneau.oapi.OpenApiParser}</ul></td>
-			<td><ul><li class='jc'>{@link org.apache.juneau.marshall.OpenApi}</ul></td>
+			<td><ul><li class='jc'>{@link org.apache.juneau.marshaller.OpenApi}</ul></td>
 			<td>{@doc jm.OpenApiDetails OpenAPI Details}</td>
 		</tr>
 		<tr>
@@ -28403,14 +28400,14 @@
 			<td><c>text/xml+rdf<c></td>
 			<td><ul><li class='jc'>{@link org.apache.juneau.jena.RdfXmlSerializer}</ul></td>
 			<td><ul><li class='jc'>{@link org.apache.juneau.jena.RdfXmlParser}</ul></td>
-			<td><ul><li class='jc'>{@link org.apache.juneau.marshall.RdfXml}</ul></td>
+			<td><ul><li class='jc'>{@link org.apache.juneau.marshaller.RdfXml}</ul></td>
 			<td>{@doc juneau-marshall-rdf juneau-marshall-rdf}</td>
 		</tr>
 		<tr>
 			<td><c>text/xml+rdf+abbrev</c></td>
 			<td><ul><li class='jc'>{@link org.apache.juneau.jena.RdfXmlAbbrevSerializer}</ul></td>
 			<td><ul><li class='jc'>{@link org.apache.juneau.jena.RdfXmlParser}</ul></td>
-			<td><ul><li class='jc'>{@link org.apache.juneau.marshall.RdfXmlAbbrev}</ul></td>
+			<td><ul><li class='jc'>{@link org.apache.juneau.marshaller.RdfXmlAbbrev}</ul></td>
 			<td>{@doc juneau-marshall-rdf juneau-marshall-rdf}</td>
 		</tr>
 		<tr>
@@ -28424,28 +28421,28 @@
 			<td><c>text/turtle</c></td>
 			<td><ul><li class='jc'>{@link org.apache.juneau.jena.TurtleSerializer}</ul></td>
 			<td><ul><li class='jc'>{@link org.apache.juneau.jena.TurtleParser}</ul></td>
-			<td><ul><li class='jc'>{@link org.apache.juneau.marshall.Turtle}</ul></td>
+			<td><ul><li class='jc'>{@link org.apache.juneau.marshaller.Turtle}</ul></td>
 			<td>{@doc juneau-marshall-rdf juneau-marshall-rdf}</td>
 		</tr>
 		<tr>
 			<td><c>text/uon</c></td>
 			<td><ul><li class='jc'>{@link org.apache.juneau.uon.UonSerializer}</ul></td>
 			<td><ul><li class='jc'>{@link org.apache.juneau.uon.UonParser}</ul></td>
-			<td><ul><li class='jc'>{@link org.apache.juneau.marshall.Uon}</ul></td>
+			<td><ul><li class='jc'>{@link org.apache.juneau.marshaller.Uon}</ul></td>
 			<td>{@doc jm.UonDetails UON Details}</td>
 		</tr>
 		<tr>
 			<td><c>application/x-www-form-urlencoded</c></td>
 			<td><ul><li class='jc'>{@link org.apache.juneau.urlencoding.UrlEncodingSerializer}</ul></td>
 			<td><ul><li class='jc'>{@link org.apache.juneau.urlencoding.UrlEncodingParser}</ul></td>
-			<td><ul><li class='jc'>{@link org.apache.juneau.marshall.UrlEncoding}</ul></td>
+			<td><ul><li class='jc'>{@link org.apache.juneau.marshaller.UrlEncoding}</ul></td>
 			<td>{@doc jm.UrlEncodingDetails URL-Encoding Details}</td>
 		</tr>
 		<tr>
 			<td><c>text/xml</c></td>
 			<td><ul><li class='jc'>{@link org.apache.juneau.xml.XmlSerializer}<li class='jc'>{@link org.apache.juneau.xml.XmlDocSerializer}</ul></td>
 			<td><ul><li class='jc'>{@link org.apache.juneau.xml.XmlParser}</ul></td>
-			<td><ul><li class='jc'>{@link org.apache.juneau.marshall.Xml}</ul></td>
+			<td><ul><li class='jc'>{@link org.apache.juneau.marshaller.Xml}</ul></td>
 			<td>{@doc jm.XmlDetails XML Details}</td>
 		</tr>
 	</table>
@@ -34686,27 +34683,27 @@
 		String string = Json.<jsf>DEFAULT</jsf>.write(myPojo);
 			</p>
 			<ul class='doctree'>
-				<li class='jac'>{@link org.apache.juneau.marshall.Marshall}
+				<li class='jac'>{@del org.apache.juneau.marshall.Marshall}
 				<ul>
-					<li class='jac'>{@link org.apache.juneau.marshall.CharMarshall}
+					<li class='jac'>{@del org.apache.juneau.marshall.CharMarshall}
 					<ul>
-						<li class='jc'>{@link org.apache.juneau.marshall.Html}
-						<li class='jc'>{@link org.apache.juneau.marshall.Json}
-						<li class='jc'>{@link org.apache.juneau.marshall.PlainText}
-						<li class='jc'>{@link org.apache.juneau.marshall.SimpleJson}
-						<li class='jc'>{@link org.apache.juneau.marshall.Uon}
-						<li class='jc'>{@link org.apache.juneau.marshall.UrlEncoding}
-						<li class='jc'>{@link org.apache.juneau.marshall.Xml}
-						<li class='jc'>{@link org.apache.juneau.marshall.N3}
-						<li class='jc'>{@link org.apache.juneau.marshall.NTriple}
-						<li class='jc'>{@link org.apache.juneau.marshall.RdfXml}
-						<li class='jc'>{@link org.apache.juneau.marshall.RdfXmlAbbrev}
-						<li class='jc'>{@link org.apache.juneau.marshall.Turtle}	
+						<li class='jc'>{@del org.apache.juneau.marshall.Html}
+						<li class='jc'>{@del org.apache.juneau.marshall.Json}
+						<li class='jc'>{@del org.apache.juneau.marshall.PlainText}
+						<li class='jc'>{@del org.apache.juneau.marshall.SimpleJson}
+						<li class='jc'>{@del org.apache.juneau.marshall.Uon}
+						<li class='jc'>{@del org.apache.juneau.marshall.UrlEncoding}
+						<li class='jc'>{@del org.apache.juneau.marshall.Xml}
+						<li class='jc'>{@del org.apache.juneau.marshall.N3}
+						<li class='jc'>{@del org.apache.juneau.marshall.NTriple}
+						<li class='jc'>{@del org.apache.juneau.marshall.RdfXml}
+						<li class='jc'>{@del org.apache.juneau.marshall.RdfXmlAbbrev}
+						<li class='jc'>{@del org.apache.juneau.marshall.Turtle}	
 					</ul>
-					<li class='jac'>{@link org.apache.juneau.marshall.StreamMarshall}
+					<li class='jac'>{@del org.apache.juneau.marshall.StreamMarshall}
 					<ul>
 						<li class='jc'>{@del org.apache.juneau.marshall.Jso}
-						<li class='jc'>{@link org.apache.juneau.marshall.MsgPack}
+						<li class='jc'>{@del org.apache.juneau.marshall.MsgPack}
 					</ul>
 				</ul>
 			</ul>
@@ -35374,11 +35371,11 @@
 		<li>
 			New convenience debugging methods on Marshall API:
 			<ul class='javatree'>
-				<li class='jc'>{@link org.apache.juneau.marshall.Marshall}
+				<li class='jc'>{@del org.apache.juneau.marshall.Marshall}
 				<ul>
-					<li class='jm'>{@link org.apache.juneau.marshall.Marshall#format(String,Object...) format(String,Object...)} - <c>MessageFormat</c>-style formatter.
-					<li class='jm'>{@link org.apache.juneau.marshall.Marshall#out(String,Object...) out(String,Object...)} - Prints <c>MessageFormat</c>-style messages to STDOUT.
-					<li class='jm'>{@link org.apache.juneau.marshall.Marshall#err(String,Object...) err(String,Object...)} - Prints <c>MessageFormat</c>-style messages to STDERR.
+					<li class='jm'>{@del org.apache.juneau.marshall.Marshall#format(String,Object...) format(String,Object...)} - <c>MessageFormat</c>-style formatter.
+					<li class='jm'>{@del org.apache.juneau.marshall.Marshall#out(String,Object...) out(String,Object...)} - Prints <c>MessageFormat</c>-style messages to STDOUT.
+					<li class='jm'>{@del org.apache.juneau.marshall.Marshall#err(String,Object...) err(String,Object...)} - Prints <c>MessageFormat</c>-style messages to STDERR.
 				</ul>
 			</ul>
 		<li>
@@ -35784,7 +35781,7 @@
 				<li class='jm'>{@del org.apache.juneau.ObjectList#parse(CharSequence)}
 			</ul>
 		<li>
-			{@link org.apache.juneau.marshall.CharMarshall} and {@link org.apache.juneau.marshall.StreamMarshall} now have public constructors.
+			{@del org.apache.juneau.marshall.CharMarshall} and {@link org.apache.juneau.marshall.StreamMarshall} now have public constructors.
 		<li>
 			{@link org.apache.juneau.annotation.Beanp @Beanp} replaces {@del org.apache.juneau.annotation.BeanProperty @BeanProperty}.
 		<li>

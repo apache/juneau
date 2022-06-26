@@ -23,10 +23,10 @@ import org.apache.juneau.annotation.*;
  * Parent class for all non-bean filters.
  *
  * <p>
- * Marshall filters are used to control aspects of how POJOs are handled during serialization and parsing.
+ * Marshalled filters are used to control aspects of how POJOs are handled during serialization and parsing.
  *
  * <p>
- * Marshall filters are created by {@link Builder} which is the programmatic equivalent to the {@link Marshalled @Marshalled}
+ * Marshalled filters are created by {@link Builder} which is the programmatic equivalent to the {@link Marshalled @Marshalled}
  * annotation.
  *
  * <ul class='seealso'>

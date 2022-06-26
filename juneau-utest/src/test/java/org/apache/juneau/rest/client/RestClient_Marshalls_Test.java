@@ -19,7 +19,7 @@ import static org.junit.runners.MethodSorters.*;
 import org.apache.juneau.http.annotation.Content;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
@@ -181,7 +181,7 @@ public class RestClient_Marshalls_Test {
 
 	@Test
 	public void d03_nullMarshalls() throws Exception {
-		RestClient x = client().marshall(null).marshalls(Json.DEFAULT,null).build();
+		RestClient x = client().marshaller(null).marshallers(Json.DEFAULT,null).build();
 		x.post("/a01",bean).header("X-Accept","application/json").header("X-Content-Type","application/json").run().assertCode().is(200).getContent().as(Bean.class).check();
 	}
 

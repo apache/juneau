@@ -34,7 +34,7 @@ import javax.xml.bind.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshaller.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.reflect.*;

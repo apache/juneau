@@ -77,7 +77,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshaller.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.objecttools.*;
@@ -318,7 +318,7 @@ import org.apache.juneau.xml.*;
  * 	<ul>
  * 		<li class='jm'>{@link Builder#serializer(Serializer) serializer(Serializer)}
  * 		<li class='jm'>{@link Builder#parser(Parser) parser(Parser)}
- * 		<li class='jm'>{@link Builder#marshall(Marshall) marshall(Marshall)}
+ * 		<li class='jm'>{@link Builder#marshaller(Marshaller) marshaller(Marshaller)}
  * 	</ul>
  * </ul>
  *
@@ -3977,11 +3977,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 
 		/**
-		 * <i><l>RestClient</l> configuration property:&emsp;</i>  Marshall
+		 * <i><l>RestClient</l> configuration property:&emsp;</i>  Marshaller
 		 *
 		 * <p>
 		 * Shortcut for specifying the serializers and parsers
-		 * using the serializer and parser defined in a marshall.
+		 * using the serializer and parser defined in a marshaller.
 		 *
 		 * <ul class='notes'>
 		 * 	<li class='note'>When using this method that takes in a pre-instantiated serializers and parsers, the serializer property setters (e.g. {@link #sortCollections()}),
@@ -3990,10 +3990,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
-		 * 	<jc>// Create a client that uses Simplified-JSON transport using an existing marshall.</jc>
+		 * 	<jc>// Create a client that uses Simplified-JSON transport using an existing marshaller.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.marshall(SimpleJson.<jsf>DEFAULT_READABLE</jsf>)
+		 * 		.marshaller(SimpleJson.<jsf>DEFAULT_READABLE</jsf>)
 		 * 		.build();
 		 * </p>
 		 *
@@ -4001,7 +4001,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		@FluentSetter
-		public Builder marshall(Marshall value) {
+		public Builder marshaller(Marshaller value) {
 			if (value != null)
 				serializer(value.getSerializer()).parser(value.getParser());
 			return this;
@@ -4012,7 +4012,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * <p>
 		 * Shortcut for specifying the serializers and parsers
-		 * using the serializer and parser defined in a marshall.
+		 * using the serializer and parser defined in a marshaller.
 		 *
 		 * <ul class='notes'>
 		 * 	<li class='note'>When using this method that takes in a pre-instantiated serializers and parsers, the serializer property setters (e.g. {@link #sortCollections()}),
@@ -4024,7 +4024,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<jc>// Create a client that uses JSON and XML transport using existing marshalls.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.marshall(Json.<jsf>DEFAULT_READABLE</jsf>, Xml.<jsf>DEFAULT_READABLE</jsf>)
+		 * 		.marshaller(Json.<jsf>DEFAULT_READABLE</jsf>, Xml.<jsf>DEFAULT_READABLE</jsf>)
 		 * 		.build();
 		 * </p>
 		 *
@@ -4032,8 +4032,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		@FluentSetter
-		public Builder marshalls(Marshall...value) {
-			for (Marshall m : value)
+		public Builder marshallers(Marshaller...value) {
+			for (Marshaller m : value)
 				if (m != null)
 					serializer(m.getSerializer()).parser(m.getParser());
 			return this;

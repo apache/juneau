@@ -19,7 +19,7 @@ import static org.junit.runners.MethodSorters.*;
 import java.io.*;
 
 import org.apache.http.entity.*;
-import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshaller.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;

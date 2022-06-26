@@ -30,7 +30,7 @@ import org.apache.http.*;
 import org.apache.http.client.utils.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.part.*;
-import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;

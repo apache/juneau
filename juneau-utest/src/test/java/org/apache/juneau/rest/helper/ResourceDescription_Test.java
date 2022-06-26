@@ -15,7 +15,7 @@ package org.apache.juneau.rest.helper;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.beans.*;
 import org.junit.*;
 
