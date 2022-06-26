@@ -22,6 +22,7 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.http.message.*;
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 
 /**
