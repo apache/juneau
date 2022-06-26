@@ -51,7 +51,7 @@ public class RestClient_BasicCalls_Test {
 		}
 		@Override
 		public String toString() {
-			return SimpleJson.DEFAULT.toString(this);
+			return SimpleJson.of(this);
 		}
 	}
 

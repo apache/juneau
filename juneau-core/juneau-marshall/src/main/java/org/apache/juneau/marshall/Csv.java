@@ -17,40 +17,24 @@ import java.lang.reflect.*;
 import java.nio.charset.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.oapi.*;
+import org.apache.juneau.csv.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 
 /**
- * A pairing of a {@link OpenApiSerializer} and {@link OpenApiParser} into a single class with convenience read/write methods.
- *
- * <p>
- * 	The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.
- *
- * <h5 class='figure'>Examples:</h5>
- * <p class='bjava'>
- * 	<jc>// Using instance.</jc>
- * 	OpenApi <jv>oapi</jv> = <jk>new</jk> OpenApi();
- * 	MyPojo <jv>myPojo</jv> = <jv>oapi</jv>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
- * 	String <jv>string</jv> = <jv>oapi</jv>.write(<jv>myPojo</jv>);
- * </p>
- * <p class='bjava'>
- *	<jc>// Using DEFAULT instance.</jc>
- * 	MyPojo <jv>myPojo</jv> = OpenApi.<jsf>DEFAULT</jsf>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
- * 	String <jv>string</jv> = OpenApi.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
- * </p>
+ * A pairing of a {@link CsvSerializer} and {@link CsvParser} into a single class with convenience read/write methods.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.Marshalls}
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class OpenApi extends CharMarshall {
+public class Csv extends CharMarshall {
 
 	/**
 	 * Default reusable instance.
 	 */
-	public static final OpenApi DEFAULT = new OpenApi();
+	public static final Csv DEFAULT = new Csv();
 
 	/**
 	 * Constructor.
@@ -62,7 +46,7 @@ public class OpenApi extends CharMarshall {
 	 * 	The parser to use for parsing input.
 	 * 	<br>Must not be <jk>null</jk>.
 	 */
-	public OpenApi(OpenApiSerializer s, OpenApiParser p) {
+	public Csv(CsvSerializer s, CsvParser p) {
 		super(s, p);
 	}
 
@@ -70,14 +54,14 @@ public class OpenApi extends CharMarshall {
 	 * Constructor.
 	 *
 	 * <p>
-	 * Uses {@link OpenApiSerializer#DEFAULT} and {@link OpenApiParser#DEFAULT}.
+	 * Uses {@link CsvSerializer#DEFAULT} and {@link CsvParser#DEFAULT}.
 	 */
-	public OpenApi() {
-		this(OpenApiSerializer.DEFAULT, OpenApiParser.DEFAULT);
+	public Csv() {
+		this(CsvSerializer.DEFAULT, CsvParser.DEFAULT);
 	}
 
 	/**
-	 * Parses an OpenApi input string to the specified type.
+	 * Parses a JSON input string to the specified type.
 	 *
 	 * <p>
 	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.
@@ -93,7 +77,7 @@ public class OpenApi extends CharMarshall {
 	}
 
 	/**
-	 * Parses an OpenApi input object to the specified Java type.
+	 * Parses a JSON input object to the specified Java type.
 	 *
 	 * <p>
 	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.
@@ -123,7 +107,7 @@ public class OpenApi extends CharMarshall {
 	}
 
 	/**
-	 * Parses an OpenApi input string to the specified Java type.
+	 * Parses a JSON input string to the specified Java type.
 	 *
 	 * <p>
 	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>, <jv>args</jv>)</c>.
@@ -146,7 +130,7 @@ public class OpenApi extends CharMarshall {
 	}
 
 	/**
-	 * Parses an OpenApi input object to the specified Java type.
+	 * Parses a JSON input object to the specified Java type.
 	 *
 	 * <p>
 	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>, <jv>args</jv>)</c>.
@@ -183,7 +167,7 @@ public class OpenApi extends CharMarshall {
 	}
 
 	/**
-	 * Serializes a Java object to an OpenApi string.
+	 * Serializes a Java object to a JSON string.
 	 *
 	 * <p>
 	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.write(<jv>object</jv>)</c>.
@@ -198,7 +182,7 @@ public class OpenApi extends CharMarshall {
 	}
 
 	/**
-	 * Serializes a Java object to an OpenApi output.
+	 * Serializes a Java object to a JSON output.
 	 *
 	 * <p>
 	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.write(<jv>output</jv>)</c>.

@@ -974,7 +974,7 @@ public class Content_Test {
 			.assertCode().is(200)
 			.assertContent().is("null");
 
-		String body1 = SimpleJson.DEFAULT.toString(list(ABean.get()));
+		String body1 = SimpleJson.of(list(ABean.get()));
 		j.post("/c", body1, APPLICATION_JSON)
 			.run()
 			.assertCode().is(200)
@@ -984,7 +984,7 @@ public class Content_Test {
 			.assertCode().is(200)
 			.assertContent().is("null");
 
-		String body2 = SimpleJson.DEFAULT.toString(list(optional(ABean.get())));
+		String body2 = SimpleJson.of(list(optional(ABean.get())));
 		j.post("/d", body2, APPLICATION_JSON)
 			.run()
 			.assertCode().is(200)

@@ -13,40 +13,50 @@
 package org.apache.juneau.marshall;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
+import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class NTripleTest {
-
-	CharMarshall m = NTriple.DEFAULT;
-
-	String r = "_:xxx <http://www.apache.org/juneau/value> \"foo\" .";
+public class OpenApi_Test {
 
 	@Test
-	public void write1() throws Exception {
-		assertString(m.write("foo")).isContains("<http://www.apache.org/juneau/value> \"foo\"");
+	public void a01_to() throws Exception {
+		Object in1 = "foo", in2 = JsonMap.of("foo", "bar");
+		String expected1 = "foo", expected2 = "foo=bar";
+
+		assertString(OpenApi.of(in1)).is(expected1);
+		assertString(OpenApi.of(in1,stringWriter())).is(expected1);
+		assertString(OpenApi.of(in2)).is(expected2);
+		assertString(OpenApi.of(in2,stringWriter())).is(expected2);
 	}
 
 	@Test
-	public void write2() throws Exception {
-		StringWriter sw = new StringWriter();
-		m.write("foo", sw);
-		assertString(sw.toString()).isContains("<http://www.apache.org/juneau/value> \"foo\"");
+	public void a02_from() throws Exception {
+		String in1 = "foo", in2 = "foo=bar";
+		String expected1 = "foo", expected2 = "{foo:'bar'}";
+
+		assertString(OpenApi.to(in1, String.class)).is(expected1);
+		assertString(OpenApi.to(stringReader(in1), String.class)).is(expected1);
+		assertObject(OpenApi.to(in2, Map.class, String.class, String.class)).asJson().is(expected2);
+		assertObject(OpenApi.to(stringReader(in2), Map.class, String.class, String.class)).asJson().is(expected2);
 	}
 
-	@Test
-	public void toString1() throws Exception {
-		assertString(m.toString("foo")).isContains("<http://www.apache.org/juneau/value> \"foo\"");
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private Writer stringWriter() {
+		return new StringWriter();
 	}
 
-	@Test
-	public void read1() throws Exception {
-		String s = m.read(r, String.class);
-		assertEquals("foo", s);
+	private Reader stringReader(String s) {
+		return new StringReader(s);
 	}
+
+
 }

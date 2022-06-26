@@ -12,46 +12,48 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.marshall;
 
-import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
-
+import static org.apache.juneau.assertions.Assertions.*;
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class UrlEncodingTest {
-
-	CharMarshall m = UrlEncoding.DEFAULT;
+public class Json_Test {
 
 	@Test
-	public void write1() throws Exception {
-		assertEquals("_value=foo", m.write("foo"));
+	public void a01_to() throws Exception {
+		Object in1 = "foo", in2 = JsonMap.of("foo", "bar");
+		String expected1 = "\"foo\"", expected2 = "{\"foo\":\"bar\"}";
+
+		assertString(Json.of(in1)).is(expected1);
+		assertString(Json.of(in1,stringWriter())).is(expected1);
+		assertString(Json.of(in2)).is(expected2);
+		assertString(Json.of(in2,stringWriter())).is(expected2);
 	}
 
 	@Test
-	public void write2() throws Exception {
-		StringWriter sw = new StringWriter();
-		m.write("foo", sw);
-		assertEquals("_value=foo", sw.toString());
+	public void a02_from() throws Exception {
+		String in1 = "\"foo\"", in2 = "{\"foo\":\"bar\"}";
+		String expected1 = "foo", expected2 = "{foo:'bar'}";
+
+		assertString(Json.to(in1, String.class)).is(expected1);
+		assertString(Json.to(stringReader(in1), String.class)).is(expected1);
+		assertObject(Json.to(in2, Map.class, String.class, String.class)).asJson().is(expected2);
+		assertObject(Json.to(stringReader(in2), Map.class, String.class, String.class)).asJson().is(expected2);
 	}
 
-	@Test
-	public void toString1() throws Exception {
-		assertEquals("_value=foo", m.toString("foo"));
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private Writer stringWriter() {
+		return new StringWriter();
 	}
 
-	@Test
-	public void read1() throws Exception {
-		String s = m.read("_value=foo", String.class);
-		assertEquals("foo", s);
-	}
-
-	@Test
-	public void read2() throws Exception {
-		Map<?,?> o = m.read("foo=bar", Map.class, String.class, String.class);
-		assertObject(o).asJson().is("{foo:'bar'}");
+	private Reader stringReader(String s) {
+		return new StringReader(s);
 	}
 }

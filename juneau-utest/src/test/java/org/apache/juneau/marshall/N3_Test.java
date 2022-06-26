@@ -10,74 +10,69 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.client;
+package org.apache.juneau.marshall;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
+import java.util.*;
 
-import org.apache.http.entity.*;
-import org.apache.juneau.marshall.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.collections.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class RestCallException_Test {
+public class N3_Test {
 
-	public static class ABean {
-		public int f;
-		static ABean get() {
-			ABean x = new ABean();
-			x.f = 1;
-			return x;
-		}
-		@Override
-		public String toString() {
-			return SimpleJson.of(this);
-		}
-	}
+	private static String EOL = System.getProperty("line.separator");
 
-	@Rest
-	public static class A extends BasicRestObject {
-		@RestPost
-		public InputStream echo(InputStream is) {
-			return is;
-		}
+	@Test
+	public void a01_to() throws Exception {
+		Object in1 = "foo", in2 = JsonMap.of("foo", "bar");
+		String
+			expected1 = ""
+				+ "@prefix jp:      <http://www.apache.org/juneaubp/> ." + EOL
+				+ "@prefix j:       <http://www.apache.org/juneau/> ." + EOL + EOL
+				+ "[]    j:value \"foo\" ." + EOL,
+			expected2 = ""
+				+ "@prefix jp:      <http://www.apache.org/juneaubp/> ." + EOL
+				+ "@prefix j:       <http://www.apache.org/juneau/> ." + EOL + EOL
+				+ "[]    jp:foo  \"bar\" ." + EOL;
+
+		assertString(N3.of(in1)).is(expected1);
+		assertString(N3.of(in1,stringWriter())).is(expected1);
+		assertString(N3.of(in2)).is(expected2);
+		assertString(N3.of(in2,stringWriter())).is(expected2);
 	}
 
 	@Test
-	public void a01_basic() throws Exception {
-		try {
-			client().build().get().run();
-			fail();
-		} catch (RestCallException e) {
-			assertInteger(e.getResponse().getStatusCode()).is(404);
-			assertNull(e.getCause());
-		}
+	public void a02_from() throws Exception {
+		String
+			in1 = ""
+				+ "@prefix jp:      <http://www.apache.org/juneaubp/> ." + EOL
+				+ "@prefix j:       <http://www.apache.org/juneau/> ." + EOL + EOL
+				+ "[]    j:value \"foo\" ." + EOL,
+			in2 = ""
+				+ "@prefix jp:      <http://www.apache.org/juneaubp/> ." + EOL
+				+ "@prefix j:       <http://www.apache.org/juneau/> ." + EOL + EOL
+				+ "[]    jp:foo  \"bar\" ." + EOL;
+		String expected1 = "foo", expected2 = "{foo:'bar'}";
 
-		try {
-			client().build().post("/echo",new StringEntity("{f:")).run().getContent().as(ABean.class);
-			fail();
-		} catch (RestCallException e) {
-			assertThrowable(e.getCause(ParseException.class)).asMessage().isContains("Could not find '}'");
-		}
-
-		RestCallException e = new RestCallException(null, null, null);
-		assertNotNull(e.getThrown());
-		assertFalse(e.getThrown().isPresent());
-		assertEquals(0, e.getResponseCode());
+		assertString(N3.to(in1, String.class)).is(expected1);
+		assertString(N3.to(stringReader(in1), String.class)).is(expected1);
+		assertObject(N3.to(in2, Map.class, String.class, String.class)).asJson().is(expected2);
+		assertObject(N3.to(stringReader(in2), Map.class, String.class, String.class)).asJson().is(expected2);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Helper methods.
+	// Helper methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static RestClient.Builder client() {
-		return MockRestClient.create(A.class).simpleJson().noTrace();
+	private Writer stringWriter() {
+		return new StringWriter();
+	}
+
+	private Reader stringReader(String s) {
+		return new StringReader(s);
 	}
 }

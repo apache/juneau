@@ -2865,7 +2865,7 @@ public final class StringUtils {
 	 * @return The specified object as simplified JSON.
 	 */
 	public static final String json(Object o) {
-		return SimpleJson.DEFAULT == null ? stringify(o) : SimpleJson.DEFAULT.toString(o);
+		return SimpleJson.DEFAULT == null ? stringify(o) : SimpleJson.DEFAULT.write(o);
 	}
 
 	/**

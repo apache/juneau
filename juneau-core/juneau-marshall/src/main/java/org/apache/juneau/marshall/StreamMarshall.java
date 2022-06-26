@@ -118,7 +118,6 @@ public class StreamMarshall extends Marshall {
 	 * 	The serialized object.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	@Override /* Serializer */
 	public final byte[] write(Object o) throws SerializeException {
 		return s.serialize(o);
 	}

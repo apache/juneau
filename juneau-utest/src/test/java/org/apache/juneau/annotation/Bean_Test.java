@@ -45,10 +45,10 @@ public class Bean_Test {
 
 	@Test
 	public void testBeanAnnotationOverridesPrivate() throws Exception {
-		String json = SimpleJson.DEFAULT.toString(A1.create());
+		String json = SimpleJson.of(A1.create());
 		assertEquals("{f1:1}", json);
 		A1 a = SimpleJson.DEFAULT.read(json, A1.class);
-		json = SimpleJson.DEFAULT.toString(a);
+		json = SimpleJson.of(a);
 		assertEquals("{f1:1}", json);
 	}
 
@@ -116,10 +116,10 @@ public class Bean_Test {
 
 	@Test
 	public void testBeanxAnnotationOverridesPrivate() throws Exception {
-		String json = SimpleJson.DEFAULT.toString(B1.create());
+		String json = SimpleJson.of(B1.create());
 		assertEquals("{f1:1,f2:2}", json);
 		B1 b = SimpleJson.DEFAULT.read(json, B1.class);
-		json = SimpleJson.DEFAULT.toString(b);
+		json = SimpleJson.of(b);
 		assertEquals("{f1:1,f2:2}", json);
 	}
 
@@ -209,19 +209,19 @@ public class Bean_Test {
 
 	@Test
 	public void d01_beanPropertiesExcludePropertiesCombined_noBeanConfig() throws Exception {
-		String json = SimpleJson.DEFAULT.toString(D1.create());
+		String json = SimpleJson.of(D1.create());
 		assertEquals("{a:1,c:3}", json);
 		D1 x = SimpleJson.DEFAULT.read(json, D1.class);
-		json = SimpleJson.DEFAULT.toString(x);
+		json = SimpleJson.of(x);
 		assertEquals("{a:1,c:3}", json);
 	}
 
 	@Test
 	public void d02_beanPXpCombined_noBeanConfig() throws Exception {
-		String json = SimpleJson.DEFAULT.toString(D2.create());
+		String json = SimpleJson.of(D2.create());
 		assertEquals("{a:1,c:3}", json);
 		D2 x = SimpleJson.DEFAULT.read(json, D2.class);
-		json = SimpleJson.DEFAULT.toString(x);
+		json = SimpleJson.of(x);
 		assertEquals("{a:1,c:3}", json);
 	}
 
@@ -326,19 +326,19 @@ public class Bean_Test {
 
 	@Test
 	public void e01_beanPropertiesExcludePropertiesCombined_multipleBeanAnnotations_noBeanConfig() throws Exception {
-		String json = SimpleJson.DEFAULT.toString(E1.create());
+		String json = SimpleJson.of(E1.create());
 		assertEquals("{a:1,c:3}", json);
 		E1 e = SimpleJson.DEFAULT.read(json, E1.class);
-		json = SimpleJson.DEFAULT.toString(e);
+		json = SimpleJson.of(e);
 		assertEquals("{a:1,c:3}", json);
 	}
 
 	@Test
 	public void e02_beanPXpCombined_multipleBeanAnnotations_noBeanConfig() throws Exception {
-		String json = SimpleJson.DEFAULT.toString(E2.create());
+		String json = SimpleJson.of(E2.create());
 		assertEquals("{a:1,c:3}", json);
 		E2 e = SimpleJson.DEFAULT.read(json, E2.class);
-		json = SimpleJson.DEFAULT.toString(e);
+		json = SimpleJson.of(e);
 		assertEquals("{a:1,c:3}", json);
 	}
 

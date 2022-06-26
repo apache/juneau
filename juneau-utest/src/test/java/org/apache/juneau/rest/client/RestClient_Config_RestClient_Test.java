@@ -58,7 +58,7 @@ public class RestClient_Config_RestClient_Test {
 		}
 		@Override
 		public String toString() {
-			return SimpleJson.DEFAULT.toString(this);
+			return SimpleJson.of(this);
 		}
 	}
 
@@ -448,7 +448,7 @@ public class RestClient_Config_RestClient_Test {
 
 	public static class A12a extends MockWriterSerializer {
 		public A12a(Builder builder) {
-			super(builder.partFunction((t,s,o)->"x" + SimpleJson.DEFAULT.toString(o)));
+			super(builder.partFunction((t,s,o)->"x" + SimpleJson.of(o)));
 		}
 	}
 

@@ -87,7 +87,7 @@ public class MsgPack extends StreamMarshall {
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static <T> T from(byte[] input, Class<T> type) throws ParseException {
+	public static <T> T to(byte[] input, Class<T> type) throws ParseException {
 		return DEFAULT.read(input, type);
 	}
 
@@ -113,7 +113,7 @@ public class MsgPack extends StreamMarshall {
 	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public static <T> T from(Object input, Class<T> type) throws ParseException, IOException {
+	public static <T> T to(Object input, Class<T> type) throws ParseException, IOException {
 		return DEFAULT.read(input, type);
 	}
 
@@ -136,7 +136,7 @@ public class MsgPack extends StreamMarshall {
 	 * @throws ParseException Malformed input encountered.
 	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
-	public static <T> T from(byte[] input, Type type, Type...args) throws ParseException {
+	public static <T> T to(byte[] input, Type type, Type...args) throws ParseException {
 		return DEFAULT.read(input, type, args);
 	}
 
@@ -169,7 +169,7 @@ public class MsgPack extends StreamMarshall {
 	 * @throws IOException Thrown by underlying stream.
 	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
-	public static <T> T from(Object input, Type type, Type...args) throws ParseException, IOException {
+	public static <T> T to(Object input, Type type, Type...args) throws ParseException, IOException {
 		return DEFAULT.read(input, type, args);
 	}
 
@@ -184,7 +184,7 @@ public class MsgPack extends StreamMarshall {
 	 * 	The serialized object.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	public static byte[] to(Object object) throws SerializeException {
+	public static byte[] of(Object object) throws SerializeException {
 		return DEFAULT.write(object);
 	}
 
@@ -202,10 +202,12 @@ public class MsgPack extends StreamMarshall {
 	 * 		<li>{@link OutputStream}
 	 * 		<li>{@link File}
 	 * 	</ul>
+	 * @return The output object.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public static void to(Object object, Object output) throws SerializeException, IOException {
+	public static Object of(Object object, Object output) throws SerializeException, IOException {
 		DEFAULT.write(object, output);
+		return output;
 	}
 }

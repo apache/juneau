@@ -12,46 +12,50 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.marshall;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
+import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
+import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class TurtleTest {
-
-	private static String EOL = System.getProperty("line.separator");
-
-	CharMarshall m = Turtle.DEFAULT;
-
-	String r = ""
-		+ "@prefix jp:      <http://www.apache.org/juneaubp/> ." + EOL
-		+ "@prefix j:       <http://www.apache.org/juneau/> ." + EOL
-		+ EOL
-		+ "[]    j:value \"foo\" ." + EOL;
+public class MsgPack_Test {
 
 	@Test
-	public void write1() throws Exception {
-		assertEquals(r, m.write("foo"));
+	public void a01_to() throws Exception {
+		Object in1 = "foo", in2 = JsonMap.of("foo", "bar");
+		String expected1 = "A3666F6F", expected2 = "81A3666F6FA3626172";
+
+		assertBytes(MsgPack.of(in1)).asHex().is(expected1);
+		assertBytes(bytes(MsgPack.of(in1,baos()))).asHex().is(expected1);
+		assertBytes(MsgPack.of(in2)).asHex().is(expected2);
+		assertBytes(bytes(MsgPack.of(in2,baos()))).asHex().is(expected2);
 	}
 
 	@Test
-	public void write2() throws Exception {
-		StringWriter sw = new StringWriter();
-		m.write("foo", sw);
-		assertEquals(r, sw.toString());
+	public void a02_from() throws Exception {
+		String in1 = "A3666F6F", in2 = "81A3666F6FA3626172";
+		String expected1 = "foo", expected2 = "{foo:'bar'}";
+
+		assertString(MsgPack.to(in1, String.class)).is(expected1);
+		assertString(MsgPack.to(fromHex(in1), String.class)).is(expected1);
+		assertObject(MsgPack.to(in2, Map.class, String.class, String.class)).asJson().is(expected2);
+		assertObject(MsgPack.to(fromHex(in2), Map.class, String.class, String.class)).asJson().is(expected2);
 	}
 
-	@Test
-	public void toString1() throws Exception {
-		assertEquals(r, m.toString("foo"));
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private OutputStream baos() {
+		return new ByteArrayOutputStream();
 	}
 
-	@Test
-	public void read1() throws Exception {
-		String s = m.read(r, String.class);
-		assertEquals("foo", s);
+	private byte[] bytes(Object o) {
+		return ((ByteArrayOutputStream)o).toByteArray();
 	}
 }

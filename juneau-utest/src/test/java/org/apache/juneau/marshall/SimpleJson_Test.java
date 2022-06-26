@@ -13,45 +13,48 @@
 package org.apache.juneau.marshall;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class SimpleJsonTest {
-
-	CharMarshall m = SimpleJson.DEFAULT;
+public class SimpleJson_Test {
 
 	@Test
-	public void write1() throws Exception {
-		assertEquals("'foo'", m.write("foo"));
+	public void a01_to() throws Exception {
+		Object in1 = "foo", in2 = JsonMap.of("foo", "bar");
+		String expected1 = "'foo'", expected2 = "{foo:'bar'}";
+
+		assertString(SimpleJson.of(in1)).is(expected1);
+		assertString(SimpleJson.of(in1,stringWriter())).is(expected1);
+		assertString(SimpleJson.of(in2)).is(expected2);
+		assertString(SimpleJson.of(in2,stringWriter())).is(expected2);
 	}
 
 	@Test
-	public void write2() throws Exception {
-		StringWriter sw = new StringWriter();
-		m.write("foo", sw);
-		assertEquals("'foo'", sw.toString());
+	public void a02_from() throws Exception {
+		String in1 = "'foo'", in2 = "{foo:'bar'}";
+		String expected1 = "foo", expected2 = "{foo:'bar'}";
+
+		assertString(SimpleJson.to(in1, String.class)).is(expected1);
+		assertString(SimpleJson.to(stringReader(in1), String.class)).is(expected1);
+		assertObject(SimpleJson.to(in2, Map.class, String.class, String.class)).asJson().is(expected2);
+		assertObject(SimpleJson.to(stringReader(in2), Map.class, String.class, String.class)).asJson().is(expected2);
 	}
 
-	@Test
-	public void toString1() throws Exception {
-		assertEquals("'foo'", m.toString("foo"));
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private Writer stringWriter() {
+		return new StringWriter();
 	}
 
-	@Test
-	public void read1() throws Exception {
-		String s = m.read("'foo'", String.class);
-		assertEquals("foo", s);
-	}
-
-	@Test
-	public void read2() throws Exception {
-		Map<?,?> o = m.read("{foo:'bar'}", Map.class, String.class, String.class);
-		assertObject(o).asJson().is("{foo:'bar'}");
+	private Reader stringReader(String s) {
+		return new StringReader(s);
 	}
 }

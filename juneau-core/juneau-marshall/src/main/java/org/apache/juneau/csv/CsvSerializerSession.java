@@ -19,7 +19,6 @@ import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.util.*;
 import java.util.function.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
@@ -213,6 +212,7 @@ public final class CsvSerializerSession extends WriterSerializerSession {
 		super(builder);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override /* SerializerSession */
 	protected final void doSerialize(SerializerPipe pipe, Object o) throws IOException, SerializeException {
 
@@ -221,9 +221,12 @@ public final class CsvSerializerSession extends WriterSerializerSession {
 			Collection<?> l = null;
 			if (cm.isArray()) {
 				l = alist((Object[])o);
-			} else {
+			} else if (cm.isCollection()) {
 				l = (Collection<?>)o;
+			} else {
+				l = Collections.singleton(o);
 			}
+
 			// TODO - Doesn't support DynaBeans.
 			if (l.size() > 0) {
 				ClassMeta<?> entryType = getClassMetaForObject(l.iterator().next());
@@ -242,6 +245,30 @@ public final class CsvSerializerSession extends WriterSerializerSession {
 							addComma2.ifSet(() -> w.w(',')).set();
 							w.writeEntry(y.get(bean, y.getName()));
 						});
+						w.w('\n');
+					});
+				} else if (entryType.isMap()) {
+					Flag addComma = Flag.create();
+					Map first = (Map)l.iterator().next();
+					first.keySet().forEach(x -> {
+						addComma.ifSet(() -> w.w(',')).set();
+						w.writeEntry(x);
+					});
+					w.append('\n');
+					l.stream().forEach(x -> {
+						Flag addComma2 = Flag.create();
+						Map map = (Map)x;
+						map.values().forEach(y -> {
+							addComma2.ifSet(() -> w.w(',')).set();
+							w.writeEntry(y);
+						});
+						w.w('\n');
+					});
+				} else {
+					w.writeEntry("value");
+					w.append('\n');
+					l.stream().forEach(x -> {
+						w.writeEntry(x);
 						w.w('\n');
 					});
 				}

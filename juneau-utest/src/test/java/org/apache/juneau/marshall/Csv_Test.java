@@ -12,46 +12,48 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.marshall;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
-
+import static org.apache.juneau.assertions.Assertions.*;
 import java.io.*;
+import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class N3Test {
-
-	private static String EOL = System.getProperty("line.separator");
-
-	CharMarshall m = N3.DEFAULT;
-
-	String r = ""
-		+ "@prefix jp:      <http://www.apache.org/juneaubp/> ." + EOL
-		+ "@prefix j:       <http://www.apache.org/juneau/> ." + EOL
-		+ EOL
-		+ "[]    j:value \"foo\" ." + EOL;
+public class Csv_Test {
 
 	@Test
-	public void write1() throws Exception {
-		assertEquals(r, m.write("foo"));
+	public void a01_to() throws Exception {
+		Object in1 = "foo", in2 = new Object[]{JsonMap.of("a","foo","b","bar")};
+		String expected1="value\nfoo\n", expected2 = "a,b\nfoo,bar\n";
+
+		assertString(Csv.of(in1)).is(expected1);
+		assertString(Csv.of(in1,stringWriter())).is(expected1);
+		assertString(Csv.of(in2)).is(expected2);
+		assertString(Csv.of(in2,stringWriter())).is(expected2);
 	}
 
-	@Test
-	public void write2() throws Exception {
-		StringWriter sw = new StringWriter();
-		m.write("foo", sw);
-		assertEquals(r, sw.toString());
-	}
 
 	@Test
-	public void toString1() throws Exception {
-		assertEquals(r, m.toString("foo"));
+	public void a02_from() throws Exception {
+		String in1 = "'foo'", in2 = "{foo:'bar'}";
+		//String expected1 = "foo", expected2 = "{foo:'bar'}";
+
+		assertThrown(()->Csv.to(in1, String.class)).asMessage().is("Not implemented.");
+		assertThrown(()->assertString(Csv.to(stringReader(in1), String.class))).asMessage().is("Not implemented.");
+		assertThrown(()->assertObject(Csv.to(in2, Map.class, String.class, String.class))).asMessage().is("Not implemented.");
+		assertThrown(()->assertObject(Csv.to(stringReader(in2), Map.class, String.class, String.class))).asMessage().is("Not implemented.");
+	}
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private Writer stringWriter() {
+		return new StringWriter();
 	}
 
-	@Test
-	public void read1() throws Exception {
-		String s = m.read(r, String.class);
-		assertEquals("foo", s);
+	private Reader stringReader(String s) {
+		return new StringReader(s);
 	}
 }

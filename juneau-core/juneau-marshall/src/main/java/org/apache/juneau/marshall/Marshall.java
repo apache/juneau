@@ -12,12 +12,9 @@ package org.apache.juneau.marshall;
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
-import java.text.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.parser.*;
@@ -87,20 +84,6 @@ public abstract class Marshall {
 	}
 
 	/**
-	 * Serializes a POJO directly to either a <c>String</c> or <code><jk>byte</jk>[]</code> depending on the serializer type.
-	 *
-	 * @param object The object to serialize.
-	 * @return
-	 * 	The serialized object.
-	 * 	<br>Character-based serializers will return a <c>String</c>
-	 * 	<br>Stream-based serializers will return a <code><jk>byte</jk>[]</code>
-	 * @throws SerializeException If a problem occurred trying to convert the output.
-	 */
-	public Object write(Object object) throws SerializeException {
-		return s.serialize(object);
-	}
-
-	/**
 	 * Serializes a POJO to the specified output stream or writer.
 	 *
 	 * <p>
@@ -126,107 +109,6 @@ public abstract class Marshall {
 	 */
 	public final void write(Object object, Object output) throws SerializeException, IOException {
 		s.serialize(object, output);
-	}
-
-	/**
-	 * Convenience method for serializing an object to a String.
-	 *
-	 * <p>
-	 * For writer-based serializers, this is identical to calling {@link Serializer#serialize(Object)}.
-	 * <br>For stream-based serializers, this converts the returned byte array to a string based on
-	 * the {@link org.apache.juneau.serializer.OutputStreamSerializer.Builder#binaryFormat(BinaryFormat)} setting.
-	 *
-	 * @param object The object to serialize.
-	 * @return The output serialized to a string.
-	 */
-	public final String toString(Object object) {
-		try {
-			return s.serializeToString(object);
-		} catch (Exception e) {
-			throw runtimeException(e);
-		}
-	}
-
-
-	/**
-	 * Convenience method for calling <c>System.out.println(...)</c> on the specified object after calling {@link #toString(Object)}.
-	 *
-	 * @param object The object to serialize and then send to the console.
-	 * @return This object.
-	 */
-	public final Marshall println(Object object) {
-		System.out.println(toString(object));
-		return this;
-	}
-
-	/**
-	 * Prints a message with arguments to {@link System#out}.
-	 *
-	 * <p>
-	 * Arguments are automatically converted to strings using this marshaller.
-	 *
-	 * <p>
-	 * Useful for debug messages.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	SimpleJson.<jsf>DEFAULT</jsf>.out(<js>"myPojo={0}"</js>, <jv>myPojo</jv>);
-	 * </p>
-	 *
-	 * @param msg The {@link MessageFormat}-styled message.
-	 * @param args The arguments sent to the the formatter after running them through this marshaller.
-	 * @return This object.
-	 */
-	public final Marshall out(String msg, Object...args) {
-		System.out.println(format(msg, args));
-		return this;
-	}
-
-	/**
-	 * Prints a message with arguments to {@link System#err}.
-	 *
-	 * <p>
-	 * Arguments are automatically converted to strings using this marshaller.
-	 *
-	 * <p>
-	 * Useful for debug messages.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	SimpleJson.<jsf>DEFAULT</jsf>.err(<js>"myPojo={0}"</js>, <jv>myPojo</jv>);
-	 * </p>
-	 *
-	 * @param msg The {@link MessageFormat}-styled message.
-	 * @param args The arguments sent to the the formatter after running them through this marshaller.
-	 * @return This object.
-	 */
-	public final Marshall err(String msg, Object...args) {
-		System.err.println(format(msg, args));  // NOT DEBUG
-		return this;
-	}
-
-	/**
-	 * Formats a message with arguments.
-	 *
-	 * <p>
-	 * Arguments are automatically converted to strings using this marshaller.
-	 *
-	 * <p>
-	 * Useful for debug messages.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	String <jv>msg</jv> = SimpleJson.<jsf>DEFAULT</jsf>.format(<js>"myPojo={0}"</js>, <jv>myPojo</jv>);
-	 * </p>
-	 *
-	 * @param msg The {@link MessageFormat}-styled message.
-	 * @param args The arguments sent to the the formatter after running them through this marshaller.
-	 * @return This object.
-	 */
-	public final String format(String msg, Object...args) {
-		for (int i = 0; i < args.length; i++)
-			args[i] = toString(args[i]);
-		return MessageFormat.format(msg, args);
 	}
 
 	/**

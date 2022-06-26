@@ -12,38 +12,50 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.marshall;
 
-import static org.junit.Assert.assertEquals;
+import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
+import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class PlainTextTest {
-
-	CharMarshall m = PlainText.DEFAULT;
+public class UrlEncoding_Test {
 
 	@Test
-	public void write1() throws Exception {
-		assertEquals("foo", m.write("foo"));
+	public void a01_to() throws Exception {
+		Object in1 = "foo", in2 = JsonMap.of("foo", "bar");
+		String expected1 = "_value=foo", expected2 = "foo=bar";
+
+		assertString(UrlEncoding.of(in1)).is(expected1);
+		assertString(UrlEncoding.of(in1,stringWriter())).is(expected1);
+		assertString(UrlEncoding.of(in2)).is(expected2);
+		assertString(UrlEncoding.of(in2,stringWriter())).is(expected2);
 	}
 
 	@Test
-	public void write2() throws Exception {
-		StringWriter sw = new StringWriter();
-		m.write("foo", sw);
-		assertEquals("foo", sw.toString());
+	public void a02_from() throws Exception {
+		String in1 = "_value=foo", in2 = "foo=bar";
+		String expected1 = "foo", expected2 = "{foo:'bar'}";
+
+		assertString(UrlEncoding.to(in1, String.class)).is(expected1);
+		assertString(UrlEncoding.to(stringReader(in1), String.class)).is(expected1);
+		assertObject(UrlEncoding.to(in2, Map.class, String.class, String.class)).asJson().is(expected2);
+		assertObject(UrlEncoding.to(stringReader(in2), Map.class, String.class, String.class)).asJson().is(expected2);
 	}
 
-	@Test
-	public void toString1() throws Exception {
-		assertEquals("foo", m.toString("foo"));
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private Writer stringWriter() {
+		return new StringWriter();
 	}
 
-	@Test
-	public void read1() throws Exception {
-		String s = m.read("foo", String.class);
-		assertEquals("foo", s);
+	private Reader stringReader(String s) {
+		return new StringReader(s);
 	}
+
 }

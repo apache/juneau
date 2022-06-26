@@ -88,7 +88,7 @@ public class N3 extends CharMarshall {
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public static <T> T from(String input, Class<T> type) throws ParseException {
+	public static <T> T to(String input, Class<T> type) throws ParseException {
 		return DEFAULT.read(input, type);
 	}
 
@@ -118,7 +118,7 @@ public class N3 extends CharMarshall {
 	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public static <T> T from(Object input, Class<T> type) throws ParseException, IOException {
+	public static <T> T to(Object input, Class<T> type) throws ParseException, IOException {
 		return DEFAULT.read(input, type);
 	}
 
@@ -141,7 +141,7 @@ public class N3 extends CharMarshall {
 	 * @throws ParseException Malformed input encountered.
 	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
-	public static <T> T from(String input, Type type, Type...args) throws ParseException {
+	public static <T> T to(String input, Type type, Type...args) throws ParseException {
 		return DEFAULT.read(input, type, args);
 	}
 
@@ -178,7 +178,7 @@ public class N3 extends CharMarshall {
 	 * @throws IOException Thrown by underlying stream.
 	 * @see BeanSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
-	public static <T> T from(Object input, Type type, Type...args) throws ParseException, IOException {
+	public static <T> T to(Object input, Type type, Type...args) throws ParseException, IOException {
 		return DEFAULT.read(input, type, args);
 	}
 
@@ -193,7 +193,7 @@ public class N3 extends CharMarshall {
 	 * 	The serialized object.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	public static String to(Object object) throws SerializeException {
+	public static String of(Object object) throws SerializeException {
 		return DEFAULT.write(object);
 	}
 
@@ -213,10 +213,12 @@ public class N3 extends CharMarshall {
 	 * 		<li>{@link File} - Output will be written as system-default encoded stream.
 	 * 		<li>{@link StringBuilder} - Output will be written to the specified string builder.
 	 * 	</ul>
+	 * @return The output object.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public static void to(Object object, Object output) throws SerializeException, IOException {
+	public static Object of(Object object, Object output) throws SerializeException, IOException {
 		DEFAULT.write(object, output);
+		return output;
 	}
 }

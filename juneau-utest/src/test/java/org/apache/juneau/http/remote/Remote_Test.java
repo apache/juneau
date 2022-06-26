@@ -580,9 +580,9 @@ public class Remote_Test {
 	@Test
 	public void f01_headers() throws Exception {
 		F1a x = client(F.class).header("Check","Foo").build().getRemote(F1a.class);
-		assertEquals("['bar','baz','qux']",SimpleJson.DEFAULT.toString(x.getHeaders()));
+		assertEquals("['bar','baz','qux']",SimpleJson.of(x.getHeaders()));
 		x = client(F.class).header("Check","Client-Version").build().getRemote(F1a.class);
-		assertEquals("['1.2.3']",SimpleJson.DEFAULT.toString(x.getHeaders()));
+		assertEquals("['1.2.3']",SimpleJson.of(x.getHeaders()));
 	}
 
 	@Remote(headerList=F2b.class)

@@ -111,7 +111,6 @@ public class CharMarshall extends Marshall {
 	 * 	The serialized object.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	@Override /* Serializer */
 	public final String write(Object object) throws SerializeException {
 		return s.serializeToString(object);
 	}

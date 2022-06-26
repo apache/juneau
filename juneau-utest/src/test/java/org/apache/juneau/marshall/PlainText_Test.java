@@ -13,48 +13,48 @@
 package org.apache.juneau.marshall;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
+import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class RdfXmlTest {
-
-	CharMarshall m = RdfXml.DEFAULT;
-
-	String r = ""
-		+ "<rdf:RDF"
-		+ "    xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\""
-		+ "    xmlns:j=\"http://www.apache.org/juneau/\""
-		+ "    xmlns:jp=\"http://www.apache.org/juneaubp/\" > "
-		+ "<rdf:Description rdf:nodeID=\"A0\">"
-		+ "<j:value>foo</j:value>"
-		+ "</rdf:Description>"
-		+ "</rdf:RDF>";
+public class PlainText_Test {
 
 	@Test
-	public void write1() throws Exception {
-		assertString(m.write("foo")).isContains("<j:value>foo</j:value>");
+	public void a01_to() throws Exception {
+		Object in1 = "foo", in2 = JsonMap.of("foo", "bar");
+		String expected1 = "foo", expected2 = "{foo:'bar'}";
+
+		assertString(PlainText.of(in1)).is(expected1);
+		assertString(PlainText.of(in1,stringWriter())).is(expected1);
+		assertString(PlainText.of(in2)).is(expected2);
+		assertString(PlainText.of(in2,stringWriter())).is(expected2);
 	}
 
 	@Test
-	public void write2() throws Exception {
-		StringWriter sw = new StringWriter();
-		m.write("foo", sw);
-		assertString(sw.toString()).isContains("<j:value>foo</j:value>");
+	public void a02_from() throws Exception {
+		String in1 = "foo", in2 = "{foo:'bar'}";
+		String expected1 = "foo", expected2 = "{foo:'bar'}";
+
+		assertString(PlainText.to(in1, String.class)).is(expected1);
+		assertString(PlainText.to(stringReader(in1), String.class)).is(expected1);
+		assertObject(PlainText.to(in2, Map.class, String.class, String.class)).asJson().is(expected2);
+		assertObject(PlainText.to(stringReader(in2), Map.class, String.class, String.class)).asJson().is(expected2);
 	}
 
-	@Test
-	public void toString1() throws Exception {
-		assertString(m.toString("foo")).isContains("<j:value>foo</j:value>");
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private Writer stringWriter() {
+		return new StringWriter();
 	}
 
-	@Test
-	public void read1() throws Exception {
-		String s = m.read(r, String.class);
-		assertEquals("foo", s);
+	private Reader stringReader(String s) {
+		return new StringReader(s);
 	}
 }

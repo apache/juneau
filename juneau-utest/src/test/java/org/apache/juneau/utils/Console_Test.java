@@ -10,48 +10,15 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.marshall;
-
-import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.runners.MethodSorters.*;
-
-import java.io.*;
-import java.util.*;
+package org.apache.juneau.utils;
 
 import org.junit.*;
 
-@FixMethodOrder(NAME_ASCENDING)
-public class HtmlTest {
-
-	CharMarshall m = Html.DEFAULT;
+public class Console_Test {
 
 	@Test
-	public void write1() throws Exception {
-		assertEquals("<string>foo</string>", m.write("foo"));
-	}
-
-	@Test
-	public void write2() throws Exception {
-		StringWriter sw = new StringWriter();
-		m.write("foo", sw);
-		assertEquals("<string>foo</string>", sw.toString());
-	}
-
-	@Test
-	public void toString1() throws Exception {
-		assertEquals("<string>foo</string>", m.toString("foo"));
-	}
-
-	@Test
-	public void read1() throws Exception {
-		String s = m.read("<string>foo</string>", String.class);
-		assertEquals("foo", s);
-	}
-
-	@Test
-	public void read2() throws Exception {
-		Map<?,?> o = m.read("<table><tr><td>foo</td><td>bar</td></tr></table>", Map.class, String.class, String.class);
-		assertObject(o).asJson().is("{foo:'bar'}");
+	public void basic() throws Exception {
+		Console.out("test{0}",1);
+		Console.err("test{0}",2);
 	}
 }

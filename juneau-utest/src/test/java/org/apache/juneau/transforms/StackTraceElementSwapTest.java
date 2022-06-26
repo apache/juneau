@@ -25,7 +25,7 @@ import org.junit.*;
 public class StackTraceElementSwapTest {
 
 	private String write(StackTraceElement ste) {
-		return SimpleJson.DEFAULT.toString(ste);
+		return SimpleJson.of(ste);
 	}
 
 	private StackTraceElement read(String in) throws Exception {

@@ -13,45 +13,52 @@
 package org.apache.juneau.marshall;
 
 import static org.apache.juneau.assertions.Assertions.*;
-import static org.junit.Assert.assertEquals;
 import static org.junit.runners.MethodSorters.*;
 
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.collections.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class UonTest {
-
-	CharMarshall m = Uon.DEFAULT;
+public class NTriple_Test {
 
 	@Test
-	public void write1() throws Exception {
-		assertEquals("foo", m.write("foo"));
+	public void a01_to() throws Exception {
+		Object in1 = "foo", in2 = JsonMap.of("foo", "bar");
+		String
+			expected1 = "<http://www.apache.org/juneau/value> \"foo\"^^<http://www.w3.org/2001/XMLSchema#string> .",
+			expected2 = "<http://www.apache.org/juneaubp/foo> \"bar\"^^<http://www.w3.org/2001/XMLSchema#string> .";
+
+		assertString(NTriple.of(in1)).isContains(expected1);
+		assertString(NTriple.of(in1,stringWriter())).isContains(expected1);
+		assertString(NTriple.of(in2)).isContains(expected2);
+		assertString(NTriple.of(in2,stringWriter())).isContains(expected2);
 	}
 
 	@Test
-	public void write2() throws Exception {
-		StringWriter sw = new StringWriter();
-		m.write("foo", sw);
-		assertEquals("foo", sw.toString());
+	public void a02_from() throws Exception {
+		String
+			in1 = "_:xxx <http://www.apache.org/juneau/value> \"foo\"^^<http://www.w3.org/2001/XMLSchema#string> .",
+			in2 = "_:xxx <http://www.apache.org/juneaubp/foo> \"bar\"^^<http://www.w3.org/2001/XMLSchema#string> .";
+		String expected1 = "foo", expected2 = "{foo:'bar'}";
+
+		assertString(NTriple.to(in1, String.class)).is(expected1);
+		assertString(NTriple.to(stringReader(in1), String.class)).is(expected1);
+		assertObject(NTriple.to(in2, Map.class, String.class, String.class)).asJson().is(expected2);
+		assertObject(NTriple.to(stringReader(in2), Map.class, String.class, String.class)).asJson().is(expected2);
 	}
 
-	@Test
-	public void toString1() throws Exception {
-		assertEquals("foo", m.toString("foo"));
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private Writer stringWriter() {
+		return new StringWriter();
 	}
 
-	@Test
-	public void read1() throws Exception {
-		String s = m.read("foo", String.class);
-		assertEquals("foo", s);
-	}
-
-	@Test
-	public void read2() throws Exception {
-		Map<?,?> o = m.read("(foo=bar)", Map.class, String.class, String.class);
-		assertObject(o).asJson().is("{foo:'bar'}");
+	private Reader stringReader(String s) {
+		return new StringReader(s);
 	}
 }

@@ -19,6 +19,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.io.*;
+import java.io.Console;
 import java.net.*;
 import java.nio.file.*;
 import java.text.*;
