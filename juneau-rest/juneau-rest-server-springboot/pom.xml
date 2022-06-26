@@ -35,18 +35,18 @@
 			<version>${project.version}</version>
 		</dependency>
 
-        <!-- Spring Boot dependencies-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>${springboot.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+		<!-- Spring Boot dependencies-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<version>${springboot.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 	</dependencies>
 
 	<properties>
@@ -83,66 +83,6 @@
 					</instructions>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<includes>
-						<include>**/*Test.class</include>
-					</includes>
-				</configuration>
-			</plugin>
-			<!--plugin>
-				<groupId>com.github.siom79.japicmp</groupId>
-				<artifactId>japicmp-maven-plugin</artifactId>
-				<version>0.13.0</version>
-				<configuration>
-					<oldVersion>
-						<dependency>
-							<groupId>org.apache.juneau</groupId>
-							<artifactId>${project.artifactId}</artifactId>
-							<version>${juneau.compare.version}</version>
-							<type>jar</type>
-						</dependency>
-					</oldVersion>
-					<newVersion>
-						<file>
-							<path>${project.build.directory}/${project.artifactId}-${project.version}.jar</path>
-						</file>
-					</newVersion>
-					<parameter>
-						<onlyModified>true</onlyModified>
-						<accessModifier>public</accessModifier>
-						<excludes>
-						</excludes>
-						<ignoreMissingClasses>true</ignoreMissingClasses>
-						<onlyBinaryIncompatible>true</onlyBinaryIncompatible>
-						<breakBuildOnBinaryIncompatibleModifications>true</breakBuildOnBinaryIncompatibleModifications>
-						<breakBuildIfCausedByExclusion>false</breakBuildIfCausedByExclusion>
-						<breakBuildBasedOnSemanticVersioning>true</breakBuildBasedOnSemanticVersioning>
-						<overrideCompatibilityChangeParameters>
-							<overrideCompatibilityChangeParameter>
-								<binaryCompatible>true</binaryCompatible>
-								<compatibilityChange>SUPERCLASS_REMOVED</compatibilityChange>
-								<sourceCompatible>true</sourceCompatible>
-							</overrideCompatibilityChangeParameter>
-							<overrideCompatibilityChangeParameter>
-								<binaryCompatible>true</binaryCompatible>
-								<compatibilityChange>FIELD_REMOVED_IN_SUPERCLASS</compatibilityChange>
-								<sourceCompatible>true</sourceCompatible>
-							</overrideCompatibilityChangeParameter>
-						</overrideCompatibilityChangeParameters>
-					</parameter>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>verify</phase>
-						<goals>
-							<goal>cmp</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin-->
 		</plugins>
 	</build>
 </project>

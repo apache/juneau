@@ -29,6 +29,7 @@
 	<description>Apache Juneau REST APIs</description>
 
 	<modules>
+		<module>juneau-rest-common</module>
 		<module>juneau-rest-server</module>
 		<module>juneau-rest-server-jaxrs</module>
 		<module>juneau-rest-server-rdf</module>

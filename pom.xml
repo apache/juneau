@@ -96,11 +96,6 @@
 				<version>${httpcore.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.httpcomponents</groupId>
-				<artifactId>httpmime</artifactId>
-				<version>${httpclient.version}</version>
-			</dependency>
-			<dependency>
 				<!-- Java 11 -->
 				<groupId>javax.activation</groupId>
 				<artifactId>javax.activation-api</artifactId>
