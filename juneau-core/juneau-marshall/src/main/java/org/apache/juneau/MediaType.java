@@ -405,6 +405,35 @@ public class MediaType implements Comparable<MediaType>  {
 		return null;
 	}
 
+	/**
+	 * Given a list of media types, returns the best match for this <c>Content-Type</c> header.
+	 *
+	 * <p>
+	 * Note that fuzzy matching is allowed on the media types where the <c>Content-Types</c> header may
+	 * contain additional subtype parts.
+	 * <br>For example, given a <c>Content-Type</c> value of <js>"text/json+activity"</js>,
+	 * the media type <js>"text/json"</js> will match if <js>"text/json+activity"</js> or <js>"text/activity+json"</js>
+	 * isn't found.
+	 * <br>The purpose for this is to allow parsers to match when artifacts such as <c>id</c> properties are
+	 * present in the header.
+	 *
+	 * @param mediaTypes The media types to match against.
+	 * @return The index into the array of the best match, or <c>-1</c> if no suitable matches could be found.
+	 */
+	public int match(List<MediaType> mediaTypes) {
+		int matchQuant = 0, matchIndex = -1;
+
+		for (int i = 0; i < mediaTypes.size(); i++) {
+			MediaType mt = mediaTypes.get(i);
+			int matchQuant2 = mt.match(this, true);
+			if (matchQuant2 > matchQuant) {
+				matchQuant = matchQuant2;
+				matchIndex = i;
+			}
+		}
+		return matchIndex;
+	}
+
 	private static HeaderElement parse(String value) {
 		HeaderElement[] elements = BasicHeaderValueParser.parseElements(emptyIfNull(trim(value)), null);
 		return (elements.length > 0 ? elements[0] : new BasicHeaderElement("", ""));

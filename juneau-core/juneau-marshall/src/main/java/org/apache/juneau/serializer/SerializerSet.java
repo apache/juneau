@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.serializer;
 
-import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -25,7 +24,6 @@ import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
@@ -566,7 +564,7 @@ public final class SerializerSet {
 		if (sm != null)
 			return sm;
 
-		Accept a = accept(acceptHeader);
+		MediaRanges a = MediaRanges.of(acceptHeader);
 		int match = a.match(mediaRangesList);
 		if (match >= 0) {
 			sm = new SerializerMatch(mediaRanges[match], mediaTypeRangeSerializers[match]);

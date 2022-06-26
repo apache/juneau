@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.encoders;
 
-import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 import static java.util.stream.Collectors.*;
@@ -21,7 +20,6 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -358,7 +356,7 @@ public final class EncoderSet {
 		if (em != null)
 			return em;
 
-		AcceptEncoding ae = acceptEncoding(acceptEncoding);
+		StringRanges ae = StringRanges.of(acceptEncoding);
 		int match = ae.match(encodings);
 
 		if (match >= 0) {

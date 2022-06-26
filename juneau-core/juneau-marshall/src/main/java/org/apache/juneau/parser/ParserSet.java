@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.parser;
 
-import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
@@ -25,7 +24,6 @@ import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
@@ -540,7 +538,7 @@ public final class ParserSet {
 		if (pm != null)
 			return pm;
 
-		ContentType ct = contentType(contentTypeHeader);
+		MediaType ct = MediaType.of(contentTypeHeader);
 		int match = ct.match(ulist(mediaTypes));
 
 		if (match >= 0) {
