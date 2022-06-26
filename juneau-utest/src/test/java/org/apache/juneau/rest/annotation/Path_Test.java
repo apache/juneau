@@ -19,6 +19,7 @@ import static org.junit.runners.MethodSorters.*;
 import java.util.*;
 
 import org.apache.http.client.config.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;

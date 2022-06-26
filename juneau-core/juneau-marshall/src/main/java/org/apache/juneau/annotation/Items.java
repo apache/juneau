@@ -10,21 +10,58 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http.annotation;
+package org.apache.juneau.annotation;
 
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.oapi.*;
+
 /**
  * Swagger items annotation.
  *
  * <p>
- * This class is essentially identical to {@link Items} except it's used for defining items of items.
+ * A limited subset of JSON-Schema's items object.
  *
  * <p>
- * Since annotations cannot be nested, we're forced to create a separate annotation for it.
- * <br>If you want to nest items further, you have to define them free-form using {@link #items()} as free-form JSON.
+ * Used to populate the auto-generated Swagger documentation and UI for server-side <ja>@Rest</ja>-annotated classes.
+ * <br>Also used to define OpenAPI schema information for POJOs serialized through {@link OpenApiSerializer} and parsed through {@link OpenApiParser}.
+ *
+ * <h5 class='section'>Examples:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Items have a specific set of enumerated string values</jc>
+ * 	<ja>@Query</ja>(
+ * 		name=<js>"status"</js>,
+ * 		schema=<ja>@Schema</ja>(
+ * 			type=<js>"array"</js>,
+ * 			collectionFormat=<js>"csv"</js>,
+ * 			items=<ja>@Items</ja>(
+ * 				type=<js>"string"</js>,
+ * 				_enum=<js>"AVAILABLE,PENDING,SOLD"</js>,
+ * 				_default=<js>"AVAILABLE"</js>
+ *			)
+ *		)
+ * 	)
+ * </p>
+ * <p class='bjava'>
+ * 	<jc>// An array of arrays, the internal array being of type integer, numbers must be between 0 and 63 (inclusive)</jc>
+ * 	<ja>@Query</ja>(
+ * 		name=<js>"status"</js>,
+ * 		schema=<ja>@Schema</ja>(
+ * 			type=<js>"array"</js>,
+ * 			collectionFormat=<js>"csv"</js>,
+ * 			items=<ja>@Items</ja>(
+ * 				type=<js>"array"</js>,
+ * 				items=<ja>@SubItems</ja>(
+ * 					type=<js>"integer"</js>,
+ * 					minimum=<js>"0"</js>,
+ * 					maximum=<js>"63"</js>
+ * 				)
+ * 			)
+ *		)
+ * 	)
+ * </p>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.Swagger}
@@ -34,7 +71,7 @@ import java.lang.annotation.*;
  */
 @Documented
 @Retention(RUNTIME)
-public @interface SubItems {
+public @interface Items {
 
 	/**
 	 * <mk>default</mk> field of the {@doc ext.SwaggerItemsObject}.
@@ -53,7 +90,7 @@ public @interface SubItems {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The format is a plain-text string.
+	 * 		Each entry is a possible value.  Can also contain comma-delimited lists of values.
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -168,13 +205,9 @@ public @interface SubItems {
 	 * <p>
 	 * Describes the type of items in the array.
 	 *
-	 * <p>
-	 * This is a {@doc jd.Swagger} object.
-	 * <br>It must be declared free-form because it's not possible to nest annotations in Java.
-	 *
 	 * @return The annotation value.
 	 */
-	String[] items() default {};
+	SubItems items() default @SubItems;
 
 	/**
 	 * Synonym for {@link #maximum()}.

@@ -56,7 +56,7 @@ public @interface OpenApiConfig {
 	 * Default format for HTTP parts.
 	 *
 	 * <p>
-	 * Specifies the format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.http.annotation.Schema#format()}.
+	 * Specifies the format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.annotation.Schema#format()}.
 	 *
 	 * <ul class='values javatree'>
 	 * 	<li class='jc'>{@link HttpPartFormat}
@@ -89,7 +89,7 @@ public @interface OpenApiConfig {
 	 * Default collection format for HTTP parts.
 	 *
 	 * <p>
-	 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.http.annotation.Schema#collectionFormat()}.
+	 * Specifies the collection format to use for HTTP parts when not otherwise specified via {@link org.apache.juneau.annotation.Schema#collectionFormat()}.
 	 *
 	 * <ul class='values javatree'>
 	 * 	<li class='jc'>{@link HttpPartCollectionFormat}

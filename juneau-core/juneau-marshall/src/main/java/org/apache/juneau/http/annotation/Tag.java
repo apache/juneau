@@ -16,6 +16,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.annotation.*;
+
 /**
  * Swagger tag annotation.
  *

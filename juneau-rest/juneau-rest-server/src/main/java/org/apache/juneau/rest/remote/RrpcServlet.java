@@ -23,6 +23,7 @@ import java.util.*;
 import java.util.Map;
 import java.util.concurrent.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.dto.*;
 import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.html.annotation.*;

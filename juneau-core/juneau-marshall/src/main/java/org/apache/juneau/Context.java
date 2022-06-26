@@ -579,7 +579,7 @@ public abstract class Context implements AnnotationProvider {
 		 * 	<li class='ja'>{@link org.apache.juneau.csv.annotation.CsvAnnotation}
 		 * 	<li class='ja'>{@link org.apache.juneau.html.annotation.HtmlAnnotation}
 		 * 	<li class='ja'>{@link org.apache.juneau.json.annotation.JsonAnnotation}
-		 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.SchemaAnnotation}
+		 * 	<li class='ja'>{@link org.apache.juneau.annotation.SchemaAnnotation}
 		 * 	<li class='ja'>{@link org.apache.juneau.msgpack.annotation.MsgPackAnnotation}
 		 * 	<li class='ja'>{@link org.apache.juneau.oapi.annotation.OpenApiAnnotation}
 		 * 	<li class='ja'>{@link org.apache.juneau.plaintext.annotation.PlainTextAnnotation}

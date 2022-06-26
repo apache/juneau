@@ -15,8 +15,8 @@ package org.apache.juneau.jsonschema;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.parser.*;
 
 /**

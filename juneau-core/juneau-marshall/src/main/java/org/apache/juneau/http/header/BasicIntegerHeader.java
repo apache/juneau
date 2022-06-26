@@ -19,6 +19,7 @@ import static org.apache.juneau.internal.ThrowableUtils.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.annotation.*;
 

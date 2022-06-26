@@ -24,6 +24,7 @@ import java.math.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;

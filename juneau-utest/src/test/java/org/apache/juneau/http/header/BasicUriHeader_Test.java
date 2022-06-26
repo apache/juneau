@@ -19,6 +19,7 @@ import java.io.*;
 import java.net.*;
 import java.util.function.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.rest.annotation.*;

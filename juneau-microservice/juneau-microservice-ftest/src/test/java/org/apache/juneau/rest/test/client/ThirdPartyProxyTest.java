@@ -24,6 +24,7 @@ import static org.junit.runners.MethodSorters.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Request;

@@ -14,6 +14,7 @@ package org.apache.juneau.http.header;
 
 import java.util.function.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.annotation.*;
 
 /**

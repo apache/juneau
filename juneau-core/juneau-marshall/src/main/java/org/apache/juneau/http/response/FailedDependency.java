@@ -17,6 +17,7 @@ import static org.apache.juneau.http.response.FailedDependency.*;
 import java.text.*;
 
 import org.apache.http.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 

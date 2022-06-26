@@ -32,6 +32,7 @@ import org.apache.http.message.*;
 import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Header;
 import org.apache.juneau.http.response.*;

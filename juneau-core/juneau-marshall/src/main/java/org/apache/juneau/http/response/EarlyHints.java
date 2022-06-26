@@ -14,6 +14,7 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.response.EarlyHints.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
 

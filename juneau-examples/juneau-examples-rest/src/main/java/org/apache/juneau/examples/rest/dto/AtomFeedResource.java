@@ -16,6 +16,7 @@ import static org.apache.juneau.dto.atom.AtomBuilder.*;
 
 import java.net.URI;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.dto.atom.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.annotation.*;

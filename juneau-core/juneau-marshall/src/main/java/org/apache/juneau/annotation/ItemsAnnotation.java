@@ -10,35 +10,27 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http.annotation;
+package org.apache.juneau.annotation;
 
 import static org.apache.juneau.internal.ArrayUtils.*;
-import static org.apache.juneau.jsonschema.SchemaUtils.*;
 
 import java.lang.annotation.*;
-import java.util.*;
-import java.util.function.*;
-
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.collections.*;
-import org.apache.juneau.internal.*;
-import org.apache.juneau.parser.*;
 
 /**
- * Utility classes and methods for the {@link SubItems @SubItems} annotation.
+ * Utility classes and methods for the {@link Items @Items} annotation.
  *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class SubItemsAnnotation {
+public class ItemsAnnotation {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/** Default value */
-	public static final SubItems DEFAULT = create().build();
+	public static final Items DEFAULT = create().build();
 
 	/**
 	 * Instantiates a new builder for this class.
@@ -55,46 +47,8 @@ public class SubItemsAnnotation {
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
-	public static boolean empty(org.apache.juneau.http.annotation.SubItems a) {
+	public static boolean empty(org.apache.juneau.annotation.Items a) {
 		return a == null || DEFAULT.equals(a);
-	}
-
-	/**
-	 * Merges the contents of the specified annotation into the specified generic map.
-	 *
-	 * @param om The map to copy the contents to.
-	 * @param a The annotation to apply.
-	 * @return The same map with the annotation contents applied.
-	 * @throws ParseException Invalid JSON found in value.
-	 */
-	public static JsonMap merge(JsonMap om, SubItems a) throws ParseException {
-		if (SubItemsAnnotation.empty(a))
-			return om;
-		Predicate<String> ne = StringUtils::isNotEmpty;
-		Predicate<Collection<?>> nec = CollectionUtils::isNotEmpty;
-		Predicate<Map<?,?>> nem = CollectionUtils::isNotEmpty;
-		Predicate<Boolean> nf = ObjectUtils::isTrue;
-		Predicate<Long> nm1 = ObjectUtils::isNotMinusOne;
-		return om
-			.appendFirst(ne, "collectionFormat", a.collectionFormat(), a.cf())
-			.appendIf(ne, "default", joinnl(a._default(), a.df()))
-			.appendFirst(nec, "enum", parseSet(a._enum()), parseSet(a.e()))
-			.appendIf(nf, "exclusiveMaximum", a.exclusiveMaximum() || a.emax())
-			.appendIf(nf, "exclusiveMinimum", a.exclusiveMinimum() || a.emin())
-			.appendFirst(ne, "format", a.format(), a.f())
-			.appendIf(nem, "items", parseMap(a.items()))
-			.appendFirst(ne, "maximum", a.maximum(), a.max())
-			.appendFirst(nm1, "maxItems", a.maxItems(), a.maxi())
-			.appendFirst(nm1, "maxLength", a.maxLength(), a.maxl())
-			.appendFirst(ne, "minimum", a.minimum(), a.min())
-			.appendFirst(nm1, "minItems", a.minItems(), a.mini())
-			.appendFirst(nm1, "minLength", a.minLength(), a.minl())
-			.appendFirst(ne, "multipleOf", a.multipleOf(), a.mo())
-			.appendFirst(ne, "pattern", a.pattern(), a.p())
-			.appendFirst(ne, "type", a.type(), a.t())
-			.appendIf(nf, "uniqueItems", a.uniqueItems() || a.ui())
-			.appendIf(ne, "$ref", a.$ref())
-		;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -110,29 +64,30 @@ public class SubItemsAnnotation {
 	 */
 	public static class Builder extends AnnotationBuilder {
 
-		String $ref="", cf="", collectionFormat="", f="", format="", max="", maximum="", min="", minimum="", mo="", multipleOf="", p="", pattern="", t="", type="";
-		long maxItems=-1, maxLength=-1, maxi=-1, maxl=-1, minItems=-1, minLength=-1, mini=-1, minl=-1;
 		boolean emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;
-		String[] _default={}, _enum={}, df={}, e={}, items={};
+		long maxItems=-1, maxLength=-1, maxi=-1, maxl=-1, minItems=-1, minLength=-1, mini=-1, minl=-1;
+		String $ref="", cf="", collectionFormat="", f="", format="", max="", maximum="", min="", minimum="", mo="", multipleOf="", p="", pattern="", t="", type="";
+		String[] _default={}, _enum={}, df={}, e={};
+		SubItems items = SubItemsAnnotation.DEFAULT;
 
 		/**
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(SubItems.class);
+			super(Items.class);
 		}
 
 		/**
-		 * Instantiates a new {@link SubItems @SubItems} object initialized with this builder.
+		 * Instantiates a new {@link Items @Items} object initialized with this builder.
 		 *
-		 * @return A new {@link SubItems @SubItems} object.
+		 * @return A new {@link Items @Items} object.
 		 */
-		public SubItems build() {
+		public Items build() {
 			return new Impl(this);
 		}
 
 		/**
-		 * Sets the <c>_default</c> property on this annotation.
+		 * Sets the {@link Items#_default} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -143,7 +98,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>_enum</c> property on this annotation.
+		 * Sets the {@link Items#_enum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -154,7 +109,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>$ref</c> property on this annotation.
+		 * Sets the {@link Items#$ref} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -165,7 +120,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>cf</c> property on this annotation.
+		 * Sets the {@link Items#cf} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -176,7 +131,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>collectionFormat</c> property on this annotation.
+		 * Sets the {@link Items#collectionFormat} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -187,7 +142,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>df</c> property on this annotation.
+		 * Sets the {@link Items#df} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -198,7 +153,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>e</c> property on this annotation.
+		 * Sets the {@link Items#e} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -209,7 +164,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>emax</c> property on this annotation.
+		 * Sets the {@link Items#emax} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -220,7 +175,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>emin</c> property on this annotation.
+		 * Sets the {@link Items#emin} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -231,7 +186,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>exclusiveMaximum</c> property on this annotation.
+		 * Sets the {@link Items#exclusiveMaximum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -242,7 +197,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>exclusiveMinimum</c> property on this annotation.
+		 * Sets the {@link Items#exclusiveMinimum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -253,7 +208,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>f</c> property on this annotation.
+		 * Sets the {@link Items#f} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -264,7 +219,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>format</c> property on this annotation.
+		 * Sets the {@link Items#format} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -275,18 +230,18 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>items</c> property on this annotation.
+		 * Sets the {@link Items#items} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder items(String...value) {
+		public Builder items(SubItems value) {
 			this.items = value;
 			return this;
 		}
 
 		/**
-		 * Sets the <c>max</c> property on this annotation.
+		 * Sets the {@link Items#max} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -297,7 +252,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>maxi</c> property on this annotation.
+		 * Sets the {@link Items#maxi} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -308,7 +263,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>maximum</c> property on this annotation.
+		 * Sets the {@link Items#maximum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -319,7 +274,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>maxItems</c> property on this annotation.
+		 * Sets the {@link Items#maxItems} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -330,7 +285,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>maxl</c> property on this annotation.
+		 * Sets the {@link Items#maxl} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -341,7 +296,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>maxLength</c> property on this annotation.
+		 * Sets the {@link Items#maxLength} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -352,7 +307,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>min</c> property on this annotation.
+		 * Sets the {@link Items#min} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -363,7 +318,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>mini</c> property on this annotation.
+		 * Sets the {@link Items#mini} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -374,7 +329,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>minimum</c> property on this annotation.
+		 * Sets the {@link Items#minimum} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -385,7 +340,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>minItems</c> property on this annotation.
+		 * Sets the {@link Items#minItems} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -396,7 +351,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>minl</c> property on this annotation.
+		 * Sets the {@link Items#minl} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -407,7 +362,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>minLength</c> property on this annotation.
+		 * Sets the {@link Items#minLength} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -418,7 +373,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>mo</c> property on this annotation.
+		 * Sets the {@link Items#mo} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -429,7 +384,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>multipleOf</c> property on this annotation.
+		 * Sets the {@link Items#multipleOf} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -440,7 +395,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>p</c> property on this annotation.
+		 * Sets the {@link Items#p} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -451,7 +406,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>pattern</c> property on this annotation.
+		 * Sets the {@link Items#pattern} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -462,7 +417,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>t</c> property on this annotation.
+		 * Sets the {@link Items#t} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -473,7 +428,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>type</c> property on this annotation.
+		 * Sets the {@link Items#type} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -484,7 +439,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>ui</c> property on this annotation.
+		 * Sets the {@link Items#ui} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -495,7 +450,7 @@ public class SubItemsAnnotation {
 		}
 
 		/**
-		 * Sets the <c>uniqueItems</c> property on this annotation.
+		 * Sets the {@link Items#uniqueItems} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -513,12 +468,13 @@ public class SubItemsAnnotation {
 	// Implementation
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static class Impl extends AnnotationImpl implements SubItems {
+	private static class Impl extends AnnotationImpl implements Items {
 
 		private final boolean emax, emin, exclusiveMaximum, exclusiveMinimum, ui, uniqueItems;
 		private final long maxi, maxItems, maxl, maxLength, mini, minItems, minl, minLength;
 		private final String $ref, cf, collectionFormat, f, format, max, maximum, min, minimum, mo, multipleOf, p, pattern, t, type;
-		private final String[] _default, _enum, df, e, items;
+		private final String[] _default, _enum, df, e;
+		private final SubItems items;
 
 		Impl(Builder b) {
 			super(b);
@@ -535,7 +491,7 @@ public class SubItemsAnnotation {
 			this.exclusiveMinimum = b.exclusiveMinimum;
 			this.f = b.f;
 			this.format = b.format;
-			this.items = copyOf(b.items);
+			this.items = b.items;
 			this.max = b.max;
 			this.maxi = b.maxi;
 			this.maximum = b.maximum;
@@ -559,172 +515,172 @@ public class SubItemsAnnotation {
 			postConstruct();
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public String[] _default() {
 			return _default;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public String[] _enum() {
 			return _enum;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public String $ref() {
 			return $ref;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public String cf() {
 			return cf;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public String collectionFormat() {
 			return collectionFormat;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public String[] df() {
 			return df;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public String[] e() {
 			return e;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public boolean emax() {
 			return emax;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public boolean emin() {
 			return emin;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public boolean exclusiveMaximum() {
 			return exclusiveMaximum;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public boolean exclusiveMinimum() {
 			return exclusiveMinimum;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public String f() {
 			return f;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public String format() {
 			return format;
 		}
 
-		@Override /* SubItems */
-		public String[] items() {
+		@Override /* Items */
+		public SubItems items() {
 			return items;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public String max() {
 			return max;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public long maxi() {
 			return maxi;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public String maximum() {
 			return maximum;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public long maxItems() {
 			return maxItems;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public long maxl() {
 			return maxl;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public long maxLength() {
 			return maxLength;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public String min() {
 			return min;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public long mini() {
 			return mini;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public String minimum() {
 			return minimum;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public long minItems() {
 			return minItems;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public long minl() {
 			return minl;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public long minLength() {
 			return minLength;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public String mo() {
 			return mo;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public String multipleOf() {
 			return multipleOf;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public String p() {
 			return p;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public String pattern() {
 			return pattern;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public String t() {
 			return t;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public String type() {
 			return type;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public boolean ui() {
 			return ui;
 		}
 
-		@Override /* SubItems */
+		@Override /* Items */
 		public boolean uniqueItems() {
 			return uniqueItems;
 		}

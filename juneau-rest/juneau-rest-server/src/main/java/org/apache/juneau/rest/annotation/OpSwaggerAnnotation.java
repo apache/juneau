@@ -17,7 +17,6 @@ import static org.apache.juneau.internal.ArrayUtils.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.http.annotation.*;
 
 /**
  * Utility classes and methods for the {@link OpSwagger @OpSwagger} annotation.
