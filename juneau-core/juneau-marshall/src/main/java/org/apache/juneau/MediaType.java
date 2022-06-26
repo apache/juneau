@@ -15,7 +15,6 @@ package org.apache.juneau;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
-import static org.apache.juneau.http.HttpParts.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -189,7 +188,7 @@ public class MediaType implements Comparable<MediaType>  {
 			}
 		}
 		for (int i = 0; i < parameters.length; i++)
-			parameters[i] = stringPart(parameters[i].getName(), parameters[i].getValue());
+			parameters[i] = new BasicNameValuePair(parameters[i].getName(), parameters[i].getValue());
 		this.parameters = parameters;
 
 		String x = mediaType.replace(' ', '+');

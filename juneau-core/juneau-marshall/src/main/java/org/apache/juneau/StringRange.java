@@ -15,7 +15,6 @@ package org.apache.juneau;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.http.HttpParts.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -75,7 +74,7 @@ public class StringRange {
 			if (p.getName().equals("q")) {
 				qValue = Float.parseFloat(p.getValue());
 			} else {
-				extensions.add(stringPart(p.getName(), p.getValue()));
+				extensions.add(new BasicNameValuePair(p.getName(), p.getValue()));
 			}
 		}
 

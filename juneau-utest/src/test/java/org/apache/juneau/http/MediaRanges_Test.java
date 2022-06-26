@@ -59,35 +59,35 @@ public class MediaRanges_Test {
 		x1 = of("text/json;a=1;q=0.9;b=2");
 		x2 = x1.getRange(0);
 		assertString(x2).is("text/json;a=1;q=0.9;b=2");
-		assertObject(x2.getParameters()).asJson().is("['a=1']");
+		assertObject(x2.getParameters()).asJson().is("[{name:'a',value:'1'}]");
 		assertString(x2.getQValue()).is("0.9");
-		assertObject(x2.getExtensions()).asJson().is("['b=2']");
+		assertObject(x2.getExtensions()).asJson().is("[{name:'b',value:'2'}]");
 
 		x1 = of("text/json;a=1;a=2;q=0.9;b=3;b=4");
 		x2 = x1.getRange(0);
 		assertString(x2).is("text/json;a=1;a=2;q=0.9;b=3;b=4");
-		assertObject(x2.getParameters()).asJson().is("['a=1','a=2']");
+		assertObject(x2.getParameters()).asJson().is("[{name:'a',value:'1'},{name:'a',value:'2'}]");
 		assertString(x2.getQValue()).is("0.9");
-		assertObject(x2.getExtensions()).asJson().is("['b=3','b=4']");
+		assertObject(x2.getExtensions()).asJson().is("[{name:'b',value:'3'},{name:'b',value:'4'}]");
 
 		x1 = of("text/json;a=1;a=2;q=1.0;b=3;b=4");
 		x2 = x1.getRange(0);
 		assertString(x2).is("text/json;a=1;a=2;q=1.0;b=3;b=4");
-		assertObject(x2.getParameters()).asJson().is("['a=1','a=2']");
+		assertObject(x2.getParameters()).asJson().is("[{name:'a',value:'1'},{name:'a',value:'2'}]");
 		assertString(x2.getQValue()).is("1.0");
-		assertObject(x2.getExtensions()).asJson().is("['b=3','b=4']");
+		assertObject(x2.getExtensions()).asJson().is("[{name:'b',value:'3'},{name:'b',value:'4'}]");
 
 		x1 = of("text/json;a=1");
 		x2 = x1.getRange(0);
 		assertString(x2).is("text/json;a=1");
-		assertObject(x2.getParameters()).asJson().is("['a=1']");
+		assertObject(x2.getParameters()).asJson().is("[{name:'a',value:'1'}]");
 		assertString(x2.getQValue()).is("1.0");
 		assertObject(x2.getExtensions()).asJson().is("[]");
 
 		x1 = of("text/json;a=1;");
 		x2 = x1.getRange(0);
 		assertString(x2).is("text/json;a=1");
-		assertObject(x2.getParameters()).asJson().is("['a=1']");
+		assertObject(x2.getParameters()).asJson().is("[{name:'a',value:'1'}]");
 		assertString(x2.getQValue()).is("1.0");
 		assertObject(x2.getExtensions()).asJson().is("[]");
 

@@ -26,7 +26,7 @@ public class StringRange_Test {
 	public void a01_basic() throws Exception {
 		StringRange x1 = of("foo;a=1;q=0.5;b=2");
 		assertString(x1.getQValue()).is("0.5");
-		assertObject(x1.getExtensions()).asJson().is("['a=1','b=2']");
+		assertObject(x1.getExtensions()).asJson().is("[{name:'a',value:'1'},{name:'b',value:'2'}]");
 
 		StringRange x2 = of("foo;q=1.0");
 		assertString(x2.getQValue()).is("1.0");
@@ -34,7 +34,7 @@ public class StringRange_Test {
 
 		StringRange x3 = of("foo;a=1");
 		assertString(x3.getQValue()).is("1.0");
-		assertObject(x3.getExtensions()).asJson().is("['a=1']");
+		assertObject(x3.getExtensions()).asJson().is("[{name:'a',value:'1'}]");
 
 		StringRange x4 = of("foo;a=1");
 		assertObject(x3).is(x4);

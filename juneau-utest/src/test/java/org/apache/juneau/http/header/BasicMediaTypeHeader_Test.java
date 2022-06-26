@@ -112,7 +112,7 @@ public class BasicMediaTypeHeader_Test {
 
 	@Test
 	public void a08_getParameters() throws Exception {
-		assertObject(contentType("text/foo;x=1;y=2").getParameters()).asJson().is("['x=1','y=2']");
+		assertObject(contentType("text/foo;x=1;y=2").getParameters()).asJson().is("[{name:'x',value:'1'},{name:'y',value:'2'}]");
 		assertObject(new ContentType((String)null).getParameters()).asJson().is("[]");
 	}
 
