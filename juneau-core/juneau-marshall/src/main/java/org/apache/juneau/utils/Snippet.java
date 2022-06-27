@@ -22,7 +22,7 @@ package org.apache.juneau.utils;
  * See <c>Assertions.<jsm>assertThrown</jsm>(Snippet)</c> for an example.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.FluentAssertions}
+ * 	<li class='link'>{@doc ja.Overview}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

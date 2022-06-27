@@ -75,7 +75,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.FluentAssertions}
+ * 	<li class='link'>{@doc ja.Overview}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

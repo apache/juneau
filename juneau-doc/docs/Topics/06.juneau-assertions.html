@@ -13,14 +13,31 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Security Best-Practices'}
+{title:'juneau-assertions', created:'9.0.0'}
 
 <div class='topic'>
+	<h5 class='figure'>Maven Dependency</h5>
+	<p class='bxml w500'>
+		|	<xt>&lt;dependency&gt;</xt>
+		|		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
+		|		<xt>&lt;artifactId&gt;</xt>juneau-assertions<xt>&lt;/artifactId&gt;</xt>
+		|		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
+		|	<xt>&lt;/dependency&gt;</xt>
+	</p>	
+	
+	<h5 class='figure'>Java Library</h5>
+	<p class='bcode w500'>
+		|	juneau-assertions-{@property juneauVersion}.jar 
+	</p>	
+	
+	<h5 class='figure'>OSGi Module</h5>
+	<p class='bcode w500'>
+		|	org.apache.juneau.assertions_{@property juneauVersion}.jar 
+	</p>	
+	
 	<p>
-		Security is always an ongoing concern in any library.  
-		If you discover any security vulnerabilities in this code, please refer to the instructions found here:
+		The {@link oaj.assertions} package in Juneau is a powerful API for performing fluent style assertions.
+		It is used to implement built-in assertion methods on both the server and client side APIs.
+		But it can also be used standalone for testing.
 	</p>
-	<ul class='spaced-list'>
-		<li class='extlink'>{@doc http://www.apache.org/security SECURITY}
-	</ul>
 </div>
