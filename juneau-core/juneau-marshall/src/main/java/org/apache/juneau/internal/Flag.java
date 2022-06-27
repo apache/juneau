@@ -14,7 +14,7 @@ package org.apache.juneau.internal;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
-import org.apache.juneau.assertions.*;
+import org.apache.juneau.utils.*;
 
 /**
  * A simple settable boolean value.

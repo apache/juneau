@@ -14,9 +14,9 @@ package org.apache.juneau.internal;
 
 import java.io.*;
 
-import org.apache.juneau.assertions.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
+import org.apache.juneau.utils.*;
 
 /**
  * Various utility methods for creating and working with throwables.
