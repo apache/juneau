@@ -38,6 +38,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-common</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>javax.xml.bind</groupId>
 			<artifactId>jaxb-api</artifactId>
 		</dependency>
