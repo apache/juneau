@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * The server does not support the HTTP protocol version used in the request.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

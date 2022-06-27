@@ -21,7 +21,7 @@ import java.util.*;
  * Represents valid HTTP 1.1 method name static strings per the RFC 2616 spec.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@doc ext.RFC2616}
  * 	<li class='extlink'>{@source}
  * </ul>

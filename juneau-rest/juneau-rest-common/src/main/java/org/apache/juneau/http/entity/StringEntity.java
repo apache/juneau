@@ -25,7 +25,7 @@ import org.apache.juneau.internal.*;
  * A self contained, repeatable entity that obtains its content from a {@link String}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

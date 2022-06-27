@@ -31,7 +31,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>Note: Some sites issue HTTP 401 when an IP address is banned from the website (usually the website domain) and that specific address is refused permission to access a website.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

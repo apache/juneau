@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * The server is unwilling to process the request because either an individual header field, or all the header fields collectively, are too large.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

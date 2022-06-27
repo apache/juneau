@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * The requested resource is capable of generating only content not acceptable according to the Accept headers sent in the request.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

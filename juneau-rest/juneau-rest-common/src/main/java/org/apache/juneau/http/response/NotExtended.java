@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * Further extensions to the request are required for the server to fulfill it.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

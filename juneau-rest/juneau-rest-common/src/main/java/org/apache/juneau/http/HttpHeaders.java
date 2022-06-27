@@ -34,7 +34,7 @@ import org.apache.juneau.reflect.*;
  * Standard predefined HTTP headers.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

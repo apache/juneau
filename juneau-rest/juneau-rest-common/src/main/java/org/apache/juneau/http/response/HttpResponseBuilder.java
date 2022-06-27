@@ -28,7 +28,7 @@ import org.apache.juneau.internal.*;
  * Builder for {@link HttpResponse} beans.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

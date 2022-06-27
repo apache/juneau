@@ -29,7 +29,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>Subsequent requests by the client are permissible.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

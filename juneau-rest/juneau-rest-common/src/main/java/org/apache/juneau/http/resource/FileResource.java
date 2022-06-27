@@ -19,7 +19,7 @@ import org.apache.juneau.http.entity.*;
  * A repeatable resource that obtains its content from a {@link File}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

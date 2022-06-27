@@ -55,7 +55,7 @@ import org.apache.juneau.http.annotation.*;
  * extension methods for which it is not explicitly referred to as part of that method definition.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@doc ext.RFC2616}
  * 	<li class='extlink'>{@source}
  * </ul>

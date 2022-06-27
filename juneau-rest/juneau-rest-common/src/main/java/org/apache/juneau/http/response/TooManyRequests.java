@@ -29,7 +29,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>Intended for use with rate-limiting schemes.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

@@ -35,7 +35,7 @@ import org.apache.juneau.annotation.*;
  * An example of a type range is a value in an <c>Accept-Encoding</c> header.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@doc ext.RFC2616}
  * 	<li class='extlink'>{@source}
  * </ul>

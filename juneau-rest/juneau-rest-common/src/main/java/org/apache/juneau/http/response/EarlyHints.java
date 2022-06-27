@@ -25,7 +25,7 @@ import org.apache.juneau.http.annotation.*;
  * Used to return some response headers before final HTTP message.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

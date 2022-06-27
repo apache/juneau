@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * So, for example, submitting a form to a permanently redirected resource may continue smoothly.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

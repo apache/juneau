@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * For example, a POST request should be repeated using another POST request.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

@@ -18,7 +18,7 @@ import org.apache.http.*;
  * Identifies a class that can be converted to a {@link NameValuePair} object.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

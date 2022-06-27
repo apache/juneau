@@ -125,7 +125,7 @@ import org.apache.juneau.http.annotation.*;
  * an unsatisfiable Range request-header, since not all servers implement this request-header.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@doc ext.RFC2616}
  * 	<li class='extlink'>{@source}
  * </ul>

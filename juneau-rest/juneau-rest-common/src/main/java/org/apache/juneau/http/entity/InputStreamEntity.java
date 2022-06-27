@@ -21,7 +21,7 @@ import java.io.*;
  * A streamed, non-repeatable entity that obtains its content from an {@link InputStream}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

@@ -27,7 +27,7 @@ import org.apache.juneau.http.annotation.*;
  * In such case, there is no need to retransmit the resource since the client still has a previously-downloaded copy.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

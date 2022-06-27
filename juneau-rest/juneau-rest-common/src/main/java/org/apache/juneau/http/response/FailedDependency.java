@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * The request failed because it depended on another request and that request failed (e.g., a PROPPATCH).
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

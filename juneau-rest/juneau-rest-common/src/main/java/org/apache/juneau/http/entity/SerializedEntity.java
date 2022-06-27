@@ -27,7 +27,7 @@ import org.apache.juneau.serializer.*;
  * HttpEntity for serializing POJOs as the body of HTTP requests.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

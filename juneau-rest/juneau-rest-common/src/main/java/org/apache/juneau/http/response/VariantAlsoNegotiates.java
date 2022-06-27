@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * Transparent content negotiation for the request results in a circular reference.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

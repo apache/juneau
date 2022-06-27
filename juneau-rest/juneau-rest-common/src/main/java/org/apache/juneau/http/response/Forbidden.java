@@ -29,7 +29,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>The user might not have the necessary permissions for a resource, or may need an account of some sort.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

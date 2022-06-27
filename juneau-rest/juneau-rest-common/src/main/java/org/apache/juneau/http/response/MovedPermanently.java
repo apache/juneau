@@ -26,7 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * This and all future requests should be directed to the given URI.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

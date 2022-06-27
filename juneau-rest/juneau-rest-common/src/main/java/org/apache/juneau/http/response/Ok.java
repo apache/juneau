@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * In a POST request, the response will contain an entity describing or containing the result of the action.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

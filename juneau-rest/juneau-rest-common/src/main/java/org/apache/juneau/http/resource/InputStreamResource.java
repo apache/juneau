@@ -19,7 +19,7 @@ import org.apache.juneau.http.entity.*;
  * A streamed, non-repeatable resource that obtains its content from an {@link InputStream}.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

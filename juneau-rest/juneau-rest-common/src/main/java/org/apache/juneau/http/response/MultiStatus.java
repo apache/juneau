@@ -26,7 +26,7 @@ import org.apache.juneau.http.annotation.*;
  * The message body that follows is by default an XML message and can contain a number of separate response codes, depending on how many sub-requests were made.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

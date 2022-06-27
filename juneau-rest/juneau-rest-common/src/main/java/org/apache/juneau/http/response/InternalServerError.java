@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * A generic error message, given when an unexpected condition was encountered and no more specific message is suitable.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

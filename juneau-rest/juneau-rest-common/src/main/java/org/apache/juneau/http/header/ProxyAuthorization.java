@@ -48,7 +48,7 @@ import org.apache.juneau.http.annotation.*;
  * proxies cooperatively authenticate a given request.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@doc ext.RFC2616}
  * 	<li class='extlink'>{@source}
  * </ul>

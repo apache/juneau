@@ -32,7 +32,7 @@ import org.apache.juneau.http.annotation.*;
  * <br>It's up to the server to decide whether to honor this header.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  *

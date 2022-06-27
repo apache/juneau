@@ -30,7 +30,7 @@ import org.apache.juneau.http.annotation.*;
  * However, some Web applications and frameworks use the 302 status code as if it were the 303.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

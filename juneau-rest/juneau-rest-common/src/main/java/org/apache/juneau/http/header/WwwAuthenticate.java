@@ -44,7 +44,7 @@ import org.apache.juneau.http.annotation.*;
  * itself can contain a comma-separated list of authentication parameters.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@doc ext.RFC2616}
  * 	<li class='extlink'>{@source}
  * </ul>

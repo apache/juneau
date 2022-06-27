@@ -26,7 +26,7 @@ import org.apache.juneau.assertions.*;
  * A {@link NameValuePair} that consists of a comma-delimited list of string values.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

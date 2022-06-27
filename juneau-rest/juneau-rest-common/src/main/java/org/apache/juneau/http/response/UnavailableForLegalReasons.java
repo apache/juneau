@@ -28,7 +28,7 @@ import org.apache.juneau.http.annotation.*;
  * A server operator has received a legal demand to deny access to a resource or to a set of resources that includes the requested resource.
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpParts}
+ * 	<li class='link'>{@doc juneau-rest-common}
  * 	<li class='extlink'>{@source}
  * </ul>
  *
