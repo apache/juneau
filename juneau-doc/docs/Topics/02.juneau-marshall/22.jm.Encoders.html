@@ -1,0 +1,80 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Encoders', created:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The {@link oaj.encoders} package defines an API for handling encoding-based matching
+		of <c>Accept-Encoding</c>/<c>Content-Encoding</c> HTTP headers.  It consists of the following classes:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.encoders.EncoderSet}
+		<li class='jcc'>{@link oaj.encoders.Encoder}
+		<ul>
+			<li class='jc'>{@link oaj.encoders.IdentityEncoder}
+			<li class='jc'>{@link oaj.encoders.GzipEncoder}
+		</ul>
+	</ul>
+	<h5 class='topic'>EncoderSet</h5>
+	<p>
+		The {@link oaj.encoders.EncoderSet} class represents the set of {@link Encoder encoders} keyed by codings.
+		It maintains a set of encoders and the codings that they can handle.
+ 		The {@link oaj.encoders.EncoderSet#getEncoderMatch(String) getEncoderMatch(String)} and {@link oaj.encoders.EncoderSet#getEncoder(String)} 
+ 		methods are then used to find appropriate encoders for specific <c>Accept-Encoding</c> and <c>Content-Encoding</c> header values.
+	</p>
+	
+	<h5 class='topic'>Match ordering</h5>
+	<p>
+		Encoders are tried in the order they appear in the set.  The {@link oaj.encoders.EncoderSet.Builder#add(Class...)} / {@link oaj.encoders.EncoderSet.Builder#add(Encoder...)}
+		methods prepend the values to the list to allow them the opportunity to override encoders already in the list.
+	</p>
+	<p>
+		For example, calling <code>builder.add(E1.<jk>class</jk>,E2.<jk>class</jk>).add(E3.<jk>class</jk>,
+		E4.<jk>class</jk>)</code> will result in the order <c>E3, E4, E1, E2</c>.
+	</p>
+	
+	<h5 class='section'>Example:</h5>
+	<p class='bjava'>
+	|	<jc>// Create an encoder group with support for gzip compression.</jc>
+	|	EncoderSet <jv>encoders</jv> = EncoderSet
+	|		.<jsm>create</jsm>()
+	|		.add(GzipEncoder.<jk>class</jk>)
+	|		.build();
+	|
+	|	<jc>// Should return "gzip"</jc>
+	|	String <jv>matchedCoding</jv> = <jv>encoders</jv>.findMatch(<js>"compress;q=1.0, gzip;q=0.8, identity;q=0.5, *;q=0"</js>);
+	|
+	|	<jc>// Get the encoder</jc>
+	|	Encoder <jv>encoder</jv> = <jv>encoders</jv>.getEncoder(<jv>matchedCoding</jv>);
+	</p>
+
+	<h5 class='topic'>Encoder API</h5>
+	<p>
+		The {@link oaj.encoders.Encoder} interface is used for enabling decompression on requests and compression on responses, such as support for GZIP compression.
+		It is used to wrap input and output streams within compression/decompression streams.
+	</p>
+	<ul class='javatree'>
+		<li class='jac'>{@link oaj.encoders.Encoder}
+		<ul class='javatreec'>
+			<li class='jm'>{@link oaj.encoders.Encoder#getCodings() getCodings()}
+			<li class='jm'>{@link oaj.encoders.Encoder#getInputStream(InputStream) getInputStream(InputStream)}
+			<li class='jm'>{@link oaj.encoders.Encoder#getOutputStream(OutputStream) getOutputStream(OutputStream)}
+		</ul>
+	</ul>
+	<p>
+		Encoders are registered with <c>RestServlets</c> through the <ja>@Rest(encoders)</ja> annotation.
+	</p>
+</div>

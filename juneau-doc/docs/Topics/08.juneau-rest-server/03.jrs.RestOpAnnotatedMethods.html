@@ -1,0 +1,85 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'@RestOp-Annotated Methods', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		REST Java methods are identified on REST servlets using the 
+		{@link oajr.annotation.RestOp @RestOp} annotation. 
+		The annotation allows the framework to identify the available REST methods through reflection.
+	</p>
+	<ul class='javatree'>
+		<li class='ja'>{@link oajr.annotation.RestOp}
+			<ul class='javatreec'>
+				<li class='jma'>{@link oajr.annotation.RestOp#clientVersion() clientVersion}
+				<li class='jma'>{@link oajr.annotation.RestOp#consumes() consumes}
+				<li class='jma'>{@link oajr.annotation.RestOp#contextClass() contextClass}
+				<li class='jma'>{@link oajr.annotation.RestOp#converters() converters}
+				<li class='jma'>{@link oajr.annotation.RestOp#debug() debug}
+				<li class='jma'>{@link oajr.annotation.RestOp#defaultAccept() defaultAccept}
+				<li class='jma'>{@link oajr.annotation.RestOp#defaultCharset() defaultCharset}
+				<li class='jma'>{@link oajr.annotation.RestOp#defaultContentType() defaultContentType}
+				<li class='jma'>{@link oajr.annotation.RestOp#defaultRequestAttributes() defaultRequestAttributes}
+				<li class='jma'>{@link oajr.annotation.RestOp#defaultRequestFormData() defaultRequestFormData}
+				<li class='jma'>{@link oajr.annotation.RestOp#defaultRequestHeaders() defaultRequestHeaders}
+				<li class='jma'>{@link oajr.annotation.RestOp#defaultRequestQueryData() defaultRequestQueryData}
+				<li class='jma'>{@link oajr.annotation.RestOp#defaultResponseHeaders() defaultResponseHeaders}
+				<li class='jma'>{@link oajr.annotation.RestOp#description() description}
+				<li class='jma'>{@link oajr.annotation.RestOp#encoders() encoders}
+				<li class='jma'>{@link oajr.annotation.RestOp#guards() guards}
+				<li class='jma'>{@link oajr.annotation.RestOp#matchers() matchers}
+				<li class='jma'>{@link oajr.annotation.RestOp#maxInput() maxInput}
+				<li class='jma'>{@link oajr.annotation.RestOp#method() method}
+				<li class='jma'>{@link oajr.annotation.RestOp#on() on}
+				<li class='jma'>{@link oajr.annotation.RestOp#parsers() parsers}
+				<li class='jma'>{@link oajr.annotation.RestOp#path() path}
+				<li class='jma'>{@link oajr.annotation.RestOp#produces() produces}
+				<li class='jma'>{@link oajr.annotation.RestOp#roleGuard() roleGuard}
+				<li class='jma'>{@link oajr.annotation.RestOp#rolesDeclared() rolesDeclared}
+				<li class='jma'>{@link oajr.annotation.RestOp#serializers() serializers}
+				<li class='jma'>{@link oajr.annotation.RestOp#summary() summary}
+				<li class='jma'>{@link oajr.annotation.RestOp#swagger() swagger}
+				<li class='jma'>{@link oajr.annotation.RestOp#value() value}
+			</ul>
+		</li>
+	</ul>
+	
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<ja>@RestOp</ja>(method=<jsf>GET</jsf>, path=<js>"/"</js>)
+		|	<jk>public</jk> String sayHello() {
+		|		<jk>return</jk> <js>"Hello world!"</js>;
+		|	}
+	</p>
+	
+	<p>
+		The following specialized annotations are also provided for specific HTTP methods:
+	</p>
+	<ul class='javatreec'>
+		<li class='ja'>{@link oajr.annotation.RestGet}
+		<li class='ja'>{@link oajr.annotation.RestPut}
+		<li class='ja'>{@link oajr.annotation.RestPost}
+		<li class='ja'>{@link oajr.annotation.RestDelete}
+	</ul>
+	
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<ja>@RestGet</ja>(path=<js>"/"</js>)
+		|	<jk>public</jk> String sayHello() {
+		|		<jk>return</jk> <js>"Hello world!"</js>;
+		|	}
+	</p>
+</div>

@@ -1,0 +1,164 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'org.apache.juneau.http.part', created:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The {@link oaj.http.part} package contains implementations of <c>org.apache.http.NameValuePair</c> to 
+		be used for query/form-data/path parts and part lists.
+	</p>
+	<ul class='javatree'>
+		<li class='jic'>{@code org.apache.http.NameValuePair}
+		<ul>
+			<li class='jc'>{@link oaj.http.part.BasicPart}
+			<ul class='javatreec'>
+				<li class='jc'>{@link oaj.http.part.BasicBooleanPart}
+				<li class='jc'>{@link oaj.http.part.BasicCsvArrayPart}
+				<li class='jc'>{@link oaj.http.part.BasicDatePart}
+				<li class='jc'>{@link oaj.http.part.BasicIntegerPart}
+				<li class='jc'>{@link oaj.http.part.BasicLongPart}
+				<li class='jc'>{@link oaj.http.part.BasicPartIterator}
+				<li class='jc'>{@link oaj.http.part.BasicStringPart}
+				<li class='jc'>{@link oaj.http.part.BasicUriPart}
+			</ul>
+		</ul>
+	</ul>
+
+	<h5 class='topic'>PartList</h5>
+	<p>
+		The {@link oaj.http.part.PartList} class is a thread-safe immutable list of HTTP parts (form-data, query-parameters, path-parameters).
+	</p>
+	<h5 class='figure'>Example</h5>
+	<p class='bjava'>
+		|	PartList <jv>parts</jv> = PartList
+		|		.<jsm>create</jsm>()
+		|		.append(MyPart.<jsm>of</jsm>(<js>"foo"</js>))
+		|		.append(<js>"Bar"</js>, ()-&gt;<jsm>getDynamicValueFromSomewhere</jsm>())
+		|		.build();
+	</p>
+
+	<p>
+		Convenience creators are provided for creating lists with minimal code:
+	</p>
+	<p class='bjava'>
+		PartList <jv>parts</jv> = PartList.<jsm>of</jsm>(BasicIntegerPart.<jsm>of</jsm>(<js>"foo"</js>, 1));
+	</p>
+
+	<p>
+		Part lists are immutable, but can be appended to using the {@link oaj.http.part.PartList#copy() copy()} method:
+	</p>
+	<p class='bjava'>
+		|	<jv>parts</jv> = <jv>parts</jv>
+		|		.copy()
+		|		.append(BasicIntegerPart.<jsm>of</jsm>(<js>"foo"</js>, 1))
+		|		.build();
+	</p>
+
+	<p>
+		Static methods are provided on {@link oaj.http.HttpParts} to further simplify creation of part lists.
+	</p>
+	<p class='bjava'>
+		|	<jk>import static</jk> org.apache.juneau.http.HttpParts.*;
+		|
+		|	PartList <jv>parts</jv> = <jsm>partList</jsm>(<jsm>integerPart</jsm>(<js>"foo"</js>, 1), <jsm>booleanPart</jsm>(<js>"bar"</js>, <jk>false</jk>));
+	</p>
+
+	<p>
+		The builder class supports setting default part values (i.e. add a part to the list if it isn't otherwise in the list).
+		Note that this is different from simply setting a value twice as using default values will not overwrite existing
+		parts.
+		<br>The following example notes the distinction:
+	</p>
+
+	<p class='bjava'>
+		|	<jv>parts</jv> = PartList
+		|		.<jsm>create</jsm>()
+		|		.set(<js>"Foo"</js>, <js>"bar"</js>)
+		|		.set(<js>"Foo"</js>, <js>"baz"</js>)
+		|		.build();
+		|	<jsm>assertObject</jsm>(<jv>parts</jv>).isString(<js>"foo=baz"</js>);
+		|
+		|	<jv>parts</jv> = PartList
+		|		.create()
+		|		.set(<js>"Foo"</js>, <js>"bar"</js>)
+		|		.setDefault(<js>"Foo"</js>, <js>"baz"</js>)
+		|		.build();
+		|	<jsm>assertObject</jsm>(<jv>parts</jv>).isString(<js>"foo=bar"</js>);
+	</p>
+
+	<p>
+		Various methods are provided for iterating over the parts in this list to avoid array copies.
+	</p>
+	<ul class='javatree'>
+		<li class='jm'>{@link oaj.http.part.PartList#forEach(Consumer) forEach(Consumer)} / {@link oaj.http.part.PartList#forEach(String,Consumer) forEach(String,Consumer)} / {@link oaj.http.part.PartList#forEach(Predicate,Consumer) forEach(Predicate,Consumer)} - Use consumers to process parts.
+		<li class='jm'>{@link oaj.http.part.PartList#iterator() iterator()} / {@link oaj.http.part.PartList#iterator(String) iterator(String)} - Use an {@link PartIterator} to process parts.
+		<li class='jm'>{@link oaj.http.part.PartList#stream() stream()} / {@link oaj.http.part.PartList#stream(String) stream(String)} - Use a stream.
+	</ul>
+	<p>
+		In general, try to use these over the {@link oaj.http.part.PartList#getAll() getAll()} / {@link oaj.http.part.PartList#getAll(String) getAll(String)} methods that require array copies.
+	</p>
+
+	<p>
+		Similar to the way multiple headers can be collapsed into a single value, the {@link oaj.http.part.PartList#get(String) get(String)} method is special in that it will collapse multiple parts with the same name into
+		a single comma-delimited list.
+	</p>
+
+	<p>
+		The {@link oaj.http.part.PartList#get(Class) get(Class)} and {@link oaj.http.part.PartList#get(String,Class) get(String,Class)} methods are provided for working with {@link oaj.http.annotation.FormData} / {@link oaj.http.annotation.Query} / {@link oaj.http.annotation.Path}-annotated
+		beans.
+	</p>
+
+	<h5 class='figure'>Example</h5>
+	<p class='bjava'>
+		|	MyQueryBean <jv>foo</jv> = <jv>parts</jv>.get(MyQueryBean.<jk>class</jk>);
+	</p>
+
+	<p>
+		A {@link oaj.svl.VarResolver} can be associated with this builder to create part values with embedded variables that
+		are resolved at runtime.
+	</p>
+
+	<h5 class='figure'>Example</h5>
+	<p class='bjava'>
+		|	<jc>// Create a part list with dynamically-resolving values pulled from a system property.</jc>
+		|
+		|	System.<jsm>setProperty</jsm>(<js>"foo"</js>, <js>"bar"</js>);
+		|
+		|	PartList <jv>parts</jv> = PartList
+		|		.<jsm>create</jsm>()
+		|		.resolving()
+		|		.append(<js>"X1"</js>, <js>"$S{foo}"</js>)
+		|		.append(<js>"X2"</js>, ()-&gt;<js>"$S{foo}"</js>)
+		|		.build();
+		|
+		|	<jsm>assertObject</jsm>(<jv>parts</jv>).isString(<js>"X1=bar&amp;X2=bar"</js>);
+	</p>
+
+	<p>
+		The {@link oaj.http.part.PartList} object can be extended to defined pre-packaged lists of parts which can be used in various
+		annotations throughout the framework.
+	</p>
+
+	<h5 class='figure'>Example</h5>
+	<p class='bjava'>
+		|	<jc>// A predefined list of parts.</jc>
+		|	<jk>public class</jk> MyPartList <jk>extends</jk> PartList {
+		|		<jk>public</jk> MyPartList() {
+		|			<jk>super</jk>(BasicIntegerPart.<jsm>of</jsm>(<js>"foo"</js>,1), BasicBooleanPart.<jsm>of</jsm>(<js>"bar"</js>,<jk>false</jk>));
+		|		}
+		|	}
+	</p>
+</div>

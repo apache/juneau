@@ -1,0 +1,75 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'@Html Annotation'}
+
+<div class='topic'>
+	<p>
+		The {@link oaj.html.annotation.Html @Html} annotation can be used to customize how POJOs are serialized to HTML on a per-class/field/method basis.
+	</p>
+	<ul class='javatree'>
+		<li class='ja'>{@link oaj.html.annotation.Html}
+			<ul class='javatreec'>
+				<li class='jma'>{@link oaj.html.annotation.Html#anchorText() anchorText}
+				<li class='jma'>{@link oaj.html.annotation.Html#format() format}
+				<li class='jma'>{@link oaj.html.annotation.Html#link() link}
+				<li class='jma'>{@link oaj.html.annotation.Html#noTableHeaders() noTableHeaders}
+				<li class='jma'>{@link oaj.html.annotation.Html#noTables() noTables}
+				<li class='jma'>{@link oaj.html.annotation.Html#render() render}
+			</ul>
+		</li>
+	</ul>		
+	<p>
+		The {@link oaj.html.annotation.Html#link @Html(link)} annotation adds a hyperlink to a bean property when rendered as HTML.
+	</p>
+	
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jk>public class</jk> FileSpace {
+		|		<jc>// Add a hyperlink to this bean property.</jc>
+		|		<ja>@Html</ja>(link=<js>"servlet:/drive/{drive}"</js>)
+		|		<jk>public</jk> String getDrive() {...}
+		|	}			
+	</p>
+	<p>
+		The {@link oaj.html.annotation.Html#anchorText @Html(anchorText)} annotation is used to specify the anchor text of a hyperlink.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jc>// Produces &lt;a ...&gt;CLICK ME!&lt;/a&gt; when serialized to HTML.</jc>
+		|	<jk>public class</jk> FileSpace {
+		|		<jc>// Add a hyperlink to this bean property.</jc>
+		|		<ja>@Html</ja>(link=<js>"servlet:/drive/{drive}"</js>, anchorText=<js>"CLICK ME!"</js>)
+		|		<jk>public</jk> String getDrive() {...}
+		|	}			
+	</p>
+	<p>
+		The {@link oaj.html.annotation.Html#format @Html(format)} annotation is used to specify what format to use for HTML elements.
+		For example, the HTML beans defined in the {@link oaj.dto.html5} package use <c>format=<jsf>XML</jsf></c> so that
+		the beans get serialized as standard XML:
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jc>// Parent class of all HTML DTO beans.</jc>
+		|	<ja>@Html</ja>(format=<jsf>XML</jsf>)	
+		|	<jk>public abstract class</jk> HtmlElement {...}
+	</p>
+	<p>
+		The {@link oaj.html.annotation.Html#noTableHeaders @Html(noTableHeaders)} annotation is used to prevent beans from being serialized with table headers.
+	</p>
+	<p>
+		The {@link oaj.html.annotation.Html#noTables @Html(noTables)} annotation is used to force beans to be serialized as trees instead of tables
+	</p>
+</div>

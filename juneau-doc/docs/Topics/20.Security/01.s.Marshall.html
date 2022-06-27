@@ -1,0 +1,86 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'juneau-marshall', created:'8.2.0'} 
+
+<h5 class='topic'>Demarshalling vulnerabilities</h5>
+<div class='topic'>
+	<p>
+		One common security vulnerability is the ability to create arbitrary Java object instances through crafted
+		user input.  For example, support for constructing POJOs based on an input attribute defining a 
+		fully-qualified class name like <js>"{class:'com.foo.MyBean',...}"</js>
+	</p>
+	<p>
+		Fortunately, Juneau does not support an open-ended <js>"class</js> attribute.  
+		As a rule, it should not be possible to create arbitrary POJOs by any of the parsers.
+		The demarshalled object types are inferred via reflection of the class objects passed in through the parser 
+		method (e.g. <c>JsonParser.<jsf>DEFAULT</jsf>.parse(input, MyBean.<jk>class</jk>)</c>).
+		As long as the <c>Class</c> object passed into this method is not constructed from user-generated input,
+		it should be free from demarshalling vulnerabilities.   
+	</p> 
+	<p>
+		The following example shows a potential vector that circumvents the restriction above:
+	</p>
+	<p class='bjava'>
+		|	<jc>// Don't do this!</jc>
+		|	Class <jv>c</jv> = Class.<jsf>forName</jsf>(<jv>someUserInputString</jv>);
+		|	JsonParser.<jsf>DEFAULT</jsf>.parse(<jv>input</jv>, <jv>c</jv>);  <jc>// Oops!  Security hole!</jc>
+	</p>
+	<p>
+		Juneau does support something similar to a <js>"class"</js> attribute that allows you to define the
+		POJO type at runtime.
+		This is the <js>"type"</js> attribute.
+		The difference is that it's not possible to specify fully-qualified class names in <js>"type"</js> attributes,
+		and instead can only specify type keys defined through bean dictionaries. 
+		Instead of serializing the fully-qualified class names in the output, we instead serialize type
+		names that represent those POJO types.
+		i.e. instead of <js>"class='com.foo.MyBean'"</js>, we instead serialize <js>"type='MyBeanIdentifier'"</js>.
+		Since bean types are defined at compile time, it's impossible to instantiate arbitrary POJOs.
+	</p>
+	<p>
+		POJO types of generalized input are also inferred through swaps.
+		Again, since the POJO types are hardcoded at compile time, these should not be subject to demarshalling
+		vulnerabilities.  However, it is possible to circumvent this through your swap implementation as shown
+		below: 	
+	</p>
+	<p class='bjava'>
+		|	<jc>// Don't do this!</jc>
+		|	<jk>public class</jk> MyInsecureSwap <jk>extends</jk> ObjectSwap&lt;JsonMap,Object&gt; {
+		|		<jk>public</jk> Object swap(BeanSession <jv>session</jv>, JsonMap <jv>input</jv>) <jk>throws</jk> Exception {
+		|			<jc>// Security hole!</jc>
+		|			<jk>return</jk> Class.<jsf>forName</jsf>(<jv>input</jv>.getString(<js>"class"</js>)).newInstance();
+		|		}
+		|	}
+	</p>
+	<p>
+		All other parsers (JSON, URL-Encoding, MessagePack, etc...) work the same way in determining POJO types, so
+		should be safe from demarshalling vulnerabilities.  
+	</p>
+</div>
+
+<h5 class='topic'>Dependent libraries</h5>
+<div class='topic'>
+	<p>
+		When accessing security vulnerabilities of any library, dependent libraries must also be taken into account:
+	</p>
+	<ul>
+		<li>The JSON, HTML, MsgPack, URL-Encoding, and UON parsers are written from scratch and do not rely on
+			any other parsing technologies.
+		<li>The XML and HTML parsers uses the built-in Java StAX parser.
+			This *should* be free from vulnerabilities.    
+		<li>The RDF parsers rely on Apache Jena 2.7.1.  
+			As of <c>7.0.1</c>, no known security vulnerabilities exist that affect Juneau at this time.
+	</ul>
+</div>

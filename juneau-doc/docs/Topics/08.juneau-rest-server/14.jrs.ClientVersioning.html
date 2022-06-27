@@ -1,0 +1,68 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Client Versioning', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		Client version headers are used to support backwards compatibility for breaking REST interface changes.
+		Using them, you're able to return different responses based on which client is making a request.
+	</p>
+	<p>
+		The APIs involved with defining client version headers are:
+	</p>
+	<ul class='javatree'>
+		<li class='ja'>{@link oajr.annotation.Rest}
+			<ul class='javatreec'>
+				<li class='jma'>{@link oajr.annotation.Rest#clientVersionHeader() clientVersionHeader}
+			</ul>
+		</li>
+		<li class='ja'>{@link oajr.annotation.RestOp}
+			<ul class='javatreec'>
+				<li class='jma'>{@link oajr.annotation.RestOp#clientVersion() clientVersion}
+			</ul>
+		</li>
+		<li class='jc'>{@link oajr.RestContext.Builder}
+			<ul class='javatreec'>
+				<li class='jm'>{@link oajr.RestContext.Builder#clientVersionHeader(String) clientVersionHeader(String)}
+			</ul>
+		</li>
+	</ul>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jc>// Option #1 - Defined via annotation resolving to a config file setting with default value.</jc>
+		|	<ja>@Rest</ja>(clientVersionHeader=<js>"Client-Version"</js>)
+		|	<jk>public class</jk> MyResource {
+		|
+		|		<jc>// Call this method if Client-Version is at least 2.0.
+		|		// Note that this also matches 2.0.1.</jc>
+		|		<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"2.0"</js>)
+		|		<jk>public</jk> Object method1() {
+		|			...
+		|		}
+		|	
+		|		<jc>// Call this method if Client-Version is at least 1.1, but less than 2.0.</jc>
+		|		<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
+		|		<jk>public</jk> Object method2() {
+		|			...
+		|		}
+		|	
+		|		<jc>// Call this method if Client-Version is less than 1.1.</jc>
+		|		<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[0,1.1)"</js>)
+		|		<jk>public</jk> Object method3() {
+		|			...
+		|		}
+	</p>
+</div>

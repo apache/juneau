@@ -1,0 +1,108 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Request Parts', created:'8.2.0', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		Per-client or per-request HTTP parts (headers, query/form data, path parameters) can be manipulated via the following methods
+		that return back builders for those parts:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oajrc.RestClient.Builder}
+		<ul class='javatreec'>
+			<li class='jm'>{@link oajrc.RestClient.Builder#headers() headers()}
+			<li class='jm'>{@link oajrc.RestClient.Builder#formData() formData()}
+			<li class='jm'>{@link oajrc.RestClient.Builder#queryData() queryData()}
+			<li class='jm'>{@link oajrc.RestClient.Builder#pathData() pathData()}
+		</ul>
+		<li class='jc'>{@link oajrc.RestRequest}
+		<ul class='javatreec'>
+			<li class='jm'>{@link oajrc.RestRequest#headers() headers()}
+			<li class='jm'>{@link oajrc.RestRequest#formData() formData()}
+			<li class='jm'>{@link oajrc.RestRequest#queryData() queryData()}
+			<li class='jm'>{@link oajrc.RestRequest#pathData() pathData()}
+		</ul>
+	</ul>
+	<p>
+		Convenience methods are also provided for quickly adding parts:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oajrc.RestClient.Builder}
+		<ul class='javatreec'>
+			<li class='jm'>{@link oajrc.RestClient.Builder#header(String,String) header(String,String)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#header(String,Supplier) header(String,Supplier&lt;String&gt;)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#headers(Header...) headers(Header...)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#headersDefault(Header...) headersDefault(Header...)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#formData(NameValuePair...) formData(NameValuePair...)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#formData(String,String) formData(String,String)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#formData(String,Supplier) formData(String,Supplier&lt;String&gt;)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#formDataDefault(NameValuePair...) formDataDefault(NameValuePair...)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#queryData(NameValuePair...) queryData(NameValuePair...)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#queryData(String,String) queryData(String,String)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#queryData(String,Supplier) queryData(String,Supplier&lt;String&gt;)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#queryDataDefault(NameValuePair...) queryDataDefault(NameValuePair...)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#pathData(NameValuePair...) pathData(NameValuePair...)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#pathData(String,String) pathData(String,String)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#pathData(String,Supplier) pathData(String,Supplier&lt;String&gt;)}
+			<li class='jm'>{@link oajrc.RestClient.Builder#pathDataDefault(NameValuePair...) pathDataDefault(NameValuePair...)}
+		</ul>
+		<li class='jc'>{@link oajrc.RestRequest}
+		<ul class='javatreec'>
+			<li class='jm'>{@link oajrc.RestRequest#header(Header) header(Header)}
+			<li class='jm'>{@link oajrc.RestRequest#header(String,Object) header(String,Object)}
+			<li class='jm'>{@link oajrc.RestRequest#headerPairs(String...) headerPairs(String...)}
+			<li class='jm'>{@link oajrc.RestRequest#headers(Header...) headers(Header...)}
+			<li class='jm'>{@link oajrc.RestRequest#headersBean(Object) headersBean(Object)}
+			<li class='jm'>{@link oajrc.RestRequest#formData(NameValuePair...) formData(NameValuePair...)}
+			<li class='jm'>{@link oajrc.RestRequest#formData(String,Object) formData(String,Object)}
+			<li class='jm'>{@link oajrc.RestRequest#formDataBean(Object) formDataBean(Object)}
+			<li class='jm'>{@link oajrc.RestRequest#formDataCustom(Object) formDataCustom(Object)}
+			<li class='jm'>{@link oajrc.RestRequest#formDataPairs(String...) formDataPairs(String...)}
+			<li class='jm'>{@link oajrc.RestRequest#queryData(NameValuePair...) queryData(NameValuePair...)}
+			<li class='jm'>{@link oajrc.RestRequest#queryData(String,Object) queryData(String,Object)}
+			<li class='jm'>{@link oajrc.RestRequest#queryDataBean(Object) queryDataBean(Object)}
+			<li class='jm'>{@link oajrc.RestRequest#queryDataPairs(String...) queryDataPairs(String...)}
+			<li class='jm'>{@link oajrc.RestRequest#pathData(NameValuePair...) pathData(NameValuePair...)}
+			<li class='jm'>{@link oajrc.RestRequest#pathData(String,Object) pathData(String,Object)}
+			<li class='jm'>{@link oajrc.RestRequest#pathDataBean(Object) pathDataBean(Object)}
+			<li class='jm'>{@link oajrc.RestRequest#pathDataPairs(String...) pathDataPairs(String...)}
+		</ul>
+	</ul>
+	
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jc>// Create a client that adds a "Foo: bar" header to every request.</jc>
+		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().header(<js>"Foo"</js>,<js>"bar"</js>).build();
+		|
+		|	<jc>// Or do it on every request.</jc>
+		|	String <jv>response</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).header(<js>"Foo"</js>,<js>"bar"</js>).run().getContent().asString();
+	</p>
+	
+	<p>
+		The supplier methods are particularly useful for header values whose values may change over time (such as <c>Authorization</c> headers
+		which may need to change every few minutes).
+	</p>
+	
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jc>// Create a client that adds a dynamic Authorization header to every request.</jc>
+		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().header(<js>"Authorization"</js>, ()->getMyAuthToken()).build();
+	</p>
+	
+	<ul class='seealso'>
+		<li class='jp'>{@link oaj.http.header} - Predefined {@link org.apache.http.Header} beans.
+	</ul>
+</div>

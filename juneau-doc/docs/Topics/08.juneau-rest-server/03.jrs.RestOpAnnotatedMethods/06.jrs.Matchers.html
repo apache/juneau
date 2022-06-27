@@ -1,0 +1,72 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Matchers', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		{@link oajr.RestMatcher RestMatchers} are used to allow multiple Java methods to be 
+		tied to the same HTTP method and path, but differentiated by some request attribute such as a specific 
+		header value.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jc>// GET method that gets invoked for administrators</jc>
+		|	<ja>@RestGet</ja>(path=<js>"/*"</js>, matchers=IsAdminMatcher.<jk>class</jk>)
+		|	<jk>public</jk> Object doGetForAdmin() {
+		|		...
+		|	}
+		|
+		|	<jc>// GET method that gets invoked for everyone else</jc>
+		|	<ja>@RestGet</ja>(<js>"/*"</js>)
+		|	<jk>public</jk> Object doGetForEveryoneElse() {
+		|		...
+		|	}
+	</p>
+	<p>
+		The interface for matchers is simple:
+	</p>
+	<p class='bjava'>
+		|	<jk>public class</jk> IsAdminMatcher <jk>extends</jk> RestMatcher {
+		|
+		|		<ja>@Override</ja> <jc>/* RestMatcher */</jc>
+		|		<jk>public boolean</jk> matches(RestRequest <jv>req</jv>) {
+		|			<jk>return</jk> <jv>req</jv>.isUserInRole(<js>"ADMINS_GROUP"</js>);
+		|		}
+		|	}
+	</p>
+	
+	<ul class='notes'>
+		<li class='note'>
+			If no methods are found with a matching matcher, a <l>412 Precondition Failed</l> status is returned.
+		<li class='note'>
+			If multiple matchers are specified on the same method, ONLY ONE matcher needs to match for the 
+			method to be invoked.
+		<li class='note'>
+			Note that you CANNOT define identical paths on different methods UNLESS you use matchers.
+			<br>That includes paths that are only different in variable names (e.g. <l>"/foo/{bar}"</l> and 
+			<l>"/foo/{baz}"</l>).
+			<br>If you try to do so, a <l>ServletException</l> will be thrown on startup.
+		<li class='note'>
+			Methods with matchers take precedence over methods without.
+			<br>Otherwise, methods are attempted in the order they appear in the class.
+	</ul>
+	
+	<ul class='seealso'>
+		<li class='ja'>{@link oajr.annotation.RestOp#matchers RestOp(matchers)}
+		<li class='jc'>{@link oajr.matcher.MultipartFormDataMatcher}
+		<li class='jc'>{@link oajr.matcher.UrlEncodedFormMatcher}
+	</ul>
+</div>

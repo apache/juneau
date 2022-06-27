@@ -1,0 +1,101 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Widgets', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The {@link oajr.widget.Widget} class allows you to add arbitrary HTML, CSS, and Javascript
+		to HTML pages.
+		<br>They are registered in the following location:
+	</p>
+	<ul class='javatree'>
+		<li class='ja'>{@link oaj.html.annotation.HtmlDocConfig}
+			<ul class='javatreec'>
+				<li class='jma'>{@link oaj.html.annotation.HtmlDocConfig#widgets() widgets}
+			</ul>
+		</li>
+	</ul>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<ja>@RestGet</ja>(...)
+		|	<ja>@HtmlDocConfig</ja>(
+		|		widgets={
+		|			MyWidget.<jk>class</jk>
+		|		},
+		|		navlinks={
+		|			<js>"$W{MyWidget}"</js>
+		|		},
+		|		aside={
+		|			<js>"Check out this widget:  $W{MyWidget}"</js>
+		|		}
+		|	)
+	</p>
+	<p>
+		The <l>Widget</l> class is composed of the following methods:
+	</p>
+	<ul class='javatree'>
+		<li class='jac'>{@link oajr.widget.Widget}
+		<ul>
+			<li class='jm'>{@link oajr.widget.Widget#getHtml(RestRequest,RestResponse) getHtml(RestRequest,RestResponse)}
+			<li class='jm'>{@link oajr.widget.Widget#getStyle(RestRequest,RestResponse) getStyle(RestRequest,RestResponse)}
+			<li class='jm'>{@link oajr.widget.Widget#getScript(RestRequest,RestResponse) getScript(RestRequest,RestResponse)}
+		</ul>
+	</ul>
+	<p>
+		The HTML content returned by the {@link oajr.widget.Widget#getHtml(RestRequest,RestResponse) getHtml(RestRequest,RestResponse)}
+		method is added wherever the <js>"$W{...}"</js> variable is used.
+	</p>
+	<p>
+		The CSS returned by {@link oajr.widget.Widget#getScript(RestRequest,RestResponse) getScript(RestRequest,RestResponse)}
+		is added to the style section in the page header.
+	</p>
+	<p>	
+		The Javascript returned by {@link oajr.widget.Widget#getScript(RestRequest,RestResponse) getScript(RestRequest,RestResponse)}
+		is added to the script section in the page header.
+	</p>
+	<p>
+		The following examples shows how to associate a widget with a REST method and then have it rendered in the links
+		and aside section of the page.
+		It shows an example of a widget that renders an image located in the <c>htdocs</c> static files
+		directory in your classpath (see {@link oajr.annotation.Rest#staticFiles() @Rest(staticFiles)}):
+	</p>
+	<p class='bjava'>
+		|	<jk>public class</jk> MyWidget <jk>extends</jk> Widget {
+		|
+		|		<ja>@Override</ja> <jc>/* Widget */</jc>
+		|		<jk>public</jk> String getHtml(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
+		|			UriResolver <jv>resolver</jv> = <jv>req</jv>.getUriResolver(); <jc>// API used for resolving URIs.</jc>
+		|			<jk>return</jk> <js>"&lt;img class='myimage' onclick='myalert(this)' src='"</js>+<jv>resolver</jv>.resolve(<js>"servlet:/htdocs/myimage.png"</js>)+<js>"'&gt;"</js>;
+		|		}
+		|
+		|		<ja>@Override</ja> <jc>/* Widget */</jc>
+		|		<jk>public</jk> String getScript(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
+		|			<jk>return</jk> <js>""</js>
+		|				+ <js>"\n function myalert(imageElement) {"</js>
+		|				+ <js>"\n 	alert('cool!');"</js>
+		|				+ <js>"\n }"</js>;
+		|		}
+		|
+		|		<ja>@Override</ja> <jc>/* Widget */</jc>
+		|		<jk>public</jk> String getStyle(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
+		|			<jk>return</jk> <js>""</js>
+		|				+ <js>"\n .myimage {"</js>
+		|				+ <js>"\n 	border: 10px solid red;"</js>
+		|				+ <js>"\n }"</js>;
+		|		}
+		|	}
+	</p>
+</div>

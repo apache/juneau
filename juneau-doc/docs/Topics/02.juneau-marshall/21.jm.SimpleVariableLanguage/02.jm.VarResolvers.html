@@ -1,0 +1,70 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'VarResolvers and VarResolverSessions', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The main class for performing variable resolution is {@link oaj.svl.VarResolver}.
+		Two methods are provided for resolving variables:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.svl.VarResolver}
+			<ul>
+				<li class='jm'>{@link oaj.svl.VarResolver#resolve(String) resolve(String)} 
+					- Resolves variables and returns the results as a simple string.
+				<li class='jm'>{@link oaj.svl.VarResolver#resolveTo(String,Writer) resolveTo(String,Writer)} 
+					- Resolves variables and sends results to a writer.
+			</ul>
+		</li>
+	</ul>
+	<p>
+		Var resolvers can rely on the existence of other objects.
+		For example, {@link oaj.config.vars.ConfigVar} relies on the existence of a {@link oaj.config.Config}.
+		This is accomplished through the following method:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.svl.VarResolver.Builder} 
+			<ul>
+				<li class='jm'>{@link oaj.svl.VarResolver.Builder#bean(Class,Object) bean(Class&lt;T&gt;, T)} - Specify a bean for all sessions.
+			</ul>
+		</li>
+		<li class='jc'>{@link oaj.svl.VarResolverSession}
+			<ul>
+				<li class='jm'>{@link oaj.svl.VarResolverSession#bean(Class,Object) bean(Class&lt;T&gt;, T)} - Specify a bean for this session.
+			</ul>
+		</li>
+	</ul>
+	<p>
+		Beans are accessible through the following method:
+	</p>
+	<ul class='javatree'>
+		<li class='jm'>{@link oaj.svl.VarResolverSession#getBean(Class)}
+	</ul>
+	<p>
+		Var resolvers can be cloned and extended by using the {@link oaj.svl.VarResolver#copy()} method.
+		Cloning a resolver will copy it's {@link oaj.svl.Var} class names and context objects.
+	</p>
+	
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jc>// Create a resolver that copies the default resolver and adds $C and $A vars.</jc>
+		|	VarResolver <jv>myVarResolver</jv> = VarResolver
+		|		.<jsf>DEFAULT</jsf>
+		|		.copy()
+		|		.vars(ConfigVar.<jk>class</jk>, ArgsVar.<jk>class</jk>)
+		|		.build();
+	</p>
+</div>

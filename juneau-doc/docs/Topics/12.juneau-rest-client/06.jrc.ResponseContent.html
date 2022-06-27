@@ -1,0 +1,149 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Response Content', created:'8.2.0', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The response body is accessed through the following method:
+	</p>
+	
+	<ul class='javatree'>
+		<li class='jc'>{@link oajrc.RestResponse}
+		<ul>
+			<li class='jm'><c>{@link oajrc.RestResponse#getContent() getContent()} <jk>returns</jk> {@link oajrc.ResponseContent}</c>
+		</ul>
+	</ul>
+	
+	<p>
+		The {@link oajrc.ResponseContent} class extends from the HttpClient {@link org.apache.http.HttpEntity} class and provides several convenience
+		methods:
+	</p>
+	
+	<ul class='javatree'>
+		<li class='jc'>{@link oajrc.ResponseContent}
+		<ul>
+			<li class='jm'><c>{@link oajrc.ResponseContent#asInputStream() asInputStream()} <jk>returns</jk> InputStream</c>
+			<li class='jm'><c>{@link oajrc.ResponseContent#asReader() asReader()} <jk>returns</jk> Reader</c>
+			<li class='jm'><c>{@link oajrc.ResponseContent#asReader(Charset) asReader(Charset)} <jk>returns</jk> Reader</c>
+			<li class='jm'><c>{@link oajrc.ResponseContent#pipeTo(OutputStream) pipeTo(OutputStream)} <jk>returns</jk> {@link oajrc.RestResponse}</c>
+			<li class='jm'><c>{@link oajrc.ResponseContent#pipeTo(Writer) pipeTo(Writer)} <jk>returns</jk> {@link oajrc.RestResponse}</c>
+			<li class='jm'><c>{@link oajrc.ResponseContent#as(Type,Type...) as(Type,Type...)} <jk>returns</jk> T</c>
+			<li class='jm'><c>{@link oajrc.ResponseContent#as(Class) as(Class&lt;T&gt;)} <jk>returns</jk> T</c>
+			<li class='jm'><c>{@link oajrc.ResponseContent#asFuture(Class) asFuture(Class&lt;T&gt;)} <jk>returns</jk> Future&lt;T&gt;</c>
+			<li class='jm'><c>{@link oajrc.ResponseContent#asFuture(Type,Type...) asFuture(Type,Type...)} <jk>returns</jk> Future&lt;T&gt;</c>
+			<li class='jm'><c>{@link oajrc.ResponseContent#asString() asString()} <jk>returns</jk> String</c>
+			<li class='jm'><c>{@link oajrc.ResponseContent#asStringFuture() asStringFuture()} <jk>returns</jk> Future&lt;String&gt;</c>
+			<li class='jm'><c>{@link oajrc.ResponseContent#asAbbreviatedString(int) asAbbreviatedString(int)} <jk>returns</jk> String</c>
+			<li class='jm'><c>{@link oajrc.ResponseContent#asMatcher(Pattern) asMatcher(Pattern)} <jk>returns</jk> {@link java.util.regex.Matcher}</c>
+			<li class='jm'><c>{@link oajrc.ResponseContent#asMatcher(String) asMatcher(String)} <jk>returns</jk> {@link java.util.regex.Matcher}</c>
+		</ul>
+	</ul>
+	
+	<h5 class='figure'>Examples:</h5>
+	<p class='bjava'>
+		|	<jc>// Parse into a bean.</jc>
+		|	MyBean <jv>bean</jv> = <jv>client</jv>
+		|		.get(<jsf>URI</jsf>)
+		|		.run()
+		|		.getContent().as(MyBean.<jk>class</jk>);
+		|
+		|	<jc>// Parse into a linked-list of strings.</jc>
+		|	List&lt;String&gt; <jv>list1</jv> = <jv>client</jv>
+		|		.get(<jsf>URI</jsf>)
+		|		.run()
+		|		.getContent().as(LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+		|
+		|	<jc>// Parse into a linked-list of beans.</jc>
+		|	List&lt;MyBean&gt; <jv>list2</jv> = <jv>client</jv>
+		|		.get(<jsf>URI</jsf>)
+		|		.run()
+		|		.getContent().as(LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+		|
+		|	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
+		|	List&lt;List&lt;String&gt;&gt; <jv>list3</jv> = <jv>client</jv>
+		|		.get(<jsf>URI</jsf>)
+		|		.run()
+		|		.getContent().as(LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+		|
+		|	<jc>// Parse into a map of string keys/values.</jc>
+		|	Map&lt;String,String&gt; <jv>map1</jv> = <jv>client</jv>
+		|		.get(<jsf>URI</jsf>)
+		|		.run()
+		|		.getContent().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+		|
+		|	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
+		|	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>map2</jv> = <jv>client</jv>
+		|		.get(<jsf>URI</jsf>)
+		|		.run()
+		|		.getContent().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	</p>
+	
+	<p>
+		The response body can only be consumed once unless it has been cached into memory.  In many cases, the body is
+		automatically cached when using the assertions methods or methods such as {@link oajrc.ResponseContent#asString()}.
+		However, methods that involve reading directly from the input stream cannot be called twice.
+		In these cases, the {@link oajrc.RestResponse#cacheContent()} and {@link oajrc.ResponseContent#cache()} methods are provided
+		to cache the response body in memory so that you can perform several operations against it.
+	</p>
+	
+	<p class='bjava'>
+		|	<jc>// Cache the response body so we can access it twice.</jc>
+		|	InputStream <jv>inputStream</jv> = <jv>client</jv>
+		|		.get(<jsf>URI</jsf>)
+		|		.run()
+		|		.cacheContent()
+		|		.getContent().pipeTo(<jv>someOtherStream</jv>)
+		|		.getContent().asInputStream();
+	</p>
+	
+	<p>
+		Assertion methods are also provided for fluent-style calls:
+	</p>
+	
+	<ul class='javatree'>
+		<li class='jc'>{@link oajrc.ResponseContent}
+		<ul>
+			<li class='jm'><c>{@link oajrc.ResponseContent#assertString() assertString()} <jk>returns</jk> {@link oaj.assertions.FluentStringAssertion}</c>
+			<li class='jm'><c>{@link oajrc.ResponseContent#assertBytes() assertBytes()} <jk>returns</jk> {@link oaj.assertions.FluentByteArrayAssertion}</c>
+			<li class='jm'><c>{@link oajrc.ResponseContent#assertObject(Class) assertObject(Class)} <jk>returns</jk> {@link oaj.assertions.FluentObjectAssertion}</c>
+			<li class='jm'><c>{@link oajrc.ResponseContent#assertObject(Type,Type...) assertObject(Type,Type...)} <jk>returns</jk> {@link oaj.assertions.FluentObjectAssertion}</c>
+		</ul>
+	</ul>
+	
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jc>// Assert that the body contains the string "Success".</jc>
+		|	String <jv>content</jv> = <jv>client</jv>
+		|		.get(<jsf>URI</jsf>)
+		|		.run()
+		|		.getContent().assertString().contains(<js>"Success"</js>)
+		|		.getContent().asString();
+	</p>
+	
+	<p>
+		Object assertions allow you to parse the response body into a POJO and then perform various tests on that resulting
+		POJO.
+	</p>
+	
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jc>// Parse bean into POJO and then validate that it was parsed correctly.</jc>
+		|	MyBean <jv>bean</jv> = <jv>client</jv>.get(<jsf>URI</jsf>)
+		|		.run()
+		|		.getContent().assertObject(MyBean.<jk>class</jk>).asJson().is(<js>"{foo:'bar'}"</js>)
+		|		.getContent().as(MyBean.<jk>class</jk>);
+	</p>
+</div>

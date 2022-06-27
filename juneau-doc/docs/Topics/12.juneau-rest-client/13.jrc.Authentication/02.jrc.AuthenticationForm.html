@@ -1,0 +1,103 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'FORM-based Authentication'}
+
+<div class='topic'>
+	<p>
+		The {@link oajrc.RestClient.Builder} class does not itself provide FORM-based 
+		authentication since there is no standard way of providing such support. 
+		Typically, to perform FORM-based or other types of authentication, you'll want to create your own
+		subclass of {@link oajrc.RestClient.Builder} and override the 
+		{@link oajrc.RestClient.Builder#createHttpClient()} method to provide an 
+		authenticated client.
+	</p>
+	<p>
+		The following example shows an implementation of a client that performs FORM-based authentication against
+		the IBM Jazz platform.
+	</p>
+	<p class='bjava'>
+		|	<jd>/**
+		|	 * Constructor.
+		|	 */</jd>
+		|	<jk>public</jk> JazzRestClient.Builder(URI <jv>jazzUri</jv>, String <jv>user</jv>, String <jv>pw</jv>) <jk>throws</jk> IOException {
+		|		...
+		|	}
+		|
+		|	<jd>/**
+		|	 * Override the createHttpClient() method to return an authenticated client.
+		|	 */</jd>
+		|	<ja>@Override</ja> <jc>/* RestClient.Builder */</jc>
+		|	<jk>protected</jk> CloseableHttpClient createHttpClient() <jk>throws</jk> Exception {
+		|		CloseableHttpClient <jv>client</jv> = <jk>super</jk>.createHttpClient();
+		|		formBasedAuthenticate(<jv>client</jv>);
+		|		visitAuthenticatedURL(<jv>client</jv>);
+		|		<jk>return</jk> <jv>client</jv>;
+		|	}
+		|
+		|	<jc>/*
+		|	 * Performs form-based authentication against the Jazz server.
+		|	 */</jc>
+		|	<jk>private void</jk> formBasedAuthenticate(HttpClient <jv>client</jv>) <jk>throws</jk> IOException {
+		|
+		|		URI <jv>uri2</jv> = <jf>jazzUri</jf>.resolve(<js>"j_security_check"</js>);
+		|		HttpPost <jv>request</jv> = <jk>new</jk> HttpPost(uri2);
+		|		<jv>request</jv>.setConfig(RequestConfig.<jsm>custom</jsm>().setRedirectsEnabled(<jk>false</jk>).build());
+		|		
+		|		<jc>// Charset must explicitly be set to UTF-8 to handle user/pw with non-ascii characters.</jc>
+		|		<jv>request</jv>.addHeader(<js>"Content-Type"</js>, <js>"application/x-www-form-urlencoded; charset=utf-8"</js>);
+		|
+		|		List&lt;NameValuePair&gt; <jv>params</jv> = AList.<jsm>of</jsm>(
+		|			BasicNameValuePair.<jsm>of</jsm>(<js>"j_username""</js>, <jf>user</jf>),
+		|			BasicNameValuePair.<jsm>of</jsm>(<js>"j_password"</js>, <jf>pw</jf>)
+		|		);
+		|		<jv>request</jv>.setEntity(<jk>new</jk> UrlEncodedFormEntity(<jv>params</jv>));
+		|
+		|		HttpResponse <jv>response</jv> = <jv>client</jv>.execute(<jv>request</jv>);
+		|		<jk>try</jk> {
+		|			<jk>int</jk> <jv>rc</jv> = <jv>response</jv>.getStatusLine().getStatusCode();
+		|
+		|			Header <jv>authMsg</jv> = <jv>response</jv>.getFirstHeader(<js>"X-com-ibm-team-repository-web-auth-msg"</js>);
+		|			<jk>if</jk> (<jv>authMsg</jv> != <jk>null</jk>)
+		|				<jk>throw new</jk> IOException(<jv>authMsg</jv>.getValue());
+		|
+		|			<jc>// The form auth request should always respond with a 200 ok or 302 redirect code</jc>
+		|			<jk>if</jk> (<jv>rc</jv> == <jsf>SC_MOVED_TEMPORARILY</jsf>) {
+		|				<jk>if</jk> (<jv>response</jv>.getFirstHeader(<js>"Location"</js>).getValue().isPattern(<js>"^.*/auth/authfailed.*$"</js>))
+		|					<jk>throw new</jk> IOException(<js>"Invalid credentials."</js>);
+		|			} <jk>else if</jk> (<jv>rc</jv> != <jsf>SC_OK</jsf>) {
+		|				<jk>throw new</jk> IOException(<js>"Unexpected HTTP status: "</js> + <jv>rc</jv>);
+		|			}
+		|		} <jk>finally</jk> {
+		|			EntityUtils.<jsm>consume</jsm>(<jv>response</jv>.getEntity());
+		|		}
+		|	}
+		|
+		|	<jc>/*
+		|	 * This is needed for Tomcat because it responds with SC_BAD_REQUEST when the j_security_check URL is visited before an
+		|	 * authenticated URL has been visited. This same URL must also be visited after authenticating with j_security_check
+		|	 * otherwise tomcat will not consider the session authenticated
+		|	 */</jc>
+		|	<jk>private int</jk> visitAuthenticatedURL(HttpClient <jv>httpClient</jv>) <jk>throws</jk> IOException {
+		|		HttpGet <jv>authenticatedURL</jv> = <jk>new</jk> HttpGet(<jf>jazzUri</jf>.resolve(<js>"authenticated/identity"</js>));
+		|		HttpResponse <jv>response</jv> = <jv>httpClient</jv>.execute(<jv>authenticatedURL</jv>);
+		|		<jk>try</jk> {
+		|			<jk>return</jk> <jv>response</jv>.getStatusLine().getStatusCode();
+		|		} <jk>finally</jk> {
+		|			EntityUtils.<jsm>consume</jsm>(<jv>response</jv>.getEntity());
+		|		}
+		|	}
+	</p>
+</div>

@@ -1,0 +1,81 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Request Content', created:'8.2.0', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The request body can either be passed in with the client creator method (e.g. {@link oajrc.RestClient#post(Object,Object) post(uri,body)}),
+		or can be specified via the following methods:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oajrc.RestRequest}
+		<ul>
+			<li class='jm'>{@link oajrc.RestRequest#content(Object) content(Object)}
+			<li class='jm'>{@link oajrc.RestRequest#content(Object,HttpPartSchema) content(Object,HttpPartSchema)}
+		</ul>
+	</ul>
+	
+	<p>
+		The request body can be any of the following types:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>
+			{@link java.lang.Object} - POJO to be converted to text using the {@link oaj.serializer.Serializer} defined on the client or request.
+		<li class='jc'>
+			{@link java.io.Reader} - Raw contents of {@code Reader} will be serialized to remote resource.
+		<li class='jc'>
+			{@link java.io.InputStream} - Raw contents of {@code InputStream} will be serialized to remote resource.
+		<li class='jc'>
+			{@link org.apache.http.HttpEntity} - Bypass Juneau serialization and pass HttpEntity directly to HttpClient.
+		<li class='jc'>
+			{@link oaj.http.part.PartList} - Converted to a URL-encoded FORM post.
+		<li class='jc'>
+			{@link java.util.function.Supplier} - A supplier of anything on this list.
+	</ul>
+	
+	<h5 class='figure'>Examples:</h5>
+	<p class='bjava'>
+		|	<jc>// Create a client with Simple-JSON support.</jc>
+		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().build();
+		|	
+		|	<jc>// Post a JSON-serialized bean.</jc>
+		|	<jv>client</jv>
+		|		.post(<jsf>URI</jsf>)
+		|		.content(<jv>bean</jv>)
+		|		.complete()
+		|		.assertStatus().asCode().is(200);
+		|	
+		|	<jc>// Post contents from a reader.</jc>
+		|	<jv>client</jv>
+		|		.post(<jsf>URI</jsf>)
+		|		.content(<jk>new</jk> FileReader(<js>"/tmp/foo.json"</js>))
+		|		.complete()
+		|		.assertStatus().asCode().is(200);
+		|	
+		|	<jc>// Post contents from an Apache HttpEntity object.</jc>
+		|	<jv>client</jv>
+		|		.post(<jsf>URI</jsf>)
+		|		.content(<jk>new</jk> StringEntity(<jv>jsonString</jv>, ContentType.<jsf>APPLICATION_JSON</jsf>))
+		|		.complete()
+		|		.assertStatus().asCode().is(200);
+	</p>
+	
+	<ul class='notes'>
+		<li class='note'>If the serializer on the client or request is explicitly set to <jk>null</jk>, POJOs will be converted to strings
+			using the registered part serializer as content type <js>"text/plain</js>.  If the part serializer is also <jk>null</jk>,
+			POJOs will be converted to strings using {@link oaj.ClassMeta#toString(Object)} which typically just calls {@link java.lang.Object#toString()}.
+	</ul>
+</div>

@@ -1,0 +1,107 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Localized Messages', updated:'8.2.0,9.0.0'}
+
+<div class='topic'>
+	<p>
+		The {@link oajr.annotation.Rest#messages @Rest(messages)} annotation identifies the location of the resource bundle 
+		for a <ja>@Rest</ja>-annotated class if it's different from the class name.
+	</p>
+	<p>
+		By default, the resource bundle name is assumed to match the class name.  For example, given the class
+		<c>MyClass.java</c>, the resource bundle is assumed to be <c>MyClass.properties</c>.  This property
+		allows you to override this setting to specify a different location such as <c>MyMessages.properties</c> by
+		specifying a value of <js>"MyMessages"</js>.
+	</p>
+	<p>
+	Resource bundles are searched using the following base name patterns:
+	</p>
+	<ul>
+		<li><js>"{package}.{name}"</js>
+		<li><js>"{package}.i18n.{name}"</js>
+		<li><js>"{package}.nls.{name}"</js>
+		<li><js>"{package}.messages.{name}"</js>
+	</ul>
+	
+	<p>
+		This annotation is used to provide request-localized (based on <c>Accept-Language</c>) messages for the following method:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oajr.RestRequest}
+			<ul class='javatreec'>
+				<li class='jm'>{@link oajr.RestRequest#getMessage(String,Object...) getMessage(String,Object)}
+			</ul>
+	</ul>
+	
+	<p>
+		Request-localized messages are also available by passing either of the following args into your Java method:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link java.util.ResourceBundle} - Basic Java resource bundle.
+		<li class='jc'>{@link oaj.cp.Messages} - Extended resource bundle with several convenience methods.
+	</ul>
+	<p>
+		The value can be a relative path like <js>"nls/Messages"</js>, indicating to look for the resource bundle
+		<js>"com.foo.sample.nls.Messages"</js> if the resource class is in <js>"com.foo.sample"</js>, or it can be an
+		absolute path like <js>"com.foo.sample.nls.Messages"</js>
+	</p>
+	
+	<h5 class='figure'>Examples:</h5>
+	<p class='bini'>
+		|	<cc>#--------------------------------------------------------------------------------
+		|	# Contents of org/apache/foo/nls/MyMessages.properties
+		|	#--------------------------------------------------------------------------------</cc>
+		|	<ck>HelloMessage</ck> = <cv>Hello {0}!</cv>
+	</p>
+	<p class='bjava'>
+		|	<jc>// Contents of org/apache/foo/MyResource.java</jc>
+		|
+		|	<ja>@Rest</ja>(messages=<js>"nls/MyMessages"</js>)
+		|	<jk>public class</jk> MyResource {
+		|
+		|		<ja>@RestGet</ja>(<js>"/hello/{you}"</js>)
+		|		<jk>public</jk> Object helloYou(RestRequest <jv>req</jv>, Messages <jv>messages</jv>, <ja>@Path</ja>(<js>"name"</js>) String <jv>you</jv>) {
+		|			String <jv>msg</jv>;
+		|
+		|			<jc>// Get it from the RestRequest object.</jc>
+		|			<jv>msg</jv> = <jv>req</jv>.getMessage(<js>"HelloMessage"</js>, <jv>you</jv>);
+		|
+		|			<jc>// Or get it from the method parameter.</jc>
+		|			<jv>msg</jv> = <jv>messages</jv>.getString(<js>"HelloMessage"</js>, <jv>you</jv>);
+		|
+		|			<jc>// Or get the message in a locale different from the request.</jc>
+		|			<jv>msg</jv> = <jv>messages</jv>.forLocale(Locale.<jsf>UK</jsf>).getString(<js>"HelloMessage"</js>, <jv>you</jv>);
+		|
+		|			<jk>return</jk> <jv>msg</jv>;
+		|		}
+		|	}
+	</p>
+	<p>
+		When using shared resource bundles, keys can be prefixed by class names like so and still retrieve by simple
+		key names:
+	</p>
+	<p class='bini'>
+		|	<cc>#--------------------------------------------------------------------------------
+		|	# Contents of shared org/apache/foo/nls/MyMessages.properties
+		|	#--------------------------------------------------------------------------------</cc>
+		|	<ck>MyResource.HelloMessage</ck> = <cv>Hello {0}!</cv>
+	</p>
+	
+	<p>
+		Messages are automatically inherited from super classes.  If a string cannot be found in the bundle of the current
+		class, it will be searched for up the class hierarchy.
+	</p>
+</div>

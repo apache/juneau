@@ -1,0 +1,343 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'REST/RPC', updated:'8.0.0,9.0.0'}
+
+<div class='topic'>
+	<p>
+		The REST/RPC (RPC over REST) API allows the creation of client-side remote proxy interfaces for calling methods on server-side POJOs using entirely REST.
+	</p>
+	<ul>
+		<li class='note'>
+			This is not to be confused with {@doc juneau-rest-server-springboot REST Proxies} which are entirely client-side driven Java interfaces
+			against arbitrary backend REST interfaces.
+	</ul>
+	
+	<h5 class='topic'>Remote Interfaces</h5>
+	<p>
+		The following example shows a remote interface:
+	</p>
+	<p class='bjava'>
+		|	<ja>@RemoteInterface</ja> <jc>// Annotation is optional</jc>
+		|	<jk>public interface</jk> IAddressBook {
+		|
+		|		<jk>void</jk> init() <jk>throws</jk> Exception;
+		|	
+		|		List&lt;Person&gt; getPeople();
+		|	
+		|		List&lt;Address&gt; getAddresses();
+		|	
+		|		<jk>int</jk> createPerson(CreatePerson cp) <jk>throws</jk> Exception;
+		|	
+		|		Person findPerson(<jk>int</jk> id);
+		|	
+		|		Address findAddress(<jk>int</jk> id);
+		|	
+		|		Person findPersonWithAddress(<jk>int</jk> id);
+		|	
+		|		Person removePerson(<jk>int</jk> id);
+		|	}
+	</p>			
+	<p>
+		The requirements for a remote interface method are:
+	</p>
+	<ul class='spaced-list'>
+		<li>
+			Must be public.
+		<li>
+			Can be called anything.
+		<li>
+			Can have any number of {@doc jm.PojoCategories serializable and parsable} parameters.
+		<li>
+			Can return a {@doc jm.PojoCategories serializable and parsable} value.
+		<li>
+			Can throw any <c>Throwables</c>.
+	</ul>
+	<p>
+		Throwables with public no-arg or single-arg-string constructors are automatically recreated on the client side
+		when thrown on the server side.
+	</p>
+	
+	<h5 class='topic'>Client side</h5>
+	<p>
+		Remote Interface proxies are instantiated on the client side using one of the following methods:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oajr.client.RestClient}
+			<ul class='javatreec'>
+				<li class='jm'>{@link oajr.client.RestClient#getRrpcInterface(Class) getRrpcInterface(Class)}
+				<li class='jm'>{@link oajr.client.RestClient#getRrpcInterface(Class,Object) getRrpcInterface(Class,Object)}
+				<li class='jm'>{@link oajr.client.RestClient#getRrpcInterface(Class,Object,Serializer,Parser) getRrpcInterface(Class,Object,Serializer,Parser)}
+			</ul>
+		</li>
+	</ul>
+	<p>
+		Since we build upon the existing <c>RestClient</c> API, we inherit all of it's features.
+		For example, convenience methods for setting POJO filters and properties to customize the behavior of the 
+		serializers and parsers, and the ability to provide your own customized Apache <c>HttpClient</c> for 
+		handling various scenarios involving authentication and Internet proxies.
+	</p>
+	<p>
+		Here's an example of the above interface being used:
+	</p>
+	<p class='bjava'>
+		|	<jc>// Create a RestClient using JSON for serialization, and point to the server-side remote interface servlet.</jc>
+		|	RestClient client = RestClient.<jsm>create</jsm>()
+		|		.json()
+		|		.rootUrl(<js>"http://localhost:10000/remote"</js>)
+		|		.build();
+		|	
+		|	<jc>// Create a proxy interface.</jc>
+		|	IAddressBook ab = client.getRrpcInterface(IAddressBook.<jk>class</jk>);
+		|	
+		|	<jc>// Invoke a method on the server side and get the returned result.</jc>
+		|	Person p = ab.createPerson(
+		|		<jk>new</jk> Person(
+		|			<js>"John Smith"</js>, 
+		|			<js>"Aug 1, 1999"</js>,
+		|			<jk>new</jk> Address(<js>"My street"</js>, <js>"My city"</js>, <js>"My state"</js>, 12345, <jk>true</jk>)
+		|		)
+		|	);
+	</p>
+	<p>
+		Under the covers, this method call gets converted to a REST POST.
+	</p>
+	<p class='bcode'>
+		|	HTTP POST http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook/createPerson(org.apache.juneau.examples.addressbook.Person)
+		|	Accept: application/json
+		|	Content-Type: application/json
+		|	
+		|	[
+		|		{
+		|			"name":"John Smith",
+		|			"birthDate":"Aug 1, 1999",
+		|			"addresses":[
+		|				{
+		|					"street":"My street",
+		|					"city":"My city",
+		|					"state":"My state",
+		|					"zip":12345,
+		|					"isCurrent":true
+		|				}
+		|			]
+		|		}
+		|	]
+	</p>
+	<p>
+		Note that the body of the request is an array.  
+		This array contains the serialized arguments of the method.
+		The object returned by the method is then serialized as the body of the response.
+	</p>
+	
+	<h5 class='topic'>Server side</h5>
+	<p>
+		There are two ways to expose remote interfaces on the server side:
+	</p>
+	<ol class='spaced-list'>
+		<li>
+			Extending from {@link oajr.remote.RrpcServlet}.
+		<li>
+			Using a <c><ja>@RestOp</ja>(method=<jsf>RRPC</jsf>)</c> annotation on a Java method.
+	</ol>
+	<p>
+		In either case, the proxy communications layer is pure REST.
+		Therefore, in cases where the interface classes are not available on the client side, the same method calls can 
+		be made through pure REST calls.  
+		This can also aid significantly in debugging, since calls to the remote interface service can be made directly from
+		a browser with no coding involved.
+	</p>
+	
+	<h5 class='topic'>RrpcServlet</h5>
+	<p>
+		The {@link oajr.remote.RrpcServlet} class is a simple specialized servlet with an abstract 
+		<c>getServiceMap()</c> method to define the server-side POJOs:
+	</p>
+	<p class='bjava'>
+		|	<ja>@Rest</ja>(
+		|		path=<js>"/remote"</js>
+		|	)
+		|	<jk>public class</jk> SampleRrpcServlet <jk>extends</jk> RrpcServlet {
+		|	
+		|		<jc>// Our server-side POJO.</jc>
+		|		<jk>private</jk> AddressBook <jf>addressBook</jf> = <jk>new</jk> AddressBook();
+		|	
+		|		<ja>@Override</ja> <jc>/* RrpcServlet */</jc>
+		|		<jk>protected</jk> Map&lt;Class&lt;?&gt;,Object&gt; getServiceMap() <jk>throws</jk> Exception {
+		|			Map&lt;Class&lt;?&gt;,Object&gt; <jv>map</jv> = <jk>new</jk> LinkedHashMap&lt;Class&lt;?&gt;,Object&gt;();
+		|	
+		|			<jc>// In this simplified example, we expose the same POJO service under two different interfaces.
+		|			// One is IAddressBook which only exposes methods defined on that interface, and
+		|			// the other is AddressBook itself which exposes all methods defined on the class itself (dangerous!).</jc>
+		|			<jv>map</jv>.put(IAddressBook.<jk>class</jk>, <jf>addressBook</jf>);
+		|			<jv>map</jv>.put(AddressBook.<jk>class</jk>, <jf>addressBook</jf>);
+		|			<jk>return</jk> <jv>map</jv>;
+		|		}
+		|	}
+	</p>
+	
+	<h5 class='topic'>@RestOp(method=RRPC)</h5>
+	<p>
+		The <c><ja>@RestOp</ja>(method=<jsf>RRPC</jsf>)</c> approach is easier if you only have a single 
+		interface you want to expose.  
+		You simply define a Java method whose return type is an interface, and return the implementation of that 
+		interface:
+	</p>
+	<p class='bjava'>
+		|	<jc>// Our exposed interface.</jc>
+		|	<ja>@RestOp</ja>(method=<jsf>RRPC</jsf>, path=<js>"/addressbookproxy/*"</js>)
+		|	<jk>public</jk> IAddressBook getProxy() {
+		|		<jk>return</jk> <jf>addressBook</jf>;
+		|	}
+	</p>
+	
+	<h5 class='topic'>RrpcServlet in a browser</h5>
+	<p>
+		If you point your browser to the servlet above, you get a list of available interfaces:
+	</p>
+	<p class='bcode'>
+		|	http://localhost:10000/remote
+	</p>
+	<img class='bordered w800' src='doc-files/jrs.restRPC.1.png'>
+	<p>
+		Clicking the hyperlinks on each shows you the list of methods that can be invoked on that service.
+		Note that the <c>IAddressBook</c> link shows that you can only invoke methods defined on that
+		interface, whereas the <c>AddressBook</c> link shows ALL public methods defined on that class.
+	</p>
+	<h5 class='figure'>IAddressBook</h5>
+	<p class='bcode'>
+		|	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook
+	</p>
+	<img class='bordered w800' src='doc-files/jrs.restRPC.2.png'>
+	<p>
+		Since <c>AddressBook</c> extends from <c>LinkedList</c>, you may notice familiar collections
+		framework methods listed.
+	</p>
+	<h5 class='figure'>AddressBook</h5>
+	<p class='bcode'>
+		|	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.AddressBook
+	</p>
+	<img class='bordered w800' src='doc-files/jrs.restRPC.3.png'>
+	<p>
+		Let's see how we can interact with this interface through nothing more than REST calls to get a better idea on 
+		how this works.
+		We'll use the same method call as in the introduction.
+		First, we need to create the serialized form of the arguments:
+	</p>
+	<p class='bjava'>
+		|	Object[] <jv>args</jv> = <jk>new</jk> Object[] {
+		|		<jk>new</jk> CreatePerson(<js>"Test Person"</js>,
+		|			AddressBook.<jsm>toCalendar</jsm>(<js>"Aug 1, 1999"</js>),
+		|			<jk>new</jk> CreateAddress(<js>"Test street"</js>, <js>"Test city"</js>, <js>"Test state"</js>, 12345, <jk>true</jk>))
+		|	};
+		|	String <jv>asJson</jv> = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.toString(<jv>args</jv>);
+		|	System.<jsf>err</jsf>.println(<jv>asJson</jv>);
+	</p>
+	<p>
+		That produces the following JSON output:
+	</p>
+	<p class='bjson'>
+		|	[
+		|		{
+		|			name: <js>'Test Person'</js>, 
+		|			birthDate: <js>'Aug 1, 1999'</js>, 
+		|			addresses: [
+		|				{
+		|					street: <js>'Test street'</js>, 
+		|					city: <js>'Test city'</js>, 
+		|					state: <js>'Test state'</js>, 
+		|					zip: 12345, 
+		|					isCurrent: <jk>true</jk>
+		|				}
+		|			]
+		|		}
+		|	]	
+	</p>
+	<p>
+		Note that in this example we're using JSON.  
+		However, various other content types can also be used such as XML, URL-Encoding, UON, or HTML.  
+		In practice however, JSON will preferred since it is often the most efficient.
+	</p>
+	<p>
+		Next, we can use a tool such as Poster to make the REST call.
+		Methods are invoked by POSTing the serialized object array to the URI of the interface method.
+		In this case, we want to POST our JSON to the following URL:
+	</p>
+	<p class='bcode'>
+		|	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook/createPerson(org.apache.juneau.examples.addressbook.CreatePerson)
+	</p>
+	<p>
+		Make sure that we specify the <c>Content-Type</c> of the body as <c>text/json</c>.
+		We also want the results to be returned as JSON, so we set the <c>Accept</c> header to 
+		<c>text/json</c> as well.
+	</p>
+	<img class='bordered w400' src='doc-files/jrs.restRPC.4.png'>
+	<p>
+		When we execute the POST, we should see the following successful response whose body contains the returned 
+		<c>Person</c> bean serialized to JSON:
+	</p>
+	<img class='bordered w400' src='doc-files/jrs.restRPC.5.png'>
+	<p>
+		From there, we could use the following code snippet to reconstruct the response object from JSON:
+	</p>
+	<p class='bjava'>
+		|	String response = <js>"<i>output from above</i>"</js>;
+		|	Person p = JsonParser.<jsf>DEFAULT</jsf>.parse(response, Person.<jk>class</jk>);
+	</p>
+	<p>
+		If we alter our servlet to allow overloaded GET requests, we can invoke methods using nothing more than a 
+		browser...
+	</p>
+	<p class='bjava'>
+		|	<ja>@Rest</ja>(
+		|		path=<js>"/remote"</js>,
+		|		
+		|		<jc>// Allow us to use method=POST from a browser.</jc>
+		|		allowedMethodParams=<js>"*"</js>
+		|	)
+		|	<jk>public class</jk> SampleRrpcServlet <jk>extends</jk> RrpcServlet {
+	</p>
+	<p>
+		For example, to invoke the <c>getPeople()</c> method on our bean:
+	</p>
+	<p class='bcode'>
+		|	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook/getPeople?method=POST
+	</p>			
+	<img class='bordered w800' src='doc-files/jrs.restRPC.6.png'>
+	<p>
+		Here we call the <c>findPerson(<jk>int</jk>)</c> method to retrieve a person and get the 
+		returned POJO (in this case as HTML since that's what's in the <c>Accept</c> header when calling from a 
+		browser):
+	</p>
+	<p class='bcode'>
+		|	http://localhost:10000/remote/org.apache.juneau.examples.addressbook.IAddressBook/findPerson(int)?method=POST&amp;body=@(3)
+	</p>			
+	<img class='bordered w800' src='doc-files/jrs.restRPC.7.png'>
+	<p>
+		When specifying the POST body as a <c>&amp;body</c> parameter, the method arguments should be in UON 
+		notation.
+		See {@link oaj.uon.UonSerializer} for more information about this encoding.
+		Usually you can also pass in JSON if you specify <c>&amp;Content-Type=text/json</c> in the URL parameters
+		but passing in unencoded JSON in a URL may not work in all browsers.  
+		Therefore, UON is preferred.
+	</p>
+	<p>
+		The hyperlinks on the method names above lead you to a simple form-entry page where you can test
+		passing parameters in UON notation as URL-encoded form posts.
+	</p>
+	<h5 class='figure'>Sample form entry page</h5>
+	<img class='bordered w800' src='doc-files/jrs.restRPC.8.png'>
+	<h5 class='figure'>Sample form entry page results</h5>
+	<img class='bordered w800' src='doc-files/jrs.restRPC.9.png'>
+</div>

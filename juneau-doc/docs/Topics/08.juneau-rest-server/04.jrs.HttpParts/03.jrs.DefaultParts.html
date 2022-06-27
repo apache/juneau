@@ -1,0 +1,114 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Default Parts', created:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The following annotations are provided for specifying default part values for requests and responses:
+	</p>
+	<ul class='javatree'>
+		<li class='ja'>{@link oajr.annotation.Rest} 
+			<ul class='javatreec'>
+				<li class='jma'>{@link oajr.annotation.Rest#defaultAccept() defaultAccept}
+				<li class='jma'>{@link oajr.annotation.Rest#defaultCharset() defaultCharset}
+				<li class='jma'>{@link oajr.annotation.Rest#defaultContentType() defaultContentType}
+				<li class='jma'>{@link oajr.annotation.Rest#defaultRequestAttributes() defaultRequestAttributes}
+				<li class='jma'>{@link oajr.annotation.Rest#defaultRequestHeaders() defaultRequestHeaders}
+				<li class='jma'>{@link oajr.annotation.Rest#defaultResponseHeaders() defaultResponseHeaders}
+			</ul>
+		</li>
+		<li class='ja'>{@link oajr.annotation.RestOp} 
+			<ul class='javatreec'>
+				<li class='jma'>{@link oajr.annotation.RestOp#defaultAccept() defaultAccept}
+				<li class='jma'>{@link oajr.annotation.RestOp#defaultCharset() defaultCharset}
+				<li class='jma'>{@link oajr.annotation.RestOp#defaultContentType() defaultContentType}
+				<li class='jma'>{@link oajr.annotation.RestOp#defaultRequestAttributes() defaultRequestAttributes}
+				<li class='jma'>{@link oajr.annotation.RestOp#defaultRequestFormData() defaultRequestFormData}
+				<li class='jma'>{@link oajr.annotation.RestOp#defaultRequestHeaders() defaultRequestHeaders}
+				<li class='jma'>{@link oajr.annotation.RestOp#defaultRequestQueryData() defaultRequestQueryData}
+				<li class='jma'>{@link oajr.annotation.RestOp#defaultResponseHeaders() defaultResponseHeaders}
+			</ul>
+		</li>
+	</ul>		
+	
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jc>// Servlet with default headers</jc>
+		|	<ja>@Rest</ja>(
+		|
+		|		<jc>// Assume "text/json" Accept value when Accept not specified</jc>
+		|		defaultRequestHeaders={<js>"Accept: text/json"</js>},
+		|
+		|		<jc>// Add a version header attribute to all responses</jc>
+		|		defaultResponseHeaders={<js>"X-Version: 1.0"</js>}
+		|	)
+		|	<jk>public</jk> MyRestServlet <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
+		|		...
+		|	}			
+	</p>
+	<p>
+		Default parts can also be specified programmatically through any of the following methods:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oajr.RestContext.Builder}
+			<ul class='javatreec'>
+				<li class='jmp'>{@link oajr.RestContext.Builder#createDefaultRequestAttributes(BeanStore,Supplier) createDefaultRequestAttributes(BeanStore,Supplier)}
+				<li class='jmp'>{@link oajr.RestContext.Builder#createDefaultRequestHeaders(BeanStore,Supplier) createDefaultRequestHeaders(BeanStore,Supplier)}
+				<li class='jmp'>{@link oajr.RestContext.Builder#createDefaultResponseHeaders(BeanStore,Supplier) createDefaultResponseHeaders(BeanStore,Supplier)}
+				<li class='jm'>{@link oajr.RestContext.Builder#defaultAccept(String) defaultAccept(String)}
+				<li class='jm'>{@link oajr.RestContext.Builder#defaultCharset(Charset) defaultCharset(Charset)}
+				<li class='jm'>{@link oajr.RestContext.Builder#defaultContentType(String) defaultContentType(String)}
+				<li class='jm'>{@link oajr.RestContext.Builder#defaultRequestAttributes() defaultRequestAttributes()}
+				<li class='jm'>{@link oajr.RestContext.Builder#defaultRequestAttributes(Consumer) defaultRequestAttributes(Consumer)}
+				<li class='jm'>{@link oajr.RestContext.Builder#defaultRequestAttributes(NamedAttribute...) defaultRequestAttributes(NamedAttribute...)}
+				<li class='jm'>{@link oajr.RestContext.Builder#defaultRequestHeaders() defaultRequestHeaders()}
+				<li class='jm'>{@link oajr.RestContext.Builder#defaultRequestHeaders(Consumer) defaultRequestHeaders(Consumer)}
+				<li class='jm'>{@link oajr.RestContext.Builder#defaultRequestHeaders(Header...) defaultRequestHeaders(Header...)}
+				<li class='jm'>{@link oajr.RestContext.Builder#defaultResponseHeaders() defaultResponseHeaders()}
+				<li class='jm'>{@link oajr.RestContext.Builder#defaultResponseHeaders(Consumer) defaultResponseHeaders(Consumer)}
+				<li class='jm'>{@link oajr.RestContext.Builder#defaultResponseHeaders(Header...) defaultResponseHeaders(Header...)}
+				<li class='jm'>{@link oajr.RestContext.Builder#defaultRequestAttributes() defaultRequestAttributes()}
+				<li class='jm'>{@link oajr.RestContext.Builder#defaultRequestAttributes(Consumer) defaultRequestAttributes(Consumer)}
+				<li class='jm'>{@link oajr.RestContext.Builder#defaultRequestAttributes(NamedAttribute...) defaultRequestAttributes(NamedAttribute...)}
+				<li class='jm'>{@link oajr.RestContext.Builder#defaultRequestHeaders() defaultRequestHeaders()}
+				<li class='jm'>{@link oajr.RestContext.Builder#defaultRequestHeaders(Consumer) defaultRequestHeaders(Consumer)}
+				<li class='jm'>{@link oajr.RestContext.Builder#defaultRequestHeaders(Header...) defaultRequestHeaders(Header...)}
+				<li class='jm'>{@link oajr.RestContext.Builder#defaultResponseHeaders() defaultResponseHeaders()}
+				<li class='jm'>{@link oajr.RestContext.Builder#defaultResponseHeaders(Consumer) defaultResponseHeaders(Consumer)}
+				<li class='jm'>{@link oajr.RestContext.Builder#defaultResponseHeaders(Header...) defaultResponseHeaders(Header...)}
+			</ul>
+		</li>
+		<li class='jc'>{@link oajr.RestOpContext.Builder}
+			<ul class='javatreec'>
+				<li class='jmp'>{@link oajr.RestOpContext.Builder#createDefaultRequestAttributes(BeanStore,RestContext.Builder,Supplier) createDefaultRequestAttributes(BeanStore,Builder,Supplier)}
+				<li class='jmp'>{@link oajr.RestOpContext.Builder#createDefaultRequestFormData(BeanStore,RestContext.Builder,Supplier) createDefaultRequestFormData(BeanStore,Builder,Supplier)}
+				<li class='jmp'>{@link oajr.RestOpContext.Builder#createDefaultRequestHeaders(BeanStore,RestContext.Builder,Supplier) createDefaultRequestHeaders(BeanStore,Builder,Supplier)}
+				<li class='jmp'>{@link oajr.RestOpContext.Builder#createDefaultRequestQueryData(BeanStore,RestContext.Builder,Supplier) createDefaultRequestQueryData(BeanStore,Builder,Supplier)}
+				<li class='jmp'>{@link oajr.RestOpContext.Builder#createDefaultResponseHeaders(BeanStore,RestContext.Builder,Supplier) createDefaultResponseHeaders(BeanStore,Builder,Supplier)}
+				<li class='jm'>{@link oajr.RestOpContext.Builder#defaultRequestAttributes() defaultRequestAttributes()}
+				<li class='jm'>{@link oajr.RestOpContext.Builder#defaultRequestAttributes(Consumer) defaultRequestAttributes(Consumer)}
+				<li class='jm'>{@link oajr.RestOpContext.Builder#defaultRequestFormData() defaultRequestFormData()}
+				<li class='jm'>{@link oajr.RestOpContext.Builder#defaultRequestFormData(Consumer) defaultRequestFormData(Consumer)}
+				<li class='jm'>{@link oajr.RestOpContext.Builder#defaultRequestHeaders() defaultRequestHeaders()}
+				<li class='jm'>{@link oajr.RestOpContext.Builder#defaultRequestHeaders(Consumer) defaultRequestHeaders(Consumer)}
+				<li class='jm'>{@link oajr.RestOpContext.Builder#defaultRequestQueryData() defaultRequestQueryData()}
+				<li class='jm'>{@link oajr.RestOpContext.Builder#defaultRequestQueryData(Consumer) defaultRequestQueryData(Consumer)}
+				<li class='jm'>{@link oajr.RestOpContext.Builder#defaultResponseHeaders() defaultResponseHeaders()}
+				<li class='jm'>{@link oajr.RestOpContext.Builder#defaultResponseHeaders(Consumer) defaultResponseHeaders(Consumer)}
+			</ul>
+		</li>
+	</ul>
+</div>

@@ -1,0 +1,89 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'@Header', updated:'8.2.0', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The {@link oaj.http.annotation.Header @Header} annotation can be applied to arguments of <ja>@RemoteOp</ja>-annotated methods
+		to denote that they are header parameters on the request.
+	</p>
+	<ul class='javatree'>
+		<li class='ja'>{@link oaj.http.annotation.Header}
+		<ul>
+			<li class='jf'>{@link oaj.http.annotation.Header#name() name} - Header name.
+			<li class='jf'>{@link oaj.http.annotation.Header#serializer() serializer} - Override the part serializer.
+		</ul>
+	</ul>
+	
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<ja>@Remote</ja>(path=<js>"/myproxy"</js>)
+		|	<jk>public interface</jk> MyProxy {
+		|
+		|		<jc>// Explicit names specified for HTTP headers.</jc>
+		|		<jc>// pojo will be converted to UON notation (unless plain-text parts enabled).</jc>
+		|		<ja>@RemoteGet</ja>(<js>"/mymethod1"</js>)
+		|		String myProxyMethod1(<ja>@Header</ja>(<js>"Foo"</js>)</ja> String <jv>foo</jv>,
+		|			<ja>@Header</ja>(<js>"Bar"</js>)</ja> MyPojo <jv>pojo</jv>);
+		|
+		|		<jc>// Multiple values pulled from a HeaderList object.</jc>
+		|		<jc>// Same as @Header("*").</jc>
+		|		<ja>@RemoteGet</ja>(<js>"/mymethod2"</js>)
+		|		String myProxyMethod2(<ja>@Header</ja> HeaderList <jv>headerList</jv>);
+		|
+		|		<jc>// Multiple values pulled from a Map.</jc>
+		|		<jc>// Same as @Header("*").</jc>
+		|		<ja>@RemoteGet</ja>(<js>"/mymethod3"</js>)
+		|		String myProxyMethod3(<ja>@Header</ja> Map&lt;String,Object&gt; <jv>map</jv>);
+		|
+		|		<jc>// Multiple values pulled from a bean.</jc>
+		|		<jc>// Same as @Header("*").</jc>
+		|		<ja>@RemoteGet</ja>(<js>"/mymethod4"</js>)
+		|		String myProxyMethod4(<ja>@Header</ja> MyBean <jv>myBean</jv>);
+		|	}
+	</p>
+	
+	<p>
+		Single-part arguments (i.e. those with name != <js>"*"</js>) can be any of the following types:
+	</p>
+	<ul class='spaced-list'>
+		<li>
+			Any serializable POJO - Converted to a string using the {@link oaj.httppart.HttpPartSerializer} registered with the
+			<c>RestClient</c> ({@link oaj.oapi.OpenApiSerializer} by default) or associated via the {@link oaj.http.annotation.Header#serializer() @Header(serializer)} annotation.
+	</ul>
+	
+	<p>
+		Multi-part arguments (i.e. those with name == <js>"*"</js> or empty) can be any of the following types:
+	</p>
+	<ul class='spaced-list'>
+		<li>
+			{@link oaj.http.HeaderList} - Serialized as individual headers.
+		<li>
+			<c>Map</c> - Converted to key-value pairs.
+				<br>Values serialized using the registered {@link oaj.httppart.HttpPartSerializer} ({@link oaj.oapi.OpenApiSerializer} by default).
+		<li>
+			Bean - Converted to key-value pairs.
+				<br>Values serialized using the registered {@link oaj.httppart.HttpPartSerializer} ({@link oaj.oapi.OpenApiSerializer} by default).
+	</ul>
+	
+	<p>
+		See the link below for information about supported data types in OpenAPI serialization.
+	</p>
+	
+	<ul class='seealso'>
+		<li class='link'>{@doc jm.OpenApiSerializers}
+	</ul>
+</div>

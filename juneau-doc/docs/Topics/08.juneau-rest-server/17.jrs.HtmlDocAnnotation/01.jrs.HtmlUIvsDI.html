@@ -1,0 +1,59 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'User Interfaces (UI) vs. Developer Interfaces (DI)'}
+
+<div class='topic'>
+	<p>
+		An important distinction needs to be made about the HTML representations produced by the REST
+		API.  These should not be considered User Interfaces, but rather Developer Interfaces.
+	</p>
+	<p>
+		UIs should hide the end-user from the underlying architecture.
+		The audience generally consists of non-technical people not interested in how the UI works.  
+	</p>
+	<p>
+		DIs, on the other hand, should NOT hide the end-user from the underlying architecture.  
+		Instead, it's a thin veneer over the REST interface with the following goals:
+	</p>
+	<ul class='spaced-list'>
+		<li>Make it easy for the developer to explore and understand the REST API.
+		<li>Make it easy for the developer to debug the REST API using simple tools (hopefully just a browser).
+	</ul>		
+	<p>
+		As a result, the following guidelines are recommended: 
+	</p>		
+	<ul class='spaced-list'>
+		<li>
+			Use titles/descriptions/asides to describe why the REST interface exists.
+			A developer knowing little about it should be able to access it with a browser and quickly 
+			understand what it is and how to use it.
+		<li>
+			Don't hide the raw data!  
+			The HTML view should simply be considered an easier-to-read representation of the data normally 
+			rendered in JSON or some other format.
+		<li>
+			Limit your use of Javascript!  
+			You can use it sparingly if you want to implement something simple like a pull-down menu to 
+			simplify some debug task, but remember that your audience cares more about interacting with your 
+			service programmatically using REST.  
+			Remember that the HTML is just icing on the cake.
+		<li>
+			Don't use it to implement a Web 2.0 interface!  
+			If you want a Web 2.0 UI, implement it separately ON TOP OF this REST interface.
+			The architecture is flexible enough that you could in theory pull in and use jQuery, React, 
+			Angular, or any number of sophisticated Javascript UI frameworks.  Resist the urge to do so.
+	</ul>		
+</div>

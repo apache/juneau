@@ -1,0 +1,63 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'juneau-svl', created:'8.2.0'} 
+
+<div class='topic'>
+	<p>
+		Care must be used when defining new {@link oaj.svl.Var Vars} using the SVL API since mistakes 
+		could potentially expose system properties, environment variables, or even file system files.
+	</p>
+	<p>
+		For recap, the SVL support allows you to embed variables of the form <js>"$X{key}"</js> inside strings that
+		get resolved to other strings.  The resolved strings themselves can also contain variables that also
+		get recursively resolved.  
+	</p>
+	<p>
+		An example of a potential security hole is shown below that could potentially expose any file on a file
+		system through a REST request:
+	</p>
+	<p class='bjava'>
+		|	<jk>public</jk> String doUnsafeGet(RestRequest <jv>req</jv>) {
+		|		<jc>// Security hole!</jc>
+		|		<jk>return</jk> <jv>req</jv>.getVarResolver().resolve(<js>"$RQ{foo}"</js>);
+		|	}
+	</p>
+	<p>
+		This code is simply echoing the value of the <c>foo</c> query parameter.
+		Now say for example that a bad actor passes in the query string <js>"foo=$F{/some/file/on/file/system}"</js>.
+		The <c>$F</c> variable allows you to resolve the contents of files using SVL, and is provided
+		by default using the built-in variable resolver returned by the <c>RestRequest</c> object.
+		You've potentially just exposed the contents of that file through your REST interface.
+	</p>
+	<p>
+		In reality, the above security hole does not exist because of the following restrictions:
+	</p>
+	<ul class='spaced-list'>
+		<li>
+			<c>Vars</c> have two methods {@link oaj.svl.Var#allowNested()} and 
+			{@link oaj.svl.Var#allowRecurse()} that can be overridden to prevent recursive processing
+			of string variables.  These are both <jk>false</jk> for the <c>$R</c> variable, so the <c>$F</c>
+			variable in the result will never get processed and instead be treated as plain text. 
+		<li>
+			The <c>$F</c> variable only allows you to retrieve files within the JVM starting directory. 
+	</ul>
+	<p>
+		Even though the built-in Juneau variables are safe, special care is needed when defining your own custom
+		variables.  If your variable resolves user input in any way, it's HIGHLY recommended that you override the
+		{@link oaj.svl.Var#allowNested()} and {@link oaj.svl.Var#allowRecurse()} 
+		methods to prevent recursive handling of variables.
+	</p>
+</div>

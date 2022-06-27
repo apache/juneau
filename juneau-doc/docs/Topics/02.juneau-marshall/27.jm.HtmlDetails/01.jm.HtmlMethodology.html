@@ -1,0 +1,526 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'HTML Methodology'}
+
+<div class='topic'>
+	<p>
+		The following examples show how different data types are represented in HTML.
+		They mirror how the data structures are represented in JSON.
+	</p>
+	
+	<h5 class='topic'>Simple types</h5>
+	<p>
+		The representation for simple types mirror those produced by the XML serializer.
+		Tags are added to help differentiate data types when they cannot be inferred through reflection.
+		These tags are ignored by browsers and treated as plain text.
+	</p>
+	<table class='styled w800'>
+		<tr>
+			<th>Data type</th>
+			<th>JSON example</th>
+			<th>HTML</th>
+		</tr>
+		<tr>
+			<td>string</td>
+			<td class='code'><js>'foo'</js></td>
+			<td class='code'><xt>&lt;string&gt;</xt>foo<xt>&lt;/string&gt;</xt></td>
+		</tr>
+		<tr>
+			<td>boolean</td>
+			<td class='code'><jk>true</jk></td>
+			<td class='code'><xt>&lt;boolean&gt;</xt>true<xt>&lt;/boolean&gt;</xt></td>
+		</tr>
+		<tr>
+			<td>integer</td>
+			<td class='code'>123</td>
+			<td class='code'><xt>&lt;number&gt;</xt>123<xt>&lt;/number&gt;</xt></td>
+		</tr>
+		<tr>
+			<td>float</td>
+			<td class='code'>1.23</td>
+			<td class='code'><xt>&lt;number&gt;</xt>1.23<xt>&lt;/number&gt;</xt></td>
+		</tr>
+		<tr>
+			<td>null</td>
+			<td class='code'><jk>null</jk></td>
+			<td class='code'><xt>&lt;null/&gt;</xt></td>
+		</tr>
+	</table>
+	
+	<h5 class='topic'>Maps</h5>
+	<p>
+		Maps and beans are represented as tables.
+	</p>
+	<p>
+		The <xa>_type</xa> attribute is added to differentiate between objects (maps/beans) and arrays 
+		(arrays/collections).
+	</p>
+	<table class='styled w800'>
+		<tr>
+			<th>Data type</th>
+			<th>JSON example</th>
+			<th>HTML</th>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	Map&lt;String,String&gt;
+			</td>
+			<td class='code'>
+				|	{
+				|		k1: <js>'v1'</js>
+				|		k2: <jk>null</jk>
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;table <xa>_type</xa>=<xs>'object'</xs>&gt;
+				|		&lt;tr&gt;
+				|			&lt;td&gt;<xv>k1</xv>&lt;/td&gt;
+				|			&lt;td&gt;<xv>v1</xv>&lt;/td&gt;
+				|		&lt;/tr&gt;
+				|		&lt;tr&gt;
+				|			&lt;td&gt;<xv>k2</xv>&lt;/td&gt;
+				|			&lt;td&gt;&lt;null/&gt;&lt;/td&gt;
+				|		&lt;/tr&gt;
+				|	&lt;/table&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	Map&lt;String,Number&gt;
+			</td>
+			<td class='code'>
+				|	{
+				|		k1: 123,
+				|		k2: 1.23,
+				|		k3: <jk>null</jk>
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;table <xa>_type</xa>=<xs>'object'</xs>&gt;
+				|		&lt;tr&gt;
+				|			&lt;td&gt;<xv>k1</xv>&lt;/td&gt;
+				|			&lt;td&gt;<xv>123</xv>&lt;/td&gt;
+				|		&lt;/tr&gt;
+				|		&lt;tr&gt;
+				|			&lt;td&gt;<xv>k2</xv>&lt;/td&gt;
+				|			&lt;td&gt;<xv>1.23</xv>&lt;/td&gt;
+				|		&lt;/tr&gt;
+				|		&lt;tr&gt;
+				|			&lt;td&gt;<xv>k3</xv>&lt;/td&gt;
+				|			&lt;td&gt;&lt;null/&gt;&lt;/td&gt;
+				|		&lt;/tr&gt;
+				|	&lt;/table&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	Map&lt;String,Object&gt;
+			</td>
+			<td class='code'>
+				|	{
+				|		k1: <js>'v1'</js>
+				|		k2: 123,
+				|		k3: 1.23,
+				|		k4: <jk>true</jk>,
+				|		k5: <jk>null</jk>
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;table <xa>_type</xa>=<xs>'object'</xs>&gt;
+				|		&lt;tr&gt;
+				|			&lt;td&gt;<xv>k1</xv>&lt;/td&gt;
+				|			&lt;td&gt;<xv>v1</xv>&lt;/td&gt;
+				|		&lt;/tr&gt;
+				|		&lt;tr&gt;
+				|			&lt;td&gt;<xv>k2</xv>&lt;/td&gt;
+				|			&lt;td&gt;&lt;number&gt;<xv>123</xv>&lt;/number&gt;&lt;/td&gt;
+				|		&lt;/tr&gt;
+				|		&lt;tr&gt;
+				|			&lt;td&gt;<xv>k3</xv>&lt;/td&gt;
+				|			&lt;td&gt;&lt;number&gt;<xv>1.23</xv>&lt;/number&gt;&lt;/td&gt;
+				|		&lt;/tr&gt;
+				|		&lt;tr&gt;
+				|			&lt;td&gt;<xv>k4</xv>&lt;/td&gt;
+				|			&lt;td&gt;&lt;boolean&gt;<xv>true</xv>&lt;/boolean&gt;&lt;/td&gt;
+				|		&lt;/tr&gt;
+				|		&lt;tr&gt;
+				|			&lt;td&gt;<xv>k5</xv>&lt;/td&gt;
+				|			&lt;td&gt;&lt;null/&gt;&lt;/td&gt;
+				|		&lt;/tr&gt;
+				|	&lt;/table&gt;
+			</xt></td>
+		</tr>
+	</table>
+	
+	<h5 class='topic'>Arrays</h5>
+	<p>
+		Collections and arrays are represented as ordered lists.
+	</p>
+	<table class='styled w800'>
+		<tr>
+			<th>Data type</th>
+			<th>JSON example</th>
+			<th>HTML</th>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	String[]
+			</td>
+			<td class='code'>
+				|	[
+				|		<js>'foo'</js>
+				|		<jk>null</jk>
+				|	]
+			</td>
+			<td class='code'><xt>
+				|	&lt;ul&gt;
+				|		&lt;li&gt;<xv>foo</xv>&lt;/li&gt;
+				|		&lt;li&gt;&lt;null/&gt;&lt;/li&gt;
+				|	&lt;/ul&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	Number[]
+			</td>
+			<td class='code'>
+				|	[
+				|		123,
+				|		1.23,
+				|		<jk>null</jk>
+				|	]
+			</td>
+			<td class='code'><xt>
+				|	&lt;ul&gt;
+				|		&lt;li&gt;<xv>123</xv>&lt;/li&gt;
+				|		&lt;li&gt;<xv>1.23</xv>&lt;/li&gt;
+				|		&lt;li&gt;&lt;null/&gt;&lt;/li&gt;
+				|	&lt;/ul&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	Object[]
+			</td>
+			<td class='code'>
+				|	[
+				|		<js>'foo'</js>,
+				|		123,
+				|		1.23,
+				|		<jk>true</jk>,
+				|		<jk>null</jk>
+				|	]
+			</td>
+			<td class='code'><xt>
+				|	&lt;ul&gt;
+				|		&lt;li&gt;<xv>foo</xv>&lt;/li&gt;
+				|		&lt;li&gt;&lt;number&gt;<xv>123</xv>&lt;/number&gt;&lt;/li&gt;
+				|		&lt;li&gt;&lt;number&gt;<xv>1.23</xv>&lt;/number&gt;&lt;/li&gt;
+				|		&lt;li&gt;&lt;boolean&gt;<xv>true</xv>&lt;/boolean&gt;&lt;/li&gt;
+				|		&lt;li&gt;&lt;null/&gt;&lt;/li&gt;
+				|	&lt;/ul&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	String[][]
+			</td>
+			<td class='code'>
+				|	[
+				|		[<js>'foo'</js>, <jk>null</jk>],
+				|		<jk>null</jk>,
+				|	]
+			</td>
+			<td class='code'><xt>
+				|	&lt;ul&gt;
+				|		&lt;li&gt;
+				|			&lt;ul&gt;
+				|				&lt;li&gt;<xv>foo</xv>&lt;/li&gt;
+				|				&lt;li&gt;&lt;null/&gt;&lt;/li&gt;
+				|			&lt;/ul&gt;
+				|		&lt;/li&gt;
+				|		&lt;li&gt;&lt;null/&gt;&lt;/li&gt;
+				|	&lt;/ul&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<jk>int</jk>[]
+			</td>
+			<td class='code'>
+				|	[
+				|		123
+				|	]
+			</td>
+			<td class='code'><xt>
+				|	&lt;ul&gt;
+				|		&lt;li&gt;<xv>123</xv>&lt;/li&gt;
+				|	&lt;/ul&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<jk>boolean</jk>[]
+			</td>
+			<td class='code'>
+				|	[
+				|		<jk>true</jk>
+				|	]
+			</td>
+			<td class='code'><xt>
+				|	&lt;ul&gt;
+				|		&lt;li&gt;<xv>true</xv>&lt;/li&gt;
+				|	&lt;/ul&gt;
+			</xt></td>
+		</tr>
+	</table>
+	
+	<h5 class='topic'>Collections</h5>
+	<table class='styled w800'>
+		<tr>
+			<th>Data type</th>
+			<th>JSON example</th>
+			<th>HTML</th>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	List&lt;String&gt;
+			</td>
+			<td class='code'>
+				|	[
+				|		<js>'foo'</js>
+				|		<jk>null</jk>
+				|	]
+			</td>
+			<td class='code'><xt>
+				|	&lt;ul&gt;
+				|		&lt;li&gt;<xv>foo</xv>&lt;/li&gt;
+				|		&lt;li&gt;&lt;null/&gt;&lt;/li&gt;
+				|	&lt;/ul&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	List&lt;Number&gt;
+			</td>
+			<td class='code'>
+				|	[
+				|		123,
+				|		1.23,
+				|		<jk>null</jk>
+				|	]
+			</td>
+			<td class='code'><xt>
+				|	&lt;ul&gt;
+				|		&lt;li&gt;<xv>123</xv>&lt;/li&gt;
+				|		&lt;li&gt;<xv>1.23</xv>&lt;/li&gt;
+				|		&lt;li&gt;&lt;null/&gt;&lt;/li&gt;
+				|	&lt;/ul&gt;
+			</xt></td>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	List&lt;Object&gt;
+			</td>
+			<td class='code'>
+				|	[
+				|		<js>'foo'</js>,
+				|		123,
+				|		1.23,
+				|		<jk>true</jk>,
+				|		<jk>null</jk>
+				|	]
+			</td>
+			<td class='code'><xt>
+				|	&lt;ul&gt;
+				|		&lt;li&gt;<xv>foo</xv>&lt;/li&gt;
+				|		&lt;li&gt;&lt;number&gt;<xv>123</xv>&lt;/number&gt;&lt;/li&gt;
+				|		&lt;li&gt;&lt;number&gt;<xv>1.23</xv>&lt;/number&gt;&lt;/li&gt;
+				|		&lt;li&gt;&lt;boolean&gt;<xv>true</xv>&lt;/boolean&gt;&lt;/li&gt;
+				|		&lt;li&gt;&lt;null/&gt;&lt;/li&gt;
+				|	&lt;/ul&gt;
+			</xt></td>
+		</tr>
+	</table>
+	
+	<h5 class='topic'>Beans</h5>
+	<table class='styled w800'>
+		<tr>
+			<th>Data type</th>
+			<th>JSON example</th>
+			<th>HTML</th>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<jk>class</jk> MyBean {
+				|		<jk>public</jk> String <jf>a</jf>;
+				|		<jk>public</jk> <jk>int</jk> <jf>b</jf>;
+				|		<jk>public</jk> Object <jf>c</jf>;  <jc>// String value</jc>
+				|		<jk>public</jk> Object <jf>d</jf>;  <jc>// Integer value</jc>  	
+				|		<jk>public</jk> MyBean2 <jf>e</jf>;  
+				|		<jk>public</jk> String[] <jf>f</jf>;  
+				|	 	<jk>public</jk> <jk>int</jk>[] <jf>g</jf>;  	
+				|	}
+				|	<jk>class</jk> MyBean2 {
+				|		String <jf>h</jf>;  
+				|	}
+			</td>
+			<td class='code'>
+				|	{
+				|		<jok>a</jok>: <jov>'foo'</jov>,
+				|		<jok>b</jok>: <jov>123</jov>,
+				|		<jok>c</jok>: <jov>'bar'</jov>,
+				|		<jok>d</jok>: <jov>456</jov>,
+				|		<jok>e</jok>: {
+				|			<jok>h</jok>: <jov>'baz'</jov>
+				|		}
+				|		<jok>f</jok>: [<jov>'qux'</jov>]
+				|		<jok>g</jok>: [<jov>789</jov>]
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;table <xa>_type</xa>=<xs>'object'</xs>&gt;
+				|		&lt;tr&gt;
+				|			&lt;td&gt;<xv>a</xv>&lt;/td&gt;
+				|			&lt;td&gt;<xv>foo</xv>&lt;/td&gt;
+				|		&lt;/tr&gt;
+				|		&lt;tr&gt;
+				|			&lt;td&gt;<xv>b</xv>&lt;/td&gt;
+				|			&lt;td&gt;<xv>123</xv>&lt;/td&gt;
+				|		&lt;/tr&gt;
+				|		&lt;tr&gt;
+				|			&lt;td&gt;<xv>c</xv>&lt;/td&gt;
+				|			&lt;td&gt;<xv>bar</xv>&lt;/td&gt;
+				|		&lt;/tr&gt;
+				|		&lt;tr&gt;
+				|			&lt;td&gt;<xv>d</xv>&lt;/td&gt;
+				|			&lt;td&gt;&lt;number&gt;<xv>456</xv>&lt;/number&gt;&lt;/td&gt;
+				|		&lt;/tr&gt;
+				|		&lt;tr&gt;
+				|			&lt;td&gt;<xv>e</xv>&lt;/td&gt;
+				|			&lt;td&gt;
+				|				&lt;table <xa>_type</xa>=<xs>'object'</xs>&gt;
+				|					&lt;tr&gt;
+				|						&lt;td&gt;<xv>h</xv>&lt;/td&gt;
+				|						&lt;td&gt;<xv>qux</xv>&lt;/td&gt;
+				|					&lt;/tr&gt;
+				|				&lt;/table&gt;
+				|			&lt;/td&gt;
+				|		&lt;/tr&gt;
+				|		&lt;tr&gt;
+				|			&lt;td&gt;<xv>f</xv>&lt;/td&gt;
+				|			&lt;td&gt;
+				|				&lt;ul&gt;
+				|					&lt;li&gt;<xv>baz</xv>&lt;/li&gt;
+				|				&lt;/ul&gt;
+				|			&lt;/td&gt;
+				|		&lt;/tr&gt;
+				|		&lt;tr&gt;
+				|			&lt;td&gt;<xv>g</xv>&lt;/td&gt;
+				|			&lt;td&gt;
+				|				&lt;ul&gt;
+				|					&lt;li&gt;<xv>789</xv>&lt;/li&gt;
+				|				&lt;/ul&gt;
+				|			&lt;/td&gt;
+				|		&lt;/tr&gt;
+				|	&lt;/table&gt;
+			</xt></td>
+		</tr>
+	</table>
+	
+	<h5 class='topic'>Beans with Map properties</h5>
+	<table class='styled w800'>
+		<tr>
+			<th>Data type</th>
+			<th>JSON example</th>
+			<th>HTML</th>
+		</tr>
+		<tr>
+			<td class='code'>
+				|	<jk>class</jk> MyBean {
+				|		<jk>public</jk> Map&lt;String,String&gt; <jf>a</jf>;
+				|		<jk>public</jk> Map&lt;String,Number&gt; <jf>b</jf>;
+				|		<jk>public</jk> Map&lt;String,Object&gt; <jf>c</jf>; 
+				|	}
+			</td>
+			<td class='code'>
+				|	{
+				|		<jok>a</jok>: {
+				|			<jok>k1</jok>: <jov>'foo'</jov>
+				|		},
+				|		<jok>b</jok>: {
+				|			<jok>k2</jok>: <jov>123</jov>
+				|		},
+				|		<jok>c</jok>: {
+				|			<jok>k3</jok>: <jov>'bar'</jov>,
+				|			<jok>k4</jok>: <jov>456</jov>,
+				|			<jok>k5</jok>: <jov>true</jov>,
+				|			<jok>k6</jok>: <jov>null</jov>
+				|		}
+				|	}
+			</td>
+			<td class='code'><xt>
+				|	&lt;table <xa>_type</xa>=<xs>'object'</xs>&gt;
+				|		&lt;tr&gt;
+				|			&lt;td&gt;<xv>a</xv>&lt;/td&gt;
+				|			&lt;td&gt;
+				|				&lt;table _type='object'&gt;
+				|					&lt;tr&gt;
+				|						&lt;td&gt;<xv>k1</xv>&lt;/td&gt;
+				|						&lt;td&gt;<xv>foo</xv>&lt;/td&gt;
+					|				&lt;/tr&gt;
+				|				&lt;/table&gt;
+				|			&lt;/td&gt;
+				|		&lt;/tr&gt;
+				|		&lt;tr&gt;
+				|			&lt;td&gt;<xv>b</xv>&lt;/td&gt;
+				|			&lt;td&gt;
+				|				&lt;table _type='object'&gt;
+				|					&lt;tr&gt;
+				|						&lt;td&gt;<xv>k2</xv>&lt;/td&gt;
+				|						&lt;td&gt;<xv>123</xv>&lt;/td&gt;
+				|					&lt;/tr&gt;
+				|				&lt;/table&gt;
+				|			&lt;/td&gt;
+				|		&lt;/tr&gt;
+				|		&lt;tr&gt;
+				|			&lt;td&gt;<xv>c</xv>&lt;/td&gt;
+				|			&lt;td&gt;
+				|				&lt;table <xa>_type</xa>=<xs>'object'</xs>&gt;
+				|					&lt;tr&gt;
+				|						&lt;td&gt;<xv>k3</xv>&lt;/td&gt;
+				|						&lt;td&gt;<xv>bar</xv>&lt;/td&gt;
+				|					&lt;/tr&gt;
+				|					&lt;tr&gt;
+				|						&lt;td&gt;<xv>k4</xv>&lt;/td&gt;
+				|						&lt;td&gt;&lt;number&gt;<xv>456</xv>&lt;/number&gt;&lt;/td&gt;
+				|					&lt;/tr&gt;
+				|					&lt;tr&gt;
+				|						&lt;td&gt;<xv>k5</xv>&lt;/td&gt;
+				|						&lt;td&gt;&lt;boolean&gt;<xv>true</xv>&lt;/boolean&gt;&lt;/td&gt;
+				|					&lt;/tr&gt;
+				|					&lt;tr&gt;
+				|						&lt;td&gt;<xv>k6</xv>&lt;/td&gt;
+				|						&lt;td&gt;&lt;null/&gt;&lt;/td&gt;
+				|					&lt;/tr&gt;
+				|				&lt;/table&gt;
+				|			&lt;/td&gt;
+				|		&lt;/tr&gt;
+				|	&lt;/table&gt;
+			</xt></td>
+		</tr>
+	</table>
+</div>

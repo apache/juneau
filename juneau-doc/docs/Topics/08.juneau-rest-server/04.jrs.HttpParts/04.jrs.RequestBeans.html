@@ -1,0 +1,107 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'@Request Beans', updated:'8.1.0,9.0.0'} 
+
+<div class='topic'>
+	<p>
+		The {@link oaj.http.annotation.Request @Request} annotation can used to define proxy interfaces against 
+		HTTP requests in combination with the following annotations used on methods:
+	</p>
+	<ul class='javatreec'>
+		<li class='ja'>{@link oaj.http.annotation.Header}
+		<li class='ja'>{@link oaj.http.annotation.Query}
+		<li class='ja'>{@link oaj.http.annotation.FormData}
+		<li class='ja'>{@link oaj.http.annotation.Path}
+		<li class='ja'>{@link oaj.http.annotation.Content}
+		<li class='ja'>{@link oaj.http.annotation.Schema}
+	</ul>
+	
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<ja>@RestPut</ja>(<js>"/pets/{petId}"</js>)
+		|	<jk>public void</jk> addPet(UpdatePetBean <jv>updatePet</jv>) {...}
+		|
+		|	<ja>@Request</ja>
+		|	<jk>public interface</jk> UpdatePetBean {
+		|
+		|		<ja>@Path</ja> <jc>// {petId} inferred.</jc>
+		|		<jk>int</jk> getPetId();
+		|
+		|		<ja>@Query</ja>(<js>"verbose"</js>)
+		|		<jk>boolean</jk> isDebug();
+		|
+		|		<ja>@Header</ja>(<js>"*"</js>)
+		|		Map&lt;String,Object&gt; getAllHeaders();
+		|
+		|		<ja>@Content</ja>
+		|		Pet getPet();
+		|	}
+	</p>
+	<p>
+		The example above is identical in behavior to specifying individual annotated parameters on the <ja>@RestOp</ja>-annotated method:
+	</p>
+	<p class='bjava'>
+		|	<ja>@RestPut</ja>(<js>"/pets/{petId}"</js>)
+		|	<jk>public void</jk> addPet(
+		|		<ja>@Path</ja>(<js>"petId"</js>) <jk>int</jk> <jv>petId</jv>,
+		|		<ja>@Query</ja>(<js>"verbose"</js>) <jk>boolean</jk> <jv>debug</jv>,
+		|		<ja>@Header</ja>(<js>"*"</js>) Map&lt;String,Object&gt; <jv>allHeaders</jv>,
+		|		<ja>@Content</ja> UpdatePetBean <jv>pet</jv>
+		|	) 
+		|	{...}
+	</p>
+	<p>
+		The return types of the getters must be the supported parameter types for the HTTP-part annotation used.
+		Schema-based serialization and parsing is used just as if used as individual parameter types.
+		Annotations used are the exact same used on REST parameters and have all the
+		same feature support including automatic Swagger validation and documentation.  
+		Part names can either be explicitly specified or automatically inferred from the getter names.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<ja>@Request</ja>
+		|	<jk>public interface</jk> MyRequest {
+		|
+		|		<jc>// Schema-based query parameter "pipedCdlInts":  
+		|		// Pipe-delimited list of comma-delimited lists of integers.</jc>
+		|		<ja>@Query</ja>
+		|		<ja>@Schema</ja>(
+		|			collectionFormat=<js>"pipes"</js>
+		|			items=<ja>@Items</ja>(
+		|				items=<ja>@SubItems</ja>(
+		|					collectionFormat=<js>"csv"</js>
+		|					type=<js>"integer"</js>,
+		|					minimum=1,
+		|					maximum=100
+		|				),
+		|				maximumLength=10
+		|			)
+		|		)
+		|		<jk>int</jk>[][] <jv>getPipedCdlInts</jv>();
+		|	}
+	</p>
+	<p>
+		For clarity, the <ja>@Request</ja> annotation can be defined on the parameter, class, or both.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<ja>@RestPut</ja>(<js>"/pets/{petId}"</js>)
+		|	<jk>public void</jk> addPet(<ja>@Request</ja> UpdatePetBean <jv>updatePet</jv>) {...}
+		|
+		|	<ja>@Request</ja>
+		|	<jk>public interface</jk> UpdatePetBean {...}
+	</p>
+</div>

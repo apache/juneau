@@ -1,0 +1,87 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'org.apache.juneau.http.resource', created:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The {@link oaj.http.resource} package contains implementations of {@link oaj.http.resource.HttpResource} which are extensions of <c>org.apache.http.HttpEntity</c> with 
+		arbitrary headers added.
+	</p>
+	<ul class='javatree'>
+		<li class='jic'>{@code org.apache.http.HttpEntity}
+		<ul>
+			<li class='jic'>{@link oaj.http.resource.HttpResource}
+			<ul>
+				<li class='jc'>{@link oaj.http.resource.BasicResource}
+				<ul class='javatreec'>
+					<li class='jc'>{@link oaj.http.resource.ByteArrayResource}
+					<li class='jc'>{@link oaj.http.resource.FileResource}
+					<li class='jc'>{@link oaj.http.resource.InputStreamResource}
+					<li class='jc'>{@link oaj.http.resource.ReaderResource}
+					<li class='jc'>{@link oaj.http.resource.StringResource}
+				</ul>
+			</ul>
+		</ul>
+	</ul>
+	
+	<h5 class='topic'>HttpResourceBuilder</h5>
+	<p>
+		HTTP entities are created through builders created in the {@link oaj.http.HttpResources} class or individual <c>create()</c> methods
+		defined in the subclasses above.  The builder contains the following methods:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.http.resource.HttpResourceBuilder}
+		<ul>
+			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#cached() cached()}
+			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#chunked() chunked()}
+			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#chunked(boolean) chunked(boolean)}
+			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#content(Object) content(Object)}
+			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#content(Supplier) content(Supplier)}
+			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#contentEncoding(ContentEncoding) contentEncoding(ContentEncoding)}
+			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#contentEncoding(String) contentEncoding(String)}
+			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#contentLength(long) contentLength(long)}
+			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#contentType(ContentType) contentType(ContentType)}
+			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#contentType(String) contentType(String)}
+			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#copyFrom(HttpResponse) copyFrom(HttpResponse)}
+			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#getEntity() getEntity()}
+			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#getHeaders() getHeaders()}
+			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#header(Header) header(Header)}
+			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#header(String,String) header(String,String)}
+			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#headers(Header...) headers(Header...)}
+			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#headers(HeaderList) headers(HeaderList)}
+			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#headers(List) headers(List&lt;Header&gt;)}
+			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#getHeaders() getHeaders()}
+		</ul>
+	</ul>
+	
+	<h5 class='figure'>Example</h5>
+	<p class='bjava'>
+		|	<jk>import static</jk> org.apache.juneau.http.HttpResources.*;
+		|
+		|	<jk>byte</jk>[] <jv>payload</jv> = {...};
+		|
+		|	<jc>// Create via type builder.</jc>
+		|	HttpResource <jv>resource</jv> = ByteArrayResource
+		|		.<jsm>create</jsm>()
+		|		.content(<jv>payload</jv>)
+		|		.contentType(ContentType.<jsf>APPLICATION_OCTET_STREAM</jsf>)
+		|		.build();
+		|
+		|	<jc>// Create via HttpResources.</jc>
+		|	HttpResource <jv>resource</jv> = <jsm>byteArrayResource</jsm>(<jv>payload</jv>, ContentType.<jsf>APPLICATION_OCTET_STREAM</jsf>).build();
+	</p>
+	
+</div>

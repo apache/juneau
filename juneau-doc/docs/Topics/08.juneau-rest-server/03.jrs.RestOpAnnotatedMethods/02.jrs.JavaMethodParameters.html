@@ -1,0 +1,188 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Java Method Parameters', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		Java methods can contain any of the following parameters in any order:
+	</p>
+	<ul class='spaced-list'>
+		<li>
+			<b>Parameters based on class types:</b>
+			<ul class='spaced-list'>
+				<li>Request objects:
+					<ul class='javatreec'>
+						<li class='jic'>{@link javax.servlet.AsyncContext}
+						<li class='jc'>{@link oajr.arg.CookieList}
+						<li class='je'>{@link javax.servlet.DispatcherType}
+						<li class='jc'>{@link oaj.httppart.HttpPartParserSession}
+						<li class='jc'>{@link oaj.httppart.HttpPartSerializerSession}
+						<li class='jic'>{@link javax.servlet.HttpServletRequest}
+						<li class='jc'>{@link java.io.InputStream}
+						<li class='jac'>{@link oaj.parser.InputStreamParser}
+						<li class='jc'>{@link java.util.Locale}
+						<li class='jc'>{@link oaj.cp.Messages}
+						<li class='jac'>{@link oaj.parser.Parser}
+						<li class='jic'>{@link java.security.Principal}
+						<li class='jc'>{@link java.io.Reader}
+						<li class='jac'>{@link oaj.parser.ReaderParser}
+						<li class='jc'>{@link oajr.httppart.RequestAttributes}
+						<li class='jc'>{@link oajr.httppart.RequestContent}
+						<li class='jc'>{@link oajr.httppart.RequestFormParams}
+						<li class='jc'>{@link oajr.httppart.RequestHeaders}
+						<li class='jc'>{@link oajr.httppart.RequestPathParams}
+						<li class='jc'>{@link oajr.httppart.RequestQueryParams}
+						<li class='jc'>{@link java.util.ResourceBundle}
+						<li class='jc'>{@link oajr.RestRequest}
+						<li class='jic'>{@link javax.servlet.ServletInputStream}
+						<li class='jc'>{@link oaj.dto.swagger.Swagger}
+						<li class='jc'>{@link java.util.TimeZone}
+						<li class='jc'>{@link oaj.UriContext}
+						<li class='jc'>{@link oaj.UriResolver}
+						<li class='jc'>{@link oaj.svl.VarResolverSession}
+					</ul>
+				</li>
+				<li>Response objects:
+					<ul class='javatreec'>
+						<li class='jic'>{@link javax.servlet.HttpServletResponse}
+						<li class='jc'>{@link java.io.OutputStream}
+						<li class='jc'>{@link oajr.RestResponse}
+						<li class='jic'>{@link javax.servlet.ServletOutputStream}
+						<li class='jc'>{@link java.io.Writer}
+					</ul>
+				</li>
+				<li>Session objects:
+					<ul class='javatreec'>
+						<li class='jic'>{@link javax.servlet.http.HttpSession}
+						<li class='jc'>{@link oajr.RestSession}
+						<li class='jc'>{@link oajr.util.UrlPath}
+						<li class='jc'>{@link oajr.util.UrlPathMatch}
+						<li class='jc'>{@link oaj.cp.BeanStore}
+						<li class='jc'>{@link oajr.RestOpSession}
+					</ul>				
+				</li>
+				<li>Parsed request header values:
+					<ul class='javatreec'>
+						<li class='jc'>{@link oaj.http.header.Accept}
+						<li class='jc'>{@link oaj.http.header.AcceptCharset}
+						<li class='jc'>{@link oaj.http.header.AcceptEncoding}
+						<li class='jc'>{@link oaj.http.header.AcceptLanguage}
+						<li class='jc'>{@link oaj.http.header.AcceptRanges}
+						<li class='jc'>{@link oaj.http.header.Authorization}
+						<li class='jc'>{@link oaj.http.header.CacheControl}
+						<li class='jc'>{@link oaj.http.header.ClientVersion}
+						<li class='jc'>{@link oaj.http.header.Connection}
+						<li class='jc'>{@link oaj.http.header.ContentDisposition}
+						<li class='jc'>{@link oaj.http.header.ContentEncoding}
+						<li class='jc'>{@link oaj.http.header.ContentLength}
+						<li class='jc'>{@link oaj.http.header.ContentType}
+						<li class='jc'>{@link oaj.http.header.Date}
+						<li class='jc'>{@link oaj.http.header.Debug}
+						<li class='jc'>{@link oaj.http.header.Expect}
+						<li class='jc'>{@link oaj.http.header.Forwarded}
+						<li class='jc'>{@link oaj.http.header.From}
+						<li class='jc'>{@link oaj.http.header.Host}
+						<li class='jc'>{@link oaj.http.header.IfMatch}
+						<li class='jc'>{@link oaj.http.header.IfModifiedSince}
+						<li class='jc'>{@link oaj.http.header.IfNoneMatch}
+						<li class='jc'>{@link oaj.http.header.IfRange}
+						<li class='jc'>{@link oaj.http.header.IfUnmodifiedSince}
+						<li class='jc'>{@link oaj.http.header.MaxForwards}
+						<li class='jc'>{@link oaj.http.header.NoTrace}
+						<li class='jc'>{@link oaj.http.header.Origin}
+						<li class='jc'>{@link oaj.http.header.Pragma}
+						<li class='jc'>{@link oaj.http.header.ProxyAuthorization}
+						<li class='jc'>{@link oaj.http.header.Range}
+						<li class='jc'>{@link oaj.http.header.Referer}
+						<li class='jc'>{@link oaj.http.header.TE}
+						<li class='jc'>{@link oaj.http.header.Thrown}
+						<li class='jc'>{@link oaj.http.header.Upgrade}
+						<li class='jc'>{@link oaj.http.header.UserAgent}
+						<li class='jc'>{@link oaj.http.header.Warning}
+					</ul>
+				</li>
+				<li>Context values:
+					<ul class='javatreec'>
+						<li class='jc'>{@link oaj.BeanContext}
+						<li class='jc'>{@link oaj.config.Config}
+						<li class='jic'>{@link oajr.debug.DebugEnablement}
+						<li class='jc'>{@link oaj.encoders.EncoderSet}
+						<li class='jic'>{@link oaj.cp.FileFinder}
+						<li class='jc'>{@link oaj.jsonschema.JsonSchemaGenerator}
+						<li class='jc'>{@link java.util.Logger}
+						<li class='jc'>{@link oajr.stats.MethodExecStore}
+						<li class='jc'>{@link oaj.parser.ParserSet}
+						<li class='jc'>{@link oajr.RestChildren}
+						<li class='jc'>{@link oajr.RestContext}
+						<li class='jc'>{@link oajr.stats.RestContextStats}
+						<li class='jic'>{@link oajr.logging.RestLogger}
+						<li class='jc'>{@link oajr.RestOpContext}
+						<li class='jc'>{@link oajr.RestOperations}
+						<li class='jc'>{@link oaj.serializer.SerializerSet}
+						<li class='jic'>{@link oajr.staticfile.StaticFiles}
+						<li class='jc'>{@link oajr.stats.ThrownStore}
+					</ul>
+				</li>
+			</ul>
+		<li><b>Annotated parameters (either on the parameter or parameter type):</b>
+			<ul class='javatreec'>
+				<li class='ja'>{@link oajr.annotation.Attr}
+				<li class='ja'>{@link oaj.http.annotation.Content}
+				<li class='ja'>{@link oaj.http.annotation.Path}
+				<li class='ja'>{@link oaj.http.annotation.FormData}
+				<li class='ja'>{@link oaj.http.annotation.HasFormData}
+				<li class='ja'>{@link oaj.http.annotation.Query}
+				<li class='ja'>{@link oaj.http.annotation.HasQuery}
+				<li class='ja'>{@link oaj.http.annotation.Header}
+				<li class='ja'>{@link oaj.http.annotation.StatusCode}
+				<li class='ja'>{@link oajr.annotation.Method}
+				<li class='ja'>{@link oaj.http.annotation.Request}
+				<li class='ja'>{@link oaj.http.annotation.Response}
+			</ul>
+		</li>
+	</ul>
+	<p>
+		In Spring Boot environments, any available Spring Beans can also be passed in as parameters.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<ja>@RestGet</ja>(<js>"/example1/{a1}/{a2}/{a3}/*"</js>)
+		|	<jk>public</jk> String doGetExample1(
+		|		RestRequest <jv>req</jv>,
+		|		RestResponse <jv>res</jv>,
+		|		<ja>@Method</ja> String <jv>method</jv>,
+		|		<ja>@Path</ja>(<js>"a1"</js>) String <jv>a1</jv>,
+		|		<ja>@Path</ja>(<js>"a2"</js>) <jk>int</jk> <jv>a2</jv>,
+		|		<ja>@Path</ja>(<js>"a3"</js>) UUID <jv>a3</jv>,
+		|		<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> <jv>p1</jv>,
+		|		<ja>@Query</ja>(<js>"p2"</js>) String <jv>p2</jv>,
+		|		<ja>@Query</ja>(<js>"p3"</js>) UUID <jv>p3</jv>,
+		|		<ja>@HasQuery</ja>(<js>"p3"</js>) boolean <jv>hasP3</jv>,
+		|		<ja>@Path</ja>(<js>"/*"</js>) String <jv>remainder</jv>,
+		|		<ja>@Header</ja>(<js>"Accept-Language"</js>) String <jv>lang</jv>,
+		|		<ja>@Header</ja>(<js>"Accept"</js>) String <jv>accept</jv>,
+		|		<ja>@Header</ja>(<js>"DNT"</js>) <jk>int</jk> <jv>doNotTrack</jv>,
+		|		RequestAttributes <jv>attributes</jv>,
+		|		ResourceBundle <jv>nls</jv>
+		|	) {
+		|		<jc>// Do something with all of those</jc>
+		|	}
+	</p>
+	<p>
+		Additional parameter types can be defined by overriding {@link oajr.RestContext.Builder#createRestOpArgs(BeanStore,Supplier)} or
+		by adding them to the bean store using {@link oajr.RestContext.Builder#createBeanStore(Class,Supplier)}.
+	</p>
+</div>

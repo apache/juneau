@@ -1,0 +1,252 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Predefined Widgets', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The {@link oajr.widget} package contains predefined reusable widgets.
+	</p>
+	<ul class='javatree'>
+		<li class='jp'>{@link oajr.widget}
+			<ul>
+				<li class='jac'>{@link oajr.widget.Widget}
+					<ul>
+						<li class='jac'>{@link oajr.widget.MenuItemWidget}
+							<ul>
+								<li class='jc'>{@link oajr.widget.ContentTypeMenuItem}
+								<li class='jc'>{@link oajr.widget.QueryMenuItem}
+								<li class='jc'>{@link oajr.widget.ThemeMenuItem}
+							</ul>
+						</li>
+						<li class='jc'>{@link oajr.widget.PoweredByJuneau}
+					</ul>
+				</li>
+				<li class='jc'>{@link oajr.widget.Tooltip}
+			</ul>
+		</li>
+	</ul>
+	
+	<h5 class='topic'>MenuItemWidget</h5>
+	<p>
+		{@link oajr.widget.MenuItemWidget} is an abstract class for rendering menu items with drop-downs.
+		It defines some simple CSS and Javascript for enabling drop-down menus in the nav section of the page (although 
+		nothing keeps you from using it in an arbitrary location in the page).
+	</p>
+	<p>
+		The script specifies a <c>menuClick(element)</c> function that toggles the visibility of the next sibling of the element.
+	</p>
+	<p>
+		Subclasses implement the following two methods:
+	</p>
+	<ul class='javatree'>
+		<li class='jac'>{@link oajr.widget.MenuItemWidget}
+			<ul class='javatreec'>
+				<li class='jm'>{@link oajr.widget.MenuItemWidget#getLabel(RestRequest,RestResponse) getLabel(RestRequest,RestResponse)}
+				<li class='jm'>{@link oajr.widget.MenuItemWidget#getContent(RestRequest,RestResponse) getContent(RestRequest,RestResponse)}
+			</ul>
+		</li>
+	</ul>
+	<p>
+		For example, to render a link that brings up a simple dialog in a div tag:
+	</p>
+	<p class='bjava'>
+		|	<ja>@Override</ja>
+		|	<jk>public</jk> String getLabel() {
+		|		<jk>return</jk> <js>"my-menu-item"</js>;
+		|	};
+		|
+		|	<ja>@Override</ja>
+		|	<jk>public</jk> Div getContent() {
+		|		<jk>return</jk> Html5Builder.<jsm>div</jsm>(<js>"Surprise!"</js>).style(<js>"color:red"</js>);
+		|	};
+	</p>
+	<p>
+		The HTML content returned by the {@link oajr.widget.MenuItemWidget#getHtml(RestRequest,RestResponse) getHtml(RestRequest,RestResponse)} method is added where the <js>"$W{...}"</js> is referenced in the page.
+	</p>
+	
+	<h5 class='topic'>ContentTypeMenuItem</h5>
+	<p>
+		{@link oajr.widget.ContentTypeMenuItem} is a predefined Widget that returns back a list of hyperlinks for rendering the contents of a page in a variety of content types.
+	</p>
+	<p>
+		The variable it resolves is <js>"$W{ContentTypeMenuItem}"</js>.
+	</p>
+	<p>
+		An example of this widget can be found in the <c>PetStoreResource</c> in the examples that provides a drop-down menu item for rendering all other supported content types in plain text:
+	</p>
+	<p class='bjava'>
+		|	<ja>@RestGet</ja>(path=<js>"/"</js>)
+		|	<ja>@HtmlDocConfig</ja>(
+		|		widgets={
+		|			ContentTypeMenuItem.<jk>class</jk>,
+		|		},
+		|		navlinks={
+		|			<js>"up: ..."</js>,
+		|			<js>"options: ..."</js>,
+		|			<js>"$W{QueryMenuItem}"</js>,
+		|			<js>"$W{ContentTypeMenuItem}"</js>,
+		|			<js>"$W{ThemeMenuItem}"</js>,
+		|			<js>"source: ..."</js>
+		|		}
+		|	)
+		|	<jk>public</jk> Collection&lt;Pet&gt; getPets() {
+	</p>
+	<p>
+		It renders the following popup-box:
+	</p>
+	<img class='bordered w800' src='doc-files/jrs.HtmlDocAnnotation.PredefinedWidgets.1.png'>
+	
+	<h5 class='topic'>QueryMenuItem</h5>
+	<p>
+		{@link oajr.widget.QueryMenuItem} is a predefined Widget that returns a menu-item drop-down form for entering search/view/sort arguments.
+	</p>
+	<p>
+		The variable it resolves is <js>"$W{QueryMenuItem}"</js>.
+	</p>
+	<p>
+		This widget is designed to be used in conjunction with the {@link oajr.converter.Queryable} converter, although implementations
+		can process the query parameters themselves if they wish to do so by using the {@link oajr.httppart.RequestQueryParams#getSearchArgs()}
+		method to retrieve the arguments and process the data themselves.
+	</p>
+	<p>
+		An example of this widget can be found in the <c>PetStoreResource</c> in the examples that provides
+		search/view/sort capabilities against the collection of POJOs:
+	<p class='bjava'>
+		|	<ja>@RestGet</ja>(
+		|		path=<js>"/"</js>,
+		|		converters=Queryable.<jk>class</jk>
+		|	)
+		|	<ja>@HtmlDocConfig</ja>(
+		|		widgets={
+		|			QueryMenuItem.<jk>class</jk>,
+		|		},
+		|		navlinks={
+		|			<js>"up: ..."</js>,
+		|			<js>"options: ..."</js>,
+		|			<js>"$W{QueryMenuItem}"</js>,
+		|			<js>"$W{ContentTypeMenuItem}"</js>,
+		|			<js>"$W{ThemeMenuItem}"</js>,
+		|			<js>"source: ..."</js>
+		|		}
+		|	)
+		|	<jk>public</jk> Collection&lt;Pet&gt; getPets() {
+	</p>
+	<p>
+		It renders the following popup-box:
+	</p>
+	<img class='bordered w800' src='doc-files/jrs.HtmlDocAnnotation.PredefinedWidgets.2.png'>
+	<p>
+		Tooltips are provided by hovering over the field names.
+	</p>
+	<img class='bordered w800' src='doc-files/jrs.HtmlDocAnnotation.PredefinedWidgets.3.png'>
+	
+	<p>
+		When submitted, the form submits a GET request against the current URI with special GET search API query parameters.
+		(e.g. <js>"?s=column1=Foo*&amp;v=column1,column2&amp;o=column1,column2-&amp;p=100&amp;l=100"</js>).
+		The {@link oajr.converter.Queryable} class knows how to perform these filters against collections of POJOs.
+	</p>
+	
+	<h5 class='topic'>ThemeMenuItem</h5>
+	<p>
+		{@link oajr.widget.ThemeMenuItem} is a predefined Widget that returns back a list of hyperlinks for rendering the contents of a page in the various default styles.
+	</p>
+	<p>
+		The variable it resolves is <js>"$W{ThemeMenuItem}"</js>.
+	</p>
+	<p>
+		An example of this widget can be found in the <c>PetStoreResource</c> in the examples that provides
+		a drop-down menu item for rendering all other supported content types in plain text:
+	</p>
+	<p class='bjava'>
+		|	<ja>@RestGet</ja>(path=<js>"/"</js>)
+		|	<ja>@HtmlDocConfig</ja>(
+		|		widgets={
+		|			ThemeMenuItem.<jk>class</jk>,
+		|		},
+		|		navlinks={
+		|			<js>"up: ..."</js>,
+		|			<js>"options: ..."</js>,
+		|			<js>"$W{QueryMenuItem}"</js>,
+		|			<js>"$W{ContentTypeMenuItem}"</js>,
+		|			<js>"$W{ThemeMenuItem}"</js>,
+		|			<js>"source: ..."</js>
+		|		}
+		|	)
+		|	<jk>public</jk> Collection&lt;Pet&gt; getPets() {
+	</p>
+	
+	<h5 class='topic'>PoweredByJuneau</h5>
+	<p>
+		{@link oajr.widget.PoweredByJuneau} is a predefined Widget that places a powered-by-Juneau message on a page.
+	</p>
+	<p>
+		The variable it resolves is <js>"$W{PoweredByJuneau}"</js>.
+	</p>
+	<p>
+		It produces a simple Apache Juneau icon floating on the right.
+		Typically it's used in the footer of the page, as shown below in the <c>AddressBookResource</c> from the examples:
+	</p>
+	<p class='bjava'>
+		|	<ja>@Rest</ja>(path=<js>"/addressBook"</js>)
+		|	<ja>@HtmlDocConfig</ja>(
+		|		widgets={
+		|			PoweredByJuneau.<jk>class</jk>
+		|		},
+		|		footer=<js>"$W{PoweredByJuneau}"</js>
+		|	)
+	</p>
+	<p>
+		It renders the following image:
+	</p>
+	<img class='bordered' src='doc-files/jrs.HtmlDocAnnotation.PredefinedWidgets.4.png'>
+	 
+	<h5 class='topic'>Tooltip</h5>
+	<p>
+		{@link oajr.widget.Tooltip} is a predefined template for adding tooltips to HTML5 bean constructs, typically in menu item widgets.
+	</p>
+	<p>
+		The following examples shows how tooltips can be added to a menu item widget.
+	</p>
+	<p class='bjava'>
+		|	<jk>public class</jk> MyFormMenuItem <jk>extends</jk> MenuItemWidget {
+		|	
+		|		<ja>@Override</ja>
+		|		<jk>public</jk> String getLabel(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
+		|			<jk>return</jk> <js>"myform"</js>;
+		|		}
+		|	
+		|		<ja>@Override</ja>
+		|		<jk>public</jk> Object getContent(RestRequest <jv>req</jv>) <jk>throws</jk> Exception {
+		|			<jk>return</jk> div(
+		|				<jsm>form</jsm>().id(<js>"form"</js>).action(<js>"servlet:/form"</js>).method(<jsf>POST</jsf>).children(
+		|					<jsm>table</jsm>(
+		|						<jsm>tr</jsm>(
+		|							<jsm>th</jsm>(<js>"Field 1:"</js>),
+		|							<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"field1"</js>).type(<js>"text"</js>)),
+		|							<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"This is field #1!"</js>, br(), <js>"(e.g. '"</js>, code(<js>"Foo"</js>), <js>"')"</js>))
+		|						),
+		|						<jsm>tr</jsm>(
+		|							<jsm>th</jsm>(<js>"Field 2:"</js>),
+		|							<jsm>td</jsm>(<jsm>input</jsm>().name(<js>"field2"</js>).type(<js>"text"</js>)),
+		|							<jsm>td</jsm>(<jk>new</jk> Tooltip(<js>"(?)"</js>, <js>"This is field #2!"</js>, br(), <js>"(e.g. '"</js>, code(<js>"Bar"</js>), <js>"')"</js>))
+		|						)
+		|					)
+		|				)
+		|			);
+		|		}
+		|	}
+	</p>
+</div>

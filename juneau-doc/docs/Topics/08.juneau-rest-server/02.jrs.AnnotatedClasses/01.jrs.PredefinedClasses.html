@@ -1,0 +1,214 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Predefined Classes', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The following example represents the bare-minimum needed
+		for deploying a top-level REST endpoint with basic JSON marshalling support:
+	</p>
+	<p class='bjava'>
+		|	<ja>@Rest</ja>(
+		|		path=<js>"/mypath"</js>,
+		|		serializers=JsonSerializer.<jk>class</jk>,
+		|		parsers=JsonParser.<jk>class</jk>
+		|	)
+		|	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet {
+		|	
+		|		<ja>@RestGet</ja>(path=<js>"/"</js>)
+		|		<jk>public</jk> Object getPojo() {
+		|			...
+		|		}
+		|	}
+	</p>
+	<p>
+		The {@link oajr.servlet.RestServlet} class provides all the logic for starting up your REST
+		application when the servlet container calls {@link oajr.servlet.RestServlet#init(ServletConfig) init(ServletConfig)}.  
+		On startup, it scans your class for annotations and sets up 
+		all of your serializers and parsers.  It then does this recursively for all child resources.
+	</p>
+	<p>
+		Users will typically not extend directly from {@link oajr.servlet.RestServlet}.  Instead, several classes are provided by the framework to provide additional
+		functionality and to handle different use-cases.  Users will typically extend from one of these <c>Basic*</c> classes:
+	</p>
+	<ul class='javatree'>
+		<li class='jac'>{@link javax.servlet.http.HttpServlet} 
+			<ul>
+				<li class='jac'>{@link oajr.servlet.RestServlet}
+					<ul>
+						<li class='jac'>{@link oajr.servlet.BasicRestServlet} <jk>implements</jk> {@link oajr.servlet.BasicRestOperations}, {@link oajr.config.BasicJsonConfig}
+							<ul>
+								<li class='jac'>{@link oajr.servlet.BasicRestServletGroup} <jk>implements</jk> {@link oajr.servlet.BasicGroupOperations}
+							</ul>
+						</li>
+						<li class='jac'>{@link oajr.springboot.SpringRestServlet}
+							<ul>
+								<li class='jac'>{@link oajr.springboot.BasicSpringRestServlet} <jk>implements</jk> {@link oajr.servlet.BasicRestOperations}, {@link oajr.config.BasicJsonConfig}
+									<ul>
+										<li class='jac'>{@link oajr.springboot.BasicSpringRestServletGroup} <jk>implements</jk> {@link oajr.servlet.BasicGroupOperations}
+									</ul>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+		<li class='jac'>{@link oajr.servlet.RestObject}
+			<ul>
+				<li class='jac'>{@link oajr.servlet.BasicRestObject} <jk>implements</jk> {@link oajr.servlet.BasicRestOperations}, {@link oajr.config.BasicJsonConfig}
+					<ul>
+						<li class='jac'>{@link oajr.servlet.BasicRestObjectGroup} <jk>implements</jk> {@link oajr.servlet.BasicGroupOperations}
+					</ul>
+				</li>
+			</ul>
+		</li>
+	</ul>
+	<p>
+		The {@link oajr.servlet.RestServlet}
+		class itself is not configured with any serializers or parsers.  However, it does
+		provide several convenience methods to be aware of:
+	</p>
+	<ul class='javatree'>
+		<li class='jac'>{@link oajr.servlet.RestServlet}
+			<ul class='spaced-list'>
+				<li>Predefined lifecycle hook methods:
+					<ul class='javatreec'>
+						<li class='jm'>{@link oajr.servlet.RestServlet#onInit(RestContext.Builder) onInit()}
+						<li class='jm'>{@link oajr.servlet.RestServlet#onPostInit(RestContext) onPostInit()}
+						<li class='jm'>{@link oajr.servlet.RestServlet#onPostInitChildFirst(RestContext) onPostInitChildFirst()}
+						<li class='jm'>{@link oajr.servlet.RestServlet#onStartCall(HttpServletRequest,HttpServletResponse) onStartCall()}
+						<li class='jm'>{@link oajr.servlet.RestServlet#onPreCall(RestRequest,RestResponse) onPreCall()}
+						<li class='jm'>{@link oajr.servlet.RestServlet#onPostCall(RestRequest,RestResponse) onPostCall()}
+						<li class='jm'>{@link oajr.servlet.RestServlet#onEndCall(HttpServletRequest,HttpServletResponse) onEndCall()}
+						<li class='jm'>{@link oajr.servlet.RestServlet#onDestroy(RestContext) onDestroy()}
+					</ul>
+				</li>
+				<li>Logging methods:
+					<ul class='javatreec'>
+						<li class='jm'>{@link oajr.servlet.RestServlet#log(Level,String,Object...) log(Level,String,Object...)}
+						<li class='jm'>{@link oajr.servlet.RestServlet#log(Level,Throwable,String,Object...) log(Level,Throwable,String,Object...)}
+						<li class='jm'>{@link oajr.servlet.RestServlet#log(String) log(String)}
+						<li class='jm'>{@link oajr.servlet.RestServlet#log(String,Throwable) log(String,Throwable)}
+					</ul>
+				</li>
+				<li>Other methods:
+					<ul class='javatreec'>
+						<li class='jm'>{@link oajr.servlet.RestServlet#getContext() getContext()}
+						<li class='jm'>{@link oajr.servlet.RestServlet#getPath() getPath()}
+						<li class='jm'>{@link oajr.servlet.RestServlet#getRequest() getRequest()}
+						<li class='jm'>{@link oajr.servlet.RestServlet#getResponse() getResponse()}
+					</ul>
+				</li>
+			</ul>
+		</li>
+	</ul>
+	<p>
+		The <c>Basic*</c> classes implement the {@link oajr.servlet.BasicRestOperations} interface
+		which defines common endpoints for swagger documentation, statistics, and serving static files:
+	</p>
+	<p class='bjava'>
+		|	<jk>public interface</jk> BasicRestOperations {
+		|
+		|		<ja>@RestGet</ja>(path=<js>"/api/*"</js>)
+		|		<jk>public</jk> {@link oaj.dto.swagger.Swagger} {@link oajr.servlet.BasicRestOperations#getSwagger(RestRequest) getSwagger}({@link oajr.RestRequest} <jv>req</jv>);
+		|
+		|		<ja>@RestGet</ja>(path=<js>"/htdocs/*"</js>)
+		|		<jk>public</jk> {@link oaj.http.resource.HttpResource} {@link oajr.servlet.BasicRestOperations#getHtdoc(String,Locale) getHtdoc}(<ja>@Path</ja> String <jv>path</jv>, Locale <jv>locale</jv>);
+		|
+		|		<ja>@RestGet</ja>(path=<js>"favicon.ico"</js>)
+		|		<jk>public</jk> {@link oaj.http.resource.HttpResource} {@link oajr.servlet.BasicRestOperations#getFavIcon() getFavIcon}();
+		|
+		|		<ja>@RestGet</ja>(path=<js>"/stats"</js>)
+		|		<jk>public</jk> {@link oajr.stats.RestContextStats} {@link oajr.servlet.BasicRestOperations#getStats(RestRequest) getStats}({@link oajr.RestRequest} <jv>req</jv>);
+		|
+		|		<ja>@RestOp</ja>(method=<jsf>ANY</jsf>, path=<js>"/error"</js>)
+		|		<jk>public void</jk> {@link oajr.servlet.BasicRestOperations#error() error}();
+		|	}
+	</p>
+	<p>
+		The <c>Basic*</c> classes also implement {@link oajr.config.BasicJsonConfig} interface which
+		provides basic JSON marshalling support.  Other config interfaces are available as
+		well to quickly provide different types of marshalling support.  Note that these interfaces
+		do not define any methods, but rather simply provide a set of commonly-used annotations so that
+		you don't need to define them on all your classes.
+	</p>
+	<ul class='javatreec'>
+		<li class='jic'>{@link oajr.config.BasicJsonConfig}
+		<li class='jic'>{@link oajr.config.BasicJsonHtmlConfig}
+		<li class='jic'>{@link oajr.config.BasicSimpleJsonConfig}
+		<li class='jic'>{@link oajr.config.BasicOpenApiConfig}
+		<li class='jic'>{@link oajr.config.BasicUniversalConfig}
+		<li class='jic'>{@link oajr.config.BasicUniversalJenaConfig}
+	</ul>
+	<p>
+		For example, if you want to provide a resource that supports all languages in Juneau, 
+		simply add the {@link oajr.config.BasicUniversalConfig} interface like so:
+	</p>
+	<p class='bjava'>
+		|	<ja>@Rest</ja>(...)
+		|	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
+		|		...
+		|	}
+	</p>
+	<p>
+		The <c>*Group</c> classes implement the {@link oajr.servlet.BasicGroupOperations} interface which provides an additional REST endpoint for listing and navigating child resources:
+	</p>
+	<p class='bjava'>
+		|	<jk>public interface</jk> BasicGroupOperations {
+		|
+		|		<ja>@RestGet</ja>(path=<js>"/"</js>)
+		|		<jk>public</jk> {@link oajr.beans.ChildResourceDescriptions} {@link oajr.servlet.BasicGroupOperations#getChildren(RestRequest) getChildren}({@link oajr.RestRequest} <jv>req</jv>);
+		|	}
+	</p>
+	<p>
+		The <c>*Spring*</c> classes are meant to be used in Spring Boot environments so that you can
+		take full advantage of the Spring Framework for injecting dependencies on child resources
+		and helper classes.
+	</p>
+	<p>
+		The <c>*Object*</c> classes provide the same functionality as the servlet
+		classes but do not extend from {@link javax.servlet.http.HttpServlet}.  
+		This becomes important in Spring Boot environments where you may want to 
+		define child resources as Spring Beans, but don't want Spring Boot to auto-detect
+		them as servlets to be deployed as top-level resources.  This is less important
+		in standard servlet containers that don't auto-deploy servlets.  In those
+		environments, you can also use servlet classes for child resources.
+	</p>
+	<p>
+		The following is a breakdown of which classes you will use in different cases:
+	</p>
+	<ul class='spaced-list'>
+		<li>Top level resources in a servlet container:
+			<ul class='javatreec'>
+				<li class='jac'>{@link oajr.servlet.BasicRestServlet}
+				<li class='jac'>{@link oajr.servlet.BasicRestServletGroup}
+			</ul>
+		</li>
+		<li>Top level resources in a Spring Boot environment:
+			<ul class='javatreec'>
+				<li class='jac'>{@link oajr.springboot.BasicSpringRestServlet}
+				<li class='jac'>{@link oajr.springboot.BasicSpringRestServletGroup}
+			</ul>
+		</li>
+		<li>Child resources:
+			<ul class='javatreec'>
+				<li class='jac'>{@link oajr.servlet.BasicRestObject}
+				<li class='jac'>{@link oajr.servlet.BasicRestObjectGroup}
+			</ul>
+		</li>
+	</ul>
+</div>	

@@ -1,0 +1,89 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'JSON Methodology'}
+
+<div class='topic'>
+	<p>
+		The JSON data type produced depends on the Java object type being serialized.
+	</p>
+	<ul class='spaced-list'>
+		<li>
+			Primitives and primitive objects are converted to JSON primitives.
+		<li>
+			Beans and Maps are converted to JSON objects.
+		<li>
+			Collections and arrays are converted to JSON arrays.
+		<li>
+			Anything else is converted to JSON strings.
+	</ul>
+	
+	<h5 class='figure'>Data type conversions:</h5>
+	<table class='styled w800'>
+		<tr>
+			<th>POJO type</th>
+			<th>JSON type</th>
+			<th>Example</th>
+			<th>Serialized form</th>
+		</tr>
+		<tr>
+			<td>String</td>
+			<td>String</td>
+			<td><c>serialize(<js>"foobar"</js>);</c></td>
+			<td><c><js>'foobar'</js></c>
+		</tr>
+		<tr>
+			<td>Number</td>
+			<td>Number</td>
+			<td><c>serialize(123);</c></td>
+			<td><c>123</c>
+		</tr>
+		<tr>
+			<td>Boolean</td>
+			<td>Boolean</td>
+			<td><c>serialize(<jk>true</jk>);</c></td>
+			<td><c><jk>true</jk></c>
+		</tr>
+		<tr>
+			<td>Null</td>
+			<td>Null</td>
+			<td><c>serialize(<jk>null</jk>);</c></td>
+			<td><c><jk>null</jk></c>
+		</tr>
+		<tr>
+			<td>Beans with properties of any type on this list</td>
+			<td>Object</td>
+			<td><c>serialize(<jk>new</jk> MyBean());</c></td>
+			<td><c>{p1:<js>'val1'</js>,p2:<jk>true</jk>}</c>
+		</tr>
+		<tr>
+			<td>Maps with values of any type on this list</td>
+			<td>Object</td>
+			<td><c>serialize(<jk>new</jk> TreeMap());</c></td>
+			<td><c>{key1:<js>'val1'</js>,key2:<jk>true</jk>}</c>
+		</tr>
+		<tr>
+			<td>Collections and arrays of any type on this list</td>
+			<td>Array</td>
+			<td><c>serialize(<jk>new</jk> Object[]{1,<js>"foo"</js>,<jk>true</jk>});</c></td>
+			<td><c>[1,<js>'foo'</js>,<jk>true</jk>]</c>
+		</tr>
+	</table>
+	<p>
+		In addition, swaps can be used to convert non-serializable POJOs into serializable forms, such as converting 
+		<c>Calendar</c> object to ISO8601 strings, or <c><jk>byte</jk>[]</c> arrays to Base-64 
+		encoded strings.
+	</p>
+</div>

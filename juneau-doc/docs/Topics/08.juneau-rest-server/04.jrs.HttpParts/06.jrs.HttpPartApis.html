@@ -1,0 +1,56 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'HTTP Part APIs', created:'9.0.0'} 
+
+<div class='topic'>
+	<p>
+		Request HTTP parts can also be retrieved programmatically through the following classes that
+		can be passed in as parameters or access through {@link oajr.RestRequest} bean:
+	</p>
+	<ul class='javatreec'>
+		<li class='jc'>{@link oajr.httppart.RequestHeaders}
+		<li class='jc'>{@link oajr.httppart.RequestQueryParams}
+		<li class='jc'>{@link oajr.httppart.RequestFormParams}
+		<li class='jc'>{@link oajr.httppart.RequestPathParams}
+	</ul>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<ja>@RestPost</ja>(...)
+		|	<jk>public</jk> Object myMethod(RequestHeaders <jv>headers</jv>) {
+		|	
+		|		<jc>// Add a default value.</jc>
+		|		<jv>headers</jv>.addDefault(<js>"ETag"</js>, <jsf>DEFAULT_UUID</jsf>);
+		|	
+		|		<jc>// Get a header value as a POJO.</jc>
+		|		UUID <jv>etag</jv> = <jv>headers</jv>.get(<js>"ETag"</js>).as(UUID.<jk>class</jk>).get();
+		|	
+		|		<jc>// Get a header as a standard HTTP part.</jc>
+		|		ContentType <jv>contentType</jv> = <jv>headers</jv>.get(ContentType.<jk>class</jk>).orElse(ContentType.<jsf>TEXT_XML</jsf>);
+		|	}
+	</p>
+	<p>
+		Built in to these APIs are various convenience methods such as converting parts to 
+		different types or inline fluent assertions:
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jc>// Inline fluent assertion and retrieval.</jc>
+		|	String <jv>foo</jv> = <jv>request</jv>
+		|		.getHeader(<js>"Foo"</js>)
+		|		.assertString().contains(<js>"bar"</js>)
+		|		.get();
+	</p>
+</div>

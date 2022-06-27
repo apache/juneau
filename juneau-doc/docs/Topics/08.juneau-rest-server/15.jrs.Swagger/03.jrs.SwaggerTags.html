@@ -1,0 +1,113 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Tags'}
+
+<div class='topic'>
+	<p>
+		Tags allow you to group operations into general categories.
+		In the user interface, these can be expanded/collapsed by clicking on the tag sections.
+		In the example below, the <c>pet</c> and <c>store</c> tag sections are collapsed
+		and the <c>user</c> section is not:
+	</p>
+	<img class='bordered w900' src='doc-files/jrs.Swagger.4.png'>
+	<p>
+		Tags are also defined in the <ja>@Swagger</ja> annotation
+	</p>
+	<h5 class='figure'>PetStoreResource.json</h5>
+	<p class='bjson'>
+		|	<jok>"tags"</jok>: [
+		|		{
+		|			<jok>"name"</jok>: <jov>"pet"</jov>,
+		|			<jok>"description"</jok>: <jov>"Everything about your Pets"</jov>,
+		|			<jok>"externalDocs"</jok>: {
+		|				<jok>"description"</jok>: <jov>"Find out more"</jov>,
+		|				<jok>"url"</jok>: <jov>"http://juneau.apache.org"</jov>
+		|			}
+		|		},
+		|		{
+		|			<jok>"name"</jok>: <jov>"store"</jov>,
+		|			<jok>"description"</jok>: <jov>"Access to Petstore orders"</jov>
+		|		},
+		|		{
+		|			<jok>"name"</jok>: <jov>"user",
+		|			<jok>"description"</jok>: <jov>"Operations about user"</jov>,
+		|			<jok>"externalDocs"</jok>: {
+		|				<jok>"description"</jok>: <jov>"Find out more about our store"</jov>,
+		|				<jok>"url"</jok>: <jov>"http://juneau.apache.org"</jov>
+		|			}
+		|		}
+		|	],
+	</p>
+	<p>
+		The annotation-only approach is shown here:
+	</p>
+	<h5 class='figure'>org.apache.juneau.examples.rest.petstore.PetStoreResource</h5>
+	<p class='bjava'>
+		|	swagger=<ja>@Swagger</ja>(
+		|		...
+		|		tags={
+		|			<ja>@Tag</ja>(
+		|				name=<js>"pet"</js>,
+		|				description=<js>"Everything about your Pets"</js>,
+		|				externalDocs=<ja>@ExternalDocs</ja>(
+		|					description=<js>"Find out more"</js>,
+		|					url=<js>"http://juneau.apache.org"</js>
+		|				)
+		|			),
+		|			<ja>@Tag</ja>(
+		|				name=<js>"store"</js>,
+		|				description=<js>"Access to Petstore orders"</js>
+		|			),
+		|			<ja>@Tag</ja>(
+		|				name=<js>"user"</js>,
+		|				description=<js>"Operations about user"</js>,
+		|				externalDocs=<ja>@ExternalDocs</ja>(
+		|					description=<js>"Find out more about our store"</js>,
+		|					url=<js>"http://juneau.apache.org"</js>
+		|				)
+		|			)
+		|		}
+		|	),
+	</p>
+	<p>
+		Tags are associated with operations using the {@link oajr.annotation.OpSwagger#tags() @OpSwagger(tags)} annotation:
+	</p>
+	
+	<h5 class='figure'>GET /user operation</h5>
+	<p class='bjava'>
+		|	<ja>@RestGet</ja>(
+		|		path=<js>"/user"</js>,
+		|		summary=<js>"Petstore users"</js>,
+		|		swagger=<ja>@OpSwagger</ja>(
+		|			tags=<js>"user"</js>
+		|		)
+		|	)
+		|	<jk>public</jk> Collection&lt;User&gt; getUsers() <jk>throws</jk> NotAcceptable {...}
+	</p>
+	<p>
+		Operations can be mapped to multiple tags.
+	</p>
+	<p>
+		Tags are optional.
+		Operations not mapped to tags are listed in the UI before tagged operations.
+	</p>
+	<p>
+		For example, the <c>getTopPage()</c> method in <c>PetStoreResource</c> is not tagged, 
+		as well as the <c>getOptions()</c> method inherited from <c>BaseRestServlet</c>, so these
+		show up at the top of the page:
+	</p>
+	<img class='bordered w900' src='doc-files/jrs.Swagger.5.png'>
+</div>

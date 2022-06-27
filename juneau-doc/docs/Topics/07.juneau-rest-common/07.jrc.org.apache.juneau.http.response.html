@@ -1,0 +1,146 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'org.apache.juneau.http.response', created:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		The {@link oaj.http.response} package contains predefined <c>org.apache.http.HttpResponse</c> implementations for most standard HTTP
+		responses. 
+	</p>
+	<ul class='javatreec'>
+		<li class='jc'>{@link oaj.http.response.Accepted}
+		<li class='jc'>{@link oaj.http.response.AlreadyReported}
+		<li class='jc'>{@link oaj.http.response.BadRequest}
+		<li class='jc'>{@link oaj.http.response.Conflict}
+		<li class='jc'>{@link oaj.http.response.Continue}
+		<li class='jc'>{@link oaj.http.response.Created}
+		<li class='jc'>{@link oaj.http.response.EarlyHints}
+		<li class='jc'>{@link oaj.http.response.ExpectationFailed}
+		<li class='jc'>{@link oaj.http.response.FailedDependency}
+		<li class='jc'>{@link oaj.http.response.Forbidden}
+		<li class='jc'>{@link oaj.http.response.Found}
+		<li class='jc'>{@link oaj.http.response.Gone}
+		<li class='jc'>{@link oaj.http.response.HttpVersionNotSupported}
+		<li class='jc'>{@link oaj.http.response.IMUsed}
+		<li class='jc'>{@link oaj.http.response.InsufficientStorage}
+		<li class='jc'>{@link oaj.http.response.InternalServerError}
+		<li class='jc'>{@link oaj.http.response.LengthRequired}
+		<li class='jc'>{@link oaj.http.response.Locked}
+		<li class='jc'>{@link oaj.http.response.LoopDetected}
+		<li class='jc'>{@link oaj.http.response.MethodNotAllowed}
+		<li class='jc'>{@link oaj.http.response.MisdirectedRequest}
+		<li class='jc'>{@link oaj.http.response.MovedPermanently}
+		<li class='jc'>{@link oaj.http.response.MultipleChoices}
+		<li class='jc'>{@link oaj.http.response.MultiStatus}
+		<li class='jc'>{@link oaj.http.response.NetworkAuthenticationRequired}
+		<li class='jc'>{@link oaj.http.response.NoContent}
+		<li class='jc'>{@link oaj.http.response.NonAuthoritiveInformation}
+		<li class='jc'>{@link oaj.http.response.NotAcceptable}
+		<li class='jc'>{@link oaj.http.response.NotExtended}
+		<li class='jc'>{@link oaj.http.response.NotFound}
+		<li class='jc'>{@link oaj.http.response.NotImplemented}
+		<li class='jc'>{@link oaj.http.response.NotModified}
+		<li class='jc'>{@link oaj.http.response.Ok}
+		<li class='jc'>{@link oaj.http.response.PartialContent}
+		<li class='jc'>{@link oaj.http.response.PayloadTooLarge}
+		<li class='jc'>{@link oaj.http.response.PermanentRedirect}
+		<li class='jc'>{@link oaj.http.response.PreconditionFailed}
+		<li class='jc'>{@link oaj.http.response.PreconditionRequired}
+		<li class='jc'>{@link oaj.http.response.Processing}
+		<li class='jc'>{@link oaj.http.response.RangeNotSatisfiable}
+		<li class='jc'>{@link oaj.http.response.RequestHeaderFieldsTooLarge}
+		<li class='jc'>{@link oaj.http.response.ResetContent}
+		<li class='jc'>{@link oaj.http.response.SeeOther}
+		<li class='jc'>{@link oaj.http.response.ServiceUnavailable}
+		<li class='jc'>{@link oaj.http.response.SwitchingProtocols}
+		<li class='jc'>{@link oaj.http.response.TemporaryRedirect}
+		<li class='jc'>{@link oaj.http.response.TooManyRequests}
+		<li class='jc'>{@link oaj.http.response.Unauthorized}
+		<li class='jc'>{@link oaj.http.response.UnavailableForLegalReasons}
+		<li class='jc'>{@link oaj.http.response.UnprocessableEntity}
+		<li class='jc'>{@link oaj.http.response.UnsupportedMediaType}
+		<li class='jc'>{@link oaj.http.response.UpgradeRequired}
+		<li class='jc'>{@link oaj.http.response.UriTooLong}
+		<li class='jc'>{@link oaj.http.response.UseProxy}
+		<li class='jc'>{@link oaj.http.response.VariantAlsoNegotiates}
+	</ul>	
+	
+	<p>
+		These are built upon existing HttpComponents APIs:
+	</p>
+	<ul class='javatree'>
+		<li class='jic'>{@code org.apache.http.HttpMessage}
+		<ul>
+			<li class='jic'>{@code org.apache.http.HttpResponse}
+			<ul>
+				<li class='jc'>{@link oaj.http.response.BasicHttpResponse} - 100-399 response codes
+				<li class='jc'>{@link oaj.http.response.BasicHttpException} - 400+ response codes
+			</ul>
+		</ul>
+	</ul>
+	
+	<p>
+		The most common location where these responses are used are in REST operation methods described later.
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<ja>@RestDelete</ja>(path=<js>"/{id}"</js>)
+		|	<jk>public</jk> Ok doDelete(<ja>@Path</ja> <jk>int</jk> <jv>id</jv>) <jk>throws</jk> NotFound, Unauthorized {
+		|		<jf>pojoService</jf>.delete(<jf>pojoService</jf>.find(<jv>id</jv>).orElseThrow(NotFound::<jk>new</jk>));
+		|		<jk>return</jk> Ok.OK;
+		|	}
+	</p>
+	
+	<p>
+		The following classes are also provided for constructing your own custom responses:
+	</p>
+	<ul class='javatreec'>
+		<li class='jc'>{@link oaj.http.response.BasicHttpException}
+		<li class='jc'>{@link oaj.http.response.BasicHttpResponse}
+		<li class='jc'>{@link oaj.http.response.HttpExceptionBuilder}
+		<li class='jc'>{@link oaj.http.response.HttpResponseBuilder}
+	</ul>
+	
+	<h5 class='topic'>HttpResponseBuilder / HttpExceptionBuilder</h5>
+	<p>
+		HTTP responses are created through builders created in the {@link oaj.http.HttpResponses} class or individual <c>create()</c> methods
+		defined in the basic classes above.  The builder contains the following methods:
+	</p>
+	<ul class='javatree'>
+		<li class='jc'>{@link oaj.http.response.HttpResponseBuilder}
+		<ul>
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#content(HttpEntity) content(HttpEntity)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#content(String) content(String)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#copyFrom(HttpResponse) copyFrom(HttpResponse)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#getHeaders() getHeaders()}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#getStatusLine() getStatusLine()}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#header(Header) header(Header)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#header(String,String) header(String,String)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#headers(Header...) headers(Header...)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#headers(HeaderList) headers(HeaderList)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#headers(List) headers(List&lt;Header&gt;)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#locale(Locale) locale(Locale)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#location(String) location(String)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#location(URI) location(URI)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#protocolVersion(ProtocolVersion) protocolVersion(ProtocolVersion)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#reasonPhrase(String) reasonPhrase(String)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#reasonPhraseCatalog(ReasonPhraseCatalog) reasonPhraseCatalog(ReasonPhraseCatalog)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#statusCode(int) statusCode(int)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#statusLine(BasicStatusLine) statusLine(BasicStatusLine)}
+			<li class='jm'>{@link oaj.http.response.HttpResponseBuilder#unmodifiable() unmodifiable()}
+		</ul>
+	</ul>
+	
+</div>

@@ -1,0 +1,56 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Operations'}
+
+<div class='topic'>
+	<p>
+		<ja>@RestOp</ja>-annotated methods automatically get rendered as Swagger operations:
+	</p>
+	<img class='bordered w900' src='doc-files/jrs.Swagger.Operations.1.png'>
+	<p>
+		The following shows the annotations defined on the <c>GET /pet</c> operation:
+	</p>
+	<h5 class='figure'>PetStoreResource.getPets()</h5>
+	<p class='bjava'>
+		|	<ja>@RestGet</ja>(
+		|		path=<js>"/pet"</js>,
+		|		summary=<js>"All pets in the store"</js>,
+		|		swagger=<ja>@OpSwagger</ja>(
+		|			tags=<js>"pet"</js>,
+		|			...
+		|		),
+		|		...
+		|	)
+		|	<jk>public</jk> Collection&lt;Pet&gt; getPets() <jk>throws</jk> NotAcceptable {
+		|		<jk>return</jk> <jsf>store</jsf>.getPets();
+		|	}
+	</p> 
+	<p>
+		Methods marked as deprecated will show up as deprecated in the Swagger UI:	
+	</p>
+	<h5 class='figure'>PetStoreResource.findPetsByTag()</h5>
+	<p class='bjava'>	
+		|	<ja>@RestGet</ja>(
+		|		path=<js>"/pet/findByTags"</js>,
+		|		summary=<js>"Finds Pets by tags"</js>,
+		|		...
+		|	)
+		|	<ja>@Deprecated</ja>
+		|	<jk>public</jk> Collection&lt;Pet&gt; findPetsByTags(...) {
+		|		...
+		|	}
+	</p>
+</div>

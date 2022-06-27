@@ -1,0 +1,80 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Using with OSGi'}
+
+<div class='topic'>
+	<p>
+		Since REST servlets are basically just <l>HttpServlets</l>, incorporating them into an OSGi environment
+		is pretty straightforward.
+	</p>
+	<p>
+		The following code shows how to register your REST servlets in an OSGi <l>Activator</l>:
+	</p>
+	<p class='bjava'>
+		|	<jk>package</jk> org.apache.juneau.examples.rest;
+		|	
+		|	<jk>import</jk> org.osgi.framework.*;
+		|	<jk>import</jk> org.osgi.service.http.*;
+		|	<jk>import</jk> org.osgi.util.tracker.*;
+		|	
+		|	<jk>import</jk> org.apache.juneau.rest.samples.*;
+		|	
+		|	<jd>/**
+		|	 * Activator class used when running samples as a bundle in an OSGi environment.
+		|	 */</jd>
+		|	<jk>public class</jk> Activator <jk>implements</jk> BundleActivator, ServiceTrackerCustomizer {
+		|	
+		|		<jk>private</jk> ServiceTracker <jf>httpServiceTracker</jf>;
+		|		<jk>private</jk> BundleContext <jf>context</jf>;
+		|	
+		|		<ja>@Override</ja> <jc>/* BundleActivator */</jc>
+		|		<jk>public void</jk> start(BundleContext <jv>context</jv>) <jk>throws</jk> Exception {
+		|			<jk>this</jk>.<jf>context</jf> = <jv>context</jv>;
+		|			<jf>httpServiceTracker</jf> = <jk>new</jk> ServiceTracker(<jv>context</jv>, HttpService.<jk>class</jk>.getName(), <jk>this</jk>);
+		|			<jf>httpServiceTracker</jf>.open();
+		|		}
+		|	
+		|		<ja>@Override</ja> <jc>/* BundleActivator */</jc>
+		|		<jk>public void</jk> stop(BundleContext <jv>context</jv>) <jk>throws</jk> Exception {
+		|			<jf>httpServiceTracker</jf>.close();
+		|		}
+		|	
+		|		<ja>@Override</ja> <jc>/* ServiceTrackerCustomizer */</jc>
+		|		<jk>public</jk> Object addingService(ServiceReference <jv>reference</jv>) {
+		|			Object <jv>service</jv> = <jf>context</jf>.getService(<jv>reference</jv>);
+		|	
+		|			<jk>if</jk> (service <jk>instanceof</jk> HttpService) {
+		|				HttpService <jv>service</jv> = (HttpService)<jv>service</jv>;
+		|				<jk>try</jk> {
+		|					<jv>service</jv>.registerServlet(<js>"/sample"</js>, <jk>new</jk> MyRestServlet(), <jk>null</jk>, <jk>null</jk>);
+		|				} <jk>catch</jk> (Exception <jv>e</jv>) {
+		|					<jk>throw new</jk> RuntimeException(<jv>e</jv>);
+		|				}
+		|			}
+		|	
+		|			<jk>return</jk> <jv>service</jv>;
+		|		}
+		|	
+		|		<ja>@Override</ja> <jc>/* ServiceTrackerCustomizer */</jc>
+		|		<jk>public void</jk> modifiedService(ServiceReference <jv>reference</jv>, Object <jv>service</jv>) {
+		|		}
+		|	
+		|		<ja>@Override</ja> <jc>/* ServiceTrackerCustomizer */</jc>
+		|		<jk>public void</jk> removedService(ServiceReference <jv>reference</jv>, Object <jv>service</jv>) {
+		|		}
+		|	}
+	</p>
+</div>

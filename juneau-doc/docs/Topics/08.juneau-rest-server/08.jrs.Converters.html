@@ -1,0 +1,71 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'Converters', updated:'9.0.0'}
+
+<div class='topic'>
+	<p>
+		Converters can be thought of as "post-processors" for response POJOs before they get passed to the serializer.
+	</p>
+	<p>
+		Converters are associated with resource classes and methods via the following:
+	</p>
+	<ul class='javatree'>
+		<li class='ja'>{@link oajr.annotation.Rest} 
+			<ul class='javatreec'>
+				<li class='jma'>{@link oajr.annotation.Rest#converters() converters} 
+			</ul>
+		</li>
+		<li class='ja'>{@link oajr.annotation.RestOp} 
+			<ul class='javatreec'>
+				<li class='jma'>{@link oajr.annotation.RestOp#converters() converters} 
+			</ul>
+		</li>
+	</ul>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<jc>// GET person request handler.</jc>
+		|	<jc>// Traversable conversion enabled to allow nodes in returned POJO tree to be addressed.</jc>
+		|	<jc>// Queryable conversion enabled to allow returned POJO to be searched/viewed/sorted.</jc>
+		|	<ja>@RestGet</ja>(
+		|		path=<js>"/people/{id}/*"</js>,
+		|		converters={Traversable.<jk>class</jk>,Queryable.<jk>class</jk>}
+		|	)
+		|	<jk>public</jk> Person getPerson(<ja>@Path</ja>(<js>"id"</js>) <jk>int</jk> <jv>id</jv>) {
+		|		<jk>return</jk> findPerson(<jv>id</jv>);
+		|	}
+	</p>	
+	<p>
+		Juneau defines the following converters out-of-the-box:
+	</p>
+	<ul class='javatree'>
+		<li class='jic'>{@link oajr.converter.RestConverter}
+			<ul class='spaced-list'>
+				<li class='jc'>
+					{@link oajr.converter.Queryable}
+					<br>Provides query parameters that can be used to transform the response (i.e. search/view/sort the 
+					POJO response before being serialized).
+				<li class='jc'>
+					{@link oajr.converter.Traversable}
+					<br>Allows nodes in the POJO response tree to be individually accessed through additional path info on 
+					the request.
+				<li class='jc'>
+					{@link oajr.converter.Introspectable}
+					<br>Allows method calls to be made on the response POJO, and for the result of that method call to be 
+					serialized as the response.
+			</ul>
+		</li>
+	</ul>
+</div>
