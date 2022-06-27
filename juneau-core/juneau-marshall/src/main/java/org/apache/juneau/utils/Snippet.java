@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import org.apache.juneau.assertions.*;
-
 /**
  * Identical to {@link Runnable} but the run method can throw stuff.
  *
@@ -21,7 +19,7 @@ import org.apache.juneau.assertions.*;
  * Allows you to pass in arbitrary snippets of code in fluent interfaces.
  *
  * <p>
- * See {@link Assertions#assertThrown(Snippet)} for an example.
+ * See <c>Assertions.<jsm>assertThrown</jsm>(Snippet)</c> for an example.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jm.FluentAssertions}

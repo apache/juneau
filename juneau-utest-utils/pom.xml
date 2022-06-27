@@ -31,7 +31,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-marshall</artifactId>
+			<artifactId>juneau-assertions</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

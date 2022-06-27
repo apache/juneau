@@ -31,11 +31,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-marshall</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-common</artifactId>
 			<version>${project.version}</version>
 		</dependency>
