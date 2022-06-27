@@ -184,18 +184,6 @@ public class Assertions_Test {
 	}
 
 	@Test
-	public void a22_assertArgNotNull() throws Exception {
-		assertArgNotNull("foo", 123);
-		assertThrown(()->assertArgNotNull("foo", null)).asMessage().is("Argument 'foo' cannot be null.");
-	}
-
-	@Test
-	public void a23_assertArg() throws Exception {
-		assertArg(true, "foo {0}", 1);
-		assertThrown(()->assertArg(false, "foo {0}", 1)).asMessage().is("foo 1");
-	}
-
-	@Test
 	public void a24_assertOptional() throws Exception {
 		assertOptional(empty()).isNull();
 		assertOptional(optional(1)).isNotNull();

@@ -12,10 +12,9 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
+import static org.apache.juneau.internal.ArgUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.assertions.Assertions.*;
-
 import java.net.*;
 import java.nio.file.*;
 

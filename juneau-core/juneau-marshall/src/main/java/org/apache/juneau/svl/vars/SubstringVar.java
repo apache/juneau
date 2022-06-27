@@ -12,7 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl.vars;
 
-import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.ArgUtils.*;
+
 import org.apache.juneau.svl.*;
 
 /**

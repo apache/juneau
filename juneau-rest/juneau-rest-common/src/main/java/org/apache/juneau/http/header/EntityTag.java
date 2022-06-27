@@ -13,8 +13,8 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.ArgUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 
 /**

@@ -13,7 +13,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.ArgUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;

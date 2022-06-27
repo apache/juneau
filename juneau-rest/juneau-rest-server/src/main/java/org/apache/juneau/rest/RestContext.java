@@ -13,9 +13,9 @@
 package org.apache.juneau.rest;
 
 import static javax.servlet.http.HttpServletResponse.*;
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.http.HttpHeaders.*;
+import static org.apache.juneau.internal.ArgUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;

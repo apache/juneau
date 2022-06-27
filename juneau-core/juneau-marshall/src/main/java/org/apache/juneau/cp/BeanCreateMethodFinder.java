@@ -12,7 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
-import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.ArgUtils.*;
+
 import java.util.*;
 import java.util.function.*;
 

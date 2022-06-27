@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
@@ -21,7 +20,6 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.cp.*;
 
 /**
  * Main class for creation of assertions for stand-alone testing.
@@ -71,10 +69,6 @@ import org.apache.juneau.cp.*;
  * </ul>
  */
 public class Assertions {
-
-	private static final Messages MESSAGES = Messages.of(Assertions.class, "Messages");
-	private static final String
-		MSG_argumentCannotBeNull = MESSAGES.getString("argumentCannotBeNull");
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Fluent assertions
@@ -983,74 +977,4 @@ public class Assertions {
 		}
 		return assertThrowable(null);
 	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other assertions
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Throws an {@link IllegalArgumentException} if the specified argument is <jk>null</jk>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
-	 *
-	 *	<jk>public</jk> String setFoo(String <jv>foo</jv>) {
-	 *		<jsm>assertArgNotNull</jsm>(<js>"foo"</js>, <jv>foo</jv>);
-	 *		...
-	 *	}
-	 * </p>
-	 *
-	 * @param <T> The argument data type.
-	 * @param name The argument name.
-	 * @param o The object to check.
-	 * @return The same argument.
-	 * @throws IllegalArgumentException Constructed exception.
-	 */
-	public static final <T> T assertArgNotNull(String name, T o) throws IllegalArgumentException {
-		assertArg(o != null, MSG_argumentCannotBeNull, name);
-		return o;
-	}
-
-	/**
-	 * Throws an {@link IllegalArgumentException} if the specified expression is <jk>false</jk>.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
-	 *
-	 *	<jk>public</jk> String setFoo(List&lt;String&gt; <jv>foo</jv>) {
-	 *		<jsm>assertArg</jsm>(<jv>foo</jv> != <jk>null</jk> &amp;&amp; ! <jv>foo</jv>.isEmpty(), <js>"'foo' cannot be null or empty."</js>);
-	 *		...
-	 *	}
-	 * </p>
-	 *
-	 * @param expression The boolean expression to check.
-	 * @param msg The exception message.
-	 * @param args The exception message args.
-	 * @throws IllegalArgumentException Constructed exception.
-	 */
-	public static final void assertArg(boolean expression, String msg, Object...args) throws IllegalArgumentException {
-		if (! expression)
-			throw illegalArgumentException(msg, args);
-	}
-
-	/**
-	 * Throws an {@link IllegalArgumentException} if the specified value doesn't have all subclasses of the specified type.
-	 *
-	 * @param <E> The element type.
-	 * @param name The argument name.
-	 * @param type The expected parent class.
-	 * @param value The array value being checked.
-	 * @return The value cast to the specified array type.
-	 * @throws IllegalArgumentException Constructed exception.
-	 */
-	@SuppressWarnings("unchecked")
-	public static final <E> Class<E>[] assertClassArrayArgIsType(String name, Class<E> type, Class<?>[] value) throws IllegalArgumentException {
-		for (int i = 0; i < value.length; i++)
-			if (! type.isAssignableFrom(value[i]))
-				throw illegalArgumentException("Arg {0} did not have arg of type {1} at index {2}: {3}", name, type.getName(), i, value[i].getName());
-		return (Class<E>[])value;
-	}
-
 }

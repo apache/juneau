@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
-import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.ArgUtils.*;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.util.NoSuchElementException;

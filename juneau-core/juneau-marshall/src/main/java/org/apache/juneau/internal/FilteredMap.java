@@ -12,7 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.internal.ArgUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;

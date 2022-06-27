@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.internal.ArgUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 
 import java.util.function.*;

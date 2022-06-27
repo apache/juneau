@@ -12,8 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
-import static org.apache.juneau.assertions.Assertions.*;
 import static java.util.Collections.*;
+import static org.apache.juneau.internal.ArgUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.list;
 import static org.apache.juneau.internal.ThrowableUtils.*;
 
