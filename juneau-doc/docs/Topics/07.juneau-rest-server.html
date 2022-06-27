@@ -1,0 +1,133 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'juneau-rest-server', updated:'9.0.0'}
+
+<div class='topic'>
+	<h5 class='figure'>Maven Dependency</h5>
+	<p class='bxml w500'>
+		|	<xt>&lt;dependency&gt;</xt>
+		|		<xt>&lt;groupId&gt;</xt>org.apache.juneau<xt>&lt;/groupId&gt;</xt>
+		|		<xt>&lt;artifactId&gt;</xt>juneau-rest-server<xt>&lt;/artifactId&gt;</xt>
+		|		<xt>&lt;version&gt;</xt>{@property juneauVersion}<xt>&lt;/version&gt;</xt>
+		|	<xt>&lt;/dependency&gt;</xt>
+	</p>	
+	
+	<h5 class='figure'>Java Library</h5>
+	<p class='bcode w500'>
+		|	juneau-rest-server-{@property juneauVersion}.jar 
+	</p>	
+	
+	<h5 class='figure'>OSGi Module</h5>
+	<p class='bcode w500'>
+		|	org.apache.juneau.rest.server_{@property juneauVersion}.jar 
+	</p>	
+	
+	<p>
+		The <l>juneau-rest-server</l> library allows you to quickly wrap POJOs and expose them as full-fledged REST 
+		resources served up in a servlet container using a bare-minimum amount of code.
+		The primary goal for Juneau was to make it as easy as possible to implement easy-to-read and self-documenting 
+		REST resources using very little code.
+	</p>
+	<p>
+		One of the biggest advantages of the Juneau REST framework over similar architectures is that it hides the 
+		serialization layer from the developer.  
+		The developer can work entirely with POJOs and let the Juneau framework handle all the serialization and 
+		parsing work.  
+		The developer need never know what the <l>Accept</l> or <l>Content-Type</l> or <l>Accept-Encoding</l> (etc...) 
+		header values are because those details are all handled by the framework. 
+	</p>
+	<p> 
+		The API builds upon the existing JEE Servlet API.  
+		The root class, {@link oajr.servlet.RestServlet} is nothing but a specialized 
+		{@link javax.servlet.http.HttpServlet}, and the {@link oajr.RestRequest} and 
+		{@link oajr.RestResponse} classes are nothing more than specialized 
+		{@link javax.servlet.http.HttpServletRequest} and {@link javax.servlet.http.HttpServletResponse} objects.  
+		This allows maximum flexibility for the developer since you can let Juneau handle operations such as 
+		serialization, or you can revert to the existing servlet APIs to do low-level processing of requests yourself.	
+		It also means you need nothing more than a Servlet container such as Jetty to use the REST framework.
+	</p>
+	
+	<h5 class='topic'>Features</h5>
+	<ul class='spaced-list'>
+		<li>
+			Deployable in standard Servlet containers.
+		<li>
+			Deployable in Spring Boot environments with full support for injected beans.
+		<li>
+			Serializes POJOs to JSON, XML, HTML, URL-Encoding, UON, RDF/XML, N-Triple, Turtle, N3, SOAP, or 
+			Java-serialized-object based on value of <l>Accept</l> header.  
+			<br>No user code is required to handle these types.
+			<ul>
+				<li>Extensible design that provides ability to override existing content type handlers, or add the 
+					ability to handle other kinds of content types.
+			</ul>
+		<li>
+			Parses content of POST/PUT request bodies to POJOs.
+		<li>
+			Automatic built-in ability to serialize POJO metadata to JSON+SCHEMA, XML+SCHEMA, or HTML+SCHEMA based on 
+			<l>Accept</l> header.
+		<li>
+			Automatic negotiation of output Writer based on HTTP headers.
+			<ul>
+				<li>Automatic handling of <l>Accept-Charset</l> header for all character sets supported by the JVM.
+				<li>Automatic handling of <l>Accept-Encoding</l> header with registered encoders.
+			</ul>
+		<li>
+			Automatic error handling.
+			<ul>
+				<li>Automatic 401 errors (Unauthorized) on failed guards.
+				<li>Automatic 404 errors (Not Found) on unmatched path patterns.
+				<li>Automatic 405 errors (Method Not Implemented) on unimplemented methods.
+				<li>Automatic 406 errors (Not Acceptable) when no matching serializer was found to handle the 
+					<l>Accept</l> header.
+				<li>Automatic 412 errors (Precondition Failed) when all matchers failed to match.
+				<li>Automatic 415 errors (Unsupported Media Type) when no matching parser was found was found to handle 
+					the <l>Content-Type</l> header.
+				<li>Automatic 500 errors on uncaught exceptions.
+			</ul>
+		<li>
+			Support for parsing all HTTP parts (headers, query, formData, path variables) using Swagger formatting rules and validations.
+			<br>Not limited to simple POJOs, but rather you can represent arbitrarily-complex POJOs in any HTTP part using UON notation.
+		<li>
+			Auto-created Swagger JSON and Swagger UI available through OPTIONS requests of resources.
+		<li>
+			Various useful debugging features that make debugging using a browser extremely simple...
+			<ul>
+				<li>Ability to pass HTTP header values as URL GET parameters (e.g. <l>&amp;Accept=text/xml</l>).
+				<li>Ability to pass HTTP content on PUT/POST requests as a URL GET parameter 
+					(e.g. <l>&amp;content=(foo=bar)</l>).
+				<li>Ability to simulate non-GET requests using a <l>&amp;method</l> GET parameter 
+					(e.g. <l>&amp;method=POST</l>).
+				<li>Ability to force <js>"text/plain"</js> on response using GET parameter <l>&amp;plainText=true</l>.
+			</ul>
+		<li>
+			Ability to implement overloaded HTTP methods through the use of the <l>&amp;method</l> attribute 
+			(e.g. <l>&amp;method=FOO</l>).
+		<li>
+			Ability to match URL patterns (e.g. <l>/foo/{fooId}/bar/{barId}</l>) against URLs 
+			(e.g. <l>/foo/123/bar/456/bing</l>).
+		<li>
+			Ability to associate guards at the resource or method levels through annotations.
+			<br>Typically useful for security, but can be used for a variety of purposes.
+		<li>
+			Ability to associate converters at the resource or method levels through annotations.
+			<br>Typically useful for performing conversions on input and output, such as for supporting older input and 
+			output formats.
+	</ul>
+	<p>
+		Many of the examples in this document are pulled directly from <l>juneau-examples-rest</l>.
+	</p>
+</div>

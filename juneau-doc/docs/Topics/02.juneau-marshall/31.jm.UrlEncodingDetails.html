@@ -1,0 +1,85 @@
+<!--
+/***************************************************************************************************************************
+ * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *  
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations under the License.
+ ***************************************************************************************************************************/
+ -->
+
+{title:'URL-Encoding Details'}
+
+<div class='topic'>
+	<p>
+		Juneau supports converting arbitrary POJOs to and from URL-encoded strings using ultra-efficient serializers 
+		and parsers.
+		The serializer converts POJOs directly to URL-encoded strings without the need for intermediate DOM objects 
+		using a highly-efficient state machine.
+		Likewise, the parser creates POJOs directly from URL-encoded strings without the need for intermediate DOM 
+		objects. 
+	</p>
+	<p>
+		Juneau uses UON (URL-Encoded Object Notation) for representing POJOs as URL-Encoded values in key-value pairs.  
+		The UON specification can be found <a href='doc-files/rfc_uon.txt'>here</a>.
+	</p>
+	<p>
+		The following example shows JSON for a typical bean:
+	</p>
+	<h5 class='figure'>Sample Beans</h5>
+	<p class='bjava'>
+		|	<jk>public class</jk> Person {
+		|		
+		|		<jc>// Bean properties</jc>
+		|		<jk>public</jk> String <jf>name</jf>;
+		|		<ja>@Swap</ja>(TemporalCalendarSwap.IsoInstant.<jk>class</jk>) <jk>public</jk> Calendar <jf>birthDate</jf>;
+		|		<jk>public</jk> List&lt;Address&gt; <jf>addresses</jf>; 
+		|	
+		|		<jc>// Getters/setters omitted</jc>
+		|	}
+		|	
+		|	<jk>public class</jk> Address {
+		|
+		|		<jc>// Bean properties</jc>
+		|		<jk>public</jk> String <jf>street</jf>, <jf>city</jf>;
+		|		<jk>public</jk> StateEnum <jf>state</jf>;
+		|		<jk>public int</jk> <jf>zip</jf>;
+		|		<jk>public boolean</jk> <jf>isCurrent</jf>;
+		|
+		|		<jc>// Getters/setters omitted</jc>
+		|	}	
+	</p>
+	<h5 class='figure'>Sample Code</h5>
+	<p class='bjava'>
+		|	Person <jv>person</jv> = <jk>new</jk> Person()
+		|		.name(<js>"John Smith"</js>)
+		|		.birthDate(<js>"1946-08-12T00:00:00Z"</js>)
+		|		.addresses(
+		|			<jk>new</jk> Address() 
+		|				.street(<js>"100 Main Street"</js>)
+		|				.city(<js>"Anywhereville"</js>)
+		|				.state(<jsf>NY</jsf>)
+		|				.zip(12345)
+		|				.isCurrent(<jk>true</jk>);
+		|		);
+	</p>
+	<h5 class='figure'>URL-Encoding</h5>
+	<p class='burlenc'>
+		|	<ua>name</ua>=<us>'John+Smith'</us>
+		|	&amp;<ua>birthDate</ua>=<us>'1946-08-12T00:00:00Z'</us>
+		|	&amp;<ua>addresses</ua>=@(
+		|		(
+		|			<ua>street</ua>=<us>'100 Main Street'</us>,
+		|			<ua>city</ua>=<us>Anywhereville</us>,
+		|			<ua>state</ua>=<us>NY</us>,
+		|			<ua>zip</ua>=<un>12345</un>,
+		|			<ua>isCurrent</ua>=<uk>true</uk>
+		|		)
+		|	)
+	</p>
+</div>
