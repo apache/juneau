@@ -19,8 +19,11 @@
 <div class='topic'>
 	<p>
 		Apache Juneau™ is a single cohesive Java ecosystem for marshalling Java objects to a wide variety of 
-		language types and creating annotation-based REST server and client APIs.
+		language types and creating annotation-based REST end-to-end server and client APIs.  The modules
+		have as few prereqs as possible making them ideal for usage in uber-jars.  All modules work with
+		Java 8 through 18.  
 	</p>
+	
 	<p>
 		The Juneau ecosystem consists of the following parts:
 	</p>
@@ -29,19 +32,16 @@
 			<th>Category</th><th>Maven Artifacts</th><th>Description</th><th>Prereqs</th>
 		</tr>
 		<tr class='dark bb'>
-			<td rowspan="4" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-core</td>
+			<td rowspan="5" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-core</td>
 			<td class='code'><a class='doclink' href='#juneau-marshall'>juneau-marshall</a></td>
 			<td>
 				<ul>
-					<li>Serializers and parsers for various languages.
-					<li>Marshalling support for HTTP headers/parts/requests/responses.
-					<li>Marshaller-based assertions for simplified unit testing.
+					<li>Serializers and parsers for JSON (various flavors), XML, HTML, URL-Encoding, UON, OpenAPI, PlainText, CSV, SOAP, and MessagePack.</li>
 				</ul>
 			</td>
 			<td>
 				<ul style='margin:0px 10px;'>
-					<li>Java 8
-					<li>Apache HttpCore 4.4.13
+					<li>Apache HttpCore 4.4</li>
 				</ul>
 			</td>
 		</tr>
@@ -49,13 +49,13 @@
 			<td class='code'><a class='doclink' href='#juneau-marshall-rdf'>juneau-marshall-rdf</a></td>
 			<td>
 				<ul>
-					<li>Serializers and parsers for various RDF languages.
+					<li>Serializers and parsers for RDF/XML (various flavors), N3, NTriple, and Turtle.
 				<ul>
 			</td>
 			<td>
 				<ul style='margin:0px 10px;'>
-					<li>Java 8
-					<li>Apache Jena 2.7.1
+					<li>Apache HttpCore 4.4</li>
+					<li>Apache Jena 2.7.1</li>
 				</ul>
 			</td>
 		</tr>
@@ -66,19 +66,53 @@
 					<li>Data Transfer Objects for HTML5, Atom, Cognos, JSON-Schema, and Swagger
 				</ul>
 			</td>
-			<td><ul style='margin:0px 10px;'><li>Java 8+</li></ul></td>
+			<td>
+				<ul style='margin:0px 10px;'>
+					<li><i>None</i></li>
+				</ul>
+			</td>
 		</tr>
 		<tr class='dark bb'>
 			<td class='code'><a class='doclink' href='#juneau-config'>juneau-config</a></td>
 			<td>
 				<ul>
-					<li>Configuration File API
+					<li>Configuration File API</li>
 				</ul>
 			</td>
-			<td><ul style='margin:0px 10px;'><li>Java 8+</li></ul></td>
+			<td>
+				<ul style='margin:0px 10px;'>
+					<li><i>None</i></li>
+				</ul>
+			</td>
+		</tr>
+		<tr class='dark bb'>
+			<td class='code'><a class='doclink' href='#juneau-assertions'>juneau-assertions</a></td>
+			<td>
+				<ul>
+					<li>Fluent-style assertions API</li>
+				</ul>
+			</td>
+			<td>
+				<ul style='margin:0px 10px;'>
+					<li><i>None</i></li>
+				</ul>
+			</td>
 		</tr>
 		<tr class='light bb'>
-			<td rowspan="6" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-rest</td>
+			<td rowspan="7" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-rest</td>
+			<td class='code'><a class='doclink' href='#juneau-rest-server'>juneau-rest-common</a></td>
+			<td>
+				<ul>
+					<li>REST APIs common to client and server side.</li>
+				<ul>
+			</td>
+			<td>
+				<ul style='margin:0px 10px;'>
+					<li>Apache HttpCore 4.4</li>
+				</ul>
+			</td>
+		</tr>
+		<tr class='light bb'>
 			<td class='code'><a class='doclink' href='#juneau-rest-server'>juneau-rest-server</a></td>
 			<td>
 				<ul>
@@ -87,8 +121,7 @@
 			</td>
 			<td>
 				<ul style='margin:0px 10px;'>
-					<li>Java 8
-					<li>Servlet 3.1+
+					<li>Servlet 3.1+</li>
 				</ul>
 			</td>
 		</tr>
@@ -101,8 +134,7 @@
 			</td>
 			<td>
 				<ul style='margin:0px 10px;'>
-					<li>Java 8+
-					<li>Spring Boot 2.0+
+					<li>Spring Boot 2.0+</li>
 				</ul>
 			</td>
 		</tr>
@@ -115,8 +147,7 @@
 			</td>
 			<td>
 				<ul style='margin:0px 10px;'>
-					<li>Java 8+
-					<li>JAX-RS 2.0
+					<li>JAX-RS 2+</li>
 				</ul>
 			</td>
 		</tr>
@@ -129,8 +160,7 @@
 			</td>
 			<td>
 				<ul style='margin:0px 10px;'>
-					<li>Java 8+
-					<li>Apache HttpClient 4.5+
+					<li>Apache HttpClient 4.5</li>
 				</ul>
 			</td>
 		</tr>
@@ -138,13 +168,12 @@
 			<td class='code'><a class='doclink' href='#juneau-rest-client'>juneau-rest-mock</a></td>
 			<td>
 				<ul>
-					<li>REST Testing API
+					<li>REST Testing API</li>
 				<ul>
 			</td>
 			<td>
 				<ul style='margin:0px 10px;'>
-					<li>Java 8+
-					<li>Apache HttpClient 4.5+
+					<li>Apache HttpClient 4.5</li>
 				</ul>
 			</td>
 		</tr>
@@ -152,13 +181,12 @@
 			<td class='code'><a class='doclink' href='#my-springboot-microservice'>my-springboot-microservice</a></td>
 			<td>
 				<ul>
-					<li>Spring Boot developer template
+					<li>Spring Boot developer template</li>
 				<ul>
 			</td>
 			<td>
 				<ul style='margin:0px 10px;'>
-					<li>Java 8+
-					<li>Spring Boot 2.0+
+					<li>Spring Boot 2.0+</li>
 				</ul>
 			</td>
 		</tr>
@@ -167,7 +195,7 @@
 			<td class='code'>juneau-examples-core</td>
 			<td>
 				<ul>
-					<li>Core code examples
+					<li>Core code examples</li>
 				<ul>
 			</td>
 			<td></td>
@@ -176,7 +204,7 @@
 			<td class='code'>juneau-examples-rest</td>
 			<td>
 				<ul>
-					<li>REST code examples
+					<li>REST code examples</li>
 				<ul>
 			</td>
 			<td></td>
@@ -190,15 +218,15 @@
 					<li>juneau-marshall
 					<li>juneau-dto
 					<li>juneau-config
+					<li>juneau-assertions
+					<li>juneau-rest-common
 					<li>juneau-rest-server
 					<li>juneau-rest-client
 				</ul>
 			</td>
 			<td>
 				<ul style='margin:0px 10px;'>
-					<li>Java 8+
 					<li>Servlet 3.1+
-					<li>Apache HttpCore 4.4.13
 					<li>Apache HttpClient 4.5+
 				</ul>
 			</td>

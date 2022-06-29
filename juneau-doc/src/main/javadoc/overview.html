@@ -62,111 +62,18 @@
 		}
 	}
 </script>
-<p>
-	Apache Juneau&trade; is a single cohesive Java ecosystem consisting of the following parts:
-</p>
-<table class='styled w800'>
-	<tr>
-		<th>Group</th><th>Component</th><th>Description</th>
-	</tr>
-	
-	<tr class='dark bb'>
-		<td rowspan="4" style='text-align:center;font-weight:bold;padding:20px;'>Juneau Core</td>
-		<td class='code'><a class='doclink' href='#juneau-marshall'>juneau-marshall</a></td>
-		<td style='padding:10px'>
-			A universal toolkit for marshalling POJOs to a wide variety of content types using a common framework with no external library dependencies.
-		</td>
-	</tr>
-	<tr class='dark bb'>
-		<td class='code'><a class='doclink' href='#juneau-marshall-rdf'>juneau-marshall-rdf</a></td>
-		<td style='padding:10px'>
-			Extended marshalling support for RDF languages.				
-		</td>
-	</tr>
-	<tr class='dark bb'>
-		<td class='code'><a class='doclink' href='#juneau-dto'>juneau-dto</a></td>
-		<td style='padding:10px'>
-			A variety of predefined DTOs for serializing and parsing languages such as HTML5, Swagger and ATOM.
-		</td>
-	</tr>
-	<tr class='dark bb'>
-		<td class='code'><a class='doclink' href='#juneau-config'>juneau-config</a></td>
-		<td style='padding:10px'>
-			A sophisticated configuration file API.
-		</td>
-	</tr>
-	
-	<tr class='light bb'>
-		<td rowspan="5" style='text-align:center;font-weight:bold;padding:20px;'>Juneau REST</td>
-		<td class='code'><a class='doclink' href='#juneau-rest-server'>juneau-rest-server</a></td>
-		<td style='padding:10px'>
-			A universal REST server API for creating Swagger-based self-documenting REST interfaces using POJOs, simply deployed as 
-			one or more top-level servlets in any Servlet 3.1.0+ container.
-		</td>
-	</tr>
-	<tr class='light bb'>
-		<td class='code'><a class='doclink' href='#juneau-rest-server-springboot'>juneau-rest-server-springboot</a></td>
-		<td style='padding:10px'>
-			Spring boot integration support.
-		</td>
-	</tr>
-	<tr class='light bb'>
-		<td class='code'><a class='doclink' href='#juneau-rest-server-jaxrs'>juneau-rest-server-jaxrs</a></td>
-		<td style='padding:10px'>
-			JAX/RS integration support.
-		</td>
-	</tr>
-	<tr class='light bb'>
-		<td class='code'><a class='doclink' href='#juneau-rest-client'>juneau-rest-client</a></td>
-		<td style='padding:10px'>
-			A universal REST client API for interacting with Juneau or 3rd-party REST interfaces using POJOs and proxy interfaces.
-		</td>
-	</tr>
-	<tr class='light bb'>
-		<td class='code'><a class='doclink' href='#juneau-rest-mock'>juneau-rest-mock</a></td>
-		<td style='padding:10px'>
-			Mocking APIs for server-less end-to-end testing of REST server and client APIs.
-		</td>
-	</tr>
-
-	<tr class='dark bb'>
-		<td rowspan="4" style='text-align:center;font-weight:bold;padding:20px;'>Examples</td>
-		<td class='code'>juneau-examples-core</td>
-		<td style='padding:10px'>
-			Juneau Core API examples.
-		</td>
-	</tr>
-	<tr class='dark bb'>
-		<td class='code'>juneau-examples-rest</td>
-		<td style='padding:10px'>
-			Juneau REST API examples.
-		</td>
-	</tr>
-	<tr class='dark bb'>
-		<td class='code'>juneau-examples-rest-jetty</td>
-		<td style='padding:10px'>
-			Juneau REST API examples using Jetty deployment.
-		</td>
-	</tr>
-	<tr class='dark bb'>
-		<td class='code'>juneau-examples-rest-springboot</td>
-		<td style='padding:10px'>
-			Juneau REST API examples using Spring Boot deployment.
-		</td>
-	</tr>
-
-</table>
 
 <a href='#TOC' id='TOC'></a><h5 class='toc'>Table of Contents</h5>
 <ol class='toc'>
 	<li><p class='toc2'><a class='doclink' href='#Overview'>Overview</a></p>
 	<ol>
-		<li><p><a class='doclink' href='#Overview.o.Core'>Core Overview</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#Overview.o.Dto'>DTO Library Overview</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#Overview.o.Config'>Config API Overview</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#Overview.o.Rest'>REST Overview</a><span class='update'>created: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#Overview.o.RestServer'>REST Server Overview</a></p>
-		<li><p><a class='doclink' href='#Overview.o.RestClient'>REST Client Overview</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#Overview.o.Marshalling'>Marshalling</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#Overview.o.EndToEndRest'>End-to-End REST</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#Overview.o.RestServer'>REST Server</a></p>
+		<li><p><a class='doclink' href='#Overview.o.RestClient'>REST Client</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#Overview.o.Dtos'>DTOs</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#Overview.o.ConfigFiles'>Config Files</a><span class='update'>created: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#Overview.o.FluentAssertions'>Fluent Assertions</a><span class='update'>created: <b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#Overview.o.GeneralDesign'>General Design</a><span class='update'>created: <b>9.0.0</b></span></p>
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#juneau-marshall'>juneau-marshall</a></p>
@@ -537,8 +444,11 @@
 <div class='topic'>
 	<p>
 		Apache Juneau™ is a single cohesive Java ecosystem for marshalling Java objects to a wide variety of 
-		language types and creating annotation-based REST server and client APIs.
+		language types and creating annotation-based REST end-to-end server and client APIs.  The modules
+		have as few prereqs as possible making them ideal for usage in uber-jars.  All modules work with
+		Java 8 through 18.  
 	</p>
+	
 	<p>
 		The Juneau ecosystem consists of the following parts:
 	</p>
@@ -547,19 +457,16 @@
 			<th>Category</th><th>Maven Artifacts</th><th>Description</th><th>Prereqs</th>
 		</tr>
 		<tr class='dark bb'>
-			<td rowspan="4" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-core</td>
+			<td rowspan="5" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-core</td>
 			<td class='code'><a class='doclink' href='#juneau-marshall'>juneau-marshall</a></td>
 			<td>
 				<ul>
-					<li>Serializers and parsers for various languages.
-					<li>Marshalling support for HTTP headers/parts/requests/responses.
-					<li>Marshaller-based assertions for simplified unit testing.
+					<li>Serializers and parsers for JSON (various flavors), XML, HTML, URL-Encoding, UON, OpenAPI, PlainText, CSV, SOAP, and MessagePack.</li>
 				</ul>
 			</td>
 			<td>
 				<ul style='margin:0px 10px;'>
-					<li>Java 8
-					<li>Apache HttpCore 4.4.13
+					<li>Apache HttpCore 4.4</li>
 				</ul>
 			</td>
 		</tr>
@@ -567,13 +474,13 @@
 			<td class='code'><a class='doclink' href='#juneau-marshall-rdf'>juneau-marshall-rdf</a></td>
 			<td>
 				<ul>
-					<li>Serializers and parsers for various RDF languages.
+					<li>Serializers and parsers for RDF/XML (various flavors), N3, NTriple, and Turtle.
 				<ul>
 			</td>
 			<td>
 				<ul style='margin:0px 10px;'>
-					<li>Java 8
-					<li>Apache Jena 2.7.1
+					<li>Apache HttpCore 4.4</li>
+					<li>Apache Jena 2.7.1</li>
 				</ul>
 			</td>
 		</tr>
@@ -584,19 +491,53 @@
 					<li>Data Transfer Objects for HTML5, Atom, Cognos, JSON-Schema, and Swagger
 				</ul>
 			</td>
-			<td><ul style='margin:0px 10px;'><li>Java 8+</li></ul></td>
+			<td>
+				<ul style='margin:0px 10px;'>
+					<li><i>None</i></li>
+				</ul>
+			</td>
 		</tr>
 		<tr class='dark bb'>
 			<td class='code'><a class='doclink' href='#juneau-config'>juneau-config</a></td>
 			<td>
 				<ul>
-					<li>Configuration File API
+					<li>Configuration File API</li>
 				</ul>
 			</td>
-			<td><ul style='margin:0px 10px;'><li>Java 8+</li></ul></td>
+			<td>
+				<ul style='margin:0px 10px;'>
+					<li><i>None</i></li>
+				</ul>
+			</td>
+		</tr>
+		<tr class='dark bb'>
+			<td class='code'><a class='doclink' href='#juneau-assertions'>juneau-assertions</a></td>
+			<td>
+				<ul>
+					<li>Fluent-style assertions API</li>
+				</ul>
+			</td>
+			<td>
+				<ul style='margin:0px 10px;'>
+					<li><i>None</i></li>
+				</ul>
+			</td>
 		</tr>
 		<tr class='light bb'>
-			<td rowspan="6" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-rest</td>
+			<td rowspan="7" style='text-align:center;font-weight:bold;padding:20px;' class='code'>juneau-rest</td>
+			<td class='code'><a class='doclink' href='#juneau-rest-server'>juneau-rest-common</a></td>
+			<td>
+				<ul>
+					<li>REST APIs common to client and server side.</li>
+				<ul>
+			</td>
+			<td>
+				<ul style='margin:0px 10px;'>
+					<li>Apache HttpCore 4.4</li>
+				</ul>
+			</td>
+		</tr>
+		<tr class='light bb'>
 			<td class='code'><a class='doclink' href='#juneau-rest-server'>juneau-rest-server</a></td>
 			<td>
 				<ul>
@@ -605,8 +546,7 @@
 			</td>
 			<td>
 				<ul style='margin:0px 10px;'>
-					<li>Java 8
-					<li>Servlet 3.1+
+					<li>Servlet 3.1+</li>
 				</ul>
 			</td>
 		</tr>
@@ -619,8 +559,7 @@
 			</td>
 			<td>
 				<ul style='margin:0px 10px;'>
-					<li>Java 8+
-					<li>Spring Boot 2.0+
+					<li>Spring Boot 2.0+</li>
 				</ul>
 			</td>
 		</tr>
@@ -633,8 +572,7 @@
 			</td>
 			<td>
 				<ul style='margin:0px 10px;'>
-					<li>Java 8+
-					<li>JAX-RS 2.0
+					<li>JAX-RS 2+</li>
 				</ul>
 			</td>
 		</tr>
@@ -647,8 +585,7 @@
 			</td>
 			<td>
 				<ul style='margin:0px 10px;'>
-					<li>Java 8+
-					<li>Apache HttpClient 4.5+
+					<li>Apache HttpClient 4.5</li>
 				</ul>
 			</td>
 		</tr>
@@ -656,13 +593,12 @@
 			<td class='code'><a class='doclink' href='#juneau-rest-client'>juneau-rest-mock</a></td>
 			<td>
 				<ul>
-					<li>REST Testing API
+					<li>REST Testing API</li>
 				<ul>
 			</td>
 			<td>
 				<ul style='margin:0px 10px;'>
-					<li>Java 8+
-					<li>Apache HttpClient 4.5+
+					<li>Apache HttpClient 4.5</li>
 				</ul>
 			</td>
 		</tr>
@@ -670,13 +606,12 @@
 			<td class='code'><a class='doclink' href='#my-springboot-microservice'>my-springboot-microservice</a></td>
 			<td>
 				<ul>
-					<li>Spring Boot developer template
+					<li>Spring Boot developer template</li>
 				<ul>
 			</td>
 			<td>
 				<ul style='margin:0px 10px;'>
-					<li>Java 8+
-					<li>Spring Boot 2.0+
+					<li>Spring Boot 2.0+</li>
 				</ul>
 			</td>
 		</tr>
@@ -685,7 +620,7 @@
 			<td class='code'>juneau-examples-core</td>
 			<td>
 				<ul>
-					<li>Core code examples
+					<li>Core code examples</li>
 				<ul>
 			</td>
 			<td></td>
@@ -694,7 +629,7 @@
 			<td class='code'>juneau-examples-rest</td>
 			<td>
 				<ul>
-					<li>REST code examples
+					<li>REST code examples</li>
 				<ul>
 			</td>
 			<td></td>
@@ -708,15 +643,15 @@
 					<li>juneau-marshall
 					<li>juneau-dto
 					<li>juneau-config
+					<li>juneau-assertions
+					<li>juneau-rest-common
 					<li>juneau-rest-server
 					<li>juneau-rest-client
 				</ul>
 			</td>
 			<td>
 				<ul style='margin:0px 10px;'>
-					<li>Java 8+
 					<li>Servlet 3.1+
-					<li>Apache HttpCore 4.4.13
 					<li>Apache HttpClient 4.5+
 				</ul>
 			</td>
@@ -782,12 +717,11 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#Overview.o.Core' id='Overview.o.Core'>1.1 - Core Overview</a><span class='update'>created: <b>9.0.0</b></span></h3>
-<div class='topic'><!-- START: 1.1 - Overview.o.Core -->
-<h5 class='topic'>Marshalling APIs</h5>
+<h3 class='topic' onclick='toggle(this)'><a href='#Overview.o.Marshalling' id='Overview.o.Marshalling'>1.1 - Marshalling</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<div class='topic'><!-- START: 1.1 - Overview.o.Marshalling -->
 <div class='topic'>
 	<p>
-		The <c>juneau-marshall</c> library includes easy-to-use and highly customizable serializers and parsers based around
+		The {@doc juneau-marshall juneau-marshall} and {@doc juneau-marshall-rdf juneau-marshall-rdf} libraries includes easy-to-use and highly customizable serializers and parsers based around
 		a common API.  It allows you to marshall Java POJOs directly to and from a wide variety of language types
 		without the need for intermediate Document Object Models making them extremely efficient.
 	</p>
@@ -811,6 +745,11 @@
 			<li>N3
 		</ul>
 	</p>
+	<ul>
+		<li class='note'>
+			The marshalling support can be thought of as similar to Jackson except for support of a wide variety of languages.
+			Additionally, JSON marshalling is about 20% faster than Jackson yet supports the same usecases.
+	</ul>
 	<p>
 		The default serializers can often be used to serialize POJOs in a single line of code:
 	</p>
@@ -823,7 +762,7 @@
 	
 	<jc>// Produces:
 	// "{"name":"John Smith","age":21}"</jc>
-	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jk>new</jk> Person());
+	String <jv>json</jv> = Json.<jsm>of</jsm>(<jk>new</jk> Person());
 	</p>
 	<p>
 		Parsing back into POJOs is equally simple for any of the supported languages 
@@ -832,21 +771,10 @@
 	<p class='bjava'>
 	<jc>// Parse a JSON object as a bean.</jc>
 	String <jv>json</jv> = <js>"{\"name\":\"John Smith\","\age\":21}"</js>;
-	Person <jv>person</jv> = <jv>parser</jv>.parse(<jv>json</jv>, Person.<jk>class</jk>);
+	Person <jv>person</jv> = Json.<jsm>from</jsm>(<jv>json</jv>, Person.<jk>class</jk>);
 	</p>
 	<p>
-		Marshalls are pairings of serializers and parsers in a single class for even simpler code:
-	</p>
-	<p class='bjava'>
-	<jc>// Serialize</jc>
-	String <jv>json</jv> = Json.<jsf>DEFAULT</jsf>.write(<jv>person</jv>);
-	
-	<jc>// Parse</jc>
-	Person <jv>person</jv> = Json.<jsf>DEFAULT</jsf>.read(<jv>json</jv>, Person.<jk>class</jk>);
-	</p>
-	<p>
-		Marshalling support is provided for a wide variety of POJO types
-		including:
+		Marshalling support is provided for a wide variety of POJO types including:
 	</p>
 	<ul>
 		<li>Primitives and primitive objects
@@ -860,9 +788,10 @@
 	</ul>
 </div>
 
-<h5 class='topic'>Marshaller Builders</h5>
+<h5 class='topic'>Serializer/Parser Builders</h5>
 <div class='topic'>
 	<p>
+		Marshallers like the one shown above are pairings of serializers and parsers.  
 		Serializers and parsers are builder-based using fluent methods allowing you to quickly create, clone, and modify them
 		in single lines of code.
 	</p>
@@ -1208,321 +1137,12 @@
 		<li class='link'>{@doc jm.SimpleVariableLanguage Simple Variable Language} for more information.
 	</ul>
 </div>
-
-<h5 class='topic'>Assertions API</h5>
-<div class='topic'>
-	<p>
-		The {@link org.apache.juneau.assertions} package in Juneau is a powerful API for performing fluent style assertions.
-	</p>
-	<h5 class='figure'>Examples:</h5>
-	<p class='bjava'>
-	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
-	<jk>import static</jk> org.apache.juneau.assertions.AssertionPredicates.*;
-	
-	<jc>// Check the contents of a string.</jc>
-	<jsm>assertString</jsm>(<js>"foo, bar"</js>)
-		.split(<js>","</js>)
-		.trim()
-		.has(<js>"foo"</js>, <js>"bar"</js>);
-
-	<jc>// Extract a subset of properties from a list of beans and compare using Simplified JSON.</jc>
-	List&lt;MyBean&gt; <jv>myListOfBeans</jv> = ...;
-	<jsm>assertBeanList</jsm>(<jv>myListOfBeans</jv>)
-		.extract(<js>"a,b"</js>)
-		.asJson().is(<js>"[{a:1,b:'foo'}]"</js>);
-	
-	<jc>// Perform an arbitrary Predicate check against a bean.</jc>
-	MyBean <jv>myBean</jv> = ...;
-	<jsm>assertBean</jsm>(<jv>myBean</jv>)
-		.is(<jv>x</jv> -> <jsm>isValidCheck</jsm>(<jv>x</jv>))
-	
-	<jc>// Check that a list of strings has less than 10 entries and the first</jc>
-	<jc>// 3 entries are [foo, bar*, null] using assertion predicates.</jc>
-	List&lt;String&gt; <jv>myListOfStrings</jv> = ...;
-	<jsm>assertStringList</jsm>(<jv>myListOfStrings</jv>)
-		.size().isLt(10)
-		.first(3)
-			.each(<jsm>eq</jsm>(<js>"foo"</js>),<jsm>match</jsm>(<js>"bar*"</js>),<jsm>isNull</jsm>())
-	
-	<jc>// Check that an exception is thrown and is the specified type and has the specified message.</jc>
-	<jsm>assertThrown</jsm>(()-><jv>myBean</jv>.runBadMethod())
-		.exists()
-		.isExactType(RuntimeException.<jk>class</jk>)
-		.message().is(<js>"foo"</js>);
-	</p>
-	<p>
-		The Assertions APIs are used throughout the REST client and server APIs for performing inline assertions on REST requests and responses.
-	</p>
-
-	<h5 class='figure'>Example:</h5>
-	<p class='bjava'>
-	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
-	MyBean <jv>bean</jv> = RestClient.<jsm>create</jsm>()
-		.simpleJson()
-		.build()
-		.get(<jsf>URI</jsf>)
-		.run()
-		.assertStatus().asCode().is(200)
-		.assertHeader(<js>"Content-Type"</js>).isMatches(<js>"application/json*"</js>)
-		.getContent().assertValue().asString().isContains(<js>"OK"</js>)
-		.getContent().as(MyBean.<jk>class</jk>);
-	</p>
-	<ul class='seealso'>
-		<li class='link'>{@doc ja.Overview Fluent Assertions} for more information.
-	</ul>
-</div>
-</div><!-- END: 1.1 - Overview.o.Core -->
+</div><!-- END: 1.1 - Overview.o.Marshalling -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#Overview.o.Dto' id='Overview.o.Dto'>1.2 - DTO Library Overview</a><span class='update'>created: <b>9.0.0</b></span></h3>
-<div class='topic'><!-- START: 1.2 - Overview.o.Dto -->
-<h5 class='topic'>DTO Libraries</h5>
-<div class='topic'>
-	<p>
-		The <c>juneau-dto</c> library contains several predefined POJOs for generating commonly-used document types that
-		are designed to be used with the Juneau Marshaller APIs for both serializing and parsing.
-	</p>
-</div>
-
-<h5 class='topic'>HTML5</h5>
-<div class='topic'>
-	<p>
-		The Juneau HTML5 DTOs are simply beans with fluent-style setters that allow you to quickly construct HTML
-		fragments as Java objects.  These object can then be serialized to HTML using one of the existing HTML 
-		serializers, or to other languages such as JSON using the JSON serializers.
-	</p>
-	<p>
-		The {@link org.apache.juneau.dto.html5.HtmlBuilder} class is a utility class with predefined static methods
-		that allow you to easily construct DTO instances in a minimal amount of code. 
-	</p>
-	<h5 class='figure'>Examples:</h5>
-	<p class='bjava'>
-	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
-
-	<jc>// An HTML table</jc>	
-	Object <jv>mytable</jv> = 	
-		<jsm>table</jsm>(
-			<jsm>tr</jsm>(
-				<jsm>th</jsm>(<js>"c1"</js>),
-				<jsm>th</jsm>(<js>"c2"</js>)
-			),
-			<jsm>tr</jsm>(
-				<jsm>td</jsm>(<js>"v1"</js>),
-				<jsm>td</jsm>(<js>"v2"</js>)
-			)
-		);
-		
-	String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>mytable</jv>);
-	</p>
-	<p class='bxml'><xt>
-	&lt;table&gt;
-		&lt;tr&gt;
-			&lt;th&gt;<xv>c1</xv>&lt;/th&gt;
-			&lt;th&gt;<xv>c2</xv>&lt;/th&gt;
-		&lt;/tr&gt;
-		&lt;tr&gt;
-			&lt;td&gt;<xv>v1</xv>&lt;/td&gt;
-			&lt;td&gt;<xv>v2</xv>&lt;/td&gt;
-		&lt;/tr&gt;
-	&lt;/table&gt;
-	</xt></p>	
-	<ul class='seealso'>
-		<li class='link'>{@doc jd.Html5 HTML5} for more information.
-	</ul>
-</div>
-
-<h5 class='topic'>ATOM</h5>
-<div class='topic'>
-	<p>
-		The Juneau ATOM feed DTOs are simply beans with fluent-style setters.
-		The following code shows a feed being created programmatically using the 
-		{@link org.apache.juneau.dto.atom.AtomBuilder} class.
-	</p>
-	<h5 class='figure'>Example:</h5>
-	<p class='bjava'>
-	<jk>import static</jk> org.apache.juneau.dto.atom.AtomBuilder.*;
-	
-	Feed <jv>feed</jv> = 
-		<jsm>feed</jsm>(<js>"tag:juneau.apache.org"</js>, <js>"Juneau ATOM specification"</js>, <js>"2016-01-02T03:04:05Z"</js>)
-		.subtitle(<jsm>text</jsm>(<js>"html"</js>).text(<js>"Describes &lt;em&gt;stuff&lt;/em&gt; about Juneau"</js>))
-		.links(
-			<jsm>link</jsm>(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://juneau.apache.org"</js>).hreflang(<js>"en"</js>),
-			<jsm>link</jsm>(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://juneau.apache.org/feed.atom"</js>)
-		)
-		.rights(<js>"Copyright (c) ..."</js>)
-		.generator(
-			<jsm>generator</jsm>(<js>"Juneau"</js>).uri(<js>"http://juneau.apache.org/"</js>).version(<js>"1.0"</js>)
-		)
-		.entries(
-			<jsm>entry</jsm>(<js>"tag:juneau.sample.com,2013:1.2345"</js>, <js>"Juneau ATOM specification snapshot"</js>, <js>"2016-01-02T03:04:05Z"</js>)
-			.links(
-				<jsm>link</jsm><js>"alternate"</js>, <js>"text/html"</js>, <js>"http://juneau.apache.org/juneau.atom"</js>),
-				<jsm>link</jsm>(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>"http://juneau.apache.org/audio/juneau_podcast.mp3"</js>).length(1337)
-			)
-			.published(<js>"2016-01-02T03:04:05Z"</js>)
-			.authors(
-				<jsm>person</jsm>(<js>"Jane Smith"</js>).uri(<js>"http://juneau.apache.org/"</js>).email(<js>"janesmith@apache.org"</js>)
-			)
-			.contributors(
-				<jsm>person</jsm>(<js>"John Smith"</js>)
-			)
-			.content(
-				<jsm>content</jsm>(<js>"xhtml"</js>)
-				.lang(<js>"en"</js>)
-				.base(<js>"http://www.apache.org/"</js>)
-				.text(<js>"&lt;div&gt;&lt;p&gt;&lt;i&gt;[Update: Juneau supports ATOM.]&lt;/i&gt;&lt;/p&gt;&lt;/div&gt;"</js>)
-			)
-		);
-
-	<jc>// Create a serializer with readable output, no namespaces yet.</jc>
-	XmlSerializer <jv>serializer</jv> = XmlSerializer.<jsm>create</jsm>().sq().ws().build();
-
-	<jc>// Serialize to ATOM/XML</jc>
-	String <jv>atomXml</jv> = <jv>serializer</jv>.serialize(<jv>feed</jv>);
-	</p>
-	<ul class='seealso'>
-		<li class='link'>{@doc jd.Atom Atom} for more information.
-	</ul>
-</div>
-
-<h5 class='topic'>Swagger</h5>
-<div class='topic'>
-	<p>
-		The Juneau Swagger DTOs are simply beans with fluent-style setters that allow you to quickly construct 
-		Swagger documents as Java objects.  
-		These object can then be serialized to JSON using one of the existing JSON serializers, or to other 
-		languages such as XML or HTML using the other serializers.
-	</p>
-	<h5 class='figure'>Example:</h5>
-	<p class='bjava'>
-	<jk>static import</jk> org.apache.juneau.dto.swagger.SwaggerBuilder.*;
-
-	Swagger <jv>swagger</jv> = <jsm>swagger</jsm>()
-		.swagger(<js>"2.0"</js>)
-		.info(
-			<jsm>info</jsm>(<js>"Swagger Petstore"</js>, <js>"1.0.0"</js>)
-				.description(<js>"This is a sample server Petstore server."</js>)
-				.termsOfService(<js>"http://swagger.io/terms/"</js>)
-				.contact(
-					<jsm>contact</jsm>().email(<js>"apiteam@swagger.io"</js>)
-				)
-				.license(
-					<jsm>license</jsm>(<js>"Apache 2.0"</js>).url(<js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>)
-				)
-		)
-		.host(<js>"petstore.swagger.io"</js>)
-		.basePath(<js>"/v2"</js>)
-		.tags(
-			<jsm>tag</jsm>(<js>"pet"</js>).description(<js>"Everything about your Pets"</js>)
-				.externalDocs(
-					<jsm>externalDocumentation</jsm>(<js>"http://swagger.io"</js>, <js>"http://swagger.io"</js>)
-				)
-		)
-		.schemes(<js>"http"</js>)
-		.path(<js>"/pet"</js>, <js>"post"</js>,
-			<jsm>operation</jsm>()
-				.tags(<js>"pet"</js>)
-				.summary(<js>"Add a new pet to the store"</js>)
-				.description(<js>""</js>)
-				.operationId(<js>"addPet"</js>)
-				.consumes(MediaType.<jsf>JSON</jsf>, MediaType.<jsf>XML</jsf>)
-				.produces(MediaType.<jsf>JSON</jsf>, MediaType.<jsf>XML</jsf>)
-				.parameters(
-					<jsm>parameterInfo</jsm>(<js>"body"</js>, <js>"body"</js>)
-						.description(<js>"Pet object that needs to be added to the store"</js>)
-						.required(<jk>true</jk>)
-				)
-				.response(405, <jsm>responseInfo</jsm>(<js>"Invalid input"</js>))
-		);
-
-	<jc>// Serialize using JSON serializer.</jc>
-	String <jv>swaggerJson</jv> = JsonSerializer.<jsf>DEFAULT_READABLE</jsf>.serialize(<jv>swagger</jv>);
-	
-	<jc>// Or just use toString().</jc>
-	String <jv>swaggerJson</jv> = <jv>swagger</jv>.toString();
-	</p>
-	<ul class='seealso'>
-		<li class='link'>{@doc jd.Swagger Swagger} for more information.
-	</ul>
-</div>
-
-<h5 class='topic'>SwaggerUI</h5>
-<div class='topic'>
-	<p>
-		The {@link org.apache.juneau.dto.swagger.ui.SwaggerUI} class is a DTO class for generating Swagger user interfaces
-		from {@link org.apache.juneau.dto.swagger.Swagger} beans.
-	</p>
-	<p>
-		The <c>PetStore</c> example described later provides an example of auto-generated Swagger JSON:
-	</p>
-	<img class='bordered w900' src='doc-files/jd.SwaggerUI.json.png'>
-	<p>
-		Using {@link org.apache.juneau.dto.swagger.ui.SwaggerUI}, we're able to render that JSON as a Swagger user interface
-		when the request is asking for HTML:
-	</p>
-	<img class='bordered w900' src='doc-files/jd.SwaggerUI.html.png'>
-	<ul class='seealso'>
-		<li class='link'>{@doc jd.SwaggerUi Swagger UI} for more information.
-	</ul>
-</div>
-</div><!-- END: 1.2 - Overview.o.Dto -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic' onclick='toggle(this)'><a href='#Overview.o.Config' id='Overview.o.Config'>1.3 - Config API Overview</a><span class='update'>created: <b>9.0.0</b></span></h3>
-<div class='topic'><!-- START: 1.3 - Overview.o.Config -->
-<h5 class='topic'>Config API</h5>
-<div class='topic'>
-	<p>
-		The <c>juneau-config</c> library contains a powerful API for creating and using INI-style config files.
-	</p>
-	<h5 class='figure'>Example configuration file:</h5>
-	<p class='bini'>
-	<cc># A set of entries</cc>
-	<cs>[Section1]</cs>
-
-	<cc># An integer</cc>
-	<ck>key1</ck> = <cv>1</cv>
-
-	<cc># A boolean</cc>
-	<ck>key2</ck> = <cv>true</cv>
-	
-	<cc># An array</cc>
-	<ck>key3</ck> = <cv>1,2,3</cv>
-
-	<cc># A POJO</cc>
-	<ck>key4</ck> = <cv>http://bar</cv>
-	</p>
-	<p>
-		Config files are accessed through the {@link org.apache.juneau.config.Config} class which
-		are created through the {@link org.apache.juneau.config.Config.Builder} class.
-		Builder creator methods are provided on the <c>Config</c> class:
-	</p>
-	<p class='bjava'>
-	<jc>// Create a Config object</jc>
-	Config <jv>config</jv> = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
-	
-	<jc>// Read values from section #1</jc>
-	<jk>int</jk> <jv>key1</jv> = <jv>config</jv>.getInt(<js>"Section1/key1"</js>);
-	<jk>boolean</jk> <jv>key2</jv> = <jv>config</jv>.getBoolean(<js>"Section1/key2"</js>);
-	<jk>int</jk>[] <jv>key3</jv> = <jv>config</jv>.getObject(<js>"Section1/key3"</js>, <jk>int</jk>[].<jk>class</jk>);
-	URL <jv>key4</jv> = <jv>config</jv>.getObject(<js>"Section1/key4"</js>, URL.<jk>class</jk>);
-	</p>
-	<p>
-		The config language may look simple, but it is a very powerful feature with many capabilities.
-	</p>
-	<ul class='seealso'>
-		<li class='link'>{@doc juneau-config juneau-config} for more information.
-	</ul>
-</div>
-</div><!-- END: 1.3 - Overview.o.Config -->
-
-<!-- ==================================================================================================== -->
-
-<h3 class='topic' onclick='toggle(this)'><a href='#Overview.o.Rest' id='Overview.o.Rest'>1.4 - REST Overview</a><span class='update'>created: <b>9.0.0</b></span></h3>
-<div class='topic'><!-- START: 1.4 - Overview.o.Rest -->
-<h5 class='topic'>REST Server/Client APIs</h5>
+<h3 class='topic' onclick='toggle(this)'><a href='#Overview.o.EndToEndRest' id='Overview.o.EndToEndRest'>1.2 - End-to-End REST</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<div class='topic'><!-- START: 1.2 - Overview.o.EndToEndRest -->
 <div class='topic'>
 	<p>
 		The {@doc juneau-rest-server juneau-rest-server} and {@doc juneau-rest-client juneau-rest-client} libraries
@@ -1601,12 +1221,12 @@
 		to perform complex tasks using very little code.
 	</p>
 </div>
-</div><!-- END: 1.4 - Overview.o.Rest -->
+</div><!-- END: 1.2 - Overview.o.EndToEndRest -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#Overview.o.RestServer' id='Overview.o.RestServer'>1.5 - REST Server Overview</a></h3>
-<div class='topic'><!-- START: 1.5 - Overview.o.RestServer -->
+<h3 class='topic' onclick='toggle(this)'><a href='#Overview.o.RestServer' id='Overview.o.RestServer'>1.3 - REST Server</a></h3>
+<div class='topic'><!-- START: 1.3 - Overview.o.RestServer -->
 <h5 class='topic'>@Rest-Annotated Resources</h5>
 <div class='topic'>
 	<p>
@@ -1898,13 +1518,12 @@
 		<li class='link'>{@doc juneau-rest-server} for more information.
 	</ul>
 </div>
-</div><!-- END: 1.5 - Overview.o.RestServer -->
+</div><!-- END: 1.3 - Overview.o.RestServer -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#Overview.o.RestClient' id='Overview.o.RestClient'>1.6 - REST Client Overview</a><span class='update'>created: <b>9.0.0</b></span></h3>
-<div class='topic'><!-- START: 1.6 - Overview.o.RestClient -->
-<h5 class='topic'>REST Client</h5>
+<h3 class='topic' onclick='toggle(this)'><a href='#Overview.o.RestClient' id='Overview.o.RestClient'>1.4 - REST Client</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<div class='topic'><!-- START: 1.4 - Overview.o.RestClient -->
 <div class='topic'>
 	<p>
 		Built upon the feature-rich Apache HttpClient library, the Juneau RestClient API adds support for fluent-style
@@ -1981,12 +1600,322 @@
 		<li class='link'>{@doc juneau-rest-client} for more information.
 	</ul>
 </div>
-</div><!-- END: 1.6 - Overview.o.RestClient -->
+</div><!-- END: 1.4 - Overview.o.RestClient -->
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#Overview.o.GeneralDesign' id='Overview.o.GeneralDesign'>1.7 - General Design</a><span class='update'>created: <b>9.0.0</b></span></h3>
-<div class='topic'><!-- START: 1.7 - Overview.o.GeneralDesign -->
+<h3 class='topic' onclick='toggle(this)'><a href='#Overview.o.Dtos' id='Overview.o.Dtos'>1.5 - DTOs</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<div class='topic'><!-- START: 1.5 - Overview.o.Dtos -->
+<div class='topic'>
+	<p>
+		The {@doc juneau-dto juneau-dto} library contains several predefined POJOs for generating commonly-used document types that
+		are designed to be used with the Juneau Marshaller APIs for both serializing and parsing.
+	</p>
+</div>
+
+<h5 class='topic'>HTML5</h5>
+<div class='topic'>
+	<p>
+		The Juneau HTML5 DTOs are simply beans with fluent-style setters that allow you to quickly construct HTML
+		fragments as Java objects.  These object can then be serialized to HTML using one of the existing HTML 
+		serializers, or to other languages such as JSON using the JSON serializers.
+	</p>
+	<p>
+		The {@link org.apache.juneau.dto.html5.HtmlBuilder} class is a utility class with predefined static methods
+		that allow you to easily construct DTO instances in a minimal amount of code. 
+	</p>
+	<h5 class='figure'>Examples:</h5>
+	<p class='bjava'>
+	<jk>import static</jk> org.apache.juneau.dto.html5.HtmlBuilder.*;
+
+	<jc>// An HTML table</jc>	
+	Object <jv>mytable</jv> = 	
+		<jsm>table</jsm>(
+			<jsm>tr</jsm>(
+				<jsm>th</jsm>(<js>"c1"</js>),
+				<jsm>th</jsm>(<js>"c2"</js>)
+			),
+			<jsm>tr</jsm>(
+				<jsm>td</jsm>(<js>"v1"</js>),
+				<jsm>td</jsm>(<js>"v2"</js>)
+			)
+		);
+		
+	String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>mytable</jv>);
+	</p>
+	<p class='bxml'><xt>
+	&lt;table&gt;
+		&lt;tr&gt;
+			&lt;th&gt;<xv>c1</xv>&lt;/th&gt;
+			&lt;th&gt;<xv>c2</xv>&lt;/th&gt;
+		&lt;/tr&gt;
+		&lt;tr&gt;
+			&lt;td&gt;<xv>v1</xv>&lt;/td&gt;
+			&lt;td&gt;<xv>v2</xv>&lt;/td&gt;
+		&lt;/tr&gt;
+	&lt;/table&gt;
+	</xt></p>	
+	<ul class='seealso'>
+		<li class='link'>{@doc jd.Html5 HTML5} for more information.
+	</ul>
+</div>
+
+<h5 class='topic'>ATOM</h5>
+<div class='topic'>
+	<p>
+		The Juneau ATOM feed DTOs are simply beans with fluent-style setters.
+		The following code shows a feed being created programmatically using the 
+		{@link org.apache.juneau.dto.atom.AtomBuilder} class.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+	<jk>import static</jk> org.apache.juneau.dto.atom.AtomBuilder.*;
+	
+	Feed <jv>feed</jv> = 
+		<jsm>feed</jsm>(<js>"tag:juneau.apache.org"</js>, <js>"Juneau ATOM specification"</js>, <js>"2016-01-02T03:04:05Z"</js>)
+		.subtitle(<jsm>text</jsm>(<js>"html"</js>).text(<js>"Describes &lt;em&gt;stuff&lt;/em&gt; about Juneau"</js>))
+		.links(
+			<jsm>link</jsm>(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://juneau.apache.org"</js>).hreflang(<js>"en"</js>),
+			<jsm>link</jsm>(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://juneau.apache.org/feed.atom"</js>)
+		)
+		.rights(<js>"Copyright (c) ..."</js>)
+		.generator(
+			<jsm>generator</jsm>(<js>"Juneau"</js>).uri(<js>"http://juneau.apache.org/"</js>).version(<js>"1.0"</js>)
+		)
+		.entries(
+			<jsm>entry</jsm>(<js>"tag:juneau.sample.com,2013:1.2345"</js>, <js>"Juneau ATOM specification snapshot"</js>, <js>"2016-01-02T03:04:05Z"</js>)
+			.links(
+				<jsm>link</jsm><js>"alternate"</js>, <js>"text/html"</js>, <js>"http://juneau.apache.org/juneau.atom"</js>),
+				<jsm>link</jsm>(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>"http://juneau.apache.org/audio/juneau_podcast.mp3"</js>).length(1337)
+			)
+			.published(<js>"2016-01-02T03:04:05Z"</js>)
+			.authors(
+				<jsm>person</jsm>(<js>"Jane Smith"</js>).uri(<js>"http://juneau.apache.org/"</js>).email(<js>"janesmith@apache.org"</js>)
+			)
+			.contributors(
+				<jsm>person</jsm>(<js>"John Smith"</js>)
+			)
+			.content(
+				<jsm>content</jsm>(<js>"xhtml"</js>)
+				.lang(<js>"en"</js>)
+				.base(<js>"http://www.apache.org/"</js>)
+				.text(<js>"&lt;div&gt;&lt;p&gt;&lt;i&gt;[Update: Juneau supports ATOM.]&lt;/i&gt;&lt;/p&gt;&lt;/div&gt;"</js>)
+			)
+		);
+
+	<jc>// Create a serializer with readable output, no namespaces yet.</jc>
+	XmlSerializer <jv>serializer</jv> = XmlSerializer.<jsm>create</jsm>().sq().ws().build();
+
+	<jc>// Serialize to ATOM/XML</jc>
+	String <jv>atomXml</jv> = <jv>serializer</jv>.serialize(<jv>feed</jv>);
+	</p>
+	<ul class='seealso'>
+		<li class='link'>{@doc jd.Atom Atom} for more information.
+	</ul>
+</div>
+
+<h5 class='topic'>Swagger</h5>
+<div class='topic'>
+	<p>
+		The Juneau Swagger DTOs are simply beans with fluent-style setters that allow you to quickly construct 
+		Swagger documents as Java objects.  
+		These object can then be serialized to JSON using one of the existing JSON serializers, or to other 
+		languages such as XML or HTML using the other serializers.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+	<jk>static import</jk> org.apache.juneau.dto.swagger.SwaggerBuilder.*;
+
+	Swagger <jv>swagger</jv> = <jsm>swagger</jsm>()
+		.swagger(<js>"2.0"</js>)
+		.info(
+			<jsm>info</jsm>(<js>"Swagger Petstore"</js>, <js>"1.0.0"</js>)
+				.description(<js>"This is a sample server Petstore server."</js>)
+				.termsOfService(<js>"http://swagger.io/terms/"</js>)
+				.contact(
+					<jsm>contact</jsm>().email(<js>"apiteam@swagger.io"</js>)
+				)
+				.license(
+					<jsm>license</jsm>(<js>"Apache 2.0"</js>).url(<js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>)
+				)
+		)
+		.host(<js>"petstore.swagger.io"</js>)
+		.basePath(<js>"/v2"</js>)
+		.tags(
+			<jsm>tag</jsm>(<js>"pet"</js>).description(<js>"Everything about your Pets"</js>)
+				.externalDocs(
+					<jsm>externalDocumentation</jsm>(<js>"http://swagger.io"</js>, <js>"http://swagger.io"</js>)
+				)
+		)
+		.schemes(<js>"http"</js>)
+		.path(<js>"/pet"</js>, <js>"post"</js>,
+			<jsm>operation</jsm>()
+				.tags(<js>"pet"</js>)
+				.summary(<js>"Add a new pet to the store"</js>)
+				.description(<js>""</js>)
+				.operationId(<js>"addPet"</js>)
+				.consumes(MediaType.<jsf>JSON</jsf>, MediaType.<jsf>XML</jsf>)
+				.produces(MediaType.<jsf>JSON</jsf>, MediaType.<jsf>XML</jsf>)
+				.parameters(
+					<jsm>parameterInfo</jsm>(<js>"body"</js>, <js>"body"</js>)
+						.description(<js>"Pet object that needs to be added to the store"</js>)
+						.required(<jk>true</jk>)
+				)
+				.response(405, <jsm>responseInfo</jsm>(<js>"Invalid input"</js>))
+		);
+
+	<jc>// Serialize using JSON serializer.</jc>
+	String <jv>swaggerJson</jv> = JsonSerializer.<jsf>DEFAULT_READABLE</jsf>.serialize(<jv>swagger</jv>);
+	
+	<jc>// Or just use toString().</jc>
+	String <jv>swaggerJson</jv> = <jv>swagger</jv>.toString();
+	</p>
+	<ul class='seealso'>
+		<li class='link'>{@doc jd.Swagger Swagger} for more information.
+	</ul>
+</div>
+
+<h5 class='topic'>SwaggerUI</h5>
+<div class='topic'>
+	<p>
+		The {@link org.apache.juneau.dto.swagger.ui.SwaggerUI} class is a DTO class for generating Swagger user interfaces
+		from {@link org.apache.juneau.dto.swagger.Swagger} beans.
+	</p>
+	<p>
+		The <c>PetStore</c> example described later provides an example of auto-generated Swagger JSON:
+	</p>
+	<img class='bordered w900' src='doc-files/jd.SwaggerUI.json.png'>
+	<p>
+		Using {@link org.apache.juneau.dto.swagger.ui.SwaggerUI}, we're able to render that JSON as a Swagger user interface
+		when the request is asking for HTML:
+	</p>
+	<img class='bordered w900' src='doc-files/jd.SwaggerUI.html.png'>
+	<ul class='seealso'>
+		<li class='link'>{@doc jd.SwaggerUi Swagger UI} for more information.
+	</ul>
+</div>
+</div><!-- END: 1.5 - Overview.o.Dtos -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#Overview.o.ConfigFiles' id='Overview.o.ConfigFiles'>1.6 - Config Files</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<div class='topic'><!-- START: 1.6 - Overview.o.ConfigFiles -->
+<div class='topic'>
+	<p>
+		The {@doc juneau-config juneau-config} library contains a powerful API for creating and using INI-style config files.
+	</p>
+	<h5 class='figure'>Example configuration file:</h5>
+	<p class='bini'>
+	<cc># A set of entries</cc>
+	<cs>[Section1]</cs>
+
+	<cc># An integer</cc>
+	<ck>key1</ck> = <cv>1</cv>
+
+	<cc># A boolean</cc>
+	<ck>key2</ck> = <cv>true</cv>
+	
+	<cc># An array</cc>
+	<ck>key3</ck> = <cv>1,2,3</cv>
+
+	<cc># A POJO</cc>
+	<ck>key4</ck> = <cv>http://bar</cv>
+	</p>
+	<p>
+		Config files are accessed through the {@link org.apache.juneau.config.Config} class which
+		are created through the {@link org.apache.juneau.config.Config.Builder} class.
+		Builder creator methods are provided on the <c>Config</c> class:
+	</p>
+	<p class='bjava'>
+	<jc>// Create a Config object</jc>
+	Config <jv>config</jv> = Config.<jsm>create</jsm>().name(<js>"MyConfig.cfg"</js>).build();
+	
+	<jc>// Read values from section #1</jc>
+	<jk>int</jk> <jv>key1</jv> = <jv>config</jv>.getInt(<js>"Section1/key1"</js>);
+	<jk>boolean</jk> <jv>key2</jv> = <jv>config</jv>.getBoolean(<js>"Section1/key2"</js>);
+	<jk>int</jk>[] <jv>key3</jv> = <jv>config</jv>.getObject(<js>"Section1/key3"</js>, <jk>int</jk>[].<jk>class</jk>);
+	URL <jv>key4</jv> = <jv>config</jv>.getObject(<js>"Section1/key4"</js>, URL.<jk>class</jk>);
+	</p>
+	<p>
+		The config language may look simple, but it is a very powerful feature with many capabilities.
+	</p>
+	<ul class='seealso'>
+		<li class='link'>{@doc juneau-config juneau-config} for more information.
+	</ul>
+</div>
+</div><!-- END: 1.6 - Overview.o.ConfigFiles -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#Overview.o.FluentAssertions' id='Overview.o.FluentAssertions'>1.7 - Fluent Assertions</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<div class='topic'><!-- START: 1.7 - Overview.o.FluentAssertions -->
+<div class='topic'>
+	<p>
+		The {@doc juneau-assertions} module in Juneau is a powerful API for performing fluent style assertions.
+	</p>
+	<h5 class='figure'>Examples:</h5>
+	<p class='bjava'>
+	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	<jk>import static</jk> org.apache.juneau.assertions.AssertionPredicates.*;
+	
+	<jc>// Check the contents of a string.</jc>
+	<jsm>assertString</jsm>(<js>"foo, bar"</js>)
+		.split(<js>","</js>)
+		.trim()
+		.has(<js>"foo"</js>, <js>"bar"</js>);
+
+	<jc>// Extract a subset of properties from a list of beans and compare using Simplified JSON.</jc>
+	List&lt;MyBean&gt; <jv>myListOfBeans</jv> = ...;
+	<jsm>assertBeanList</jsm>(<jv>myListOfBeans</jv>)
+		.extract(<js>"a,b"</js>)
+		.asJson().is(<js>"[{a:1,b:'foo'}]"</js>);
+	
+	<jc>// Perform an arbitrary Predicate check against a bean.</jc>
+	MyBean <jv>myBean</jv> = ...;
+	<jsm>assertBean</jsm>(<jv>myBean</jv>)
+		.is(<jv>x</jv> -> <jsm>isValidCheck</jsm>(<jv>x</jv>))
+	
+	<jc>// Check that a list of strings has less than 10 entries and the first</jc>
+	<jc>// 3 entries are [foo, bar*, null] using assertion predicates.</jc>
+	List&lt;String&gt; <jv>myListOfStrings</jv> = ...;
+	<jsm>assertStringList</jsm>(<jv>myListOfStrings</jv>)
+		.size().isLt(10)
+		.first(3)
+			.each(<jsm>eq</jsm>(<js>"foo"</js>),<jsm>match</jsm>(<js>"bar*"</js>),<jsm>isNull</jsm>())
+	
+	<jc>// Check that an exception is thrown and is the specified type and has the specified message.</jc>
+	<jsm>assertThrown</jsm>(()-><jv>myBean</jv>.runBadMethod())
+		.exists()
+		.isExactType(RuntimeException.<jk>class</jk>)
+		.message().is(<js>"foo"</js>);
+	</p>
+	<p>
+		The Assertions APIs are used throughout the REST client and server APIs for performing inline assertions on REST requests and responses.
+	</p>
+
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
+	MyBean <jv>bean</jv> = RestClient.<jsm>create</jsm>()
+		.simpleJson()
+		.build()
+		.get(<jsf>URI</jsf>)
+		.run()
+		.assertStatus().asCode().is(200)
+		.assertHeader(<js>"Content-Type"</js>).isMatches(<js>"application/json*"</js>)
+		.getContent().assertValue().asString().isContains(<js>"OK"</js>)
+		.getContent().as(MyBean.<jk>class</jk>);
+	</p>
+	<ul class='seealso'>
+		<li class='link'>{@doc ja.Overview Fluent Assertions} for more information.
+	</ul>
+</div>
+</div><!-- END: 1.7 - Overview.o.FluentAssertions -->
+
+<!-- ==================================================================================================== -->
+
+<h3 class='topic' onclick='toggle(this)'><a href='#Overview.o.GeneralDesign' id='Overview.o.GeneralDesign'>1.8 - General Design</a><span class='update'>created: <b>9.0.0</b></span></h3>
+<div class='topic'><!-- START: 1.8 - Overview.o.GeneralDesign -->
 <div class='topic'>
 	<p>
 		The Juneau framework uses the design pattern of builders, context, and session objects:
@@ -2057,7 +1986,7 @@
 		for reuse by all serializers and parsers that share the same bean context configuration settings.
 	</p>
 </div>
-</div><!-- END: 1.7 - Overview.o.GeneralDesign -->
+</div><!-- END: 1.8 - Overview.o.GeneralDesign -->
 </div><!-- END: 1 - Overview -->
 
 <!-- ==================================================================================================== -->
