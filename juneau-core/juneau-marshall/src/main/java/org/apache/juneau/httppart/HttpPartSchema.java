@@ -4053,7 +4053,7 @@ public class HttpPartSchema {
 			return null;
 		Set<String> set = set();
 		try {
-			parseListOrCdl(s).forEach(x -> set.add(x.toString()));
+			JsonList.ofJsonOrCdl(s).forEach(x -> set.add(x.toString()));
 		} catch (ParseException e) {
 			throw asRuntimeException(e);
 		}

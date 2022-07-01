@@ -1565,7 +1565,7 @@ public class BeanMapTest {
 		// With _type
 		JsonMap m = new JsonMap(session);
 		m.put("_type", "LinkedListOfCalendar");
-		m.put("items", JsonList.of("2001-07-04T15:30:45Z"));
+		m.put("items", JsonList.ofJsonOrCdl("2001-07-04T15:30:45Z"));
 
 		List l = (List)m.cast(Object.class);
 		assertTrue(l instanceof LinkedList);
@@ -1596,7 +1596,7 @@ public class BeanMapTest {
 
 		// Without _type
 		m = new JsonMap().session(bc.getSession());
-		m.put("items", JsonList.of("2001-07-04T15:30:45Z"));
+		m.put("items", JsonList.ofJsonOrCdl("2001-07-04T15:30:45Z"));
 
 		l = m.cast(List.class);
 		assertTrue(l instanceof LinkedList);
@@ -1718,7 +1718,7 @@ public class BeanMapTest {
 		// With _type
 		JsonMap m = new JsonMap(session);
 		m.put("_type", "String2dArray");
-		m.put("items", JsonList.of(JsonList.of("1"),JsonList.of("2")));
+		m.put("items", JsonList.of(JsonList.ofJsonOrCdl("1"),JsonList.ofJsonOrCdl("2")));
 
 		String[][] l = (String[][])m.cast(Object.class);
 		assertEquals("1", l[0][0]);
@@ -1732,7 +1732,7 @@ public class BeanMapTest {
 
 		// Without _type
 		m = new JsonMap();
-		m.put("items", JsonList.of(JsonList.of("1"),JsonList.of("2")));
+		m.put("items", JsonList.of(JsonList.ofJsonOrCdl("1"),JsonList.ofJsonOrCdl("2")));
 
 		l = m.cast(String[][].class);
 		assertEquals("1", l[0][0]);
@@ -1750,7 +1750,7 @@ public class BeanMapTest {
 		// With _type
 		JsonMap m = new JsonMap(session);
 		m.put("_type", "Int2dArray");
-		m.put("items", JsonList.of(JsonList.of("1"),JsonList.of("2")));
+		m.put("items", JsonList.of(JsonList.ofJsonOrCdl("1"),JsonList.ofJsonOrCdl("2")));
 
 		int[][] l = (int[][])m.cast(Object.class);
 		assertEquals(1, l[0][0]);
@@ -1764,7 +1764,7 @@ public class BeanMapTest {
 
 		// Without _type
 		m = new JsonMap();
-		m.put("items", JsonList.of(JsonList.of("1"),JsonList.of("2")));
+		m.put("items", JsonList.of(JsonList.ofJsonOrCdl("1"),JsonList.ofJsonOrCdl("2")));
 
 		l = m.cast(int[][].class);
 		assertEquals(1, l[0][0]);
@@ -2028,8 +2028,8 @@ public class BeanMapTest {
 	public void testSettingCollectionPropertyMultipleTimes() throws Exception {
 
 		BeanMap m = BeanContext.DEFAULT.newBeanMap(Y.class);
-		m.put("f1", JsonList.of("a"));
-		m.put("f1",  JsonList.of("b"));
+		m.put("f1", JsonList.ofJsonOrCdl("a"));
+		m.put("f1",  JsonList.ofJsonOrCdl("b"));
 		assertEquals("{f1=[b]}", m.toString());
 	}
 

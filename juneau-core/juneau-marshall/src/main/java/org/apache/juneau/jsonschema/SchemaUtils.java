@@ -91,7 +91,7 @@ public class SchemaUtils {
 		if (s.isEmpty())
 			return null;
 		Set<String> set = set();
-		parseListOrCdl(s).forEach(x -> set.add(x.toString()));
+		JsonList.ofJsonOrCdl(s).forEach(x -> set.add(x.toString()));
 		return set;
 	}
 

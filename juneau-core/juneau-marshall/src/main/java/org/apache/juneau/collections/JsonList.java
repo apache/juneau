@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.objecttools.*;
@@ -107,7 +108,34 @@ import org.apache.juneau.serializer.*;
  * @serial exclude
  */
 public class JsonList extends LinkedList<Object> {
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Parses a string that can consist of either a JSON array or comma-delimited list.
+	 *
+	 * <p>
+	 * The type of string is auto-detected.
+	 *
+	 * @param s The string to parse.
+	 * @return The parsed string.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public static JsonList ofJsonOrCdl(String s) throws ParseException {
+		if (StringUtils.isEmpty(s))
+			return null;
+		if (! StringUtils.isJsonArray(s, true))
+			return new JsonList((Object[])StringUtils.split(s.trim(), ','));
+		return new JsonList(s);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	transient BeanSession session = null;
 	private transient ObjectRest objectRest;

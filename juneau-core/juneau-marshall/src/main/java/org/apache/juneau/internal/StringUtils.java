@@ -33,7 +33,6 @@ import java.util.zip.*;
 import javax.xml.bind.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.reflect.*;
@@ -125,9 +124,8 @@ public final class StringUtils {
 	 * 	</ul>
 	 * 	If <jk>null</jk> or <c>Number</c>, uses the best guess.
 	 * @return The parsed number, or <jk>null</jk> if the string was null.
-	 * @throws ParseException Malformed input encountered.
 	 */
-	public static Number parseNumber(String s, Class<? extends Number> type) throws ParseException {
+	public static Number parseNumber(String s, Class<? extends Number> type) {
 		if (s == null)
 			return null;
 		if (s.isEmpty())
@@ -213,9 +211,8 @@ public final class StringUtils {
 	 *
 	 * @param o The string to convert.
 	 * @return The first character of the string if the string is of length 0, or <jk>null</jk> if the string is <jk>null</jk> or empty.
-	 * @throws ParseException If string has a length greater than 1.
 	 */
-	public static Character parseCharacter(Object o) throws ParseException {
+	public static Character parseCharacter(Object o) {
 		if (o == null)
 			return null;
 		String s = o.toString();
@@ -223,7 +220,7 @@ public final class StringUtils {
 			return null;
 		if (s.length() == 1)
 			return s.charAt(0);
-		throw new ParseException("Invalid character: ''{0}''", s);
+		throw new RuntimeException("Invalid character: '"+s+"'");
 	}
 
 	/**
@@ -2430,24 +2427,6 @@ public final class StringUtils {
 			return true;
 		}
 		return false;
-	}
-
-	/**
-	 * Parses a string that can consist of either a JSON array or comma-delimited list.
-	 *
-	 * <p>
-	 * The type of string is auto-detected.
-	 *
-	 * @param s The string to parse.
-	 * @return The parsed string.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public static JsonList parseListOrCdl(String s) throws ParseException {
-		if (isEmpty(s))
-			return null;
-		if (! isJsonArray(s, true))
-			return new JsonList((Object[])StringUtils.split(s.trim(), ','));
-		return new JsonList(s);
 	}
 
 	/**

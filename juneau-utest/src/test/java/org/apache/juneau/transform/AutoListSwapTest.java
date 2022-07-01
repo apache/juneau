@@ -33,7 +33,7 @@ import org.junit.*;
 public class AutoListSwapTest {
 
 	private static final List<String> STRINGLIST = list("foo");
-	private static final JsonList JSONLIST = JsonList.of("foo");
+	private static final JsonList JSONLIST = JsonList.ofJsonOrCdl("foo");
 
 	private static ObjectSwap find(Class<?> c) {
 		return AutoListSwap.find(BeanContext.DEFAULT, ClassInfo.of(c));

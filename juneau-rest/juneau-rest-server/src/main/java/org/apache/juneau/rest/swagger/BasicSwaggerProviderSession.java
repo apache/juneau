@@ -690,7 +690,7 @@ public class BasicSwaggerProviderSession {
 			if (s.isEmpty())
 				return null;
 			s = resolve(s);
-			return StringUtils.parseListOrCdl(s);
+			return JsonList.ofJsonOrCdl(s);
 		} catch (ParseException e) {
 			throw new SwaggerException(e, "Malformed swagger JSON array encountered in "+location+".", locationArgs);
 		}
