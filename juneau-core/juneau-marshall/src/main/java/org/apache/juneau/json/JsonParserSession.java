@@ -396,7 +396,7 @@ public final class JsonParserSession extends ReaderParserSession {
 		int c = r.peek();
 		if (c == '\'' || c == '"')
 			return parseNumber(r, parseString(r), type);
-		return parseNumber(r, parseNumberString(r), type);
+		return parseNumber(r, r.parseNumberString(), type);
 	}
 
 	private Number parseNumber(ParserReader r, String s, Class<? extends Number> type) throws ParseException {

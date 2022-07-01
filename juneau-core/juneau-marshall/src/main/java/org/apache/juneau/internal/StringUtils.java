@@ -33,7 +33,6 @@ import java.util.zip.*;
 import javax.xml.bind.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.reflect.*;
 
@@ -81,28 +80,6 @@ public final class StringUtils {
 	static {
 		for (int i = 0; i < 64; i++)
 			base64m2[base64m1[i]] = (byte)i;
-	}
-
-	/**
-	 * Reads a numeric string from the specified reader.
-	 *
-	 * @param r The reader to read form.
-	 * @return The parsed number string.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public static String parseNumberString(ParserReader r) throws IOException {
-		r.mark();
-		int c = 0;
-		while (true) {
-			c = r.read();
-			if (c == -1)
-				break;
-			if (! numberChars.contains((char)c)) {
-				r.unread();
-				break;
-			}
-		}
-		return r.getMarked();
 	}
 
 	/**
@@ -2857,5 +2834,15 @@ public final class StringUtils {
 		if (o instanceof Collection)
 			return join((Collection<?>)o, ", ");
 		return o.toString();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified character is a valid number character.
+	 *
+	 * @param c The character to check.
+	 * @return <jk>true</jk> if the specified character is a valid number character.
+	 */
+	public static boolean isNumberChar(char c) {
+		return numberChars.contains(c);
 	}
 }

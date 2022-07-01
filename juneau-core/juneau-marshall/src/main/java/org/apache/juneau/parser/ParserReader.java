@@ -396,6 +396,26 @@ public class ParserReader extends Reader implements Positionable {
 	public final ParserReader replace(char c) throws IOException {
 		return replace(c, 1);
 	}
+	/**
+	 * Reads a numeric string from the specified reader.
+	 *
+	 * @return The parsed number string.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public String parseNumberString() throws IOException {
+		mark();
+		int c = 0;
+		while (true) {
+			c = read();
+			if (c == -1)
+				break;
+			if (! StringUtils.isNumberChar((char)c)) {
+				unread();
+				break;
+			}
+		}
+		return getMarked();
+	}
 
 	/**
 	 * Subclasses can override this method to provide additional filtering.
