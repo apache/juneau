@@ -28,12 +28,10 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.regex.*;
+import java.util.stream.*;
 import java.util.zip.*;
 
 import javax.xml.bind.*;
-
-import org.apache.juneau.*;
-import org.apache.juneau.reflect.*;
 
 /**
  * Reusable string utility methods.
@@ -844,7 +842,7 @@ public final class StringUtils {
 		if (state == S4)
 			l.add(s.substring(mark));
 		else if (state == S2 || state == S3)
-			throw new BasicRuntimeException("Unmatched string quotes: {0}", s);
+			throw new RuntimeException("Unmatched string quotes: "+s);
 		return l.toArray(new String[l.size()]);
 	}
 
@@ -2274,15 +2272,23 @@ public final class StringUtils {
 	private static String convertToReadable(Object o) {
 		if (o == null)
 			return null;
-		if (o instanceof ClassMeta)
-			return ((ClassMeta<?>)o).getFullName();
 		if (o instanceof Class)
 			return ((Class<?>)o).getName();
 		if (o instanceof Method)
-			return MethodInfo.of((Method)o).getShortName();
+			return Method.class.cast(o).getName();
 		if (o.getClass().isArray())
-			o = ArrayUtils.toObjectList(o);
+			return arrayAsList(o).stream().map(x -> convertToReadable(x)).collect(Collectors.joining(", ", "[", "]"));
 		return o.toString();
+	}
+
+	private static List<Object> arrayAsList(Object array) {
+		if (array.getClass().getComponentType().isPrimitive()) {
+			List<Object> l = new ArrayList<>(Array.getLength(array));
+			for (int i = 0; i < Array.getLength(array); i++)
+				l.add(Array.get(array, i));
+			return l;
+		}
+		return Arrays.asList((Object[])array);
 	}
 
 	/**
