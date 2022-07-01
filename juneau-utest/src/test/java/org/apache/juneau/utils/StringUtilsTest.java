@@ -22,7 +22,6 @@ import java.util.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.testutils.*;
 import org.junit.*;
@@ -245,11 +244,11 @@ public class StringUtilsTest {
 
 		s = String.valueOf("214748364x");
 		assertFalse(isNumeric(s));
-		assertThrown(()->parseNumber(String.valueOf("214748364x"), Number.class)).isType(ParseException.class);
+		assertThrown(()->parseNumber(String.valueOf("214748364x"), Number.class)).isType(NumberFormatException.class);
 
 		s = String.valueOf("2147483640x");
 		assertFalse(isNumeric(s));
-		assertThrown(()->parseNumber(String.valueOf("2147483640x"), Long.class)).isType(ParseException.class);
+		assertThrown(()->parseNumber(String.valueOf("2147483640x"), Long.class)).isType(NumberFormatException.class);
 	}
 
 	//====================================================================================================

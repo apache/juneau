@@ -33,7 +33,6 @@ import java.util.zip.*;
 import javax.xml.bind.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -110,73 +109,69 @@ public final class StringUtils {
 		if (type == null)
 			type = Number.class;
 
-		try {
-			// Determine the data type if it wasn't specified.
-			boolean isAutoDetect = (type == Number.class);
-			boolean isDecimal = false;
-			if (isAutoDetect) {
-				// If we're auto-detecting, then we use either an Integer, Long, or Double depending on how
-				// long the string is.
-				// An integer range is -2,147,483,648 to 2,147,483,647
-				// An long range is -9,223,372,036,854,775,808 to +9,223,372,036,854,775,807
-				isDecimal = isDecimal(s);
-				if (isDecimal) {
-					if (s.length() > 20)
-						type = Double.class;
-					else if (s.length() >= 10)
-						type = Long.class;
-					else
-						type = Integer.class;
-				}
-				else if (isFloat(s))
+		// Determine the data type if it wasn't specified.
+		boolean isAutoDetect = (type == Number.class);
+		boolean isDecimal = false;
+		if (isAutoDetect) {
+			// If we're auto-detecting, then we use either an Integer, Long, or Double depending on how
+			// long the string is.
+			// An integer range is -2,147,483,648 to 2,147,483,647
+			// An long range is -9,223,372,036,854,775,808 to +9,223,372,036,854,775,807
+			isDecimal = isDecimal(s);
+			if (isDecimal) {
+				if (s.length() > 20)
 					type = Double.class;
+				else if (s.length() >= 10)
+					type = Long.class;
 				else
-					throw new NumberFormatException(s);
+					type = Integer.class;
 			}
-
-			if (type == Double.class || type == Double.TYPE) {
-				Double d = Double.valueOf(s);
-				Float f = Float.valueOf(s);
-				if (isAutoDetect && (!isDecimal) && d.toString().equals(f.toString()))
-					return f;
-				return d;
-			}
-			if (type == Float.class || type == Float.TYPE)
-				return Float.valueOf(s);
-			if (type == BigDecimal.class)
-				return new BigDecimal(s);
-			if (type == Long.class || type == Long.TYPE || type == AtomicLong.class) {
-				try {
-					Long l = Long.decode(s);
-					if (type == AtomicLong.class)
-						return new AtomicLong(l);
-					if (isAutoDetect && l >= Integer.MIN_VALUE && l <= Integer.MAX_VALUE) {
-						// This occurs if the string is 10 characters long but is still a valid integer value.
-						return l.intValue();
-					}
-					return l;
-				} catch (NumberFormatException e) {
-					if (isAutoDetect) {
-						// This occurs if the string is 20 characters long but still falls outside the range of a valid long.
-						return Double.valueOf(s);
-					}
-					throw e;
-				}
-			}
-			if (type == Integer.class || type == Integer.TYPE)
-				return Integer.decode(s);
-			if (type == Short.class || type == Short.TYPE)
-				return Short.decode(s);
-			if (type == Byte.class || type == Byte.TYPE)
-				return Byte.decode(s);
-			if (type == BigInteger.class)
-				return new BigInteger(s);
-			if (type == AtomicInteger.class)
-				return new AtomicInteger(Integer.decode(s));
-			throw new ParseException("Unsupported Number type: {0}", type.getName());
-		} catch (NumberFormatException e) {
-			throw new ParseException(e, "Invalid number: ''{0}'', class=''{1}''", s, type.getSimpleName());
+			else if (isFloat(s))
+				type = Double.class;
+			else
+				throw new NumberFormatException(s);
 		}
+
+		if (type == Double.class || type == Double.TYPE) {
+			Double d = Double.valueOf(s);
+			Float f = Float.valueOf(s);
+			if (isAutoDetect && (!isDecimal) && d.toString().equals(f.toString()))
+				return f;
+			return d;
+		}
+		if (type == Float.class || type == Float.TYPE)
+			return Float.valueOf(s);
+		if (type == BigDecimal.class)
+			return new BigDecimal(s);
+		if (type == Long.class || type == Long.TYPE || type == AtomicLong.class) {
+			try {
+				Long l = Long.decode(s);
+				if (type == AtomicLong.class)
+					return new AtomicLong(l);
+				if (isAutoDetect && l >= Integer.MIN_VALUE && l <= Integer.MAX_VALUE) {
+					// This occurs if the string is 10 characters long but is still a valid integer value.
+					return l.intValue();
+				}
+				return l;
+			} catch (NumberFormatException e) {
+				if (isAutoDetect) {
+					// This occurs if the string is 20 characters long but still falls outside the range of a valid long.
+					return Double.valueOf(s);
+				}
+				throw e;
+			}
+		}
+		if (type == Integer.class || type == Integer.TYPE)
+			return Integer.decode(s);
+		if (type == Short.class || type == Short.TYPE)
+			return Short.decode(s);
+		if (type == Byte.class || type == Byte.TYPE)
+			return Byte.decode(s);
+		if (type == BigInteger.class)
+			return new BigInteger(s);
+		if (type == AtomicInteger.class)
+			return new AtomicInteger(Integer.decode(s));
+		throw new NumberFormatException("Unsupported Number type: "+type.getName());
 	}
 
 	private static final Pattern fpRegex = Pattern.compile(

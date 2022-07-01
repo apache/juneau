@@ -66,7 +66,7 @@ public class JsonParserEdgeCasesTest {
 			{ 30, "n_array_inner_array_no_comma", "[3[4]]", "Expected ',' or ']'" },
 			{ 31, "n_array_items_separated_by_semicolon", "[1:2]", "Expected ',' or ']'" },
 			{ 32, "n_array_just_comma", "[,]", null },
-			{ 33, "n_array_just_minus", "[-]", "Invalid number" },
+			{ 33, "n_array_just_minus", "[-]", "NumberFormatException" },
 			{ 34, "n_array_missing_value", "[   , \"\"]", "Missing value detected" },
 			{ 35, "n_array_number_and_comma", "[1,]", "Unexpected trailing comma in array" },
 			{ 36, "n_array_number_and_several_commas", "[1,,]", null },
@@ -81,47 +81,47 @@ public class JsonParserEdgeCasesTest {
 			{ 45, "n_number_+1", "[+1]", "Unrecognized syntax" },
 			{ 46, "n_number_+Inf", "[+Inf]", "Unrecognized syntax" },
 			{ 47, "n_number_-01", "[-01]", "Invalid JSON number" },
-			{ 48, "n_number_-1.0.", "[-1.0.]", "Invalid number" },
+			{ 48, "n_number_-1.0.", "[-1.0.]", "NumberFormatException" },
 			{ 49, "n_number_-2.", "[-2.]", "Invalid JSON number" },
 			{ 50, "n_number_-NaN", "[-NaN]", null },
-			{ 51, "n_number_.-1", "[.-1]", "Invalid" },
+			{ 51, "n_number_.-1", "[.-1]", null },
 			{ 52, "n_number_.2e-3", "[.2e-3]", "Invalid JSON number" },
-			{ 53, "n_number_0.1.2", "[0.1.2]", "Invalid number" },
-			{ 54, "n_number_0.3e+", "[0.3e+]", "Invalid number" },
-			{ 55, "n_number_0.3e", "[0.3e]", "Invalid number" },
+			{ 53, "n_number_0.1.2", "[0.1.2]", "NumberFormatException" },
+			{ 54, "n_number_0.3e+", "[0.3e+]", "NumberFormatException" },
+			{ 55, "n_number_0.3e", "[0.3e]", "NumberFormatException" },
 			{ 56, "n_number_0.e1", "[0.e1]", "Invalid JSON number" },
-			{ 57, "n_number_0_capital_E+", "[0E+]", "Invalid number" },
-			{ 58, "n_number_0_capital_E", "[0E]", "Invalid number" },
-			{ 59, "n_number_0e+", "[0e+]", "Invalid number" },
-			{ 60, "n_number_0e", "[0e]", "Invalid number" },
-			{ 61, "n_number_1.0e+", "[1.0e+]", "Invalid number" },
-			{ 62, "n_number_1.0e-", "[1.0e-]", "Invalid number" },
-			{ 63, "n_number_1.0e", "[1.0e]", "Invalid number" },
+			{ 57, "n_number_0_capital_E+", "[0E+]", "NumberFormatException" },
+			{ 58, "n_number_0_capital_E", "[0E]", "NumberFormatException" },
+			{ 59, "n_number_0e+", "[0e+]", "NumberFormatException" },
+			{ 60, "n_number_0e", "[0e]", "NumberFormatException" },
+			{ 61, "n_number_1.0e+", "[1.0e+]", "NumberFormatException" },
+			{ 62, "n_number_1.0e-", "[1.0e-]", "NumberFormatException" },
+			{ 63, "n_number_1.0e", "[1.0e]", "NumberFormatException" },
 			{ 64, "n_number_1_000", "[1 000.0]", "Expected ',' or ']'" },
-			{ 65, "n_number_1eE2", "[1eE2]", "Invalid number" },
+			{ 65, "n_number_1eE2", "[1eE2]", "NumberFormatException" },
 			{ 66, "n_number_2.e+3", "[2.e+3]", "Invalid JSON number" },
 			{ 67, "n_number_2.e-3", "[2.e-3]", "Invalid JSON number" },
 			{ 68, "n_number_2.e3", "[2.e3]", "Invalid JSON number" },
 			{ 69, "n_number_9.e+", "[9.e+]", null },
-			{ 70, "n_number_expression", "[1+2]", "Invalid number" },
+			{ 70, "n_number_expression", "[1+2]", "NumberFormatException" },
 			{ 71, "n_number_hex_1_digit", "[0x1]", "Invalid JSON number" },
 			{ 72, "n_number_hex_2_digits", "[0x42]", "Invalid JSON number" },
 			{ 73, "n_number_Inf", "[Inf]", "Unrecognized syntax" },
 			{ 74, "n_number_infinity", "[Infinity]", "Unrecognized syntax" },
-			{ 75, "n_number_invalid+-", "[0e+-1]", "Invalid number" },
+			{ 75, "n_number_invalid+-", "[0e+-1]", "NumberFormatException" },
 			{ 76, "n_number_invalid-negative-real", "[-123.123foo]", "Expected ',' or ']'" },
 			{ 77, "n_number_minus_infinity", "[-Infinity]", null },
-			{ 78, "n_number_minus_sign_with_trailing_garbage", "[-foo]", "Invalid number" },
+			{ 78, "n_number_minus_sign_with_trailing_garbage", "[-foo]", "NumberFormatException" },
 			{ 79, "n_number_minus_space_1", "[- 1]", null },
 			{ 80, "n_number_NaN", "[NaN]", "Unrecognized syntax" },
 			{ 81, "n_number_neg_int_starting_with_zero", "[-012]", "Invalid JSON number" },
 			{ 82, "n_number_neg_real_without_int_part", "[-.123]", "Invalid JSON number" },
-			{ 83, "n_number_neg_with_garbage_at_end", "[-1x]", "Invalid number" },
-			{ 84, "n_number_real_garbage_after_e", "[1ea]", "Invalid number" },
+			{ 83, "n_number_neg_with_garbage_at_end", "[-1x]", "NumberFormatException" },
+			{ 84, "n_number_real_garbage_after_e", "[1ea]", "NumberFormatException" },
 			{ 85, "n_number_real_without_fractional_part", "[1.]", "Invalid" },
 			{ 86, "n_number_starting_with_dot", "[.123]", "Invalid JSON number" },
 			{ 87, "n_number_U+FF11_fullwidth_digit_one", "[１]", "Unrecognized syntax" },
-			{ 88, "n_number_with_alpha", "[1.2a-3]", "Invalid number" },
+			{ 88, "n_number_with_alpha", "[1.2a-3]", "NumberFormatException" },
 			{ 89, "n_number_with_alpha_char", "[1.8011670033376514H-308]", "Expected ',' or ']'" },
 			{ 90, "n_number_with_leading_zero", "[012]", "Invalid JSON number" },
 			{ 91, "n_object_bad_value", "[\"x\", truth]", "Unrecognized syntax" },
@@ -500,7 +500,7 @@ public class JsonParserEdgeCasesTest {
 		errors.put(/*29*/ "n_array_incomplete_invalid_value", "Unrecognized syntax");
 		errors.put(/*30*/ "n_array_inner_array_no_comma", "Expected ',' or ']'");
 		errors.put(/*31*/ "n_array_items_separated_by_semicolon", "Expected ',' or ']'");
-		errors.put(/*33*/ "n_array_just_minus", "Invalid number");
+		errors.put(/*33*/ "n_array_just_minus", "NumberFormatException");
 		errors.put(/*34*/ "n_array_missing_value", "Missing value detected");
 		errors.put(/*35*/ "n_array_number_and_comma", "Unexpected trailing comma in array");
 		errors.put(/*37*/ "n_array_star_inside", "Unrecognized syntax");
@@ -514,43 +514,43 @@ public class JsonParserEdgeCasesTest {
 		errors.put(/*45*/ "n_number_+1", "Unrecognized syntax");
 		errors.put(/*46*/ "n_number_+Inf", "Unrecognized syntax");
 		errors.put(/*47*/ "n_number_-01", "Invalid JSON number");
-		errors.put(/*48*/ "n_number_-1.0.", "Invalid number");
+		errors.put(/*48*/ "n_number_-1.0.", "NumberFormatException");
 		errors.put(/*49*/ "n_number_-2.", "Invalid JSON number");
 		errors.put(/*51*/ "n_number_.-1", "Invalid");
 		errors.put(/*52*/ "n_number_.2e-3", "Invalid JSON number");
-		errors.put(/*53*/ "n_number_0.1.2", "Invalid number");
-		errors.put(/*54*/ "n_number_0.3e+", "Invalid number");
-		errors.put(/*55*/ "n_number_0.3e", "Invalid number");
+		errors.put(/*53*/ "n_number_0.1.2", "NumberFormatException");
+		errors.put(/*54*/ "n_number_0.3e+", "NumberFormatException");
+		errors.put(/*55*/ "n_number_0.3e", "NumberFormatException");
 		errors.put(/*56*/ "n_number_0.e1", "Invalid JSON number");
-		errors.put(/*57*/ "n_number_0_capital_E+", "Invalid number");
-		errors.put(/*58*/ "n_number_0_capital_E", "Invalid number");
-		errors.put(/*59*/ "n_number_0e+", "Invalid number");
-		errors.put(/*60*/ "n_number_0e", "Invalid number");
-		errors.put(/*61*/ "n_number_1.0e+", "Invalid number");
-		errors.put(/*62*/ "n_number_1.0e-", "Invalid number");
-		errors.put(/*63*/ "n_number_1.0e", "Invalid number");
+		errors.put(/*57*/ "n_number_0_capital_E+", "NumberFormatException");
+		errors.put(/*58*/ "n_number_0_capital_E", "NumberFormatException");
+		errors.put(/*59*/ "n_number_0e+", "NumberFormatException");
+		errors.put(/*60*/ "n_number_0e", "NumberFormatException");
+		errors.put(/*61*/ "n_number_1.0e+", "NumberFormatException");
+		errors.put(/*62*/ "n_number_1.0e-", "NumberFormatException");
+		errors.put(/*63*/ "n_number_1.0e", "NumberFormatException");
 		errors.put(/*64*/ "n_number_1_000", "Expected ',' or ']'");
-		errors.put(/*65*/ "n_number_1eE2", "Invalid number");
+		errors.put(/*65*/ "n_number_1eE2", "NumberFormatException");
 		errors.put(/*66*/ "n_number_2.e+3", "Invalid JSON number");
 		errors.put(/*67*/ "n_number_2.e-3", "Invalid JSON number");
 		errors.put(/*68*/ "n_number_2.e3", "Invalid JSON number");
-		errors.put(/*70*/ "n_number_expression", "Invalid number");
+		errors.put(/*70*/ "n_number_expression", "NumberFormatException");
 		errors.put(/*71*/ "n_number_hex_1_digit", "Invalid JSON number");
 		errors.put(/*72*/ "n_number_hex_2_digits", "Invalid JSON number");
 		errors.put(/*73*/ "n_number_Inf", "Unrecognized syntax");
 		errors.put(/*74*/ "n_number_infinity", "Unrecognized syntax");
-		errors.put(/*75*/ "n_number_invalid+-", "Invalid number");
+		errors.put(/*75*/ "n_number_invalid+-", "NumberFormatException");
 		errors.put(/*76*/ "n_number_invalid-negative-real", "Expected ',' or ']'");
-		errors.put(/*78*/ "n_number_minus_sign_with_trailing_garbage", "Invalid number");
+		errors.put(/*78*/ "n_number_minus_sign_with_trailing_garbage", "NumberFormatException");
 		errors.put(/*80*/ "n_number_NaN", "Unrecognized syntax");
 		errors.put(/*81*/ "n_number_neg_int_starting_with_zero", "Invalid JSON number");
 		errors.put(/*82*/ "n_number_neg_real_without_int_part", "Invalid JSON number");
-		errors.put(/*83*/ "n_number_neg_with_garbage_at_end", "Invalid number");
-		errors.put(/*84*/ "n_number_real_garbage_after_e", "Invalid number");
+		errors.put(/*83*/ "n_number_neg_with_garbage_at_end", "NumberFormatException");
+		errors.put(/*84*/ "n_number_real_garbage_after_e", "NumberFormatException");
 		errors.put(/*85*/ "n_number_real_without_fractional_part", "Invalid");
 		errors.put(/*86*/ "n_number_starting_with_dot", "Invalid JSON number");
 		errors.put(/*87*/ "n_number_U+FF11_fullwidth_digit_one", "Unrecognized syntax");
-		errors.put(/*88*/ "n_number_with_alpha", "Invalid number");
+		errors.put(/*88*/ "n_number_with_alpha", "NumberFormatException");
 		errors.put(/*89*/ "n_number_with_alpha_char", "Expected ',' or ']'");
 		errors.put(/*90*/ "n_number_with_leading_zero", "Invalid JSON number");
 		errors.put(/*91*/ "n_object_bad_value", "Unrecognized syntax");

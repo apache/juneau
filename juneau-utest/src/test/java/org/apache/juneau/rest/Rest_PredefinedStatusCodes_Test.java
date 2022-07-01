@@ -131,7 +131,7 @@ public class Rest_PredefinedStatusCodes_Test {
 			.run()
 			.assertCode().is(400)
 			.assertContent().isContains(
-				"Invalid number"
+				"NumberFormatException"
 			);
 		b.put("/c?noTrace=true", "{f1:1}", APPLICATION_JSON)
 			.run()
