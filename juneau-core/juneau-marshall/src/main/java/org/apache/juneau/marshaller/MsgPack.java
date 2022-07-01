@@ -40,7 +40,7 @@ import org.apache.juneau.serializer.*;
  * </p>
  *
  * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.Marshalls}
+ * 	<li class='link'>{@doc jm.Marshallers}
  * 	<li class='extlink'>{@source}
  * </ul>
  */

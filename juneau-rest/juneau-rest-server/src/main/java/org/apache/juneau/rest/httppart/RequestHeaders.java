@@ -16,7 +16,6 @@ import static org.apache.juneau.internal.ArgUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
@@ -505,7 +504,7 @@ public class RequestHeaders {
 	 */
 	public <T> Optional<T> get(Class<T> type) {
 		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
-		String name = HttpParts.getName(HEADER, cm).orElseThrow(()->runtimeException("@Header(name) not found on class {0}", className(type)));
+		String name = HttpParts.getName(HEADER, cm).orElseThrow(()->new BasicRuntimeException("@Header(name) not found on class {0}", className(type)));
 		return get(name).as(type);
 	}
 

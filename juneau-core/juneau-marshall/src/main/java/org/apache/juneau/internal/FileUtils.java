@@ -19,6 +19,8 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.io.*;
 import java.nio.file.*;
 
+import org.apache.juneau.*;
+
 /**
  * File utilities.
  *
@@ -41,13 +43,13 @@ public class FileUtils {
 		if (f.exists()) {
 			if (clean) {
 				if (! delete(f))
-					throw runtimeException("Could not clean directory ''{0}''", f.getAbsolutePath());
+					throw new BasicRuntimeException("Could not clean directory ''{0}''", f.getAbsolutePath());
 			} else {
 				return f;
 			}
 		}
 		if (! f.mkdirs())
-			throw runtimeException("Could not create directory ''{0}''", f.getAbsolutePath());
+			throw new BasicRuntimeException("Could not create directory ''{0}''", f.getAbsolutePath());
 		return f;
 	}
 
@@ -94,9 +96,9 @@ public class FileUtils {
 			return;
 		try {
 			if (! f.createNewFile())
-				throw runtimeException("Could not create file ''{0}''", f.getAbsolutePath());
+				throw new BasicRuntimeException("Could not create file ''{0}''", f.getAbsolutePath());
 		} catch (IOException e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 
@@ -114,13 +116,13 @@ public class FileUtils {
 		if (lm == l)
 			l++;
 		if (! f.setLastModified(l))
-			throw runtimeException("Could not modify timestamp on file ''{0}''", f.getAbsolutePath());
+			throw new BasicRuntimeException("Could not modify timestamp on file ''{0}''", f.getAbsolutePath());
 
 		// Linux only gives 1s precision, so set the date 1s into the future.
 		if (lm == f.lastModified()) {
 			l += 1000;
 			if (! f.setLastModified(l))
-				throw runtimeException("Could not modify timestamp on file ''{0}''", f.getAbsolutePath());
+				throw new BasicRuntimeException("Could not modify timestamp on file ''{0}''", f.getAbsolutePath());
 		}
 	}
 

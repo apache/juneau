@@ -13,8 +13,6 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.ArgUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
 import java.util.NoSuchElementException;
 
 import org.apache.http.Header;
@@ -101,7 +99,7 @@ public class BasicHeaderIterator implements HeaderIterator {
 	 */
 	@Override /* HeaderIterator */
 	public void remove() {
-		throw unsupportedOperationException("Not supported.");
+		throw new UnsupportedOperationException("Not supported.");
 	}
 
 	private boolean eq(String s1, String s2) {

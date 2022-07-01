@@ -13,7 +13,6 @@
 package org.apache.juneau.parser;
 
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -190,7 +189,7 @@ public final class ParserPipe implements Closeable {
 				doClose = true;
 			}
 		} else {
-			throw ioException("Cannot convert object of type {0} to an InputStream.", className(input));
+			throw new IOException("Cannot convert object of type "+className(input)+" to an InputStream.");
 		}
 
 		return inputStream;
@@ -266,7 +265,7 @@ public final class ParserPipe implements Closeable {
 			}
 			doClose = true;
 		} else {
-			throw ioException("Cannot convert object of type {0} to an InputStream.", className(input));
+			throw new IOException("Cannot convert object of type "+className(input)+" to an InputStream.");
 		}
 
 		return reader;

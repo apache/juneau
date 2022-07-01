@@ -14,7 +14,6 @@ package org.apache.juneau.parser;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static java.util.stream.Collectors.*;
 
 import java.util.*;
@@ -184,7 +183,7 @@ public final class ParserSet {
 				Parser.Builder x = (Parser.Builder)o;
 				Parser.Builder x2 = x.copy();
 				if (ne(x.getClass(), x2.getClass()))
-					throw runtimeException("Copy method not implemented on class " + x.getClass().getName());
+					throw new BasicRuntimeException("Copy method not implemented on class {0}", x.getClass().getName());
 				x = x2;
 				if (bcBuilder != null)
 					x.beanContext(bcBuilder);
@@ -268,7 +267,7 @@ public final class ParserSet {
 				if (Parser.class.isAssignableFrom(v)) {
 					l.add(createBuilder(v));
 				} else if (! v.getSimpleName().equals("NoInherit")) {
-					throw runtimeException("Invalid type passed to ParserSet.Builder.add(): " + v.getName());
+					throw new BasicRuntimeException("Invalid type passed to ParserSet.Builder.add(): {0}", v.getName());
 				}
 			}
 			entries.addAll(0, l);
@@ -307,7 +306,7 @@ public final class ParserSet {
 				} else if (Parser.class.isAssignableFrom(v)) {
 					l.add(createBuilder(v));
 				} else {
-					throw runtimeException("Invalid type passed to ParserGrouup.Builder.set(): " + v.getName());
+					throw new BasicRuntimeException("Invalid type passed to ParserGrouup.Builder.set(): {0}", v.getName());
 				}
 			}
 			entries = l;

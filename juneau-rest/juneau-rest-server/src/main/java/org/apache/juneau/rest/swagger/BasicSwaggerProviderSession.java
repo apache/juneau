@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.swagger;
 
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.rest.httppart.RestPartType.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -1069,7 +1068,7 @@ public class BasicSwaggerProviderSession {
 		for (Header aa : a) {
 			String name = StringUtils.firstNonEmpty(aa.name(), aa.value());
 			if (isEmpty(name))
-				throw runtimeException("@Header used without name or value.");
+				throw new RuntimeException("@Header used without name or value.");
 			merge(om.getMap(name, true), aa.schema());
 		}
 		return om;

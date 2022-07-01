@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.uon;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
 import java.io.*;
 
 import org.apache.juneau.parser.*;
@@ -115,7 +113,7 @@ public final class UonReader extends ParserReader {
 
 				// 10xxxxxx
 				} else if (b0 < 192) {
-					throw ioException("Invalid hex value for first escape pattern in UTF-8 sequence:  {0}", b0);
+					throw new IOException("Invalid hex value for first escape pattern in UTF-8 sequence:  "+b0);
 
 				// 110xxxxx	10xxxxxx
 				// 11000000(192) - 11011111(223)
@@ -145,7 +143,7 @@ public final class UonReader extends ParserReader {
 					}
 
 				} else
-					throw ioException("Invalid hex value for first escape pattern in UTF-8 sequence:  {0}", b0);
+					throw new IOException("Invalid hex value for first escape pattern in UTF-8 sequence:  "+b0);
 
 				if (cx < 0x10000)
 					cbuf[off + i++] = (char)cx;
@@ -172,13 +170,13 @@ public final class UonReader extends ParserReader {
 	private int readHex() throws IOException {
 		int c = buff[iCurrent++];
 		if (c != '%')
-			throw ioException("Did not find expected '%' character in UTF-8 sequence.");
+			throw new IOException("Did not find expected '%' character in UTF-8 sequence.");
 		return readEncodedByte();
 	}
 
 	private int readEncodedByte() throws IOException {
 		if (iEnd <= iCurrent + 1)
-			throw ioException("Incomplete trailing escape pattern");
+			throw new IOException("Incomplete trailing escape pattern");
 		int h = buff[iCurrent++];
 		int l = buff[iCurrent++];
 		h = fromHexChar(h);
@@ -193,7 +191,7 @@ public final class UonReader extends ParserReader {
 			return 10 + c - 'a';
 		if (c >= 'A' && c <= 'F')
 			return 10 + c - 'A';
-		throw ioException("Invalid hex character ''{0}'' found in escape pattern.", c);
+		throw new IOException("Invalid hex character '"+c+"' found in escape pattern.");
 	}
 
 	@Override /* ParserReader */

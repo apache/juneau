@@ -396,7 +396,7 @@ public class FileStore extends ConfigStore {
 			if (watcher != null)
 				watcher.start();
 		} catch (Exception e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 
@@ -611,7 +611,7 @@ public class FileStore extends ConfigStore {
 						break;
 				}
 			} catch (Exception e) {
-				throw runtimeException(e);
+				throw asRuntimeException(e);
 			}
 		};
 
@@ -620,7 +620,7 @@ public class FileStore extends ConfigStore {
 			try {
 				watchService.close();
 			} catch (IOException e) {
-				throw runtimeException(e);
+				throw asRuntimeException(e);
 			} finally {
 				super.interrupt();
 			}

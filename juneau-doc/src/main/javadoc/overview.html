@@ -78,9 +78,9 @@
 	</ol>
 	<li><p class='toc2'><a class='doclink' href='#juneau-marshall'>juneau-marshall</a></p>
 	<ol>
-		<li><p><a class='doclink' href='#juneau-marshall.jm.BeanContexts'>Bean Contexts</a><span class='update'>updated: <b>9.0.0</b></span></p>
+		<li><p><a class='doclink' href='#juneau-marshall.jm.Marshallers'>Marshallers</a></p>
 		<li><p><a class='doclink' href='#juneau-marshall.jm.SerializersAndParsers'>Serializers and Parsers</a><span class='update'>updated: <b>9.0.0</b></span></p>
-		<li><p><a class='doclink' href='#juneau-marshall.jm.Marshalls'>Marshallers</a></p>
+		<li><p><a class='doclink' href='#juneau-marshall.jm.BeanContexts'>Bean Contexts</a><span class='update'>updated: <b>9.0.0</b></span></p>
 		<li><p><a class='doclink' href='#juneau-marshall.jm.JavaBeansSupport'>Java Beans Support</a><span class='update'>created: 8.2.0, updated: <b>9.0.0</b></span></p>
 		<ol>
 			<li><p><a class='doclink' href='#juneau-marshall.jm.JavaBeansSupport.jm.BeanAnnotation'>@Bean Annotation</a><span class='update'>updated: 8.2.0,<b>9.0.0</b></span></p>
@@ -820,7 +820,7 @@
 		For other objects, "transforms" allow you to perform various mutations on them before serialization and after parsing.
 	</p>
 	<p> 
-		{@doc jm.Swaps Object swaps} allow you to replace non-serializable objects with serializable equivalents.
+		{@doc jm.Swaps Swaps} allow you to replace non-serializable objects with serializable equivalents.
 		The {@link org.apache.juneau.swaps} package contains a variety of predefined swaps.
 	</p>
 	<p class='bjava'>
@@ -2027,34 +2027,102 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.BeanContexts' id='juneau-marshall.jm.BeanContexts'>2.1 - Bean Contexts</a><span class='update'>updated: <b>9.0.0</b></span></h3>
-<div class='topic'><!-- START: 2.1 - juneau-marshall.jm.BeanContexts -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.Marshallers' id='juneau-marshall.jm.Marshallers'>2.1 - Marshallers</a></h3>
+<div class='topic'><!-- START: 2.1 - juneau-marshall.jm.Marshallers -->
 <div class='topic'>
 	<p>
-		At the heart of the marshalling APIs is the {@link org.apache.juneau.BeanContext Bean Context} API that provides a common
-		framework for marshalling beans and POJOs across all serializers and parsers. 
-		All serializers and parsers (and their builders) extend from the bean context API classes.
+		{@link org.apache.juneau.marshaller.Marshaller Marshallers} are simple pairings of a {@link org.apache.juneau.serializer.Serializer}
+		and {@link org.apache.juneau.parser.Parser} with convenience methods for serializing and parsing POJOs.
 	</p>
-	<p>
-		One important feature of the bean context API is the ability to wrap Java beans inside maps to allow
-		properties to be accessed through a Map layer.  Although this is used internally by all the serializers and parsers,
-		it's often useful to use this feature by itself.
-	</p>
-	<h5 class='figure'>Example:</h5>
-	<p class='bjava'>
-	<jc>// Wrap a bean in a map and do some simple get/set calls.</jc>
-	BeanMap&lt;MyBean&gt; <jv>myBeanMap</jv> = BeanContext.<jsf>DEFAULT_SESSION</jsf>.toBeanMap(<jv>myBean</jv>);
-	<jv>myBeanMap</jv>.put(<js>"myProperty"</js>, 123);
-	<jk>int</jk> <jv>myProperty</jv> = <jv>myBeanMap</jv>.get(<js>"myProperty"</js>, <jk>int</jk>.<jk>class</jk>);
-	</p>
-	<p>
-		The bean context API provides many settings that fine-tune how POJOs should be handled during marshalling.
-	</p>
-	<ul class='seealso'>
-		<li class='jc'>{@link org.apache.juneau.BeanContext.Builder}
+	<ul class='javatree'>
+		<li class='jac'>{@link org.apache.juneau.marshaller.Marshaller}
+			<ul>
+				<li class='jm'><c>T</c>&nbsp;&nbsp;{@link org.apache.juneau.marshaller.Marshaller#read(Object,Class) read(Object,Class&lt;T&gt;)}
+			</ul>
+			<ul>
+				<li class='jac'>{@link org.apache.juneau.marshaller.CharMarshaller}
+					<ul>
+						<li class='jm'><c>String</c>&nbsp;&nbsp;{@link org.apache.juneau.marshaller.CharMarshaller#write(Object) write(Object)}
+						<ul class='javatreec'>
+							<li class='jc'>{@link org.apache.juneau.marshaller.Csv}
+							<li class='jc'>{@link org.apache.juneau.marshaller.Html}
+							<li class='jc'>{@link org.apache.juneau.marshaller.Json}
+							<li class='jc'>{@link org.apache.juneau.marshaller.OpenApi}
+							<li class='jc'>{@link org.apache.juneau.marshaller.PlainText}
+							<li class='jc'>{@link org.apache.juneau.marshaller.SimpleJson}
+							<li class='jc'>{@link org.apache.juneau.marshaller.Uon}
+							<li class='jc'>{@link org.apache.juneau.marshaller.UrlEncoding}
+							<li class='jc'>{@link org.apache.juneau.marshaller.Xml}
+							<li class='jc'>{@link org.apache.juneau.marshaller.N3}
+							<li class='jc'>{@link org.apache.juneau.marshaller.NTriple}
+							<li class='jc'>{@link org.apache.juneau.marshaller.RdfXml}
+							<li class='jc'>{@link org.apache.juneau.marshaller.RdfXmlAbbrev}
+							<li class='jc'>{@link org.apache.juneau.marshaller.Turtle}
+						</ul>
+					</ul>
+				<li class='jac'>{@link org.apache.juneau.marshaller.StreamMarshaller}
+					<ul>
+						<li class='jm'><c><jk>byte</jk>[]</c>&nbsp;&nbsp;{@link org.apache.juneau.marshaller.StreamMarshaller#write(Object) write(Object)}
+						<ul class='javatreec'>
+							<li class='jc'>{@link org.apache.juneau.marshaller.MsgPack}
+						</ul>
+					</ul>
+				</ul>
+			</ul>
+		</li>
 	</ul>
+	<h5 class='figure'>Examples:</h5>
+	<p class='bjava'>
+	<jc>// Using instance.</jc>
+	Json <jv>json</jv> = <jk>new</jk> Json();
+	MyPojo <jv>myPojo</jv> = <jv>json</jv>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
+	String <jv>string</jv> = <jv>json</jv>.write(<jv>myPojo</jv>);
+	</p>
+	<p class='bjava'>
+	<jc>// Using DEFAULT instance.</jc>
+	MyPojo <jv>myPojo</jv> = Json.<jsf>DEFAULT</jsf>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
+	String <jv>string</jv> = Json.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
+	</p>
+	<p>
+		Juneau comes with the following predefined marshallers:
+	</p>
+	<ul class='javatreec'>
+		<li class='jc'>{@link org.apache.juneau.marshaller.Csv}
+		<li class='jc'>{@link org.apache.juneau.marshaller.Html}
+		<li class='jc'>{@link org.apache.juneau.marshaller.Json}
+		<li class='jc'>{@link org.apache.juneau.marshaller.MsgPack}
+		<li class='jc'>{@link org.apache.juneau.marshaller.OpenApi}
+		<li class='jc'>{@link org.apache.juneau.marshaller.PlainText}
+		<li class='jc'>{@link org.apache.juneau.marshaller.SimpleJson}
+		<li class='jc'>{@link org.apache.juneau.marshaller.Uon}
+		<li class='jc'>{@link org.apache.juneau.marshaller.UrlEncoding}
+		<li class='jc'>{@link org.apache.juneau.marshaller.Xml}
+		<li class='jc'>{@link org.apache.juneau.marshaller.N3}
+		<li class='jc'>{@link org.apache.juneau.marshaller.NTriple}
+		<li class='jc'>{@link org.apache.juneau.marshaller.RdfXml}
+		<li class='jc'>{@link org.apache.juneau.marshaller.RdfXmlAbbrev}
+		<li class='jc'>{@link org.apache.juneau.marshaller.Turtle}
+	</ul>
+	<p>
+		Each predefined marshaller also includes static convenience from/to methods to make it even easier to
+		perform marshalling on POJOs:
+	</p>
+	<ul class='javatree'>
+		<li class='jac'>{@link org.apache.juneau.marshaller.Json}
+			<ul>
+				<li class='jm'><c>String</c>&nbsp;&nbsp;<i>{@link org.apache.juneau.marshaller.Json#of(Object) of(Object)}</i>
+				<li class='jm'><c>T</c>&nbsp;&nbsp;<i>{@link org.apache.juneau.marshaller.Json#to(Object,Class) to(Object,Class&lt;T&gt;)}</i>
+			</ul>
+		</li>
+	</ul>
+	<h5 class='figure'>Examples:</h5>
+	<p class='bjava'>
+	<jc>// Using shortcut static methods.</jc>
+	MyPojo <jv>myPojo</jv> = Json.<jsm>to</jsm>(<jv>jsonString</jv>, MyPojo.<jk>class</jk>);
+	String <jv>json</jv> = Json.<jsm>of</jsm>(<jv>myPojo</jv>);
+	</p>
 </div>
-</div><!-- END: 2.1 - juneau-marshall.jm.BeanContexts -->
+</div><!-- END: 2.1 - juneau-marshall.jm.Marshallers -->
 
 <!-- ==================================================================================================== -->
 
@@ -2229,50 +2297,34 @@
 
 <!-- ==================================================================================================== -->
 
-<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.Marshalls' id='juneau-marshall.jm.Marshalls'>2.3 - Marshallers</a></h3>
-<div class='topic'><!-- START: 2.3 - juneau-marshall.jm.Marshalls -->
+<h3 class='topic' onclick='toggle(this)'><a href='#juneau-marshall.jm.BeanContexts' id='juneau-marshall.jm.BeanContexts'>2.3 - Bean Contexts</a><span class='update'>updated: <b>9.0.0</b></span></h3>
+<div class='topic'><!-- START: 2.3 - juneau-marshall.jm.BeanContexts -->
 <div class='topic'>
 	<p>
-		{@link org.apache.juneau.marshaller.Marshaller Marshallers} are simple pairings of a {@link org.apache.juneau.serializer.Serializer}
-		and {@link org.apache.juneau.parser.Parser} with convenience methods for serializing and parsing POJOs.
-	</p>
-	<ul class='javatree'>
-		<li class='jac'>{@link org.apache.juneau.marshaller.Marshaller}
-			<ul class='javatreec'>
-				<li class='jm'>{@link org.apache.juneau.marshaller.Marshaller#read(Object,Class) read(Object,Class)}
-				<li class='jm'>{@link org.apache.juneau.marshaller.Marshaller#read(Object,Type,Type...) read(Object,Type,Type...)}
-				<li class='jm'>{@link org.apache.juneau.marshaller.Marshaller#write(Object,Object) write(Object,Object)}
-			</ul>
-		</li>
-	</ul>
-	<p>
-		Marshalls are often cleaner to use on-the-fly since they have simplified names.
+		At the heart of the marshalling APIs is the {@link org.apache.juneau.BeanContext Bean Context} API that provides a common
+		framework for marshalling beans and POJOs across all serializers and parsers. 
+		All serializers and parsers (and their builders) extend from the bean context API classes.
 	</p>
 	<p>
-		The following shows the {@link org.apache.juneau.marshaller.Json} marshaller in action:
+		One important feature of the bean context API is the ability to wrap Java beans inside maps to allow
+		properties to be accessed through a Map layer.  Although this is used internally by all the serializers and parsers,
+		it's often useful to use this feature by itself.
 	</p>
-	<h5 class='figure'>Examples:</h5>
+	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
-	<jc>// Using instance.</jc>
-	Json <jv>json</jv> = <jk>new</jk> Json();
-	MyPojo <jv>myPojo</jv> = <jv>json</jv>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
-	String <jv>string</jv> = <jv>json</jv>.write(<jv>myPojo</jv>);
+	<jc>// Wrap a bean in a map and do some simple get/set calls.</jc>
+	BeanMap&lt;MyBean&gt; <jv>myBeanMap</jv> = BeanContext.<jsf>DEFAULT_SESSION</jsf>.toBeanMap(<jv>myBean</jv>);
+	<jv>myBeanMap</jv>.put(<js>"myProperty"</js>, 123);
+	<jk>int</jk> <jv>myProperty</jv> = <jv>myBeanMap</jv>.get(<js>"myProperty"</js>, <jk>int</jk>.<jk>class</jk>);
 	</p>
-	<p class='bjava'>
-	<jc>// Using DEFAULT instance.</jc>
-	MyPojo <jv>myPojo</jv> = Json.<jsf>DEFAULT</jsf>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
-	String <jv>string</jv> = Json.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
-	</p>
-	<p class='bjava'>
-	<jc>// Using shortcut methods.</jc>
-	MyPojo <jv>myPojo</jv> = Json.<jsf>from</jsf>(<jv>string</jv>, MyPojo.<jk>class</jk>);
-	String <jv>string</jv> = Json.<jsf>to</jsf>(<jv>myPojo</jv>);
+	<p>
+		The bean context API provides many settings that fine-tune how POJOs should be handled during marshalling.
 	</p>
 	<ul class='seealso'>
-		<li class='doclink'>{@doc g.LanguageSupport Language Support} - Glossary of all supported languages.
+		<li class='jc'>{@link org.apache.juneau.BeanContext.Builder}
 	</ul>
 </div>
-</div><!-- END: 2.3 - juneau-marshall.jm.Marshalls -->
+</div><!-- END: 2.3 - juneau-marshall.jm.BeanContexts -->
 
 <!-- ==================================================================================================== -->
 

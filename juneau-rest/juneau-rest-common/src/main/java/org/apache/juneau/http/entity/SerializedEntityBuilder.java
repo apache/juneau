@@ -75,7 +75,7 @@ public class SerializedEntityBuilder<T extends SerializedEntity> extends HttpEnt
 		try {
 			return (T) implClass.getConstructor(SerializedEntityBuilder.class).newInstance(this);
 		} catch (Exception e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 

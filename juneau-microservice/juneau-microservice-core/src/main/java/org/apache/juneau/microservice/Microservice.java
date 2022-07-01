@@ -16,8 +16,6 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
 import java.io.*;
 import java.io.Console;
 import java.net.*;
@@ -277,7 +275,7 @@ public class Microservice implements ConfigEventListener {
 			else if (value instanceof Class)
 				this.manifest = new ManifestFile((Class<?>)value);
 			else
-				throw runtimeException("Invalid type passed to Builder.manifest(Object).  Type=[{0}]", className(value));
+				throw new BasicRuntimeException("Invalid type passed to Builder.manifest(Object).  Type=[{0}]", className(value));
 
 			return this;
 		}
@@ -566,7 +564,7 @@ public class Microservice implements ConfigEventListener {
 				try (FileInputStream fis = new FileInputStream(f)) {
 					m.read(fis);
 				} catch (IOException e) {
-					throw ioException(e, "Problem detected in MANIFEST.MF.  Contents below:\n{0}", read(f));
+					throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n"+read(f), e);
 				}
 			} else {
 				// Otherwise, read from manifest file in the jar file containing the main class.
@@ -575,7 +573,7 @@ public class Microservice implements ConfigEventListener {
 					try {
 						m.read(url.openStream());
 					} catch (IOException e) {
-						throw ioException(e, "Problem detected in MANIFEST.MF.  Contents below:\n{0}", read(url.openStream()));
+						throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n"+read(url.openStream()), e);
 					}
 				}
 			}

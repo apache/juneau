@@ -201,7 +201,7 @@ public class JettyMicroservice extends Microservice {
 			else if (jettyXml instanceof Reader)
 				this.jettyXml = read((Reader)jettyXml);
 			else
-				throw runtimeException("Invalid object type passed to jettyXml(Object)", className(jettyXml));
+				throw new BasicRuntimeException("Invalid object type passed to jettyXml(Object): {0}", className(jettyXml));
 			this.jettyXmlResolveVars = resolveVars;
 			return this;
 		}
@@ -556,7 +556,7 @@ public class JettyMicroservice extends Microservice {
 		for (Connector c : getServer().getConnectors())
 			if (c instanceof ServerConnector)
 				return ((ServerConnector)c).getPort();
-		throw runtimeException("Could not locate ServerConnector in Jetty server.");
+		throw new RuntimeException("Could not locate ServerConnector in Jetty server.");
 	}
 
 	/**
@@ -576,7 +576,7 @@ public class JettyMicroservice extends Microservice {
 			if (h instanceof ServletContextHandler)
 				return ((ServletContextHandler)h).getContextPath();
 		}
-		throw runtimeException("Could not locate ServletContextHandler in Jetty server.");
+		throw new RuntimeException("Could not locate ServletContextHandler in Jetty server.");
 	}
 
 	/**
@@ -622,7 +622,7 @@ public class JettyMicroservice extends Microservice {
 		try {
 			return new URI(getProtocol(), null, getHostName(), getPort(), "/".equals(cp) ? null : cp, null, null);
 		} catch (URISyntaxException e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 
@@ -679,7 +679,7 @@ public class JettyMicroservice extends Microservice {
 		if (jettyXml == null)
 			jettyXml = IOUtils.loadSystemResourceAsString("jetty.xml", ".", "files");
 		if (jettyXml == null)
-			throw runtimeException("jetty.xml file ''{0}'' was not found on the file system or classpath.", jettyConfig);
+			throw new BasicRuntimeException("jetty.xml file ''{0}'' was not found on the file system or classpath.", jettyConfig);
 
 		if (resolveVars)
 			jettyXml = vr.resolve(jettyXml);
@@ -699,7 +699,7 @@ public class JettyMicroservice extends Microservice {
 					RestServlet rs = (RestServlet)c.newInstance();
 					addServlet(rs, rs.getPath());
 				} else {
-					throw runtimeException("Invalid servlet specified in Jetty/servlets.  Must be a subclass of RestServlet.", s);
+					throw new BasicRuntimeException("Invalid servlet specified in Jetty/servlets.  Must be a subclass of RestServlet: {0}", s);
 				}
 			} catch (ClassNotFoundException e1) {
 				throw new ExecutableException(e1);
@@ -713,7 +713,7 @@ public class JettyMicroservice extends Microservice {
 					Servlet rs = (Servlet)c.newInstance();
 					addServlet(rs, k);
 				} else {
-					throw runtimeException("Invalid servlet specified in Jetty/servletMap.  Must be a subclass of Servlet.", v);
+					throw new BasicRuntimeException("Invalid servlet specified in Jetty/servletMap.  Must be a subclass of Servlet: {0}", v);
 				}
 			} catch (ClassNotFoundException e1) {
 				throw new ExecutableException(e1);
@@ -771,7 +771,7 @@ public class JettyMicroservice extends Microservice {
 			if (sch != null)
 				return sch;
 		}
-		throw runtimeException("Servlet context handler not found in jetty server.");
+		throw new RuntimeException("Servlet context handler not found in jetty server.");
 	}
 
 	/**
@@ -794,7 +794,7 @@ public class JettyMicroservice extends Microservice {
 	 */
 	public Server getServer() {
 		if (server == null)
-			throw runtimeException("Server not found.  createServer() must be called first.");
+			throw new RuntimeException("Server not found.  createServer() must be called first.");
 		return server;
 	}
 

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.collections;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
@@ -130,12 +129,12 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 
 		@Override /* Map */
 		public Object put(String key, Object value) {
-			throw unsupportedOperationException("Not supported on read-only object.");
+			throw new UnsupportedOperationException("Not supported on read-only object.");
 		}
 
 		@Override /* Map */
 		public Object remove(Object key) {
-			throw unsupportedOperationException("Not supported on read-only object.");
+			throw new UnsupportedOperationException("Not supported on read-only object.");
 		}
 
 		@Override /* Map */
@@ -374,7 +373,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 	 */
 	public JsonMap(Object... keyValuePairs) {
 		if (keyValuePairs.length % 2 != 0)
-			throw runtimeException("Odd number of parameters passed into JsonMap(Object...)");
+			throw new RuntimeException("Odd number of parameters passed into JsonMap(Object...)");
 		for (int i = 0; i < keyValuePairs.length; i+=2)
 			put(stringify(keyValuePairs[i]), keyValuePairs[i+1]);
 	}
@@ -1791,12 +1790,12 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 
 		@Override
 		public final Object put(String key, Object val) {
-			throw unsupportedOperationException("Not supported on read-only object.");
+			throw new UnsupportedOperationException("Not supported on read-only object.");
 		}
 
 		@Override
 		public final Object remove(Object key) {
-			throw unsupportedOperationException("Not supported on read-only object.");
+			throw new UnsupportedOperationException("Not supported on read-only object.");
 		}
 
 		@Override
@@ -1880,7 +1879,7 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 
 					@Override /* Iterator */
 					public void remove() {
-						throw unsupportedOperationException("Not supported on read-only object.");
+						throw new UnsupportedOperationException("Not supported on read-only object.");
 					}
 				};
 			}

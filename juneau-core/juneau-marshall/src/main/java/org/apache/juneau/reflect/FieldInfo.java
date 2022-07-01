@@ -13,8 +13,6 @@
 package org.apache.juneau.reflect;
 
 import static org.apache.juneau.internal.ConsumerUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
 import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.util.function.*;
@@ -217,7 +215,7 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 						return false;
 					break;
 				default:
-					throw runtimeException("Invalid flag for field: {0}", f);
+					throw new BasicRuntimeException("Invalid flag for field: {0}", f);
 			}
 		}
 		return true;
@@ -265,7 +263,7 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 						return true;
 					break;
 				default:
-					throw runtimeException("Invalid flag for field: {0}", f);
+					throw new BasicRuntimeException("Invalid flag for field: {0}", f);
 			}
 		}
 		return false;

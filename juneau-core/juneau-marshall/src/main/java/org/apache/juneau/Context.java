@@ -112,14 +112,14 @@ public abstract class Context implements AnnotationProvider {
 					}
 				}
 				if (mi == null)
-					throw runtimeException("Could not find builder create method on class {0}", type);
+					throw new BasicRuntimeException("Could not find builder create method on class {0}", type);
 				BUILDER_CREATE_METHODS.put(type, mi);
 			}
 			Builder b = (Builder)mi.invoke(null);
 			b.type(type);
 			return b;
 		} catch (ExecutableException e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 
@@ -186,7 +186,7 @@ public abstract class Context implements AnnotationProvider {
 
 		private Context innerBuild() {
 			if (type == null)
-				throw runtimeException("Type not specified for context builder {0}", getClass().getName());
+				throw new BasicRuntimeException("Type not specified for context builder {0}", getClass().getName());
 			if (impl != null && type.isInstance(impl))
 				return type.cast(impl);
 			if (cache != null)
@@ -202,7 +202,7 @@ public abstract class Context implements AnnotationProvider {
 					&& x.getParam(0).canAccept(this)
 				);
 				if (cci == null)
-					throw runtimeException("Public constructor not found: {0}({1})", className(type), className(this));
+					throw new BasicRuntimeException("Public constructor not found: {0}({1})", className(type), className(this));
 				CONTEXT_CONSTRUCTORS.put(type, cci);
 			}
 			return cci;
@@ -888,7 +888,7 @@ public abstract class Context implements AnnotationProvider {
 	 * @return A new Builder object.
 	 */
 	public Builder copy() {
-		throw unsupportedOperationException("Not implemented.");
+		throw new UnsupportedOperationException("Not implemented.");
 	}
 
 	/**
@@ -901,7 +901,7 @@ public abstract class Context implements AnnotationProvider {
 	 * @return A new session builder.
 	 */
 	public ContextSession.Builder createSession() {
-		throw unsupportedOperationException("Not implemented.");
+		throw new UnsupportedOperationException("Not implemented.");
 	}
 
 	/**

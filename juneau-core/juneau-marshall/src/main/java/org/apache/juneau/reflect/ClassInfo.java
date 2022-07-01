@@ -1420,7 +1420,7 @@ public final class ClassInfo {
 						return false;
 					break;
 				default:
-					throw runtimeException("Invalid flag for class: {0}", f);
+					throw new BasicRuntimeException("Invalid flag for class: {0}", f);
 
 			}
 		}
@@ -1485,7 +1485,7 @@ public final class ClassInfo {
 						return true;
 					break;
 				default:
-					throw runtimeException("Invalid flag for class: {0}", f);
+					throw new BasicRuntimeException("Invalid flag for class: {0}", f);
 			}
 		}
 		return false;
@@ -2407,7 +2407,7 @@ public final class ClassInfo {
 		} else if (actualType instanceof ParameterizedType) {
 			return (Class<?>)((ParameterizedType)actualType).getRawType();
 		}
-		throw illegalArgumentException("Could not resolve variable ''{0}'' to a type.", actualType.getTypeName());
+		throw new IllegalArgumentException("Could not resolve variable '"+actualType.getTypeName()+"' to a type.");
 	}
 
 	private static boolean isInnerClass(GenericDeclaration od, GenericDeclaration id) {

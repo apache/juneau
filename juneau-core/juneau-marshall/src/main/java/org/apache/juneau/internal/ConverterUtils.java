@@ -221,7 +221,7 @@ public final class ConverterUtils {
 		try {
 			return StringUtils.parseNumber(o.toString(), null);
 		} catch (ParseException e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 }

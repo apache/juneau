@@ -229,7 +229,7 @@ public final class ListBuilder<E> {
 	 */
 	public ListBuilder<E> addAny(Object...values) {
 		if (elementType == null)
-			throw runtimeException("Unknown element type.  Cannot use this method.");
+			throw new RuntimeException("Unknown element type.  Cannot use this method.");
 		try {
 			if (values != null) {
 				for (Object o : values) {
@@ -250,7 +250,7 @@ public final class ListBuilder<E> {
 				}
 			}
 		} catch (ParseException e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 		return this;
 	}

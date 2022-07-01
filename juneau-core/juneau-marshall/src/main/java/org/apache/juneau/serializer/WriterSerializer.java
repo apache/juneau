@@ -1060,7 +1060,7 @@ public class WriterSerializer extends Serializer {
 		try {
 			return serialize(o);
 		} catch (Exception e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 

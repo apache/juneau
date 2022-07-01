@@ -242,7 +242,7 @@ public class ResponseContent implements HttpEntity {
 
 			return is;
 		} catch (UnsupportedOperationException | RestCallException e) {
-			throw ioException(e);
+			throw new IOException(e);
 		}
 	}
 
@@ -681,7 +681,7 @@ public class ResponseContent implements HttpEntity {
 				try {
 					return (T)ci.invoke(response);
 				} catch (ExecutableException e) {
-					throw runtimeException(e);
+					throw asRuntimeException(e);
 				}
 			}
 

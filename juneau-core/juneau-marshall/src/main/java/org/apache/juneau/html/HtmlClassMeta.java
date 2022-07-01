@@ -58,7 +58,7 @@ public class HtmlClassMeta extends ExtendedClassMeta {
 				try {
 					render.set(x.render().newInstance());
 				} catch (Exception e) {
-					throw runtimeException(e);
+					throw asRuntimeException(e);
 				}
 			}
 		};

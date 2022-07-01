@@ -85,7 +85,7 @@ public class UriContext {
 		try {
 			return new UriContext(s);
 		} catch (ParseException e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 

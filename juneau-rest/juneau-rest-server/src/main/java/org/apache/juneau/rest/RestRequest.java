@@ -1139,7 +1139,7 @@ public final class RestRequest {
 			return new URI(uri);
 		} catch (URISyntaxException e) {
 			// Shouldn't happen.
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 
@@ -1635,7 +1635,7 @@ public final class RestRequest {
 
 			});
 		} catch (Exception e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 

@@ -13,7 +13,6 @@
 package org.apache.juneau.http;
 
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.net.*;
@@ -2681,6 +2680,6 @@ public class HttpHeaders {
 			Map.Entry e = (Map.Entry)o;
 			return BasicHeader.of(stringify(e.getKey()), stringify(e.getValue()));
 		}
-		throw runtimeException("Object of type {0} could not be converted to a Header.", className(o));
+		throw new BasicRuntimeException("Object of type {0} could not be converted to a Header.", className(o));
 	}
 }

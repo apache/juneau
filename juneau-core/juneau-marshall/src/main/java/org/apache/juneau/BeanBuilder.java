@@ -13,8 +13,6 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
 import java.util.*;
 
 import org.apache.juneau.cp.*;
@@ -90,7 +88,7 @@ public class BeanBuilder<T> {
 	 */
 	protected BeanCreator<? extends T> creator() {
 		return beanStore
-			.createBean(type().orElseThrow(()->runtimeException("Type not specified.")))
+			.createBean(type().orElseThrow(()->new RuntimeException("Type not specified.")))
 			.builder(BeanBuilder.class, this);
 	}
 
@@ -101,7 +99,7 @@ public class BeanBuilder<T> {
 	 */
 	protected T buildDefault() {
 		return beanStore
-			.createBean(type().orElseThrow(()->runtimeException("Type not specified.")))
+			.createBean(type().orElseThrow(()->new RuntimeException("Type not specified.")))
 			.builder(BeanBuilder.class, this)
 			.run();
 	}

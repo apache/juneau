@@ -81,7 +81,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 		try {
 			return (T) implClass.getConstructor(HttpExceptionBuilder.class).newInstance(this);
 		} catch (Exception e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 

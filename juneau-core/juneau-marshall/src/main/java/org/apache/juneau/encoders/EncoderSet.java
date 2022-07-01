@@ -177,7 +177,7 @@ public final class EncoderSet {
 				if (Encoder.class.isAssignableFrom(v)) {
 					l.add(v);
 				} else if (! v.getSimpleName().equals("NoInherit")) {
-					throw illegalArgumentException("Invalid type passed to EncoderSet.Builder.add(): " + v.getName());
+					throw new IllegalArgumentException("Invalid type passed to EncoderSet.Builder.add(): " + v.getName());
 				}
 			}
 			entries.addAll(0, l);
@@ -206,7 +206,7 @@ public final class EncoderSet {
 				} else if (Encoder.class.isAssignableFrom(v)) {
 					l.add(v);
 				} else {
-					throw illegalArgumentException("Invalid type passed to EncoderSet.Builder.set(): " + v.getName());
+					throw new IllegalArgumentException("Invalid type passed to EncoderSet.Builder.set(): " + v.getName());
 				}
 			}
 			entries = l;
@@ -334,7 +334,7 @@ public final class EncoderSet {
 		try {
 			return bs.createBean(Encoder.class).type((Class<?>)o).run();
 		} catch (ExecutableException e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 

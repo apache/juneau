@@ -15,10 +15,9 @@ package org.apache.juneau.dto.swagger;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
@@ -168,7 +167,7 @@ public class Items extends SwaggerElement {
 	 */
 	public Items setCollectionFormat(String value) {
 		if (isStrict() && ! ArrayUtils.contains(value, VALID_COLLECTION_FORMATS))
-			throw runtimeException(
+			throw new BasicRuntimeException(
 				"Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}",
 				value, json(VALID_COLLECTION_FORMATS)
 			);
@@ -603,7 +602,7 @@ public class Items extends SwaggerElement {
 	 */
 	public Items setType(String value) {
 		if (isStrict() && ! ArrayUtils.contains(value, VALID_TYPES))
-			throw runtimeException("Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}", value, json(VALID_TYPES));
+			throw new BasicRuntimeException("Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}", value, json(VALID_TYPES));
 		type = value;
 		return this;
 	}

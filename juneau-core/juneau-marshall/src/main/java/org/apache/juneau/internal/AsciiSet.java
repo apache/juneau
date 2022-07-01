@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
 import java.util.*;
 
 /**
@@ -81,7 +79,7 @@ public final class AsciiSet {
 		public AsciiSet.Builder ranges(String...s) {
 			for (String ss : s) {
 				if (ss.length() != 3 || ss.charAt(1) != '-')
-					throw runtimeException("Value passed to ranges() must be 3 characters");
+					throw new RuntimeException("Value passed to ranges() must be 3 characters");
 				range(ss.charAt(0), ss.charAt(2));
 			}
 			return this;

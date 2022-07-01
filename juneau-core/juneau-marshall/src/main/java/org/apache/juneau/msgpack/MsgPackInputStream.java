@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.msgpack;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.msgpack.DataType.*;
 
@@ -80,7 +79,7 @@ public final class MsgPackInputStream extends ParserInputStream {
 	DataType readDataType() throws IOException {
 		int i = read();
 		if (i == -1)
-			throw ioException("Unexpected end of file found at position {0}", pos);
+			throw new IOException("Unexpected end of file found at position "+pos);
 		currentDataType = TYPES[i];
 		switch (currentDataType) {
 			case NULL:
@@ -371,7 +370,7 @@ public final class MsgPackInputStream extends ParserInputStream {
 				break;
 			}
 			default:
-				throw ioException("Invalid flag 0xC1 detected in stream.");
+				throw new IOException("Invalid flag 0xC1 detected in stream.");
 		}
 		return currentDataType;
 	}

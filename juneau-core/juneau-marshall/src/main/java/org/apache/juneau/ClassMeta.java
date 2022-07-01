@@ -696,7 +696,7 @@ public final class ClassMeta<T> implements Type {
 				if (! ba.isEmpty())
 					return BeanFilter.create(innerClass).applyAnnotations(ba).build();
 			} catch (Exception e) {
-				throw runtimeException(e);
+				throw asRuntimeException(e);
 			}
 			return null;
 		}
@@ -707,7 +707,7 @@ public final class ClassMeta<T> implements Type {
 				if (! ba.isEmpty())
 					return MarshalledFilter.create(innerClass).applyAnnotations(ba).build();
 			} catch (Exception e) {
-				throw runtimeException(e);
+				throw asRuntimeException(e);
 			}
 			return null;
 		}

@@ -12,11 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
@@ -294,9 +294,9 @@ public class SerializedHeader extends BasicHeader {
 				return null;
 			return serializer == null ? stringify(v) : serializer.serialize(HttpPartType.HEADER, schema, v);
 		} catch (SchemaValidationException e) {
-			throw runtimeException(e, "Validation error on request {0} parameter ''{1}''=''{2}''", HttpPartType.HEADER, getName(), value);
+			throw new BasicRuntimeException(e, "Validation error on request {0} parameter ''{1}''=''{2}''", HttpPartType.HEADER, getName(), value);
 		} catch (SerializeException e) {
-			throw runtimeException(e, "Serialization error on request {0} parameter ''{1}''", HttpPartType.HEADER, getName());
+			throw new BasicRuntimeException(e, "Serialization error on request {0} parameter ''{1}''", HttpPartType.HEADER, getName());
 		}
 	}
 }

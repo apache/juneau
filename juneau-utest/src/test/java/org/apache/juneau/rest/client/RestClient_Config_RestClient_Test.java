@@ -464,7 +464,7 @@ public class RestClient_Config_RestClient_Test {
 					return SimpleJson.DEFAULT.read(in.substring(1),c);
 				return SimplePartParser.DEFAULT.parse(type,schema,in,c);
 			} catch (Exception e) {
-				throw runtimeException(e);
+				throw asRuntimeException(e);
 			}
 		}
 	}

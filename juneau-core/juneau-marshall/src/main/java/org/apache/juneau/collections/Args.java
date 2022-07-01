@@ -12,11 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.collections;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.*;
+
+import org.apache.juneau.*;
 
 /**
  * Utility class to make it easier to work with command-line arguments pass in through a
@@ -140,7 +141,7 @@ public final class Args extends JsonMap {
 			if (startsWith(s, '-')) {
 				key = s.substring(1);
 				if (key.matches("\\d*"))
-					throw runtimeException("Invalid optional key name ''{0}''", key);
+					throw new BasicRuntimeException("Invalid optional key name ''{0}''", key);
 				if (! containsKey(key))
 					put(key, new JsonList());
 			} else {

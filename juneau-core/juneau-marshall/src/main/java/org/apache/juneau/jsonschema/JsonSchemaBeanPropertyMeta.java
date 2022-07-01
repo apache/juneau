@@ -51,7 +51,7 @@ public class JsonSchemaBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 		try {
 			bpm.forEachAnnotation(Schema.class, x -> true, x -> schema.append(SchemaAnnotation.asMap(x)));
 		} catch (ParseException e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 

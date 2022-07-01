@@ -79,7 +79,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 		try {
 			return (T) implClass.getConstructor(HttpResponseBuilder.class).newInstance(this);
 		} catch (Exception e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 

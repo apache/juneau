@@ -130,7 +130,7 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 			try {
 				value = IOUtils.read(part.getInputStream());
 			} catch (IOException e) {
-				throw runtimeException(e);
+				throw asRuntimeException(e);
 			}
 		return value;
 	}

@@ -16,7 +16,6 @@ import static org.apache.juneau.internal.ArgUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.util.*;
@@ -452,7 +451,7 @@ public class RequestPathParams {
 	 */
 	public <T> Optional<T> get(Class<T> type) {
 		ClassMeta<T> cm = req.getBeanSession().getClassMeta(type);
-		String name = HttpParts.getName(PATH, cm).orElseThrow(()->runtimeException("@Path(name) not found on class {0}", className(type)));
+		String name = HttpParts.getName(PATH, cm).orElseThrow(()->new BasicRuntimeException("@Path(name) not found on class {0}", className(type)));
 		return get(name).as(type);
 	}
 

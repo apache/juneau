@@ -78,7 +78,7 @@ public class ExceptionBuilder<T extends Throwable> {
 		try {
 			return type.getConstructor(String.class, Throwable.class).newInstance(message, causedBy);
 		} catch (Exception e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 }

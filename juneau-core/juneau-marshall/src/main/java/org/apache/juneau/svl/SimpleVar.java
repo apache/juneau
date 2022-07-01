@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.svl;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
 import java.io.*;
 
 /**
@@ -48,6 +46,6 @@ public abstract class SimpleVar extends Var {
 
 	@Override /* Var */
 	public void resolveTo(VarResolverSession session, Writer w, String arg) throws Exception {
-		throw unsupportedOperationException("Cannot call streamTo() on SimpleVar class");
+		throw new UnsupportedOperationException("Cannot call streamTo() on SimpleVar class");
 	}
 }

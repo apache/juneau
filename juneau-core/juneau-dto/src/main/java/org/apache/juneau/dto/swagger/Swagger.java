@@ -16,8 +16,6 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConverterUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -997,7 +995,7 @@ public class Swagger extends SwaggerElement {
 		if (isEmpty(ref))
 			return null;
 		if (! ref.startsWith("#/"))
-			throw runtimeException("Unsupported reference:  ''{0}''", ref);
+			throw new BasicRuntimeException("Unsupported reference:  ''{0}''", ref);
 		try {
 			return new ObjectRest(this).get(ref.substring(1), c);
 		} catch (Exception e) {

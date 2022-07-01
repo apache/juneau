@@ -952,7 +952,7 @@ public final class Config extends Context implements ConfigEventListener {
 		try {
 			return setSection(section(name), preLines, null);
 		} catch (SerializeException e) {
-			throw runtimeException(e);  // Impossible.
+			throw asRuntimeException(e);  // Impossible.
 		}
 	}
 
@@ -1272,7 +1272,7 @@ public final class Config extends Context implements ConfigEventListener {
 
 	void checkWrite() {
 		if (readOnly)
-			throw unsupportedOperationException("Cannot call this method on a read-only configuration.");
+			throw new UnsupportedOperationException("Cannot call this method on a read-only configuration.");
 	}
 
 

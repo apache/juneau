@@ -13,12 +13,12 @@
 package org.apache.juneau.internal;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
 import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
+
+import org.apache.juneau.*;
 
 /**
  * Utility methods for accessing system properties and environment variables.
@@ -73,7 +73,7 @@ public class SystemEnv {
 			return (T)Enum.valueOf((Class<? extends Enum>) c, s);
 		Function<String,T> f = (Function<String,T>)ENV_FUNCTIONS.get(c);
 		if (f == null)
-			throw runtimeException("Invalid env type: {0}", c);
+			throw new BasicRuntimeException("Invalid env type: {0}", c);
 		return f.apply(s);
 	};
 

@@ -941,7 +941,7 @@ public class MockServletRequest implements HttpServletRequest {
 			else if (value != null)
 				this.content = value.toString().getBytes();
 		} catch (IOException e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 		return this;
 	}

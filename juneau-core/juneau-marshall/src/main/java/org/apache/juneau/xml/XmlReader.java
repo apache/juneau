@@ -70,7 +70,7 @@ public final class XmlReader implements XMLStreamReader, Positionable {
 			sr.nextTag();
 			pipe.setPositionable(this);
 		} catch (Error e) {
-			throw ioException(e);
+			throw cast(IOException.class, e);
 		}
 	}
 

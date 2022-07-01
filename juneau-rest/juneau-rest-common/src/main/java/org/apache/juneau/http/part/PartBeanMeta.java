@@ -153,7 +153,7 @@ public class PartBeanMeta<T> {
 	public T construct(String name, Object value) {
 
 		if (constructor == null)
-			throw unsupportedOperationException("Constructor for type {0} could not be found.", type.getName());
+			throw new UnsupportedOperationException("Constructor for type "+type.getName()+" could not be found.");
 
 		if (name == null)
 			name = schema.getName();
@@ -164,7 +164,7 @@ public class PartBeanMeta<T> {
 			args[0] = pt[0] == String.class ? stringify(value) : value;
 		} else {
 			if (name == null)
-				throw unsupportedOperationException("Constructor for type {0} requires a name as the first argument.", type.getName());
+				throw new UnsupportedOperationException("Constructor for type "+type.getName()+" requires a name as the first argument.");
 			args[0] = name;
 			args[1] = pt[1] == String.class ? stringify(value) : value;
 		}
@@ -172,7 +172,7 @@ public class PartBeanMeta<T> {
 		try {
 			return constructor.newInstance(args);
 		} catch (Exception e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 }

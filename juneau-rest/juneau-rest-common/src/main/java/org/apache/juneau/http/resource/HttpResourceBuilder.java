@@ -88,7 +88,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 		try {
 			return (T) implClass.getConstructor(HttpResourceBuilder.class).newInstance(this);
 		} catch (Exception e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 

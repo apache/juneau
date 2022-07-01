@@ -1874,7 +1874,7 @@ public class HtmlDocSerializer extends HtmlStrippedDocSerializer {
 		try {
 			return c.newInstance();
 		} catch (Exception e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 

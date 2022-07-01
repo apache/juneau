@@ -113,7 +113,7 @@ public class ConfigMap implements ConfigStoreListener {
 							if (! imports.containsKey(importName))
 								imports.put(importName, store.getMap(importName));
 						} catch (StackOverflowError e) {
-							throw ioException("Import loop detected in configuration ''{0}''->''{1}''", name, importName);
+							throw new IOException("Import loop detected in configuration '"+name+"'->'"+importName+"'");
 						}
 					}
 				}
@@ -372,7 +372,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @return This object.
 	 */
 	public ConfigMap setImport(String section, String importName, List<String> preLines) {
-		throw unsupportedOperationException("Not implemented.");
+		throw new UnsupportedOperationException("Not implemented.");
 	}
 
 	/**
@@ -423,7 +423,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @return This object.
 	 */
 	public ConfigMap removeImport(String section, String importName) {
-		throw unsupportedOperationException("Not implemented.");
+		throw new UnsupportedOperationException("Not implemented.");
 	}
 
 	private ConfigMap applyChange(boolean addToChangeList, ConfigEvent ce) {
@@ -589,7 +589,7 @@ public class ConfigMap implements ConfigStoreListener {
 				this.changes.forEach(y -> applyChange(false, y));
 			}
 		} catch (IOException e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 		if (changes != null && ! changes.isEmpty())
 			signal(changes);
@@ -652,7 +652,7 @@ public class ConfigMap implements ConfigStoreListener {
 				changes.clear();
 				load(contents);
 			} catch (IOException e) {
-				throw runtimeException(e);
+				throw asRuntimeException(e);
 			}
 		}
 		return this;
@@ -665,12 +665,12 @@ public class ConfigMap implements ConfigStoreListener {
 
 	private void checkSectionName(String s) {
 		if (! ("".equals(s) || isValidNewSectionName(s)))
-			throw illegalArgumentException("Invalid section name: ''{0}''", s);
+			throw new IllegalArgumentException("Invalid section name: '"+s+"'");
 	}
 
 	private void checkKeyName(String s) {
 		if (! isValidKeyName(s))
-			throw illegalArgumentException("Invalid key name: ''{0}''", s);
+			throw new IllegalArgumentException("Invalid key name: '"+s+"'");
 	}
 
 	private boolean isValidKeyName(String s) {
@@ -798,7 +798,7 @@ public class ConfigMap implements ConfigStoreListener {
 				cs.writeTo(sw);
 			return sw.toString();
 		} catch (IOException e) {
-			throw runtimeException(e);  // Not possible.
+			throw asRuntimeException(e);  // Not possible.
 		}
 	}
 

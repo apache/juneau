@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ArgUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -237,7 +236,7 @@ public class HeaderList {
 		if (pairs == null || pairs.length == 0)
 			return EMPTY;
 		if (pairs.length % 2 != 0)
-			throw runtimeException("Odd number of parameters passed into HeaderList.ofPairs()");
+			throw new RuntimeException("Odd number of parameters passed into HeaderList.ofPairs()");
 		ArrayBuilder<Header> b = ArrayBuilder.of(Header.class).filter(NOT_NULL).size(pairs.length / 2);
 		for (int i = 0; i < pairs.length; i+=2)
 			b.add(BasicHeader.of(pairs[i], pairs[i+1]));
@@ -904,7 +903,7 @@ public class HeaderList {
 				return set(value);
 			if (flag == ListOperation.DEFAULT)
 				return setDefault(value);
-			throw runtimeException("Invalid value specified for flag parameter on add(flag,value) method: {0}", flag);
+			throw new BasicRuntimeException("Invalid value specified for flag parameter on add(flag,value) method: {0}", flag);
 		}
 
 		/**
@@ -932,7 +931,7 @@ public class HeaderList {
 				return set(values);
 			if (flag == ListOperation.DEFAULT)
 				return setDefault(values);
-			throw runtimeException("Invalid value specified for flag parameter on add(flag,values) method: {0}", flag);
+			throw new BasicRuntimeException("Invalid value specified for flag parameter on add(flag,values) method: {0}", flag);
 		}
 
 		/**
@@ -960,7 +959,7 @@ public class HeaderList {
 				return set(name, value);
 			if (flag == ListOperation.DEFAULT)
 				return setDefault(name, value);
-			throw runtimeException("Invalid value specified for flag parameter on add(flag,name,value) method: {0}", flag);
+			throw new BasicRuntimeException("Invalid value specified for flag parameter on add(flag,name,value) method: {0}", flag);
 		}
 
 		/**
@@ -988,7 +987,7 @@ public class HeaderList {
 				return set(name, value);
 			if (flag == ListOperation.DEFAULT)
 				return setDefault(name, value);
-			throw runtimeException("Invalid value specified for flag parameter on add(flag,name,value) method: {0}", flag);
+			throw new BasicRuntimeException("Invalid value specified for flag parameter on add(flag,name,value) method: {0}", flag);
 		}
 
 		/**
@@ -1016,7 +1015,7 @@ public class HeaderList {
 				return set(values);
 			if (flag == ListOperation.DEFAULT)
 				return setDefault(values);
-			throw runtimeException("Invalid value specified for flag parameter on add(flag,values) method: {0}", flag);
+			throw new BasicRuntimeException("Invalid value specified for flag parameter on add(flag,values) method: {0}", flag);
 		}
 
 		/**
@@ -1043,7 +1042,7 @@ public class HeaderList {
 				return set(values);
 			if (flag == ListOperation.DEFAULT)
 				return setDefault(values);
-			throw runtimeException("Invalid value specified for flag parameter on add(flag,values) method: {0}", flag);
+			throw new BasicRuntimeException("Invalid value specified for flag parameter on add(flag,values) method: {0}", flag);
 		}
 
 		/**

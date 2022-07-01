@@ -62,7 +62,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 				.build();
 
 		} catch (Exception e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 
@@ -101,7 +101,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			session.serialize(o, c);
 
 		} catch (SerializeException e) {
-			throw ioException(e);
+			throw new IOException(e);
 		}
 	}
 
@@ -131,7 +131,7 @@ public class BaseProvider implements MessageBodyReader<Object>, MessageBodyWrite
 			Object in2 = session.isReaderParser() ? new InputStreamReader(in, UTF8) : in;
 			return session.parse(in2, p.getBeanContext().getClassMeta(gType));
 		} catch (ParseException e) {
-			throw ioException(e);
+			throw new IOException(e);
 		}
 	}
 

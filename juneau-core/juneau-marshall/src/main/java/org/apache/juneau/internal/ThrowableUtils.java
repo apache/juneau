@@ -13,9 +13,6 @@
 package org.apache.juneau.internal;
 
 import java.io.*;
-
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.utils.*;
 
 /**
@@ -28,195 +25,29 @@ import org.apache.juneau.utils.*;
 public class ThrowableUtils {
 
 	/**
-	 * Creates a new builder for {@link RuntimeException} objects.
-	 *
-	 * @return A new builder for {@link RuntimeException} objects.
-	 */
-	public static ExceptionBuilder<RuntimeException> runtimeException() {
-		return new ExceptionBuilder<>(RuntimeException.class);
-	}
-
-	/**
-	 * Creates a new {@link RuntimeException}.
-	 *
-	 * @param msg The exception message.  Can be <jk>null</jk>.
-	 * 	<br>If <jk>null</jk>, then the caused-by message is used if available.
-	 * @param args The exception message arguments.
-	 * @return A new {@link RuntimeException}.
-	 */
-	public static RuntimeException runtimeException(String msg, Object...args) {
-		return runtimeException().message(msg, args).build();
-	}
-
-	/**
-	 * Creates a new {@link RuntimeException}.
-	 *
-	 * @param cause The caused-by exception.
-	 * @param msg The exception message.  Can be <jk>null</jk>.
-	 * 	<br>If <jk>null</jk>, then the caused-by message is used if available.
-	 * @param args The exception message arguments.
-	 * @return A new {@link RuntimeException}.
-	 */
-	public static RuntimeException runtimeException(Throwable cause, String msg, Object...args) {
-		return runtimeException().message(msg, args).causedBy(cause).build();
-	}
-
-	/**
 	 * Creates a new {@link RuntimeException}.
 	 *
 	 * @param cause The caused-by exception.
 	 * @return A new {@link RuntimeException}, or the same exception if it's already of that type.
 	 */
-	public static RuntimeException runtimeException(Throwable cause) {
-		return cause instanceof RuntimeException ? (RuntimeException)cause : runtimeException().causedBy(cause).build();
+	public static RuntimeException asRuntimeException(Throwable cause) {
+		return cast(RuntimeException.class, cause);
 	}
 
 	/**
-	 * Creates a new builder for {@link IOException} objects.
+	 * Casts or wraps the specified throwable to the specified type.
 	 *
-	 * @return A new builder for {@link IOException} objects.
+	 * @param <T> The class to cast to.
+	 * @param type The class to cast to.
+	 * @param t The throwable to cast.
+	 * @return Either the same exception if it's already the specified type, or a wrapped exception.
 	 */
-	public static ExceptionBuilder<IOException> ioException() {
-		return new ExceptionBuilder<>(IOException.class);
-	}
-
-	/**
-	 * Creates a new {@link IOException}.
-	 *
-	 * @param msg The exception message.  Can be <jk>null</jk>.
-	 * 	<br>If <jk>null</jk>, then the caused-by message is used if available.
-	 * @param args The exception message arguments.
-	 * @return A new {@link IOException}.
-	 */
-	public static IOException ioException(String msg, Object...args) {
-		return ioException().message(msg, args).build();
-	}
-
-	/**
-	 * Creates a new {@link IOException}.
-	 *
-	 * @param cause The caused-by exception.
-	 * @param msg The exception message.  Can be <jk>null</jk>.
-	 * 	<br>If <jk>null</jk>, then the caused-by message is used if available.
-	 * @param args The exception message arguments.
-	 * @return A new {@link IOException}.
-	 */
-	public static IOException ioException(Throwable cause, String msg, Object...args) {
-		return ioException().message(msg, args).causedBy(cause).build();
-	}
-
-	/**
-	 * Creates a new {@link IOException}.
-	 *
-	 * @param cause The caused-by exception.
-	 * @return A new {@link IOException}, or the same exception if it's already of that type.
-	 */
-	public static IOException ioException(Throwable cause) {
-		return cause instanceof IOException ? (IOException)cause : ioException().causedBy(cause).build();
-	}
-
-	/**
-	 * Creates a new builder for {@link IOException} objects.
-	 *
-	 * @return A new builder for {@link IOException} objects.
-	 */
-	public static ExceptionBuilder<UnsupportedOperationException> unsupportedOperationException() {
-		return new ExceptionBuilder<>(UnsupportedOperationException.class);
-	}
-
-	/**
-	 * Creates a new {@link UnsupportedOperationException}.
-	 *
-	 * @param msg The exception message.  Can be <jk>null</jk>.
-	 * 	<br>If <jk>null</jk>, then the caused-by message is used if available.
-	 * @param args The exception message arguments.
-	 * @return A new {@link UnsupportedOperationException}.
-	 */
-	public static UnsupportedOperationException unsupportedOperationException(String msg, Object...args) {
-		return unsupportedOperationException().message(msg, args).build();
-	}
-
-	/**
-	 * Creates a new builder for {@link IllegalArgumentException} objects.
-	 *
-	 * @return A new builder for {@link IllegalArgumentException} objects.
-	 */
-	public static ExceptionBuilder<IllegalArgumentException> illegalArgumentException() {
-		return new ExceptionBuilder<>(IllegalArgumentException.class);
-	}
-
-	/**
-	 * Creates a new {@link UnsupportedOperationException}.
-	 *
-	 * @param msg The exception message.  Can be <jk>null</jk>.
-	 * 	<br>If <jk>null</jk>, then the caused-by message is used if available.
-	 * @param args The exception message arguments.
-	 * @return A new {@link UnsupportedOperationException}.
-	 */
-	public static IllegalArgumentException illegalArgumentException(String msg, Object...args) {
-		return illegalArgumentException().message(msg, args).build();
-	}
-
-	/**
-	 * Creates a new builder for {@link ParseException} objects.
-	 *
-	 * @return A new builder for {@link ParseException} objects.
-	 */
-	public static ExceptionBuilder<SerializeException> serializeException() {
-		return new ExceptionBuilder<>(SerializeException.class);
-	}
-
-	/**
-	 * Creates a new {@link ParseException}.
-	 *
-	 * @param msg The exception message.  Can be <jk>null</jk>.
-	 * 	<br>If <jk>null</jk>, then the caused-by message is used if available.
-	 * @param args The exception message arguments.
-	 * @return A new {@link ParseException}.
-	 */
-	public static SerializeException serializeException(String msg, Object...args) {
-		return serializeException().message(msg, args).build();
-	}
-
-	/**
-	 * Creates a new {@link SerializeException}.
-	 *
-	 * @param cause The caused-by exception.
-	 * @return A new {@link SerializeException}, or the same exception if it's already of that type.
-	 */
-	public static SerializeException serializeException(Throwable cause) {
-		return cause instanceof SerializeException ? (SerializeException)cause : serializeException().causedBy(cause).build();
-	}
-
-	/**
-	 * Creates a new builder for {@link ParseException} objects.
-	 *
-	 * @return A new builder for {@link ParseException} objects.
-	 */
-	public static ExceptionBuilder<ParseException> parseException() {
-		return new ExceptionBuilder<>(ParseException.class);
-	}
-
-	/**
-	 * Creates a new {@link ParseException}.
-	 *
-	 * @param msg The exception message.  Can be <jk>null</jk>.
-	 * 	<br>If <jk>null</jk>, then the caused-by message is used if available.
-	 * @param args The exception message arguments.
-	 * @return A new {@link ParseException}.
-	 */
-	public static ParseException parseException(String msg, Object...args) {
-		return parseException().message(msg, args).build();
-	}
-
-	/**
-	 * Creates a new {@link ParseException}.
-	 *
-	 * @param cause The caused-by exception.
-	 * @return A new {@link ParseException}, or the same exception if it's already of that type.
-	 */
-	public static ParseException parseException(Throwable cause) {
-		return cause instanceof ParseException ? (ParseException)cause : parseException().causedBy(cause).build();
+	public static <T> T cast(Class<T> type, Throwable t) {
+		try {
+			return type.isInstance(t) ? type.cast(t) : type.getConstructor(Throwable.class).newInstance(t);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**
@@ -250,7 +81,7 @@ public class ThrowableUtils {
 		} catch (RuntimeException t) {
 			throw t;
 		} catch (Throwable t) {
-			throw runtimeException(t);
+			throw asRuntimeException(t);
 		}
 	}
 
@@ -274,7 +105,7 @@ public class ThrowableUtils {
 		} catch (RuntimeException t) {
 			throw t;
 		} catch (Throwable t) {
-			throw runtimeException(t);
+			throw asRuntimeException(t);
 		}
 	}
 

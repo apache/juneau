@@ -130,7 +130,7 @@ public class TestMicroservice {
 				});
 			return rc;
 		} catch (Exception e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 
@@ -152,7 +152,7 @@ public class TestMicroservice {
 		try {
 			return HttpClients.custom().setRedirectStrategy(new LaxRedirectStrategy()).build();
 		} catch (Exception e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 

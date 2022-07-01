@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
+import static org.apache.juneau.internal.StringUtils.*;
 
 /**
  * Method argument utility methods.
@@ -63,7 +63,7 @@ public class ArgUtils {
 	 */
 	public static final void assertArg(boolean expression, String msg, Object...args) throws IllegalArgumentException {
 		if (! expression)
-			throw illegalArgumentException(msg, args);
+			throw new IllegalArgumentException(format(msg, args));
 	}
 
 	/**
@@ -80,7 +80,7 @@ public class ArgUtils {
 	public static final <E> Class<E>[] assertClassArrayArgIsType(String name, Class<E> type, Class<?>[] value) throws IllegalArgumentException {
 		for (int i = 0; i < value.length; i++)
 			if (! type.isAssignableFrom(value[i]))
-				throw illegalArgumentException("Arg {0} did not have arg of type {1} at index {2}: {3}", name, type.getName(), i, value[i].getName());
+				throw new IllegalArgumentException("Arg "+name+" did not have arg of type "+type.getName()+" at index "+i+": "+value[i].getName());
 		return (Class<E>[])value;
 	}
 

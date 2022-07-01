@@ -15,7 +15,6 @@ package org.apache.juneau.rest.client;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.http.HttpEntities.*;
@@ -1080,7 +1079,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest headerPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
-			throw runtimeException("Odd number of parameters passed into headerPairs(String...)");
+			throw new RuntimeException("Odd number of parameters passed into headerPairs(String...)");
 		HeaderList.Builder b = headers();
 		for (int i = 0; i < pairs.length; i+=2)
 			b.append(pairs[i], pairs[i+1]);
@@ -1109,7 +1108,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest queryDataPairs(String...pairs) throws RestCallException {
 		if (pairs.length % 2 != 0)
-			throw runtimeException("Odd number of parameters passed into queryDataPairs(String...)");
+			throw new RuntimeException("Odd number of parameters passed into queryDataPairs(String...)");
 		PartList.Builder b = queryData();
 		for (int i = 0; i < pairs.length; i+=2)
 			b.append(pairs[i], pairs[i+1]);
@@ -1138,7 +1137,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest formDataPairs(String...pairs) throws RestCallException {
 		if (pairs.length % 2 != 0)
-			throw runtimeException("Odd number of parameters passed into formDataPairs(String...)");
+			throw new RuntimeException("Odd number of parameters passed into formDataPairs(String...)");
 		PartList.Builder b = formData();
 		for (int i = 0; i < pairs.length; i+=2)
 			b.append(pairs[i], pairs[i+1]);
@@ -1169,7 +1168,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest pathDataPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
-			throw runtimeException("Odd number of parameters passed into pathDataPairs(String...)");
+			throw new RuntimeException("Odd number of parameters passed into pathDataPairs(String...)");
 		PartList.Builder b = pathData();
 		for (int i = 0; i < pairs.length; i+=2)
 			b.set(pairs[i], pairs[i+1]);
@@ -1202,7 +1201,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest headersBean(Object value) {
 		if (! isBean(value))
-			throw runtimeException("Object passed into headersBean(Object) is not a bean.");
+			throw new RuntimeException("Object passed into headersBean(Object) is not a bean.");
 		HeaderList.Builder b = headers();
 		toBeanMap(value, PropertyNamerDUCS.INSTANCE).forEach((k,v) -> b.append(createHeader(k, v)));
 		return this;
@@ -1230,7 +1229,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest queryDataBean(Object value) {
 		if (! isBean(value))
-			throw runtimeException("Object passed into queryDataBean(Object) is not a bean.");
+			throw new RuntimeException("Object passed into queryDataBean(Object) is not a bean.");
 		PartList.Builder b = queryData();
 		toBeanMap(value).forEach((k,v) -> b.append(createPart(QUERY, k, v)));
 		return this;
@@ -1258,7 +1257,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest formDataBean(Object value) {
 		if (! isBean(value))
-			throw runtimeException("Object passed into formDataBean(Object) is not a bean.");
+			throw new RuntimeException("Object passed into formDataBean(Object) is not a bean.");
 		PartList.Builder b = formData();
 		toBeanMap(value).forEach((k,v) -> b.append(createPart(FORMDATA, k, v)));
 		return this;
@@ -1286,7 +1285,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	public RestRequest pathDataBean(Object value) {
 		if (! isBean(value))
-			throw runtimeException("Object passed into pathDataBean(Object) is not a bean.");
+			throw new RuntimeException("Object passed into pathDataBean(Object) is not a bean.");
 		PartList.Builder b = pathData();
 		toBeanMap(value).forEach((k,v) -> b.set(createPart(PATH, k, v)));
 		return this;
@@ -1447,7 +1446,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				q = stringify(value);  // Works for NameValuePairs.
 			uriBuilder.setCustomQuery(q);
 		} catch (IOException e) {
-			throw runtimeException(e, "Could not read custom query.");
+			throw new BasicRuntimeException(e, "Could not read custom query.");
 		}
 		return this;
 	}
@@ -1532,7 +1531,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		} else if (isBean(value)) {
 			toBeanMap(value).forEach((k,v) -> l.add(createHeader(k, v, serializer, schema, skipIfEmpty)));
 		} else if (value != null) {
-			throw runtimeException("Invalid value type for header arg ''{0}'': {1}", name, className(value));
+			throw new BasicRuntimeException("Invalid value type for header arg ''{0}'': {1}", name, className(value));
 		}
 
 		if (skipIfEmpty)
@@ -1639,7 +1638,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		} else if (isBean(value)) {
 			toBeanMap(value).forEach((k,v) -> l.add(createPart(k, v, PATH, serializer, schema, false)));
 		} else if (value != null) {
-			throw runtimeException("Invalid value type for path arg ''{0}'': {1}", name, className(value));
+			throw new BasicRuntimeException("Invalid value type for path arg ''{0}'': {1}", name, className(value));
 		}
 
 		pathData().append(l);
@@ -1870,7 +1869,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					String name = x.name, value = x.value;
 					String var = "{" + name + "}";
 					if (path.indexOf(var) == -1 && ! name.equals("/*"))
-						throw runtimeException("Path variable {"+name+"} was not found in path.");
+						throw new RuntimeException("Path variable {"+name+"} was not found in path.");
 					if (name.equals("/*"))
 						path = path.replaceAll("\\/\\*$", "/" + value);
 					else

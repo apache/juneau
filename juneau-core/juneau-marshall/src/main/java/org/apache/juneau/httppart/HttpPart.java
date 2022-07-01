@@ -68,7 +68,7 @@ public class HttpPart implements NameValuePair {
 		try {
 			return serializer.serialize(partType, schema, opart);
 		} catch (Exception e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 }

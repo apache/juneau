@@ -19,6 +19,7 @@ import static java.util.Collections.*;
 
 import java.lang.reflect.*;
 import java.util.*;
+
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 
@@ -211,7 +212,7 @@ public final class SetBuilder<E> {
 	 */
 	public SetBuilder<E> addAny(Object...values) {
 		if (elementType == null)
-			throw runtimeException("Unknown element type.  Cannot use this method.");
+			throw new RuntimeException("Unknown element type.  Cannot use this method.");
 		try {
 			if (values != null) {
 				for (Object o : values) {
@@ -232,7 +233,7 @@ public final class SetBuilder<E> {
 				}
 			}
 		} catch (ParseException e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 		return this;
 	}

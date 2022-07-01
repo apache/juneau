@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
@@ -20,6 +19,7 @@ import java.net.*;
 import java.util.jar.*;
 
 import org.apache.juneau.collections.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Utility class for working with Jar manifest files.
@@ -50,7 +50,7 @@ public class ManifestFile extends JsonMap {
 			mf.read(fis);
 			load(mf);
 		} catch (IOException e) {
-			throw ioException(e, "Problem detected in MANIFEST.MF.  Contents below:\n{0}", read(f));
+			throw new IOException("Problem detected in MANIFEST.MF.  Contents below:\n"+read(f), e);
 		}
 	}
 
@@ -80,7 +80,7 @@ public class ManifestFile extends JsonMap {
 			Manifest mf = new Manifest(new URL(manifestPath).openStream());
 			load(mf);
 		} catch (MalformedURLException e) {
-			throw ioException(e);
+			throw ThrowableUtils.cast(IOException.class, e);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

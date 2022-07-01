@@ -13,7 +13,6 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.ArgUtils.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 
@@ -77,7 +76,7 @@ public class EntityTag {
 			if (value.length() > 1 && value.charAt(0) == '"' && value.charAt(value.length()-1) == '"')
 				value = value.substring(1, value.length()-1);
 			else
-				throw illegalArgumentException("Invalid value for entity-tag: [{0}]", isWeak ? ("W/"+value) : value);
+				throw new IllegalArgumentException("Invalid value for entity-tag: ["+(isWeak ? ("W/"+value) : value)+"]");
 		}
 		this.value = value;
 

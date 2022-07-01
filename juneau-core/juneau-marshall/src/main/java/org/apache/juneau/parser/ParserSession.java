@@ -14,7 +14,6 @@ package org.apache.juneau.parser;
 
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -858,7 +857,7 @@ public class ParserSession extends BeanSession {
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
 	 */
 	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
-		throw unsupportedOperationException("Parser ''{0}'' does not support this method.", className(getClass()));
+		throw new UnsupportedOperationException("Parser '"+className(getClass())+"' does not support this method.");
 	}
 
 	/**
@@ -912,7 +911,7 @@ public class ParserSession extends BeanSession {
 	 * @throws Exception If thrown from underlying stream, or if the input contains a syntax error or is malformed.
 	 */
 	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
-		throw unsupportedOperationException("Parser ''{0}'' does not support this method.", className(getClass()));
+		throw new UnsupportedOperationException("Parser '"+className(getClass())+"' does not support this method.");
 	}
 
 	/**

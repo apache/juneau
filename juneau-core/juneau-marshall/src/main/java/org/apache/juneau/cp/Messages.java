@@ -198,7 +198,7 @@ public class Messages extends ResourceBundle {
 						try {
 							ms = SimpleJson.DEFAULT.read(value, MessagesString.class);
 						} catch (ParseException e) {
-							throw runtimeException(e);
+							throw asRuntimeException(e);
 						}
 						x = Messages.create(c).name(ms.name).baseNames(split(ms.baseNames, ',')).locale(ms.locale).parent(x == null ? null : x.build());
 					} else {

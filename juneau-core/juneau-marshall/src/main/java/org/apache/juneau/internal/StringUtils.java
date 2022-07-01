@@ -876,7 +876,7 @@ public final class StringUtils {
 		if (state == S4)
 			l.add(s.substring(mark));
 		else if (state == S2 || state == S3)
-			throw runtimeException("Unmatched string quotes: {0}", s);
+			throw new BasicRuntimeException("Unmatched string quotes: {0}", s);
 		return l.toArray(new String[l.size()]);
 	}
 
@@ -2245,7 +2245,7 @@ public final class StringUtils {
 		try {
 			return new URI(o.toString());
 		} catch (URISyntaxException e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 
@@ -2511,7 +2511,7 @@ public final class StringUtils {
 			}
 			return -1;
 		} catch (Exception e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 	private static void skipComments(StringReader r) throws IOException {

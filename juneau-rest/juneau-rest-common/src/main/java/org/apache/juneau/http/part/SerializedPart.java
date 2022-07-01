@@ -12,12 +12,12 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.util.function.*;
 
 import org.apache.http.*;
+import org.apache.juneau.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
@@ -225,9 +225,9 @@ public class SerializedPart extends BasicPart implements Headerable {
 				return null;
 			return serializer == null ? stringify(v) : serializer.serialize(type, schema, v);
 		} catch (SchemaValidationException e) {
-			throw runtimeException(e, "Validation error on request {0} part ''{1}''=''{2}''", type, getName(), value);
+			throw new BasicRuntimeException(e, "Validation error on request {0} part ''{1}''=''{2}''", type, getName(), value);
 		} catch (SerializeException e) {
-			throw runtimeException(e, "Serialization error on request {0} part ''{1}''", type, getName());
+			throw new BasicRuntimeException(e, "Serialization error on request {0} part ''{1}''", type, getName());
 		}
 	}
 

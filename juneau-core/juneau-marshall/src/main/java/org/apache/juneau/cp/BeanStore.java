@@ -15,7 +15,6 @@ package org.apache.juneau.cp;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static java.util.stream.Collectors.*;
 
 import java.lang.annotation.*;
@@ -24,6 +23,7 @@ import java.util.concurrent.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
@@ -175,7 +175,7 @@ public class BeanStore {
 			if (ci != null)
 				return ci.accessible().invoke(this);
 
-			throw runtimeException("Could not find a way to instantiate class {0}", type);
+			throw new BasicRuntimeException("Could not find a way to instantiate class {0}", type);
 		}
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -576,7 +576,7 @@ public class BeanStore {
 	 * @return The method finder.  Never <jk>null</jk>.
 	 */
 	public <T> BeanCreateMethodFinder<T> createMethodFinder(Class<T> beanType) {
-		return new BeanCreateMethodFinder<>(beanType, outer.orElseThrow(()->runtimeException("Method cannot be used without outer bean definition.")), this);
+		return new BeanCreateMethodFinder<>(beanType, outer.orElseThrow(()->new RuntimeException("Method cannot be used without outer bean definition.")), this);
 	}
 
 	/**
@@ -694,7 +694,7 @@ public class BeanStore {
 
 	private void assertCanWrite() {
 		if (readOnly)
-			throw runtimeException("Method cannot be used because BeanStore is read-only.");
+			throw new RuntimeException("Method cannot be used because BeanStore is read-only.");
 	}
 
 	private JsonMap properties() {

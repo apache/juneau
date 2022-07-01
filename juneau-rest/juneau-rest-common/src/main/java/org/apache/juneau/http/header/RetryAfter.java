@@ -15,13 +15,13 @@ package org.apache.juneau.http.header;
 import static java.time.format.DateTimeFormatter.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 
 /**
@@ -206,7 +206,7 @@ public class RetryAfter extends BasicDateHeader {
 			} else if (o instanceof ZonedDateTime) {
 				return RFC_1123_DATE_TIME.format((ZonedDateTime)o);
 			}
-			throw runtimeException("Invalid object type returned by supplier: {0}", className(o));
+			throw new BasicRuntimeException("Invalid object type returned by supplier: {0}", className(o));
 		}
 		if (value != null)
 			return stringify(value);

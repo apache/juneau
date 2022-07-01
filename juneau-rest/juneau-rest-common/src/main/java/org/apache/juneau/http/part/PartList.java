@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.http.part;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ArgUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
@@ -225,7 +224,7 @@ public class PartList {
 		if (pairs == null || pairs.length == 0)
 			return EMPTY;
 		if (pairs.length % 2 != 0)
-			throw runtimeException("Odd number of parameters passed into PartList.ofPairs()");
+			throw new RuntimeException("Odd number of parameters passed into PartList.ofPairs()");
 		ArrayBuilder<NameValuePair> b = ArrayBuilder.of(NameValuePair.class).filter(NOT_NULL).size(pairs.length / 2);
 		for (int i = 0; i < pairs.length; i+=2)
 			b.add(BasicPart.of(stringify(pairs[i]), pairs[i+1]));
@@ -893,7 +892,7 @@ public class PartList {
 				return set(value);
 			if (flag == ListOperation.DEFAULT)
 				return setDefault(value);
-			throw runtimeException("Invalid value specified for flag parameter on add(flag,value) method: {0}", flag);
+			throw new BasicRuntimeException("Invalid value specified for flag parameter on add(flag,value) method: {0}", flag);
 		}
 
 		/**
@@ -921,7 +920,7 @@ public class PartList {
 				return set(values);
 			if (flag == ListOperation.DEFAULT)
 				return setDefault(values);
-			throw runtimeException("Invalid value specified for flag parameter on add(flag,values) method: {0}", flag);
+			throw new BasicRuntimeException("Invalid value specified for flag parameter on add(flag,values) method: {0}", flag);
 		}
 
 		/**
@@ -949,7 +948,7 @@ public class PartList {
 				return set(name, value);
 			if (flag == ListOperation.DEFAULT)
 				return setDefault(name, value);
-			throw runtimeException("Invalid value specified for flag parameter on add(flag,name,value) method: {0}", flag);
+			throw new BasicRuntimeException("Invalid value specified for flag parameter on add(flag,name,value) method: {0}", flag);
 		}
 
 		/**
@@ -977,7 +976,7 @@ public class PartList {
 				return set(name, value);
 			if (flag == ListOperation.DEFAULT)
 				return setDefault(name, value);
-			throw runtimeException("Invalid value specified for flag parameter on add(flag,name,value) method: {0}", flag);
+			throw new BasicRuntimeException("Invalid value specified for flag parameter on add(flag,name,value) method: {0}", flag);
 		}
 
 		/**
@@ -1005,7 +1004,7 @@ public class PartList {
 				return set(values);
 			if (flag == ListOperation.DEFAULT)
 				return setDefault(values);
-			throw runtimeException("Invalid value specified for flag parameter on add(flag,values) method: {0}", flag);
+			throw new BasicRuntimeException("Invalid value specified for flag parameter on add(flag,values) method: {0}", flag);
 		}
 
 		/**
@@ -1032,7 +1031,7 @@ public class PartList {
 				return set(values);
 			if (flag == ListOperation.DEFAULT)
 				return setDefault(values);
-			throw runtimeException("Invalid value specified for flag parameter on add(flag,values) method: {0}", flag);
+			throw new BasicRuntimeException("Invalid value specified for flag parameter on add(flag,values) method: {0}", flag);
 		}
 
 		/**

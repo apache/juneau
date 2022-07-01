@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.util;
 
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
@@ -39,7 +38,7 @@ public class UrlPath {
 	 */
 	public static UrlPath of(String path) {
 		if (path != null && ! path.startsWith("/"))
-			throw runtimeException("Invalid path specified.  Must be null or start with '/' per HttpServletRequest.getPathInfo().");
+			throw new RuntimeException("Invalid path specified.  Must be null or start with '/' per HttpServletRequest.getPathInfo().");
 		return new UrlPath(path);
 	}
 

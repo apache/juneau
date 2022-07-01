@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.assertions;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -241,7 +240,7 @@ public class Assertion {
 					.run();
 			} catch (ExecutableException e) {
 				// If we couldn't create requested exception, just throw a RuntimeException.
-				throw runtimeException(cause, msg);
+				throw new BasicRuntimeException(cause, msg);
 			}
 		}
 		return new BasicAssertionError(cause, msg);

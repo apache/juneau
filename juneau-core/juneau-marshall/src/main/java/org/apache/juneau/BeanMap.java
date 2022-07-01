@@ -144,7 +144,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				try {
 					 getPropertyMeta(k).setArray(b, v);
 				} catch (Exception e1) {
-					throw runtimeException(e1);
+					throw asRuntimeException(e1);
 				}
 			});
 			arrayPropertyCache = null;
@@ -641,7 +641,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 					@Override /* Iterator */
 					public void remove() {
-						throw unsupportedOperationException("Cannot remove item from iterator.");
+						throw new UnsupportedOperationException("Cannot remove item from iterator.");
 					}
 				};
 			}

@@ -20,6 +20,7 @@ import static org.apache.juneau.internal.StringUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.parser.*;
 
@@ -204,7 +205,7 @@ public final class MapBuilder<K,V> {
 	@SuppressWarnings("unchecked")
 	public MapBuilder<K,V> addAny(Object...values) {
 		if (keyType == null || valueType == null)
-			throw runtimeException("Unknown key and value types.  Cannot use this method.");
+			throw new RuntimeException("Unknown key and value types.  Cannot use this method.");
 		try {
 			for (Object o : values) {
 				if (o != null) {
@@ -213,12 +214,12 @@ public final class MapBuilder<K,V> {
 					} else if (isJsonObject(o, false)) {
 						JsonMap.ofJson(o.toString()).forEach((k,v) -> add(toType(k, keyType), toType(v, valueType, valueTypeArgs)));
 					} else {
-						throw runtimeException("Invalid object type {0} passed to addAny()", className(o));
+						throw new BasicRuntimeException("Invalid object type {0} passed to addAny()", className(o));
 					}
 				}
 			}
 		} catch (ParseException e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 		return this;
 	}
@@ -232,7 +233,7 @@ public final class MapBuilder<K,V> {
 	@SuppressWarnings("unchecked")
 	public MapBuilder<K,V> addPairs(Object...pairs) {
 		if (pairs.length % 2 != 0)
-			throw runtimeException("Odd number of parameters passed into AMap.ofPairs()");
+			throw new RuntimeException("Odd number of parameters passed into AMap.ofPairs()");
 		for (int i = 0; i < pairs.length; i+=2)
 			add((K)pairs[i], (V)pairs[i+1]);
 		return this;

@@ -14,7 +14,6 @@ package org.apache.juneau.internal;
 
 import static org.apache.juneau.internal.ArgUtils.*;
 import static org.apache.juneau.internal.ArrayUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -91,7 +90,7 @@ public final class SimpleMap<K,V> extends AbstractMap<K,V> {
 				return v;
 			}
 		}
-		throw illegalArgumentException("No key ''{0}'' defined in map", key);
+		throw new IllegalArgumentException("No key '"+key+"' defined in map");
 	}
 
 	final class SimpleMapEntry implements Map.Entry<K,V> {

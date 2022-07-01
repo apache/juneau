@@ -72,7 +72,7 @@ public class Assertion_Test {
 
 		a.setThrowable(A3.class);
 		assertThrown(()->a.doError())
-			.isExactType(RuntimeException.class)
+			.isExactType(BasicRuntimeException.class)
 			.asMessage().is("bar baz")
 			.asCausedBy().isExactType(A1.class)
 			.asCausedBy().asMessage().is("foo")

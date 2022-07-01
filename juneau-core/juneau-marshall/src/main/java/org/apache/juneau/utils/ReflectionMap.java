@@ -14,13 +14,14 @@ package org.apache.juneau.utils;
 
 import static java.lang.Character.*;
 import static org.apache.juneau.collections.JsonMap.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
+
+import org.apache.juneau.*;
 
 /**
  * Allows arbitrary objects to be mapped to classes and methods base on class/method name keys.
@@ -197,7 +198,7 @@ public class ReflectionMap<V> {
 		 */
 		public Builder<V> append(String key, V value) {
 			if (isEmpty(key))
-				throw runtimeException("Invalid reflection signature: [{0}]", key);
+				throw new BasicRuntimeException("Invalid reflection signature: [{0}]", key);
 			try {
 				splitNames(key, k -> {
 					if (k.endsWith(")")) {
@@ -221,7 +222,7 @@ public class ReflectionMap<V> {
 					}
 				});
 			} catch (IndexOutOfBoundsException e) {
-				throw runtimeException("Invalid reflection signature: [{0}]", key);
+				throw new BasicRuntimeException("Invalid reflection signature: [{0}]", key);
 			}
 
 			return this;

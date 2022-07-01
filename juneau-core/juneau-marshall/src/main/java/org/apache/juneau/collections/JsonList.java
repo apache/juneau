@@ -122,7 +122,7 @@ public class JsonList extends LinkedList<Object> {
 
 		@Override /* List */
 		public void add(int location, Object object) {
-			throw unsupportedOperationException("Not supported on read-only object.");
+			throw new UnsupportedOperationException("Not supported on read-only object.");
 		}
 
 		@Override /* List */
@@ -132,12 +132,12 @@ public class JsonList extends LinkedList<Object> {
 
 		@Override /* List */
 		public Object remove(int location) {
-			throw unsupportedOperationException("Not supported on read-only object.");
+			throw new UnsupportedOperationException("Not supported on read-only object.");
 		}
 
 		@Override /* List */
 		public Object set(int location, Object object) {
-			throw unsupportedOperationException("Not supported on read-only object.");
+			throw new UnsupportedOperationException("Not supported on read-only object.");
 		}
 
 		@Override /* List */
@@ -970,7 +970,7 @@ public class JsonList extends LinkedList<Object> {
 		try {
 			return JsonParser.DEFAULT.parse(SimpleJsonSerializer.DEFAULT.serialize(this), cm);
 		} catch (ParseException | SerializeException e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 
@@ -1007,17 +1007,17 @@ public class JsonList extends LinkedList<Object> {
 
 		@Override /* List */
 		public void add(int location, Object object) {
-			throw unsupportedOperationException("Not supported on read-only object.");
+			throw new UnsupportedOperationException("Not supported on read-only object.");
 		}
 
 		@Override /* List */
 		public Object remove(int location) {
-			throw unsupportedOperationException("Not supported on read-only object.");
+			throw new UnsupportedOperationException("Not supported on read-only object.");
 		}
 
 		@Override /* List */
 		public Object set(int location, Object object) {
-			throw unsupportedOperationException("Not supported on read-only object.");
+			throw new UnsupportedOperationException("Not supported on read-only object.");
 		}
 
 		@Override

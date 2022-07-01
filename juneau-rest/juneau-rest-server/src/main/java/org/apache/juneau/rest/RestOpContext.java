@@ -1040,7 +1040,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				try {
 					b.append(new RoleBasedRestGuard(rolesDeclared, rg));
 				} catch (java.text.ParseException e1) {
-					throw runtimeException(e1);
+					throw asRuntimeException(e1);
 				}
 			}
 
@@ -2648,7 +2648,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	@Override /* Context */
 	public Context.Builder copy() {
-		throw unsupportedOperationException("Method not implemented.");
+		throw new UnsupportedOperationException("Method not implemented.");
 	}
 
 	/*

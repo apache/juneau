@@ -227,7 +227,7 @@ public final class DateUtils {
 				return (DateTimeFormatter)fi.inner().get(null);
 			return DateTimeFormatter.ofPattern(pattern);
 		} catch (IllegalArgumentException | IllegalAccessException e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 }

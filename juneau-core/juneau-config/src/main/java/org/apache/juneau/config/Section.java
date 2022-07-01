@@ -14,8 +14,6 @@ package org.apache.juneau.config;
 
 import static org.apache.juneau.internal.ArgUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
 import java.beans.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -210,7 +208,7 @@ public class Section {
 		assertArgNotNull("c", c);
 
 		if (! c.isInterface())
-			throw illegalArgumentException("Class ''{0}'' passed to toInterface() is not an interface.", c.getName());
+			throw new IllegalArgumentException("Class '"+c.getName()+"' passed to toInterface() is not an interface.");
 
 		InvocationHandler h = new InvocationHandler() {
 
@@ -224,7 +222,7 @@ public class Section {
 					if (method.equals(wm))
 						return config.set(name + '/' + pd.getName(), args[0]);
 				}
-				throw unsupportedOperationException("Unsupported interface method.  method=''{0}''", method);
+				throw new UnsupportedOperationException("Unsupported interface method.  method='"+method+"'");
 			}
 		};
 
@@ -244,7 +242,7 @@ public class Section {
 	 */
 	public Section writeToBean(Object bean, boolean ignoreUnknownProperties) throws ParseException {
 		assertArgNotNull("bean", bean);
-		if (! isPresent()) throw illegalArgumentException("Section ''{0}'' not found in configuration.", name);
+		if (! isPresent()) throw new IllegalArgumentException("Section '"+name+"' not found in configuration.");
 
 		Set<String> keys = configMap.getKeys(name);
 

@@ -105,7 +105,7 @@ public class VarResolverSession {
 		try {
 			return resolveTo(s, new StringWriter()).toString();
 		} catch (IOException e) {
-			throw runtimeException(e); // Never happens.
+			throw asRuntimeException(e); // Never happens.
 		}
 	}
 

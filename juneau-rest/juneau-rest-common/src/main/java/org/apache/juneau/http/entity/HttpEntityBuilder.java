@@ -85,7 +85,7 @@ public class HttpEntityBuilder<T extends BasicHttpEntity> {
 		try {
 			return (T) implClass.getConstructor(HttpEntityBuilder.class).newInstance(this);
 		} catch (Exception e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 

@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.reflect;
 
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
@@ -472,7 +471,7 @@ public abstract class ExecutableInfo {
 						return false;
 					break;
 				default:
-					throw runtimeException("Invalid flag for executable: {0}", f);
+					throw new BasicRuntimeException("Invalid flag for executable: {0}", f);
 			}
 		}
 		return true;
@@ -546,7 +545,7 @@ public abstract class ExecutableInfo {
 						return true;
 					break;
 				default:
-					throw runtimeException("Invalid flag for executable: {0}", f);
+					throw new BasicRuntimeException("Invalid flag for executable: {0}", f);
 			}
 		}
 		return false;

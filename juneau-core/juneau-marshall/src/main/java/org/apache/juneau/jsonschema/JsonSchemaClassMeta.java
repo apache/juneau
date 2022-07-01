@@ -46,7 +46,7 @@ public class JsonSchemaClassMeta extends ExtendedClassMeta {
 			try {
 				schema.append(SchemaAnnotation.asMap(x));
 			} catch (ParseException e) {
-				throw runtimeException(e);
+				throw asRuntimeException(e);
 			}
 		};
 		cm.forEachAnnotation(Schema.class, x -> true, c);

@@ -14,11 +14,10 @@ package org.apache.juneau.http.header;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
-
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.annotation.*;
@@ -212,7 +211,7 @@ public class BasicIntegerHeader extends BasicHeader {
 		try {
 			return value == null ? null : Integer.parseInt(value);
 		} catch (NumberFormatException e) {
-			throw runtimeException("Value ''{0}'' could not be parsed as an integer.", value);
+			throw new BasicRuntimeException("Value ''{0}'' could not be parsed as an integer.", value);
 		}
 	}
 

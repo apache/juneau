@@ -18,7 +18,6 @@ import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.internal.ArgUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
@@ -396,7 +395,7 @@ public class RestContext extends Context {
 		 */
 		public Supplier<?> resource() {
 			if (resource == null)
-				throw runtimeException("Resource not available.  init(Object) has not been called.");
+				throw new RuntimeException("Resource not available.  init(Object) has not been called.");
 			return resource;
 		}
 
@@ -863,7 +862,7 @@ public class RestContext extends Context {
 			Value<Config> v = Value.empty();
 
 			// Find our config file.  It's the last non-empty @RestResource(config).
-			VarResolver vr = beanStore.getBean(VarResolver.class).orElseThrow(()->runtimeException("VarResolver not found."));
+			VarResolver vr = beanStore.getBean(VarResolver.class).orElseThrow(()->new RuntimeException("VarResolver not found."));
 			Value<String> cfv = Value.empty();
 			ClassInfo.of(resourceClass).forEachAnnotation(Rest.class, x -> isNotEmpty(x.config()), x -> cfv.set(vr.resolve(x.config())));
 			String cf = cfv.orElse("");
@@ -4307,10 +4306,10 @@ public class RestContext extends Context {
 			Value<SwaggerProvider.Builder> v = Value.of(
 				SwaggerProvider
 					.create(beanStore)
-					.varResolver(()->beanStore.getBean(VarResolver.class).orElseThrow(()->runtimeException("VarResolver bean not found.")))
-					.fileFinder(()->beanStore.getBean(FileFinder.class).orElseThrow(()->runtimeException("FileFinder bean not found.")))
-					.messages(()->beanStore.getBean(Messages.class).orElseThrow(()->runtimeException("Messages bean not found.")))
-					.jsonSchemaGenerator(()->beanStore.getBean(JsonSchemaGenerator.class).orElseThrow(()->runtimeException("JsonSchemaGenerator bean not found.")))
+					.varResolver(()->beanStore.getBean(VarResolver.class).orElseThrow(()->new RuntimeException("VarResolver bean not found.")))
+					.fileFinder(()->beanStore.getBean(FileFinder.class).orElseThrow(()->new RuntimeException("FileFinder bean not found.")))
+					.messages(()->beanStore.getBean(Messages.class).orElseThrow(()->new RuntimeException("Messages bean not found.")))
+					.jsonSchemaGenerator(()->beanStore.getBean(JsonSchemaGenerator.class).orElseThrow(()->new RuntimeException("JsonSchemaGenerator bean not found.")))
 			);
 
 			// Replace with builder from bean store.

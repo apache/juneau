@@ -54,7 +54,7 @@ public final class XmlUtils {
 				return encodeElementNameInner(w, s);
 			w.append(s);
 		} catch (IOException e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 		return w;
 	}
@@ -78,7 +78,7 @@ public final class XmlUtils {
 					return encodeElementNameInner(w, s).toString();
 				}
 		} catch (IOException e) {
-			throw runtimeException(e); // Never happens
+			throw asRuntimeException(e); // Never happens
 		}
 
 		return s;
@@ -160,7 +160,7 @@ public final class XmlUtils {
 			}
 			return sw.toString();
 		} catch (IOException e) {
-			throw runtimeException(e); // Never happens
+			throw asRuntimeException(e); // Never happens
 		}
 	}
 
@@ -212,7 +212,7 @@ public final class XmlUtils {
 				w.append(s);
 			}
 		} catch (IOException e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 
 		return w;
@@ -343,7 +343,7 @@ public final class XmlUtils {
 				w.append(s);
 			}
 		} catch (IOException e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 
 		return w;

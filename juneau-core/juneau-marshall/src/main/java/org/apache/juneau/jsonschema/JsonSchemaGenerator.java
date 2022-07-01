@@ -886,7 +886,7 @@ public class JsonSchemaGenerator extends BeanTraverseContext implements JsonSche
 		try {
 			beanDefMapperBean = beanDefMapper.newInstance();
 		} catch (Exception e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 
 		jsonSerializer = builder.jsonSerializerBuilder.build();

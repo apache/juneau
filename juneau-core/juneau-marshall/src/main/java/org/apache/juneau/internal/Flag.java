@@ -92,7 +92,7 @@ public final class Flag {
 		} catch (RuntimeException e) {
 			throw e;
 		} catch (Throwable e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 

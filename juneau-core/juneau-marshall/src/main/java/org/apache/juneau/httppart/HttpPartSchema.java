@@ -726,7 +726,7 @@ public class HttpPartSchema {
 			else if (a instanceof Schema)
 				apply((Schema)a);
 			else
-				throw runtimeException("Builder.apply(@{0}) not defined", className(a));
+				throw new BasicRuntimeException("Builder.apply(@{0}) not defined", className(a));
 			return this;
 		}
 
@@ -4055,7 +4055,7 @@ public class HttpPartSchema {
 		try {
 			parseListOrCdl(s).forEach(x -> set.add(x.toString()));
 		} catch (ParseException e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 		return set;
 	}
@@ -4067,7 +4067,7 @@ public class HttpPartSchema {
 					return parseNumber(ss, Number.class);
 			return null;
 		} catch (ParseException e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 
@@ -4080,7 +4080,7 @@ public class HttpPartSchema {
 		try {
 			return JsonMap.ofJson(s);
 		} catch (ParseException e) {
-			throw runtimeException(e);
+			throw asRuntimeException(e);
 		}
 	}
 
