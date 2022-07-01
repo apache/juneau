@@ -12,7 +12,7 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.internal;
 
-import static org.apache.juneau.internal.StringUtils.*;
+import java.text.*;
 
 /**
  * Method argument utility methods.
@@ -63,7 +63,7 @@ public class ArgUtils {
 	 */
 	public static final void assertArg(boolean expression, String msg, Object...args) throws IllegalArgumentException {
 		if (! expression)
-			throw new IllegalArgumentException(format(msg, args));
+			throw new IllegalArgumentException(MessageFormat.format(msg, args));
 	}
 
 	/**
