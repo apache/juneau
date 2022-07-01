@@ -31,6 +31,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.marshaller.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
@@ -1847,7 +1848,7 @@ public class BeanContext extends Context {
 		 */
 		@FluentSetter
 		public <T> Builder example(Class<T> pojoClass, T o) {
-			return annotations(MarshalledAnnotation.create(pojoClass).example(json(o)).build());
+			return annotations(MarshalledAnnotation.create(pojoClass).example(SimpleJson.of(o)).build());
 		}
 
 		/**

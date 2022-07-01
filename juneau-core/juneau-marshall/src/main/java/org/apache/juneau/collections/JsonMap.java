@@ -24,6 +24,7 @@ import java.util.function.*;
 import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.marshaller.*;
 import org.apache.juneau.objecttools.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -1893,6 +1894,6 @@ public class JsonMap extends LinkedHashMap<String,Object> {
 
 	@Override /* Object */
 	public String toString() {
-		return json(this);
+		return SimpleJson.of(this);
 	}
 }

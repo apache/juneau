@@ -13,7 +13,6 @@
 package org.apache.juneau.collections;
 
 import static org.apache.juneau.internal.ThrowableUtils.*;
-import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 
 import java.io.*;
@@ -23,6 +22,7 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
+import org.apache.juneau.marshaller.*;
 import org.apache.juneau.objecttools.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -1032,6 +1032,6 @@ public class JsonList extends LinkedList<Object> {
 
 	@Override /* Object */
 	public String toString() {
-		return json(this);
+		return SimpleJson.of(this);
 	}
 }

@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.stats;
 
-import static org.apache.juneau.internal.StringUtils.*;
-
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
@@ -21,6 +19,7 @@ import java.util.concurrent.atomic.*;
 import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.marshaller.*;
 
 /**
  * Method execution statistics.
@@ -285,6 +284,6 @@ public class MethodExecStats {
 
 	@Override /* Object */
 	public String toString() {
-		return json(this);
+		return SimpleJson.of(this);
 	}
 }

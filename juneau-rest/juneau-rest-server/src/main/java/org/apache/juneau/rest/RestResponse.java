@@ -30,6 +30,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
+import org.apache.juneau.marshaller.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
@@ -332,7 +333,7 @@ public final class RestResponse {
 					if (ae.matches(".*(identity|\\*)\\s*;\\s*q\\s*=\\s*(0(?!\\.)|0\\.0).*")) {
 						throw new NotAcceptable(
 							"Unsupported encoding in request header ''Accept-Encoding'': ''{0}''\n\tSupported codings: {1}",
-							ae, json(encoders.getSupportedEncodings())
+							ae, SimpleJson.of(encoders.getSupportedEncodings())
 						);
 					}
 				} else {

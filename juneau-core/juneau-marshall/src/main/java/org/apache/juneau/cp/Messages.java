@@ -509,6 +509,6 @@ public class Messages extends ResourceBundle {
 		JsonMap m = new JsonMap();
 		for (String k : new TreeSet<>(keySet()))
 			m.put(k, getString(k));
-		return json(m);
+		return SimpleJson.of(m);
 	}
 }

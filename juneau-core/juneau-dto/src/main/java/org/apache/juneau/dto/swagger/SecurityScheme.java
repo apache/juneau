@@ -21,6 +21,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.marshaller.*;
 
 /**
  * Allows the definition of a security scheme that can be used by the operations.
@@ -377,7 +378,7 @@ public class SecurityScheme extends SwaggerElement {
 		if (isStrict() && ! contains(value, VALID_TYPES))
 			throw new BasicRuntimeException(
 				"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}",
-				value, json(VALID_TYPES)
+				value, SimpleJson.of(VALID_TYPES)
 			);
 		type = value;
 		return this;

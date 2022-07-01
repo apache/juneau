@@ -34,7 +34,6 @@ import javax.xml.bind.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.marshaller.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.reflect.*;
@@ -2856,16 +2855,6 @@ public final class StringUtils {
 	 */
 	public static final String decompress(byte[] is) throws Exception {
 		return read(new GZIPInputStream(new ByteArrayInputStream(is)));
-	}
-
-	/**
-	 * Converts the specified object to simplified JSON.
-	 *
-	 * @param o The object to convert.
-	 * @return The specified object as simplified JSON.
-	 */
-	public static final String json(Object o) {
-		return SimpleJson.DEFAULT == null ? stringify(o) : SimpleJson.DEFAULT.write(o);
 	}
 
 	/**

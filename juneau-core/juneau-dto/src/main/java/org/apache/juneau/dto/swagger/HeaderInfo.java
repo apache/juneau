@@ -20,6 +20,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.marshaller.*;
 
 /**
  * Describes a single HTTP header.
@@ -169,7 +170,7 @@ public class HeaderInfo extends SwaggerElement {
 		if (isStrict() && ! ArrayUtils.contains(value, VALID_COLLECTION_FORMATS))
 			throw new BasicRuntimeException(
 				"Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}",
-				value, json(VALID_COLLECTION_FORMATS)
+				value, SimpleJson.of(VALID_COLLECTION_FORMATS)
 			);
 		collectionFormat = value;
 		return this;
@@ -650,7 +651,7 @@ public class HeaderInfo extends SwaggerElement {
 		if (isStrict() && ! ArrayUtils.contains(value, VALID_TYPES))
 			throw new BasicRuntimeException(
 				"Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}",
-				value, json(VALID_TYPES)
+				value, SimpleJson.of(VALID_TYPES)
 			);
 		type = value;
 		return this;
