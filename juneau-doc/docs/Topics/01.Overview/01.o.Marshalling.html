@@ -61,7 +61,7 @@
 		|	String <jv>json</jv> = Json.<jsm>of</jsm>(<jk>new</jk> Person());
 	</p>
 	<p>
-		Parsing back into POJOs is equally simple for any of the supported languages 
+		Parsing back into POJOs is equally simple for any of the supported languages.
 		Language fragments are also supported.
 	</p>
 	<p class='bjava'>
@@ -113,7 +113,6 @@
 	</p>
 	<p>
 		Many POJOs such as primitives, beans, collections, arrays, and classes with various known constructors and methods are serializable out-of-the-box.
-		For other objects, "transforms" allow you to perform various mutations on them before serialization and after parsing.
 	</p>
 	<p> 
 		{@doc jm.Swaps Swaps} allow you to replace non-serializable objects with serializable equivalents.
@@ -187,14 +186,14 @@
 		Config annotations are extensively used in the REST Servlet APIs to configure how POJOs are marshalled through REST interfaces.
 	</p>
 	<p>
-		Configuration variables also support embedded variables for resolving settings at runtime.
+		Config variables also support embedded variables for resolving settings at runtime.
 	</p>
 	<p class='bjava'>
 		|	<jc>// Sort properties depending on value of system property "sortProperties".</jc>
 		|	<ja>@BeanConfig</ja>(sortProperties=<js>"$S{sortProperties,false}"</js>)
 	</p>
 	<p>
-		Default values for configuration settings can be overridden via system properties or environment variables.
+		Default values for config settings can be overridden via system properties or environment variables.
 		For example, the system property "BeanContext.sortProperties" or environment variable "BEANCONTEXT_SORTPROPERTIES" can be
 		used to set the default value for the sort properties setting.
 	</p>
@@ -263,7 +262,7 @@
 	</p>
 	<p class='bjava'>
 		|	WriterSerializer <jv>serializer</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>;
-		|	<jsm>assertEquals</jsm>(<js>"{foo:'bar',baz:123}"</js>, <jv>serializer</jv>.toString(<jv>myPojo</jv>));
+		|	<jsm>assertString</jsm>(<jv>serializer</jv>.toString(<jv>myPojo</jv>)).is(<js>"{foo:'bar',baz:123}"</js>);
 	</p>			
 	<ul class='seealso'>
 		<li class='link'>{@doc jm.SimplifiedJson} for more information.
@@ -323,7 +322,7 @@
 		|	Object <jv>value</jv> = <jk>new long</jk>[][]{{1,2,3},{4,5,6},{7,8,9}};
 		|
 		|	<jc>// Produces "1,2,3|4,5,6|7,8,9"</jc>
-		|	String <jv>output</jv> = OpenApiSerializer.<jsf>DEFAULT</jsf>.serialize(HttpPartType.<jsf>HEADER</jsf>, <jv>schema</jv>, <jv>value</jv>);
+		|	String <jv>output</jv> = OpenApi.<jsm>of</jsm>(HttpPartType.<jsf>HEADER</jsf>, <jv>schema</jv>, <jv>value</jv>);
 	</p>
 	<p>
 		Schema-based serialization and parsing is used heavily in both the server and client REST APIs with built-in schema
@@ -333,8 +332,8 @@
 		|	<jc>// REST server method with HTTP parts using schema validation.</jc>
 		|	<ja>@RestGet</ja>
 		|	<jk>public void</jk> doGet(
-		|		<ja>@Query</ja>(name=<js>"myParam"</js>, min=1, max=32) <jk>int</jk> <jv>myParam</jv>,
-		|		<ja>@Header</ja>(<js>"MyHeader"</js>, pattern=<js>"foo.*"</js>) String <jv>p2</jv>
+		|		<ja>@Query</ja>(name=<js>"myParam"</js>, schema=<ja>@Schema</ja>(min=1, max=32)) <jk>int</jk> <jv>myParam</jv>,
+		|		<ja>@Header</ja>(<js>"MyHeader"</js>, schema=<ja>@Schema</ja>(pattern=<js>"foo.*"</js>)) String <jv>p2</jv>
 		|	) {...}
 	</p>
 	<ul class='seealso'>

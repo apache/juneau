@@ -17,6 +17,7 @@ import java.lang.reflect.*;
 import java.nio.charset.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
@@ -123,6 +124,26 @@ public class OpenApi extends CharMarshaller {
 	}
 
 	/**
+	 * Parses an OpenApi input object to the specified Java type.
+	 *
+	 * <p>
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.
+	 *
+	 * @param <T> The class type of the object being created.
+	 * @param partType The part type being created.
+	 * @param schema The part type schema.  Can be <jk>null</jk>.
+	 * @param input
+	 * 	The input.
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public static <T> T to(HttpPartType partType, HttpPartSchema schema, String input, Class<T> type) throws ParseException, IOException {
+		return ((OpenApiParser)DEFAULT.getParser()).parse(partType, schema, input, type);
+	}
+
+	/**
 	 * Parses an OpenApi input string to the specified Java type.
 	 *
 	 * <p>
@@ -220,5 +241,20 @@ public class OpenApi extends CharMarshaller {
 	public static Object of(Object object, Object output) throws SerializeException, IOException {
 		DEFAULT.write(object, output);
 		return output;
+	}
+
+	/**
+	 * Serializes a Java object to an OpenApi output.
+	 *
+	 * <p>
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.write(<jv>output</jv>)</c>.
+	 * @param partType The part type being parsed.
+	 * @param schema The part schema.  Can be <jk>null</jk>.
+	 * @param object The object to serialize.
+	 * @return The output object.
+	 * @throws SerializeException If a problem occurred trying to convert the output.
+	 */
+	public static String of(HttpPartType partType, HttpPartSchema schema, Object object) throws SerializeException {
+		return ((OpenApiSerializer)DEFAULT.getSerializer()).serialize(partType, schema, object);
 	}
 }

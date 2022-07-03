@@ -27,7 +27,7 @@
 	</p>
 	<p class='bjava'>	
 		|	<ja>@Rest</ja>(path=<js>"/petstore"</js>)
-		|	<jk>public class</jk> PetStore {
+		|	<jk>public class</jk> PetStoreRest {
 		|		
 		|		<ja>@RestPost</ja>(path=<js>"/pets"</js>, guards=AdminGuard.<jk>class</jk>)
 		|		<jk>public</jk> Ok addPet(
@@ -45,7 +45,7 @@
 	</p>
 	<p class='bjava'>	
 		|	<ja>@Remote</ja>(path=<js>"/petstore"</js>)
-		|	<jk>public interface</jk> PetStoreService {
+		|	<jk>public interface</jk> PetStoreClient {
 		|		
 		|		<ja>@RemotePost</ja>(<js>"/pets"</js>)
 		|		Ok addPet(
@@ -67,7 +67,7 @@
 		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().simpleJson().basicAuth(...).build();
 		|	
 		|	<jc>// Instantiate our proxy interface.</jc>
-		|	PetStore <jv>store</jv> = <jv>client</jv>.getRemote(PetStore.<jk>class</jk>, <js>"http://localhost:10000"</js>);
+		|	PetStoreClient <jv>store</jv> = <jv>client</jv>.getRemote(PetStoreClient.<jk>class</jk>, <js>"http://localhost:10000"</js>);
 		|	
 		|	<jc>// Use it to create a pet.</jc>
 		|	CreatePet <jv>createPet</jv> = <jk>new</jk> CreatePet(<js>"Fluffy"</js>, 9.99);
