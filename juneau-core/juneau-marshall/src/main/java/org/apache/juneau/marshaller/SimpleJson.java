@@ -47,6 +47,10 @@ import org.apache.juneau.serializer.*;
  */
 public class SimpleJson extends CharMarshaller {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Default reusable instance.
 	 */
@@ -56,6 +60,10 @@ public class SimpleJson extends CharMarshaller {
 	 * Default reusable instance, readable format.
 	 */
 	public static final SimpleJson DEFAULT_READABLE = new SimpleJson(SimpleJsonSerializer.DEFAULT_READABLE, SimpleJsonParser.DEFAULT);
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Constructor.

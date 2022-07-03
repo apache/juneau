@@ -978,6 +978,14 @@ public class Swagger extends SwaggerElement {
 		return new MultiSet<>(s, super.keySet());
 	}
 
+	/**
+	 * A synonym of {@link #toString()}.
+	 * @return This object serialized as JSON.
+	 */
+	public String asJson() {
+		return toString();
+	}
+
 	@Override /* Object */
 	public String toString() {
 		return JsonSerializer.DEFAULT.toString(this);

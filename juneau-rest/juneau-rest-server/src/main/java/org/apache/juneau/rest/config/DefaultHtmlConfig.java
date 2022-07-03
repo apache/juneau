@@ -10,45 +10,41 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.httppart;
+package org.apache.juneau.rest.config;
+
+import org.apache.juneau.html.annotation.*;
 
 /**
- * Represents possible enum values that can be passed to the {@link HttpPartSerializerSession#serialize(HttpPartType, HttpPartSchema, Object)}.
- *
- * <ul class='seealso'>
- * 	<li class='link'>{@doc jm.HttpPartSerializersParsers}
- * 	<li class='extlink'>{@source}
- * </ul>
+ * Predefined REST configuration that defines common default values for HTML Doc serializers.
  */
-public enum HttpPartType {
+@HtmlDocConfig(
 
-	/** An HTTP request body */
-	BODY,
+	// Default page header contents.
+	header={
+		"<h1>$RS{title}</h1>",  // Use @Rest(title)
+		"<h2>$RS{operationSummary,description}</h2>", // Use either @RestOp(summary) or @Rest(description)
+		"$C{REST/header}"  // Extra header HTML defined in external config file.
+	},
 
-	/** A URI path variable */
-	PATH,
+	// Basic page navigation links.
+	navlinks={
+		"up: request:/.."
+	},
 
-	/** A URI query parameter */
-	QUERY,
+	// Default stylesheet to use for the page.
+	// Can be overridden from external config file.
+	// Default is DevOps look-and-feel (aka Depression look-and-feel).
+	stylesheet="$C{REST/theme,servlet:/htdocs/themes/devops.css}",
 
-	/** A form-data parameter */
-	FORMDATA,
+	// Default contents to add to the <head> section of the HTML page.
+	// Use it to add a favicon link to the page.
+	head="$C{REST/head}",
 
-	/** An HTTP request header */
-	HEADER,
+	// No default page footer contents.
+	// Can be overridden from external config file.
+	footer="$C{REST/footer}",
 
-	/** An HTTP response header */
-	RESPONSE_HEADER,
-
-	/** An HTTP response body */
-	RESPONSE_BODY,
-
-	/** An HTTP response status code */
-	RESPONSE_STATUS,
-
-	/** Generic part */
-	ANY,
-
-	/** A non-standard field */
-	OTHER,
-}
+	// By default, table cell contents should not wrap.
+	nowrap="true"
+)
+public interface DefaultHtmlConfig {}

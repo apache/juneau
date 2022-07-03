@@ -48,10 +48,21 @@ import org.apache.juneau.serializer.*;
  */
 public class OpenApi extends CharMarshaller {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Default reusable instance.
 	 */
 	public static final OpenApi DEFAULT = new OpenApi();
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private final OpenApiSerializer s;
+	private final OpenApiParser p;
 
 	/**
 	 * Constructor.
@@ -65,6 +76,8 @@ public class OpenApi extends CharMarshaller {
 	 */
 	public OpenApi(OpenApiSerializer s, OpenApiParser p) {
 		super(s, p);
+		this.s = s;
+		this.p = p;
 	}
 
 	/**
@@ -130,7 +143,6 @@ public class OpenApi extends CharMarshaller {
 	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.
 	 *
 	 * @param <T> The class type of the object being created.
-	 * @param partType The part type being created.
 	 * @param schema The part type schema.  Can be <jk>null</jk>.
 	 * @param input
 	 * 	The input.
@@ -139,8 +151,8 @@ public class OpenApi extends CharMarshaller {
 	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public static <T> T to(HttpPartType partType, HttpPartSchema schema, String input, Class<T> type) throws ParseException, IOException {
-		return ((OpenApiParser)DEFAULT.getParser()).parse(partType, schema, input, type);
+	public static <T> T to(HttpPartSchema schema, String input, Class<T> type) throws ParseException, IOException {
+		return DEFAULT.p.parse(HttpPartType.ANY, schema, input, type);
 	}
 
 	/**
@@ -248,13 +260,12 @@ public class OpenApi extends CharMarshaller {
 	 *
 	 * <p>
 	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.write(<jv>output</jv>)</c>.
-	 * @param partType The part type being parsed.
 	 * @param schema The part schema.  Can be <jk>null</jk>.
 	 * @param object The object to serialize.
 	 * @return The output object.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	public static String of(HttpPartType partType, HttpPartSchema schema, Object object) throws SerializeException {
-		return ((OpenApiSerializer)DEFAULT.getSerializer()).serialize(partType, schema, object);
+	public static String of(HttpPartSchema schema, Object object) throws SerializeException {
+		return DEFAULT.s.serialize(HttpPartType.ANY, schema, object);
 	}
 }

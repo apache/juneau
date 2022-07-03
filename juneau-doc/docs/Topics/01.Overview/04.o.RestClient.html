@@ -39,7 +39,8 @@
 <div class='topic'>
 	<p>
 		The {@link oajr.mock.MockRestClient} class is used for performing serverless unit testing of {@link oajr.annotation.Rest @Rest}-annotated
-		and {@link oaj.http.remote.Remote @Remote}-annotated classes.
+		and {@link oaj.http.remote.Remote @Remote}-annotated classes.  It perform full serialization and parsing of the HTTP request and responses, 
+		but bypasses the network layer to significantly improve speed while still performing real testing.
 	</p>
 	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
@@ -53,7 +54,7 @@
 		|		<jc>// Our REST resource to test.</jc>
 		|		<jc>// Simply echos the response.</jc>
 		|		<ja>@Rest</ja>
-		|		<jk>public static class</jk> EchoRest <jk>implements</jk> BasicRestServlet {
+		|		<jk>public static class</jk> EchoRest <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicJsonConfig {
 		|
 		|			<ja>@RestPut</ja>
 		|			<jk>public</jk> MyBean echo(<ja>@Content</ja> MyBean <jv>bean</jv>) {

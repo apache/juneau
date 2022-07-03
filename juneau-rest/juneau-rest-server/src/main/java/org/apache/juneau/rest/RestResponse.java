@@ -634,7 +634,7 @@ public final class RestResponse {
 	 * Sets the <js>"Exception"</js> attribute to the specified throwable.
 	 *
 	 * <p>
-	 * This exception is used by {@link BasicRestLogger} for logging purposes.
+	 * This exception is used by {@link RestLogger} for logging purposes.
 	 *
 	 * @param t The attribute value.
 	 * @return This object.
@@ -648,7 +648,7 @@ public final class RestResponse {
 	 * Sets the <js>"NoTrace"</js> attribute to the specified boolean.
 	 *
 	 * <p>
-	 * This flag is used by {@link BasicRestLogger} and tells it not to log the current request.
+	 * This flag is used by {@link RestLogger} and tells it not to log the current request.
 	 *
 	 * @param b The attribute value.
 	 * @return This object.
@@ -671,7 +671,7 @@ public final class RestResponse {
 	 * Sets the <js>"Debug"</js> attribute to the specified boolean.
 	 *
 	 * <p>
-	 * This flag is used by {@link BasicRestLogger} to help determine how a request should be logged.
+	 * This flag is used by {@link RestLogger} to help determine how a request should be logged.
 	 *
 	 * @param b The attribute value.
 	 * @return This object.

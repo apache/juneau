@@ -17,7 +17,17 @@
 
 <div class='topic'>
 	<p>
-		The {@doc juneau-assertions} module in Juneau is a powerful API for performing fluent style assertions.
+		The {@doc juneau-assertions juneau-assertions} module in Juneau is a powerful API for performing fluent style assertions.
+	</p>
+	<p>
+		Fluent assertions have two types of methods:
+	</p>
+	<ul>
+		<li><c>"asX"</c> methods which perform transformations.
+		<li><c>"isX"</c> methods which perform assertions.
+	</ul>
+	<p>
+		Multiple transformations and assertions can be performed per statement.
 	</p>
 	<h5 class='figure'>Examples:</h5>
 	<p class='bjava'>
@@ -33,7 +43,7 @@
 		|	<jc>// Extract a subset of properties from a list of beans and compare using Simplified JSON.</jc>
 		|	List&lt;MyBean&gt; <jv>myListOfBeans</jv> = ...;
 		|	<jsm>assertBeanList</jsm>(<jv>myListOfBeans</jv>)
-		|		.asPropertyMap(<js>"a,b"</js>)
+		|		.asPropertyMaps(<js>"a,b"</js>)
 		|		.asJson().is(<js>"[{a:1,b:'foo'}]"</js>);
 		|	
 		|	<jc>// Perform an arbitrary Predicate check against a bean.</jc>

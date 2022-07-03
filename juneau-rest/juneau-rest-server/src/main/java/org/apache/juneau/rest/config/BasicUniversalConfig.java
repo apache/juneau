@@ -29,7 +29,8 @@ import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
 
 /**
- * Basic configuration for a REST resource that supports all languages and provides common default configuration values.
+ * Predefined configuration for a REST resource that supports all languages
+ * and provides common default configuration values.
  *
  * <p>
  * 	Default settings defined:
@@ -155,48 +156,6 @@ import org.apache.juneau.xml.*;
 		MsgPackParser.class,
 		PlainTextParser.class,
 		CsvParser.class
-	},
-
-	// Optional external configuration file.
-	config="$S{juneau.configFile,SYSTEM_DEFAULT}"
+	}
 )
-@BeanConfig(
-	// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.
-	ignoreUnknownBeanProperties="true",
-	ignoreUnknownEnumValues="true"
-)
-@SerializerConfig(
-	// Enable automatic resolution of URI objects to root-relative values.
-	uriResolution="ROOT_RELATIVE"
-)
-@HtmlDocConfig(
-
-	// Default page header contents.
-	header={
-		"<h1>$RS{title}</h1>",  // Use @Rest(title)
-		"<h2>$RS{operationSummary,description}</h2>", // Use either @RestOp(summary) or @Rest(description)
-		"$C{REST/header}"  // Extra header HTML defined in external config file.
-	},
-
-	// Basic page navigation links.
-	navlinks={
-		"up: request:/.."
-	},
-
-	// Default stylesheet to use for the page.
-	// Can be overridden from external config file.
-	// Default is DevOps look-and-feel (aka Depression look-and-feel).
-	stylesheet="$C{REST/theme,servlet:/htdocs/themes/devops.css}",
-
-	// Default contents to add to the <head> section of the HTML page.
-	// Use it to add a favicon link to the page.
-	head="$C{REST/head}",
-
-	// No default page footer contents.
-	// Can be overridden from external config file.
-	footer="$C{REST/footer}",
-
-	// By default, table cell contents should not wrap.
-	nowrap="true"
-)
-public interface BasicUniversalConfig {}
+public interface BasicUniversalConfig extends DefaultConfig, DefaultHtmlConfig {}

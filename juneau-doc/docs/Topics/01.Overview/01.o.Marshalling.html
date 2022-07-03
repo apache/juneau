@@ -322,7 +322,7 @@
 		|	Object <jv>value</jv> = <jk>new long</jk>[][]{{1,2,3},{4,5,6},{7,8,9}};
 		|
 		|	<jc>// Produces "1,2,3|4,5,6|7,8,9"</jc>
-		|	String <jv>output</jv> = OpenApi.<jsm>of</jsm>(HttpPartType.<jsf>HEADER</jsf>, <jv>schema</jv>, <jv>value</jv>);
+		|	String <jv>output</jv> = OpenApi.<jsm>of</jsm>(<jv>schema</jv>, <jv>value</jv>);
 	</p>
 	<p>
 		Schema-based serialization and parsing is used heavily in both the server and client REST APIs with built-in schema
@@ -351,8 +351,8 @@
 	</p>
 	<p class='bjava'>
 		|	<jc>// Create JSON strings from scratch using fluent-style code.</jc>
-		|	String <jv>myMap</jv> = JsonMap.<jsm>create</jsm>().append(<js>"foo"</js>,<js>"bar"</js>).toString(); 
-		|	String <jv>myList</jv> = JsonList.<jsm>of</jsm>(<js>"foo"</js>, 123, <jk>null</jk>, <jv>jsonObject</jv>).toString(); 
+		|	String <jv>myMap</jv> = JsonMap.<jsm>create</jsm>().append(<js>"foo"</js>,<js>"bar"</js>).asJson(); 
+		|	String <jv>myList</jv> = JsonList.<jsm>of</jsm>(<js>"foo"</js>, 123, <jk>null</jk>, <jv>jsonObject</jv>).asJson(); 
 		|	
 		|	<jc>// Parse directly from JSON into generic DOMs.</jc>
 		|	Map&lt;String,Object&gt; <jv>myMap</jv> = JsonMap.<jsm>ofJson</jsm>(<js>"{foo:'bar'}"</js>); 
@@ -373,11 +373,12 @@
 <h5 class='topic'>Serializer and Parser Sets</h5>
 <div class='topic'>
 	<p>
-		<code>SerializerSet</code> and <code>ParserSet</code> classes allow serializers and parsers 
+		{@link oaj.serializer.SerializerSet} and {@link oaj.parser.ParserSet} classes allow serializers and parsers 
 		to be retrieved by W3C-compliant HTTP <code>Accept</code> and <code>Content-Type</code> values:
 	</p>
 	<p class='bjava'>
-		|	<jc>// Construct a new serializer group with configuration parameters that get applied to all serializers.</jc>
+		|	<jc>// Construct a new serializer group with configuration parameters that get applied 
+		|	// to all serializers.</jc>
 		|	SerializerSet <jv>serializerSet</jv> = SerializerSet
 		|		.<jsm>create</jsm>()
 		|		.add(JsonSerializer.<jk>class</jk>, UrlEncodingSerializer.<jk>class</jk>);

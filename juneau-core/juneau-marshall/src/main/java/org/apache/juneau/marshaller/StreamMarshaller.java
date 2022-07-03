@@ -29,6 +29,10 @@ import org.apache.juneau.serializer.*;
  */
 public class StreamMarshaller extends Marshaller {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
 	private final OutputStreamSerializer s;
 	private final InputStreamParser p;
 

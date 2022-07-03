@@ -50,7 +50,7 @@
 		|			)
 		|		);
 		|		
-		|	String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>mytable</jv>);
+		|	String <jv>html</jv> = Html.<jsm>of</jsm>(<jv>mytable</jv>);
 	</p>
 	<p class='bxml'><xt>
 		|	&lt;table&gt;
@@ -174,10 +174,10 @@
 		|		);
 		|
 		|	<jc>// Serialize using JSON serializer.</jc>
-		|	String <jv>swaggerJson</jv> = JsonSerializer.<jsf>DEFAULT_READABLE</jsf>.serialize(<jv>swagger</jv>);
+		|	String <jv>swaggerJson</jv> = Json.<jsm>of</jsm>(<jv>swagger</jv>);
 		|	
-		|	<jc>// Or just use toString().</jc>
-		|	String <jv>swaggerJson</jv> = <jv>swagger</jv>.toString();
+		|	<jc>// Or just use toString() or asJson().</jc>
+		|	String <jv>swaggerJson</jv> = <jv>swagger</jv>.asJson();
 	</p>
 	<ul class='seealso'>
 		<li class='link'>{@doc jd.Swagger Swagger} for more information.

@@ -89,18 +89,6 @@ import org.apache.juneau.serializer.annotation.*;
 		OpenApiParser.class,
 	},
 
-	defaultAccept="text/openapi",
-
-	// Optional external configuration file.
-	config="$S{juneau.configFile,SYSTEM_DEFAULT}"
+	defaultAccept="text/openapi"
 )
-@BeanConfig(
-	// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.
-	ignoreUnknownBeanProperties="true",
-	ignoreUnknownEnumValues="true"
-)
-@SerializerConfig(
-	// Enable automatic resolution of URI objects to root-relative values.
-	uriResolution="ROOT_RELATIVE"
-)
-public interface BasicOpenApiConfig {}
+public interface BasicOpenApiConfig extends DefaultConfig {}

@@ -1789,7 +1789,7 @@ public class RestContext extends Context {
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// Our customized logger.</jc>
-		 * 	<jk>public class</jk> MyLogger <jk>extends</jk> BasicRestLogger {
+		 * 	<jk>public class</jk> MyLogger <jk>extends</jk> RestLogger {
 		 *
 		 * 		<ja>@Override</ja>
 		 * 			<jk>protected void</jk> log(Level <jv>level</jv>, String <jv>msg</jv>, Throwable <jv>e</jv>) {
@@ -1818,7 +1818,7 @@ public class RestContext extends Context {
 		 *
 		 * <ul class='notes'>
 		 * 	<li class='note'>
-		 * 		The default call logger if not specified is {@link BasicRestLogger}.
+		 * 		The default call logger if not specified is {@link RestLogger}.
 		 * 	<li class='note'>
 		 * 		The resource class itself will be used if it implements the {@link RestLogger} interface and not
 		 * 		explicitly overridden via this annotation.

@@ -199,7 +199,7 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The default call logger if not specified is {@link BasicRestLogger}.
+	 * 		The default call logger if not specified is {@link RestLogger}.
 	 * 	<li class='note'>
 	 * 		The resource class itself will be used if it implements the {@link RestLogger} interface and not
 	 * 		explicitly overridden via this annotation.

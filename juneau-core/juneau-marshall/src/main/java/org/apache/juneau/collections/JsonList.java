@@ -1058,6 +1058,15 @@ public class JsonList extends LinkedList<Object> {
 	// Overridden methods.
 	//------------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * A synonym for {@link #toString()}
+	 *
+	 * @return This object as a JSON string.
+	 */
+	public String asJson() {
+		return toString();
+	}
+
 	@Override /* Object */
 	public String toString() {
 		return SimpleJson.of(this);
