@@ -1050,7 +1050,7 @@
 	<p>
 		The {@link org.apache.juneau.collections.JsonMap} and {@link org.apache.juneau.collections.JsonList} collections classes allow you
 		to programmatically build generic JSON data structures.  They are similar in concept to 
-		<c>JSONObject</c> and <c>JSONArray</c> that you find in other JSON marshalling APIs, but
+		<c>JSONObject</c> and <c>JSONArray</c> that you find in other JSON marshalling APIs but
 		can be used to generate DOMs in any of the supported languages.
 	</p>
 	<p class='bjava'>
@@ -1217,7 +1217,7 @@
 	}
 	</p>
 	<p>
-		It looks simplistic, but the server and client APIs are highly sophisticated libraries that allow you
+		It looks simplistic but the server and client APIs are highly sophisticated libraries that allow you
 		to perform complex tasks using very little code.
 	</p>
 </div>
@@ -1372,38 +1372,21 @@
 	 * Predefined REST configuration that defines common default values for all configurations.
 	 */</jd>
 	<ja>@Rest</ja>(
-		allowedHeaderParams=<js>"$S{j.allowedHeaderParams,$E{J_ALLOWED_HEADER_PARAMS,Accept,Content-Type}}"</js>,
-		allowedMethodHeaders=<js>"$S{j.allowedMethodHeaders,$E{J_ALLOWED_METHOD_HEADERS,}}"</js>,
-		allowedMethodParams=<js>"$S{j.allowedMethodParams,$E{J_ALLOWED_METHOD_PARAMS,HEAD,OPTIONS}}"</js>,
-		beanStore=BeanStore.<jk>class</jk>,
-		callLogger=BasicRestLogger.<jk>class</jk>,
-		clientVersionHeader=<js>"$S{j.clientVersionHeader,$E{J_CLIENT_VERSION_HEADER,Client-Version}}"</js>,
+		<jc>// Configuration file.</jc>
 		config=<js>"$S{j.configFile,$E{J_CONFIG_FILE,SYSTEM_DEFAULT}}"</js>,
-		consumes={},
-		contextClass=RestContext.<jk>class</jk>,
+	
+		<jc>// Standard fields.</jc>
+		path=<js>""</js>,
+		roleGuard=<js>""</js>,
+		rolesDeclared=<js>""</js>,
+	
+		<jc>// Configuration beans.</jc>
 		converters={},
-		debug=<js>"$S{j.debug,$E{J_DEBUG,}}"</js>,
-		debugEnablement=BasicDebugEnablement.<jk>class</jk>,
-		debugOn=<js>"$S{j.debugOn,$E{J_DEBUG_ON,}}"</js>,
-		defaultAccept=<js>"$S{j.defaultAccept,$E{J_DEFAULT_ACCEPT,}}"</js>,
-		defaultCharset=<js>"$S{j.defaultCharset,$E{J_DEFAULT_CHARSET,UTF-8}}"</js>,
-		defaultContentType=<js>"$S{j.defaultContentType,$E{J_DEFAULT_CONTENT_TYPE,}}"</js>,
-		defaultRequestAttributes=<js>"$S{j.defaultRequestAttributes,$E{J_DEFAULT_REQUEST_ATTRIBUTES,}}"</js>,
-		defaultRequestHeaders=<js>"$S{j.defaultRequestHeaders,$E{J_DEFAULT_REQUEST_HEADERS,}}"</js>,
-		defaultResponseHeaders=<js>"$S{j.defaultResponseHeaders,$E{J_DEFAULT_RESPONSE_HEADERS,}}"</js>,
-		description=<js>""</js>,
-		disableContentParam=<js>"$S{j.disableContentParam,$E{J_DISABLE_CONTENT_PARAM,false}}"</js>,
 		encoders={IdentityEncoder.<jk>class</jk>},
-		fileFinder=BasicFileFinder.<jk>class</jk>,
 		guards={},
-		maxInput=<js>"$S{j.maxInput,$E{J_MAX_INPUT,1000000}}"</js>,
-		messages=<js>"$S{j.messages,$E{J_MESSAGES,}}"</js>,
 		parsers={},
 		partParser=OpenApiParser.<jk>class</jk>,
 		partSerializer=OpenApiSerializer.<jk>class</jk>,
-		path=<js>""</js>,
-		produces={},
-		renderResponseStackTraces=<js>"$S{j.renderResponseStackTraces,$E{J_RENDER_RESPONSE_STACK_TRACES,false}}"</js>,
 		responseProcessors={
 			ReaderProcessor.<jk>class</jk>,
 			InputStreamProcessor.<jk>class</jk>,
@@ -1415,7 +1398,6 @@
 			PlainTextPojoProcessor.<jk>class</jk>,
 			SerializedPojoProcessor.<jk>class</jk>
 		},
-		restChildrenClass=RestChildren.<jk>class</jk>,
 		restOpArgs={
 			AttributeArg.<jk>class</jk>,
 			ContentArg.<jk>class</jk>,
@@ -1444,20 +1426,51 @@
 			RestResponseArgs.<jk>class</jk>,
 			DefaultArg.<jk>class</jk>
 		},
-		restOpContextClass=RestOpContext.<jk>class</jk>,
-		restOperationsClass=RestOperations.<jk>class</jk>,
-		roleGuard=<js>""</js>,
-		rolesDeclared=<js>""</js>,
 		serializers={},
-		siteName=<js>"$S{j.siteName,$E{J_SITE_NAME,}}"</js>,
-		staticFiles=BasicStaticFiles.<jk>class</jk>,
-		swagger=<ja>@Swagger</ja>,
-		swaggerProvider=BasicSwaggerProvider.<jk>class</jk>,
-		title=<js>"$S{j.title,$E{J_TITLE,}}"</js>,
+	
+		<jc>// Configurable settings.</jc>
+		allowedHeaderParams=<js>"$S{j.allowedHeaderParams,$E{J_ALLOWED_HEADER_PARAMS,Accept,Content-Type}}"</js>,
+		allowedMethodHeaders=<js>"$S{j.allowedMethodHeaders,$E{J_ALLOWED_METHOD_HEADERS,}}"</js>,
+		allowedMethodParams=<js>"$S{j.allowedMethodParams,$E{J_ALLOWED_METHOD_PARAMS,HEAD,OPTIONS}}"</js>,
+		clientVersionHeader=<js>"$S{j.clientVersionHeader,$E{J_CLIENT_VERSION_HEADER,Client-Version}}"</js>,
+		debug=<js>"$S{j.debug,$E{J_DEBUG,}}"</js>,
+		debugOn=<js>"$S{j.debugOn,$E{J_DEBUG_ON,}}"</js>,
+		defaultAccept=<js>"$S{j.defaultAccept,$E{J_DEFAULT_ACCEPT,}}"</js>,
+		defaultCharset=<js>"$S{j.defaultCharset,$E{J_DEFAULT_CHARSET,UTF-8}}"</js>,
+		defaultContentType=<js>"$S{j.defaultContentType,$E{J_DEFAULT_CONTENT_TYPE,}}"</js>,
+		defaultRequestAttributes=<js>"$S{j.defaultRequestAttributes,$E{J_DEFAULT_REQUEST_ATTRIBUTES,}}"</js>,
+		defaultRequestHeaders=<js>"$S{j.defaultRequestHeaders,$E{J_DEFAULT_REQUEST_HEADERS,}}"</js>,
+		defaultResponseHeaders=<js>"$S{j.defaultResponseHeaders,$E{J_DEFAULT_RESPONSE_HEADERS,}}"</js>,
+		disableContentParam=<js>"$S{j.disableContentParam,$E{J_DISABLE_CONTENT_PARAM,false}}"</js>,
+		maxInput=<js>"$S{j.maxInput,$E{J_MAX_INPUT,1000000}}"</js>,
+		messages=<js>"$S{j.messages,$E{J_MESSAGES,}}"</js>,
+		renderResponseStackTraces=<js>"$S{j.renderResponseStackTraces,$E{J_RENDER_RESPONSE_STACK_TRACES,false}}"</js>,
 		uriAuthority=<js>"$S{j.uriAuthority,$E{J_URI_AUTHORITY,}}"</js>,
 		uriContext=<js>"$S{j.uriContext,$E{J_URI_CONTEXT,}}"</js>,
 		uriRelativity=<js>"$S{j.uriRelativity,$E{J_URI_RELATIVITY,}}"</js>,
-		uriResolution=<js>"$S{j.uriResolution,$E{J_URI_RESOLUTION,}}"</js>
+		uriResolution=<js>"$S{j.uriResolution,$E{J_URI_RESOLUTION,}}"</js>,
+	
+		<jc>// Metadata settings.</jc>
+		consumes={},
+		description=<js>""</js>,
+		produces={},
+		siteName=<js>"$S{j.siteName,$E{J_SITE_NAME,}}"</js>,
+		swagger=@Swagger,
+		title=<js>"$S{j.title,$E{J_TITLE,}}"</js>,
+	
+		<jc>// Injectable/overridable beans.</jc>
+		beanStore=BeanStore.Void.<jk>class</jk>,  <jc>// Defaults to BeanStore.</jc>
+		callLogger=CallLogger.Void.<jk>class</jk>,  <jc>// Defaults to BasicCallLogger.</jc>
+		debugEnablement=DebugEnablement.Void.<jk>class</jk>,  <jc>// Defaults to BasicDefaultEnablement.</jc>
+		fileFinder=FileFinder.Void.<jk>class</jk>,  <jc>// Defaults to BasicFileFinder.</jc>
+		staticFiles=StaticFiles.Void.<jk>class</jk>,  <jc>// Defaults to BasicStaticFiles.</jc>
+		swaggerProvider=SwaggerProvider.Void.<jk>class</jk>,  <jc>// Defaults to BasicSwaggerProvider.</jc>
+	
+		<jc>// Overridable context classes.</jc>
+		contextClass=RestContext.<jk>class</jk>,
+		restChildrenClass=RestChildren.<jk>class</jk>,
+		restOpContextClass=RestOpContext.<jk>class</jk>,
+		restOperationsClass=RestOperations.<jk>class</jk>
 	)
 	<ja>@BeanConfig</ja>(
 		<jc>// When parsing generated beans, ignore unknown properties 
@@ -1582,7 +1595,7 @@
 	}
 	</p>
 	<p>
-		The various parts require their own topics to fully appreciate the scope of abilities, but the following is a summary:
+		The various parts require their own topics to fully appreciate the scope of abilities but the following is a summary:
 	</p>
 	<ul class='spaced-list'>
 		<li>Annotated with {@link org.apache.juneau.rest.annotation.RestOp @RestOp}.
@@ -2033,7 +2046,7 @@
 	URL <jv>key4</jv> = <jv>config</jv>.getObject(<js>"Section1/key4"</js>, URL.<jk>class</jk>);
 	</p>
 	<p>
-		The config language may look simple, but it is a very powerful feature with many capabilities.
+		The config language may look simple but it is a very powerful feature with many capabilities.
 	</p>
 	<ul class='seealso'>
 		<li class='link'>{@doc juneau-config juneau-config} for more information.
@@ -2073,7 +2086,7 @@
 	<jc>// Extract a subset of properties from a list of beans and compare using Simplified JSON.</jc>
 	List&lt;MyBean&gt; <jv>myListOfBeans</jv> = ...;
 	<jsm>assertBeanList</jsm>(<jv>myListOfBeans</jv>)
-		.asPropertyMap(<js>"a,b"</js>)
+		.asPropertyMaps(<js>"a,b"</js>)
 		.asJson().is(<js>"[{a:1,b:'foo'}]"</js>);
 	
 	<jc>// Perform an arbitrary Predicate check against a bean.</jc>
@@ -2618,22 +2631,13 @@
 	</ul>
 	<p>
 		It's common to use the {@link org.apache.juneau.annotation.Bean#properties @Bean(properties|p)} annotation to force the ordering
-		of properties during marshalling.  IBM JVMs keep the ordering of fields and methods in the compiled bytecode, but
+		of properties during marshalling.  IBM JVMs keep the ordering of fields and methods in the compiled bytecodebut
 		Oracle JVMs do not and return fields/methods in random order.  The {@link org.apache.juneau.annotation.Bean#properties @Bean(properties|p)} annotation was added to 
 		help with this limitation.
 	</p>
 	<p class='bjava'>
 	<jc>// Bean should be marshalled with properties in the specified order.</jc>
 	<ja>@Bean</ja>(properties=<js>"foo,bar,baz"</js>)
-	<jk>public class</jk> MyBean {
-		...
-	}
-	</p>
-	<p>
-		Another option to force ordering of properties is to use {@link org.apache.juneau.annotation.Bean#sort @Bean(sort)}.
-	</p>
-	<p class='bjava'>
-	<ja>@Bean</ja>(sort=<jk>true</jk>)
 	<jk>public class</jk> MyBean {
 		...
 	}
@@ -2716,10 +2720,8 @@
 		<jk>public</jk> String <jf>f1</jf> = <js>"f1"</js>;
 	}
 
-	JsonSerializer <jv>serializer</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>;
-	
 	A1 <jv>a1</jv> = <jk>new</jk> A1();
-	String <jv>result</jv> = <jv>serializer</jv>.serialize(<jv>a1</jv>);
+	String <jv>result</jv> = SimpleJson.<jsm>of</jsm>(<jv>a1</jv>);
 	<jsm>assertEquals</jsm>(<js>"{f0:'f0'}"</js>, <jv>result</jv>);  <jc>// Note f1 is not serialized.</jc> 
 	</p>
 	<p>
@@ -2734,7 +2736,7 @@
 	</p>
 	<p>
 		For example, in the following class hierarchy, instances of <c>C3</c> will include property 
-		<c>p3</c>, but not <c>p1</c> or <c>p2</c>.
+		<c>p3</c> but not <c>p1</c> or <c>p2</c>.
 	</p>
 	<p class='bjava'>
 	<jk>public class</jk> C1 {
@@ -2827,7 +2829,7 @@
 	</p>
 	<p>
 		If the {@link org.apache.juneau.BeanContext.Builder#beanFieldVisibility(Visibility) beanFieldVisibility} setting on the bean context excludes this field 
-		(e.g. the visibility is set to the default of PUBLIC, but the field is PROTECTED), this annotation 
+		(e.g. the visibility is set to the default of PUBLIC but the field is PROTECTED), this annotation 
 		can be used to force the field to be identified as a property.
 	</p>
 	<p class='bjava'>
@@ -2840,7 +2842,7 @@
 		The bean property named <js>"*"</js> is the designated "dynamic property" which allows for "extra" bean
 		properties not otherwise defined.
 		This is similar in concept to the Jackson <ja>@JsonGetterAll</ja> and <ja>@JsonSetterAll</ja> 
-		annotations, but generalized for all supported marshall languages.
+		annotations but generalized for all supported marshall languages.
 		The primary purpose is for backwards compatibility in parsing newer streams with addition 
 		information into older beans.
 	</p>
@@ -2965,8 +2967,8 @@
 	<ul class='spaced-list'>
 		<li>Beans - Only render the specified properties of the bean.
 		<li>Maps - Only render the specified entries in the map.
-		<li>Bean/Map arrays - Same, but applied to each element in the array.
-		<li>Bean/Map collections - Same, but applied to each element in the collection.
+		<li>Bean/Map arrays - Same but applied to each element in the array.
+		<li>Bean/Map collections - Same but applied to each element in the collection.
 	</ul>
 	<p class='bjava'>
 	<jk>public class</jk> MyClass {
@@ -2982,7 +2984,7 @@
 	}
 
 	<jc>// Renders "{x1:{f1:1}}"</jc>
-	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jk>new</jk> MyClass());
+	String <jv>json</jv> = Json.<jsm>of</jsm>(<jk>new</jk> MyClass());
 	</p>
 	<p>
 		The {@link org.apache.juneau.annotation.Beanp#format() @Beanp(format)} 
@@ -3023,7 +3025,7 @@
 		}
 
 		<jc>// Read only properties.</jc>
-		<jc>// Getters, but no setters.</jc>
+		<jc>// Getters but no setters.</jc>
 
 		<jk>public</jk> String getName() {
 			<jk>return</jk> <jf>name</jf>;
@@ -3037,7 +3039,7 @@
 	<p class='bjava'>
 	<jc>// Parsing into a read-only bean.</jc>
 	String <jv>json</jv> = <js>"{name:'John Smith',age:45}"</js>;
-	Person <jv>person</jv> = JsonParser.<jsf>DEFAULT</jsf>.parse(<jv>json</jv>);
+	Person <jv>person</jv> = Json.<jsm>to</jsm>(<jv>json</jv>, Person.<jk>class</jk>);
 	String <jv>name</jv> = <jv>person</jv>.getName();  <jc>// "John Smith"</jc>
 	<jk>int</jk> <jv>age</jv> = <jv>person</jv>.getAge();   <jc>// 45</jc>
 	</p>
@@ -3296,7 +3298,7 @@
 	}	
 	
 	<jc>// Produces "{f1:{'foo':'bar'}}"</jc>
-	String <jv>json</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>.toString(<jk>new</jk> MyBean());
+	String <jv>json</jv> = SimpleJson.<jsm>of</jsm>(<jk>new</jk> MyBean());
 	</p>			
 	<p>
 		Note that if you're serializing Readers and InputStreams, it's up to you to make sure you're producing
@@ -3305,14 +3307,14 @@
 	<p>
 		A more typical scenario where this is useful is by using swaps to convert POJOs to Readers whose 
 		contents are determined via the {@link org.apache.juneau.BeanSession#getMediaType()} method.
-		In the following example, we're customizing the JSON output for a particular bean type, but leaving
+		In the following example, we're customizing the JSON output for a particular bean type but leaving
 		all other renditions as-is:
 	</p>			
 	<p class='bjava'>
 	<ja>@Swap</ja>(MyBeanSwapSometimes.<jk>class</jk>)
 	<jk>public class</jk> MyBean {...}
 	
-	<jc>// A swap that produces specialized output for JSON, but default serialization for</jc>
+	<jc>// A swap that produces specialized output for JSON but default serialization for</jc>
 	<jc>// all other media types.</jc>
 	<jk>public class</jk> MyBeanSwapSometimes <jk>extends</jk> ObjectSwap&lt;MyBean,Object&gt; {
 		<jk>public</jk> Object swap(BeanSession <jv>session</jv>, MyPojo <jv>object</jv>) <jk>throws</jk> Exception {
@@ -3326,7 +3328,7 @@
 	<div class='info'>
 		Due to the nature of the RDF serializers, Readers and InputStreams are serialized as literals,
 		not as RDF text.
-		This is due to the fact that the RDF serializers use a DOM for serialization, so we don't have
+		This is due to the fact that the RDF serializers use a DOM for serialization so we don't have
 		access to the underlying stream.
 	</div>
 </div>
@@ -3359,17 +3361,17 @@
 	Object <jv>value</jv> = <jk>new long</jk>[][]{{1,2,3},{4,5,6},{7,8,9}};
 
 	<jc>// Produces "1,2,3|4,5,6|7,8,9"</jc>
-	String <jv>output</jv> = OpenApiSerializer.<jsf>DEFAULT</jsf>.serialize(HttpPartType.<jsf>HEADER</jsf>, <jv>schema</jv>, <jv>value</jv>);
+	String <jv>output</jv> = OpenApi.<jsm>of</jsm>(HttpPartType.<jsf>HEADER</jsf>, <jv>schema</jv>, <jv>value</jv>);
 	
 	<jc>// Produces "[[1,2,3],[4,5,6],[7,8,9]]</jc>
-	<jk>long</jk>[][] <jv>value</jv> = OpenApiParser.<jsf>DEFAULT</jsf>.parse(HttpPartType.<jsf>HEADER</jsf>, <jv>schema</jv>, <jv>output</jv>, <jk>long</jk>[][].<jk>class</jk>);
+	<jk>long</jk>[][] <jv>value</jv> = OpenApi.<jsm>to</jsm>(HttpPartType.<jsf>HEADER</jsf>, <jv>schema</jv>, <jv>output</jv>, <jk>long</jk>[][].<jk>class</jk>);
 	</p>
 	<p>
-		The {@link org.apache.juneau.httppart.HttpPartSchemaBuilder} class is provided for shortening the creation of schemas.
+		The {@link org.apache.juneau.httppart.HttpPartSchema} class also provides convenience static methods for creation of custom schemas.
 		The equivalent to the schema above can be structured like so:
 	</p>
 	<p class='bjava'>
-	<jk>import static</jk> org.apache.juneau.httppart.HttpPartSchemaBuilder.*;
+	<jk>import static</jk> org.apache.juneau.httppart.HttpPartSchema.*;
 	
 	<jc>// Schema information about our part.</jc>
 	HttpPartSchema <jv>schema</jv> = <jsm>tArrayPipes</jsm>(<jsm>tArrayCsv</jsm>(<jsm>tInt64</jsm>())).build();
@@ -3560,7 +3562,7 @@
 		</li>
 	</ul>
 	<p>
-		The following example shows a concrete implementation of an interface can be applied to a serializer:
+		The following example shows a concrete implementation of an annotation can be applied to a serializer:
 	</p>
 	<p class='bjava'>
 	<jk>public class</jk> Address {...}
@@ -3642,7 +3644,7 @@
 		<li>
 			Passing them to one of the {@link org.apache.juneau.serializer.Serializer} serialize methods.
 		<li>
-			Simply calling the {@link org.apache.juneau.collections.JsonMap#toString()} or {@link org.apache.juneau.collections.JsonList#toString()}
+			Simply calling the {@link org.apache.juneau.collections.JsonMap#asJson()}/{@link org.apache.juneau.collections.JsonMap#toString()} or {@link org.apache.juneau.collections.JsonList#asString()}/{@link org.apache.juneau.collections.JsonList#toString()}
 			methods which will serialize it as Simplified JSON.
 	</ol>
 	<p>
@@ -3654,21 +3656,21 @@
 	<p class='bjava'>
 	<jc>// Parse an arbitrary JSON document into an unstructered data model
 	// consisting of JsonMaps, JsonLists, and java primitive objects.</jc>
-	Parser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
 	String <jv>json</jv> = <js>"{a:{name:'John Smith',age:21},b:{name:'Joe Smith',age:42}}"</js>;
-	JsonMap <jv>map</jv> = <jv>parser</jv>.parse(<jv>json</jv>, JsonMap.<jk>class</jk>);
+	JsonMap <jv>map</jv> = Json.<jsm>to</jsm>(<jv>json</jv>, JsonMap.<jk>class</jk>);
 
 	<jc>// Use JsonMap API to extract data from the unstructured model.</jc>
 	<jk>int</jk> <jv>johnSmithAge</jv> = <jv>map</jv>.getMap(<js>"a"</js>).getInt(<js>"age"</js>);
 	
 	<jc>// Convert it back into JSON.</jc>
-	<jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>map</jv>);
+	<jv>json</jv> = Json.<jsm>of</jsm>(<jv>map</jv>);
 	
 	<jc>// Or convert it to XML.</jc>
-	String <jv>xml</jv> = XmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>map</jv>);
+	String <jv>xml</jv> = Xml.<jsm>of</jsm>(<jv>map</jv>);
 
-	<jc>// Or just use toString().</jc>
+	<jc>// Or just use toString() or asJson().</jc>
 	<jv>json</jv> = <jv>map</jv>.toString();
+	<jv>json</jv> = <jv>map</jv>.asJson();
 	</p>
 	<p>
 		The <c>JsonMap</c> and <c>JsonList</c> classes have many convenience features:
@@ -3728,9 +3730,8 @@
 		Arrays are simple enough and can be constructed using the first method:
 	</p>
 	<p class='bjava'>
-	ReaderParser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
 	String <jv>json</jv> = <js>"[1,2,3]"</js>;
-	<jk>int</jk>[] <jv>array</jv> = <jv>parser</jv>.parse(<jv>json</jv>, <jk>int</jk>[].<jk>class</jk>);
+	<jk>int</jk>[] <jv>array</jv> = Json.<jsm>to</jsm>(<jv>json</jv>, <jk>int</jk>[].<jk>class</jk>);
 	</p>
 	<p>
 		For data types consisting of nested collections an maps such as <c>Map&lt;String,List&lt;MyBean&gt;&gt;</c>, you need to
@@ -3739,7 +3740,7 @@
 	</p>
 	<p class='bjava'>
 	String <jv>json</jv> = <js>"{foo:[{bar:'baz'}]}"</js>;
-	TreeMap&lt;String,List&lt;MyBean&gt;&gt; <jv>map</jv> = <jv>parser</jv>.parse(
+	TreeMap&lt;String,List&lt;MyBean&gt;&gt; <jv>map</jv> = Json.<jsm>to</jsm>(
 		<jv>json</jv>,             <jc>// Input being parsed.</jc>
 		TreeMap.<jk>class</jk>,    <jc>// Top-level data type.</jc>
 		String.<jk>class</jk>,     <jc>// Key type of map.</jc>
@@ -3815,8 +3816,6 @@
 	<p>
 		Swaps are, simply put, 'object swappers' that swap in serializable objects for 
 		non-serializable ones during serialization, and vis-versa during parsing.
-	</p>
-	<p>
 		Some examples of non-serializable objects are <c>File</c>, <c>Reader</c>, 
 		<c>Iterable</c>, etc...
 		These are classes that aren't beans and cannot be represented as simple maps, collections, or primitives.
@@ -4227,7 +4226,7 @@
 	<p>
 		In the previous sections, we defined two-way swaps, meaning swaps where the original objects could be 
 		reconstructing during parsing. 
-		However, there are certain kinds of objects that we may want to support for serializing, but that are not 
+		However, there are certain kinds of objects that we may want to support for serializing but that are not 
 		possible to reconstruct during parsing.  
 		For these, we can use one-way object swaps.
 	</p>
@@ -4237,7 +4236,7 @@
 	</p>
 	<p>
 		An example of a one-way swaps would be one that allows {@code Iterators} to be serialized as JSON arrays.  
-		It can make sense to be able to render {@code Iterators} as arrays, but in general it's not possible to 
+		It can make sense to be able to render {@code Iterators} as arrays but in general it's not possible to 
 		reconstruct an {@code Iterator} during parsing. 
 	</p>
 	<p class='bjava'>
@@ -4414,7 +4413,7 @@
 		Surrogate classes are very similar in concept to <c>ObjectSwaps</c> except they're simpler to define.
 	</p>
 	<p>
-		For example, let's say we want to be able to serialize the following class, but it's not serializable for 
+		For example, let's say we want to be able to serialize the following class but it's not serializable for 
 		some reason (for example, there are no properties exposed):  
 	</p>
 	<p class='bjava'>
@@ -4520,7 +4519,7 @@
 	</p>
 	<p>
 		For example, the following shows the <ja>@Bean</ja> annotation being selectively applied on a single REST method 
-		(described later in {@doc juneau-rest-server}): 
+		(described later in {@doc juneau-rest-server juneau-rest-server}): 
 	</p>
 	<p class='bjava'>
 	<ja>@RestGet</ja> 
@@ -4544,7 +4543,7 @@
 		<li class='ja'>{@link org.apache.juneau.csv.annotation.Csv}
 		<li class='ja'>{@link org.apache.juneau.html.annotation.Html}
 		<li class='ja'>{@link org.apache.juneau.json.annotation.Json}
-		<li class='ja'>{@link org.apache.juneau.jsonschema.annotation.Schema}
+		<li class='ja'>{@link org.apache.juneau.annotation.Schema}
 		<li class='ja'>{@link org.apache.juneau.msgpack.annotation.MsgPack}
 		<li class='ja'>{@link org.apache.juneau.oapi.annotation.OpenApi}
 		<li class='ja'>{@link org.apache.juneau.plaintext.annotation.PlainText}
@@ -4859,19 +4858,16 @@
 		When serialized, the subtype is serialized as a virtual <js>"_type"</js> property:
 	</p>	
 	<p class='bjava'>
-	JsonSerializer <jv>serializer</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>;
-	
 	A1 <jv>object</jv> = <jk>new</jk> A1();
 	<jv>object</jv>.<jf>f1</jf> = <js>"f1"</js>;
-	String <jv>json</jv> = <jv>serilalizer</jv>.serialize(<jv>object</jv>);
+	String <jv>json</jv> = SimpleJson.<jsm>of</jsm>(<jv>object</jv>);
 	<jsm>assertEquals</jsm>(<js>"{_type:'A1',f1:'f1',f0:'f0'}"</js>, <jv>json</jv>);
 	</p>
 	<p>
 		The following shows what happens when parsing back into the original object.
 	</p>
 	<p class='bjava'>
-	JsonParser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
-	A <jv>object</jv> = <jv>parser</jv>.parse(<jv>json</jv>, A.<jk>class</jk>);
+	A <jv>object</jv> = Json.<jsm>to</jsm>(<jv>json</jv>, A.<jk>class</jk>);
 	<jsm>assertTrue</jsm>(<jv>object</jv> <jk>instanceof</jk> A1);
 	</p>
 </div>
@@ -4908,7 +4904,7 @@
 	}
 	
 	<jc>// Our code</jc>
-	Address <jv>address</jv> = JsonParser.<jsf>DEFAULT</jsf>.parse(
+	Address <jv>address</jv> = Json.<jsm>to</jsm>(
 		<js>"{street:'123 Main St', city:'Anywhere', state:'PR', zip:12345}"</js>, 
 		Address.<jk>class</jk>
 	); 
@@ -5020,12 +5016,12 @@
 		objects.
 	</p>
 	<p>
-		You can parse into any <c>Map</c> type (e.g. <c>HashMap</c>, <c>TreeMap</c>), but
+		You can parse into any <c>Map</c> type (e.g. <c>HashMap</c>, <c>TreeMap</c>) but
 		using {@link org.apache.juneau.collections.JsonMap} is recommended since it has many convenience methods
 		for converting values to various types.
 		The same is true when parsing collections.  You can use any Collection (e.g. <c>HashSet</c>, 
 		<c>LinkedList</c>) or array (e.g. <c>Object[]</c>, <c>String[]</c>, 
-		<c>String[][]</c>), but using {@link org.apache.juneau.collections.JsonList} is recommended.
+		<c>String[][]</c>) but using {@link org.apache.juneau.collections.JsonList} is recommended.
 	</p>
 	<p>
 		When the map or list type is not specified, or is the abstract <c>Map</c>, <c>Collection</c>, 
@@ -5061,10 +5057,10 @@
 	</p>
 	<p class='bjava'>	
 	<jc>// Parse JSON into a generic POJO model.</jc>
-	JsonMap <jv>map</jv> = JsonParser.<jsf>DEFAULT</jsf>.parse(<jv>json</jv>, JsonMap.<jk>class</jk>);
+	JsonMap <jv>map</jv> = Json.<jsm>to</jsm>(<jv>json</jv>, JsonMap.<jk>class</jk>);
 
 	<jc>// Convert it back to JSON.</jc>
-	String <jv>json</jv> = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.serialize(<jv>map</jv>);
+	String <jv>json</jv> = SimpleJson.<jsm>of</jsm>(<jv>map</jv>);
 	</p>
 	<p>
 		What we end up with is the exact same output.
@@ -5098,7 +5094,7 @@
 	</p>
 	<p class='bjava'>
 	<jc>// Parse JSON into a generic POJO model.</jc>
-	JsonMap <jv>map</jv> = JsonParser.<jsf>DEFAULT</jsf>.parse(<jv>json</jv>, JsonMap.<jk>class</jk>);
+	JsonMap <jv>map</jv> = Json.<jsm>to</jsm>(<jv>json</jv>, JsonMap.<jk>class</jk>);
 
 	<jc>// Get some simple values.</jc>
 	String <jv>name</jv> = <jv>map</jv>.getString(<js>"name"</js>);
@@ -5337,9 +5333,9 @@
 <div class='topic'><!-- START: 2.19 - juneau-marshall.jm.JacksonComparison -->
 <div class='topic'>
 	<p>
-		Juneau was developed independently from Jackson, but shares many of the same features and capabilities.
+		Juneau was developed independently from Jackson but shares many of the same features and capabilities.
 		Whereas Jackson was created to work primarily with JSON, Juneau was created to work for multiple languages.
-		Therefore, the terminology and annotations in Juneau are similar, but language-agnostic.   
+		Therefore, the terminology and annotations in Juneau are similar but language-agnostic.   
 	</p>
 	<p>
 		The following charts describe equivalent features between the two libraries:
@@ -5384,7 +5380,7 @@
 		<tr>
 			<td><c><ja>@JsonAutoDetect</ja>(fieldVisibility=...)</c></td>
 			<td>
-				No equivalent annotation, but can be controlled via: 
+				No equivalent annotation but can be controlled via: 
 				<br>{@link org.apache.juneau.BeanContext.Builder#beanFieldVisibility(Visibility)}
 				<br>{@link org.apache.juneau.BeanContext.Builder#beanMethodVisibility(Visibility)}
 			</td>
@@ -5418,7 +5414,7 @@
 		<tr>
 			<td><ja>@JsonInclude</ja></td>
 			<td>
-				No equivalent annotation, but can be controlled via various settings:
+				No equivalent annotation but can be controlled via various settings:
 				<br>{@link org.apache.juneau.BeanContext}
 				<br>{@link org.apache.juneau.serializer.Serializer}
 			</td>
@@ -5539,7 +5535,7 @@
 			<td>
 				<b>With non-standard properties or not true beans</b>
 				<br>These include true beans that have one or more properties defined by getter 
-				and setter methods or properties, but property types include group [3b, 4b, 5, 6b, 7] objects.
+				and setter methods or properties but property types include group [3b, 4b, 5, 6b, 7] objects.
 				<br>This also includes classes that look like beans but aren't true beans.  
 				For example, classes that have getters but not setters, or classes without no-arg constructors.	
 			</td>
@@ -5562,7 +5558,7 @@
 			<td style='text-align:center'>3d</td>
 			<td>
 				<b>Read-only beans without setters</b>
-				<br>The same as 3a, but without property setters or constructor args.
+				<br>The same as 3a but without property setters or constructor args.
 			</td>
 			<td>&nbsp;</td>
 			<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
@@ -5572,7 +5568,7 @@
 			<td style='text-align:center'>4</td>
 			<td>
 				<b>Swapped objects</b>
-				<br>These are objects that are not directly serializable, but have 
+				<br>These are objects that are not directly serializable but have 
 				{@link org.apache.juneau.swap.ObjectSwap ObjectSwaps} associated with them.  
 				The purpose of a POJO swap is to convert an object to another object that is easier to serialize 
 				and parse.  
@@ -5710,7 +5706,7 @@
 		These are models where there are no referential loops (e.g. leaves with references to nodes, or nodes 
 		in one branch referencing nodes in another branch).  
 		There is a serializer setting {@code detectRecursions} to look for and handle these kinds of loops 
-		(by setting these references to <jk>null</jk>), but it is not enabled by default since it introduces 
+		(by setting these references to <jk>null</jk>) but it is not enabled by default since it introduces 
 		a moderate performance penalty. 
 	</div>
 	
@@ -5737,7 +5733,7 @@
 		POJOs are convertible from Strings using any of the following (matched in the specified order):
 	</p>
 	<ul class='spaced-list'>
-		<li>Any any of the following public static non-deprecated methods:
+		<li>Any of the following public static non-deprecated methods:
 		<ul>
 			<li><c>create(String)</c>
 			<li><c>fromString(String)</c>
@@ -7550,7 +7546,7 @@
 		The {@link org.apache.juneau.xml.XmlSerializer} class is used to serialize POJOs into XML.
 	</p>	
 	<p>
-		The {@link org.apache.juneau.xml.XmlDocSerializer} class is the same, but serializes a <xt>&lt;?xml?&gt;</xt> header 
+		The {@link org.apache.juneau.xml.XmlDocSerializer} class is the same but serializes a <xt>&lt;?xml?&gt;</xt> header 
 		at the top of the file.
 	</p>
 	<p>
@@ -7759,7 +7755,7 @@
 		{@link org.apache.juneau.annotation.Bean#dictionary() @Bean(dictionary)} and 
 		{@link org.apache.juneau.annotation.Beanp#dictionary() @Beanp(dictionary)} 
 		annotations so that the beans can be resolved at parse time.  
-		These annotations are not necessary during serialization, but are needed during parsing in order to 
+		These annotations are not necessary during serialization but are needed during parsing in order to 
 		resolve the bean types.
 	</p>
 	<p>
@@ -8356,7 +8352,7 @@
 		property of type <c>Map&lt;String,Object&gt;</c> to denote arbitrary XML attribute values on the 
 		element.
 		These can be mixed with other {@link org.apache.juneau.xml.annotation.XmlFormat#ATTR} annotated 
-		properties, but there must not be an overlap in bean property names and map keys. 
+		properties but there must not be an overlap in bean property names and map keys. 
 	</p>
 	
 	<h5 class='figure'>Example</h5>
@@ -8521,7 +8517,7 @@
 		{@link org.apache.juneau.xml.annotation.XmlFormat#ELEMENTS} except elements names on primitive types 
 		(string/number/boolean/null) are stripped from the output.
 		This format particularly useful when combined with bean dictionaries to produce mixed content.  
-		The bean dictionary isn't used during serialization, but it is needed during parsing to resolve bean 
+		The bean dictionary isn't used during serializationbut it is needed during parsing to resolve bean 
 		types.
 	</p>
 	<p>
@@ -8941,7 +8937,7 @@
 <div class='topic'><!-- START: 2.26.7 - juneau-marshall.jm.XmlDetails.jm.XmlNamespaces -->
 <div class='topic'>
 	<p>
-		Let's go back to the example of our original <c>Person</c> bean class, but add some namespace annotations:
+		Let's go back to the example of our original <c>Person</c> bean class but add some namespace annotations:
 	</p>
 	<h5 class='figure'>Sample Beans</h5>
 	<p class='bjava'>
@@ -9093,7 +9089,7 @@
 		{@link org.apache.juneau.xml.XmlSerializer.Builder#disableAutoDetectNamespaces()}.
 	</p>
 	<p>
-		The following code will produce the same output as before, but will perform slightly better since it 
+		The following code will produce the same output as before but will perform slightly better since it 
 		avoids this pre-scan step.
 	</p>
 	<p class='bjava'>
@@ -9647,7 +9643,7 @@
 		The {@link org.apache.juneau.html.HtmlSerializer} class is used to serialize POJOs into HTML.
 	</p>	
 	<p>
-		The {@link org.apache.juneau.html.HtmlDocSerializer} class is the same, but wraps the serialized POJO
+		The {@link org.apache.juneau.html.HtmlDocSerializer} class is the same but wraps the serialized POJO
 		inside a document template consisting of header, nav, aside, and footer sections.
 	</p>
 	<p>
@@ -10759,8 +10755,6 @@
 	<p>
 		The {@link org.apache.juneau.urlencoding.annotation.UrlEncoding#expandedParams() expandedParams} setting is
 		used to force bean properties of type array or Collection to be expanded into multiple key/value pairings.
-		It's identical in behavior to using the {@del org.apache.juneau.urlencoding.UrlEncodingSerializer#URLENC_expandedParams}
-		and {@del org.apache.juneau.urlencoding.UrlEncodingParser#URLENC_expandedParams} properties, but applies to only individual bean properties.
 	</p>
 </div>
 </div><!-- END: 2.30.4 - juneau-marshall.jm.UrlEncodingDetails.jm.UrlEncodingAnnotation -->
@@ -11055,7 +11049,7 @@
 	}
 	</p>
 	<p>
-		It looks simple, but the implementation is highly sophisticated being able to serialize and parse and validate using complex schemas.
+		It looks simple but the implementation is highly sophisticated being able to serialize and parse and validate using complex schemas.
 	</p>
 	<p>
 		The next sections go more into depth on serializing and parsing various POJO types.
@@ -11191,7 +11185,9 @@
 		Various convenience methods exist for shortening this code.
 	</p>
 	<p class='bjava'>
-	HttpPartSchema <jv>schema</jv> = HttpPartSchema.<jsm>tArrayPipes</jsm>(
+	<jk>import static</jk> org.apache.juneau.http.HttpPartSchema.*;
+
+	HttpPartSchema <jv>schema</jv> = <jsm>tArrayPipes</jsm>(
 		<jsm>tArrayCsv</jsm>(
 			<jsm>tInt64</jsm>().minimum(0).maximum(100).minLength(1).maxLength(10)
 		)
@@ -11204,12 +11200,9 @@
 	<jc>// Our POJO being serialized.</jc>
 	Long[][] <jv>input</jv> = ....
 	
-	<jc>// The serializer to use.</jc>
-	HttpPartSerializer <jv>serializer</jv> = OpenApiSerializer.<jsf>DEFAULT</jsf>;
-	
 	<jc>// Convert POJO to a string.</jc>
 	<jk>try</jk> {
-		String <jv>httpPart</jv> = <jv>serializer</jv>.serialize(<jv>schema</jv>, <jv>input</jv>);
+		String <jv>httpPart</jv> = OpenApi.<jsm>of</jsm>(<jv>schema</jv>, <jv>input</jv>);
 	} <jk>catch</jk> (SchemaValidationException <jv>e</jv>) {
 		<jc>// Oops, one of the restrictions were not met.</jc>
 	}
@@ -11419,12 +11412,9 @@
 	<jc>// Our POJO being serialized.</jc>
 	MyPojo <jv>input</jv> = ....
 	
-	<jc>// The serializer to use.</jc>
-	HttpPartSerializer <jv>serializer</jv> = OpenApiSerializer.<jsf>DEFAULT</jsf>;
-	
 	<jc>// Convert POJO to a string.</jc>
 	<jk>try</jk> {
-		String <jv>httpPart</jv> = <jv>serializer</jv>.serialize(<jv>schema</jv>, <jv>input</jv>);
+		String <jv>httpPart</jv> = OpenApi.<jsm>of</jsm>(<jv>schema</jv>, <jv>input</jv>);
 	} <jk>catch</jk> (SchemaValidationException <jv>e</jv>) {
 		<jc>// Oops, one of the restrictions were not met.</jc>
 	}
@@ -11465,7 +11455,7 @@
 		.prop(<js>"f2"</js>, <jsm>tByte</jsm>())
 		.prop(<js>"f3"</js>, <jsm>tBinary</jsm>())
 		.prop(<js>"f4"</js>, <jsm>tBinarySpaced</jsm>())
-		.prop(<js>"f5"</js>, <jsm>tDateTime</jsm>(>))
+		.prop(<js>"f5"</js>, <jsm>tDateTime</jsm>())
 		.prop(<js>"f6"</js>, <jsm>tUon</jsm>())
 		.prop(<js>"f7"</js>, <jsm>tInteger</jsm>())
 		.prop(<js>"f8"</js>, <jsm>tInt64</jsm>())
@@ -11479,8 +11469,7 @@
 		Then we serialize our bean:
 	</p>
 	<p class='bjava'>
-	HttpPartSerializer <jv>serializer</jv> = OpenApiSerializer.<jsf>DEFAULT</jsf>;
-	String <jv>httpPart</jv> = <jv>serializer</jv>.serialize(<jv>schema</jv>, <jk>new</jk> MyBean());
+	String <jv>httpPart</jv> = OpenApi.<jsm>of</jsm>(<jv>schema</jv>, <jk>new</jk> MyBean());
 	</p>
 	<p>
 		The results of this serialization is shown below:
@@ -11635,12 +11624,9 @@
 	<jc>// Our input being parsed.</jc>
 	String <jv>input</jv> = <js>"1,2,3|4,5,6|7,8,9"</js>
 	
-	<jc>// The parser to use.</jc>
-	HttpPartParser <jv>parser</jv> = OpenApiParser.<jsf>DEFAULT</jsf>;
-	
 	<jc>// Convert string to a POJO.</jc>
 	<jk>try</jk> {
-		Long[][] <jv>pojo</jv> = <jv>parser</jv>.parse(<jv>schema</jv>, <jv>input</jv>, Long[][].<jk>class</jk>);
+		Long[][] <jv>pojo</jv> = OpenApi.<jsm>to</jsm>(<jv>schema</jv>, <jv>input</jv>, Long[][].<jk>class</jk>);
 	} <jk>catch</jk> (SchemaValidationException <jv>e</jv>) {
 		<jc>// Oops, one of the restrictions were not met.</jc>
 	}
@@ -11824,18 +11810,15 @@
 	<jc>// Our input being parsed.</jc>
 	String <jv>input</jv> = <js>"1,2,3|4,5,6|7,8,9"</js>
 	
-	<jc>// The parser to use.</jc>
-	HttpPartParser <jv>parser</jv> = OpenApiParser.<jsf>DEFAULT</jsf>;
-	
 	<jc>// Convert string to a POJO.</jc>
 	<jk>try</jk> {
-		MyPojo <jv>pojo</jv> = <jv>parser</jv>.parse(<jv>schema</jv>, <jv>input</jv>, MyPojo.<jk>class</jk>);
+		MyPojo <jv>pojo</jv> = OpenApi.<jsm>to</jsm>(<jv>schema</jv>, <jv>input</jv>, MyPojo.<jk>class</jk>);
 	} <jk>catch</jk> (SchemaValidationException <jv>e</jv>) {
 		<jc>// Oops, one of the restrictions were not met.</jc>
 	}
 	</p>
 	<p>
-		Just like serialization, the <c>object</c> type is not officially part of the OpenAPI standard, but
+		Just like serialization, the <c>object</c> type is not officially part of the OpenAPI standard but
 		Juneau supports parsing HTTP parts in UON notation to Maps and beans.
 	</p>
 	<p>
@@ -11886,8 +11869,7 @@
 		<js>"(f1=foo,f2=Zm9v,f3=666F6F,f4='66 6F 6F',f5=2012-12-21T12:34:56Z,f6=foo,"</js>
 		+ <js>"f7=1,f8=2,f9=1.0,f10=1.0,f11=true,fExtra=1)"</js>;
 	
-	HttpPartParser <jv>parser</jv> = OpenApiParser.<jsf>DEFAULT</jsf>;
-	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<jv>schema</jv>, <jv>input</jv>, MyBean.<jk>class</jk>);
+	MyBean <jv>bean</jv> = OpenApi.<jsm>to</jsm>(<jv>schema</jv>, <jv>input</jv>, MyBean.<jk>class</jk>);
 	</p>
 	<p>
 		Note that serializing into generic <c>Object</c> properties would have produced similar results:
@@ -11916,8 +11898,7 @@
 		<js>"(f1=foo,f2=Zm9v,f3=666F6F,f4='66 6F 6F',f5=2012-12-21T12:34:56Z,f6=foo,"</js>
 		+ <js>"f7=1,f8=2,f9=1.0,f10=1.0,f11=true,fExtra=1)"</js>;
 	
-	HttpPartParser <jv>parser</jv> = OpenApiParser.<jsf>DEFAULT</jsf>;
-	JsonMap <jv>map</jv> = <jv>parser</jv>.parse(<jv>schema</jv>, <jv>input</jv>, JsonMap.<jk>class</jk>);
+	JsonMap <jv>map</jv> = OpenApi.<jsm>to</jsm>(<jv>schema</jv>, <jv>input</jv>, JsonMap.<jk>class</jk>);
 	</p>
 	<ul class='notes'>
 		<li class='note'>
@@ -12020,7 +12001,7 @@
 	</ul>
 	
 	<p>
-		The serializers and parsers work identically to those in <c>juneau-marshall</c>, but are
+		The serializers and parsers work identically to those in <c>juneau-marshall</c> but are
 		packaged separately so that you don't need to pull in the Jena dependency unless you need it.
 	</p>
 	
@@ -12044,19 +12025,19 @@
 	// 		&lt;jp:age&gt;21&lt;/jp:age&gt;
 	// 	&lt;/rdf:Description&gt;
 	// &lt;/rdf:RDF&gt;</jc>
-	String <jv>rdfXml</jv> = RdfSerializer.<jsf>DEFAULT_XMLABBREV</jsf>.serialize(<jv>person</jv>);
+	String <jv>rdfXml</jv> = RdfXmlAbbrev.<jsm>of</jsm>(<jv>person</jv>);
 	
 	<jc>// Produces:
 	// @prefix jp:      &lt;http://www.apache.org/juneaubp/&gt; .
 	// @prefix j:       &lt;http://www.apache.org/juneau/&gt; .
 	//	[]    jp:age  "21" ;
 	//	      jp:name "John Smith" .</jc>
-	String <jv>rdfN3</jv> = N3Serializer.<jsf>DEFAULT</jsf>.serialize(<jv>person</jv>);
+	String <jv>rdfN3</jv> = N3.<jsm>of</jsm>(<jv>person</jv>);
 
 	<jc>// Produces:
 	// _:A3bf53c85X3aX157cf407e2dX3aXX2dX7ffd &lt;http://www.apache.org/juneaubp/name&gt; "John Smith" .
 	// _:A3bf53c85X3aX157cf407e2dX3aXX2dX7ffd &lt;http://www.apache.org/juneaubp/age&gt; "21" .</jc>
-	String <jv>rdfNTriple</jv> = RdfSerializer.<jsf>DEFAULT_NTRIPLE</jsf>.serialize(<jv>person</jv>);
+	String <jv>rdfNTriple</jv> = NTriple.<jsm>of</jsm>(<jv>person</jv>);
 	</p>
 </div>
 
@@ -12322,7 +12303,7 @@
 		explicit list of namespaces to the serializer to avoid this scanning step using {@link org.apache.juneau.xml.XmlSerializer.Builder#disableAutoDetectNamespaces()}.
 	</p>
 	<p class='bjava'>
-	<jc>// Create a new serializer, but manually specify the namespaces.</jc>
+	<jc>// Create a new serializer but manually specify the namespaces.</jc>
 	RdfSerializer <jv>serializer</jv> = RdfSerializer.<jsm>create</jsm>()
 		.xmlabbrev()
 		.rdfxml_tab(3)
@@ -12331,7 +12312,7 @@
 		.build();
 	</p>
 	<p>
-		This code change will produce the same output as before, but will perform slightly better since it doesn't 
+		This code change will produce the same output as before but will perform slightly better since it doesn't 
 		have to crawl the POJO tree before serializing the result.
 	</p>
 </div>
@@ -12426,7 +12407,7 @@
 		layer.
 	</p>
 	<p>
-		The following code produces the same output as before, but the URIs on the beans are relative.
+		The following code produces the same output as before but the URIs on the beans are relative.
 	</p>
 	<p class='bjava'>
 	<jc>// Create a new serializer with readable output.</jc>
@@ -12619,7 +12600,7 @@
 		that allow you to easily construct DTO instances in a minimal amount of code. 
 	</p>
 	<p>
-		The following examples show how to create HTML tables.
+		The following examples show how to create common HTML DOM objects.
 	</p>
 	<table class='styled w800'>
 		<tr>
@@ -12642,7 +12623,7 @@
 				)
 			);
 	
-		String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>mytablE</jv>);
+		String <jv>html</jv> = Html.<jsm>of</jsm>(<jv>mytablE</jv>);
 			</td>
 			<td class='code'><xt>
 		&lt;table&gt;
@@ -12667,7 +12648,7 @@
 				<jsm>p</jsm>(<js>"Juneau supports "</js>, <jsm>b</jsm>(<jsm>i</jsm>(<js>"mixed"</js>)), <js>" content!"</js>)
 			);
 	
-		String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>mydiv</jv>);
+		String <jv>html</jv> = Html.<jsm>of</jsm>(<jv>mydiv</jv>);
 			</td>
 			<td class='code'><xt>
 		&lt;div <xa>align</xa>=<xs>'center'</xs> <xa>onmouseover</xa>=<xs>'alert("boo!");'</xs>&gt;
@@ -12688,7 +12669,7 @@
 				<jsm>button</jsm>(<js>"reset"</js>, <js>"Reset"</js>)
 			); 	
 	
-		String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>myform</jv>);
+		String <jv>html</jv> = Html.<jsm>of</jsm>(<jv>myform</jv>);
 			</td>
 			<td class='code'><xt>
 			&lt;form <xa>action</xa>=<xs>'/submit'</xs> <xa>method</xa>=<xs>'POST'</xs>&gt;
@@ -12742,33 +12723,33 @@
 	
 	Feed <jv>feed</jv> = 
 		<jsm>feed</jsm>(<js>"tag:juneau.apache.org"</js>, <js>"Juneau ATOM specification"</js>, <js>"2016-01-02T03:04:05Z"</js>)
-		.subtitle(<jsm>text</jsm>(<js>"html"</js>).text(<js>"Describes &lt;em&gt;stuff&lt;/em&gt; about Juneau"</js>))
-		.links(
-			<jsm>link</jsm>(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://juneau.apache.org"</js>).hreflang(<js>"en"</js>),
+		.setSubtitle(<jsm>text</jsm>(<js>"html"</js>).setText(<js>"Describes &lt;em&gt;stuff&lt;/em&gt; about Juneau"</js>))
+		.setLinks(
+			<jsm>link</jsm>(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://juneau.apache.org"</js>).setHreflang(<js>"en"</js>),
 			<jsm>link</jsm>(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://juneau.apache.org/feed.atom"</js>)
 		)
-		.rights(<js>"Copyright (c) ..."</js>)
-		.generator(
-			<jsm>generator</jsm>(<js>"Juneau"</js>).uri(<js>"http://juneau.apache.org/"</js>).version(<js>"1.0"</js>)
+		.setRights(<js>"Copyright (c) ..."</js>)
+		.setGenerator(
+			<jsm>generator</jsm>(<js>"Juneau"</js>).setUri(<js>"http://juneau.apache.org/"</js>).setVersion(<js>"1.0"</js>)
 		)
-		.entries(
+		.setEntries(
 			<jsm>entry</jsm>(<js>"tag:juneau.sample.com,2013:1.2345"</js>, <js>"Juneau ATOM specification snapshot"</js>, <js>"2016-01-02T03:04:05Z"</js>)
-			.links(
+			.setLinks(
 				<jsm>link</jsm><js>"alternate"</js>, <js>"text/html"</js>, <js>"http://juneau.apache.org/juneau.atom"</js>),
-				<jsm>link</jsm>(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>"http://juneau.apache.org/audio/juneau_podcast.mp3"</js>).length(1337)
+				<jsm>link</jsm>(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>"http://juneau.apache.org/audio/juneau_podcast.mp3"</js>).setLength(1337)
 			)
-			.published(<js>"2016-01-02T03:04:05Z"</js>)
-			.authors(
-				<jsm>person</jsm>(<js>"Jane Smith"</js>).uri(<js>"http://juneau.apache.org/"</js>).email(<js>"janesmith@apache.org"</js>)
+			.setPublished(<js>"2016-01-02T03:04:05Z"</js>)
+			.setAuthors(
+				<jsm>person</jsm>(<js>"Jane Smith"</js>).setUri(<js>"http://juneau.apache.org/"</js>).setEmail(<js>"janesmith@apache.org"</js>)
 			)
-			.contributors(
+			.setContributors(
 				<jsm>person</jsm>(<js>"John Smith"</js>)
 			)
-			.content(
+			.setContent(
 				<jsm>content</jsm>(<js>"xhtml"</js>)
-				.lang(<js>"en"</js>)
-				.base(<js>"http://www.apache.org/"</js>)
-				.text(<js>"&lt;div&gt;&lt;p&gt;&lt;i&gt;[Update: Juneau supports ATOM.]&lt;/i&gt;&lt;/p&gt;&lt;/div&gt;"</js>)
+				.setLang(<js>"en"</js>)
+				.setBase(<js>"http://www.apache.org/"</js>)
+				.setText(<js>"&lt;div&gt;&lt;p&gt;&lt;i&gt;[Update: Juneau supports ATOM.]&lt;/i&gt;&lt;/p&gt;&lt;/div&gt;"</js>)
 			)
 		);
 	</p>
@@ -12806,7 +12787,7 @@
 			Juneau
 		<xt>&lt;/generator&gt;</xt>
 		<xt>&lt;subtitle</xt> <xa>type</xa>=<xs>'html'</xs><xt>&gt;</xt>
-			Describes &lt;em&gt;stuff&lt;/em&gt; about Juneau
+			Describes <xt>&lt;em&gt;</xt>stuff<xt>&lt;/em&gt;</xt> about Juneau
 		<xt>&lt;/subtitle&gt;</xt>
 		<xt>&lt;entry&gt;</xt>
 			<xt>&lt;author&gt;</xt>
@@ -12953,45 +12934,45 @@
 	<jk>static import</jk> org.apache.juneau.dto.swagger.SwaggerBuilder.*;
 
 	Swagger <jv>swagger</jv> = <jsm>swagger</jsm>()
-		.swagger(<js>"2.0"</js>)
-		.info(
+		.setSwagger(<js>"2.0"</js>)
+		.setInfo(
 			<jsm>info</jsm>(<js>"Swagger Petstore"</js>, <js>"1.0.0"</js>)
-				.description(<js>"This is a sample server Petstore server."</js>)
-				.termsOfService(<js>"http://swagger.io/terms/"</js>)
-				.contact(
-					<jsm>contact</jsm>().email(<js>"apiteam@swagger.io"</js>)
+				.setDescription(<js>"This is a sample server Petstore server."</js>)
+				.setTermsOfService(<js>"http://swagger.io/terms/"</js>)
+				.setContact(
+					<jsm>contact</jsm>().setEmail(<js>"apiteam@swagger.io"</js>)
 				)
-				.license(
-					<jsm>license</jsm>(<js>"Apache 2.0"</js>).url(<js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>)
+				.setLicense(
+					<jsm>license</jsm>(<js>"Apache 2.0"</js>).setUrl(<js>"http://www.apache.org/licenses/LICENSE-2.0.html"</js>)
 				)
 		)
-		.host(<js>"petstore.swagger.io"</js>)
-		.basePath(<js>"/v2"</js>)
-		.tags(
-			<jsm>tag</jsm>(<js>"pet"</js>).description(<js>"Everything about your Pets"</js>)
-				.externalDocs(
+		.setHost(<js>"petstore.swagger.io"</js>)
+		.setBasePath(<js>"/v2"</js>)
+		.setTags(
+			<jsm>tag</jsm>(<js>"pet"</js>).setDescription(<js>"Everything about your Pets"</js>)
+				.setExternalDocs(
 					<jsm>externalDocumentation</jsm>(<js>"http://swagger.io"</js>, <js>"http://swagger.io"</js>)
 				)
 		)
-		.schemes(<js>"http"</js>)
-		.path(<js>"/pet"</js>, <js>"post"</js>,
+		.setSchemes(<js>"http"</js>)
+		.setPath(<js>"/pet"</js>, <js>"post"</js>,
 			<jsm>operation</jsm>()
-				.tags(<js>"pet"</js>)
-				.summary(<js>"Add a new pet to the store"</js>)
-				.description(<js>""</js>)
-				.operationId(<js>"addPet"</js>)
-				.consumes(MediaType.<jsf>JSON</jsf>, MediaType.<jsf>XML</jsf>)
-				.produces(MediaType.<jsf>JSON</jsf>, MediaType.<jsf>XML</jsf>)
-				.parameters(
+				.setTags(<js>"pet"</js>)
+				.setSummary(<js>"Add a new pet to the store"</js>)
+				.setDescription(<js>""</js>)
+				.setOperationId(<js>"addPet"</js>)
+				.setConsumes(MediaType.<jsf>JSON</jsf>, MediaType.<jsf>XML</jsf>)
+				.setProduces(MediaType.<jsf>JSON</jsf>, MediaType.<jsf>XML</jsf>)
+				.setParameters(
 					<jsm>parameterInfo</jsm>(<js>"body"</js>, <js>"body"</js>)
-						.description(<js>"Pet object that needs to be added to the store"</js>)
-						.required(<jk>true</jk>)
+						.setDescription(<js>"Pet object that needs to be added to the store"</js>)
+						.setRequired(<jk>true</jk>)
 				)
-				.response(405, <jsm>responseInfo</jsm>(<js>"Invalid input"</js>))
+				.setResponse(405, <jsm>responseInfo</jsm>(<js>"Invalid input"</js>))
 		);
 
 	<jc>// Serialize using JSON serializer.</jc>
-	String <jv>swaggerJson</jv> = JsonSerializer.<jsf>DEFAULT_READABLE</jsf>.serialize(<jv>swagger</jv>);
+	String <jv>swaggerJson</jv> = Json.<jsm>of</jsm>(<jv>swagger</jv>);
 	
 	<jc>// Or just use toString().</jc>
 	String <jv>swaggerJson</jv> = <jv>swagger</jv>.toString();
@@ -13008,7 +12989,7 @@
 		Properties can also be accessed via the {@link org.apache.juneau.dto.swagger.SwaggerElement#get(String,Class)}
 		and {@link org.apache.juneau.dto.swagger.SwaggerElement#set(String,Object)} methods.
 		These methods can also be used to set and retrieve non-Swagger attributes such as 
-		<js>"$ref"</js> (which is not a part of the Swagger spec, but is part of the JSON Schema spec).
+		<js>"$ref"</js> (which is not a part of the Swagger spec but is part of the JSON Schema spec).
 	</p>
 	<p class='bjava'>
 	<jc>// Set a non-standard attribute.</jc>
@@ -13187,7 +13168,7 @@
 	URL <jv>key4</jv> = <jv>config</jv>.get(<js>"Section1/key4"</js>).as(URL.<jk>class</jk>).orElse(<jk>null</jk>);
 	</p>
 	<p>
-		The config language may look simple, but it is a very powerful feature with many capabilities including:
+		The config language may look simple but it is a very powerful feature with many capabilities including:
 	</p>
 	<ul class='spaced-list'>
 		<li>
@@ -14084,7 +14065,7 @@
 	<p>
 		Changes made to the configuration are transactional in nature.  
 		They are kept in memory until you call the {@link org.apache.juneau.config.Config#commit()} method.
-		Until then, you still see the modified values when you call any of the getters, but the modified values
+		Until then, you still see the modified values when you call any of the getters but the modified values
 		exist only in memory.
 	</p>
 	<p>
@@ -14364,7 +14345,7 @@
 		the perspective of the child configuration.
 	</p>
 	<p>
-		Values can be overwritten in child configurations, but the values will only be set in that configuration
+		Values can be overwritten in child configurations but the values will only be set in that configuration
 		and not the imported configuration.  
 	</p>
 	<p>
@@ -15414,20 +15395,16 @@
 	<ul class='javatreec'>
 		<li class='ja'>{@link org.apache.juneau.http.annotation.Contact}
 		<li class='ja'>{@link org.apache.juneau.http.annotation.Content}
-		<li class='ja'>{@link org.apache.juneau.http.annotation.ExternalDocs}
 		<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
 		<li class='ja'>{@link org.apache.juneau.http.annotation.HasFormData}
 		<li class='ja'>{@link org.apache.juneau.http.annotation.HasQuery}
 		<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
-		<li class='ja'>{@link org.apache.juneau.http.annotation.Items}
 		<li class='ja'>{@link org.apache.juneau.http.annotation.License}
 		<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
 		<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
 		<li class='ja'>{@link org.apache.juneau.http.annotation.Request}
 		<li class='ja'>{@link org.apache.juneau.http.annotation.Response}
-		<li class='ja'>{@link org.apache.juneau.http.annotation.Schema}
 		<li class='ja'>{@link org.apache.juneau.http.annotation.StatusCode}
-		<li class='ja'>{@link org.apache.juneau.http.annotation.SubItems}
 		<li class='ja'>{@link org.apache.juneau.http.annotation.Tag}
 	</ul>
 	<p>
@@ -15481,9 +15458,6 @@
 		<li class='jc'>{@link org.apache.juneau.http.header.LastModified}
 		<li class='jc'>{@link org.apache.juneau.http.header.Location}
 		<li class='jc'>{@link org.apache.juneau.http.header.MaxForwards}
-		<li class='jc'>{@link org.apache.juneau.http.header.MediaRange}
-		<li class='jc'>{@link org.apache.juneau.http.header.MediaRanges}
-		<li class='jc'>{@link org.apache.juneau.http.header.MediaType}
 		<li class='jc'>{@link org.apache.juneau.http.header.NoTrace}
 		<li class='jc'>{@link org.apache.juneau.http.header.Origin}
 		<li class='jc'>{@link org.apache.juneau.http.header.Pragma}
@@ -15560,7 +15534,7 @@
 	HeaderList <jv>headers</jv> = HeaderList.<jsm>of</jsm>(Accept.<jsf>TEXT_XML</jsf>, ContentType.<jsf>TEXT_XML</jsf>);
 	</p>
 	<p>
-		Header lists are immutable, but can be appended to using the {@link org.apache.juneau.http.header.HeaderList#copy() copy()} method:	
+		Header lists are immutable but can be appended to using the {@link org.apache.juneau.http.header.HeaderList#copy() copy()} method:	
 	</p>
 	<p class='bjava'>
 	<jv>headers</jv> = <jv>headers</jv>
@@ -15723,7 +15697,7 @@
 	</p>
 
 	<p>
-		Part lists are immutable, but can be appended to using the {@link org.apache.juneau.http.part.PartList#copy() copy()} method:
+		Part lists are immutable but can be appended to using the {@link org.apache.juneau.http.part.PartList#copy() copy()} method:
 	</p>
 	<p class='bjava'>
 	<jv>parts</jv> = <jv>parts</jv>
@@ -16215,7 +16189,7 @@
 			</ul>
 		<li>
 			Support for parsing all HTTP parts (headers, query, formData, path variables) using Swagger formatting rules and validations.
-			<br>Not limited to simple POJOs, but rather you can represent arbitrarily-complex POJOs in any HTTP part using UON notation.
+			<br>Not limited to simple POJOs but rather you can represent arbitrarily-complex POJOs in any HTTP part using UON notation.
 		<li>
 			Auto-created Swagger JSON and Swagger UI available through OPTIONS requests of resources.
 		<li>
@@ -16236,7 +16210,7 @@
 			(e.g. <l>/foo/123/bar/456/bing</l>).
 		<li>
 			Ability to associate guards at the resource or method levels through annotations.
-			<br>Typically useful for security, but can be used for a variety of purposes.
+			<br>Typically useful for security but can be used for a variety of purposes.
 		<li>
 			Ability to associate converters at the resource or method levels through annotations.
 			<br>Typically useful for performing conversions on input and output, such as for supporting older input and 
@@ -16601,7 +16575,7 @@
 		The <c>Basic*</c> classes also implement {@link org.apache.juneau.rest.config.BasicJsonConfig} interface which
 		provides basic JSON marshalling support.  Other config interfaces are available as
 		well to quickly provide different types of marshalling support.  Note that these interfaces
-		do not define any methods, but rather simply provide a set of commonly-used annotations so that
+		do not define any methods but rather simply provide a set of commonly-used annotations so that
 		you don't need to define them on all your classes.
 	</p>
 	<ul class='javatreec'>
@@ -16641,7 +16615,7 @@
 		The <c>*Object*</c> classes provide the same functionality as the servlet
 		classes but do not extend from {@link javax.servlet.http.HttpServlet}.  
 		This becomes important in Spring Boot environments where you may want to 
-		define child resources as Spring Beans, but don't want Spring Boot to auto-detect
+		define child resources as Spring Beans but don't want Spring Boot to auto-detect
 		them as servlets to be deployed as top-level resources.  This is less important
 		in standard servlet containers that don't auto-deploy servlets.  In those
 		environments, you can also use servlet classes for child resources.
@@ -16858,7 +16832,7 @@
 					<ul class='javatree'>
 						<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#INIT INIT} - Right before initialization.
 						<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#POST_INIT POST_INIT} - Right after initialization.
-						<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#POST_INIT_CHILD_FIRST POST_INIT_CHILD_FIRST} - Right after initialization, but run child methods first.
+						<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#POST_INIT_CHILD_FIRST POST_INIT_CHILD_FIRST} - Right after initialization but run child methods first.
 						<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#DESTROY DESTROY} - Right before servlet destroy.
 					</ul>
 				</li>
@@ -17136,7 +17110,7 @@
 						<li class='jc'>{@link org.apache.juneau.rest.RestChildren}
 						<li class='jc'>{@link org.apache.juneau.rest.RestContext}
 						<li class='jc'>{@link org.apache.juneau.rest.stats.RestContextStats}
-						<li class='jic'>{@link org.apache.juneau.rest.logger.RestLogger}
+						<li class='jic'>{@link org.apache.juneau.rest.logging.RestLogger}
 						<li class='jc'>{@link org.apache.juneau.rest.RestOpContext}
 						<li class='jc'>{@link org.apache.juneau.rest.RestOperations}
 						<li class='jc'>{@link org.apache.juneau.serializer.SerializerSet}
@@ -17532,7 +17506,7 @@
 <div class='topic'>
 	<p>
 		{@link org.apache.juneau.rest.RestMatcher RestMatchers} are used to allow multiple Java methods to be 
-		tied to the same HTTP method and path, but differentiated by some request attribute such as a specific 
+		tied to the same HTTP method and path but differentiated by some request attribute such as a specific 
 		header value.
 	</p>
 	<h5 class='figure'>Example:</h5>
@@ -17962,7 +17936,7 @@
 	<jk>public void</jk> doGet(<ja>@Query</ja>(<js>"*"</js>) Map&lt;String,Object&gt; <jv>map</jv>) {...}
 	</p>
 	<p class='bjava'>
-	<jc>// Same, but name "*" is inferred.</jc>
+	<jc>// Same but name "*" is inferred.</jc>
 	<ja>@RestGet</ja>
 	<jk>public void</jk> doGet(<ja>@Query</ja> Map&lt;String,Object&gt; <jv>map</jv>) {...}
 	</p>
@@ -19293,7 +19267,7 @@
 	</p>
 	<p class='bjava'>
 	<ja>@Rest</ja>
-	<jc>// Get stylesheet from myconfig.cfg, but default to devops.css if it's not specified</jc>
+	<jc>// Get stylesheet from myconfig.cfg but default to devops.css if it's not specified</jc>
 	<ja>@HtmlDoc</ja>(
 		stylesheet=<js>"$C{MyServlet/stylesheet,servlet:/styles/devops.css}"</js>,
 	)
@@ -19766,7 +19740,7 @@
 			...
 		}
 	
-		<jc>// Call this method if Client-Version is at least 1.1, but less than 2.0.</jc>
+		<jc>// Call this method if Client-Version is at least 1.1 but less than 2.0.</jc>
 		<ja>@RestGet</ja>(path=<js>"/foobar"</js>, clientVersion=<js>"[1.1,2.0)"</js>)
 		<jk>public</jk> Object method2() {
 			...
@@ -20368,7 +20342,7 @@
 		generated Swagger JSON files by creating model definitions for beans and referencing those definitions through <c>$ref</c> attributes.
 	</p>
 	<p>
-		This setting is disabled by default, but can be set on the {@link org.apache.juneau.rest.RestContext.Builder} object:
+		This setting is disabled by default but can be set on the {@link org.apache.juneau.rest.RestContext.Builder} object:
 	</p>
 	<p class='bjava'>
 	<ja>@HookEvent</ja>(<jsf>INIT</jsf>)
@@ -20657,7 +20631,7 @@
 <div class='topic'>
 	<p>
 		An important distinction needs to be made about the HTML representations produced by the REST
-		API.  These should not be considered User Interfaces, but rather Developer Interfaces.
+		API.  These should not be considered User Interfaces but rather Developer Interfaces.
 	</p>
 	<p>
 		UIs should hide the end-user from the underlying architecture.
@@ -20686,7 +20660,7 @@
 		<li>
 			Limit your use of Javascript!  
 			You can use it sparingly if you want to implement something simple like a pull-down menu to 
-			simplify some debug task, but remember that your audience cares more about interacting with your 
+			simplify some debug task but remember that your audience cares more about interacting with your 
 			service programmatically using REST.  
 			Remember that the HTML is just icing on the cake.
 		<li>
@@ -21297,7 +21271,7 @@
 		<li>
 			HTTP request/response bodies are cached in memory for logging purposes.
 		<li>
-			HTTP requests/responses are logged to the registered {@link org.apache.juneau.rest.logger.RestLogger}.
+			HTTP requests/responses are logged to the registered {@link org.apache.juneau.rest.logging.RestLogger}.
 	</ul>
 	<p>
 		The possible annotation values are:
@@ -21358,11 +21332,11 @@
 		HTTP calls can be logged with the following levels of granularity:
 	</p>	
 	<ul class='javatree'>
-		<li class='je'>{@link org.apache.juneau.rest.logger.CallLoggingDetail}
+		<li class='je'>{@link org.apache.juneau.rest.logging.RestLoggingDetail}
 			<ul class='javatreec'>
-				<li class='jf'>{@link org.apache.juneau.rest.logger.CallLoggingDetail#STATUS_LINE STATUS_LINE}
-				<li class='jf'>{@link org.apache.juneau.rest.logger.CallLoggingDetail#HEADER HEADER}
-				<li class='jf'>{@link org.apache.juneau.rest.logger.CallLoggingDetail#ENTITY ENTITY}
+				<li class='jf'>{@link org.apache.juneau.rest.logging.RestLoggingDetail#STATUS_LINE STATUS_LINE}
+				<li class='jf'>{@link org.apache.juneau.rest.logging.RestLoggingDetail#HEADER HEADER}
+				<li class='jf'>{@link org.apache.juneau.rest.logging.RestLoggingDetail#ENTITY ENTITY}
 			</ul>
 		</li>
 	</ul>
@@ -21414,8 +21388,8 @@
 	=== END ===================================================================
 	</p>
 	<p>
-		The interface responsible for generating the log entries is {@link org.apache.juneau.rest.logger.RestLogger}
-		and the default is {@link org.apache.juneau.rest.logger.CallLogger} which produces the output above.  It
+		The interface responsible for generating the log entries is {@link org.apache.juneau.rest.logging.RestLogger}
+		and the default is {@link org.apache.juneau.rest.logging.BasicRestLogger} which produces the output above.  It
 		can be changed through any of the following:
 	</p>
 	<ul class='javatree'>
@@ -21426,9 +21400,8 @@
 		</li>
 		<li class='jc'>{@link org.apache.juneau.rest.RestContext.Builder}
 			<ul class='javatreec'>
-				<li class='jmp'>{@link org.apache.juneau.rest.RestContext.Builder#createCallLogger(BeanStore,Supplier) createCallLogger(BeanStore,Supplier)}
+				<li class='jmp'>{@link org.apache.juneau.rest.RestContext.Builder#createCallLogger() createCallLogger()}
 				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#callLogger() callLogger()}
-				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#callLogger(Consumer) callLogger(Consumer)}
 			</ul>
 		</li>
 	</ul>
@@ -21482,10 +21455,10 @@
 		</li>
 	</ul>
 	<ul class='notes'>
-		<li class='note'>The {@link org.apache.juneau.rest.logger.BasicTestCallLogger} class is useful for testing and
+		<li class='note'>The {@link org.apache.juneau.rest.logging.BasicTestRestLogger} class is useful for testing and
 			allows you to suppress logging when testing error conditions by passing in a <c>noTrace=true</c> query parameter
 			or <c>No-Trace: true</c> header on requests.  
-		<li class='note'>{@link org.apache.juneau.rest.debug.DebugEnablement}, {@link org.apache.juneau.rest.logger.RestLogger}, and 
+		<li class='note'>{@link org.apache.juneau.rest.debug.DebugEnablement}, {@link org.apache.juneau.rest.logging.RestLogger}, and 
 			{@link org.apache.juneau.rest.stats.ThrownStore} can all be defined globally as Spring beans in a Spring Boot environment.
 	</ul>
 </div>
@@ -21526,13 +21499,13 @@
 		<tr>
 			<td><l>405</l></td>
 			<td>Method Not Implemented</td>
-			<td>A path pattern matched, but no Java methods were found for the HTTP method</td>
+			<td>A path pattern matched but no Java methods were found for the HTTP method</td>
 		</tr>
 		<tr>
 			<td><l>406</l></td>
 			<td>Not Acceptable</td>
 			<td>
-				A path pattern matched, but no Java methods were found with a matching serializer for the 
+				A path pattern matched but no Java methods were found with a matching serializer for the 
 				<l>Accept</l> on the request
 			</td>
 		</tr>
@@ -21540,7 +21513,7 @@
 			<td><l>412</l></td>
 			<td>Precondition Failed</td>
 			<td>
-				A path pattern matched, but no Java methods were found that were not rejected by 
+				A path pattern matched but no Java methods were found that were not rejected by 
 				{@link org.apache.juneau.rest.RestMatcher matchers}
 			</td>
 		</tr>
@@ -21548,7 +21521,7 @@
 			<td><l>415</l></td>
 			<td>Unsupported Media Type</td>
 			<td>
-				A path pattern matched, but no Java methods were found with a matching parser for the 
+				A path pattern matched but no Java methods were found with a matching parser for the 
 				<l>Content-Type</l> on the request
 			</td>
 		</tr>
@@ -22769,7 +22742,7 @@
 			Specify or override filters and properties at the Java class level.
 		<li>
 			Default stylesheets for the {@link org.apache.juneau.html.HtmlDocSerializer} class.
-			<br>It will produce HTML, but it won't contain any styles applied.
+			<br>It will produce HTML but it won't contain any styles applied.
 		<li>
 			The ability to specify HTTP method, headers, and content using GET parameters.
 			<br>These make debugging REST interfaces using only a browser possible.
@@ -23989,7 +23962,7 @@
 	</ul>
 	
 	<p>
-		The <ja>@Remote</ja> annotation is optional, but often included for code readability.
+		The <ja>@Remote</ja> annotation is optional but often included for code readability.
 	</p>
 	
 	<h5 class='topic'>@Remote(path)</h5>
@@ -24111,7 +24084,7 @@
 	<ja>@RestGet</ja>(clientVersion=<js>"2.0"</js>)
 	<jk>public</jk> Object foo()  {...}
 
-	<jc>// Call this method if Client-Version is at least 1.1, but less than 2.0.</jc>
+	<jc>// Call this method if Client-Version is at least 1.1 but less than 2.0.</jc>
 	<ja>@RestGet</ja>(clientVersion=<js>"[1.1,2.0)"</js>)
 	<jk>public</jk> Object foo()  {...}
 
@@ -24934,7 +24907,7 @@
 	<p>
 		What makes this possible is that method-level annotations such as <ja>@RestOp</ja> and parameter-level annotations
 		such as <ja>@Query</ja> are inherited from parent classes.  
-		This normally isn't possible, but the framework will spider up the parent hierarchy of classes to find method and parameter level
+		This normally isn't possible but the framework will spider up the parent hierarchy of classes to find method and parameter level
 		annotations defined on overridden methods.
 	</p>
 	<p>
@@ -25645,7 +25618,7 @@
 	<jk>public void</jk> mytest() <jk>throws</jk> Exception {
 		MockRestClient <jv>client</jv> = MockRestClient.<jsm>build</jsm>(A.<jk>class</jk>);
 
-		<jc>// Admin user should get 200, but anyone else should get 403-Unauthorized.</jc>
+		<jc>// Admin user should get 200 but anyone else should get 403-Unauthorized.</jc>
 		<jv>client</jv>.get().roles(<js>"ADMIN"</js>).run().assertStatus().is(200);
 		<jv>client</jv>.get().roles(<js>"USER"</js>).run().assertStatus().is(403);
 	}
@@ -25791,7 +25764,7 @@
 		</li>
 	</ul>
 	<p>
-		By itself the Microservice API doesn't provided much functionality, but it does provide the basis for the {@doc juneau-microservice-jetty Jetty Microservice} described later.
+		By itself the Microservice API doesn't provided much functionality but it does provide the basis for the {@doc juneau-microservice-jetty Jetty Microservice} described later.
 	</p> 
 	<p>
 		The most-basic creation of a microservice from an entry-point method is shown below:
@@ -26109,7 +26082,7 @@
 		If located on the file system, then the configuration is writeable and the microservice can automatically 
 		listen for and react to changes in the configuration file on the file system.
 		If located on the classpath, then the configuration can still react to modifications made to it through
-		the Config API, but the changes cannot be persisted since the location prevents the file from being modified.
+		the Config API but the changes cannot be persisted since the location prevents the file from being modified.
 	</p>
 	
 	<p>
@@ -26540,7 +26513,7 @@
 		</li>
 	</ul>
 	<p>
-		The additional lifecycle methods are typically not called directly, but are exposed to allow subclasses to
+		The additional lifecycle methods are typically not called directly but are exposed to allow subclasses to
 		provide customized behavior for these events.  
 		For this reason, these methods are left as non-final so that they can be overridden.
 	</p>
@@ -26973,7 +26946,7 @@
 			type was specified on the <l>Accept</l> header on the request.
 	</ol>
 	<p>
-		This particular example is needlessly complex, but it gives an idea of how variables can be used 
+		This particular example is needlessly complex but it gives an idea of how variables can be used 
 		recursively to produce sophisticated results
 	</p>
 	
@@ -27892,7 +27865,7 @@
 		to create an end-to-end client/server REST API. 
 	</p>
 	<p>
-		What makes Juneau unique is the ability to create Java interfaces that behave just like RPC, but using REST
+		What makes Juneau unique is the ability to create Java interfaces that behave just like RPC but using REST
 		as the underlying protocol.  And the technology it not tied to any platform so it can be used in any environment
 		by simply pulling in Maven dependencies.  The server-side need only provide the ability to host a servlet.
 	</p>
@@ -29440,7 +29413,7 @@
 		</li>
 		<li>
 			Automatic support for parsing maps with <c>Enum</c> keys, and parsing <c>Enum</c> strings.<br>
-			This was previously possible using filters, but now it's built-in for all the parsers.
+			This was previously possible using filters but now it's built-in for all the parsers.
 		</li>
 		<li> 
 			Replaced the <c>ObjectList.toXArray()</c> methods with a new <c>elements(Class&lt;T&gt; type)</c> method that's more efficient and avoids creating an unnecessary array.
@@ -30777,7 +30750,7 @@
 	<ul class='spaced-list'>
 		<li>Brand new REST client API that uses Apache HttpClient for HTTP communication.<br>
 			The new client API is simply a thin layer on top of <c>HttpClient</c> that performs 
-			serialization and parsing using Juno parsers, but leaves all the details of the HTTP connection
+			serialization and parsing using Juno parsers but leaves all the details of the HTTP connection
 			to the Apache code. <br>
 			See the {@del org.apache.juneau.rest.client} package for details.
 		<li>New <c>org.apache.juneau.rest.client.jazz</c> package and <c>org.apache.juneau.rest.client.jazz.JazzRestClient</c> class
@@ -31006,7 +30979,7 @@
 		<li>New {@del ParserContext#PARSER_debug} and {@del SerializerContext#SERIALIZER_debug}.
 			settings for logging additional information for debugging problems.
 		<li>New {@del SERIALIZER_ignoreRecursions} setting for explicitly ignoring recursions when 
-			serializing models.  Previously, the <jsf>SERIALIZER_detectRecursions</jsf> setting did this, but now it simply looks for recursions 
+			serializing models.  Previously, the <jsf>SERIALIZER_detectRecursions</jsf> setting did this but now it simply looks for recursions 
 			and throws exceptions when they occur.
 		<li>Improved handling of <c>StackOverflowErrors</c>.  When <jsf>SERIALIZER_detectRecursions</jsf> is enabled, a useful error message
 			is displayed showing the exact chain of objects that resulted in the stack overflow.
@@ -31068,7 +31041,7 @@
 <div class='topic'>
 	<p>
 		Juno 5.1.0.9 is a major update.
-		There weren't very many code changes, but the source has been made a part of Jazz Foundation.
+		There weren't very many code changes but the source has been made a part of Jazz Foundation.
 		This required some restructuring of the project.
 		The project on Jazz Hub will eventually be discontinued.
 		However, the libraries on IBM Community Source will continue to be updated regularly.
@@ -32509,7 +32482,7 @@
 				<li>{@link org.apache.juneau.parser.Parser#parse(Object,Type,Type...)} - Method for parsing into parameterized maps and collections.
 			</ul>
 			Using these methods, you can construct arbitrarily complex objects consisting of maps and collections.
-			You could do this before, but it required constructing a <c>ClassMeta</c> object.  
+			You could do this before but it required constructing a <c>ClassMeta</c> object.  
 			<br>For example:
 				<p class='bcode'>
 		<jc>// Old way:</jc>
@@ -32883,7 +32856,7 @@
 		<li>New methods added/updated to {@link org.apache.juneau.rest.client.RestClient}:
 		<ul>
 			<li>{@del RestClient#getRemoteableProxy(Class,Object)} - For interface proxies defined using <c><ja>@RestMethod</ja>(name=<js>"PROXY"</js>)</c>.
-			<li>{@del RestClient#getRemoteableProxy(Class,Object,Serializer,Parser)} - Same as above, but overrides the serializer and parser defined on the client.
+			<li>{@del RestClient#getRemoteableProxy(Class,Object,Serializer,Parser)} - Same as above but overrides the serializer and parser defined on the client.
 			<li>{@del RestClient#doPost(Object)}
 			<li>{@del RestClient#doCall(HttpMethod,Object,Object)} - Can now pass in instances of {@del org.apache.juneau.rest.client.NameValuePairs} for easy form posts.
 				<br>This extends to all methods that take in the input.
@@ -33049,7 +33022,7 @@
 					<p class='bcode'>
 		links=<js>"{top:'context:/', up:'request:/..' ,options:'servlet:/?method=OPTIONS', upload:'servlet:/upload'}"</js>
 					</p>
-					The old method of using variables and servlet-relative URIs will still be supported, but using 
+					The old method of using variables and servlet-relative URIs will still be supported but using 
 					these new protocols should (hopefully) be easier to understand.
 					<br>
 					These protocols work on all serialized URL and URI objects, as well as classes and properties 
@@ -33457,7 +33430,7 @@
 			}
 		)
 					</p>
-					Previous syntax will still work, but you're encouraged to use the simplified syntax.
+					Previous syntax will still work but you're encouraged to use the simplified syntax.
 				<li>Several annotations are now arrays of strings instead of simple strings.
 					Values are simply concatenated with newlines which makes multi-line values cleaner.
 					<ul>
@@ -33883,7 +33856,7 @@
 		JsonSerializer.<jsf>DEFAULT</jsf>.serialize(writer1, pojo1);
 		JsonSerializer.<jsf>DEFAULT</jsf>.serialize(writer2, pojo2);
 		
-		<jc>// Same, but using a session object</jc>
+		<jc>// Same but using a session object</jc>
 		SerializerSession session = JsonSerializer.<jsf>DEFAULT</jsf>.createSession();
 		<jk>try</jk> {
 			session.serialize(writer1, pojo1);
@@ -34289,7 +34262,7 @@
 					Caching improvements on serializers and parsers have reduced execution time of the core
 					JUnits by approximately 1/3.
 					<br>The 17000+ JUnit tests now execute in less than 10 seconds and have a cache-reuse hit rate
-					of 98% (164104 serializers/parsers/bean-contexts retrieved, but only 1801 created from scratch).
+					of 98% (164104 serializers/parsers/bean-contexts retrieved but only 1801 created from scratch).
 				<li>
 					All the various separate <c>Context</c> classes (e.g. <c>JsonSerializerContext</c>) have been folded into
 					their respective serializer or parser classes (e.g. <c>JsonSerializer</c>).
@@ -36251,13 +36224,13 @@
 			<ja>@Html</ja>(link=<js>"servlet:/{b}"</js>)
 			<jk>public</jk> String <jf>a</jf>;
 			
-			<jk>public</jk> String <jf>b</jf>;  <jc>// Not serialized, but referenced in link on a.</jc>  
+			<jk>public</jk> String <jf>b</jf>;  <jc>// Not serialized but referenced in link on a.</jc>  
 				
 		}
 			</p>
 			<br>
 			The general rule for the {@link org.apache.juneau.BeanMap} class is that <c>get()</c>,<c>put()</c>, and <c>containsKey()</c>
-			will work against hidden properties, but <c>keySet()</c> and <c>entrySet()</c> will skip them.
+			will work against hidden properties but <c>keySet()</c> and <c>entrySet()</c> will skip them.
 		<li>
 			Several bug fixes in the {@link org.apache.juneau.html.HtmlSerializer} and {@link org.apache.juneau.html.HtmlParser} classes around the handling of 
 			collections and arrays of beans with <c><ja>@Bean</ja>(typeName)</c> annotations.

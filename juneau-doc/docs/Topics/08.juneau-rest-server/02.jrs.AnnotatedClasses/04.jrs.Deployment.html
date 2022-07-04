@@ -65,8 +65,8 @@
 		|		}
 		|	
 		|		<ja>@Bean</ja>
-		|		<jk>public</jk> ServletRegistrationBean&gt;Servlet> getRootServlet(RootResources <jv>rootResources</jv>) {
-		|			<jk>return new</jk> ServletRegistrationBean&gt;>(<jv>rootResources</jv>, <js>"/*"</js>);
+		|		<jk>public</jk> ServletRegistrationBean&lt;Servlet&gt; getRootServlet(RootResources <jv>rootResources</jv>) {
+		|			<jk>return new</jk> ServletRegistrationBean&lt;&gt;(<jv>rootResources</jv>, <js>"/*"</js>);
 		|		}
 		|	}
 	</p>	

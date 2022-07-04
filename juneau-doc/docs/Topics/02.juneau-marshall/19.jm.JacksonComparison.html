@@ -17,9 +17,9 @@
 
 <div class='topic'>
 	<p>
-		Juneau was developed independently from Jackson, but shares many of the same features and capabilities.
+		Juneau was developed independently from Jackson but shares many of the same features and capabilities.
 		Whereas Jackson was created to work primarily with JSON, Juneau was created to work for multiple languages.
-		Therefore, the terminology and annotations in Juneau are similar, but language-agnostic.   
+		Therefore, the terminology and annotations in Juneau are similar but language-agnostic.   
 	</p>
 	<p>
 		The following charts describe equivalent features between the two libraries:
@@ -64,7 +64,7 @@
 		<tr>
 			<td><c><ja>@JsonAutoDetect</ja>(fieldVisibility=...)</c></td>
 			<td>
-				No equivalent annotation, but can be controlled via: 
+				No equivalent annotation but can be controlled via: 
 				<br>{@link oaj.BeanContext.Builder#beanFieldVisibility(Visibility)}
 				<br>{@link oaj.BeanContext.Builder#beanMethodVisibility(Visibility)}
 			</td>
@@ -98,7 +98,7 @@
 		<tr>
 			<td><ja>@JsonInclude</ja></td>
 			<td>
-				No equivalent annotation, but can be controlled via various settings:
+				No equivalent annotation but can be controlled via various settings:
 				<br>{@link oaj.BeanContext}
 				<br>{@link oaj.serializer.Serializer}
 			</td>

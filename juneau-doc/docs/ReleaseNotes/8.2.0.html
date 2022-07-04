@@ -129,13 +129,13 @@
 			<ja>@Html</ja>(link=<js>"servlet:/{b}"</js>)
 			<jk>public</jk> String <jf>a</jf>;
 			
-			<jk>public</jk> String <jf>b</jf>;  <jc>// Not serialized, but referenced in link on a.</jc>  
+			<jk>public</jk> String <jf>b</jf>;  <jc>// Not serialized but referenced in link on a.</jc>  
 				
 		}
 			</p>
 			<br>
 			The general rule for the {@link oaj.BeanMap} class is that <c>get()</c>,<c>put()</c>, and <c>containsKey()</c>
-			will work against hidden properties, but <c>keySet()</c> and <c>entrySet()</c> will skip them.
+			will work against hidden properties but <c>keySet()</c> and <c>entrySet()</c> will skip them.
 		<li>
 			Several bug fixes in the {@link oaj.html.HtmlSerializer} and {@link oaj.html.HtmlParser} classes around the handling of 
 			collections and arrays of beans with <c><ja>@Bean</ja>(typeName)</c> annotations.

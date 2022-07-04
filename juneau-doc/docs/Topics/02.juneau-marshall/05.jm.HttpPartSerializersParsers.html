@@ -37,17 +37,17 @@
 		|	Object <jv>value</jv> = <jk>new long</jk>[][]{{1,2,3},{4,5,6},{7,8,9}};
 		|
 		|	<jc>// Produces "1,2,3|4,5,6|7,8,9"</jc>
-		|	String <jv>output</jv> = OpenApiSerializer.<jsf>DEFAULT</jsf>.serialize(HttpPartType.<jsf>HEADER</jsf>, <jv>schema</jv>, <jv>value</jv>);
+		|	String <jv>output</jv> = OpenApi.<jsm>of</jsm>(HttpPartType.<jsf>HEADER</jsf>, <jv>schema</jv>, <jv>value</jv>);
 		|	
 		|	<jc>// Produces "[[1,2,3],[4,5,6],[7,8,9]]</jc>
-		|	<jk>long</jk>[][] <jv>value</jv> = OpenApiParser.<jsf>DEFAULT</jsf>.parse(HttpPartType.<jsf>HEADER</jsf>, <jv>schema</jv>, <jv>output</jv>, <jk>long</jk>[][].<jk>class</jk>);
+		|	<jk>long</jk>[][] <jv>value</jv> = OpenApi.<jsm>to</jsm>(HttpPartType.<jsf>HEADER</jsf>, <jv>schema</jv>, <jv>output</jv>, <jk>long</jk>[][].<jk>class</jk>);
 	</p>
 	<p>
-		The {@link oaj.httppart.HttpPartSchemaBuilder} class is provided for shortening the creation of schemas.
+		The {@link oaj.httppart.HttpPartSchema} class also provides convenience static methods for creation of custom schemas.
 		The equivalent to the schema above can be structured like so:
 	</p>
 	<p class='bjava'>
-		|	<jk>import static</jk> org.apache.juneau.httppart.HttpPartSchemaBuilder.*;
+		|	<jk>import static</jk> org.apache.juneau.httppart.HttpPartSchema.*;
 		|	
 		|	<jc>// Schema information about our part.</jc>
 		|	HttpPartSchema <jv>schema</jv> = <jsm>tArrayPipes</jsm>(<jsm>tArrayCsv</jsm>(<jsm>tInt64</jsm>())).build();

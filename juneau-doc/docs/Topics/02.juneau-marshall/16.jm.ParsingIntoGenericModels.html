@@ -23,12 +23,12 @@
 		objects.
 	</p>
 	<p>
-		You can parse into any <c>Map</c> type (e.g. <c>HashMap</c>, <c>TreeMap</c>), but
+		You can parse into any <c>Map</c> type (e.g. <c>HashMap</c>, <c>TreeMap</c>) but
 		using {@link oaj.collections.JsonMap} is recommended since it has many convenience methods
 		for converting values to various types.
 		The same is true when parsing collections.  You can use any Collection (e.g. <c>HashSet</c>, 
 		<c>LinkedList</c>) or array (e.g. <c>Object[]</c>, <c>String[]</c>, 
-		<c>String[][]</c>), but using {@link oaj.collections.JsonList} is recommended.
+		<c>String[][]</c>) but using {@link oaj.collections.JsonList} is recommended.
 	</p>
 	<p>
 		When the map or list type is not specified, or is the abstract <c>Map</c>, <c>Collection</c>, 
@@ -64,10 +64,10 @@
 	</p>
 	<p class='bjava'>	
 		|	<jc>// Parse JSON into a generic POJO model.</jc>
-		|	JsonMap <jv>map</jv> = JsonParser.<jsf>DEFAULT</jsf>.parse(<jv>json</jv>, JsonMap.<jk>class</jk>);
+		|	JsonMap <jv>map</jv> = Json.<jsm>to</jsm>(<jv>json</jv>, JsonMap.<jk>class</jk>);
 		|
 		|	<jc>// Convert it back to JSON.</jc>
-		|	String <jv>json</jv> = SimpleJsonSerializer.<jsf>DEFAULT_READABLE</jsf>.serialize(<jv>map</jv>);
+		|	String <jv>json</jv> = SimpleJson.<jsm>of</jsm>(<jv>map</jv>);
 	</p>
 	<p>
 		What we end up with is the exact same output.
@@ -101,7 +101,7 @@
 	</p>
 	<p class='bjava'>
 		|	<jc>// Parse JSON into a generic POJO model.</jc>
-		|	JsonMap <jv>map</jv> = JsonParser.<jsf>DEFAULT</jsf>.parse(<jv>json</jv>, JsonMap.<jk>class</jk>);
+		|	JsonMap <jv>map</jv> = Json.<jsm>to</jsm>(<jv>json</jv>, JsonMap.<jk>class</jk>);
 		|
 		|	<jc>// Get some simple values.</jc>
 		|	String <jv>name</jv> = <jv>map</jv>.getString(<js>"name"</js>);

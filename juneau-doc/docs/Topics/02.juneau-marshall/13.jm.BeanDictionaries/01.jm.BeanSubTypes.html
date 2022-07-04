@@ -55,19 +55,16 @@
 		When serialized, the subtype is serialized as a virtual <js>"_type"</js> property:
 	</p>	
 	<p class='bjava'>
-		|	JsonSerializer <jv>serializer</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>;
-		|	
 		|	A1 <jv>object</jv> = <jk>new</jk> A1();
 		|	<jv>object</jv>.<jf>f1</jf> = <js>"f1"</js>;
-		|	String <jv>json</jv> = <jv>serilalizer</jv>.serialize(<jv>object</jv>);
+		|	String <jv>json</jv> = SimpleJson.<jsm>of</jsm>(<jv>object</jv>);
 		|	<jsm>assertEquals</jsm>(<js>"{_type:'A1',f1:'f1',f0:'f0'}"</js>, <jv>json</jv>);
 	</p>
 	<p>
 		The following shows what happens when parsing back into the original object.
 	</p>
 	<p class='bjava'>
-		|	JsonParser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
-		|	A <jv>object</jv> = <jv>parser</jv>.parse(<jv>json</jv>, A.<jk>class</jk>);
+		|	A <jv>object</jv> = Json.<jsm>to</jsm>(<jv>json</jv>, A.<jk>class</jk>);
 		|	<jsm>assertTrue</jsm>(<jv>object</jv> <jk>instanceof</jk> A1);
 	</p>
 </div>

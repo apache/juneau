@@ -300,7 +300,7 @@
 		JsonSerializer.<jsf>DEFAULT</jsf>.serialize(writer1, pojo1);
 		JsonSerializer.<jsf>DEFAULT</jsf>.serialize(writer2, pojo2);
 		
-		<jc>// Same, but using a session object</jc>
+		<jc>// Same but using a session object</jc>
 		SerializerSession session = JsonSerializer.<jsf>DEFAULT</jsf>.createSession();
 		<jk>try</jk> {
 			session.serialize(writer1, pojo1);

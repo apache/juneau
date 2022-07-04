@@ -59,7 +59,7 @@
 		<li>
 			Passing them to one of the {@link oaj.serializer.Serializer} serialize methods.
 		<li>
-			Simply calling the {@link oaj.collections.JsonMap#toString()} or {@link oaj.collections.JsonList#toString()}
+			Simply calling the {@link oaj.collections.JsonMap#asJson()}/{@link oaj.collections.JsonMap#toString()} or {@link oaj.collections.JsonList#asString()}/{@link oaj.collections.JsonList#toString()}
 			methods which will serialize it as Simplified JSON.
 	</ol>
 	<p>
@@ -71,21 +71,21 @@
 	<p class='bjava'>
 		|	<jc>// Parse an arbitrary JSON document into an unstructered data model
 		|	// consisting of JsonMaps, JsonLists, and java primitive objects.</jc>
-		|	Parser <jv>parser</jv> = JsonParser.<jsf>DEFAULT</jsf>;
 		|	String <jv>json</jv> = <js>"{a:{name:'John Smith',age:21},b:{name:'Joe Smith',age:42}}"</js>;
-		|	JsonMap <jv>map</jv> = <jv>parser</jv>.parse(<jv>json</jv>, JsonMap.<jk>class</jk>);
+		|	JsonMap <jv>map</jv> = Json.<jsm>to</jsm>(<jv>json</jv>, JsonMap.<jk>class</jk>);
 		|
 		|	<jc>// Use JsonMap API to extract data from the unstructured model.</jc>
 		|	<jk>int</jk> <jv>johnSmithAge</jv> = <jv>map</jv>.getMap(<js>"a"</js>).getInt(<js>"age"</js>);
 		|	
 		|	<jc>// Convert it back into JSON.</jc>
-		|	<jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>map</jv>);
+		|	<jv>json</jv> = Json.<jsm>of</jsm>(<jv>map</jv>);
 		|	
 		|	<jc>// Or convert it to XML.</jc>
-		|	String <jv>xml</jv> = XmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>map</jv>);
+		|	String <jv>xml</jv> = Xml.<jsm>of</jsm>(<jv>map</jv>);
 		|
-		|	<jc>// Or just use toString().</jc>
+		|	<jc>// Or just use toString() or asJson().</jc>
 		|	<jv>json</jv> = <jv>map</jv>.toString();
+		|	<jv>json</jv> = <jv>map</jv>.asJson();
 	</p>
 	<p>
 		The <c>JsonMap</c> and <c>JsonList</c> classes have many convenience features:

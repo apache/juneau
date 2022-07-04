@@ -107,7 +107,7 @@
 			<td>
 				<b>With non-standard properties or not true beans</b>
 				<br>These include true beans that have one or more properties defined by getter 
-				and setter methods or properties, but property types include group [3b, 4b, 5, 6b, 7] objects.
+				and setter methods or properties but property types include group [3b, 4b, 5, 6b, 7] objects.
 				<br>This also includes classes that look like beans but aren't true beans.  
 				For example, classes that have getters but not setters, or classes without no-arg constructors.	
 			</td>
@@ -130,7 +130,7 @@
 			<td style='text-align:center'>3d</td>
 			<td>
 				<b>Read-only beans without setters</b>
-				<br>The same as 3a, but without property setters or constructor args.
+				<br>The same as 3a but without property setters or constructor args.
 			</td>
 			<td>&nbsp;</td>
 			<td style='background-color:lightgreen;text-align:center'><b>yes</b></td>
@@ -140,7 +140,7 @@
 			<td style='text-align:center'>4</td>
 			<td>
 				<b>Swapped objects</b>
-				<br>These are objects that are not directly serializable, but have 
+				<br>These are objects that are not directly serializable but have 
 				{@link oaj.swap.ObjectSwap ObjectSwaps} associated with them.  
 				The purpose of a POJO swap is to convert an object to another object that is easier to serialize 
 				and parse.  
@@ -278,7 +278,7 @@
 		These are models where there are no referential loops (e.g. leaves with references to nodes, or nodes 
 		in one branch referencing nodes in another branch).  
 		There is a serializer setting {@code detectRecursions} to look for and handle these kinds of loops 
-		(by setting these references to <jk>null</jk>), but it is not enabled by default since it introduces 
+		(by setting these references to <jk>null</jk>) but it is not enabled by default since it introduces 
 		a moderate performance penalty. 
 	</div>
 	
@@ -305,7 +305,7 @@
 		POJOs are convertible from Strings using any of the following (matched in the specified order):
 	</p>
 	<ul class='spaced-list'>
-		<li>Any any of the following public static non-deprecated methods:
+		<li>Any of the following public static non-deprecated methods:
 		<ul>
 			<li><c>create(String)</c>
 			<li><c>fromString(String)</c>

@@ -82,6 +82,7 @@ public abstract class OpenApiElement {
 	 *
 	 * @param property The property name to retrieve.
 	 * @param type The datatype to cast the value to.
+	 * @param <T> The datatype to cast the value to.
 	 * @return The property value, or <jk>null</jk> if the property does not exist or is not set.
 	 */
 	public <T> T get(String property, Class<T> type) {

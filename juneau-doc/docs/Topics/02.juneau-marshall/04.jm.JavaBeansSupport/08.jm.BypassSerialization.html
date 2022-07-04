@@ -28,7 +28,7 @@
 		|	}	
 		|	
 		|	<jc>// Produces "{f1:{'foo':'bar'}}"</jc>
-		|	String <jv>json</jv> = SimpleJsonSerializer.<jsf>DEFAULT</jsf>.toString(<jk>new</jk> MyBean());
+		|	String <jv>json</jv> = SimpleJson.<jsm>of</jsm>(<jk>new</jk> MyBean());
 	</p>			
 	<p>
 		Note that if you're serializing Readers and InputStreams, it's up to you to make sure you're producing
@@ -37,14 +37,14 @@
 	<p>
 		A more typical scenario where this is useful is by using swaps to convert POJOs to Readers whose 
 		contents are determined via the {@link oaj.BeanSession#getMediaType()} method.
-		In the following example, we're customizing the JSON output for a particular bean type, but leaving
+		In the following example, we're customizing the JSON output for a particular bean type but leaving
 		all other renditions as-is:
 	</p>			
 	<p class='bjava'>
 		|	<ja>@Swap</ja>(MyBeanSwapSometimes.<jk>class</jk>)
 		|	<jk>public class</jk> MyBean {...}
 		|	
-		|	<jc>// A swap that produces specialized output for JSON, but default serialization for</jc>
+		|	<jc>// A swap that produces specialized output for JSON but default serialization for</jc>
 		|	<jc>// all other media types.</jc>
 		|	<jk>public class</jk> MyBeanSwapSometimes <jk>extends</jk> ObjectSwap&lt;MyBean,Object&gt; {
 		|		<jk>public</jk> Object swap(BeanSession <jv>session</jv>, MyPojo <jv>object</jv>) <jk>throws</jk> Exception {
@@ -58,7 +58,7 @@
 	<div class='info'>
 		Due to the nature of the RDF serializers, Readers and InputStreams are serialized as literals,
 		not as RDF text.
-		This is due to the fact that the RDF serializers use a DOM for serialization, so we don't have
+		This is due to the fact that the RDF serializers use a DOM for serialization so we don't have
 		access to the underlying stream.
 	</div>
 </div>

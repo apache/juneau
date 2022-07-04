@@ -26,33 +26,33 @@
 		|	
 		|	Feed <jv>feed</jv> = 
 		|		<jsm>feed</jsm>(<js>"tag:juneau.apache.org"</js>, <js>"Juneau ATOM specification"</js>, <js>"2016-01-02T03:04:05Z"</js>)
-		|		.subtitle(<jsm>text</jsm>(<js>"html"</js>).text(<js>"Describes &lt;em&gt;stuff&lt;/em&gt; about Juneau"</js>))
-		|		.links(
-		|			<jsm>link</jsm>(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://juneau.apache.org"</js>).hreflang(<js>"en"</js>),
+		|		.setSubtitle(<jsm>text</jsm>(<js>"html"</js>).setText(<js>"Describes &lt;em&gt;stuff&lt;/em&gt; about Juneau"</js>))
+		|		.setLinks(
+		|			<jsm>link</jsm>(<js>"alternate"</js>, <js>"text/html"</js>, <js>"http://juneau.apache.org"</js>).setHreflang(<js>"en"</js>),
 		|			<jsm>link</jsm>(<js>"self"</js>, <js>"application/atom+xml"</js>, <js>"http://juneau.apache.org/feed.atom"</js>)
 		|		)
-		|		.rights(<js>"Copyright (c) ..."</js>)
-		|		.generator(
-		|			<jsm>generator</jsm>(<js>"Juneau"</js>).uri(<js>"http://juneau.apache.org/"</js>).version(<js>"1.0"</js>)
+		|		.setRights(<js>"Copyright (c) ..."</js>)
+		|		.setGenerator(
+		|			<jsm>generator</jsm>(<js>"Juneau"</js>).setUri(<js>"http://juneau.apache.org/"</js>).setVersion(<js>"1.0"</js>)
 		|		)
-		|		.entries(
+		|		.setEntries(
 		|			<jsm>entry</jsm>(<js>"tag:juneau.sample.com,2013:1.2345"</js>, <js>"Juneau ATOM specification snapshot"</js>, <js>"2016-01-02T03:04:05Z"</js>)
-		|			.links(
+		|			.setLinks(
 		|				<jsm>link</jsm><js>"alternate"</js>, <js>"text/html"</js>, <js>"http://juneau.apache.org/juneau.atom"</js>),
-		|				<jsm>link</jsm>(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>"http://juneau.apache.org/audio/juneau_podcast.mp3"</js>).length(1337)
+		|				<jsm>link</jsm>(<js>"enclosure"</js>, <js>"audio/mpeg"</js>, <js>"http://juneau.apache.org/audio/juneau_podcast.mp3"</js>).setLength(1337)
 		|			)
-		|			.published(<js>"2016-01-02T03:04:05Z"</js>)
-		|			.authors(
-		|				<jsm>person</jsm>(<js>"Jane Smith"</js>).uri(<js>"http://juneau.apache.org/"</js>).email(<js>"janesmith@apache.org"</js>)
+		|			.setPublished(<js>"2016-01-02T03:04:05Z"</js>)
+		|			.setAuthors(
+		|				<jsm>person</jsm>(<js>"Jane Smith"</js>).setUri(<js>"http://juneau.apache.org/"</js>).setEmail(<js>"janesmith@apache.org"</js>)
 		|			)
-		|			.contributors(
+		|			.setContributors(
 		|				<jsm>person</jsm>(<js>"John Smith"</js>)
 		|			)
-		|			.content(
+		|			.setContent(
 		|				<jsm>content</jsm>(<js>"xhtml"</js>)
-		|				.lang(<js>"en"</js>)
-		|				.base(<js>"http://www.apache.org/"</js>)
-		|				.text(<js>"&lt;div&gt;&lt;p&gt;&lt;i&gt;[Update: Juneau supports ATOM.]&lt;/i&gt;&lt;/p&gt;&lt;/div&gt;"</js>)
+		|				.setLang(<js>"en"</js>)
+		|				.setBase(<js>"http://www.apache.org/"</js>)
+		|				.setText(<js>"&lt;div&gt;&lt;p&gt;&lt;i&gt;[Update: Juneau supports ATOM.]&lt;/i&gt;&lt;/p&gt;&lt;/div&gt;"</js>)
 		|			)
 		|		);
 	</p>
@@ -90,7 +90,7 @@
 		|			Juneau
 		|		<xt>&lt;/generator&gt;</xt>
 		|		<xt>&lt;subtitle</xt> <xa>type</xa>=<xs>'html'</xs><xt>&gt;</xt>
-		|			Describes &lt;em&gt;stuff&lt;/em&gt; about Juneau
+		|			Describes <xt>&lt;em&gt;</xt>stuff<xt>&lt;/em&gt;</xt> about Juneau
 		|		<xt>&lt;/subtitle&gt;</xt>
 		|		<xt>&lt;entry&gt;</xt>
 		|			<xt>&lt;author&gt;</xt>

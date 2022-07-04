@@ -67,12 +67,9 @@
 		|	<jc>// Our input being parsed.</jc>
 		|	String <jv>input</jv> = <js>"1,2,3|4,5,6|7,8,9"</js>
 		|	
-		|	<jc>// The parser to use.</jc>
-		|	HttpPartParser <jv>parser</jv> = OpenApiParser.<jsf>DEFAULT</jsf>;
-		|	
 		|	<jc>// Convert string to a POJO.</jc>
 		|	<jk>try</jk> {
-		|		Long[][] <jv>pojo</jv> = <jv>parser</jv>.parse(<jv>schema</jv>, <jv>input</jv>, Long[][].<jk>class</jk>);
+		|		Long[][] <jv>pojo</jv> = OpenApi.<jsm>to</jsm>(<jv>schema</jv>, <jv>input</jv>, Long[][].<jk>class</jk>);
 		|	} <jk>catch</jk> (SchemaValidationException <jv>e</jv>) {
 		|		<jc>// Oops, one of the restrictions were not met.</jc>
 		|	}
@@ -256,18 +253,15 @@
 		|	<jc>// Our input being parsed.</jc>
 		|	String <jv>input</jv> = <js>"1,2,3|4,5,6|7,8,9"</js>
 		|	
-		|	<jc>// The parser to use.</jc>
-		|	HttpPartParser <jv>parser</jv> = OpenApiParser.<jsf>DEFAULT</jsf>;
-		|	
 		|	<jc>// Convert string to a POJO.</jc>
 		|	<jk>try</jk> {
-		|		MyPojo <jv>pojo</jv> = <jv>parser</jv>.parse(<jv>schema</jv>, <jv>input</jv>, MyPojo.<jk>class</jk>);
+		|		MyPojo <jv>pojo</jv> = OpenApi.<jsm>to</jsm>(<jv>schema</jv>, <jv>input</jv>, MyPojo.<jk>class</jk>);
 		|	} <jk>catch</jk> (SchemaValidationException <jv>e</jv>) {
 		|		<jc>// Oops, one of the restrictions were not met.</jc>
 		|	}
 	</p>
 	<p>
-		Just like serialization, the <c>object</c> type is not officially part of the OpenAPI standard, but
+		Just like serialization, the <c>object</c> type is not officially part of the OpenAPI standard but
 		Juneau supports parsing HTTP parts in UON notation to Maps and beans.
 	</p>
 	<p>
@@ -318,8 +312,7 @@
 		|		<js>"(f1=foo,f2=Zm9v,f3=666F6F,f4='66 6F 6F',f5=2012-12-21T12:34:56Z,f6=foo,"</js>
 		|		+ <js>"f7=1,f8=2,f9=1.0,f10=1.0,f11=true,fExtra=1)"</js>;
 		|	
-		|	HttpPartParser <jv>parser</jv> = OpenApiParser.<jsf>DEFAULT</jsf>;
-		|	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<jv>schema</jv>, <jv>input</jv>, MyBean.<jk>class</jk>);
+		|	MyBean <jv>bean</jv> = OpenApi.<jsm>to</jsm>(<jv>schema</jv>, <jv>input</jv>, MyBean.<jk>class</jk>);
 	</p>
 	<p>
 		Note that serializing into generic <c>Object</c> properties would have produced similar results:
@@ -348,8 +341,7 @@
 		|		<js>"(f1=foo,f2=Zm9v,f3=666F6F,f4='66 6F 6F',f5=2012-12-21T12:34:56Z,f6=foo,"</js>
 		|		+ <js>"f7=1,f8=2,f9=1.0,f10=1.0,f11=true,fExtra=1)"</js>;
 		|	
-		|	HttpPartParser <jv>parser</jv> = OpenApiParser.<jsf>DEFAULT</jsf>;
-		|	JsonMap <jv>map</jv> = <jv>parser</jv>.parse(<jv>schema</jv>, <jv>input</jv>, JsonMap.<jk>class</jk>);
+		|	JsonMap <jv>map</jv> = OpenApi.<jsm>to</jsm>(<jv>schema</jv>, <jv>input</jv>, JsonMap.<jk>class</jk>);
 	</p>
 	<ul class='notes'>
 		<li class='note'>

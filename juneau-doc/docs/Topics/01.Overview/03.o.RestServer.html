@@ -160,38 +160,21 @@
 		|	 * Predefined REST configuration that defines common default values for all configurations.
 		|	 */</jd>
 		|	<ja>@Rest</ja>(
-		|		allowedHeaderParams=<js>"$S{j.allowedHeaderParams,$E{J_ALLOWED_HEADER_PARAMS,Accept,Content-Type}}"</js>,
-		|		allowedMethodHeaders=<js>"$S{j.allowedMethodHeaders,$E{J_ALLOWED_METHOD_HEADERS,}}"</js>,
-		|		allowedMethodParams=<js>"$S{j.allowedMethodParams,$E{J_ALLOWED_METHOD_PARAMS,HEAD,OPTIONS}}"</js>,
-		|		beanStore=BeanStore.<jk>class</jk>,
-		|		callLogger=BasicRestLogger.<jk>class</jk>,
-		|		clientVersionHeader=<js>"$S{j.clientVersionHeader,$E{J_CLIENT_VERSION_HEADER,Client-Version}}"</js>,
+		|		<jc>// Configuration file.</jc>
 		|		config=<js>"$S{j.configFile,$E{J_CONFIG_FILE,SYSTEM_DEFAULT}}"</js>,
-		|		consumes={},
-		|		contextClass=RestContext.<jk>class</jk>,
+		|	
+		|		<jc>// Standard fields.</jc>
+		|		path=<js>""</js>,
+		|		roleGuard=<js>""</js>,
+		|		rolesDeclared=<js>""</js>,
+		|	
+		|		<jc>// Configuration beans.</jc>
 		|		converters={},
-		|		debug=<js>"$S{j.debug,$E{J_DEBUG,}}"</js>,
-		|		debugEnablement=BasicDebugEnablement.<jk>class</jk>,
-		|		debugOn=<js>"$S{j.debugOn,$E{J_DEBUG_ON,}}"</js>,
-		|		defaultAccept=<js>"$S{j.defaultAccept,$E{J_DEFAULT_ACCEPT,}}"</js>,
-		|		defaultCharset=<js>"$S{j.defaultCharset,$E{J_DEFAULT_CHARSET,UTF-8}}"</js>,
-		|		defaultContentType=<js>"$S{j.defaultContentType,$E{J_DEFAULT_CONTENT_TYPE,}}"</js>,
-		|		defaultRequestAttributes=<js>"$S{j.defaultRequestAttributes,$E{J_DEFAULT_REQUEST_ATTRIBUTES,}}"</js>,
-		|		defaultRequestHeaders=<js>"$S{j.defaultRequestHeaders,$E{J_DEFAULT_REQUEST_HEADERS,}}"</js>,
-		|		defaultResponseHeaders=<js>"$S{j.defaultResponseHeaders,$E{J_DEFAULT_RESPONSE_HEADERS,}}"</js>,
-		|		description=<js>""</js>,
-		|		disableContentParam=<js>"$S{j.disableContentParam,$E{J_DISABLE_CONTENT_PARAM,false}}"</js>,
 		|		encoders={IdentityEncoder.<jk>class</jk>},
-		|		fileFinder=BasicFileFinder.<jk>class</jk>,
 		|		guards={},
-		|		maxInput=<js>"$S{j.maxInput,$E{J_MAX_INPUT,1000000}}"</js>,
-		|		messages=<js>"$S{j.messages,$E{J_MESSAGES,}}"</js>,
 		|		parsers={},
 		|		partParser=OpenApiParser.<jk>class</jk>,
 		|		partSerializer=OpenApiSerializer.<jk>class</jk>,
-		|		path=<js>""</js>,
-		|		produces={},
-		|		renderResponseStackTraces=<js>"$S{j.renderResponseStackTraces,$E{J_RENDER_RESPONSE_STACK_TRACES,false}}"</js>,
 		|		responseProcessors={
 		|			ReaderProcessor.<jk>class</jk>,
 		|			InputStreamProcessor.<jk>class</jk>,
@@ -203,7 +186,6 @@
 		|			PlainTextPojoProcessor.<jk>class</jk>,
 		|			SerializedPojoProcessor.<jk>class</jk>
 		|		},
-		|		restChildrenClass=RestChildren.<jk>class</jk>,
 		|		restOpArgs={
 		|			AttributeArg.<jk>class</jk>,
 		|			ContentArg.<jk>class</jk>,
@@ -232,20 +214,51 @@
 		|			RestResponseArgs.<jk>class</jk>,
 		|			DefaultArg.<jk>class</jk>
 		|		},
-		|		restOpContextClass=RestOpContext.<jk>class</jk>,
-		|		restOperationsClass=RestOperations.<jk>class</jk>,
-		|		roleGuard=<js>""</js>,
-		|		rolesDeclared=<js>""</js>,
 		|		serializers={},
-		|		siteName=<js>"$S{j.siteName,$E{J_SITE_NAME,}}"</js>,
-		|		staticFiles=BasicStaticFiles.<jk>class</jk>,
-		|		swagger=<ja>@Swagger</ja>,
-		|		swaggerProvider=BasicSwaggerProvider.<jk>class</jk>,
-		|		title=<js>"$S{j.title,$E{J_TITLE,}}"</js>,
+		|	
+		|		<jc>// Configurable settings.</jc>
+		|		allowedHeaderParams=<js>"$S{j.allowedHeaderParams,$E{J_ALLOWED_HEADER_PARAMS,Accept,Content-Type}}"</js>,
+		|		allowedMethodHeaders=<js>"$S{j.allowedMethodHeaders,$E{J_ALLOWED_METHOD_HEADERS,}}"</js>,
+		|		allowedMethodParams=<js>"$S{j.allowedMethodParams,$E{J_ALLOWED_METHOD_PARAMS,HEAD,OPTIONS}}"</js>,
+		|		clientVersionHeader=<js>"$S{j.clientVersionHeader,$E{J_CLIENT_VERSION_HEADER,Client-Version}}"</js>,
+		|		debug=<js>"$S{j.debug,$E{J_DEBUG,}}"</js>,
+		|		debugOn=<js>"$S{j.debugOn,$E{J_DEBUG_ON,}}"</js>,
+		|		defaultAccept=<js>"$S{j.defaultAccept,$E{J_DEFAULT_ACCEPT,}}"</js>,
+		|		defaultCharset=<js>"$S{j.defaultCharset,$E{J_DEFAULT_CHARSET,UTF-8}}"</js>,
+		|		defaultContentType=<js>"$S{j.defaultContentType,$E{J_DEFAULT_CONTENT_TYPE,}}"</js>,
+		|		defaultRequestAttributes=<js>"$S{j.defaultRequestAttributes,$E{J_DEFAULT_REQUEST_ATTRIBUTES,}}"</js>,
+		|		defaultRequestHeaders=<js>"$S{j.defaultRequestHeaders,$E{J_DEFAULT_REQUEST_HEADERS,}}"</js>,
+		|		defaultResponseHeaders=<js>"$S{j.defaultResponseHeaders,$E{J_DEFAULT_RESPONSE_HEADERS,}}"</js>,
+		|		disableContentParam=<js>"$S{j.disableContentParam,$E{J_DISABLE_CONTENT_PARAM,false}}"</js>,
+		|		maxInput=<js>"$S{j.maxInput,$E{J_MAX_INPUT,1000000}}"</js>,
+		|		messages=<js>"$S{j.messages,$E{J_MESSAGES,}}"</js>,
+		|		renderResponseStackTraces=<js>"$S{j.renderResponseStackTraces,$E{J_RENDER_RESPONSE_STACK_TRACES,false}}"</js>,
 		|		uriAuthority=<js>"$S{j.uriAuthority,$E{J_URI_AUTHORITY,}}"</js>,
 		|		uriContext=<js>"$S{j.uriContext,$E{J_URI_CONTEXT,}}"</js>,
 		|		uriRelativity=<js>"$S{j.uriRelativity,$E{J_URI_RELATIVITY,}}"</js>,
-		|		uriResolution=<js>"$S{j.uriResolution,$E{J_URI_RESOLUTION,}}"</js>
+		|		uriResolution=<js>"$S{j.uriResolution,$E{J_URI_RESOLUTION,}}"</js>,
+		|	
+		|		<jc>// Metadata settings.</jc>
+		|		consumes={},
+		|		description=<js>""</js>,
+		|		produces={},
+		|		siteName=<js>"$S{j.siteName,$E{J_SITE_NAME,}}"</js>,
+		|		swagger=@Swagger,
+		|		title=<js>"$S{j.title,$E{J_TITLE,}}"</js>,
+		|	
+		|		<jc>// Injectable/overridable beans.</jc>
+		|		beanStore=BeanStore.Void.<jk>class</jk>,  <jc>// Defaults to BeanStore.</jc>
+		|		callLogger=CallLogger.Void.<jk>class</jk>,  <jc>// Defaults to BasicCallLogger.</jc>
+		|		debugEnablement=DebugEnablement.Void.<jk>class</jk>,  <jc>// Defaults to BasicDefaultEnablement.</jc>
+		|		fileFinder=FileFinder.Void.<jk>class</jk>,  <jc>// Defaults to BasicFileFinder.</jc>
+		|		staticFiles=StaticFiles.Void.<jk>class</jk>,  <jc>// Defaults to BasicStaticFiles.</jc>
+		|		swaggerProvider=SwaggerProvider.Void.<jk>class</jk>,  <jc>// Defaults to BasicSwaggerProvider.</jc>
+		|	
+		|		<jc>// Overridable context classes.</jc>
+		|		contextClass=RestContext.<jk>class</jk>,
+		|		restChildrenClass=RestChildren.<jk>class</jk>,
+		|		restOpContextClass=RestOpContext.<jk>class</jk>,
+		|		restOperationsClass=RestOperations.<jk>class</jk>
 		|	)
 		|	<ja>@BeanConfig</ja>(
 		|		<jc>// When parsing generated beans, ignore unknown properties 
@@ -370,7 +383,7 @@
 		|	}
 	</p>
 	<p>
-		The various parts require their own topics to fully appreciate the scope of abilities, but the following is a summary:
+		The various parts require their own topics to fully appreciate the scope of abilities but the following is a summary:
 	</p>
 	<ul class='spaced-list'>
 		<li>Annotated with {@link oajr.annotation.RestOp @RestOp}.

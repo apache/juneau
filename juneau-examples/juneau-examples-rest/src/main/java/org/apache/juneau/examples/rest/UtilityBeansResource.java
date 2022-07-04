@@ -60,7 +60,7 @@ public class UtilityBeansResource extends BasicRestObject implements BasicUniver
 
 	/**
 	 * [HTTP GET /utilitybeans]
-	 * Returns descriptive links to the child endpoints.
+	 * @return Descriptive links to the child endpoints.
 	 */
 	@RestGet("/")
 	public ResourceDescriptions getChildDescriptions() {
@@ -73,7 +73,7 @@ public class UtilityBeansResource extends BasicRestObject implements BasicUniver
 
 	/**
 	 * [HTTP GET /utilitybeans/BeanDescription]
-	 * Example of serialized org.apache.juneau.rest.utilitybeans.ResourceDescriptions bean.
+	 * @return Example of serialized org.apache.juneau.rest.utilitybeans.ResourceDescriptions bean.
 	 */
 	@RestGet("/BeanDescription")
 	@HtmlDocConfig(
@@ -100,7 +100,7 @@ public class UtilityBeansResource extends BasicRestObject implements BasicUniver
 
 	/**
 	 * [HTTP GET /utilitybeans/Hyperlink]
-	 * Example of serialized org.apache.juneau.rest.utilitybeans.Hyperlink bean.
+	 * @return Example of serialized org.apache.juneau.rest.utilitybeans.Hyperlink bean.
 	 */
 	@RestGet("/Hyperlink")
 	@HtmlDocConfig(
@@ -116,7 +116,7 @@ public class UtilityBeansResource extends BasicRestObject implements BasicUniver
 
 	/**
 	 * [HTTP GET /utilitybeans/SeeOtherRoot]
-	 * Example of serialized SeeOtherRoot bean.
+	 * @return Example of serialized SeeOtherRoot bean.
 	 * This just redirects back to the servlet root.
 	 */
 	@RestGet("/SeeOtherRoot")

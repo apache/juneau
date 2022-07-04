@@ -24,7 +24,7 @@
 		<li>New {@del ParserContext#PARSER_debug} and {@del SerializerContext#SERIALIZER_debug}.
 			settings for logging additional information for debugging problems.
 		<li>New {@del SERIALIZER_ignoreRecursions} setting for explicitly ignoring recursions when 
-			serializing models.  Previously, the <jsf>SERIALIZER_detectRecursions</jsf> setting did this, but now it simply looks for recursions 
+			serializing models.  Previously, the <jsf>SERIALIZER_detectRecursions</jsf> setting did this but now it simply looks for recursions 
 			and throws exceptions when they occur.
 		<li>Improved handling of <c>StackOverflowErrors</c>.  When <jsf>SERIALIZER_detectRecursions</jsf> is enabled, a useful error message
 			is displayed showing the exact chain of objects that resulted in the stack overflow.

@@ -62,7 +62,7 @@ public class HtmlBeansResource extends BasicRestObject implements BasicUniversal
 
 	/**
 	 * [HTTP GET /htmlbeans]
-	 * Returns descriptive links to the child endpoints.
+	 * @return Descriptive links to the child endpoints.
 	 */
 	@RestGet("/")
 	public ResourceDescriptions getChildDescriptions() {
@@ -75,6 +75,7 @@ public class HtmlBeansResource extends BasicRestObject implements BasicUniversal
 
 	/**
 	 * [HTTP GET /htmlbeans/table]
+	 * @return An example table.
 	 */
 	@RestGet("/table")
 	@HtmlDocConfig(
@@ -99,6 +100,7 @@ public class HtmlBeansResource extends BasicRestObject implements BasicUniversal
 
 	/**
 	 * [HTTP GET /htmlbeans/div]
+	 * @return An example div tag.
 	 */
 	@RestGet("/div")
 	@HtmlDocConfig(
@@ -118,6 +120,7 @@ public class HtmlBeansResource extends BasicRestObject implements BasicUniversal
 
 	/**
 	 * [HTTP GET /htmlbeans/form]
+	 * @return An example form tag.
 	 */
 	@RestGet("/form")
 	@HtmlDocConfig(

@@ -164,7 +164,7 @@
 		|	<jk>public void</jk> mytest() <jk>throws</jk> Exception {
 		|		MockRestClient <jv>client</jv> = MockRestClient.<jsm>build</jsm>(A.<jk>class</jk>);
 		|
-		|		<jc>// Admin user should get 200, but anyone else should get 403-Unauthorized.</jc>
+		|		<jc>// Admin user should get 200 but anyone else should get 403-Unauthorized.</jc>
 		|		<jv>client</jv>.get().roles(<js>"ADMIN"</js>).run().assertStatus().is(200);
 		|		<jv>client</jv>.get().roles(<js>"USER"</js>).run().assertStatus().is(403);
 		|	}

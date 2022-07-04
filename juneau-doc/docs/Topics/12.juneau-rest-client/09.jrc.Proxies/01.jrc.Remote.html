@@ -33,7 +33,7 @@ specific language governing permissions and limitations under the License.
 	</ul>
 	
 	<p>
-		The <ja>@Remote</ja> annotation is optional, but often included for code readability.
+		The <ja>@Remote</ja> annotation is optional but often included for code readability.
 	</p>
 	
 	<h5 class='topic'>@Remote(path)</h5>
@@ -155,7 +155,7 @@ specific language governing permissions and limitations under the License.
 		|	<ja>@RestGet</ja>(clientVersion=<js>"2.0"</js>)
 		|	<jk>public</jk> Object foo()  {...}
 		|
-		|	<jc>// Call this method if Client-Version is at least 1.1, but less than 2.0.</jc>
+		|	<jc>// Call this method if Client-Version is at least 1.1 but less than 2.0.</jc>
 		|	<ja>@RestGet</ja>(clientVersion=<js>"[1.1,2.0)"</js>)
 		|	<jk>public</jk> Object foo()  {...}
 		|

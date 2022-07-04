@@ -55,9 +55,6 @@
 		<li class='jc'>{@link oaj.http.header.LastModified}
 		<li class='jc'>{@link oaj.http.header.Location}
 		<li class='jc'>{@link oaj.http.header.MaxForwards}
-		<li class='jc'>{@link oaj.http.header.MediaRange}
-		<li class='jc'>{@link oaj.http.header.MediaRanges}
-		<li class='jc'>{@link oaj.http.header.MediaType}
 		<li class='jc'>{@link oaj.http.header.NoTrace}
 		<li class='jc'>{@link oaj.http.header.Origin}
 		<li class='jc'>{@link oaj.http.header.Pragma}
@@ -134,7 +131,7 @@
 		|	HeaderList <jv>headers</jv> = HeaderList.<jsm>of</jsm>(Accept.<jsf>TEXT_XML</jsf>, ContentType.<jsf>TEXT_XML</jsf>);
 	</p>
 	<p>
-		Header lists are immutable, but can be appended to using the {@link oaj.http.header.HeaderList#copy() copy()} method:	
+		Header lists are immutable but can be appended to using the {@link oaj.http.header.HeaderList#copy() copy()} method:	
 	</p>
 	<p class='bjava'>
 		|	<jv>headers</jv> = <jv>headers</jv>

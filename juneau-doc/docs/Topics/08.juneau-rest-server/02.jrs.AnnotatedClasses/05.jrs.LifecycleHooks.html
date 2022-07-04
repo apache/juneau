@@ -24,7 +24,7 @@
 	</p>
 	<p class='bjava'>
 		|	<ja>@Rest</ja>(...)
-		|	<jk>public class</jk> MyResource {
+		|	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestObject <jk>implements</jk> BasicUniversalConfig {
 		|
 		|		<jc>// Our database.</jc>
 		|		<jk>private</jk> Map&lt;Integer,Object&gt; <jf>myDatabase</jf>;
@@ -40,7 +40,7 @@
 	</p>
 	<p class='bjava'>
 		|	<ja>@Rest</ja>(...)
-		|	<jk>public class</jk> MyResource {
+		|	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestObject <jk>implements</jk> BasicUniversalConfig {
 		|
 		|		<jc>// Add a request attribute to all incoming requests.</jc>
 		|		<ja>@RestHook</ja>(<jsf>PRE_CALL</jsf>)
@@ -59,7 +59,7 @@
 					<ul class='javatree'>
 						<li class='jf'>{@link oajr.annotation.HookEvent#INIT INIT} - Right before initialization.
 						<li class='jf'>{@link oajr.annotation.HookEvent#POST_INIT POST_INIT} - Right after initialization.
-						<li class='jf'>{@link oajr.annotation.HookEvent#POST_INIT_CHILD_FIRST POST_INIT_CHILD_FIRST} - Right after initialization, but run child methods first.
+						<li class='jf'>{@link oajr.annotation.HookEvent#POST_INIT_CHILD_FIRST POST_INIT_CHILD_FIRST} - Right after initialization but run child methods first.
 						<li class='jf'>{@link oajr.annotation.HookEvent#DESTROY DESTROY} - Right before servlet destroy.
 					</ul>
 				</li>

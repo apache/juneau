@@ -34,7 +34,8 @@
  		|	<ja>@Rest</ja>(
 		|		path=<js>"/child"</js>  <jc>// Path relative to parent resource.</jc>
 		|	)
-		|	<jk>public</jk> MyChildResource {...} <jc>// Note that we don't need to extend from RestServlet.</jc>
+		|	<jc>// Note that we don't need to extend from RestServlet.</jc>
+		|	<jk>public</jk> MyChildResource <jk>extends</jk> BasicRestObject <jk>implements</jk> BasicUniversalConfig {...} 
 	</p>
 	<p>
 		The path of the child resource gets appended to the path of the parent resource. 

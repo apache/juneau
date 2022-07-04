@@ -41,7 +41,7 @@
 	</p>
 	<p>
 		If the {@link oaj.BeanContext.Builder#beanFieldVisibility(Visibility) beanFieldVisibility} setting on the bean context excludes this field 
-		(e.g. the visibility is set to the default of PUBLIC, but the field is PROTECTED), this annotation 
+		(e.g. the visibility is set to the default of PUBLIC but the field is PROTECTED), this annotation 
 		can be used to force the field to be identified as a property.
 	</p>
 	<p class='bjava'>
@@ -54,7 +54,7 @@
 		The bean property named <js>"*"</js> is the designated "dynamic property" which allows for "extra" bean
 		properties not otherwise defined.
 		This is similar in concept to the Jackson <ja>@JsonGetterAll</ja> and <ja>@JsonSetterAll</ja> 
-		annotations, but generalized for all supported marshall languages.
+		annotations but generalized for all supported marshall languages.
 		The primary purpose is for backwards compatibility in parsing newer streams with addition 
 		information into older beans.
 	</p>
@@ -179,8 +179,8 @@
 	<ul class='spaced-list'>
 		<li>Beans - Only render the specified properties of the bean.
 		<li>Maps - Only render the specified entries in the map.
-		<li>Bean/Map arrays - Same, but applied to each element in the array.
-		<li>Bean/Map collections - Same, but applied to each element in the collection.
+		<li>Bean/Map arrays - Same but applied to each element in the array.
+		<li>Bean/Map collections - Same but applied to each element in the collection.
 	</ul>
 	<p class='bjava'>
 		|	<jk>public class</jk> MyClass {
@@ -196,7 +196,7 @@
 		|	}
 		|
 		|	<jc>// Renders "{x1:{f1:1}}"</jc>
-		|	String <jv>json</jv> = JsonSerializer.<jsf>DEFAULT</jsf>.serialize(<jk>new</jk> MyClass());
+		|	String <jv>json</jv> = Json.<jsm>of</jsm>(<jk>new</jk> MyClass());
 	</p>
 	<p>
 		The {@link oaj.annotation.Beanp#format() @Beanp(format)} 

@@ -28,7 +28,7 @@
 	</ul>
 	
 	<p>
-		The serializers and parsers work identically to those in <c>juneau-marshall</c>, but are
+		The serializers and parsers work identically to those in <c>juneau-marshall</c> but are
 		packaged separately so that you don't need to pull in the Jena dependency unless you need it.
 	</p>
 	
@@ -52,18 +52,18 @@
 		|	// 		&lt;jp:age&gt;21&lt;/jp:age&gt;
 		|	// 	&lt;/rdf:Description&gt;
 		|	// &lt;/rdf:RDF&gt;</jc>
-		|	String <jv>rdfXml</jv> = RdfSerializer.<jsf>DEFAULT_XMLABBREV</jsf>.serialize(<jv>person</jv>);
+		|	String <jv>rdfXml</jv> = RdfXmlAbbrev.<jsm>of</jsm>(<jv>person</jv>);
 		|	
 		|	<jc>// Produces:
 		|	// @prefix jp:      &lt;http://www.apache.org/juneaubp/&gt; .
 		|	// @prefix j:       &lt;http://www.apache.org/juneau/&gt; .
 		|	//	[]    jp:age  "21" ;
 		|	//	      jp:name "John Smith" .</jc>
-		|	String <jv>rdfN3</jv> = N3Serializer.<jsf>DEFAULT</jsf>.serialize(<jv>person</jv>);
+		|	String <jv>rdfN3</jv> = N3.<jsm>of</jsm>(<jv>person</jv>);
 		|
 		|	<jc>// Produces:
 		|	// _:A3bf53c85X3aX157cf407e2dX3aXX2dX7ffd &lt;http://www.apache.org/juneaubp/name&gt; "John Smith" .
 		|	// _:A3bf53c85X3aX157cf407e2dX3aXX2dX7ffd &lt;http://www.apache.org/juneaubp/age&gt; "21" .</jc>
-		|	String <jv>rdfNTriple</jv> = RdfSerializer.<jsf>DEFAULT_NTRIPLE</jsf>.serialize(<jv>person</jv>);
+		|	String <jv>rdfNTriple</jv> = NTriple.<jsm>of</jsm>(<jv>person</jv>);
 	</p>
 </div>

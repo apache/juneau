@@ -139,7 +139,9 @@
 		Various convenience methods exist for shortening this code.
 	</p>
 	<p class='bjava'>
-		|	HttpPartSchema <jv>schema</jv> = HttpPartSchema.<jsm>tArrayPipes</jsm>(
+		|	<jk>import static</jk> org.apache.juneau.http.HttpPartSchema.*;
+		|
+		|	HttpPartSchema <jv>schema</jv> = <jsm>tArrayPipes</jsm>(
 		|		<jsm>tArrayCsv</jsm>(
 		|			<jsm>tInt64</jsm>().minimum(0).maximum(100).minLength(1).maxLength(10)
 		|		)
@@ -152,12 +154,9 @@
 		|	<jc>// Our POJO being serialized.</jc>
 		|	Long[][] <jv>input</jv> = ....
 		|	
-		|	<jc>// The serializer to use.</jc>
-		|	HttpPartSerializer <jv>serializer</jv> = OpenApiSerializer.<jsf>DEFAULT</jsf>;
-		|	
 		|	<jc>// Convert POJO to a string.</jc>
 		|	<jk>try</jk> {
-		|		String <jv>httpPart</jv> = <jv>serializer</jv>.serialize(<jv>schema</jv>, <jv>input</jv>);
+		|		String <jv>httpPart</jv> = OpenApi.<jsm>of</jsm>(<jv>schema</jv>, <jv>input</jv>);
 		|	} <jk>catch</jk> (SchemaValidationException <jv>e</jv>) {
 		|		<jc>// Oops, one of the restrictions were not met.</jc>
 		|	}
@@ -367,12 +366,9 @@
 		|	<jc>// Our POJO being serialized.</jc>
 		|	MyPojo <jv>input</jv> = ....
 		|	
-		|	<jc>// The serializer to use.</jc>
-		|	HttpPartSerializer <jv>serializer</jv> = OpenApiSerializer.<jsf>DEFAULT</jsf>;
-		|	
 		|	<jc>// Convert POJO to a string.</jc>
 		|	<jk>try</jk> {
-		|		String <jv>httpPart</jv> = <jv>serializer</jv>.serialize(<jv>schema</jv>, <jv>input</jv>);
+		|		String <jv>httpPart</jv> = OpenApi.<jsm>of</jsm>(<jv>schema</jv>, <jv>input</jv>);
 		|	} <jk>catch</jk> (SchemaValidationException <jv>e</jv>) {
 		|		<jc>// Oops, one of the restrictions were not met.</jc>
 		|	}
@@ -413,7 +409,7 @@
 		|		.prop(<js>"f2"</js>, <jsm>tByte</jsm>())
 		|		.prop(<js>"f3"</js>, <jsm>tBinary</jsm>())
 		|		.prop(<js>"f4"</js>, <jsm>tBinarySpaced</jsm>())
-		|		.prop(<js>"f5"</js>, <jsm>tDateTime</jsm>(>))
+		|		.prop(<js>"f5"</js>, <jsm>tDateTime</jsm>())
 		|		.prop(<js>"f6"</js>, <jsm>tUon</jsm>())
 		|		.prop(<js>"f7"</js>, <jsm>tInteger</jsm>())
 		|		.prop(<js>"f8"</js>, <jsm>tInt64</jsm>())
@@ -427,8 +423,7 @@
 		Then we serialize our bean:
 	</p>
 	<p class='bjava'>
-		|	HttpPartSerializer <jv>serializer</jv> = OpenApiSerializer.<jsf>DEFAULT</jsf>;
-		|	String <jv>httpPart</jv> = <jv>serializer</jv>.serialize(<jv>schema</jv>, <jk>new</jk> MyBean());
+		|	String <jv>httpPart</jv> = OpenApi.<jsm>of</jsm>(<jv>schema</jv>, <jk>new</jk> MyBean());
 	</p>
 	<p>
 		The results of this serialization is shown below:

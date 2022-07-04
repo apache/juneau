@@ -82,7 +82,7 @@
 		explicit list of namespaces to the serializer to avoid this scanning step using {@link oaj.xml.XmlSerializer.Builder#disableAutoDetectNamespaces()}.
 	</p>
 	<p class='bjava'>
-		|	<jc>// Create a new serializer, but manually specify the namespaces.</jc>
+		|	<jc>// Create a new serializer but manually specify the namespaces.</jc>
 		|	RdfSerializer <jv>serializer</jv> = RdfSerializer.<jsm>create</jsm>()
 		|		.xmlabbrev()
 		|		.rdfxml_tab(3)
@@ -91,7 +91,7 @@
 		|		.build();
 	</p>
 	<p>
-		This code change will produce the same output as before, but will perform slightly better since it doesn't 
+		This code change will produce the same output as before but will perform slightly better since it doesn't 
 		have to crawl the POJO tree before serializing the result.
 	</p>
 </div>

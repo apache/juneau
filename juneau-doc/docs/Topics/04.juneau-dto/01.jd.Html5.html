@@ -26,7 +26,7 @@
 		that allow you to easily construct DTO instances in a minimal amount of code. 
 	</p>
 	<p>
-		The following examples show how to create HTML tables.
+		The following examples show how to create common HTML DOM objects.
 	</p>
 	<table class='styled w800'>
 		<tr>
@@ -49,7 +49,7 @@
 				)
 			);
 	
-		String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>mytablE</jv>);
+		String <jv>html</jv> = Html.<jsm>of</jsm>(<jv>mytablE</jv>);
 			</td>
 			<td class='code'><xt>
 		&lt;table&gt;
@@ -74,7 +74,7 @@
 				<jsm>p</jsm>(<js>"Juneau supports "</js>, <jsm>b</jsm>(<jsm>i</jsm>(<js>"mixed"</js>)), <js>" content!"</js>)
 			);
 	
-		String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>mydiv</jv>);
+		String <jv>html</jv> = Html.<jsm>of</jsm>(<jv>mydiv</jv>);
 			</td>
 			<td class='code'><xt>
 		&lt;div <xa>align</xa>=<xs>'center'</xs> <xa>onmouseover</xa>=<xs>'alert("boo!");'</xs>&gt;
@@ -95,7 +95,7 @@
 				<jsm>button</jsm>(<js>"reset"</js>, <js>"Reset"</js>)
 			); 	
 	
-		String <jv>html</jv> = HtmlSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>myform</jv>);
+		String <jv>html</jv> = Html.<jsm>of</jsm>(<jv>myform</jv>);
 			</td>
 			<td class='code'><xt>
 			&lt;form <xa>action</xa>=<xs>'/submit'</xs> <xa>method</xa>=<xs>'POST'</xs>&gt;

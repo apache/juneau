@@ -19,7 +19,7 @@
 	<p>
 		In the previous sections, we defined two-way swaps, meaning swaps where the original objects could be 
 		reconstructing during parsing. 
-		However, there are certain kinds of objects that we may want to support for serializing, but that are not 
+		However, there are certain kinds of objects that we may want to support for serializing but that are not 
 		possible to reconstruct during parsing.  
 		For these, we can use one-way object swaps.
 	</p>
@@ -29,7 +29,7 @@
 	</p>
 	<p>
 		An example of a one-way swaps would be one that allows {@code Iterators} to be serialized as JSON arrays.  
-		It can make sense to be able to render {@code Iterators} as arrays, but in general it's not possible to 
+		It can make sense to be able to render {@code Iterators} as arrays but in general it's not possible to 
 		reconstruct an {@code Iterator} during parsing. 
 	</p>
 	<p class='bjava'>

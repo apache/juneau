@@ -30,38 +30,21 @@ import org.apache.juneau.oapi.*;
  * Predefined REST configuration that defines common default values for all configurations.
  */
 @Rest(
-	allowedHeaderParams="$S{j.allowedHeaderParams,$E{J_ALLOWED_HEADER_PARAMS,Accept,Content-Type}}",
-	allowedMethodHeaders="$S{j.allowedMethodHeaders,$E{J_ALLOWED_METHOD_HEADERS,}}",
-	allowedMethodParams="$S{j.allowedMethodParams,$E{J_ALLOWED_METHOD_PARAMS,HEAD,OPTIONS}}",
-	beanStore=BeanStore.class,
-	callLogger=CallLogger.Void.class,  // Defaults to BasicCallLogger.
-	clientVersionHeader="$S{j.clientVersionHeader,$E{J_CLIENT_VERSION_HEADER,Client-Version}}",
+	// Configuration file.
 	config="$S{j.configFile,$E{J_CONFIG_FILE,SYSTEM_DEFAULT}}",
-	consumes={},
-	contextClass=RestContext.class,
+
+	// Standard fields.
+	path="",
+	roleGuard="",
+	rolesDeclared="",
+
+	// Configuration beans.
 	converters={},
-	debug="$S{j.debug,$E{J_DEBUG,}}",
-	debugEnablement=BasicDebugEnablement.class,
-	debugOn="$S{j.debugOn,$E{J_DEBUG_ON,}}",
-	defaultAccept="$S{j.defaultAccept,$E{J_DEFAULT_ACCEPT,}}",
-	defaultCharset="$S{j.defaultCharset,$E{J_DEFAULT_CHARSET,UTF-8}}",
-	defaultContentType="$S{j.defaultContentType,$E{J_DEFAULT_CONTENT_TYPE,}}",
-	defaultRequestAttributes="$S{j.defaultRequestAttributes,$E{J_DEFAULT_REQUEST_ATTRIBUTES,}}",
-	defaultRequestHeaders="$S{j.defaultRequestHeaders,$E{J_DEFAULT_REQUEST_HEADERS,}}",
-	defaultResponseHeaders="$S{j.defaultResponseHeaders,$E{J_DEFAULT_RESPONSE_HEADERS,}}",
-	description="",
-	disableContentParam="$S{j.disableContentParam,$E{J_DISABLE_CONTENT_PARAM,false}}",
 	encoders={IdentityEncoder.class},
-	fileFinder=BasicFileFinder.class,
 	guards={},
-	maxInput="$S{j.maxInput,$E{J_MAX_INPUT,1000000}}",
-	messages="$S{j.messages,$E{J_MESSAGES,}}",
 	parsers={},
 	partParser=OpenApiParser.class,
 	partSerializer=OpenApiSerializer.class,
-	path="",
-	produces={},
-	renderResponseStackTraces="$S{j.renderResponseStackTraces,$E{J_RENDER_RESPONSE_STACK_TRACES,false}}",
 	responseProcessors={
 		ReaderProcessor.class,
 		InputStreamProcessor.class,
@@ -73,7 +56,6 @@ import org.apache.juneau.oapi.*;
 		PlainTextPojoProcessor.class,
 		SerializedPojoProcessor.class
 	},
-	restChildrenClass=RestChildren.class,
 	restOpArgs={
 		AttributeArg.class,
 		ContentArg.class,
@@ -102,20 +84,51 @@ import org.apache.juneau.oapi.*;
 		RestResponseArgs.class,
 		DefaultArg.class
 	},
-	restOpContextClass=RestOpContext.class,
-	restOperationsClass=RestOperations.class,
-	roleGuard="",
-	rolesDeclared="",
 	serializers={},
-	siteName="$S{j.siteName,$E{J_SITE_NAME,}}",
-	staticFiles=BasicStaticFiles.class,
-	swagger=@Swagger,
-	swaggerProvider=BasicSwaggerProvider.class,
-	title="$S{j.title,$E{J_TITLE,}}",
+
+	// Configurable settings.
+	allowedHeaderParams="$S{j.allowedHeaderParams,$E{J_ALLOWED_HEADER_PARAMS,Accept,Content-Type}}",
+	allowedMethodHeaders="$S{j.allowedMethodHeaders,$E{J_ALLOWED_METHOD_HEADERS,}}",
+	allowedMethodParams="$S{j.allowedMethodParams,$E{J_ALLOWED_METHOD_PARAMS,HEAD,OPTIONS}}",
+	clientVersionHeader="$S{j.clientVersionHeader,$E{J_CLIENT_VERSION_HEADER,Client-Version}}",
+	debug="$S{j.debug,$E{J_DEBUG,}}",
+	debugOn="$S{j.debugOn,$E{J_DEBUG_ON,}}",
+	defaultAccept="$S{j.defaultAccept,$E{J_DEFAULT_ACCEPT,}}",
+	defaultCharset="$S{j.defaultCharset,$E{J_DEFAULT_CHARSET,UTF-8}}",
+	defaultContentType="$S{j.defaultContentType,$E{J_DEFAULT_CONTENT_TYPE,}}",
+	defaultRequestAttributes="$S{j.defaultRequestAttributes,$E{J_DEFAULT_REQUEST_ATTRIBUTES,}}",
+	defaultRequestHeaders="$S{j.defaultRequestHeaders,$E{J_DEFAULT_REQUEST_HEADERS,}}",
+	defaultResponseHeaders="$S{j.defaultResponseHeaders,$E{J_DEFAULT_RESPONSE_HEADERS,}}",
+	disableContentParam="$S{j.disableContentParam,$E{J_DISABLE_CONTENT_PARAM,false}}",
+	maxInput="$S{j.maxInput,$E{J_MAX_INPUT,1000000}}",
+	messages="$S{j.messages,$E{J_MESSAGES,}}",
+	renderResponseStackTraces="$S{j.renderResponseStackTraces,$E{J_RENDER_RESPONSE_STACK_TRACES,false}}",
 	uriAuthority="$S{j.uriAuthority,$E{J_URI_AUTHORITY,}}",
 	uriContext="$S{j.uriContext,$E{J_URI_CONTEXT,}}",
 	uriRelativity="$S{j.uriRelativity,$E{J_URI_RELATIVITY,}}",
-	uriResolution="$S{j.uriResolution,$E{J_URI_RESOLUTION,}}"
+	uriResolution="$S{j.uriResolution,$E{J_URI_RESOLUTION,}}",
+
+	// Metadata settings.
+	consumes={},
+	description="",
+	produces={},
+	siteName="$S{j.siteName,$E{J_SITE_NAME,}}",
+	swagger=@Swagger,
+	title="$S{j.title,$E{J_TITLE,}}",
+
+	// Injectable/overridable beans.
+	beanStore=BeanStore.Void.class,  // Defaults to BeanStore.
+	callLogger=CallLogger.Void.class,  // Defaults to BasicCallLogger.
+	debugEnablement=DebugEnablement.Void.class,  // Defaults to BasicDefaultEnablement.
+	fileFinder=FileFinder.Void.class,  // Defaults to BasicFileFinder.
+	staticFiles=StaticFiles.Void.class,  // Defaults to BasicStaticFiles.
+	swaggerProvider=SwaggerProvider.Void.class,  // Defaults to BasicSwaggerProvider.
+
+	// Overridable context classes.
+	contextClass=RestContext.class,
+	restChildrenClass=RestChildren.class,
+	restOpContextClass=RestOpContext.class,
+	restOperationsClass=RestOperations.class
 )
 @BeanConfig(
 	// When parsing generated beans, ignore unknown properties that may only exist as getters and not setters.

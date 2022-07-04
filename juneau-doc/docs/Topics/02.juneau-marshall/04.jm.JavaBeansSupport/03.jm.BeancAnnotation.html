@@ -38,7 +38,7 @@
 		|		}
 		|
 		|		<jc>// Read only properties.</jc>
-		|		<jc>// Getters, but no setters.</jc>
+		|		<jc>// Getters but no setters.</jc>
 		|
 		|		<jk>public</jk> String getName() {
 		|			<jk>return</jk> <jf>name</jf>;
@@ -52,7 +52,7 @@
 	<p class='bjava'>
 		|	<jc>// Parsing into a read-only bean.</jc>
 		|	String <jv>json</jv> = <js>"{name:'John Smith',age:45}"</js>;
-		|	Person <jv>person</jv> = JsonParser.<jsf>DEFAULT</jsf>.parse(<jv>json</jv>);
+		|	Person <jv>person</jv> = Json.<jsm>to</jsm>(<jv>json</jv>, Person.<jk>class</jk>);
 		|	String <jv>name</jv> = <jv>person</jv>.getName();  <jc>// "John Smith"</jc>
 		|	<jk>int</jk> <jv>age</jv> = <jv>person</jv>.getAge();   <jc>// 45</jc>
 	</p>

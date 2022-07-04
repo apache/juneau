@@ -143,7 +143,7 @@
 		property of type <c>Map&lt;String,Object&gt;</c> to denote arbitrary XML attribute values on the 
 		element.
 		These can be mixed with other {@link oaj.xml.annotation.XmlFormat#ATTR} annotated 
-		properties, but there must not be an overlap in bean property names and map keys. 
+		properties but there must not be an overlap in bean property names and map keys. 
 	</p>
 	
 	<h5 class='figure'>Example</h5>
@@ -308,7 +308,7 @@
 		{@link oaj.xml.annotation.XmlFormat#ELEMENTS} except elements names on primitive types 
 		(string/number/boolean/null) are stripped from the output.
 		This format particularly useful when combined with bean dictionaries to produce mixed content.  
-		The bean dictionary isn't used during serialization, but it is needed during parsing to resolve bean 
+		The bean dictionary isn't used during serializationbut it is needed during parsing to resolve bean 
 		types.
 	</p>
 	<p>

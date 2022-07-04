@@ -143,7 +143,7 @@
 		The <c>Basic*</c> classes also implement {@link oajr.config.BasicJsonConfig} interface which
 		provides basic JSON marshalling support.  Other config interfaces are available as
 		well to quickly provide different types of marshalling support.  Note that these interfaces
-		do not define any methods, but rather simply provide a set of commonly-used annotations so that
+		do not define any methods but rather simply provide a set of commonly-used annotations so that
 		you don't need to define them on all your classes.
 	</p>
 	<ul class='javatreec'>
@@ -183,7 +183,7 @@
 		The <c>*Object*</c> classes provide the same functionality as the servlet
 		classes but do not extend from {@link javax.servlet.http.HttpServlet}.  
 		This becomes important in Spring Boot environments where you may want to 
-		define child resources as Spring Beans, but don't want Spring Boot to auto-detect
+		define child resources as Spring Beans but don't want Spring Boot to auto-detect
 		them as servlets to be deployed as top-level resources.  This is less important
 		in standard servlet containers that don't auto-deploy servlets.  In those
 		environments, you can also use servlet classes for child resources.

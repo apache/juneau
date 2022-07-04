@@ -41,7 +41,7 @@
 		|	}
 		|	
 		|	<jc>// Our code</jc>
-		|	Address <jv>address</jv> = JsonParser.<jsf>DEFAULT</jsf>.parse(
+		|	Address <jv>address</jv> = Json.<jsm>to</jsm>(
 		|		<js>"{street:'123 Main St', city:'Anywhere', state:'PR', zip:12345}"</js>, 
 		|		Address.<jk>class</jk>
 		|	); 
