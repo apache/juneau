@@ -41,7 +41,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='jc'>{@link RestChildren}
  * 	<li class='jc'>{@link RestContext}
  * 	<li class='jc'>{@link RestContextStats}
- * 	<li class='jc'>{@link RestLogger}
+ * 	<li class='jc'>{@link CallLogger}
  * 	<li class='jc'>{@link RestOperations}
  * 	<li class='jc'>{@link StaticFiles}
  * 	<li class='jc'>{@link ThrownStore}
@@ -81,7 +81,7 @@ public class RestContextArgs extends SimpleRestOperationArg {
 			return new RestContextArgs(x->x);
 		if (paramInfo.isType(RestContextStats.class))
 			return new RestContextArgs(x->x.getStats());
-		if (paramInfo.isType(RestLogger.class))
+		if (paramInfo.isType(CallLogger.class))
 			return new RestContextArgs(x->x.getCallLogger());
 		if (paramInfo.isType(RestOperations.class))
 			return new RestContextArgs(x->x.getRestOperations());

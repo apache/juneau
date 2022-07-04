@@ -49,7 +49,7 @@ public class RestAnnotation_Test {
 		.allowedMethodHeaders("allowedMethodHeaders")
 		.allowedMethodParams("allowedMethodParams")
 		.beanStore(BeanStore.class)
-		.callLogger(RestLogger.class)
+		.callLogger(CallLogger.class)
 		.children(RestAnnotation_Test.class)
 		.clientVersionHeader("clientVersionHeader")
 		.config("config")
@@ -104,7 +104,7 @@ public class RestAnnotation_Test {
 		.allowedMethodHeaders("allowedMethodHeaders")
 		.allowedMethodParams("allowedMethodParams")
 		.beanStore(BeanStore.class)
-		.callLogger(RestLogger.class)
+		.callLogger(CallLogger.class)
 		.children(RestAnnotation_Test.class)
 		.clientVersionHeader("clientVersionHeader")
 		.config("config")
@@ -162,7 +162,7 @@ public class RestAnnotation_Test {
 				+ "allowedMethodParams:'allowedMethodParams',"
 				+ "beanStore:'org.apache.juneau.cp.BeanStore',"
 				+ "builder:'org.apache.juneau.rest.RestContext$Builder$Void',"
-				+ "callLogger:'org.apache.juneau.rest.logger.RestLogger',"
+				+ "callLogger:'org.apache.juneau.rest.logger.CallLogger',"
 				+ "children:['"+CNAME+"'],"
 				+ "clientVersionHeader:'clientVersionHeader',"
 				+ "config:'config',"
@@ -263,7 +263,7 @@ public class RestAnnotation_Test {
 		allowedMethodHeaders="allowedMethodHeaders",
 		allowedMethodParams="allowedMethodParams",
 		beanStore=BeanStore.class,
-		callLogger=RestLogger.class,
+		callLogger=CallLogger.class,
 		children=RestAnnotation_Test.class,
 		clientVersionHeader="clientVersionHeader",
 		config="config",
@@ -320,7 +320,7 @@ public class RestAnnotation_Test {
 		allowedMethodHeaders="allowedMethodHeaders",
 		allowedMethodParams="allowedMethodParams",
 		beanStore=BeanStore.class,
-		callLogger=RestLogger.class,
+		callLogger=CallLogger.class,
 		children=RestAnnotation_Test.class,
 		clientVersionHeader="clientVersionHeader",
 		config="config",

@@ -84,7 +84,7 @@ public class RestOpSession extends ContextSession {
 		 * @param value The new value for this setting.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder logger(RestLogger value) {
+		public Builder logger(CallLogger value) {
 			session.logger(value);
 			return this;
 		}

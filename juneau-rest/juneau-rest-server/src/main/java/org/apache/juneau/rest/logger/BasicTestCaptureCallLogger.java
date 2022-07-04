@@ -23,7 +23,7 @@ import org.apache.juneau.cp.*;
 
 /**
  *
- * Implementation of a {@link RestLogger} that captures log entries for testing logging itself.
+ * Implementation of a {@link CallLogger} that captures log entries for testing logging itself.
  *
  * <p>
  * Instead of logging messages to a log file, messages are simply kept in an internal atomic string reference.
@@ -78,10 +78,10 @@ public class BasicTestCaptureCallLogger extends CallLogger {
 	/**
 	 * Constructor using specific settings.
 	 *
-	 * @param builder The settings to use for this logger.
+	 * @param beanStore The bean store containing injectable beans for this logger.
 	 */
-	public BasicTestCaptureCallLogger(RestLogger.Builder builder) {
-		super(builder);
+	public BasicTestCaptureCallLogger(BeanStore beanStore) {
+		super(beanStore);
 	}
 
 	/**
@@ -90,20 +90,20 @@ public class BasicTestCaptureCallLogger extends CallLogger {
 	 * Uses the same settings as {@link CallLogger}.
 	 */
 	public BasicTestCaptureCallLogger() {
-		super(builder());
+		super(BeanStore.INSTANCE);
 	}
 
-	private static RestLogger.Builder builder() {
-		BeanStore bs = BeanStore.INSTANCE;
-		return RestLogger.create(bs)
+	@Override
+	protected Builder init(BeanStore beanStore) {
+		return super.init(beanStore)
 			.normalRules(  // Rules when debugging is not enabled.
-				CallLoggerRule.create(bs)  // Log 500+ errors with status-line and header information.
+				CallLoggerRule.create(beanStore)  // Log 500+ errors with status-line and header information.
 					.statusFilter(x -> x >= 500)
 					.level(SEVERE)
 					.requestDetail(HEADER)
 					.responseDetail(HEADER)
 					.build(),
-				CallLoggerRule.create(bs)  // Log 400-500 errors with just status-line information.
+				CallLoggerRule.create(beanStore)  // Log 400-500 errors with just status-line information.
 					.statusFilter(x -> x >= 400)
 					.level(WARNING)
 					.requestDetail(STATUS_LINE)
@@ -111,7 +111,7 @@ public class BasicTestCaptureCallLogger extends CallLogger {
 					.build()
 			)
 			.debugRules(  // Rules when debugging is enabled.
-				CallLoggerRule.create(bs)  // Log everything with full details.
+				CallLoggerRule.create(beanStore)  // Log everything with full details.
 					.level(SEVERE)
 					.requestDetail(ENTITY)
 					.responseDetail(ENTITY)

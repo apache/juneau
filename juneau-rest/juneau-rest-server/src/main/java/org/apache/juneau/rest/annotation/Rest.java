@@ -199,9 +199,9 @@ public @interface Rest {
 	 *
 	 * <ul class='notes'>
 	 * 	<li class='note'>
-	 * 		The default call logger if not specified is {@link RestLogger}.
+	 * 		The default call logger if not specified is {@link CallLogger}.
 	 * 	<li class='note'>
-	 * 		The resource class itself will be used if it implements the {@link RestLogger} interface and not
+	 * 		The resource class itself will be used if it implements the {@link CallLogger} interface and not
 	 * 		explicitly overridden via this annotation.
 	 * 	<li class='note'>
 	 * 		The implementation must have one of the following constructors:
@@ -222,12 +222,12 @@ public @interface Rest {
 	 *
 	 * @return The annotation value.
 	 */
-	Class<? extends RestLogger> callLogger() default RestLogger.Void.class;
+	Class<? extends CallLogger> callLogger() default CallLogger.Void.class;
 
 	/**
 	 * The resolver used for resolving instances of child resources and various other beans including:
 	 * <ul>
-	 * 	<li>{@link RestLogger}
+	 * 	<li>{@link CallLogger}
 	 * 	<li>{@link SwaggerProvider}
 	 * 	<li>{@link FileFinder}
 	 * 	<li>{@link StaticFiles}
@@ -373,7 +373,7 @@ public @interface Rest {
 	 * 	<li>
 	 * 		HTTP request/response bodies are cached in memory for logging purposes.
 	 * 	<li>
-	 * 		HTTP requests/responses are logged to the registered {@link RestLogger}.
+	 * 		HTTP requests/responses are logged to the registered {@link CallLogger}.
 	 * </ul>
 	 *
 	 * <ul class='values'>
@@ -421,7 +421,7 @@ public @interface Rest {
 	 * 	<li>
 	 * 		HTTP request/response bodies are cached in memory for logging purposes on matching classes and methods.
 	 * 	<li>
-	 * 		HTTP requests/responses are logged to the registered {@link RestLogger}.
+	 * 		HTTP requests/responses are logged to the registered {@link CallLogger}.
 	 * </ul>
 	 *
 	 * <p>

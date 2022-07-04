@@ -103,7 +103,7 @@ public class RestAnnotation {
 		Class<? extends FileFinder> fileFinder = FileFinder.Void.class;
 		Class<? extends StaticFiles> staticFiles = StaticFiles.Void.class;
 		Class<? extends ResponseProcessor>[] responseProcessors = new Class[0];
-		Class<? extends RestLogger> callLogger = RestLogger.Void.class;
+		Class<? extends CallLogger> callLogger = CallLogger.Void.class;
 		Class<? extends RestContext> contextClass = RestContext.Void.class;
 		Class<? extends RestConverter>[] converters = new Class[0];
 		Class<? extends RestGuard>[] guards = new Class[0];
@@ -197,7 +197,7 @@ public class RestAnnotation {
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder callLogger(Class<? extends RestLogger> value) {
+		public Builder callLogger(Class<? extends CallLogger> value) {
 			this.callLogger = value;
 			return this;
 		}
@@ -722,7 +722,7 @@ public class RestAnnotation {
 		private final Class<? extends FileFinder> fileFinder;
 		private final Class<? extends StaticFiles> staticFiles;
 		private final Class<? extends ResponseProcessor>[] responseProcessors;
-		private final Class<? extends RestLogger> callLogger;
+		private final Class<? extends CallLogger> callLogger;
 		private final Class<? extends RestContext> contextClass;
 		private final Class<? extends RestConverter>[] converters;
 		private final Class<? extends RestGuard>[] guards;
@@ -826,7 +826,7 @@ public class RestAnnotation {
 		}
 
 		@Override /* Rest */
-		public Class<? extends RestLogger> callLogger() {
+		public Class<? extends CallLogger> callLogger() {
 			return callLogger;
 		}
 

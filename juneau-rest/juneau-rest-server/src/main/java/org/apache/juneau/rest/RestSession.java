@@ -72,7 +72,7 @@ public class RestSession extends ContextSession {
 		Object resource;
 		HttpServletRequest req;
 		HttpServletResponse res;
-		RestLogger logger;
+		CallLogger logger;
 		String pathInfoUndecoded;
 		UrlPath urlPath;
 
@@ -145,7 +145,7 @@ public class RestSession extends ContextSession {
 		 * @param value The value for this setting.
 		 * @return This object.
 		 */
-		public Builder logger(RestLogger value) {
+		public Builder logger(CallLogger value) {
 			logger = value;
 			return this;
 		}
@@ -206,7 +206,7 @@ public class RestSession extends ContextSession {
 	private HttpServletRequest req;
 	private HttpServletResponse res;
 
-	private RestLogger logger;
+	private CallLogger logger;
 	private UrlPath urlPath;
 	private String pathInfoUndecoded;
 	private long startTime = System.currentTimeMillis();
@@ -230,7 +230,7 @@ public class RestSession extends ContextSession {
 
 		req = beanStore.add(HttpServletRequest.class, builder.req);
 		res = beanStore.add(HttpServletResponse.class, builder.res);
-		logger = beanStore.add(RestLogger.class, builder.logger);
+		logger = beanStore.add(CallLogger.class, builder.logger);
 		urlPath = beanStore.add(UrlPath.class, builder.urlPath);
 		pathInfoUndecoded = builder.pathInfoUndecoded;
 	}
@@ -245,8 +245,8 @@ public class RestSession extends ContextSession {
 	 * @param value The new value for this setting.  Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RestSession logger(RestLogger value) {
-		logger = beanStore.add(RestLogger.class, value);
+	public RestSession logger(CallLogger value) {
+		logger = beanStore.add(CallLogger.class, value);
 		return this;
 	}
 

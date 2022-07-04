@@ -2214,7 +2214,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private final List<MediaType>
 		supportedAcceptTypes,
 		supportedContentTypes;
-	private final RestLogger callLogger;
+	private final CallLogger callLogger;
 
 	private final Map<Class<?>,ResponseBeanMeta> responseBeanMetas = new ConcurrentHashMap<>();
 	private final Map<Class<?>,ResponsePartMeta> headerPartMetas = new ConcurrentHashMap<>();

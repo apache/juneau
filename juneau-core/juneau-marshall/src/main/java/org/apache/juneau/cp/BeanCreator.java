@@ -157,8 +157,6 @@ public class BeanCreator<T> {
 	 * @return This object.
 	 */
 	public BeanCreator<T> type(Class<?> value) {
-		if (value != null && ! type.inner().isAssignableFrom(value))
-			throw new ExecutableException("Could not instantiate class of type {0} because it was not a subtype of the class: {1}.", type, value);
 		type = ClassInfo.of(value);
 		return this;
 	}

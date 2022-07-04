@@ -34,7 +34,7 @@ import org.apache.juneau.oapi.*;
 	allowedMethodHeaders="$S{j.allowedMethodHeaders,$E{J_ALLOWED_METHOD_HEADERS,}}",
 	allowedMethodParams="$S{j.allowedMethodParams,$E{J_ALLOWED_METHOD_PARAMS,HEAD,OPTIONS}}",
 	beanStore=BeanStore.class,
-	callLogger=CallLogger.class,
+	callLogger=BasicCallLogger.class,
 	clientVersionHeader="$S{j.clientVersionHeader,$E{J_CLIENT_VERSION_HEADER,Client-Version}}",
 	config="$S{j.configFile,$E{J_CONFIG_FILE,SYSTEM_DEFAULT}}",
 	consumes={},

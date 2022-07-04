@@ -24,7 +24,7 @@ import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 
 /**
- * Represents a logging rule used by {@link RestLogger}.
+ * Represents a logging rule used by {@link CallLogger}.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
