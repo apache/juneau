@@ -46,21 +46,21 @@
 			<br>Only the top-level resource needs to be annotated with {@del oaj.rest.springboot.annotation.JuneauRestRoot @JuneauRestRoot}
 			<br><br>
 			<p class='bjava'>
-		<ja>@SpringBootApplication</ja>
-		<ja>@Controller</ja>
-		<jk>public class</jk> App {
-		
-			<jk>public static void</jk> main(String[] args) {
-				<jk>new</jk> SpringApplicationBuilder(App.<jk>class</jk>)
-					.initializers(<jk>new</jk> JuneauRestInitializer(App.<jk>class</jk>))
-					.run(args);
-			}
-		
-			<ja>@Bean @JuneauRestRoot</ja>
-			<jk>public</jk> RootResources getRootResources() {
-				<jk>return new</jk> RootResources();
-			}
-		}
+				|	<ja>@SpringBootApplication</ja>
+				|	<ja>@Controller</ja>
+				|	<jk>public class</jk> App {
+				|	
+				|		<jk>public static void</jk> main(String[] args) {
+				|			<jk>new</jk> SpringApplicationBuilder(App.<jk>class</jk>)
+				|				.initializers(<jk>new</jk> JuneauRestInitializer(App.<jk>class</jk>))
+				|				.run(args);
+				|		}
+				|	
+				|		<ja>@Bean @JuneauRestRoot</ja>
+				|		<jk>public</jk> RootResources getRootResources() {
+				|			<jk>return new</jk> RootResources();
+				|		}
+				|	}
 			</p>
 		<li>
 			<l>RootResources.java</l> - The top-level REST resource. 
@@ -68,28 +68,28 @@
 			<br>This is identical to the Jetty example.
 			<br><br>
 			<p class='bjava'>
-		<ja>@Rest</ja>(
-			path=<js>"/"</js>,
-			title=<js>"My Microservice"</js>,
-			description=<js>"Top-level resources page"</js>,
-			htmldoc=<ja>@HtmlDoc</ja>(
-				widgets={
-					ContentTypeMenuItem.<jk>class</jk>,
-					StyleMenuItem.<jk>class</jk>
-				},
-				navlinks={
-					<js>"options: servlet:/?method=OPTIONS"</js>
-				}
-			),
-			children={
-				HelloWorldResource.<jk>class</jk>,
-				ConfigResource.<jk>class</jk>,
-				LogsResource.<jk>class</jk>
-			}
-		)
-		<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup <jk>implements</jk> BasicUniversalConfig {
-			<jc>// No code</jc>
-		}
+				|	<ja>@Rest</ja>(
+				|		path=<js>"/"</js>,
+				|		title=<js>"My Microservice"</js>,
+				|		description=<js>"Top-level resources page"</js>,
+				|		htmldoc=<ja>@HtmlDoc</ja>(
+				|			widgets={
+				|				ContentTypeMenuItem.<jk>class</jk>,
+				|				StyleMenuItem.<jk>class</jk>
+				|			},
+				|			navlinks={
+				|				<js>"options: servlet:/?method=OPTIONS"</js>
+				|			}
+				|		),
+				|		children={
+				|			HelloWorldResource.<jk>class</jk>,
+				|			ConfigResource.<jk>class</jk>,
+				|			LogsResource.<jk>class</jk>
+				|		}
+				|	)
+				|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup <jk>implements</jk> BasicUniversalConfig {
+				|		<jc>// No code</jc>
+				|	}
 			</p>
 		<li>
 			<l>juneau.cfg</l> - The configuration file. 
@@ -99,46 +99,46 @@
 			<br>Also it's located in the classpath so that our microservice can be built as a single executable jar. 
 			<br><br>
 			<p class='bini'>
-		<cc>#=======================================================================================================================
-		# Basic configuration file for REST microservices
-		# Subprojects can use this as a starting point.
-		#=======================================================================================================================</cc>
-		
-		<cc>#=======================================================================================================================
-		# REST settings
-		#=======================================================================================================================</cc>
-		<cs>[REST]</cs>
-		
-		<cc># Comma-delimited list of key-value pairs that represent locations of static files that can be served up by your @Rest-annotated
-		# classes.  These are static files that are served up by the servlet under the specified sub-paths.
-		# For example, given the following setting...
-		# 	staticFiles = htdocs:my-docs,styles/my-styles
-		# ...the URI "/servletPath/htdocs/javadoc.css" resolves to the path "/my-docs/javadoc.css".
-		# This path can be relative to the working directory, classpath root, or package of your resource class.
-		# Used by the BasicRestConfig interface that defines the following value:
-		# 	staticFiles="$C{REST/staticFiles}"</cc>
-		<ck>staticFiles</ck> = htdocs:htdocs
-		
-		<cc># Stylesheet to use for HTML views.
-		# Used by the BasicRestConfig interface that defines the following value:
-		# 	stylesheet="$C{REST/theme,servlet:/htdocs/themes/devops.css}"</cc>
-		<ck>theme</ck> = <cv>servlet:/htdocs/themes/devops.css</cv>
-		
-		<cc># Various look-and-feel settings used in the BasicRestConfig interface.</cc>
-		<ck>headerIcon</ck> = <cv>servlet:/htdocs/images/juneau.png</cv>
-		<ck>headerLink</ck> = <cv>http://juneau.apache.org</cv>
-		<ck>footerIcon</ck> = <cv>servlet:/htdocs/images/asf.png</cv>
-		<ck>footerLink</ck> = <cv>http://www.apache.org</cv>
-		<ck>favicon</ck> = <cv>$C{REST/headerIcon}</cv>
-		<ck>header</ck> = 
-			<cv>&lt;a href='$U{$C{REST/headerLink}}'&gt;
-				&lt;img src='$U{$C{REST/headerIcon}}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/&gt;
-			&lt;/a&gt;</cv>
-		<ck>footer</ck> = 
-			<cv>&lt;a href='$U{$C{REST/footerLink}}'&gt;
-				&lt;img src='$U{$C{REST/footerIcon}}' style='float:right;padding-right:20px;height:32px'/&gt;
-			&lt;/a&gt;</cv>
-		</p>
+				|	<cc>#=======================================================================================================================
+				|	# Basic configuration file for REST microservices
+				|	# Subprojects can use this as a starting point.
+				|	#=======================================================================================================================</cc>
+				|	
+				|	<cc>#=======================================================================================================================
+				|	# REST settings
+				|	#=======================================================================================================================</cc>
+				|	<cs>[REST]</cs>
+				|	
+				|	<cc># Comma-delimited list of key-value pairs that represent locations of static files that can be served up by your @Rest-annotated
+				|	# classes.  These are static files that are served up by the servlet under the specified sub-paths.
+				|	# For example, given the following setting...
+				|	# 	staticFiles = htdocs:my-docs,styles/my-styles
+				|	# ...the URI "/servletPath/htdocs/javadoc.css" resolves to the path "/my-docs/javadoc.css".
+				|	# This path can be relative to the working directory, classpath root, or package of your resource class.
+				|	# Used by the BasicRestConfig interface that defines the following value:
+				|	# 	staticFiles="$C{REST/staticFiles}"</cc>
+				|	<ck>staticFiles</ck> = htdocs:htdocs
+				|	
+				|	<cc># Stylesheet to use for HTML views.
+				|	# Used by the BasicRestConfig interface that defines the following value:
+				|	# 	stylesheet="$C{REST/theme,servlet:/htdocs/themes/devops.css}"</cc>
+				|	<ck>theme</ck> = <cv>servlet:/htdocs/themes/devops.css</cv>
+				|	
+				|	<cc># Various look-and-feel settings used in the BasicRestConfig interface.</cc>
+				|	<ck>headerIcon</ck> = <cv>servlet:/htdocs/images/juneau.png</cv>
+				|	<ck>headerLink</ck> = <cv>http://juneau.apache.org</cv>
+				|	<ck>footerIcon</ck> = <cv>servlet:/htdocs/images/asf.png</cv>
+				|	<ck>footerLink</ck> = <cv>http://www.apache.org</cv>
+				|	<ck>favicon</ck> = <cv>$C{REST/headerIcon}</cv>
+				|	<ck>header</ck> = 
+				|		<cv>&lt;a href='$U{$C{REST/headerLink}}'&gt;
+				|			&lt;img src='$U{$C{REST/headerIcon}}' style='position:absolute;top:5;right:5;background-color:transparent;height:30px'/&gt;
+				|		&lt;/a&gt;</cv>
+				|	<ck>footer</ck> = 
+				|		<cv>&lt;a href='$U{$C{REST/footerLink}}'&gt;
+				|			&lt;img src='$U{$C{REST/footerIcon}}' style='float:right;padding-right:20px;height:32px'/&gt;
+				|		&lt;/a&gt;</cv>
+			</p>
 	</ul>
 	<p>
 		At this point, you're ready to start the microservice from your workspace.

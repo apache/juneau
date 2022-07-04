@@ -67,7 +67,7 @@
 	<p class='bjava'>
 		|	<jc>// Parse a JSON object as a bean.</jc>
 		|	String <jv>json</jv> = <js>"{\"name\":\"John Smith\","\age\":21}"</js>;
-		|	Person <jv>person</jv> = Json.<jsm>from</jsm>(<jv>json</jv>, Person.<jk>class</jk>);
+		|	Person <jv>person</jv> = Json.<jsm>to</jsm>(<jv>json</jv>, Person.<jk>class</jk>);
 	</p>
 	<p>
 		Marshalling support is provided for a wide variety of POJO types including:

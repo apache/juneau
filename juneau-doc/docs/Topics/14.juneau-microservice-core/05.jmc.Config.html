@@ -13,7 +13,7 @@
  ***************************************************************************************************************************/
  -->
 
-{title:'Config', created:'8.0.0', deprecated:'8.1.2'}
+{title:'Config', created:'8.0.0'}
 
 <div class='topic'>
 	<p>
@@ -129,7 +129,7 @@
 		|	String <jv>format</jv> = <jv>config</jv>.get(<js>"Logging/format"</js>, <js>"[{date} {level}] {msg}%n"</js>).orElse(<jk>null</jk>);
 		|	<jk>long</jk> <jv>limit</jv> = <jv>config</jv>.get(<js>"Logging/limit"</js>).asLong().orElse(<jk>null</jk>);
 		|	Map&lt;String,Level&gt; <jv>levels</jv> = <jv>config</jv>.get(<js>"Logging/levels"</js>).as(Map.<jk>class</jk>, String.<jk>class</jk>, Level.<jk>class</jk>).orElse(<jk>null</jk>);
-	</p)
+	</p>
 	<p>
 		Changes to the configuration file can trigger notifications that can be used to restart your microservice or make various other
 		on-the-fly changes.  

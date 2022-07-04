@@ -90,13 +90,10 @@ bc {
 /*--- Bordered code ---*/
 p.bcode,p.bjava,p.bjson,p.bxml,p.bini,p.buon,p.burlenc,p.bconsole,p.bschema,
 div.bcode,div.bjava,div.bjson,div.bxml,div.bini,div.buon,div.burlenc,div.bconsole,div.bschema {
-	border: 1px solid black;
-	margin: 0px 20px;
-	border-radius: 10px;
-	overflow: hidden;
+	border-left: 3px solid #4c6b87;
+	margin: 0px 20px 5px 20px;
+	overflow: auto;
 	background-color: #f8f8f8;
-	border-color: #cccccc;
-	box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.5);
 }
 
 /*--- Bordered code in a section of a method doc ---*/
@@ -111,6 +108,7 @@ dd p.bschema, dd div.bschema,
 dd p.bconsole, dd div.bconsole {
 	margin-left:0px;
 	margin-right:20px;
+	margin-bottom:5px;
 }
 
 /* Override padding bottom in javadoc comments. */
