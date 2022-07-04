@@ -1788,7 +1788,7 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	<jc>// Our customized logger.</jc>
 		 * 	<jk>public class</jk> MyLogger <jk>extends</jk> BasicCallLogger {
-		 * 
+		 *
 		 * 		<jk>public</jk> MyLogger(BeanStore <jv>beanStore</jv>) {
 		 *			<jk>super</jk>(<jv>beanStore</jv>);
 		 *		}
@@ -1883,10 +1883,14 @@ public class RestContext extends Context {
 		 * 		</ul>
 		 * 	<li>Looks for a static or non-static <c>createCallLogger()</c> method that returns {@link CallLogger} on the
 		 * 		resource class with any of the following arguments:
-		 * 		<ul>
 		 * 			<li>{@link RestContext}
+		 * 			<li>{@link RestContext.Builder}
+		 * 			<li>{@link BeanContext}
 		 * 			<li>{@link BeanStore}
-		 * 			<li>{@link BasicFileFinder}
+		 * 			<li>{@link VarResolver}
+		 * 			<li>{@link Config}
+		 * 			<li>{@link Logger}
+		 * 			<li>{@link ServletContext}
 		 * 			<li>Any {@doc juneau-rest-server-springboot injected beans}.
 		 * 		</ul>
 		 * 	<li>Resolves it via the bean store registered in this context.
