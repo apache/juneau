@@ -17136,7 +17136,7 @@
 						<li class='jc'>{@link org.apache.juneau.rest.RestChildren}
 						<li class='jc'>{@link org.apache.juneau.rest.RestContext}
 						<li class='jc'>{@link org.apache.juneau.rest.stats.RestContextStats}
-						<li class='jic'>{@link org.apache.juneau.rest.logging.RestLogger}
+						<li class='jic'>{@link org.apache.juneau.rest.logger.RestLogger}
 						<li class='jc'>{@link org.apache.juneau.rest.RestOpContext}
 						<li class='jc'>{@link org.apache.juneau.rest.RestOperations}
 						<li class='jc'>{@link org.apache.juneau.serializer.SerializerSet}
@@ -21297,7 +21297,7 @@
 		<li>
 			HTTP request/response bodies are cached in memory for logging purposes.
 		<li>
-			HTTP requests/responses are logged to the registered {@link org.apache.juneau.rest.logging.RestLogger}.
+			HTTP requests/responses are logged to the registered {@link org.apache.juneau.rest.logger.RestLogger}.
 	</ul>
 	<p>
 		The possible annotation values are:
@@ -21358,11 +21358,11 @@
 		HTTP calls can be logged with the following levels of granularity:
 	</p>	
 	<ul class='javatree'>
-		<li class='je'>{@link org.apache.juneau.rest.logging.RestLoggingDetail}
+		<li class='je'>{@link org.apache.juneau.rest.logger.CallLoggingDetail}
 			<ul class='javatreec'>
-				<li class='jf'>{@link org.apache.juneau.rest.logging.RestLoggingDetail#STATUS_LINE STATUS_LINE}
-				<li class='jf'>{@link org.apache.juneau.rest.logging.RestLoggingDetail#HEADER HEADER}
-				<li class='jf'>{@link org.apache.juneau.rest.logging.RestLoggingDetail#ENTITY ENTITY}
+				<li class='jf'>{@link org.apache.juneau.rest.logger.CallLoggingDetail#STATUS_LINE STATUS_LINE}
+				<li class='jf'>{@link org.apache.juneau.rest.logger.CallLoggingDetail#HEADER HEADER}
+				<li class='jf'>{@link org.apache.juneau.rest.logger.CallLoggingDetail#ENTITY ENTITY}
 			</ul>
 		</li>
 	</ul>
@@ -21414,8 +21414,8 @@
 	=== END ===================================================================
 	</p>
 	<p>
-		The interface responsible for generating the log entries is {@link org.apache.juneau.rest.logging.RestLogger}
-		and the default is {@link org.apache.juneau.rest.logging.BasicRestLogger} which produces the output above.  It
+		The interface responsible for generating the log entries is {@link org.apache.juneau.rest.logger.RestLogger}
+		and the default is {@link org.apache.juneau.rest.logger.CallLogger} which produces the output above.  It
 		can be changed through any of the following:
 	</p>
 	<ul class='javatree'>
@@ -21482,10 +21482,10 @@
 		</li>
 	</ul>
 	<ul class='notes'>
-		<li class='note'>The {@link org.apache.juneau.rest.logging.BasicTestRestLogger} class is useful for testing and
+		<li class='note'>The {@link org.apache.juneau.rest.logger.BasicTestCallLogger} class is useful for testing and
 			allows you to suppress logging when testing error conditions by passing in a <c>noTrace=true</c> query parameter
 			or <c>No-Trace: true</c> header on requests.  
-		<li class='note'>{@link org.apache.juneau.rest.debug.DebugEnablement}, {@link org.apache.juneau.rest.logging.RestLogger}, and 
+		<li class='note'>{@link org.apache.juneau.rest.debug.DebugEnablement}, {@link org.apache.juneau.rest.logger.RestLogger}, and 
 			{@link org.apache.juneau.rest.stats.ThrownStore} can all be defined globally as Spring beans in a Spring Boot environment.
 	</ul>
 </div>

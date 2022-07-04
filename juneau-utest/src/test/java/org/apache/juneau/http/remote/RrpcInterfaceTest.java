@@ -30,7 +30,7 @@ import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
-import org.apache.juneau.rest.logging.*;
+import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.serializer.*;
@@ -230,7 +230,7 @@ public class RrpcInterfaceTest {
 		}
 	}
 
-	@Rest(callLogger=BasicDisabledRestLogger.class)
+	@Rest(callLogger=BasicDisabledCallLogger.class)
 	@SerializerConfig(addRootType="true",addBeanTypes="true")
 	public static class InterfaceProxyResource extends BasicRestServlet implements BasicUniversalJenaConfig {
 		private static final long serialVersionUID = 1L;

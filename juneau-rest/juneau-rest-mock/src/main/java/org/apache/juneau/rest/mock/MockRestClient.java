@@ -59,8 +59,8 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.RestRequest;
 import org.apache.juneau.rest.client.RestResponse;
+import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.http.header.ContentType;
-import org.apache.juneau.rest.logging.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.utils.*;
@@ -1870,7 +1870,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 				Object o = isClass ? ((Class<?>)restBean).newInstance() : restBean;
 				RestContext rc = RestContext
 					.create(o.getClass(), null, null)
-					.defaultClasses(BasicTestRestLogger.class)
+					.defaultClasses(BasicTestCallLogger.class)
 					.debugDefault(CONDITIONAL)
 					.init(()->o)
 					.build()

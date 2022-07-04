@@ -27,7 +27,7 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
-import org.apache.juneau.rest.logging.*;
+import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.serializer.*;
@@ -40,7 +40,7 @@ public class RestClient_Headers_Test {
 
 	public static final CaptureLogger LOGGER = new CaptureLogger();
 
-	public static class CaptureLogger extends BasicTestCaptureRestLogger {
+	public static class CaptureLogger extends BasicTestCaptureCallLogger {
 		public static CaptureLogger getInstance(RestLogger.Builder x) {
 			return LOGGER;
 		}

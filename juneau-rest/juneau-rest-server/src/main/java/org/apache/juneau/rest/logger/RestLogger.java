@@ -10,13 +10,13 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.logging;
+package org.apache.juneau.rest.logger;
 
 import static java.util.logging.Level.*;
 import static org.apache.juneau.Enablement.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.SystemEnv.*;
-import static org.apache.juneau.rest.logging.RestLoggingDetail.*;
+import static org.apache.juneau.rest.logger.CallLoggingDetail.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -39,10 +39,10 @@ import org.apache.juneau.rest.stats.*;
  * <p>
  * The following default implementations are also provided:
  * <ul class='javatree'>
- * 	<li class='jc'>{@link BasicRestLogger} - The default logger typically used.
- * 	<li class='jc'>{@link BasicDisabledRestLogger} - A no-op logger if you want to turn off logging entirely.
- * 	<li class='jc'>{@link BasicTestRestLogger} - A logger useful for testcases.
- * 	<li class='jc'>{@link BasicTestCaptureRestLogger} - Useful for capturing log messages for testing logging itself.
+ * 	<li class='jc'>{@link CallLogger} - The default logger typically used.
+ * 	<li class='jc'>{@link BasicDisabledCallLogger} - A no-op logger if you want to turn off logging entirely.
+ * 	<li class='jc'>{@link BasicTestCallLogger} - A logger useful for testcases.
+ * 	<li class='jc'>{@link BasicTestCaptureCallLogger} - Useful for capturing log messages for testing logging itself.
  * </ul>
  *
  * <ul class='seealso'>
@@ -93,9 +93,9 @@ public interface RestLogger {
 	 * Can also use a <c>JUNEAU_RESTLOGGER_REQUESTDETAIL</c> environment variable.
 	 *
 	 * <ul class='values'>
-	 * 	<li>{@link RestLoggingDetail#STATUS_LINE "STATUS_LINE"} (default) - Log only the status line.
-	 * 	<li>{@link RestLoggingDetail#HEADER "HEADER"} - Log the status line and headers.
-	 * 	<li>{@link RestLoggingDetail#ENTITY "ENTITY"} - Log the status line and headers and content if available.
+	 * 	<li>{@link CallLoggingDetail#STATUS_LINE "STATUS_LINE"} (default) - Log only the status line.
+	 * 	<li>{@link CallLoggingDetail#HEADER "HEADER"} - Log the status line and headers.
+	 * 	<li>{@link CallLoggingDetail#ENTITY "ENTITY"} - Log the status line and headers and content if available.
 	 * </ul>
 	 */
 	public static final String SP_requestDetail = "juneau.restLogger.requestDetail";
@@ -106,9 +106,9 @@ public interface RestLogger {
 	 * Can also use a <c>JUNEAU_RESTLOGGER_RESPONSEDETAIL</c> environment variable.
 	 *
 	 * <ul class='values'>
-	 * 	<li>{@link RestLoggingDetail#STATUS_LINE "STATUS_LINE"} (default) - Log only the status line.
-	 * 	<li>{@link RestLoggingDetail#HEADER "HEADER"} - Log the status line and headers.
-	 * 	<li>{@link RestLoggingDetail#ENTITY "ENTITY"} - Log the status line and headers and content if available.
+	 * 	<li>{@link CallLoggingDetail#STATUS_LINE "STATUS_LINE"} (default) - Log only the status line.
+	 * 	<li>{@link CallLoggingDetail#HEADER "HEADER"} - Log the status line and headers.
+	 * 	<li>{@link CallLoggingDetail#ENTITY "ENTITY"} - Log the status line and headers and content if available.
 	 * </ul>
 	 */
 	public static final String SP_responseDetail = "juneau.restLogger.responseDetail";
@@ -153,10 +153,10 @@ public interface RestLogger {
 
 		Logger logger;
 		ThrownStore thrownStore;
-		List<RestLoggerRule> normalRules = list(), debugRules = list();
+		List<CallLoggerRule> normalRules = list(), debugRules = list();
 		Enablement enabled;
 		Predicate<HttpServletRequest> enabledTest;
-		RestLoggingDetail requestDetail, responseDetail;
+		CallLoggingDetail requestDetail, responseDetail;
 		Level level;
 
 		/**
@@ -165,7 +165,7 @@ public interface RestLogger {
 		 * @param beanStore The bean store to use for creating beans.
 		 */
 		protected Builder(BeanStore beanStore) {
-			super(BasicRestLogger.class, beanStore);
+			super(CallLogger.class, beanStore);
 			logger = Logger.getLogger(env(SP_logger, "global"));
 			enabled = env(SP_enabled, ALWAYS);
 			enabledTest = x -> false;
@@ -176,7 +176,7 @@ public interface RestLogger {
 
 		@Override /* BeanBuilder */
 		protected RestLogger buildDefault() {
-			return new BasicRestLogger(this);
+			return new CallLogger(this);
 		}
 
 		@Override /* BeanBuilder */
@@ -200,7 +200,7 @@ public interface RestLogger {
 		 * </ol>
 		 *
 		 * <p>
-		 * The {@link BasicRestLogger#getLogger()} method can also be overridden to provide different logic.
+		 * The {@link CallLogger#getLogger()} method can also be overridden to provide different logic.
 		 *
 		 * @param value
 		 * 	The logger to use for logging the request.
@@ -226,7 +226,7 @@ public interface RestLogger {
 		 * </ol>
 		 *
 		 * <p>
-		 * The {@link BasicRestLogger#getLogger()} method can also be overridden to provide different logic.
+		 * The {@link CallLogger#getLogger()} method can also be overridden to provide different logic.
 		 *
 		 * @param value
 		 * 	The logger to use for logging the request.
@@ -350,16 +350,16 @@ public interface RestLogger {
 		 * </ul>
 		 *
 		 * <ul class='values'>
-		 * 	<li>{@link RestLoggingDetail#STATUS_LINE STATUS_LINE} - Log only the status line.
-		 * 	<li>{@link RestLoggingDetail#HEADER HEADER} - Log the status line and headers.
-		 * 	<li>{@link RestLoggingDetail#ENTITY ENTITY} - Log the status line and headers and content if available.
+		 * 	<li>{@link CallLoggingDetail#STATUS_LINE STATUS_LINE} - Log only the status line.
+		 * 	<li>{@link CallLoggingDetail#HEADER HEADER} - Log the status line and headers.
+		 * 	<li>{@link CallLoggingDetail#ENTITY ENTITY} - Log the status line and headers and content if available.
 		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property, or <jk>null</jk> to use the default.
 		 * @return This object.
 		 */
-		public Builder requestDetail(RestLoggingDetail value) {
+		public Builder requestDetail(CallLoggingDetail value) {
 			requestDetail = value;
 			return this;
 		}
@@ -379,16 +379,16 @@ public interface RestLogger {
 		 * </ul>
 		 *
 		 * <ul class='values'>
-		 * 	<li>{@link RestLoggingDetail#STATUS_LINE STATUS_LINE} - Log only the status line.
-		 * 	<li>{@link RestLoggingDetail#HEADER HEADER} - Log the status line and headers.
-		 * 	<li>{@link RestLoggingDetail#ENTITY ENTITY} - Log the status line and headers and content if available.
+		 * 	<li>{@link CallLoggingDetail#STATUS_LINE STATUS_LINE} - Log only the status line.
+		 * 	<li>{@link CallLoggingDetail#HEADER HEADER} - Log the status line and headers.
+		 * 	<li>{@link CallLoggingDetail#ENTITY ENTITY} - Log the status line and headers and content if available.
 		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property, or <jk>null</jk> to use the default.
 		 * @return This object.
 		 */
-		public Builder responseDetail(RestLoggingDetail value) {
+		public Builder responseDetail(CallLoggingDetail value) {
 			responseDetail = value;
 			return this;
 		}
@@ -425,8 +425,8 @@ public interface RestLogger {
 		 * @param values The logging rules to add to the list of rules.
 		 * @return This object.
 		 */
-		public Builder normalRules(RestLoggerRule...values) {
-			for (RestLoggerRule rule : values)
+		public Builder normalRules(CallLoggerRule...values) {
+			for (CallLoggerRule rule : values)
 				normalRules.add(rule);
 			return this;
 		}
@@ -440,8 +440,8 @@ public interface RestLogger {
 		 * @param values The logging rules to add to the list of rules.
 		 * @return This object.
 		 */
-		public Builder debugRules(RestLoggerRule...values) {
-			for (RestLoggerRule rule : values)
+		public Builder debugRules(CallLoggerRule...values) {
+			for (CallLoggerRule rule : values)
 				debugRules.add(rule);
 			return this;
 		}
@@ -455,7 +455,7 @@ public interface RestLogger {
 		 * @param values The logging rules to add to the list of rules.
 		 * @return This object.
 		 */
-		public Builder rules(RestLoggerRule...values) {
+		public Builder rules(CallLoggerRule...values) {
 			return normalRules(values).debugRules(values);
 		}
 

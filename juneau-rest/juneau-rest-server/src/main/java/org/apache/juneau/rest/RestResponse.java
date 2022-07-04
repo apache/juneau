@@ -35,7 +35,7 @@ import org.apache.juneau.oapi.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.httppart.*;
-import org.apache.juneau.rest.logging.*;
+import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.serializer.*;
 

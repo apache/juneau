@@ -20,7 +20,7 @@ import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.converter.*;
 import org.apache.juneau.rest.guard.*;
-import org.apache.juneau.rest.logging.*;
+import org.apache.juneau.rest.logger.*;
 
 /**
  * A session for a single HTTP request.

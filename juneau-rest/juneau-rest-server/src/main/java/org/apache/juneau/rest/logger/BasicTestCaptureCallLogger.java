@@ -10,10 +10,10 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.logging;
+package org.apache.juneau.rest.logger;
 
 import static java.util.logging.Level.*;
-import static org.apache.juneau.rest.logging.RestLoggingDetail.*;
+import static org.apache.juneau.rest.logger.CallLoggingDetail.*;
 
 import java.util.concurrent.atomic.*;
 import java.util.logging.*;
@@ -39,7 +39,7 @@ import org.apache.juneau.cp.*;
  *
  * 		<jk>private static final</jk> CaptureLogger <jsf>LOGGER</jsf> = <jk>new</jk> CaptureLogger();
  *
- * 		<jk>public static class</jk> CaptureLogger <jk>extends</jk> BasicTestCaptureRestLogger {
+ * 		<jk>public static class</jk> CaptureLogger <jk>extends</jk> BasicTestCaptureCallLogger {
  * 			<jc>// How our REST class will get the logger.</jc>
  * 			<jk>public static</jk> CaptureLogger <jsm>getInstance</jsm>() {
  * 				<jk>return</jk> <jsf>LOGGER</jsf>;
@@ -71,7 +71,7 @@ import org.apache.juneau.cp.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class BasicTestCaptureRestLogger extends BasicRestLogger {
+public class BasicTestCaptureCallLogger extends CallLogger {
 
 	private AtomicReference<LogRecord> lastRecord = new AtomicReference<>();
 
@@ -80,16 +80,16 @@ public class BasicTestCaptureRestLogger extends BasicRestLogger {
 	 *
 	 * @param builder The settings to use for this logger.
 	 */
-	public BasicTestCaptureRestLogger(RestLogger.Builder builder) {
+	public BasicTestCaptureCallLogger(RestLogger.Builder builder) {
 		super(builder);
 	}
 
 	/**
 	 * Constructor using default settings.
 	 * <p>
-	 * Uses the same settings as {@link BasicRestLogger}.
+	 * Uses the same settings as {@link CallLogger}.
 	 */
-	public BasicTestCaptureRestLogger() {
+	public BasicTestCaptureCallLogger() {
 		super(builder());
 	}
 
@@ -97,13 +97,13 @@ public class BasicTestCaptureRestLogger extends BasicRestLogger {
 		BeanStore bs = BeanStore.INSTANCE;
 		return RestLogger.create(bs)
 			.normalRules(  // Rules when debugging is not enabled.
-				RestLoggerRule.create(bs)  // Log 500+ errors with status-line and header information.
+				CallLoggerRule.create(bs)  // Log 500+ errors with status-line and header information.
 					.statusFilter(x -> x >= 500)
 					.level(SEVERE)
 					.requestDetail(HEADER)
 					.responseDetail(HEADER)
 					.build(),
-				RestLoggerRule.create(bs)  // Log 400-500 errors with just status-line information.
+				CallLoggerRule.create(bs)  // Log 400-500 errors with just status-line information.
 					.statusFilter(x -> x >= 400)
 					.level(WARNING)
 					.requestDetail(STATUS_LINE)
@@ -111,7 +111,7 @@ public class BasicTestCaptureRestLogger extends BasicRestLogger {
 					.build()
 			)
 			.debugRules(  // Rules when debugging is enabled.
-				RestLoggerRule.create(bs)  // Log everything with full details.
+				CallLoggerRule.create(bs)  // Log everything with full details.
 					.level(SEVERE)
 					.requestDetail(ENTITY)
 					.responseDetail(ENTITY)
@@ -200,7 +200,7 @@ public class BasicTestCaptureRestLogger extends BasicRestLogger {
 	 *
 	 * @return This object.
 	 */
-	public BasicTestCaptureRestLogger reset() {
+	public BasicTestCaptureCallLogger reset() {
 		this.lastRecord.set(null);
 		return this;
 	}

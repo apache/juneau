@@ -15,4 +15,4 @@
 /**
  * REST Logging API
  */
-package org.apache.juneau.rest.logging;
+package org.apache.juneau.rest.logger;

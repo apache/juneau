@@ -24,7 +24,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.logging.*;
+import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.util.*;
 
 /**

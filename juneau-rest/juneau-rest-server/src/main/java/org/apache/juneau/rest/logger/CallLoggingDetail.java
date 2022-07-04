@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.logging;
+package org.apache.juneau.rest.logger;
 
 import org.apache.juneau.internal.*;
 
@@ -22,7 +22,7 @@ import org.apache.juneau.internal.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public enum RestLoggingDetail {
+public enum CallLoggingDetail {
 
 	/**
 	 * Lowest detail - Log only the request and response status lines.
@@ -39,8 +39,8 @@ public enum RestLoggingDetail {
 	 */
 	ENTITY;
 
-	boolean isOneOf(RestLoggingDetail...values) {
-		for (RestLoggingDetail v : values)
+	boolean isOneOf(CallLoggingDetail...values) {
+		for (CallLoggingDetail v : values)
 			if (v == this)
 				return true;
 		return false;
@@ -52,7 +52,7 @@ public enum RestLoggingDetail {
 	 * @param s The enum name to resolve.
 	 * @return The resolved value.
 	 */
-	public static RestLoggingDetail fromString(String s) {
+	public static CallLoggingDetail fromString(String s) {
 		if (! StringUtils.isEmpty(s)) {
 			try {
 				return valueOf(s.toUpperCase());

@@ -21,12 +21,12 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
-import static org.apache.juneau.rest.logging.RestLoggingDetail.*;
 import static org.apache.juneau.rest.processor.ResponseProcessor.*;
 import static java.util.Collections.*;
 import static java.util.logging.Level.*;
 import static java.util.Optional.*;
 import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
+import static org.apache.juneau.rest.logger.CallLoggingDetail.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -65,7 +65,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.arg.*;
 import org.apache.juneau.rest.debug.*;
 import org.apache.juneau.rest.httppart.*;
-import org.apache.juneau.rest.logging.*;
+import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.processor.*;
 import org.apache.juneau.rest.rrpc.*;
 import org.apache.juneau.rest.servlet.*;
@@ -1911,13 +1911,13 @@ public class RestContext extends Context {
 				RestLogger
 					.create(beanStore)
 					.normalRules(  // Rules when debugging is not enabled.
-						RestLoggerRule.create(beanStore)  // Log 500+ errors with status-line and header information.
+						CallLoggerRule.create(beanStore)  // Log 500+ errors with status-line and header information.
 							.statusFilter(a -> a >= 500)
 							.level(SEVERE)
 							.requestDetail(HEADER)
 							.responseDetail(HEADER)
 							.build(),
-						RestLoggerRule.create(beanStore)  // Log 400-500 errors with just status-line information.
+						CallLoggerRule.create(beanStore)  // Log 400-500 errors with just status-line information.
 							.statusFilter(a -> a >= 400)
 							.level(WARNING)
 							.requestDetail(STATUS_LINE)
@@ -1925,7 +1925,7 @@ public class RestContext extends Context {
 							.build()
 					)
 					.debugRules(  // Rules when debugging is enabled.
-						RestLoggerRule.create(beanStore)  // Log everything with full details.
+						CallLoggerRule.create(beanStore)  // Log everything with full details.
 							.level(SEVERE)
 							.requestDetail(ENTITY)
 							.responseDetail(ENTITY)

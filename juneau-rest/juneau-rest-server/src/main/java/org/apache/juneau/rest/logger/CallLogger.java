@@ -10,12 +10,13 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.logging;
+package org.apache.juneau.rest.logger;
 
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.rest.logging.RestLoggingDetail.*;
+import static org.apache.juneau.rest.logger.CallLoggingDetail.*;
+
 import java.util.*;
 import java.util.function.*;
 import java.util.logging.*;
@@ -86,28 +87,28 @@ import org.apache.juneau.rest.util.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class BasicRestLogger implements RestLogger {
+public class CallLogger implements RestLogger {
 
-	private static final RestLoggerRule DEFAULT_RULE = RestLoggerRule.create(BeanStore.INSTANCE).build();
+	private static final CallLoggerRule DEFAULT_RULE = CallLoggerRule.create(BeanStore.INSTANCE).build();
 
 	private final Logger logger;
 	private final ThrownStore thrownStore;
-	private final RestLoggerRule[] normalRules, debugRules;
+	private final CallLoggerRule[] normalRules, debugRules;
 	private final Enablement enabled;
 	private final Predicate<HttpServletRequest> enabledTest;
 	private final Level level;
-	private final RestLoggingDetail requestDetail, responseDetail;
+	private final CallLoggingDetail requestDetail, responseDetail;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param builder The builder object.
 	 */
-	public BasicRestLogger(RestLogger.Builder builder) {
+	public CallLogger(RestLogger.Builder builder) {
 		this.logger = builder.logger;
 		this.thrownStore = builder.thrownStore;
-		this.normalRules = builder.normalRules.toArray(new RestLoggerRule[builder.normalRules.size()]);
-		this.debugRules = builder.debugRules.toArray(new RestLoggerRule[builder.debugRules.size()]);
+		this.normalRules = builder.normalRules.toArray(new CallLoggerRule[builder.normalRules.size()]);
+		this.debugRules = builder.debugRules.toArray(new CallLoggerRule[builder.debugRules.size()]);
 		this.enabled = builder.enabled;
 		this.enabledTest = builder.enabledTest;
 		this.requestDetail = builder.requestDetail;
@@ -124,7 +125,7 @@ public class BasicRestLogger implements RestLogger {
 	@Override /* RestLogger */
 	public void log(HttpServletRequest req, HttpServletResponse res) {
 
-		RestLoggerRule rule = getRule(req, res);
+		CallLoggerRule rule = getRule(req, res);
 
 		if (! isEnabled(rule, req))
 			return;
@@ -137,8 +138,8 @@ public class BasicRestLogger implements RestLogger {
 		Throwable e = castOrNull(req.getAttribute("Exception"), Throwable.class);
 		Long execTime = castOrNull(req.getAttribute("ExecTime"), Long.class);
 
-		RestLoggingDetail reqd = firstNonNull(rule.getRequestDetail(), requestDetail);
-		RestLoggingDetail resd = firstNonNull(rule.getResponseDetail(), responseDetail);
+		CallLoggingDetail reqd = firstNonNull(rule.getRequestDetail(), requestDetail);
+		CallLoggingDetail resd = firstNonNull(rule.getResponseDetail(), responseDetail);
 
 		String method = req.getMethod();
 		int status = res.getStatus();
@@ -248,8 +249,8 @@ public class BasicRestLogger implements RestLogger {
 	 * @param res The servlet response.
 	 * @return The applicable logging rule, or the default rule if not found.  Never <jk>null</jk>.
 	 */
-	protected RestLoggerRule getRule(HttpServletRequest req, HttpServletResponse res) {
-		for (RestLoggerRule r : isDebug(req) ? debugRules : normalRules)
+	protected CallLoggerRule getRule(HttpServletRequest req, HttpServletResponse res) {
+		for (CallLoggerRule r : isDebug(req) ? debugRules : normalRules)
 			if (r.matches(req, res))
 				return r;
 		return DEFAULT_RULE;
@@ -289,7 +290,7 @@ public class BasicRestLogger implements RestLogger {
 	 * @param req The HTTP request.
 	 * @return <jk>true</jk> if logging is enabled for this request.
 	 */
-	protected boolean isEnabled(RestLoggerRule rule, HttpServletRequest req) {
+	protected boolean isEnabled(CallLoggerRule rule, HttpServletRequest req) {
 		Enablement enabled = firstNonNull(rule.getEnabled(), this.enabled);
 		Predicate<HttpServletRequest> enabledTest = firstNonNull(rule.getEnabledTest(), this.enabledTest);
 		return enabled.isEnabled(enabledTest.test(req));

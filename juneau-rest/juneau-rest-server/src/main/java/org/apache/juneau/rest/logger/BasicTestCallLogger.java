@@ -10,12 +10,12 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.logging;
+package org.apache.juneau.rest.logger;
 
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.rest.logger.CallLoggingDetail.*;
 import static org.apache.juneau.Enablement.*;
 import static java.util.logging.Level.*;
-import static org.apache.juneau.rest.logging.RestLoggingDetail.*;
 
 import javax.servlet.http.*;
 
@@ -49,14 +49,14 @@ import org.apache.juneau.rest.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class BasicTestRestLogger extends BasicRestLogger {
+public class BasicTestCallLogger extends CallLogger {
 
 	/**
 	 * Constructor.
 	 *
 	 * @param context The context of the resource object.
 	 */
-	public BasicTestRestLogger(RestContext context) {
+	public BasicTestCallLogger(RestContext context) {
 		super(builder().logger(context.getLogger()).thrownStore(context.getThrownStore()));
 	}
 
@@ -64,7 +64,7 @@ public class BasicTestRestLogger extends BasicRestLogger {
 		BeanStore bs = BeanStore.INSTANCE;
 		return RestLogger.create(bs)
 			.normalRules(  // Rules when debugging is not enabled.
-				RestLoggerRule.create(bs)  // Log 500+ errors with status-line and header information.
+				CallLoggerRule.create(bs)  // Log 500+ errors with status-line and header information.
 					.statusFilter(x -> x >= 400)
 					.level(SEVERE)
 					.requestDetail(HEADER)
@@ -73,7 +73,7 @@ public class BasicTestRestLogger extends BasicRestLogger {
 					.enabledPredicate(x -> ! isNoTrace(x))  // Only log if it's not a no-trace request.
 					.logStackTrace()
 					.build(),
-				RestLoggerRule.create(bs)  // Log 400-500 errors with just status-line information.
+				CallLoggerRule.create(bs)  // Log 400-500 errors with just status-line information.
 					.statusFilter(x -> x >= 400)
 					.level(WARNING)
 					.requestDetail(STATUS_LINE)
@@ -84,7 +84,7 @@ public class BasicTestRestLogger extends BasicRestLogger {
 					.build()
 			)
 			.debugRules(  // Rules when debugging is enabled.
-				RestLoggerRule.create(bs)  // Log everything with full details.
+				CallLoggerRule.create(bs)  // Log everything with full details.
 					.level(SEVERE)
 					.requestDetail(ENTITY)
 					.responseDetail(ENTITY)

@@ -34,7 +34,7 @@ import org.apache.juneau.rest.converter.*;
 import org.apache.juneau.rest.debug.*;
 import org.apache.juneau.rest.guard.*;
 import org.apache.juneau.rest.httppart.*;
-import org.apache.juneau.rest.logging.*;
+import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.processor.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.staticfile.*;

@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.logging;
+package org.apache.juneau.rest.logger;
 
 import org.apache.juneau.rest.*;
 
@@ -22,14 +22,14 @@ import org.apache.juneau.rest.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class BasicDisabledRestLogger extends BasicRestLogger {
+public class BasicDisabledCallLogger extends CallLogger {
 
 	/**
 	 * Constructor.
 	 *
 	 * @param context The context of the resource object.
 	 */
-	public BasicDisabledRestLogger(RestContext context) {
+	public BasicDisabledCallLogger(RestContext context) {
 		super(RestLogger.create(context.getBeanStore()).disabled());
 	}
 }

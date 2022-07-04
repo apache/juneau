@@ -10,7 +10,7 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.rest.logging;
+package org.apache.juneau.rest.logger;
 
 import static org.apache.juneau.collections.JsonMap.*;
 
@@ -31,7 +31,7 @@ import org.apache.juneau.internal.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class RestLoggerRule {
+public class CallLoggerRule {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -55,7 +55,7 @@ public class RestLoggerRule {
 	 * Builder class.
 	 */
 	@FluentSetters
-	public static class Builder extends BeanBuilder<RestLoggerRule> {
+	public static class Builder extends BeanBuilder<CallLoggerRule> {
 
 		Predicate<Integer> statusFilter;
 		Predicate<HttpServletRequest> requestFilter;
@@ -64,7 +64,7 @@ public class RestLoggerRule {
 		Enablement enabled;
 		Predicate<HttpServletRequest> enabledTest;
 		Level level;
-		RestLoggingDetail requestDetail, responseDetail;
+		CallLoggingDetail requestDetail, responseDetail;
 		boolean logStackTrace;
 
 		/**
@@ -73,12 +73,12 @@ public class RestLoggerRule {
 		 * @param beanStore The bean store to use for creating beans.
 		 */
 		protected Builder(BeanStore beanStore) {
-			super(RestLoggerRule.class, beanStore);
+			super(CallLoggerRule.class, beanStore);
 		}
 
 		@Override /* BeanBuilder */
-		protected RestLoggerRule buildDefault() {
-			return new RestLoggerRule(this);
+		protected CallLoggerRule buildDefault() {
+			return new CallLoggerRule(this);
 		}
 
 		//-------------------------------------------------------------------------------------------------------------
@@ -244,16 +244,16 @@ public class RestLoggerRule {
 		 * The level of detail to log on a request.
 		 *
 		 * <ul class='values'>
-		 * 	<li>{@link RestLoggingDetail#STATUS_LINE STATUS_LINE} - Log only the status line.
-		 * 	<li>{@link RestLoggingDetail#HEADER HEADER} - Log the status line and headers.
-		 * 	<li>{@link RestLoggingDetail#ENTITY ENTITY} - Log the status line and headers and content if available.
+		 * 	<li>{@link CallLoggingDetail#STATUS_LINE STATUS_LINE} - Log only the status line.
+		 * 	<li>{@link CallLoggingDetail#HEADER HEADER} - Log the status line and headers.
+		 * 	<li>{@link CallLoggingDetail#ENTITY ENTITY} - Log the status line and headers and content if available.
 		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property, or <jk>null</jk> to inherit from the call logger.
 		 * @return This object.
 		 */
-		public Builder requestDetail(RestLoggingDetail value) {
+		public Builder requestDetail(CallLoggingDetail value) {
 			this.requestDetail = value;
 			return this;
 		}
@@ -262,16 +262,16 @@ public class RestLoggerRule {
 		 * The level of detail to log on a response.
 		 *
 		 * <ul class='values'>
-		 * 	<li>{@link RestLoggingDetail#STATUS_LINE STATUS_LINE} - Log only the status line.
-		 * 	<li>{@link RestLoggingDetail#HEADER HEADER} - Log the status line and headers.
-		 * 	<li>{@link RestLoggingDetail#ENTITY ENTITY} - Log the status line and headers and content if available.
+		 * 	<li>{@link CallLoggingDetail#STATUS_LINE STATUS_LINE} - Log only the status line.
+		 * 	<li>{@link CallLoggingDetail#HEADER HEADER} - Log the status line and headers.
+		 * 	<li>{@link CallLoggingDetail#ENTITY ENTITY} - Log the status line and headers and content if available.
 		 * </ul>
 		 *
 		 * @param value
 		 * 	The new value for this property, or <jk>null</jk> to inherit from the call logger.
 		 * @return This object.
 		 */
-		public Builder responseDetail(RestLoggingDetail value) {
+		public Builder responseDetail(CallLoggingDetail value) {
 			this.responseDetail = value;
 			return this;
 		}
@@ -332,7 +332,7 @@ public class RestLoggerRule {
 	private final Level level;
 	private final Enablement enabled;
 	private final Predicate<HttpServletRequest> enabledTest;
-	private final RestLoggingDetail requestDetail, responseDetail;
+	private final CallLoggingDetail requestDetail, responseDetail;
 	private final boolean logStackTrace;
 
 	/**
@@ -340,7 +340,7 @@ public class RestLoggerRule {
 	 *
 	 * @param b Builder
 	 */
-	RestLoggerRule(Builder b) {
+	CallLoggerRule(Builder b) {
 		this.statusFilter = b.statusFilter;
 		this.exceptionFilter = b.exceptionFilter;
 		this.requestFilter = b.requestFilter;
@@ -380,7 +380,7 @@ public class RestLoggerRule {
 	 *
 	 * @return the detail level for HTTP requests, or <jk>null</jk> if it's not set.
 	 */
-	public RestLoggingDetail getRequestDetail() {
+	public CallLoggingDetail getRequestDetail() {
 		return requestDetail;
 	}
 
@@ -389,7 +389,7 @@ public class RestLoggerRule {
 	 *
 	 * @return the detail level for HTTP responses, or <jk>null</jk> if it's not set.
 	 */
-	public RestLoggingDetail getResponseDetail() {
+	public CallLoggingDetail getResponseDetail() {
 		return responseDetail;
 	}
 

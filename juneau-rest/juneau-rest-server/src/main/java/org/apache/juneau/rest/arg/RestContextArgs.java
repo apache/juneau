@@ -22,7 +22,7 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.debug.*;
-import org.apache.juneau.rest.logging.*;
+import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.staticfile.*;
 import org.apache.juneau.rest.stats.*;
 import org.apache.juneau.utils.*;

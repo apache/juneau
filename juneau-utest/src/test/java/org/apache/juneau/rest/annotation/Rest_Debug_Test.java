@@ -17,7 +17,7 @@ import static org.junit.runners.MethodSorters.*;
 import org.apache.juneau.rest.RestRequest;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.config.*;
-import org.apache.juneau.rest.logging.*;
+import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.*;
@@ -27,7 +27,7 @@ public class Rest_Debug_Test {
 
 	public static final CaptureLogger LOGGER = new CaptureLogger();
 
-	public static class CaptureLogger extends BasicTestCaptureRestLogger {
+	public static class CaptureLogger extends BasicTestCaptureCallLogger {
 		public static CaptureLogger getInstance(RestLogger.Builder x) {
 			return LOGGER;
 		}

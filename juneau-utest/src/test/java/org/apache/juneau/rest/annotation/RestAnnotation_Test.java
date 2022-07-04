@@ -26,7 +26,7 @@ import org.apache.juneau.rest.arg.*;
 import org.apache.juneau.rest.converter.*;
 import org.apache.juneau.rest.debug.*;
 import org.apache.juneau.rest.guard.*;
-import org.apache.juneau.rest.logging.*;
+import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.processor.*;
 import org.apache.juneau.rest.staticfile.*;
 import org.apache.juneau.rest.swagger.*;
@@ -162,7 +162,7 @@ public class RestAnnotation_Test {
 				+ "allowedMethodParams:'allowedMethodParams',"
 				+ "beanStore:'org.apache.juneau.cp.BeanStore',"
 				+ "builder:'org.apache.juneau.rest.RestContext$Builder$Void',"
-				+ "callLogger:'org.apache.juneau.rest.logging.RestLogger',"
+				+ "callLogger:'org.apache.juneau.rest.logger.RestLogger',"
 				+ "children:['"+CNAME+"'],"
 				+ "clientVersionHeader:'clientVersionHeader',"
 				+ "config:'config',"
