@@ -86,6 +86,13 @@ import org.apache.juneau.oapi.*;
 public @interface Path {
 
 	/**
+	 * Default value for this parameter.
+	 *
+	 * @return The annotation value.
+	 */
+	String def() default "";
+
+	/**
 	 * URL path variable name.
 	 *
 	 * <p>

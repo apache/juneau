@@ -32,6 +32,7 @@ public class FormDataAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	FormData a1 = FormDataAnnotation.create()
+		.def("def")
 		.name("name")
 		.on("on")
 		.onClass(X1.class)
@@ -41,6 +42,7 @@ public class FormDataAnnotation_Test {
 		.build();
 
 	FormData a2 = FormDataAnnotation.create()
+		.def("def")
 		.name("name")
 		.on("on")
 		.onClass(X1.class)
@@ -53,6 +55,7 @@ public class FormDataAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().isMatches(""
 			+ "{"
+				+ "def:'def',"
 				+ "name:'name',"
 				+ "on:['on'],"
 				+ "onClass:['org.apache.juneau.http.annotation.FormDataAnnotation_Test$X1'],"
@@ -112,6 +115,7 @@ public class FormDataAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@FormData(
+		def="def",
 		name="name",
 		on="on",
 		onClass=X1.class,
@@ -123,6 +127,7 @@ public class FormDataAnnotation_Test {
 	FormData d1 = D1.class.getAnnotationsByType(FormData.class)[0];
 
 	@FormData(
+		def="def",
 		name="name",
 		on="on",
 		onClass=X1.class,

@@ -123,6 +123,13 @@ import org.apache.juneau.oapi.*;
 public @interface FormData {
 
 	/**
+	 * Default value for this parameter.
+	 *
+	 * @return The annotation value.
+	 */
+	String def() default "";
+
+	/**
 	 * FORM parameter name.
 	 *
 	 * <p>

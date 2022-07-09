@@ -90,7 +90,7 @@ import org.apache.juneau.rest.*;
  */
 public class RequestQueryParam extends RequestHttpPart implements NameValuePair {
 
-	private final String value;
+	private String value;
 
 	/**
 	 * Constructor.
@@ -102,6 +102,18 @@ public class RequestQueryParam extends RequestHttpPart implements NameValuePair 
 	public RequestQueryParam(RestRequest request, String name, String value) {
 		super(QUERY, request, name);
 		this.value = value;
+	}
+
+	/**
+	 * Sets a default value for this part.
+	 *
+	 * @param def The default value.
+	 * @return This object.
+	 */
+	public RequestQueryParam def(String def) {
+		if (value == null)
+			value = def;
+		return this;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -50,7 +50,7 @@ import org.apache.juneau.rest.util.*;
 public class PathArg implements RestOpArg {
 	private final HttpPartParser partParser;
 	private final HttpPartSchema schema;
-	private final String name;
+	private final String name, def;
 	private final Type type;
 
 	/**
@@ -76,6 +76,7 @@ public class PathArg implements RestOpArg {
 	 */
 	protected PathArg(ParamInfo paramInfo, AnnotationWorkList annotations, UrlPathMatcher pathMatcher) {
 		this.name = getName(paramInfo, pathMatcher);
+		this.def = findDef(paramInfo).orElse(null);
 		this.type = paramInfo.getParameterType().innerType();
 		this.schema = HttpPartSchema.create(Path.class, paramInfo);
 		Class<? extends HttpPartParser> pp = schema.getParser();
@@ -119,6 +120,6 @@ public class PathArg implements RestOpArg {
 			return req.getBeanSession().convertToType(m, type);
 		}
 		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
-		return req.getPathParams().get(name).parser(ps).schema(schema).as(type).orElse(null);
+		return req.getPathParams().get(name).parser(ps).schema(schema).def(def).as(type).orElse(null);
 	}
 }

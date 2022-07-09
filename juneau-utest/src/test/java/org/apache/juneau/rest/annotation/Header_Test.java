@@ -210,4 +210,114 @@ public class Header_Test {
 		e.get("/a").header("H1",7).header("H2",8).header("H3",9).run().assertContent().is("{h1:'7',h2:'8',h3:'9'}");
 		e.get("/a").header("h1",7).header("h2",8).header("h3",9).run().assertContent().is("{h1:'7',h2:'8',h3:'9'}");
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Default parameters
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Rest(serializers=SimpleJsonSerializer.class)
+	public static class F {
+		@RestGet
+		public Object a1(@Header(name="f1", def="1") Integer f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestGet
+		public Object a2(@Header(name="f1", def="1") Optional<Integer> f1) throws Exception {
+			assertNotNull(f1);
+			return f1.get();
+		}
+		@RestGet
+		public Object b1(@Header(name="f1", def="a=1,b=foo") ABean f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestGet
+		public Object b2(@Header(name="f1", def="a=1,b=foo") Optional<ABean> f1) throws Exception {
+			assertNotNull(f1);
+			return f1.get();
+		}
+		@RestGet
+		public Object c1(@Header(name="f1", def="@((a=1,b=foo))") List<ABean> f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestGet
+		public Object c2(@Header(name="f1", def="@((a=1,b=foo))") Optional<List<ABean>> f1) throws Exception {
+			assertNotNull(f1);
+			return f1.get();
+		}
+		@RestGet
+		public Object d(@Header(name="f1", def="@((a=1,b=foo))") List<Optional<ABean>> f1) throws Exception {
+			return f1;
+		}
+	}
+
+	@Test
+	public void f01_defaultHeaders() throws Exception {
+		RestClient f = MockRestClient.buildJson(F.class);
+		f.get("/a1")
+			.header("f1","123")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("123");
+		f.get("/a1")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("1");
+		f.get("/a2")
+			.header("f1","123")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("123");
+		f.get("/a2")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("1");
+		f.get("/b1")
+			.header("f1","a=2,b=bar")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("{a:2,b:'bar'}");
+		f.get("/b1")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("{a:1,b:'foo'}");
+		f.get("/b2")
+			.header("f1","a=2,b=bar")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("{a:2,b:'bar'}");
+		f.get("/b2")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("{a:1,b:'foo'}");
+		f.get("/c1")
+			.header("f1","@((a=2,b=bar))")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("[{a:2,b:'bar'}]");
+		f.get("/c1")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("[{a:1,b:'foo'}]");
+		f.get("/c2")
+			.header("f1","@((a=2,b=bar))")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("[{a:2,b:'bar'}]");
+		f.get("/c2")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("[{a:1,b:'foo'}]");
+		f.get("/d")
+			.header("f1","@((a=2,b=bar))")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("[{a:2,b:'bar'}]");
+		f.get("/d")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("[{a:1,b:'foo'}]");
+	}
 }

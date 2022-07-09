@@ -97,6 +97,13 @@ import org.apache.juneau.oapi.*;
 public @interface Query {
 
 	/**
+	 * Default value for this parameter.
+	 *
+	 * @return The annotation value.
+	 */
+	String def() default "";
+
+	/**
 	 * URL query parameter name.
 	 *
 	 * Required. The name of the parameter. Parameter names are case sensitive.

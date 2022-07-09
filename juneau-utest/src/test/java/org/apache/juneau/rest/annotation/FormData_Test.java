@@ -211,4 +211,112 @@ public class FormData_Test {
 			.assertCode().is(200)
 			.assertContent().is("null");
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Default form data parameter.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Rest(serializers=SimpleJsonSerializer.class)
+	public static class F {
+		@RestPost
+		public Object a1(@FormData(name="f1",def="1") Integer f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestPost
+		public Object a2(@FormData(name="f1",def="1") Optional<Integer> f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestPost
+		public Object b1(@FormData(name="f1",def="a=2,b=bar") ABean f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestPost
+		public Object b2(@FormData(name="f1",def="a=2,b=bar") Optional<ABean> f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestPost
+		public Object c1(@FormData(name="f1",def="@((a=2,b=bar))") List<ABean> f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestPost
+		public Object c2(@FormData(name="f1",def="@((a=2,b=bar))") Optional<List<ABean>> f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestPost
+		public Object d(@FormData(name="f1",def="@((a=2,b=bar))") List<Optional<ABean>> f1) throws Exception {
+			return f1;
+		}
+	}
+
+	@Test
+	public void f01_defaultParams() throws Exception {
+		RestClient f = MockRestClient.create(F.class).accept("application/json").contentType("application/x-www-form-urlencoded").build();
+
+		f.post("/a1", "f1=123")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("123");
+		f.post("/a1", "")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("1");
+		f.post("/a2", "f1=123")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("123");
+		f.post("/a2", "")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("1");
+
+		f.post("/b1", "f1=a=1,b=foo")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("{a:1,b:'foo'}");
+		f.post("/b1", "")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("{a:2,b:'bar'}");
+		f.post("/b2", "f1=a=1,b=foo")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("{a:1,b:'foo'}");
+		f.post("/b2", "")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("{a:2,b:'bar'}");
+
+		f.post("/c1", "f1=@((a=1,b=foo))")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("[{a:1,b:'foo'}]");
+		f.post("/c1", "null")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("[{a:2,b:'bar'}]");
+		f.post("/c2", "f1=@((a=1,b=foo))")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("[{a:1,b:'foo'}]");
+		f.post("/c2", "null")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("[{a:2,b:'bar'}]");
+
+
+		f.post("/d", "f1=@((a=1,b=foo))")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("[{a:1,b:'foo'}]");
+		f.post("/d", "null")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("[{a:2,b:'bar'}]");
+	}
 }

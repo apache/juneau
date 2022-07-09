@@ -288,4 +288,107 @@ public class Query_Test {
 			.assertCode().is(200)
 			.assertContent().is("null");
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Default parameters
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Rest(serializers=SimpleJsonSerializer.class)
+	public static class F {
+		@RestGet
+		public Object a1(@Query(name="f1", def="1") Integer f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestGet
+		public Object a2(@Query(name="f1", def="1") Optional<Integer> f1) throws Exception {
+			assertNotNull(f1);
+			return f1.get();
+		}
+		@RestGet
+		public Object b1(@Query(name="f1", def="a=1,b=foo") ABean f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestGet
+		public Object b2(@Query(name="f1", def="a=1,b=foo") Optional<ABean> f1) throws Exception {
+			assertNotNull(f1);
+			return f1.get();
+		}
+		@RestGet
+		public Object c1(@Query(name="f1", def="@((a=1,b=foo))") List<ABean> f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestGet
+		public Object c2(@Query(name="f1", def="@((a=1,b=foo))") Optional<List<ABean>> f1) throws Exception {
+			assertNotNull(f1);
+			return f1.get();
+		}
+		@RestGet
+		public Object d(@Query(name="f1", def="@((a=1,b=foo))") List<Optional<ABean>> f1) throws Exception {
+			return f1;
+		}
+	}
+
+	@Test
+	public void f01_defaultParams() throws Exception {
+		RestClient f = MockRestClient.buildJson(F.class);
+		f.get("/a1?f1=123")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("123");
+		f.get("/a1")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("1");
+		f.get("/a2?f1=123")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("123");
+		f.get("/a2")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("1");
+		f.get("/b1?f1=a=2,b=bar")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("{a:2,b:'bar'}");
+		f.get("/b1")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("{a:1,b:'foo'}");
+		f.get("/b2?f1=a=2,b=bar")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("{a:2,b:'bar'}");
+		f.get("/b2")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("{a:1,b:'foo'}");
+		f.get("/c1?f1=@((a=2,b=bar))")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("[{a:2,b:'bar'}]");
+		f.get("/c1")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("[{a:1,b:'foo'}]");
+		f.get("/c2?f1=@((a=2,b=bar))")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("[{a:2,b:'bar'}]");
+		f.get("/c2")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("[{a:1,b:'foo'}]");
+		f.get("/d?f1=@((a=2,b=bar))")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("[{a:2,b:'bar'}]");
+		f.get("/d")
+			.run()
+			.assertCode().is(200)
+			.assertContent().is("[{a:1,b:'foo'}]");
+	}
 }
