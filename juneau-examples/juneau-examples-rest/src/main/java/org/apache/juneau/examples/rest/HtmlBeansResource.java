@@ -54,7 +54,6 @@ import org.apache.juneau.rest.widget.*;
 	},
 	asideFloat="RIGHT"
 )
-@SuppressWarnings("javadoc")
 public class HtmlBeansResource extends BasicRestObject implements BasicUniversalConfig {
 
 	@SuppressWarnings("unused")

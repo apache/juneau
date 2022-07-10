@@ -14,8 +14,11 @@ package org.apache.juneau.microservice;
 
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
+import static org.apache.juneau.internal.FileUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+
 import java.io.*;
 import java.io.Console;
 import java.net.*;
@@ -25,6 +28,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.jar.*;
 import java.util.logging.*;
+import java.util.logging.Formatter;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
@@ -36,6 +40,7 @@ import org.apache.juneau.config.vars.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.microservice.console.*;
+import org.apache.juneau.microservice.resources.*;
 import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.svl.*;
 import org.apache.juneau.svl.vars.*;
@@ -140,6 +145,7 @@ public class Microservice implements ConfigEventListener {
 		Args args;
 		ManifestFile manifest;
 		Logger logger;
+		LogConfig logConfig;
 		Config config;
 		String configName;
 		ConfigStore configStore;
@@ -167,6 +173,7 @@ public class Microservice implements ConfigEventListener {
 			this.manifest = copyFrom.manifest;
 			this.logger = copyFrom.logger;
 			this.configName = copyFrom.configName;
+			this.logConfig = copyFrom.logConfig == null ? null : copyFrom.logConfig.copy();
 			this.consoleEnabled = copyFrom.consoleEnabled;
 			this.configBuilder = copyFrom.configBuilder;
 			this.varResolver = copyFrom.varResolver;
@@ -283,11 +290,31 @@ public class Microservice implements ConfigEventListener {
 		/**
 		 * Specifies the logger used by the microservice and returned by the {@link Microservice#getLogger()} method.
 		 *
+		 * <p>
+		 * Calling this method overrides the default logging mechanism controlled by the {@link #logConfig(LogConfig)} method.
+		 *
 		 * @param logger The logger to use for logging microservice messages.
 		 * @return This object.
 		 */
 		public Builder logger(Logger logger) {
 			this.logger = logger;
+			return this;
+		}
+
+		/**
+		 * Specifies logging instructions for the microservice.
+		 *
+		 * <p>
+		 * If not specified, the values are taken from the <js>"Logging"</js> section of the configuration.
+		 *
+		 * <p>
+		 * This method is ignored if {@link #logger(Logger)} is used to set the microservice logger.
+		 *
+		 * @param logConfig The log configuration.
+		 * @return This object.
+		 */
+		public Builder logConfig(LogConfig logConfig) {
+			this.logConfig = logConfig;
 			return this;
 		}
 
@@ -522,6 +549,7 @@ public class Microservice implements ConfigEventListener {
 
 	final Messages messages = Messages.of(Microservice.class);
 
+	private final Builder builder;
 	private final Args args;
 	private final Config config;
 	private final ManifestFile manifest;
@@ -535,7 +563,7 @@ public class Microservice implements ConfigEventListener {
 	final File workingDir;
 	private final String configName;
 
-	private volatile Logger logger = Logger.getGlobal();
+	private volatile Logger logger;
 
 	/**
 	 * Constructor.
@@ -544,8 +572,10 @@ public class Microservice implements ConfigEventListener {
 	 * @throws IOException Problem occurred reading file.
 	 * @throws ParseException Malformed input encountered.
 	 */
+	@SuppressWarnings("resource")
 	protected Microservice(Builder builder) throws IOException, ParseException {
 		setInstance(this);
+		this.builder = builder.copy();
 		this.workingDir = builder.workingDir;
 		this.configName = builder.configName;
 
@@ -733,6 +763,53 @@ public class Microservice implements ConfigEventListener {
 		if (spKeys != null)
 			for (String key : spKeys)
 				System.setProperty(key, config.get("SystemProperties/"+key).orElse(null));
+
+		// --------------------------------------------------------------------------------
+		// Initialize logging.
+		// --------------------------------------------------------------------------------
+		this.logger = builder.logger;
+		LogConfig logConfig = builder.logConfig != null ? builder.logConfig : new LogConfig();
+		if (this.logger == null) {
+			LogManager.getLogManager().reset();
+			this.logger = Logger.getLogger("");
+			String logFile = firstNonNull(logConfig.logFile, config.get("Logging/logFile").orElse(null));
+
+			if (isNotEmpty(logFile)) {
+				String logDir = firstNonNull(logConfig.logDir, config.get("Logging/logDir").orElse("."));
+				File logDirFile = resolveFile(logDir);
+				mkdirs(logDirFile, false);
+				logDir = logDirFile.getAbsolutePath();
+				System.setProperty("juneau.logDir", logDir);
+
+				boolean append = firstNonNull(logConfig.append, config.get("Logging/append").asBoolean().orElse(false));
+				int limit = firstNonNull(logConfig.limit, config.get("Logging/limit").asInteger().orElse(1024*1024));
+				int count = firstNonNull(logConfig.count, config.get("Logging/count").asInteger().orElse(1));
+
+				FileHandler fh = new FileHandler(logDir + '/' + logFile, limit, count, append);
+
+				Formatter f = logConfig.formatter;
+				if (f == null) {
+					String format = config.get("Logging/format").orElse("[{date} {level}] {msg}%n");
+					String dateFormat = config.get("Logging/dateFormat").orElse("yyyy.MM.dd hh:mm:ss");
+					boolean useStackTraceHashes = config.get("Logging/useStackTraceHashes").asBoolean().orElse(false);
+					f = new LogEntryFormatter(format, dateFormat, useStackTraceHashes);
+				}
+				fh.setFormatter(f);
+				fh.setLevel(firstNonNull(logConfig.fileLevel, config.get("Logging/fileLevel").as(Level.class).orElse(Level.INFO)));
+				logger.addHandler(fh);
+
+				ConsoleHandler ch = new ConsoleHandler();
+				ch.setLevel(firstNonNull(logConfig.consoleLevel, config.get("Logging/consoleLevel").as(Level.class).orElse(Level.WARNING)));
+				ch.setFormatter(f);
+				logger.addHandler(ch);
+			}
+		}
+
+		JsonMap loggerLevels = config.get("Logging/levels").as(JsonMap.class).orElseGet(JsonMap::new);
+		for (String l : loggerLevels.keySet())
+			Logger.getLogger(l).setLevel(loggerLevels.get(l, Level.class));
+		for (String l : logConfig.levels.keySet())
+			Logger.getLogger(l).setLevel(logConfig.levels.get(l));
 
 		return this;
 	}
