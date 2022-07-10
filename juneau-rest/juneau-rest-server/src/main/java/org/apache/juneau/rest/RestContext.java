@@ -62,6 +62,7 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.arg.*;
 import org.apache.juneau.rest.debug.*;
+import org.apache.juneau.rest.filefinder.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.processor.*;
@@ -233,7 +234,7 @@ public class RestContext extends Context {
 		private HttpPartSerializer.Creator partSerializer;
 		private HttpPartParser.Creator partParser;
 		private JsonSchemaGenerator.Builder jsonSchemaGenerator;
-		private FileFinder.Builder fileFinder;
+		private BeanCreator<FileFinder> fileFinder;
 		private StaticFiles.Builder staticFiles;
 		private HeaderList.Builder defaultRequestHeaders, defaultResponseHeaders;
 		private NamedAttributeList.Builder defaultRequestAttributes;
@@ -2351,40 +2352,40 @@ public class RestContext extends Context {
 		//-----------------------------------------------------------------------------------------------------------------
 
 		/**
-		 * Returns the file finder sub-builder.
+		 * Returns the file finder bean creator.
 		 *
-		 * @return The file finder sub-builder.
+		 * @return The file finder bean creator.
 		 */
-		public FileFinder.Builder fileFinder() {
+		public BeanCreator<FileFinder> fileFinder() {
 			if (fileFinder == null)
-				fileFinder = createFileFinder(beanStore(), resource());
+				fileFinder = createFileFinder();
 			return fileFinder;
 		}
 
 		/**
-		 * Applies an operation to the file finder sub-builder.
+		 * Specifies the file finder class to use for this REST context.
 		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.fileFinder(<jv>x</jv> -&gt; <jv>x</jv>.dir(<js>"/mydir"</js>)))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
+		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		public Builder fileFinder(Consumer<FileFinder.Builder> operation) {
-			operation.accept(fileFinder());
+		public Builder fileFinder(Class<? extends FileFinder> value) {
+			fileFinder().type(value);
 			return this;
 		}
 
 		/**
-		 * Instantiates the file finder sub-builder.
+		 * Specifies the file finder class to use for this REST context.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder fileFinder(FileFinder value) {
+			fileFinder().impl(value);
+			return this;
+		}
+
+		/**
+		 * Instantiates the file finder bean creator.
 		 *
 		 * <p>
 		 * The file finder is used to retrieve localized files from the classpath.
@@ -2403,7 +2404,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <p>
-		 * The file finder is instantiated via the {@link RestContext.Builder#createFileFinder(BeanStore,Supplier)} method which in turn instantiates
+		 * The file finder is instantiated via the {@link RestContext.Builder#createFileFinder()} method which in turn instantiates
 		 * based on the following logic:
 		 * <ul>
 		 * 	<li>Returns the resource class itself if it's an instance of {@link FileFinder}.
@@ -2503,56 +2504,28 @@ public class RestContext extends Context {
 		 * 	<li>{@link BeanStore} - The bean store of this REST context.
 		 * 	<li>Any {@doc juneau-rest-server-springboot injected bean} types.  Use {@link Optional} arguments for beans that may not exist.
 		 * </ul>
-		 *
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @return A new file finder sub-builder.
+		 * @return A new file finder bean creator.
 		 */
-		protected FileFinder.Builder createFileFinder(BeanStore beanStore, Supplier<?> resource) {
+		protected BeanCreator<FileFinder> createFileFinder() {
 
-			// Default value.
-			Value<FileFinder.Builder> v = Value.of(
-				FileFinder
-					.create(beanStore)
-					.dir("static")
-					.dir("htdocs")
-					.cp(resourceClass, "htdocs", true)
-					.cp(resourceClass, "/htdocs", true)
-					.caching(1_000_000)
-					.exclude("(?i).*\\.(class|properties)")
-			);
-
-			// Replace with bean from bean store.
-			rootBeanStore
-				.getBean(FileFinder.class)
-				.ifPresent(x -> v.get().impl(x));
-
-			// Replace with this bean.
-			resourceAs(FileFinder.class)
-				.ifPresent(x -> v.get().impl(x));
+			BeanCreator<FileFinder> creator = beanStore.createBean(FileFinder.class).type(BasicRestFileFinder.class);
 
 			// Specify the bean type if its set as a default.
 			defaultClasses()
 				.get(FileFinder.class)
-				.ifPresent(x -> v.get().type(x));
+				.ifPresent(x -> creator.type(x));
 
-			// Replace with builder from:  public [static] FileFinder.Builder createFileFinder(<args>)
-			beanStore
-				.createMethodFinder(FileFinder.Builder.class)
-				.addBean(FileFinder.Builder.class, v.get())
-				.find("createFileFinder")
-				.run(x -> v.set(x));
+			rootBeanStore
+				.getBean(FileFinder.class)
+				.ifPresent(x -> creator.impl(x));
 
 			// Replace with bean from:  public [static] FileFinder createFileFinder(<args>)
 			beanStore
 				.createMethodFinder(FileFinder.class)
-				.addBean(FileFinder.Builder.class, v.get())
 				.find("createFileFinder")
-				.run(x -> v.get().impl(x));
+				.run(x -> creator.impl(x));
 
-			return v.get();
+			return creator;
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -5836,7 +5809,7 @@ public class RestContext extends Context {
 			partSerializer = bs.add(HttpPartSerializer.class, builder.partSerializer().create());
 			partParser = bs.add(HttpPartParser.class, builder.partParser().create());
 			jsonSchemaGenerator = bs.add(JsonSchemaGenerator.class, builder.jsonSchemaGenerator().build());
-			fileFinder = bs.add(FileFinder.class, builder.fileFinder().build());
+			fileFinder = bs.add(FileFinder.class, builder.fileFinder().orElse(null));
 			staticFiles = bs.add(StaticFiles.class, builder.staticFiles().build());
 			defaultRequestHeaders = bs.add(HeaderList.class, builder.defaultRequestHeaders().build(), "RestContext.defaultRequestHeaders");
 			defaultResponseHeaders = bs.add(HeaderList.class, builder.defaultResponseHeaders().build(), "RestContext.defaultResponseHeaders");
