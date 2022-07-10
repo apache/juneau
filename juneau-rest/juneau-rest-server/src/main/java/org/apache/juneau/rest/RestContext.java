@@ -243,7 +243,7 @@ public class RestContext extends Context {
 		private MethodList startCallMethods, endCallMethods, postInitMethods, postInitChildFirstMethods, destroyMethods, preCallMethods, postCallMethods;
 		private RestOperations.Builder restOperations;
 		private RestChildren.Builder restChildren;
-		private SwaggerProvider.Builder swaggerProvider;
+		private BeanCreator<SwaggerProvider> swaggerProvider;
 		private BeanContext.Builder beanContext;
 		private EncoderSet.Builder encoders;
 		private SerializerSet.Builder serializers;
@@ -4069,31 +4069,31 @@ public class RestContext extends Context {
 		 *
 		 * @return The swagger provider sub-builder.
 		 */
-		public SwaggerProvider.Builder swaggerProvider() {
+		public BeanCreator<SwaggerProvider> swaggerProvider() {
 			if (swaggerProvider == null)
-				swaggerProvider = createSwaggerProvider(beanStore(), resource());
+				swaggerProvider = createSwaggerProvider();
 			return swaggerProvider;
 		}
 
 		/**
-		 * Applies an operation to the swagger provider sub-builder.
+		 * Specifies the call logger class to use for this REST context.
 		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.swaggerProvider(<jv>x</jv> -&gt; <jv>x</jv>.fileFinder(<jv>aDifferentFileFinder</jv>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
+		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		public Builder swaggerProvider(Consumer<SwaggerProvider.Builder> operation) {
-			operation.accept(swaggerProvider());
+		public Builder swaggerProvider(Class<? extends SwaggerProvider> value) {
+			swaggerProvider().type(value);
+			return this;
+		}
+
+		/**
+		 * Specifies the call logger class to use for this REST context.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder swaggerProvider(SwaggerProvider value) {
+			swaggerProvider().impl(value);
 			return this;
 		}
 
@@ -4125,48 +4125,28 @@ public class RestContext extends Context {
 		 * 	<li class='jm'>{@link RestContext.Builder#swaggerProvider(SwaggerProvider)}
 		 * </ul>
 		 *
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new swagger provider sub-builder.
 		 */
-		protected SwaggerProvider.Builder createSwaggerProvider(BeanStore beanStore, Supplier<?> resource) {
+		protected BeanCreator<SwaggerProvider> createSwaggerProvider() {
 
-			// Default value.
-			Value<SwaggerProvider.Builder> v = Value.of(
-				SwaggerProvider
-					.create(beanStore)
-					.varResolver(()->beanStore.getBean(VarResolver.class).orElseThrow(()->new RuntimeException("VarResolver bean not found.")))
-					.fileFinder(()->beanStore.getBean(FileFinder.class).orElseThrow(()->new RuntimeException("FileFinder bean not found.")))
-					.messages(()->beanStore.getBean(Messages.class).orElseThrow(()->new RuntimeException("Messages bean not found.")))
-					.jsonSchemaGenerator(()->beanStore.getBean(JsonSchemaGenerator.class).orElseThrow(()->new RuntimeException("JsonSchemaGenerator bean not found.")))
-			);
+			BeanCreator<SwaggerProvider> creator = beanStore.createBean(SwaggerProvider.class).type(BasicSwaggerProvider.class);
 
-			// Replace with builder from bean store.
+			// Specify the bean type if its set as a default.
+			defaultClasses()
+				.get(SwaggerProvider.class)
+				.ifPresent(x -> creator.type(x));
+
 			rootBeanStore
 				.getBean(SwaggerProvider.class)
-				.ifPresent(x -> v.get().impl(x));
-
-			// Replace with this bean.
-			resourceAs(SwaggerProvider.class)
-				.ifPresent(x -> v.get().impl(x));
-
-			// Replace with builder from:  public [static] SwaggerProvider.Builder createSwaggerProvider(<args>)
-			beanStore
-				.createMethodFinder(SwaggerProvider.Builder.class)
-				.addBean(SwaggerProvider.Builder.class, v.get())
-				.find("createSwaggerProvider")
-				.run(x -> v.set(x));
+				.ifPresent(x -> creator.impl(x));
 
 			// Replace with bean from:  public [static] SwaggerProvider createSwaggerProvider(<args>)
 			beanStore
 				.createMethodFinder(SwaggerProvider.class)
-				.addBean(SwaggerProvider.Builder.class, v.get())
 				.find("createSwaggerProvider")
-				.run(x -> v.get().impl(x));
+				.run(x -> creator.impl(x));
 
-			return v.get();
+			return creator;
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -5493,46 +5473,6 @@ public class RestContext extends Context {
 			return optional(consumes);
 		}
 
-		/**
-		 * Swagger provider.
-		 *
-		 * <p>
-		 * Class used to retrieve swagger information about a resource.
-		 *
-		 * <p>
-		 * This setting is inherited from the parent context if not specified.
-		 * <br>The default is {@link BasicSwaggerProvider}.
-		 *
-		 * <ul class='seealso'>
-		 * 	<li class='ja'>{@link Rest#swaggerProvider}
-		 * </ul>
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 */
-		@FluentSetter
-		public Builder swaggerProvider(Class<? extends SwaggerProvider> value) {
-			swaggerProvider().type(value);
-			return this;
-		}
-
-		/**
-		 * Swagger provider.
-		 *
-		 * <p>
-		 * Same as {@link #swaggerProvider(Class)} except input is a pre-constructed instance.
-		 *
-		 * @param value
-		 * 	The new value for this setting.
-		 * @return This object.
-		 */
-		@FluentSetter
-		public Builder swaggerProvider(SwaggerProvider value) {
-			swaggerProvider().impl(value);
-			return this;
-		}
-
 		// <FluentSetters>
 
 		@Override /* GENERATED - org.apache.juneau.Context.Builder */
@@ -5796,7 +5736,7 @@ public class RestContext extends Context {
 			postCallMethods = builder.postCallMethods();
 			restOperations = builder.restOperations(this).build();
 			restChildren = builder.restChildren(this).build();
-			swaggerProvider = builder.swaggerProvider().build();
+			swaggerProvider = bs.add(SwaggerProvider.class, builder.swaggerProvider().orElse(null));
 
 			List<RestOpContext> opContexts = restOperations.getOpContexts();
 
