@@ -31,8 +31,8 @@ public class BasicRestFileFinder extends BasicFileFinder {
 				.create(beanStore)
 				.dir("static")
 				.dir("htdocs")
-				.cp(beanStore.getBean(ResourceSupplier.class).get().getClass(), "htdocs", true)
-				.cp(beanStore.getBean(ResourceSupplier.class).get().getClass(), "/htdocs", true)
+				.cp(beanStore.getBean(ResourceSupplier.class).get().getResourceClass(), "htdocs", true)
+				.cp(beanStore.getBean(ResourceSupplier.class).get().getResourceClass(), "/htdocs", true)
 				.caching(1_000_000)
 				.exclude("(?i).*\\.(class|properties)")
 		);

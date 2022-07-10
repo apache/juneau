@@ -235,7 +235,7 @@ public class RestContext extends Context {
 		private HttpPartParser.Creator partParser;
 		private JsonSchemaGenerator.Builder jsonSchemaGenerator;
 		private BeanCreator<FileFinder> fileFinder;
-		private StaticFiles.Builder staticFiles;
+		private BeanCreator<StaticFiles> staticFiles;
 		private HeaderList.Builder defaultRequestHeaders, defaultResponseHeaders;
 		private NamedAttributeList.Builder defaultRequestAttributes;
 		private RestOpArgList.Builder restOpArgs;
@@ -325,7 +325,7 @@ public class RestContext extends Context {
 				return this;
 			initialized = true;
 
-			this.resource = new ResourceSupplier(resource);
+			this.resource = new ResourceSupplier(resourceClass, resource);
 			Supplier<?> r = this.resource;
 			Class<?> rc = resourceClass;
 
@@ -2533,40 +2533,40 @@ public class RestContext extends Context {
 		//-----------------------------------------------------------------------------------------------------------------
 
 		/**
-		 * Returns the static files sub-builder.
+		 * Returns the static files bean creator.
 		 *
-		 * @return The static files sub-builder.
+		 * @return The static files bean creator.
 		 */
-		public StaticFiles.Builder staticFiles() {
+		public BeanCreator<StaticFiles> staticFiles() {
 			if (staticFiles == null)
-				staticFiles = createStaticFiles(beanStore(), resource());
+				staticFiles = createStaticFiles();
 			return staticFiles;
 		}
 
 		/**
-		 * Applies an operation to the static files sub-builder.
+		 * Specifies the static files class to use for this REST context.
 		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.staticFiles(<jv>x</jv> -&gt; <jv>x</jv>.dir(<js>"/mydir"</js>)))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
+		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		public Builder staticFiles(Consumer<StaticFiles.Builder> operation) {
-			operation.accept(staticFiles());
+		public Builder staticFiles(Class<? extends StaticFiles> value) {
+			staticFiles().type(value);
 			return this;
 		}
 
 		/**
-		 * Instantiates the static files sub-builder.
+		 * Specifies the static files class to use for this REST context.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder staticFiles(StaticFiles value) {
+			staticFiles().impl(value);
+			return this;
+		}
+
+		/**
+		 * Instantiates the static files bean creator.
 		 *
 		 * <p>
 		 * Used to retrieve localized files to be served up as static files through the REST API via the following
@@ -2584,7 +2584,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <p>
-		 * The static file finder is instantiated via the {@link RestContext.Builder#createStaticFiles(BeanStore,Supplier)} method which in turn instantiates
+		 * The static file finder is instantiated via the {@link RestContext.Builder#createStaticFiles()} method which in turn instantiates
 		 * based on the following logic:
 		 *
 		 * <ol class='spaced-list'>
@@ -2657,57 +2657,28 @@ public class RestContext extends Context {
 		 * 	<jk>public class</jk> MyResource {...}
 		 * </p>
 		 *
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new static files sub-builder.
 		 */
-		protected StaticFiles.Builder createStaticFiles(BeanStore beanStore, Supplier<?> resource) {
+		protected BeanCreator<StaticFiles> createStaticFiles() {
 
-			// Default value.
-			Value<StaticFiles.Builder> v = Value.of(
-				StaticFiles
-					.create(beanStore)
-					.type(BasicStaticFiles.class)
-					.dir("static")
-					.dir("htdocs")
-					.cp(resourceClass, "htdocs", true)
-					.cp(resourceClass, "/htdocs", true)
-					.caching(1_000_000)
-					.exclude("(?i).*\\.(class|properties)")
-					.headers(cacheControl("max-age=86400, public"))
-			);
-
-			// Replace with bean from bean store.
-			rootBeanStore
-				.getBean(StaticFiles.class)
-				.ifPresent(x -> v.get().impl(x));
-
-			// Replace with this bean.
-			resourceAs(StaticFiles.class)
-				.ifPresent(x -> v.get().impl(x));
+			BeanCreator<StaticFiles> creator = beanStore.createBean(StaticFiles.class).type(BasicStaticFiles.class);
 
 			// Specify the bean type if its set as a default.
 			defaultClasses()
 				.get(StaticFiles.class)
-				.ifPresent(x -> v.get().type(x));
+				.ifPresent(x -> creator.type(x));
 
-			// Replace with builder from:  public [static] StaticFiles.Builder createStaticFiles(<args>)
-			beanStore
-				.createMethodFinder(StaticFiles.Builder.class)
-				.addBean(StaticFiles.Builder.class, v.get())
-				.find("createStaticFiles")
-				.run(x -> v.set(x));
+			rootBeanStore
+				.getBean(StaticFiles.class)
+				.ifPresent(x -> creator.impl(x));
 
 			// Replace with bean from:  public [static] StaticFiles createStaticFiles(<args>)
 			beanStore
 				.createMethodFinder(StaticFiles.class)
-				.addBean(StaticFiles.Builder.class, v.get())
 				.find("createStaticFiles")
-				.run(x -> v.get().impl(x));
+				.run(x -> creator.impl(x));
 
-			return v.get();
+			return creator;
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -5810,7 +5781,7 @@ public class RestContext extends Context {
 			partParser = bs.add(HttpPartParser.class, builder.partParser().create());
 			jsonSchemaGenerator = bs.add(JsonSchemaGenerator.class, builder.jsonSchemaGenerator().build());
 			fileFinder = bs.add(FileFinder.class, builder.fileFinder().orElse(null));
-			staticFiles = bs.add(StaticFiles.class, builder.staticFiles().build());
+			staticFiles = bs.add(StaticFiles.class, builder.staticFiles().orElse(null));
 			defaultRequestHeaders = bs.add(HeaderList.class, builder.defaultRequestHeaders().build(), "RestContext.defaultRequestHeaders");
 			defaultResponseHeaders = bs.add(HeaderList.class, builder.defaultResponseHeaders().build(), "RestContext.defaultResponseHeaders");
 			defaultRequestAttributes = bs.add(NamedAttributeList.class, builder.defaultRequestAttributes().build(), "RestContext.defaultRequestAttributes");

@@ -23,14 +23,30 @@ import java.util.function.*;
 public class ResourceSupplier implements Supplier<Object> {
 
 	private final Supplier<?> supplier;
+	private final Class<?> resourceClass;
 
 	/**
 	 * Constructor.
 	 *
+	 * @param resourceClass The resource class.
+	 * 	<br>May or may not be the same as the object returned by the supplier (e.g. supplier returns a proxy).
 	 * @param supplier The supplier of the bean.
 	 */
-	public ResourceSupplier(Supplier<?> supplier) {
+	public ResourceSupplier(Class<?> resourceClass, Supplier<?> supplier) {
+		this.resourceClass = resourceClass;
 		this.supplier = supplier;
+	}
+
+	/**
+	 * Returns the resource class.
+	 *
+	 * <p>
+	 * May or may not be the same as the object returned by the supplier (e.g. supplier returns a proxy).
+	 *
+	 * @return The resource class.
+	 */
+	public Class<?> getResourceClass() {
+		return resourceClass;
 	}
 
 	@Override

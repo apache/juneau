@@ -29,6 +29,7 @@ import org.apache.juneau.cp.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.rest.*;
 
 /**
  * API for retrieving localized static files from either the classpath or file system.
@@ -57,6 +58,25 @@ public class BasicStaticFiles implements StaticFiles {
 	 */
 	public static StaticFiles.Builder create(BeanStore beanStore) {
 		return new StaticFiles.Builder(beanStore);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param beanStore The bean store containing injectable beans for this logger.
+	 */
+	public BasicStaticFiles(BeanStore beanStore) {
+		this(StaticFiles
+			.create(beanStore)
+			.type(BasicStaticFiles.class)
+			.dir("static")
+			.dir("htdocs")
+			.cp(beanStore.getBean(ResourceSupplier.class).get().getResourceClass(), "htdocs", true)
+			.cp(beanStore.getBean(ResourceSupplier.class).get().getResourceClass(), "/htdocs", true)
+			.caching(1_000_000)
+			.exclude("(?i).*\\.(class|properties)")
+			.headers(cacheControl("max-age=86400, public"))
+		);
 	}
 
 	/**
