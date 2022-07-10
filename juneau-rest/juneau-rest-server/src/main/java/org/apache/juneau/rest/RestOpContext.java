@@ -2238,7 +2238,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			if (builder.debug == null)
 				debug = context.getDebugEnablement();
 			else
-				debug = DebugEnablement.create(context.getRootBeanStore()).enable(builder.debug, "*").build();
+				debug = DebugEnablement.create(context.getBeanStore()).enable(builder.debug, "*").build();
 
 			mi = MethodInfo.of(method).accessible();
 			Object r = context.getResource();

@@ -12,82 +12,104 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.debug;
 
-import static org.apache.juneau.internal.ObjectUtils.*;
-import static org.apache.juneau.Enablement.*;
-import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
 
-import java.lang.reflect.*;
-import java.util.function.*;
-
-import javax.servlet.http.*;
+import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.cp.*;
+import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.utils.*;
+import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.svl.*;
 
 /**
  * Default implementation of the {@link DebugEnablement} interface.
+ * 
+ * <p>
+ * Enables debug mode based on the following annotations:
+ * <ul>
+ * 	<li class='ja'>{@link Rest#debug()}
+ * 	<li class='ja'>{@link RestOp#debug()}
+ * 	<li class='ja'>{@link Rest#debugOn()}
+ * </ul>
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class BasicDebugEnablement implements DebugEnablement {
-
-	private final Enablement defaultEnablement;
-	private final ReflectionMap<Enablement> enablementMap;
-	private final Predicate<HttpServletRequest> conditionalPredicate;
+public class BasicDebugEnablement extends DebugEnablement {
 
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder containing the settings for this bean.
+	 * @param beanStore The bean store containing injectable beans for this enablement.
 	 */
-	public BasicDebugEnablement(DebugEnablement.Builder builder) {
-		this.defaultEnablement = firstNonNull(builder.defaultEnablement, NEVER);
-		this.enablementMap = builder.mapBuilder.build();
-		this.conditionalPredicate = firstNonNull(builder.conditional, x -> "true".equalsIgnoreCase(x.getHeader("Debug")));
+	public BasicDebugEnablement(BeanStore beanStore) {
+		super(beanStore);
 	}
 
 	@Override
-	public boolean isDebug(RestOpContext context, HttpServletRequest req) {
-		Method m = context.getJavaMethod();
-		Enablement e = enablementMap.find(m).orElse(enablementMap.find(m.getDeclaringClass()).orElse(defaultEnablement));
-		return e == ALWAYS || (e == CONDITIONAL && isConditionallyEnabled(req));
-	}
+	protected Builder init(BeanStore beanStore) {
+		Builder b = super.init(beanStore);
 
-	@Override
-	public boolean isDebug(RestContext context, HttpServletRequest req) {
-		Class<?> c = context.getResourceClass();
-		Enablement e = enablementMap.find(c).orElse(defaultEnablement);
-		return e == ALWAYS || (e == CONDITIONAL && isConditionallyEnabled(req));
-	}
+		DefaultSettingsMap defaultSettings = beanStore.getBean(DefaultSettingsMap.class).get();
+		RestContext.Builder builder = beanStore.getBean(RestContext.Builder.class).get();
+		ResourceSupplier resource = beanStore.getBean(ResourceSupplier.class).get();
+		VarResolver varResolver = beanStore.getBean(VarResolver.class).get();
 
-	/**
-	 * Returns <jk>true</jk> if debugging is conditionally enabled on the specified request.
-	 *
-	 * <p>
-	 * This method only gets called when the enablement value resolves to {@link Enablement#CONDITIONAL CONDITIONAL}.
-	 *
-	 * <p>
-	 * Subclasses can override this method to provide their own implementation.
-	 * The default implementation is provided by {@link DebugEnablement.Builder#conditional(Predicate)}
-	 * which has a default predicate of <c><jv>x</jv> -&gt; <js>"true"</js>.equalsIgnoreCase(<jv>x</jv>.getHeader(<js>"Debug"</js>)</c>.
-	 *
-	 * @param req The incoming HTTP request.
-	 * @return <jk>true</jk> if debugging is conditionally enabled on the specified request.
-	 */
-	protected boolean isConditionallyEnabled(HttpServletRequest req) {
-		return conditionalPredicate.test(req);
-	}
+		// Default debug enablement if not overridden at class/method level.
+		Enablement debugDefault = defaultSettings.get(Enablement.class, "RestContext.debugDefault").orElse(builder.isDebug() ? Enablement.ALWAYS : Enablement.NEVER);
+		b.defaultEnable(debugDefault);
 
-	@Override /* Object */
-	public String toString() {
-		return filteredMap()
-			.append("defaultEnablement", defaultEnablement)
-			.append("enablementMap", enablementMap)
-			.append("conditionalPredicate", conditionalPredicate)
-			.asString();
+		ClassInfo ci = ClassInfo.ofProxy(resource.get());
+
+		// Gather @Rest(debug) settings.
+		ci.forEachAnnotation(
+			Rest.class,
+			x -> true,
+			x -> {
+				String x2 = varResolver.resolve(x.debug());
+				if (! x2.isEmpty())
+					b.enable(Enablement.fromString(x2), ci.getFullName());
+			}
+		);
+
+		// Gather @RestOp(debug) settings.
+		ci.forEachPublicMethod(
+			x -> true,
+			x -> {
+				x.getAnnotationList(REST_OP_GROUP).forEachValue(
+					String.class,
+					"debug",
+					y -> true,
+					y -> {
+						String y2 = varResolver.resolve(y);
+						if (! y2.isEmpty())
+							b.enable(Enablement.fromString(y2), x.getFullName());
+					}
+				);
+			}
+		);
+
+		// Gather @Rest(debugOn) settings.
+		ci.forEachAnnotation(
+			Rest.class,
+			x -> true,
+			x -> {
+				String x2 = varResolver.resolve(x.debugOn());
+				for (Map.Entry<String,String> e : splitMap(x2, true).entrySet()) {
+					String k = e.getKey(), v = e.getValue();
+					if (v.isEmpty())
+						v = "ALWAYS";
+					if (! k.isEmpty())
+						b.enable(Enablement.fromString(v), k);
+				}
+			}
+		);
+
+		return b;
 	}
 }

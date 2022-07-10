@@ -211,7 +211,7 @@ public class RestContext extends Context {
 
 		private boolean initialized;
 
-		Supplier<?> resource;
+		ResourceSupplier resource;
 		ServletContext servletContext;
 
 		final ServletConfig inner;
@@ -238,7 +238,7 @@ public class RestContext extends Context {
 		private HeaderList.Builder defaultRequestHeaders, defaultResponseHeaders;
 		private NamedAttributeList.Builder defaultRequestAttributes;
 		private RestOpArgList.Builder restOpArgs;
-		private DebugEnablement.Builder debugEnablement;
+		private BeanCreator<DebugEnablement> debugEnablement;
 		private MethodList startCallMethods, endCallMethods, postInitMethods, postInitChildFirstMethods, destroyMethods, preCallMethods, postCallMethods;
 		private RestOperations.Builder restOperations;
 		private RestChildren.Builder restChildren;
@@ -324,13 +324,14 @@ public class RestContext extends Context {
 				return this;
 			initialized = true;
 
-			this.resource = resource;
+			this.resource = new ResourceSupplier(resource);
 			Supplier<?> r = this.resource;
 			Class<?> rc = resourceClass;
 
 			beanStore = createBeanStore(rc, r)
 				.build()
 				.addBean(Builder.class, this)
+				.addBean(ResourceSupplier.class, this.resource)
 				.addBean(ServletConfig.class, inner != null ? inner : this)
 				.addBean(ServletContext.class, (inner != null ? inner : this).getServletContext());
 
@@ -3359,7 +3360,7 @@ public class RestContext extends Context {
 		//-----------------------------------------------------------------------------------------------------------------
 
 		/**
-		 * Returns the debug enablement sub-builder.
+		 * Returns the debug enablement bean creator.
 		 *
 		 * <p>
 		 * Enables the following:
@@ -3372,31 +3373,31 @@ public class RestContext extends Context {
 		 *
 		 * @return The debug enablement sub-builder.
 		 */
-		public DebugEnablement.Builder debugEnablement() {
+		public BeanCreator<DebugEnablement> debugEnablement() {
 			if (debugEnablement == null)
-				debugEnablement = createDebugEnablement(beanStore(), resource());
+				debugEnablement = createDebugEnablement();
 			return debugEnablement;
 		}
 
 		/**
-		 * Applies an operation to the debug enablement sub-builder.
+		 * Specifies the debug enablement class to use for this REST context.
 		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.debugEnablement(<jv>x</jv> -&gt; <jv>x</jv>.defaultEnable(<jsf>ALWAYS</jsf>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
+		 * @param value The new value for this setting.
 		 * @return This object.
 		 */
-		public Builder debugEnablement(Consumer<DebugEnablement.Builder> operation) {
-			operation.accept(debugEnablement());
+		public Builder debugEnablement(Class<? extends DebugEnablement> value) {
+			debugEnablement().type(value);
+			return this;
+		}
+
+		/**
+		 * Specifies the debug enablement class to use for this REST context.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder debugEnablement(DebugEnablement value) {
+			debugEnablement().impl(value);
 			return this;
 		}
 
@@ -3416,105 +3417,30 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Specifies the debug level on this REST resource.
+		 * Instantiates the debug enablement bean creator.
 		 *
-		 * @param value The value for this setting.
-		 * @return This object.
+		 * @return A new debug enablement bean creator.
 		 */
-		public Builder debug(Enablement value) {
-			debugEnablement().enable(value, this.resourceClass);
-			return this;
-		}
+		protected BeanCreator<DebugEnablement> createDebugEnablement() {
 
-		/**
-		 * Debug mode on specified classes/methods.
-		 *
-		 * Enables the following:
-		 * <ul class='spaced-list'>
-		 * 	<li>
-		 * 		HTTP request/response bodies are cached in memory for logging purposes.
-		 * 	<li>
-		 * 		Request/response messages are automatically logged.
-		 * </ul>
-		 *
-		 * <ul class='seealso'>
-		 * 	<li class='ja'>{@link Rest#debugOn}
-		 * </ul>
-		 *
-		 * @param value The new value for this setting.
-		 * @return This object.
-		 */
-		@FluentSetter
-		public Builder debugOn(String value) {
-			for (Map.Entry<String,String> e : splitMap(value != null ? value : "", true).entrySet()) {
-				String k = e.getKey(), v = e.getValue();
-				if (v.isEmpty())
-					v = "ALWAYS";
-				if (! k.isEmpty())
-					debugEnablement().enable(Enablement.fromString(v), k);
-			}
-			return this;
-		}
+			BeanCreator<DebugEnablement> creator = beanStore.createBean(DebugEnablement.class).type(BasicDebugEnablement.class);
 
-		/**
-		 * Instantiates the debug enablement sub-builder.
-		 *
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @return A new debug enablement sub-builder.
-		 */
-		protected DebugEnablement.Builder createDebugEnablement(BeanStore beanStore, Supplier<?> resource) {
-
-			// Default value.
-			Value<DebugEnablement.Builder> v = Value.of(
-				DebugEnablement
-					.create(beanStore)
-			);
-
-			// Default debug enablement if not overridden at class/method level.
-			Enablement debugDefault = defaultSettings.get(Enablement.class, "RestContext.debugDefault").orElse(isDebug() ? Enablement.ALWAYS : Enablement.NEVER);
-			v.get().defaultEnable(debugDefault);
-
-			// Gather @RestOp(debug) settings.
-			Consumer<MethodInfo> consumer = x -> {
-				Value<String> debug = Value.empty();
-				x.getAnnotationList(REST_OP_GROUP).forEachValue(String.class, "debug", NOT_EMPTY, y -> debug.set(y));
-				if (debug.isPresent())
-					v.get().enable(Enablement.fromString(debug.get()), x.getFullName());
-			};
-			ClassInfo.ofProxy(resource.get()).forEachPublicMethod(x -> true, consumer);
-
-			// Replace with bean from bean store.
-			rootBeanStore
-				.getBean(DebugEnablement.class)
-				.ifPresent(x -> v.get().impl(x));
-
-			// Replace with this bean.
-			resourceAs(DebugEnablement.class)
-				.ifPresent(x -> v.get().impl(x));
-
-			// Specify the implementation class if its set as a default.
+			// Specify the bean type if its set as a default.
 			defaultClasses()
 				.get(DebugEnablement.class)
-				.ifPresent(x -> v.get().type(x));
+				.ifPresent(x -> creator.type(x));
 
-			// Replace with builder from:  public [static] DebugEnablement.Builder createDebugEnablement(<args>)
-			beanStore
-				.createMethodFinder(DebugEnablement.Builder.class)
-				.addBean(DebugEnablement.Builder.class, v.get())
-				.find("createDebugEnablement")
-				.run(x -> v.set(x));
+			rootBeanStore
+				.getBean(DebugEnablement.class)
+				.ifPresent(x -> creator.impl(x));
 
 			// Replace with bean from:  public [static] DebugEnablement createDebugEnablement(<args>)
 			beanStore
 				.createMethodFinder(DebugEnablement.class)
-				.addBean(DebugEnablement.Builder.class, v.get())
 				.find("createDebugEnablement")
-				.run(x -> v.get().impl(x));
+				.run(x -> creator.impl(x));
 
-			return v.get();
+			return creator;
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -5871,6 +5797,7 @@ public class RestContext extends Context {
 				.addBean(BeanStore.class, beanStore)
 				.addBean(RestContext.class, this)
 				.addBean(Object.class, resource.get())
+				.addBean(DefaultSettingsMap.class, defaultSettings)
 				.addBean(Builder.class, builder)
 				.addBean(AnnotationWorkList.class, builder.getApplied());
 
@@ -5915,7 +5842,7 @@ public class RestContext extends Context {
 			defaultResponseHeaders = bs.add(HeaderList.class, builder.defaultResponseHeaders().build(), "RestContext.defaultResponseHeaders");
 			defaultRequestAttributes = bs.add(NamedAttributeList.class, builder.defaultRequestAttributes().build(), "RestContext.defaultRequestAttributes");
 			restOpArgs = builder.restOpArgs().build().asArray();
-			debugEnablement = builder.debugEnablement().build();
+			debugEnablement = bs.add(DebugEnablement.class, builder.debugEnablement().orElse(null));
 			startCallMethods = builder.startCallMethods().stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
 			endCallMethods = builder.endCallMethods().stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
 			postInitMethods = builder.postInitMethods().stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);

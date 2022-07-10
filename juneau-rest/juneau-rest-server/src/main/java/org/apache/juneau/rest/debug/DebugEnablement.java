@@ -13,8 +13,11 @@
 package org.apache.juneau.rest.debug;
 
 import static org.apache.juneau.Enablement.*;
+import static org.apache.juneau.collections.JsonMap.*;
+import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.apache.juneau.rest.HttpRuntimeException.*;
 
+import java.lang.reflect.Method;
 import java.util.function.*;
 
 import javax.servlet.http.*;
@@ -34,7 +37,7 @@ import org.apache.juneau.utils.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public interface DebugEnablement {
+public abstract class DebugEnablement {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
@@ -43,7 +46,11 @@ public interface DebugEnablement {
 	/**
 	 * Represents no DebugEnablement.
 	 */
-	public abstract class Void implements DebugEnablement {};
+	public abstract class Void extends DebugEnablement {
+		Void(BeanStore beanStore) {
+			super(beanStore);
+		}
+	};
 
 	/**
 	 * Static creator.
@@ -62,7 +69,7 @@ public interface DebugEnablement {
 	/**
 	 * Builder class.
 	 */
-	public class Builder {
+	public static class Builder {
 
 		ReflectionMap.Builder<Enablement> mapBuilder;
 		Enablement defaultEnablement = NEVER;
@@ -214,6 +221,48 @@ public interface DebugEnablement {
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
+	private final Enablement defaultEnablement;
+	private final ReflectionMap<Enablement> enablementMap;
+	private final Predicate<HttpServletRequest> conditionalPredicate;
+
+	/**
+	 * Constructor.
+	 * <p>
+	 * Subclasses typically override the {@link #init(BeanStore)} method when using this constructor.
+	 *
+	 * @param beanStore The bean store containing injectable beans for this enablement.
+	 */
+	public DebugEnablement(BeanStore beanStore) {
+		Builder builder = init(beanStore);
+		this.defaultEnablement = firstNonNull(builder.defaultEnablement, NEVER);
+		this.enablementMap = builder.mapBuilder.build();
+		this.conditionalPredicate = firstNonNull(builder.conditional, x -> "true".equalsIgnoreCase(x.getHeader("Debug")));
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder for this enablement.
+	 */
+	public DebugEnablement(Builder builder) {
+		this.defaultEnablement = firstNonNull(builder.defaultEnablement, NEVER);
+		this.enablementMap = builder.mapBuilder.build();
+		this.conditionalPredicate = firstNonNull(builder.conditional, x -> "true".equalsIgnoreCase(x.getHeader("Debug")));
+
+	}
+
+	/**
+	 * Initializer.
+	 * <p>
+	 * Subclasses should override this method to make modifications to the builder used to create this logger.
+	 *
+	 * @param beanStore The bean store containing injectable beans for this logger.
+	 * @return A new builder object.
+	 */
+	protected Builder init(BeanStore beanStore) {
+		return new Builder(beanStore);
+	}
+
 	/**
 	 * Returns <jk>true</jk> if debug is enabled on the specified class and request.
 	 *
@@ -225,7 +274,11 @@ public interface DebugEnablement {
 	 * @param req The HTTP request.
 	 * @return <jk>true</jk> if debug is enabled on the specified method and request.
 	 */
-	public boolean isDebug(RestContext context, HttpServletRequest req);
+	public boolean isDebug(RestContext context, HttpServletRequest req) {
+		Class<?> c = context.getResourceClass();
+		Enablement e = enablementMap.find(c).orElse(defaultEnablement);
+		return e == ALWAYS || (e == CONDITIONAL && isConditionallyEnabled(req));
+	}
 
 	/**
 	 * Returns <jk>true</jk> if debug is enabled on the specified method and request.
@@ -238,5 +291,36 @@ public interface DebugEnablement {
 	 * @param req The HTTP request.
 	 * @return <jk>true</jk> if debug is enabled on the specified method and request.
 	 */
-	public boolean isDebug(RestOpContext context, HttpServletRequest req);
+	public boolean isDebug(RestOpContext context, HttpServletRequest req) {
+		Method m = context.getJavaMethod();
+		Enablement e = enablementMap.find(m).orElse(enablementMap.find(m.getDeclaringClass()).orElse(defaultEnablement));
+		return e == ALWAYS || (e == CONDITIONAL && isConditionallyEnabled(req));
+	}
+
+	/**
+	 * Returns <jk>true</jk> if debugging is conditionally enabled on the specified request.
+	 *
+	 * <p>
+	 * This method only gets called when the enablement value resolves to {@link Enablement#CONDITIONAL CONDITIONAL}.
+	 *
+	 * <p>
+	 * Subclasses can override this method to provide their own implementation.
+	 * The default implementation is provided by {@link DebugEnablement.Builder#conditional(Predicate)}
+	 * which has a default predicate of <c><jv>x</jv> -&gt; <js>"true"</js>.equalsIgnoreCase(<jv>x</jv>.getHeader(<js>"Debug"</js>)</c>.
+	 *
+	 * @param req The incoming HTTP request.
+	 * @return <jk>true</jk> if debugging is conditionally enabled on the specified request.
+	 */
+	protected boolean isConditionallyEnabled(HttpServletRequest req) {
+		return conditionalPredicate.test(req);
+	}
+
+	@Override /* Object */
+	public String toString() {
+		return filteredMap()
+			.append("defaultEnablement", defaultEnablement)
+			.append("enablementMap", enablementMap)
+			.append("conditionalPredicate", conditionalPredicate)
+			.asString();
+	}
 }

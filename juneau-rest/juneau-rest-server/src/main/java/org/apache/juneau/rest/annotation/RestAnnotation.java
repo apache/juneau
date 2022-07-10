@@ -1109,8 +1109,6 @@ public class RestAnnotation {
 			string(a.allowedMethodHeaders()).ifPresent(x -> b.allowedMethodHeaders(x));
 			string(a.allowedMethodParams()).ifPresent(x -> b.allowedMethodParams(x));
 			bool(a.renderResponseStackTraces()).ifPresent(x -> b.renderResponseStackTraces(x));
-			string(a.debug()).map(Enablement::fromString).ifPresent(x -> b.debug(x));
-			string(a.debugOn()).ifPresent(x -> b.debugOn(x));
 		}
 	}
 

@@ -84,7 +84,6 @@ import org.apache.juneau.rest.util.*;
  * <ul class='seealso'>
  * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#callLogger()}
  * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugEnablement()}
- * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugOn(String)}
  * 	<li class='ja'>{@link Rest#debug}
  * 	<li class='ja'>{@link RestOp#debug}
  * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
@@ -714,7 +713,6 @@ public class CallLogger {
 	 * @param req The HTTP request being logged.
 	 * @return <jk>true</jk> if debug is enabled on this request.
 	 * @see org.apache.juneau.rest.RestContext.Builder#debugEnablement()
-	 * @see org.apache.juneau.rest.RestContext.Builder#debugOn(String)
 	 * @see Rest#debug()
 	 * @see RestOp#debug()
 	 */

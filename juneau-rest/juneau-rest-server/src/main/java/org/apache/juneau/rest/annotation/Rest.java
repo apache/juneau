@@ -523,10 +523,6 @@ public @interface Rest {
 	 * 		These debug settings can be overridden at runtime by directly calling {@link RestRequest#setDebug()}.
 	 * </ul>
 	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugOn(String)}
-	 * </ul>
-	 *
 	 * @return The annotation value.
 	 */
 	String debugOn() default "";
