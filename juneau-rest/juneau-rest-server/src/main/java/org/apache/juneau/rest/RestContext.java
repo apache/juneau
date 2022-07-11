@@ -588,13 +588,13 @@ public class RestContext extends Context {
 			// Replace with builder from:  public [static] BeanStore.Builder createBeanStore(<args>)
 			v.get().build()
 				.createMethodFinder(BeanStore.Builder.class)
-				.find("createBeanStore")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.set(x));
 
 			// Replace with bean from:  public [static] BeanStore createBeanStore(<args>)
 			v.get().build()
 				.createMethodFinder(BeanStore.class)
-				.find("createBeanStore")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.get().impl(x));
 
 			return v.get();

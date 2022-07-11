@@ -21,7 +21,6 @@ import static org.apache.juneau.rest.annotation.HookEvent.*;
 
 import java.io.*;
 import java.text.*;
-import java.util.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
@@ -37,7 +36,6 @@ import org.apache.juneau.rest.converter.*;
 import org.apache.juneau.rest.guard.*;
 import org.apache.juneau.rest.matcher.*;
 import org.apache.juneau.*;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
 
 /**
@@ -93,15 +91,16 @@ public abstract class RestServlet extends HttpServlet {
 		}
 	}
 
-	/**
-	 * Instantiates the bean store to use for creating beans for this servlet.
-	 *
-	 * @param parent The parent bean store.
-	 * @return A new bean store.
-	 */
-	public BeanStore createBeanStore(Optional<BeanStore> parent) {
-		return BeanStore.of(parent.orElse(null), this);
-	}
+//	/**
+//	 * Instantiates the bean store to use for creating beans for this servlet.
+//	 *
+//	 * @param parent The parent bean store.
+//	 * @return A new bean store.
+//	 */
+//	@Rest
+//	public BeanStore createBeanStore(Optional<BeanStore> parent) {
+//		return BeanStore.of(parent.orElse(null), this);
+//	}
 
 	/**
 	 * Sets the context object for this servlet.

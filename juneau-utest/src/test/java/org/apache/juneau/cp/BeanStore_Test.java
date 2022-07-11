@@ -12,15 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
+import java.lang.annotation.*;
 import java.util.*;
 import java.util.function.*;
-
-import javax.inject.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.reflect.*;
@@ -28,6 +29,14 @@ import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
 public class BeanStore_Test {
+
+	@Documented
+	@Target({PARAMETER})
+	@Retention(RUNTIME)
+	@Inherited
+	public @interface Named {
+		String value();
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests
