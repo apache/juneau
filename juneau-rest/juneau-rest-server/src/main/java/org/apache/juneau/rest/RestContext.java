@@ -710,14 +710,14 @@ public class RestContext extends Context {
 			// Replace with builder from:  public [static] VarResolver.Builder createVarResolver(<args>)
 			beanStore
 				.createMethodFinder(VarResolver.Builder.class)
-				.find("createVarResolver")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.set(x));
 
 			// Replace with bean from:  public [static] VarResolver createVarResolver(<args>)
 			beanStore
 				.createMethodFinder(VarResolver.class)
 				.addBean(VarResolver.Builder.class, v.get())
-				.find("createVarResolver")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.get().impl(x));
 
 			return v.get();
@@ -778,7 +778,7 @@ public class RestContext extends Context {
 			beanStore
 				.createMethodFinder(VarList.class)
 				.addBean(VarList.class, v.get())
-				.find("createVars")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.set(x));
 
 			return v.get();
@@ -888,7 +888,7 @@ public class RestContext extends Context {
 			beanStore
 				.createMethodFinder(Config.class)
 				.addBean(Config.class, v.get())
-				.find("createConfig")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.set(x));
 
 			return v.get();
@@ -986,7 +986,7 @@ public class RestContext extends Context {
 			beanStore
 				.createMethodFinder(Logger.class)
 				.addBean(Logger.class, v.get())
-				.find("createLogger")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.set(x));
 
 			return v.get();
@@ -1079,14 +1079,14 @@ public class RestContext extends Context {
 			beanStore
 				.createMethodFinder(ThrownStore.Builder.class)
 				.addBean(ThrownStore.Builder.class, v.get())
-				.find("createThrownStore")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.set(x));
 
 			// Replace with bean from:  public [static] ThrownStore createThrownStore(<args>)
 			beanStore
 				.createMethodFinder(ThrownStore.class)
 				.addBean(ThrownStore.Builder.class, v.get())
-				.find("createThrownStore")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.get().impl(x));
 
 			return v.get();
@@ -1183,14 +1183,14 @@ public class RestContext extends Context {
 			beanStore
 				.createMethodFinder(EncoderSet.Builder.class)
 				.addBean(EncoderSet.Builder.class, v.get())
-				.find("createEncoders")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.set(x));
 
 			// Replace with bean from:  public [static] EncoderSet createEncoders(<args>)
 			beanStore
 				.createMethodFinder(EncoderSet.class)
 				.addBean(EncoderSet.Builder.class, v.get())
-				.find("createEncoders")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.get().impl(x));
 
 			return v.get();
@@ -1265,14 +1265,14 @@ public class RestContext extends Context {
 			beanStore
 				.createMethodFinder(SerializerSet.Builder.class)
 				.addBean(SerializerSet.Builder.class, v.get())
-				.find("createSerializers")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.set(x));
 
 			// Replace with bean from:  public [static] SerializerSet createSerializers(<args>)
 			beanStore
 				.createMethodFinder(SerializerSet.class)
 				.addBean(SerializerSet.Builder.class, v.get())
-				.find("createSerializers")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.get().impl(x));
 
 			return v.get();
@@ -1347,14 +1347,14 @@ public class RestContext extends Context {
 			beanStore
 				.createMethodFinder(ParserSet.Builder.class)
 				.addBean(ParserSet.Builder.class, v.get())
-				.find("createParsers")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.set(x));
 
 			// Replace with bean from:  public [static] ParserSet createParsers(<args>)
 			beanStore
 				.createMethodFinder(ParserSet.class)
 				.addBean(ParserSet.Builder.class, v.get())
-				.find("createParsers")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.get().impl(x));
 
 			return v.get();
@@ -1428,14 +1428,14 @@ public class RestContext extends Context {
 			beanStore
 				.createMethodFinder(MethodExecStore.Builder.class)
 				.addBean(MethodExecStore.Builder.class, v.get())
-				.find("createMethodExecStore")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.set(x));
 
 			// Replace with bean from:  public [static] MethodExecStore createThrownStore(<args>)
 			beanStore
 				.createMethodFinder(MethodExecStore.class)
 				.addBean(MethodExecStore.Builder.class, v.get())
-				.find("createMethodExecStore")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.get().impl(x));
 
 			return v.get();
@@ -1576,14 +1576,14 @@ public class RestContext extends Context {
 			// Replace with builder from:  public [static] Messages.Builder createMessages(<args>)
 			beanStore
 				.createMethodFinder(Messages.Builder.class)
-				.find("createMessages")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.set(x));
 
 			// Replace with bean from:  public [static] Messages createMessages(<args>)
 			beanStore
 				.createMethodFinder(Messages.class)
 				.addBean(Messages.Builder.class, v.get())
-				.find("createMessages")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.get().impl(x));
 
 			return v.get();
@@ -1763,14 +1763,14 @@ public class RestContext extends Context {
 			beanStore
 				.createMethodFinder(ResponseProcessorList.Builder.class)
 				.addBean(ResponseProcessorList.Builder.class, v.get())
-				.find("createResponseProcessors")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.set(x));
 
 			// Replace with bean from:  public [static] ResponseProcessorList createResponseProcessors(<args>)
 			beanStore
 				.createMethodFinder(ResponseProcessorList.class)
 				.addBean(ResponseProcessorList.Builder.class, v.get())
-				.find("createResponseProcessors")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.get().impl(x));
 
 			return v.get();
@@ -1921,7 +1921,7 @@ public class RestContext extends Context {
 			// Replace with bean from:  public [static] CallLogger createCallLogger(<args>)
 			beanStore
 				.createMethodFinder(CallLogger.class)
-				.find("createCallLogger")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> creator.impl(x));
 
 			return creator;
@@ -2015,15 +2015,8 @@ public class RestContext extends Context {
 			beanStore
 				.createMethodFinder(BeanContext.Builder.class)
 				.addBean(BeanContext.Builder.class, v.get())
-				.find("createBeanContext")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.set(x));
-
-			// Replace with builder from:  public [static] BeanContext createBeanContext(<args>)
-			beanStore
-				.createMethodFinder(BeanContext.class)
-				.addBean(BeanContext.Builder.class, v.get())
-				.find("createBeanContext")
-				.run(x -> v.get().impl(x));
 
 			return v.get();
 		}
@@ -2127,14 +2120,14 @@ public class RestContext extends Context {
 			beanStore
 				.createMethodFinder(HttpPartSerializer.Creator.class)
 				.addBean(HttpPartSerializer.Creator.class, v.get())
-				.find("createPartSerializer")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.set(x));
 
 			// Replace with bean from:  public [static] HttpPartSerializer createPartSerializer(<args>)
 			beanStore
 				.createMethodFinder(HttpPartSerializer.class)
 				.addBean(HttpPartSerializer.Creator.class, v.get())
-				.find("createPartSerializer")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.get().impl(x));
 
 			return v.get();
@@ -2239,14 +2232,14 @@ public class RestContext extends Context {
 			beanStore
 				.createMethodFinder(HttpPartParser.Creator.class)
 				.addBean(HttpPartParser.Creator.class, v.get())
-				.find("createPartParser")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.set(x));
 
 			// Replace with bean from:  public [static] HttpPartParser createPartParser(<args>)
 			beanStore
 				.createMethodFinder(HttpPartParser.class)
 				.addBean(HttpPartParser.Creator.class, v.get())
-				.find("createPartParser")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.get().impl(x));
 
 			return v.get();
@@ -2334,14 +2327,14 @@ public class RestContext extends Context {
 			beanStore
 				.createMethodFinder(JsonSchemaGenerator.Builder.class)
 				.addBean(JsonSchemaGenerator.Builder.class, v.get())
-				.find("createJsonSchemaGenerator")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.set(x));
 
 			// Replace with bean from:  public [static] JsonSchemaGenerator createJsonSchemaGenerator(<args>)
 			beanStore
 				.createMethodFinder(JsonSchemaGenerator.class)
 				.addBean(JsonSchemaGenerator.Builder.class, v.get())
-				.find("createJsonSchemaGenerator")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.get().impl(x));
 
 			return v.get();
@@ -2522,7 +2515,7 @@ public class RestContext extends Context {
 			// Replace with bean from:  public [static] FileFinder createFileFinder(<args>)
 			beanStore
 				.createMethodFinder(FileFinder.class)
-				.find("createFileFinder")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> creator.impl(x));
 
 			return creator;
@@ -2675,7 +2668,7 @@ public class RestContext extends Context {
 			// Replace with bean from:  public [static] StaticFiles createStaticFiles(<args>)
 			beanStore
 				.createMethodFinder(StaticFiles.class)
-				.find("createStaticFiles")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> creator.impl(x));
 
 			return creator;
@@ -2834,14 +2827,14 @@ public class RestContext extends Context {
 			beanStore
 				.createMethodFinder(HeaderList.Builder.class)
 				.addBean(HeaderList.Builder.class, v.get())
-				.find("createDefaultRequestHeaders")
+				.find(x -> x.hasAnnotation(RestBean.class) && x.getAnnotation(RestBean.class).name().equals("defaultRequestHeaders"))
 				.run(x -> v.set(x));
 
 			// Replace with bean from:  public [static] HeaderList createDefaultRequestHeaders(<args>)
 			beanStore
 				.createMethodFinder(HeaderList.class)
 				.addBean(HeaderList.Builder.class, v.get())
-				.find("createDefaultRequestHeaders")
+				.find(x -> x.hasAnnotation(RestBean.class) && x.getAnnotation(RestBean.class).name().equals("defaultRequestHeaders"))
 				.run(x -> v.get().impl(x));
 
 			return v.get();
@@ -2966,14 +2959,14 @@ public class RestContext extends Context {
 			beanStore
 				.createMethodFinder(HeaderList.Builder.class)
 				.addBean(HeaderList.Builder.class, v.get())
-				.find("createDefaultResponseHeaders")
+				.find(x -> x.hasAnnotation(RestBean.class) && x.getAnnotation(RestBean.class).name().equals("defaultResponseHeaders"))
 				.run(x -> v.set(x));
 
 			// Replace with bean from:  public [static] HeaderList createDefaultResponseHeaders(<args>)
 			beanStore
 				.createMethodFinder(HeaderList.class)
 				.addBean(HeaderList.Builder.class, v.get())
-				.find("createDefaultResponseHeaders")
+				.find(x -> x.hasAnnotation(RestBean.class) && x.getAnnotation(RestBean.class).name().equals("defaultResponseHeaders"))
 				.run(x -> v.get().impl(x));
 
 			return v.get();
@@ -3094,14 +3087,14 @@ public class RestContext extends Context {
 			beanStore
 				.createMethodFinder(NamedAttributeList.Builder.class)
 				.addBean(NamedAttributeList.Builder.class, v.get())
-				.find("createDefaultRequestAttributes")
+				.find(x -> x.hasAnnotation(RestBean.class) && x.getAnnotation(RestBean.class).name().equals("defaultRequestAttributes"))
 				.run(x -> v.set(x));
 
 			// Replace with bean from:  public [static] NamedAttributeList createDefaultRequestAttributes(<args>)
 			beanStore
 				.createMethodFinder(NamedAttributeList.class)
 				.addBean(NamedAttributeList.Builder.class, v.get())
-				.find("createDefaultRequestAttributes")
+				.find(x -> x.hasAnnotation(RestBean.class) && x.getAnnotation(RestBean.class).name().equals("defaultRequestAttributes"))
 				.run(x -> v.get().impl(x));
 
 			return v.get();
@@ -3286,14 +3279,14 @@ public class RestContext extends Context {
 			beanStore
 				.createMethodFinder(RestOpArgList.Builder.class)
 				.addBean(RestOpArgList.Builder.class, v.get())
-				.find("createRestOpArgs")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.set(x));
 
 			// Replace with bean from:  public [static] RestOpArgList createRestOpArgs(<args>)
 			beanStore
 				.createMethodFinder(RestOpArgList.class)
 				.addBean(RestOpArgList.Builder.class, v.get())
-				.find("createRestOpArgs")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.get().impl(x));
 
 			return v.get();
@@ -3381,7 +3374,7 @@ public class RestContext extends Context {
 			// Replace with bean from:  public [static] DebugEnablement createDebugEnablement(<args>)
 			beanStore
 				.createMethodFinder(DebugEnablement.class)
-				.find("createDebugEnablement")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> creator.impl(x));
 
 			return creator;
@@ -3444,7 +3437,7 @@ public class RestContext extends Context {
 			beanStore
 				.createMethodFinder(MethodList.class)
 				.addBean(MethodList.class, v.get())
-				.find("createStartCallMethods")
+				.find(x -> x.hasAnnotation(RestBean.class) && x.getAnnotation(RestBean.class).name().equals("startCallMethods"))
 				.run(x -> v.set(x));
 
 			return v.get();
@@ -3507,7 +3500,7 @@ public class RestContext extends Context {
 			beanStore
 				.createMethodFinder(MethodList.class)
 				.addBean(MethodList.class, v.get())
-				.find("createEndCallMethods")
+				.find(x -> x.hasAnnotation(RestBean.class) && x.getAnnotation(RestBean.class).name().equals("endCallMethods"))
 				.run(x -> v.set(x));
 
 			return v.get();
@@ -3570,7 +3563,7 @@ public class RestContext extends Context {
 			beanStore
 				.createMethodFinder(MethodList.class)
 				.addBean(MethodList.class, v.get())
-				.find("createPostInitMethods")
+				.find(x -> x.hasAnnotation(RestBean.class) && x.getAnnotation(RestBean.class).name().equals("postInitMethods"))
 				.run(x -> v.set(x));
 
 			return v.get();
@@ -3633,7 +3626,7 @@ public class RestContext extends Context {
 			beanStore
 				.createMethodFinder(MethodList.class)
 				.addBean(MethodList.class, v.get())
-				.find("createPostInitChildFirstMethods")
+				.find(x -> x.hasAnnotation(RestBean.class) && x.getAnnotation(RestBean.class).name().equals("postInitChildFirstMethods"))
 				.run(x -> v.set(x));
 
 			return v.get();
@@ -3696,7 +3689,7 @@ public class RestContext extends Context {
 			beanStore
 				.createMethodFinder(MethodList.class)
 				.addBean(MethodList.class, v.get())
-				.find("createDestroyMethods")
+				.find(x -> x.hasAnnotation(RestBean.class) && x.getAnnotation(RestBean.class).name().equals("destroyMethods"))
 				.run(x -> v.set(x));
 
 			return v.get();
@@ -3762,7 +3755,7 @@ public class RestContext extends Context {
 			beanStore
 				.createMethodFinder(MethodList.class)
 				.addBean(MethodList.class, v.get())
-				.find("createPreCallMethods")
+				.find(x -> x.hasAnnotation(RestBean.class) && x.getAnnotation(RestBean.class).name().equals("preCallMethods"))
 				.run(x -> v.set(x));
 
 			return v.get();
@@ -3828,7 +3821,7 @@ public class RestContext extends Context {
 			beanStore
 				.createMethodFinder(MethodList.class)
 				.addBean(MethodList.class, v.get())
-				.find("createPostCallMethods")
+				.find(x -> x.hasAnnotation(RestBean.class) && x.getAnnotation(RestBean.class).name().equals("postCallMethods"))
 				.run(x -> v.set(x));
 
 			return v.get();
@@ -3947,14 +3940,14 @@ public class RestContext extends Context {
 			beanStore
 				.createMethodFinder(RestOperations.Builder.class)
 				.addBean(RestOperations.Builder.class, v.get())
-				.find("createRestOperations")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.set(x));
 
 			// Replace with bean from:  public [static] RestOperations createRestOperations(<args>)
 			beanStore
 				.createMethodFinder(RestOperations.class)
 				.addBean(RestOperations.Builder.class, v.get())
-				.find("createRestOperations")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.get().impl(x));
 
 			return v.get();
@@ -4047,14 +4040,14 @@ public class RestContext extends Context {
 			beanStore
 				.createMethodFinder(RestChildren.Builder.class)
 				.addBean(RestChildren.Builder.class, v.get())
-				.find("createRestChildren")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.set(x));
 
 			// Replace with bean from:  public [static] RestChildren createRestChildren(<args>)
 			beanStore
 				.createMethodFinder(RestChildren.class)
 				.addBean(RestChildren.Builder.class, v.get())
-				.find("createRestChildren")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> v.get().impl(x));
 
 			return v.get();
@@ -4143,7 +4136,7 @@ public class RestContext extends Context {
 			// Replace with bean from:  public [static] SwaggerProvider createSwaggerProvider(<args>)
 			beanStore
 				.createMethodFinder(SwaggerProvider.class)
-				.find("createSwaggerProvider")
+				.find(x -> x.hasAnnotation(RestBean.class))
 				.run(x -> creator.impl(x));
 
 			return creator;
