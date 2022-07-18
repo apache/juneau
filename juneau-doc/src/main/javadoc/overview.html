@@ -22983,7 +22983,7 @@
 	)
 	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestObject <jk>implements</jk> BasicUniversalConfig {
 	
-		<ja>@Inject</ja>
+		<ja>@Autowired</ja>
 		<jk>private</jk> HelloWorldMessageProvider <jf>messageProvider</jf>;
 	
 		<ja>@RestGet</ja>(path=<js>"/*"</js>, summary=<js>"Responds with injected message"</js>)
@@ -28384,7 +28384,7 @@
 	)
 	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestObject <jk>implements</jk> BasicUniversalConfig, PetStore {
 	
-		<ja>@Inject</ja>
+		<ja>@Autowired</ja>
 		<jk>private</jk> PetStoreService <jf>store</jf>;
 	
 		<jd>/**

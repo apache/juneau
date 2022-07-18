@@ -2171,9 +2171,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		//-----------------------------------------------------------------------------------------------------------------
 
 		private boolean matches(MethodInfo annotated) {
-			RestMethodBean a = annotated.getAnnotation(RestMethodBean.class);
+			RestBean a = annotated.getAnnotation(RestBean.class);
 			if (a != null) {
-				for (String n : a.method()) {
+				for (String n : a.methodScope()) {
 					if ("*".equals(n))
 						return true;
 					if (restMethod.getName().equals(n))
@@ -2184,11 +2184,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		private boolean matches(MethodInfo annotated, String beanName) {
-			RestMethodBean a = annotated.getAnnotation(RestMethodBean.class);
+			RestBean a = annotated.getAnnotation(RestBean.class);
 			if (a != null) {
 				if (! a.name().equals(beanName))
 					return false;
-				for (String n : a.method()) {
+				for (String n : a.methodScope()) {
 					if ("*".equals(n))
 						return true;
 					if (restMethod.getName().equals(n))

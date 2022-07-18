@@ -352,7 +352,7 @@ public class BeanStore {
 		BeanStoreEntry<T> e = createEntry(beanType, bean, name);
 		try (SimpleLock x = lock.write()) {
 			entries.addFirst(e);
-			if (name == null)
+			if (isEmpty(name))
 				unnamedEntries.put(beanType, e);
 		}
 		return this;
