@@ -482,14 +482,34 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	}
 
 	/**
-	 * Invokes this field on the specified object.
+	 * Returns the field value on the specified object.
 	 *
 	 * @param o The object containing the field.
 	 * @return The field value.
-	 * @throws IllegalAccessException Field was not accessible.
-	 * @throws IllegalArgumentException Field does not belong to object.
+	 * @throws BeanRuntimeException Field was not accessible or field does not belong to object.
 	 */
-	public Object invoke(Object o) throws IllegalArgumentException, IllegalAccessException {
-		return f.get(o);
+	public Object get(Object o) throws BeanRuntimeException {
+		try {
+			f.setAccessible(true);
+			return f.get(o);
+		} catch (Exception e) {
+			throw new BeanRuntimeException(e);
+		}
+	}
+
+	/**
+	 * Sets the field value on the specified object.
+	 *
+	 * @param o The object containing the field.
+	 * @param value The new field value.
+	 * @throws BeanRuntimeException Field was not accessible or field does not belong to object.
+	 */
+	public void set(Object o, Object value) throws BeanRuntimeException {
+		try {
+			f.setAccessible(true);
+			f.set(o, value);
+		} catch (Exception e) {
+			throw new BeanRuntimeException(e);
+		}
 	}
 }

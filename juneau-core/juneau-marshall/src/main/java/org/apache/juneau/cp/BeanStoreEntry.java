@@ -93,6 +93,7 @@ public class BeanStoreEntry<T> {
 	 * @return <jk>true</jk> if this bean is exactly of the specified type and has the specified name.
 	 */
 	public boolean matches(Class<?> type, String name) {
+		name = nullIfEmpty(name);
 		return matches(type) && StringUtils.eq(this.name, name);
 	}
 

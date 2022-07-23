@@ -117,7 +117,7 @@ import org.apache.juneau.svl.*;
  * 	<tr><td>{@link VarResolver}<br>{@link org.apache.juneau.svl.VarResolver.Builder}</td><td></td><td>class</td></tr>
  * </table>
  */
-@Target({METHOD})
+@Target({METHOD,FIELD})
 @Retention(RUNTIME)
 @Inherited
 public @interface RestBean {

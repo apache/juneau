@@ -314,9 +314,9 @@ public class RestClient_Test {
 		RestClient x1 = RestClient.create().simpleJson().pooled().build();
 		RestClient x2 = RestClient.create().simpleJson().build();
 		RestClient x3 = client().pooled().build();
-		assertEquals("PoolingHttpClientConnectionManager",ClassInfo.of(x1.httpClient).getDeclaredField(x -> x.hasName("connManager")).accessible().invoke(x1.httpClient).getClass().getSimpleName());
-		assertEquals("BasicHttpClientConnectionManager",ClassInfo.of(x2.httpClient).getDeclaredField(x -> x.hasName("connManager")).accessible().invoke(x2.httpClient).getClass().getSimpleName());
-		assertEquals("MockHttpClientConnectionManager",ClassInfo.of(x3.httpClient).getDeclaredField(x -> x.hasName("connManager")).accessible().invoke(x3.httpClient).getClass().getSimpleName());
+		assertEquals("PoolingHttpClientConnectionManager",ClassInfo.of(x1.httpClient).getDeclaredField(x -> x.hasName("connManager")).accessible().get(x1.httpClient).getClass().getSimpleName());
+		assertEquals("BasicHttpClientConnectionManager",ClassInfo.of(x2.httpClient).getDeclaredField(x -> x.hasName("connManager")).accessible().get(x2.httpClient).getClass().getSimpleName());
+		assertEquals("MockHttpClientConnectionManager",ClassInfo.of(x3.httpClient).getDeclaredField(x -> x.hasName("connManager")).accessible().get(x3.httpClient).getClass().getSimpleName());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

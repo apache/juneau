@@ -389,7 +389,7 @@ public class RestContext extends Context {
 			Supplier<?> r = this.resource;
 			Class<?> rc = resourceClass;
 
-			beanStore = createBeanStore(rc, r)
+			beanStore = createBeanStore()
 				.build()
 				.addBean(Builder.class, this)
 				.addBean(ResourceSupplier.class, this.resource)
@@ -402,6 +402,7 @@ public class RestContext extends Context {
 			}
 			BeanStore bs = beanStore;
 
+			beanStore.add(BeanStore.class, bs);
 			varResolver = createVarResolver(bs, rc);
 			beanStore.add(VarResolver.class, varResolver.build());
 			config = beanStore.add(Config.class, createConfig(bs, rc));
@@ -430,6 +431,10 @@ public class RestContext extends Context {
 			jsonSchemaGenerator().apply(work);
 
 			runInitHooks(bs, resource());
+
+			// Set @RestBean fields.
+			// Note that these only get set on the first resource bean.
+			rci.forEachAllField(x -> x.hasAnnotation(RestBean.class), x -> x.set(resource.get(), beanStore.getBean(x.getType().inner(), x.getAnnotation(RestBean.class).name()).orElse(null)));
 
 			return this;
 		}
@@ -577,7 +582,7 @@ public class RestContext extends Context {
 		 * Can be used to add more beans to the bean store.
 		 *
 		 * <p>
-		 * The bean store is created by the constructor using the {@link #createBeanStore(Class,Supplier)} method and is initialized with the following beans:
+		 * The bean store is created by the constructor using the {@link #createBeanStore()} method and is initialized with the following beans:
 		 * <ul>
 		 * 	<li>{@link RestContext.Builder}
 		 * 	<li>{@link ServletConfig}
@@ -633,17 +638,18 @@ public class RestContext extends Context {
 		 * The bean store is created with the parent root bean store as the parent, allowing any beans in the root bean store to be available
 		 * in this builder.  The root bean store typically pulls from an injection framework such as Spring to allow injected beans to be used.
 		 *
-		 * The resource class can optionally define a <c><jk>public static</jk> BeanStore <jsm>createBeanStore</jk>(...);</c> method to override
-		 * the default bean store created by this method.  The parameters can be any beans available in the root bean store (such as any available
-		 * Spring beans if the top level resource is an instance of SpringRestServlet).
+		 * The default bean store can be overridden via any of the following methods:
+		 * <ul>
+		 * 	<li>Annotation:  {@link Rest#beanStore()}
+		 * 	<li>Method:  <c><ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] BeanStore.Builder myMethod(<i>&lt;args&gt;</i>)</c>
+		 * 		<br>Args can be any injectable bean including {@link org.apache.juneau.cp.BeanStore.Builder}, the default builder.
+		 * 	<li>Method:  <c><ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] BeanStore myMethod(<i>&lt;args&gt;</i>)</c>
+		 * 		<br>Args can be any injectable bean including {@link org.apache.juneau.cp.BeanStore.Builder}, the default builder.
+		 * </ul>
 		 *
-		 * @param resourceClass
-		 * 	The REST servlet/bean type that this context is defined against.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @return A new bean store.
+		 * @return A new bean store builder.
 		 */
-		protected BeanStore.Builder createBeanStore(Class<?> resourceClass, Supplier<?> resource) {
+		protected BeanStore.Builder createBeanStore() {
 
 			// Default value.
 			Value<BeanStore.Builder> v = Value.of(
