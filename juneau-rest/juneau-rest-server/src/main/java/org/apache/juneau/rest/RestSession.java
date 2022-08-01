@@ -226,7 +226,7 @@ public class RestSession extends ContextSession {
 		super(builder);
 		context = builder.ctx;
 		resource = builder.resource;
-		beanStore = BeanStore.of(context.getRootBeanStore(), resource).addBean(RestContext.class, context);
+		beanStore = BeanStore.of(context.getBeanStore(), resource).addBean(RestContext.class, context);
 
 		req = beanStore.add(HttpServletRequest.class, builder.req);
 		res = beanStore.add(HttpServletResponse.class, builder.res);

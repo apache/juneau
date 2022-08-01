@@ -95,7 +95,7 @@ import org.apache.juneau.xml.*;
 /**
  * Utility class for interfacing with remote REST interfaces.
  *
- * <p class='w900'>
+ * <p>
  * Built upon the feature-rich Apache HttpClient library, the Juneau RestClient API adds support for fluent-style
  * REST calls and the ability to perform marshalling of POJOs to and from HTTP parts.
  *
@@ -112,7 +112,7 @@ import org.apache.juneau.xml.*;
  * 		.getContent().as(MyBean.<jk>class</jk>);
  * </p>
  *
- * <p class='w900'>
+ * <p>
  * Breaking apart the fluent call, we can see the classes being used:
  * <p class='bjava'>
  * 	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>().simpleJson();
@@ -128,7 +128,7 @@ import org.apache.juneau.xml.*;
  * 	MyBean <jv>bean</jv> = <jv>content</jv>.as(MyBean.<jk>class</jk>);
  * </p>
  *
- * <p class='w900'>
+ * <p>
  * It additionally provides support for creating remote proxy interfaces using REST as the transport medium.
  *
  * <h5 class='figure'>Example:</h5>
@@ -153,7 +153,7 @@ import org.apache.juneau.xml.*;
  * 	Pet <jv>pet</jv> = <jv>store</jv>.addPet(<jv>createPet</jv>, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
  * </p>
  *
- * <p class='w900'>
+ * <p>
  * The classes are closely tied to Apache HttpClient, yet provide lots of additional functionality:
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestClient} <jk>extends</jk> {@link HttpClient}, creates {@link RestRequest} objects.
@@ -164,11 +164,11 @@ import org.apache.juneau.xml.*;
  * </ul>
  *
  *
- * <p class='w900'>
+ * <p>
  * Instances of this class are built using the {@link Builder} class which can be constructed using
  * the {@link #create() RestClient.create()} method as shown above.
  *
- * <p class='w900'>
+ * <p>
  * Clients are typically created with a root URI so that relative URIs can be used when making requests.
  * This is done using the {@link Builder#rootUri(Object)} method.
  *
@@ -181,7 +181,7 @@ import org.apache.juneau.xml.*;
  * 	String <jv>body</jv> = <jv>client</jv>.get(<js>"/subpath"</js>).run().getContent().asString();
  * </p>
  *
- * <p class='w900'>
+ * <p>
  * The {@link RestClient} class creates {@link RestRequest} objects using the following methods:
  *
  * <ul class='javatree'>
@@ -200,7 +200,7 @@ import org.apache.juneau.xml.*;
  * 	</ul>
  * </ul>
  *
- * <p class='w900'>
+ * <p>
  * The {@link RestRequest} class creates {@link RestResponse} objects using the following methods:
  *
  * <ul class='javatree'>
@@ -211,13 +211,13 @@ import org.apache.juneau.xml.*;
  * 	</ul>
  * </ul>
  *
- * <p class='w900'>
+ * <p>
  * The distinction between the two methods is that {@link RestRequest#complete() complete()} automatically consumes the response body and
  * {@link RestRequest#run() run()} does not.  Note that you must consume response bodies in order for HTTP connections to be freed up
  * for reuse!  The {@link InputStream InputStreams} returned by the {@link ResponseContent} object are auto-closing once
  * they are exhausted, so it is often not necessary to explicitly close them.
  *
- * <p class='w900'>
+ * <p>
  * The following examples show the distinction between the two calls:
  *
  * <p class='bjava'>
@@ -231,7 +231,7 @@ import org.apache.juneau.xml.*;
  *
  * <h4 class='topic'>POJO Marshalling</h4>
  *
- * <p class='w900'>
+ * <p>
  * By default, JSON support is provided for HTTP request and response bodies.
  * Other languages can be specified using any of the following builder methods:
  * <ul class='javatree'>
@@ -268,7 +268,7 @@ import org.apache.juneau.xml.*;
  * 	RestClient <jv>client2</jv> = RestClient.<jsm>create</jsm>().universal().build();
  * </p>
  *
- * <p class='w900'>
+ * <p>
  * When using clients with multiple language support, you must specify the <c>Content-Type</c> header on requests
  * with bodies to specify which serializer should be selected.
  *
@@ -299,7 +299,7 @@ import org.apache.juneau.xml.*;
  * </p>
  *
  *
- * <p class='w900'>
+ * <p>
  * The {@link Builder} class provides convenience methods for setting common serializer and parser
  * settings.
  *
@@ -310,7 +310,7 @@ import org.apache.juneau.xml.*;
  * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().sq().ws().build();
  * </p>
  *
- * <p class='w900'>
+ * <p>
  * 	Other methods are also provided for specifying the serializers and parsers used for lower-level marshalling support:
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Builder}
@@ -321,7 +321,7 @@ import org.apache.juneau.xml.*;
  * 	</ul>
  * </ul>
  *
- * <p class='w900'>
+ * <p>
  * HTTP parts (headers, query parameters, form data...) are serialized and parsed using the {@link HttpPartSerializer}
  * and {@link HttpPartParser} APIs.  By default, clients are configured to use {@link OpenApiSerializer} and
  * {@link OpenApiParser}.  These can be overridden using the following methods:
@@ -335,7 +335,7 @@ import org.apache.juneau.xml.*;
  *
  *
  * <h4 class='topic'>Request Headers</h4>
- * <p class='w900'>
+ * <p>
  * Per-client or per-request headers can be specified using the following methods:
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Builder}
@@ -355,7 +355,7 @@ import org.apache.juneau.xml.*;
  * 	</ul>
  * </ul>
  *
- * <p class='w900'>
+ * <p>
  * The supplier methods are particularly useful for header values whose values may change over time (such as <c>Authorization</c> headers
  * which may need to change every few minutes).
  * </p>
@@ -428,7 +428,7 @@ import org.apache.juneau.xml.*;
  *
  * <h4 class='topic'>Request Form Data</h4>
  *
- * <p class='w900'>
+ * <p>
  * Per-client or per-request form-data parameters can be specified using the following methods:
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Builder}
@@ -458,7 +458,7 @@ import org.apache.juneau.xml.*;
  *
  * <h4 class='topic'>Request Body</h4>
  *
- * <p class='w900'>
+ * <p>
  * The request body can either be passed in with the client creator method (e.g. {@link RestClient#post(Object,Object) post(uri,body)}),
  * or can be specified via the following methods:
  *
@@ -470,7 +470,7 @@ import org.apache.juneau.xml.*;
  * 	</ul>
  * </ul>
  *
- * <p class='w900'>
+ * <p>
  * The request body can be any of the following types:
  * <ul class='javatree'>
  * 		<li class='jc'>
@@ -498,7 +498,7 @@ import org.apache.juneau.xml.*;
  *
  * <h4 class='topic'>Response Status</h4>
  *
- * <p class='w900'>
+ * <p>
  * After execution using {@link RestRequest#run()} or {@link RestRequest#complete()}, the following methods can be used
  * to get the response status:
  *
@@ -518,7 +518,7 @@ import org.apache.juneau.xml.*;
  * 	<jk>int</jk> <jv>statusCode</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).complete().getStatusCode();
  * </p>
  *
- * <p class='w900'>
+ * <p>
  * Equivalent methods with mutable parameters are provided to allow access to status values without breaking fluent call chains.
  *
  * <h5 class='figure'>Example:</h5>
@@ -537,7 +537,7 @@ import org.apache.juneau.xml.*;
  * 		consume the response yourself.
  * </ul>
  *
- * <p class='w900'>
+ * <p>
  * The assertion method is provided for quickly asserting status codes in fluent calls.
  *
  * <h5 class='figure'>Example:</h5>
@@ -558,7 +558,7 @@ import org.apache.juneau.xml.*;
  *
  * <h4 class='topic'>Response Headers</h4>
  *
- * <p class='w900'>
+ * <p>
  * Response headers are accessed through the following methods:
  *
  * <ul class='javatree'>
@@ -573,7 +573,7 @@ import org.apache.juneau.xml.*;
  * 	</ul>
  * </ul>
  *
- * <p class='w900'>
+ * <p>
  * The {@link RestResponse#getFirstHeader(String)} and {@link RestResponse#getLastHeader(String)} methods return an empty {@link ResponseHeader} object instead of<jk>null</jk>.
  * This allows it to be used more easily in fluent calls.
  *
@@ -583,7 +583,7 @@ import org.apache.juneau.xml.*;
  * 	<jk>boolean</jk> <jv>hasLocationHeader</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).complete().getLastHeader(<js>"Location"</js>).exists();
  * </p>
  *
- * <p class='w900'>
+ * <p>
  * The {@link ResponseHeader} class extends from the HttpClient {@link Header} class and provides several convenience
  * methods:
  *
@@ -647,7 +647,7 @@ import org.apache.juneau.xml.*;
  *
  * <h4 class='topic'>Response Body</h4>
  *
- * <p class='w900'>
+ * <p>
  * The response body is accessed through the following method:
  *
  * <ul class='javatree'>
@@ -657,7 +657,7 @@ import org.apache.juneau.xml.*;
  * 	</ul>
  * </ul>
  *
- * <p class='w900'>
+ * <p>
  * The {@link ResponseContent} class extends from the HttpClient {@link HttpEntity} class and provides several convenience
  * methods:
  *
@@ -718,7 +718,7 @@ import org.apache.juneau.xml.*;
  * 		.getContent().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
  * </p>
  *
- * <p class='w900'>
+ * <p>
  * The response body can only be consumed once unless it has been cached into memory.  In many cases, the body is
  * automatically cached when using the assertions methods or methods such as {@link ResponseContent#asString()}.
  * However, methods that involve reading directly from the input stream cannot be called twice.
@@ -773,7 +773,7 @@ import org.apache.juneau.xml.*;
  *
  * <h4 class='topic'>Custom Call Handlers</h4>
  *
- * <p class='w900'>
+ * <p>
  * The {@link RestCallHandler} interface provides the ability to provide custom handling of requests.
  *
  * <ul class='javatree'>
@@ -787,7 +787,7 @@ import org.apache.juneau.xml.*;
  * 	</ul>
  * </ul>
  *
- * <p class='w900'>
+ * <p>
  * Note that there are other ways of accomplishing this such as extending the {@link RestClient} class and overriding
  * the {@link #run(HttpHost,HttpRequest,HttpContext)} method
  * or by defining your own {@link HttpRequestExecutor}.  Using this interface is often simpler though.
@@ -795,7 +795,7 @@ import org.apache.juneau.xml.*;
  *
  * <h4 class='topic'>Interceptors</h4>
  *
- * <p class='w900'>
+ * <p>
  * The {@link RestCallInterceptor} API provides a quick way of intercepting and manipulating requests and responses beyond
  * the existing {@link HttpRequestInterceptor} and {@link HttpResponseInterceptor} APIs.
  *
@@ -819,7 +819,7 @@ import org.apache.juneau.xml.*;
  *
  * <h4 class='topic'>Logging / Debugging</h4>
  *
- * <p class='w900'>
+ * <p>
  * The following methods provide logging of requests and responses:
  *
  * <ul class='javatree'>
@@ -870,11 +870,11 @@ import org.apache.juneau.xml.*;
  * </p>
  *
  *
- * <p class='notes w900'>
+ * <p class='notes'>
  * It should be noted that if you enable request logging detail level {@link DetailLevel#FULL}, response bodies will be cached by default which may introduce
  * a performance penalty.
  *
- * <p class='w900'>
+ * <p>
  * Additionally, the following method is also provided for enabling debug mode:
  *
  * <ul class='javatree'>
@@ -884,7 +884,7 @@ import org.apache.juneau.xml.*;
  * 	</ul>
  * </ul>
  *
- * <p class='w900'>
+ * <p>
  * Enabling debug mode has the following effects:
  * <ul>
  * 	<li>{@link org.apache.juneau.Context.Builder#debug()} is enabled.
@@ -895,7 +895,7 @@ import org.apache.juneau.xml.*;
  *
  * <h4 class='topic'>REST Proxies</h4>
  *
- * <p class='w900'>
+ * <p>
  * One of the more powerful features of the REST client class is the ability to produce Java interface proxies against
  * arbitrary remote REST resources.
  *
@@ -921,7 +921,7 @@ import org.apache.juneau.xml.*;
  * 	Pet <jv>pet</jv> = <jv>store</jv>.addPet(<jv>createPet</jv>, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
  * </p>
  *
- * <p class='w900'>
+ * <p>
  * The methods to retrieve remote interfaces are:
  *
  * <ul class='javatree'>
@@ -936,7 +936,7 @@ import org.apache.juneau.xml.*;
  * 	</ul>
  * </ul>
  *
- * <p class='w900'>
+ * <p>
  * Two basic types of remote interfaces are provided:
  *
  * <ul class='spaced-list'>
@@ -944,7 +944,7 @@ import org.apache.juneau.xml.*;
  * 	<li>RPC-over-REST interfaces.  These are Java interfaces that allow you to make method calls on server-side POJOs.
  * </ul>
  *
- * <p class='w900'>
+ * <p>
  * Refer to the following documentation on both flavors:
  *
  * <ul class='doctree'>
@@ -953,10 +953,10 @@ import org.apache.juneau.xml.*;
  * </ul>
  *
  * <br>
- * <hr class='w900'>
+ * <hr>
  * <h4 class='topic'>Customizing Apache HttpClient</h4>
  *
- * <p class='w900'>
+ * <p>
  * Several methods are provided for customizing the underlying HTTP client and client builder classes:
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Builder}
@@ -968,7 +968,7 @@ import org.apache.juneau.xml.*;
  * 	</ul>
  * </ul>
  *
- * <p class='w900'>
+ * <p>
  * Additionally, all methods on the <c>HttpClientBuilder</c> class have been extended with fluent setters.
  *
  * <h5 class='figure'>Example:</h5>
@@ -988,7 +988,7 @@ import org.apache.juneau.xml.*;
  *
  * <h4 class='topic'>Extending RestClient</h4>
  *
- * <p class='w900'>
+ * <p>
  * The <c>RestClient</c> API has been designed to allow for the ability to be easily extended.
  * The following example that overrides the primary run method shows how this can be done.
  *
@@ -1011,7 +1011,7 @@ import org.apache.juneau.xml.*;
  * 	MyRestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().build(MyRestClient.<jk>class</jk>);
  * </p>
  *
- * <p class='w900'>
+ * <p>
  * The {@link RestRequest} and {@link RestResponse} objects can also be extended and integrated by overriding the
  * {@link RestClient#createRequest(URI,String,boolean)} and {@link RestClient#createResponse(RestRequest,HttpResponse,Parser)} methods.
  *

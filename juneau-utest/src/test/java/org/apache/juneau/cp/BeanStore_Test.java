@@ -65,7 +65,7 @@ public class BeanStore_Test {
 	public void a01_builderCopyConstructor() {
 		BeanStore b1p = BeanStore.create().readOnly().threadSafe().build();
 		BeanStore b1c = BeanStore.create().parent(b1p).build();
-		assertString(b1c.toString()).is("{parent:{readOnly:true,threadSafe:true}}");
+		assertString(b1c.toString()).isContains("readOnly:true","threadSafe:true");
 	}
 
 	@Test
@@ -161,10 +161,10 @@ public class BeanStore_Test {
 			assertList(b.stream(A2.class).map(BeanStoreEntry::get)).isHas(a2a);
 		}
 
-		assertString(b1p.toString()).is("{entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}]}");
-		assertString(b1c.toString()).is("{entries:[{type:'A2',bean:'"+identity(a2a)+"'}],parent:{entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}]}}");
-		assertString(b2p.toString()).is("{entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}],threadSafe:true}");
-		assertString(b2c.toString()).is("{entries:[{type:'A2',bean:'"+identity(a2a)+"'}],parent:{entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}],threadSafe:true},threadSafe:true}");
+		assertString(b1p.toString()).isMatches("{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}]}");
+		assertString(b1c.toString()).isMatches("{*,entries:[{type:'A2',bean:'"+identity(a2a)+"'}],parent:{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}]}}");
+		assertString(b2p.toString()).isMatches("{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}],threadSafe:true}");
+		assertString(b2c.toString()).isMatches("{*,entries:[{type:'A2',bean:'"+identity(a2a)+"'}],parent:{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}],threadSafe:true},threadSafe:true}");
 
 		b1p.removeBean(A1.class);
 		b1c.clear().addBean(A1.class, a1a);

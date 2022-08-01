@@ -15,6 +15,7 @@ package org.apache.juneau.reflect;
 import static org.apache.juneau.internal.ConsumerUtils.*;
 import java.lang.annotation.*;
 import java.lang.reflect.*;
+import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
@@ -488,13 +489,25 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	 * @return The field value.
 	 * @throws BeanRuntimeException Field was not accessible or field does not belong to object.
 	 */
-	public Object get(Object o) throws BeanRuntimeException {
+	@SuppressWarnings("unchecked")
+	public <T> T get(Object o) throws BeanRuntimeException {
 		try {
 			f.setAccessible(true);
-			return f.get(o);
+			return (T)f.get(o);
 		} catch (Exception e) {
 			throw new BeanRuntimeException(e);
 		}
+	}
+
+	/**
+	 * Same as {@link #get(Object)} but wraps the results in an {@link Optional}.
+	 *
+	 * @param o The object containing the field.
+	 * @return The field value.
+	 * @throws BeanRuntimeException Field was not accessible or field does not belong to object.
+	 */
+	public <T> Optional<T> getOptional(Object o) throws BeanRuntimeException {
+		return Optional.ofNullable(get(o));
 	}
 
 	/**
@@ -511,5 +524,18 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 		} catch (Exception e) {
 			throw new BeanRuntimeException(e);
 		}
+	}
+
+	/**
+	 * Sets the field value on the specified object if the value is <jk>null</jk>.
+	 *
+	 * @param o The object containing the field.
+	 * @param value The new field value.
+	 * @throws BeanRuntimeException Field was not accessible or field does not belong to object.
+	 */
+	public void setIfNull(Object o, Object value) {
+		Object v = get(o);
+		if (v == null)
+			set(o, value);
 	}
 }

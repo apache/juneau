@@ -33,7 +33,7 @@ public class ConfigMapListenerTest {
 
 	@Test
 	public void testBasicDefaultSection() throws Exception {
-		ConfigStore s = initStore("Foo.cfg",
+		ConfigStore s = initStore("A.cfg",
 			"foo=bar"
 		);
 
@@ -46,7 +46,7 @@ public class ConfigMapListenerTest {
 			}
 		};
 
-		ConfigMap cm = s.getMap("Foo.cfg");
+		ConfigMap cm = s.getMap("A.cfg");
 		cm.register(l);
 		cm.setEntry("", "foo", "baz", null, null, null);
 		cm.commit();
@@ -59,7 +59,7 @@ public class ConfigMapListenerTest {
 
 	@Test
 	public void testBasicNormalSection() throws Exception {
-		ConfigStore s = initStore("Foo.cfg",
+		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"foo=bar"
 		);
@@ -73,7 +73,7 @@ public class ConfigMapListenerTest {
 			}
 		};
 
-		ConfigMap cm = s.getMap("Foo.cfg");
+		ConfigMap cm = s.getMap("A.cfg");
 		cm.register(l);
 		cm.setEntry("S1", "foo", "baz", null, null, null);
 		cm.commit();
@@ -90,7 +90,7 @@ public class ConfigMapListenerTest {
 
 	@Test
 	public void testAddNewEntries() throws Exception {
-		ConfigStore s = initStore("Foo.cfg"
+		ConfigStore s = initStore("A.cfg"
 		);
 
 		final CountDownLatch latch = new CountDownLatch(2);
@@ -102,7 +102,7 @@ public class ConfigMapListenerTest {
 			}
 		};
 
-		ConfigMap cm = s.getMap("Foo.cfg");
+		ConfigMap cm = s.getMap("A.cfg");
 		cm.register(l);
 		cm.setEntry("", "k", "vb", null, null, null);
 		cm.setEntry("S1", "k1", "v1b", null, null, null);
@@ -116,7 +116,7 @@ public class ConfigMapListenerTest {
 
 	@Test
 	public void testAddNewEntriesWithAttributes() throws Exception {
-		ConfigStore s = initStore("Foo.cfg"
+		ConfigStore s = initStore("A.cfg"
 		);
 
 		final CountDownLatch latch = new CountDownLatch(2);
@@ -128,7 +128,7 @@ public class ConfigMapListenerTest {
 			}
 		};
 
-		ConfigMap cm = s.getMap("Foo.cfg");
+		ConfigMap cm = s.getMap("A.cfg");
 		cm.register(l);
 		cm.setEntry("", "k", "kb", "^*", "C", Arrays.asList("#k"));
 		cm.setEntry("S1", "k1", "k1b", "^*", "C1", Arrays.asList("#k1"));
@@ -142,7 +142,7 @@ public class ConfigMapListenerTest {
 
 	@Test
 	public void testAddExistingEntriesWithAttributes() throws Exception {
-		ConfigStore s = initStore("Foo.cfg",
+		ConfigStore s = initStore("A.cfg",
 			"#ka",
 			"k=va # Ca",
 			"#S1",
@@ -160,7 +160,7 @@ public class ConfigMapListenerTest {
 			}
 		};
 
-		ConfigMap cm = s.getMap("Foo.cfg");
+		ConfigMap cm = s.getMap("A.cfg");
 		cm.register(l);
 		cm.setEntry("", "k", "kb", "^*", "Cb", Arrays.asList("#kb"));
 		cm.setEntry("S1", "k1", "k1b", "^*", "Cb1", Arrays.asList("#k1b"));
@@ -178,7 +178,7 @@ public class ConfigMapListenerTest {
 
 	@Test
 	public void testRemoveExistingEntries() throws Exception {
-		ConfigStore s = initStore("Foo.cfg",
+		ConfigStore s = initStore("A.cfg",
 			"k=v",
 			"[S1]",
 			"k1=v1"
@@ -193,7 +193,7 @@ public class ConfigMapListenerTest {
 			}
 		};
 
-		ConfigMap cm = s.getMap("Foo.cfg");
+		ConfigMap cm = s.getMap("A.cfg");
 		cm.register(l);
 		cm.removeEntry("", "k");
 		cm.removeEntry("S1", "k1");
@@ -207,7 +207,7 @@ public class ConfigMapListenerTest {
 
 	@Test
 	public void testRemoveExistingEntriesWithAttributes() throws Exception {
-		ConfigStore s = initStore("Foo.cfg",
+		ConfigStore s = initStore("A.cfg",
 			"#ka",
 			"k=va # Ca",
 			"#S1",
@@ -225,7 +225,7 @@ public class ConfigMapListenerTest {
 			}
 		};
 
-		ConfigMap cm = s.getMap("Foo.cfg");
+		ConfigMap cm = s.getMap("A.cfg");
 		cm.register(l);
 		cm.removeEntry("", "k");
 		cm.removeEntry("S1", "k1");
@@ -243,7 +243,7 @@ public class ConfigMapListenerTest {
 
 	@Test
 	public void testAddNewSections() throws Exception {
-		ConfigStore s = initStore("Foo.cfg"
+		ConfigStore s = initStore("A.cfg"
 		);
 
 		final CountDownLatch latch = new CountDownLatch(1);
@@ -255,7 +255,7 @@ public class ConfigMapListenerTest {
 			}
 		};
 
-		ConfigMap cm = s.getMap("Foo.cfg");
+		ConfigMap cm = s.getMap("A.cfg");
 		cm.register(l);
 		cm.setSection("", Arrays.asList("#D1"));
 		cm.setSection("S1", Arrays.asList("#S1"));
@@ -272,7 +272,7 @@ public class ConfigMapListenerTest {
 
 	@Test
 	public void testModifyExistingSections() throws Exception {
-		ConfigStore s = initStore("Foo.cfg",
+		ConfigStore s = initStore("A.cfg",
 			"#Da",
 			"",
 			"#S1a",
@@ -290,7 +290,7 @@ public class ConfigMapListenerTest {
 			}
 		};
 
-		ConfigMap cm = s.getMap("Foo.cfg");
+		ConfigMap cm = s.getMap("A.cfg");
 		cm.register(l);
 		cm.setSection("", Arrays.asList("#Db"));
 		cm.setSection("S1", Arrays.asList("#S1b"));
@@ -311,7 +311,7 @@ public class ConfigMapListenerTest {
 
 	@Test
 	public void testRemoveSections() throws Exception {
-		ConfigStore s = initStore("Foo.cfg",
+		ConfigStore s = initStore("A.cfg",
 			"#Da",
 			"",
 			"k = v",
@@ -335,7 +335,7 @@ public class ConfigMapListenerTest {
 			}
 		};
 
-		ConfigMap cm = s.getMap("Foo.cfg");
+		ConfigMap cm = s.getMap("A.cfg");
 		cm.register(l);
 		cm.removeSection("");
 		cm.removeSection("S1");
@@ -355,7 +355,7 @@ public class ConfigMapListenerTest {
 
 	@Test
 	public void testUpdateFromStore() throws Exception {
-		ConfigStore s = initStore("Foo.cfg");
+		ConfigStore s = initStore("A.cfg");
 
 		final CountDownLatch latch = new CountDownLatch(3);
 
@@ -366,9 +366,9 @@ public class ConfigMapListenerTest {
 			}
 		};
 
-		ConfigMap cm = s.getMap("Foo.cfg");
+		ConfigMap cm = s.getMap("A.cfg");
 		cm.register(l);
-		s.update("Foo.cfg",
+		s.update("A.cfg",
 			"#Da",
 			"",
 			"k = v # cv",
@@ -395,7 +395,7 @@ public class ConfigMapListenerTest {
 
 	@Test
 	public void testMergeNoOverwrite() throws Exception {
-		ConfigStore s = initStore("Foo.cfg",
+		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1a"
 		);
@@ -412,10 +412,10 @@ public class ConfigMapListenerTest {
 			}
 		};
 
-		ConfigMap cm = s.getMap("Foo.cfg");
+		ConfigMap cm = s.getMap("A.cfg");
 		cm.register(l);
 		cm.setEntry("S2", "k2", "v2b", null, null, null);
-		s.update("Foo.cfg",
+		s.update("A.cfg",
 			"[S1]",
 			"k1 = v1b"
 		);
@@ -433,7 +433,7 @@ public class ConfigMapListenerTest {
 
 	@Test
 	public void testMergeWithOverwrite() throws Exception {
-		ConfigStore s = initStore("Foo.cfg",
+		ConfigStore s = initStore("A.cfg",
 			"[S1]",
 			"k1 = v1a"
 		);
@@ -450,10 +450,10 @@ public class ConfigMapListenerTest {
 			}
 		};
 
-		ConfigMap cm = s.getMap("Foo.cfg");
+		ConfigMap cm = s.getMap("A.cfg");
 		cm.register(l);
 		cm.setEntry("S1", "k1", "v1c", null, null, null);
-		s.update("Foo.cfg",
+		s.update("A.cfg",
 			"[S1]",
 			"k1 = v1b"
 		);
@@ -497,7 +497,7 @@ public class ConfigMapListenerTest {
 				}
 			};
 
-			ConfigMap cm = s.getMap("Foo.cfg");
+			ConfigMap cm = s.getMap("A.cfg");
 			cm.register(l);
 			cm.setEntry("S1", "k1", "v1c", null, null, null);
 			cm.commit();
@@ -543,7 +543,7 @@ public class ConfigMapListenerTest {
 				}
 			};
 
-			ConfigMap cm = s.getMap("Foo.cfg");
+			ConfigMap cm = s.getMap("A.cfg");
 			cm.register(l);
 			cm.setEntry("S1", "k1", "v1c", null, null, null);
 			assertThrown(()->cm.commit()).asMessage().is("Unable to store contents of config to store.");

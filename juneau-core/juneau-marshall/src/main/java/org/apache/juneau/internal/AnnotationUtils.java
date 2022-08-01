@@ -79,6 +79,8 @@ public class AnnotationUtils {
 
 	private static int hashMember(String name, Object value) {
 		int part1 = name.hashCode() * 127;
+		if (value == null)
+			return part1;
 		if (value.getClass().isArray())
 			return part1 ^ arrayMemberHash(value.getClass().getComponentType(), value);
 		if (value instanceof Annotation)

@@ -40,7 +40,7 @@ import org.apache.juneau.utils.*;
 /**
  * Bean context.
  *
- * <p class='w800'>
+ * <p>
  * This class servers multiple purposes:
  * <ul class='spaced-list'>
  * 	<li>
@@ -50,16 +50,16 @@ import org.apache.juneau.utils.*;
  * 		{@link PropertyNamer PropertyNamers}, etc...  which are used to tailor how POJOs are serialized and parsed.
  * </ul>
  *
- * <p class='w800'>
+ * <p>
  * All serializers and parsers use this context so that they can handle POJOs using a common framework.
  *
  * <h5 class='topic'>Bean Contexts</h5>
  *
- * <p class='w800'>
+ * <p>
  * Bean contexts are created through the {@link BeanContext#create() BeanContext.create()} and {@link Builder#build()} methods.
  * <br>These context objects are read-only, reusable, and thread-safe.
  *
- * <p class='w800'>
+ * <p>
  * Each bean context maintains a cache of {@link ClassMeta} objects that describe information about classes encountered.
  * These <c>ClassMeta</c> objects are time-consuming to construct.
  * Therefore, instances of {@link BeanContext} that share the same <js>"BeanContext.*"</js> property values share
@@ -69,7 +69,7 @@ import org.apache.juneau.utils.*;
  *
  * <h5 class='topic'>Bean Sessions</h5>
  *
- * <p class='w800'>
+ * <p>
  * Whereas <c>BeanContext</c> objects are permanent, unchangeable, cached, and thread-safe,
  * {@link BeanSession} objects are ephemeral and not thread-safe.
  * They are meant to be used as quickly-constructed scratchpads for creating bean maps.
@@ -77,22 +77,22 @@ import org.apache.juneau.utils.*;
  *
  * <h5 class='topic'>BeanContext configuration properties</h5>
  *
- * <p class='w800'>
+ * <p>
  * <c>BeanContexts</c> have several configuration properties that can be used to tweak behavior on how beans are
  * handled.  These are denoted as the static <jsf>BEAN_*</jsf> fields on this class.
  *
- * <p class='w800'>
+ * <p>
  * Some settings (e.g. {@link Builder#beansRequireDefaultConstructor()}) are used to differentiate between bean
  * and non-bean classes.
  * Attempting to create a bean map around one of these objects will throw a {@link BeanRuntimeException}.
  * The purpose for this behavior is so that the serializers can identify these non-bean classes and convert them to
  * plain strings using the {@link Object#toString()} method.
  *
- * <p class='w800'>
+ * <p>
  * Some settings (e.g. {@link Builder#beanFieldVisibility(Visibility)}) are used to determine what kinds of properties are
  * detected on beans.
  *
- * <p class='w800'>
+ * <p>
  * Some settings (e.g. {@link Builder#beanMapPutReturnsOldValue()}) change the runtime behavior of bean maps.
  *
  * <h5 class='section'>Example:</h5>
@@ -108,11 +108,11 @@ import org.apache.juneau.utils.*;
  *
  * <h5 class='topic'>Bean Maps</h5>
  *
- * <p class='w800'>
+ * <p>
  * {@link BeanMap BeanMaps} are wrappers around Java beans that allow properties to be retrieved and
  * set using the common {@link Map#put(Object,Object)} and {@link Map#get(Object)} methods.
  *
- * <p class='w800'>
+ * <p>
  * Bean maps are created in two ways...
  * <ol>
  * 	<li>{@link BeanSession#toBeanMap(Object) BeanSession.toBeanMap()} - Wraps an existing bean inside a {@code Map}

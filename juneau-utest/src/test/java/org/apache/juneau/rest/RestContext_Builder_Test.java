@@ -15,8 +15,11 @@ package org.apache.juneau.rest;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.junit.runners.MethodSorters.*;
 
+import org.apache.juneau.annotation.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.client.*;
+import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.*;
 
@@ -27,7 +30,7 @@ public class RestContext_Builder_Test {
 	// beanStore
 	//-----------------------------------------------------------------------------------------------------------------
 
-	public static class Foo {}
+	public static class A {}
 
 	@Rest
 	public static class A1 {
@@ -42,7 +45,7 @@ public class RestContext_Builder_Test {
 
 	public static class MyBeanStore extends BeanStore {
 		protected MyBeanStore(Builder builder) {
-			super(builder.parent(BeanStore.create().build().addBean(Foo.class, new Foo())));
+			super(builder.parent(BeanStore.create().build().addBean(A.class, new A())));
 		}
 	}
 
@@ -54,7 +57,7 @@ public class RestContext_Builder_Test {
 	@Test
 	public void a02_createBeanStore_annotation() {
 		MockRestClient.buildLax(A2.class);
-		assertObject(A2.beanStore.getBean(Foo.class)).isNotNull();
+		assertObject(A2.beanStore.getBean(A.class)).isNotNull();
 	}
 
 	@Rest
@@ -69,7 +72,7 @@ public class RestContext_Builder_Test {
 	@Test
 	public void a03_createBeanStore_restBean1() {
 		MockRestClient.buildLax(A3.class);
-		assertObject(A3.beanStore.getBean(Foo.class)).isNotNull();
+		assertObject(A3.beanStore.getBean(A.class)).isNotNull();
 	}
 
 	@Rest
@@ -84,6 +87,54 @@ public class RestContext_Builder_Test {
 	@Test
 	public void a04_createBeanStore_restBean2() {
 		MockRestClient.buildLax(A4.class);
-		assertObject(A4.beanStore.getBean(Foo.class)).isNotNull();
+		assertObject(A4.beanStore.getBean(A.class)).isNotNull();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// @RestBean on fields.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class B {
+		public int id;
+
+		public B(int id) {
+			this.id = id;
+		}
+	}
+
+	@Rest
+	public static class B1a implements BasicJsonConfig {
+		@RestBean static B b1 = new B(1);
+		@RestBean(name="b2") B b2 = new B(2);
+
+		@RestBean static B b3;
+		@RestBean(name="b2") B b4;
+
+		@RestGet("/a1") public B a1(B b) { return b; }
+		@RestGet("/a2") public B a2(@Named("b2") B b) { return b; }
+		@RestGet("/a3") public B a3() { return b3; }
+		@RestGet("/a4") public B a4() { return b4; }
+	}
+
+	@Rest
+	public static class B1b extends B1a {
+		@RestGet("/a5") public B a5(B b) { return b; }
+		@RestGet("/a6") public B a6(@Named("b2") B b) { return b; }
+		@RestGet("/a7") public B a7() { return b3; }
+		@RestGet("/a8") public B a8() { return b4; }
+	}
+
+	static RestClient b1b = MockRestClient.createLax(B1b.class).simpleJson().build();
+
+	@Test
+	public void b01_RestBean_fields() throws Exception {
+		b1b.get("/a1").run().assertContent().is("{id:1}");
+		b1b.get("/a2").run().assertContent().is("{id:2}");
+		b1b.get("/a3").run().assertContent().is("{id:1}");
+		b1b.get("/a4").run().assertContent().is("{id:2}");
+		b1b.get("/a5").run().assertContent().is("{id:1}");
+		b1b.get("/a6").run().assertContent().is("{id:2}");
+		b1b.get("/a7").run().assertContent().is("{id:1}");
+		b1b.get("/a8").run().assertContent().is("{id:2}");
 	}
 }

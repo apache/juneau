@@ -39,7 +39,7 @@ import org.apache.juneau.oapi.*;
  * <p>
  * Annotation that can be applied to a parameter of a <ja>@RestOp</ja>-annotated method to identify it as a URL query parameter.
  *
- * <p class='w800'>
+ * <p>
  * Unlike {@link FormData @FormData}, using this annotation does not result in the servlet reading the contents of
  * URL-encoded form posts.
  * Therefore, this annotation can be used in conjunction with the {@link Content @Content} annotation or

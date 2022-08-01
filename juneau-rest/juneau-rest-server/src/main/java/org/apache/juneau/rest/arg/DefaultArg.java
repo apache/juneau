@@ -12,6 +12,10 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.arg;
 
+import static org.apache.juneau.internal.StringUtils.*;
+
+import java.lang.annotation.*;
+
 import org.apache.juneau.cp.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
@@ -39,6 +43,7 @@ import org.apache.juneau.rest.annotation.*;
 public class DefaultArg implements RestOpArg {
 
 	private final Class<?> type;
+	private final String name;
 	private final ParamInfo paramInfo;
 
 	/**
@@ -59,10 +64,22 @@ public class DefaultArg implements RestOpArg {
 	protected DefaultArg(ParamInfo paramInfo) {
 		this.type = paramInfo.getParameterType().inner();
 		this.paramInfo = paramInfo;
+		this.name = findBeanName(paramInfo);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Helper methods
+	//-----------------------------------------------------------------------------------------------------------------
+	private String findBeanName(ParamInfo pi) {
+		Annotation n = pi.getAnnotation(Annotation.class, x -> x.annotationType().getSimpleName().equals("Named"));
+		if (n != null)
+			return AnnotationInfo.of((ClassInfo)null, n).getValue(String.class, "value", NOT_EMPTY).orElse(null);
+		return null;
 	}
 
 	@Override /* RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
-		return opSession.getBeanStore().getBean(type).orElseThrow(()->new ArgException(paramInfo, "Could not resolve bean type {0}", type.getName()));
+		System.err.println("beanStore2" + opSession.getBeanStore());
+		return opSession.getBeanStore().getBean(type, name).orElseThrow(()->new ArgException(paramInfo, "Could not resolve bean type {0}", type.getName()));
 	}
 }

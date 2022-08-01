@@ -170,8 +170,9 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			this.restContext = context;
 			this.parent = context.builder;
 			this.restMethod = method;
+
 			this.beanStore = BeanStore
-				.of(context.getRootBeanStore(), context.builder.resource().get())
+				.of(context.getBeanStore(), context.builder.resource().get())
 				.addBean(java.lang.reflect.Method.class, method);
 
 			MethodInfo mi = MethodInfo.of(context.getResourceClass(), method);

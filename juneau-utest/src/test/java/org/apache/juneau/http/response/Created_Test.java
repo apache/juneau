@@ -26,7 +26,7 @@ public class Created_Test {
 	public static class A {
 		@RestGet public Created a1() { return CREATED; }
 		@RestGet public Created a2() { return created().content("foo").build(); }
-		@RestGet public Created a3() { return created().header("Foo","bar").build(); }
+		@RestGet public Created a3() { return created().header("A","bar").build(); }
 	}
 
 	@Test
@@ -44,6 +44,6 @@ public class Created_Test {
 		client.get("/a3")
 			.run()
 			.assertCode().is(201)
-			.assertHeader("Foo").is("bar");
+			.assertHeader("A").is("bar");
 	}
 }

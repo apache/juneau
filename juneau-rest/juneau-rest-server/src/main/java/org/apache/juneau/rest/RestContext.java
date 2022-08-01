@@ -410,9 +410,21 @@ public class RestContext extends Context {
 
 			ClassInfo rci = ClassInfo.of(resourceClass);
 
+			// Get @RestBean fields initialized with values.
+			rci.forEachAllField(
+				x -> x.hasAnnotation(RestBean.class),
+				x -> x.getOptional(resource.get()).ifPresent(
+					y -> beanStore.add(
+						x.getType().inner(),
+						y,
+						RestBeanAnnotation.name(x.getAnnotation(RestBean.class))
+					)
+				)
+			);
+
 			rci.forEachMethod(x -> x.hasAnnotation(RestBean.class), x -> {
 				Class<Object> rt = x.getReturnType().inner();
-				String name = x.getAnnotation(RestBean.class).name();
+				String name = RestBeanAnnotation.name(x.getAnnotation(RestBean.class));
 				if (! (DELAYED_INJECTION.contains(rt) || DELAYED_INJECTION_NAMES.contains(name))) {
 					beanStore
 						.createMethodFinder(rt)
@@ -432,9 +444,17 @@ public class RestContext extends Context {
 
 			runInitHooks(bs, resource());
 
-			// Set @RestBean fields.
-			// Note that these only get set on the first resource bean.
-			rci.forEachAllField(x -> x.hasAnnotation(RestBean.class), x -> x.set(resource.get(), beanStore.getBean(x.getType().inner(), x.getAnnotation(RestBean.class).name()).orElse(null)));
+			// Set @RestBean fields not initialized with values.
+			rci.forEachAllField(
+				x -> x.hasAnnotation(RestBean.class),
+				x -> x.setIfNull(
+					resource.get(),
+					beanStore.getBean(
+						x.getType().inner(),
+						RestBeanAnnotation.name(x.getAnnotation(RestBean.class))
+					).orElse(null)
+				)
+			);
 
 			return this;
 		}
@@ -780,7 +800,7 @@ public class RestContext extends Context {
 			);
 
 			// Replace with bean from bean store.
-			rootBeanStore
+			beanStore
 				.getBean(VarResolver.class)
 				.ifPresent(x -> v.get().impl(x));
 
@@ -1148,7 +1168,7 @@ public class RestContext extends Context {
 				.ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from bean store.
-			rootBeanStore
+			beanStore
 				.getBean(ThrownStore.class)
 				.ifPresent(x->v.get().impl(x));
 
@@ -1191,7 +1211,7 @@ public class RestContext extends Context {
 		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
 		 *
 		 * <h5 class='section'>Example:</h5>
-		 * <p class='bcodbjavae w800'>
+		 * <p class='bjava'>
 		 * 	RestContext <jv>context</jv> = RestContext
 		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
 		 * 		.encoders(<jv>x</jv> -&gt; <jv>x</jv>.add(MyEncoder.<jk>class</jk>))
@@ -1252,7 +1272,7 @@ public class RestContext extends Context {
 				.ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from bean store.
-			rootBeanStore
+			beanStore
 				.getBean(EncoderSet.class)
 				.ifPresent(x->v.get().impl(x));
 
@@ -1334,7 +1354,7 @@ public class RestContext extends Context {
 				.ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from bean store.
-			rootBeanStore
+			beanStore
 				.getBean(SerializerSet.class)
 				.ifPresent(x->v.get().impl(x));
 
@@ -1416,7 +1436,7 @@ public class RestContext extends Context {
 				.ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from bean store.
-			rootBeanStore
+			beanStore
 				.getBean(ParserSet.class)
 				.ifPresent(x->v.get().impl(x));
 
@@ -1497,7 +1517,7 @@ public class RestContext extends Context {
 				.ifPresent(x -> v.get().type(x));
 
 			// Replace with bean from bean store.
-			rootBeanStore
+			beanStore
 				.getBean(MethodExecStore.class)
 				.ifPresent(x->v.get().impl(x));
 
@@ -1592,7 +1612,7 @@ public class RestContext extends Context {
 		 * absolute path like <js>"com.foo.sample.nls.Messages"</js>
 		 *
 		 * <h5 class='section'>Examples:</h5>
-		 * <p class='jini w800'>
+		 * <p class='bini'>
 		 * 	<cc># Contents of org/apache/foo/nls/MyMessages.properties</cc>
 		 *
 		 * 	<ck>HelloMessage</ck> = <cv>Hello {0}!</cv>
@@ -1646,7 +1666,7 @@ public class RestContext extends Context {
 			);
 
 			// Replace with bean from bean store.
-			rootBeanStore
+			beanStore
 				.getBean(Messages.class)
 				.ifPresent(x->v.get().impl(x));
 
@@ -1832,7 +1852,7 @@ public class RestContext extends Context {
 			);
 
 			// Replace with bean from bean store.
-			rootBeanStore
+			beanStore
 				.getBean(ResponseProcessorList.class)
 				.ifPresent(x -> v.get().impl(x));
 
@@ -1991,7 +2011,7 @@ public class RestContext extends Context {
 				.get(CallLogger.class)
 				.ifPresent(x -> creator.type(x));
 
-			rootBeanStore
+			beanStore
 				.getBean(CallLogger.class)
 				.ifPresent(x -> creator.impl(x));
 
@@ -2084,7 +2104,7 @@ public class RestContext extends Context {
 				.ifPresent(x -> v.set(x));
 
 			// Replace with bean from bean store.
-			rootBeanStore
+			beanStore
 				.getBean(BeanContext.class)
 				.ifPresent(x -> v.get().impl(x));
 
@@ -2180,7 +2200,7 @@ public class RestContext extends Context {
 				.ifPresent(x -> v.set(x));
 
 			// Replace with bean from bean store.
-			rootBeanStore
+			beanStore
 				.getBean(HttpPartSerializer.class)
 				.ifPresent(x -> v.get().impl(x));
 
@@ -2292,7 +2312,7 @@ public class RestContext extends Context {
 				.ifPresent(x -> v.set(x));
 
 			// Replace with bean from bean store.
-			rootBeanStore
+			beanStore
 				.getBean(HttpPartParser.class)
 				.ifPresent(x -> v.get().impl(x));
 
@@ -2396,7 +2416,7 @@ public class RestContext extends Context {
 				.ifPresent(x -> v.set(x));
 
 			// Replace with bean from bean store.
-			rootBeanStore
+			beanStore
 				.getBean(JsonSchemaGenerator.class)
 				.ifPresent(x -> v.get().impl(x));
 
@@ -2585,7 +2605,7 @@ public class RestContext extends Context {
 				.get(FileFinder.class)
 				.ifPresent(x -> creator.type(x));
 
-			rootBeanStore
+			beanStore
 				.getBean(FileFinder.class)
 				.ifPresent(x -> creator.impl(x));
 
@@ -2738,7 +2758,7 @@ public class RestContext extends Context {
 				.get(StaticFiles.class)
 				.ifPresent(x -> creator.type(x));
 
-			rootBeanStore
+			beanStore
 				.getBean(StaticFiles.class)
 				.ifPresent(x -> creator.impl(x));
 
@@ -2896,7 +2916,7 @@ public class RestContext extends Context {
 			);
 
 			// Replace with bean from bean store.
-			rootBeanStore
+			beanStore
 				.getBean(HeaderList.class, "defaultRequestHeaders")
 				.ifPresent(x -> v.get().impl(x));
 
@@ -3028,7 +3048,7 @@ public class RestContext extends Context {
 			);
 
 			// Replace with bean from bean store.
-			rootBeanStore
+			beanStore
 				.getBean(HeaderList.class, "defaultResponseHeaders")
 				.ifPresent(x -> v.get().impl(x));
 
@@ -3156,7 +3176,7 @@ public class RestContext extends Context {
 				NamedAttributeList.create()
 			);
 
-			rootBeanStore
+			beanStore
 				.getBean(NamedAttributeList.class, "defaultRequestAttributes")
 				.ifPresent(x -> v.get().impl(x));
 
@@ -3348,7 +3368,7 @@ public class RestContext extends Context {
 			);
 
 			// Replace with bean from bean store.
-			rootBeanStore
+			beanStore
 				.getBean(RestOpArgList.class)
 				.ifPresent(x -> v.get().impl(x));
 
@@ -3444,7 +3464,7 @@ public class RestContext extends Context {
 				.get(DebugEnablement.class)
 				.ifPresent(x -> creator.type(x));
 
-			rootBeanStore
+			beanStore
 				.getBean(DebugEnablement.class)
 				.ifPresent(x -> creator.impl(x));
 
@@ -4206,7 +4226,7 @@ public class RestContext extends Context {
 				.get(SwaggerProvider.class)
 				.ifPresent(x -> creator.type(x));
 
-			rootBeanStore
+			beanStore
 				.getBean(SwaggerProvider.class)
 				.ifPresent(x -> creator.impl(x));
 

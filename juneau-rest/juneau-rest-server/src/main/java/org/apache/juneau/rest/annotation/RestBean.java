@@ -47,35 +47,89 @@ import org.apache.juneau.svl.*;
  * Rest bean injection annotation.
  *
  * <p>
- * Used on methods of {@link Rest}-annotated classes to denote methods that override and customize beans
+ * Used on methods of {@link Rest}-annotated classes to denote methods and fields that override and customize beans
  * used by the REST framework.
  *
  * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
+ * 	<jc>// Rest resource that uses a customized call logger.</jc>
  * 	<ja>@Rest</ja>
  * 	<jk>public class</jk> MyRest <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
  *
- * 		<jc>// Use a customized call logger for the class.</jc>
+ * 		<jc>// Option #1:  As a field.</jc>
+ * 		<ja>@RestBean</ja>
+ * 		CallLogger <jf>myCallLogger</jf> = CallLogger.<jsm>create</jsm>().logger(<js>"mylogger"</js>).build();
+ *
+ * 		<jc>// Option #2:  As a method.</jc>
  * 		<ja>@RestBean</ja>
  * 		<jk>public</jk> CallLogger myCallLogger() {
  * 			<jk>return</jk> CallLogger.<jsm>create</jsm>().logger(<js>"mylogger"</js>).build();
  * 		}
- *
- * 		<jc>// Set a default header on a specific REST method.</jc>
- * 		<jc>// Input parameter is the default header list builder with all annotations applied.</jc>
- * 		<ja>@RestBean</ja>(name=<js>"defaultRequestHeaders"</js>,methodScope=<js>"myRestMethod"</js>)
- * 		<jk>public</jk> HeaderList.Builder myRequestHeaders(HeaderList.Builder <jv>builder</jv>) {
- * 			<jk>return</jk> <jv>builder</jv>.set(ContentType.<jsf>TEXT_PLAIN</jsf>).build();
- * 		}
  * 	}
  * </p>
  *
- * <ul>
- * 	<li>Methods must be public.
- * 	<li>Methods can be static or non-static.
- * 	<li>Any injectable beans (including spring beans) can be passed as arguments into the method.
- * 	<li>Bean names are required when multiple beans of the same type exist in the bean store.
- * 	<li>By default, the injected bean scope is class-level (applies to the entire class).  The
+ * <p>
+ * 	The {@link RestBean#name()}/{@link RestBean#value()} attributes are used to differentiate between named beans.
+ * </p>
+ * <h5 class='figure'>Example</h5>
+ * <p class='bcode'>
+ * 	<jc>// Customized default request headers.</jc>
+ * 	<ja>@RestBean</ja>(<js>"defaultRequestHeaders"</js>)
+ * 	HeaderList <jf>defaultRequestHeaders</jf> = HeaderList.<jsm>create</jsm>().set(ContentType.<jsf>TEXT_PLAIN</jsf>).build();
+ *
+ * 	<jc>// Customized default response headers.</jc>
+ * 	<ja>@RestBean</ja>(<js>"defaultResponseHeaders"</js>)
+ * 	HeaderList <jf>defaultResponseHeaders</jf> = HeaderList.<jsm>create</jsm>().set(ContentType.<jsf>TEXT_PLAIN</jsf>).build();
+ * </p>
+ *
+ * <p>
+ * 	The {@link RestBean#methodScope()} attribute is used to define beans in the scope of specific {@link RestOp}-annotated methods.
+ * </p>
+ * <h5 class='figure'>Example</h5>
+ * <p class='bcode'>
+ * 	<jc>// Set a default header on a specific REST method.</jc>
+ * 	<jc>// Input parameter is the default header list builder with all annotations applied.</jc>
+ * 	<ja>@RestBean</ja>(name=<js>"defaultRequestHeaders"</js>, methodScope=<js>"myRestMethod"</js>)
+ * 	<jk>public</jk> HeaderList.Builder myRequestHeaders(HeaderList.Builder <jv>builder</jv>) {
+ * 		<jk>return</jk> <jv>builder</jv>.set(ContentType.<jsf>TEXT_PLAIN</jsf>);
+ * 	}
+ *
+ * 	<jc>// Method that picks up default header defined above.</jc>
+ * 	<ja>@RestGet</ja>
+ * 	<jk>public</jk> Object myRestMethod(ContentType <jv>contentType</jv>) { ... }
+ * </p>
+ *
+ * <p>
+ * 	This annotation can also be used to inject arbitrary beans into the bean store which allows them to be
+ * 	passed as resolved parameters on {@link RestOp}-annotated methods.
+ * </p>
+ * <h5 class='figure'>Example</h5>
+ * <p class='bcode'>
+ * 	<jc>// Custom beans injected into the bean store.</jc>
+ * 	<ja>@RestBean</ja> MyBean <jv>myBean1</jv> = <jk>new</jk> MyBean();
+ * 	<ja>@RestBean</ja>(<js>"myBean2"</js>) MyBean <jv>myBean2</jv> = <jk>new</jk> MyBean();
+ *
+ * 	<jc>// Method that uses injected beans.</jc>
+ * 	<ja>@RestGet</ja>
+ * 	<jk>public</jk> Object doGet(MyBean <jv>myBean1</jv>, <ja>@Named</ja>(<js>"myBean2"</js>) MyBean <jv>myBean2</jv>) { ... }
+ * </p>
+ *
+ * <p>
+ * 	This annotation can also be used on uninitialized fields.  When fields are uninitialized, they will
+ * 	be set during initialization based on beans found in the bean store.
+ * </p>
+ * <h5 class='figure'>Example</h5>
+ * <p class='bcode'>
+ * 	<jc>// Fields that get set during initialization based on beans found in the bean store.</jc>
+ * 	<ja>@RestBean</ja> CallLogger <jf>callLogger</jf>;
+ * 	<ja>@RestBean</ja> BeanStore <jf>beanStore</jf>;  <jc>// Note that BeanStore itself can be accessed this way.</jc>
+ * </p>
+ *
+ * <ul class='notes'>
+ * 	<li class='note'>Methods and fields can be static or non-static.
+ * 	<li class='note'>Any injectable beans (including spring beans) can be passed as arguments into methods.
+ * 	<li class='note'>Bean names are required when multiple beans of the same type exist in the bean store.
+ * 	<li class='note'>By default, the injected bean scope is class-level (applies to the entire class).  The
  * 		{@link RestBean#methodScope()} annotation can be used to apply to method-level only (when applicable).
  * </ul>
  *
@@ -132,6 +186,14 @@ public @interface RestBean {
 	 * @return The bean name to use to distinguish beans of the same type for different purposes, or blank if bean type is unique.
 	 */
 	String name() default "";
+
+
+	/**
+	 * Same as {@link #name()}.
+	 *
+	 * @return The bean name to use to distinguish beans of the same type for different purposes, or blank if bean type is unique.
+	 */
+	String value() default "";
 
 	/**
 	 * The short names of the methods that this annotation applies to.
