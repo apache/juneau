@@ -862,7 +862,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 		}
 		 *
 		 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
-		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.converters(MyConverter.<jk>class</jk>);
 		 * 		}
@@ -1891,7 +1891,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 		}
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.maxInput(<js>"10M"</js>);
 		 * 		}

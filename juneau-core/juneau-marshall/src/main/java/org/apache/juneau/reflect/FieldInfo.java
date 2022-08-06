@@ -486,6 +486,7 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	 * Returns the field value on the specified object.
 	 *
 	 * @param o The object containing the field.
+	 * @param <T> The object type to retrieve.
 	 * @return The field value.
 	 * @throws BeanRuntimeException Field was not accessible or field does not belong to object.
 	 */
@@ -503,6 +504,7 @@ public final class FieldInfo implements Comparable<FieldInfo> {
 	 * Same as {@link #get(Object)} but wraps the results in an {@link Optional}.
 	 *
 	 * @param o The object containing the field.
+	 * @param <T> The object type to retrieve.
 	 * @return The field value.
 	 * @throws BeanRuntimeException Field was not accessible or field does not belong to object.
 	 */

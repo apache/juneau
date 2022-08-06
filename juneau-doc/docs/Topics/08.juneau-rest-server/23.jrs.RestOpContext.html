@@ -28,8 +28,8 @@
 		To access the builder for these objects, simply implement the following init method that will be called for each {@link oajr.annotation.RestOp}-annotated method.
 	</p>
 	<p class='bjava'>
-		|	<jc>// Use an INIT hook with RestOpContext.Builder as a parameter.</jc>
-		|	<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		|	<jc>// Use an init hook with RestOpContext.Builder as a parameter.</jc>
+		|	<ja>@RestInit</ja>
 		|	<jk>public void</jk> init(RestOpContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		|			<jv>builder</jv>
 		|				.beanContext(<jv>x</jv> -&gt; <jv>x</jv>.swaps(TemporalCalendarSwap.Rfc1123DateTime.<jk>class</jk>))

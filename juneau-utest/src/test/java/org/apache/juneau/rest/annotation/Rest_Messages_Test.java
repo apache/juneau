@@ -101,10 +101,10 @@ public class Rest_Messages_Test {
 	}
 
 	public static class B3 extends B1 {
-		 @RestHook(HookEvent.INIT)
-		 public void init(RestContext.Builder builder) throws Exception {
-			 builder.messages().location(null, "B2x").location(B1.class, "B1x");
-		 }
+		@RestInit
+		public void init(RestContext.Builder builder) throws Exception {
+			builder.messages().location(null, "B2x").location(B1.class, "B1x");
+		}
 	}
 
 	@Test

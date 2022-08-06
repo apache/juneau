@@ -29,7 +29,7 @@
 		|		<jc>// Our database.</jc>
 		|		<jk>private</jk> Map&lt;Integer,Object&gt; <jf>myDatabase</jf>;
 		|
-		|		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		|		<ja>@RestInit</ja>
 		|		<jk>public void</jk> initMyDatabase(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		|			<jf>myDatabase</jf> = <jk>new</jk> LinkedHashMap&lt;&gt;();
 		|		}
@@ -43,39 +43,30 @@
 		|	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestObject <jk>implements</jk> BasicUniversalConfig {
 		|
 		|		<jc>// Add a request attribute to all incoming requests.</jc>
-		|		<ja>@RestHook</ja>(<jsf>PRE_CALL</jsf>)
+		|		<ja>@RestPreCall</ja>
 		|		<jk>public void</jk> onPreCall(RestRequest <jv>req</jv>) {
 		|			<jv>req</jv>.setAttribute(<js>"foo"</js>, <js>"bar"</js>);
 		|		}
 		|	}
 	</p>
 	<p>
-		The hook events can be broken down into two categories:
+		The following lifecycle annotations are provided.
 	</p>
 	<ul class='javatree'>
-		<li class='je'>{@link oajr.annotation.HookEvent}
-			<ul class='spaced-list'>
-				<li>Resource lifecycle events:
-					<ul class='javatree'>
-						<li class='jf'>{@link oajr.annotation.HookEvent#INIT INIT} - Right before initialization.
-						<li class='jf'>{@link oajr.annotation.HookEvent#POST_INIT POST_INIT} - Right after initialization.
-						<li class='jf'>{@link oajr.annotation.HookEvent#POST_INIT_CHILD_FIRST POST_INIT_CHILD_FIRST} - Right after initialization but run child methods first.
-						<li class='jf'>{@link oajr.annotation.HookEvent#DESTROY DESTROY} - Right before servlet destroy.
-					</ul>
-				</li>
-				<li>REST call lifecycle events:
-					<ul class='javatree'>
-						<li class='jf'>{@link oajr.annotation.HookEvent#START_CALL START_CALL} - At the beginning of a REST call.
-						<li class='jf'>{@link oajr.annotation.HookEvent#PRE_CALL PRE_CALL} - Right before the <ja>@RestOp</ja> method is invoked.
-						<li class='jf'>{@link oajr.annotation.HookEvent#POST_CALL POST_CALL} - Right after the <ja>@RestOp</ja> method is invoked.
-						<li class='jf'>{@link oajr.annotation.HookEvent#END_CALL END_CALL} - At the end of the REST call after the response has been flushed.
-					</ul>
-				</li>
+		<li>Resource lifecycle events:
+			<ul class='javatree'>
+				<li class='ja'>{@link oajr.annotation.RestInit} - Right before initialization.
+				<li class='ja'>{@link oajr.annotation.RestPostInit} - Right after initialization.
+				<li class='ja'>{@link oajr.annotation.RestDestroy} - Right before servlet destroy.
 			</ul>
 		</li>
-	</ul>
-	
-	<ul class='seealso'>
-		<li class='ja'>{@link oajr.annotation.RestHook}
+		<li>REST call lifecycle events:
+			<ul class='javatree'>
+				<li class='ja'>{@link oajr.annotation.RestStartCall} - At the beginning of a REST call.
+				<li class='ja'>{@link oajr.annotation.RestPreCall} - Right before the <ja>@RestOp</ja> method is invoked.
+				<li class='ja'>{@link oajr.annotation.RestPostCall} - Right after the <ja>@RestOp</ja> method is invoked.
+				<li class='ja'>{@link oajr.annotation.RestEndCall} - At the end of the REST call after the response has been flushed.
+			</ul>
+		</li>
 	</ul>
 </div>

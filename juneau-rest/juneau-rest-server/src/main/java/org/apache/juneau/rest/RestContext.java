@@ -101,8 +101,8 @@ import org.apache.juneau.utils.*;
  * 				.swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>);
  * 	}
  *
- * 	<jc>// Option #2 - Use an INIT hook.</jc>
- * 	<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+ * 	<jc>// Option #2 - Use an init hook.</jc>
+ * 	<ja>@RestInit</ja>
  * 	<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
  * 			<jv>builder</jv>
  * 				.swaps(TemporalCalendarSwap.IsoLocalDateTime.<jk>class</jk>);
@@ -389,7 +389,7 @@ public class RestContext extends Context {
 			Supplier<?> r = this.resource;
 			Class<?> rc = resourceClass;
 
-			beanStore = createBeanStore()
+			beanStore = createBeanStore(resource)
 				.build()
 				.addBean(Builder.class, this)
 				.addBean(ResourceSupplier.class, this.resource)
@@ -403,9 +403,9 @@ public class RestContext extends Context {
 			BeanStore bs = beanStore;
 
 			beanStore.add(BeanStore.class, bs);
-			varResolver = createVarResolver(bs, rc);
+			varResolver = createVarResolver(bs, r, rc);
 			beanStore.add(VarResolver.class, varResolver.build());
-			config = beanStore.add(Config.class, createConfig(bs, rc));
+			config = beanStore.add(Config.class, createConfig(bs, r, rc));
 			beanStore.add(VarResolver.class, varResolver.bean(Config.class, config).build());
 
 			ClassInfo rci = ClassInfo.of(resourceClass);
@@ -465,7 +465,7 @@ public class RestContext extends Context {
 
 			Map<String,MethodInfo> map = map();
 			ClassInfo.ofProxy(r).forEachAllMethodParentFirst(
-				y -> y.hasAnnotation(RestHook.class) && y.getAnnotation(RestHook.class).value() == HookEvent.INIT && ! y.hasArg(RestOpContext.Builder.class),
+				y -> y.hasAnnotation(RestInit.class) && ! y.hasArg(RestOpContext.Builder.class),
 				y -> {
 					String sig = y.getSignature();
 					if (! map.containsKey(sig))
@@ -475,11 +475,11 @@ public class RestContext extends Context {
 
 			for (MethodInfo m : map.values()) {
 				if (! beanStore.hasAllParams(m))
-					throw servletException("Could not call @RestHook(INIT) method {0}.{1}.  Could not find prerequisites: {2}.", m.getDeclaringClass().getSimpleName(), m.getSignature(), beanStore.getMissingParams(m));
+					throw servletException("Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}.", m.getDeclaringClass().getSimpleName(), m.getSignature(), beanStore.getMissingParams(m));
 				try {
 					m.invoke(r, beanStore.getParams(m));
 				} catch (Exception e) {
-					throw servletException(e, "Exception thrown from @RestHook(INIT) method {0}.{1}.", m.getDeclaringClass().getSimpleName(), m.getSignature());
+					throw servletException(e, "Exception thrown from @RestInit method {0}.{1}.", m.getDeclaringClass().getSimpleName(), m.getSignature());
 				}
 			}
 		}
@@ -602,7 +602,7 @@ public class RestContext extends Context {
 		 * Can be used to add more beans to the bean store.
 		 *
 		 * <p>
-		 * The bean store is created by the constructor using the {@link #createBeanStore()} method and is initialized with the following beans:
+		 * The bean store is created by the constructor using the {@link #createBeanStore(Supplier)} method and is initialized with the following beans:
 		 * <ul>
 		 * 	<li>{@link RestContext.Builder}
 		 * 	<li>{@link ServletConfig}
@@ -667,9 +667,11 @@ public class RestContext extends Context {
 		 * 		<br>Args can be any injectable bean including {@link org.apache.juneau.cp.BeanStore.Builder}, the default builder.
 		 * </ul>
 		 *
+		 * @param resource
+		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new bean store builder.
 		 */
-		protected BeanStore.Builder createBeanStore() {
+		protected BeanStore.Builder createBeanStore(Supplier<?> resource) {
 
 			// Default value.
 			Value<BeanStore.Builder> v = Value.of(
@@ -710,7 +712,7 @@ public class RestContext extends Context {
 		 * used to resolve string variables of the form <js>"$X{...}"</js> in various places such as annotations on the REST class and methods.
 		 *
 		 * <p>
-		 * The var resolver is created by the constructor using the {@link #createVarResolver(BeanStore,Class)} method and is initialized with the following beans:
+		 * The var resolver is created by the constructor using the {@link #createVarResolver(BeanStore,Supplier,Class)} method and is initialized with the following beans:
 		 * <ul>
 		 * 	<li>{@link ConfigVar}
 		 * 	<li>{@link FileVar}
@@ -779,22 +781,25 @@ public class RestContext extends Context {
 		 * 	<li>
 		 * 		Looks for bean of type {@link org.apache.juneau.svl.VarResolver.Builder} in bean store and returns a copy of it.
 		 * 	<li>
-		 * 		Creates a default builder with default variables pulled from {@link #createVars(BeanStore,Class)}.
+		 * 		Creates a default builder with default variables pulled from {@link #createVars(BeanStore,Supplier,Class)}.
 		 * </ol>
 		 *
-		 * @param beanStore The bean store containing injected beans.
+		 * @param beanStore
+		 * 	The factory used for creating beans and retrieving injected beans.
+		 * @param resource
+		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @param resourceClass
 		 * 	The REST servlet/bean type that this context is defined against.
 		 * @return A new variable resolver sub-builder.
 		 */
-		protected VarResolver.Builder createVarResolver(BeanStore beanStore, Class<?> resourceClass) {
+		protected VarResolver.Builder createVarResolver(BeanStore beanStore, Supplier<?> resource, Class<?> resourceClass) {
 
 			// Default value.
 			Value<VarResolver.Builder> v = Value.of(
 				VarResolver
 					.create()
 					.defaultVars()
-					.vars(createVars(beanStore, resourceClass))
+					.vars(createVars(beanStore, resource, resourceClass))
 					.vars(FileVar.class)
 					.bean(FileFinder.class, FileFinder.create(beanStore).cp(resourceClass,null,true).build())
 			);
@@ -835,12 +840,15 @@ public class RestContext extends Context {
 		 * 		Creates a default builder with default variables.
 		 * </ol>
 		 *
-		 * @param beanStore The bean store containing injected beans.
+		 * @param beanStore
+		 * 	The factory used for creating beans and retrieving injected beans.
+		 * @param resource
+		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @param resourceClass
 		 * 	The REST servlet/bean type that this context is defined against.
 		 * @return A new var resolver variable list.
 		 */
-		protected VarList createVars(BeanStore beanStore, Class<?> resourceClass) {
+		protected VarList createVars(BeanStore beanStore, Supplier<?> resource, Class<?> resourceClass) {
 
 			// Default value.
 			Value<VarList> v = Value.of(
@@ -949,12 +957,15 @@ public class RestContext extends Context {
 		/**
 		 * Creates the config for this builder.
 		 *
-		 * @param beanStore The bean store to use for creating the config.
+		 * @param beanStore
+		 * 	The factory used for creating beans and retrieving injected beans.
+		 * @param resource
+		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @param resourceClass
 		 * 	The REST servlet/bean type that this context is defined against.
 		 * @return A new config.
 		 */
-		protected Config createConfig(BeanStore beanStore, Class<?> resourceClass) {
+		protected Config createConfig(BeanStore beanStore, Supplier<?> resource, Class<?> resourceClass) {
 
 			Value<Config> v = Value.empty();
 
@@ -1003,7 +1014,7 @@ public class RestContext extends Context {
 		 */
 		public Logger logger() {
 			if (logger == null)
-				logger = createLogger(beanStore(), resourceClass);
+				logger = createLogger(beanStore(), resource, resourceClass);
 			return logger;
 		}
 
@@ -1033,7 +1044,7 @@ public class RestContext extends Context {
 		 * Sets the logger for this resource.
 		 *
 		 * <p>
-		 * If not specified, the logger used is created by {@link #createLogger(BeanStore, Class)}.
+		 * If not specified, the logger used is created by {@link #createLogger(BeanStore, Supplier, Class)}.
 		 *
 		 * @param value The logger to use for the REST resource.
 		 * @return This object.
@@ -1060,14 +1071,15 @@ public class RestContext extends Context {
 		 * 	<li>Instantiates via <c>Logger.<jsm>getLogger</jsm>(<jv>resource</jv>.getClass().getName())</c>.
 		 * </ul>
 		 *
-		 * @param resourceClass
-		 * 	The REST servlet/bean class that this context is defined against.
 		 * @param beanStore
 		 * 	The factory used for creating beans and retrieving injected beans.
-		 * 	<br>Created by {@link RestContext.Builder#beanStore()}.
+		 * @param resource
+		 * 	The REST servlet/bean instance that this context is defined against.
+		 * @param resourceClass
+		 * 	The REST servlet/bean class that this context is defined against.
 		 * @return A new logger.
 		 */
-		protected Logger createLogger(BeanStore beanStore, Class<?> resourceClass) {
+		protected Logger createLogger(BeanStore beanStore, Supplier<?> resource, Class<?> resourceClass) {
 
 			// Default value.
 			Value<Logger> v = Value.of(
@@ -1746,7 +1758,7 @@ public class RestContext extends Context {
 		 * 		}
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.responseProcessors(MyResponseProcessors.<jk>class</jk>);
 		 * 		}
@@ -1910,7 +1922,7 @@ public class RestContext extends Context {
 		 * 		}
 		 *
 		 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
-		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.callLogger(MyLogger.<jk>class</jk>);
 		 * 		}
@@ -1942,7 +1954,7 @@ public class RestContext extends Context {
 		 */
 		public BeanCreator<CallLogger> callLogger() {
 			if (callLogger == null)
-				callLogger = createCallLogger();
+				callLogger = createCallLogger(beanStore, resource);
 			return callLogger;
 		}
 
@@ -1982,6 +1994,7 @@ public class RestContext extends Context {
 		 * 		</ul>
 		 * 	<li>Looks for a static or non-static <c>createCallLogger()</c> method that returns {@link CallLogger} on the
 		 * 		resource class with any of the following arguments:
+		 * 		<ul class='javatreec'>
 		 * 			<li>{@link RestContext}
 		 * 			<li>{@link RestContext.Builder}
 		 * 			<li>{@link BeanContext}
@@ -2000,9 +2013,13 @@ public class RestContext extends Context {
 		 * 	<li class='jm'>{@link RestContext.Builder#callLogger()}
 		 * </ul>
 		 *
+		 * @param beanStore
+		 * 	The factory used for creating beans and retrieving injected beans.
+		 * @param resource
+		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new call logger sub-builder.
 		 */
-		protected BeanCreator<CallLogger> createCallLogger() {
+		protected BeanCreator<CallLogger> createCallLogger(BeanStore beanStore, Supplier<?> resource) {
 
 			BeanCreator<CallLogger> creator = beanStore.createBean(CallLogger.class).type(BasicCallLogger.class);
 
@@ -2448,7 +2465,7 @@ public class RestContext extends Context {
 		 */
 		public BeanCreator<FileFinder> fileFinder() {
 			if (fileFinder == null)
-				fileFinder = createFileFinder();
+				fileFinder = createFileFinder(beanStore, resource);
 			return fileFinder;
 		}
 
@@ -2494,7 +2511,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <p>
-		 * The file finder is instantiated via the {@link RestContext.Builder#createFileFinder()} method which in turn instantiates
+		 * The file finder is instantiated via the {@link RestContext.Builder#createFileFinder(BeanStore,Supplier)} method which in turn instantiates
 		 * based on the following logic:
 		 * <ul>
 		 * 	<li>Returns the resource class itself if it's an instance of {@link FileFinder}.
@@ -2546,7 +2563,7 @@ public class RestContext extends Context {
 		 * 		}
 		 *
 		 * 		<jc>// Option #4 - Registered via builder passed in through init method.</jc>
-		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.fileFinder(MyFileFinder.<jk>class</jk>);
 		 * 		}
@@ -2594,9 +2611,14 @@ public class RestContext extends Context {
 		 * 	<li>{@link BeanStore} - The bean store of this REST context.
 		 * 	<li>Any {@doc juneau-rest-server-springboot injected bean} types.  Use {@link Optional} arguments for beans that may not exist.
 		 * </ul>
+		 *
+		 * @param beanStore
+		 * 	The factory used for creating beans and retrieving injected beans.
+		 * @param resource
+		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new file finder bean creator.
 		 */
-		protected BeanCreator<FileFinder> createFileFinder() {
+		protected BeanCreator<FileFinder> createFileFinder(BeanStore beanStore, Supplier<?> resource) {
 
 			BeanCreator<FileFinder> creator = beanStore.createBean(FileFinder.class).type(BasicRestFileFinder.class);
 
@@ -2629,7 +2651,7 @@ public class RestContext extends Context {
 		 */
 		public BeanCreator<StaticFiles> staticFiles() {
 			if (staticFiles == null)
-				staticFiles = createStaticFiles();
+				staticFiles = createStaticFiles(beanStore, resource);
 			return staticFiles;
 		}
 
@@ -2674,7 +2696,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <p>
-		 * The static file finder is instantiated via the {@link RestContext.Builder#createStaticFiles()} method which in turn instantiates
+		 * The static file finder is instantiated via the {@link RestContext.Builder#createStaticFiles(BeanStore,Supplier)} method which in turn instantiates
 		 * based on the following logic:
 		 *
 		 * <ol class='spaced-list'>
@@ -2747,9 +2769,13 @@ public class RestContext extends Context {
 		 * 	<jk>public class</jk> MyResource {...}
 		 * </p>
 		 *
+		 * @param beanStore
+		 * 	The factory used for creating beans and retrieving injected beans.
+		 * @param resource
+		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new static files sub-builder.
 		 */
-		protected BeanCreator<StaticFiles> createStaticFiles() {
+		protected BeanCreator<StaticFiles> createStaticFiles(BeanStore beanStore, Supplier<?> resource) {
 
 			BeanCreator<StaticFiles> creator = beanStore.createBean(StaticFiles.class).type(BasicStaticFiles.class);
 
@@ -2840,7 +2866,7 @@ public class RestContext extends Context {
 		 * 		}
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.defaultRequestHeaders(Accept.<jsm>of</jsm>(<js>"application/json"</js>));
 		 * 		}
@@ -3006,7 +3032,7 @@ public class RestContext extends Context {
 		 * 		}
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.defaultResponseHeaders(ContentType.<jsm>of</jsm>(<js>"text/plain"</js>));
 		 * 		}
@@ -3136,7 +3162,7 @@ public class RestContext extends Context {
 		 * 		}
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.defaultRequestAttribute(<js>"Foo"</js>, <js>"bar"</js>);
 		 * 		}
@@ -3279,7 +3305,7 @@ public class RestContext extends Context {
 		 * 		}
 		 *
 		 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
-		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.restOpArgs(MyRestParam.<jk>class</jk>);
 		 * 		}
@@ -3409,7 +3435,7 @@ public class RestContext extends Context {
 		 */
 		public BeanCreator<DebugEnablement> debugEnablement() {
 			if (debugEnablement == null)
-				debugEnablement = createDebugEnablement();
+				debugEnablement = createDebugEnablement(beanStore, resource);
 			return debugEnablement;
 		}
 
@@ -3453,9 +3479,13 @@ public class RestContext extends Context {
 		/**
 		 * Instantiates the debug enablement bean creator.
 		 *
+		 * @param beanStore
+		 * 	The factory used for creating beans and retrieving injected beans.
+		 * @param resource
+		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new debug enablement bean creator.
 		 */
-		protected BeanCreator<DebugEnablement> createDebugEnablement() {
+		protected BeanCreator<DebugEnablement> createDebugEnablement(BeanStore beanStore, Supplier<?> resource) {
 
 			BeanCreator<DebugEnablement> creator = beanStore.createBean(DebugEnablement.class).type(BasicDebugEnablement.class);
 
@@ -3527,7 +3557,7 @@ public class RestContext extends Context {
 
 			// Default value.
 			Value<MethodList> v = Value.of(
-				getHookMethods(resource, HookEvent.START_CALL)
+				getAnnotatedMethods(resource, RestStartCall.class, x -> true)
 			);
 
 			// Replace with bean from:  @RestBean(name="startCallMethods") public [static] MethodList xxx(<args>)
@@ -3590,7 +3620,7 @@ public class RestContext extends Context {
 
 			// Default value.
 			Value<MethodList> v = Value.of(
-				getHookMethods(resource, HookEvent.END_CALL)
+				getAnnotatedMethods(resource, RestEndCall.class, x -> true)
 			);
 
 			// Replace with bean from:  @RestBean(name="endCallMethods") public [static] MethodList xxx(<args>)
@@ -3653,7 +3683,7 @@ public class RestContext extends Context {
 
 			// Default value.
 			Value<MethodList> v = Value.of(
-				getHookMethods(resource, HookEvent.POST_INIT)
+				getAnnotatedMethods(resource, RestPostInit.class, x -> ! x.childFirst())
 			);
 
 			// Replace with bean from:  @RestBean(name="postInitMethods") public [static] MethodList xxx(<args>)
@@ -3716,7 +3746,7 @@ public class RestContext extends Context {
 
 			// Default value.
 			Value<MethodList> v = Value.of(
-				getHookMethods(resource, HookEvent.POST_INIT_CHILD_FIRST)
+				getAnnotatedMethods(resource, RestPostInit.class, x -> x.childFirst())
 			);
 
 			// Replace with bean from:  @RestBean(name="postInitChildFirstMethods") public [static] MethodList xxx(<args>)
@@ -3779,7 +3809,7 @@ public class RestContext extends Context {
 
 			// Default value.
 			Value<MethodList> v = Value.of(
-				getHookMethods(resource, HookEvent.DESTROY)
+				getAnnotatedMethods(resource, RestDestroy.class, x -> true)
 			);
 
 			// Replace with bean from:  @RestBean(name="destroyMethods") public [static] MethodList xxx(<args>)
@@ -3845,7 +3875,7 @@ public class RestContext extends Context {
 
 			// Default value.
 			Value<MethodList> v = Value.of(
-				getHookMethods(resource, HookEvent.PRE_CALL)
+				getAnnotatedMethods(resource, RestPreCall.class, x -> true)
 			);
 
 			// Replace with bean from:  @RestBean(name="preCallMethods") public [static] MethodList xxx(<args>)
@@ -3911,7 +3941,7 @@ public class RestContext extends Context {
 
 			// Default value.
 			Value<MethodList> v = Value.of(
-				getHookMethods(resource, HookEvent.POST_CALL)
+				getAnnotatedMethods(resource, RestPostCall.class, x -> true)
 			);
 
 			// Replace with bean from:  @RestBean(name="postCallMethods") public [static] MethodList xxx(<args>)
@@ -3966,7 +3996,7 @@ public class RestContext extends Context {
 
 			Map<String,MethodInfo> initMap = map();
 			ClassInfo.ofProxy(resource.get()).forEachAllMethodParentFirst(
-				y -> y.hasAnnotation(RestHook.class) && y.getAnnotation(RestHook.class).value() == HookEvent.INIT && y.hasArg(RestOpContext.Builder.class),
+				y -> y.hasAnnotation(RestInit.class) && y.hasArg(RestOpContext.Builder.class),
 				y -> {
 					String sig = y.getSignature();
 					if (! initMap.containsKey(sig))
@@ -3996,12 +4026,12 @@ public class RestContext extends Context {
 						beanStore = BeanStore.of(beanStore, resource.get()).addBean(RestOpContext.Builder.class, rocb);
 						for (MethodInfo m : initMap.values()) {
 							if (! beanStore.hasAllParams(m)) {
-								throw servletException("Could not call @RestHook(INIT) method {0}.{1}.  Could not find prerequisites: {2}.", m.getDeclaringClass().getSimpleName(), m.getSignature(), beanStore.getMissingParams(m));
+								throw servletException("Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}.", m.getDeclaringClass().getSimpleName(), m.getSignature(), beanStore.getMissingParams(m));
 							}
 							try {
 								m.invoke(resource.get(), beanStore.getParams(m));
 							} catch (Exception e) {
-								throw servletException(e, "Exception thrown from @RestHook(INIT) method {0}.{1}.", m.getDeclaringClass().getSimpleName(), m.getSignature());
+								throw servletException(e, "Exception thrown from @RestInit method {0}.{1}.", m.getDeclaringClass().getSimpleName(), m.getSignature());
 							}
 						}
 
@@ -4161,7 +4191,7 @@ public class RestContext extends Context {
 		 */
 		public BeanCreator<SwaggerProvider> swaggerProvider() {
 			if (swaggerProvider == null)
-				swaggerProvider = createSwaggerProvider();
+				swaggerProvider = createSwaggerProvider(beanStore, resource);
 			return swaggerProvider;
 		}
 
@@ -4215,9 +4245,13 @@ public class RestContext extends Context {
 		 * 	<li class='jm'>{@link RestContext.Builder#swaggerProvider(SwaggerProvider)}
 		 * </ul>
 		 *
+		 * @param beanStore
+		 * 	The factory used for creating beans and retrieving injected beans.
+		 * @param resource
+		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new swagger provider sub-builder.
 		 */
-		protected BeanCreator<SwaggerProvider> createSwaggerProvider() {
+		protected BeanCreator<SwaggerProvider> createSwaggerProvider(BeanStore beanStore, Supplier<?> resource) {
 
 			BeanCreator<SwaggerProvider> creator = beanStore.createBean(SwaggerProvider.class).type(BasicSwaggerProvider.class);
 
@@ -4314,7 +4348,7 @@ public class RestContext extends Context {
 		 * 		}
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.allowedMethodHeaders(<js>"PATCH"</js>);
 		 * 		}
@@ -4385,7 +4419,7 @@ public class RestContext extends Context {
 		 * 		}
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder builder) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.allowedMethodParams(<js>"HEAD,OPTIONS,PUT"</js>);
 		 * 		}
@@ -4447,7 +4481,7 @@ public class RestContext extends Context {
 		 * 		}
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.clientVersionHeader(<js>"Client-Version"</js>);
 		 * 		}
@@ -4515,7 +4549,7 @@ public class RestContext extends Context {
 		 * 		}
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.defaultCharset(<js>"US-ASCII"</js>);
 		 * 		}
@@ -4573,7 +4607,7 @@ public class RestContext extends Context {
 		 * 		}
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.disableContentParam();
 		 * 		}
@@ -4630,7 +4664,7 @@ public class RestContext extends Context {
 		 * 		}
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.maxInput(<js>"10M"</js>);
 		 * 		}
@@ -4749,7 +4783,7 @@ public class RestContext extends Context {
 		 * 		}
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.uriAuthority(<js>"http://localhost:10000"</js>);
 		 * 		}
@@ -4810,7 +4844,7 @@ public class RestContext extends Context {
 		 * 		}
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.uriContext(<js>"/foo"</js>);
 		 * 		}
@@ -4869,7 +4903,7 @@ public class RestContext extends Context {
 		 * 		}
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.uriRelativity(<jsf>PATH_INFO</jsf>);
 		 * 		}
@@ -4928,7 +4962,7 @@ public class RestContext extends Context {
 		 * 		}
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.uriResolution(<jsf>ABSOLUTE</jsf>);
 		 * 		}
@@ -5101,7 +5135,7 @@ public class RestContext extends Context {
 		 * 		}
 		 *
 		 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
-		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.children(MyChildResource.<jk>class</jk>);
 		 * 		}
@@ -5201,7 +5235,7 @@ public class RestContext extends Context {
 		 * 		}
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.path(<js>"/myResource"</js>);
 		 * 		}
@@ -5283,7 +5317,7 @@ public class RestContext extends Context {
 		 * 		...
 		 *
 		 * 		<jc>// Option #2 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.restChildrenClass(MyRestChildren.<jk>class</jk>);
 		 * 		}
@@ -5343,7 +5377,7 @@ public class RestContext extends Context {
 		 * 		...
 		 *
 		 * 		<jc>// Option #2 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.methodContextClass(MyRestOperationContext.<jk>class</jk>);
 		 * 		}
@@ -5405,7 +5439,7 @@ public class RestContext extends Context {
 		 * 		...
 		 *
 		 * 		<jc>// Option #2 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.restMethodsClass(MyRestOperations.<jk>class</jk>);
 		 * 		}
@@ -5463,7 +5497,7 @@ public class RestContext extends Context {
 		 * 		}
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.produces(<jk>false</jk>, <js>"application/json"</js>);
 		 * 		}
@@ -5525,7 +5559,7 @@ public class RestContext extends Context {
 		 * 		}
 		 *
 		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
-		 * 		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.consumes(<jk>false</jk>, <js>"application/json"</js>);
 		 * 		}
@@ -5625,13 +5659,13 @@ public class RestContext extends Context {
 		// Helper methods
 		//----------------------------------------------------------------------------------------------------
 
-		private static MethodList getHookMethods(Supplier<?> resource, HookEvent event) {
+		private static <T extends Annotation> MethodList getAnnotatedMethods(Supplier<?> resource, Class<T> annotation, Predicate<T> predicate) {
 			Map<String,Method> x = map();
 			Object r = resource.get();
 
 			ClassInfo.ofProxy(r).forEachAllMethodParentFirst(
-				y -> y.hasAnnotation(RestHook.class),
-				y -> y.forEachAnnotation(RestHook.class, z -> z.value() == event, z -> x.put(y.getSignature(), y.accessible().inner()))
+				y -> y.hasAnnotation(annotation),
+				y -> y.forEachAnnotation(annotation, predicate, z -> x.put(y.getSignature(), y.accessible().inner()))
 			);
 
 			MethodList x2 = MethodList.of(x.values());
@@ -6666,7 +6700,7 @@ public class RestContext extends Context {
 		} finally {
 			try {
 				s.finish();
-				finishCall(s);
+				endCall(s);
 			} finally {
 				localSession.remove();
 			}
@@ -6886,7 +6920,7 @@ public class RestContext extends Context {
 	}
 
 	/**
-	 * Called at the start of a request to invoke all {@link HookEvent#START_CALL} methods.
+	 * Called at the start of a request to invoke all {@link RestStartCall} methods.
 	 *
 	 * @param session The current request.
 	 * @throws BasicHttpException If thrown from call methods.
@@ -6904,7 +6938,7 @@ public class RestContext extends Context {
 	}
 
 	/**
-	 * Called during a request to invoke all {@link HookEvent#PRE_CALL} methods.
+	 * Called during a request to invoke all {@link RestPreCall} methods.
 	 *
 	 * @param session The current request.
 	 * @throws Throwable If thrown from call methods.
@@ -6915,7 +6949,7 @@ public class RestContext extends Context {
 	}
 
 	/**
-	 * Called during a request to invoke all {@link HookEvent#POST_CALL} methods.
+	 * Called during a request to invoke all {@link RestPostCall} methods.
 	 *
 	 * @param session The current request.
 	 * @throws Throwable If thrown from call methods.
@@ -6926,14 +6960,14 @@ public class RestContext extends Context {
 	}
 
 	/**
-	 * Called at the end of a request to invoke all {@link HookEvent#END_CALL} methods.
+	 * Called at the end of a request to invoke all {@link RestEndCall} methods.
 	 *
 	 * <p>
 	 * This is the very last method called in {@link #execute(Object, HttpServletRequest, HttpServletResponse)}.
 	 *
 	 * @param session The current request.
 	 */
-	protected void finishCall(RestSession session) {
+	protected void endCall(RestSession session) {
 		for (MethodInvoker x : endCallMethods) {
 			try {
 				x.invoke(session.getBeanStore(), session.getResource());
@@ -6944,7 +6978,7 @@ public class RestContext extends Context {
 	}
 
 	/**
-	 * Called during servlet initialization to invoke all {@link HookEvent#POST_INIT} methods.
+	 * Called during servlet initialization to invoke all {@link RestPostInit} child-last methods.
 	 *
 	 * @return This object.
 	 * @throws ServletException Error occurred.
@@ -6976,7 +7010,7 @@ public class RestContext extends Context {
 	}
 
 	/**
-	 * Called during servlet initialization to invoke all {@link HookEvent#POST_INIT_CHILD_FIRST} methods.
+	 * Called during servlet initialization to invoke all {@link RestPostInit} child-first methods.
 	 *
 	 * @return This object.
 	 * @throws ServletException Error occurred.
@@ -6997,7 +7031,7 @@ public class RestContext extends Context {
 	}
 
 	/**
-	 * Called during servlet destruction to invoke all {@link HookEvent#DESTROY} methods.
+	 * Called during servlet destruction to invoke all {@link RestDestroy} methods.
 	 */
 	public void destroy() {
 		for (MethodInvoker x : destroyMethods) {

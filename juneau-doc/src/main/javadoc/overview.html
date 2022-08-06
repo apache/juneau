@@ -16803,7 +16803,7 @@
 		<jc>// Our database.</jc>
 		<jk>private</jk> Map&lt;Integer,Object&gt; <jf>myDatabase</jf>;
 
-		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		<ja>@RestInit</ja>
 		<jk>public void</jk> initMyDatabase(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 			<jf>myDatabase</jf> = <jk>new</jk> LinkedHashMap&lt;&gt;();
 		}
@@ -16817,40 +16817,31 @@
 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestObject <jk>implements</jk> BasicUniversalConfig {
 
 		<jc>// Add a request attribute to all incoming requests.</jc>
-		<ja>@RestHook</ja>(<jsf>PRE_CALL</jsf>)
+		<ja>@RestPreCall</ja>
 		<jk>public void</jk> onPreCall(RestRequest <jv>req</jv>) {
 			<jv>req</jv>.setAttribute(<js>"foo"</js>, <js>"bar"</js>);
 		}
 	}
 	</p>
 	<p>
-		The hook events can be broken down into two categories:
+		The following lifecycle annotations are provided.
 	</p>
 	<ul class='javatree'>
-		<li class='je'>{@link org.apache.juneau.rest.annotation.HookEvent}
-			<ul class='spaced-list'>
-				<li>Resource lifecycle events:
-					<ul class='javatree'>
-						<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#INIT INIT} - Right before initialization.
-						<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#POST_INIT POST_INIT} - Right after initialization.
-						<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#POST_INIT_CHILD_FIRST POST_INIT_CHILD_FIRST} - Right after initialization but run child methods first.
-						<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#DESTROY DESTROY} - Right before servlet destroy.
-					</ul>
-				</li>
-				<li>REST call lifecycle events:
-					<ul class='javatree'>
-						<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#START_CALL START_CALL} - At the beginning of a REST call.
-						<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#PRE_CALL PRE_CALL} - Right before the <ja>@RestOp</ja> method is invoked.
-						<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#POST_CALL POST_CALL} - Right after the <ja>@RestOp</ja> method is invoked.
-						<li class='jf'>{@link org.apache.juneau.rest.annotation.HookEvent#END_CALL END_CALL} - At the end of the REST call after the response has been flushed.
-					</ul>
-				</li>
+		<li>Resource lifecycle events:
+			<ul class='javatree'>
+				<li class='ja'>{@link org.apache.juneau.rest.annotation.RestInit} - Right before initialization.
+				<li class='ja'>{@link org.apache.juneau.rest.annotation.RestPostInit} - Right after initialization.
+				<li class='ja'>{@link org.apache.juneau.rest.annotation.RestDestroy} - Right before servlet destroy.
 			</ul>
 		</li>
-	</ul>
-	
-	<ul class='seealso'>
-		<li class='ja'>{@link org.apache.juneau.rest.annotation.RestHook}
+		<li>REST call lifecycle events:
+			<ul class='javatree'>
+				<li class='ja'>{@link org.apache.juneau.rest.annotation.RestStartCall} - At the beginning of a REST call.
+				<li class='ja'>{@link org.apache.juneau.rest.annotation.RestPreCall} - Right before the <ja>@RestOp</ja> method is invoked.
+				<li class='ja'>{@link org.apache.juneau.rest.annotation.RestPostCall} - Right after the <ja>@RestOp</ja> method is invoked.
+				<li class='ja'>{@link org.apache.juneau.rest.annotation.RestEndCall} - At the end of the REST call after the response has been flushed.
+			</ul>
+		</li>
 	</ul>
 </div>
 </div><!-- END: 8.2.5 - juneau-rest-server.jrs.AnnotatedClasses.jrs.LifecycleHooks -->
@@ -17166,7 +17157,7 @@
 	</p>
 	<p>
 		Additional parameter types can be defined by overriding {@link org.apache.juneau.rest.RestContext.Builder#createRestOpArgs(BeanStore,Supplier)} or
-		by adding them to the bean store using {@link org.apache.juneau.rest.RestContext.Builder#createBeanStore(Class,Supplier)}.
+		by adding them to the bean store using {@link org.apache.juneau.rest.RestContext.Builder#createBeanStore(Supplier)}.
 	</p>
 </div>
 </div><!-- END: 8.3.2 - juneau-rest-server.jrs.RestOpAnnotatedMethods.jrs.JavaMethodParameters -->
@@ -18664,7 +18655,7 @@
 	<ja>@Rest</ja>
 	<jk>public class</jk> MyResource {
 
-		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		<ja>@RestInit</ja>
 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) {
 			<jv>builder</jv>.serializers().add(JsonSerializer.<jk>class</jk>, HtmlSerializer.<jk>class</jk>);
 			<jv>builder</jv>.parsers().add(JsonParser.<jk>class</jk>, HtmlParser.<jk>class</jk>);
@@ -19629,7 +19620,7 @@
 	<ul class='javatree'>
 		<li class='jc'>{@link org.apache.juneau.rest.RestContext.Builder}
 			<ul class='javatreec'>
-				<li class='jmp'>{@link org.apache.juneau.rest.RestContext.Builder#createVarResolver(BeanStore,Class) createVarResolver(BeanStore,Class)}
+				<li class='jmp'>{@link org.apache.juneau.rest.RestContext.Builder#createVarResolver(BeanStore,Supplier,Class) createVarResolver(BeanStore,Supplier,Class)}
 				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#varResolver() varResolver()}
 				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#varResolver(Consumer) varResolver(Consumer)}
 			</ul>
@@ -19730,9 +19721,8 @@
 	<ul class='javatree'>
 		<li class='jc'>{@link org.apache.juneau.rest.RestContext.Builder}
 			<ul class='javatreec'>
-				<li class='jmp'>{@link org.apache.juneau.rest.RestContext.Builder#createStaticFiles(BeanStore,Supplier) createStaticFiles(BeanStore,Supplier)}
+				<li class='jmp'>{@link org.apache.juneau.rest.RestContext.Builder#createStaticFiles() createStaticFiles(BeanStore,Supplier)}
 				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#staticFiles() staticFiles()}
-				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#staticFiles(Consumer) staticFiles(Consumer)}
 			</ul>
 		</li>
 	</ul>
@@ -20491,7 +20481,7 @@
 <div class='topic'>
 	<p>
 		{@link org.apache.juneau.rest.annotation.Rest}-annotated classes get automated timing and error statistic information for all <ja>@RestOp</ja>
-		and <ja>@RestHook</ja> annotated methods on the class.
+		and lifecycle-event annotated methods on the class.
 	</p>
 	<p>
 		If you extend from {@link org.apache.juneau.rest.servlet.BasicRestServlet} or {@link org.apache.juneau.rest.servlet.BasicRestObject}, then
@@ -21365,7 +21355,6 @@
 			<ul class='javatreec'>
 				<li class='jmp'>{@link org.apache.juneau.rest.RestContext.Builder#createDebugEnablement(BeanStore,Supplier) createDebugEnablement(BeanStore,Supplier)}
 				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugEnablement() debugEnablement()}
-				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugEnablement(Consumer) debugEnablement(Consumer)}
 			</ul>
 		</li>
 	</ul>
@@ -21441,7 +21430,7 @@
 		</li>
 		<li class='jc'>{@link org.apache.juneau.rest.RestContext.Builder}
 			<ul class='javatreec'>
-				<li class='jmp'>{@link org.apache.juneau.rest.RestContext.Builder#createCallLogger() createCallLogger()}
+				<li class='jmp'>{@link org.apache.juneau.rest.RestContext.Builder#createCallLogger(BeanStore,Supplier) createCallLogger(BeanStore,Supplier)}
 				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#callLogger() callLogger()}
 			</ul>
 		</li>
@@ -21741,8 +21730,8 @@
 				.debugEnablement(<jsf>CONDITIONAL</jsf>);
 	}
 
-	<jc>// Option #2 - Use an INIT hook.</jc>
-	<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	<jc>// Option #2 - Use an init hook.</jc>
+	<ja>@RestInit</ja>
 	<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 			<jv>builder</jv>
 				.beanContext(<jv>x</jv> -&gt; <jv>x</jv>.swaps(TemporalCalendarSwap.Rfc1123DateTime.<jk>class</jk>))
@@ -21768,9 +21757,7 @@
 			<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#children(Object...) children}
 			<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#config(Config) config}
 			<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#consumes(MediaType...) consumes}
-			<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debug(Enablement) debug}
 			<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugDefault(Enablement) debugDefault}
-			<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugOn(String) debugOn}
 			<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultAccept(String) defaultAccept}
 			<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultCharset(Charset) defaultCharset}
 			<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultClasses(Class...) defaultClasses}
@@ -21876,8 +21863,8 @@
 		To access the builder for these objects, simply implement the following init method that will be called for each {@link org.apache.juneau.rest.annotation.RestOp}-annotated method.
 	</p>
 	<p class='bjava'>
-	<jc>// Use an INIT hook with RestOpContext.Builder as a parameter.</jc>
-	<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+	<jc>// Use an init hook with RestOpContext.Builder as a parameter.</jc>
+	<ja>@RestInit</ja>
 	<jk>public void</jk> init(RestOpContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 			<jv>builder</jv>
 				.beanContext(<jv>x</jv> -&gt; <jv>x</jv>.swaps(TemporalCalendarSwap.Rfc1123DateTime.<jk>class</jk>))
@@ -33963,7 +33950,7 @@
 	<ul class='spaced-list'>
 		<li>
 			Revamped and simplified servlet and REST-call lifecycle handling through new
-			{@link org.apache.juneau.rest.annotation.RestHook @RestHook} annotation.
+			{@del @RestHook} annotation.
 			<ul>
 				<li>The {@del org.apache.juneau.rest.RestServlet#init(ServletConfig)} method is now final and can
 					no longer be extended.

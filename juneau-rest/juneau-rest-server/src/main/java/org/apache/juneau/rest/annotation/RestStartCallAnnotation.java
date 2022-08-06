@@ -20,21 +20,21 @@ import java.lang.annotation.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * Utility classes and methods for the {@link RestHook @RestHook} annotation.
+ * Utility classes and methods for the {@link RestStartCall @RestStartCall} annotation.
  *
  * <ul class='seealso'>
  * 	<li class='link'>{@doc jrs.LifecycleHooks}
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class RestHookAnnotation {
+public class RestStartCallAnnotation {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/** Default value */
-	public static final RestHook DEFAULT = create().value(HookEvent.INIT).build();
+	public static final RestStartCall DEFAULT = create().build();
 
 	/**
 	 * Instantiates a new builder for this class.
@@ -58,33 +58,20 @@ public class RestHookAnnotation {
 	 */
 	public static class Builder extends TargetedAnnotationMBuilder {
 
-		HookEvent value = HookEvent.INIT;
-
 		/**
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(RestHook.class);
+			super(RestStartCall.class);
 		}
 
 		/**
-		 * Instantiates a new {@link RestHook @RestHook} object initialized with this builder.
+		 * Instantiates a new {@link RestStartCall @RestStartCall} object initialized with this builder.
 		 *
-		 * @return A new {@link RestHook @RestHook} object.
+		 * @return A new {@link RestStartCall @RestStartCall} object.
 		 */
-		public RestHook build() {
+		public RestStartCall build() {
 			return new Impl(this);
-		}
-
-		/**
-		 * Sets the {@link RestHook#value()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder value(HookEvent value) {
-			this.value = value;
-			return this;
 		}
 
 		// <FluentSetters>
@@ -108,19 +95,11 @@ public class RestHookAnnotation {
 	// Implementation
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static class Impl extends TargetedAnnotationImpl implements RestHook {
-
-		private final HookEvent value;
+	private static class Impl extends TargetedAnnotationImpl implements RestStartCall {
 
 		Impl(Builder b) {
 			super(b);
-			this.value = b.value;
 			postConstruct();
-		}
-
-		@Override /* RestHook */
-		public HookEvent value() {
-			return value;
 		}
 	}
 
@@ -129,7 +108,7 @@ public class RestHookAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * A collection of {@link RestHook @RestHook annotations}.
+	 * A collection of {@link RestStartCall @RestStartCall annotations}.
 	 */
 	@Documented
 	@Target({METHOD,TYPE})
@@ -142,6 +121,6 @@ public class RestHookAnnotation {
 		 *
 		 * @return The annotation value.
 		 */
-		RestHook[] value();
+		RestStartCall[] value();
 	}
 }

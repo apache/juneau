@@ -12,7 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.resources;
 
-import static org.apache.juneau.rest.annotation.HookEvent.*;
 import static org.apache.juneau.internal.StringUtils.*;
 
 import java.io.*;
@@ -56,7 +55,7 @@ public class LogsResource extends BasicRestServlet implements BasicUniversalConf
 	private LogEntryFormatter leFormatter;
 	boolean allowDeletes;
 
-	@RestHook(INIT)
+	@RestInit
 	public void init(Config config) throws Exception {
 		logDir = new File(config.get("Logging/logDir").asString().orElse("logs"));
 		allowDeletes = config.get("Logging/allowDeletes").asBoolean().orElse(true);

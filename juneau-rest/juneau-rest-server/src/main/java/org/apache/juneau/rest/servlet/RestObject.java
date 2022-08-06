@@ -13,7 +13,6 @@
 package org.apache.juneau.rest.servlet;
 
 import static org.apache.juneau.internal.ClassUtils.*;
-import static org.apache.juneau.rest.annotation.HookEvent.*;
 
 import java.text.*;
 import java.util.concurrent.atomic.*;
@@ -187,9 +186,9 @@ public abstract class RestObject {
 	 * 	<li class='note'>
 	 * 		The default implementation of this method is a no-op.
 	 * 	<li class='note'>
-	 * 		Multiple INIT methods can be defined on a class.
-	 * 		<br>INIT methods on parent classes are invoked before INIT methods on child classes.
-	 * 		<br>The order of INIT method invocations within a class is alphabetical, then by parameter count, then by parameter types.
+	 * 		Multiple init methods can be defined on a class.
+	 * 		<br>Init methods on parent classes are invoked before init methods on child classes.
+	 * 		<br>The order of init method invocations within a class is alphabetical, then by parameter count, then by parameter types.
 	 * 	<li class='note'>
 	 * 		The method can throw any exception causing initialization of the servlet to fail.
 	 * </ul>
@@ -197,7 +196,7 @@ public abstract class RestObject {
 	 * @param builder Context builder which can be used to configure the servlet.
 	 * @throws Exception Any exception thrown will cause servlet to fail startup.
 	 */
-	@RestHook(INIT)
+	@RestInit
 	public void onInit(RestContext.Builder builder) throws Exception {}
 
 	/**
@@ -211,9 +210,9 @@ public abstract class RestObject {
 	 * 	<li class='note'>
 	 * 		The default implementation of this method is a no-op.
 	 * 	<li class='note'>
-	 * 		Multiple POST_INIT methods can be defined on a class.
-	 * 		<br>POST_INIT methods on parent classes are invoked before POST_INIT methods on child classes.
-	 * 		<br>The order of POST_INIT method invocations within a class is alphabetical, then by parameter count, then by parameter types.
+	 * 		Multiple post-init methods can be defined on a class.
+	 * 		<br>Post-init methods on parent classes are invoked before post-init methods on child classes.
+	 * 		<br>The order of post-init method invocations within a class is alphabetical, then by parameter count, then by parameter types.
 	 * 	<li class='note'>
 	 * 		The method can throw any exception causing initialization of the servlet to fail.
 	 * </ul>
@@ -221,7 +220,7 @@ public abstract class RestObject {
 	 * @param context The initialized context object.
 	 * @throws Exception Any exception thrown will cause servlet to fail startup.
 	 */
-	@RestHook(POST_INIT)
+	@RestPostInit
 	public void onPostInit(RestContext context) throws Exception {}
 
 	/**
@@ -232,7 +231,7 @@ public abstract class RestObject {
 	 *
 	 * <p>
 	 * This method is called from within the {@link Servlet#init(ServletConfig)} method after the {@link RestContext}
-	 * object has been created and after the {@link HookEvent#POST_INIT} methods have been called.
+	 * object has been created and after the child-last {@link RestPostInit} methods have been called.
 	 *
 	 * <p>
 	 * The only valid parameter type for this method is {@link RestContext} which can be used to retrieve information
@@ -242,9 +241,9 @@ public abstract class RestObject {
 	 * 	<li class='note'>
 	 * 		The default implementation of this method is a no-op.
 	 * 	<li class='note'>
-	 * 		Multiple POST_INIT_CHILD_FIRST methods can be defined on a class.
-	 * 		<br>POST_INIT_CHILD_FIRST methods on parent classes are invoked before POST_INIT_CHILD_FIRST methods on child classes.
-	 * 		<br>The order of POST_INIT_CHILD_FIRST method invocations within a class is alphabetical, then by parameter count, then by parameter types.
+	 * 		Multiple post-init methods can be defined on a class.
+	 * 		<br>Post-init methods on parent classes are invoked before post-init methods on child classes.
+	 * 		<br>The order of post-init method invocations within a class is alphabetical, then by parameter count, then by parameter types.
 	 * 	<li class='note'>
 	 * 		The method can throw any exception causing initialization of the servlet to fail.
 	 * </ul>
@@ -252,7 +251,7 @@ public abstract class RestObject {
 	 * @param context The initialized context object.
 	 * @throws Exception Any exception thrown will cause servlet to fail startup.
 	 */
-	@RestHook(POST_INIT_CHILD_FIRST)
+	@RestPostInit(childFirst=true)
 	public void onPostInitChildFirst(RestContext context) throws Exception {}
 
 	/**
@@ -280,9 +279,9 @@ public abstract class RestObject {
 	 * 	<li class='note'>
 	 * 		The default implementation of this method is a no-op.
 	 * 	<li class='note'>
-	 * 		Multiple DESTROY methods can be defined on a class.
-	 * 		<br>DESTROY methods on child classes are invoked before DESTROY methods on parent classes.
-	 * 		<br>The order of DESTROY method invocations within a class is alphabetical, then by parameter count, then by parameter types.
+	 * 		Multiple destroy methods can be defined on a class.
+	 * 		<br>Destroy methods on child classes are invoked before destroy methods on parent classes.
+	 * 		<br>The order of destroy method invocations within a class is alphabetical, then by parameter count, then by parameter types.
 	 * 	<li class='note'>
 	 * 		In general, destroy methods should not throw any exceptions, although if any are thrown, the stack trace will be
 	 * 		printed to <c>System.err</c>.
@@ -291,7 +290,7 @@ public abstract class RestObject {
 	 * @param context The initialized context object.
 	 * @throws Exception Any exception thrown will cause stack trace to be printed to <c>System.err</c>.
 	 */
-	@RestHook(DESTROY)
+	@RestDestroy
 	public void onDestroy(RestContext context) throws Exception {}
 
 	/**
@@ -318,9 +317,9 @@ public abstract class RestObject {
 	 * 	<li class='note'>
 	 * 		The default implementation of this method is a no-op.
 	 * 	<li class='note'>
-	 * 		Multiple START_CALL methods can be defined on a class.
-	 * 		<br>START_CALL methods on parent classes are invoked before START_CALL methods on child classes.
-	 * 		<br>The order of START_CALL method invocations within a class is alphabetical, then by parameter count, then by parameter types.
+	 * 		Multiple start-call methods can be defined on a class.
+	 * 		<br>start-call methods on parent classes are invoked before start-call methods on child classes.
+	 * 		<br>The order of start-call method invocations within a class is alphabetical, then by parameter count, then by parameter types.
 	 * 	<li class='note'>
 	 * 		The method can throw any exception.
 	 * 		<br>{@link BasicHttpException HttpExceptions} can be thrown to cause a particular HTTP error status code.
@@ -331,7 +330,7 @@ public abstract class RestObject {
 	 * @param res The HTTP servlet response object.
 	 * @throws Exception Any exception.
 	 */
-	@RestHook(START_CALL)
+	@RestStartCall
 	public void onStartCall(HttpServletRequest req, HttpServletResponse res) throws Exception {}
 
 	/**
@@ -345,9 +344,9 @@ public abstract class RestObject {
 	 * 	<li class='note'>
 	 * 		The default implementation of this method is a no-op.
 	 * 	<li class='note'>
-	 * 		Multiple PRE_CALL methods can be defined on a class.
-	 * 		<br>PRE_CALL methods on parent classes are invoked before PRE_CALL methods on child classes.
-	 * 		<br>The order of PRE_CALL method invocations within a class is alphabetical, then by parameter count, then by parameter types.
+	 * 		Multiple pre-call methods can be defined on a class.
+	 * 		<br>Pre-call methods on parent classes are invoked before pre-call methods on child classes.
+	 * 		<br>The order of pre-call method invocations within a class is alphabetical, then by parameter count, then by parameter types.
 	 * 	<li class='note'>
 	 * 		The method can throw any exception.
 	 * 		<br>{@link BasicHttpException HttpExceptions} can be thrown to cause a particular HTTP error status code.
@@ -361,7 +360,7 @@ public abstract class RestObject {
 	 * @param res The response object.
 	 * @throws Exception Any exception.
 	 */
-	@RestHook(PRE_CALL)
+	@RestPreCall
 	public void onPreCall(RestRequest req, RestResponse res) throws Exception {}
 
 	/**
@@ -375,9 +374,9 @@ public abstract class RestObject {
 	 * 	<li class='note'>
 	 * 		The default implementation of this method is a no-op.
 	 * 	<li class='note'>
-	 * 		Multiple POST_CALL methods can be defined on a class.
-	 * 		<br>POST_CALL methods on parent classes are invoked before POST_CALL methods on child classes.
-	 * 		<br>The order of POST_CALL method invocations within a class is alphabetical, then by parameter count, then by parameter types.
+	 * 		Multiple post-call methods can be defined on a class.
+	 * 		<br>post-call methods on parent classes are invoked before post-call methods on child classes.
+	 * 		<br>The order of post-call method invocations within a class is alphabetical, then by parameter count, then by parameter types.
 	 * 	<li class='note'>
 	 * 		The method can throw any exception, although at this point it is too late to set an HTTP error status code.
 	 * </ul>
@@ -386,7 +385,7 @@ public abstract class RestObject {
 	 * @param res The response object.
 	 * @throws Exception Any exception.
 	 */
-	@RestHook(POST_CALL)
+	@RestPostCall
 	public void onPostCall(RestRequest req, RestResponse res) throws Exception {}
 
 	/**
@@ -406,9 +405,9 @@ public abstract class RestObject {
 	 * 	<li class='note'>
 	 * 		The default implementation of this method is a no-op.
 	 * 	<li class='note'>
-	 * 		Multiple END_CALL methods can be defined on a class.
-	 * 		<br>END_CALL methods on parent classes are invoked before END_CALL methods on child classes.
-	 * 		<br>The order of END_CALL method invocations within a class is alphabetical, then by parameter count, then by parameter types.
+	 * 		Multiple end-call methods can be defined on a class.
+	 * 		<br>end-call methods on parent classes are invoked before end-call methods on child classes.
+	 * 		<br>The order of end-call method invocations within a class is alphabetical, then by parameter count, then by parameter types.
 	 * 	<li class='note'>
 	 * 		The method can throw any exception, although at this point it is too late to set an HTTP error status code.
 	 * 	<li class='note'>
@@ -421,7 +420,7 @@ public abstract class RestObject {
 	 * @param res The HTTP servlet response object.
 	 * @throws Exception Any exception.
 	 */
-	@RestHook(END_CALL)
+	@RestEndCall
 	public void onEndCall(HttpServletRequest req, HttpServletResponse res) throws Exception {}
 
 	//-----------------------------------------------------------------------------------------------------------------

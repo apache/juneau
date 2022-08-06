@@ -79,7 +79,6 @@ public class DefaultArg implements RestOpArg {
 
 	@Override /* RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
-		System.err.println("beanStore2" + opSession.getBeanStore());
 		return opSession.getBeanStore().getBean(type, name).orElseThrow(()->new ArgException(paramInfo, "Could not resolve bean type {0}", type.getName()));
 	}
 }
