@@ -593,6 +593,10 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.beanStore().add(<jv>beanType</jv>, <jv>bean</jv>);
 		 * </p>
 		 *
+		 * <ul class='seealso'>
+		 * 	<li class='jm'>{@link #beanStore()}
+		 * </ul>
+		 *
 		 * @param <T> The class to associate this bean with.
 		 * @param beanType The class to associate this bean with.
 		 * @param bean The bean.  Can be <jk>null</jk>.
@@ -611,6 +615,10 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	<jv>builder</jv>.beanStore().add(<jv>beanType</jv>, <jv>bean</jv>, <jv>name</jv>);
 		 * </p>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='jm'>{@link #beanStore()}
+		 * </ul>
 		 *
 		 * @param <T> The class to associate this bean with.
 		 * @param beanType The class to associate this bean with.
@@ -734,7 +742,7 @@ public class RestContext extends Context {
 		 * </ul>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li>{@doc jrs.SvlVariables}
+		 * 	<li class='link'>{@doc jrs.SvlVariables}
 		 * </ul>
 		 *
 		 * @return The variable resolver sub-builder.
@@ -753,7 +761,8 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li>{@doc jrs.SvlVariables}
+		 * 	<li class='link'>{@doc jrs.SvlVariables}
+		 * 	<li class='jm'>{@link #varResolver()}
 		 * </ul>
 		 *
 		 * @param value The values to add.
@@ -775,7 +784,8 @@ public class RestContext extends Context {
 		 * </p>
 		 *
 		 * <ul class='seealso'>
-		 * 	<li>{@doc jrs.SvlVariables}
+		 * 	<li class='link'>{@doc jrs.SvlVariables}
+		 * 	<li class='jm'>{@link #varResolver()}
 		 * </ul>
 		 *
 		 * @param value The values to add.
@@ -790,7 +800,7 @@ public class RestContext extends Context {
 		 * Creates the variable resolver sub-builder.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li>{@doc jrs.SvlVariables}
+		 * 	<li class='link'>{@doc jrs.SvlVariables}
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -861,6 +871,10 @@ public class RestContext extends Context {
 		 * Returns the external configuration file for this resource.
 		 *
 		 * <p>
+		 * The config file contains arbitrary configuration information that can be accessed by this class, usually
+		 * via <c>$C</c> variables.
+		 *
+		 * <p>
 		 * The default config can be overridden via any of the following:
 		 * <ul class='spaced-list'>
 		 * 	<li>Injected via bean store.
@@ -875,8 +889,12 @@ public class RestContext extends Context {
 		 * <p>
 		 * If a config file is not set up, then an empty config file will be returned that is not backed by any file.
 		 *
+		 * <p>
+		 * This bean can be accessed directly via {@link RestContext#getConfig()} or passed in as a parameter
+		 * on a {@link RestOp}-annotated method.
+		 *
 		 * <ul class='seealso'>
-		 * 	<li>{@doc jrs.ConfigurationFiles}
+		 * 	<li class='link'>{@doc jrs.ConfigurationFiles}
 		 * </ul>
 		 *
 		 * @return The external configuration file for this resource.
@@ -894,7 +912,8 @@ public class RestContext extends Context {
 		 * This method allows you to programmatically override it with your own custom config file.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li>{@doc jrs.ConfigurationFiles}
+		 * 	<li class='link'>{@doc jrs.ConfigurationFiles}
+		 * 	<li class='jm'>{@link #config()}
 		 * </ul>
 		 *
 		 * @param config The new config file.
@@ -910,7 +929,8 @@ public class RestContext extends Context {
 		 * Creates the config for this builder.
 		 *
 		 * <ul class='seealso'>
-		 * 	<li>{@doc jrs.ConfigurationFiles}
+		 * 	<li class='link'>{@doc jrs.ConfigurationFiles}
+		 * 	<li class='jm'>{@link #config()}
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -965,8 +985,32 @@ public class RestContext extends Context {
 		/**
 		 * Returns the logger for this resource.
 		 *
+		 * <p>
+		 * The logger is used in the following locations:
+		 * <ul>
+		 * 	<li>{@link RestServlet#log(Level, Throwable, String, Object...)} and related methods.
+		 * 	<li>{@link RestObject#log(Level, Throwable, String, Object...)} and related methods.
+		 * 	<li>In the {@link #callLogger()} of this resource.
+		 * </ul>
+		 * It can also be accessed directly via {@link RestContext#getLogger()} or passed in as a parameter
+		 * on a {@link RestOp}-annotated method.
+		 *
+		 * <p>
+		 * The default config can be overridden via any of the following:
+		 * <ul class='spaced-list'>
+		 * 	<li>Injected via bean store.
+		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 		<p class='bjava'>
+		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] Logger myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 		</p>
+		 * 		Args can be any injected bean.
+		 * </ul>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
+		 * </ul>
+		 *
 		 * @return The logger for this resource.
-		 * @throws RuntimeException If {@link #init(Supplier)} has not been called.
 		 */
 		public Logger logger() {
 			if (logger == null)
@@ -977,8 +1021,10 @@ public class RestContext extends Context {
 		/**
 		 * Sets the logger for this resource.
 		 *
-		 * <p>
-		 * If not specified, the logger used is created by {@link #createLogger(BeanStore, Supplier, Class)}.
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
+		 * 	<li class='jm'>{@link #logger()}
+		 * </ul>
 		 *
 		 * @param value The logger to use for the REST resource.
 		 * @return This object.
@@ -991,18 +1037,9 @@ public class RestContext extends Context {
 		/**
 		 * Instantiates the logger for this resource.
 		 *
-		 * <p>
-		 * Instantiates based on the following logic:
-		 * <ul>
-		 * 	<li>Looks for a static or non-static <c>createLogger()</c> method that returns <c>{@link Logger}</c> on the
-		 * 		resource class with any of the following arguments:
-		 * 		<ul>
-		 * 			<li>{@link RestContext}
-		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc juneau-rest-server-springboot injected beans}.
-		 * 		</ul>
-		 * 	<li>Resolves it via the bean store registered in this context.
-		 * 	<li>Instantiates via <c>Logger.<jsm>getLogger</jsm>(<jv>resource</jv>.getClass().getName())</c>.
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
+		 * 	<li class='jm'>{@link #logger()}
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -1042,6 +1079,27 @@ public class RestContext extends Context {
 		/**
 		 * Returns the thrown-store sub-builder.
 		 *
+		 * <p>
+		 * The thrown store is an in-memory cache of thrown exceptions.
+		 * It is used to store thrown exceptions when {@link MethodExecStats#error(Throwable)} is called from the {@link MethodExecStore}
+		 * bean of this resource.  It can also be accessed directly via {@link RestContext#getThrownStore()} or passed in as a parameter
+		 * on a {@link RestOp}-annotated method.
+		 *
+		 * <p>
+		 * The default thrown store is inherited from the parent context and can be overridden via any of the following:
+		 * <ul class='spaced-list'>
+		 * 	<li>Injected via bean store.
+		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 		<p class='bjava'>
+		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] (ThrownStore.Builder|ThrownStore) myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 		</p>
+		 * 		Args can be any injected bean including ThrownStore.Builder, the default builder.
+		 * </ul>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.ExecutionStatistics}
+		 * </ul>
+		 *
 		 * @return The builder for the {@link ThrownStore} object in the REST context.
 		 */
 		public ThrownStore.Builder thrownStore() {
@@ -1058,6 +1116,11 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	<jv>builder</jv>.thrownStore().type(<jv>value</jv>);
 		 * </p>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.ExecutionStatistics}
+		 * 	<li class='jm'>{@link #thrownStore()}
+		 * </ul>
 		 *
 		 * @param value The new value.
 		 * @return This object.
@@ -1076,6 +1139,11 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.thrownStore().impl(<jv>value</jv>);
 		 * </p>
 		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.ExecutionStatistics}
+		 * 	<li class='jm'>{@link #thrownStore()}
+		 * </ul>
+		 *
 		 * @param value The new value.
 		 * @return This object.
 		 */
@@ -1087,18 +1155,8 @@ public class RestContext extends Context {
 		/**
 		 * Instantiates the thrown-store sub-builder.
 		 *
-		 * <p>
-		 * Instantiates based on the following logic:
-		 * <ul>
-		 * 	<li>Looks for a static or non-static <c>createThrownStore()</c> method that returns <c>{@link ThrownStore}</c> on the
-		 * 		resource class with any of the following arguments:
-		 * 		<ul>
-		 * 			<li>{@link RestContext}
-		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc juneau-rest-server-springboot injected beans}.
-		 * 		</ul>
-		 * 	<li>Resolves it via the bean store registered in this context.
-		 * 	<li>Returns {@link ThrownStore#GLOBAL}.
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.ExecutionStatistics}
 		 * </ul>
 		 *
 		 * @param resource
@@ -1154,6 +1212,27 @@ public class RestContext extends Context {
 		/**
 		 * Returns the encoder group sub-builder.
 		 *
+		 * <p>
+		 * Encoders are used to decode HTTP requests and encode HTTP responses based on {@code Content-Encoding} and {@code Accept-Encoding}
+		 * headers.
+		 *
+		 * <p>
+		 * The default encoder set has support for identity incoding only.
+		 * It can be overridden via any of the following:
+		 * <ul class='spaced-list'>
+		 * 	<li>Injected via bean store.
+		 * 	<li>Class annotation: {@link Rest#encoders() @Rest(encoders)}
+		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 		<p class='bjava'>
+		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] (EncoderSet.Builder|EncoderSet) myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 		</p>
+		 * 		Args can be any injected bean including EncoderSet.Builder, the default builder.
+		 * </ul>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.Encoders}
+		 * </ul>
+		 *
 		 * @return The builder for the {@link EncoderSet} object in the REST context.
 		 */
 		public EncoderSet.Builder encoders() {
@@ -1170,6 +1249,11 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	<jv>builder</jv>.encoders().add(<jv>value</jv>);
 		 * </p>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.Encoders}
+		 * 	<li class='jm'>{@link #encoders()}
+		 * </ul>
 		 *
 		 * @param value The values to add.
 		 * @return This object.
@@ -1189,6 +1273,11 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.encoders().add(<jv>value</jv>);
 		 * </p>
 		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.Encoders}
+		 * 	<li class='jm'>{@link #encoders()}
+		 * </ul>
+		 *
 		 * @param value The values to add.
 		 * @return This object.
 		 */
@@ -1200,25 +1289,9 @@ public class RestContext extends Context {
 		/**
 		 * Instantiates the encoder group sub-builder.
 		 *
-		 * <p>
-		 * Instantiates based on the following logic:
-		 * <ul>
-		 * 	<li>Looks for encoders set via any of the following:
-		 * 		<ul>
-		 * 			<li>{@link RestOpContext.Builder#encoders()}
-		 * 			<li>{@link RestOp#encoders()}.
-		 * 			<li>{@link Rest#encoders()}.
-		 * 		</ul>
-		 * 	<li>Looks for a static or non-static <c>createEncoders()</c> method that returns <c>{@link Encoder}[]</c> on the
-		 * 		resource class with any of the following arguments:
-		 * 		<ul>
-		 * 			<li>{@link Method} - The Java method this context belongs to.
-		 * 			<li>{@link RestContext}
-		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc juneau-rest-server-springboot injected beans}.
-		 * 		</ul>
-		 * 	<li>Resolves it via the bean store registered in this context.
-		 * 	<li>Instantiates a <c>Encoder[0]</c>.
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.Encoders}
+		 * 	<li class='jm'>{@link #encoders()}
 		 * </ul>
 		 *
 		 * @param resource
@@ -1271,6 +1344,26 @@ public class RestContext extends Context {
 		/**
 		 * Returns the serializer group sub-builder.
 		 *
+		 * <p>
+		 * Serializers are used to convert POJOs to HTTP response bodies based on the {@code Accept} header.
+		 *
+		 * <p>
+		 * The default serializer set is empty.
+		 * It can be overridden via any of the following:
+		 * <ul class='spaced-list'>
+		 * 	<li>Injected via bean store.
+		 * 	<li>Class annotation: {@link Rest#serializers() @Rest(serializers)}
+		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 		<p class='bjava'>
+		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] (SerializerSet.Builder|SerializerSet) myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 		</p>
+		 * 		Args can be any injected bean including SerializerSet.Builder, the default builder.
+		 * </ul>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.Marshalling}
+		 * </ul>
+		 *
 		 * @return The serializer group sub-builder.
 		 */
 		public SerializerSet.Builder serializers() {
@@ -1287,6 +1380,11 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	<jv>builder</jv>.serializers().add(<jv>value</jv>);
 		 * </p>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.Marshalling}
+		 * 	<li class='jm'>{@link #serializers()}
+		 * </ul>
 		 *
 		 * @param value The values to add.
 		 * @return This object.
@@ -1306,6 +1404,11 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.serializers().add(<jv>value</jv>);
 		 * </p>
 		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.Marshalling}
+		 * 	<li class='jm'>{@link #serializers()}
+		 * </ul>
+		 *
 		 * @param value The values to add.
 		 * @return This object.
 		 */
@@ -1316,6 +1419,10 @@ public class RestContext extends Context {
 
 		/**
 		 * Instantiates the serializer group sub-builder.
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.Marshalling}
+		 * </ul>
 		 *
 		 * @param resource
 		 * 	The REST servlet/bean instance that this context is defined against.
@@ -1366,6 +1473,26 @@ public class RestContext extends Context {
 		/**
 		 * Returns the parser group sub-builder.
 		 *
+		 * <p>
+		 * Parsers are used to HTTP request bodies into POJOs based on the {@code Content-Type} header.
+		 *
+		 * <p>
+		 * The default parser set is empty.
+		 * It can be overridden via any of the following:
+		 * <ul class='spaced-list'>
+		 * 	<li>Injected via bean store.
+		 * 	<li>Class annotation: {@link Rest#parsers() @Rest(parsers)}
+		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 		<p class='bjava'>
+		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] (ParserSet.Builder|ParserSet) myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 		</p>
+		 * 		Args can be any injected bean including ParserSet.Builder, the default builder.
+		 * </ul>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.Marshalling}
+		 * </ul>
+		 *
 		 * @return The parser group sub-builder.
 		 */
 		public ParserSet.Builder parsers() {
@@ -1382,6 +1509,11 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	<jv>builder</jv>.parsers().add(<jv>value</jv>);
 		 * </p>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.Marshalling}
+		 * 	<li class='jm'>{@link #parsers()}
+		 * </ul>
 		 *
 		 * @param value The values to add.
 		 * @return This object.
@@ -1401,6 +1533,11 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.parsers().add(<jv>value</jv>);
 		 * </p>
 		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.Marshalling}
+		 * 	<li class='jm'>{@link #parsers()}
+		 * </ul>
+		 *
 		 * @param value The values to add.
 		 * @return This object.
 		 */
@@ -1411,6 +1548,10 @@ public class RestContext extends Context {
 
 		/**
 		 * Instantiates the parser group sub-builder.
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.Marshalling}
+		 * </ul>
 		 *
 		 * @param resource
 		 * 	The REST servlet/bean instance that this context is defined against.
@@ -1461,6 +1602,26 @@ public class RestContext extends Context {
 		/**
 		 * Returns the method execution statistics store sub-builder.
 		 *
+		 * <p>
+		 * Used for tracking basic call statistics on Java methods in this class.
+		 * It can be accessed directly via {@link RestContext#getMethodExecStore()} or passed in as a parameter
+		 * on a {@link RestOp}-annotated method.
+		 *
+		 * <p>
+		 * The default method exec store can overridden via any of the following:
+		 * <ul class='spaced-list'>
+		 * 	<li>Injected via bean store.
+		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 		<p class='bjava'>
+		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] (MethodExecStore.Builder|MethodExecStore) myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 		</p>
+		 * 		Args can be any injected bean including MethodExecStore.Builder, the default builder.
+		 * </ul>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.ExecutionStatistics}
+		 * </ul>
+		 *
 		 * @return The method execution statistics store sub-builder.
 		 */
 		public MethodExecStore.Builder methodExecStore() {
@@ -1477,6 +1638,11 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	<jv>builder</jv>.methodExecStore().type(<jv>value</jv>);
 		 * </p>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.ExecutionStatistics}
+		 * 	<li class='jm'>{@link #methodExecStore()}
+		 * </ul>
 		 *
 		 * @param value The new value.
 		 * @return This object.
@@ -1495,6 +1661,11 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.methodExecStore().impl(<jv>value</jv>);
 		 * </p>
 		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.ExecutionStatistics}
+		 * 	<li class='jm'>{@link #methodExecStore()}
+		 * </ul>
+		 *
 		 * @param value The new value.
 		 * @return This object.
 		 */
@@ -1505,6 +1676,10 @@ public class RestContext extends Context {
 
 		/**
 		 * Instantiates the method execution statistics store sub-builder.
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.ExecutionStatistics}
+		 * </ul>
 		 *
 		 * @param beanStore
 		 * 	The factory used for creating beans and retrieving injected beans.
@@ -1554,50 +1729,8 @@ public class RestContext extends Context {
 		/**
 		 * Returns the messages sub-builder.
 		 *
-		 * @return The messages sub-builder.
-		 */
-		public Messages.Builder messages() {
-			if (messages == null)
-				messages = createMessages(beanStore(), resource());
-			return messages;
-		}
-
-		/**
-		 * Specifies the messages bundle for this class.
-		 *
 		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.messages().type(<jv>value</jv>);
-		 * </p>
-		 *
-		 * @param value The new value.
-		 * @return This object.
-		 */
-		public Builder messages(Class<? extends Messages> value) {
-			messages().type(value);
-			return this;
-		}
-
-		/**
-		 * Specifies the messages bundle for this class.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.messages().impl(<jv>value</jv>);
-		 * </p>
-		 *
-		 * @param value The new value.
-		 * @return This object.
-		 */
-		public Builder messages(Messages value) {
-			messages().impl(value);
-			return this;
-		}
-
-		/**
-		 * Instantiates the messages sub-builder.
+		 * Messages beans are wrappers around resource bundles containing localized messages.
 		 *
 		 * <p>
 		 * By default, the resource bundle name is assumed to match the class name.  For example, given the class
@@ -1662,6 +1795,18 @@ public class RestContext extends Context {
 		 * 	}
 		 * </p>
 		 *
+		 * <p>
+		 * The default messages can overridden via any of the following:
+		 * <ul class='spaced-list'>
+		 * 	<li>Injected via bean store.
+		 * 	<li>Class annotation:  {@link Rest#messages() @Rest(messages)}
+		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 		<p class='bjava'>
+		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] (Messages.Builder|Messages) myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 		</p>
+		 * 		Args can be any injected bean including Messages.Builder, the default builder.
+		 * </ul>
+		 *
 		 * <ul class='notes'>
 		 * 	<li class='note'>Mappings are cumulative from super classes.
 		 * 		<br>Therefore, you can find and retrieve messages up the class-hierarchy chain.
@@ -1669,6 +1814,65 @@ public class RestContext extends Context {
 		 *
 		 * <ul class='seealso'>
 		 * 	<li class='jc'>{@link Messages}
+		 * 	<li class='link'>{@doc jrs.LocalizedMessages}
+		 * </ul>
+		 *
+		 * @return The messages sub-builder.
+		 */
+		public Messages.Builder messages() {
+			if (messages == null)
+				messages = createMessages(beanStore(), resource());
+			return messages;
+		}
+
+		/**
+		 * Specifies the messages bundle for this class.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.messages().type(<jv>value</jv>);
+		 * </p>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.LocalizedMessages}
+		 * 	<li class='jm'>{@link #messages()}
+		 * </ul>
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public Builder messages(Class<? extends Messages> value) {
+			messages().type(value);
+			return this;
+		}
+
+		/**
+		 * Specifies the messages bundle for this class.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.messages().impl(<jv>value</jv>);
+		 * </p>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.LocalizedMessages}
+		 * 	<li class='jm'>{@link #messages()}
+		 * </ul>
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public Builder messages(Messages value) {
+			messages().impl(value);
+			return this;
+		}
+
+		/**
+		 * Instantiates the messages sub-builder.
+		 *
+		 * <ul class='seealso'>
 		 * 	<li class='link'>{@doc jrs.LocalizedMessages}
 		 * </ul>
 		 *
@@ -1720,7 +1924,7 @@ public class RestContext extends Context {
 		 *
 		 * <p>
 		 * By default, the following response handlers are provided in the specified order:
-		 * <ul>
+		 * <ul class='javatreec'>
 		 * 	<li class='jc'>{@link ReaderProcessor}
 		 * 	<li class='jc'>{@link InputStreamProcessor}
 		 * 	<li class='jc'>{@link ThrowableProcessor}
@@ -1759,14 +1963,7 @@ public class RestContext extends Context {
 		 * 	<ja>@Rest</ja>(responseProcessors=MyResponseProcessor.<jk>class</jk>)
 		 * 	<jk>public class</jk> MyResource {
 		 *
-		 * 		<jc>// Option #2 - Defined via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 *
-		 * 			<jc>// Using method on builder.</jc>
-		 * 			<jv>builder</jv>.responseProcessors(MyResponseProcessor.<jk>class</jk>);
-		 * 		}
-		 *
-		 * 		<jc>// Option #3 - Defined via builder passed in through init method.</jc>
+		 * 		<jc>// Option #2 - Defined via builder passed in through init method.</jc>
 		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.responseProcessors(MyResponseProcessors.<jk>class</jk>);
@@ -1779,6 +1976,18 @@ public class RestContext extends Context {
 		 * 		}
 		 * 	}
 		 * </p>
+		 *
+		 * <p>
+		 * The default response processors can overridden via any of the following:
+		 * <ul class='spaced-list'>
+		 * 	<li>Injected via bean store.
+		 * 	<li>Class annotation:  {@link Rest#responseProcessors() @Rest(responseProcessors)}
+		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 		<p class='bjava'>
+		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] (ResponseProcessorList.Builder|ResponseProcessorList) myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 		</p>
+		 * 		Args can be any injected bean including ResponseProcessorList.Builder, the default builder.
+		 * </ul>
 		 *
 		 * <ul class='notes'>
 		 * 	<li class='note'>
@@ -1793,6 +2002,10 @@ public class RestContext extends Context {
 		 * 		</ul>
 		 * 	<li class='note'>
 		 * 		Inner classes of the REST resource class are allowed.
+		 * </ul>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.ResponseProcessors}
 		 * </ul>
 		 *
 		 * @return The response processor list sub-builder.
@@ -1812,6 +2025,11 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.responseProcessors().add(<jv>value</jv>);
 		 * </p>
 		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.ResponseProcessors}
+		 * 	<li class='jm'>{@link #responseProcessors()}
+		 * </ul>
+		 *
 		 * @param value The values to add.
 		 * @return This object.
 		 */
@@ -1830,6 +2048,11 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.responseProcessors().add(<jv>value</jv>);
 		 * </p>
 		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.ResponseProcessors}
+		 * 	<li class='jm'>{@link #responseProcessors()}
+		 * </ul>
+		 *
 		 * @param value The values to add.
 		 * @return This object.
 		 */
@@ -1841,23 +2064,8 @@ public class RestContext extends Context {
 		/**
 		 * Instantiates the response processor list sub-builder.
 		 *
-		 * <p>
-		 * Instantiates based on the following logic:
-		 * <ul>
-		 * 	<li>Looks for response processors set via any of the following:
-		 * 		<ul>
-		 * 			<li>{@link RestContext.Builder#responseProcessors()}
-		 * 			<li>{@link Rest#responseProcessors()}.
-		 * 		</ul>
-		 * 	<li>Looks for a static or non-static <c>createResponseProcessors()</c> method that returns <c>{@link ResponseProcessor}[]</c> on the
-		 * 		resource class with any of the following arguments:
-		 * 		<ul>
-		 * 			<li>{@link RestContext}
-		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc juneau-rest-server-springboot injected beans}.
-		 * 		</ul>
-		 * 	<li>Resolves it via the bean store registered in this context.
-		 * 	<li>Instantiates a <c>ResponseProcessor[0]</c>.
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.ResponseProcessors}
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -1936,20 +2144,25 @@ public class RestContext extends Context {
 		 * 	<ja>@Rest</ja>(callLogger=MyLogger.<jk>class</jk>)
 		 * 	<jk>public class</jk> MyResource {
 		 *
-		 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 *
-		 * 			<jc>// Using method on builder.</jc>
-		 * 			<jv>builder</jv>.callLogger(MyLogger.<jk>class</jk>);
-		 * 		}
-		 *
-		 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
+		 * 		<jc>// Option #2 - Registered via builder passed in through init method.</jc>
 		 * 		<ja>@RestInit</ja>
 		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		 * 			<jv>builder</jv>.callLogger(MyLogger.<jk>class</jk>);
 		 * 		}
 		 * 	}
 		 * </p>
+		 *
+		 * <p>
+		 * The default call logger can overridden via any of the following:
+		 * <ul class='spaced-list'>
+		 * 	<li>Injected via bean store.
+		 * 	<li>Class annotation:  {@link Rest#callLogger() @Rest(callLogger)}
+		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 		<p class='bjava'>
+		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] CallLogger myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 		</p>
+		 * 		Args can be any injected bean.
+		 * </ul>
 		 *
 		 * <ul class='notes'>
 		 * 	<li class='note'>
@@ -1968,7 +2181,6 @@ public class RestContext extends Context {
 		 *
 		 * <ul class='seealso'>
 		 * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
-		 * 	<li class='ja'>{@link Rest#callLogger()}
 		 * </ul>
 		 *
 		 * @return The call logger sub-builder.
@@ -1989,6 +2201,11 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.callLogger().type(<jv>value</jv>);
 		 * </p>
 		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
+		 * 	<li class='jm'>{@link #callLogger()}
+		 * </ul>
+		 *
 		 * @param value The new value.
 		 * @return This object.
 		 */
@@ -2006,6 +2223,11 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.callLogger().impl(<jv>value</jv>);
 		 * </p>
 		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
+		 * 	<li class='jm'>{@link #callLogger()}
+		 * </ul>
+		 *
 		 * @param value The new value.
 		 * @return This object.
 		 */
@@ -2017,34 +2239,8 @@ public class RestContext extends Context {
 		/**
 		 * Instantiates the call logger sub-builder.
 		 *
-		 * <p>
-		 * Instantiates based on the following logic:
-		 * <ul>
-		 * 	<li>Returns the resource class itself is an instance of RestLogger.
-		 * 	<li>Looks for REST call logger set via any of the following:
-		 * 		<ul>
-		 * 			<li>{@link RestContext.Builder#callLogger()}
-		 * 			<li>{@link Rest#callLogger()}.
-		 * 		</ul>
-		 * 	<li>Looks for a static or non-static <c>createCallLogger()</c> method that returns {@link CallLogger} on the
-		 * 		resource class with any of the following arguments:
-		 * 		<ul class='javatreec'>
-		 * 			<li>{@link RestContext}
-		 * 			<li>{@link RestContext.Builder}
-		 * 			<li>{@link BeanContext}
-		 * 			<li>{@link BeanStore}
-		 * 			<li>{@link VarResolver}
-		 * 			<li>{@link Config}
-		 * 			<li>{@link Logger}
-		 * 			<li>{@link ServletContext}
-		 * 			<li>Any {@doc juneau-rest-server-springboot injected beans}.
-		 * 		</ul>
-		 * 	<li>Resolves it via the bean store registered in this context.
-		 * 	<li>Instantiates a {@link BasicFileFinder}.
-		 * </ul>
-		 *
 		 * <ul class='seealso'>
-		 * 	<li class='jm'>{@link RestContext.Builder#callLogger()}
+		 * 	<li class='link'>{@doc jrs.LoggingAndDebugging}
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -2082,6 +2278,20 @@ public class RestContext extends Context {
 		/**
 		 * Returns the bean context sub-builder.
 		 *
+		 * <p>
+		 * The bean context is used to retrieve metadata on Java beans.
+		 *
+		 * <p>
+		 * The default bean context can overridden via any of the following:
+		 * <ul class='spaced-list'>
+		 * 	<li>Injected via bean store.
+		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 		<p class='bjava'>
+		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] BeanContext.Builder myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 		</p>
+		 * 		Args can be any injected bean.
+		 * </ul>
+		 *
 		 * @return The bean context sub-builder.
 		 */
 		public BeanContext.Builder beanContext() {
@@ -2092,26 +2302,6 @@ public class RestContext extends Context {
 
 		/**
 		 * Instantiates the bean context sub-builder.
-		 *
-		 * <p>
-		 * Instantiates based on the following logic:
-		 * <ul>
-		 * 	<li>Returns the resource class itself is an instance of {@link HttpPartSerializer}.
-		 * 	<li>Looks for part serializer set via any of the following:
-		 * 		<ul>
-		 * 			<li>{@link RestContext.Builder#partSerializer()}
-		 * 			<li>{@link Rest#partSerializer()}.
-		 * 		</ul>
-		 * 	<li>Looks for a static or non-static <c>createPartSerializer()</c> method that returns <c>{@link HttpPartSerializer}</c> on the
-		 * 		resource class with any of the following arguments:
-		 * 		<ul>
-		 * 			<li>{@link RestContext}
-		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc juneau-rest-server-springboot injected beans}.
-		 * 		</ul>
-		 * 	<li>Resolves it via the bean store registered in this context.
-		 * 	<li>Instantiates an {@link OpenApiSerializer}.
-		 * </ul>
 		 *
 		 * @param beanStore
 		 * 	The factory used for creating beans and retrieving injected beans.
@@ -2154,6 +2344,25 @@ public class RestContext extends Context {
 		/**
 		 * Returns the part serializer sub-builder.
 		 *
+		 * <p>
+		 * The part serializer is used for serializing HTTP parts such as response headers.
+		 *
+		 * <p>
+		 * The default part serializer is an {@link OpenApiSerializer}.
+		 * It can overridden via any of the following:
+		 * <ul class='spaced-list'>
+		 * 	<li>Injected via bean store.
+		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 		<p class='bjava'>
+		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] (HttpPartSerializer.Builder|HttpPartSerializer) myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 		</p>
+		 * 		Args can be any injected bean including HttpPartSerializer.Builder, the default builder.
+		 * </ul>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.HttpParts}
+		 * </ul>
+		 *
 		 * @return The part serializer sub-builder.
 		 */
 		public HttpPartSerializer.Creator partSerializer() {
@@ -2170,6 +2379,11 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	<jv>builder</jv>.partSerializer().type(<jv>value</jv>);
 		 * </p>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.HttpParts}
+		 * 	<li class='jm'>{@link #partSerializer()}
+		 * </ul>
 		 *
 		 * @param value The new value.
 		 * @return This object.
@@ -2188,6 +2402,11 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.partSerializer().impl(<jv>value</jv>);
 		 * </p>
 		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.HttpParts}
+		 * 	<li class='jm'>{@link #partSerializer()}
+		 * </ul>
+		 *
 		 * @param value The new value.
 		 * @return This object.
 		 */
@@ -2199,24 +2418,8 @@ public class RestContext extends Context {
 		/**
 		 * Instantiates the part serializer sub-builder.
 		 *
-		 * <p>
-		 * Instantiates based on the following logic:
-		 * <ul>
-		 * 	<li>Returns the resource class itself is an instance of {@link HttpPartSerializer}.
-		 * 	<li>Looks for part serializer set via any of the following:
-		 * 		<ul>
-		 * 			<li>{@link RestContext.Builder#partSerializer()}
-		 * 			<li>{@link Rest#partSerializer()}.
-		 * 		</ul>
-		 * 	<li>Looks for a static or non-static <c>createPartSerializer()</c> method that returns <c>{@link HttpPartSerializer}</c> on the
-		 * 		resource class with any of the following arguments:
-		 * 		<ul>
-		 * 			<li>{@link RestContext}
-		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc juneau-rest-server-springboot injected beans}.
-		 * 		</ul>
-		 * 	<li>Resolves it via the bean store registered in this context.
-		 * 	<li>Instantiates an {@link OpenApiSerializer}.
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.HttpParts}
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -2278,6 +2481,25 @@ public class RestContext extends Context {
 		/**
 		 * Returns the part parser sub-builder.
 		 *
+		 * <p>
+		 * The part parser is used for parsing HTTP parts such as request headers and query/form/path parameters.
+		 *
+		 * <p>
+		 * The default part parser is an {@link OpenApiParser}.
+		 * It can overridden via any of the following:
+		 * <ul class='spaced-list'>
+		 * 	<li>Injected via bean store.
+		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 		<p class='bjava'>
+		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] (HttpPartParser.Builder|HttpPartParser) myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 		</p>
+		 * 		Args can be any injected bean including HttpPartParser.Builder, the default builder.
+		 * </ul>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.HttpParts}
+		 * </ul>
+		 *
 		 * @return The part parser sub-builder.
 		 */
 		public HttpPartParser.Creator partParser() {
@@ -2294,6 +2516,11 @@ public class RestContext extends Context {
 		 * <p class='bjava'>
 		 * 	<jv>builder</jv>.partParser().type(<jv>value</jv>);
 		 * </p>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.HttpParts}
+		 * 	<li class='jm'>{@link #partParser()}
+		 * </ul>
 		 *
 		 * @param value The new value.
 		 * @return This object.
@@ -2312,6 +2539,11 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.partParser().impl(<jv>value</jv>);
 		 * </p>
 		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.HttpParts}
+		 * 	<li class='jm'>{@link #partParser()}
+		 * </ul>
+		 *
 		 * @param value The new value.
 		 * @return This object.
 		 */
@@ -2323,24 +2555,8 @@ public class RestContext extends Context {
 		/**
 		 * Instantiates the part parser sub-builder.
 		 *
-		 * <p>
-		 * Instantiates based on the following logic:
-		 * <ul>
-		 * 	<li>Returns the resource class itself is an instance of {@link HttpPartParser}.
-		 * 	<li>Looks for part parser set via any of the following:
-		 * 		<ul>
-		 * 			<li>{@link RestContext.Builder#partParser()}
-		 * 			<li>{@link Rest#partParser()}.
-		 * 		</ul>
-		 * 	<li>Looks for a static or non-static <c>createPartParser()</c> method that returns <c>{@link HttpPartParser}</c> on the
-		 * 		resource class with any of the following arguments:
-		 * 		<ul>
-		 * 			<li>{@link RestContext}
-		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc juneau-rest-server-springboot injected beans}.
-		 * 		</ul>
-		 * 	<li>Resolves it via the bean store registered in this context.
-		 * 	<li>Instantiates an {@link OpenApiParser}.
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.HttpParts}
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -2402,6 +2618,25 @@ public class RestContext extends Context {
 		/**
 		 * Returns the JSON schema generator sub-builder.
 		 *
+		 * <p>
+		 * The JSON schema generator is used for generating JSON schema in the auto-generated Swagger documentation.
+		 *
+		 * <p>
+		 * The default JSON schema generator is a default {@link JsonSchemaGenerator}.
+		 * It can overridden via any of the following:
+		 * <ul class='spaced-list'>
+		 * 	<li>Injected via bean store.
+		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 		<p class='bjava'>
+		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] (JsonSchemaGenerator.Builder|JsonSchemaGenerator) myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 		</p>
+		 * 		Args can be any injected bean including JsonSchemaGenerator.Builder, the default builder.
+		 * </ul>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.Swagger}
+		 * </ul>
+		 *
 		 * @return The JSON schema generator sub-builder.
 		 */
 		public JsonSchemaGenerator.Builder jsonSchemaGenerator() {
@@ -2419,6 +2654,11 @@ public class RestContext extends Context {
 		 * 	<jv>builder</jv>.jsonSchemaGenerator().type(<jv>value</jv>);
 		 * </p>
 		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.Swagger}
+		 * 	<li class='jm'>{@link #jsonSchemaGenerator()}
+		 * </ul>
+		 *
 		 * @param value The new value.
 		 * @return This object.
 		 */
@@ -2434,7 +2674,12 @@ public class RestContext extends Context {
 		 * Equivalent to calling:
 		 * <p class='bjava'>
 		 * 	<jv>builder</jv>.jsonSchemaGenerator().impl(<jv>value</jv>);
+		 * 	<li class='jm'>{@link #jsonSchemaGenerator()}
 		 * </p>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.Swagger}
+		 * </ul>
 		 *
 		 * @param value The new value.
 		 * @return This object.
@@ -2447,18 +2692,8 @@ public class RestContext extends Context {
 		/**
 		 * Instantiates the JSON schema generator sub-builder.
 		 *
-		 * <p>
-		 * Instantiates based on the following logic:
-		 * <ul>
-		 * 	<li>Looks for a static or non-static <c>createJsonSchemaGenerator()</c> method that returns <c>{@link JsonSchemaGenerator}</c> on the
-		 * 		resource class with any of the following arguments:
-		 * 		<ul>
-		 * 			<li>{@link RestContext}
-		 * 			<li>{@link BeanStore}
-		 * 			<li>Any {@doc juneau-rest-server-springboot injected beans}.
-		 * 		</ul>
-		 * 	<li>Resolves it via the bean store registered in this context.
-		 * 	<li>Instantiates a new {@link JsonSchemaGenerator} using the property store of this context..
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.Swagger}
 		 * </ul>
 		 *
 		 * @param beanStore
@@ -2509,6 +2744,34 @@ public class RestContext extends Context {
 		/**
 		 * Returns the file finder bean creator.
 		 *
+		 * <p>
+		 * The file finder is used to retrieve localized files from the classpath.
+		 *
+		 * <p>
+		 * Used to retrieve localized files from the classpath for a variety of purposes including:
+		 * <ul>
+		 * 	<li>Resolution of {@link FileVar $F} variable contents.
+		 * </ul>
+		 *
+		 * <p>
+		 * The file finder can be accessed through the following methods:
+		 * <ul class='javatree'>
+		 * 	<li class='jm'>{@link RestContext#getFileFinder()}
+		 * 	<li class='jm'>{@link RestRequest#getFileFinder()}
+		 * </ul>
+		 *
+		 * <p>
+		 * The default file finder is an instance of {@link BasicRestFileFinder}.
+		 * It can overridden via any of the following:
+		 * <ul class='spaced-list'>
+		 * 	<li>Injected via bean store.
+		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 		<p class='bjava'>
+		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] FileFinder myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 		</p>
+		 * 		Args can be any injected bean.
+		 * </ul>
+		 *
 		 * @return The file finder bean creator.
 		 */
 		public BeanCreator<FileFinder> fileFinder() {
@@ -2553,124 +2816,6 @@ public class RestContext extends Context {
 
 		/**
 		 * Instantiates the file finder bean creator.
-		 *
-		 * <p>
-		 * The file finder is used to retrieve localized files from the classpath.
-		 *
-		 * <p>
-		 * Used to retrieve localized files from the classpath for a variety of purposes including:
-		 * <ul>
-		 * 	<li>Resolution of {@link FileVar $F} variable contents.
-		 * </ul>
-		 *
-		 * <p>
-		 * The file finder can be accessed through the following methods:
-		 * <ul class='javatree'>
-		 * 	<li class='jm'>{@link RestContext#getFileFinder()}
-		 * 	<li class='jm'>{@link RestRequest#getFileFinder()}
-		 * </ul>
-		 *
-		 * <p>
-		 * The file finder is instantiated via the {@link RestContext.Builder#createFileFinder(BeanStore,Supplier)} method which in turn instantiates
-		 * based on the following logic:
-		 * <ul>
-		 * 	<li>Returns the resource class itself if it's an instance of {@link FileFinder}.
-		 * 	<li>Looks for file finder setting.
-		 * 	<li>Looks for a public <c>createFileFinder()</c> method on the resource class with an optional {@link RestContext} argument.
-		 * 	<li>Instantiates the default file finder as specified via file finder default setting.
-		 * 	<li>Instantiates a {@link BasicFileFinder} which provides basic support for finding localized
-		 * 		resources on the classpath and JVM working directory.
-		 * </ul>
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a file finder that looks for files in the /files working subdirectory, but overrides the find()
-		 * 	// method for special handling of special cases.</jc>
-		 * 	<jk>public class</jk> MyFileFinder <jk>extends</jk> BasicFileFinder {
-		 *
-		 * 		<jk>public</jk> MyFileFinder() {
-		 * 			<jk>super</jk>(
-		 * 				<jk>new</jk> FileFinderBuilder()
-		 * 					.dir(<js>"/files"</js>)
-		 *			);
-		 * 		}
-		 *
-		 *		<ja>@Override</ja> <jc>// FileFinder</jc>
-		 * 		<jk>protected</jk> Optional&lt;InputStream&gt; find(String <jv>name</jv>, Locale <jv>locale</jv>) <jk>throws</jk> IOException {
-		 * 			<jc>// Do special handling or just call super.find().</jc>
-		 * 			<jk>return super</jk>.find(<jv>name</jv>, <jv>locale</jv>);
-		 * 		}
-		 * 	}
-		 * </p>
-		 *
-		 * 	<jc>// Option #1 - Registered via annotation.</jc>
-		 * 	<ja>@Rest</ja>(fileFinder=MyFileFinder.<jk>class</jk>)
-		 * 	<jk>public class</jk> MyResource {
-		 *
-		 * 		<jc>// Option #2 - Created via createFileFinder() method.</jc>
-		 * 		<jk>public</jk> FileFinder createFileFinder(RestContext <jv>context</jv>) <jk>throws</jk> Exception {
-		 * 			<jk>return new</jk> MyFileFinder();
-		 * 		}
-		 *
-		 * 		<jc>// Option #3 - Registered via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 *
-		 * 			<jc>// Using method on builder.</jc>
-		 * 			<jv>builder</jv>.fileFinder(MyFileFinder.<jk>class</jk>);
-		 *
-		 * 			<jc>// Use a pre-instantiated object instead.</jc>
-		 * 			<jv>builder</jv>.fileFinder(<jk>new</jk> MyFileFinder());
-		 * 		}
-		 *
-		 * 		<jc>// Option #4 - Registered via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.fileFinder(MyFileFinder.<jk>class</jk>);
-		 * 		}
-		 *
-		 * 		<jc>// Create a REST method that uses the file finder.</jc>
-		 * 		<ja>@RestGet</ja>
-		 * 		<jk>public</jk> InputStream foo(RestRequest <jv>req</jv>) {
-		 * 			<jk>return</jk> <jv>req</jv>.getFileFinder().getStream(<js>"foo.json"</js>).orElseThrow(NotFound::<jk>new</jk>);
-		 * 		}
-		 * 	}
-		 * </p>
-		 * <p>
-		 * Instantiates based on the following logic:
-		 * <ul>
-		 * 	<li>Returns the resource class itself is an instance of {@link FileFinder}.
-		 * 	<li>Looks for file finder value set via any of the following:
-		 * 		<ul>
-		 * 			<li>{@link RestContext.Builder#fileFinder()}
-		 * 			<li>{@link Rest#fileFinder()}.
-		 * 		</ul>
-		 * 	<li>Resolves it via the {@link RestContext.Builder#beanStore() bean store} registered in this context (including Spring beans if using SpringRestServlet).
-		 * 	<li>Looks for file finder default setting.
-		 * </ul>
-		 *
-		 * <p>
-		 * Your REST class can also implement a create method called <c>createFileFinder()</c> to instantiate your own
-		 * file finder.
-		 *
-		 * <h5 class='figure'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<ja>@Rest</ja>
-		 * 	<jk>public class</jk> MyRestClass {
-		 *
-		 * 		<jk>public</jk> FileFinder createFileFinder() <jk>throws</jk> Exception {
-		 * 			<jc>// Create your own file finder here.</jc>
-		 * 		}
-		 * 	}
-		 * </p>
-		 *
-		 * <p>
-		 * The <c>createFileFinder()</c> method can be static or non-static can contain any of the following arguments:
-		 * <ul>
-		 * 	<li>{@link FileFinder} - The file finder that would have been returned by this method.
-		 * 	<li>{@link RestContext} - This REST context.
-		 * 	<li>{@link BeanStore} - The bean store of this REST context.
-		 * 	<li>Any {@doc juneau-rest-server-springboot injected bean} types.  Use {@link Optional} arguments for beans that may not exist.
-		 * </ul>
 		 *
 		 * @param beanStore
 		 * 	The factory used for creating beans and retrieving injected beans.
@@ -2883,28 +3028,6 @@ public class RestContext extends Context {
 				defaultRequestHeaders = createDefaultRequestHeaders(beanStore(), resource());
 			return defaultRequestHeaders;
 		}
-
-//		/**
-//		 * Applies an operation to the default request headers sub-builder.
-//		 *
-//		 * <p>
-//		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-//		 *
-//		 * <h5 class='section'>Example:</h5>
-//		 * <p class='bjava'>
-//		 * 	RestContext <jv>context</jv> = RestContext
-//		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-//		 * 		.defaultRequestHeaders(<jv>x</jv> -&gt; <jv>x</jv>.remove(<js>"Foo"</js>)))
-//		 * 		.build();
-//		 * </p>
-//		 *
-//		 * @param operation The operation to apply.
-//		 * @return This object.
-//		 */
-//		public Builder defaultRequestHeaders(Consumer<HeaderList.Builder> operation) {
-//			operation.accept(defaultRequestHeaders());
-//			return this;
-//		}
 
 		/**
 		 * Default request headers.
@@ -6912,7 +7035,7 @@ public class RestContext extends Context {
 			try {
 				x.invoke(session.getBeanStore(), session.getResource());
 			} catch (Exception e) {
-				logger.log(Level.WARNING, unwrap(e), ()->format("Error occurred invoking finish-call method ''{0}''.", x.getFullName()));
+				getLogger().log(Level.WARNING, unwrap(e), ()->format("Error occurred invoking finish-call method ''{0}''.", x.getFullName()));
 			}
 		}
 	}

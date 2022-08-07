@@ -17,6 +17,20 @@ import org.apache.juneau.rest.*;
 
 /**
  * Default implementation of a file finder.
+ *
+ * <p>
+ * Looks for files in the following locations:
+ * <ul>
+ * 	<li>{@code "static"} working directory.
+ * 	<li>{@code "htdocs"} working directory.
+ * 	<li>{@code "htdocs"} package relative to resource class.
+ * 	<li>{@code "htdocs"} root package.
+ * </ul>
+ *
+ * <ul class='notes'>
+ * 	<li>Files up to 1MB are cached in memory.
+ * 	<li>Files with {@link "class"} and {@link "properties"} are excluded for security purposes.
+ * </ul>
  */
 public class BasicRestFileFinder extends BasicFileFinder {
 
