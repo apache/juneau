@@ -71,7 +71,6 @@ public class RestDeleteAnnotation {
 
 		Class<? extends RestGuard>[] guards = new Class[0];
 		Class<? extends RestMatcher>[] matchers = new Class[0];
-		Class<? extends RestOpContext> contextClass = RestOpContext.Void.class;
 		Class<? extends Encoder>[] encoders = new Class[0];
 		OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
 		String clientVersion="", debug="", defaultAccept="", defaultCharset="", rolesDeclared="", roleGuard="", summary="", value="";
@@ -101,17 +100,6 @@ public class RestDeleteAnnotation {
 		 */
 		public Builder clientVersion(String value) {
 			this.clientVersion = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link RestDelete#contextClass()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder contextClass(Class<? extends RestOpContext> value) {
-			this.contextClass = value;
 			return this;
 		}
 
@@ -327,7 +315,6 @@ public class RestDeleteAnnotation {
 
 		private final Class<? extends RestGuard>[] guards;
 		private final Class<? extends RestMatcher>[] matchers;
-		private final Class<? extends RestOpContext> contextClass;
 		private final Class<? extends Encoder>[] encoders;
 		private final OpSwagger swagger;
 		private final String clientVersion, debug, defaultAccept, defaultCharset, rolesDeclared, roleGuard, summary, value;
@@ -336,7 +323,6 @@ public class RestDeleteAnnotation {
 		Impl(Builder b) {
 			super(b);
 			this.clientVersion = b.clientVersion;
-			this.contextClass = b.contextClass;
 			this.debug = b.debug;
 			this.defaultAccept = b.defaultAccept;
 			this.defaultCharset = b.defaultCharset;
@@ -360,11 +346,6 @@ public class RestDeleteAnnotation {
 		@Override /* RestDelete */
 		public String clientVersion() {
 			return clientVersion;
-		}
-
-		@Override /* RestDelete */
-		public Class<? extends RestOpContext> contextClass() {
-			return contextClass;
 		}
 
 		@Override /* RestDelete */
@@ -478,7 +459,6 @@ public class RestDeleteAnnotation {
 			b.httpMethod("delete");
 
 			classes(a.encoders()).ifPresent(x -> b.encoders().set(x));
-			type(a.contextClass()).ifPresent(x -> b.type(x));
 			stream(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultRequestHeaders().setDefault(x));
 			stream(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultResponseHeaders().setDefault(x));
 			stream(a.defaultRequestAttributes()).map(x -> BasicNamedAttribute.ofPair(x)).forEach(x -> b.defaultRequestAttributes().add(x));

@@ -19,7 +19,6 @@ import static org.junit.runners.MethodSorters.*;
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.converter.*;
 import org.apache.juneau.rest.guard.*;
 import org.apache.juneau.rest.matcher.*;
@@ -39,7 +38,6 @@ public class RestPostAnnotation_Test {
 	RestPost a1 = RestPostAnnotation.create()
 		.clientVersion("clientVersion")
 		.consumes("consumes")
-		.contextClass(RestOpContext.class)
 		.converters(RestConverter.class)
 		.debug("debug")
 		.defaultAccept("defaultAccept")
@@ -70,7 +68,6 @@ public class RestPostAnnotation_Test {
 	RestPost a2 = RestPostAnnotation.create()
 		.clientVersion("clientVersion")
 		.consumes("consumes")
-		.contextClass(RestOpContext.class)
 		.converters(RestConverter.class)
 		.debug("debug")
 		.defaultAccept("defaultAccept")
@@ -104,7 +101,6 @@ public class RestPostAnnotation_Test {
 			+ "{"
 				+ "clientVersion:'clientVersion',"
 				+ "consumes:['consumes'],"
-				+ "contextClass:'org.apache.juneau.rest.RestOpContext',"
 				+ "converters:['org.apache.juneau.rest.converter.RestConverter'],"
 				+ "debug:'debug',"
 				+ "defaultAccept:'defaultAccept',"
@@ -180,7 +176,6 @@ public class RestPostAnnotation_Test {
 		@RestPost(
 			clientVersion="clientVersion",
 			consumes="consumes",
-			contextClass=RestOpContext.class,
 			converters=RestConverter.class,
 			debug="debug",
 			defaultAccept="defaultAccept",
@@ -212,7 +207,6 @@ public class RestPostAnnotation_Test {
 		@RestPost(
 			clientVersion="clientVersion",
 			consumes="consumes",
-			contextClass=RestOpContext.class,
 			converters=RestConverter.class,
 			debug="debug",
 			defaultAccept="defaultAccept",

@@ -19,8 +19,6 @@ import java.lang.annotation.*;
 import java.nio.charset.*;
 import java.util.*;
 
-import javax.servlet.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.config.*;
@@ -60,25 +58,6 @@ import org.apache.juneau.serializer.*;
 @ContextApply({RestAnnotation.RestContextApply.class,RestAnnotation.RestOpContextApply.class})
 @AnnotationGroup(Rest.class)
 public @interface Rest {
-
-	/**
-	 * Override the builder class used for creating the {@link RestContext} bean for this resource.
-	 *
-	 * <p>
-	 * Can be used when you want to override any of the protected methods in the {@link org.apache.juneau.rest.RestContext.Builder} to provide
-	 * customized behavior.
-	 *
-	 * <p>
-	 * The subclass must contain a public constructor that takes in the following arguments that should be passed to the parent constructor:
-	 * <ul>
-	 * 	<li>{@link Class} - The resource class.
-	 * 	<li>{@link RestContext} - The parent context if this is a child of another resource.  Can be <jk>null</jk>.
-	 * 	<li>{@link ServletConfig} - The servlet config passed in during servlet initialization.
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	Class<? extends RestContext.Builder> builder() default RestContext.Builder.Void.class;
 
 	/**
 	 * Disable content URL parameter.
@@ -328,20 +307,6 @@ public @interface Rest {
 	 * @return The annotation value.
 	 */
 	String[] consumes() default {};
-
-	/**
-	 * REST context class.
-	 *
-	 * <p>
-	 * Allows you to extend the {@link RestContext} class to modify how any of the methods are implemented.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#type(Class)}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	Class<? extends RestContext> contextClass() default RestContext.Void.class;
 
 	/**
 	 * Class-level response converters.
@@ -1126,17 +1091,6 @@ public @interface Rest {
 	 * @return The annotation value.
 	 */
 	Class<? extends RestOperations> restOperationsClass() default RestOperations.Void.class;
-
-	/**
-	 * Allows you to extend the {@link RestOpContext} class to modify how any of the methods are implemented.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#restOpContextClass(Class)}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	Class<? extends RestOpContext> restOpContextClass() default RestOpContext.Void.class;
 
 	/**
 	 * Java REST operation method parameter resolvers.

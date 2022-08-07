@@ -16382,13 +16382,11 @@
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#allowedMethodHeaders() allowedMethodHeaders}
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#allowedMethodParams() allowedMethodParams}
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#beanStore() beanStore}
-				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#builder() builder}
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#callLogger() callLogger}
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#children() children}
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#clientVersionHeader() clientVersionHeader}
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#config() config}
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#consumes() consumes}
-				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#contextClass() contextClass}
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#converters() converters}
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#debug() debug}
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#debugEnablement() debugEnablement}
@@ -16417,7 +16415,6 @@
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#responseProcessors() responseProcessors}
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#restChildrenClass() restChildrenClass}
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#restOpArgs() restOpArgs}
-				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#restOpContextClass() restOpContextClass}
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#restOperationsClass() restOperationsClass}
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#roleGuard() roleGuard}
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#rolesDeclared() rolesDeclared}
@@ -16862,7 +16859,6 @@
 			<ul class='javatreec'>
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.RestOp#clientVersion() clientVersion}
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.RestOp#consumes() consumes}
-				<li class='jma'>{@link org.apache.juneau.rest.annotation.RestOp#contextClass() contextClass}
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.RestOp#converters() converters}
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.RestOp#debug() debug}
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.RestOp#defaultAccept() defaultAccept}
@@ -17156,8 +17152,21 @@
 	}
 	</p>
 	<p>
-		Additional parameter types can be defined by overriding {@link org.apache.juneau.rest.RestContext.Builder#createRestOpArgs(BeanStore,Supplier)} or
-		by adding them to the bean store using {@link org.apache.juneau.rest.RestContext.Builder#createBeanStore(Supplier)}.
+		Additional parameter types can be defined via the annotation {@link org.apache.juneau.rest.annotation.Rest#restOpArgs()} or by calling {@link org.apache.juneau.rest.RestContext.Builder#restOpArgs(Class...)}.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+	<ja>@Rest</ja>(
+		restOpArgs={ MyOpArg.<jk>class</jk> }  <jc>// Option #1 - Via annotation</jc>
+	)
+	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestObject <jk>implements</jk> BasicUniversalConfig {
+	
+		// Option #2 - Programmatically
+		<ja>@RestInit</ja>
+		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) {
+			<jv>builder</jv>.restOpArgs(MyOpArg.<jk>class</jk>);
+		}
+	}
 	</p>
 </div>
 </div><!-- END: 8.3.2 - juneau-rest-server.jrs.RestOpAnnotatedMethods.jrs.JavaMethodParameters -->
@@ -17300,8 +17309,23 @@
 	}
 	</p>
 	<p>
-		Additional parameter types can be defined by overriding {@link org.apache.juneau.rest.RestContext.Builder#createResponseProcessors(BeanStore,Supplier)}.
+		Additional parameter types can be defined via the annotation {@link org.apache.juneau.rest.annotation.Rest#responseProcessors()} or by calling {@link org.apache.juneau.rest.RestContext.Builder#responseProcessors(Class...)}.
 	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+	<ja>@Rest</ja>(
+		responseProcessors={ MyResponseProcessor.<jk>class</jk> }  <jc>// Option #1 - Via annotation</jc>
+	)
+	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestObject <jk>implements</jk> BasicUniversalConfig {
+	
+		// Option #2 - Programmatically
+		<ja>@RestInit</ja>
+		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) {
+			<jv>builder</jv>.responseProcessors(MyResponseProcessor.<jk>class</jk>);
+		}
+	}
+	</p>
+	
 </div>
 </div><!-- END: 8.3.3 - juneau-rest-server.jrs.RestOpAnnotatedMethods.jrs.JavaMethodReturnTypes -->
 
@@ -17711,8 +17735,8 @@
 		</li>
 		<li class='jc'>{@link org.apache.juneau.rest.RestContext.Builder}
 			<ul class='javatreec'>
-				<li class='jmp'>{@link org.apache.juneau.rest.RestContext.Builder#createPartSerializer(BeanStore,Supplier) createPartSerializer(BeanStore,Supplier)}
-				<li class='jmp'>{@link org.apache.juneau.rest.RestContext.Builder#createPartParser(BeanStore,Supplier) createPartParser(BeanStore,Supplier)}
+				<li class='jmp'>{@link org.apache.juneau.rest.RestContext.Builder#partSerializer(HttpPartSerializer) partSerializer(HttpPartSerializer)}
+				<li class='jmp'>{@link org.apache.juneau.rest.RestContext.Builder#partParser(HttpPartParser) partParser(HttpPartParser)}
 			</ul>
 		</li>
 	</ul>
@@ -18280,49 +18304,29 @@
 	<ul class='javatree'>
 		<li class='jc'>{@link org.apache.juneau.rest.RestContext.Builder}
 			<ul class='javatreec'>
-				<li class='jmp'>{@link org.apache.juneau.rest.RestContext.Builder#createDefaultRequestAttributes(BeanStore,Supplier) createDefaultRequestAttributes(BeanStore,Supplier)}
-				<li class='jmp'>{@link org.apache.juneau.rest.RestContext.Builder#createDefaultRequestHeaders(BeanStore,Supplier) createDefaultRequestHeaders(BeanStore,Supplier)}
-				<li class='jmp'>{@link org.apache.juneau.rest.RestContext.Builder#createDefaultResponseHeaders(BeanStore,Supplier) createDefaultResponseHeaders(BeanStore,Supplier)}
 				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultAccept(String) defaultAccept(String)}
 				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultCharset(Charset) defaultCharset(Charset)}
 				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultContentType(String) defaultContentType(String)}
 				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestAttributes() defaultRequestAttributes()}
-				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestAttributes(Consumer) defaultRequestAttributes(Consumer)}
 				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestAttributes(NamedAttribute...) defaultRequestAttributes(NamedAttribute...)}
 				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestHeaders() defaultRequestHeaders()}
-				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestHeaders(Consumer) defaultRequestHeaders(Consumer)}
 				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestHeaders(Header...) defaultRequestHeaders(Header...)}
 				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultResponseHeaders() defaultResponseHeaders()}
-				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultResponseHeaders(Consumer) defaultResponseHeaders(Consumer)}
-				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultResponseHeaders(Header...) defaultResponseHeaders(Header...)}
-				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestAttributes() defaultRequestAttributes()}
-				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestAttributes(Consumer) defaultRequestAttributes(Consumer)}
-				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestAttributes(NamedAttribute...) defaultRequestAttributes(NamedAttribute...)}
-				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestHeaders() defaultRequestHeaders()}
-				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestHeaders(Consumer) defaultRequestHeaders(Consumer)}
-				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultRequestHeaders(Header...) defaultRequestHeaders(Header...)}
-				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultResponseHeaders() defaultResponseHeaders()}
-				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultResponseHeaders(Consumer) defaultResponseHeaders(Consumer)}
 				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#defaultResponseHeaders(Header...) defaultResponseHeaders(Header...)}
 			</ul>
 		</li>
 		<li class='jc'>{@link org.apache.juneau.rest.RestOpContext.Builder}
 			<ul class='javatreec'>
-				<li class='jmp'>{@link org.apache.juneau.rest.RestOpContext.Builder#createDefaultRequestAttributes(BeanStore,RestContext.Builder,Supplier) createDefaultRequestAttributes(BeanStore,Builder,Supplier)}
-				<li class='jmp'>{@link org.apache.juneau.rest.RestOpContext.Builder#createDefaultRequestFormData(BeanStore,RestContext.Builder,Supplier) createDefaultRequestFormData(BeanStore,Builder,Supplier)}
-				<li class='jmp'>{@link org.apache.juneau.rest.RestOpContext.Builder#createDefaultRequestHeaders(BeanStore,RestContext.Builder,Supplier) createDefaultRequestHeaders(BeanStore,Builder,Supplier)}
-				<li class='jmp'>{@link org.apache.juneau.rest.RestOpContext.Builder#createDefaultRequestQueryData(BeanStore,RestContext.Builder,Supplier) createDefaultRequestQueryData(BeanStore,Builder,Supplier)}
-				<li class='jmp'>{@link org.apache.juneau.rest.RestOpContext.Builder#createDefaultResponseHeaders(BeanStore,RestContext.Builder,Supplier) createDefaultResponseHeaders(BeanStore,Builder,Supplier)}
 				<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#defaultRequestAttributes() defaultRequestAttributes()}
-				<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#defaultRequestAttributes(Consumer) defaultRequestAttributes(Consumer)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#defaultRequestAttributes(NamedAttribute...) defaultRequestAttributes(NamedAttribute...)}
 				<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#defaultRequestFormData() defaultRequestFormData()}
-				<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#defaultRequestFormData(Consumer) defaultRequestFormData(Consumer)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#defaultRequestFormData(NameValuePair...) defaultRequestFormData(NameValuePair...)}
 				<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#defaultRequestHeaders() defaultRequestHeaders()}
-				<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#defaultRequestHeaders(Consumer) defaultRequestHeaders(Consumer)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#defaultRequestHeaders(Header...) defaultRequestHeaders(Header...)}
 				<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#defaultRequestQueryData() defaultRequestQueryData()}
-				<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#defaultRequestQueryData(Consumer) defaultRequestQueryData(Consumer)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#defaultRequestQueryData(NameValuePair...) defaultRequestQueryData(NameValuePair...)}
 				<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#defaultResponseHeaders() defaultResponseHeaders()}
-				<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#defaultResponseHeaders(Consumer) defaultResponseHeaders(Consumer)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#defaultResponseHeaders(Header...) defaultResponseHeaders(Header...)}
 			</ul>
 		</li>
 	</ul>
@@ -19620,9 +19624,9 @@
 	<ul class='javatree'>
 		<li class='jc'>{@link org.apache.juneau.rest.RestContext.Builder}
 			<ul class='javatreec'>
-				<li class='jmp'>{@link org.apache.juneau.rest.RestContext.Builder#createVarResolver(BeanStore,Supplier,Class) createVarResolver(BeanStore,Supplier,Class)}
 				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#varResolver() varResolver()}
-				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#varResolver(Consumer) varResolver(Consumer)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#vars(Class...) vars(Class...)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#vars(Var...) vars(Var...)}
 			</ul>
 		</li>
 	</ul>
@@ -19644,10 +19648,11 @@
 
 	<jc>// Register it with our resource.</jc>
 	<ja>@Rest</ja>(...)
-	<jk>public class</jk> MyResource {
+	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestObject <jk>implements</jk> BasicUniversalConfig {
 	
-		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) {
-			<jv>builder</jv>.varResolver().vars(BracketVar.<jk>class</jk>);
+		<ja>@RestInit</ja>
+		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) {
+			<jv>builder</jv>.vars(BracketVar.<jk>class</jk>);
 		}
 	}
 	</p>
@@ -19721,7 +19726,7 @@
 	<ul class='javatree'>
 		<li class='jc'>{@link org.apache.juneau.rest.RestContext.Builder}
 			<ul class='javatreec'>
-				<li class='jmp'>{@link org.apache.juneau.rest.RestContext.Builder#createStaticFiles() createStaticFiles(BeanStore,Supplier)}
+				<li class='jmp'>{@link org.apache.juneau.rest.RestContext.Builder#staticFiles(StaticFiles) staticFiles(StaticFiles)}
 				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#staticFiles() staticFiles()}
 			</ul>
 		</li>
@@ -21353,8 +21358,9 @@
 		<li class='jc'>{@link org.apache.juneau.rest.debug.BasicDebugEnablement}
 		<li class='jc'>{@link org.apache.juneau.rest.RestContext.Builder}
 			<ul class='javatreec'>
-				<li class='jmp'>{@link org.apache.juneau.rest.RestContext.Builder#createDebugEnablement(BeanStore,Supplier) createDebugEnablement(BeanStore,Supplier)}
 				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugEnablement() debugEnablement()}
+				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugEnablement(Class) debugEnablement(Class)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#debugEnablement(DebugEnablement) debugEnablement(DebugEnablement)}
 			</ul>
 		</li>
 	</ul>
@@ -21430,8 +21436,9 @@
 		</li>
 		<li class='jc'>{@link org.apache.juneau.rest.RestContext.Builder}
 			<ul class='javatreec'>
-				<li class='jmp'>{@link org.apache.juneau.rest.RestContext.Builder#createCallLogger(BeanStore,Supplier) createCallLogger(BeanStore,Supplier)}
 				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#callLogger() callLogger()}
+				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#callLogger(Class) callLogger(Class)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#callLogger(CallLogger) callLogger(CallLogger)}
 			</ul>
 		</li>
 	</ul>
@@ -21478,9 +21485,9 @@
 	<ul class='javatree'>
 		<li class='jc'>{@link org.apache.juneau.rest.RestContext.Builder}
 			<ul class='javatreec'>
-				<li class='jmp'>{@link org.apache.juneau.rest.RestContext.Builder#createThrownStore(BeanStore,Supplier,RestContext) createThrownStore(BeanStore,Supplier)}
 				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#thrownStore() thrownStore()}
-				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#thrownStore(Consumer) thrownStore(Consumer)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#thrownStore(Class) thrownStore(Class)}
+				<li class='jm'>{@link org.apache.juneau.rest.RestContext.Builder#thrownStore(ThrownStore) thrownStore(ThrownStore)}
 			</ul>
 		</li>
 	</ul>

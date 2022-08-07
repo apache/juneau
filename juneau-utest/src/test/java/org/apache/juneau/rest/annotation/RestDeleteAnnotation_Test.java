@@ -18,7 +18,6 @@ import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.guard.*;
 import org.apache.juneau.rest.matcher.*;
 import org.junit.*;
@@ -35,7 +34,6 @@ public class RestDeleteAnnotation_Test {
 
 	RestDelete a1 = RestDeleteAnnotation.create()
 		.clientVersion("clientVersion")
-		.contextClass(RestOpContext.class)
 		.debug("debug")
 		.defaultAccept("defaultAccept")
 		.defaultCharset("defaultCharset")
@@ -58,7 +56,6 @@ public class RestDeleteAnnotation_Test {
 
 	RestDelete a2 = RestDeleteAnnotation.create()
 		.clientVersion("clientVersion")
-		.contextClass(RestOpContext.class)
 		.debug("debug")
 		.defaultAccept("defaultAccept")
 		.defaultCharset("defaultCharset")
@@ -84,7 +81,6 @@ public class RestDeleteAnnotation_Test {
 		assertObject(a1).asJson().is(""
 			+ "{"
 				+ "clientVersion:'clientVersion',"
-				+ "contextClass:'org.apache.juneau.rest.RestOpContext',"
 				+ "debug:'debug',"
 				+ "defaultAccept:'defaultAccept',"
 				+ "defaultCharset:'defaultCharset',"
@@ -152,7 +148,6 @@ public class RestDeleteAnnotation_Test {
 
 		@RestDelete(
 			clientVersion="clientVersion",
-			contextClass=RestOpContext.class,
 			debug="debug",
 			defaultAccept="defaultAccept",
 			defaultCharset="defaultCharset",
@@ -176,7 +171,6 @@ public class RestDeleteAnnotation_Test {
 
 		@RestDelete(
 			clientVersion="clientVersion",
-			contextClass=RestOpContext.class,
 			debug="debug",
 			defaultAccept="defaultAccept",
 			defaultCharset="defaultCharset",

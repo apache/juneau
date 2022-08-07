@@ -149,6 +149,21 @@
 		|	}
 	</p>
 	<p>
-		Additional parameter types can be defined by overriding {@link oajr.RestContext.Builder#createResponseProcessors(BeanStore,Supplier)}.
+		Additional parameter types can be defined via the annotation {@link oajr.annotation.Rest#responseProcessors()} or by calling {@link oajr.RestContext.Builder#responseProcessors(Class...)}.
 	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<ja>@Rest</ja>(
+		|		responseProcessors={ MyResponseProcessor.<jk>class</jk> }  <jc>// Option #1 - Via annotation</jc>
+		|	)
+		|	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestObject <jk>implements</jk> BasicUniversalConfig {
+		|	
+		|		// Option #2 - Programmatically
+		|		<ja>@RestInit</ja>
+		|		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) {
+		|			<jv>builder</jv>.responseProcessors(MyResponseProcessor.<jk>class</jk>);
+		|		}
+		|	}
+	</p>
+	
 </div>

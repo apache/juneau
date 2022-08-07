@@ -18,7 +18,6 @@ import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.encoders.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.converter.*;
 import org.apache.juneau.rest.guard.*;
 import org.apache.juneau.rest.matcher.*;
@@ -37,7 +36,6 @@ public class RestGetAnnotation_Test {
 
 	RestGet a1 = RestGetAnnotation.create()
 		.clientVersion("clientVersion")
-		.contextClass(RestOpContext.class)
 		.converters(RestConverter.class)
 		.debug("debug")
 		.defaultAccept("defaultAccept")
@@ -63,7 +61,6 @@ public class RestGetAnnotation_Test {
 
 	RestGet a2 = RestGetAnnotation.create()
 		.clientVersion("clientVersion")
-		.contextClass(RestOpContext.class)
 		.converters(RestConverter.class)
 		.debug("debug")
 		.defaultAccept("defaultAccept")
@@ -92,7 +89,6 @@ public class RestGetAnnotation_Test {
 		assertObject(a1).asJson().is(""
 			+ "{"
 				+ "clientVersion:'clientVersion',"
-				+ "contextClass:'org.apache.juneau.rest.RestOpContext',"
 				+ "converters:['org.apache.juneau.rest.converter.RestConverter'],"
 				+ "debug:'debug',"
 				+ "defaultAccept:'defaultAccept',"
@@ -163,7 +159,6 @@ public class RestGetAnnotation_Test {
 
 		@RestGet(
 			clientVersion="clientVersion",
-			contextClass=RestOpContext.class,
 			converters=RestConverter.class,
 			debug="debug",
 			defaultAccept="defaultAccept",
@@ -190,7 +185,6 @@ public class RestGetAnnotation_Test {
 
 		@RestGet(
 			clientVersion="clientVersion",
-			contextClass=RestOpContext.class,
 			converters=RestConverter.class,
 			debug="debug",
 			defaultAccept="defaultAccept",

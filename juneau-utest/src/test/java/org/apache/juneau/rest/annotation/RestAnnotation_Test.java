@@ -54,7 +54,6 @@ public class RestAnnotation_Test {
 		.clientVersionHeader("clientVersionHeader")
 		.config("config")
 		.consumes("consumes")
-		.contextClass(RestContext.class)
 		.converters(RestConverter.class)
 		.debug("debug")
 		.debugEnablement(DebugEnablement.class)
@@ -81,7 +80,6 @@ public class RestAnnotation_Test {
 		.renderResponseStackTraces("renderResponseStackTraces")
 		.responseProcessors(ResponseProcessor.class)
 		.restChildrenClass(RestChildren.class)
-		.restOpContextClass(RestOpContext.class)
 		.restOpArgs(RestOpArg.class)
 		.restOperationsClass(RestOperations.class)
 		.roleGuard("roleGuard")
@@ -109,7 +107,6 @@ public class RestAnnotation_Test {
 		.clientVersionHeader("clientVersionHeader")
 		.config("config")
 		.consumes("consumes")
-		.contextClass(RestContext.class)
 		.converters(RestConverter.class)
 		.debug("debug")
 		.debugEnablement(DebugEnablement.class)
@@ -136,7 +133,6 @@ public class RestAnnotation_Test {
 		.renderResponseStackTraces("renderResponseStackTraces")
 		.responseProcessors(ResponseProcessor.class)
 		.restChildrenClass(RestChildren.class)
-		.restOpContextClass(RestOpContext.class)
 		.restOpArgs(RestOpArg.class)
 		.restOperationsClass(RestOperations.class)
 		.roleGuard("roleGuard")
@@ -161,13 +157,11 @@ public class RestAnnotation_Test {
 				+ "allowedMethodHeaders:'allowedMethodHeaders',"
 				+ "allowedMethodParams:'allowedMethodParams',"
 				+ "beanStore:'org.apache.juneau.cp.BeanStore',"
-				+ "builder:'org.apache.juneau.rest.RestContext$Builder$Void',"
 				+ "callLogger:'org.apache.juneau.rest.logger.CallLogger',"
 				+ "children:['"+CNAME+"'],"
 				+ "clientVersionHeader:'clientVersionHeader',"
 				+ "config:'config',"
 				+ "consumes:['consumes'],"
-				+ "contextClass:'org.apache.juneau.rest.RestContext',"
 				+ "converters:['org.apache.juneau.rest.converter.RestConverter'],"
 				+ "debug:'debug',"
 				+ "debugEnablement:'org.apache.juneau.rest.debug.DebugEnablement',"
@@ -196,7 +190,6 @@ public class RestAnnotation_Test {
 				+ "responseProcessors:['org.apache.juneau.rest.processor.ResponseProcessor'],"
 				+ "restChildrenClass:'org.apache.juneau.rest.RestChildren',"
 				+ "restOpArgs:['org.apache.juneau.rest.arg.RestOpArg'],"
-				+ "restOpContextClass:'org.apache.juneau.rest.RestOpContext',"
 				+ "restOperationsClass:'org.apache.juneau.rest.RestOperations',"
 				+ "roleGuard:'roleGuard',"
 				+ "rolesDeclared:'rolesDeclared',"
@@ -268,7 +261,6 @@ public class RestAnnotation_Test {
 		clientVersionHeader="clientVersionHeader",
 		config="config",
 		consumes="consumes",
-		contextClass=RestContext.class,
 		converters=RestConverter.class,
 		debug="debug",
 		debugEnablement=DebugEnablement.class,
@@ -295,7 +287,6 @@ public class RestAnnotation_Test {
 		renderResponseStackTraces="renderResponseStackTraces",
 		responseProcessors=ResponseProcessor.class,
 		restChildrenClass=RestChildren.class,
-		restOpContextClass=RestOpContext.class,
 		restOpArgs=RestOpArg.class,
 		restOperationsClass=RestOperations.class,
 		roleGuard="roleGuard",
@@ -325,7 +316,6 @@ public class RestAnnotation_Test {
 		clientVersionHeader="clientVersionHeader",
 		config="config",
 		consumes="consumes",
-		contextClass=RestContext.class,
 		converters=RestConverter.class,
 		debug="debug",
 		debugEnablement=DebugEnablement.class,
@@ -352,7 +342,6 @@ public class RestAnnotation_Test {
 		renderResponseStackTraces="renderResponseStackTraces",
 		responseProcessors=ResponseProcessor.class,
 		restChildrenClass=RestChildren.class,
-		restOpContextClass=RestOpContext.class,
 		restOpArgs=RestOpArg.class,
 		restOperationsClass=RestOperations.class,
 		roleGuard="roleGuard",

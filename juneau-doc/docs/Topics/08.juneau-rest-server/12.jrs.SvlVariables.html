@@ -251,9 +251,9 @@
 	<ul class='javatree'>
 		<li class='jc'>{@link oajr.RestContext.Builder}
 			<ul class='javatreec'>
-				<li class='jmp'>{@link oajr.RestContext.Builder#createVarResolver(BeanStore,Supplier,Class) createVarResolver(BeanStore,Supplier,Class)}
 				<li class='jm'>{@link oajr.RestContext.Builder#varResolver() varResolver()}
-				<li class='jm'>{@link oajr.RestContext.Builder#varResolver(Consumer) varResolver(Consumer)}
+				<li class='jm'>{@link oajr.RestContext.Builder#vars(Class...) vars(Class...)}
+				<li class='jm'>{@link oajr.RestContext.Builder#vars(Var...) vars(Var...)}
 			</ul>
 		</li>
 	</ul>
@@ -275,10 +275,11 @@
 		|
 		|	<jc>// Register it with our resource.</jc>
 		|	<ja>@Rest</ja>(...)
-		|	<jk>public class</jk> MyResource {
+		|	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestObject <jk>implements</jk> BasicUniversalConfig {
 		|	
-		|		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) {
-		|			<jv>builder</jv>.varResolver().vars(BracketVar.<jk>class</jk>);
+		|		<ja>@RestInit</ja>
+		|		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) {
+		|			<jv>builder</jv>.vars(BracketVar.<jk>class</jk>);
 		|		}
 		|	}
 	</p>

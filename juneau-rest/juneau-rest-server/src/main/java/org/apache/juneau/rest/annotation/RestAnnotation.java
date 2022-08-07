@@ -96,7 +96,6 @@ public class RestAnnotation {
 	@SuppressWarnings("unchecked")
 	public static class Builder extends TargetedAnnotationTBuilder {
 
-		Class<? extends RestContext.Builder> builder = RestContext.Builder.Void.class;
 		Class<? extends Encoder>[] encoders = new Class[0];
 		Class<? extends HttpPartParser> partParser = HttpPartParser.Void.class;
 		Class<? extends HttpPartSerializer> partSerializer = HttpPartSerializer.Void.class;
@@ -104,13 +103,11 @@ public class RestAnnotation {
 		Class<? extends StaticFiles> staticFiles = StaticFiles.Void.class;
 		Class<? extends ResponseProcessor>[] responseProcessors = new Class[0];
 		Class<? extends CallLogger> callLogger = CallLogger.Void.class;
-		Class<? extends RestContext> contextClass = RestContext.Void.class;
 		Class<? extends RestConverter>[] converters = new Class[0];
 		Class<? extends RestGuard>[] guards = new Class[0];
 		Class<? extends SwaggerProvider> swaggerProvider = SwaggerProvider.Void.class;
 		Class<? extends RestOpArg>[] restOpArgs = new Class[0];
 		Class<? extends BeanStore> beanStore = BeanStore.Void.class;
-		Class<? extends RestOpContext> restOpContextClass = RestOpContext.Void.class;
 		Class<? extends RestChildren> restChildrenClass = RestChildren.Void.class;
 		Class<? extends RestOperations> restOperationsClass = RestOperations.Void.class;
 		Class<? extends DebugEnablement> debugEnablement = DebugEnablement.Void.class;
@@ -243,17 +240,6 @@ public class RestAnnotation {
 		 */
 		public Builder consumes(String...value) {
 			this.consumes = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Rest#contextClass()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder contextClass(Class<? extends RestContext> value) {
-			this.contextClass = value;
 			return this;
 		}
 
@@ -522,17 +508,6 @@ public class RestAnnotation {
 		}
 
 		/**
-		 * Sets the {@link Rest#restOpContextClass()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder restOpContextClass(Class<? extends RestOpContext> value) {
-			this.restOpContextClass = value;
-			return this;
-		}
-
-		/**
 		 * Sets the {@link Rest#restOpArgs()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -715,7 +690,6 @@ public class RestAnnotation {
 
 	private static class Impl extends TargetedAnnotationTImpl implements Rest {
 
-		private final Class<? extends RestContext.Builder> builder;
 		private final Class<? extends Encoder>[] encoders;
 		private final Class<? extends HttpPartParser> partParser;
 		private final Class<? extends HttpPartSerializer> partSerializer;
@@ -723,13 +697,11 @@ public class RestAnnotation {
 		private final Class<? extends StaticFiles> staticFiles;
 		private final Class<? extends ResponseProcessor>[] responseProcessors;
 		private final Class<? extends CallLogger> callLogger;
-		private final Class<? extends RestContext> contextClass;
 		private final Class<? extends RestConverter>[] converters;
 		private final Class<? extends RestGuard>[] guards;
 		private final Class<? extends SwaggerProvider> swaggerProvider;
 		private final Class<? extends RestOpArg>[] restOpArgs;
 		private final Class<? extends BeanStore> beanStore;
-		private final Class<? extends RestOpContext> restOpContextClass;
 		private final Class<? extends RestChildren> restChildrenClass;
 		private final Class<? extends RestOperations> restOperationsClass;
 		private final Class<? extends DebugEnablement> debugEnablement;
@@ -741,7 +713,6 @@ public class RestAnnotation {
 
 		Impl(Builder b) {
 			super(b);
-			this.builder = b.builder;
 			this.disableContentParam = b.disableContentParam;
 			this.allowedHeaderParams = b.allowedHeaderParams;
 			this.allowedMethodHeaders = b.allowedMethodHeaders;
@@ -752,7 +723,6 @@ public class RestAnnotation {
 			this.clientVersionHeader = b.clientVersionHeader;
 			this.config = b.config;
 			this.consumes = copyOf(b.consumes);
-			this.contextClass = b.contextClass;
 			this.converters = copyOf(b.converters);
 			this.debug = b.debug;
 			this.debugEnablement = b.debugEnablement;
@@ -777,7 +747,6 @@ public class RestAnnotation {
 			this.renderResponseStackTraces = b.renderResponseStackTraces;
 			this.responseProcessors = copyOf(b.responseProcessors);
 			this.restChildrenClass = b.restChildrenClass;
-			this.restOpContextClass = b.restOpContextClass;
 			this.restOperationsClass = b.restOperationsClass;
 			this.restOpArgs = copyOf(b.restOpArgs);
 			this.roleGuard = b.roleGuard;
@@ -793,11 +762,6 @@ public class RestAnnotation {
 			this.uriRelativity = b.uriRelativity;
 			this.uriResolution = b.uriResolution;
 			postConstruct();
-		}
-
-		@Override /* Rest */
-		public Class<? extends RestContext.Builder> builder() {
-			return builder;
 		}
 
 		@Override /* Rest */
@@ -848,11 +812,6 @@ public class RestAnnotation {
 		@Override /* Rest */
 		public String[] consumes() {
 			return consumes;
-		}
-
-		@Override /* Rest */
-		public Class<? extends RestContext> contextClass() {
-			return contextClass;
 		}
 
 		@Override /* Rest */
@@ -976,11 +935,6 @@ public class RestAnnotation {
 		}
 
 		@Override /* Rest */
-		public Class<? extends RestOpContext> restOpContextClass() {
-			return restOpContextClass;
-		}
-
-		@Override /* Rest */
 		public Class<? extends RestOpArg>[] restOpArgs() {
 			return restOpArgs;
 		}
@@ -1088,7 +1042,6 @@ public class RestAnnotation {
 			b.children((Object[])a.children());
 			b.restOpArgs(a.restOpArgs());
 			classes(a.encoders()).ifPresent(x -> b.encoders().add(x));
-			type(a.contextClass()).ifPresent(x -> b.type(x));
 			string(a.uriContext()).ifPresent(x -> b.uriContext(x));
 			string(a.uriAuthority()).ifPresent(x -> b.uriAuthority(x));
 			string(a.uriRelativity()).map(UriRelativity::valueOf).ifPresent(x -> b.uriRelativity(x));
@@ -1100,7 +1053,6 @@ public class RestAnnotation {
 			string(a.clientVersionHeader()).ifPresent(x -> b.clientVersionHeader(x));
 			type(a.callLogger()).ifPresent(x -> b.callLogger().type(x));
 			type(a.swaggerProvider()).ifPresent(x -> b.swaggerProvider(x));
-			type(a.restOpContextClass()).ifPresent(x -> b.restOpContextClass(x));
 			type(a.restChildrenClass()).ifPresent(x -> b.restChildrenClass(x));
 			type(a.restOperationsClass()).ifPresent(x -> b.restOperationsClass(x));
 			type(a.debugEnablement()).ifPresent(x -> b.debugEnablement().type(x));

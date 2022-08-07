@@ -15,7 +15,6 @@ package org.apache.juneau.rest;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.http.HttpHeaders.*;
-import static org.apache.juneau.internal.ArgUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
@@ -124,15 +123,6 @@ public class RestContext extends Context {
 	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * Represents a null value for the {@link Rest#contextClass()} annotation.
-	 */
-	public static final class Void extends RestContext {
-		private Void(Builder builder) throws Exception {
-			super(builder);
-		}
-	}
-
 	private static final Map<Class<?>, RestContext> REGISTRY = new ConcurrentHashMap<>();
 
 	/**
@@ -146,12 +136,6 @@ public class RestContext extends Context {
 
 	/**
 	 * Creates a new builder for this object.
-	 *
-	 * <p>
-	 * The builder class can be subclassed by using the {@link Rest#builder()} annotation.
-	 * This can be useful when you want to perform any customizations on the builder class, typically by overriding protected methods that create
-	 * 	the various builders used in the created {@link RestContext} object (which itself can be overridden via {@link RestContext.Builder#type(Class)}).
-	 * The subclass must contain a public constructor that takes in the same arguments passed in to this method.
 	 *
 	 * @param resourceClass
 	 * 	The class annotated with <ja>@Rest</ja>.
@@ -168,21 +152,7 @@ public class RestContext extends Context {
 	 * @throws ServletException Something bad happened.
 	 */
 	public static Builder create(Class<?> resourceClass, RestContext parentContext, ServletConfig servletConfig) throws ServletException {
-
-		Value<Class<? extends Builder>> v = Value.of(Builder.class);
-		ClassInfo.of(resourceClass).forEachAnnotation(Rest.class, x -> isNotVoid(x.builder()), x -> v.set(x.builder()));
-
-		if (v.get() == Builder.class)
-			return new Builder(resourceClass, parentContext, servletConfig);
-
-		return BeanStore
-			.of(parentContext == null ? null : parentContext.getRootBeanStore())
-			.addBean(Class.class, resourceClass)
-			.addBean(RestContext.class, parentContext)
-			.addBean(ServletConfig.class, servletConfig)
-			.createBean(Builder.class)
-			.type(v.get())
-			.run();
+		return new Builder(resourceClass, parentContext, servletConfig);
 	}
 
 	//-------------------------------------------------------------------------------------------------------------------
@@ -193,16 +163,7 @@ public class RestContext extends Context {
 	 * Builder class.
 	 */
 	@FluentSetters(ignore={"set"})
-	public static class Builder extends Context.Builder implements ServletConfig {
-
-		/**
-		 * Represents a <jk>null</jk> value for the {@link Rest#builder()} annotation.
-		 */
-		public static final class Void extends Builder {
-			private Void(Class<?> resourceClass, RestContext parentContext, ServletConfig servletConfig) {
-				super(resourceClass, parentContext, servletConfig);
-			}
-		}
+	public static final class Builder extends Context.Builder implements ServletConfig {
 
 		private static final Set<Class<?>> DELAYED_INJECTION = set(
 			BeanContext.Builder.class,
@@ -599,16 +560,22 @@ public class RestContext extends Context {
 		 * Returns the bean store in this builder.
 		 *
 		 * <p>
-		 * Can be used to add more beans to the bean store.
+		 * The bean store is a simple storage database for beans keyed by type and name.
 		 *
 		 * <p>
-		 * The bean store is created by the constructor using the {@link #createBeanStore(Supplier)} method and is initialized with the following beans:
-		 * <ul>
-		 * 	<li>{@link RestContext.Builder}
-		 * 	<li>{@link ServletConfig}
-		 * 	<li>{@link ServletContext}
-		 * 	<li>{@link VarResolver}
-		 * 	<li>{@link Config}
+		 * The bean store is created with the parent root bean store as the parent, allowing any beans in the root bean store to be available
+		 * in this builder.  The root bean store typically pulls from an injection framework such as Spring to allow injected beans to be used.
+		 *
+		 * <p>
+		 * The default bean store can be overridden via any of the following:
+		 * <ul class='spaced-list'>
+		 * 	<li>Class annotation:  {@link Rest#beanStore() @Rest(beanStore)}
+		 * 	<li>{@link RestBean @RestBean}-annotated methods:
+		 * 		<p class='bjava'>
+		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] BeanStore.Builder myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] BeanStore myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 		</p>
+		 * 		Args can be any injected bean including {@link org.apache.juneau.cp.BeanStore.Builder}, the default builder.
 		 * </ul>
 		 *
 		 * @return The bean store in this builder.
@@ -618,29 +585,50 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Applies an operation to the bean store in this builder.
+		 * Adds a bean to the bean store of this class.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.beanStore(<jv>x</jv> -&gt; <jv>x</jv>.addSupplier(MyBean.<jk>class</jk>, ()-&gt;<jsm>getMyBean</jsm>()))
-		 * 		.build();
+		 * 	<jv>builder</jv>.beanStore().add(<jv>beanType</jv>, <jv>bean</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * @param <T> The class to associate this bean with.
+		 * @param beanType The class to associate this bean with.
+		 * @param bean The bean.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder beanStore(Consumer<BeanStore> operation) {
-			operation.accept(beanStore());
+		public <T> Builder beanStore(Class<T> beanType, T bean) {
+			beanStore().addBean(beanType, bean);
+			return this;
+		}
+
+		/**
+		 * Adds a bean to the bean store of this class.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.beanStore().add(<jv>beanType</jv>, <jv>bean</jv>, <jv>name</jv>);
+		 * </p>
+		 *
+		 * @param <T> The class to associate this bean with.
+		 * @param beanType The class to associate this bean with.
+		 * @param bean The bean.  Can be <jk>null</jk>.
+		 * @param name The bean name if this is a named bean.  Can be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public <T> Builder beanStore(Class<T> beanType, T bean, String name) {
+			beanStore().addBean(beanType, bean, name);
 			return this;
 		}
 
 		/**
 		 * Returns the root bean store.
+		 *
+		 * <p>
+		 * This is the bean store inherited from the parent resource and does not include
+		 * any beans added by this class.
 		 *
 		 * @return The root bean store.
 		 */
@@ -650,22 +638,6 @@ public class RestContext extends Context {
 
 		/**
 		 * Creates the bean store in this builder.
-		 *
-		 * <p>
-		 * Gets called in the constructor to create the bean store used for finding other beans.
-		 *
-		 * <p>
-		 * The bean store is created with the parent root bean store as the parent, allowing any beans in the root bean store to be available
-		 * in this builder.  The root bean store typically pulls from an injection framework such as Spring to allow injected beans to be used.
-		 *
-		 * The default bean store can be overridden via any of the following methods:
-		 * <ul>
-		 * 	<li>Annotation:  {@link Rest#beanStore()}
-		 * 	<li>Method:  <c><ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] BeanStore.Builder myMethod(<i>&lt;args&gt;</i>)</c>
-		 * 		<br>Args can be any injectable bean including {@link org.apache.juneau.cp.BeanStore.Builder}, the default builder.
-		 * 	<li>Method:  <c><ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] BeanStore myMethod(<i>&lt;args&gt;</i>)</c>
-		 * 		<br>Args can be any injectable bean including {@link org.apache.juneau.cp.BeanStore.Builder}, the default builder.
-		 * </ul>
 		 *
 		 * @param resource
 		 * 	The REST servlet/bean instance that this context is defined against.
@@ -707,30 +679,62 @@ public class RestContext extends Context {
 		 * Returns the variable resolver sub-builder.
 		 *
 		 * <p>
-		 * Can be used to add more variables or context objects to the variable resolver.
-		 * These variables affect the variable resolver returned by {@link RestRequest#getVarResolverSession()} which is
-		 * used to resolve string variables of the form <js>"$X{...}"</js> in various places such as annotations on the REST class and methods.
+		 * 	The variable resolver is used to resolve string variables of the form <js>"$X{...}"</js> in various places such as annotations on the REST class and methods.
 		 *
 		 * <p>
-		 * The var resolver is created by the constructor using the {@link #createVarResolver(BeanStore,Supplier,Class)} method and is initialized with the following beans:
-		 * <ul>
-		 * 	<li>{@link ConfigVar}
-		 * 	<li>{@link FileVar}
-		 * 	<li>{@link SystemPropertiesVar}
-		 * 	<li>{@link EnvVariablesVar}
-		 * 	<li>{@link ArgsVar}
-		 * 	<li>{@link ManifestFileVar}
-		 * 	<li>{@link SwitchVar}
-		 * 	<li>{@link IfVar}
-		 * 	<li>{@link CoalesceVar}
-		 * 	<li>{@link PatternMatchVar}
-		 * 	<li>{@link PatternReplaceVar}
-		 * 	<li>{@link PatternExtractVar}
-		 * 	<li>{@link UpperCaseVar}
-		 * 	<li>{@link LowerCaseVar}
-		 * 	<li>{@link NotEmptyVar}
-		 * 	<li>{@link LenVar}
-		 * 	<li>{@link SubstringVar}
+		 * 	Can be used to add more variables or context objects to the variable resolver.
+		 * 	These variables affect the variable resolver returned by {@link RestRequest#getVarResolverSession()}.
+		 *
+		 * <p>
+		 * The var resolver is created by the constructor using the {@link #createVarResolver(BeanStore,Supplier,Class)} method and is initialized with the following variables:
+		 * <ul class='javatreec'>
+		 * 	<li class='jc'>{@link ArgsVar}
+		 * 	<li class='jc'>{@link CoalesceVar}
+		 * 	<li class='jc'>{@link ConfigVar}
+		 * 	<li class='jc'>{@link EnvVariablesVar}
+		 * 	<li class='jc'>{@link FileVar}
+		 * 	<li class='jc'>{@link HtmlWidgetVar}
+		 * 	<li class='jc'>{@link IfVar}
+		 * 	<li class='jc'>{@link LenVar}
+		 * 	<li class='jc'>{@link LocalizationVar}
+		 * 	<li class='jc'>{@link LowerCaseVar}
+		 * 	<li class='jc'>{@link ManifestFileVar}
+		 * 	<li class='jc'>{@link NotEmptyVar}
+		 * 	<li class='jc'>{@link PatternExtractVar}
+		 * 	<li class='jc'>{@link PatternMatchVar}
+		 * 	<li class='jc'>{@link PatternReplaceVar}
+		 * 	<li class='jc'>{@link RequestAttributeVar}
+		 * 	<li class='jc'>{@link RequestFormDataVar}
+		 * 	<li class='jc'>{@link RequestHeaderVar}
+		 * 	<li class='jc'>{@link RequestPathVar}
+		 * 	<li class='jc'>{@link RequestQueryVar}
+		 * 	<li class='jc'>{@link RequestSwaggerVar}
+		 * 	<li class='jc'>{@link RequestVar}
+		 * 	<li class='jc'>{@link SerializedRequestAttrVar}
+		 * 	<li class='jc'>{@link ServletInitParamVar}
+		 * 	<li class='jc'>{@link SubstringVar}
+		 * 	<li class='jc'>{@link SwaggerVar}
+		 * 	<li class='jc'>{@link SwitchVar}
+		 * 	<li class='jc'>{@link SystemPropertiesVar}
+		 * 	<li class='jc'>{@link UpperCaseVar}
+		 * 	<li class='jc'>{@link UrlEncodeVar}
+		 * 	<li class='jc'>{@link UrlVar}
+		 * </ul>
+		 *
+		 * <p>
+		 * The default var resolver can be overridden via any of the following:
+		 * <ul class='spaced-list'>
+		 * 	<li>Injected via bean store.
+		 * 	<li>{@link RestBean @RestBean}-annotated methods:
+		 * 		<p class='bjava'>
+		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] VarResolver.Builder myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] VarResolver myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 		</p>
+		 * 		Args can be any injected bean including {@link org.apache.juneau.svl.VarResolver.Builder}, the default builder.
+		 * </ul>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li>{@doc jrs.SvlVariables}
 		 * </ul>
 		 *
 		 * @return The variable resolver sub-builder.
@@ -740,49 +744,54 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Applies an operation to the variable resolver sub-builder.
+		 * Adds one or more variables to the var resolver of this class.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.varResolver(<jv>x</jv> -&gt; <jv>x</jv>.vars(MyVar.<jk>class</jk>))
-		 * 		.build();
+		 * 	<jv>builder</jv>.vars().add(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * <ul class='seealso'>
+		 * 	<li>{@doc jrs.SvlVariables}
+		 * </ul>
+		 *
+		 * @param value The values to add.
 		 * @return This object.
 		 */
-		public Builder varResolver(Consumer<VarResolver.Builder> operation) {
-			operation.accept(varResolver());
+		@SafeVarargs
+		public final Builder vars(Class<? extends Var>...value) {
+			varResolver.vars(value);
+			return this;
+		}
+
+		/**
+		 * Adds one or more variables to the var resolver of this class.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.vars().add(<jv>value</jv>);
+		 * </p>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li>{@doc jrs.SvlVariables}
+		 * </ul>
+		 *
+		 * @param value The values to add.
+		 * @return This object.
+		 */
+		public Builder vars(Var...value) {
+			varResolver.vars(value);
 			return this;
 		}
 
 		/**
 		 * Creates the variable resolver sub-builder.
 		 *
-		 * <p>
-		 * Gets called in the constructor to create the var resolver for performing variable resolution in strings.
-		 *
-		 * <p>
-		 * Instantiates based on the following logic:
-		 * <ol>
-		 * 	<li>
-		 * 		Looks for the following method on the resource class and sets it as the implementation bean:
-		 * 		<br><c><jk>public static</jk> VarResolver createVarResolver(&lt;any-bean-types-in-bean-store&gt;) {}</c>
-		 * 	<li>
-		 * 		Looks for bean of type {@link org.apache.juneau.svl.VarResolver} in bean store and sets it as the implementation bean.
-		 * 	<li>
-		 * 		Looks for the following method on the resource class:
-		 * 		<br><c><jk>public static</jk> VarResolver.Builder createVarResolver(&lt;any-bean-types-in-bean-store&gt;) {}</c>
-		 * 	<li>
-		 * 		Looks for bean of type {@link org.apache.juneau.svl.VarResolver.Builder} in bean store and returns a copy of it.
-		 * 	<li>
-		 * 		Creates a default builder with default variables pulled from {@link #createVars(BeanStore,Supplier,Class)}.
-		 * </ol>
+		 * <ul class='seealso'>
+		 * 	<li>{@doc jrs.SvlVariables}
+		 * </ul>
 		 *
 		 * @param beanStore
 		 * 	The factory used for creating beans and retrieving injected beans.
@@ -799,8 +808,27 @@ public class RestContext extends Context {
 				VarResolver
 					.create()
 					.defaultVars()
-					.vars(createVars(beanStore, resource, resourceClass))
-					.vars(FileVar.class)
+					.vars(
+						VarList.of(
+							ConfigVar.class,
+							FileVar.class,
+							LocalizationVar.class,
+							RequestAttributeVar.class,
+							RequestFormDataVar.class,
+							RequestHeaderVar.class,
+							RequestPathVar.class,
+							RequestQueryVar.class,
+							RequestVar.class,
+							RequestSwaggerVar.class,
+							SerializedRequestAttrVar.class,
+							ServletInitParamVar.class,
+							SwaggerVar.class,
+							UrlVar.class,
+							UrlEncodeVar.class,
+							HtmlWidgetVar.class
+						)
+						.addDefault()
+					)
 					.bean(FileFinder.class, FileFinder.create(beanStore).cp(resourceClass,null,true).build())
 			);
 
@@ -825,70 +853,6 @@ public class RestContext extends Context {
 			return v.get();
 		}
 
-		/**
-		 * Instantiates the variable resolver variables for this REST resource.
-		 *
-		 * <p>
-		 * Instantiates based on the following logic:
-		 * <ol>
-		 * 	<li>
-		 * 		Looks for the following method on the resource class:
-		 * 		<br><c><jk>public static</jk> VarList createVars(&lt;any-bean-types-in-bean-store&gt;) {}</c>
-		 * 	<li>
-		 * 		Looks for bean of type {@link org.apache.juneau.svl.VarList} in bean store and returns a copy of it.
-		 * 	<li>
-		 * 		Creates a default builder with default variables.
-		 * </ol>
-		 *
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @param resourceClass
-		 * 	The REST servlet/bean type that this context is defined against.
-		 * @return A new var resolver variable list.
-		 */
-		protected VarList createVars(BeanStore beanStore, Supplier<?> resource, Class<?> resourceClass) {
-
-			// Default value.
-			Value<VarList> v = Value.of(
-				VarList.of(
-					ConfigVar.class,
-					FileVar.class,
-					LocalizationVar.class,
-					RequestAttributeVar.class,
-					RequestFormDataVar.class,
-					RequestHeaderVar.class,
-					RequestPathVar.class,
-					RequestQueryVar.class,
-					RequestVar.class,
-					RequestSwaggerVar.class,
-					SerializedRequestAttrVar.class,
-					ServletInitParamVar.class,
-					SwaggerVar.class,
-					UrlVar.class,
-					UrlEncodeVar.class,
-					HtmlWidgetVar.class
-				)
-				.addDefault()
-			);
-
-			// Replace with bean from bean store.
-			beanStore
-				.getBean(VarList.class)
-				.map(x -> x.copy())
-				.ifPresent(x -> v.set(x));
-
-			// Replace with bean from:  @RestBean public [static] VarList xxx(<args>)
-			beanStore
-				.createMethodFinder(VarList.class)
-				.addBean(VarList.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.set(x));
-
-			return v.get();
-		}
-
 		//-----------------------------------------------------------------------------------------------------------------
 		// config
 		//-----------------------------------------------------------------------------------------------------------------
@@ -897,44 +861,28 @@ public class RestContext extends Context {
 		 * Returns the external configuration file for this resource.
 		 *
 		 * <p>
-		 * The configuration file location is determined via the {@link Rest#config() @Rest(config)}
-		 * annotation on the resource.
-		 *
-		 * <p>
-		 * The config file can be programmatically overridden by adding the following method to your resource:
-		 * <p class='bjava'>
-		 * 	<jk>public</jk> Config createConfig(ServletConfig <jv>servletConfig</jv>) <jk>throws</jk> ServletException;
-		 * </p>
+		 * The default config can be overridden via any of the following:
+		 * <ul class='spaced-list'>
+		 * 	<li>Injected via bean store.
+		 * 	<li>Class annotation:  {@link Rest#config() @Rest(config)}
+		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 		<p class='bjava'>
+		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] Config myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 		</p>
+		 * 		Args can be any injected bean.
+		 * </ul>
 		 *
 		 * <p>
 		 * If a config file is not set up, then an empty config file will be returned that is not backed by any file.
+		 *
+		 * <ul class='seealso'>
+		 * 	<li>{@doc jrs.ConfigurationFiles}
+		 * </ul>
 		 *
 		 * @return The external configuration file for this resource.
 		 */
 		public Config config() {
 			return config;
-		}
-
-		/**
-		 * Applies an operation to the external configuration file for this resource.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.config(<jv>x</jv> -&gt; <jv>x</jv>.set(<js>"Foo/bar"</js>, <js>"baz"</js>).save())
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public Builder config(Consumer<Config> operation) {
-			operation.accept(config());
-			return this;
 		}
 
 		/**
@@ -944,6 +892,10 @@ public class RestContext extends Context {
 		 * By default, the config file is determined using the {@link Rest#config() @Rest(config)}
 		 * annotation.
 		 * This method allows you to programmatically override it with your own custom config file.
+		 *
+		 * <ul class='seealso'>
+		 * 	<li>{@doc jrs.ConfigurationFiles}
+		 * </ul>
 		 *
 		 * @param config The new config file.
 		 * @return This object.
@@ -956,6 +908,10 @@ public class RestContext extends Context {
 
 		/**
 		 * Creates the config for this builder.
+		 *
+		 * <ul class='seealso'>
+		 * 	<li>{@doc jrs.ConfigurationFiles}
+		 * </ul>
 		 *
 		 * @param beanStore
 		 * 	The factory used for creating beans and retrieving injected beans.
@@ -1016,28 +972,6 @@ public class RestContext extends Context {
 			if (logger == null)
 				logger = createLogger(beanStore(), resource, resourceClass);
 			return logger;
-		}
-
-		/**
-		 * Applies an operation to the logger for this resource.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.logger(<jv>x</jv> -&gt; <jv>x</jv>.setFilter(<jv>logFilter</jv>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public Builder logger(Consumer<Logger> operation) {
-			operation.accept(logger());
-			return this;
 		}
 
 		/**
@@ -1117,24 +1051,36 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Applies an operation to the thrown-store sub-builder.
+		 * Specifies the thrown store for this class.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.logger(<jv>x</jv> -&gt; <jv>x</jv>.statsImplClass(MyStatsImplClass.<jk>class</jk>))
-		 * 		.build();
+		 * 	<jv>builder</jv>.thrownStore().type(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * @param value The new value.
 		 * @return This object.
 		 */
-		public Builder thrownStore(Consumer<ThrownStore.Builder> operation) {
-			operation.accept(thrownStore());
+		public Builder thrownStore(Class<? extends ThrownStore> value) {
+			thrownStore().type(value);
+			return this;
+		}
+
+		/**
+		 * Specifies the thrown store for this class.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.thrownStore().impl(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public Builder thrownStore(ThrownStore value) {
+			thrownStore().impl(value);
 			return this;
 		}
 
@@ -1217,24 +1163,37 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Applies an operation to the encoder group sub-builder.
+		 * Adds one or more encoders to this class.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.encoders(<jv>x</jv> -&gt; <jv>x</jv>.add(MyEncoder.<jk>class</jk>))
-		 * 		.build();
+		 * 	<jv>builder</jv>.encoders().add(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * @param value The values to add.
 		 * @return This object.
 		 */
-		public Builder encoders(Consumer<EncoderSet.Builder> operation) {
-			operation.accept(encoders());
+		@SafeVarargs
+		public final Builder encoders(Class<? extends Encoder>...value) {
+			encoders().add(value);
+			return this;
+		}
+
+		/**
+		 * Adds one or more encoders to this class.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.encoders().add(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The values to add.
+		 * @return This object.
+		 */
+		public Builder encoders(Encoder...value) {
+			encoders().add(value);
 			return this;
 		}
 
@@ -1321,24 +1280,37 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Applies an operation to the serializer group sub-builder.
+		 * Adds one or more serializers to this class.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.serializers(<jv>x</jv> -&gt; <jv>x</jv>.add(MySerializer.<jk>class</jk>))
-		 * 		.build();
+		 * 	<jv>builder</jv>.serializers().add(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * @param value The values to add.
 		 * @return This object.
 		 */
-		public Builder serializers(Consumer<SerializerSet.Builder> operation) {
-			operation.accept(serializers());
+		@SafeVarargs
+		public final Builder serializers(Class<? extends Serializer>...value) {
+			serializers().add(value);
+			return this;
+		}
+
+		/**
+		 * Adds one or more serializers to this class.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.serializers().add(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The values to add.
+		 * @return This object.
+		 */
+		public Builder serializers(Serializer...value) {
+			serializers().add(value);
 			return this;
 		}
 
@@ -1403,24 +1375,37 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Applies an operation to the parser group sub-builder.
+		 * Adds one or more parsers to this class.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.parsers(<jv>x</jv> -&gt; <jv>x</jv>.add(MyParser.<jk>class</jk>))
-		 * 		.build();
+		 * 	<jv>builder</jv>.parsers().add(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * @param value The values to add.
 		 * @return This object.
 		 */
-		public Builder parsers(Consumer<ParserSet.Builder> operation) {
-			operation.accept(parsers());
+		@SafeVarargs
+		public final Builder parsers(Class<? extends Parser>...value) {
+			parsers().add(value);
+			return this;
+		}
+
+		/**
+		 * Adds one or more parsers to this class.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.parsers().add(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The values to add.
+		 * @return This object.
+		 */
+		public Builder parsers(Parser...value) {
+			parsers().add(value);
 			return this;
 		}
 
@@ -1485,24 +1470,36 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Applies an operation to the method execution statistics store sub-builder.
+		 * Specifies the method execution store for this class.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.methodExecStore(<jv>x</jv> -&gt; <jv>x</jv>.statsImplClass(MyStats.<jk>class</jk>))
-		 * 		.build();
+		 * 	<jv>builder</jv>.methodExecStore().type(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * @param value The new value.
 		 * @return This object.
 		 */
-		public Builder methodExecStore(Consumer<MethodExecStore.Builder> operation) {
-			operation.accept(methodExecStore());
+		public Builder methodExecStore(Class<? extends MethodExecStore> value) {
+			methodExecStore().type(value);
+			return this;
+		}
+
+		/**
+		 * Specifies the method execution store for this class.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.methodExecStore().impl(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public Builder methodExecStore(MethodExecStore value) {
+			methodExecStore().impl(value);
 			return this;
 		}
 
@@ -1566,24 +1563,36 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Applies an operation to the messages sub-builder.
+		 * Specifies the messages bundle for this class.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.messages(<jv>x</jv> -&gt; <jv>x</jv>.name(<js>"MyMessages"</js>))
-		 * 		.build();
+		 * 	<jv>builder</jv>.messages().type(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * @param value The new value.
 		 * @return This object.
 		 */
-		public Builder messages(Consumer<Messages.Builder> operation) {
-			operation.accept(messages());
+		public Builder messages(Class<? extends Messages> value) {
+			messages().type(value);
+			return this;
+		}
+
+		/**
+		 * Specifies the messages bundle for this class.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.messages().impl(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public Builder messages(Messages value) {
+			messages().impl(value);
 			return this;
 		}
 
@@ -1795,24 +1804,37 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Applies an operation to the response processor list sub-builder.
+		 * Adds one or more response processors to this class.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.responseProcessors(<jv>x</jv> -&gt; <jv>x</jv>.add(MyResponseProcessor.<jk>class</jk>))
-		 * 		.build();
+		 * 	<jv>builder</jv>.responseProcessors().add(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * @param value The values to add.
 		 * @return This object.
 		 */
-		public Builder responseProcessors(Consumer<ResponseProcessorList.Builder> operation) {
-			operation.accept(responseProcessors());
+		@SafeVarargs
+		public final Builder responseProcessors(Class<? extends ResponseProcessor>...value) {
+			responseProcessors().add(value);
+			return this;
+		}
+
+		/**
+		 * Adds one or more response processors to this class.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.responseProcessors().add(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The values to add.
+		 * @return This object.
+		 */
+		public Builder responseProcessors(ResponseProcessor...value) {
+			responseProcessors().add(value);
 			return this;
 		}
 
@@ -1959,9 +1981,15 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Specifies the call logger class to use for this REST context.
+		 * Specifies the call logger for this class.
 		 *
-		 * @param value The new value for this setting.
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.callLogger().type(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The new value.
 		 * @return This object.
 		 */
 		public Builder callLogger(Class<? extends CallLogger> value) {
@@ -1970,9 +1998,15 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Specifies the call logger class to use for this REST context.
+		 * Specifies the call logger for this class.
 		 *
-		 * @param value The new value for this setting.
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.callLogger().impl(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The new value.
 		 * @return This object.
 		 */
 		public Builder callLogger(CallLogger value) {
@@ -2042,7 +2076,7 @@ public class RestContext extends Context {
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
-		// partSerializer
+		// beanContext
 		//-----------------------------------------------------------------------------------------------------------------
 
 		/**
@@ -2054,28 +2088,6 @@ public class RestContext extends Context {
 			if (beanContext == null)
 				beanContext = createBeanContext(beanStore(), resource());
 			return beanContext;
-		}
-
-		/**
-		 * Applies an operation to the bean context sub-builder.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.beanContext(<jv>x</jv> -&gt; <jv>x</jv>.interfaces(MyInterface.<jk>class</jk>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public Builder beanContext(Consumer<BeanContext.Builder> operation) {
-			operation.accept(beanContext());
-			return this;
 		}
 
 		/**
@@ -2151,24 +2163,36 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Applies an operation to the part serializer sub-builder.
+		 * Specifies the part serializer to use for serializing HTTP parts for this class.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.partSerializer(<jv>x</jv> -&gt; <jv>x</jv>.builder(OpenApiSerializer.Builder.<jk>class</jk>, <jv>y</jv> -&gt; <jv>y</jv>.sortProperties()))
-		 * 		.build();
+		 * 	<jv>builder</jv>.partSerializer().type(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * @param value The new value.
 		 * @return This object.
 		 */
-		public Builder partSerializer(Consumer<HttpPartSerializer.Creator> operation) {
-			operation.accept(partSerializer());
+		public Builder partSerializer(Class<? extends HttpPartSerializer> value) {
+			partSerializer().type(value);
+			return this;
+		}
+
+		/**
+		 * Specifies the part serializer to use for serializing HTTP parts for this class.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.partSerializer().impl(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public Builder partSerializer(HttpPartSerializer value) {
+			partSerializer().impl(value);
 			return this;
 		}
 
@@ -2263,24 +2287,36 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Applies an operation to the part parser sub-builder.
+		 * Specifies the part parser to use for parsing HTTP parts for this class.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.partParser(<jv>x</jv> -&gt; <jv>x</jv>.builder(OpenApiParser.Builder.<jk>class</jk>, <jv>y</jv> -&gt; <jv>y</jv>.ignoreUnknownBeanProperties()))
-		 * 		.build();
+		 * 	<jv>builder</jv>.partParser().type(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * @param value The new value.
 		 * @return This object.
 		 */
-		public Builder partParser(Consumer<HttpPartParser.Creator> operation) {
-			operation.accept(partParser());
+		public Builder partParser(Class<? extends HttpPartParser> value) {
+			partParser().type(value);
+			return this;
+		}
+
+		/**
+		 * Specifies the part parser to use for parsing HTTP parts for this class.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.partParser().impl(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public Builder partParser(HttpPartParser value) {
+			partParser().impl(value);
 			return this;
 		}
 
@@ -2375,24 +2411,36 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Applies an operation to the JSON schema generator sub-builder.
+		 * Specifies the JSON schema generator for this class.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.jsonSchemaGenerator(<jv>x</jv> -&gt; <jv>x</jv>.allowNestedExamples()))
-		 * 		.build();
+		 * 	<jv>builder</jv>.jsonSchemaGenerator().type(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * @param value The new value.
 		 * @return This object.
 		 */
-		public Builder jsonSchemaGenerator(Consumer<JsonSchemaGenerator.Builder> operation) {
-			operation.accept(jsonSchemaGenerator());
+		public Builder jsonSchemaGenerator(Class<? extends JsonSchemaGenerator> value) {
+			jsonSchemaGenerator().type(value);
+			return this;
+		}
+
+		/**
+		 * Specifies the JSON schema generator for this class.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.jsonSchemaGenerator().impl(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public Builder jsonSchemaGenerator(JsonSchemaGenerator value) {
+			jsonSchemaGenerator().impl(value);
 			return this;
 		}
 
@@ -2470,9 +2518,15 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Specifies the file finder class to use for this REST context.
+		 * Specifies the file finder for this class.
 		 *
-		 * @param value The new value for this setting.
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.fileFinder().type(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The new value.
 		 * @return This object.
 		 */
 		public Builder fileFinder(Class<? extends FileFinder> value) {
@@ -2481,9 +2535,15 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Specifies the file finder class to use for this REST context.
+		 * Specifies the file finder for this class.
 		 *
-		 * @param value The new value for this setting.
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.fileFinder().impl(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The new value.
 		 * @return This object.
 		 */
 		public Builder fileFinder(FileFinder value) {
@@ -2656,9 +2716,15 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Specifies the static files class to use for this REST context.
+		 * Specifies the static files resource finder for this class.
 		 *
-		 * @param value The new value for this setting.
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.staticFiles().type(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The new value.
 		 * @return This object.
 		 */
 		public Builder staticFiles(Class<? extends StaticFiles> value) {
@@ -2667,9 +2733,15 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Specifies the static files class to use for this REST context.
+		 * Specifies the static files resource finder for this class.
 		 *
-		 * @param value The new value for this setting.
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.staticFiles().impl(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The new value.
 		 * @return This object.
 		 */
 		public Builder staticFiles(StaticFiles value) {
@@ -2812,27 +2884,27 @@ public class RestContext extends Context {
 			return defaultRequestHeaders;
 		}
 
-		/**
-		 * Applies an operation to the default request headers sub-builder.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.defaultRequestHeaders(<jv>x</jv> -&gt; <jv>x</jv>.remove(<js>"Foo"</js>)))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public Builder defaultRequestHeaders(Consumer<HeaderList.Builder> operation) {
-			operation.accept(defaultRequestHeaders());
-			return this;
-		}
+//		/**
+//		 * Applies an operation to the default request headers sub-builder.
+//		 *
+//		 * <p>
+//		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
+//		 *
+//		 * <h5 class='section'>Example:</h5>
+//		 * <p class='bjava'>
+//		 * 	RestContext <jv>context</jv> = RestContext
+//		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
+//		 * 		.defaultRequestHeaders(<jv>x</jv> -&gt; <jv>x</jv>.remove(<js>"Foo"</js>)))
+//		 * 		.build();
+//		 * </p>
+//		 *
+//		 * @param operation The operation to apply.
+//		 * @return This object.
+//		 */
+//		public Builder defaultRequestHeaders(Consumer<HeaderList.Builder> operation) {
+//			operation.accept(defaultRequestHeaders());
+//			return this;
+//		}
 
 		/**
 		 * Default request headers.
@@ -2978,27 +3050,27 @@ public class RestContext extends Context {
 			return defaultResponseHeaders;
 		}
 
-		/**
-		 * Applies an operation to the default response headers sub-builder.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.defaultResponseHeaders(<jv>x</jv> -&gt; <jv>x</jv>.remove(<js>"Foo"</js>)))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public Builder defaultResponseHeaders(Consumer<HeaderList.Builder> operation) {
-			operation.accept(defaultResponseHeaders());
-			return this;
-		}
+//		/**
+//		 * Applies an operation to the default response headers sub-builder.
+//		 *
+//		 * <p>
+//		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
+//		 *
+//		 * <h5 class='section'>Example:</h5>
+//		 * <p class='bjava'>
+//		 * 	RestContext <jv>context</jv> = RestContext
+//		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
+//		 * 		.defaultResponseHeaders(<jv>x</jv> -&gt; <jv>x</jv>.remove(<js>"Foo"</js>)))
+//		 * 		.build();
+//		 * </p>
+//		 *
+//		 * @param operation The operation to apply.
+//		 * @return This object.
+//		 */
+//		public Builder defaultResponseHeaders(Consumer<HeaderList.Builder> operation) {
+//			operation.accept(defaultResponseHeaders());
+//			return this;
+//		}
 
 		/**
 		 * Default response headers.
@@ -3110,27 +3182,27 @@ public class RestContext extends Context {
 			return defaultRequestAttributes;
 		}
 
-		/**
-		 * Applies an operation to the default request attributes sub-builder.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.defaultRequestAttributes(<jv>x</jv> -&gt; <jv>x</jv>.add(BasicNamedAttribute.<jsm>of</jsm>(<js>"Foo"</js>, ()-&gt;<jsm>getFoo</jsm>()))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public Builder defaultRequestAttributes(Consumer<NamedAttributeList.Builder> operation) {
-			operation.accept(defaultRequestAttributes());
-			return this;
-		}
+//		/**
+//		 * Applies an operation to the default request attributes sub-builder.
+//		 *
+//		 * <p>
+//		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
+//		 *
+//		 * <h5 class='section'>Example:</h5>
+//		 * <p class='bjava'>
+//		 * 	RestContext <jv>context</jv> = RestContext
+//		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
+//		 * 		.defaultRequestAttributes(<jv>x</jv> -&gt; <jv>x</jv>.add(BasicNamedAttribute.<jsm>of</jsm>(<js>"Foo"</js>, ()-&gt;<jsm>getFoo</jsm>()))
+//		 * 		.build();
+//		 * </p>
+//		 *
+//		 * @param operation The operation to apply.
+//		 * @return This object.
+//		 */
+//		public Builder defaultRequestAttributes(Consumer<NamedAttributeList.Builder> operation) {
+//			operation.accept(defaultRequestAttributes());
+//			return this;
+//		}
 
 		/**
 		 * Default request attributes.
@@ -3239,99 +3311,21 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Applies an operation to the REST operation args sub-builder.
+		 * Adds one or more REST operation args to this class.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.restOpArgs(<jv>x</jv> -&gt; <jv>x</jv>.add(MyRestOpArg.<jk>class</jk>))
-		 * 		.build();
+		 * 	<jv>builder</jv>.restOpArgs().add(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * @param value The new value.
 		 * @return This object.
 		 */
-		public Builder restOpArgs(Consumer<RestOpArgList.Builder> operation) {
-			operation.accept(restOpArgs());
-			return this;
-		}
-
-		/**
-		 * Java method parameter resolvers.
-		 *
-		 * <p>
-		 * By default, the Juneau framework will automatically Java method parameters of various types (e.g.
-		 * <c>RestRequest</c>, <c>Accept</c>, <c>Reader</c>).
-		 * This annotation allows you to provide your own resolvers for your own class types that you want resolved.
-		 *
-		 * <p>
-		 * For example, if you want to pass in instances of <c>MySpecialObject</c> to your Java method, define
-		 * the following resolver:
-		 * <p class='bjava'>
-		 * 	<jc>// Define a parameter resolver for resolving MySpecialObject objects.</jc>
-		 * 	<jk>public class</jk> MyRestOpArg <jk>implements</jk> RestOpArg {
-		 *
-		 *		<jc>// Must implement a static creator method that takes in a ParamInfo that describes the parameter
-		 *		// being checked.  If the parameter isn't of type MySpecialObject, then it should return null.</jc>
-		 *		<jk>public static</jk> MyRestOpArg <jsm>create</jsm>(ParamInfo <jv>paramInfo</jv>) {
-		 *			<jk>if</jk> (<jv>paramInfo</jv>.isType(MySpecialObject.<jk>class</jk>)
-		 *				<jk>return new</jk> MyRestParam();
-		 *			<jk>return null</jk>;
-		 *		}
-		 *
-		 * 		<jk>public</jk> MyRestOpArg(ParamInfo <jv>paramInfo</jv>) {}
-		 *
-		 * 		<jc>// The method that creates our object.
-		 * 		// In this case, we're taking in a query parameter and converting it to our object.</jc>
-		 * 		<ja>@Override</ja>
-		 * 		<jk>public</jk> Object resolve(RestCall <jv>call</jv>) <jk>throws</jk> Exception {
-		 * 			<jk>return new</jk> MySpecialObject(<jv>call</jv>.getRestRequest().getQuery().get(<js>"myparam"</js>));
-		 * 		}
-		 * 	}
-		 *
-		 * 	<jc>// Option #1 - Registered via annotation.</jc>
-		 * 	<ja>@Rest</ja>(restOpArgs=MyRestParam.<jk>class</jk>)
-		 * 	<jk>public class</jk> MyResource {
-		 *
-		 * 		<jc>// Option #2 - Registered via builder passed in through resource constructor.</jc>
-		 * 		<jk>public</jk> MyResource(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 *
-		 * 			<jc>// Using method on builder.</jc>
-		 * 			<jv>builder</jv>.restOpArgs(MyRestParam.<jk>class</jk>);
-		 * 		}
-		 *
-		 * 		<jc>// Option #3 - Registered via builder passed in through init method.</jc>
-		 * 		<ja>@RestInit</ja>
-		 * 		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-		 * 			<jv>builder</jv>.restOpArgs(MyRestParam.<jk>class</jk>);
-		 * 		}
-		 *
-		 * 		<jc>// Now pass it into your method.</jc>
-		 * 		<ja>@RestPost</ja>(...)
-		 * 		<jk>public</jk> Object doMyMethod(MySpecialObject <jv>mySpecialObject</jv>) {
-		 * 			<jc>// Do something with it.</jc>
-		 * 		}
-		 * 	}
-		 * </p>
-		 *
-		 * <ul class='notes'>
-		 * 	<li class='note'>
-		 * 		Inner classes of the REST resource class are allowed.
-		 * 	<li class='note'>
-		 * 		Refer to {@link RestOpArg} for the list of predefined parameter resolvers.
-		 * </ul>
-		 *
-		 * @param values The values to add to this setting.
-		 * @return This object.
-		 * @throws IllegalArgumentException if any class does not extend from {@link RestOpArg}.
-		 */
+		@SafeVarargs
 		@FluentSetter
-		public Builder restOpArgs(Class<?>...values) {
-			restOpArgs().add(assertClassArrayArgIsType("values", RestOpArg.class, values));
+		public final Builder restOpArgs(Class<? extends RestOpArg>...value) {
+			restOpArgs().add(value);
 			return this;
 		}
 
@@ -3522,27 +3516,27 @@ public class RestContext extends Context {
 			return startCallMethods;
 		}
 
-		/**
-		 * Applies an operation to the start call method list.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.startCallMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public Builder startCallMethods(Consumer<MethodList> operation) {
-			operation.accept(startCallMethods());
-			return this;
-		}
+//		/**
+//		 * Applies an operation to the start call method list.
+//		 *
+//		 * <p>
+//		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
+//		 *
+//		 * <h5 class='section'>Example:</h5>
+//		 * <p class='bjava'>
+//		 * 	RestContext <jv>context</jv> = RestContext
+//		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
+//		 * 		.startCallMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
+//		 * 		.build();
+//		 * </p>
+//		 *
+//		 * @param operation The operation to apply.
+//		 * @return This object.
+//		 */
+//		public Builder startCallMethods(Consumer<MethodList> operation) {
+//			operation.accept(startCallMethods());
+//			return this;
+//		}
 
 		/**
 		 * Instantiates the start call method list.
@@ -3585,27 +3579,27 @@ public class RestContext extends Context {
 			return endCallMethods;
 		}
 
-		/**
-		 * Applies an operation to the end call method list.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.endCallMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public Builder endCallMethods(Consumer<MethodList> operation) {
-			operation.accept(endCallMethods());
-			return this;
-		}
+//		/**
+//		 * Applies an operation to the end call method list.
+//		 *
+//		 * <p>
+//		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
+//		 *
+//		 * <h5 class='section'>Example:</h5>
+//		 * <p class='bjava'>
+//		 * 	RestContext <jv>context</jv> = RestContext
+//		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
+//		 * 		.endCallMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
+//		 * 		.build();
+//		 * </p>
+//		 *
+//		 * @param operation The operation to apply.
+//		 * @return This object.
+//		 */
+//		public Builder endCallMethods(Consumer<MethodList> operation) {
+//			operation.accept(endCallMethods());
+//			return this;
+//		}
 
 		/**
 		 * Instantiates the end call method list.
@@ -3648,27 +3642,27 @@ public class RestContext extends Context {
 			return postInitMethods;
 		}
 
-		/**
-		 * Applies an operation to the post-init method list.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.postInitMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public Builder postInitMethods(Consumer<MethodList> operation) {
-			operation.accept(postInitMethods());
-			return this;
-		}
+//		/**
+//		 * Applies an operation to the post-init method list.
+//		 *
+//		 * <p>
+//		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
+//		 *
+//		 * <h5 class='section'>Example:</h5>
+//		 * <p class='bjava'>
+//		 * 	RestContext <jv>context</jv> = RestContext
+//		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
+//		 * 		.postInitMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
+//		 * 		.build();
+//		 * </p>
+//		 *
+//		 * @param operation The operation to apply.
+//		 * @return This object.
+//		 */
+//		public Builder postInitMethods(Consumer<MethodList> operation) {
+//			operation.accept(postInitMethods());
+//			return this;
+//		}
 
 		/**
 		 * Instantiates the post-init method list.
@@ -3711,27 +3705,27 @@ public class RestContext extends Context {
 			return postInitChildFirstMethods;
 		}
 
-		/**
-		 * Applies an operation to the post-init-child-first method list.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.postInitChildFirstMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public Builder postInitChildFirstMethods(Consumer<MethodList> operation) {
-			operation.accept(postInitChildFirstMethods());
-			return this;
-		}
+//		/**
+//		 * Applies an operation to the post-init-child-first method list.
+//		 *
+//		 * <p>
+//		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
+//		 *
+//		 * <h5 class='section'>Example:</h5>
+//		 * <p class='bjava'>
+//		 * 	RestContext <jv>context</jv> = RestContext
+//		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
+//		 * 		.postInitChildFirstMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
+//		 * 		.build();
+//		 * </p>
+//		 *
+//		 * @param operation The operation to apply.
+//		 * @return This object.
+//		 */
+//		public Builder postInitChildFirstMethods(Consumer<MethodList> operation) {
+//			operation.accept(postInitChildFirstMethods());
+//			return this;
+//		}
 
 		/**
 		 * Instantiates the post-init-child-first method list.
@@ -3772,28 +3766,6 @@ public class RestContext extends Context {
 			if (destroyMethods == null)
 				destroyMethods = createDestroyMethods(beanStore(), resource());
 			return destroyMethods;
-		}
-
-		/**
-		 * Applies an operation to the destroy method list.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.destroyMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public Builder destroyMethods(Consumer<MethodList> operation) {
-			operation.accept(destroyMethods());
-			return this;
 		}
 
 		/**
@@ -3841,28 +3813,6 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Applies an operation to the pre-call method list.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.preCallMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public Builder preCallMethods(Consumer<MethodList> operation) {
-			operation.accept(preCallMethods());
-			return this;
-		}
-
-		/**
 		 * Instantiates the pre-call method list.
 		 *
 		 * @param beanStore
@@ -3904,28 +3854,6 @@ public class RestContext extends Context {
 			if (postCallMethods == null)
 				postCallMethods = createPostCallMethods(beanStore(), resource());
 			return postCallMethods;
-		}
-
-		/**
-		 * Applies an operation to the post-call method list.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestContext <jv>context</jv> = RestContext
-		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-		 * 		.postCallMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public Builder postCallMethods(Consumer<MethodList> operation) {
-			operation.accept(postCallMethods());
-			return this;
 		}
 
 		/**
@@ -4196,9 +4124,15 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Specifies the call logger class to use for this REST context.
+		 * Specifies the swagger provider for this class.
 		 *
-		 * @param value The new value for this setting.
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.swaggerProvider().type(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The new value.
 		 * @return This object.
 		 */
 		public Builder swaggerProvider(Class<? extends SwaggerProvider> value) {
@@ -4207,9 +4141,15 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Specifies the call logger class to use for this REST context.
+		 * Specifies the swagger provider for this class.
 		 *
-		 * @param value The new value for this setting.
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.swaggerProvider().impl(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The new value.
 		 * @return This object.
 		 */
 		public Builder swaggerProvider(SwaggerProvider value) {

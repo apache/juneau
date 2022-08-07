@@ -125,9 +125,7 @@ import org.apache.juneau.oapi.*;
 	swaggerProvider=SwaggerProvider.Void.class,  // Defaults to BasicSwaggerProvider.
 
 	// Overridable context classes.
-	contextClass=RestContext.class,
 	restChildrenClass=RestChildren.class,
-	restOpContextClass=RestOpContext.class,
 	restOperationsClass=RestOperations.class
 )
 @BeanConfig(

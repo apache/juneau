@@ -33,6 +33,7 @@ import java.util.function.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
@@ -83,13 +84,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	// Static
 	//-------------------------------------------------------------------------------------------------------------------
 
-	/** Represents a null value for the {@link RestOp#contextClass()} annotation.*/
-	public static final class Void extends RestOpContext {
-		private Void(Builder builder) throws Exception {
-			super(builder);
-		}
-	}
-
 	/**
 	 * Creates a new builder for this object.
 	 *
@@ -109,7 +103,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * Builder class.
 	 */
 	@FluentSetters
-	public static class Builder extends Context.Builder {
+	public static final class Builder extends Context.Builder {
 
 		RestContext restContext;
 		RestContext.Builder parent;
@@ -210,7 +204,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @return The REST servlet/bean instance that this context is defined against.
 		 */
-		public final Supplier<?> resource() {
+		public Supplier<?> resource() {
 			return restContext.builder.resource();
 		}
 
@@ -230,7 +224,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @return The default classes list for this builder.
 		 */
-		public final DefaultClassList defaultClasses() {
+		public DefaultClassList defaultClasses() {
 			return restContext.builder.defaultClasses();
 		}
 
@@ -246,8 +240,58 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @return The bean store being used by this builder.
 		 */
-		public final BeanStore beanStore() {
+		public BeanStore beanStore() {
 			return beanStore;
+		}
+
+		/**
+		 * Specifies a {@link BeanStore} to use when resolving constructor arguments.
+		 *
+		 * @param beanStore The bean store to use for resolving constructor arguments.
+		 * @return This object.
+		 */
+		protected Builder beanStore(BeanStore beanStore) {
+			this.beanStore = beanStore;
+			return this;
+		}
+
+		/**
+		 * Adds a bean to the bean store of this operation.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.beanStore().add(<jv>beanType</jv>, <jv>bean</jv>);
+		 * </p>
+		 *
+		 * @param <T> The class to associate this bean with.
+		 * @param beanType The class to associate this bean with.
+		 * @param bean The bean.  Can be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public <T> Builder beanStore(Class<T> beanType, T bean) {
+			beanStore().addBean(beanType, bean);
+			return this;
+		}
+
+		/**
+		 * Adds a bean to the bean store of this operation.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.beanStore().add(<jv>beanType</jv>, <jv>bean</jv>, <jv>name</jv>);
+		 * </p>
+		 *
+		 * @param <T> The class to associate this bean with.
+		 * @param beanType The class to associate this bean with.
+		 * @param bean The bean.  Can be <jk>null</jk>.
+		 * @param name The bean name if this is a named bean.  Can be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public <T> Builder beanStore(Class<T> beanType, T bean, String name) {
+			beanStore().addBean(beanType, bean, name);
+			return this;
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -259,32 +303,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @return The bean context sub-builder.
 		 */
-		public final BeanContext.Builder beanContext() {
+		public BeanContext.Builder beanContext() {
 			if (beanContext == null)
 				beanContext = createBeanContext(beanStore(), parent, resource());
 			return beanContext;
-		}
-
-		/**
-		 * Applies an operation to the bean context sub-builder.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestOpContext <jv>context</jv> = RestOpContext
-		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.beanContext(<jv>x</jv> -&gt; <jv>x</jv>.ignoreUnknownBeanProperties())
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public final Builder beanContext(Consumer<BeanContext.Builder> operation) {
-			operation.accept(beanContext());
-			return this;
 		}
 
 		/**
@@ -322,7 +344,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return v.get();
 		}
 
-		final Optional<BeanContext> getBeanContext() {
+		Optional<BeanContext> getBeanContext() {
 			return optional(beanContext).map(x -> x.build());
 		}
 
@@ -335,31 +357,44 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @return The encoder group sub-builder.
 		 */
-		public final EncoderSet.Builder encoders() {
+		public EncoderSet.Builder encoders() {
 			if (encoders == null)
 				encoders = createEncoders(beanStore(), parent, resource());
 			return encoders;
 		}
 
 		/**
-		 * Applies an operation to the encoder group sub-builder.
+		 * Adds one or more encoders to this operation.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestOpContext <jv>context</jv> = RestOpContext
-		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.encoders(<jv>x</jv> -&gt; <jv>x</jv>.add(MyEncoder.<jk>class</jk>))
-		 * 		.build();
+		 * 	<jv>builder</jv>.encoders().add(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * @param value The values to add.
 		 * @return This object.
 		 */
-		public final Builder encoders(Consumer<EncoderSet.Builder> operation) {
-			operation.accept(encoders());
+		@SafeVarargs
+		public final Builder encoders(Class<? extends Encoder>...value) {
+			encoders().add(value);
+			return this;
+		}
+
+		/**
+		 * Adds one or more encoders to this operation.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.encoders().add(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The values to add.
+		 * @return This object.
+		 */
+		public Builder encoders(Encoder...value) {
+			encoders().add(value);
 			return this;
 		}
 
@@ -398,7 +433,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return v.get();
 		}
 
-		final Optional<EncoderSet> getEncoders() {
+		Optional<EncoderSet> getEncoders() {
 			return optional(encoders).map(x -> x.build());
 		}
 
@@ -411,31 +446,44 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @return The serializer group sub-builder.
 		 */
-		public final SerializerSet.Builder serializers() {
+		public SerializerSet.Builder serializers() {
 			if (serializers == null)
 				serializers = createSerializers(beanStore(), parent, resource());
 			return serializers;
 		}
 
 		/**
-		 * Applies an operation to the serializer group sub-builder.
+		 * Adds one or more serializers to this operation.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestOpContext <jv>context</jv> = RestOpContext
-		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.serializers(<jv>x</jv> -&gt; <jv>x</jv>.add(MySerializer.<jk>class</jk>))
-		 * 		.build();
+		 * 	<jv>builder</jv>.serializers().add(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * @param value The values to add.
 		 * @return This object.
 		 */
-		public final Builder serializers(Consumer<SerializerSet.Builder> operation) {
-			operation.accept(serializers());
+		@SafeVarargs
+		public final Builder serializers(Class<? extends Serializer>...value) {
+			serializers().add(value);
+			return this;
+		}
+
+		/**
+		 * Adds one or more serializers to this operation.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.serializers().add(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The values to add.
+		 * @return This object.
+		 */
+		public Builder serializers(Serializer...value) {
+			serializers().add(value);
 			return this;
 		}
 
@@ -474,7 +522,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return v.get();
 		}
 
-		final Optional<SerializerSet> getSerializers() {
+		Optional<SerializerSet> getSerializers() {
 			return optional(serializers).map(x -> x.build());
 		}
 
@@ -487,31 +535,44 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @return The parser group sub-builder.
 		 */
-		public final ParserSet.Builder parsers() {
+		public ParserSet.Builder parsers() {
 			if (parsers == null)
 				parsers = createParsers(beanStore(), parent, resource());
 			return parsers;
 		}
 
 		/**
-		 * Applies an operation to the parser group sub-builder.
+		 * Adds one or more parsers to this operation.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestOpContext <jv>context</jv> = RestOpContext
-		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.parsers(<jv>x</jv> -&gt; <jv>x</jv>.add(MyParser.<jk>class</jk>))
-		 * 		.build();
+		 * 	<jv>builder</jv>.parsers().add(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * @param value The values to add.
 		 * @return This object.
 		 */
-		public final Builder parsers(Consumer<ParserSet.Builder> operation) {
-			operation.accept(parsers());
+		@SafeVarargs
+		public final Builder parsers(Class<? extends Parser>...value) {
+			parsers().add(value);
+			return this;
+		}
+
+		/**
+		 * Adds one or more parsers to this operation.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.parsers().add(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The values to add.
+		 * @return This object.
+		 */
+		public Builder parsers(Parser...value) {
+			parsers().add(value);
 			return this;
 		}
 
@@ -550,7 +611,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return v.get();
 		}
 
-		final Optional<ParserSet> getParsers() {
+		Optional<ParserSet> getParsers() {
 			return optional(parsers).map(x -> x.build());
 		}
 
@@ -563,31 +624,43 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @return The part serializer sub-builder.
 		 */
-		public final HttpPartSerializer.Creator partSerializer() {
+		public HttpPartSerializer.Creator partSerializer() {
 			if (partSerializer == null)
 				partSerializer = createPartSerializer(beanStore(), parent, resource());
 			return partSerializer;
 		}
 
 		/**
-		 * Applies an operation to the part serializer sub-builder.
+		 * Specifies the part serializer to use for serializing HTTP parts for this operation.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestOpContext <jv>context</jv> = RestOpContext
-		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.partSerializer(<jv>x</jv> -&gt; <jv>x</jv>.builder(OpenApiSerializer.Builder.<jk>class</jk>, <jv>y</jv> -&gt; <jv>y</jv>.sortProperties()))
-		 * 		.build();
+		 * 	<jv>builder</jv>.partSerializer().type(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * @param value The new value.
 		 * @return This object.
 		 */
-		public final Builder partSerializer(Consumer<HttpPartSerializer.Creator> operation) {
-			operation.accept(partSerializer());
+		public Builder partSerializer(Class<? extends HttpPartSerializer> value) {
+			partSerializer().type(value);
+			return this;
+		}
+
+		/**
+		 * Specifies the part serializer to use for serializing HTTP parts for this operation.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.partSerializer().impl(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public Builder partSerializer(HttpPartSerializer value) {
+			partSerializer().impl(value);
 			return this;
 		}
 
@@ -626,7 +699,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return v.get();
 		}
 
-		final Optional<HttpPartSerializer> getPartSerializer() {
+		Optional<HttpPartSerializer> getPartSerializer() {
 			return optional(partSerializer).map(x -> x.create());
 		}
 
@@ -639,31 +712,43 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @return The part parser sub-builder.
 		 */
-		public final HttpPartParser.Creator partParser() {
+		public HttpPartParser.Creator partParser() {
 			if (partParser == null)
 				partParser = createPartParser(beanStore(), parent, resource());
 			return partParser;
 		}
 
 		/**
-		 * Applies an operation to the part parser sub-builder.
+		 * Specifies the part parser to use for parsing HTTP parts for this operation.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestOpContext <jv>context</jv> = RestOpContext
-		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.partParser(<jv>x</jv> -&gt; <jv>x</jv>.builder(OpenApiParser.Builder.<jk>class</jk>, <jv>y</jv> -&gt; <jv>y</jv>.ignoreUnknownBeanProperties()))
-		 * 		.build();
+		 * 	<jv>builder</jv>.partParser().type(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * @param value The new value.
 		 * @return This object.
 		 */
-		public final Builder partParser(Consumer<HttpPartParser.Creator> operation) {
-			operation.accept(partParser());
+		public Builder partParser(Class<? extends HttpPartParser> value) {
+			partParser().type(value);
+			return this;
+		}
+
+		/**
+		 * Specifies the part parser to use for parsing HTTP parts for this operation.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.partParser().impl(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public Builder partParser(HttpPartParser value) {
+			partParser().impl(value);
 			return this;
 		}
 
@@ -702,7 +787,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return v.get();
 		}
 
-		final Optional<HttpPartParser> getPartParser() {
+		Optional<HttpPartParser> getPartParser() {
 			return optional(partParser).map(x -> x.create());
 		}
 
@@ -715,31 +800,43 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @return The JSON schema generator sub-builder.
 		 */
-		public final JsonSchemaGenerator.Builder jsonSchemaGenerator() {
+		public JsonSchemaGenerator.Builder jsonSchemaGenerator() {
 			if (jsonSchemaGenerator == null)
 				jsonSchemaGenerator = createJsonSchemaGenerator(beanStore(), parent, resource());
 			return jsonSchemaGenerator;
 		}
 
 		/**
-		 * Applies an operation to the JSON schema generator sub-builder.
+		 * Specifies the JSON schema generator for this operation.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestOpContext <jv>context</jv> = RestOpContext
-		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.jsonSchemaGenerator(<jv>x</jv> -&gt; <jv>x</jv>.allowNestedExamples()))
-		 * 		.build();
+		 * 	<jv>builder</jv>.jsonSchemaGenerator().type(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * @param value The new value.
 		 * @return This object.
 		 */
-		public final Builder jsonSchemaGenerator(Consumer<JsonSchemaGenerator.Builder> operation) {
-			operation.accept(jsonSchemaGenerator());
+		public Builder jsonSchemaGenerator(Class<? extends JsonSchemaGenerator> value) {
+			jsonSchemaGenerator().type(value);
+			return this;
+		}
+
+		/**
+		 * Specifies the JSON schema generator for this operation.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.jsonSchemaGenerator().impl(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public Builder jsonSchemaGenerator(JsonSchemaGenerator value) {
+			jsonSchemaGenerator().impl(value);
 			return this;
 		}
 
@@ -778,7 +875,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return v.get();
 		}
 
-		final Optional<JsonSchemaGenerator> getJsonSchemaGenerator() {
+		Optional<JsonSchemaGenerator> getJsonSchemaGenerator() {
 			return optional(jsonSchemaGenerator).map(x -> x.build());
 		}
 
@@ -791,31 +888,44 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @return The response converter list sub-builder.
 		 */
-		public final RestConverterList.Builder converters() {
+		public RestConverterList.Builder converters() {
 			if (converters == null)
 				converters = createConverters(beanStore(), resource());
 			return converters;
 		}
 
 		/**
-		 * Applies an operation to the response converter list sub-builder.
+		 * Adds one or more converters to use to convert response objects for this operation.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestOpContext <jv>context</jv> = RestOpContext
-		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.converters(<jv>x</jv> -&gt; <jv>x</jv>.add(MyConverter.<jk>class</jk>)))
-		 * 		.build();
+		 * 	<jv>builder</jv>.converters().append(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * @param value The new value.
 		 * @return This object.
 		 */
-		public final Builder converters(Consumer<RestConverterList.Builder> operation) {
-			operation.accept(converters());
+		@SafeVarargs
+		public final Builder converters(Class<? extends RestConverter>...value) {
+			converters().append(value);
+			return this;
+		}
+
+		/**
+		 * Adds one or more converters to this operation.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.converters().append(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public Builder converters(RestConverter...value) {
+			converters().append(value);
 			return this;
 		}
 
@@ -940,31 +1050,44 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @return The guard list sub-builder.
 		 */
-		public final RestGuardList.Builder guards() {
+		public RestGuardList.Builder guards() {
 			if (guards == null)
 				guards = createGuards(beanStore(), resource());
 			return guards;
 		}
 
 		/**
-		 * Applies an operation to the guard list sub-builder.
+		 * Adds one or more guards to this operation.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestOpContext <jv>context</jv> = RestOpContext
-		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.guards(<jv>x</jv> -&gt; <jv>x</jv>.add(MyGuard.<jk>class</jk>)))
-		 * 		.build();
+		 * 	<jv>builder</jv>.guards().append(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * @param value The values to add.
 		 * @return This object.
 		 */
-		public final Builder guards(Consumer<RestGuardList.Builder> operation) {
-			operation.accept(guards());
+		@SafeVarargs
+		public final Builder guards(Class<? extends RestGuard>...value) {
+			guards().append(value);
+			return this;
+		}
+
+		/**
+		 * Adds one or more guards to this operation.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.guards().append(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The values to add.
+		 * @return This object.
+		 */
+		public Builder guards(RestGuard...value) {
+			guards().append(value);
 			return this;
 		}
 
@@ -1033,7 +1156,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return v.get();
 		}
 
-		final RestGuardList getGuards() {
+		RestGuardList getGuards() {
 			RestGuardList.Builder b = guards();
 			Set<String> roleGuard = optional(this.roleGuard).orElseGet(()->set());
 
@@ -1057,31 +1180,44 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @return The matcher list sub-builder.
 		 */
-		public final RestMatcherList.Builder matchers() {
+		public RestMatcherList.Builder matchers() {
 			if (matchers == null)
 				matchers = createMatchers(beanStore(), resource());
 			return matchers;
 		}
 
 		/**
-		 * Applies an operation to the matcher list sub-builder.
+		 * Adds one or more matchers to this operation.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestOpContext <jv>context</jv> = RestOpContext
-		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.matchers(<jv>x</jv> -&gt; <jv>x</jv>.add(MyMatcher.<jk>class</jk>)))
-		 * 		.build();
+		 * 	<jv>builder</jv>.matchers().append(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * @param value The values to add.
 		 * @return This object.
 		 */
-		public final Builder matchers(Consumer<RestMatcherList.Builder> operation) {
-			operation.accept(matchers());
+		@SafeVarargs
+		public final Builder matchers(Class<? extends RestMatcher>...value) {
+			matchers().append(value);
+			return this;
+		}
+
+		/**
+		 * Adds one or more matchers to this operation.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.matchers().append(<jv>value</jv>);
+		 * </p>
+		 *
+		 * @param value The values to add.
+		 * @return This object.
+		 */
+		public Builder matchers(RestMatcher...value) {
+			matchers().append(value);
 			return this;
 		}
 
@@ -1176,7 +1312,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return v.get();
 		}
 
-		final RestMatcherList getMatchers(RestContext restContext) {
+		RestMatcherList getMatchers(RestContext restContext) {
 			RestMatcherList.Builder b = matchers();
 			if (clientVersion != null)
 				b.append(new ClientVersionMatcher(restContext.getClientVersionHeader(), MethodInfo.of(restMethod)));
@@ -1261,31 +1397,26 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @return The default request headers sub-builder.
 		 */
-		public final HeaderList.Builder defaultRequestHeaders() {
+		public HeaderList.Builder defaultRequestHeaders() {
 			if (defaultRequestHeaders == null)
 				defaultRequestHeaders = createDefaultRequestHeaders(beanStore(), parent, resource());
 			return defaultRequestHeaders;
 		}
 
 		/**
-		 * Applies an operation to the default request headers sub-builder.
+		 * Adds one or more default request headers to this operation.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestOpContext <jv>context</jv> = RestOpContext
-		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.defaultRequestHeaders(<jv>x</jv> -&gt; <jv>x</jv>.remove(<js>"Foo"</js>)))
-		 * 		.build();
+		 * 	<jv>builder</jv>.defaultRequestHeaders().append(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * @param value The values to add.
 		 * @return This object.
 		 */
-		public final Builder defaultRequestHeaders(Consumer<HeaderList.Builder> operation) {
-			operation.accept(defaultRequestHeaders());
+		public Builder defaultRequestHeaders(org.apache.http.Header...value) {
+			defaultRequestHeaders().append(value);
 			return this;
 		}
 
@@ -1332,31 +1463,26 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @return The default response headers sub-builder.
 		 */
-		public final HeaderList.Builder defaultResponseHeaders() {
+		public HeaderList.Builder defaultResponseHeaders() {
 			if (defaultResponseHeaders == null)
 				defaultResponseHeaders = createDefaultResponseHeaders(beanStore(), parent, resource());
 			return defaultResponseHeaders;
 		}
 
 		/**
-		 * Applies an operation to the default response headers sub-builder.
+		 * Adds one or more default response headers to this operation.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestOpContext <jv>context</jv> = RestOpContext
-		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.defaultResponseHeaders(<jv>x</jv> -&gt; <jv>x</jv>.remove(<js>"Foo"</js>)))
-		 * 		.build();
+		 * 	<jv>builder</jv>.defaultResponseHeaders().append(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * @param value The values to add.
 		 * @return This object.
 		 */
-		public final Builder defaultResponseHeaders(Consumer<HeaderList.Builder> operation) {
-			operation.accept(defaultResponseHeaders());
+		public Builder defaultResponseHeaders(org.apache.http.Header...value) {
+			defaultResponseHeaders().append(value);
 			return this;
 		}
 
@@ -1403,31 +1529,26 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @return The default request attributes sub-builder.
 		 */
-		public final NamedAttributeList.Builder defaultRequestAttributes() {
+		public NamedAttributeList.Builder defaultRequestAttributes() {
 			if (defaultRequestAttributes == null)
 				defaultRequestAttributes = createDefaultRequestAttributes(beanStore(), parent, resource());
 			return defaultRequestAttributes;
 		}
 
 		/**
-		 * Applies an operation to the default request attributes sub-builder.
+		 * Adds one or more default request attributes to this operation.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestOpContext <jv>context</jv> = RestOpContext
-		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.defaultRequestAttributes(<jv>x</jv> -&gt; <jv>x</jv>.add(BasicNamedAttribute.<jsm>of</jsm>(<js>"Foo"</js>, ()-&gt;<jsm>getFoo</jsm>()))
-		 * 		.build();
+		 * 	<jv>builder</jv>.defaultRequestAttributes().append(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * @param value The values to add.
 		 * @return This object.
 		 */
-		public final Builder defaultRequestAttributes(Consumer<NamedAttributeList.Builder> operation) {
-			operation.accept(defaultRequestAttributes());
+		public Builder defaultRequestAttributes(NamedAttribute...value) {
+			defaultRequestAttributes().add(value);
 			return this;
 		}
 
@@ -1474,31 +1595,26 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @return The default request query data sub-builder.
 		 */
-		public final PartList.Builder defaultRequestQueryData() {
+		public PartList.Builder defaultRequestQueryData() {
 			if (defaultRequestQueryData == null)
 				defaultRequestQueryData = createDefaultRequestQueryData(beanStore(), parent, resource());
 			return defaultRequestQueryData;
 		}
 
 		/**
-		 * Applies an operation to the default request query data sub-builder.
+		 * Adds one or more default request query data to this operation.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestOpContext <jv>context</jv> = RestOpContext
-		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.defaultRequestQueryData(<jv>x</jv> -&gt; <jv>x</jv>.add(BasicPart.<jsm>of</jsm>(<js>"foo"</js>, ()-&gt;<jsm>getFoo</jsm>()))
-		 * 		.build();
+		 * 	<jv>builder</jv>.defaultRequestQueryData().append(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * @param value The values to add.
 		 * @return This object.
 		 */
-		public final Builder defaultRequestQueryData(Consumer<PartList.Builder> operation) {
-			operation.accept(defaultRequestQueryData());
+		public Builder defaultRequestQueryData(NameValuePair...value) {
+			defaultRequestQueryData().append(value);
 			return this;
 		}
 
@@ -1545,31 +1661,26 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @return The default request form data sub-builder.
 		 */
-		public final PartList.Builder defaultRequestFormData() {
+		public PartList.Builder defaultRequestFormData() {
 			if (defaultRequestFormData == null)
 				defaultRequestFormData = createDefaultRequestFormData(beanStore(), parent, resource());
 			return defaultRequestFormData;
 		}
 
 		/**
-		 * Applies an operation to the default request form data sub-builder.
+		 * Adds one or more default request form data to this operation.
 		 *
 		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
+		 * Equivalent to calling:
 		 * <p class='bjava'>
-		 * 	RestOpContext <jv>context</jv> = RestOpContext
-		 * 		.<jsm>create</jsm>(<jv>method</jv>, <jv>restContext</jv>)
-		 * 		.defaultRequestFormData(<jv>x</jv> -&gt; <jv>x</jv>.add(BasicPart.<jsm>of</jsm>(<js>"foo"</js>, ()-&gt;<jsm>getFoo</jsm>()))
-		 * 		.build();
+		 * 	<jv>builder</jv>.defaultRequestFormData().append(<jv>value</jv>);
 		 * </p>
 		 *
-		 * @param operation The operation to apply.
+		 * @param value The values to add.
 		 * @return This object.
 		 */
-		public final Builder defaultRequestFormData(Consumer<PartList.Builder> operation) {
-			operation.accept(defaultRequestFormData());
+		public Builder defaultRequestFormData(NameValuePair...value) {
+			defaultRequestFormData().append(value);
 			return this;
 		}
 
@@ -1666,17 +1777,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		//----------------------------------------------------------------------------------------------------
 		// Properties
 		//----------------------------------------------------------------------------------------------------
-
-		/**
-		 * Specifies a {@link BeanStore} to use when resolving constructor arguments.
-		 *
-		 * @param beanStore The bean store to use for resolving constructor arguments.
-		 * @return This object.
-		 */
-		public Builder beanStore(BeanStore beanStore) {
-			this.beanStore = beanStore;
-			return this;
-		}
 
 		/**
 		 * Client version pattern matcher.
