@@ -99,7 +99,6 @@ public class RestAnnotation {
 		Class<? extends Encoder>[] encoders = new Class[0];
 		Class<? extends HttpPartParser> partParser = HttpPartParser.Void.class;
 		Class<? extends HttpPartSerializer> partSerializer = HttpPartSerializer.Void.class;
-		Class<? extends FileFinder> fileFinder = FileFinder.Void.class;
 		Class<? extends StaticFiles> staticFiles = StaticFiles.Void.class;
 		Class<? extends ResponseProcessor>[] responseProcessors = new Class[0];
 		Class<? extends CallLogger> callLogger = CallLogger.Void.class;
@@ -372,17 +371,6 @@ public class RestAnnotation {
 		 */
 		public Builder encoders(Class<? extends Encoder>...value) {
 			this.encoders = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link Rest#fileFinder()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder fileFinder(Class<? extends FileFinder> value) {
-			this.fileFinder = value;
 			return this;
 		}
 
@@ -693,7 +681,6 @@ public class RestAnnotation {
 		private final Class<? extends Encoder>[] encoders;
 		private final Class<? extends HttpPartParser> partParser;
 		private final Class<? extends HttpPartSerializer> partSerializer;
-		private final Class<? extends FileFinder> fileFinder;
 		private final Class<? extends StaticFiles> staticFiles;
 		private final Class<? extends ResponseProcessor>[] responseProcessors;
 		private final Class<? extends CallLogger> callLogger;
@@ -735,7 +722,6 @@ public class RestAnnotation {
 			this.defaultResponserHeaders = copyOf(b.defaultResponseHeaders);
 			this.description = copyOf(b.description);
 			this.encoders = copyOf(b.encoders);
-			this.fileFinder = b.fileFinder;
 			this.guards = copyOf(b.guards);
 			this.maxInput = b.maxInput;
 			this.messages = b.messages;
@@ -872,11 +858,6 @@ public class RestAnnotation {
 		@Override /* Rest */
 		public Class<? extends Encoder>[] encoders() {
 			return encoders;
-		}
-
-		@Override /* Rest */
-		public Class<? extends FileFinder> fileFinder() {
-			return fileFinder;
 		}
 
 		@Override /* Rest */
@@ -1047,7 +1028,6 @@ public class RestAnnotation {
 			string(a.uriRelativity()).map(UriRelativity::valueOf).ifPresent(x -> b.uriRelativity(x));
 			string(a.uriResolution()).map(UriResolution::valueOf).ifPresent(x -> b.uriResolution(x));
 			b.messages().location(string(a.messages()).orElse(null));
-			type(a.fileFinder()).ifPresent(x -> b.fileFinder().type(x));
 			type(a.staticFiles()).ifPresent(x -> b.staticFiles().type(x));
 			string(a.path()).ifPresent(x -> b.path(x));
 			string(a.clientVersionHeader()).ifPresent(x -> b.clientVersionHeader(x));

@@ -118,7 +118,7 @@ public class BasicStaticFiles implements StaticFiles {
 	@Override /* StaticFiles */
 	public Optional<HttpResource> resolve(String path, Locale locale) {
 		try {
-			Optional<InputStream> is = getStream(path);
+			Optional<InputStream> is = getStream(path, locale);
 			if (! is.isPresent())
 				return empty();
 			return optional(
@@ -145,16 +145,6 @@ public class BasicStaticFiles implements StaticFiles {
 	@Override /* FileFinder */
 	public Optional<InputStream> getStream(String name, Locale locale) throws IOException {
 		return fileFinder.getStream(name, locale);
-	}
-
-	@Override /* FileFinder */
-	public Optional<InputStream> getStream(String name) throws IOException {
-		return fileFinder.getStream(name);
-	}
-
-	@Override /* FileFinder */
-	public Optional<String> getString(String name) throws IOException {
-		return fileFinder.getString(name);
 	}
 
 	@Override /* FileFinder */

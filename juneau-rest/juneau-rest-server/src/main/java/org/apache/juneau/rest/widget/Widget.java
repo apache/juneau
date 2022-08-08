@@ -134,7 +134,7 @@ public abstract class Widget implements HtmlWidget {
 	 * @return The file finder to used for finding files on the file system.
 	 */
 	protected FileFinder getFileFinder(RestRequest req) {
-		return req.getFileFinder();
+		return req.getStaticFiles();
 	}
 
 	/**
@@ -149,7 +149,7 @@ public abstract class Widget implements HtmlWidget {
 	 */
 	protected String loadScript(RestRequest req, String name) {
 		try {
-			String s = getFileFinder(req).getString(name).orElse(null);
+			String s = getFileFinder(req).getString(name, null).orElse(null);
 			if (s != null)
 				s = s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "");
 			return s;
@@ -188,7 +188,7 @@ public abstract class Widget implements HtmlWidget {
 	 */
 	protected String loadStyle(RestRequest req, String name) {
 		try {
-			String s = getFileFinder(req).getString(name).orElse(null);
+			String s = getFileFinder(req).getString(name, null).orElse(null);
 			if (s != null)
 				s = s.replaceAll("(?s)\\/\\*(.*?)\\*\\/\\s*", "");
 			return s;
@@ -227,7 +227,7 @@ public abstract class Widget implements HtmlWidget {
 	 */
 	protected String loadHtml(RestRequest req, String name) {
 		try {
-			String s = getFileFinder(req).getString(name).orElse(null);
+			String s = getFileFinder(req).getString(name, null).orElse(null);
 			if (s != null)
 				s = s.replaceAll("(?s)<!--(.*?)-->\\s*", "");
 			return s;

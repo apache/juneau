@@ -29,7 +29,7 @@ import org.junit.*;
 public class FileFinder_Test {
 
 	private InputStream stream(FileFinder ff, String path) throws Exception {
-		return ff.getStream(path).orElse(null);
+		return ff.getStream(path, null).orElse(null);
 	}
 
 	private InputStream stream(FileFinder ff, String path, Locale locale) throws Exception {

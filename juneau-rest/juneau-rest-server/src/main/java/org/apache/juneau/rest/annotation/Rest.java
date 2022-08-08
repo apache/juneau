@@ -37,7 +37,6 @@ import org.apache.juneau.rest.processor.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.staticfile.*;
 import org.apache.juneau.rest.swagger.*;
-import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.serializer.*;
 
 /**
@@ -710,26 +709,6 @@ public @interface Rest {
 	 * @return The annotation value.
 	 */
 	Class<? extends Encoder>[] encoders() default {};
-
-	/**
-	 * File finder.
-	 *
-	 * <p>
-	 * Used to retrieve localized files from the classpath for a variety of purposes including:
-	 * <ul>
-	 * 	<li>Resolution of {@link FileVar $F} variable contents.
-	 * </ul>
-	 *
-	 * <p>
-	 * The file finder can be accessed through the following methods:
-	 * <ul class='javatree'>
-	 * 	<li class='jm'>{@link RestContext#getFileFinder()}
-	 * 	<li class='jm'>{@link RestRequest#getFileFinder()}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	Class<? extends FileFinder> fileFinder() default FileFinder.Void.class;
 
 	/**
 	 * Class-level guards.

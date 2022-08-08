@@ -143,7 +143,6 @@ import org.apache.juneau.utils.*;
  * 		</ul>
  * 		<li>Methods for accessing static files:
  * 		<ul class='javatreec'>
- * 			<li class='jm'>{@link RestRequest#getFileFinder() getFileFinder()}
  * 			<li class='jm'>{@link RestRequest#getStaticFiles() getStaticFiles()}
  * 			<li class='jm'>{@link RestRequest#getVarResolverSession() getVarResolverSession()}
  * 		</ul>
@@ -1475,18 +1474,6 @@ public final class RestRequest {
 				.bean(RestRequest.class, this)
 				.bean(RestSession.class, session);
 		return varSession;
-	}
-
-	/**
-	 * Returns the file finder registered on the REST resource context object.
-	 *
-	 * <p>
-	 * Used to retrieve localized files from the classpath for a variety of purposes.
-	 *
-	 * @return The file finder associated with the REST resource object.
-	 */
-	public FileFinder getFileFinder() {
-		return context.getFileFinder();
 	}
 
 	/**

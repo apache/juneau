@@ -66,7 +66,6 @@ public class RestAnnotation_Test {
 		.defaultResponseHeaders("defaultResponseHeaders")
 		.description("description")
 		.encoders(Encoder.class)
-		.fileFinder(FileFinder.class)
 		.guards(RestGuard.class)
 		.maxInput("maxInput")
 		.messages("messages")
@@ -119,7 +118,6 @@ public class RestAnnotation_Test {
 		.defaultResponseHeaders("defaultResponseHeaders")
 		.description("description")
 		.encoders(Encoder.class)
-		.fileFinder(FileFinder.class)
 		.guards(RestGuard.class)
 		.maxInput("maxInput")
 		.messages("messages")
@@ -175,7 +173,6 @@ public class RestAnnotation_Test {
 				+ "description:['description'],"
 				+ "disableContentParam:'disableContentParam',"
 				+ "encoders:['org.apache.juneau.encoders.Encoder'],"
-				+ "fileFinder:'org.apache.juneau.cp.FileFinder',"
 				+ "guards:['org.apache.juneau.rest.guard.RestGuard'],"
 				+ "maxInput:'maxInput',"
 				+ "messages:'messages',"
@@ -273,7 +270,6 @@ public class RestAnnotation_Test {
 		defaultResponseHeaders="defaultResponseHeaders",
 		description="description",
 		encoders=Encoder.class,
-		fileFinder=FileFinder.class,
 		guards=RestGuard.class,
 		maxInput="maxInput",
 		messages="messages",
@@ -328,7 +324,6 @@ public class RestAnnotation_Test {
 		defaultResponseHeaders="defaultResponseHeaders",
 		description="description",
 		encoders=Encoder.class,
-		fileFinder=FileFinder.class,
 		guards=RestGuard.class,
 		maxInput="maxInput",
 		messages="messages",

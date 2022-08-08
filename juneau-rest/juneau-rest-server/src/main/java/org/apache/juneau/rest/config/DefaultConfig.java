@@ -120,7 +120,6 @@ import org.apache.juneau.oapi.*;
 	beanStore=BeanStore.Void.class,  // Defaults to BeanStore.
 	callLogger=CallLogger.Void.class,  // Defaults to BasicCallLogger.
 	debugEnablement=DebugEnablement.Void.class,  // Defaults to BasicDefaultEnablement.
-	fileFinder=FileFinder.Void.class,  // Defaults to BasicFileFinder.
 	staticFiles=StaticFiles.Void.class,  // Defaults to BasicStaticFiles.
 	swaggerProvider=SwaggerProvider.Void.class,  // Defaults to BasicSwaggerProvider.
 

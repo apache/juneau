@@ -61,7 +61,6 @@ import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.arg.*;
 import org.apache.juneau.rest.debug.*;
-import org.apache.juneau.rest.filefinder.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.processor.*;
@@ -255,7 +254,6 @@ public class RestContext extends Context {
 		private HttpPartSerializer.Creator partSerializer;
 		private HttpPartParser.Creator partParser;
 		private JsonSchemaGenerator.Builder jsonSchemaGenerator;
-		private BeanCreator<FileFinder> fileFinder;
 		private BeanCreator<StaticFiles> staticFiles;
 		private HeaderList.Builder defaultRequestHeaders, defaultResponseHeaders;
 		private NamedAttributeList.Builder defaultRequestAttributes;
@@ -2735,114 +2733,6 @@ public class RestContext extends Context {
 				.run(x -> v.get().impl(x));
 
 			return v.get();
-		}
-
-		//-----------------------------------------------------------------------------------------------------------------
-		// fileFinder
-		//-----------------------------------------------------------------------------------------------------------------
-
-		/**
-		 * Returns the file finder bean creator.
-		 *
-		 * <p>
-		 * The file finder is used to retrieve localized files from the classpath.
-		 *
-		 * <p>
-		 * Used to retrieve localized files from the classpath for a variety of purposes including:
-		 * <ul>
-		 * 	<li>Resolution of {@link FileVar $F} variable contents.
-		 * </ul>
-		 *
-		 * <p>
-		 * The file finder can be accessed through the following methods:
-		 * <ul class='javatree'>
-		 * 	<li class='jm'>{@link RestContext#getFileFinder()}
-		 * 	<li class='jm'>{@link RestRequest#getFileFinder()}
-		 * </ul>
-		 *
-		 * <p>
-		 * The default file finder is an instance of {@link BasicRestFileFinder}.
-		 * It can overridden via any of the following:
-		 * <ul class='spaced-list'>
-		 * 	<li>Injected via bean store.
-		 * 	<li>{@link RestBean @RestBean}-annotated method:
-		 * 		<p class='bjava'>
-		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] FileFinder myMethod(<i>&lt;args&gt;</i>) {...}
-		 * 		</p>
-		 * 		Args can be any injected bean.
-		 * </ul>
-		 *
-		 * @return The file finder bean creator.
-		 */
-		public BeanCreator<FileFinder> fileFinder() {
-			if (fileFinder == null)
-				fileFinder = createFileFinder(beanStore, resource);
-			return fileFinder;
-		}
-
-		/**
-		 * Specifies the file finder for this class.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.fileFinder().type(<jv>value</jv>);
-		 * </p>
-		 *
-		 * @param value The new value.
-		 * @return This object.
-		 */
-		public Builder fileFinder(Class<? extends FileFinder> value) {
-			fileFinder().type(value);
-			return this;
-		}
-
-		/**
-		 * Specifies the file finder for this class.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.fileFinder().impl(<jv>value</jv>);
-		 * </p>
-		 *
-		 * @param value The new value.
-		 * @return This object.
-		 */
-		public Builder fileFinder(FileFinder value) {
-			fileFinder().impl(value);
-			return this;
-		}
-
-		/**
-		 * Instantiates the file finder bean creator.
-		 *
-		 * @param beanStore
-		 * 	The factory used for creating beans and retrieving injected beans.
-		 * @param resource
-		 * 	The REST servlet/bean instance that this context is defined against.
-		 * @return A new file finder bean creator.
-		 */
-		protected BeanCreator<FileFinder> createFileFinder(BeanStore beanStore, Supplier<?> resource) {
-
-			BeanCreator<FileFinder> creator = beanStore.createBean(FileFinder.class).type(BasicRestFileFinder.class);
-
-			// Specify the bean type if its set as a default.
-			defaultClasses()
-				.get(FileFinder.class)
-				.ifPresent(x -> creator.type(x));
-
-			beanStore
-				.getBean(FileFinder.class)
-				.ifPresent(x -> creator.impl(x));
-
-			// Replace with bean from:  @RestBean public [static] FileFinder xxx(<args>)
-			beanStore
-				.createMethodFinder(FileFinder.class)
-				.find(Builder::isRestBeanMethod)
-				.run(x -> creator.impl(x));
-
-			return creator;
 		}
 
 		//-----------------------------------------------------------------------------------------------------------------
@@ -5838,7 +5728,6 @@ public class RestContext extends Context {
 		preCallMethods,
 		postCallMethods;
 
-	private final FileFinder fileFinder;
 	private final StaticFiles staticFiles;
 	private final CallLogger callLogger;
 	private final DebugEnablement debugEnablement;
@@ -5917,8 +5806,8 @@ public class RestContext extends Context {
 			partSerializer = bs.add(HttpPartSerializer.class, builder.partSerializer().create());
 			partParser = bs.add(HttpPartParser.class, builder.partParser().create());
 			jsonSchemaGenerator = bs.add(JsonSchemaGenerator.class, builder.jsonSchemaGenerator().build());
-			fileFinder = bs.add(FileFinder.class, builder.fileFinder().orElse(null));
 			staticFiles = bs.add(StaticFiles.class, builder.staticFiles().orElse(null));
+			bs.add(FileFinder.class, staticFiles);
 			defaultRequestHeaders = bs.add(HeaderList.class, builder.defaultRequestHeaders().build(), "defaultRequestHeaders");
 			defaultResponseHeaders = bs.add(HeaderList.class, builder.defaultResponseHeaders().build(), "defaultResponseHeaders");
 			defaultRequestAttributes = bs.add(NamedAttributeList.class, builder.defaultRequestAttributes().build(), "defaultRequestAttributes");
@@ -6312,17 +6201,6 @@ public class RestContext extends Context {
 	 */
 	public String getClientVersionHeader() {
 		return clientVersionHeader;
-	}
-
-	/**
-	 * Returns the file finder associated with this context.
-	 *
-	 * @return
-	 * 	The file finder for this resource.
-	 * 	<br>Never <jk>null</jk>.
-	 */
-	public FileFinder getFileFinder() {
-		return fileFinder;
 	}
 
 	/**
@@ -7187,7 +7065,6 @@ public class RestContext extends Context {
 			.append("consumes", consumes)
 			.append("defaultRequestHeaders", defaultRequestHeaders)
 			.append("defaultResponseHeaders", defaultResponseHeaders)
-			.append("fileFinder", fileFinder)
 			.append("restOpArgs", restOpArgs)
 			.append("partParser", partParser)
 			.append("partSerializer", partSerializer)

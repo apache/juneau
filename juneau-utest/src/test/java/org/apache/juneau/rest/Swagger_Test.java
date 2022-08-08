@@ -35,6 +35,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.annotation.Swagger;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.staticfile.*;
 import org.apache.juneau.rest.swagger.*;
 import org.junit.*;
 
@@ -65,17 +66,17 @@ public class Swagger_Test {
 		return ip.getSwagger(rc, req.getLocale());
 	}
 
-	public static class TestClasspathFileFinder extends BasicFileFinder {
+	public static class TestClasspathFileFinder extends BasicStaticFiles {
 
 		public TestClasspathFileFinder() {
-			super(FileFinder.create().cp(Swagger_Test.class, null, false));
+			super(StaticFiles.create(BeanStore.INSTANCE).cp(Swagger_Test.class, null, false));
 		}
 
-		@Override
-		public Optional<InputStream> find(String name, Locale locale) throws IOException {
+		@Override /* FileFinder */
+		public Optional<InputStream> getStream(String name, Locale locale) throws IOException {
 			if (name.endsWith(".json"))
 				return optional(SwaggerProvider.class.getResourceAsStream("BasicRestInfoProviderTest_swagger.json"));
-			return super.find(name, locale);
+			return super.getStream(name, locale);
 		}
 	}
 
