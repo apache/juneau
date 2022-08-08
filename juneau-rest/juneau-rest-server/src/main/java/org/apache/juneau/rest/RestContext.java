@@ -2742,51 +2742,6 @@ public class RestContext extends Context {
 		/**
 		 * Returns the static files bean creator.
 		 *
-		 * @return The static files bean creator.
-		 */
-		public BeanCreator<StaticFiles> staticFiles() {
-			if (staticFiles == null)
-				staticFiles = createStaticFiles(beanStore, resource);
-			return staticFiles;
-		}
-
-		/**
-		 * Specifies the static files resource finder for this class.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.staticFiles().type(<jv>value</jv>);
-		 * </p>
-		 *
-		 * @param value The new value.
-		 * @return This object.
-		 */
-		public Builder staticFiles(Class<? extends StaticFiles> value) {
-			staticFiles().type(value);
-			return this;
-		}
-
-		/**
-		 * Specifies the static files resource finder for this class.
-		 *
-		 * <p>
-		 * Equivalent to calling:
-		 * <p class='bjava'>
-		 * 	<jv>builder</jv>.staticFiles().impl(<jv>value</jv>);
-		 * </p>
-		 *
-		 * @param value The new value.
-		 * @return This object.
-		 */
-		public Builder staticFiles(StaticFiles value) {
-			staticFiles().impl(value);
-			return this;
-		}
-
-		/**
-		 * Instantiates the static files bean creator.
-		 *
 		 * <p>
 		 * Used to retrieve localized files to be served up as static files through the REST API via the following
 		 * predefined methods:
@@ -2801,45 +2756,6 @@ public class RestContext extends Context {
 		 * 	<li class='jm'>{@link RestContext#getStaticFiles()}
 		 * 	<li class='jm'>{@link RestRequest#getStaticFiles()}
 		 * </ul>
-		 *
-		 * <p>
-		 * The static file finder is instantiated via the {@link RestContext.Builder#createStaticFiles(BeanStore,Supplier)} method which in turn instantiates
-		 * based on the following logic:
-		 *
-		 * <ol class='spaced-list'>
-		 * 	<li>
-		 * 		Uses resource object itself if it implements the <c>StaticFiles</c> interface.
-		 * 	<li>
-		 * 		Uses existing {@link StaticFiles} bean if found in the bean store (e.g. an injected bean).
-		 * 	<li>
-		 * 		Uses existing {@link org.apache.juneau.rest.staticfile.StaticFiles.Builder} bean if found in the bean store (e.g. an injected bean).
-		 * 	<li>
-		 * 		Constructs a builder with default settings:
-		 * 		<p class='bjava'>
-		 * 	StaticFiles
-		 * 		.<jsm>create</jsm>(<jv>beanStore</jv>)
-		 * 		.{@link org.apache.juneau.rest.staticfile.StaticFiles.Builder#type(Class) type}({@link BasicStaticFiles}.<jk>class</jk>)
-		 * 		.{@link org.apache.juneau.rest.staticfile.StaticFiles.Builder#dir(String) dir}(<js>"static"</js>)  <jc>// Look in working /static directory.</jc>
-		 * 		.{@link org.apache.juneau.rest.staticfile.StaticFiles.Builder#dir(String) dir}(<js>"htdocs"</js>)  <jc>// Look in working /htdocs directory.</jc>
-		 * 		.{@link org.apache.juneau.rest.staticfile.StaticFiles.Builder#cp(Class,String,boolean) cp}(<jv>resourceClass</jv>, <js>"htdocs"</js>, <jk>true</jk>)  <jc>// Look in htdocs subpackage.</jc>
-		 * 		.{@link org.apache.juneau.rest.staticfile.StaticFiles.Builder#cp(Class,String,boolean) cp}(<jv>resourceClass</jv>, <js>"/htdocs"</js>, <jk>true</jk>)  <jc>// Look in htdocs package.</jc>
-		 * 		.{@link org.apache.juneau.rest.staticfile.StaticFiles.Builder#caching(long) caching}(1_000_000)  <jc>// Cache files in memory up to 1MB.</jc>
-		 * 		.{@link org.apache.juneau.rest.staticfile.StaticFiles.Builder#exclude(String...) exclude}(<js>"(?i).*\\.(class|properties)"</js>)  <jc>// Ignore class/properties files.</jc>
-		 * 		.{@link org.apache.juneau.rest.staticfile.StaticFiles.Builder#headers(Header...) headers}(<jsm>{@link org.apache.juneau.http.HttpHeaders#cacheControl(String) cacheControl}</jsm>(<js>"max-age=86400, public"</js>));  <jc>// Add cache control.</jc>
-		 * 		</p>
-		 * 	<li>
-		 * 		Looks for the following method on the resource class:
-		 * 		<p class='bjava'>
-		 * 	<jk>public [static]</jk> StaticFiles.Builder createStaticFiles(<ja>&lt;args&gt;</ja>)
-		 * 		</p>
-		 * 		Args can be any bean found in the bean store (including injected beans) and the <c>StaticFiles.Builder</c> itself.
-		 * 	<li>
-		 * 		Looks for the following method on the resource class:
-		 * 		<p class='bjava'>
-		 * 	<jk>public [static]</jk> StaticFiles createStaticFiles(<ja>&lt;args&gt;</ja>)
-		 * 		</p>
-		 * 		Args can be any bean found in the bean store (including injected beans) and the <c>StaticFiles.Builder</c> itself.
-		 * </ol>
 		 *
 		 * <p>
 		 * The default static files finder implementation class is {@link BasicStaticFiles}.  This can be overridden via the following:
@@ -2875,6 +2791,67 @@ public class RestContext extends Context {
 		 * 	<ja>@Rest</ja>(staticFiles=MyStaticFiles.<jk>class</jk>)
 		 * 	<jk>public class</jk> MyResource {...}
 		 * </p>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.StaticFiles}
+		 * </ul>
+		 *
+		 * @return The static files bean creator.
+		 */
+		public BeanCreator<StaticFiles> staticFiles() {
+			if (staticFiles == null)
+				staticFiles = createStaticFiles(beanStore, resource);
+			return staticFiles;
+		}
+
+		/**
+		 * Specifies the static files resource finder for this class.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.staticFiles().type(<jv>value</jv>);
+		 * </p>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.StaticFiles}
+		 * </ul>
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public Builder staticFiles(Class<? extends StaticFiles> value) {
+			staticFiles().type(value);
+			return this;
+		}
+
+		/**
+		 * Specifies the static files resource finder for this class.
+		 *
+		 * <p>
+		 * Equivalent to calling:
+		 * <p class='bjava'>
+		 * 	<jv>builder</jv>.staticFiles().impl(<jv>value</jv>);
+		 * </p>
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.StaticFiles}
+		 * </ul>
+		 *
+		 * @param value The new value.
+		 * @return This object.
+		 */
+		public Builder staticFiles(StaticFiles value) {
+			staticFiles().impl(value);
+			return this;
+		}
+
+		/**
+		 * Instantiates the static files bean creator.
+		 *
+		 * <ul class='seealso'>
+		 * 	<li class='link'>{@doc jrs.StaticFiles}
+		 * </ul>
 		 *
 		 * @param beanStore
 		 * 	The factory used for creating beans and retrieving injected beans.
