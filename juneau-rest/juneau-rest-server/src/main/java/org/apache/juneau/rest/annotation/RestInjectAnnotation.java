@@ -20,20 +20,20 @@ import java.lang.annotation.*;
 import org.apache.juneau.annotation.*;
 
 /**
- * Utility classes and methods for the {@link RestBean RestBean} annotation.
+ * Utility classes and methods for the {@link RestInject RestInject} annotation.
  *
  * <ul class='seealso'>
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class RestBeanAnnotation {
+public class RestInjectAnnotation {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/** Default value */
-	public static final RestBean DEFAULT = create().build();
+	public static final RestInject DEFAULT = create().build();
 
 	/**
 	 * Instantiates a new builder for this class.
@@ -45,12 +45,12 @@ public class RestBeanAnnotation {
 	}
 
 	/**
-	 * Pulls the name/value attribute from a {@link RestBean} annotation.
+	 * Pulls the name/value attribute from a {@link RestInject} annotation.
 	 *
 	 * @param a The annotation to check.  Can be <jk>null</jk>.
 	 * @return The annotation value, or an empty string if the annotation is <jk>null</jk>.
 	 */
-	public static String name(RestBean a) {
+	public static String name(RestInject a) {
 		if (a == null)
 			return "";
 		if (! a.name().isEmpty())
@@ -78,20 +78,20 @@ public class RestBeanAnnotation {
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(RestBean.class);
+			super(RestInject.class);
 		}
 
 		/**
-		 * Instantiates a new {@link RestBean @RestBean} object initialized with this builder.
+		 * Instantiates a new {@link RestInject @RestInject} object initialized with this builder.
 		 *
-		 * @return A new {@link RestBean @RestBean} object.
+		 * @return A new {@link RestInject @RestInject} object.
 		 */
-		public RestBean build() {
+		public RestInject build() {
 			return new Impl(this);
 		}
 
 		/**
-		 * Sets the {@link RestBean#name()} property on this annotation.
+		 * Sets the {@link RestInject#name()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -102,7 +102,7 @@ public class RestBeanAnnotation {
 		}
 
 		/**
-		 * Sets the {@link RestBean#value()} property on this annotation.
+		 * Sets the {@link RestInject#value()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -113,7 +113,7 @@ public class RestBeanAnnotation {
 		}
 
 		/**
-		 * Sets the {@link RestBean#methodScope()} property on this annotation.
+		 * Sets the {@link RestInject#methodScope()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
@@ -144,7 +144,7 @@ public class RestBeanAnnotation {
 	// Implementation
 	//-----------------------------------------------------------------------------------------------------------------
 
-	private static class Impl extends TargetedAnnotationImpl implements RestBean {
+	private static class Impl extends TargetedAnnotationImpl implements RestInject {
 
 		private final String name, value;
 		private final String[] methodScope;
@@ -157,17 +157,17 @@ public class RestBeanAnnotation {
 			postConstruct();
 		}
 
-		@Override /* RestBean */
+		@Override /* RestInject */
 		public String name() {
 			return name;
 		}
 
-		@Override /* RestBean */
+		@Override /* RestInject */
 		public String value() {
 			return value;
 		}
 
-		@Override /* RestBean */
+		@Override /* RestInject */
 		public String[] methodScope() {
 			return methodScope;
 		}
@@ -178,7 +178,7 @@ public class RestBeanAnnotation {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * A collection of {@link RestBean @RestBean annotations}.
+	 * A collection of {@link RestInject @RestInject annotations}.
 	 */
 	@Documented
 	@Target({FIELD,METHOD,TYPE})
@@ -191,6 +191,6 @@ public class RestBeanAnnotation {
 		 *
 		 * @return The annotation value.
 		 */
-		RestBean[] value();
+		RestInject[] value();
 	}
 }

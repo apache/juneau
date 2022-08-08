@@ -369,21 +369,21 @@ public class RestContext extends Context {
 
 			ClassInfo rci = ClassInfo.of(resourceClass);
 
-			// Get @RestBean fields initialized with values.
+			// Get @RestInject fields initialized with values.
 			rci.forEachAllField(
-				x -> x.hasAnnotation(RestBean.class),
+				x -> x.hasAnnotation(RestInject.class),
 				x -> x.getOptional(resource.get()).ifPresent(
 					y -> beanStore.add(
 						x.getType().inner(),
 						y,
-						RestBeanAnnotation.name(x.getAnnotation(RestBean.class))
+						RestInjectAnnotation.name(x.getAnnotation(RestInject.class))
 					)
 				)
 			);
 
-			rci.forEachMethod(x -> x.hasAnnotation(RestBean.class), x -> {
+			rci.forEachMethod(x -> x.hasAnnotation(RestInject.class), x -> {
 				Class<Object> rt = x.getReturnType().inner();
-				String name = RestBeanAnnotation.name(x.getAnnotation(RestBean.class));
+				String name = RestInjectAnnotation.name(x.getAnnotation(RestInject.class));
 				if (! (DELAYED_INJECTION.contains(rt) || DELAYED_INJECTION_NAMES.contains(name))) {
 					beanStore
 						.createMethodFinder(rt)
@@ -403,14 +403,14 @@ public class RestContext extends Context {
 
 			runInitHooks(bs, resource());
 
-			// Set @RestBean fields not initialized with values.
+			// Set @RestInject fields not initialized with values.
 			rci.forEachAllField(
-				x -> x.hasAnnotation(RestBean.class),
+				x -> x.hasAnnotation(RestInject.class),
 				x -> x.setIfNull(
 					resource.get(),
 					beanStore.getBean(
 						x.getType().inner(),
-						RestBeanAnnotation.name(x.getAnnotation(RestBean.class))
+						RestInjectAnnotation.name(x.getAnnotation(RestInject.class))
 					).orElse(null)
 				)
 			);
@@ -568,10 +568,9 @@ public class RestContext extends Context {
 		 * The default bean store can be overridden via any of the following:
 		 * <ul class='spaced-list'>
 		 * 	<li>Class annotation:  {@link Rest#beanStore() @Rest(beanStore)}
-		 * 	<li>{@link RestBean @RestBean}-annotated methods:
+		 * 	<li>{@link RestInject @RestInject}-annotated methods:
 		 * 		<p class='bjava'>
-		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] BeanStore.Builder myMethod(<i>&lt;args&gt;</i>) {...}
-		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] BeanStore myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 	<ja>@RestInject</ja> <jk>public</jk> [<jk>static</jk>] BeanStore myMethod(<i>&lt;args&gt;</i>) {...}
 		 * 		</p>
 		 * 		Args can be any injected bean including {@link org.apache.juneau.cp.BeanStore.Builder}, the default builder.
 		 * </ul>
@@ -662,13 +661,7 @@ public class RestContext extends Context {
 			// Apply @Rest(beanStore).
 			ClassInfo.of(resourceClass).forEachAnnotation(Rest.class, x -> isNotVoid(x.beanStore()), x -> v.get().type(x.beanStore()));
 
-			// Replace with builder from:  @RestBean public [static] BeanStore.Builder xxx(<args>)
-			v.get().build()
-				.createMethodFinder(BeanStore.Builder.class)
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.set(x));
-
-			// Replace with bean from:  @RestBean public [static] BeanStore xxx(<args>)
+			// Replace with bean from:  @RestInject public [static] BeanStore xxx(<args>)
 			v.get().build()
 				.createMethodFinder(BeanStore.class)
 				.find(Builder::isRestBeanMethod)
@@ -731,10 +724,9 @@ public class RestContext extends Context {
 		 * The default var resolver can be overridden via any of the following:
 		 * <ul class='spaced-list'>
 		 * 	<li>Injected via bean store.
-		 * 	<li>{@link RestBean @RestBean}-annotated methods:
+		 * 	<li>{@link RestInject @RestInject}-annotated methods:
 		 * 		<p class='bjava'>
-		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] VarResolver.Builder myMethod(<i>&lt;args&gt;</i>) {...}
-		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] VarResolver myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 	<ja>@RestInject</ja> <jk>public</jk> [<jk>static</jk>] VarResolver myMethod(<i>&lt;args&gt;</i>) {...}
 		 * 		</p>
 		 * 		Args can be any injected bean including {@link org.apache.juneau.svl.VarResolver.Builder}, the default builder.
 		 * </ul>
@@ -845,13 +837,7 @@ public class RestContext extends Context {
 				.getBean(VarResolver.class)
 				.ifPresent(x -> v.get().impl(x));
 
-			// Replace with builder from:  @RestBean public [static] VarResolver.Builder xxx(<args>)
-			beanStore
-				.createMethodFinder(VarResolver.Builder.class)
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.set(x));
-
-			// Replace with bean from:  @RestBean public [static] VarResolver xxx(<args>)
+			// Replace with bean from:  @RestInject public [static] VarResolver xxx(<args>)
 			beanStore
 				.createMethodFinder(VarResolver.class)
 				.addBean(VarResolver.Builder.class, v.get())
@@ -877,9 +863,9 @@ public class RestContext extends Context {
 		 * <ul class='spaced-list'>
 		 * 	<li>Injected via bean store.
 		 * 	<li>Class annotation:  {@link Rest#config() @Rest(config)}
-		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 	<li>{@link RestInject @RestInject}-annotated method:
 		 * 		<p class='bjava'>
-		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] Config myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 	<ja>@RestInject</ja> <jk>public</jk> [<jk>static</jk>] Config myMethod(<i>&lt;args&gt;</i>) {...}
 		 * 		</p>
 		 * 		Args can be any injected bean.
 		 * </ul>
@@ -966,7 +952,7 @@ public class RestContext extends Context {
 				.getBean(Config.class)
 				.ifPresent(x -> v.set(x));
 
-			// Replace with bean from:  @RestBean public [static] Config xxx(<args>)
+			// Replace with bean from:  @RestInject public [static] Config xxx(<args>)
 			beanStore
 				.createMethodFinder(Config.class)
 				.addBean(Config.class, v.get())
@@ -997,9 +983,9 @@ public class RestContext extends Context {
 		 * The default config can be overridden via any of the following:
 		 * <ul class='spaced-list'>
 		 * 	<li>Injected via bean store.
-		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 	<li>{@link RestInject @RestInject}-annotated method:
 		 * 		<p class='bjava'>
-		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] Logger myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 	<ja>@RestInject</ja> <jk>public</jk> [<jk>static</jk>] Logger myMethod(<i>&lt;args&gt;</i>) {...}
 		 * 		</p>
 		 * 		Args can be any injected bean.
 		 * </ul>
@@ -1060,7 +1046,7 @@ public class RestContext extends Context {
 				.getBean(Logger.class)
 				.ifPresent(x -> v.set(x));
 
-			// Replace with bean from:  @RestBean public [static] Logger xxx(<args>)
+			// Replace with bean from:  @RestInject public [static] Logger xxx(<args>)
 			beanStore
 				.createMethodFinder(Logger.class)
 				.addBean(Logger.class, v.get())
@@ -1087,9 +1073,9 @@ public class RestContext extends Context {
 		 * The default thrown store is inherited from the parent context and can be overridden via any of the following:
 		 * <ul class='spaced-list'>
 		 * 	<li>Injected via bean store.
-		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 	<li>{@link RestInject @RestInject}-annotated method:
 		 * 		<p class='bjava'>
-		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] (ThrownStore.Builder|ThrownStore) myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 	<ja>@RestInject</ja> <jk>public</jk> [<jk>static</jk>] ThrownStore myMethod(<i>&lt;args&gt;</i>) {...}
 		 * 		</p>
 		 * 		Args can be any injected bean including ThrownStore.Builder, the default builder.
 		 * </ul>
@@ -1186,14 +1172,7 @@ public class RestContext extends Context {
 				.getBean(ThrownStore.class)
 				.ifPresent(x->v.get().impl(x));
 
-			// Replace with builder from:  @RestBean public [static] ThrownStore.Builder xxx(<args>)
-			beanStore
-				.createMethodFinder(ThrownStore.Builder.class)
-				.addBean(ThrownStore.Builder.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.set(x));
-
-			// Replace with bean from:  @RestBean public [static] ThrownStore xxx(<args>)
+			// Replace with bean from:  @RestInject public [static] ThrownStore xxx(<args>)
 			beanStore
 				.createMethodFinder(ThrownStore.class)
 				.addBean(ThrownStore.Builder.class, v.get())
@@ -1220,9 +1199,9 @@ public class RestContext extends Context {
 		 * <ul class='spaced-list'>
 		 * 	<li>Injected via bean store.
 		 * 	<li>Class annotation: {@link Rest#encoders() @Rest(encoders)}
-		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 	<li>{@link RestInject @RestInject}-annotated method:
 		 * 		<p class='bjava'>
-		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] (EncoderSet.Builder|EncoderSet) myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 	<ja>@RestInject</ja> <jk>public</jk> [<jk>static</jk>] EncoderSet myMethod(<i>&lt;args&gt;</i>) {...}
 		 * 		</p>
 		 * 		Args can be any injected bean including EncoderSet.Builder, the default builder.
 		 * </ul>
@@ -1318,14 +1297,7 @@ public class RestContext extends Context {
 				.getBean(EncoderSet.class)
 				.ifPresent(x->v.get().impl(x));
 
-			// Replace with builder from:  @RestBean public [static] EncoderSet.Builder xxx(<args>)
-			beanStore
-				.createMethodFinder(EncoderSet.Builder.class)
-				.addBean(EncoderSet.Builder.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.set(x));
-
-			// Replace with bean from:  @RestBean public [static] EncoderSet xxx(<args>)
+			// Replace with bean from:  @RestInject public [static] EncoderSet xxx(<args>)
 			beanStore
 				.createMethodFinder(EncoderSet.class)
 				.addBean(EncoderSet.Builder.class, v.get())
@@ -1351,9 +1323,9 @@ public class RestContext extends Context {
 		 * <ul class='spaced-list'>
 		 * 	<li>Injected via bean store.
 		 * 	<li>Class annotation: {@link Rest#serializers() @Rest(serializers)}
-		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 	<li>{@link RestInject @RestInject}-annotated method:
 		 * 		<p class='bjava'>
-		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] (SerializerSet.Builder|SerializerSet) myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 	<ja>@RestInject</ja> <jk>public</jk> [<jk>static</jk>] SerializerSet myMethod(<i>&lt;args&gt;</i>) {...}
 		 * 		</p>
 		 * 		Args can be any injected bean including SerializerSet.Builder, the default builder.
 		 * </ul>
@@ -1447,14 +1419,7 @@ public class RestContext extends Context {
 				.getBean(SerializerSet.class)
 				.ifPresent(x->v.get().impl(x));
 
-			// Replace with builder from:  @RestBean public [static] SerializerSet.Builder xxx(<args>)
-			beanStore
-				.createMethodFinder(SerializerSet.Builder.class)
-				.addBean(SerializerSet.Builder.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.set(x));
-
-			// Replace with bean from:  @RestBean public [static] SerializerSet xxx(<args>)
+			// Replace with bean from:  @RestInject public [static] SerializerSet xxx(<args>)
 			beanStore
 				.createMethodFinder(SerializerSet.class)
 				.addBean(SerializerSet.Builder.class, v.get())
@@ -1480,9 +1445,9 @@ public class RestContext extends Context {
 		 * <ul class='spaced-list'>
 		 * 	<li>Injected via bean store.
 		 * 	<li>Class annotation: {@link Rest#parsers() @Rest(parsers)}
-		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 	<li>{@link RestInject @RestInject}-annotated method:
 		 * 		<p class='bjava'>
-		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] (ParserSet.Builder|ParserSet) myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 	<ja>@RestInject</ja> <jk>public</jk> [<jk>static</jk>] ParserSet myMethod(<i>&lt;args&gt;</i>) {...}
 		 * 		</p>
 		 * 		Args can be any injected bean including ParserSet.Builder, the default builder.
 		 * </ul>
@@ -1576,14 +1541,7 @@ public class RestContext extends Context {
 				.getBean(ParserSet.class)
 				.ifPresent(x->v.get().impl(x));
 
-			// Replace with builder from:  @RestBean public [static] ParserSet.Builder xxx(<args>)
-			beanStore
-				.createMethodFinder(ParserSet.Builder.class)
-				.addBean(ParserSet.Builder.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.set(x));
-
-			// Replace with bean from:  @RestBean public [static] ParserSet xxx(<args>)
+			// Replace with bean from:  @RestInject public [static] ParserSet xxx(<args>)
 			beanStore
 				.createMethodFinder(ParserSet.class)
 				.addBean(ParserSet.Builder.class, v.get())
@@ -1609,9 +1567,9 @@ public class RestContext extends Context {
 		 * The default method exec store can overridden via any of the following:
 		 * <ul class='spaced-list'>
 		 * 	<li>Injected via bean store.
-		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 	<li>{@link RestInject @RestInject}-annotated method:
 		 * 		<p class='bjava'>
-		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] (MethodExecStore.Builder|MethodExecStore) myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 	<ja>@RestInject</ja> <jk>public</jk> [<jk>static</jk>] MethodExecStore myMethod(<i>&lt;args&gt;</i>) {...}
 		 * 		</p>
 		 * 		Args can be any injected bean including MethodExecStore.Builder, the default builder.
 		 * </ul>
@@ -1703,14 +1661,7 @@ public class RestContext extends Context {
 				.getBean(MethodExecStore.class)
 				.ifPresent(x->v.get().impl(x));
 
-			// Replace with builder from:  @RestBean public [static] MethodExecStore.Builder xxx(<args>)
-			beanStore
-				.createMethodFinder(MethodExecStore.Builder.class)
-				.addBean(MethodExecStore.Builder.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.set(x));
-
-			// Replace with bean from:  @RestBean public [static] MethodExecStore xxx(<args>)
+			// Replace with bean from:  @RestInject public [static] MethodExecStore xxx(<args>)
 			beanStore
 				.createMethodFinder(MethodExecStore.class)
 				.addBean(MethodExecStore.Builder.class, v.get())
@@ -1798,9 +1749,9 @@ public class RestContext extends Context {
 		 * <ul class='spaced-list'>
 		 * 	<li>Injected via bean store.
 		 * 	<li>Class annotation:  {@link Rest#messages() @Rest(messages)}
-		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 	<li>{@link RestInject @RestInject}-annotated method:
 		 * 		<p class='bjava'>
-		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] (Messages.Builder|Messages) myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 	<ja>@RestInject</ja> <jk>public</jk> [<jk>static</jk>] Messages myMethod(<i>&lt;args&gt;</i>) {...}
 		 * 		</p>
 		 * 		Args can be any injected bean including Messages.Builder, the default builder.
 		 * </ul>
@@ -1893,13 +1844,7 @@ public class RestContext extends Context {
 				.getBean(Messages.class)
 				.ifPresent(x->v.get().impl(x));
 
-			// Replace with builder from:  @RestBean public [static] Messages.Builder xxx(<args>)
-			beanStore
-				.createMethodFinder(Messages.Builder.class)
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.set(x));
-
-			// Replace with bean from:  @RestBean public [static] Messages xxx(<args>)
+			// Replace with bean from:  @RestInject public [static] Messages xxx(<args>)
 			beanStore
 				.createMethodFinder(Messages.class)
 				.addBean(Messages.Builder.class, v.get())
@@ -1980,9 +1925,9 @@ public class RestContext extends Context {
 		 * <ul class='spaced-list'>
 		 * 	<li>Injected via bean store.
 		 * 	<li>Class annotation:  {@link Rest#responseProcessors() @Rest(responseProcessors)}
-		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 	<li>{@link RestInject @RestInject}-annotated method:
 		 * 		<p class='bjava'>
-		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] (ResponseProcessorList.Builder|ResponseProcessorList) myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 	<ja>@RestInject</ja> <jk>public</jk> [<jk>static</jk>] ResponseProcessorList myMethod(<i>&lt;args&gt;</i>) {...}
 		 * 		</p>
 		 * 		Args can be any injected bean including ResponseProcessorList.Builder, the default builder.
 		 * </ul>
@@ -2096,14 +2041,7 @@ public class RestContext extends Context {
 				.getBean(ResponseProcessorList.class)
 				.ifPresent(x -> v.get().impl(x));
 
-			// Replace with builder from:  @RestBean public [static] ResponseProcessorList.Builder xxx(<args>)
-			beanStore
-				.createMethodFinder(ResponseProcessorList.Builder.class)
-				.addBean(ResponseProcessorList.Builder.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.set(x));
-
-			// Replace with bean from:  @RestBean public [static] ResponseProcessorList xxx(<args>)
+			// Replace with bean from:  @RestInject public [static] ResponseProcessorList xxx(<args>)
 			beanStore
 				.createMethodFinder(ResponseProcessorList.class)
 				.addBean(ResponseProcessorList.Builder.class, v.get())
@@ -2155,9 +2093,9 @@ public class RestContext extends Context {
 		 * <ul class='spaced-list'>
 		 * 	<li>Injected via bean store.
 		 * 	<li>Class annotation:  {@link Rest#callLogger() @Rest(callLogger)}
-		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 	<li>{@link RestInject @RestInject}-annotated method:
 		 * 		<p class='bjava'>
-		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] CallLogger myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 	<ja>@RestInject</ja> <jk>public</jk> [<jk>static</jk>] CallLogger myMethod(<i>&lt;args&gt;</i>) {...}
 		 * 		</p>
 		 * 		Args can be any injected bean.
 		 * </ul>
@@ -2260,7 +2198,7 @@ public class RestContext extends Context {
 				.getBean(CallLogger.class)
 				.ifPresent(x -> creator.impl(x));
 
-			// Replace with bean from:  @RestBean public [static] CallLogger xxx(<args>)
+			// Replace with bean from:  @RestInject public [static] CallLogger xxx(<args>)
 			beanStore
 				.createMethodFinder(CallLogger.class)
 				.find(Builder::isRestBeanMethod)
@@ -2283,11 +2221,6 @@ public class RestContext extends Context {
 		 * The default bean context can overridden via any of the following:
 		 * <ul class='spaced-list'>
 		 * 	<li>Injected via bean store.
-		 * 	<li>{@link RestBean @RestBean}-annotated method:
-		 * 		<p class='bjava'>
-		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] BeanContext.Builder myMethod(<i>&lt;args&gt;</i>) {...}
-		 * 		</p>
-		 * 		Args can be any injected bean.
 		 * </ul>
 		 *
 		 * @return The bean context sub-builder.
@@ -2325,13 +2258,6 @@ public class RestContext extends Context {
 				.getBean(BeanContext.class)
 				.ifPresent(x -> v.get().impl(x));
 
-			// Replace with builder from:  @RestBean public [static] BeanContext.Builder xxx(<args>)
-			beanStore
-				.createMethodFinder(BeanContext.Builder.class)
-				.addBean(BeanContext.Builder.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.set(x));
-
 			return v.get();
 		}
 
@@ -2350,9 +2276,9 @@ public class RestContext extends Context {
 		 * It can overridden via any of the following:
 		 * <ul class='spaced-list'>
 		 * 	<li>Injected via bean store.
-		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 	<li>{@link RestInject @RestInject}-annotated method:
 		 * 		<p class='bjava'>
-		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] (HttpPartSerializer.Builder|HttpPartSerializer) myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 	<ja>@RestInject</ja> <jk>public</jk> [<jk>static</jk>] HttpPartSerializer myMethod(<i>&lt;args&gt;</i>) {...}
 		 * 		</p>
 		 * 		Args can be any injected bean including HttpPartSerializer.Builder, the default builder.
 		 * </ul>
@@ -2455,14 +2381,7 @@ public class RestContext extends Context {
 				.get(HttpPartSerializer.class)
 				.ifPresent(x -> v.get().type(x));
 
-			// Replace with builder from:  @RestBean public [static] HttpPartSerializer.Creator xxx(<args>)
-			beanStore
-				.createMethodFinder(HttpPartSerializer.Creator.class)
-				.addBean(HttpPartSerializer.Creator.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.set(x));
-
-			// Replace with bean from:  @RestBean public [static] HttpPartSerializer xxx(<args>)
+			// Replace with bean from:  @RestInject public [static] HttpPartSerializer xxx(<args>)
 			beanStore
 				.createMethodFinder(HttpPartSerializer.class)
 				.addBean(HttpPartSerializer.Creator.class, v.get())
@@ -2487,9 +2406,9 @@ public class RestContext extends Context {
 		 * It can overridden via any of the following:
 		 * <ul class='spaced-list'>
 		 * 	<li>Injected via bean store.
-		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 	<li>{@link RestInject @RestInject}-annotated method:
 		 * 		<p class='bjava'>
-		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] (HttpPartParser.Builder|HttpPartParser) myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 	<ja>@RestInject</ja> <jk>public</jk> [<jk>static</jk>] HttpPartParser myMethod(<i>&lt;args&gt;</i>) {...}
 		 * 		</p>
 		 * 		Args can be any injected bean including HttpPartParser.Builder, the default builder.
 		 * </ul>
@@ -2592,14 +2511,7 @@ public class RestContext extends Context {
 				.get(HttpPartParser.class)
 				.ifPresent(x -> v.get().type(x));
 
-			// Replace with builder from:  @RestBean public [static] HttpPartParser.Creator xxx(<args>)
-			beanStore
-				.createMethodFinder(HttpPartParser.Creator.class)
-				.addBean(HttpPartParser.Creator.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.set(x));
-
-			// Replace with bean from:  @RestBean public [static] HttpPartParser xxx(<args>)
+			// Replace with bean from:  @RestInject public [static] HttpPartParser xxx(<args>)
 			beanStore
 				.createMethodFinder(HttpPartParser.class)
 				.addBean(HttpPartParser.Creator.class, v.get())
@@ -2624,9 +2536,9 @@ public class RestContext extends Context {
 		 * It can overridden via any of the following:
 		 * <ul class='spaced-list'>
 		 * 	<li>Injected via bean store.
-		 * 	<li>{@link RestBean @RestBean}-annotated method:
+		 * 	<li>{@link RestInject @RestInject}-annotated method:
 		 * 		<p class='bjava'>
-		 * 	<ja>@RestBean</ja> <jk>public</jk> [<jk>static</jk>] (JsonSchemaGenerator.Builder|JsonSchemaGenerator) myMethod(<i>&lt;args&gt;</i>) {...}
+		 * 	<ja>@RestInject</ja> <jk>public</jk> [<jk>static</jk>] JsonSchemaGenerator myMethod(<i>&lt;args&gt;</i>) {...}
 		 * 		</p>
 		 * 		Args can be any injected bean including JsonSchemaGenerator.Builder, the default builder.
 		 * </ul>
@@ -2718,14 +2630,7 @@ public class RestContext extends Context {
 				.getBean(JsonSchemaGenerator.class)
 				.ifPresent(x -> v.get().impl(x));
 
-			// Replace with builder from:  @RestBean public [static] JsonSchemaGeneratorBuilder xxx(<args>)
-			beanStore
-				.createMethodFinder(JsonSchemaGenerator.Builder.class)
-				.addBean(JsonSchemaGenerator.Builder.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.set(x));
-
-			// Replace with bean from:  @RestBean public [static] JsonSchemaGenerator xxx(<args>)
+			// Replace with bean from:  @RestInject public [static] JsonSchemaGenerator xxx(<args>)
 			beanStore
 				.createMethodFinder(JsonSchemaGenerator.class)
 				.addBean(JsonSchemaGenerator.Builder.class, v.get())
@@ -2872,7 +2777,7 @@ public class RestContext extends Context {
 				.getBean(StaticFiles.class)
 				.ifPresent(x -> creator.impl(x));
 
-			// Replace with bean from:  @RestBean public [static] StaticFiles xxx(<args>)
+			// Replace with bean from:  @RestInject public [static] StaticFiles xxx(<args>)
 			beanStore
 				.createMethodFinder(StaticFiles.class)
 				.find(Builder::isRestBeanMethod)
@@ -3008,14 +2913,7 @@ public class RestContext extends Context {
 				.getBean(HeaderList.class, "defaultRequestHeaders")
 				.ifPresent(x -> v.get().impl(x));
 
-			// Replace with builder from:  @RestBean(name="defaultRequestHeaders") public [static] HeaderList.Builder xxx(<args>)
-			beanStore
-				.createMethodFinder(HeaderList.Builder.class)
-				.addBean(HeaderList.Builder.class, v.get())
-				.find(x -> isRestBeanMethod(x, "defaultRequestHeaders"))
-				.run(x -> v.set(x));
-
-			// Replace with bean from:  @RestBean(name="defaultRequestHeaders") public [static] HeaderList xxx(<args>)
+			// Replace with bean from:  @RestInject(name="defaultRequestHeaders") public [static] HeaderList xxx(<args>)
 			beanStore
 				.createMethodFinder(HeaderList.class)
 				.addBean(HeaderList.Builder.class, v.get())
@@ -3039,28 +2937,6 @@ public class RestContext extends Context {
 				defaultResponseHeaders = createDefaultResponseHeaders(beanStore(), resource());
 			return defaultResponseHeaders;
 		}
-
-//		/**
-//		 * Applies an operation to the default response headers sub-builder.
-//		 *
-//		 * <p>
-//		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-//		 *
-//		 * <h5 class='section'>Example:</h5>
-//		 * <p class='bjava'>
-//		 * 	RestContext <jv>context</jv> = RestContext
-//		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-//		 * 		.defaultResponseHeaders(<jv>x</jv> -&gt; <jv>x</jv>.remove(<js>"Foo"</js>)))
-//		 * 		.build();
-//		 * </p>
-//		 *
-//		 * @param operation The operation to apply.
-//		 * @return This object.
-//		 */
-//		public Builder defaultResponseHeaders(Consumer<HeaderList.Builder> operation) {
-//			operation.accept(defaultResponseHeaders());
-//			return this;
-//		}
 
 		/**
 		 * Default response headers.
@@ -3140,14 +3016,7 @@ public class RestContext extends Context {
 				.getBean(HeaderList.class, "defaultResponseHeaders")
 				.ifPresent(x -> v.get().impl(x));
 
-			// Replace with builder from:  @RestBean(name="defaultResponseHeaders") public [static] HeaderList.Builder xxx(<args>)
-			beanStore
-				.createMethodFinder(HeaderList.Builder.class)
-				.addBean(HeaderList.Builder.class, v.get())
-				.find(x -> isRestBeanMethod(x, "defaultResponseHeaders"))
-				.run(x -> v.set(x));
-
-			// Replace with bean from:  @RestBean(name="defaultResponseHeaders") public [static] HeaderList xxx(<args>)
+			// Replace with bean from:  @RestInject(name="defaultResponseHeaders") public [static] HeaderList xxx(<args>)
 			beanStore
 				.createMethodFinder(HeaderList.class)
 				.addBean(HeaderList.Builder.class, v.get())
@@ -3171,28 +3040,6 @@ public class RestContext extends Context {
 				defaultRequestAttributes = createDefaultRequestAttributes(beanStore(), resource());
 			return defaultRequestAttributes;
 		}
-
-//		/**
-//		 * Applies an operation to the default request attributes sub-builder.
-//		 *
-//		 * <p>
-//		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-//		 *
-//		 * <h5 class='section'>Example:</h5>
-//		 * <p class='bjava'>
-//		 * 	RestContext <jv>context</jv> = RestContext
-//		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-//		 * 		.defaultRequestAttributes(<jv>x</jv> -&gt; <jv>x</jv>.add(BasicNamedAttribute.<jsm>of</jsm>(<js>"Foo"</js>, ()-&gt;<jsm>getFoo</jsm>()))
-//		 * 		.build();
-//		 * </p>
-//		 *
-//		 * @param operation The operation to apply.
-//		 * @return This object.
-//		 */
-//		public Builder defaultRequestAttributes(Consumer<NamedAttributeList.Builder> operation) {
-//			operation.accept(defaultRequestAttributes());
-//			return this;
-//		}
 
 		/**
 		 * Default request attributes.
@@ -3268,14 +3115,7 @@ public class RestContext extends Context {
 				.getBean(NamedAttributeList.class, "defaultRequestAttributes")
 				.ifPresent(x -> v.get().impl(x));
 
-			// Replace with bean from:  @RestBean(name="defaultRequestAttributes") public [static] NamedAttributeList.Builder xxx(<args>)
-			beanStore
-				.createMethodFinder(NamedAttributeList.Builder.class)
-				.addBean(NamedAttributeList.Builder.class, v.get())
-				.find(x -> isRestBeanMethod(x, "defaultRequestAttributes"))
-				.run(x -> v.set(x));
-
-			// Replace with bean from:  @RestBean(name="defaultRequestAttributes") public [static] NamedAttributeList xxx(<args>)
+			// Replace with bean from:  @RestInject(name="defaultRequestAttributes") public [static] NamedAttributeList xxx(<args>)
 			beanStore
 				.createMethodFinder(NamedAttributeList.class)
 				.addBean(NamedAttributeList.Builder.class, v.get())
@@ -3382,14 +3222,7 @@ public class RestContext extends Context {
 				.getBean(RestOpArgList.class)
 				.ifPresent(x -> v.get().impl(x));
 
-			// Replace with builder from:  @RestBean public [static] RestOpArgList.Builder xxx(<args>)
-			beanStore
-				.createMethodFinder(RestOpArgList.Builder.class)
-				.addBean(RestOpArgList.Builder.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.set(x));
-
-			// Replace with bean from:  @RestBean public [static] RestOpArgList xxx(<args>)
+			// Replace with bean from:  @RestInject public [static] RestOpArgList xxx(<args>)
 			beanStore
 				.createMethodFinder(RestOpArgList.class)
 				.addBean(RestOpArgList.Builder.class, v.get())
@@ -3482,7 +3315,7 @@ public class RestContext extends Context {
 				.getBean(DebugEnablement.class)
 				.ifPresent(x -> creator.impl(x));
 
-			// Replace with bean from:  @RestBean public [static] DebugEnablement xxx(<args>)
+			// Replace with bean from:  @RestInject public [static] DebugEnablement xxx(<args>)
 			beanStore
 				.createMethodFinder(DebugEnablement.class)
 				.find(Builder::isRestBeanMethod)
@@ -3506,28 +3339,6 @@ public class RestContext extends Context {
 			return startCallMethods;
 		}
 
-//		/**
-//		 * Applies an operation to the start call method list.
-//		 *
-//		 * <p>
-//		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-//		 *
-//		 * <h5 class='section'>Example:</h5>
-//		 * <p class='bjava'>
-//		 * 	RestContext <jv>context</jv> = RestContext
-//		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-//		 * 		.startCallMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
-//		 * 		.build();
-//		 * </p>
-//		 *
-//		 * @param operation The operation to apply.
-//		 * @return This object.
-//		 */
-//		public Builder startCallMethods(Consumer<MethodList> operation) {
-//			operation.accept(startCallMethods());
-//			return this;
-//		}
-
 		/**
 		 * Instantiates the start call method list.
 		 *
@@ -3544,7 +3355,7 @@ public class RestContext extends Context {
 				getAnnotatedMethods(resource, RestStartCall.class, x -> true)
 			);
 
-			// Replace with bean from:  @RestBean(name="startCallMethods") public [static] MethodList xxx(<args>)
+			// Replace with bean from:  @RestInject(name="startCallMethods") public [static] MethodList xxx(<args>)
 			beanStore
 				.createMethodFinder(MethodList.class)
 				.addBean(MethodList.class, v.get())
@@ -3569,28 +3380,6 @@ public class RestContext extends Context {
 			return endCallMethods;
 		}
 
-//		/**
-//		 * Applies an operation to the end call method list.
-//		 *
-//		 * <p>
-//		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-//		 *
-//		 * <h5 class='section'>Example:</h5>
-//		 * <p class='bjava'>
-//		 * 	RestContext <jv>context</jv> = RestContext
-//		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-//		 * 		.endCallMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
-//		 * 		.build();
-//		 * </p>
-//		 *
-//		 * @param operation The operation to apply.
-//		 * @return This object.
-//		 */
-//		public Builder endCallMethods(Consumer<MethodList> operation) {
-//			operation.accept(endCallMethods());
-//			return this;
-//		}
-
 		/**
 		 * Instantiates the end call method list.
 		 *
@@ -3607,7 +3396,7 @@ public class RestContext extends Context {
 				getAnnotatedMethods(resource, RestEndCall.class, x -> true)
 			);
 
-			// Replace with bean from:  @RestBean(name="endCallMethods") public [static] MethodList xxx(<args>)
+			// Replace with bean from:  @RestInject(name="endCallMethods") public [static] MethodList xxx(<args>)
 			beanStore
 				.createMethodFinder(MethodList.class)
 				.addBean(MethodList.class, v.get())
@@ -3632,28 +3421,6 @@ public class RestContext extends Context {
 			return postInitMethods;
 		}
 
-//		/**
-//		 * Applies an operation to the post-init method list.
-//		 *
-//		 * <p>
-//		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-//		 *
-//		 * <h5 class='section'>Example:</h5>
-//		 * <p class='bjava'>
-//		 * 	RestContext <jv>context</jv> = RestContext
-//		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-//		 * 		.postInitMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
-//		 * 		.build();
-//		 * </p>
-//		 *
-//		 * @param operation The operation to apply.
-//		 * @return This object.
-//		 */
-//		public Builder postInitMethods(Consumer<MethodList> operation) {
-//			operation.accept(postInitMethods());
-//			return this;
-//		}
-
 		/**
 		 * Instantiates the post-init method list.
 		 *
@@ -3670,7 +3437,7 @@ public class RestContext extends Context {
 				getAnnotatedMethods(resource, RestPostInit.class, x -> ! x.childFirst())
 			);
 
-			// Replace with bean from:  @RestBean(name="postInitMethods") public [static] MethodList xxx(<args>)
+			// Replace with bean from:  @RestInject(name="postInitMethods") public [static] MethodList xxx(<args>)
 			beanStore
 				.createMethodFinder(MethodList.class)
 				.addBean(MethodList.class, v.get())
@@ -3695,28 +3462,6 @@ public class RestContext extends Context {
 			return postInitChildFirstMethods;
 		}
 
-//		/**
-//		 * Applies an operation to the post-init-child-first method list.
-//		 *
-//		 * <p>
-//		 * Typically used to allow you to execute operations without breaking the fluent flow of the context builder.
-//		 *
-//		 * <h5 class='section'>Example:</h5>
-//		 * <p class='bjava'>
-//		 * 	RestContext <jv>context</jv> = RestContext
-//		 * 		.<jsm>create</jsm>(<jv>resourceClass</jv>, <jv>parentContext</jv>, <jv>servletConfig</jv>)
-//		 * 		.postInitChildFirstMethods(<jv>x</jv> -&gt; <jv>x</jv>.add(<jv>extraMethod</jv>))
-//		 * 		.build();
-//		 * </p>
-//		 *
-//		 * @param operation The operation to apply.
-//		 * @return This object.
-//		 */
-//		public Builder postInitChildFirstMethods(Consumer<MethodList> operation) {
-//			operation.accept(postInitChildFirstMethods());
-//			return this;
-//		}
-
 		/**
 		 * Instantiates the post-init-child-first method list.
 		 *
@@ -3733,7 +3478,7 @@ public class RestContext extends Context {
 				getAnnotatedMethods(resource, RestPostInit.class, x -> x.childFirst())
 			);
 
-			// Replace with bean from:  @RestBean(name="postInitChildFirstMethods") public [static] MethodList xxx(<args>)
+			// Replace with bean from:  @RestInject(name="postInitChildFirstMethods") public [static] MethodList xxx(<args>)
 			beanStore
 				.createMethodFinder(MethodList.class)
 				.addBean(MethodList.class, v.get())
@@ -3774,7 +3519,7 @@ public class RestContext extends Context {
 				getAnnotatedMethods(resource, RestDestroy.class, x -> true)
 			);
 
-			// Replace with bean from:  @RestBean(name="destroyMethods") public [static] MethodList xxx(<args>)
+			// Replace with bean from:  @RestInject(name="destroyMethods") public [static] MethodList xxx(<args>)
 			beanStore
 				.createMethodFinder(MethodList.class)
 				.addBean(MethodList.class, v.get())
@@ -3818,7 +3563,7 @@ public class RestContext extends Context {
 				getAnnotatedMethods(resource, RestPreCall.class, x -> true)
 			);
 
-			// Replace with bean from:  @RestBean(name="preCallMethods") public [static] MethodList xxx(<args>)
+			// Replace with bean from:  @RestInject(name="preCallMethods") public [static] MethodList xxx(<args>)
 			beanStore
 				.createMethodFinder(MethodList.class)
 				.addBean(MethodList.class, v.get())
@@ -3862,7 +3607,7 @@ public class RestContext extends Context {
 				getAnnotatedMethods(resource, RestPostCall.class, x -> true)
 			);
 
-			// Replace with bean from:  @RestBean(name="postCallMethods") public [static] MethodList xxx(<args>)
+			// Replace with bean from:  @RestInject(name="postCallMethods") public [static] MethodList xxx(<args>)
 			beanStore
 				.createMethodFinder(MethodList.class)
 				.addBean(MethodList.class, v.get())
@@ -3981,14 +3726,7 @@ public class RestContext extends Context {
 				}
 			}
 
-			// Replace with builder from:  @RestBean public [static] RestOperations.Builder xxx(<args>)
-			beanStore
-				.createMethodFinder(RestOperations.Builder.class)
-				.addBean(RestOperations.Builder.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.set(x));
-
-			// Replace with bean from:  @RestBean public [static] RestOperations xxx(<args>)
+			// Replace with bean from:  @RestInject public [static] RestOperations xxx(<args>)
 			beanStore
 				.createMethodFinder(RestOperations.class)
 				.addBean(RestOperations.Builder.class, v.get())
@@ -4081,14 +3819,7 @@ public class RestContext extends Context {
 				v.get().add(cc);
 			}
 
-			// Replace with builder from:  @RestBean public [static] RestChildren.Builder xxx(<args>)
-			beanStore
-				.createMethodFinder(RestChildren.Builder.class)
-				.addBean(RestChildren.Builder.class, v.get())
-				.find(Builder::isRestBeanMethod)
-				.run(x -> v.set(x));
-
-			// Replace with bean from:  @RestBean public [static] RestChildren xxx(<args>)
+			// Replace with bean from:  @RestInject public [static] RestChildren xxx(<args>)
 			beanStore
 				.createMethodFinder(RestChildren.class)
 				.addBean(RestChildren.Builder.class, v.get())
@@ -4194,7 +3925,7 @@ public class RestContext extends Context {
 				.getBean(SwaggerProvider.class)
 				.ifPresent(x -> creator.impl(x));
 
-			// Replace with bean from:  @RestBean public [static] SwaggerProvider xxx(<args>)
+			// Replace with bean from:  @RestInject public [static] SwaggerProvider xxx(<args>)
 			beanStore
 				.createMethodFinder(SwaggerProvider.class)
 				.find(Builder::isRestBeanMethod)
@@ -5603,12 +5334,12 @@ public class RestContext extends Context {
 		}
 
 		private static boolean isRestBeanMethod(MethodInfo mi) {
-			RestBean x = mi.getAnnotation(RestBean.class);
+			RestInject x = mi.getAnnotation(RestInject.class);
 			return x != null && x.methodScope().length == 0;
 		}
 
 		private static boolean isRestBeanMethod(MethodInfo mi, String name) {
-			RestBean x = mi.getAnnotation(RestBean.class);
+			RestInject x = mi.getAnnotation(RestInject.class);
 			return x != null && x.methodScope().length == 0 && x.name().equals(name);
 		}
 

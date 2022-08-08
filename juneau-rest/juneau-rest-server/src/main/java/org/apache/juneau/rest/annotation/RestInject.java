@@ -57,11 +57,11 @@ import org.apache.juneau.svl.*;
  * 	<jk>public class</jk> MyRest <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
  *
  * 		<jc>// Option #1:  As a field.</jc>
- * 		<ja>@RestBean</ja>
+ * 		<ja>@RestInject</ja>
  * 		CallLogger <jf>myCallLogger</jf> = CallLogger.<jsm>create</jsm>().logger(<js>"mylogger"</js>).build();
  *
  * 		<jc>// Option #2:  As a method.</jc>
- * 		<ja>@RestBean</ja>
+ * 		<ja>@RestInject</ja>
  * 		<jk>public</jk> CallLogger myCallLogger() {
  * 			<jk>return</jk> CallLogger.<jsm>create</jsm>().logger(<js>"mylogger"</js>).build();
  * 		}
@@ -69,27 +69,27 @@ import org.apache.juneau.svl.*;
  * </p>
  *
  * <p>
- * 	The {@link RestBean#name()}/{@link RestBean#value()} attributes are used to differentiate between named beans.
+ * 	The {@link RestInject#name()}/{@link RestInject#value()} attributes are used to differentiate between named beans.
  * </p>
  * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	<jc>// Customized default request headers.</jc>
- * 	<ja>@RestBean</ja>(<js>"defaultRequestHeaders"</js>)
+ * 	<ja>@RestInject</ja>(<js>"defaultRequestHeaders"</js>)
  * 	HeaderList <jf>defaultRequestHeaders</jf> = HeaderList.<jsm>create</jsm>().set(ContentType.<jsf>TEXT_PLAIN</jsf>).build();
  *
  * 	<jc>// Customized default response headers.</jc>
- * 	<ja>@RestBean</ja>(<js>"defaultResponseHeaders"</js>)
+ * 	<ja>@RestInject</ja>(<js>"defaultResponseHeaders"</js>)
  * 	HeaderList <jf>defaultResponseHeaders</jf> = HeaderList.<jsm>create</jsm>().set(ContentType.<jsf>TEXT_PLAIN</jsf>).build();
  * </p>
  *
  * <p>
- * 	The {@link RestBean#methodScope()} attribute is used to define beans in the scope of specific {@link RestOp}-annotated methods.
+ * 	The {@link RestInject#methodScope()} attribute is used to define beans in the scope of specific {@link RestOp}-annotated methods.
  * </p>
  * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	<jc>// Set a default header on a specific REST method.</jc>
  * 	<jc>// Input parameter is the default header list builder with all annotations applied.</jc>
- * 	<ja>@RestBean</ja>(name=<js>"defaultRequestHeaders"</js>, methodScope=<js>"myRestMethod"</js>)
+ * 	<ja>@RestInject</ja>(name=<js>"defaultRequestHeaders"</js>, methodScope=<js>"myRestMethod"</js>)
  * 	<jk>public</jk> HeaderList.Builder myRequestHeaders(HeaderList.Builder <jv>builder</jv>) {
  * 		<jk>return</jk> <jv>builder</jv>.set(ContentType.<jsf>TEXT_PLAIN</jsf>);
  * 	}
@@ -106,8 +106,8 @@ import org.apache.juneau.svl.*;
  * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	<jc>// Custom beans injected into the bean store.</jc>
- * 	<ja>@RestBean</ja> MyBean <jv>myBean1</jv> = <jk>new</jk> MyBean();
- * 	<ja>@RestBean</ja>(<js>"myBean2"</js>) MyBean <jv>myBean2</jv> = <jk>new</jk> MyBean();
+ * 	<ja>@RestInject</ja> MyBean <jv>myBean1</jv> = <jk>new</jk> MyBean();
+ * 	<ja>@RestInject</ja>(<js>"myBean2"</js>) MyBean <jv>myBean2</jv> = <jk>new</jk> MyBean();
  *
  * 	<jc>// Method that uses injected beans.</jc>
  * 	<ja>@RestGet</ja>
@@ -121,8 +121,8 @@ import org.apache.juneau.svl.*;
  * <h5 class='figure'>Example</h5>
  * <p class='bcode'>
  * 	<jc>// Fields that get set during initialization based on beans found in the bean store.</jc>
- * 	<ja>@RestBean</ja> CallLogger <jf>callLogger</jf>;
- * 	<ja>@RestBean</ja> BeanStore <jf>beanStore</jf>;  <jc>// Note that BeanStore itself can be accessed this way.</jc>
+ * 	<ja>@RestInject</ja> CallLogger <jf>callLogger</jf>;
+ * 	<ja>@RestInject</ja> BeanStore <jf>beanStore</jf>;  <jc>// Note that BeanStore itself can be accessed this way.</jc>
  * </p>
  *
  * <ul class='notes'>
@@ -130,7 +130,7 @@ import org.apache.juneau.svl.*;
  * 	<li class='note'>Any injectable beans (including spring beans) can be passed as arguments into methods.
  * 	<li class='note'>Bean names are required when multiple beans of the same type exist in the bean store.
  * 	<li class='note'>By default, the injected bean scope is class-level (applies to the entire class).  The
- * 		{@link RestBean#methodScope()} annotation can be used to apply to method-level only (when applicable).
+ * 		{@link RestInject#methodScope()} annotation can be used to apply to method-level only (when applicable).
  * </ul>
  *
  * <p>
@@ -174,7 +174,7 @@ import org.apache.juneau.svl.*;
 @Target({METHOD,FIELD})
 @Retention(RUNTIME)
 @Inherited
-public @interface RestBean {
+public @interface RestInject {
 
 	/**
 	 * The bean name to use to distinguish beans of the same type for different purposes.

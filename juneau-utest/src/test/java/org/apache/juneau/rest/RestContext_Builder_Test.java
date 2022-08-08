@@ -34,7 +34,7 @@ public class RestContext_Builder_Test {
 
 	@Rest
 	public static class A1 {
-		@RestBean static BeanStore beanStore;
+		@RestInject static BeanStore beanStore;
 	}
 
 	@Test
@@ -51,7 +51,7 @@ public class RestContext_Builder_Test {
 
 	@Rest(beanStore=MyBeanStore.class)
 	public static class A2 {
-		@RestBean static BeanStore beanStore;
+		@RestInject static BeanStore beanStore;
 	}
 
 	@Test
@@ -62,9 +62,9 @@ public class RestContext_Builder_Test {
 
 	@Rest
 	public static class A3 {
-		@RestBean static BeanStore beanStore;
+		@RestInject static BeanStore beanStore;
 
-		@RestBean BeanStore.Builder beanStore(BeanStore.Builder b) {
+		@RestInject BeanStore.Builder beanStore(BeanStore.Builder b) {
 			return b.type(MyBeanStore.class);
 		}
 	}
@@ -77,9 +77,9 @@ public class RestContext_Builder_Test {
 
 	@Rest
 	public static class A4 {
-		@RestBean static BeanStore beanStore;
+		@RestInject static BeanStore beanStore;
 
-		@RestBean BeanStore beanStore() {
+		@RestInject BeanStore beanStore() {
 			return BeanStore.create().type(MyBeanStore.class).build();
 		}
 	}
@@ -91,7 +91,7 @@ public class RestContext_Builder_Test {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// @RestBean on fields.
+	// @RestInject on fields.
 	//-----------------------------------------------------------------------------------------------------------------
 
 	public static class B {
@@ -104,11 +104,11 @@ public class RestContext_Builder_Test {
 
 	@Rest
 	public static class B1a implements BasicJsonConfig {
-		@RestBean static B b1 = new B(1);
-		@RestBean(name="b2") B b2 = new B(2);
+		@RestInject static B b1 = new B(1);
+		@RestInject(name="b2") B b2 = new B(2);
 
-		@RestBean static B b3;
-		@RestBean(name="b2") B b4;
+		@RestInject static B b3;
+		@RestInject(name="b2") B b4;
 
 		@RestGet("/a1") public B a1(B b) { return b; }
 		@RestGet("/a2") public B a2(@Named("b2") B b) { return b; }

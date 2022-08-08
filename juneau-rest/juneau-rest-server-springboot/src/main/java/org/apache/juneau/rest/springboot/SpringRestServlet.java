@@ -50,7 +50,7 @@ public abstract class SpringRestServlet extends RestServlet {
 	 * @param parent Optional parent resource.
 	 * @return A BeanStore that retrieves beans from the Spring Boot app context.
 	 */
-	@RestBean
+	@RestInject
 	public BeanStore createBeanStore(Optional<BeanStore> parent) {
 		return new SpringBeanStore(appContext, parent, this);
 	}
