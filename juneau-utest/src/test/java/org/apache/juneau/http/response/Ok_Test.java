@@ -35,15 +35,15 @@ public class Ok_Test {
 
 		client.get("/a1")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("OK");
+			.assertStatus(200)
+			.assertContent("OK");
 		client.get("/a2")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("foo");
+			.assertStatus(200)
+			.assertContent("foo");
 		client.get("/a3")
 			.run()
-			.assertCode().is(200)
+			.assertStatus(200)
 			.assertHeader("Foo").is("bar");
 	}
 }

@@ -55,10 +55,10 @@ public class BasicMediaTypeHeader_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(mediaTypeHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
-		c.get().header(mediaTypeHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
-		c.get().header(mediaTypeHeader(HEADER,PARSED)).run().assertContent().is(VALUE);
-		c.get().header(mediaTypeHeader(HEADER,()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(mediaTypeHeader(HEADER,VALUE)).run().assertContent(VALUE);
+		c.get().header(mediaTypeHeader(HEADER,VALUE)).run().assertContent(VALUE);
+		c.get().header(mediaTypeHeader(HEADER,PARSED)).run().assertContent(VALUE);
+		c.get().header(mediaTypeHeader(HEADER,()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(mediaTypeHeader(HEADER,(Supplier<MediaType>)null)).run().assertContent().isEmpty();

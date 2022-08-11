@@ -35,13 +35,13 @@ public class NoContent_Test {
 
 		client.get("/a1")
 			.run()
-			.assertCode().is(204);
+			.assertStatus(204);
 		client.get("/a2")
 			.run()
-			.assertCode().is(204);
+			.assertStatus(204);
 		client.get("/a3")
 			.run()
-			.assertCode().is(204)
+			.assertStatus(204)
 			.assertHeader("Foo").is("bar");
 	}
 }

@@ -35,13 +35,13 @@ public class ResetContent_Test {
 
 		client.get("/a1")
 			.run()
-			.assertCode().is(205);
+			.assertStatus(205);
 		client.get("/a2")
 			.run()
-			.assertCode().is(205);
+			.assertStatus(205);
 		client.get("/a3")
 			.run()
-			.assertCode().is(205)
+			.assertStatus(205)
 			.assertHeader("Foo").is("bar");
 	}
 }

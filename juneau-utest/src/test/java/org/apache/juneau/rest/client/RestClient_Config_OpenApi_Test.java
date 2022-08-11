@@ -61,7 +61,7 @@ public class RestClient_Config_OpenApi_Test {
 		RestClient x = client().oapiCollectionFormat(PIPES).build();
 		x.get("/checkQuery").queryData("Foo",a).run().assertContent().asString().asUrlDecode().is("Foo=bar|baz");
 		x.post("/checkFormData").formData("Foo",a).run().assertContent().asString().asUrlDecode().is("Foo=bar|baz");
-		x.get("/checkHeader").header("Check","Foo").header("Foo",a).accept("text/json+simple").run().assertContent().is("['bar|baz']");
+		x.get("/checkHeader").header("Check","Foo").header("Foo",a).accept("text/json+simple").run().assertContent("['bar|baz']");
 	}
 
 	@Test
@@ -70,9 +70,9 @@ public class RestClient_Config_OpenApi_Test {
 			"foo","bar",
 			"baz",new String[]{"qux","true","123"}
 		);
-		client().urlEnc().paramFormat(PLAINTEXT).build().post("/echoBody",m).run().assertContent().is("foo=bar&baz=qux,true,123");
-		client().urlEnc().paramFormatPlain().build().post("/echoBody",m).run().assertContent().is("foo=bar&baz=qux,true,123");
-		client().urlEnc().paramFormat(UON).build().post("/echoBody",m).run().assertContent().is("foo=bar&baz=@(qux,'true','123')");
+		client().urlEnc().paramFormat(PLAINTEXT).build().post("/echoBody",m).run().assertContent("foo=bar&baz=qux,true,123");
+		client().urlEnc().paramFormatPlain().build().post("/echoBody",m).run().assertContent("foo=bar&baz=qux,true,123");
+		client().urlEnc().paramFormat(UON).build().post("/echoBody",m).run().assertContent("foo=bar&baz=@(qux,'true','123')");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

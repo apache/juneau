@@ -36,6 +36,6 @@ public class ResponseStatus_Test {
 		RestClient a = MockRestClient.build(A.class);
 		a.get("/a")
 			.run()
-			.assertCode().is(202);
+			.assertStatus(202);
 	}
 }

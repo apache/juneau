@@ -58,22 +58,22 @@ public class Locked_Test {
 
 		c.get("/f1").run()
 			.assertStatus().asCode().is(STATUS_CODE)
-			.assertContent().is(REASON_PHRASE);
+			.assertContent(REASON_PHRASE);
 		c.get("/f2").run()
 			.assertStatus().asCode().is(STATUS_CODE)
-			.assertContent().is("foo bar");
+			.assertContent("foo bar");
 		c.get("/f3").run()
 			.assertStatus().asCode().is(STATUS_CODE)
-			.assertContent().is("baz");
+			.assertContent("baz");
 		c.get("/f4").run()
 			.assertStatus().asCode().is(STATUS_CODE)
-			.assertContent().is("foo bar");
+			.assertContent("foo bar");
 		c.get("/f5").run()
 			.assertStatus().asCode().is(STATUS_CODE)
-			.assertContent().is(REASON_PHRASE)
+			.assertContent(REASON_PHRASE)
 			.assertHeader("Foo").is("bar");
 		c.get("/f6").run()
 			.assertStatus().asCode().is(STATUS_CODE)
-			.assertContent().is("foo");
+			.assertContent("foo");
 	}
 }

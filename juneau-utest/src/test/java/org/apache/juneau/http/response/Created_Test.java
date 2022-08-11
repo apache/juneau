@@ -35,15 +35,15 @@ public class Created_Test {
 
 		client.get("/a1")
 			.run()
-			.assertCode().is(201)
-			.assertContent().is("Created");
+			.assertStatus(201)
+			.assertContent("Created");
 		client.get("/a2")
 			.run()
-			.assertCode().is(201)
-			.assertContent().is("foo");
+			.assertStatus(201)
+			.assertContent("foo");
 		client.get("/a3")
 			.run()
-			.assertCode().is(201)
+			.assertStatus(201)
 			.assertHeader("A").is("bar");
 	}
 }

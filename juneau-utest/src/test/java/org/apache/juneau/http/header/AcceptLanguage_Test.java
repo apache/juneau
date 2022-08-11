@@ -52,10 +52,10 @@ public class AcceptLanguage_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(acceptLanguage(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(acceptLanguage(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(acceptLanguage(PARSED)).run().assertContent().is(VALUE);
-		c.get().header(acceptLanguage(()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(acceptLanguage(VALUE)).run().assertContent(VALUE);
+		c.get().header(acceptLanguage(VALUE)).run().assertContent(VALUE);
+		c.get().header(acceptLanguage(PARSED)).run().assertContent(VALUE);
+		c.get().header(acceptLanguage(()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(acceptLanguage((String)null)).run().assertContent().isEmpty();

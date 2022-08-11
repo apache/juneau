@@ -66,63 +66,63 @@ public class Rest_AllowedMethodHeaders_Test {
 	@Test
 	public void c01_basic() throws Exception {
 		RestClient a1 = MockRestClient.build(A1.class);
-		a1.get("/").run().assertContent().is("GET");
-		a1.put("/", "").run().assertContent().is("PUT");
-		a1.get("/").header("X-Method", "PUT").run().assertContent().is("GET");
-		a1.put("/", "").header("X-Method", "GET").run().assertContent().is("PUT");
-		a1.request("get","/").header("X-Method","FOO").run().assertContent().is("GET");
+		a1.get("/").run().assertContent("GET");
+		a1.put("/", "").run().assertContent("PUT");
+		a1.get("/").header("X-Method", "PUT").run().assertContent("GET");
+		a1.put("/", "").header("X-Method", "GET").run().assertContent("PUT");
+		a1.request("get","/").header("X-Method","FOO").run().assertContent("GET");
 
 		RestClient a2 = MockRestClient.build(A2.class);
-		a2.get("/").run().assertContent().is("GET");
-		a2.put("/", "").run().assertContent().is("PUT");
-		a2.get("/").header("X-Method", "PUT").run().assertContent().is("GET");
-		a2.put("/", "").header("X-Method", "GET").run().assertContent().is("GET");
-		a2.request("get","/").header("X-Method","FOO").run().assertContent().is("GET");
+		a2.get("/").run().assertContent("GET");
+		a2.put("/", "").run().assertContent("PUT");
+		a2.get("/").header("X-Method", "PUT").run().assertContent("GET");
+		a2.put("/", "").header("X-Method", "GET").run().assertContent("GET");
+		a2.request("get","/").header("X-Method","FOO").run().assertContent("GET");
 
 		RestClient a3 = MockRestClient.build(A3.class);
-		a3.get("/").run().assertContent().is("GET");
-		a3.put("/", "").run().assertContent().is("PUT");
-		a3.get("/").header("X-Method", "PUT").run().assertContent().is("GET");
-		a3.put("/", "").header("X-Method", "GET").run().assertContent().is("GET");
-		a3.request("get","/").header("X-Method","FOO").run().assertContent().is("GET");
+		a3.get("/").run().assertContent("GET");
+		a3.put("/", "").run().assertContent("PUT");
+		a3.get("/").header("X-Method", "PUT").run().assertContent("GET");
+		a3.put("/", "").header("X-Method", "GET").run().assertContent("GET");
+		a3.request("get","/").header("X-Method","FOO").run().assertContent("GET");
 
 		RestClient a4 = MockRestClient.build(A4.class);
-		a4.get("/").run().assertContent().is("GET");
-		a4.put("/", "").run().assertContent().is("PUT");
-		a4.get("/").header("X-Method", "PUT").run().assertContent().is("GET");
-		a4.put("/", "").header("X-Method", "GET").run().assertContent().is("PUT");
-		a4.request("get","/").header("X-Method","FOO").run().assertContent().is("FOO");
+		a4.get("/").run().assertContent("GET");
+		a4.put("/", "").run().assertContent("PUT");
+		a4.get("/").header("X-Method", "PUT").run().assertContent("GET");
+		a4.put("/", "").header("X-Method", "GET").run().assertContent("PUT");
+		a4.request("get","/").header("X-Method","FOO").run().assertContent("FOO");
 
 		RestClient a5 = MockRestClient.build(A5.class);
-		a5.get("/").run().assertContent().is("GET");
-		a5.put("/", "").run().assertContent().is("PUT");
-		a5.get("/").header("X-Method", "PUT").run().assertContent().is("PUT");
-		a5.put("/", "").header("X-Method", "GET").run().assertContent().is("GET");
-		a5.get("/").header("x-method", "PUT").run().assertContent().is("PUT");
-		a5.get("/").header("x-method", "FOO").run().assertContent().is("FOO");
-		a5.get("/").header("X-Method", "put").run().assertContent().is("PUT");
-		a5.get("/").header("X-Method", "foo").run().assertContent().is("FOO");
-		a5.request("get","/").header("X-Method","FOO").run().assertContent().is("FOO");
+		a5.get("/").run().assertContent("GET");
+		a5.put("/", "").run().assertContent("PUT");
+		a5.get("/").header("X-Method", "PUT").run().assertContent("PUT");
+		a5.put("/", "").header("X-Method", "GET").run().assertContent("GET");
+		a5.get("/").header("x-method", "PUT").run().assertContent("PUT");
+		a5.get("/").header("x-method", "FOO").run().assertContent("FOO");
+		a5.get("/").header("X-Method", "put").run().assertContent("PUT");
+		a5.get("/").header("X-Method", "foo").run().assertContent("FOO");
+		a5.request("get","/").header("X-Method","FOO").run().assertContent("FOO");
 
 		RestClient a6 = MockRestClient.build(A6.class);
-		a6.get("/").run().assertContent().is("GET");
-		a6.put("/", "").run().assertContent().is("PUT");
-		a6.get("/").header("X-Method", "PUT").run().assertContent().is("GET");
-		a6.put("/", "").header("X-Method", "GET").run().assertContent().is("PUT");
-		a6.request("get","/").header("X-Method","FOO").run().assertContent().is("GET");
+		a6.get("/").run().assertContent("GET");
+		a6.put("/", "").run().assertContent("PUT");
+		a6.get("/").header("X-Method", "PUT").run().assertContent("GET");
+		a6.put("/", "").header("X-Method", "GET").run().assertContent("PUT");
+		a6.request("get","/").header("X-Method","FOO").run().assertContent("GET");
 
 		RestClient a7 = MockRestClient.build(A7.class);
-		a7.get("/").run().assertContent().is("GET");
-		a7.put("/", "").run().assertContent().is("PUT");
-		a7.get("/").header("X-Method", "PUT").run().assertContent().is("GET");
-		a7.put("/", "").header("X-Method", "GET").run().assertContent().is("PUT");
-		a7.request("get","/").header("X-Method","FOO").run().assertContent().is("GET");
+		a7.get("/").run().assertContent("GET");
+		a7.put("/", "").run().assertContent("PUT");
+		a7.get("/").header("X-Method", "PUT").run().assertContent("GET");
+		a7.put("/", "").header("X-Method", "GET").run().assertContent("PUT");
+		a7.request("get","/").header("X-Method","FOO").run().assertContent("GET");
 
 		RestClient a8 = MockRestClient.build(A8.class);
-		a8.get("/").run().assertContent().is("GET");
-		a8.put("/", "").run().assertContent().is("PUT");
-		a8.get("/").header("X-Method", "PUT").run().assertContent().is("GET");
-		a8.put("/", "").header("X-Method", "GET").run().assertContent().is("PUT");
-		a8.request("get","/").header("X-Method","FOO").run().assertContent().is("GET");
+		a8.get("/").run().assertContent("GET");
+		a8.put("/", "").run().assertContent("PUT");
+		a8.get("/").header("X-Method", "PUT").run().assertContent("GET");
+		a8.put("/", "").header("X-Method", "GET").run().assertContent("PUT");
+		a8.request("get","/").header("X-Method","FOO").run().assertContent("GET");
 	}
 }

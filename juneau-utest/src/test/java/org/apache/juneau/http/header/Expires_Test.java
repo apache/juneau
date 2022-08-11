@@ -54,14 +54,14 @@ public class Expires_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(expires(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(expires(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(expires(PARSED)).run().assertContent().is(VALUE);
-		c.get().header(expires(()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(expires(VALUE)).run().assertContent(VALUE);
+		c.get().header(expires(VALUE)).run().assertContent(VALUE);
+		c.get().header(expires(PARSED)).run().assertContent(VALUE);
+		c.get().header(expires(()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
-		c.get().header(expires((String)null)).run().assertContent().is("");
-		c.get().header(expires((Supplier<ZonedDateTime>)null)).run().assertContent().is("");
+		c.get().header(expires((String)null)).run().assertContent("");
+		c.get().header(expires((Supplier<ZonedDateTime>)null)).run().assertContent("");
 		c.get().header(expires(()->null)).run().assertContent().isEmpty();
 	}
 

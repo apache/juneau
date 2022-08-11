@@ -35,15 +35,15 @@ public class MultiStatus_Test {
 
 		client.get("/a1")
 			.run()
-			.assertCode().is(207)
-			.assertContent().is("Multi-Status");
+			.assertStatus(207)
+			.assertContent("Multi-Status");
 		client.get("/a2")
 			.run()
-			.assertCode().is(207)
-			.assertContent().is("foo");
+			.assertStatus(207)
+			.assertContent("foo");
 		client.get("/a3")
 			.run()
-			.assertCode().is(207)
+			.assertStatus(207)
 			.assertHeader("Foo").is("bar");
 	}
 }

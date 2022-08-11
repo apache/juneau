@@ -56,19 +56,19 @@ public class HttpException_Test {
 
 		c.get("/f1").run()
 			.assertStatus().asCode().is(225)
-			.assertContent().is("bar baz");
+			.assertContent("bar baz");
 		c.get("/f2").run()
 			.assertStatus().asCode().is(225)
-			.assertContent().is("foo");
+			.assertContent("foo");
 		c.get("/f3").run()
 			.assertStatus().asCode().is(225)
-			.assertContent().is("baz");
+			.assertContent("baz");
 		c.get("/f4").run()
 			.assertStatus().asCode().is(225)
-			.assertContent().is("bar baz");
+			.assertContent("bar baz");
 		c.get("/f5").run()
 			.assertStatus().asCode().is(225)
-			.assertContent().is("")
+			.assertContent("")
 			.assertHeader("Foo").is("bar");
 	}
 

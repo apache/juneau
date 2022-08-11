@@ -38,6 +38,6 @@ public class MockRestClient_PathVars_Test {
 			.get("/")
 			.run()
 			.assertStatus().asCode().is(200)
-			.assertContent().is("bar");
+			.assertContent("bar");
 	}
 }

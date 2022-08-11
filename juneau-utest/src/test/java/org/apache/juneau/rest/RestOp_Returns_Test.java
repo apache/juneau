@@ -65,28 +65,28 @@ public class RestOp_Returns_Test {
 	@Test
 	public void a01_responseBeans() throws Exception {
 		RestClient c = client(A.class);
-		c.get("/accepted").run().assertStatus().asCode().is(Accepted.STATUS_CODE).assertContent().is(Accepted.REASON_PHRASE);
-		c.get("/alreadyReported").run().assertStatus().asCode().is(AlreadyReported.STATUS_CODE).assertContent().is(AlreadyReported.REASON_PHRASE);
-		c.get("/continue").run().assertStatus().asCode().is(Continue.STATUS_CODE + 1000).assertContent().is(Continue.REASON_PHRASE);
-		c.get("/created").run().assertStatus().asCode().is(Created.STATUS_CODE).assertContent().is(Created.REASON_PHRASE);
-		c.get("/earlyHints").run().assertStatus().asCode().is(EarlyHints.STATUS_CODE + 1000).assertContent().is(EarlyHints.REASON_PHRASE);
-		c.get("/found").run().assertStatus().asCode().is(Found.STATUS_CODE).assertContent().is(Found.REASON_PHRASE);
-		c.get("/imUsed").run().assertStatus().asCode().is(IMUsed.STATUS_CODE).assertContent().is(IMUsed.REASON_PHRASE);
-		c.get("/movedPermanently").run().assertStatus().asCode().is(MovedPermanently.STATUS_CODE).assertContent().is(MovedPermanently.REASON_PHRASE);
-		c.get("/multipleChoices").run().assertStatus().asCode().is(MultipleChoices.STATUS_CODE).assertContent().is(MultipleChoices.REASON_PHRASE);
-		c.get("/multiStatus").run().assertStatus().asCode().is(MultiStatus.STATUS_CODE).assertContent().is(MultiStatus.REASON_PHRASE);
+		c.get("/accepted").run().assertStatus().asCode().is(Accepted.STATUS_CODE).assertContent(Accepted.REASON_PHRASE);
+		c.get("/alreadyReported").run().assertStatus().asCode().is(AlreadyReported.STATUS_CODE).assertContent(AlreadyReported.REASON_PHRASE);
+		c.get("/continue").run().assertStatus().asCode().is(Continue.STATUS_CODE + 1000).assertContent(Continue.REASON_PHRASE);
+		c.get("/created").run().assertStatus().asCode().is(Created.STATUS_CODE).assertContent(Created.REASON_PHRASE);
+		c.get("/earlyHints").run().assertStatus().asCode().is(EarlyHints.STATUS_CODE + 1000).assertContent(EarlyHints.REASON_PHRASE);
+		c.get("/found").run().assertStatus().asCode().is(Found.STATUS_CODE).assertContent(Found.REASON_PHRASE);
+		c.get("/imUsed").run().assertStatus().asCode().is(IMUsed.STATUS_CODE).assertContent(IMUsed.REASON_PHRASE);
+		c.get("/movedPermanently").run().assertStatus().asCode().is(MovedPermanently.STATUS_CODE).assertContent(MovedPermanently.REASON_PHRASE);
+		c.get("/multipleChoices").run().assertStatus().asCode().is(MultipleChoices.STATUS_CODE).assertContent(MultipleChoices.REASON_PHRASE);
+		c.get("/multiStatus").run().assertStatus().asCode().is(MultiStatus.STATUS_CODE).assertContent(MultiStatus.REASON_PHRASE);
 		c.get("/noContent").run().assertStatus().asCode().is(NoContent.STATUS_CODE).assertContent().isEmpty();
-		c.get("/nonAuthoritiveInformation").run().assertStatus().asCode().is(NonAuthoritiveInformation.STATUS_CODE).assertContent().is(NonAuthoritiveInformation.REASON_PHRASE);
+		c.get("/nonAuthoritiveInformation").run().assertStatus().asCode().is(NonAuthoritiveInformation.STATUS_CODE).assertContent(NonAuthoritiveInformation.REASON_PHRASE);
 		c.get("/notModified").run().assertStatus().asCode().is(NotModified.STATUS_CODE).assertContent().isEmpty();
-		c.get("/ok").run().assertStatus().asCode().is(Ok.STATUS_CODE).assertContent().is(Ok.REASON_PHRASE);
-		c.get("/partialContent").run().assertStatus().asCode().is(PartialContent.STATUS_CODE).assertContent().is(PartialContent.REASON_PHRASE);
-		c.get("/permanentRedirect").run().assertStatus().asCode().is(PermanentRedirect.STATUS_CODE).assertContent().is(PermanentRedirect.REASON_PHRASE);
-		c.get("/processing").run().assertStatus().asCode().is(Processing.STATUS_CODE + 1000).assertContent().is(Processing.REASON_PHRASE);
+		c.get("/ok").run().assertStatus().asCode().is(Ok.STATUS_CODE).assertContent(Ok.REASON_PHRASE);
+		c.get("/partialContent").run().assertStatus().asCode().is(PartialContent.STATUS_CODE).assertContent(PartialContent.REASON_PHRASE);
+		c.get("/permanentRedirect").run().assertStatus().asCode().is(PermanentRedirect.STATUS_CODE).assertContent(PermanentRedirect.REASON_PHRASE);
+		c.get("/processing").run().assertStatus().asCode().is(Processing.STATUS_CODE + 1000).assertContent(Processing.REASON_PHRASE);
 		c.get("/resetContent").run().assertStatus().asCode().is(ResetContent.STATUS_CODE).assertContent().isEmpty();
-		c.get("/seeOther").run().assertStatus().asCode().is(SeeOther.STATUS_CODE).assertContent().is(SeeOther.REASON_PHRASE);
-		c.get("/switchingProtocols").run().assertStatus().asCode().is(SwitchingProtocols.STATUS_CODE + 1000).assertContent().is(SwitchingProtocols.REASON_PHRASE);
-		c.get("/temporaryRedirect").run().assertStatus().asCode().is(TemporaryRedirect.STATUS_CODE).assertContent().is(TemporaryRedirect.REASON_PHRASE);
-		c.get("/useProxy").run().assertStatus().asCode().is(UseProxy.STATUS_CODE).assertContent().is(UseProxy.REASON_PHRASE);
+		c.get("/seeOther").run().assertStatus().asCode().is(SeeOther.STATUS_CODE).assertContent(SeeOther.REASON_PHRASE);
+		c.get("/switchingProtocols").run().assertStatus().asCode().is(SwitchingProtocols.STATUS_CODE + 1000).assertContent(SwitchingProtocols.REASON_PHRASE);
+		c.get("/temporaryRedirect").run().assertStatus().asCode().is(TemporaryRedirect.STATUS_CODE).assertContent(TemporaryRedirect.REASON_PHRASE);
+		c.get("/useProxy").run().assertStatus().asCode().is(UseProxy.STATUS_CODE).assertContent(UseProxy.REASON_PHRASE);
 	}
 
 	@Test
@@ -153,7 +153,7 @@ public class RestOp_Returns_Test {
 		RestClient b = MockRestClient.build(B.class);
 		b.get("/a")
 			.run()
-			.assertContent().is("foo");
+			.assertContent("foo");
 		b.get("/b")
 			.run()
 			.assertHeader("Foo").is("Bar");
@@ -162,13 +162,13 @@ public class RestOp_Returns_Test {
 			.assertHeader("Content-Type").is("application/json");
 		b.get("/d?foo=bar")
 			.run()
-			.assertContent().is("bar");
+			.assertContent("bar");
 		b.get("/e")
 			.run()
-			.assertContent().is("foo");
+			.assertContent("foo");
 		b.get("/f")
 			.run()
-			.assertContent().is("foo");
+			.assertContent("foo");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

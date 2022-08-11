@@ -92,10 +92,10 @@ public class Rest_DefaultRequestAttributes_Test {
 	@Test
 	public void a01_preCall() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
-		a.put("/a", null).contentType("text/a1").run().assertContent().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
-		a.put("/a", null).contentType("text/a1").header("Override-Content-Type", "text/a2").run().assertContent().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
-		a.put("/b", null).contentType("text/a1").run().assertContent().is("p1=sp1,p2=xp2,p3=pp3,p4=pp4,p5=xp5");
-		a.put("/b", null).contentType("text/a1").header("Override-Content-Type", "text/a2").run().assertContent().is("p1=sp1,p2=xp2,p3=pp3,p4=pp4,p5=xp5");
+		a.put("/a", null).contentType("text/a1").run().assertContent("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		a.put("/a", null).contentType("text/a1").header("Override-Content-Type", "text/a2").run().assertContent("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		a.put("/b", null).contentType("text/a1").run().assertContent("p1=sp1,p2=xp2,p3=pp3,p4=pp4,p5=xp5");
+		a.put("/b", null).contentType("text/a1").header("Override-Content-Type", "text/a2").run().assertContent("p1=sp1,p2=xp2,p3=pp3,p4=pp4,p5=xp5");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -168,17 +168,17 @@ public class Rest_DefaultRequestAttributes_Test {
 	@Test
 	public void b01_postCall() throws Exception {
 		RestClient b = MockRestClient.build(B.class);
-		b.put("/a", null).accept("text/s1").run().assertContent().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
-		b.put("/a", null).accept("text/s1").header("Override-Accept", "text/s2").run().assertContent().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
-		b.put("/a", null).accept("text/s1").header("Override-Content-Type", "text/s3").run().assertContent().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
-		b.put("/a", null).run().assertContent().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
-		b.put("/a", null).header("Override-Accept", "text/s3").run().assertContent().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
-		b.put("/a", null).header("Override-Content-Type", "text/s3").run().assertContent().is("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
-		b.put("/b", null).accept("text/s1").run().assertContent().is("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
-		b.put("/b", null).accept("text/s1").header("Override-Accept", "text/s2").run().assertContent().is("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
-		b.put("/b", null).accept("text/s1").header("Override-Content-Type", "text/s3").run().assertContent().is("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
-		b.put("/b", null).run().assertContent().is("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
-		b.put("/b", null).header("Override-Accept", "text/s3").run().assertContent().is("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
-		b.put("/b", null).header("Override-Content-Type", "text/s3").run().assertContent().is("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
+		b.put("/a", null).accept("text/s1").run().assertContent("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		b.put("/a", null).accept("text/s1").header("Override-Accept", "text/s2").run().assertContent("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		b.put("/a", null).accept("text/s1").header("Override-Content-Type", "text/s3").run().assertContent("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		b.put("/a", null).run().assertContent("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		b.put("/a", null).header("Override-Accept", "text/s3").run().assertContent("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		b.put("/a", null).header("Override-Content-Type", "text/s3").run().assertContent("p1=sp1,p2=xp2,p3=mp3,p4=xp4,p5=xp5");
+		b.put("/b", null).accept("text/s1").run().assertContent("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
+		b.put("/b", null).accept("text/s1").header("Override-Accept", "text/s2").run().assertContent("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
+		b.put("/b", null).accept("text/s1").header("Override-Content-Type", "text/s3").run().assertContent("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
+		b.put("/b", null).run().assertContent("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
+		b.put("/b", null).header("Override-Accept", "text/s3").run().assertContent("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
+		b.put("/b", null).header("Override-Content-Type", "text/s3").run().assertContent("p1=sp1,p2=xp2,p3=pp3,p4=xp4,p5=xp5");
 	}
 }

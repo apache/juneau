@@ -36,19 +36,19 @@ public class MovedPermanently_Test {
 
 		client.get("/a1")
 			.run()
-			.assertCode().is(301)
-			.assertContent().is("Moved Permanently");
+			.assertStatus(301)
+			.assertContent("Moved Permanently");
 		client.get("/a2")
 			.run()
-			.assertCode().is(301)
-			.assertContent().is("foo");
+			.assertStatus(301)
+			.assertContent("foo");
 		client.get("/a3")
 			.run()
-			.assertCode().is(301)
+			.assertStatus(301)
 			.assertHeader("Location").is("/foo");
 		client.get("/a4")
 			.run()
-			.assertCode().is(301)
+			.assertStatus(301)
 			.assertHeader("Foo").is("bar");
 	}
 }

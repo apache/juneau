@@ -40,17 +40,17 @@ public class HasFormData_Test {
 	@Test
 	public void a01_basic() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
-		a.post("/a", "p1=p1&p2=2").run().assertContent().is("p1=[true,true],p2=[true,true]");
-		a.post("/a", "p1&p2").run().assertContent().is("p1=[true,true],p2=[true,true]");
-		a.post("/a", "p1=&p2=").run().assertContent().is("p1=[true,true],p2=[true,true]");
-		a.post("/a", null).run().assertContent().is("p1=[false,false],p2=[false,false]");
-		a.post("/a", "p1").run().assertContent().is("p1=[true,true],p2=[false,false]");
-		a.post("/a", "p1=").run().assertContent().is("p1=[true,true],p2=[false,false]");
-		a.post("/a", "p2").run().assertContent().is("p1=[false,false],p2=[true,true]");
-		a.post("/a", "p2=").run().assertContent().is("p1=[false,false],p2=[true,true]");
-		a.post("/a", "p1=foo&p2").run().assertContent().is("p1=[true,true],p2=[true,true]");
-		a.post("/a", "p1&p2=1").run().assertContent().is("p1=[true,true],p2=[true,true]");
+		a.post("/a", "p1=p1&p2=2").run().assertContent("p1=[true,true],p2=[true,true]");
+		a.post("/a", "p1&p2").run().assertContent("p1=[true,true],p2=[true,true]");
+		a.post("/a", "p1=&p2=").run().assertContent("p1=[true,true],p2=[true,true]");
+		a.post("/a", null).run().assertContent("p1=[false,false],p2=[false,false]");
+		a.post("/a", "p1").run().assertContent("p1=[true,true],p2=[false,false]");
+		a.post("/a", "p1=").run().assertContent("p1=[true,true],p2=[false,false]");
+		a.post("/a", "p2").run().assertContent("p1=[false,false],p2=[true,true]");
+		a.post("/a", "p2=").run().assertContent("p1=[false,false],p2=[true,true]");
+		a.post("/a", "p1=foo&p2").run().assertContent("p1=[true,true],p2=[true,true]");
+		a.post("/a", "p1&p2=1").run().assertContent("p1=[true,true],p2=[true,true]");
 		String x = "a%2Fb%25c%3Dd+e"; // [x/y%z=a+b]
-		a.post("/a", "p1="+x+"&p2=1").run().assertContent().is("p1=[true,true],p2=[true,true]");
+		a.post("/a", "p1="+x+"&p2=1").run().assertContent("p1=[true,true],p2=[true,true]");
 	}
 }

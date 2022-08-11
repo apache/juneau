@@ -56,10 +56,10 @@ public class BasicMediaRangesHeader_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(mediaRangesHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
-		c.get().header(mediaRangesHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
-		c.get().header(mediaRangesHeader(HEADER,PARSED)).run().assertContent().is(VALUE);
-		c.get().header(mediaRangesHeader(HEADER,()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(mediaRangesHeader(HEADER,VALUE)).run().assertContent(VALUE);
+		c.get().header(mediaRangesHeader(HEADER,VALUE)).run().assertContent(VALUE);
+		c.get().header(mediaRangesHeader(HEADER,PARSED)).run().assertContent(VALUE);
+		c.get().header(mediaRangesHeader(HEADER,()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(mediaRangesHeader(HEADER,(Supplier<MediaRanges>)null)).run().assertContent().isEmpty();

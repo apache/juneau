@@ -46,30 +46,30 @@ public class HasQuery_Test {
 	public void a01_basic() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
 
-		a.get("/a?p1=p1&p2=2").run().assertContent().is("p1=[true,true],p2=[true,true]");
-		a.get("/a?p1&p2").run().assertContent().is("p1=[true,true],p2=[true,true]");
-		a.get("/a?p1=&p2=").run().assertContent().is("p1=[true,true],p2=[true,true]");
-		a.get("/a").run().assertContent().is("p1=[false,false],p2=[false,false]");
-		a.get("/a?p1").run().assertContent().is("p1=[true,true],p2=[false,false]");
-		a.get("/a?p1=").run().assertContent().is("p1=[true,true],p2=[false,false]");
-		a.get("/a?p2").run().assertContent().is("p1=[false,false],p2=[true,true]");
-		a.get("/a?p2=").run().assertContent().is("p1=[false,false],p2=[true,true]");
-		a.get("/a?p1=foo&p2").run().assertContent().is("p1=[true,true],p2=[true,true]");
-		a.get("/a?p1&p2=1").run().assertContent().is("p1=[true,true],p2=[true,true]");
+		a.get("/a?p1=p1&p2=2").run().assertContent("p1=[true,true],p2=[true,true]");
+		a.get("/a?p1&p2").run().assertContent("p1=[true,true],p2=[true,true]");
+		a.get("/a?p1=&p2=").run().assertContent("p1=[true,true],p2=[true,true]");
+		a.get("/a").run().assertContent("p1=[false,false],p2=[false,false]");
+		a.get("/a?p1").run().assertContent("p1=[true,true],p2=[false,false]");
+		a.get("/a?p1=").run().assertContent("p1=[true,true],p2=[false,false]");
+		a.get("/a?p2").run().assertContent("p1=[false,false],p2=[true,true]");
+		a.get("/a?p2=").run().assertContent("p1=[false,false],p2=[true,true]");
+		a.get("/a?p1=foo&p2").run().assertContent("p1=[true,true],p2=[true,true]");
+		a.get("/a?p1&p2=1").run().assertContent("p1=[true,true],p2=[true,true]");
 		String x1 = "a%2Fb%25c%3Dd+e"; // [x/y%z=a+b]
-		a.get("/a?p1="+x1+"&p2=1").run().assertContent().is("p1=[true,true],p2=[true,true]");
+		a.get("/a?p1="+x1+"&p2=1").run().assertContent("p1=[true,true],p2=[true,true]");
 
-		a.post("/b?p1=p1&p2=2", null).run().assertContent().is("p1=[true,true],p2=[true,true]");
-		a.post("/b?p1&p2", null).run().assertContent().is("p1=[true,true],p2=[true,true]");
-		a.post("/b?p1=&p2=", null).run().assertContent().is("p1=[true,true],p2=[true,true]");
-		a.post("/b", null).run().assertContent().is("p1=[false,false],p2=[false,false]");
-		a.post("/b?p1", null).run().assertContent().is("p1=[true,true],p2=[false,false]");
-		a.post("/b?p1=", null).run().assertContent().is("p1=[true,true],p2=[false,false]");
-		a.post("/b?p2", null).run().assertContent().is("p1=[false,false],p2=[true,true]");
-		a.post("/b?p2=", null).run().assertContent().is("p1=[false,false],p2=[true,true]");
-		a.post("/b?p1=foo&p2", null).run().assertContent().is("p1=[true,true],p2=[true,true]");
-		a.post("/b?p1&p2=1", null).run().assertContent().is("p1=[true,true],p2=[true,true]");
+		a.post("/b?p1=p1&p2=2", null).run().assertContent("p1=[true,true],p2=[true,true]");
+		a.post("/b?p1&p2", null).run().assertContent("p1=[true,true],p2=[true,true]");
+		a.post("/b?p1=&p2=", null).run().assertContent("p1=[true,true],p2=[true,true]");
+		a.post("/b", null).run().assertContent("p1=[false,false],p2=[false,false]");
+		a.post("/b?p1", null).run().assertContent("p1=[true,true],p2=[false,false]");
+		a.post("/b?p1=", null).run().assertContent("p1=[true,true],p2=[false,false]");
+		a.post("/b?p2", null).run().assertContent("p1=[false,false],p2=[true,true]");
+		a.post("/b?p2=", null).run().assertContent("p1=[false,false],p2=[true,true]");
+		a.post("/b?p1=foo&p2", null).run().assertContent("p1=[true,true],p2=[true,true]");
+		a.post("/b?p1&p2=1", null).run().assertContent("p1=[true,true],p2=[true,true]");
 		String x2 = "a%2Fb%25c%3Dd+e"; // [x/y%z=a+b]
-		a.post("/b?p1="+x2+"&p2=1", null).run().assertContent().is("p1=[true,true],p2=[true,true]");
+		a.post("/b?p1="+x2+"&p2=1", null).run().assertContent("p1=[true,true],p2=[true,true]");
 	}
 }

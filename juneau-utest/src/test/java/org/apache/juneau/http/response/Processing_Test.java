@@ -35,15 +35,15 @@ public class Processing_Test {
 
 		client.get("/a1")
 			.run()
-			.assertCode().is(1102)
-			.assertContent().is("Processing");
+			.assertStatus(1102)
+			.assertContent("Processing");
 		client.get("/a2")
 			.run()
-			.assertCode().is(1102)
-			.assertContent().is("foo");
+			.assertStatus(1102)
+			.assertContent("foo");
 		client.get("/a3")
 			.run()
-			.assertCode().is(1102)
+			.assertStatus(1102)
 			.assertHeader("Foo").is("bar");
 	}
 }

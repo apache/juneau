@@ -44,6 +44,7 @@ import org.apache.juneau.internal.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
+@FluentSetters
 public class RestResponse implements HttpResponse {
 
 	private final RestClient client;
@@ -96,6 +97,7 @@ public class RestResponse implements HttpResponse {
 	 * @return This object.
 	 * @throws RestCallException If one of the {@link RestCallInterceptor RestCallInterceptors} threw an exception.
 	 */
+	@FluentSetter
 	public RestResponse consume() throws RestCallException {
 		close();
 		return this;
@@ -104,17 +106,6 @@ public class RestResponse implements HttpResponse {
 	//------------------------------------------------------------------------------------------------------------------
 	// Status line
 	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Same as {@link #getStatusLine()} but sets the value in a mutable for fluent calls.
-	 *
-	 * @param value The mutable to set the status line in.
-	 * @return This object.
-	 */
-	public RestResponse getStatusLine(Value<StatusLine> value) {
-		value.set(getStatusLine());
-		return this;
-	}
 
 	/**
 	 * Returns the status code of the response.
@@ -128,17 +119,6 @@ public class RestResponse implements HttpResponse {
 	}
 
 	/**
-	 * Same as {@link #getStatusCode()} but sets the value in a mutable for fluent calls.
-	 *
-	 * @param value The mutable to set the status code in.
-	 * @return This object.
-	 */
-	public RestResponse getStatusCode(Value<Integer> value) {
-		value.set(getStatusCode());
-		return this;
-	}
-
-	/**
 	 * Returns the status line reason phrase of the response.
 	 *
 	 * Shortcut for calling <code>getStatusLine().getReasonPhrase()</code>.
@@ -147,17 +127,6 @@ public class RestResponse implements HttpResponse {
 	 */
 	public String getReasonPhrase() {
 		return getStatusLine().getReasonPhrase();
-	}
-
-	/**
-	 * Same as {@link #getReasonPhrase()} but sets the value in a mutable for fluent calls.
-	 *
-	 * @param value The mutable to set the status line reason phrase in.
-	 * @return This object.
-	 */
-	public RestResponse getReasonPhrase(Value<String> value) {
-		value.set(getReasonPhrase());
-		return this;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -190,14 +159,16 @@ public class RestResponse implements HttpResponse {
 	 * 	MyBean <jv>bean</jv> = <jv>client</jv>
 	 * 		.get(<jsf>URI</jsf>)
 	 * 		.run()
-	 * 		.assertCode().is(200)
+	 * 		.assertStatus(200)
 	 * 		.getContent().as(MyBean.<jk>class</jk>);
 	 * </p>
 	 *
+	 * @param value The value to assert.
 	 * @return A new fluent assertion object.
 	 */
-	public FluentIntegerAssertion<RestResponse> assertCode() {
-		return assertStatus().asCode();
+	public RestResponse assertStatus(int value) {
+		assertStatus().asCode().is(value);
+		return this;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -407,6 +378,44 @@ public class RestResponse implements HttpResponse {
 	}
 
 	/**
+	 * Provides the ability to perform fluent-style assertions on this response body.
+	 *
+	 * <p>
+	 * A shortcut for calling <c>assertContent().is(<jv>value</jv>)</c>.
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Validates the response body equals the text "OK".</jc>
+	 * 	<jv>client</jv>
+	 * 		.get(<jsf>URI</jsf>)
+	 * 		.run()
+	 * 		.assertContent(<js>"OK"</js>);
+	 * </p>
+	 *
+	 * @param value The value to assert.
+	 * @return This object.
+	 */
+	public RestResponse assertContent(String value) {
+		assertContent().is(value);
+		return this;
+	}
+
+	/**
+	 * Provides the ability to perform fluent-style assertions on this response body.
+	 *
+	 * <p>
+	 * A shortcut for calling <c>assertContent().asString().isMatches(<jv>value</jv>)</c>.
+	 *
+	 * @see FluentStringAssertion#isMatches(String)
+	 * @param value The value to assert.
+	 * @return This object.
+	 */
+	public RestResponse assertContentMatches(String value) {
+		assertContent().asString().isMatches(value);
+		return this;
+	}
+
+	/**
 	 * Caches the response body so that it can be read as a stream multiple times.
 	 *
 	 * This is equivalent to calling the following:
@@ -416,6 +425,7 @@ public class RestResponse implements HttpResponse {
 	 *
 	 * @return The body of the response.
 	 */
+	@FluentSetter
 	public RestResponse cacheContent() {
 		responseContent.cache();
 		return this;

@@ -128,13 +128,13 @@ public class RestContext_Builder_Test {
 
 	@Test
 	public void b01_RestBean_fields() throws Exception {
-		b1b.get("/a1").run().assertContent().is("{id:1}");
-		b1b.get("/a2").run().assertContent().is("{id:2}");
-		b1b.get("/a3").run().assertContent().is("{id:1}");
-		b1b.get("/a4").run().assertContent().is("{id:2}");
-		b1b.get("/a5").run().assertContent().is("{id:1}");
-		b1b.get("/a6").run().assertContent().is("{id:2}");
-		b1b.get("/a7").run().assertContent().is("{id:1}");
-		b1b.get("/a8").run().assertContent().is("{id:2}");
+		b1b.get("/a1").run().assertContent("{id:1}");
+		b1b.get("/a2").run().assertContent("{id:2}");
+		b1b.get("/a3").run().assertContent("{id:1}");
+		b1b.get("/a4").run().assertContent("{id:2}");
+		b1b.get("/a5").run().assertContent("{id:1}");
+		b1b.get("/a6").run().assertContent("{id:2}");
+		b1b.get("/a7").run().assertContent("{id:1}");
+		b1b.get("/a8").run().assertContent("{id:2}");
 	}
 }

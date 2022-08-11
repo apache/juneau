@@ -35,15 +35,15 @@ public class IMUsed_Test {
 
 		client.get("/a1")
 			.run()
-			.assertCode().is(226)
-			.assertContent().is("IM Used");
+			.assertStatus(226)
+			.assertContent("IM Used");
 		client.get("/a2")
 			.run()
-			.assertCode().is(226)
-			.assertContent().is("foo");
+			.assertStatus(226)
+			.assertContent("foo");
 		client.get("/a3")
 			.run()
-			.assertCode().is(226)
+			.assertStatus(226)
 			.assertHeader("Foo").is("bar");
 	}
 }

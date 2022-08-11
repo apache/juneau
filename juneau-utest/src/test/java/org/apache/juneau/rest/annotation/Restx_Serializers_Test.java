@@ -83,11 +83,11 @@ public class Restx_Serializers_Test {
 		a.get("/a")
 			.accept("text/a")
 			.run()
-			.assertContent().is("text/a - test1");
+			.assertContent("text/a - test1");
 		a.get("/a?noTrace=true")
 			.accept("text/b")
 			.run()
-			.assertCode().is(406)
+			.assertStatus(406)
 			.assertContent().isContains(
 				"Unsupported media-type in request header 'Accept': 'text/b'",
 				"Supported media-types: ['text/a'"
@@ -95,7 +95,7 @@ public class Restx_Serializers_Test {
 		a.get("/b?noTrace=true")
 			.accept("text/a")
 			.run()
-			.assertCode().is(406)
+			.assertStatus(406)
 			.assertContent().isContains(
 				"Unsupported media-type in request header 'Accept': 'text/a'",
 				"Supported media-types: ['text/b']"
@@ -103,23 +103,23 @@ public class Restx_Serializers_Test {
 		a.get("/c")
 			.accept("text/a")
 			.run()
-			.assertContent().is("text/c - test3");
+			.assertContent("text/c - test3");
 		a.get("/c")
 			.accept("text/b")
 			.run()
-			.assertContent().is("text/b - test3");
+			.assertContent("text/b - test3");
 		a.get("/d")
 			.accept("text/a")
 			.run()
-			.assertContent().is("text/d - test4");
+			.assertContent("text/d - test4");
 		a.get("/d")
 			.accept("text/d")
 			.run()
-			.assertContent().is("text/d - test4");
+			.assertContent("text/d - test4");
 		a.get("/e?noTrace=true")
 			.accept("text/bad")
 			.run()
-			.assertCode().is(406)
+			.assertStatus(406)
 			.assertContent().isContains(
 				"Unsupported media-type in request header 'Accept': 'text/bad'",
 				"Supported media-types: ['text/a"
@@ -170,8 +170,8 @@ public class Restx_Serializers_Test {
 	@Test
 	public void b01_inheritence() throws Exception {
 		RestClient b = MockRestClient.build(B2.class);
-		b.get("/a").run().assertContent().is("['text/s3','text/s4','text/s1','text/s2']");
-		b.get("/b").run().assertContent().is("['text/s5']");
-		b.get("/c").run().assertContent().is("['text/s5','text/s3','text/s4','text/s1','text/s2']");
+		b.get("/a").run().assertContent("['text/s3','text/s4','text/s1','text/s2']");
+		b.get("/b").run().assertContent("['text/s5']");
+		b.get("/c").run().assertContent("['text/s5','text/s3','text/s4','text/s1','text/s2']");
 	}
 }

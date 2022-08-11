@@ -52,40 +52,40 @@ public class RestClient_FormData_Test {
 
 	@Test
 	public void a01_formData_String_Object() throws Exception {
-		client().formData("foo","bar").formData(part("foo",new StringBuilder("baz"),null)).build().post("/formData").run().assertContent().is("foo=bar&foo=baz");
-		client().build().post("/formData").formData("foo","bar").formData("foo",new StringBuilder("baz")).run().assertContent().is("foo=bar&foo=baz");
-		client().build().post("/formData").formData(null,"bar").run().assertContent().is("");
-		client().build().post("/formData").formData("foo",null).run().assertContent().is("");
-		client().build().post("/formData").formData(null,(String)null).run().assertContent().is("");
+		client().formData("foo","bar").formData(part("foo",new StringBuilder("baz"),null)).build().post("/formData").run().assertContent("foo=bar&foo=baz");
+		client().build().post("/formData").formData("foo","bar").formData("foo",new StringBuilder("baz")).run().assertContent("foo=bar&foo=baz");
+		client().build().post("/formData").formData(null,"bar").run().assertContent("");
+		client().build().post("/formData").formData("foo",null).run().assertContent("");
+		client().build().post("/formData").formData(null,(String)null).run().assertContent("");
 	}
 
 	@Test
 	public void a03_formData_NameValuePair() throws Exception {
-		client().formData(part("foo","bar")).build().post("/formData").formData(part("foo","baz")).run().assertContent().is("foo=bar&foo=baz");
+		client().formData(part("foo","bar")).build().post("/formData").formData(part("foo","baz")).run().assertContent("foo=bar&foo=baz");
 	}
 
 	@Test
 	public void a04_formDatas_Objects() throws Exception {
-		client().formData(part("foo","bar")).build().post("/formData").run().assertContent().is("foo=bar");
-		client().formData(parts("foo","bar","foo","baz").getAll()).build().post("/formData").run().assertContent().is("foo=bar&foo=baz");
-		client().formData(part("foo","bar"),part("foo","baz")).build().post("/formData").run().assertContent().is("foo=bar&foo=baz");
+		client().formData(part("foo","bar")).build().post("/formData").run().assertContent("foo=bar");
+		client().formData(parts("foo","bar","foo","baz").getAll()).build().post("/formData").run().assertContent("foo=bar&foo=baz");
+		client().formData(part("foo","bar"),part("foo","baz")).build().post("/formData").run().assertContent("foo=bar&foo=baz");
 
-		client().build().post("/formData").formData(part("foo","bar")).run().assertContent().is("foo=bar");
-		client().build().post("/formData").formData(part("foo","bar"),part("foo","baz")).run().assertContent().is("foo=bar&foo=baz");
+		client().build().post("/formData").formData(part("foo","bar")).run().assertContent("foo=bar");
+		client().build().post("/formData").formData(part("foo","bar"),part("foo","baz")).run().assertContent("foo=bar&foo=baz");
 
-		client().build().post("/formData").formDataBean(ABean.get()).run().assertContent().is("a=1&b=foo");
+		client().build().post("/formData").formDataBean(ABean.get()).run().assertContent("a=1&b=foo");
 
-		client().formData(part("foo","bar"),null).build().post("/formData").run().assertContent().is("foo=bar");
-		client().formData(part("foo",null)).build().post("/formData").run().assertContent().is("");
-		client().formData(part(null,null)).build().post("/formData").run().assertContent().is("");
+		client().formData(part("foo","bar"),null).build().post("/formData").run().assertContent("foo=bar");
+		client().formData(part("foo",null)).build().post("/formData").run().assertContent("");
+		client().formData(part(null,null)).build().post("/formData").run().assertContent("");
 
-		client().build().post("/formData").formData(part("foo",null)).run().assertContent().is("");
-		client().build().post("/formData").formData(part(null,"foo")).run().assertContent().is("");
-		client().build().post("/formData").formData(part(null,null)).run().assertContent().is("");
+		client().build().post("/formData").formData(part("foo",null)).run().assertContent("");
+		client().build().post("/formData").formData(part(null,"foo")).run().assertContent("");
+		client().build().post("/formData").formData(part(null,null)).run().assertContent("");
 
-		client().formData(part("foo","bar",null)).build().post("/formData").run().assertContent().is("foo=bar");
-		client().formData(part("foo",null,null)).build().post("/formData").run().assertContent().is("");
-		client().formData(part("foo",null,null).skipIfEmpty().schema(HttpPartSchema.create()._default("bar").build())).build().post("/formData").run().assertContent().is("foo=bar");
+		client().formData(part("foo","bar",null)).build().post("/formData").run().assertContent("foo=bar");
+		client().formData(part("foo",null,null)).build().post("/formData").run().assertContent("");
+		client().formData(part("foo",null,null).skipIfEmpty().schema(HttpPartSchema.create()._default("bar").build())).build().post("/formData").run().assertContent("foo=bar");
 	}
 
 	@Test

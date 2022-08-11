@@ -59,20 +59,20 @@ public class IfRange_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(ifRange(VALUE1)).run().assertContent().is(VALUE1);
-		c.get().header(ifRange(VALUE1)).run().assertContent().is(VALUE1);
-		c.get().header(ifRange(PARSED1)).run().assertContent().is(VALUE1);
-		c.get().header(ifRange(()->PARSED1)).run().assertContent().is(VALUE1);
+		c.get().header(ifRange(VALUE1)).run().assertContent(VALUE1);
+		c.get().header(ifRange(VALUE1)).run().assertContent(VALUE1);
+		c.get().header(ifRange(PARSED1)).run().assertContent(VALUE1);
+		c.get().header(ifRange(()->PARSED1)).run().assertContent(VALUE1);
 
-		c.get().header(ifRange(VALUE2)).run().assertContent().is(VALUE2);
-		c.get().header(ifRange(VALUE2)).run().assertContent().is(VALUE2);
-		c.get().header(ifRange(PARSED2)).run().assertContent().is(VALUE2);
-		c.get().header(ifRange(()->PARSED2)).run().assertContent().is(VALUE2);
+		c.get().header(ifRange(VALUE2)).run().assertContent(VALUE2);
+		c.get().header(ifRange(VALUE2)).run().assertContent(VALUE2);
+		c.get().header(ifRange(PARSED2)).run().assertContent(VALUE2);
+		c.get().header(ifRange(()->PARSED2)).run().assertContent(VALUE2);
 
-		c.get().header(ifRange(VALUE3)).run().assertContent().is(VALUE3);
-		c.get().header(ifRange(VALUE3)).run().assertContent().is(VALUE3);
-		c.get().header(ifRange(PARSED3)).run().assertContent().is(VALUE3);
-		c.get().header(ifRange(()->PARSED3)).run().assertContent().is(VALUE3);
+		c.get().header(ifRange(VALUE3)).run().assertContent(VALUE3);
+		c.get().header(ifRange(VALUE3)).run().assertContent(VALUE3);
+		c.get().header(ifRange(PARSED3)).run().assertContent(VALUE3);
+		c.get().header(ifRange(()->PARSED3)).run().assertContent(VALUE3);
 
 		// Invalid usage.
 		c.get().header(ifRange((String)null)).run().assertContent().isEmpty();

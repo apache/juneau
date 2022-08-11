@@ -35,15 +35,15 @@ public class Accepted_Test {
 
 		client.get("/a1")
 			.run()
-			.assertCode().is(202)
-			.assertContent().is("Accepted");
+			.assertStatus(202)
+			.assertContent("Accepted");
 		client.get("/a2")
 			.run()
-			.assertCode().is(202)
-			.assertContent().is("foo");
+			.assertStatus(202)
+			.assertContent("foo");
 		client.get("/a3")
 			.run()
-			.assertCode().is(202)
+			.assertStatus(202)
 			.assertHeader("Foo").is("bar");
 	}
 }

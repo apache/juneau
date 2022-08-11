@@ -35,15 +35,15 @@ public class Continue_Test {
 
 		client.get("/a1")
 			.run()
-			.assertCode().is(1100)
-			.assertContent().is("Continue");
+			.assertStatus(1100)
+			.assertContent("Continue");
 		client.get("/a2")
 			.run()
-			.assertCode().is(1100)
-			.assertContent().is("foo");
+			.assertStatus(1100)
+			.assertContent("foo");
 		client.get("/a3")
 			.run()
-			.assertCode().is(1100)
+			.assertStatus(1100)
 			.assertHeader("A").is("bar");
 	}
 }

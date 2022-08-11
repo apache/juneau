@@ -51,10 +51,10 @@ public class ProxyAuthorization_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(proxyAuthorization(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(proxyAuthorization(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(proxyAuthorization(PARSED)).run().assertContent().is(VALUE);
-		c.get().header(proxyAuthorization(()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(proxyAuthorization(VALUE)).run().assertContent(VALUE);
+		c.get().header(proxyAuthorization(VALUE)).run().assertContent(VALUE);
+		c.get().header(proxyAuthorization(PARSED)).run().assertContent(VALUE);
+		c.get().header(proxyAuthorization(()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(proxyAuthorization((String)null)).run().assertContent().isEmpty();

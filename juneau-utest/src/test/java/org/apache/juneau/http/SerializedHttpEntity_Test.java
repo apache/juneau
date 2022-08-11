@@ -96,17 +96,17 @@ public class SerializedHttpEntity_Test {
 
 	@Test
 	public void a09_chunked() throws Exception {
-		checkHeaderClient("Transfer-Encoding").post("/",serializedEntity(ABean.get(),null).chunked().build()).run().assertContent().is("['chunked']");
+		checkHeaderClient("Transfer-Encoding").post("/",serializedEntity(ABean.get(),null).chunked().build()).run().assertContent("['chunked']");
 	}
 
 	@Test
 	public void a10_contentEncoding() throws Exception {
-		checkHeaderClient("Content-Encoding").post("/",serializedEntity(ABean.get(),null).contentEncoding("identity").build()).run().assertContent().is("['identity']");
+		checkHeaderClient("Content-Encoding").post("/",serializedEntity(ABean.get(),null).contentEncoding("identity").build()).run().assertContent("['identity']");
 	}
 
 	@Test
 	public void a12_contentType() throws Exception {
-		checkHeaderClient("Content-Type").post("/",serializedEntity(reader("foo"),null).contentType("text/foo").build()).run().assertContent().is("['text/foo']");
+		checkHeaderClient("Content-Type").post("/",serializedEntity(reader("foo"),null).contentType("text/foo").build()).run().assertContent("['text/foo']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

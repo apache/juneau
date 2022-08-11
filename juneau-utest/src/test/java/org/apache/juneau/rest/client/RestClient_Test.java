@@ -305,7 +305,7 @@ public class RestClient_Test {
 	@Test
 	public void c14_httpClient_requestConfig() throws Exception {
 		RestRequest req = client().build().get("/bean").config(RequestConfig.custom().setMaxRedirects(1).build());
-		req.run().assertContent().is("{f:1}");
+		req.run().assertContent("{f:1}");
 		assertEquals(1, req.getConfig().getMaxRedirects());
 	}
 
@@ -347,7 +347,7 @@ public class RestClient_Test {
 
 	@Test
 	public void e01_other_completeFuture() throws Exception {
-		client().build().get("/bean").completeFuture().get().assertCode().is(200);
+		client().build().get("/bean").completeFuture().get().assertStatus(200);
 	}
 
 	public static class E2 implements Cancellable {
@@ -359,12 +359,12 @@ public class RestClient_Test {
 
 	@Test
 	public void e02_httpRequestBase_setCancellable() throws Exception {
-		client().build().get("/bean").cancellable(new E2()).run().assertCode().is(200);
+		client().build().get("/bean").cancellable(new E2()).run().assertStatus(200);
 	}
 
 	@Test
 	public void e03_httpRequestBase_protocolVersion() throws Exception {
-		client().build().get("/bean").protocolVersion(new ProtocolVersion("http", 2, 0)).run().assertCode().is(200);
+		client().build().get("/bean").protocolVersion(new ProtocolVersion("http", 2, 0)).run().assertStatus(200);
 		ProtocolVersion x = client().build().get("/bean").protocolVersion(new ProtocolVersion("http", 2, 0)).getProtocolVersion();
 		assertEquals(2,x.getMajor());
 	}
@@ -372,7 +372,7 @@ public class RestClient_Test {
 	@SuppressWarnings("deprecation")
 	@Test
 	public void e04_httpRequestBase_completed() throws Exception {
-		client().build().get("/bean").completed().run().assertCode().is(200);
+		client().build().get("/bean").completed().run().assertStatus(200);
 	}
 
 	@Test

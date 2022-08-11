@@ -48,7 +48,7 @@ public class RestClient_Query_Test {
 
 	@Test
 	public void a01_query_String_Object() throws Exception {
-		client().queryData("foo","bar").queryData(part("foo",new StringBuilder("baz"),null)).build().get("/query").run().assertContent().is("foo=bar&foo=baz");
+		client().queryData("foo","bar").queryData(part("foo",new StringBuilder("baz"),null)).build().get("/query").run().assertContent("foo=bar&foo=baz");
 		client().build().get("/query").queryData("foo","bar").run().assertContent().isContains("foo=bar");
 	}
 
@@ -106,7 +106,7 @@ public class RestClient_Query_Test {
 
 	@Test
 	public void a10_queries_Objects() throws Exception {
-		client().build().get("/query").queryData(part("foo","bar")).run().assertContent().is("foo=bar");
+		client().build().get("/query").queryData(part("foo","bar")).run().assertContent("foo=bar");
 	}
 
 	public static class A12 extends Reader {

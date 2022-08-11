@@ -51,11 +51,11 @@ public class Rest_Encoders_Test {
 	@Test
 	public void a01_noCompression() throws Exception {
 		RestClient a = MockRestClient.buildLax(A.class);
-		a.put("/", "foo").run().assertContent().is("foo");
-		a.put("/", "foo").header(ContentEncoding.of("")).run().assertContent().is("foo");
-		a.put("/", "foo").header(ContentEncoding.of("identity")).run().assertContent().is("foo");
+		a.put("/", "foo").run().assertContent("foo");
+		a.put("/", "foo").header(ContentEncoding.of("")).run().assertContent("foo");
+		a.put("/", "foo").header(ContentEncoding.of("identity")).run().assertContent("foo");
 		a.put("?noTrace=true", StringUtils.compress("foo")).header(ContentEncoding.of("mycoding")).run()
-			.assertCode().is(415)
+			.assertStatus(415)
 			.assertContent().isContains(
 				"Unsupported encoding in request header 'Content-Encoding': 'mycoding'",
 				"Supported codings: ['identity']"
@@ -79,15 +79,15 @@ public class Rest_Encoders_Test {
 		RestClient b = MockRestClient.build(B.class);
 		b.put("/", "foo")
 			.run()
-			.assertContent().is("foo");
+			.assertContent("foo");
 		b.put("/", "foo")
 			.header(ContentEncoding.of(""))
 			.run()
-			.assertContent().is("foo");
+			.assertContent("foo");
 		b.put("/", "foo")
 			.header(ContentEncoding.of("identity"))
 			.run()
-			.assertContent().is("foo");
+			.assertContent("foo");
 //		b.put("/", StringUtils.compress("foo"))
 //			.contentEncoding("mycoding")
 //			.run()

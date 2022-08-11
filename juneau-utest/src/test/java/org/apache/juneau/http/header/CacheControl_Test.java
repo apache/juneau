@@ -51,10 +51,10 @@ public class CacheControl_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(cacheControl(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(cacheControl(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(cacheControl(PARSED)).run().assertContent().is(VALUE);
-		c.get().header(cacheControl(()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(cacheControl(VALUE)).run().assertContent(VALUE);
+		c.get().header(cacheControl(VALUE)).run().assertContent(VALUE);
+		c.get().header(cacheControl(PARSED)).run().assertContent(VALUE);
+		c.get().header(cacheControl(()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(cacheControl((String)null)).run().assertContent().isEmpty();

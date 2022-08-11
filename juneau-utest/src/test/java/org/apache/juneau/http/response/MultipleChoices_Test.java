@@ -35,15 +35,15 @@ public class MultipleChoices_Test {
 
 		client.get("/a1")
 			.run()
-			.assertCode().is(300)
-			.assertContent().is("Multiple Choices");
+			.assertStatus(300)
+			.assertContent("Multiple Choices");
 		client.get("/a2")
 			.run()
-			.assertCode().is(300)
-			.assertContent().is("foo");
+			.assertStatus(300)
+			.assertContent("foo");
 		client.get("/a3")
 			.run()
-			.assertCode().is(300)
+			.assertStatus(300)
 			.assertHeader("Foo").is("bar");
 	}
 }

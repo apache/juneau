@@ -50,10 +50,10 @@ public class Upgrade_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(upgrade(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(upgrade(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(upgrade(PARSED)).run().assertContent().is(VALUE);
-		c.get().header(upgrade(()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(upgrade(VALUE)).run().assertContent(VALUE);
+		c.get().header(upgrade(VALUE)).run().assertContent(VALUE);
+		c.get().header(upgrade(PARSED)).run().assertContent(VALUE);
+		c.get().header(upgrade(()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(upgrade((String)null)).run().assertContent().isEmpty();

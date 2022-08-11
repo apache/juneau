@@ -52,6 +52,7 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
@@ -78,6 +79,7 @@ import org.apache.juneau.xml.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
+@FluentSetters
 public class RestRequest extends BeanSession implements HttpUriRequest, Configurable {
 
 	private static final ContentType TEXT_PLAIN = ContentType.TEXT_PLAIN;
@@ -178,6 +180,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest json() {
 		return serializer(JsonSerializer.class).parser(JsonParser.class);
 	}
@@ -218,6 +221,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest simpleJson() {
 		return serializer(SimpleJsonSerializer.class).parser(SimpleJsonParser.class);
 	}
@@ -248,6 +252,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest xml() {
 		return serializer(XmlSerializer.class).parser(XmlParser.class);
 	}
@@ -281,6 +286,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest html() {
 		return serializer(HtmlSerializer.class).parser(HtmlParser.class);
 	}
@@ -314,6 +320,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest htmlDoc() {
 		return serializer(HtmlDocSerializer.class).parser(HtmlParser.class);
 	}
@@ -347,6 +354,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest htmlStrippedDoc() {
 		return serializer(HtmlStrippedDocSerializer.class).parser(HtmlParser.class);
 	}
@@ -381,6 +389,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest plainText() {
 		return serializer(PlainTextSerializer.class).parser(PlainTextParser.class);
 	}
@@ -414,6 +423,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest msgPack() {
 		return serializer(MsgPackSerializer.class).parser(MsgPackParser.class);
 	}
@@ -448,6 +458,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest uon() {
 		return serializer(UonSerializer.class).parser(UonParser.class);
 	}
@@ -480,6 +491,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest urlEnc() {
 		return serializer(UrlEncodingSerializer.class).parser(UrlEncodingParser.class);
 	}
@@ -516,6 +528,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest openApi() {
 		return serializer(OpenApiSerializer.class).parser(OpenApiParser.class);
 	}
@@ -536,6 +549,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param serializer The serializer used to serialize POJOs to the body of the HTTP request.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest serializer(Serializer serializer) {
 		this.serializer = serializer;
 		return this;
@@ -557,6 +571,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param serializer The serializer used to serialize POJOs to the body of the HTTP request.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest serializer(Class<? extends Serializer> serializer) {
 		this.serializer = client.getInstance(serializer);
 		return this;
@@ -578,6 +593,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param parser The parser used to parse POJOs from the body of the HTTP response.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest parser(Parser parser) {
 		this.parser = parser;
 		return this;
@@ -599,6 +615,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param parser The parser used to parse POJOs from the body of the HTTP response.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest parser(Class<? extends Parser> parser) {
 		this.parser = client.getInstance(parser);
 		return this;
@@ -613,6 +630,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param value The new predicate for calculating error codes.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest errorCodes(Predicate<Integer> value) {
 		this.errorCodes = value;
 		return this;
@@ -625,6 +643,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 * @throws RestCallException If init method on interceptor threw an exception.
 	 */
+	@FluentSetter
 	public RestRequest interceptors(RestCallInterceptor...interceptors) throws RestCallException {
 		try {
 			for (RestCallInterceptor i : interceptors) {
@@ -648,6 +667,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest ignoreErrors() {
 		this.ignoreErrors = true;
 		return this;
@@ -667,6 +687,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 */
 	@SuppressWarnings("unchecked")
+	@FluentSetter
 	public RestRequest rethrow(Class<?>...values) {
 		if (rethrow == null)
 			rethrow = list();
@@ -683,6 +704,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 * @throws RestCallException Invalid input.
 	 */
+	@FluentSetter
 	public RestRequest debug() throws RestCallException {
 		header("Debug", true);
 		return this;
@@ -704,6 +726,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest suppressLogging() {
 		this.suppressLogging = true;
 		return this;
@@ -721,6 +744,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	target or by inspecting the request.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest target(HttpHost target) {
 		this.target = target;
 		return this;
@@ -732,6 +756,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param context The context to use for the execution, or <jk>null</jk> to use the default context.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest context(HttpContext context) {
 		this.context = context;
 		return this;
@@ -862,6 +887,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	<jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest header(Header part) {
 		return headers(part);
 	}
@@ -886,6 +912,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	<jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest headers(Header...parts) {
 		headers().append(parts);
 		return this;
@@ -911,6 +938,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	<jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest queryData(NameValuePair...parts) {
 		queryData().append(parts);
 		return this;
@@ -936,6 +964,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	<jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest formData(NameValuePair...parts) {
 		formData().append(parts);
 		return this;
@@ -961,6 +990,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	<jk>null</jk> values are ignored.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest pathData(NameValuePair...parts) {
 		pathData().set(parts);
 		return this;
@@ -985,6 +1015,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	<br>Non-string values are converted to strings using the {@link HttpPartSerializer} defined on the client.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest header(String name, Object value) {
 		headers().append(createHeader(name, value));
 		return this;
@@ -1009,6 +1040,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	<br>Non-string values are converted to strings using the {@link HttpPartSerializer} defined on the client.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest queryData(String name, Object value) {
 		queryData().append(createPart(QUERY, name, value));
 		return this;
@@ -1033,6 +1065,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	<br>Non-string values are converted to strings using the {@link HttpPartSerializer} defined on the client.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest formData(String name, Object value) {
 		formData().append(createPart(FORMDATA, name, value));
 		return this;
@@ -1057,6 +1090,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	<br>Non-string values are converted to strings using the {@link HttpPartSerializer} defined on the client.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest pathData(String name, Object value) {
 		pathData().set(createPart(PATH, name, value));
 		return this;
@@ -1077,6 +1111,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param pairs The form-data key/value pairs.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest headerPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
 			throw new RuntimeException("Odd number of parameters passed into headerPairs(String...)");
@@ -1106,6 +1141,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 * @throws RestCallException Invalid input.
 	 */
+	@FluentSetter
 	public RestRequest queryDataPairs(String...pairs) throws RestCallException {
 		if (pairs.length % 2 != 0)
 			throw new RuntimeException("Odd number of parameters passed into queryDataPairs(String...)");
@@ -1135,6 +1171,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 * @throws RestCallException Invalid input.
 	 */
+	@FluentSetter
 	public RestRequest formDataPairs(String...pairs) throws RestCallException {
 		if (pairs.length % 2 != 0)
 			throw new RuntimeException("Odd number of parameters passed into formDataPairs(String...)");
@@ -1166,6 +1203,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	</ul>
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest pathDataPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
 			throw new RuntimeException("Odd number of parameters passed into pathDataPairs(String...)");
@@ -1199,6 +1237,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param value The bean containing the properties to set as header values.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest headersBean(Object value) {
 		if (! isBean(value))
 			throw new RuntimeException("Object passed into headersBean(Object) is not a bean.");
@@ -1227,6 +1266,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param value The bean containing the properties to set as query parameter values.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest queryDataBean(Object value) {
 		if (! isBean(value))
 			throw new RuntimeException("Object passed into queryDataBean(Object) is not a bean.");
@@ -1255,6 +1295,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param value The bean containing the properties to set as form-data parameter values.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest formDataBean(Object value) {
 		if (! isBean(value))
 			throw new RuntimeException("Object passed into formDataBean(Object) is not a bean.");
@@ -1283,6 +1324,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param value The bean containing the properties to set as path parameter values.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest pathDataBean(Object value) {
 		if (! isBean(value))
 			throw new RuntimeException("Object passed into pathDataBean(Object) is not a bean.");
@@ -1324,6 +1366,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 * @throws RestCallException Invalid URI syntax detected.
 	 */
+	@FluentSetter
 	public RestRequest uri(Object uri) throws RestCallException {
 		URI x = client.toURI(uri, null);
 		if (x.getScheme() != null)
@@ -1348,6 +1391,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param scheme The new URI host.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest uriScheme(String scheme) {
 		uriBuilder.setScheme(scheme);
 		return this;
@@ -1359,6 +1403,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param host The new URI host.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest uriHost(String host) {
 		uriBuilder.setHost(host);
 		return this;
@@ -1370,6 +1415,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param port The new URI port.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest uriPort(int port) {
 		uriBuilder.setPort(port);
 		return this;
@@ -1381,6 +1427,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param userInfo The new URI user info.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest uriUserInfo(String userInfo) {
 		uriBuilder.setUserInfo(userInfo);
 		return this;
@@ -1393,6 +1440,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param password The new URI password.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest uriUserInfo(String username, String password) {
 		uriBuilder.setUserInfo(username, password);
 		return this;
@@ -1404,6 +1452,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param fragment The URI fragment.  The value is expected to be unescaped and may contain non ASCII characters.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest uriFragment(String fragment) {
 		uriBuilder.setFragment(fragment);
 		return this;
@@ -1435,6 +1484,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	</ul>
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest queryCustom(Object value) {
 		try {
 			String q = null;
@@ -1496,6 +1546,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	</ul>
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest formDataCustom(Object value) {
 		header(ContentType.APPLICATION_FORM_URLENCODED);
 		content(value instanceof CharSequence ? new StringReader(value.toString()) : value);
@@ -1675,6 +1726,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	</ul>
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest content(Object value) {
 		this.content = value;
 		return this;
@@ -1711,6 +1763,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 * @throws RestCallException If a retry was attempted, but the entity was not repeatable.
 	 */
+	@FluentSetter
 	public RestRequest contentString(Object input) throws RestCallException {
 		return content(input == null ? null : new StringReader(stringify(input)));
 	}
@@ -1745,6 +1798,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * 	</ul>
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest content(Object input, HttpPartSchema schema) {
 		this.content = input;
 		this.contentSchema = schema;
@@ -1766,6 +1820,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 * @throws RestCallException Invalid input.
 	 */
+	@FluentSetter
 	public RestRequest accept(String value) throws RestCallException {
 		return header(Accept.of(value));
 	}
@@ -1780,6 +1835,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 * @throws RestCallException Invalid input.
 	 */
+	@FluentSetter
 	public RestRequest acceptCharset(String value) throws RestCallException {
 		return header(AcceptCharset.of(value));
 	}
@@ -1795,6 +1851,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 * @throws RestCallException Invalid input.
 	 */
+	@FluentSetter
 	public RestRequest contentType(String value) throws RestCallException {
 		return header(ContentType.of(value));
 	}
@@ -1806,6 +1863,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 * @throws RestCallException Invalid input.
 	 */
+	@FluentSetter
 	public RestRequest mediaType(String value) throws RestCallException {
 		return header(Accept.of(value)).header(ContentType.of(value));
 	}
@@ -1821,6 +1879,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @return This object.
 	 * @throws RestCallException Invalid input.
 	 */
+	@FluentSetter
 	public RestRequest noTrace() throws RestCallException {
 		return header(NoTrace.TRUE);
 	}
@@ -2158,6 +2217,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param value The new value.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest config(RequestConfig value) {
 		request.setConfig(value);
 		return this;
@@ -2169,6 +2229,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param cancellable The cancellable object.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest cancellable(Cancellable cancellable) {
 		request.setCancellable(cancellable);
 		return this;
@@ -2180,6 +2241,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 * @param version The protocol version for this request.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public RestRequest protocolVersion(ProtocolVersion version) {
 		request.setProtocolVersion(version);
 		return this;

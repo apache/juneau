@@ -89,117 +89,117 @@ public class RestOp_Guards_Test {
 
 		a.get("/a1?t1=1")
 			.run()
-			.assertContent().is("OK-a1");
+			.assertContent("OK-a1");
 		a.get("/a1?noTrace=true")
 			.run()
-			.assertCode().is(403)
+			.assertStatus(403)
 			.assertContent().isContains("Access denied by guard");
 		a.get("/a2?noTrace=true")
 			.run()
-			.assertCode().is(403)
+			.assertStatus(403)
 			.assertContent().isContains("Access denied by guard");
 		a.get("/a2?noTrace=true&t1=1")
 			.run()
-			.assertCode().is(403)
+			.assertStatus(403)
 			.assertContent().isContains("Access denied by guard");
 		a.get("/a2?noTrace=true&t2=2")
 			.run()
-			.assertCode().is(403)
+			.assertStatus(403)
 			.assertContent().isContains("Access denied by guard");
 		a.get("/a2?t1=1&t2=2")
 			.run()
-			.assertContent().is("OK-a2");
+			.assertContent("OK-a2");
 
 		a.get("/b1?t1=1")
 			.run()
-			.assertContent().is("OK-b1");
+			.assertContent("OK-b1");
 		a.get("/b1?noTrace=true")
 			.run()
-			.assertCode().is(403)
+			.assertStatus(403)
 			.assertContent().isContains("Access denied by guard");
 		a.get("/b2?noTrace=true")
 			.run()
-			.assertCode().is(403)
+			.assertStatus(403)
 			.assertContent().isContains("Access denied by guard");
 		a.get("/b2?noTrace=true&t1=1")
 			.run()
-			.assertCode().is(403)
+			.assertStatus(403)
 			.assertContent().isContains("Access denied by guard");
 		a.get("/b2?noTrace=true&t2=2")
 			.run()
-			.assertCode().is(403)
+			.assertStatus(403)
 			.assertContent().isContains("Access denied by guard");
 		a.get("/b2?t1=1&t2=2")
 			.run()
-			.assertContent().is("OK-b2");
+			.assertContent("OK-b2");
 
 		a.put("/c1?t1=1")
 			.run()
-			.assertContent().is("OK-c1");
+			.assertContent("OK-c1");
 		a.put("/c1?noTrace=true")
 			.run()
-			.assertCode().is(403)
+			.assertStatus(403)
 			.assertContent().isContains("Access denied by guard");
 		a.put("/c2?noTrace=true")
 			.run()
-			.assertCode().is(403)
+			.assertStatus(403)
 			.assertContent().isContains("Access denied by guard");
 		a.put("/c2?noTrace=true&t1=1")
 			.run()
-			.assertCode().is(403)
+			.assertStatus(403)
 			.assertContent().isContains("Access denied by guard");
 		a.put("/c2?noTrace=true&t2=2")
 			.run()
-			.assertCode().is(403)
+			.assertStatus(403)
 			.assertContent().isContains("Access denied by guard");
 		a.put("/c2?t1=1&t2=2")
 			.run()
-			.assertContent().is("OK-c2");
+			.assertContent("OK-c2");
 
 		a.post("/d1?t1=1")
 			.run()
-			.assertContent().is("OK-d1");
+			.assertContent("OK-d1");
 		a.post("/d1?noTrace=true")
 			.run()
-			.assertCode().is(403)
+			.assertStatus(403)
 			.assertContent().isContains("Access denied by guard");
 		a.post("/d2?noTrace=true")
 			.run()
-			.assertCode().is(403)
+			.assertStatus(403)
 			.assertContent().isContains("Access denied by guard");
 		a.post("/d2?noTrace=true&t1=1")
 			.run()
-			.assertCode().is(403)
+			.assertStatus(403)
 			.assertContent().isContains("Access denied by guard");
 		a.post("/d2?noTrace=true&t2=2")
 			.run()
-			.assertCode().is(403)
+			.assertStatus(403)
 			.assertContent().isContains("Access denied by guard");
 		a.post("/d2?t1=1&t2=2")
 			.run()
-			.assertContent().is("OK-d2");
+			.assertContent("OK-d2");
 
 		a.delete("/e1?t1=1")
 			.run()
-			.assertContent().is("OK-e1");
+			.assertContent("OK-e1");
 		a.delete("/e1?noTrace=true")
 			.run()
-			.assertCode().is(403)
+			.assertStatus(403)
 			.assertContent().isContains("Access denied by guard");
 		a.delete("/e2?noTrace=true")
 			.run()
-			.assertCode().is(403)
+			.assertStatus(403)
 			.assertContent().isContains("Access denied by guard");
 		a.delete("/e2?noTrace=true&t1=1")
 			.run()
-			.assertCode().is(403)
+			.assertStatus(403)
 			.assertContent().isContains("Access denied by guard");
 		a.delete("/e2?noTrace=true&t2=2")
 			.run()
-			.assertCode().is(403)
+			.assertStatus(403)
 			.assertContent().isContains("Access denied by guard");
 		a.delete("/e2?t1=1&t2=2")
 			.run()
-			.assertContent().is("OK-e2");
+			.assertContent("OK-e2");
 	}
 }

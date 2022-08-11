@@ -97,11 +97,11 @@ public class RestClient_Body_Test {
 		;
 
 		HttpResource x7 = readerResource(reader("foo")).build();
-		client().build().post("/",x7).run().assertContent().is("foo");
+		client().build().post("/",x7).run().assertContent("foo");
 
 		HttpResource x8 = readerResource(reader("foo")).cached().build();
-		client().build().post("/",x8).run().assertContent().is("foo");
-		client().build().post("/",x8).run().assertContent().is("foo");
+		client().build().post("/",x8).run().assertContent("foo");
+		client().build().post("/",x8).run().assertContent("foo");
 
 		HttpResource x9 = readerResource(null).build();
 		client().build().post("/",x9).run().assertContent().isEmpty();
@@ -142,11 +142,11 @@ public class RestClient_Body_Test {
 		;
 
 		HttpEntity x7 = readerEntity(reader("foo")).build();
-		client().build().post("/",x7).run().assertContent().is("foo");
+		client().build().post("/",x7).run().assertContent("foo");
 
 		HttpEntity x8 = readerEntity(reader("foo")).cached().build();
-		client().build().post("/",x8).run().assertContent().is("foo");
-		client().build().post("/",x8).run().assertContent().is("foo");
+		client().build().post("/",x8).run().assertContent("foo");
+		client().build().post("/",x8).run().assertContent("foo");
 
 		HttpEntity x9 = readerEntity(null).build();
 		client().build().post("/",x9).run().assertContent().isEmpty();

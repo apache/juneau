@@ -57,10 +57,10 @@ public class BasicDateHeader_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(dateHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
-		c.get().header(dateHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
-		c.get().header(dateHeader(HEADER,PARSED)).run().assertContent().is(VALUE);
-		c.get().header(dateHeader(HEADER,()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(dateHeader(HEADER,VALUE)).run().assertContent(VALUE);
+		c.get().header(dateHeader(HEADER,VALUE)).run().assertContent(VALUE);
+		c.get().header(dateHeader(HEADER,PARSED)).run().assertContent(VALUE);
+		c.get().header(dateHeader(HEADER,()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(dateHeader(HEADER,(Supplier<ZonedDateTime>)null)).run().assertContent().isEmpty();

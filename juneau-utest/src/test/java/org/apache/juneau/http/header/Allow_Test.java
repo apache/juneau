@@ -51,10 +51,10 @@ public class Allow_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(allow(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(allow(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(allow(PARSED)).run().assertContent().is(VALUE);
-		c.get().header(allow(()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(allow(VALUE)).run().assertContent(VALUE);
+		c.get().header(allow(VALUE)).run().assertContent(VALUE);
+		c.get().header(allow(PARSED)).run().assertContent(VALUE);
+		c.get().header(allow(()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(allow((String)null)).run().assertContent().isEmpty();

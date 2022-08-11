@@ -36,19 +36,19 @@ public class TemporaryRedirect_Test {
 
 		client.get("/a1")
 			.run()
-			.assertCode().is(307)
-			.assertContent().is("Temporary Redirect");
+			.assertStatus(307)
+			.assertContent("Temporary Redirect");
 		client.get("/a2")
 			.run()
-			.assertCode().is(307)
-			.assertContent().is("foo");
+			.assertStatus(307)
+			.assertContent("foo");
 		client.get("/a3")
 			.run()
-			.assertCode().is(307)
+			.assertStatus(307)
 			.assertHeader("Location").is("/foo");
 		client.get("/a4")
 			.run()
-			.assertCode().is(307)
+			.assertStatus(307)
 			.assertHeader("Foo").is("bar");
 	}
 }

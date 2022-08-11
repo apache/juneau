@@ -88,11 +88,11 @@ public class Restx_Parsers_Test {
 		a.put("/a", "test1")
 			.contentType("text/a")
 			.run()
-			.assertContent().is("text/a - test1");
+			.assertContent("text/a - test1");
 		a.put("/a?noTrace=true", "test1")
 			.contentType("text/b")
 			.run()
-			.assertCode().is(415)
+			.assertStatus(415)
 			.assertContent().isContains(
 				"Unsupported media-type in request header 'Content-Type': 'text/b'",
 				"Supported media-types: ['text/a"
@@ -101,11 +101,11 @@ public class Restx_Parsers_Test {
 		a.put("/b", "test2")
 			.contentType("text/b")
 			.run()
-			.assertContent().is("text/b - test2");
+			.assertContent("text/b - test2");
 		a.put("/b?noTrace=true", "test2")
 			.contentType("text/a")
 			.run()
-			.assertCode().is(415)
+			.assertStatus(415)
 			.assertContent().isContains(
 				"Unsupported media-type in request header 'Content-Type': 'text/a'",
 				"Supported media-types: ['text/b']"
@@ -114,25 +114,25 @@ public class Restx_Parsers_Test {
 		a.put("/c", "test3")
 			.contentType("text/a")
 			.run()
-			.assertContent().is("text/a - test3");
+			.assertContent("text/a - test3");
 		a.put("/c", "test3")
 			.contentType("text/b")
 			.run()
-			.assertContent().is("text/b - test3");
+			.assertContent("text/b - test3");
 
 		a.put("/d", "test4")
 			.contentType("text/a")
 			.run()
-			.assertContent().is("text/a - test4");
+			.assertContent("text/a - test4");
 		a.put("/d", "test4")
 			.contentType("text/d")
 			.run()
-			.assertContent().is("text/d - test4");
+			.assertContent("text/d - test4");
 
 		a.put("/e?noTrace=true", "test1")
 			.contentType("text/bad")
 			.run()
-			.assertCode().is(415)
+			.assertStatus(415)
 			.assertContent().isContains(
 				"Unsupported media-type in request header 'Content-Type': 'text/bad'",
 				"Supported media-types: ['text/a"
@@ -177,9 +177,9 @@ public class Restx_Parsers_Test {
 	@Test
 	public void b01_inheritence() throws Exception {
 		RestClient b = MockRestClient.build(B2.class);
-		b.get("/a").run().assertContent().is("['text/p3','text/p4','text/p1','text/p2']");
-		b.get("/b").run().assertContent().is("['text/p5']");
-		b.get("/c").run().assertContent().is("['text/p5','text/p3','text/p4','text/p1','text/p2']");
+		b.get("/a").run().assertContent("['text/p3','text/p4','text/p1','text/p2']");
+		b.get("/b").run().assertContent("['text/p5']");
+		b.get("/c").run().assertContent("['text/p5','text/p3','text/p4','text/p1','text/p2']");
 	}
 
 }

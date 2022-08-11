@@ -17,12 +17,20 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import java.net.*;
 import java.security.*;
 import java.util.*;
+import java.util.function.*;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 
 import org.apache.http.*;
+import org.apache.http.client.config.*;
+import org.apache.http.concurrent.*;
+import org.apache.http.protocol.*;
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.internal.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.client.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * A subclass of {@link RestRequest} with additional features for mocked testing.
@@ -39,6 +47,7 @@ import org.apache.juneau.rest.client.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
+@FluentSetters(ignore="uriScheme")
 public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -892,4 +901,362 @@ public class MockRestRequest extends org.apache.juneau.rest.client.RestRequest {
 	public HttpSession getHttpSession() {
 		return httpSession;
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest accept(String value) throws RestCallException{
+		super.accept(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest acceptCharset(String value) throws RestCallException{
+		super.acceptCharset(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest cancellable(Cancellable cancellable) {
+		super.cancellable(cancellable);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest config(RequestConfig value) {
+		super.config(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest content(Object value) {
+		super.content(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest content(Object input, HttpPartSchema schema) {
+		super.content(input, schema);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest contentString(Object input) throws RestCallException{
+		super.contentString(input);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest contentType(String value) throws RestCallException{
+		super.contentType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest context(HttpContext context) {
+		super.context(context);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest debug() throws RestCallException{
+		super.debug();
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest errorCodes(Predicate<Integer> value) {
+		super.errorCodes(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest formData(NameValuePair...parts) {
+		super.formData(parts);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest formData(String name, Object value) {
+		super.formData(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest formDataBean(Object value) {
+		super.formDataBean(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest formDataCustom(Object value) {
+		super.formDataCustom(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest formDataPairs(String...pairs) throws RestCallException{
+		super.formDataPairs(pairs);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest header(Header part) {
+		super.header(part);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest header(String name, Object value) {
+		super.header(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest headerPairs(String...pairs) {
+		super.headerPairs(pairs);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest headers(Header...parts) {
+		super.headers(parts);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest headersBean(Object value) {
+		super.headersBean(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest html() {
+		super.html();
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest htmlDoc() {
+		super.htmlDoc();
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest htmlStrippedDoc() {
+		super.htmlStrippedDoc();
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest ignoreErrors() {
+		super.ignoreErrors();
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest interceptors(RestCallInterceptor...interceptors) throws RestCallException{
+		super.interceptors(interceptors);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest json() {
+		super.json();
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest mediaType(String value) throws RestCallException{
+		super.mediaType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest msgPack() {
+		super.msgPack();
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest noTrace() throws RestCallException{
+		super.noTrace();
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest openApi() {
+		super.openApi();
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest parser(Class<? extends org.apache.juneau.parser.Parser> parser) {
+		super.parser(parser);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest parser(Parser parser) {
+		super.parser(parser);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest pathData(NameValuePair...parts) {
+		super.pathData(parts);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest pathData(String name, Object value) {
+		super.pathData(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest pathDataBean(Object value) {
+		super.pathDataBean(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest pathDataPairs(String...pairs) {
+		super.pathDataPairs(pairs);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest plainText() {
+		super.plainText();
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest protocolVersion(ProtocolVersion version) {
+		super.protocolVersion(version);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest queryCustom(Object value) {
+		super.queryCustom(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest queryData(NameValuePair...parts) {
+		super.queryData(parts);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest queryData(String name, Object value) {
+		super.queryData(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest queryDataBean(Object value) {
+		super.queryDataBean(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest queryDataPairs(String...pairs) throws RestCallException{
+		super.queryDataPairs(pairs);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest rethrow(java.lang.Class<?>...values) {
+		super.rethrow(values);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest serializer(Class<? extends org.apache.juneau.serializer.Serializer> serializer) {
+		super.serializer(serializer);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest serializer(Serializer serializer) {
+		super.serializer(serializer);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest simpleJson() {
+		super.simpleJson();
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest suppressLogging() {
+		super.suppressLogging();
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest target(HttpHost target) {
+		super.target(target);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest uon() {
+		super.uon();
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest uri(Object uri) throws RestCallException{
+		super.uri(uri);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest uriFragment(String fragment) {
+		super.uriFragment(fragment);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest uriHost(String host) {
+		super.uriHost(host);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest uriPort(int port) {
+		super.uriPort(port);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest uriUserInfo(String userInfo) {
+		super.uriUserInfo(userInfo);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest uriUserInfo(String username, String password) {
+		super.uriUserInfo(username, password);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest urlEnc() {
+		super.urlEnc();
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestRequest */
+	public MockRestRequest xml() {
+		super.xml();
+		return this;
+	}
+
+	// </FluentSetters>
 }

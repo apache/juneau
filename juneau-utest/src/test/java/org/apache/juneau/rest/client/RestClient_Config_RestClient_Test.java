@@ -113,8 +113,8 @@ public class RestClient_Config_RestClient_Test {
 				return new BasicHttpResponse(new BasicStatusLine(new ProtocolVersion("http",1,1),201,null));
 			}
 		};
-		client().callHandler(A1.class).header("Foo","f1").build().get("/checkHeader").header("Foo","f2").run().assertContent().is("['f1','f2','baz']");
-		client().callHandler(y -> y.impl(x)).header("Foo","f1").build().get("/checkHeader").header("Foo","f2").run().assertCode().is(201);
+		client().callHandler(A1.class).header("Foo","f1").build().get("/checkHeader").header("Foo","f2").run().assertContent("['f1','f2','baz']");
+		client().callHandler(y -> y.impl(x)).header("Foo","f1").build().get("/checkHeader").header("Foo","f2").run().assertStatus(201);
 	}
 
 	@Test
@@ -131,12 +131,12 @@ public class RestClient_Config_RestClient_Test {
 		RestClient x1 = client().executorService(es,true).build();
 
 		assertEquals(es,x1.getExecutorService());
-		x1.get("/echo").runFuture().get().assertCode().is(200).assertContent().isContains("GET /echo HTTP/1.1");
+		x1.get("/echo").runFuture().get().assertStatus(200).assertContent().isContains("GET /echo HTTP/1.1");
 
 		es = null;
 		RestClient x2 = client().executorService(es,true).build();
 		assertNotNull(x2.getExecutorService());
-		x2.get("/echo").runFuture().get().assertCode().is(200).assertContent().isContains("GET /echo HTTP/1.1");
+		x2.get("/echo").runFuture().get().assertStatus(200).assertContent().isContains("GET /echo HTTP/1.1");
 	}
 
 	@Test
@@ -272,13 +272,13 @@ public class RestClient_Config_RestClient_Test {
 
 	@Test
 	public void a05_interceptors() throws Exception {
-		client().header("Foo","f1").interceptors(A5.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().assertContent().is("['f1','f2','f3']").assertHeader("Bar").is("b1");
+		client().header("Foo","f1").interceptors(A5.class).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().assertContent("['f1','f2','f3']").assertHeader("Bar").is("b1");
 		assertEquals(111,A5.x);
 
-		client().header("Foo","f1").interceptors(new A5()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().assertContent().is("['f1','f2','f3']").assertHeader("Bar").is("b1");
+		client().header("Foo","f1").interceptors(new A5()).build().get("/checkHeader").header("Check","foo").header("Foo","f3").run().assertContent("['f1','f2','f3']").assertHeader("Bar").is("b1");
 		assertEquals(111,A5.x);
 
-		client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5()).header("Check","foo").header("Foo","f3").run().assertContent().is("['f1','f2','f3']").assertHeader("Bar").is("b1");
+		client().header("Foo","f1").build().get("/checkHeader").interceptors(new A5()).header("Check","foo").header("Foo","f3").run().assertContent("['f1','f2','f3']").assertHeader("Bar").is("b1");
 		assertEquals(111,A5.x);
 
 		assertThrown(()->client().header("Foo","f1").interceptors(A5a.class).build().get("/checkHeader")).isType(RuntimeException.class).asMessage().is("foo");
@@ -357,7 +357,7 @@ public class RestClient_Config_RestClient_Test {
 	@Test
 	public void a08_marshaller() throws Exception {
 		RestClient rc = MockRestClient.create(A.class).marshaller(Xml.DEFAULT).build();
-		ABean b = rc.post("/echoBody",bean).run().cacheContent().assertContent().is("<object><f>1</f></object>").getContent().as(ABean.class);
+		ABean b = rc.post("/echoBody",bean).run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
 		assertObject(b).isSameJsonAs(bean);
 	}
 
@@ -369,16 +369,16 @@ public class RestClient_Config_RestClient_Test {
 
 		assertThrown(()->x.post("/echoBody",bean).contentType("text/json").run().getContent().as(ABean.class)).asMessages().isContains("Content-Type not specified in response header.  Cannot find appropriate parser.");
 
-		ABean b = x.post("/echoBody",bean).accept("text/xml").contentType("text/xml").run().cacheContent().assertContent().is("<object><f>1</f></object>").getContent().as(ABean.class);
+		ABean b = x.post("/echoBody",bean).accept("text/xml").contentType("text/xml").run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
 		assertObject(b).isSameJsonAs(bean);
 
-		b = x.post("/echoBody",bean).mediaType("text/xml").run().cacheContent().assertContent().is("<object><f>1</f></object>").getContent().as(ABean.class);
+		b = x.post("/echoBody",bean).mediaType("text/xml").run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
 		assertObject(b).isSameJsonAs(bean);
 
-		b = x.post("/echoBody",bean).accept("text/json").contentType("text/json").run().cacheContent().assertContent().is("{\"f\":1}").getContent().as(ABean.class);
+		b = x.post("/echoBody",bean).accept("text/json").contentType("text/json").run().cacheContent().assertContent("{\"f\":1}").getContent().as(ABean.class);
 		assertObject(b).isSameJsonAs(bean);
 
-		b = x.post("/echoBody",bean).mediaType("text/json").run().cacheContent().assertContent().is("{\"f\":1}").getContent().as(ABean.class);
+		b = x.post("/echoBody",bean).mediaType("text/json").run().cacheContent().assertContent("{\"f\":1}").getContent().as(ABean.class);
 		assertObject(b).isSameJsonAs(bean);
 	}
 
@@ -386,11 +386,11 @@ public class RestClient_Config_RestClient_Test {
 	public void a10_serializer_parser() throws Exception {
 		RestClient x = MockRestClient.create(A.class).serializer(XmlSerializer.class).parser(XmlParser.class).build();
 
-		ABean b = x.post("/echoBody",bean).run().cacheContent().assertContent().is("<object><f>1</f></object>").getContent().as(ABean.class);
+		ABean b = x.post("/echoBody",bean).run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
 		assertObject(b).isSameJsonAs(bean);
 
 		x = MockRestClient.create(A.class).serializer(XmlSerializer.DEFAULT).parser(XmlParser.DEFAULT).build();
-		b = x.post("/echoBody",bean).run().cacheContent().assertContent().is("<object><f>1</f></object>").getContent().as(ABean.class);
+		b = x.post("/echoBody",bean).run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
 		assertObject(b).isSameJsonAs(bean);
 	}
 
@@ -403,16 +403,16 @@ public class RestClient_Config_RestClient_Test {
 
 		assertThrown(()->x.post("/echoBody",bean).contentType("text/json").run().getContent().as(ABean.class)).asMessages().isContains("Content-Type not specified in response header.  Cannot find appropriate parser.");
 
-		ABean b = x.post("/echoBody",bean).accept("text/xml").contentType("text/xml").run().cacheContent().assertContent().is("<object><f>1</f></object>").getContent().as(ABean.class);
+		ABean b = x.post("/echoBody",bean).accept("text/xml").contentType("text/xml").run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
 		assertObject(b).isSameJsonAs(bean);
 
-		b = x.post("/echoBody",bean).mediaType("text/xml").run().cacheContent().assertContent().is("<object><f>1</f></object>").getContent().as(ABean.class);
+		b = x.post("/echoBody",bean).mediaType("text/xml").run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
 		assertObject(b).isSameJsonAs(bean);
 
-		b = x.post("/echoBody",bean).accept("text/json").contentType("text/json").run().cacheContent().assertContent().is("{\"f\":1}").getContent().as(ABean.class);
+		b = x.post("/echoBody",bean).accept("text/json").contentType("text/json").run().cacheContent().assertContent("{\"f\":1}").getContent().as(ABean.class);
 		assertObject(b).isSameJsonAs(bean);
 
-		b = x.post("/echoBody",bean).mediaType("text/json").run().cacheContent().assertContent().is("{\"f\":1}").getContent().as(ABean.class);
+		b = x.post("/echoBody",bean).mediaType("text/json").run().cacheContent().assertContent("{\"f\":1}").getContent().as(ABean.class);
 		assertObject(b).isSameJsonAs(bean);
 
 		final RestClient x2 = MockRestClient.create(A.class).serializers(XmlSerializer.DEFAULT,JsonSerializer.DEFAULT).parsers(XmlParser.DEFAULT,JsonParser.DEFAULT).build();
@@ -421,16 +421,16 @@ public class RestClient_Config_RestClient_Test {
 
 		assertThrown(()->x2.post("/echoBody",bean).contentType("text/json").run().getContent().as(ABean.class)).asMessages().isContains("Content-Type not specified in response header.  Cannot find appropriate parser.");
 
-		b = x2.post("/echoBody",bean).accept("text/xml").contentType("text/xml").run().cacheContent().assertContent().is("<object><f>1</f></object>").getContent().as(ABean.class);
+		b = x2.post("/echoBody",bean).accept("text/xml").contentType("text/xml").run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
 		assertObject(b).isSameJsonAs(bean);
 
-		b = x2.post("/echoBody",bean).mediaType("text/xml").run().cacheContent().assertContent().is("<object><f>1</f></object>").getContent().as(ABean.class);
+		b = x2.post("/echoBody",bean).mediaType("text/xml").run().cacheContent().assertContent("<object><f>1</f></object>").getContent().as(ABean.class);
 		assertObject(b).isSameJsonAs(bean);
 
-		b = x2.post("/echoBody",bean).accept("text/json").contentType("text/json").run().cacheContent().assertContent().is("{\"f\":1}").getContent().as(ABean.class);
+		b = x2.post("/echoBody",bean).accept("text/json").contentType("text/json").run().cacheContent().assertContent("{\"f\":1}").getContent().as(ABean.class);
 		assertObject(b).isSameJsonAs(bean);
 
-		b = x2.post("/echoBody",bean).mediaType("text/json").run().cacheContent().assertContent().is("{\"f\":1}").getContent().as(ABean.class);
+		b = x2.post("/echoBody",bean).mediaType("text/json").run().cacheContent().assertContent("{\"f\":1}").getContent().as(ABean.class);
 		assertObject(b).isSameJsonAs(bean);
 	}
 
@@ -491,26 +491,26 @@ public class RestClient_Config_RestClient_Test {
 
 	@Test
 	public void a14_request_target() throws Exception {
-		client().build().get("/bean").target(new HttpHost("localhost")).run().assertContent().is("{f:1}");
+		client().build().get("/bean").target(new HttpHost("localhost")).run().assertContent("{f:1}");
 	}
 
 	@Test
 	public void a15_request_context() throws Exception {
-		client().build().get("/bean").context(new BasicHttpContext()).run().assertContent().is("{f:1}");
+		client().build().get("/bean").context(new BasicHttpContext()).run().assertContent("{f:1}");
 	}
 
 	@Test
 	public void a16_request_uriParts() throws Exception {
-		java.net.URI uri = client().build().get().uriScheme("http").uriHost("localhost").uriPort(8080).uriUserInfo("foo:bar").uri("/bean").uriFragment("baz").queryData("foo","bar").run().assertContent().is("{f:1}").getRequest().getURI();
+		java.net.URI uri = client().build().get().uriScheme("http").uriHost("localhost").uriPort(8080).uriUserInfo("foo:bar").uri("/bean").uriFragment("baz").queryData("foo","bar").run().assertContent("{f:1}").getRequest().getURI();
 		assertEquals("http://foo:bar@localhost:8080/bean?foo=bar#baz",uri.toString());
 
-		uri = client().build().get().uriScheme("http").uriHost("localhost").uriPort(8080).uriUserInfo("foo","bar").uri("/bean").uriFragment("baz").queryData("foo","bar").run().assertContent().is("{f:1}").getRequest().getURI();
+		uri = client().build().get().uriScheme("http").uriHost("localhost").uriPort(8080).uriUserInfo("foo","bar").uri("/bean").uriFragment("baz").queryData("foo","bar").run().assertContent("{f:1}").getRequest().getURI();
 		assertEquals("http://foo:bar@localhost:8080/bean?foo=bar#baz",uri.toString());
 
-		uri = client().build().get().uri("http://localhost").uri("http://foo:bar@localhost:8080/bean?foo=bar#baz").run().assertContent().is("{f:1}").getRequest().getURI();
+		uri = client().build().get().uri("http://localhost").uri("http://foo:bar@localhost:8080/bean?foo=bar#baz").run().assertContent("{f:1}").getRequest().getURI();
 		assertEquals("http://foo:bar@localhost:8080/bean?foo=bar#baz",uri.toString());
 
-		uri = client().build().get().uri(new java.net.URI(null,null,null,null)).uri(new java.net.URI("http://foo:bar@localhost:8080/bean?foo=bar#baz")).run().assertContent().is("{f:1}").getRequest().getURI();
+		uri = client().build().get().uri(new java.net.URI(null,null,null,null)).uri(new java.net.URI("http://foo:bar@localhost:8080/bean?foo=bar#baz")).run().assertContent("{f:1}").getRequest().getURI();
 		assertEquals("http://foo:bar@localhost:8080/bean?foo=bar#baz",uri.toString());
 	}
 
