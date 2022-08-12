@@ -92,7 +92,7 @@ public class PartList_Test {
 		x.append((List<NameValuePair>)null);
 		assertObject(x.build()).isString("Foo=1&Foo=2&Foo=3&Foo=4&Foo=5&Foo=6&Foo=7");
 
-		assertObject(new PartList.Null()).isString("");
+		assertObject(new PartList.Null(false)).isString("");
 	}
 
 	@Test
@@ -556,16 +556,6 @@ public class PartList_Test {
 			.setDefault(alist(CPart.X))
 			.build();
 		assertObject(x14).isString("b=x&b=y&a=y&c=x");
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Other tests
-	//-----------------------------------------------------------------------------------------------------------------
-
-	@Test
-	public void e01_asNameValuePairs() {
-		PartList x = PartList.of(APart.X);
-		assertObject(x.toNameValuePairs()).isString("[a=x]");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -6777,7 +6777,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			if (body instanceof NameValuePair[])
 				return req.content(new UrlEncodedFormEntity(alist((NameValuePair[])body)));
 			if (body instanceof PartList)
-				return req.content(new UrlEncodedFormEntity(((PartList)body).toNameValuePairs()));
+				return req.content(new UrlEncodedFormEntity(((PartList)body)));
 			if (body instanceof HttpResource)
 				((HttpResource)body).getHeaders().forEach(x-> req.header(x));
 			if (body instanceof HttpEntity) {

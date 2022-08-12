@@ -24,6 +24,7 @@ import java.util.stream.*;
 import org.apache.http.*;
 import org.apache.http.util.*;
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.HttpParts;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
@@ -156,21 +157,27 @@ import org.apache.juneau.svl.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class PartList {
+public class PartList extends ControlledArrayList<NameValuePair> {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
+	private static final long serialVersionUID = 1L;
 	private static final NameValuePair[] EMPTY_ARRAY = new NameValuePair[0];
 	private static final String[] EMPTY_STRING_ARRAY = new String[0];
 	private static final Predicate<NameValuePair> NOT_NULL = x -> x != null;
 
 	/** Represents no part supplier in annotations. */
-	public static final class Null extends PartList {}
+	public static final class Null extends PartList {
+		Null(boolean modifiable) {
+			super(false);
+		}
+		private static final long serialVersionUID = 1L;
+	}
 
 	/** Predefined instance. */
-	public static final PartList EMPTY = new PartList();
+	public static final PartList EMPTY = new PartList(false);
 
 	/**
 	 * Instantiates a new builder for this bean.
@@ -191,7 +198,7 @@ public class PartList {
 	 * @return A new unmodifiable instance, never <jk>null</jk>.
 	 */
 	public static PartList of(List<NameValuePair> parts) {
-		return parts == null || parts.isEmpty() ? EMPTY : new PartList(parts);
+		return parts == null || parts.isEmpty() ? EMPTY : new PartList(true, parts);
 	}
 
 	/**
@@ -203,7 +210,7 @@ public class PartList {
 	 * @return A new unmodifiable instance, never <jk>null</jk>.
 	 */
 	public static PartList of(NameValuePair...parts) {
-		return parts == null || parts.length == 0 ? EMPTY : new PartList(parts);
+		return parts == null || parts.length == 0 ? EMPTY : new PartList(true, parts);
 	}
 
 	/**
@@ -228,7 +235,7 @@ public class PartList {
 		ArrayBuilder<NameValuePair> b = ArrayBuilder.of(NameValuePair.class).filter(NOT_NULL).size(pairs.length / 2);
 		for (int i = 0; i < pairs.length; i+=2)
 			b.add(BasicPart.of(stringify(pairs[i]), pairs[i+1]));
-		return new PartList(b.orElse(EMPTY_ARRAY));
+		return new PartList(true, b.orElse(EMPTY_ARRAY));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -244,7 +251,7 @@ public class PartList {
 		final List<NameValuePair> entries;
 		List<NameValuePair> defaultEntries;
 		private VarResolver varResolver;
-		boolean caseInsensitive = false;
+		boolean caseInsensitive = false, unmodifiable = false;
 
 		/**
 		 * Constructor.
@@ -261,8 +268,9 @@ public class PartList {
 		 */
 		protected Builder(PartList copyFrom) {
 			super(copyFrom.getClass());
-			entries = list(copyFrom.entries);
+			entries = copyOf(copyFrom);
 			caseInsensitive = copyFrom.caseInsensitive;
+			unmodifiable = false;
 		}
 
 		/**
@@ -276,6 +284,7 @@ public class PartList {
 			defaultEntries = copyOf(copyFrom.defaultEntries);
 			varResolver = copyFrom.varResolver;
 			caseInsensitive = copyFrom.caseInsensitive;
+			unmodifiable = copyFrom.unmodifiable;
 		}
 
 		@Override /* BeanBuilder */
@@ -359,6 +368,19 @@ public class PartList {
 		}
 
 		/**
+		 * Specifies that the resulting list should be unmodifiable.
+		 *
+		 * <p>
+		 * The default behavior is modifiable.
+		 *
+		 * @return This object.
+		 */
+		public Builder unmodifiable() {
+			unmodifiable = true;
+			return this;
+		}
+
+		/**
 		 * Removes any parts already in this builder.
 		 *
 		 * @return This object.
@@ -366,20 +388,6 @@ public class PartList {
 		@FluentSetter
 		public Builder clear() {
 			entries.clear();
-			return this;
-		}
-
-		/**
-		 * Adds the specified parts to the end of the parts in this builder.
-		 *
-		 * @param value The parts to add.  <jk>null</jk> values are ignored.
-		 * @return This object.
-		 */
-		@FluentSetter
-		public Builder append(PartList value) {
-			if (value != null)
-				for (NameValuePair x : value.entries)
-					append(x);
 			return this;
 		}
 
@@ -450,8 +458,7 @@ public class PartList {
 		@FluentSetter
 		public Builder append(List<? extends NameValuePair> values) {
 			if (values != null)
-				for (int i = 0, j = values.size(); i < j; i++)
-					append(values.get(i));
+				values.forEach(x -> append(x));
 			return this;
 		}
 
@@ -464,7 +471,7 @@ public class PartList {
 		@FluentSetter
 		public Builder prepend(PartList value) {
 			if (value != null)
-				prependAll(entries, value.entries);
+				prependAll(entries, value.getAll());
 			return this;
 		}
 
@@ -545,20 +552,6 @@ public class PartList {
 		 * @return This object.
 		 */
 		@FluentSetter
-		public Builder remove(PartList value) {
-			if (value != null)
-				for (int i = 0; i < value.entries.length; i++)
-					remove(value.entries[i]);
-			return this;
-		}
-
-		/**
-		 * Removes the specified part from this builder.
-		 *
-		 * @param value The part to remove.  <jk>null</jk> values are ignored.
-		 * @return This object.
-		 */
-		@FluentSetter
 		public Builder remove(NameValuePair value) {
 			if (value != null)
 				entries.remove(value);
@@ -586,8 +579,8 @@ public class PartList {
 		 */
 		@FluentSetter
 		public Builder remove(List<? extends NameValuePair> values) {
-			for (int i = 0, j = values.size(); i < j; i++) /* See HTTPCORE-361 */
-				remove(values.get(i));
+			if (values != null)
+				values.forEach(x -> remove(x));
 			return this;
 		}
 
@@ -728,21 +721,6 @@ public class PartList {
 		}
 
 		/**
-		 * Adds or replaces the parts with the specified names.
-		 *
-		 * <p>
-		 * If no part with the same name is found the given part is added to the end of the list.
-		 *
-		 * @param values The parts to replace.  <jk>null</jk> values are ignored.
-		 * @return This object.
-		 */
-		public Builder set(PartList values) {
-			if (values != null)
-				set(values.entries);
-			return this;
-		}
-
-		/**
 		 * Sets a default value for a part.
 		 *
 		 * <p>
@@ -849,21 +827,6 @@ public class PartList {
 				});
 			}
 
-			return this;
-		}
-
-		/**
-		 * Replaces the first occurrence of the parts with the same name.
-		 *
-		 * <p>
-		 * If no part with the same name is found the given part is added to the end of the list.
-		 *
-		 * @param values The default parts to set.  <jk>null</jk> values are ignored.
-		 * @return This object.
-		 */
-		public Builder setDefault(PartList values) {
-			if (values != null)
-				setDefault(values.entries);
 			return this;
 		}
 
@@ -996,33 +959,6 @@ public class PartList {
 		 */
 		@FluentSetter
 		public Builder add(ListOperation flag, List<NameValuePair> values) {
-			if (flag == ListOperation.APPEND)
-				return append(values);
-			if (flag == ListOperation.PREPEND)
-				return prepend(values);
-			if (flag == ListOperation.SET)
-				return set(values);
-			if (flag == ListOperation.DEFAULT)
-				return setDefault(values);
-			throw new BasicRuntimeException("Invalid value specified for flag parameter on add(flag,values) method: {0}", flag);
-		}
-
-		/**
-		 * Adds the specified parts to this list.
-		 *
-		 * @param flag
-		 * 	What to do with the part.
-		 * 	<br>Possible values:
-		 * 	<ul>
-		 * 		<li>{@link ListOperation#APPEND APPEND} - Calls {@link #append(PartList)}.
-		 * 		<li>{@link ListOperation#PREPEND PREEND} - Calls {@link #prepend(PartList)}.
-		 * 		<li>{@link ListOperation#SET REPLACE} - Calls {@link #set(PartList)}.
-		 * 		<li>{@link ListOperation#DEFAULT DEFAULT} - Calls {@link #setDefault(PartList)}.
-		 * 	</ul>
-		 * @param values The parts to add.
-		 * @return This object.
-		 */
-		public Builder add(ListOperation flag, PartList values) {
 			if (flag == ListOperation.APPEND)
 				return append(values);
 			if (flag == ListOperation.PREPEND)
@@ -1177,7 +1113,6 @@ public class PartList {
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
-	final NameValuePair[] entries;
 	final boolean caseInsensitive;
 
 	/**
@@ -1186,24 +1121,17 @@ public class PartList {
 	 * @param builder The builder containing the settings for this bean.
 	 */
 	public PartList(Builder builder) {
-		if (builder.defaultEntries == null) {
-			entries = builder.entries.toArray(new NameValuePair[builder.entries.size()]);
-		} else {
-			ArrayBuilder<NameValuePair> l = ArrayBuilder.of(NameValuePair.class).filter(NOT_NULL).size(builder.entries.size() + builder.defaultEntries.size());
+		super(! builder.unmodifiable, builder.entries);
 
-			for (int i = 0, j = builder.entries.size(); i < j; i++)
-				l.add(builder.entries.get(i));
-
+		if (builder.defaultEntries != null) {
 			for (int i1 = 0, j1 = builder.defaultEntries.size(); i1 < j1; i1++) {
 				NameValuePair x = builder.defaultEntries.get(i1);
 				boolean exists = false;
 				for (int i2 = 0, j2 = builder.entries.size(); i2 < j2 && ! exists; i2++)
 					exists = eq(builder.entries.get(i2).getName(), x.getName());
 				if (! exists)
-					l.add(x);
+					overrideAdd(x);
 			}
-
-			entries = l.orElse(EMPTY_ARRAY);
 		}
 		this.caseInsensitive = builder.caseInsensitive;
 	}
@@ -1211,39 +1139,37 @@ public class PartList {
 	/**
 	 * Constructor.
 	 *
+	 * @param modifiable Whether this list should be modifiable.
 	 * @param parts
 	 * 	The parts to add to the list.
 	 * 	<br>Can be <jk>null</jk>.
 	 * 	<br><jk>null</jk> entries are ignored.
 	 */
-	protected PartList(List<NameValuePair> parts) {
-		ArrayBuilder<NameValuePair> l = ArrayBuilder.of(NameValuePair.class).filter(NOT_NULL).size(parts.size());
-		for (int i = 0, j = parts.size(); i < j; i++)
-			l.add(parts.get(i));
-		entries = l.orElse(EMPTY_ARRAY);
+	protected PartList(boolean modifiable, List<NameValuePair> parts) {
+		super(modifiable, parts);
 		caseInsensitive = false;
 	}
 
 	/**
 	 * Constructor.
 	 *
+	 * @param modifiable Whether this list should be modifiable.
 	 * @param parts
 	 * 	The parts to add to the list.
 	 * 	<br><jk>null</jk> entries are ignored.
 	 */
-	protected PartList(NameValuePair...parts) {
-		ArrayBuilder<NameValuePair> l = ArrayBuilder.of(NameValuePair.class).filter(NOT_NULL).size(parts.length);
-		for (int i = 0; i < parts.length; i++)
-			l.add(parts[i]);
-		entries = l.orElse(EMPTY_ARRAY);
+	protected PartList(boolean modifiable, NameValuePair...parts) {
+		super(modifiable, Arrays.asList(parts));
 		caseInsensitive = false;
 	}
 
 	/**
 	 * Default constructor.
+	 *
+	 * @param modifiable Whether this list should be modifiable.
 	 */
-	protected PartList() {
-		entries = EMPTY_ARRAY;
+	protected PartList(boolean modifiable) {
+		super(modifiable);
 		caseInsensitive = false;
 	}
 
@@ -1270,8 +1196,7 @@ public class PartList {
 
 		NameValuePair first = null;
 		List<NameValuePair> rest = null;
-		for (int i = 0; i < entries.length; i++) {
-			NameValuePair x = entries[i];
+		for (NameValuePair x : this) {
 			if (eq(x.getName(), name)) {
 				if (first == null)
 					first = x;
@@ -1329,8 +1254,7 @@ public class PartList {
 
 		NameValuePair first = null;
 		List<NameValuePair> rest = null;
-		for (int i = 0; i < entries.length; i++) {
-			NameValuePair x = entries[i];
+		for (NameValuePair x : this) {
 			if (eq(x.getName(), name)) {
 				if (first == null)
 					first = x;
@@ -1393,7 +1317,7 @@ public class PartList {
 	 * 	An array of all the parts in this list, or an empty array if no parts are present.
 	 */
 	public NameValuePair[] getAll() {
-		return entries.length == 0 ? EMPTY_ARRAY : Arrays.copyOf(entries, entries.length);
+		return size() == 0 ? EMPTY_ARRAY : toArray(new NameValuePair[size()]);
 	}
 
 	/**
@@ -1410,19 +1334,10 @@ public class PartList {
 	 */
 	public NameValuePair[] getAll(String name) {
 		ArrayBuilder<NameValuePair> b = ArrayBuilder.of(NameValuePair.class).filter(NOT_NULL);
-		for (int i = 0; i < entries.length; i++)
-			if (eq(entries[i].getName(), name))
-				b.add(entries[i]);
+		for (NameValuePair x : this)
+			if (eq(x.getName(), name))
+				b.add(x);
 		return b.orElse(EMPTY_ARRAY);
-	}
-
-	/**
-	 * Returns the number of parts in this list.
-	 *
-	 * @return The number of parts in this list.
-	 */
-	public int size() {
-		return entries.length;
 	}
 
 	/**
@@ -1435,8 +1350,7 @@ public class PartList {
 	 * @return The first matching part, or <jk>null</jk> if not found.
 	 */
 	public Optional<NameValuePair> getFirst(String name) {
-		for (int i = 0; i < entries.length; i++) {
-			NameValuePair x = entries[i];
+		for (NameValuePair x : this) {
 			if (eq(x.getName(), name))
 				return optional(x);
 		}
@@ -1453,8 +1367,8 @@ public class PartList {
 	 * @return The last matching part, or <jk>null</jk> if not found.
 	 */
 	public Optional<NameValuePair> getLast(String name) {
-		for (int i = entries.length - 1; i >= 0; i--) {
-			NameValuePair x = entries[i];
+		for (int i = size() - 1; i >= 0; i--) {
+			NameValuePair x = get(i);
 			if (eq(x.getName(), name))
 				return optional(x);
 		}
@@ -1505,8 +1419,7 @@ public class PartList {
 	 * @return <jk>true</jk> if at least one part with the name is present.
 	 */
 	public boolean contains(String name) {
-		for (int i = 0; i < entries.length; i++) {
-			NameValuePair x = entries[i];
+		for (NameValuePair x : this) {
 			if (eq(x.getName(), name))
 				return true;
 		}
@@ -1518,8 +1431,9 @@ public class PartList {
 	 *
 	 * @return A new iterator over this list of parts.
 	 */
+	@Override
 	public PartIterator iterator() {
-		return new BasicPartIterator(entries, null, caseInsensitive);
+		return new BasicPartIterator(getAll(), null, caseInsensitive);
 	}
 
 	/**
@@ -1530,21 +1444,7 @@ public class PartList {
 	 * @return A new iterator over the matching parts in this list.
 	 */
 	public PartIterator iterator(String name) {
-		return new BasicPartIterator(entries, name, caseInsensitive);
-	}
-
-	/**
-	 * Performs an action on all parts in this list.
-	 *
-	 * <p>
-	 * This is the preferred method for iterating over parts as it does not involve
-	 * creation or copy of lists/arrays.
-	 *
-	 * @param action An action to perform on each element.
-	 * @return This object.
-	 */
-	public PartList forEach(Consumer<NameValuePair> action) {
-		return forEach(x -> true, action);
+		return new BasicPartIterator(getAll(), name, caseInsensitive);
 	}
 
 	/**
@@ -1574,21 +1474,8 @@ public class PartList {
 	 * @return This object.
 	 */
 	public PartList forEach(Predicate<NameValuePair> filter, Consumer<NameValuePair> action) {
-		for (int i = 0; i < entries.length; i++)
-			consume(filter, action, entries[i]);
+		forEach(x -> consume(filter, action, x));
 		return this;
-	}
-
-	/**
-	 * Returns a stream of the parts in this list.
-	 *
-	 * <p>
-	 * This does not involve a copy of the underlying array of <c>NameValuePair</c> objects so should perform well.
-	 *
-	 * @return This object.
-	 */
-	public Stream<NameValuePair> stream() {
-		return Arrays.stream(entries);
 	}
 
 	/**
@@ -1601,28 +1488,7 @@ public class PartList {
 	 * @return This object.
 	 */
 	public Stream<NameValuePair> stream(String name) {
-		return Arrays.stream(entries).filter(x->eq(name, x.getName()));
-	}
-
-	/**
-	 * Returns the contents of this list as an unmodifiable list of {@link NameValuePair} objects.
-	 *
-	 * @return The contents of this list as an unmodifiable list of {@link NameValuePair} objects.
-	 */
-	public List<NameValuePair> toNameValuePairs() {
-		return ulist(entries);
-	}
-
-	/**
-	 * Performs an action on the contents of this list.
-	 *
-	 * @param action The action to perform.
-	 * @return This object.
-	 */
-	public PartList forEachNameValuePair(Consumer<NameValuePair> action) {
-		for (NameValuePair p : entries)
-			action.accept(p);
-		return this;
+		return Arrays.stream(getAll(name)).filter(x->eq(name, x.getName()));
 	}
 
 	private boolean eq(String s1, String s2) {
@@ -1635,15 +1501,16 @@ public class PartList {
 	@Override /* Object */
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < entries.length; i++) {
-			NameValuePair p = entries[i];
-			String v = p.getValue();
-			if (v != null) {
-				if (sb.length() > 0)
-					sb.append("&");
-				sb.append(urlEncode(p.getName())).append('=').append(urlEncode(p.getValue()));
+		forEach(p -> {
+			if (p != null) {
+				String v = p.getValue();
+				if (v != null) {
+					if (sb.length() > 0)
+						sb.append("&");
+					sb.append(urlEncode(p.getName())).append('=').append(urlEncode(p.getValue()));
+				}
 			}
-		}
+		});
 		return sb.toString();
 	}
 }
