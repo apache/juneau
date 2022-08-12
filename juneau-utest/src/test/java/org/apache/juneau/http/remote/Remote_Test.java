@@ -567,6 +567,7 @@ public class Remote_Test {
 		String[] getHeaders();
 	}
 
+	@SuppressWarnings("serial")
 	public static class F1b extends HeaderList {
 		public F1b() {
 			super(
@@ -590,8 +591,10 @@ public class Remote_Test {
 		String[] getHeaders();
 	}
 
+	@SuppressWarnings("serial")
 	public static class F2b extends HeaderList {
 		public F2b() {
+			super(true);
 			throw new NullPointerException("foo");
 		}
 	}

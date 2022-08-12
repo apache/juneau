@@ -2486,7 +2486,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public HeaderIterator headerIterator() {
-		return getHeaderList().iterator();
+		return getHeaderList().headerIterator();
 	}
 
 	/**
@@ -2497,7 +2497,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public HeaderIterator headerIterator(String name) {
-		return getHeaderList().iterator(name);
+		return getHeaderList().headerIterator(name);
 	}
 
 	/**

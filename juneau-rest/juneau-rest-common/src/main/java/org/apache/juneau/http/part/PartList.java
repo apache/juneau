@@ -91,7 +91,7 @@ import org.apache.juneau.svl.*;
  * Various methods are provided for iterating over the parts in this list to avoid array copies.
  * <ul class='javatree'>
  * 	<li class='jm'>{@link #forEach(Consumer)} / {@link #forEach(String,Consumer)} / {@link #forEach(Predicate,Consumer)} - Use consumers to process parts.
- * 	<li class='jm'>{@link #iterator()} / {@link #iterator(String)} - Use an {@link PartIterator} to process parts.
+ * 	<li class='jm'>{@link #partIterator()} / {@link #partIterator(String)} - Use an {@link PartIterator} to process parts.
  * 	<li class='jm'>{@link #stream()} / {@link #stream(String)} - Use a stream.
  * </ul>
  * <p>
@@ -169,8 +169,8 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	private static final Predicate<NameValuePair> NOT_NULL = x -> x != null;
 
 	/** Represents no part supplier in annotations. */
-	public static final class Null extends PartList {
-		Null(boolean modifiable) {
+	public static final class Void extends PartList {
+		Void() {
 			super(false);
 		}
 		private static final long serialVersionUID = 1L;
@@ -459,19 +459,6 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 		public Builder append(List<? extends NameValuePair> values) {
 			if (values != null)
 				values.forEach(x -> append(x));
-			return this;
-		}
-
-		/**
-		 * Adds the specified part to the beginning of the parts in this builder.
-		 *
-		 * @param value The part to add.  <jk>null</jk> values are ignored.
-		 * @return This object.
-		 */
-		@FluentSetter
-		public Builder prepend(PartList value) {
-			if (value != null)
-				prependAll(entries, value.getAll());
 			return this;
 		}
 
@@ -1350,7 +1337,8 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * @return The first matching part, or <jk>null</jk> if not found.
 	 */
 	public Optional<NameValuePair> getFirst(String name) {
-		for (NameValuePair x : this) {
+		for (int i = 0; i < size(); i++) {
+			NameValuePair x = get(i);
 			if (eq(x.getName(), name))
 				return optional(x);
 		}
@@ -1431,8 +1419,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 *
 	 * @return A new iterator over this list of parts.
 	 */
-	@Override
-	public PartIterator iterator() {
+	public PartIterator partIterator() {
 		return new BasicPartIterator(getAll(), null, caseInsensitive);
 	}
 
@@ -1443,7 +1430,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 *
 	 * @return A new iterator over the matching parts in this list.
 	 */
-	public PartIterator iterator(String name) {
+	public PartIterator partIterator(String name) {
 		return new BasicPartIterator(getAll(), name, caseInsensitive);
 	}
 

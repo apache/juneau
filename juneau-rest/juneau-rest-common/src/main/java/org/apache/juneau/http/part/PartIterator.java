@@ -24,13 +24,4 @@ import org.apache.http.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public interface PartIterator extends Iterator<NameValuePair> {
-
-	/**
-	 * Indicates whether there is another part in this iteration.
-	 *
-	 * @return <jk>true</jk> if there is another part.
-	 */
-	@Override /* Iterator */
-	boolean hasNext();
-}
+public interface PartIterator extends Iterator<NameValuePair> {}

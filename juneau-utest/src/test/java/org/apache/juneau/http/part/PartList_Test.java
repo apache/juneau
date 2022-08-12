@@ -92,7 +92,7 @@ public class PartList_Test {
 		x.append((List<NameValuePair>)null);
 		assertObject(x.build()).isString("Foo=1&Foo=2&Foo=3&Foo=4&Foo=5&Foo=6&Foo=7");
 
-		assertObject(new PartList.Null(false)).isString("");
+		assertObject(new PartList.Void()).isString("");
 	}
 
 	@Test
@@ -241,20 +241,20 @@ public class PartList_Test {
 	}
 
 	@Test
-	public void a12_headerIterator_all() {
+	public void a12_partIterator_all() {
 		PartList x = PartList.of();
-		assertBoolean(x.iterator().hasNext()).isFalse();
+		assertBoolean(x.partIterator().hasNext()).isFalse();
 		x = PartList.of(FOO_1);
-		assertBoolean(x.iterator().hasNext()).isTrue();
+		assertBoolean(x.partIterator().hasNext()).isTrue();
 	}
 
 	@Test
-	public void a13_headerIterator_single() {
+	public void a13_partIterator_single() {
 		PartList x = PartList.of();
-		assertBoolean(x.iterator("Foo").hasNext()).isFalse();
+		assertBoolean(x.partIterator("Foo").hasNext()).isFalse();
 		x = PartList.of(FOO_1);
-		assertBoolean(x.iterator("Foo").hasNext()).isTrue();
-		assertBoolean(x.iterator("FOO").hasNext()).isFalse();
+		assertBoolean(x.partIterator("Foo").hasNext()).isTrue();
+		assertBoolean(x.partIterator("FOO").hasNext()).isFalse();
 	}
 
 	@Test
@@ -473,26 +473,26 @@ public class PartList_Test {
 	public void c01_iterators() {
 		PartList x = PartList.of(APart.X, BPart.X);
 
-		PartIterator i1 = x.iterator();
+		PartIterator i1 = x.partIterator();
 		assertObject(i1.next()).isString("a=x");
 		assertObject(i1.next()).isString("b=x");
 		assertThrown(()->i1.next()).asMessage().is("Iteration already finished.");
 
-		PartIterator i2 = x.iterator();
+		PartIterator i2 = x.partIterator();
 		assertObject(i2.next()).isString("a=x");
 		assertObject(i2.next()).isString("b=x");
 		assertThrown(()->i2.next()).asMessage().is("Iteration already finished.");
 
-		PartIterator i3 = x.iterator("a");
+		PartIterator i3 = x.partIterator("a");
 		assertObject(i3.next()).isString("a=x");
 		assertThrown(()->i3.next()).asMessage().is("Iteration already finished.");
 
-		PartIterator i4 = x.iterator("A");
+		PartIterator i4 = x.partIterator("A");
 		assertThrown(()->i4.next()).asMessage().is("Iteration already finished.");
 
 		PartList x2 = PartList.create().append(APart.X,BPart.X).caseInsensitive().build();
 
-		PartIterator i5 = x2.iterator("A");
+		PartIterator i5 = x2.partIterator("A");
 		assertObject(i5.next()).isString("a=x");
 		assertThrown(()->i5.next()).asMessage().is("Iteration already finished.");
 
