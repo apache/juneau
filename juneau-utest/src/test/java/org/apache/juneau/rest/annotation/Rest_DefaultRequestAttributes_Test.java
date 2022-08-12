@@ -54,7 +54,7 @@ public class Rest_DefaultRequestAttributes_Test {
 			attrs.set("p2", "xp2");
 			attrs.set("p4", "xp4");
 			attrs.set("p5", "xp5"); // New property
-			String overrideContentType = req.getHeader("Override-Content-Type").orElse(null);
+			String overrideContentType = req.getHeaderParam("Override-Content-Type").orElse(null);
 			if (overrideContentType != null)
 				req.getHeaders().set("Content-Type", overrideContentType);
 		}
@@ -119,10 +119,10 @@ public class Rest_DefaultRequestAttributes_Test {
 			attrs.set("p2", "xp2");
 			attrs.set("p4", "xp4");
 			attrs.set("p5", "xp5"); // New property
-			String overrideAccept = req.getHeader("Override-Accept").orElse(null);
+			String overrideAccept = req.getHeaderParam("Override-Accept").orElse(null);
 			if (overrideAccept != null)
 				req.getHeaders().set("Accept", overrideAccept);
-			String overrideContentType = req.getHeader("Override-Content-Type").orElse(null);
+			String overrideContentType = req.getHeaderParam("Override-Content-Type").orElse(null);
 			if (overrideContentType != null)
 				attrs.set("Override-Content-Type", overrideContentType);
 		}
@@ -142,7 +142,7 @@ public class Rest_DefaultRequestAttributes_Test {
 		public String b(RestRequest req, RequestAttributes attrs) throws Exception {
 			attrs.set("p3", "pp3");
 			attrs.set("p4", "pp4");
-			String accept = req.getHeader("Accept").orElse(null);
+			String accept = req.getHeaderParam("Accept").orElse(null);
 			if (accept == null || accept.isEmpty())
 				req.getHeaders().set("Accept", "text/s2");
 			return null;

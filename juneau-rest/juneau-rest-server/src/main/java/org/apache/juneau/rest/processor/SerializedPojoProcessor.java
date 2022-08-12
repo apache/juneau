@@ -108,7 +108,7 @@ public final class SerializedPojoProcessor implements ResponseProcessor {
 
 		throw new NotAcceptable(
 			"Unsupported media-type in request header ''Accept'': ''{0}''\n\tSupported media-types: {1}",
-			req.getHeader("Accept").orElse(""), SimpleJson.of(res.getOpContext().getSerializers().getSupportedMediaTypes())
+			req.getHeaderParam("Accept").orElse(""), SimpleJson.of(res.getOpContext().getSerializers().getSupportedMediaTypes())
 		);
 	}
 }

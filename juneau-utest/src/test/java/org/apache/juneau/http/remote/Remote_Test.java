@@ -558,7 +558,7 @@ public class Remote_Test {
 	public static class F extends BasicRestObject {
 		@RestGet
 		public String[] headers(org.apache.juneau.rest.RestRequest req) {
-			return req.getHeaders().getAll(req.getHeader("Check").orElse(null)).stream().map(x -> x.getValue()).toArray(String[]::new);
+			return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(x -> x.getValue()).toArray(String[]::new);
 		}
 	}
 

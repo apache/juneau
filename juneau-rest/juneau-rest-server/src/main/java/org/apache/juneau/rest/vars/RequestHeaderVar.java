@@ -68,7 +68,7 @@ public class RequestHeaderVar extends MultipartResolvingVar {
 
 	@Override /* Var */
 	public String resolve(VarResolverSession session, String key) {
-		return session.getBean(RestRequest.class).orElseThrow(InternalServerError::new).getHeader(key).orElse(null);
+		return session.getBean(RestRequest.class).orElseThrow(InternalServerError::new).getHeaderParam(key).orElse(null);
 	}
 
 	@Override /* Var */

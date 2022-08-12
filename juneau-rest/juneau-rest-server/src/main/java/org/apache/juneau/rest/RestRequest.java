@@ -32,6 +32,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.net.*;
 import java.nio.charset.*;
+import java.security.*;
 import java.text.*;
 import java.util.*;
 import java.util.logging.*;
@@ -199,7 +200,7 @@ import org.apache.juneau.utils.*;
  * </ul>
  */
 @SuppressWarnings({ "unchecked", "unused" })
-public final class RestRequest {
+public final class RestRequest extends HttpServletRequestWrapper {
 
 	// Constructor initialized.
 	private HttpServletRequest inner;
@@ -227,6 +228,7 @@ public final class RestRequest {
 	 * Constructor.
 	 */
 	RestRequest(RestOpContext opContext, RestSession session) throws Exception {
+		super(session.getRequest());
 		this.session = session;
 		this.opContext = opContext;
 
@@ -355,7 +357,7 @@ public final class RestRequest {
 	 * @return A new fluent assertion on the parameter, never <jk>null</jk>.
 	 */
 	public FluentRequestHeaderAssertion<RestRequest> assertHeader(String name) {
-		return new FluentRequestHeaderAssertion<>(getHeader(name), this);
+		return new FluentRequestHeaderAssertion<>(getHeaderParam(name), this);
 	}
 
 	/**
@@ -464,7 +466,7 @@ public final class RestRequest {
 	 * @param name The header name.
 	 * @return The request header object, never <jk>null</jk>.
 	 */
-	public RequestHeader getHeader(String name) {
+	public RequestHeader getHeaderParam(String name) {
 		return headers.getLast(name);
 	}
 
@@ -514,7 +516,7 @@ public final class RestRequest {
 			// Determine charset
 			// NOTE:  Don't use super.getCharacterEncoding() because the spec is implemented inconsistently.
 			// Jetty returns the default charset instead of null if the character is not specified on the request.
-			String h = getHeader("Content-Type").orElse(null);
+			String h = getHeaderParam("Content-Type").orElse(null);
 			if (h != null) {
 				int i = h.indexOf(";charset=");
 				if (i > 0)
@@ -536,6 +538,7 @@ public final class RestRequest {
 	 *
 	 * @return The preferred Locale that the client will accept content in.  Never <jk>null</jk>.
 	 */
+	@Override
 	public Locale getLocale() {
 		Locale best = inner.getLocale();
 		String h = headers.get("Accept-Language").asString().orElse(null);
@@ -679,6 +682,7 @@ public final class RestRequest {
 	 * @param name The attribute name.
 	 * @return The attribute value, never <jk>null</jk>.
 	 */
+	@Override
 	public RequestAttribute getAttribute(String name) {
 		return attrs.get(name);
 	}
@@ -689,6 +693,7 @@ public final class RestRequest {
 	 * @param name The attribute name.
 	 * @param value The attribute value.
 	 */
+	@Override
 	public void setAttribute(String name, Object value) {
 		attrs.set(name, value);
 	}
@@ -999,6 +1004,7 @@ public final class RestRequest {
 	 * @return The HTTP content content as a {@link Reader}.
 	 * @throws IOException If content could not be read.
 	 */
+	@Override
 	public BufferedReader getReader() throws IOException {
 		return getContent().getReader();
 	}
@@ -1015,6 +1021,7 @@ public final class RestRequest {
 	 * @return The negotiated input stream.
 	 * @throws IOException If any error occurred while trying to get the input stream or wrap it in the GZIP wrapper.
 	 */
+	@Override
 	public ServletInputStream getInputStream() throws IOException {
 		return getContent().getInputStream();
 	}
@@ -1034,6 +1041,7 @@ public final class RestRequest {
 	 * @return The context path, never <jk>null</jk>.
 	 * @see HttpServletRequest#getContextPath()
 	 */
+	@Override
 	public String getContextPath() {
 		String cp = context.getUriContext();
 		return cp == null ? inner.getContextPath() : cp;
@@ -1068,6 +1076,7 @@ public final class RestRequest {
 	 * @return The servlet path, never <jk>null</jk>.
 	 * @see HttpServletRequest#getServletPath()
 	 */
+	@Override
 	public String getServletPath() {
 		String cp = context.getUriContext();
 		String sp = inner.getServletPath();
@@ -1142,58 +1151,6 @@ public final class RestRequest {
 		}
 	}
 
-	/**
-	 * Returns any extra path information associated with the URL the client sent when it made this request.
-	 *
-	 * <p>
-	 * The extra path information follows the servlet path but precedes the query string and will start with a <js>"/"</js> character.
-	 * This method returns <jk>null</jk> if there was no extra path information.
-	 *
-	 * @return The extra path information.
-	 * @see HttpServletRequest#getPathInfo()
-	 */
-	public String getPathInfo() {
-		return inner.getPathInfo();
-	}
-
-	/**
-	 * Returns the part of this request's URL from the protocol name up to the query string in the first line of the HTTP request.
-	 *
-	 * The web container does not decode this String
-	 *
-	 * @return The request URI.
-	 * @see HttpServletRequest#getRequestURI()
-	 */
-	public String getRequestURI() {
-		return inner.getRequestURI();
-	}
-
-
-	/**
-	 * Returns the query string that is contained in the request URL after the path.
-	 *
-	 * <p>
-	 * This method returns <jk>null</jk> if the URL does not have a query string.
-	 *
-	 * @return The query string.
-	 * @see HttpServletRequest#getQueryString()
-	 */
-	public String getQueryString() {
-		return inner.getQueryString();
-	}
-
-	/**
-	 * Reconstructs the URL the client used to make the request.
-	 *
-	 * <p>
-	 * The returned URL contains a protocol, server name, port number, and server path, but it does not include query string parameters.
-	 *
-	 * @return The request URL.
-	 * @see HttpServletRequest#getRequestURL()
-	 */
-	public StringBuffer getRequestURL() {
-		return inner.getRequestURL();
-	}
 	//-----------------------------------------------------------------------------------------------------------------
 	// Labels
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1267,6 +1224,7 @@ public final class RestRequest {
 	 *
 	 * @return The HTTP method of this request.
 	 */
+	@Override
 	public String getMethod() {
 		return session.getMethod();
 	}
@@ -1613,7 +1571,7 @@ public final class RestRequest {
 							if (pt == FORMDATA)
 								return getFormParam(name).parser(pp).schema(schema).as(type).orElse(null);
 							if (pt == HEADER)
-								return getHeader(name).parser(pp).schema(schema).as(type).orElse(null);
+								return getHeaderParam(name).parser(pp).schema(schema).as(type).orElse(null);
 							if (pt == PATH)
 								return getPathParam(name).parser(pp).schema(schema).as(type).orElse(null);
 						}
@@ -1635,31 +1593,6 @@ public final class RestRequest {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	/**
-	 * Returns the current session associated with this request, or if the request does not have a session, creates one.
-	 *
-	 * @return The current request session.
-	 * @see HttpServletRequest#getSession()
-	 */
-	public HttpSession getSession() {
-		return inner.getSession();
-	}
-
-	/**
-	 * Returns a boolean indicating whether the authenticated user is included in the specified logical "role".
-	 *
-	 * <p>
-	 * Roles and role membership can be defined using deployment descriptors.
-	 * If the user has not been authenticated, the method returns false.
-	 *
-	 * @param role The role name.
-	 * @return <jk>true</jk> if the user holds the specified role.
-	 * @see HttpServletRequest#isUserInRole(String)
-	 */
-	public boolean isUserInRole(String role) {
-		return inner.isUserInRole(role);
 	}
 
 	/**

@@ -546,14 +546,14 @@ public class RequestContent {
 
 	private Encoder getEncoder() throws UnsupportedMediaType {
 		if (encoder == null) {
-			String ce = req.getHeader("content-encoding").orElse(null);
+			String ce = req.getHeaderParam("content-encoding").orElse(null);
 			if (isNotEmpty(ce)) {
 				ce = ce.trim();
 				encoder = encoders.getEncoder(ce);
 				if (encoder == null)
 					throw new UnsupportedMediaType(
 						"Unsupported encoding in request header ''Content-Encoding'': ''{0}''\n\tSupported codings: {1}",
-						req.getHeader("content-encoding").orElse(null), SimpleJson.of(encoders.getSupportedEncodings())
+						req.getHeaderParam("content-encoding").orElse(null), SimpleJson.of(encoders.getSupportedEncodings())
 					);
 			}
 
