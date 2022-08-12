@@ -1681,28 +1681,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 
 		/**
-		 * Applies an operation to the HTTP client builder.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.httpClientBuilder(<jv>x</jv> -&gt; <jv>x</jv>.disableAuthCaching())
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public final Builder httpClientBuilder(Consumer<HttpClientBuilder> operation) {
-			operation.accept(httpClientBuilder());
-			return this;
-		}
-
-		/**
 		 * Creates an instance of an {@link HttpClientBuilder} to be used to create the {@link HttpClient}.
 		 *
 		 * <p>
@@ -1836,20 +1814,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			if (serializers == null)
 				serializers = createSerializers();
 			return serializers;
-		}
-
-		/**
-		 * Applies an operation to the serializer group sub-builder.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public final Builder serializers(Consumer<SerializerSet.Builder> operation) {
-			operation.accept(serializers());
-			return this;
 		}
 
 		/**
@@ -2025,20 +1989,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 
 		/**
-		 * Applies an operation to the parser group sub-builder.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public final Builder parsers(Consumer<ParserSet.Builder> operation) {
-			operation.accept(parsers());
-			return this;
-		}
-
-		/**
 		 * Instantiates the parser group sub-builder.
 		 *
 		 * @return A new parser group sub-builder.
@@ -2211,20 +2161,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 
 		/**
-		 * Applies an operation to the part serializer sub-builder.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public final Builder partSerializer(Consumer<HttpPartSerializer.Creator> operation) {
-			operation.accept(partSerializer());
-			return this;
-		}
-
-		/**
 		 * Instantiates the part serializer sub-builder.
 		 *
 		 * @return A new part serializer sub-builder.
@@ -2304,20 +2240,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			if (partParser == null)
 				partParser = createPartParser();
 			return partParser;
-		}
-
-		/**
-		 * Applies an operation to the part parser sub-builder.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public final Builder partParser(Consumer<HttpPartParser.Creator> operation) {
-			operation.accept(partParser());
-			return this;
 		}
 
 		/**
@@ -2403,20 +2325,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 
 		/**
-		 * Applies an operation to the URL-encoding serializer sub-builder.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public final Builder urlEncodingSerializer(Consumer<UrlEncodingSerializer.Builder> operation) {
-			operation.accept(urlEncodingSerializer());
-			return this;
-		}
-
-		/**
 		 * Instantiates the URL-encoding serializer sub-builder.
 		 *
 		 * @return A new URL-encoding serializer sub-builder.
@@ -2461,37 +2369,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='jm'>{@link #noTrace()}
 		 * </ul>
 		 *
-		 * <p>
-		 * Note that the {@link #headers(Consumer)} method can be used to call this method without breaking fluent call chains.
-		 *
 		 * @return The header list builder.
 		 */
 		public final HeaderList.Builder headers() {
 			if (headerData == null)
 				headerData = createHeaderData();
 			return headerData;
-		}
-
-		/**
-		 * Applies an operation to the header data builder.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.headerData(<jv>x</jv> -&gt; <jv>x</jv>.setDefault(<js>"Foo"</js>, <js>"bar"</js>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public final Builder headers(Consumer<HeaderList.Builder> operation) {
-			operation.accept(headers());
-			return this;
 		}
 
 		/**
@@ -2785,37 +2668,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='jm'>{@link #queryData(String,Supplier)}
 		 * </ul>
 		 *
-		 * <p>
-		 * Note that the {@link #queryData(Consumer)} method can be used to call this method without breaking fluent call chains.
-		 *
 		 * @return The query data list builder.
 		 */
 		public final PartList.Builder queryData() {
 			if (queryData == null)
 				queryData = createQueryData();
 			return queryData;
-		}
-
-		/**
-		 * Applies an operation to the query data builder.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.queryData(<jv>x</jv> -&gt; <jv>x</jv>.setDefault(<js>"foo"</js>, <js>"bar"</js>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public final Builder queryData(Consumer<PartList.Builder> operation) {
-			operation.accept(queryData());
-			return this;
 		}
 
 		/**
@@ -2968,37 +2826,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='jm'>{@link #formData(String,Supplier)}
 		 * </ul>
 		 *
-		 * <p>
-		 * Note that the {@link #formData(Consumer)} method can be used to call this method without breaking fluent call chains.
-		 *
 		 * @return The form data list builder.
 		 */
 		public final PartList.Builder formData() {
 			if (formData == null)
 				formData = createFormData();
 			return formData;
-		}
-
-		/**
-		 * Applies an operation to the form data builder.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.formData(<jv>x</jv> -&gt; <jv>x</jv>.setDefault(<js>"foo"</js>, <js>"bar"</js>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public final Builder formData(Consumer<PartList.Builder> operation) {
-			operation.accept(formData());
-			return this;
 		}
 
 		/**
@@ -3151,37 +2984,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='jm'>{@link #pathData(String,Supplier)}
 		 * </ul>
 		 *
-		 * <p>
-		 * Note that the {@link #pathData(Consumer)} method can be used to call this method without breaking fluent call chains.
-		 *
 		 * @return The form data list builder.
 		 */
 		public final PartList.Builder pathData() {
 			if (pathData == null)
 				pathData = createPathData();
 			return pathData;
-		}
-
-		/**
-		 * Applies an operation to the path data builder.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.pathData(<jv>x</jv> -&gt; <jv>x</jv>.setDefault(<js>"foo"</js>, <js>"bar"</js>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public final Builder pathData(Consumer<PartList.Builder> operation) {
-			operation.accept(pathData());
-			return this;
 		}
 
 		/**
@@ -3354,28 +3162,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			if (callHandler == null)
 				callHandler = createCallHandler();
 			return callHandler;
-		}
-
-		/**
-		 * Applies an operation to the REST call handler bean creator.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.callHandler(<jv>x</jv> -&gt; <jv>x</jv>.impl(<jv>myCallHandler</jv>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public final Builder callHandler(Consumer<BeanCreator<RestCallHandler>> operation) {
-			operation.accept(callHandler());
-			return this;
 		}
 
 		/**

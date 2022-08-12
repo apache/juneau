@@ -28,8 +28,6 @@ import org.apache.http.*;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.*;
 import org.apache.http.impl.client.*;
-import org.apache.http.message.*;
-import org.apache.http.message.BasicHttpResponse;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
@@ -107,14 +105,7 @@ public class RestClient_Config_RestClient_Test {
 
 	@Test
 	public void a01_callHandler() throws Exception {
-		RestCallHandler x = new RestCallHandler() {
-			@Override
-			public HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) throws ClientProtocolException, IOException {
-				return new BasicHttpResponse(new BasicStatusLine(new ProtocolVersion("http",1,1),201,null));
-			}
-		};
 		client().callHandler(A1.class).header("Foo","f1").build().get("/checkHeader").header("Foo","f2").run().assertContent("['f1','f2','baz']");
-		client().callHandler(y -> y.impl(x)).header("Foo","f1").build().get("/checkHeader").header("Foo","f2").run().assertStatus(201);
 	}
 
 	@Test
