@@ -27,6 +27,7 @@ import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.marshaller.*;
 import org.junit.*;
@@ -620,6 +621,108 @@ public class Remote_Test {
 	@Test
 	public void g01_badMethodName() throws Exception {
 		assertThrown(()->client(G.class).header("Check","Foo").build().getRemote(G1.class)).isType(RemoteMetadataException.class).asMessage().isContains("Invalid value");
+	}
+
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Method detection
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Rest
+	public static class H extends BasicRestObject {
+		@RestOp(method="*", path="/*")
+		public String echoMethod(@Method String method, @Path("/*") String path) {
+			return method + " " + path;
+		}
+	}
+
+	@Remote
+	public static interface H1 {
+		@RemoteOp(method="get") String a1();
+		@RemoteOp(method="put") String a2();
+		@RemoteOp(method="post") String a3();
+		@RemoteOp(method="patch") String a4();
+		@RemoteOp(method="delete") String a5();
+		@RemoteOp(method="options") String a6();
+		@RemoteGet String a11();
+		@RemotePut String a12();
+		@RemotePost String a13();
+		@RemotePatch String a14();
+		@RemoteDelete String a15();
+		@RemoteOp String getA21();
+		@RemoteOp String putA22();
+		@RemoteOp String postA23();
+		@RemoteOp String patchA24();
+		@RemoteOp String deleteA25();
+		@RemoteOp String optionsA26();
+		@RemoteGet("/a31x") String a31();
+		@RemotePut("/a32x") String a32();
+		@RemotePost("/a33x") String a33();
+		@RemotePatch("/a34x") String a34();
+		@RemoteDelete("/a35x") String a35();
+		@RemoteOp("GET /a41x") String a41();
+		@RemoteOp("PUT /a42x") String a42();
+		@RemoteOp("POST /a43x") String a43();
+		@RemoteOp("PATCH /a44x") String a44();
+		@RemoteOp("DELETE /a45x") String a45();
+		@RemoteOp("OPTIONS /a46x") String a46();
+		@RemoteGet("a51x") String a51();
+		@RemotePut("a52x") String a52();
+		@RemotePost("a53x") String a53();
+		@RemotePatch("a54x") String a54();
+		@RemoteDelete("a55x") String a55();
+		@RemoteOp("GET a61x") String a61();
+		@RemoteOp("PUT a62x") String a62();
+		@RemoteOp("POST a63x") String a63();
+		@RemoteOp("PATCH a64x") String a64();
+		@RemoteOp("DELETE a65x") String a65();
+		@RemoteOp("OPTIONS a66x") String a66();
+	}
+
+
+	@Test
+	public void h01_methodDetection() throws Exception {
+
+		H1 x = client(H.class).build().getRemote(H1.class);
+		assertEquals("GET a1", x.a1());
+		assertEquals("PUT a2", x.a2());
+		assertEquals("POST a3", x.a3());
+		assertEquals("PATCH a4", x.a4());
+		assertEquals("DELETE a5", x.a5());
+		assertEquals("OPTIONS a6", x.a6());
+		assertEquals("GET a11", x.a11());
+		assertEquals("PUT a12", x.a12());
+		assertEquals("POST a13", x.a13());
+		assertEquals("PATCH a14", x.a14());
+		assertEquals("DELETE a15", x.a15());
+		assertEquals("GET a21", x.getA21());
+		assertEquals("PUT a22", x.putA22());
+		assertEquals("POST a23", x.postA23());
+		assertEquals("PATCH a24", x.patchA24());
+		assertEquals("DELETE a25", x.deleteA25());
+		assertEquals("OPTIONS a26", x.optionsA26());
+		assertEquals("GET a31x", x.a31());
+		assertEquals("PUT a32x", x.a32());
+		assertEquals("POST a33x", x.a33());
+		assertEquals("PATCH a34x", x.a34());
+		assertEquals("DELETE a35x", x.a35());
+		assertEquals("GET a41x", x.a41());
+		assertEquals("PUT a42x", x.a42());
+		assertEquals("POST a43x", x.a43());
+		assertEquals("PATCH a44x", x.a44());
+		assertEquals("DELETE a45x", x.a45());
+		assertEquals("OPTIONS a46x", x.a46());
+		assertEquals("GET a51x", x.a51());
+		assertEquals("PUT a52x", x.a52());
+		assertEquals("POST a53x", x.a53());
+		assertEquals("PATCH a54x", x.a54());
+		assertEquals("DELETE a55x", x.a55());
+		assertEquals("GET a61x", x.a61());
+		assertEquals("PUT a62x", x.a62());
+		assertEquals("POST a63x", x.a63());
+		assertEquals("PATCH a64x", x.a64());
+		assertEquals("DELETE a65x", x.a65());
+		assertEquals("OPTIONS a66x", x.a66());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

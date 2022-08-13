@@ -149,6 +149,16 @@ public final class AnnotationInfo<T extends Annotation> {
 	}
 
 	/**
+	 * Returns the class name of the annotation.
+	 *
+	 * @return The simple class name of the annotation.
+	 */
+	public String getName() {
+		return a.annotationType().getSimpleName();
+	}
+
+
+	/**
 	 * Converts this object to a readable JSON object for debugging purposes.
 	 *
 	 * @return A new map showing the attributes of this object as a JSON object.

@@ -79,64 +79,64 @@ public class Remote_FormDataAnnotation_Test {
 
 	@Remote
 	public static interface A1 {
-		@RemoteOp(path="a") String postX1(@FormData("x") int b);
-		@RemoteOp(path="a") String postX2(@FormData("x") float b);
-		@RemoteOp(path="a") String postX3(@FormData("x") Bean b);
-		@RemoteOp(path="a") String postX4(@FormData("*") Bean b);
-		@RemoteOp(path="a") String postX5(@FormData Bean b);
-		@RemoteOp(path="a") String postX6(@FormData("x") Bean[] b);
-		@RemoteOp(path="a") String postX7(@FormData("x") @Schema(cf="uon") Bean[] b);
-		@RemoteOp(path="a") String postX8(@FormData("x") List<Bean> b);
-		@RemoteOp(path="a") String postX9(@FormData("x") @Schema(cf="uon") List<Bean> b);
-		@RemoteOp(path="a") String postX10(@FormData("x") Map<String,Bean> b);
-		@RemoteOp(path="a") String postX11(@FormData("*") Map<String,Bean> b);
-		@RemoteOp(path="a") String postX12(@FormData Map<String,Bean> b);
-		@RemoteOp(path="a") String postX13(@FormData("x") @Schema(f="uon") Map<String,Bean> b);
-		@RemoteOp(path="a") String postX14(@FormData @Schema(f="uon") Map<String,Bean> b);
-		@RemoteOp(path="a") String postX15(@FormData("*") Reader b);
-		@RemoteOp(path="a") String postX16(@FormData Reader b);
-		@RemoteOp(path="a") String postX17(@FormData("*") InputStream b);
-		@RemoteOp(path="a") String postX18(@FormData InputStream b);
-		@RemoteOp(path="a") String postX19(@FormData("*") PartList b);
-		@RemoteOp(path="a") String postX20(@FormData PartList b);
-		@RemoteOp(path="a") String postX21(@FormData NameValuePair b);
-		@RemoteOp(path="a") String postX22(@FormData String b);
-		@RemoteOp(path="a") String postX23(@FormData InputStream b);
-		@RemoteOp(path="a") String postX24(@FormData Reader b);
-		@RemoteOp(path="a") String postX25(@FormData Bean2 b);
-		@RemoteOp(path="a") String postX26(@FormData List<NameValuePair> b);
+		@RemotePost(path="a") String x1(@FormData("x") int b);
+		@RemotePost(path="a") String x2(@FormData("x") float b);
+		@RemotePost(path="a") String x3(@FormData("x") Bean b);
+		@RemotePost(path="a") String x4(@FormData("*") Bean b);
+		@RemotePost(path="a") String x5(@FormData Bean b);
+		@RemotePost(path="a") String x6(@FormData("x") Bean[] b);
+		@RemotePost(path="a") String x7(@FormData("x") @Schema(cf="uon") Bean[] b);
+		@RemotePost(path="a") String x8(@FormData("x") List<Bean> b);
+		@RemotePost(path="a") String x9(@FormData("x") @Schema(cf="uon") List<Bean> b);
+		@RemotePost(path="a") String x10(@FormData("x") Map<String,Bean> b);
+		@RemotePost(path="a") String x11(@FormData("*") Map<String,Bean> b);
+		@RemotePost(path="a") String x12(@FormData Map<String,Bean> b);
+		@RemotePost(path="a") String x13(@FormData("x") @Schema(f="uon") Map<String,Bean> b);
+		@RemotePost(path="a") String x14(@FormData @Schema(f="uon") Map<String,Bean> b);
+		@RemotePost(path="a") String x15(@FormData("*") Reader b);
+		@RemotePost(path="a") String x16(@FormData Reader b);
+		@RemotePost(path="a") String x17(@FormData("*") InputStream b);
+		@RemotePost(path="a") String x18(@FormData InputStream b);
+		@RemotePost(path="a") String x19(@FormData("*") PartList b);
+		@RemotePost(path="a") String x20(@FormData PartList b);
+		@RemotePost(path="a") String x21(@FormData NameValuePair b);
+		@RemotePost(path="a") String x22(@FormData String b);
+		@RemotePost(path="a") String x23(@FormData InputStream b);
+		@RemotePost(path="a") String x24(@FormData Reader b);
+		@RemotePost(path="a") String x25(@FormData Bean2 b);
+		@RemotePost(path="a") String x26(@FormData List<NameValuePair> b);
 	}
 
 	@Test
 	public void a01_objectTypes() throws Exception {
 		A1 x = MockRestClient.build(A.class).getRemote(A1.class);
-		assertEquals("{x:'1'}",x.postX1(1));
-		assertEquals("{x:'1.0'}",x.postX2(1));
-		assertEquals("{x:'f=1'}",x.postX3(Bean.create()));
-		assertEquals("{f:'1'}",x.postX4(Bean.create()));
-		assertEquals("{f:'1'}",x.postX5(Bean.create()));
-		assertEquals("{x:'f=1,f=1'}",x.postX6(new Bean[]{Bean.create(),Bean.create()}));
-		assertEquals("{x:'@((f=1),(f=1))'}",x.postX7(new Bean[]{Bean.create(),Bean.create()}));
-		assertEquals("{x:'f=1,f=1'}",x.postX8(alist(Bean.create(),Bean.create())));
-		assertEquals("{x:'@((f=1),(f=1))'}",x.postX9(alist(Bean.create(),Bean.create())));
-		assertEquals("{x:'k1=f\\\\=1'}",x.postX10(map("k1",Bean.create())));
-		assertEquals("{k1:'f=1'}",x.postX11(map("k1",Bean.create())));
-		assertEquals("{k1:'f=1'}",x.postX12(map("k1",Bean.create())));
-		assertEquals("{x:'k1=f\\\\=1'}",x.postX13(map("k1",Bean.create())));
-		assertEquals("{k1:'f=1'}",x.postX14(map("k1",Bean.create())));
-		assertEquals("{x:'1'}",x.postX15(reader("x=1")));
-		assertEquals("{x:'1'}",x.postX16(reader("x=1")));
-		assertEquals("{x:'1'}",x.postX17(inputStream("x=1")));
-		assertEquals("{x:'1'}",x.postX18(inputStream("x=1")));
-		assertEquals("{foo:'bar'}",x.postX19(parts("foo","bar")));
-		assertEquals("{foo:'bar'}",x.postX20(parts("foo","bar")));
-		assertEquals("{foo:'bar'}",x.postX21(part("foo","bar")));
-		assertEquals("{foo:'bar'}",x.postX22("foo=bar"));
-		assertEquals("{}",x.postX22(null));
-		assertEquals("{foo:'bar'}",x.postX23(inputStream("foo=bar")));
-		assertEquals("{foo:'bar'}",x.postX24(reader("foo=bar")));
-		assertEquals("{f:'1'}",x.postX25(Bean2.create()));
-		assertEquals("{foo:'bar'}",x.postX26(alist(part("foo","bar"))));
+		assertEquals("{x:'1'}",x.x1(1));
+		assertEquals("{x:'1.0'}",x.x2(1));
+		assertEquals("{x:'f=1'}",x.x3(Bean.create()));
+		assertEquals("{f:'1'}",x.x4(Bean.create()));
+		assertEquals("{f:'1'}",x.x5(Bean.create()));
+		assertEquals("{x:'f=1,f=1'}",x.x6(new Bean[]{Bean.create(),Bean.create()}));
+		assertEquals("{x:'@((f=1),(f=1))'}",x.x7(new Bean[]{Bean.create(),Bean.create()}));
+		assertEquals("{x:'f=1,f=1'}",x.x8(alist(Bean.create(),Bean.create())));
+		assertEquals("{x:'@((f=1),(f=1))'}",x.x9(alist(Bean.create(),Bean.create())));
+		assertEquals("{x:'k1=f\\\\=1'}",x.x10(map("k1",Bean.create())));
+		assertEquals("{k1:'f=1'}",x.x11(map("k1",Bean.create())));
+		assertEquals("{k1:'f=1'}",x.x12(map("k1",Bean.create())));
+		assertEquals("{x:'k1=f\\\\=1'}",x.x13(map("k1",Bean.create())));
+		assertEquals("{k1:'f=1'}",x.x14(map("k1",Bean.create())));
+		assertEquals("{x:'1'}",x.x15(reader("x=1")));
+		assertEquals("{x:'1'}",x.x16(reader("x=1")));
+		assertEquals("{x:'1'}",x.x17(inputStream("x=1")));
+		assertEquals("{x:'1'}",x.x18(inputStream("x=1")));
+		assertEquals("{foo:'bar'}",x.x19(parts("foo","bar")));
+		assertEquals("{foo:'bar'}",x.x20(parts("foo","bar")));
+		assertEquals("{foo:'bar'}",x.x21(part("foo","bar")));
+		assertEquals("{foo:'bar'}",x.x22("foo=bar"));
+		assertEquals("{}",x.x22(null));
+		assertEquals("{foo:'bar'}",x.x23(inputStream("foo=bar")));
+		assertEquals("{foo:'bar'}",x.x24(reader("foo=bar")));
+		assertEquals("{f:'1'}",x.x25(Bean2.create()));
+		assertEquals("{foo:'bar'}",x.x26(alist(part("foo","bar"))));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
