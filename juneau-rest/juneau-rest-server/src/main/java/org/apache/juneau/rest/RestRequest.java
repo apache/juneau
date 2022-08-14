@@ -21,7 +21,6 @@ import static org.apache.juneau.internal.ThrowableUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.serializer.Serializer.*;
-import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static java.lang.Integer.*;
 import static java.util.Collections.*;
 import static java.util.Optional.*;

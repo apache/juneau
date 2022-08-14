@@ -21,7 +21,6 @@ import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpParts.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
-import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 import java.lang.annotation.*;
 import java.lang.reflect.Method;
@@ -146,7 +145,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			try {
 				return beanStore.createBean(RestOpContext.class).type(getType().orElse(getDefaultImplClass())).builder(RestOpContext.Builder.class, this).run();
 			} catch (Exception e) {
-				throw toHttpException(e, InternalServerError.class);
+				throw new InternalServerError(e);
 			}
 		}
 
@@ -195,7 +194,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				processParameterAnnotations();
 
 			} catch (Exception e) {
-				throw toHttpException(e, InternalServerError.class);
+				throw new InternalServerError(e);
 			}
 		}
 

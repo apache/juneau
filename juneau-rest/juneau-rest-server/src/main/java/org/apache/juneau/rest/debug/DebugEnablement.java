@@ -15,8 +15,6 @@ package org.apache.juneau.rest.debug;
 import static org.apache.juneau.Enablement.*;
 import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
-import static org.apache.juneau.rest.HttpRuntimeException.*;
-
 import java.lang.reflect.Method;
 import java.util.function.*;
 
@@ -101,7 +99,7 @@ public abstract class DebugEnablement {
 			try {
 				return creator.run();
 			} catch (Exception e) {
-				throw toHttpException(e, InternalServerError.class);
+				throw new InternalServerError(e);
 			}
 		}
 

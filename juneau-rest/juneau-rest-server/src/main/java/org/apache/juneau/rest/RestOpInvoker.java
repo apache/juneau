@@ -12,12 +12,8 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.rest.HttpRuntimeException.*;
-
 import java.lang.reflect.*;
 
-import org.apache.http.*;
-import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.arg.*;
@@ -59,8 +55,10 @@ public class RestOpInvoker extends MethodInvoker {
 			ParamInfo pi = inner().getParam(i);
 			try {
 				args[i] = opArgs[i].resolve(opSession);
+			} catch (BasicHttpException e) {
+				throw e;
 			} catch (Exception e) {
-				throw toHttpException(e, BadRequest.class, "Could not resolve parameter {0} of type ''{1}'' on method ''{2}''.", i, pi.getParameterType(), getFullName());
+				throw new BadRequest(e, "Could not resolve parameter {0} of type ''{1}'' on method ''{2}''.", i, pi.getParameterType(), getFullName());
 			}
 		}
 		try {
@@ -88,12 +86,7 @@ public class RestOpInvoker extends MethodInvoker {
 			RestResponse res = opSession.getResponse();
 			Throwable e2 = e.getTargetException();
 			res.setStatus(500);  // May be overridden later.
-			Class<?> c = e2.getClass();
-			if (e2 instanceof HttpResponse || c.getAnnotation(Response.class) != null || c.getAnnotation(Content.class) != null) {
-				res.setContent(e2);
-			} else {
-				throw toHttpException(e2, InternalServerError.class, "Method ''{0}'' threw an unexpected exception.", getFullName());
-			}
+			res.setContent(opSession.getRestContext().convertThrowable(e2));
 		}
 	}
 }

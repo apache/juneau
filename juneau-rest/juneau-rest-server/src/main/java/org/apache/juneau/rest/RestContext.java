@@ -19,7 +19,6 @@ import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.rest.HttpRuntimeException.*;
 import static org.apache.juneau.rest.processor.ResponseProcessor.*;
 import static java.util.Collections.*;
 import static java.util.Optional.*;
@@ -51,7 +50,6 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.oapi.*;
@@ -5416,7 +5414,6 @@ public class RestContext extends Context {
 	private final ThrownStore thrownStore;
 	private final ConcurrentHashMap<Locale,Swagger> swaggerCache = new ConcurrentHashMap<>();
 	private final Instant startTime;
-	private final Map<Class<?>,ResponseBeanMeta> responseBeanMetas = new ConcurrentHashMap<>();
 	final Charset defaultCharset;
 	final long maxInput;
 
@@ -6205,7 +6202,7 @@ public class RestContext extends Context {
 				if (s != null)
 					swaggerCache.put(locale, s);
 			} catch (Exception e) {
-				throw toHttpException(e, InternalServerError.class);
+				throw new InternalServerError(e);
 			}
 		}
 		return optional(s);
@@ -6334,7 +6331,7 @@ public class RestContext extends Context {
 			}
 
 		} catch (Throwable e) {
-			handleError(sb.build(), convertThrowable(e, InternalServerError.class));
+			handleError(sb.build(), convertThrowable(e));
 		}
 
 		RestSession s = sb.build();
@@ -6345,7 +6342,7 @@ public class RestContext extends Context {
 			startCall(s);
 			s.run();
 		} catch (Throwable e) {
-			handleError(s, convertThrowable(e, InternalServerError.class));
+			handleError(s, convertThrowable(e));
 		} finally {
 			try {
 				s.finish();
@@ -6418,27 +6415,20 @@ public class RestContext extends Context {
 	 * </ul>
 	 *
 	 * @param t The thrown object.
-	 * @param defaultThrowable The default throwable class to create.
 	 * @return The converted thrown object.
 	 */
-	public Throwable convertThrowable(Throwable t, Class<?> defaultThrowable) {
+	protected Throwable convertThrowable(Throwable t) {
+
+		if (t instanceof InvocationTargetException)
+			t = ((InvocationTargetException)t).getTargetException();
+
+		if (t instanceof ExecutableException)
+			t = ((ExecutableException)t).getTargetException();
+
+		if (t instanceof BasicHttpException)
+			return t;
 
 		ClassInfo ci = ClassInfo.of(t);
-
-		if (ci.is(InvocationTargetException.class)) {
-			t = ((InvocationTargetException)t).getTargetException();
-			ci = ClassInfo.of(t);
-		}
-
-		if (ci.is(HttpRuntimeException.class)) {
-			t = ((HttpRuntimeException)t).getInner();
-			ci = ClassInfo.of(t);
-		}
-
-		if (ci.is(ExecutableException.class)) {
-			t = ((ExecutableException)t).getTargetException();
-			ci = ClassInfo.of(t);
-		}
 
 		if (ci.hasAnnotation(Response.class))
 			return t;
@@ -6454,25 +6444,7 @@ public class RestContext extends Context {
 		if (n.contains("Empty") || n.contains("NotFound"))
 			return new NotFound(t);
 
-		if (defaultThrowable == null)
-			return new InternalServerError(t);
-
-		ClassInfo eci = ClassInfo.of(defaultThrowable);
-
-		try {
-			ConstructorInfo cci = eci.getPublicConstructor(x -> x.hasParamTypes(Throwable.class, String.class, Object[].class));
-			if (cci != null)
-	 			return toHttpException((Throwable)cci.invoke(t, t.getMessage(), new Object[0]), InternalServerError.class);
-
-			cci = eci.getPublicConstructor(x -> x.hasParamTypes(Throwable.class));
-			if (cci != null)
-				return toHttpException((Throwable)cci.invoke(t), InternalServerError.class);
-
-			System.err.println("WARNING:  Class '"+eci+"' does not have a public constructor that takes in valid arguments.");
-			return new InternalServerError(t);
-		} catch (ExecutableException e) {
-			return new InternalServerError(e.getCause());
-		}
+		return t;
 	}
 
 	/**
@@ -6530,11 +6502,7 @@ public class RestContext extends Context {
 		HttpServletRequest req = session.getRequest();
 		HttpServletResponse res = session.getResponse();
 
-		Throwable t = null;
-		if (e instanceof HttpRuntimeException)
-			t = ((HttpRuntimeException)e).getInner();
-		if (t == null)
-			t = e2.getRootCause();
+		Throwable t = e2.getRootCause();
 		if (t != null) {
 			Thrown t2 = thrown(t);
 			res.setHeader(t2.getName(), t2.getValue());
@@ -6581,7 +6549,10 @@ public class RestContext extends Context {
 			} catch (IllegalAccessException|IllegalArgumentException e) {
 				throw InternalServerError.create().message("Error occurred invoking start-call method ''{0}''.", x.getFullName()).causedBy(e).build();
 			} catch (InvocationTargetException e) {
-				throw toHttpException(e.getTargetException(), InternalServerError.class);
+				Throwable t = e.getTargetException();
+				if (t instanceof BasicHttpException)
+					throw (BasicHttpException)t;
+				throw new InternalServerError(t);
 			}
 		}
 	}
@@ -6707,28 +6678,28 @@ public class RestContext extends Context {
 		return rc;
 	}
 
-	/**
-	 * If the specified object is annotated with {@link Response}, this returns the response metadata about that object.
-	 *
-	 * @param o The object to check.
-	 * @return The response metadata, or <jk>null</jk> if it wasn't annotated with {@link Response}.
-	 */
-	public ResponseBeanMeta getResponseBeanMeta(Object o) {
-		if (o == null)
-			return null;
-		Class<?> c = o.getClass();
-		ResponseBeanMeta rbm = responseBeanMetas.get(c);
-		if (rbm == null) {
-			rbm = ResponseBeanMeta.create(c, getAnnotations());
-			if (rbm == null)
-				rbm = ResponseBeanMeta.NULL;
-			responseBeanMetas.put(c, rbm);
-		}
-		if (rbm == ResponseBeanMeta.NULL)
-			return null;
-		return rbm;
-	}
-
+//	/**
+//	 * If the specified object is annotated with {@link Response}, this returns the response metadata about that object.
+//	 *
+//	 * @param o The object to check.
+//	 * @return The response metadata, or <jk>null</jk> if it wasn't annotated with {@link Response}.
+//	 */
+//	public ResponseBeanMeta getResponseBeanMeta(Object o) {
+//		if (o == null)
+//			return null;
+//		Class<?> c = o.getClass();
+//		ResponseBeanMeta rbm = responseBeanMetas.get(c);
+//		if (rbm == null) {
+//			rbm = ResponseBeanMeta.create(c, getAnnotations());
+//			if (rbm == null)
+//				rbm = ResponseBeanMeta.NULL;
+//			responseBeanMetas.put(c, rbm);
+//		}
+//		if (rbm == ResponseBeanMeta.NULL)
+//			return null;
+//		return rbm;
+//	}
+//
 	/**
 	 * Returns the annotations applied to this context.
 	 *
@@ -6737,6 +6708,9 @@ public class RestContext extends Context {
 	public AnnotationWorkList getAnnotations() {
 		return builder.getApplied();
 	}
+
+
+
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper methods

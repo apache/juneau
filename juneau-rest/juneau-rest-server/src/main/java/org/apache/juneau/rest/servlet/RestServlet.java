@@ -16,8 +16,6 @@ import static java.util.logging.Level.*;
 import static javax.servlet.http.HttpServletResponse.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.rest.HttpRuntimeException.*;
-
 import java.io.*;
 import java.text.*;
 import java.util.concurrent.atomic.*;
@@ -84,22 +82,14 @@ public abstract class RestServlet extends HttpServlet {
 			initException.set(e);
 			log(SEVERE, e, "Servlet init error on class ''{0}''", className(this));
 			throw e;
+		} catch (BasicHttpException e) {
+			initException.set(e);
+			log(SEVERE, e, "Servlet init error on class ''{0}''", className(this));
 		} catch (Throwable e) {
-			initException.set(toHttpException(e, InternalServerError.class));
+			initException.set(new InternalServerError(e));
 			log(SEVERE, e, "Servlet init error on class ''{0}''", className(this));
 		}
 	}
-
-//	/**
-//	 * Instantiates the bean store to use for creating beans for this servlet.
-//	 *
-//	 * @param parent The parent bean store.
-//	 * @return A new bean store.
-//	 */
-//	@Rest
-//	public BeanStore createBeanStore(Optional<BeanStore> parent) {
-//		return BeanStore.of(parent.orElse(null), this);
-//	}
 
 	/**
 	 * Sets the context object for this servlet.

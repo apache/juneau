@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.converter;
 
-import static org.apache.juneau.rest.HttpRuntimeException.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.swap.*;
@@ -65,7 +63,7 @@ public final class Traversable implements RestConverter {
 			} catch (ObjectRestException e) {
 				throw new BasicHttpException(e.getStatus(), e);
 			} catch (Throwable t) {
-				throw toHttpException(t, InternalServerError.class);
+				throw new InternalServerError(t);
 			}
 		}
 

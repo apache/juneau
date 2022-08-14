@@ -12,8 +12,6 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.vars;
 
-import static org.apache.juneau.rest.HttpRuntimeException.*;
-
 import java.util.*;
 
 import org.apache.juneau.dto.swagger.*;
@@ -131,7 +129,7 @@ public class RequestSwaggerVar extends MultipartResolvingVar {
 			}
 			return null;
 		} catch (Exception e) {
-			throw toHttpException(e, InternalServerError.class);
+			throw new InternalServerError(e);
 		}
 	}
 
