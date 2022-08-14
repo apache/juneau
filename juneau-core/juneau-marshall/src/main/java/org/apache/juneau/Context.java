@@ -841,6 +841,7 @@ public abstract class Context implements AnnotationProvider {
 	 * @param builder The builder for this class.
 	 */
 	protected Context(Builder builder) {
+		init(builder);
 		debug = builder.debug;
 		annotations = optional(builder.annotations).orElseGet(()->emptyList());
 
@@ -878,6 +879,16 @@ public abstract class Context implements AnnotationProvider {
 		fieldAnnotationCache = new TwoKeyConcurrentCache<>(disabled, (k1,k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
 		constructorAnnotationCache = new TwoKeyConcurrentCache<>(disabled, (k1,k2) -> annotationMap.appendAll(k1, k2, k1.getAnnotationsByType(k2)));
 	}
+
+	/**
+	 * Perform optional initialization on builder before it is used.
+	 *
+	 * <p>
+	 * Default behavior is a no-op.
+	 *
+	 * @param builder The builder to initialize.
+	 */
+	protected void init(Builder builder) {}
 
 	/**
 	 * Creates a builder from this context object.

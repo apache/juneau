@@ -80,7 +80,7 @@ import org.apache.juneau.xml.*;
  * </ul>
  */
 @FluentSetters
-public class RestRequest extends BeanSession implements HttpUriRequest, Configurable {
+public class RestRequest extends BeanSession implements HttpUriRequest, Configurable, AutoCloseable {
 
 	private static final ContentType TEXT_PLAIN = ContentType.TEXT_PLAIN;
 
@@ -2020,7 +2020,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 			for (RestCallInterceptor rci : interceptors)
 				rci.onConnect(this, response);
-			client.onConnect(this, response);
+			client.onCallConnect(this, response);
 
 			String method = getMethod();
 			int sc = response.getStatusCode();
@@ -2160,6 +2160,47 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				}
 			}
 		);
+	}
+
+	/**
+	 * A shortcut for calling <c>run().getContent().asString()</c>.
+	 *
+	 * @return The response content as a simple string.
+	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
+	 */
+	public String getResponseAsString() throws RestCallException {
+		return run().getContent().asString();
+	}
+
+	/**
+	 * A shortcut for calling <c>run().getContent().as(<js>type</js>)</c>.
+	 *
+	 * @param type The object type to create.
+	 * @param <T> The object type to create.
+	 * @see ResponseContent#as(Class)
+	 * @return The response content as a simple string.
+	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
+	 */
+	public <T> T getResponse(Class<T> type) throws RestCallException {
+		return run().getContent().as(type);
+	}
+
+	/**
+	 * A shortcut for calling <c>run().getContent().as(<js>type</js>,<js>args</js>)</c>.
+	 *
+	 * @param type
+	 * 	The object type to create.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * @param args
+	 * 	The type arguments of the class if it's a collection or map.
+	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}
+	 * 	<br>Ignored if the main type is not a map or collection.
+	 * @see ResponseContent#as(Type,Type...)
+	 * @return The response content as a simple string.
+	 * @throws RestCallException If an exception or non-200 response code occurred during the connection attempt.
+	 */
+	public <T> T getResponse(Type type, Type...args) throws RestCallException {
+		return run().getContent().as(type, args);
 	}
 
 	/**
@@ -2711,6 +2752,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
+
+	@Override
+	public void close() throws Exception {
+		complete();
+	}
 
 	@Override /* ContextSession */
 	protected JsonMap properties() {

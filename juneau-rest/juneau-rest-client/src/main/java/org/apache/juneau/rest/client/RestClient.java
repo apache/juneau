@@ -997,14 +997,37 @@ import org.apache.juneau.xml.*;
  * 	<jk>public class</jk> MyRestClient <jk>extends</jk> RestClient {
  *
  * 		<jc>// Must provide this constructor!</jc>
- * 		<jk>public</jk> MyRestClient(ContextProperties <jv>properties</jv>) {
- * 			<jk>super</jk>(<jv>properties</jv>);
+ * 		<jk>public</jk> MyRestClient(RestClient.Builder <jv>builder</jv>) {
+ * 			<jk>super</jk>(<jv>builder</jv>);
  * 		}
  *
+ * 		<jd>/** Optionally override to customize builder settings before initialization. </jd>
  * 		<ja>@Override</ja>
- * 		<jk>public</jk> HttpResponse run(HttpHost <jv>target</jv>, HttpRequest <jv>request</jv>, HttpContext <jv>context</jv>) <jk>throws</jk> IOException {
- * 			<jc>// Perform special handling of requests.</jc>
- * 		}
+ * 		<jk>protected void</jk> init(RestClient.Builder) {...}
+ *
+ * 		<jd>/** Optionally override to provide post-initialization (e.g. setting up SAML handshakes, etc...). </jd>
+ * 		<ja>@Override</ja>
+ * 		<jk>protected void</jk> init() {...}
+ *
+ * 		<jd>/** Optionally override to customize requests when they're created (e.g. add headers to each request). </jd>
+ * 		<ja>@Override</ja>
+ * 		<jk>protected void</jk> request(RestOperation) {...}
+ *
+ * 		<jd>/** Optionally override to implement your own call handling. </jd>
+ * 		<ja>@Override</ja>
+ * 		<jk>protected</jk> HttpResponse run(HttpHost, HttpRequest, HttpContext) {...}
+ *
+ * 		<jd>/** Optionally override to customize requests before they're executed. </jd>
+ * 		<ja>@Override</ja>
+ * 		<jk>protected void</jk> onCallInit(RestRequest) {...}
+ *
+ * 		<jd>/** Optionally override to customize responses as soon as a connection is made. </jd>
+ * 		<ja>@Override</ja>
+ * 		<jk>protected void</jk> onCallConnect(RestRequest, RestResponse) {...}
+ *
+ * 		<jd>/** Optionally override to perform any call cleanup. </jd>
+ * 		<ja>@Override</ja>
+ * 		<jk>protected void</jk> onCallClose(RestRequest, RestResponse) {...}
  * 	}
  *
  * 	<jc>// Instantiate your client.</jc>
@@ -1024,7 +1047,7 @@ import org.apache.juneau.xml.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class RestClient extends BeanContextable implements HttpClient, Closeable, RestCallHandler, RestCallInterceptor {
+public class RestClient extends BeanContextable implements HttpClient, Closeable {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Static
@@ -3627,8 +3650,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li class='note'>The {@link RestClient#onInit(RestRequest)}, {@link RestClient#onConnect(RestRequest,RestResponse)}, and
-		 * {@link RestClient#onClose(RestRequest,RestResponse)} methods can also be overridden to produce the same results.
+		 * 	<li class='note'>The {@link RestClient#onCallInit(RestRequest)}, {@link RestClient#onCallConnect(RestRequest,RestResponse)}, and
+		 * {@link RestClient#onCallClose(RestRequest,RestResponse)} methods can also be overridden to produce the same results.
 		 * </ul>
 		 *
 		 * @param values
@@ -3691,8 +3714,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li class='note'>The {@link RestClient#onInit(RestRequest)}, {@link RestClient#onConnect(RestRequest,RestResponse)}, and
-		 * {@link RestClient#onClose(RestRequest,RestResponse)} methods can also be overridden to produce the same results.
+		 * 	<li class='note'>The {@link RestClient#onCallInit(RestRequest)}, {@link RestClient#onCallConnect(RestRequest,RestResponse)}, and
+		 * {@link RestClient#onCallClose(RestRequest,RestResponse)} methods can also be overridden to produce the same results.
 		 * </ul>
 		 *
 		 * @param value
@@ -6373,11 +6396,29 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		partParser = builder.partParser().create();
 		urlEncodingSerializer = builder.urlEncodingSerializer().build();
 		creationStack = isDebug() ? Thread.currentThread().getStackTrace() : null;
+
+		init();
 	}
 
 	@Override /* Context */
 	public Builder copy() {
 		throw new NoSuchMethodError("Not implemented.");
+	}
+
+	/**
+	 * Perform optional initialization on builder before it is used.
+	 *
+	 * <p>
+	 * Default behavior is a no-op.
+	 *
+	 * @param builder The builder to initialize.
+	 */
+	protected void init(RestClient.Builder builder) {}
+
+	/**
+	 * Gets called add the end of the constructor call to perform any post-initialization.
+	 */
+	protected void init() {
 	}
 
 	/**
@@ -6440,8 +6481,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @throws IOException In case of a problem or the connection was aborted.
 	 * @throws ClientProtocolException In case of an http protocol error.
 	 */
-	@Override /* RestCallHandler */
-	public HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) throws ClientProtocolException, IOException {
+	protected HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) throws ClientProtocolException, IOException {
 		return callHandler.run(target, request, context);
 	}
 
@@ -7123,13 +7163,17 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	/**
 	 * Perform an arbitrary request against the specified URI.
 	 *
+	 * <p>
+	 * All requests feed through this method so it can be used to intercept request creations and make modifications
+	 * (such as add headers).
+	 *
 	 * @param op The operation that identifies the HTTP method, URL, and optional payload.
 	 * @return
 	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
 	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest request(RestOperation op) throws RestCallException {
+	protected RestRequest request(RestOperation op) throws RestCallException {
 		if (isClosed) {
 			Exception e2 = null;
 			if (closedStack != null) {
@@ -7142,7 +7186,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 		RestRequest req = createRequest(toURI(op.getUri(), rootUri), op.getMethod(), op.hasContent());
 
-		onInit(req);
+		onCallInit(req);
 
 		req.content(op.getContent());
 
@@ -7780,8 +7824,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @param req The HTTP request.
 	 * @throws RestCallException If any of the interceptors threw an exception.
 	 */
-	@Override
-	public void onInit(RestRequest req) throws RestCallException {
+	protected void onCallInit(RestRequest req) throws RestCallException {
 		try {
 			for (RestCallInterceptor rci : interceptors)
 				rci.onInit(req);
@@ -7806,8 +7849,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @param res The HTTP response.
 	 * @throws RestCallException If any of the interceptors threw an exception.
 	 */
-	@Override
-	public void onConnect(RestRequest req, RestResponse res) throws RestCallException {
+	protected void onCallConnect(RestRequest req, RestResponse res) throws RestCallException {
 		try {
 			for (RestCallInterceptor rci : interceptors)
 				rci.onConnect(req, res);
@@ -7832,8 +7874,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @param res The HTTP response.
 	 * @throws RestCallException If any of the interceptors threw an exception.
 	 */
-	@Override
-	public void onClose(RestRequest req, RestResponse res) throws RestCallException {
+	protected void onCallClose(RestRequest req, RestResponse res) throws RestCallException {
 		try {
 			for (RestCallInterceptor rci : interceptors)
 				rci.onClose(req, res);
