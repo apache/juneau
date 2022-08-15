@@ -25,9 +25,9 @@ import org.apache.juneau.http.entity.*;
 public class StringResource extends BasicResource {
 
 	/**
-	 * Creates a new {@link InputStreamResource} builder.
+	 * Creates a new {@link StringResource} builder.
 	 *
-	 * @return A new {@link InputStreamResource} builder.
+	 * @return A new {@link StringResource} builder.
 	 */
 	public static HttpResourceBuilder<StringResource> create() {
 		return new HttpResourceBuilder<>(StringResource.class, StringEntity.class);

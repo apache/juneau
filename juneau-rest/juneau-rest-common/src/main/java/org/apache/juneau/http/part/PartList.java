@@ -1132,7 +1132,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * 	<br>Can be <jk>null</jk>.
 	 * 	<br><jk>null</jk> entries are ignored.
 	 */
-	protected PartList(boolean modifiable, List<NameValuePair> parts) {
+	public PartList(boolean modifiable, List<NameValuePair> parts) {
 		super(modifiable, parts);
 		caseInsensitive = false;
 	}
@@ -1145,7 +1145,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 * 	The parts to add to the list.
 	 * 	<br><jk>null</jk> entries are ignored.
 	 */
-	protected PartList(boolean modifiable, NameValuePair...parts) {
+	public PartList(boolean modifiable, NameValuePair...parts) {
 		super(modifiable, Arrays.asList(parts));
 		caseInsensitive = false;
 	}
@@ -1155,8 +1155,16 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 	 *
 	 * @param modifiable Whether this list should be modifiable.
 	 */
-	protected PartList(boolean modifiable) {
+	public PartList(boolean modifiable) {
 		super(modifiable);
+		caseInsensitive = false;
+	}
+
+	/**
+	 * Default constructor.
+	 */
+	public PartList() {
+		super(true);
 		caseInsensitive = false;
 	}
 

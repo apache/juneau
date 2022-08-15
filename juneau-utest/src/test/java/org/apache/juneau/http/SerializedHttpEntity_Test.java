@@ -118,6 +118,6 @@ public class SerializedHttpEntity_Test {
 	}
 
 	private RestClient checkHeaderClient(String header) {
-		return MockRestClient.create(A.class).rootUri("http://localhost/checkHeader").simpleJson().header("Check",header).ignoreErrors().build();
+		return MockRestClient.create(A.class).rootUrl("http://localhost/checkHeader").simpleJson().header("Check",header).ignoreErrors().build();
 	}
 }

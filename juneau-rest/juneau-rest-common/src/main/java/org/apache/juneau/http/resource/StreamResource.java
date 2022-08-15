@@ -23,15 +23,15 @@ import org.apache.juneau.http.entity.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class InputStreamResource extends BasicResource {
+public class StreamResource extends BasicResource {
 
 	/**
-	 * Creates a new {@link InputStreamResource} builder.
+	 * Creates a new {@link StreamResource} builder.
 	 *
-	 * @return A new {@link InputStreamResource} builder.
+	 * @return A new {@link StreamResource} builder.
 	 */
-	public static HttpResourceBuilder<InputStreamResource> create() {
-		return new HttpResourceBuilder<>(InputStreamResource.class, InputStreamEntity.class);
+	public static HttpResourceBuilder<StreamResource> create() {
+		return new HttpResourceBuilder<>(StreamResource.class, StreamEntity.class);
 	}
 
 	/**
@@ -39,17 +39,17 @@ public class InputStreamResource extends BasicResource {
 	 *
 	 * @param builder The resource builder.
 	 */
-	public InputStreamResource(HttpResourceBuilder<?> builder) {
+	public StreamResource(HttpResourceBuilder<?> builder) {
 		super(builder);
 	}
 
 	/**
-	 * Creates a new {@link InputStreamResource} builder initialized with the contents of this entity.
+	 * Creates a new {@link StreamResource} builder initialized with the contents of this entity.
 	 *
-	 * @return A new {@link InputStreamResource} builder initialized with the contents of this entity.
+	 * @return A new {@link StreamResource} builder initialized with the contents of this entity.
 	 */
 	@Override /* BasicResource */
-	public HttpResourceBuilder<InputStreamResource> copy() {
+	public HttpResourceBuilder<StreamResource> copy() {
 		return new HttpResourceBuilder<>(this);
 	}
 }

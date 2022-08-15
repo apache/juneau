@@ -188,28 +188,28 @@ public class HttpEntities {
 	}
 
 	/**
-	 * Creates a new {@link InputStreamEntity} builder.
+	 * Creates a new {@link StreamEntity} builder.
 	 *
 	 * <p>
 	 * Assumes no content type.
 	 *
 	 * @param content The entity content.  Can be <jk>null</jk>.
-	 * @return A new {@link InputStreamEntity} builder.
+	 * @return A new {@link StreamEntity} builder.
 	 */
-	public static final HttpEntityBuilder<InputStreamEntity> streamEntity(InputStream content) {
-		return InputStreamEntity.create().content(content);
+	public static final HttpEntityBuilder<StreamEntity> streamEntity(InputStream content) {
+		return StreamEntity.create().content(content);
 	}
 
 	/**
-	 * Creates a new {@link InputStreamEntity} builder.
+	 * Creates a new {@link StreamEntity} builder.
 	 *
 	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @param length The content length, or <c>-1</c> if not known.
-	 * @return A new {@link InputStreamEntity} builder.
+	 * @return A new {@link StreamEntity} builder.
 	 */
-	public static final HttpEntityBuilder<InputStreamEntity> streamEntity(InputStream content, long length, ContentType contentType) {
-		return InputStreamEntity.create().content(content).contentLength(length).contentType(contentType);
+	public static final HttpEntityBuilder<StreamEntity> streamEntity(InputStream content, long length, ContentType contentType) {
+		return StreamEntity.create().content(content).contentLength(length).contentType(contentType);
 	}
 
 	/**

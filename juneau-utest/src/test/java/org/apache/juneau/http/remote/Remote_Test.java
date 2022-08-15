@@ -475,7 +475,7 @@ public class Remote_Test {
 
 	@Test
 	public void e01_rrpcBasic() throws Exception {
-		E1 x = client(E.class).rootUri("http://localhost/proxy").build().getRrpcInterface(E1.class);
+		E1 x = client(E.class).rootUrl("http://localhost/proxy").build().getRrpcInterface(E1.class);
 
 		assertEquals("foo",x.echo("foo"));
 	}
@@ -487,7 +487,7 @@ public class Remote_Test {
 
 	@Test
 	public void e03_rrpc_noRestUrl() throws Exception {
-		E3 x = client(E.class).rootUri("http://localhost").build().getRrpcInterface(E3.class);
+		E3 x = client(E.class).rootUrl("http://localhost").build().getRrpcInterface(E3.class);
 		assertEquals("foo",x.echo("foo"));
 	}
 
@@ -498,7 +498,7 @@ public class Remote_Test {
 
 	@Test
 	public void e04_rrpc_fullPathOnRemotePath() throws Exception {
-		E4 x = client(E.class).rootUri("").build().getRrpcInterface(E4.class);
+		E4 x = client(E.class).rootUrl("").build().getRrpcInterface(E4.class);
 		assertEquals("foo",x.echo("foo"));
 	}
 
@@ -742,6 +742,6 @@ public class Remote_Test {
 	}
 
 	private static <T> T plainRemote(Class<?> c, Class<T> r, String rootUrl) {
-		return MockRestClient.create(c).rootUri(rootUrl).build().getRemote(r);
+		return MockRestClient.create(c).rootUrl(rootUrl).build().getRemote(r);
 	}
 }

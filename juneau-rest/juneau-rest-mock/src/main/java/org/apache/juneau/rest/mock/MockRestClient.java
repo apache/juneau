@@ -1597,8 +1597,8 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		@Override /* GENERATED - org.apache.juneau.rest.client.RestClient.Builder */
-		public Builder rootUri(Object value) {
-			super.rootUri(value);
+		public Builder rootUrl(Object value) {
+			super.rootUrl(value);
 			return this;
 		}
 
@@ -1887,7 +1887,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			rootUrl = rootUrl + emptyIfNull(contextPath) + emptyIfNull(servletPath);
 
 			builder.servletPath = servletPath;
-			builder.rootUri(rootUrl);
+			builder.rootUrl(rootUrl);
 			return builder;
 		} catch (Exception e) {
 			throw new ConfigException(e, "Could not initialize MockRestClient");

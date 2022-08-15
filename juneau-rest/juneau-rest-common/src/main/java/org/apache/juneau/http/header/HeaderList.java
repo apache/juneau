@@ -1150,7 +1150,7 @@ public class HeaderList extends ControlledArrayList<Header>{
 	 * 	<br>Can be <jk>null</jk>.
 	 * 	<br><jk>null</jk> entries are ignored.
 	 */
-	protected HeaderList(boolean modifiable, List<Header> headers) {
+	public HeaderList(boolean modifiable, List<Header> headers) {
 		super(modifiable, headers);
 		caseSensitive = false;
 	}
@@ -1163,7 +1163,7 @@ public class HeaderList extends ControlledArrayList<Header>{
 	 * 	The headers to add to the list.
 	 * 	<br><jk>null</jk> entries are ignored.
 	 */
-	protected HeaderList(boolean modifiable, Header...headers) {
+	public HeaderList(boolean modifiable, Header...headers) {
 		super(modifiable, Arrays.asList(headers));
 		caseSensitive = false;
 	}
@@ -1173,8 +1173,16 @@ public class HeaderList extends ControlledArrayList<Header>{
 	 *
 	 * @param modifiable Whether this list should be modifiable.
 	 */
-	protected HeaderList(boolean modifiable) {
+	public HeaderList(boolean modifiable) {
 		super(modifiable);
+		caseSensitive = false;
+	}
+
+	/**
+	 * Default constructor.
+	 */
+	public HeaderList() {
+		super(true);
 		caseSensitive = false;
 	}
 

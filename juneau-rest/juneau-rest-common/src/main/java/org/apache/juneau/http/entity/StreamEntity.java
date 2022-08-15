@@ -25,19 +25,19 @@ import java.io.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class InputStreamEntity extends BasicHttpEntity {
+public class StreamEntity extends BasicHttpEntity {
 
 	private final InputStream content;
 	private final long maxLength;
 	private final byte[] cache;
 
 	/**
-	 * Creates a new {@link InputStreamEntity} builder.
+	 * Creates a new {@link StreamEntity} builder.
 	 *
-	 * @return A new {@link InputStreamEntity} builder.
+	 * @return A new {@link StreamEntity} builder.
 	 */
-	public static HttpEntityBuilder<InputStreamEntity> create() {
-		return new HttpEntityBuilder<>(InputStreamEntity.class);
+	public static HttpEntityBuilder<StreamEntity> create() {
+		return new HttpEntityBuilder<>(StreamEntity.class);
 	}
 
 	/**
@@ -46,7 +46,7 @@ public class InputStreamEntity extends BasicHttpEntity {
 	 * @param builder The entity builder.
 	 * @throws IOException If stream could not be read.
 	 */
-	public InputStreamEntity(HttpEntityBuilder<?> builder) throws IOException {
+	public StreamEntity(HttpEntityBuilder<?> builder) throws IOException {
 		super(builder);
 		content = contentOrElse(EMPTY_INPUT_STREAM);
 		cache = builder.cached ? readBytes(content) : null;
@@ -54,12 +54,12 @@ public class InputStreamEntity extends BasicHttpEntity {
 	}
 
 	/**
-	 * Creates a new {@link InputStreamEntity} builder initialized with the contents of this entity.
+	 * Creates a new {@link StreamEntity} builder initialized with the contents of this entity.
 	 *
-	 * @return A new {@link InputStreamEntity} builder initialized with the contents of this entity.
+	 * @return A new {@link StreamEntity} builder initialized with the contents of this entity.
 	 */
 	@Override /* BasicHttpEntity */
-	public HttpEntityBuilder<InputStreamEntity> copy() {
+	public HttpEntityBuilder<StreamEntity> copy() {
 		return new HttpEntityBuilder<>(this);
 	}
 

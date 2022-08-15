@@ -104,7 +104,7 @@ public class TestMicroservice {
 			final StatusLine[] currentResponse = new StatusLine[1];
 			RestClient.Builder rc = RestClient.create()
 				.json()
-				.rootUri(microserviceURI)
+				.rootUrl(microserviceURI)
 				.noTrace();
 			rc.retryHandler(
 					new HttpRequestRetryHandler() {

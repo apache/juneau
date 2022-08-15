@@ -170,12 +170,12 @@ import org.apache.juneau.xml.*;
  *
  * <p>
  * Clients are typically created with a root URI so that relative URIs can be used when making requests.
- * This is done using the {@link Builder#rootUri(Object)} method.
+ * This is done using the {@link Builder#rootUrl(Object)} method.
  *
  * <h5 class='figure'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Create a client where all URIs are relative to localhost.</jc>
- * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().rootUri(<js>"http://localhost:5000"</js>).build();
+ * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:5000"</js>).build();
  *
  * 	<jc>// Use relative paths.</jc>
  * 	String <jv>body</jv> = <jv>client</jv>.get(<js>"/subpath"</js>).run().getContent().asString();
@@ -1011,7 +1011,7 @@ import org.apache.juneau.xml.*;
  *
  * 		<jd>/** Optionally override to customize requests when they're created (e.g. add headers to each request). </jd>
  * 		<ja>@Override</ja>
- * 		<jk>protected void</jk> request(RestOperation) {...}
+ * 		<jk>protected</jk> RestRequest request(RestOperation) {...}
  *
  * 		<jd>/** Optionally override to implement your own call handling. </jd>
  * 		<ja>@Override</ja>
@@ -1090,7 +1090,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 		private boolean pooled;
 
-		String rootUri;
+		String rootUrl;
 		boolean skipEmptyHeaderData, skipEmptyFormData, skipEmptyQueryData, executorServiceShutdownOnClose, ignoreErrors, keepHttpClientOpen, detectLeaks,
 			logToConsole;
 		Logger logger;
@@ -3860,7 +3860,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<jc>// Create a client that uses UON format by default for HTTP parts.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.rootUri(<js>"http://localhost:10000/foo"</js>)
+		 * 		.rootUrl(<js>"http://localhost:10000/foo"</js>)
 		 * 		.build();
 		 *
 		 * 	Bar <jv>bar</jv> = <jv>client</jv>
@@ -3876,16 +3876,16 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		@FluentSetter
-		public Builder rootUri(Object value) {
+		public Builder rootUrl(Object value) {
 			String s = stringify(value);
 			if (! isEmpty(s))
 				s = s.replaceAll("\\/$", "");
 			if (isEmpty(s))
-				rootUri = null;
+				rootUrl = null;
 			else if (s.indexOf("://") == -1)
-				throw new BasicRuntimeException("Invalid rootUri value: ''{0}''.  Must be a valid absolute URL.", value);
+				throw new BasicRuntimeException("Invalid rootUrl value: ''{0}''.  Must be a valid absolute URL.", value);
 			else
-				rootUri = s;
+				rootUrl = s;
 			return this;
 		}
 
@@ -3899,7 +3899,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return The root URI defined for this client.
 		 */
 		public String getRootUri() {
-			return rootUri;
+			return rootUrl;
 		}
 
 		/**
@@ -6325,7 +6325,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	final HttpPartSerializer partSerializer;
 	final HttpPartParser partParser;
 	private final RestCallHandler callHandler;
-	private final String rootUri;
+	private final String rootUrl;
 	private volatile boolean isClosed = false;
 	private final StackTraceElement[] creationStack;
 	private final Logger logger;
@@ -6375,7 +6375,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		skipEmptyHeaderData = builder.skipEmptyHeaderData;
 		skipEmptyQueryData = builder.skipEmptyQueryData;
 		skipEmptyFormData = builder.skipEmptyFormData;
-		rootUri = builder.rootUri;
+		rootUrl = builder.rootUrl;
 		errorCodes = builder.errorCodes;
 		connectionManager = builder.connectionManager;
 		console = builder.console != null ? builder.console : System.err;
@@ -7184,7 +7184,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			throw new RestCallException(null, null, "RestClient.close() has already been called.  This client cannot be reused.  Closed location stack trace can be displayed by setting the system property 'org.apache.juneau.rest.client2.RestClient.trackCreation' to true.");
 		}
 
-		RestRequest req = createRequest(toURI(op.getUri(), rootUri), op.getMethod(), op.hasContent());
+		RestRequest req = createRequest(toURI(op.getUri(), rootUrl), op.getMethod(), op.hasContent());
 
 		onCallInit(req);
 
@@ -7233,7 +7233,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * The URI to the REST interface is based on the following values:
 	 * <ul>
 	 * 	<li>The {@link Remote#path() @Remote(path)} annotation on the interface (<c>remote-path</c>).
-	 * 	<li>The {@link Builder#rootUri(Object) rootUri} on the client (<c>root-url</c>).
+	 * 	<li>The {@link Builder#rootUrl(Object) rootUrl} on the client (<c>root-url</c>).
 	 * 	<li>The fully-qualified class name of the interface (<c>class-name</c>).
 	 * </ul>
 	 *
@@ -7269,14 +7269,14 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * 	<jc>// Resolves to "http://hostname/resturi/myinterface2"</jc>
 	 * 	MyInterface2 <jv>interface2</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.rootUri(<js>"http://hostname/resturi"</js>)
+	 * 		.rootUrl(<js>"http://hostname/resturi"</js>)
 	 * 		.build()
 	 * 		.getRemote(MyInterface2.<jk>class</jk>);
 	 *
 	 * 	<jc>// Resolves to "http://hostname/resturi/org.apache.foo.MyInterface3"</jc>
 	 * 	MyInterface3 <jv>interface3</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.rootUri(<js>"http://hostname/resturi"</js>)
+	 * 		.rootUrl(<js>"http://hostname/resturi"</js>)
 	 * 		.build()
 	 * 		.getRemote(MyInterface3.<jk>class</jk>);
 	 * </p>
@@ -7309,11 +7309,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 *
 	 * @param <T> The interface to create a proxy for.
 	 * @param interfaceClass The interface to create a proxy for.
-	 * @param rootUri The URI of the REST interface.
+	 * @param rootUrl The URI of the REST interface.
 	 * @return The new proxy interface.
 	 */
-	public <T> T getRemote(Class<T> interfaceClass, Object rootUri) {
-		return getRemote(interfaceClass, rootUri, null, null);
+	public <T> T getRemote(Class<T> interfaceClass, Object rootUrl) {
+		return getRemote(interfaceClass, rootUrl, null, null);
 	}
 
 	/**
@@ -7325,18 +7325,18 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 	 * @param <T> The interface to create a proxy for.
 	 * @param interfaceClass The interface to create a proxy for.
-	 * @param rootUri The URI of the REST interface.
+	 * @param rootUrl The URI of the REST interface.
 	 * @param serializer The serializer used to serialize POJOs to the body of the HTTP request.
 	 * @param parser The parser used to parse POJOs from the body of the HTTP response.
 	 * @return The new proxy interface.
 	 */
 	@SuppressWarnings({ "unchecked" })
-	public <T> T getRemote(final Class<T> interfaceClass, Object rootUri, final Serializer serializer, final Parser parser) {
+	public <T> T getRemote(final Class<T> interfaceClass, Object rootUrl, final Serializer serializer, final Parser parser) {
 
-		if (rootUri == null)
-			rootUri = this.rootUri;
+		if (rootUrl == null)
+			rootUrl = this.rootUrl;
 
-		final String restUrl2 = trimSlashes(emptyIfNull(rootUri));
+		final String restUrl2 = trimSlashes(emptyIfNull(rootUrl));
 
 		return (T)Proxy.newProxyInstance(
 			interfaceClass.getClassLoader(),
@@ -7488,7 +7488,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * The URI to the REST interface is based on the following values:
 	 * <ul>
 	 * 	<li>The {@link Remote#path() @Remote(path)} annotation on the interface (<c>remote-path</c>).
-	 * 	<li>The {@link Builder#rootUri(Object) rootUri} on the client (<c>root-url</c>).
+	 * 	<li>The {@link Builder#rootUrl(Object) rootUrl} on the client (<c>root-url</c>).
 	 * 	<li>The fully-qualified class name of the interface (<c>class-name</c>).
 	 * </ul>
 	 *
@@ -7559,9 +7559,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			RrpcInterfaceMeta rm = new RrpcInterfaceMeta(interfaceClass, "");
 			String path = rm.getPath();
 			if (path.indexOf("://") == -1) {
-				if (isEmpty(rootUri))
+				if (isEmpty(rootUrl))
 					throw new RemoteMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remote interface.");
-				path = trimSlashes(rootUri) + '/' + path;
+				path = trimSlashes(rootUrl) + '/' + path;
 			}
 			uri = path;
 		}
@@ -8124,7 +8124,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 	private Pattern absUrlPattern = Pattern.compile("^\\w+\\:\\/\\/.*");
 
-	URI toURI(Object x, String rootUri) throws RestCallException {
+	URI toURI(Object x, String rootUrl) throws RestCallException {
 		try {
 			if (x instanceof URI)
 				return (URI)x;
@@ -8133,11 +8133,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			if (x instanceof URIBuilder)
 				return ((URIBuilder)x).build();
 			String s = x == null ? "" : x.toString();
-			if (rootUri != null && ! absUrlPattern.matcher(s).matches()) {
+			if (rootUrl != null && ! absUrlPattern.matcher(s).matches()) {
 				if (s.isEmpty())
-					s = rootUri;
+					s = rootUrl;
 				else {
-					StringBuilder sb = new StringBuilder(rootUri);
+					StringBuilder sb = new StringBuilder(rootUrl);
 					if (! s.startsWith("/"))
 						sb.append('/');
 					sb.append(s);
@@ -8236,6 +8236,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			.append("partParser", partParser)
 			.append("partSerializer", partSerializer)
 			.append("queryData", queryData)
-			.append("rootUri", rootUri);
+			.append("rootUrl", rootUrl);
 	}
 }

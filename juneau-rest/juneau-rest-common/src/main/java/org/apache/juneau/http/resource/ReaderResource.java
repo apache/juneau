@@ -26,9 +26,9 @@ import org.apache.juneau.http.entity.*;
 public class ReaderResource extends BasicResource {
 
 	/**
-	 * Creates a new {@link InputStreamResource} builder.
+	 * Creates a new {@link ReaderResource} builder.
 	 *
-	 * @return A new {@link InputStreamResource} builder.
+	 * @return A new {@link ReaderResource} builder.
 	 */
 	public static HttpResourceBuilder<ReaderResource> create() {
 		return new HttpResourceBuilder<>(ReaderResource.class, ReaderEntity.class);
