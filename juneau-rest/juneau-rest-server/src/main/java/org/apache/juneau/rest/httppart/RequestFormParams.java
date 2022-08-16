@@ -12,12 +12,14 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.rest.httppart;
 
+import static java.util.stream.Collectors.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static org.apache.juneau.internal.ArgUtils.*;
 import static org.apache.juneau.internal.ClassUtils.*;
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import java.util.*;
+import java.util.stream.*;
 
 import javax.servlet.http.*;
 
@@ -69,11 +71,10 @@ import org.apache.juneau.svl.*;
  * 	<ul class='spaced-list'>
  * 		<li>Methods for retrieving form data parameters:
  * 		<ul class='javatreec'>
- * 			<li class='jm'>{@link RequestFormParams#contains(String...) contains(String...)}
+ * 			<li class='jm'>{@link RequestFormParams#contains(String) contains(String)}
  * 			<li class='jm'>{@link RequestFormParams#containsAny(String...) containsAny(String...)}
  * 			<li class='jm'>{@link RequestFormParams#get(Class) get(Class)}
  * 			<li class='jm'>{@link RequestFormParams#get(String) get(String)}
- * 			<li class='jm'>{@link RequestFormParams#getAll() getAll()}
  * 			<li class='jm'>{@link RequestFormParams#getAll(String) getAll(String)}
  * 			<li class='jm'>{@link RequestFormParams#getFirst(String) getFirst(String)}
  * 			<li class='jm'>{@link RequestFormParams#getLast(String) getLast(String)}
@@ -86,8 +87,7 @@ import org.apache.juneau.svl.*;
  * 			<li class='jm'>{@link RequestFormParams#addDefault(List) addDefault(List)}
  * 			<li class='jm'>{@link RequestFormParams#addDefault(NameValuePair...) addDefault(NameValuePair...)}
  * 			<li class='jm'>{@link RequestFormParams#addDefault(String,String) addDefault(String,String)}
- * 			<li class='jm'>{@link RequestFormParams#remove(NameValuePair...) remove(NameValuePair...)}
- * 			<li class='jm'>{@link RequestFormParams#remove(String...) remove(String...)}
+ * 			<li class='jm'>{@link RequestFormParams#remove(String) remove(String)}
  * 			<li class='jm'>{@link RequestFormParams#set(NameValuePair...) set(NameValuePair...)}
  * 			<li class='jm'>{@link RequestFormParams#set(String,Object) set(String,Object)}
  * 		</ul>
@@ -108,15 +108,14 @@ import org.apache.juneau.svl.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class RequestFormParams {
+public class RequestFormParams extends ArrayList<RequestFormParam> {
+
+	private static final long serialVersionUID = 1L;
 
 	private final RestRequest req;
-	private final boolean caseSensitive;
+	private boolean caseSensitive;
 	private HttpPartParserSession parser;
 	private final VarResolverSession vs ;
-
-	private List<RequestFormParam> list = new LinkedList<>();
-	private Map<String,List<RequestFormParam>> map = new TreeMap<>();
 
 	/**
 	 * Constructor.
@@ -145,8 +144,6 @@ public class RequestFormParams {
 		if (m != null) {
 			for (Map.Entry<String,String[]> e : m.entrySet()) {
 				String name = e.getKey();
-				String key = key(name);
-				List<RequestFormParam> l = list();
 
 				String[] values = e.getValue();
 				if (values == null)
@@ -158,12 +155,11 @@ public class RequestFormParams {
 				if (values.length == 1 && values[0] == null)
 					values[0] = "";
 
-				for (String value : values) {
-					RequestFormParam p = new RequestFormParam(req, name, value);
-					list.add(p);
-					l.add(p);
-				}
-				map.put(key, l);
+				if (values.length == 0)
+					values = new String[]{null};
+
+				for (String value : values)
+					add(new RequestFormParam(req, name, value));
 			}
 		} else if (c != null) {
 			c.stream().forEach(x->add(x));
@@ -178,9 +174,20 @@ public class RequestFormParams {
 		req = copyFrom.req;
 		caseSensitive = copyFrom.caseSensitive;
 		parser = copyFrom.parser;
-		list.addAll(copyFrom.list);
-		map.putAll(copyFrom.map);
+		addAll(copyFrom);
 		vs = copyFrom.vs;
+	}
+
+	/**
+	 * Subset constructor.
+	 */
+	private RequestFormParams(RequestFormParams copyFrom, String...names) {
+		this.req = copyFrom.req;
+		caseSensitive = copyFrom.caseSensitive;
+		parser = copyFrom.parser;
+		vs = copyFrom.vs;
+		for (String n : names)
+			copyFrom.stream().filter(x -> eq(x.getName(), n)).forEach(x -> add(x));
 	}
 
 	/**
@@ -191,8 +198,18 @@ public class RequestFormParams {
 	 */
 	public RequestFormParams parser(HttpPartParserSession value) {
 		this.parser = value;
-		for (RequestFormParam p : list)
-			p.parser(parser);
+		forEach(x -> x.parser(parser));
+		return this;
+	}
+
+	/**
+	 * Sets case sensitivity for names in this list.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RequestFormParams caseSensitive(boolean value) {
+		this.caseSensitive = value;
 		return this;
 	}
 
@@ -214,15 +231,11 @@ public class RequestFormParams {
 	public RequestFormParams addDefault(List<? extends NameValuePair> pairs) {
 		for (NameValuePair p : pairs) {
 			String name = p.getName();
-			String key = key(name);
-			List<RequestFormParam> l = map.get(key);
-			boolean hasAllBlanks = l != null && l.stream().allMatch(x -> StringUtils.isEmpty(x.getValue()));
-			if (l == null || hasAllBlanks) {
-				if (hasAllBlanks)
-					list.removeAll(l);
-				RequestFormParam x = new RequestFormParam(req, name, vs.resolve(p.getValue()));
-				list.add(x);
-				map.put(key, list(x));
+			Stream<RequestFormParam> l = stream(name);
+			boolean hasAllBlanks = l.allMatch(x -> StringUtils.isEmpty(x.getValue()));
+			if (hasAllBlanks) {
+				removeAll(getAll(name));
+				add(new RequestFormParam(req, name, vs.resolve(p.getValue())));
 			}
 		}
 		return this;
@@ -240,7 +253,7 @@ public class RequestFormParams {
 	 * @return This object.
 	 */
 	public RequestFormParams addDefault(NameValuePair...pairs) {
-		return addDefault(Arrays.asList(pairs));
+		return addDefault(alist(pairs));
 	}
 
 	/**
@@ -252,64 +265,6 @@ public class RequestFormParams {
 	 */
 	public RequestFormParams addDefault(String name, String value) {
 		return addDefault(BasicStringPart.of(name, value));
-	}
-
-	/**
-	 * Returns all the parameters with the specified name.
-	 *
-	 * @param name The parameter name.
-	 * @return The list of all parameters with the specified name, or an empty list if none are found.
-	 */
-	public List<RequestFormParam> getAll(String name) {
-		assertArgNotNull("name", name);
-		List<RequestFormParam> l = map.get(key(name));
-		return l == null ? emptyList() : unmodifiable(l);
-	}
-
-	/**
-	 * Returns all the parameters on this request.
-	 *
-	 * @return All the parameters on this request.
-	 */
-	public List<RequestFormParam> getAll() {
-		return unmodifiable(list);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the parameters with the specified names are present.
-	 *
-	 * @param names The parameter names.  Must not be <jk>null</jk>.
-	 * @return <jk>true</jk> if the parameters with the specified names are present.
-	 */
-	public boolean contains(String...names) {
-		assertArgNotNull("names", names);
-		for (String n : names)
-			if (! map.containsKey(key(n)))
-				return false;
-		return true;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the parameter with any of the specified names are present.
-	 *
-	 * @param names The parameter names.  Must not be <jk>null</jk>.
-	 * @return <jk>true</jk> if the parameter with any of the specified names are present.
-	 */
-	public boolean containsAny(String...names) {
-		assertArgNotNull("names", names);
-		for (String n : names)
-			if (map.containsKey(key(n)))
-				return true;
-		return false;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if these parameters are empty.
-	 *
-	 * @return <jk>true</jk> if these parameters are empty.
-	 */
-	public boolean isEmpty() {
-		return list.isEmpty();
 	}
 
 	/**
@@ -325,35 +280,7 @@ public class RequestFormParams {
 	 */
 	public RequestFormParams add(String name, Object value) {
 		assertArgNotNull("name", name);
-		String key = key(name);
-		RequestFormParam h = new RequestFormParam(req, name, stringify(value)).parser(parser);
-		if (map.containsKey(key))
-			map.get(key).add(h);
-		else
-			map.put(key, list(h));
-		list.add(h);
-		return this;
-	}
-
-	/**
-	 * Adds a parameter value.
-	 *
-	 * <p>
-	 * Parameter is added to the end.
-	 * <br>Existing parameter with the same name are not changed.
-	 *
-	 * @param part The parameter part.  Must not be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public RequestFormParams add(Part part) {
-		assertArgNotNull("part", part);
-		String key = key(part.getName());
-		RequestFormParam h = new RequestFormParam(req, part).parser(parser);
-		if (map.containsKey(key))
-			map.get(key).add(h);
-		else
-			map.put(key, list(h));
-		list.add(h);
+		add(new RequestFormParam(req, name, stringify(value)).parser(parser));
 		return this;
 	}
 
@@ -369,10 +296,25 @@ public class RequestFormParams {
 	 */
 	public RequestFormParams add(NameValuePair...parameters) {
 		assertArgNotNull("parameters", parameters);
-		for (NameValuePair p : parameters) {
+		for (NameValuePair p : parameters)
 			if (p != null)
 				add(p.getName(), p.getValue());
-		}
+		return this;
+	}
+
+	/**
+	 * Adds a parameter value.
+	 *
+	 * <p>
+	 * Parameter is added to the end.
+	 * <br>Existing parameter with the same name are not changed.
+	 *
+	 * @param part The parameter part.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RequestFormParams add(Part part) {
+		assertArgNotNull("part", part);
+		add(new RequestFormParam(req, part).parser(parser));
 		return this;
 	}
 
@@ -392,12 +334,7 @@ public class RequestFormParams {
 	 */
 	public RequestFormParams set(String name, Object value) {
 		assertArgNotNull("name", name);
-		String key = key(name);
-		RequestFormParam p = new RequestFormParam(req, name, stringify(value)).parser(parser);
-		if (map.containsKey(key))
-			list.removeIf(x->caseSensitive?x.getName().equals(name):x.getName().equalsIgnoreCase(name));
-		list.add(p);
-		map.put(key, list(p));
+		set(new RequestFormParam(req, name, stringify(value)).parser(parser));
 		return this;
 	}
 
@@ -427,32 +364,91 @@ public class RequestFormParams {
 	 * @param name The parameter names.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestFormParams remove(String...name) {
+	public RequestFormParams remove(String name) {
 		assertArgNotNull("name", name);
-		for (String n : name) {
-			String key = key(n);
-			if (map.containsKey(key))
-				list.removeAll(map.get(key));
-			map.remove(key);
-		}
+		removeIf(x -> eq(x.getName(), name));
 		return this;
 	}
 
 	/**
-	 * Remove parameters.
+	 * Returns a copy of this object but only with the specified param names copied.
 	 *
-	 * @param parameters The parameters to remove.  Must not be <jk>null</jk>.
-	 * @return This object.
+	 * @param names The list to include in the copy.
+	 * @return A new list object.
 	 */
-	public RequestFormParams remove(NameValuePair...parameters) {
-		for (NameValuePair p : parameters)
-			remove(p.getName());
-		return this;
+	public RequestFormParams subset(String...names) {
+		return new RequestFormParams(this, names);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Convenience getters.
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns <jk>true</jk> if the parameters with the specified names are present.
+	 *
+	 * @param name The parameter name.  Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the parameters with the specified names are present.
+	 */
+	public boolean contains(String name) {
+		return stream(name).findAny().isPresent();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the parameter with any of the specified names are present.
+	 *
+	 * @param names The parameter names.  Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the parameter with any of the specified names are present.
+	 */
+	public boolean containsAny(String...names) {
+		assertArgNotNull("names", names);
+		for (String n : names)
+			if (stream(n).findAny().isPresent())
+				return true;
+		return false;
+	}
+
+	/**
+	 * Returns all the parameters with the specified name.
+	 *
+	 * @param name The parameter name.
+	 * @return The list of all parameters with the specified name, or an empty list if none are found.
+	 */
+	public List<RequestFormParam> getAll(String name) {
+		return stream(name).collect(toList());
+	}
+
+	/**
+	 * Returns all headers with the specified name.
+	 *
+	 * @param name The header name.
+	 * @return The stream of all headers with matching names.  Never <jk>null</jk>.
+	 */
+	public Stream<RequestFormParam> stream(String name) {
+		return stream().filter(x -> eq(x.getName(), name));
+	}
+
+	/**
+	 * Returns all headers in sorted order.
+	 *
+	 * @return The stream of all headers in sorted order.
+	 */
+	public Stream<RequestFormParam> getSorted() {
+		Comparator<RequestFormParam> x;
+		if (caseSensitive)
+			x = (x1,x2) -> x1.getName().compareTo(x2.getName());
+		else
+			x = (x1,x2) -> String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());
+		return stream().sorted(x);
+	}
+
+	/**
+	 * Returns all the unique header names in this list.
+	 * @return The list of all unique header names in this list.
+	 */
+	public List<String> getNames() {
+		return stream().map(x -> x.getName()).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().collect(toList());
+	}
 
 	/**
 	 * Returns the first parameter with the specified name.
@@ -466,8 +462,7 @@ public class RequestFormParams {
 	 */
 	public RequestFormParam getFirst(String name) {
 		assertArgNotNull("name", name);
-		List<RequestFormParam> l = map.get(key(name));
-		return (l == null || l.isEmpty() ? new RequestFormParam(req, name, null).parser(parser) : l.get(0));
+		return stream(name).findFirst().orElseGet(()->new RequestFormParam(req, name, null).parser(parser));
 	}
 
 	/**
@@ -482,8 +477,9 @@ public class RequestFormParams {
 	 */
 	public RequestFormParam getLast(String name) {
 		assertArgNotNull("name", name);
-		List<RequestFormParam> l = map.get(key(name));
-		return (l == null || l.isEmpty() ? new RequestFormParam(req, name, null).parser(parser) : l.get(l.size()-1));
+		Value<RequestFormParam> v = Value.empty();
+		stream(name).forEach(x -> v.set(x));
+		return v.orElseGet(() -> new RequestFormParam(req, name, null).parser(parser));
 	}
 
 	/**
@@ -496,7 +492,18 @@ public class RequestFormParams {
 	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
 	 */
 	public RequestFormParam get(String name) {
-		return getLast(name);
+		List<RequestFormParam> l = getAll(name);
+		if (l.isEmpty())
+			return new RequestFormParam(req, name, null).parser(parser);
+		if (l.size() == 1)
+			return l.get(0);
+		StringBuilder sb = new StringBuilder(128);
+		for (int i = 0, j = l.size(); i < j; i++) {
+			if (i > 0)
+				sb.append(", ");
+			sb.append(l.get(i).getValue());
+		}
+		return new RequestFormParam(req, name, sb.toString()).parser(parser);
 	}
 
 	/**
@@ -530,7 +537,7 @@ public class RequestFormParams {
 	 */
 	public String asQueryString() {
 		StringBuilder sb = new StringBuilder();
-		for (RequestFormParam e : list) {
+		for (RequestFormParam e : this) {
 			if (sb.length() > 0)
 				sb.append("&");
 			sb.append(urlEncode(e.getName())).append('=').append(urlEncode(e.getValue()));
@@ -547,31 +554,11 @@ public class RequestFormParams {
 		return new RequestFormParams(this);
 	}
 
-	/**
-	 * Converts the parameters to a readable string.
-	 *
-	 * @param sorted Sort the parameters by name.
-	 * @return A JSON string containing the contents of the parameters.
-	 */
-	public String toString(boolean sorted) {
-		JsonMap m = JsonMap.create();
-		if (sorted) {
-			for (List<RequestFormParam> p1 : map.values())
-				for (RequestFormParam p2 : p1)
-					m.append(p2.getName(), p2.getValue());
-		} else {
-			for (RequestFormParam p : list)
-				m.append(p.getName(), p.getValue());
-		}
-		return m.toString();
-	}
-
-	private String key(String name) {
-		return caseSensitive ? name : name.toLowerCase();
-	}
-
 	@Override /* Object */
 	public String toString() {
-		return toString(false);
+		JsonMap m = new JsonMap();
+		for (String n : getNames())
+			m.put(n, get(n).asString().orElse(null));
+		return m.asJson();
 	}
 }

@@ -314,7 +314,6 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 		return this;
 	}
 
-
 	/**
 	 * Sets request header values.
 	 *

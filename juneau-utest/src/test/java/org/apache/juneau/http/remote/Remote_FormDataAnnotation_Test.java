@@ -716,7 +716,7 @@ public class Remote_FormDataAnnotation_Test {
 	public static class K {
 		@RestOp
 		public String post(RestRequest req) throws Exception {
-			return req.getFormParams().toString(true);
+			return req.getFormParams().toString();
 		}
 	}
 
@@ -881,7 +881,7 @@ public class Remote_FormDataAnnotation_Test {
 	@Test
 	public void k04_requestBean_charSequence() throws Exception {
 		K4 x = remote(K.class,K4.class);
-		assertEquals("{baz:'qux',foo:'bar'}",x.post(new C04_Bean()));
+		assertEquals("{foo:'bar',baz:'qux'}",x.post(new C04_Bean()));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -903,7 +903,7 @@ public class Remote_FormDataAnnotation_Test {
 	@Test
 	public void k05_requestBean_reader() throws Exception {
 		K5 x = remote(K.class,K5.class);
-		assertEquals("{baz:'qux',foo:'bar'}",x.post(new K5a()));
+		assertEquals("{foo:'bar',baz:'qux'}",x.post(new K5a()));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

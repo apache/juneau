@@ -31,7 +31,7 @@ import org.apache.juneau.rest.httppart.*;
  * 	<jv>opSession</jv>
  * 		.{@link RestOpSession#getRequest() getRequest}()
  * 		.{@link RestRequest#getFormParams() getFormParams}()
- * 		.{@link RequestFormParams#contains(String...) contains}(<jv>name</jv>);
+ * 		.{@link RequestFormParams#contains(String) contains}(<jv>name</jv>);
  * </p>
  *
  * <p>
