@@ -569,6 +569,12 @@ public class RequestQueryParams extends ArrayList<RequestQueryParam> {
 		return ofNullable(PageArgs.create(get("p").asInteger().orElse(null), get("l").asInteger().orElse(null)));
 	}
 
+	private boolean eq(String s1, String s2) {
+		if (caseSensitive)
+			return StringUtils.eq(s1, s2);
+		return StringUtils.eqic(s1, s2);
+	}
+
 	@Override /* Object */
 	public String toString() {
 		JsonMap m = new JsonMap();

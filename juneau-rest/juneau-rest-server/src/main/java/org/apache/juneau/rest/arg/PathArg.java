@@ -116,7 +116,7 @@ public class PathArg implements RestOpArg {
 		RestRequest req = opSession.getRequest();
 		if (name.equals("*")) {
 			JsonMap m = new JsonMap();
-			req.getPathParams().getAll().stream().forEach(x -> m.put(x.getName(), x.getValue()));
+			req.getPathParams().stream().forEach(x -> m.put(x.getName(), x.getValue()));
 			return req.getBeanSession().convertToType(m, type);
 		}
 		HttpPartParserSession ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
