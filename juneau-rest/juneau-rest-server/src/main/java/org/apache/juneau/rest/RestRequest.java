@@ -1616,9 +1616,7 @@ public final class RestRequest extends HttpServletRequestWrapper {
 	public String toString() {
 		StringBuilder sb = new StringBuilder("\n").append(getRequestLine()).append("\n");
 		sb.append("---Headers---\n");
-		for (RequestHeader h : getHeaders().getAll()) {
-			sb.append("\t").append(h).append("\n");
-		}
+		getHeaders().forEach(x -> sb.append("\t").append(x).append("\n"));
 		String m = getMethod();
 		if (m.equals("PUT") || m.equals("POST")) {
 			try {
