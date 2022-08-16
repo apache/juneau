@@ -32,7 +32,7 @@ import org.apache.juneau.rest.httppart.*;
  * 	<jv>opSession</jv>
  * 		.{@link RestOpSession#getRequest() getRequest}()
  * 		.{@link RestRequest#getQueryParams() getQueryParams}()
- * 		.{@link RequestQueryParams#contains(String...) contains}(<jv>name</jv>);
+ * 		.{@link RequestQueryParams#contains(String) contains}(<jv>name</jv>);
  * </p>
  *
  * <p>

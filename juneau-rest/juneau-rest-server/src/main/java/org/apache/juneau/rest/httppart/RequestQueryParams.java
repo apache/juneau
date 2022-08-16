@@ -18,8 +18,10 @@ import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 import static java.util.Optional.*;
+import static java.util.stream.Collectors.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.http.*;
 import org.apache.juneau.httppart.*;
@@ -72,11 +74,10 @@ import org.apache.juneau.http.part.*;
  * 	<ul class='spaced-list'>
  * 		<li>Methods for retrieving query parameters:
  * 		<ul class='javatreec'>
- * 			<li class='jm'>{@link RequestQueryParams#contains(String...) contains(String...)}
+ * 			<li class='jm'>{@link RequestQueryParams#contains(String) contains(String)}
  * 			<li class='jm'>{@link RequestQueryParams#containsAny(String...) containsAny(String...)}
  * 			<li class='jm'>{@link RequestQueryParams#get(Class) get(Class)}
  * 			<li class='jm'>{@link RequestQueryParams#get(String) get(String)}
- * 			<li class='jm'>{@link RequestQueryParams#getAll() getAll()}
  * 			<li class='jm'>{@link RequestQueryParams#getAll(String) getAll(String)}
  * 			<li class='jm'>{@link RequestQueryParams#getFirst(String) getFirst(String)}
  * 			<li class='jm'>{@link RequestQueryParams#getLast(String) getLast(String)}
@@ -92,8 +93,7 @@ import org.apache.juneau.http.part.*;
  * 			<li class='jm'>{@link RequestQueryParams#addDefault(List) addDefault(List)}
  * 			<li class='jm'>{@link RequestQueryParams#addDefault(NameValuePair...) addDefault(NameValuePair...)}
  * 			<li class='jm'>{@link RequestQueryParams#addDefault(String,String) addDefault(String,String)}
- * 			<li class='jm'>{@link RequestQueryParams#remove(NameValuePair...) remove(NameValuePair...)}
- * 			<li class='jm'>{@link RequestQueryParams#remove(String...) remove(String...)}
+ * 			<li class='jm'>{@link RequestQueryParams#remove(String) remove(String)}
  * 			<li class='jm'>{@link RequestQueryParams#set(NameValuePair...) set(NameValuePair...)}
  * 			<li class='jm'>{@link RequestQueryParams#set(String,Object) set(String,Object)}
  * 		</ul>
@@ -117,15 +117,14 @@ import org.apache.juneau.http.part.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class RequestQueryParams {
+public class RequestQueryParams extends ArrayList<RequestQueryParam> {
+
+	private static final long serialVersionUID = 1L;
 
 	private final RestRequest req;
-	private final boolean caseSensitive;
+	private boolean caseSensitive;
 	private final VarResolverSession vs;
 	private HttpPartParserSession parser;
-
-	private List<RequestQueryParam> list = new LinkedList<>();
-	private Map<String,List<RequestQueryParam>> map = new TreeMap<>();
 
 	/**
 	 * Constructor.
@@ -141,8 +140,6 @@ public class RequestQueryParams {
 
 		for (Map.Entry<String,String[]> e : query.entrySet()) {
 			String name = e.getKey();
-			String key = key(name);
-			List<RequestQueryParam> l = list();
 
 			String[] values = e.getValue();
 			if (values == null)
@@ -154,12 +151,11 @@ public class RequestQueryParams {
 			if (values.length == 1 && values[0] == null)
 				values[0] = "";
 
-			for (String value : values) {
-				RequestQueryParam p = new RequestQueryParam(req, name, value);
-				list.add(p);
-				l.add(p);
-			}
-			map.put(key, l);
+			if (values.length == 0)
+				values = new String[]{null};
+
+			for (String value : values)
+				add(new RequestQueryParam(req, name, value));
 		}
 	}
 
@@ -170,9 +166,20 @@ public class RequestQueryParams {
 		req = copyFrom.req;
 		caseSensitive = copyFrom.caseSensitive;
 		parser = copyFrom.parser;
-		list.addAll(copyFrom.list);
-		map.putAll(copyFrom.map);
+		addAll(copyFrom);
 		vs = copyFrom.vs;
+	}
+
+	/**
+	 * Subset constructor.
+	 */
+	private RequestQueryParams(RequestQueryParams copyFrom, String...names) {
+		this.req = copyFrom.req;
+		caseSensitive = copyFrom.caseSensitive;
+		parser = copyFrom.parser;
+		vs = copyFrom.vs;
+		for (String n : names)
+			copyFrom.stream().filter(x -> eq(x.getName(), n)).forEach(x -> add(x));
 	}
 
 	/**
@@ -183,8 +190,18 @@ public class RequestQueryParams {
 	 */
 	public RequestQueryParams parser(HttpPartParserSession value) {
 		this.parser = value;
-		for (RequestQueryParam p : list)
-			p.parser(parser);
+		forEach(x -> x.parser(parser));
+		return this;
+	}
+
+	/**
+	 * Sets case sensitivity for names in this list.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RequestQueryParams caseSensitive(boolean value) {
+		this.caseSensitive = value;
 		return this;
 	}
 
@@ -206,15 +223,11 @@ public class RequestQueryParams {
 	public RequestQueryParams addDefault(List<? extends NameValuePair> pairs) {
 		for (NameValuePair p : pairs) {
 			String name = p.getName();
-			String key = key(name);
-			List<RequestQueryParam> l = map.get(key);
-			boolean hasAllBlanks = l != null && l.stream().allMatch(x -> StringUtils.isEmpty(x.getValue()));
-			if (l == null || hasAllBlanks) {
-				if (hasAllBlanks)
-					list.removeAll(l);
-				RequestQueryParam x = new RequestQueryParam(req, name, vs.resolve(p.getValue()));
-				list.add(x);
-				map.put(key, list(x));
+			Stream<RequestQueryParam> l = stream(name);
+			boolean hasAllBlanks = l.allMatch(x -> StringUtils.isEmpty(x.getValue()));
+			if (hasAllBlanks) {
+				removeAll(getAll(name));
+				add(new RequestQueryParam(req, name, vs.resolve(p.getValue())));
 			}
 		}
 		return this;
@@ -247,64 +260,6 @@ public class RequestQueryParams {
 	}
 
 	/**
-	 * Returns all the parameters with the specified name.
-	 *
-	 * @param name The parameter name.
-	 * @return The list of all parameters with the specified name, or an empty list if none are found.
-	 */
-	public List<RequestQueryParam> getAll(String name) {
-		assertArgNotNull("name", name);
-		List<RequestQueryParam> l = map.get(key(name));
-		return l == null ? emptyList() : unmodifiable(l);
-	}
-
-	/**
-	 * Returns all the parameters on this request.
-	 *
-	 * @return All the parameters on this request.
-	 */
-	public List<RequestQueryParam> getAll() {
-		return unmodifiable(list);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the parameters with the specified names are present.
-	 *
-	 * @param names The parameter names.  Must not be <jk>null</jk>.
-	 * @return <jk>true</jk> if the parameters with the specified names are present.
-	 */
-	public boolean contains(String...names) {
-		assertArgNotNull("names", names);
-		for (String n : names)
-			if (! map.containsKey(key(n)))
-				return false;
-		return true;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the parameter with any of the specified names are present.
-	 *
-	 * @param names The parameter names.  Must not be <jk>null</jk>.
-	 * @return <jk>true</jk> if the parameter with any of the specified names are present.
-	 */
-	public boolean containsAny(String...names) {
-		assertArgNotNull("names", names);
-		for (String n : names)
-			if (map.containsKey(key(n)))
-				return true;
-		return false;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if these parameters are empty.
-	 *
-	 * @return <jk>true</jk> if these parameters are empty.
-	 */
-	public boolean isEmpty() {
-		return list.isEmpty();
-	}
-
-	/**
 	 * Adds a parameter value.
 	 *
 	 * <p>
@@ -317,13 +272,7 @@ public class RequestQueryParams {
 	 */
 	public RequestQueryParams add(String name, Object value) {
 		assertArgNotNull("name", name);
-		String key = key(name);
-		RequestQueryParam h = new RequestQueryParam(req, name, stringify(value)).parser(parser);
-		if (map.containsKey(key))
-			map.get(key).add(h);
-		else
-			map.put(key, list(h));
-		list.add(h);
+		add(new RequestQueryParam(req, name, stringify(value)).parser(parser));
 		return this;
 	}
 
@@ -339,10 +288,9 @@ public class RequestQueryParams {
 	 */
 	public RequestQueryParams add(NameValuePair...parameters) {
 		assertArgNotNull("parameters", parameters);
-		for (NameValuePair p : parameters) {
+		for (NameValuePair p : parameters)
 			if (p != null)
 				add(p.getName(), p.getValue());
-		}
 		return this;
 	}
 
@@ -362,12 +310,7 @@ public class RequestQueryParams {
 	 */
 	public RequestQueryParams set(String name, Object value) {
 		assertArgNotNull("name", name);
-		String key = key(name);
-		RequestQueryParam p = new RequestQueryParam(req, name, stringify(value)).parser(parser);
-		if (map.containsKey(key))
-			list.removeIf(x->caseSensitive?x.getName().equals(name):x.getName().equalsIgnoreCase(name));
-		list.add(p);
-		map.put(key, list(p));
+		set(new RequestQueryParam(req, name, stringify(value)).parser(parser));
 		return this;
 	}
 
@@ -397,32 +340,91 @@ public class RequestQueryParams {
 	 * @param name The parameter names.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestQueryParams remove(String...name) {
+	public RequestQueryParams remove(String name) {
 		assertArgNotNull("name", name);
-		for (String n : name) {
-			String key = key(n);
-			if (map.containsKey(key))
-				list.removeAll(map.get(key));
-			map.remove(key);
-		}
+		removeIf(x -> eq(x.getName(), name));
 		return this;
 	}
 
 	/**
-	 * Remove parameters.
+	 * Returns a copy of this object but only with the specified param names copied.
 	 *
-	 * @param parameters The parameters to remove.  Must not be <jk>null</jk>.
-	 * @return This object.
+	 * @param names The list to include in the copy.
+	 * @return A new list object.
 	 */
-	public RequestQueryParams remove(NameValuePair...parameters) {
-		for (NameValuePair p : parameters)
-			remove(p.getName());
-		return this;
+	public RequestQueryParams subset(String...names) {
+		return new RequestQueryParams(this, names);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Convenience getters.
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns <jk>true</jk> if the parameters with the specified name is present.
+	 *
+	 * @param name The parameter name.  Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the parameters with the specified names are present.
+	 */
+	public boolean contains(String name) {
+		return stream(name).findAny().isPresent();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the parameter with any of the specified names are present.
+	 *
+	 * @param names The parameter names.  Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the parameter with any of the specified names are present.
+	 */
+	public boolean containsAny(String...names) {
+		assertArgNotNull("names", names);
+		for (String n : names)
+			if (stream(n).findAny().isPresent())
+				return true;
+		return false;
+	}
+
+	/**
+	 * Returns all the parameters with the specified name.
+	 *
+	 * @param name The parameter name.
+	 * @return The list of all parameters with the specified name, or an empty list if none are found.
+	 */
+	public List<RequestQueryParam> getAll(String name) {
+		return stream(name).collect(toList());
+	}
+
+	/**
+	 * Returns all headers with the specified name.
+	 *
+	 * @param name The header name.
+	 * @return The stream of all headers with matching names.  Never <jk>null</jk>.
+	 */
+	public Stream<RequestQueryParam> stream(String name) {
+		return stream().filter(x -> eq(x.getName(), name));
+	}
+
+	/**
+	 * Returns all headers in sorted order.
+	 *
+	 * @return The stream of all headers in sorted order.
+	 */
+	public Stream<RequestQueryParam> getSorted() {
+		Comparator<RequestQueryParam> x;
+		if (caseSensitive)
+			x = (x1,x2) -> x1.getName().compareTo(x2.getName());
+		else
+			x = (x1,x2) -> String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());
+		return stream().sorted(x);
+	}
+
+	/**
+	 * Returns all the unique header names in this list.
+	 * @return The list of all unique header names in this list.
+	 */
+	public List<String> getNames() {
+		return stream().map(x -> x.getName()).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().collect(toList());
+	}
 
 	/**
 	 * Returns the first parameter with the specified name.
@@ -436,8 +438,7 @@ public class RequestQueryParams {
 	 */
 	public RequestQueryParam getFirst(String name) {
 		assertArgNotNull("name", name);
-		List<RequestQueryParam> l = map.get(key(name));
-		return (l == null || l.isEmpty() ? new RequestQueryParam(req, name, null).parser(parser) : l.get(0));
+		return stream(name).findFirst().orElseGet(()->new RequestQueryParam(req, name, null).parser(parser));
 	}
 
 	/**
@@ -452,21 +453,33 @@ public class RequestQueryParams {
 	 */
 	public RequestQueryParam getLast(String name) {
 		assertArgNotNull("name", name);
-		List<RequestQueryParam> l = map.get(key(name));
-		return (l == null || l.isEmpty() ? new RequestQueryParam(req, name, null).parser(parser) : l.get(l.size()-1));
+		Value<RequestQueryParam> v = Value.empty();
+		stream(name).forEach(x -> v.set(x));
+		return v.orElseGet(() -> new RequestQueryParam(req, name, null).parser(parser));
 	}
 
 	/**
-	 * Returns the last parameter with the specified name.
+	 * Returns the condensed header with the specified name.
 	 *
 	 * <p>
-	 * This is equivalent to {@link #getLast(String)}.
+	 * If multiple headers are present, they will be combined into a single comma-delimited list.
 	 *
-	 * @param name The parameter name.
-	 * @return The parameter value, or {@link Optional#empty()} if it doesn't exist.
+	 * @param name The header name.
+	 * @return The header, never <jk>null</jk>.
 	 */
 	public RequestQueryParam get(String name) {
-		return getLast(name);
+		List<RequestQueryParam> l = getAll(name);
+		if (l.isEmpty())
+			return new RequestQueryParam(req, name, null).parser(parser);
+		if (l.size() == 1)
+			return l.get(0);
+		StringBuilder sb = new StringBuilder(128);
+		for (int i = 0, j = l.size(); i < j; i++) {
+			if (i > 0)
+				sb.append(", ");
+			sb.append(l.get(i).getValue());
+		}
+		return new RequestQueryParam(req, name, sb.toString()).parser(parser);
 	}
 
 	/**
@@ -500,7 +513,7 @@ public class RequestQueryParams {
 	 */
 	public String asQueryString() {
 		StringBuilder sb = new StringBuilder();
-		for (RequestQueryParam e : list) {
+		for (RequestQueryParam e : this) {
 			if (sb.length() > 0)
 				sb.append("&");
 			sb.append(urlEncode(e.getName())).append('=').append(urlEncode(e.getValue()));
@@ -557,31 +570,11 @@ public class RequestQueryParams {
 		return ofNullable(PageArgs.create(get("p").asInteger().orElse(null), get("l").asInteger().orElse(null)));
 	}
 
-	/**
-	 * Converts the parameters to a readable string.
-	 *
-	 * @param sorted Sort the parameters by name.
-	 * @return A JSON string containing the contents of the parameters.
-	 */
-	public String toString(boolean sorted) {
-		JsonMap m = JsonMap.create();
-		if (sorted) {
-			for (List<RequestQueryParam> p1 : map.values())
-				for (RequestQueryParam p2 : p1)
-					m.append(p2.getName(), p2.getValue());
-		} else {
-			for (RequestQueryParam p : list)
-				m.append(p.getName(), p.getValue());
-		}
-		return m.toString();
-	}
-
-	private String key(String name) {
-		return caseSensitive ? name : name.toLowerCase();
-	}
-
 	@Override /* Object */
 	public String toString() {
-		return toString(false);
+		JsonMap m = new JsonMap();
+		for (String n : getNames())
+			m.put(n, get(n).asString().orElse(null));
+		return m.asJson();
 	}
 }

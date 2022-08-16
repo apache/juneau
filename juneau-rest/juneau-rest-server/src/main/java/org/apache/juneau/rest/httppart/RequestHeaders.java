@@ -137,13 +137,13 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 
 		// Parameters defined on the request URL overwrite existing headers.
 		Set<String> allowedHeaderParams = req.getContext().getAllowedHeaderParams();
-		for (RequestQueryParam p : query.getAll()) {
+		query.forEach(p -> {
 			String name = p.getName();
 			String key = key(name);
 			if (allowedHeaderParams.contains(key) || allowedHeaderParams.contains("*")) {
 				set(name, p.getValue());
 			}
-		}
+		});
 	}
 
 	/**
@@ -182,12 +182,13 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	}
 
 	/**
-	 * Sets case sensitivity to <jk>true</jk> for names in this set.
+	 * Sets case sensitivity for names in this list.
 	 *
+	 * @param value The new value for this setting.
 	 * @return This object (for method chaining).
 	 */
-	public RequestHeaders caseSensitive() {
-		this.caseSensitive = true;
+	public RequestHeaders caseSensitive(boolean value) {
+		this.caseSensitive = value;
 		return this;
 	}
 
@@ -324,18 +325,18 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 */
 	public RequestHeaders remove(String name) {
 		assertArgNotNull("name", name);
-		stream(name).forEach(x -> remove(x));
+		removeIf(x -> eq(x.getName(), name));
 		return this;
 	}
 
 	/**
 	 * Returns a copy of this object but only with the specified header names copied.
 	 *
-	 * @param headers The list to include in the copy.
+	 * @param names The list to include in the copy.
 	 * @return A new list object.
 	 */
-	public RequestHeaders subset(String...headers) {
-		return new RequestHeaders(this, headers);
+	public RequestHeaders subset(String...names) {
+		return new RequestHeaders(this, names);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

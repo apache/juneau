@@ -698,7 +698,7 @@ public class Remote_QueryAnnotation_Test {
 	public static class K {
 		@RestOp
 		public String get(RestRequest req) throws Exception {
-			return req.getQueryParams().toString(true);
+			return req.getQueryParams().toString();
 		}
 	}
 
@@ -845,7 +845,7 @@ public class Remote_QueryAnnotation_Test {
 	@Test
 	public void k04_requestBean_charSequence() throws Exception {
 		K4 x = remote(K.class,K4.class);
-		assertEquals("{baz:'qux',foo:'bar'}",x.get(new K4a()));
+		assertEquals("{foo:'bar',baz:'qux'}",x.get(new K4a()));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -867,7 +867,7 @@ public class Remote_QueryAnnotation_Test {
 	@Test
 	public void k05_requestBean_reader() throws Exception {
 		K5 x = remote(K.class,K5.class);
-		assertEquals("{baz:'qux',foo:'bar'}",x.get(new K5a()));
+		assertEquals("{foo:'bar',baz:'qux'}",x.get(new K5a()));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
