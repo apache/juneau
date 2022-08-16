@@ -2188,6 +2188,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	/**
 	 * A shortcut for calling <c>run().getContent().as(<js>type</js>,<js>args</js>)</c>.
 	 *
+	 * @param <T>
+	 * 	The object type to create.
 	 * @param type
 	 * 	The object type to create.
 	 * 	<br>Can be any of the following: {@link ClassMeta}, {@link Class}, {@link ParameterizedType}, {@link GenericArrayType}

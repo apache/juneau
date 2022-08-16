@@ -29,7 +29,7 @@ import org.apache.juneau.rest.*;
  *
  * <ul class='notes'>
  * 	<li>Files up to 1MB are cached in memory.
- * 	<li>Files with {@link "class"} and {@link "properties"} are excluded for security purposes.
+ * 	<li>Files with {@code "class"} and {@code "properties"} are excluded for security purposes.
  * </ul>
  */
 public class BasicRestFileFinder extends BasicFileFinder {

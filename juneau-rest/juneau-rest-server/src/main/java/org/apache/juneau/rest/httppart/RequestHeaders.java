@@ -83,7 +83,7 @@ import org.apache.juneau.http.header.*;
  * 			<li class='jm'>{@link RequestHeaders#addDefault(Header...) addDefault(Header...)}
  * 			<li class='jm'>{@link RequestHeaders#addDefault(List) addDefault(List)}
  * 			<li class='jm'>{@link RequestHeaders#addDefault(String,String) addDefault(String,String)}
- * 			<li class='jm'>{@link RequestHeaders#remove(String...) remove(String...)}
+ * 			<li class='jm'>{@link RequestHeaders#remove(String) remove(String)}
  * 			<li class='jm'>{@link RequestHeaders#set(Header...) set(Header...)}
  * 			<li class='jm'>{@link RequestHeaders#set(String,Object) set(String,Object)}
  * 		</ul>
@@ -166,9 +166,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 		parser = copyFrom.parser;
 		vs = copyFrom.vs;
 		for (String n : names)
-			for (RequestHeader h : copyFrom)
-				if (eq(h.getName(), n))
-					add(h);
+			copyFrom.stream().filter(x -> eq(x.getName(), n)).forEach(x -> add(x));
 	}
 
 	/**
@@ -179,8 +177,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 */
 	public RequestHeaders parser(HttpPartParserSession value) {
 		this.parser = value;
-		for (RequestHeader h : this)
-			h.parser(parser);
+		forEach(x -> x.parser(parser));
 		return this;
 	}
 
@@ -215,8 +212,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 			boolean hasAllBlanks = l.allMatch(x -> StringUtils.isEmpty(x.getValue()));
 			if (hasAllBlanks) {
 				removeAll(getAll(name));
-				RequestHeader x = new RequestHeader(req, name, vs.resolve(p.getValue()));
-				add(x);
+				add(new RequestHeader(req, name, vs.resolve(p.getValue())));
 			}
 		}
 		return this;
@@ -244,30 +240,6 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 */
 	public RequestHeaders addDefault(String name, String value) {
 		return addDefault(BasicStringHeader.of(name, value));
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the header with the specified name is present.
-	 *
-	 * @param name The header name.  Must not be <jk>null</jk>.
-	 * @return <jk>true</jk> if the headers with the specified name is present.
-	 */
-	public boolean contains(String name) {
-		return stream(name).findAny().isPresent();
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the header with any of the specified names are present.
-	 *
-	 * @param names The header names.  Must not be <jk>null</jk>.
-	 * @return <jk>true</jk> if the header with any of the specified names are present.
-	 */
-	public boolean containsAny(String...names) {
-		assertArgNotNull("names", names);
-		for (String n : names)
-			if (stream(n).findAny().isPresent())
-				return true;
-		return false;
 	}
 
 	/**
@@ -299,10 +271,9 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 */
 	public RequestHeaders add(Header...headers) {
 		assertArgNotNull("headers", headers);
-		for (Header h : headers) {
+		for (Header h : headers)
 			if (h != null)
 				add(h.getName(), h.getValue());
-		}
 		return this;
 	}
 
@@ -322,7 +293,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 */
 	public RequestHeaders set(String name, Object value) {
 		assertArgNotNull("name", name);
-		add(new RequestHeader(req, name, stringify(value)).parser(parser));
+		set(new RequestHeader(req, name, stringify(value)).parser(parser));
 		return this;
 	}
 
@@ -346,15 +317,14 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	}
 
 	/**
-	 * Remove headers.
+	 * Remove header by name.
 	 *
 	 * @param name The header names.  Must not be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestHeaders remove(String...name) {
+	public RequestHeaders remove(String name) {
 		assertArgNotNull("name", name);
-		for (String n : name)
-			stream(n).forEach(x -> remove(x));
+		stream(name).forEach(x -> remove(x));
 		return this;
 	}
 
@@ -371,6 +341,30 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	//-----------------------------------------------------------------------------------------------------------------
 	// Convenience getters.
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns <jk>true</jk> if the header with the specified name is present.
+	 *
+	 * @param name The header name.  Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the header with the specified name is present.
+	 */
+	public boolean contains(String name) {
+		return stream(name).findAny().isPresent();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the header with any of the specified names are present.
+	 *
+	 * @param names The header names.  Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the header with any of the specified names are present.
+	 */
+	public boolean containsAny(String...names) {
+		assertArgNotNull("names", names);
+		for (String n : names)
+			if (stream(n).findAny().isPresent())
+				return true;
+		return false;
+	}
 
 	/**
 	 * Returns all headers with the specified name.
@@ -397,7 +391,7 @@ public class RequestHeaders extends ArrayList<RequestHeader> {
 	 *
 	 * @return The stream of all headers in sorted order.
 	 */
-	public Stream<RequestHeader> sorted() {
+	public Stream<RequestHeader> getSorted() {
 		Comparator<RequestHeader> x;
 		if (caseSensitive)
 			x = (x1,x2) -> x1.getName().compareTo(x2.getName());
