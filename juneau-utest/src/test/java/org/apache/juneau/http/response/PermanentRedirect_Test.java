@@ -36,19 +36,19 @@ public class PermanentRedirect_Test {
 
 		client.get("/a1")
 			.run()
-			.assertCode().is(308)
-			.assertContent().is("Permanent Redirect");
+			.assertStatus(308)
+			.assertContent("Permanent Redirect");
 		client.get("/a2")
 			.run()
-			.assertCode().is(308)
-			.assertContent().is("foo");
+			.assertStatus(308)
+			.assertContent("foo");
 		client.get("/a3")
 			.run()
-			.assertCode().is(308)
+			.assertStatus(308)
 			.assertHeader("Location").is("/foo");
 		client.get("/a4")
 			.run()
-			.assertCode().is(308)
+			.assertStatus(308)
 			.assertHeader("Foo").is("bar");
 	}
 }

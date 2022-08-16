@@ -126,28 +126,28 @@ public class HttpResources {
 	}
 
 	/**
-	 * Creates a new {@link InputStreamResource} builder.
+	 * Creates a new {@link StreamResource} builder.
 	 *
 	 * <p>
 	 * Assumes no content type.
 	 *
 	 * @param content The entity content.  Can be <jk>null</jk>.
-	 * @return A new {@link InputStreamResource} builder.
+	 * @return A new {@link StreamResource} builder.
 	 */
-	public static final HttpResourceBuilder<InputStreamResource> streamResource(InputStream content) {
-		return InputStreamResource.create().content(content);
+	public static final HttpResourceBuilder<StreamResource> streamResource(InputStream content) {
+		return StreamResource.create().content(content);
 	}
 
 	/**
-	 * Creates a new {@link InputStreamResource} builder.
+	 * Creates a new {@link StreamResource} builder.
 	 *
 	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @param length The content length, or <c>-1</c> if not known.
-	 * @return A new {@link InputStreamResource} builder.
+	 * @return A new {@link StreamResource} builder.
 	 */
-	public static final HttpResourceBuilder<InputStreamResource> streamResource(InputStream content, long length, ContentType contentType) {
-		return InputStreamResource.create().content(content).contentLength(length).contentType(contentType);
+	public static final HttpResourceBuilder<StreamResource> streamResource(InputStream content, long length, ContentType contentType) {
+		return StreamResource.create().content(content).contentLength(length).contentType(contentType);
 	}
 
 	/**

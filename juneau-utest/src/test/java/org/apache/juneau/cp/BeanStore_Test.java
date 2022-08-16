@@ -12,15 +12,16 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.cp;
 
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ObjectUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
+import java.lang.annotation.*;
 import java.util.*;
 import java.util.function.*;
-
-import javax.inject.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.reflect.*;
@@ -28,6 +29,14 @@ import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
 public class BeanStore_Test {
+
+	@Documented
+	@Target({PARAMETER})
+	@Retention(RUNTIME)
+	@Inherited
+	public @interface Named {
+		String value();
+	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Basic tests
@@ -56,7 +65,7 @@ public class BeanStore_Test {
 	public void a01_builderCopyConstructor() {
 		BeanStore b1p = BeanStore.create().readOnly().threadSafe().build();
 		BeanStore b1c = BeanStore.create().parent(b1p).build();
-		assertString(b1c.toString()).is("{parent:{readOnly:true,threadSafe:true}}");
+		assertString(b1c.toString()).isContains("readOnly:true","threadSafe:true");
 	}
 
 	@Test
@@ -152,10 +161,10 @@ public class BeanStore_Test {
 			assertList(b.stream(A2.class).map(BeanStoreEntry::get)).isHas(a2a);
 		}
 
-		assertString(b1p.toString()).is("{entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}]}");
-		assertString(b1c.toString()).is("{entries:[{type:'A2',bean:'"+identity(a2a)+"'}],parent:{entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}]}}");
-		assertString(b2p.toString()).is("{entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}],threadSafe:true}");
-		assertString(b2c.toString()).is("{entries:[{type:'A2',bean:'"+identity(a2a)+"'}],parent:{entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}],threadSafe:true},threadSafe:true}");
+		assertString(b1p.toString()).isMatches("{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}]}");
+		assertString(b1c.toString()).isMatches("{*,entries:[{type:'A2',bean:'"+identity(a2a)+"'}],parent:{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}]}}");
+		assertString(b2p.toString()).isMatches("{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}],threadSafe:true}");
+		assertString(b2c.toString()).isMatches("{*,entries:[{type:'A2',bean:'"+identity(a2a)+"'}],parent:{*,entries:[{type:'A1',bean:'"+identity(a1b)+"'},{type:'A1',bean:'"+identity(a1a)+"'}],threadSafe:true},threadSafe:true}");
 
 		b1p.removeBean(A1.class);
 		b1c.clear().addBean(A1.class, a1a);
@@ -726,14 +735,14 @@ public class BeanStore_Test {
 		b1p.add(A1.class, null);
 		assertString(b1c.createMethodFinder(String.class).find("createC1").thenFind("createC2").run()).is("createC1");
 		assertString(b1c.createMethodFinder(String.class).find("createC2").thenFind("createC1").run()).is("createC2");
-		assertString(b1c.createMethodFinder(String.class).find("createC1", A1.class).thenFind("createC2", A1.class).run()).is("createC1");
-		assertString(b1c.createMethodFinder(String.class).find("createC2", A1.class).thenFind("createC1", A1.class).run()).is("createC1");
+		assertString(b1c.createMethodFinder(String.class).find(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).run()).is("createC1");
+		assertString(b1c.createMethodFinder(String.class).find(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).run()).is("createC1");
 
 		b1p.clear();
 		assertString(b1c.createMethodFinder(String.class).addBean(A1.class, null).find("createC1").thenFind("createC2").run()).is("createC1");
 		assertString(b1c.createMethodFinder(String.class).addBean(A1.class, null).find("createC2").thenFind("createC1").run()).is("createC2");
-		assertString(b1c.createMethodFinder(String.class).addBean(A1.class, null).find("createC1", A1.class).thenFind("createC2", A1.class).run()).is("createC1");
-		assertString(b1c.createMethodFinder(String.class).addBean(A1.class, null).find("createC2", A1.class).thenFind("createC1", A1.class).run()).is("createC1");
+		assertString(b1c.createMethodFinder(String.class).addBean(A1.class, null).find(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).run()).is("createC1");
+		assertString(b1c.createMethodFinder(String.class).addBean(A1.class, null).find(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).run()).is("createC1");
 
 		assertString(b1c.createMethodFinder(String.class).withDefault("X").run()).is("X");
 		assertString(b1c.createMethodFinder(String.class).withDefault(()->"X").run()).is("X");
@@ -759,14 +768,14 @@ public class BeanStore_Test {
 		b1p.add(A1.class, null);
 		assertString(b1c.createMethodFinder(String.class).find("createC1").thenFind("createC2").run()).is("createC1");
 		assertString(b1c.createMethodFinder(String.class).find("createC2").thenFind("createC1").run()).is("createC2");
-		assertString(b1c.createMethodFinder(String.class).find("createC1", A1.class).thenFind("createC2", A1.class).run()).is("createC1");
-		assertString(b1c.createMethodFinder(String.class).find("createC2", A1.class).thenFind("createC1", A1.class).run()).is("createC1");
+		assertString(b1c.createMethodFinder(String.class).find(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).run()).is("createC1");
+		assertString(b1c.createMethodFinder(String.class).find(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).run()).is("createC1");
 
 		b1p.clear();
 		assertString(b1c.createMethodFinder(String.class).addBean(A1.class, null).find("createC1").thenFind("createC2").run()).is("createC1");
 		assertString(b1c.createMethodFinder(String.class).addBean(A1.class, null).find("createC2").thenFind("createC1").run()).is("createC2");
-		assertString(b1c.createMethodFinder(String.class).addBean(A1.class, null).find("createC1", A1.class).thenFind("createC2", A1.class).run()).is("createC1");
-		assertString(b1c.createMethodFinder(String.class).addBean(A1.class, null).find("createC2", A1.class).thenFind("createC1", A1.class).run()).is("createC1");
+		assertString(b1c.createMethodFinder(String.class).addBean(A1.class, null).find(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).run()).is("createC1");
+		assertString(b1c.createMethodFinder(String.class).addBean(A1.class, null).find(x2->x2.hasName("createC2") && x2.hasAllArgs(A1.class)).thenFind(x2->x2.hasName("createC1") && x2.hasAllArgs(A1.class)).run()).is("createC1");
 
 		assertString(b1c.createMethodFinder(String.class).withDefault("X").run()).is("X");
 		assertString(b1c.createMethodFinder(String.class).withDefault(()->"X").run()).is("X");

@@ -54,10 +54,10 @@ public class BasicLongHeader_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(longHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
-		c.get().header(longHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
-		c.get().header(longHeader(HEADER,PARSED)).run().assertContent().is(VALUE);
-		c.get().header(longHeader(HEADER,()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(longHeader(HEADER,VALUE)).run().assertContent(VALUE);
+		c.get().header(longHeader(HEADER,VALUE)).run().assertContent(VALUE);
+		c.get().header(longHeader(HEADER,PARSED)).run().assertContent(VALUE);
+		c.get().header(longHeader(HEADER,()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(longHeader(HEADER,(Supplier<Long>)null)).run().assertContent().isEmpty();

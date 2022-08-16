@@ -54,10 +54,10 @@ public class Date_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(date(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(date(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(date(PARSED)).run().assertContent().is(VALUE);
-		c.get().header(date(()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(date(VALUE)).run().assertContent(VALUE);
+		c.get().header(date(VALUE)).run().assertContent(VALUE);
+		c.get().header(date(PARSED)).run().assertContent(VALUE);
+		c.get().header(date(()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(date((String)null)).run().assertContent().isEmpty();

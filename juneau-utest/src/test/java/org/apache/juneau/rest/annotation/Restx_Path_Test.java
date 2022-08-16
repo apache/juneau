@@ -54,9 +54,9 @@ public class Restx_Path_Test {
 		RestClient a = MockRestClient.build(A.class);
 		// Since we're not running from a servlet container, we access A directly with no path.
 		// However, the path is still reflected in RestContext.getPath().
-		a.get("/").run().assertContent().is("A-p0");
-		a.get("/p1").run().assertContent().is("A01-p0/p1");
-		a.get("/p1/p2").run().assertContent().is("A02a-p0/p1/p2");
+		a.get("/").run().assertContent("A-p0");
+		a.get("/p1").run().assertContent("A01-p0/p1");
+		a.get("/p1/p2").run().assertContent("A02a-p0/p1/p2");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -110,13 +110,13 @@ public class Restx_Path_Test {
 		// [/{id}/*] = [test5f]
 		// [/{id}/foo] = [test5g]
 		// [/{id}/foo/*] = [test5h]
-		b.get("/").run().assertContent().is("a");
-		b.get("/foo").run().assertContent().is("c");
-		b.get("/foo/x").run().assertContent().is("d");
-		b.get("/x").run().assertContent().is("e");
-		b.get("/x/x").run().assertContent().is("f");
-		b.get("/x/foo").run().assertContent().is("g");
-		b.get("/x/foo/x").run().assertContent().is("h");
+		b.get("/").run().assertContent("a");
+		b.get("/foo").run().assertContent("c");
+		b.get("/foo/x").run().assertContent("d");
+		b.get("/x").run().assertContent("e");
+		b.get("/x/x").run().assertContent("f");
+		b.get("/x/foo").run().assertContent("g");
+		b.get("/x/foo/x").run().assertContent("h");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -142,6 +142,6 @@ public class Restx_Path_Test {
 	@Test
 	public void c01_pathOverriddenByChild() throws Exception {
 		RestClient c2 = MockRestClient.build(C2.class);
-		c2.get("/foo").run().assertContent().is("b");
+		c2.get("/foo").run().assertContent("b");
 	}
 }

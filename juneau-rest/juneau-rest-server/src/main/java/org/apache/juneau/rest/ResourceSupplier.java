@@ -10,46 +10,47 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.http.resource;
+package org.apache.juneau.rest;
 
-import java.io.*;
-import org.apache.juneau.http.entity.*;
+import java.util.function.*;
 
 /**
- * A streamed, non-repeatable resource that obtains its content from an {@link InputStream}.
+ * A supplier of a REST resource bean.
  *
- * <ul class='seealso'>
- * 	<li class='link'>{@doc juneau-rest-common}
- * 	<li class='extlink'>{@source}
- * </ul>
+ * <p>
+ * Pretty much just a normal supplier, but wrapped in a concrete class so that it can be retrieved by class name.
  */
-public class InputStreamResource extends BasicResource {
+public class ResourceSupplier implements Supplier<Object> {
 
-	/**
-	 * Creates a new {@link InputStreamResource} builder.
-	 *
-	 * @return A new {@link InputStreamResource} builder.
-	 */
-	public static HttpResourceBuilder<InputStreamResource> create() {
-		return new HttpResourceBuilder<>(InputStreamResource.class, InputStreamEntity.class);
-	}
+	private final Supplier<?> supplier;
+	private final Class<?> resourceClass;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The resource builder.
+	 * @param resourceClass The resource class.
+	 * 	<br>May or may not be the same as the object returned by the supplier (e.g. supplier returns a proxy).
+	 * @param supplier The supplier of the bean.
 	 */
-	public InputStreamResource(HttpResourceBuilder<?> builder) {
-		super(builder);
+	public ResourceSupplier(Class<?> resourceClass, Supplier<?> supplier) {
+		this.resourceClass = resourceClass;
+		this.supplier = supplier;
 	}
 
 	/**
-	 * Creates a new {@link InputStreamResource} builder initialized with the contents of this entity.
+	 * Returns the resource class.
 	 *
-	 * @return A new {@link InputStreamResource} builder initialized with the contents of this entity.
+	 * <p>
+	 * May or may not be the same as the object returned by the supplier (e.g. supplier returns a proxy).
+	 *
+	 * @return The resource class.
 	 */
-	@Override /* BasicResource */
-	public HttpResourceBuilder<InputStreamResource> copy() {
-		return new HttpResourceBuilder<>(this);
+	public Class<?> getResourceClass() {
+		return resourceClass;
+	}
+
+	@Override
+	public Object get() {
+		return supplier.get();
 	}
 }

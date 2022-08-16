@@ -92,7 +92,8 @@ public class RemoteOperationMeta {
 				al = mi.getReturnType().unwrap(Value.class,Optional.class).getAnnotationList(REMOTE_OP_GROUP);
 
 			Value<String> _httpMethod = Value.empty(), _path = Value.empty();
-			al.forEachValue(String.class, "method", NOT_EMPTY, x -> _httpMethod.set(x.trim()));
+			al.stream().map(x -> x.getName().substring(6).toUpperCase()).filter(x -> ! x.equals("OP")).forEach(x -> _httpMethod.set(x));
+			al.forEachValue(String.class, "method", NOT_EMPTY, x -> _httpMethod.set(x.trim().toUpperCase()));
 			al.forEachValue(String.class, "path", NOT_EMPTY, x-> _path.set(x.trim()));
 			httpMethod = _httpMethod.orElse("").trim();
 			path = _path.orElse("").trim();
@@ -125,7 +126,7 @@ public class RemoteOperationMeta {
 
 			if (! isOneOf(httpMethod, "DELETE", "GET", "POST", "PUT", "OPTIONS", "HEAD", "CONNECT", "TRACE", "PATCH"))
 				throw new RemoteMetadataException(m,
-					"Invalid value specified for @RemoteOp(httpMethod) annotation.  Valid values are [DELTE,GET,POST,PUT,OPTIONS,HEAD,CONNECT,TRACE,PATCH].");
+					"Invalid value specified for @RemoteOp(httpMethod) annotation: '"+httpMethod+"'.  Valid values are [DELETE,GET,POST,PUT,OPTIONS,HEAD,CONNECT,TRACE,PATCH].");
 
 			methodReturn = new RemoteOperationReturn(mi);
 

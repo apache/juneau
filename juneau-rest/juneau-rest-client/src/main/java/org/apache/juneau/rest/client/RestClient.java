@@ -95,7 +95,7 @@ import org.apache.juneau.xml.*;
 /**
  * Utility class for interfacing with remote REST interfaces.
  *
- * <p class='w900'>
+ * <p>
  * Built upon the feature-rich Apache HttpClient library, the Juneau RestClient API adds support for fluent-style
  * REST calls and the ability to perform marshalling of POJOs to and from HTTP parts.
  *
@@ -112,7 +112,7 @@ import org.apache.juneau.xml.*;
  * 		.getContent().as(MyBean.<jk>class</jk>);
  * </p>
  *
- * <p class='w900'>
+ * <p>
  * Breaking apart the fluent call, we can see the classes being used:
  * <p class='bjava'>
  * 	RestClient.Builder <jv>builder</jv> = RestClient.<jsm>create</jsm>().simpleJson();
@@ -128,7 +128,7 @@ import org.apache.juneau.xml.*;
  * 	MyBean <jv>bean</jv> = <jv>content</jv>.as(MyBean.<jk>class</jk>);
  * </p>
  *
- * <p class='w900'>
+ * <p>
  * It additionally provides support for creating remote proxy interfaces using REST as the transport medium.
  *
  * <h5 class='figure'>Example:</h5>
@@ -153,7 +153,7 @@ import org.apache.juneau.xml.*;
  * 	Pet <jv>pet</jv> = <jv>store</jv>.addPet(<jv>createPet</jv>, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
  * </p>
  *
- * <p class='w900'>
+ * <p>
  * The classes are closely tied to Apache HttpClient, yet provide lots of additional functionality:
  * <ul class='javatree'>
  * 	<li class='jc'>{@link RestClient} <jk>extends</jk> {@link HttpClient}, creates {@link RestRequest} objects.
@@ -164,24 +164,24 @@ import org.apache.juneau.xml.*;
  * </ul>
  *
  *
- * <p class='w900'>
+ * <p>
  * Instances of this class are built using the {@link Builder} class which can be constructed using
  * the {@link #create() RestClient.create()} method as shown above.
  *
- * <p class='w900'>
+ * <p>
  * Clients are typically created with a root URI so that relative URIs can be used when making requests.
- * This is done using the {@link Builder#rootUri(Object)} method.
+ * This is done using the {@link Builder#rootUrl(Object)} method.
  *
  * <h5 class='figure'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Create a client where all URIs are relative to localhost.</jc>
- * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().rootUri(<js>"http://localhost:5000"</js>).build();
+ * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:5000"</js>).build();
  *
  * 	<jc>// Use relative paths.</jc>
  * 	String <jv>body</jv> = <jv>client</jv>.get(<js>"/subpath"</js>).run().getContent().asString();
  * </p>
  *
- * <p class='w900'>
+ * <p>
  * The {@link RestClient} class creates {@link RestRequest} objects using the following methods:
  *
  * <ul class='javatree'>
@@ -200,7 +200,7 @@ import org.apache.juneau.xml.*;
  * 	</ul>
  * </ul>
  *
- * <p class='w900'>
+ * <p>
  * The {@link RestRequest} class creates {@link RestResponse} objects using the following methods:
  *
  * <ul class='javatree'>
@@ -211,13 +211,13 @@ import org.apache.juneau.xml.*;
  * 	</ul>
  * </ul>
  *
- * <p class='w900'>
+ * <p>
  * The distinction between the two methods is that {@link RestRequest#complete() complete()} automatically consumes the response body and
  * {@link RestRequest#run() run()} does not.  Note that you must consume response bodies in order for HTTP connections to be freed up
  * for reuse!  The {@link InputStream InputStreams} returned by the {@link ResponseContent} object are auto-closing once
  * they are exhausted, so it is often not necessary to explicitly close them.
  *
- * <p class='w900'>
+ * <p>
  * The following examples show the distinction between the two calls:
  *
  * <p class='bjava'>
@@ -231,7 +231,7 @@ import org.apache.juneau.xml.*;
  *
  * <h4 class='topic'>POJO Marshalling</h4>
  *
- * <p class='w900'>
+ * <p>
  * By default, JSON support is provided for HTTP request and response bodies.
  * Other languages can be specified using any of the following builder methods:
  * <ul class='javatree'>
@@ -268,7 +268,7 @@ import org.apache.juneau.xml.*;
  * 	RestClient <jv>client2</jv> = RestClient.<jsm>create</jsm>().universal().build();
  * </p>
  *
- * <p class='w900'>
+ * <p>
  * When using clients with multiple language support, you must specify the <c>Content-Type</c> header on requests
  * with bodies to specify which serializer should be selected.
  *
@@ -299,7 +299,7 @@ import org.apache.juneau.xml.*;
  * </p>
  *
  *
- * <p class='w900'>
+ * <p>
  * The {@link Builder} class provides convenience methods for setting common serializer and parser
  * settings.
  *
@@ -310,7 +310,7 @@ import org.apache.juneau.xml.*;
  * 	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().sq().ws().build();
  * </p>
  *
- * <p class='w900'>
+ * <p>
  * 	Other methods are also provided for specifying the serializers and parsers used for lower-level marshalling support:
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Builder}
@@ -321,7 +321,7 @@ import org.apache.juneau.xml.*;
  * 	</ul>
  * </ul>
  *
- * <p class='w900'>
+ * <p>
  * HTTP parts (headers, query parameters, form data...) are serialized and parsed using the {@link HttpPartSerializer}
  * and {@link HttpPartParser} APIs.  By default, clients are configured to use {@link OpenApiSerializer} and
  * {@link OpenApiParser}.  These can be overridden using the following methods:
@@ -335,7 +335,7 @@ import org.apache.juneau.xml.*;
  *
  *
  * <h4 class='topic'>Request Headers</h4>
- * <p class='w900'>
+ * <p>
  * Per-client or per-request headers can be specified using the following methods:
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Builder}
@@ -355,7 +355,7 @@ import org.apache.juneau.xml.*;
  * 	</ul>
  * </ul>
  *
- * <p class='w900'>
+ * <p>
  * The supplier methods are particularly useful for header values whose values may change over time (such as <c>Authorization</c> headers
  * which may need to change every few minutes).
  * </p>
@@ -428,7 +428,7 @@ import org.apache.juneau.xml.*;
  *
  * <h4 class='topic'>Request Form Data</h4>
  *
- * <p class='w900'>
+ * <p>
  * Per-client or per-request form-data parameters can be specified using the following methods:
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Builder}
@@ -458,7 +458,7 @@ import org.apache.juneau.xml.*;
  *
  * <h4 class='topic'>Request Body</h4>
  *
- * <p class='w900'>
+ * <p>
  * The request body can either be passed in with the client creator method (e.g. {@link RestClient#post(Object,Object) post(uri,body)}),
  * or can be specified via the following methods:
  *
@@ -470,7 +470,7 @@ import org.apache.juneau.xml.*;
  * 	</ul>
  * </ul>
  *
- * <p class='w900'>
+ * <p>
  * The request body can be any of the following types:
  * <ul class='javatree'>
  * 		<li class='jc'>
@@ -498,7 +498,7 @@ import org.apache.juneau.xml.*;
  *
  * <h4 class='topic'>Response Status</h4>
  *
- * <p class='w900'>
+ * <p>
  * After execution using {@link RestRequest#run()} or {@link RestRequest#complete()}, the following methods can be used
  * to get the response status:
  *
@@ -518,7 +518,7 @@ import org.apache.juneau.xml.*;
  * 	<jk>int</jk> <jv>statusCode</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).complete().getStatusCode();
  * </p>
  *
- * <p class='w900'>
+ * <p>
  * Equivalent methods with mutable parameters are provided to allow access to status values without breaking fluent call chains.
  *
  * <h5 class='figure'>Example:</h5>
@@ -537,7 +537,7 @@ import org.apache.juneau.xml.*;
  * 		consume the response yourself.
  * </ul>
  *
- * <p class='w900'>
+ * <p>
  * The assertion method is provided for quickly asserting status codes in fluent calls.
  *
  * <h5 class='figure'>Example:</h5>
@@ -558,7 +558,7 @@ import org.apache.juneau.xml.*;
  *
  * <h4 class='topic'>Response Headers</h4>
  *
- * <p class='w900'>
+ * <p>
  * Response headers are accessed through the following methods:
  *
  * <ul class='javatree'>
@@ -573,7 +573,7 @@ import org.apache.juneau.xml.*;
  * 	</ul>
  * </ul>
  *
- * <p class='w900'>
+ * <p>
  * The {@link RestResponse#getFirstHeader(String)} and {@link RestResponse#getLastHeader(String)} methods return an empty {@link ResponseHeader} object instead of<jk>null</jk>.
  * This allows it to be used more easily in fluent calls.
  *
@@ -583,7 +583,7 @@ import org.apache.juneau.xml.*;
  * 	<jk>boolean</jk> <jv>hasLocationHeader</jv> = <jv>client</jv>.get(<jsf>URI</jsf>).complete().getLastHeader(<js>"Location"</js>).exists();
  * </p>
  *
- * <p class='w900'>
+ * <p>
  * The {@link ResponseHeader} class extends from the HttpClient {@link Header} class and provides several convenience
  * methods:
  *
@@ -647,7 +647,7 @@ import org.apache.juneau.xml.*;
  *
  * <h4 class='topic'>Response Body</h4>
  *
- * <p class='w900'>
+ * <p>
  * The response body is accessed through the following method:
  *
  * <ul class='javatree'>
@@ -657,7 +657,7 @@ import org.apache.juneau.xml.*;
  * 	</ul>
  * </ul>
  *
- * <p class='w900'>
+ * <p>
  * The {@link ResponseContent} class extends from the HttpClient {@link HttpEntity} class and provides several convenience
  * methods:
  *
@@ -718,7 +718,7 @@ import org.apache.juneau.xml.*;
  * 		.getContent().as(TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
  * </p>
  *
- * <p class='w900'>
+ * <p>
  * The response body can only be consumed once unless it has been cached into memory.  In many cases, the body is
  * automatically cached when using the assertions methods or methods such as {@link ResponseContent#asString()}.
  * However, methods that involve reading directly from the input stream cannot be called twice.
@@ -773,7 +773,7 @@ import org.apache.juneau.xml.*;
  *
  * <h4 class='topic'>Custom Call Handlers</h4>
  *
- * <p class='w900'>
+ * <p>
  * The {@link RestCallHandler} interface provides the ability to provide custom handling of requests.
  *
  * <ul class='javatree'>
@@ -787,7 +787,7 @@ import org.apache.juneau.xml.*;
  * 	</ul>
  * </ul>
  *
- * <p class='w900'>
+ * <p>
  * Note that there are other ways of accomplishing this such as extending the {@link RestClient} class and overriding
  * the {@link #run(HttpHost,HttpRequest,HttpContext)} method
  * or by defining your own {@link HttpRequestExecutor}.  Using this interface is often simpler though.
@@ -795,7 +795,7 @@ import org.apache.juneau.xml.*;
  *
  * <h4 class='topic'>Interceptors</h4>
  *
- * <p class='w900'>
+ * <p>
  * The {@link RestCallInterceptor} API provides a quick way of intercepting and manipulating requests and responses beyond
  * the existing {@link HttpRequestInterceptor} and {@link HttpResponseInterceptor} APIs.
  *
@@ -819,7 +819,7 @@ import org.apache.juneau.xml.*;
  *
  * <h4 class='topic'>Logging / Debugging</h4>
  *
- * <p class='w900'>
+ * <p>
  * The following methods provide logging of requests and responses:
  *
  * <ul class='javatree'>
@@ -870,11 +870,11 @@ import org.apache.juneau.xml.*;
  * </p>
  *
  *
- * <p class='notes w900'>
+ * <p class='notes'>
  * It should be noted that if you enable request logging detail level {@link DetailLevel#FULL}, response bodies will be cached by default which may introduce
  * a performance penalty.
  *
- * <p class='w900'>
+ * <p>
  * Additionally, the following method is also provided for enabling debug mode:
  *
  * <ul class='javatree'>
@@ -884,7 +884,7 @@ import org.apache.juneau.xml.*;
  * 	</ul>
  * </ul>
  *
- * <p class='w900'>
+ * <p>
  * Enabling debug mode has the following effects:
  * <ul>
  * 	<li>{@link org.apache.juneau.Context.Builder#debug()} is enabled.
@@ -895,7 +895,7 @@ import org.apache.juneau.xml.*;
  *
  * <h4 class='topic'>REST Proxies</h4>
  *
- * <p class='w900'>
+ * <p>
  * One of the more powerful features of the REST client class is the ability to produce Java interface proxies against
  * arbitrary remote REST resources.
  *
@@ -921,7 +921,7 @@ import org.apache.juneau.xml.*;
  * 	Pet <jv>pet</jv> = <jv>store</jv>.addPet(<jv>createPet</jv>, UUID.<jsm>randomUUID</jsm>(), <jk>true</jk>);
  * </p>
  *
- * <p class='w900'>
+ * <p>
  * The methods to retrieve remote interfaces are:
  *
  * <ul class='javatree'>
@@ -936,7 +936,7 @@ import org.apache.juneau.xml.*;
  * 	</ul>
  * </ul>
  *
- * <p class='w900'>
+ * <p>
  * Two basic types of remote interfaces are provided:
  *
  * <ul class='spaced-list'>
@@ -944,7 +944,7 @@ import org.apache.juneau.xml.*;
  * 	<li>RPC-over-REST interfaces.  These are Java interfaces that allow you to make method calls on server-side POJOs.
  * </ul>
  *
- * <p class='w900'>
+ * <p>
  * Refer to the following documentation on both flavors:
  *
  * <ul class='doctree'>
@@ -953,10 +953,10 @@ import org.apache.juneau.xml.*;
  * </ul>
  *
  * <br>
- * <hr class='w900'>
+ * <hr>
  * <h4 class='topic'>Customizing Apache HttpClient</h4>
  *
- * <p class='w900'>
+ * <p>
  * Several methods are provided for customizing the underlying HTTP client and client builder classes:
  * <ul class='javatree'>
  * 	<li class='jc'>{@link Builder}
@@ -968,7 +968,7 @@ import org.apache.juneau.xml.*;
  * 	</ul>
  * </ul>
  *
- * <p class='w900'>
+ * <p>
  * Additionally, all methods on the <c>HttpClientBuilder</c> class have been extended with fluent setters.
  *
  * <h5 class='figure'>Example:</h5>
@@ -988,7 +988,7 @@ import org.apache.juneau.xml.*;
  *
  * <h4 class='topic'>Extending RestClient</h4>
  *
- * <p class='w900'>
+ * <p>
  * The <c>RestClient</c> API has been designed to allow for the ability to be easily extended.
  * The following example that overrides the primary run method shows how this can be done.
  *
@@ -997,21 +997,44 @@ import org.apache.juneau.xml.*;
  * 	<jk>public class</jk> MyRestClient <jk>extends</jk> RestClient {
  *
  * 		<jc>// Must provide this constructor!</jc>
- * 		<jk>public</jk> MyRestClient(ContextProperties <jv>properties</jv>) {
- * 			<jk>super</jk>(<jv>properties</jv>);
+ * 		<jk>public</jk> MyRestClient(RestClient.Builder <jv>builder</jv>) {
+ * 			<jk>super</jk>(<jv>builder</jv>);
  * 		}
  *
+ * 		<jd>/** Optionally override to customize builder settings before initialization. </jd>
  * 		<ja>@Override</ja>
- * 		<jk>public</jk> HttpResponse run(HttpHost <jv>target</jv>, HttpRequest <jv>request</jv>, HttpContext <jv>context</jv>) <jk>throws</jk> IOException {
- * 			<jc>// Perform special handling of requests.</jc>
- * 		}
+ * 		<jk>protected void</jk> init(RestClient.Builder) {...}
+ *
+ * 		<jd>/** Optionally override to provide post-initialization (e.g. setting up SAML handshakes, etc...). </jd>
+ * 		<ja>@Override</ja>
+ * 		<jk>protected void</jk> init() {...}
+ *
+ * 		<jd>/** Optionally override to customize requests when they're created (e.g. add headers to each request). </jd>
+ * 		<ja>@Override</ja>
+ * 		<jk>protected</jk> RestRequest request(RestOperation) {...}
+ *
+ * 		<jd>/** Optionally override to implement your own call handling. </jd>
+ * 		<ja>@Override</ja>
+ * 		<jk>protected</jk> HttpResponse run(HttpHost, HttpRequest, HttpContext) {...}
+ *
+ * 		<jd>/** Optionally override to customize requests before they're executed. </jd>
+ * 		<ja>@Override</ja>
+ * 		<jk>protected void</jk> onCallInit(RestRequest) {...}
+ *
+ * 		<jd>/** Optionally override to customize responses as soon as a connection is made. </jd>
+ * 		<ja>@Override</ja>
+ * 		<jk>protected void</jk> onCallConnect(RestRequest, RestResponse) {...}
+ *
+ * 		<jd>/** Optionally override to perform any call cleanup. </jd>
+ * 		<ja>@Override</ja>
+ * 		<jk>protected void</jk> onCallClose(RestRequest, RestResponse) {...}
  * 	}
  *
  * 	<jc>// Instantiate your client.</jc>
  * 	MyRestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().build(MyRestClient.<jk>class</jk>);
  * </p>
  *
- * <p class='w900'>
+ * <p>
  * The {@link RestRequest} and {@link RestResponse} objects can also be extended and integrated by overriding the
  * {@link RestClient#createRequest(URI,String,boolean)} and {@link RestClient#createResponse(RestRequest,HttpResponse,Parser)} methods.
  *
@@ -1024,7 +1047,7 @@ import org.apache.juneau.xml.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class RestClient extends BeanContextable implements HttpClient, Closeable, RestCallHandler, RestCallInterceptor {
+public class RestClient extends BeanContextable implements HttpClient, Closeable {
 
 	//-------------------------------------------------------------------------------------------------------------------
 	// Static
@@ -1067,7 +1090,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 		private boolean pooled;
 
-		String rootUri;
+		String rootUrl;
 		boolean skipEmptyHeaderData, skipEmptyFormData, skipEmptyQueryData, executorServiceShutdownOnClose, ignoreErrors, keepHttpClientOpen, detectLeaks,
 			logToConsole;
 		Logger logger;
@@ -1681,28 +1704,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 
 		/**
-		 * Applies an operation to the HTTP client builder.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.httpClientBuilder(<jv>x</jv> -&gt; <jv>x</jv>.disableAuthCaching())
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public final Builder httpClientBuilder(Consumer<HttpClientBuilder> operation) {
-			operation.accept(httpClientBuilder());
-			return this;
-		}
-
-		/**
 		 * Creates an instance of an {@link HttpClientBuilder} to be used to create the {@link HttpClient}.
 		 *
 		 * <p>
@@ -1836,20 +1837,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			if (serializers == null)
 				serializers = createSerializers();
 			return serializers;
-		}
-
-		/**
-		 * Applies an operation to the serializer group sub-builder.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public final Builder serializers(Consumer<SerializerSet.Builder> operation) {
-			operation.accept(serializers());
-			return this;
 		}
 
 		/**
@@ -2025,20 +2012,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 
 		/**
-		 * Applies an operation to the parser group sub-builder.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public final Builder parsers(Consumer<ParserSet.Builder> operation) {
-			operation.accept(parsers());
-			return this;
-		}
-
-		/**
 		 * Instantiates the parser group sub-builder.
 		 *
 		 * @return A new parser group sub-builder.
@@ -2211,20 +2184,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 
 		/**
-		 * Applies an operation to the part serializer sub-builder.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public final Builder partSerializer(Consumer<HttpPartSerializer.Creator> operation) {
-			operation.accept(partSerializer());
-			return this;
-		}
-
-		/**
 		 * Instantiates the part serializer sub-builder.
 		 *
 		 * @return A new part serializer sub-builder.
@@ -2304,20 +2263,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			if (partParser == null)
 				partParser = createPartParser();
 			return partParser;
-		}
-
-		/**
-		 * Applies an operation to the part parser sub-builder.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public final Builder partParser(Consumer<HttpPartParser.Creator> operation) {
-			operation.accept(partParser());
-			return this;
 		}
 
 		/**
@@ -2403,20 +2348,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		}
 
 		/**
-		 * Applies an operation to the URL-encoding serializer sub-builder.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public final Builder urlEncodingSerializer(Consumer<UrlEncodingSerializer.Builder> operation) {
-			operation.accept(urlEncodingSerializer());
-			return this;
-		}
-
-		/**
 		 * Instantiates the URL-encoding serializer sub-builder.
 		 *
 		 * @return A new URL-encoding serializer sub-builder.
@@ -2461,37 +2392,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='jm'>{@link #noTrace()}
 		 * </ul>
 		 *
-		 * <p>
-		 * Note that the {@link #headers(Consumer)} method can be used to call this method without breaking fluent call chains.
-		 *
 		 * @return The header list builder.
 		 */
 		public final HeaderList.Builder headers() {
 			if (headerData == null)
 				headerData = createHeaderData();
 			return headerData;
-		}
-
-		/**
-		 * Applies an operation to the header data builder.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.headerData(<jv>x</jv> -&gt; <jv>x</jv>.setDefault(<js>"Foo"</js>, <js>"bar"</js>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public final Builder headers(Consumer<HeaderList.Builder> operation) {
-			operation.accept(headers());
-			return this;
 		}
 
 		/**
@@ -2785,37 +2691,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='jm'>{@link #queryData(String,Supplier)}
 		 * </ul>
 		 *
-		 * <p>
-		 * Note that the {@link #queryData(Consumer)} method can be used to call this method without breaking fluent call chains.
-		 *
 		 * @return The query data list builder.
 		 */
 		public final PartList.Builder queryData() {
 			if (queryData == null)
 				queryData = createQueryData();
 			return queryData;
-		}
-
-		/**
-		 * Applies an operation to the query data builder.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.queryData(<jv>x</jv> -&gt; <jv>x</jv>.setDefault(<js>"foo"</js>, <js>"bar"</js>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public final Builder queryData(Consumer<PartList.Builder> operation) {
-			operation.accept(queryData());
-			return this;
 		}
 
 		/**
@@ -2968,37 +2849,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='jm'>{@link #formData(String,Supplier)}
 		 * </ul>
 		 *
-		 * <p>
-		 * Note that the {@link #formData(Consumer)} method can be used to call this method without breaking fluent call chains.
-		 *
 		 * @return The form data list builder.
 		 */
 		public final PartList.Builder formData() {
 			if (formData == null)
 				formData = createFormData();
 			return formData;
-		}
-
-		/**
-		 * Applies an operation to the form data builder.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.formData(<jv>x</jv> -&gt; <jv>x</jv>.setDefault(<js>"foo"</js>, <js>"bar"</js>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public final Builder formData(Consumer<PartList.Builder> operation) {
-			operation.accept(formData());
-			return this;
 		}
 
 		/**
@@ -3151,37 +3007,12 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<li class='jm'>{@link #pathData(String,Supplier)}
 		 * </ul>
 		 *
-		 * <p>
-		 * Note that the {@link #pathData(Consumer)} method can be used to call this method without breaking fluent call chains.
-		 *
 		 * @return The form data list builder.
 		 */
 		public final PartList.Builder pathData() {
 			if (pathData == null)
 				pathData = createPathData();
 			return pathData;
-		}
-
-		/**
-		 * Applies an operation to the path data builder.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.pathData(<jv>x</jv> -&gt; <jv>x</jv>.setDefault(<js>"foo"</js>, <js>"bar"</js>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public final Builder pathData(Consumer<PartList.Builder> operation) {
-			operation.accept(pathData());
-			return this;
 		}
 
 		/**
@@ -3354,28 +3185,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			if (callHandler == null)
 				callHandler = createCallHandler();
 			return callHandler;
-		}
-
-		/**
-		 * Applies an operation to the REST call handler bean creator.
-		 *
-		 * <p>
-		 * Typically used to allow you to execute operations without breaking the fluent flow of the client builder.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	RestClient <jv>client</jv> = RestClient
-		 * 		.<jsm>create</jsm>()
-		 * 		.callHandler(<jv>x</jv> -&gt; <jv>x</jv>.impl(<jv>myCallHandler</jv>))
-		 * 		.build();
-		 * </p>
-		 *
-		 * @param operation The operation to apply.
-		 * @return This object.
-		 */
-		public final Builder callHandler(Consumer<BeanCreator<RestCallHandler>> operation) {
-			operation.accept(callHandler());
-			return this;
 		}
 
 		/**
@@ -3841,8 +3650,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li class='note'>The {@link RestClient#onInit(RestRequest)}, {@link RestClient#onConnect(RestRequest,RestResponse)}, and
-		 * {@link RestClient#onClose(RestRequest,RestResponse)} methods can also be overridden to produce the same results.
+		 * 	<li class='note'>The {@link RestClient#onCallInit(RestRequest)}, {@link RestClient#onCallConnect(RestRequest,RestResponse)}, and
+		 * {@link RestClient#onCallClose(RestRequest,RestResponse)} methods can also be overridden to produce the same results.
 		 * </ul>
 		 *
 		 * @param values
@@ -3905,8 +3714,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * </p>
 		 *
 		 * <ul class='notes'>
-		 * 	<li class='note'>The {@link RestClient#onInit(RestRequest)}, {@link RestClient#onConnect(RestRequest,RestResponse)}, and
-		 * {@link RestClient#onClose(RestRequest,RestResponse)} methods can also be overridden to produce the same results.
+		 * 	<li class='note'>The {@link RestClient#onCallInit(RestRequest)}, {@link RestClient#onCallConnect(RestRequest,RestResponse)}, and
+		 * {@link RestClient#onCallClose(RestRequest,RestResponse)} methods can also be overridden to produce the same results.
 		 * </ul>
 		 *
 		 * @param value
@@ -4051,7 +3860,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * 	<jc>// Create a client that uses UON format by default for HTTP parts.</jc>
 		 * 	RestClient <jv>client</jv> = RestClient
 		 * 		.<jsm>create</jsm>()
-		 * 		.rootUri(<js>"http://localhost:10000/foo"</js>)
+		 * 		.rootUrl(<js>"http://localhost:10000/foo"</js>)
 		 * 		.build();
 		 *
 		 * 	Bar <jv>bar</jv> = <jv>client</jv>
@@ -4067,16 +3876,16 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return This object.
 		 */
 		@FluentSetter
-		public Builder rootUri(Object value) {
+		public Builder rootUrl(Object value) {
 			String s = stringify(value);
 			if (! isEmpty(s))
 				s = s.replaceAll("\\/$", "");
 			if (isEmpty(s))
-				rootUri = null;
+				rootUrl = null;
 			else if (s.indexOf("://") == -1)
-				throw new BasicRuntimeException("Invalid rootUri value: ''{0}''.  Must be a valid absolute URL.", value);
+				throw new BasicRuntimeException("Invalid rootUrl value: ''{0}''.  Must be a valid absolute URL.", value);
 			else
-				rootUri = s;
+				rootUrl = s;
 			return this;
 		}
 
@@ -4090,7 +3899,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return The root URI defined for this client.
 		 */
 		public String getRootUri() {
-			return rootUri;
+			return rootUrl;
 		}
 
 		/**
@@ -6516,7 +6325,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	final HttpPartSerializer partSerializer;
 	final HttpPartParser partParser;
 	private final RestCallHandler callHandler;
-	private final String rootUri;
+	private final String rootUrl;
 	private volatile boolean isClosed = false;
 	private final StackTraceElement[] creationStack;
 	private final Logger logger;
@@ -6566,7 +6375,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		skipEmptyHeaderData = builder.skipEmptyHeaderData;
 		skipEmptyQueryData = builder.skipEmptyQueryData;
 		skipEmptyFormData = builder.skipEmptyFormData;
-		rootUri = builder.rootUri;
+		rootUrl = builder.rootUrl;
 		errorCodes = builder.errorCodes;
 		connectionManager = builder.connectionManager;
 		console = builder.console != null ? builder.console : System.err;
@@ -6587,11 +6396,29 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		partParser = builder.partParser().create();
 		urlEncodingSerializer = builder.urlEncodingSerializer().build();
 		creationStack = isDebug() ? Thread.currentThread().getStackTrace() : null;
+
+		init();
 	}
 
 	@Override /* Context */
 	public Builder copy() {
 		throw new NoSuchMethodError("Not implemented.");
+	}
+
+	/**
+	 * Perform optional initialization on builder before it is used.
+	 *
+	 * <p>
+	 * Default behavior is a no-op.
+	 *
+	 * @param builder The builder to initialize.
+	 */
+	protected void init(RestClient.Builder builder) {}
+
+	/**
+	 * Gets called add the end of the constructor call to perform any post-initialization.
+	 */
+	protected void init() {
 	}
 
 	/**
@@ -6654,8 +6481,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @throws IOException In case of a problem or the connection was aborted.
 	 * @throws ClientProtocolException In case of an http protocol error.
 	 */
-	@Override /* RestCallHandler */
-	public HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) throws ClientProtocolException, IOException {
+	protected HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) throws ClientProtocolException, IOException {
 		return callHandler.run(target, request, context);
 	}
 
@@ -6991,7 +6817,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			if (body instanceof NameValuePair[])
 				return req.content(new UrlEncodedFormEntity(alist((NameValuePair[])body)));
 			if (body instanceof PartList)
-				return req.content(new UrlEncodedFormEntity(((PartList)body).toNameValuePairs()));
+				return req.content(new UrlEncodedFormEntity(((PartList)body)));
 			if (body instanceof HttpResource)
 				((HttpResource)body).getHeaders().forEach(x-> req.header(x));
 			if (body instanceof HttpEntity) {
@@ -7337,13 +7163,17 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	/**
 	 * Perform an arbitrary request against the specified URI.
 	 *
+	 * <p>
+	 * All requests feed through this method so it can be used to intercept request creations and make modifications
+	 * (such as add headers).
+	 *
 	 * @param op The operation that identifies the HTTP method, URL, and optional payload.
 	 * @return
 	 * 	A {@link RestRequest} object that can be further tailored before executing the request and getting the response
 	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest request(RestOperation op) throws RestCallException {
+	protected RestRequest request(RestOperation op) throws RestCallException {
 		if (isClosed) {
 			Exception e2 = null;
 			if (closedStack != null) {
@@ -7354,9 +7184,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			throw new RestCallException(null, null, "RestClient.close() has already been called.  This client cannot be reused.  Closed location stack trace can be displayed by setting the system property 'org.apache.juneau.rest.client2.RestClient.trackCreation' to true.");
 		}
 
-		RestRequest req = createRequest(toURI(op.getUri(), rootUri), op.getMethod(), op.hasContent());
+		RestRequest req = createRequest(toURI(op.getUri(), rootUrl), op.getMethod(), op.hasContent());
 
-		onInit(req);
+		onCallInit(req);
 
 		req.content(op.getContent());
 
@@ -7403,7 +7233,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * The URI to the REST interface is based on the following values:
 	 * <ul>
 	 * 	<li>The {@link Remote#path() @Remote(path)} annotation on the interface (<c>remote-path</c>).
-	 * 	<li>The {@link Builder#rootUri(Object) rootUri} on the client (<c>root-url</c>).
+	 * 	<li>The {@link Builder#rootUrl(Object) rootUrl} on the client (<c>root-url</c>).
 	 * 	<li>The fully-qualified class name of the interface (<c>class-name</c>).
 	 * </ul>
 	 *
@@ -7439,14 +7269,14 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * 	<jc>// Resolves to "http://hostname/resturi/myinterface2"</jc>
 	 * 	MyInterface2 <jv>interface2</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.rootUri(<js>"http://hostname/resturi"</js>)
+	 * 		.rootUrl(<js>"http://hostname/resturi"</js>)
 	 * 		.build()
 	 * 		.getRemote(MyInterface2.<jk>class</jk>);
 	 *
 	 * 	<jc>// Resolves to "http://hostname/resturi/org.apache.foo.MyInterface3"</jc>
 	 * 	MyInterface3 <jv>interface3</jv> = RestClient
 	 * 		.<jsm>create</jsm>()
-	 * 		.rootUri(<js>"http://hostname/resturi"</js>)
+	 * 		.rootUrl(<js>"http://hostname/resturi"</js>)
 	 * 		.build()
 	 * 		.getRemote(MyInterface3.<jk>class</jk>);
 	 * </p>
@@ -7479,11 +7309,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 *
 	 * @param <T> The interface to create a proxy for.
 	 * @param interfaceClass The interface to create a proxy for.
-	 * @param rootUri The URI of the REST interface.
+	 * @param rootUrl The URI of the REST interface.
 	 * @return The new proxy interface.
 	 */
-	public <T> T getRemote(Class<T> interfaceClass, Object rootUri) {
-		return getRemote(interfaceClass, rootUri, null, null);
+	public <T> T getRemote(Class<T> interfaceClass, Object rootUrl) {
+		return getRemote(interfaceClass, rootUrl, null, null);
 	}
 
 	/**
@@ -7495,18 +7325,18 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 	 * @param <T> The interface to create a proxy for.
 	 * @param interfaceClass The interface to create a proxy for.
-	 * @param rootUri The URI of the REST interface.
+	 * @param rootUrl The URI of the REST interface.
 	 * @param serializer The serializer used to serialize POJOs to the body of the HTTP request.
 	 * @param parser The parser used to parse POJOs from the body of the HTTP response.
 	 * @return The new proxy interface.
 	 */
 	@SuppressWarnings({ "unchecked" })
-	public <T> T getRemote(final Class<T> interfaceClass, Object rootUri, final Serializer serializer, final Parser parser) {
+	public <T> T getRemote(final Class<T> interfaceClass, Object rootUrl, final Serializer serializer, final Parser parser) {
 
-		if (rootUri == null)
-			rootUri = this.rootUri;
+		if (rootUrl == null)
+			rootUrl = this.rootUrl;
 
-		final String restUrl2 = trimSlashes(emptyIfNull(rootUri));
+		final String restUrl2 = trimSlashes(emptyIfNull(rootUrl));
 
 		return (T)Proxy.newProxyInstance(
 			interfaceClass.getClassLoader(),
@@ -7658,7 +7488,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * The URI to the REST interface is based on the following values:
 	 * <ul>
 	 * 	<li>The {@link Remote#path() @Remote(path)} annotation on the interface (<c>remote-path</c>).
-	 * 	<li>The {@link Builder#rootUri(Object) rootUri} on the client (<c>root-url</c>).
+	 * 	<li>The {@link Builder#rootUrl(Object) rootUrl} on the client (<c>root-url</c>).
 	 * 	<li>The fully-qualified class name of the interface (<c>class-name</c>).
 	 * </ul>
 	 *
@@ -7729,9 +7559,9 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			RrpcInterfaceMeta rm = new RrpcInterfaceMeta(interfaceClass, "");
 			String path = rm.getPath();
 			if (path.indexOf("://") == -1) {
-				if (isEmpty(rootUri))
+				if (isEmpty(rootUrl))
 					throw new RemoteMetadataException(interfaceClass, "Root URI has not been specified.  Cannot construct absolute path to remote interface.");
-				path = trimSlashes(rootUri) + '/' + path;
+				path = trimSlashes(rootUrl) + '/' + path;
 			}
 			uri = path;
 		}
@@ -7994,8 +7824,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @param req The HTTP request.
 	 * @throws RestCallException If any of the interceptors threw an exception.
 	 */
-	@Override
-	public void onInit(RestRequest req) throws RestCallException {
+	protected void onCallInit(RestRequest req) throws RestCallException {
 		try {
 			for (RestCallInterceptor rci : interceptors)
 				rci.onInit(req);
@@ -8020,8 +7849,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @param res The HTTP response.
 	 * @throws RestCallException If any of the interceptors threw an exception.
 	 */
-	@Override
-	public void onConnect(RestRequest req, RestResponse res) throws RestCallException {
+	protected void onCallConnect(RestRequest req, RestResponse res) throws RestCallException {
 		try {
 			for (RestCallInterceptor rci : interceptors)
 				rci.onConnect(req, res);
@@ -8046,8 +7874,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * @param res The HTTP response.
 	 * @throws RestCallException If any of the interceptors threw an exception.
 	 */
-	@Override
-	public void onClose(RestRequest req, RestResponse res) throws RestCallException {
+	protected void onCallClose(RestRequest req, RestResponse res) throws RestCallException {
 		try {
 			for (RestCallInterceptor rci : interceptors)
 				rci.onClose(req, res);
@@ -8297,7 +8124,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 
 	private Pattern absUrlPattern = Pattern.compile("^\\w+\\:\\/\\/.*");
 
-	URI toURI(Object x, String rootUri) throws RestCallException {
+	URI toURI(Object x, String rootUrl) throws RestCallException {
 		try {
 			if (x instanceof URI)
 				return (URI)x;
@@ -8306,11 +8133,11 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			if (x instanceof URIBuilder)
 				return ((URIBuilder)x).build();
 			String s = x == null ? "" : x.toString();
-			if (rootUri != null && ! absUrlPattern.matcher(s).matches()) {
+			if (rootUrl != null && ! absUrlPattern.matcher(s).matches()) {
 				if (s.isEmpty())
-					s = rootUri;
+					s = rootUrl;
 				else {
-					StringBuilder sb = new StringBuilder(rootUri);
+					StringBuilder sb = new StringBuilder(rootUrl);
 					if (! s.startsWith("/"))
 						sb.append('/');
 					sb.append(s);
@@ -8409,6 +8236,6 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			.append("partParser", partParser)
 			.append("partSerializer", partSerializer)
 			.append("queryData", queryData)
-			.append("rootUri", rootUri);
+			.append("rootUrl", rootUrl);
 	}
 }

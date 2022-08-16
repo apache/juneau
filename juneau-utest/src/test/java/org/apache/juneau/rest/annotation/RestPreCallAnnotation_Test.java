@@ -20,30 +20,27 @@ import org.apache.juneau.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class RestHookAnnotation_Test {
+public class RestPreCallAnnotation_Test {
 
-	private static final String CNAME = RestHookAnnotation_Test.class.getName();
+	private static final String CNAME = RestPreCallAnnotation_Test.class.getName();
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	RestHook a1 = RestHookAnnotation.create()
+	RestPreCall a1 = RestPreCallAnnotation.create()
 		.on("a")
-		.value(HookEvent.INIT)
 		.build();
 
-	RestHook a2 = RestHookAnnotation.create()
+	RestPreCall a2 = RestPreCallAnnotation.create()
 		.on("a")
-		.value(HookEvent.INIT)
 		.build();
 
 	@Test
 	public void a01_basic() {
 		assertObject(a1).asJson().is(""
 			+ "{"
-				+ "on:['a'],"
-				+ "value:'INIT'"
+				+ "on:['a']"
 			+ "}"
 		);
 	}
@@ -80,7 +77,7 @@ public class RestHookAnnotation_Test {
 
 	@Test
 	public void c01_otherMethods() throws Exception {
-		RestHook c4 = RestHookAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
+		RestPreCall c4 = RestPreCallAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
 
 		assertObject(c4).asJson().isContains("on:['"+CNAME+"$C1.m1()','"+CNAME+"$C2.m2()']");
 	}
@@ -89,19 +86,17 @@ public class RestHookAnnotation_Test {
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@RestHook(
-		on="a",
-		value=HookEvent.INIT
+	@RestPreCall(
+		on="a"
 	)
 	public static class D1 {}
-	RestHook d1 = D1.class.getAnnotationsByType(RestHook.class)[0];
+	RestPreCall d1 = D1.class.getAnnotationsByType(RestPreCall.class)[0];
 
-	@RestHook(
-		on="a",
-		value=HookEvent.INIT
+	@RestPreCall(
+		on="a"
 	)
 	public static class D2 {}
-	RestHook d2 = D2.class.getAnnotationsByType(RestHook.class)[0];
+	RestPreCall d2 = D2.class.getAnnotationsByType(RestPreCall.class)[0];
 
 	@Test
 	public void d01_comparisonWithDeclarativeAnnotations() {

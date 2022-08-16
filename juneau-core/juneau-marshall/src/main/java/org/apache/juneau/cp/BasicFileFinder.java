@@ -103,16 +103,6 @@ public class BasicFileFinder implements FileFinder {
 	}
 
 	@Override /* FileFinder */
-	public final Optional<InputStream> getStream(String name) throws IOException {
-		return find(name, null);
-	}
-
-	@Override /* FileFinder */
-	public final Optional<String> getString(String name) throws IOException {
-		return optional(read(find(name, null).orElse(null)));
-	}
-
-	@Override /* FileFinder */
 	public Optional<String> getString(String name, Locale locale) throws IOException {
 		return optional(read(find(name, locale).orElse(null)));
 	}

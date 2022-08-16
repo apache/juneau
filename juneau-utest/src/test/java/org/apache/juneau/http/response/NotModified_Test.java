@@ -35,13 +35,13 @@ public class NotModified_Test {
 
 		client.get("/a1")
 			.run()
-			.assertCode().is(304);
+			.assertStatus(304);
 		client.get("/a2")
 			.run()
-			.assertCode().is(304);
+			.assertStatus(304);
 		client.get("/a3")
 			.run()
-			.assertCode().is(304)
+			.assertStatus(304)
 			.assertHeader("Foo").is("bar");
 	}
 }

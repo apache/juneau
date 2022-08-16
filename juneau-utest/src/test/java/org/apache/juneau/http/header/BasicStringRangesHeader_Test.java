@@ -55,10 +55,10 @@ public class BasicStringRangesHeader_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(stringRangesHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
-		c.get().header(stringRangesHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
-		c.get().header(stringRangesHeader(HEADER,PARSED)).run().assertContent().is(VALUE);
-		c.get().header(stringRangesHeader(HEADER,()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(stringRangesHeader(HEADER,VALUE)).run().assertContent(VALUE);
+		c.get().header(stringRangesHeader(HEADER,VALUE)).run().assertContent(VALUE);
+		c.get().header(stringRangesHeader(HEADER,PARSED)).run().assertContent(VALUE);
+		c.get().header(stringRangesHeader(HEADER,()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(stringRangesHeader(HEADER,(Supplier<StringRanges>)null)).run().assertContent().isEmpty();

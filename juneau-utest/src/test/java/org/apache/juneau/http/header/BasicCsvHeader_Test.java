@@ -53,10 +53,10 @@ public class BasicCsvHeader_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(csvHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
-		c.get().header(csvHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
-		c.get().header(csvHeader(HEADER,PARSED)).run().assertContent().is(VALUE);
-		c.get().header(csvHeader(HEADER,()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(csvHeader(HEADER,VALUE)).run().assertContent(VALUE);
+		c.get().header(csvHeader(HEADER,VALUE)).run().assertContent(VALUE);
+		c.get().header(csvHeader(HEADER,PARSED)).run().assertContent(VALUE);
+		c.get().header(csvHeader(HEADER,()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(csvHeader(HEADER,(Supplier<String[]>)null)).run().assertContent().isEmpty();

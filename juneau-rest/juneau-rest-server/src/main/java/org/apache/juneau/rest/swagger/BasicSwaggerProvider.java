@@ -40,6 +40,22 @@ public class BasicSwaggerProvider implements SwaggerProvider {
 	/**
 	 * Constructor.
 	 *
+	 * @param beanStore The bean store containing injectable beans for this logger.
+	 */
+	public BasicSwaggerProvider(BeanStore beanStore) {
+		this(
+			SwaggerProvider
+				.create(beanStore)
+				.varResolver(()->beanStore.getBean(VarResolver.class).get())
+				.fileFinder(()->beanStore.getBean(FileFinder.class).get())
+				.messages(()->beanStore.getBean(Messages.class).get())
+				.jsonSchemaGenerator(()->beanStore.getBean(JsonSchemaGenerator.class).get())
+		);
+	}
+
+	/**
+	 * Constructor.
+	 *
 	 * @param builder The builder containing the settings for this Swagger provider.
 	 */
 	public BasicSwaggerProvider(SwaggerProvider.Builder builder) {

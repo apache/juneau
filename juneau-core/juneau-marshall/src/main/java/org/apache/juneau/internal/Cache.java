@@ -68,7 +68,7 @@ public class Cache<K,V> {
 			this.type = type;
 			disabled = env("juneau.cache.disable", false);
 			maxSize = env("juneau.cache.maxSize", 1000);
-			logOnExit = env("juneau.cache.logOnExit", true);
+			logOnExit = env("juneau.cache.logOnExit", false);
 		}
 
 		/**

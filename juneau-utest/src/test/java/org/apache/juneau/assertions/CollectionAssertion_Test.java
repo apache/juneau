@@ -41,8 +41,8 @@ public class CollectionAssertion_Test {
 
 	@Test
 	public void a01_msg() throws Exception {
-		assertThrown(()->test(null).setMsg("Foo {0}", 1).isExists()).asMessage().is("Foo 1");
-		assertThrown(()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists()).isExactType(RuntimeException.class).asMessage().is("Foo 1");
+		assertThrown(()->test(null).setMsg("A {0}", 1).isExists()).asMessage().is("A 1");
+		assertThrown(()->test(null).setMsg("A {0}", 1).setThrowable(RuntimeException.class).isExists()).isExactType(RuntimeException.class).asMessage().is("A 1");
 	}
 
 	@Test

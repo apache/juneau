@@ -81,10 +81,7 @@ public class QueryAnnotation {
 	}
 
 	/**
-	 * Finds the name from the specified lists of annotations.
-	 *
-	 * <p>
-	 * The last matching name found is returned.
+	 * Finds the name from the specified list of annotations.
 	 *
 	 * @param pi The parameter.
 	 * @return The last matching name, or {@link Value#empty()} if not found.
@@ -93,6 +90,18 @@ public class QueryAnnotation {
 		Value<String> n = Value.empty();
 		pi.forEachAnnotation(Query.class, x -> isNotEmpty(x.value()), x -> n.set(x.value()));
 		pi.forEachAnnotation(Query.class, x -> isNotEmpty(x.name()), x -> n.set(x.name()));
+		return n;
+	}
+
+	/**
+	 * Finds the default value from the specified list of annotations.
+	 *
+	 * @param pi The parameter.
+	 * @return The last matching default value, or {@link Value#empty()} if not found.
+	 */
+	public static Value<String> findDef(ParamInfo pi) {
+		Value<String> n = Value.empty();
+		pi.forEachAnnotation(Query.class, x -> isNotEmpty(x.def()), x -> n.set(x.def()));
 		return n;
 	}
 
@@ -112,7 +121,7 @@ public class QueryAnnotation {
 		Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
 		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
 		Schema schema = SchemaAnnotation.DEFAULT;
-		String name="", value="";
+		String name="", value="", def="";
 
 		/**
 		 * Constructor.
@@ -128,6 +137,17 @@ public class QueryAnnotation {
 		 */
 		public Query build() {
 			return new Impl(this);
+		}
+
+		/**
+		 * Sets the {@link Query#def} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder def(String value) {
+			this.def = value;
+			return this;
 		}
 
 		/**
@@ -228,7 +248,7 @@ public class QueryAnnotation {
 
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;
-		private final String name, value;
+		private final String name, value, def;
 		private final Schema schema;
 
 		Impl(Builder b) {
@@ -238,6 +258,7 @@ public class QueryAnnotation {
 			this.schema = b.schema;
 			this.serializer = b.serializer;
 			this.value = b.value;
+			this.def = b.def;
 			postConstruct();
 		}
 
@@ -264,6 +285,11 @@ public class QueryAnnotation {
 		@Override /* Query */
 		public String value() {
 			return value;
+		}
+
+		@Override /* Query */
+		public String def() {
+			return def;
 		}
 	}
 

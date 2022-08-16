@@ -35,15 +35,15 @@ public class UseProxy_Test {
 
 		client.get("/a1")
 			.run()
-			.assertCode().is(305)
-			.assertContent().is("Use Proxy");
+			.assertStatus(305)
+			.assertContent("Use Proxy");
 		client.get("/a2")
 			.run()
-			.assertCode().is(305)
-			.assertContent().is("foo");
+			.assertStatus(305)
+			.assertContent("foo");
 		client.get("/a3")
 			.run()
-			.assertCode().is(305)
+			.assertStatus(305)
 			.assertHeader("Foo").is("bar");
 	}
 }

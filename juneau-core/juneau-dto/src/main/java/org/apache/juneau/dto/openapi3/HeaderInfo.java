@@ -26,7 +26,7 @@ import java.util.*;
  * Describes a single HTTP header.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	HeaderInfo x = <jsm>headerInfo</jsm>(<js>"integer"</js>).description(<js>"The number of allowed requests in the current period"</js>);
  *
@@ -36,7 +36,7 @@ import java.util.*;
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	String json = x.toString();
  * </p>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	<jc>// Output</jc>
  * 	{
  * 		<js>"description"</js>: <js>"The number of allowed requests in the current period"</js>,

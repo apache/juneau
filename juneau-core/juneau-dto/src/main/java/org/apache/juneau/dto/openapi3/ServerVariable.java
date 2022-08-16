@@ -99,12 +99,12 @@ public class ServerVariable extends OpenApiElement {
 	 * 		<li><code>Collection&lt;Object&gt;</code>
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Object&gt;</code>
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
+	 * 			<p class='bcode'>
 	 * 	_enum(<js>"['foo','bar']"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - Individual values
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
+	 * 			<p class='bcode'>
 	 * 	_enum(<js>"foo"</js>, <js>"bar"</js>);
 	 * 			</p>
 	 * 	</ul>

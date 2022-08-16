@@ -14,6 +14,7 @@ package org.apache.juneau.rest.arg;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
+import static org.apache.juneau.http.annotation.QueryAnnotation.*;
 
 import java.util.*;
 
@@ -56,7 +57,7 @@ public class QueryArg implements RestOpArg {
 	private final boolean multi;
 	private final HttpPartParser partParser;
 	private final HttpPartSchema schema;
-	private final String name;
+	private final String name, def;
 	private final ClassInfo type;
 
 	/**
@@ -79,7 +80,8 @@ public class QueryArg implements RestOpArg {
 	 * @param annotations The annotations to apply to any new part parsers.
 	 */
 	protected QueryArg(ParamInfo pi, AnnotationWorkList annotations) {
-		this.name = QueryAnnotation.findName(pi).orElseThrow(() -> new ArgException(pi, "@Query used without name or value"));
+		this.name = findName(pi).orElseThrow(() -> new ArgException(pi, "@Query used without name or value"));
+		this.def = findDef(pi).orElse(null);
 		this.type = pi.getParameterType();
 		this.schema = HttpPartSchema.create(Query.class, pi);
 		Class<? extends HttpPartParser> pp = schema.getParser();
@@ -112,6 +114,6 @@ public class QueryArg implements RestOpArg {
 			return req.getBeanSession().convertToType(m, cm);
 		}
 
-		return rh.getLast(name).parser(ps).schema(schema).as(type.innerType()).orElse(null);
+		return rh.getLast(name).parser(ps).schema(schema).def(def).as(type.innerType()).orElse(null);
 	}
 }

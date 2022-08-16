@@ -74,10 +74,10 @@ public class HeaderList_Test {
 		HeaderList x;
 
 		x = headerList(FOO_1, FOO_2, null);
-		assertObject(x).isString("[Foo: 1, Foo: 2]");
+		assertObject(x).isString("[Foo: 1, Foo: 2, null]");
 
 		x = headerList(alist(FOO_1, FOO_2, null));
-		assertObject(x).isString("[Foo: 1, Foo: 2]");
+		assertObject(x).isString("[Foo: 1, Foo: 2, null]");
 
 		x = headerList("Foo","1","Foo","2");
 		assertObject(x).isString("[Foo: 1, Foo: 2]");
@@ -219,18 +219,18 @@ public class HeaderList_Test {
 	@Test
 	public void a12_headerIterator_all() {
 		HeaderList x = HeaderList.of();
-		assertBoolean(x.iterator().hasNext()).isFalse();
+		assertBoolean(x.headerIterator().hasNext()).isFalse();
 		x = HeaderList.of(FOO_1);
-		assertBoolean(x.iterator().hasNext()).isTrue();
+		assertBoolean(x.headerIterator().hasNext()).isTrue();
 	}
 
 	@Test
 	public void a13_headerIterator_single() {
 		HeaderList x = HeaderList.of();
-		assertBoolean(x.iterator("Foo").hasNext()).isFalse();
+		assertBoolean(x.headerIterator("Foo").hasNext()).isFalse();
 		x = HeaderList.of(FOO_1);
-		assertBoolean(x.iterator("Foo").hasNext()).isTrue();
-		assertBoolean(x.iterator("FOO").hasNext()).isTrue();
+		assertBoolean(x.headerIterator("Foo").hasNext()).isTrue();
+		assertBoolean(x.headerIterator("FOO").hasNext()).isTrue();
 	}
 
 	@Test
@@ -445,27 +445,27 @@ public class HeaderList_Test {
 	public void c01_iterators() {
 		HeaderList x = HeaderList.of(Accept.TEXT_XML,ContentType.TEXT_XML);
 
-		HeaderIterator i1 = x.iterator();
+		HeaderIterator i1 = x.headerIterator();
 		assertObject(i1.nextHeader()).isString("Accept: text/xml");
 		assertObject(i1.nextHeader()).isString("Content-Type: text/xml");
 		assertThrown(()->i1.nextHeader()).asMessage().is("Iteration already finished.");
 
-		HeaderIterator i2 = x.iterator();
+		HeaderIterator i2 = x.headerIterator();
 		assertObject(i2.next()).isString("Accept: text/xml");
 		assertObject(i2.nextHeader()).isString("Content-Type: text/xml");
 		assertThrown(()->i2.next()).asMessage().is("Iteration already finished.");
 
-		HeaderIterator i3 = x.iterator("accept");
+		HeaderIterator i3 = x.headerIterator("accept");
 		assertObject(i3.nextHeader()).isString("Accept: text/xml");
 		assertThrown(()->i3.nextHeader()).asMessage().is("Iteration already finished.");
 
 		HeaderList x2 = HeaderList.create().append(Accept.TEXT_XML,ContentType.TEXT_XML).caseSensitive().build();
 
-		HeaderIterator i4 = x2.iterator("Accept");
+		HeaderIterator i4 = x2.headerIterator("Accept");
 		assertObject(i4.nextHeader()).isString("Accept: text/xml");
 		assertThrown(()->i4.nextHeader()).asMessage().is("Iteration already finished.");
 
-		HeaderIterator i5 = x2.iterator("accept");
+		HeaderIterator i5 = x2.headerIterator("accept");
 		assertThrown(()->i5.nextHeader()).asMessage().is("Iteration already finished.");
 
 		assertThrown(()->i5.remove()).asMessage().is("Not supported.");

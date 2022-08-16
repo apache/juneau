@@ -69,13 +69,13 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 
 		Session s = new Session(beanSession, swagger);
 
-		String css = RESOURCES.getString("files/htdocs/styles/SwaggerUI.css").orElse(null);
+		String css = RESOURCES.getString("files/htdocs/styles/SwaggerUI.css", null).orElse(null);
 		if (css == null)
-			css = RESOURCES.getString("SwaggerUI.css").orElse(null);
+			css = RESOURCES.getString("SwaggerUI.css", null).orElse(null);
 
 		Div outer = div(
 			style(css),
-			script("text/javascript", new String[]{RESOURCES.getString("SwaggerUI.js").orElse(null)}),
+			script("text/javascript", new String[]{RESOURCES.getString("SwaggerUI.js", null).orElse(null)}),
 			header(s)
 		)._class("swagger-ui");
 

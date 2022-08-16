@@ -50,7 +50,7 @@ public class Rest_PredefinedStatusCodes_Test {
 		RestClient a = MockRestClient.build(A.class);
 		a.put("/a", "foo")
 			.run()
-			.assertCode().is(200);
+			.assertStatus(200);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -117,62 +117,62 @@ public class Rest_PredefinedStatusCodes_Test {
 		RestClient b = MockRestClient.buildLax(B.class);
 		b.put("/a?noTrace=true", "{f2:'foo'}", APPLICATION_JSON)
 			.run()
-			.assertCode().is(400)
+			.assertStatus(400)
 			.assertContent().isContains(
 				"Unknown property 'f2' encountered while trying to parse into class"
 			);
 		b.put("/a?noTrace=true", "{f1:'foo', f2:'foo'}", APPLICATION_JSON)
 			.run()
-			.assertCode().is(400)
+			.assertStatus(400)
 			.assertContent().isContains(
 				"Unknown property 'f2' encountered while trying to parse into class"
 			);
 		b.put("/b?noTrace=true", "{f1:'foo'}", APPLICATION_JSON)
 			.run()
-			.assertCode().is(400)
+			.assertStatus(400)
 			.assertContent().isContains(
 				"NumberFormatException"
 			);
 		b.put("/c?noTrace=true", "{f1:1}", APPLICATION_JSON)
 			.run()
-			.assertCode().is(400)
+			.assertStatus(400)
 			.assertContent().isContains(
 				"could not be instantiated"
 			);
 		b.put("/d?noTrace=true", "{f1:1}", APPLICATION_JSON)
 			.run()
-			.assertCode().is(400)
+			.assertStatus(400)
 			.assertContent().isContains(
 				"could not be instantiated"
 			);
 		b.put("/e?noTrace=true", "{f1:1}", APPLICATION_JSON)
 			.run()
-			.assertCode().is(400)
+			.assertStatus(400)
 			.assertContent().isContains(
 				"Class is not public"
 			);
 		b.put("/f?noTrace=true", "'foo'", APPLICATION_JSON)
 			.run()
-			.assertCode().is(400)
+			.assertStatus(400)
 			.assertContent().isContains(
 				"Test error"
 			);
 		b.put("/g/123?noTrace=true&p1=foo", "'foo'", APPLICATION_JSON)
 			.run()
-			.assertCode().is(400)
+			.assertStatus(400)
 			.assertContent().isContains(
 				"Could not parse query parameter 'p1'."
 			);
 		b.put("/g/foo?noTrace=true&p1=1", "'foo'", APPLICATION_JSON)
 			.run()
-			.assertCode().is(400)
+			.assertStatus(400)
 			.assertContent().isContains(
 				"Could not parse path parameter 'a1'."
 			);
 		b.put("/g/123?noTrace=true&p1=1", "'foo'", APPLICATION_JSON)
 			.header("h1", "foo")
 			.run()
-			.assertCode().is(400)
+			.assertStatus(400)
 			.assertContent().isContains(
 				"Could not parse header parameter 'h1'."
 			);
@@ -195,7 +195,7 @@ public class Rest_PredefinedStatusCodes_Test {
 	public void c01_badPath() throws Exception {
 		c.get("/bad?noTrace=true")
 			.run()
-			.assertCode().is(404)
+			.assertStatus(404)
 			.assertContent().isContains(
 				"Method 'GET' not found on resource with matching pattern on path '/bad'"
 			);
@@ -203,7 +203,7 @@ public class Rest_PredefinedStatusCodes_Test {
 	public void c02_badMethod() throws Exception {
 		c.put("?noTrace=true", null)
 			.run()
-			.assertCode().is(405)
+			.assertStatus(405)
 			.assertContent().isContains(
 				"Method 'PUT' not found on resource."
 			);
@@ -232,7 +232,7 @@ public class Rest_PredefinedStatusCodes_Test {
 	public void d01() throws Exception {
 		d.get("/d?noTrace=true")
 			.run()
-			.assertCode().is(412)
+			.assertStatus(412)
 			.assertContent().isContains(
 				"Method 'GET' not found on resource on path '/d' with matching matcher."
 			);

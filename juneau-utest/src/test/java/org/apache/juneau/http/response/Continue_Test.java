@@ -26,7 +26,7 @@ public class Continue_Test {
 	public static class A {
 		@RestGet public Continue a1() { return CONTINUE; }
 		@RestGet public Continue a2() { return _continue().content("foo").build(); }
-		@RestGet public Continue a3() { return _continue().header("Foo","bar").build(); }
+		@RestGet public Continue a3() { return _continue().header("A","bar").build(); }
 	}
 
 	@Test
@@ -35,15 +35,15 @@ public class Continue_Test {
 
 		client.get("/a1")
 			.run()
-			.assertCode().is(1100)
-			.assertContent().is("Continue");
+			.assertStatus(1100)
+			.assertContent("Continue");
 		client.get("/a2")
 			.run()
-			.assertCode().is(1100)
-			.assertContent().is("foo");
+			.assertStatus(1100)
+			.assertContent("foo");
 		client.get("/a3")
 			.run()
-			.assertCode().is(1100)
-			.assertHeader("Foo").is("bar");
+			.assertStatus(1100)
+			.assertHeader("A").is("bar");
 	}
 }

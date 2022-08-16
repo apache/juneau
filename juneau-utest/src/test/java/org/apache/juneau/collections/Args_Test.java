@@ -10,22 +10,21 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.utils;
+package org.apache.juneau.collections;
 
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.collections.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)
-public class ArgsTest {
+public class Args_Test {
 
-	//====================================================================================================
+	//-----------------------------------------------------------------------------------------------------------------
 	// test - Basic tests
-	//====================================================================================================
+	//-----------------------------------------------------------------------------------------------------------------
 	@Test
-	public void test() throws Exception {
+	public void basic() throws Exception {
 		Args a;
 
 		// Empty args

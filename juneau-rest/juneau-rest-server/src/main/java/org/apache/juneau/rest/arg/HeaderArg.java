@@ -98,7 +98,7 @@ public class HeaderArg implements RestOpArg {
 	private final HttpPartParser partParser;
 	private final HttpPartSchema schema;
 	private final boolean multi;
-	private final String name;
+	private final String name, def;
 	private final ClassInfo type;
 
 	/**
@@ -122,6 +122,7 @@ public class HeaderArg implements RestOpArg {
 	 */
 	protected HeaderArg(ParamInfo pi, AnnotationWorkList annotations) {
 		this.name = findName(pi).orElseThrow(() -> new ArgException(pi, "@Header used without name or value"));
+		this.def = findDef(pi).orElse(null);
 		this.type = pi.getParameterType();
 		this.schema = HttpPartSchema.create(Header.class, pi);
 		Class<? extends HttpPartParser> pp = schema.getParser();
@@ -143,17 +144,16 @@ public class HeaderArg implements RestOpArg {
 
 		if (multi) {
 			Collection c = cm.isArray() ? list() : (Collection)(cm.canCreateNewInstance() ? cm.newInstance() : new JsonList());
-			rh.getAll(name).stream().map(x -> x.parser(ps).schema(schema).as(cm.getElementType()).orElse(null)).forEach(x -> c.add(x));
+			rh.stream(name).map(x -> x.parser(ps).schema(schema).as(cm.getElementType()).orElse(null)).forEach(x -> c.add(x));
 			return cm.isArray() ? ArrayUtils.toArray(c, cm.getElementType().getInnerClass()) : c;
 		}
 
 		if (cm.isMapOrBean() && isOneOf(name, "*", "")) {
 			JsonMap m = new JsonMap();
-			for (RequestHeader e : rh.getAll())
-				m.put(e.getName(), e.parser(ps).schema(schema == null ? null : schema.getProperty(e.getName())).as(cm.getValueType()).orElse(null));
+			rh.forEach(x -> m.put(x.getName(), x.parser(ps).schema(schema == null ? null : schema.getProperty(x.getName())).as(cm.getValueType()).orElse(null)));
 			return req.getBeanSession().convertToType(m, cm);
 		}
 
-		return rh.getLast(name).parser(ps).schema(schema).as(type.innerType()).orElse(null);
+		return rh.getLast(name).parser(ps).schema(schema).def(def).as(type.innerType()).orElse(null);
 	}
 }

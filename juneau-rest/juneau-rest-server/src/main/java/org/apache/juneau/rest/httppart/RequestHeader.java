@@ -95,7 +95,7 @@ import org.apache.juneau.rest.*;
  */
 public class RequestHeader extends RequestHttpPart implements Header {
 
-	private final String value;
+	private String value;
 
 	/**
 	 * Constructor.
@@ -107,6 +107,18 @@ public class RequestHeader extends RequestHttpPart implements Header {
 	public RequestHeader(RestRequest request, String name, String value) {
 		super(HEADER, request, name);
 		this.value = value;
+	}
+
+	/**
+	 * Sets a default value for this part.
+	 *
+	 * @param def The default value.
+	 * @return This object.
+	 */
+	public RequestHeader def(String def) {
+		if (value == null)
+			value = def;
+		return this;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

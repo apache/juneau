@@ -57,7 +57,7 @@ public class FormDataArg implements RestOpArg {
 	private final boolean multi;
 	private final HttpPartParser partParser;
 	private final HttpPartSchema schema;
-	private final String name;
+	private final String name, def;
 	private final ClassInfo type;
 
 	/**
@@ -81,6 +81,7 @@ public class FormDataArg implements RestOpArg {
 	 */
 	protected FormDataArg(ParamInfo pi, AnnotationWorkList annotations) {
 		this.name = findName(pi).orElseThrow(()->new ArgException(pi, "@FormData used without name or value"));
+		this.def = findDef(pi).orElse(null);
 		this.type = pi.getParameterType();
 		this.schema = HttpPartSchema.create(FormData.class, pi);
 		Class<? extends HttpPartParser> pp = schema.getParser();
@@ -113,6 +114,6 @@ public class FormDataArg implements RestOpArg {
 			return req.getBeanSession().convertToType(m, cm);
 		}
 
-		return rh.getLast(name).parser(ps).schema(schema).as(type.innerType()).orElse(null);
+		return rh.getLast(name).parser(ps).schema(schema).def(def).as(type.innerType()).orElse(null);
 	}
 }

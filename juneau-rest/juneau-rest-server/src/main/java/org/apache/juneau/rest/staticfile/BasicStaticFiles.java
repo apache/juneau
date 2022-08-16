@@ -29,6 +29,7 @@ import org.apache.juneau.cp.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.rest.*;
 
 /**
  * API for retrieving localized static files from either the classpath or file system.
@@ -57,6 +58,25 @@ public class BasicStaticFiles implements StaticFiles {
 	 */
 	public static StaticFiles.Builder create(BeanStore beanStore) {
 		return new StaticFiles.Builder(beanStore);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param beanStore The bean store containing injectable beans for this logger.
+	 */
+	public BasicStaticFiles(BeanStore beanStore) {
+		this(StaticFiles
+			.create(beanStore)
+			.type(BasicStaticFiles.class)
+			.dir("static")
+			.dir("htdocs")
+			.cp(beanStore.getBean(ResourceSupplier.class).get().getResourceClass(), "htdocs", true)
+			.cp(beanStore.getBean(ResourceSupplier.class).get().getResourceClass(), "/htdocs", true)
+			.caching(1_000_000)
+			.exclude("(?i).*\\.(class|properties)")
+			.headers(cacheControl("max-age=86400, public"))
+		);
 	}
 
 	/**
@@ -98,7 +118,7 @@ public class BasicStaticFiles implements StaticFiles {
 	@Override /* StaticFiles */
 	public Optional<HttpResource> resolve(String path, Locale locale) {
 		try {
-			Optional<InputStream> is = getStream(path);
+			Optional<InputStream> is = getStream(path, locale);
 			if (! is.isPresent())
 				return empty();
 			return optional(
@@ -125,16 +145,6 @@ public class BasicStaticFiles implements StaticFiles {
 	@Override /* FileFinder */
 	public Optional<InputStream> getStream(String name, Locale locale) throws IOException {
 		return fileFinder.getStream(name, locale);
-	}
-
-	@Override /* FileFinder */
-	public Optional<InputStream> getStream(String name) throws IOException {
-		return fileFinder.getStream(name);
-	}
-
-	@Override /* FileFinder */
-	public Optional<String> getString(String name) throws IOException {
-		return fileFinder.getString(name);
 	}
 
 	@Override /* FileFinder */

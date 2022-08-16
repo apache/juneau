@@ -35,15 +35,15 @@ public class NonAuthoritativeInformation_Test {
 
 		client.get("/a1")
 			.run()
-			.assertCode().is(203)
-			.assertContent().is("Non-Authoritative Information");
+			.assertStatus(203)
+			.assertContent("Non-Authoritative Information");
 		client.get("/a2")
 			.run()
-			.assertCode().is(203)
-			.assertContent().is("foo");
+			.assertStatus(203)
+			.assertContent("foo");
 		client.get("/a3")
 			.run()
-			.assertCode().is(203)
+			.assertStatus(203)
 			.assertHeader("Foo").is("bar");
 	}
 }

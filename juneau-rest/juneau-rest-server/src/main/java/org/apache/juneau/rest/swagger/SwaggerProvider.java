@@ -13,8 +13,6 @@
 package org.apache.juneau.rest.swagger;
 
 import static org.apache.juneau.internal.CollectionUtils.*;
-import static org.apache.juneau.rest.HttpRuntimeException.*;
-
 import java.util.*;
 import java.util.function.*;
 
@@ -99,7 +97,7 @@ public interface SwaggerProvider {
 			try {
 				return creator.run();
 			} catch (Exception e) {
-				throw toHttpException(e, InternalServerError.class);
+				throw new InternalServerError(e);
 			}
 		}
 

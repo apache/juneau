@@ -410,6 +410,35 @@ public final class IOUtils {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
+	 * Pipes the specified object to the specified output stream.
+	 *
+	 * @param in
+	 * 	The input byte array.
+	 * 	<br>Can be <jk>null</jk> or any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link Reader}
+	 * 		<li>{@link InputStream}
+	 * 		<li>{@link File}
+	 * 		<li>byte array.
+	 * 	</ul>
+	 * @return The input converted to a string.
+	 * @throws IOException If thrown from output stream.
+	 */
+	public static String read(Object in) throws IOException {
+		if (in == null)
+			return null;
+		if (in instanceof Reader)
+			return read((Reader)in);
+		if (in instanceof InputStream)
+			return read((InputStream)in);
+		if (in instanceof File)
+			return read((File)in);
+		if (in instanceof byte[])
+			return read((byte[])in);
+		throw new RuntimeException("Invalid type passed to read:  " + in.getClass().getName());
+	}
+
+	/**
 	 * Reads the specified byte array containing UTF-8 into a string.
 	 *
 	 * @param in

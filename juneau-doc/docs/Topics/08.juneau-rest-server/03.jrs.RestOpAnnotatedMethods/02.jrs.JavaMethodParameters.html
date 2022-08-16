@@ -182,7 +182,20 @@
 		|	}
 	</p>
 	<p>
-		Additional parameter types can be defined by overriding {@link oajr.RestContext.Builder#createRestOpArgs(BeanStore,Supplier)} or
-		by adding them to the bean store using {@link oajr.RestContext.Builder#createBeanStore(Class,Supplier)}.
+		Additional parameter types can be defined via the annotation {@link oajr.annotation.Rest#restOpArgs()} or by calling {@link oajr.RestContext.Builder#restOpArgs(Class...)}.
+	</p>
+	<h5 class='figure'>Example:</h5>
+	<p class='bjava'>
+		|	<ja>@Rest</ja>(
+		|		restOpArgs={ MyOpArg.<jk>class</jk> }  <jc>// Option #1 - Via annotation</jc>
+		|	)
+		|	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestObject <jk>implements</jk> BasicUniversalConfig {
+		|	
+		|		// Option #2 - Programmatically
+		|		<ja>@RestInit</ja>
+		|		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) {
+		|			<jv>builder</jv>.restOpArgs(MyOpArg.<jk>class</jk>);
+		|		}
+		|	}
 	</p>
 </div>

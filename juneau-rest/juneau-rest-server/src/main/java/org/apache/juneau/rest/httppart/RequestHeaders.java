@@ -20,7 +20,7 @@ import static java.util.stream.Collectors.*;
 import static org.apache.juneau.httppart.HttpPartType.*;
 
 import java.util.*;
-import java.util.function.*;
+import java.util.stream.*;
 
 import org.apache.http.*;
 import org.apache.juneau.httppart.*;
@@ -68,11 +68,10 @@ import org.apache.juneau.http.header.*;
  * 	<ul class='spaced-list'>
  * 		<li>Methods for retrieving headers:
  * 		<ul class='javatreec'>
- * 			<li class='jm'>{@link RequestHeaders#contains(String...) contains(String...)}
+ * 			<li class='jm'>{@link RequestHeaders#contains(String) contains(String)}
  * 			<li class='jm'>{@link RequestHeaders#containsAny(String...) containsAny(String...)}
  * 			<li class='jm'>{@link RequestHeaders#get(Class) get(Class)}
  * 			<li class='jm'>{@link RequestHeaders#get(String) get(String)}
- * 			<li class='jm'>{@link RequestHeaders#getAll() getAll()}
  * 			<li class='jm'>{@link RequestHeaders#getAll(String) getAll(String)}
  * 			<li class='jm'>{@link RequestHeaders#getFirst(String) getFirst(String)}
  * 			<li class='jm'>{@link RequestHeaders#getLast(String) getLast(String)}
@@ -84,7 +83,6 @@ import org.apache.juneau.http.header.*;
  * 			<li class='jm'>{@link RequestHeaders#addDefault(Header...) addDefault(Header...)}
  * 			<li class='jm'>{@link RequestHeaders#addDefault(List) addDefault(List)}
  * 			<li class='jm'>{@link RequestHeaders#addDefault(String,String) addDefault(String,String)}
- * 			<li class='jm'>{@link RequestHeaders#remove(Header...) remove(Header...)}
  * 			<li class='jm'>{@link RequestHeaders#remove(String...) remove(String...)}
  * 			<li class='jm'>{@link RequestHeaders#set(Header...) set(Header...)}
  * 			<li class='jm'>{@link RequestHeaders#set(String,Object) set(String,Object)}
@@ -108,19 +106,18 @@ import org.apache.juneau.http.header.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class RequestHeaders {
+public class RequestHeaders extends ArrayList<RequestHeader> {
+
+	private static final long serialVersionUID = 1L;
 
 	private final RestRequest req;
-	private final boolean caseSensitive;
-	private final VarResolverSession vs ;
+	private boolean caseSensitive;
+	private final VarResolverSession vs;
 
 	private HttpPartParserSession parser;
 
-	private List<RequestHeader> list = new LinkedList<>();
-	private Map<String,List<RequestHeader>> map = new TreeMap<>();
-
 	/**
-	 * TODO
+	 * Constructor.
 	 *
 	 * @param req The request creating this bean.
 	 * @param query The query parameters on the request (used for overloaded header values).
@@ -133,14 +130,9 @@ public class RequestHeaders {
 
 		for (Enumeration<String> e = req.getHttpServletRequest().getHeaderNames(); e.hasMoreElements();) {
 			String name = e.nextElement();
-			String key = key(name);
-			List<RequestHeader> l = list();
 			for (Enumeration<String> ve = req.getHttpServletRequest().getHeaders(name); ve.hasMoreElements();) {
-				RequestHeader h = new RequestHeader(req, name, ve.nextElement());
-				list.add(h);
-				l.add(h);
+				add(new RequestHeader(req, name, ve.nextElement()));
 			}
-			map.put(key, l);
 		}
 
 		// Parameters defined on the request URL overwrite existing headers.
@@ -161,21 +153,22 @@ public class RequestHeaders {
 		req = copyFrom.req;
 		caseSensitive = copyFrom.caseSensitive;
 		parser = copyFrom.parser;
-		list.addAll(copyFrom.list);
-		map.putAll(copyFrom.map);
+		addAll(copyFrom);
 		vs = copyFrom.vs;
 	}
 
 	/**
 	 * Subset constructor.
 	 */
-	private RequestHeaders(RequestHeaders copyFrom, Map<String,List<RequestHeader>> headerMap) {
+	private RequestHeaders(RequestHeaders copyFrom, String...names) {
 		this.req = copyFrom.req;
-		map.putAll(headerMap);
-		list = headerMap.values().stream().flatMap(List::stream).collect(toList());
-		parser = copyFrom.parser;
 		caseSensitive = copyFrom.caseSensitive;
+		parser = copyFrom.parser;
 		vs = copyFrom.vs;
+		for (String n : names)
+			for (RequestHeader h : copyFrom)
+				if (eq(h.getName(), n))
+					add(h);
 	}
 
 	/**
@@ -186,8 +179,18 @@ public class RequestHeaders {
 	 */
 	public RequestHeaders parser(HttpPartParserSession value) {
 		this.parser = value;
-		for (RequestHeader h : list)
+		for (RequestHeader h : this)
 			h.parser(parser);
+		return this;
+	}
+
+	/**
+	 * Sets case sensitivity to <jk>true</jk> for names in this set.
+	 *
+	 * @return This object (for method chaining).
+	 */
+	public RequestHeaders caseSensitive() {
+		this.caseSensitive = true;
 		return this;
 	}
 
@@ -208,15 +211,12 @@ public class RequestHeaders {
 		assertArgNotNull("pairs", pairs);
 		for (Header p : pairs) {
 			String name = p.getName();
-			String key = key(name);
-			List<RequestHeader> l = map.get(key);
-			boolean hasAllBlanks = l != null && l.stream().allMatch(x -> StringUtils.isEmpty(x.getValue()));
-			if (l == null || hasAllBlanks) {
-				if (hasAllBlanks)
-					list.removeAll(l);
+			Stream<RequestHeader> l = stream(name);
+			boolean hasAllBlanks = l.allMatch(x -> StringUtils.isEmpty(x.getValue()));
+			if (hasAllBlanks) {
+				removeAll(getAll(name));
 				RequestHeader x = new RequestHeader(req, name, vs.resolve(p.getValue()));
-				list.add(x);
-				map.put(key, list(x));
+				add(x);
 			}
 		}
 		return this;
@@ -247,38 +247,13 @@ public class RequestHeaders {
 	}
 
 	/**
-	 * Returns all the headers with the specified name.
+	 * Returns <jk>true</jk> if the header with the specified name is present.
 	 *
 	 * @param name The header name.  Must not be <jk>null</jk>.
-	 * @return The list of all headers with the specified name, or an empty list if none are found.
+	 * @return <jk>true</jk> if the headers with the specified name is present.
 	 */
-	public List<RequestHeader> getAll(String name) {
-		assertArgNotNull("name", name);
-		List<RequestHeader> l = map.get(key(name));
-		return l == null ? emptyList() : unmodifiable(l);
-	}
-
-	/**
-	 * Returns all the headers in this request.
-	 *
-	 * @return All the headers in this request.
-	 */
-	public List<RequestHeader> getAll() {
-		return unmodifiable(list);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the headers with the specified names are present.
-	 *
-	 * @param names The header names.  Must not be <jk>null</jk>.
-	 * @return <jk>true</jk> if the headers with the specified names are present.
-	 */
-	public boolean contains(String...names) {
-		assertArgNotNull("names", names);
-		for (String n : names)
-			if (! map.containsKey(key(n)))
-				return false;
-		return true;
+	public boolean contains(String name) {
+		return stream(name).findAny().isPresent();
 	}
 
 	/**
@@ -290,18 +265,9 @@ public class RequestHeaders {
 	public boolean containsAny(String...names) {
 		assertArgNotNull("names", names);
 		for (String n : names)
-			if (map.containsKey(key(n)))
+			if (stream(n).findAny().isPresent())
 				return true;
 		return false;
-	}
-
-	/**
-	 * Returns <jk>true</jk> if these headers are empty.
-	 *
-	 * @return <jk>true</jk> if these headers are empty.
-	 */
-	public boolean isEmpty() {
-		return list.isEmpty();
 	}
 
 	/**
@@ -317,13 +283,7 @@ public class RequestHeaders {
 	 */
 	public RequestHeaders add(String name, Object value) {
 		assertArgNotNull("name", name);
-		String key = key(name);
-		RequestHeader h = new RequestHeader(req, name, stringify(value)).parser(parser);
-		if (map.containsKey(key))
-			map.get(key).add(h);
-		else
-			map.put(key, list(h));
-		list.add(h);
+		add(new RequestHeader(req, name, stringify(value)).parser(parser));
 		return this;
 	}
 
@@ -362,11 +322,7 @@ public class RequestHeaders {
 	 */
 	public RequestHeaders set(String name, Object value) {
 		assertArgNotNull("name", name);
-		String key = key(name);
-		remove(key);
-		RequestHeader h = new RequestHeader(req, name, stringify(value)).parser(parser);
-		map.put(key, list(h));
-		list.add(h);
+		add(new RequestHeader(req, name, stringify(value)).parser(parser));
 		return this;
 	}
 
@@ -397,24 +353,8 @@ public class RequestHeaders {
 	 */
 	public RequestHeaders remove(String...name) {
 		assertArgNotNull("name", name);
-		for (String n : name) {
-			String key = key(n);
-			if (map.containsKey(key))
-				list.removeAll(map.get(key));
-			map.remove(key);
-		}
-		return this;
-	}
-
-	/**
-	 * Remove headers.
-	 *
-	 * @param headers The headers to remove.  Must not be <jk>null</jk>.
-	 * @return This object.
-	 */
-	public RequestHeaders remove(Header...headers) {
-		for (Header h : headers)
-			remove(h.getName());
+		for (String n : name)
+			stream(n).forEach(x -> remove(x));
 		return this;
 	}
 
@@ -425,18 +365,54 @@ public class RequestHeaders {
 	 * @return A new list object.
 	 */
 	public RequestHeaders subset(String...headers) {
-		Map<String,List<RequestHeader>> m = alist(headers)
-			.stream()
-			.map(x -> key(x))
-			.filter(map::containsKey)
-			.collect(toMap(Function.identity(),map::get));
-
-		return new RequestHeaders(this, m);
+		return new RequestHeaders(this, headers);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Convenience getters.
 	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns all headers with the specified name.
+	 *
+	 * @param name The header name.
+	 * @return The list of all headers with matching names.  Never <jk>null</jk>.
+	 */
+	public List<RequestHeader> getAll(String name) {
+		return stream(name).collect(toList());
+	}
+
+	/**
+	 * Returns all headers with the specified name.
+	 *
+	 * @param name The header name.
+	 * @return The stream of all headers with matching names.  Never <jk>null</jk>.
+	 */
+	public Stream<RequestHeader> stream(String name) {
+		return stream().filter(x -> eq(x.getName(), name));
+	}
+
+	/**
+	 * Returns all headers in sorted order.
+	 *
+	 * @return The stream of all headers in sorted order.
+	 */
+	public Stream<RequestHeader> sorted() {
+		Comparator<RequestHeader> x;
+		if (caseSensitive)
+			x = (x1,x2) -> x1.getName().compareTo(x2.getName());
+		else
+			x = (x1,x2) -> String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());
+		return stream().sorted(x);
+	}
+
+	/**
+	 * Returns all the unique header names in this list.
+	 * @return The list of all unique header names in this list.
+	 */
+	public List<String> getNames() {
+		return stream().map(x -> x.getName()).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().collect(toList());
+	}
 
 	/**
 	 * Returns the first header with the specified name.
@@ -450,8 +426,7 @@ public class RequestHeaders {
 	 */
 	public RequestHeader getFirst(String name) {
 		assertArgNotNull("name", name);
-		List<RequestHeader> l = map.get(key(name));
-		return (l == null || l.isEmpty() ? new RequestHeader(req, name, null).parser(parser) : l.get(0));
+		return stream(name).findFirst().orElseGet(()->new RequestHeader(req, name, null).parser(parser));
 	}
 
 	/**
@@ -466,12 +441,16 @@ public class RequestHeaders {
 	 */
 	public RequestHeader getLast(String name) {
 		assertArgNotNull("name", name);
-		List<RequestHeader> l = map.get(key(name));
-		return (l == null || l.isEmpty() ? new RequestHeader(req, name, null).parser(parser) : l.get(l.size()-1));
+		Value<RequestHeader> v = Value.empty();
+		stream(name).forEach(x -> v.set(x));
+		return v.orElseGet(() -> new RequestHeader(req, name, null).parser(parser));
 	}
 
 	/**
 	 * Returns the condensed header with the specified name.
+	 *
+	 * <p>
+	 * If multiple headers are present, they will be combined into a single comma-delimited list.
 	 *
 	 * @param name The header name.
 	 * @return The header, never <jk>null</jk>.
@@ -521,31 +500,21 @@ public class RequestHeaders {
 		return new RequestHeaders(this);
 	}
 
-	/**
-	 * Converts the headers to a readable string.
-	 *
-	 * @param sorted Sort the headers by name.
-	 * @return A JSON string containing the contents of the headers.
-	 */
-	public String toString(boolean sorted) {
-		JsonMap m = JsonMap.create();
-		if (sorted) {
-			for (List<RequestHeader> h1 : map.values())
-				for (RequestHeader h2 : h1)
-					m.append(h2.getName(), h2.getValue());
-		} else {
-			for (RequestHeader h : list)
-				m.append(h.getName(), h.getValue());
-		}
-		return m.toString();
-	}
-
 	private String key(String name) {
 		return caseSensitive ? name : name.toLowerCase();
 	}
 
+	private boolean eq(String s1, String s2) {
+		if (caseSensitive)
+			return StringUtils.eq(s1, s2);
+		return StringUtils.eqic(s1, s2);
+	}
+
 	@Override /* Object */
 	public String toString() {
-		return toString(false);
+		JsonMap m = new JsonMap();
+		for (String n : getNames())
+			m.put(n, get(n).asString().orElse(null));
+		return m.asJson();
 	}
 }

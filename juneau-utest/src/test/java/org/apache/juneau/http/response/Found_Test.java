@@ -36,19 +36,19 @@ public class Found_Test {
 
 		client.get("/a1")
 			.run()
-			.assertCode().is(302)
-			.assertContent().is("Found");
+			.assertStatus(302)
+			.assertContent("Found");
 		client.get("/a2")
 			.run()
-			.assertCode().is(302)
-			.assertContent().is("foo");
+			.assertStatus(302)
+			.assertContent("foo");
 		client.get("/a3")
 			.run()
-			.assertCode().is(302)
+			.assertStatus(302)
 			.assertHeader("Location").is("/foo");
 		client.get("/a4")
 			.run()
-			.assertCode().is(302)
+			.assertStatus(302)
 			.assertHeader("Foo").is("bar");
 	}
 }

@@ -39,7 +39,7 @@ public class RestClient_Response_Headers_Test {
 	public static class A extends BasicRestObject {
 		@RestGet
 		public String echo(org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) {
-			String c = req.getHeader("Check").orElse(null);
+			String c = req.getHeaderParam("Check").orElse(null);
 			String[] h = req.getHeaders().getAll(c).stream().map(x -> x.getValue()).toArray(String[]::new);
 			if (h != null)
 				for (String hh : h)

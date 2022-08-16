@@ -31,7 +31,7 @@ import java.util.Set;
  * in the Swagger-UI for convenience.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	Info x = <jsm>info</jsm>(<js>"Swagger Sample App"</js>, <js>"1.0.1"</js>)
  * 		.description(<js>"This is a sample server Petstore server."</js>)
@@ -49,7 +49,7 @@ import java.util.Set;
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	String json = x.toString();
  * </p>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	<jc>// Output</jc>
  * 	{
  * 		<js>"title"</js>: <js>"Swagger Sample App"</js>,

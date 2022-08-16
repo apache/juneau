@@ -27,7 +27,6 @@ import org.apache.http.Header;
 import org.apache.http.entity.*;
 import org.apache.http.message.*;
 import org.apache.http.params.*;
-import org.apache.juneau.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
@@ -77,22 +76,8 @@ public class RestClient_Response_Test {
 	}
 
 	@Test
-	public void a02_getStatusLine_Mutable() throws RestCallException {
-		Value<StatusLine> m = Value.empty();
-		client().build().get("/bean").run().getStatusLine(m);
-		assertEquals(200,m.get().getStatusCode());
-	}
-
-	@Test
 	public void a03_getStatusCode() throws RestCallException {
 		assertEquals(200,client().build().get("/bean").run().getStatusCode());
-	}
-
-	@Test
-	public void a04_getStatusCode_Mutable() throws RestCallException {
-		Value<Integer> m = Value.empty();
-		client().build().get("/bean").run().getStatusCode(m);
-		assertEquals(200,m.get().intValue());
 	}
 
 	@Test
@@ -101,19 +86,12 @@ public class RestClient_Response_Test {
 	}
 
 	@Test
-	public void a06_getReasonPhrase_Mutable() throws RestCallException {
-		Value<String> m = Value.empty();
-		client().build().get("/bean").run().getReasonPhrase(m);
-		assertNull(m.get());
-	}
-
-	@Test
 	public void a07_setStatusLine() throws RestCallException {
 		StatusLine sl = new BasicStatusLine(new ProtocolVersion("http",9,8),299,"foo");
 		RestResponse r = client().build().get("/bean").run();
 		r.setStatusLine(sl);
 		r
-			.assertCode().is(299)
+			.assertStatus(299)
 			.assertStatus().asCode().is(299)
 			.assertStatus().asProtocol().is("http")
 			.assertStatus().asMajor().is(9)
@@ -121,12 +99,12 @@ public class RestClient_Response_Test {
 			.assertStatus().asReason().is("foo");
 
 		r.setStatusCode(298);
-		r.assertCode().is(298);
+		r.assertStatus(298);
 		r.setReasonPhrase("bar");
 		r.setStatusLine(new ProtocolVersion("http",9,8),297);
-		r.assertCode().is(297);
+		r.assertStatus(297);
 		r.setStatusLine(new ProtocolVersion("http",9,8),296,"foo");
-		r.assertCode().is(296);
+		r.assertStatus(296);
 
 		assertEquals(9, r.getProtocolVersion().getMajor());
 	}
@@ -146,8 +124,8 @@ public class RestClient_Response_Test {
 	public static class C extends BasicRestObject {
 		@RestGet(path="/")
 		public String getHeader(org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) {
-			String n = req.getHeader("Check").orElse(null);
-			String v = req.getHeader(n).orElse(null);
+			String n = req.getHeaderParam("Check").orElse(null);
+			String v = req.getHeaderParam(n).orElse(null);
 			res.setHeader(n,v);
 			return v;
 		}

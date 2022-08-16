@@ -51,10 +51,10 @@ public class Forwarded_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(forwarded(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(forwarded(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(forwarded(PARSED)).run().assertContent().is(VALUE);
-		c.get().header(forwarded(()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(forwarded(VALUE)).run().assertContent(VALUE);
+		c.get().header(forwarded(VALUE)).run().assertContent(VALUE);
+		c.get().header(forwarded(PARSED)).run().assertContent(VALUE);
+		c.get().header(forwarded(()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(forwarded((String)null)).run().assertContent().isEmpty();

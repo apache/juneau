@@ -36,19 +36,19 @@ public class SeeOther_Test {
 
 		client.get("/a1")
 			.run()
-			.assertCode().is(303)
-			.assertContent().is("See Other");
+			.assertStatus(303)
+			.assertContent("See Other");
 		client.get("/a2")
 			.run()
-			.assertCode().is(303)
-			.assertContent().is("foo");
+			.assertStatus(303)
+			.assertContent("foo");
 		client.get("/a3")
 			.run()
-			.assertCode().is(303)
+			.assertStatus(303)
 			.assertHeader("Location").is("/foo");
 		client.get("/a4")
 			.run()
-			.assertCode().is(303)
+			.assertStatus(303)
 			.assertHeader("Foo").is("bar");
 	}
 }

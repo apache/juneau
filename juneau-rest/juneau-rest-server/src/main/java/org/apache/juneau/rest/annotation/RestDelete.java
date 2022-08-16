@@ -110,17 +110,6 @@ public @interface RestDelete {
 	String clientVersion() default "";
 
 	/**
-	 * Allows you to extend the {@link RestOpContext} class to modify how any of the methods are implemented.
-	 *
-	 * <ul class='seealso'>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.RestOpContext.Builder#type(Class)}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	Class<? extends RestOpContext> contextClass() default RestOpContext.Void.class;
-
-	/**
 	 * Enable debug mode.
 	 *
 	 * <p>

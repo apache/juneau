@@ -135,6 +135,19 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 		return value;
 	}
 
+
+	/**
+	 * Sets a default value for this part.
+	 *
+	 * @param def The default value.
+	 * @return This object.
+	 */
+	public RequestFormParam def(String def) {
+		if (getValue() == null)
+			value = def;
+		return this;
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Assertions
 	//------------------------------------------------------------------------------------------------------------------

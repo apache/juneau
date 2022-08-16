@@ -41,8 +41,8 @@
 		|				.debugEnablement(<jsf>CONDITIONAL</jsf>);
 		|	}
 		|
-		|	<jc>// Option #2 - Use an INIT hook.</jc>
-		|	<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		|	<jc>// Option #2 - Use an init hook.</jc>
+		|	<ja>@RestInit</ja>
 		|	<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
 		|			<jv>builder</jv>
 		|				.beanContext(<jv>x</jv> -&gt; <jv>x</jv>.swaps(TemporalCalendarSwap.Rfc1123DateTime.<jk>class</jk>))
@@ -68,9 +68,7 @@
 			<li class='jm'>{@link oaj.rest.RestContext.Builder#children(Object...) children}
 			<li class='jm'>{@link oaj.rest.RestContext.Builder#config(Config) config}
 			<li class='jm'>{@link oaj.rest.RestContext.Builder#consumes(MediaType...) consumes}
-			<li class='jm'>{@link oaj.rest.RestContext.Builder#debug(Enablement) debug}
 			<li class='jm'>{@link oaj.rest.RestContext.Builder#debugDefault(Enablement) debugDefault}
-			<li class='jm'>{@link oaj.rest.RestContext.Builder#debugOn(String) debugOn}
 			<li class='jm'>{@link oaj.rest.RestContext.Builder#defaultAccept(String) defaultAccept}
 			<li class='jm'>{@link oaj.rest.RestContext.Builder#defaultCharset(Charset) defaultCharset}
 			<li class='jm'>{@link oaj.rest.RestContext.Builder#defaultClasses(Class...) defaultClasses}

@@ -41,7 +41,7 @@ public class SerializedHttpEntity_Test {
 	public static class A extends BasicRestObject {
 		@RestPost
 		public String[] checkHeader(org.apache.juneau.rest.RestRequest req) {
-			return req.getHeaders().getAll(req.getHeader("Check").orElse(null)).stream().map(x -> x.getValue()).toArray(String[]::new);
+			return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(x -> x.getValue()).toArray(String[]::new);
 		}
 		@RestPost
 		public Reader checkBody(org.apache.juneau.rest.RestRequest req) throws IOException {
@@ -96,17 +96,17 @@ public class SerializedHttpEntity_Test {
 
 	@Test
 	public void a09_chunked() throws Exception {
-		checkHeaderClient("Transfer-Encoding").post("/",serializedEntity(ABean.get(),null).chunked().build()).run().assertContent().is("['chunked']");
+		checkHeaderClient("Transfer-Encoding").post("/",serializedEntity(ABean.get(),null).chunked().build()).run().assertContent("['chunked']");
 	}
 
 	@Test
 	public void a10_contentEncoding() throws Exception {
-		checkHeaderClient("Content-Encoding").post("/",serializedEntity(ABean.get(),null).contentEncoding("identity").build()).run().assertContent().is("['identity']");
+		checkHeaderClient("Content-Encoding").post("/",serializedEntity(ABean.get(),null).contentEncoding("identity").build()).run().assertContent("['identity']");
 	}
 
 	@Test
 	public void a12_contentType() throws Exception {
-		checkHeaderClient("Content-Type").post("/",serializedEntity(reader("foo"),null).contentType("text/foo").build()).run().assertContent().is("['text/foo']");
+		checkHeaderClient("Content-Type").post("/",serializedEntity(reader("foo"),null).contentType("text/foo").build()).run().assertContent("['text/foo']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -118,6 +118,6 @@ public class SerializedHttpEntity_Test {
 	}
 
 	private RestClient checkHeaderClient(String header) {
-		return MockRestClient.create(A.class).rootUri("http://localhost/checkHeader").simpleJson().header("Check",header).ignoreErrors().build();
+		return MockRestClient.create(A.class).rootUrl("http://localhost/checkHeader").simpleJson().header("Check",header).ignoreErrors().build();
 	}
 }

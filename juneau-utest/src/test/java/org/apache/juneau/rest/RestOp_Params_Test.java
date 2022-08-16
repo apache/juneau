@@ -126,22 +126,22 @@ public class RestOp_Params_Test {
 	@Test
 	public void a01_params() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
-		a.post("/c", "foo").run().assertContent().is("foo");
-		a.post("/d", "foo").run().assertContent().is("foo");
-		a.post("/e", "foo").run().assertContent().is("foo");
-		a.get("/f").run().assertContent().is("OK");
-		a.get("/g").run().assertContent().is("OK");
-		a.get("/h").run().assertContent().is("OK");
-		a.get("/i").run().assertContent().is("true");
-		a.get("/j").run().assertContent().is("true");
-		a.get("/k").run().assertContent().is("true");
-		a.get("/l").run().assertContent().is("GET");
-		a.get("/n").run().assertContent().is("true");
-		a.get("/o").contentType("application/json").run().assertContent().is("org.apache.juneau.json.JsonParser");
-		a.get("/q").run().assertContent().is("true");
-		a.get("/r").run().assertContent().is("true");
-		a.get("/s").run().assertContent().is("true");
-		a.get("/t").run().assertContent().is("true");
+		a.post("/c", "foo").run().assertContent("foo");
+		a.post("/d", "foo").run().assertContent("foo");
+		a.post("/e", "foo").run().assertContent("foo");
+		a.get("/f").run().assertContent("OK");
+		a.get("/g").run().assertContent("OK");
+		a.get("/h").run().assertContent("OK");
+		a.get("/i").run().assertContent("true");
+		a.get("/j").run().assertContent("true");
+		a.get("/k").run().assertContent("true");
+		a.get("/l").run().assertContent("GET");
+		a.get("/n").run().assertContent("true");
+		a.get("/o").contentType("application/json").run().assertContent("org.apache.juneau.json.JsonParser");
+		a.get("/q").run().assertContent("true");
+		a.get("/r").run().assertContent("true");
+		a.get("/s").run().assertContent("true");
+		a.get("/t").run().assertContent("true");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -289,42 +289,42 @@ public class RestOp_Params_Test {
 	public void b01_headers() throws Exception {
 		RestClient b = MockRestClient.build(B1.class);
 
-		b.get("/accept").accept("text/foo").run().assertContent().is("text/foo");
-		b.get("/accept").accept("text/foo+bar").run().assertContent().is("text/foo+bar");
-		b.get("/accept").accept("text/*").run().assertContent().is("text/*");
-		b.get("/accept").accept("*/foo").run().assertContent().is("*/foo");
-		b.get("/accept").accept("text/foo;q=1.0").run().assertContent().is("text/foo;q=1.0");
-		b.get("/accept").accept("text/foo;q=0.9").run().assertContent().is("text/foo;q=0.9");
-		b.get("/accept").accept("text/foo;x=X;q=0.9;y=Y").run().assertContent().is("text/foo;x=X;q=0.9;y=Y");
-		b.get("/accept?Accept=text/foo").run().assertContent().is("text/foo");
-		b.get("/acceptCharset").acceptCharset("UTF-8").run().assertContent().is("UTF-8");
-		b.get("/acceptCharset?Accept-Charset=UTF-8").run().assertContent().is("UTF-8");
-		b.get("/acceptEncoding?Accept-Encoding=*").run().assertContent().is("*");
-		b.get("/authorization?Authorization=foo").run().assertContent().is("foo");
-		b.get("/cacheControl?Cache-Control=foo").run().assertContent().is("foo");
-		b.get("/connection?Connection=foo").run().assertContent().is("foo");
-		b.get("/contentLength?Content-Length=0").run().assertContent().is("0");
-		b.get("/contentType").contentType("text/foo").run().assertContent().is("text/foo");
-		b.get("/contentType?Content-Type=text/foo").run().assertContent().is("text/foo");
-		b.get("/date?Date=Mon, 3 Dec 2007 10:15:30 GMT").run().assertContent().is("Mon, 3 Dec 2007 10:15:30 GMT");
-		b.get("/expect?Expect=100-continue").run().assertContent().is("100-continue");
-		b.get("/from?From=foo").run().assertContent().is("foo");
-		b.get("/host").uriHost("localhost").run().assertContent().is("localhost");
-		b.get("/host?Host=localhost").run().assertContent().is("localhost");
-		b.get("/ifMatch?If-Match=\"foo\"").run().assertContent().is("\"foo\"");
-		b.get("/ifModifiedSince?If-Modified-Since=Mon, 3 Dec 2007 10:15:30 GMT").run().assertContent().is("Mon, 3 Dec 2007 10:15:30 GMT");
-		b.get("/ifNoneMatch?If-None-Match=\"foo\"").run().assertContent().is("\"foo\"");
-		b.get("/ifRange?If-Range=\"foo\"").run().assertContent().is("\"foo\"");
-		b.get("/ifUnmodifiedSince?If-Unmodified-Since=Mon, 3 Dec 2007 10:15:30 GMT").run().assertContent().is("Mon, 3 Dec 2007 10:15:30 GMT");
-		b.get("/maxForwards?Max-Forwards=123").run().assertContent().is("123");
-		b.get("/pragma?Pragma=foo").run().assertContent().is("foo");
-		b.get("/proxyAuthorization?Proxy-Authorization=foo").run().assertContent().is("foo");
-		b.get("/range?Range=foo").run().assertContent().is("foo");
-		b.get("/referer?Referer=foo").run().assertContent().is("foo");
-		b.get("/te?TE=foo").run().assertContent().is("foo");
-		b.get("/upgrade?Upgrade=foo").run().assertContent().is("foo");
-		b.get("/userAgent?User-Agent=foo").run().assertContent().is("foo");
-		b.get("/warning?Warning=foo").run().assertContent().is("foo");
+		b.get("/accept").accept("text/foo").run().assertContent("text/foo");
+		b.get("/accept").accept("text/foo+bar").run().assertContent("text/foo+bar");
+		b.get("/accept").accept("text/*").run().assertContent("text/*");
+		b.get("/accept").accept("*/foo").run().assertContent("*/foo");
+		b.get("/accept").accept("text/foo;q=1.0").run().assertContent("text/foo;q=1.0");
+		b.get("/accept").accept("text/foo;q=0.9").run().assertContent("text/foo;q=0.9");
+		b.get("/accept").accept("text/foo;x=X;q=0.9;y=Y").run().assertContent("text/foo;x=X;q=0.9;y=Y");
+		b.get("/accept?Accept=text/foo").run().assertContent("text/foo");
+		b.get("/acceptCharset").acceptCharset("UTF-8").run().assertContent("UTF-8");
+		b.get("/acceptCharset?Accept-Charset=UTF-8").run().assertContent("UTF-8");
+		b.get("/acceptEncoding?Accept-Encoding=*").run().assertContent("*");
+		b.get("/authorization?Authorization=foo").run().assertContent("foo");
+		b.get("/cacheControl?Cache-Control=foo").run().assertContent("foo");
+		b.get("/connection?Connection=foo").run().assertContent("foo");
+		b.get("/contentLength?Content-Length=0").run().assertContent("0");
+		b.get("/contentType").contentType("text/foo").run().assertContent("text/foo");
+		b.get("/contentType?Content-Type=text/foo").run().assertContent("text/foo");
+		b.get("/date?Date=Mon, 3 Dec 2007 10:15:30 GMT").run().assertContent("Mon, 3 Dec 2007 10:15:30 GMT");
+		b.get("/expect?Expect=100-continue").run().assertContent("100-continue");
+		b.get("/from?From=foo").run().assertContent("foo");
+		b.get("/host").uriHost("localhost").run().assertContent("localhost");
+		b.get("/host?Host=localhost").run().assertContent("localhost");
+		b.get("/ifMatch?If-Match=\"foo\"").run().assertContent("\"foo\"");
+		b.get("/ifModifiedSince?If-Modified-Since=Mon, 3 Dec 2007 10:15:30 GMT").run().assertContent("Mon, 3 Dec 2007 10:15:30 GMT");
+		b.get("/ifNoneMatch?If-None-Match=\"foo\"").run().assertContent("\"foo\"");
+		b.get("/ifRange?If-Range=\"foo\"").run().assertContent("\"foo\"");
+		b.get("/ifUnmodifiedSince?If-Unmodified-Since=Mon, 3 Dec 2007 10:15:30 GMT").run().assertContent("Mon, 3 Dec 2007 10:15:30 GMT");
+		b.get("/maxForwards?Max-Forwards=123").run().assertContent("123");
+		b.get("/pragma?Pragma=foo").run().assertContent("foo");
+		b.get("/proxyAuthorization?Proxy-Authorization=foo").run().assertContent("foo");
+		b.get("/range?Range=foo").run().assertContent("foo");
+		b.get("/referer?Referer=foo").run().assertContent("foo");
+		b.get("/te?TE=foo").run().assertContent("foo");
+		b.get("/upgrade?Upgrade=foo").run().assertContent("foo");
+		b.get("/userAgent?User-Agent=foo").run().assertContent("foo");
+		b.get("/warning?Warning=foo").run().assertContent("foo");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -352,7 +352,7 @@ public class RestOp_Params_Test {
 
 		@Override
 		public Object resolve(RestOpSession opSession) throws Exception {
-			return new B2b(opSession.getRequest().getHeader("Custom").orElse(null));
+			return new B2b(opSession.getRequest().getHeaderParam("Custom").orElse(null));
 		}
 	}
 
@@ -370,7 +370,7 @@ public class RestOp_Params_Test {
 	@Test
 	public void b02_customHeader() throws Exception {
 		RestClient b = MockRestClient.build(B2.class);
-		b.get("/a").header("Custom", "foo").run().assertContent().is("foo");
-		b.get("/a?Custom=foo").run().assertContent().is("foo");
+		b.get("/a").header("Custom", "foo").run().assertContent("foo");
+		b.get("/a?Custom=foo").run().assertContent("foo");
 	}
 }

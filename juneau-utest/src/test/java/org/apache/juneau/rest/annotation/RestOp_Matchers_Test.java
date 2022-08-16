@@ -69,12 +69,12 @@ public class RestOp_Matchers_Test {
 	@Test
 	public void a01_overlapping() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
-		a.get("/one?t1=1").run().assertContent().is("OK-1a");
-		a.get("/one?t2=2").run().assertContent().is("OK-1b");
-		a.get("/one").run().assertContent().is("OK-1c");
-		a.get("/two?t1=1").run().assertContent().is("OK-2b");
-		a.get("/two?t2=2").run().assertContent().is("OK-2b");
-		a.get("/two?t1=1&t2=2").run().assertContent().is("OK-2b");
-		a.get("/two?tx=x").run().assertContent().is("OK-2a");
+		a.get("/one?t1=1").run().assertContent("OK-1a");
+		a.get("/one?t2=2").run().assertContent("OK-1b");
+		a.get("/one").run().assertContent("OK-1c");
+		a.get("/two?t1=1").run().assertContent("OK-2b");
+		a.get("/two?t2=2").run().assertContent("OK-2b");
+		a.get("/two?t1=1&t2=2").run().assertContent("OK-2b");
+		a.get("/two?tx=x").run().assertContent("OK-2a");
 	}
 }

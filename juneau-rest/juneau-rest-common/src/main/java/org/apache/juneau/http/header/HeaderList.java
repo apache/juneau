@@ -24,6 +24,7 @@ import java.util.stream.*;
 import org.apache.http.*;
 import org.apache.http.util.*;
 import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.HttpHeaders;
 import org.apache.juneau.internal.*;
@@ -90,7 +91,7 @@ import org.apache.juneau.svl.*;
  * Various methods are provided for iterating over the headers in this list to avoid array copies.
  * <ul class='javatree'>
  * 	<li class='jm'>{@link #forEach(Consumer)} / {@link #forEach(String,Consumer)} / {@link #forEach(Predicate,Consumer)} - Use consumers to process headers.
- * 	<li class='jm'>{@link #iterator()} / {@link #iterator(String)} - Use an {@link HeaderIterator} to process headers.
+ * 	<li class='jm'>{@link #headerIterator()} / {@link #headerIterator(String)} - Use an {@link HeaderIterator} to process headers.
  * 	<li class='jm'>{@link #stream()} / {@link #stream(String)} - Use a stream.
  * </ul>
  * <p>
@@ -168,21 +169,27 @@ import org.apache.juneau.svl.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class HeaderList {
+public class HeaderList extends ControlledArrayList<Header>{
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Static
 	//-----------------------------------------------------------------------------------------------------------------
 
+	private static final long serialVersionUID = 1L;
 	private static final Header[] EMPTY_ARRAY = new Header[0];
 	private static final String[] EMPTY_STRING_ARRAY = new String[0];
 	private static final Predicate<Header> NOT_NULL = x -> x != null;
 
 	/** Represents no header supplier in annotations. */
-	public static final class Void extends HeaderList {}
+	public static final class Void extends HeaderList {
+		Void() {
+			super(false);
+		}
+		private static final long serialVersionUID = 1L;
+	}
 
 	/** Predefined instance. */
-	public static final HeaderList EMPTY = new HeaderList();
+	public static final HeaderList EMPTY = new HeaderList(false);
 
 	/**
 	 * Instantiates a new builder for this bean.
@@ -203,7 +210,7 @@ public class HeaderList {
 	 * @return A new unmodifiable instance, never <jk>null</jk>.
 	 */
 	public static HeaderList of(List<Header> headers) {
-		return headers == null || headers.isEmpty() ? EMPTY : new HeaderList(headers);
+		return headers == null || headers.isEmpty() ? EMPTY : new HeaderList(true, headers);
 	}
 
 	/**
@@ -215,7 +222,7 @@ public class HeaderList {
 	 * @return A new unmodifiable instance, never <jk>null</jk>.
 	 */
 	public static HeaderList of(Header...headers) {
-		return headers == null || headers.length == 0 ? EMPTY : new HeaderList(headers);
+		return headers == null || headers.length == 0 ? EMPTY : new HeaderList(true, headers);
 	}
 
 	/**
@@ -240,7 +247,7 @@ public class HeaderList {
 		ArrayBuilder<Header> b = ArrayBuilder.of(Header.class).filter(NOT_NULL).size(pairs.length / 2);
 		for (int i = 0; i < pairs.length; i+=2)
 			b.add(BasicHeader.of(pairs[i], pairs[i+1]));
-		return new HeaderList(b.orElse(EMPTY_ARRAY));
+		return new HeaderList(true, b.orElse(EMPTY_ARRAY));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -256,7 +263,7 @@ public class HeaderList {
 		final List<Header> entries;
 		List<Header> defaultEntries;
 		private VarResolver varResolver;
-		boolean caseSensitive;
+		boolean caseSensitive = false, unmodifiable = false;
 
 		/**
 		 * Constructor.
@@ -273,8 +280,9 @@ public class HeaderList {
 		 */
 		protected Builder(HeaderList copyFrom) {
 			super(copyFrom.getClass(), BeanStore.INSTANCE);
-			entries = list(copyFrom.entries);
+			entries = copyOf(copyFrom);
 			caseSensitive = copyFrom.caseSensitive;
+			unmodifiable = false;
 		}
 
 		/**
@@ -288,6 +296,7 @@ public class HeaderList {
 			defaultEntries = copyOf(copyFrom.defaultEntries);
 			varResolver = copyFrom.varResolver;
 			caseSensitive = copyFrom.caseSensitive;
+			unmodifiable = copyFrom.unmodifiable;
 		}
 
 		@Override /* BeanBuilder */
@@ -371,6 +380,19 @@ public class HeaderList {
 		}
 
 		/**
+		 * Specifies that the resulting list should be unmodifiable.
+		 *
+		 * <p>
+		 * The default behavior is modifiable.
+		 *
+		 * @return This object.
+		 */
+		public Builder unmodifiable() {
+			unmodifiable = true;
+			return this;
+		}
+
+		/**
 		 * Removes any headers already in this builder.
 		 *
 		 * @return This object.
@@ -378,20 +400,6 @@ public class HeaderList {
 		@FluentSetter
 		public Builder clear() {
 			entries.clear();
-			return this;
-		}
-
-		/**
-		 * Adds the specified headers to the end of the headers in this builder.
-		 *
-		 * @param value The header to add.  <jk>null</jk> values are ignored.
-		 * @return This object.
-		 */
-		@FluentSetter
-		public Builder append(HeaderList value) {
-			if (value != null)
-				for (Header x : value.entries)
-					append(x);
 			return this;
 		}
 
@@ -474,19 +482,6 @@ public class HeaderList {
 		 * @return This object.
 		 */
 		@FluentSetter
-		public Builder prepend(HeaderList value) {
-			if (value != null)
-				prependAll(entries, value.entries);
-			return this;
-		}
-
-		/**
-		 * Adds the specified header to the beginning of the headers in this builder.
-		 *
-		 * @param value The header to add.  <jk>null</jk> values are ignored.
-		 * @return This object.
-		 */
-		@FluentSetter
 		public Builder prepend(Header value) {
 			if (value != null)
 				entries.add(0, value);
@@ -557,20 +552,6 @@ public class HeaderList {
 		 * @return This object.
 		 */
 		@FluentSetter
-		public Builder remove(HeaderList value) {
-			if (value != null)
-				for (int i = 0; i < value.entries.length; i++)
-					remove(value.entries[i]);
-			return this;
-		}
-
-		/**
-		 * Removes the specified header from this builder.
-		 *
-		 * @param value The header to remove.  <jk>null</jk> values are ignored.
-		 * @return This object.
-		 */
-		@FluentSetter
 		public Builder remove(Header value) {
 			if (value != null)
 				entries.remove(value);
@@ -598,8 +579,8 @@ public class HeaderList {
 		 */
 		@FluentSetter
 		public Builder remove(List<Header> values) {
-			for (int i = 0, j = values.size(); i < j; i++) /* See HTTPCORE-361 */
-				remove(values.get(i));
+			if (values != null)
+				values.forEach(x -> remove(x));
 			return this;
 		}
 
@@ -740,21 +721,6 @@ public class HeaderList {
 		}
 
 		/**
-		 * Replaces the first occurrence of the headers with the same name.
-		 *
-		 * <p>
-		 * If no header with the same name is found the given header is added to the end of the list.
-		 *
-		 * @param values The headers to replace.  <jk>null</jk> values are ignored.
-		 * @return This object.
-		 */
-		public Builder set(HeaderList values) {
-			if (values != null)
-				set(values.entries);
-			return this;
-		}
-
-		/**
 		 * Sets a default value for a header.
 		 *
 		 * <p>
@@ -860,21 +826,6 @@ public class HeaderList {
 				});
 			}
 
-			return this;
-		}
-
-		/**
-		 * Replaces the first occurrence of the headers with the same name.
-		 *
-		 * <p>
-		 * If no header with the same name is found the given header is added to the end of the list.
-		 *
-		 * @param values The default headers to set.  <jk>null</jk> values are ignored.
-		 * @return This object.
-		 */
-		public Builder setDefault(HeaderList values) {
-			if (values != null)
-				setDefault(values.entries);
 			return this;
 		}
 
@@ -1019,33 +970,6 @@ public class HeaderList {
 		}
 
 		/**
-		 * Adds the specified headers to this list.
-		 *
-		 * @param flag
-		 * 	What to do with the header.
-		 * 	<br>Possible values:
-		 * 	<ul>
-		 * 		<li>{@link ListOperation#APPEND APPEND} - Calls {@link #append(HeaderList)}.
-		 * 		<li>{@link ListOperation#PREPEND PREEND} - Calls {@link #prepend(HeaderList)}.
-		 * 		<li>{@link ListOperation#SET REPLACE} - Calls {@link #set(HeaderList)}.
-		 * 		<li>{@link ListOperation#DEFAULT DEFAULT} - Calls {@link #setDefault(HeaderList)}.
-		 * 	</ul>
-		 * @param values The headers to add.
-		 * @return This object.
-		 */
-		public Builder add(ListOperation flag, HeaderList values) {
-			if (flag == ListOperation.APPEND)
-				return append(values);
-			if (flag == ListOperation.PREPEND)
-				return prepend(values);
-			if (flag == ListOperation.SET)
-				return set(values);
-			if (flag == ListOperation.DEFAULT)
-				return setDefault(values);
-			throw new BasicRuntimeException("Invalid value specified for flag parameter on add(flag,values) method: {0}", flag);
-		}
-
-		/**
 		 * Performs an action on all headers in this list.
 		 *
 		 * <p>
@@ -1102,7 +1026,7 @@ public class HeaderList {
 		 * @param value The header value.
 		 * @return A new header.
 		 */
-		public Header createHeader(String name, Object value) {
+		protected Header createHeader(String name, Object value) {
 			if (value instanceof Supplier<?>) {
 				Supplier<?> value2 = (Supplier<?>)value;
 				return isResolving() ? new BasicHeader(name, resolver(value2)) : new BasicHeader(name, value2);
@@ -1194,7 +1118,6 @@ public class HeaderList {
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
-	final Header[] entries;
 	final boolean caseSensitive;
 
 	/**
@@ -1203,24 +1126,17 @@ public class HeaderList {
 	 * @param builder The builder containing the settings for this bean.
 	 */
 	public HeaderList(Builder builder) {
-		if (builder.defaultEntries == null) {
-			entries = builder.entries.toArray(new Header[builder.entries.size()]);
-		} else {
-			ArrayBuilder<Header> l = ArrayBuilder.of(Header.class).filter(NOT_NULL).size(builder.entries.size() + builder.defaultEntries.size());
+		super(! builder.unmodifiable, builder.entries);
 
-			for (int i = 0, j = builder.entries.size(); i < j; i++)
-				l.add(builder.entries.get(i));
-
+		if (builder.defaultEntries != null) {
 			for (int i1 = 0, j1 = builder.defaultEntries.size(); i1 < j1; i1++) {
 				Header x = builder.defaultEntries.get(i1);
 				boolean exists = false;
 				for (int i2 = 0, j2 = builder.entries.size(); i2 < j2 && ! exists; i2++)
 					exists = eq(builder.entries.get(i2).getName(), x.getName());
 				if (! exists)
-					l.add(x);
+					overrideAdd(x);
 			}
-
-			entries = l.orElse(EMPTY_ARRAY);
 		}
 		this.caseSensitive = builder.caseSensitive;
 	}
@@ -1228,39 +1144,45 @@ public class HeaderList {
 	/**
 	 * Constructor.
 	 *
+	 * @param modifiable Whether this list should be modifiable.
 	 * @param headers
 	 * 	The headers to add to the list.
 	 * 	<br>Can be <jk>null</jk>.
 	 * 	<br><jk>null</jk> entries are ignored.
 	 */
-	protected HeaderList(List<Header> headers) {
-		ArrayBuilder<Header> l = ArrayBuilder.of(Header.class).filter(NOT_NULL).size(headers.size());
-		for (int i = 0, j = headers.size(); i < j; i++)
-			l.add(headers.get(i));
-		entries = l.orElse(EMPTY_ARRAY);
+	public HeaderList(boolean modifiable, List<Header> headers) {
+		super(modifiable, headers);
 		caseSensitive = false;
 	}
 
 	/**
 	 * Constructor.
 	 *
+	 * @param modifiable Whether this list should be modifiable.
 	 * @param headers
 	 * 	The headers to add to the list.
 	 * 	<br><jk>null</jk> entries are ignored.
 	 */
-	protected HeaderList(Header...headers) {
-		ArrayBuilder<Header> l = ArrayBuilder.of(Header.class).filter(NOT_NULL).size(headers.length);
-		for (int i = 0; i < headers.length; i++)
-			l.add(headers[i]);
-		entries = l.orElse(EMPTY_ARRAY);
+	public HeaderList(boolean modifiable, Header...headers) {
+		super(modifiable, Arrays.asList(headers));
+		caseSensitive = false;
+	}
+
+	/**
+	 * Default constructor.
+	 *
+	 * @param modifiable Whether this list should be modifiable.
+	 */
+	public HeaderList(boolean modifiable) {
+		super(modifiable);
 		caseSensitive = false;
 	}
 
 	/**
 	 * Default constructor.
 	 */
-	protected HeaderList() {
-		entries = EMPTY_ARRAY;
+	public HeaderList() {
+		super(true);
 		caseSensitive = false;
 	}
 
@@ -1287,8 +1209,7 @@ public class HeaderList {
 
 		Header first = null;
 		List<Header> rest = null;
-		for (int i = 0; i < entries.length; i++) {
-			Header x = entries[i];
+		for (Header x : this) {
 			if (eq(x.getName(), name)) {
 				if (first == null)
 					first = x;
@@ -1346,8 +1267,7 @@ public class HeaderList {
 
 		Header first = null;
 		List<Header> rest = null;
-		for (int i = 0; i < entries.length; i++) {
-			Header x = entries[i];
+		for (Header x : this) {
 			if (eq(x.getName(), name)) {
 				if (first == null)
 					first = x;
@@ -1401,6 +1321,24 @@ public class HeaderList {
 	}
 
 	/**
+	 * Gets all of the headers contained within this list.
+	 *
+	 * <p>
+	 * The returned array maintains the relative order in which the headers were added.
+	 * Headers with null values are ignored.
+	 * Each call creates a new array not backed by this list.
+	 *
+	 * <p>
+	 * As a general rule, it's more efficient to use the other methods with consumers to
+	 * get headers.
+	 *
+	 * @return An array of all the headers in this list, never <jk>null</jk>.
+	 */
+	public Header[] getAll() {
+		return size() == 0 ? EMPTY_ARRAY : toArray(new Header[size()]);
+	}
+
+	/**
 	 * Gets all of the headers with the given name.
 	 *
 	 * <p>
@@ -1419,37 +1357,10 @@ public class HeaderList {
 	 */
 	public Header[] getAll(String name) {
 		ArrayBuilder<Header> b = ArrayBuilder.of(Header.class).filter(NOT_NULL);
-		for (int i = 0; i < entries.length; i++)
-			if (eq(entries[i].getName(), name))
-				b.add(entries[i]);
+		for (Header x : this)
+			if (eq(x.getName(), name))
+				b.add(x);
 		return b.orElse(EMPTY_ARRAY);
-	}
-
-	/**
-	 * Gets all of the headers contained within this list.
-	 *
-	 * <p>
-	 * The returned array maintains the relative order in which the headers were added.
-	 * Headers with null values are ignored.
-	 * Each call creates a new array not backed by this list.
-	 *
-	 * <p>
-	 * As a general rule, it's more efficient to use the other methods with consumers to
-	 * get headers.
-	 *
-	 * @return An array of all the headers in this list, never <jk>null</jk>.
-	 */
-	public Header[] getAll() {
-		return entries.length == 0 ? EMPTY_ARRAY : Arrays.copyOf(entries, entries.length);
-	}
-
-	/**
-	 * Returns the number of headers in this list.
-	 *
-	 * @return The number of headers in this list.
-	 */
-	public int size() {
-		return entries.length;
 	}
 
 	/**
@@ -1462,8 +1373,8 @@ public class HeaderList {
 	 * @return The first matching header, or <jk>null</jk> if not found.
 	 */
 	public Optional<Header> getFirst(String name) {
-		for (int i = 0; i < entries.length; i++) {
-			Header x = entries[i];
+		for (int i = 0; i < size(); i++) {
+			Header x = get(i);
 			if (eq(x.getName(), name))
 				return optional(x);
 		}
@@ -1480,8 +1391,8 @@ public class HeaderList {
 	 * @return The last matching header, or <jk>null</jk> if not found.
 	 */
 	public Optional<Header> getLast(String name) {
-		for (int i = entries.length - 1; i >= 0; i--) {
-			Header x = entries[i];
+		for (int i = size() - 1; i >= 0; i--) {
+			Header x = get(i);
 			if (eq(x.getName(), name))
 				return optional(x);
 		}
@@ -1532,8 +1443,7 @@ public class HeaderList {
 	 * @return <jk>true</jk> if at least one header with the name is present.
 	 */
 	public boolean contains(String name) {
-		for (int i = 0; i < entries.length; i++) {
-			Header x = entries[i];
+		for (Header x : this) {
 			if (eq(x.getName(), name))
 				return true;
 		}
@@ -1545,8 +1455,8 @@ public class HeaderList {
 	 *
 	 * @return A new iterator over this list of headers.
 	 */
-	public HeaderIterator iterator() {
-		return new BasicHeaderIterator(entries, null, caseSensitive);
+	public HeaderIterator headerIterator() {
+		return new BasicHeaderIterator(getAll(), null, caseSensitive);
 	}
 
 	/**
@@ -1556,22 +1466,8 @@ public class HeaderList {
 	 *
 	 * @return A new iterator over the matching headers in this list.
 	 */
-	public HeaderIterator iterator(String name) {
-		return new BasicHeaderIterator(entries, name, caseSensitive);
-	}
-
-	/**
-	 * Performs an action on all headers in this list.
-	 *
-	 * <p>
-	 * This is the preferred method for iterating over headers as it does not involve
-	 * creation or copy of lists/arrays.
-	 *
-	 * @param action An action to perform on each element.
-	 * @return This object.
-	 */
-	public HeaderList forEach(Consumer<Header> action) {
-		return forEach(x -> true, action);
+	public HeaderIterator headerIterator(String name) {
+		return new BasicHeaderIterator(getAll(name), name, caseSensitive);
 	}
 
 	/**
@@ -1601,21 +1497,8 @@ public class HeaderList {
 	 * @return This object.
 	 */
 	public HeaderList forEach(Predicate<Header> filter, Consumer<Header> action) {
-		for (int i = 0; i < entries.length; i++)
-			consume(filter, action, entries[i]);
+		forEach(x -> consume(filter, action, x));
 		return this;
-	}
-
-	/**
-	 * Returns a stream of the headers in this list.
-	 *
-	 * <p>
-	 * This does not involve a copy of the underlying array of <c>Header</c> objects so should perform well.
-	 *
-	 * @return This object.
-	 */
-	public Stream<Header> stream() {
-		return Arrays.stream(entries);
 	}
 
 	/**
@@ -1637,6 +1520,6 @@ public class HeaderList {
 
 	@Override /* Object */
 	public String toString() {
-		return alist(entries).toString();
+		return super.toString();
 	}
 }

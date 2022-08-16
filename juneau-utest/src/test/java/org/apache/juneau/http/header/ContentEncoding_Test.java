@@ -51,10 +51,10 @@ public class ContentEncoding_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(contentEncoding(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(contentEncoding(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(contentEncoding(PARSED)).run().assertContent().is(VALUE);
-		c.get().header(contentEncoding(()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(contentEncoding(VALUE)).run().assertContent(VALUE);
+		c.get().header(contentEncoding(VALUE)).run().assertContent(VALUE);
+		c.get().header(contentEncoding(PARSED)).run().assertContent(VALUE);
+		c.get().header(contentEncoding(()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(contentEncoding((String)null)).run().assertContent().isEmpty();

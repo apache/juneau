@@ -29,7 +29,7 @@ import java.util.Set;
  * It is not mandatory to have a Tag Object per tag used there.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	Tag x = <jsm>tag</jsm>()
  * 		.name(<js>"pet"</js>)
@@ -41,7 +41,7 @@ import java.util.Set;
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	String json = x.toString();
  * </p>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	<jc>// Output</jc>
  * 	{
  * 		<js>"name"</js>: <js>"pet"</js>,

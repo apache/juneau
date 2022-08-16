@@ -35,15 +35,15 @@ public class SwitchingProtocols_Test {
 
 		client.get("/a1")
 			.run()
-			.assertCode().is(1101)
-			.assertContent().is("Switching Protocols");
+			.assertStatus(1101)
+			.assertContent("Switching Protocols");
 		client.get("/a2")
 			.run()
-			.assertCode().is(1101)
-			.assertContent().is("foo");
+			.assertStatus(1101)
+			.assertContent("foo");
 		client.get("/a3")
 			.run()
-			.assertCode().is(1101)
+			.assertStatus(1101)
 			.assertHeader("Foo").is("bar");
 	}
 }

@@ -232,7 +232,7 @@ red { color:red; }
 review { display:block; background-color:#ffdf00; padding:10px; border-radius:5px; text-align:center; box-shadow:1px 1px 1px 0px rgba(0, 0, 0, 0.5); margin:20px 0px; font-weight:bold; width:800px !important; }
 reviewed { display:block; background-color:lightgreen; padding:10px; border-radius:5px; text-align:center; box-shadow:1px 1px 1px 0px rgba(0, 0, 0, 0.5); margin:20px 0px; font-weight:bold; width:800px !important; }
 
-ul.javatreec, .javatreec ul {  padding-left:0px; margin:0px; }
+ul.javatreec, .javatreec ul {  padding-left:0px; margin:0px;max-width:900px; }
 .javatreec li { display:inline-block; padding-left:5px; }
 .javatreec li::before { font-weight:bolder; font-size:x-small; }
 .javatreec li.ja::before  { color:#00ced1; content:'\00a0\00a0\24d0\00a0'; }

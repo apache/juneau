@@ -50,14 +50,14 @@ public class Hyperlink_Test {
 		a.get("/a")
 			.accept("text/html+stripped")
 			.run()
-			.assertContent().is("<a href=\"/foo\">bar</a>");
+			.assertContent("<a href=\"/foo\">bar</a>");
 		a.get("/b")
 			.accept("text/html+stripped")
 			.run()
-			.assertContent().is("<ul><li><a href=\"/foo\">bar</a></li><li><a href=\"/foo\">bar</a></li></ul>");
+			.assertContent("<ul><li><a href=\"/foo\">bar</a></li><li><a href=\"/foo\">bar</a></li></ul>");
 		a.get("/c")
 			.accept("text/html+stripped")
 			.run()
-			.assertContent().is("<ul><li><a href=\"/foo\">bar</a></li><li><a href=\"/foo\">bar</a></li></ul>");
+			.assertContent("<ul><li><a href=\"/foo\">bar</a></li><li><a href=\"/foo\">bar</a></li></ul>");
 	}
 }

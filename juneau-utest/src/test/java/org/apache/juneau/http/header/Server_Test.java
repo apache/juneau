@@ -51,10 +51,10 @@ public class Server_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(server(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(server(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(server(PARSED)).run().assertContent().is(VALUE);
-		c.get().header(server(()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(server(VALUE)).run().assertContent(VALUE);
+		c.get().header(server(VALUE)).run().assertContent(VALUE);
+		c.get().header(server(PARSED)).run().assertContent(VALUE);
+		c.get().header(server(()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(server((String)null)).run().assertContent().isEmpty();

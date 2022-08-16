@@ -69,8 +69,6 @@ public class RestContextArgs extends SimpleRestOperationArg {
 			return new RestContextArgs(x->x.getDebugEnablement());
 		if (paramInfo.isType(EncoderSet.class))
 			return new RestContextArgs(x->x.getEncoders());
-		if (paramInfo.isType(FileFinder.class))
-			return new RestContextArgs(x->x.getFileFinder());
 		if (paramInfo.isType(Logger.class))
 			return new RestContextArgs(x->x.getLogger());
 		if (paramInfo.isType(MethodExecStore.class))

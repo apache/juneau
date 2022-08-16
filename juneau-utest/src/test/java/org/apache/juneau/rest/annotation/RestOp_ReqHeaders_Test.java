@@ -70,25 +70,25 @@ public class RestOp_ReqHeaders_Test {
 	public void a01_reqHeaders() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
 
-		a.get("/a").run().assertContent().is("{h1:'1',h2:'2',h3:'3'}");
-		a.get("/a").header("H1",4).header("H2",5).header("H3",6).run().assertContent().is("{h1:'4',h2:'5',h3:'6'}");
-		a.get("/a").header("h1",4).header("h2",5).header("h3",6).run().assertContent().is("{h1:'4',h2:'5',h3:'6'}");
+		a.get("/a").run().assertContent("{h1:'1',h2:'2',h3:'3'}");
+		a.get("/a").header("H1",4).header("H2",5).header("H3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");
+		a.get("/a").header("h1",4).header("h2",5).header("h3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");
 
-		a.get("/b").run().assertContent().is("{h1:'1',h2:'2',h3:'3'}");
-		a.get("/b").header("H1",4).header("H2",5).header("H3",6).run().assertContent().is("{h1:'4',h2:'5',h3:'6'}");
-		a.get("/b").header("h1",4).header("h2",5).header("h3",6).run().assertContent().is("{h1:'4',h2:'5',h3:'6'}");
+		a.get("/b").run().assertContent("{h1:'1',h2:'2',h3:'3'}");
+		a.get("/b").header("H1",4).header("H2",5).header("H3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");
+		a.get("/b").header("h1",4).header("h2",5).header("h3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");
 
-		a.put("/c").run().assertContent().is("{h1:'1',h2:'2',h3:'3'}");
-		a.put("/c").header("H1",4).header("H2",5).header("H3",6).run().assertContent().is("{h1:'4',h2:'5',h3:'6'}");
-		a.put("/c").header("h1",4).header("h2",5).header("h3",6).run().assertContent().is("{h1:'4',h2:'5',h3:'6'}");
+		a.put("/c").run().assertContent("{h1:'1',h2:'2',h3:'3'}");
+		a.put("/c").header("H1",4).header("H2",5).header("H3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");
+		a.put("/c").header("h1",4).header("h2",5).header("h3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");
 
-		a.post("/d").run().assertContent().is("{h1:'1',h2:'2',h3:'3'}");
-		a.post("/d").header("H1",4).header("H2",5).header("H3",6).run().assertContent().is("{h1:'4',h2:'5',h3:'6'}");
-		a.post("/d").header("h1",4).header("h2",5).header("h3",6).run().assertContent().is("{h1:'4',h2:'5',h3:'6'}");
+		a.post("/d").run().assertContent("{h1:'1',h2:'2',h3:'3'}");
+		a.post("/d").header("H1",4).header("H2",5).header("H3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");
+		a.post("/d").header("h1",4).header("h2",5).header("h3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");
 
-		a.delete("/e").run().assertContent().is("{h1:'1',h2:'2',h3:'3'}");
-		a.delete("/e").header("H1",4).header("H2",5).header("H3",6).run().assertContent().is("{h1:'4',h2:'5',h3:'6'}");
-		a.delete("/e").header("h1",4).header("h2",5).header("h3",6).run().assertContent().is("{h1:'4',h2:'5',h3:'6'}");
+		a.delete("/e").run().assertContent("{h1:'1',h2:'2',h3:'3'}");
+		a.delete("/e").header("H1",4).header("H2",5).header("H3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");
+		a.delete("/e").header("h1",4).header("h2",5).header("h3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -109,8 +109,8 @@ public class RestOp_ReqHeaders_Test {
 	@Test
 	public void b01_reqHeadersCaseInsensitive() throws Exception {
 		RestClient b = MockRestClient.build(B.class);
-		b.get("/a").run().assertContent().is("{h1:'1',h2:'2',h3:'3'}");
-		b.get("/a").header("H1",4).header("H2",5).header("H3",6).run().assertContent().is("{h1:'4',h2:'5',h3:'6'}");
-		b.get("/a").header("h1",4).header("h2",5).header("h3",6).run().assertContent().is("{h1:'4',h2:'5',h3:'6'}");
+		b.get("/a").run().assertContent("{h1:'1',h2:'2',h3:'3'}");
+		b.get("/a").header("H1",4).header("H2",5).header("H3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");
+		b.get("/a").header("h1",4).header("h2",5).header("h3",6).run().assertContent("{h1:'4',h2:'5',h3:'6'}");
 	}
 }

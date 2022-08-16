@@ -35,15 +35,15 @@ public class PartialContent_Test {
 
 		client.get("/a1")
 			.run()
-			.assertCode().is(206)
-			.assertContent().is("Partial Content");
+			.assertStatus(206)
+			.assertContent("Partial Content");
 		client.get("/a2")
 			.run()
-			.assertCode().is(206)
-			.assertContent().is("foo");
+			.assertStatus(206)
+			.assertContent("foo");
 		client.get("/a3")
 			.run()
-			.assertCode().is(206)
+			.assertStatus(206)
 			.assertHeader("Foo").is("bar");
 	}
 }

@@ -44,7 +44,7 @@ public class Conflict_Test {
 		}
 		@RestGet
 		public void f5() throws Conflict {
-			throw conflict().header("Foo", "bar").build();
+			throw conflict().header("A", "bar").build();
 		}
 		@RestGet
 		public void f6() throws Conflict {
@@ -58,22 +58,22 @@ public class Conflict_Test {
 
 		c.get("/f1").run()
 			.assertStatus().asCode().is(STATUS_CODE)
-			.assertContent().is(REASON_PHRASE);
+			.assertContent(REASON_PHRASE);
 		c.get("/f2").run()
 			.assertStatus().asCode().is(STATUS_CODE)
-			.assertContent().is("foo bar");
+			.assertContent("foo bar");
 		c.get("/f3").run()
 			.assertStatus().asCode().is(STATUS_CODE)
-			.assertContent().is("baz");
+			.assertContent("baz");
 		c.get("/f4").run()
 			.assertStatus().asCode().is(STATUS_CODE)
-			.assertContent().is("foo bar");
+			.assertContent("foo bar");
 		c.get("/f5").run()
 			.assertStatus().asCode().is(STATUS_CODE)
-			.assertContent().is(REASON_PHRASE)
-			.assertHeader("Foo").is("bar");
+			.assertContent(REASON_PHRASE)
+			.assertHeader("A").is("bar");
 		c.get("/f6").run()
 			.assertStatus().asCode().is(STATUS_CODE)
-			.assertContent().is("foo");
+			.assertContent("foo");
 	}
 }

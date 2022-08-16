@@ -24,7 +24,7 @@ import org.apache.juneau.svl.*;
  * The format for this var is <js>"$F{path[,defaultValue]}"</js>.
  *
  * <p>
- * Contents of files are retrieved from the request using {@link RestRequest#getFileFinder()}.
+ * Contents of files are retrieved from the request using {@link RestRequest#getStaticFiles()}.
 
  * <p>
  * Localized resources (based on the locale of the HTTP request) are supported.
@@ -75,7 +75,7 @@ public class FileVar extends DefaultingVar {
 
 		RestRequest req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
 
-		String s = req.getFileFinder().getString(key).orElse(null);
+		String s = req.getStaticFiles().getString(key, null).orElse(null);
 		if (s == null)
 			return null;
 		String subType = FileUtils.getExtension(key);

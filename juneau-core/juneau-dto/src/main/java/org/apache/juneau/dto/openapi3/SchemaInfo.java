@@ -37,7 +37,7 @@ import java.util.*;
  * Unless stated otherwise, the property definitions follow the JSON Schema specification as referenced here.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	SchemaInfo x = <jsm>schemaInfo</jsm>()
  * 		.type("string")
@@ -49,7 +49,7 @@ import java.util.*;
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	String json = x.toString();
  * </p>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	<jc>// Output</jc>
  * 	{
  * 		<js>"type"</js>: <js>"string"</js>,
@@ -633,12 +633,12 @@ public class SchemaInfo extends OpenApiElement {
 	 * 		<li><code>Collection&lt;String&gt;</code>
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;String&gt;</code>
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
+	 * 			<p class='bcode'>
 	 * 	schemes(<js>"['scheme1','scheme2']"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - Individual values
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
+	 * 			<p class='bcode'>
 	 * 	schemes(<js>"scheme1</js>, <js>"scheme2"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -682,12 +682,12 @@ public class SchemaInfo extends OpenApiElement {
 	 * 		<li><code>Collection&lt;Object&gt;</code>
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Object&gt;</code>
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
+	 * 			<p class='bcode'>
 	 * 	_enum(<js>"['foo','bar']"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - Individual values
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
+	 * 			<p class='bcode'>
 	 * 	_enum(<js>"foo"</js>, <js>"bar"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -786,12 +786,12 @@ public class SchemaInfo extends OpenApiElement {
 	 * 		<li><code>Collection&lt;Object&gt;</code>
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Object&gt;</code>
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
+	 * 			<p class='bcode'>
 	 * 	allOf(<js>"['foo','bar']"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - Individual values
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
+	 * 			<p class='bcode'>
 	 * 	allOf(<js>"foo"</js>, <js>"bar"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -836,12 +836,12 @@ public class SchemaInfo extends OpenApiElement {
 	 * 		<li><code>Collection&lt;Object&gt;</code>
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Object&gt;</code>
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
+	 * 			<p class='bcode'>
 	 * 	allOf(<js>"['foo','bar']"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - Individual values
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
+	 * 			<p class='bcode'>
 	 * 	allOf(<js>"foo"</js>, <js>"bar"</js>);
 	 * 			</p>
 	 * 	</ul>
@@ -886,12 +886,12 @@ public class SchemaInfo extends OpenApiElement {
 	 * 		<li><code>Collection&lt;Object&gt;</code>
 	 * 		<li><code>String</code> - JSON array representation of <code>Collection&lt;Object&gt;</code>
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
+	 * 			<p class='bcode'>
 	 * 	allOf(<js>"['foo','bar']"</js>);
 	 * 			</p>
 	 * 		<li><code>String</code> - Individual values
 	 * 			<h5 class='figure'>Example:</h5>
-	 * 			<p class='bcode w800'>
+	 * 			<p class='bcode'>
 	 * 	allOf(<js>"foo"</js>, <js>"bar"</js>);
 	 * 			</p>
 	 * 	</ul>

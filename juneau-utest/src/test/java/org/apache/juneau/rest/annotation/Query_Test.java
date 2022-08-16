@@ -53,31 +53,31 @@ public class Query_Test {
 	public void a01_basic() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
 
-		a.get("/a?p1=p1&p2=2").run().assertContent().is("p1=[p1,p1,p1],p2=[2,2,2]");
-		a.get("/a?p1&p2").run().assertContent().is("p1=[null,null,null],p2=[0,null,0]");
-		a.get("/a?p1=&p2=").run().assertContent().is("p1=[,,],p2=[0,,0]");
-		a.get("/a").run().assertContent().is("p1=[null,null,null],p2=[0,null,0]");
-		a.get("/a?p1").run().assertContent().is("p1=[null,null,null],p2=[0,null,0]");
-		a.get("/a?p1=").run().assertContent().is("p1=[,,],p2=[0,null,0]");
-		a.get("/a?p2").run().assertContent().is("p1=[null,null,null],p2=[0,null,0]");
-		a.get("/a?p2=").run().assertContent().is("p1=[null,null,null],p2=[0,,0]");
-		a.get("/a?p1=foo&p2").run().assertContent().is("p1=[foo,foo,foo],p2=[0,null,0]");
-		a.get("/a?p1&p2=1").run().assertContent().is("p1=[null,null,null],p2=[1,1,1]");
+		a.get("/a?p1=p1&p2=2").run().assertContent("p1=[p1,p1,p1],p2=[2,2,2]");
+		a.get("/a?p1&p2").run().assertContent("p1=[null,null,null],p2=[0,null,0]");
+		a.get("/a?p1=&p2=").run().assertContent("p1=[,,],p2=[0,,0]");
+		a.get("/a").run().assertContent("p1=[null,null,null],p2=[0,null,0]");
+		a.get("/a?p1").run().assertContent("p1=[null,null,null],p2=[0,null,0]");
+		a.get("/a?p1=").run().assertContent("p1=[,,],p2=[0,null,0]");
+		a.get("/a?p2").run().assertContent("p1=[null,null,null],p2=[0,null,0]");
+		a.get("/a?p2=").run().assertContent("p1=[null,null,null],p2=[0,,0]");
+		a.get("/a?p1=foo&p2").run().assertContent("p1=[foo,foo,foo],p2=[0,null,0]");
+		a.get("/a?p1&p2=1").run().assertContent("p1=[null,null,null],p2=[1,1,1]");
 		String x1 = "a%2Fb%25c%3Dd+e"; // [x/y%z=a+b]
-		a.get("/a?p1="+x1+"&p2=1").run().assertContent().is("p1=[a/b%c=d e,a/b%c=d e,a/b%c=d e],p2=[1,1,1]");
+		a.get("/a?p1="+x1+"&p2=1").run().assertContent("p1=[a/b%c=d e,a/b%c=d e,a/b%c=d e],p2=[1,1,1]");
 
-		a.post("/b?p1=p1&p2=2", null).run().assertContent().is("p1=[p1,p1,p1],p2=[2,2,2]");
-		a.post("/b?p1&p2", null).run().assertContent().is("p1=[null,null,null],p2=[0,null,0]");
-		a.post("/b?p1=&p2=", null).run().assertContent().is("p1=[,,],p2=[0,,0]");
-		a.post("/b", null).run().assertContent().is("p1=[null,null,null],p2=[0,null,0]");
-		a.post("/b?p1", null).run().assertContent().is("p1=[null,null,null],p2=[0,null,0]");
-		a.post("/b?p1=", null).run().assertContent().is("p1=[,,],p2=[0,null,0]");
-		a.post("/b?p2", null).run().assertContent().is("p1=[null,null,null],p2=[0,null,0]");
-		a.post("/b?p2=", null).run().assertContent().is("p1=[null,null,null],p2=[0,,0]");
-		a.post("/b?p1=foo&p2", null).run().assertContent().is("p1=[foo,foo,foo],p2=[0,null,0]");
-		a.post("/b?p1&p2=1", null).run().assertContent().is("p1=[null,null,null],p2=[1,1,1]");
+		a.post("/b?p1=p1&p2=2", null).run().assertContent("p1=[p1,p1,p1],p2=[2,2,2]");
+		a.post("/b?p1&p2", null).run().assertContent("p1=[null,null,null],p2=[0,null,0]");
+		a.post("/b?p1=&p2=", null).run().assertContent("p1=[,,],p2=[0,,0]");
+		a.post("/b", null).run().assertContent("p1=[null,null,null],p2=[0,null,0]");
+		a.post("/b?p1", null).run().assertContent("p1=[null,null,null],p2=[0,null,0]");
+		a.post("/b?p1=", null).run().assertContent("p1=[,,],p2=[0,null,0]");
+		a.post("/b?p2", null).run().assertContent("p1=[null,null,null],p2=[0,null,0]");
+		a.post("/b?p2=", null).run().assertContent("p1=[null,null,null],p2=[0,,0]");
+		a.post("/b?p1=foo&p2", null).run().assertContent("p1=[foo,foo,foo],p2=[0,null,0]");
+		a.post("/b?p1&p2=1", null).run().assertContent("p1=[null,null,null],p2=[1,1,1]");
 		String x2 = "a%2Fb%25c%3Dd+e"; // [x/y%z=a+b]
-		a.post("/b?p1="+x2+"&p2=1", null).run().assertContent().is("p1=[a/b%c=d e,a/b%c=d e,a/b%c=d e],p2=[1,1,1]");
+		a.post("/b?p1="+x2+"&p2=1", null).run().assertContent("p1=[a/b%c=d e,a/b%c=d e,a/b%c=d e],p2=[1,1,1]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -111,14 +111,14 @@ public class Query_Test {
 	@Test
 	public void b01_uonParameters() throws Exception {
 		RestClient b = MockRestClient.build(B.class);
-		b.get("/a?p1=p1").run().assertContent().is("p1=[p1,p1,p1]");
-		b.get("/a?p1='p1'").run().assertContent().is("p1=['p1','p1','p1']");
-		b.get("/b?p1=p1").run().assertContent().is("p1=[p1,p1,p1]");
-		b.get("/b?p1='p1'").run().assertContent().is("p1=[p1,'p1','p1']");
-		b.post("/c?p1=p1", null).run().assertContent().is("p1=[p1,p1,p1]");
-		b.post("/c?p1='p1'", null).run().assertContent().is("p1=['p1','p1','p1']");
-		b.post("/d?p1=p1", null).run().assertContent().is("p1=[p1,p1,p1]");
-		b.post("/d?p1='p1'", null).run().assertContent().is("p1=[p1,'p1','p1']");
+		b.get("/a?p1=p1").run().assertContent("p1=[p1,p1,p1]");
+		b.get("/a?p1='p1'").run().assertContent("p1=['p1','p1','p1']");
+		b.get("/b?p1=p1").run().assertContent("p1=[p1,p1,p1]");
+		b.get("/b?p1='p1'").run().assertContent("p1=[p1,'p1','p1']");
+		b.post("/c?p1=p1", null).run().assertContent("p1=[p1,p1,p1]");
+		b.post("/c?p1='p1'", null).run().assertContent("p1=['p1','p1','p1']");
+		b.post("/d?p1=p1", null).run().assertContent("p1=[p1,p1,p1]");
+		b.post("/d?p1='p1'", null).run().assertContent("p1=[p1,'p1','p1']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -162,18 +162,18 @@ public class Query_Test {
 	@Test
 	public void c01_multipartParams() throws Exception {
 		RestClient c = MockRestClient.build(C.class);
-		c.get("/a?x=a").run().assertContent().is("['a']");
-		c.get("/a?x=a&x=b").run().assertContent().is("['a','b']");
-		c.get("/b?x=1").run().assertContent().is("[1]");
-		c.get("/b?x=1&x=2").run().assertContent().is("[1,2]");
-		c.get("/c?x=a").run().assertContent().is("['a']");
-		c.get("/c?x=a&x=b").run().assertContent().is("['a','b']");
-		c.get("/d?x=1").run().assertContent().is("[1]");
-		c.get("/d?x=1&x=2").run().assertContent().is("[1,2]");
-		c.get("/e?x=a=1,b=2,c=false").run().assertContent().is("[{a:'1,b=2,c=false',b:0,c:false}]");
-		c.get("/e?x=a=1,b=2,c=false&x=a=3,b=4,c=true").run().assertContent().is("[{a:'1,b=2,c=false',b:0,c:false},{a:'3,b=4,c=true',b:0,c:false}]");
-		c.get("/f?x=a=1,b=2,c=false").run().assertContent().is("[{a:'1,b=2,c=false',b:0,c:false}]");
-		c.get("/f?x=a=1,b=2,c=false&x=a=3,b=4,c=true").run().assertContent().is("[{a:'1,b=2,c=false',b:0,c:false},{a:'3,b=4,c=true',b:0,c:false}]");
+		c.get("/a?x=a").run().assertContent("['a']");
+		c.get("/a?x=a&x=b").run().assertContent("['a','b']");
+		c.get("/b?x=1").run().assertContent("[1]");
+		c.get("/b?x=1&x=2").run().assertContent("[1,2]");
+		c.get("/c?x=a").run().assertContent("['a']");
+		c.get("/c?x=a&x=b").run().assertContent("['a','b']");
+		c.get("/d?x=1").run().assertContent("[1]");
+		c.get("/d?x=1&x=2").run().assertContent("[1,2]");
+		c.get("/e?x=a=1,b=2,c=false").run().assertContent("[{a:'1,b=2,c=false',b:0,c:false}]");
+		c.get("/e?x=a=1,b=2,c=false&x=a=3,b=4,c=true").run().assertContent("[{a:'1,b=2,c=false',b:0,c:false},{a:'3,b=4,c=true',b:0,c:false}]");
+		c.get("/f?x=a=1,b=2,c=false").run().assertContent("[{a:'1,b=2,c=false',b:0,c:false}]");
+		c.get("/f?x=a=1,b=2,c=false&x=a=3,b=4,c=true").run().assertContent("[{a:'1,b=2,c=false',b:0,c:false},{a:'3,b=4,c=true',b:0,c:false}]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -215,14 +215,14 @@ public class Query_Test {
 	@Test
 	public void d01_defaultValues() throws Exception {
 		RestClient d = MockRestClient.build(D.class);
-		d.get("/a").run().assertContent().is("{f1:'1',f2:'2',f3:'3'}");
-		d.get("/a").queryData("f1",4).queryData("f2",5).queryData("f3",6).run().assertContent().is("{f1:'4',f2:'5',f3:'6'}");
-		d.get("/b").run().assertContent().is("{f1:null,f2:null,f3:null}");
-		d.get("/b").queryData("f1",4).queryData("f2",5).queryData("f3",6).run().assertContent().is("{f1:'4',f2:'5',f3:'6'}");
-		d.get("/c").run().assertContent().is("{f1:'1',f2:'2',f3:'3'}");
-		d.get("/c").queryData("f1",4).queryData("f2",5).queryData("f3",6).run().assertContent().is("{f1:'4',f2:'5',f3:'6'}");
-		d.get("/d").run().assertContent().is("{f1:'4',f2:'5',f3:'6'}");
-		d.get("/d").queryData("f1",7).queryData("f2",8).queryData("f3",9).run().assertContent().is("{f1:'7',f2:'8',f3:'9'}");
+		d.get("/a").run().assertContent("{f1:'1',f2:'2',f3:'3'}");
+		d.get("/a").queryData("f1",4).queryData("f2",5).queryData("f3",6).run().assertContent("{f1:'4',f2:'5',f3:'6'}");
+		d.get("/b").run().assertContent("{f1:null,f2:null,f3:null}");
+		d.get("/b").queryData("f1",4).queryData("f2",5).queryData("f3",6).run().assertContent("{f1:'4',f2:'5',f3:'6'}");
+		d.get("/c").run().assertContent("{f1:'1',f2:'2',f3:'3'}");
+		d.get("/c").queryData("f1",4).queryData("f2",5).queryData("f3",6).run().assertContent("{f1:'4',f2:'5',f3:'6'}");
+		d.get("/d").run().assertContent("{f1:'4',f2:'5',f3:'6'}");
+		d.get("/d").queryData("f1",7).queryData("f2",8).queryData("f3",9).run().assertContent("{f1:'7',f2:'8',f3:'9'}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -257,35 +257,138 @@ public class Query_Test {
 		RestClient e = MockRestClient.buildJson(E.class);
 		e.get("/a?f1=123")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("123");
+			.assertStatus(200)
+			.assertContent("123");
 		e.get("/a")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("null");
+			.assertStatus(200)
+			.assertContent("null");
 		e.get("/b?f1=a=1,b=foo")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("{a:1,b:'foo'}");
+			.assertStatus(200)
+			.assertContent("{a:1,b:'foo'}");
 		e.get("/b")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("null");
+			.assertStatus(200)
+			.assertContent("null");
 		e.get("/c?f1=@((a=1,b=foo))")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("[{a:1,b:'foo'}]");
+			.assertStatus(200)
+			.assertContent("[{a:1,b:'foo'}]");
 		e.get("/c")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("null");
+			.assertStatus(200)
+			.assertContent("null");
 		e.get("/d?f1=@((a=1,b=foo))")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("[{a:1,b:'foo'}]");
+			.assertStatus(200)
+			.assertContent("[{a:1,b:'foo'}]");
 		e.get("/d")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("null");
+			.assertStatus(200)
+			.assertContent("null");
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Default parameters
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Rest(serializers=SimpleJsonSerializer.class)
+	public static class F {
+		@RestGet
+		public Object a1(@Query(name="f1", def="1") Integer f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestGet
+		public Object a2(@Query(name="f1", def="1") Optional<Integer> f1) throws Exception {
+			assertNotNull(f1);
+			return f1.get();
+		}
+		@RestGet
+		public Object b1(@Query(name="f1", def="a=1,b=foo") ABean f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestGet
+		public Object b2(@Query(name="f1", def="a=1,b=foo") Optional<ABean> f1) throws Exception {
+			assertNotNull(f1);
+			return f1.get();
+		}
+		@RestGet
+		public Object c1(@Query(name="f1", def="@((a=1,b=foo))") List<ABean> f1) throws Exception {
+			assertNotNull(f1);
+			return f1;
+		}
+		@RestGet
+		public Object c2(@Query(name="f1", def="@((a=1,b=foo))") Optional<List<ABean>> f1) throws Exception {
+			assertNotNull(f1);
+			return f1.get();
+		}
+		@RestGet
+		public Object d(@Query(name="f1", def="@((a=1,b=foo))") List<Optional<ABean>> f1) throws Exception {
+			return f1;
+		}
+	}
+
+	@Test
+	public void f01_defaultParams() throws Exception {
+		RestClient f = MockRestClient.buildJson(F.class);
+		f.get("/a1?f1=123")
+			.run()
+			.assertStatus(200)
+			.assertContent("123");
+		f.get("/a1")
+			.run()
+			.assertStatus(200)
+			.assertContent("1");
+		f.get("/a2?f1=123")
+			.run()
+			.assertStatus(200)
+			.assertContent("123");
+		f.get("/a2")
+			.run()
+			.assertStatus(200)
+			.assertContent("1");
+		f.get("/b1?f1=a=2,b=bar")
+			.run()
+			.assertStatus(200)
+			.assertContent("{a:2,b:'bar'}");
+		f.get("/b1")
+			.run()
+			.assertStatus(200)
+			.assertContent("{a:1,b:'foo'}");
+		f.get("/b2?f1=a=2,b=bar")
+			.run()
+			.assertStatus(200)
+			.assertContent("{a:2,b:'bar'}");
+		f.get("/b2")
+			.run()
+			.assertStatus(200)
+			.assertContent("{a:1,b:'foo'}");
+		f.get("/c1?f1=@((a=2,b=bar))")
+			.run()
+			.assertStatus(200)
+			.assertContent("[{a:2,b:'bar'}]");
+		f.get("/c1")
+			.run()
+			.assertStatus(200)
+			.assertContent("[{a:1,b:'foo'}]");
+		f.get("/c2?f1=@((a=2,b=bar))")
+			.run()
+			.assertStatus(200)
+			.assertContent("[{a:2,b:'bar'}]");
+		f.get("/c2")
+			.run()
+			.assertStatus(200)
+			.assertContent("[{a:1,b:'foo'}]");
+		f.get("/d?f1=@((a=2,b=bar))")
+			.run()
+			.assertStatus(200)
+			.assertContent("[{a:2,b:'bar'}]");
+		f.get("/d")
+			.run()
+			.assertStatus(200)
+			.assertContent("[{a:1,b:'foo'}]");
 	}
 }

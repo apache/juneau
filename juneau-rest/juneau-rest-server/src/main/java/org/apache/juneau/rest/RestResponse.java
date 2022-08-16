@@ -106,7 +106,7 @@ import org.apache.juneau.serializer.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public final class RestResponse {
+public final class RestResponse extends HttpServletResponseWrapper {
 
 	private HttpServletResponse inner;
 	private final RestRequest request;
@@ -127,6 +127,7 @@ public final class RestResponse {
 	 * Constructor.
 	 */
 	RestResponse(RestOpContext opContext, RestSession session, RestRequest req) throws Exception {
+		super(session.getResponse());
 
 		inner = session.getResponse();
 		request = req;
@@ -137,7 +138,7 @@ public final class RestResponse {
 		RestContext context = session.getContext();
 
 		try {
-			String passThroughHeaders = request.getHeader("x-response-headers").orElse(null);
+			String passThroughHeaders = request.getHeaderParam("x-response-headers").orElse(null);
 			if (passThroughHeaders != null) {
 				JsonMap m = context.getPartParser().getPartSession().parse(HEADER, null, passThroughHeaders, BeanContext.DEFAULT.getClassMeta(JsonMap.class));
 				for (Map.Entry<String,Object> e : m.entrySet())
@@ -148,7 +149,7 @@ public final class RestResponse {
 		}
 
 		// Find acceptable charset
-		String h = request.getHeader("accept-charset").orElse(null);
+		String h = request.getHeaderParam("accept-charset").orElse(null);
 		Charset charset = null;
 		if (h == null)
 			charset = opContext.getDefaultCharset();
@@ -168,7 +169,7 @@ public final class RestResponse {
 		opContext.getDefaultResponseHeaders().forEach(x->addHeader(x.getName(), resolveUris(x.getValue())));
 
 		if (charset == null)
-			throw new NotAcceptable("No supported charsets in header ''Accept-Charset'': ''{0}''", request.getHeader("Accept-Charset").orElse(null));
+			throw new NotAcceptable("No supported charsets in header ''Accept-Charset'': ''{0}''", request.getHeaderParam("Accept-Charset").orElse(null));
 		inner.setCharacterEncoding(charset.name());
 
 	}
@@ -294,25 +295,6 @@ public final class RestResponse {
 	}
 
 	/**
-	 * Sets the content type of the response being sent to the client, if the response has not been committed yet.
-	 *
-	 * <p>
-	 * The given content type may include a character encoding specification, for example, text/html;charset=UTF-8.
-	 * The response's character encoding is only set from the given content type if this method is called before getWriter is called.
-	 *
-	 * <p>This method may be called repeatedly to change content type and character encoding.
-	 * This method has no effect if called after the response has been committed.
-	 * It does not set the response's character encoding if it is called after getWriter has been called or after the response has been committed.
-	 *
-	 * @param value A string specifying the MIME type of the content.
-	 * @return This object.
-	 */
-	public RestResponse setContentType(String value) {
-		inner.setContentType(value);
-		return this;
-	}
-
-	/**
 	 * Equivalent to {@link HttpServletResponse#getOutputStream()}, except wraps the output stream if an {@link Encoder}
 	 * was found that matched the <c>Accept-Encoding</c> header.
 	 *
@@ -325,7 +307,7 @@ public final class RestResponse {
 			Encoder encoder = null;
 			EncoderSet encoders = request.getOpContext().getEncoders();
 
-			String ae = request.getHeader("Accept-Encoding").orElse(null);
+			String ae = request.getHeaderParam("Accept-Encoding").orElse(null);
 			if (! (ae == null || ae.isEmpty())) {
 				EncoderMatch match = encoders.getEncoderMatch(ae);
 				if (match == null) {
@@ -365,6 +347,7 @@ public final class RestResponse {
 	 * @return The stream.
 	 * @throws IOException If stream could not be accessed.
 	 */
+	@Override
 	public ServletOutputStream getOutputStream() throws IOException {
 		if (sos == null)
 			sos = inner.getOutputStream();
@@ -390,6 +373,7 @@ public final class RestResponse {
 	 * @return The writer.
 	 * @throws IOException If writer could not be accessed.
 	 */
+	@Override
 	public PrintWriter getWriter() throws IOException {
 		return getWriter(true, false);
 	}
@@ -449,67 +433,12 @@ public final class RestResponse {
 	}
 
 	/**
-	 * Sets the character encoding (MIME charset) of the response being sent to the client, for example, to UTF-8.
-	 *
-	 * <p>
-	 * If the character encoding has already been set by <c>setContentType</c> or <c>setLocale</c>, this method overrides it.
-	 * Calling {@link #setContentType(String)} with the String of <js>"text/html"</js> and calling this method with
-	 * <js>"UTF-8"</js> is equivalent with calling {@link #setContentType(String)} with <js>"text/html; charset=UTF-8"</js>.
-	 *
-	 * <p>
-	 * This method can be called repeatedly to change the character encoding.
-	 * This method has no effect if it is called after <c>getWriter</c> has been called or after the response has been committed.
-	 *
-	 * @param value The character encoding value.
-	 * @return This object.
-	 */
-	public RestResponse setCharacterEncoding(String value) {
-		inner.setCharacterEncoding(value);
-		return this;
-	}
-
-	/**
-	 * Returns the name of the character encoding (MIME charset) used for the content sent in this response.
-	 *
-	 * <p>
-	 * The character encoding may have been specified explicitly using the <c>setCharacterEncoding</c> or <c>setContentType</c> methods,
-	 * or implicitly using the <c>setLocale</c> method.
-	 * Explicit specifications take precedence over implicit specifications.
-	 * Calls made to these methods after <c>getWriter</c> has been called or after the response has been committed have
-	 * no effect on the character encoding.
-	 * If no character encoding has been specified, <js>"ISO-8859-1"</js> is returned.
-	 *
-	 * @return A string specifying the name of the character encoding, for example, <js>"UTF-8"</js>.
-	 */
-	public String getCharacterEncoding() {
-		return inner.getCharacterEncoding();
-	}
-
-	/**
 	 * Returns the <c>Content-Type</c> header stripped of the charset attribute if present.
 	 *
 	 * @return The <c>media-type</c> portion of the <c>Content-Type</c> header.
 	 */
 	public MediaType getMediaType() {
 		return MediaType.of(getContentType());
-	}
-
-	/**
-	 * Returns the content type used for the MIME content sent in this response.
-	 *
-	 *
-	 * <p>
-	 * The content type proper must have been specified using <c>setContentType</c> before the response is committed.
-	 * If no content type has been specified, this method returns <jk>null</jk>.
-	 * If a content type has been specified, and a character encoding has been explicitly or implicitly specified as
-	 * described in <c>getCharacterEncoding</c> or <c>getWriter</c> has been called, the charset parameter is included
-	 * in the string returned.
-	 * If no character encoding has been specified, the charset parameter is omitted.
-	 *
-	 * @return A string specifying the content type, for example, <js>"text/html; charset=UTF-8"</js>, or <jk>null</jk>.
-	 */
-	public String getContentType() {
-		return inner.getContentType();
 	}
 
 	/**
@@ -532,6 +461,7 @@ public final class RestResponse {
 	 * @param uri The redirection URL.
 	 * @throws IOException If an input or output exception occurs
 	 */
+	@Override
 	public void sendRedirect(String uri) throws IOException {
 		char c = (uri.length() > 0 ? uri.charAt(0) : 0);
 		if (c != '/' && uri.indexOf("://") == -1)
@@ -551,6 +481,7 @@ public final class RestResponse {
 	 * @param name The header name.
 	 * @param value The header value.
 	 */
+	@Override
 	public void setHeader(String name, String value) {
 
 		// Jetty doesn't set the content type correctly if set through this method.
@@ -566,16 +497,6 @@ public final class RestResponse {
 			value = abbreviate(value, maxHeaderLength);
 			inner.setHeader(name, value);
 		}
-	}
-
-	/**
-	 * Returns a boolean indicating whether the named response header has already been set.
-	 *
-	 * @param name The header name.
-	 * @return <jk>true</jk> if the response header has been set.
-	 */
-	public boolean containsHeader(String name) {
-		return inner.containsHeader(name);
 	}
 
 	/**
@@ -757,6 +678,7 @@ public final class RestResponse {
 	 *
 	 * @throws IOException If an I/O error occurred.
 	 */
+	@Override
 	public void flushBuffer() throws IOException {
 		if (w != null)
 			w.flush();
@@ -767,39 +689,6 @@ public final class RestResponse {
 
 	private Object getRawOutput() {
 		return content == null ? null : content.orElse(null);
-	}
-
-	/**
-	 * Returns the current status code of this response.
-	 *
-	 * @return The current status code of this response.
-	 */
-	public int getStatus() {
-		return inner.getStatus();
-	}
-
-	/**
-	 * Sets the status code for this response.
-	 *
-	 * <p>
-	 * This method is used to set the return status code when there is no error (for example, for the SC_OK or SC_MOVED_TEMPORARILY status codes).
-	 *
-	 * <p>
-	 * If this method is used to set an error code, then the container's error page mechanism will not be triggered.
-	 * If there is an error and the caller wishes to invoke an error page defined in the web application, then sendError must be used instead.
-	 *
-	 * <p>
-	 * This method preserves any cookies and other response headers.
-	 *
-	 * <p>
-	 * Valid status codes are those in the 2XX, 3XX, 4XX, and 5XX ranges. Other status codes are treated as container specific.
-	 *
-	 * @param value The status code for this response.
-	 * @return This object.
-	 */
-	public RestResponse setStatus(int value) {
-		inner.setStatus(value);
-		return this;
 	}
 
 	/**
@@ -845,9 +734,9 @@ public final class RestResponse {
 	 *
 	 * @param name The header name.
 	 * @param value The header value.
-	 * @return This object.
 	 */
-	public RestResponse addHeader(String name, String value) {
+	@Override
+	public void addHeader(String name, String value) {
 		if (name != null && value != null) {
 			if (name.equalsIgnoreCase("Content-Type"))
 				setHeader(name, value);
@@ -858,7 +747,6 @@ public final class RestResponse {
 				inner.addHeader(name, value);
 			}
 		}
-		return this;
 	}
 
 	/**
@@ -934,20 +822,6 @@ public final class RestResponse {
 	}
 
 	/**
-	 * Gets the value of the response header with the given name.
-	 *
-	 * <p>
-	 * If a response header with the given name exists and contains multiple values, the value that was added first will be returned.
-	 *
-	 * @param name The header name.
-	 * @return The header value, or <jk>null</jk> if it wasn't set.
-	 */
-	public String getHeader(String name) {
-		return inner.getHeader(name);
-	}
-
-
-	/**
 	 * Returns the matching serializer and media type for this response.
 	 *
 	 * @return The matching serializer, never <jk>null</jk>.
@@ -958,7 +832,7 @@ public final class RestResponse {
 		if (serializer != null) {
 			serializerMatch = optional(new SerializerMatch(getMediaType(), serializer));
 		} else {
-			serializerMatch = optional(opContext.getSerializers().getSerializerMatch(request.getHeader("Accept").orElse("*/*")));
+			serializerMatch = optional(opContext.getSerializers().getSerializerMatch(request.getHeaderParam("Accept").orElse("*/*")));
 		}
 		return serializerMatch;
 	}

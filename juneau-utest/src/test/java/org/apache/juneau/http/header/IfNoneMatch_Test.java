@@ -51,10 +51,10 @@ public class IfNoneMatch_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(ifNoneMatch(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(ifNoneMatch(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(ifNoneMatch(PARSED)).run().assertContent().is(VALUE);
-		c.get().header(ifNoneMatch(()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(ifNoneMatch(VALUE)).run().assertContent(VALUE);
+		c.get().header(ifNoneMatch(VALUE)).run().assertContent(VALUE);
+		c.get().header(ifNoneMatch(PARSED)).run().assertContent(VALUE);
+		c.get().header(ifNoneMatch(()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(ifNoneMatch((String)null)).run().assertContent().isEmpty();

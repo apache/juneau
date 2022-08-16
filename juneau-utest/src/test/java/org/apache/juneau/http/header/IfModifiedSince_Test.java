@@ -54,14 +54,14 @@ public class IfModifiedSince_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(ifModifiedSince(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(ifModifiedSince(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(ifModifiedSince(PARSED)).run().assertContent().is(VALUE);
-		c.get().header(ifModifiedSince(()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(ifModifiedSince(VALUE)).run().assertContent(VALUE);
+		c.get().header(ifModifiedSince(VALUE)).run().assertContent(VALUE);
+		c.get().header(ifModifiedSince(PARSED)).run().assertContent(VALUE);
+		c.get().header(ifModifiedSince(()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
-		c.get().header(ifModifiedSince((String)null)).run().assertContent().is("");
-		c.get().header(ifModifiedSince((Supplier<ZonedDateTime>)null)).run().assertContent().is("");
+		c.get().header(ifModifiedSince((String)null)).run().assertContent("");
+		c.get().header(ifModifiedSince((Supplier<ZonedDateTime>)null)).run().assertContent("");
 		c.get().header(ifModifiedSince(()->null)).run().assertContent().isEmpty();
 	}
 

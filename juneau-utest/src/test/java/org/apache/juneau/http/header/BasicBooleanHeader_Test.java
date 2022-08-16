@@ -54,10 +54,10 @@ public class BasicBooleanHeader_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(booleanHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
-		c.get().header(booleanHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
-		c.get().header(booleanHeader(HEADER,PARSED)).run().assertContent().is(VALUE);
-		c.get().header(booleanHeader(HEADER,()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(booleanHeader(HEADER,VALUE)).run().assertContent(VALUE);
+		c.get().header(booleanHeader(HEADER,VALUE)).run().assertContent(VALUE);
+		c.get().header(booleanHeader(HEADER,PARSED)).run().assertContent(VALUE);
+		c.get().header(booleanHeader(HEADER,()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(booleanHeader(HEADER,(Supplier<Boolean>)null)).run().assertContent().isEmpty();

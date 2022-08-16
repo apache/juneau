@@ -52,10 +52,10 @@ public class BasicEntityTagHeader_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(entityTagHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
-		c.get().header(entityTagHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
-		c.get().header(entityTagHeader(HEADER,PARSED)).run().assertContent().is(VALUE);
-		c.get().header(entityTagHeader(HEADER,()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(entityTagHeader(HEADER,VALUE)).run().assertContent(VALUE);
+		c.get().header(entityTagHeader(HEADER,VALUE)).run().assertContent(VALUE);
+		c.get().header(entityTagHeader(HEADER,PARSED)).run().assertContent(VALUE);
+		c.get().header(entityTagHeader(HEADER,()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(entityTagHeader(HEADER,(String)null)).run().assertContent().isEmpty();

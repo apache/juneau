@@ -32,6 +32,7 @@ public class PathAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	Path a1 = PathAnnotation.create()
+		.def("def")
 		.name("name")
 		.on("on")
 		.onClass(X1.class)
@@ -41,6 +42,7 @@ public class PathAnnotation_Test {
 		.build();
 
 	Path a2 = PathAnnotation.create()
+		.def("def")
 		.name("name")
 		.on("on")
 		.onClass(X1.class)
@@ -53,6 +55,7 @@ public class PathAnnotation_Test {
 	public void a01_basic() {
 		assertObject(a1).asJson().isMatches(""
 			+ "{"
+				+ "def:'def',"
 				+ "name:'name',"
 				+ "on:['on'],"
 				+ "onClass:['"+CNAME+"$X1'],"
@@ -112,6 +115,7 @@ public class PathAnnotation_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Path(
+		def="def",
 		name="name",
 		on="on",
 		onClass=X1.class,
@@ -123,6 +127,7 @@ public class PathAnnotation_Test {
 	Path d1 = D1.class.getAnnotationsByType(Path.class)[0];
 
 	@Path(
+		def="def",
 		name="name",
 		on="on",
 		onClass=X1.class,

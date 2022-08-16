@@ -122,4 +122,25 @@ public class ThrowableUtils {
 		}
 		return sw.toString();
 	}
+
+	/**
+	 * Calculates a 16-bit hash for the specified throwable based on it's stack trace.
+	 *
+	 * @param t The throwable to calculate the stack trace on.
+	 * @param stopClass Optional stop class on which to stop calculation of a stack trace beyond when found.
+	 * @return A calculated hash.
+	 */
+	public static int hash(Throwable t, String stopClass) {
+		int i = 0;
+		while (t != null) {
+			for (StackTraceElement e : t.getStackTrace()) {
+				if (e.getClassName().equals(stopClass))
+					break;
+				if (e.getClassName().indexOf('$') == -1)
+					i ^= e.hashCode();
+			}
+			t = t.getCause();
+		}
+		return i;
+	}
 }

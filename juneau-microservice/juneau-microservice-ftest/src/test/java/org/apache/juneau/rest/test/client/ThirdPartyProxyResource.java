@@ -53,7 +53,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet implements BasicUn
 		}
 	}
 
-	@RestHook(HookEvent.START_CALL)
+	@RestStartCall
 	public static void startCall(HttpServletRequest req) {
 		try {
 			logFile.append("START["+new Date()+"]-").append(req.getQueryString()).append("\n");
@@ -63,7 +63,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet implements BasicUn
 		}
 	}
 
-	@RestHook(HookEvent.PRE_CALL)
+	@RestPreCall
 	public static void preCall(HttpServletRequest req) {
 		try {
 			logFile.append("PRE["+new Date()+"]-").append(req.getQueryString()).append("\n");
@@ -73,7 +73,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet implements BasicUn
 		}
 	}
 
-	@RestHook(HookEvent.POST_CALL)
+	@RestPostCall
 	public static void postCall(HttpServletRequest req) {
 		try {
 			logFile.append("POST["+new Date()+"]-").append(req.getQueryString()).append("\n");
@@ -83,7 +83,7 @@ public class ThirdPartyProxyResource extends BasicRestServlet implements BasicUn
 		}
 	}
 
-	@RestHook(HookEvent.END_CALL)
+	@RestEndCall
 	public static void endCall(HttpServletRequest req) {
 		try {
 			Throwable e = (Throwable)req.getAttribute("Exception");

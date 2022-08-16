@@ -28,7 +28,7 @@ import java.util.Set;
  * Contact information for the exposed API.
  *
  * <h5 class='section'>Example:</h5>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	<jc>// Construct using SwaggerBuilder.</jc>
  * 	Contact x = <jsm>contact</jsm>(<js>"API Support"</js>, <js>"http://www.swagger.io/support"</js>, <js>"support@swagger.io"</js>);
  *
@@ -38,7 +38,7 @@ import java.util.Set;
  * 	<jc>// Or just use toString() which does the same as above.</jc>
  * 	String json = x.toString();
  * </p>
- * <p class='bcode w800'>
+ * <p class='bcode'>
  * 	<jc>// Output</jc>
  * 	{
  * 		<js>"name"</js>: <js>"API Support"</js>,

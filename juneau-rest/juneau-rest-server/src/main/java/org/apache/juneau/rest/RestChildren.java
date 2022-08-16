@@ -171,7 +171,7 @@ public class RestChildren {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Called during servlet initialization on all children to invoke all {@link HookEvent#POST_INIT} methods.
+	 * Called during servlet initialization on all children to invoke all {@link RestPostInit} child-last methods.
 	 *
 	 * @throws ServletException Error occurred.
 	 */
@@ -181,7 +181,7 @@ public class RestChildren {
 	}
 
 	/**
-	 * Called during servlet initialization on all children to invoke all {@link HookEvent#POST_INIT_CHILD_FIRST} methods.
+	 * Called during servlet initialization on all children to invoke all {@link RestPostInit} child-first methods.
 	 *
 	 * @throws ServletException Error occurred.
 	 */
@@ -191,7 +191,7 @@ public class RestChildren {
 	}
 
 	/**
-	 * Called during servlet destruction on all children to invoke all {@link HookEvent#DESTROY} and {@link Servlet#destroy()} methods.
+	 * Called during servlet destruction on all children to invoke all {@link RestDestroy} and {@link Servlet#destroy()} methods.
 	 */
 	public void destroy() {
 		for (RestContext r : children.values()) {

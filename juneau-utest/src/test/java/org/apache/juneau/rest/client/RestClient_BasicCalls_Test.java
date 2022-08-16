@@ -89,7 +89,7 @@ public class RestClient_BasicCalls_Test {
 		}
 		@RestOp(path="/checkHeader")
 		public String[] postHeader(org.apache.juneau.rest.RestRequest req) {
-			return req.getHeaders().getAll(req.getHeader("Check").orElse(null)).stream().map(x -> x.getValue()).toArray(String[]::new);
+			return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(x -> x.getValue()).toArray(String[]::new);
 		}
 		@RestOp(path="/",method="*")
 		public Reader echoMethod(@Method String method) {
@@ -100,18 +100,18 @@ public class RestClient_BasicCalls_Test {
 	@Test
 	public void a01_basic() throws Exception {
 		RestClient x = client().build();
-		x.get().run().assertContent().is("GET");
-		x.get("/").run().assertContent().is("GET");
-		x.get("").run().assertContent().is("GET");
-		x.put("/",null).run().assertContent().is("PUT");
-		x.post("/",null).run().assertContent().is("POST");
-		x.delete("/").run().assertContent().is("DELETE");
-		x.formPost("/").run().assertContent().is("POST");
+		x.get().run().assertContent("GET");
+		x.get("/").run().assertContent("GET");
+		x.get("").run().assertContent("GET");
+		x.put("/",null).run().assertContent("PUT");
+		x.post("/",null).run().assertContent("POST");
+		x.delete("/").run().assertContent("DELETE");
+		x.formPost("/").run().assertContent("POST");
 	}
 
 	@Test
 	public void a02_get() throws Exception {
-		client().build().get("/bean").run().assertContent().is("{f:1}");
+		client().build().get("/bean").run().assertContent("{f:1}");
 
 		assertThrown(()->client().build().get("/bean").content(bean).run()).asMessage().isContains("Method does not support content entity.");
 	}
@@ -127,24 +127,24 @@ public class RestClient_BasicCalls_Test {
 		);
 		RestClient x = client().build();
 		for (Object url : urls) {
-			x.get(url).run().assertContent().is("{f:1}");
+			x.get(url).run().assertContent("{f:1}");
 		}
 	}
 
 	@Test
 	public void a04_put() throws Exception {
-		client().build().put("/bean",bean).run().assertContent().is("{f:1}");
-		client().build().put("/bean").content(bean).run().assertContent().is("{f:1}");
-		client().build().put("/bean",TestSupplier.of(bean)).run().assertContent().is("{f:1}");
-		client().build().put("/bean").content(TestSupplier.of(bean)).run().assertContent().is("{f:1}");
+		client().build().put("/bean",bean).run().assertContent("{f:1}");
+		client().build().put("/bean").content(bean).run().assertContent("{f:1}");
+		client().build().put("/bean",TestSupplier.of(bean)).run().assertContent("{f:1}");
+		client().build().put("/bean").content(TestSupplier.of(bean)).run().assertContent("{f:1}");
 	}
 
 	@Test
 	public void a05_put_bodyString() throws Exception {
-		client().build().put("/bean","{f:1}",APPLICATION_JSON).run().assertContent().is("{f:1}");
-		client().build().put("/bean").contentString("{f:1}").simpleJson().run().assertContent().is("{f:1}");
-		client().build().put("/bean").contentString("").simpleJson().run().assertContent().is("{f:0}");
-		client().build().put("/bean").contentString(null).simpleJson().run().assertContent().is("null");
+		client().build().put("/bean","{f:1}",APPLICATION_JSON).run().assertContent("{f:1}");
+		client().build().put("/bean").contentString("{f:1}").simpleJson().run().assertContent("{f:1}");
+		client().build().put("/bean").contentString("").simpleJson().run().assertContent("{f:0}");
+		client().build().put("/bean").contentString(null).simpleJson().run().assertContent("null");
  	}
 
 	@Test
@@ -158,9 +158,9 @@ public class RestClient_BasicCalls_Test {
 		);
 		RestClient x = client().build();
 		for (Object url : urls) {
-			x.put(url,bean).run().assertContent().is("{f:1}");
-			x.put(url,"{f:1}",APPLICATION_JSON).run().assertContent().is("{f:1}");
-			x.put(url).content(bean).run().assertContent().is("{f:1}");
+			x.put(url,bean).run().assertContent("{f:1}");
+			x.put(url,"{f:1}",APPLICATION_JSON).run().assertContent("{f:1}");
+			x.put(url).content(bean).run().assertContent("{f:1}");
 		}
 	}
 
@@ -175,19 +175,19 @@ public class RestClient_BasicCalls_Test {
 			parts("f",1)
 		);
 		for (Object body : bodies) {
-			client().headers(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).build().put("/bean",body).run().assertContent().is("{f:1}");
+			client().headers(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).build().put("/bean",body).run().assertContent("{f:1}");
 		}
 	}
 
 	@Test
 	public void a08_post() throws Exception {
-		client().build().post("/bean",bean).run().assertContent().is("{f:1}");
-		client().build().post("/bean").content(bean).run().assertContent().is("{f:1}");
+		client().build().post("/bean",bean).run().assertContent("{f:1}");
+		client().build().post("/bean").content(bean).run().assertContent("{f:1}");
 	}
 
 	@Test
 	public void a09_post_stringBody() throws Exception {
-		client().build().post("/bean","{f:1}",APPLICATION_JSON).run().assertContent().is("{f:1}");
+		client().build().post("/bean","{f:1}",APPLICATION_JSON).run().assertContent("{f:1}");
 	}
 
 	@Test
@@ -201,9 +201,9 @@ public class RestClient_BasicCalls_Test {
 		);
 		RestClient x = client().build();
 		for (Object url : urls) {
-			x.post(url,bean).run().assertContent().is("{f:1}");
-			x.post(url,"{f:1}",APPLICATION_JSON).run().assertContent().is("{f:1}");
-			x.post(url).content(bean).run().assertContent().is("{f:1}");
+			x.post(url,bean).run().assertContent("{f:1}");
+			x.post(url,"{f:1}",APPLICATION_JSON).run().assertContent("{f:1}");
+			x.post(url).content(bean).run().assertContent("{f:1}");
 		}
 	}
 
@@ -218,13 +218,13 @@ public class RestClient_BasicCalls_Test {
 			parts("f",1)
 		);
 		for (Object body : bodies) {
-			client().headers(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).build().post("/bean",body).run().assertContent().is("{f:1}");
+			client().headers(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).build().post("/bean",body).run().assertContent("{f:1}");
 		}
 	}
 
 	@Test
 	public void a12_delete() throws Exception {
-		client().build().delete("/bean").run().assertContent().is("{f:1}");
+		client().build().delete("/bean").run().assertContent("{f:1}");
 	}
 
 	@Test
@@ -238,13 +238,13 @@ public class RestClient_BasicCalls_Test {
 		);
 		RestClient x = client().build();
 		for (Object url : urls) {
-			x.delete(url).run().assertContent().is("{f:1}");
+			x.delete(url).run().assertContent("{f:1}");
 		}
 	}
 
 	@Test
 	public void a14_options() throws Exception {
-		client().build().options("/bean").run().assertContent().is("{f:1}");
+		client().build().options("/bean").run().assertContent("{f:1}");
 	}
 
 	@Test
@@ -258,13 +258,13 @@ public class RestClient_BasicCalls_Test {
 		);
 		RestClient x = client().build();
 		for (Object url : urls) {
-			x.options(url).run().assertContent().is("{f:1}");
+			x.options(url).run().assertContent("{f:1}");
 		}
 	}
 
 	@Test
 	public void a16_head() throws Exception {
-		client().build().head("/bean").run().assertContent().is("");
+		client().build().head("/bean").run().assertContent("");
 	}
 
 	@Test
@@ -278,17 +278,17 @@ public class RestClient_BasicCalls_Test {
 		);
 		RestClient x = client().build();
 		for (Object url : urls) {
-			x.head(url).run().assertContent().is("");
+			x.head(url).run().assertContent("");
 		}
 	}
 
 	@Test
 	public void a18_formPost() throws Exception {
-		client().build().formPost("/bean",bean).accept("application/json+simple").run().assertContent().is("{f:1}");
+		client().build().formPost("/bean",bean).accept("application/json+simple").run().assertContent("{f:1}");
 
-		client().build().formPost("/bean",bean).content(bean).accept("application/json+simple").run().assertContent().is("{f:1}");
-		client().build().post("/bean").urlEnc().formDataBean(bean).content(bean).accept("application/json+simple").run().assertContent().is("{f:1}");
-		client().build().post("/bean").urlEnc().content(bean).formDataBean(bean).accept("application/json+simple").run().assertContent().is("{f:1}");
+		client().build().formPost("/bean",bean).content(bean).accept("application/json+simple").run().assertContent("{f:1}");
+		client().build().post("/bean").urlEnc().formDataBean(bean).content(bean).accept("application/json+simple").run().assertContent("{f:1}");
+		client().build().post("/bean").urlEnc().content(bean).formDataBean(bean).accept("application/json+simple").run().assertContent("{f:1}");
 	}
 
 	@Test
@@ -302,7 +302,7 @@ public class RestClient_BasicCalls_Test {
 		);
 		RestClient x = client().build();
 		for (Object url : urls) {
-			x.formPost(url,bean).accept("application/json+simple").run().assertContent().is("{f:1}");
+			x.formPost(url,bean).accept("application/json+simple").run().assertContent("{f:1}");
 		}
 	}
 
@@ -333,18 +333,18 @@ public class RestClient_BasicCalls_Test {
 
 	@Test
 	public void a21_formPostPairs() throws Exception {
-		client().build().formPostPairs("/bean",new StringBuilder("f"),new StringBuilder("1")).accept("application/json+simple").run().assertContent().is("{f:1}");
+		client().build().formPostPairs("/bean",new StringBuilder("f"),new StringBuilder("1")).accept("application/json+simple").run().assertContent("{f:1}");
 	}
 
 	@Test
 	public void a22_patch() throws Exception {
-		client().build().patch("/bean",bean).run().assertContent().is("{f:1}");
-		client().build().patch("/bean").content(bean).run().assertContent().is("{f:1}");
+		client().build().patch("/bean",bean).run().assertContent("{f:1}");
+		client().build().patch("/bean").content(bean).run().assertContent("{f:1}");
 	}
 
 	@Test
 	public void a23_patch_fromString() throws Exception {
-		client().build().patch("/bean","{f:1}",APPLICATION_JSON).run().assertContent().is("{f:1}");
+		client().build().patch("/bean","{f:1}",APPLICATION_JSON).run().assertContent("{f:1}");
 	}
 
 	@Test
@@ -359,7 +359,7 @@ public class RestClient_BasicCalls_Test {
 		);
 		RestClient x = client().build();
 		for (Object body : bodies) {
-			x.patch("/bean",body).header(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).run().assertContent().is("{f:1}");
+			x.patch("/bean",body).header(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).run().assertContent("{f:1}");
 		}
 	}
 
@@ -374,14 +374,14 @@ public class RestClient_BasicCalls_Test {
 		);
 		RestClient x = client().build();
 		for (Object url : urls) {
-			x.patch(url,bean).accept("application/json+simple").run().assertContent().is("{f:1}");
+			x.patch(url,bean).accept("application/json+simple").run().assertContent("{f:1}");
 		}
 	}
 
 	@Test
 	public void a26_request_PATCH() throws Exception {
-		client().build().request("patch","/bean",bean).run().assertContent().is("{f:1}");
-		client().build().request("patch","/bean").content(bean).run().assertContent().is("{f:1}");
+		client().build().request("patch","/bean",bean).run().assertContent("{f:1}");
+		client().build().request("patch","/bean").content(bean).run().assertContent("{f:1}");
 	}
 
 	@Test
@@ -396,7 +396,7 @@ public class RestClient_BasicCalls_Test {
 		);
 		RestClient x = client().build();
 		for (Object body : bodies) {
-			x.request("patch","/bean",body).header(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).run().assertContent().is("{f:1}");
+			x.request("patch","/bean",body).header(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).run().assertContent("{f:1}");
 		}
 	}
 
@@ -411,13 +411,13 @@ public class RestClient_BasicCalls_Test {
 		);
 		RestClient x = client().build();
 		for (Object url : urls) {
-			x.request("patch",url,bean).accept("application/json+simple").run().assertContent().is("{f:1}");
+			x.request("patch",url,bean).accept("application/json+simple").run().assertContent("{f:1}");
 		}
 	}
 
 	@Test
 	public void a29_request_GET() throws Exception {
-		client().build().request("get","/bean").run().assertContent().is("{f:1}");
+		client().build().request("get","/bean").run().assertContent("{f:1}");
 	}
 
 	@Test
@@ -431,7 +431,7 @@ public class RestClient_BasicCalls_Test {
 		);
 		RestClient x = client().build();
 		for (Object url : urls) {
-			x.request("get",url).accept("application/json+simple").run().assertContent().is("{f:1}");
+			x.request("get",url).accept("application/json+simple").run().assertContent("{f:1}");
 		}
 	}
 

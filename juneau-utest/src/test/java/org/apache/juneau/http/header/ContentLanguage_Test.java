@@ -51,10 +51,10 @@ public class ContentLanguage_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(contentLanguage(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(contentLanguage(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(contentLanguage(PARSED)).run().assertContent().is(VALUE);
-		c.get().header(contentLanguage(()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(contentLanguage(VALUE)).run().assertContent(VALUE);
+		c.get().header(contentLanguage(VALUE)).run().assertContent(VALUE);
+		c.get().header(contentLanguage(PARSED)).run().assertContent(VALUE);
+		c.get().header(contentLanguage(()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(contentLanguage((String)null)).run().assertContent().isEmpty();

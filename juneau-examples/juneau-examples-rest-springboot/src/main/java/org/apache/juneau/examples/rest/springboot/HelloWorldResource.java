@@ -12,12 +12,11 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.examples.rest.springboot;
 
-import javax.inject.*;
-
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.servlet.*;
+import org.springframework.beans.factory.annotation.*;
 
 /**
  * Sample REST resource that prints out a simple "Hello world!" message.
@@ -42,7 +41,7 @@ import org.apache.juneau.rest.servlet.*;
 )
 public class HelloWorldResource extends BasicRestObject implements BasicUniversalConfig {
 
-	@Inject
+	@Autowired
 	private HelloWorldMessageProvider messageProvider;
 
 	/**

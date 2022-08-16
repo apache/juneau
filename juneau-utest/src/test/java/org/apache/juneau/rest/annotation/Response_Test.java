@@ -63,11 +63,11 @@ public class Response_Test {
 		RestClient a = MockRestClient.buildLax(A.class);
 		a.get("/a")
 			.run()
-			.assertCode().is(201)
-			.assertContent().is("foo");
+			.assertStatus(201)
+			.assertContent("foo");
 		a.get("/b")
 			.run()
-			.assertCode().is(501);
+			.assertStatus(501);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -112,20 +112,20 @@ public class Response_Test {
 		RestClient b = MockRestClient.buildLax(B.class);
 		b.get("/a")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("foo");
+			.assertStatus(200)
+			.assertContent("foo");
 		b.get("/b")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("foo");
+			.assertStatus(200)
+			.assertContent("foo");
 		b.get("/c")
 			.run()
-			.assertCode().is(500)
-			.assertContent().is("foo");
+			.assertStatus(500)
+			.assertContent("foo");
 		b.get("/d")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("foo");
+			.assertStatus(200)
+			.assertContent("foo");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -203,36 +203,36 @@ public class Response_Test {
 		RestClient d = MockRestClient.buildLax(D.class);
 		d.get("/a")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("foo|bar");
+			.assertStatus(200)
+			.assertContent("foo|bar");
 		d.get("/b")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("Zm9v");
+			.assertStatus(200)
+			.assertContent("Zm9v");
 		d.get("/c")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("foo|bar");
+			.assertStatus(200)
+			.assertContent("foo|bar");
 		d.get("/d")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("Zm9v");
+			.assertStatus(200)
+			.assertContent("Zm9v");
 		d.get("/e")
 			.run()
-			.assertCode().is(500)
-			.assertContent().is("foo|bar");
+			.assertStatus(500)
+			.assertContent("foo|bar");
 		d.get("/f")
 			.run()
-			.assertCode().is(500)
-			.assertContent().is("Zm9v");
+			.assertStatus(500)
+			.assertContent("Zm9v");
 		d.get("/g")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("foo|bar");
+			.assertStatus(200)
+			.assertContent("foo|bar");
 		d.get("/h")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("Zm9v");
+			.assertStatus(200)
+			.assertContent("Zm9v");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -276,20 +276,20 @@ public class Response_Test {
 		RestClient e = MockRestClient.build(E.class);
 		e.get("/a")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("foo");
+			.assertStatus(200)
+			.assertContent("foo");
 		e.get("/b")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("foo");
+			.assertStatus(200)
+			.assertContent("foo");
 		e.get("/c")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("foo");
+			.assertStatus(200)
+			.assertContent("foo");
 		e.get("/d")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("foo");
+			.assertStatus(200)
+			.assertContent("foo");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -330,19 +330,19 @@ public class Response_Test {
 		RestClient g = MockRestClient.build(G.class);
 		g.get("/a").json()
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("[1,2]");
+			.assertStatus(200)
+			.assertContent("[1,2]");
 		g.get("/b").json()
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("[1,2]");
+			.assertStatus(200)
+			.assertContent("[1,2]");
 		g.get("/c").json()
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("[1,2]");
+			.assertStatus(200)
+			.assertContent("[1,2]");
 		g.get("/d").json()
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("[1,2]");
+			.assertStatus(200)
+			.assertContent("[1,2]");
 	}
 }

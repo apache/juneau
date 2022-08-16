@@ -14,10 +14,10 @@ package org.apache.juneau.rest.springboot;
 
 import java.util.*;
 
-import javax.inject.*;
-
 import org.apache.juneau.cp.*;
+import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.servlet.*;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.*;
 
 /**
@@ -41,10 +41,16 @@ public abstract class SpringRestServlet extends RestServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	@Inject
+	@Autowired
 	private Optional<ApplicationContext> appContext;
 
-	@Override /* RestServlet */
+	/**
+	 * Hook into Spring bean injection framework.
+	 *
+	 * @param parent Optional parent resource.
+	 * @return A BeanStore that retrieves beans from the Spring Boot app context.
+	 */
+	@RestInject
 	public BeanStore createBeanStore(Optional<BeanStore> parent) {
 		return new SpringBeanStore(appContext, parent, this);
 	}

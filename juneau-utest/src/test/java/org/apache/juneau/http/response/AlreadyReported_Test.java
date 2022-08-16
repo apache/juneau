@@ -35,15 +35,15 @@ public class AlreadyReported_Test {
 
 		client.get("/a1")
 			.run()
-			.assertCode().is(208)
-			.assertContent().is("Already Reported");
+			.assertStatus(208)
+			.assertContent("Already Reported");
 		client.get("/a2")
 			.run()
-			.assertCode().is(208)
-			.assertContent().is("foo");
+			.assertStatus(208)
+			.assertContent("foo");
 		client.get("/a3")
 			.run()
-			.assertCode().is(208)
+			.assertStatus(208)
 			.assertHeader("Foo").is("bar");
 	}
 }

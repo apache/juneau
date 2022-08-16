@@ -56,10 +56,10 @@ public class BasicUriHeader_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(uriHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
-		c.get().header(uriHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
-		c.get().header(uriHeader(HEADER,PARSED)).run().assertContent().is(VALUE);
-		c.get().header(uriHeader(HEADER,()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(uriHeader(HEADER,VALUE)).run().assertContent(VALUE);
+		c.get().header(uriHeader(HEADER,VALUE)).run().assertContent(VALUE);
+		c.get().header(uriHeader(HEADER,PARSED)).run().assertContent(VALUE);
+		c.get().header(uriHeader(HEADER,()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(uriHeader(HEADER,(Supplier<URI>)null)).run().assertContent().isEmpty();

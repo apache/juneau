@@ -59,30 +59,30 @@ public class PathRemainder_Test {
 	public void a01_basic() throws Exception {
 		RestClient a = MockRestClient.build(A.class);
 
-		a.get("/a").run().assertContent().is("null");
-		a.get("/a/").run().assertContent().is("");
-		a.get("/a/foo").run().assertContent().is("foo");
-		a.get("/a/foo/bar").run().assertContent().is("foo/bar");
+		a.get("/a").run().assertContent("null");
+		a.get("/a/").run().assertContent("");
+		a.get("/a/foo").run().assertContent("foo");
+		a.get("/a/foo/bar").run().assertContent("foo/bar");
 
-		a.get("/b").run().assertContent().is("null");
-		a.get("/b/").run().assertContent().is("");
-		a.get("/b/foo").run().assertContent().is("foo");
-		a.get("/b/foo/bar").run().assertContent().is("foo/bar");
+		a.get("/b").run().assertContent("null");
+		a.get("/b/").run().assertContent("");
+		a.get("/b/foo").run().assertContent("foo");
+		a.get("/b/foo/bar").run().assertContent("foo/bar");
 
-		a.put("/c").run().assertContent().is("null");
-		a.put("/c/").run().assertContent().is("");
-		a.put("/c/foo").run().assertContent().is("foo");
-		a.put("/c/foo/bar").run().assertContent().is("foo/bar");
+		a.put("/c").run().assertContent("null");
+		a.put("/c/").run().assertContent("");
+		a.put("/c/foo").run().assertContent("foo");
+		a.put("/c/foo/bar").run().assertContent("foo/bar");
 
-		a.post("/d").run().assertContent().is("null");
-		a.post("/d/").run().assertContent().is("");
-		a.post("/d/foo").run().assertContent().is("foo");
-		a.post("/d/foo/bar").run().assertContent().is("foo/bar");
+		a.post("/d").run().assertContent("null");
+		a.post("/d/").run().assertContent("");
+		a.post("/d/foo").run().assertContent("foo");
+		a.post("/d/foo/bar").run().assertContent("foo/bar");
 
-		a.delete("/e").run().assertContent().is("null");
-		a.delete("/e/").run().assertContent().is("");
-		a.delete("/e/foo").run().assertContent().is("foo");
-		a.delete("/e/foo/bar").run().assertContent().is("foo/bar");
+		a.delete("/e").run().assertContent("null");
+		a.delete("/e/").run().assertContent("");
+		a.delete("/e/foo").run().assertContent("foo");
+		a.delete("/e/foo/bar").run().assertContent("foo/bar");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -117,19 +117,19 @@ public class PathRemainder_Test {
 		RestClient b = MockRestClient.buildJson(B.class);
 		b.get("/a/123")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("123");
+			.assertStatus(200)
+			.assertContent("123");
 		b.put("/b/a=1,b=foo")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("{a:1,b:'foo'}");
+			.assertStatus(200)
+			.assertContent("{a:1,b:'foo'}");
 		b.post("/c/@((a=1,b=foo))")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("[{a:1,b:'foo'}]");
+			.assertStatus(200)
+			.assertContent("[{a:1,b:'foo'}]");
 		b.delete("/d/@((a=1,b=foo))")
 			.run()
-			.assertCode().is(200)
-			.assertContent().is("[{a:1,b:'foo'}]");
+			.assertStatus(200)
+			.assertContent("[{a:1,b:'foo'}]");
 	}
 }

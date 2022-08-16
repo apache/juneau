@@ -51,10 +51,10 @@ public class Vary_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(vary(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(vary(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(vary(PARSED)).run().assertContent().is(VALUE);
-		c.get().header(vary(()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(vary(VALUE)).run().assertContent(VALUE);
+		c.get().header(vary(VALUE)).run().assertContent(VALUE);
+		c.get().header(vary(PARSED)).run().assertContent(VALUE);
+		c.get().header(vary(()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(vary((String)null)).run().assertContent().isEmpty();

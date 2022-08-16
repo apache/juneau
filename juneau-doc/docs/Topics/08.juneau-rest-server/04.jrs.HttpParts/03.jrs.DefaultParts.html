@@ -17,7 +17,53 @@
 
 <div class='topic'>
 	<p>
-		The following annotations are provided for specifying default part values for requests and responses:
+		By default, HTTP parts that don't have value (such as missing query parameters) end up with null
+		values:
+	</p>
+	<p class='bjava'>
+		|	<ja>@RestPost</ja>(<js>"/example"</js>)
+		|	<jk>public</jk> String doGetExample1(
+		|		<ja>@Query</ja>(<js>"p1"</js>) <jk>int</jk> <jv>p1</jv>,
+		|		<ja>@FormData</ja>(<js>"f1"</js>) MyBean <jv>f1</jv>,
+		|		<ja>@Header</ja>(<js>"Accept-Language"</js>) AcceptLanguage <jv>h1</jv>
+		|	) {
+		|		<jk>if</jk> (<jv>p1</jv> == <jk>null</jk>) <jv>p1</jv> = -1;
+		|		<jk>if</jk> (<jv>f1</jv> == <jk>null</jk>) <jv>f1</jv> = <jsf>DEFAULT_BEAN</jsf>;
+		|		<jk>if</jk> (<jv>h1</jv> == <jk>null</jk>) <jv>h1</jv> = AcceptLanguage.<jsm>of</jsm>(<js>"en"</js>);
+		|	}
+	</p>
+	<p>
+		You have several options to provide default values for HTTP parts.  The most common is to simply
+		use {@link java.util.Optional} parameters and handle default values programmatically:
+	</p>
+	<p class='bjava'>
+		|	<ja>@RestPost</ja>(<js>"/example"</js>)
+		|	<jk>public</jk> String doGetExample1(
+		|		<ja>@Query</ja>(<js>"p1"</js>) Optional&lt;Integer&gt; <jv>p1</jv>,
+		|		<ja>@FormData</ja>(<js>"f1"</js>) Optional&lt;MyBean&gt; <jv>f1</jv>,
+		|		<ja>@Header</ja>(<js>"Accept-Language"</js>) Optional&lt;AcceptLanguage&gt; <jv>h1</jv>
+		|	) {
+		|		<jk>int</jk> <jv>_p1</jv> = <jv>p1</jv>.orElse(-1);
+		|		Bean <jv>_f1</jv> = <jv>f1</jv>.orElse(<jsf>DEFAULT_BEAN</jsf>);
+		|		AcceptLanguage <jv>_h1</jv> = <jv>h1</jv>.orElse(AcceptLanguage.<jsm>of</jsm>(<js>"en"</js>));
+		|	}
+	</p>
+	<p>
+		You can also specify default values on the annotations:
+	</p>
+	<p class='bjava'>
+		|	<ja>@RestPost</ja>(<js>"/example"</js>)
+		|	<jk>public</jk> String doGetExample1(
+		|		<ja>@Query</ja>(name=<js>"p1"</js>, def=<js>"-1"</js>) <jk>int</jk> <jv>p1</jv>,
+		|		<ja>@FormData</ja>(name=<js>"f1"</js>, def=<js>"foo=bar,baz=qux"</js>) MyBean <jv>f1</jv>,
+		|		<ja>@Header</ja>(name=<js>"Accept-Language"</js>, def=<js>"en"</js>) AcceptLanguage <jv>lang</jv>
+		|	) {
+		|		...
+		|	}
+	</p>
+	<p>
+		A third option is to specify default values via the {@link oajr.annotation.Rest} and
+		{@link oajr.annotation.RestOp} annotations. 
 	</p>
 	<ul class='javatree'>
 		<li class='ja'>{@link oajr.annotation.Rest} 
@@ -65,49 +111,29 @@
 	<ul class='javatree'>
 		<li class='jc'>{@link oajr.RestContext.Builder}
 			<ul class='javatreec'>
-				<li class='jmp'>{@link oajr.RestContext.Builder#createDefaultRequestAttributes(BeanStore,Supplier) createDefaultRequestAttributes(BeanStore,Supplier)}
-				<li class='jmp'>{@link oajr.RestContext.Builder#createDefaultRequestHeaders(BeanStore,Supplier) createDefaultRequestHeaders(BeanStore,Supplier)}
-				<li class='jmp'>{@link oajr.RestContext.Builder#createDefaultResponseHeaders(BeanStore,Supplier) createDefaultResponseHeaders(BeanStore,Supplier)}
 				<li class='jm'>{@link oajr.RestContext.Builder#defaultAccept(String) defaultAccept(String)}
 				<li class='jm'>{@link oajr.RestContext.Builder#defaultCharset(Charset) defaultCharset(Charset)}
 				<li class='jm'>{@link oajr.RestContext.Builder#defaultContentType(String) defaultContentType(String)}
 				<li class='jm'>{@link oajr.RestContext.Builder#defaultRequestAttributes() defaultRequestAttributes()}
-				<li class='jm'>{@link oajr.RestContext.Builder#defaultRequestAttributes(Consumer) defaultRequestAttributes(Consumer)}
 				<li class='jm'>{@link oajr.RestContext.Builder#defaultRequestAttributes(NamedAttribute...) defaultRequestAttributes(NamedAttribute...)}
 				<li class='jm'>{@link oajr.RestContext.Builder#defaultRequestHeaders() defaultRequestHeaders()}
-				<li class='jm'>{@link oajr.RestContext.Builder#defaultRequestHeaders(Consumer) defaultRequestHeaders(Consumer)}
 				<li class='jm'>{@link oajr.RestContext.Builder#defaultRequestHeaders(Header...) defaultRequestHeaders(Header...)}
 				<li class='jm'>{@link oajr.RestContext.Builder#defaultResponseHeaders() defaultResponseHeaders()}
-				<li class='jm'>{@link oajr.RestContext.Builder#defaultResponseHeaders(Consumer) defaultResponseHeaders(Consumer)}
-				<li class='jm'>{@link oajr.RestContext.Builder#defaultResponseHeaders(Header...) defaultResponseHeaders(Header...)}
-				<li class='jm'>{@link oajr.RestContext.Builder#defaultRequestAttributes() defaultRequestAttributes()}
-				<li class='jm'>{@link oajr.RestContext.Builder#defaultRequestAttributes(Consumer) defaultRequestAttributes(Consumer)}
-				<li class='jm'>{@link oajr.RestContext.Builder#defaultRequestAttributes(NamedAttribute...) defaultRequestAttributes(NamedAttribute...)}
-				<li class='jm'>{@link oajr.RestContext.Builder#defaultRequestHeaders() defaultRequestHeaders()}
-				<li class='jm'>{@link oajr.RestContext.Builder#defaultRequestHeaders(Consumer) defaultRequestHeaders(Consumer)}
-				<li class='jm'>{@link oajr.RestContext.Builder#defaultRequestHeaders(Header...) defaultRequestHeaders(Header...)}
-				<li class='jm'>{@link oajr.RestContext.Builder#defaultResponseHeaders() defaultResponseHeaders()}
-				<li class='jm'>{@link oajr.RestContext.Builder#defaultResponseHeaders(Consumer) defaultResponseHeaders(Consumer)}
 				<li class='jm'>{@link oajr.RestContext.Builder#defaultResponseHeaders(Header...) defaultResponseHeaders(Header...)}
 			</ul>
 		</li>
 		<li class='jc'>{@link oajr.RestOpContext.Builder}
 			<ul class='javatreec'>
-				<li class='jmp'>{@link oajr.RestOpContext.Builder#createDefaultRequestAttributes(BeanStore,RestContext.Builder,Supplier) createDefaultRequestAttributes(BeanStore,Builder,Supplier)}
-				<li class='jmp'>{@link oajr.RestOpContext.Builder#createDefaultRequestFormData(BeanStore,RestContext.Builder,Supplier) createDefaultRequestFormData(BeanStore,Builder,Supplier)}
-				<li class='jmp'>{@link oajr.RestOpContext.Builder#createDefaultRequestHeaders(BeanStore,RestContext.Builder,Supplier) createDefaultRequestHeaders(BeanStore,Builder,Supplier)}
-				<li class='jmp'>{@link oajr.RestOpContext.Builder#createDefaultRequestQueryData(BeanStore,RestContext.Builder,Supplier) createDefaultRequestQueryData(BeanStore,Builder,Supplier)}
-				<li class='jmp'>{@link oajr.RestOpContext.Builder#createDefaultResponseHeaders(BeanStore,RestContext.Builder,Supplier) createDefaultResponseHeaders(BeanStore,Builder,Supplier)}
 				<li class='jm'>{@link oajr.RestOpContext.Builder#defaultRequestAttributes() defaultRequestAttributes()}
-				<li class='jm'>{@link oajr.RestOpContext.Builder#defaultRequestAttributes(Consumer) defaultRequestAttributes(Consumer)}
+				<li class='jm'>{@link oajr.RestOpContext.Builder#defaultRequestAttributes(NamedAttribute...) defaultRequestAttributes(NamedAttribute...)}
 				<li class='jm'>{@link oajr.RestOpContext.Builder#defaultRequestFormData() defaultRequestFormData()}
-				<li class='jm'>{@link oajr.RestOpContext.Builder#defaultRequestFormData(Consumer) defaultRequestFormData(Consumer)}
+				<li class='jm'>{@link oajr.RestOpContext.Builder#defaultRequestFormData(NameValuePair...) defaultRequestFormData(NameValuePair...)}
 				<li class='jm'>{@link oajr.RestOpContext.Builder#defaultRequestHeaders() defaultRequestHeaders()}
-				<li class='jm'>{@link oajr.RestOpContext.Builder#defaultRequestHeaders(Consumer) defaultRequestHeaders(Consumer)}
+				<li class='jm'>{@link oajr.RestOpContext.Builder#defaultRequestHeaders(Header...) defaultRequestHeaders(Header...)}
 				<li class='jm'>{@link oajr.RestOpContext.Builder#defaultRequestQueryData() defaultRequestQueryData()}
-				<li class='jm'>{@link oajr.RestOpContext.Builder#defaultRequestQueryData(Consumer) defaultRequestQueryData(Consumer)}
+				<li class='jm'>{@link oajr.RestOpContext.Builder#defaultRequestQueryData(NameValuePair...) defaultRequestQueryData(NameValuePair...)}
 				<li class='jm'>{@link oajr.RestOpContext.Builder#defaultResponseHeaders() defaultResponseHeaders()}
-				<li class='jm'>{@link oajr.RestOpContext.Builder#defaultResponseHeaders(Consumer) defaultResponseHeaders(Consumer)}
+				<li class='jm'>{@link oajr.RestOpContext.Builder#defaultResponseHeaders(Header...) defaultResponseHeaders(Header...)}
 			</ul>
 		</li>
 	</ul>

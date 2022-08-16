@@ -13,8 +13,6 @@
 package org.apache.juneau.rest.rrpc;
 
 import static org.apache.juneau.internal.StringUtils.*;
-import static org.apache.juneau.rest.HttpRuntimeException.*;
-
 import java.io.*;
 import java.lang.reflect.*;
 
@@ -134,8 +132,10 @@ public class RrpcRestOpSession extends RestOpSession {
 					}
 					res.setContent(m.invoke(o, args));
 					return;
+				} catch (BasicHttpException e) {
+					throw e;
 				} catch (Exception e) {
-					throw toHttpException(e, InternalServerError.class);
+					throw new InternalServerError(e);
 				}
 			}
 		}

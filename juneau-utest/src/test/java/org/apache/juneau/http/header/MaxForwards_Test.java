@@ -51,10 +51,10 @@ public class MaxForwards_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(maxForwards(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(maxForwards(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(maxForwards(PARSED)).run().assertContent().is(VALUE);
-		c.get().header(maxForwards(()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(maxForwards(VALUE)).run().assertContent(VALUE);
+		c.get().header(maxForwards(VALUE)).run().assertContent(VALUE);
+		c.get().header(maxForwards(PARSED)).run().assertContent(VALUE);
+		c.get().header(maxForwards(()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(maxForwards((String)null)).run().assertContent().isEmpty();

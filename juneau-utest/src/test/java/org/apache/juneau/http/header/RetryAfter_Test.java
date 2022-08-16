@@ -57,15 +57,15 @@ public class RetryAfter_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(retryAfter(VALUE1)).run().assertContent().is(VALUE1);
-		c.get().header(retryAfter(VALUE1)).run().assertContent().is(VALUE1);
-		c.get().header(retryAfter(PARSED1)).run().assertContent().is(VALUE1);
-		c.get().header(retryAfter(()->PARSED1)).run().assertContent().is(VALUE1);
+		c.get().header(retryAfter(VALUE1)).run().assertContent(VALUE1);
+		c.get().header(retryAfter(VALUE1)).run().assertContent(VALUE1);
+		c.get().header(retryAfter(PARSED1)).run().assertContent(VALUE1);
+		c.get().header(retryAfter(()->PARSED1)).run().assertContent(VALUE1);
 
-		c.get().header(retryAfter(VALUE2)).run().assertContent().is(VALUE2);
-		c.get().header(retryAfter(VALUE2)).run().assertContent().is(VALUE2);
-		c.get().header(retryAfter(PARSED2)).run().assertContent().is(VALUE2);
-		c.get().header(retryAfter(()->PARSED2)).run().assertContent().is(VALUE2);
+		c.get().header(retryAfter(VALUE2)).run().assertContent(VALUE2);
+		c.get().header(retryAfter(VALUE2)).run().assertContent(VALUE2);
+		c.get().header(retryAfter(PARSED2)).run().assertContent(VALUE2);
+		c.get().header(retryAfter(()->PARSED2)).run().assertContent(VALUE2);
 
 		// Invalid usage.
 		c.get().header(retryAfter((String)null)).run().assertContent().isEmpty();

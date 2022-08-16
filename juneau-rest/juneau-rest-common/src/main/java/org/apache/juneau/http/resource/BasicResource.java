@@ -78,7 +78,7 @@ public class BasicResource implements HttpResource {
 	 * @throws IOException Rethrown from {@link HttpEntity#getContent()}.
 	 */
 	public BasicResource(HttpResponse response) throws IOException {
-		this(create(null, InputStreamEntity.class).copyFrom(response));
+		this(create(null, StreamEntity.class).copyFrom(response));
 	}
 
 	/**

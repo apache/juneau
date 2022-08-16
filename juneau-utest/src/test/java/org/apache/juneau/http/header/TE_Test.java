@@ -52,10 +52,10 @@ public class TE_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(te(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(te(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(te(PARSED)).run().assertContent().is(VALUE);
-		c.get().header(te(()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(te(VALUE)).run().assertContent(VALUE);
+		c.get().header(te(VALUE)).run().assertContent(VALUE);
+		c.get().header(te(PARSED)).run().assertContent(VALUE);
+		c.get().header(te(()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(te((String)null)).run().assertContent().isEmpty();

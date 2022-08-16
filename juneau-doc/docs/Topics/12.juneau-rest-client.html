@@ -114,13 +114,13 @@ specific language governing permissions and limitations under the License.
 	</p>
 	<p>
 		Clients are typically created with a root URI so that relative URIs can be used when making requests.
-		This is done using the {@link oajrc.RestClient.Builder#rootUri(Object)} method.
+		This is done using the {@link oajrc.RestClient.Builder#rootUrl(Object)} method.
 	</p>
 	
 	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
 		|	<jc>// Create a client where all URIs are relative to localhost.</jc>
-		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().rootUri(<js>"http://localhost:10000"</js>).build();
+		|	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:10000"</js>).build();
 		|
 		|	<jc>// Use relative paths.</jc>
 		|	String <jv>content</jv> = <jv>client</jv>.get(<js>"/subpath"</js>).run().getContent().asString();

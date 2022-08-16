@@ -51,10 +51,10 @@ public class Via_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(via(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(via(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(via(PARSED)).run().assertContent().is(VALUE);
-		c.get().header(via(()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(via(VALUE)).run().assertContent(VALUE);
+		c.get().header(via(VALUE)).run().assertContent(VALUE);
+		c.get().header(via(PARSED)).run().assertContent(VALUE);
+		c.get().header(via(()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(via((String)null)).run().assertContent().isEmpty();

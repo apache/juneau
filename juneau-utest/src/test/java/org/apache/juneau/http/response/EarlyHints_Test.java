@@ -35,15 +35,15 @@ public class EarlyHints_Test {
 
 		client.get("/a1")
 			.run()
-			.assertCode().is(1103)
-			.assertContent().is("Early Hints");
+			.assertStatus(1103)
+			.assertContent("Early Hints");
 		client.get("/a2")
 			.run()
-			.assertCode().is(1103)
-			.assertContent().is("foo");
+			.assertStatus(1103)
+			.assertContent("foo");
 		client.get("/a3")
 			.run()
-			.assertCode().is(1103)
+			.assertStatus(1103)
 			.assertHeader("Foo").is("bar");
 	}
 }

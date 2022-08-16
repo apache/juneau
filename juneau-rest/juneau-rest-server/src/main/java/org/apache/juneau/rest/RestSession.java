@@ -226,7 +226,7 @@ public class RestSession extends ContextSession {
 		super(builder);
 		context = builder.ctx;
 		resource = builder.resource;
-		beanStore = BeanStore.of(context.getRootBeanStore(), resource).addBean(RestContext.class, context);
+		beanStore = BeanStore.of(context.getBeanStore(), resource).addBean(RestContext.class, context);
 
 		req = beanStore.add(HttpServletRequest.class, builder.req);
 		res = beanStore.add(HttpServletResponse.class, builder.res);
@@ -544,9 +544,9 @@ public class RestSession extends ContextSession {
 	 * Does the following:
 	 * <ol>
 	 * 	<li>Finds the Java method to invoke and creates a {@link RestOpSession} for it.
-	 * 	<li>Invokes {@link HookEvent#PRE_CALL} methods by calling {@link RestContext#preCall(RestOpSession)}.
+	 * 	<li>Invokes {@link RestPreCall} methods by calling {@link RestContext#preCall(RestOpSession)}.
 	 * 	<li>Invokes Java method by calling {@link RestOpSession#run()}.
-	 * 	<li>Invokes {@link HookEvent#POST_CALL} methods by calling {@link RestContext#postCall(RestOpSession)}.
+	 * 	<li>Invokes {@link RestPostCall} methods by calling {@link RestContext#postCall(RestOpSession)}.
 	 * 	<li>If the Java method produced output, finds the response processor for it and runs it by calling {@link RestContext#processResponse(RestOpSession)}.
 	 * 	<li>If no Java method matched, generates a 404/405/412 by calling {@link RestContext#handleNotFound(RestSession)}.
 	 * </ol>

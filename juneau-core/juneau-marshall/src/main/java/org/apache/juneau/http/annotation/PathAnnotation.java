@@ -96,6 +96,18 @@ public class PathAnnotation {
 		return n;
 	}
 
+	/**
+	 * Finds the default value from the specified list of annotations.
+	 *
+	 * @param pi The parameter.
+	 * @return The last matching default value, or {@link Value#empty()} if not found.
+	 */
+	public static Value<String> findDef(ParamInfo pi) {
+		Value<String> n = Value.empty();
+		pi.forEachAnnotation(Path.class, x -> isNotEmpty(x.def()), x -> n.set(x.def()));
+		return n;
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Builder
 	//-----------------------------------------------------------------------------------------------------------------
@@ -112,7 +124,7 @@ public class PathAnnotation {
 		Class<? extends HttpPartParser> parser = HttpPartParser.Void.class;
 		Class<? extends HttpPartSerializer> serializer = HttpPartSerializer.Void.class;
 		Schema schema = SchemaAnnotation.DEFAULT;
-		String name="", value="";
+		String name="", value="", def="";
 
 		/**
 		 * Constructor.
@@ -138,6 +150,17 @@ public class PathAnnotation {
 		 */
 		public Builder name(String value) {
 			this.name = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Path#name} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder def(String value) {
+			this.def = value;
 			return this;
 		}
 
@@ -228,11 +251,12 @@ public class PathAnnotation {
 
 		private final Class<? extends HttpPartParser> parser;
 		private final Class<? extends HttpPartSerializer> serializer;
-		private final String  name, value;
+		private final String  name, value, def;
 		private final Schema schema;
 
 		Impl(Builder b) {
 			super(b);
+			this.def = b.def;
 			this.name = b.name;
 			this.parser = b.parser;
 			this.schema = b.schema;
@@ -244,6 +268,11 @@ public class PathAnnotation {
 		@Override /* Path */
 		public String name() {
 			return name;
+		}
+
+		@Override /* Path */
+		public String def() {
+			return def;
 		}
 
 		@Override /* Path */

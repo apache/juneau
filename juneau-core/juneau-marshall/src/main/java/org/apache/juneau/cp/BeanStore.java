@@ -26,6 +26,7 @@ import java.util.stream.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.internal.*;
+import org.apache.juneau.marshaller.*;
 import org.apache.juneau.reflect.*;
 
 /**
@@ -352,7 +353,7 @@ public class BeanStore {
 		BeanStoreEntry<T> e = createEntry(beanType, bean, name);
 		try (SimpleLock x = lock.write()) {
 			entries.addFirst(e);
-			if (name == null)
+			if (isEmpty(name))
 				unnamedEntries.put(beanType, e);
 		}
 		return this;
@@ -655,7 +656,7 @@ public class BeanStore {
 
 	@Override /* Object */
 	public String toString() {
-		return properties().asString();
+		return SimpleJson.of(properties());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -680,7 +681,7 @@ public class BeanStore {
 
 	// <FluentSetters>
 
-		// </FluentSetters>
+	// </FluentSetters>
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Helper methods
@@ -700,6 +701,7 @@ public class BeanStore {
 	private JsonMap properties() {
 		Predicate<Boolean> nf = ObjectUtils::isTrue;
 		return filteredMap()
+			.append("identity", ObjectUtils.identity(this))
 			.append("entries", entries.stream().map(x -> x.properties()).collect(toList()))
 			.append("outer", ObjectUtils.identity(outer.orElse(null)))
 			.append("parent", parent.map(x->x.properties()).orElse(null))

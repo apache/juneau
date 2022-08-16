@@ -74,7 +74,6 @@ public class RestGetAnnotation {
 		Class<? extends RestConverter>[] converters = new Class[0];
 		Class<? extends RestGuard>[] guards = new Class[0];
 		Class<? extends RestMatcher>[] matchers = new Class[0];
-		Class<? extends RestOpContext> contextClass = RestOpContext.Void.class;
 		Class<? extends Encoder>[] encoders = new Class[0];
 		Class<? extends Serializer>[] serializers = new Class[0];
 		OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
@@ -105,17 +104,6 @@ public class RestGetAnnotation {
 		 */
 		public Builder clientVersion(String value) {
 			this.clientVersion = value;
-			return this;
-		}
-
-		/**
-		 * Sets the {@link RestGet#contextClass()} property on this annotation.
-		 *
-		 * @param value The new value for this property.
-		 * @return This object.
-		 */
-		public Builder contextClass(Class<? extends RestOpContext> value) {
-			this.contextClass = value;
 			return this;
 		}
 
@@ -365,7 +353,6 @@ public class RestGetAnnotation {
 		private final Class<? extends RestConverter>[] converters;
 		private final Class<? extends RestGuard>[] guards;
 		private final Class<? extends RestMatcher>[] matchers;
-		private final Class<? extends RestOpContext> contextClass;
 		private final Class<? extends Encoder>[] encoders;
 		private final Class<? extends Serializer>[] serializers;
 		private final OpSwagger swagger;
@@ -375,7 +362,6 @@ public class RestGetAnnotation {
 		Impl(Builder b) {
 			super(b);
 			this.clientVersion = b.clientVersion;
-			this.contextClass = b.contextClass;
 			this.converters = copyOf(b.converters);
 			this.debug = b.debug;
 			this.defaultAccept = b.defaultAccept;
@@ -402,11 +388,6 @@ public class RestGetAnnotation {
 		@Override /* RestGet */
 		public String clientVersion() {
 			return clientVersion;
-		}
-
-		@Override /* RestGet */
-		public Class<? extends RestOpContext> contextClass() {
-			return contextClass;
 		}
 
 		@Override /* RestGet */
@@ -536,7 +517,6 @@ public class RestGetAnnotation {
 
 			classes(a.serializers()).ifPresent(x -> b.serializers().set(x));
 			classes(a.encoders()).ifPresent(x -> b.encoders().set(x));
-			type(a.contextClass()).ifPresent(x -> b.type(x));
 			stream(a.produces()).map(MediaType::of).forEach(x -> b.produces(x));
 			stream(a.defaultRequestHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultRequestHeaders().setDefault(x));
 			stream(a.defaultResponseHeaders()).map(x -> stringHeader(x)).forEach(x -> b.defaultResponseHeaders().setDefault(x));

@@ -77,136 +77,136 @@ public class RestOp_Throws_Test {
 		RestClient a = MockRestClient.buildLax(A.class);
 		a.get("/badRequest")
 			.run()
-			.assertCode().is(400)
-			.assertContent().is("Bad Request");
+			.assertStatus(400)
+			.assertContent("Bad Request");
 		a.get("/conflict")
 			.run()
-			.assertCode().is(409)
-			.assertContent().is("Conflict");
+			.assertStatus(409)
+			.assertContent("Conflict");
 		a.get("/expectationFailed")
 			.run()
-			.assertCode().is(417)
-			.assertContent().is("Expectation Failed");
+			.assertStatus(417)
+			.assertContent("Expectation Failed");
 		a.get("/failedDependency")
 			.run()
-			.assertCode().is(424)
-			.assertContent().is("Failed Dependency");
+			.assertStatus(424)
+			.assertContent("Failed Dependency");
 		a.get("/forbidden")
 			.run()
-			.assertCode().is(403)
-			.assertContent().is("Forbidden");
+			.assertStatus(403)
+			.assertContent("Forbidden");
 		a.get("/gone")
 			.run()
-			.assertCode().is(410)
-			.assertContent().is("Gone");
+			.assertStatus(410)
+			.assertContent("Gone");
 		a.get("/httpVersionNotSupported")
 			.run()
-			.assertCode().is(505)
-			.assertContent().is("HTTP Version Not Supported");
+			.assertStatus(505)
+			.assertContent("HTTP Version Not Supported");
 		a.get("/insufficientStorage")
 			.run()
-			.assertCode().is(507)
-			.assertContent().is("Insufficient Storage");
+			.assertStatus(507)
+			.assertContent("Insufficient Storage");
 		a.get("/internalServerError")
 			.run()
-			.assertCode().is(500)
-			.assertContent().is("Internal Server Error");
+			.assertStatus(500)
+			.assertContent("Internal Server Error");
 		a.get("/lengthRequired")
 			.run()
-			.assertCode().is(411)
-			.assertContent().is("Length Required");
+			.assertStatus(411)
+			.assertContent("Length Required");
 		a.get("/locked")
 			.run()
-			.assertCode().is(423)
-			.assertContent().is("Locked");
+			.assertStatus(423)
+			.assertContent("Locked");
 		a.get("/loopDetected")
 			.run()
-			.assertCode().is(508)
-			.assertContent().is("Loop Detected");
+			.assertStatus(508)
+			.assertContent("Loop Detected");
 		a.get("/methodNotAllowed")
 			.run()
-			.assertCode().is(405)
-			.assertContent().is("Method Not Allowed");
+			.assertStatus(405)
+			.assertContent("Method Not Allowed");
 		a.get("/misdirectedRequest")
 			.run()
-			.assertCode().is(421)
-			.assertContent().is("Misdirected Request");
+			.assertStatus(421)
+			.assertContent("Misdirected Request");
 		a.get("/networkAuthenticationRequired")
 			.run()
-			.assertCode().is(511)
-			.assertContent().is("Network Authentication Required");
+			.assertStatus(511)
+			.assertContent("Network Authentication Required");
 		a.get("/notAcceptable")
 			.run()
-			.assertCode().is(406)
-			.assertContent().is("Not Acceptable");
+			.assertStatus(406)
+			.assertContent("Not Acceptable");
 		a.get("/notExtended")
 			.run()
-			.assertCode().is(510)
-			.assertContent().is("Not Extended");
+			.assertStatus(510)
+			.assertContent("Not Extended");
 		a.get("/notFound")
 			.run()
-			.assertCode().is(404)
-			.assertContent().is("Not Found");
+			.assertStatus(404)
+			.assertContent("Not Found");
 		a.get("/notImplemented")
 			.run()
-			.assertCode().is(501)
-			.assertContent().is("Not Implemented");
+			.assertStatus(501)
+			.assertContent("Not Implemented");
 		a.get("/payloadTooLarge")
 			.run()
-			.assertCode().is(413)
-			.assertContent().is("Payload Too Large");
+			.assertStatus(413)
+			.assertContent("Payload Too Large");
 		a.get("/preconditionFailed")
 			.run()
-			.assertCode().is(412)
-			.assertContent().is("Precondition Failed");
+			.assertStatus(412)
+			.assertContent("Precondition Failed");
 		a.get("/preconditionRequired")
 			.run()
-			.assertCode().is(428)
-			.assertContent().is("Precondition Required");
+			.assertStatus(428)
+			.assertContent("Precondition Required");
 		a.get("/rangeNotSatisfiable")
 			.run()
-			.assertCode().is(416)
-			.assertContent().is("Range Not Satisfiable");
+			.assertStatus(416)
+			.assertContent("Range Not Satisfiable");
 		a.get("/requestHeaderFieldsTooLarge")
 			.run()
-			.assertCode().is(431)
-			.assertContent().is("Request Header Fields Too Large");
+			.assertStatus(431)
+			.assertContent("Request Header Fields Too Large");
 		a.get("/serviceUnavailable")
 			.run()
-			.assertCode().is(503)
-			.assertContent().is("Service Unavailable");
+			.assertStatus(503)
+			.assertContent("Service Unavailable");
 		a.get("/tooManyRequests")
 			.run()
-			.assertCode().is(429)
-			.assertContent().is("Too Many Requests");
+			.assertStatus(429)
+			.assertContent("Too Many Requests");
 		a.get("/unauthorized")
 			.run()
-			.assertCode().is(401)
-			.assertContent().is("Unauthorized");
+			.assertStatus(401)
+			.assertContent("Unauthorized");
 		a.get("/unavailableForLegalReasons")
 			.run()
-			.assertCode().is(451)
-			.assertContent().is("Unavailable For Legal Reasons");
+			.assertStatus(451)
+			.assertContent("Unavailable For Legal Reasons");
 		a.get("/unprocessableEntity")
 			.run()
-			.assertCode().is(422)
-			.assertContent().is("Unprocessable Entity");
+			.assertStatus(422)
+			.assertContent("Unprocessable Entity");
 		a.get("/unsupportedMediaType")
 			.run()
-			.assertCode().is(415)
-			.assertContent().is("Unsupported Media Type");
+			.assertStatus(415)
+			.assertContent("Unsupported Media Type");
 		a.get("/upgradeRequired")
 			.run()
-			.assertCode().is(426)
-			.assertContent().is("Upgrade Required");
+			.assertStatus(426)
+			.assertContent("Upgrade Required");
 		a.get("/uriTooLong")
 			.run()
-			.assertCode().is(414)
-			.assertContent().is("URI Too Long");
+			.assertStatus(414)
+			.assertContent("URI Too Long");
 		a.get("/variantAlsoNegotiates")
 			.run()
-			.assertCode().is(506)
-			.assertContent().is("Variant Also Negotiates");
+			.assertStatus(506)
+			.assertContent("Variant Also Negotiates");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -256,136 +256,136 @@ public class RestOp_Throws_Test {
 		RestClient b = MockRestClient.buildLax(B.class);
 		b.get("/badRequest")
 			.run()
-			.assertCode().is(400)
-			.assertContent().is("foo bar");
+			.assertStatus(400)
+			.assertContent("foo bar");
 		b.get("/conflict")
 			.run()
-			.assertCode().is(409)
-			.assertContent().is("foo bar");
+			.assertStatus(409)
+			.assertContent("foo bar");
 		b.get("/expectationFailed")
 			.run()
-			.assertCode().is(417)
-			.assertContent().is("foo bar");
+			.assertStatus(417)
+			.assertContent("foo bar");
 		b.get("/failedDependency")
 			.run()
-			.assertCode().is(424)
-			.assertContent().is("foo bar");
+			.assertStatus(424)
+			.assertContent("foo bar");
 		b.get("/forbidden")
 			.run()
-			.assertCode().is(403)
-			.assertContent().is("foo bar");
+			.assertStatus(403)
+			.assertContent("foo bar");
 		b.get("/gone")
 			.run()
-			.assertCode().is(410)
-			.assertContent().is("foo bar");
+			.assertStatus(410)
+			.assertContent("foo bar");
 		b.get("/httpVersionNotSupported")
 			.run()
-			.assertCode().is(505)
-			.assertContent().is("foo bar");
+			.assertStatus(505)
+			.assertContent("foo bar");
 		b.get("/insufficientStorage")
 			.run()
-			.assertCode().is(507)
-			.assertContent().is("foo bar");
+			.assertStatus(507)
+			.assertContent("foo bar");
 		b.get("/internalServerError")
 			.run()
-			.assertCode().is(500)
-			.assertContent().is("foo bar");
+			.assertStatus(500)
+			.assertContent("foo bar");
 		b.get("/lengthRequired")
 			.run()
-			.assertCode().is(411)
-			.assertContent().is("foo bar");
+			.assertStatus(411)
+			.assertContent("foo bar");
 		b.get("/locked")
 			.run()
-			.assertCode().is(423)
-			.assertContent().is("foo bar");
+			.assertStatus(423)
+			.assertContent("foo bar");
 		b.get("/loopDetected")
 			.run()
-			.assertCode().is(508)
-			.assertContent().is("foo bar");
+			.assertStatus(508)
+			.assertContent("foo bar");
 		b.get("/methodNotAllowed")
 			.run()
-			.assertCode().is(405)
-			.assertContent().is("foo bar");
+			.assertStatus(405)
+			.assertContent("foo bar");
 		b.get("/misdirectedRequest")
 			.run()
-			.assertCode().is(421)
-			.assertContent().is("foo bar");
+			.assertStatus(421)
+			.assertContent("foo bar");
 		b.get("/networkAuthenticationRequired")
 			.run()
-			.assertCode().is(511)
-			.assertContent().is("foo bar");
+			.assertStatus(511)
+			.assertContent("foo bar");
 		b.get("/notAcceptable")
 			.run()
-			.assertCode().is(406)
-			.assertContent().is("foo bar");
+			.assertStatus(406)
+			.assertContent("foo bar");
 		b.get("/notExtended")
 			.run()
-			.assertCode().is(510)
-			.assertContent().is("foo bar");
+			.assertStatus(510)
+			.assertContent("foo bar");
 		b.get("/notFound")
 			.run()
-			.assertCode().is(404)
-			.assertContent().is("foo bar");
+			.assertStatus(404)
+			.assertContent("foo bar");
 		b.get("/notImplemented")
 			.run()
-			.assertCode().is(501)
-			.assertContent().is("foo bar");
+			.assertStatus(501)
+			.assertContent("foo bar");
 		b.get("/payloadTooLarge")
 			.run()
-			.assertCode().is(413)
-			.assertContent().is("foo bar");
+			.assertStatus(413)
+			.assertContent("foo bar");
 		b.get("/preconditionFailed")
 			.run()
-			.assertCode().is(412)
-			.assertContent().is("foo bar");
+			.assertStatus(412)
+			.assertContent("foo bar");
 		b.get("/preconditionRequired")
 			.run()
-			.assertCode().is(428)
-			.assertContent().is("foo bar");
+			.assertStatus(428)
+			.assertContent("foo bar");
 		b.get("/rangeNotSatisfiable")
 			.run()
-			.assertCode().is(416)
-			.assertContent().is("foo bar");
+			.assertStatus(416)
+			.assertContent("foo bar");
 		b.get("/requestHeaderFieldsTooLarge")
 			.run()
-			.assertCode().is(431)
-			.assertContent().is("foo bar");
+			.assertStatus(431)
+			.assertContent("foo bar");
 		b.get("/serviceUnavailable")
 			.run()
-			.assertCode().is(503)
-			.assertContent().is("foo bar");
+			.assertStatus(503)
+			.assertContent("foo bar");
 		b.get("/tooManyRequests")
 			.run()
-			.assertCode().is(429)
-			.assertContent().is("foo bar");
+			.assertStatus(429)
+			.assertContent("foo bar");
 		b.get("/unauthorized")
 			.run()
-			.assertCode().is(401)
-			.assertContent().is("foo bar");
+			.assertStatus(401)
+			.assertContent("foo bar");
 		b.get("/unavailableForLegalReasons")
 			.run()
-			.assertCode().is(451)
-			.assertContent().is("foo bar");
+			.assertStatus(451)
+			.assertContent("foo bar");
 		b.get("/unprocessableEntity")
 			.run()
-			.assertCode().is(422)
-			.assertContent().is("foo bar");
+			.assertStatus(422)
+			.assertContent("foo bar");
 		b.get("/unsupportedMediaType")
 			.run()
-			.assertCode().is(415)
-			.assertContent().is("foo bar");
+			.assertStatus(415)
+			.assertContent("foo bar");
 		b.get("/upgradeRequired")
 			.run()
-			.assertCode().is(426)
-			.assertContent().is("foo bar");
+			.assertStatus(426)
+			.assertContent("foo bar");
 		b.get("/uriTooLong")
 			.run()
-			.assertCode().is(414)
-			.assertContent().is("foo bar");
+			.assertStatus(414)
+			.assertContent("foo bar");
 		b.get("/variantAlsoNegotiates")
 			.run()
-			.assertCode().is(506)
-			.assertContent().is("foo bar");
+			.assertStatus(506)
+			.assertContent("foo bar");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -436,136 +436,136 @@ public class RestOp_Throws_Test {
 		RestClient c = MockRestClient.buildLax(C.class);
 		c.get("/badRequest")
 			.run()
-			.assertCode().is(400)
-			.assertContent().is("foo");
+			.assertStatus(400)
+			.assertContent("foo");
 		c.get("/conflict")
 			.run()
-			.assertCode().is(409)
-			.assertContent().is("foo");
+			.assertStatus(409)
+			.assertContent("foo");
 		c.get("/expectationFailed")
 			.run()
-			.assertCode().is(417)
-			.assertContent().is("foo");
+			.assertStatus(417)
+			.assertContent("foo");
 		c.get("/failedDependency")
 			.run()
-			.assertCode().is(424)
-			.assertContent().is("foo");
+			.assertStatus(424)
+			.assertContent("foo");
 		c.get("/forbidden")
 			.run()
-			.assertCode().is(403)
-			.assertContent().is("foo");
+			.assertStatus(403)
+			.assertContent("foo");
 		c.get("/gone")
 			.run()
-			.assertCode().is(410)
-			.assertContent().is("foo");
+			.assertStatus(410)
+			.assertContent("foo");
 		c.get("/httpVersionNotSupported")
 			.run()
-			.assertCode().is(505)
-			.assertContent().is("foo");
+			.assertStatus(505)
+			.assertContent("foo");
 		c.get("/insufficientStorage")
 			.run()
-			.assertCode().is(507)
-			.assertContent().is("foo");
+			.assertStatus(507)
+			.assertContent("foo");
 		c.get("/internalServerError")
 			.run()
-			.assertCode().is(500)
-			.assertContent().is("foo");
+			.assertStatus(500)
+			.assertContent("foo");
 		c.get("/lengthRequired")
 			.run()
-			.assertCode().is(411)
-			.assertContent().is("foo");
+			.assertStatus(411)
+			.assertContent("foo");
 		c.get("/locked")
 			.run()
-			.assertCode().is(423)
-			.assertContent().is("foo");
+			.assertStatus(423)
+			.assertContent("foo");
 		c.get("/loopDetected")
 			.run()
-			.assertCode().is(508)
-			.assertContent().is("foo");
+			.assertStatus(508)
+			.assertContent("foo");
 		c.get("/methodNotAllowed")
 			.run()
-			.assertCode().is(405)
-			.assertContent().is("foo");
+			.assertStatus(405)
+			.assertContent("foo");
 		c.get("/misdirectedRequest")
 			.run()
-			.assertCode().is(421)
-			.assertContent().is("foo");
+			.assertStatus(421)
+			.assertContent("foo");
 		c.get("/networkAuthenticationRequired")
 			.run()
-			.assertCode().is(511)
-			.assertContent().is("foo");
+			.assertStatus(511)
+			.assertContent("foo");
 		c.get("/notAcceptable")
 			.run()
-			.assertCode().is(406)
-			.assertContent().is("foo");
+			.assertStatus(406)
+			.assertContent("foo");
 		c.get("/notExtended")
 			.run()
-			.assertCode().is(510)
-			.assertContent().is("foo");
+			.assertStatus(510)
+			.assertContent("foo");
 		c.get("/notFound")
 			.run()
-			.assertCode().is(404)
-			.assertContent().is("foo");
+			.assertStatus(404)
+			.assertContent("foo");
 		c.get("/notImplemented")
 			.run()
-			.assertCode().is(501)
-			.assertContent().is("foo");
+			.assertStatus(501)
+			.assertContent("foo");
 		c.get("/payloadTooLarge")
 			.run()
-			.assertCode().is(413)
-			.assertContent().is("foo");
+			.assertStatus(413)
+			.assertContent("foo");
 		c.get("/preconditionFailed").
 			run()
-			.assertCode().is(412)
-			.assertContent().is("foo");
+			.assertStatus(412)
+			.assertContent("foo");
 		c.get("/preconditionRequired")
 			.run()
-			.assertCode().is(428)
-			.assertContent().is("foo");
+			.assertStatus(428)
+			.assertContent("foo");
 		c.get("/rangeNotSatisfiable")
 			.run()
-			.assertCode().is(416)
-			.assertContent().is("foo");
+			.assertStatus(416)
+			.assertContent("foo");
 		c.get("/requestHeaderFieldsTooLarge")
 			.run()
-			.assertCode().is(431)
-			.assertContent().is("foo");
+			.assertStatus(431)
+			.assertContent("foo");
 		c.get("/serviceUnavailable")
 			.run()
-			.assertCode().is(503)
-			.assertContent().is("foo");
+			.assertStatus(503)
+			.assertContent("foo");
 		c.get("/tooManyRequests")
 			.run()
-			.assertCode().is(429)
-			.assertContent().is("foo");
+			.assertStatus(429)
+			.assertContent("foo");
 		c.get("/unauthorized")
 			.run()
-			.assertCode().is(401)
-			.assertContent().is("foo");
+			.assertStatus(401)
+			.assertContent("foo");
 		c.get("/unavailableForLegalReasons")
 			.run()
-			.assertCode().is(451)
-			.assertContent().is("foo");
+			.assertStatus(451)
+			.assertContent("foo");
 		c.get("/unprocessableEntity")
 			.run()
-			.assertCode().is(422)
-			.assertContent().is("foo");
+			.assertStatus(422)
+			.assertContent("foo");
 		c.get("/unsupportedMediaType")
 			.run()
-			.assertCode().is(415)
-			.assertContent().is("foo");
+			.assertStatus(415)
+			.assertContent("foo");
 		c.get("/upgradeRequired")
 			.run()
-			.assertCode().is(426)
-			.assertContent().is("foo");
+			.assertStatus(426)
+			.assertContent("foo");
 		c.get("/uriTooLong")
 			.run()
-			.assertCode().is(414)
-			.assertContent().is("foo");
+			.assertStatus(414)
+			.assertContent("foo");
 		c.get("/variantAlsoNegotiates")
 			.run()
-			.assertCode().is(506)
-			.assertContent().is("foo");
+			.assertStatus(506)
+			.assertContent("foo");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -614,136 +614,136 @@ public class RestOp_Throws_Test {
 		RestClient d = MockRestClient.buildLax(D.class);
 		d.get("/badRequest")
 			.run()
-			.assertCode().is(400)
-			.assertContent().is("foo bar");
+			.assertStatus(400)
+			.assertContent("foo bar");
 		d.get("/conflict")
 			.run()
-			.assertCode().is(409)
-			.assertContent().is("foo bar");
+			.assertStatus(409)
+			.assertContent("foo bar");
 		d.get("/expectationFailed")
 			.run()
-			.assertCode().is(417)
-			.assertContent().is("foo bar");
+			.assertStatus(417)
+			.assertContent("foo bar");
 		d.get("/failedDependency")
 			.run()
-			.assertCode().is(424)
-			.assertContent().is("foo bar");
+			.assertStatus(424)
+			.assertContent("foo bar");
 		d.get("/forbidden")
 			.run()
-			.assertCode().is(403)
-			.assertContent().is("foo bar");
+			.assertStatus(403)
+			.assertContent("foo bar");
 		d.get("/gone")
 			.run()
-			.assertCode().is(410)
-			.assertContent().is("foo bar");
+			.assertStatus(410)
+			.assertContent("foo bar");
 		d.get("/httpVersionNotSupported")
 			.run()
-			.assertCode().is(505)
-			.assertContent().is("foo bar");
+			.assertStatus(505)
+			.assertContent("foo bar");
 		d.get("/insufficientStorage")
 			.run()
-			.assertCode().is(507)
-			.assertContent().is("foo bar");
+			.assertStatus(507)
+			.assertContent("foo bar");
 		d.get("/internalServerError")
 			.run()
-			.assertCode().is(500)
-			.assertContent().is("foo bar");
+			.assertStatus(500)
+			.assertContent("foo bar");
 		d.get("/lengthRequired")
 			.run()
-			.assertCode().is(411)
-			.assertContent().is("foo bar");
+			.assertStatus(411)
+			.assertContent("foo bar");
 		d.get("/locked")
 			.run()
-			.assertCode().is(423)
-			.assertContent().is("foo bar");
+			.assertStatus(423)
+			.assertContent("foo bar");
 		d.get("/loopDetected")
 			.run()
-			.assertCode().is(508)
-			.assertContent().is("foo bar");
+			.assertStatus(508)
+			.assertContent("foo bar");
 		d.get("/methodNotAllowed")
 			.run()
-			.assertCode().is(405)
-			.assertContent().is("foo bar");
+			.assertStatus(405)
+			.assertContent("foo bar");
 		d.get("/misdirectedRequest")
 			.run()
-			.assertCode().is(421)
-			.assertContent().is("foo bar");
+			.assertStatus(421)
+			.assertContent("foo bar");
 		d.get("/networkAuthenticationRequired")
 			.run()
-			.assertCode().is(511)
-			.assertContent().is("foo bar");
+			.assertStatus(511)
+			.assertContent("foo bar");
 		d.get("/notAcceptable")
 			.run()
-			.assertCode().is(406)
-			.assertContent().is("foo bar");
+			.assertStatus(406)
+			.assertContent("foo bar");
 		d.get("/notExtended")
 			.run()
-			.assertCode().is(510)
-			.assertContent().is("foo bar");
+			.assertStatus(510)
+			.assertContent("foo bar");
 		d.get("/notFound")
 			.run()
-			.assertCode().is(404)
-			.assertContent().is("foo bar");
+			.assertStatus(404)
+			.assertContent("foo bar");
 		d.get("/notImplemented")
 			.run()
-			.assertCode().is(501)
-			.assertContent().is("foo bar");
+			.assertStatus(501)
+			.assertContent("foo bar");
 		d.get("/payloadTooLarge")
 			.run()
-			.assertCode().is(413)
-			.assertContent().is("foo bar");
+			.assertStatus(413)
+			.assertContent("foo bar");
 		d.get("/preconditionFailed")
 			.run()
-			.assertCode().is(412)
-			.assertContent().is("foo bar");
+			.assertStatus(412)
+			.assertContent("foo bar");
 		d.get("/preconditionRequired")
 			.run()
-			.assertCode().is(428)
-			.assertContent().is("foo bar");
+			.assertStatus(428)
+			.assertContent("foo bar");
 		d.get("/rangeNotSatisfiable")
 			.run()
-			.assertCode().is(416)
-			.assertContent().is("foo bar");
+			.assertStatus(416)
+			.assertContent("foo bar");
 		d.get("/requestHeaderFieldsTooLarge")
 			.run()
-			.assertCode().is(431)
-			.assertContent().is("foo bar");
+			.assertStatus(431)
+			.assertContent("foo bar");
 		d.get("/serviceUnavailable")
 			.run()
-			.assertCode().is(503)
-			.assertContent().is("foo bar");
+			.assertStatus(503)
+			.assertContent("foo bar");
 		d.get("/tooManyRequests")
 			.run()
-			.assertCode().is(429)
-			.assertContent().is("foo bar");
+			.assertStatus(429)
+			.assertContent("foo bar");
 		d.get("/unauthorized")
 			.run()
-			.assertCode().is(401)
-			.assertContent().is("foo bar");
+			.assertStatus(401)
+			.assertContent("foo bar");
 		d.get("/unavailableForLegalReasons")
 			.run()
-			.assertCode().is(451)
-			.assertContent().is("foo bar");
+			.assertStatus(451)
+			.assertContent("foo bar");
 		d.get("/unprocessableEntity")
 			.run()
-			.assertCode().is(422)
-			.assertContent().is("foo bar");
+			.assertStatus(422)
+			.assertContent("foo bar");
 		d.get("/unsupportedMediaType")
 			.run()
-			.assertCode().is(415)
-			.assertContent().is("foo bar");
+			.assertStatus(415)
+			.assertContent("foo bar");
 		d.get("/upgradeRequired")
 			.run()
-			.assertCode().is(426)
-			.assertContent().is("foo bar");
+			.assertStatus(426)
+			.assertContent("foo bar");
 		d.get("/uriTooLong")
 			.run()
-			.assertCode().is(414)
-			.assertContent().is("foo bar");
+			.assertStatus(414)
+			.assertContent("foo bar");
 		d.get("/variantAlsoNegotiates")
 			.run()
-			.assertCode().is(506)
-			.assertContent().is("foo bar");
+			.assertStatus(506)
+			.assertContent("foo bar");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -761,8 +761,8 @@ public class RestOp_Throws_Test {
 		e.get("/badRequest")
 			.json()
 			.run()
-			.assertCode().is(400)
-			.assertContent().is("foo bar");
+			.assertStatus(400)
+			.assertContent("foo bar");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -860,7 +860,7 @@ public class RestOp_Throws_Test {
 		RestClient g = MockRestClient.buildLax(G.class);
 		g.get("/a")
 			.run()
-			.assertCode().is(404);
+			.assertStatus(404);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -880,6 +880,6 @@ public class RestOp_Throws_Test {
 		RestClient h = MockRestClient.buildLax(H.class);
 		h.get("/a")
 			.run()
-			.assertCode().is(400);
+			.assertStatus(400);
 	}
 }

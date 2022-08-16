@@ -52,7 +52,7 @@ public class RestClient_Config_Context_Test {
 
 	@Test
 	public void a02_addToStringObject() throws Exception {
-		client().notBeanClasses(A2.class).build().post("/echoBody",A2.fromString("bar")).run().cacheContent().assertContent().is("'bar'").getContent().as(A2.class);
+		client().notBeanClasses(A2.class).build().post("/echoBody",A2.fromString("bar")).run().cacheContent().assertContent("'bar'").getContent().as(A2.class);
 	}
 
 	public static class A3a {
@@ -73,13 +73,13 @@ public class RestClient_Config_Context_Test {
 
 	@Test
 	public void a03_appendToStringObject() throws Exception {
-		A3a x = client().swaps(A3b.class).build().post("/echoBody",A3a.get()).run().cacheContent().assertContent().is("1").getContent().as(A3a.class);
+		A3a x = client().swaps(A3b.class).build().post("/echoBody",A3a.get()).run().cacheContent().assertContent("1").getContent().as(A3a.class);
 		assertEquals(1,x.foo);
 	}
 
 	@Test
 	public void a04_prependToStringObject() throws Exception {
-		A3a x = client().swaps(A3b.class).build().post("/echoBody",A3a.get()).run().cacheContent().assertContent().is("1").getContent().as(A3a.class);
+		A3a x = client().swaps(A3b.class).build().post("/echoBody",A3a.get()).run().cacheContent().assertContent("1").getContent().as(A3a.class);
 		assertEquals(1,x.foo);
 	}
 
@@ -110,16 +110,16 @@ public class RestClient_Config_Context_Test {
 		new A6b();
 		new A6c();
 		new A6d().foo();
-		client().applyAnnotations(A6b.class).build().post("/echoBody",A6a.get()).run().cacheContent().assertContent().is("{bar:2,baz:3,foo:1}").getContent().as(A6a.class);
-		client().applyAnnotations(A6c.class).build().post("/echoBody",A6a.get()).run().cacheContent().assertContent().is("{bar:2,baz:3,foo:1}").getContent().as(A6a.class);
-		client().applyAnnotations(A6d.class.getMethod("foo")).build().post("/echoBody",A6a.get()).run().cacheContent().assertContent().is("{bar:2,baz:3,foo:1}").getContent().as(A6a.class);
+		client().applyAnnotations(A6b.class).build().post("/echoBody",A6a.get()).run().cacheContent().assertContent("{bar:2,baz:3,foo:1}").getContent().as(A6a.class);
+		client().applyAnnotations(A6c.class).build().post("/echoBody",A6a.get()).run().cacheContent().assertContent("{bar:2,baz:3,foo:1}").getContent().as(A6a.class);
+		client().applyAnnotations(A6d.class.getMethod("foo")).build().post("/echoBody",A6a.get()).run().cacheContent().assertContent("{bar:2,baz:3,foo:1}").getContent().as(A6a.class);
 		AnnotationWorkList al = AnnotationWorkList.of(ClassInfo.of(A6c.class).getAnnotationList(CONTEXT_APPLY_FILTER));
-		client().apply(al).build().post("/echoBody",A6a.get()).run().cacheContent().assertContent().is("{bar:2,baz:3,foo:1}").getContent().as(A6a.class);
+		client().apply(al).build().post("/echoBody",A6a.get()).run().cacheContent().assertContent("{bar:2,baz:3,foo:1}").getContent().as(A6a.class);
 	}
 
 	@Test
 	public void a09_annotations() throws Exception {
-		client().annotations(BeanAnnotation.create(A6a.class).sort(true).build()).build().post("/echoBody",A6a.get()).run().cacheContent().assertContent().is("{bar:2,baz:3,foo:1}").getContent().as(A6a.class);
+		client().annotations(BeanAnnotation.create(A6a.class).sort(true).build()).build().post("/echoBody",A6a.get()).run().cacheContent().assertContent("{bar:2,baz:3,foo:1}").getContent().as(A6a.class);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

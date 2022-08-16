@@ -91,7 +91,7 @@
 		|	<ja>@Rest</ja>
 		|	<jk>public class</jk> MyResource {
 		|
-		|		<ja>@RestHook</ja>(<jsf>INIT</jsf>)
+		|		<ja>@RestInit</ja>
 		|		<jk>public void</jk> init(RestContext.Builder <jv>builder</jv>) {
 		|			<jv>builder</jv>.serializers().add(JsonSerializer.<jk>class</jk>, HtmlSerializer.<jk>class</jk>);
 		|			<jv>builder</jv>.parsers().add(JsonParser.<jk>class</jk>, HtmlParser.<jk>class</jk>);

@@ -266,24 +266,6 @@ public interface FileFinder {
 	public Optional<InputStream> getStream(String name, Locale locale) throws IOException;
 
 	/**
-	 * Returns the file with the specified name.
-	 *
-	 * @param name The file name.
-	 * @return An input stream to the file if it exists, or <jk>null</jk> if it does not.
-	 * @throws IOException If file could not be read.
-	 */
-	public Optional<InputStream> getStream(String name) throws IOException;
-
-	/**
-	 * Returns the file with the specified name as a string.
-	 *
-	 * @param name The file name.
-	 * @return The contents of the file as a string.  Assumes UTF-8 encoding.
-	 * @throws IOException If file could not be read.
-	 */
-	public Optional<String> getString(String name) throws IOException;
-
-	/**
 	 * Returns the file with the specified name as a string.
 	 *
 	 * @param name The file name.

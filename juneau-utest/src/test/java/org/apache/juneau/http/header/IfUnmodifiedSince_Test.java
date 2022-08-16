@@ -54,10 +54,10 @@ public class IfUnmodifiedSince_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(ifUnmodifiedSince(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(ifUnmodifiedSince(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(ifUnmodifiedSince(PARSED)).run().assertContent().is(VALUE);
-		c.get().header(ifUnmodifiedSince(()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(ifUnmodifiedSince(VALUE)).run().assertContent(VALUE);
+		c.get().header(ifUnmodifiedSince(VALUE)).run().assertContent(VALUE);
+		c.get().header(ifUnmodifiedSince(PARSED)).run().assertContent(VALUE);
+		c.get().header(ifUnmodifiedSince(()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(ifUnmodifiedSince((String)null)).run().assertContent().isEmpty();

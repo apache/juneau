@@ -310,12 +310,12 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 
 	@Override /* HttpMessage */
 	public HeaderIterator headerIterator() {
-		return headers().iterator();
+		return headers().headerIterator();
 	}
 
 	@Override /* HttpMessage */
 	public HeaderIterator headerIterator(String name) {
-		return headers().iterator(name);
+		return headers().headerIterator(name);
 	}
 
 	@SuppressWarnings("deprecation")

@@ -54,10 +54,10 @@ public class BasicIntegerHeader_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(integerHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
-		c.get().header(integerHeader(HEADER,VALUE)).run().assertContent().is(VALUE);
-		c.get().header(integerHeader(HEADER,PARSED)).run().assertContent().is(VALUE);
-		c.get().header(integerHeader(HEADER,()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(integerHeader(HEADER,VALUE)).run().assertContent(VALUE);
+		c.get().header(integerHeader(HEADER,VALUE)).run().assertContent(VALUE);
+		c.get().header(integerHeader(HEADER,PARSED)).run().assertContent(VALUE);
+		c.get().header(integerHeader(HEADER,()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(integerHeader(HEADER,(Supplier<Integer>)null)).run().assertContent().isEmpty();

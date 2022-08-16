@@ -35,7 +35,7 @@ public final class PlainTextPojoProcessor implements ResponseProcessor {
 	public int process(RestOpSession opSession) throws IOException, NotAcceptable, BasicHttpException {
 		RestRequest req = opSession.getRequest();
 		RestResponse res = opSession.getResponse();
-		String accept = req.getHeader("Accept").orElse("*/*");
+		String accept = req.getHeaderParam("Accept").orElse("*/*");
 
 		if (res.getSerializerMatch().isPresent() || ! (isEmpty(accept) || accept.startsWith("text/plain") || accept.contains("*/*")))
 			return NEXT;

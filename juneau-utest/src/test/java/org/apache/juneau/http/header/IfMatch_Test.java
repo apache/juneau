@@ -51,10 +51,10 @@ public class IfMatch_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(ifMatch(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(ifMatch(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(ifMatch(PARSED)).run().assertContent().is(VALUE);
-		c.get().header(ifMatch(()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(ifMatch(VALUE)).run().assertContent(VALUE);
+		c.get().header(ifMatch(VALUE)).run().assertContent(VALUE);
+		c.get().header(ifMatch(PARSED)).run().assertContent(VALUE);
+		c.get().header(ifMatch(()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(ifMatch((String)null)).run().assertContent().isEmpty();

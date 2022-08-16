@@ -58,15 +58,15 @@ public class ResponseHeader_Test {
 		RestClient a = MockRestClient.build(A.class);
 		a.get("/a")
 			.run()
-			.assertCode().is(200)
+			.assertStatus(200)
 			.assertHeader("Foo").is("foo");
 		a.get("/b")
 			.run()
-			.assertCode().is(200)
+			.assertStatus(200)
 			.assertHeader("Foo").is("foo");
 		a.get("/c")
 			.run()
-			.assertCode().is(200)
+			.assertStatus(200)
 			.assertHeader("Bar").is("foo");
 	}
 

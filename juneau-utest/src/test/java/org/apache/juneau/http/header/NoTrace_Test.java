@@ -51,10 +51,10 @@ public class NoTrace_Test {
 		RestClient c = client().build();
 
 		// Normal usage.
-		c.get().header(noTrace(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(noTrace(VALUE)).run().assertContent().is(VALUE);
-		c.get().header(noTrace(PARSED)).run().assertContent().is(VALUE);
-		c.get().header(noTrace(()->PARSED)).run().assertContent().is(VALUE);
+		c.get().header(noTrace(VALUE)).run().assertContent(VALUE);
+		c.get().header(noTrace(VALUE)).run().assertContent(VALUE);
+		c.get().header(noTrace(PARSED)).run().assertContent(VALUE);
+		c.get().header(noTrace(()->PARSED)).run().assertContent(VALUE);
 
 		// Invalid usage.
 		c.get().header(noTrace((String)null)).run().assertContent().isEmpty();

@@ -89,6 +89,13 @@ import org.apache.juneau.oapi.*;
 public @interface Header {
 
 	/**
+	 * Default value for this parameter.
+	 *
+	 * @return The annotation value.
+	 */
+	String def() default "";
+
+	/**
 	 * HTTP header name.
 	 * <p>
 	 * A blank value (the default) indicates to reuse the bean property name when used on a request bean property.

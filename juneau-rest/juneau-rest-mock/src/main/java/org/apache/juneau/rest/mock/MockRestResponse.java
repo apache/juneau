@@ -13,6 +13,7 @@
 package org.apache.juneau.rest.mock;
 
 import org.apache.http.*;
+import org.apache.juneau.internal.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.client.*;
 
@@ -24,6 +25,7 @@ import org.apache.juneau.rest.client.*;
  * 	<li class='extlink'>{@source}
  * </ul>
 */
+@FluentSetters
 public class MockRestResponse extends org.apache.juneau.rest.client.RestResponse {
 
 	/**
@@ -38,4 +40,20 @@ public class MockRestResponse extends org.apache.juneau.rest.client.RestResponse
 		super(client, request, response, parser);
 		((MockRestClient)client).currentResponse(this);
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestResponse */
+	public MockRestResponse cacheContent() {
+		super.cacheContent();
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.rest.client.RestResponse */
+	public MockRestResponse consume() throws RestCallException{
+		super.consume();
+		return this;
+	}
+
+	// </FluentSetters>
 }
