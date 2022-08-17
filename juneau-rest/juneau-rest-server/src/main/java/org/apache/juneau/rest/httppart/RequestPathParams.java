@@ -105,7 +105,6 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 
 	private static final long serialVersionUID = 1L;
 
-	private final RestSession session;
 	private final RestRequest req;
 	private boolean caseSensitive;
 	private HttpPartParserSession parser;
@@ -119,7 +118,6 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 * @param caseSensitive Whether case-sensitive name matching is enabled.
 	 */
 	public RequestPathParams(RestSession session, RestRequest req, boolean caseSensitive) {
-		this.session = session;
 		this.req = req;
 		this.caseSensitive = caseSensitive;
 		this.vs = req.getVarResolverSession();
@@ -146,7 +144,6 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 * Copy constructor.
 	 */
 	private RequestPathParams(RequestPathParams copyFrom) {
-		session = copyFrom.session;
 		req = copyFrom.req;
 		caseSensitive = copyFrom.caseSensitive;
 		parser = copyFrom.parser;
@@ -159,7 +156,6 @@ public class RequestPathParams extends ArrayList<RequestPathParam> {
 	 */
 	private RequestPathParams(RequestPathParams copyFrom, String...names) {
 		this.req = copyFrom.req;
-		this.session = copyFrom.session;
 		caseSensitive = copyFrom.caseSensitive;
 		parser = copyFrom.parser;
 		vs = copyFrom.vs;

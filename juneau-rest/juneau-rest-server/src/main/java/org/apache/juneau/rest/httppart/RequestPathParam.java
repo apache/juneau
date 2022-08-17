@@ -19,7 +19,6 @@ import java.util.regex.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
-import org.apache.juneau.assertions.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
 
@@ -123,99 +122,6 @@ public class RequestPathParam extends RequestHttpPart implements NameValuePair {
 	@Override /* RequestHttpPart */
 	public String getValue() {
 		return value;
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Assertions
-	//------------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on this parameter.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jv>request</jv>
-	 * 		.getPathParam(<js>"foo"</js>)
-	 * 		.assertString().contains(<js>"bar"</js>);
-	 * </p>
-	 *
-	 * <p>
-	 * The assertion test returns the original object allowing you to chain multiple requests like so:
-	 * <p class='bjava'>
-	 * 	String <jv>foo</jv> = <jv>request</jv>
-	 * 		.getPathParam(<js>"foo"</js>)
-	 * 		.assertString().contains(<js>"bar"</js>)
-	 * 		.asString().get();
-	 * </p>
-	 *
-	 * @return A new fluent assertion object.
-	 */
-	public FluentStringAssertion<RequestPathParam> assertString() {
-		return new FluentStringAssertion<>(orElse(null), this);
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on an integer parameter.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jv>request</jv>
-	 * 		.getPathParam(<js>"age"</js>)
-	 * 		.assertInteger().isGreaterThan(1);
-	 * </p>
-	 *
-	 * @return A new fluent assertion object.
-	 */
-	public FluentIntegerAssertion<RequestPathParam> assertInteger() {
-		return new FluentIntegerAssertion<>(asIntegerPart().asInteger().orElse(null), this);
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on a long parameter.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jv>request</jv>
-	 * 		.getPathParam(<js>"length"</js>)
-	 * 		.assertLong().isLessThan(100000);
-	 * </p>
-	 *
-	 * @return A new fluent assertion object.
-	 */
-	public FluentLongAssertion<RequestPathParam> assertLong() {
-		return new FluentLongAssertion<>(asLongPart().asLong().orElse(null), this);
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on a date parameter.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jv>request</jv>
-	 * 		.getPathParam(<js>"time"</js>)
-	 * 		.assertDate().isAfterNow();
-	 * </p>
-	 *
-	 * @return A new fluent assertion object.
-	 */
-	public FluentZonedDateTimeAssertion<RequestPathParam> assertDate() {
-		return new FluentZonedDateTimeAssertion<>(asDatePart().asZonedDateTime().orElse(null), this);
-	}
-
-	/**
-	 * Provides the ability to perform fluent-style assertions on comma-separated string parameters.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jv>request</jv>
-	 * 		.getPathParam(<js>"allow"</js>)
-	 * 		.assertCsvArray().contains(<js>"GET"</js>);
-	 * </p>
-	 *
-	 * @return A new fluent assertion object.
-	 */
-	public FluentListAssertion<String,RequestPathParam> assertCsvArray() {
-		return new FluentListAssertion<>(asCsvArrayPart().asList().orElse(null), this);
 	}
 
 	// <FluentSetters>
