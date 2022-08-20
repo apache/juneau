@@ -89,8 +89,6 @@ import org.apache.juneau.rest.*;
  */
 public class RequestPathParam extends RequestHttpPart implements NameValuePair {
 
-	private String value;
-
 	/**
 	 * Constructor.
 	 *
@@ -99,29 +97,8 @@ public class RequestPathParam extends RequestHttpPart implements NameValuePair {
 	 * @param value The parameter value.
 	 */
 	public RequestPathParam(RestRequest request, String name, String value) {
-		super(PATH, request, name);
+		super(PATH, request, name, value);
 		this.value = value;
-	}
-
-	/**
-	 * Sets a default value for this part.
-	 *
-	 * @param def The default value.
-	 * @return This object.
-	 */
-	public RequestPathParam def(String def) {
-		if (value == null)
-			value = def;
-		return this;
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// Retrievers
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Override /* RequestHttpPart */
-	public String getValue() {
-		return value;
 	}
 
 	// <FluentSetters>

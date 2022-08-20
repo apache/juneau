@@ -50,25 +50,28 @@ import org.apache.juneau.rest.*;
  * </ul>
  */
 @FluentSetters
-public abstract class RequestHttpPart {
+public class RequestHttpPart {
 
 	private final HttpPartType partType;
 	private final String name;
 	private final RestRequest request;
 	private HttpPartParserSession parser;
 	private HttpPartSchema schema;
+	String value;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param partType The HTTP part type.
 	 * @param request The request object.
-	 * @param name The header name.
+	 * @param name The part name.
+	 * @param value The part value.
 	 */
-	public RequestHttpPart(HttpPartType partType, RestRequest request, String name) {
+	public RequestHttpPart(HttpPartType partType, RestRequest request, String name, String value) {
 		this.partType = partType;
 		this.request = request;
 		this.name = name;
+		this.value = value;
 		parser(null);
 	}
 
@@ -109,9 +112,30 @@ public abstract class RequestHttpPart {
 		return this;
 	}
 
+	/**
+	 * Sets a default value for this part.
+	 *
+	 * @param def The default value.
+	 * @return This object.
+	 */
+	public RequestHttpPart def(String def) {
+		if (value == null)
+			value = def;
+		return this;
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Retrievers
 	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns the value of this part.
+	 *
+	 * @return The value of this part.
+	 */
+	public String getValue() {
+		return value;
+	}
 
 	/**
 	 * Returns <jk>true</jk> if this part exists on the request.
@@ -521,13 +545,6 @@ public abstract class RequestHttpPart {
 	public String getName() {
 		return name;
 	}
-
-	/**
-	 * Gets the value of this part.
-	 *
-	 * @return The value of this part, may be <jk>null</jk>.
-	 */
-	public abstract String getValue();
 
 	@Override /* Object */
 	public String toString() {

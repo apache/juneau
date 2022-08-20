@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.ThrowableUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.util.*;
 import java.util.regex.*;
 
 import org.apache.http.*;
@@ -93,7 +94,6 @@ import org.apache.juneau.rest.*;
 public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 
 	private final javax.servlet.http.Part part;
-	private String value;
 
 	/**
 	 * Constructor.
@@ -102,7 +102,7 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	 * @param part The HTTP part.
 	 */
 	public RequestFormParam(RestRequest request, javax.servlet.http.Part part) {
-		super(FORMDATA, request, part.getName());
+		super(FORMDATA, request, part.getName(), null);
 		this.part = part;
 	}
 
@@ -114,8 +114,7 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 	 * @param value The parameter value.
 	 */
 	public RequestFormParam(RestRequest request, String name, String value) {
-		super(FORMDATA, request, name);
-		this.value = value;
+		super(FORMDATA, request, name, value);
 		this.part = null;
 	}
 
@@ -134,17 +133,78 @@ public class RequestFormParam extends RequestHttpPart implements NameValuePair {
 		return value;
 	}
 
+	/**
+	 * Returns this part value as an input stream.
+	 *
+	 * @return This part value as an input stream.
+	 * @throws IOException If an error occurs in retrieving the content.
+	 */
+	public InputStream getStream() throws IOException {
+		if (value != null)
+			return new ByteArrayInputStream(value.getBytes(IOUtils.UTF8));
+		return part.getInputStream();
+	}
 
 	/**
-	 * Sets a default value for this part.
+	 * Returns the content type of this part.
 	 *
-	 * @param def The default value.
-	 * @return This object.
+	 * @return The content type of this part, or <jk>null</jk> if not known.
 	 */
-	public RequestFormParam def(String def) {
-		if (getValue() == null)
-			value = def;
-		return this;
+	public String getContentType() {
+		return (part == null ? null : part.getContentType());
+	}
+
+	/**
+	 * Returns the value of the specified mime header as a String.
+	 *
+	 * <p>
+	 * If the Part did not include a header of the specified name, this method returns null.
+	 * If there are multiple headers with the same name, this method returns the first header in the part.
+	 * The header name is case insensitive.
+	 * You can use this method with any request header.
+	 *
+	 * @param name The header name.
+	 * @return The value of the specified mime header as a String.
+	 */
+	public String getHeader(String name) {
+		return part.getHeader(name);
+	}
+
+	/**
+	 * Returns the header names of this param.
+	 *
+	 * @return The header names of this param.
+	 */
+	public Collection<String> getHeaderNames() {
+		return part.getHeaderNames();
+	}
+
+	/**
+	 * Returns the values of the param header with the given name.
+	 *
+	 * @param name The param name.
+	 * @return The values of the param header with the given name.
+	 */
+	public Collection<String> getHeaders(String name) {
+		return part.getHeaders(name);
+	}
+
+	/**
+	 * Returns the size of this file.
+	 *
+	 * @return A long specifying the size of this part, in bytes.
+	 */
+	public long getSize() {
+		return part.getSize();
+	}
+
+	/**
+	 * Returns the file name specified by the client.
+	 *
+	 * @return The file name specified by the client.
+	 */
+	public String getSubmittedFileName() {
+		return part.getSubmittedFileName();
 	}
 
 	// <FluentSetters>
