@@ -89,9 +89,6 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	private RestResponse response;                         // The response.
 	List<RestCallInterceptor> interceptors = list();   // Used for intercepting and altering requests.
 
-	private final HeaderList.Builder headerDataBuilder;
-	private final PartList.Builder queryDataBuilder, formDataBuilder, pathDataBuilder;
-
 	private HeaderList headerData;
 	private PartList queryData, formData, pathData;
 
@@ -126,10 +123,10 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		this.errorCodes = client.errorCodes;
 		this.uriBuilder = new URIBuilder(request.getURI());
 		this.ignoreErrors = client.ignoreErrors;
-		this.headerDataBuilder = client.createHeaderDataBuilder();
-		this.queryDataBuilder = client.createQueryDataBuilder();
-		this.formDataBuilder = client.createFormDataBuilder();
-		this.pathDataBuilder = client.createPathDataBuilder();
+		this.headerData = client.createHeaderData();
+		this.queryData = client.createQueryData();
+		this.formData = client.createFormData();
+		this.pathData = client.createPathData();
 	}
 
 	/**
@@ -715,7 +712,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override
 	public boolean isDebug() {
-		return getHeaderList().get("Debug", Boolean.class).orElse(false);
+		return headerData.get("Debug", Boolean.class).orElse(false);
 	}
 
 	/**
@@ -767,42 +764,12 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the builder for the header data.
-	 *
-	 * <p>
-	 * Allows you to perform operations that aren't otherwise exposed on this API such
-	 * as Prepend/Replace/Default operations.
-	 *
-	 * @return The header data builder.
-	 */
-	public HeaderList.Builder headers() {
-		headerData = null;
-		return headerDataBuilder;
-	}
-
-	/**
 	 * Returns the header data for the request.
 	 *
 	 * @return An immutable list of headers to send on the request.
 	 */
-	public HeaderList getHeaderList() {
-		if (headerData == null)
-			headerData = headerDataBuilder.build();
+	public HeaderList getHeaders() {
 		return headerData;
-	}
-
-	/**
-	 * Returns the builder for the query data.
-	 *
-	 * <p>
-	 * Allows you to perform operations that aren't otherwise exposed on this API such
-	 * as Prepend/Replace/Default operations.
-	 *
-	 * @return The query data builder.
-	 */
-	public PartList.Builder queryData() {
-		queryData = null;
-		return queryDataBuilder;
 	}
 
 	/**
@@ -810,24 +777,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return An immutable list of query data to send on the request.
 	 */
-	public PartList getQueryDataList() {
-		if (queryData == null)
-			queryData = queryDataBuilder.build();
+	public PartList getQueryData() {
 		return queryData;
-	}
-
-	/**
-	 * Returns the builder for the form data list.
-	 *
-	 * <p>
-	 * Allows you to perform operations that aren't otherwise exposed on this API such
-	 * as Prepend/Replace/Default operations.
-	 *
-	 * @return The form data builder.
-	 */
-	public PartList.Builder formData() {
-		formData = null;
-		return formDataBuilder;
 	}
 
 	/**
@@ -835,24 +786,8 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return An immutable list of form data to send on the request.
 	 */
-	public PartList getFormDataList() {
-		if (formData == null)
-			formData = formDataBuilder.build();
+	public PartList getFormData() {
 		return formData;
-	}
-
-	/**
-	 * Returns the builder for the path data.
-	 *
-	 * <p>
-	 * Allows you to perform operations that aren't otherwise exposed on this API such
-	 * as Prepend/Replace/Default operations.
-	 *
-	 * @return The path data builder.
-	 */
-	public PartList.Builder pathData() {
-		pathData = null;
-		return pathDataBuilder;
 	}
 
 	/**
@@ -860,9 +795,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 *
 	 * @return An immutable list of path data to send on the request.
 	 */
-	public PartList getPathDataList() {
-		if (pathData == null)
-			pathData = pathDataBuilder.build();
+	public PartList getPathData() {
 		return pathData;
 	}
 
@@ -914,7 +847,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@FluentSetter
 	public RestRequest headers(Header...parts) {
-		headers().append(parts);
+		headerData.append(parts);
 		return this;
 	}
 
@@ -940,7 +873,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@FluentSetter
 	public RestRequest queryData(NameValuePair...parts) {
-		queryData().append(parts);
+		queryData.append(parts);
 		return this;
 	}
 
@@ -966,7 +899,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@FluentSetter
 	public RestRequest formData(NameValuePair...parts) {
-		formData().append(parts);
+		formData.append(parts);
 		return this;
 	}
 
@@ -992,7 +925,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@FluentSetter
 	public RestRequest pathData(NameValuePair...parts) {
-		pathData().set(parts);
+		pathData.set(parts);
 		return this;
 	}
 
@@ -1017,7 +950,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@FluentSetter
 	public RestRequest header(String name, Object value) {
-		headers().append(createHeader(name, value));
+		headerData.append(createHeader(name, value));
 		return this;
 	}
 
@@ -1042,7 +975,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@FluentSetter
 	public RestRequest queryData(String name, Object value) {
-		queryData().append(createPart(QUERY, name, value));
+		queryData.append(createPart(QUERY, name, value));
 		return this;
 	}
 
@@ -1067,7 +1000,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@FluentSetter
 	public RestRequest formData(String name, Object value) {
-		formData().append(createPart(FORMDATA, name, value));
+		formData.append(createPart(FORMDATA, name, value));
 		return this;
 	}
 
@@ -1092,7 +1025,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@FluentSetter
 	public RestRequest pathData(String name, Object value) {
-		pathData().set(createPart(PATH, name, value));
+		pathData.set(createPart(PATH, name, value));
 		return this;
 	}
 
@@ -1115,7 +1048,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest headerPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
 			throw new RuntimeException("Odd number of parameters passed into headerPairs(String...)");
-		HeaderList.Builder b = headers();
+		HeaderList b = headerData;
 		for (int i = 0; i < pairs.length; i+=2)
 			b.append(pairs[i], pairs[i+1]);
 		return this;
@@ -1145,7 +1078,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest queryDataPairs(String...pairs) throws RestCallException {
 		if (pairs.length % 2 != 0)
 			throw new RuntimeException("Odd number of parameters passed into queryDataPairs(String...)");
-		PartList.Builder b = queryData();
+		PartList b = queryData;
 		for (int i = 0; i < pairs.length; i+=2)
 			b.append(pairs[i], pairs[i+1]);
 		return this;
@@ -1175,7 +1108,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest formDataPairs(String...pairs) throws RestCallException {
 		if (pairs.length % 2 != 0)
 			throw new RuntimeException("Odd number of parameters passed into formDataPairs(String...)");
-		PartList.Builder b = formData();
+		PartList b = formData;
 		for (int i = 0; i < pairs.length; i+=2)
 			b.append(pairs[i], pairs[i+1]);
 		return this;
@@ -1207,7 +1140,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest pathDataPairs(String...pairs) {
 		if (pairs.length % 2 != 0)
 			throw new RuntimeException("Odd number of parameters passed into pathDataPairs(String...)");
-		PartList.Builder b = pathData();
+		PartList b = pathData;
 		for (int i = 0; i < pairs.length; i+=2)
 			b.set(pairs[i], pairs[i+1]);
 		return this;
@@ -1241,7 +1174,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest headersBean(Object value) {
 		if (! isBean(value))
 			throw new RuntimeException("Object passed into headersBean(Object) is not a bean.");
-		HeaderList.Builder b = headers();
+		HeaderList b = headerData;
 		toBeanMap(value, PropertyNamerDUCS.INSTANCE).forEach((k,v) -> b.append(createHeader(k, v)));
 		return this;
 	}
@@ -1270,7 +1203,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest queryDataBean(Object value) {
 		if (! isBean(value))
 			throw new RuntimeException("Object passed into queryDataBean(Object) is not a bean.");
-		PartList.Builder b = queryData();
+		PartList b = queryData;
 		toBeanMap(value).forEach((k,v) -> b.append(createPart(QUERY, k, v)));
 		return this;
 	}
@@ -1299,7 +1232,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest formDataBean(Object value) {
 		if (! isBean(value))
 			throw new RuntimeException("Object passed into formDataBean(Object) is not a bean.");
-		PartList.Builder b = formData();
+		PartList b = formData;
 		toBeanMap(value).forEach((k,v) -> b.append(createPart(FORMDATA, k, v)));
 		return this;
 	}
@@ -1328,7 +1261,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	public RestRequest pathDataBean(Object value) {
 		if (! isBean(value))
 			throw new RuntimeException("Object passed into pathDataBean(Object) is not a bean.");
-		PartList.Builder b = pathData();
+		PartList b = pathData;
 		toBeanMap(value).forEach((k,v) -> b.set(createPart(PATH, k, v)));
 		return this;
 	}
@@ -1588,7 +1521,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (skipIfEmpty)
 			l.removeIf(x -> isEmpty(x.getValue()));
 
-		headers().append(l);
+		headerData.append(l);
 
 		return this;
 	}
@@ -1625,7 +1558,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (skipIfEmpty)
 			l.removeIf(x -> isEmpty(x.getValue()));
 
-		queryData().append(l);
+		queryData.append(l);
 
 		return this;
 	}
@@ -1662,7 +1595,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 		if (skipIfEmpty)
 			l.removeIf(x -> isEmpty(x.getValue()));
 
-		formData().append(l);
+		formData.append(l);
 
 		return this;
 	}
@@ -1692,7 +1625,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			throw new BasicRuntimeException("Invalid value type for path arg ''{0}'': {1}", name, className(value));
 		}
 
-		pathData().append(l);
+		pathData.append(l);
 
 		return this;
 	}
@@ -1918,11 +1851,11 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 
 		try {
 
-			getQueryDataList().stream().map(SimpleQuery::new).filter(SimplePart::isValid).forEach(
+			queryData.stream().map(SimpleQuery::new).filter(SimplePart::isValid).forEach(
 				x -> uriBuilder.addParameter(x.name, x.value)
 			);
 
-			getPathDataList().stream().map(SimplePath::new).forEach(x ->
+			pathData.stream().map(SimplePath::new).forEach(x ->
 				{
 					String path = uriBuilder.getPath();
 					String name = x.name, value = x.value;
@@ -1941,7 +1874,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			request.setURI(uriBuilder.build());
 
 			// Pick the serializer if it hasn't been overridden.
-			HeaderList.Builder hl = headers();
+			HeaderList hl = headerData;
 			Optional<Header> h = hl.getLast("Content-Type");
 			String contentType = h.isPresent() ? h.get().getValue() : null;
 			Serializer serializer = this.serializer;
@@ -1959,7 +1892,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 			if (accept == null && parser != null)
 				hl.set(Accept.of( parser.getPrimaryMediaType()));
 
-			getHeaderList().stream().map(SimpleHeader::new).filter(SimplePart::isValid).forEach(x -> request.addHeader(x));
+			headerData.stream().map(SimpleHeader::new).filter(SimplePart::isValid).forEach(x -> request.addHeader(x));
 
 			if (request2 == null && content != NO_BODY)
 				throw new RestCallException(null, null, "Method does not support content entity.  Method={0}, URI={1}", getMethod(), getURI());
@@ -1970,7 +1903,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 				if (content != NO_BODY) {
 					input2 = content;
 				} else {
-					input2 = new UrlEncodedFormEntity(getFormDataList().stream().map(SimpleFormData::new).filter(SimplePart::isValid).collect(toList()));
+					input2 = new UrlEncodedFormEntity(formData.stream().map(SimpleFormData::new).filter(SimplePart::isValid).collect(toList()));
 				}
 
 				if (input2 instanceof Supplier)
@@ -2375,7 +2308,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public boolean containsHeader(String name) {
-		return getHeaderList().contains(name);
+		return headerData.contains(name);
 	}
 
 	/**
@@ -2389,7 +2322,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public Header[] getHeaders(String name) {
-		return getHeaderList().getAll(name);
+		return headerData.getAll(name);
 	}
 
 	/**
@@ -2404,7 +2337,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public Header getFirstHeader(String name) {
-		return getHeaderList().getFirst(name).orElse(null);
+		return headerData.getFirst(name).orElse(null);
 	}
 
 	/**
@@ -2419,7 +2352,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public Header getLastHeader(String name) {
-		return getHeaderList().getLast(name).orElse(null);
+		return headerData.getLast(name).orElse(null);
 	}
 
 	/**
@@ -2431,7 +2364,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public Header[] getAllHeaders() {
-		return getHeaderList().getAll();
+		return headerData.getAll();
 	}
 
 	/**
@@ -2447,7 +2380,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public void addHeader(Header header) {
-		headers().append(header);
+		headerData.append(header);
 	}
 
 	/**
@@ -2464,7 +2397,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public void addHeader(String name, String value) {
-		headers().append(stringHeader(name, value));
+		headerData.append(stringHeader(name, value));
 	}
 
 	/**
@@ -2476,7 +2409,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public void setHeader(Header header) {
-		headers().set(header);
+		headerData.set(header);
 	}
 
 	/**
@@ -2489,7 +2422,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public void setHeader(String name, String value) {
-		headers().set(stringHeader(name, value));
+		headerData.set(stringHeader(name, value));
 	}
 
 	/**
@@ -2499,7 +2432,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public void setHeaders(Header[] headers) {
-		headers().set(headers);
+		headerData.set(headers);
 	}
 
 	/**
@@ -2509,7 +2442,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public void removeHeader(Header header) {
-		headers().remove(header);
+		headerData.remove(header);
 	}
 
 	/**
@@ -2519,7 +2452,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public void removeHeaders(String name) {
-		headers().remove(name);
+		headerData.remove(name);
 	}
 
 	/**
@@ -2529,7 +2462,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public HeaderIterator headerIterator() {
-		return getHeaderList().headerIterator();
+		return headerData.headerIterator();
 	}
 
 	/**
@@ -2540,7 +2473,7 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 	 */
 	@Override /* HttpMessage */
 	public HeaderIterator headerIterator(String name) {
-		return getHeaderList().headerIterator(name);
+		return headerData.headerIterator(name);
 	}
 
 	/**

@@ -574,7 +574,7 @@ public class Remote_Test {
 			super(
 				create()
 				.append(basicHeader("Foo","baz"))
-				.append(HeaderList.create().append(basicHeader("Foo",()->"qux")).build().getAll())
+				.append(HeaderList.create().append(basicHeader("Foo",()->"qux")).getAll())
 			);
 		}
 	}
@@ -595,7 +595,7 @@ public class Remote_Test {
 	@SuppressWarnings("serial")
 	public static class F2b extends HeaderList {
 		public F2b() {
-			super(true);
+			super();
 			throw new NullPointerException("foo");
 		}
 	}

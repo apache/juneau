@@ -195,7 +195,7 @@ import org.apache.juneau.xml.*;
  * 		<li class='jm'>{@link RestClient#head(Object) head(uri)}
  * 		<li class='jm'>{@link RestClient#options(Object) options(uri)}
  * 		<li class='jm'>{@link RestClient#formPost(Object,Object) formPost(uri,body)} / {@link RestClient#formPost(Object) formPost(uri)}
- * 		<li class='jm'>{@link RestClient#formPostPairs(Object,Object...) formPostPairs(uri,parameters...)}
+ * 		<li class='jm'>{@link RestClient#formPostPairs(Object,String...) formPostPairs(uri,parameters...)}
  * 		<li class='jm'>{@link RestClient#request(String,Object,Object) request(method,uri,body)}
  * 	</ul>
  * </ul>
@@ -1079,8 +1079,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		private HttpClientBuilder httpClientBuilder;
 		private CloseableHttpClient httpClient;
 
-		private HeaderList.Builder headerData;
-		private PartList.Builder queryData, formData, pathData;
+		private HeaderList headerData;
+		private PartList queryData, formData, pathData;
 		private BeanCreator<RestCallHandler> callHandler;
 		private SerializerSet.Builder serializers;
 		private ParserSet.Builder parsers;
@@ -2394,7 +2394,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return The header list builder.
 		 */
-		public final HeaderList.Builder headers() {
+		public final HeaderList headers() {
 			if (headerData == null)
 				headerData = createHeaderData();
 			return headerData;
@@ -2412,7 +2412,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return The header list builder.
 		 * @see #headers()
 		 */
-		protected HeaderList.Builder createHeaderData() {
+		protected HeaderList createHeaderData() {
 			return HeaderList.create();
 		}
 
@@ -2693,7 +2693,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return The query data list builder.
 		 */
-		public final PartList.Builder queryData() {
+		public final PartList queryData() {
 			if (queryData == null)
 				queryData = createQueryData();
 			return queryData;
@@ -2711,7 +2711,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return The query data list builder.
 		 * @see #queryData()
 		 */
-		protected PartList.Builder createQueryData() {
+		protected PartList createQueryData() {
 			return PartList.create();
 		}
 
@@ -2851,7 +2851,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return The form data list builder.
 		 */
-		public final PartList.Builder formData() {
+		public final PartList formData() {
 			if (formData == null)
 				formData = createFormData();
 			return formData;
@@ -2869,7 +2869,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return The query data list builder.
 		 * @see #formData()
 		 */
-		protected PartList.Builder createFormData() {
+		protected PartList createFormData() {
 			return PartList.create();
 		}
 
@@ -3009,7 +3009,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 *
 		 * @return The form data list builder.
 		 */
-		public final PartList.Builder pathData() {
+		public final PartList pathData() {
 			if (pathData == null)
 				pathData = createPathData();
 			return pathData;
@@ -3027,7 +3027,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 		 * @return The query data list builder.
 		 * @see #pathData()
 		 */
-		protected PartList.Builder createPathData() {
+		protected PartList createPathData() {
 			return PartList.create();
 		}
 
@@ -6314,8 +6314,8 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	// Instance
 	//-------------------------------------------------------------------------------------------------------------------
 
-	final HeaderList.Builder headerData;
-	final PartList.Builder queryData, formData, pathData;
+	final HeaderList headerData;
+	final PartList queryData, formData, pathData;
 	final CloseableHttpClient httpClient;
 
 	private final HttpClientConnectionManager connectionManager;
@@ -6367,10 +6367,10 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			.addBean(RestClient.class, this);
 
 		httpClient = builder.getHttpClient();
-		headerData = builder.headers().build().copy();
-		queryData = builder.queryData().build().copy();
-		formData = builder.formData().build().copy();
-		pathData = builder.pathData().build().copy();
+		headerData = builder.headers().copy();
+		queryData = builder.queryData().copy();
+		formData = builder.formData().copy();
+		pathData = builder.pathData().copy();
 		callHandler = builder.callHandler().run();
 		skipEmptyHeaderData = builder.skipEmptyHeaderData;
 		skipEmptyQueryData = builder.skipEmptyQueryData;
@@ -6879,7 +6879,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 * 	as a parsed object.
 	 * @throws RestCallException If any authentication errors occurred.
 	 */
-	public RestRequest formPostPairs(Object uri, Object...parameters) throws RestCallException {
+	public RestRequest formPostPairs(Object uri, String...parameters) throws RestCallException {
 		return formPost(uri, partList(parameters));
 	}
 
@@ -7758,7 +7758,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 *
 	 * @return A new builder.
 	 */
-	public HeaderList.Builder createHeaderDataBuilder() {
+	public HeaderList createHeaderData() {
 		return headerData.copy();
 	}
 
@@ -7773,7 +7773,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 *
 	 * @return A new builder.
 	 */
-	public PartList.Builder createQueryDataBuilder() {
+	public PartList createQueryData() {
 		return queryData.copy();
 	}
 
@@ -7788,7 +7788,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 *
 	 * @return A new builder.
 	 */
-	public PartList.Builder createFormDataBuilder() {
+	public PartList createFormData() {
 		return formData.copy();
 	}
 
@@ -7803,7 +7803,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 	 *
 	 * @return A new builder.
 	 */
-	public PartList.Builder createPathDataBuilder() {
+	public PartList createPathData() {
 		return pathData.copy();
 	}
 

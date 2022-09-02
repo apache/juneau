@@ -2603,11 +2603,11 @@ public class HttpHeaders {
 	}
 
 	/**
-	 * Instantiates a new {@link org.apache.juneau.http.header.HeaderList.Builder}.
+	 * Instantiates a new {@link org.apache.juneau.http.header.HeaderList}.
 	 *
 	 * @return A new empty builder.
 	 */
-	public static final HeaderList.Builder headerList() {
+	public static final HeaderList headerList() {
 		return HeaderList.create();
 	}
 

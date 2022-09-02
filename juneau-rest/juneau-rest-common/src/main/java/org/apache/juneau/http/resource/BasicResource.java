@@ -65,7 +65,7 @@ public class BasicResource implements HttpResource {
 	 */
 	public BasicResource(HttpResourceBuilder<?> builder) {
 		this.entity = builder.entity();
-		this.headers = builder.headers();
+		this.headers = builder.headers.copy();
 	}
 
 	/**

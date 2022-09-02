@@ -173,7 +173,7 @@ public class RestClient_FormData_Test {
 		return serializedPart(name, val).schema(schema);
 	}
 
-	private static PartList parts(Object...pairs) {
+	private static PartList parts(String...pairs) {
 		return partList(pairs);
 	}
 

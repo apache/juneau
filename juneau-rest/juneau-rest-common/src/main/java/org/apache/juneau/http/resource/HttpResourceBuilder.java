@@ -37,8 +37,7 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="HttpResourceBuilder<T>")
 public class HttpResourceBuilder<T extends BasicResource> {
 
-	HeaderList headers = HeaderList.EMPTY;
-	HeaderList.Builder headersBuilder;
+	HeaderList headers = HeaderList.create();
 
 	BasicHttpEntity entity;
 	HttpEntityBuilder<?> entityBuilder;
@@ -90,14 +89,6 @@ public class HttpResourceBuilder<T extends BasicResource> {
 		} catch (Exception e) {
 			throw asRuntimeException(e);
 		}
-	}
-
-	HeaderList headers() {
-		if (headersBuilder != null)
-			return headersBuilder.build();
-		if (headers == null)
-			return HeaderList.EMPTY;
-		return headers;
 	}
 
 	BasicHttpEntity entity() {
@@ -281,12 +272,8 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 *
 	 * @return The underlying builder for the headers.
 	 */
-	public HeaderList.Builder getHeaders() {
-		if (headersBuilder == null) {
-			headersBuilder = headers == null ? HeaderList.create() : headers.copy();
-			headers = null;
-		}
-		return headersBuilder;
+	public HeaderList getHeaders() {
+		return headers;
 	}
 
 	/**
@@ -298,7 +285,6 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	@FluentSetter
 	public HttpResourceBuilder<T> headers(HeaderList value) {
 		headers = value;
-		headersBuilder = null;
 		return this;
 	}
 
@@ -310,7 +296,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 */
 	public HttpResourceBuilder<T> header(Header value) {
 		if (value != null)
-			getHeaders().append(value);
+			headers.append(value);
 		return this;
 	}
 
@@ -326,7 +312,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 */
 	public HttpResourceBuilder<T> header(String name, String value) {
 		if (name != null && value != null)
-			getHeaders().append(name, value);
+			headers.append(name, value);
 		return this;
 	}
 
@@ -349,7 +335,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 					else if (n.equalsIgnoreCase("content-length"))
 						contentLength(Long.parseLong(v));
 					else
-						getHeaders().append(h);
+						headers.append(h);
 				}
 			}
 		}
@@ -363,7 +349,7 @@ public class HttpResourceBuilder<T extends BasicResource> {
 	 * @return This object.
 	 */
 	public HttpResourceBuilder<T> headers(List<Header> values) {
-		getHeaders().append(values);
+		headers.append(values);
 		return this;
 	}
 

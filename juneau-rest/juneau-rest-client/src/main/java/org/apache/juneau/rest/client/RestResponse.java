@@ -719,7 +719,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public void addHeader(Header header) {
-		headers = headers.copy().append(header).build();
+		headers.append(header);
 	}
 
 	/**
@@ -732,7 +732,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public void addHeader(String name, String value) {
-		headers = headers.copy().append(name, value).build();
+		headers.append(name, value);
 	}
 
 	/**
@@ -744,7 +744,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public void setHeader(Header header) {
-		headers = headers.copy().set(header).build();
+		headers.set(header);
 	}
 
 	/**
@@ -757,7 +757,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public void setHeader(String name, String value) {
-		headers = headers.copy().set(name, value).build();
+		headers.set(name, value);
 	}
 
 	/**
@@ -777,7 +777,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public void removeHeader(Header header) {
-		headers = headers.copy().remove(header).build();
+		headers.remove(header);
 	}
 
 	/**
@@ -787,7 +787,7 @@ public class RestResponse implements HttpResponse {
 	 */
 	@Override /* HttpMessage */
 	public void removeHeaders(String name) {
-		headers = headers.copy().remove(name).build();
+		headers.remove(name);
 	}
 
 	/**
@@ -851,7 +851,7 @@ public class RestResponse implements HttpResponse {
 				sb.append("\n=== REQUEST ===\n");
 				sb.append(request.getMethod()).append(" ").append(request.getURI());
 				sb.append("\n---request headers---");
-				request.getHeaderList().forEach(x -> sb.append("\n\t").append(x));
+				request.getHeaders().forEach(x -> sb.append("\n\t").append(x));
 				if (request.hasHttpEntity()) {
 					sb.append("\n---request entity---");
 					HttpEntity e = request.getHttpEntity();

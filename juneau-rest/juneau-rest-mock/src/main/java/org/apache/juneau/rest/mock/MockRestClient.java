@@ -1969,7 +1969,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 	}
 
 	@Override /* RestClient */
-	public MockRestRequest formPostPairs(Object url, Object...parameters) throws RestCallException {
+	public MockRestRequest formPostPairs(Object url, String...parameters) throws RestCallException {
 		return (MockRestRequest)super.formPostPairs(url, parameters);
 	}
 

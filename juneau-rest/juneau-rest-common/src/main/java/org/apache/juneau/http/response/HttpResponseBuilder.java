@@ -38,9 +38,9 @@ import org.apache.juneau.internal.*;
 public class HttpResponseBuilder<T extends BasicHttpResponse> {
 
 	BasicStatusLine statusLine;
-	HeaderList headers = HeaderList.EMPTY;
+	HeaderList headers = HeaderList.create();
 	BasicStatusLine.Builder statusLineBuilder;
-	HeaderList.Builder headersBuilder;
+	private int TODO;
 	HttpEntity content;
 	boolean unmodifiable;
 
@@ -99,14 +99,6 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 		if (statusLineBuilder != null)
 			return statusLineBuilder.build();
 		return statusLine;
-	}
-
-	HeaderList buildHeaders() {
-		if (headersBuilder != null)
-			return headersBuilder.build();
-		if (headers == null)
-			return HeaderList.EMPTY;
-		return headers;
 	}
 
 	/**
@@ -238,12 +230,8 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 *
 	 * @return The underlying builder for the headers.
 	 */
-	public HeaderList.Builder getHeaders() {
-		if (headersBuilder == null) {
-			headersBuilder = headers == null ? HeaderList.create() : headers.copy();
-			headers = null;
-		}
-		return headersBuilder;
+	public HeaderList getHeaders() {
+		return headers;
 	}
 
 	/**
@@ -255,7 +243,6 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	@FluentSetter
 	public HttpResponseBuilder<T> headers(HeaderList value) {
 		headers = value;
-		headersBuilder = null;
 		return this;
 	}
 
@@ -266,7 +253,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object.
 	 */
 	public HttpResponseBuilder<T> header(Header value) {
-		getHeaders().append(value);
+		headers.append(value);
 		return this;
 	}
 
@@ -278,7 +265,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object.
 	 */
 	public HttpResponseBuilder<T> header(String name, String value) {
-		getHeaders().append(name, value);
+		headers.append(name, value);
 		return this;
 	}
 
@@ -289,7 +276,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object.
 	 */
 	public HttpResponseBuilder<T> headers(Header...values) {
-		getHeaders().append(values);
+		headers.append(values);
 		return this;
 	}
 
@@ -300,7 +287,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 * @return This object.
 	 */
 	public HttpResponseBuilder<T> headers(List<Header> values) {
-		getHeaders().append(values);
+		headers.append(values);
 		return this;
 	}
 
@@ -312,7 +299,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 */
 	@FluentSetter
 	public HttpResponseBuilder<T> location(URI value) {
-		getHeaders().set(Location.of(value));
+		headers.set(Location.of(value));
 		return this;
 	}
 
@@ -324,7 +311,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 */
 	@FluentSetter
 	public HttpResponseBuilder<T> location(String value) {
-		getHeaders().set(Location.of(value));
+		headers.set(Location.of(value));
 		return this;
 	}
 

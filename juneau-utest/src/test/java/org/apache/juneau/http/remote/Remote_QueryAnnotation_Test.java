@@ -798,7 +798,7 @@ public class Remote_QueryAnnotation_Test {
 	public static class K3a {
 		@Query() @Schema(aev=true)
 		public PartList getA() {
-			return parts("a1","v1","a2",123,"a3",null,"a4","");
+			return parts("a1","v1","a2","123","a3",null,"a4","");
 		}
 		@Query("*")
 		public PartList getB() {
@@ -806,7 +806,7 @@ public class Remote_QueryAnnotation_Test {
 		}
 		@Query("*") @Schema(aev=true)
 		public PartList getC() {
-			return parts("c1","v1","c2",123,"c3",null,"c4","");
+			return parts("c1","v1","c2","123","c3",null,"c4","");
 		}
 		@Query("*")
 		public PartList getD() {
@@ -814,7 +814,7 @@ public class Remote_QueryAnnotation_Test {
 		}
 		@Query() @Schema(aev=true)
 		public NameValuePair[] getE() {
-			return parts("e1","v1","e2",123,"e3",null,"e4","").getAll();
+			return parts("e1","v1","e2","123","e3",null,"e4","").getAll();
 		}
 	}
 
@@ -932,7 +932,7 @@ public class Remote_QueryAnnotation_Test {
 	// Helper methods.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static PartList parts(Object...pairs) {
+	private static PartList parts(String...pairs) {
 		return partList(pairs);
 	}
 

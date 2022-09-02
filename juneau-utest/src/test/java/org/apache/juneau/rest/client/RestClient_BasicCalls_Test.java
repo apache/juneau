@@ -172,7 +172,7 @@ public class RestClient_BasicCalls_Test {
 			stringResource("{f:1}").build(),
 			bean,
 			stringEntity("{f:1}").build(),
-			parts("f",1)
+			parts("f","1")
 		);
 		for (Object body : bodies) {
 			client().headers(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).build().put("/bean",body).run().assertContent("{f:1}");
@@ -215,7 +215,7 @@ public class RestClient_BasicCalls_Test {
 			stringResource("{f:1}").build(),
 			bean,
 			stringEntity("{f:1}").build(),
-			parts("f",1)
+			parts("f","1")
 		);
 		for (Object body : bodies) {
 			client().headers(body instanceof PartList ? APPLICATION_FORM_URLENCODED : APPLICATION_JSON).build().post("/bean",body).run().assertContent("{f:1}");
@@ -333,7 +333,7 @@ public class RestClient_BasicCalls_Test {
 
 	@Test
 	public void a21_formPostPairs() throws Exception {
-		client().build().formPostPairs("/bean",new StringBuilder("f"),new StringBuilder("1")).accept("application/json+simple").run().assertContent("{f:1}");
+		client().build().formPostPairs("/bean","f","1").accept("application/json+simple").run().assertContent("{f:1}");
 	}
 
 	@Test
@@ -355,7 +355,7 @@ public class RestClient_BasicCalls_Test {
 			stringResource("{f:1}").build(),
 			bean,
 			stringEntity("{f:1}").build(),
-			parts("f",1)
+			parts("f","1")
 		);
 		RestClient x = client().build();
 		for (Object body : bodies) {
@@ -392,7 +392,7 @@ public class RestClient_BasicCalls_Test {
 			stringResource("{f:1}").build(),
 			bean,
 			stringEntity("{f:1}").build(),
-			parts("f",1)
+			parts("f","1")
 		);
 		RestClient x = client().build();
 		for (Object body : bodies) {
@@ -443,7 +443,7 @@ public class RestClient_BasicCalls_Test {
 		return basicPart(name, val);
 	}
 
-	private static PartList parts(Object...pairs) {
+	private static PartList parts(String...pairs) {
 		return partList(pairs);
 	}
 

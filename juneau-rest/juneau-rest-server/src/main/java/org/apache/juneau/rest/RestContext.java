@@ -253,8 +253,9 @@ public class RestContext extends Context {
 		private HttpPartParser.Creator partParser;
 		private JsonSchemaGenerator.Builder jsonSchemaGenerator;
 		private BeanCreator<StaticFiles> staticFiles;
-		private HeaderList.Builder defaultRequestHeaders, defaultResponseHeaders;
+		private HeaderList defaultRequestHeaders, defaultResponseHeaders;
 		private NamedAttributeList.Builder defaultRequestAttributes;
+		private int TODO;
 		private RestOpArgList.Builder restOpArgs;
 		private BeanCreator<DebugEnablement> debugEnablement;
 		private MethodList startCallMethods, endCallMethods, postInitMethods, postInitChildFirstMethods, destroyMethods, preCallMethods, postCallMethods;
@@ -2789,11 +2790,11 @@ public class RestContext extends Context {
 		//-----------------------------------------------------------------------------------------------------------------
 
 		/**
-		 * Returns the default request headers sub-builder.
+		 * Returns the default request headers.
 		 *
-		 * @return The default request headers sub-builder.
+		 * @return The default request headers.
 		 */
-		public HeaderList.Builder defaultRequestHeaders() {
+		public HeaderList defaultRequestHeaders() {
 			if (defaultRequestHeaders == null)
 				defaultRequestHeaders = createDefaultRequestHeaders(beanStore(), resource());
 			return defaultRequestHeaders;
@@ -2899,24 +2900,24 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new default request headers sub-builder.
 		 */
-		protected HeaderList.Builder createDefaultRequestHeaders(BeanStore beanStore, Supplier<?> resource) {
+		protected HeaderList createDefaultRequestHeaders(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<HeaderList.Builder> v = Value.of(
+			Value<HeaderList> v = Value.of(
 				HeaderList.create()
 			);
 
 			// Replace with bean from bean store.
 			beanStore
 				.getBean(HeaderList.class, "defaultRequestHeaders")
-				.ifPresent(x -> v.get().impl(x));
+				.ifPresent(x -> v.set(x));
 
 			// Replace with bean from:  @RestInject(name="defaultRequestHeaders") public [static] HeaderList xxx(<args>)
 			beanStore
 				.createMethodFinder(HeaderList.class)
-				.addBean(HeaderList.Builder.class, v.get())
+				.addBean(HeaderList.class, v.get())
 				.find(x -> isRestBeanMethod(x, "defaultRequestHeaders"))
-				.run(x -> v.get().impl(x));
+				.run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -2926,11 +2927,11 @@ public class RestContext extends Context {
 		//-----------------------------------------------------------------------------------------------------------------
 
 		/**
-		 * Returns the default response headers sub-builder.
+		 * Returns the default response headers.
 		 *
-		 * @return The default response headers sub-builder.
+		 * @return The default response headers.
 		 */
-		public HeaderList.Builder defaultResponseHeaders() {
+		public HeaderList defaultResponseHeaders() {
 			if (defaultResponseHeaders == null)
 				defaultResponseHeaders = createDefaultResponseHeaders(beanStore(), resource());
 			return defaultResponseHeaders;
@@ -3002,24 +3003,24 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new default response headers sub-builder.
 		 */
-		protected HeaderList.Builder createDefaultResponseHeaders(BeanStore beanStore, Supplier<?> resource) {
+		protected HeaderList createDefaultResponseHeaders(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<HeaderList.Builder> v = Value.of(
+			Value<HeaderList> v = Value.of(
 				HeaderList.create()
 			);
 
 			// Replace with bean from bean store.
 			beanStore
 				.getBean(HeaderList.class, "defaultResponseHeaders")
-				.ifPresent(x -> v.get().impl(x));
+				.ifPresent(x -> v.set(x));
 
 			// Replace with bean from:  @RestInject(name="defaultResponseHeaders") public [static] HeaderList xxx(<args>)
 			beanStore
 				.createMethodFinder(HeaderList.class)
-				.addBean(HeaderList.Builder.class, v.get())
+				.addBean(HeaderList.class, v.get())
 				.find(x -> isRestBeanMethod(x, "defaultResponseHeaders"))
-				.run(x -> v.get().impl(x));
+				.run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -5513,8 +5514,8 @@ public class RestContext extends Context {
 			jsonSchemaGenerator = bs.add(JsonSchemaGenerator.class, builder.jsonSchemaGenerator().build());
 			staticFiles = bs.add(StaticFiles.class, builder.staticFiles().orElse(null));
 			bs.add(FileFinder.class, staticFiles);
-			defaultRequestHeaders = bs.add(HeaderList.class, builder.defaultRequestHeaders().build(), "defaultRequestHeaders");
-			defaultResponseHeaders = bs.add(HeaderList.class, builder.defaultResponseHeaders().build(), "defaultResponseHeaders");
+			defaultRequestHeaders = bs.add(HeaderList.class, builder.defaultRequestHeaders(), "defaultRequestHeaders");
+			defaultResponseHeaders = bs.add(HeaderList.class, builder.defaultResponseHeaders(), "defaultResponseHeaders");
 			defaultRequestAttributes = bs.add(NamedAttributeList.class, builder.defaultRequestAttributes().build(), "defaultRequestAttributes");
 			restOpArgs = builder.restOpArgs().build().asArray();
 			debugEnablement = bs.add(DebugEnablement.class, builder.debugEnablement().orElse(null));

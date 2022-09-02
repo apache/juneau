@@ -221,7 +221,7 @@ public class Query_Test {
 		d.get("/b").queryData("f1",4).queryData("f2",5).queryData("f3",6).run().assertContent("{f1:'4',f2:'5',f3:'6'}");
 		d.get("/c").run().assertContent("{f1:'1',f2:'2',f3:'3'}");
 		d.get("/c").queryData("f1",4).queryData("f2",5).queryData("f3",6).run().assertContent("{f1:'4',f2:'5',f3:'6'}");
-		d.get("/d").run().assertContent("{f1:'4',f2:'5',f3:'6'}");
+		d.get("/d").run().assertContent("{f1:'1',f2:'2',f3:'3'}");
 		d.get("/d").queryData("f1",7).queryData("f2",8).queryData("f3",9).run().assertContent("{f1:'7',f2:'8',f3:'9'}");
 	}
 

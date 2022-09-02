@@ -55,20 +55,20 @@ public class RemoteMeta {
 		List<Remote> remotes = ci.getAnnotations(Remote.class);
 
 		String versionHeader = "Client-Version", clientVersion = null;
-		HeaderList.Builder headersBuilder = HeaderList.create().resolving();
+		HeaderList headers = HeaderList.create().resolving();
 
 		for (Remote r : remotes) {
 			if (isNotEmpty(r.path()))
 				path = trimSlashes(resolve(r.path()));
 			for (String h : r.headers())
-				headersBuilder.append(stringHeader(resolve(h)));
+				headers.append(stringHeader(resolve(h)));
 			if (isNotEmpty(r.version()))
 				clientVersion = resolve(r.version());
 			if (isNotEmpty(r.versionHeader()))
 				versionHeader = resolve(r.versionHeader());
 			if (isNotVoid(r.headerList())) {
 				try {
-					headersBuilder.append(r.headerList().newInstance().getAll());
+					headers.append(r.headerList().newInstance().getAll());
 				} catch (Exception e) {
 					throw new BasicRuntimeException(e, "Could not instantiate HeaderSupplier class");
 				}
@@ -76,7 +76,7 @@ public class RemoteMeta {
 		}
 
 		if (clientVersion != null)
-			headersBuilder.append(stringHeader(versionHeader, clientVersion));
+			headers.append(stringHeader(versionHeader, clientVersion));
 
 		Map<Method,RemoteOperationMeta> operations = map();
 		String path2 = path;
@@ -86,7 +86,7 @@ public class RemoteMeta {
 		);
 
 		this.operations = unmodifiable(operations);
-		this.headers = headersBuilder.build();
+		this.headers = headers;
 	}
 
 	/**

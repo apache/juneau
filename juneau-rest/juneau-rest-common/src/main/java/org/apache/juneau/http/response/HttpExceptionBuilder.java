@@ -39,9 +39,9 @@ import org.apache.juneau.internal.*;
 public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRuntimeException.Builder {
 
 	BasicStatusLine statusLine;
-	HeaderList headers = HeaderList.EMPTY;
+	HeaderList headers = HeaderList.create();
 	BasicStatusLine.Builder statusLineBuilder;
-	HeaderList.Builder headersBuilder;
+	private int TODO;
 	HttpEntity content;
 
 	private final Class<? extends BasicHttpException> implClass;
@@ -104,14 +104,6 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 		if (statusLineBuilder != null)
 			return statusLineBuilder.build();
 		return statusLine;
-	}
-
-	HeaderList buildHeaders() {
-		if (headersBuilder != null)
-			return headersBuilder.build();
-		if (headers == null)
-			return HeaderList.EMPTY;
-		return headers;
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -232,12 +224,8 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 *
 	 * @return The underlying builder for the headers.
 	 */
-	public HeaderList.Builder getHeaders() {
-		if (headersBuilder == null) {
-			headersBuilder = headers == null ? HeaderList.create() : headers.copy();
-			headers = null;
-		}
-		return headersBuilder;
+	public HeaderList getHeaders() {
+		return headers;
 	}
 
 	/**
@@ -249,7 +237,6 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	@FluentSetter
 	public HttpExceptionBuilder<T> headers(HeaderList value) {
 		headers = value;
-		headersBuilder = null;
 		return this;
 	}
 
@@ -260,7 +247,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object.
 	 */
 	public HttpExceptionBuilder<T> header(Header value) {
-		getHeaders().append(value);
+		headers.append(value);
 		return this;
 	}
 
@@ -272,7 +259,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object.
 	 */
 	public HttpExceptionBuilder<T> header(String name, String value) {
-		getHeaders().append(name, value);
+		headers.append(name, value);
 		return this;
 	}
 
@@ -283,7 +270,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object.
 	 */
 	public HttpExceptionBuilder<T> headers(Header...values) {
-		getHeaders().append(values);
+		headers.append(values);
 		return this;
 	}
 
@@ -294,7 +281,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 * @return This object.
 	 */
 	public HttpExceptionBuilder<T> headers(List<Header> values) {
-		getHeaders().append(values);
+		headers.append(values);
 		return this;
 	}
 

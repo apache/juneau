@@ -57,8 +57,8 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 
 	HeaderList headers;
 	BasicStatusLine statusLine;
-	HeaderList.Builder headersBuilder;
 	BasicStatusLine.Builder statusLineBuilder;
+	private int TODO;
 	HttpEntity content;
 
 	/**
@@ -79,7 +79,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 */
 	public BasicHttpException(HttpExceptionBuilder<?> builder) {
 		super(builder);
-		headers = builder.buildHeaders();
+		headers = builder.headers;
 		statusLine = builder.buildStatusLine();
 		content = builder.content;
 	}
@@ -250,72 +250,72 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 
 	@Override /* HttpMessage */
 	public boolean containsHeader(String name) {
-		return headers().contains(name);
+		return headers.contains(name);
 	}
 
 	@Override /* HttpMessage */
 	public Header[] getHeaders(String name) {
-		return headers().getAll(name);
+		return headers.getAll(name);
 	}
 
 	@Override /* HttpMessage */
 	public Header getFirstHeader(String name) {
-		return headers().getFirst(name).orElse(null);
+		return headers.getFirst(name).orElse(null);
 	}
 
 	@Override /* HttpMessage */
 	public Header getLastHeader(String name) {
-		return headers().getLast(name).orElse(null);
+		return headers.getLast(name).orElse(null);
 	}
 
 	@Override /* HttpMessage */
 	public Header[] getAllHeaders() {
-		return headers().getAll();
+		return headers.getAll();
 	}
 
 	@Override /* HttpMessage */
 	public void addHeader(Header value) {
-		headersBuilder().append(value).build();
+		headers.append(value);
 	}
 
 	@Override /* HttpMessage */
 	public void addHeader(String name, String value) {
-		headersBuilder().append(name, value).build();
+		headers.append(name, value);
 	}
 
 	@Override /* HttpMessage */
 	public void setHeader(Header value) {
-		headersBuilder().set(value).build();
+		headers.set(value);
 	}
 
 	@Override /* HttpMessage */
 	public void setHeader(String name, String value) {
-		headersBuilder().set(name, value).build();
+		headers.set(name, value);
 	}
 
 	@Override /* HttpMessage */
 	public void setHeaders(Header[] values) {
-		headersBuilder().clear().append(values).build();
+		headers.removeAll().append(values);
 	}
 
 	@Override /* HttpMessage */
 	public void removeHeader(Header value) {
-		headersBuilder().remove(value).build();
+		headers.remove(value);
 	}
 
 	@Override /* HttpMessage */
 	public void removeHeaders(String name) {
-		headersBuilder().remove(name).build();
+		headers.remove(name);
 	}
 
 	@Override /* HttpMessage */
 	public HeaderIterator headerIterator() {
-		return headers().headerIterator();
+		return headers.headerIterator();
 	}
 
 	@Override /* HttpMessage */
 	public HeaderIterator headerIterator(String name) {
-		return headers().headerIterator(name);
+		return headers.headerIterator(name);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -391,14 +391,6 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		return statusLine;
 	}
 
-	private HeaderList headers() {
-		if (headers == null) {
-			headers = headersBuilder.build();
-			headersBuilder = null;
-		}
-		return headers;
-	}
-
 	private BasicStatusLine.Builder statusLineBuilder() {
 		assertModifiable();
 		if (statusLineBuilder == null) {
@@ -406,14 +398,5 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 			statusLine = null;
 		}
 		return statusLineBuilder;
-	}
-
-	private HeaderList.Builder headersBuilder() {
-		assertModifiable();
-		if (headersBuilder == null) {
-			headersBuilder = headers.copy();
-			headers = null;
-		}
-		return headersBuilder;
 	}
 }

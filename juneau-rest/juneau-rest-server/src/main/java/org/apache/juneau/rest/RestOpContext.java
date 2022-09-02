@@ -122,9 +122,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		private RestMatcherList.Builder matchers;
 		private JsonSchemaGenerator.Builder jsonSchemaGenerator;
 
-		PartList.Builder defaultRequestFormData, defaultRequestQueryData;
+		PartList defaultRequestFormData, defaultRequestQueryData;
 		NamedAttributeList.Builder defaultRequestAttributes;
-		HeaderList.Builder defaultRequestHeaders, defaultResponseHeaders;
+		private int TODO;
+		HeaderList defaultRequestHeaders, defaultResponseHeaders;
 		RestMatcherList.Builder restMatchers;
 		List<MediaType> produces, consumes;
 		Set<String> roleGuard, rolesDeclared;
@@ -1330,11 +1331,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		//-----------------------------------------------------------------------------------------------------------------
 
 		/**
-		 * Returns the default request headers sub-builder.
+		 * Returns the default request headers.
 		 *
-		 * @return The default request headers sub-builder.
+		 * @return The default request headers.
 		 */
-		public HeaderList.Builder defaultRequestHeaders() {
+		public HeaderList defaultRequestHeaders() {
 			if (defaultRequestHeaders == null)
 				defaultRequestHeaders = createDefaultRequestHeaders(beanStore(), parent, resource());
 			return defaultRequestHeaders;
@@ -1358,7 +1359,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		/**
-		 * Instantiates the default request headers sub-builder.
+		 * Instantiates the default request headers.
 		 *
 		 * @param beanStore
 		 * 	The factory used for creating beans and retrieving injected beans.
@@ -1368,19 +1369,19 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new default request headers sub-builder.
 		 */
-		protected HeaderList.Builder createDefaultRequestHeaders(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
+		protected HeaderList createDefaultRequestHeaders(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
-			Value<HeaderList.Builder> v = Value.of(
+			Value<HeaderList> v = Value.of(
 				parent.defaultRequestHeaders().copy()
 			);
 
 			// Replace with bean from:  @RestInject(name="defaultRequestHeaders",methodScope="foo") public [static] HeaderList xxx(<args>)
 			BeanStore
 				.of(beanStore, resource)
-				.addBean(HeaderList.Builder.class, v.get())
+				.addBean(HeaderList.class, v.get())
 				.createMethodFinder(HeaderList.class, resource)
 				.find(x -> matches(x, "defaultRequestHeaders"))
-				.run(x -> v.get().impl(x));
+				.run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -1390,11 +1391,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		//-----------------------------------------------------------------------------------------------------------------
 
 		/**
-		 * Returns the default response headers sub-builder.
+		 * Returns the default response headers.
 		 *
-		 * @return The default response headers sub-builder.
+		 * @return The default response headers.
 		 */
-		public HeaderList.Builder defaultResponseHeaders() {
+		public HeaderList defaultResponseHeaders() {
 			if (defaultResponseHeaders == null)
 				defaultResponseHeaders = createDefaultResponseHeaders(beanStore(), parent, resource());
 			return defaultResponseHeaders;
@@ -1418,7 +1419,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		/**
-		 * Instantiates the default response headers sub-builder.
+		 * Instantiates the default response headers.
 		 *
 		 * @param beanStore
 		 * 	The factory used for creating beans and retrieving injected beans.
@@ -1428,19 +1429,19 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new default response headers sub-builder.
 		 */
-		protected HeaderList.Builder createDefaultResponseHeaders(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
+		protected HeaderList createDefaultResponseHeaders(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
-			Value<HeaderList.Builder> v = Value.of(
+			Value<HeaderList> v = Value.of(
 				parent.defaultResponseHeaders().copy()
 			);
 
 			// Replace with bean from:  @RestInject(name="defaultResponseHeaders",methodScope="foo") public [static] HeaderList xxx(<args>)
 			BeanStore
 				.of(beanStore, resource)
-				.addBean(HeaderList.Builder.class, v.get())
+				.addBean(HeaderList.class, v.get())
 				.createMethodFinder(HeaderList.class, resource)
 				.find(x -> matches(x, "defaultResponseHeaders"))
-				.run(x -> v.get().impl(x));
+				.run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -1510,11 +1511,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		//-----------------------------------------------------------------------------------------------------------------
 
 		/**
-		 * Returns the default request query data sub-builder.
+		 * Returns the default request query data.
 		 *
-		 * @return The default request query data sub-builder.
+		 * @return The default request query data.
 		 */
-		public PartList.Builder defaultRequestQueryData() {
+		public PartList defaultRequestQueryData() {
 			if (defaultRequestQueryData == null)
 				defaultRequestQueryData = createDefaultRequestQueryData(beanStore(), parent, resource());
 			return defaultRequestQueryData;
@@ -1538,7 +1539,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		/**
-		 * Instantiates the default request query data sub-builder.
+		 * Instantiates the default request query data.
 		 *
 		 * @param beanStore
 		 * 	The factory used for creating beans and retrieving injected beans.
@@ -1548,19 +1549,19 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new default request query data sub-builder.
 		 */
-		protected PartList.Builder createDefaultRequestQueryData(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
+		protected PartList createDefaultRequestQueryData(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
-			Value<PartList.Builder> v = Value.of(
+			Value<PartList> v = Value.of(
 				PartList.create()
 			);
 
 			// Replace with bean from:  @RestInject(name="defaultRequestQueryData",methodScope="foo") public [static] PartList xxx(<args>)
 			BeanStore
 				.of(beanStore, resource)
-				.addBean(PartList.Builder.class, v.get())
+				.addBean(PartList.class, v.get())
 				.createMethodFinder(PartList.class, resource)
 				.find(x -> matches(x, "defaultRequestQueryData"))
-				.run(x -> v.get().impl(x));
+				.run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -1570,11 +1571,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		//-----------------------------------------------------------------------------------------------------------------
 
 		/**
-		 * Returns the default request form data sub-builder.
+		 * Returns the default request form data.
 		 *
-		 * @return The default request form data sub-builder.
+		 * @return The default request form data.
 		 */
-		public PartList.Builder defaultRequestFormData() {
+		public PartList defaultRequestFormData() {
 			if (defaultRequestFormData == null)
 				defaultRequestFormData = createDefaultRequestFormData(beanStore(), parent, resource());
 			return defaultRequestFormData;
@@ -1598,7 +1599,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		/**
-		 * Instantiates the default request form data sub-builder.
+		 * Instantiates the default request form data.
 		 *
 		 * @param beanStore
 		 * 	The factory used for creating beans and retrieving injected beans.
@@ -1608,19 +1609,19 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new default request form data sub-builder.
 		 */
-		protected PartList.Builder createDefaultRequestFormData(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
+		protected PartList createDefaultRequestFormData(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
-			Value<PartList.Builder> v = Value.of(
+			Value<PartList> v = Value.of(
 				PartList.create()
 			);
 
 			// Replace with bean from:  @RestInject(name="defaultRequestFormData",methodScope="foo") public [static] PartList xxx(<args>)
 			BeanStore
 				.of(beanStore, resource)
-				.addBean(PartList.Builder.class, v.get())
+				.addBean(PartList.class, v.get())
 				.createMethodFinder(PartList.class, resource)
 				.find(x -> matches(x, "defaultRequestFormData"))
-				.run(x -> v.get().impl(x));
+				.run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -2301,10 +2302,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			supportedAcceptTypes = unmodifiable(builder.produces != null ? builder.produces : serializers.getSupportedMediaTypes());
 			supportedContentTypes = unmodifiable(builder.consumes != null ? builder.consumes : parsers.getSupportedMediaTypes());
 
-			defaultRequestHeaders = builder.defaultRequestHeaders().build();
-			defaultResponseHeaders = builder.defaultResponseHeaders().build();
-			defaultRequestQueryData = builder.defaultRequestQueryData().build();
-			defaultRequestFormData = builder.defaultRequestFormData().build();
+			defaultRequestHeaders = builder.defaultRequestHeaders();
+			defaultResponseHeaders = builder.defaultResponseHeaders();
+			defaultRequestQueryData = builder.defaultRequestQueryData();
+			defaultRequestFormData = builder.defaultRequestFormData();
 			defaultRequestAttributes = builder.defaultRequestAttributes().build();
 
 			int _hierarchyDepth = 0;

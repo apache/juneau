@@ -374,11 +374,11 @@ public class HttpParts {
 	}
 
 	/**
-	 * Instantiates a new {@link org.apache.juneau.http.part.PartList.Builder}.
+	 * Instantiates a new {@link org.apache.juneau.http.part.PartList}.
 	 *
-	 * @return A new empty builder.
+	 * @return A new part list.
 	 */
-	public static final PartList.Builder partList() {
+	public static final PartList partList() {
 		return PartList.create();
 	}
 
@@ -411,7 +411,7 @@ public class HttpParts {
 	 * @throws RuntimeException If odd number of parameters were specified.
 	 * @return A new instance.
 	 */
-	public static PartList partList(Object...pairs) {
+	public static PartList partList(String...pairs) {
 		return PartList.ofPairs(pairs);
 	}
 

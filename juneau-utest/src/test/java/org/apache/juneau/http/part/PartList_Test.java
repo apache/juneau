@@ -72,25 +72,25 @@ public class PartList_Test {
 
 	@Test
 	public void a01_basic() {
-		PartList.Builder x = PartList.create();
+		PartList x = PartList.create();
 
-		assertObject(x.build()).isString("");
+		assertObject(x).isString("");
 		x.append(FOO_1);
-		assertObject(x.build()).isString("Foo=1");
+		assertObject(x).isString("Foo=1");
 		x.append(FOO_2);
-		assertObject(x.build()).isString("Foo=1&Foo=2");
+		assertObject(x).isString("Foo=1&Foo=2");
 		x.append(PartList.of().getAll());
-		assertObject(x.build()).isString("Foo=1&Foo=2");
+		assertObject(x).isString("Foo=1&Foo=2");
 		x.append(PartList.of(FOO_3).getAll());
-		assertObject(x.build()).isString("Foo=1&Foo=2&Foo=3");
+		assertObject(x).isString("Foo=1&Foo=2&Foo=3");
 		x.append(PartList.of(FOO_4, FOO_5).getAll());
-		assertObject(x.build()).isString("Foo=1&Foo=2&Foo=3&Foo=4&Foo=5");
+		assertObject(x).isString("Foo=1&Foo=2&Foo=3&Foo=4&Foo=5");
 		x.append(PartList.of(FOO_6, FOO_7).getAll());
-		assertObject(x.build()).isString("Foo=1&Foo=2&Foo=3&Foo=4&Foo=5&Foo=6&Foo=7");
+		assertObject(x).isString("Foo=1&Foo=2&Foo=3&Foo=4&Foo=5&Foo=6&Foo=7");
 		x.append((NameValuePair)null);
-		assertObject(x.build()).isString("Foo=1&Foo=2&Foo=3&Foo=4&Foo=5&Foo=6&Foo=7");
+		assertObject(x).isString("Foo=1&Foo=2&Foo=3&Foo=4&Foo=5&Foo=6&Foo=7");
 		x.append((List<NameValuePair>)null);
-		assertObject(x.build()).isString("Foo=1&Foo=2&Foo=3&Foo=4&Foo=5&Foo=6&Foo=7");
+		assertObject(x).isString("Foo=1&Foo=2&Foo=3&Foo=4&Foo=5&Foo=6&Foo=7");
 
 		assertObject(new PartList.Void()).isString("");
 	}
@@ -128,7 +128,7 @@ public class PartList_Test {
 		x = PartList.of(FOO_1);
 		assertObject(x).isString("Foo=1");
 
-		x = PartList.ofPairs((Object[])null);
+		x = PartList.ofPairs((String[])null);
 		assertObject(x).isString("");
 
 		x = PartList.ofPairs();
@@ -139,7 +139,7 @@ public class PartList_Test {
 	public void a03_addMethods() {
 		String pname = "PartSupplierTest.x";
 
-		PartList.Builder x = PartList.create().resolving();
+		PartList x = PartList.create().resolving();
 		System.setProperty(pname, "y");
 
 		x.append("X1","bar");
@@ -148,27 +148,27 @@ public class PartList_Test {
 		x.append("X4",()->"$S{"+pname+"}");
 		x.append(new SerializedPart("X5","bar",HttpPartType.QUERY,openApiSession(),null,false));
 
-		assertObject(x.build()).isString("X1=bar&X2=y&X3=bar&X4=y&X5=bar");
+		assertObject(x).isString("X1=bar&X2=y&X3=bar&X4=y&X5=bar");
 
 		System.setProperty(pname, "z");
 
-		assertObject(x.build()).isString("X1=bar&X2=z&X3=bar&X4=z&X5=bar");
+		assertObject(x).isString("X1=bar&X2=z&X3=bar&X4=z&X5=bar");
 
 		System.clearProperty(pname);
 	}
 
 	@Test
 	public void a04_toArrayMethods() {
-		PartList.Builder x = PartList
+		PartList x = PartList
 			.create()
 			.append("X1","1")
 			.append(partList("X2","2").getAll());
-		assertObject(x.build()).isString("X1=1&X2=2");
+		assertObject(x).isString("X1=1&X2=2");
 	}
 
 	@Test
 	public void a05_copy() {
-		PartList x = PartList.of(FOO_1).copy().build();
+		PartList x = PartList.of(FOO_1).copy();
 		assertObject(x).isString("Foo=1");
 	}
 
@@ -315,11 +315,11 @@ public class PartList_Test {
 
 	@Test
 	public void a18_caseSensitive() {
-		PartList x1 = PartList.create().append(FOO_1, FOO_2, X_x).build();
+		PartList x1 = PartList.create().append(FOO_1, FOO_2, X_x);
 		assertArray(x1.getAll("Foo")).isString("[Foo=1, Foo=2]");
 		assertArray(x1.getAll("FOO")).isString("[]");
 
-		PartList x2 = x1.copy().caseInsensitive().build();
+		PartList x2 = x1.copy().caseInsensitive(true);
 		assertArray(x2.getAll("Foo")).isString("[Foo=1, Foo=2]");
 		assertArray(x2.getAll("FOO")).isString("[Foo=1, Foo=2]");
 	}
@@ -336,15 +336,15 @@ public class PartList_Test {
 
 	@Test
 	public void b01_builder_clear() {
-		PartList.Builder x = PartList.create();
+		PartList x = PartList.create();
 		x.append(FOO_1);
 		x.clear();
-		assertObject(x.build()).isString("");
+		assertObject(x).isString("");
 	}
 
 	@Test
 	public void b02_builder_append() {
-		PartList x1 = PartList.create().append(FOO_1).build();
+		PartList x1 = PartList.create().append(FOO_1);
 		PartList x2 = PartList
 			.create()
 			.append()
@@ -356,14 +356,13 @@ public class PartList_Test {
 			.append("Bar", "b1")
 			.append("Bar", ()->"b2")
 			.append((List<NameValuePair>)null)
-			.append(alist(FOO_4))
-			.build();
+			.append(alist(FOO_4));
 		assertObject(x2).isString("Foo=1&Foo=2&Foo=3&Bar=b1&Bar=b2&Foo=4");
 	}
 
 	@Test
 	public void b03_builder_prepend() {
-		PartList x1 = PartList.create().append(FOO_1).build();
+		PartList x1 = PartList.create().append(FOO_1);
 		PartList x2 = PartList
 			.create()
 			.prepend()
@@ -375,8 +374,7 @@ public class PartList_Test {
 			.prepend("Bar", "b1")
 			.prepend("Bar", ()->"b2")
 			.prepend((List<NameValuePair>)null)
-			.prepend(alist(FOO_4))
-			.build();
+			.prepend(alist(FOO_4));
 		assertObject(x2).isString("Foo=4&Bar=b2&Bar=b1&Foo=2&Foo=3&Foo=1");
 	}
 
@@ -390,11 +388,10 @@ public class PartList_Test {
 			.remove(PartList.of(FOO_1))
 			.remove(FOO_2)
 			.remove(FOO_3, FOO_4)
-			.remove(alist(FOO_5))
-			.build();
+			.remove(alist(FOO_5));
 		assertObject(x).isString("Foo=6&Foo=7");
 
-		x = PartList.create().append(FOO_1,FOO_2).remove((String[])null).remove("Bar","Foo").build();
+		x = PartList.create().append(FOO_1,FOO_2).remove((String[])null).remove("Bar","Foo");
 		assertObject(x).isString("");
 	}
 
@@ -408,60 +405,53 @@ public class PartList_Test {
 			.set(FOO_3)
 			.set(BAR_1)
 			.set((NameValuePair)null)
-			.set((PartList)null)
-			.build();
+			.set((PartList)null);
 		assertObject(x).isString("Foo=3&Bar=1");
 
 		x = PartList
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
-			.set(FOO_3)
-			.build();
+			.set(FOO_3);
 		assertObject(x).isString("Bar=1&Foo=3&Bar=2");
 
 		x = PartList
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
 			.set((NameValuePair[])null)
-			.set(null,FOO_3,FOO_4,FOO_5)
-			.build();
+			.set(null,FOO_3,FOO_4,FOO_5);
 		assertObject(x).isString("Bar=1&Bar=2&Foo=3&Foo=4&Foo=5");
 
 		x = PartList
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
 			.set((List<NameValuePair>)null)
-			.set(alist(null,FOO_3,FOO_4,FOO_5))
-			.build();
+			.set(alist(null,FOO_3,FOO_4,FOO_5));
 		assertObject(x).isString("Bar=1&Bar=2&Foo=3&Foo=4&Foo=5");
 
 		x = PartList
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
-			.set("FOO", "x")
-			.build();
+			.caseInsensitive(true)
+			.set("FOO", "x");
 		assertObject(x).isString("Bar=1&FOO=x&Bar=2");
 
 		x = PartList
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
-			.set("FOO", ()->"x")
-			.build();
+			.caseInsensitive(true)
+			.set("FOO", ()->"x");
 		assertObject(x).isString("Bar=1&FOO=x&Bar=2");
 
 		x = PartList
 			.create()
-			.caseInsensitive()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
-			.set("FOO", ()->"x")
-			.build();
+			.set("FOO", ()->"x");
 		assertObject(x).isString("Bar=1&Foo=1&Foo=2&Bar=2&FOO=x");
 
 		x = PartList
 			.create()
 			.append(BAR_1,FOO_1,FOO_2,BAR_2)
-			.set(PartList.of(FOO_3,FOO_4))
-			.build();
+			.set(PartList.of(FOO_3,FOO_4));
 		assertObject(x).isString("Bar=1&Bar=2&Foo=3&Foo=4");
 	}
 
@@ -490,7 +480,7 @@ public class PartList_Test {
 		PartIterator i4 = x.partIterator("A");
 		assertThrown(()->i4.next()).asMessage().is("Iteration already finished.");
 
-		PartList x2 = PartList.create().append(APart.X,BPart.X).caseInsensitive().build();
+		PartList x2 = PartList.create().append(APart.X,BPart.X).caseInsensitive(true);
 
 		PartIterator i5 = x2.partIterator("A");
 		assertObject(i5.next()).isString("a=x");
@@ -505,57 +495,52 @@ public class PartList_Test {
 
 	@Test
 	public void d01_defaultParts() {
-		PartList x1 = PartList.create().setDefault(APart.X).build();
+		PartList x1 = PartList.create().setDefault(APart.X);
 		assertObject(x1).isString("a=x");
 
-		PartList x2 = PartList.create().set(APart.X).setDefault(APart.Y).build();
+		PartList x2 = PartList.create().set(APart.X).setDefault(APart.Y);
 		assertObject(x2).isString("a=x");
 
-		PartList x3 = PartList.create().set(BPart.X,APart.X,BPart.Y).setDefault(APart.Y).build();
+		PartList x3 = PartList.create().set(BPart.X,APart.X,BPart.Y).setDefault(APart.Y);
 		assertObject(x3).isString("b=x&a=x&b=y");
 
-		PartList x4 = PartList.create().set(BPart.X,BPart.Y).setDefault(APart.X).build();
+		PartList x4 = PartList.create().set(BPart.X,BPart.Y).setDefault(APart.X);
 		assertObject(x4).isString("b=x&b=y&a=x");
 
-		PartList x5 = PartList.create().set(BPart.X,BPart.Y).setDefault(APart.X).setDefault(BPart.X).build();
+		PartList x5 = PartList.create().set(BPart.X,BPart.Y).setDefault(APart.X).setDefault(BPart.X);
 		assertObject(x5).isString("b=x&b=y&a=x");
 
-		PartList x6 = PartList.create().setDefault(APart.X,APart.Y).build();
-		assertObject(x6).isString("a=x&a=y");
+		PartList x7 = PartList.create().setDefault(APart.X).setDefault(APart.Y);
+		assertObject(x7).isString("a=x");
 
-		PartList x7 = PartList.create().setDefault(APart.X).setDefault(APart.Y).build();
-		assertObject(x7).isString("a=y");
-
-		PartList x8 = PartList.create().setDefault(APart.X,APart.Y).setDefault(APart.Z).build();
-		assertObject(x8).isString("a=z");
+		PartList x8 = PartList.create().setDefault(APart.X,APart.Y).setDefault(APart.Z);
+		assertObject(x8).isString("a=x");
 
 		PartList x9 = PartList
 			.create()
 			.setDefault((NameValuePair)null)
 			.setDefault((PartList)null)
 			.setDefault((NameValuePair[])null)
-			.setDefault((List<NameValuePair>)null)
-			.build();
+			.setDefault((List<NameValuePair>)null);
 		assertObject(x9).isString("");
 
-		PartList x10 = PartList.create().setDefault("a","x").build();
+		PartList x10 = PartList.create().setDefault("a","x");
 		assertObject(x10).isString("a=x");
 
-		PartList x11 = PartList.create().setDefault("a",()->"x").build();
+		PartList x11 = PartList.create().setDefault("a",()->"x");
 		assertObject(x11).isString("a=x");
 
-		PartList x12 = PartList.create().set(BPart.X,BPart.Y).setDefault(alist(APart.X,BPart.Z,null)).build();
+		PartList x12 = PartList.create().set(BPart.X,BPart.Y).setDefault(alist(APart.X,BPart.Z,null));
 		assertObject(x12).isString("b=x&b=y&a=x");
 
-		PartList x13 = PartList.create().set(BPart.X,BPart.Y).setDefault(PartList.of(APart.X,BPart.Z,null)).build();
+		PartList x13 = PartList.create().set(BPart.X,BPart.Y).setDefault(PartList.of(APart.X,BPart.Z,null));
 		assertObject(x13).isString("b=x&b=y&a=x");
 
 		PartList x14 = PartList.create().set(BPart.X,BPart.Y)
 			.setDefault(alist(APart.X,BPart.X,null))
 			.setDefault(alist(APart.Y,BPart.Y,null))
-			.setDefault(alist(CPart.X))
-			.build();
-		assertObject(x14).isString("b=x&b=y&a=y&c=x");
+			.setDefault(alist(CPart.X));
+		assertObject(x14).isString("b=x&b=y&a=x&c=x");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

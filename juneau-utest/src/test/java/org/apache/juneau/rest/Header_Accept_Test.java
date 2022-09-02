@@ -197,11 +197,11 @@ public class Header_Accept_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(
-		defaultRequestHeaders={" Accept : text/s2 "},
+		defaultRequestHeaders={" Accept : text/s3 "},
 		serializers={S1.class,S2.class}
 	)
 	public static class E {
-		@RestOp(defaultRequestHeaders={"Accept: text/s3"}, serializers=S3.class)
+		@RestOp(defaultRequestHeaders={"Accept: text/s2"}, serializers=S3.class)
 		public String put(@Content String in) {
 			return in;
 		}
@@ -234,11 +234,11 @@ public class Header_Accept_Test {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest(
-		defaultRequestHeaders={" Accept : text/s2 "},
+		defaultRequestHeaders={" Accept : text/s3 "},
 		serializers={S1.class,S2.class}
 	)
 	public static class F {
-		@RestOp(defaultRequestHeaders={"Accept: text/s3"}, serializers={SerializerSet.Inherit.class, S3.class})
+		@RestOp(defaultRequestHeaders={"Accept: text/s2"}, serializers={SerializerSet.Inherit.class, S3.class})
 		public String put(@Content String in) {
 			return in;
 		}
