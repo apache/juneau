@@ -254,8 +254,7 @@ public class RestContext extends Context {
 		private JsonSchemaGenerator.Builder jsonSchemaGenerator;
 		private BeanCreator<StaticFiles> staticFiles;
 		private HeaderList defaultRequestHeaders, defaultResponseHeaders;
-		private NamedAttributeList.Builder defaultRequestAttributes;
-		private int TODO;
+		private NamedAttributeMap defaultRequestAttributes;
 		private RestOpArgList.Builder restOpArgs;
 		private BeanCreator<DebugEnablement> debugEnablement;
 		private MethodList startCallMethods, endCallMethods, postInitMethods, postInitChildFirstMethods, destroyMethods, preCallMethods, postCallMethods;
@@ -3034,7 +3033,7 @@ public class RestContext extends Context {
 		 *
 		 * @return The default request attributes sub-builder.
 		 */
-		public NamedAttributeList.Builder defaultRequestAttributes() {
+		public NamedAttributeMap defaultRequestAttributes() {
 			if (defaultRequestAttributes == null)
 				defaultRequestAttributes = createDefaultRequestAttributes(beanStore(), resource());
 			return defaultRequestAttributes;
@@ -3103,23 +3102,23 @@ public class RestContext extends Context {
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new default request attributes sub-builder.
 		 */
-		protected NamedAttributeList.Builder createDefaultRequestAttributes(BeanStore beanStore, Supplier<?> resource) {
+		protected NamedAttributeMap createDefaultRequestAttributes(BeanStore beanStore, Supplier<?> resource) {
 
 			// Default value.
-			Value<NamedAttributeList.Builder> v = Value.of(
-				NamedAttributeList.create()
+			Value<NamedAttributeMap> v = Value.of(
+				NamedAttributeMap.create()
 			);
 
 			beanStore
-				.getBean(NamedAttributeList.class, "defaultRequestAttributes")
-				.ifPresent(x -> v.get().impl(x));
+				.getBean(NamedAttributeMap.class, "defaultRequestAttributes")
+				.ifPresent(x -> v.set(x));
 
-			// Replace with bean from:  @RestInject(name="defaultRequestAttributes") public [static] NamedAttributeList xxx(<args>)
+			// Replace with bean from:  @RestInject(name="defaultRequestAttributes") public [static] NamedAttributeMap xxx(<args>)
 			beanStore
-				.createMethodFinder(NamedAttributeList.class)
-				.addBean(NamedAttributeList.Builder.class, v.get())
+				.createMethodFinder(NamedAttributeMap.class)
+				.addBean(NamedAttributeMap.class, v.get())
 				.find(x -> isRestBeanMethod(x, "defaultRequestAttributes"))
-				.run(x -> v.get().impl(x));
+				.run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -5023,7 +5022,7 @@ public class RestContext extends Context {
 		 *
 		 * 		<jc>// Override the method used to create default request attributes.</jc>
 		 * 		<ja>@Override</ja>
-		 * 		<jk>protected</jk> NamedAttributeList createDefaultRequestAttributes(Object <jv>resource</jv>, BeanStore <jv>beanStore</jv>, Method <jv>method</jv>, RestContext <jv>context</jv>) <jk>throws</jk> Exception {
+		 * 		<jk>protected</jk> NamedAttributeMap createDefaultRequestAttributes(Object <jv>resource</jv>, BeanStore <jv>beanStore</jv>, Method <jv>method</jv>, RestContext <jv>context</jv>) <jk>throws</jk> Exception {
 		 * 			<jk>return super</jk>
 		 * 				.createDefaultRequestAttributes(<jv>resource</jv>, <jv>beanStore</jv>, <jv>method</jv>, <jv>context</jv>)
 		 * 				.append(NamedAttribute.<jsm>of</jsm>(<js>"foo"</js>, ()-&gt;<jf>fooSupplier</jf>.get());
@@ -5397,7 +5396,7 @@ public class RestContext extends Context {
 	private final JsonSchemaGenerator jsonSchemaGenerator;
 	private final List<MediaType> consumes, produces;
 	private final HeaderList defaultRequestHeaders, defaultResponseHeaders;
-	private final NamedAttributeList defaultRequestAttributes;
+	private final NamedAttributeMap defaultRequestAttributes;
 	private final ResponseProcessor[] responseProcessors;
 	private final Messages messages;
 	private final Config config;
@@ -5516,7 +5515,7 @@ public class RestContext extends Context {
 			bs.add(FileFinder.class, staticFiles);
 			defaultRequestHeaders = bs.add(HeaderList.class, builder.defaultRequestHeaders(), "defaultRequestHeaders");
 			defaultResponseHeaders = bs.add(HeaderList.class, builder.defaultResponseHeaders(), "defaultResponseHeaders");
-			defaultRequestAttributes = bs.add(NamedAttributeList.class, builder.defaultRequestAttributes().build(), "defaultRequestAttributes");
+			defaultRequestAttributes = bs.add(NamedAttributeMap.class, builder.defaultRequestAttributes(), "defaultRequestAttributes");
 			restOpArgs = builder.restOpArgs().build().asArray();
 			debugEnablement = bs.add(DebugEnablement.class, builder.debugEnablement().orElse(null));
 			startCallMethods = builder.startCallMethods().stream().map(this::toMethodInvoker).toArray(MethodInvoker[]::new);
@@ -6035,7 +6034,7 @@ public class RestContext extends Context {
 	 * 	The default request headers for this resource in an unmodifiable list.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public NamedAttributeList getDefaultRequestAttributes() {
+	public NamedAttributeMap getDefaultRequestAttributes() {
 		return defaultRequestAttributes;
 	}
 

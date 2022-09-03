@@ -66,7 +66,7 @@ import org.apache.juneau.svl.*;
  * 		<ul class='javatreec'>
  * 			<li class='jm'>{@link RequestAttributes#addDefault(List) addDefault(List)}
  * 			<li class='jm'>{@link RequestAttributes#addDefault(NamedAttribute...) addDefault(NamedAttribute...)}
- * 			<li class='jm'>{@link RequestAttributes#addDefault(NamedAttributeList) addDefault(NamedAttributeList)}
+ * 			<li class='jm'>{@link RequestAttributes#addDefault(NamedAttributeMap) addDefault(NamedAttributeMap)}
  * 			<li class='jm'>{@link RequestAttributes#addDefault(String,Object) addDefault(String,Object)}
  * 			<li class='jm'>{@link RequestAttributes#remove(NamedAttribute...) remove(NamedAttribute...)}
  * 			<li class='jm'>{@link RequestAttributes#remove(String...) remove(String...)}
@@ -133,8 +133,8 @@ public class RequestAttributes {
 	 * 	<br>Can be <jk>null</jk>.
 	 * @return This object.
 	 */
-	public RequestAttributes addDefault(NamedAttributeList pairs) {
-		for (NamedAttribute p : pairs.entries)
+	public RequestAttributes addDefault(NamedAttributeMap pairs) {
+		for (NamedAttribute p : pairs.values())
 			if (sreq.getAttribute(p.getName()) == null) {
 				Object o = p.getValue();
 				sreq.setAttribute(p.getName(), o instanceof String ? vs.resolve(o) : o);

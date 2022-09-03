@@ -152,7 +152,7 @@ import org.apache.juneau.svl.*;
  * 	<tr><td>{@link Messages}<br>{@link org.apache.juneau.cp.Messages.Builder}</td><td></td><td>class</td></tr>
  * 	<tr><td>{@link MethodExecStore}<br>{@link org.apache.juneau.rest.stats.MethodExecStore.Builder}</td><td></td><td>class</td></tr>
  * 	<tr><td>{@link MethodList}</td><td><js>"destroyMethods"</js><br><js>"endCallMethods"</js><br><js>"postCallMethods"</js><br><js>"postInitChildFirstMethods"</js><br><js>"postInitMethods"</js><br><js>"preCallMethods"</js><br><js>"startCallMethods"</js></td><td>class</td></tr>
- * 	<tr><td>{@link NamedAttributeList}<br>{@link org.apache.juneau.rest.httppart.NamedAttributeList.Builder}</td><td><js>"defaultRequestAttributes"</js></td><td>class<br>method</td></tr>
+ * 	<tr><td>{@link NamedAttributeMap}<br>{@link org.apache.juneau.rest.httppart.NamedAttributeMap}</td><td><js>"defaultRequestAttributes"</js></td><td>class<br>method</td></tr>
  * 	<tr><td>{@link ParserSet}<br>{@link org.apache.juneau.parser.ParserSet.Builder}</td><td></td><td>class<br>method</td></tr>
  * 	<tr><td>{@link PartList}<br>{@link org.apache.juneau.http.part.PartList}</td><td><js>"defaultRequestQueryData"</js><br><js>"defaultRequestFormData"</js></td><td>method</td></tr>
  * 	<tr><td>{@link ResponseProcessorList}<br>{@link org.apache.juneau.rest.processor.ResponseProcessorList.Builder}</td><td></td><td>class</td></tr>

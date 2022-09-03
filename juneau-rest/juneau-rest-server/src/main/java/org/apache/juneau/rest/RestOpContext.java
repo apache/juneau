@@ -123,8 +123,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		private JsonSchemaGenerator.Builder jsonSchemaGenerator;
 
 		PartList defaultRequestFormData, defaultRequestQueryData;
-		NamedAttributeList.Builder defaultRequestAttributes;
-		private int TODO;
+		NamedAttributeMap defaultRequestAttributes;
 		HeaderList defaultRequestHeaders, defaultResponseHeaders;
 		RestMatcherList.Builder restMatchers;
 		List<MediaType> produces, consumes;
@@ -1455,7 +1454,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 *
 		 * @return The default request attributes sub-builder.
 		 */
-		public NamedAttributeList.Builder defaultRequestAttributes() {
+		public NamedAttributeMap defaultRequestAttributes() {
 			if (defaultRequestAttributes == null)
 				defaultRequestAttributes = createDefaultRequestAttributes(beanStore(), parent, resource());
 			return defaultRequestAttributes;
@@ -1489,19 +1488,19 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		 * 	The REST servlet/bean instance that this context is defined against.
 		 * @return A new default request attributes sub-builder.
 		 */
-		protected NamedAttributeList.Builder createDefaultRequestAttributes(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
+		protected NamedAttributeMap createDefaultRequestAttributes(BeanStore beanStore, RestContext.Builder parent, Supplier<?> resource) {
 
-			Value<NamedAttributeList.Builder> v = Value.of(
+			Value<NamedAttributeMap> v = Value.of(
 				parent.defaultRequestAttributes().copy()
 			);
 
-			// Replace with bean from:  @RestInject(name="defaultRequestAttributes",methodScope="foo") public [static] NamedAttributeList xxx(<args>)
+			// Replace with bean from:  @RestInject(name="defaultRequestAttributes",methodScope="foo") public [static] NamedAttributeMap xxx(<args>)
 			BeanStore
 				.of(beanStore, resource)
-				.addBean(NamedAttributeList.Builder.class, v.get())
-				.createMethodFinder(NamedAttributeList.class, resource)
+				.addBean(NamedAttributeMap.class, v.get())
+				.createMethodFinder(NamedAttributeMap.class, resource)
 				.find(x -> matches(x, "defaultRequestAttributes"))
-				.run(x -> v.get().impl(x));
+				.run(x -> v.set(x));
 
 			return v.get();
 		}
@@ -2241,7 +2240,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private final JsonSchemaGenerator jsonSchemaGenerator;
 	private final HeaderList defaultRequestHeaders, defaultResponseHeaders;
 	private final PartList defaultRequestQueryData, defaultRequestFormData;
-	private final NamedAttributeList defaultRequestAttributes;
+	private final NamedAttributeMap defaultRequestAttributes;
 	private final Charset defaultCharset;
 	private final long maxInput;
 	private final List<MediaType>
@@ -2306,7 +2305,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			defaultResponseHeaders = builder.defaultResponseHeaders();
 			defaultRequestQueryData = builder.defaultRequestQueryData();
 			defaultRequestFormData = builder.defaultRequestFormData();
-			defaultRequestAttributes = builder.defaultRequestAttributes().build();
+			defaultRequestAttributes = builder.defaultRequestAttributes();
 
 			int _hierarchyDepth = 0;
 			Class<?> sc = method.getDeclaringClass().getSuperclass();
@@ -2553,7 +2552,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 *
 	 * @return The default request attributes.  Never <jk>null</jk>.
 	 */
-	public NamedAttributeList getDefaultRequestAttributes() {
+	public NamedAttributeMap getDefaultRequestAttributes() {
 		return defaultRequestAttributes;
 	}
 
