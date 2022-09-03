@@ -15231,7 +15231,7 @@
 		<li class='jm'>{@link org.apache.juneau.http.HttpParts#partList() partList()}
 		<li class='jm'>{@link org.apache.juneau.http.HttpParts#partList(List) partList(List&lt;NameValuePair&gt;)}
 		<li class='jm'>{@link org.apache.juneau.http.HttpParts#partList(NameValuePair...) partList(NameValuePair...)}
-		<li class='jm'>{@link org.apache.juneau.http.HttpParts#partList(Object...) partList(Object...)}
+		<li class='jm'>{@link org.apache.juneau.http.HttpParts#partList(String...) partList(String...)}
 	</ul>
 	<p>
 		The capabilities of the {@link org.apache.juneau.http.part.PartList} class is described later.
@@ -15577,7 +15577,7 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jm'>{@link org.apache.juneau.http.header.HeaderList#forEach(Consumer) forEach(Consumer)} / {@link org.apache.juneau.http.header.HeaderList#forEach(String,Consumer) forEach(String,Consumer)} / {@link org.apache.juneau.http.header.HeaderList#forEach(Predicate,Consumer) forEach(Predicate,Consumer)} - Use consumers to process headers.
-		<li class='jm'>{@link org.apache.juneau.http.header.HeaderList#iterator() iterator()} / {@link org.apache.juneau.http.header.HeaderList#iterator(String) iterator(String)} - Use an {@link HeaderIterator} to process headers.
+		<li class='jm'>{@link org.apache.juneau.http.header.HeaderList#headerIterator() headerIterator()} / {@link org.apache.juneau.http.header.HeaderList#headerIterator(String) headerIterator(String)} - Use an {@link HeaderIterator} to process headers.
 		<li class='jm'>{@link org.apache.juneau.http.header.HeaderList#stream() stream()} / {@link org.apache.juneau.http.header.HeaderList#stream(String) stream(String)} - Use a stream.
 	</ul>
 	<p>
@@ -15743,7 +15743,7 @@
 	</p>
 	<ul class='javatree'>
 		<li class='jm'>{@link org.apache.juneau.http.part.PartList#forEach(Consumer) forEach(Consumer)} / {@link org.apache.juneau.http.part.PartList#forEach(String,Consumer) forEach(String,Consumer)} / {@link org.apache.juneau.http.part.PartList#forEach(Predicate,Consumer) forEach(Predicate,Consumer)} - Use consumers to process parts.
-		<li class='jm'>{@link org.apache.juneau.http.part.PartList#iterator() iterator()} / {@link org.apache.juneau.http.part.PartList#iterator(String) iterator(String)} - Use an {@link PartIterator} to process parts.
+		<li class='jm'>{@link org.apache.juneau.http.part.PartList#partIterator() partIterator()} / {@link org.apache.juneau.http.part.PartList#partIterator(String) partIterator(String)} - Use an {@link PartIterator} to process parts.
 		<li class='jm'>{@link org.apache.juneau.http.part.PartList#stream() stream()} / {@link org.apache.juneau.http.part.PartList#stream(String) stream(String)} - Use a stream.
 	</ul>
 	<p>
@@ -15818,7 +15818,7 @@
 			<ul class='javatreec'>
 				<li class='jc'>{@link org.apache.juneau.http.entity.ByteArrayEntity}
 				<li class='jc'>{@link org.apache.juneau.http.entity.FileEntity}
-				<li class='jc'>{@link org.apache.juneau.http.entity.StreamEntity}
+				<li class='jc'>{@link org.apache.juneau.http.entity.InputStreamEntity}
 				<li class='jc'>{@link org.apache.juneau.http.entity.ReaderEntity}
 				<li class='jc'>{@link org.apache.juneau.http.entity.SerializedEntity}
 				<li class='jc'>{@link org.apache.juneau.http.entity.StringEntity}
@@ -15884,7 +15884,7 @@
 				<ul class='javatreec'>
 					<li class='jc'>{@link org.apache.juneau.http.resource.ByteArrayResource}
 					<li class='jc'>{@link org.apache.juneau.http.resource.FileResource}
-					<li class='jc'>{@link org.apache.juneau.http.resource.StreamResource}
+					<li class='jc'>{@link org.apache.juneau.http.resource.InputStreamResource}
 					<li class='jc'>{@link org.apache.juneau.http.resource.ReaderResource}
 					<li class='jc'>{@link org.apache.juneau.http.resource.StringResource}
 				</ul>
@@ -16400,7 +16400,6 @@
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#description() description}
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#disableContentParam() disableContentParam}
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#encoders() encoders}
-				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#fileFinder() fileFinder}
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#guards() guards}
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#maxInput() maxInput}
 				<li class='jma'>{@link org.apache.juneau.rest.annotation.Rest#messages() messages}
@@ -23100,13 +23099,13 @@
 	</p>
 	<p>
 		Clients are typically created with a root URI so that relative URIs can be used when making requests.
-		This is done using the {@link org.apache.juneau.rest.client.RestClient.Builder#rootUri(Object)} method.
+		This is done using the {@link org.apache.juneau.rest.client.RestClient.Builder#rootUrl(Object)} method.
 	</p>
 	
 	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
 	<jc>// Create a client where all URIs are relative to localhost.</jc>
-	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().rootUri(<js>"http://localhost:10000"</js>).build();
+	RestClient <jv>client</jv> = RestClient.<jsm>create</jsm>().json().rootUrl(<js>"http://localhost:10000"</js>).build();
 
 	<jc>// Use relative paths.</jc>
 	String <jv>content</jv> = <jv>client</jv>.get(<js>"/subpath"</js>).run().getContent().asString();
@@ -23127,7 +23126,7 @@
 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#head(Object) head(uri)}
 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#options(Object) options(uri)}
 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#formPost(Object,Object) formPost(uri,body)} / {@link org.apache.juneau.rest.client.RestClient#formPost(Object) formPost(uri)}
-				<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#formPostPairs(Object,Object...) formPostPairs(uri,parameters...)}
+				<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#formPostPairs(Object,String...) formPostPairs(uri,parameters...)}
 				<li class='jm'>{@link org.apache.juneau.rest.client.RestClient#request(String,Object,Object) request(method,uri,body)}
 			</ul>
 		</li>
@@ -23294,10 +23293,10 @@
 		</ul>
 		<li class='jc'>{@link org.apache.juneau.rest.client.RestRequest}
 		<ul class='javatreec'>
-			<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#headers() headers()}
-			<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#formData() formData()}
-			<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#queryData() queryData()}
-			<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#pathData() pathData()}
+			<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#getHeaders() getHeaders()}
+			<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#getFormData() getFormData()}
+			<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#getQueryData() getQueryData()}
+			<li class='jm'>{@link org.apache.juneau.rest.client.RestRequest#getPathData() getPathData()}
 		</ul>
 	</ul>
 	<p>
