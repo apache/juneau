@@ -47,7 +47,7 @@ public class HttpVersionNotSupported extends BasicHttpException {
 	public static final String REASON_PHRASE = "HTTP Version Not Supported";
 
 	/** Default status line */
-	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create().statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE).build();
+	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
 	/** Reusable unmodifiable instance */
 	public static final HttpVersionNotSupported INSTANCE = create().unmodifiable().build();
@@ -58,7 +58,7 @@ public class HttpVersionNotSupported extends BasicHttpException {
 	 * @return A new builder bean.
 	 */
 	public static HttpExceptionBuilder<HttpVersionNotSupported> create() {
-		return new HttpExceptionBuilder<>(HttpVersionNotSupported.class).statusLine(STATUS_LINE);
+		return new HttpExceptionBuilder<>(HttpVersionNotSupported.class).statusLine(STATUS_LINE.copy());
 	}
 
 	/**

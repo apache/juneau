@@ -37,10 +37,8 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="HttpResponseBuilder<T>")
 public class HttpResponseBuilder<T extends BasicHttpResponse> {
 
-	BasicStatusLine statusLine;
+	BasicStatusLine statusLine = new BasicStatusLine();
 	HeaderList headers = HeaderList.create();
-	BasicStatusLine.Builder statusLineBuilder;
-	private int TODO;
 	HttpEntity content;
 	boolean unmodifiable;
 
@@ -64,7 +62,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 */
 	public HttpResponseBuilder(T copyFrom) {
 		implClass = copyFrom.getClass();
-		statusLine = copyFrom.statusLine;
+		statusLine = copyFrom.statusLine.copy();
 		headers = copyFrom.headers;
 		content = copyFrom.content;
 	}
@@ -95,12 +93,6 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 		return this;
 	}
 
-	BasicStatusLine buildStatusLine() {
-		if (statusLineBuilder != null)
-			return statusLineBuilder.build();
-		return statusLine;
-	}
-
 	/**
 	 * Specifies whether this exception should be unmodifiable after creation.
 	 *
@@ -121,12 +113,8 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 *
 	 * @return The underlying builder for the status line.
 	 */
-	public BasicStatusLine.Builder getStatusLine() {
-		if (statusLineBuilder == null) {
-			statusLineBuilder = statusLine == null ? BasicStatusLine.create() : statusLine.copy();
-			statusLine = null;
-		}
-		return statusLineBuilder;
+	public BasicStatusLine getStatusLine() {
+		return statusLine;
 	}
 
 	/**
@@ -141,7 +129,6 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	@FluentSetter
 	public HttpResponseBuilder<T> statusLine(BasicStatusLine value) {
 		statusLine = value;
-		statusLineBuilder = null;
 		return this;
 	}
 
@@ -156,7 +143,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 */
 	@FluentSetter
 	public HttpResponseBuilder<T> protocolVersion(ProtocolVersion value) {
-		getStatusLine().protocolVersion(value);
+		statusLine.setProtocolVersion(value);
 		return this;
 	}
 
@@ -171,7 +158,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 */
 	@FluentSetter
 	public HttpResponseBuilder<T> statusCode(int value) {
-		getStatusLine().statusCode(value);
+		statusLine.setStatusCode(value);
 		return this;
 	}
 
@@ -187,7 +174,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 */
 	@FluentSetter
 	public HttpResponseBuilder<T> reasonPhrase(String value) {
-		getStatusLine().reasonPhrase(value);
+		statusLine.setReasonPhrase(value);
 		return this;
 	}
 
@@ -202,7 +189,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 */
 	@FluentSetter
 	public HttpResponseBuilder<T> reasonPhraseCatalog(ReasonPhraseCatalog value) {
-		getStatusLine().reasonPhraseCatalog(value);
+		statusLine.setReasonPhraseCatalog(value);
 		return this;
 	}
 
@@ -217,7 +204,7 @@ public class HttpResponseBuilder<T extends BasicHttpResponse> {
 	 */
 	@FluentSetter
 	public HttpResponseBuilder<T> locale(Locale value) {
-		getStatusLine().locale(value);
+		statusLine.setLocale(value);
 		return this;
 	}
 

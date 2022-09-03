@@ -48,7 +48,7 @@ public class NotImplemented extends BasicHttpException {
 	public static final String REASON_PHRASE = "Not Implemented";
 
 	/** Default status line */
-	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create().statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE).build();
+	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
 	/** Reusable unmodifiable instance */
 	public static final NotImplemented INSTANCE = create().unmodifiable().build();
@@ -59,7 +59,7 @@ public class NotImplemented extends BasicHttpException {
 	 * @return A new builder bean.
 	 */
 	public static HttpExceptionBuilder<NotImplemented> create() {
-		return new HttpExceptionBuilder<>(NotImplemented.class).statusLine(STATUS_LINE);
+		return new HttpExceptionBuilder<>(NotImplemented.class).statusLine(STATUS_LINE.copy());
 	}
 
 	/**

@@ -47,7 +47,7 @@ public class NotAcceptable extends BasicHttpException {
 	public static final String REASON_PHRASE = "Not Acceptable";
 
 	/** Default status line */
-	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create().statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE).build();
+	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
 	/** Reusable unmodifiable instance */
 	public static final NotAcceptable INSTANCE = create().unmodifiable().build();
@@ -58,7 +58,7 @@ public class NotAcceptable extends BasicHttpException {
 	 * @return A new builder bean.
 	 */
 	public static HttpExceptionBuilder<NotAcceptable> create() {
-		return new HttpExceptionBuilder<>(NotAcceptable.class).statusLine(STATUS_LINE);
+		return new HttpExceptionBuilder<>(NotAcceptable.class).statusLine(STATUS_LINE.copy());
 	}
 
 	/**

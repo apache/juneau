@@ -47,7 +47,7 @@ public class UnavailableForLegalReasons extends BasicHttpException {
 	public static final String REASON_PHRASE = "Unavailable For Legal Reasons";
 
 	/** Default status line */
-	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create().statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE).build();
+	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
 	/** Reusable unmodifiable instance */
 	public static final UnavailableForLegalReasons INSTANCE = create().unmodifiable().build();
@@ -58,7 +58,7 @@ public class UnavailableForLegalReasons extends BasicHttpException {
 	 * @return A new builder bean.
 	 */
 	public static HttpExceptionBuilder<UnavailableForLegalReasons> create() {
-		return new HttpExceptionBuilder<>(UnavailableForLegalReasons.class).statusLine(STATUS_LINE);
+		return new HttpExceptionBuilder<>(UnavailableForLegalReasons.class).statusLine(STATUS_LINE.copy());
 	}
 
 	/**

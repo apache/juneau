@@ -43,7 +43,7 @@ public class PartialContent extends BasicHttpResponse {
 	public static final String REASON_PHRASE = "Partial Content";
 
 	/** Default status line */
-	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create().statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE).build();
+	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
 	/** Reusable unmodifiable instance */
 	public static final PartialContent INSTANCE = create().unmodifiable().build();
@@ -54,7 +54,7 @@ public class PartialContent extends BasicHttpResponse {
 	 * @return A new builder bean.
 	 */
 	public static HttpResponseBuilder<PartialContent> create() {
-		return new HttpResponseBuilder<>(PartialContent.class).statusLine(STATUS_LINE);
+		return new HttpResponseBuilder<>(PartialContent.class).statusLine(STATUS_LINE.copy());
 	}
 
 	/**

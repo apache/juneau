@@ -47,7 +47,7 @@ public class VariantAlsoNegotiates extends BasicHttpException {
 	public static final String REASON_PHRASE = "Variant Also Negotiates";
 
 	/** Default status line */
-	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create().statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE).build();
+	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
 	/** Reusable unmodifiable instance */
 	public static final VariantAlsoNegotiates INSTANCE = create().unmodifiable().build();
@@ -58,7 +58,7 @@ public class VariantAlsoNegotiates extends BasicHttpException {
 	 * @return A new builder bean.
 	 */
 	public static HttpExceptionBuilder<VariantAlsoNegotiates> create() {
-		return new HttpExceptionBuilder<>(VariantAlsoNegotiates.class).statusLine(STATUS_LINE);
+		return new HttpExceptionBuilder<>(VariantAlsoNegotiates.class).statusLine(STATUS_LINE.copy());
 	}
 
 	/**

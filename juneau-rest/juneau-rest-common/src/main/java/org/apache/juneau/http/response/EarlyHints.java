@@ -41,7 +41,7 @@ public class EarlyHints extends BasicHttpResponse {
 	public static final String REASON_PHRASE = "Early Hints";
 
 	/** Default status line */
-	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create().statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE).build();
+	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
 	/** Reusable unmodifiable instance */
 	public static final EarlyHints INSTANCE = create().unmodifiable().build();
@@ -52,7 +52,7 @@ public class EarlyHints extends BasicHttpResponse {
 	 * @return A new builder bean.
 	 */
 	public static HttpResponseBuilder<EarlyHints> create() {
-		return new HttpResponseBuilder<>(EarlyHints.class).statusLine(STATUS_LINE);
+		return new HttpResponseBuilder<>(EarlyHints.class).statusLine(STATUS_LINE.copy());
 	}
 
 	/**

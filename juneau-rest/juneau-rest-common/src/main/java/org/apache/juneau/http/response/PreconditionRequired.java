@@ -48,7 +48,7 @@ public class PreconditionRequired extends BasicHttpException {
 	public static final String REASON_PHRASE = "Precondition Required";
 
 	/** Default status line */
-	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create().statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE).build();
+	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
 	/** Reusable unmodifiable instance */
 	public static final PreconditionRequired INSTANCE = create().unmodifiable().build();
@@ -59,7 +59,7 @@ public class PreconditionRequired extends BasicHttpException {
 	 * @return A new builder bean.
 	 */
 	public static HttpExceptionBuilder<PreconditionRequired> create() {
-		return new HttpExceptionBuilder<>(PreconditionRequired.class).statusLine(STATUS_LINE);
+		return new HttpExceptionBuilder<>(PreconditionRequired.class).statusLine(STATUS_LINE.copy());
 	}
 
 	/**

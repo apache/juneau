@@ -38,10 +38,8 @@ import org.apache.juneau.internal.*;
 @FluentSetters(returns="HttpExceptionBuilder<T>")
 public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRuntimeException.Builder {
 
-	BasicStatusLine statusLine;
+	BasicStatusLine statusLine = new BasicStatusLine();
 	HeaderList headers = HeaderList.create();
-	BasicStatusLine.Builder statusLineBuilder;
-	private int TODO;
 	HttpEntity content;
 
 	private final Class<? extends BasicHttpException> implClass;
@@ -100,12 +98,6 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 		return this;
 	}
 
-	BasicStatusLine buildStatusLine() {
-		if (statusLineBuilder != null)
-			return statusLineBuilder.build();
-		return statusLine;
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// BasicStatusLine setters.
 	//-----------------------------------------------------------------------------------------------------------------
@@ -115,12 +107,8 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 *
 	 * @return The underlying builder for the status line.
 	 */
-	public BasicStatusLine.Builder getStatusLine() {
-		if (statusLineBuilder == null) {
-			statusLineBuilder = statusLine == null ? BasicStatusLine.create() : statusLine.copy();
-			statusLine = null;
-		}
-		return statusLineBuilder;
+	public BasicStatusLine getStatusLine() {
+		return statusLine;
 	}
 
 	/**
@@ -135,7 +123,6 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	@FluentSetter
 	public HttpExceptionBuilder<T> statusLine(BasicStatusLine value) {
 		statusLine = value;
-		statusLineBuilder = null;
 		return this;
 	}
 
@@ -150,7 +137,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 */
 	@FluentSetter
 	public HttpExceptionBuilder<T> protocolVersion(ProtocolVersion value) {
-		getStatusLine().protocolVersion(value);
+		statusLine.setProtocolVersion(value);
 		return this;
 	}
 
@@ -165,7 +152,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 */
 	@FluentSetter
 	public HttpExceptionBuilder<T> statusCode(int value) {
-		getStatusLine().statusCode(value);
+		statusLine.setStatusCode(value);
 		return this;
 	}
 
@@ -181,7 +168,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 */
 	@FluentSetter
 	public HttpExceptionBuilder<T> reasonPhrase(String value) {
-		getStatusLine().reasonPhrase(value);
+		statusLine.setReasonPhrase(value);
 		return this;
 	}
 
@@ -196,7 +183,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 */
 	@FluentSetter
 	public HttpExceptionBuilder<T> reasonPhraseCatalog(ReasonPhraseCatalog value) {
-		getStatusLine().reasonPhraseCatalog(value);
+		statusLine.setReasonPhraseCatalog(value);
 		return this;
 	}
 
@@ -211,7 +198,7 @@ public class HttpExceptionBuilder<T extends BasicHttpException> extends BasicRun
 	 */
 	@FluentSetter
 	public HttpExceptionBuilder<T> locale(Locale value) {
-		getStatusLine().locale(value);
+		statusLine.setLocale(value);
 		return this;
 	}
 

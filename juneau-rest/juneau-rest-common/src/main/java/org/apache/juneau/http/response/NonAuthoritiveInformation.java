@@ -42,7 +42,7 @@ public class NonAuthoritiveInformation extends BasicHttpResponse {
 	public static final String REASON_PHRASE = "Non-Authoritative Information";
 
 	/** Default status line */
-	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create().statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE).build();
+	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
 	/** Reusable unmodifiable instance */
 	public static final NonAuthoritiveInformation INSTANCE = create().unmodifiable().build();
@@ -53,7 +53,7 @@ public class NonAuthoritiveInformation extends BasicHttpResponse {
 	 * @return A new builder bean.
 	 */
 	public static HttpResponseBuilder<NonAuthoritiveInformation> create() {
-		return new HttpResponseBuilder<>(NonAuthoritiveInformation.class).statusLine(STATUS_LINE);
+		return new HttpResponseBuilder<>(NonAuthoritiveInformation.class).statusLine(STATUS_LINE.copy());
 	}
 
 	/**

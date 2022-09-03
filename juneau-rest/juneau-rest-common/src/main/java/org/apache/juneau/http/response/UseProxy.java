@@ -42,7 +42,7 @@ public class UseProxy extends BasicHttpResponse {
 	/** Reason phrase */
 	public static final String REASON_PHRASE = "Use Proxy";
 
-	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create().statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE).build();
+	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
 	/**
 	 * Default unmodifiable instance.
@@ -57,7 +57,7 @@ public class UseProxy extends BasicHttpResponse {
 	 * @return A new builder bean.
 	 */
 	public static HttpResponseBuilder<UseProxy> create() {
-		return new HttpResponseBuilder<>(UseProxy.class).statusLine(STATUS_LINE);
+		return new HttpResponseBuilder<>(UseProxy.class).statusLine(STATUS_LINE.copy());
 	}
 
 	/**

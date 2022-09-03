@@ -47,7 +47,7 @@ public class PreconditionFailed extends BasicHttpException {
 	public static final String REASON_PHRASE = "Precondition Failed";
 
 	/** Default status line */
-	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create().statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE).build();
+	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
 	/** Reusable unmodifiable instance */
 	public static final PreconditionFailed INSTANCE = create().unmodifiable().build();
@@ -58,7 +58,7 @@ public class PreconditionFailed extends BasicHttpException {
 	 * @return A new builder bean.
 	 */
 	public static HttpExceptionBuilder<PreconditionFailed> create() {
-		return new HttpExceptionBuilder<>(PreconditionFailed.class).statusLine(STATUS_LINE);
+		return new HttpExceptionBuilder<>(PreconditionFailed.class).statusLine(STATUS_LINE.copy());
 	}
 
 	/**

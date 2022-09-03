@@ -47,7 +47,7 @@ public class UpgradeRequired extends BasicHttpException {
 	public static final String REASON_PHRASE = "Upgrade Required";
 
 	/** Default status line */
-	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create().statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE).build();
+	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
 	/** Reusable unmodifiable instance */
 	public static final UpgradeRequired INSTANCE = create().unmodifiable().build();
@@ -58,7 +58,7 @@ public class UpgradeRequired extends BasicHttpException {
 	 * @return A new builder bean.
 	 */
 	public static HttpExceptionBuilder<UpgradeRequired> create() {
-		return new HttpExceptionBuilder<>(UpgradeRequired.class).statusLine(STATUS_LINE);
+		return new HttpExceptionBuilder<>(UpgradeRequired.class).statusLine(STATUS_LINE.copy());
 	}
 
 	/**

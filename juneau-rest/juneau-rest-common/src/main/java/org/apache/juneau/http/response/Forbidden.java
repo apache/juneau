@@ -48,7 +48,7 @@ public class Forbidden extends BasicHttpException {
 	public static final String REASON_PHRASE = "Forbidden";
 
 	/** Default status line */
-	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create().statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE).build();
+	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
 	/** Reusable unmodifiable instance */
 	public static final Forbidden INSTANCE = create().unmodifiable().build();
@@ -59,7 +59,7 @@ public class Forbidden extends BasicHttpException {
 	 * @return A new builder bean.
 	 */
 	public static HttpExceptionBuilder<Forbidden> create() {
-		return new HttpExceptionBuilder<>(Forbidden.class).statusLine(STATUS_LINE);
+		return new HttpExceptionBuilder<>(Forbidden.class).statusLine(STATUS_LINE.copy());
 	}
 
 	/**

@@ -56,9 +56,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	private static final long serialVersionUID = 1L;
 
 	HeaderList headers;
-	BasicStatusLine statusLine;
-	BasicStatusLine.Builder statusLineBuilder;
-	private int TODO;
+	BasicStatusLine statusLine = new BasicStatusLine();
 	HttpEntity content;
 
 	/**
@@ -80,7 +78,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	public BasicHttpException(HttpExceptionBuilder<?> builder) {
 		super(builder);
 		headers = builder.headers;
-		statusLine = builder.buildStatusLine();
+		statusLine = builder.statusLine.copy();
 		content = builder.content;
 	}
 
@@ -222,7 +220,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		if (m == null && getCause() != null)
 			m = getCause().getMessage();
 		if (m == null)
-			m = statusLine().getReasonPhrase();
+			m = statusLine.getReasonPhrase();
 		return m;
 	}
 
@@ -245,7 +243,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 
 	@Override /* HttpMessage */
 	public ProtocolVersion getProtocolVersion() {
-		return statusLine().getProtocolVersion();
+		return statusLine.getProtocolVersion();
 	}
 
 	@Override /* HttpMessage */
@@ -331,7 +329,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 
 	@Override /* HttpMessage */
 	public StatusLine getStatusLine() {
-		return statusLine();
+		return statusLine;
 	}
 
 	@Override /* HttpMessage */
@@ -341,22 +339,22 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 
 	@Override /* HttpMessage */
 	public void setStatusLine(ProtocolVersion ver, int code) {
-		statusLineBuilder().protocolVersion(ver).statusCode(code).build();
+		statusLine.setProtocolVersion(ver).setStatusCode(code);
 	}
 
 	@Override /* HttpMessage */
 	public void setStatusLine(ProtocolVersion ver, int code, String reason) {
-		statusLineBuilder().protocolVersion(ver).reasonPhrase(reason).statusCode(code).build();
+		statusLine.setProtocolVersion(ver).setReasonPhrase(reason).setStatusCode(code);
 	}
 
 	@Override /* HttpMessage */
 	public void setStatusCode(int code) throws IllegalStateException {
-		statusLineBuilder().statusCode(code).build();
+		statusLine.setStatusCode(code);
 	}
 
 	@Override /* HttpMessage */
 	public void setReasonPhrase(String reason) throws IllegalStateException {
-		statusLineBuilder().reasonPhrase(reason).build();
+		statusLine.setReasonPhrase(reason);
 	}
 
 	@Override /* HttpMessage */
@@ -375,28 +373,11 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 
 	@Override /* HttpMessage */
 	public Locale getLocale() {
-		return statusLine().getLocale();
+		return statusLine.getLocale();
 	}
 
 	@Override /* HttpMessage */
 	public void setLocale(Locale loc) {
-		statusLineBuilder().locale(loc).build();
-	}
-
-	private BasicStatusLine statusLine() {
-		if (statusLine == null) {
-			statusLine = statusLineBuilder.build();
-			statusLineBuilder = null;
-		}
-		return statusLine;
-	}
-
-	private BasicStatusLine.Builder statusLineBuilder() {
-		assertModifiable();
-		if (statusLineBuilder == null) {
-			statusLineBuilder = statusLine.copy();
-			statusLine = null;
-		}
-		return statusLineBuilder;
+		statusLine.setLocale(loc);
 	}
 }

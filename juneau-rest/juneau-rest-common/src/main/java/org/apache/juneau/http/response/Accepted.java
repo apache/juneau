@@ -43,7 +43,7 @@ public class Accepted extends BasicHttpResponse {
 	public static final String REASON_PHRASE = "Accepted";
 
 	/** Default status line */
-	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create().statusCode(STATUS_CODE).reasonPhrase(REASON_PHRASE).build();
+	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
 	/** Default unmodifiable instance */
 	public static final Accepted INSTANCE = create().unmodifiable().build();
@@ -54,7 +54,7 @@ public class Accepted extends BasicHttpResponse {
 	 * @return A new builder bean.
 	 */
 	public static HttpResponseBuilder<Accepted> create() {
-		return new HttpResponseBuilder<>(Accepted.class).statusLine(STATUS_LINE);
+		return new HttpResponseBuilder<>(Accepted.class).statusLine(STATUS_LINE.copy());
 	}
 
 	/**
