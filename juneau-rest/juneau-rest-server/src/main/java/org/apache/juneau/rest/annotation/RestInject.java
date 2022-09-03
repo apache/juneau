@@ -144,7 +144,7 @@ import org.apache.juneau.svl.*;
  * 	<tr><td>{@link DebugEnablement}<br>{@link org.apache.juneau.rest.debug.DebugEnablement.Builder}</td><td></td><td>class</td></tr>
  * 	<tr><td>{@link EncoderSet}<br>{@link org.apache.juneau.encoders.EncoderSet.Builder}</td><td></td><td>class<br>method</td></tr>
  * 	<tr><td>{@link FileFinder}<br>{@link org.apache.juneau.cp.FileFinder.Builder}</td><td></td><td>class</td></tr>
- * 	<tr><td>{@link HeaderList}<br>{@link org.apache.juneau.http.header.HeaderList.Builder}</td><td><js>"defaultRequestHeaders"</js><br><js>"defaultResponseHeaders"</js></td><td>class<br>method</td></tr>
+ * 	<tr><td>{@link HeaderList}<br>{@link org.apache.juneau.http.header.HeaderList}</td><td><js>"defaultRequestHeaders"</js><br><js>"defaultResponseHeaders"</js></td><td>class<br>method</td></tr>
  * 	<tr><td>{@link HttpPartParser}<br>{@link org.apache.juneau.httppart.HttpPartParser.Creator}</td><td></td><td>class<br>method</td></tr>
  * 	<tr><td>{@link HttpPartSerializer}<br>{@link org.apache.juneau.httppart.HttpPartSerializer.Creator}</td><td></td><td>class<br>method</td></tr>
  * 	<tr><td>{@link JsonSchemaGenerator}<br>{@link org.apache.juneau.jsonschema.JsonSchemaGenerator.Builder}</td><td></td><td>class<br>method</td></tr>
@@ -154,7 +154,7 @@ import org.apache.juneau.svl.*;
  * 	<tr><td>{@link MethodList}</td><td><js>"destroyMethods"</js><br><js>"endCallMethods"</js><br><js>"postCallMethods"</js><br><js>"postInitChildFirstMethods"</js><br><js>"postInitMethods"</js><br><js>"preCallMethods"</js><br><js>"startCallMethods"</js></td><td>class</td></tr>
  * 	<tr><td>{@link NamedAttributeList}<br>{@link org.apache.juneau.rest.httppart.NamedAttributeList.Builder}</td><td><js>"defaultRequestAttributes"</js></td><td>class<br>method</td></tr>
  * 	<tr><td>{@link ParserSet}<br>{@link org.apache.juneau.parser.ParserSet.Builder}</td><td></td><td>class<br>method</td></tr>
- * 	<tr><td>{@link PartList}<br>{@link org.apache.juneau.http.part.PartList.Builder}</td><td><js>"defaultRequestQueryData"</js><br><js>"defaultRequestFormData"</js></td><td>method</td></tr>
+ * 	<tr><td>{@link PartList}<br>{@link org.apache.juneau.http.part.PartList}</td><td><js>"defaultRequestQueryData"</js><br><js>"defaultRequestFormData"</js></td><td>method</td></tr>
  * 	<tr><td>{@link ResponseProcessorList}<br>{@link org.apache.juneau.rest.processor.ResponseProcessorList.Builder}</td><td></td><td>class</td></tr>
  * 	<tr><td>{@link RestChildren}<br>{@link org.apache.juneau.rest.RestChildren.Builder}</td><td></td><td>class</td></tr>
  * 	<tr><td>{@link RestConverterList}<br>{@link org.apache.juneau.rest.converter.RestConverterList.Builder}</td><td></td><td>method</td></tr>
