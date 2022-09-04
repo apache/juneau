@@ -536,9 +536,9 @@ public class BeanStore_Test {
 		assertObject(b1c.createMethodFinder(C.class, C1.class).find("createA1").run()).isNull();
 		assertObject(b2c.createMethodFinder(C.class).find("createA1").run()).isNotNull();
 		assertObject(b3c.createMethodFinder(C.class).find("createA1").run()).isNull();
-		assertThrown(()->b1c.createMethodFinder(C.class, x).find("createA7").run()).asMessage().is("foo");
+		assertThrown(()->b1c.createMethodFinder(C.class, x).find("createA7").run()).asMessage().isContains("foo");
 		assertObject(b1c.createMethodFinder(C.class, C1.class).find("createA7").run()).isNull();
-		assertThrown(()->b2c.createMethodFinder(C.class).find("createA7").run()).asMessage().is("foo");
+		assertThrown(()->b2c.createMethodFinder(C.class).find("createA7").run()).asMessage().isContains("foo");
 		assertObject(b3c.createMethodFinder(C.class).find("createA7").run()).isNull();
 	}
 
@@ -576,9 +576,9 @@ public class BeanStore_Test {
 		assertObject(b1c.createMethodFinder(C.class, C2.class).find("createB1").run()).isNotNull();
 		assertObject(b2c.createMethodFinder(C.class).find("createB1").run()).isNotNull();
 		assertObject(b3c.createMethodFinder(C.class).find("createB1").run()).isNull();
-		assertThrown(()->b1c.createMethodFinder(C.class, x).find("createB7").run()).asMessage().is("foo");
-		assertThrown(()->b1c.createMethodFinder(C.class, C2.class).find("createB7").run()).asMessage().is("foo");
-		assertThrown(()->b2c.createMethodFinder(C.class).find("createB7").run()).asMessage().is("foo");
+		assertThrown(()->b1c.createMethodFinder(C.class, x).find("createB7").run()).asMessage().isContains("foo");
+		assertThrown(()->b1c.createMethodFinder(C.class, C2.class).find("createB7").run()).asMessage().isContains("foo");
+		assertThrown(()->b2c.createMethodFinder(C.class).find("createB7").run()).asMessage().isContains("foo");
 		assertObject(b3c.createMethodFinder(C.class).find("createB7").run()).isNull();
 	}
 

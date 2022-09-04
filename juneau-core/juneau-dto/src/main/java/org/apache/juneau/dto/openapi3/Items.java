@@ -260,10 +260,10 @@ public class Items extends OpenApiElement {
 	 */
 	public Items setCollectionFormat(String value) {
 		if (isStrict() && ! contains(value, VALID_COLLECTION_FORMATS))
-			throw BasicRuntimeException.create().message(
+			throw new BasicRuntimeException(
 				"Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}",
 				value, VALID_COLLECTION_FORMATS
-			).build();
+			);
 		collectionFormat = value;
 		return this;
 	}

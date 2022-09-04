@@ -129,7 +129,8 @@ public class BasicRuntimeException extends RuntimeException {
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
-	final boolean unmodifiable;
+	boolean unmodifiable;
+	String message;
 
 	/**
 	 * Constructor.
@@ -149,7 +150,7 @@ public class BasicRuntimeException extends RuntimeException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public BasicRuntimeException(Throwable cause, String message, Object...args) {
-		this(create().causedBy(cause).message(message, args));
+		super(format(message, args), cause);
 	}
 
 	/**
@@ -159,7 +160,7 @@ public class BasicRuntimeException extends RuntimeException {
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
 	public BasicRuntimeException(String message, Object...args) {
-		this(create().message(message, args));
+		super(format(message, args));
 	}
 
 	/**
@@ -168,7 +169,7 @@ public class BasicRuntimeException extends RuntimeException {
 	 * @param cause The cause of this exception.
 	 */
 	public BasicRuntimeException(Throwable cause) {
-		this(create().causedBy(cause));
+		super(cause);
 	}
 
 	/**
@@ -180,6 +181,19 @@ public class BasicRuntimeException extends RuntimeException {
 	 */
 	public <T extends Throwable> T getCause(Class<T> c) {
 		return ThrowableUtils.getCause(c, this);
+	}
+
+	/**
+	 * Sets the detail message on this exception.
+	 *
+	 * @param message The message.
+	 * @param args The message args.
+	 * @return This object.
+	 */
+	public BasicRuntimeException setMessage(String message, Object...args) {
+		assertModifiable();
+		this.message = format(message, args);
+		return this;
 	}
 
 	@Override /* Throwable */
@@ -216,6 +230,14 @@ public class BasicRuntimeException extends RuntimeException {
 	public Throwable unwrap() {
 		Throwable t = getCause();
 		return t == null ? this : t;
+	}
+
+	/**
+	 * Set the unmodifiable flag on this exception.  This prevents the message from being up
+	 *
+	 */
+	protected void setUnmodifiable() {
+		unmodifiable = true;
 	}
 
 	/**

@@ -365,7 +365,7 @@ public class ResponseHeader extends BasicHeader {
 		try {
 			return optional(parser.parse(HEADER, schema, getValue(), type));
 		} catch (ParseException e) {
-			throw BasicRuntimeException.create().causedBy(e).message("Could not parse response header {0}.", getName()).build();
+			throw new BasicRuntimeException(e, "Could not parse response header {0}.", getName());
 		}
 	}
 
