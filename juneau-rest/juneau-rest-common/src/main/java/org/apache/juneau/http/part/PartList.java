@@ -43,6 +43,7 @@ import org.apache.juneau.svl.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
+@FluentSetters
 public class PartList extends ArrayList<NameValuePair> {
 
 	private static final long serialVersionUID = 1L;
@@ -930,4 +931,8 @@ public class PartList extends ArrayList<NameValuePair> {
 		});
 		return sb.toString();
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

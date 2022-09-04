@@ -20,19 +20,25 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.stream.*;
 
+import org.apache.juneau.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 
 public class ConfigurablePropertyCodeGenerator {
 
-	static Set<Class<?>> ignoreClasses = set(
+	static Set<Class<?>> IGNORE_CLASSES = set(
 		org.apache.http.entity.AbstractHttpEntity.class,
 		org.apache.http.entity.BasicHttpEntity.class,
 		org.apache.http.message.AbstractHttpMessage.class,
-		org.apache.http.message.BasicHttpResponse.class
+		org.apache.http.message.BasicHttpResponse.class,
+		BeanSession.class,
+		ArrayList.class,
+		RuntimeException.class,
+		Writer.class
 	);
 
 	private static String[] SOURCE_PATHS = {
+		"juneau-core/juneau-assertions",
 		"juneau-core/juneau-common",
 		"juneau-core/juneau-config",
 		"juneau-core/juneau-dto",
@@ -45,6 +51,15 @@ public class ConfigurablePropertyCodeGenerator {
 	};
 
 	public static void main(String[] args) throws Exception {
+
+		Set<Class<?>> ignoreClasses = new HashSet<>();
+		for (Class<?> ic : IGNORE_CLASSES) {
+			while (ic != null) {
+				ignoreClasses.add(ic);
+				ic = ic.getSuperclass();
+			}
+		}
+
 		Map<Class<?>, Set<Method>> configMethods = new HashMap<>();
 
 		Map<Class<?>,File> classMap = map();
@@ -175,11 +190,9 @@ public class ConfigurablePropertyCodeGenerator {
 							sb.append("\n").append(indent).append("}");
 
 						}
-					} else if (pc.isAny(Throwable.class, RuntimeException.class, Exception.class)) {
-						// Ignore
 					} else {
 						if (! ignoreClasses.contains(pc.inner()))
-							System.err.println(pc.inner().getSimpleName() + " not found in " + c.getName());
+							System.err.println("Parent " + pc.inner().getSimpleName() + " not found for class " + c.getName());
 					}
 				}
 			}

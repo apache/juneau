@@ -154,4 +154,8 @@ public class BasicRuntimeException extends RuntimeException {
 		if (unmodifiable)
 			throw new UnsupportedOperationException("Bean is read-only");
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

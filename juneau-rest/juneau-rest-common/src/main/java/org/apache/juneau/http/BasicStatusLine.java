@@ -30,6 +30,7 @@ import org.apache.juneau.internal.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
+@FluentSetters
 public class BasicStatusLine implements StatusLine {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -207,4 +208,8 @@ public class BasicStatusLine implements StatusLine {
 	public String toString() {
 		return BasicLineFormatter.INSTANCE.formatStatusLine(null, this).toString();
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

@@ -57,6 +57,7 @@ import org.apache.juneau.svl.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
+@FluentSetters
 public class HeaderList extends ArrayList<Header> {
 
 	private static final long serialVersionUID = 1L;
@@ -949,4 +950,8 @@ public class HeaderList extends ArrayList<Header> {
 	public String toString() {
 		return "[" + join(this, ", ") + "]";
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

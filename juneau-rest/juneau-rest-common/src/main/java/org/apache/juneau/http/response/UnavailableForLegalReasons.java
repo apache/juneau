@@ -170,6 +170,12 @@ public class UnavailableForLegalReasons extends BasicHttpException {
 	}
 
 	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public UnavailableForLegalReasons setStatusCode2(int code) throws IllegalStateException{
+		super.setStatusCode2(code);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
 	public UnavailableForLegalReasons setStatusLine(BasicStatusLine value) {
 		super.setStatusLine(value);
 		return this;

@@ -920,4 +920,12 @@ public class RestResponse implements HttpResponse {
 	HttpResponse asHttpResponse() {
 		return response;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent setters
+	//-----------------------------------------------------------------------------------------------------------------
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

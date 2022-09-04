@@ -171,6 +171,12 @@ public class UnsupportedMediaType extends BasicHttpException {
 	}
 
 	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public UnsupportedMediaType setStatusCode2(int code) throws IllegalStateException{
+		super.setStatusCode2(code);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
 	public UnsupportedMediaType setStatusLine(BasicStatusLine value) {
 		super.setStatusLine(value);
 		return this;

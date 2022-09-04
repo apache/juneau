@@ -171,6 +171,12 @@ public class RangeNotSatisfiable extends BasicHttpException {
 	}
 
 	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public RangeNotSatisfiable setStatusCode2(int code) throws IllegalStateException{
+		super.setStatusCode2(code);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
 	public RangeNotSatisfiable setStatusLine(BasicStatusLine value) {
 		super.setStatusLine(value);
 		return this;

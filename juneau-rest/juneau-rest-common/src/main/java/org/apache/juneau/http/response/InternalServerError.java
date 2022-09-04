@@ -170,6 +170,12 @@ public class InternalServerError extends BasicHttpException {
 	}
 
 	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public InternalServerError setStatusCode2(int code) throws IllegalStateException{
+		super.setStatusCode2(code);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
 	public InternalServerError setStatusLine(BasicStatusLine value) {
 		super.setStatusLine(value);
 		return this;

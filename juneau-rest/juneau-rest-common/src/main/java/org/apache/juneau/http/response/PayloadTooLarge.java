@@ -170,6 +170,12 @@ public class PayloadTooLarge extends BasicHttpException {
 	}
 
 	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public PayloadTooLarge setStatusCode2(int code) throws IllegalStateException{
+		super.setStatusCode2(code);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
 	public PayloadTooLarge setStatusLine(BasicStatusLine value) {
 		super.setStatusLine(value);
 		return this;
