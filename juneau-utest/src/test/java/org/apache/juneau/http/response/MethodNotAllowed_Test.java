@@ -44,7 +44,7 @@ public class MethodNotAllowed_Test {
 		}
 		@RestGet
 		public void f5() throws MethodNotAllowed {
-			throw methodNotAllowed().header("Foo", "bar").build();
+			throw methodNotAllowed().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws MethodNotAllowed {

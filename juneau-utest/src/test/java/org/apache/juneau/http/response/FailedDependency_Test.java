@@ -44,7 +44,7 @@ public class FailedDependency_Test {
 		}
 		@RestGet
 		public void f5() throws FailedDependency {
-			throw failedDependency().header("Foo", "bar").build();
+			throw failedDependency().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws FailedDependency {

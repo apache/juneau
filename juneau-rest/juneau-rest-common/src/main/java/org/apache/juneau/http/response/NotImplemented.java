@@ -15,11 +15,13 @@ package org.apache.juneau.http.response;
 import static org.apache.juneau.http.response.NotImplemented.*;
 
 import java.text.*;
-
 import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 501 (Not Implemented).
@@ -38,6 +40,7 @@ import org.apache.juneau.http.annotation.*;
 @Response
 @StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
+@FluentSetters
 public class NotImplemented extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -51,25 +54,7 @@ public class NotImplemented extends BasicHttpException {
 	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
 	/** Reusable unmodifiable instance */
-	public static final NotImplemented INSTANCE = create().unmodifiable().build();
-
-	/**
-	 * Creates a builder for this class.
-	 *
-	 * @return A new builder bean.
-	 */
-	public static HttpExceptionBuilder<NotImplemented> create() {
-		return new HttpExceptionBuilder<>(NotImplemented.class).statusLine(STATUS_LINE.copy());
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param builder The builder containing the settings for this exception.
-	 */
-	public NotImplemented(HttpExceptionBuilder<?> builder) {
-		super(builder);
-	}
+	public static final NotImplemented INSTANCE = new NotImplemented().setUnmodifiable();
 
 	/**
 	 * Constructor.
@@ -79,14 +64,15 @@ public class NotImplemented extends BasicHttpException {
 	 * @param args The message arguments.
 	 */
 	public NotImplemented(Throwable cause, String msg, Object...args) {
-		this(create().causedBy(cause).message(msg, args));
+		super(STATUS_CODE, cause, msg, args);
+		setStatusLine(STATUS_LINE.copy());
 	}
 
 	/**
 	 * Constructor.
 	 */
 	public NotImplemented() {
-		this(create());
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**
@@ -96,7 +82,7 @@ public class NotImplemented extends BasicHttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public NotImplemented(String msg, Object...args) {
-		this(create().message(msg, args));
+		this((Throwable)null, msg, args);
 	}
 
 	/**
@@ -105,7 +91,7 @@ public class NotImplemented extends BasicHttpException {
 	 * @param cause The cause.  Can be <jk>null</jk>.
 	 */
 	public NotImplemented(Throwable cause) {
-		this(create().causedBy(cause));
+		this(cause, cause == null ? REASON_PHRASE : cause.getMessage());
 	}
 
 	/**
@@ -118,17 +104,77 @@ public class NotImplemented extends BasicHttpException {
 	 * @throws AssertionError If HTTP response status code does not match what was expected.
 	 */
 	public NotImplemented(HttpResponse response) {
-		this(create().copyFrom(response));
+		super(response);
 		assertStatusCode(response);
 	}
 
 	/**
-	 * Creates a builder for this class initialized with the contents of this bean.
+	 * Copy constructor.
 	 *
-	 * @return A new builder bean.
+	 * @param copyFrom The bean to copy.
 	 */
-	@Override /* BasicHttpException */
-	public HttpExceptionBuilder<NotImplemented> copy() {
-		return new HttpExceptionBuilder<>(this);
+	protected NotImplemented(NotImplemented copyFrom) {
+		super(copyFrom);
 	}
+
+	/**
+	 * Creates a modifiable copy of this bean.
+	 *
+	 * @return A new modifiable bean.
+	 */
+	public NotImplemented copy() {
+		return new NotImplemented(this);
+	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.BasicRuntimeException */
+	public NotImplemented setMessage(String message, Object...args) {
+		super.setMessage(message, args);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.BasicRuntimeException */
+	public NotImplemented setUnmodifiable() {
+		super.setUnmodifiable();
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public NotImplemented setHeader2(String name, Object value) {
+		super.setHeader2(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public NotImplemented setHeaders(HeaderList value) {
+		super.setHeaders(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public NotImplemented setHeaders2(Header...values) {
+		super.setHeaders2(values);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public NotImplemented setProtocolVersion(ProtocolVersion value) {
+		super.setProtocolVersion(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public NotImplemented setReasonPhraseCatalog(ReasonPhraseCatalog value) {
+		super.setReasonPhraseCatalog(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public NotImplemented setStatusLine(BasicStatusLine value) {
+		super.setStatusLine(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

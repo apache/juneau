@@ -44,7 +44,7 @@ public class InternalServerError_Test {
 		}
 		@RestGet
 		public void f5() throws InternalServerError {
-			throw internalServerError().header("Foo", "bar").build();
+			throw internalServerError().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws InternalServerError {

@@ -81,7 +81,7 @@ public class RestOpInvoker extends MethodInvoker {
 					res.setContent(output);
 
 		} catch (IllegalAccessException|IllegalArgumentException e) {
-			throw InternalServerError.create().message("Error occurred invoking method ''{0}''.", inner().getFullName()).causedBy(e).build();
+			throw new InternalServerError(e, "Error occurred invoking method ''{0}''.", inner().getFullName());
 		} catch (InvocationTargetException e) {
 			RestResponse res = opSession.getResponse();
 			Throwable e2 = e.getTargetException();

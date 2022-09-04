@@ -27,6 +27,7 @@ import org.apache.juneau.internal.*;
  *
  * @serial exclude
  */
+@FluentSetters
 public class BasicRuntimeException extends RuntimeException {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -35,112 +36,12 @@ public class BasicRuntimeException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @return A new builder.
-	 */
-	public static Builder create() {
-		return new Builder();
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// Builder
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Builder class.
-	 */
-	@FluentSetters
-	public static class Builder {
-
-		String message;
-		Throwable causedBy;
-		boolean unmodifiable;
-
-		/**
-		 * Default constructor.
-		 */
-		protected Builder() {}
-
-		/**
-		 * Copy constructor.
-		 *
-		 * @param copyFrom The bean to copy.
-		 */
-		protected Builder(BasicRuntimeException copyFrom) {
-			message = copyFrom.getMessage();
-			causedBy = copyFrom.getCause();
-			unmodifiable = copyFrom.unmodifiable;
-		}
-
-		/**
-		 * Specifies the exception message.
-		 *
-		 * @param msg The exception message.  Can be <jk>null</jk>.
-		 * 	<br>If <jk>null</jk>, then the caused-by message is used if available.
-		 * @param args The exception message arguments.
-		 * @return This object.
-		 */
-		@FluentSetter
-		public Builder message(String msg, Object...args) {
-			message = format(msg, args);
-			return this;
-		}
-
-		/**
-		 * Specifies the caused-by exception.
-		 *
-		 * @param value The caused-by exception.  Can be <jk>null</jk>.
-		 * @return This object.
-		 */
-		@FluentSetter
-		public Builder causedBy(Throwable value) {
-			causedBy = value;
-			return this;
-		}
-
-		/**
-		 * Specifies whether this exception should be unmodifiable after creation.
-		 *
-		 * @return This object.
-		 */
-		@FluentSetter
-		public Builder unmodifiable() {
-			unmodifiable = true;
-			return this;
-		}
-
-		/**
-		 * Instantiates the exception.
-		 *
-		 * @return A new exception.
-		 */
-		public BasicRuntimeException build() {
-			return new BasicRuntimeException(this);
-		}
-
-		// <FluentSetters>
-
-		// </FluentSetters>
-	}
-
 	//-----------------------------------------------------------------------------------------------------------------
 	// Instance
 	//-----------------------------------------------------------------------------------------------------------------
 
 	boolean unmodifiable;
 	String message;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param builder The builder containing the settings for this exception.
-	 */
-	public BasicRuntimeException(Builder builder) {
-		super(builder.message, builder.causedBy);
-		this.unmodifiable = builder.unmodifiable;
-	}
 
 	/**
 	 * Constructor.
@@ -190,6 +91,7 @@ public class BasicRuntimeException extends RuntimeException {
 	 * @param args The message args.
 	 * @return This object.
 	 */
+	@FluentSetter
 	public BasicRuntimeException setMessage(String message, Object...args) {
 		assertModifiable();
 		this.message = format(message, args);
@@ -198,6 +100,8 @@ public class BasicRuntimeException extends RuntimeException {
 
 	@Override /* Throwable */
 	public String getMessage() {
+		if (message != null)
+			return message;
 		String m = super.getMessage();
 		if (m == null && getCause() != null)
 			m = getCause().getMessage();
@@ -233,11 +137,14 @@ public class BasicRuntimeException extends RuntimeException {
 	}
 
 	/**
-	 * Set the unmodifiable flag on this exception.  This prevents the message from being up
+	 * Set the unmodifiable flag on this exception.  This prevents the message from being modified.
 	 *
+	 * @return This object.
 	 */
-	protected void setUnmodifiable() {
+	@FluentSetter
+	protected BasicRuntimeException setUnmodifiable() {
 		unmodifiable = true;
+		return this;
 	}
 
 	/**

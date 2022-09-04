@@ -44,7 +44,7 @@ public class Locked_Test {
 		}
 		@RestGet
 		public void f5() throws Locked {
-			throw locked().header("Foo", "bar").build();
+			throw locked().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws Locked {

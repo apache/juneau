@@ -102,7 +102,7 @@ public class RestOp_Throws_Test {
 		a.get("/httpVersionNotSupported")
 			.run()
 			.assertStatus(505)
-			.assertContent("HTTP Version Not Supported");
+			.assertContent("Http Version Not Supported");
 		a.get("/insufficientStorage")
 			.run()
 			.assertStatus(507)

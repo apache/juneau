@@ -23,6 +23,7 @@ import org.apache.http.params.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Basic implementation of the {@link HttpResponse} interface.
@@ -44,6 +45,7 @@ import org.apache.juneau.http.header.*;
  * </ul>
  */
 @BeanIgnore /* Use toString() to serialize */
+@FluentSetters
 public class BasicHttpResponse implements HttpResponse {
 
 	HeaderList headers;
@@ -255,6 +257,10 @@ public class BasicHttpResponse implements HttpResponse {
 	public void setLocale(Locale loc) {
 		statusLine.setLocale(loc);
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 
 	/**
 	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.

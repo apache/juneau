@@ -44,7 +44,7 @@ public class Conflict_Test {
 		}
 		@RestGet
 		public void f5() throws Conflict {
-			throw conflict().header("A", "bar").build();
+			throw conflict().setHeader2("A", "bar");
 		}
 		@RestGet
 		public void f6() throws Conflict {

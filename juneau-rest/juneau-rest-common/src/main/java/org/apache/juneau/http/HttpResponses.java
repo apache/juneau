@@ -328,21 +328,21 @@ public class HttpResponses {
 	}
 
 	/**
-	 * A shortcut for calling {@link BadRequest#create()}.
+	 * A shortcut for calling {@link BadRequest#BadRequest()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<BadRequest> badRequest() {
-		return BadRequest.create();
+	public static final BadRequest badRequest() {
+		return new BadRequest();
 	}
 
 	/**
-	 * A shortcut for calling {@link Conflict#create()}.
+	 * A shortcut for calling {@link Conflict#Conflict()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<Conflict> conflict() {
-		return Conflict.create();
+	public static final Conflict conflict() {
+		return new Conflict();
 	}
 
 	/**
@@ -364,30 +364,30 @@ public class HttpResponses {
 	}
 
 	/**
-	 * A shortcut for calling {@link ExpectationFailed#create()}.
+	 * A shortcut for calling {@link ExpectationFailed#ExpectationFailed()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<ExpectationFailed> expectationFailed() {
-		return ExpectationFailed.create();
+	public static final ExpectationFailed expectationFailed() {
+		return new ExpectationFailed();
 	}
 
 	/**
-	 * A shortcut for calling {@link FailedDependency#create()}.
+	 * A shortcut for calling {@link FailedDependency#FailedDependency()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<FailedDependency> failedDependency() {
-		return FailedDependency.create();
+	public static final FailedDependency failedDependency() {
+		return new FailedDependency();
 	}
 
 	/**
-	 * A shortcut for calling {@link Forbidden#create()}.
+	 * A shortcut for calling {@link Forbidden#Forbidden()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<Forbidden> forbidden() {
-		return Forbidden.create();
+	public static final Forbidden forbidden() {
+		return new Forbidden();
 	}
 
 	/**
@@ -401,30 +401,30 @@ public class HttpResponses {
 	}
 
 	/**
-	 * A shortcut for calling {@link Gone#create()}.
+	 * A shortcut for calling {@link Gone#Gone()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<Gone> gone() {
-		return Gone.create();
+	public static final Gone gone() {
+		return new Gone();
 	}
 
 	/**
-	 * A shortcut for calling {@link BasicHttpException#create()}.
+	 * A shortcut for calling {@link BasicHttpException#BasicHttpException()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<BasicHttpException> httpException() {
-		return BasicHttpException.create(BasicHttpException.class);
+	public static final BasicHttpException httpException() {
+		return new BasicHttpException();
 	}
 
 	/**
-	 * A shortcut for calling {@link HttpVersionNotSupported#create()}.
+	 * A shortcut for calling {@link HttpVersionNotSupported#HttpVersionNotSupported()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<HttpVersionNotSupported> httpVersionNotSupported() {
-		return HttpVersionNotSupported.create();
+	public static final HttpVersionNotSupported httpVersionNotSupported() {
+		return new HttpVersionNotSupported();
 	}
 
 	/**
@@ -437,66 +437,66 @@ public class HttpResponses {
 	}
 
 	/**
-	 * A shortcut for calling {@link InsufficientStorage#create()}.
+	 * A shortcut for calling {@link InsufficientStorage#InsufficientStorage()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<InsufficientStorage> insufficientStorage() {
-		return InsufficientStorage.create();
+	public static final InsufficientStorage insufficientStorage() {
+		return new InsufficientStorage();
 	}
 
 	/**
-	 * A shortcut for calling {@link InternalServerError#create()}.
+	 * A shortcut for calling {@link InternalServerError#InternalServerError()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<InternalServerError> internalServerError() {
-		return InternalServerError.create();
+	public static final InternalServerError internalServerError() {
+		return new InternalServerError();
 	}
 
 	/**
-	 * A shortcut for calling {@link LengthRequired#create()}.
+	 * A shortcut for calling {@link LengthRequired#LengthRequired()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<LengthRequired> lengthRequired() {
-		return LengthRequired.create();
+	public static final LengthRequired lengthRequired() {
+		return new LengthRequired();
 	}
 
 	/**
-	 * A shortcut for calling {@link Locked#create()}.
+	 * A shortcut for calling {@link Locked#Locked()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<Locked> locked() {
-		return Locked.create();
+	public static final Locked locked() {
+		return new Locked();
 	}
 
 	/**
-	 * A shortcut for calling {@link LoopDetected#create()}.
+	 * A shortcut for calling {@link LoopDetected#LoopDetected()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<LoopDetected> loopDetected() {
-		return LoopDetected.create();
+	public static final LoopDetected loopDetected() {
+		return new LoopDetected();
 	}
 
 	/**
-	 * A shortcut for calling {@link MethodNotAllowed#create()}.
+	 * A shortcut for calling {@link MethodNotAllowed#MethodNotAllowed()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<MethodNotAllowed> methodNotAllowed() {
-		return MethodNotAllowed.create();
+	public static final MethodNotAllowed methodNotAllowed() {
+		return new MethodNotAllowed();
 	}
 
 	/**
-	 * A shortcut for calling {@link MisdirectedRequest#create()}.
+	 * A shortcut for calling {@link MisdirectedRequest#MisdirectedRequest()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<MisdirectedRequest> misdirectedRequest() {
-		return MisdirectedRequest.create();
+	public static final MisdirectedRequest misdirectedRequest() {
+		return new MisdirectedRequest();
 	}
 	/**
 	 * A shortcut for calling {@link MovedPermanently#create()}.
@@ -527,12 +527,12 @@ public class HttpResponses {
 	}
 
 	/**
-	 * A shortcut for calling {@link NetworkAuthenticationRequired#create()}.
+	 * A shortcut for calling {@link NetworkAuthenticationRequired#NetworkAuthenticationRequired()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<NetworkAuthenticationRequired> networkAuthenticationRequired() {
-		return NetworkAuthenticationRequired.create();
+	public static final NetworkAuthenticationRequired networkAuthenticationRequired() {
+		return new NetworkAuthenticationRequired();
 	}
 
 	/**
@@ -554,39 +554,39 @@ public class HttpResponses {
 	}
 
 	/**
-	 * A shortcut for calling {@link NotAcceptable#create()}.
+	 * A shortcut for calling {@link NotAcceptable#NotAcceptable()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<NotAcceptable> notAcceptable() {
-		return NotAcceptable.create();
+	public static final NotAcceptable notAcceptable() {
+		return new NotAcceptable();
 	}
 
 	/**
-	 * A shortcut for calling {@link NotExtended#create()}.
+	 * A shortcut for calling {@link NotExtended#NotExtended()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<NotExtended> notExtended() {
-		return NotExtended.create();
+	public static final NotExtended notExtended() {
+		return new NotExtended();
 	}
 
 	/**
-	 * A shortcut for calling {@link NotFound#create()}.
+	 * A shortcut for calling {@link NotFound#NotFound()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<NotFound> notFound() {
-		return NotFound.create();
+	public static final NotFound notFound() {
+		return new NotFound();
 	}
 
 	/**
-	 * A shortcut for calling {@link NotImplemented#create()}.
+	 * A shortcut for calling {@link NotImplemented#NotImplemented()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<NotImplemented> notImplemented() {
-		return NotImplemented.create();
+	public static final NotImplemented notImplemented() {
+		return new NotImplemented();
 	}
 
 	/**
@@ -617,12 +617,12 @@ public class HttpResponses {
 	}
 
 	/**
-	 * A shortcut for calling {@link PayloadTooLarge#create()}.
+	 * A shortcut for calling {@link PayloadTooLarge#PayloadTooLarge()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<PayloadTooLarge> payloadTooLarge() {
-		return PayloadTooLarge.create();
+	public static final PayloadTooLarge payloadTooLarge() {
+		return new PayloadTooLarge();
 	}
 
 	/**
@@ -636,21 +636,21 @@ public class HttpResponses {
 	}
 
 	/**
-	 * A shortcut for calling {@link PreconditionFailed#create()}.
+	 * A shortcut for calling {@link PreconditionFailed#PreconditionFailed()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<PreconditionFailed> preconditionFailed() {
-		return PreconditionFailed.create();
+	public static final PreconditionFailed preconditionFailed() {
+		return new PreconditionFailed();
 	}
 
 	/**
-	 * A shortcut for calling {@link PreconditionRequired#create()}.
+	 * A shortcut for calling {@link PreconditionRequired#PreconditionRequired()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<PreconditionRequired> preconditionRequired() {
-		return PreconditionRequired.create();
+	public static final PreconditionRequired preconditionRequired() {
+		return new PreconditionRequired();
 	}
 
 	/**
@@ -663,21 +663,21 @@ public class HttpResponses {
 	}
 
 	/**
-	 * A shortcut for calling {@link RangeNotSatisfiable#create()}.
+	 * A shortcut for calling {@link RangeNotSatisfiable#RangeNotSatisfiable()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<RangeNotSatisfiable> rangeNotSatisfiable() {
-		return RangeNotSatisfiable.create();
+	public static final RangeNotSatisfiable rangeNotSatisfiable() {
+		return new RangeNotSatisfiable();
 	}
 
 	/**
-	 * A shortcut for calling {@link RequestHeaderFieldsTooLarge#create()}.
+	 * A shortcut for calling {@link RequestHeaderFieldsTooLarge#RequestHeaderFieldsTooLarge()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<RequestHeaderFieldsTooLarge> requestHeaderFieldsTooLarge() {
-		return RequestHeaderFieldsTooLarge.create();
+	public static final RequestHeaderFieldsTooLarge requestHeaderFieldsTooLarge() {
+		return new RequestHeaderFieldsTooLarge();
 	}
 
 	/**
@@ -700,12 +700,12 @@ public class HttpResponses {
 	}
 
 	/**
-	 * A shortcut for calling {@link ServiceUnavailable#create()}.
+	 * A shortcut for calling {@link ServiceUnavailable#ServiceUnavailable()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<ServiceUnavailable> serviceUnavailable() {
-		return ServiceUnavailable.create();
+	public static final ServiceUnavailable serviceUnavailable() {
+		return new ServiceUnavailable();
 	}
 
 	/**
@@ -728,66 +728,66 @@ public class HttpResponses {
 	}
 
 	/**
-	 * A shortcut for calling {@link TooManyRequests#create()}.
+	 * A shortcut for calling {@link TooManyRequests#TooManyRequests()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<TooManyRequests> tooManyRequests() {
-		return TooManyRequests.create();
+	public static final TooManyRequests tooManyRequests() {
+		return new TooManyRequests();
 	}
 
 	/**
-	 * A shortcut for calling {@link Unauthorized#create()}.
+	 * A shortcut for calling {@link Unauthorized#Unauthorized()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<Unauthorized> unauthorized() {
-		return Unauthorized.create();
+	public static final Unauthorized unauthorized() {
+		return new Unauthorized();
 	}
 
 	/**
-	 * A shortcut for calling {@link UnavailableForLegalReasons#create()}.
+	 * A shortcut for calling {@link UnavailableForLegalReasons#UnavailableForLegalReasons()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<UnavailableForLegalReasons> unavailableForLegalReasons() {
-		return UnavailableForLegalReasons.create();
+	public static final UnavailableForLegalReasons unavailableForLegalReasons() {
+		return new UnavailableForLegalReasons();
 	}
 
 	/**
-	 * A shortcut for calling {@link UnprocessableEntity#create()}.
+	 * A shortcut for calling {@link UnprocessableEntity#UnprocessableEntity()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<UnprocessableEntity> unprocessableEntity() {
-		return UnprocessableEntity.create();
+	public static final UnprocessableEntity unprocessableEntity() {
+		return new UnprocessableEntity();
 	}
 
 	/**
-	 * A shortcut for calling {@link UnsupportedMediaType#create()}.
+	 * A shortcut for calling {@link UnsupportedMediaType#UnsupportedMediaType()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<UnsupportedMediaType> unsupportedMediaType() {
-		return UnsupportedMediaType.create();
+	public static final UnsupportedMediaType unsupportedMediaType() {
+		return new UnsupportedMediaType();
 	}
 
 	/**
-	 * A shortcut for calling {@link UpgradeRequired#create()}.
+	 * A shortcut for calling {@link UpgradeRequired#UpgradeRequired()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<UpgradeRequired> upgradeRequired() {
-		return UpgradeRequired.create();
+	public static final UpgradeRequired upgradeRequired() {
+		return new UpgradeRequired();
 	}
 
 	/**
-	 * A shortcut for calling {@link UriTooLong#create()}.
+	 * A shortcut for calling {@link UriTooLong#UriTooLong()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<UriTooLong> uriTooLong() {
-		return UriTooLong.create();
+	public static final UriTooLong uriTooLong() {
+		return new UriTooLong();
 	}
 
 	/**
@@ -800,11 +800,11 @@ public class HttpResponses {
 	}
 
 	/**
-	 * A shortcut for calling {@link VariantAlsoNegotiates#create()}.
+	 * A shortcut for calling {@link VariantAlsoNegotiates#VariantAlsoNegotiates()}.
 	 *
 	 * @return A new bean builder.
 	 */
-	public static final HttpExceptionBuilder<VariantAlsoNegotiates> variantAlsoNegotiates() {
-		return VariantAlsoNegotiates.create();
+	public static final VariantAlsoNegotiates variantAlsoNegotiates() {
+		return new VariantAlsoNegotiates();
 	}
 }

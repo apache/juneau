@@ -44,7 +44,7 @@ public class UnsupportedMediaType_Test {
 		}
 		@RestGet
 		public void f5() throws UnsupportedMediaType {
-			throw unsupportedMediaType().header("Foo", "bar").build();
+			throw unsupportedMediaType().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws UnsupportedMediaType {

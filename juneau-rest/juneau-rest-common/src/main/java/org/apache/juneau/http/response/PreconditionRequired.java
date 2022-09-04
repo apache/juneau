@@ -15,11 +15,13 @@ package org.apache.juneau.http.response;
 import static org.apache.juneau.http.response.PreconditionRequired.*;
 
 import java.text.*;
-
 import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 428 (Precondition Required).
@@ -38,6 +40,7 @@ import org.apache.juneau.http.annotation.*;
 @Response
 @StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
+@FluentSetters
 public class PreconditionRequired extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -51,25 +54,7 @@ public class PreconditionRequired extends BasicHttpException {
 	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
 	/** Reusable unmodifiable instance */
-	public static final PreconditionRequired INSTANCE = create().unmodifiable().build();
-
-	/**
-	 * Creates a builder for this class.
-	 *
-	 * @return A new builder bean.
-	 */
-	public static HttpExceptionBuilder<PreconditionRequired> create() {
-		return new HttpExceptionBuilder<>(PreconditionRequired.class).statusLine(STATUS_LINE.copy());
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param builder The builder containing the settings for this exception.
-	 */
-	public PreconditionRequired(HttpExceptionBuilder<?> builder) {
-		super(builder);
-	}
+	public static final PreconditionRequired INSTANCE = new PreconditionRequired().setUnmodifiable();
 
 	/**
 	 * Constructor.
@@ -79,14 +64,15 @@ public class PreconditionRequired extends BasicHttpException {
 	 * @param args The message arguments.
 	 */
 	public PreconditionRequired(Throwable cause, String msg, Object...args) {
-		this(create().causedBy(cause).message(msg, args));
+		super(STATUS_CODE, cause, msg, args);
+		setStatusLine(STATUS_LINE.copy());
 	}
 
 	/**
 	 * Constructor.
 	 */
 	public PreconditionRequired() {
-		this(create());
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**
@@ -96,7 +82,7 @@ public class PreconditionRequired extends BasicHttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public PreconditionRequired(String msg, Object...args) {
-		this(create().message(msg, args));
+		this((Throwable)null, msg, args);
 	}
 
 	/**
@@ -105,7 +91,7 @@ public class PreconditionRequired extends BasicHttpException {
 	 * @param cause The cause.  Can be <jk>null</jk>.
 	 */
 	public PreconditionRequired(Throwable cause) {
-		this(create().causedBy(cause));
+		this(cause, cause == null ? REASON_PHRASE : cause.getMessage());
 	}
 
 	/**
@@ -118,17 +104,77 @@ public class PreconditionRequired extends BasicHttpException {
 	 * @throws AssertionError If HTTP response status code does not match what was expected.
 	 */
 	public PreconditionRequired(HttpResponse response) {
-		this(create().copyFrom(response));
+		super(response);
 		assertStatusCode(response);
 	}
 
 	/**
-	 * Creates a builder for this class initialized with the contents of this bean.
+	 * Copy constructor.
 	 *
-	 * @return A new builder bean.
+	 * @param copyFrom The bean to copy.
 	 */
-	@Override /* BasicHttpException */
-	public HttpExceptionBuilder<PreconditionRequired> copy() {
-		return new HttpExceptionBuilder<>(this);
+	protected PreconditionRequired(PreconditionRequired copyFrom) {
+		super(copyFrom);
 	}
+
+	/**
+	 * Creates a modifiable copy of this bean.
+	 *
+	 * @return A new modifiable bean.
+	 */
+	public PreconditionRequired copy() {
+		return new PreconditionRequired(this);
+	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.BasicRuntimeException */
+	public PreconditionRequired setMessage(String message, Object...args) {
+		super.setMessage(message, args);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.BasicRuntimeException */
+	public PreconditionRequired setUnmodifiable() {
+		super.setUnmodifiable();
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public PreconditionRequired setHeader2(String name, Object value) {
+		super.setHeader2(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public PreconditionRequired setHeaders(HeaderList value) {
+		super.setHeaders(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public PreconditionRequired setHeaders2(Header...values) {
+		super.setHeaders2(values);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public PreconditionRequired setProtocolVersion(ProtocolVersion value) {
+		super.setProtocolVersion(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public PreconditionRequired setReasonPhraseCatalog(ReasonPhraseCatalog value) {
+		super.setReasonPhraseCatalog(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public PreconditionRequired setStatusLine(BasicStatusLine value) {
+		super.setStatusLine(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

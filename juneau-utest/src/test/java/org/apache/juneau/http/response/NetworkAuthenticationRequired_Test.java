@@ -44,7 +44,7 @@ public class NetworkAuthenticationRequired_Test {
 		}
 		@RestGet
 		public void f5() throws NetworkAuthenticationRequired {
-			throw networkAuthenticationRequired().header("Foo", "bar").build();
+			throw networkAuthenticationRequired().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws NetworkAuthenticationRequired {

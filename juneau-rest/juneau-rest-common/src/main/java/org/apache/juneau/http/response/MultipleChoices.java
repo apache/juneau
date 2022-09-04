@@ -18,6 +18,7 @@ import org.apache.http.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents an <c>HTTP 300 Multiple Choices</c> response.
@@ -34,6 +35,7 @@ import org.apache.juneau.http.annotation.*;
 @Response
 @StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
+@FluentSetters
 public class MultipleChoices extends BasicHttpResponse {
 
 	/** HTTP status code */
@@ -89,4 +91,8 @@ public class MultipleChoices extends BasicHttpResponse {
 	public HttpResponseBuilder<MultipleChoices> copy() {
 		return new HttpResponseBuilder<>(this);
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

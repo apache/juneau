@@ -44,7 +44,7 @@ public class Forbidden_Test {
 		}
 		@RestGet
 		public void f5() throws Forbidden {
-			throw forbidden().header("Foo", "bar").build();
+			throw forbidden().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws Forbidden {

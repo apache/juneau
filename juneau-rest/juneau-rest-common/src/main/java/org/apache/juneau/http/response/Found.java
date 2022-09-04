@@ -18,6 +18,7 @@ import org.apache.http.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Represents an <c>HTTP 302 Found</c> response.
@@ -37,6 +38,7 @@ import org.apache.juneau.http.annotation.*;
 @Response
 @StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
+@FluentSetters
 public class Found extends BasicHttpResponse {
 
 	/** HTTP status code */
@@ -92,4 +94,8 @@ public class Found extends BasicHttpResponse {
 	public HttpResponseBuilder<Found> copy() {
 		return new HttpResponseBuilder<>(this);
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

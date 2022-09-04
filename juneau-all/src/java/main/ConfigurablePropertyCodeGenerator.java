@@ -33,10 +33,12 @@ public class ConfigurablePropertyCodeGenerator {
 	);
 
 	private static String[] SOURCE_PATHS = {
+		"juneau-core/juneau-common",
 		"juneau-core/juneau-config",
 		"juneau-core/juneau-dto",
 		"juneau-core/juneau-marshall",
 		"juneau-core/juneau-marshall-rdf",
+		"juneau-rest/juneau-rest-common",
 		"juneau-rest/juneau-rest-client",
 		"juneau-rest/juneau-rest-server",
 		"juneau-rest/juneau-rest-mock",

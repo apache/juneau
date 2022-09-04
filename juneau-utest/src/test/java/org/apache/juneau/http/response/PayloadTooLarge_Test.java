@@ -44,7 +44,7 @@ public class PayloadTooLarge_Test {
 		}
 		@RestGet
 		public void f5() throws PayloadTooLarge {
-			throw payloadTooLarge().header("Foo", "bar").build();
+			throw payloadTooLarge().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws PayloadTooLarge {

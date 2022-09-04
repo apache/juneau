@@ -44,7 +44,7 @@ public class RequestHeaderFieldsTooLarge_Test {
 		}
 		@RestGet
 		public void f5() throws RequestHeaderFieldsTooLarge {
-			throw requestHeaderFieldsTooLarge().header("Foo", "bar").build();
+			throw requestHeaderFieldsTooLarge().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws RequestHeaderFieldsTooLarge {

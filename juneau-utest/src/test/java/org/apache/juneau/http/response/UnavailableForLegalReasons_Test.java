@@ -44,7 +44,7 @@ public class UnavailableForLegalReasons_Test {
 		}
 		@RestGet
 		public void f5() throws UnavailableForLegalReasons {
-			throw unavailableForLegalReasons().header("Foo", "bar").build();
+			throw unavailableForLegalReasons().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws UnavailableForLegalReasons {

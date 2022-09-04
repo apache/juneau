@@ -44,7 +44,7 @@ public class InsufficentStorage_Test {
 		}
 		@RestGet
 		public void f5() throws InsufficientStorage {
-			throw insufficientStorage().header("Foo", "bar").build();
+			throw insufficientStorage().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws InsufficientStorage {

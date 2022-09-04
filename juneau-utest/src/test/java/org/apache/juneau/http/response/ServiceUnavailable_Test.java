@@ -44,7 +44,7 @@ public class ServiceUnavailable_Test {
 		}
 		@RestGet
 		public void f5() throws ServiceUnavailable {
-			throw serviceUnavailable().header("Foo", "bar").build();
+			throw serviceUnavailable().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws ServiceUnavailable {

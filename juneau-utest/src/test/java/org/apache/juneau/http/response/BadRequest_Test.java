@@ -44,7 +44,7 @@ public class BadRequest_Test {
 		}
 		@RestGet
 		public void f5() throws BadRequest {
-			throw badRequest().header("Foo", "bar").build();
+			throw badRequest().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws BadRequest {

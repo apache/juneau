@@ -44,7 +44,7 @@ public class NotExtended_Test {
 		}
 		@RestGet
 		public void f5() throws NotExtended {
-			throw notExtended().header("Foo", "bar").build();
+			throw notExtended().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws NotExtended {

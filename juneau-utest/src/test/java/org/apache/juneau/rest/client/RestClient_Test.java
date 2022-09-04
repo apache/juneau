@@ -328,7 +328,7 @@ public class RestClient_Test {
 		@RestGet
 		public String echo(@org.apache.juneau.http.annotation.Header("Authorization") String auth, org.apache.juneau.rest.RestResponse res) throws IOException {
 			if (auth == null) {
-				throw unauthorized().header("WWW-Authenticate","BASIC realm=\"foo\"").build();
+				throw unauthorized().setHeader2("WWW-Authenticate","BASIC realm=\"foo\"");
 			} else {
 				assertEquals("Basic dXNlcjpwdw==",auth);
 				return "OK";

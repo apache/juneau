@@ -44,7 +44,7 @@ public class VariantAlsoNegotiates_Test {
 		}
 		@RestGet
 		public void f5() throws VariantAlsoNegotiates {
-			throw variantAlsoNegotiates().header("Foo", "bar").build();
+			throw variantAlsoNegotiates().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws VariantAlsoNegotiates {

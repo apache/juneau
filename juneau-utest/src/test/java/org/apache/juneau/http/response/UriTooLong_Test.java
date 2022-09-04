@@ -44,7 +44,7 @@ public class UriTooLong_Test {
 		}
 		@RestGet
 		public void f5() throws UriTooLong {
-			throw uriTooLong().header("Foo", "bar").build();
+			throw uriTooLong().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws UriTooLong {

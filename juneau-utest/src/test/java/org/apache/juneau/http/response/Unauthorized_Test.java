@@ -44,7 +44,7 @@ public class Unauthorized_Test {
 		}
 		@RestGet
 		public void f5() throws Unauthorized {
-			throw unauthorized().header("Foo", "bar").build();
+			throw unauthorized().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws Unauthorized {

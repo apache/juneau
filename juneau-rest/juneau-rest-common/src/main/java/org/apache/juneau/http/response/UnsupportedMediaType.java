@@ -15,11 +15,13 @@ package org.apache.juneau.http.response;
 import static org.apache.juneau.http.response.UnsupportedMediaType.*;
 
 import java.text.*;
-
 import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Exception representing an HTTP 415 (Unsupported Media Type).
@@ -38,6 +40,7 @@ import org.apache.juneau.http.annotation.*;
 @Response
 @StatusCode(STATUS_CODE)
 @Schema(description=REASON_PHRASE)
+@FluentSetters
 public class UnsupportedMediaType extends BasicHttpException {
 	private static final long serialVersionUID = 1L;
 
@@ -51,25 +54,7 @@ public class UnsupportedMediaType extends BasicHttpException {
 	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
 	/** Reusable unmodifiable instance */
-	public static final UnsupportedMediaType INSTANCE = create().unmodifiable().build();
-
-	/**
-	 * Creates a builder for this class.
-	 *
-	 * @return A new builder bean.
-	 */
-	public static HttpExceptionBuilder<UnsupportedMediaType> create() {
-		return new HttpExceptionBuilder<>(UnsupportedMediaType.class).statusLine(STATUS_LINE.copy());
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param builder The builder containing the settings for this exception.
-	 */
-	public UnsupportedMediaType(HttpExceptionBuilder<?> builder) {
-		super(builder);
-	}
+	public static final UnsupportedMediaType INSTANCE = new UnsupportedMediaType().setUnmodifiable();
 
 	/**
 	 * Constructor.
@@ -79,14 +64,15 @@ public class UnsupportedMediaType extends BasicHttpException {
 	 * @param args The message arguments.
 	 */
 	public UnsupportedMediaType(Throwable cause, String msg, Object...args) {
-		this(create().causedBy(cause).message(msg, args));
+		super(STATUS_CODE, cause, msg, args);
+		setStatusLine(STATUS_LINE.copy());
 	}
 
 	/**
 	 * Constructor.
 	 */
 	public UnsupportedMediaType() {
-		this(create());
+		this((Throwable)null, REASON_PHRASE);
 	}
 
 	/**
@@ -96,7 +82,7 @@ public class UnsupportedMediaType extends BasicHttpException {
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public UnsupportedMediaType(String msg, Object...args) {
-		this(create().message(msg, args));
+		this((Throwable)null, msg, args);
 	}
 
 	/**
@@ -105,7 +91,7 @@ public class UnsupportedMediaType extends BasicHttpException {
 	 * @param cause The cause.  Can be <jk>null</jk>.
 	 */
 	public UnsupportedMediaType(Throwable cause) {
-		this(create().causedBy(cause));
+		this(cause, cause == null ? REASON_PHRASE : cause.getMessage());
 	}
 
 	/**
@@ -118,17 +104,77 @@ public class UnsupportedMediaType extends BasicHttpException {
 	 * @throws AssertionError If HTTP response status code does not match what was expected.
 	 */
 	public UnsupportedMediaType(HttpResponse response) {
-		this(create().copyFrom(response));
+		super(response);
 		assertStatusCode(response);
 	}
 
 	/**
-	 * Creates a builder for this class initialized with the contents of this bean.
+	 * Copy constructor.
 	 *
-	 * @return A new builder bean.
+	 * @param copyFrom The bean to copy.
 	 */
-	@Override /* BasicHttpException */
-	public HttpExceptionBuilder<UnsupportedMediaType> copy() {
-		return new HttpExceptionBuilder<>(this);
+	protected UnsupportedMediaType(UnsupportedMediaType copyFrom) {
+		super(copyFrom);
 	}
+
+	/**
+	 * Creates a modifiable copy of this bean.
+	 *
+	 * @return A new modifiable bean.
+	 */
+	public UnsupportedMediaType copy() {
+		return new UnsupportedMediaType(this);
+	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.BasicRuntimeException */
+	public UnsupportedMediaType setMessage(String message, Object...args) {
+		super.setMessage(message, args);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.BasicRuntimeException */
+	public UnsupportedMediaType setUnmodifiable() {
+		super.setUnmodifiable();
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public UnsupportedMediaType setHeader2(String name, Object value) {
+		super.setHeader2(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public UnsupportedMediaType setHeaders(HeaderList value) {
+		super.setHeaders(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public UnsupportedMediaType setHeaders2(Header...values) {
+		super.setHeaders2(values);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public UnsupportedMediaType setProtocolVersion(ProtocolVersion value) {
+		super.setProtocolVersion(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public UnsupportedMediaType setReasonPhraseCatalog(ReasonPhraseCatalog value) {
+		super.setReasonPhraseCatalog(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public UnsupportedMediaType setStatusLine(BasicStatusLine value) {
+		super.setStatusLine(value);
+		return this;
+	}
+
+	// </FluentSetters>
 }

@@ -46,7 +46,7 @@ public class HttpException_Test {
 		}
 		@RestGet
 		public void f5() throws BasicHttpException {
-			throw httpException().statusCode(225).header("Foo", "bar").build();
+			throw httpException().setStatusCode2(225).setHeader2("Foo", "bar");
 		}
 	}
 
@@ -62,7 +62,7 @@ public class HttpException_Test {
 			.assertContent("foo");
 		c.get("/f3").run()
 			.assertStatus().asCode().is(225)
-			.assertContent("baz");
+			.assertContent("java.lang.RuntimeException: baz");
 		c.get("/f4").run()
 			.assertStatus().asCode().is(225)
 			.assertContent("bar baz");

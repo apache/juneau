@@ -44,7 +44,7 @@ public class NotAcceptable_Test {
 		}
 		@RestGet
 		public void f5() throws NotAcceptable {
-			throw notAcceptable().header("Foo", "bar").build();
+			throw notAcceptable().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws NotAcceptable {

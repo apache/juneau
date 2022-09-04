@@ -44,7 +44,7 @@ public class NotImplemented_Test {
 		}
 		@RestGet
 		public void f5() throws NotImplemented {
-			throw notImplemented().header("Foo", "bar").build();
+			throw notImplemented().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws NotImplemented {

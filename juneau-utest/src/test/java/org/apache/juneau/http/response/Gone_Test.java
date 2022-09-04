@@ -44,7 +44,7 @@ public class Gone_Test {
 		}
 		@RestGet
 		public void f5() throws Gone {
-			throw gone().header("Foo", "bar").build();
+			throw gone().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws Gone {

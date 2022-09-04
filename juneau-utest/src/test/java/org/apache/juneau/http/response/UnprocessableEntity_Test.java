@@ -44,7 +44,7 @@ public class UnprocessableEntity_Test {
 		}
 		@RestGet
 		public void f5() throws UnprocessableEntity {
-			throw unprocessableEntity().header("Foo", "bar").build();
+			throw unprocessableEntity().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws UnprocessableEntity {

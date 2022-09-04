@@ -44,7 +44,7 @@ public class UpgradeRequired_Test {
 		}
 		@RestGet
 		public void f5() throws UpgradeRequired {
-			throw upgradeRequired().header("Foo", "bar").build();
+			throw upgradeRequired().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws UpgradeRequired {

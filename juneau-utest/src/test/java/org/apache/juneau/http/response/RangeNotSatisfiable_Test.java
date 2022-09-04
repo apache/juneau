@@ -44,7 +44,7 @@ public class RangeNotSatisfiable_Test {
 		}
 		@RestGet
 		public void f5() throws RangeNotSatisfiable {
-			throw rangeNotSatisfiable().header("Foo", "bar").build();
+			throw rangeNotSatisfiable().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws RangeNotSatisfiable {

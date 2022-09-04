@@ -44,7 +44,7 @@ public class ExpectationFailed_Test {
 		}
 		@RestGet
 		public void f5() throws ExpectationFailed {
-			throw expectationFailed().header("Foo", "bar").build();
+			throw expectationFailed().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws ExpectationFailed {

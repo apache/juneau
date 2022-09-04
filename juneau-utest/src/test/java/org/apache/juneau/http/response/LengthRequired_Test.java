@@ -44,7 +44,7 @@ public class LengthRequired_Test {
 		}
 		@RestGet
 		public void f5() throws LengthRequired {
-			throw lengthRequired().header("Foo", "bar").build();
+			throw lengthRequired().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws LengthRequired {

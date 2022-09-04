@@ -44,7 +44,7 @@ public class MisdirectedRequest_Test {
 		}
 		@RestGet
 		public void f5() throws MisdirectedRequest {
-			throw misdirectedRequest().header("Foo", "bar").build();
+			throw misdirectedRequest().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws MisdirectedRequest {

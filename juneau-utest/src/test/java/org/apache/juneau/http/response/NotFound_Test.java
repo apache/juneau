@@ -44,7 +44,7 @@ public class NotFound_Test {
 		}
 		@RestGet
 		public void f5() throws NotFound {
-			throw notFound().header("Foo", "bar").build();
+			throw notFound().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws NotFound {

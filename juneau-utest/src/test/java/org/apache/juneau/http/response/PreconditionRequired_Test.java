@@ -44,7 +44,7 @@ public class PreconditionRequired_Test {
 		}
 		@RestGet
 		public void f5() throws PreconditionRequired {
-			throw preconditionRequired().header("Foo", "bar").build();
+			throw preconditionRequired().setHeader2("Foo", "bar");
 		}
 		@RestGet
 		public void f6() throws PreconditionRequired {

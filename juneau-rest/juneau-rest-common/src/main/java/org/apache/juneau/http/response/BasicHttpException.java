@@ -16,18 +16,20 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.internal.ArgUtils.*;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.apache.juneau.http.HttpEntities.*;
+import static org.apache.juneau.http.HttpHeaders.*;
 
 import java.lang.reflect.*;
 import java.text.*;
 import java.util.*;
 
 import org.apache.http.*;
-import org.apache.http.Header;
+import org.apache.http.impl.*;
 import org.apache.http.params.*;
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.internal.*;
 
 /**
  * Basic implementation of the {@link HttpResponse} interface for error responses.
@@ -51,36 +53,14 @@ import org.apache.juneau.http.header.*;
  * @serial exclude
  */
 @BeanIgnore /* Use toString() to serialize */
+@FluentSetters
 public class BasicHttpException extends BasicRuntimeException implements HttpResponse {
 
 	private static final long serialVersionUID = 1L;
 
-	HeaderList headers;
+	HeaderList headers = HeaderList.create();
 	BasicStatusLine statusLine = new BasicStatusLine();
 	HttpEntity content;
-
-	/**
-	 * Creates a builder for this class.
-	 *
-	 * @param <T> The subclass that the builder is going to create.
-	 * @param implClass The subclass that the builder is going to create.
-	 * @return A new builder bean.
-	 */
-	public static <T extends BasicHttpException> HttpExceptionBuilder<T> create(Class<T> implClass) {
-		return new HttpExceptionBuilder<>(implClass);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param builder The builder containing the arguments for this exception.
-	 */
-	public BasicHttpException(HttpExceptionBuilder<?> builder) {
-		super(builder);
-		headers = builder.headers;
-		statusLine = builder.statusLine.copy();
-		content = builder.content;
-	}
 
 	/**
 	 * Constructor.
@@ -91,7 +71,9 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @param args The message arguments.
 	 */
 	public BasicHttpException(int statusCode, Throwable cause, String msg, Object...args) {
-		this(create(null).statusCode(statusCode).causedBy(cause).message(msg, args));
+		super(cause, msg, args);
+		setStatusCode(statusCode);
+		setContent(format(msg, args));
 	}
 
 	/**
@@ -100,7 +82,8 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @param statusCode The HTTP status code.
 	 */
 	public BasicHttpException(int statusCode) {
-		this(create(null).statusCode(statusCode));
+		super((Throwable)null);
+		setStatusCode(statusCode);
 	}
 
 	/**
@@ -111,7 +94,8 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @param args Optional {@link MessageFormat}-style arguments in the message.
 	 */
 	public BasicHttpException(int statusCode, String msg, Object...args) {
-		this(create(null).statusCode(statusCode).message(msg, args));
+		super(msg, args);
+		setStatusCode(statusCode);
 	}
 
 	/**
@@ -121,7 +105,15 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @param causedBy The cause.  Can be <jk>null</jk>.
 	 */
 	public BasicHttpException(int statusCode, Throwable causedBy) {
-		this(create(null).statusCode(statusCode).causedBy(causedBy));
+		super(causedBy);
+		setStatusCode(statusCode);
+	}
+
+	/**
+	 * Constructor.
+	 */
+	public BasicHttpException() {
+		super((Throwable)null);
 	}
 
 	/**
@@ -133,16 +125,168 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @param response The HTTP response being parsed.
 	 */
 	public BasicHttpException(HttpResponse response) {
-		this(create(null).copyFrom(response));
+		super((Throwable)null);
+		Header h = response.getLastHeader("Thrown");
+		if (h != null)
+			setMessage(thrown(h.getValue()).asParts().get().get(0).getMessage());
+		setHeaders(response.getAllHeaders());
+		setContent(response.getEntity());
+		setStatusCode(response.getStatusLine().getStatusCode());
 	}
 
 	/**
-	 * Creates a builder for this class initialized with the contents of this bean.
+	 * Copy constructor.
 	 *
-	 * @return A new builder bean.
+	 * @param copyFrom The bean to copy.
 	 */
-	public HttpExceptionBuilder<? extends BasicHttpException> copy() {
-		return new HttpExceptionBuilder<>(this);
+	protected BasicHttpException(BasicHttpException copyFrom) {
+		this(0, copyFrom.getCause(), copyFrom.getMessage());
+		setStatusLine(copyFrom.statusLine.copy());
+	}
+
+	/**
+	 * Sets the protocol version on the status line.
+	 *
+	 * <p>
+	 * If not specified, <js>"HTTP/1.1"</js> will be used.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpException setStatusLine(BasicStatusLine value) {
+		statusLine = value;
+		return this;
+	}
+
+	/**
+	 * Same as {@link #setStatusCode2(int)} but returns this object.
+	 *
+	 * @param code The new status code.
+	 * @return This object.
+	 * @throws IllegalStateException If status code could not be set.
+	 */
+	@FluentSetter
+	public BasicHttpException setStatusCode2(int code) throws IllegalStateException {
+		setStatusCode(code);
+		return this;
+	}
+
+	/**
+	 * Sets the protocol version on the status line.
+	 *
+	 * <p>
+	 * If not specified, <js>"HTTP/1.1"</js> will be used.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpException setProtocolVersion(ProtocolVersion value) {
+		statusLine.setProtocolVersion(value);
+		return this;
+	}
+
+	/**
+	 * Sets the reason phrase catalog used to retrieve reason phrases.
+	 *
+	 * <p>
+	 * If not specified, uses {@link EnglishReasonPhraseCatalog}.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpException setReasonPhraseCatalog(ReasonPhraseCatalog value) {
+		statusLine.setReasonPhraseCatalog(value);
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// BasicHeaderGroup setters.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns access to the underlying builder for the headers.
+	 *
+	 * @return The underlying builder for the headers.
+	 */
+	public HeaderList getHeaders() {
+		return headers;
+	}
+
+	/**
+	 * Sets the specified headers on this response.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpException setHeaders(HeaderList value) {
+		headers = value;
+		return this;
+	}
+
+	/**
+	 * Sets a header on this response.
+	 *
+	 * @param name The header name.
+	 * @param value The header value.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpException setHeader2(String name, Object value) {
+		headers.set(name, value);
+		return this;
+	}
+
+	/**
+	 * Sets multiple headers on this response.
+	 *
+	 * @param values The headers to add.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpException setHeaders2(Header...values) {
+		headers.set(values);
+		return this;
+	}
+
+	/**
+	 * Sets the specified headers on this response.
+	 *
+	 * @param values The headers to set.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	public BasicHttpException setHeaders(List<Header> values) {
+		headers.set(values);
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Body setters.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Sets the body on this response.
+	 *
+	 * @param value The body on this response.
+	 * @return This object.
+	 */
+	public BasicHttpException setContent(String value) {
+		setContent(stringEntity(value).build());
+		return this;
+	}
+
+	/**
+	 * Sets the body on this response.
+	 *
+	 * @param value The body on this response.
+	 * @return This object.
+	 */
+	public BasicHttpException setContent(HttpEntity value) {
+		this.content = value;
+		return this;
 	}
 
 	/**
@@ -380,4 +524,20 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	public void setLocale(Locale loc) {
 		statusLine.setLocale(loc);
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.BasicRuntimeException */
+	public BasicHttpException setMessage(String message, Object...args) {
+		super.setMessage(message, args);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.BasicRuntimeException */
+	public BasicHttpException setUnmodifiable() {
+		super.setUnmodifiable();
+		return this;
+	}
+
+	// </FluentSetters>
 }

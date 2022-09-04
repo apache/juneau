@@ -6497,7 +6497,7 @@ public class RestContext extends Context {
 			if (r.value().length > 0)
 				code = r.value()[0];
 
-		BasicHttpException e2 = (e instanceof BasicHttpException ? (BasicHttpException)e : BasicHttpException.create(BasicHttpException.class).causedBy(e).statusCode(code).build());
+		BasicHttpException e2 = (e instanceof BasicHttpException ? (BasicHttpException)e : new BasicHttpException(code, e));
 
 		HttpServletRequest req = session.getRequest();
 		HttpServletResponse res = session.getResponse();
@@ -6547,7 +6547,7 @@ public class RestContext extends Context {
 			try {
 				x.invoke(session.getBeanStore(), session.getContext().getResource());
 			} catch (IllegalAccessException|IllegalArgumentException e) {
-				throw InternalServerError.create().message("Error occurred invoking start-call method ''{0}''.", x.getFullName()).causedBy(e).build();
+				throw new InternalServerError(e, "Error occurred invoking start-call method ''{0}''.", x.getFullName());
 			} catch (InvocationTargetException e) {
 				Throwable t = e.getTargetException();
 				if (t instanceof BasicHttpException)
