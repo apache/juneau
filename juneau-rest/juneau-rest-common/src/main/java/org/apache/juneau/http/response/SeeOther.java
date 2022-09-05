@@ -14,10 +14,15 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.response.SeeOther.*;
 
+import java.net.*;
+import java.util.*;
+
 import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -47,25 +52,23 @@ public class SeeOther extends BasicHttpResponse {
 	/** Default status line */
 	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
-	/** Reusable unmodifiable instance */
-	public static final SeeOther INSTANCE = create().unmodifiable().build();
-
-	/**
-	 * Creates a builder for this class.
-	 *
-	 * @return A new builder bean.
-	 */
-	public static HttpResponseBuilder<SeeOther> create() {
-		return new HttpResponseBuilder<>(SeeOther.class).statusLine(STATUS_LINE.copy());
-	}
+	/** Default unmodifiable instance */
+	public static final SeeOther INSTANCE = new SeeOther().setUnmodifiable();
 
 	/**
 	 * Constructor.
-	 *
-	 * @param builder The builder containing the settings for this exception.
 	 */
-	public SeeOther(HttpResponseBuilder<?> builder) {
-		super(builder);
+	public SeeOther() {
+		super(STATUS_LINE);
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public SeeOther(SeeOther copyFrom) {
+		super(copyFrom);
 	}
 
 	/**
@@ -78,7 +81,7 @@ public class SeeOther extends BasicHttpResponse {
 	 * @throws AssertionError If HTTP response status code does not match what was expected.
 	 */
 	public SeeOther(HttpResponse response) {
-		this(create().copyFrom(response));
+		super(response);
 		assertStatusCode(response);
 	}
 
@@ -87,12 +90,107 @@ public class SeeOther extends BasicHttpResponse {
 	 *
 	 * @return A new builder bean.
 	 */
-	@Override /* BasicHttpResponse */
-	public HttpResponseBuilder<SeeOther> copy() {
-		return new HttpResponseBuilder<>(this);
+	public SeeOther copy() {
+		return new SeeOther(this);
 	}
 
 	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SeeOther setContent(String value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SeeOther setContent(HttpEntity value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SeeOther setHeader2(Header value) {
+		super.setHeader2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SeeOther setHeader2(String name, String value) {
+		super.setHeader2(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SeeOther setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SeeOther setHeaders(HeaderList value) {
+		super.setHeaders(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SeeOther setHeaders2(Header...values) {
+		super.setHeaders2(values);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SeeOther setLocale2(Locale value) {
+		super.setLocale2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SeeOther setLocation(String value) {
+		super.setLocation(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SeeOther setLocation(URI value) {
+		super.setLocation(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SeeOther setProtocolVersion(ProtocolVersion value) {
+		super.setProtocolVersion(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SeeOther setReasonPhrase2(String value) {
+		super.setReasonPhrase2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SeeOther setReasonPhraseCatalog(ReasonPhraseCatalog value) {
+		super.setReasonPhraseCatalog(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SeeOther setStatusCode2(int value) {
+		super.setStatusCode2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SeeOther setStatusLine(BasicStatusLine value) {
+		super.setStatusLine(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SeeOther setUnmodifiable() {
+		super.setUnmodifiable();
+		return this;
+	}
 
 	// </FluentSetters>
 }

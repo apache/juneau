@@ -14,9 +14,15 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.response.EarlyHints.*;
 
+import java.net.*;
+import java.util.*;
+
+import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -45,25 +51,37 @@ public class EarlyHints extends BasicHttpResponse {
 	/** Default status line */
 	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
-	/** Reusable unmodifiable instance */
-	public static final EarlyHints INSTANCE = create().unmodifiable().build();
+	/** Default unmodifiable instance */
+	public static final EarlyHints INSTANCE = new EarlyHints().setUnmodifiable();
 
 	/**
-	 * Creates a builder for this class.
-	 *
-	 * @return A new builder bean.
+	 * Constructor.
 	 */
-	public static HttpResponseBuilder<EarlyHints> create() {
-		return new HttpResponseBuilder<>(EarlyHints.class).statusLine(STATUS_LINE.copy());
+	public EarlyHints() {
+		super(STATUS_LINE);
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public EarlyHints(EarlyHints copyFrom) {
+		super(copyFrom);
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder containing the settings for this exception.
+	 * <p>
+	 * This is the constructor used when parsing an HTTP response.
+	 *
+	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
+	 * @throws AssertionError If HTTP response status code does not match what was expected.
 	 */
-	public EarlyHints(HttpResponseBuilder<?> builder) {
-		super(builder);
+	public EarlyHints(HttpResponse response) {
+		super(response);
+		assertStatusCode(response);
 	}
 
 	/**
@@ -71,12 +89,107 @@ public class EarlyHints extends BasicHttpResponse {
 	 *
 	 * @return A new builder bean.
 	 */
-	@Override /* BasicHttpResponse */
-	public HttpResponseBuilder<EarlyHints> copy() {
-		return new HttpResponseBuilder<>(this);
+	public EarlyHints copy() {
+		return new EarlyHints(this);
 	}
 
 	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public EarlyHints setContent(String value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public EarlyHints setContent(HttpEntity value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public EarlyHints setHeader2(Header value) {
+		super.setHeader2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public EarlyHints setHeader2(String name, String value) {
+		super.setHeader2(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public EarlyHints setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public EarlyHints setHeaders(HeaderList value) {
+		super.setHeaders(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public EarlyHints setHeaders2(Header...values) {
+		super.setHeaders2(values);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public EarlyHints setLocale2(Locale value) {
+		super.setLocale2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public EarlyHints setLocation(String value) {
+		super.setLocation(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public EarlyHints setLocation(URI value) {
+		super.setLocation(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public EarlyHints setProtocolVersion(ProtocolVersion value) {
+		super.setProtocolVersion(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public EarlyHints setReasonPhrase2(String value) {
+		super.setReasonPhrase2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public EarlyHints setReasonPhraseCatalog(ReasonPhraseCatalog value) {
+		super.setReasonPhraseCatalog(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public EarlyHints setStatusCode2(int value) {
+		super.setStatusCode2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public EarlyHints setStatusLine(BasicStatusLine value) {
+		super.setStatusLine(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public EarlyHints setUnmodifiable() {
+		super.setUnmodifiable();
+		return this;
+	}
 
 	// </FluentSetters>
 }

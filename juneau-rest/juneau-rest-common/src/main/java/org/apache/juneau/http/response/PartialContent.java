@@ -14,10 +14,15 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.response.PartialContent.*;
 
+import java.net.*;
+import java.util.*;
+
 import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -47,25 +52,23 @@ public class PartialContent extends BasicHttpResponse {
 	/** Default status line */
 	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
-	/** Reusable unmodifiable instance */
-	public static final PartialContent INSTANCE = create().unmodifiable().build();
-
-	/**
-	 * Creates a builder for this class.
-	 *
-	 * @return A new builder bean.
-	 */
-	public static HttpResponseBuilder<PartialContent> create() {
-		return new HttpResponseBuilder<>(PartialContent.class).statusLine(STATUS_LINE.copy());
-	}
+	/** Default unmodifiable instance */
+	public static final PartialContent INSTANCE = new PartialContent().setUnmodifiable();
 
 	/**
 	 * Constructor.
-	 *
-	 * @param builder The builder containing the settings for this exception.
 	 */
-	public PartialContent(HttpResponseBuilder<?> builder) {
-		super(builder);
+	public PartialContent() {
+		super(STATUS_LINE);
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public PartialContent(PartialContent copyFrom) {
+		super(copyFrom);
 	}
 
 	/**
@@ -78,7 +81,7 @@ public class PartialContent extends BasicHttpResponse {
 	 * @throws AssertionError If HTTP response status code does not match what was expected.
 	 */
 	public PartialContent(HttpResponse response) {
-		this(create().copyFrom(response));
+		super(response);
 		assertStatusCode(response);
 	}
 
@@ -87,12 +90,107 @@ public class PartialContent extends BasicHttpResponse {
 	 *
 	 * @return A new builder bean.
 	 */
-	@Override /* BasicHttpResponse */
-	public HttpResponseBuilder<PartialContent> copy() {
-		return new HttpResponseBuilder<>(this);
+	public PartialContent copy() {
+		return new PartialContent(this);
 	}
 
 	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public PartialContent setContent(String value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public PartialContent setContent(HttpEntity value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public PartialContent setHeader2(Header value) {
+		super.setHeader2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public PartialContent setHeader2(String name, String value) {
+		super.setHeader2(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public PartialContent setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public PartialContent setHeaders(HeaderList value) {
+		super.setHeaders(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public PartialContent setHeaders2(Header...values) {
+		super.setHeaders2(values);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public PartialContent setLocale2(Locale value) {
+		super.setLocale2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public PartialContent setLocation(String value) {
+		super.setLocation(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public PartialContent setLocation(URI value) {
+		super.setLocation(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public PartialContent setProtocolVersion(ProtocolVersion value) {
+		super.setProtocolVersion(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public PartialContent setReasonPhrase2(String value) {
+		super.setReasonPhrase2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public PartialContent setReasonPhraseCatalog(ReasonPhraseCatalog value) {
+		super.setReasonPhraseCatalog(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public PartialContent setStatusCode2(int value) {
+		super.setStatusCode2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public PartialContent setStatusLine(BasicStatusLine value) {
+		super.setStatusLine(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public PartialContent setUnmodifiable() {
+		super.setUnmodifiable();
+		return this;
+	}
 
 	// </FluentSetters>
 }

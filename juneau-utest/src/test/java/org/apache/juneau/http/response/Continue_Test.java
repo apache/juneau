@@ -25,8 +25,8 @@ public class Continue_Test {
 	@Rest
 	public static class A {
 		@RestGet public Continue a1() { return CONTINUE; }
-		@RestGet public Continue a2() { return _continue().content("foo").build(); }
-		@RestGet public Continue a3() { return _continue().header("A","bar").build(); }
+		@RestGet public Continue a2() { return _continue().setContent("foo"); }
+		@RestGet public Continue a3() { return _continue().setHeader2("A","bar"); }
 	}
 
 	@Test

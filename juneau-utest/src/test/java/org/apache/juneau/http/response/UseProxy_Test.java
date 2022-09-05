@@ -25,8 +25,8 @@ public class UseProxy_Test {
 	@Rest
 	public static class A {
 		@RestGet public UseProxy a1() { return USE_PROXY; }
-		@RestGet public UseProxy a2() { return useProxy().content("foo").build(); }
-		@RestGet public UseProxy a3() { return useProxy().header("Foo","bar").build(); }
+		@RestGet public UseProxy a2() { return useProxy().setContent("foo"); }
+		@RestGet public UseProxy a3() { return useProxy().setHeader2("Foo","bar"); }
 	}
 
 	@Test

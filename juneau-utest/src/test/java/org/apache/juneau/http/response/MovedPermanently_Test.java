@@ -25,9 +25,9 @@ public class MovedPermanently_Test {
 	@Rest
 	public static class A {
 		@RestGet public MovedPermanently a1() { return MOVED_PERMANENTLY; }
-		@RestGet public MovedPermanently a2() { return movedPermanently("servlet:/foo").content("foo").build(); }
-		@RestGet public MovedPermanently a3() { return movedPermanently("servlet:/foo").location("servlet:/foo").build(); }
-		@RestGet public MovedPermanently a4() { return movedPermanently("servlet:/foo").header("Foo","bar").build(); }
+		@RestGet public MovedPermanently a2() { return movedPermanently("servlet:/foo").setContent("foo"); }
+		@RestGet public MovedPermanently a3() { return movedPermanently("servlet:/foo").setLocation("servlet:/foo"); }
+		@RestGet public MovedPermanently a4() { return movedPermanently("servlet:/foo").setHeader2("Foo","bar"); }
 	}
 
 	@Test

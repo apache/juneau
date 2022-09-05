@@ -25,8 +25,8 @@ public class Accepted_Test {
 	@Rest
 	public static class A {
 		@RestGet public Accepted a1() { return ACCEPTED; }
-		@RestGet public Accepted a2() { return accepted().content("foo").build(); }
-		@RestGet public Accepted a3() { return accepted().header("Foo","bar").build(); }
+		@RestGet public Accepted a2() { return accepted().setContent("foo"); }
+		@RestGet public Accepted a3() { return accepted().setHeader2("Foo","bar"); }
 	}
 
 	@Test

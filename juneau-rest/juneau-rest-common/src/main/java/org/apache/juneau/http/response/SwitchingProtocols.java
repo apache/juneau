@@ -14,10 +14,15 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.response.SwitchingProtocols.*;
 
+import java.net.*;
+import java.util.*;
+
 import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -46,25 +51,23 @@ public class SwitchingProtocols extends BasicHttpResponse {
 	/** Default status line */
 	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
-	/** Reusable unmodifiable instance */
-	public static final SwitchingProtocols INSTANCE = create().unmodifiable().build();
-
-	/**
-	 * Creates a builder for this class.
-	 *
-	 * @return A new builder bean.
-	 */
-	public static HttpResponseBuilder<SwitchingProtocols> create() {
-		return new HttpResponseBuilder<>(SwitchingProtocols.class).statusLine(STATUS_LINE.copy());
-	}
+	/** Default unmodifiable instance */
+	public static final SwitchingProtocols INSTANCE = new SwitchingProtocols().setUnmodifiable();
 
 	/**
 	 * Constructor.
-	 *
-	 * @param builder The builder containing the settings for this exception.
 	 */
-	public SwitchingProtocols(HttpResponseBuilder<?> builder) {
-		super(builder);
+	public SwitchingProtocols() {
+		super(STATUS_LINE);
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public SwitchingProtocols(SwitchingProtocols copyFrom) {
+		super(copyFrom);
 	}
 
 	/**
@@ -77,7 +80,7 @@ public class SwitchingProtocols extends BasicHttpResponse {
 	 * @throws AssertionError If HTTP response status code does not match what was expected.
 	 */
 	public SwitchingProtocols(HttpResponse response) {
-		this(create().copyFrom(response));
+		super(response);
 		assertStatusCode(response);
 	}
 
@@ -86,12 +89,107 @@ public class SwitchingProtocols extends BasicHttpResponse {
 	 *
 	 * @return A new builder bean.
 	 */
-	@Override /* BasicHttpResponse */
-	public HttpResponseBuilder<SwitchingProtocols> copy() {
-		return new HttpResponseBuilder<>(this);
+	public SwitchingProtocols copy() {
+		return new SwitchingProtocols(this);
 	}
 
 	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SwitchingProtocols setContent(String value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SwitchingProtocols setContent(HttpEntity value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SwitchingProtocols setHeader2(Header value) {
+		super.setHeader2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SwitchingProtocols setHeader2(String name, String value) {
+		super.setHeader2(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SwitchingProtocols setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SwitchingProtocols setHeaders(HeaderList value) {
+		super.setHeaders(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SwitchingProtocols setHeaders2(Header...values) {
+		super.setHeaders2(values);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SwitchingProtocols setLocale2(Locale value) {
+		super.setLocale2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SwitchingProtocols setLocation(String value) {
+		super.setLocation(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SwitchingProtocols setLocation(URI value) {
+		super.setLocation(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SwitchingProtocols setProtocolVersion(ProtocolVersion value) {
+		super.setProtocolVersion(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SwitchingProtocols setReasonPhrase2(String value) {
+		super.setReasonPhrase2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SwitchingProtocols setReasonPhraseCatalog(ReasonPhraseCatalog value) {
+		super.setReasonPhraseCatalog(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SwitchingProtocols setStatusCode2(int value) {
+		super.setStatusCode2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SwitchingProtocols setStatusLine(BasicStatusLine value) {
+		super.setStatusLine(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public SwitchingProtocols setUnmodifiable() {
+		super.setUnmodifiable();
+		return this;
+	}
 
 	// </FluentSetters>
 }

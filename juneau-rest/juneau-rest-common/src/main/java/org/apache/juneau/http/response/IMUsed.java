@@ -14,10 +14,15 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.response.IMUsed.*;
 
+import java.net.*;
+import java.util.*;
+
 import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -46,25 +51,23 @@ public class IMUsed extends BasicHttpResponse {
 	/** Default status line */
 	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
-	/** Reusable unmodifiable instance */
-	public static final IMUsed INSTANCE = create().unmodifiable().build();
-
-	/**
-	 * Creates a builder for this class.
-	 *
-	 * @return A new builder bean.
-	 */
-	public static HttpResponseBuilder<IMUsed> create() {
-		return new HttpResponseBuilder<>(IMUsed.class).statusLine(STATUS_LINE.copy());
-	}
+	/** Default unmodifiable instance */
+	public static final IMUsed INSTANCE = new IMUsed().setUnmodifiable();
 
 	/**
 	 * Constructor.
-	 *
-	 * @param builder The builder containing the settings for this exception.
 	 */
-	public IMUsed(HttpResponseBuilder<?> builder) {
-		super(builder);
+	public IMUsed() {
+		super(STATUS_LINE);
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public IMUsed(IMUsed copyFrom) {
+		super(copyFrom);
 	}
 
 	/**
@@ -77,7 +80,7 @@ public class IMUsed extends BasicHttpResponse {
 	 * @throws AssertionError If HTTP response status code does not match what was expected.
 	 */
 	public IMUsed(HttpResponse response) {
-		this(create().copyFrom(response));
+		super(response);
 		assertStatusCode(response);
 	}
 
@@ -86,12 +89,107 @@ public class IMUsed extends BasicHttpResponse {
 	 *
 	 * @return A new builder bean.
 	 */
-	@Override /* BasicHttpResponse */
-	public HttpResponseBuilder<IMUsed> copy() {
-		return new HttpResponseBuilder<>(this);
+	public IMUsed copy() {
+		return new IMUsed(this);
 	}
 
 	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public IMUsed setContent(String value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public IMUsed setContent(HttpEntity value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public IMUsed setHeader2(Header value) {
+		super.setHeader2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public IMUsed setHeader2(String name, String value) {
+		super.setHeader2(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public IMUsed setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public IMUsed setHeaders(HeaderList value) {
+		super.setHeaders(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public IMUsed setHeaders2(Header...values) {
+		super.setHeaders2(values);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public IMUsed setLocale2(Locale value) {
+		super.setLocale2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public IMUsed setLocation(String value) {
+		super.setLocation(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public IMUsed setLocation(URI value) {
+		super.setLocation(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public IMUsed setProtocolVersion(ProtocolVersion value) {
+		super.setProtocolVersion(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public IMUsed setReasonPhrase2(String value) {
+		super.setReasonPhrase2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public IMUsed setReasonPhraseCatalog(ReasonPhraseCatalog value) {
+		super.setReasonPhraseCatalog(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public IMUsed setStatusCode2(int value) {
+		super.setStatusCode2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public IMUsed setStatusLine(BasicStatusLine value) {
+		super.setStatusLine(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public IMUsed setUnmodifiable() {
+		super.setUnmodifiable();
+		return this;
+	}
 
 	// </FluentSetters>
 }

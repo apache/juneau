@@ -25,9 +25,9 @@ public class TemporaryRedirect_Test {
 	@Rest
 	public static class A {
 		@RestGet public TemporaryRedirect a1() { return TEMPORARY_REDIRECT; }
-		@RestGet public TemporaryRedirect a2() { return temporaryRedirect("servlet:/foo").content("foo").build(); }
-		@RestGet public TemporaryRedirect a3() { return temporaryRedirect("servlet:/foo").build(); }
-		@RestGet public TemporaryRedirect a4() { return temporaryRedirect("servlet:/foo").header("Foo","bar").build(); }
+		@RestGet public TemporaryRedirect a2() { return temporaryRedirect("servlet:/foo").setContent("foo"); }
+		@RestGet public TemporaryRedirect a3() { return temporaryRedirect("servlet:/foo"); }
+		@RestGet public TemporaryRedirect a4() { return temporaryRedirect("servlet:/foo").setHeader2("Foo","bar"); }
 	}
 
 	@Test

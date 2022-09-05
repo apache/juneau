@@ -14,10 +14,15 @@ package org.apache.juneau.http.response;
 
 import static org.apache.juneau.http.response.MultipleChoices.*;
 
+import java.net.*;
+import java.util.*;
+
 import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -47,25 +52,23 @@ public class MultipleChoices extends BasicHttpResponse {
 	/** Default status line */
 	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);
 
-	/** Reusable unmodifiable instance */
-	public static final MultipleChoices INSTANCE = create().unmodifiable().build();
-
-	/**
-	 * Creates a builder for this class.
-	 *
-	 * @return A new builder bean.
-	 */
-	public static HttpResponseBuilder<MultipleChoices> create() {
-		return new HttpResponseBuilder<>(MultipleChoices.class).statusLine(STATUS_LINE.copy());
-	}
+	/** Default unmodifiable instance */
+	public static final MultipleChoices INSTANCE = new MultipleChoices().setUnmodifiable();
 
 	/**
 	 * Constructor.
-	 *
-	 * @param builder The builder containing the settings for this exception.
 	 */
-	public MultipleChoices(HttpResponseBuilder<?> builder) {
-		super(builder);
+	public MultipleChoices() {
+		super(STATUS_LINE);
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public MultipleChoices(MultipleChoices copyFrom) {
+		super(copyFrom);
 	}
 
 	/**
@@ -78,7 +81,7 @@ public class MultipleChoices extends BasicHttpResponse {
 	 * @throws AssertionError If HTTP response status code does not match what was expected.
 	 */
 	public MultipleChoices(HttpResponse response) {
-		this(create().copyFrom(response));
+		super(response);
 		assertStatusCode(response);
 	}
 
@@ -87,12 +90,107 @@ public class MultipleChoices extends BasicHttpResponse {
 	 *
 	 * @return A new builder bean.
 	 */
-	@Override /* BasicHttpResponse */
-	public HttpResponseBuilder<MultipleChoices> copy() {
-		return new HttpResponseBuilder<>(this);
+	public MultipleChoices copy() {
+		return new MultipleChoices(this);
 	}
 
 	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public MultipleChoices setContent(String value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public MultipleChoices setContent(HttpEntity value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public MultipleChoices setHeader2(Header value) {
+		super.setHeader2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public MultipleChoices setHeader2(String name, String value) {
+		super.setHeader2(name, value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public MultipleChoices setHeaders(List<Header> values) {
+		super.setHeaders(values);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public MultipleChoices setHeaders(HeaderList value) {
+		super.setHeaders(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public MultipleChoices setHeaders2(Header...values) {
+		super.setHeaders2(values);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public MultipleChoices setLocale2(Locale value) {
+		super.setLocale2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public MultipleChoices setLocation(String value) {
+		super.setLocation(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public MultipleChoices setLocation(URI value) {
+		super.setLocation(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public MultipleChoices setProtocolVersion(ProtocolVersion value) {
+		super.setProtocolVersion(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public MultipleChoices setReasonPhrase2(String value) {
+		super.setReasonPhrase2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public MultipleChoices setReasonPhraseCatalog(ReasonPhraseCatalog value) {
+		super.setReasonPhraseCatalog(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public MultipleChoices setStatusCode2(int value) {
+		super.setStatusCode2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public MultipleChoices setStatusLine(BasicStatusLine value) {
+		super.setStatusLine(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpResponse */
+	public MultipleChoices setUnmodifiable() {
+		super.setUnmodifiable();
+		return this;
+	}
 
 	// </FluentSetters>
 }

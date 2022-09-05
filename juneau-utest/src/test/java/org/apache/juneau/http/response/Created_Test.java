@@ -25,8 +25,8 @@ public class Created_Test {
 	@Rest
 	public static class A {
 		@RestGet public Created a1() { return CREATED; }
-		@RestGet public Created a2() { return created().content("foo").build(); }
-		@RestGet public Created a3() { return created().header("A","bar").build(); }
+		@RestGet public Created a2() { return created().setContent("foo"); }
+		@RestGet public Created a3() { return created().setHeader2("A","bar"); }
 	}
 
 	@Test

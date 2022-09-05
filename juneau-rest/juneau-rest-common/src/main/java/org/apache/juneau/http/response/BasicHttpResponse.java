@@ -15,10 +15,12 @@ package org.apache.juneau.http.response;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpEntities.*;
 import static org.apache.juneau.internal.ArgUtils.*;
+
+import java.net.*;
 import java.util.*;
 
 import org.apache.http.*;
-import org.apache.http.Header;
+import org.apache.http.impl.*;
 import org.apache.http.params.*;
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.*;
@@ -48,32 +50,33 @@ import org.apache.juneau.internal.*;
 @FluentSetters
 public class BasicHttpResponse implements HttpResponse {
 
-	HeaderList headers;
-	BasicStatusLine statusLine = new BasicStatusLine();
-	HttpEntity content;
-	final boolean unmodifiable;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
 
-	/**
-	 * Creates a builder for this class.
-	 *
-	 * @param <T> The implementation type.
-	 * @param implClass The subclass that the builder is going to create.
-	 * @return A new builder bean.
-	 */
-	public static <T extends BasicHttpResponse> HttpResponseBuilder<T> create(Class<T> implClass) {
-		return new HttpResponseBuilder<>(implClass);
-	}
+	BasicStatusLine statusLine = new BasicStatusLine();
+	HeaderList headers = HeaderList.create();
+	HttpEntity content;
+	boolean unmodifiable;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder containing the arguments for this bean.
+	 * @param statusLine The HTTP status line.
 	 */
-	public BasicHttpResponse(HttpResponseBuilder<?> builder) {
-		headers = builder.headers;
-		statusLine = builder.statusLine.copy();
-		content = builder.content;
-		unmodifiable = builder.unmodifiable;
+	public BasicHttpResponse(BasicStatusLine statusLine) {
+		setStatusLine(statusLine.copy());
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean to copy from.
+	 */
+	public BasicHttpResponse(BasicHttpResponse copyFrom) {
+		statusLine = copyFrom.statusLine.copy();
+		headers = copyFrom.headers.copy();
+		content = copyFrom.content;
 	}
 
 	/**
@@ -85,16 +88,240 @@ public class BasicHttpResponse implements HttpResponse {
 	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
 	 */
 	public BasicHttpResponse(HttpResponse response) {
-		this(create(null).copyFrom(response));
+		setHeaders(response.getAllHeaders());
+		setContent(response.getEntity());
+		setStatusLine(response.getStatusLine());
 	}
 
 	/**
-	 * Creates a builder for this class initialized with the contents of this bean.
+	 * Specifies whether this exception should be unmodifiable after creation.
 	 *
-	 * @return A new builder bean.
+	 * @return This object.
 	 */
-	public HttpResponseBuilder<? extends BasicHttpResponse> copy() {
-		return new HttpResponseBuilder<>(this);
+	@FluentSetter
+	public BasicHttpResponse setUnmodifiable() {
+		unmodifiable = true;
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// BasicStatusLine setters.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Sets the protocol version on the status line.
+	 *
+	 * <p>
+	 * If not specified, <js>"HTTP/1.1"</js> will be used.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpResponse setStatusLine(BasicStatusLine value) {
+		statusLine = value;
+		return this;
+	}
+
+	/**
+	 * Sets the protocol version on the status line.
+	 *
+	 * <p>
+	 * If not specified, <js>"HTTP/1.1"</js> will be used.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpResponse setProtocolVersion(ProtocolVersion value) {
+		statusLine.setProtocolVersion(value);
+		return this;
+	}
+
+	/**
+	 * Sets the status code on the status line.
+	 *
+	 * <p>
+	 * If not specified, <c>0</c> will be used.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpResponse setStatusCode2(int value) {
+		statusLine.setStatusCode(value);
+		return this;
+	}
+
+	/**
+	 * Sets the reason phrase on the status line.
+	 *
+	 * <p>
+	 * If not specified, the reason phrase will be retrieved from the reason phrase catalog
+	 * using the locale on this builder.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpResponse setReasonPhrase2(String value) {
+		statusLine.setReasonPhrase(value);
+		return this;
+	}
+
+	/**
+	 * Sets the reason phrase catalog used to retrieve reason phrases.
+	 *
+	 * <p>
+	 * If not specified, uses {@link EnglishReasonPhraseCatalog}.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpResponse setReasonPhraseCatalog(ReasonPhraseCatalog value) {
+		statusLine.setReasonPhraseCatalog(value);
+		return this;
+	}
+
+	/**
+	 * Sets the locale used to retrieve reason phrases.
+	 *
+	 * <p>
+	 * If not specified, uses {@link Locale#getDefault()}.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpResponse setLocale2(Locale value) {
+		statusLine.setLocale(value);
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// BasicHeaderGroup setters.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Returns access to the underlying builder for the headers.
+	 *
+	 * @return The underlying builder for the headers.
+	 */
+	public HeaderList getHeaders() {
+		return headers;
+	}
+
+	/**
+	 * Sets the specified headers on this response.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpResponse setHeaders(HeaderList value) {
+		headers = value;
+		return this;
+	}
+
+	/**
+	 * Sets the specified header to the end of the headers in this builder.
+	 *
+	 * @param value The header to add.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpResponse setHeader2(Header value) {
+		headers.set(value);
+		return this;
+	}
+
+	/**
+	 * Sets the specified header to the end of the headers in this builder.
+	 *
+	 * @param name The header name.
+	 * @param value The header value.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpResponse setHeader2(String name, String value) {
+		headers.set(name, value);
+		return this;
+	}
+
+	/**
+	 * Sets the specified headers to the end of the headers in this builder.
+	 *
+	 * @param values The headers to add.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpResponse setHeaders2(Header...values) {
+		headers.set(values);
+		return this;
+	}
+
+	/**
+	 * Sets the specified headers to the end of the headers in this builder.
+	 *
+	 * @param values The headers to add.  <jk>null</jk> values are ignored.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpResponse setHeaders(List<Header> values) {
+		headers.set(values);
+		return this;
+	}
+
+	/**
+	 * Specifies the value for the <c>Location</c> header.
+	 *
+	 * @param value The new header location.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpResponse setLocation(URI value) {
+		headers.set(Location.of(value));
+		return this;
+	}
+
+	/**
+	 * Specifies the value for the <c>Location</c> header.
+	 *
+	 * @param value The new header location.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpResponse setLocation(String value) {
+		headers.set(Location.of(value));
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Body setters.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Sets the body on this response.
+	 *
+	 * @param value The body on this response.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpResponse setContent(String value) {
+		return setContent(stringEntity(value).build());
+	}
+
+	/**
+	 * Sets the body on this response.
+	 *
+	 * @param value The body on this response.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpResponse setContent(HttpEntity value) {
+		this.content = value;
+		return this;
 	}
 
 	/**

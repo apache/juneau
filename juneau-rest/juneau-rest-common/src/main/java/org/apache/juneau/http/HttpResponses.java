@@ -301,30 +301,30 @@ public class HttpResponses {
 
 
 	/**
-	 * A shortcut for calling {@link Continue#create()}.
+	 * A shortcut for calling {@link Continue#Continue()}.
 	 *
 	 * @return A new bean.
 	 */
-	public static final HttpResponseBuilder<Continue> _continue() {
-		return Continue.create();
+	public static final Continue _continue() {
+		return new Continue();
 	}
 
 	/**
-	 * A shortcut for calling {@link Accepted#create()}.
+	 * A shortcut for calling {@link Accepted#Accepted()}.
 	 *
 	 * @return A new bean.
 	 */
-	public static final HttpResponseBuilder<Accepted> accepted() {
-		return Accepted.create();
+	public static final Accepted accepted() {
+		return new Accepted();
 	}
 
 	/**
-	 * A shortcut for calling {@link AlreadyReported#create()}.
+	 * A shortcut for calling {@link AlreadyReported#AlreadyReported()}.
 	 *
 	 * @return A new bean.
 	 */
-	public static final HttpResponseBuilder<AlreadyReported> alreadyReported() {
-		return AlreadyReported.create();
+	public static final AlreadyReported alreadyReported() {
+		return new AlreadyReported();
 	}
 
 	/**
@@ -346,21 +346,21 @@ public class HttpResponses {
 	}
 
 	/**
-	 * A shortcut for calling {@link Created#create()}.
+	 * A shortcut for calling {@link Created#Created()}.
 	 *
 	 * @return A new bean.
 	 */
-	public static final HttpResponseBuilder<Created> created() {
-		return Created.create();
+	public static final Created created() {
+		return new Created();
 	}
 
 	/**
-	 * A shortcut for calling {@link EarlyHints#create()}.
+	 * A shortcut for calling {@link EarlyHints#EarlyHints()}.
 	 *
 	 * @return A new bean.
 	 */
-	public static final HttpResponseBuilder<EarlyHints> earlyHints() {
-		return EarlyHints.create();
+	public static final EarlyHints earlyHints() {
+		return new EarlyHints();
 	}
 
 	/**
@@ -391,13 +391,13 @@ public class HttpResponses {
 	}
 
 	/**
-	 * A shortcut for calling {@link Found#create()}.
+	 * A shortcut for calling {@link Found#Found()}.
 	 *
 	 * @param location The value for the Location header.
 	 * @return A new bean.
 	 */
-	public static final HttpResponseBuilder<Found> found(String location) {
-		return Found.create().location(location);
+	public static final Found found(String location) {
+		return new Found().setLocation(location);
 	}
 
 	/**
@@ -428,12 +428,12 @@ public class HttpResponses {
 	}
 
 	/**
-	 * A shortcut for calling {@link IMUsed#create()}.
+	 * A shortcut for calling {@link IMUsed#IMUsed()}.
 	 *
 	 * @return A new bean.
 	 */
-	public static final HttpResponseBuilder<IMUsed> imUsed() {
-		return IMUsed.create();
+	public static final IMUsed imUsed() {
+		return new IMUsed();
 	}
 
 	/**
@@ -499,31 +499,31 @@ public class HttpResponses {
 		return new MisdirectedRequest();
 	}
 	/**
-	 * A shortcut for calling {@link MovedPermanently#create()}.
+	 * A shortcut for calling {@link MovedPermanently#MovedPermanently()}.
 	 *
 	 * @param location The value for the Location header.
 	 * @return A new bean.
 	 */
-	public static final HttpResponseBuilder<MovedPermanently> movedPermanently(String location) {
-		return MovedPermanently.create().location(location);
+	public static final MovedPermanently movedPermanently(String location) {
+		return new MovedPermanently().setLocation(location);
 	}
 
 	/**
-	 * A shortcut for calling {@link MovedPermanently#create()}.
+	 * A shortcut for calling {@link MovedPermanently#MovedPermanently()}.
 	 *
 	 * @return A new bean.
 	 */
-	public static final HttpResponseBuilder<MultipleChoices> multipleChoices() {
-		return MultipleChoices.create();
+	public static final MultipleChoices multipleChoices() {
+		return new MultipleChoices();
 	}
 
 	/**
-	 * A shortcut for calling {@link MultiStatus#create()}.
+	 * A shortcut for calling {@link MultiStatus#MultiStatus()}.
 	 *
 	 * @return A new bean.
 	 */
-	public static final HttpResponseBuilder<MultiStatus> multiStatus() {
-		return MultiStatus.create();
+	public static final MultiStatus multiStatus() {
+		return new MultiStatus();
 	}
 
 	/**
@@ -536,21 +536,21 @@ public class HttpResponses {
 	}
 
 	/**
-	 * A shortcut for calling {@link NoContent#create()}.
+	 * A shortcut for calling {@link NoContent#NoContent()}.
 	 *
 	 * @return A new bean.
 	 */
-	public static final HttpResponseBuilder<NoContent> noContent() {
-		return NoContent.create();
+	public static final NoContent noContent() {
+		return new NoContent();
 	}
 
 	/**
-	 * A shortcut for calling {@link NonAuthoritiveInformation#create()}.
+	 * A shortcut for calling {@link NonAuthoritiveInformation#NonAuthoritiveInformation()}.
 	 *
 	 * @return A new bean.
 	 */
-	public static final HttpResponseBuilder<NonAuthoritiveInformation> nonAuthoritiveInformation() {
-		return NonAuthoritiveInformation.create();
+	public static final NonAuthoritiveInformation nonAuthoritiveInformation() {
+		return new NonAuthoritiveInformation();
 	}
 
 	/**
@@ -590,30 +590,30 @@ public class HttpResponses {
 	}
 
 	/**
-	 * A shortcut for calling {@link NotModified#create()}.
+	 * A shortcut for calling {@link NotModified#NotModified()}.
 	 *
 	 * @return A new bean.
 	 */
-	public static final HttpResponseBuilder<NotModified> notModified() {
-		return NotModified.create();
+	public static final NotModified notModified() {
+		return new NotModified();
 	}
 
 	/**
-	 * A shortcut for calling {@link Ok#create()}.
+	 * A shortcut for calling {@link Ok#Ok()}.
 	 *
 	 * @return A new bean.
 	 */
-	public static final HttpResponseBuilder<Ok> ok() {
-		return Ok.create();
+	public static final Ok ok() {
+		return new Ok();
 	}
 
 	/**
-	 * A shortcut for calling {@link PartialContent#create()}.
+	 * A shortcut for calling {@link PartialContent#PartialContent()}.
 	 *
 	 * @return A new bean.
 	 */
-	public static final HttpResponseBuilder<PartialContent> partialContent() {
-		return PartialContent.create();
+	public static final PartialContent partialContent() {
+		return new PartialContent();
 	}
 
 	/**
@@ -626,13 +626,13 @@ public class HttpResponses {
 	}
 
 	/**
-	 * A shortcut for calling {@link PermanentRedirect#create()}.
+	 * A shortcut for calling {@link PermanentRedirect#PermanentRedirect()}.
 	 *
 	 * @param location The value for the Location header.
 	 * @return A new bean.
 	 */
-	public static final HttpResponseBuilder<PermanentRedirect> permanentRedirect(String location) {
-		return PermanentRedirect.create().location(location);
+	public static final PermanentRedirect permanentRedirect(String location) {
+		return new PermanentRedirect().setLocation(location);
 	}
 
 	/**
@@ -654,12 +654,12 @@ public class HttpResponses {
 	}
 
 	/**
-	 * A shortcut for calling {@link Processing#create()}.
+	 * A shortcut for calling {@link Processing#Processing()}.
 	 *
 	 * @return A new bean.
 	 */
-	public static final HttpResponseBuilder<Processing> processing() {
-		return Processing.create();
+	public static final Processing processing() {
+		return new Processing();
 	}
 
 	/**
@@ -681,22 +681,22 @@ public class HttpResponses {
 	}
 
 	/**
-	 * A shortcut for calling {@link ResetContent#create()}.
+	 * A shortcut for calling {@link ResetContent#ResetContent()}.
 	 *
 	 * @return A new bean.
 	 */
-	public static final HttpResponseBuilder<ResetContent> resetContent() {
-		return ResetContent.create();
+	public static final ResetContent resetContent() {
+		return new ResetContent();
 	}
 
 	/**
-	 * A shortcut for calling {@link SeeOther#create()}.
+	 * A shortcut for calling {@link SeeOther#SeeOther()}.
 	 *
 	 * @param location The value for the Location header.
 	 * @return A new bean.
 	 */
-	public static final HttpResponseBuilder<SeeOther> seeOther(String location) {
-		return SeeOther.create().location(location);
+	public static final SeeOther seeOther(String location) {
+		return new SeeOther().setLocation(location);
 	}
 
 	/**
@@ -709,22 +709,22 @@ public class HttpResponses {
 	}
 
 	/**
-	 * A shortcut for calling {@link SwitchingProtocols#create()}.
+	 * A shortcut for calling {@link SwitchingProtocols#SwitchingProtocols()}.
 	 *
 	 * @return A new bean.
 	 */
-	public static final HttpResponseBuilder<SwitchingProtocols> switchingProtocols() {
-		return SwitchingProtocols.create();
+	public static final SwitchingProtocols switchingProtocols() {
+		return new SwitchingProtocols();
 	}
 
 	/**
-	 * A shortcut for calling {@link TemporaryRedirect#create()}.
+	 * A shortcut for calling {@link TemporaryRedirect#TemporaryRedirect()}.
 	 *
 	 * @param location The value for the Location header.
 	 * @return A new bean.
 	 */
-	public static final HttpResponseBuilder<TemporaryRedirect> temporaryRedirect(String location) {
-		return TemporaryRedirect.create().location(location);
+	public static final TemporaryRedirect temporaryRedirect(String location) {
+		return new TemporaryRedirect().setLocation(location);
 	}
 
 	/**
@@ -791,12 +791,12 @@ public class HttpResponses {
 	}
 
 	/**
-	 * A shortcut for calling {@link UseProxy#create()}.
+	 * A shortcut for calling {@link UseProxy#UseProxy()}.
 	 *
 	 * @return A new bean.
 	 */
-	public static final HttpResponseBuilder<UseProxy> useProxy() {
-		return UseProxy.create();
+	public static final UseProxy useProxy() {
+		return new UseProxy();
 	}
 
 	/**
