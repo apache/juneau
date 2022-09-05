@@ -15,6 +15,8 @@ package org.apache.juneau.http.response;
 import static org.apache.juneau.http.response.UnprocessableEntity.*;
 
 import java.text.*;
+import java.util.*;
+
 import org.apache.http.*;
 import org.apache.http.Header;
 import org.apache.juneau.annotation.*;
@@ -158,8 +160,20 @@ public class UnprocessableEntity extends BasicHttpException {
 	}
 
 	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public UnprocessableEntity setLocale2(Locale value) {
+		super.setLocale2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
 	public UnprocessableEntity setProtocolVersion(ProtocolVersion value) {
 		super.setProtocolVersion(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public UnprocessableEntity setReasonPhrase2(String value) {
+		super.setReasonPhrase2(value);
 		return this;
 	}
 

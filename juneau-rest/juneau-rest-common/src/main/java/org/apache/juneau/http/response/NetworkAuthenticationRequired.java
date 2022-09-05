@@ -15,6 +15,8 @@ package org.apache.juneau.http.response;
 import static org.apache.juneau.http.response.NetworkAuthenticationRequired.*;
 
 import java.text.*;
+import java.util.*;
+
 import org.apache.http.*;
 import org.apache.http.Header;
 import org.apache.juneau.annotation.*;
@@ -159,8 +161,20 @@ public class NetworkAuthenticationRequired extends BasicHttpException {
 	}
 
 	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public NetworkAuthenticationRequired setLocale2(Locale value) {
+		super.setLocale2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
 	public NetworkAuthenticationRequired setProtocolVersion(ProtocolVersion value) {
 		super.setProtocolVersion(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public NetworkAuthenticationRequired setReasonPhrase2(String value) {
+		super.setReasonPhrase2(value);
 		return this;
 	}
 

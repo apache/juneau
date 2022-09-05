@@ -23,6 +23,7 @@ import java.util.stream.*;
 
 import org.apache.http.*;
 import org.apache.http.util.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.HttpHeaders;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.svl.*;
@@ -58,7 +59,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 @FluentSetters
-public class HeaderList extends ArrayList<Header> {
+public class HeaderList extends ControlledArrayList<Header> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -135,12 +136,13 @@ public class HeaderList extends ArrayList<Header> {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private VarResolver varResolver;
-	boolean caseSensitive = false;
+	boolean caseSensitive;
 
 	/**
 	 * Constructor.
 	 */
 	public HeaderList() {
+		super(false);
 	}
 
 	/**
@@ -149,7 +151,7 @@ public class HeaderList extends ArrayList<Header> {
 	 * @param copyFrom The bean to copy.
 	 */
 	protected HeaderList(HeaderList copyFrom) {
-		super(copyFrom);
+		super(false, copyFrom);
 		caseSensitive = copyFrom.caseSensitive;
 	}
 
@@ -260,6 +262,7 @@ public class HeaderList extends ArrayList<Header> {
 	 * @return This object.
 	 */
 	public HeaderList resolving(VarResolver varResolver) {
+		assertModifiable();
 		this.varResolver = varResolver;
 		return this;
 	}
@@ -274,6 +277,7 @@ public class HeaderList extends ArrayList<Header> {
 	 * @return This object.
 	 */
 	public HeaderList caseSensitive(boolean value) {
+		assertModifiable();
 		caseSensitive = value;
 		return this;
 	}
@@ -952,6 +956,12 @@ public class HeaderList extends ArrayList<Header> {
 	}
 
 	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.collections.ControlledArrayList */
+	public HeaderList setUnmodifiable() {
+		super.setUnmodifiable();
+		return this;
+	}
 
 	// </FluentSetters>
 }

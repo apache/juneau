@@ -23,6 +23,7 @@ import java.util.stream.*;
 
 import org.apache.http.*;
 import org.apache.http.util.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.svl.*;
@@ -44,7 +45,7 @@ import org.apache.juneau.svl.*;
  * </ul>
  */
 @FluentSetters
-public class PartList extends ArrayList<NameValuePair> {
+public class PartList extends ControlledArrayList<NameValuePair> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -121,12 +122,13 @@ public class PartList extends ArrayList<NameValuePair> {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private VarResolver varResolver;
-	boolean caseInsensitive = false;
+	boolean caseInsensitive;
 
 	/**
 	 * Constructor.
 	 */
 	public PartList() {
+		super(false);
 	}
 
 	/**
@@ -135,7 +137,7 @@ public class PartList extends ArrayList<NameValuePair> {
 	 * @param copyFrom The bean to copy.
 	 */
 	protected PartList(PartList copyFrom) {
-		super(copyFrom);
+		super(false, copyFrom);
 		caseInsensitive = copyFrom.caseInsensitive;
 	}
 
@@ -246,6 +248,7 @@ public class PartList extends ArrayList<NameValuePair> {
 	 * @return This object.
 	 */
 	public PartList resolving(VarResolver varResolver) {
+		assertModifiable();
 		this.varResolver = varResolver;
 		return this;
 	}
@@ -260,6 +263,7 @@ public class PartList extends ArrayList<NameValuePair> {
 	 * @return This object.
 	 */
 	public PartList caseInsensitive(boolean value) {
+		assertModifiable();
 		caseInsensitive = value;
 		return this;
 	}
@@ -933,6 +937,12 @@ public class PartList extends ArrayList<NameValuePair> {
 	}
 
 	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.collections.ControlledArrayList */
+	public PartList setUnmodifiable() {
+		super.setUnmodifiable();
+		return this;
+	}
 
 	// </FluentSetters>
 }

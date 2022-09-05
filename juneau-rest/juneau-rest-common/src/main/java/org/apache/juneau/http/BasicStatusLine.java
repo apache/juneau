@@ -68,6 +68,7 @@ public class BasicStatusLine implements StatusLine {
 	private String reasonPhrase;
 	private ReasonPhraseCatalog reasonPhraseCatalog;
 	private Locale locale = Locale.getDefault();
+	private boolean unmodifiable;
 
 	/**
 	 * Constructor.
@@ -100,6 +101,27 @@ public class BasicStatusLine implements StatusLine {
 	// Properties
 	//-----------------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Specifies whether this bean should be unmodifiable.
+	 * <p>
+	 * When enabled, attempting to set any properties on this bean will cause an {@link UnsupportedOperationException}.
+	 *
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicStatusLine setUnmodifiable() {
+		unmodifiable = true;
+		return this;
+	}
+
+	/**
+	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.
+	 */
+	protected final void assertModifiable() {
+		if (unmodifiable)
+			throw new UnsupportedOperationException("Bean is read-only");
+	}
+
 	@Override /* StatusLine */
 	public ProtocolVersion getProtocolVersion() {
 		return protocolVersion;
@@ -116,6 +138,7 @@ public class BasicStatusLine implements StatusLine {
 	 */
 	@FluentSetter
 	public BasicStatusLine setProtocolVersion(ProtocolVersion value) {
+		assertModifiable();
 		this.protocolVersion = value;
 		return this;
 	}
@@ -136,6 +159,7 @@ public class BasicStatusLine implements StatusLine {
 	 */
 	@FluentSetter
 	public BasicStatusLine setStatusCode(int value) {
+		assertModifiable();
 		this.statusCode = value;
 		return this;
 	}
@@ -161,6 +185,7 @@ public class BasicStatusLine implements StatusLine {
 	 */
 	@FluentSetter
 	public BasicStatusLine setReasonPhrase(String value) {
+		assertModifiable();
 		this.reasonPhrase = value;
 		return this;
 	}
@@ -176,6 +201,7 @@ public class BasicStatusLine implements StatusLine {
 	 */
 	@FluentSetter
 	public BasicStatusLine setReasonPhraseCatalog(ReasonPhraseCatalog value) {
+		assertModifiable();
 		this.reasonPhraseCatalog = value;
 		return this;
 	}
@@ -200,6 +226,7 @@ public class BasicStatusLine implements StatusLine {
 	 */
 	@FluentSetter
 	public BasicStatusLine setLocale(Locale value) {
+		assertModifiable();
 		this.locale = value;
 		return this;
 	}

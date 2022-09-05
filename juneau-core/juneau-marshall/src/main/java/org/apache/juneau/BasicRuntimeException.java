@@ -73,6 +73,40 @@ public class BasicRuntimeException extends RuntimeException {
 		super(cause);
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Specifies whether this bean should be unmodifiable.
+	 * <p>
+	 * When enabled, attempting to set any properties on this bean will cause an {@link UnsupportedOperationException}.
+	 *
+	 * @return This object.
+	 */
+	@FluentSetter
+	protected BasicRuntimeException setUnmodifiable() {
+		unmodifiable = true;
+		return this;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this bean is unmodifiable.
+	 *
+	 * @return <jk>true</jk> if this bean is unmodifiable.
+	 */
+	public boolean isUnmodifiable() {
+		return unmodifiable;
+	}
+
+	/**
+	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.
+	 */
+	protected final void assertModifiable() {
+		if (unmodifiable)
+			throw new UnsupportedOperationException("Bean is read-only");
+	}
+
 	/**
 	 * Same as {@link #getCause()} but searches the throwable chain for an exception of the specified type.
 	 *
@@ -134,25 +168,6 @@ public class BasicRuntimeException extends RuntimeException {
 	public Throwable unwrap() {
 		Throwable t = getCause();
 		return t == null ? this : t;
-	}
-
-	/**
-	 * Set the unmodifiable flag on this exception.  This prevents the message from being modified.
-	 *
-	 * @return This object.
-	 */
-	@FluentSetter
-	protected BasicRuntimeException setUnmodifiable() {
-		unmodifiable = true;
-		return this;
-	}
-
-	/**
-	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.
-	 */
-	protected final void assertModifiable() {
-		if (unmodifiable)
-			throw new UnsupportedOperationException("Bean is read-only");
 	}
 
 	// <FluentSetters>

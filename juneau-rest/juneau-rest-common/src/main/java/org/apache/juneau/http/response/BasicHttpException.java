@@ -53,7 +53,7 @@ import org.apache.juneau.internal.*;
  * @serial exclude
  */
 @BeanIgnore /* Use toString() to serialize */
-@FluentSetters
+@FluentSetters(ignore="setUnmodifiable")
 public class BasicHttpException extends BasicRuntimeException implements HttpResponse {
 
 	private static final long serialVersionUID = 1L;
@@ -144,6 +144,29 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		setStatusLine(copyFrom.statusLine.copy());
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Specifies whether this bean should be unmodifiable.
+	 * <p>
+	 * When enabled, attempting to set any properties on this bean will cause an {@link UnsupportedOperationException}.
+	 *
+	 * @return This object.
+	 */
+	@Override
+	@FluentSetter
+	public BasicHttpException setUnmodifiable() {
+		super.setUnmodifiable();
+		statusLine.setUnmodifiable();
+		return this;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// BasicStatusLine setters.
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
 	 * Sets the protocol version on the status line.
 	 *
@@ -155,12 +178,13 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 */
 	@FluentSetter
 	public BasicHttpException setStatusLine(BasicStatusLine value) {
-		statusLine = value;
+		assertModifiable();
+		statusLine = value.copy();
 		return this;
 	}
 
 	/**
-	 * Same as {@link #setStatusCode2(int)} but returns this object.
+	 * Same as {@link #setStatusCode(int)} but returns this object.
 	 *
 	 * @param code The new status code.
 	 * @return This object.
@@ -188,6 +212,22 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	}
 
 	/**
+	 * Sets the reason phrase on the status line.
+	 *
+	 * <p>
+	 * If not specified, the reason phrase will be retrieved from the reason phrase catalog
+	 * using the locale on this builder.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpException setReasonPhrase2(String value) {
+		statusLine.setReasonPhrase(value);
+		return this;
+	}
+
+	/**
 	 * Sets the reason phrase catalog used to retrieve reason phrases.
 	 *
 	 * <p>
@@ -202,6 +242,21 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 		return this;
 	}
 
+	/**
+	 * Sets the locale used to retrieve reason phrases.
+	 *
+	 * <p>
+	 * If not specified, uses {@link Locale#getDefault()}.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpException setLocale2(Locale value) {
+		statusLine.setLocale(value);
+		return this;
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// BasicHeaderGroup setters.
 	//-----------------------------------------------------------------------------------------------------------------
@@ -212,6 +267,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @return The underlying builder for the headers.
 	 */
 	public HeaderList getHeaders() {
+		assertModifiable();
 		return headers;
 	}
 
@@ -223,7 +279,8 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 */
 	@FluentSetter
 	public BasicHttpException setHeaders(HeaderList value) {
-		headers = value;
+		assertModifiable();
+		headers = value.copy();
 		return this;
 	}
 
@@ -285,8 +342,22 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @return This object.
 	 */
 	public BasicHttpException setContent(HttpEntity value) {
+		assertModifiable();
 		this.content = value;
 		return this;
+	}
+
+	/**
+	 * Asserts that the specified HTTP response has the same status code as the one on the status line of this bean.
+	 *
+	 * @param response The HTTP response to check.  Must not be <jk>null</jk>.
+	 * @throws AssertionError If status code is not what was expected.
+	 */
+	protected void assertStatusCode(HttpResponse response) throws AssertionError {
+		assertArgNotNull("response", response);
+		int expected = getStatusLine().getStatusCode();
+		int actual = response.getStatusLine().getStatusCode();
+		assertInteger(actual).setMsg("Unexpected status code.  Expected:[{0}], Actual:[{1}]", expected, actual).is(expected);
 	}
 
 	/**
@@ -309,19 +380,6 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 			t = t.getCause();
 		}
 		return null;
-	}
-
-	/**
-	 * Asserts that the specified HTTP response has the same status code as the one on the status line of this bean.
-	 *
-	 * @param response The HTTP response to check.  Must not be <jk>null</jk>.
-	 * @throws AssertionError If status code is not what was expected.
-	 */
-	protected void assertStatusCode(HttpResponse response) throws AssertionError {
-		assertArgNotNull("response", response);
-		int expected = getStatusLine().getStatusCode();
-		int actual = response.getStatusLine().getStatusCode();
-		assertInteger(actual).setMsg("Unexpected status code.  Expected:[{0}], Actual:[{1}]", expected, actual).is(expected);
 	}
 
 	/**
@@ -530,12 +588,6 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	@Override /* GENERATED - org.apache.juneau.BasicRuntimeException */
 	public BasicHttpException setMessage(String message, Object...args) {
 		super.setMessage(message, args);
-		return this;
-	}
-
-	@Override /* GENERATED - org.apache.juneau.BasicRuntimeException */
-	public BasicHttpException setUnmodifiable() {
-		super.setUnmodifiable();
 		return this;
 	}
 

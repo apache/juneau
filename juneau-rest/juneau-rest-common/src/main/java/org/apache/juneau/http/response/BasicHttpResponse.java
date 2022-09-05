@@ -93,8 +93,14 @@ public class BasicHttpResponse implements HttpResponse {
 		setStatusLine(response.getStatusLine());
 	}
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Specifies whether this exception should be unmodifiable after creation.
+	 * Specifies whether this bean should be unmodifiable.
+	 * <p>
+	 * When enabled, attempting to set any properties on this bean will cause an {@link UnsupportedOperationException}.
 	 *
 	 * @return This object.
 	 */
@@ -102,6 +108,23 @@ public class BasicHttpResponse implements HttpResponse {
 	public BasicHttpResponse setUnmodifiable() {
 		unmodifiable = true;
 		return this;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this bean is unmodifiable.
+	 *
+	 * @return <jk>true</jk> if this bean is unmodifiable.
+	 */
+	public boolean isUnmodifiable() {
+		return unmodifiable;
+	}
+
+	/**
+	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.
+	 */
+	protected final void assertModifiable() {
+		if (unmodifiable)
+			throw new UnsupportedOperationException("Bean is read-only");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -119,22 +142,8 @@ public class BasicHttpResponse implements HttpResponse {
 	 */
 	@FluentSetter
 	public BasicHttpResponse setStatusLine(BasicStatusLine value) {
-		statusLine = value;
-		return this;
-	}
-
-	/**
-	 * Sets the protocol version on the status line.
-	 *
-	 * <p>
-	 * If not specified, <js>"HTTP/1.1"</js> will be used.
-	 *
-	 * @param value The new value.
-	 * @return This object.
-	 */
-	@FluentSetter
-	public BasicHttpResponse setProtocolVersion(ProtocolVersion value) {
-		statusLine.setProtocolVersion(value);
+		assertModifiable();
+		statusLine = value.copy();
 		return this;
 	}
 
@@ -150,6 +159,21 @@ public class BasicHttpResponse implements HttpResponse {
 	@FluentSetter
 	public BasicHttpResponse setStatusCode2(int value) {
 		statusLine.setStatusCode(value);
+		return this;
+	}
+
+	/**
+	 * Sets the protocol version on the status line.
+	 *
+	 * <p>
+	 * If not specified, <js>"HTTP/1.1"</js> will be used.
+	 *
+	 * @param value The new value.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpResponse setProtocolVersion(ProtocolVersion value) {
+		statusLine.setProtocolVersion(value);
 		return this;
 	}
 
@@ -220,7 +244,8 @@ public class BasicHttpResponse implements HttpResponse {
 	 */
 	@FluentSetter
 	public BasicHttpResponse setHeaders(HeaderList value) {
-		headers = value;
+		assertModifiable();
+		headers = value.copy();
 		return this;
 	}
 
@@ -320,6 +345,7 @@ public class BasicHttpResponse implements HttpResponse {
 	 */
 	@FluentSetter
 	public BasicHttpResponse setContent(HttpEntity value) {
+		assertModifiable();
 		this.content = value;
 		return this;
 	}
@@ -488,12 +514,4 @@ public class BasicHttpResponse implements HttpResponse {
 	// <FluentSetters>
 
 	// </FluentSetters>
-
-	/**
-	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.
-	 */
-	protected final void assertModifiable() {
-		if (unmodifiable)
-			throw new UnsupportedOperationException("Bean is read-only");
-	}
 }

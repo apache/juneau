@@ -15,6 +15,8 @@ package org.apache.juneau.http.response;
 import static org.apache.juneau.http.response.MethodNotAllowed.*;
 
 import java.text.*;
+import java.util.*;
+
 import org.apache.http.*;
 import org.apache.http.Header;
 import org.apache.juneau.annotation.*;
@@ -158,8 +160,20 @@ public class MethodNotAllowed extends BasicHttpException {
 	}
 
 	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public MethodNotAllowed setLocale2(Locale value) {
+		super.setLocale2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
 	public MethodNotAllowed setProtocolVersion(ProtocolVersion value) {
 		super.setProtocolVersion(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public MethodNotAllowed setReasonPhrase2(String value) {
+		super.setReasonPhrase2(value);
 		return this;
 	}
 

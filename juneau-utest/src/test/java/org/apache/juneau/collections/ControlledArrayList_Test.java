@@ -31,23 +31,23 @@ public class ControlledArrayList_Test {
 	public void a01_constructors() throws Exception {
 		ControlledArrayList<Integer> x;
 
-		x = new ControlledArrayList<>(true);
+		x = new ControlledArrayList<>(false);
 		assertTrue(x.isModifiable());
 
-		x = new ControlledArrayList<>(false);
+		x = new ControlledArrayList<>(true);
 		assertFalse(x.isModifiable());
 
-		x = new ControlledArrayList<>(true, Arrays.asList(1));
+		x = new ControlledArrayList<>(false, Arrays.asList(1));
 		assertTrue(x.isModifiable());
 
-		x = new ControlledArrayList<>(false, Arrays.asList(1));
+		x = new ControlledArrayList<>(true, Arrays.asList(1));
 		assertFalse(x.isModifiable());
 	}
 
 	@Test
 	public void a02_basicMethods() throws Exception {
-		ControlledArrayList<Integer> x1 = new ControlledArrayList<Integer>(true, Arrays.asList(1));
-		ControlledArrayList<Integer> x2 = new ControlledArrayList<Integer>(false, Arrays.asList(1));
+		ControlledArrayList<Integer> x1 = new ControlledArrayList<Integer>(false, Arrays.asList(1));
+		ControlledArrayList<Integer> x2 = new ControlledArrayList<Integer>(true, Arrays.asList(1));
 
 		x1.set(0, 2);
 		assertThrown(() -> x2.set(0, 2)).isType(UnsupportedOperationException.class);
@@ -128,8 +128,8 @@ public class ControlledArrayList_Test {
 
 	@Test
 	public void a03_iterator() throws Exception {
-		ControlledArrayList<Integer> x1 = new ControlledArrayList<Integer>(true, Arrays.asList(1));
-		ControlledArrayList<Integer> x2 = new ControlledArrayList<Integer>(false, Arrays.asList(1));
+		ControlledArrayList<Integer> x1 = new ControlledArrayList<Integer>(false, Arrays.asList(1));
+		ControlledArrayList<Integer> x2 = new ControlledArrayList<Integer>(true, Arrays.asList(1));
 
 		Iterator<Integer> i1 = x1.iterator();
 		Iterator<Integer> i2 = x2.iterator();
@@ -149,8 +149,8 @@ public class ControlledArrayList_Test {
 
 	@Test
 	public void a04_listIterator() throws Exception {
-		ControlledArrayList<Integer> x1 = new ControlledArrayList<Integer>(true, Arrays.asList(1));
-		ControlledArrayList<Integer> x2 = new ControlledArrayList<Integer>(false, Arrays.asList(1));
+		ControlledArrayList<Integer> x1 = new ControlledArrayList<Integer>(false, Arrays.asList(1));
+		ControlledArrayList<Integer> x2 = new ControlledArrayList<Integer>(true, Arrays.asList(1));
 
 		ListIterator<Integer> i1a = x1.listIterator();
 		ListIterator<Integer> i2a = x2.listIterator();

@@ -15,6 +15,8 @@ package org.apache.juneau.collections;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.internal.*;
+
 /**
  * An array list that allows you to control whether it's read-only via a constructor parameter.
  *
@@ -29,31 +31,52 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 
 	private static final long serialVersionUID = -1L;
 
-	private final boolean modifiable;
+	private boolean unmodifiable;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param modifiable If <jk>true</jk>, this list can be modified through normal list operation methods on the {@link List} interface.
+	 * @param unmodifiable If <jk>true</jk>, this list cannot be modified through normal list operation methods on the {@link List} interface.
 	 */
-	public ControlledArrayList(boolean modifiable) {
-		this.modifiable = modifiable;
+	public ControlledArrayList(boolean unmodifiable) {
+		this.unmodifiable = unmodifiable;
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param modifiable If <jk>true</jk>, this list can be modified through normal list operation methods on the {@link List} interface.
+	 * @param unmodifiable If <jk>true</jk>, this list cannot be modified through normal list operation methods on the {@link List} interface.
 	 * @param list The initial contents of this list.
 	 */
-	public ControlledArrayList(boolean modifiable, List<? extends E> list) {
+	public ControlledArrayList(boolean unmodifiable, List<? extends E> list) {
 		super(list);
-		this.modifiable = modifiable;
+		this.unmodifiable = unmodifiable;
 	}
 
-	void checkModifiable() {
-		if (! modifiable)
-			throw new UnsupportedOperationException("List is read-only.");
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+
+	/**
+	 * Specifies whether this bean should be unmodifiable.
+	 * <p>
+	 * When enabled, attempting to set any properties on this bean will cause an {@link UnsupportedOperationException}.
+	 *
+	 * @return This object.
+	 */
+	@FluentSetter
+	public ControlledArrayList<E> setUnmodifiable() {
+		unmodifiable = true;
+		return this;
+	}
+
+	/**
+	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.
+	 */
+	protected final void assertModifiable() {
+		if (unmodifiable)
+			throw new UnsupportedOperationException("List is read-only");
 	}
 
 	/**
@@ -62,12 +85,12 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 	 * @return <jk>true</jk> if this list is modifiable.
 	 */
 	public boolean isModifiable() {
-		return modifiable;
+		return ! unmodifiable;
 	}
 
 	@Override
 	public E set(int index, E element) {
-		checkModifiable();
+		assertModifiable();
 		return overrideSet(index, element);
 	}
 
@@ -84,7 +107,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 
 	@Override
 	public void add(int index, E element) {
-		checkModifiable();
+		assertModifiable();
 		overrideAdd(index, element);
 	}
 
@@ -100,7 +123,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 
 	@Override
 	public E remove(int index) {
-		checkModifiable();
+		assertModifiable();
 		return overrideRemove(index);
 	}
 
@@ -116,7 +139,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 
 	@Override
 	public boolean addAll(int index, Collection<? extends E> c) {
-		checkModifiable();
+		assertModifiable();
 		return overrideAddAll(index, c);
 	}
 
@@ -133,7 +156,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 
 	@Override
 	public void replaceAll(UnaryOperator<E> operator) {
-		checkModifiable();
+		assertModifiable();
 		overrideReplaceAll(operator);
 	}
 
@@ -148,7 +171,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 
 	@Override
 	public void sort(Comparator<? super E> c) {
-		checkModifiable();
+		assertModifiable();
 		overrideSort(c);
 	}
 
@@ -163,7 +186,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 
 	@Override
 	public boolean add(E element) {
-		checkModifiable();
+		assertModifiable();
 		return overrideAdd(element);
 	}
 
@@ -179,7 +202,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 
 	@Override
 	public boolean remove(Object o) {
-		checkModifiable();
+		assertModifiable();
 		return overrideRemove(o);
 	}
 
@@ -195,7 +218,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 
 	@Override
 	public boolean addAll(Collection<? extends E> c) {
-		checkModifiable();
+		assertModifiable();
 		return overrideAddAll(c);
 	}
 
@@ -211,7 +234,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 
 	@Override
 	public boolean removeAll(Collection<?> coll) {
-		checkModifiable();
+		assertModifiable();
 		return overrideRemoveAll(coll);
 	}
 
@@ -227,7 +250,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 
 	@Override
 	public boolean retainAll(Collection<?> c) {
-		checkModifiable();
+		assertModifiable();
 		return overrideRetainAll(c);
 	}
 
@@ -243,7 +266,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 
 	@Override
 	public void clear() {
-		checkModifiable();
+		assertModifiable();
 		overrideClear();
 	}
 
@@ -256,7 +279,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 
 	@Override
 	public boolean removeIf(Predicate<? super E> filter) {
-		checkModifiable();
+		assertModifiable();
 		return overrideRemoveIf(filter);
 	}
 
@@ -272,7 +295,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 
 	@Override
 	public List<E> subList(int fromIndex, int toIndex) {
-		return new ControlledArrayList<>(modifiable, super.subList(fromIndex, toIndex));
+		return new ControlledArrayList<>(unmodifiable, super.subList(fromIndex, toIndex));
 	}
 
 	@Override
@@ -282,7 +305,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 
 	@Override
 	public ListIterator<E> listIterator(final int index) {
-		if (modifiable)
+		if (! unmodifiable)
 			return overrideListIterator(index);
 
 		return new ListIterator<E>() {
@@ -352,7 +375,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 
 	@Override
 	public Iterator<E> iterator() {
-		if (modifiable)
+		if (! unmodifiable)
 			return overrideIterator();
 
 		return new Iterator<E>() {

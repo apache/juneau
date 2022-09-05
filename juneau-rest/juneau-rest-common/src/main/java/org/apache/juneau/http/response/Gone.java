@@ -15,6 +15,8 @@ package org.apache.juneau.http.response;
 import static org.apache.juneau.http.response.Gone.*;
 
 import java.text.*;
+import java.util.*;
+
 import org.apache.http.*;
 import org.apache.http.Header;
 import org.apache.juneau.annotation.*;
@@ -162,8 +164,20 @@ public class Gone extends BasicHttpException {
 	}
 
 	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public Gone setLocale2(Locale value) {
+		super.setLocale2(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
 	public Gone setProtocolVersion(ProtocolVersion value) {
 		super.setProtocolVersion(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.response.BasicHttpException */
+	public Gone setReasonPhrase2(String value) {
+		super.setReasonPhrase2(value);
 		return this;
 	}
 
