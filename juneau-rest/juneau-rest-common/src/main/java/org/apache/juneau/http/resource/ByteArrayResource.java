@@ -13,6 +13,7 @@
 package org.apache.juneau.http.resource;
 
 import org.apache.juneau.http.entity.*;
+import org.apache.juneau.http.header.*;
 
 /**
  * A repeatable resource that obtains its content from a byte array.
@@ -24,31 +25,38 @@ import org.apache.juneau.http.entity.*;
  */
 public class ByteArrayResource extends BasicResource {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Creates a new {@link ByteArrayResource} builder.
-	 *
-	 * @return A new {@link ByteArrayResource} builder.
+	 * Constructor.
 	 */
-	public static HttpResourceBuilder<ByteArrayResource> create() {
-		return new HttpResourceBuilder<>(ByteArrayResource.class, ByteArrayEntity.class);
+	public ByteArrayResource() {
+		super(new ByteArrayEntity());
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The resource builder.
+	 * @param contentType The entity content type.
+	 * @param contents The entity contents.
 	 */
-	public ByteArrayResource(HttpResourceBuilder<?> builder) {
-		super(builder);
+	public ByteArrayResource(ContentType contentType, byte[] contents) {
+		super(new ByteArrayEntity(contentType, contents));
 	}
 
 	/**
-	 * Creates a new {@link ByteArrayResource} builder initialized with the contents of this entity.
+	 * Copy constructor.
 	 *
-	 * @return A new {@link ByteArrayResource} builder initialized with the contents of this entity.
+	 * @param copyFrom The bean being copied.
 	 */
-	@Override /* BasicResource */
-	public HttpResourceBuilder<ByteArrayResource> copy() {
-		return new HttpResourceBuilder<>(this);
+	protected ByteArrayResource(ByteArrayResource copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override
+	public ByteArrayResource copy() {
+		return new ByteArrayResource(this);
 	}
 }

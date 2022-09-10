@@ -331,7 +331,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	 * @return This object.
 	 */
 	public BasicHttpException setContent(String value) {
-		setContent(stringEntity(value).build());
+		setContent(stringEntity(value));
 		return this;
 	}
 
@@ -563,7 +563,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	public HttpEntity getEntity() {
 		// Constructing a StringEntity is somewhat expensive, so don't create it unless it's needed.
 		if (content == null)
-			content = stringEntity(getMessage()).build();
+			content = stringEntity(getMessage());
 		return content;
 	}
 

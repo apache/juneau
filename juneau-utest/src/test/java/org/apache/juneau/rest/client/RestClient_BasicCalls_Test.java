@@ -169,9 +169,9 @@ public class RestClient_BasicCalls_Test {
 		List<Object> bodies = list(
 			reader("{f:1}"),
 			inputStream("{f:1}"),
-			stringResource("{f:1}").build(),
+			stringResource("{f:1}"),
 			bean,
-			stringEntity("{f:1}").build(),
+			stringEntity("{f:1}"),
 			parts("f","1")
 		);
 		for (Object body : bodies) {
@@ -212,9 +212,9 @@ public class RestClient_BasicCalls_Test {
 		List<Object> bodies = list(
 			reader("{f:1}"),
 			inputStream("{f:1}"),
-			stringResource("{f:1}").build(),
+			stringResource("{f:1}"),
 			bean,
-			stringEntity("{f:1}").build(),
+			stringEntity("{f:1}"),
 			parts("f","1")
 		);
 		for (Object body : bodies) {
@@ -315,13 +315,13 @@ public class RestClient_BasicCalls_Test {
 			/*[ 0]*/ bean,
 			/*[ 1]*/ parts("f","1"),
 			/*[ 2]*/ new NameValuePair[]{part("f","1")},
-			/*[ 3]*/ stringEntity("f=1", ContentType.APPLICATION_FORM_URLENCODED).build(),
-			/*[ 4]*/ stringEntity("f=1", null).build(),
+			/*[ 3]*/ stringEntity("f=1", ContentType.APPLICATION_FORM_URLENCODED),
+			/*[ 4]*/ stringEntity("f=1", null),
 			/*[ 5]*/ part("f","1"),
-			/*[ 6]*/ stringResource("f=1").build(),
-			/*[ 7]*/ stringResource("f=1").build(),
-			/*[ 8]*/ stringResource("f=1").contentType(APPLICATION_FORM_URLENCODED).build(),
-			/*[ 9]*/ stringResource("f=1").contentType(APPLICATION_FORM_URLENCODED).build(),
+			/*[ 6]*/ stringResource("f=1"),
+			/*[ 7]*/ stringResource("f=1"),
+			/*[ 8]*/ stringResource("f=1").setContentType(APPLICATION_FORM_URLENCODED),
+			/*[ 9]*/ stringResource("f=1").setContentType(APPLICATION_FORM_URLENCODED),
 			/*[14]*/ s1,
 			/*[15]*/ s2
 		);
@@ -352,9 +352,9 @@ public class RestClient_BasicCalls_Test {
 		List<Object> bodies = list(
 			reader("{f:1}"),
 			inputStream("{f:1}"),
-			stringResource("{f:1}").build(),
+			stringResource("{f:1}"),
 			bean,
-			stringEntity("{f:1}").build(),
+			stringEntity("{f:1}"),
 			parts("f","1")
 		);
 		RestClient x = client().build();
@@ -389,9 +389,9 @@ public class RestClient_BasicCalls_Test {
 		List<Object> bodies = list(
 			reader("{f:1}"),
 			inputStream("{f:1}"),
-			stringResource("{f:1}").build(),
+			stringResource("{f:1}"),
 			bean,
-			stringEntity("{f:1}").build(),
+			stringEntity("{f:1}"),
 			parts("f","1")
 		);
 		RestClient x = client().build();

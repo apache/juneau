@@ -45,46 +45,64 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @BeanIgnore
+@FluentSetters
 public class BasicHttpEntity implements HttpEntity {
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * An empty HttpEntity.
 	 */
-	public static final BasicHttpEntity EMPTY = create(BasicHttpEntity.class).build();
+	public static final BasicHttpEntity EMPTY = new BasicHttpEntity().setUnmodifiable();
 
-	final boolean cached, chunked;
-	final Object content;
-	final Supplier<?> contentSupplier;
-	final ContentType contentType;
-	final ContentEncoding contentEncoding;
-	final Charset charset;
-	final long contentLength;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private boolean cached, chunked, unmodifiable;
+	private Object content;
+	private Supplier<?> contentSupplier;
+	private ContentType contentType;
+	private ContentEncoding contentEncoding;
+	private Charset charset;
+	private long contentLength = -1;
+	private int maxLength = -1;
 
 	/**
-	 * Creates a builder for this class.
-	 *
-	 * @param <T> The subclass that the builder is going to create.
-	 * @param implClass The subclass that the builder is going to create.
-	 * @return A new builder bean.
+	 * Constructor.
 	 */
-	public static <T extends BasicHttpEntity> HttpEntityBuilder<T> create(Class<T> implClass) {
-		return new HttpEntityBuilder<>(implClass);
+	public BasicHttpEntity() {
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder containing the arguments for this bean.
+	 * @param contentType The entity content type.
+	 * @param content The entity content.
 	 */
-	public BasicHttpEntity(HttpEntityBuilder<?> builder) {
-		this.cached = builder.cached;
-		this.chunked = builder.chunked;
-		this.content = builder.content;
-		this.contentSupplier = builder.contentSupplier;
-		this.contentType = builder.contentType;
-		this.contentEncoding = builder.contentEncoding;
-		this.charset = builder.charset;
-		this.contentLength = builder.contentLength;
+	public BasicHttpEntity(ContentType contentType, Object content) {
+		this.contentType = contentType;
+		this.content = content;
+	}
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param copyFrom The bean being copied.
+	 */
+	public BasicHttpEntity(BasicHttpEntity copyFrom) {
+		this.cached = copyFrom.cached;
+		this.chunked = copyFrom.chunked;
+		this.content = copyFrom.content;
+		this.contentSupplier = copyFrom.contentSupplier;
+		this.contentType = copyFrom.contentType;
+		this.contentEncoding = copyFrom.contentEncoding;
+		this.contentLength = copyFrom.contentLength;
+		this.charset = copyFrom.charset;
+		this.maxLength = copyFrom.maxLength;
+		this.unmodifiable = false;
 	}
 
 	/**
@@ -95,9 +113,241 @@ public class BasicHttpEntity implements HttpEntity {
 	 *
 	 * @return A new builder bean.
 	 */
-	public HttpEntityBuilder<? extends BasicHttpEntity> copy() {
-		return new HttpEntityBuilder<>(this);
+	public BasicHttpEntity copy() {
+		return new BasicHttpEntity(this);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Properties
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Specifies whether this bean should be unmodifiable.
+	 * <p>
+	 * When enabled, attempting to set any properties on this bean will cause an {@link UnsupportedOperationException}.
+	 *
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpEntity setUnmodifiable() {
+		unmodifiable = true;
+		return this;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this bean is unmodifiable.
+	 *
+	 * @return <jk>true</jk> if this bean is unmodifiable.
+	 */
+	public boolean isUnmodifiable() {
+		return unmodifiable;
+	}
+
+	/**
+	 * Throws an {@link UnsupportedOperationException} if the unmodifiable flag is set on this bean.
+	 */
+	protected final void assertModifiable() {
+		if (unmodifiable)
+			throw new UnsupportedOperationException("Bean is read-only");
+	}
+
+	/**
+	 * Sets the content on this entity bean.
+	 *
+	 * @param value The entity content, can be <jk>null</jk>.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpEntity setContent(Object value) {
+		assertModifiable();
+		this.content = value;
+		return this;
+	}
+
+	/**
+	 * Sets the content on this entity bean from a supplier.
+	 *
+	 * <p>
+	 * Repeatable entities such as {@link StringEntity} use this to allow the entity content to be resolved at
+	 * serialization time.
+	 *
+	 * @param value The entity content, can be <jk>null</jk>.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpEntity setContent(Supplier<?> value) {
+		assertModifiable();
+		this.contentSupplier = value == null ? ()->null : value;
+		return this;
+	}
+
+	/**
+	 * Sets the content type on this entity bean.
+	 *
+	 * @param value The new <c>Content-Type</c> header, or <jk>null</jk> to unset.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpEntity setContentType(String value) {
+		return setContentType(ContentType.of(value));
+	}
+
+	/**
+	 * Sets the content type on this entity bean.
+	 *
+	 * @param value The new <c>Content-Type</c> header, or <jk>null</jk> to unset.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpEntity setContentType(ContentType value) {
+		assertModifiable();
+		contentType = value;
+		return this;
+	}
+
+	/**
+	 * Sets the content length on this entity bean.
+	 *
+	 * @param value The new <c>Content-Length</c> header value, or <c>-1</c> to unset.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpEntity setContentLength(long value) {
+		assertModifiable();
+		contentLength = value;
+		return this;
+	}
+
+	/**
+	 * Sets the content encoding header on this entity bean.
+	 *
+	 * @param value The new <c>Content-Encoding</c> header, or <jk>null</jk> to unset.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpEntity setContentEncoding(String value) {
+		return setContentEncoding(ContentEncoding.of(value));
+	}
+
+	/**
+	 * Sets the content encoding header on this entity bean.
+	 *
+	 * @param value The new <c>Content-Encoding</c> header, or <jk>null</jk> to unset.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpEntity setContentEncoding(ContentEncoding value) {
+		assertModifiable();
+		contentEncoding = value;
+		return this;
+	}
+
+	/**
+	 * Sets the 'chunked' flag value to <jk>true</jk>.
+	 *
+	 * <ul class='notes'>
+	 * 	<li class='note'>If the {@link HttpEntity#getContentLength()} method returns a negative value, the HttpClient code will always
+	 * 		use chunked encoding.
+	 * </ul>
+	 *
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpEntity setChunked() {
+		return setChunked(true);
+	}
+
+	/**
+	 * Sets the 'chunked' flag value.
+	 *
+	 * <ul class='notes'>
+	 * 	<li class='note'>If the {@link HttpEntity#getContentLength()} method returns a negative value, the HttpClient code will always
+	 * 		use chunked encoding.
+	 * </ul>
+	 *
+	 * @param value The new value for this flag.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpEntity setChunked(boolean value) {
+		assertModifiable();
+		chunked = value;
+		return this;
+	}
+
+	/**
+	 * Specifies that the contents of this resource should be cached into an internal byte array so that it can
+	 * be read multiple times.
+	 *
+	 * @return This object.
+	 * @throws IOException If entity could not be read into memory.
+	 */
+	@FluentSetter
+	public BasicHttpEntity setCached() throws IOException {
+		assertModifiable();
+		cached = true;
+		return this;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this entity is cached in-memory.
+	 *
+	 * @return <jk>true</jk> if this entity is cached in-memory.
+	 */
+	public boolean isCached() {
+		return cached;
+	}
+
+	/**
+	 * Specifies the charset to use when converting to and from stream-based resources.
+	 *
+	 * @param value The new value.  If <jk>null</jk>, <c>UTF-8</c> is assumed.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpEntity setCharset(Charset value) {
+		assertModifiable();
+		this.charset = value;
+		return this;
+	}
+
+	/**
+	 * Returns the charset to use when converting to and from stream-based resources.
+	 *
+	 * @return The charset to use when converting to and from stream-based resources.
+	 */
+	public Charset getCharset() {
+		return charset == null ? UTF8 : charset;
+	}
+
+	/**
+	 * Specifies the maximum number of bytes to read or write to and from stream-based resources.
+	 *
+	 * <p>
+	 * Implementation is not universal.
+	 *
+	 * @param value The new value.  The default is <c>-1</c> which means read everything.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public BasicHttpEntity setMaxLength(int value) {
+		assertModifiable();
+		this.maxLength = value;
+		return this;
+	}
+
+	/**
+	 * Returns the maximum number of bytes to read or write to and from stream-based resources.
+	 *
+	 * @return The maximum number of bytes to read or write to and from stream-based resources.
+	 */
+	public int getMaxLength() {
+		return maxLength;
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Converts the contents of this entity as a string.
@@ -123,6 +373,19 @@ public class BasicHttpEntity implements HttpEntity {
 	 */
 	public byte[] asBytes() throws IOException {
 		return readBytes(getContent());
+	}
+
+	/**
+	 * Same as {@link #asBytes()} but wraps {@link IOException IOExceptions} inside a {@link RuntimeException}.
+	 *
+	 * @return The contents of this entity as a byte array.
+	 */
+	protected byte[] asSafeBytes() {
+		try {
+			return asBytes();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**
@@ -184,40 +447,40 @@ public class BasicHttpEntity implements HttpEntity {
 		return contentLength;
 	}
 
-	@Override
+	@Override /* HttpEntity */
 	public boolean isRepeatable() {
 		return false;
 	}
 
-	@Override
+	@Override /* HttpEntity */
 	public boolean isChunked() {
 		return chunked;
 	}
 
-	@Override
+	@Override /* HttpEntity */
 	public Header getContentType() {
 		return contentType;
 	}
 
-	@Override
+	@Override /* HttpEntity */
 	public Header getContentEncoding() {
 		return contentEncoding;
 	}
 
-	@Override
+	@Override /* HttpEntity */
 	public boolean isStreaming() {
 		return false;
 	}
 
-	@Override
+	@Override /* HttpEntity */
 	public void consumeContent() throws IOException {}
 
-	@Override
+	@Override /* HttpEntity */
 	public InputStream getContent() throws IOException, UnsupportedOperationException {
 		return IOUtils.EMPTY_INPUT_STREAM;
 	}
 
-	@Override
+	@Override /* HttpEntity */
 	public void writeTo(OutputStream outStream) throws IOException {}
 
 	// <FluentSetters>

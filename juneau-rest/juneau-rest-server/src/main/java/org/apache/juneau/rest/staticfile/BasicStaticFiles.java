@@ -123,9 +123,8 @@ public class BasicStaticFiles implements StaticFiles {
 				return empty();
 			return optional(
 				streamResource(is.get())
-					.header(contentType(mimeTypes == null ? null : mimeTypes.getContentType(getFileName(path))))
-					.headers(headers)
-					.build()
+					.setHeaders(contentType(mimeTypes == null ? null : mimeTypes.getContentType(getFileName(path))))
+					.addHeaders(headers)
 			);
 		} catch (IOException e) {
 			throw new InternalServerError(e);

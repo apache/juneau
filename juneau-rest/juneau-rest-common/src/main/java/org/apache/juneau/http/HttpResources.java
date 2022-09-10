@@ -41,8 +41,8 @@ public class HttpResources {
 	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @return A new {@link ByteArrayResource} builder.
 	 */
-	public static final HttpResourceBuilder<ByteArrayResource> byteArrayResource(byte[] content) {
-		return ByteArrayResource.create().content(content);
+	public static final ByteArrayResource byteArrayResource(byte[] content) {
+		return (ByteArrayResource) new ByteArrayResource().setContent(content);
 	}
 
 	/**
@@ -52,8 +52,8 @@ public class HttpResources {
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link ByteArrayResource} builder.
 	 */
-	public static final HttpResourceBuilder<ByteArrayResource> byteArrayResource(byte[] content, ContentType contentType) {
-		return ByteArrayResource.create().content(content).contentType(contentType);
+	public static final ByteArrayResource byteArrayResource(byte[] content, ContentType contentType) {
+		return (ByteArrayResource) new ByteArrayResource().setContent(content).setContentType(contentType);
 	}
 
 	/**
@@ -65,8 +65,8 @@ public class HttpResources {
 	 * @param content The entity content supplier.  Can be <jk>null</jk>.
 	 * @return A new {@link ByteArrayResource} builder.
 	 */
-	public static final HttpResourceBuilder<ByteArrayResource> byteArrayResource(Supplier<byte[]> content) {
-		return ByteArrayResource.create().content(content);
+	public static final ByteArrayResource byteArrayResource(Supplier<byte[]> content) {
+		return (ByteArrayResource) new ByteArrayResource().setContent(content);
 	}
 
 	/**
@@ -76,8 +76,8 @@ public class HttpResources {
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link ByteArrayResource} builder.
 	 */
-	public static final HttpResourceBuilder<ByteArrayResource> byteArrayResource(Supplier<byte[]> content, ContentType contentType) {
-		return ByteArrayResource.create().content(content).contentType(contentType);
+	public static final ByteArrayResource byteArrayResource(Supplier<byte[]> content, ContentType contentType) {
+		return (ByteArrayResource) new ByteArrayResource().setContent(content).setContentType(contentType);
 	}
 
 	/**
@@ -89,8 +89,8 @@ public class HttpResources {
 	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @return A new {@link FileResource} builder.
 	 */
-	public static final HttpResourceBuilder<FileResource> fileResource(File content) {
-		return FileResource.create().content(content);
+	public static final FileResource fileResource(File content) {
+		return (FileResource) new FileResource().setContent(content);
 	}
 
 	/**
@@ -100,8 +100,8 @@ public class HttpResources {
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link FileResource} builder.
 	 */
-	public static final HttpResourceBuilder<FileResource> fileResource(File content, ContentType contentType) {
-		return FileResource.create().content(content).contentType(contentType);
+	public static final FileResource fileResource(File content, ContentType contentType) {
+		return (FileResource) new FileResource().setContent(content).setContentType(contentType);
 	}
 
 	/**
@@ -110,8 +110,8 @@ public class HttpResources {
 	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @return A new {@link ReaderResource} builder.
 	 */
-	public static final HttpResourceBuilder<ReaderResource> readerResource(Reader content) {
-		return ReaderResource.create().content(content);
+	public static final ReaderResource readerResource(Reader content) {
+		return (ReaderResource) new ReaderResource().setContent(content);
 	}
 
 	/**
@@ -121,8 +121,8 @@ public class HttpResources {
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link ReaderResource} builder.
 	 */
-	public static final HttpResourceBuilder<ReaderResource> readerResource(Reader content, ContentType contentType) {
-		return ReaderResource.create().content(content).contentType(contentType);
+	public static final ReaderResource readerResource(Reader content, ContentType contentType) {
+		return (ReaderResource) new ReaderResource().setContent(content).setContentType(contentType);
 	}
 
 	/**
@@ -134,8 +134,8 @@ public class HttpResources {
 	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @return A new {@link StreamResource} builder.
 	 */
-	public static final HttpResourceBuilder<StreamResource> streamResource(InputStream content) {
-		return StreamResource.create().content(content);
+	public static final StreamResource streamResource(InputStream content) {
+		return (StreamResource) new StreamResource().setContent(content);
 	}
 
 	/**
@@ -146,8 +146,8 @@ public class HttpResources {
 	 * @param length The content length, or <c>-1</c> if not known.
 	 * @return A new {@link StreamResource} builder.
 	 */
-	public static final HttpResourceBuilder<StreamResource> streamResource(InputStream content, long length, ContentType contentType) {
-		return StreamResource.create().content(content).contentLength(length).contentType(contentType);
+	public static final StreamResource streamResource(InputStream content, long length, ContentType contentType) {
+		return (StreamResource) new StreamResource().setContent(content).setContentLength(length).setContentType(contentType);
 	}
 
 	/**
@@ -156,29 +156,8 @@ public class HttpResources {
 	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @return A new {@link StringResource} builder.
 	 */
-	public static final HttpResourceBuilder<StringResource> stringResource(String content) {
-		return StringResource.create().content(content);
-	}
-
-	/**
-	 * Creates a new builder for a {@link StringResource} builder.
-	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
-	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
-	 * @return A new {@link StringResource} builder.
-	 */
-	public static final HttpResourceBuilder<StringResource> stringResource(String content, ContentType contentType) {
-		return StringResource.create().content(content).contentType(contentType);
-	}
-
-	/**
-	 * Creates a new builder for a {@link StringResource} builder.
-	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
-	 * @return A new {@link StringResource} builder.
-	 */
-	public static final HttpResourceBuilder<StringResource> stringResource(Supplier<String> content) {
-		return StringResource.create().content(content);
+	public static final StringResource stringResource(String content) {
+		return (StringResource) new StringResource().setContent(content);
 	}
 
 	/**
@@ -188,7 +167,28 @@ public class HttpResources {
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link StringResource} builder.
 	 */
-	public static final HttpResourceBuilder<StringResource> stringResource(Supplier<String> content, ContentType contentType) {
-		return StringResource.create().content(content).contentType(contentType);
+	public static final StringResource stringResource(String content, ContentType contentType) {
+		return (StringResource) new StringResource().setContent(content).setContentType(contentType);
+	}
+
+	/**
+	 * Creates a new builder for a {@link StringResource} builder.
+	 *
+	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @return A new {@link StringResource} builder.
+	 */
+	public static final StringResource stringResource(Supplier<String> content) {
+		return (StringResource) new StringResource().setContent(content);
+	}
+
+	/**
+	 * Creates a new builder for a {@link StringResource} builder.
+	 *
+	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
+	 * @return A new {@link StringResource} builder.
+	 */
+	public static final StringResource stringResource(Supplier<String> content, ContentType contentType) {
+		return (StringResource) new StringResource().setContent(content).setContentType(contentType);
 	}
 }

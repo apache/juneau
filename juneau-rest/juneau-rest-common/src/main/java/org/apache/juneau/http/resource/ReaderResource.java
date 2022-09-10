@@ -14,6 +14,7 @@ package org.apache.juneau.http.resource;
 
 import java.io.*;
 import org.apache.juneau.http.entity.*;
+import org.apache.juneau.http.header.*;
 
 /**
  * A streamed, non-repeatable resource that obtains its content from an {@link Reader}.
@@ -25,31 +26,38 @@ import org.apache.juneau.http.entity.*;
  */
 public class ReaderResource extends BasicResource {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Creates a new {@link ReaderResource} builder.
-	 *
-	 * @return A new {@link ReaderResource} builder.
+	 * Constructor.
 	 */
-	public static HttpResourceBuilder<ReaderResource> create() {
-		return new HttpResourceBuilder<>(ReaderResource.class, ReaderEntity.class);
+	public ReaderResource() {
+		super(new ReaderEntity());
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The resource builder.
+	 * @param contentType The entity content type.
+	 * @param contents The entity contents.
 	 */
-	public ReaderResource(HttpResourceBuilder<?> builder) {
-		super(builder);
+	public ReaderResource(ContentType contentType, Reader contents) {
+		super(new ReaderEntity(contentType, contents));
 	}
 
 	/**
-	 * Creates a new {@link ReaderResource} builder initialized with the contents of this entity.
+	 * Copy constructor.
 	 *
-	 * @return A new {@link ReaderResource} builder initialized with the contents of this entity.
+	 * @param copyFrom The bean being copied.
 	 */
-	@Override /* BasicResource */
-	public HttpResourceBuilder<ReaderResource> copy() {
-		return new HttpResourceBuilder<>(this);
+	protected ReaderResource(ReaderResource copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override
+	public ReaderResource copy() {
+		return new ReaderResource(this);
 	}
 }

@@ -17,6 +17,7 @@ import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -27,50 +28,78 @@ import org.apache.juneau.internal.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
+@FluentSetters
 public class FileEntity extends BasicHttpEntity {
 
-	private final File content;
-	private final byte[] cache;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private byte[] byteCache;
+	private String stringCache;
 
 	/**
-	 * Creates a new {@link FileEntity} builder.
-	 *
-	 * @return A new {@link FileEntity} builder.
+	 * Constructor.
 	 */
-	public static HttpEntityBuilder<FileEntity> create() {
-		return new HttpEntityBuilder<>(FileEntity.class);
+	public FileEntity() {
+		super();
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The entity builder.
-	 * @throws IOException If file could not be read.
+	 * @param contentType The entity content type.
+	 * @param content The entity contents.
 	 */
-	public FileEntity(HttpEntityBuilder<?> builder) throws IOException {
-		super(builder);
-		content = contentOrElse(null);
-		cache = builder.cached ? readBytes(content) : null;
+	public FileEntity(ContentType contentType, File content) {
+		super(contentType, content);
 	}
 
 	/**
-	 * Creates a new {@link FileEntity} builder initialized with the contents of this entity.
+	 * Copy constructor.
 	 *
-	 * @return A new {@link FileEntity} builder initialized with the contents of this entity.
+	 * @param copyFrom The bean being copied.
 	 */
-	@Override /* BasicHttpEntity */
-	public HttpEntityBuilder<FileEntity> copy() {
-		return new HttpEntityBuilder<>(this);
+	protected FileEntity(FileEntity copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override
+	public FileEntity copy() {
+		return new FileEntity(this);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private File content() {
+		File f = contentOrElse((File)null);
+		if (f == null)
+			throw new RuntimeException("File is null.");
+		if (! f.exists())
+			throw new RuntimeException("File "+f.getAbsolutePath()+" does not exist.");
+		if (! f.canRead())
+			throw new RuntimeException("File "+f.getAbsolutePath()+" is not readable.");
+		return f;
 	}
 
 	@Override /* AbstractHttpEntity */
 	public String asString() throws IOException {
-		return read(content);
+		if (isCached() && stringCache == null)
+			stringCache = read(new InputStreamReader(new FileInputStream(content()), getCharset()), getMaxLength());
+		if (stringCache != null)
+			return stringCache;
+		return read(new InputStreamReader(new FileInputStream(content()), getCharset()), getMaxLength());
 	}
 
 	@Override /* AbstractHttpEntity */
 	public byte[] asBytes() throws IOException {
-		return cache == null ? readBytes(this.content) : cache;
+		if (isCached() && byteCache == null)
+			byteCache = readBytes(content(), getMaxLength());
+		if (byteCache != null)
+			return byteCache;
+		return readBytes(content());
 	}
 
 	@Override /* HttpEntity */
@@ -80,24 +109,30 @@ public class FileEntity extends BasicHttpEntity {
 
 	@Override /* HttpEntity */
 	public long getContentLength() {
-		return content == null ? 0 : content.length();
+		return content().length();
 	}
 
 	@Override /* HttpEntity */
 	public InputStream getContent() throws IOException {
-		return cache == null ? new FileInputStream(content) : new ByteArrayInputStream(cache);
+		if (isCached())
+			return new ByteArrayInputStream(asBytes());
+		return new FileInputStream(content());
 	}
 
 	@Override /* HttpEntity */
 	public void writeTo(OutputStream out) throws IOException {
 		assertArgNotNull("out", out);
 
-		if (cache != null) {
-			out.write(cache);
+		if (isCached()) {
+			out.write(asBytes());
 		} else {
 			try (InputStream is = getContent()) {
-				IOUtils.pipe(is, out);
+				IOUtils.pipe(is, out, getMaxLength());
 			}
 		}
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

@@ -20,6 +20,7 @@ import java.io.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.internal.*;
 import org.apache.juneau.serializer.*;
@@ -32,39 +33,61 @@ import org.apache.juneau.serializer.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
+@FluentSetters
 public class SerializedEntity extends BasicHttpEntity {
-	final Serializer serializer;
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instances
+	//-----------------------------------------------------------------------------------------------------------------
+
+	Serializer serializer;
 	HttpPartSchema schema;
 
 	/**
-	 * Creates a new {@link SerializedEntity} builder.
-	 *
-	 * @return A new {@link SerializedEntity} builder.
+	 * Constructor.
 	 */
-	public static SerializedEntityBuilder<SerializedEntity> create() {
-		return new SerializedEntityBuilder<>(SerializedEntity.class);
+	public SerializedEntity() {
+		super();
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The builder for this bean.
+	 * @param contentType The entity content type.
+	 * @param content The entity content.
+	 * @param serializer The entity serializer.
+	 * @param schema The entity schema.  Can be <jk>null</jk>.
 	 */
-	public SerializedEntity(SerializedEntityBuilder<?> builder) {
-		super(builder);
-		serializer = builder.serializer;
-		schema = builder.schema;
+	public SerializedEntity(ContentType contentType, Object content, Serializer serializer, HttpPartSchema schema) {
+		super(contentType, content);
+		this.serializer = serializer;
+		this.schema = schema;
 	}
 
 	/**
-	 * Creates a copy of this object.
+	 * Copy constructor.
 	 *
-	 * @return A new copy of this object.
+	 * @param copyFrom The bean being copied.
+	 */
+	public SerializedEntity(SerializedEntity copyFrom) {
+		super(copyFrom);
+		this.serializer = copyFrom.serializer;
+		this.schema = copyFrom.schema;
+	}
+
+	/**
+	 * Creates a builder for this class initialized with the contents of this bean.
+	 *
+	 * <p>
+	 * Allows you to create a modifiable copy of this bean.
+	 *
+	 * @return A new builder bean.
 	 */
 	@Override
-	public SerializedEntityBuilder<SerializedEntity> copy() {
-		return new SerializedEntityBuilder<>(this);
+	public SerializedEntity copy() {
+		return new SerializedEntity(this);
 	}
+
 
 	/**
 	 * Copies this bean and sets the serializer and schema on it.
@@ -76,15 +99,48 @@ public class SerializedEntity extends BasicHttpEntity {
 	 */
 	public SerializedEntity copyWith(Serializer serializer, HttpPartSchema schema) {
 		if ((this.serializer == null && serializer != null) || (this.schema == null && schema != null)) {
-			SerializedEntityBuilder<SerializedEntity> h = copy();
+			SerializedEntity h = copy();
 			if (serializer != null)
-				h.serializer(serializer);
+				h.setSerializer(serializer);
 			if (schema != null)
-				h.schema(schema);
-			return h.build();
+				h.setSchema(schema);
+			return h;
 		}
 		return this;
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Sets the serializer on this entity bean.
+	 *
+	 * @param value The entity serializer, can be <jk>null</jk>.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public SerializedEntity setSerializer(Serializer value) {
+		assertModifiable();
+		this.serializer = value;
+		return this;
+	}
+
+	/**
+	 * Sets the schema on this entity bean.
+	 *
+	 * <p>
+	 * Used to provide instructions to the serializer on how to serialize this object.
+	 *
+	 * @param value The entity schema, can be <jk>null</jk>.
+	 * @return This object.
+	 */
+	@FluentSetter
+	public SerializedEntity setSchema(HttpPartSchema value) {
+		assertModifiable();
+		this.schema = value;
+		return this;
+	}
+
+
 
 	@Override
 	public Header getContentType() {
@@ -134,4 +190,8 @@ public class SerializedEntity extends BasicHttpEntity {
 			throw asRuntimeException(e);
 		}
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

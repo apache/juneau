@@ -17,6 +17,9 @@ import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
 
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.internal.*;
+
 /**
  * A streamed, non-repeatable entity that obtains its content from an {@link InputStream}.
  *
@@ -25,67 +28,93 @@ import java.io.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
+@FluentSetters
 public class StreamEntity extends BasicHttpEntity {
 
-	private final InputStream content;
-	private final long maxLength;
-	private final byte[] cache;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private byte[] byteCache;
+	private String stringCache;
 
 	/**
-	 * Creates a new {@link StreamEntity} builder.
-	 *
-	 * @return A new {@link StreamEntity} builder.
+	 * Constructor.
 	 */
-	public static HttpEntityBuilder<StreamEntity> create() {
-		return new HttpEntityBuilder<>(StreamEntity.class);
+	public StreamEntity() {
+		super();
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The entity builder.
-	 * @throws IOException If stream could not be read.
+	 * @param contentType The entity content type.
+	 * @param content The entity contents.
 	 */
-	public StreamEntity(HttpEntityBuilder<?> builder) throws IOException {
-		super(builder);
-		content = contentOrElse(EMPTY_INPUT_STREAM);
-		cache = builder.cached ? readBytes(content) : null;
-		maxLength = builder.contentLength == -1 && cache != null ? cache.length : builder.contentLength;
+	public StreamEntity(ContentType contentType, InputStream content) {
+		super(contentType, content);
 	}
 
 	/**
-	 * Creates a new {@link StreamEntity} builder initialized with the contents of this entity.
+	 * Copy constructor.
 	 *
-	 * @return A new {@link StreamEntity} builder initialized with the contents of this entity.
+	 * @param copyFrom The bean being copied.
 	 */
-	@Override /* BasicHttpEntity */
-	public HttpEntityBuilder<StreamEntity> copy() {
-		return new HttpEntityBuilder<>(this);
+	protected StreamEntity(StreamEntity copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override
+	public StreamEntity copy() {
+		return new StreamEntity(this);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private InputStream content() {
+		InputStream is = contentOrElse((InputStream)null);
+		if (is == null)
+			throw new RuntimeException("Input stream is null.");
+		return is;
 	}
 
 	@Override /* AbstractHttpEntity */
 	public String asString() throws IOException {
-		return new String(asBytes(), UTF8);
+		if (isCached() && stringCache == null)
+			stringCache = read(content(), getCharset());
+		if (stringCache != null)
+			return stringCache;
+		return read(content());
 	}
 
 	@Override /* AbstractHttpEntity */
 	public byte[] asBytes() throws IOException {
-		return cache == null ? readBytes(content) : cache;
+		if (isCached() && byteCache == null)
+			byteCache = readBytes(content(), getMaxLength());
+		if (byteCache != null)
+			return byteCache;
+		return readBytes(content(), getMaxLength());
 	}
 
 	@Override /* HttpEntity */
 	public boolean isRepeatable() {
-		return cache != null;
+		return isCached();
 	}
 
 	@Override /* HttpEntity */
 	public long getContentLength() {
-		return maxLength;
+		if (isCached())
+			return asSafeBytes().length;
+		return super.getContentLength();
 	}
 
 	@Override /* HttpEntity */
 	public InputStream getContent() throws IOException {
-		return cache == null ? content : new ByteArrayInputStream(cache);
+		if (isCached())
+			return new ByteArrayInputStream(asBytes());
+		return content();
 	}
 
 	/**
@@ -98,17 +127,21 @@ public class StreamEntity extends BasicHttpEntity {
 	public void writeTo(OutputStream out) throws IOException {
 		assertArgNotNull("out", out);
 
-		if (cache != null) {
-			pipe(cache, out, (int)maxLength);
+		if (isCached()) {
+			out.write(asBytes());
 		} else {
 			try (InputStream is = getContent()) {
-				pipe(is, out, maxLength);
+				pipe(is, out, getMaxLength());
 			}
 		}
 	}
 
 	@Override /* HttpEntity */
 	public boolean isStreaming() {
-		return cache == null;
+		return ! isCached();
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

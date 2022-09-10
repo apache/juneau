@@ -15,7 +15,6 @@ package org.apache.juneau.http;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 import static org.apache.juneau.http.HttpResources.*;
-import static org.apache.juneau.internal.CollectionUtils.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
@@ -32,92 +31,87 @@ public class BasicHttpResource_Test {
 	public void a01_basic() throws Exception {
 		File f = File.createTempFile("test", "txt");
 
-		HttpResource x = stringResource((String)null).build();
+		HttpResource x = stringResource((String)null);
 
 		assertNull(x.getContentType());
 		assertBytes(x.getContent()).isNotNull().asString().isEmpty();
 		assertNull(x.getContentEncoding());
 		assertInteger(x.getHeaders().size()).is(0);
 
-		x = stringResource("foo").build();
+		x = stringResource("foo");
 		assertBytes(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
-		x = readerResource(reader("foo")).build();
+		x = readerResource(reader("foo"));
 		assertBytes(x.getContent()).asString().is("foo");
 		assertFalse(x.isRepeatable());
 		assertTrue(x.isStreaming());
 
-		x = byteArrayResource("foo".getBytes()).build();
+		x = byteArrayResource("foo".getBytes());
 		assertBytes(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
-		x = streamResource(inputStream("foo")).build();
+		x = streamResource(inputStream("foo"));
 		assertBytes(x.getContent()).asString().is("foo");
 		assertFalse(x.isRepeatable());
 		assertTrue(x.isStreaming());
 
-		x = streamResource(null).build();
-		assertBytes(x.getContent()).isNotNull().asString().isEmpty();
-		assertFalse(x.isRepeatable());
-		assertTrue(x.isStreaming());
-
-		x = fileResource(f).build();
+		x = fileResource(f);
 		assertBytes(x.getContent()).asString().isEmpty();
 		assertTrue(x.isRepeatable());
 		assertFalse(x.isStreaming());
 
-		x = stringResource("foo").cached().build();
+		x = stringResource("foo").setCached();
 		assertBytes(x.getContent()).asString().is("foo");
 		assertBytes(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 
-		x = readerResource(reader("foo")).cached().build();
+		x = readerResource(reader("foo")).setCached();
 		assertBytes(x.getContent()).asString().is("foo");
 		assertBytes(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 
-		x = byteArrayResource("foo".getBytes()).cached().build();
+		x = byteArrayResource("foo".getBytes()).setCached();
 		assertBytes(x.getContent()).asString().is("foo");
 		assertBytes(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 
-		x = streamResource(inputStream("foo")).cached().build();
+		x = streamResource(inputStream("foo")).setCached();
 		assertBytes(x.getContent()).asString().is("foo");
 		assertBytes(x.getContent()).asString().is("foo");
 		assertTrue(x.isRepeatable());
 
-		x = stringResource((String)null).cached().build();
+		x = stringResource((String)null).setCached();
 		assertBytes(x.getContent()).isExists().asString().isEmpty();
 		assertTrue(x.isRepeatable());
 		x.writeTo(new ByteArrayOutputStream());
 
-		x = fileResource(f).cached().build();
+		x = fileResource(f).setCached();
 		assertBytes(x.getContent()).asString().isEmpty();
 		assertTrue(x.isRepeatable());
 		x.writeTo(new ByteArrayOutputStream());
 
-		assertLong(stringResource("foo").build().getContentLength()).is(3l);
-		assertLong(byteArrayResource("foo".getBytes()).build().getContentLength()).is(3l);
-		assertLong(fileResource(f).build().getContentLength()).is(0l);
+		assertLong(stringResource("foo").getContentLength()).is(3l);
+		assertLong(byteArrayResource("foo".getBytes()).getContentLength()).is(3l);
+		assertLong(fileResource(f).getContentLength()).is(0l);
 
-		assertLong(readerResource(reader("foo")).build().getContentLength()).is(-1l);
-		assertLong(readerResource(reader("foo")).contentLength(3).build().getContentLength()).is(3l);
+		assertLong(readerResource(reader("foo")).getContentLength()).is(-1l);
+		assertLong(readerResource(reader("foo")).setContentLength(3).getContentLength()).is(3l);
 
-		x = stringResource("foo", contentType("text/plain")).contentEncoding("identity").build();
+		x = stringResource("foo", contentType("text/plain")).setContentEncoding("identity");
 		assertString(x.getContentType().getValue()).is("text/plain");
 		assertString(x.getContentEncoding().getValue()).is("identity");
 
-		x = stringResource("foo", null).contentEncoding((String)null).build();
+		x = stringResource("foo", null).setContentEncoding((String)null);
 		assertObject(x.getContentType()).isNull();
 		assertObject(x.getContentEncoding()).isNull();
 	}
 
 	@Test
 	public void a02_header_String_Object() throws Exception {
-		HeaderList x = stringResource("foo").header("Foo","bar").header("Foo","baz").header(null,"bar").header("foo",null).build().getHeaders();
+		HeaderList x = stringResource("foo").addHeader("Foo","bar").addHeader("Foo","baz").addHeader(null,"bar").addHeader("foo",null).getHeaders();
 		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
 		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
 		assertOptional(x.getFirst("Bar")).isNull();
@@ -127,7 +121,7 @@ public class BasicHttpResource_Test {
 
 	@Test
 	public void a03_header_Header() throws Exception {
-		HeaderList x = stringResource("foo").header(null).header(header("Foo","bar")).header(header("Foo","baz")).header(header("Bar",null)).header(null).build().getHeaders();
+		HeaderList x = stringResource("foo").addHeaders(header("Foo","bar")).addHeaders(header("Foo","baz")).addHeaders(header("Bar",null)).getHeaders();
 		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
 		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
 		assertObject(x.getFirst("Bar").get().getValue()).isNull();
@@ -137,7 +131,7 @@ public class BasicHttpResource_Test {
 
 	@Test
 	public void a04_headers_List() throws Exception {
-		HeaderList x = stringResource("foo").headers(alist(header("Foo","bar"),header("Foo","baz"),header("Bar",null),null)).build().getHeaders();
+		HeaderList x = stringResource("foo").addHeaders(header("Foo","bar"),header("Foo","baz"),header("Bar",null),null).getHeaders();
 		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
 		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
 		assertObject(x.getFirst("Bar").get().getValue()).isNull();
@@ -147,7 +141,7 @@ public class BasicHttpResource_Test {
 
 	@Test
 	public void a05_headers_array() throws Exception {
-		HeaderList x = stringResource("foo").headers(header("Foo","bar"),header("Foo","baz"),header("Bar",null),null).build().getHeaders();
+		HeaderList x = stringResource("foo").addHeaders(header("Foo","bar"),header("Foo","baz"),header("Bar",null),null).getHeaders();
 		assertString(x.getFirst("Foo").get().toString()).is("Foo: bar");
 		assertString(x.getLast("Foo").get().toString()).is("Foo: baz");
 		assertObject(x.getFirst("Bar").get().getValue()).isNull();
@@ -158,33 +152,33 @@ public class BasicHttpResource_Test {
 
 	@Test
 	public void a06_chunked() throws Exception {
-		StringResource x1 = stringResource("foo").chunked().build();
+		StringResource x1 = (StringResource) stringResource("foo").setChunked();
 		assertBoolean(x1.isChunked()).isTrue();
-		StringResource x2 = stringResource("foo").build();
+		StringResource x2 = stringResource("foo");
 		assertBoolean(x2.isChunked()).isFalse();
 	}
 
 	@Test
 	public void a07_chunked_boolean() throws Exception {
-		StringResource x1 = stringResource("foo").chunked(true).build();
+		StringResource x1 = (StringResource) stringResource("foo").setChunked(true);
 		assertBoolean(x1.isChunked()).isTrue();
-		StringResource x2 = stringResource("foo").chunked(false).build();
+		StringResource x2 = (StringResource) stringResource("foo").setChunked(false);
 		assertBoolean(x2.isChunked()).isFalse();
 	}
 
 	@Test
 	public void a08_contentType_String() throws Exception {
-		StringResource x1 = stringResource("foo").contentType("text/plain").build();
+		StringResource x1 = (StringResource) stringResource("foo").setContentType("text/plain");
 		assertString(x1.getContentType().getValue()).is("text/plain");
-		StringResource x2 = stringResource("foo").contentType((String)null).build();
+		StringResource x2 = (StringResource) stringResource("foo").setContentType((String)null);
 		assertObject(x2.getContentType()).isNull();
 	}
 
 	@Test
 	public void a09_contentEncoding_String() throws Exception {
-		StringResource x1 = stringResource("foo").contentEncoding("identity").build();
+		StringResource x1 = (StringResource) stringResource("foo").setContentEncoding("identity");
 		assertString(x1.getContentEncoding().getValue()).is("identity");
-		StringResource x2 = stringResource("foo").contentEncoding((String)null).build();
+		StringResource x2 = (StringResource) stringResource("foo").setContentEncoding((String)null);
 		assertObject(x2.getContentEncoding()).isNull();
 	}
 

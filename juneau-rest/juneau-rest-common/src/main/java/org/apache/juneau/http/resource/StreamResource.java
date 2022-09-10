@@ -14,6 +14,7 @@ package org.apache.juneau.http.resource;
 
 import java.io.*;
 import org.apache.juneau.http.entity.*;
+import org.apache.juneau.http.header.*;
 
 /**
  * A streamed, non-repeatable resource that obtains its content from an {@link InputStream}.
@@ -25,31 +26,38 @@ import org.apache.juneau.http.entity.*;
  */
 public class StreamResource extends BasicResource {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Creates a new {@link StreamResource} builder.
-	 *
-	 * @return A new {@link StreamResource} builder.
+	 * Constructor.
 	 */
-	public static HttpResourceBuilder<StreamResource> create() {
-		return new HttpResourceBuilder<>(StreamResource.class, StreamEntity.class);
+	public StreamResource() {
+		super(new StreamEntity());
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The resource builder.
+	 * @param contentType The entity content type.
+	 * @param contents The entity contents.
 	 */
-	public StreamResource(HttpResourceBuilder<?> builder) {
-		super(builder);
+	public StreamResource(ContentType contentType, InputStream contents) {
+		super(new StreamEntity(contentType, contents));
 	}
 
 	/**
-	 * Creates a new {@link StreamResource} builder initialized with the contents of this entity.
+	 * Copy constructor.
 	 *
-	 * @return A new {@link StreamResource} builder initialized with the contents of this entity.
+	 * @param copyFrom The bean being copied.
 	 */
-	@Override /* BasicResource */
-	public HttpResourceBuilder<StreamResource> copy() {
-		return new HttpResourceBuilder<>(this);
+	protected StreamResource(StreamResource copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override
+	public StreamResource copy() {
+		return new StreamResource(this);
 	}
 }

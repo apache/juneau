@@ -51,62 +51,62 @@ public class SerializedHttpEntity_Test {
 
 	@Test
 	public void a01_basic() throws Exception {
-		serializedEntity(ABean.get(),JsonSerializer.DEFAULT).build().assertString().is("{\"a\":1,\"b\":\"foo\"}");
-		serializedEntity(()->ABean.get(),JsonSerializer.DEFAULT).build().assertString().is("{\"a\":1,\"b\":\"foo\"}");
-		serializedEntity(ABean.get(),null).build().assertString().is("{a:1,b:'foo'}");
-		serializedEntity(null,JsonSerializer.DEFAULT).build().assertString().is("null");
+		serializedEntity(ABean.get(),JsonSerializer.DEFAULT).assertString().is("{\"a\":1,\"b\":\"foo\"}");
+		serializedEntity(()->ABean.get(),JsonSerializer.DEFAULT).assertString().is("{\"a\":1,\"b\":\"foo\"}");
+		serializedEntity(ABean.get(),null).assertString().is("{a:1,b:'foo'}");
+		serializedEntity(null,JsonSerializer.DEFAULT).assertString().is("null");
 	}
 
 	@Test
 	public void a02_schema() throws Exception {
-		serializedEntity(alist("foo","bar"),OpenApiSerializer.DEFAULT).schema(T_ARRAY_PIPES).build().assertString().is("foo|bar");
+		serializedEntity(alist("foo","bar"),OpenApiSerializer.DEFAULT).setSchema(T_ARRAY_PIPES).assertString().is("foo|bar");
 	}
 
 	@Test
 	public void a03_serializer_streaming() throws Exception {
-		serializedEntity(ABean.get(),MsgPackSerializer.DEFAULT).build().assertBytes().asSpacedHex().is("82 A1 61 01 A1 62 A3 66 6F 6F");
+		serializedEntity(ABean.get(),MsgPackSerializer.DEFAULT).assertBytes().asSpacedHex().is("82 A1 61 01 A1 62 A3 66 6F 6F");
 	}
 
 	@Test
 	public void a04_serializer_bad() throws Exception {
-		assertThrown(()->serializedEntity(null,OpenApiSerializer.DEFAULT).schema(schema().required().build()).build().asString()).asMessages().isContains("Required value not provided.");
+		assertThrown(()->serializedEntity(null,OpenApiSerializer.DEFAULT).setSchema(schema().required().build()).asString()).asMessages().isContains("Required value not provided.");
 	}
 
 	@Test
 	public void a05_writeTo() throws Exception {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		serializedEntity("foo", null).build().writeTo(baos);
+		serializedEntity("foo", null).writeTo(baos);
 		assertBytes(baos.toByteArray()).asString().is("foo");
 	}
 
 	@Test
 	public void a06_isRepeatable() throws Exception {
-		assertBoolean(serializedEntity(ABean.get(),null).build().isRepeatable()).isTrue();
+		assertBoolean(serializedEntity(ABean.get(),null).isRepeatable()).isTrue();
 	}
 
 	@Test
 	public void a07_getContentLength() throws Exception {
-		assertLong(serializedEntity(ABean.get(),null).build().getContentLength()).is(-1l);
+		assertLong(serializedEntity(ABean.get(),null).getContentLength()).is(-1l);
 	}
 
 	@Test
 	public void a08_getContent() throws Exception {
-		assertBytes(serializedEntity("foo",null).build().getContent()).asString().is("foo");
+		assertBytes(serializedEntity("foo",null).getContent()).asString().is("foo");
 	}
 
 	@Test
 	public void a09_chunked() throws Exception {
-		checkHeaderClient("Transfer-Encoding").post("/",serializedEntity(ABean.get(),null).chunked().build()).run().assertContent("['chunked']");
+		checkHeaderClient("Transfer-Encoding").post("/",serializedEntity(ABean.get(),null).setChunked()).run().assertContent("['chunked']");
 	}
 
 	@Test
 	public void a10_contentEncoding() throws Exception {
-		checkHeaderClient("Content-Encoding").post("/",serializedEntity(ABean.get(),null).contentEncoding("identity").build()).run().assertContent("['identity']");
+		checkHeaderClient("Content-Encoding").post("/",serializedEntity(ABean.get(),null).setContentEncoding("identity")).run().assertContent("['identity']");
 	}
 
 	@Test
 	public void a12_contentType() throws Exception {
-		checkHeaderClient("Content-Type").post("/",serializedEntity(reader("foo"),null).contentType("text/foo").build()).run().assertContent("['text/foo']");
+		checkHeaderClient("Content-Type").post("/",serializedEntity(reader("foo"),null).setContentType("text/foo")).run().assertContent("['text/foo']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

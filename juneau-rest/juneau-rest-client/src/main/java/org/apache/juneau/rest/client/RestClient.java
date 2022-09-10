@@ -6828,7 +6828,7 @@ public class RestClient extends BeanContextable implements HttpClient, Closeable
 			}
 			if (body instanceof Reader || body instanceof InputStream)
 				return req.header(ContentType.APPLICATION_FORM_URLENCODED).content(body);
-			return req.content(serializedEntity(body, urlEncodingSerializer, null).build());
+			return req.content(serializedEntity(body, urlEncodingSerializer, null));
 		} catch (IOException e) {
 			throw new RestCallException(null, e, "Could not read form post body.");
 		}

@@ -334,7 +334,7 @@ public class BasicHttpResponse implements HttpResponse {
 	 */
 	@FluentSetter
 	public BasicHttpResponse setContent(String value) {
-		return setContent(stringEntity(value).build());
+		return setContent(stringEntity(value));
 	}
 
 	/**
@@ -491,7 +491,7 @@ public class BasicHttpResponse implements HttpResponse {
 	public HttpEntity getEntity() {
 		// Constructing a StringEntity is somewhat expensive, so don't create it unless it's needed.
 		if (content == null)
-			content = stringEntity(getStatusLine().getReasonPhrase()).build();
+			content = stringEntity(getStatusLine().getReasonPhrase());
 		return content;
 	}
 

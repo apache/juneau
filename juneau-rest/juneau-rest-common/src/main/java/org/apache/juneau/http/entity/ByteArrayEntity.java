@@ -13,9 +13,11 @@
 package org.apache.juneau.http.entity;
 
 import static org.apache.juneau.internal.ArgUtils.*;
-import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
+
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.internal.*;
 
 /**
  * A repeatable entity that obtains its content from a byte array.
@@ -25,50 +27,66 @@ import java.io.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
+@FluentSetters
 public class ByteArrayEntity extends BasicHttpEntity {
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private static final byte[] EMPTY = new byte[0];
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Creates a new {@link ByteArrayEntity} builder.
-	 *
-	 * @return A new {@link ByteArrayEntity} builder.
+	 * Constructor.
 	 */
-	public static HttpEntityBuilder<ByteArrayEntity> create() {
-		return new HttpEntityBuilder<>(ByteArrayEntity.class);
+	public ByteArrayEntity() {
+		super();
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The entity builder.
+	 * @param contentType The entity content type.
+	 * @param contents The entity contents.
 	 */
-	public ByteArrayEntity(HttpEntityBuilder<?> builder) {
-		super(builder);
+	public ByteArrayEntity(ContentType contentType, byte[] contents) {
+		super(contentType, contents);
 	}
 
 	/**
-	 * Creates a new {@link ByteArrayEntity} builder initialized with the contents of this entity.
+	 * Copy constructor.
 	 *
-	 * @return A new {@link ByteArrayEntity} builder initialized with the contents of this entity.
+	 * @param copyFrom The bean being copied.
 	 */
-	@Override /* BasicHttpEntity */
-	public HttpEntityBuilder<ByteArrayEntity> copy() {
-		return new HttpEntityBuilder<>(this);
+	protected ByteArrayEntity(ByteArrayEntity copyFrom) {
+		super(copyFrom);
 	}
 
-	private byte[] bytes() {
+	@Override
+	public ByteArrayEntity copy() {
+		return new ByteArrayEntity(this);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private byte[] content() {
 		return contentOrElse(EMPTY);
 	}
 
 	@Override /* AbstractHttpEntity */
 	public String asString() throws IOException {
-		return new String(bytes(), UTF8);
+		return new String(content(), getCharset());
 	}
 
 	@Override /* AbstractHttpEntity */
 	public byte[] asBytes() throws IOException {
-		return bytes();
+		return content();
 	}
 
 	@Override /* HttpEntity */
@@ -78,17 +96,21 @@ public class ByteArrayEntity extends BasicHttpEntity {
 
 	@Override /* HttpEntity */
 	public long getContentLength() {
-		return isSupplied() ? super.getContentLength() : bytes().length;
+		return isSupplied() ? super.getContentLength() : content().length;
 	}
 
 	@Override /* HttpEntity */
 	public InputStream getContent() throws IOException {
-		return new ByteArrayInputStream(bytes());
+		return new ByteArrayInputStream(content());
 	}
 
 	@Override /* HttpEntity */
 	public void writeTo(OutputStream out) throws IOException {
 		assertArgNotNull("out", out);
-		out.write(bytes());
+		out.write(content());
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

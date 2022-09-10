@@ -14,6 +14,7 @@ package org.apache.juneau.http.resource;
 
 import java.io.*;
 import org.apache.juneau.http.entity.*;
+import org.apache.juneau.http.header.*;
 
 /**
  * A repeatable resource that obtains its content from a {@link File}.
@@ -25,31 +26,38 @@ import org.apache.juneau.http.entity.*;
  */
 public class FileResource extends BasicResource {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Creates a new {@link FileResource} builder.
-	 *
-	 * @return A new {@link FileResource} builder.
+	 * Constructor.
 	 */
-	public static HttpResourceBuilder<FileResource> create() {
-		return new HttpResourceBuilder<>(FileResource.class, FileEntity.class);
+	public FileResource() {
+		super(new FileEntity());
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The resource builder.
+	 * @param contentType The entity content type.
+	 * @param contents The entity contents.
 	 */
-	public FileResource(HttpResourceBuilder<?> builder) {
-		super(builder);
+	public FileResource(ContentType contentType, File contents) {
+		super(new FileEntity(contentType, contents));
 	}
 
 	/**
-	 * Creates a new {@link FileResource} builder initialized with the contents of this entity.
+	 * Copy constructor.
 	 *
-	 * @return A new {@link FileResource} builder initialized with the contents of this entity.
+	 * @param copyFrom The bean being copied.
 	 */
-	@Override /* BasicResource */
-	public HttpResourceBuilder<FileResource> copy() {
-		return new HttpResourceBuilder<>(this);
+	protected FileResource(FileResource copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override
+	public FileResource copy() {
+		return new FileResource(this);
 	}
 }

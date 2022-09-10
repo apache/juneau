@@ -14,11 +14,10 @@ package org.apache.juneau.http.entity;
 
 import static org.apache.juneau.internal.ArgUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
-import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.io.*;
-import java.nio.charset.Charset;
 
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -29,50 +28,72 @@ import org.apache.juneau.internal.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
+@FluentSetters
 public class StringEntity extends BasicHttpEntity {
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Static
+	//-----------------------------------------------------------------------------------------------------------------
 
 	private static final String EMPTY = "";
 
-	private final byte[] cache;
-	private final Charset charset;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private byte[] byteCache;
 
 	/**
-	 * Creates a new {@link StringEntity} builder.
-	 *
-	 * @return A new {@link StringEntity} builder.
+	 * Constructor.
 	 */
-	public static HttpEntityBuilder<StringEntity> create() {
-		return new HttpEntityBuilder<>(StringEntity.class);
+	public StringEntity() {
+		super();
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The entity builder.
+	 * @param contentType The entity content type.
+	 * @param content The entity contents.
 	 */
-	public StringEntity(HttpEntityBuilder<?> builder) {
-		super(builder);
-		charset = firstNonNull(builder.charset, UTF8);
-		cache = builder.cached ? string().getBytes(charset) : null;
+	public StringEntity(ContentType contentType, String content) {
+		super(contentType, content);
 	}
 
 	/**
-	 * Creates a new {@link StringEntity} builder initialized with the contents of this entity.
+	 * Copy constructor.
 	 *
-	 * @return A new {@link StringEntity} builder initialized with the contents of this entity.
+	 * @param copyFrom The bean being copied.
 	 */
-	@Override /* BasicHttpEntity */
-	public HttpEntityBuilder<StringEntity> copy() {
-		return new HttpEntityBuilder<>(this);
-	}
-
-	private String string() {
-		return contentOrElse(EMPTY);
+	protected StringEntity(StringEntity copyFrom) {
+		super(copyFrom);
 	}
 
 	@Override
+	public StringEntity copy() {
+		return new StringEntity(this);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private String content() {
+		return contentOrElse(EMPTY);
+	}
+
+	@Override /* AbstractHttpEntity */
+	public String asString() throws IOException {
+		return content();
+	}
+
+	@Override /* AbstractHttpEntity */
 	public byte[] asBytes() throws IOException {
-		return cache == null ? string().getBytes() : cache;
+		if (isCached() && byteCache == null)
+			byteCache = content().getBytes(getCharset());
+		if (byteCache != null)
+			return byteCache;
+		return content().getBytes(getCharset());
 	}
 
 	@Override /* HttpEntity */
@@ -82,13 +103,13 @@ public class StringEntity extends BasicHttpEntity {
 
 	@Override /* HttpEntity */
 	public long getContentLength() {
-		if (cache != null)
-			return cache.length;
+		if (isCached())
+			return asSafeBytes().length;
 		long l = super.getContentLength();
 		if (l != -1 || isSupplied())
 			return l;
-		String s = string();
-		if (charset == UTF8)
+		String s = content();
+		if (getCharset() == UTF8)
 			for (int i = 0; i < s.length(); i++)
 				if (s.charAt(i) > 127)
 					return -1;
@@ -97,22 +118,19 @@ public class StringEntity extends BasicHttpEntity {
 
 	@Override /* HttpEntity */
 	public InputStream getContent() throws IOException {
-		if (cache != null)
-			return new ByteArrayInputStream(cache);
-		String s = string();
-		if (s == null)
-			return IOUtils.EMPTY_INPUT_STREAM;
-		return new ReaderInputStream(new StringReader(s), charset);
+		if (isCached())
+			return new ByteArrayInputStream(asBytes());
+		return new ReaderInputStream(new StringReader(content()), getCharset());
 	}
 
 	@Override /* HttpEntity */
 	public void writeTo(OutputStream out) throws IOException {
 		assertArgNotNull("out", out);
-		if (cache != null) {
-			out.write(cache);
+		if (isCached()) {
+			out.write(asBytes());
 		} else {
-			OutputStreamWriter osw = new OutputStreamWriter(out, charset);
-			osw.write(string());
+			OutputStreamWriter osw = new OutputStreamWriter(out, getCharset());
+			osw.write(content());
 			osw.flush();
 		}
 	}
@@ -121,5 +139,9 @@ public class StringEntity extends BasicHttpEntity {
 	public boolean isStreaming() {
 		return false;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }
 

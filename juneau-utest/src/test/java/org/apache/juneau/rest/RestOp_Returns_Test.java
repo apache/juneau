@@ -19,6 +19,7 @@ import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
 
+import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.dto.swagger.*;
@@ -124,27 +125,27 @@ public class RestOp_Returns_Test {
 	public static class B {
 		@RestGet
 		public HttpResource a() throws Exception {
-			return stringResource("foo").build();
+			return stringResource("foo");
 		}
 		@RestGet
 		public HttpResource b() throws Exception {
-			return readerResource(null).header("Foo", "Bar").build();
+			return readerResource(new StringReader("foo")).setHeader("Foo", "Bar");
 		}
 		@RestGet
 		public HttpResource c() throws Exception {
-			return readerResource(null).contentType("application/json").build();
+			return readerResource(new StringReader("foo")).setContentType("application/json");
 		}
 		@RestGet
 		public HttpResource d(RestRequest req) throws Exception {
-			return stringResource(()->req.getVarResolverSession().resolve("$RQ{foo}")).build();
+			return stringResource(()->req.getVarResolverSession().resolve("$RQ{foo}"));
 		}
 		@RestGet
 		public HttpResource e() throws Exception {
-			return streamResource(inputStream("foo")).build();
+			return streamResource(inputStream("foo"));
 		}
 		@RestGet
 		public HttpResource f() throws Exception {
-			return readerResource(reader("foo")).build();
+			return readerResource(reader("foo"));
 		}
 	}
 

@@ -39,8 +39,8 @@ public class HttpEntities {
 	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @return A new {@link ByteArrayEntity} builder.
 	 */
-	public static final HttpEntityBuilder<ByteArrayEntity> byteArrayEntity(byte[] content) {
-		return ByteArrayEntity.create().content(content);
+	public static final ByteArrayEntity byteArrayEntity(byte[] content) {
+		return (ByteArrayEntity) new ByteArrayEntity().setContent(content);
 	}
 
 	/**
@@ -50,8 +50,8 @@ public class HttpEntities {
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link ByteArrayEntity} builder.
 	 */
-	public static final HttpEntityBuilder<ByteArrayEntity> byteArrayEntity(byte[] content, ContentType contentType) {
-		return ByteArrayEntity.create().content(content).contentType(contentType);
+	public static final ByteArrayEntity byteArrayEntity(byte[] content, ContentType contentType) {
+		return (ByteArrayEntity) new ByteArrayEntity().setContent(content).setContentType(contentType);
 	}
 
 	/**
@@ -63,8 +63,8 @@ public class HttpEntities {
 	 * @param content The entity content supplier.  Can be <jk>null</jk>.
 	 * @return A new {@link ByteArrayEntity} builder.
 	 */
-	public static final HttpEntityBuilder<ByteArrayEntity> byteArrayEntity(Supplier<byte[]> content) {
-		return ByteArrayEntity.create().content(content);
+	public static final ByteArrayEntity byteArrayEntity(Supplier<byte[]> content) {
+		return (ByteArrayEntity) new ByteArrayEntity().setContent(content);
 	}
 
 	/**
@@ -74,8 +74,8 @@ public class HttpEntities {
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link ByteArrayEntity} builder.
 	 */
-	public static final HttpEntityBuilder<ByteArrayEntity> byteArrayEntity(Supplier<byte[]> content, ContentType contentType) {
-		return ByteArrayEntity.create().content(content).contentType(contentType);
+	public static final ByteArrayEntity byteArrayEntity(Supplier<byte[]> content, ContentType contentType) {
+		return (ByteArrayEntity) new ByteArrayEntity().setContent(content).setContentType(contentType);
 	}
 
 	/**
@@ -87,8 +87,8 @@ public class HttpEntities {
 	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @return A new {@link FileEntity} builder.
 	 */
-	public static final HttpEntityBuilder<FileEntity> fileEntity(File content) {
-		return FileEntity.create().content(content);
+	public static final FileEntity fileEntity(File content) {
+		return (FileEntity) new FileEntity().setContent(content);
 	}
 
 	/**
@@ -98,8 +98,8 @@ public class HttpEntities {
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link FileEntity} builder.
 	 */
-	public static final HttpEntityBuilder<FileEntity> fileEntity(File content, ContentType contentType) {
-		return FileEntity.create().content(content).contentType(contentType);
+	public static final FileEntity fileEntity(File content, ContentType contentType) {
+		return (FileEntity) new FileEntity().setContent(content).setContentType(contentType);
 	}
 
 	/**
@@ -108,8 +108,8 @@ public class HttpEntities {
 	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @return A new {@link ReaderEntity} builder.
 	 */
-	public static final HttpEntityBuilder<ReaderEntity> readerEntity(Reader content) {
-		return ReaderEntity.create().content(content);
+	public static final ReaderEntity readerEntity(Reader content) {
+		return (ReaderEntity) new ReaderEntity().setContent(content);
 	}
 
 	/**
@@ -119,8 +119,8 @@ public class HttpEntities {
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link ReaderEntity} builder.
 	 */
-	public static final HttpEntityBuilder<ReaderEntity> readerEntity(Reader content, ContentType contentType) {
-		return ReaderEntity.create().content(content).contentType(contentType);
+	public static final ReaderEntity readerEntity(Reader content, ContentType contentType) {
+		return (ReaderEntity) new ReaderEntity().setContent(content).setContentType(contentType);
 	}
 
 	/**
@@ -134,8 +134,8 @@ public class HttpEntities {
 	 * 	<br>If <jk>null</jk>, POJO will be converted to a string using {@link Object#toString()}.
 	 * @return A new {@link SerializedEntity} object.
 	 */
-	public static final SerializedEntityBuilder<SerializedEntity> serializedEntity(Object content, Serializer serializer) {
-		return SerializedEntity.create().content(content).serializer(serializer);
+	public static final SerializedEntity serializedEntity(Object content, Serializer serializer) {
+		return ((SerializedEntity) new SerializedEntity().setContent(content)).setSerializer(serializer);
 	}
 
 	/**
@@ -149,8 +149,8 @@ public class HttpEntities {
 	 * 	<br>If <jk>null</jk>, POJO will be converted to a string using {@link Object#toString()}.
 	 * @return A new {@link SerializedEntity} object.
 	 */
-	public static final SerializedEntityBuilder<SerializedEntity> serializedEntity(Supplier<?> content, Serializer serializer) {
-		return SerializedEntity.create().content(content).serializer(serializer);
+	public static final SerializedEntity serializedEntity(Supplier<?> content, Serializer serializer) {
+		return ((SerializedEntity) new SerializedEntity().setContent(content)).setSerializer(serializer);
 	}
 
 	/**
@@ -166,8 +166,8 @@ public class HttpEntities {
 	 * 	Optional HTTP-part schema for providing instructionst to the serializer on the format of the entity.
 	 * @return A new {@link SerializedEntity} object.
 	 */
-	public static final SerializedEntityBuilder<SerializedEntity> serializedEntity(Object content, Serializer serializer, HttpPartSchema 	schema) {
-		return SerializedEntity.create().content(content).serializer(serializer).schema(schema);
+	public static final SerializedEntity serializedEntity(Object content, Serializer serializer, HttpPartSchema schema) {
+		return ((SerializedEntity) new SerializedEntity().setContent(content)).setSerializer(serializer).setSchema(schema);
 	}
 
 	/**
@@ -183,8 +183,8 @@ public class HttpEntities {
 	 * 	Optional HTTP-part schema for providing instructionst to the serializer on the format of the entity.
 	 * @return A new {@link SerializedEntity} object.
 	 */
-	public static final SerializedEntityBuilder<SerializedEntity> serializedEntity(Supplier<?> content, Serializer serializer, HttpPartSchema schema) {
-		return SerializedEntity.create().content(content).serializer(serializer).schema(schema);
+	public static final SerializedEntity serializedEntity(Supplier<?> content, Serializer serializer, HttpPartSchema schema) {
+		return ((SerializedEntity) new SerializedEntity().setContent(content)).setSerializer(serializer).setSchema(schema);
 	}
 
 	/**
@@ -196,8 +196,8 @@ public class HttpEntities {
 	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @return A new {@link StreamEntity} builder.
 	 */
-	public static final HttpEntityBuilder<StreamEntity> streamEntity(InputStream content) {
-		return StreamEntity.create().content(content);
+	public static final StreamEntity streamEntity(InputStream content) {
+		return (StreamEntity) new StreamEntity().setContent(content);
 	}
 
 	/**
@@ -208,8 +208,8 @@ public class HttpEntities {
 	 * @param length The content length, or <c>-1</c> if not known.
 	 * @return A new {@link StreamEntity} builder.
 	 */
-	public static final HttpEntityBuilder<StreamEntity> streamEntity(InputStream content, long length, ContentType contentType) {
-		return StreamEntity.create().content(content).contentLength(length).contentType(contentType);
+	public static final StreamEntity streamEntity(InputStream content, long length, ContentType contentType) {
+		return (StreamEntity) new StreamEntity().setContent(content).setContentLength(length).setContentType(contentType);
 	}
 
 	/**
@@ -218,29 +218,8 @@ public class HttpEntities {
 	 * @param content The entity content.  Can be <jk>null</jk>.
 	 * @return A new {@link StringEntity} builder.
 	 */
-	public static final HttpEntityBuilder<StringEntity> stringEntity(String content) {
-		return StringEntity.create().content(content);
-	}
-
-	/**
-	 * Creates a new builder for a {@link StringEntity} builder.
-	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
-	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
-	 * @return A new {@link StringEntity} builder.
-	 */
-	public static final HttpEntityBuilder<StringEntity> stringEntity(String content, ContentType contentType) {
-		return StringEntity.create().content(content).contentType(contentType);
-	}
-
-	/**
-	 * Creates a new builder for a {@link StringEntity} builder.
-	 *
-	 * @param content The entity content.  Can be <jk>null</jk>.
-	 * @return A new {@link StringEntity} builder.
-	 */
-	public static final HttpEntityBuilder<StringEntity> stringEntity(Supplier<String> content) {
-		return StringEntity.create().content(content);
+	public static final StringEntity stringEntity(String content) {
+		return (StringEntity) new StringEntity().setContent(content);
 	}
 
 	/**
@@ -250,7 +229,28 @@ public class HttpEntities {
 	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
 	 * @return A new {@link StringEntity} builder.
 	 */
-	public static final HttpEntityBuilder<StringEntity> stringEntity(Supplier<String> content, ContentType contentType) {
-		return StringEntity.create().content(content).contentType(contentType);
+	public static final StringEntity stringEntity(String content, ContentType contentType) {
+		return (StringEntity) new StringEntity().setContent(content).setContentType(contentType);
+	}
+
+	/**
+	 * Creates a new builder for a {@link StringEntity} builder.
+	 *
+	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @return A new {@link StringEntity} builder.
+	 */
+	public static final StringEntity stringEntity(Supplier<String> content) {
+		return (StringEntity) new StringEntity().setContent(content);
+	}
+
+	/**
+	 * Creates a new builder for a {@link StringEntity} builder.
+	 *
+	 * @param content The entity content.  Can be <jk>null</jk>.
+	 * @param contentType The entity content type, or <jk>null</jk> if not specified.
+	 * @return A new {@link StringEntity} builder.
+	 */
+	public static final StringEntity stringEntity(Supplier<String> content, ContentType contentType) {
+		return (StringEntity) new StringEntity().setContent(content).setContentType(contentType);
 	}
 }

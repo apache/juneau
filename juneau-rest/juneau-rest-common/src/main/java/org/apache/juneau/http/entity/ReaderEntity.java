@@ -14,11 +14,10 @@ package org.apache.juneau.http.entity;
 
 import static org.apache.juneau.internal.ArgUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
-import static org.apache.juneau.internal.ObjectUtils.*;
 
 import java.io.*;
-import java.nio.charset.*;
 
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
 
 /**
@@ -29,69 +28,93 @@ import org.apache.juneau.internal.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
+@FluentSetters
 public class ReaderEntity extends BasicHttpEntity {
 
-	private final Reader content;
-	private final long contentLength;
-	private final Charset charset;
-	private final byte[] cache;
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private byte[] byteCache;
+	private String stringCache;
 
 	/**
-	 * Creates a new {@link ReaderEntity} builder.
-	 *
-	 * @return A new {@link ReaderEntity} builder.
+	 * Constructor.
 	 */
-	public static HttpEntityBuilder<ReaderEntity> create() {
-		return new HttpEntityBuilder<>(ReaderEntity.class);
+	public ReaderEntity() {
+		super();
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The entity builder.
-	 * @throws IOException If reader could not be read.
+	 * @param contentType The entity content type.
+	 * @param content The entity contents.
 	 */
-	public ReaderEntity(HttpEntityBuilder<?> builder) throws IOException {
-		super(builder);
-		content = contentOrElse(EMPTY_READER);
-		charset = firstNonNull(builder.charset, UTF8);
-		cache = builder.cached ? readBytes(this.content) : null;
-		contentLength = builder.contentLength == -1 && cache != null ? cache.length : builder.contentLength;
+	public ReaderEntity(ContentType contentType, Reader content) {
+		super(contentType, content);
 	}
 
 	/**
-	 * Creates a new {@link ReaderEntity} builder initialized with the contents of this entity.
+	 * Copy constructor.
 	 *
-	 * @return A new {@link ReaderEntity} builder initialized with the contents of this entity.
+	 * @param copyFrom The bean being copied.
 	 */
-	@Override /* BasicHttpEntity */
-	public HttpEntityBuilder<ReaderEntity> copy() {
-		return new HttpEntityBuilder<>(this);
+	protected ReaderEntity(ReaderEntity copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override
+	public ReaderEntity copy() {
+		return new ReaderEntity(this);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Other methods
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private Reader content() {
+		Reader r = contentOrElse((Reader)null);
+		if (r == null)
+			throw new RuntimeException("Reader is null.");
+		return r;
 	}
 
 	@Override /* AbstractHttpEntity */
 	public String asString() throws IOException {
-		return cache == null ? read(content) : new String(cache, UTF8);
+		if (isCached() && stringCache == null)
+			stringCache = read(content(), getMaxLength());
+		if (stringCache != null)
+			return stringCache;
+		return read(content());
 	}
 
 	@Override /* AbstractHttpEntity */
 	public byte[] asBytes() throws IOException {
-		return cache == null ? asString().getBytes(UTF8) : cache;
+		if (isCached() && byteCache == null)
+			byteCache = readBytes(content());
+		if (byteCache != null)
+			return byteCache;
+		return readBytes(content());
 	}
 
 	@Override /* HttpEntity */
 	public boolean isRepeatable() {
-		return cache != null;
+		return isCached();
 	}
 
 	@Override /* HttpEntity */
 	public long getContentLength() {
-		return contentLength;
+		if (isCached())
+			return asSafeBytes().length;
+		return super.getContentLength();
 	}
 
 	@Override /* HttpEntity */
 	public InputStream getContent() throws IOException {
-		return cache == null ? new ReaderInputStream(content, charset) : new ByteArrayInputStream(cache);
+		if (isCached())
+			return new ByteArrayInputStream(asBytes());
+		return new ReaderInputStream(content(), getCharset());
 	}
 
 	/**
@@ -104,11 +127,11 @@ public class ReaderEntity extends BasicHttpEntity {
 	public void writeTo(OutputStream out) throws IOException {
 		assertArgNotNull("out", out);
 
-		if (cache != null) {
-			out.write(cache);
+		if (isCached()) {
+			out.write(asBytes());
 		} else {
-			OutputStreamWriter osw = new OutputStreamWriter(out, charset);
-			pipe(content, osw);
+			OutputStreamWriter osw = new OutputStreamWriter(out, getCharset());
+			pipe(content(), osw);
 			osw.flush();
 		}
 		out.flush();
@@ -116,6 +139,10 @@ public class ReaderEntity extends BasicHttpEntity {
 
 	@Override /* HttpEntity */
 	public boolean isStreaming() {
-		return cache == null;
+		return ! isCached();
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

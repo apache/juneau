@@ -1925,18 +1925,18 @@ public class RestRequest extends BeanSession implements HttpUriRequest, Configur
 					}
 				}
 				else if (input2 instanceof Reader)
-					entity = readerEntity((Reader)input2, getRequestContentType(TEXT_PLAIN)).build();
+					entity = readerEntity((Reader)input2, getRequestContentType(TEXT_PLAIN));
 				else if (input2 instanceof InputStream)
-					entity = streamEntity((InputStream)input2, -1, getRequestContentType(ContentType.APPLICATION_OCTET_STREAM)).build();
+					entity = streamEntity((InputStream)input2, -1, getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));
 				else if (serializer != null)
-					entity = serializedEntity(input2, serializer, contentSchema).contentType(contentType).build();
+					entity = serializedEntity(input2, serializer, contentSchema).setContentType(contentType);
 				else {
 					if (client.hasSerializers()) {
 						if (contentType == null)
 							throw new RestCallException(null, null, "Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.");
 						throw new RestCallException(null, null, "No matching serializer for media type ''{0}''", contentType);
 					}
-					entity = stringEntity(input2 == null ? "" : BeanContext.DEFAULT.getClassMetaForObject(input2).toString(input2), getRequestContentType(TEXT_PLAIN)).build();
+					entity = stringEntity(input2 == null ? "" : BeanContext.DEFAULT.getClassMetaForObject(input2).toString(input2), getRequestContentType(TEXT_PLAIN));
 				}
 
 				request2.setEntity(entity);

@@ -19,7 +19,6 @@ import static org.junit.runners.MethodSorters.*;
 import static org.apache.juneau.testutils.StreamUtils.*;
 
 import java.io.*;
-import java.util.*;
 
 import org.apache.http.*;
 import org.apache.juneau.http.entity.*;
@@ -52,7 +51,7 @@ public class RestClient_Body_Test {
 
 	@Test
 	public void a01_BasicHttpResource() throws Exception {
-		HttpResource x1 = stringResource("foo").build();
+		HttpResource x1 = stringResource("foo");
 		client().build().post("/", x1).run()
 			.assertHeader("X-Content-Length").asInteger().is(3)
 			.assertHeader("X-Content-Encoding").isNull()
@@ -60,7 +59,7 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Transfer-Encoding").isNull()
 		;
 
-		HttpResource x2 = stringResource("foo").contentType("text/plain").contentEncoding("identity").build();
+		HttpResource x2 = stringResource("foo").setContentType("text/plain").setContentEncoding("identity");
 		client().build().post("/",x2).run()
 			.assertHeader("X-Content-Length").asInteger().is(3)
 			.assertHeader("X-Content-Encoding").is("identity")
@@ -68,7 +67,7 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Transfer-Encoding").isNull()
 		;
 
-		HttpResource x3 = stringResource("foo").contentType(contentType("text/plain")).contentEncoding(contentEncoding("identity")).chunked().build();
+		HttpResource x3 = stringResource("foo").setContentType(contentType("text/plain")).setContentEncoding(contentEncoding("identity")).setChunked();
 		client().build().post("/",x3).run()
 			.assertHeader("X-Content-Length").isNull()  // Missing when chunked.
 			.assertHeader("X-Content-Encoding").is("identity")
@@ -76,7 +75,7 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Transfer-Encoding").is("chunked")
 		;
 
-		HttpResource x4 = stringResource("foo", contentType("text/plain")).contentEncoding("identity").build();
+		HttpResource x4 = stringResource("foo", contentType("text/plain")).setContentEncoding("identity");
 		client().build().post("/",x4).run()
 			.assertHeader("X-Content-Length").asInteger().is(3)
 			.assertHeader("X-Content-Encoding").is("identity")
@@ -84,32 +83,29 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Transfer-Encoding").isNull()
 		;
 
-		HttpResource x5 = stringResource("foo").header("Foo","bar").header(header("Baz","qux")).build();
+		HttpResource x5 = stringResource("foo").setHeader("Foo","bar").setHeaders(header("Baz","qux"));
 		client().build().post("/",x5).run()
 			.assertHeader("X-Foo").is("bar")
 			.assertHeader("X-Baz").is("qux")
 		;
 
-		HttpResource x6 = stringResource("foo").headers(Arrays.asList(header("Foo","bar"),header("Baz","qux"))).build();
+		HttpResource x6 = stringResource("foo").addHeaders(header("Foo","bar"),header("Baz","qux"));
 		client().build().post("/",x6).run()
 			.assertHeader("X-Foo").is("bar")
 			.assertHeader("X-Baz").is("qux")
 		;
 
-		HttpResource x7 = readerResource(reader("foo")).build();
+		HttpResource x7 = readerResource(reader("foo"));
 		client().build().post("/",x7).run().assertContent("foo");
 
-		HttpResource x8 = readerResource(reader("foo")).cached().build();
+		HttpResource x8 = readerResource(reader("foo")).setCached();
 		client().build().post("/",x8).run().assertContent("foo");
 		client().build().post("/",x8).run().assertContent("foo");
-
-		HttpResource x9 = readerResource(null).build();
-		client().build().post("/",x9).run().assertContent().isEmpty();
 	}
 
 	@Test
 	public void a02_StringEntity() throws Exception {
-		HttpEntity x1 = stringEntity("foo").build();
+		HttpEntity x1 = stringEntity("foo");
 		client().build().post("/", x1).run()
 			.assertHeader("X-Content-Length").asInteger().is(3)
 			.assertHeader("X-Content-Encoding").isNull()
@@ -117,7 +113,7 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Transfer-Encoding").isNull()
 		;
 
-		HttpEntity x2 = stringEntity("foo").contentType("text/plain").contentEncoding("identity").build();
+		HttpEntity x2 = stringEntity("foo").setContentType("text/plain").setContentEncoding("identity");
 		client().build().post("/",x2).run()
 			.assertHeader("X-Content-Length").asInteger().is(3)
 			.assertHeader("X-Content-Encoding").is("identity")
@@ -125,7 +121,7 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Transfer-Encoding").isNull()
 		;
 
-		HttpEntity x3 = stringEntity("foo").contentType(contentType("text/plain")).contentEncoding(contentEncoding("identity")).chunked().build();
+		HttpEntity x3 = stringEntity("foo").setContentType(contentType("text/plain")).setContentEncoding(contentEncoding("identity")).setChunked();
 		client().build().post("/",x3).run()
 			.assertHeader("X-Content-Length").isNull()  // Missing when chunked.
 			.assertHeader("X-Content-Encoding").is("identity")
@@ -133,7 +129,7 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Transfer-Encoding").is("chunked")
 		;
 
-		HttpEntity x4 = stringEntity("foo", contentType("text/plain")).contentEncoding("identity").build();
+		HttpEntity x4 = stringEntity("foo", contentType("text/plain")).setContentEncoding("identity");
 		client().build().post("/",x4).run()
 			.assertHeader("X-Content-Length").asInteger().is(3)
 			.assertHeader("X-Content-Encoding").is("identity")
@@ -141,17 +137,14 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Transfer-Encoding").isNull()
 		;
 
-		HttpEntity x7 = readerEntity(reader("foo")).build();
+		HttpEntity x7 = readerEntity(reader("foo"));
 		client().build().post("/",x7).run().assertContent("foo");
 
-		HttpEntity x8 = readerEntity(reader("foo")).cached().build();
+		HttpEntity x8 = readerEntity(reader("foo")).setCached();
 		client().build().post("/",x8).run().assertContent("foo");
 		client().build().post("/",x8).run().assertContent("foo");
 
-		HttpEntity x9 = readerEntity(null).build();
-		client().build().post("/",x9).run().assertContent().isEmpty();
-
-		BasicHttpEntity x12 = stringEntity("foo").build();
+		BasicHttpEntity x12 = stringEntity("foo");
 		x12.assertString().is("foo");
 		x12.assertBytes().asString().is("foo");
 	}
@@ -160,7 +153,7 @@ public class RestClient_Body_Test {
 	public void a03_SerializedHttpEntity() throws Exception {
 		Serializer js = JsonSerializer.DEFAULT;
 
-		SerializedEntity x1 = serializedEntity(ABean.get(),null,null).build();
+		SerializedEntity x1 = serializedEntity(ABean.get(),null,null);
 		client().build().post("/",x1).run()
 			.assertHeader("X-Content-Length").isNull()
 			.assertHeader("X-Content-Encoding").isNull()
@@ -168,14 +161,14 @@ public class RestClient_Body_Test {
 			.assertHeader("X-Transfer-Encoding").is("chunked")  // Because content length is -1.
 		;
 
-		SerializedEntity x2 = serializedEntity(ABean.get(),js,null).build();
+		SerializedEntity x2 = serializedEntity(ABean.get(),js,null);
 		client().build().post("/",x2).run()
 			.assertHeader("X-Content-Length").isNull()
 			.assertHeader("X-Content-Encoding").isNull()
 			.assertHeader("X-Content-Type").is("application/json")
 			.assertContent().as(ABean.class).asJson().is("{a:1,b:'foo'}");
 
-		SerializedEntity x3 = serializedEntity(()->ABean.get(),js,null).build();
+		SerializedEntity x3 = serializedEntity(()->ABean.get(),js,null);
 		client().build().post("/",x3).run()
 			.assertHeader("X-Content-Length").isNull()
 			.assertHeader("X-Content-Encoding").isNull()

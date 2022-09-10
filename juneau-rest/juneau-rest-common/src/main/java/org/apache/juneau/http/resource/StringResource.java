@@ -13,6 +13,7 @@
 package org.apache.juneau.http.resource;
 
 import org.apache.juneau.http.entity.*;
+import org.apache.juneau.http.header.*;
 
 /**
  * A self contained, repeatable resource that obtains its content from a {@link String}.
@@ -24,32 +25,39 @@ import org.apache.juneau.http.entity.*;
  */
 public class StringResource extends BasicResource {
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Instance
+	//-----------------------------------------------------------------------------------------------------------------
+
 	/**
-	 * Creates a new {@link StringResource} builder.
-	 *
-	 * @return A new {@link StringResource} builder.
+	 * Constructor.
 	 */
-	public static HttpResourceBuilder<StringResource> create() {
-		return new HttpResourceBuilder<>(StringResource.class, StringEntity.class);
+	public StringResource() {
+		super(new StringEntity());
 	}
 
 	/**
 	 * Constructor.
 	 *
-	 * @param builder The resource builder.
+	 * @param contentType The entity content type.
+	 * @param contents The entity contents.
 	 */
-	public StringResource(HttpResourceBuilder<?> builder) {
-		super(builder);
+	public StringResource(ContentType contentType, String contents) {
+		super(new StringEntity(contentType, contents));
 	}
 
 	/**
-	 * Creates a new {@link StringResource} builder initialized with the contents of this entity.
+	 * Copy constructor.
 	 *
-	 * @return A new {@link StringResource} builder initialized with the contents of this entity.
+	 * @param copyFrom The bean being copied.
 	 */
-	@Override /* BasicResource */
-	public HttpResourceBuilder<StringResource> copy() {
-		return new HttpResourceBuilder<>(this);
+	protected StringResource(StringResource copyFrom) {
+		super(copyFrom);
+	}
+
+	@Override
+	public StringResource copy() {
+		return new StringResource(this);
 	}
 }
 

@@ -205,7 +205,7 @@ public class Remote_CommonInterfaces_Test {
 	public static class D1 implements D {
 		@Override
 		public BasicResource httpResource() throws IOException {
-			return byteArrayResource("foo".getBytes()).contentType("text/foo").header("Foo","foo").headers(eTag("\"bar\"")).build();
+			return byteArrayResource("foo".getBytes()).setContentType("text/foo").setHeader("Foo","foo").addHeaders(eTag("\"bar\""));
 		}
 	}
 
