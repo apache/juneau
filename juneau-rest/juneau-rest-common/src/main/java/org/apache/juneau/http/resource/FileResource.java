@@ -13,8 +13,11 @@
 package org.apache.juneau.http.resource;
 
 import java.io.*;
+import java.util.function.*;
+
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.internal.*;
 
 /**
  * A repeatable resource that obtains its content from a {@link File}.
@@ -24,6 +27,7 @@ import org.apache.juneau.http.header.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
+@FluentSetters
 public class FileResource extends BasicResource {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -60,4 +64,80 @@ public class FileResource extends BasicResource {
 	public FileResource copy() {
 		return new FileResource(this);
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	public FileResource setCached() throws IOException{
+		super.setCached();
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	public FileResource setChunked() {
+		super.setChunked();
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	public FileResource setChunked(boolean value) {
+		super.setChunked(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	public FileResource setContent(Object value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	public FileResource setContent(Supplier<?> value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	public FileResource setContentEncoding(String value) {
+		super.setContentEncoding(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	public FileResource setContentEncoding(ContentEncoding value) {
+		super.setContentEncoding(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	public FileResource setContentLength(long value) {
+		super.setContentLength(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	public FileResource setContentType(String value) {
+		super.setContentType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	public FileResource setContentType(ContentType value) {
+		super.setContentType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	public FileResource setHeaders(HeaderList value) {
+		super.setHeaders(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	public FileResource setUnmodifiable() {
+		super.setUnmodifiable();
+		return this;
+	}
+
+	// </FluentSetters>
 }

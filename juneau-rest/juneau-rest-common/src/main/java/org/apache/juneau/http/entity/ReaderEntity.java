@@ -16,6 +16,8 @@ import static org.apache.juneau.internal.ArgUtils.*;
 import static org.apache.juneau.internal.IOUtils.*;
 
 import java.io.*;
+import java.nio.charset.*;
+import java.util.function.*;
 
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
@@ -143,6 +145,84 @@ public class ReaderEntity extends BasicHttpEntity {
 	}
 
 	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	public ReaderEntity setCached() throws IOException{
+		super.setCached();
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	public ReaderEntity setCharset(Charset value) {
+		super.setCharset(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	public ReaderEntity setChunked() {
+		super.setChunked();
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	public ReaderEntity setChunked(boolean value) {
+		super.setChunked(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	public ReaderEntity setContent(Object value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	public ReaderEntity setContent(Supplier<?> value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	public ReaderEntity setContentEncoding(String value) {
+		super.setContentEncoding(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	public ReaderEntity setContentEncoding(ContentEncoding value) {
+		super.setContentEncoding(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	public ReaderEntity setContentLength(long value) {
+		super.setContentLength(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	public ReaderEntity setContentType(String value) {
+		super.setContentType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	public ReaderEntity setContentType(ContentType value) {
+		super.setContentType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	public ReaderEntity setMaxLength(int value) {
+		super.setMaxLength(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	public ReaderEntity setUnmodifiable() {
+		super.setUnmodifiable();
+		return this;
+	}
 
 	// </FluentSetters>
 }

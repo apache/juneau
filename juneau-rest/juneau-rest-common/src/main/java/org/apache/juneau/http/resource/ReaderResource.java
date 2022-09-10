@@ -13,8 +13,11 @@
 package org.apache.juneau.http.resource;
 
 import java.io.*;
+import java.util.function.*;
+
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
+import org.apache.juneau.internal.*;
 
 /**
  * A streamed, non-repeatable resource that obtains its content from an {@link Reader}.
@@ -24,6 +27,7 @@ import org.apache.juneau.http.header.*;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
+@FluentSetters
 public class ReaderResource extends BasicResource {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -60,4 +64,80 @@ public class ReaderResource extends BasicResource {
 	public ReaderResource copy() {
 		return new ReaderResource(this);
 	}
+
+	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	public ReaderResource setCached() throws IOException{
+		super.setCached();
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	public ReaderResource setChunked() {
+		super.setChunked();
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	public ReaderResource setChunked(boolean value) {
+		super.setChunked(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	public ReaderResource setContent(Object value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	public ReaderResource setContent(Supplier<?> value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	public ReaderResource setContentEncoding(String value) {
+		super.setContentEncoding(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	public ReaderResource setContentEncoding(ContentEncoding value) {
+		super.setContentEncoding(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	public ReaderResource setContentLength(long value) {
+		super.setContentLength(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	public ReaderResource setContentType(String value) {
+		super.setContentType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	public ReaderResource setContentType(ContentType value) {
+		super.setContentType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	public ReaderResource setHeaders(HeaderList value) {
+		super.setHeaders(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.resource.BasicResource */
+	public ReaderResource setUnmodifiable() {
+		super.setUnmodifiable();
+		return this;
+	}
+
+	// </FluentSetters>
 }

@@ -40,7 +40,7 @@ public class HttpEntities {
 	 * @return A new {@link ByteArrayEntity} builder.
 	 */
 	public static final ByteArrayEntity byteArrayEntity(byte[] content) {
-		return (ByteArrayEntity) new ByteArrayEntity().setContent(content);
+		return new ByteArrayEntity().setContent(content);
 	}
 
 	/**
@@ -51,7 +51,7 @@ public class HttpEntities {
 	 * @return A new {@link ByteArrayEntity} builder.
 	 */
 	public static final ByteArrayEntity byteArrayEntity(byte[] content, ContentType contentType) {
-		return (ByteArrayEntity) new ByteArrayEntity().setContent(content).setContentType(contentType);
+		return new ByteArrayEntity().setContent(content).setContentType(contentType);
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class HttpEntities {
 	 * @return A new {@link ByteArrayEntity} builder.
 	 */
 	public static final ByteArrayEntity byteArrayEntity(Supplier<byte[]> content) {
-		return (ByteArrayEntity) new ByteArrayEntity().setContent(content);
+		return new ByteArrayEntity().setContent(content);
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class HttpEntities {
 	 * @return A new {@link ByteArrayEntity} builder.
 	 */
 	public static final ByteArrayEntity byteArrayEntity(Supplier<byte[]> content, ContentType contentType) {
-		return (ByteArrayEntity) new ByteArrayEntity().setContent(content).setContentType(contentType);
+		return new ByteArrayEntity().setContent(content).setContentType(contentType);
 	}
 
 	/**
@@ -88,7 +88,7 @@ public class HttpEntities {
 	 * @return A new {@link FileEntity} builder.
 	 */
 	public static final FileEntity fileEntity(File content) {
-		return (FileEntity) new FileEntity().setContent(content);
+		return new FileEntity().setContent(content);
 	}
 
 	/**
@@ -99,7 +99,7 @@ public class HttpEntities {
 	 * @return A new {@link FileEntity} builder.
 	 */
 	public static final FileEntity fileEntity(File content, ContentType contentType) {
-		return (FileEntity) new FileEntity().setContent(content).setContentType(contentType);
+		return new FileEntity().setContent(content).setContentType(contentType);
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class HttpEntities {
 	 * @return A new {@link ReaderEntity} builder.
 	 */
 	public static final ReaderEntity readerEntity(Reader content) {
-		return (ReaderEntity) new ReaderEntity().setContent(content);
+		return new ReaderEntity().setContent(content);
 	}
 
 	/**
@@ -120,7 +120,7 @@ public class HttpEntities {
 	 * @return A new {@link ReaderEntity} builder.
 	 */
 	public static final ReaderEntity readerEntity(Reader content, ContentType contentType) {
-		return (ReaderEntity) new ReaderEntity().setContent(content).setContentType(contentType);
+		return new ReaderEntity().setContent(content).setContentType(contentType);
 	}
 
 	/**
@@ -135,7 +135,7 @@ public class HttpEntities {
 	 * @return A new {@link SerializedEntity} object.
 	 */
 	public static final SerializedEntity serializedEntity(Object content, Serializer serializer) {
-		return ((SerializedEntity) new SerializedEntity().setContent(content)).setSerializer(serializer);
+		return new SerializedEntity().setContent(content).setSerializer(serializer);
 	}
 
 	/**
@@ -150,7 +150,7 @@ public class HttpEntities {
 	 * @return A new {@link SerializedEntity} object.
 	 */
 	public static final SerializedEntity serializedEntity(Supplier<?> content, Serializer serializer) {
-		return ((SerializedEntity) new SerializedEntity().setContent(content)).setSerializer(serializer);
+		return new SerializedEntity().setContent(content).setSerializer(serializer);
 	}
 
 	/**
@@ -167,7 +167,7 @@ public class HttpEntities {
 	 * @return A new {@link SerializedEntity} object.
 	 */
 	public static final SerializedEntity serializedEntity(Object content, Serializer serializer, HttpPartSchema schema) {
-		return ((SerializedEntity) new SerializedEntity().setContent(content)).setSerializer(serializer).setSchema(schema);
+		return new SerializedEntity().setContent(content).setSerializer(serializer).setSchema(schema);
 	}
 
 	/**
@@ -184,7 +184,7 @@ public class HttpEntities {
 	 * @return A new {@link SerializedEntity} object.
 	 */
 	public static final SerializedEntity serializedEntity(Supplier<?> content, Serializer serializer, HttpPartSchema schema) {
-		return ((SerializedEntity) new SerializedEntity().setContent(content)).setSerializer(serializer).setSchema(schema);
+		return new SerializedEntity().setContent(content).setSerializer(serializer).setSchema(schema);
 	}
 
 	/**
@@ -197,7 +197,7 @@ public class HttpEntities {
 	 * @return A new {@link StreamEntity} builder.
 	 */
 	public static final StreamEntity streamEntity(InputStream content) {
-		return (StreamEntity) new StreamEntity().setContent(content);
+		return new StreamEntity().setContent(content);
 	}
 
 	/**
@@ -209,7 +209,7 @@ public class HttpEntities {
 	 * @return A new {@link StreamEntity} builder.
 	 */
 	public static final StreamEntity streamEntity(InputStream content, long length, ContentType contentType) {
-		return (StreamEntity) new StreamEntity().setContent(content).setContentLength(length).setContentType(contentType);
+		return new StreamEntity().setContent(content).setContentLength(length).setContentType(contentType);
 	}
 
 	/**
@@ -219,7 +219,7 @@ public class HttpEntities {
 	 * @return A new {@link StringEntity} builder.
 	 */
 	public static final StringEntity stringEntity(String content) {
-		return (StringEntity) new StringEntity().setContent(content);
+		return new StringEntity().setContent(content);
 	}
 
 	/**
@@ -230,7 +230,7 @@ public class HttpEntities {
 	 * @return A new {@link StringEntity} builder.
 	 */
 	public static final StringEntity stringEntity(String content, ContentType contentType) {
-		return (StringEntity) new StringEntity().setContent(content).setContentType(contentType);
+		return new StringEntity().setContent(content).setContentType(contentType);
 	}
 
 	/**
@@ -240,7 +240,7 @@ public class HttpEntities {
 	 * @return A new {@link StringEntity} builder.
 	 */
 	public static final StringEntity stringEntity(Supplier<String> content) {
-		return (StringEntity) new StringEntity().setContent(content);
+		return new StringEntity().setContent(content);
 	}
 
 	/**
@@ -251,6 +251,6 @@ public class HttpEntities {
 	 * @return A new {@link StringEntity} builder.
 	 */
 	public static final StringEntity stringEntity(Supplier<String> content, ContentType contentType) {
-		return (StringEntity) new StringEntity().setContent(content).setContentType(contentType);
+		return new StringEntity().setContent(content).setContentType(contentType);
 	}
 }

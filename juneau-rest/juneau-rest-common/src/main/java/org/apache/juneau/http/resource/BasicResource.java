@@ -45,6 +45,7 @@ import org.apache.juneau.internal.*;
  * </ul>
  */
 @BeanIgnore  /* Use toString() to serialize */
+@FluentSetters
 public class BasicResource implements HttpResource {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -501,4 +502,8 @@ public class BasicResource implements HttpResource {
 	public HeaderList getHeaders() {
 		return headers;
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }

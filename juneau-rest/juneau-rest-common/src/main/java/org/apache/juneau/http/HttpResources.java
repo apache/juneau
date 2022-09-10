@@ -42,7 +42,7 @@ public class HttpResources {
 	 * @return A new {@link ByteArrayResource} builder.
 	 */
 	public static final ByteArrayResource byteArrayResource(byte[] content) {
-		return (ByteArrayResource) new ByteArrayResource().setContent(content);
+		return new ByteArrayResource().setContent(content);
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class HttpResources {
 	 * @return A new {@link ByteArrayResource} builder.
 	 */
 	public static final ByteArrayResource byteArrayResource(byte[] content, ContentType contentType) {
-		return (ByteArrayResource) new ByteArrayResource().setContent(content).setContentType(contentType);
+		return new ByteArrayResource().setContent(content).setContentType(contentType);
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class HttpResources {
 	 * @return A new {@link ByteArrayResource} builder.
 	 */
 	public static final ByteArrayResource byteArrayResource(Supplier<byte[]> content) {
-		return (ByteArrayResource) new ByteArrayResource().setContent(content);
+		return new ByteArrayResource().setContent(content);
 	}
 
 	/**
@@ -77,7 +77,7 @@ public class HttpResources {
 	 * @return A new {@link ByteArrayResource} builder.
 	 */
 	public static final ByteArrayResource byteArrayResource(Supplier<byte[]> content, ContentType contentType) {
-		return (ByteArrayResource) new ByteArrayResource().setContent(content).setContentType(contentType);
+		return new ByteArrayResource().setContent(content).setContentType(contentType);
 	}
 
 	/**
@@ -90,7 +90,7 @@ public class HttpResources {
 	 * @return A new {@link FileResource} builder.
 	 */
 	public static final FileResource fileResource(File content) {
-		return (FileResource) new FileResource().setContent(content);
+		return new FileResource().setContent(content);
 	}
 
 	/**
@@ -101,7 +101,7 @@ public class HttpResources {
 	 * @return A new {@link FileResource} builder.
 	 */
 	public static final FileResource fileResource(File content, ContentType contentType) {
-		return (FileResource) new FileResource().setContent(content).setContentType(contentType);
+		return new FileResource().setContent(content).setContentType(contentType);
 	}
 
 	/**
@@ -111,7 +111,7 @@ public class HttpResources {
 	 * @return A new {@link ReaderResource} builder.
 	 */
 	public static final ReaderResource readerResource(Reader content) {
-		return (ReaderResource) new ReaderResource().setContent(content);
+		return new ReaderResource().setContent(content);
 	}
 
 	/**
@@ -122,7 +122,7 @@ public class HttpResources {
 	 * @return A new {@link ReaderResource} builder.
 	 */
 	public static final ReaderResource readerResource(Reader content, ContentType contentType) {
-		return (ReaderResource) new ReaderResource().setContent(content).setContentType(contentType);
+		return new ReaderResource().setContent(content).setContentType(contentType);
 	}
 
 	/**
@@ -135,7 +135,7 @@ public class HttpResources {
 	 * @return A new {@link StreamResource} builder.
 	 */
 	public static final StreamResource streamResource(InputStream content) {
-		return (StreamResource) new StreamResource().setContent(content);
+		return new StreamResource().setContent(content);
 	}
 
 	/**
@@ -147,7 +147,7 @@ public class HttpResources {
 	 * @return A new {@link StreamResource} builder.
 	 */
 	public static final StreamResource streamResource(InputStream content, long length, ContentType contentType) {
-		return (StreamResource) new StreamResource().setContent(content).setContentLength(length).setContentType(contentType);
+		return new StreamResource().setContent(content).setContentLength(length).setContentType(contentType);
 	}
 
 	/**
@@ -157,7 +157,7 @@ public class HttpResources {
 	 * @return A new {@link StringResource} builder.
 	 */
 	public static final StringResource stringResource(String content) {
-		return (StringResource) new StringResource().setContent(content);
+		return new StringResource().setContent(content);
 	}
 
 	/**
@@ -168,7 +168,7 @@ public class HttpResources {
 	 * @return A new {@link StringResource} builder.
 	 */
 	public static final StringResource stringResource(String content, ContentType contentType) {
-		return (StringResource) new StringResource().setContent(content).setContentType(contentType);
+		return new StringResource().setContent(content).setContentType(contentType);
 	}
 
 	/**
@@ -178,7 +178,7 @@ public class HttpResources {
 	 * @return A new {@link StringResource} builder.
 	 */
 	public static final StringResource stringResource(Supplier<String> content) {
-		return (StringResource) new StringResource().setContent(content);
+		return new StringResource().setContent(content);
 	}
 
 	/**
@@ -189,6 +189,6 @@ public class HttpResources {
 	 * @return A new {@link StringResource} builder.
 	 */
 	public static final StringResource stringResource(Supplier<String> content, ContentType contentType) {
-		return (StringResource) new StringResource().setContent(content).setContentType(contentType);
+		return new StringResource().setContent(content).setContentType(contentType);
 	}
 }

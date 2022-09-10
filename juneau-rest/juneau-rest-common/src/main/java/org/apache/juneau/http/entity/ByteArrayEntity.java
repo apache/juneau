@@ -15,6 +15,8 @@ package org.apache.juneau.http.entity;
 import static org.apache.juneau.internal.ArgUtils.*;
 
 import java.io.*;
+import java.nio.charset.*;
+import java.util.function.*;
 
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.internal.*;
@@ -111,6 +113,84 @@ public class ByteArrayEntity extends BasicHttpEntity {
 	}
 
 	// <FluentSetters>
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	public ByteArrayEntity setCached() throws IOException{
+		super.setCached();
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	public ByteArrayEntity setCharset(Charset value) {
+		super.setCharset(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	public ByteArrayEntity setChunked() {
+		super.setChunked();
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	public ByteArrayEntity setChunked(boolean value) {
+		super.setChunked(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	public ByteArrayEntity setContent(Object value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	public ByteArrayEntity setContent(Supplier<?> value) {
+		super.setContent(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	public ByteArrayEntity setContentEncoding(String value) {
+		super.setContentEncoding(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	public ByteArrayEntity setContentEncoding(ContentEncoding value) {
+		super.setContentEncoding(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	public ByteArrayEntity setContentLength(long value) {
+		super.setContentLength(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	public ByteArrayEntity setContentType(String value) {
+		super.setContentType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	public ByteArrayEntity setContentType(ContentType value) {
+		super.setContentType(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	public ByteArrayEntity setMaxLength(int value) {
+		super.setMaxLength(value);
+		return this;
+	}
+
+	@Override /* GENERATED - org.apache.juneau.http.entity.BasicHttpEntity */
+	public ByteArrayEntity setUnmodifiable() {
+		super.setUnmodifiable();
+		return this;
+	}
 
 	// </FluentSetters>
 }

@@ -27,6 +27,7 @@ import org.apache.juneau.internal.*;
  *
  * @param <E> The element type.
  */
+@FluentSetters
 public class ControlledArrayList<E> extends ArrayList<E> {
 
 	private static final long serialVersionUID = -1L;
@@ -411,4 +412,8 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 	public Iterator<E> overrideIterator() {
 		return super.iterator();
 	}
+
+	// <FluentSetters>
+
+	// </FluentSetters>
 }
