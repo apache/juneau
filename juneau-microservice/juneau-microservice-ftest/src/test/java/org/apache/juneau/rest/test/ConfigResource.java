@@ -17,7 +17,6 @@ import static org.apache.juneau.http.HttpMethod.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.servlet.*;
 
 /**
@@ -27,7 +26,7 @@ import org.apache.juneau.rest.servlet.*;
 	path="/testConfig"
 )
 @SuppressWarnings({"serial"})
-public class ConfigResource extends BasicRestServlet implements BasicUniversalConfig {
+public class ConfigResource extends BasicRestServlet {
 
 	@RestOp(method=GET, path="/")
 	public Object test1(RestRequest req) {

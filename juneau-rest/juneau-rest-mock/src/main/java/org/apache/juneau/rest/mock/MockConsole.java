@@ -30,7 +30,7 @@ import org.apache.juneau.assertions.*;
  * <p class='bjava'>
  * 	<jc>// A simple REST API that echos a posted bean.</jc>
  * 	<ja>@Rest</ja>
- * 	<jk>public class</jk> MyRest <jk>extends</jk> BasicRestObject <jk>implements</jk> BasicUniversalConfig {
+ * 	<jk>public class</jk> MyRest <jk>extends</jk> BasicRestObject {
  * 		<ja>@RestPost</ja>(<js>"/bean"</js>)
  * 		<jk>public</jk> Bean postBean(<ja>@Content</ja> Bean <jv>bean</jv>) {
  * 			<jk>return</jk> <jv>bean</jv>;

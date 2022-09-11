@@ -14,7 +14,6 @@ package org.apache.juneau.examples.rest;
 
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.servlet.*;
 
 /**
@@ -37,7 +36,7 @@ import org.apache.juneau.rest.servlet.*;
 		"</div>"
 	}
 )
-public class HelloWorldResource extends BasicRestObject implements BasicUniversalConfig {
+public class HelloWorldResource extends BasicRestObject {
 
 	/**
 	 * [HTTP GET /helloworld]

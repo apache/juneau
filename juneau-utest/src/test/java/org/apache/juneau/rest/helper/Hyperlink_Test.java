@@ -19,7 +19,6 @@ import java.util.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.*;
@@ -29,7 +28,7 @@ import org.junit.*;
 public class Hyperlink_Test {
 
 	@Rest
-	public static class A extends BasicRestServlet implements BasicUniversalConfig {
+	public static class A extends BasicRestServlet {
 		@RestGet
 		public Hyperlink a() {
 			return new Hyperlink("foo", "bar");

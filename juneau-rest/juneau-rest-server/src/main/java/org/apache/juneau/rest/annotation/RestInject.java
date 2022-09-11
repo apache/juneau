@@ -54,7 +54,7 @@ import org.apache.juneau.svl.*;
  * <p class='bcode'>
  * 	<jc>// Rest resource that uses a customized call logger.</jc>
  * 	<ja>@Rest</ja>
- * 	<jk>public class</jk> MyRest <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
+ * 	<jk>public class</jk> MyRest <jk>extends</jk> BasicRestServlet {
  *
  * 		<jc>// Option #1:  As a field.</jc>
  * 		<ja>@RestInject</ja>

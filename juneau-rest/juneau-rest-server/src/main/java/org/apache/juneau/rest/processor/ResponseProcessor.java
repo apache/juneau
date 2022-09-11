@@ -46,7 +46,7 @@ import org.apache.juneau.rest.annotation.*;
  * 		path=<js>"/example"</js>,
  * 		responseProcessors=FooProcessor.<jk>class</jk>
  * 	)
- * 	<jk>public class</jk> Example <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
+ * 	<jk>public class</jk> Example <jk>extends</jk> BasicRestServlet {
  *
  * 		<ja>@RestGet</ja>(<js>"/"</js>)
  * 		<jk>public</jk> Foo test1() {

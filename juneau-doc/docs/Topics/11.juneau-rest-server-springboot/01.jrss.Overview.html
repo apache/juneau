@@ -115,7 +115,7 @@
 		|	<ja>@SerializerConfig</ja>(
 		|		quoteChar=<js>"'"</js>
 		|	)
-		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicSpringRestServletGroup <jk>implements</jk> BasicUniversalConfig {
+		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicSpringRestServletGroup {
 		|		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L;
 		|	}
 	</p>	
@@ -144,7 +144,7 @@
 		|			<js>"&lt;/div&gt;"</js>
 		|		}
 		|	)
-		|	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestObject <jk>implements</jk> BasicUniversalConfig {
+		|	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestObject {
 		|	
 		|		<ja>@Autowired</ja>
 		|		<jk>private</jk> HelloWorldMessageProvider <jf>messageProvider</jf>;

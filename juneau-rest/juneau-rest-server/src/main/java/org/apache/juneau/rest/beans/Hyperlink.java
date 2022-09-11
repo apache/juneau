@@ -20,7 +20,7 @@ import org.apache.juneau.dto.html5.*;
  * <h5 class='figure'>Examples:</h5>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>
- * 	<jk>public class</jk> MyRest <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
+ * 	<jk>public class</jk> MyRest <jk>extends</jk> BasicRestServlet {
  *
  * 		<jc>// Produces &lt;a href=&quot;/foo&quot;&gt;bar&lt;/a&gt;</jc>
  * 		<ja>@RestGet</ja>

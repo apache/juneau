@@ -95,10 +95,7 @@
 		|		// You can apply any of the Serializer/Parser/BeanContext settings this way.</jc>
 		|		quoteChar=<js>"'"</js>
 		|	)
-		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup <jk>implements</jk> BasicUniversalJenaConfig {
-		|		<jc>// IMPORTANT!  If you don't need RDF support, change the parent interface to BasicUniversalConfig.
-		|		// It allows you to remove the Jena prerequisite.</jc>
-		|	
+		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup {
 		|		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L;
 		|	}	
 	</p>
@@ -130,7 +127,7 @@
 		|			<js>"&lt;/div&gt;"</js>
 		|		}
 		|	)
-		|	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestObject <jk>implements</jk> BasicUniversalConfig {
+		|	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestObject {
 		|	
 		|		<ja>@RestGet</ja>(path=<js>"/*"</js>, summary=<js>"Responds with \"Hello world!\""</js>)
 		|		<jk>public</jk> String sayHello() {

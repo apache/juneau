@@ -54,7 +54,7 @@
 		|		<jc>// Our REST resource to test.</jc>
 		|		<jc>// Simply echos the response.</jc>
 		|		<ja>@Rest</ja>
-		|		<jk>public static class</jk> EchoRest <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicJsonConfig {
+		|		<jk>public static class</jk> EchoRest <jk>extends</jk> BasicRestServlet {
 		|
 		|			<ja>@RestPut</ja>
 		|			<jk>public</jk> MyBean echo(<ja>@Content</ja> MyBean <jv>bean</jv>) {

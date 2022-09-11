@@ -18,7 +18,6 @@ import org.apache.juneau.dto.html5.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
-import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.widget.*;
 
@@ -54,7 +53,7 @@ import org.apache.juneau.rest.widget.*;
 	},
 	asideFloat="RIGHT"
 )
-public class HtmlBeansResource extends BasicRestObject implements BasicUniversalConfig {
+public class HtmlBeansResource extends BasicRestObject {
 
 	@SuppressWarnings("unused")
 	private static final long serialVersionUID = 1L;

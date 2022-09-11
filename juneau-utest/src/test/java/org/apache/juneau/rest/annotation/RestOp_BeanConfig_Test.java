@@ -16,7 +16,6 @@ import static org.junit.runners.MethodSorters.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.rest.client.*;
-import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.*;
@@ -29,7 +28,7 @@ public class RestOp_BeanConfig_Test {
 	// @BeanConfig(bpi)
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class A1 extends BasicRestServlet implements BasicUniversalConfig {
+	public static class A1 extends BasicRestServlet {
 		@RestGet
 		@Bean(onClass=X1.class, properties="a,_b")
 		public Object a() throws Exception {
@@ -71,7 +70,7 @@ public class RestOp_BeanConfig_Test {
 	// @BeanConfig(bpx)
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class A2 extends BasicRestServlet implements BasicUniversalConfig {
+	public static class A2 extends BasicRestServlet {
 		@RestGet
 		@Bean(on="X1", excludeProperties="a,_b")
 		public Object a() throws Exception {
@@ -113,7 +112,7 @@ public class RestOp_BeanConfig_Test {
 	// @BeanConfig(bpi) and @Bean(bpi)
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class A3 extends BasicRestServlet implements BasicUniversalConfig {
+	public static class A3 extends BasicRestServlet {
 		@RestGet
 		@Bean(onClass=X2.class, p="a,_b")
 		public Object a() throws Exception {
@@ -155,7 +154,7 @@ public class RestOp_BeanConfig_Test {
 	// @BeanConfig(bpx) and @Bean(bpi)
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class A4 extends BasicRestServlet implements BasicUniversalConfig {
+	public static class A4 extends BasicRestServlet {
 		@RestGet
 		@Bean(onClass=X2.class, xp="a,_b")
 		public Object a() throws Exception {
@@ -197,7 +196,7 @@ public class RestOp_BeanConfig_Test {
 	// @BeanConfig(bpi), meta-matching
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class A5 extends BasicRestServlet implements BasicUniversalConfig {
+	public static class A5 extends BasicRestServlet {
 		@RestGet
 		@Bean(on="*", p="a")
 		public Object a() throws Exception {
@@ -219,7 +218,7 @@ public class RestOp_BeanConfig_Test {
 	// @BeanConfig(bpi), fully-qualified class name
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class A6 extends BasicRestServlet implements BasicUniversalConfig {
+	public static class A6 extends BasicRestServlet {
 		@RestGet
 		@Bean(on="org.apache.juneau.rest.annotation.RestOp_BeanConfig_Test$X1", p="a")
 		public Object a() throws Exception {
@@ -241,7 +240,7 @@ public class RestOp_BeanConfig_Test {
 	// @BeanConfig(bpi), negative matching
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class A7 extends BasicRestServlet implements BasicUniversalConfig {
+	public static class A7 extends BasicRestServlet {
 		@RestGet
 		@Bean(on="MyBean", p="a")
 		public Object a() throws Exception {

@@ -63,7 +63,7 @@
 		|	<ja>@HtmlDocConfig</ja>(
 		|		stylesheet=<js>"servlet:/htdocs/themes/my-style.css"</js>
 		|	)
-		|	<jk>public class</jk> MyResourceBaseClass <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {...}
+		|	<jk>public class</jk> MyResourceBaseClass <jk>extends</jk> BasicRestServlet {...}
 	</p>
 	<p>
 		You can try out different stylesheets by passing in a <c>stylesheet</c> attribute in the request
@@ -88,7 +88,7 @@
 		|			<js>"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/$R{servletClassSimple}.java"</js>
 		|		}
 		|	)
-		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup <jk>implements</jk> BasicUniversalConfig {...}
+		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup {...}
 	</p>
 	<p>
 		The <c>StyleMenuItem</c> is a widget that extends from {@link oajr.widget.MenuItemWidget}, a

@@ -5657,7 +5657,7 @@ public class RestContext extends Context {
 	 * 			<ja>@Property</ja>(name=<js>"v1"</js>,value=<js>"$R{foo,bar}"</js>),  <jc>// Request variable.  value="bar"</jc>
 	 * 		}
 	 * 	)
-	 * 	<jk>public class</jk> MyRestResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
+	 * 	<jk>public class</jk> MyRestResource <jk>extends</jk> BasicRestServlet {
 	 * </p>
 	 *
 	 * <p>

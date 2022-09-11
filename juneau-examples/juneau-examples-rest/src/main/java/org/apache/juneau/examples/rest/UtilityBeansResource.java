@@ -16,7 +16,6 @@ import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
-import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.widget.*;
 
@@ -53,7 +52,7 @@ import org.apache.juneau.rest.widget.*;
 	asideFloat="RIGHT"
 )
 @SuppressWarnings("javadoc")
-public class UtilityBeansResource extends BasicRestObject implements BasicUniversalConfig {
+public class UtilityBeansResource extends BasicRestObject {
 
 	@SuppressWarnings("unused")
 	private static final long serialVersionUID = 1L;

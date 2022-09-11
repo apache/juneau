@@ -49,14 +49,14 @@
 			<ul>
 				<li class='jac'>{@link oajr.servlet.RestServlet}
 					<ul>
-						<li class='jac'>{@link oajr.servlet.BasicRestServlet} <jk>implements</jk> {@link oajr.servlet.BasicRestOperations}, {@link oajr.config.BasicJsonConfig}
+						<li class='jac'>{@link oajr.servlet.BasicRestServlet} <jk>implements</jk> {@link oajr.servlet.BasicRestOperations}, {@link oajr.config.BasicUniversalConfig}
 							<ul>
 								<li class='jac'>{@link oajr.servlet.BasicRestServletGroup} <jk>implements</jk> {@link oajr.servlet.BasicGroupOperations}
 							</ul>
 						</li>
 						<li class='jac'>{@link oajr.springboot.SpringRestServlet}
 							<ul>
-								<li class='jac'>{@link oajr.springboot.BasicSpringRestServlet} <jk>implements</jk> {@link oajr.servlet.BasicRestOperations}, {@link oajr.config.BasicJsonConfig}
+								<li class='jac'>{@link oajr.springboot.BasicSpringRestServlet} <jk>implements</jk> {@link oajr.servlet.BasicRestOperations}, {@link oajr.config.BasicUniversalConfig}
 									<ul>
 										<li class='jac'>{@link oajr.springboot.BasicSpringRestServletGroup} <jk>implements</jk> {@link oajr.servlet.BasicGroupOperations}
 									</ul>
@@ -160,7 +160,7 @@
 	</p>
 	<p class='bjava'>
 		|	<ja>@Rest</ja>(...)
-		|	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
+		|	<jk>public class</jk> MyResource <jk>extends</jk> RestServlet <jk>implements</jk> BasicUniversalConfig {
 		|		...
 		|	}
 	</p>

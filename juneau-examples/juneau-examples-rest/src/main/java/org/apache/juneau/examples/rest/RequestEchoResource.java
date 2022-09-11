@@ -20,7 +20,6 @@ import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.converter.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.widget.*;
@@ -78,7 +77,7 @@ import org.apache.juneau.swaps.*;
 @Bean(on="HttpServletRequest",interfaceClass=HttpServletRequest.class)
 @Bean(on="HttpSession",interfaceClass=HttpSession.class)
 @Bean(on="ServletContext",interfaceClass=ServletContext.class)
-public class RequestEchoResource extends BasicRestObject implements BasicUniversalConfig {
+public class RequestEchoResource extends BasicRestObject {
 
 	/**
 	 * [HTTP GET /echo/*]

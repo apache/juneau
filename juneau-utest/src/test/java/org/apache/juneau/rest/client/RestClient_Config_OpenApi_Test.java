@@ -22,7 +22,6 @@ import java.io.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.*;
@@ -31,7 +30,7 @@ import org.junit.*;
 public class RestClient_Config_OpenApi_Test {
 
 	@Rest
-	public static class A extends BasicRestObject implements BasicUniversalConfig {
+	public static class A extends BasicRestObject {
 		@RestPost
 		public Reader echoBody(org.apache.juneau.rest.RestRequest req) throws IOException {
 			return req.getContent().getReader();

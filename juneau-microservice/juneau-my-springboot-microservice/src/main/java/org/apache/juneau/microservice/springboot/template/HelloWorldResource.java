@@ -16,7 +16,6 @@ import java.util.*;
 
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.config.BasicUniversalConfig;
 import org.apache.juneau.rest.servlet.BasicRestObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -41,7 +40,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 		"</div>"
 	}
 )
-public class HelloWorldResource extends BasicRestObject implements BasicUniversalConfig {
+public class HelloWorldResource extends BasicRestObject {
 
 	private final String message;
 

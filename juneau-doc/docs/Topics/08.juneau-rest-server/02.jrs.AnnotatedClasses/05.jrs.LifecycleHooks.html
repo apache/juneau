@@ -24,7 +24,7 @@
 	</p>
 	<p class='bjava'>
 		|	<ja>@Rest</ja>(...)
-		|	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestObject <jk>implements</jk> BasicUniversalConfig {
+		|	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestObject {
 		|
 		|		<jc>// Our database.</jc>
 		|		<jk>private</jk> Map&lt;Integer,Object&gt; <jf>myDatabase</jf>;
@@ -40,7 +40,7 @@
 	</p>
 	<p class='bjava'>
 		|	<ja>@Rest</ja>(...)
-		|	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestObject <jk>implements</jk> BasicUniversalConfig {
+		|	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestObject {
 		|
 		|		<jc>// Add a request attribute to all incoming requests.</jc>
 		|		<ja>@RestPreCall</ja>

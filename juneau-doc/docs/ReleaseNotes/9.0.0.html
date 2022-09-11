@@ -79,14 +79,13 @@
 			processors, serializers/parsers, JSON schema generators, statistics gathering stores, and default request attributes/headers and response
 			headers.
 		<li>
-			Defining REST resources with predefined marshalling support is now much simpler.  You now extend from a basic REST servlet/object
-			class and then include an interface with predefined common annotations.
+			Defining REST resources with predefined marshalling support is now much simpler.  You now extend from a basic REST servlet/object.
 			<p class='bcode'>
 				|	<jc>// A root resource that supports JSON/HTML marshalling.</jc>
-				|	<jk>public class</jk> MyRootResources <jk>extends</jk> BasicRestServletGroup <jk>implements</jk> BasicJsonHtmlConfig { ... }
+				|	<jk>public class</jk> MyRootResources <jk>extends</jk> BasicRestServletGroup  { ... }
 				|	
 				|	<jc>// A child resource that supports all available marshalling.</jc>
-				|	<jk>public class</jk> MyChildResource <jk>extends</jk> BasicRestObject <jk>implements</jk> BasicUniversalConfig { ... }
+				|	<jk>public class</jk> MyChildResource <jk>extends</jk> BasicRestObject { ... }
 			</p>
 			REST servlets/objects are in the {@link oajr.servlet} package and REST configs are in the {@link oajr.config} package.
 		<li>

@@ -119,7 +119,7 @@
 				|	<cc># Contents of MyHelloResource.java </cc>
 				|	<cc>#---------------------------------</cc>
 				|	<ja>@Rest</ja>(...)
-				|	<jk>public class</jk> MyHelloResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
+				|	<jk>public class</jk> MyHelloResource <jk>extends</jk> BasicRestServlet {
 				|		<jk>private</jk> String <jf>greeting</jf>; 
 				|		
 				|		<jc>// Or access config file in servlet init method.</jc>
@@ -159,7 +159,7 @@
 				|		messages=<js>"nls/Messages"</js>,
 				|		...
 				|	)
-				|	<jk>public class</jk> MyHelloResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
+				|	<jk>public class</jk> MyHelloResource <jk>extends</jk> BasicRestServlet {
 				|
 				|		<jd>/** Standard hello message. */</jd>
 				|		<ja>@RestGet</ja>(<js>"/{person}"</js>)

@@ -47,7 +47,7 @@ import org.apache.juneau.rest.servlet.*;
  * <h5 class='figure'>Example:</h5>
  * <p class='bjava'>
  * 	<ja>@Rest</ja>(...)
- * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
+ * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
  *
  * 		<jc>// Log the time it took to execute the request.</jc>
  * 		<ja>@RestEndCall

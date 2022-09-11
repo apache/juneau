@@ -29,44 +29,14 @@
 				<ul class='javatreec'>
 					<li class='jc'>{@link oaj.http.resource.ByteArrayResource}
 					<li class='jc'>{@link oaj.http.resource.FileResource}
-					<li class='jc'>{@link oaj.http.resource.InputStreamResource}
+					<li class='jc'>{@link oaj.http.resource.StreamResource}
 					<li class='jc'>{@link oaj.http.resource.ReaderResource}
 					<li class='jc'>{@link oaj.http.resource.StringResource}
 				</ul>
 			</ul>
 		</ul>
 	</ul>
-	
-	<h5 class='topic'>HttpResourceBuilder</h5>
-	<p>
-		HTTP entities are created through builders created in the {@link oaj.http.HttpResources} class or individual <c>create()</c> methods
-		defined in the subclasses above.  The builder contains the following methods:
-	</p>
-	<ul class='javatree'>
-		<li class='jc'>{@link oaj.http.resource.HttpResourceBuilder}
-		<ul>
-			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#cached() cached()}
-			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#chunked() chunked()}
-			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#chunked(boolean) chunked(boolean)}
-			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#content(Object) content(Object)}
-			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#content(Supplier) content(Supplier)}
-			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#contentEncoding(ContentEncoding) contentEncoding(ContentEncoding)}
-			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#contentEncoding(String) contentEncoding(String)}
-			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#contentLength(long) contentLength(long)}
-			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#contentType(ContentType) contentType(ContentType)}
-			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#contentType(String) contentType(String)}
-			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#copyFrom(HttpResponse) copyFrom(HttpResponse)}
-			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#getEntity() getEntity()}
-			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#getHeaders() getHeaders()}
-			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#header(Header) header(Header)}
-			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#header(String,String) header(String,String)}
-			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#headers(Header...) headers(Header...)}
-			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#headers(HeaderList) headers(HeaderList)}
-			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#headers(List) headers(List&lt;Header&gt;)}
-			<li class='jm'>{@link oaj.http.resource.HttpResourceBuilder#getHeaders() getHeaders()}
-		</ul>
-	</ul>
-	
+		
 	<h5 class='figure'>Example</h5>
 	<p class='bjava'>
 		|	<jk>import static</jk> org.apache.juneau.http.HttpResources.*;
@@ -77,11 +47,38 @@
 		|	HttpResource <jv>resource</jv> = ByteArrayResource
 		|		.<jsm>create</jsm>()
 		|		.content(<jv>payload</jv>)
-		|		.contentType(ContentType.<jsf>APPLICATION_OCTET_STREAM</jsf>)
-		|		.build();
+		|		.contentType(ContentType.<jsf>APPLICATION_OCTET_STREAM</jsf>);
 		|
 		|	<jc>// Create via HttpResources.</jc>
-		|	HttpResource <jv>resource</jv> = <jsm>byteArrayResource</jsm>(<jv>payload</jv>, ContentType.<jsf>APPLICATION_OCTET_STREAM</jsf>).build();
+		|	HttpResource <jv>resource</jv> = <jsm>byteArrayResource</jsm>(<jv>payload</jv>, ContentType.<jsf>APPLICATION_OCTET_STREAM</jsf>);
+	</p>
+
+	<p>
+		HttpResources can be used by both the server and client side APIs described in later sections.
+	</p>
+	<h5 class='figure'>Server-side example:</h5>
+	<p class='bjava'>
+		|	<jc>// REST endpoint that simply echos an HTTP resource.</jc>
+		| 
+		|	<ja>@RestPost</ja>(path=<js>"/resource"</js>)
+		|	<jk>public</jk> HttpResource echoMyEntity(HttpResource <jv>resource</jv>) {
+		|		<jk>return</jk> <jv>resource</jv>;
+		|	}
+	</p>
+	
+	<h5 class='figure'>Client-side example:</h5>
+	<p class='bjava'>
+		|	<jc>// REST client that uses the echo REST endpoint above.</jc> 
+		|	
+		|	HttpEntity <jv>resource</jv> = <jsm>byteArrayResource</jsm>(...);
+		|	
+		|	<jv>resource</jv> = RestClient.<jsm>create</jsm>()
+		|		.build()
+		|		.rootUrl(<jsf>URI</jsf>)
+		|		.post(<js>"/resource"</js>, <jv>resource</jv>)
+		|		.run()
+		|		.assertStatus().asCode().is(200)
+		|		.getContent().as(ByteArrayResource.<jk>class</jk>);
 	</p>
 	
 </div>

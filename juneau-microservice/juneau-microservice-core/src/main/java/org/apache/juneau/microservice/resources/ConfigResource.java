@@ -25,7 +25,6 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Content;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.servlet.*;
 
 /**
@@ -52,7 +51,7 @@ import org.apache.juneau.rest.servlet.*;
 	}
 )
 @SuppressWarnings("javadoc")
-public class ConfigResource extends BasicRestServlet implements BasicUniversalConfig {
+public class ConfigResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	@RestGet(

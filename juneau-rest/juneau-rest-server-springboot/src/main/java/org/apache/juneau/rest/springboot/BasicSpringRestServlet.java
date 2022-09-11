@@ -31,9 +31,8 @@ import org.apache.juneau.rest.stats.*;
  * Meant as base class for top-level REST resources in Spring Boot environments.
  *
  * <p>
- * Provides basic JSON support by implementing the {@link BasicJsonConfig} interface.
- * Other language types can be added via the {@link Rest#serializers() @Rest(serializers)}/{@link Rest#parsers() @Rest(parsers)} annotations
- * or by adding one of the predefined interfaces in {@link org.apache.juneau.rest.config}.
+ * Provides support for JSON, XML, HTML, URL-Encoding, UON, XML, and MessagePack.  See {@link BasicUniversalConfig}
+ * for details.
  *
  * <p>
  * Implements the basic REST endpoints defined in {@link BasicRestOperations}.
@@ -47,7 +46,7 @@ import org.apache.juneau.rest.stats.*;
  * @serial exclude
  */
 @Rest
-public abstract class BasicSpringRestServlet extends SpringRestServlet implements BasicRestOperations, BasicJsonConfig {
+public abstract class BasicSpringRestServlet extends SpringRestServlet implements BasicRestOperations, BasicUniversalConfig {
 	private static final long serialVersionUID = 1L;
 
 	//-----------------------------------------------------------------------------------------------------------------

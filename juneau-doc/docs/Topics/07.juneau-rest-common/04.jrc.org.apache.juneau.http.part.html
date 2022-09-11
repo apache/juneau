@@ -39,32 +39,21 @@
 
 	<h5 class='topic'>PartList</h5>
 	<p>
-		The {@link oaj.http.part.PartList} class is a thread-safe immutable list of HTTP parts (form-data, query-parameters, path-parameters).
+		The {@link oaj.http.part.PartList} class is a list of HTTP parts (form-data, query-parameters, path-parameters).
 	</p>
 	<h5 class='figure'>Example</h5>
 	<p class='bjava'>
 		|	PartList <jv>parts</jv> = PartList
 		|		.<jsm>create</jsm>()
 		|		.append(MyPart.<jsm>of</jsm>(<js>"foo"</js>))
-		|		.append(<js>"Bar"</js>, ()-&gt;<jsm>getDynamicValueFromSomewhere</jsm>())
-		|		.build();
+		|		.append(<js>"Bar"</js>, ()-&gt;<jsm>getDynamicValueFromSomewhere</jsm>());
 	</p>
 
 	<p>
 		Convenience creators are provided for creating lists with minimal code:
 	</p>
 	<p class='bjava'>
-		PartList <jv>parts</jv> = PartList.<jsm>of</jsm>(BasicIntegerPart.<jsm>of</jsm>(<js>"foo"</js>, 1));
-	</p>
-
-	<p>
-		Part lists are immutable but can be appended to using the {@link oaj.http.part.PartList#copy() copy()} method:
-	</p>
-	<p class='bjava'>
-		|	<jv>parts</jv> = <jv>parts</jv>
-		|		.copy()
-		|		.append(BasicIntegerPart.<jsm>of</jsm>(<js>"foo"</js>, 1))
-		|		.build();
+		|	PartList <jv>parts</jv> = PartList.<jsm>of</jsm>(BasicIntegerPart.<jsm>of</jsm>(<js>"foo"</js>, 1));
 	</p>
 
 	<p>
@@ -87,15 +76,13 @@
 		|	<jv>parts</jv> = PartList
 		|		.<jsm>create</jsm>()
 		|		.set(<js>"Foo"</js>, <js>"bar"</js>)
-		|		.set(<js>"Foo"</js>, <js>"baz"</js>)
-		|		.build();
+		|		.set(<js>"Foo"</js>, <js>"baz"</js>);
 		|	<jsm>assertObject</jsm>(<jv>parts</jv>).isString(<js>"foo=baz"</js>);
 		|
 		|	<jv>parts</jv> = PartList
 		|		.create()
 		|		.set(<js>"Foo"</js>, <js>"bar"</js>)
-		|		.setDefault(<js>"Foo"</js>, <js>"baz"</js>)
-		|		.build();
+		|		.setDefault(<js>"Foo"</js>, <js>"baz"</js>);
 		|	<jsm>assertObject</jsm>(<jv>parts</jv>).isString(<js>"foo=bar"</js>);
 	</p>
 
@@ -141,8 +128,7 @@
 		|		.<jsm>create</jsm>()
 		|		.resolving()
 		|		.append(<js>"X1"</js>, <js>"$S{foo}"</js>)
-		|		.append(<js>"X2"</js>, ()-&gt;<js>"$S{foo}"</js>)
-		|		.build();
+		|		.append(<js>"X2"</js>, ()-&gt;<js>"$S{foo}"</js>);
 		|
 		|	<jsm>assertObject</jsm>(<jv>parts</jv>).isString(<js>"X1=bar&amp;X2=bar"</js>);
 	</p>

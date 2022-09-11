@@ -27,7 +27,7 @@
 		|		path=<js>"/parent"</js>,
 		|		children={MyChildResource.<jk>class</jk>}
 		|	)
-		|	<jk>public</jk> MyRootResources <jk>extends</jk> BasicRestServletGroup <jk>implements</jk> BasicUniversalConfig {...}
+		|	<jk>public</jk> MyRootResources <jk>extends</jk> BasicRestServletGroup {...}
 	</p>
 	<p class='bjava'>
 		|	<jd>/** Child Resource */</jd>
@@ -35,7 +35,7 @@
 		|		path=<js>"/child"</js>  <jc>// Path relative to parent resource.</jc>
 		|	)
 		|	<jc>// Note that we don't need to extend from RestServlet.</jc>
-		|	<jk>public</jk> MyChildResource <jk>extends</jk> BasicRestObject <jk>implements</jk> BasicUniversalConfig {...} 
+		|	<jk>public</jk> MyChildResource <jk>extends</jk> BasicRestObject {...} 
 	</p>
 	<p>
 		The path of the child resource gets appended to the path of the parent resource. 

@@ -115,7 +115,7 @@
 	
 	<h5 class='topic'>HeaderList</h5>
 	<p>
-		The {@link oaj.http.header.HeaderList} class is a thread-safe immutable list of HTTP headers.
+		The {@link oaj.http.header.HeaderList} class is a list of HTTP headers.
 	</p>
 
 	<h5 class='figure'>Example</h5>
@@ -124,20 +124,10 @@
 		|	HeaderList <jv>headers</jv> = HeaderList
 		|		.<jsm>create</jsm>()
 		|		.append(Accept.<jsm>of</jsm>(<js>"text/xml"</js>))
-		|		.append(<js>"Content-Type"</js>, ()-&gt;<jsm>getDynamicContentTypeFromSomewhere</jsm>())
-		|		.build();
+		|		.append(<js>"Content-Type"</js>, ()-&gt;<jsm>getDynamicContentTypeFromSomewhere</jsm>());
 		|	
 		|	<jc>// Construct using convenience creator.</jc>
 		|	HeaderList <jv>headers</jv> = HeaderList.<jsm>of</jsm>(Accept.<jsf>TEXT_XML</jsf>, ContentType.<jsf>TEXT_XML</jsf>);
-	</p>
-	<p>
-		Header lists are immutable but can be appended to using the {@link oaj.http.header.HeaderList#copy() copy()} method:	
-	</p>
-	<p class='bjava'>
-		|	<jv>headers</jv> = <jv>headers</jv>
-		|		.copy()
-		|		.append(AcceptEncoding.<jsm>of</jsm>(<js>"identity"</js>))
-		|		.build();
 	</p>
 	<p>
 		Static methods are provided on {@link oaj.http.HttpHeaders} to further simplify creation of header lists.
@@ -157,15 +147,13 @@
 		|	<jv>headers</jv> = HeaderList
 		|		.<jsm>create</jsm>()
 		|		.set(Accept.<jsf>TEXT_PLAIN</jsf>)
-		|		.set(Accept.<jsf>TEXT_XML</jsf>)
-		|		.build();
+		|		.set(Accept.<jsf>TEXT_XML</jsf>);
 		|	<jsm>assertObject</jsm>(<jv>headers</jv>).isString(<js>"[Accept: text/xml]"</js>);
 		|
 		|	<jv>headers</jv> = HeaderList
 		|		.create()
 		|		.set(Accept.<jsf>TEXT_PLAIN</jsf>)
-		|		.setDefault(Accept.<jsf>TEXT_XML</jsf>)
-		|		.build();
+		|		.setDefault(Accept.<jsf>TEXT_XML</jsf>);
 		|	<jsm>assertObject</jsm>(<jv>headers</jv>).isString(<js>"[Accept: text/plain]"</js>);
 	</p>
 
@@ -190,7 +178,10 @@
 	</p>
 	<h5 class='figure'>Example</h5>
 	<p class='bjava'>
-		|	ContentType <jv>contentType</jv> = <jv>headers</jv>.get(ContentType.<jk>class</jk>);
+		|	HeaderList headers = HeaderList.of(Accept.TEXT_JSON, Accept.TEXT_XML);
+		|
+		|	<jc>// Returns "text/json, text/xml"</jc>
+		|	Accept <jv>accept</jv> = <jv>headers</jv>.get(Accept.<jk>class</jk>);
 	</p>
 
 	<p>
@@ -213,8 +204,7 @@
 		|		.<jsm>create</jsm>()
 		|		.resolving()
 		|		.append(<js>"X1"</js>, <js>"$S{foo}"</js>)
-		|		.append(<js>"X2"</js>, ()-&gt;<js>"$S{foo}"</js>)
-		|		.build();
+		|		.append(<js>"X2"</js>, ()-&gt;<js>"$S{foo}"</js>);
 		|
 		|	<jsm>assertObject</jsm>(<jv>headers</jv>).isString(<js>"[X1: bar, X2: bar]"</js>);
 	</p>

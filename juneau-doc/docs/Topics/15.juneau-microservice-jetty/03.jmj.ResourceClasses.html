@@ -36,7 +36,7 @@
 		|			LogsResource.<jk>class</jk>
 		|		}
 		|	)
-		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup <jk>implements</jk> BasicUniversalConfig {
+		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup {
 		|		<jc>// No code! </jc>
 		|	}
 	</p>
@@ -77,7 +77,7 @@
 		|		title=<js>"Hello World example"</js>,
 		|		description=<js>"Simplest possible REST resource"</js>
 		|	)
-		|	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {
+		|	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet {
 		|	
 		|		<ja>@RestGet</ja>(<js>"/*"</js>)
 		|		<jk>public</jk> String sayHello() {

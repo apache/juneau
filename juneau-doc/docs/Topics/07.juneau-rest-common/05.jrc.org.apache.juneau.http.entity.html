@@ -26,32 +26,11 @@
 			<ul class='javatreec'>
 				<li class='jc'>{@link oaj.http.entity.ByteArrayEntity}
 				<li class='jc'>{@link oaj.http.entity.FileEntity}
-				<li class='jc'>{@link oaj.http.entity.InputStreamEntity}
+				<li class='jc'>{@link oaj.http.entity.StreamEntity}
 				<li class='jc'>{@link oaj.http.entity.ReaderEntity}
 				<li class='jc'>{@link oaj.http.entity.SerializedEntity}
 				<li class='jc'>{@link oaj.http.entity.StringEntity}
 			</ul>
-		</ul>
-	</ul>
-	
-	<h5 class='topic'>HttpEntityBuilder</h5>
-	<p>
-		HTTP entities are created through builders created in the {@link oaj.http.HttpEnties} class or individual <c>create()</c> methods
-		defined in the subclasses above.  The builder contains the following methods:
-	</p>
-	<ul class='javatree'>
-		<li class='jc'>{@link oaj.http.entity.HttpEntityBuilder}
-		<ul>
-			<li class='jm'>{@link oaj.http.entity.HttpEntityBuilder#cached() cached()}
-			<li class='jm'>{@link oaj.http.entity.HttpEntityBuilder#chunked() chunked()}
-			<li class='jm'>{@link oaj.http.entity.HttpEntityBuilder#chunked(boolean) chunked(boolean)}
-			<li class='jm'>{@link oaj.http.entity.HttpEntityBuilder#content(Object) content(Object)}
-			<li class='jm'>{@link oaj.http.entity.HttpEntityBuilder#content(Supplier) content(Supplier)}
-			<li class='jm'>{@link oaj.http.entity.HttpEntityBuilder#contentEncoding(ContentEncoding) contentEncoding(ContentEncoding)}
-			<li class='jm'>{@link oaj.http.entity.HttpEntityBuilder#contentEncoding(String) contentEncoding(String)}
-			<li class='jm'>{@link oaj.http.entity.HttpEntityBuilder#contentLength(long) contentLength(long)}
-			<li class='jm'>{@link oaj.http.entity.HttpEntityBuilder#contentType(ContentType) contentType(ContentType)}
-			<li class='jm'>{@link oaj.http.entity.HttpEntityBuilder#contentType(String) contentType(String)}
 		</ul>
 	</ul>
 	
@@ -65,10 +44,37 @@
 		|	HttpEntity <jv>entity</jv> = ByteArrayEntity
 		|		.<jsm>create</jsm>()
 		|		.content(<jv>payload</jv>)
-		|		.contentType(ContentType.<jsf>APPLICATION_OCTET_STREAM</jsf>)
-		|		.build();
+		|		.contentType(ContentType.<jsf>APPLICATION_OCTET_STREAM</jsf>);
 		|
 		|	<jc>// Create via HttpEntities.</jc>
-		|	HttpEntity <jv>entity</jv> = <jsm>byteArrayEntity</jsm>(<jv>payload</jv>, ContentType.<jsf>APPLICATION_OCTET_STREAM</jsf>).build();
+		|	HttpEntity <jv>entity</jv> = <jsm>byteArrayEntity</jsm>(<jv>payload</jv>, ContentType.<jsf>APPLICATION_OCTET_STREAM</jsf>);
+	</p>
+	
+	<p>
+		HttpEntities can be used by both the server and client side APIs described in later sections.
+	</p>
+	<h5 class='figure'>Server-side example:</h5>
+	<p class='bjava'>
+		|	<jc>// REST endpoint that simply echos an HTTP entity.</jc>
+		| 
+		|	<ja>@RestPost</ja>(path=<js>"/entity"</js>)
+		|	<jk>public</jk> HttpEntity echoMyEntity(HttpEntity <jv>entity</jv>) {
+		|		<jk>return</jk> <jv>entity</jv>;
+		|	}
+	</p>
+	
+	<h5 class='figure'>Client-side example:</h5>
+	<p class='bjava'>
+		|	<jc>// REST client that uses the echo REST endpoint above.</jc> 
+		|	
+		|	HttpEntity <jv>entity</jv> = <jsm>byteArrayEntity</jsm>(...);
+		|	
+		|	<jv>entity</jv> = RestClient.<jsm>create</jsm>()
+		|		.build()
+		|		.rootUrl(<jsf>URI</jsf>)
+		|		.post(<js>"/entity"</js>, <jv>entity</jv>)
+		|		.run()
+		|		.assertStatus().asCode().is(200)
+		|		.getContent().as(ByteArrayEntity.<jk>class</jk>);
 	</p>
 </div>

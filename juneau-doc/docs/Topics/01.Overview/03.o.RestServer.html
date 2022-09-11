@@ -42,7 +42,7 @@
 		|		}
 		|	)
 		|	<ja>@BeanConfig</ja>(sortProperties=<js>"true"</js>)
-		|	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniveralConfig {
+		|	<jk>public class</jk> HelloWorldResource <jk>extends</jk> BasicRestServlet {
 		|	
 		|		<ja>@RestGet</ja>(path=<js>"/*"</js>, summary=<js>"Responds with \"Hello world!\""</js>)
 		|		<jk>public</jk> String sayHello() {
@@ -84,7 +84,7 @@
 		|			MyChildResource.<jk>class</jk>
 		|		}
 		|	)
-		|	<jk>public</jk> MyParentResource <jk>extends</jk> BasicRestServlet <jk>implements</jk> BasicUniversalConfig {...}
+		|	<jk>public</jk> MyParentResource <jk>extends</jk> BasicRestServlet {...}
 	</p>
 	<p class='bjava'>
 		|	<jd>/** Child Resource */</jd>
@@ -92,7 +92,7 @@
 		|		path=<js>"/child"</js>  <jc>// Path relative to parent resource.</jc>
 		|	)
 		|	<jc>// Note that we don't need to extend from RestServlet.</jc>
-		|	<jk>public</jk> MyChildResource <jk>implements</jk> BasicUniversalConfig {
+		|	<jk>public</jk> MyChildResource <jk>implements</jk> BasicRestObject {
 		|		...
 		|	} 
 	</p>
@@ -341,7 +341,7 @@
 		|			ShutdownResource.<jk>class</jk>
 		|		}
 		|	)
-		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup <jk>implements</jk> BasicUniversalConfig {
+		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicRestServletGroup {
 		|		<jc>// NO CODE!!!</jc>
 		|	}
 	</p>
@@ -502,7 +502,7 @@
 		|			HelloWorldResource.<jk>class</jk>
 		|		}
 		|	)
-		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicSpringRestServletGroup <jk>implements</jk> BasicUniversalConfig {
+		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicSpringRestServletGroup {
 		|		<jc>// No code!</jc>
 		|	}
 	</p>

@@ -107,7 +107,7 @@
 		|			<js>"&lt;/div&gt;"</js>
 		|		}
 		|	)
-		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicSpringRestServletGroup <jk>implements</jk> BasicUniversalConfig {
+		|	<jk>public class</jk> RootResources <jk>extends</jk> BasicSpringRestServletGroup {
 		|		<jk>private static final long</jk> <jsf>serialVersionUID</jsf> = 1L;
 		|	}
 	</p>
@@ -207,7 +207,7 @@
 		|		},
 		|		stylesheet=<js>"servlet:/htdocs/themes/dark.css"</js>  <jc>// Use dark theme by default.</jc>
 		|	)
-		|	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestObject <jk>implements</jk> BasicUniversalConfig, PetStore {
+		|	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestObject <jk>implements</jk> PetStore {
 		|	
 		|		<ja>@Autowired</ja>
 		|		<jk>private</jk> PetStoreService <jf>store</jf>;

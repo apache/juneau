@@ -13,7 +13,6 @@
 package org.apache.juneau.microservice.resources;
 
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.servlet.*;
 
 /**
@@ -32,6 +31,6 @@ import org.apache.juneau.rest.servlet.*;
 	description="This is a sample router page",
 	children={ConfigResource.class}
 )
-public class SampleRootResource extends BasicRestServletGroup implements BasicUniversalConfig {
+public class SampleRootResource extends BasicRestServletGroup {
 	private static final long serialVersionUID = 1L;
 }

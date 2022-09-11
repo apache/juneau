@@ -20,7 +20,6 @@ import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.widget.*;
 
@@ -60,7 +59,7 @@ import java.net.*;
 	},
 	asideFloat="RIGHT"
 )
-public class PhotosResource extends BasicRestServlet implements BasicUniversalConfig {
+public class PhotosResource extends BasicRestServlet {
 
 	private static final long serialVersionUID = 1L;
 

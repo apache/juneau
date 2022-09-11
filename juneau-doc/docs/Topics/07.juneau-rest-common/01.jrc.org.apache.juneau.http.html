@@ -209,7 +209,7 @@
 		|	
 		|	<ja>@RestDelete</ja>(path=<js>"/{id}"</js>)
 		|	<jk>public</jk> HttpResource helloWold(...) {
-		|		<jk>return</jk> <jsm>stringResource</jsm>(<js>"Hello!"</js>).contentType(<js>"text/plain"</js>).build();
+		|		<jk>return</jk> <jsm>stringResource</jsm>(<js>"Hello!"</js>).contentType(<js>"text/plain"</js>);
 		|	}
 	</p>
 	
@@ -290,8 +290,8 @@
 		|	<ja>@RestDelete</ja>(path=<js>"/{id}"</js>)
 		|	<jk>public</jk> Ok doDelete(...) <jk>throws</jk> Unauthorized {
 		|		<jk>if</jk> (<jc>/* user not authorized*/</jc>)
-		|			<jk>throw</jk> <jsm>unauthorized</jsm>().build();
-		|		<jk>return</jk> <jsm>ok</jsm>().content(<js>"OK"</js>).header(<jsm>contentType</jsm>(<js>"text/plain"</js>)).build();
+		|			<jk>throw</jk> <jsm>unauthorized</jsm>();
+		|		<jk>return</jk> <jsm>ok</jsm>().content(<js>"OK"</js>).header(<jsm>contentType</jsm>(<js>"text/plain"</js>));
 		|	}
 	</p>
 </div>
