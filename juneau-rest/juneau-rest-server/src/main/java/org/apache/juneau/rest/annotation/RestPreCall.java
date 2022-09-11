@@ -32,7 +32,6 @@ import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.guard.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.matcher.*;
-import org.apache.juneau.rest.servlet.*;
 
 /**
  * Identifies a method that gets called immediately before the <ja>@RestOp</ja> annotated method gets called.
@@ -147,15 +146,6 @@ import org.apache.juneau.rest.servlet.*;
  * 	<li class='note'>
  * 		It's advisable not to mess around with the HTTP content itself since you may end up consuming the content
  * 		before the actual REST method has a chance to use it.
- * 	<li class='note'>
- * 		The {@link RestServlet} class itself implements a convenience method annotated with this annotation
- * 		that can be overridden directly:
- * 		<ul class='javatree'>
- * 			<li class='jac'>{@link RestServlet}
- * 			<ul>
- * 				<li class='jm'>{@link RestServlet#onPreCall(RestRequest,RestResponse) onPreCall(RestRequest,RestResponse)}
- * 			</ul>
- * 		</ul>
  * </ul>
  *
  * <ul class='seealso'>

@@ -29,9 +29,6 @@ import org.apache.juneau.internal.*;
 import org.apache.juneau.reflect.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.converter.*;
-import org.apache.juneau.rest.guard.*;
-import org.apache.juneau.rest.matcher.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.response.*;
 
@@ -108,7 +105,8 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	/**
-	 * Returns the path defined on this servlet if it's defined via {@link Rest#path()}.
+	 * Returns the path for this resource as defined by the @Rest(path) annotation or RestContext.Builder.path(String) method
+	 * concatenated with those on all parent classes.
 	 *
 	 * @return The path defined on this servlet, or an empty string if not specified.
 	 */
@@ -185,33 +183,6 @@ public abstract class RestServlet extends HttpServlet {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Log a message at {@link Level#INFO} level.
-	 *
-	 * <p>
-	 * Subclasses can intercept the handling of these messages by overriding {@link #doLog(Level, Throwable, Supplier)}.
-	 *
-	 * @param msg The message to log.
-	 */
-	@Override /* GenericServlet */
-	public void log(String msg) {
-		doLog(Level.INFO, null, () -> msg);
-	}
-
-	/**
-	 * Log a message.
-	 *
-	 * <p>
-	 * Subclasses can intercept the handling of these messages by overriding {@link #doLog(Level, Throwable, Supplier)}.
-	 *
-	 * @param msg The message to log.
-	 * @param cause The cause.
-	 */
-	@Override /* GenericServlet */
-	public void log(String msg, Throwable cause) {
-		doLog(Level.INFO, null, () -> msg);
-	}
-
-	/**
 	 * Log a message.
 	 *
 	 * <p>
@@ -262,301 +233,22 @@ public abstract class RestServlet extends HttpServlet {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Hook events
-	//-----------------------------------------------------------------------------------------------------------------
-
-	/**
-	 * Method that gets called during servlet initialization.
-	 *
-	 * <p>
-	 * This method is called from within the {@link Servlet#init(ServletConfig)} method after the {@link org.apache.juneau.rest.RestContext.Builder}
-	 * object has been created and initialized with the annotations defined on the class, but before the
-	 * {@link RestContext} object has been created.
-	 *
-	 * <p>
-	 * An example of this is the <c>PetStoreResource</c> class that uses an init method to perform initialization
-	 * of an internal data structure.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<ja>@Rest</ja>(...)
-	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServlet {
-	 *
-	 * 		<jc>// Our database.</jc>
-	 * 		<jk>private</jk> Map&lt;Integer,Pet&gt; <jf>petDB</jf>;
-	 *
-	 * 		<ja>@Override</ja>
-	 * 		<jk>public void</jk> onInit(RestContext.Builder <jv>builder</jv>) <jk>throws</jk> Exception {
-	 * 			<jc>// Load our database from a local JSON file.</jc>
-	 * 			<jf>petDB</jf> = JsonParser.<jsf>DEFAULT</jsf>
-	 * 				.parse(
-	 * 					getClass().getResourceAsStream(<js>"PetStore.json"</js>),
-	 * 					LinkedHashMap.<jk>class</jk>,
-	 * 					Integer.<jk>class</jk>,
-	 * 					Pet.<jk>class</jk>
-	 * 				);
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li class='note'>
-	 * 		The default implementation of this method is a no-op.
-	 * 	<li>
-	 * 		Multiple init methods can be defined on a class.
-	 * 		<br>Init methods on parent classes are invoked before init methods on child classes.
-	 * 		<br>The order of init method invocations within a class is alphabetical, then by parameter count, then by parameter types.
-	 * 	<li>
-	 * 		The method can throw any exception causing initialization of the servlet to fail.
-	 * </ul>
-	 *
-	 * @param builder Context builder which can be used to configure the servlet.
-	 * @throws Exception Any exception thrown will cause servlet to fail startup.
-	 */
-	@RestInit
-	public void onInit(RestContext.Builder builder) throws Exception {}
-
-	/**
-	 * Method that gets called immediately after servlet initialization.
-	 *
-	 * <p>
-	 * This method is called from within the {@link Servlet#init(ServletConfig)} method after the {@link RestContext}
-	 * object has been created.
-	 *
-	 * <ul class='notes'>
-	 * 	<li class='note'>
-	 * 		The default implementation of this method is a no-op.
-	 * 	<li class='note'>
-	 * 		Multiple post-init methods can be defined on a class.
-	 * 		<br>post-init methods on parent classes are invoked before post-init methods on child classes.
-	 * 		<br>The order of post-init method invocations within a class is alphabetical, then by parameter count, then by parameter types.
-	 * 	<li class='note'>
-	 * 		The method can throw any exception causing initialization of the servlet to fail.
-	 * </ul>
-	 *
-	 * @param context The initialized context object.
-	 * @throws Exception Any exception thrown will cause servlet to fail startup.
-	 */
-	@RestPostInit
-	public void onPostInit(RestContext context) throws Exception {}
-
-	/**
-	 * Identical to {@link #onPostInit(RestContext)} except the order of execution is child-resources first.
-	 *
-	 * <p>
-	 * Use this method if you need to perform any kind of initialization on child resources before the parent resource.
-	 *
-	 * <p>
-	 * This method is called from within the {@link Servlet#init(ServletConfig)} method after the {@link RestContext}
-	 * object has been created and after the child-last {@link RestPostInit} methods have been called.
-	 *
-	 * <p>
-	 * The only valid parameter type for this method is {@link RestContext} which can be used to retrieve information
-	 * about the servlet.
-	 *
-	 * <ul class='notes'>
-	 * 	<li class='note'>
-	 * 		The default implementation of this method is a no-op.
-	 * 	<li class='note'>
-	 * 		Multiple POST_INIT_CHILD_FIRST methods can be defined on a class.
-	 * 		<br>POST_INIT_CHILD_FIRST methods on parent classes are invoked before POST_INIT_CHILD_FIRST methods on child classes.
-	 * 		<br>The order of POST_INIT_CHILD_FIRST method invocations within a class is alphabetical, then by parameter count, then by parameter types.
-	 * 	<li class='note'>
-	 * 		The method can throw any exception causing initialization of the servlet to fail.
-	 * </ul>
-	 *
-	 * @param context The initialized context object.
-	 * @throws Exception Any exception thrown will cause servlet to fail startup.
-	 */
-	@RestPostInit(childFirst=true)
-	public void onPostInitChildFirst(RestContext context) throws Exception {}
-
-	/**
-	 * Method that gets called during servlet destroy.
-	 *
-	 * <p>
-	 * This method is called from within the {@link Servlet#destroy()}.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<ja>@Rest</ja>(...)
-	 * 	<jk>public class</jk> PetStoreResource <jk>extends</jk> BasicRestServlet {
-	 *
-	 * 		<jc>// Our database.</jc>
-	 * 		<jk>private</jk> Map&lt;Integer,Pet&gt; <jf>petDB</jf>;
-	 *
-	 * 		<ja>@Override</ja>
-	 * 		<jk>public void</jk> onDestroy(RestContext <jv>context</jv>) {
-	 * 			<jf>petDB</jf> = <jk>null</jk>;
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li class='note'>
-	 * 		The default implementation of this method is a no-op.
-	 * 	<li class='note'>
-	 * 		Multiple destroy methods can be defined on a class.
-	 * 		<br>Destroy methods on child classes are invoked before destroy methods on parent classes.
-	 * 		<br>The order of destroy method invocations within a class is alphabetical, then by parameter count, then by parameter types.
-	 * 	<li class='note'>
-	 * 		In general, destroy methods should not throw any exceptions, although if any are thrown, the stack trace will be
-	 * 		printed to <c>System.err</c>.
-	 * </ul>
-	 *
-	 * @param context The initialized context object.
-	 * @throws Exception Any exception thrown will cause stack trace to be printed to <c>System.err</c>.
-	 */
-	@RestDestroy
-	public void onDestroy(RestContext context) throws Exception {}
-
-	/**
-	 * A method that is called immediately after the <c>HttpServlet.service(HttpServletRequest, HttpServletResponse)</c>
-	 * method is called.
-	 *
-	 * <p>
-	 * Note that you only have access to the raw request and response objects at this point.
-	 *
-	 * <h5 class='figure'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<ja>@Rest</ja>(...)
-	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
-	 *
-	 * 		<jc>// Add a request attribute to all incoming requests.</jc>
-	 * 		<ja>@Override</ja>
-	 * 		<jk>public void</jk> onStartCall(HttpServletRequest <jv>req</jv>, HttpServletResponse <jv>res</jv>) {
-	 * 			<jv>req</jv>.setAttribute(<js>"foobar"</js>, <jk>new</jk> FooBar());
-	 * 		}
-	 * 	}
-	 * </p>
-	 *
-	 * <ul class='notes'>
-	 * 	<li class='note'>
-	 * 		The default implementation of this method is a no-op.
-	 * 	<li class='note'>
-	 * 		Multiple start-call methods can be defined on a class.
-	 * 		<br>Start-call methods on parent classes are invoked before start-call methods on child classes.
-	 * 		<br>The order of start-call method invocations within a class is alphabetical, then by parameter count, then by parameter types.
-	 * 	<li class='note'>
-	 * 		The method can throw any exception.
-	 * 		<br>{@link BasicHttpException HttpExceptions} can be thrown to cause a particular HTTP error status code.
-	 * 		<br>All other exceptions cause an HTTP 500 error status code.
-	 * </ul>
-	 *
-	 * @param req The HTTP servlet request object.
-	 * @param res The HTTP servlet response object.
-	 * @throws Exception Any exception.
-	 */
-	@RestStartCall
-	public void onStartCall(HttpServletRequest req, HttpServletResponse res) throws Exception {}
-
-	/**
-	 * Method that gets called immediately before the <ja>@RestOp</ja> annotated method gets called.
-	 *
-	 * <p>
-	 * At this point, the {@link RestRequest} object has been fully initialized, and all {@link RestGuard} and
-	 * {@link RestMatcher} objects have been called.
-	 *
-	 * <ul class='notes'>
-	 * 	<li class='note'>
-	 * 		The default implementation of this method is a no-op.
-	 * 	<li class='note'>
-	 * 		Multiple pre-call methods can be defined on a class.
-	 * 		<br>Pre-call methods on parent classes are invoked before pre-call methods on child classes.
-	 * 		<br>The order of pre-call method invocations within a class is alphabetical, then by parameter count, then by parameter types.
-	 * 	<li class='note'>
-	 * 		The method can throw any exception.
-	 * 		<br>{@link BasicHttpException HttpExceptions} can be thrown to cause a particular HTTP error status code.
-	 * 		<br>All other exceptions cause an HTTP 500 error status code.
-	 * 	<li class='note'>
-	 * 		It's advisable not to mess around with the HTTP content itself since you may end up consuming the content
-	 * 		before the actual REST method has a chance to use it.
-	 * </ul>
-	 *
-	 * @param req The request object.
-	 * @param res The response object.
-	 * @throws Exception Any exception.
-	 */
-	@RestPreCall
-	public void onPreCall(RestRequest req, RestResponse res) throws Exception {}
-
-	/**
-	 * Method that gets called immediately after the <ja>@RestOp</ja> annotated method gets called.
-	 *
-	 * <p>
-	 * At this point, the output object returned by the method call has been set on the response, but
-	 * {@link RestConverter RestConverters} have not yet been executed and the response has not yet been written.
-	 *
-	 * <ul class='notes'>
-	 * 	<li class='note'>
-	 * 		The default implementation of this method is a no-op.
-	 * 	<li class='note'>
-	 * 		Multiple post-call methods can be defined on a class.
-	 * 		<br>Post-call methods on parent classes are invoked before post-call methods on child classes.
-	 * 		<br>The order of post-call method invocations within a class is alphabetical, then by parameter count, then by parameter types.
-	 * 	<li class='note'>
-	 * 		The method can throw any exception, although at this point it is too late to set an HTTP error status code.
-	 * </ul>
-	 *
-	 * @param req The request object.
-	 * @param res The response object.
-	 * @throws Exception Any exception.
-	 */
-	@RestPostCall
-	public void onPostCall(RestRequest req, RestResponse res) throws Exception {}
-
-	/**
-	 * Method that gets called right before we exit the servlet service method.
-	 *
-	 * <p>
-	 * At this point, the output has been written and flushed.
-	 *
-	 * <p>
-	 * The following attributes are set on the {@link HttpServletRequest} object that can be useful for logging purposes:
-	 * <ul>
-	 * 	<li><js>"Exception"</js> - Any exceptions thrown during the request.
-	 * 	<li><js>"ExecTime"</js> - Execution time of the request.
-	 * </ul>
-	 *
-	 * <ul class='notes'>
-	 * 	<li class='note'>
-	 * 		The default implementation of this method is a no-op.
-	 * 	<li class='note'>
-	 * 		Multiple end-call methods can be defined on a class.
-	 * 		<br>End-call methods on parent classes are invoked before end-call methods on child classes.
-	 * 		<br>The order of end-call method invocations within a class is alphabetical, then by parameter count, then by parameter types.
-	 * 	<li class='note'>
-	 * 		The method can throw any exception, although at this point it is too late to set an HTTP error status code.
-	 * 	<li class='note'>
-	 * 		Note that if you override a parent method, you probably need to call <code><jk>super</jk>.parentMethod(...)</code>.
-	 * 		<br>The method is still considered part of the parent class for ordering purposes even though it's
-	 * 		overridden by the child class.
-	 * </ul>
-	 *
-	 * @param req The HTTP servlet request object.
-	 * @param res The HTTP servlet response object.
-	 * @throws Exception Any exception.
-	 */
-	@RestEndCall
-	public void onEndCall(HttpServletRequest req, HttpServletResponse res) throws Exception {}
-
-	//-----------------------------------------------------------------------------------------------------------------
 	// Other methods
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Returns the current HTTP request.
+	 * Returns the current thread-local HTTP request.
 	 *
-	 * @return The current HTTP request, or <jk>null</jk> if it wasn't created.
+	 * @return The current thread-local HTTP request, or <jk>null</jk> if it wasn't created.
 	 */
 	public synchronized RestRequest getRequest() {
 		return getContext().getLocalSession().getOpSession().getRequest();
 	}
 
 	/**
-	 * Returns the current HTTP response.
+	 * Returns the current thread-local HTTP response.
 	 *
-	 * @return The current HTTP response, or <jk>null</jk> if it wasn't created.
+	 * @return The current thread-local HTTP response, or <jk>null</jk> if it wasn't created.
 	 */
 	public synchronized RestResponse getResponse() {
 		return getContext().getLocalSession().getOpSession().getResponse();

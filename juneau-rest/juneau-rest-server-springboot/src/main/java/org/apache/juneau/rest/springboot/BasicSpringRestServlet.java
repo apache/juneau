@@ -31,7 +31,7 @@ import org.apache.juneau.rest.stats.*;
  * Meant as base class for top-level REST resources in Spring Boot environments.
  *
  * <p>
- * Provides support for JSON, XML, HTML, URL-Encoding, UON, XML, and MessagePack.  See {@link BasicUniversalConfig}
+ * Provides support for JSON, XML, HTML, URL-Encoding, UON, XML, OpenAPI, and MessagePack.  See {@link BasicUniversalConfig}
  * for details.
  *
  * <p>

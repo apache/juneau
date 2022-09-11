@@ -52,7 +52,6 @@ import org.apache.juneau.rest.widget.*;
 		"api: servlet:/api",
 		"stats: servlet:/stats",
 		"$W{ContentTypeMenuItem}",
-		"$W{ThemeMenuItem}",
 		"source: $C{Source/gitHub}/org/apache/juneau/examples/rest/dto/JsonSchemaResource.java"
 	},
 	aside={

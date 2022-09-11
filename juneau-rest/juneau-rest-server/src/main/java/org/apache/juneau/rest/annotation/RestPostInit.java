@@ -20,7 +20,6 @@ import java.lang.annotation.*;
 import javax.servlet.*;
 
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.servlet.*;
 
 /**
  * Identifies a method that gets called immediately after servlet initialization.
@@ -50,16 +49,6 @@ import org.apache.juneau.rest.servlet.*;
  * 		Note that if you override a parent method, you probably need to call <code><jk>super</jk>.parentMethod(...)</code>.
  * 		<br>The method is still considered part of the parent class for ordering purposes even though it's
  * 		overridden by the child class.
- * 	<li class='note'>
- * 		The {@link RestServlet} class itself implements the following convenience methods annotated with this annotation
- * 		that can be overridden directly:
- * 		<ul class='javatree'>
- * 			<li class='jac'>{@link RestServlet}
- * 			<ul>
- * 				<li class='jm'>{@link RestServlet#onPostInit(RestContext) onPostInit(RestContext)}
- * 				<li class='jm'>{@link RestServlet#onPostInitChildFirst(RestContext) onPostInitChildFirst(RestContext)}
- * 			</ul>
- * 		</ul>
  * </ul>
  */
 @Target({METHOD,TYPE})

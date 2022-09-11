@@ -32,7 +32,7 @@ import org.apache.juneau.http.response.*;
  * Meant as a base class for child REST resources in servlet containers and Spring Boot environments.
  *
  * <p>
- * Provides support for JSON, XML, HTML, URL-Encoding, UON, XML, and MessagePack.  See {@link BasicUniversalConfig}
+ * Provides support for JSON, XML, HTML, URL-Encoding, UON, XML, OpenAPI, and MessagePack.  See {@link BasicUniversalConfig}
  * for details.
  *
  * <p>

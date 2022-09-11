@@ -19,8 +19,6 @@ import java.lang.annotation.*;
 
 import javax.servlet.http.*;
 
-import org.apache.juneau.rest.servlet.*;
-
 /**
  * Identifies a method that gets called right before we exit the servlet service method.
  *
@@ -79,15 +77,6 @@ import org.apache.juneau.rest.servlet.*;
  * 		Note that if you override a parent method, you probably need to call <code><jk>super</jk>.parentMethod(...)</code>.
  * 		<br>The method is still considered part of the parent class for ordering purposes even though it's
  * 		overridden by the child class.
- * 	<li class='note'>
- * 		The {@link RestServlet} class itself implements a convenience method annotated with this annotation
- * 		that can be overridden directly:
- * 		<ul class='javatree'>
- * 			<li class='jac'>{@link RestServlet}
- * 			<ul>
- * 				<li class='jm'>{@link RestServlet#onEndCall(HttpServletRequest,HttpServletResponse) onEndCall(HttpServletRequest,HttpServletResponse)}
- * 			</ul>
- * 		</ul>
  * </ul>
  *
  * <ul class='seealso'>
