@@ -15,7 +15,8 @@ package org.apache.juneau.transforms;
 import static org.apache.juneau.internal.StringUtils.*;
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.jena.ext.com.google.common.base.*;
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.swap.*;
 import org.junit.*;
@@ -44,7 +45,7 @@ public abstract class RoundTripObjectSwapTest<T,S> {
 	@Test
 	public void testSwap() throws Exception {
 		S s = ss.swap(bs, o);
-		if (! Objects.equal(expected, s)) {
+		if (! Objects.equals(expected, s)) {
 			fail("Test [{0} swap] failed.  Expected=[{1}], Actual=[{2}]", label, expected, s);
 		}
 	}
@@ -54,7 +55,7 @@ public abstract class RoundTripObjectSwapTest<T,S> {
 		S s = ss.swap(bs, o);
 		T o2 = ss.unswap(bs, s, bs.getClassMetaForObject(o));
 		S s2 = ss.swap(bs, o2);
-		if (! Objects.equal(s, s2)) {
+		if (! Objects.equals(s, s2)) {
 			System.err.println("s=["+s+"], o=["+o+"], o.type=["+o.getClass().getName()+"], o2=["+o2+"], o2.type=["+o2.getClass().getName()+"]");  // NOT DEBUG
 			fail("Test [{0} unswap] failed.  Expected=[{1}], Actual=[{2}]", label, s, s2);
 		}

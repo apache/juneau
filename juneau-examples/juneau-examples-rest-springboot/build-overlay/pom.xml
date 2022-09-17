@@ -50,7 +50,6 @@
 
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 		<juneau.version>${version}</juneau.version>
-		<jena.version>${jena.version}</jena.version>
 		<springboot.version>2.4.2</springboot.version>
 	</properties>
 
@@ -108,13 +107,6 @@
 		    <artifactId>xml-apis</artifactId>
 		</dependency>
 		
-		<!-- Optional RDF support -->
-		<dependency>
-			<groupId>org.apache.jena</groupId>
-			<artifactId>jena-core</artifactId>
-			<version>\${jena.version}</version>
-		</dependency>
-			
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
