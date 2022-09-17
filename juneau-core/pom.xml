@@ -31,7 +31,6 @@
 	<modules>
 		<module>juneau-common</module>
 		<module>juneau-marshall</module>
-		<module>juneau-marshall-rdf</module>
 		<module>juneau-dto</module>
 		<module>juneau-config</module>
 		<module>juneau-assertions</module>

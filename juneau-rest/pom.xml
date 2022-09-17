@@ -32,7 +32,6 @@
 		<module>juneau-rest-common</module>
 		<module>juneau-rest-server</module>
 		<module>juneau-rest-server-jaxrs</module>
-		<module>juneau-rest-server-rdf</module>
 		<module>juneau-rest-server-springboot</module>
 		<module>juneau-rest-client</module>
 		<module>juneau-rest-mock</module>
