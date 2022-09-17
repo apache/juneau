@@ -39,7 +39,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-server-rdf</artifactId>
+			<artifactId>juneau-rest-server</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

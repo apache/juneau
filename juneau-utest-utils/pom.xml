@@ -36,7 +36,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-marshall-rdf</artifactId>
+			<artifactId>juneau-marshall</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

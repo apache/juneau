@@ -82,29 +82,6 @@
 									<destFileName>org.apache.juneau.marshall_${project.version}.jar</destFileName>
 								</artifactItem>
 
-								<!-- juneau-marshall-rdf -->
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-marshall-rdf</artifactId>
-									<version>${project.version}</version>
-									<type>jar</type>
-									<classifier>sources</classifier>
-								</artifactItem>
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-marshall-rdf</artifactId>
-									<version>${project.version}</version>
-								</artifactItem>
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-marshall-rdf</artifactId>
-									<version>${project.version}</version>
-									<destFileName>org.apache.juneau.marshall.rdf_${project.version}.jar</destFileName>
-								</artifactItem>
-
 								<!-- juneau-config -->
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
@@ -174,52 +151,6 @@
 									<destFileName>org.apache.juneau.rest.server_${project.version}.jar</destFileName>
 								</artifactItem>
 
-								<!-- juneau-rest-server-jaxrs -->
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-rest-server-jaxrs</artifactId>
-									<version>${project.version}</version>
-									<type>jar</type>
-									<classifier>sources</classifier>
-								</artifactItem>
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-rest-server-jaxrs</artifactId>
-									<version>${project.version}</version>
-								</artifactItem>
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-rest-server-jaxrs</artifactId>
-									<version>${project.version}</version>
-									<destFileName>org.apache.juneau.rest.server.jaxrs_${project.version}.jar</destFileName>
-								</artifactItem>
-								
-								<!-- juneau-rest-server-rdf -->
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-rest-server-rdf</artifactId>
-									<version>${project.version}</version>
-									<type>jar</type>
-									<classifier>sources</classifier>
-								</artifactItem>
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-rest-server-rdf</artifactId>
-									<version>${project.version}</version>
-								</artifactItem>
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-rest-server-rdf</artifactId>
-									<version>${project.version}</version>
-									<destFileName>org.apache.juneau.rest.server.rdf_${project.version}.jar</destFileName>
-								</artifactItem>
-								
 								<!-- juneau-rest-server-springboot -->
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
