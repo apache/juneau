@@ -15,7 +15,6 @@ package org.apache.juneau.a.rttests;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
-import org.apache.juneau.jena.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.testutils.pojos.*;
@@ -156,10 +155,6 @@ public class RoundTripPrimitiveObjectBeansTest extends RoundTripTest {
 	//====================================================================================================
 	@Test
 	public void testPrimitiveAtomicObjectsBean() throws Exception {
-
-		// Jena does not support parsing into AtomicIntegers and AtomicLongs.
-		if (getSerializer() instanceof RdfSerializer)
-			return;
 
 		PrimitiveAtomicObjectsBean t = PrimitiveAtomicObjectsBean.get();
 		t = roundTrip(t, PrimitiveAtomicObjectsBean.class);

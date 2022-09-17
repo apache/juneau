@@ -17,7 +17,6 @@ import org.apache.juneau.dto.jsonschema.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.widget.*;
 
@@ -61,7 +60,7 @@ import org.apache.juneau.rest.widget.*;
 	}
 )
 @Marshalled(on="Schema",example="$F{JsonSchemaResource_example.json}")
-public class JsonSchemaResource extends BasicRestServlet implements BasicUniversalJenaConfig {
+public class JsonSchemaResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	private JsonSchema schema;     // The schema document

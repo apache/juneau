@@ -24,12 +24,10 @@ import static org.junit.runners.MethodSorters.*;
 import java.util.*;
 
 import org.apache.juneau.html.*;
-import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
@@ -56,8 +54,7 @@ public class RrpcInterfaceTest {
 			{ /* 3 */ "Html", HtmlSerializer.DEFAULT.copy().addBeanTypes().addRootType().build(), HtmlParser.DEFAULT },
 			{ /* 4 */ "MessagePack", MsgPackSerializer.DEFAULT.copy().addBeanTypes().addRootType().build(), MsgPackParser.DEFAULT },
 			{ /* 5 */ "UrlEncoding", UrlEncodingSerializer.DEFAULT.copy().addBeanTypes().addRootType().build(), UrlEncodingParser.DEFAULT },
-			{ /* 6 */ "Uon", UonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build(), UonParser.DEFAULT },
-			{ /* 7 */ "RdfXml", RdfXmlAbbrevSerializer.DEFAULT.copy().addBeanTypes().addRootType().build(), RdfXmlParser.DEFAULT },
+			{ /* 6 */ "Uon", UonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build(), UonParser.DEFAULT }
 		});
 	}
 
@@ -232,7 +229,7 @@ public class RrpcInterfaceTest {
 
 	@Rest(callLogger=BasicDisabledCallLogger.class)
 	@SerializerConfig(addRootType="true",addBeanTypes="true")
-	public static class InterfaceProxyResource extends BasicRestServlet implements BasicUniversalJenaConfig {
+	public static class InterfaceProxyResource extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 
 		//-----------------------------------------------------------------------------------------------------------------

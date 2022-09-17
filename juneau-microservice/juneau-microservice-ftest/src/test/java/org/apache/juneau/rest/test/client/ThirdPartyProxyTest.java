@@ -32,7 +32,6 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
@@ -61,7 +60,6 @@ public class ThirdPartyProxyTest extends RestTestcase {
 			{ /* 4 */ "MessagePack", MsgPackSerializer.DEFAULT.copy().addBeanTypes().addRootType().build(), MsgPackParser.DEFAULT },
 			{ /* 5 */ "UrlEncoding", UrlEncodingSerializer.DEFAULT.copy().addBeanTypes().addRootType().build(), UrlEncodingParser.DEFAULT },
 			{ /* 6 */ "Uon", UonSerializer.DEFAULT.copy().addBeanTypes().addRootType().build(), UonParser.DEFAULT },
-			{ /* 7 */ "RdfXml", RdfXmlAbbrevSerializer.DEFAULT.copy().addBeanTypes().addRootType().build(), RdfXmlParser.DEFAULT },
 		});
 	}
 

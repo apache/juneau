@@ -20,7 +20,6 @@ import java.util.*;
 
 import org.apache.juneau.html.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.serializer.*;
@@ -68,16 +67,7 @@ public abstract class ComboSerializeTest {
 
 			s = getSerializer(s);
 
-			boolean isRdf = s instanceof RdfSerializer;
-
 			String r = s.serializeToString(comboInput.in.get());
-
-			// Can't control RdfSerializer output well, so manually remove namespace declarations
-			// double-quotes with single-quotes, and spaces with tabs.
-			// Also because RDF sucks really bad and can't be expected to produce consistent testable results,
-			// we must also do an expensive sort-then-compare operation to verify the results.
-			if (isRdf)
-				r = r.replaceAll("<rdf:RDF[^>]*>", "<rdf:RDF>").replace('"', '\'');
 
 			// Specifying "xxx" in the expected results will spit out what we should populate the field with.
 			if (expected.equals("xxx")) {
@@ -88,11 +78,7 @@ public abstract class ComboSerializeTest {
 				}
 			}
 
-			if (isRdf) {
-				Object[] args = { comboInput.label, testName };
-				assertString(r).setMsg("{0}/{1} serialize-normal failed: <<<MSG>>>", args).isSortedLines(expected);
-			} else
-				assertString(r).setMsg("{0}/{1} parse-normal failed: <<<MSG>>>", comboInput.label, testName).is(expected);
+			assertString(r).setMsg("{0}/{1} parse-normal failed: <<<MSG>>>", comboInput.label, testName).is(expected);
 
 		} catch (AssertionError e) {
 			if (comboInput.exceptionMsg == null)
@@ -289,35 +275,5 @@ public abstract class ComboSerializeTest {
 	@Test
 	public void f21_serializeMsgPackT() throws Exception {
 		testSerialize("serializeMsgPackT", sMsgPackT, comboInput.msgPackT);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// RdfXml
-	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sRdfXml = RdfXmlAbbrevSerializer.DEFAULT;
-
-	@Test
-	public void g11_serializeRdfXml() throws Exception {
-		testSerialize("serializeRdfXml", sRdfXml, comboInput.rdfXml);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// RdfXml - 't' property
-	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sRdfXmlT = RdfXmlAbbrevSerializer.create().typePropertyName("t").build();
-
-	@Test
-	public void g21_serializeRdfXmlT() throws Exception {
-		testSerialize("serializeRdfXmlT", sRdfXmlT, comboInput.rdfXmlT);
-	}
-
-	//-----------------------------------------------------------------------------------------------------------------
-	// RdfXml - Readable
-	//-----------------------------------------------------------------------------------------------------------------
-	WriterSerializer sRdfXmlR = RdfXmlAbbrevSerializer.create().ws().build();
-
-	@Test
-	public void g31_serializeRdfXmlR() throws Exception {
-		testSerialize("serializeRdfXmlR", sRdfXmlR, comboInput.rdfXmlR);
 	}
 }

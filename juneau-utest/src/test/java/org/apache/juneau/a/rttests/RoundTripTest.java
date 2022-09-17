@@ -21,7 +21,6 @@ import java.util.Map.*;
 
 import org.apache.juneau.html.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
@@ -131,36 +130,6 @@ public abstract class RoundTripTest {
 				"UrlEncoding - expanded params",
 				UrlEncodingSerializer.create().expandedParams().addBeanTypes().addRootType(),
 				UrlEncodingParser.create().expandedParams(),
-				0
-			},
-			{ /* 14 */
-				"Rdf.Xml",
-				RdfXmlSerializer.create().keepNullProperties().addLiteralTypes().addBeanTypes().addRootType(),
-				RdfXmlParser.create(),
-				0
-			},
-			{ /* 15 */
-				"Rdf.XmlAbbrev",
-				RdfXmlAbbrevSerializer.create().keepNullProperties().addLiteralTypes().addBeanTypes().addRootType(),
-				RdfXmlParser.create(),
-				0
-			},
-			{ /* 16 */
-				"Rdf.Turtle",
-				TurtleSerializer.create().keepNullProperties().addLiteralTypes().addBeanTypes().addRootType(),
-				TurtleParser.create(),
-				0
-			},
-			{ /* 17 */
-				"Rdf.NTriple",
-				NTripleSerializer.create().keepNullProperties().addLiteralTypes().addBeanTypes().addRootType(),
-				NTripleParser.create(),
-				0
-			},
-			{ /* 18 */
-				"Rdf.N3",
-				N3Serializer.create().keepNullProperties().addLiteralTypes().addBeanTypes().addRootType(),
-				N3Parser.create(),
 				0
 			},
 			{ /* 19 */

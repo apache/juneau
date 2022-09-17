@@ -23,7 +23,6 @@ import java.util.function.*;
 import org.apache.juneau.*;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
@@ -53,10 +52,6 @@ public class ContentComboTestBase extends RestTestcase {
 			case "text/uon": return getClient(mt, UonSerializer.DEFAULT, UonParser.DEFAULT);
 			case "application/x-www-form-urlencoded": return getClient(mt, UrlEncodingSerializer.DEFAULT, UrlEncodingParser.DEFAULT);
 			case "text/xml": return getClient(mt, XmlSerializer.DEFAULT, XmlParser.DEFAULT);
-			case "text/xml+rdf": return getClient(mt, RdfXmlSerializer.DEFAULT, RdfXmlParser.DEFAULT);
-			case "text/n-triple": return getClient(mt, NTripleSerializer.DEFAULT, NTripleParser.DEFAULT);
-			case "text/turtle": return getClient(mt, TurtleSerializer.DEFAULT, TurtleParser.DEFAULT);
-			case "text/n3": return getClient(mt, N3Serializer.DEFAULT, N3Parser.DEFAULT);
 			default: throw new BasicRuntimeException("Client for mediaType ''{0}'' not found", mt);
 		}
 	}

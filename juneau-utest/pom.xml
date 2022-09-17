@@ -41,11 +41,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-marshall-rdf</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-config</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -57,11 +52,6 @@
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-mock</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-server-rdf</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>

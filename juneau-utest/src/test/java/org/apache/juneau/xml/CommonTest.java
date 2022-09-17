@@ -18,13 +18,10 @@ import static org.apache.juneau.xml.annotation.XmlFormat.*;
 import static org.junit.Assert.*;
 import static org.junit.runners.MethodSorters.*;
 
-import java.net.*;
-import java.net.URI;
 import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.testutils.XmlUtils;
 import org.apache.juneau.xml.annotation.*;
 import org.junit.*;
@@ -217,32 +214,6 @@ public class CommonTest {
 	public static class Test7b {
 		@Beanp(properties="x2") public List<Test7b> x1 = new LinkedList<>();
 		public int x2 = 2;
-	}
-
-	//====================================================================================================
-	// Test that URLs and URIs are serialized and parsed correctly.
-	//====================================================================================================
-	@Test
-	public void testURIAttr() throws Exception {
-		XmlSerializer s = XmlSerializer.DEFAULT_SQ;
-		XmlParser p = XmlParser.DEFAULT;
-
-		G t = new G();
-		t.uri = new URI("http://uri");
-		t.f1 = new URI("http://f1");
-		t.f2 = new URL("http://f2");
-
-		String xml = s.serialize(t);
-		t = p.parse(xml, G.class);
-		assertEquals("http://uri", t.uri.toString());
-		assertEquals("http://f1", t.f1.toString());
-		assertEquals("http://f2", t.f2.toString());
-	}
-
-	public static class G {
-		@Rdf(beanUri=true) public URI uri;
-		public URI f1;
-		public URL f2;
 	}
 
 	//====================================================================================================

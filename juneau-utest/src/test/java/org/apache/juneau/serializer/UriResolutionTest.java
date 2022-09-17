@@ -19,7 +19,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
@@ -64,7 +63,7 @@ public class UriResolutionTest {
 	// Output
 	//------------------------------------------------------------------------------------------------------------------
 	private static class Results {
-		final String json, xml, html, uon, urlEncoding, msgPack, rdfXml;
+		final String json, xml, html, uon, urlEncoding, msgPack;
 
 		Results(String json, String xml, String html, String uon, String urlEncoding, String msgPack, String rdfXml) {
 			this.json = json;
@@ -73,7 +72,6 @@ public class UriResolutionTest {
 			this.uon = uon;
 			this.urlEncoding = urlEncoding;
 			this.msgPack = msgPack;
-			this.rdfXml = rdfXml;
 		}
 	}
 
@@ -547,16 +545,7 @@ public class UriResolutionTest {
 
 	private void testSerialize(Serializer s, String expected, Object testBean) throws Exception {
 		try {
-			boolean isRdf = s instanceof RdfSerializer;
-
 			String r = s.serializeToString(testBean);
-
-			// Can't control RdfSerializer output well, so manually remove namespace declarations
-			// double-quotes with single-quotes, and spaces with tabs.
-			// Also because RDF sucks really bad and can't be expected to produce consistent testable results,
-			// we must also do an expensive sort-then-compare operation to verify the results.
-			if (isRdf)
-				r = r.replaceAll("<rdf:RDF[^>]*>", "<rdf:RDF>").replace('"', '\'');
 
 			// Specifying "xxx" in the expected results will spit out what we should populate the field with.
 			if (expected.equals("xxx")) {
@@ -564,11 +553,7 @@ public class UriResolutionTest {
 				System.out.println(r);
 			}
 
-			if (isRdf) {
-				Object[] args = { label, s.getClass().getSimpleName() };
-				assertString(r).setMsg("{0}/{1} serialize-normal failed", args).isSortedLines(expected);
-			} else
-				assertString(r).setMsg("{0}/{1} serialize-normal failed", label, s.getClass().getSimpleName()).is(expected);
+			assertString(r).setMsg("{0}/{1} serialize-normal failed", label, s.getClass().getSimpleName()).is(expected);
 
 		} catch (AssertionError e) {
 			throw e;
@@ -737,17 +722,5 @@ public class UriResolutionTest {
 	public void f2c_testMsgPackParse_usingConfig() throws Exception {
 		Serializer s = MsgPackSerializer.create().uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.Config.class).build();
 		testParse(s, MsgPackParser.DEFAULT.copy().applyAnnotations(TestURIc.Config.class).build(), new TestURIc());
-	}
-
-	@Test
-	public void g1_testRdfXmlSerialize() throws Exception {
-		Serializer s = RdfSerializer.create().language(Constants.LANG_RDF_XML_ABBREV).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).build();
-		testSerialize(s, results.rdfXml, new TestURI());
-	}
-
-	@Test
-	public void g1c_testRdfXmlSerialize_usingConfig() throws Exception {
-		Serializer s = RdfSerializer.create().language(Constants.LANG_RDF_XML_ABBREV).uriContext(input.context).uriResolution(input.resolution).uriRelativity(input.relativity).applyAnnotations(TestURIc.Config.class).build();
-		testSerialize(s, results.rdfXml, new TestURIc());
 	}
 }

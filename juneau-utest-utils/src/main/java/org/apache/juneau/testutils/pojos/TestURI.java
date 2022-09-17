@@ -16,13 +16,11 @@ import java.net.*;
 import java.net.URI;
 
 import org.apache.juneau.annotation.*;
-import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.xml.annotation.*;
 
 @Bean(sort=true)
 public class TestURI {
 	@Uri
-	@Rdf(beanUri=true)
 	@Xml(format=XmlFormat.ATTR)
 	public String f0 = "f0/x0";
 

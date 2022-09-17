@@ -20,7 +20,6 @@ import java.util.*;
 
 import org.apache.juneau.annotation.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
@@ -87,12 +86,6 @@ public class RoundTripAddClassAttrsTest extends RoundTripTest {
 				"UrlEncodingSerializer.DEFAULT/UrlEncodingParser.DEFAULT",
 				UrlEncodingSerializer.create().addBeanTypes().addRootType(),
 				UrlEncodingParser.create().disableInterfaceProxies(),
-				0
-			},
-			{ /* 8 */
-				"RdfSerializer.Xml/RdfParser.Xml",
-				RdfSerializer.create().addBeanTypes().addRootType(),
-				RdfParser.create().disableInterfaceProxies(),
 				0
 			},
 			{ /* 9 */

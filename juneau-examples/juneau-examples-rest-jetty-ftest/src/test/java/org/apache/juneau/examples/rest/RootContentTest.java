@@ -108,26 +108,6 @@ public class RootContentTest extends ContentComboTestBase {
 				new ComboInput("HTML-content-text/xml", "/", MediaType.XML,
 					"<name>helloWorld</name><description>Hello World</description>"
 				)
-			},
-			{ 	/* 14 */
-				new ComboInput("HTML-content-text/xml+rdf", "/", MediaType.RDF,
-					"<jp:name>helloWorld</jp:name>"
-				)
-			},
-			{ 	/* 15 */
-				new ComboInput("HTML-content-text/n-triple", "/", MediaType.NTRIPLE,
-					"\"helloWorld\"^^<"
-				)
-			},
-			{ 	/* 16 */
-				new ComboInput("HTML-content-text/turtle", "/", MediaType.TURTLE,
-					"jp:description \"Hello World\""
-				)
-			},
-			{ 	/* 17 */
-				new ComboInput("HTML-content-text/n3", "/", MediaType.N3,
-					"jp:description \"Hello World\""
-				)
 			}
 		});
 	}

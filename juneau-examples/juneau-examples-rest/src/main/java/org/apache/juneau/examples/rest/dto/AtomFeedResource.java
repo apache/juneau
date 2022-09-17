@@ -22,9 +22,7 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.annotation.Content;
-import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.widget.*;
 import org.apache.juneau.serializer.annotation.*;
@@ -66,11 +64,7 @@ import org.apache.juneau.serializer.annotation.*;
 @SerializerConfig(
 	quoteChar="'"
 )
-@RdfConfig(
-	rdfxml_tab="5",
-	addRootProperty="true"
-)
-public class AtomFeedResource extends BasicRestServlet implements BasicUniversalJenaConfig {
+public class AtomFeedResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	private Feed feed;     // The root resource object
