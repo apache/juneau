@@ -85,10 +85,10 @@ yprompt "Are you using at least Maven 3?"
 
 cd ~/.m2
 
-message "Cleaning Maven repository"
 st
 if [ "$X_CLEANM2" != "N" ] && [ "$X_CLEANM2" != "n" ] 
 then
+	message "Cleaning Maven repository"
 	mv repository repository-old
 	rm -rf repository-old & 
 fi
