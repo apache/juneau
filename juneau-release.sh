@@ -73,6 +73,7 @@ command -v wget || fail_with_message "wget not found"
 command -v gpg || fail_with_message "gpg not found"
 command -v /usr/local/bin/gpg || fail_with_message "gpg not found in /usr/local/bin"
 command -v svn || fail_with_message "svn not found"
+export GPG_TTY=$(tty)
 
 message "Checking Java version"
 java -version
@@ -84,7 +85,7 @@ yprompt "Are you using at least Maven 3?"
 
 cd ~/.m2
 
-message "Cleaning existing Git repository"
+message "Cleaning Maven repository"
 st
 if [ "$X_CLEANM2" != "N" ] && [ "$X_CLEANM2" != "n" ] 
 then
@@ -106,10 +107,10 @@ st
 git clone https://gitbox.apache.org/repos/asf/juneau.git
 et
 
-message "Cloning juneau-website.git"
-st
-git clone https://gitbox.apache.org/repos/asf/juneau-website.git
-et
+#message "Cloning juneau-website.git"
+#st
+#git clone https://gitbox.apache.org/repos/asf/juneau-website.git
+#et
 
 cd juneau
 git config user.name $X_USERNAME
@@ -185,7 +186,7 @@ echo "IMPORTANT - When all artifacts to be deployed are in the staging repositor
 echo "DO NOT CLICK RELEASE YET - the release candidate must pass [VOTE] emails on dev@juneau before we release."
 echo "Once closing has finished (check with Refresh), browse to the URL of the staging repository which should be something like https://repository.apache.org/content/repositories/orgapachejuneau-1000."
 echo " "
-echo "Enter the staging repository name: orgapachejuneau-"
+echo "Enter the staging repository name AFTER CLOSING IT!!!: orgapachejuneau-"
 
 read prompt
 export X_REPO="orgapachejuneau-$prompt";

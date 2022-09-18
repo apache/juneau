@@ -81,6 +81,14 @@
 			</ul>
 		</li>
 	</ul>
+	<p>
+		Assertions have 3 categories of methods:
+	</p>
+	<ul>
+		<li>Testing methods (<c>isX</c> methods)
+		<li>Transform methods (<c>asX</c> methods)
+		<li>Configuration methods (<c>setX</c> methods)
+	</ul>
 	<h5 class='figure'>Examples:</h5>
 	<p class='bjava'>
 		|	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
@@ -118,17 +126,8 @@
 		|		.asMessage().is(<js>"foo"</js>);
 	</p>
 	<p>
-		Assertions have 3 categories of methods:
-	</p>
-	<ul>
-		<li>Testing methods.
-		<li>Transform methods.
-		<li>Configuration methods.
-	</ul>
-	<p>
-		Testing methods perform an assertion on the specified value and throws a {@link java.lang.AssertionError} if
+		Testing methods (<c>isX</c> methods) perform an assertion on the specified value and throws a {@link java.lang.AssertionError} if
 		the test fails.  Otherwise, the method returns the original assertion object to allow you to chain the command.
-		Testing methods start with <c>is</c>.
 	</p>
 	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
@@ -138,8 +137,8 @@
 		|		.isNotEmpty();  <jc>// Perform test and returns original FluentStringAssertion.</jc>
 	</p>	
 	<p>
-		Transform methods allow you to convert assertions of one type to another type or to convert the tested value to
-		some other form wrapped in another assertion.  Transform methods start with <c>as</c>.
+		Transform methods (<c>asX</c> methods) allow you to convert assertions of one type to another type or to convert the tested value to
+		some other form wrapped in another assertion.
 	</p>
 	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
@@ -151,7 +150,7 @@
 		|			.isContains(<js>"FOO"</js>);  <jc>// Runs test and returns original FluentStringAssertion.</jc>
 	</p>	
 	<p>
-		Configuration methods allow you to tailor the behavior of assertions when they fail.  They always return the same assertion object.
+		Configuration methods (<c>setX</c> methods) allow you to tailor the behavior of assertions when they fail.  They always return the same assertion object.
 		Transformed assertions inherit the configurations of the created-by assertions.  Configuration methods start with <c>set</c>.
 	</p>
 	<h5 class='figure'>Example:</h5>
