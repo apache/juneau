@@ -22,7 +22,7 @@ export X_RELEASE=juneau-9.0.0-RC1
 export X_STAGING=~/tmp/dist-release-juneau
 export X_USERNAME=jamesbognar
 export X_EMAIL=jamesbognar@apache.org
-export X_CLEANM2=N
+export X_CLEANM2=Y
 
 echo ' '
 echo --- Settings ------------------------------------------------------------------

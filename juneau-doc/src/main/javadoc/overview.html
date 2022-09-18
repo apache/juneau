@@ -36364,15 +36364,19 @@
 <div class='topic'>
 	<p>
 		Juneau 9.0.0 is a major release.  Deprecated APIs that have been accumulating over time have been removed.
-		The underlying code has undergone significant refactoring to ease maintainability and improve overall performance.
+		
 	</p>
-	
-	<h5 class='topic w800'>General changes</h5>
+	<p>
+		Major changes include:
+	</p>
 	<ul class='spaced-list'>
 		<li>
+			The code has undergone significant refactoring to ease maintainability and improve overall performance.
 			Configuration properties have been removed entirely.  They have been replaced with a standard builder-based
 			architecture.  In addition to making the code more maintainable, it also improves performance when
 			creating new serializers/parsers/rest clients (and others).
+		<li>
+			REST servlets now seemlessly integrate with Spring Boot.  
 	</ul>
 	
 	<h5 class='topic w800'>juneau-marshall</h5>
@@ -36393,23 +36397,7 @@
 	}
 			</p>
 		<li>
-			New shortened form {@link org.apache.juneau.http.remote.RemoteOp#value()} for specifying http method name and path.
-			<p class='bcode'>
-	<jc>// Normal form</jc>
-	<ja>@RemoteOp</ja>(method=<jsf>PUT</jsf>, path=<js>"/foo"</js>)
-	
-	<jc>// Shortened form</jc>
-	<ja>@RemoteOp</ja>(<js>"PUT /foo"</js>)
-			</p>
-		<li>
-			New annotations:  {@link org.apache.juneau.http.remote.RemoteGet}/{@link org.apache.juneau.http.remote.RemotePut}/{@link org.apache.juneau.http.remote.RemotePost}/{@link org.apache.juneau.http.remote.RemoteDelete}
-		<li>
-			Significant refactoring of the classes in the {@link org.apache.juneau.http} package and subpackages.  Attempts were made to make classes as natural
-			extensions to the Apache HttpComponents APIs.  Significant new functionality here.
-		<li>
 			New {@link org.apache.juneau.annotation.Marshalled @Marshalled} annotation for non-bean classes.
-		<li>
-			New {@link org.apache.juneau.annotation.Bean#example() @Bean(example)} annotation.
 		<li>
 			New {@link org.apache.juneau.annotation.BeanConfig#ignoreUnknownEnumValues() @BeanConfig(ignoreUnknownEnumValues)} annotation and support for ignoring
 			unknown enum values during parsing.
@@ -36417,6 +36405,28 @@
 			Java Serialized Object marshalling support has been removed entirely due to security risks with usage (better safe than sorry).
 	</ul>
 	
+	<h5 class='topic w800'>juneau-rest-common</h5>
+	<p>
+		New module containing the common REST classes/annotations uses by both the client and server APIs.
+		These were previously contained within <c>juneau-marshall</c>.
+	</p>
+	<ul class='spaced-list'>
+		<li>
+			Significant refactoring of the classes in the {@link org.apache.juneau.http} package and subpackages.  Attempts were made to make classes as natural
+			extensions to the Apache HttpComponents APIs.  Significant new functionality here.
+		<li>
+			<c>@RemoteMethod</c> annotation has been replaced with the following:
+			<ul class='javatreec'>
+				<li class='ja'>{@link org.apache.juneau.http.remote.RemoteOp}
+				<li class='ja'>{@link org.apache.juneau.http.remote.RemoteGet}
+				<li class='ja'>{@link org.apache.juneau.http.remote.RemotePut}
+				<li class='ja'>{@link org.apache.juneau.http.remote.RemotePatch}
+				<li class='ja'>{@link org.apache.juneau.http.remote.RemotePost}
+				<li class='ja'>{@link org.apache.juneau.http.remote.RemoteDelete}
+			</ul>
+		</li>
+	</ul>
+
 	<h5 class='topic w800'>juneau-rest-server</h5>
 	<ul class='spaced-list'>
 		<li>
@@ -36425,7 +36435,18 @@
 			processors, serializers/parsers, JSON schema generators, statistics gathering stores, and default request attributes/headers and response
 			headers.
 		<li>
-			Defining REST resources with predefined marshalling support is now much simpler.  You now extend from a basic REST servlet/object.
+			<c>@RestMethod</c> annotation has been replaced with the following:
+			<ul class='javatreec'>
+				<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp}
+				<li class='ja'>{@link org.apache.juneau.rest.annotation.RestGet}
+				<li class='ja'>{@link org.apache.juneau.rest.annotation.RestPut}
+				<li class='ja'>{@link org.apache.juneau.rest.annotation.RestPatch}
+				<li class='ja'>{@link org.apache.juneau.rest.annotation.RestPost}
+				<li class='ja'>{@link org.apache.juneau.rest.annotation.RestDelete}
+			</ul>
+		</li>
+		<li>
+			Defining REST resources with predefined marshalling support is now much simpler.  You can now extend from a basic REST servlet/object.
 			<p class='bcode'>
 	<jc>// A root resource that supports JSON/HTML marshalling.</jc>
 	<jk>public class</jk> MyRootResources <jk>extends</jk> BasicRestServletGroup  { ... }
@@ -36433,20 +36454,13 @@
 	<jc>// A child resource that supports all available marshalling.</jc>
 	<jk>public class</jk> MyChildResource <jk>extends</jk> BasicRestObject { ... }
 			</p>
-			REST servlets/objects are in the {@link org.apache.juneau.rest.servlet} package and REST configs are in the {@link org.apache.juneau.rest.config} package.
-		<li>
-			<ja>@RestMethod</ja> annotation has been replaced with 
-			{@link org.apache.juneau.http.remote.RemoteGet} / {@link org.apache.juneau.http.remote.RemotePut} / {@link org.apache.juneau.http.remote.RemotePost} / {@link org.apache.juneau.http.remote.RemoteDelete}
-			 / {@link org.apache.juneau.http.remote.RemoteOp}
-		<li>
-			New shortened form {@link org.apache.juneau.rest.annotation.RestOp#value()} for specifying http method name and path.
-			<p class='bcode'>
-	<jc>// Normal form</jc>
-	<ja>@RestOp</ja>(method=<jsf>PUT</jsf>, path=<js>"/{propertyName}"</js>)
-	
-	<jc>// Shortened form</jc>
-	<ja>@RestOp</ja>(<js>"PUT /{propertyName}"</js>)
-			</p>
+			<ul class='javatreec'>
+				<li class='jc'>{@link org.apache.juneau.rest.servlet.BasicRestServlet}
+				<li class='jc'>{@link org.apache.juneau.rest.servlet.BasicRestServletGroup}
+				<li class='jc'>{@link org.apache.juneau.rest.servlet.BasicRestObject}
+				<li class='jc'>{@link org.apache.juneau.rest.servlet.BasicRestObjectGroup}
+			</ul>
+		</li>
 	</ul>
 	
 	<h5 class='topic w800'>juneau-dto</h5>
@@ -36469,6 +36483,17 @@
 		<li>
 			While the general usage pattern stays the same, the REST client code has undergone significant rewriting.  It is now more inline
 			as an extension of the Apache HttpClient library.  Much new functionality such as support for fluent assertions has been added.
+			<p class='bjava'>
+	<jc>// Create a basic REST client with JSON support and download a bean.</jc>
+	MyBean <jv>bean</jv> = RestClient.<jsm>create</jsm>()
+		.simpleJson()
+		.build()
+		.get(<jsf>URI</jsf>)
+		.run()
+		.assertStatus().asCode().is(200)
+		.assertHeader(<js>"Content-Type"</js>).matchesSimple(<js>"application/json*"</js>)
+		.getContent().as(MyBean.<jk>class</jk>);
+			</p>
 	</ul>
 	
 	<h5 class='topic w800'>juneau-rest-mock</h5>
