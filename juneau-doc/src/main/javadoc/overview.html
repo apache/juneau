@@ -427,6 +427,7 @@
 		<li><p><a class='doclink' href='#Security.s.Svl'>juneau-svl</a><span class='update'>created: 8.2.0</span></p>
 		<li><p><a class='doclink' href='#Security.s.Rest'>juneau-rest-server</a><span class='update'>created: 8.2.0</span></p>
 	</ol>
+	<li><p class='toc2'><a class='doclink' href='#v9.0-migration-guide'>v9.0 Migration Guide</a></p>
 </ol>
 
 
@@ -14905,6 +14906,14 @@
 			</ul>
 		</li>
 	</ul>
+	<p>
+		Assertions have 3 categories of methods:
+	</p>
+	<ul>
+		<li>Testing methods (<c>isX</c> methods)
+		<li>Transform methods (<c>asX</c> methods)
+		<li>Configuration methods (<c>setX</c> methods)
+	</ul>
 	<h5 class='figure'>Examples:</h5>
 	<p class='bjava'>
 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
@@ -14942,17 +14951,8 @@
 		.asMessage().is(<js>"foo"</js>);
 	</p>
 	<p>
-		Assertions have 3 categories of methods:
-	</p>
-	<ul>
-		<li>Testing methods.
-		<li>Transform methods.
-		<li>Configuration methods.
-	</ul>
-	<p>
-		Testing methods perform an assertion on the specified value and throws a {@link java.lang.AssertionError} if
+		Testing methods (<c>isX</c> methods) perform an assertion on the specified value and throws a {@link java.lang.AssertionError} if
 		the test fails.  Otherwise, the method returns the original assertion object to allow you to chain the command.
-		Testing methods start with <c>is</c>.
 	</p>
 	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
@@ -14962,8 +14962,8 @@
 		.isNotEmpty();  <jc>// Perform test and returns original FluentStringAssertion.</jc>
 	</p>	
 	<p>
-		Transform methods allow you to convert assertions of one type to another type or to convert the tested value to
-		some other form wrapped in another assertion.  Transform methods start with <c>as</c>.
+		Transform methods (<c>asX</c> methods) allow you to convert assertions of one type to another type or to convert the tested value to
+		some other form wrapped in another assertion.
 	</p>
 	<h5 class='figure'>Example:</h5>
 	<p class='bjava'>
@@ -14975,7 +14975,7 @@
 			.isContains(<js>"FOO"</js>);  <jc>// Runs test and returns original FluentStringAssertion.</jc>
 	</p>	
 	<p>
-		Configuration methods allow you to tailor the behavior of assertions when they fail.  They always return the same assertion object.
+		Configuration methods (<c>setX</c> methods) allow you to tailor the behavior of assertions when they fail.  They always return the same assertion object.
 		Transformed assertions inherit the configurations of the created-by assertions.  Configuration methods start with <c>set</c>.
 	</p>
 	<h5 class='figure'>Example:</h5>
@@ -28916,6 +28916,91 @@
 </div>
 </div><!-- END: 18.3 - Security.s.Rest -->
 </div><!-- END: 18 - Security -->
+
+<!-- ==================================================================================================== -->
+
+<h2 class='topic' onclick='toggle(this)'><a href='#v9.0-migration-guide' id='v9.0-migration-guide'>19 - v9.0 Migration Guide</a></h2>
+<div class='topic'><!-- START: 19 - v9.0-migration-guide -->
+<div class='topic'>
+	<p>
+		The following guide can be used to help migrate your code to v9.0.  Note that you can also refer to the <a href='#9.0.0'>Release Notes</a> for
+		changes as well.
+	</p>
+	<table class='styled w900'>
+		<tr>
+			<th>
+				Old
+			</th>
+			<th>
+				New
+			</th>
+		</tr>
+		<tr>
+			<td>
+				<ja>@RestMethod</ja> annotation.
+			</td>
+			<td>
+				Has been replaced with {@link org.apache.juneau.rest.annotation.RestOp}, {@link org.apache.juneau.rest.annotation.RestGet}, {@link org.apache.juneau.rest.annotation.RestPut}, {@link org.apache.juneau.rest.annotation.RestPost}, {@link org.apache.juneau.rest.annotation.RestDelete}, {@link org.apache.juneau.rest.annotation.RestOptions}
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<ja>@RemoteMethod</ja> annotation.
+			</td>
+			<td>
+				Has been replaced with {@link org.apache.juneau.http.remote.RemoteOp}, {@link org.apache.juneau.http.remote.RemoteGet}, {@link org.apache.juneau.http.remote.RemotePut}, {@link org.apache.juneau.http.remote.RemotePost}, {@link org.apache.juneau.http.remote.RemoteDelete}.
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<c>BasicRestServletJena</c>, <c>BasicRestServletJenaGroup</c> classes.
+			</td>
+			<td>
+				These have been removed in 9.0 due to the removal of the Jena packages (due to security issues).  Replace
+				with {@link org.apache.juneau.rest.servlet.BasicRestServlet} and {@link org.apache.juneau.rest.servlet.BasicRestServletGroup}.
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<ja>@Body</ja> annotation.
+			</td>
+			<td>
+				Has been renamed to <ja>@Content</ja> (to better match HTTP naming conventions such as Content-Type/Content-Encoding headers).
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<c><ja>@Query</ja>(_default)</c>, <c><ja>@FormData</ja>(_default)</c>.
+			</td>
+			<td>
+				Has been renamed to {@link org.apache.juneau.http.annotation.Query#def} / {@link org.apache.juneau.http.annotation.FormData#def}.  Note however that <ja>@RestOp</ja>-annotated parameters
+				now also support use of Optional parameters which simplifies the coding of default values.
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<c><ja>@Rest</ja>(reqHeaders)</c>.
+			</td>
+			<td>
+				Has been renamed to {@link org.apache.juneau.rest.annotation.Rest#defaultRequestHeaders} and added {@link org.apache.juneau.rest.annotation.Rest#defaultResponseHeaders}.
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<ja>@Rest(staticFiles)</ja>.
+			</td>
+			<td>
+				Changed from a string array to a <c>Class&lt;? <jk>extends</jk> StaticFiles&gt;</c>.  If you're extending from 
+				{@link org.apache.juneau.rest.servlet.BasicRestServlet}/{@link org.apache.juneau.rest.servlet.BasicRestObject}, the {@link org.apache.juneau.rest.servlet.BasicRestOperations#getHtdoc(String,Locale)}
+				is already implemented for you to provide static files under the sub-URI <js>/htdocs/*</js>.  The default implementation for finding
+				static files is {@link org.apache.juneau.rest.staticfile.BasicStaticFiles} which provides basic out-of-the-box functionality, so you can usually
+				just remove the previous <c><ja>@Rest</ja>(staticFiles)</c> value.
+			</td>
+		</tr>
+	</table>
+	
+</div>
+</div><!-- END: 19 - v9.0-migration-guide -->
 
 
 <h2 class='topic' onclick='toggle(this)'><a href='#ReleaseNotes' id='ReleaseNotes'>Release Notes</a></h2>

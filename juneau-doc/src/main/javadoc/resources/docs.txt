@@ -329,3 +329,4 @@ s.Marshall = #Security.s.Marshall, Overview > Security Best-Practices > juneau-m
 s.Rest = #Security.s.Rest, Overview > Security Best-Practices > juneau-rest-server
 s.Svl = #Security.s.Svl, Overview > Security Best-Practices > juneau-svl
 this =  package-summary.html, package-summary.html
+v9.0-migration-guide = #v9.0-migration-guide, Overview > v9.0 Migration Guide
