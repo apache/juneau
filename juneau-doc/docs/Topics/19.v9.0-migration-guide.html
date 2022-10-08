@@ -17,9 +17,10 @@
 
 <div class='topic'>
 	<p>
-		The following guide can be used to help migrate your code to v9.0:
+		The following guide can be used to help migrate your code to v9.0.  Note that you can also refer to the <a href='#9.0.0'>Release Notes</a> for
+		changes as well.
 	</p>
-	<table>
+	<table class='styled w900'>
 		<tr>
 			<th>
 				Old
@@ -38,7 +39,15 @@
 		</tr>
 		<tr>
 			<td>
-				<c>BasicRestServletJena</c>/<c>BasicRestServletJenaGroup classes.
+				<ja>@RemoteMethod</ja> annotation.
+			</td>
+			<td>
+				Has been replaced with {@link oaj.http.remote.RemoteOp}, {@link oaj.http.remote.RemoteGet}, {@link oaj.http.remote.RemotePut}, {@link oaj.http.remote.RemotePost}, {@link oaj.http.remote.RemoteDelete}.
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<c>BasicRestServletJena</c>, <c>BasicRestServletJenaGroup</c> classes.
 			</td>
 			<td>
 				These have been removed in 9.0 due to the removal of the Jena packages (due to security issues).  Replace
@@ -50,24 +59,24 @@
 				<ja>@Body</ja> annotation.
 			</td>
 			<td>
-				Has been renamed to <ja>@Content</ja> (to better match with Content-Type/Content-Encoding header names).
+				Has been renamed to <ja>@Content</ja> (to better match HTTP naming conventions such as Content-Type/Content-Encoding headers).
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<ja>@Query(_default)</ja>/<ja>@FormData(_default)</ja>.
+				<c><ja>@Query</ja>(_default)</c>, <c><ja>@FormData</ja>(_default)</c>.
 			</td>
 			<td>
-				Has been renamed to <ja>@Query(def)</ja>/<ja>@FormData(def)</ja>.  Note however that <ja>@RestOp</ja>-annotated parameters
+				Has been renamed to {@link oaj.http.annotation.Query#def} / {@link oaj.http.annotation.FormData#def}.  Note however that <ja>@RestOp</ja>-annotated parameters
 				now also support use of Optional parameters which simplifies the coding of default values.
 			</td>
 		</tr>
 		<tr>
 			<td>
-				<ja>@Rest(reqHeaders)</ja>.
+				<c><ja>@Rest</ja>(reqHeaders)</c>.
 			</td>
 			<td>
-				Has been renamed to <ja>@Rest(defaultRequestHeaders)</ja> and added <ja>@Rest(defaultResponseHeaders)</ja>.
+				Has been renamed to {@link oajr.annotation.Rest#defaultRequestHeaders} and added {@link oajr.annotation.Rest#defaultResponseHeaders}.
 			</td>
 		</tr>
 		<tr>
@@ -79,7 +88,7 @@
 				{@link oajr.servlet.BasicRestServlet}/{@link oajr.servlet.BasicRestObject}, the {@link oajr.servlet.BasicRestOperations#getHtdoc(String,Locale)}
 				is already implemented for you to provide static files under the sub-URI <js>/htdocs/*</js>.  The default implementation for finding
 				static files is {@link oajr.staticfile.BasicStaticFiles} which provides basic out-of-the-box functionality, so you can usually
-				just remove the previous <ja>@Rest(staticFiles)</ja> value.
+				just remove the previous <c><ja>@Rest</ja>(staticFiles)</c> value.
 			</td>
 		</tr>
 	</table>
