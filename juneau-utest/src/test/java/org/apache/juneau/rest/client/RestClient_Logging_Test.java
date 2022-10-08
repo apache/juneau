@@ -71,8 +71,7 @@ public class RestClient_Logging_Test {
 		c.reset();
 
 		client().logRequests(DetailLevel.FULL,Level.SEVERE,null).logToConsole().logger(l).console(c).build().post("/bean",bean).complete();
-		c.assertContents().isLines(
-			"",
+		c.assertContents().asTrimmed().isLines(
 			"=== HTTP Call (outgoing) ======================================================",
 			"=== REQUEST ===",
 			"POST http://localhost/bean",
@@ -88,14 +87,12 @@ public class RestClient_Logging_Test {
 			"	Content-Type: application/json",
 			"---response content---",
 			"{f:1}",
-			"=== END =======================================================================",
-			""
+			"=== END ======================================================================="
 		);
 		c.reset();
 
 		client().logRequests(DetailLevel.FULL,Level.SEVERE,null).logToConsole().logger(l).console(c).build().get("/bean").complete();
-		c.assertContents().isLines(
-			"",
+		c.assertContents().asTrimmed().isLines(
 			"=== HTTP Call (outgoing) ======================================================",
 			"=== REQUEST ===",
 			"GET http://localhost/bean",
@@ -107,14 +104,12 @@ public class RestClient_Logging_Test {
 			"	Content-Type: application/json",
 			"---response content---",
 			"{f:1}",
-			"=== END =======================================================================",
-			""
+			"=== END ======================================================================="
 		);
 		c.reset();
 
 		clientPlain().logRequests(DetailLevel.FULL,Level.SEVERE,null).logToConsole().logger(l).console(c).build().post("/stream",new InputStreamEntity(inputStream("foo"))).complete();
-		c.assertContents().isLines(
-			"",
+		c.assertContents().asTrimmed().isLines(
 			"=== HTTP Call (outgoing) ======================================================",
 			"=== REQUEST ===",
 			"POST http://localhost/stream",
@@ -126,8 +121,7 @@ public class RestClient_Logging_Test {
 			"	Content-Encoding: identity",
 			"---response content---",
 			"foo",
-			"=== END =======================================================================",
-			""
+			"=== END ======================================================================="
 		);
 		c.reset();
 
@@ -153,8 +147,7 @@ public class RestClient_Logging_Test {
 
 		client().logger(l).logRequests(DetailLevel.FULL,Level.WARNING,null).build().post("/bean",bean).complete();
 		l.assertLastLevel(Level.WARNING);
-		l.assertLastMessage().isLines(
-			"",
+		l.assertLastMessage().asTrimmed().isLines(
 			"=== HTTP Call (outgoing) ======================================================",
 			"=== REQUEST ===",
 			"POST http://localhost/bean",
@@ -172,7 +165,7 @@ public class RestClient_Logging_Test {
 			"{f:1}",
 			"=== END ======================================================================="
 		);
-		l.assertContents().asJavaStrings().isContains(
+		l.assertContents().asTrimmed().asJavaStrings().isContains(
 			"WARNING: ",
 			"=== HTTP Call (outgoing) ======================================================",
 			"=== REQUEST ===",
@@ -189,8 +182,7 @@ public class RestClient_Logging_Test {
 			"	Content-Type: application/json",
 			"---response content---",
 			"{f:1}",
-			"=== END =======================================================================",
-			""
+			"=== END ======================================================================="
 		);
 	}
 

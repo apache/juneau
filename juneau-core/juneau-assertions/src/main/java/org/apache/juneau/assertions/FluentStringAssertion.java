@@ -311,6 +311,15 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 		return asTransformed(x->x == null ? null : x.replaceAll("\\s*[\r\n]+\\s*","  "));
 	}
 
+	/**
+	 * Removes any leading/trailing whitespace from the string.
+	 *
+	 * @return This object.
+	 */
+	public FluentStringAssertion<R> asTrimmed() {
+		return new FluentStringAssertion<>(this, valueIsNull() ? null : value().trim(), returns());
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test methods
 	//-----------------------------------------------------------------------------------------------------------------
