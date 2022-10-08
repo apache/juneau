@@ -148,6 +148,30 @@ public class FileUtils {
 	}
 
 	/**
+	 * Create a temporary file with the specified name and specified contents.
+	 *
+	 * <p>
+	 * The name is broken into file name and suffix, and the parts are passed to
+	 * {@link File#createTempFile(String, String)}.
+	 *
+	 * <p>
+	 * {@link File#deleteOnExit()} is called on the resulting file before being returned by this method.
+	 *
+	 * @param name The file name
+	 * @param contents The file contents.
+	 * @return A newly-created temporary file.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public static File createTempFile(String name, String contents) throws IOException {
+		File f = createTempFile(name);
+		try (Reader r = new StringReader(contents); Writer w = new FileWriter(f)) {
+			IOUtils.pipe(r, w);
+			w.flush();
+		}
+		return f;
+	};
+
+	/**
 	 * Strips the extension from a file name.
 	 *
 	 * @param name The file name.
