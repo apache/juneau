@@ -36,10 +36,10 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 
 		<jaxb.version>2.3.1</jaxb.version>
-		<junit.version>4.13.1</junit.version>
+		<junit.version>4.13.2</junit.version>
 		<jaxrs.version>1.1.1</jaxrs.version>
 		<servlet.version>4.0.1</servlet.version>
-		<httpcore.version>4.4.13</httpcore.version>
+		<httpcore.version>4.4.15</httpcore.version>
 		<httpclient.version>4.5.13</httpclient.version>
 		<jetty.version>9.4.49.v20220914</jetty.version>
 		<juneau.compare.version>8.0.0</juneau.compare.version>
@@ -48,7 +48,7 @@
 		<juneauVersionNext>9.0.1</juneauVersionNext>
 		<derby.version>10.10.2.0</derby.version>
 		<hibernate.version>5.0.9.Final</hibernate.version>
-		<springboot.version>2.7.0</springboot.version>
+		<springboot.version>2.7.4</springboot.version>
 		<xml.apis.version>1.4.01</xml.apis.version>
 		<javadoc.executable />
 	</properties>
