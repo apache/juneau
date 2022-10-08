@@ -67,7 +67,7 @@ public class RestClient_Logging_Test {
 		c.reset();
 
 		client().logRequests(DetailLevel.SIMPLE,Level.SEVERE,null).logToConsole().logger(l).console(c).build().post("/bean",bean).complete();
-		c.assertContents().is("HTTP POST http://localhost/bean, HTTP/1.1 200 \n");
+		c.assertContents().isContains("HTTP POST http://localhost/bean, HTTP/1.1 200");
 		c.reset();
 
 		client().logRequests(DetailLevel.FULL,Level.SEVERE,null).logToConsole().logger(l).console(c).build().post("/bean",bean).complete();
@@ -148,7 +148,7 @@ public class RestClient_Logging_Test {
 		client().logger(l).logRequests(DetailLevel.SIMPLE,Level.WARNING,null).build().post("/bean",bean).complete();
 		l.assertLastLevel(Level.WARNING);
 		l.assertLastMessage().is("HTTP POST http://localhost/bean, HTTP/1.1 200 ");
-		l.assertContents().isContains("WARNING: HTTP POST http://localhost/bean, HTTP/1.1 200 \n");
+		l.assertContents().isContains("WARNING: HTTP POST http://localhost/bean, HTTP/1.1 200");
 		l.reset();
 
 		client().logger(l).logRequests(DetailLevel.FULL,Level.WARNING,null).build().post("/bean",bean).complete();
