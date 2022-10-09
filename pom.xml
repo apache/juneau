@@ -27,7 +27,7 @@
 	<parent>
 		<groupId>org.apache</groupId>
 		<artifactId>apache</artifactId>
-		<version>21</version>
+		<version>27</version>
 	</parent>
 
 	<properties>
@@ -51,6 +51,7 @@
 		<springboot.version>2.7.4</springboot.version>
 		<xml.apis.version>1.4.01</xml.apis.version>
 		<javadoc.executable />
+		<javadoc.plugin.version>3.4.1</javadoc.plugin.version>
 	</properties>
 
 	<dependencyManagement>
@@ -73,12 +74,6 @@
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
-				<groupId>javax.xml.bind</groupId>
-				<artifactId>jaxb-api</artifactId>
-				<version>${jaxb.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
 				<groupId>org.apache.httpcomponents</groupId>
 				<artifactId>httpclient</artifactId>
 				<version>${httpclient.version}</version>
@@ -87,6 +82,12 @@
 				<groupId>org.apache.httpcomponents</groupId>
 				<artifactId>httpcore</artifactId>
 				<version>${httpcore.version}</version>
+			</dependency>
+			<dependency>
+				<!-- Java 11 -->
+				<groupId>javax.xml.bind</groupId>
+				<artifactId>jaxb-api</artifactId>
+				<version>${jaxb.version}</version>
 			</dependency>
 			<dependency>
 				<!-- Java 11 -->
@@ -211,7 +212,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>3.0.1</version>
+					<version>${javadoc.plugin.version}</version>
 					<configuration>
 						<doclint>missing,reference,syntax</doclint>
 						<sourcetab>3</sourcetab>
@@ -288,12 +289,19 @@
 
 				<plugin>
 					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.10.1</version>
 					<configuration>
-						<source>1.8</source>
-						<target>1.8</target>
+						<source>${maven.compiler.source}</source>
+						<target>${maven.compiler.target}</target>
 						<compilerArgument>-parameters</compilerArgument>
 						<testCompilerArgument>-parameters</testCompilerArgument>
 					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.apache.felix</groupId>
+					<artifactId>maven-bundle-plugin</artifactId>
+					<version>5.1.8</version>
 				</plugin>
 
 				<plugin>
@@ -330,7 +338,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.4</version>
+				<version>${javadoc.plugin.version}</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -340,7 +348,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-report-plugin</artifactId>
-				<version>2.18</version>
+				<version>2.22.2</version>
 				<configuration>
 					<aggregate>true</aggregate>
 				</configuration>
@@ -348,7 +356,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.2</version>
+				<version>0.8.8</version>
 				<configuration>
 					<excludes>
 						<exclude>**/doc/**/*</exclude>

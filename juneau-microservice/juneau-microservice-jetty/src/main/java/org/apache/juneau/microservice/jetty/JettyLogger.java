@@ -12,12 +12,15 @@
 // ***************************************************************************************************************************
 package org.apache.juneau.microservice.jetty;
 
-import static java.util.logging.Level.*;
-import static org.apache.juneau.internal.SystemEnv.*;
+import static java.util.logging.Level.FINE;
+import static java.util.logging.Level.FINEST;
+import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.WARNING;
+import static org.apache.juneau.internal.SystemEnv.env;
 
-import java.util.logging.*;
-
-import org.eclipse.jetty.util.log.AbstractLogger;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 /**
  * Implementation of Jetty {@link Logger} based on {@link java.util.logging.Logger}.
@@ -41,7 +44,7 @@ import org.eclipse.jetty.util.log.AbstractLogger;
  * 	<li class='extlink'>{@source}
  * </ul>
  */
-public class JettyLogger extends AbstractLogger {
+public class JettyLogger implements org.eclipse.jetty.util.log.Logger {
 	private static final boolean SHOW_SOURCE = env("org.eclipse.jetty.util.log.SOURCE", env("org.eclipse.jetty.util.log.javautil.SOURCE", true));
 
 	private Level configuredLevel;
@@ -66,6 +69,11 @@ public class JettyLogger extends AbstractLogger {
 		logger = Logger.getLogger(name);
 		configuredLevel = logger.getLevel();
 	}
+
+    @Override
+    public org.eclipse.jetty.util.log.Logger getLogger(String name) {
+        return new JettyLogger(name);
+    }
 
 	@Override
 	public String getName() {
@@ -148,14 +156,9 @@ public class JettyLogger extends AbstractLogger {
 	}
 
 	@Override
-	protected org.eclipse.jetty.util.log.Logger newLogger(String fullname) {
-		return new JettyLogger(fullname);
-	}
-
-	@Override
 	public void ignore(Throwable ignored) {
 		if (isLoggable(FINEST))
-			log(FINEST, org.eclipse.jetty.util.log.Log.IGNORED, ignored);
+			log(FINEST, "IGNORED EXCEPTION ", ignored);
 	}
 
 	private static String format(String msg, Object... args) {
@@ -200,4 +203,5 @@ public class JettyLogger extends AbstractLogger {
 	private boolean isLoggable(Level level) {
 		return logger.isLoggable(level);
 	}
+
 }
