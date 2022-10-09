@@ -52,6 +52,7 @@
 		<xml.apis.version>1.4.01</xml.apis.version>
 		<javadoc.executable />
 		<javadoc.plugin.version>3.4.1</javadoc.plugin.version>
+		<jacoco.plugin.version>0.8.8</jacoco.plugin.version>
 	</properties>
 
 	<dependencyManagement>
@@ -329,6 +330,13 @@
 						</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>
+
+				<plugin>
+					<groupId>org.jacoco</groupId>
+					<artifactId>jacoco-maven-plugin</artifactId>
+					<version>${jacoco.plugin.version}</version>
+				</plugin>
+
 			</plugins>
 		</pluginManagement>
 	</build>
@@ -356,7 +364,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.8</version>
+				<version>${jacoco.plugin.version}</version>
 				<configuration>
 					<excludes>
 						<exclude>**/doc/**/*</exclude>
