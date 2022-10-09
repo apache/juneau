@@ -34,9 +34,9 @@
 		<Set name="contextPath">/</Set>
 		<!-- Optionally specify your servlets here -->
 		<!--Call name="addServlet">
-            <Arg>org.apache.juneau.microservice.jetty.template.RootResources</Arg>
-            <Arg>/*</Arg>
-         </Call-->
+			<Arg>org.apache.juneau.microservice.jetty.template.RootResources</Arg>
+			<Arg>/*</Arg>
+		</Call-->
 		<Set name="sessionHandler">
 			<New class="org.eclipse.jetty.server.session.SessionHandler" />
 		</Set>
@@ -72,14 +72,14 @@
 			<!-- Param 1: String -->
 			<Arg>
 				<Get class="org.eclipse.jetty.server.CustomRequestLog" name="EXTENDED_NCSA_FORMAT" />
-			</Arg>      
+			</Arg>
 		</New>
 	</Set>
 
-    <Get name="ThreadPool">
-        <Set name="minThreads" type="int">10</Set>
-        <Set name="maxThreads" type="int">100</Set>
-        <Set name="idleTimeout" type="int">60000</Set>
-        <Set name="detailedDump">true</Set>
-    </Get>
+	<Get name="ThreadPool">
+		<Set name="minThreads" type="int">10</Set>
+		<Set name="maxThreads" type="int">100</Set>
+		<Set name="idleTimeout" type="int">60000</Set>
+		<Set name="detailedDump">true</Set>
+	</Get>
 </Configure>

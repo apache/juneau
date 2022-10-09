@@ -244,16 +244,22 @@
 				|			<xt>&lt;/New&gt;</xt>
 				|		<xt>&lt;/Set&gt;</xt>
 				|	
-				|		<xt>&lt;Set</xt> <xa>name</xa>=<xs>"requestLog"</xs><xt>&gt;</xt>
-				|			<xt>&lt;New</xt> <xa>id</xa>=<xs>"RequestLogImpl"</xs> <xa>class</xa>=<xs>"org.eclipse.jetty.server.NCSARequestLog"</xs><xt>&gt;</xt>
-				|				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"filename"</xs><xt>&gt;&lt;Property</xt> <xa>name</xa>=<xs>"jetty.logs"</xs> <xa>default</xa>=<xs>"$C{Logging/logDir,logs}"</xs><xt>/&gt;</xt>/jetty-requests.log<xt>&lt;/Set&gt;</xt>
-				|				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"filenameDateFormat</xs><xt>"&gt;</xt>yyyy_MM_dd<xt>&lt;/Set&gt;</xt>
-				|				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"LogTimeZone"</xs><xt>&gt;</xt>GMT<xt>&lt;/Set&gt;</xt>
-				|				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"retainDays"</xs><xt>&gt;</xt>90<xt>&lt;/Set&gt;</xt>
-				|				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"append"</xs><xt>&gt;</xt>false<xt>&lt;/Set&gt;</xt>
-				|				<xt>&lt;Set</xt> <xa>name</xa>=<xs>"LogLatency"</xs><xt>&gt;</xt>true<xt>&lt;/Set&gt;</xt>
-				|			<xt>&lt;/New&gt;</xt>
-				|		<xt>&lt;/Set&gt;</xt>
+				|		<xt>&lt;New</xt> <xa>id</xa>=<xs>"RequestLogImpl"</xs> <xa>class</xa>=<xs>"org.eclipse.jetty.server.CustomRequestLog"</xs><xt>&gt;</xt>
+				|			<xc>&lt;!-- Param 0: org.eclipse.jetty.server.RequestLogWriter --&gt;</xc>
+				|			<xt>&lt;Arg&gt;</xt>
+				|				<xt>&lt;New</xt> <xa>class</xa>=<xs>"org.eclipse.jetty.server.RequestLogWriter"</xs><xt>&gt;</xt>
+				|					<xt>&lt;Set</xt> <xa>name</xa>=<xs>"append"</xs><xt>&gt;</xt>false<xt>&lt;/Set&gt</xt>;
+				|					<xt>&lt;Set</xt> <xa>name</xa>=<xs>"filename"</xs><xt>&gt;&lt;Property</xt> <xa>name</xa>=<xs>"jetty.logs"</xs> <xa>default</xa>=<xs>"$C{Logging/logDir,logs}"</xs> <xt>/&gt;</xt>/jetty-requests.log<xt>&lt;/Set&gt</xt>;
+				|					<xt>&lt;Set</xt> <xa>name</xa>=<xs>"filenameDateFormat"</xs><xt>&gt;</xt>yyyy_MM_dd<xt>&lt;/Set&gt;</xt>
+				|					<xt>&lt;Set</xt> <xa>name</xa>=<xs>"retainDays"</xs><xt>&gt;</xt>90<xt>&lt;/Set&gt;</xt>
+				|					<xt>&lt;Set</xt> <xa>name</xa>=<xs>"timeZone"</xs><xt>&gt;</xt>GMT<xt>&lt;/Set&gt;</xt>
+				|				<xt>&lt;/New&gt;</xt>
+				|			<xt>&lt;/Arg&gt;</xt>
+				|			<xc>&lt;!-- Param 1: String --&gt;</xc>
+				|			<xt>&lt;Arg&gt;</xt>
+				|				<xt>&lt;Get</xt> <xa>class</xa>=<xs>"org.eclipse.jetty.server.CustomRequestLog"</xs> <xa>name</xa>=<xs>"EXTENDED_NCSA_FORMAT"</xs> <xt>/&gt;</xt>
+				|			<xt>&lt;/Arg&gt;</xt>
+				|		<xt>&lt;/New&gt;</xt>
 				|	
 				|		<xt>&lt;Get</xt> <xa>name</xa>=<xs>"ThreadPool"</xs><xt>&gt;</xt>
 				|			<xt>&lt;Set</xt> <xa>name</xa>=<xs>"minThreads"</xs> <xa>type</xa>=<xs>"int"</xs><xt>&gt;</xt>10<xt>&lt;/Set&gt;</xt>
