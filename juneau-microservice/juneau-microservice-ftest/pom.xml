@@ -29,10 +29,6 @@
 
 	<properties>
 		<maven.javadoc.skip>true</maven.javadoc.skip>
-		
-		<!-- Java 8 required because Jetty requires it. -->
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
 	<dependencies>
