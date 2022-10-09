@@ -53,13 +53,21 @@
 	</Set>
 
 	<Set name="requestLog">
-		<New id="RequestLogImpl" class="org.eclipse.jetty.server.NCSARequestLog">
-			<Set name="filename"><Property name="jetty.logs" default="$C{Logging/logDir,logs}"/>/jetty-requests.log</Set>
-			<Set name="filenameDateFormat">yyyy_MM_dd</Set>
-			<Set name="LogTimeZone">GMT</Set>
-			<Set name="retainDays">90</Set>
-			<Set name="append">false</Set>
-			<Set name="LogLatency">true</Set>
+		<New id="RequestLogImpl" class="org.eclipse.jetty.server.CustomRequestLog">
+			<!-- Param 0: org.eclipse.jetty.server.RequestLogWriter -->
+			<Arg>
+				<New class="org.eclipse.jetty.server.RequestLogWriter">
+					<Set name="append">false</Set>
+					<Set name="filename"><Property name="jetty.logs" default="$C{Logging/logDir,logs}" />/jetty-requests.log</Set>
+					<Set name="filenameDateFormat">yyyy_MM_dd</Set>
+					<Set name="retainDays">90</Set>
+					<Set name="timeZone">GMT</Set>
+				</New>
+			</Arg>
+			<!-- Param 1: String -->
+			<Arg>
+				<Get class="org.eclipse.jetty.server.CustomRequestLog" name="EXTENDED_NCSA_FORMAT" />
+			</Arg>      
 		</New>
 	</Set>
 
